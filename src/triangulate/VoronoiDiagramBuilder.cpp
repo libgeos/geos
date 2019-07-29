@@ -30,6 +30,10 @@
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
+
+using geos::detail::make_unique;
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -49,14 +53,13 @@ VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
-    siteCoords.reset(DelaunayTriangulationBuilder::extractUniqueCoordinates(geom));
+    siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
 }
 
 void
 VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
-    siteCoords.reset(coords.clone());
-    DelaunayTriangulationBuilder::unique(*siteCoords);
+    siteCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(&coords);
 }
 
 void
@@ -86,13 +89,12 @@ VoronoiDiagramBuilder::create()
         diagramEnv.expandToInclude(clipEnv);
     }
 
-    std::unique_ptr<IncrementalDelaunayTriangulator::VertexList> vertices(
-        DelaunayTriangulationBuilder::toVertices(*siteCoords)
-    );
+    auto vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
+    std::sort(vertices.begin(), vertices.end()); // Best performance from locator when inserting points near each other
 
     subdiv.reset(new quadedge::QuadEdgeSubdivision(diagramEnv, tolerance));
     IncrementalDelaunayTriangulator triangulator(subdiv.get());
-    triangulator.insertSites(*vertices);
+    triangulator.insertSites(vertices);
 }
 
 std::unique_ptr<quadedge::QuadEdgeSubdivision>
@@ -107,8 +109,15 @@ std::unique_ptr<geom::GeometryCollection>
 VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 {
     create();
-    std::unique_ptr<geom::GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
-    return clipGeometryCollection(*polys, diagramEnv);
+
+    auto polys = subdiv->getVoronoiCellPolygons(geomFact);
+    auto ret = clipGeometryCollection(polys, diagramEnv);
+
+    if (ret == nullptr) {
+        return std::unique_ptr<geom::GeometryCollection>(geomFact.createGeometryCollection());
+    }
+
+    return ret;
 }
 
 std::unique_ptr<geom::Geometry>
@@ -125,28 +134,36 @@ VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
 }
 
 std::unique_ptr<geom::GeometryCollection>
-VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv)
+VoronoiDiagramBuilder::clipGeometryCollection(std::vector<std::unique_ptr<Geometry>> & geoms, const geom::Envelope& clipEnv)
 {
-    std::unique_ptr<geom::Geometry> clipPoly(geom.getFactory()->toGeometry(&clipEnv));
-    std::unique_ptr< std::vector<Geometry*> >clipped(new std::vector<Geometry*>);
-    for(std::size_t i = 0 ; i < geom.getNumGeometries() ; i++) {
-        const Geometry* g = geom.getGeometryN(i);
+    if (geoms.empty()) {
+        return nullptr;
+    }
+
+    auto gfact = geoms[0]->getFactory();
+
+    std::unique_ptr<geom::Geometry> clipPoly(gfact->toGeometry(&clipEnv));
+    auto clipped = make_unique<std::vector<Geometry*>>();
+
+    for(auto& g : geoms) {
         std::unique_ptr<Geometry> result;
+
         // don't clip unless necessary
         if(clipEnv.contains(g->getEnvelopeInternal())) {
-            result.reset(g->clone());
+            result = std::move(g);
             // TODO: check if userData is correctly cloned here?
         }
         else if(clipEnv.intersects(g->getEnvelopeInternal())) {
-            result.reset(clipPoly->intersection(g));
-            result->setUserData(((Geometry*)g)->getUserData()); // TODO: needed ?
+            result = clipPoly->intersection(g.get());
+            result->setUserData(g->getUserData()); // TODO: needed ?
         }
 
         if(result.get() && !result->isEmpty()) {
             clipped->push_back(result.release());
         }
     }
-    return std::unique_ptr<GeometryCollection>(geom.getFactory()->createGeometryCollection(clipped.release()));
+
+    return std::unique_ptr<GeometryCollection>(gfact->createGeometryCollection(clipped.release()));
 }
 
 } //namespace geos.triangulate

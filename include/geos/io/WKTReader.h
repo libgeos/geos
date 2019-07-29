@@ -24,6 +24,7 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
 #include <string>
 
 // Forward declarations
@@ -34,7 +35,6 @@ class StringTokenizer;
 namespace geom {
 
 class Coordinate;
-class Geometry;
 class GeometryCollection;
 class Point;
 class LineString;
@@ -81,26 +81,26 @@ public:
     ~WKTReader();
 
     /// Parse a WKT string returning a Geometry
-    geom::Geometry* read(const std::string& wellKnownText);
+    std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText);
 
 //	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:
-    geom::CoordinateSequence* getCoordinates(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer);
     double getNextNumber(io::StringTokenizer* tokenizer);
     std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer);
     std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
     std::string getNextCloser(io::StringTokenizer* tokenizer);
     std::string getNextWord(io::StringTokenizer* tokenizer);
-    geom::Geometry* readGeometryTaggedText(io::StringTokenizer* tokenizer);
-    geom::Point* readPointText(io::StringTokenizer* tokenizer);
-    geom::LineString* readLineStringText(io::StringTokenizer* tokenizer);
-    geom::LinearRing* readLinearRingText(io::StringTokenizer* tokenizer);
-    geom::MultiPoint* readMultiPointText(io::StringTokenizer* tokenizer);
-    geom::Polygon* readPolygonText(io::StringTokenizer* tokenizer);
-    geom::MultiLineString* readMultiLineStringText(io::StringTokenizer* tokenizer);
-    geom::MultiPolygon* readMultiPolygonText(io::StringTokenizer* tokenizer);
-    geom::GeometryCollection* readGeometryCollectionText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::LinearRing> readLinearRingText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::MultiPoint> readMultiPointText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::Polygon> readPolygonText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::MultiLineString> readMultiLineStringText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer);
 private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;

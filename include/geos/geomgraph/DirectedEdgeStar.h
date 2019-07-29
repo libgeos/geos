@@ -46,7 +46,7 @@ namespace geomgraph { // geos.geomgraph
 
 /**
  * \brief
- * A DirectedEdgeStar is an ordered list of <b>outgoing</b> DirectedEdges around a node.
+ * A DirectedEdgeStar is an ordered list of **outgoing** DirectedEdges around a node.
  *
  * It supports labelling the edges as well as linking the edges to form both
  * MaximalEdgeRings and MinimalEdgeRings.
@@ -84,24 +84,23 @@ public:
     DirectedEdge* getRightmostEdge();
 
     /** \brief
-     * Compute the labelling for all dirEdges in this star, as well
-     * as the overall labelling
+     * Compute the labelling for all dirEdges in this star, as well as the overall labelling
      */
     void computeLabelling(std::vector<GeometryGraph*>* geom) override; // throw(TopologyException *);
 
     /** \brief
-     * For each dirEdge in the star,
-     * merge the label from the sym dirEdge into the label
+     * For each dirEdge in the star, merge the label from the sym dirEdge into the label
      */
     void mergeSymLabels();
 
-    /// Update incomplete dirEdge labels from the labelling for the node
+    /// \brief Update incomplete dirEdge labels from the labelling for the node
     void updateLabelling(const Label& nodeLabel);
 
 
-    /**
+    /** \brief
      * Traverse the star of DirectedEdges, linking the included edges together.
-     * To link two dirEdges, the <next> pointer for an incoming dirEdge
+     *
+     * To link two dirEdges, the `next` pointer for an incoming dirEdge
      * is set to the next outgoing edge.
      *
      * DirEdges are only linked if:
@@ -109,10 +108,9 @@ public:
      * - they belong to an area (i.e. they have sides)
      * - they are marked as being in the result
      *
-     * Edges are linked in CCW order (the order they are stored).
-     * This means that rings have their face on the Right
-     * (in other words,
-     * the topological location of the face is given by the RHS label of the DirectedEdge)
+     * Edges are linked in CCW order (the order they are stored). This means
+     * that rings have their face on the Right (in other words, the topological
+     * location of the face is given by the RHS label of the DirectedEdge)
      *
      * PRECONDITION: No pair of dirEdges are both marked as being in the result
      */
@@ -132,8 +130,6 @@ public:
 
     /** \brief
      * Compute the DirectedEdge depths for a subsequence of the edge array.
-     *
-     * @return the last depth assigned (from the R side of the last edge visited)
      */
     void computeDepths(DirectedEdge* de);
 

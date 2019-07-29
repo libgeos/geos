@@ -46,7 +46,7 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 /** \brief
- * A ring of {@link edges} which may contain nodes of degree > 2.
+ * A ring of [DirectedEdges](@ref geomgraph::DirectedEdge) which may contain nodes of degree > 2.
  *
  * A MaximalEdgeRing may represent two different spatial entities:
  *
@@ -57,7 +57,7 @@ namespace overlay { // geos::operation::overlay
  * the interior of the polygon is strongly connected.
  *
  * These are the form of rings used to define polygons under some spatial data models.
- * However, under the OGC SFS model, {@link MinimalEdgeRings} are required.
+ * However, under the OGC SFS model, [MinimalEdgeRings](@ref MinimalEdgeRing) are required.
  * A MaximalEdgeRing can be converted to a list of MinimalEdgeRings using the
  * {@link #buildMinimalRings() } method.
  *

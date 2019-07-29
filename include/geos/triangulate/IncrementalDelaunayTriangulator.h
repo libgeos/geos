@@ -33,8 +33,8 @@ class QuadEdgeSubdivision;
 }
 
 /**
- * Computes a Delauanay Triangulation of a set of {@link Vertex}es, using an
- * incrementatal insertion algorithm.
+ * Computes a Delauanay Triangulation of a set of {@link quadedge::Vertex}es,
+ * using an incrementatal insertion algorithm.
  *
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
@@ -46,7 +46,7 @@ private:
 
 public:
     /**
-     * Creates a new triangulator using the given {@link QuadEdgeSubdivision}.
+     * Creates a new triangulator using the given {@link quadedge::QuadEdgeSubdivision}.
      * The triangulator uses the tolerance of the supplied subdivision.
      *
      * @param subdiv
@@ -54,7 +54,7 @@ public:
      */
     IncrementalDelaunayTriangulator(quadedge::QuadEdgeSubdivision* subdiv);
 
-    typedef std::list<quadedge::Vertex> VertexList;
+    typedef std::vector<quadedge::Vertex> VertexList;
 
     /**
      * Inserts all sites in a collection. The inserted vertices <b>MUST</b> be

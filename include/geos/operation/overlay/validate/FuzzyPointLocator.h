@@ -61,7 +61,7 @@ public:
 
     FuzzyPointLocator(const geom::Geometry& geom, double nTolerance);
 
-    geom::Location::Value getLocation(const geom::Coordinate& pt);
+    geom::Location getLocation(const geom::Coordinate& pt);
 
 private:
 
@@ -78,7 +78,7 @@ private:
 
     /// Extracts linework for polygonal components.
     //
-    /// @param g the geometry from which to extract
+    /// @param geom the geometry from which to extract
     /// @return a lineal geometry containing the extracted linework
     std::unique_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
 

@@ -22,10 +22,12 @@
 #define GEOS_ALGORITHM_CONVEXHULL_H
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 // FIXME: avoid using Cordinate:: typedefs to avoid full include
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -37,7 +39,6 @@ namespace geos {
 namespace geom {
 class Geometry;
 class GeometryFactory;
-class CoordinateSequence;
 }
 }
 
@@ -66,7 +67,7 @@ private:
     /// This is needed to construct the geometries.
     /// Here coordinate copies happen
     /// The returned object is newly allocated !NO EXCEPTION SAFE!
-    geom::CoordinateSequence* toCoordinateSequence(geom::Coordinate::ConstVect& cv);
+    std::unique_ptr<geom::CoordinateSequence> toCoordinateSequence(geom::Coordinate::ConstVect& cv);
 
     void computeOctPts(const geom::Coordinate::ConstVect& src,
                        geom::Coordinate::ConstVect& tgt);
@@ -138,7 +139,7 @@ private:
      *                   collinear; otherwise, a Polygon with unnecessary
      *                   (collinear) vertices removed
      */
-    geom::Geometry* lineOrPolygon(const geom::Coordinate::ConstVect& vertices);
+    std::unique_ptr<geom::Geometry> lineOrPolygon(const geom::Coordinate::ConstVect& vertices);
 
     /**
      * Write in 'cleaned' a version of 'input' with collinear
@@ -175,7 +176,7 @@ public:
      *         a Polygon; 2 points, a LineString;
      *         1 point, a Point; 0 points, an empty GeometryCollection.
      */
-    geom::Geometry* getConvexHull();
+    std::unique_ptr<geom::Geometry> getConvexHull();
 };
 
 } // namespace geos::algorithm

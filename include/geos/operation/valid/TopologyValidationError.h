@@ -33,7 +33,7 @@ namespace operation { // geos::operation
 namespace valid { // geos::operation::valid
 
 /** \brief
- * Contains information about the nature and location of a {@link Geometry}
+ * Contains information about the nature and location of a geom::Geometry
  * validation error
  *
  */

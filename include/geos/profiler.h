@@ -15,29 +15,8 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
-#include <stdlib.h> /** need this to correctly detect MINGW64 **/
 #include <geos/export.h>
-
-/* For MingW builds with __STRICT_ANSI__ (-ansi) */
-/** MINGW64 doesn't have a config.h **/
-#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
-/* Allow us to check for presence of gettimeofday in MingW */
-#include <config.h>
-
-#include <sys/time.h>
-extern "C" {
-    extern _CRTIMP void __cdecl	_tzset(void);
-    __MINGW_IMPORT int	_daylight;
-    __MINGW_IMPORT long	_timezone;
-    __MINGW_IMPORT char* 	_tzname[2];
-}
-#endif
-
-#if defined(_MSC_VER) || defined(__MINGW32__) && !defined(HAVE_GETTIMEOFDAY) && !defined(__MINGW64_VERSION_MAJOR)
-#include <geos/timeval.h>
-#else
-#include <sys/time.h>
-#endif
+#include <chrono>
 
 #include <map>
 #include <memory>
@@ -65,29 +44,30 @@ namespace util {
  */
 class GEOS_DLL Profile {
 public:
+    using timeunit = std::chrono::microseconds;
+
     /** \brief Create a named profile */
     Profile(std::string name);
 
     /** \brief Destructor */
-    ~Profile();
+    ~Profile() = default;
 
     /** \brief start a new timer */
     void
     start()
     {
-        gettimeofday(&starttime, nullptr);
+        starttime = std::chrono::high_resolution_clock::now();
     }
 
     /** \brief stop current timer */
     void
     stop()
     {
-        gettimeofday(&stoptime, nullptr);
-        double elapsed = static_cast<double>(
-                             1000000 * (stoptime.tv_sec - starttime.tv_sec)
-                             + (stoptime.tv_usec - starttime.tv_usec));
+        stoptime = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<timeunit>(stoptime - starttime);
 
         timings.push_back(elapsed);
+
         totaltime += elapsed;
         if(timings.size() == 1) {
             max = min = elapsed;
@@ -100,7 +80,8 @@ public:
                 min = elapsed;
             }
         }
-        avg = totaltime / static_cast<double>(timings.size());
+
+        avg = static_cast<double>(totaltime.count()) / static_cast<double>(timings.size());
     }
 
     /** \brief Return Max stored timing */
@@ -111,6 +92,9 @@ public:
 
     /** \brief Return total timing */
     double getTot() const;
+
+    /** \brief Return total timing */
+    std::string getTotFormatted() const;
 
     /** \brief Return average timing */
     double getAvg() const;
@@ -123,25 +107,23 @@ public:
 
 
 private:
-
     /* \brief current start and stop times */
-    struct timeval starttime, stoptime;
+    std::chrono::high_resolution_clock::time_point starttime, stoptime;
 
     /* \brief actual times */
-    std::vector<double> timings;
+    std::vector<timeunit> timings;
 
     /* \brief total time */
-    double totaltime;
+    timeunit totaltime;
 
     /* \brief max time */
-    double max;
+    timeunit max;
 
     /* \brief max time */
-    double min;
+    timeunit min;
 
-    /* \brief max time */
+    /* \brief avg time */
     double avg;
-
 };
 
 /*
@@ -154,8 +136,8 @@ class GEOS_DLL Profiler {
 
 public:
 
-    Profiler();
-    ~Profiler();
+    Profiler() = default;
+    ~Profiler() = default;
 
     /**
      * \brief
@@ -181,7 +163,7 @@ public:
     /** \brief get Profile of named task */
     Profile* get(std::string name);
 
-    std::map<std::string, Profile*> profs;
+    std::map<std::string, std::unique_ptr<Profile>> profs;
 };
 
 

@@ -75,12 +75,12 @@ public:
     /// @param g2
     ///   Second geometry. Must be linear.
     ///
-    /// @param sameDir
+    /// @param sameDirection
     ///   Shared edges having the same direction are pushed
     ///   onto this vector. They'll be of type LineString.
     ///   Ownership of the edges is tranferred.
     ///
-    /// @param oppositeDir
+    /// @param oppositeDirection
     ///   Shared edges having the opposite direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
     ///   Ownership of the edges is tranferred.
@@ -102,12 +102,12 @@ public:
 
     /// Get shared paths
     //
-    /// @param sameDir
+    /// @param sameDirection
     ///   Shared edges having the same direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
     ///   Ownership of the edges is tranferred.
     ///
-    /// @param oppositeDir
+    /// @param oppositeDirection
     ///   Shared edges having the opposite direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
     ///   Ownership of the edges is tranferred.

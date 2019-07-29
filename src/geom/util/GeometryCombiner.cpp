@@ -25,14 +25,14 @@ namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCombiner::combine(std::vector<Geometry*> const& geoms)
 {
     GeometryCombiner combiner(geoms);
     return combiner.combine();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCombiner::combine(const Geometry* g0, const Geometry* g1)
 {
     std::vector<Geometry*> geoms;
@@ -43,7 +43,7 @@ GeometryCombiner::combine(const Geometry* g0, const Geometry* g1)
     return combiner.combine();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCombiner::combine(const Geometry* g0, const Geometry* g1,
                           const Geometry* g2)
 {
@@ -67,26 +67,24 @@ GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms)
     return geoms.empty() ? nullptr : geoms.front()->getFactory();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCombiner::combine()
 {
     std::vector<Geometry*> elems;
 
-    std::vector<Geometry*>::const_iterator end = inputGeoms.end();
-    for(std::vector<Geometry*>::const_iterator i = inputGeoms.begin();
-            i != end; ++i) {
-        extractElements(*i, elems);
+    for(const auto& geom : inputGeoms) {
+        extractElements(geom, elems);
     }
 
     if(elems.empty()) {
         if(geomFactory != nullptr) {
-            return geomFactory->createGeometryCollection(nullptr);
+            return std::unique_ptr<Geometry>(geomFactory->createGeometryCollection(nullptr));
         }
         return nullptr;
     }
 
     // return the "simplest possible" geometry
-    return geomFactory->buildGeometry(elems);
+    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(elems));
 }
 
 void

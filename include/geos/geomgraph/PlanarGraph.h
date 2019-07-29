@@ -124,7 +124,7 @@ public:
 
     virtual Node* addNode(const geom::Coordinate& coord);
 
-    /** \brief
+    /**
      * @return the node if found; null otherwise
      */
     virtual Node* find(geom::Coordinate& coord);

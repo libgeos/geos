@@ -50,24 +50,24 @@ static GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
 static geos::io::WKTReader reader(gf.get());
 
 static void
-runPtLocator(int expected, const Coordinate& pt,
+runPtLocator(Location expected, const Coordinate& pt,
              const std::string& wkt)
 {
     std::unique_ptr<Geometry> geom(reader.read(wkt));
     const Polygon* poly = dynamic_cast<Polygon*>(geom.get());
     const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
-    int loc = PointLocation::locateInRing(pt, *cs);
+    Location loc = PointLocation::locateInRing(pt, *cs);
     ensure_equals(loc, expected);
 }
 
 static void
-runPtLocatorDD(int expected, const Coordinate& pt,
+runPtLocatorDD(Location expected, const Coordinate& pt,
                const std::string& wkt)
 {
     std::unique_ptr<Geometry> geom(reader.read(wkt));
     const Polygon* poly = dynamic_cast<Polygon*>(geom.get());
     const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
-    int loc = RayCrossingCounterDD::locatePointInRing(pt, *cs);
+    Location loc = RayCrossingCounterDD::locatePointInRing(pt, *cs);
     ensure_equals(loc, expected);
 }
 

@@ -27,6 +27,7 @@
 #include <geos/algorithm/LineIntersector.h> // for RelateComputer composition
 #include <geos/geomgraph/NodeMap.h> // for RelateComputer composition
 #include <geos/geom/Coordinate.h> // for RelateComputer composition
+#include <geos/geom/IntersectionMatrix.h>
 
 #include <vector>
 #include <memory>
@@ -39,7 +40,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class IntersectionMatrix;
 class Geometry;
 }
 namespace geomgraph {
@@ -77,7 +77,7 @@ public:
     RelateComputer(std::vector<geomgraph::GeometryGraph*>* newArg);
     ~RelateComputer();
 
-    geom::IntersectionMatrix* computeIM();
+    std::unique_ptr<geom::IntersectionMatrix> computeIM();
 private:
 
     algorithm::LineIntersector li;

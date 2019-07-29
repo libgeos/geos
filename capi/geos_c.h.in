@@ -75,6 +75,7 @@ extern "C" {
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR
 #define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
 
+
 /************************************************************************
  *
  * (Abstract) type definitions
@@ -572,6 +573,11 @@ extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g);
+/* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
+ * noded and do not overlap. It will not generate an error (return NULL) for inputs that
+ * do not satisfy this constraint. */
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(GEOSContextHandle_t handle,
+                                                  const GEOSGeometry* g);
 /* @deprecated in 3.3.0: use GEOSUnaryUnion_r instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle,
                                                   const GEOSGeometry* g);
@@ -596,20 +602,20 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect_r(GEOSContextHandle_t handle,
  * Polygonizes a set of Geometries which contain linework that
  * represents the edges of a planar graph.
  *
- * Any dimension of Geometry is handled - the constituent linework
- * is extracted to form the edges.
+ * All types of Geometry are accepted as input; the constituent
+ * linework is extracted as the edges to be polygonized.
  *
  * The edges must be correctly noded; that is, they must only meet
- * at their endpoints.
- * The Polygonizer will still run on incorrectly noded input
- * but will not form polygons from incorrectly noded edges.
+ * at their endpoints. Polygonization will accept incorrectly noded
+ * input but will not form polygons from non-noded edges, and reports
+ * them as errors.
  *
  * The Polygonizer reports the follow kinds of errors:
  *
  * - Dangles - edges which have one or both ends which are
  *   not incident on another edge endpoint
  * - Cut Edges - edges which are connected at both ends but
- *   which do not form part of polygon
+ *   which do not form part of a polygon
  * - Invalid Ring Lines - edges which form rings which are invalid
  *   (e.g. the component lines contain a self-intersection)
  *
@@ -618,11 +624,19 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect_r(GEOSContextHandle_t handle,
  * collection. NULL is returned on exception. All returned
  * geometries must be destroyed by caller.
  *
+ * The GEOSPolygonize_valid_r variant allows extracting only polygons
+ * which form a valid polygonal result. The set of extracted polygons
+ * is guaranteed to be edge-disjoint. This is useful when it is known
+ * that the input lines form a valid polygonal geometry (which may
+ * include holes or nested polygons).
  */
 
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_r(GEOSContextHandle_t handle,
                               const GEOSGeometry *const geoms[],
                               unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSPolygonize_valid_r(GEOSContextHandle_t handle,
+                                                     const GEOSGeometry *const geoms[],
+                                                     unsigned int ngems);
 extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges_r(
                               GEOSContextHandle_t handle,
                               const GEOSGeometry * const geoms[],
@@ -630,6 +644,10 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges_r(
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full_r(GEOSContextHandle_t handle,
                               const GEOSGeometry* input, GEOSGeometry** cuts,
                               GEOSGeometry** dangles, GEOSGeometry** invalidRings);
+
+extern GEOSGeometry GEOS_DLL *GEOSBuildArea_r(
+                                              GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);
@@ -954,6 +972,9 @@ extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
                                          int flags,
                                          char** reason,
                                          GEOSGeometry** location);
+
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g);
 
 /************************************************************************
  *
@@ -1588,6 +1609,11 @@ extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
 
+/* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
+ * noded and do not overlap. It will not generate an error (return NULL) for inputs that
+ * do not satisfy this constraint. */
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
+
 /* @deprecated in 3.3.0: use GEOSUnaryUnion instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g);
@@ -1600,36 +1626,12 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(const GEOSGeometry* g, double xmin,
  * (both Geometries and pointers)
  */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSPolygonize_valid(const GEOSGeometry * const geoms[], unsigned int ngeoms);
 extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(const GEOSGeometry * const geoms[], unsigned int ngeoms);
-/*
- * Polygonizes a set of Geometries which contain linework that
- * represents the edges of a planar graph.
- *
- * Any dimension of Geometry is handled - the constituent linework
- * is extracted to form the edges.
- *
- * The edges must be correctly noded; that is, they must only meet
- * at their endpoints.
- * The Polygonizer will still run on incorrectly noded input
- * but will not form polygons from incorrectly noded edges.
- *
- * The Polygonizer reports the follow kinds of errors:
- *
- * - Dangles - edges which have one or both ends which are
- *   not incident on another edge endpoint
- * - Cut Edges - edges which are connected at both ends but
- *   which do not form part of polygon
- * - Invalid Ring Lines - edges which form rings which are invalid
- *   (e.g. the component lines contain a self-intersection)
- *
- * Errors are reported to output parameters "cuts", "dangles" and
- * "invalid" (if not-null). Formed polygons are returned as a
- * collection. NULL is returned on exception. All returned
- * geometries must be destroyed by caller.
- *
- */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(const GEOSGeometry* input,
     GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid);
+
+extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
@@ -1930,6 +1932,8 @@ extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g,
                                        int flags,
                                        char** reason, GEOSGeometry** location);
+
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
 
 /************************************************************************
  *

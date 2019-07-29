@@ -42,8 +42,8 @@ namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
 /** \brief
- * "Snaps" all {@link SegmentString}s in a {@link SpatialIndex} containing
- * {@link MonotoneChain}s to a given {@link HotPixel}.
+ * "Snaps" all [SegmentStrings](@ref SegmentString) in a [SpatialIndex](@ref index::SpatialIndex) containing
+ * [MonotoneChains](@ref index::chain::MonotoneChain) to a given HotPixel.
  *
  */
 class GEOS_DLL MCIndexPointSnapper {
@@ -56,17 +56,17 @@ public:
         index(nIndex)
     {}
 
-    /**
+    /** \brief
      * Snaps (nodes) all interacting segments to this hot pixel.
-     * The hot pixel may represent a vertex of an edge,
-     * in which case this routine uses the optimization
-     * of not noding the vertex itself
+     *
+     * The hot pixel may represent a vertex of an edge, in which case this
+     * routine uses the optimization of not noding the vertex itself.
      *
      * @param hotPixel the hot pixel to snap to
      * @param parentEdge the edge containing the vertex,
-     *        if applicable, or <code>null</code>
+     *                   if applicable, or `null`
      * @param vertexIndex the index of the vertex, if applicable, or -1
-     * @return <code>true</code> if a node was added for this pixel
+     * @return `true` if a node was added for this pixel
      */
     bool snap(HotPixel& hotPixel, SegmentString* parentEdge,
               size_t vertexIndex);

@@ -51,7 +51,8 @@ namespace operation { // geos::operation
 namespace intersection { // geos::operation::intersection
 
 /**
- * \brief Speed-optimized clipping of a {@link Geometry} with a rectangle.
+ * \brief
+ * Speed-optimized clipping of a [Geometry](@ref geom::Geometry) with a rectangle.
  *
  * Two different methods are provided. The first performs normal
  * clipping, the second clips the boundaries of polygons, not
@@ -67,35 +68,34 @@ namespace intersection { // geos::operation::intersection
  * of the rectangle. Hence clipping may be faster than calculating
  * the envelope of the geometry for trivial overlap tests.
  *
- * The input geometry must be valid. In particular all {@link LinearRing}s must
- * be properly closed, or the algorithm may not terminate.
+ * The input geometry must be valid. In particular all [LinearRings](@ref geom::LinearRing)
+ * must be properly closed, or the algorithm may not terminate.
  *
  */
 class GEOS_DLL RectangleIntersection {
 public:
 
     /**
-     * \brief Clip geometry with a rectangle
+     * \brief Clip geometry with a rectangle.
      *
-     * @param geom a {@link Geometry}
-     * @param rect a {@link Rectangle}
+     * @param geom a [Geometry](@ref geom::Geometry)
+     * @param rect a Rectangle
      * @return the clipped geometry
-     * @return NULL if the geometry is outside the {@link Rectangle}
+     * @return `NULL` if the geometry is outside the Rectangle
      */
     static std::unique_ptr<geom::Geometry> clip(const geom::Geometry& geom,
             const Rectangle& rect);
 
     /**
-     * \brief Clip boundary of a geometry with a rectangle
-     *
+     * \brief Clip boundary of a geometry with a rectangle.
      *
      * Any polygon which intersects the rectangle will be converted to
      * a polyline or a multipolyline - including the holes.
      *
-     * @param geom a {@link Geometry}
-     * @param rect a {@link Rectangle}
+     * @param geom a [Geometry](@ref geom::Geometry)
+     * @param rect a Rectangle
      * @return the clipped geometry
-     * @return NULL if the geometry is outside the {@link Rectangle}
+     * @return `NULL` if the geometry is outside the Rectangle
      */
     static std::unique_ptr<geom::Geometry> clipBoundary(const geom::Geometry& geom,
             const Rectangle& rect);

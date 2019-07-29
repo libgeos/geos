@@ -78,14 +78,11 @@ void object::test<2>
         ensure(nullptr != col);
 
         const size_t size0 = 0;
-        CoordinateSequencePtr sequence = factory->create(col);
+        auto sequence = factory->create(col);
 
         ensure(nullptr != sequence);
         ensure(sequence->isEmpty());
         ensure_equals(sequence->size(), size0);
-
-        // FREE MEMORY
-        delete sequence;
     }
     catch(std::exception& e) {
         fail(e.what());
@@ -112,15 +109,12 @@ void object::test<3>
         col->push_back(Coordinate(5, 10, 15));
 
         const size_t size2 = 2;
-        CoordinateSequencePtr sequence = factory->create(col);
+        auto sequence = factory->create(col);
 
         ensure(nullptr != sequence);
         ensure(!sequence->isEmpty());
         ensure_equals(sequence->size(), size2);
         ensure(sequence->getAt(0) != sequence->getAt(1));
-
-        // FREE MEMORY
-        delete sequence;
     }
     catch(std::exception& e) {
         fail(e.what());
@@ -141,7 +135,7 @@ void object::test<4>
         ensure(nullptr != factory);
 
         const size_t size1000 = 1000;
-        CoordinateSequencePtr sequence = factory->create(size1000, 3);
+        auto sequence = factory->create(size1000, 3);
 
         ensure(nullptr != sequence);
         ensure(!sequence->isEmpty());
@@ -149,9 +143,6 @@ void object::test<4>
         ensure(sequence->hasRepeatedPoints());
         ensure_equals(sequence->getAt(0), sequence->getAt(size1000 - 1));
         ensure_equals(sequence->getAt(0), sequence->getAt(size1000 / 2));
-
-        // FREE MEMORY
-        delete sequence;
     }
     catch(std::exception& e) {
         fail(e.what());
@@ -172,14 +163,11 @@ void object::test<5>
         ensure(nullptr != factory);
 
         const size_t size0 = 0;
-        CoordinateSequencePtr sequence = factory->create();
+        auto sequence = factory->create();
 
         ensure(nullptr != sequence);
         ensure(sequence->isEmpty());
         ensure_equals(sequence->size(), size0);
-
-        // FREE MEMORY
-        delete sequence;
     }
     catch(std::exception& e) {
         fail(e.what());

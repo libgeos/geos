@@ -22,6 +22,7 @@
 #define GEOS_GEOM_UTIL_GEOMETRYEDITOR_H
 
 #include <geos/export.h>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -82,12 +83,12 @@ private:
      */
     const GeometryFactory* factory;
 
-    Polygon* editPolygon(const Polygon* polygon,
-                         GeometryEditorOperation* operation);
+    std::unique_ptr<Polygon> editPolygon(const Polygon* polygon,
+                                         GeometryEditorOperation* operation);
 
-    GeometryCollection* editGeometryCollection(
-        const GeometryCollection* collection,
-        GeometryEditorOperation* operation);
+    std::unique_ptr<GeometryCollection> editGeometryCollection(
+            const GeometryCollection* collection,
+            GeometryEditorOperation* operation);
 
 public:
 
@@ -117,8 +118,8 @@ public:
      * @return a new Geometry which is the result of the editing
      *
      */
-    Geometry* edit(const Geometry* geometry,
-                   GeometryEditorOperation* operation); // final
+    std::unique_ptr<Geometry> edit(const Geometry* geometry,
+                                   GeometryEditorOperation* operation); // final
 };
 
 } // namespace geos.geom.util

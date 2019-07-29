@@ -74,7 +74,7 @@ public:
      *             coordinate bits
      * @return the shifted Geometry
      */
-    geom::Geometry* removeCommonBits(geom::Geometry* geom);
+    void removeCommonBits(geom::Geometry* geom);
 
     /** \brief
      * Adds the common coordinate bits back into a Geometry.

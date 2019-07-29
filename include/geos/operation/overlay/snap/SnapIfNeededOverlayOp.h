@@ -39,12 +39,10 @@ namespace snap { // geos::operation::overlay::snap
  * Performs an overlay operation using snapping and enhanced precision
  * to improve the robustness of the result.
  *
- * This class only uses snapping
- * if an error is detected when running the standard JTS overlay code.
- * Errors detected include thrown exceptions
- * (in particular, {@link TopologyException})
+ * This class only uses snapping if an error is detected when running
+ * the standard JTS overlay code. Errors detected include thrown exceptions
+ * (in particular, [TopologyException](@ref util::TopologyException))
  * and invalid overlay computations.
- *
  */
 class SnapIfNeededOverlayOp {
 

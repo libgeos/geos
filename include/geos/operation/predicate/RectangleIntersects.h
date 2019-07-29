@@ -41,7 +41,7 @@ namespace predicate { // geos::operation::predicate
  * for cases where one Geometry is a rectangle.
  *
  * This class works for all input geometries, including
- * {@link GeometryCollection}s.
+ * [GeometryCollections](@ref geom::GeometryCollection).
  *
  * As a further optimization,
  * this class can be used to test

@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 109/138 (JTS-1.10)
+ * Last port: operation/polygonize/EdgeRing.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
@@ -22,8 +22,15 @@
 #define GEOS_OP_POLYGONIZE_EDGERING_H
 
 #include <geos/export.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
 
+#include <memory>
 #include <vector>
+#include <geos/geom/Location.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -34,15 +41,17 @@
 namespace geos {
 namespace geom {
 class LineString;
-class LinearRing;
-class Polygon;
 class CoordinateSequence;
-class Geometry;
 class GeometryFactory;
 class Coordinate;
 }
 namespace planargraph {
 class DirectedEdge;
+}
+namespace index {
+namespace strtree {
+class STRtree;
+}
 }
 }
 
@@ -58,33 +67,54 @@ class GEOS_DLL EdgeRing {
 private:
     const geom::GeometryFactory* factory;
 
-    typedef std::vector<const planargraph::DirectedEdge*> DeList;
+    typedef std::vector<const PolygonizeDirectedEdge*> DeList;
     DeList deList;
 
     // cache the following data for efficiency
-    geom::LinearRing* ring;
-    geom::CoordinateSequence* ringPts;
+    std::unique_ptr<geom::LinearRing> ring;
+    std::unique_ptr<geom::CoordinateArraySequence> ringPts;
+    std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
 
-    typedef std::vector<geom::Geometry*> GeomVect;
-    GeomVect* holes;
+    std::unique_ptr<std::vector<geom::LinearRing*>> holes;
+
+    EdgeRing* shell = nullptr;
+    bool is_hole;
+    bool is_processed = false;
+    bool is_included_set = false;
+    bool is_included = false;
+    bool visitedByUpdateIncludedRecursive = false;
 
     /** \brief
      * Computes the list of coordinates which are contained in this ring.
-     * The coordinatea are computed once only and cached.
+     * The coordinates are computed once only and cached.
      *
      * @return an array of the Coordinate in this ring
      */
-    geom::CoordinateSequence* getCoordinates();
+    const geom::CoordinateSequence* getCoordinates();
 
     static void addEdge(const geom::CoordinateSequence* coords,
                         bool isForward,
-                        geom::CoordinateSequence* coordList);
+                        geom::CoordinateArraySequence* coordList);
+
+    algorithm::locate::PointOnGeometryLocator* getLocator() {
+        if (ringLocator == nullptr) {
+            ringLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*getRingInternal()));
+        }
+        return ringLocator.get();
+    }
 
 public:
+    /** \brief
+     * Adds a DirectedEdge which is known to form part of this ring.
+     *
+     * @param de the DirectedEdge to add. Ownership to the caller.
+     */
+    void add(const PolygonizeDirectedEdge* de);
+
     /**
      * \brief
      * Find the innermost enclosing shell EdgeRing
-     * containing the argument EdgeRing, if any.
+     * containing this, if any.
      *
      * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
      * The algorithm used depends on the fact that:
@@ -99,9 +129,19 @@ public:
      * @return containing EdgeRing, if there is one
      * @return null if no containing EdgeRing is found
      */
-    static EdgeRing* findEdgeRingContaining(
-        EdgeRing* testEr,
-        std::vector<EdgeRing*>* shellList);
+    EdgeRing* findEdgeRingContaining(const std::vector<EdgeRing*> & erList);
+
+    /**
+     * \brief
+     * Traverses a ring of DirectedEdges, accumulating them into a list.
+     *
+     * This assumes that all dangling directed edges have been removed from
+     * the graph, so that there is always a next dirEdge.
+     *
+     * @param startDE the DirectedEdge to start traversing at
+     * @return a vector of DirectedEdges that form a ring
+     */
+    static std::vector<PolygonizeDirectedEdge*> findDirEdgesInRing(PolygonizeDirectedEdge* startDE);
 
     /**
      * \brief
@@ -128,16 +168,13 @@ public:
     static bool isInList(const geom::Coordinate& pt,
                          const geom::CoordinateSequence* pts);
 
-    EdgeRing(const geom::GeometryFactory* newFactory);
+    explicit EdgeRing(const geom::GeometryFactory* newFactory);
 
     ~EdgeRing();
 
-    /** \brief
-     * Adds a DirectedEdge which is known to form part of this ring.
-     *
-     * @param de the DirectedEdge to add. Ownership to the caller.
-     */
-    void add(const planargraph::DirectedEdge* de);
+    void build(PolygonizeDirectedEdge* startDE);
+
+    void computeHole();
 
     /** \brief
      * Tests whether this ring is a hole.
@@ -146,7 +183,104 @@ public:
      * a ring is a hole if it is oriented counter-clockwise.
      * @return <code>true</code> if this ring is a hole
      */
-    bool isHole();
+    bool isHole() const {
+        return is_hole;
+    }
+
+    /* Indicates whether we know if the ring should be included in a polygonizer
+     * output of only polygons.
+     */
+    bool isIncludedSet() const {
+        return is_included_set;
+    }
+
+    /* Indicates whether the ring should be included in a polygonizer output of
+     * only polygons.
+     */
+    bool isIncluded() const {
+        return is_included;
+    }
+
+    void setIncluded(bool included) {
+        is_included = included;
+        is_included_set = true;
+    }
+
+    bool isProcessed() const {
+        return is_processed;
+    }
+
+    void setProcessed(bool processed) {
+        is_processed = processed;
+    }
+
+    /** \brief
+     *  Sets the containing shell ring of a ring that has been determined to be a hole.
+     *
+     *  @param shellRing the shell ring
+     */
+    void setShell(EdgeRing* shellRing) {
+        shell = shellRing;
+    }
+
+    /** \brief
+     * Tests whether this ring has a shell assigned to it.
+     *
+     * @return true if the ring has a shell
+     */
+    bool hasShell() const {
+        return shell != nullptr;
+    }
+
+    /** \brief
+     * Gets the shell for this ring. The shell is the ring itself if it is
+     * not a hole, otherwise it is the parent shell.
+     *
+     * @return the shell for the ring
+     */
+    EdgeRing* getShell() {
+        return isHole() ? shell : this;
+    }
+
+    /** \brief
+     * Tests whether this ring is an outer hole.
+     * A hole is an outer hole if it is not contained by any shell.
+     *
+     * @return true if the ring is an outer hole.
+     */
+    bool isOuterHole() const {
+        if (!isHole()) {
+            return false;
+        }
+
+        return !hasShell();
+    }
+
+    /** \brief
+     * Tests whether this ring is an outer shell.
+     *
+     * @return true if the ring is an outer shell.
+     */
+    bool isOuterShell() const {
+        return getOuterHole() != nullptr;
+    }
+
+    /** \brief
+     * Gets the outer hole of a shell, if it has one.
+     * An outer hole is one that is not contained in any other shell.
+     *
+     * Each disjoint connected group of shells is surrounded by
+     * an outer hole.
+     *
+     * @return the outer hole edge ring, or nullptr
+     */
+    EdgeRing* getOuterHole() const;
+
+    /** \brief
+     * Updates the included status for currently non-included shells
+     * based on whether they are adjacent to an included shell.
+     */
+    void updateIncludedRecursive();
 
     /** \brief
      * Adds a hole to the polygon formed by this ring.
@@ -154,6 +288,8 @@ public:
      * @param hole the LinearRing forming the hole.
      */
     void addHole(geom::LinearRing* hole);
+
+    void addHole(EdgeRing* holeER);
 
     /** \brief
      * Computes the Polygon formed by this ring and any contained holes.
@@ -163,7 +299,7 @@ public:
      *
      * @return the Polygon formed by this ring and its holes.
      */
-    geom::Polygon* getPolygon();
+    std::unique_ptr<geom::Polygon> getPolygon();
 
     /** \brief
      * Tests if the LinearRing ring formed by this edge ring
@@ -179,7 +315,7 @@ public:
      * is topologically invalid.
      * @return a LineString containing the coordinates in this ring
      */
-    geom::LineString* getLineString();
+    std::unique_ptr<geom::LineString> getLineString();
 
     /** \brief
      * Returns this ring as a LinearRing, or null if an Exception
@@ -197,7 +333,11 @@ public:
      * Details of problems are written to standard output.
      * Caller gets ownership of ring.
      */
-    geom::LinearRing* getRingOwnership();
+    std::unique_ptr<geom::LinearRing> getRingOwnership();
+
+    bool isInRing(const geom::Coordinate & pt) {
+        return geom::Location::EXTERIOR != getLocator()->locate(&pt);
+    }
 };
 
 } // namespace geos::operation::polygonize

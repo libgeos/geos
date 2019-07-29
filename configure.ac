@@ -43,8 +43,11 @@ AC_MSG_RESULT(["$CAPI_VERSION"])
 
 AM_INIT_AUTOMAKE([geos], [$VERSION], [no-define])
 AM_MAINTAINER_MODE
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_CC
+
+AC_CONFIG_LINKS([tools/astyle.sh:tools/astyle.sh])
 
 dnl -- JTS_PORT: the version of JTS this release is bound to
 dnl JTS_PORT=1.13.0
@@ -492,16 +495,18 @@ AC_OUTPUT([
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/unit/Makefile
-	tests/perf/Makefile
-	tests/perf/operation/Makefile
-	tests/perf/operation/buffer/Makefile
-	tests/perf/operation/predicate/Makefile
-	tests/perf/capi/Makefile
+	benchmarks/Makefile
+	benchmarks/algorithm/Makefile
+	benchmarks/operation/Makefile
+	benchmarks/operation/buffer/Makefile
+	benchmarks/operation/predicate/Makefile
+	benchmarks/capi/Makefile
 	tests/xmltester/Makefile
 	tests/geostest/Makefile
 	tests/thread/Makefile
 	tools/Makefile
 	tools/geos-config
+	tools/astyle/Makefile
 	])
 
 dnl -- echo "---------------------------------------"

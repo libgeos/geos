@@ -37,6 +37,7 @@
 #include <sstream>
 #include <string>
 #include <cassert>
+#include <geos/util.h>
 
 
 #ifndef GEOS_DEBUG
@@ -214,8 +215,8 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
         // PlanarGraph destructor will delete all DirectedEdges
         // in edgeEndList, which is where these are added
         // by the ::add(EdgeEnd) call
-        std::unique_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
-        std::unique_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
+        auto de1 = detail::make_unique<DirectedEdge>(e, true);
+        auto de2 = detail::make_unique<DirectedEdge>(e, false);
         de1->setSym(de2.get());
         de2->setSym(de1.get());
 

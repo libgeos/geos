@@ -60,7 +60,7 @@ void object::test<1>
 
     ensure_equals(geo->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
     std::unique_ptr<geos::geom::CoordinateSequence> cs;
-    cs.reset(geo->getCoordinates());
+    cs = geo->getCoordinates();
     ensure_equals(cs->getSize(), size5);
 
     // Create collection buffer for filtered coordinates
@@ -76,7 +76,7 @@ void object::test<1>
     const Coordinate::ConstVect::size_type size3 = 3;
     geo->apply_ro(&filter);
 
-    cs.reset(geo->getCoordinates());
+    cs = geo->getCoordinates();
     ensure_equals(cs->getSize(), size5);
     ensure_equals(coords.size(), size3);
     ensure_equals(coords.at(0)->x, 10);

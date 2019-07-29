@@ -39,7 +39,7 @@ namespace noding { // geos.noding
  * Non-noded intersections include:
  *
  * - intersections which lie in the interior of a segment
- * - intersections at a vertex in the interior of a {@link SegmentString}
+ * - intersections at a vertex in the interior of a SegmentString
  * (e.g. with a segment string endpoint or other interior vertex)
  *
  * @version 1.7
@@ -52,7 +52,7 @@ public:
      * Creates an intersection finder which finds an interior intersection
      * if one exists
      *
-     * @param li the LineIntersector to use
+     * @param newLi the LineIntersector to use
      */
     NodingIntersectionFinder(algorithm::LineIntersector& newLi)
         :
@@ -88,7 +88,7 @@ public:
         return interiorIntersection;
     }
 
-    /**
+    /** \brief
     * Gets the count of intersections found.
     *
     * @return the intersection count
@@ -99,15 +99,16 @@ public:
         return intersectionCount;
     }
 
-    /**
-    * Sets whether only end segments should be tested for interior intersection.
-    * This is a performance optimization that may be used if
-    * the segments have been previously noded by an appropriate algorithm.
-    * It may be known that any potential noding failures will occur only in
-    * end segments.
-    *
-    * @param isCheckEndSegmentsOnly whether to test only end segments
-    */
+    /** \brief
+     * Sets whether only end segments should be tested for interior intersection.
+     *
+     * This is a performance optimization that may be used if the segments
+     * have been previously noded by an appropriate algorithm.
+     * It may be known that any potential noding failures will occur only in
+     * end segments.
+     *
+     * @param isCESO whether to test only end segments
+     */
     void
     setCheckEndSegmentsOnly(bool isCESO)
     {
@@ -115,15 +116,16 @@ public:
     }
 
 
-    /**
-    * Sets whether all intersections should be computed.
-    * When this is <code>false</code> (the default value)
-    * the value of {@link #isDone()} is <code>true</code> after the first intersection is found.
-    * <p>
-    * Default is <code>false</code>.
-    *
-    * @param findAllIntersections whether all intersections should be computed
-    */
+    /** \brief
+     * Sets whether all intersections should be computed.
+     *
+     * When this is `false` (the default value) the value of
+     * #isDone() is `true` after the first intersection is found.
+     *
+     * Default is `false`.
+     *
+     * @param fAI whether all intersections should be computed
+     */
     void
     setFindAllIntersections(bool fAI)
     {
@@ -142,11 +144,11 @@ public:
     }
 
     /** \brief
-     * This method is called by clients
-     * of the {@link SegmentIntersector} class to process
-     * intersections for two segments of the {@link SegmentStrings} being intersected.
+     * This method is called by clients of the SegmentIntersector class to process
+     * intersections for two segments of the [SegmentStrings](@ref SegmentString)
+     * being intersected.
      *
-     * Note that some clients (such as {@link MonotoneChain}s) may optimize away
+     * @note Some clients (such as `MonotoneChains`) may optimize away
      * this call for segment pairs which they have determined do not intersect
      * (e.g. by an disjoint envelope test).
      */
@@ -173,48 +175,49 @@ private:
     NodingIntersectionFinder(const NodingIntersectionFinder& other) = delete;
     NodingIntersectionFinder& operator=(const NodingIntersectionFinder& rhs) = delete;
 
-    /**
-    * Tests if two vertices with at least one in a segmentString interior
-    * are equal.
-    *
-    * @param p0 a segment vertex
-    * @param p1 a segment vertex
-    * @param isEnd0 true if vertex is a segmentString endpoint
-    * @param isEnd1 true if vertex is a segmentString endpoint
-    * @return true if an intersection is found
+    /** \brief
+     * Tests if two vertices with at least one in a segmentString interior
+     * are equal.
+     *
+     * @param p0 a segment vertex
+     * @param p1 a segment vertex
+     * @param isEnd0 true if vertex is a segmentString endpoint
+     * @param isEnd1 true if vertex is a segmentString endpoint
+     * @return true if an intersection is found
     */
     bool isInteriorVertexIntersection(
         const geom::Coordinate& p0, const geom::Coordinate& p1,
         bool isEnd0, bool isEnd1);
 
-    /**
-    * Tests if an intersection occurs between a segmentString interior vertex and another vertex.
-    * Note that intersections between two endpoint vertices are valid noding,
-    * and are not flagged.
-    *
-    * @param p00 a segment vertex
-    * @param p01 a segment vertex
-    * @param p10 a segment vertex
-    * @param p11 a segment vertex
-    * @param isEnd00 true if vertex is a segmentString endpoint
-    * @param isEnd01 true if vertex is a segmentString endpoint
-    * @param isEnd10 true if vertex is a segmentString endpoint
-    * @param isEnd11 true if vertex is a segmentString endpoint
-    * @return true if an intersection is found
-    */
+    /** \brief
+     * Tests if an intersection occurs between a SegmentString interior vertex and another vertex.
+     *
+     * @note intersections between two endpoint vertices are valid noding,
+     * and are not flagged.
+     *
+     * @param p00 a segment vertex
+     * @param p01 a segment vertex
+     * @param p10 a segment vertex
+     * @param p11 a segment vertex
+     * @param isEnd00 true if vertex is a segmentString endpoint
+     * @param isEnd01 true if vertex is a segmentString endpoint
+     * @param isEnd10 true if vertex is a segmentString endpoint
+     * @param isEnd11 true if vertex is a segmentString endpoint
+     * @return true if an intersection is found
+     */
     bool isInteriorVertexIntersection(
         const geom::Coordinate& p00, const geom::Coordinate& p01,
         const geom::Coordinate& p10, const geom::Coordinate& p11,
         bool isEnd00, bool isEnd01, bool isEnd10, bool isEnd11);
 
-    /**
-    * Tests whether a segment in a {@link SegmentString} is an end segment.
-    * (either the first or last).
-    *
-    * @param segStr a segment string
-    * @param index the index of a segment in the segment string
-    * @return true if the segment is an end segment
-    */
+    /** \brief
+     * Tests whether a segment in a SegmentString is an end segment.
+     * (either the first or last).
+     *
+     * @param segStr a segment string
+     * @param index the index of a segment in the segment string
+     * @return true if the segment is an end segment
+     */
     bool isEndSegment(const SegmentString* segStr, size_t index);
 
 

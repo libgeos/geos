@@ -44,7 +44,7 @@ namespace geomgraph { // geos.geomgraph
 
 /* public static */
 int
-DirectedEdge::depthFactor(int currLocation, int nextLocation)
+DirectedEdge::depthFactor(Location currLocation, Location nextLocation)
 {
     if(currLocation == Location::EXTERIOR && nextLocation == Location::INTERIOR) {
         return 1;

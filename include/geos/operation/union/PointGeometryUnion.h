@@ -28,7 +28,6 @@ namespace geos {
 namespace geom {
 class GeometryFactory;
 class Geometry;
-class Puntal;
 }
 }
 
@@ -38,8 +37,8 @@ namespace geounion {  // geos::operation::geounion
 
 /**
  * \brief
- * Computes the union of a {@link Puntal} geometry with
- * another arbitrary {@link Geometry}.
+ * Computes the union of a puntal geometry with another
+ * arbitrary [Geometry](@ref geom::Geometry).
  *
  * Does not copy any component geometries.
  *
@@ -48,11 +47,11 @@ class GEOS_DLL PointGeometryUnion {
 public:
 
     static std::unique_ptr<geom::Geometry> Union(
-        const geom::Puntal& pointGeom,
+        const geom::Geometry& pointGeom,
         const geom::Geometry& otherGeom);
 
 
-    PointGeometryUnion(const geom::Puntal& pointGeom,
+    PointGeometryUnion(const geom::Geometry& pointGeom,
                        const geom::Geometry& otherGeom);
 
     std::unique_ptr<geom::Geometry> Union() const;

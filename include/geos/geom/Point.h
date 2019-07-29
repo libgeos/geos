@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -63,7 +62,7 @@ namespace geom { // geos::geom
  *   (i.e does not have an NaN X or Y ordinate)
  *
  */
-class GEOS_DLL Point : public virtual Geometry, public Puntal {
+class GEOS_DLL Point : public Geometry {
 
 public:
 
@@ -80,13 +79,13 @@ public:
      *
      * @return a clone of this instance
      */
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new Point(*this);
+        return std::unique_ptr<Geometry>(new Point(*this));
     }
 
-    CoordinateSequence* getCoordinates(void) const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates(void) const override;
 
     const CoordinateSequence* getCoordinatesRO() const;
 
@@ -111,7 +110,7 @@ public:
      * @return an empty GeometryCollection
      * @see Geometry::getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     double getX() const;
     double getY() const;
@@ -136,7 +135,7 @@ public:
         // a Point is always in normalized form
     }
 
-    Geometry*
+    std::unique_ptr<Geometry>
     reverse() const override
     {
         return clone();

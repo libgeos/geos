@@ -74,7 +74,7 @@ public:
     }
 
     /**
-     * Computes the </tt>contains</tt> predicate between a {@link PreparedPolygon}
+     * Computes the <tt>contains</tt> predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
      * @param prep the prepared polygon

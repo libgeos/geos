@@ -37,12 +37,12 @@ namespace noding { // geos::noding
 class SegmentStringUtil {
 public:
     /** \brief
-     * Extracts all linear components from a given {@link Geometry}
-     * to {@link SegmentString}s.
+     * Extracts all linear components from a given [Geometry](@ref geom::Geometry)
+     * to [SegmentStrings](@ref SegmentString)
      *
      * The SegmentString data item is set to be the source Geometry.
      *
-     * @param geom the geometry to extract from
+     * @param g the geometry to extract from
      * @param segStr a List of SegmentStrings (output parameter).
      *               Ownership of elements pushed to the vector
      *               is transferred to caller.
@@ -60,9 +60,9 @@ public:
             // we take ownership of the coordinates here
             // TODO: check if this can be optimized by getting
             //       the internal CS.
-            geom::CoordinateSequence* pts = line->getCoordinates();
+            auto pts = line->getCoordinates();
 
-            segStr.push_back(new NodedSegmentString(pts, g));
+            segStr.push_back(new NodedSegmentString(pts.release(), g));
         }
     }
 

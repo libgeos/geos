@@ -37,7 +37,7 @@ namespace algorithm {
 //
 // public:
 //
-/*static*/ int
+/*static*/ geom::Location
 RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
                                       const geom::CoordinateSequence& ring)
 {
@@ -56,7 +56,7 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
     return rcc.getLocation();
 }
 
-/*static*/ int
+/*static*/ geom::Location
 RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
                                       const std::vector<const geom::Coordinate*>& ring)
 {
@@ -73,21 +73,6 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
         }
     }
     return rcc.getLocation();
-}
-
-/*public static*/
-int
-RayCrossingCounter::orientationIndex(const geom::Coordinate& p1,
-                                     const geom::Coordinate& p2, const geom::Coordinate& q)
-{
-    // travelling along p1->p2, turn counter clockwise to get to q return 1,
-    // travelling along p1->p2, turn clockwise to get to q return -1,
-    // p1, p2 and q are colinear return 0.
-    double dx1 = p2.x - p1.x;
-    double dy1 = p2.y - p1.y;
-    double dx2 = q.x - p2.x;
-    double dy2 = q.y - p2.y;
-    return CGAlgorithmsDD::signOfDet2x2(dx1, dy1, dx2, dy2);
 }
 
 void
@@ -138,7 +123,7 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
             ((p2.y > point.y) && (p1.y <= point.y))) {
         // For an upward edge, orientationIndex will be positive when p1->p2
         // crosses ray. Conversely, downward edges should have negative sign.
-        int sign = orientationIndex(p1, p2, point);
+        int sign = CGAlgorithmsDD::orientationIndex(p1, p2, point);
         if(sign == 0) {
             isPointOnSegment = true;
             return;
@@ -156,7 +141,7 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 }
 
 
-int
+geom::Location
 RayCrossingCounter::getLocation()
 {
     if(isPointOnSegment) {

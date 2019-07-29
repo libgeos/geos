@@ -21,6 +21,7 @@
 #define GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 
 #include <vector>
 
@@ -98,8 +99,8 @@ private:
      *
      * @param coord is raw offset curve, ownership transferred here
      */
-    void addCurve(geom::CoordinateSequence* coord, int leftLoc,
-                  int rightLoc);
+    void addCurve(geom::CoordinateSequence* coord, geom::Location leftLoc,
+                  geom::Location rightLoc);
 
     void add(const geom::Geometry& g);
 
@@ -133,16 +134,16 @@ private:
      *                   (if it is CW)
      */
     void addPolygonRing(const geom::CoordinateSequence* coord,
-                        double offsetDistance, int side, int cwLeftLoc,
-                        int cwRightLoc);
+                        double offsetDistance, int side, geom::Location cwLeftLoc,
+                        geom::Location cwRightLoc);
 
     /**
      * The ringCoord is assumed to contain no repeated points.
      * It may be degenerate (i.e. contain only 1, 2, or 3 points).
      * In this case it has no area, and hence has a minimum diameter of 0.
      *
-     * @param ring
-     * @param offsetDistance
+     * @param ringCoord
+     * @param bufferDistance
      * @return
      */
     bool isErodedCompletely(const geom::LinearRing* ringCoord,
@@ -188,18 +189,19 @@ public:
      * Each offset curve has an attached {@link geomgraph::Label} indicating
      * its left and right location.
      *
-     * @return a Collection of SegmentStrings representing the raw
-     * buffer curves
+     * @return a Collection of SegmentStrings representing the raw buffer curves
      */
     std::vector<noding::SegmentString*>& getCurves();
 
-    /// Add raw curves for a set of CoordinateSequences
-    //
+    /// \brief Add raw curves for a set of CoordinateSequences.
+    ///
     /// @param lineList is a list of CoordinateSequence, ownership
-    ///        of which is transferred here.
+    ///                 of which is transferred here
+    /// @param leftLoc left location
+    /// @param rightLoc right location
     ///
     void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
-                   int leftLoc, int rightLoc);
+                   geom::Location leftLoc, geom::Location rightLoc);
 
 };
 

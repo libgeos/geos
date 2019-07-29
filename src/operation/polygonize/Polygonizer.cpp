@@ -14,17 +14,19 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/polygonize/Polygonizer.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/PolygonizeGraph.h>
 #include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/operation/polygonize/HoleAssigner.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/Interrupt.h>
+#include <geos/index/strtree/STRtree.h>
 // std
 #include <vector>
 
@@ -51,19 +53,15 @@ Polygonizer::LineStringAdder::LineStringAdder(Polygonizer* p):
 void
 Polygonizer::LineStringAdder::filter_ro(const Geometry* g)
 {
-    const LineString* ls = dynamic_cast<const LineString*>(g);
+    auto ls = dynamic_cast<const LineString*>(g);
     if(ls) {
         pol->add(ls);
     }
 }
 
-
-/*
- * Create a polygonizer with the same GeometryFactory
- * as the input Geometry
- */
-Polygonizer::Polygonizer():
+Polygonizer::Polygonizer(bool onlyPolygonal):
     lineStringAdder(this),
+    extractOnlyPolygonal(onlyPolygonal),
     graph(nullptr),
     dangles(),
     cutEdges(),
@@ -76,17 +74,8 @@ Polygonizer::Polygonizer():
 
 Polygonizer::~Polygonizer()
 {
-    delete graph;
-
     for(auto& r : invalidRingLines) {
         delete r;
-    }
-
-    if(polyList) {
-        for(auto& p : (*polyList)) {
-            delete p;
-        }
-        delete polyList;
     }
 }
 
@@ -160,7 +149,7 @@ Polygonizer::add(const LineString* line)
 {
     // create a new graph using the factory from the input Geometry
     if(graph == nullptr) {
-        graph = new PolygonizeGraph(line->getFactory());
+        graph.reset(new PolygonizeGraph(line->getFactory()));
     }
     graph->addEdge(line);
 }
@@ -169,13 +158,11 @@ Polygonizer::add(const LineString* line)
  * Gets the list of polygons formed by the polygonization.
  * @return a collection of Polygons
  */
-vector<Polygon*>*
+unique_ptr<vector<unique_ptr<Polygon>>>
 Polygonizer::getPolygons()
 {
     polygonize();
-    vector<Polygon*>* ret = polyList;
-    polyList = nullptr;
-    return ret;
+    return std::move(polyList);
 }
 
 /* public */
@@ -186,6 +173,12 @@ Polygonizer::getDangles()
     return dangles;
 }
 
+bool
+Polygonizer::hasDangles() {
+    polygonize();
+    return !dangles.empty();
+}
+
 /* public */
 const vector<const LineString*>&
 Polygonizer::getCutEdges()
@@ -194,12 +187,33 @@ Polygonizer::getCutEdges()
     return cutEdges;
 }
 
+bool
+Polygonizer::hasCutEdges()
+{
+    polygonize();
+    return !cutEdges.empty();
+}
+
 /* public */
 const vector<LineString*>&
 Polygonizer::getInvalidRingLines()
 {
     polygonize();
     return invalidRingLines;
+}
+
+bool
+Polygonizer::hasInvalidRingLines()
+{
+    polygonize();
+    return !invalidRingLines.empty();
+}
+
+bool
+Polygonizer::allInputsFormPolygons()
+{
+    polygonize();
+    return !hasCutEdges() && !hasDangles() &&!hasInvalidRingLines();
 }
 
 /* public */
@@ -211,10 +225,9 @@ Polygonizer::polygonize()
         return;
     }
 
-    polyList = new vector<Polygon*>();
-
     // if no geometries were supplied it's possible graph could be null
     if(graph == nullptr) {
+        polyList.reset(new std::vector<std::unique_ptr<Polygon>>());
         return;
     }
 
@@ -241,11 +254,14 @@ Polygonizer::polygonize()
     cerr << "                           " << shellList.size() << " shells" << endl;
 #endif
 
-    assignHolesToShells(holeList, shellList);
+    HoleAssigner::assignHolesToShells(holeList, shellList);
 
-    for(const auto& er : shellList) {
-        polyList->push_back(er->getPolygon());
+    bool includeAll = true;
+    if (extractOnlyPolygonal) {
+        findDisjointShells();
+        includeAll = false;
     }
+    polyList = extractPolygons(shellList, includeAll);
 }
 
 /* private */
@@ -259,9 +275,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
             validEdgeRingList.push_back(er);
         }
         else {
-            // NOTE: polygonize::EdgeRing::getLineString
-            // returned LineString ownership is transferred.
-            invalidRingList.push_back(er->getLineString());
+            invalidRingList.push_back(er->getLineString().release());
         }
         GEOS_CHECK_FOR_INTERRUPTS();
     }
@@ -273,7 +287,8 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
 {
     holeList.clear();
     shellList.clear();
-    for(const auto& er : edgeRingList) {
+    for(auto& er : edgeRingList) {
+        er->computeHole();
         if(er->isHole()) {
             holeList.push_back(er);
         }
@@ -285,28 +300,44 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
     }
 }
 
-/* private */
+
 void
-Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeRing*>& shellList)
+Polygonizer::findDisjointShells() {
+    findOuterShells(shellList);
+
+    for (EdgeRing *er : shellList) {
+        if (!er->isIncludedSet()) {
+            er->updateIncludedRecursive();
+        }
+    }
+
+    return;
+}
+
+void
+Polygonizer::findOuterShells(vector<EdgeRing*> & shells)
 {
-    for(const auto& holeER : holeList) {
-        assignHoleToShell(holeER, shellList);
-        GEOS_CHECK_FOR_INTERRUPTS();
+    for (EdgeRing* er : shells) {
+        auto outerHoleER = er->getOuterHole();
+        if (outerHoleER != nullptr && !outerHoleER->isProcessed()) {
+            er->setIncluded(true);
+            outerHoleER->setProcessed(true);
+        }
     }
 }
 
-/* private */
-void
-Polygonizer::assignHoleToShell(EdgeRing* holeER,
-                               vector<EdgeRing*>& shellList)
+std::unique_ptr<std::vector<std::unique_ptr<Polygon>>>
+Polygonizer::extractPolygons(vector<EdgeRing*> & shells, bool includeAll)
 {
-    EdgeRing* shell = EdgeRing::findEdgeRingContaining(holeER, &shellList);
-
-    if(shell != nullptr) {
-        shell->addHole(holeER->getRingOwnership());
+    std::unique_ptr<std::vector<std::unique_ptr<Polygon>>> polys(new std::vector<std::unique_ptr<Polygon>>);
+    for (EdgeRing* er : shells) {
+        if (includeAll || er->isIncluded()) {
+            polys->emplace_back(er->getPolygon());
+        }
     }
-}
 
+    return polys;
+}
 
 } // namespace geos.operation.polygonize
 } // namespace geos.operation

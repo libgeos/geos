@@ -26,7 +26,7 @@
 namespace geos {
 namespace util { // geos::util
 
-/**
+/** \brief
  * A CoordinateFilter that adds read-only pointers
  * to every Coordinate in a Geometry to a given
  * vector.
@@ -37,10 +37,10 @@ class GEOS_DLL CoordinateArrayFilter: public geom::CoordinateFilter {
 private:
     geom::Coordinate::ConstVect& pts; // target vector reference
 public:
-    /**
+    /** \brief
      * Constructs a CoordinateArrayFilter.
      *
-     * @param  target   The destination vector.
+     * @param target The destination vector.
      */
     CoordinateArrayFilter(geom::Coordinate::ConstVect& target)
         :

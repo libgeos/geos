@@ -34,24 +34,21 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*public*/
-LinearRing::LinearRing(const LinearRing& lr): Geometry(lr), LineString(lr) {}
+LinearRing::LinearRing(const LinearRing& lr): LineString(lr) {}
 
 /*public*/
 LinearRing::LinearRing(CoordinateSequence* newCoords,
                        const GeometryFactory* newFactory)
     :
-    Geometry(newFactory),
     LineString(newCoords, newFactory)
 {
     validateConstruction();
 }
 
 /*public*/
-LinearRing::LinearRing(CoordinateSequence::Ptr newCoords,
-                       const GeometryFactory* newFactory)
-    :
-    Geometry(newFactory),
-    LineString(std::move(newCoords), newFactory)
+LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
+                       const GeometryFactory& newFactory)
+        : LineString(std::move(newCoords), newFactory)
 {
     validateConstruction();
 }
@@ -109,11 +106,9 @@ LinearRing::getGeometryType() const
 }
 
 void
-LinearRing::setPoints(CoordinateSequence* cl)
+LinearRing::setPoints(const CoordinateSequence* cl)
 {
-    const vector<Coordinate>* v = cl->toVector();
-    points->setPoints(*(v));
-    //delete v;
+    points = cl->clone();
 }
 
 GeometryTypeId
@@ -122,7 +117,7 @@ LinearRing::getGeometryTypeId() const
     return GEOS_LINEARRING;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 LinearRing::reverse() const
 {
     if(isEmpty()) {
@@ -130,10 +125,10 @@ LinearRing::reverse() const
     }
 
     assert(points.get());
-    CoordinateSequence* seq = points->clone();
-    CoordinateSequence::reverse(seq);
+    auto seq = points->clone();
+    CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLinearRing(seq);
+    return std::unique_ptr<Geometry>(getFactory()->createLinearRing(seq.release()));
 }
 
 } // namespace geos::geom

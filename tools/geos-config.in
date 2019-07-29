@@ -32,36 +32,36 @@ case "$1" in
 esac
 case $1 in
     --prefix)
-    echo ${prefix}
+    echo @prefix@
      ;;
     --version)
     echo @VERSION@
      ;;
     --cflags)
-    echo -I${prefix}/include
+    echo -I@prefix@/include
       ;;
     --libs)
       # TODO: make an alias for --clibs
       # see http://trac.osgeo.org/geos/ticket/497
-      echo -L${libdir} -lgeos-@VERSION_RELEASE@
+      echo -L@libdir@ -lgeos-@VERSION_RELEASE@
       ;;
     --clibs)
-      echo -L${libdir} -lgeos_c
+      echo -L@libdir@ -lgeos_c
       ;;
     --cclibs)
-      echo -L${libdir} -lgeos
+      echo -L@libdir@ -lgeos
       ;;
     --static-clibs)
-      echo -L${libdir} -lgeos_c -lgeos -lm
+      echo -L@libdir@ -lgeos_c -lgeos -lm
       ;;
     --static-cclibs)
-      echo -L${libdir} -lgeos -lm
+      echo -L@libdir@ -lgeos -lm
       ;;
     --ldflags)
-      echo -L${libdir}
+      echo -L@libdir@
       ;;
     --includes)
-      echo ${prefix}/include
+      echo @prefix@/include
       ;;
     --jtsport)
     echo @JTS_PORT@

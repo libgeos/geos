@@ -62,8 +62,10 @@ OffsetPointGenerator::getPoints()
 
     vector<const LineString*> lines;
     geos::geom::util::LinearComponentExtracter::getLines(g, lines);
-    for_each(lines.begin(), lines.end(),
-             bind1st(mem_fun(&OffsetPointGenerator::extractPoints), this));
+
+    for (const auto& line : lines) {
+        extractPoints(line);
+    }
 
     // NOTE: Apparently, this is 'source' method giving up the object resource.
     return std::move(offsetPts);

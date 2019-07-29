@@ -22,6 +22,7 @@
 #define GEOS_GEOMGRAPH_DEPTH_H
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 #include <string>
 
 #include <geos/inline.h>
@@ -38,13 +39,13 @@ namespace geomgraph { // geos.geomgraph
 
 class GEOS_DLL Depth {
 public:
-    static int depthAtLocation(int location);
+    static int depthAtLocation(geom::Location location);
     Depth();
     virtual ~Depth(); // FIXME: shoudn't be virtual!
     int getDepth(int geomIndex, int posIndex) const;
     void setDepth(int geomIndex, int posIndex, int depthValue);
-    int getLocation(int geomIndex, int posIndex) const;
-    void add(int geomIndex, int posIndex, int location);
+    geom::Location getLocation(int geomIndex, int posIndex) const;
+    void add(int geomIndex, int posIndex, geom::Location location);
     bool isNull() const;
     bool isNull(int geomIndex) const;
     bool isNull(int geomIndex, int posIndex) const;

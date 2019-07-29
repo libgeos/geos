@@ -48,7 +48,7 @@ namespace noding { // geos::noding
  * intersections are detected.
  *
  * Iterated noding using a FLOATING precision model is not guaranteed to converge,
- * due to roundoff error.   This problem is detected and an exception is thrown.
+ * due to roundoff error. This problem is detected and an exception is thrown.
  * Clients can choose to rerun the noding using a lower precision model.
  *
  */
@@ -82,9 +82,10 @@ public:
 
     ~IteratedNoder() override {}
 
-    /**
+    /** \brief
      * Sets the maximum number of noding iterations performed before
      * the noding is aborted.
+     *
      * Experience suggests that this should rarely need to be changed
      * from the default.
      * The default is MAX_ITER.
@@ -104,13 +105,13 @@ public:
     }
 
 
-    /**
-     * Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively
+    /** \brief
+     * Fully nodes a list of {@link SegmentString}s, i.e. peforms noding iteratively
      * until no intersections are found between segments.
-     * Maintains labelling of edges correctly through
-     * the noding.
      *
-     * @param segStrings a collection of SegmentStrings to be noded
+     * Maintains labelling of edges correctly through the noding.
+     *
+     * @param inputSegmentStrings a collection of SegmentStrings to be noded
      * @throws TopologyException if the iterated noding fails to converge.
      */
     void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override; // throw(GEOSException);

@@ -45,7 +45,7 @@ PreparedLineStringIntersects::isAnyTestPointInTarget(const geom::Geometry* testG
     ComponentCoordinateExtracter::getCoordinates(*testGeom, coords);
 
     for(size_t i = 0, n = coords.size(); i < n; i++) {
-        geom::Coordinate c = *(coords[i]);
+        const geom::Coordinate& c = *(coords[i]);
         if(locator.intersects(c, &(prepLine.getGeometry()))) {
             return true;
         }

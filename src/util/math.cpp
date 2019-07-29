@@ -12,7 +12,7 @@
  *
  **********************************************************************/
 
-#include "geos/util.h"
+#include <geos/util.h>
 #include <cmath>
 
 namespace geos {
@@ -114,6 +114,7 @@ rint_vc(double val)
         }
     }
 }
+
 
 } // namespace geos.util
 } // namespace geos

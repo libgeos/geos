@@ -237,9 +237,9 @@ void object::test<8>
     std::string
     line("0102000000070000009909bf203f1f37c05c1d66d6954249404afe386d871d37c0a7eb1124b54149409c266328061c37c056d8bff5db42494098266328061c37c0034f7b5c2a42494060065c5aa01837c08ac001de3a4449408401b189bb1637c0b04e471a4f43494014ef84a6d11537c0b20dabfb62434940");
     std::stringstream sPoint(point);
-    geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sPoint));
+    geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sPoint).release());
     std::stringstream sLine(line);
-    geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sLine));
+    geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sLine).release());
 
     prepGeom1_ = GEOSPrepare(geom1_);
     ensure(nullptr != prepGeom1_);
@@ -289,9 +289,9 @@ void object::test<10>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
         prepGeom1_ = GEOSPrepare(geom1_);
@@ -314,9 +314,9 @@ void object::test<10>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
         prepGeom1_ = GEOSPrepare(geom1_);
@@ -353,9 +353,9 @@ void object::test<11>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
         prepGeom1_ = GEOSPrepare(geom1_);
@@ -378,9 +378,9 @@ void object::test<11>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
         prepGeom1_ = GEOSPrepare(geom1_);

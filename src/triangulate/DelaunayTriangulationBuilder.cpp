@@ -22,43 +22,55 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/operation/valid/RepeatedPointTester.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
 
 using namespace geos::geom;
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 DelaunayTriangulationBuilder::extractUniqueCoordinates(
     const Geometry& geom)
 {
-    geom::CoordinateSequence* coords = geom.getCoordinates();
-    unique(*coords);
-    return coords;
+    std::unique_ptr<CoordinateSequence> seq(geom.getCoordinates());
+    return unique(seq.get());
 }
 
-void
-DelaunayTriangulationBuilder::unique(CoordinateSequence& coords)
-{
-    std::vector<Coordinate> coordVector;
-    coords.toVector(coordVector);
-    std::sort(coordVector.begin(), coordVector.end(), geos::geom::CoordinateLessThen());
-    coords.setPoints(coordVector);
-    coords.removeRepeatedPoints();
+std::unique_ptr<CoordinateSequence>
+DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
+    auto seqFactory = CoordinateArraySequenceFactory::instance();
+    auto dim = seq->getDimension();
+
+    auto coords = detail::make_unique<std::vector<Coordinate>>();
+    seq->toVector(*(coords.get()));
+    std::sort(coords->begin(), coords->end(), geos::geom::CoordinateLessThen());
+
+    std::unique_ptr<CoordinateSequence> sortedSeq(seqFactory->create(coords.release(), dim));
+
+    operation::valid::RepeatedPointTester rpt;
+    if (rpt.hasRepeatedPoint(sortedSeq.get())) {
+        return operation::valid::RepeatedPointRemover::removeRepeatedPoints(sortedSeq.get());
+    } else {
+        return sortedSeq;
+    }
 }
 
-IncrementalDelaunayTriangulator::VertexList*
+IncrementalDelaunayTriangulator::VertexList
 DelaunayTriangulationBuilder::toVertices(
     const CoordinateSequence& coords)
 {
-    IncrementalDelaunayTriangulator::VertexList* vertexList =
-        new IncrementalDelaunayTriangulator::VertexList();
+    IncrementalDelaunayTriangulator::VertexList vertexList(coords.size());
 
-    for(size_t iter = 0; iter < coords.size(); ++iter) {
-        vertexList->push_back(quadedge::Vertex(coords.getAt(iter)));
+    for(size_t i = 0; i < coords.size(); i++) {
+        vertexList[i] = quadedge::Vertex(coords.getAt(i));
     }
     return vertexList;
 }
@@ -68,22 +80,9 @@ DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
 {
 }
 
-DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
-{
-    if(siteCoords) {
-        delete siteCoords;
-    }
-    if(subdiv) {
-        delete subdiv;
-    }
-}
-
 void
 DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 {
-    if(siteCoords) {
-        delete siteCoords;
-    }
     // remove any duplicate points (they will cause the triangulation to fail)
     siteCoords = extractUniqueCoordinates(geom);
 }
@@ -91,12 +90,8 @@ DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 void
 DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 {
-    if(siteCoords) {
-        delete siteCoords;
-    }
-    siteCoords = coords.clone();
     // remove any duplicate points (they will cause the triangulation to fail)
-    unique(*siteCoords);
+    siteCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(&coords);
 }
 
 void
@@ -108,11 +103,12 @@ DelaunayTriangulationBuilder::create()
 
     Envelope siteEnv;
     siteCoords ->expandEnvelope(siteEnv);
-    IncrementalDelaunayTriangulator::VertexList* vertices = toVertices(*siteCoords);
-    subdiv = new quadedge::QuadEdgeSubdivision(siteEnv, tolerance);
-    IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv);
-    triangulator.insertSites(*vertices);
-    delete vertices;
+    auto vertices = toVertices(*siteCoords);
+    std::sort(vertices.begin(), vertices.end()); // Best performance from locator when inserting points near each other
+
+    subdiv.reset(new quadedge::QuadEdgeSubdivision(siteEnv, tolerance));
+    IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv.get());
+    triangulator.insertSites(vertices);
 }
 
 quadedge::QuadEdgeSubdivision&
@@ -142,12 +138,7 @@ geom::Envelope
 DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
 {
     Envelope env;
-    std::vector<Coordinate> coord_vector;
-    coords.toVector(coord_vector);
-    for(std::vector<Coordinate>::iterator it = coord_vector.begin() ; it != coord_vector.end() ; ++it) {
-        const Coordinate& coord = *it;
-        env.expandToInclude(coord);
-    }
+    coords.expandEnvelope(env);
     return env;
 }
 

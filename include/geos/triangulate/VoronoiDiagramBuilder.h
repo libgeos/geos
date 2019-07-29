@@ -33,10 +33,10 @@ class GeometryFactory;
 }
 namespace triangulate { //geos.triangulate
 
-/**
- * A utility class which creates Voronoi Diagrams
- * from collections of points.
- * The diagram is returned as a {@link GeometryCollection} of {@link Polygon}s,
+/** \brief
+ * A utility class which creates Voronoi Diagrams from collections of points.
+ *
+ * The diagram is returned as a geom::GeometryCollection of {@link geom::Polygon}s,
  * clipped to the larger of a supplied envelope or to an envelope determined
  * by the input sites.
  *
@@ -45,7 +45,7 @@ namespace triangulate { //geos.triangulate
  */
 class GEOS_DLL VoronoiDiagramBuilder {
 public:
-    /**
+    /** \brief
      * Creates a new Voronoi diagram builder.
      *
      */
@@ -53,7 +53,7 @@ public:
 
     ~VoronoiDiagramBuilder();
 
-    /**
+    /** \brief
      * Sets the sites (point or vertices) which will be diagrammed.
      * All vertices of the given geometry will be used as sites.
      *
@@ -61,16 +61,17 @@ public:
      */
     void setSites(const geom::Geometry& geom);
 
-    /**
+    /** \brief
      * Sets the sites (point or vertices) which will be diagrammed
-     * from a collection of {@link Coordinate}s.
+     * from a collection of {@link geom::Coordinate}s.
      *
      * @param coords a collection of Coordinates.
      */
     void setSites(const geom::CoordinateSequence& coords);
 
-    /**
+    /** \brief
      * Sets the envelope to clip the diagram to.
+     *
      * The diagram will be clipped to the larger
      * of this envelope or an envelope surrounding the sites.
      *
@@ -80,34 +81,35 @@ public:
      */
     void setClipEnvelope(const geom::Envelope* clipEnv);
 
-    /**
+    /** \brief
      * Sets the snapping tolerance which will be used
      * to improved the robustness of the triangulation computation.
+     *
      * A tolerance of 0.0 specifies that no snapping will take place.
      *
      * @param tolerance the tolerance distance to use
      */
     void setTolerance(double tolerance);
 
-    /**
-     * Gets the {@link QuadEdgeSubdivision} which models the computed diagram.
+    /** \brief
+     * Gets the quadedge::QuadEdgeSubdivision which models the computed diagram.
      *
      * @return the subdivision containing the triangulation
      */
     std::unique_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
 
-    /**
-     * Gets the faces of the computed diagram as a {@link GeometryCollection}
-     * of {@link Polygon}s, clipped as specified.
+    /** \brief
+     * Gets the faces of the computed diagram as a geom::GeometryCollection
+     * of {@link geom::Polygon}s, clipped as specified.
      *
      * @param geomFact the geometry factory to use to create the output
      * @return the faces of the diagram
      */
     std::unique_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
 
-    /**
-     * Gets the faces of the computed diagram as a {@link GeometryCollection}
-     * of {@link LineString}s, clipped as specified.
+    /** \brief
+     * Gets the faces of the computed diagram as a geom::GeometryCollection
+     * of {@link geom::LineString}s, clipped as specified.
      *
      * @param geomFact the geometry factory to use to create the output
      * @return the faces of the diagram
@@ -125,7 +127,7 @@ private:
     void create();
 
     static std::unique_ptr<geom::GeometryCollection>
-    clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv);
+    clipGeometryCollection(std::vector<std::unique_ptr<geom::Geometry>> & geoms, const geom::Envelope& clipEnv);
 
 };
 

@@ -165,7 +165,7 @@ LineSegment::orientationIndex(const Coordinate& p) const
     return algorithm::Orientation::index(p0, p1, p);
 }
 
-INLINE CoordinateSequence*
+INLINE std::array<Coordinate, 2>
 LineSegment::closestPoints(const LineSegment* line)
 {
     assert(line);

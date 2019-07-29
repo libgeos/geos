@@ -52,7 +52,7 @@ public:
 
     /**
      * User's constructor.
-     * @param nMap - reference to LinesMap instance.
+     * @param simp - reference to LinesMap instance.
      */
     LineStringTransformer(LinesMap& simp);
 

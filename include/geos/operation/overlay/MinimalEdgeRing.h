@@ -44,11 +44,11 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 /** \brief
- * A ring of {@link Edge}s with the property that no node
+ * A ring of [Edges](@ref geomgraph::Edge) with the property that no node
  * has degree greater than 2.
  *
- * These are the form of rings required
- * to represent polygons under the OGC SFS spatial data model.
+ * These are the form of rings required to represent polygons
+ * under the OGC SFS spatial data model.
  *
  * @see operation::overlay::MaximalEdgeRing
  *

@@ -100,6 +100,7 @@ private:
         BoundableList* childBoundables,
         size_t sliceCount);
 
+    bool isWithinDistance(BoundablePair* initBndPair, double maxDistance);
 
 protected:
 
@@ -149,17 +150,19 @@ public:
         return AbstractSTRtree::query(searchEnv, visitor);
     }
 
-    const void* nearestNeighbour(const geom::Envelope* env, const void* item, ItemDistance* itemDist);
-    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair);
     std::pair<const void*, const void*> nearestNeighbour(ItemDistance* itemDist);
-    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
+    const void* nearestNeighbour(const geom::Envelope* env, const void* item, ItemDistance* itemDist);
     std::pair<const void*, const void*> nearestNeighbour(STRtree* tree, ItemDistance* itemDist);
+    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair);
+    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
 
     bool
     remove(const geom::Envelope* itemEnv, void* item) override
     {
         return AbstractSTRtree::remove(itemEnv, item);
     }
+
+    bool isWithinDistance(STRtree* tree, ItemDistance* itemDist, double maxDistance);
 
 };
 

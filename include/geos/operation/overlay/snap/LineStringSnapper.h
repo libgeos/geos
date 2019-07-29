@@ -57,7 +57,7 @@ public:
      * as source points to be snapped.
      *
      * @param nSrcPts the points to snap
-     * @param nSnapTolerance the snap tolerance to use
+     * @param nSnapTol the snap tolerance to use
      */
     LineStringSnapper(const geom::Coordinate::Vect& nSrcPts,
                       double nSnapTol)

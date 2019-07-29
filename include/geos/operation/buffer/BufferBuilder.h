@@ -132,7 +132,7 @@ public:
      * This allows choosing fast but non-robust noding, or slower
      * but robust noding.
      *
-     * @param noder the noder to use
+     * @param newNoder the noder to use
      */
     void
     setNoder(noding::Noder* newNoder)

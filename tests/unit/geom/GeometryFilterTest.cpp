@@ -60,7 +60,7 @@ void object::test<1>
         void
         filter_ro(geos::geom::Geometry const* g) override
         {
-            if(dynamic_cast<geos::geom::Lineal const*>(g)) {
+            if(g->isLineal()) {
                 lineal.push_back(g);
             }
             else {

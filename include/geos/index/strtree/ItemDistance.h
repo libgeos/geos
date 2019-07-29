@@ -24,9 +24,16 @@
 namespace geos {
 namespace index {
 namespace strtree {
+
+/** \brief
+ * A function method which computes the distance between two [ItemBoundables](\ref ItemBoundable)
+ * in an STRtree. Used for Nearest Neighbour searches.
+ *
+ * \author Martin Davis
+ */
 class GEOS_DLL ItemDistance {
 public:
-    /**
+    /** \brief
      * Computes the distance between two items.
      *
      * @param item1

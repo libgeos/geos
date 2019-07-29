@@ -22,6 +22,7 @@
 #define GEOS_GEOM_PREP_PREPAREDPOLYGONPREDICATE_H
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Location.h>
 
 // forward declarations
 namespace geos {
@@ -64,16 +65,13 @@ protected:
     const PreparedPolygon* const prepPoly;
 
     /** \brief
-     * Tests whether all components of the test Geometry
-     * are contained in the target geometry.
+     * Returns the outermost Location among a test point from each
+     * components of the test geometry.
      *
-     * Handles both linear and point components.
-     *
-     * @param geom a geometry to test
-     * @return true if all components of the argument are contained
-     *              in the target geometry
+     * @param testGeom a geometry to test
+     * @return the outermost Location
      */
-    bool isAllTestComponentsInTarget(const geom::Geometry* testGeom) const;
+    geom::Location getOutermostTestComponentLocation(const geom::Geometry* testGeom) const;
 
     /** \brief
      * Tests whether all components of the test Geometry
@@ -81,7 +79,7 @@ protected:
      *
      * Handles both linear and point components.
      *
-     * @param geom a geometry to test
+     * @param testGeom a geometry to test
      * @return true if all componenta of the argument are contained in
      *              the target geometry interior
      */
@@ -93,7 +91,7 @@ protected:
      *
      * Handles test geometries with both linear and point components.
      *
-     * @param geom a geometry to test
+     * @param testGeom a geometry to test
      * @return true if any component of the argument intersects the
      *              prepared geometry
      */
@@ -105,7 +103,7 @@ protected:
      *
      * Handles test geometries with both linear and point components.
      *
-     * @param geom a geometry to test
+     * @param testGeom a geometry to test
      * @return true if any component of the argument intersects the
      *              prepared area geometry interior
      */
@@ -115,8 +113,8 @@ protected:
      * Tests whether any component of the target geometry
      * intersects the test geometry (which must be an areal geometry)
      *
-     * @param geom the test geometry
-     * @param repPts the representative points of the target geometry
+     * @param testGeom the test geometry
+     * @param targetRepPts the representative points of the target geometry
      * @return true if any component intersects the areal test geometry
      */
     bool isAnyTargetComponentInAreaTest(const geom::Geometry* testGeom,
@@ -126,7 +124,7 @@ public:
     /**
      * Creates an instance of this operation.
      *
-     * @param prepPoly the PreparedPolygon to evaluate
+     * @param p_prepPoly the PreparedPolygon to evaluate
      */
     PreparedPolygonPredicate(const PreparedPolygon* const p_prepPoly)
         :	prepPoly(p_prepPoly)

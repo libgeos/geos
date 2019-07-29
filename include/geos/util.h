@@ -31,6 +31,8 @@
 #include <geos/util/GeometricShapeFactory.h>
 //#include <geos/util/math.h>
 
+#include <memory>
+
 //
 // Private macros definition
 //
@@ -38,8 +40,48 @@
 namespace geos {
 template<class T>
 void
-ignore_unused_variable_warning(T const&) {}
+ignore_unused_variable_warning(T const &) {}
+
+namespace detail {
+#if __cplusplus >= 201402L
+using std::make_unique;
+#else
+// Backport of std::make_unique to C++11
+// Source: https://stackoverflow.com/a/19472607
+template<class T>
+struct _Unique_if {
+    typedef std::unique_ptr<T> _Single_object;
+};
+
+template<class T>
+struct _Unique_if<T[]> {
+    typedef std::unique_ptr<T[]> _Unknown_bound;
+};
+
+template<class T, size_t N>
+struct _Unique_if<T[N]> {
+    typedef void _Known_bound;
+};
+
+template<class T, class... Args>
+typename _Unique_if<T>::_Single_object
+make_unique(Args &&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
+template<class T>
+typename _Unique_if<T>::_Unknown_bound
+make_unique(size_t n) {
+    typedef typename std::remove_extent<T>::type U;
+    return std::unique_ptr<T>(new U[n]());
+}
+
+template<class T, class... Args>
+typename _Unique_if<T>::_Known_bound
+make_unique(Args &&...) = delete;
+
+#endif
+}
+}
 
 #endif // GEOS_UTIL_H

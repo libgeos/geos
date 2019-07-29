@@ -155,7 +155,7 @@ DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*>* geom)
         assert(e);
         const Label& eLabel = e->getLabel();
         for(int i = 0; i < 2; ++i) {
-            int eLoc = eLabel.getLocation(i);
+            Location eLoc = eLabel.getLocation(i);
             if(eLoc == Location::INTERIOR || eLoc == Location::BOUNDARY) {
                 label.setLocation(i, Location::INTERIOR);
             }
@@ -378,7 +378,7 @@ DirectedEdgeStar::findCoveredLineEdges()
      * - INTERIOR if the edge is outgoing
      * - EXTERIOR if the edge is incoming
      */
-    int startLoc = Location::UNDEF;
+    Location startLoc = Location::UNDEF;
 
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
@@ -411,7 +411,7 @@ DirectedEdgeStar::findCoveredLineEdges()
      * (Interior or Exterior) for the result area.
      * If L edges are found, mark them as covered if they are in the interior
      */
-    int currLoc = startLoc;
+    Location currLoc = startLoc;
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
         assert(dynamic_cast<DirectedEdge*>(*it));

@@ -51,11 +51,11 @@ public:
      * Computes the (approximate) intersection point between two line
      * segments using homogeneous coordinates.
      *
-     * Note that this algorithm is
-     * not numerically stable; i.e. it can produce intersection points which
-     * lie outside the envelope of the line segments themselves.  In order
-     * to increase the precision of the calculation input points should be
-     * normalized before passing them to this routine.
+     * @note this algorithm is  not numerically stable; i.e. it can
+     * produce intersection points which lie outside the envelope of the
+     * line segments themselves. In order to increase the precision of
+     * the calculation input points should be normalized before
+     * passing them to this routine.
      */
     static void intersection(const geom::Coordinate& p1,
                              const geom::Coordinate& p2,
@@ -74,7 +74,7 @@ public:
     /** \brief
      * Constructs a homogeneous coordinate which is the intersection
      * of the lines define by the homogenous coordinates represented
-     * by two {@link Coordinate}s.
+     * by two [Coordinates](@ref geom::Coordinate).
      *
      * @param p1
      * @param p2

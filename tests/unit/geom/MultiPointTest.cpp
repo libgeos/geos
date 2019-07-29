@@ -40,9 +40,8 @@ struct test_multipoint_data {
         , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
     {
         // Create non-empty MultiPoint
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
-        mp_ = dynamic_cast<MultiPointPtr>(geo);
+        auto geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
+        mp_ = dynamic_cast<MultiPointPtr>(geo.release());
     }
 
     ~test_multipoint_data()
@@ -89,7 +88,7 @@ void object::test<2>
 ()
 {
     const size_t size0 = 0;
-    MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
+    MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone().release()));
     ensure(nullptr != copy.get());
 
     ensure(copy->isEmpty());
@@ -107,8 +106,8 @@ void object::test<3>
 ()
 {
     const size_t size0 = 0;
-    GeometryPtr geo = reader_.read("MULTIPOINT EMPTY");
-    MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo);
+    auto geo = reader_.read("MULTIPOINT EMPTY");
+    MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo.get());
 
     ensure(mp->isEmpty());
     ensure(mp->isSimple());
@@ -116,9 +115,6 @@ void object::test<3>
     ensure(mp->getCentroid() == nullptr);
     ensure_equals(mp->getNumPoints(), size0);
     ensure_equals(mp->getNumGeometries(), size0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(geo);
 }
 
 // Test of isEmpty() for empty MultiPoint
@@ -154,10 +150,9 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr envelope = empty_mp_->getEnvelope();
+    auto envelope = empty_mp_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty MultiPoint
@@ -166,10 +161,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr boundary = empty_mp_->getBoundary();
+    auto boundary = empty_mp_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty MultiPoint
@@ -178,10 +172,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr hull = empty_mp_->convexHull();
+    auto hull = empty_mp_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty MultiPoint
@@ -248,7 +241,7 @@ void object::test<16>
     ensure_equals(empty_mp_->getArea(), 0.0);
 }
 
-// Test of isEmpty() for non-empty LinearRing
+// Test of isEmpty() for non-empty MultiPoint
 template<>
 template<>
 void object::test<17>
@@ -258,7 +251,7 @@ void object::test<17>
     ensure(!mp_->isEmpty());
 }
 
-// Test of getEnvelope() for non-empty LinearRing
+// Test of getEnvelope() for non-empty MultiPoint
 template<>
 template<>
 void object::test<18>
@@ -266,16 +259,13 @@ void object::test<18>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr envelope = mp_->getEnvelope();
+    auto envelope = mp_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
-// Test of getBoundary() for non-empty LinearRing
+// Test of getBoundary() for non-empty MultiPoint
 template<>
 template<>
 void object::test<19>
@@ -283,17 +273,14 @@ void object::test<19>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr boundary = mp_->getBoundary();
+    auto boundary = mp_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.5 MultiPoint
     ensure("[OGC] The boundary of a MultiPoint is the empty set.", boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
-// Test of convexHull() for non-empty LinearRing
+// Test of convexHull() for non-empty MultiPoint
 template<>
 template<>
 void object::test<20>
@@ -301,17 +288,14 @@ void object::test<20>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr hull = mp_->convexHull();
+    auto hull = mp_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::L);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
-// Test of getGeometryTypeId() for non-empty LinearRing
+// Test of getGeometryTypeId() for non-empty MultiPoint
 template<>
 template<>
 void object::test<21>
@@ -321,7 +305,7 @@ void object::test<21>
     ensure_equals(mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
 }
 
-// Test of getGeometryType() for non-empty Polygon
+// Test of getGeometryType() for non-empty MultiPoint
 template<>
 template<>
 void object::test<22>
@@ -333,7 +317,7 @@ void object::test<22>
     ensure_equals(mp_->getGeometryType(), type);
 }
 
-// Test of getDimension() for non-empty LinearRing
+// Test of getDimension() for non-empty MultiPoint
 template<>
 template<>
 void object::test<23>
@@ -343,7 +327,7 @@ void object::test<23>
     ensure_equals(mp_->getDimension(), geos::geom::Dimension::P);
 }
 
-// Test of getBoundaryDimension() for non-empty LinearRing
+// Test of getBoundaryDimension() for non-empty MultiPoint
 template<>
 template<>
 void object::test<24>
@@ -353,7 +337,7 @@ void object::test<24>
     ensure_equals(mp_->getBoundaryDimension(), geos::geom::Dimension::False);
 }
 
-// Test of getNumPoints() for non-empty LinearRing
+// Test of getNumPoints() for non-empty MultiPoint
 template<>
 template<>
 void object::test<25>
@@ -363,7 +347,7 @@ void object::test<25>
     ensure_equals(mp_->getNumPoints(), mp_size_);
 }
 
-// Test of getLength() for non-empty LinearRing
+// Test of getLength() for non-empty MultiPoint
 template<>
 template<>
 void object::test<26>
@@ -373,7 +357,7 @@ void object::test<26>
     ensure_equals(mp_->getLength(), 0.0);
 }
 
-// Test of getArea() for non-empty LinearRing
+// Test of getArea() for non-empty MultiPoint
 template<>
 template<>
 void object::test<27>
@@ -383,18 +367,15 @@ void object::test<27>
     ensure_equals(mp_->getArea(), 0.0);
 }
 
-// Test of ParseException thrown when constructing MultiPoint from invalind WKT
+// Test of ParseException thrown when constructing MultiPoint from invalid WKT
 template<>
 template<>
 void object::test<28>
 ()
 {
     try {
-        GeometryPtr geo = reader_.read("MULTIPOINT(0 0, 5)");
+        auto geo = reader_.read("MULTIPOINT(0 0, 5)");
         ensure(geo != nullptr);
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
 
         fail("ParseException expected.");
     }
@@ -402,6 +383,38 @@ void object::test<28>
         const char* msg = e.what(); // ok
         ensure(msg != nullptr);
     }
+}
+
+template<>
+template<>
+void object::test<29>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createMultiPoint());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty MultiPoint
+template<>
+template<>
+void object::test<30>
+()
+{
+    ensure(empty_mp_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_mp_->isDimensionStrict(geos::geom::Dimension::L));
+}
+
+// test isDimensionStrict for non-empty MultiPoint
+template<>
+template<>
+void object::test<31>
+()
+{
+    ensure(empty_mp_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_mp_->isDimensionStrict(geos::geom::Dimension::L));
 }
 
 } // namespace tut

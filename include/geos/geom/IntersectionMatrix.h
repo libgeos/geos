@@ -19,7 +19,10 @@
 #ifndef GEOS_GEOM_INTERSECTIONMATRIX_H
 #define GEOS_GEOM_INTERSECTIONMATRIX_H
 
+#include <geos/geom/Location.h>
+
 #include <geos/export.h>
+#include <array>
 #include <string>
 
 #include <geos/inline.h>
@@ -143,7 +146,7 @@ public:
      *        second Geometry.
      * @param dimensionValue - the new value of the element.
      */
-    void set(int row, int column, int dimensionValue);
+    void set(Location row, Location column, int dimensionValue);
 
     /** \brief
      * Changes the elements of this IntersectionMatrix to the dimension
@@ -167,7 +170,7 @@ public:
      *        to compare the element.  The order of dimension values
      *        from least to greatest is {DONTCARE, TRUE, FALSE, 0, 1, 2}.
      */
-    void setAtLeast(size_t row, size_t column, int minimumDimensionValue);
+    void setAtLeast(Location row, Location column, int minimumDimensionValue);
 
     /** \brief
      * If row >= 0 and column >= 0, changes the specified element
@@ -189,7 +192,7 @@ public:
      *        to compare the element. The order of dimension values
      *        from least to greatest is {DONTCARE, TRUE, FALSE, 0, 1, 2}.
      */
-    void setAtLeastIfValid(int row, int column, int minimumDimensionValue);
+    void setAtLeastIfValid(Location row, Location column, int minimumDimensionValue);
 
     /** \brief
      * For each element in this IntersectionMatrix, changes the element to
@@ -226,7 +229,9 @@ public:
      *
      * @return the dimension value at the given matrix position.
      */
-    int get(int row, int column) const;
+    int get(geom::Location row, geom::Location column) const {
+        return matrix[static_cast<size_t>(row)][static_cast<size_t>(column)];
+    }
 
     /** \brief
      * Returns true if this IntersectionMatrix is FF*FF****.
@@ -368,7 +373,7 @@ private:
     static const int secondDim; // = 3;
 
     // Internal buffer for 3x3 matrix.
-    int matrix[3][3];
+    std::array<std::array<int, 3>, 3> matrix;
 
 }; // class IntersectionMatrix
 

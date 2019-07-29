@@ -14,22 +14,6 @@ CLEANFILES = testrunner
 EXTRA_DIST = testrunner.sh CMakeLists.txt
 
 SAFE_XMLTESTS= \
-	$(srcdir)/tests/TestBufferExternal.xml \
-	$(srcdir)/tests/TestBufferExternal2.xml \
-	$(srcdir)/tests/TestIsValid.xml \
-	$(srcdir)/tests/badguy3.xml \
-	$(srcdir)/tests/buffer.xml \
-	$(srcdir)/tests/fme.xml \
-	$(srcdir)/tests/heisenbugs.xml \
-	$(srcdir)/tests/hexwkb.xml \
-	$(srcdir)/tests/hole_from_shell.xml \
-	$(srcdir)/tests/hole_red.xml \
-	$(srcdir)/tests/linemerge.xml \
-	$(srcdir)/tests/robustness.xml \
-	$(srcdir)/tests/singlesidedbuffer.xml \
-	$(srcdir)/tests/split.xml \
-	$(srcdir)/tests/test.xml \
-	$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
@@ -51,9 +35,9 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
 	$(srcdir)/tests/general/TestMinimumClearance.xml \
-  $(srcdir)/tests/general/TestPreparedPointPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
+	$(srcdir)/tests/general/TestPreparedPointPredicate.xml \
+	$(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
+	$(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
 	$(srcdir)/tests/general/TestRectanglePredicate.xml \
 	$(srcdir)/tests/general/TestRelateAA.xml \
 	$(srcdir)/tests/general/TestRelateAC.xml \
@@ -70,37 +54,56 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
+	$(srcdir)/tests/misc/Buffer-1.xml \
+	$(srcdir)/tests/misc/Buffer-2.xml \
+	$(srcdir)/tests/misc/InvalidRelates.xml \
+	$(srcdir)/tests/misc/Segfaults.xml \
+	$(srcdir)/tests/misc/TestBufferExternal-1.xml \
+	$(srcdir)/tests/misc/TestBufferExternal-2.xml \
+	$(srcdir)/tests/misc/TestIsValid.xml \
+	$(srcdir)/tests/misc/buildarea.xml \
+	$(srcdir)/tests/misc/fme.xml \
+	$(srcdir)/tests/misc/heisenbugs.xml \
+	$(srcdir)/tests/misc/hexwkb.xml \
+	$(srcdir)/tests/misc/hole_from_shell.xml \
+	$(srcdir)/tests/misc/hole_red.xml \
+	$(srcdir)/tests/misc/linemerge.xml \
+	$(srcdir)/tests/misc/makevalid.xml \
+	$(srcdir)/tests/misc/robustness.xml \
+	$(srcdir)/tests/misc/safe-16595.xml \
+	$(srcdir)/tests/misc/safe-16596.xml \
+	$(srcdir)/tests/misc/safe-TestBufferJagged.xml \
+	$(srcdir)/tests/misc/singlesidedbuffer.xml \
+	$(srcdir)/tests/misc/stmlf-20061020-invalid-output.xml \
+	$(srcdir)/tests/misc/stmlf-20061020.xml \
+	$(srcdir)/tests/misc/stmlf-20070119.xml \
+	$(srcdir)/tests/misc/split.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
-	$(srcdir)/tests/safe/16595.xml \
-	$(srcdir)/tests/safe/16596.xml \
-	$(srcdir)/tests/safe/TestBufferJagged.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
-	$(srcdir)/tests/ticket/bug176.xml \
-	$(srcdir)/tests/ticket/bug188.xml \
-	$(srcdir)/tests/ticket/bug244.xml \
-	$(srcdir)/tests/ticket/bug275.xml \
-	$(srcdir)/tests/ticket/bug350.xml \
-	$(srcdir)/tests/ticket/bug356.xml \
-	$(srcdir)/tests/ticket/bug358.xml \
-	$(srcdir)/tests/ticket/bug360.xml \
-	$(srcdir)/tests/ticket/bug366.xml \
-	$(srcdir)/tests/ticket/bug392.xml \
-	$(srcdir)/tests/ticket/bug398.xml \
-	$(srcdir)/tests/ticket/bug434.xml \
-	$(srcdir)/tests/ticket/bug459.xml \
-	$(srcdir)/tests/ticket/bug527.xml \
-	$(srcdir)/tests/ticket/bug569.xml \
-	$(srcdir)/tests/ticket/bug582.xml \
-	$(srcdir)/tests/ticket/bug586.xml \
-	$(srcdir)/tests/ticket/bug599.xml \
-	$(srcdir)/tests/ticket/bug605.xml \
-	$(srcdir)/tests/ticket/bug615.xml \
-	$(srcdir)/tests/ticket/bug716.xml \
-	$(srcdir)/tests/ticket/bug837.xml \
-	$(srcdir)/tests/ticket/bug838.xml \
+	$(srcdir)/tests/issue/issue-geos-176.xml \
+	$(srcdir)/tests/issue/issue-geos-188.xml \
+	$(srcdir)/tests/issue/issue-geos-234.xml \
+	$(srcdir)/tests/issue/issue-geos-244.xml \
+	$(srcdir)/tests/issue/issue-geos-275.xml \
+	$(srcdir)/tests/issue/issue-geos-350.xml \
+	$(srcdir)/tests/issue/issue-geos-356.xml \
+	$(srcdir)/tests/issue/issue-geos-358.xml \
+	$(srcdir)/tests/issue/issue-geos-360.xml \
+	$(srcdir)/tests/issue/issue-geos-366.xml \
+	$(srcdir)/tests/issue/issue-geos-392.xml \
+	$(srcdir)/tests/issue/issue-geos-398.xml \
+	$(srcdir)/tests/issue/issue-geos-434.xml \
+	$(srcdir)/tests/issue/issue-geos-459.xml \
+	$(srcdir)/tests/issue/issue-geos-527.xml \
+	$(srcdir)/tests/issue/issue-geos-569.xml \
+	$(srcdir)/tests/issue/issue-geos-582.xml \
+	$(srcdir)/tests/issue/issue-geos-586.xml \
+	$(srcdir)/tests/issue/issue-geos-599.xml \
+	$(srcdir)/tests/issue/issue-geos-605.xml \
+	$(srcdir)/tests/issue/issue-geos-615.xml \
+	$(srcdir)/tests/issue/issue-geos-716.xml \
+	$(srcdir)/tests/issue/issue-geos-837.xml \
+	$(srcdir)/tests/issue/issue-geos-838.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \
@@ -115,10 +118,13 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/ticket/bug488.xml \
-	$(srcdir)/tests/ticket/bug344.xml \
-	$(srcdir)/tests/robust/TestRobustRelateFloat.xml \
-	$(srcdir)/tests/TestBigNastyBuffer.xml
+	$(srcdir)/tests/failure/issue-geos-488.xml \
+	$(srcdir)/tests/failure/issue-geos-344.xml \
+	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
+	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \
+	$(srcdir)/tests/failure/misc-TestSameDirection.xml
+
+
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 

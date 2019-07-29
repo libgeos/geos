@@ -1,9 +1,9 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-SUBDIRS = 
+SUBDIRS =
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 geosdir = $(includedir)/geos/index/strtree
 
@@ -12,6 +12,7 @@ geos_HEADERS = \
     AbstractSTRtree.h \
     Boundable.h \
     BoundablePair.h \
+    EnvelopeUtil.h \
     GeometryItemDistance.h \
     Interval.h \
     ItemBoundable.h \

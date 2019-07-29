@@ -42,10 +42,10 @@ namespace noding { // geos.noding
  * Indexing is used to improve performance.
  * By default validation stops after a single
  * non-noded intersection is detected.
- * Alternatively, it can be requested to detect all intersections
- * by using {@link #setFindAllIntersections(boolean)}.
+ * Alternatively, it can be requested to detect all intersections by
+ * using `setFindAllIntersections(boolean)`.
  *
-* The validator does not check for topology collapse situations
+ * The validator does not check for topology collapse situations
  * (e.g. where two segment strings are fully co-incident).
  *
  * The validator checks for the following situations which indicated incorrect noding:
@@ -54,7 +54,7 @@ namespace noding { // geos.noding
  * - Intersections at an interior vertex (i.e. with an endpoint or another interior vertex)
  *
  * The client may either test the {@link #isValid()} condition,
- * or request that a suitable {@link TopologyException} be thrown.
+ * or request that a suitable [TopologyException](@ref util::TopologyException) be thrown.
  *
  */
 class FastNodingValidator {
@@ -70,7 +70,7 @@ public:
     {
     }
 
-    /**
+    /** \brief
      * Checks for an intersection and
      * reports if one is found.
      *
@@ -83,7 +83,7 @@ public:
         return isValidVar;
     }
 
-    /**
+    /** \brief
      * Returns an error message indicating the segments containing
      * the intersection.
      *
@@ -91,7 +91,7 @@ public:
      */
     std::string getErrorMessage() const;
 
-    /**
+    /** \brief
      * Checks for an intersection and throws
      * a TopologyException if one is found.
      *

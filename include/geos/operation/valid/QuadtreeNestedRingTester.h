@@ -52,8 +52,8 @@ namespace operation { // geos::operation
 namespace valid { // geos::operation::valid
 
 /** \brief
- * Tests whether any of a set of {@link LinearRing}s are
- * nested inside another ring in the set, using a {@link Quadtree}
+ * Tests whether any of a set of [LinearRings](@ref geom::LinearRing) are nested
+ * inside another ring in the set, using a [Quadtree](@ref index::quadtree::Quadtree)
  * index to speed up the comparisons.
  *
  */

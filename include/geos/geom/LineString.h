@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -64,9 +63,9 @@ namespace geom { // geos::geom
  *
  *  A linestring must have either 0 or 2 or more points.
  *  If these conditions are not met, the constructors throw
- *  an {@link IllegalArgumentException}.
+ *  an {@link util::IllegalArgumentException}.
  */
-class GEOS_DLL LineString: public virtual Geometry, public Lineal {
+class GEOS_DLL LineString: public Geometry {
 
 public:
 
@@ -84,9 +83,9 @@ public:
      *
      * @return A clone of this instance
      */
-    Geometry* clone() const override;
+    std::unique_ptr<Geometry> clone() const override;
 
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     /// Returns a read-only pointer to internal CoordinateSequence
     const CoordinateSequence* getCoordinatesRO() const;
@@ -111,7 +110,7 @@ public:
      * Returns a MultiPoint.
      * Empty for closed LineString, a Point for each vertex otherwise.
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     bool isEmpty() const override;
 
@@ -182,7 +181,7 @@ public:
      *
      * @return a LineString with coordinates in the reverse order
      */
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 
@@ -194,8 +193,8 @@ protected:
     LineString(CoordinateSequence* pts, const GeometryFactory* newFactory);
 
     /// Hopefully cleaner version of the above
-    LineString(CoordinateSequence::Ptr pts,
-               const GeometryFactory* newFactory);
+    LineString(CoordinateSequence::Ptr && pts,
+               const GeometryFactory& newFactory);
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 
@@ -222,10 +221,10 @@ struct GEOS_DLL  LineStringLT {
 };
 
 
-inline Geometry*
+inline std::unique_ptr<Geometry>
 LineString::clone() const
 {
-    return new LineString(*this);
+    return std::unique_ptr<Geometry>(new LineString(*this));
 }
 
 } // namespace geos::geom

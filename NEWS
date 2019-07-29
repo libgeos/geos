@@ -1,20 +1,50 @@
-Changes in 3.7.0rc1
-2018-08-19
-Fixes / enhancements since 3.7.0beta2
-  - Avoid segfault when querying empty tree (#730, framm)
-  - Collection with Empty components crashes overlay (#782, Dan Baston)
-  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+Changes in 3.8.0
+2019-MM-DD
+
+- New things:
+  - CAPI: GEOSBuildArea (#952, Even Rouault)
+  - CAPI: GEOSMakeValid (#952, Even Rouault)
+  - CAPI: GEOSPolygonize_valid (#727, Dan Baston)
+  - CAPI: GEOSCoverageUnion (Dan Baston)
+
+- Improvements:
+  - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
+  - Improve performance of GEOSPolygonize for cases with many potential
+    holes (#748, Dan Baston)
+  - Improve performance of GEOSPolygonize for cases with many or complex
+    shells (Dan Baston, Martin Davis)
 
 
-Changes in 3.7.0beta2
-2018-08-06
-Fixes since 3.7.0beta1
-  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
-  - Make GEOSException inherit from std::runtime_error
-    to address clang warnings (Dan Baston)
-  - Add missing CMake files to tarball (#895, Regina Obe)
+Changes in 3.7.2
+2019-05-02
 
-3.7.0 changes
+- Bug fixes / improvements
+  - Envelope constructor using strtod (#875 Paul Ramsey)
+  - Failure in CMake for OSX Framework (#936 Paul Ramsey)
+  - Polygon build failure in Overlay difference (#789 Paul Ramsey)
+  - Invalid union result from valid polygon inputs (#838)
+
+
+Changes in 3.7.1
+2018-11-29
+
+- Bug fixes / improvements
+  - Fix crash in GEOSCoordSeq_isCCW with empty coordseq
+    (#927, Sergey Fedoseev)
+  - Fix crash in GEOSInterpolate with empty LineString
+    (#926, Sergey Fedoseev)
+  - Fix crash in GEOSUnaryUnion with empty LineString
+    (#928, Sergey Fedoseev)
+  - Fix memory leak in SIRtree::insert (#919, Dan Baston)
+  - Reduce required autoconf to 2.63
+    (#56, John Harvey)
+  - Fix incorrect return values on error from GEOSLength
+    GEOSisValidDetail (#941, Dan Baston)
+
+
+Changes in 3.7.0
+2018-09-10
+
 - New things:
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
   - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
@@ -22,6 +52,7 @@ Fixes since 3.7.0beta1
           GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
   - CAPI: GEOSReverse (#872, Dan Baston)
+  - CAPI: GEOSSegmentIntersection (#873, Dan Baston)
   - CAPI: GEOSGeomGetZ (#581, J Smith)
 
 - Improvements
@@ -39,6 +70,22 @@ Fixes since 3.7.0beta1
     (#851, Vicky Vergara)
   - Fix CommonBits::getBit to correctly handle i >= 32
     (#834, Kurt Schwehr)
+
+Changes in 3.7.0rc1
+2018-08-19
+Fixes / enhancements since 3.7.0beta2
+  - Avoid segfault when querying empty tree (#730, framm)
+  - Collection with Empty components crashes overlay (#782, Dan Baston)
+  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+
+Changes in 3.7.0beta2
+2018-08-06
+Fixes since 3.7.0beta1
+  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
+  - Make GEOSException inherit from std::runtime_error
+    to address clang warnings (Dan Baston)
+  - Add missing CMake files to tarball (#895, Regina Obe)
+
 
 Changes in 3.7.0beta1
 2018-06-25

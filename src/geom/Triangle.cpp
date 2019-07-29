@@ -14,10 +14,23 @@
 
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/algorithm/CGAlgorithmsDD.h>
 
 namespace geos {
 namespace geom { // geos::geom
 
+
+bool
+Triangle::isIsoceles()
+{
+    double len0 = p1.distance(p2);
+    double len1 = p0.distance(p2);
+    double len2 = p0.distance(p1);
+    if (len0 == len1 || len1 == len2 || len2 == len0)
+        return true;
+    else
+        return false;
+}
 
 void
 Triangle::inCentre(Coordinate& result)
@@ -53,6 +66,12 @@ Triangle::circumcentre(Coordinate& result)
     result = Coordinate(ccx, ccy);
 }
 
+void
+Triangle::circumcentreDD(Coordinate& result)
+{
+    result = algorithm::CGAlgorithmsDD::circumcentreDD(p0, p1, p2);
+}
+
 /* public static */
 const Coordinate
 Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
@@ -63,7 +82,7 @@ Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordin
     return c;
 }
 
-
+/* private */
 double
 Triangle::det(double m00, double m01, double m10, double m11) const
 {

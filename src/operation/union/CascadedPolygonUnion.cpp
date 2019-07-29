@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
@@ -50,7 +51,7 @@ check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThro
 {
     using namespace geos;
 
-    if(dynamic_cast<const geos::geom::Lineal*>(&g)) {
+    if(g.isLineal()) {
         if(! validOnly) {
             operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
             if(! sop.isSimple()) {
@@ -117,10 +118,8 @@ CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly)
 {
     std::vector<geom::Polygon*> polys;
 
-    typedef geom::MultiPolygon::const_iterator iterator;
-    iterator end = multipoly->end();
-    for(iterator i = multipoly->begin(); i != end; ++i) {
-        polys.push_back(dynamic_cast<geom::Polygon*>(*i));
+    for(const auto& g : *multipoly) {
+        polys.push_back(dynamic_cast<geom::Polygon*>(g.get()));
     }
 
     CascadedPolygonUnion op(&polys);
@@ -225,10 +224,10 @@ CascadedPolygonUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
     }
 
     if(g0 == nullptr) {
-        return g1->clone();
+        return g1->clone().release();
     }
     if(g1 == nullptr) {
-        return g0->clone();
+        return g0->clone().release();
     }
 
     return unionOptimized(g0, g1);
@@ -241,7 +240,7 @@ CascadedPolygonUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
     geom::Envelope const* g1Env = g1->getEnvelopeInternal();
 
     if(!g0Env->intersects(g1Env)) {
-        return geom::util::GeometryCombiner::combine(g0, g1);
+        return geom::util::GeometryCombiner::combine(g0, g1).release();
     }
 
     if(g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1) {
@@ -318,13 +317,13 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     std::unique_ptr<geom::Geometry> ret;
     if(polysOn.empty()) {
         disjointPolys.push_back(u.get());
-        ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
+        ret = geom::util::GeometryCombiner::combine(disjointPolys);
     }
     else {
         // TODO: could be further tweaked to only union with polysOn
         //       and combine with polysOff, but then it'll need again to
         //       recurse in the check for disjoint/intersecting
-        ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
+        ret = geom::util::GeometryCombiner::combine(disjointPolys);
         ret.reset(unionActual(ret.get(), u.get()));
     }
 
@@ -395,7 +394,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     using namespace geom;
     using namespace std;
 
-    if(dynamic_cast<Polygonal*>(g.get())) {
+    if(g->isPolygonal()) {
         return g;
     }
 
@@ -411,7 +410,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     Polygon::ConstVect::size_type n = polygons.size();
     GeomVect* newpolys = new GeomVect(n);
     for(Polygon::ConstVect::size_type i = 0; i < n; ++i) {
-        (*newpolys)[i] = polygons[i]->clone();
+        (*newpolys)[i] = polygons[i]->clone().release();
     }
     return unique_ptr<Geometry>(
                g->getFactory()->createMultiPolygon(newpolys)

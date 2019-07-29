@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 
+#include <geos/geom/IntersectionMatrix.h>
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
 #include <geos/operation/relate/RelateComputer.h> // for composition
 
@@ -30,7 +31,6 @@ namespace algorithm {
 class BoundaryNodeRule;
 }
 namespace geom {
-class IntersectionMatrix;
 class Geometry;
 }
 }
@@ -41,17 +41,17 @@ namespace operation { // geos::operation
 namespace relate { // geos::operation::relate
 
 /** \brief
- * Implements the SFS <tt>relate()</tt> operation on two
+ * Implements the SFS `relate()` operation on two
  * geom::Geometry objects.
  *
  * This class supports specifying a custom algorithm::BoundaryNodeRule
  * to be used during the relate computation.
  *
- * <b>Note:</b> custom Boundary Node Rules do not (currently)
+ * @note Custom Boundary Node Rules do not (currently)
  * affect the results of other Geometry methods (such
- * as {@link Geometry::getBoundary}.  The results of
- * these methods may not be consistent with the relationship computed by
- * a custom Boundary Node Rule.
+ * as [Geometry::getBoundary()](@ref geom::Geometry::getBoundary() const)).
+ * The results of these methods may not be consistent with the relationship
+ * computed by a custom Boundary Node Rule.
  *
  */
 class GEOS_DLL RelateOp: public GeometryGraphOperation {
@@ -69,14 +69,14 @@ public:
      * @return the IntersectonMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
-    static geom::IntersectionMatrix* relate(
+    static std::unique_ptr<geom::IntersectionMatrix> relate(
         const geom::Geometry* a,
         const geom::Geometry* b);
 
     /** \brief
      * Computes the geom::IntersectionMatrix for the spatial relationship
      * between two geom::Geometry objects, using a specified
-     * Boundary Node Rule
+     * Boundary Node Rule.
      *
      * @param a a Geometry to test. Ownership left to caller.
      * @param b a Geometry to test. Ownership left to caller.
@@ -85,7 +85,7 @@ public:
      * @return the IntersectonMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
-    static geom::IntersectionMatrix* relate(
+    static std::unique_ptr<geom::IntersectionMatrix> relate(
         const geom::Geometry* a,
         const geom::Geometry* b,
         const algorithm::BoundaryNodeRule& boundaryNodeRule);
@@ -122,7 +122,7 @@ public:
      *         relationship between the input geometries.
      *         Ownership transferred.
      */
-    geom::IntersectionMatrix* getIntersectionMatrix();
+    std::unique_ptr<geom::IntersectionMatrix> getIntersectionMatrix();
 
 private:
 

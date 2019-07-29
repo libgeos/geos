@@ -52,14 +52,14 @@ namespace geom { // geos::geom
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
-class GEOS_DLL GeometryCollection : public virtual Geometry {
+class GEOS_DLL GeometryCollection : public Geometry {
 
 public:
     friend class GeometryFactory;
 
-    typedef std::vector<Geometry*>::const_iterator const_iterator;
+    typedef std::vector<std::unique_ptr<Geometry>>::const_iterator const_iterator;
 
-    typedef std::vector<Geometry*>::iterator iterator;
+    typedef std::vector<std::unique_ptr<Geometry>>::iterator iterator;
 
     const_iterator begin() const;
 
@@ -71,10 +71,10 @@ public:
      *
      * @return a clone of this instance
      */
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new GeometryCollection(*this);
+        return std::unique_ptr<Geometry>(new GeometryCollection(*this));
     }
 
     ~GeometryCollection() override;
@@ -94,7 +94,7 @@ public:
      * @return the collected coordinates
      *
      */
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     bool isEmpty() const override;
 
@@ -107,10 +107,12 @@ public:
      */
     Dimension::DimensionType getDimension() const override;
 
+    bool isDimensionStrict(Dimension::DimensionType d) const override;
+
     /// Returns coordinate dimension.
     int getCoordinateDimension() const override;
 
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     /**
      * \brief
@@ -167,7 +169,7 @@ public:
      *
      * @return a GeometryCollection in the reverse order
      */
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 	static bool envelopeIntersects(const Geometry *geom1, const Geometry *geom2);
 
@@ -201,13 +203,20 @@ protected:
      */
     GeometryCollection(std::vector<Geometry*>* newGeoms, const GeometryFactory* newFactory);
 
+    GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& newFactory);
+
+    /// Convenience constructor to build a GeometryCollection from vector of Geometry subclass pointers
+    template<typename T>
+    GeometryCollection(std::vector<std::unique_ptr<T>> && newGeoms, const GeometryFactory& newFactory) :
+        GeometryCollection(toGeometryArray(std::move(newGeoms)), newFactory) {}
+
     int
     getSortIndex() const override
     {
         return SORTINDEX_GEOMETRYCOLLECTION;
     };
 
-    std::vector<Geometry*>* geometries;
+    std::vector<std::unique_ptr<Geometry>> geometries;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

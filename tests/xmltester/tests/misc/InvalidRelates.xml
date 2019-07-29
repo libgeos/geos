@@ -1,0 +1,89 @@
+<run>
+  <precisionModel type="FLOATING" />
+
+  <case>
+    <desc>A/A-3-1-8: the closing point of a polygon touching the boundary of another polygon where the closing point touching the boundary at a vertex [dim(0){A.A.Bdy.CP = B.A.Bdy.TP}]</desc>
+    <a>
+      POLYGON((160 200, 210 70, 120 70, 160 200))
+    </a>
+    <b>
+      POLYGON((160 200, 260 40, 70 40, 160 200, 20 20, 310 20, 160 200))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="FF2F01212" name="relate">true</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A/A-3-1-9: the closing point of a polygon touching the boundary of another polygon where the closing point intersecting the boundary at a non-vertex [dim(0){A.A.Bdy.CP = B.A.Bdy.TP}]</desc>
+    <a>
+      POLYGON((110 140, 200 70, 200 160, 110 140))
+    </a>
+    <b>
+      POLYGON((110 140, 110 50, 60 50, 60 90, 160 190, 20 110, 20 20, 200 20, 110 140))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="FF2F01212" name="relate">true</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>LC - intersection (containment) along mod-2 A-Int line segment</desc>
+    <a>
+      LINESTRING(40 180, 140 180)
+    </a>
+    <b>
+      MULTIPOLYGON(
+      ((20 320, 180 320, 180 180, 20 180, 20 320)),
+      ((20 180, 20 80, 180 80, 180 180, 20 180)))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="1FF0FF212" name="relate">true</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>LC - intersection (overlap) along mod-2 A-Int line segment</desc>
+    <a>
+      LINESTRING(40 180, 140 180)
+    </a>
+    <b>
+      MULTIPOLYGON(
+      ((20 320, 180 320, 180 180, 20 180, 20 320)),
+      ((60 180, 60 80, 180 80, 180 180, 60 180)))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="11F00F212" name="relate">true</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>P/A-2-2: a point outside a converx polygon [dim(0){A.P.Int = B.A.Ext}]</desc>
+    <a>
+      POINT(70 170)
+    </a>
+    <b>
+      POLYGON((110 230, 80 160, 20 160, 20 20, 200 20, 200 160, 140 160, 110 230))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="FF0FFF212" name="relate">true</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>
+      P/A-3-4: a point on the touching point of boudary [dim(0){A.P.Int = B.A.Bdy.TP}
+    </desc>
+    <a>
+      POINT(100 150)
+    </a>
+    <b>
+      POLYGON(
+      (20 150, 100 150, 40 50, 160 50, 100 150, 180 150, 180 20, 20 20, 20 150))
+    </b>
+    <test>
+      <op arg1="A" arg2="B" arg3="F0FFFF212" name="relate">true</op>
+    </test>
+  </case>
+
+</run>

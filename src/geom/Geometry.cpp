@@ -136,34 +136,11 @@ Geometry::Geometry(const Geometry& geom)
 }
 
 bool
-Geometry::hasNonEmptyElements(const vector<Geometry*>* geometries)
-{
-    for(size_t i = 0; i < geometries->size(); i++) {
-        if(!(*geometries)[i]->isEmpty()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool
 Geometry::hasNullElements(const CoordinateSequence* list)
 {
     size_t npts = list->getSize();
     for(size_t i = 0; i < npts; ++i) {
         if(list->getAt(i).isNull()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool
-Geometry::hasNullElements(const vector<Geometry*>* lrs)
-{
-    size_t n = lrs->size();
-    for(size_t i = 0; i < n; ++i) {
-        if((*lrs)[i] == nullptr) {
             return true;
         }
     }
@@ -177,8 +154,7 @@ Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
     const Envelope* env0 = getEnvelopeInternal();
     const Envelope* env1 = geom->getEnvelopeInternal();
     double envDist = env0->distance(env1);
-    //delete env0;
-    //delete env1;
+
     if(envDist > cDistance) {
         return false;
     }
@@ -191,7 +167,7 @@ Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
 }
 
 /*public*/
-Point*
+std::unique_ptr<Point>
 Geometry::getCentroid() const
 {
     Coordinate centPt;
@@ -201,8 +177,7 @@ Geometry::getCentroid() const
 
     // We don't use createPointFromInternalCoord here
     // because ::getCentroid() takes care about rounding
-    Point* pt = getFactory()->createPoint(centPt);
-    return pt;
+    return std::unique_ptr<Point>(getFactory()->createPoint(centPt));
 }
 
 /*public*/
@@ -219,7 +194,7 @@ Geometry::getCentroid(Coordinate& ret) const
     return true;
 }
 
-Point*
+std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
     Coordinate interiorPt;
@@ -242,7 +217,7 @@ Geometry::getInteriorPoint() const
             return nullptr;
         }
     }
-    Point* p = getFactory()->createPointFromInternalCoord(&interiorPt, this);
+    std::unique_ptr<Point> p(getFactory()->createPointFromInternalCoord(&interiorPt, this));
     return p;
 }
 
@@ -266,7 +241,6 @@ Geometry::geometryChanged()
 void
 Geometry::geometryChangedAction()
 {
-    //delete envelope;
     envelope.reset(nullptr);
 }
 
@@ -276,10 +250,10 @@ Geometry::isValid() const
     return IsValidOp(this).isValid();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::getEnvelope() const
 {
-    return getFactory()->toGeometry(getEnvelopeInternal());
+    return std::unique_ptr<Geometry>(getFactory()->toGeometry(getEnvelopeInternal()));
 }
 
 const Envelope*
@@ -495,9 +469,8 @@ Geometry::equals(const Geometry* g) const
     return res;
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 Geometry::relate(const Geometry* other) const
-//throw(IllegalArgumentException *)
 {
     return RelateOp::relate(this, other);
 }
@@ -523,31 +496,31 @@ Geometry::toText() const
     return writer.write(this);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance) const
 {
-    return BufferOp::bufferOp(this, p_distance);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance, int quadrantSegments) const
 {
-    return BufferOp::bufferOp(this, p_distance, quadrantSegments);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance, quadrantSegments));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance, int quadrantSegments, int endCapStyle) const
 {
-    return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::convexHull() const
 {
     return ConvexHull(this).getConvexHull();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::intersection(const Geometry* other) const
 {
     /**
@@ -556,7 +529,7 @@ Geometry::intersection(const Geometry* other) const
 
     // special case: if one input is empty ==> empty
     if(isEmpty() || other->isEmpty()) {
-        return getFactory()->createGeometryCollection();
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
     }
 
 #ifdef USE_RECTANGLE_INTERSECTION
@@ -577,14 +550,12 @@ Geometry::intersection(const Geometry* other) const
     }
 #endif
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::Union(const Geometry* other) const
-//throw(TopologyException *, IllegalArgumentException *)
 {
-
     // special case: if one input is empty ==> other input
     if(isEmpty()) {
         return other->clone();
@@ -592,8 +563,6 @@ Geometry::Union(const Geometry* other) const
     if(other->isEmpty()) {
         return clone();
     }
-
-    Geometry* out = nullptr;
 
 #ifdef SHORTCIRCUIT_PREDICATES
     // if envelopes are disjoint return a MULTI geom or
@@ -612,28 +581,28 @@ Geometry::Union(const Geometry* other) const
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(this->clone());
+            v->push_back(this->clone().release());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(other->clone());
+            v->push_back(other->clone().release());
         }
 
-        out = _factory->buildGeometry(v);
+        std::unique_ptr<Geometry>out(_factory->buildGeometry(v));
         return out;
     }
 #endif
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION));
 }
 
 /* public */
@@ -644,22 +613,22 @@ Geometry::Union() const
     return UnaryUnionOp::Union(*this);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::difference(const Geometry* other) const
 //throw(IllegalArgumentException *)
 {
     // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
     if(isEmpty()) {
-        return getFactory()->createGeometryCollection();
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
     }
     if(other->isEmpty()) {
         return clone();
     }
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::symDifference(const Geometry* other) const
 {
     // special case: if either input is empty ==> other input
@@ -685,26 +654,26 @@ Geometry::symDifference(const Geometry* other) const
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(this->clone());
+            v->push_back(this->clone().release());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(other->clone());
+            v->push_back(other->clone().release());
         }
 
-        return _factory->buildGeometry(v);
+        return std::unique_ptr<Geometry>(_factory->buildGeometry(v));
     }
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE));
 }
 
 int
@@ -791,6 +760,31 @@ Geometry::compare(vector<Geometry*> a, vector<Geometry*> b) const
     while(i < a.size() && j < b.size()) {
         Geometry* aGeom = a[i];
         Geometry* bGeom = b[j];
+        int comparison = aGeom->compareTo(bGeom);
+        if(comparison != 0) {
+            return comparison;
+        }
+        i++;
+        j++;
+    }
+    if(i < a.size()) {
+        return 1;
+    }
+    if(j < b.size()) {
+        return -1;
+    }
+    return 0;
+}
+
+int
+Geometry::compare(const std::vector<std::unique_ptr<Geometry>> & a,
+        const std::vector<std::unique_ptr<Geometry>> & b) const
+{
+    size_t i = 0;
+    size_t j = 0;
+    while(i < a.size() && j < b.size()) {
+        Geometry* aGeom = a[i].get();
+        Geometry* bGeom = b[j].get();
         int comparison = aGeom->compareTo(bGeom);
         if(comparison != 0) {
             return comparison;

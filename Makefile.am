@@ -20,16 +20,15 @@ SUBDIRS = \
 	macros  \
 	swig    \
 	tests   \
+	benchmarks \
 	tools
 
-BUILT_SOURCES = geos_revision.h
+BUILT_SOURCES =
 
 EXTRA_DIST = acsite.m4 .editorconfig \
 	Version.txt CMakeLists.txt \
-	cmake/modules/CheckPrototypeExists.cmake \
-	cmake/modules/COPYING-CMAKE-SCRIPTS \
-	cmake/modules/GenerateSourceGroups.cmake \
-	cmake/cmake_uninstall.cmake.in geos_revision.h \
+	cmake/cmake_uninstall.cmake.in \
+	cmake/geos-config.cmake \
 	README.md
 
 ACLOCAL_AMFLAGS = -I macros
@@ -50,24 +49,25 @@ gen-ChangeLog:
 apidoc doxygen:
 	cd doc && make $@
 
+doxygen-checked:
+	( set -o pipefail; \
+		! make doxygen 2>&1 > /dev/null | \
+		grep -v '\(not documented\|ignoring unsupported tag\)'; \
+	)
+
 authors.git: authors.svn
 	cd $(srcdir) && sed -e 's/:/ = /' authors.svn > authors.git
 
 svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
 
-geos_revision.h:
-	top_srcdir=$(srcdir) sh $(srcdir)/tools/repo_revision.sh
-
 VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode=1
 
 valgrindcheck:
 	$(VALGRIND) tests/unit/geos_unit
 
-.PHONY: geos_revision.h
-
 check-local:
-	! find . -name '*.cpp' -o -name '*.h' | \
+	! find $(srcdir) -name '*.cpp' -o -name '*.h' | \
 		grep -v tests/xmltester/tinyxml | \
 		grep -v include/geos/algorithm/ttmath | \
 		xargs grep -n '[[:space:]]$$'

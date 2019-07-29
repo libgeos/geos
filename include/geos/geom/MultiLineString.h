@@ -23,8 +23,8 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/Dimension.h>
+#include <geos/geom/LineString.h>
 
 #include <string>
 #include <vector>
@@ -47,8 +47,8 @@ namespace geom { // geos::geom
 #pragma warning(disable:4250) // T1 inherits T2 via dominance
 #endif
 
-/// Models a collection of (@link LineString}s.
-class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
+/// Models a collection of [LineStrings](@ref geom::LineString).
+class GEOS_DLL MultiLineString: public GeometryCollection {
 
 public:
 
@@ -59,15 +59,19 @@ public:
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;
 
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::L;
+    }
+
     /**
      * \brief
-     * Returns Dimension::False if all LineStrings in the collection
+     * Returns Dimension::False if all [LineStrings](@ref geom::LineString) in the collection
      * are closed, 0 otherwise.
      */
     int getBoundaryDimension() const override;
 
-    /// Returns a (possibly empty) MultiPoint
-    Geometry* getBoundary() const override;
+    /// Returns a (possibly empty) [MultiPoint](@ref geom::MultiPoint)
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
 
@@ -77,7 +81,7 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    Geometry* clone() const override;
+    std::unique_ptr<Geometry> clone() const override;
 
     /**
      * Creates a MultiLineString in the reverse
@@ -88,31 +92,35 @@ public:
      *
      * @return a MultiLineString in the reverse order
      */
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 
     /**
-     * \brief Constructs a <code>MultiLineString</code>.
+     * \brief Constructs a MultiLineString.
      *
-     * @param  newLines
-     *	The <code>LineStrings</code>s for this
-     *	<code>MultiLineString</code>, or <code>null</code>
-     *	or an empty array to create the empty geometry.
-     *	Elements may be empty <code>LineString</code>s,
-     *	but not <code>null</code>s.
+     * @param  newLines The [LineStrings](@ref geom::LineString) for this
+     *                  MultiLineString, or `null`
+     *                  or an empty array to create the empty geometry.
+     *                  Elements may be empty LineString,
+     *                  but not `null`s.
      *
-     *	Constructed object will take ownership of
-     *	the vector and its elements.
+     * @param newFactory The GeometryFactory used to create this geometry.
+     *                   Caller must keep the factory alive for the life-time
+     *                   of the constructed MultiLineString.
      *
-     * @param newFactory
-     * 	The GeometryFactory used to create this geometry.
-     *	Caller must keep the factory alive for the life-time
-     *	of the constructed MultiLineString.
+     * @note Constructed object will take ownership of
+     *       the vector and its elements.
      *
      */
     MultiLineString(std::vector<Geometry*>* newLines,
                     const GeometryFactory* newFactory);
+
+    MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
+            const GeometryFactory& newFactory);
+
+    MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
+                    const GeometryFactory& newFactory);
 
     MultiLineString(const MultiLineString& mp);
 

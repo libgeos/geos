@@ -53,7 +53,7 @@ struct test_linearring_data {
     {
         // Create non-empty LinearRing
         GeometryPtr geo = nullptr;
-        geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)");
+        geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)").release();
         ring_ = dynamic_cast<LinearRingPtr>(geo);
     }
 
@@ -178,10 +178,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr envelope = empty_ring_.getEnvelope();
+    auto envelope = empty_ring_.getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty LinearRing
@@ -190,10 +189,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr boundary = empty_ring_.getBoundary();
+    auto boundary = empty_ring_.getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty LinearRing
@@ -202,10 +200,9 @@ template<>
 void object::test<10>
 ()
 {
-    GeometryPtr hull = empty_ring_.convexHull();
+    auto hull = empty_ring_.convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty LinearRing
@@ -291,13 +288,10 @@ void object::test<19>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr envelope = ring_->getEnvelope();
+    auto envelope = ring_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty LinearRing
@@ -308,14 +302,11 @@ void object::test<20>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr boundary = ring_->getBoundary();
+    auto boundary = ring_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.6 Curve
     ensure("[OGC] The boundary of a closed Curve must be empty.", boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty LinearRing
@@ -326,14 +317,11 @@ void object::test<21>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr hull = ring_->convexHull();
+    auto hull = ring_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty LinearRing
@@ -408,12 +396,8 @@ void object::test<28>
 ()
 {
     try {
-        GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10)");
+        auto geo = reader_.read("LINEARRING(0 0, 5 5, 10 10)");
         ensure(geo != nullptr);
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
-
         fail("IllegalArgumentException expected.");
     }
     catch(geos::util::IllegalArgumentException const& e) {
@@ -422,7 +406,7 @@ void object::test<28>
     }
 }
 
-// TTest of exception thrown when constructing a self-intersecting LinearRing
+// Test of exception thrown when constructing a self-intersecting LinearRing
 template<>
 template<>
 void object::test<29>
@@ -430,16 +414,13 @@ void object::test<29>
 {
     try {
         // Construct LinearRing self-intersecting in point (5,5)
-        GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
+        auto geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
         ensure(geo != nullptr);
 
-        LinearRingPtr ring = dynamic_cast<LinearRingPtr>(geo);
+        LinearRingPtr ring = dynamic_cast<LinearRingPtr>(geo.get());
         ensure(ring != nullptr);
 
         ensure(!ring->isValid());
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
 
         fail("IllegalArgumentException expected.");
     }
@@ -459,5 +440,37 @@ void object::test<30>
 
     const std::string type("LinearRing");
     ensure_equals(ring_->getGeometryType(), type);
+}
+
+template<>
+template<>
+void object::test<31>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createLinearRing());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty LinearRing
+template<>
+template<>
+void object::test<32>
+()
+{
+    ensure(empty_ring_.isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!empty_ring_.isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty LinearRing
+template<>
+template<>
+void object::test<33>
+()
+{
+    ensure(ring_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!ring_->isDimensionStrict(geos::geom::Dimension::A));
 }
 } // namespace tut

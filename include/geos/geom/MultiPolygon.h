@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Polygonal.h> // for inheritance
+#include <geos/geom/Polygon.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -56,7 +56,7 @@ namespace geom { // geos::geom
 /// This allows the topological point-set semantics
 /// to be well-defined.
 ///
-class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal {
+class GEOS_DLL MultiPolygon: public GeometryCollection {
 public:
 
     friend class GeometryFactory;
@@ -65,6 +65,10 @@ public:
 
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
+
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::A;
+    }
 
     /// Returns 1 (MultiPolygon boundary is MultiLineString)
     int getBoundaryDimension() const override;
@@ -75,7 +79,7 @@ public:
      * @return a lineal geometry (which may be empty)
      * @see Geometry#getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
 
@@ -83,9 +87,9 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    Geometry* clone() const override;
+    std::unique_ptr<Geometry> clone() const override;
 
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 
@@ -111,6 +115,12 @@ protected:
      *	of the constructed MultiPolygon.
      */
     MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* newFactory);
+
+    MultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys,
+            const GeometryFactory& newFactory);
+
+    MultiPolygon(std::vector<std::unique_ptr<Geometry>> && newPolys,
+                 const GeometryFactory& newFactory);
 
     MultiPolygon(const MultiPolygon& mp);
 

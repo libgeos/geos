@@ -81,7 +81,7 @@ public:
     *
     * @return a Geometry representing the Minimum Bounding Circle.
     */
-    geom::Geometry* getCircle();
+    std::unique_ptr<geom::Geometry> getCircle();
 
     /**
     * Gets a geometry representing a line between the two farthest points

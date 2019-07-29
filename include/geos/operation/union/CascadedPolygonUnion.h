@@ -51,22 +51,19 @@ namespace geounion {  // geos::operation::geounion
 
 /**
  * \brief
- * Provides an efficient method of unioning a collection of
- * {@link Polygonal} geometries.
- * This algorithm is faster and likely more robust than
- * the simple iterated approach of
- * repeatedly unioning each polygon to a result geometry.
+ * Provides an efficient method of unioning a collection of polygonal geometries.
  *
- * The <tt>buffer(0)</tt> trick is sometimes faster, but can be less robust and
+ * This algorithm is faster and likely more robust than the simple iterated
+ * approach of repeatedly unioning each polygon to a result geometry.
+ *
+ * The `buffer(0)` trick is sometimes faster, but can be less robust and
  * can sometimes take an exceptionally long time to complete.
  * This is particularly the case where there is a high degree of overlap
- * between the polygons.  In this case, <tt>buffer(0)</tt> is forced to compute
- * with <i>all</i> line segments from the outset,
- * whereas cascading can eliminate many segments
- * at each stage of processing.
- * The best case for buffer(0) is the trivial case
- * where there is <i>no</i> overlap between the input geometries.
- * However, this case is likely rare in practice.
+ * between the polygons.  In this case, `buffer(0)` is forced to compute
+ * with *all* line segments from the outset, whereas cascading can eliminate
+ * many segments at each stage of processing.
+ * The best case for buffer(0) is the trivial case where there is `no` overlap
+ * between the input geometries. However, this case is likely rare in practice.
  */
 class GEOS_DLL CascadedPolygonUnion {
 private:
@@ -82,13 +79,13 @@ private:
      */
     static int const STRTREE_NODE_CAPACITY = 4;
 
-    /**
-     * Computes a {@link Geometry} containing only {@link Polygonal} components.
+    /** \brief
+     * Computes a [Geometry](@ref geom::Geometry) containing only polygonal components.
      *
-     * Extracts the {@link Polygon}s from the input
-     * and returns them as an appropriate {@link Polygonal} geometry.
+     * Extracts the [Polygons](@ref geom::Polygon) from the input
+     * and returns them as an appropriate polygonal geometry.
      *
-     * If the input is already <tt>Polygonal</tt>, it is returned unchanged.
+     * If the input is already `Polygonal`, it is returned unchanged.
      *
      * A particular use case is to filter out non-polygonal components
      * returned from an overlay operation.
@@ -101,17 +98,16 @@ private:
 public:
     CascadedPolygonUnion();
 
-    /**
-     * Computes the union of
-     * a collection of {@link Polygonal} {@link Geometry}s.
+    /** \brief
+     * Computes the union of a collection of polygonal [Geometrys](@ref geom::Geometry).
      *
-     * @param polys a collection of {@link Polygonal} {@link Geometry}s.
-     *        ownership of elements _and_ vector are left to caller.
+     * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
+     *              ownership of elements *and* vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
 
-    /**
-     * Computes the union of a set of {@link Polygonal} {@link Geometry}s.
+    /** \brief
+     * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
      *
      * @tparam T an iterator yelding something castable to const Polygon *
      * @param start start iterator
@@ -129,32 +125,31 @@ public:
         return Union(&polys);
     }
 
-    /**
-     * Computes the union of
-     * a collection of {@link Polygonal} {@link Geometry}s.
+    /** \brief
+     * Computes the union of a collection of polygonal [Geometrys](@ref geom::Geometry).
      *
-     * @param polys a collection of {@link Polygonal} {@link Geometry}s
-     *        ownership of elements _and_ vector are left to caller.
+     * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
+     *              Ownership of elements *and* vector are left to caller.
      */
     static geom::Geometry* Union(const geom::MultiPolygon* polys);
 
-    /**
-     * Creates a new instance to union
-     * the given collection of {@link Geometry}s.
+    /** \brief
+     * Creates a new instance to union the given collection of
+     * [Geometrys](@ref geom::Geometry).
      *
-     * @param geoms a collection of {@link Polygonal} {@link Geometry}s
-     *        ownership of elements _and_ vector are left to caller.
+     * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
+     *              Ownership of elements *and* vector are left to caller.
      */
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
         : inputPolys(polys),
           geomFactory(nullptr)
     {}
 
-    /**
+    /** \brief
      * Computes the union of the input geometries.
      *
      * @return the union of the input geometries
-     * @return null if no input geometries were provided
+     * @return `null` if no input geometries were provided
      */
     geom::Geometry* Union();
 

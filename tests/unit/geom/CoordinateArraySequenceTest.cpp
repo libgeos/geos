@@ -315,53 +315,6 @@ void object::test<8>
     ensure(!sequence.hasRepeatedPoints());
 }
 
-// Test of deleteAt()
-template<>
-template<>
-void object::test<9>
-()
-{
-    using geos::geom::Coordinate;
-
-    // Create sequence with only 1 default coordinate
-    const size_t sizeOne = 1;
-    geos::geom::CoordinateArraySequence sequence(1);
-
-    ensure(!sequence.isEmpty());
-    ensure_equals(sequence.size(), sizeOne);
-
-    // Delete the only coordinate in the sequence
-    sequence.deleteAt(0);
-    const size_t sizeZero = 0;
-
-    ensure(sequence.isEmpty());
-    ensure_equals(sequence.size(), sizeZero);
-
-    // Add new 3 coordinates
-    Coordinate first(1, 2, 3);
-    sequence.add(first);
-    Coordinate second(5, 10, 15);
-    sequence.add(second);
-    Coordinate third(9, 18, 27);
-    sequence.add(third);
-    const size_t sizeThree = 3;
-
-    ensure(!sequence.isEmpty());
-    ensure_equals(sequence.size(), sizeThree);
-
-    // Delete coordinate in the middle of sequence - the second one.
-    sequence.deleteAt(1); // (5, 10, 15)
-    const size_t sizeTwo = 2;
-
-    ensure(!sequence.isEmpty());
-    ensure_equals(sequence.size(), sizeTwo);
-
-    ensure(sequence.getAt(0) != sequence.getAt(1));
-    ensure_equals(sequence.getAt(0), first);
-    ensure("deleteAt() did not remove coordinate.", sequence.getAt(1) != second);
-    ensure_equals(sequence.getAt(1), third);
-}
-
 // Test of setPoints()
 template<>
 template<>
@@ -406,34 +359,6 @@ void object::test<10>
     ensure_equals(sequence.getAt(2).x, 9);
     ensure_equals(sequence.getAt(2).y, 18);
     ensure_equals(sequence.getAt(2).z, 27);
-}
-
-// Test of removeRepeatedPoints
-template<>
-template<>
-void object::test<11>
-()
-{
-    using geos::geom::Coordinate;
-
-    geos::geom::CoordinateArraySequence sequence;
-
-    // Add new 3 equal coordinates
-    Coordinate c(1, 2, 3);
-    sequence.add(c);
-    sequence.add(c);
-    sequence.add(c);
-
-    Coordinate c2(5, 10, 15);
-    sequence.add(c2);
-    sequence.add(c2);
-
-    sequence.add(c);
-
-    ensure_equals(sequence.size(), 6u);
-    sequence.removeRepeatedPoints();
-
-    ensure_equals(sequence.size(), 3u);
 }
 
 // Test of equality and inequality operators

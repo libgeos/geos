@@ -16,6 +16,7 @@
 #define GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
 
 #include <geos/export.h>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -29,8 +30,8 @@ namespace geos {
 namespace precision { // geos.precision
 
 /** \brief
- * Reduces the precision of a {@link Geometry}
- * according to the supplied {@link PrecisionModel}, without
+ * Reduces the precision of a {@link geom::Geometry}
+ * according to the supplied {@link geom::PrecisionModel}, without
  * attempting to preserve valid topology.
  *
  * The topology of the resulting geometry may be invalid if
@@ -60,7 +61,7 @@ public:
      * being removed completely, or simply being collapsed to an (invalid)
      * Geometry of the same type.
      *
-     * @param removeCollapsed if <code>true</code> collapsed
+     * @param nRemoveCollapsed if <code>true</code> collapsed
      * components will be removed
      */
     void setRemoveCollapsedComponents(bool nRemoveCollapsed);
@@ -80,7 +81,7 @@ public:
     const geom::PrecisionModel* getPrecisionModel();
 
     bool getRemoveCollapsed();
-    geom::Geometry* reduce(const geom::Geometry* geom);
+    std::unique_ptr<geom::Geometry> reduce(const geom::Geometry* geom);
 };
 
 } // namespace geos.precision

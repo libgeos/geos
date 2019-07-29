@@ -37,7 +37,7 @@ namespace geos {
 namespace precision { // geos.precision
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 EnhancedPrecisionOp::intersection(
     const Geometry* geom0,
     const Geometry* geom1)
@@ -45,8 +45,7 @@ EnhancedPrecisionOp::intersection(
     util::GEOSException originalEx;
 
     try {
-        Geometry* result = geom0->intersection(geom1);
-        return result;
+        return geom0->intersection(geom1);
     }
     catch(const util::GEOSException& ex) {
         originalEx = ex;
@@ -59,7 +58,7 @@ EnhancedPrecisionOp::intersection(
      */
     try {
         CommonBitsOp cbo(true);
-        Geometry* resultEP = cbo.intersection(geom0, geom1);
+        auto resultEP = cbo.intersection(geom0, geom1);
 
         // check that result is a valid geometry after
         // the reshift to orginal precision
@@ -84,15 +83,14 @@ EnhancedPrecisionOp::intersection(
 }
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 EnhancedPrecisionOp::Union(
     const Geometry* geom0,
     const Geometry* geom1)
 {
     util::GEOSException originalEx;
     try {
-        Geometry* result = geom0->Union(geom1);
-        return result;
+        return geom0->Union(geom1);
     }
     catch(const util::GEOSException& ex) {
         originalEx = ex;
@@ -105,7 +103,7 @@ EnhancedPrecisionOp::Union(
      */
     try {
         CommonBitsOp cbo(true);
-        Geometry* resultEP = cbo.Union(geom0, geom1);
+        auto resultEP = cbo.Union(geom0, geom1);
 
         // check that result is a valid geometry after
         // the reshift to orginal precision
@@ -120,7 +118,7 @@ EnhancedPrecisionOp::Union(
 }
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 EnhancedPrecisionOp::difference(
     const Geometry* geom0,
     const Geometry* geom1)
@@ -128,8 +126,7 @@ EnhancedPrecisionOp::difference(
     util::GEOSException originalEx;
 
     try {
-        Geometry* result = geom0->difference(geom1);
-        return result;
+        return geom0->difference(geom1);
     }
     catch(const util::GEOSException& ex) {
         originalEx = ex;
@@ -142,7 +139,7 @@ EnhancedPrecisionOp::difference(
      */
     try {
         CommonBitsOp cbo(true);
-        Geometry* resultEP = cbo.difference(geom0, geom1);
+        auto resultEP = cbo.difference(geom0, geom1);
 
         // check that result is a valid geometry after
         // the reshift to orginal precision
@@ -157,15 +154,14 @@ EnhancedPrecisionOp::difference(
 }
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 EnhancedPrecisionOp::symDifference(
     const Geometry* geom0,
     const Geometry* geom1)
 {
     util::GEOSException originalEx;
     try {
-        Geometry* result = geom0->symDifference(geom1);
-        return result;
+        return geom0->symDifference(geom1);
     }
     catch(const util::GEOSException& ex) {
         originalEx = ex;
@@ -178,7 +174,7 @@ EnhancedPrecisionOp::symDifference(
      */
     try {
         CommonBitsOp cbo(true);
-        Geometry* resultEP = cbo.symDifference(geom0, geom1);
+        auto resultEP = cbo.symDifference(geom0, geom1);
 
         // check that result is a valid geometry after
         // the reshift to orginal precision
@@ -193,13 +189,12 @@ EnhancedPrecisionOp::symDifference(
 }
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 EnhancedPrecisionOp::buffer(const Geometry* geom, double distance)
 {
     util::GEOSException originalEx;
     try {
-        Geometry* result = geom->buffer(distance);
-        return result;
+        return geom->buffer(distance);
     }
     catch(const util::GEOSException& ex) {
         originalEx = ex;
@@ -212,7 +207,7 @@ EnhancedPrecisionOp::buffer(const Geometry* geom, double distance)
      */
     try {
         CommonBitsOp cbo(true);
-        Geometry* resultEP = cbo.buffer(geom, distance);
+        auto resultEP = cbo.buffer(geom, distance);
 
         // check that result is a valid geometry
         // after the reshift to orginal precision

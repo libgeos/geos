@@ -52,7 +52,6 @@ class GEOS_DLL RectangleContains {
 
 private:
 
-    const geom::Polygon& rectangle;
     const geom::Envelope& rectEnv;
 
     bool isContainedInBoundary(const geom::Geometry& geom);
@@ -104,7 +103,6 @@ public:
      */
     RectangleContains(const geom::Polygon& rect)
         :
-        rectangle(rect),
         rectEnv(*(rect.getEnvelopeInternal()))
     {}
 

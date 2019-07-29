@@ -43,10 +43,19 @@ namespace geom { // geos::geom
 MultiLineString::MultiLineString(vector<Geometry*>* newLines,
                                  const GeometryFactory* factory)
     :
-    Geometry(factory),
     GeometryCollection(newLines, factory)
 {
 }
+
+MultiLineString::MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
+        const GeometryFactory& factory)
+        : GeometryCollection(std::move(newLines), factory)
+{}
+
+MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
+                                 const GeometryFactory& factory)
+        : GeometryCollection(std::move(newLines), factory)
+{}
 
 MultiLineString::~MultiLineString() {}
 
@@ -77,8 +86,8 @@ MultiLineString::isClosed() const
     if(isEmpty()) {
         return false;
     }
-    for(size_t i = 0, n = geometries->size(); i < n; ++i) {
-        LineString* ls = dynamic_cast<LineString*>((*geometries)[i]);
+    for(const auto& g : geometries) {
+        LineString* ls = dynamic_cast<LineString*>(g.get());
         if(! ls->isClosed()) {
             return false;
         }
@@ -86,17 +95,16 @@ MultiLineString::isClosed() const
     return true;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
     if(isEmpty()) {
-        return getFactory()->createGeometryCollection(nullptr);
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
     }
-    //Geometry *in = toInternalGeometry(this);
+
     GeometryGraph gg(0, this);
     CoordinateSequence* pts = gg.getBoundaryPoints();
-    Geometry* ret = getFactory()->createMultiPoint(*pts);
-    return ret;
+    return std::unique_ptr<Geometry>(getFactory()->createMultiPoint(*pts));
 }
 
 bool
@@ -113,21 +121,21 @@ MultiLineString::getGeometryTypeId() const
     return GEOS_MULTILINESTRING;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiLineString::reverse() const
 {
     if(isEmpty()) {
         return clone();
     }
 
-    size_t nLines = geometries->size();
+    size_t nLines = geometries.size();
     Geometry::NonConstVect* revLines = new Geometry::NonConstVect(nLines);
     for(size_t i = 0; i < nLines; ++i) {
-        LineString* iLS = dynamic_cast<LineString*>((*geometries)[i]);
+        LineString* iLS = dynamic_cast<LineString*>(geometries[i].get());
         assert(iLS);
-        (*revLines)[nLines - 1 - i] = iLS->reverse();
+        (*revLines)[nLines - 1 - i] = iLS->reverse().release();
     }
-    return getFactory()->createMultiLineString(revLines);
+    return std::unique_ptr<Geometry>(getFactory()->createMultiLineString(revLines));
 }
 
 } // namespace geos::geom

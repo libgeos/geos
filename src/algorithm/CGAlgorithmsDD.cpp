@@ -87,7 +87,7 @@ CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
 }
 
 int
-CGAlgorithmsDD::signOfDet2x2(DD& x1, DD& y1, DD& x2, DD& y2)
+CGAlgorithmsDD::signOfDet2x2(const DD& x1, const DD& y1, const DD& x2, const DD& y2)
 {
     DD mx1y2(x1 * y2);
     DD my1x2(y1 * x2);
@@ -192,6 +192,39 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
     rv.y = y.ToDouble();
 }
 
+/* public static */
+Coordinate
+CGAlgorithmsDD::circumcentreDD(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    DD ax = DD(a.x) - DD(c.x);
+    DD ay = DD(a.y) - DD(c.y);
+    DD bx = DD(b.x) - DD(c.x);
+    DD by = DD(b.y) - DD(c.y);
+
+    DD denom = DD(2) * detDD(ax, ay, bx, by);
+    DD asqr = (ax * ax) + (ay * ay);
+    DD bsqr = (bx * bx) + (by * by);
+    DD numx = detDD(ay, asqr, by, bsqr);
+    DD numy = detDD(ax, asqr, bx, bsqr);
+    double ccx = (DD(c.x) - (numx / denom)).ToDouble();
+    double ccy = (DD(c.y) + (numy / denom)).ToDouble();
+    Coordinate cc(ccx, ccy);
+    return cc;
+}
+
+/* public static */
+DD
+CGAlgorithmsDD::detDD(double x1, double y1, double x2, double y2)
+{
+    return detDD(DD(x1), DD(y1), DD(x2), DD(y2));
+}
+
+/* public static */
+DD
+CGAlgorithmsDD::detDD(const DD& x1, const DD& y1, const DD& x2, const DD& y2)
+{
+    return (x1 * y2) - (y1 * x2);
+}
 
 } // namespace geos::algorithm
 } // namespace geos

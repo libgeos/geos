@@ -38,7 +38,7 @@ namespace algorithm {
 // public:
 //
 /*static*/
-int
+geom::Location
 RayCrossingCounterDD::locatePointInRing(const geom::Coordinate& point,
                                         const geom::CoordinateSequence& ring)
 {
@@ -58,7 +58,7 @@ RayCrossingCounterDD::locatePointInRing(const geom::Coordinate& point,
 }
 
 /*static*/
-int
+geom::Location
 RayCrossingCounterDD::locatePointInRing(const geom::Coordinate& point,
                                         const std::vector<const geom::Coordinate*>& ring)
 {
@@ -151,7 +151,7 @@ RayCrossingCounterDD::countSegment(const geom::Coordinate& p1,
 }
 
 
-int
+geom::Location
 RayCrossingCounterDD::getLocation()
 {
     if(isPointOnSegment) {

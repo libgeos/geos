@@ -42,7 +42,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 MinimumBoundingCircle::getCircle()
 {
     //TODO: ensure the output circle contains the extermal points.
@@ -50,9 +50,9 @@ MinimumBoundingCircle::getCircle()
 
     compute();
     if(centre.isNull()) {
-        return input->getFactory()->createPolygon();
+        return std::unique_ptr<Geometry>(input->getFactory()->createPolygon());
     }
-    Point* centrePoint = input->getFactory()->createPoint(centre);
+    std::unique_ptr<Geometry> centrePoint(input->getFactory()->createPoint(centre));
     if(radius == 0.0) {
         return centrePoint;
     }
@@ -71,12 +71,12 @@ MinimumBoundingCircle::getFarthestPoints()
         return input->getFactory()->createPoint(centre);
     }
 
-    size_t dims = input->getDimension();
+    size_t dims = input->getCoordinateDimension();
     size_t len = 2;
-    CoordinateSequence* cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
-    cs->add(extremalPts[0], true);
-    cs->add(extremalPts[extremalPts.size() - 1], true);
-    return input->getFactory()->createLineString(cs);
+    auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+    cs->setAt(extremalPts[0], 0);
+    cs->setAt(extremalPts[extremalPts.size() - 1], 1);
+    return input->getFactory()->createLineString(cs.release());
 }
 
 /*public*/
@@ -90,14 +90,14 @@ MinimumBoundingCircle::getDiameter()
     case 1:
         return input->getFactory()->createPoint(centre);
     }
-    size_t dims = input->getDimension();
+    size_t dims = input->getCoordinateDimension();
     size_t len = 2;
-    CoordinateSequence* cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+    auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
     // TODO: handle case of 3 extremal points, by computing a line from one of
     // them through the centre point with len = 2*radius
-    cs->add(extremalPts[0], true);
-    cs->add(extremalPts[1], true);
-    return input->getFactory()->createLineString(cs);
+    cs->setAt(extremalPts[0], 0);
+    cs->setAt(extremalPts[1], 1);
+    return input->getFactory()->createLineString(cs.release());
 }
 
 /*public*/
@@ -149,8 +149,7 @@ MinimumBoundingCircle::computeCentre()
         break;
     }
     default: {
-        util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
-        \
+        throw util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
     }
     }
 }
@@ -187,9 +186,9 @@ MinimumBoundingCircle::computeCirclePoints()
     * The problem is simplified by reducing to the convex hull.
     * Computing the convex hull also has the useful effect of eliminating duplicate points
     */
-    Geometry* convexHull = input->convexHull();
+    std::unique_ptr<Geometry> convexHull(input->convexHull());
 
-    CoordinateSequence* cs = convexHull->getCoordinates();
+    std::unique_ptr<CoordinateSequence> cs(convexHull->getCoordinates());
     std::vector<Coordinate> pts;
     cs->toVector(pts);
 
@@ -246,7 +245,7 @@ MinimumBoundingCircle::computeCirclePoints()
         return;
     }
     // never get here
-    util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
+    throw util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
 }
 
 /*private*/

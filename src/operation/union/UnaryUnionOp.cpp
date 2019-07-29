@@ -25,7 +25,6 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/PointGeometryUnion.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/Puntal.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
@@ -58,7 +57,7 @@ UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
         return g0;
     }
 
-    ret.reset(g0->Union(g1.get()));
+    ret = g0->Union(g1.get());
     return ret;
 }
 
@@ -66,7 +65,6 @@ UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
 std::unique_ptr<geom::Geometry>
 UnaryUnionOp::Union()
 {
-    using geom::Puntal;
     typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
     GeomPtr ret;
@@ -130,8 +128,7 @@ UnaryUnionOp::Union()
         assert(!unionPoints.get());
     }
     else {
-        Puntal& up = dynamic_cast<Puntal&>(*unionPoints);
-        ret = PointGeometryUnion::Union(up, *unionLA);
+        ret = PointGeometryUnion::Union(*unionPoints, *unionLA);
     }
 
     if(! ret.get()) {

@@ -50,7 +50,7 @@ main(int /*argc*/, char** /*argv*/)
         while(!in.eof()) {
             getline(in, instr);
             if(instr != "") {
-                g = r->read(instr);
+                g = r->read(instr).release();
                 outstr = w->write(g);
                 out << "----------" << endl;
                 out << instr << endl;

@@ -21,13 +21,9 @@
 
 #include <geos/export.h>
 #include <geos/constants.h> // for int64
+#include <geos/geom/Geometry.h>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Geometry;
-}
-}
+#include <memory>
 
 namespace geos {
 namespace precision { // geos.precision
@@ -50,7 +46,7 @@ public:
      * @return the Geometry representing the set-theoretic
      * intersection of the input Geometries.
      */
-    static geom::Geometry* intersection(
+    static std::unique_ptr<geom::Geometry> intersection(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -62,7 +58,7 @@ public:
      * @return the Geometry representing the set-theoretic
      * union of the input Geometries.
      */
-    static geom::Geometry* Union(
+    static std::unique_ptr<geom::Geometry> Union(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -74,7 +70,7 @@ public:
      * @return the Geometry representing the set-theoretic
      * difference of the input Geometries.
      */
-    static geom::Geometry* difference(
+    static std::unique_ptr<geom::Geometry> difference(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -86,7 +82,7 @@ public:
      * @return the Geometry representing the set-theoretic symmetric
      * difference of the input Geometries.
      */
-    static geom::Geometry* symDifference(
+    static std::unique_ptr<geom::Geometry> symDifference(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -95,11 +91,11 @@ public:
      * This method should no longer be necessary, since the buffer
      * algorithm now is highly robust.
      *
-     * @param geom0 the first Geometry
+     * @param geom the first Geometry
      * @param distance the buffer distance
      * @return the Geometry representing the buffer of the input Geometry.
      */
-    static geom::Geometry* buffer(
+    static std::unique_ptr<geom::Geometry> buffer(
         const geom::Geometry* geom,
         double distance);
 };

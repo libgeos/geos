@@ -66,7 +66,7 @@ protected:
 
 public:
     /**
-     * Computes the </tt>covers</tt> predicate between a {@link PreparedPolygon}
+     * Computes the <tt>covers</tt> predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
      * @param prep the prepared polygon
@@ -83,7 +83,7 @@ public:
     /**
      * Creates an instance of this operation.
      *
-     * @param prepPoly the PreparedPolygon to evaluate
+     * @param prep the PreparedPolygon to evaluate
      */
     PreparedPolygonCovers(const PreparedPolygon* const prep)
         :	AbstractPreparedPolygonContains(prep, false)

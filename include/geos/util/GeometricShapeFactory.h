@@ -95,10 +95,8 @@ public:
      * Create a shape factory which will create shapes using the given
      * GeometryFactory.
      *
-     * @param factory the factory to use. You need to keep the
-     *	factory alive for the whole GeometricShapeFactory
-     *	life time.
-     *
+     * @param factory the factory to use. You need to keep the factory
+     *                alive for the whole GeometricShapeFactory life time.
      */
     GeometricShapeFactory(const geom::GeometryFactory* factory);
 
@@ -124,7 +122,7 @@ public:
      * the ellipse.
      *
      * @param startAng start angle in radians
-     * @param angExtent size of angle in radians
+     * @param angExt size of angle in radians
      * @return an elliptical arc polygon
      */
     geom::Polygon* createArcPolygon(double startAng, double angExt);

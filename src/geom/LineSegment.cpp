@@ -55,10 +55,7 @@ namespace geom { // geos::geom
 void
 LineSegment::reverse()
 {
-    // TODO: use std::swap<>
-    Coordinate temp = p0;
-    p0 = p1;
-    p1 = temp;
+    std::swap(p0, p1);
 }
 
 /*public*/
@@ -193,22 +190,20 @@ LineSegment::orientationIndex(const LineSegment& seg) const
     return 0;
 }
 
-CoordinateSequence*
+std::array<Coordinate, 2>
 LineSegment::closestPoints(const LineSegment& line)
 {
     // test for intersection
     Coordinate intPt;
     if(intersection(line, intPt)) {
-        CoordinateSequence* cl = new CoordinateArraySequence(new vector<Coordinate>(2, intPt));
-        return cl;
+        return { intPt, intPt };
     }
 
     /*
      * if no intersection closest pair contains at least one endpoint.
      * Test each endpoint in turn.
      */
-    CoordinateSequence* closestPt = new CoordinateArraySequence(2);
-    //vector<Coordinate> *cv = new vector<Coordinate>(2);
+    std::array<Coordinate, 2> closestPt;
 
     double minDistance = DoubleMax;
     double dist;
@@ -217,18 +212,16 @@ LineSegment::closestPoints(const LineSegment& line)
     closestPoint(line.p0, close00);
     minDistance = close00.distance(line.p0);
 
-    closestPt->setAt(close00, 0);
-    closestPt->setAt(line.p0, 1);
+    closestPt[0] = close00;
+    closestPt[1] = line.p0;
 
     Coordinate close01;
     closestPoint(line.p1, close01);
     dist = close01.distance(line.p1);
     if(dist < minDistance) {
         minDistance = dist;
-        closestPt->setAt(close01, 0);
-        closestPt->setAt(line.p1, 1);
-        //(*cv)[0] = close01;
-        //(*cv)[1] = line.p1;
+        closestPt[0] = close01;
+        closestPt[1] = line.p1;
     }
 
     Coordinate close10;
@@ -236,10 +229,8 @@ LineSegment::closestPoints(const LineSegment& line)
     dist = close10.distance(p0);
     if(dist < minDistance) {
         minDistance = dist;
-        closestPt->setAt(p0, 0);
-        closestPt->setAt(close10, 1);
-        //(*cv)[0] = p0;
-        //(*cv)[1] = close10;
+        closestPt[0] = p0;
+        closestPt[1] = close10;
     }
 
     Coordinate close11;
@@ -247,10 +238,8 @@ LineSegment::closestPoints(const LineSegment& line)
     dist = close11.distance(p1);
     if(dist < minDistance) {
         minDistance = dist;
-        closestPt->setAt(p1, 0);
-        closestPt->setAt(close11, 1);
-        //(*cv)[0] = p1;
-        //(*cv)[1] = *close11;
+        closestPt[0] = p1;
+        closestPt[1] = close11;
     }
 
     return closestPt;
@@ -321,9 +310,9 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    CoordinateSequence* cl = new CoordinateArraySequence();
-    cl->add(p0);
-    cl->add(p1);
+    CoordinateSequence* cl = new CoordinateArraySequence(2);
+    cl->setAt(p0, 0);
+    cl->setAt(p1, 1);
     return std::unique_ptr<LineString>(
                gf.createLineString(cl) // ownership transferred
            );

@@ -17,6 +17,8 @@
  *
  **********************************************************************/
 
+#include <geos/io/WKTWriter.h>
+#include <geos/geom/Geometry.h>
 #include <geos/operation/distance/GeometryLocation.h>
 
 using namespace geos::geom;
@@ -80,6 +82,17 @@ bool
 GeometryLocation::isInsideArea()
 {
     return inside_area;
+}
+
+std::string
+GeometryLocation::toString()
+{
+    geos::io::WKTWriter writer;
+    std::string str(component->getGeometryType());
+    str += "[" + std::to_string(segIndex) + "]";
+    str += "-";
+    str += writer.toPoint(pt);
+    return str;
 }
 
 } // namespace geos.operation.distance

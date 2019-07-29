@@ -506,6 +506,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSCoverageUnion(const Geometry* g)
+    {
+        return GEOSCoverageUnion_r(handle, g);
+    }
+
+    Geometry*
     GEOSNode(const Geometry* g)
     {
         return GEOSNode_r(handle, g);
@@ -712,6 +718,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonize_valid(const Geometry* const* g, unsigned int ngeoms)
+    {
+        return GEOSPolygonize_valid_r(handle, g, ngeoms);
+    }
+
+    Geometry*
     GEOSPolygonizer_getCutEdges(const Geometry* const* g, unsigned int ngeoms)
     {
         return GEOSPolygonizer_getCutEdges_r(handle, g, ngeoms);
@@ -722,6 +734,18 @@ extern "C" {
                         GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid)
     {
         return GEOSPolygonize_full_r(handle, input, cuts, dangles, invalid);
+    }
+
+    Geometry*
+    GEOSBuildArea(const Geometry* g)
+    {
+        return GEOSBuildArea_r(handle, g);
+    }
+
+    Geometry*
+    GEOSMakeValid(const Geometry* g)
+    {
+        return GEOSMakeValid_r(handle, g);
     }
 
     Geometry*

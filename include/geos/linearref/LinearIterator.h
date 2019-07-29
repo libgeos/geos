@@ -36,38 +36,38 @@ namespace linearref {
  *
  * The standard usage pattern for a LinearIterator is:
  *
- * <pre>
+ * ~~~~~~
  * for (LinearIterator it = new LinearIterator(...); it.hasNext(); it.next()) {
  *   ...
  *   int ci = it.getComponentIndex();   // for example
  *   int vi = it.getVertexIndex();      // for example
  *   ...
  * }
- * </pre>
+ * ~~~~~~
  *
  * @version 1.7
  */
 class LinearIterator {
 public:
-    /**
+    /** \brief
      * Creates an iterator initialized to the start of a linear Geometry
      *
      * @param linear the linear geometry to iterate over
      */
     LinearIterator(const geom::Geometry* linear);
 
-    /**
+    /** \brief
      * Creates an iterator starting at
-     * a {@link LinearLocation} on a linear {@link Geometry}
+     * a LinearLocation on a linear geom::Geometry
      *
      * @param linear the linear geometry to iterate over
      * @param start the location to start at
      */
     LinearIterator(const geom::Geometry* linear, const LinearLocation& start);
 
-    /**
-     * Creates an iterator starting at
-     * a component and vertex in a linear {@link Geometry}
+    /** \brief
+     * Creates an iterator starting at a component and vertex in a
+     * linear geom::Geometry
      *
      * @param linear the linear geometry to iterate over
      * @param componentIndex the component to start at
@@ -75,57 +75,57 @@ public:
      */
     LinearIterator(const geom::Geometry* linear, size_t componentIndex, size_t vertexIndex);
 
-    /**
+    /** \brief
      * Tests whether there are any vertices left to iterator over.
-     * @return <code>true</code> if there are more vertices to scan
+     * @return `true` if there are more vertices to scan
      */
     bool hasNext() const;
 
 
-    /**
+    /** \brief
      * Moves the iterator ahead to the next vertex and (possibly) linear component.
      */
     void next();
 
-    /**
+    /** \brief
      * Checks whether the iterator cursor is pointing to the
-     * endpoint of a component {@link LineString}.
+     * endpoint of a component geom::LineString.
      *
-     * @return <code>true</true> if the iterator is at an endpoint
+     * @return `true` if the iterator is at an endpoint
      */
     bool isEndOfLine() const;
 
-    /**
+    /** \brief
      * The component index of the vertex the iterator is currently at.
      * @return the current component index
      */
     size_t getComponentIndex() const;
 
-    /**
+    /** \brief
      * The vertex index of the vertex the iterator is currently at.
      * @return the current vertex index
      */
     size_t getVertexIndex() const;
 
-    /**
-     * Gets the {@link LineString} component the iterator is current at.
+    /** \brief
+     * Gets the geom::LineString component the iterator is current at.
      * @return a linestring
      */
     const geom::LineString* getLine() const;
 
-    /**
-     * Gets the first {@link Coordinate} of the current segment.
+    /** \brief
+     * Gets the first geom::Coordinate of the current segment.
      * (the coordinate of the current vertex).
-     * @return a {@link Coordinate}
+     * @return a Coordinate
      */
     geom::Coordinate getSegmentStart() const;
 
-    /**
-     * Gets the second {@link Coordinate} of the current segment.
+    /** \brief
+     * Gets the second geom::Coordinate of the current segment.
      * (the coordinate of the next vertex).
-     * If the iterator is at the end of a line, <code>null</code> is returned.
+     * If the iterator is at the end of a line, `null` is returned.
      *
-     * @return a {@link Coordinate} or <code>null</code>
+     * @return a Coordinate or `null`
      */
     geom::Coordinate getSegmentEnd() const;
 

@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -51,7 +50,7 @@ namespace geom { // geos::geom
  *
  * Any collection of Points is a valid MultiPoint.
  */
-class GEOS_DLL MultiPoint: public GeometryCollection, public Puntal {
+class GEOS_DLL MultiPoint: public GeometryCollection {
 
 public:
 
@@ -61,6 +60,10 @@ public:
 
     /// Returns point dimension (0)
     Dimension::DimensionType getDimension() const override;
+
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::P;
+    }
 
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;
@@ -74,7 +77,7 @@ public:
      * @return an empty GeometryCollection
      * @see Geometry#getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
 
@@ -82,13 +85,13 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new MultiPoint(*this);
+        return std::unique_ptr<Geometry>(new MultiPoint(*this));
     }
 
-    Geometry*
+    std::unique_ptr<Geometry>
     reverse() const override
     {
         return clone();
@@ -116,7 +119,11 @@ protected:
      */
     MultiPoint(std::vector<Geometry*>* newPoints, const GeometryFactory* newFactory);
 
-    MultiPoint(const MultiPoint& mp): Geometry(mp), GeometryCollection(mp) {}
+    MultiPoint(std::vector<std::unique_ptr<Point>> && newPoints, const GeometryFactory& newFactory);
+
+    MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, const GeometryFactory& newFactory);
+
+    MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
     const Coordinate* getCoordinateN(size_t n) const;
 

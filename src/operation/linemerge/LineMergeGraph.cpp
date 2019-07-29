@@ -21,6 +21,7 @@
 #include <geos/operation/linemerge/LineMergeGraph.h>
 #include <geos/operation/linemerge/LineMergeEdge.h>
 #include <geos/operation/linemerge/LineMergeDirectedEdge.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Node.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -56,9 +57,7 @@ LineMergeGraph::addEdge(const LineString* lineString)
     cerr << "Adding LineString " << lineString->toString() << endl;
 #endif
 
-    std::unique_ptr<CoordinateSequence> coordinates(
-        CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO())
-    );
+    auto coordinates = valid::RepeatedPointRemover::removeRepeatedPoints(lineString->getCoordinatesRO());
 
     std::size_t nCoords = coordinates->size(); // virtual call..
 

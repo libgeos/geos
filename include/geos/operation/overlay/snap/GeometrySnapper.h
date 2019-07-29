@@ -41,7 +41,7 @@ namespace overlay { // geos::operation::overlay
 namespace snap { // geos::operation::overlay::snap
 
 /** \brief
- * Snaps the vertices and segments of a {@link Geometry}
+ * Snaps the vertices and segments of a {@link geom::Geometry}
  * to another Geometry's vertices.
  *
  * A snap distance tolerance is used to control where snapping is performed.
@@ -89,7 +89,7 @@ public:
     }
 
     /** \brief
-     * Snaps the vertices in the component {@link LineString}s
+     * Snaps the vertices in the component {@link geom::LineString}s
      * of the source geometry to the vertices of the given snap geometry
      * with a given snap tolerance
      *
@@ -101,7 +101,7 @@ public:
                                            double snapTolerance);
 
     /** \brief
-     * Snaps the vertices in the component {@link LineString}s
+     * Snaps the vertices in the component {@link geom::LineString}s
      * of the source geometry to the vertices of itself
      * with a given snap tolerance and optionally cleaning the result.
      *

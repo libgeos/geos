@@ -84,11 +84,11 @@ struct test_mcidxsnprndr_data {
         if(wkt[0] == '0' || wkt[0] == '1') {
             WKBReader r;
             std::istringstream is(wkt);
-            g.reset(r.readHEX(is));
+            g = r.readHEX(is);
         }
         else {
             WKTReader r;
-            g.reset(r.read(wkt));
+            g = r.read(wkt);
         }
         return g;
     }

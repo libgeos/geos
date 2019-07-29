@@ -45,7 +45,6 @@ class LinearRing;
 class MultiLineString;
 class MultiPoint;
 class MultiPolygon;
-class Point;
 class Polygon;
 class PrecisionModel;
 }
@@ -184,6 +183,9 @@ public:
     GeometryCollection* createGeometryCollection(
         std::vector<Geometry*>* newGeoms) const;
 
+    std::unique_ptr<GeometryCollection> createGeometryCollection(
+            std::vector<std::unique_ptr<Geometry>> && newGeoms) const;
+
     /// Constructs a GeometryCollection with a deep-copy of args
     GeometryCollection* createGeometryCollection(
         const std::vector<Geometry*>& newGeoms) const;
@@ -199,6 +201,12 @@ public:
     MultiLineString* createMultiLineString(
         const std::vector<Geometry*>& fromLines) const;
 
+    std::unique_ptr<MultiLineString> createMultiLineString(
+            std::vector<std::unique_ptr<LineString>> && fromLines) const;
+
+    std::unique_ptr<MultiLineString> createMultiLineString(
+            std::vector<std::unique_ptr<Geometry>> && fromLines) const;
+
     /// Construct an EMPTY MultiPolygon
     MultiPolygon* createMultiPolygon() const;
 
@@ -209,14 +217,20 @@ public:
     MultiPolygon* createMultiPolygon(
         const std::vector<Geometry*>& fromPolys) const;
 
+    std::unique_ptr<MultiPolygon> createMultiPolygon(
+        std::vector<std::unique_ptr<Polygon>> && fromPolys) const;
+
+    std::unique_ptr<MultiPolygon> createMultiPolygon(
+            std::vector<std::unique_ptr<Geometry>> && fromPolys) const;
+
     /// Construct an EMPTY LinearRing
     LinearRing* createLinearRing() const;
 
     /// Construct a LinearRing taking ownership of given arguments
     LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
 
-    std::unique_ptr<Geometry> createLinearRing(
-        std::unique_ptr<CoordinateSequence> newCoords) const;
+    std::unique_ptr<LinearRing> createLinearRing(
+        std::unique_ptr<CoordinateSequence> && newCoords) const;
 
     /// Construct a LinearRing with a deep-copy of given arguments
     LinearRing* createLinearRing(
@@ -227,6 +241,10 @@ public:
 
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
+
+    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const;
+
+    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints) const;
 
     /// Construct a MultiPoint with a deep-copy of given arguments
     MultiPoint* createMultiPoint(
@@ -249,11 +267,16 @@ public:
 
     /// Construct a Polygon taking ownership of given arguments
     Polygon* createPolygon(LinearRing* shell,
-                           std::vector<Geometry*>* holes) const;
+                           std::vector<LinearRing*>* holes) const;
+
+    std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell) const;
+
+    std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell,
+                                           std::vector<std::unique_ptr<LinearRing>> && holes) const;
 
     /// Construct a Polygon with a deep-copy of given arguments
     Polygon* createPolygon(const LinearRing& shell,
-                           const std::vector<Geometry*>& holes) const;
+                           const std::vector<LinearRing*>& holes) const;
 
     /// Construct an EMPTY LineString
     LineString* createLineString() const;
@@ -264,8 +287,8 @@ public:
     /// Construct a LineString taking ownership of given argument
     LineString* createLineString(CoordinateSequence* coordinates) const;
 
-    std::unique_ptr<Geometry> createLineString(
-        std::unique_ptr<CoordinateSequence> coordinates) const;
+    std::unique_ptr<LineString> createLineString(
+        std::unique_ptr<CoordinateSequence> && coordinates) const;
 
     /// Construct a LineString with a deep-copy of given argument
     LineString* createLineString(
@@ -293,14 +316,13 @@ public:
      * and hence if any MultiGeometries are contained in the input a
      * GeometryCollection containing them will be returned.
      *
-     * @param  newGeoms  the <code>Geometry</code>s to combine
+     * @param  geoms  the <code>Geometry</code>s to combine
      *
-     * @return
-     *	A <code>Geometry</code> of the "smallest", "most type-specific"
-     *	class that can contain the elements of <code>geomList</code>.
+     * @return A <code>Geometry</code> of the "smallest", "most type-specific"
+     *         class that can contain the elements of <code>geomList</code>.
      *
      * NOTE: the returned Geometry will take ownership of the
-     * 	given vector AND its elements
+     *       given vector AND its elements
      */
     Geometry* buildGeometry(std::vector<Geometry*>* geoms) const;
 

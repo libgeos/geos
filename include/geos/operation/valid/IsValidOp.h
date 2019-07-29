@@ -56,7 +56,7 @@ namespace valid { // geos::operation::valid
 
 /** \brief
  * Implements the algorithsm required to compute the <code>isValid()</code>
- * method for {@link Geometry}s.
+ * method for [Geometrys](@ref geom::Geometry).
  */
 class GEOS_DLL IsValidOp {
     friend class Unload;
@@ -192,7 +192,7 @@ private:
     bool isSelfTouchingRingFormingHoleValid;
 
 public:
-    /**
+    /** \brief
      * Find a point from the list of testCoords
      * that is NOT a node in the edge for the list of searchCoords
      *
@@ -203,21 +203,21 @@ public:
         const geom::LinearRing* searchRing,
         geomgraph::GeometryGraph* graph);
 
-    /**
+    /** \brief
      * Checks whether a coordinate is valid for processing.
      * Coordinates are valid iff their x and y coordinates are in the
      * range of the floating point representation.
      *
      * @param coord the coordinate to validate
-     * @return <code>true</code> if the coordinate is valid
+     * @return `true` if the coordinate is valid
      */
     static bool isValid(const geom::Coordinate& coord);
 
-    /**
-     * Tests whether a {@link Geometry} is valid.
+    /** \brief
+     * Tests whether a geom::Geometry is valid.
      *
      * @param geom the Geometry to test
-     * @return true if the geometry is valid
+     * @return `true` if the geometry is valid
      */
     static bool isValid(const geom::Geometry& geom);
 
@@ -241,30 +241,27 @@ public:
     TopologyValidationError* getValidationError();
 
     /** \brief
-     * Sets whether polygons using <b>Self-Touching Rings</b> to form
+     * Sets whether polygons using **Self-Touching Rings** to form
      * holes are reported as valid.
      *
      * If this flag is set, the following Self-Touching conditions
      * are treated as being valid:
-     * <ul>
-     * <li>the shell ring self-touches to create a hole touching the shell
-     * <li>a hole ring self-touches to create two holes touching at a point
-     * </ul>
-     * <p>
+     *
+     * - the shell ring self-touches to create a hole touching the shell
+     * - a hole ring self-touches to create two holes touching at a point
+     *
      * The default (following the OGC SFS standard)
-     * is that this condition is <b>not</b> valid (<code>false</code>).
-     * <p>
+     * is that this condition is **not** valid (`false`).
+     *
      * This does not affect whether Self-Touching Rings
      * disconnecting the polygon interior are considered valid
-     * (these are considered to be <b>invalid</b> under the SFS,
+     * (these are considered to be **invalid** under the SFS,
      * and many other spatial models as well).
-     * This includes "bow-tie" shells,
-     * which self-touch at a single point causing the interior to
-     * be disconnected,
-     * and "C-shaped" holes which self-touch at a single point causing
-     * an island to be formed.
+     * This includes "bow-tie" shells, which self-touch at a single point
+     * causing the interior to be disconnected, and "C-shaped" holes which
+     * self-touch at a single point causing an island to be formed.
      *
-     * @param isValid states whether geometry with this condition is valid
+     * @param p_isValid states whether geometry with this condition is valid
      */
     void
     setSelfTouchingRingFormingHoleValid(bool p_isValid)

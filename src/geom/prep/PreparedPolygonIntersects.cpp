@@ -22,7 +22,6 @@
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/Puntal.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/prep/PreparedPolygonPredicate.h>
 #include <geos/noding/SegmentString.h>
@@ -54,7 +53,7 @@ PreparedPolygonIntersects::intersects(const geom::Geometry* geom)
         return true;
     }
 
-    if(dynamic_cast<const geom::Puntal*>(geom)) {
+    if(geom->isPuntal()) {
         // point-in-poly failed, no way there can be an intersection
         // (NOTE: isAnyTestComponentInTarget also checks for boundary)
         return false;

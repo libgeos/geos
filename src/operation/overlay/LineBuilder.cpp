@@ -192,11 +192,11 @@ LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 {
     for(size_t i = 0, s = lineEdgesList.size(); i < s; ++i) {
         Edge* e = lineEdgesList[i];
-        CoordinateSequence* cs = e->getCoordinates()->clone();
+        auto cs = e->getCoordinates()->clone();
 #if COMPUTE_Z
-        propagateZ(cs);
+        propagateZ(cs.get());
 #endif
-        LineString* line = geometryFactory->createLineString(cs);
+        LineString* line = geometryFactory->createLineString(cs.release());
         resultLineList->push_back(line);
         e->setInResult(true);
     }
@@ -305,7 +305,7 @@ LineBuilder::labelIsolatedLines(vector<Edge*>* edgesList)
 void
 LineBuilder::labelIsolatedLine(Edge* e, int targetIndex)
 {
-    int loc = ptLocator->locate(e->getCoordinate(),
+    Location loc = ptLocator->locate(e->getCoordinate(),
                                 op->getArgGeometry(targetIndex));
     e->getLabel().setLocation(targetIndex, loc);
 }

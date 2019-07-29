@@ -113,7 +113,7 @@ private:
     bool testValid(OverlayOp::OpCode overlayOp, const geom::Coordinate& pt);
 
     bool isValidResult(OverlayOp::OpCode overlayOp,
-                       std::vector<geom::Location::Value>& location);
+                       std::vector<geom::Location>& location);
 
     static double computeBoundaryDistanceTolerance(
         const geom::Geometry& g0, const geom::Geometry& g1);

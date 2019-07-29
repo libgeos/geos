@@ -110,6 +110,8 @@ public:
      * inside an area geometry.
      */
     bool isInsideArea();
+
+    std::string toString();
 };
 
 } // namespace geos::operation::distance

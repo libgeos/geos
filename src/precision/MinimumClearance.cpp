@@ -51,7 +51,7 @@ MinimumClearance::getLine()
         return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
     }
 
-    return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone()));
+    return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone().release()));
 }
 
 void

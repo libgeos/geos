@@ -54,7 +54,7 @@ LineString::LineString(const LineString& ls)
     //points=ls.points->clone();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 LineString::reverse() const
 {
     if(isEmpty()) {
@@ -62,10 +62,10 @@ LineString::reverse() const
     }
 
     assert(points.get());
-    CoordinateSequence* seq = points->clone();
-    CoordinateSequence::reverse(seq);
+    auto seq = points->clone();
+    CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLineString(seq);
+    return std::unique_ptr<Geometry>(getFactory()->createLineString(seq.release()));
 }
 
 
@@ -74,7 +74,7 @@ void
 LineString::validateConstruction()
 {
     if(points.get() == nullptr) {
-        points.reset(getFactory()->getCoordinateSequenceFactory()->create());
+        points = getFactory()->getCoordinateSequenceFactory()->create();
         return;
     }
 
@@ -94,22 +94,19 @@ LineString::LineString(CoordinateSequence* newCoords,
 }
 
 /*public*/
-LineString::LineString(CoordinateSequence::Ptr newCoords,
-                       const GeometryFactory* factory)
+LineString::LineString(CoordinateSequence::Ptr && newCoords,
+                       const GeometryFactory& factory)
     :
-    Geometry(factory),
+    Geometry(&factory),
     points(std::move(newCoords))
 {
     validateConstruction();
 }
 
 
-LineString::~LineString()
-{
-    //delete points;
-}
+LineString::~LineString() = default;
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
     assert(points.get());
@@ -215,23 +212,23 @@ LineString::getGeometryType() const
     return "LineString";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 LineString::getBoundary() const
 {
     if(isEmpty()) {
-        return getFactory()->createMultiPoint();
+        return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
 
     // using the default OGC_SFS MOD2 rule, the boundary of a
     // closed LineString is empty
     if(isClosed()) {
-        return getFactory()->createMultiPoint();
+        return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
     vector<Geometry*>* pts = new vector<Geometry*>();
     pts->push_back(getStartPoint());
     pts->push_back(getEndPoint());
     MultiPoint* mp = getFactory()->createMultiPoint(pts);
-    return mp;
+    return std::unique_ptr<Geometry>(mp);
 }
 
 bool

@@ -24,7 +24,7 @@ namespace tut {
 struct test_ispointinring_data {
     typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
-    geos::geom::CoordinateSequence* cs_;
+    std::unique_ptr<geos::geom::CoordinateSequence> cs_;
     geos::io::WKTReader reader_;
 
     test_ispointinring_data()
@@ -35,8 +35,6 @@ struct test_ispointinring_data {
 
     ~test_ispointinring_data()
     {
-        delete cs_;
-        cs_ = nullptr;
     }
 };
 
@@ -61,7 +59,7 @@ void object::test<1>
     geos::geom::Coordinate pt(10, 10);
 
     cs_ = geom->getCoordinates();
-    bool isInRing = PointLocation::isInRing(pt, cs_);
+    bool isInRing = PointLocation::isInRing(pt, cs_.get());
 
     ensure_equals(true, isInRing);
 }
@@ -80,7 +78,7 @@ void object::test<2>
     geos::geom::Coordinate pt(0, 0);
 
     cs_ = geom->getCoordinates();
-    bool isInRing = PointLocation::isInRing(pt, cs_);
+    bool isInRing = PointLocation::isInRing(pt, cs_.get());
 
     ensure_equals(true, isInRing);
 }

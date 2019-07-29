@@ -30,6 +30,7 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
@@ -55,7 +56,7 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     holes(),
     maxNodeDegree(-1),
     edges(),
-    pts(newGeometryFactory->getCoordinateSequenceFactory()->create()),
+    pts(new CoordinateArraySequence()),
     label(Location::UNDEF), // new Label(Location::UNDEF)),
     ring(nullptr),
     isHoleVar(false),
@@ -77,16 +78,7 @@ EdgeRing::~EdgeRing()
 {
     testInvariant();
 
-    /*
-     * If we constructed a ring, we did by transferring
-     * ownership of the CoordinateSequence, so it will be
-     * destroyed by `ring' dtor and we must not destroy
-     * it twice.
-     */
-    if(ring == nullptr) {
-        delete pts;
-    }
-    else {
+    if(ring != nullptr) {
         delete ring;
     }
 
@@ -173,10 +165,9 @@ EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
     testInvariant();
 
     size_t nholes = holes.size();
-    vector<Geometry*>* holeLR = new vector<Geometry*>(nholes);
+    vector<LinearRing*>* holeLR = new vector<LinearRing*>(nholes);
     for(size_t i = 0; i < nholes; ++i) {
-        Geometry* hole = holes[i]->getLinearRing()->clone();
-        (*holeLR)[i] = hole;
+        (*holeLR)[i] = new LinearRing(*(holes[i]->getLinearRing()));
     }
 
     // We don't use "clone" here because
@@ -200,7 +191,6 @@ EdgeRing::computeRing()
     isHoleVar = Orientation::isCCW(pts);
 
     testInvariant();
-
 }
 
 /*public*/
@@ -317,7 +307,7 @@ EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
 
     testInvariant();
 
-    int loc = deLabel.getLocation(geomIndex, Position::RIGHT);
+    Location loc = deLabel.getLocation(geomIndex, Position::RIGHT);
     // no information to be had from this label
     if(loc == Location::UNDEF) {
         return;

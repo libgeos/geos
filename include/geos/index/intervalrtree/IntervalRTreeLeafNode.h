@@ -40,7 +40,7 @@ private:
 protected:
 public:
 
-    /// @param item externally owned
+    /// @param p_item externally owned
     IntervalRTreeLeafNode(double p_min, double p_max, void* p_item)
         :	IntervalRTreeNode(p_min, p_max),
           item(p_item)

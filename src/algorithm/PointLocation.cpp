@@ -67,7 +67,7 @@ PointLocation::isInRing(const geom::Coordinate& p,
 }
 
 /* public static */
-int
+geom::Location
 PointLocation::locateInRing(const geom::Coordinate& p,
                             const std::vector<const geom::Coordinate*>& ring)
 {
@@ -75,7 +75,7 @@ PointLocation::locateInRing(const geom::Coordinate& p,
 }
 
 /* public static */
-int
+geom::Location
 PointLocation::locateInRing(const geom::Coordinate& p,
                             const geom::CoordinateSequence& ring)
 {

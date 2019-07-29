@@ -36,9 +36,8 @@ IncrementalDelaunayTriangulator::IncrementalDelaunayTriangulator(
 void
 IncrementalDelaunayTriangulator::insertSites(const VertexList& vertices)
 {
-    for(VertexList::const_iterator x = vertices.begin();
-            x != vertices.end(); ++x) {
-        insertSite(*x);
+    for(const auto& vertex : vertices) {
+        insertSite(vertex);
     }
 }
 

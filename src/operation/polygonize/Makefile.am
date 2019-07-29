@@ -12,6 +12,8 @@ liboppolygonize_la_SOURCES = \
     PolygonizeEdge.cpp \
     PolygonizeGraph.cpp \
     Polygonizer.cpp \
+    HoleAssigner.cpp \
+    BuildArea.cpp \
     EdgeRing.cpp 
 
 liboppolygonize_la_LIBADD = 

@@ -41,19 +41,14 @@ public:
 
     CoordinateArraySequence(const CoordinateSequence& cl);
 
-    CoordinateSequence* clone() const override;
+    std::unique_ptr<CoordinateSequence> clone() const override;
 
-    //const Coordinate& getCoordinate(int pos) const;
     const Coordinate& getAt(std::size_t pos) const override;
 
     /// Copy Coordinate at position i to Coordinate c
     void getAt(std::size_t i, Coordinate& c) const override;
 
-    //int size() const;
     size_t getSize() const override;
-
-    // @deprecated
-    const std::vector<Coordinate>* toVector() const override;
 
     // See dox in CoordinateSequence.h
     void toVector(std::vector<Coordinate>&) const override;
@@ -79,19 +74,26 @@ public:
     bool
     empty() const
     {
-        return vect->empty();
+        return vect.empty();
     }
 
     /// Reset this CoordinateArraySequence to the empty state
     void
     clear()
     {
-        vect->clear();
+        vect.clear();
     }
 
-    void add(const Coordinate& c) override;
+    /// Add a Coordinate to the list
+    void add(const Coordinate& c);
 
-    void add(const Coordinate& c, bool allowRepeated) override;
+    /**
+     * \brief Add a coordinate
+     * @param c the coordinate to add
+     * @param allowRepeated if set to false, repeated coordinates
+     *                      are collapsed
+     */
+    void add(const Coordinate& c, bool allowRepeated);
 
     /** \brief
      * Inserts the specified coordinate at the specified position in
@@ -102,15 +104,13 @@ public:
      * @param allowRepeated if set to false, repeated coordinates are
      *                      collapsed
      *
-     * NOTE: this is a CoordinateList interface in JTS
+     * @note this is a CoordinateList interface in JTS
      */
-    void add(std::size_t i, const Coordinate& coord, bool allowRepeated) override;
+    void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
+
+    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
 
     void setAt(const Coordinate& c, std::size_t pos) override;
-
-    void deleteAt(std::size_t pos) override;
-
-    std::string toString() const override;
 
     void setPoints(const std::vector<Coordinate>& v) override;
 
@@ -128,10 +128,8 @@ public:
 
     void apply_ro(CoordinateFilter* filter) const override;
 
-    CoordinateSequence& removeRepeatedPoints() override;
-
 private:
-    std::vector<Coordinate>* vect;
+    std::vector<Coordinate> vect;
     mutable std::size_t dimension;
 };
 

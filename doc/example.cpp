@@ -105,7 +105,7 @@ WKBtest(vector<Geometry*>* geoms)
 #endif
 
 
-    unsigned int ngeoms = geoms->size();
+    size_t ngeoms = geoms->size();
     for(unsigned int i = 0; i < ngeoms; ++i) {
         Geometry* gin = (*geoms)[i];
 
@@ -160,7 +160,7 @@ WKBtest(vector<Geometry*>* geoms)
              " fail:" << s.fail() << endl;
 #endif
 
-        gout = wkbReader.read(s);
+        gout = wkbReader.read(s).release();
 
 #if DEBUG_STREAM_STATE
         cout << "State of stream after READ: ";
@@ -233,7 +233,7 @@ LineString*
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
     // We will use a coordinate list to build the linestring
-    CoordinateSequence* cl = new CoordinateArraySequence();
+    CoordinateArraySequence* cl = new CoordinateArraySequence();
 
     cl->add(Coordinate(xoffset, yoffset));
     cl->add(Coordinate(xoffset, yoffset + side));
@@ -260,7 +260,7 @@ LinearRing*
 create_square_linearring(double xoffset, double yoffset, double side)
 {
     // We will use a coordinate list to build the linearring
-    CoordinateSequence* cl = new CoordinateArraySequence();
+    CoordinateArraySequence* cl = new CoordinateArraySequence();
 
     cl->add(Coordinate(xoffset, yoffset));
     cl->add(Coordinate(xoffset, yoffset + side));
@@ -295,9 +295,8 @@ create_square_polygon(double xoffset, double yoffset, double side)
                         yoffset + (side / 3), (side / 3));
 
     // If we need to specify any hole, we do it using
-    // a vector of Geometry pointers (I don't know why
-    // not LinearRings)
-    vector<Geometry*>* holes = new vector<Geometry*>;
+    // a vector of LinearRing pointers
+    vector<LinearRing*>* holes = new vector<LinearRing*>;
 
     // We add the newly created geometry to the vector
     // of holes.
@@ -467,7 +466,7 @@ do_all()
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
-        newgeoms->push_back(g->getCentroid());
+        newgeoms->push_back(g->getCentroid().release());
     }
 
     // Print all convex hulls
@@ -488,7 +487,7 @@ do_all()
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
         try {
-            Geometry* g2 = g->buffer(10);
+            Geometry* g2 = g->buffer(10).release();
             newgeoms->push_back(g2);
         }
         catch(const GEOSException& exc) {
@@ -512,7 +511,7 @@ do_all()
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
-        newgeoms->push_back(g->convexHull());
+        newgeoms->push_back(g->convexHull().release());
     }
 
     // Print all convex hulls
@@ -790,7 +789,6 @@ do_all()
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
-            IntersectionMatrix* im = NULL;
             try {
                 // second argument is intersectionPattern
                 string pattern = "212101212";
@@ -802,8 +800,7 @@ do_all()
                 }
 
                 // get the intersectionMatrix itself
-                im = g1->relate(g2);
-                delete im; // delete afterwards
+                auto im = g1->relate(g2);
             }
             // Geometry Collection is not a valid argument
             catch(const IllegalArgumentException& exc) {
@@ -944,7 +941,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->Union(g2);
+                Geometry* g3 = g1->Union(g2).release();
                 newgeoms->push_back(g3);
             }
             // It's illegal to union a collection ...
@@ -979,7 +976,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->intersection(g2);
+                Geometry* g3 = g1->intersection(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as intersection argument
@@ -1012,7 +1009,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->difference(g2);
+                Geometry* g3 = g1->difference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as difference argument
@@ -1045,7 +1042,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->symDifference(g2);
+                Geometry* g3 = g1->symDifference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as symdifference argument
@@ -1101,12 +1098,11 @@ do_all()
     /////////////////////////////////////////////
     Polygonizer plgnzr;
     plgnzr.add(geoms);
-    vector<Polygon*>* polys = plgnzr.getPolygons();
+    auto polys = plgnzr.getPolygons();
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < polys->size(); i++) {
-        newgeoms->push_back((*polys)[i]);
+        newgeoms->push_back((*polys)[i].release());
     }
-    delete polys;
 
     cout << endl << "----- HERE IS POLYGONIZE OUTPUT ------" << endl;
     wkt_print_geoms(newgeoms);

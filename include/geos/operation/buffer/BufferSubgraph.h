@@ -75,7 +75,7 @@ private:
      *
      * Uses an explicit stack to avoid a large depth of recursion.
      *
-     * @param node a node known to be in the subgraph
+     * @param startNode a node known to be in the subgraph
      */
     void addReachable(geomgraph::Node* startNode);
 

@@ -25,6 +25,7 @@
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -91,7 +92,7 @@ OffsetCurveSetBuilder::getCurves()
 /*public*/
 void
 OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
-                                 int leftLoc, int rightLoc)
+                                 geom::Location leftLoc, geom::Location rightLoc)
 {
     for(size_t i = 0, n = lineList.size(); i < n; ++i) {
         CoordinateSequence* coords = lineList[i];
@@ -102,7 +103,7 @@ OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineLis
 /*private*/
 void
 OffsetCurveSetBuilder::addCurve(CoordinateSequence* coord,
-                                int leftLoc, int rightLoc)
+                                geom::Location leftLoc, geom::Location rightLoc)
 {
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ": coords=" << coord->toString() << std::endl;
@@ -190,7 +191,6 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
     curveBuilder.getLineCurve(coord, distance, lineList);
 
     addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
-    //delete lineList;
 }
 
 /*private*/
@@ -204,7 +204,7 @@ OffsetCurveSetBuilder::addLineString(const LineString* line)
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ": " << line->toString() << std::endl;
 #endif
-    std::unique_ptr<CoordinateSequence> coord(CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO()));
+    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
 #if GEOS_DEBUG
     std::cerr << " After coordinate removal: " << coord->toString() << std::endl;
 #endif
@@ -225,8 +225,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         offsetSide = Position::RIGHT;
     }
 
-    // FIXME: avoid the C-style cast
-    const LinearRing* shell = (const LinearRing*)p->getExteriorRing();
+    const LinearRing* shell = p->getExteriorRing();
 
     // optimization - don't bother computing buffer
     // if the polygon would be completely eroded
@@ -237,23 +236,21 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
+    auto shellCoord =
+            operation::valid::RepeatedPointRemover::removeRepeatedPoints(shell->getCoordinatesRO());
+
     // don't attempt to buffer a polygon
     // with too few distinct vertices
-    CoordinateSequence* shellCoord =
-        CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
     if(distance <= 0.0 && shellCoord->size() < 3) {
-        delete shellCoord;
         return;
     }
 
     addPolygonRing(
-        shellCoord,
+        shellCoord.get(),
         offsetDistance,
         offsetSide,
         Location::EXTERIOR,
         Location::INTERIOR);
-
-    delete shellCoord;
 
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         const LineString* hls = p->getInteriorRingN(i);
@@ -266,27 +263,24 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
             continue;
         }
 
-        CoordinateSequence* holeCoord =
-            CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
+        auto holeCoord = valid::RepeatedPointRemover::removeRepeatedPoints(hole->getCoordinatesRO());
 
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
         addPolygonRing(
-            holeCoord,
+            holeCoord.get(),
             offsetDistance,
             Position::opposite(offsetSide),
             Location::INTERIOR,
             Location::EXTERIOR);
-
-        delete holeCoord;
     }
 }
 
 /* private */
 void
 OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
-                                      double offsetDistance, int side, int cwLeftLoc, int cwRightLoc)
+                                      double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
     // don't bother adding ring if it is "flat" and
@@ -295,8 +289,8 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
         return;
     }
 
-    int leftLoc = cwLeftLoc;
-    int rightLoc = cwRightLoc;
+    Location leftLoc = cwLeftLoc;
+    Location rightLoc = cwRightLoc;
 #if GEOS_DEBUG
     std::cerr << "OffsetCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
 #endif

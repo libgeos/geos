@@ -98,6 +98,13 @@ public:
     PolygonizeDirectedEdge* getNext() const;
 
     /*
+     * Gets the EdgeRing this edge is a member of.
+     */
+    EdgeRing* getRing() const {
+        return edgeRing;
+    }
+
+    /*
      * Sets the next directed edge in the EdgeRing that this
      * directed edge is a member of.
      */

@@ -39,7 +39,7 @@ struct test_polygon_data {
     geos::io::WKTReader reader_;
 
     PolygonAutoPtr empty_poly_;
-    PolygonPtr poly_;
+    PolygonAutoPtr poly_;
     const size_t poly_size_;
 
     test_polygon_data()
@@ -48,16 +48,9 @@ struct test_polygon_data {
         , reader_(factory_.get())
         , empty_poly_(factory_->createPolygon()), poly_size_(7)
     {
-        // Create non-empty LinearRing
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
-        poly_ = dynamic_cast<PolygonPtr>(geo);
-    }
-
-    ~test_polygon_data()
-    {
-        // FREE MEMORY
-        factory_->destroyGeometry(poly_);
+        // Create non-empty Polygon
+        auto geo = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
+        poly_.reset(dynamic_cast<PolygonPtr>(geo.release()));
     }
 
 private:
@@ -107,7 +100,7 @@ void object::test<1>
         ensure(ring.isSimple());
 
         // Exterior (clone is required here because Polygon takes ownership)
-        GeometryPtr geo = ring.clone();
+        geos::geom::Geometry* geo = ring.clone().release();
         LinearRingPtr exterior = dynamic_cast<LinearRingPtr>(geo);
 
         // Create non-empty Polygon
@@ -190,10 +183,9 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr boundary = empty_poly_->getBoundary();
+    auto boundary = empty_poly_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty Polygon
@@ -202,10 +194,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr hull = empty_poly_->convexHull();
+    auto hull = empty_poly_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty Polygon
@@ -280,13 +271,10 @@ void object::test<17>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr envelope = poly_->getEnvelope();
+    auto envelope = poly_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty Polygon
@@ -297,14 +285,11 @@ void object::test<18>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr boundary = poly_->getBoundary();
+    auto boundary = poly_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.10 Surface
     ensure("[OGC] The boundary of Polygin is the set of closed Curves.", !boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty Polygon
@@ -315,14 +300,11 @@ void object::test<19>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr hull = poly_->convexHull();
+    auto hull = poly_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty Polygon
@@ -399,13 +381,10 @@ void object::test<26>
     ensure(poly_ != nullptr);
 
     // Caller takes ownership of 'coords'
-    CoordSeqPtr coords = poly_->getCoordinates();
+    auto coords = poly_->getCoordinates();
     ensure(coords != nullptr);
     ensure(!coords->isEmpty());
     ensure_equals(coords->getSize(), poly_->getNumPoints());
-
-    // FREE MEMORY
-    delete coords;
 }
 
 // Test of clone() and equals() for non-empty Polygon
@@ -416,11 +395,9 @@ void object::test<27>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr geo = poly_->clone();
+    auto geo = poly_->clone();
     ensure(geo != nullptr);
-    ensure(geo->equals(poly_));
-
-    factory_->destroyGeometry(geo);
+    ensure(geo->equals(poly_.get()));
 }
 
 // Test of getExteriorRing() for non-empty Polygon
@@ -455,12 +432,11 @@ void object::test<30>
 {
     const size_t holesNum = 1;
 
-    GeometryPtr geo = nullptr;
-    geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
+    auto geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
     ensure(geo != nullptr);
     ensure_equals(geo->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
 
-    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo);
+    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo.get());
     ensure(poly != nullptr);
     ensure_equals(poly->getNumInteriorRing(), holesNum);
 
@@ -469,11 +445,9 @@ void object::test<30>
     ensure(interior->isRing());
 
     ensure_equals(interior->getGeometryTypeId(), geos::geom::GEOS_LINEARRING);
-
-    factory_->destroyGeometry(geo);
 }
 
-// Test of getCoordiante() for non-empty Polygon
+// Test of getCoordinate() for non-empty Polygon
 template<>
 template<>
 void object::test<31>
@@ -488,7 +462,7 @@ void object::test<31>
     ensure_equals(coord->y, 10);
 }
 
-// Test of getCoordiantes() for non-empty Polygon
+// Test of getCoordinates() for non-empty Polygon
 template<>
 template<>
 void object::test<32>
@@ -497,7 +471,7 @@ void object::test<32>
     ensure(poly_ != nullptr);
     // "POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))"
 
-    CoordSeqPtr coords = poly_->getCoordinates();
+    auto coords = poly_->getCoordinates();
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), poly_size_);
 
@@ -509,9 +483,6 @@ void object::test<32>
     const int middlePos = 3;
     ensure_equals(coords->getAt(middlePos).x, 15);
     ensure_equals(coords->getAt(middlePos).y, 10);
-
-    // FREE MEMORY
-    delete coords;
 }
 
 // Test of getGeometryType() for non-empty Polygon
@@ -532,7 +503,7 @@ template<>
 void object::test<34>
 ()
 {
-    PointPtr point = empty_poly_->getCentroid();
+    auto point = empty_poly_->getCentroid();
     ensure(point == nullptr);
 }
 
@@ -553,13 +524,10 @@ template<>
 void object::test<36>
 ()
 {
-    PointPtr point = poly_->getCentroid();
+    auto point = poly_->getCentroid();
     ensure(point != nullptr);
     ensure(!point->isEmpty());
     ensure_equals(point->getGeometryTypeId(), geos::geom::GEOS_POINT);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(point);
 }
 
 // Test of Geometry::getCentroid(Coordinate& ret) const for non-empty Polygon
@@ -580,7 +548,7 @@ void object::test<38>
 ()
 {
     // First centroid
-    PointPtr point = poly_->getCentroid();
+    auto point = poly_->getCentroid();
     ensure(point != nullptr);
     ensure(!point->isEmpty());
     ensure_equals(point->getGeometryTypeId(), geos::geom::GEOS_POINT);
@@ -588,8 +556,6 @@ void object::test<38>
     CoordinateCPtr pointCoord = point->getCoordinate();
     ensure(pointCoord != nullptr);
     geos::geom::Coordinate pointCentr(*pointCoord);
-    // FREE MEMORY
-    factory_->destroyGeometry(point);
 
     // Second centroid
     geos::geom::Coordinate coordCentr;
@@ -611,6 +577,38 @@ void object::test<39>
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure(gBuffer->getNumPoints() == poly_->getNumPoints());
+}
+
+template<>
+template<>
+void object::test<40>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createPolygon());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty Polygon
+template<>
+template<>
+void object::test<41>
+()
+{
+    ensure(empty_poly_->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!empty_poly_->isDimensionStrict(geos::geom::Dimension::L));
+}
+
+// test isDimensionStrict for non-empty Polygon
+template<>
+template<>
+void object::test<42>
+()
+{
+    ensure(poly_->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!poly_->isDimensionStrict(geos::geom::Dimension::L));
 }
 
 } // namespace tut

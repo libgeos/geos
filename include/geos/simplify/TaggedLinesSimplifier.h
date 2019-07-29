@@ -69,18 +69,14 @@ public:
      */
     void setDistanceTolerance(double tolerance);
 
-    /**
+    /** \brief
      * Simplify a set of {@link TaggedLineString}s
      *
-     * @param iterator_type
-     * 	an iterator, must support assignment, increment,
-     *      inequality and dereference operators.
-     *	Dereference operator must return a TaggedLineString*
-     *
-     * @param begin iterator to the first element
-     *              to be simplified.
-     * @param end an iterator to one-past-last element
-     *            to be simplified.
+     * @tparam iterator_type an iterator, must support assignment, increment,
+     *                       inequality and dereference operators. Dereference
+     *                       operator must return a `TaggedLineString*`.
+     * @param begin iterator to the first element to be simplified.
+     * @param end an iterator to one-past-last element to be simplified.
      */
     template <class iterator_type>
     void

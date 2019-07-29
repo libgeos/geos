@@ -22,7 +22,6 @@
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
-#include <geos/geom/Lineal.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
 #include <geos/linearref/LocationIndexOfLine.h>
@@ -33,9 +32,9 @@ namespace linearref { // geos::linearref
 
 /**
  * \brief
- * Supports linear referencing
- * along a linear {@link Geometry}
- * using {@link LinearLocation}s as the index.
+ * Supports linear referencing along a linear
+ * [Geometry](@ref geom::Geometry) using
+ * [LinearLocations](@ref LinearLocation) as the index.
  */
 class GEOS_DLL LocationIndexedLine {
 private:
@@ -44,7 +43,7 @@ private:
     void
     checkGeometryType()
     {
-        if(! dynamic_cast<const geom::Lineal*>(linearGeom)) {
+        if(!linearGeom->isLineal()) {
             throw util::IllegalArgumentException("Input geometry must be linear");
         }
     }
@@ -54,9 +53,9 @@ public:
     /**
      * \brief
      * Constructs an object which allows linear referencing along
-     * a given linear {@link Geometry}.
+     * a given linear [Geometry](@ref geom::Geometry).
      *
-     * @param linearGeom the linear geometry to reference along
+     * @param p_linearGeom the linear geometry to reference along
      */
     LocationIndexedLine(const geom::Geometry* p_linearGeom)
         : linearGeom(p_linearGeom)
@@ -66,7 +65,7 @@ public:
 
     /**
      * \brief
-     * Computes the {@link Coordinate} for the point
+     * Computes the [Coordinate](@ref geom::Coordinate) for the point
      * on the line at the given index.
      *
      * If the index is out of range the first or last point on the
@@ -86,7 +85,7 @@ public:
 
     /**
      * \brief
-     * Computes the {@link Coordinate} for the point
+     * Computes the [Coordinate](@ref geom::Coordinate) for the point
      * on the line at the given index, offset by the given distance.
      *
      * If the index is out of range the first or last point on the
@@ -99,7 +98,7 @@ public:
      *
      * @param index the index of the desired point
      * @param offsetDistance the distance the point is offset from the segment
-     *    (positive is to the left, negative is to the right)
+     *                       (positive is to the left, negative is to the right)
      * @return the Coordinate at the given index
      */
     geom::Coordinate
@@ -115,7 +114,7 @@ public:
 
     /**
      * \brief
-     * Computes the {@link LineString} for the interval
+     * Computes the [LineString](@ref geom::LineString) for the interval
      * on the line between the given indices.
      *
      * If the endIndex lies before the startIndex,
@@ -125,7 +124,7 @@ public:
      * @param endIndex the index of the end of the interval
      * @return the linear interval between the indices
      */
-    geom::Geometry*
+    std::unique_ptr<geom::Geometry>
     extractLine(const LinearLocation& startIndex,
                 const LinearLocation& endIndex) const
     {
@@ -248,8 +247,8 @@ public:
      * \brief
      * Tests whether an index is in the valid index range for the line.
      *
-     * @param length the index to test
-     * @return <code>true</code> if the index is in the valid range
+     * @param index the index to test
+     * @return `true` if the index is in the valid range
      */
     bool
     isValidIndex(const LinearLocation& index) const

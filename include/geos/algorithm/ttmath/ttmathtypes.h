@@ -46,7 +46,7 @@
     As our library is written in header files (templates) we cannot use
 	constants like 'const int' etc. because we should have some source files
 	*.cpp to define this variables. Only what we can have are constants
-	defined by #define preprocessor macros.
+	defined by \#define preprocessor macros.
 
 	All macros are preceded by TTMATH_ prefix
 */

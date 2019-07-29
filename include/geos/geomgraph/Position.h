@@ -32,29 +32,33 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/** \brief
+ * A Position indicates the position of a Location relative to a graph
+ * component (Node, Edge, or Area).
+ */
 class GEOS_DLL Position {
 public:
     enum {
-        /*
-         * An indicator that a Location is <i>on</i>
+        /** \brief
+         * An indicator that a Location is *on*
          * a GraphComponent
          */
         ON = 0,
 
-        /*
+        /** \brief
          * An indicator that a Location is to the
-         * <i>left</i> of a GraphComponent
+         * *left* of a GraphComponent
          */
         LEFT,
 
-        /*
+        /** \brief
          * An indicator that a Location is to the
-         * <i>right</i> of a GraphComponent
+         * *right* of a GraphComponent
          */
         RIGHT
     };
 
-    /**
+    /** \brief
      * Returns LEFT if the position is RIGHT, RIGHT if
      * the position is LEFT, or the position otherwise.
      */

@@ -37,7 +37,7 @@
 
 /** \page c_iface C wrapper interface
  *
- * \section Overview
+ * \section overview_c Overview
  *
  * This is the preferred access method for GEOS.
  *
@@ -53,7 +53,7 @@
 
 /** \page cpp_iface C++ interface
  *
- * \section Overview
+ * \section overview_cpp Overview
  *
  * Main class is geos::geom::Geometry, from which all geometry types
  * derive.

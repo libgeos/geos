@@ -134,11 +134,10 @@ public:
      * coordinates, which are rounded to the grid defined by the
      * scale factor.
      *
-     * @param  scale
-     *	amount by which to multiply a coordinate after subtracting
-     *	the offset, to obtain a precise coordinate
-     * @param  offsetX  not used.
-     * @param  offsetY  not used.
+     * @param  newScale  amount by which to multiply a coordinate after
+     *                   subtracting the offset, to obtain a precise coordinate
+     * @param  newOffsetX  not used.
+     * @param  newOffsetY  not used.
      *
      * @deprecated offsets are no longer supported, since internal
      * representation is rounded floating point
@@ -234,9 +233,8 @@ public:
     ///
     double getOffsetY() const;
 
-    /** \brief
-     *  Sets <code>internal</code> to the precise representation of
-     * <code>external</code>.
+    /*
+     *  Sets ´internal` to the precise representation of `external`.
      *
      * @param external the original coordinate
      * @param internal the coordinate whose values will be changed to the

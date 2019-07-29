@@ -39,7 +39,7 @@ namespace geos {
 namespace linearref { // geos.linearref
 
 
-Geometry*
+std::unique_ptr<Geometry>
 ExtractLineByLocation::extract(const Geometry* line, const LinearLocation& start, const LinearLocation& end)
 {
     ExtractLineByLocation ls(line);
@@ -50,19 +50,18 @@ ExtractLineByLocation::ExtractLineByLocation(const Geometry* p_line) :
     line(p_line) {}
 
 
-Geometry*
+std::unique_ptr<Geometry>
 ExtractLineByLocation::extract(const LinearLocation& start, const LinearLocation& end)
 {
     if(end.compareTo(start) < 0) {
-        Geometry* backwards = computeLinear(end, start);
-        Geometry* forwards = reverse(backwards);
-        delete backwards;
+        auto backwards = computeLinear(end, start);
+        auto forwards = reverse(backwards.get());
         return forwards;
     }
     return computeLinear(start, end);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 ExtractLineByLocation::reverse(const Geometry* linear)
 {
     const LineString* ls = dynamic_cast<const LineString*>(linear);
@@ -81,10 +80,10 @@ ExtractLineByLocation::reverse(const Geometry* linear)
     }
 }
 
-LineString*
+std::unique_ptr<LineString>
 ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLocation& end)
 {
-    CoordinateSequence* coordinates = line->getCoordinates();
+    auto coordinates = line->getCoordinates();
     CoordinateArraySequence newCoordinateArray;
 
     const size_t indexStep = 1;
@@ -130,10 +129,10 @@ ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLoca
         newCoordinateArray.add(newCoordinateArray[0]);
     }
 
-    return line->getFactory()->createLineString(newCoordinateArray);
+    return std::unique_ptr<LineString>(line->getFactory()->createLineString(newCoordinateArray));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 ExtractLineByLocation::computeLinear(const LinearLocation& start, const LinearLocation& end)
 {
     LinearGeometryBuilder builder(line->getFactory());
@@ -156,7 +155,7 @@ ExtractLineByLocation::computeLinear(const LinearLocation& start, const LinearLo
     if(! end.isVertex()) {
         builder.add(end.getCoordinate(line));
     }
-    return builder.getGeometry();
+    return std::unique_ptr<Geometry>(builder.getGeometry());
 }
 }
 }

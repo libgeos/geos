@@ -26,28 +26,25 @@ namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
-Geometry*
+std::unique_ptr<Geometry>
 CoordinateOperation::edit(const Geometry* geometry,
                           const GeometryFactory* factory)
 {
-    const LinearRing* ring = dynamic_cast<const LinearRing*>(geometry);
-    if(ring) {
+    if(const LinearRing* ring = dynamic_cast<const LinearRing*>(geometry)) {
         const CoordinateSequence* coords = ring->getCoordinatesRO();
-        CoordinateSequence* newCoords = edit(coords, geometry);
+        auto newCoords = edit(coords, geometry);
         // LinearRing instance takes over ownership of newCoords instance
-        return factory->createLinearRing(newCoords);
+        return std::unique_ptr<Geometry>(factory->createLinearRing(newCoords.release()));
     }
-    const LineString* line = dynamic_cast<const LineString*>(geometry);
-    if(line) {
+    if(const LineString* line = dynamic_cast<const LineString*>(geometry)) {
         const CoordinateSequence* coords = line->getCoordinatesRO();
-        CoordinateSequence* newCoords = edit(coords, geometry);
-        return factory->createLineString(newCoords);
+        auto newCoords = edit(coords, geometry);
+        return std::unique_ptr<Geometry>(factory->createLineString(newCoords.release()));
     }
-    if(typeid(*geometry) == typeid(Point)) {
-        CoordinateSequence* coords = geometry->getCoordinates();
-        CoordinateSequence* newCoords = edit(coords, geometry);
-        delete coords;
-        return factory->createPoint(newCoords);
+    if(const Point* point = dynamic_cast<const Point*>(geometry)) {
+        auto coords = point->getCoordinatesRO();
+        auto newCoords = edit(coords, geometry);
+        return std::unique_ptr<Geometry>(factory->createPoint(newCoords.release()));
     }
 
     return geometry->clone();

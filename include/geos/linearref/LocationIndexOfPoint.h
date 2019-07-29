@@ -28,12 +28,12 @@
 namespace geos {
 namespace linearref { // geos::linearref
 
-/**
- * Computes the {@link LinearLocation} of the point
- * on a linear {@link Geometry} nearest a given {@link Coordinate}.
- * The nearest point is not necessarily unique; this class
- * always computes the nearest point closest to
- * the start of the geometry.
+/** \brief
+ * Computes the LinearLocation of the point on a linear [Geometry](@ref geom::Geometry)
+ * nearest a given [Coordinate](@ref geom::Coordinate).
+ *
+ * The nearest point is not necessarily unique; this class always computes
+ * the nearest point closest to the start of the geometry.
  */
 class LocationIndexOfPoint {
 
@@ -50,26 +50,26 @@ public:
 
     LocationIndexOfPoint(const geom::Geometry* linearGeom);
 
-    /**
-     * Find the nearest location along a linear {@link Geometry} to a given point.
+    /** \brief
+     * Find the nearest location along a linear [Geometry](@ref geom::Geometry)
+     * to a given point.
      *
      * @param inputPt the coordinate to locate
      * @return the location of the nearest point
      */
     LinearLocation indexOf(const geom::Coordinate& inputPt) const;
-    /**
-     * Find the nearest {@link LinearLocation} along the linear {@link Geometry}
-     * to a given {@link Coordinate}
-     * after the specified minimum {@link LinearLocation}.
+
+    /** \brief
+     * Find the nearest LinearLocation along the linear [Geometry](@ref geom::Geometry)
+     * to a given [Coordinate](@ref geom::Coordinate) after the specified minimum LinearLocation.
+     *
      * If possible the location returned will be strictly greater than the
-     * <code>minLocation</code>.
-     * If this is not possible, the
-     * value returned will equal <code>minLocation</code>.
-     * (An example where this is not possible is when
-     * minLocation = [end of line] ).
+     * `minLocation`.
+     * If this is not possible, the value returned will equal `minLocation`.
+     * (An example where this is not possible is when `minLocation = [end of line]`).
      *
      * @param inputPt the coordinate to locate
-     * @param minLocation the minimum location for the point location
+     * @param minIndex the minimum location for the point location
      * @return the location of the nearest point
      */
     LinearLocation indexOfAfter(const geom::Coordinate& inputPt, const LinearLocation* minIndex) const;

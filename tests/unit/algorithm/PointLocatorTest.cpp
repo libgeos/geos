@@ -47,12 +47,12 @@ static geos::io::WKTReader reader(gf.get());
 typedef std::unique_ptr<Geometry> GeomPtr;
 
 void
-runPtLocator(int expected, const Coordinate& pt,
+runPtLocator(Location expected, const Coordinate& pt,
              const std::string& wkt)
 {
     GeomPtr geom(reader.read(wkt));
     geos::algorithm::PointLocator pointLocator;
-    int loc = pointLocator.locate(pt, geom.get());
+    Location loc = pointLocator.locate(pt, geom.get());
     ensure_equals(loc, expected);
 }
 

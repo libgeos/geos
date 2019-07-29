@@ -27,7 +27,7 @@ namespace tut {
 struct test_signedarea_data {
     typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
 
-    geos::geom::CoordinateSequence* cs_;
+    std::unique_ptr<geos::geom::CoordinateSequence> cs_;
     geos::io::WKTReader reader_;
     geos::io::WKBReader breader_;
 
@@ -39,8 +39,6 @@ struct test_signedarea_data {
 
     ~test_signedarea_data()
     {
-        delete cs_;
-        cs_ = nullptr;
     }
 };
 
@@ -63,7 +61,7 @@ void object::test<1>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    double area = Area::ofRingSigned(cs_);
+    double area = Area::ofRingSigned(cs_.get());
 
     ensure_equals(area, 8400);
 }
@@ -78,7 +76,7 @@ void object::test<2>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    double area = Area::ofRingSigned(cs_);
+    double area = Area::ofRingSigned(cs_.get());
 
     ensure_equals(area, -2400);
 }
@@ -93,7 +91,7 @@ void object::test<3>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    double area = Area::ofRingSigned(cs_);
+    double area = Area::ofRingSigned(cs_.get());
 
     ensure_equals(area, -2400);
 }

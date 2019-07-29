@@ -19,6 +19,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
@@ -35,6 +36,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
@@ -87,7 +89,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
     std::vector<Geometry*> lines;
     while(it != et) {
         const SegmentString* ss = *it;
-        LineString* line = fact->createLineString(ss->getCoordinates()->clone());
+        LineString* line = fact->createLineString(ss->getCoordinates()->clone().release());
         lines.push_back(line);
         ++it;
     }
@@ -107,8 +109,8 @@ static Profiler* profiler = Profiler::instance();
 int
 BufferBuilder::depthDelta(const Label& label)
 {
-    int lLoc = label.getLocation(0, Position::LEFT);
-    int rLoc = label.getLocation(0, Position::RIGHT);
+    Location lLoc = label.getLocation(0, Position::LEFT);
+    Location rLoc = label.getLocation(0, Position::RIGHT);
     if(lLoc == Location::INTERIOR && rLoc == Location::EXTERIOR) {
         return 1;
     }
@@ -138,7 +140,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Nothing to do for a distance of zero
     if(distance == 0) {
-        return g->clone();
+        return g->clone().release();
     }
 
     // Get geometry factory and precision model.
@@ -212,7 +214,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         SegmentString* ss = (*nodedEdges)[i];
 
         Geometry* tmp = geomFact->createLineString(
-                            ss->getCoordinates()->clone()
+                            ss->getCoordinates()->clone().release()
                         );
         delete ss;
 
@@ -278,53 +280,71 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             // epsilon is removed.
             const double segLengthAllowance = 1.02 * distance;
 
+            size_t front = 0;
+            size_t back = coords->size() - 1;
+            size_t sz = back - front + 1;
+
             // Clean up the front of the list.
             // Loop until the line's end is not inside the buffer width from
             // the startPoint.
-            while(coords->size() > 1 &&
-                    coords->front().distance(startPoint) < ptDistAllowance) {
+            while (sz > 1 && coords->getAt(front).distance(startPoint) < ptDistAllowance) {
                 // Record the end segment length.
-                double segLength = coords->front().distance((*coords)[1]);
+                double segLength = coords->getAt(front).distance(coords->getAt(front + 1));
+
                 // Stop looping if there are no more points, or if the segment
                 // length is larger than the buffer width.
-                if(coords->size() <= 1 || segLength > segLengthAllowance) {
+                if(sz <= 1 || segLength > segLengthAllowance) {
                     break;
                 }
+
                 // If the first point is less than buffer width away from the
                 // reference point, then delete the point.
-                coords->deleteAt(0);
+                front++;
+                sz--;
             }
-            while(coords->size() > 1 &&
-                    coords->front().distance(endPoint) < ptDistAllowance) {
-                double segLength = coords->front().distance((*coords)[1]);
-                if(coords->size() <= 1 || segLength > segLengthAllowance) {
+            while(sz > 1 && coords->getAt(front).distance(endPoint) < ptDistAllowance) {
+                double segLength = coords->getAt(front).distance(coords->getAt(front + 1));
+                if(sz <= 1 || segLength > segLengthAllowance) {
                     break;
                 }
-                coords->deleteAt(0);
+                front++;
+                sz--;
             }
-
             // Clean up the back of the list.
-            while(coords->size() > 1 &&
-                    coords->back().distance(startPoint) < ptDistAllowance) {
-                double segLength = coords->back().distance(
-                                       (*coords)[coords->size() - 2]);
-                if(coords->size() <= 1 || segLength > segLengthAllowance) {
+            while(sz > 1 && coords->getAt(back).distance(startPoint) < ptDistAllowance) {
+                double segLength = coords->getAt(back).distance(coords->getAt(back - 1));
+
+                if(sz <= 1 || segLength > segLengthAllowance) {
                     break;
                 }
-                coords->deleteAt(coords->size() - 1);
+                back--;
+                sz--;
             }
-            while(coords->size() > 1 &&
-                    coords->back().distance(endPoint) < ptDistAllowance) {
-                double segLength = coords->back().distance(
-                                       (*coords)[coords->size() - 2]);
-                if(coords->size() <= 1 || segLength > segLengthAllowance) {
+            while(sz > 1 && coords->getAt(back).distance(endPoint) < ptDistAllowance) {
+                double segLength = coords->getAt(back).distance(coords->getAt(back - 1));
+
+                if(sz <= 1 || segLength > segLengthAllowance) {
                     break;
                 }
-                coords->deleteAt(coords->size() - 1);
+                back--;
+                sz--;
             }
 
-            // Add the coordinates to the resultant line string.
-            if(coords->size() > 1) {
+            if (sz > 1) {
+                if (sz < coords->size()) {
+                    // Points were removed; make a new CoordinateSequence
+                    auto seqFactory = geomFact->getCoordinateSequenceFactory();
+
+                    auto newSeq = seqFactory->create(sz, coords->getDimension());
+
+                    for (size_t i = 0; i < sz; i++) {
+                        newSeq->setAt(coords->getAt(i + front), i);
+                    }
+
+                    coords = std::move(newSeq);
+                }
+
+                // Add the coordinates to the resultant line string.
                 mergedLinesGeom->push_back(geomFact->createLineString(coords.release()));
             }
         }
@@ -556,17 +576,16 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
         SegmentString* segStr = *i;
         const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
-        CoordinateSequence* cs = CoordinateSequence::removeRepeatedPoints(segStr->getCoordinates());
+        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates());
         delete segStr;
         if(cs->size() < 2) {
             // don't insert collapsed edges
             // we need to take care of the memory here as cs is a new sequence
-            delete cs;
             continue;
         }
 
         // Edge takes ownership of the CoordinateSequence
-        Edge* edge = new Edge(cs, *oldLabel);
+        Edge* edge = new Edge(cs.release(), *oldLabel);
 
         // will take care of the Edge ownership
         insertUniqueEdge(edge);

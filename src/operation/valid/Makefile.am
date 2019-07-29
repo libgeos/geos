@@ -16,11 +16,13 @@ libopvalid_la_SOURCES = \
     ConsistentAreaTester.cpp \
     IsValidOp.cpp \
     QuadtreeNestedRingTester.cpp \
+    RepeatedPointRemover.cpp \
     RepeatedPointTester.cpp \
     SimpleNestedRingTester.cpp \
     SweeplineNestedRingTester.cpp \
     TopologyValidationError.cpp \
     IndexedNestedRingTester.cpp \
-    IndexedNestedRingTester.h
+    IndexedNestedRingTester.h \
+    MakeValid.cpp
 
 libopvalid_la_LIBADD =

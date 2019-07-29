@@ -21,8 +21,11 @@
 #include <geos/export.h>
 #include <geos/algorithm/ttmath/ttmath.h>
 
-// Close to DoubleDouble equivalent used by JTS
-// Usage: ttmath::Big<exponent, mantissa>
+/// \file CGAlgorithmsDD.h
+
+/// \brief Close to DoubleDouble equivalent used by JTS
+///
+/// Usage: `ttmath::Big<exponent, mantissa>`
 typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(256)> DD;
@@ -38,10 +41,8 @@ class CoordinateSequence;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
-/**
-* \brief
-* Implements basic computational geometry algorithms using extended precision float-point arithmetic.
-*/
+
+/// Implements basic computational geometry algorithms using extended precision float-point arithmetic.
 class GEOS_DLL CGAlgorithmsDD {
 
 public:
@@ -59,9 +60,9 @@ public:
         FAILURE = 2
     };
 
-    /**
-     * Returns the index of the direction of the point <code>q</code> relative to
-     * a vector specified by <code>p1-p2</code>.
+    /** \brief
+     * Returns the index of the direction of the point `q` relative to
+     * a vector specified by `p1-p2`.
      *
      * @param p1 the origin point of the vector
      * @param p2 the final point of the vector
@@ -74,25 +75,25 @@ public:
     static int orientationIndex(const geom::Coordinate& p1,
                                 const geom::Coordinate& p2,
                                 const geom::Coordinate& q);
-    /**
-    * A filter for computing the orientation index of three coordinates.
-    * <p>
-    * If the orientation can be computed safely using standard DP
-    * arithmetic, this routine returns the orientation index.
-    * Otherwise, a value i > 1 is returned.
-    * In this case the orientation index must
-    * be computed using some other more robust method.
-    * The filter is fast to compute, so can be used to
-    * avoid the use of slower robust methods except when they are really needed,
-    * thus providing better average performance.
-    * <p>
-    * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
-    *
-    * @param pa a coordinate
-    * @param pb a coordinate
-    * @param pc a coordinate
-    * @return the orientation index if it can be computed safely
-    * @return i > 1 if the orientation index cannot be computed safely
+    /** \brief
+     * A filter for computing the orientation index of three coordinates.
+     *
+     * If the orientation can be computed safely using standard DP arithmetic,
+     * this routine returns the orientation index. Otherwise, a value `i > 1` is
+     * returned. In this case the orientation index must be computed using some
+     * other more robust method.
+     *
+     * The filter is fast to compute, so can be used to avoid the use of slower
+     * robust methods except when they are really needed, thus providing better
+     * average performance.
+     *
+     * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
+     *
+     * @param pa a coordinate
+     * @param pb a coordinate
+     * @param pc a coordinate
+     * @return the orientation index if it can be computed safely
+     * @return `i > 1` if the orientation index cannot be computed safely
     */
     static int orientationIndexFilter(const geom::Coordinate& pa,
                                       const geom::Coordinate& pb,
@@ -116,10 +117,37 @@ public:
 
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 
+    static DD detDD(double x1, double y1, double x2, double y2);
+    static DD detDD(const DD& x1, const DD& y1, const DD& x2, const DD& y2);
+
+    /** \brief
+     * Computes the circumcentre of a triangle.
+     *
+     * The circumcentre is the centre of the circumcircle, the smallest circle
+     * which encloses the triangle. It is also the common intersection point of
+     * the perpendicular bisectors of the sides of the triangle, and is the only
+     * point which has equal distance to all three vertices of the triangle.
+     *
+     * The circumcentre does not necessarily lie within the triangle. For example,
+     * the circumcentre of an obtuse isosceles triangle lies outside the triangle.
+     *
+     * This method uses @ref DD extended-precision arithmetic to provide more accurate
+     * results than [circumcentre(Coordinate, Coordinate, Coordinate)]
+     * (@ref geos::geom::Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)).
+     *
+     * @param a
+     *          a vertex of the triangle
+     * @param b
+     *          a vertex of the triangle
+     * @param c
+     *          a vertex of the triangle
+     * @return the circumcentre of the triangle
+     */
+    static geom::Coordinate circumcentreDD(const geom::Coordinate& a, const geom::Coordinate& b, const geom::Coordinate& c);
 
 protected:
 
-    static int signOfDet2x2(DD& x1, DD& y1, DD& x2, DD& y2);
+    static int signOfDet2x2(const DD& x1, const DD& y1, const DD& x2, const DD& y2);
 
 };
 

@@ -59,8 +59,9 @@ private:
         using std::unique_ptr;
 
         assert(srcPts);
-        assert(srcPts->toVector());
-        LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
+        std::vector<Coordinate> coords;
+        srcPts->toVector(coords);
+        LineStringSnapper snapper(coords, snapTol);
         unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
         const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
@@ -93,7 +94,7 @@ public:
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-    std::unique_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
+    auto snapPts = detail::make_unique<Coordinate::ConstVect>();
     util::UniqueCoordinateArrayFilter filter(*snapPts);
     g.apply_ro(&filter);
     // integrity check
@@ -138,7 +139,7 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
     if(cleanResult && (dynamic_cast<const Polygon*>(result.get()) ||
                        dynamic_cast<const MultiPolygon*>(result.get()))) {
         // TODO: use better cleaning approach
-        result.reset(result->buffer(0));
+        result = result->buffer(0);
     }
 
     return result;

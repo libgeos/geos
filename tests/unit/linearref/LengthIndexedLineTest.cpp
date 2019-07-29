@@ -138,12 +138,12 @@ struct test_lengthindexedline_data {
     }
 
 
-    Geometry*
+    std::unique_ptr<Geometry>
     indicesOfThenExtract(Geometry* linearGeom, Geometry* subLine)
     {
         LengthIndexedLine indexedLine(linearGeom);
         double* loc = indexedLine.indicesOf(subLine);
-        Geometry* result = indexedLine.extractLine(loc[0], loc[1]);
+        auto result = indexedLine.extractLine(loc[0], loc[1]);
         delete [] loc;
         return result;
     }

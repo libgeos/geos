@@ -42,20 +42,19 @@ BasicPreparedGeometry::setGeometry(const geom::Geometry* geom)
 bool
 BasicPreparedGeometry::envelopesIntersect(const geom::Geometry* g) const
 {
-    if (dynamic_cast<const geom::Puntal *>(g))
-    {
-        //Puntal is already handled efficiently so no need to individually check the parts of it
-        return baseGeom->getEnvelopeInternal()->intersects(g->getEnvelopeInternal());
+    if (g->getGeometryTypeId() == GEOS_POINT) {
+        return baseGeom->getEnvelopeInternal()->intersects(*(g->getCoordinate()));
     }
-    else
-    {
-        return GeometryCollection::envelopeIntersects(baseGeom, g);
-    }
+    return GeometryCollection::envelopeIntersects(baseGeom, g);
 }
 
 bool
 BasicPreparedGeometry::envelopeCovers(const geom::Geometry* g) const
 {
+    if (g->getGeometryTypeId() == GEOS_POINT) {
+        return baseGeom->getEnvelopeInternal()->covers(g->getCoordinate());
+    }
+
     return baseGeom->getEnvelopeInternal()->covers(g->getEnvelopeInternal());
 }
 

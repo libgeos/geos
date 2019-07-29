@@ -30,8 +30,9 @@ namespace geos {
 namespace linearref { // geos::linearref
 
 /** \brief
- * Supports linear referencing along a linear {@link Geometry}
+ * Supports linear referencing along a linear geom::Geometry
  * using the length along the line as the index.
+ *
  * Negative length values are taken as measured in the reverse direction
  * from the end of the geometry.
  * Out-of-range index values are handled by clamping
@@ -50,7 +51,7 @@ private:
 public:
 
     /** \brief
-     * Constructs an object which allows a linear {@link Geometry}
+     * Constructs an object which allows a linear [Geometry](@ref geom::Geometry)
      * to be linearly referenced using length as an index.
      *
      * @param linearGeom the linear geometry to reference along
@@ -59,8 +60,9 @@ public:
     LengthIndexedLine(const geom::Geometry* linearGeom);
 
     /** \brief
-     * Computes the {@link Coordinate} for the point
+     * Computes the [Coordinate](@ref geom::Coordinate) for the point
      * on the line at the given index.
+     *
      * If the index is out of range the first or last point on the
      * line will be returned.
      * The Z-ordinate of the computed point will be interpolated from
@@ -74,7 +76,7 @@ public:
 
     /**
      * \brief
-     * Computes the {@link Coordinate} for the point
+     * Computes the [Coordinate](@ref geom::Coordinate) for the point
      * on the line at the given index, offset by the given distance.
      *
      * If the index is out of range the first or last point on the
@@ -87,14 +89,15 @@ public:
      *
      * @param index the index of the desired point
      * @param offsetDistance the distance the point is offset from the segment
-     *    (positive is to the left, negative is to the right)
+     *                       (positive is to the left, negative is to the right)
      * @return the Coordinate at the given index
      */
     geom::Coordinate extractPoint(double index, double offsetDistance) const;
 
-    /**
-     * Computes the {@link LineString} for the interval
+    /** \brief
+     * Computes the [LineString](@ref geom::LineString) for the interval
      * on the line between the given indices.
+     *
      * If the endIndex lies before the startIndex,
      * the computed geometry is reversed.
      *
@@ -102,16 +105,17 @@ public:
      * @param endIndex the index of the end of the interval
      * @return the linear interval between the indices
      */
-    geom::Geometry* extractLine(double startIndex, double endIndex) const;
+    std::unique_ptr<geom::Geometry> extractLine(double startIndex, double endIndex) const;
 
 
-    /**
+    /** \brief
      * Computes the minimum index for a point on the line.
+     *
      * If the line is not simple (i.e. loops back on itself)
      * a single point may have more than one possible index.
      * In this case, the smallest index is returned.
      *
-     * The supplied point does not <i>necessarily</i> have to lie precisely
+     * The supplied point does not *necessarily* have to lie precisely
      * on the line, but if it is far from the line the accuracy and
      * performance of this function is not guaranteed.
      * Use {@link #project} to compute a guaranteed result for points
@@ -124,17 +128,18 @@ public:
      */
     double indexOf(const geom::Coordinate& pt) const;
 
-    /**
-     * Finds the index for a point on the line
-     * which is greater than the given index.
-     * If no such index exists, returns <tt>minIndex</tt>.
+    /** \brief
+     * Finds the index for a point on the line which is
+     * greater than the given index.
+     *
+     * If no such index exists, returns `minIndex`.
      * This method can be used to determine all indexes for
      * a point which occurs more than once on a non-simple line.
      * It can also be used to disambiguate cases where the given point lies
      * slightly off the line and is equidistant from two different
      * points on the line.
      *
-     * The supplied point does not <i>necessarily</i> have to lie precisely
+     * The supplied point does not `*necessarily* have to lie precisely
      * on the line, but if it is far from the line the accuracy and
      * performance of this function is not guaranteed.
      * Use {@link #project} to compute a guaranteed result for points
@@ -148,9 +153,10 @@ public:
      */
     double indexOfAfter(const geom::Coordinate& pt, double minIndex) const;
 
-    /**
+    /** \brief
      * Computes the indices for a subline of the line.
-     * (The subline must <b>conform</b> to the line; that is,
+     *
+     * (The subline must **conform** to the line; that is,
      * all vertices in the subline (except possibly the first and last)
      * must be vertices of the line and occcur in the same order).
      *
@@ -160,8 +166,9 @@ public:
     double* indicesOf(const geom::Geometry* subLine) const;
 
 
-    /**
+    /** \brief
      * Computes the index for the closest point on the line to the given point.
+     *
      * If more than one point has the closest distance the first one along the line
      * is returned.
      * (The point does not necessarily have to lie precisely on the line.)
@@ -171,30 +178,30 @@ public:
      */
     double project(const geom::Coordinate& pt) const;
 
-    /**
+    /** \brief
      * Returns the index of the start of the line
      * @return the start index
      */
     double getStartIndex() const;
 
-    /**
+    /** \brief
      * Returns the index of the end of the line
      * @return the end index
      */
     double getEndIndex() const;
 
-    /**
+    /** \brief
      * Tests whether an index is in the valid index range for the line.
      *
-     * @param length the index to test
-     * @return <code>true</code> if the index is in the valid range
+     * @param index the index to test
+     * @return `true` if the index is in the valid range
      */
     bool isValidIndex(double index) const;
 
 
-    /**
-     * Computes a valid index for this line
-     * by clamping the given index to the valid range of index values
+    /** \brief
+     * Computes a valid index for this line by clamping the given index
+     * to the valid range of index values.
      *
      * @return a valid index value
      */

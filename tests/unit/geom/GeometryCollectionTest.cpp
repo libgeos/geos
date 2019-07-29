@@ -4,6 +4,8 @@
 #include <tut/tut.hpp>
 #include <utility.h>
 
+#include <memory>
+
 
 namespace tut {
 //
@@ -16,10 +18,17 @@ struct test_geometry_collection_data {
 
     geos::geom::PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
+    std::unique_ptr<geos::geom::Geometry> empty_gc_;
+
+    std::unique_ptr<geos::geom::Geometry> readWKT(std::string wkt) {
+        geos::io::WKTReader reader;
+        return std::unique_ptr<geos::geom::Geometry>(reader.read(wkt));
+    }
 
     test_geometry_collection_data()
-        : pm_(1000), factory_(GeometryFactory::create(&pm_, 0))
+        : pm_(1000), factory_(GeometryFactory::create(&pm_, 0)), empty_gc_(factory_->createGeometryCollection())
     {
+
     }
 };
 
@@ -38,15 +47,17 @@ template<>
 void object::test<1>
 ()
 {
-    GeometryPtr empty_point = factory_->createPoint();
+    using geos::geom::Geometry;
+
+    std::unique_ptr<Geometry> empty_point(factory_->createPoint());
     ensure(empty_point != nullptr);
 
     geos::geom::Coordinate coord(1, 2);
-    GeometryPtr point = factory_->createPoint(coord);
+    std::unique_ptr<Geometry> point(factory_->createPoint(coord));
     ensure(point != nullptr);
 
-    std::vector<GeometryPtr> geoms{empty_point, point};
-    GeometryColPtr col = factory_->createGeometryCollection(geoms);
+    std::vector<Geometry*> geoms{empty_point.get(), point.get()};
+    std::unique_ptr<Geometry> col(factory_->createGeometryCollection(geoms));
     ensure(col != nullptr);
 
     ensure(col->getCoordinate() != nullptr);
@@ -60,23 +71,76 @@ template<>
 void object::test<2>
 ()
 {
+    using geos::geom::Geometry;
+
     geos::geom::PrecisionModel pm;
     auto gf = GeometryFactory::create(&pm, 1);
-    auto g = gf->createEmptyGeometry();
+    std::unique_ptr<Geometry> g(gf->createEmptyGeometry());
 
     g->setSRID(0);
-    std::vector<decltype(g)> v = {g};
-    auto geom_col = gf->createGeometryCollection(v);
+    std::vector<Geometry*> v = {g.get()};
+    std::unique_ptr<Geometry> geom_col(gf->createGeometryCollection(v));
     ensure_equals(geom_col->getGeometryN(0)->getSRID(), 1);
 
     geom_col->setSRID(2);
     ensure_equals(geom_col->getGeometryN(0)->getSRID(), 2);
 
-    auto clone = geom_col->clone();
+    std::unique_ptr<Geometry> clone(geom_col->clone());
     ensure_equals(clone->getGeometryN(0)->getSRID(), 2);
-
-    // FREE MEMORY
-    gf->destroyGeometry(geom_col);
-    gf->destroyGeometry(clone);
 }
+
+// test getCoordinate() returns nullptr for empty geometry
+template<>
+template<>
+void object::test<3>
+()
+{
+    ensure(empty_gc_->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty GeometryCollection
+template<>
+template<>
+void object::test<4>
+()
+{
+    // Empty GeometryCollection passes isDimensionStrict for any input
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for homogeneous GeometryCollections
+template<>
+template<>
+void object::test<5>
+()
+{
+    auto point = readWKT("GEOMETRYCOLLECTION(POINT (1 1), POINT(2 2))");
+    auto line = readWKT("GEOMETRYCOLLECTION(LINESTRING (1 1, 2 2), LINESTRING (3 8, 3 9))");
+    auto poly = readWKT("GEOMETRYCOLLECTION(POLYGON ((1 1, 2 1, 2 2, 1 1)))");
+
+    ensure(point->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(line->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(poly->isDimensionStrict(geos::geom::Dimension::A));
+
+    ensure(!point->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!line->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!poly->isDimensionStrict(geos::geom::Dimension::P));
+}
+
+// test isDimensionStrict for heterogeneous GeometryCollections
+template<>
+template<>
+void object::test<6>
+()
+{
+    // Heterogenous GeometryCollection does not pass isDimensionString for any input
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (1 1), LINESTRING (1 1, 2 2))");
+
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::A));
+}
+
 } // namespace tut

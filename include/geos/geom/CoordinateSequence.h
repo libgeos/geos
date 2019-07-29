@@ -73,7 +73,7 @@ public:
     /** \brief
      * Returns a deep copy of this collection.
      */
-    virtual CoordinateSequence* clone() const = 0;
+    virtual std::unique_ptr<CoordinateSequence> clone() const = 0;
 
     /** \brief
      * Returns a read-only reference to Coordinate at position i.
@@ -81,7 +81,6 @@ public:
      * Whether or not the Coordinate returned is the actual underlying
      * Coordinate or merely a copy depends on the implementation.
      */
-    //virtual const Coordinate& getCoordinate(int i) const=0;
     virtual const Coordinate& getAt(std::size_t i) const = 0;
 
     /// Return last Coordinate in the sequence
@@ -113,7 +112,6 @@ public:
      * Returns the number of Coordinates (actual or otherwise, as
      * this implementation may not store its data in Coordinate objects).
      */
-    //virtual int size() const=0;
     virtual std::size_t getSize() const = 0;
 
     size_t
@@ -122,130 +120,29 @@ public:
         return getSize();
     }
 
-    /** \brief
-     * Returns a read-only vector with the Coordinates in this collection.
-     *
-     * Whether or not the Coordinates returned are the actual underlying
-     * Coordinates or merely copies depends on the implementation.
-     * Note that if this implementation does not store its data as an
-     * array of Coordinates, this method will incur a performance penalty
-     * because the array needs to be built from scratch.
-     *
-     * This method is a port of the toCoordinateArray() method of JTS.
-     * It is not much used as memory management requires us to
-     * know wheter we should or not delete the returned object
-     * in a consistent way. Our options are: use shared_ptr<Coordinate>
-     * or always keep ownerhips of an eventual newly created vector.
-     * We opted for the second, so the returned object is a const, to
-     * also ensure that returning an internal pointer doesn't make
-     * the object mutable.
-     *
-     * @deprecated use toVector(std::vector<Coordinate>&) instead
-     */
-    virtual	const std::vector<Coordinate>* toVector() const = 0;
-
-    /// Pushes all Coordinates of this sequence onto the provided vector.
-    //
+    /// Pushes all Coordinates of this sequence into the provided vector.
+    ///
     /// This method is a port of the toCoordinateArray() method of JTS.
     ///
-    virtual	void toVector(std::vector<Coordinate>& coords) const = 0;
-
-    /**
-     * \brief Add an array of coordinates
-     * @param vc The coordinates
-     * @param allowRepeated if set to false, repeated coordinates
-     * 	are collapsed
-     * @return true (as by general collection contract)
-     */
-    void add(const std::vector<Coordinate>* vc, bool allowRepeated);
-
-    /* This is here for backward compatibility.. */
-    //void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
-
-    /** \brief
-     *  Add an array of coordinates
-     *
-     *  @param cl The coordinates
-     *
-     *  @param allowRepeated
-     * 	if set to false, repeated coordinates are collapsed
-     *
-     *  @param direction if false, the array is added in reverse order
-     *
-     *  @return true (as by general collection contract)
-     */
-    void add(const CoordinateSequence* cl, bool allowRepeated,
-             bool direction);
-
-    /**
-     * \brief Add a coordinate
-     * @param c The coordinate to add
-     * @param allowRepeated if set to false, repeated coordinates
-     * are collapsed
-     * @return true (as by general collection contract)
-     */
-    virtual void add(const Coordinate& c, bool allowRepeated);
-
-    /** \brief
-     * Inserts the specified coordinate at the specified position in
-     * this list.
-     *
-     * @param i the position at which to insert
-     * @param coord the coordinate to insert
-     * @param allowRepeated if set to false, repeated coordinates are
-     *                      collapsed
-     *
-     * NOTE: this is a CoordinateList interface in JTS
-     */
-    virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated) = 0;
+    virtual void toVector(std::vector<Coordinate>& coords) const = 0;
 
     /// Returns <code>true</code> it list contains no coordinates.
-    virtual	bool isEmpty() const = 0;
-
-    /// Add a Coordinate to the list
-    virtual	void add(const Coordinate& c) = 0;
-
-    // Get number of coordinates
-    //virtual int getSize() const=0;
-
-    /// Get a reference to Coordinate at position pos
-    //virtual	const Coordinate& getAt(std::size_t pos) const=0;
+    virtual bool isEmpty() const = 0;
 
     /// Copy Coordinate c to position pos
-    virtual	void setAt(const Coordinate& c, std::size_t pos) = 0;
+    virtual void setAt(const Coordinate& c, std::size_t pos) = 0;
 
-    /// Delete Coordinate at position pos (list will shrink).
-    virtual	void deleteAt(std::size_t pos) = 0;
-
-    /// Get a string rapresentation of CoordinateSequence
-    virtual	std::string toString() const = 0;
+    /// Get a string representation of CoordinateSequence
+    std::string toString() const;
 
     /// Substitute Coordinate list with a copy of the given vector
-    virtual	void setPoints(const std::vector<Coordinate>& v) = 0;
+    virtual void setPoints(const std::vector<Coordinate>& v) = 0;
 
     /// Returns true if contains any two consecutive points
     bool hasRepeatedPoints() const;
 
     /// Returns lower-left Coordinate in list
     const Coordinate* minCoordinate() const;
-
-
-    /// \brief
-    /// Returns a new CoordinateSequence being a copy of the input
-    /// with any consecutive equal Coordinate removed.
-    ///
-    /// Equality test is 2D based
-    ///
-    /// Ownership of returned object goes to the caller.
-    ///
-    static CoordinateSequence* removeRepeatedPoints(
-        const CoordinateSequence* cl);
-
-    /// Remove consecutive equal Coordinates from the sequence
-    //
-    /// Equality test is 2D based. Returns a reference to self.
-    ///
-    virtual CoordinateSequence& removeRepeatedPoints() = 0;
 
     /** \brief
      *  Returns true if given CoordinateSequence contains
@@ -259,13 +156,6 @@ public:
      */
     static CoordinateSequence* atLeastNCoordinatesOrNothing(std::size_t n,
             CoordinateSequence* c);
-
-    /** \brief
-     *  Returns lower-left Coordinate in given CoordinateSequence.
-     *  This is actually the Coordinate with lower X (and Y if needed)
-     *  ordinate.
-     */
-    static const Coordinate* minCoordinate(CoordinateSequence* cl);
 
     /// Return position of a Coordinate, or -1 if not found
     //
@@ -327,7 +217,7 @@ public:
      *
      * @param index  the coordinate index in the sequence
      * @param ordinateIndex the ordinate index in the coordinate
-     * 	   (in range [0, dimension-1])
+     *                      (in range [0, dimension-1])
      */
     virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const = 0;
 
@@ -361,7 +251,7 @@ public:
      *
      * @param index  the coordinate index in the sequence
      * @param ordinateIndex the ordinate index in the coordinate
-     * 		(in range [0, dimension-1])
+     *                      (in range [0, dimension-1])
      * @param value  the new ordinate value
      */
     virtual void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value) = 0;
@@ -379,7 +269,7 @@ public:
     virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract
 
     /** \brief
-     * Apply a fiter to each Coordinate of this sequence.
+     * Apply a filter to each Coordinate of this sequence.
      * The filter is expected to provide a .filter(Coordinate&)
      * method.
      *

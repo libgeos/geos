@@ -38,34 +38,33 @@ namespace index { // geos::index
 namespace bintree { // geos::index::bintree
 
 /** \brief
- * An BinTree (or "Binary Interval Tree")
- * is a 1-dimensional version of a quadtree.
+ * A BinTree (or "Binary Interval Tree") is a 1-dimensional version of a quadtree.
  *
- * It indexes 1-dimensional intervals (which of course may
- * be the projection of 2-D objects on an axis).
- * It supports range searching
- * (where the range may be a single point).
+ * It indexes 1-dimensional intervals (which of course may be the projection
+ * of 2-D objects on an axis). It supports range searching (where the range
+ * may be a single point).
  *
  * This implementation does not require specifying the extent of the inserted
- * items beforehand.  It will automatically expand to accomodate any extent
+ * items beforehand. It will automatically expand to accomodate any extent
  * of dataset.
  *
- * This index is different to the Interval Tree of Edelsbrunner
- * or the Segment Tree of Bentley.
+ * This index is different to the "Interval Tree of Edelsbrunner"
+ * or the "Segment Tree of Bentley".
  */
 class GEOS_DLL Bintree {
 
 public:
 
-    /**
+    /** \brief
      * Ensure that the Interval for the inserted item has non-zero extents.
-     * Use the current minExtent to pad it, if necessary
      *
-     * NOTE: in GEOS this function always return a newly allocated object
+     * Use the current minExtent to pad it, if necessary.
+     *
+     * @note In GEOS this function always return a newly allocated object
      *       with ownership transferred to caller. TODO: change this ?
      *
-     * @param itemInterval
-     *      Source interval, ownership left to caller, no references hold.
+     * @param itemInterval source interval, ownership left to caller, no references hold
+     * @param minExtent minimal extent
      */
     static Interval* ensureExtent(const Interval* itemInterval,
                                   double minExtent);

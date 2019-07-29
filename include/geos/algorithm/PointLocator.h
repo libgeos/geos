@@ -67,7 +67,7 @@ public:
      *
      * @return the Location of the point relative to the input Geometry
      */
-    int locate(const geom::Coordinate& p, const geom::Geometry* geom);
+    geom::Location locate(const geom::Coordinate& p, const geom::Geometry* geom);
 
     /**
      * Convenience method to test a point for intersection with
@@ -91,15 +91,15 @@ private:
 
     void computeLocation(const geom::Coordinate& p, const geom::Geometry* geom);
 
-    void updateLocationInfo(int loc);
+    void updateLocationInfo(geom::Location loc);
 
-    int locate(const geom::Coordinate& p, const geom::Point* pt);
+    geom::Location locate(const geom::Coordinate& p, const geom::Point* pt);
 
-    int locate(const geom::Coordinate& p, const geom::LineString* l);
+    geom::Location locate(const geom::Coordinate& p, const geom::LineString* l);
 
-    int locateInPolygonRing(const geom::Coordinate& p, const geom::LinearRing* ring);
+    geom::Location locateInPolygonRing(const geom::Coordinate& p, const geom::LinearRing* ring);
 
-    int locate(const geom::Coordinate& p, const geom::Polygon* poly);
+    geom::Location locate(const geom::Coordinate& p, const geom::Polygon* poly);
 
 };
 

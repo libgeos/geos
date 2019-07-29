@@ -69,7 +69,7 @@ public:
     /**
      * Tests whether this geometry intersects a given geometry.
      *
-     * @param geom the test geometry
+     * @param g the test geometry
      * @return true if the test geometry intersects
      */
     bool intersects(const geom::Geometry* g) const;
@@ -82,7 +82,7 @@ protected:
      * the target geometry.
      * Only handles test geometries which are Puntal (dimension 0)
      *
-     * @param geom a Puntal geometry to test
+     * @param testGeom a Puntal geometry to test
      * @return true if any point of the argument intersects the prepared geometry
      */
     bool isAnyTestPointInTarget(const geom::Geometry* testGeom) const;

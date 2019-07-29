@@ -24,54 +24,44 @@ namespace geos {
 namespace geom { // geos::geom
 
 /** \brief
+ * Constants representing the location of a point relative to a geometry.
  *
- *  Constants representing the location of a point relative to a geometry.
- *
- *  They  can also be thought of as the row or column index of a DE-9IM matrix.
- *  For a description of the DE-9IM, see the <A
- *  HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
- *  Specification for SQL</A> .
+ * They can also be thought of as the row or column index of a DE-9IM matrix.
+ * For a description of the DE-9IM, see the
+ * [OpenGIS Simple Features Specification for SQL](http://www.opengis.org/techno/specs.htm").
  */
-class GEOS_DLL Location {
-public:
-    enum Value {
+GEOS_DLL enum class Location : char {
+    /**
+     *  Used for uninitialized location values.
+     */
+    UNDEF = -1, // Instead of NULL
 
-        /**
-         *  Used for uninitialized location values.
-         */
-        UNDEF = -1, // Instead of NULL
+    /**
+     * DE-9IM row index of the interior of the first geometry and
+     * column index of the interior of the second geometry.
+     * Location value for the interior of a geometry.
+     */
+    INTERIOR = 0,
 
-        /**
-         * DE-9IM row index of the interior of the first geometry and
-         * column index of the interior of the second geometry.
-         * Location value for the interior of a geometry.
-         */
-        INTERIOR = 0,
+    /**
+     * DE-9IM row index of the boundary of the first geometry and
+     * column index of the boundary of the second geometry.
+     * Location value for the boundary of a geometry.
+     */
+    BOUNDARY = 1,
 
-        /**
-         * DE-9IM row index of the boundary of the first geometry and
-         * column index of the boundary of the second geometry.
-         * Location value for the boundary of a geometry.
-         */
-        BOUNDARY = 1,
-
-        /**
-         * DE-9IM row index of the exterior of the first geometry and
-         * column index of the exterior of the second geometry.
-         * Location value for the exterior of a geometry.
-         */
-        EXTERIOR = 2
-    };
-
-    static char toLocationSymbol(int locationValue);
+    /**
+     * DE-9IM row index of the exterior of the first geometry and
+     * column index of the exterior of the second geometry.
+     * Location value for the exterior of a geometry.
+     */
+    EXTERIOR = 2
 };
+
+std::ostream& operator<<(std::ostream& os, const Location& loc);
 
 } // namespace geos::geom
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geom/Location.inl"
-//#endif
 
 #endif // ndef GEOS_GEOM_LOCATION_H
 

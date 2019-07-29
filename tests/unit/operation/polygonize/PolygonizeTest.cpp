@@ -55,21 +55,7 @@ struct test_polygonizetest_data {
     printAll(std::ostream& os, T& cnt)
     {
         for(typename T::iterator i = cnt.begin(), e = cnt.end(); i != e; ++i) {
-            os << **i;
-        }
-    }
-
-    GeomPtr
-    readWKT(const std::string& inputWKT)
-    {
-        return GeomPtr(wktreader.read(inputWKT));
-    }
-
-    void
-    readWKT(const char* const* inputWKT, std::vector<Geom*>& geoms)
-    {
-        for(const char* const* ptr = inputWKT; *ptr; ++ptr) {
-            geoms.push_back(readWKT(*ptr).release());
+            os << **i << std::endl;
         }
     }
 
@@ -78,7 +64,7 @@ struct test_polygonizetest_data {
     contains(T& cnt, const Geom* g)
     {
         for(typename T::iterator i = cnt.begin(), e = cnt.end(); i != e; ++i) {
-            const Geom* element = *i;
+            const auto& element = *i;
             if(element->equalsExact(g)) {
                 return true;
             }
@@ -99,8 +85,8 @@ struct test_polygonizetest_data {
             return false;
         }
         for(typename T::iterator i = ex.begin(), e = ex.end(); i != e; ++i) {
-            if(! contains(ob, *i)) {
-                cout << "Expected " << wktwriter.write(*i)
+            if(! contains(ob, i->get())) {
+                cout << "Expected " << wktwriter.write(i->get())
                      << " not found" << endl;
                 return false;
             }
@@ -111,35 +97,44 @@ struct test_polygonizetest_data {
     }
 
     bool
-    doTest(const char* const* inputWKT, const char* const* expectWKT)
+    doTest(const std::vector<std::string> & inputWKT, const std::vector<std::string> & expectWKT, bool onlyPolygonal)
     {
         using std::cout;
         using std::endl;
 
-        std::vector<Geom*> inputGeoms, expectGeoms;
+        std::vector<std::unique_ptr<geos::geom::Geometry>> inputGeoms, expectGeoms;
 
-        readWKT(inputWKT, inputGeoms);
-        readWKT(expectWKT, expectGeoms);
+        for (const auto& wkt : inputWKT) {
+            inputGeoms.push_back(wktreader.read(wkt));
+        }
 
-        Polygonizer polygonizer;
-        polygonizer.add(&inputGeoms);
+        for (const auto& wkt : expectWKT) {
+            auto g = wktreader.read(wkt);
+            g->normalize();
+            expectGeoms.push_back(std::move(g));
+        }
 
-        std::unique_ptr< std::vector<Poly*> > retGeoms;
-        retGeoms.reset(polygonizer.getPolygons());
+        Polygonizer polygonizer(onlyPolygonal);
+        for (const auto& p : inputGeoms) {
+            polygonizer.add(p.get());
+        }
 
-        delAll(inputGeoms);
+        std::unique_ptr<std::vector<std::unique_ptr<Poly>> > retGeoms;
+        retGeoms = polygonizer.getPolygons();
+        for (const auto& g : *retGeoms) {
+            g->normalize();
+        }
 
         bool ok = compare(expectGeoms, *retGeoms);
         if(! ok) {
-            cout << "OBTAINED(" << retGeoms->size() << "): ";
+            cout << "EXPECTED(" << expectGeoms.size() << "): " << std::endl;
+            printAll(cout, expectGeoms);
+            cout << "OBTAINED(" << retGeoms->size() << "): " << std::endl;
             printAll(cout, *retGeoms);
             cout << endl;
 
             ensure("not all expected geometries in the obtained set", 0);
         }
-
-        delAll(expectGeoms);
-        delAll(*retGeoms);
 
         return ok;
     }
@@ -157,17 +152,14 @@ template<>
 void object::test<1>
 ()
 {
-    static char const* const inp[] = {
+    std::vector<std::string> inp {
         "LINESTRING EMPTY",
         "LINESTRING EMPTY",
-        nullptr
     };
 
-    static char const* const exp[] = {
-        nullptr
-    };
+    std::vector<std::string> exp{};
 
-    doTest(inp, exp);
+    doTest(inp, exp, false);
 }
 
 // test2() in JTS
@@ -176,19 +168,163 @@ template<>
 void object::test<2>
 ()
 {
-    static char const* const inp[] = {
+    std::vector<std::string> inp{
         "LINESTRING (100 180, 20 20, 160 20, 100 180)",
         "LINESTRING (100 180, 80 60, 120 60, 100 180)",
-        nullptr
     };
 
-    static char const* const exp[] = {
+    std::vector<std::string> exp{
         "POLYGON ((100 180, 120 60, 80 60, 100 180))",
-        "POLYGON ((100 180, 160 20, 20 20, 100 180), (100 180, 80 60, 120 60, 100 180))",
-        nullptr
+        "POLYGON ((100 180, 160 20, 20 20, 100 180), (100 180, 80 60, 120 60, 100 180))"
     };
 
-    doTest(inp, exp);
+    doTest(inp, exp, false);
+}
+
+// JTS test3
+template<>
+template<>
+void object::test<3>()
+{
+    std::vector<std::string> inp{
+        "LINESTRING (0 0, 4 0)",
+        "LINESTRING (4 0, 5 3)",
+        "LINESTRING (5 3, 4 6, 6 6, 5 3)",
+        "LINESTRING (5 3, 6 0)",
+        "LINESTRING (6 0, 10 0, 5 10, 0 0)",
+        "LINESTRING (4 0, 6 0)"
+    };
+
+    std::vector<std::string> exp{
+        "POLYGON ((5 3, 4 0, 0 0, 5 10, 10 0, 6 0, 5 3), (5 3, 6 6, 4 6, 5 3))",
+        "POLYGON ((5 3, 4 6, 6 6, 5 3))",
+        "POLYGON ((4 0, 5 3, 6 0, 4 0))"
+    };
+
+    doTest(inp, exp, false);
+}
+
+// JTS testPolygonal1
+template<>
+template<>
+void object::test<4>()
+{
+    std::vector<std::string> inp{
+            "LINESTRING (100 100, 100 300, 300 300, 300 100, 100 100)",
+            "LINESTRING (150 150, 150 250, 250 250, 250 150, 150 150)"
+    };
+
+    std::vector<std::string> exp{
+            "POLYGON ((100 100, 100 300, 300 300, 300 100, 100 100), (150 150, 150 250, 250 250, 250 150, 150 150))"
+    };
+
+    doTest(inp, exp, true);
+}
+
+// JTS testPolygonal2
+template<>
+template<>
+void object::test<5>()
+{
+    std::vector<std::string> inp{
+            "LINESTRING (100 100, 100 0, 0 0, 0 100, 100 100)",
+            "LINESTRING (10 10, 10 30, 20 30)",
+            "LINESTRING (20 30, 30 30, 30 20)",
+            "LINESTRING (30 20, 30 10, 10 10)",
+            "LINESTRING (40 40, 40 20, 30 20)",
+            "LINESTRING (30 20, 20 20, 20 30)",
+            "LINESTRING (20 30, 20 40, 40 40))"
+    };
+
+    std::vector<std::string> exp{
+            "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), (10 10, 30 10, 30 20, 40 20, 40 40, 20 40, 20 30, 10 30, 10 10))",
+            "POLYGON ((20 20, 20 30, 30 30, 30 20, 20 20))"
+    };
+
+    doTest(inp, exp, true);
+}
+
+// JTS testPolygonal_OuterOnly_1
+template<>
+template<>
+void object::test<6>()
+{
+    // Two adjacent squares, but since we only get polygonal output
+    // we only get one of the squares back.
+    std::vector<std::string> inp{
+            "LINESTRING (10 10, 10 20, 20 20)",
+            "LINESTRING (20 20, 20 10)",
+            "LINESTRING (20 10, 10 10)",
+            "LINESTRING (20 20, 30 20, 30 10, 20 10)"
+    };
+
+    std::vector<std::string> exp{
+            "POLYGON ((20 20, 20 10, 10 10, 10 20, 20 20))"
+    };
+
+    doTest(inp, exp, true);
+}
+
+// JTS testPolygonal_OuterOnly_2
+template<>
+template<>
+void object::test<7>()
+{
+    std::vector<std::string> inp{
+            "LINESTRING (100 400, 200 400, 200 300)",
+            "LINESTRING (200 300, 150 300)",
+            "LINESTRING (150 300, 100 300, 100 400)",
+            "LINESTRING (200 300, 250 300, 250 200)",
+            "LINESTRING (250 200, 200 200)",
+            "LINESTRING (200 200, 150 200, 150 300)",
+            "LINESTRING (250 200, 300 200, 300 100, 200 100, 200 200)"
+    };
+
+    std::vector<std::string> exp{
+         "POLYGON ((150 300, 100 300, 100 400, 200 400, 200 300, 150 300))",
+         "POLYGON ((200 200, 250 200, 300 200, 300 100, 200 100, 200 200))"
+    };
+
+    doTest(inp, exp, true);
+}
+
+// JTS testPolygonal_OuterOnly_Checkerboard
+template<>
+template<>
+void object::test<8>()
+{
+    std::vector<std::string> inp{
+            "LINESTRING (10 20, 20 20)",
+            "LINESTRING (10 20, 10 30)",
+            "LINESTRING (20 10, 10 10, 10 20)",
+            "LINESTRING (10 30, 20 30)",
+            "LINESTRING (10 30, 10 40, 20 40)",
+            "LINESTRING (30 10, 20 10)",
+            "LINESTRING (20 20, 20 10)",
+            "LINESTRING (20 20, 30 20)",
+            "LINESTRING (20 30, 20 20)",
+            "LINESTRING (20 30, 30 30)",
+            "LINESTRING (20 40, 20 30)",
+            "LINESTRING (20 40, 30 40)",
+            "LINESTRING (40 20, 40 10, 30 10)",
+            "LINESTRING (30 20, 30 10)",
+            "LINESTRING (30 20, 40 20)",
+            "LINESTRING (30 30, 30 20)",
+            "LINESTRING (30 30, 40 30)",
+            "LINESTRING (30 40, 30 30)",
+            "LINESTRING (30 40, 40 40, 40 30)",
+            "LINESTRING (40 30, 40 20)"
+    };
+
+    std::vector<std::string> exp{
+            "POLYGON ((10 20, 20 20, 20 10, 10 10, 10 20))",
+            "POLYGON ((20 30, 10 30, 10 40, 20 40, 20 30))",
+            "POLYGON ((30 20, 20 20, 20 30, 30 30, 30 20))",
+            "POLYGON ((30 10, 30 20, 40 20, 40 10, 30 10))",
+            "POLYGON ((30 40, 40 40, 40 30, 30 30, 30 40))"
+    };
+
+    doTest(inp, exp, true);
 }
 
 } // namespace tut

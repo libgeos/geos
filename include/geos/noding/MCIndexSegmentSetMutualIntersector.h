@@ -46,8 +46,9 @@ namespace geos {
 namespace noding { // geos::noding
 
 /** \brief
- * Intersects two sets of {@link SegmentStrings} using a index based
- * on {@link MonotoneChain}s and a {@link SpatialIndex}.
+ * Intersects two sets of [SegmentStrings](@ref SegmentString) using a index based
+ * on [MonotoneChains](@ref index::chain::MonotoneChain) and a
+ * [SpatialIndex](@ref index::SpatialIndex).
  *
  * @version 1.7
  */
@@ -99,9 +100,9 @@ private:
     MonoChains monoChains;
 
     /*
-     * The {@link SpatialIndex} used should be something that supports
-     * envelope (range) queries efficiently (such as a {@link Quadtree}
-     * or {@link STRtree}.
+     * The index::SpatialIndex used should be something that supports
+     * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
+     * or index::strtree::STRtree).
      */
     index::SpatialIndex* index;
     int indexCounter;

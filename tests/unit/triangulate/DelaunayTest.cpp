@@ -38,14 +38,14 @@ typedef group::object object;
 
 group test_incdelaunaytri_group("geos::triangulate::Delaunay");
 
-//helper function for funning triangulation
+//helper function for running triangulation
 void
 runDelaunay(const char* sitesWkt, bool computeTriangles, const char* expectedWkt, double tolerance = 0.0)
 {
     WKTReader reader;
     std::unique_ptr<Geometry> results;
-    Geometry* sites = reader.read(sitesWkt);
-    Geometry* expected = reader.read(expectedWkt);
+    auto sites = reader.read(sitesWkt);
+    auto expected = reader.read(expectedWkt);
     DelaunayTriangulationBuilder builder;
     builder.setTolerance(tolerance);
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
@@ -61,11 +61,8 @@ runDelaunay(const char* sitesWkt, bool computeTriangles, const char* expectedWkt
     results->normalize();
     expected->normalize();
 
-    ensure(results->toString(), results->equalsExact(expected, 1e-7));
+    ensure(results->toString(), results->equalsExact(expected.get(), 1e-7));
     ensure_equals(results->getCoordinateDimension(), expected->getCoordinateDimension());
-
-    delete sites;
-    delete expected;
 }
 
 //

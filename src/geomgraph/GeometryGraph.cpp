@@ -47,6 +47,8 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/util/Interrupt.h>
 
+#include <geos/operation/valid/RepeatedPointRemover.h>
+
 #include <geos/inline.h>
 
 #include <vector>
@@ -89,7 +91,7 @@ GeometryGraph::isInBoundary(int boundaryCount)
     return boundaryCount % 2 == 1;
 }
 
-int
+Location
 GeometryGraph::determineBoundary(int boundaryCount)
 {
     return isInBoundary(boundaryCount) ? Location::BOUNDARY : Location::INTERIOR;
@@ -234,7 +236,7 @@ GeometryGraph::addPoint(const Point* p)
  * the left and right locations must be interchanged.
  */
 void
-GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
+GeometryGraph::addPolygonRing(const LinearRing* lr, Location cwLeft, Location cwRight)
 // throw IllegalArgumentException (see below)
 {
     // skip empty component (see bug #234)
@@ -244,55 +246,43 @@ GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
 
     const CoordinateSequence* lrcl = lr->getCoordinatesRO();
 
-    CoordinateSequence* coord = CoordinateSequence::removeRepeatedPoints(lrcl);
+    auto coord = geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints(lrcl);
     if(coord->getSize() < 4) {
         hasTooFewPointsVar = true;
         invalidPoint = coord->getAt(0); // its now a Coordinate
-        delete coord;
         return;
     }
-    int left = cwLeft;
-    int right = cwRight;
+    Location left = cwLeft;
+    Location right = cwRight;
 
     /*
      * the isCCW call might throw an
      * IllegalArgumentException if degenerate ring does
      * not contain 3 distinct points.
      */
-    try {
-        if(Orientation::isCCW(coord)) {
-            left = cwRight;
-            right = cwLeft;
-        }
-    }
-    catch(...) {
-        delete coord;
-        throw;
+    if(Orientation::isCCW(coord.get())) {
+        left = cwRight;
+        right = cwLeft;
     }
 
-    Edge* e = new Edge(coord, Label(argIndex, Location::BOUNDARY, left, right));
+    auto coordRaw = coord.release();
+    Edge* e = new Edge(coordRaw, Label(argIndex, Location::BOUNDARY, left, right));
     lineEdgeMap[lr] = e;
     insertEdge(e);
-    insertPoint(argIndex, coord->getAt(0), Location::BOUNDARY);
+    insertPoint(argIndex, coordRaw->getAt(0), Location::BOUNDARY);
 }
 
 void
 GeometryGraph::addPolygon(const Polygon* p)
 {
-    const LineString* ls;
-    const LinearRing* lr;
+    const LinearRing* lr = p->getExteriorRing();
 
-    ls = p->getExteriorRing();
-    assert(dynamic_cast<const LinearRing*>(ls));
-    lr = static_cast<const LinearRing*>(ls);
     addPolygonRing(lr, Location::EXTERIOR, Location::INTERIOR);
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         // Holes are topologically labelled opposite to the shell, since
         // the interior of the polygon lies on their opposite side
         // (on the left, if the hole is oriented CW)
-        ls = p->getInteriorRingN(i);
-        assert(dynamic_cast<const LinearRing*>(ls));
-        lr = static_cast<const LinearRing*>(ls);
+        lr = p->getInteriorRingN(i);
         addPolygonRing(lr, Location::INTERIOR, Location::EXTERIOR);
     }
 }
@@ -300,15 +290,15 @@ GeometryGraph::addPolygon(const Polygon* p)
 void
 GeometryGraph::addLineString(const LineString* line)
 {
-    CoordinateSequence* coord = CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
     if(coord->getSize() < 2) {
         hasTooFewPointsVar = true;
         invalidPoint = coord->getAt(0);
-        delete coord;
         return;
     }
 
-    Edge* e = new Edge(coord, Label(argIndex, Location::INTERIOR));
+    auto coordRaw = coord.release();
+    Edge* e = new Edge(coordRaw, Label(argIndex, Location::INTERIOR));
     lineEdgeMap[line] = e;
     insertEdge(e);
 
@@ -319,9 +309,9 @@ GeometryGraph::addLineString(const LineString* line)
      * This allows for the case that the node already exists and is
      * a boundary point.
      */
-    assert(coord->size() >= 2); // found LineString with single point
-    insertBoundaryPoint(argIndex, coord->getAt(0));
-    insertBoundaryPoint(argIndex, coord->getAt(coord->getSize() - 1));
+    assert(coordRaw->size() >= 2); // found LineString with single point
+    insertBoundaryPoint(argIndex, coordRaw->getAt(0));
+    insertBoundaryPoint(argIndex, coordRaw->getAt(coordRaw->getSize() - 1));
 }
 
 /*
@@ -409,7 +399,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
 #if GEOS_DEBUG
     cerr << "GeometryGraph::computeEdgeIntersections call" << endl;
 #endif
-    SegmentIntersector* si = new SegmentIntersector(li, includeProper, true);
+    unique_ptr<SegmentIntersector> si(new SegmentIntersector(li, includeProper, true));
 
     si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
     unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
@@ -431,16 +421,16 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
         //cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
         oe = &other_edges_copy;
     }
-    esi->computeIntersections(se, oe, si);
+    esi->computeIntersections(se, oe, si.get());
 #if GEOS_DEBUG
     cerr << "GeometryGraph::computeEdgeIntersections returns" << endl;
 #endif
-    return si;
+    return si.release();
 }
 
 void
 GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
-                           int onLocation)
+                           geom::Location onLocation)
 {
 #if GEOS_DEBUG > 1
     cerr << "GeometryGraph::insertPoint(" << coord.toString() << " called" << endl;
@@ -472,14 +462,14 @@ GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
     int boundaryCount = 1;
 
     // determine the current location for the point (if any)
-    int loc = lbl.getLocation(p_argIndex, Position::ON);
+    Location loc = lbl.getLocation(p_argIndex, Position::ON);
     if(loc == Location::BOUNDARY) {
         boundaryCount++;
     }
 
     // determine the boundary status of the point according to the
     // Boundary Determination Rule
-    int newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
+    Location newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
     lbl.setLocation(p_argIndex, newLoc);
 }
 
@@ -490,7 +480,7 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
     for(vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
             i != endIt; ++i) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(p_argIndex);
+        Location eLoc = e->getLabel().getLocation(p_argIndex);
         EdgeIntersectionList& eiL = e->eiList;
         for(EdgeIntersectionList::iterator
                 eiIt = eiL.begin(), eiEnd = eiL.end();
@@ -505,7 +495,7 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
 /*private*/
 void
 GeometryGraph::addSelfIntersectionNode(int p_argIndex,
-                                       const Coordinate& coord, int loc)
+                                       const Coordinate& coord, Location loc)
 {
     // if this node is already a boundary node, don't change it
     if(isBoundaryNode(p_argIndex, coord)) {
@@ -581,7 +571,7 @@ GeometryGraph::GeometryGraph()
 
 
 /* public static */
-int
+Location
 GeometryGraph::determineBoundary(
     const algorithm::BoundaryNodeRule& boundaryNodeRule,
     int boundaryCount)

@@ -30,7 +30,6 @@ namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
 SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
-//events(new vector<SweepLineEvent*>())
 {
 }
 
@@ -42,7 +41,6 @@ SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector()
             delete sle;
         }
     }
-    //delete events;
 }
 
 void

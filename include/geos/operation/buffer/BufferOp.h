@@ -54,9 +54,9 @@ namespace buffer { // geos.operation.buffer
  * the Minkowski sum (or difference) of the geometry
  * with a circle with radius equal to the absolute value of the buffer
  * distance.
- * In the CAD/CAM world buffers are known as </i>offset curves</i>.
+ * In the CAD/CAM world buffers are known as *offset curves*.
  * In morphological analysis the operation of positive and negative buffering
- * is referred to as <i>erosion</i> and <i>dilation</i>.
+ * is referred to as *erosion* and *dilation*.
  *
  * The buffer operation always returns a polygonal result.
  * The negative or zero-distance buffer of lines and points is always
@@ -80,7 +80,7 @@ class GEOS_DLL BufferOp {
 
 private:
 
-    /**
+    /** \brief
      *  A number of digits of precision which leaves some computational "headroom"
      *  for floating point operations.
      *
@@ -145,7 +145,7 @@ public:
         CAP_SQUARE = BufferParameters::CAP_SQUARE
     };
 
-    /**
+    /** \brief
      * Computes the buffer for a geometry for a given buffer distance
      * and accuracy of approximation.
      *
@@ -153,6 +153,7 @@ public:
      * @param distance the buffer distance
      * @param quadrantSegments the number of segments used to
      *        approximate a quarter circle
+     * @param endCapStyle line buffer end cap style (default: BufferParameters::CAP_ROUND)
      * @return the buffer of the input geometry
      *
      */
@@ -162,8 +163,8 @@ public:
                                         BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
                                     int endCapStyle = BufferParameters::CAP_ROUND);
 
-    /**
-     * Initializes a buffer computation for the given geometry
+    /** \brief
+     * Initializes a buffer computation for the given geometry.
      *
      * @param g the geometry to buffer
      */
@@ -175,9 +176,9 @@ public:
     {
     }
 
-    /**
+    /** \brief
      * Initializes a buffer computation for the given geometry
-     * with the given set of parameters
+     * with the given set of parameters.
      *
      * @param g the geometry to buffer
      * @param params the buffer parameters to use. This class will
@@ -191,25 +192,24 @@ public:
     {
     }
 
-    /**
+    /** \brief
      * Specifies the end cap style of the generated buffer.
+     *
      * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
      * The default is CAP_ROUND.
      *
-     * @param endCapStyle the end cap style to specify
+     * @param nEndCapStyle the end cap style to specify
      */
     inline void setEndCapStyle(int nEndCapStyle);
 
-    /**
-     * Specifies the end cap style of the generated buffer.
-     * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-     * The default is CAP_ROUND.
+    /** \brief
+     * Sets the number of segments used to approximate a angle fillet
      *
-     * @param endCapStyle the end cap style to specify
+     * @param nQuadrantSegments the number of segments in a fillet for a quadrant
      */
     inline void setQuadrantSegments(int nQuadrantSegments);
 
-    /**
+    /** \brief
      * Sets whether the computed buffer should be single-sided.
      *
      * A single-sided buffer is constructed on only one side
@@ -224,19 +224,18 @@ public:
      *
      * The End Cap Style for single-sided buffers is
      * always ignored,
-     * and forced to the equivalent of <tt>CAP_FLAT</tt>.
+     * and forced to the equivalent of `CAP_FLAT`.
      *
-     * @param isSingleSided true if a single-sided buffer
+     * @param isSingleSided `true` if a single-sided buffer
      *                      should be constructed
      */
     inline void setSingleSided(bool isSingleSided);
 
-    /**
+    /** \brief
      * Returns the buffer computed for a geometry for a given buffer
      * distance.
      *
-     * @param g the geometry to buffer
-     * @param distance the buffer distance
+     * @param nDistance the buffer distance
      * @return the buffer of the input geometry
      */
     geom::Geometry* getResultGeometry(double nDistance);

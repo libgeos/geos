@@ -61,7 +61,7 @@ private:
 protected:
 public:
     /**
-     * Computes the </tt>containsProperly</tt> predicate between a {@link PreparedPolygon}
+     * Computes the <tt>containsProperly</tt> predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
      * @param prep the prepared polygon
@@ -79,7 +79,7 @@ public:
     /**
      * Creates an instance of this operation.
      *
-     * @param prepPoly the PreparedPolygon to evaluate
+     * @param prep the PreparedPolygon to evaluate
      */
     PreparedPolygonContainsProperly(const PreparedPolygon* const prep)
         :	PreparedPolygonPredicate(prep)

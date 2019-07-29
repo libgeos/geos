@@ -22,29 +22,24 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-/**
- *  Converts the location value to a location symbol, for example, <code>EXTERIOR => 'e'</code>.
- *
- *@param  locationValue  either EXTERIOR, BOUNDARY, INTERIOR or NULL
- *@return                either 'e', 'b', 'i' or '-'
- */
-char
-Location::toLocationSymbol(int locationValue)
+std::ostream&
+operator<<(std::ostream& os, const Location& loc)
 {
-    switch(locationValue) {
-    case EXTERIOR:
-        return 'e';
-    case BOUNDARY:
-        return 'b';
-    case INTERIOR:
-        return 'i';
-    case UNDEF: //NULL
-        return '-';
-    default:
-        ostringstream s;
-        s << "Unknown location value: " << locationValue;
-        throw util::IllegalArgumentException(s.str());
+    switch(loc) {
+        case Location::EXTERIOR:
+            os << 'e';
+            break;
+        case Location::BOUNDARY:
+            os << 'b';
+            break;
+        case Location::INTERIOR:
+            os << 'i';
+            break;
+        case Location::UNDEF:
+            os << '-';
+            break;
     }
+    return os;
 }
 
 } // namespace geos::geom

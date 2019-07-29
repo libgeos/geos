@@ -123,7 +123,7 @@ public:
      * Inserts the specified coordinate at the specified position in this list.
      *
      * @param pos the position at which to insert
-     * @param coord the coordinate to insert
+     * @param c the coordinate to insert
      * @param allowRepeated if set to false, repeated coordinates are collapsed
      *
      * @return an iterator to the newly installed coordinate

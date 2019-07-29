@@ -23,6 +23,7 @@
 
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geom/Location.h>
 #include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/geomgraph/PlanarGraph.h> // for inline (GeometryGraph->PlanarGraph)
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
@@ -61,7 +62,7 @@ namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
-/// Computes the geometric overlay of two Geometry.
+/// \brief Computes the geometric overlay of two Geometry.
 //
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
@@ -70,7 +71,7 @@ class GEOS_DLL OverlayOp: public GeometryGraphOperation {
 
 public:
 
-    /// The spatial functions supported by this class.
+    ///  \brief The spatial functions supported by this class.
     //
     /// These operations implement various boolean combinations of
     /// the resultants of the overlay.
@@ -86,7 +87,7 @@ public:
         opSYMDIFFERENCE = 4
     };
 
-    /**
+    /** \brief
      * Computes an overlay operation for the given geometry arguments.
      *
      * @param geom0 the first geometry argument
@@ -100,13 +101,13 @@ public:
                                      OpCode opCode);
     //throw(TopologyException *);
 
-    /**
-     * Tests whether a point with a given topological {@link Label}
+    /** \brief
+     * Tests whether a point with a given topological [Label](@ref geomgraph::Label)
      * relative to two geometries is contained in
      * the result of overlaying the geometries using
      * a given overlay operation.
      *
-     * The method handles arguments of {@link Location#NONE} correctly
+     * The method handles arguments of [Location::UNDEF](@ref geom::Location::UNDEF) correctly
      *
      * @param label the topological label of the point
      * @param opCode the code for the overlay operation to test
@@ -114,13 +115,13 @@ public:
      */
     static bool isResultOfOp(const geomgraph::Label& label, OpCode opCode);
 
-    /// This method will handle arguments of Location.NULL correctly
+    /// \brief This method will handle arguments of Location.NULL correctly
     //
     /// @return true if the locations correspond to the opCode
     ///
-    static bool isResultOfOp(int loc0, int loc1, OpCode opCode);
+    static bool isResultOfOp(geom::Location loc0, geom::Location loc1, OpCode opCode);
 
-    /// Construct an OverlayOp with the given Geometry args.
+    /// \brief Construct an OverlayOp with the given Geometry args.
     //
     /// Ownership of passed args will remain to caller, and
     /// the OverlayOp won't change them in any way.
@@ -129,7 +130,7 @@ public:
 
     ~OverlayOp() override; // FIXME: virtual ?
 
-    /**
+    /** \brief
      * Gets the result of the overlay for a given overlay operation.
      *
      * Note: this method can be called once only.
@@ -141,7 +142,7 @@ public:
     geom::Geometry* getResultGeometry(OpCode overlayOpCode);
     // throw(TopologyException *);
 
-    /**
+    /** \brief
      * Gets the graph constructed to compute the overlay.
      *
      * @return the overlay graph
@@ -156,8 +157,8 @@ public:
      * This method is used to decide if a point node should be included
      * in the result or not.
      *
-     * @return true if the coord point is covered by a result Line
-     * or Area geometry
+     * @return `true` if the coord point is covered by a result Line
+     *         or Area geometry
      */
     bool isCoveredByLA(const geom::Coordinate& coord);
 
@@ -165,7 +166,7 @@ public:
      * This method is used to decide if an L edge should be included
      * in the result or not.
      *
-     * @return true if the coord point is covered by a result Area geometry
+     * @return `true` if the coord point is covered by a result Area geometry
      */
     bool isCoveredByA(const geom::Coordinate& coord);
 

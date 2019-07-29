@@ -22,6 +22,7 @@
 #define GEOS_GEOMGRAPH_LABEL_H
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 #include <geos/geomgraph/TopologyLocation.h>
 
 #include <geos/inline.h>
@@ -70,7 +71,7 @@ public:
     /** \brief
      * Construct a Label with a single location for both Geometries.
      */
-    Label(int onLoc);
+    Label(geom::Location onLoc);
 
     /** \brief
      * Construct a Label with the location specified
@@ -79,14 +80,14 @@ public:
      * Other geometry location will be set to
      * Location::UNDEF.
      */
-    Label(int geomIndex, int onLoc);
+    Label(int geomIndex, geom::Location onLoc);
 
     /** \brief
      * Construct a Label with On, Left and Right locations for both Geometries.
      *
      * Initialize the locations for both Geometries to the given values.
      */
-    Label(int onLoc, int leftLoc, int rightLoc);
+    Label(geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc);
 
     /// Copy ctor
     Label(const Label& l);
@@ -106,23 +107,23 @@ public:
      * Initialize the locations for the other Geometry to
      * Location::UNDEF
      */
-    Label(int geomIndex, int onLoc, int leftLoc, int rightLoc);
+    Label(int geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc);
 
     void flip();
 
-    int getLocation(int geomIndex, int posIndex) const;
+    geom::Location getLocation(int geomIndex, int posIndex) const;
 
-    int getLocation(int geomIndex) const;
+    geom::Location getLocation(int geomIndex) const;
 
-    void setLocation(int geomIndex, int posIndex, int location);
+    void setLocation(int geomIndex, int posIndex, geom::Location location);
 
-    void setLocation(int geomIndex, int location);
+    void setLocation(int geomIndex, geom::Location location);
 
-    void setAllLocations(int geomIndex, int location);
+    void setAllLocations(int geomIndex, geom::Location location);
 
-    void setAllLocationsIfNull(int geomIndex, int location);
+    void setAllLocationsIfNull(int geomIndex, geom::Location location);
 
-    void setAllLocationsIfNull(int location);
+    void setAllLocationsIfNull(geom::Location location);
 
     /** \brief
      * Merge this label with another one.
@@ -148,7 +149,7 @@ public:
 
     bool isEqualOnSide(const Label& lbl, int side) const;
 
-    bool allPositionsEqual(int geomIndex, int loc) const;
+    bool allPositionsEqual(int geomIndex, geom::Location loc) const;
 
     /** \brief
      * Converts one GeometryLocation to a Line location

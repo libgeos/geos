@@ -36,9 +36,9 @@ namespace geos {
 namespace index { // geos::index
 namespace chain { // geos::index::chain
 
-/**
+/** \brief
  * The action for the internal iterator for performing
- * overlap queries on a MonotoneChain
+ * overlap queries on a MonotoneChain.
  */
 class GEOS_DLL MonotoneChainOverlapAction {
 
@@ -55,9 +55,11 @@ public:
     virtual
     ~MonotoneChainOverlapAction() {}
 
-    /**
-     * This function can be overridden if the original chains are needed
+    /** \brief
+     * This function can be overridden if the original chains are needed.
      *
+     * @param mc1 a MonotoneChain
+     * @param mc2 a MonotoneChain
      * @param start1 the index of the start of the overlapping segment
      *               from mc1
      * @param start2 the index of the start of the overlapping segment
@@ -66,11 +68,12 @@ public:
     virtual void overlap(MonotoneChain& mc1, std::size_t start1,
                          MonotoneChain& mc2, std::size_t start2);
 
-    /**
+    /** \brief
      * This is a convenience function which can be overridden to
-     * obtain the actual line segments which overlap
-     * @param seg1
-     * @param seg2
+     * obtain the actual line segments which overlap.
+     *
+     * **param** `seg1`
+     * **param** `seg2`
      */
     virtual void
     overlap(const geom::LineSegment& /*seg1*/,

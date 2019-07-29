@@ -14,6 +14,7 @@
 #include <memory>
 
 using namespace geos::geom;
+using geos::geom::prep::PreparedGeometry;
 
 namespace tut {
 
@@ -22,15 +23,14 @@ namespace tut {
 //
 
 struct test_preparedgeometrytouches_data {
-    typedef std::unique_ptr<geos::geom::prep::PreparedGeometry> PrepGeomAutoPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
     geos::geom::GeometryFactory::Ptr factory;
     geos::io::WKTReader reader;
-    GeometryPtr g1;
-    GeometryPtr g2;
-    PreparedGeometryPtr pg1;
-    PreparedGeometryPtr pg2;
+    std::unique_ptr<geos::geom::Geometry> g1;
+    std::unique_ptr<geos::geom::Geometry> g2;
+    std::unique_ptr<PreparedGeometry> pg1;
+    std::unique_ptr<PreparedGeometry> pg2;
 
     test_preparedgeometrytouches_data()
         : factory(GeometryFactory::create())
@@ -40,13 +40,6 @@ struct test_preparedgeometrytouches_data {
         , pg1(nullptr)
         , pg2(nullptr)
     {}
-    ~test_preparedgeometrytouches_data()
-    {
-        prep::PreparedGeometryFactory::destroy(pg1);
-        prep::PreparedGeometryFactory::destroy(pg2);
-        factory->destroyGeometry(g1);
-        factory->destroyGeometry(g2);
-    }
 };
 
 typedef test_group<test_preparedgeometrytouches_data> group;
@@ -70,11 +63,11 @@ void object::test<1>
     g2 = reader.read(
              "POINT (0 0)"
          );
-    pg1 = prep::PreparedGeometryFactory::prepare(g1);
-    pg2 = prep::PreparedGeometryFactory::prepare(g2);
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+    pg2 = prep::PreparedGeometryFactory::prepare(g2.get());
 
-    ensure(!pg1->touches(g2));
-    ensure(!pg2->touches(g1));
+    ensure(!pg1->touches(g2.get()));
+    ensure(!pg2->touches(g1.get()));
 }
 
 // 2 - Line/Point do not touch if point is not on boundary
@@ -89,11 +82,11 @@ void object::test<2>
     g2 = reader.read(
              "POINT (1 1)"
          );
-    pg1 = prep::PreparedGeometryFactory::prepare(g1);
-    pg2 = prep::PreparedGeometryFactory::prepare(g2);
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+    pg2 = prep::PreparedGeometryFactory::prepare(g2.get());
 
-    ensure(!pg1->touches(g2));
-    ensure(!pg2->touches(g1));
+    ensure(!pg1->touches(g2.get()));
+    ensure(!pg2->touches(g1.get()));
 }
 
 // 3 - Line/Point touch
@@ -108,11 +101,11 @@ void object::test<3>
     g2 = reader.read(
              "POINT (0 2)"
          );
-    pg1 = prep::PreparedGeometryFactory::prepare(g1);
-    pg2 = prep::PreparedGeometryFactory::prepare(g2);
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+    pg2 = prep::PreparedGeometryFactory::prepare(g2.get());
 
-    ensure(pg1->touches(g2));
-    ensure(pg2->touches(g1));
+    ensure(pg1->touches(g2.get()));
+    ensure(pg2->touches(g1.get()));
 }
 
 // 4 - Line/Point touch (FP coordinates)
@@ -127,11 +120,11 @@ void object::test<4>
     g2 = reader.read(
              "POINT (-257704.820935236 574364.179187424)"
          );
-    pg1 = prep::PreparedGeometryFactory::prepare(g1);
-    pg2 = prep::PreparedGeometryFactory::prepare(g2);
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+    pg2 = prep::PreparedGeometryFactory::prepare(g2.get());
 
-    ensure(pg1->touches(g2));
-    ensure(pg2->touches(g1));
+    ensure(pg1->touches(g2.get()));
+    ensure(pg2->touches(g1.get()));
 }
 
 } // namespace tut

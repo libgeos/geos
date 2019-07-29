@@ -47,9 +47,8 @@ struct test_point_data {
         , reader_(factory_.get()), empty_point_(factory_->createPoint())
     {
         // Create non-empty Point
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("POINT(1.234 5.678)");
-        point_ = dynamic_cast<PointPtr>(geo);
+        auto geo = reader_.read("POINT(1.234 5.678)");
+        point_ = dynamic_cast<PointPtr>(geo.release());
     }
 
     ~test_point_data()
@@ -94,8 +93,9 @@ void object::test<2>
     ensure(!point->isEmpty());
 
     // currently the empty CoordinateArraySequence constructor
-    // produces a dimension 3 sequence.
-    ensure(point->getCoordinateDimension() == 3);
+    // produces a dimension 0 sequence. The dimension is then
+    // autodetected when the first point is inserted.
+    ensure(point->getCoordinateDimension() == 2);
 }
 
 // Test of user's constructor throwing IllegalArgumentException
@@ -171,10 +171,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr envelope = empty_point_->getEnvelope();
+    auto envelope = empty_point_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty Point
@@ -183,10 +182,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr boundary = empty_point_->getBoundary();
+    auto boundary = empty_point_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty Point
@@ -195,10 +193,9 @@ template<>
 void object::test<10>
 ()
 {
-    GeometryPtr hull = empty_point_->convexHull();
+    auto hull = empty_point_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty Point
@@ -298,10 +295,9 @@ template<>
 void object::test<21>
 ()
 {
-    GeometryPtr envelope = point_->getEnvelope();
+    auto envelope = point_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty Point
@@ -310,10 +306,9 @@ template<>
 void object::test<22>
 ()
 {
-    GeometryPtr boundary = point_->getBoundary();
+    auto boundary = point_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty Point
@@ -322,10 +317,9 @@ template<>
 void object::test<23>
 ()
 {
-    GeometryPtr hull = point_->convexHull();
+    auto hull = point_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty Point
@@ -409,15 +403,10 @@ template<>
 void object::test<32>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.234 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(1.234 5.678)");
+    auto p1 = reader_.read("POINT(1.234 5.678)");
+    auto p2 = reader_.read("POINT(1.234 5.678)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Point (1.23 5.67)
@@ -426,15 +415,10 @@ template<>
 void object::test<33>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.23 5.67)");
-    GeometryPtr p2 = reader_.read("POINT(1.23 5.67)");
+    auto p1 = reader_.read("POINT(1.23 5.67)");
+    auto p2 = reader_.read("POINT(1.23 5.67)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points (1.235 5.678) and (1.234 5.678)
@@ -443,15 +427,10 @@ template<>
 void object::test<34>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.235 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(1.234 5.678)");
+    auto p1 = reader_.read("POINT(1.235 5.678)");
+    auto p2 = reader_.read("POINT(1.234 5.678)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(!p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(!p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points (1.2334 5.678) and (1.2333 5.678)
@@ -460,15 +439,10 @@ template<>
 void object::test<35>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.2334 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(1.2333 5.678)");
+    auto p1 = reader_.read("POINT(1.2334 5.678)");
+    auto p2 = reader_.read("POINT(1.2333 5.678)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points (1.2334 5.678) and (1.2335 5.678)
@@ -477,15 +451,10 @@ template<>
 void object::test<36>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.2334 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(1.2335 5.678)");
+    auto p1 = reader_.read("POINT(1.2334 5.678)");
+    auto p2 = reader_.read("POINT(1.2335 5.678)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(!p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(!p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points (1.2324 5.678) and (1.2325 5.678)
@@ -494,15 +463,10 @@ template<>
 void object::test<37>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.2324 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(1.2325 5.678)");
+    auto p1 = reader_.read("POINT(1.2324 5.678)");
+    auto p2 = reader_.read("POINT(1.2325 5.678)");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(!p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(!p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points (1.2324 5.678) and (EMPTY)
@@ -511,15 +475,10 @@ template<>
 void object::test<38>
 ()
 {
-    GeometryPtr p1 = reader_.read("POINT(1.2324 5.678)");
-    GeometryPtr p2 = reader_.read("POINT EMPTY");
+    auto p1 = reader_.read("POINT(1.2324 5.678)");
+    auto p2 = reader_.read("POINT EMPTY");
 
-    // WARNING! If test fails, memory leaks occur.
-    ensure(!p1->equals(p2));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
+    ensure(!p1->equals(p2.get()));
 }
 
 // Test of equals() for non-empty Points with negative coordiantes
@@ -528,26 +487,19 @@ template<>
 void object::test<39>
 ()
 {
-    GeometryPtr pLo = reader_.read("POINT(-1.233 5.678)");
-    GeometryPtr pHi = reader_.read("POINT(-1.232 5.678)");
+    auto pLo = reader_.read("POINT(-1.233 5.678)");
+    auto pHi = reader_.read("POINT(-1.232 5.678)");
 
-    GeometryPtr p1 = reader_.read("POINT(-1.2326 5.678)");
-    GeometryPtr p2 = reader_.read("POINT(-1.2325 5.678)");
-    GeometryPtr p3 = reader_.read("POINT(-1.2324 5.678)");
+    auto p1 = reader_.read("POINT(-1.2326 5.678)");
+    auto p2 = reader_.read("POINT(-1.2325 5.678)");
+    auto p3 = reader_.read("POINT(-1.2324 5.678)");
 
-    ensure(!p1->equals(p2));
-    ensure(p3->equals(p2));
+    ensure(!p1->equals(p2.get()));
+    ensure(p3->equals(p2.get()));
 
-    ensure(p1->equals(pLo));
-    ensure(p2->equals(pHi));
-    ensure(p3->equals(pHi));
-
-    // FREE MEMORY
-    factory_->destroyGeometry(pLo);
-    factory_->destroyGeometry(pHi);
-    factory_->destroyGeometry(p1);
-    factory_->destroyGeometry(p2);
-    factory_->destroyGeometry(p3);
+    ensure(p1->equals(pLo.get()));
+    ensure(p2->equals(pHi.get()));
+    ensure(p3->equals(pHi.get()));
 }
 
 // Test of getCoordinateDimension() for 2d/3d.
@@ -556,17 +508,45 @@ template<>
 void object::test<40>
 ()
 {
-    GeometryPtr p = reader_.read("POINT(-1.233 5.678 1.0)");
+    auto p = reader_.read("POINT(-1.233 5.678 1.0)");
 
     ensure(p->getCoordinateDimension() == 3);
-
-    delete p;
 
     p = reader_.read("POINT(-1.233 5.678)");
 
     ensure(p->getCoordinateDimension() == 2);
+}
 
-    delete p;
+template<>
+template<>
+void object::test<41>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createPoint());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty Point
+template<>
+template<>
+void object::test<42>
+()
+{
+    ensure(empty_point_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_point_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty Point
+template<>
+template<>
+void object::test<43>
+()
+{
+    ensure(point_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!point_->isDimensionStrict(geos::geom::Dimension::A));
 }
 
 } // namespace tut

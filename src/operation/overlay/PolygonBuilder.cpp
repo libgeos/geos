@@ -339,7 +339,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing* testEr,
         }
 
         const CoordinateSequence* tsrcs = tryShellRing->getCoordinatesRO();
-        Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
+        const Coordinate& testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 
         bool isContained = false;
         if(tryShell.pipLocator->locate(&testPt) != Location::EXTERIOR) {

@@ -49,8 +49,6 @@ QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph* newGraph):
 
 QuadtreeNestedRingTester::~QuadtreeNestedRingTester()
 {
-    //delete rings;
-    //delete totalEnv;
     delete qt;
 }
 

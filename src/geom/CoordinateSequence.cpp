@@ -25,6 +25,7 @@
 #include <vector>
 #include <cassert>
 #include <iterator>
+#include <sstream>
 
 using namespace std;
 
@@ -60,7 +61,7 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
     }
     else {
         // FIXME: return NULL rather then empty coordinate array
-        return CoordinateArraySequenceFactory::instance()->create();
+        return CoordinateArraySequenceFactory::instance()->create().release();
     }
 }
 
@@ -85,19 +86,6 @@ CoordinateSequence::minCoordinate() const
     for(std::size_t i = 0; i < p_size; i++) {
         if(minCoord == nullptr || minCoord->compareTo(getAt(i)) > 0) {
             minCoord = &getAt(i);
-        }
-    }
-    return minCoord;
-}
-
-const Coordinate*
-CoordinateSequence::minCoordinate(CoordinateSequence* cl)
-{
-    const Coordinate* minCoord = nullptr;
-    const std::size_t p_size = cl->getSize();
-    for(std::size_t i = 0; i < p_size; i++) {
-        if(minCoord == nullptr || minCoord->compareTo(cl->getAt(i)) > 0) {
-            minCoord = &(cl->getAt(i));
         }
     }
     return minCoord;
@@ -157,7 +145,6 @@ CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
 void
 CoordinateSequence::reverse(CoordinateSequence* cl)
 {
-
     // FIXME: use a standard algorithm
     auto last = cl->size() - 1;
     auto mid = last / 2;
@@ -192,82 +179,6 @@ CoordinateSequence::equals(const CoordinateSequence* cl1,
     return true;
 }
 
-/*public*/
-void
-CoordinateSequence::add(const vector<Coordinate>* vc, bool allowRepeated)
-{
-    assert(vc);
-    for(size_t i = 0; i < vc->size(); ++i) {
-        add((*vc)[i], allowRepeated);
-    }
-}
-
-/*public*/
-void
-CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
-{
-    if(!allowRepeated) {
-        std::size_t npts = getSize();
-        if(npts >= 1) {
-            const Coordinate& last = getAt(npts - 1);
-            if(last.equals2D(c)) {
-                return;
-            }
-        }
-    }
-    add(c);
-}
-
-/* Here for backward compatibility */
-//void
-//CoordinateSequence::add(CoordinateSequence *cl, bool allowRepeated,
-//		bool direction)
-//{
-//	add(cl, allowRepeated, direction);
-//}
-
-/*public*/
-void
-CoordinateSequence::add(const CoordinateSequence* cl,
-                        bool allowRepeated, bool direction)
-{
-    // FIXME:  don't rely on negative values for 'j' (the reverse case)
-
-    const auto npts = cl->size();
-    if(direction) {
-        for(size_t i = 0; i < npts; ++i) {
-            add(cl->getAt(i), allowRepeated);
-        }
-    }
-    else {
-        for(auto j = npts; j > 0; --j) {
-            add(cl->getAt(j - 1), allowRepeated);
-        }
-    }
-}
-
-
-/*public static*/
-CoordinateSequence*
-CoordinateSequence::removeRepeatedPoints(const CoordinateSequence* cl)
-{
-#if PROFILE
-    static Profile* prof = profiler->get("CoordinateSequence::removeRepeatedPoints()");
-    prof->start();
-#endif
-    const vector<Coordinate>* v = cl->toVector();
-
-    vector<Coordinate>* nv = new vector<Coordinate>;
-    nv->reserve(v->size());
-    unique_copy(v->begin(), v->end(), back_inserter(*nv));
-    CoordinateSequence* ret = CoordinateArraySequenceFactory::instance()->create(nv);
-
-#if PROFILE
-    prof->stop();
-#endif
-    return ret;
-}
-
 void
 CoordinateSequence::expandEnvelope(Envelope& env) const
 {
@@ -291,6 +202,14 @@ operator<< (std::ostream& os, const CoordinateSequence& cs)
     os << ")";
 
     return os;
+}
+
+std::string
+CoordinateSequence::toString() const
+{
+    std::stringstream ss;
+    ss << *this;
+    return ss.str();
 }
 
 bool

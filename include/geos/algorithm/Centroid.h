@@ -36,44 +36,44 @@ class CoordinateSequence;
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
- * Computes the centroid of a {@link Geometry} of any dimension.
- * If the geometry is nomimally of higher dimension, but contains only components
- * having a lower effective dimension (i.e. zero length or area),
+/**\brief
+ * Computes the centroid of a [Geometry](@ref geom::Geometry) of any dimension.
+ *
+ * If the geometry is nomimally of higher dimension, but contains only
+ * components having a lower effective dimension (i.e. zero length or area),
  * the centroid will be computed appropriately.
  *
- * <h2>Algorithm</h2>
- * <ul>
- * <li><b>Dimension = 2</b> - Based on the usual algorithm for calculating
- * the centroid as a weighted sum of the centroids
- * of a decomposition of the area into (possibly overlapping) triangles.
- * The algorithm has been extended to handle holes and multi-polygons.
- * See <code>http://www.faqs.org/faqs/graphics/algorithms-faq/</code>
- * for further details of the basic approach.
- * <li><b>Dimension = 1</b> - Computes the average of the midpoints
- * of all line segments weighted by the segment length.
- * <li><b>Dimension = 0</b> - Compute the average coordinate over all points.
- * </ul>
- * If the input geometries are empty, a
- * <code>null</code> Coordinate is returned.
+ * ### Algorithm #
+ *
+ * - **Dimension = 2** - Based on the usual algorithm for calculating
+ *     the centroid as a weighted sum of the centroids
+ *     of a decomposition of the area into (possibly overlapping) triangles.
+ *     The algorithm has been extended to handle holes and multi-polygons.
+ *     See http://www.faqs.org/faqs/graphics/algorithms-faq/
+ *     for further details of the basic approach.
+ * - **Dimension = 1** - Computes the average of the midpoints
+ *     of all line segments weighted by the segment length.
+ * - **Dimension = 0** - Compute the average coordinate over all points.
+ *
+ * If the input geometries are empty, a `null` Coordinate is returned.
  *
  */
 class GEOS_DLL Centroid {
 
 public:
 
-    /**
+    /** \brief
      * Computes the centroid point of a geometry.
      *
      * @param geom the geometry to use
      * @param cent will be set to the centroid point, if any
      *
-     * @return true if a centroid could be computed,
-     *         false otherwise (empty geom)
+     * @return `true` if a centroid could be computed,
+     *         `false` otherwise (empty geom)
      */
     static bool getCentroid(const geom::Geometry& geom, geom::Coordinate& cent);
 
-    /**
+    /** \brief
      * Creates a new instance for computing the centroid of a geometry
      */
     Centroid(const geom::Geometry& geom)
@@ -85,13 +85,13 @@ public:
         add(geom);
     }
 
-    /**
+    /** \brief
      * Gets the computed centroid.
      *
      * @param cent will be set to the centroid point, if any
      *
-     * @return true if a centroid could be computed,
-     *         false otherwise (empty geom)
+     * @return `true` if a centroid could be computed,
+     *         `false` otherwise (empty geom)
      */
     bool getCentroid(geom::Coordinate& cent) const;
 

@@ -130,7 +130,7 @@ private:
     /** \brief
      * Tests whether a segment is in a section of a TaggedLineString
      *
-     * @param line
+     * @param parentLine
      * @param sectionIndex
      * @param seg
      * @return
@@ -144,9 +144,8 @@ private:
      * Remove the segs in the section of the line
      *
      * @param line
-     * @param pts
-     * @param sectionStartIndex
-     * @param sectionEndIndex
+     * @param start
+     * @param end
      */
     void remove(const TaggedLineString* line,
                 std::size_t start,

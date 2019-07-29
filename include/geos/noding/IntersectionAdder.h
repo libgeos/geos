@@ -46,13 +46,15 @@ class LineIntersector;
 namespace geos {
 namespace noding { // geos.noding
 
-/**
+/** \brief
  * Computes the intersections between two line segments in SegmentString
  * and adds them to each string.
- * The {@link SegmentIntersector} is passed to a {@link Noder}.
- * The {@link addIntersections} method is called whenever the {@link Noder}
- * detects that two SegmentStrings <i>might</i> intersect.
- * This class is an example of the <i>Strategy</i> pattern.
+ *
+ * The SegmentIntersector is passed to a Noder.
+ * The NodedSegmentString::addIntersections(algorithm::LineIntersector* li, size_t segmentIndex, size_t geomIndex)
+ * method is called whenever the Noder
+ * detects that two SegmentStrings *might* intersect.
+ * This class is an example of the *Strategy* pattern.
  *
  */
 class GEOS_DLL IntersectionAdder: public SegmentIntersector {
@@ -118,7 +120,7 @@ public:
     }
 
     /**
-     * @return the proper intersection point, or <code>NULL</code>
+     * @return the proper intersection point, or `NULL`
      *         if none was found
      */
     const geom::Coordinate*
@@ -133,13 +135,14 @@ public:
         return hasIntersectionVar;
     }
 
-    /**
+    /** \brief
      * A proper intersection is an intersection which is interior to
-     * at least two line segments.  Note that a proper intersection
-     * is not necessarily in the interior of the entire Geometry,
-     * since another edge may have an endpoint equal to the intersection,
-     * which according to SFS semantics can result in the point being
-     * on the Boundary of the Geometry.
+     * at least two line segments.
+     *
+     * Note that a proper intersection is not necessarily in the interior
+     * of the entire Geometry, since another edge may have an endpoint equal
+     * to the intersection, which according to SFS semantics can result in
+     * the point being on the Boundary of the Geometry.
      */
     bool
     hasProperIntersection()
@@ -147,10 +150,9 @@ public:
         return hasProper;
     }
 
-    /**
+    /** \brief
      * A proper interior intersection is a proper intersection which is
-     * <b>not</b> contained in the set of boundary nodes set for this
-     * SegmentIntersector.
+     * *not* contained in the set of boundary nodes set for this SegmentIntersector.
      */
     bool
     hasProperInteriorIntersection()
@@ -158,7 +160,7 @@ public:
         return hasProperInterior;
     }
 
-    /**
+    /** \brief
      * An interior intersection is an intersection which is
      * in the interior of some segment.
      */
@@ -169,11 +171,10 @@ public:
     }
 
 
-    /**
-     * This method is called by clients
-     * of the {@link SegmentIntersector} class to process
-     * intersections for two segments of the SegmentStrings being
-     * intersected.
+    /** \brief
+     * This method is called by clients of the SegmentIntersector class to
+     * process intersections for two segments of the SegmentStrings being intersected.
+     *
      * Note that some clients (such as MonotoneChains) may optimize away
      * this call for segment pairs which they have determined do not
      * intersect (e.g. by an disjoint envelope test).
@@ -189,8 +190,8 @@ public:
         return (i1 > i2 ? i1 - i2 : i2 - i1) == 1;
     }
 
-    /**
-     * Always process all intersections
+    /** \brief
+     * Always process all intersections.
      *
      * @return false always
      */

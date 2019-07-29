@@ -22,18 +22,15 @@
 #include <geos/export.h>
 
 #include <geos/geom/GeometryFilter.h> // for inheritance
+#include <geos/operation/distance/GeometryLocation.h>
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
 namespace geos {
 namespace geom {
 class Geometry;
-}
-namespace operation {
-namespace distance {
-class GeometryLocation;
-}
 }
 }
 
@@ -43,30 +40,28 @@ namespace operation { // geos::operation
 namespace distance { // geos::operation::distance
 
 /** \brief
- * A ConnectedElementPointFilter extracts a single point
- * from each connected element in a Geometry
- * (e.g. a polygon, linestring or point)
- * and returns them in a list. The elements of the list are
- * DistanceOp::GeometryLocation.
+ * A ConnectedElementPointFilter extracts a single point from each connected
+ * element in a Geometry (e.g. a polygon, linestring or point) and returns
+ * them in a list.
+ *
+ * The elements of the list are GeometryLocation.
  */
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:
 
-    std::vector<GeometryLocation*>* locations;
+    std::vector<std::unique_ptr<GeometryLocation>> locations;
+    ConnectedElementLocationFilter() = default;
 
 public:
-    /**
-     * Returns a list containing a point from each Polygon, LineString, and Point
-     * found inside the specified geometry. Thus, if the specified geometry is
-     * not a GeometryCollection, an empty list will be returned. The elements of the list
-     * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
+    /** \brief
+     * Returns a list containing a point from each Polygon, LineString, and
+     * Point found inside the specified geometry.
+     *
+     * Thus, if the specified geometry is not a GeometryCollection,
+     * an empty list will be returned. The elements of the list
+     * are [GeometryLocations](@ref operation::distance::GeometryLocation).
      */
-    static std::vector<GeometryLocation*>* getLocations(const geom::Geometry* geom);
-
-    ConnectedElementLocationFilter(std::vector<GeometryLocation*>* newLocations)
-        :
-        locations(newLocations)
-    {}
+    static std::vector<std::unique_ptr<GeometryLocation>> getLocations(const geom::Geometry* geom);
 
     void filter_ro(const geom::Geometry* geom) override;
     void filter_rw(geom::Geometry* geom) override;

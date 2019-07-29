@@ -98,7 +98,6 @@ IndexedNestedRingTester::isNonNested()
 IndexedNestedRingTester::~IndexedNestedRingTester()
 {
     delete index;
-    //delete totalEnv;
 }
 
 void

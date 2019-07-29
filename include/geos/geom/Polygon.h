@@ -25,8 +25,8 @@
 #include <string>
 #include <vector>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -39,7 +39,6 @@ namespace geom { // geos::geom
 class Coordinate;
 class CoordinateArraySequence;
 class CoordinateSequenceFilter;
-class LinearRing;
 class LineString;
 }
 }
@@ -62,7 +61,7 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class GEOS_DLL Polygon: public virtual Geometry, public Polygonal {
+class GEOS_DLL Polygon: public Geometry {
 
 public:
 
@@ -79,13 +78,13 @@ public:
      *
      * @return a clone of this instance
      */
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new Polygon(*this);
+        return std::unique_ptr<Geometry>(new Polygon(*this));
     }
 
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     size_t getNumPoints() const override;
 
@@ -104,18 +103,18 @@ public:
      * @return a lineal geometry (which may be empty)
      * @see Geometry#getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     bool isEmpty() const override;
 
     /// Returns the exterior ring (shell)
-    const LineString* getExteriorRing() const;
+    const LinearRing* getExteriorRing() const;
 
     /// Returns number of interior rings (hole)
     size_t getNumInteriorRing() const;
 
     /// Get nth interior ring (hole)
-    const LineString* getInteriorRingN(std::size_t n) const;
+    const LinearRing* getInteriorRingN(std::size_t n) const;
 
     std::string getGeometryType() const override;
     GeometryTypeId getGeometryTypeId() const override;
@@ -129,11 +128,11 @@ public:
     void apply_rw(GeometryComponentFilter* filter) override;
     void apply_ro(GeometryComponentFilter* filter) const override;
 
-    Geometry* convexHull() const override;
+    std::unique_ptr<Geometry> convexHull() const override;
 
     void normalize() override;
 
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
     int compareToSameClass(const Geometry* p) const override; //was protected
 
@@ -169,12 +168,19 @@ protected:
      *
      * Polygon will take ownership of Shell and Holes LinearRings
      */
-    Polygon(LinearRing* newShell, std::vector<Geometry*>* newHoles,
+    Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
             const GeometryFactory* newFactory);
 
-    LinearRing* shell;
+    Polygon(std::unique_ptr<LinearRing> && newShell,
+            const GeometryFactory& newFactory);
 
-    std::vector<Geometry*>* holes;  //Actually vector<LinearRing *>
+    Polygon(std::unique_ptr<LinearRing> && newShell,
+            std::vector<std::unique_ptr<LinearRing>> && newHoles,
+            const GeometryFactory& newFactory);
+
+    std::unique_ptr<LinearRing> shell;
+
+    std::vector<std::unique_ptr<LinearRing>> holes;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

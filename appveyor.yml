@@ -18,30 +18,30 @@ environment:
       BUILDER: CMake
       GENERATOR: "Visual Studio 15 2017 Win64"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - PLATFORM: x86
-      BUILDER: CMake
-      GENERATOR: "Visual Studio 15 2017"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - PLATFORM: x64
-      BUILDER: CMake
-      GENERATOR: "NMake Makefiles"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - PLATFORM: x86
-      BUILDER: CMake
-      GENERATOR: "NMake Makefiles"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - PLATFORM: x64
-      BUILDER: CMake
-      GENERATOR: "Visual Studio 14 2015 Win64"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    - PLATFORM: x86
-      BUILDER: CMake
-      GENERATOR: "Visual Studio 14 2015"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    - PLATFORM: x64
-      BUILDER: CMake
-      GENERATOR: "NMake Makefiles"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#    - PLATFORM: x86
+#      BUILDER: CMake
+#      GENERATOR: "Visual Studio 15 2017"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+#    - PLATFORM: x64
+#      BUILDER: CMake
+#      GENERATOR: "NMake Makefiles"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+#    - PLATFORM: x86
+#      BUILDER: CMake
+#      GENERATOR: "NMake Makefiles"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+#    - PLATFORM: x64
+#      BUILDER: CMake
+#      GENERATOR: "Visual Studio 14 2015 Win64"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#    - PLATFORM: x86
+#      BUILDER: CMake
+#      GENERATOR: "Visual Studio 14 2015"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+#    - PLATFORM: x64
+#      BUILDER: CMake
+#      GENERATOR: "NMake Makefiles"
+#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - PLATFORM: x86
       BUILDER: CMake
       GENERATOR: "NMake Makefiles"
@@ -60,7 +60,7 @@ init:
 
 before_build:
   - ps: 'Write-Host "Running $env:BUILDER with $env:GENERATOR" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
+  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
   - if "%BUILDER%"=="NMake" .\autogen.bat
 
 build_script:

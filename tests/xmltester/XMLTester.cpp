@@ -41,6 +41,8 @@
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/polygonize/BuildArea.h>
+#include <geos/operation/valid/MakeValid.h>
 #include <geos/precision/MinimumClearance.h>
 #include <geos/util.h>
 #include <geos/util/Interrupt.h>
@@ -96,7 +98,7 @@ namespace {
 std::unique_ptr<const PreparedGeometry>
 prepare(const geom::Geometry* g)
 {
-    return std::unique_ptr<const PreparedGeometry> (PreparedGeometryFactory::prepare(g));
+    return PreparedGeometryFactory::prepare(g);
 }
 
 // Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
@@ -132,6 +134,7 @@ java_math_round(double val)
 } // java_math_round
 
 
+#ifdef not_used
 // a utility function defining a very simple method to indent a line of text
 const char*
 getIndent(unsigned int numIndents)
@@ -145,7 +148,7 @@ getIndent(unsigned int numIndents)
 
     return &pINDENT[ LENGTH - numIndents ];
 }
-
+#endif
 
 
 // void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 )
@@ -364,24 +367,26 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << ": " << (success ? "ok." : "failed.");
         std::cout << " (" << std::setprecision(15) << java_math_round(prof.getTot() / 1000) << " ms)" << std::endl;
 
-        std::cout << "\tDescription: " << curr_case_desc << std::endl;
+        // print geometry etc for -v -v and above
+        if (verbose > 1) {
+            std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
+            if(gA) {
+                std::cout << "\tGeometry A: ";
+                printGeom(std::cout, gA);
+                std::cout << std::endl;
+            }
 
-        if(gA) {
-            std::cout << "\tGeometry A: ";
-            printGeom(std::cout, gA);
+            if(gB) {
+                std::cout << "\tGeometry B: ";
+                printGeom(std::cout, gB);
+                std::cout << std::endl;
+            }
+
+            std::cout << "\tExpected result: " << expected_result << std::endl;
+            std::cout << "\tObtained result: " << actual_result << std::endl;
             std::cout << std::endl;
         }
-
-        if(gB) {
-            std::cout << "\tGeometry B: ";
-            printGeom(std::cout, gB);
-            std::cout << std::endl;
-        }
-
-        std::cout << "\tExpected result: " << expected_result << std::endl;
-        std::cout << "\tObtained result: " << actual_result << std::endl;
-        std::cout << std::endl;
     }
 }
 
@@ -587,7 +592,7 @@ XMLTester::parseGeometry(const std::string& in, const char* label)
     while(is.get(first_char) && std::isspace(first_char));
     is.unget();
 
-    geom::Geometry* ret;
+    std::unique_ptr<geom::Geometry> ret;
 
     switch(first_char) {
     case '0':
@@ -614,12 +619,12 @@ XMLTester::parseGeometry(const std::string& in, const char* label)
     }
 
     if(testValidInput) {
-        testValid(ret, std::string(label));
+        testValid(ret.get(), std::string(label));
     }
 
     //ret->normalize();
 
-    return ret;
+    return ret.release();
 }
 
 std::string
@@ -933,10 +938,12 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "union") {
             GeomPtr gRes(parseGeometry(opRes, "expected"));
 
+            profile.start();
+
             GeomPtr gRealRes;
             if(gB) {
 #ifndef USE_BINARYOP
-                gRealRes.reset(gA->Union(gB));
+                gRealRes = gA->Union(gB);
 #else
                 gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
 #endif
@@ -944,6 +951,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             else {
                 gRealRes = gA->Union();
             }
+
+            profile.stop();
 
             success = checkOverlaySuccess(*gRes, *gRealRes);
 
@@ -1501,12 +1510,11 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             plgnzr.add(gA);
 
 
-            std::vector<geos::geom::Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             std::vector<geom::Geometry*>* newgeoms = new std::vector<geom::Geometry*>;
             for(unsigned int i = 0; i < polys->size(); i++) {
-                newgeoms->push_back((*polys)[i]);
+                newgeoms->push_back((*polys)[i].release());
             }
-            delete polys;
 
             GeomPtr gRealRes(factory->createGeometryCollection(newgeoms));
             gRealRes->normalize();
@@ -1746,6 +1754,58 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             success = lineE.get()->equalsExact(lineO.get(), tol) ? 1 : 0;
         }
 
+        else if (opName == "buildarea")
+        {
+            GeomPtr gExpected(parseGeometry(opRes, "expected"));
+            gExpected->normalize();
+
+            auto gGot = BuildArea().build(gA);
+            if( gGot )
+            {
+                GeomPtr gRealRes(gGot.release());
+                gRealRes->normalize();
+
+                if (gExpected->equals(gRealRes.get())) success=1;
+
+                actual_result=printGeom(gRealRes.get());
+                expected_result=printGeom(gExpected.get());
+                if( actual_result == expected_result ) success=1;
+
+                if ( testValidOutput )
+                    success &= int(testValid(gRealRes.get(), "result"));
+            }
+            else
+            {
+                success = false;
+            }
+        }
+
+        else if (opName == "makevalid")
+        {
+            GeomPtr gExpected(parseGeometry(opRes, "expected"));
+            gExpected->normalize();
+
+            auto gGot = geos::operation::valid::MakeValid().build(gA);
+            if( gGot )
+            {
+                GeomPtr gRealRes(gGot.release());
+                gRealRes->normalize();
+
+                if (gExpected->equals(gRealRes.get())) success=1;
+
+                actual_result=printGeom(gRealRes.get());
+                expected_result=printGeom(gExpected.get());
+                if( actual_result == expected_result ) success=1;
+
+                if ( testValidOutput )
+                    success &= int(testValid(gRealRes.get(), "result"));
+            }
+            else
+            {
+                success = false;
+            }
+        }
+
         else {
             std::cerr << *curr_file << ":";
             std::cerr << " case" << caseCount << ":";
@@ -1776,7 +1836,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         ++failed;
     }
 
-    if((!success && verbose) || verbose > 1) {
+    if((!success && verbose) || verbose > 0) {
         printTest(!!success, expected_result, actual_result, profile);
     }
 

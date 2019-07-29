@@ -104,11 +104,12 @@ geos_unit_SOURCES = \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
+	operation/distance/IndexedFacetDistanceTest.cpp \
 	operation/intersection/RectangleIntersectionTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
-    operation/overlay/OverlayOpUnionTest.cpp \
+	operation/overlay/OverlayOpUnionTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
@@ -119,6 +120,7 @@ geos_unit_SOURCES = \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/union/UnaryUnionOpTest.cpp \
 	operation/valid/IsValidTest.cpp \
+	operation/valid/RepeatedPointRemoverTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \
@@ -133,6 +135,7 @@ geos_unit_SOURCES = \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSClipByRectTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSCoverageUnionTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
@@ -159,7 +162,7 @@ geos_unit_SOURCES = \
 	capi/GEOSUserDataTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPointOnSurfaceTest.cpp \
-	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
+	capi/GEOSPolygonizeTest.cpp \
 	capi/GEOSBufferTest.cpp \
 	capi/GEOSOffsetCurveTest.cpp \
 	capi/GEOSGeom_create.cpp \
@@ -176,7 +179,9 @@ geos_unit_SOURCES = \
 	capi/GEOSUnaryUnionTest.cpp \
 	capi/GEOSisValidDetailTest.cpp \
 	capi/GEOSisClosedTest.cpp \
-	capi/GEOSInterpolateTest.cpp
+	capi/GEOSInterpolateTest.cpp \
+	capi/GEOSBuildArea.cpp \
+	capi/GEOSMakeValid.cpp
 
 noinst_HEADERS = \
 	utility.h

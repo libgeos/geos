@@ -17,6 +17,7 @@
 #define GEOS_GEOM_UTIL_GEOMETRYEDITOROPERATION_H
 
 #include <geos/export.h>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -50,8 +51,8 @@ public:
      *
      * @return a new Geometry which is a modification of the input Geometry
      */
-    virtual Geometry* edit(const Geometry* geometry,
-                           const GeometryFactory* factory) = 0;
+    virtual std::unique_ptr<Geometry> edit(const Geometry* geometry,
+                                           const GeometryFactory* factory) = 0;
 
     virtual
     ~GeometryEditorOperation() {}

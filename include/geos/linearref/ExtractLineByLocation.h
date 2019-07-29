@@ -27,15 +27,15 @@
 namespace geos {
 namespace linearref { // geos::linearref
 
-/**
- * Extracts the subline of a linear {@link Geometry} between
+/** \brief
+ * Extracts the subline of a linear [Geometry](@ref geom::Geometry) between
  * two {@link LinearLocation}s on the line.
  */
 class ExtractLineByLocation {
 
 private:
     const geom::Geometry* line;
-    geom::Geometry* reverse(const geom::Geometry* linear);
+    std::unique_ptr<geom::Geometry> reverse(const geom::Geometry* linear);
 
     /**
      * Assumes input is valid (e.g. start <= end)
@@ -44,7 +44,7 @@ private:
      * @param end
      * @return a linear geometry
      */
-    geom::LineString* computeLine(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::LineString> computeLine(const LinearLocation& start, const LinearLocation& end);
 
     /**
      * Assumes input is valid (e.g. start <= end)
@@ -53,12 +53,13 @@ private:
      * @param end
      * @return a linear geometry
      */
-    geom::Geometry* computeLinear(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::Geometry> computeLinear(const LinearLocation& start, const LinearLocation& end);
 
 public:
-    /**
-     * Computes the subline of a {@link LineString} between
-     * two {@link LineStringLocation}s on the line.
+    /** \brief
+     * Computes the subline of a [LineString](@ref geom::LineString) between
+     * two {@link LinearLocation}s on the line.
+     *
      * If the start location is after the end location,
      * the computed geometry is reversed.
      *
@@ -67,19 +68,20 @@ public:
      * @param end the end location
      * @return the extracted subline
      */
-    static geom::Geometry* extract(const geom::Geometry* line, const LinearLocation& start, const LinearLocation& end);
+    static std::unique_ptr<geom::Geometry> extract(const geom::Geometry* line, const LinearLocation& start, const LinearLocation& end);
 
     ExtractLineByLocation(const geom::Geometry* line);
 
-    /**
+    /** \brief
      * Extracts a subline of the input.
-     * If <code>end < start</code> the linear geometry computed will be reversed.
+     *
+     * If `end < start` the linear geometry computed will be reversed.
      *
      * @param start the start location
      * @param end the end location
      * @return a linear geometry
      */
-    geom::Geometry* extract(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::Geometry> extract(const LinearLocation& start, const LinearLocation& end);
 
 };
 }

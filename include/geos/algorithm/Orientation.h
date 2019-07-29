@@ -26,20 +26,20 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
-* Functions to compute the orientation of basic geometric structures
-* including point triplets (triangles) and rings.
-* Orientation is a fundamental property of planar geometries
-* (and more generally geometry on two-dimensional manifolds).
-*
-* Orientation is notoriously subject to numerical precision errors
-* in the case of collinear or nearly collinear points.
-* JTS uses extended-precision arithmetic to increase
-* the robustness of the computation.
-*
-* @author Martin Davis
-*
-*/
+/** \brief
+ * Functions to compute the orientation of basic geometric structures
+ * including point triplets (triangles) and rings.
+ *
+ * Orientation is a fundamental property of planar geometries
+ * (and more generally geometry on two-dimensional manifolds).
+ *
+ * Orientation is notoriously subject to numerical precision errors
+ * in the case of collinear or nearly collinear points.
+ * JTS uses extended-precision arithmetic to increase
+ * the robustness of the computation.
+ *
+ * @author Martin Davis
+ */
 class GEOS_DLL Orientation {
 public:
 
@@ -53,36 +53,36 @@ public:
         STRAIGHT = 0
     };
 
-    /*
-    * Returns the orientation index of the direction of the point q relative to
-    * a directed infinite line specified by p1-p2.
-    * The index indicates whether the point lies to the
-    * {@link #Orientation::LEFT} or {@link #Orientation::RIGHT}
-    * of the line, or lies on it {@link #Orientation::COLLINEAR}.
-    * The index also indicates the orientation of the triangle formed
-    * by the three points
-    * ( {@link #Orientation::COUNTERCLOCKWISE},
-    * {@link #Orientation::CLOCKWISE}, or {@link #Orientation::STRAIGHT} )
+    /** \brief
+     * Returns the orientation index of the direction of the point q relative to
+     * a directed infinite line specified by p1-p2.
+     *
+     * The index indicates whether the point lies to the
+     * `Orientation::LEFT` or `Orientation::RIGHT`
+     * of the line, or lies on it `Orientation::COLLINEAR`.
+     * The index also indicates the orientation of the triangle formed
+     * by the three points
+     * ( `Orientation::COUNTERCLOCKWISE`,
+     * `Orientation::CLOCKWISE`, or `Orientation::STRAIGHT` )
     */
     static int index(const geom::Coordinate& p1, const geom::Coordinate& p2,
                      const geom::Coordinate& q);
 
-    /**
-    * Computes whether a ring defined by an array of {@link Coordinate}s is
-    * oriented counter-clockwise.
-    *
-    * - The list of points is assumed to have the first and last points equal.
-    * - This will handle coordinate lists which contain repeated points.
-    *
-    * This algorithm is *only<* guaranteed to work with valid rings. If the
-    * ring is invalid (e.g. self-crosses or touches), the computed result may not
-    * be correct.
-    *
-    * @param ring
-    *          an array of Coordinates forming a ring
-    * @return true if the ring is oriented counter-clockwise.
-    * @throws IllegalArgumentException
-    *           if there are too few points to determine orientation (&lt; 4)
+    /** \brief
+     * Computes whether a ring defined by an array of
+     * [Coordinates](@ref geom::Coordinate) is oriented counter-clockwise.
+     *
+     * - The list of points is assumed to have the first and last points equal.
+     * - This will handle coordinate lists which contain repeated points.
+     *
+     * This algorithm is *only* guaranteed to work with valid rings. If the
+     * ring is invalid (e.g. self-crosses or touches), the computed result may not
+     * be correct.
+     *
+     * @param ring an array of Coordinates forming a ring
+     * @return `true` if the ring is oriented counter-clockwise.
+     * @throws IllegalArgumentException
+     *           if there are too few points to determine orientation (&lt; 4)
     */
     static bool isCCW(const geom::CoordinateSequence* ring);
 

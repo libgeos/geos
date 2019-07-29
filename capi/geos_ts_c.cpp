@@ -63,14 +63,18 @@
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/operation/union/CoverageUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/valid/MakeValid.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
+#include <geos/util.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
@@ -107,7 +111,6 @@
 #define GEOSWKBWriter_t geos::io::WKBWriter
 
 #include "geos_c.h"
-#include "../geos_revision.h"
 
 // Intentional, to allow non-standard C elements like C99 functions to be
 // imported through C++ headers of C library, like <cmath>.
@@ -759,15 +762,12 @@ extern "C" {
         try {
             using geos::geom::IntersectionMatrix;
 
-            IntersectionMatrix* im = g1->relate(g2);
-            if(0 == im) {
+            auto im = g1->relate(g2);
+            if(im == nullptr) {
                 return 0;
             }
 
             char* result = gstrdup(im->toString());
-
-            delete im;
-            im = 0;
 
             return result;
         }
@@ -799,7 +799,7 @@ extern "C" {
             using geos::geom::IntersectionMatrix;
             using geos::algorithm::BoundaryNodeRule;
 
-            IntersectionMatrix* im;
+            std::unique_ptr<IntersectionMatrix> im;
             switch(bnr) {
             case GEOSRELATE_BNR_MOD2: /* same as OGC */
                 im = RelateOp::relate(g1, g2,
@@ -828,9 +828,6 @@ extern "C" {
             }
 
             char* result = gstrdup(im->toString());
-
-            delete im;
-            im = 0;
 
             return result;
         }
@@ -1297,7 +1294,7 @@ extern "C" {
             if(g1->isEmpty() || g2->isEmpty()) {
                 return 0;
             }
-            return geos::operation::distance::DistanceOp::nearestPoints(g1, g2);
+            return geos::operation::distance::DistanceOp::nearestPoints(g1, g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1327,8 +1324,8 @@ extern "C" {
             const std::string wktstring(wkt);
             WKTReader r(static_cast<GeometryFactory const*>(handle->geomFactory));
 
-            Geometry* g = r.read(wktstring);
-            return g;
+            auto g = r.read(wktstring);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1430,8 +1427,8 @@ extern "C" {
             std::istringstream is(std::ios_base::binary);
             is.str(wkbstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
-            Geometry* g = r.read(is);
-            return g;
+            auto g = r.read(is);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1504,8 +1501,8 @@ extern "C" {
             is.str(hexstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            Geometry* g = r.readHEX(is);
-            return g;
+            auto g = r.readHEX(is);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1680,7 +1677,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->getEnvelope();
+            Geometry* g3 = g1->getEnvelope().release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -1707,7 +1704,7 @@ extern "C" {
         }
 
         try {
-            return g1->intersection(g2);
+            return g1->intersection(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1733,7 +1730,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->buffer(width, quadrantsegments);
+            Geometry* g3 = g1->buffer(width, quadrantsegments).release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -1901,7 +1898,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->convexHull();
+            Geometry* g3 = g1->convexHull().release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -2044,7 +2041,7 @@ extern "C" {
         }
 
         try {
-            return g1->difference(g2);
+            return g1->difference(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2070,7 +2067,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->getBoundary();
+            Geometry* g3 = g1->getBoundary().release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -2097,7 +2094,7 @@ extern "C" {
         }
 
         try {
-            return g1->symDifference(g2);
+            return g1->symDifference(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2124,16 +2121,42 @@ extern "C" {
         }
 
         try {
-            return g1->Union(g2);
+            return g1->Union(g2).release();
         }
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSUnion_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
 #endif // VERBOSE_EXCEPTIONS
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return NULL;
+    }
+
+    Geometry*
+    GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(0 == extHandle) {
+            return NULL;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return NULL;
+        }
+
+        try {
+            return geos::operation::geounion::CoverageUnion::Union(g).release();
+        }
+        catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
@@ -2163,7 +2186,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSUnaryUnion_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2197,7 +2220,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSNode_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2258,13 +2281,13 @@ extern "C" {
         }
 
         try {
-            Geometry* ret = g1->getInteriorPoint();
-            if(! ret) {
+            auto ret = g1->getInteriorPoint();
+            if(ret == nullptr) {
                 const GeometryFactory* gf = handle->geomFactory;
                 // return an empty point
                 return gf->createPoint();
             }
-            return ret;
+            return ret.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2299,7 +2322,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSClipByRect with following inputs:" << std::endl;
+            s << "Exception on GEOSClipByRect_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2960,7 +2983,7 @@ extern "C" {
         }
 
         try {
-            Geometry* ret = g->getCentroid();
+            Geometry* ret = g->getCentroid().release();
             if(0 == ret) {
                 const GeometryFactory* gf = handle->geomFactory;
                 return gf->createPoint();
@@ -3115,7 +3138,7 @@ extern "C" {
             handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-            std::vector<Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             assert(0 != polys);
 
 #if GEOS_DEBUG
@@ -3134,9 +3157,8 @@ extern "C" {
             std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
 
             for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i];
+                (*polyvec)[i] = (*polys)[i].release();
             }
-            delete polys;
             polys = 0;
 
             const GeometryFactory* gf = handle->geomFactory;
@@ -3144,6 +3166,115 @@ extern "C" {
             // The below takes ownership of the passed vector,
             // so we must *not* delete it
             out = gf->createGeometryCollection(polyvec);
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return out;
+    }
+
+    Geometry*
+    GEOSPolygonize_valid_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
+    {
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        Geometry* out = 0;
+
+        try {
+            // Polygonize
+            using geos::operation::polygonize::Polygonizer;
+            Polygonizer plgnzr(true);
+            for(std::size_t i = 0; i < ngeoms; ++i) {
+                plgnzr.add(g[i]);
+            }
+
+            auto polys = plgnzr.getPolygons();
+            if (polys->empty()) {
+                out = handle->geomFactory->createGeometryCollection();
+            } else if (polys->size() == 1) {
+                out = (*polys)[0].release();
+            } else {
+                auto geoms = new std::vector<Geometry *>(polys->size());
+                for (size_t i = 0; i < polys->size(); i++) {
+                    (*geoms)[i] = (*polys)[i].release();
+                }
+
+                out = handle->geomFactory->createMultiPolygon(geoms);
+            }
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return out;
+    }
+
+
+    Geometry*
+    GEOSBuildArea_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(nullptr == extHandle) {
+            return nullptr;
+        }
+
+        GEOSContextHandleInternal_t* handle = nullptr;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return nullptr;
+        }
+
+        Geometry* out = nullptr;
+
+        try {
+            using geos::operation::polygonize::BuildArea;
+            BuildArea builder;
+            out = builder.build(g).release();
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return out;
+    }
+
+    Geometry*
+    GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(nullptr == extHandle) {
+            return nullptr;
+        }
+
+        GEOSContextHandleInternal_t* handle = nullptr;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return nullptr;
+        }
+
+        Geometry* out = nullptr;
+
+        try {
+            // BuildArea
+            using geos::operation::valid::MakeValid;
+            MakeValid makeValid;
+            out = makeValid.build(g).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3196,7 +3327,7 @@ extern "C" {
             std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
 
             for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                (*linevec)[i] = lines[i]->clone();
+                (*linevec)[i] = lines[i]->clone().release();
             }
 
             const GeometryFactory* gf = handle->geomFactory;
@@ -3247,7 +3378,7 @@ extern "C" {
                 const std::vector<const LineString*>& lines = plgnzr.getCutEdges();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3260,7 +3391,7 @@ extern "C" {
                 const std::vector<const LineString*>& lines = plgnzr.getDangles();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3273,7 +3404,7 @@ extern "C" {
                 const std::vector<LineString*>& lines = plgnzr.getInvalidRingLines();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3281,12 +3412,11 @@ extern "C" {
                 *invalid = gf->createGeometryCollection(linevec);
             }
 
-            std::vector<Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
             for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i];
+                (*polyvec)[i] = (*polys)[i].release();
             }
-            delete polys;
 
             return gf->createGeometryCollection(polyvec);
 
@@ -3367,7 +3497,7 @@ extern "C" {
         }
 
         try {
-            return g->reverse();
+            return g->reverse().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3438,7 +3568,7 @@ extern "C" {
     const char* GEOSversion()
     {
         static char version[256];
-        sprintf(version, "%s " GEOS_REVISION, GEOS_CAPI_VERSION);
+        sprintf(version, "%s ", GEOS_CAPI_VERSION);
         return version;
     }
 
@@ -3563,7 +3693,7 @@ extern "C" {
 
         try {
             const GeometryFactory* gf = handle->geomFactory;
-            return gf->getCoordinateSequenceFactory()->create(size, dims);
+            return gf->getCoordinateSequenceFactory()->create(size, dims).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3638,7 +3768,7 @@ extern "C" {
         }
 
         try {
-            return cs->clone();
+            return cs->clone().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4052,17 +4182,24 @@ extern "C" {
         try {
             using geos::geom::LinearRing;
 
-            std::vector<Geometry*>* vholes = new std::vector<Geometry*>(holes, holes + nholes);
+            auto vholes = geos::detail::make_unique<std::vector<LinearRing*>>(nholes);
+
+            for (size_t i = 0; i < nholes; i++) {
+                (*vholes)[i] = dynamic_cast<LinearRing*>(holes[i]);
+                if ((*vholes)[i] == nullptr) {
+                    handle->ERROR_MESSAGE("Hole is not a LinearRing");
+                    return NULL;
+                }
+            }
 
             LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
             if(! nshell) {
                 handle->ERROR_MESSAGE("Shell is not a LinearRing");
-                delete vholes;
                 return NULL;
             }
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createPolygon(nshell, vholes);
+            return gf->createPolygon(nshell, vholes.release());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4090,7 +4227,7 @@ extern "C" {
         }
 
         try {
-            return g->clone();
+            return g->clone().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4124,7 +4261,7 @@ extern "C" {
             const PrecisionModel* pm = g->getPrecisionModel();
             double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             std::unique_ptr<PrecisionModel> newpm;
-            if(gridSize) {
+            if(gridSize != 0) {
                 newpm.reset(new PrecisionModel(1.0 / gridSize));
             }
             else {
@@ -4133,7 +4270,7 @@ extern "C" {
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(newpm.get(), g->getSRID());
             Geometry* ret;
-            if(gridSize && cursize != gridSize) {
+            if(gridSize != 0 && cursize != gridSize) {
                 // We need to snap the geometry
                 GeometryPrecisionReducer reducer(*gf);
                 reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
@@ -4501,8 +4638,7 @@ extern "C" {
 
         try {
             const std::string wktstring(wkt);
-            Geometry* g = reader->read(wktstring);
-            return g;
+            return reader->read(wktstring).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4813,8 +4949,7 @@ extern "C" {
             membuf mb((char*)wkb, size);
             istream is(&mb);
 
-            Geometry* g = reader->read(is);
-            return g;
+            return reader->read(is).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4848,8 +4983,7 @@ extern "C" {
             is.str(hexstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            Geometry* g = reader->readHEX(is);
-            return g;
+            return reader->readHEX(is).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -5171,7 +5305,7 @@ extern "C" {
         const geos::geom::prep::PreparedGeometry* prep = 0;
 
         try {
-            prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
+            prep = geos::geom::prep::PreparedGeometryFactory::prepare(g).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

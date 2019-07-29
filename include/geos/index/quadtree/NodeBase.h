@@ -93,7 +93,7 @@ public:
     /**
      * Removes a single item from this subtree.
      *
-     * @param searchEnv the envelope containing the item
+     * @param itemEnv the envelope containing the item
      * @param item the item to remove
      * @return <code>true</code> if the item was found and removed
      */

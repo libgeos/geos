@@ -71,7 +71,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 
             // only get linework for polygonal components
             if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary();
+                lineGeom = gComp->getBoundary().release();
                 lineGeoms->push_back(lineGeom);
             }
         }
@@ -101,10 +101,10 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
             const Geometry* gComp = g.getGeometryN(i);
             Geometry* lineGeom;
             if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary();
+                lineGeom = gComp->getBoundary().release();
             }
             else {
-                lineGeom = gComp->clone();
+                lineGeom = gComp->clone().release();
             }
             lineGeoms->push_back(lineGeom);
         }
@@ -123,7 +123,7 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 }
 
 /* public */
-Location::Value
+Location
 FuzzyPointLocator::getLocation(const Coordinate& pt)
 {
     unique_ptr<Geometry> point(g.getFactory()->createPoint(pt));
@@ -138,10 +138,7 @@ FuzzyPointLocator::getLocation(const Coordinate& pt)
 
     // now we know point must be clearly inside or outside geometry,
     // so return actual location value
-
-    // (the static_cast is needed because PointLocator doesn't cleanly
-    // return a Location::Value - it should !!)
-    return static_cast<Location::Value>(ptLocator.locate(pt, &g));
+    return ptLocator.locate(pt, &g);
 }
 
 } // namespace geos.operation.overlay.validate

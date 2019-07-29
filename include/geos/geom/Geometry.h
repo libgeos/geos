@@ -36,7 +36,9 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
+#include <geos/geom/IntersectionMatrix.h>
 
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <vector>
@@ -58,7 +60,6 @@ class CoordinateSequenceFilter;
 class GeometryComponentFilter;
 class GeometryFactory;
 class GeometryFilter;
-class IntersectionMatrix;
 class PrecisionModel;
 class Point;
 }
@@ -200,7 +201,7 @@ public:
     using Ptr = std::unique_ptr<Geometry> ;
 
     /// Make a deep-copy of this Geometry
-    virtual Geometry* clone() const = 0;
+    virtual std::unique_ptr<Geometry> clone() const = 0;
 
     /// Destroy Geometry and all components
     virtual ~Geometry();
@@ -250,20 +251,15 @@ public:
         return _userData;
     }
 
-    /*
-     * \brief
-     * Returns the ID of the Spatial Reference System used by the
-     * <code>Geometry</code>.
+    /** \brief
+     * Returns the ID of the Spatial Reference System used by the Geometry.
      *
      * GEOS supports Spatial Reference System information in the simple way
      * defined in the SFS. A Spatial Reference System ID (SRID) is present
-     * in each <code>Geometry</code> object. <code>Geometry</code>
-     * provides basic accessor operations for this field, but no others.
-     * The SRID is represented as an integer.
+     * in each Geometry object. Geometry provides basic accessor operations
+     * for this field, but no others. The SRID is represented as an integer.
      *
-     * @return the ID of the coordinate space in which the
-     * <code>Geometry</code> is defined.
-     *
+     * @return the ID of the coordinate space in which the Geometry is defined.
      */
     virtual int
     getSRID() const
@@ -271,9 +267,8 @@ public:
         return SRID;
     }
 
-    /*
-     * Sets the ID of the Spatial Reference System used by the
-     * <code>Geometry</code>.
+    /** \brief
+     * Sets the ID of the Spatial Reference System used by the Geometry.
      */
     virtual void
     setSRID(int newSRID)
@@ -287,10 +282,7 @@ public:
      */
     const PrecisionModel* getPrecisionModel() const;
 
-    /// \brief
-    /// Returns a vertex of this Geometry,
-    /// or NULL if this is the empty geometry
-    ///
+    /// Returns a vertex of this Geometry, or NULL if this is the empty geometry.
     virtual const Coordinate* getCoordinate() const = 0; //Abstract
 
     /**
@@ -298,7 +290,7 @@ public:
      * Returns this Geometry vertices.
      * Caller takes ownership of the returned object.
      */
-    virtual CoordinateSequence* getCoordinates() const = 0; //Abstract
+    virtual std::unique_ptr<CoordinateSequence> getCoordinates() const = 0; //Abstract
 
     /// Returns the count of this Geometrys vertices.
     virtual std::size_t getNumPoints() const = 0; //Abstract
@@ -320,7 +312,7 @@ public:
         return 1;
     }
 
-    /// Returns a pointer to the nth Geometry in this collection
+    /// \brief Returns a pointer to the nth Geometry in this collection
     /// (or self if this is not a collection)
     virtual const Geometry*
     getGeometryN(std::size_t /*n*/) const
@@ -352,6 +344,23 @@ public:
     /// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
     virtual Dimension::DimensionType getDimension() const = 0; //Abstract
 
+    /// Checks whether this Geometry consists only of components having dimension d.
+    virtual bool isDimensionStrict(Dimension::DimensionType d) const {
+        return d == getDimension();
+    }
+
+    bool isPuntal() const {
+        return isDimensionStrict(Dimension::P);
+    }
+
+    bool isLineal() const {
+        return isDimensionStrict(Dimension::L);
+    }
+
+    bool isPolygonal() const {
+        return isDimensionStrict(Dimension::A);
+    }
+
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
     virtual int getCoordinateDimension() const = 0; //Abstract
 
@@ -371,13 +380,13 @@ public:
      *          of this <code>Geometry</code>.
      *          Ownershipof the returned object transferred to caller.
      */
-    virtual Geometry* getBoundary() const = 0; //Abstract
+    virtual std::unique_ptr<Geometry> getBoundary() const = 0; //Abstract
 
     /// Returns the dimension of this Geometrys inherent boundary.
     virtual int getBoundaryDimension() const = 0; //Abstract
 
     /// Returns this Geometrys bounding box.
-    virtual Geometry* getEnvelope() const;
+    virtual std::unique_ptr<Geometry> getEnvelope() const;
 
     /** \brief
      * Returns the minimum and maximum x and y values in this Geometry,
@@ -396,7 +405,7 @@ public:
      *  - <code>! g.intersects(this)</code>
      *    (<code>disjoint</code> is the inverse of <code>intersects</code>)
      *
-     * @param  g  the Geometry with which to compare this Geometry
+     * @param  other  the Geometry with which to compare this Geometry
      * @return true if the two <code>Geometry</code>s are disjoint
      *
      * @see Geometry::intersects
@@ -466,7 +475,7 @@ public:
      * @throws util::IllegalArgumentException if either arg is a collection
      *
      */
-    virtual bool relate(const Geometry* g,
+    bool relate(const Geometry* g,
                         const std::string& intersectionPattern) const;
 
     bool
@@ -476,9 +485,9 @@ public:
     }
 
     /// Returns the DE-9IM intersection matrix for the two Geometrys.
-    virtual IntersectionMatrix* relate(const Geometry* g) const;
-    IntersectionMatrix*
-    relate(const Geometry& g) const
+    std::unique_ptr<IntersectionMatrix> relate(const Geometry* g) const;
+
+    std::unique_ptr<IntersectionMatrix> relate(const Geometry& g) const
     {
         return relate(&g);
     }
@@ -573,19 +582,19 @@ public:
     virtual std::string toText() const;
 
     /// Returns a buffer region around this Geometry having the given width.
-    //
+    ///
     /// @throws util::TopologyException if a robustness error occurs
     ///
-    virtual Geometry* buffer(double distance) const;
+    std::unique_ptr<Geometry> buffer(double distance) const;
 
     /// \brief
     /// Returns a buffer region around this Geometry having the
     /// given width and with a specified number of segments used
     /// to approximate curves.
-    //
+    ///
     /// @throws util::TopologyException if a robustness error occurs
     ///
-    virtual Geometry* buffer(double distance, int quadrantSegments) const;
+    std::unique_ptr<Geometry> buffer(double distance, int quadrantSegments) const;
 
     /** \brief
      * Computes a buffer area around this geometry having the given
@@ -623,21 +632,21 @@ public:
      *
      * @see BufferOp
      */
-    virtual Geometry* buffer(double distance, int quadrantSegments,
+    std::unique_ptr<Geometry> buffer(double distance, int quadrantSegments,
                              int endCapStyle) const;
 
     /// \brief
     /// Returns the smallest convex Polygon that contains
     /// all the points in the Geometry.
-    virtual Geometry* convexHull() const;
+    virtual std::unique_ptr<Geometry> convexHull() const;
 
-    /**
+    /** \brief
      * Computes a new geometry which has all component coordinate sequences
      * in reverse order (opposite orientation) to this one.
      *
      * @return a reversed geometry
      */
-    virtual Geometry* reverse() const = 0;
+    virtual std::unique_ptr<Geometry> reverse() const = 0;
 
     /** \brief
      * Returns a Geometry representing the points shared by
@@ -648,7 +657,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* intersection(const Geometry* other) const;
+    std::unique_ptr<Geometry> intersection(const Geometry* other) const;
 
     /** \brief
      * Returns a Geometry representing all the points in this Geometry
@@ -659,19 +668,19 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    Geometry* Union(const Geometry* other) const;
+    std::unique_ptr<Geometry> Union(const Geometry* other) const;
     // throw(IllegalArgumentException *, TopologyException *);
 
-    /**
+    /** \brief
      * Computes the union of all the elements of this geometry. Heterogeneous
-     * {@link GeometryCollection}s are fully supported.
+     * [GeometryCollections](@ref GeometryCollection) are fully supported.
      *
      * The result obeys the following contract:
      *
-     * - Unioning a set of {@link LineString}s has the effect of fully noding
+     * - Unioning a set of [LineStrings](@ref LineString) has the effect of fully noding
      *   and dissolving the linework.
-     * - Unioning a set of {@link Polygon}s will always
-     *   return a {@link Polygonal} geometry (unlike {link #union(Geometry)},
+     * - Unioning a set of [Polygons](@ref Polygon) will always
+     *   return a polygonal geometry (unlike Geometry::Union(const Geometry* other) const),
      *   which may return geometrys of lower dimension if a topology collapse
      *   occurred.
      *
@@ -692,7 +701,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* difference(const Geometry* other) const;
+    std::unique_ptr<Geometry> difference(const Geometry* other) const;
 
     /** \brief
      * Returns a set combining the points in this Geometry not in other,
@@ -703,7 +712,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* symDifference(const Geometry* other) const;
+    std::unique_ptr<Geometry> symDifference(const Geometry* other) const;
 
     /** \brief
      * Returns true iff the two Geometrys are of the same type and their
@@ -738,7 +747,7 @@ public:
     virtual void apply_ro(CoordinateSequenceFilter& filter) const = 0;
 
     /** \brief
-     * Apply a fiter to each component of this geometry.
+     * Apply a filter to each component of this geometry.
      * The filter is expected to provide a .filter(const Geometry*)
      * method.
      *
@@ -795,7 +804,7 @@ public:
      *
      * @return a {@link Point} which is the centroid of this Geometry
      */
-    virtual Point* getCentroid() const;
+    virtual std::unique_ptr<Point> getCentroid() const;
 
     /// Computes the centroid of this Geometry as a Coordinate
     //
@@ -813,9 +822,9 @@ public:
      * @return a Point which is in the interior of this Geometry, or
      *         null if the geometry doesn't have an interior (empty)
      */
-    virtual Point* getInteriorPoint() const;
+    std::unique_ptr<Point> getInteriorPoint() const;
 
-    /*
+    /**
      * \brief
      * Notifies this Geometry that its Coordinates have been changed
      * by an external party (using a CoordinateFilter, for example).
@@ -835,13 +844,19 @@ protected:
     mutable std::unique_ptr<Envelope> envelope;
 
     /// Returns true if the array contains any non-empty Geometrys.
-    static bool hasNonEmptyElements(const std::vector<Geometry*>* geometries);
+    template<typename T>
+    static bool hasNonEmptyElements(const std::vector<T>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const T& g) { return !g->isEmpty(); });
+    }
 
     /// Returns true if the CoordinateSequence contains any null elements.
     static bool hasNullElements(const CoordinateSequence* list);
 
     /// Returns true if the vector contains any null elements.
-    static bool hasNullElements(const std::vector<Geometry*>* lrs);
+    template<typename T>
+    static bool hasNullElements(const std::vector<T>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const T& g) { return g == nullptr; });
+    }
 
 //	static void reversePointOrder(CoordinateSequence* coordinates);
 //	static Coordinate& minCoordinate(CoordinateSequence* coordinates);
@@ -869,18 +884,11 @@ protected:
 
     int compare(std::vector<Geometry*> a, std::vector<Geometry*> b) const;
 
+    int compare(const std::vector<std::unique_ptr<Geometry>> & a, const std::vector<std::unique_ptr<Geometry>> & b) const;
+
     bool equal(const Coordinate& a, const Coordinate& b,
                double tolerance) const;
     int SRID;
-
-    /// @deprecated
-    //Geometry* toInternalGeometry(const Geometry *g) const;
-
-    /// @deprecated
-    //Geometry* fromInternalGeometry(const Geometry *g) const;
-
-    /// Polygon overrides to check for actual rectangle
-    //virtual bool isRectangle() const { return false; } -- moved to public
 
     Geometry(const Geometry& geom);
 
@@ -895,6 +903,15 @@ protected:
      */
     Geometry(const GeometryFactory* factory);
 
+    template<typename T>
+    static std::vector<std::unique_ptr<Geometry>> toGeometryArray(std::vector<std::unique_ptr<T>> && v) {
+        static_assert(std::is_base_of<Geometry, T>::value, "");
+        std::vector<std::unique_ptr<Geometry>> gv(v.size());
+        for (size_t i = 0; i < v.size(); i++) {
+            gv[i] = std::move(v[i]);
+        }
+        return gv;
+    }
 
 protected:
 
@@ -911,7 +928,7 @@ private:
     static GeometryChangedFilter geometryChangedFilter;
 
     /// The GeometryFactory used to create this Geometry
-    //
+    ///
     /// Externally owned
     ///
     const GeometryFactory* _factory;

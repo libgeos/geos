@@ -218,7 +218,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
                 lineToAdd = reverse(line);
             }
             else {
-                Geometry* lineClone = line->clone();
+                Geometry* lineClone = line->clone().release();
                 lineToAdd = dynamic_cast<LineString*>(lineClone);
                 assert(lineToAdd);
             }
@@ -241,9 +241,9 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 LineString*
 LineSequencer::reverse(const LineString* line)
 {
-    CoordinateSequence* cs = line->getCoordinates();
-    CoordinateSequence::reverse(cs);
-    return line->getFactory()->createLineString(cs);
+    auto cs = line->getCoordinates();
+    CoordinateSequence::reverse(cs.get());
+    return line->getFactory()->createLineString(cs.release());
 }
 
 /*private static*/

@@ -20,7 +20,7 @@
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/noding/SegmentString.h>
 
 namespace geos {
@@ -51,7 +51,7 @@ private:
     bool _hasNonProperIntersection;
 
     const geom::Coordinate* intPt;
-    geom::CoordinateSequence* intSegments;
+    geom::CoordinateArraySequence* intSegments;
 
 protected:
 public:
@@ -86,7 +86,7 @@ public:
         this->findAllTypes = p_findAllTypes;
     }
 
-    /**
+    /** \brief
      * Tests whether an intersection was found.
      *
      * @return true if an intersection was found
@@ -97,10 +97,10 @@ public:
         return _hasIntersection;
     }
 
-    /**
+    /** \brief
      * Tests whether a proper intersection was found.
      *
-     * @return true if a proper intersection was found
+     * @return `true` if a proper intersection was found
      */
     bool
     hasProperIntersection() const
@@ -108,7 +108,7 @@ public:
         return _hasProperIntersection;
     }
 
-    /**
+    /** \brief
      * Tests whether a non-proper intersection was found.
      *
      * @return true if a non-proper intersection was found
@@ -119,7 +119,7 @@ public:
         return _hasNonProperIntersection;
     }
 
-    /**
+    /** \brief
     * Gets the computed location of the intersection.
     * Due to round-off, the location may not be exact.
     *
@@ -132,7 +132,7 @@ public:
     }
 
 
-    /**
+    /** \brief
      * Gets the endpoints of the intersecting segments.
      *
      * @return an array of the segment endpoints (p00, p01, p10, p11)
@@ -160,13 +160,13 @@ public:
         return _hasIntersection;
     }
 
-    /**
-     * This method is called by clients
-     * of the {@link SegmentIntersector} class to process
-     * intersections for two segments of the {@link SegmentStrings} being intersected.
-     * Note that some clients (such as {@link MonotoneChain}s) may optimize away
-     * this call for segment pairs which they have determined do not intersect
-     * (e.g. by an disjoint envelope test).
+    /** \brief
+     * This method is called by clients of the SegmentIntersector class to process
+     * intersections for two segments of the {@link SegmentString}s being intersected.
+     *
+     * @note Some clients (such as `MonotoneChains`) may optimize away
+     *       this call for segment pairs which they have determined do not intersect
+     *       (e.g. by an disjoint envelope test).
      */
     void processIntersections(noding::SegmentString* e0, size_t segIndex0,
                               noding::SegmentString* e1, size_t segIndex1) override;

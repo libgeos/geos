@@ -71,7 +71,7 @@ RelateComputer::~RelateComputer()
 {
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 RelateComputer::computeIM()
 {
     // since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
@@ -79,7 +79,7 @@ RelateComputer::computeIM()
     // if the Geometries don't overlap there is nothing to do
     const Geometry* geom1 = (*arg)[0]->getGeometry();
     const Geometry* geom2 = (*arg)[1]->getGeometry();
-    if (dynamic_cast<const geom::Puntal *>(geom1) && dynamic_cast<const geom::Puntal *>(geom2))
+    if ( (geom1->getGeometryTypeId() == GEOS_POINT) && (geom2->getGeometryTypeId() == GEOS_POINT))
     {
         //Puntal is already handled efficiently so no need to individually check the parts of it
         const Envelope *e1 = geom1->getEnvelopeInternal();
@@ -254,7 +254,7 @@ RelateComputer::computeIM()
     labelIsolatedEdges(1, 0);
     // update the IM from all components
     updateIM(*im);
-    return im.release();
+    return std::move(im);
 }
 
 void
@@ -363,7 +363,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(argIndex);
+        Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         EdgeIntersectionList::iterator it = eiL.begin();
         EdgeIntersectionList::iterator end = eiL.end();
@@ -396,7 +396,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(argIndex);
+        Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         EdgeIntersectionList::iterator eiIt = eiL.begin();
         EdgeIntersectionList::iterator eiEnd = eiL.end();
@@ -498,7 +498,7 @@ RelateComputer::labelIsolatedEdge(Edge* e, int targetIndex, const Geometry* targ
         // since edge is not in boundary, may not need the full generality of PointLocator?
         // Possibly should use ptInArea locator instead?  We probably know here
         // that the edge does not touch the bdy of the target Geometry
-        int loc = ptLocator.locate(e->getCoordinate(), target);
+        Location loc = ptLocator.locate(e->getCoordinate(), target);
         e->getLabel().setAllLocations(targetIndex, loc);
     }
     else {
@@ -532,7 +532,7 @@ RelateComputer::labelIsolatedNodes()
 void
 RelateComputer::labelIsolatedNode(Node* n, int targetIndex)
 {
-    int loc = ptLocator.locate(n->getCoordinate(),
+    Location loc = ptLocator.locate(n->getCoordinate(),
                                (*arg)[targetIndex]->getGeometry());
     n->getLabel().setAllLocations(targetIndex, loc);
     //debugPrintln(n.getLabel());

@@ -77,7 +77,7 @@ public:
         bufParams(nBufParams)
     {}
 
-    /**
+    /** \brief
      * Gets the buffer parameters being used to generate the curve.
      *
      * @return the buffer parameters being used
@@ -88,11 +88,14 @@ public:
         return bufParams;
     }
 
-    /**
+    /** \brief
      * This method handles single points as well as lines.
-     * Lines are assumed to <b>not</b> be closed (the function will not
+     *
+     * Lines are assumed to **not** be closed (the function will not
      * fail for closed lines, but will generate superfluous line caps).
      *
+     * @param inputPts input points
+     * @param distance offset distance
      * @param lineList the std::vector to which the newly created
      *                 CoordinateSequences will be pushed_back.
      *                 Caller is responsible to delete these new elements.
@@ -101,12 +104,14 @@ public:
                       double distance,
                       std::vector<geom::CoordinateSequence*>& lineList);
 
-    /**
+    /** \brief
      * This method handles single points as well as lines.
      *
-     * Lines are assumed to <b>not</b> be closed (the function will not
+     * Lines are assumed to **not** be closed (the function will not
      * fail for closed lines, but will generate superfluous line caps).
      *
+     * @param inputPts input points
+     * @param distance offset distance
      * @param lineList the std::vector to which newly created
      *                 CoordinateSequences will be pushed_back.
      *                 Caller will be responsible to delete them.
@@ -115,16 +120,19 @@ public:
      * @param rightSide indicates that the right side buffer will
      *                  be obtained/skipped
      *
-     * NOTE: this is a GEOS extension
+     * @note This is a GEOS extension.
      */
     void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts,
                                  double distance, std::vector<geom::CoordinateSequence*>& lineList,
                                  bool leftSide, bool rightSide) ;
 
-    /**
+    /** \brief
      * This method handles the degenerate cases of single points and lines,
      * as well as rings.
      *
+     * @param inputPts input points
+     * @param side a [Position](@ref geomgraph::Position)
+     * @param distance offset distance
      * @param lineList the std::vector to which CoordinateSequences will
      *                 be pushed_back
      */
@@ -141,10 +149,10 @@ private:
 
     const BufferParameters& bufParams;
 
-    /**
+    /** \brief
      * Use a value which results in a potential distance error which is
-     * significantly less than the error due to
-     * the quadrant segment discretization.
+     * significantly less than the error due to the quadrant segment discretization.
+     *
      * For QS = 8 a value of 100 is reasonable.
      * This should produce a maximum of 1% distance error.
      */
@@ -154,7 +162,7 @@ private:
      * Computes the distance tolerance to use during input
      * line simplification.
      *
-     * @param distance the buffer distance
+     * @param bufDistance the buffer distance
      * @return the simplification tolerance
      */
     double simplifyTolerance(double bufDistance);

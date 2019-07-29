@@ -31,15 +31,14 @@ namespace geom { // geos::geom
 INLINE
 MultiLineString::MultiLineString(const MultiLineString& mp)
     :
-    Geometry(mp),
     GeometryCollection(mp)
 {
 }
 
-INLINE Geometry*
+INLINE std::unique_ptr<Geometry>
 MultiLineString::clone() const
 {
-    return new MultiLineString(*this);
+    return std::unique_ptr<Geometry>(new MultiLineString(*this));
 }
 
 } // namespace geos::geom

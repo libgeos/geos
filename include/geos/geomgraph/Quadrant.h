@@ -42,7 +42,7 @@ namespace geomgraph { // geos.geomgraph
  * 1 | 0
  * --+--
  * 2 | 3
- * <pre>
+ * </pre>
  *
  */
 class GEOS_DLL Quadrant {
