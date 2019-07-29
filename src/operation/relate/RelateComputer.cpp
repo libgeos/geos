@@ -86,7 +86,7 @@ RelateComputer::computeIM()
         if (!e1->intersects(e2))
         {
             computeDisjointIM(im.get());
-            return im.release();
+            return std::move(im);
         }
     }
     else
@@ -94,7 +94,7 @@ RelateComputer::computeIM()
         if (!GeometryCollection::envelopeIntersects(geom1, geom2))
         {
             computeDisjointIM(im.get());
-            return im.release();
+            return std::move(im);
         }
     }
 
