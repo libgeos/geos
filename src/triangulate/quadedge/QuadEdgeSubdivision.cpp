@@ -362,7 +362,7 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge* edge,
     do {
         triEdges[edgeCount] = curr;
 
-        if(isFrameEdge(*curr)) {
+        if(!includeFrame && isFrameEdge(*curr)) {
             isFrame = true;
         }
 
@@ -381,7 +381,7 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge* edge,
     }
     while(curr != edge);
 
-    if(isFrame && !includeFrame) {
+    if(!includeFrame && isFrame) {
         return nullptr;
     }
     return triEdges;
@@ -439,13 +439,12 @@ void
 QuadEdgeSubdivision::getTriangleCoordinates(QuadEdgeSubdivision::TriList* triList, bool includeFrame)
 {
     TriangleCoordinatesVisitor visitor(triList);
-    visitTriangles((TriangleVisitor*)&visitor, includeFrame);
+    visitTriangles(&visitor, includeFrame);
 }
 
 void
 QuadEdgeSubdivision::visitTriangles(TriangleVisitor* triVisitor, bool includeFrame)
 {
-
     QuadEdgeStack edgeStack;
     edgeStack.push(startingEdges[0]);
 
@@ -495,24 +494,16 @@ QuadEdgeSubdivision::getTriangles(const GeometryFactory& geomFact)
 {
     TriList triPtsList;
     getTriangleCoordinates(&triPtsList, false);
-    std::vector<Geometry*> tris;
+    std::vector<std::unique_ptr<Geometry>> tris;
+    tris.reserve(triPtsList.size());
 
-    for(TriList::const_iterator it = triPtsList.begin();
-            it != triPtsList.end(); ++it) {
-        CoordinateSequence* coordSeq = *it;
+    for(CoordinateSequence* coordSeq : triPtsList) {
         Polygon* tri = geomFact.createPolygon(
                            geomFact.createLinearRing(coordSeq), nullptr);
-        tris.push_back(static_cast<Geometry*>(tri));
+        tris.emplace_back(tri);
     }
-    GeometryCollection* ret =  geomFact.createGeometryCollection(tris);
 
-    //release memory
-    for(std::vector<Geometry*>::iterator it = tris.begin(); it != tris.end(); ++it) {
-        delete *it;
-    }
-    tris.clear();
-
-    return std::unique_ptr<GeometryCollection>(ret);
+    return geomFact.createGeometryCollection(std::move(tris));
 }
 
 
@@ -520,22 +511,13 @@ QuadEdgeSubdivision::getTriangles(const GeometryFactory& geomFact)
 std::unique_ptr<geom::GeometryCollection>
 QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
-    auto vorCells = getVoronoiCellPolygons(geomFact);
-
-    // TODO remove loop when GeometryFactory API handles unique_ptr
-    std::unique_ptr<std::vector<Geometry*>> rawCells(new std::vector<Geometry*>(vorCells.size()));
-    for (size_t i = 0; i < rawCells->size(); i++) {
-        (*rawCells)[i] = vorCells[i].release();
-    }
-
-    return std::unique_ptr<GeometryCollection>(geomFact.createGeometryCollection(rawCells.release()));
+    return geomFact.createGeometryCollection(getVoronoiCellPolygons(geomFact));
 }
 
 std::unique_ptr<geom::MultiLineString>
 QuadEdgeSubdivision::getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact)
 {
-    std::unique_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellEdges(geomFact);
-    return std::unique_ptr<MultiLineString>(geomFact.createMultiLineString(vorCells.release()));
+    return geomFact.createMultiLineString(getVoronoiCellEdges(geomFact));
 }
 
 std::vector<std::unique_ptr<geom::Geometry>>
@@ -544,10 +526,11 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
     std::vector<std::unique_ptr<geom::Geometry>> cells;
     TriangleCircumcentreVisitor tricircumVisitor;
 
-    visitTriangles((TriangleVisitor*) &tricircumVisitor, true);
+    visitTriangles(&tricircumVisitor, true);
 
     std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList> edges = getVertexUniqueEdges(false);
 
+    cells.reserve(edges->size());
     for(const QuadEdge* qe : *edges) {
         cells.push_back(getVoronoiCellPolygon(qe, geomFact));
     }
@@ -555,20 +538,19 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
     return cells;
 }
 
-std::unique_ptr< std::vector<geom::Geometry*> >
+std::vector<std::unique_ptr<geom::Geometry>>
 QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 {
-    auto cells = detail::make_unique<std::vector<geom::Geometry*>>();
+    std::vector<std::unique_ptr<geom::Geometry>> cells;
     TriangleCircumcentreVisitor tricircumVisitor;
 
     visitTriangles((TriangleVisitor*) &tricircumVisitor, true);
 
     std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList> edges = getVertexUniqueEdges(false);
+    cells.reserve(edges->size());
 
     for(const QuadEdge* qe : *edges) {
-        std::unique_ptr<geom::Geometry> poly = getVoronoiCellEdge(qe, geomFact);
-
-        cells->push_back(poly.release());
+        cells.push_back(getVoronoiCellEdge(qe, geomFact));
     }
 
     return cells;
@@ -577,12 +559,13 @@ QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    std::unique_ptr<std::vector<Coordinate>> cellPts(new std::vector<Coordinate>());
+    std::vector<Coordinate> cellPts;
+
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts->empty() || cellPts->back() != cc) {  // no duplicates
-            cellPts->push_back(cc);
+        if(cellPts.empty() || cellPts.back() != cc) {  // no duplicates
+            cellPts.push_back(cc);
         }
         qe = &qe->oPrev();
 
@@ -590,15 +573,16 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts->front() != cellPts->back()) {
-        cellPts->push_back(cellPts->front());
+    if (cellPts.front() != cellPts.back()) {
+        cellPts.push_back(cellPts.front());
     }
-    if (cellPts->size() < 4) {
-        cellPts->push_back(cellPts->back());
+    if (cellPts.size() < 4) {
+        cellPts.push_back(cellPts.back());
     }
 
-    std::unique_ptr<geom::Geometry> cellPoly(
-        geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(cellPts.release())), nullptr));
+    std::unique_ptr<CoordinateSequence> seq(new CoordinateArraySequence(std::move(cellPts)));
+
+    std::unique_ptr<geom::Geometry> cellPoly(geomFact.createPolygon(geomFact.createLinearRing(seq.release()), nullptr));
 
     // FIXME why is this returning a pointer to a local variable?
     Vertex v = startQE->orig();
@@ -611,12 +595,13 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    std::unique_ptr<std::vector<Coordinate>> cellPts(new std::vector<Coordinate>());
+    std::vector<Coordinate> cellPts;
+
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts->empty() || cellPts->back() != cc) {  // no duplicates
-            cellPts->push_back(cc);
+        if(cellPts.empty() || cellPts.back() != cc) {  // no duplicates
+            cellPts.push_back(cc);
         }
         qe = &qe->oPrev();
 
@@ -624,12 +609,12 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts->front() != cellPts->back()) {
-        cellPts->push_back(cellPts->front());
+    if (cellPts.front() != cellPts.back()) {
+        cellPts.push_back(cellPts.front());
     }
 
     std::unique_ptr<geom::Geometry> cellEdge(
-        geomFact.createLineString(new geom::CoordinateArraySequence(cellPts.release())));
+        geomFact.createLineString(new geom::CoordinateArraySequence(std::move(cellPts))));
 
     // FIXME why is this returning a pointer to a local variable?
     Vertex v = startQE->orig();

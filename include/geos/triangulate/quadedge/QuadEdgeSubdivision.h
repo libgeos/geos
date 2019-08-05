@@ -458,7 +458,7 @@ public:
      * @param geomFact a geometry factory
      * @return a List of LineString
      */
-    std::unique_ptr< std::vector<geom::Geometry*> > getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
+    std::vector<std::unique_ptr<geom::Geometry>> getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
 
     /** \brief
      * Gets a collection of [QuadEdges](@ref QuadEdge) whose origin vertices are a unique set
