@@ -99,6 +99,7 @@ private:
     Vertex frameVertex[3];
     geom::Envelope frameEnv;
     std::unique_ptr<QuadEdgeLocator> locator;
+    bool visit_state_clean;
 
 public:
     /** \brief
@@ -348,7 +349,6 @@ public:
 
 private:
     typedef std::stack<QuadEdge*> QuadEdgeStack;
-    typedef std::unordered_set<QuadEdge*> QuadEdgeSet;
     typedef std::vector<geom::CoordinateSequence*> TriList;
 
     /** \brief
@@ -357,6 +357,11 @@ private:
      * Only one visitor is allowed to be active at a time, so this is safe.
      */
     QuadEdge* triEdges[3];
+
+    /** \brief
+     * Resets the `visited` flag of each `QuadEdge` prior to iteration, if necessary.
+     */
+    void prepareVisit();
 
     /** \brief
      * Stores the edges for a visited triangle. Also pushes sym (neighbour) edges
@@ -369,8 +374,7 @@ private:
      * @return `null` if the triangle should not be visited (for instance, if it is
      *         outer)
      */
-    QuadEdge** fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame,
-                                    QuadEdgeSet& visitedEdges);
+    QuadEdge** fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame);
 
     /** \brief
      * Gets the coordinates for each triangle in the subdivision as an array.

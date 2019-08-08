@@ -62,7 +62,8 @@ QuadEdgeSubdivision::getTriangleEdges(const QuadEdge& startQE,
 
 QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope& env, double p_tolerance) :
     tolerance(p_tolerance),
-    locator(new LastFoundQuadEdgeLocator(this))
+    locator(new LastFoundQuadEdgeLocator(this)),
+    visit_state_clean(true)
 {
     edgeCoincidenceTolerance = tolerance / EDGE_COINCIDENCE_TOL_FACTOR;
     createFrame(env);
@@ -328,14 +329,15 @@ QuadEdgeSubdivision::getPrimaryEdges(bool includeFrame)
 {
     QuadEdgeList* edges = new QuadEdgeList();
     QuadEdgeStack edgeStack;
-    QuadEdgeSet visitedEdges;
 
     edgeStack.push(startingEdges[0]);
+
+    prepareVisit();
 
     while(!edgeStack.empty()) {
         QuadEdge* edge = edgeStack.top();
         edgeStack.pop();
-        if(visitedEdges.find(edge) == visitedEdges.end()) {
+        if(!edge->isVisited()) {
             QuadEdge* priQE = (QuadEdge*)&edge->getPrimary();
 
             if(includeFrame || ! isFrameEdge(*priQE)) {
@@ -345,8 +347,8 @@ QuadEdgeSubdivision::getPrimaryEdges(bool includeFrame)
             edgeStack.push(&edge->oNext());
             edgeStack.push(&edge->sym().oNext());
 
-            visitedEdges.insert(edge);
-            visitedEdges.insert(&edge->sym());
+            edge->setVisited(true);
+            edge->sym().setVisited(true);
         }
     }
     return std::unique_ptr<QuadEdgeList>(edges);
@@ -354,7 +356,7 @@ QuadEdgeSubdivision::getPrimaryEdges(bool includeFrame)
 
 QuadEdge**
 QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge* edge,
-        QuadEdgeStack& edgeStack, bool includeFrame, QuadEdgeSet& visitedEdges)
+        QuadEdgeStack& edgeStack, bool includeFrame)
 {
     QuadEdge* curr = edge;
     int edgeCount = 0;
@@ -368,16 +370,15 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge* edge,
 
         // push sym edges to visit next
         QuadEdge* sym = &curr->sym();
-        if(visitedEdges.find(sym) == visitedEdges.end()) {
+        if (!sym->isVisited()) {
             edgeStack.push(sym);
         }
 
         // mark this edge as visited
-        visitedEdges.insert(curr);
+        curr->setVisited(true);
 
         edgeCount++;
         curr = &curr->lNext();
-
     }
     while(curr != edge);
 
@@ -443,19 +444,29 @@ QuadEdgeSubdivision::getTriangleCoordinates(QuadEdgeSubdivision::TriList* triLis
 }
 
 void
+QuadEdgeSubdivision::prepareVisit() {
+    if (!visit_state_clean) {
+        for (auto& qe : quadEdges) {
+            qe->setVisited(false);
+        }
+    }
+
+    visit_state_clean = false;
+}
+
+void
 QuadEdgeSubdivision::visitTriangles(TriangleVisitor* triVisitor, bool includeFrame)
 {
     QuadEdgeStack edgeStack;
     edgeStack.push(startingEdges[0]);
 
-    QuadEdgeSet visitedEdges;
+    prepareVisit();
 
     while(!edgeStack.empty()) {
         QuadEdge* edge = edgeStack.top();
         edgeStack.pop();
-        if(visitedEdges.find(edge) == visitedEdges.end()) {
-            QuadEdge** p_triEdges = fetchTriangleToVisit(edge, edgeStack,
-                                    includeFrame, visitedEdges);
+        if(!edge->isVisited()) {
+            QuadEdge** p_triEdges = fetchTriangleToVisit(edge, edgeStack, includeFrame);
             if(p_triEdges != nullptr) {
                 triVisitor->visit(p_triEdges);
             }

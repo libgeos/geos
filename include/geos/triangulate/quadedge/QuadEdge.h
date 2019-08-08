@@ -102,6 +102,7 @@ private:
     QuadEdge* next;			  // A reference to a connected edge
     void*   data;
     bool isAlive;
+    bool visited;
 
     /**
      * Quadedges must be made using {@link makeEdge},
@@ -165,11 +166,21 @@ public:
      * @return `true` if this edge has not been deleted.
      */
     inline bool
-    isLive()
+    isLive() const
     {
         return isAlive;
     }
 
+    inline bool
+    isVisited() const
+    {
+        return visited;
+    }
+
+    inline void
+    setVisited(bool v) {
+        visited = v;
+    }
 
     /** \brief
      * Sets the connected edge
