@@ -51,28 +51,39 @@ public:
         isNodeAddedVar(false)
     {}
 
+    /**
+    * Reports whether the HotPixel caused a node to be added in any target
+    * segmentString (including its own). If so, the HotPixel must be added as a
+    * node as well.
+    *
+    * @return true if a node was added in any target segmentString.
+    */
     bool
     isNodeAdded() const
     {
         return isNodeAddedVar;
     }
 
+    /**
+    * Check if a segment of the monotone chain intersects
+    * the hot pixel vertex and introduce a snap node if so.
+    * Optimized to avoid noding segments which
+    * contain the vertex (which otherwise
+    * would cause every vertex to be noded).
+    */
     void
     select(chain::MonotoneChain& mc, size_t startIndex) override
     {
         // This is casting away 'constness'!
         NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
 
-        // don't snap a vertex to itself
-        if(parentEdge) {
-            if(&ss == parentEdge && startIndex == vertexIndex) {
+        if (parentEdge == &ss) {
+            // exit if hotpixel is equal to endpoint of target segment
+            if (startIndex == vertexIndex || startIndex + 1 == vertexIndex)
                 return;
-            }
         }
-
-        //isNodeAddedVar = SimpleSnapRounder::addSnappedNode(hotPixel, ss, startIndex);
-
-        isNodeAddedVar = hotPixel.addSnappedNode(ss, startIndex);
+        // snap and record if a node was created
+        isNodeAddedVar |= hotPixel.addSnappedNode(ss, startIndex);
     }
 
     void
