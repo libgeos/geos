@@ -38,8 +38,12 @@ namespace locate {
 // private:
 //
 IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry(const geom::Geometry& g)
+    : isEmpty(0)
 {
-    init(g);
+    if (g.isEmpty())
+        isEmpty = true;
+    else
+        init(g);
 }
 
 void
@@ -119,6 +123,8 @@ IndexedPointInAreaLocator::SegmentVisitor::visitItem(void* item)
 void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::query(double min, double max, index::ItemVisitor* visitor)
 {
+    if (isEmpty)
+        return;
     index.query(min, max, visitor);
 }
 

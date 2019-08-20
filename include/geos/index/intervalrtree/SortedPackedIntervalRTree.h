@@ -52,6 +52,13 @@ class SortedPackedIntervalRTree {
 private:
     std::vector<IntervalRTreeLeafNode> leaves;
     std::vector<IntervalRTreeBranchNode> branches;
+
+    /**
+    * If root is null that indicates
+    * that the tree has not yet been built,
+    * OR nothing has been added to the tree.
+    * In both cases, the tree is still open for insertions.
+    */
     const IntervalRTreeNode* root = nullptr;
     int level = 0;
 
