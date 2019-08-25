@@ -758,9 +758,9 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     GEOS_CHECK_FOR_INTERRUPTS();
 
     // node the input Geometries
-    delete arg[0]->computeSelfNodes(li, false, env);
+    arg[0]->computeSelfNodes(li, false, env);
     GEOS_CHECK_FOR_INTERRUPTS();
-    delete arg[1]->computeSelfNodes(li, false, env);
+    arg[1]->computeSelfNodes(li, false, env);
 
 #if GEOS_DEBUG
     cerr << "OverlayOp::computeOverlay: computed SelfNodes" << endl;
@@ -769,7 +769,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     GEOS_CHECK_FOR_INTERRUPTS();
 
     // compute intersections between edges of the two input geometries
-    delete arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
+    arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
 
 #if GEOS_DEBUG
     cerr << "OverlayOp::computeOverlay: computed EdgeIntersections" << endl;

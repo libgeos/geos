@@ -40,13 +40,7 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
     }
 }
 
-SweepLineEvent::~SweepLineEvent()
-{
-    if(eventType == DELETE_EVENT) {
-        delete insertEvent;
-        delete obj;
-    }
-}
+SweepLineEvent::~SweepLineEvent() = default;
 
 /**
  * ProjectionEvents are ordered first by their x-value, and then by their

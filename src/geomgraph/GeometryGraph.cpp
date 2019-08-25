@@ -22,6 +22,7 @@
 #include <geos/algorithm/BoundaryNodeRule.h>
 
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/util.h>
 
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Node.h>
@@ -351,18 +352,18 @@ collect_intersecting_edges(const Envelope* env, T start, T end, C& to)
 }
 
 /*public*/
-SegmentIntersector*
+std::unique_ptr<SegmentIntersector>
 GeometryGraph::computeSelfNodes(LineIntersector& li,
                                 bool computeRingSelfNodes, const Envelope* env)
 {
     return computeSelfNodes(li, computeRingSelfNodes, false, env);
 }
 
-SegmentIntersector*
+std::unique_ptr<SegmentIntersector>
 GeometryGraph::computeSelfNodes(LineIntersector& li,
                                 bool computeRingSelfNodes, bool isDoneIfProperInt, const Envelope* env)
 {
-    SegmentIntersector* si = new SegmentIntersector(&li, true, false);
+    auto si = detail::make_unique<SegmentIntersector>(&li, true, false);
     si->setIsDoneIfProperInt(isDoneIfProperInt);
     unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
@@ -382,7 +383,7 @@ GeometryGraph::computeSelfNodes(LineIntersector& li,
 
     bool computeAllSegments = computeRingSelfNodes || ! isRings;
 
-    esi->computeIntersections(se, si, computeAllSegments);
+    esi->computeIntersections(se, si.get(), computeAllSegments);
 
 #if GEOS_DEBUG
     cerr << "SegmentIntersector # tests = " << si->numTests << endl;
@@ -392,7 +393,7 @@ GeometryGraph::computeSelfNodes(LineIntersector& li,
     return si;
 }
 
-SegmentIntersector*
+std::unique_ptr<SegmentIntersector>
 GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
                                         LineIntersector* li, bool includeProper, const Envelope* env)
 {
@@ -425,7 +426,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
 #if GEOS_DEBUG
     cerr << "GeometryGraph::computeEdgeIntersections returns" << endl;
 #endif
-    return si.release();
+    return si;
 }
 
 void

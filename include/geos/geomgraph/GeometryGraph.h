@@ -30,6 +30,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h> // for unique_ptr<CoordinateSequence>
 #include <geos/geomgraph/PlanarGraph.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geom/LineString.h> // for LineStringLT
 
 #include <geos/inline.h>
@@ -58,7 +59,6 @@ namespace geomgraph {
 class Edge;
 class Node;
 namespace index {
-class SegmentIntersector;
 class EdgeSetIntersector;
 }
 }
@@ -209,7 +209,7 @@ public:
      * @return the SegmentIntersector used, containing information about
      *         the intersections found
      */
-    index::SegmentIntersector*
+    std::unique_ptr<index::SegmentIntersector>
     computeSelfNodes(
         algorithm::LineIntersector* li,
         bool computeRingSelfNodes,
@@ -218,7 +218,7 @@ public:
         return computeSelfNodes(*li, computeRingSelfNodes, env);
     }
 
-    index::SegmentIntersector*
+    std::unique_ptr<index::SegmentIntersector>
     computeSelfNodes(
         algorithm::LineIntersector* li,
         bool computeRingSelfNodes,
@@ -230,15 +230,15 @@ public:
 
     // Quick inline calling the function above, the above should probably
     // be deprecated.
-    index::SegmentIntersector* computeSelfNodes(
+    std::unique_ptr<index::SegmentIntersector> computeSelfNodes(
         algorithm::LineIntersector& li,
         bool computeRingSelfNodes, const geom::Envelope* env = nullptr);
 
-    index::SegmentIntersector* computeSelfNodes(
+    std::unique_ptr<index::SegmentIntersector> computeSelfNodes(
         algorithm::LineIntersector& li,
         bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope* env = nullptr);
 
-    index::SegmentIntersector* computeEdgeIntersections(GeometryGraph* g,
+    std::unique_ptr<index::SegmentIntersector> computeEdgeIntersections(GeometryGraph* g,
             algorithm::LineIntersector* li, bool includeProper,
             const geom::Envelope* env = nullptr);
 

@@ -132,7 +132,11 @@ void object::test<4>
 
     auto g = reader.readHEX(s);
 
-    g->isSimple();
+    try {
+        g->isSimple();
+    } catch (geos::util::GEOSException & e) {
+        // no memory leaks or invalid reads on exception
+    }
 }
 
 } // namespace tut
