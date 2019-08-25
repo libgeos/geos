@@ -40,6 +40,12 @@ CoordinateArraySequence::CoordinateArraySequence(size_t n,
 {
 }
 
+CoordinateArraySequence::CoordinateArraySequence(std::vector<Coordinate> && coords, size_t dimension_in):
+        vect(std::move(coords)),
+        dimension(dimension_in)
+{
+}
+
 CoordinateArraySequence::CoordinateArraySequence(
     std::vector<Coordinate>* coords, size_t dimension_in)
     : dimension(dimension_in)
