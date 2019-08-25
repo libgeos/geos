@@ -554,6 +554,17 @@ void object::test<20>()
     ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(1)) < 1e-8);
 }
 
+// JTS testDisjointCollinearSegments
+template<>
+template<>
+void object::test<21>()
+{
+    auto g1 = wktreader.read("LINESTRING (0.0 0.0, 9.9 1.4)");
+    auto g2 = wktreader.read("LINESTRING (11.88 1.68, 21.78 3.08)");
+
+    ensure_equals(g1->distance(g2.get()), 1.9996999774966246);
+}
+
 // TODO: finish the tests by adding:
 // 	LINESTRING - *all*
 // 	MULTILINESTRING - *all*
