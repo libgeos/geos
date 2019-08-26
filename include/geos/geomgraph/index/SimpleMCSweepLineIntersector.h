@@ -17,10 +17,12 @@
 #define GEOS_GEOMGRAPH_INDEX_SIMPLEMCSWEEPLINEINTERSECTOR_H
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
 #include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geomgraph/index/MonotoneChain.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -68,7 +70,8 @@ public:
 
 protected:
 
-    std::vector<SweepLineEvent*> events;
+    std::vector<std::unique_ptr<SweepLineEvent>> events;
+    std::vector<std::unique_ptr<MonotoneChain>> chains;
 
     // statistics information
     int nOverlaps;

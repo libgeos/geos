@@ -110,8 +110,9 @@ private:
 
 class GEOS_DLL SweepLineEventLessThen {
 public:
+    template<typename T>
     bool
-    operator()(const SweepLineEvent* f, const SweepLineEvent* s) const
+    operator()(const T& f, const T& s) const
     {
         if(f->xValue < s->xValue) {
             return true;

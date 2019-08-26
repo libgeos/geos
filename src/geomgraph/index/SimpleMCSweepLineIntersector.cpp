@@ -33,15 +33,7 @@ SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
 {
 }
 
-SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector()
-{
-    for(size_t i = 0; i < events.size(); ++i) {
-        SweepLineEvent* sle = events[i];
-        if(sle->isDelete()) {
-            delete sle;
-        }
-    }
-}
+SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector() = default;
 
 void
 SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
@@ -91,12 +83,14 @@ SimpleMCSweepLineIntersector::add(Edge* edge, void* edgeSet)
     auto& startIndex = mce->getStartIndexes();
     size_t n = startIndex.size() - 1;
     events.reserve(events.size() + (n * 2));
+    chains.reserve(chains.size() + n);
     for(size_t i = 0; i < n; ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
         MonotoneChain* mc = new MonotoneChain(mce, i);
+        chains.emplace_back(mc);
         SweepLineEvent* insertEvent = new SweepLineEvent(edgeSet, mce->getMinX(i), nullptr, mc);
-        events.push_back(insertEvent);
-        events.push_back(new SweepLineEvent(edgeSet, mce->getMaxX(i), insertEvent, mc));
+        events.emplace_back(insertEvent);
+        events.emplace_back(new SweepLineEvent(edgeSet, mce->getMaxX(i), insertEvent, mc));
     }
 }
 
@@ -111,7 +105,7 @@ SimpleMCSweepLineIntersector::prepareEvents()
     sort(events.begin(), events.end(), SweepLineEventLessThen());
     for(size_t i = 0; i < events.size(); ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
-        SweepLineEvent* ev = events[i];
+        auto& ev = events[i];
         if(ev->isDelete()) {
             ev->getInsertEvent()->setDeleteEventIndex(i);
         }
@@ -125,9 +119,9 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector* si)
     prepareEvents();
     for(size_t i = 0; i < events.size(); ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
-        SweepLineEvent* ev = events[i];
+        auto& ev = events[i];
         if(ev->isInsert()) {
-            processOverlaps(i, ev->getDeleteEventIndex(), ev, si);
+            processOverlaps(i, ev->getDeleteEventIndex(), ev.get(), si);
         }
         if(si->getIsDone()) {
             break;
@@ -147,7 +141,7 @@ SimpleMCSweepLineIntersector::processOverlaps(size_t start, size_t end,
      * Last index can be skipped, because it must be a Delete event.
      */
     for(auto i = start; i < end; ++i) {
-        SweepLineEvent* ev1 = events[i];
+        auto& ev1 = events[i];
         if(ev1->isInsert()) {
             MonotoneChain* mc1 = (MonotoneChain*) ev1->getObject();
             // don't compare edges in same group

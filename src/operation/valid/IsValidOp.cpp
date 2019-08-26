@@ -215,7 +215,7 @@ IsValidOp::checkValid(const LinearRing* g)
     }
 
     LineIntersector li;
-    delete graph.computeSelfNodes(&li, true, true);
+    graph.computeSelfNodes(&li, true, true);
     checkNoSelfIntersectingRings(&graph);
 }
 
