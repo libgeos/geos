@@ -25,6 +25,7 @@
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/export.h>
 #include <geos/inline.h>
 
@@ -46,7 +47,6 @@ class MultiLineString;
 class MultiPoint;
 class MultiPolygon;
 class Polygon;
-class PrecisionModel;
 }
 }
 
@@ -490,7 +490,7 @@ protected:
 
 private:
 
-    const PrecisionModel* precisionModel;
+    PrecisionModel precisionModel;
     int SRID;
     const CoordinateSequenceFactory* coordinateListFactory;
 
