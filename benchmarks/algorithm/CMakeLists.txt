@@ -15,3 +15,6 @@ target_link_libraries(perf_interiorpoint_area geos)
 
 add_executable(perf_voronoi VoronoiPerfTest.cpp)
 target_link_libraries(perf_voronoi geos)
+
+add_executable(perf_unaryunion_segments UnaryUnionSegmentsPerfTest.cpp)
+target_link_libraries(perf_unaryunion_segments geos)
