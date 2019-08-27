@@ -11,6 +11,7 @@
 #include <geos/io/WKTReader.h>
 // std
 #include <string>
+#include <sstream>
 #include <memory>
 
 using namespace geos::geom;
@@ -60,6 +61,35 @@ void object::test<1>
     // drop nodes of degree 2 from the built topology,
     // do not expect GEOS_LINESTRING.
     // See LineMergerTest where the test triangle is generated as a single LineString.
+}
+
+// https://trac.osgeo.org/geos/ticket/523
+template<>
+template<>
+void object::test<2>
+()
+{
+    std::istringstream wkb1("010300000001000000080000000000000087523A41000000402C625241000"
+                            "00000B0523A41000000C01E6252410000000084523A41000000C023625241"
+                            "858C4F2488523A4151F8EEAC2562524111A0F52288523A414F50F3AC25625"
+                            "241D59FF52288523A414F50F3AC25625241000000007F523A410000008025"
+                            "6252410000000087523A41000000402C625241");
+
+    std::istringstream wkb2("01030000000100000004000000A871502388523A4158FEF2AC2562524100A"
+                            "0F52288523A414F50F3AC2562524111A0F52288523A414F50F3AC25625241"
+                            "A871502388523A4158FEF2AC25625241");
+
+    geos::io::WKBReader reader;
+
+    auto g1 = reader.readHEX(wkb1);
+    auto g2 = reader.readHEX(wkb2);
+
+    ensure(g1->isValid());
+    ensure(g2->isValid());
+
+    auto g3 = g1->symDifference(g2.get());
+
+    ensure(g3->isValid());
 }
 
 } // namespace tut
