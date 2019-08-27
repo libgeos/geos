@@ -67,11 +67,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
     }
 
     if (geom->getNumGeometries() == 1) {
-        if (geom->getEnvelopeInternal()->contains(p)) {
-            return locatePointInPolygon(p, dynamic_cast<const Polygon*>(geom->getGeometryN(0)));
-        } else {
-            return Location::EXTERIOR;
-        }
+        return locatePointInPolygon(p, dynamic_cast<const Polygon*>(geom->getGeometryN(0)));
     } else {
         for (size_t i = 0; i < geom->getNumGeometries(); i++) {
             const Geometry* gi = geom->getGeometryN(i);
