@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include <geos/algorithm/Distance.h>
+#include <geos/geom/Envelope.h>
 #include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
@@ -142,21 +143,29 @@ Distance::segmentToSegment(const geom::Coordinate& A,
         If the numerator in eqn 1 is also zero, AB & CD are collinear.
     */
 
-    double r_top = (A.y - C.y) * (D.x - C.x) - (A.x - C.x) * (D.y - C.y);
-    double r_bot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
-    double s_top = (A.y - C.y) * (B.x - A.x) - (A.x - C.x) * (B.y - A.y);
-    double s_bot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
+    bool noIntersection = false;
 
-    if((r_bot == 0) || (s_bot == 0)) {
-        return std::min(pointToSegment(A, C, D),
-                        std::min(pointToSegment(B, C, D),
-                                 std::min(pointToSegment(C, A, B), pointToSegment(D, A, B))));
+    if (!geom::Envelope::intersects(A, B, C, D)) {
+        noIntersection = true;
+    } else {
+        double denom = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
+
+        if (denom == 0) {
+            noIntersection = true;
+        } else {
+            double r_num = (A.y - C.y) * (D.x - C.x) - (A.x - C.x) * (D.y - C.y);
+            double s_num = (A.y - C.y) * (B.x - A.x) - (A.x - C.x) * (B.y - A.y);
+
+            double s = s_num / denom;
+            double r = r_num / denom;
+
+            if ((r < 0) || (r > 1) || (s < 0) || (s > 1)) {
+                noIntersection = true;
+            }
+        }
     }
 
-    double s = s_top / s_bot;
-    double r = r_top / r_bot;
-
-    if((r < 0) || (r > 1) || (s < 0) || (s > 1)) {
+    if (noIntersection) {
         /* no intersection */
         return std::min(pointToSegment(A, C, D),
                         std::min(pointToSegment(B, C, D),
