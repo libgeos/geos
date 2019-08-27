@@ -408,7 +408,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
                   << " curves" << std::endl;
 #endif
         // short-circuit test
-        if(bufferSegStrList.size() <= 0) {
+        if(bufferSegStrList.empty()) {
             return createEmptyResultGeometry();
         }
 

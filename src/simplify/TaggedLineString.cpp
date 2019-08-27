@@ -81,7 +81,7 @@ TaggedLineString::init()
          << endl;
 #endif
 
-    if(pts->size()) {
+    if(!pts->isEmpty()) {
 
         segs.reserve(pts->size() - 1);
 

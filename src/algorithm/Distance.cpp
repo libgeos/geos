@@ -180,7 +180,7 @@ double
 Distance::pointToSegmentString(const geom::Coordinate& p,
                                const geom::CoordinateSequence* seq)
 {
-    if(seq->size() == 0) {
+    if(seq->isEmpty()) {
         throw util::IllegalArgumentException(
             "Line array must contain at least one vertex");
     }

@@ -42,7 +42,7 @@ SortedPackedIntervalRTree::init()
     * if leaves is empty then nothing has been inserted.
     * In this case it is safe to leave the tree in an open state
     */
-    if (leaves.size() == 0) return;
+    if (leaves.empty()) return;
 
     root = buildTree();
 }
