@@ -82,7 +82,6 @@ public:
 /*protected*/
 GeometryFactory::GeometryFactory()
     :
-    precisionModel(new PrecisionModel()),
     SRID(0),
     coordinateListFactory(CoordinateArraySequenceFactory::instance())
     , _refCount(0), _autoDestroy(false)
@@ -111,11 +110,8 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(PrecisionModel[" << pm << "], SRID)" <<
               std::endl;
 #endif
-    if(! pm) {
-        precisionModel = new PrecisionModel();
-    }
-    else {
-        precisionModel = new PrecisionModel(*pm);
+    if(pm) {
+        precisionModel = *pm;
     }
 
     if(! nCoordinateSequenceFactory) {
@@ -140,7 +136,6 @@ GeometryFactory::create(const PrecisionModel* pm, int newSRID,
 GeometryFactory::GeometryFactory(
     CoordinateSequenceFactory* nCoordinateSequenceFactory)
     :
-    precisionModel(new PrecisionModel()),
     SRID(0)
     , _refCount(0), _autoDestroy(false)
 {
@@ -176,11 +171,8 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm)
 #if GEOS_DEBUG
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(PrecisionModel[" << pm << "])" << std::endl;
 #endif
-    if(! pm) {
-        precisionModel = new PrecisionModel();
-    }
-    else {
-        precisionModel = new PrecisionModel(*pm);
+    if(pm) {
+        precisionModel = *pm;
     }
 }
 
@@ -204,11 +196,8 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(PrecisionModel[" << pm << "], SRID)" <<
               std::endl;
 #endif
-    if(! pm) {
-        precisionModel = new PrecisionModel();
-    }
-    else {
-        precisionModel = new PrecisionModel(*pm);
+    if(pm) {
+        precisionModel = *pm;
     }
 }
 
@@ -222,15 +211,13 @@ GeometryFactory::create(const PrecisionModel* pm, int newSRID)
 }
 
 /*protected*/
-GeometryFactory::GeometryFactory(const GeometryFactory& gf)
-{
-    assert(gf.precisionModel);
-    precisionModel = new PrecisionModel(*(gf.precisionModel));
-    SRID = gf.SRID;
-    coordinateListFactory = gf.coordinateListFactory;
-    _autoDestroy = false;
-    _refCount = 0;
-}
+GeometryFactory::GeometryFactory(const GeometryFactory& gf) :
+precisionModel(gf.precisionModel),
+SRID(gf.SRID),
+coordinateListFactory(gf.coordinateListFactory),
+_refCount(0),
+_autoDestroy(false)
+{}
 
 /*public static*/
 GeometryFactory::Ptr
@@ -247,7 +234,6 @@ GeometryFactory::~GeometryFactory()
 #if GEOS_DEBUG
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::~GeometryFactory()" << std::endl;
 #endif
-    delete precisionModel;
 }
 
 /*public*/
@@ -307,7 +293,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 const PrecisionModel*
 GeometryFactory::getPrecisionModel() const
 {
-    return precisionModel;
+    return &precisionModel;
 }
 
 /*public*/
@@ -670,7 +656,7 @@ const
 Geometry*
 GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
 {
-    if(!newGeoms->size()) {
+    if(newGeoms->empty()) {
         // we do not need the vector anymore
         delete newGeoms;
         return createGeometryCollection();
