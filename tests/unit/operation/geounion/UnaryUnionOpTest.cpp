@@ -201,7 +201,7 @@ void object::test<7>
         "LINESTRING EMPTY",
         nullptr
     };
-    doTest(geoms, "GEOMETRYCOLLECTION EMPTY");
+    doTest(geoms, "LINESTRING EMPTY");
 }
 
 } // namespace tut

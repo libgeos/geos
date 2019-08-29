@@ -146,8 +146,11 @@ void object::test<5>
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_),
-                  std::string("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5))"));
+    GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5))");
+
+    ensure(GEOSEquals(geom2_, expected));
+
+    GEOSGeom_destroy(expected);
 }
 
 // Self-union a collection of puntal and polygonal geometries
@@ -179,9 +182,11 @@ void object::test<7>
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_), std::string(
-                      "GEOMETRYCOLLECTION (LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))"
-                  ));
+    GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))");
+
+    ensure(GEOSEquals(geom2_, expected));
+
+    GEOSGeom_destroy(expected);
 }
 
 // Self-union a collection of puntal, lineal and polygonal geometries
@@ -229,7 +234,7 @@ void object::test<10>
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION EMPTY"));
+    ensure_equals(toWKT(geom2_), std::string("LINESTRING EMPTY"));
 }
 } // namespace tut
 
