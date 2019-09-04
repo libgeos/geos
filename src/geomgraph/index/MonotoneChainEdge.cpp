@@ -57,8 +57,8 @@ MonotoneChainEdge::MonotoneChainEdge(Edge* newE):
     pts(newE->getCoordinates())
 {
     assert(e);
-    MonotoneChainIndexer mcb;
-    mcb.getChainStartIndices(pts, startIndex);
+    MonotoneChainIndexer mci;
+    mci.getChainStartIndices(pts, startIndex);
     assert(e);
 }
 

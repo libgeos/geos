@@ -54,37 +54,18 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
-                                vector<std::unique_ptr<MonotoneChain>>& mcList)
+                                std::vector<std::unique_ptr<MonotoneChain>>& mcList)
 {
-    vector<std::size_t> startIndex;
-    getChainStartIndices(*pts, startIndex);
-    std::size_t nindexes = startIndex.size();
-    if(nindexes > 0) {
-        std::size_t n = nindexes - 1;
-        for(std::size_t i = 0; i < n; i++) {
-            mcList.emplace_back(new MonotoneChain(*pts, startIndex[i], startIndex[i + 1], context));
-        }
-    }
-}
-
-/* static public */
-void
-MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence& pts,
-        vector<std::size_t>& startIndexList)
-{
-    // find the startpoint (and endpoints) of all monotone chains
-    // in this edge
-    std::size_t start = 0;
-    startIndexList.push_back(start);
-    const std::size_t n = pts.getSize() - 1;
+    std::size_t chainStart = 0;
     do {
-        std::size_t last = findChainEnd(pts, start);
-        startIndexList.push_back(last);
-        start = last;
+        std::size_t chainEnd = findChainEnd(*pts, chainStart);
+        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd, context);
+        mcList.emplace_back(mc);
+        chainStart = chainEnd;
     }
-    while(start < n);
-
+    while (chainStart < (pts->size() - 1));
 }
+
 
 /* private static */
 std::size_t
