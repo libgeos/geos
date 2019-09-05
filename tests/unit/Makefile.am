@@ -63,6 +63,7 @@ geos_unit_SOURCES = \
 	geom/CoordinateTest.cpp \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \
+	geom/FixedSizeCoordinateSequenceTest.cpp \
 	geom/GeometryCollectionTest.cpp \
 	geom/Geometry/clone.cpp \
 	geom/Geometry/coversTest.cpp \
