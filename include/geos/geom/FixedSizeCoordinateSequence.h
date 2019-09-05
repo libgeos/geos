@@ -34,29 +34,29 @@ namespace geom {
     public:
         explicit FixedSizeCoordinateSequence(size_t dimension_in = 0) : dimension(dimension_in) {}
 
-        std::unique_ptr<CoordinateSequence> clone() const override {
+        std::unique_ptr<CoordinateSequence> clone() const final {
             auto seq = detail::make_unique<FixedSizeCoordinateSequence<N>>();
             seq->m_data = m_data;
             return std::unique_ptr<CoordinateSequence>(seq.release());
         }
 
-        const Coordinate& getAt(size_t i) const override {
+        const Coordinate& getAt(size_t i) const final {
             return m_data[i];
         }
 
-        void getAt(size_t i, Coordinate& c) const override {
+        void getAt(size_t i, Coordinate& c) const final {
             c = m_data[i];
         }
 
-        size_t getSize() const override {
+        size_t getSize() const final {
             return N;
         }
 
-        bool isEmpty() const override {
+        bool isEmpty() const final {
             return N == 0;
         }
 
-        void setAt(const Coordinate & c, size_t pos) override {
+        void setAt(const Coordinate & c, size_t pos) final {
             m_data[pos] = c;
         }
 
@@ -81,7 +81,7 @@ namespace geom {
             }
         }
 
-        size_t getDimension() const override {
+        size_t getDimension() const final {
             if(dimension != 0) {
                 return dimension;
             }
@@ -104,16 +104,16 @@ namespace geom {
             out.insert(out.end(), m_data.begin(), m_data.end());
         }
 
-        void setPoints(const std::vector<Coordinate> & v) override {
+        void setPoints(const std::vector<Coordinate> & v) final {
             std::copy(v.begin(), v.end(), m_data.begin());
         }
 
-        void apply_ro(CoordinateFilter* filter) const override {
+        void apply_ro(CoordinateFilter* filter) const final {
             std::for_each(m_data.begin(), m_data.end(),
                     [&filter](const Coordinate & c) { filter->filter_ro(&c); });
         }
 
-        void apply_rw(const CoordinateFilter* filter) override {
+        void apply_rw(const CoordinateFilter* filter) final {
             std::for_each(m_data.begin(), m_data.end(),
                     [&filter](Coordinate &c) { filter->filter_rw(&c); });
             dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
