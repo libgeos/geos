@@ -23,6 +23,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util.h>
 
 using namespace geos::geom;
 
@@ -42,10 +43,7 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
 {
 }
 
-MonotoneChain::~MonotoneChain()
-{
-    delete env;
-}
+MonotoneChain::~MonotoneChain() = default;
 
 const Envelope&
 MonotoneChain::getEnvelope() const
@@ -53,7 +51,7 @@ MonotoneChain::getEnvelope() const
     if(nullptr == env) {
         const Coordinate& p0 = pts[start];
         const Coordinate& p1 = pts[end];
-        env = new Envelope(p0, p1);
+        env = detail::make_unique<Envelope>(p0, p1);
     }
     return *env;
 }

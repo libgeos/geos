@@ -173,7 +173,7 @@ private:
     const geom::CoordinateSequence& pts;
 
     /// Owned by this class, lazely created
-    mutable geom::Envelope* env;
+    mutable std::unique_ptr<geom::Envelope> env;
 
     /// user-defined information
     void* context;
