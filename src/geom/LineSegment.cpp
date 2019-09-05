@@ -27,8 +27,7 @@
 #include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/HCoordinate.h>
-#include <geos/algorithm/NotRepresentableException.h>
+#include <geos/algorithm/Intersection.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/profiler.h>
 #include <geos/inline.h>
@@ -41,11 +40,6 @@
 # include <geos/geom/LineSegment.inl>
 #endif
 
-using namespace std;
-//using namespace geos::algorithm;
-using geos::algorithm::HCoordinate;
-using geos::algorithm::NotRepresentableException;
-using geos::algorithm::LineIntersector;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -260,14 +254,11 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 bool
 LineSegment::lineIntersection(const LineSegment& line, Coordinate& ret) const
 {
-    try {
-        HCoordinate::intersection(p0, p1, line.p0, line.p1, ret);
+    algorithm::Intersection::intersection(p0, p1, line.p0, line.p1, ret);
+    if (ret.isNull())
+        return false;
+    else
         return true;
-    }
-    catch(const NotRepresentableException& /*ex*/) {
-        // eat this exception, and return null;
-    }
-    return false;
 }
 
 
