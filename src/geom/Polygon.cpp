@@ -125,22 +125,20 @@ Polygon::getCoordinates() const
         return getFactory()->getCoordinateSequenceFactory()->create();
     }
 
-    std::vector<Coordinate>* cl = new std::vector<Coordinate>;
-
-    // reserve space in the vector for all the polygon points
-    cl->reserve(getNumPoints());
+    std::vector<Coordinate> cl;
+    cl.reserve(getNumPoints());
 
     // Add shell points
     const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
-    shellCoords->toVector(*cl);
+    shellCoords->toVector(cl);
 
     // Add holes points
     for(const auto& hole : holes) {
         const CoordinateSequence* childCoords = hole->getCoordinatesRO();
-        childCoords->toVector(*cl);
+        childCoords->toVector(cl);
     }
 
-    return getFactory()->getCoordinateSequenceFactory()->create(cl);
+    return getFactory()->getCoordinateSequenceFactory()->create(std::move(cl));
 }
 
 size_t

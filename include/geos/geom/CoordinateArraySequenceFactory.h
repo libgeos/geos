@@ -47,6 +47,8 @@ public:
 
     std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate>* coords, std::size_t dims = 0) const override;
 
+    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> && coords, std::size_t dims = 0) const override;
+
     /** @see CoordinateSequenceFactory::create(std::size_t, int) */
     std::unique_ptr<CoordinateSequence> create(std::size_t size, std::size_t dimension = 0) const override;
 
