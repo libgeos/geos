@@ -35,6 +35,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h> // FIXME: shouldn't use
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 //#define GEOS_DEBUG_INTERSECT 0
 #ifndef GEOS_DEBUG
@@ -77,13 +78,7 @@ Edge::updateIM(const Label& lbl, IntersectionMatrix& im)
 }
 
 /*public*/
-Edge::~Edge()
-{
-    //cerr<<"["<<this<<"] ~Edge()"<<endl;
-    delete mce;
-    delete pts;
-    delete env;
-}
+Edge::~Edge() = default;
 
 /*public*/
 Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
@@ -91,9 +86,9 @@ Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
     GraphComponent(newLabel),
     mce(nullptr),
     env(nullptr),
-    isIsolatedVar(true),
     depth(),
     depthDelta(0),
+    isIsolatedVar(true),
     pts(newPts),
     eiList(this)
 {
@@ -106,9 +101,9 @@ Edge::Edge(CoordinateSequence* newPts)
     GraphComponent(),
     mce(nullptr),
     env(nullptr),
-    isIsolatedVar(true),
     depth(),
     depthDelta(0),
+    isIsolatedVar(true),
     pts(newPts),
     eiList(this)
 {
@@ -121,9 +116,9 @@ Edge::getMonotoneChainEdge()
 {
     testInvariant();
     if(mce == nullptr) {
-        mce = new MonotoneChainEdge(this);
+        mce = detail::make_unique<MonotoneChainEdge>(this);
     }
-    return mce;
+    return mce.get();
 }
 
 
@@ -309,14 +304,14 @@ Edge::getEnvelope()
 {
     // compute envelope lazily
     if(env == nullptr) {
-        env = new Envelope();
+        env = detail::make_unique<Envelope>();
         auto npts = getNumPoints();
         for(size_t i = 0; i < npts; ++i) {
             env->expandToInclude(pts->getAt(i));
         }
     }
     testInvariant();
-    return env;
+    return env.get();
 }
 
 std::ostream&

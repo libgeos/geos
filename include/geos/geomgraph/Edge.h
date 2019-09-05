@@ -71,16 +71,16 @@ private:
     std::string name;
 
     /// Lazily-created, owned by Edge.
-    index::MonotoneChainEdge* mce;
+    std::unique_ptr<index::MonotoneChainEdge> mce;
 
     /// Lazily-created, owned by Edge.
-    geom::Envelope* env;
-
-    bool isIsolatedVar;
+    std::unique_ptr<geom::Envelope> env;
 
     Depth depth;
 
     int depthDelta;   // the change in area depth from the R to L side of this edge
+
+    bool isIsolatedVar;
 
 public:
 
@@ -97,7 +97,7 @@ public:
     static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
 
     /// Externally-set, owned by Edge. FIXME: refuse ownership
-    geom::CoordinateSequence* pts;
+    std::unique_ptr<geom::CoordinateSequence> pts;
 
     EdgeIntersectionList eiList;
 
@@ -127,7 +127,7 @@ public:
     getCoordinates() const
     {
         testInvariant();
-        return pts;
+        return pts.get();
     }
 
     virtual const geom::Coordinate&

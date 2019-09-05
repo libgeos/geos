@@ -28,7 +28,9 @@
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geomgraph/Depth.h>
 #include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/noding/NodedSegmentString.h>
@@ -45,9 +47,11 @@ using namespace geos;
 int
 main()
 {
-    check(geomgraph::PlanarGraph);
-    check(geomgraph::EdgeEnd);
+    check(geomgraph::Depth);
     check(geomgraph::DirectedEdge);
+    check(geomgraph::Edge);
+    check(geomgraph::EdgeEnd);
+    check(geomgraph::PlanarGraph);
     check(noding::NodedSegmentString);
     check(geom::Geometry);
     check(geom::Point);
