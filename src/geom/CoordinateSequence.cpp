@@ -19,6 +19,7 @@
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cstdio>
 #include <algorithm>
@@ -35,6 +36,21 @@ namespace geom { // geos::geom
 #if PROFILE
 static Profiler* profiler = Profiler::instance();
 #endif
+
+double
+CoordinateSequence::getOrdinate(size_t index, size_t ordinateIndex) const
+{
+    switch(ordinateIndex) {
+        case CoordinateSequence::X:
+            return getAt(index).x;
+        case CoordinateSequence::Y:
+            return getAt(index).y;
+        case CoordinateSequence::Z:
+            return getAt(index).z;
+        default:
+            return DoubleNotANumber;
+    }
+}
 
 bool
 CoordinateSequence::hasRepeatedPoints() const

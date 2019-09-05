@@ -57,10 +57,7 @@ public:
         size_t hits = 0;
         auto prep = GEOSPrepare(g);
         for (const auto& c : coords) {
-            auto seq = GEOSCoordSeq_create(1, 2);
-            GEOSCoordSeq_setX(seq, 0, c.x);
-            GEOSCoordSeq_setY(seq, 0, c.y);
-            auto pt = GEOSGeom_createPoint(seq);
+            auto pt = GEOSGeom_createPointFromXY(c.x, c.y);
 
             if (GEOSPreparedContains(prep, pt)) {
                 hits++;

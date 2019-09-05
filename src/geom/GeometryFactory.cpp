@@ -311,11 +311,7 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
         return createPoint();
     }
     else {
-        std::size_t dim = std::isnan(coordinate.z) ? 2 : 3;
-        auto cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
-
-        Point* ret = createPoint(cl.release());
-        return ret;
+        return new Point(coordinate, this);
     }
 }
 

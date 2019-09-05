@@ -912,6 +912,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_createPointFromXY(double x, double y)
+    {
+        return GEOSGeom_createPointFromXY_r(handle, x, y);
+    }
+
+    Geometry*
     GEOSGeom_createLinearRing(CoordinateSequence* cs)
     {
         return GEOSGeom_createLinearRing_r(handle, cs);

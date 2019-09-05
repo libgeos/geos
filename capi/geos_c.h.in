@@ -480,6 +480,10 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint_r(
                                        GEOSContextHandle_t handle,
                                        GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY_r(
+                                       GEOSContextHandle_t handle,
+                                       double x,
+                                       double y);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint_r(
                                        GEOSContextHandle_t handle);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing_r(
@@ -1525,6 +1529,7 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
  ***********************************************************************/
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint();
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing(GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
