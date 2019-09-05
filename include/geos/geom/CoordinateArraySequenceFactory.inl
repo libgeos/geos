@@ -39,6 +39,12 @@ CoordinateArraySequenceFactory::create(std::vector<Coordinate>* coords,
 }
 
 INLINE std::unique_ptr<CoordinateSequence>
+CoordinateArraySequenceFactory::create(std::vector<Coordinate> && coords,
+        size_t dimension) const {
+    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(coords), dimension));
+}
+
+INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
 const
 {

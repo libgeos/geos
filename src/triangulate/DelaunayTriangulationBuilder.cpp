@@ -49,11 +49,11 @@ DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
     auto seqFactory = CoordinateArraySequenceFactory::instance();
     auto dim = seq->getDimension();
 
-    auto coords = detail::make_unique<std::vector<Coordinate>>();
-    seq->toVector(*(coords.get()));
-    std::sort(coords->begin(), coords->end(), geos::geom::CoordinateLessThen());
+    std::vector<Coordinate> coords;
+    seq->toVector(coords);
+    std::sort(coords.begin(), coords.end(), geos::geom::CoordinateLessThen());
 
-    std::unique_ptr<CoordinateSequence> sortedSeq(seqFactory->create(coords.release(), dim));
+    std::unique_ptr<CoordinateSequence> sortedSeq(seqFactory->create(std::move(coords), dim));
 
     operation::valid::RepeatedPointTester rpt;
     if (rpt.hasRepeatedPoint(sortedSeq.get())) {

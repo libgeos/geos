@@ -99,18 +99,18 @@ GeometryCollection::setSRID(int newSRID)
 std::unique_ptr<CoordinateSequence>
 GeometryCollection::getCoordinates() const
 {
-    auto coordinates = detail::make_unique<std::vector<Coordinate>>(getNumPoints());
+    std::vector<Coordinate> coordinates(getNumPoints());
 
     size_t k = 0;
     for(const auto& g : geometries) {
-        auto childCoordinates = g->getCoordinates(); // TODO avoid this copy
+        auto childCoordinates = g->getCoordinates(); // TODO avoid this copy where getCoordinateRO() exists
         size_t npts = childCoordinates->getSize();
         for(size_t j = 0; j < npts; ++j) {
-            (*coordinates)[k] = childCoordinates->getAt(j);
+            coordinates[k] = childCoordinates->getAt(j);
             k++;
         }
     }
-    return CoordinateArraySequenceFactory::instance()->create(coordinates.release());
+    return CoordinateArraySequenceFactory::instance()->create(std::move(coordinates));
 }
 
 bool
