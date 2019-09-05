@@ -116,6 +116,7 @@ namespace geom {
         void apply_rw(const CoordinateFilter* filter) override {
             std::for_each(m_data.begin(), m_data.end(),
                     [&filter](Coordinate &c) { filter->filter_rw(&c); });
+            dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
         }
 
     private:
