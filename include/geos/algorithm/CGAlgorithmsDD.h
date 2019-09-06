@@ -111,9 +111,17 @@ public:
         return CGAlgorithmsDD::STRAIGHT;
     }
 
-    static void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& q1, const geom::Coordinate& q2,
-                             geom::Coordinate& rv);
+    /**
+     * If the lines are parallel (either identical
+     * or separate) a null value is returned.
+     * @param p1 an endpoint of line segment 1
+     * @param p2 an endpoint of line segment 1
+     * @param q1 an endpoint of line segment 2
+     * @param q2 an endpoint of line segment 2
+     * @return an intersection point if one exists, or null if the lines are parallel
+     */
+    static geom::Coordinate intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                             const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 

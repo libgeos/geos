@@ -14,12 +14,30 @@ namespace tut {
 //
 
 struct test_lineseg_data {
+
+    typedef geos::geom::Coordinate Coordinate;
+    typedef geos::geom::LineSegment LineSegment;
+
     geos::geom::Coordinate ph1;
     geos::geom::Coordinate ph2;
     geos::geom::Coordinate pv1;
     geos::geom::Coordinate pv2;
     geos::geom::LineSegment h1;
     geos::geom::LineSegment v1;
+    double MAX_ABS_ERROR_INTERSECTION = 1e-5;
+
+    void checkLineIntersection(double p1x, double p1y, double p2x, double p2y,
+                               double q1x, double q1y, double q2x, double q2y,
+                               double expectedx, double expectedy) {
+        LineSegment seg1(p1x, p1y, p2x, p2y);
+        LineSegment seg2(q1x, q1y, q2x, q2y);
+
+        Coordinate actual = seg1.lineIntersection(seg2);
+        Coordinate expected(expectedx, expectedy);
+        double dist = actual.distance(expected);
+        // std::cout << "Expected: " << expected << "  Actual: " << actual << "  Dist = " << dist << std::endl;
+        ensure("checkLineIntersection", dist <= MAX_ABS_ERROR_INTERSECTION);
+    }
 
     test_lineseg_data()
         : ph1(0, 2), ph2(10, 2), pv1(0, 0), pv2(0, 10), h1(ph1, ph2), v1(pv1, pv2)
@@ -115,6 +133,24 @@ void object::test<6>
     ensure_equals(v1.distance(p), 1);
     v1.reverse();
     ensure_equals(v1.distance(p), 1);
+}
+
+template<>
+template<>
+void object::test<7>
+()
+{
+    // simple case
+    checkLineIntersection(
+        0,0,  10,10,
+        0,10, 10,0,
+        5,5);
+
+    //Almost collinear - See JTS GitHub issue #464
+    checkLineIntersection(
+        35613471.6165017, 4257145.306132293, 35613477.7705378, 4257160.528222711,
+        35613477.77505724, 4257160.539653536, 35613479.85607389, 4257165.92369170,
+        35613477.772841461, 4257160.5339209242 );
 }
 
 } // namespace tut

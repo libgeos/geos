@@ -6579,11 +6579,9 @@ extern "C" {
         try {
             geos::geom::LineSegment a(ax0, ay0, ax1, ay1);
             geos::geom::LineSegment b(bx0, by0, bx1, by1);
-            geos::geom::Coordinate isect;
+            geos::geom::Coordinate isect = a.intersection(b);
 
-            bool intersects = a.intersection(b, isect);
-
-            if(!intersects) {
+            if(isect.isNull()) {
                 return -1;
             }
 
