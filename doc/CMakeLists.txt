@@ -2,6 +2,7 @@
 # Part of CMake configuration for GEOS
 #
 # Copyright (C) 2018 Mateusz Loskot <mateusz@loskot.net>
+# Copyright (C) 2019 Daniel Baston <dbaston@gmail.com>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
@@ -15,3 +16,24 @@ target_link_libraries(example PRIVATE geos)
 target_include_directories(test_geos_unit
         PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+
+option(BUILD_DOCUMENTATION "Build Doxygen documentation" OFF)
+
+if(BUILD_DOCUMENTATION)
+    find_package(Doxygen)
+
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen was not found.")
+    endif()
+
+    set(srcdir ${CMAKE_CURRENT_SOURCE_DIR})
+    set(DOXYGEN_LOGFILE ${CMAKE_CURRENT_BINARY_DIR}/doxygen_log)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+                   @ONLY)
+    unset(srcdir)
+    unset(DOXYGEN_LOGFILE)
+
+    add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+endif()
