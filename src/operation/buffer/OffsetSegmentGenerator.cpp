@@ -486,8 +486,7 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
      * However, this situation should have been eliminated earlier by the check
      * for whether the offset segment endpoints are almost coincident
      */
-    Coordinate intPt;
-    algorithm::Intersection::intersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1, intPt);
+    Coordinate intPt = algorithm::Intersection::intersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
     if (!intPt.isNull()) {
         double mitreRatio = p_distance <= 0.0 ? 1.0 : intPt.distance(p) / fabs(p_distance);
         if (mitreRatio <= bufParams.getMitreLimit()) {

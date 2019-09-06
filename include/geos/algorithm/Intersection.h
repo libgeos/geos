@@ -48,9 +48,8 @@ class GEOS_DLL Intersection {
 
 public:
 
-static void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                         const geom::Coordinate& q1, const geom::Coordinate& q2,
-                         geom::Coordinate& rv);
+static geom::Coordinate intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                     const geom::Coordinate& q1, const geom::Coordinate& q2);
 
 };
 

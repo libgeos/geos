@@ -147,10 +147,9 @@ CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
     return CGAlgorithmsDD::FAILURE;
 }
 
-void
+Coordinate
 CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
-                             const Coordinate& q1, const Coordinate& q2,
-                             Coordinate& rv)
+                             const Coordinate& q1, const Coordinate& q2)
 {
     DD q1x(q1.x);
     DD q1y(q1.y);
@@ -177,15 +176,17 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
     double xInt = (x / w).ToDouble();
     double yInt = (y / w).ToDouble();
 
+    Coordinate rv;
+
     if (std::isnan(xInt) || std::isnan(yInt) ||
         std::isinf(xInt) || std::isinf(yInt)) {
         rv.setNull();
-        return;
+        return rv;
     }
 
     rv.x = xInt;
     rv.y = yInt;
-    return;
+    return rv;
 }
 
 /* public static */

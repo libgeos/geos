@@ -292,8 +292,8 @@ private:
         return result == COLLINEAR_INTERSECTION;
     }
 
-    int computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& q1,
-                         const geom::Coordinate& q2);
+    int computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                         const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     bool
     isEndPoint() const
@@ -305,9 +305,8 @@ private:
 
     void computeIntLineIndex(int segmentIndex);
 
-    int computeCollinearIntersection(const geom::Coordinate& p1,
-                                     const geom::Coordinate& p2, const geom::Coordinate& q1,
-                                     const geom::Coordinate& q2);
+    int computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                     const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     /** \brief
      * This method computes the actual value of the intersection point.
@@ -318,11 +317,10 @@ private:
      * removing common significant digits from the calculation to
      * maintain more bits of precision.
      */
-    void intersection(const geom::Coordinate& p1,
-                      const geom::Coordinate& p2,
-                      const geom::Coordinate& q1,
-                      const geom::Coordinate& q2,
-                      geom::Coordinate& ret) const;
+    geom::Coordinate intersection(const geom::Coordinate& p1,
+                                  const geom::Coordinate& p2,
+                                  const geom::Coordinate& q1,
+                                  const geom::Coordinate& q2) const;
 
     /**
      * Test whether a point lies in the envelopes of both input segments.
@@ -347,11 +345,10 @@ private:
      * @param p2 a segment endpoint
      * @param q1 a segment endpoint
      * @param q2 a segment endpoint
-     * @param intPt the computed intersection point is stored there
+     * @return the computed intersection point is stored there
      */
-    void intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                          const geom::Coordinate& q1, const geom::Coordinate& q2,
-                          geom::Coordinate& intPt) const;
+    geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                      const geom::Coordinate& q1, const geom::Coordinate& q2) const;
 
 };
 

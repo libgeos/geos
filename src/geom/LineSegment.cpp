@@ -188,8 +188,8 @@ std::array<Coordinate, 2>
 LineSegment::closestPoints(const LineSegment& line)
 {
     // test for intersection
-    Coordinate intPt;
-    if(intersection(line, intPt)) {
+    Coordinate intPt = intersection(line);
+    if(!intPt.isNull()) {
         return { intPt, intPt };
     }
 
@@ -239,26 +239,23 @@ LineSegment::closestPoints(const LineSegment& line)
     return closestPt;
 }
 
-bool
-LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
+Coordinate
+LineSegment::intersection(const LineSegment& line) const
 {
     algorithm::LineIntersector li;
     li.computeIntersection(p0, p1, line.p0, line.p1);
     if(li.hasIntersection()) {
-        ret = li.getIntersection(0);
-        return true;
+        return li.getIntersection(0);
     }
-    return false;
+    Coordinate rv;
+    rv.setNull();
+    return rv;
 }
 
-bool
-LineSegment::lineIntersection(const LineSegment& line, Coordinate& ret) const
+Coordinate
+LineSegment::lineIntersection(const LineSegment& line) const
 {
-    algorithm::Intersection::intersection(p0, p1, line.p0, line.p1, ret);
-    if (ret.isNull())
-        return false;
-    else
-        return true;
+    return algorithm::Intersection::intersection(p0, p1, line.p0, line.p1);
 }
 
 

@@ -385,8 +385,8 @@ LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, cons
 
 /*private*/
 int
-LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, const Coordinate& q1,
-                                  const Coordinate& q2)
+LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
+                                  const Coordinate& q1, const Coordinate& q2)
 {
 #if GEOS_DEBUG
     cerr << "LineIntersector::computeIntersect called" << endl;
@@ -543,7 +543,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, co
     }
     else {
         isProperVar = true;
-        intersection(p1, p2, q1, q2, intPt[0]);
+        intPt[0] = intersection(p1, p2, q1, q2);
     }
 #if GEOS_DEBUG
     cerr << " POINT_INTERSECTION; intPt[0]:" << intPt[0].toString() << endl;
@@ -553,8 +553,8 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, co
 
 /*private*/
 int
-LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2, const Coordinate& q1,
-        const Coordinate& q2)
+LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2,
+                                              const Coordinate& q1, const Coordinate& q2)
 {
 #if COMPUTE_Z
     double ztot;
@@ -840,13 +840,12 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordi
 }
 
 /*private*/
-void
-LineIntersector::intersection(const Coordinate& p1,
-                              const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
-                              Coordinate& intPtOut) const
+Coordinate
+LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
+                              const Coordinate& q1, const Coordinate& q2) const
 {
 
-    intersectionSafe(p1, p2, q1, q2, intPtOut);
+    Coordinate intPtOut = intersectionSafe(p1, p2, q1, q2);
 
     /*
      * Due to rounding it can happen that the computed intersection is
@@ -894,7 +893,7 @@ LineIntersector::intersection(const Coordinate& p1,
         intPtOut.z = ztot / zvals;
     }
 #endif // COMPUTE_Z
-
+    return intPtOut;
 }
 
 /*private*/
@@ -907,16 +906,15 @@ LineIntersector::isInSegmentEnvelopes(const Coordinate& pt) const
 }
 
 /*private*/
-void
+Coordinate
 LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
-                                  const Coordinate& q1, const Coordinate& q2,
-                                  Coordinate& intPt) const
+                                  const Coordinate& q1, const Coordinate& q2) const
 {
-    Intersection::intersection(p1, p2, q1, q2, intPt);
+    Coordinate intPt = Intersection::intersection(p1, p2, q1, q2);
     if (intPt.isNull()) {
         intPt = nearestEndpoint(p1, p2, q1, q2);
     }
-    return;
+    return intPt;
 }
 
 

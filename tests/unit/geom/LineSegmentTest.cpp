@@ -32,8 +32,7 @@ struct test_lineseg_data {
         LineSegment seg1(p1x, p1y, p2x, p2y);
         LineSegment seg2(q1x, q1y, q2x, q2y);
 
-        Coordinate actual;
-        bool good = seg1.lineIntersection(seg2, actual);
+        Coordinate actual = seg1.lineIntersection(seg2);
         Coordinate expected(expectedx, expectedy);
         double dist = actual.distance(expected);
         // std::cout << "Expected: " << expected << "  Actual: " << actual << "  Dist = " << dist << std::endl;
