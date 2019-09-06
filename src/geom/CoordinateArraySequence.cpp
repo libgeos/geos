@@ -214,21 +214,6 @@ CoordinateArraySequence::expandEnvelope(Envelope& env) const
     }
 }
 
-double
-CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
-{
-    switch(ordinateIndex) {
-    case CoordinateSequence::X:
-        return vect[index].x;
-    case CoordinateSequence::Y:
-        return vect[index].y;
-    case CoordinateSequence::Z:
-        return vect[index].z;
-    default:
-        return DoubleNotANumber;
-    }
-}
-
 void
 CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
                                      double value)

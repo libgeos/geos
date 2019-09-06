@@ -105,19 +105,13 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
     const CoordinateSequenceFactory* csf =
         geomFactory->getCoordinateSequenceFactory();
 
-    // Create a new Coordinate::Vect for feeding it to
-    // the CoordinateSequenceFactory
-    Coordinate::Vect* vect = new Coordinate::Vect();
+    std::vector<Coordinate> vect(cv.size());
 
-    size_t n = cv.size();
-    vect->reserve(n); // avoid multiple reallocs
-
-    for(size_t i = 0; i < n; ++i) {
-        vect->push_back(*(cv[i])); // Coordinate copy
+    for(size_t i = 0; i < cv.size(); ++i) {
+        vect[i] = *(cv[i]); // Coordinate copy
     }
 
-    return csf->create(vect); // takes ownership of the vector
-
+    return csf->create(std::move(vect)); // takes ownership of the vector
 }
 
 /* private */

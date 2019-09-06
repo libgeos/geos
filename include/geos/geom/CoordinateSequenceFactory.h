@@ -74,6 +74,16 @@ public:
         std::size_t dimension = 0) const = 0;
 
     /** \brief
+     * Returns a CoordinateSequence based on the given array.
+     *
+     * @param coordinates the coordinates
+     * @param dimension 0, 2 or 3 with 0 indicating unknown at this time.
+     */
+    virtual std::unique_ptr<CoordinateSequence> create(
+            std::vector<Coordinate> && coordinates,
+            std::size_t dimension = 0) const = 0;
+
+    /** \brief
      * Creates a CoordinateSequence of the specified size and dimension.
      *
      * For this to be useful, the CoordinateSequence implementation must

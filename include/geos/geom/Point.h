@@ -24,6 +24,7 @@
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
+#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
@@ -157,6 +158,8 @@ protected:
      */
     Point(CoordinateSequence* newCoords, const GeometryFactory* newFactory);
 
+    Point(const Coordinate& c, const GeometryFactory* newFactory);
+
     Point(const Point& p);
 
     Envelope::Ptr computeEnvelopeInternal() const override;
@@ -174,7 +177,8 @@ private:
     /**
      *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
      */
-    std::unique_ptr<CoordinateSequence> coordinates;
+    FixedSizeCoordinateSequence<1> coordinates;
+    bool empty;
 };
 
 } // namespace geos::geom

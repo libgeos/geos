@@ -32,6 +32,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
@@ -3692,8 +3693,16 @@ extern "C" {
         }
 
         try {
-            const GeometryFactory* gf = handle->geomFactory;
-            return gf->getCoordinateSequenceFactory()->create(size, dims).release();
+            switch (size) {
+                case 1:
+                    return new geos::geom::FixedSizeCoordinateSequence<1>(dims);
+                case 2:
+                    return new geos::geom::FixedSizeCoordinateSequence<2>(dims);
+                default: {
+                    const GeometryFactory *gf = handle->geomFactory;
+                    return gf->getCoordinateSequenceFactory()->create(size, dims).release();
+                }
+            }
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4041,6 +4050,34 @@ extern "C" {
         try {
             const GeometryFactory* gf = handle->geomFactory;
             return gf->createPoint(cs);
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    Geometry*
+    GEOSGeom_createPointFromXY_r(GEOSContextHandle_t extHandle, double x, double y)
+    {
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            const GeometryFactory* gf = handle->geomFactory;
+            geos::geom::Coordinate c(x, y);
+            return gf->createPoint(c);
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
