@@ -49,6 +49,7 @@ geos_unit_SOURCES = \
 	algorithm/distance/DiscreteFrechetDistanceTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/InteriorPointAreaTest.cpp \
+	algorithm/IntersectionTest.cpp \
 	algorithm/LengthTest.cpp \
 	algorithm/LocatePointInRingTest.cpp \
 	algorithm/MinimumBoundingCircleTest.cpp \

@@ -21,7 +21,7 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
-#include <geos/algorithm/HCoordinate.h>
+#include <geos/algorithm/Intersection.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
@@ -385,8 +385,8 @@ LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, cons
 
 /*private*/
 int
-LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, const Coordinate& q1,
-                                  const Coordinate& q2)
+LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
+                                  const Coordinate& q1, const Coordinate& q2)
 {
 #if GEOS_DEBUG
     cerr << "LineIntersector::computeIntersect called" << endl;
@@ -543,7 +543,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, co
     }
     else {
         isProperVar = true;
-        intersection(p1, p2, q1, q2, intPt[0]);
+        intPt[0] = intersection(p1, p2, q1, q2);
     }
 #if GEOS_DEBUG
     cerr << " POINT_INTERSECTION; intPt[0]:" << intPt[0].toString() << endl;
@@ -553,8 +553,8 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2, co
 
 /*private*/
 int
-LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2, const Coordinate& q1,
-        const Coordinate& q2)
+LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2,
+                                              const Coordinate& q1, const Coordinate& q2)
 {
 #if COMPUTE_Z
     double ztot;
@@ -840,13 +840,12 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordi
 }
 
 /*private*/
-void
-LineIntersector::intersection(const Coordinate& p1,
-                              const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
-                              Coordinate& intPtOut) const
+Coordinate
+LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
+                              const Coordinate& q1, const Coordinate& q2) const
 {
 
-    intersectionWithNormalization(p1, p2, q1, q2, intPtOut);
+    Coordinate intPtOut = intersectionSafe(p1, p2, q1, q2);
 
     /*
      * Due to rounding it can happen that the computed intersection is
@@ -894,47 +893,7 @@ LineIntersector::intersection(const Coordinate& p1,
         intPtOut.z = ztot / zvals;
     }
 #endif // COMPUTE_Z
-
-}
-
-/*private*/
-void
-LineIntersector::intersectionWithNormalization(const Coordinate& p1,
-        const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
-        Coordinate& intPtOut) const
-{
-    Coordinate n1 = p1;
-    Coordinate n2 = p2;
-    Coordinate n3 = q1;
-    Coordinate n4 = q2;
-    Coordinate normPt;
-    normalizeToEnvCentre(n1, n2, n3, n4, normPt);
-
-    safeHCoordinateIntersection(n1, n2, n3, n4, intPtOut);
-
-    intPtOut.x += normPt.x;
-    intPtOut.y += normPt.y;
-}
-
-
-/*private*/
-double
-LineIntersector::smallestInAbsValue(double x1, double x2, double x3, double x4) const
-{
-    double x = x1;
-    double xabs = fabs(x);
-    if(fabs(x2) < xabs) {
-        x = x2;
-        xabs = fabs(x2);
-    }
-    if(fabs(x3) < xabs) {
-        x = x3;
-        xabs = fabs(x3);
-    }
-    if(fabs(x4) < xabs) {
-        x = x4;
-    }
-    return x;
+    return intPtOut;
 }
 
 /*private*/
@@ -947,82 +906,17 @@ LineIntersector::isInSegmentEnvelopes(const Coordinate& pt) const
 }
 
 /*private*/
-void
-LineIntersector::normalizeToEnvCentre(Coordinate& n00, Coordinate& n01,
-                                      Coordinate& n10, Coordinate& n11, Coordinate& normPt) const
+Coordinate
+LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
+                                  const Coordinate& q1, const Coordinate& q2) const
 {
-    double minX0 = n00.x < n01.x ? n00.x : n01.x;
-    double minY0 = n00.y < n01.y ? n00.y : n01.y;
-    double maxX0 = n00.x > n01.x ? n00.x : n01.x;
-    double maxY0 = n00.y > n01.y ? n00.y : n01.y;
-
-    double minX1 = n10.x < n11.x ? n10.x : n11.x;
-    double minY1 = n10.y < n11.y ? n10.y : n11.y;
-    double maxX1 = n10.x > n11.x ? n10.x : n11.x;
-    double maxY1 = n10.y > n11.y ? n10.y : n11.y;
-
-    double intMinX = minX0 > minX1 ? minX0 : minX1;
-    double intMaxX = maxX0 < maxX1 ? maxX0 : maxX1;
-    double intMinY = minY0 > minY1 ? minY0 : minY1;
-    double intMaxY = maxY0 < maxY1 ? maxY0 : maxY1;
-
-    double intMidX = (intMinX + intMaxX) / 2.0;
-    double intMidY = (intMinY + intMaxY) / 2.0;
-
-    normPt.x = intMidX;
-    normPt.y = intMidY;
-
-    n00.x -= normPt.x;
-    n00.y -= normPt.y;
-    n01.x -= normPt.x;
-    n01.y -= normPt.y;
-    n10.x -= normPt.x;
-    n10.y -= normPt.y;
-    n11.x -= normPt.x;
-    n11.y -= normPt.y;
-
-#if COMPUTE_Z
-
-    // Only do this if input does have Z
-    // See https://trac.osgeo.org/geos/ticket/811
-    if(std::isnan(n00.z)) {
-        return;
+    Coordinate intPt = Intersection::intersection(p1, p2, q1, q2);
+    if (intPt.isNull()) {
+        intPt = nearestEndpoint(p1, p2, q1, q2);
     }
-
-    double minZ0 = n00.z < n01.z ? n00.z : n01.z;
-    double minZ1 = n10.z < n11.z ? n10.z : n11.z;
-    double maxZ0 = n00.z > n01.z ? n00.z : n01.z;
-    double maxZ1 = n10.z > n11.z ? n10.z : n11.z;
-    double intMinZ = minZ0 > minZ1 ? minZ0 : minZ1;
-    double intMaxZ = maxZ0 < maxZ1 ? maxZ0 : maxZ1;
-    double intMidZ = (intMinZ + intMaxZ) / 2.0;
-    normPt.z = intMidZ;
-    n00.z -= normPt.z;
-    n01.z -= normPt.z;
-    n10.z -= normPt.z;
-    n11.z -= normPt.z;
-#endif
+    return intPt;
 }
 
-/*private*/
-void
-LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
-        const Coordinate& p2, const Coordinate& q1,
-        const Coordinate& q2, Coordinate& intPtOut) const
-{
-    try {
-        HCoordinate::intersection(p1, p2, q1, q2, intPtOut);
-#if GEOS_DEBUG
-        cerr << " HCoordinate found intersection h:" << intPt.toString() << endl;
-#endif
-
-    }
-    catch(const NotRepresentableException& /* e */) {
-        // compute an approximate result
-        //intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
-        intPtOut = nearestEndpoint(p1, p2, q1, q2);
-    }
-}
 
 } // namespace geos.algorithm
 } // namespace geos

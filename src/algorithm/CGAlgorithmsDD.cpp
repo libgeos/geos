@@ -21,6 +21,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <sstream>
+#include <cmath>
 
 using namespace geos::geom;
 using namespace geos::algorithm;
@@ -146,10 +147,9 @@ CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
     return CGAlgorithmsDD::FAILURE;
 }
 
-void
+Coordinate
 CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
-                             const Coordinate& q1, const Coordinate& q2,
-                             Coordinate& rv)
+                             const Coordinate& q1, const Coordinate& q2)
 {
     DD q1x(q1.x);
     DD q1y(q1.y);
@@ -161,35 +161,32 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
     DD p2x(p2.x);
     DD p2y(p2.y);
 
-    DD qdy = q2y - q1y;
-    DD qdx = q2x - q1x;
+    DD px = p1y - p2y;
+    DD py = p2x - p1x;
+    DD pw = (p1x * p2y) - (p2x * p1y);
 
-    DD pdy = p2y - p1y;
-    DD pdx = p2x - p1x;
+    DD qx = q1y - q2y;
+    DD qy = q2x - q1x;
+    DD qw = (q1x * q2y) - (q2x * q1y);
 
-    DD denom = (qdy * pdx) - (qdx * pdy);
+    DD x = (py * qw) - (qy * pw);
+    DD y = (qx * pw) - (px * qw);
+    DD w = (px * qy) - (qx * py);
 
-    /**
-     * Cases:
-     * - denom is 0 if lines are parallel
-     * - intersection point lies within line segment p if fracP is between 0 and 1
-     * - intersection point lies within line segment q if fracQ is between 0 and 1
-     */
-    DD numx1 = (q2x - q1x) * (p1y - q1y);
-    DD numx2 = (q2y - q1y) * (p1x - q1x);
-    DD numx = numx1 - numx2;
-    DD fracP = numx / denom;
+    double xInt = (x / w).ToDouble();
+    double yInt = (y / w).ToDouble();
 
-    DD x = p1x + (p2x - p1x) * fracP;
+    Coordinate rv;
 
-    DD numy1 = (p2x - p1x) * (p1y - q1y);
-    DD numy2 = (p2y - p1y) * (p1x - q1x);
-    DD numy = numy1 - numy2;
-    DD fracQ = numy / denom;
-    DD y = q1y + (q2y - q1y) * fracQ;
+    if (std::isnan(xInt) || std::isnan(yInt) ||
+        std::isinf(xInt) || std::isinf(yInt)) {
+        rv.setNull();
+        return rv;
+    }
 
-    rv.x = x.ToDouble();
-    rv.y = y.ToDouble();
+    rv.x = xInt;
+    rv.y = yInt;
+    return rv;
 }
 
 /* public static */

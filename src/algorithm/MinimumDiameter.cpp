@@ -343,11 +343,10 @@ MinimumDiameter::getMinimumRectangle()
     LineSegment minParaLine = computeSegmentForLine(-dy, dx, minPara);
 
     // compute vertices of rectangle (where the para/perp max & min lines intersect)
-    Coordinate p0, p1, p2, p3;
-    maxParaLine.lineIntersection(maxPerpLine, p0);
-    minParaLine.lineIntersection(maxPerpLine, p1);
-    minParaLine.lineIntersection(minPerpLine, p2);
-    maxParaLine.lineIntersection(minPerpLine, p3);
+    Coordinate p0 = maxParaLine.lineIntersection(maxPerpLine);
+    Coordinate p1 = minParaLine.lineIntersection(maxPerpLine);
+    Coordinate p2 = minParaLine.lineIntersection(minPerpLine);
+    Coordinate p3 = maxParaLine.lineIntersection(minPerpLine);
 
     const CoordinateSequenceFactory* csf =
         inputGeom->getFactory()->getCoordinateSequenceFactory();

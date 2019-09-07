@@ -33,7 +33,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/algorithm/NotRepresentableException.h>
-#include <geos/algorithm/HCoordinate.h>
+#include <geos/algorithm/Intersection.h>
 #include <geos/util.h>
 
 #ifndef GEOS_DEBUG
@@ -481,43 +481,22 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
                                      const geom::LineSegment& p_offset1,
                                      double p_distance)
 {
-    bool isMitreWithinLimit = true;
-    Coordinate intPt;
-
     /**
-     * This computation is unstable if the offset segments
-    * are nearly collinear.
-     * Howver, this situation should have been eliminated earlier
-    * by the check for whether the offset segment endpoints are
-    * almost coincident
+     * This computation is unstable if the offset segments are nearly collinear.
+     * However, this situation should have been eliminated earlier by the check
+     * for whether the offset segment endpoints are almost coincident
      */
-    try {
-        HCoordinate::intersection(p_offset0.p0, p_offset0.p1,
-                                  p_offset1.p0, p_offset1.p1,
-                                  intPt);
-
-        double mitreRatio = p_distance <= 0.0 ? 1.0
-                            : intPt.distance(p) / fabs(p_distance);
-
-        if(mitreRatio > bufParams.getMitreLimit()) {
-            isMitreWithinLimit = false;
+    Coordinate intPt = algorithm::Intersection::intersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
+    if (!intPt.isNull()) {
+        double mitreRatio = p_distance <= 0.0 ? 1.0 : intPt.distance(p) / fabs(p_distance);
+        if (mitreRatio <= bufParams.getMitreLimit()) {
+            segList.addPt(intPt);
+            return;
         }
     }
-    catch(const NotRepresentableException& e) {
-        ::geos::ignore_unused_variable_warning(e);
-
-        intPt = Coordinate(0, 0);
-        isMitreWithinLimit = false;
-    }
-
-    if(isMitreWithinLimit) {
-        segList.addPt(intPt);
-    }
-    else {
-        addLimitedMitreJoin(p_offset0, p_offset1, p_distance,
-                            bufParams.getMitreLimit());
-        //addBevelJoin(offset0, offset1);
-    }
+    // at this point either intersection failed or mitre limit was exceeded
+    addLimitedMitreJoin(p_offset0, p_offset1, p_distance,
+                        bufParams.getMitreLimit());
 }
 
 /* private */

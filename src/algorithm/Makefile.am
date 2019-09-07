@@ -21,6 +21,7 @@ libalgorithm_la_SOURCES = \
 	InteriorPointArea.cpp \
 	InteriorPointLine.cpp \
 	InteriorPointPoint.cpp \
+	Intersection.cpp \
 	LineIntersector.cpp \
 	Length.cpp \
 	MinimumBoundingCircle.cpp \
@@ -32,7 +33,6 @@ libalgorithm_la_SOURCES = \
 	RayCrossingCounter.cpp \
 	RayCrossingCounterDD.cpp \
 	RobustDeterminant.cpp
-
 
 libalgorithm_la_LIBADD = \
 	locate/liblocation.la \

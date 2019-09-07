@@ -24,6 +24,7 @@ geos_HEADERS = \
 	InteriorPointArea.h \
 	InteriorPointLine.h \
 	InteriorPointPoint.h \
+	Intersection.h \
 	Length.h \
 	LineIntersector.h \
 	MinimumBoundingCircle.h \

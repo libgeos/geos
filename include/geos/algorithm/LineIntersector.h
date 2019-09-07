@@ -260,12 +260,6 @@ public:
 
 private:
 
-    void intersectionWithNormalization(const geom::Coordinate& p1,
-                                       const geom::Coordinate& p2,
-                                       const geom::Coordinate& q1,
-                                       const geom::Coordinate& q2,
-                                       geom::Coordinate& ret) const;
-
     /**
      * If makePrecise is true, computed intersection coordinates
      * will be made precise using Coordinate#makePrecise
@@ -298,8 +292,8 @@ private:
         return result == COLLINEAR_INTERSECTION;
     }
 
-    int computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& q1,
-                         const geom::Coordinate& q2);
+    int computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                         const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     bool
     isEndPoint() const
@@ -311,9 +305,8 @@ private:
 
     void computeIntLineIndex(int segmentIndex);
 
-    int computeCollinearIntersection(const geom::Coordinate& p1,
-                                     const geom::Coordinate& p2, const geom::Coordinate& q1,
-                                     const geom::Coordinate& q2);
+    int computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                     const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     /** \brief
      * This method computes the actual value of the intersection point.
@@ -324,14 +317,10 @@ private:
      * removing common significant digits from the calculation to
      * maintain more bits of precision.
      */
-    void intersection(const geom::Coordinate& p1,
-                      const geom::Coordinate& p2,
-                      const geom::Coordinate& q1,
-                      const geom::Coordinate& q2,
-                      geom::Coordinate& ret) const;
-
-    double smallestInAbsValue(double x1, double x2,
-                              double x3, double x4) const;
+    geom::Coordinate intersection(const geom::Coordinate& p1,
+                                  const geom::Coordinate& p2,
+                                  const geom::Coordinate& q1,
+                                  const geom::Coordinate& q2) const;
 
     /**
      * Test whether a point lies in the envelopes of both input segments.
@@ -345,23 +334,9 @@ private:
      */
     bool isInSegmentEnvelopes(const geom::Coordinate& intPt) const;
 
-    /** \brief
-     * Normalize the supplied coordinates to
-     * so that the midpoint of their intersection envelope
-     * lies at the origin.
-     *
-     * @param n00
-     * @param n01
-     * @param n10
-     * @param n11
-     * @param normPt
-     */
-    void normalizeToEnvCentre(geom::Coordinate& n00, geom::Coordinate& n01,
-                              geom::Coordinate& n10, geom::Coordinate& n11,
-                              geom::Coordinate& normPt) const;
 
     /**
-     * Computes a segment intersection using homogeneous coordinates.
+     * Computes a segment intersection.
      * Round-off error can cause the raw computation to fail,
      * (usually due to the segments being approximately parallel).
      * If this happens, a reasonable approximation is computed instead.
@@ -370,13 +345,10 @@ private:
      * @param p2 a segment endpoint
      * @param q1 a segment endpoint
      * @param q2 a segment endpoint
-     * @param intPt the computed intersection point is stored there
+     * @return the computed intersection point is stored there
      */
-    void safeHCoordinateIntersection(const geom::Coordinate& p1,
-                                     const geom::Coordinate& p2,
-                                     const geom::Coordinate& q1,
-                                     const geom::Coordinate& q2,
-                                     geom::Coordinate& intPt) const;
+    geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                      const geom::Coordinate& q1, const geom::Coordinate& q2) const;
 
 };
 
