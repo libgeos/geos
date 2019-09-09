@@ -108,16 +108,17 @@ private:
     bool isUnionSafe;
 
     static geom::Envelope overlapEnvelope(const geom::Geometry* g0, const geom::Geometry* g1);
-    geom::Geometry* combine(const geom::Geometry* unionGeom, std::vector<geom::Geometry*> disjointPolys);
+    geom::Geometry* combine(geom::Geometry* unionGeom, std::vector<geom::Geometry*> disjointPolys);
     geom::Geometry* extractByEnvelope(const geom::Envelope& env, const geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
     geom::Geometry* unionFull(const geom::Geometry* geom0, const geom::Geometry* geom1);
     static geom::Geometry* unionBuffer(const geom::Geometry* g0, const geom::Geometry* g1);
     bool isBorderSegmentsSame(const geom::Geometry* result, const geom::Envelope& env);
-    bool isEqual(std::vector<geom::LineSegment*> segs0, std::vector<geom::LineSegment*> segs1);
-    std::vector<geom::LineSegment*> extractBorderSegments(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::Envelope& env);
+    bool isEqual(std::vector<std::unique_ptr<geom::LineSegment>>& segs0, std::vector<std::unique_ptr<geom::LineSegment>>& segs1);
+    std::vector<std::unique_ptr<geom::LineSegment>> extractBorderSegments(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::Envelope& env);
     static bool intersects(const geom::Envelope& env, const Coordinate& p0, const Coordinate& p1);
     static bool containsProperly(const geom::Envelope& env, const Coordinate& p0, const Coordinate& p1);
-    static void extractBorderSegments(const geom::Geometry* geom, const geom::Envelope& env, std::vector<geom::LineSegment*> segs);
+    static void extractBorderSegments(const geom::Geometry* geom, const geom::Envelope& penv, std::vector<std::unique_ptr<geom::LineSegment>>& psegs);
+
 };
 
 } // namespace geos::operation::union
