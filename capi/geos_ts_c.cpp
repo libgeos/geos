@@ -3761,6 +3761,62 @@ extern "C" {
         return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 2, val);
     }
 
+    int
+    GEOSCoordSeq_setXY_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y)
+    {
+        assert(0 != cs);
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            cs->setAt({x, y}, idx);
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    int
+    GEOSCoordSeq_setXYZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y, double z)
+    {
+        assert(0 != cs);
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            cs->setAt({x, y, z}, idx);
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
     CoordinateSequence*
     GEOSCoordSeq_clone_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs)
     {
@@ -3838,6 +3894,67 @@ extern "C" {
     GEOSCoordSeq_getZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
         return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 2, val);
+    }
+
+    int
+    GEOSCoordSeq_getXY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y)
+    {
+        assert(0 != cs);
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            auto& c = cs->getAt(idx);
+            *x = c.x;
+            *y = c.y;
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    int
+    GEOSCoordSeq_getXYZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y, double* z)
+    {
+        assert(0 != cs);
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            auto& c = cs->getAt(idx);
+            *x = c.x;
+            *y = c.y;
+            *z = c.z;
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
     }
 
     int

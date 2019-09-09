@@ -302,6 +302,13 @@ extern int GEOS_DLL GEOSCoordSeq_setY_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSCoordSeq_setZ_r(GEOSContextHandle_t handle,
                                         GEOSCoordSequence* s, unsigned int idx,
                                         double val);
+extern int GEOS_DLL GEOSCoordSeq_setXY_r(GEOSContextHandle_t handle,
+                                        GEOSCoordSequence* s, unsigned int idx,
+                                        double x, double y);
+extern int GEOS_DLL GEOSCoordSeq_setXYZ_r(GEOSContextHandle_t handle,
+                                        GEOSCoordSequence* s, unsigned int idx,
+                                        double x, double y, double z);
+
 extern int GEOS_DLL GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t handle,
                                                GEOSCoordSequence* s,
                                                unsigned int idx,
@@ -320,6 +327,12 @@ extern int GEOS_DLL GEOSCoordSeq_getY_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSCoordSeq_getZ_r(GEOSContextHandle_t handle,
                                         const GEOSCoordSequence* s,
                                         unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getXY_r(GEOSContextHandle_t handle,
+                                         const GEOSCoordSequence* s,
+                                         unsigned int idx, double *x, double *y);
+extern int GEOS_DLL GEOSCoordSeq_getXYZ_r(GEOSContextHandle_t handle,
+                                          const GEOSCoordSequence* s,
+                                          unsigned int idx, double *x, double *y, double *z);
 extern int GEOS_DLL GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t handle,
                                                const GEOSCoordSequence* s,
                                                unsigned int idx,
@@ -1393,6 +1406,10 @@ extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSequence* s,
     unsigned int idx, double val);
 extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSequence* s,
     unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setXY(GEOSCoordSequence* s,
+    unsigned int idx, double x, double y);
+extern int GEOS_DLL GEOSCoordSeq_setXYZ(GEOSCoordSequence* s,
+    unsigned int idx, double x, double y, double z);
 extern int GEOS_DLL GEOSCoordSeq_setOrdinate(GEOSCoordSequence* s,
     unsigned int idx, unsigned int dim, double val);
 
@@ -1406,6 +1423,10 @@ extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
 extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getXY(const GEOSCoordSequence* s,
+    unsigned int idx, double *x, double *y);
+extern int GEOS_DLL GEOSCoordSeq_getXYZ(const GEOSCoordSequence* s,
+    unsigned int idx, double *x, double *y, double *z);
 extern int GEOS_DLL GEOSCoordSeq_getOrdinate(const GEOSCoordSequence* s,
     unsigned int idx, unsigned int dim, double *val);
 /*

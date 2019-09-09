@@ -344,5 +344,48 @@ void object::test<10>
     ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
 }
 
+template<>
+template<>
+void object::test<11>
+()
+{
+    cs_ = GEOSCoordSeq_create(1, 2);
+
+    unsigned int size;
+    unsigned int dims;
+
+    ensure(0 != GEOSCoordSeq_getSize(cs_, &size));
+    ensure_equals(size, 1u);
+
+    ensure(0 != GEOSCoordSeq_getDimensions(cs_, &dims));
+    ensure_equals(dims, 2u);
+
+    double x = 10;
+    double y = 11;
+
+    GEOSCoordSeq_setXY(cs_, 0, x, y);
+
+    double xcheck, ycheck, zcheck;
+    ensure(0 != GEOSCoordSeq_getXY(cs_, 0, &xcheck, &ycheck));
+
+    ensure_equals(xcheck, x);
+    ensure_equals(ycheck, y);
+
+    ensure(0 != GEOSCoordSeq_getXYZ(cs_, 0, &xcheck, &ycheck, &zcheck));
+
+    ensure_equals(xcheck, x);
+    ensure_equals(ycheck, y);
+    ensure(std::isnan(zcheck));
+
+    double z = 12;
+    GEOSCoordSeq_setXYZ(cs_, 0, x, y, z);
+
+    ensure(0 != GEOSCoordSeq_getXYZ(cs_, 0, &xcheck, &ycheck, &zcheck));
+
+    ensure_equals(xcheck, x);
+    ensure_equals(ycheck, y);
+    ensure_equals(zcheck, z);
+}
+
 } // namespace tut
 
