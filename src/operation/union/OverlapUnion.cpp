@@ -210,7 +210,7 @@ extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<st
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        std::vector<std::unique_ptr<LineSegment>>* segs;
+        std::vector<std::unique_ptr<LineSegment>> segs;
         const Envelope env;
 
     public:
