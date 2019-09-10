@@ -23,7 +23,6 @@
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/util/TopologyException.h>
 
-
 namespace geos {
 namespace operation {
 namespace geounion {
@@ -33,80 +32,81 @@ namespace geounion {
 // xxx OverlapUnion::union leaks like a seive, check cascadedunion implementation for use of unique_ptr
 
 using namespace geom;
+using namespace geom::util;
 
 /* public */
 Geometry*
-OverlapUnion::union()
+OverlapUnion::doUnion()
 {
     Envelope overlapEnv = overlapEnvelope(g0, g1);
     /**
      * If no overlap, can just combine the geometries
      */
     if (overlapEnv.isNull()) {
-        Geometry* g0Copy = g0.clone();
-        Geometry* g1Copy = g1.clone();
-        return util::GeometryCombiner::combine(g0Copy, g1Copy);
+        Geometry* g0Copy = g0->clone().get();
+        Geometry* g1Copy = g1->clone().get();
+        return GeometryCombiner::combine(g0Copy, g1Copy).get();
     }
 
     std::vector<Geometry*> disjointPolys;
 
-    Geometry* g0Overlap = extractByEnvelope(overlapEnv, g0, disjointPolys);
-    Geometry* g1Overlap = extractByEnvelope(overlapEnv, g1, disjointPolys);
+    std::unique_ptr<Geometry> g0Overlap = extractByEnvelope(overlapEnv, g0, disjointPolys);
+    std::unique_ptr<Geometry> g1Overlap = extractByEnvelope(overlapEnv, g1, disjointPolys);
 
     // std::out << "# geoms in common: " << intersectingPolys.size() << std::endl;
-    Geometry* unionGeom = unionFull(g0Overlap, g1Overlap);
-    Geometry* result = nullptr;
-    isUnionSafe = isBorderSegmentsSame(unionGeom, overlapEnv);
+    std::unique_ptr<Geometry> theUnion(unionFull(g0Overlap.get(), g1Overlap.get()));
+    isUnionSafe = isBorderSegmentsSame(theUnion.get(), overlapEnv);
     if (!isUnionSafe) {
-      // overlap union changed border segments... need to do full union
-      // std::out <<  "OverlapUnion: Falling back to full union" << std::endl;
-      result = unionFull(g0, g1);
+        // overlap union changed border segments... need to do full union
+        // std::out <<  "OverlapUnion: Falling back to full union" << std::endl;
+        return unionFull(g0, g1);
     }
     else {
-      // std::out << "OverlapUnion: fast path" << std::endl;
-      result = combine(unionGeom, disjointPolys);
+        // std::out << "OverlapUnion: fast path" << std::endl;
+        return combine(theUnion, disjointPolys);
     }
-    return result;
 }
 
 /* private static */
 Envelope
-overlapEnvelope(const Geometry* g0, const Geometry* g1)
+overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
 {
-    const Envelope* g0Env = g0->getEnvelopeInternal();
-    const Envelope* g1Env = g1->getEnvelopeInternal();
+    const Envelope* g0Env = geom0->getEnvelopeInternal();
+    const Envelope* g1Env = geom1->getEnvelopeInternal();
     Envelope overlapEnv;
-    g0Env->intersection(g1Env, overlapEnv);
+    g0Env->intersection(*g1Env, overlapEnv);
     return overlapEnv;
 }
 
 /* private */
 Geometry*
-OverlapUnion::combine(Geometry* unionGeom, std::vector<Geometry*>& disjointPolys)
+OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry*>& disjointPolys)
 {
     if (disjointPolys.size() <= 0)
-        return unionGeom;
+        return unionGeom.release();
 
-    disjointPolys.push_back(unionGeom);
-    return GeometryCombiner::combine(disjointPolys).get();
+    disjointPolys.push_back(unionGeom.release());
+    return GeometryCombiner::combine(disjointPolys).release();
 }
 
 /* private */
-Geometry*
+std::unique_ptr<Geometry>
 OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::vector<Geometry*>& disjointGeoms)
 {
     std::vector<Geometry*> intersectingGeoms;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        Geometry* elem = geom->getGeometryN(i);
+        const Geometry* elem = geom->getGeometryN(i);
         if (elem->getEnvelopeInternal()->intersects(env)) {
-            intersectingGeoms.push_back(elem);
+            Geometry* copy = elem->clone().get();
+            intersectingGeoms.push_back(copy);
         }
         else {
-            Geometry* copy = elem->copy();
+            Geometry* copy = elem->clone().get();
             disjointGeoms.push_back(copy);
         }
     }
-    return geomFactory->buildGeometry(intersectingGeoms);
+    std::unique_ptr<Geometry> result(geomFactory->buildGeometry(intersectingGeoms));
+    return result;
 }
 
 /* private */
@@ -114,9 +114,9 @@ Geometry*
 OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 {
     try {
-        return geom0->union(geom1);
+        return geom0->Union(geom1).release();
     }
-    catch (util::TopologyException ex) {
+    catch (geos::util::TopologyException ex) {
         /**
          * If the overlay union fails,
          * try a buffer union, which often succeeds
@@ -127,13 +127,14 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 
 /* private static */
 Geometry*
-unionBuffer(const Geometry* g0, const Geometry* g1)
+unionBuffer(const Geometry* geom0, const Geometry* geom1)
 {
-    std::vector<Geometry*> geoms = {g0 g1};
-    GeometryFactory* factory = g0->getFactory();
-    Geometry* gColl = factory->createGeometryCollection(geoms);
-    Geometry* unionGeom = gColl->buffer(0.0);
-    return unionGeom;
+    Geometry* copy0 = geom0->clone().release();
+    Geometry* copy1 = geom1->clone().release();
+    std::vector<Geometry*> geoms = {copy0, copy1};
+    const GeometryFactory* factory = copy0->getFactory();
+    std::unique_ptr<GeometryCollection> gColl(factory->createGeometryCollection(&geoms));
+    return gColl->buffer(0.0).release();
 }
 
 /* private */
@@ -155,9 +156,9 @@ OverlapUnion::isEqual(std::vector<std::unique_ptr<LineSegment>>& segs0, std::vec
     if (segs0.size() != segs1.size())
         return false;
 
-    std::unordered_set<std::unique_ptr<LineSegment>> segIndex(segs0);
+    std::unordered_set<std::unique_ptr<LineSegment>> segIndex(segs0.begin(), segs0.end());
 
-    for (auto seg : segs1) {
+    for (auto & seg : segs1) {
         if (segIndex.count(seg) == 0) {
             //std::cout <<  "Found changed border seg: " << seg << std::endl;
             return false;
@@ -186,6 +187,17 @@ intersects(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 
 /* private static */
 bool
+containsProperly(const Envelope& env, const Coordinate& p)
+{
+    if (env.isNull()) return false;
+    return p.x > env.getMinX() &&
+           p.x < env.getMaxX() &&
+           p.y > env.getMinY() &&
+           p.y < env.getMaxY();
+}
+
+/* private static */
+bool
 containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 {
     return containsProperly(env, p0) && containsProperly(env, p1);
@@ -198,12 +210,12 @@ extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<st
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        std::vector<std::unique_ptr<LineSegment>> segs;
+        std::vector<std::unique_ptr<LineSegment>>* segs;
         const Envelope env;
 
     public:
 
-        BorderSegmentFilter(const Envelope& penv, std::vector<unique_ptr<LineSegment>> psegs)
+        BorderSegmentFilter(const Envelope& penv, std::vector<std::unique_ptr<LineSegment>> psegs)
             : env(penv),
               segs(psegs) {};
 
@@ -214,7 +226,7 @@ extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<st
         isGeometryChanged() const override  { return false; }
 
         void
-        filter_rw(CoordinateSequence& seq, std::size_t i)
+        filter_ro(CoordinateSequence& seq, std::size_t i)
         {
             if (i <= 0) return;
 
@@ -228,17 +240,10 @@ extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<st
                 segs.push_back(seg);
             }
         }
-
-        void
-        filter_ro(CoordinateSequence& seq, std::size_t i)
-        {
-            ::geos::ignore_unused_variable_warning(seq);
-            ::geos::ignore_unused_variable_warning(i);
-        }
     };
 
     BorderSegmentFilter bsf(penv, psegs);
-    geom->apply_rw(bsf);
+    geom->apply_ro(bsf);
 
 }
 

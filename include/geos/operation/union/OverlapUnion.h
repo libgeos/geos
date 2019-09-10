@@ -23,16 +23,15 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_set>
 
 #include <geos/geom/Geometry.h>
-#include <geos/operation/union/GeometryListHolder.h>
-#include "GeometryListHolder.h"
 
 // Forward declarations
 namespace geos {
 namespace geom {
-class GeometryFactory;
 class Envelope;
+class LineSegment;
 }
 }
 
@@ -92,31 +91,33 @@ class GEOS_DLL OverlapUnion {
 
 public:
 
-    void OverlapUnion(geom::Geometry* p_g0, geom::Geometry* p_g1)
+    OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1)
         : g0(p_g0), g1(p_g1)
     {
         geomFactory = g0->getFactory();
+        isUnionSafe = false;
     };
 
-    geom::Geometry* union();
+    geom::Geometry* doUnion();
 
 private:
 
-    geom::GeometryFactory* geomFactory;
-    geom::Geometry* g0;
-    geom::Geometry* g1;
+    const geom::GeometryFactory* geomFactory;
+    const geom::Geometry* g0;
+    const geom::Geometry* g1;
     bool isUnionSafe;
 
-    static geom::Envelope overlapEnvelope(const geom::Geometry* g0, const geom::Geometry* g1);
-    geom::Geometry* combine(geom::Geometry* unionGeom, std::vector<geom::Geometry*> disjointPolys);
-    geom::Geometry* extractByEnvelope(const geom::Envelope& env, const geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
+    static geom::Envelope overlapEnvelope(const geom::Geometry* geom0, const geom::Geometry* geom1);
+    std::unique_ptr<geom::Geometry> extractByEnvelope(const geom::Envelope& env, const geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
+    geom::Geometry* combine(std::unique_ptr<geom::Geometry>& unionGeom, std::vector<geom::Geometry*>& disjointPolys);
     geom::Geometry* unionFull(const geom::Geometry* geom0, const geom::Geometry* geom1);
-    static geom::Geometry* unionBuffer(const geom::Geometry* g0, const geom::Geometry* g1);
+    static geom::Geometry* unionBuffer(const geom::Geometry* geom0, const geom::Geometry* geom1);
     bool isBorderSegmentsSame(const geom::Geometry* result, const geom::Envelope& env);
     bool isEqual(std::vector<std::unique_ptr<geom::LineSegment>>& segs0, std::vector<std::unique_ptr<geom::LineSegment>>& segs1);
     std::vector<std::unique_ptr<geom::LineSegment>> extractBorderSegments(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::Envelope& env);
-    static bool intersects(const geom::Envelope& env, const Coordinate& p0, const Coordinate& p1);
-    static bool containsProperly(const geom::Envelope& env, const Coordinate& p0, const Coordinate& p1);
+    static bool intersects(const geom::Envelope& env, const geom::Coordinate& p0, const geom::Coordinate& p1);
+    static bool containsProperly(const geom::Envelope& env, const geom::Coordinate& p);
+    static bool containsProperly(const geom::Envelope& env, const geom::Coordinate& p0, const geom::Coordinate& p1);
     static void extractBorderSegments(const geom::Geometry* geom, const geom::Envelope& penv, std::vector<std::unique_ptr<geom::LineSegment>>& psegs);
 
 };
