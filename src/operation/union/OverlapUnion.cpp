@@ -141,37 +141,53 @@ unionBuffer(const Geometry* geom0, const Geometry* geom1)
 bool
 OverlapUnion::isBorderSegmentsSame(const Geometry* result, const Envelope& env)
 {
-    std::vector<std::unique_ptr<LineSegment>> segsBefore = extractBorderSegments(g0, g1, env);
-    std::vector<std::unique_ptr<LineSegment>> segsAfter;
+    std::vector<LineSegment*> segsBefore = extractBorderSegments(g0, g1, env);
+    std::vector<LineSegment*> segsAfter;
     extractBorderSegments(result, env, segsAfter);
-
     //std::cout << ("# seg before: " << segsBefore.size() << " - # seg after: " << segsAfter.size() << std::endl;
-    return isEqual(segsBefore, segsAfter);
+    bool eq = isEqual(segsBefore, segsAfter);
+
+    // Clean up temporary segment arrays
+    for (auto seg : segsBefore) delete seg;
+    for (auto seg : segsAfter) delete seg;
+
+    return eq;
+}
+
+static bool lineSegmentPtrCmp(const LineSegment* a, const LineSegment* b)
+{
+    return a->compareTo(*b) < 0;
 }
 
 /* private */
 bool
-OverlapUnion::isEqual(std::vector<std::unique_ptr<LineSegment>>& segs0, std::vector<std::unique_ptr<LineSegment>>& segs1)
+OverlapUnion::isEqual(std::vector<LineSegment*>& segs0, std::vector<LineSegment*>& segs1)
 {
     if (segs0.size() != segs1.size())
         return false;
 
-    std::unordered_set<std::unique_ptr<LineSegment>> segIndex(segs0.begin(), segs0.end());
+    std::sort(segs0.begin(), segs0.end(), lineSegmentPtrCmp);
+    std::sort(segs1.begin(), segs1.end(), lineSegmentPtrCmp);
 
-    for (auto & seg : segs1) {
-        if (segIndex.count(seg) == 0) {
-            //std::cout <<  "Found changed border seg: " << seg << std::endl;
+    size_t sz = segs0.size();
+    for (std::size_t i = 0; i < sz; i++) {
+        if (segs0[i]->p0.x != segs1[i]->p0.x ||
+            segs0[i]->p0.y != segs1[i]->p0.y ||
+            segs0[i]->p1.x != segs1[i]->p1.x ||
+            segs0[i]->p1.y != segs1[i]->p1.y)
+        {
             return false;
         }
     }
+
     return true;
 }
 
 /* private */
-std::vector<std::unique_ptr<LineSegment>>
+std::vector<LineSegment*>
 OverlapUnion::extractBorderSegments(const Geometry* geom0, const Geometry* geom1, const Envelope& env)
 {
-    std::vector<std::unique_ptr<LineSegment>> segs;
+    std::vector<LineSegment*> segs;
     extractBorderSegments(geom0, env, segs);
     if (geom1 != nullptr)
         extractBorderSegments(geom1, env, segs);
@@ -205,17 +221,17 @@ containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1
 
 /* private static */
 void
-extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<std::unique_ptr<LineSegment>>& psegs)
+extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<LineSegment*>& psegs)
 {
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        std::vector<std::unique_ptr<LineSegment>> segs;
+        std::vector<LineSegment*>* segs;
         const Envelope env;
 
     public:
 
-        BorderSegmentFilter(const Envelope& penv, std::vector<std::unique_ptr<LineSegment>> psegs)
+        BorderSegmentFilter(const Envelope& penv, std::vector<LineSegment*>* psegs)
             : env(penv),
               segs(psegs) {};
 
@@ -236,13 +252,12 @@ extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<st
             seq.getAt(  i, p1);
             bool isBorder = intersects(env, p0, p1) && ! containsProperly(env, p0, p1);
             if (isBorder) {
-                std::unique_ptr<LineSegment> seg(new LineSegment(p0, p1));
-                segs.push_back(seg);
+                segs->push_back(new LineSegment(p0, p1));
             }
         }
     };
 
-    BorderSegmentFilter bsf(penv, psegs);
+    BorderSegmentFilter bsf(penv, &psegs);
     geom->apply_ro(bsf);
 
 }

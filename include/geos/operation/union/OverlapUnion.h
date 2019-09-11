@@ -113,12 +113,12 @@ private:
     geom::Geometry* unionFull(const geom::Geometry* geom0, const geom::Geometry* geom1);
     static geom::Geometry* unionBuffer(const geom::Geometry* geom0, const geom::Geometry* geom1);
     bool isBorderSegmentsSame(const geom::Geometry* result, const geom::Envelope& env);
-    bool isEqual(std::vector<std::unique_ptr<geom::LineSegment>>& segs0, std::vector<std::unique_ptr<geom::LineSegment>>& segs1);
-    std::vector<std::unique_ptr<geom::LineSegment>> extractBorderSegments(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::Envelope& env);
+    bool isEqual(std::vector<geom::LineSegment*>& segs0, std::vector<geom::LineSegment*>& segs1);
+    std::vector<geom::LineSegment*> extractBorderSegments(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::Envelope& env);
     static bool intersects(const geom::Envelope& env, const geom::Coordinate& p0, const geom::Coordinate& p1);
     static bool containsProperly(const geom::Envelope& env, const geom::Coordinate& p);
     static bool containsProperly(const geom::Envelope& env, const geom::Coordinate& p0, const geom::Coordinate& p1);
-    static void extractBorderSegments(const geom::Geometry* geom, const geom::Envelope& penv, std::vector<std::unique_ptr<geom::LineSegment>>& psegs);
+    static void extractBorderSegments(const geom::Geometry* geom, const geom::Envelope& penv, std::vector<geom::LineSegment*>& psegs);
 
 };
 
