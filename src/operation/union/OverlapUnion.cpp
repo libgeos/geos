@@ -93,19 +93,19 @@ OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry
 std::unique_ptr<Geometry>
 OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::vector<Geometry*>& disjointGeoms)
 {
-    std::vector<Geometry*> intersectingGeoms;
+    std::vector<Geometry*>* intersectingGeoms = new std::vector<Geometry*>;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         const Geometry* elem = geom->getGeometryN(i);
         if (elem->getEnvelopeInternal()->intersects(env)) {
-            Geometry* copy = elem->clone().get();
-            intersectingGeoms.push_back(copy);
+            Geometry* copy = elem->clone().release();
+            intersectingGeoms->push_back(copy);
         }
         else {
-            Geometry* copy = elem->clone().get();
+            Geometry* copy = elem->clone().release();
             disjointGeoms.push_back(copy);
         }
     }
-    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(&intersectingGeoms));
+    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(intersectingGeoms));
 }
 
 /* private */
@@ -241,7 +241,7 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
         isGeometryChanged() const override  { return false; }
 
         void
-        filter_ro(CoordinateSequence& seq, std::size_t i)
+        filter_ro(const CoordinateSequence& seq, std::size_t i) override
         {
             if (i <= 0) return;
 
@@ -253,7 +253,8 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
             if (isBorder) {
                 segs->push_back(new LineSegment(p0, p1));
             }
-        }
+        };
+
     };
 
     BorderSegmentFilter bsf(penv, &psegs);
