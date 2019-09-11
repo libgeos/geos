@@ -231,167 +231,22 @@ CascadedPolygonUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
         return g0->clone().release();
     }
 
-    return unionOptimized(g0, g1);
+    return unionActual(g0, g1);
 }
 
-geom::Geometry*
-CascadedPolygonUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
-{
-    geom::Envelope const* g0Env = g0->getEnvelopeInternal();
-    geom::Envelope const* g1Env = g1->getEnvelopeInternal();
-
-    if(!g0Env->intersects(g1Env)) {
-        return geom::util::GeometryCombiner::combine(g0, g1).release();
-    }
-
-    if(g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1) {
-        return unionActual(g0, g1);
-    }
-
-    geom::Envelope commonEnv;
-    g0Env->intersection(*g1Env, commonEnv);
-    return unionUsingEnvelopeIntersection(g0, g1, commonEnv);
-}
-
-/* private */
-geom::Geometry*
-CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
-        geom::Geometry* g1, geom::Envelope const& common)
-{
-    std::vector<geom::Geometry*> disjointPolys;
-
-#if GEOS_DEBUG_CASCADED_UNION
-    check_valid(*g0, "unionUsingEnvelopeIntersection g0");
-    check_valid(*g1, "unionUsingEnvelopeIntersection g1");
-#endif
-
-    std::unique_ptr<geom::Geometry> g0Int(extractByEnvelope(common, g0, disjointPolys));
-    std::unique_ptr<geom::Geometry> g1Int(extractByEnvelope(common, g1, disjointPolys));
-
-#if GEOS_DEBUG_CASCADED_UNION
-    check_valid(*g0Int, "unionUsingEnvelopeIntersection g0Int");
-    check_valid(*g1Int, "unionUsingEnvelopeIntersection g1Int");
-#endif
-
-    std::unique_ptr<geom::Geometry> u(unionActual(g0Int.get(), g1Int.get()));
-
-#if GEOS_DEBUG_CASCADED_UNION
-    if(! check_valid(*u, "unionUsingEnvelopeIntersection unionActual return")) {
-#if GEOS_DEBUG_CASCADED_UNION_PRINT_INVALID
-        std::cerr << " union between the following is invalid"
-                  << "<a>" << std::endl
-                  << *g0Int << std::endl
-                  << "</a>" << std::endl
-                  << "<b>" << std::endl
-                  << *g1Int << std::endl
-                  << "</b>" << std::endl
-                  ;
-#endif
-    }
-#endif
-
-    if(disjointPolys.empty()) {
-        return u.release();
-    }
-
-#if GEOS_DEBUG_CASCADED_UNION
-    for(size_t i = 0; i < disjointPolys.size(); ++i) {
-        std::ostringstream os;
-        os << "dp" << i;
-        check_valid(*(disjointPolys[i]), os.str());
-    }
-#endif
-
-    // TODO: find, in disjointPolys, those which now have their
-    // environment intersect the environment of the union "u"
-    // and collect them in another vector to be unioned
-
-    std::vector<geom::Geometry*> polysOn;
-    std::vector<geom::Geometry*> polysOff;
-    geom::Envelope const* uEnv = u->getEnvelopeInternal(); // TODO: check for EMPTY ?
-    extractByEnvelope(*uEnv, disjointPolys, polysOn, polysOff);
-#if GEOS_DEBUG_CASCADED_UNION
-    std::cerr << "unionUsingEnvelopeIntersection: " << polysOn.size() << "/" << disjointPolys.size() <<
-              " polys intersect union of final thing" << std::endl;
-#endif
-
-    std::unique_ptr<geom::Geometry> ret;
-    if(polysOn.empty()) {
-        disjointPolys.push_back(u.get());
-        ret = geom::util::GeometryCombiner::combine(disjointPolys);
-    }
-    else {
-        // TODO: could be further tweaked to only union with polysOn
-        //       and combine with polysOff, but then it'll need again to
-        //       recurse in the check for disjoint/intersecting
-        ret = geom::util::GeometryCombiner::combine(disjointPolys);
-        ret.reset(unionActual(ret.get(), u.get()));
-    }
-
-#if GEOS_DEBUG_CASCADED_UNION
-    check_valid(*ret, "unionUsingEnvelopeIntersection returned geom");
-#endif
-
-    return ret.release();
-}
-
-/* private */
-void
-CascadedPolygonUnion::extractByEnvelope(geom::Envelope const& env,
-                                        std::vector<geom::Geometry*>& sourceGeoms,
-                                        std::vector<geom::Geometry*>& intersectingGeoms,
-                                        std::vector<geom::Geometry*>& disjointGeoms)
-{
-    for(std::vector<geom::Geometry*>::iterator i = sourceGeoms.begin(),
-            e = sourceGeoms.end(); i != e; ++i) {
-        geom::Geometry* elem = *i;
-        if(elem->getEnvelopeInternal()->intersects(env)) {
-            intersectingGeoms.push_back(elem);
-        }
-        else {
-            disjointGeoms.push_back(elem);
-        }
-    }
-}
-
-/* private */
-void
-CascadedPolygonUnion::extractByEnvelope(geom::Envelope const& env,
-                                        geom::Geometry* geom,
-                                        std::vector<geom::Geometry*>& intersectingGeoms,
-                                        std::vector<geom::Geometry*>& disjointGeoms)
-{
-    for(std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        geom::Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
-        if(elem->getEnvelopeInternal()->intersects(env)) {
-            intersectingGeoms.push_back(elem);
-        }
-        else {
-            disjointGeoms.push_back(elem);
-        }
-    }
-}
-
-/* private */
-geom::Geometry*
-CascadedPolygonUnion::extractByEnvelope(geom::Envelope const& env,
-                                        geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms)
-{
-    std::vector<geom::Geometry*> intersectingGeoms;
-    extractByEnvelope(env, geom, intersectingGeoms, disjointGeoms);
-
-    return geomFactory->buildGeometry(intersectingGeoms);
-}
 
 geom::Geometry*
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
     OverlapUnion unionOp(g0, g1);
-    return restrictToPolygons(std::unique_ptr<geom::Geometry>(unionOp.doUnion())).release();
+    geom::Geometry* unioned = unionOp.doUnion();
+    geom::Geometry* justPolys = restrictToPolygons(unioned);
+    delete unioned;
+    return justPolys;
 }
 
-std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
+geom::Geometry*
+CascadedPolygonUnion::restrictToPolygons(geom::Geometry* g)
 {
     using namespace geom;
     using namespace std;
@@ -404,7 +259,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     geom::util::PolygonExtracter::getPolygons(*g, polygons);
 
     if(polygons.size() == 1) {
-        return std::unique_ptr<Geometry>(polygons[0]->clone());
+        return polygons[0]->clone().release();
     }
 
     typedef vector<Geometry*> GeomVect;
@@ -414,9 +269,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     for(Polygon::ConstVect::size_type i = 0; i < n; ++i) {
         (*newpolys)[i] = polygons[i]->clone().release();
     }
-    return unique_ptr<Geometry>(
-               g->getFactory()->createMultiPolygon(newpolys)
-           );
+    return g->getFactory()->createMultiPolygon(newpolys);
 
 }
 

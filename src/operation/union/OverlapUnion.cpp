@@ -43,9 +43,9 @@ OverlapUnion::doUnion()
      * If no overlap, can just combine the geometries
      */
     if (overlapEnv.isNull()) {
-        Geometry* g0Copy = g0->clone().get();
-        Geometry* g1Copy = g1->clone().get();
-        return GeometryCombiner::combine(g0Copy, g1Copy).get();
+        // Geometry* g0Copy = g0->clone().get();
+        // Geometry* g1Copy = g1->clone().get();
+        return GeometryCombiner::combine(g0, g1).release();
     }
 
     std::vector<Geometry*> disjointPolys;
