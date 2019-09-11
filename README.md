@@ -186,10 +186,18 @@ Python bindings are available via:
 
 ## Documentation
 
-To build Doxygen documentation:
+Doxygen documentation can be generated using either the autotools or CMake build
+systems.
+
+### Using Autotools:
 
     cd doc
     make doxygen-html
+
+### Using CMake:
+
+    cmake -DBUILD_DOCUMENTATION=YES
+    make docs
 
 ## Style
 
