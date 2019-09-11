@@ -27,11 +27,13 @@ if(BUILD_DOCUMENTATION)
     endif()
 
     set(srcdir ${CMAKE_CURRENT_SOURCE_DIR})
+    set(VERSION ${GEOS_VERSION_FULL})
     set(DOXYGEN_LOGFILE ${CMAKE_CURRENT_BINARY_DIR}/doxygen_log)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
                    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
                    @ONLY)
     unset(srcdir)
+    unset(VERSION)
     unset(DOXYGEN_LOGFILE)
 
     add_custom_target(docs
