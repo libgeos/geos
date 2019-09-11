@@ -67,9 +67,9 @@ OverlapUnion::doUnion()
     }
 }
 
-/* private static */
+/* private */
 Envelope
-overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
+OverlapUnion::overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
 {
     const Envelope* g0Env = geom0->getEnvelopeInternal();
     const Envelope* g1Env = geom1->getEnvelopeInternal();
@@ -125,9 +125,9 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
     }
 }
 
-/* private static */
+/* private */
 Geometry*
-unionBuffer(const Geometry* geom0, const Geometry* geom1)
+OverlapUnion::unionBuffer(const Geometry* geom0, const Geometry* geom1)
 {
     Geometry* copy0 = geom0->clone().release();
     Geometry* copy1 = geom1->clone().release();
@@ -194,15 +194,15 @@ OverlapUnion::extractBorderSegments(const Geometry* geom0, const Geometry* geom1
     return segs;
 }
 
-/* private static */
-bool
+/* static */
+static bool
 intersects(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 {
     return env.intersects(p0) || env.intersects(p1);
 }
 
-/* private static */
-bool
+/* static */
+static bool
 containsProperly(const Envelope& env, const Coordinate& p)
 {
     if (env.isNull()) return false;
@@ -212,16 +212,16 @@ containsProperly(const Envelope& env, const Coordinate& p)
            p.y < env.getMaxY();
 }
 
-/* private static */
-bool
+/* static */
+static bool
 containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 {
     return containsProperly(env, p0) && containsProperly(env, p1);
 }
 
-/* private static */
+/* privatef */
 void
-extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<LineSegment*>& psegs)
+OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<LineSegment*>& psegs)
 {
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 

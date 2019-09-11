@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/operation/union/OverlapUnion.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -385,7 +386,8 @@ CascadedPolygonUnion::extractByEnvelope(geom::Envelope const& env,
 geom::Geometry*
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
-    return restrictToPolygons(std::unique_ptr<geom::Geometry>(g0->Union(g1))).release();
+    OverlapUnion unionOp(g0, g1);
+    return restrictToPolygons(std::unique_ptr<geom::Geometry>(unionOp.doUnion())).release();
 }
 
 std::unique_ptr<geom::Geometry>
