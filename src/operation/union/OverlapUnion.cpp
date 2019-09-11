@@ -93,16 +93,14 @@ OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry
 std::unique_ptr<Geometry>
 OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::vector<Geometry*>& disjointGeoms)
 {
-    std::vector<Geometry*>* intersectingGeoms = new std::vector<Geometry*>;
+    std::vector<Geometry*> intersectingGeoms;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        const Geometry* elem = geom->getGeometryN(i);
+        Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
         if (elem->getEnvelopeInternal()->intersects(env)) {
-            Geometry* copy = elem->clone().release();
-            intersectingGeoms->push_back(copy);
+            intersectingGeoms.push_back(elem);
         }
         else {
-            Geometry* copy = elem->clone().release();
-            disjointGeoms.push_back(copy);
+            disjointGeoms.push_back(elem);
         }
     }
     return std::unique_ptr<Geometry>(geomFactory->buildGeometry(intersectingGeoms));

@@ -252,7 +252,7 @@ CascadedPolygonUnion::restrictToPolygons(geom::Geometry* g)
     using namespace std;
 
     if(g->isPolygonal()) {
-        return g;
+        return g->clone().release();
     }
 
     Polygon::ConstVect polygons;
