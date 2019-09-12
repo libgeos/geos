@@ -67,8 +67,6 @@ public:
 
     ~TopologyLocation();
 
-    TopologyLocation(const std::vector<int>& newLocation);
-
     /** \brief
      * Constructs a TopologyLocation specifying how points on, to the
      * left of, and to the right of some GraphComponent relate to some

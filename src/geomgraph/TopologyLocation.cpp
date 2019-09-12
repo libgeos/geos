@@ -32,13 +32,6 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /*public*/
-TopologyLocation::TopologyLocation(const std::vector<int>& newLocation)
-{
-    location.fill(Location::UNDEF);
-    locationSize = newLocation.size() > 3 ? 3 : newLocation.size();
-}
-
-/*public*/
 TopologyLocation::TopologyLocation()
 {
 }
@@ -61,7 +54,8 @@ TopologyLocation::TopologyLocation(Location on, Location left, Location right):
 TopologyLocation::TopologyLocation(Location on):
     locationSize(1)
 {
-    // location[Position::ON] = on;
+    location.fill(Location::UNDEF);
+    location[Position::ON] = on;
 }
 
 /*public*/
@@ -96,7 +90,7 @@ TopologyLocation::get(size_t posIndex) const
 bool
 TopologyLocation::isNull() const
 {
-    for(size_t i = 0, sz = locationSize; i < sz; ++i) {
+    for(size_t i = 0; i < locationSize; ++i) {
         if(location[i] != Location::UNDEF) {
             return false;
         }
@@ -108,7 +102,7 @@ TopologyLocation::isNull() const
 bool
 TopologyLocation::isAnyNull() const
 {
-    for(size_t i = 0, sz = locationSize; i < sz; ++i) {
+    for(size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::UNDEF) {
             return true;
         }
@@ -158,7 +152,7 @@ TopologyLocation::setAllLocations(Location locValue)
 void
 TopologyLocation::setAllLocationsIfNull(Location locValue)
 {
-    for(size_t i = 0, sz = locationSize; i < sz; ++i) {
+    for(size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::UNDEF) {
             location[i] = locValue;
         }
@@ -200,7 +194,7 @@ TopologyLocation::setLocations(Location on, Location left, Location right)
 bool
 TopologyLocation::allPositionsEqual(Location loc) const
 {
-    for(size_t i = 0, sz = locationSize; i < sz; ++i) {
+    for(size_t i = 0; i < locationSize; ++i) {
         if(location[i] != loc) {
             return false;
         }
@@ -220,7 +214,7 @@ TopologyLocation::merge(const TopologyLocation& gl)
         location[Position::LEFT] = Location::UNDEF;
         location[Position::RIGHT] = Location::UNDEF;
     }
-    for(size_t i = 0; i < 3; ++i) {
+    for(size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::UNDEF && i < glsz) {
             location[i] = gl.location[i];
         }
