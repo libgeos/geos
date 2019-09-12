@@ -12,6 +12,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
+#include <geos/util/GEOSException.h>
+
 // std
 #include <string>
 #include <sstream>
