@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -193,7 +193,7 @@ if(NOT HAVE_STD_ISNAN)
       check_prototype_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
     endif()
   else()
-    check_symbol_exists(isnan math.h HAVE_ISNAN)
+    check_prototype_exists(isnan math.h HAVE_ISNAN)
   endif()
 endif()
 
