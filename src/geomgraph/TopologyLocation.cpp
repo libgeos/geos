@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -55,24 +55,26 @@ TopologyLocation::TopologyLocation(int on, int left, int right):
 TopologyLocation::TopologyLocation(int on):
 	locationSize(1)
 {
-	location.fill(Location::UNDEF);
 	location[Position::ON] = on;
 }
 
 /*public*/
-TopologyLocation::TopologyLocation(const TopologyLocation &gl)
-  :
-	location(gl.location),
-	locationSize(gl.locationSize)
+TopologyLocation::TopologyLocation(const TopologyLocation &gl):
+  locationSize(gl.locationSize)
 {
+	for (size_t i=0; i<locationSize; ++i) {
+		location[i] = gl.location[i];
+	}
 }
 
 /*public*/
 TopologyLocation&
 TopologyLocation::operator= (const TopologyLocation &gl)
 {
-	location = gl.location;
 	locationSize = gl.locationSize;
+	for (size_t i=0; i<locationSize; ++i) {
+		location[i] = gl.location[i];
+	}
   return *this;
 }
 
@@ -140,7 +142,9 @@ TopologyLocation::flip()
 void
 TopologyLocation::setAllLocations(int locValue)
 {
-	location.fill(locValue);
+	for (size_t i=0; i<locationSize; ++i) {
+		location[i]=locValue;
+	}
 }
 
 /*public*/
@@ -167,7 +171,7 @@ TopologyLocation::setLocation(int locValue)
 }
 
 /*public*/
-const std::array<int, 3>&
+const int*
 TopologyLocation::getLocations() const
 {
 	return location;
