@@ -22,7 +22,7 @@
 #include <geos/constants.h> // for DoubleNotANumber
 #include <geos/geom/Coordinate.h> // for inlines
 
-#include <vector> // for composition
+#include <array>
 #include <cassert>
 
 namespace geos {
@@ -39,12 +39,9 @@ public:
 
     PointPairDistance()
         :
-        pt(2),
-        distance(DoubleNotANumber),
+        distanceSquared(DoubleNotANumber),
         isNull(true)
-    {
-        assert(pt.size() == 2);
-    }
+    {}
 
     void
     initialize()
@@ -57,17 +54,17 @@ public:
     {
         pt[0] = p0;
         pt[1] = p1;
-        distance = p0.distance(p1);
+        distanceSquared = p0.distanceSquared(p1);
         isNull = false;
     }
 
     double
     getDistance() const
     {
-        return distance;
+        return std::sqrt(distanceSquared);
     }
 
-    const std::vector<geom::Coordinate>&
+    const std::array<geom::Coordinate, 2>&
     getCoordinates() const
     {
         return pt;
@@ -93,9 +90,9 @@ public:
             initialize(p0, p1);
             return;
         }
-        double dist = p0.distance(p1);
-        if(dist > distance) {
-            initialize(p0, p1, dist);
+        double distSq = p0.distanceSquared(p1);
+        if(distSq > distanceSquared) {
+            initialize(p0, p1, distSq);
         }
     }
 
@@ -112,9 +109,9 @@ public:
             initialize(p0, p1);
             return;
         }
-        double dist = p0.distance(p1);
-        if(dist < distance) {
-            initialize(p0, p1, dist);
+        double distSq = p0.distanceSquared(p1);
+        if(distSq < distanceSquared) {
+            initialize(p0, p1, distSq);
         }
     }
 
@@ -134,17 +131,17 @@ private:
      */
     void
     initialize(const geom::Coordinate& p0, const geom::Coordinate& p1,
-               double dist)
+               double distSquared)
     {
         pt[0] = p0;
         pt[1] = p1;
-        distance = dist;
+        distanceSquared = distSquared;
         isNull = false;
     }
 
-    std::vector<geom::Coordinate> pt;
+    std::array<geom::Coordinate, 2> pt;
 
-    double distance;
+    double distanceSquared;
 
     bool isNull;
 };

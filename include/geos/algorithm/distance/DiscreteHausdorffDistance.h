@@ -148,7 +148,7 @@ public:
         return ptDist.getDistance();
     }
 
-    const std::vector<geom::Coordinate>
+    const std::array<geom::Coordinate, 2>
     getCoordinates() const
     {
         return ptDist.getCoordinates();
