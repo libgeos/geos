@@ -26,6 +26,7 @@
 #include <geos/geom/Location.h>
 
 #include <vector>
+#include <array>
 #include <string>
 
 #ifdef _MSC_VER
@@ -65,8 +66,6 @@ public:
     TopologyLocation();
 
     ~TopologyLocation();
-
-    TopologyLocation(const std::vector<int>& newLocation);
 
     /** \brief
      * Constructs a TopologyLocation specifying how points on, to the
@@ -116,7 +115,7 @@ public:
     void setLocation(geom::Location locValue);
 
     /// Warning: returns reference to owned memory
-    const std::vector<geom::Location>& getLocations() const;
+    const std::array<geom::Location, 3>& getLocations() const;
 
     void setLocations(geom::Location on, geom::Location left, geom::Location right);
 
@@ -132,7 +131,8 @@ public:
 
 private:
 
-    std::vector<geom::Location> location;
+    std::array<geom::Location, 3> location;
+    std::size_t locationSize;
 };
 
 std::ostream& operator<< (std::ostream&, const TopologyLocation&);

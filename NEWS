@@ -18,6 +18,7 @@ Changes in 3.8.0
   - Improve performance of Delaunay triangulations / Voronoi Diagrams
     (Dan Baston)
   - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
+  - Improve overlay performance (Paul Ramsey)
 
 
 Changes in 3.7.2
