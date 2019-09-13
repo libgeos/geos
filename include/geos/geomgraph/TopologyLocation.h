@@ -132,7 +132,7 @@ public:
 private:
 
     std::array<geom::Location, 3> location;
-    std::size_t locationSize;
+    std::uint8_t locationSize;
 };
 
 std::ostream& operator<< (std::ostream&, const TopologyLocation&);
