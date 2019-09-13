@@ -2,17 +2,17 @@ Changes in 3.7.3dev
 2019-XX-XX
 
 - Bug fixes / improvements
-  - Union performance regression (#867 Paul Ramsey)
-  - Overlay performance improvement (Paul Ramsey)
+  - Union performance regression (#867, Paul Ramsey)
+  - Overlay performance improvement (#986, Paul Ramsey)
 
 
 Changes in 3.7.2
 2019-05-02
 
 - Bug fixes / improvements
-  - Envelope constructor using strtod (#875 Paul Ramsey)
-  - Failure in CMake for OSX Framework (#936 Paul Ramsey)
-  - Polygon build failure in Overlay difference (#789 Paul Ramsey)
+  - Envelope constructor using strtod (#875, Paul Ramsey)
+  - Failure in CMake for OSX Framework (#936, Paul Ramsey)
+  - Polygon build failure in Overlay difference (#789, Paul Ramsey)
   - Invalid union result from valid polygon inputs (#838)
 
 
