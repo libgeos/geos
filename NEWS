@@ -3,6 +3,7 @@ Changes in 3.7.3dev
 
 - Bug fixes / improvements
   - Union performance regression (#867 Paul Ramsey)
+  - Overlay performance improvement (Paul Ramsey)
 
 
 Changes in 3.7.2
