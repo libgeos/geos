@@ -139,11 +139,11 @@ extern "C"
 # if defined(_MSC_VER)
 #  define ISNAN(x) _isnan(static_cast<double>(x))
 # else
-#  include <math.h>
 #  define ISNAN(x) isnan(x)
 # endif
 #else
-# error "Could not find isnan function or macro!"
+# include <math.h>
+# define ISNAN(x) isnan(x)
 #endif
 
 #if defined(HAVE_STD_ISFINITE)
