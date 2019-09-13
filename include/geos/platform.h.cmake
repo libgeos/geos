@@ -139,6 +139,7 @@ extern "C"
 # if defined(_MSC_VER)
 #  define ISNAN(x) _isnan(static_cast<double>(x))
 # else
+#  include <math.h>
 #  include <float.h>
 #  define ISNAN(x) isnan(x)
 # endif
