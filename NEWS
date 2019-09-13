@@ -4,6 +4,7 @@ Changes in 3.5.3
 -Bug fixes / improvements
   - Fix crash in GEOSUnaryUnion with empty LineString (#928, Sergey Fedoseev)
   - Polygon build failure in Overlay difference (#789 Paul Ramsey)
+  - Performance improvement in overlay (Paul Ramsey)
 
 
 Changes in 3.5.2
