@@ -57,8 +57,13 @@ Setting `CMAKE_BUILD_TYPE` to `Release` is necessary to enable compiler
 optimizations.
 
 Once the `cmake` tool has run, GEOS can be built by running `make` and
-installed by running `make install`. The test suite can be run using `make
-check`.
+installed by running `make install`.
+
+The entire test suite can be run using `make check`.
+Alternatively, the `ctest` command can be used, which provides more control over test execution.
+For example, `ctest -R unit-capi -j2` uses a regular expression to run all tests
+associated with the C API, using two processes in parallel.
+A list of available tests can be obtained using `ctest -N`.
 
 ### Microsoft Windows
 
