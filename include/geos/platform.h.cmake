@@ -130,7 +130,7 @@ extern "C"
 #endif
 
 #if defined(HAVE_STD_ISNAN)
-# define ISNAN(x) (std::isnan)(x)
+# define ISNAN(x) (std::isnan(x))
 #elif defined(HAVE_INLINE_ISNAND_XCODE)
 # define ISNAN(x) __inline_isnand(static_cast<double>(x))
 #elif defined(HAVE_ISNAND_XCODE)
@@ -139,6 +139,7 @@ extern "C"
 # if defined(_MSC_VER)
 #  define ISNAN(x) _isnan(static_cast<double>(x))
 # else
+#  include <math.h>
 #  define ISNAN(x) isnan(x)
 # endif
 #else

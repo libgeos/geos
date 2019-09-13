@@ -183,7 +183,7 @@ endif()
 include(CheckPrototypeExists)
 include(CheckSymbolExists)
 
-check_prototype_exists(isnan cmath HAVE_STD_ISNAN)
+check_symbol_exists(isnan cmath HAVE_STD_ISNAN)
 if(NOT HAVE_STD_ISNAN)
   if(MSVC)
     check_prototype_exists(_isnan float.h HAVE_ISNAN)
