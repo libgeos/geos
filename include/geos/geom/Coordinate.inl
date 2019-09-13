@@ -97,6 +97,14 @@ Coordinate::distance(const Coordinate& p) const
     return std::sqrt(dx * dx + dy * dy);
 }
 
+INLINE double
+Coordinate::distanceSquared(const Coordinate& p) const
+{
+    double dx = x - p.x;
+    double dy = y - p.y;
+    return dx * dx + dy * dy;
+}
+
 INLINE int
 Coordinate::hashCode() const
 {

@@ -113,6 +113,8 @@ public:
 
     double distance(const Coordinate& p) const;
 
+    double distanceSquared(const Coordinate& p) const;
+
     int hashCode() const;
 
     /**
