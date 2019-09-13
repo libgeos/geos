@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -25,7 +25,6 @@
 #include <geos/inline.h>
 
 #include <vector>
-#include <array>
 #include <string>
 
 #ifdef _MSC_VER
@@ -39,14 +38,14 @@ namespace geomgraph { // geos.geomgraph
 /** \brief
  * A TopologyLocation is the labelling of a
  * GraphComponent's topological relationship to a single Geometry.
- * 
+ *
  * If the parent component is an area edge, each side and the edge itself
  * have a topological location.  These locations are named
- * 
+ *
  *  - ON: on the edge
  *  - LEFT: left-hand side of the edge
  *  - RIGHT: right-hand side
- * 
+ *
  * If the parent component is a line edge or node, there is a single
  * topological relationship attribute, ON.
  *
@@ -72,7 +71,7 @@ public:
 	 * Geometry.
 	 *
 	 * Possible values for the
-	 * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY, 
+	 * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY,
 	 * and Location::INTERIOR.
 	 *
 	 * @see Location
@@ -114,7 +113,7 @@ public:
 	void setLocation(int locValue);
 
 	/// Warning: returns reference to owned memory
-	const std::array<int, 3>& getLocations() const;
+	const int* getLocations() const;
 
 	void setLocations(int on, int left, int right);
 
@@ -130,7 +129,7 @@ public:
 
 private:
 
-	std::array<int, 3> location;
+	int location[3];
 	std::size_t locationSize;
 };
 
