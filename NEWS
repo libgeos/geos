@@ -11,6 +11,7 @@ Changes in 3.6.4
   - Invalid union result from valid polygon inputs (#838)
   - Static library does not contain C API (#878)
   - Prevent crash when querying empty STRtree (#730)
+  - Overlay performance improvement (Paul Ramsey)
 
 
 Changes in 3.6.3
