@@ -141,9 +141,11 @@ extern "C"
 # else
 #  define ISNAN(x) isnan(x)
 # endif
-#else
+#elif defined(HAVE_ISNAN)
 # include <math.h>
 # define ISNAN(x) isnan(x)
+#else
+# error "Could not find isnan!"
 #endif
 
 #if defined(HAVE_STD_ISFINITE)
