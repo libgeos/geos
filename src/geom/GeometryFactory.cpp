@@ -19,8 +19,8 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/DefaultCoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
@@ -83,7 +83,7 @@ public:
 GeometryFactory::GeometryFactory()
     :
     SRID(0),
-    coordinateListFactory(CoordinateArraySequenceFactory::instance())
+    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
     , _refCount(0), _autoDestroy(false)
 {
 #if GEOS_DEBUG
@@ -115,7 +115,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
     }
 
     if(! nCoordinateSequenceFactory) {
-        coordinateListFactory = CoordinateArraySequenceFactory::instance();
+        coordinateListFactory = DefaultCoordinateSequenceFactory::instance();
     }
     else {
         coordinateListFactory = nCoordinateSequenceFactory;
@@ -144,7 +144,7 @@ GeometryFactory::GeometryFactory(
               nCoordinateSequenceFactory << "])" << std::endl;
 #endif
     if(! nCoordinateSequenceFactory) {
-        coordinateListFactory = CoordinateArraySequenceFactory::instance();
+        coordinateListFactory = DefaultCoordinateSequenceFactory::instance();
     }
     else {
         coordinateListFactory = nCoordinateSequenceFactory;
@@ -165,7 +165,7 @@ GeometryFactory::create(
 GeometryFactory::GeometryFactory(const PrecisionModel* pm)
     :
     SRID(0),
-    coordinateListFactory(CoordinateArraySequenceFactory::instance())
+    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
     , _refCount(0), _autoDestroy(false)
 {
 #if GEOS_DEBUG
@@ -189,7 +189,7 @@ GeometryFactory::create(const PrecisionModel* pm)
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
     :
     SRID(newSRID),
-    coordinateListFactory(CoordinateArraySequenceFactory::instance())
+    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
     , _refCount(0), _autoDestroy(false)
 {
 #if GEOS_DEBUG
@@ -262,8 +262,8 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
         coord.y = envelope->getMinY();
         return createPoint(coord);
     }
-    auto cl = CoordinateArraySequenceFactory::instance()->
-                             create((size_t) 5, 2);
+
+    auto cl = coordinateListFactory->create(5, 2);
 
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
