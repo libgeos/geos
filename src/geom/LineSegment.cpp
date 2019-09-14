@@ -23,8 +23,8 @@
 #include <geos/geom/LineString.h> // for toGeometry
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Intersection.h>
@@ -298,12 +298,11 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    CoordinateSequence* cl = new CoordinateArraySequence(2);
+    auto cl = gf.getCoordinateSequenceFactory()->create(2, 0);
+
     cl->setAt(p0, 0);
     cl->setAt(p1, 1);
-    return std::unique_ptr<LineString>(
-               gf.createLineString(cl) // ownership transferred
-           );
+    return gf.createLineString(std::move(cl));
 }
 
 } // namespace geos::geom

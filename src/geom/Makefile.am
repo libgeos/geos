@@ -15,6 +15,7 @@ libgeom_la_SOURCES = \
     CoordinateSequence.cpp \
     CoordinateArraySequence.cpp \
     CoordinateArraySequenceFactory.cpp \
+    DefaultCoordinateSequenceFactory.cpp \
     Dimension.cpp \
     Envelope.cpp \
     Geometry.cpp \
