@@ -129,13 +129,13 @@ MultiLineString::reverse() const
     }
 
     size_t nLines = geometries.size();
-    Geometry::NonConstVect* revLines = new Geometry::NonConstVect(nLines);
+    std::vector<std::unique_ptr<Geometry>> revLines(nLines);
+
     for(size_t i = 0; i < nLines; ++i) {
-        LineString* iLS = dynamic_cast<LineString*>(geometries[i].get());
-        assert(iLS);
-        (*revLines)[nLines - 1 - i] = iLS->reverse().release();
+        const LineString* iLS = static_cast<LineString*>(geometries[i].get());
+        revLines[nLines - 1 - i] = iLS->reverse();
     }
-    return std::unique_ptr<Geometry>(getFactory()->createMultiLineString(revLines));
+    return getFactory()->createMultiLineString(std::move(revLines));
 }
 
 } // namespace geos::geom

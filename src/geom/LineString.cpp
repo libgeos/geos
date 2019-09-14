@@ -163,15 +163,15 @@ LineString::getNumPoints() const
     return points->getSize();
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getPointN(size_t n) const
 {
     assert(getFactory());
     assert(points.get());
-    return getFactory()->createPoint(points->getAt(n));
+    return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt(n)));
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getStartPoint() const
 {
     if(isEmpty()) {
@@ -181,7 +181,7 @@ LineString::getStartPoint() const
     return getPointN(0);
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getEndPoint() const
 {
     if(isEmpty()) {
@@ -224,11 +224,10 @@ LineString::getBoundary() const
     if(isClosed()) {
         return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
-    vector<Geometry*>* pts = new vector<Geometry*>();
-    pts->push_back(getStartPoint());
-    pts->push_back(getEndPoint());
-    MultiPoint* mp = getFactory()->createMultiPoint(pts);
-    return std::unique_ptr<Geometry>(mp);
+    std::vector<std::unique_ptr<Point>> pts(2);
+    pts[0] = getStartPoint();
+    pts[1] = getEndPoint();
+    return getFactory()->createMultiPoint(std::move(pts));
 }
 
 bool

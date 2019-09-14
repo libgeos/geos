@@ -116,19 +116,19 @@ public:
 
     std::size_t getNumPoints() const override;
 
-    virtual Point* getPointN(std::size_t n) const;
+    virtual std::unique_ptr<Point> getPointN(std::size_t n) const;
 
     /// \brief
     /// Return the start point of the LineString
     /// or NULL if this is an EMPTY LineString.
     ///
-    virtual Point* getStartPoint() const;
+    virtual std::unique_ptr<Point> getStartPoint() const;
 
     /// \brief
     /// Return the end point of the LineString
     /// or NULL if this is an EMPTY LineString.
     ///
-    virtual Point* getEndPoint() const;
+    virtual std::unique_ptr<Point> getEndPoint() const;
 
     virtual bool isClosed() const;
 

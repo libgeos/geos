@@ -72,13 +72,13 @@ nodeLineWithFirstCoordinate(const geom::Geometry* geom)
   if( geomType == GEOS_LINESTRING ) {
       auto line = dynamic_cast<const geom::LineString*>(geom);
       assert(line);
-      point.reset(line->getPointN(0));
+      point = line->getPointN(0);
   } else {
       auto mls = dynamic_cast<const geom::MultiLineString*>(geom);
       assert(mls);
       auto line = dynamic_cast<const geom::LineString*>(mls->getGeometryN(0));
       assert(line);
-      point.reset(line->getPointN(0));
+      point = line->getPointN(0);
   }
 
   return geom->Union(point.get());

@@ -2589,7 +2589,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getPointN(n);
+            return ls->getPointN(n).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2624,7 +2624,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getStartPoint();
+            return ls->getStartPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2659,7 +2659,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getEndPoint();
+            return ls->getEndPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
