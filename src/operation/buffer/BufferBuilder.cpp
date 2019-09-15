@@ -722,7 +722,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 geom::Geometry*
 BufferBuilder::createEmptyResultGeometry() const
 {
-    geom::Geometry* emptyGeom = geomFact->createPolygon(nullptr, nullptr);
+    geom::Geometry* emptyGeom = geomFact->createPolygon();
     return emptyGeom;
 }
 
