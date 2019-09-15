@@ -249,18 +249,18 @@ GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
 
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 GeometryFactory::toGeometry(const Envelope* envelope) const
 {
     Coordinate coord;
 
     if(envelope->isNull()) {
-        return createPoint();
+        return std::unique_ptr<Geometry>(createPoint());
     }
     if(envelope->getMinX() == envelope->getMaxX() && envelope->getMinY() == envelope->getMaxY()) {
         coord.x = envelope->getMinX();
         coord.y = envelope->getMinY();
-        return createPoint(coord);
+        return std::unique_ptr<Geometry>(createPoint(coord));
     }
     auto cl = CoordinateArraySequenceFactory::instance()->
                              create((size_t) 5, 2);
@@ -285,8 +285,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
     coord.y = envelope->getMinY();
     cl->setAt(coord, 4);
 
-    Polygon* p = createPolygon(createLinearRing(cl.release()), nullptr);
-    return p;
+    return createPolygon(createLinearRing(std::move(cl)));
 }
 
 /*public*/

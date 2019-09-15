@@ -154,7 +154,7 @@ public:
     //
     /// Returned Geometry can be a Point, a Polygon or an EMPTY geom.
     ///
-    Geometry* toGeometry(const Envelope* envelope) const;
+    std::unique_ptr<Geometry> toGeometry(const Envelope* envelope) const;
 
     /// \brief
     /// Returns the PrecisionModel that Geometries created by this
