@@ -155,7 +155,7 @@ void
 MinimumDiameter::computeMinimumDiameter()
 {
     // check if computation is cached
-    if(minWidthPt.isNull()) {
+    if(!minWidthPt.isNull()) {
         return;
     }
     if(isConvex) {
