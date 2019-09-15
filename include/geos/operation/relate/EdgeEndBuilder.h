@@ -49,7 +49,7 @@ class GEOS_DLL EdgeEndBuilder {
 public:
     EdgeEndBuilder() {}
 
-    std::vector<geomgraph::EdgeEnd*>* computeEdgeEnds(std::vector<geomgraph::Edge*>* edges);
+    std::vector<geomgraph::EdgeEnd*> computeEdgeEnds(std::vector<geomgraph::Edge*>* edges);
     void computeEdgeEnds(geomgraph::Edge* edge, std::vector<geomgraph::EdgeEnd*>* l);
 
 protected:

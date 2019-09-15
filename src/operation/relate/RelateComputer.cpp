@@ -189,13 +189,9 @@ RelateComputer::computeIM()
      */
     // build EdgeEnds for all intersections
     EdgeEndBuilder eeBuilder;
-    std::unique_ptr< std::vector<EdgeEnd*> > ee0(
-        eeBuilder.computeEdgeEnds((*arg)[0]->getEdges())
-    );
-    insertEdgeEnds(ee0.get());
-    std::unique_ptr< std::vector<EdgeEnd*> > ee1(
-        eeBuilder.computeEdgeEnds((*arg)[1]->getEdges())
-    );
+    std::vector<EdgeEnd*> ee0 = eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
+    insertEdgeEnds(&ee0);
+    std::vector<EdgeEnd*> ee1 = eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
 
 #if GEOS_DEBUG
     std::cerr << "RelateComputer::computeIM: "
@@ -203,9 +199,7 @@ RelateComputer::computeIM()
               << std::endl;
 #endif
 
-    insertEdgeEnds(ee1.get());
-    //Debug.println("==== NodeList ===");
-    //Debug.print(nodes);
+    insertEdgeEnds(&ee1);
 
 #if GEOS_DEBUG
     std::cerr << "RelateComputer::computeIM: "
