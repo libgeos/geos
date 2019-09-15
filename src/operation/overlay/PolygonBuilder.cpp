@@ -371,7 +371,7 @@ PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
     // add Polygons for all shells
     for(size_t i = 0, n = newShellList.size(); i < n; i++) {
         EdgeRing* er = newShellList[i];
-        Polygon* poly = er->toPolygon(geometryFactory);
+        Polygon* poly = er->toPolygon(geometryFactory).release();
         resultPolyList->push_back(poly);
     }
     return resultPolyList;

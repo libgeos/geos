@@ -36,6 +36,7 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -159,23 +160,26 @@ EdgeRing::addHole(EdgeRing* edgeRing)
 }
 
 /*public*/
-Polygon*
+std::unique_ptr<Polygon>
 EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
 {
     testInvariant();
 
-    size_t nholes = holes.size();
-    vector<LinearRing*>* holeLR = new vector<LinearRing*>(nholes);
-    for(size_t i = 0; i < nholes; ++i) {
-        (*holeLR)[i] = new LinearRing(*(holes[i]->getLinearRing()));
-    }
-
     // We don't use "clone" here because
     // GeometryFactory::createPolygon really
     // wants a LinearRing
-    //
-    LinearRing* shellLR = new LinearRing(*(getLinearRing()));
-    return p_geometryFactory->createPolygon(shellLR, holeLR);
+    auto shellLR = detail::make_unique<LinearRing>(*(getLinearRing()));
+    if (holes.empty()) {
+        return p_geometryFactory->createPolygon(std::move(shellLR));
+    } else {
+        size_t nholes = holes.size();
+        std::vector<std::unique_ptr<LinearRing>> holeLR(nholes);
+        for(size_t i = 0; i < nholes; ++i) {
+            holeLR[i] = detail::make_unique<LinearRing>(*(holes[i]->getLinearRing()));
+        }
+
+        return p_geometryFactory->createPolygon(std::move(shellLR), std::move(holeLR));
+    }
 }
 
 /*public*/
