@@ -92,7 +92,6 @@ static std::unique_ptr<geom::Geometry> MakeValidLine(const geom::LineString* lin
 
 static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineString* mls)
 {
-
     std::vector<std::unique_ptr<geom::Geometry>> points;
     std::vector<std::unique_ptr<geom::Geometry>> lines;
 
@@ -122,13 +121,7 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
     std::unique_ptr<geom::Geometry> pointsRet;
     if( !points.empty() ) {
         if( points.size() > 1 ) {
-            auto pointsRawPtr = new std::vector<geom::Geometry*>(points.size());
-            for( size_t i = 0; i < points.size(); i++ ) {
-                auto pointMoved = std::move(points[i]);
-                (*pointsRawPtr)[i] = pointMoved.release();
-            }
-            pointsRet.reset(
-                mls->getFactory()->createMultiPoint(pointsRawPtr));
+            pointsRet = mls->getFactory()->createMultiPoint(std::move(points));
         } else {
             pointsRet = std::move(points[0]);
         }
@@ -137,24 +130,17 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
     std::unique_ptr<geom::Geometry> linesRet;
     if( !lines.empty() ) {
         if( lines.size() > 1 ) {
-            auto linesRawPtr = new std::vector<geom::Geometry*>(lines.size());
-            for( size_t i = 0; i < lines.size(); i++ ) {
-                auto lineMoved = std::move(lines[i]);
-                (*linesRawPtr)[i] = lineMoved.release();
-            }
-            linesRet.reset(
-                mls->getFactory()->createMultiLineString(linesRawPtr));
+            linesRet = mls->getFactory()->createMultiLineString(std::move(lines));
         } else {
             linesRet = std::move(lines[0]);
         }
     }
 
     if( pointsRet && linesRet ) {
-        auto geoms = new std::vector<geom::Geometry*>(2);
-        (*geoms)[0] = pointsRet.release();
-        (*geoms)[1] = linesRet.release();
-        return std::unique_ptr<geom::Geometry>(
-                    mls->getFactory()->createGeometryCollection(geoms));
+        std::vector<std::unique_ptr<Geometry>> geoms(2);
+        geoms[0] = std::move(pointsRet);
+        geoms[1] = std::move(linesRet);
+        return mls->getFactory()->createGeometryCollection(std::move(geoms));
     } else if( pointsRet ) {
         return pointsRet;
     } else if( linesRet ) {
@@ -175,18 +161,15 @@ static std::unique_ptr<geom::Geometry> extractUniquePoints(const geom::Geometry*
     geom->apply_ro(&filter);
 
     /* 2: for each point, create a geometry and put into a vector */
-    auto points = new std::vector<geom::Geometry*>();
-    points->reserve(coords.size());
+    std::vector<std::unique_ptr<Geometry>> points;
+    points.reserve(coords.size());
     const GeometryFactory* factory = geom->getFactory();
-    for(std::vector<const geom::Coordinate*>::iterator it = coords.begin(),
-            itE = coords.end();
-            it != itE; ++it) {
-        auto point = factory->createPoint(*(*it));
-        points->push_back(point);
+    for(const Coordinate* c : coords) {
+        points.emplace_back(factory->createPoint(*c));
     }
 
     /* 3: create a multipoint */
-    return std::unique_ptr<geom::Geometry>(factory->createMultiPoint(points));
+    return factory->createMultiPoint(std::move(points));
 }
 
 static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
@@ -260,50 +243,36 @@ static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
         cut_edges = std::move(new_cut_edges);
     }
 
-    auto vgeoms = new std::vector<Geometry*>(3);
+    std::vector<std::unique_ptr<Geometry>> vgeoms(3);
     unsigned int nvgeoms=0;
 
     if( !area->isEmpty() ) {
-        (*vgeoms)[nvgeoms++] = area.release();
+        vgeoms[nvgeoms++] = std::move(area);
     }
     if( !cut_edges->isEmpty() ) {
-        (*vgeoms)[nvgeoms++] = cut_edges.release();
+        vgeoms[nvgeoms++] = std::move(cut_edges);
     }
     if( !collapse_points->isEmpty() ) {
-        (*vgeoms)[nvgeoms++] = collapse_points.release();
+        vgeoms[nvgeoms++] = std::move(collapse_points);
     }
 
     if( nvgeoms == 1 ) {
         /* Return cut edges */
-        auto ret = std::unique_ptr<geom::Geometry>((*vgeoms)[0]);
-        delete vgeoms;
-        return ret;
+        return std::move(vgeoms[0]);
     }
 
     /* Collect areas and lines (if any line) */
-    vgeoms->resize(nvgeoms);
-    return std::unique_ptr<geom::Geometry>(
-                    factory->createGeometryCollection(vgeoms));
+    vgeoms.resize(nvgeoms);
+    return factory->createGeometryCollection(std::move(vgeoms));
 }
 
 static std::unique_ptr<geom::Geometry> MakeValidCollection(const geom::GeometryCollection* coll)
 {
-    auto validGeoms = new std::vector<geom::Geometry*>();
-    try {
-        for(const auto& geom: *coll )
-        {
-            validGeoms->push_back(MakeValid().build(geom.get()).release());
-        }
-        return std::unique_ptr<geom::Geometry>(
-            GeometryFactory::create()->createGeometryCollection(validGeoms));
+    std::vector<std::unique_ptr<Geometry>> validGeoms;
+    for(const auto& geom: *coll) {
+        validGeoms.push_back(MakeValid().build(geom.get()));
     }
-    catch( ... ) {
-        for( auto geom: *validGeoms ) {
-            delete geom;
-        }
-        delete validGeoms;
-        throw;
-    }
+    return coll->getFactory()->createGeometryCollection(std::move(validGeoms));
 }
 
 /** Return a valid version of the input geometry. */
