@@ -20,6 +20,9 @@
 #ifndef GEOS_ALGORITHM_MINIMUMDIAMETER_H
 #define GEOS_ALGORITHM_MINIMUMDIAMETER_H
 
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/LineSegment.h>
+
 #include <memory>
 #include <geos/export.h>
 
@@ -27,9 +30,7 @@
 namespace geos {
 namespace geom {
 class Geometry;
-class LineSegment;
 class LineString;
-class Coordinate;
 class CoordinateSequence;
 }
 }
@@ -66,9 +67,9 @@ private:
 
     std::unique_ptr<geom::CoordinateSequence> convexHullPts;
 
-    geom::LineSegment* minBaseSeg;
-    geom::Coordinate* minWidthPt;
-    int minPtIndex;
+    geom::LineSegment minBaseSeg;
+    geom::Coordinate minWidthPt;
+    size_t minPtIndex;
     double minWidth;
     void computeMinimumDiameter();
     void computeWidthConvex(const geom::Geometry* geom);
@@ -83,7 +84,7 @@ private:
     void computeConvexRingMinDiameter(const geom::CoordinateSequence* pts);
 
     unsigned int findMaxPerpDistance(const geom::CoordinateSequence* pts,
-                                     geom::LineSegment* seg, unsigned int startIndex);
+                                     const geom::LineSegment* seg, unsigned int startIndex);
 
     static unsigned int getNextIndex(const geom::CoordinateSequence* pts,
                                      unsigned int index);
@@ -93,7 +94,7 @@ private:
     static geom::LineSegment computeSegmentForLine(double a, double b, double c);
 
 public:
-    ~MinimumDiameter();
+    ~MinimumDiameter() = default;
 
     /** \brief
      * Compute a minimum diameter for a given [Geometry](@ref geom::Geometry).
@@ -126,21 +127,21 @@ public:
      *
      * @return a coordinate forming one end of the minimum diameter
      */
-    geom::Coordinate* getWidthCoordinate();
+    const geom::Coordinate& getWidthCoordinate();
 
     /** \brief
      * Gets the segment forming the base of the minimum diameter.
      *
      * @return the segment forming the base of the minimum diameter
      */
-    geom::LineString* getSupportingSegment();
+    std::unique_ptr<geom::LineString> getSupportingSegment();
 
     /** \brief
      * Gets a LineString which is a minimum diameter.
      *
      * @return a LineString which is a minimum diameter
      */
-    geom::LineString* getDiameter();
+    std::unique_ptr<geom::LineString> getDiameter();
 
     /** \brief
      * Gets the minimum rectangular Polygon which encloses the input geometry.
@@ -153,7 +154,7 @@ public:
      *
      * @return the minimum rectangle enclosing the input (or a line or point if degenerate)
      */
-    geom::Geometry* getMinimumRectangle();
+    std::unique_ptr<geom::Geometry> getMinimumRectangle();
 
     /** \brief
      * Gets the minimum rectangle enclosing a geometry.
@@ -161,14 +162,14 @@ public:
      * @param geom the geometry
      * @return the minimum rectangle enclosing the geometry
     */
-    static geom::Geometry* getMinimumRectangle(geom::Geometry* geom);
+    static std::unique_ptr<geom::Geometry> getMinimumRectangle(geom::Geometry* geom);
 
     /** \brief
      * Gets the length of the minimum diameter enclosing a geometry.
      * @param geom the geometry
      * @return the length of the minimum diameter of the geometry
      */
-    static geom::Geometry* getMinimumDiameter(geom::Geometry* geom);
+    static std::unique_ptr<geom::Geometry> getMinimumDiameter(geom::Geometry* geom);
 
 };
 

@@ -1929,8 +1929,7 @@ extern "C" {
         try {
             geos::algorithm::MinimumDiameter m(g);
 
-            Geometry* g3 = m.getMinimumRectangle();
-            return g3;
+            return m.getMinimumRectangle().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1958,8 +1957,7 @@ extern "C" {
         try {
             geos::algorithm::MinimumDiameter m(g);
 
-            Geometry* g3 = m.getDiameter();
-            return g3;
+            return m.getDiameter().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
