@@ -22,12 +22,9 @@
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/FastSegmentSetIntersectionFinder.h>
 
-namespace geos {
-namespace noding {
-class FastSegmentSetIntersectionFinder;
-}
-}
+#include <memory>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -42,7 +39,7 @@ namespace prep { // geos::geom::prep
  */
 class PreparedLineString : public BasicPreparedGeometry {
 private:
-    noding::FastSegmentSetIntersectionFinder* segIntFinder;
+    std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable noding::SegmentString::ConstVect segStrings;
 
 protected:
