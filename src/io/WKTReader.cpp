@@ -352,7 +352,7 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<Polygon>(geometryFactory->createPolygon(nullptr, nullptr));
+        return std::unique_ptr<Polygon>(geometryFactory->createPolygon());
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;
