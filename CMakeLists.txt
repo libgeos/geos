@@ -13,6 +13,9 @@
 # modes for specific C/C++ language standard levels.
 cmake_minimum_required(VERSION 3.8)
 
+# Default to release build so packagers don't release debug builds
+set(DEFAULT_BUILD_TYPE Release)
+
 # Require CMake 3.13+ with VS generator for complete support of VS versions
 # and support by AppVeyor.
 if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
@@ -27,7 +30,14 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
-message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+# Make sure we know our build type
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
+  message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
+else()
+  message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
 
 #-----------------------------------------------------------------------------
 # Options

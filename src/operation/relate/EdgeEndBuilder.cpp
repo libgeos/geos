@@ -26,7 +26,6 @@
 
 #include <vector>
 
-using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::geom;
 
@@ -34,13 +33,12 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-vector<EdgeEnd*>*
-EdgeEndBuilder::computeEdgeEnds(vector<Edge*>* edges)
+std::vector<EdgeEnd*>
+EdgeEndBuilder::computeEdgeEnds(std::vector<Edge*>* edges)
 {
-    vector<EdgeEnd*>* l = new vector<EdgeEnd*>();
-    for(vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
-        Edge* e = *i;
-        computeEdgeEnds(e, l);
+    std::vector<EdgeEnd*> l;
+    for(Edge* e : *edges) {
+        computeEdgeEnds(e, &l);
     }
     return l;
 }
@@ -50,7 +48,7 @@ EdgeEndBuilder::computeEdgeEnds(vector<Edge*>* edges)
  * Edge (if any) and inserts them into the graph.
  */
 void
-EdgeEndBuilder::computeEdgeEnds(Edge* edge, vector<EdgeEnd*>* l)
+EdgeEndBuilder::computeEdgeEnds(Edge* edge, std::vector<EdgeEnd*>* l)
 {
     EdgeIntersectionList& eiList = edge->getEdgeIntersectionList();
     //Debug.print(eiList);
@@ -93,7 +91,7 @@ EdgeEndBuilder::computeEdgeEnds(Edge* edge, vector<EdgeEnd*>* l)
  * eiCurr will always be an EdgeIntersection, but eiPrev may be null.
  */
 void
-EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, vector<EdgeEnd*>* l,
+EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, std::vector<EdgeEnd*>* l,
                                      EdgeIntersection* eiCurr, EdgeIntersection* eiPrev)
 {
     auto iPrev = eiCurr->segmentIndex;
@@ -126,7 +124,7 @@ EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, vector<EdgeEnd*>* l,
  * eiCurr will always be an EdgeIntersection, but eiNext may be null.
  */
 void
-EdgeEndBuilder::createEdgeEndForNext(Edge* edge, vector<EdgeEnd*>* l,
+EdgeEndBuilder::createEdgeEndForNext(Edge* edge, std::vector<EdgeEnd*>* l,
                                      EdgeIntersection* eiCurr, EdgeIntersection* eiNext)
 {
     size_t iNext = eiCurr->segmentIndex + 1;

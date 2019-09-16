@@ -46,9 +46,6 @@ PreparedPolygon::PreparedPolygon(const geom::Geometry* geom)
 
 PreparedPolygon::~PreparedPolygon()
 {
-    delete segIntFinder;
-    delete ptOnGeomLoc;
-
     for(std::size_t i = 0, ni = segStrings.size(); i < ni; i++) {
         delete segStrings[ i ];
     }
@@ -61,9 +58,9 @@ getIntersectionFinder() const
 {
     if(! segIntFinder) {
         noding::SegmentStringUtil::extractSegmentStrings(&getGeometry(), segStrings);
-        segIntFinder = new noding::FastSegmentSetIntersectionFinder(&segStrings);
+        segIntFinder.reset(new noding::FastSegmentSetIntersectionFinder(&segStrings));
     }
-    return segIntFinder;
+    return segIntFinder.get();
 }
 
 algorithm::locate::PointOnGeometryLocator*
@@ -71,10 +68,10 @@ PreparedPolygon::
 getPointLocator() const
 {
     if(! ptOnGeomLoc) {
-        ptOnGeomLoc = new algorithm::locate::IndexedPointInAreaLocator(getGeometry());
+        ptOnGeomLoc.reset(new algorithm::locate::IndexedPointInAreaLocator(getGeometry()));
     }
 
-    return ptOnGeomLoc;
+    return ptOnGeomLoc.get();
 }
 
 bool

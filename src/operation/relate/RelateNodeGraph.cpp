@@ -70,13 +70,9 @@ RelateNodeGraph::build(GeometryGraph* geomGraph)
     /**
      * Build EdgeEnds for all intersections.
      */
-    EdgeEndBuilder* eeBuilder = new EdgeEndBuilder();
-    vector<EdgeEnd*>* eeList = eeBuilder->computeEdgeEnds(geomGraph->getEdges());
-    insertEdgeEnds(eeList);
-    delete eeBuilder;
-    delete eeList;
-    //Debug.println("==== NodeList ===");
-    //Debug.print(nodes);
+    EdgeEndBuilder eeBuilder;
+    std::vector<EdgeEnd*> eeList = eeBuilder.computeEdgeEnds(geomGraph->getEdges());
+    insertEdgeEnds(&eeList);
 }
 
 /**

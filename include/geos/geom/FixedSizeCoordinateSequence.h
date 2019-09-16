@@ -60,7 +60,7 @@ namespace geom {
             m_data[pos] = c;
         }
 
-        void setOrdinate(size_t index, size_t ordinateIndex, double value)
+        void setOrdinate(size_t index, size_t ordinateIndex, double value) final
         {
             switch(ordinateIndex) {
                 case CoordinateSequence::X:
@@ -100,7 +100,7 @@ namespace geom {
             return dimension;
         }
 
-        void toVector(std::vector<Coordinate> & out) const {
+        void toVector(std::vector<Coordinate> & out) const final {
             out.insert(out.end(), m_data.begin(), m_data.end());
         }
 

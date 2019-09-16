@@ -53,6 +53,8 @@ dnl -- JTS_PORT: the version of JTS this release is bound to
 dnl JTS_PORT=1.13.0
 JTS_PORT=`cat $VERTXT | awk -F= '/^JTS_PORT/ {print $2}'`
 
+DOXYGEN_LOGFILE=
+AC_SUBST(DOXYGEN_LOGFILE)
 
 dnl Hush warnings
 AC_DEFINE(USE_UNSTABLE_GEOS_CPP_API, [1], [We know])

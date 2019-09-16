@@ -6,6 +6,8 @@ Changes in 3.8.0
   - CAPI: GEOSMakeValid (#952, Even Rouault)
   - CAPI: GEOSPolygonize_valid (#727, Dan Baston)
   - CAPI: GEOSCoverageUnion (Dan Baston)
+  - CAPI: GEOSCoordSeq_setXY, GEOSCoordSeq_setXYZ,
+          GEOSCoordSeq_getXY, GEOSCoordSeq_getXYZ (Dan Baston)
 
 - Improvements:
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
@@ -16,6 +18,7 @@ Changes in 3.8.0
   - Improve performance of Delaunay triangulations / Voronoi Diagrams
     (Dan Baston)
   - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
+  - Improve overlay performance (Paul Ramsey)
 
 
 Changes in 3.7.2

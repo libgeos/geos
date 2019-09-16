@@ -252,13 +252,13 @@ MinimumBoundingCircle::computeCirclePoints()
 Coordinate
 MinimumBoundingCircle::lowestPoint(std::vector<Coordinate>& pts)
 {
-    Coordinate min = pts[0];
-    for(auto pt : pts) {
-        if(pt.y < min.y) {
-            min = pt;
+    const Coordinate* min = &(pts[0]);
+    for(const auto& pt : pts) {
+        if(pt.y < min->y) {
+            min = &pt;
         }
     }
-    return min;
+    return *min;
 }
 
 
@@ -269,7 +269,7 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
     double minSin = std::numeric_limits<double>::max();
     Coordinate minAngPt;
     minAngPt.setNull();
-    for(auto p : pts) {
+    for(const auto& p : pts) {
 
         if(p == P) {
             continue;
@@ -300,9 +300,9 @@ Coordinate
 MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts, Coordinate& P, Coordinate& Q)
 {
     double minAng = std::numeric_limits<double>::max();
-    Coordinate minAngPt;
-    minAngPt.setNull();
-    for(auto p : pts) {
+    const Coordinate* minAngPt = nullptr;
+
+    for(const auto& p : pts) {
         if(p == P) {
             continue;
         }
@@ -313,10 +313,10 @@ MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts
         double ang = Angle::angleBetween(P, p, Q);
         if(ang < minAng) {
             minAng = ang;
-            minAngPt = p;
+            minAngPt = &p;
         }
     }
-    return minAngPt;
+    return *minAngPt;
 }
 
 

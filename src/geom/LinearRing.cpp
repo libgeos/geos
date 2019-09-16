@@ -28,8 +28,6 @@
 #include <string>
 #include <memory>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -99,7 +97,7 @@ LinearRing::isClosed() const
     return LineString::isClosed();
 }
 
-string
+std::string
 LinearRing::getGeometryType() const
 {
     return "LinearRing";

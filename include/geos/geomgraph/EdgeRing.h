@@ -90,10 +90,9 @@ public:
 
     /**
      * Return a Polygon copying coordinates from this
-     * EdgeRing and its holes. Caller must remember
-     * to delete the result
+     * EdgeRing and its holes.
      */
-    geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
+    std::unique_ptr<geom::Polygon> toPolygon(const geom::GeometryFactory* geometryFactory);
 
     /**
      * Compute a LinearRing from the point list previously collected.
@@ -122,7 +121,7 @@ public:
     bool containsPoint(const geom::Coordinate& p);
 
     void
-    testInvariant()
+    testInvariant() const
     {
         // pts are never NULL
         assert(pts);

@@ -13,8 +13,9 @@ source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
 cmake --version
 
-cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${TRAVIS_BUILD_DIR}
+cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_DOCUMENTATION=YES ${TRAVIS_BUILD_DIR}
 run_make
+cmake --build . --target docs
 ctest --output-on-failure .
 
 if [ "${BUILD_TYPE}" = "Coverage" ]; then

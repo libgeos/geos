@@ -15,11 +15,6 @@
  *
  * Last port: algorithm/MinimumDiameter.java r966
  *
- **********************************************************************
- *
- * TODO:
- * 	- avoid heap allocation for LineSegment and Coordinate
- *
  **********************************************************************/
 
 #include <geos/constants.h>
@@ -68,8 +63,7 @@ namespace algorithm { // geos.algorithm
  */
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 {
-    minBaseSeg = new LineSegment();
-    minWidthPt = nullptr;
+    minWidthPt = Coordinate::getNull();
     minPtIndex = 0;
     minWidth = 0.0;
     inputGeom = newInputGeom;
@@ -89,18 +83,11 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
  */
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsConvex)
 {
-    minBaseSeg = new LineSegment();
-    minWidthPt = nullptr;
+    minWidthPt = Coordinate::getNull();
     minWidth = 0.0;
     inputGeom = newInputGeom;
     isConvex = newIsConvex;
     convexHullPts = nullptr;
-}
-
-MinimumDiameter::~MinimumDiameter()
-{
-    delete minBaseSeg;
-    delete minWidthPt;
 }
 
 /**
@@ -120,7 +107,7 @@ MinimumDiameter::getLength()
  *
  * @return a coordinate forming one end of the minimum diameter
  */
-Coordinate*
+const Coordinate&
 MinimumDiameter::getWidthCoordinate()
 {
     computeMinimumDiameter();
@@ -132,15 +119,12 @@ MinimumDiameter::getWidthCoordinate()
  *
  * @return the segment forming the base of the minimum diameter
  */
-LineString*
+std::unique_ptr<LineString>
 MinimumDiameter::getSupportingSegment()
 {
     computeMinimumDiameter();
     const GeometryFactory* fact = inputGeom->getFactory();
-    auto cl = fact->getCoordinateSequenceFactory()->create(2);
-    cl->setAt(minBaseSeg->p0, 0);
-    cl->setAt(minBaseSeg->p1, 1);
-    return fact->createLineString(cl.release());
+    return minBaseSeg.toGeometry(*fact);
 }
 
 /**
@@ -148,22 +132,22 @@ MinimumDiameter::getSupportingSegment()
  *
  * @return a LineString which is a minimum diameter
  */
-LineString*
+std::unique_ptr<LineString>
 MinimumDiameter::getDiameter()
 {
     computeMinimumDiameter();
     // return empty linestring if no minimum width calculated
-    if(minWidthPt == nullptr) {
-        return inputGeom->getFactory()->createLineString(nullptr);
+    if(minWidthPt.isNull()) {
+        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(nullptr));
     }
 
     Coordinate basePt;
-    minBaseSeg->project(*minWidthPt, basePt);
+    minBaseSeg.project(minWidthPt, basePt);
 
     auto cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2);
     cl->setAt(basePt, 0);
-    cl->setAt(*minWidthPt, 1);
-    return inputGeom->getFactory()->createLineString(cl.release());
+    cl->setAt(minWidthPt, 1);
+    return inputGeom->getFactory()->createLineString(std::move(cl));
 }
 
 /* private */
@@ -171,7 +155,7 @@ void
 MinimumDiameter::computeMinimumDiameter()
 {
     // check if computation is cached
-    if(minWidthPt != nullptr) {
+    if(!minWidthPt.isNull()) {
         return;
     }
     if(isConvex) {
@@ -201,25 +185,20 @@ MinimumDiameter::computeWidthConvex(const Geometry* geom)
     switch(convexHullPts->getSize()) {
     case 0:
         minWidth = 0.0;
-        delete minWidthPt;
-        minWidthPt = nullptr;
-        delete minBaseSeg;
-        minBaseSeg = nullptr;
+        minWidthPt = Coordinate::getNull();
         break;
     case 1:
         minWidth = 0.0;
-        delete minWidthPt;
-        minWidthPt = new Coordinate(convexHullPts->getAt(0));
-        minBaseSeg->p0 = convexHullPts->getAt(0);
-        minBaseSeg->p1 = convexHullPts->getAt(0);
+        minWidthPt = convexHullPts->getAt(0);
+        minBaseSeg.p0 = convexHullPts->getAt(0);
+        minBaseSeg.p1 = convexHullPts->getAt(0);
         break;
     case 2:
     case 3:
         minWidth = 0.0;
-        delete minWidthPt;
-        minWidthPt = new Coordinate(convexHullPts->getAt(0));
-        minBaseSeg->p0 = convexHullPts->getAt(0);
-        minBaseSeg->p1 = convexHullPts->getAt(1);
+        minWidthPt = convexHullPts->getAt(0);
+        minBaseSeg.p0 = convexHullPts->getAt(0);
+        minBaseSeg.p1 = convexHullPts->getAt(1);
         break;
     default:
         computeConvexRingMinDiameter(convexHullPts.get());
@@ -251,7 +230,7 @@ MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 
 unsigned int
 MinimumDiameter::findMaxPerpDistance(const CoordinateSequence* pts,
-                                     LineSegment* seg, unsigned int startIndex)
+                                     const LineSegment* seg, unsigned int startIndex)
 {
     double maxPerpDistance = seg->distancePerpendicular(pts->getAt(startIndex));
     double nextPerpDistance = maxPerpDistance;
@@ -268,12 +247,8 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateSequence* pts,
     if(maxPerpDistance < minWidth) {
         minPtIndex = maxIndex;
         minWidth = maxPerpDistance;
-        delete minWidthPt;
-        minWidthPt = new Coordinate(pts->getAt(minPtIndex));
-        delete minBaseSeg;
-        minBaseSeg = new LineSegment(*seg);
-//      System.out.println(minBaseSeg);
-//      System.out.println(minWidth);
+        minWidthPt = pts->getAt(minPtIndex);
+        minBaseSeg = *seg;
     }
     return maxIndex;
 }
@@ -288,27 +263,27 @@ MinimumDiameter::getNextIndex(const CoordinateSequence* pts,
     return index;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MinimumDiameter::getMinimumRectangle()
 {
     computeMinimumDiameter();
 
-    if(!minBaseSeg || !convexHullPts) {
+    if(minWidthPt.isNull() || !convexHullPts) {
         //return empty polygon
-        return inputGeom->getFactory()->createPolygon();
+        return std::unique_ptr<Geometry>(inputGeom->getFactory()->createPolygon());
     }
 
     // check if minimum rectangle is degenerate (a point or line segment)
     if(minWidth == 0.0) {
-        if(minBaseSeg->p0.equals2D(minBaseSeg->p1)) {
-            return inputGeom->getFactory()->createPoint(minBaseSeg->p0);
+        if(minBaseSeg.p0.equals2D(minBaseSeg.p1)) {
+            return std::unique_ptr<Geometry>(inputGeom->getFactory()->createPoint(minBaseSeg.p0));
         }
-        return minBaseSeg->toGeometry(*inputGeom->getFactory()).release();
+        return minBaseSeg.toGeometry(*inputGeom->getFactory());
     }
 
     // deltas for the base segment of the minimum diameter
-    double dx = minBaseSeg->p1.x - minBaseSeg->p0.x;
-    double dy = minBaseSeg->p1.y - minBaseSeg->p0.y;
+    double dx = minBaseSeg.p1.x - minBaseSeg.p0.x;
+    double dy = minBaseSeg.p1.y - minBaseSeg.p0.y;
 
     double minPara = DoubleMax;
     double maxPara = -DoubleMax;
@@ -358,8 +333,8 @@ MinimumDiameter::getMinimumRectangle()
     seq->setAt(p3, 3);
     seq->setAt(p0, 4); // close
 
-    LinearRing* shell = inputGeom->getFactory()->createLinearRing(seq.release());
-    return inputGeom->getFactory()->createPolygon(shell, nullptr);
+    std::unique_ptr<LinearRing> shell = inputGeom->getFactory()->createLinearRing(std::move(seq));
+    return inputGeom->getFactory()->createPolygon(std::move(shell));
 }
 
 double
@@ -390,14 +365,14 @@ MinimumDiameter::computeSegmentForLine(double a, double b, double c)
 }
 
 
-Geometry*
+std::unique_ptr<Geometry>
 MinimumDiameter::getMinimumRectangle(Geometry* geom)
 {
     MinimumDiameter md(geom);
     return md.getMinimumRectangle();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MinimumDiameter::getMinimumDiameter(Geometry* geom)
 {
     MinimumDiameter md(geom);

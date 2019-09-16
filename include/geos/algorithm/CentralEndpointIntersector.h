@@ -140,12 +140,12 @@ private:
     findNearestPoint(const geom::Coordinate& p,
                      const std::vector<geom::Coordinate>& pts) const
     {
-        double minDist = std::numeric_limits<double>::max();
+        double minDistSq = std::numeric_limits<double>::max();
         geom::Coordinate result = geom::Coordinate::getNull();
         for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
-            double dist = p.distance(pts[i]);
-            if(dist < minDist) {
-                minDist = dist;
+            double distSq = p.distanceSquared(pts[i]);
+            if(distSq < minDistSq) {
+                minDistSq = distSq;
                 result = pts[i];
             }
         }

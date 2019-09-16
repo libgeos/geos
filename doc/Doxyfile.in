@@ -779,7 +779,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           =
+WARN_LOGFILE           = @DOXYGEN_LOGFILE@
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -853,6 +853,7 @@ EXCLUDE_PATTERNS       = */examples/* \
                          */test/* \
                          */bigtest/* \
                          */io/markup/* \
+                         */ttmath/* \
                          config.h \
                          acconfig.h \
                          CoordinateList.cpp \

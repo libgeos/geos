@@ -346,12 +346,11 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
     if(cleaned.size() == 3) { // shouldn't this be 2 ??
         cleaned.resize(2);
         auto cl1 = toCoordinateSequence(cleaned);
-        std::unique_ptr<Geometry> ret(geomFactory->createLineString(cl1.release()));
-        return ret;
+        return geomFactory->createLineString(std::move(cl1));
     }
     auto cl2 = toCoordinateSequence(cleaned);
-    LinearRing* linearRing = geomFactory->createLinearRing(cl2.release());
-    return std::unique_ptr<Geometry>(geomFactory->createPolygon(linearRing, nullptr));
+    std::unique_ptr<LinearRing> linearRing = geomFactory->createLinearRing(std::move(cl2));
+    return geomFactory->createPolygon(std::move(linearRing));
 }
 
 /*private*/
