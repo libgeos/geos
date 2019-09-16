@@ -195,43 +195,6 @@ private:
      */
     geom::Geometry* unionSafe(geom::Geometry* g0, geom::Geometry* g1);
 
-    geom::Geometry* unionOptimized(geom::Geometry* g0, geom::Geometry* g1);
-
-    /**
-     * \brief
-     * Unions two polygonal geometries, restricting computation
-     * to the envelope intersection where possible.
-     *
-     * The case of MultiPolygons is optimized to union only
-     * the polygons which lie in the intersection of the two geometry's
-     * envelopes.
-     * Polygons outside this region can simply be combined with the union
-     * result, which is potentially much faster.
-     * This case is likely to occur often during cascaded union, and may also
-     * occur in real world data (such as unioning data for parcels on
-     * different street blocks).
-     *
-     * @param g0 a polygonal geometry
-     * @param g1 a polygonal geometry
-     * @param common the intersection of the envelopes of the inputs
-     * @return the union of the inputs
-     */
-    geom::Geometry* unionUsingEnvelopeIntersection(geom::Geometry* g0,
-            geom::Geometry* g1, geom::Envelope const& common);
-
-    geom::Geometry* extractByEnvelope(geom::Envelope const& env,
-                                      geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
-
-    void extractByEnvelope(geom::Envelope const& env,
-                           geom::Geometry* geom,
-                           std::vector<geom::Geometry*>& intersectingGeoms,
-                           std::vector<geom::Geometry*>& disjointGeoms);
-
-    void extractByEnvelope(geom::Envelope const& env,
-                           std::vector<geom::Geometry*>& sourceGeoms,
-                           std::vector<geom::Geometry*>& intersectingGeoms,
-                           std::vector<geom::Geometry*>& disjointGeoms);
-
     /**
      * Encapsulates the actual unioning of two polygonal geometries.
      *

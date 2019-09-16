@@ -19,6 +19,7 @@ Changes in 3.8.0
     (Dan Baston)
   - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
   - Improve overlay performance (Paul Ramsey)
+  - Improve cascaded union performance (Paul Ramsey, Martin Davis)
 
 
 Changes in 3.7.2

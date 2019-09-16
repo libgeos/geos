@@ -41,7 +41,7 @@ class LinearGeometryBuilder {
 private:
     const geom::GeometryFactory* geomFact;
 
-    typedef std::vector<geom::Geometry*> GeomPtrVect;
+    typedef std::vector<const geom::Geometry*> GeomPtrVect;
 
     // Geometry elements owned by this class
     GeomPtrVect lines;

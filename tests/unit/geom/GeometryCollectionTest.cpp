@@ -56,7 +56,7 @@ void object::test<1>
     std::unique_ptr<Geometry> point(factory_->createPoint(coord));
     ensure(point != nullptr);
 
-    std::vector<Geometry*> geoms{empty_point.get(), point.get()};
+    std::vector<const Geometry*> geoms{empty_point.get(), point.get()};
     std::unique_ptr<Geometry> col(factory_->createGeometryCollection(geoms));
     ensure(col != nullptr);
 
@@ -78,7 +78,7 @@ void object::test<2>
     std::unique_ptr<Geometry> g(gf->createEmptyGeometry());
 
     g->setSRID(0);
-    std::vector<Geometry*> v = {g.get()};
+    std::vector<const Geometry*> v = {g.get()};
     std::unique_ptr<Geometry> geom_col(gf->createGeometryCollection(v));
     ensure_equals(geom_col->getGeometryN(0)->getSRID(), 1);
 

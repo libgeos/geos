@@ -348,7 +348,7 @@ const
 
 /*public*/
 MultiLineString*
-GeometryFactory::createMultiLineString(const std::vector<Geometry*>& fromLines)
+GeometryFactory::createMultiLineString(const std::vector<const Geometry*>& fromLines)
 const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromLines.size());
@@ -407,7 +407,7 @@ GeometryFactory::createGeometryCollection(std::vector<std::unique_ptr<geos::geom
 
 /*public*/
 GeometryCollection*
-GeometryFactory::createGeometryCollection(const std::vector<Geometry*>& fromGeoms) const
+GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fromGeoms) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromGeoms.size());
 
@@ -448,7 +448,7 @@ GeometryFactory::createMultiPolygon(std::vector<std::unique_ptr<Geometry>> && ne
 
 /*public*/
 MultiPolygon*
-GeometryFactory::createMultiPolygon(const std::vector<Geometry*>& fromPolys) const
+GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPolys) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPolys.size());
 
@@ -512,7 +512,7 @@ GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newP
 
 /*public*/
 MultiPoint*
-GeometryFactory::createMultiPoint(const vector<Geometry*>& fromPoints) const
+GeometryFactory::createMultiPoint(const vector<const Geometry*>& fromPoints) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPoints.size());
     for(size_t i = 0; i < fromPoints.size(); i++) {
@@ -704,7 +704,7 @@ GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
 
 /*public*/
 Geometry*
-GeometryFactory::buildGeometry(const vector<Geometry*>& fromGeoms) const
+GeometryFactory::buildGeometry(const vector<const Geometry*>& fromGeoms) const
 {
     size_t geomsSize = fromGeoms.size();
     if(geomsSize == 0) {
