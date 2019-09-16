@@ -72,13 +72,6 @@ Polygonizer::Polygonizer(bool onlyPolygonal):
 {
 }
 
-Polygonizer::~Polygonizer()
-{
-    for(auto& r : invalidRingLines) {
-        delete r;
-    }
-}
-
 /*
  * Add a collection of geometries to be polygonized.
  * May be called multiple times.
@@ -195,7 +188,7 @@ Polygonizer::hasCutEdges()
 }
 
 /* public */
-const vector<LineString*>&
+const std::vector<std::unique_ptr<LineString>>&
 Polygonizer::getInvalidRingLines()
 {
     polygonize();
@@ -268,14 +261,14 @@ Polygonizer::polygonize()
 void
 Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
                             vector<EdgeRing*>& validEdgeRingList,
-                            vector<LineString*>& invalidRingList)
+                            vector<std::unique_ptr<LineString>>& invalidRingList)
 {
     for(const auto& er : edgeRingList) {
         if(er->isValid()) {
             validEdgeRingList.push_back(er);
         }
         else {
-            invalidRingList.push_back(er->getLineString().release());
+            invalidRingList.push_back(er->getLineString());
         }
         GEOS_CHECK_FOR_INTERRUPTS();
     }

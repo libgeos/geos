@@ -3400,7 +3400,7 @@ extern "C" {
 
             if(invalid) {
 
-                const std::vector<LineString*>& lines = plgnzr.getInvalidRingLines();
+                const std::vector<std::unique_ptr<LineString>>& lines = plgnzr.getInvalidRingLines();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
                     (*linevec)[i] = lines[i]->clone().release();
