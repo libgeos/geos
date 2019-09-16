@@ -67,7 +67,7 @@ Polygon::Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
     Geometry(newFactory)
 {
     if(newShell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell.reset(getFactory()->createLinearRing());
     }
     else {
         if(newHoles != nullptr && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
@@ -93,7 +93,7 @@ Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
         shell(std::move(newShell))
 {
     if(shell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell.reset(getFactory()->createLinearRing());
     }
 }
 
@@ -105,7 +105,7 @@ Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
                  holes(std::move(newHoles))
 {
     if(shell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell.reset(getFactory()->createLinearRing());
     }
 
     // TODO move into validateConstruction() method

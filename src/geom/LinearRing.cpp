@@ -126,7 +126,7 @@ LinearRing::reverse() const
     auto seq = points->clone();
     CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return std::unique_ptr<Geometry>(getFactory()->createLinearRing(seq.release()));
+    return getFactory()->createLinearRing(std::move(seq));
 }
 
 } // namespace geos::geom
