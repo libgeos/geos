@@ -180,7 +180,7 @@ private:
             geom::Geometry* g1, geom::Envelope const& common);
 
     geom::Geometry* extractByEnvelope(geom::Envelope const& env,
-                                      geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
+                                      geom::Geometry* geom, std::vector<const geom::Geometry*>& disjointGeoms);
 
     /**
      * Encapsulates the actual unioning of two polygonal geometries.

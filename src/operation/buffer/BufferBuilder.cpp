@@ -93,7 +93,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
         lines.push_back(line);
         ++it;
     }
-    return std::unique_ptr<Geometry>(fact->buildGeometry(lines));
+    return std::unique_ptr<Geometry>(fact->buildGeometry(lines.begin(), lines.end()));
 }
 
 }

@@ -478,26 +478,20 @@ std::unique_ptr<geom::MultiLineString>
 QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 {
     std::unique_ptr<QuadEdgeList> p_quadEdges(getPrimaryEdges(false));
-    std::vector<Geometry*> edges(p_quadEdges->size());
+    std::vector<std::unique_ptr<Geometry>> edges;
     const CoordinateSequenceFactory* coordSeqFact = geomFact.getCoordinateSequenceFactory();
-    int i = 0;
-    for(QuadEdgeSubdivision::QuadEdgeList::iterator it = p_quadEdges->begin(); it != p_quadEdges->end(); ++it) {
-        QuadEdge* qe = *it;
+
+    edges.reserve(p_quadEdges->size());
+    for(const QuadEdge* qe : *p_quadEdges) {
         auto coordSeq = coordSeqFact->create(2);
 
         coordSeq->setAt(qe->orig().getCoordinate(), 0);
         coordSeq->setAt(qe->dest().getCoordinate(), 1);
 
-        edges[i++] = static_cast<Geometry*>(geomFact.createLineString(coordSeq.release()));
+        edges.emplace_back(geomFact.createLineString(coordSeq.release()));
     }
 
-    geom::MultiLineString* result = geomFact.createMultiLineString(edges);
-
-    for(std::vector<Geometry*>::iterator it = edges.begin(); it != edges.end(); ++it) {
-        delete *it;
-    }
-
-    return std::unique_ptr<MultiLineString>(result);
+    return geomFact.createMultiLineString(std::move(edges));
 }
 
 std::unique_ptr<GeometryCollection>

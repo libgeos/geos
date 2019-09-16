@@ -46,7 +46,7 @@ OverlapUnion::doUnion()
         return GeometryCombiner::combine(g0, g1);
     }
 
-    std::vector<Geometry*> disjointPolys;
+    std::vector<const Geometry*> disjointPolys;
 
     std::unique_ptr<Geometry> g0Overlap = extractByEnvelope(overlapEnv, g0, disjointPolys);
     std::unique_ptr<Geometry> g1Overlap = extractByEnvelope(overlapEnv, g1, disjointPolys);
@@ -78,7 +78,7 @@ OverlapUnion::overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
 
 /* private */
 std::unique_ptr<Geometry>
-OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry*>& disjointPolys)
+OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<const Geometry*>& disjointPolys)
 {
     if (disjointPolys.size() <= 0)
         return std::move(unionGeom);
@@ -89,11 +89,11 @@ OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry
 
 /* private */
 std::unique_ptr<Geometry>
-OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::vector<Geometry*>& disjointGeoms)
+OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::vector<const Geometry*>& disjointGeoms)
 {
-    std::vector<Geometry*> intersectingGeoms;
+    std::vector<const Geometry*> intersectingGeoms;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
+        const Geometry* elem = geom->getGeometryN(i);
         if (elem->getEnvelopeInternal()->intersects(env)) {
             intersectingGeoms.push_back(elem);
         }

@@ -188,7 +188,7 @@ public:
 
     /// Constructs a GeometryCollection with a deep-copy of args
     GeometryCollection* createGeometryCollection(
-        const std::vector<Geometry*>& newGeoms) const;
+        const std::vector<const Geometry*>& newGeoms) const;
 
     /// Construct an EMPTY MultiLineString
     MultiLineString* createMultiLineString() const;
@@ -199,7 +199,7 @@ public:
 
     /// Construct a MultiLineString with a deep-copy of given arguments
     MultiLineString* createMultiLineString(
-        const std::vector<Geometry*>& fromLines) const;
+        const std::vector<const Geometry*>& fromLines) const;
 
     std::unique_ptr<MultiLineString> createMultiLineString(
             std::vector<std::unique_ptr<LineString>> && fromLines) const;
@@ -215,7 +215,7 @@ public:
 
     /// Construct a MultiPolygon with a deep-copy of given arguments
     MultiPolygon* createMultiPolygon(
-        const std::vector<Geometry*>& fromPolys) const;
+        const std::vector<const Geometry*>& fromPolys) const;
 
     std::unique_ptr<MultiPolygon> createMultiPolygon(
         std::vector<std::unique_ptr<Polygon>> && fromPolys) const;
@@ -248,7 +248,7 @@ public:
 
     /// Construct a MultiPoint with a deep-copy of given arguments
     MultiPoint* createMultiPoint(
-        const std::vector<Geometry*>& fromPoints) const;
+        const std::vector<const Geometry*>& fromPoints) const;
 
     /// \brief
     /// Construct a MultiPoint containing a Point geometry
@@ -368,10 +368,10 @@ public:
         // Until we tweak all the createMulti* interfaces
         // to support taking iterators we'll have to build
         // a custom vector here.
-        std::vector<Geometry*> fromGeoms;
+        std::vector<const Geometry*> fromGeoms;
         for(T i = from; i != toofar; ++i) {
             const Geometry* g = *i;
-            fromGeoms.push_back(const_cast<Geometry*>(g));
+            fromGeoms.push_back(g);
         }
 
 
@@ -402,7 +402,7 @@ public:
      * The difference is that this version will copy needed data
      * leaving ownership to the caller.
      */
-    Geometry* buildGeometry(const std::vector<Geometry*>& geoms) const;
+    Geometry* buildGeometry(const std::vector<const Geometry*>& geoms) const;
 
     int getSRID() const;
 

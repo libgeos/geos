@@ -26,7 +26,7 @@ namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
 std::unique_ptr<Geometry>
-GeometryCombiner::combine(std::vector<Geometry*> const& geoms)
+GeometryCombiner::combine(std::vector<const Geometry*> const& geoms)
 {
     GeometryCombiner combiner(geoms);
     return combiner.combine();
@@ -35,9 +35,9 @@ GeometryCombiner::combine(std::vector<Geometry*> const& geoms)
 std::unique_ptr<Geometry>
 GeometryCombiner::combine(const Geometry* g0, const Geometry* g1)
 {
-    std::vector<Geometry*> geoms;
-    geoms.push_back(const_cast<Geometry*>(g0));
-    geoms.push_back(const_cast<Geometry*>(g1));
+    std::vector<const Geometry*> geoms;
+    geoms.push_back(g0);
+    geoms.push_back(g1);
 
     GeometryCombiner combiner(geoms);
     return combiner.combine();
@@ -47,22 +47,22 @@ std::unique_ptr<Geometry>
 GeometryCombiner::combine(const Geometry* g0, const Geometry* g1,
                           const Geometry* g2)
 {
-    std::vector<Geometry*> geoms;
-    geoms.push_back(const_cast<Geometry*>(g0));
-    geoms.push_back(const_cast<Geometry*>(g1));
-    geoms.push_back(const_cast<Geometry*>(g2));
+    std::vector<const Geometry*> geoms;
+    geoms.push_back(g0);
+    geoms.push_back(g1);
+    geoms.push_back(g2);
 
     GeometryCombiner combiner(geoms);
     return combiner.combine();
 }
 
-GeometryCombiner::GeometryCombiner(std::vector<Geometry*> const& geoms)
+GeometryCombiner::GeometryCombiner(std::vector<const Geometry*> const& geoms)
     : geomFactory(extractFactory(geoms)), skipEmpty(false), inputGeoms(geoms)
 {
 }
 
 GeometryFactory const*
-GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms)
+GeometryCombiner::extractFactory(std::vector<const Geometry*> const& geoms)
 {
     return geoms.empty() ? nullptr : geoms.front()->getFactory();
 }
@@ -70,7 +70,7 @@ GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms)
 std::unique_ptr<Geometry>
 GeometryCombiner::combine()
 {
-    std::vector<Geometry*> elems;
+    std::vector<const Geometry*> elems;
 
     for(const auto& geom : inputGeoms) {
         extractElements(geom, elems);
@@ -88,14 +88,14 @@ GeometryCombiner::combine()
 }
 
 void
-GeometryCombiner::extractElements(Geometry* geom, std::vector<Geometry*>& elems)
+GeometryCombiner::extractElements(const Geometry* geom, std::vector<const Geometry*>& elems)
 {
     if(geom == nullptr) {
         return;
     }
 
     for(std::size_t i = 0; i < geom->getNumGeometries(); ++i) {
-        Geometry* elemGeom = const_cast<Geometry*>(geom->getGeometryN(i));
+        const Geometry* elemGeom = geom->getGeometryN(i);
         if(skipEmpty && elemGeom->isEmpty()) {
             continue;
         }

@@ -54,7 +54,7 @@ public:
      * @param geoms the geometries to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static std::unique_ptr<Geometry> combine(std::vector<Geometry*> const& geoms);
+    static std::unique_ptr<Geometry> combine(std::vector<const Geometry*> const& geoms);
 
     /** \brief
      * Combines two geometries.
@@ -78,7 +78,7 @@ public:
 private:
     GeometryFactory const* geomFactory;
     bool skipEmpty;
-    std::vector<Geometry*> const& inputGeoms;
+    std::vector<const Geometry*> const& inputGeoms;
 
 public:
     /** \brief
@@ -86,7 +86,7 @@ public:
      *
      * @param geoms the geometries to combine
      */
-    GeometryCombiner(std::vector<Geometry*> const& geoms);
+    GeometryCombiner(std::vector<const Geometry*> const& geoms);
 
     /** \brief
      * Extracts the GeometryFactory used by the geometries in a collection.
@@ -94,7 +94,7 @@ public:
      * @param geoms
      * @return a GeometryFactory
      */
-    static GeometryFactory const* extractFactory(std::vector<Geometry*> const& geoms);
+    static GeometryFactory const* extractFactory(std::vector<const Geometry*> const& geoms);
 
     /** \brief
      * Computes the combination of the input geometries
@@ -105,7 +105,7 @@ public:
     std::unique_ptr<Geometry> combine();
 
 private:
-    void extractElements(Geometry* geom, std::vector<Geometry*>& elems);
+    void extractElements(const Geometry* geom, std::vector<const Geometry*>& elems);
 
     // Declare type as noncopyable
     GeometryCombiner(const GeometryCombiner& other) = delete;

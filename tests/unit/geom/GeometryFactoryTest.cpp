@@ -866,7 +866,7 @@ void object::test<23>
     const std::size_t size = 3;
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    std::vector<GeometryPtr> vec;
+    std::vector<const geos::geom::Geometry*> vec;
 
     GeometryPtr geo = nullptr;
     geo = factory_->createPoint(coord);
@@ -892,9 +892,8 @@ void object::test<23>
 
     // FREE MEMORY
     factory_->destroyGeometry(col);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = vec.begin(); it != vec.end(); ++it) {
-        delete(*it);
+    for(auto& g : vec) {
+        delete g;
     }
 }
 
@@ -991,7 +990,7 @@ void object::test<26>
     const std::size_t size = 3;
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    std::vector<GeometryPtr> vec;
+    std::vector<const geos::geom::Geometry*> vec;
 
     GeometryPtr geo = nullptr;
     geo = factory_->createPoint(coord);
@@ -1019,9 +1018,8 @@ void object::test<26>
 
     // FREE MEMORY
     factory_->destroyGeometry(mp);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = vec.begin(); it != vec.end(); ++it) {
-        delete(*it);
+    for(auto& g : vec) {
+        delete g;
     }
 }
 
@@ -1147,7 +1145,7 @@ void object::test<30>
     const std::size_t size = 5;
     const std::size_t lineSize = 2;
 
-    std::vector<GeometryPtr> lines;
+    std::vector<const geos::geom::Geometry*> lines;
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
@@ -1176,9 +1174,8 @@ void object::test<30>
 
     // FREE MEMORY
     factory_->destroyGeometry(mls);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = lines.begin(); it != lines.end(); ++it) {
-        delete(*it);
+    for(auto& g : lines) {
+        delete g;
     }
 }
 
