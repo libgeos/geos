@@ -26,6 +26,17 @@ namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
 std::unique_ptr<Geometry>
+GeometryCombiner::combine(std::vector<std::unique_ptr<Geometry>> const& geoms)
+{
+    std::vector<const Geometry*> geomptrs;
+    for(const auto& g : geoms) {
+        geomptrs.push_back(g.get());
+    }
+    GeometryCombiner combiner(geomptrs);
+    return combiner.combine();
+}
+
+std::unique_ptr<Geometry>
 GeometryCombiner::combine(std::vector<const Geometry*> const& geoms)
 {
     GeometryCombiner combiner(geoms);

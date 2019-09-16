@@ -55,6 +55,7 @@ public:
      * @return the combined geometry
      */
     static std::unique_ptr<Geometry> combine(std::vector<const Geometry*> const& geoms);
+    static std::unique_ptr<Geometry> combine(std::vector<std::unique_ptr<Geometry>> const& geoms);
 
     /** \brief
      * Combines two geometries.
