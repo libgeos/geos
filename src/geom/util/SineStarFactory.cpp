@@ -30,18 +30,16 @@
 #include <cmath>
 #include <memory>
 
-using namespace std;
-//using namespace geos::geom;
 
 namespace geos {
 namespace geom { // geos::geom
 namespace util { // geos::geom::util
 
 /* public */
-unique_ptr<Polygon>
+std::unique_ptr<Polygon>
 SineStarFactory::createSineStar() const
 {
-    unique_ptr<Envelope> env(dim.getEnvelope());
+    std::unique_ptr<Envelope> env(dim.getEnvelope());
     double radius = env->getWidth() / 2.0;
 
     double armRatio = armLengthRatio;
@@ -58,7 +56,7 @@ SineStarFactory::createSineStar() const
     double centreX = env->getMinX() + radius;
     double centreY = env->getMinY() + radius;
 
-    unique_ptr< vector<Coordinate> > pts(new vector<Coordinate>(nPts + 1));
+    std::vector<Coordinate> pts(nPts + 1);
     int iPt = 0;
     for(int i = 0; i < nPts; i++) {
         // the fraction of the way thru the current arm - in [0,1]
@@ -78,15 +76,13 @@ SineStarFactory::createSineStar() const
         double ang = i * (2 * M_PI / nPts);
         double x = curveRadius * cos(ang) + centreX;
         double y = curveRadius * sin(ang) + centreY;
-        (*pts)[iPt++] = coord(x, y);
+        pts[iPt++] = coord(x, y);
     }
-    (*pts)[iPt] = Coordinate((*pts)[0]);
+    pts[iPt] = pts[0];
 
-    unique_ptr<CoordinateSequence> cs(
-        geomFact->getCoordinateSequenceFactory()->create(pts.release())
-    );
-    unique_ptr<LinearRing> ring(geomFact->createLinearRing(cs.release()));
-    unique_ptr<Polygon> poly(geomFact->createPolygon(ring.release(), nullptr));
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
+    auto ring = geomFact->createLinearRing(std::move(cs));
+    auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }
 
