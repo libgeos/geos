@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2019 Daniel Baston <dbaston@gmail.com>
+ * Copyright (C) 2019 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -28,8 +28,6 @@ namespace operation {
 namespace geounion {
 
 // https://github.com/locationtech/jts/blob/master/modules/core/src/main/java/org/locationtech/jts/operation/union/OverlapUnion.java
-
-// xxx OverlapUnion::union leaks like a seive, check cascadedunion implementation for use of unique_ptr
 
 using namespace geom;
 using namespace geom::util;
