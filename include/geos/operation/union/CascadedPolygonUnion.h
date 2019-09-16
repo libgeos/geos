@@ -93,7 +93,7 @@ private:
      * @param g the geometry to filter
      * @return a Polygonal geometry
      */
-    static geom::Geometry* restrictToPolygons(geom::Geometry* g);
+    static std::unique_ptr<geom::Geometry> restrictToPolygons(std::unique_ptr<geom::Geometry> g);
 
 public:
     CascadedPolygonUnion();

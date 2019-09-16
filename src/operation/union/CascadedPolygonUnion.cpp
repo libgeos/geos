@@ -239,27 +239,27 @@ geom::Geometry*
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
     OverlapUnion unionOp(g0, g1);
-    geom::Geometry* unioned = unionOp.doUnion();
-    geom::Geometry* justPolys = restrictToPolygons(unioned);
-    delete unioned;
+    geom::Geometry* justPolys = restrictToPolygons(
+        std::unique_ptr<geom::Geometry>(unionOp.doUnion())
+        ).release();
     return justPolys;
 }
 
-geom::Geometry*
-CascadedPolygonUnion::restrictToPolygons(geom::Geometry* g)
+std::unique_ptr<geom::Geometry>
+CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
 {
     using namespace geom;
     using namespace std;
 
     if(g->isPolygonal()) {
-        return g->clone().release();
+        return g;
     }
 
     Polygon::ConstVect polygons;
     geom::util::PolygonExtracter::getPolygons(*g, polygons);
 
     if(polygons.size() == 1) {
-        return polygons[0]->clone().release();
+        return std::unique_ptr<Geometry>(polygons[0]->clone());
     }
 
     typedef vector<Geometry*> GeomVect;
@@ -269,8 +269,7 @@ CascadedPolygonUnion::restrictToPolygons(geom::Geometry* g)
     for(Polygon::ConstVect::size_type i = 0; i < n; ++i) {
         (*newpolys)[i] = polygons[i]->clone().release();
     }
-    return g->getFactory()->createMultiPolygon(newpolys);
-
+    return unique_ptr<Geometry>(g->getFactory()->createMultiPolygon(newpolys));
 }
 
 } // namespace geos.operation.union

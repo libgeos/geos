@@ -33,7 +33,7 @@ using namespace geom;
 using namespace geom::util;
 
 /* public */
-Geometry*
+std::unique_ptr<Geometry>
 OverlapUnion::doUnion()
 {
     Envelope overlapEnv = overlapEnvelope(g0, g1);
@@ -43,7 +43,7 @@ OverlapUnion::doUnion()
     if (overlapEnv.isNull()) {
         // Geometry* g0Copy = g0->clone().get();
         // Geometry* g1Copy = g1->clone().get();
-        return GeometryCombiner::combine(g0, g1).release();
+        return GeometryCombiner::combine(g0, g1);
     }
 
     std::vector<Geometry*> disjointPolys;
@@ -77,14 +77,14 @@ OverlapUnion::overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
 }
 
 /* private */
-Geometry*
+std::unique_ptr<Geometry>
 OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<Geometry*>& disjointPolys)
 {
     if (disjointPolys.size() <= 0)
-        return unionGeom.release();
+        return std::move(unionGeom);
 
     disjointPolys.push_back(unionGeom.release());
-    return GeometryCombiner::combine(disjointPolys).release();
+    return GeometryCombiner::combine(disjointPolys);
 }
 
 /* private */
@@ -101,15 +101,16 @@ OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::
             disjointGeoms.push_back(elem);
         }
     }
-    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(intersectingGeoms));
+    std::unique_ptr<Geometry> intersectingGeom(geomFactory->buildGeometry(intersectingGeoms));
+    return std::move(intersectingGeom);
 }
 
 /* private */
-Geometry*
+std::unique_ptr<Geometry>
 OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 {
     try {
-        return geom0->Union(geom1).release();
+        return geom0->Union(geom1);
     }
     catch (geos::util::TopologyException ex) {
         /**
@@ -121,15 +122,17 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 }
 
 /* private */
-Geometry*
+std::unique_ptr<Geometry>
 OverlapUnion::unionBuffer(const Geometry* geom0, const Geometry* geom1)
 {
-    Geometry* copy0 = geom0->clone().release();
-    Geometry* copy1 = geom1->clone().release();
-    std::vector<Geometry*> geoms = {copy0, copy1};
+    std::unique_ptr<Geometry> copy0 = geom0->clone();
+    std::unique_ptr<Geometry> copy1 = geom1->clone();
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    geoms.push_back(std::move(copy0));
+    geoms.push_back(std::move(copy1));
     const GeometryFactory* factory = copy0->getFactory();
-    std::unique_ptr<GeometryCollection> gColl(factory->createGeometryCollection(&geoms));
-    return gColl->buffer(0.0).release();
+    std::unique_ptr<GeometryCollection> gColl(factory->createGeometryCollection(std::move(geoms)));
+    return gColl->buffer(0.0);
 }
 
 /* private */
