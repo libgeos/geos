@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -26,17 +26,11 @@
 #include <iostream>
 #include <cassert>
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/*public*/
-TopologyLocation::TopologyLocation(const vector<int> &newLocation):
-	location(newLocation.size(), Location::UNDEF)
-{
-}
 
 /*public*/
 TopologyLocation::TopologyLocation()
@@ -50,7 +44,7 @@ TopologyLocation::~TopologyLocation()
 
 /*public*/
 TopologyLocation::TopologyLocation(int on, int left, int right):
-	location(3)
+	locationSize(3)
 {
 	location[Position::ON]=on;
 	location[Position::LEFT]=left;
@@ -59,23 +53,28 @@ TopologyLocation::TopologyLocation(int on, int left, int right):
 
 /*public*/
 TopologyLocation::TopologyLocation(int on):
-	location(1, on)
+	locationSize(1)
 {
-	//(*location)[Position::ON]=on;
+	location[Position::ON] = on;
 }
 
 /*public*/
-TopologyLocation::TopologyLocation(const TopologyLocation &gl)
-  :
-	location(gl.location)
+TopologyLocation::TopologyLocation(const TopologyLocation &gl):
+  locationSize(gl.locationSize)
 {
+	for (size_t i=0; i<locationSize; ++i) {
+		location[i] = gl.location[i];
+	}
 }
 
 /*public*/
 TopologyLocation&
 TopologyLocation::operator= (const TopologyLocation &gl)
 {
-	location = gl.location;
+	locationSize = gl.locationSize;
+	for (size_t i=0; i<locationSize; ++i) {
+		location[i] = gl.location[i];
+	}
   return *this;
 }
 
@@ -84,7 +83,7 @@ int
 TopologyLocation::get(size_t posIndex) const
 {
 	// should be an assert() instead ?
-	if (posIndex<location.size()) return location[posIndex];
+	if (posIndex<locationSize) return location[posIndex];
 	return Location::UNDEF;
 }
 
@@ -92,7 +91,7 @@ TopologyLocation::get(size_t posIndex) const
 bool
 TopologyLocation::isNull() const
 {
-	for (size_t i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		if (location[i]!=Location::UNDEF) return false;
 	}
 	return true;
@@ -102,7 +101,7 @@ TopologyLocation::isNull() const
 bool
 TopologyLocation::isAnyNull() const
 {
-	for (size_t i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		if (location[i]==Location::UNDEF) return true;
 	}
 	return false;
@@ -119,21 +118,21 @@ TopologyLocation::isEqualOnSide(const TopologyLocation &le, int locIndex) const
 bool
 TopologyLocation::isArea() const
 {
-	return location.size()>1;
+	return locationSize>1;
 }
 
 /*public*/
 bool
 TopologyLocation::isLine() const
 {
-	return location.size()==1;
+	return locationSize==1;
 }
 
 /*public*/
 void
 TopologyLocation::flip()
 {
-	if (location.size()<=1) return;
+	if (locationSize<=1) return;
 	int temp=location[Position::LEFT];
 	location[Position::LEFT]=location[Position::RIGHT];
 	location[Position::RIGHT] = temp;
@@ -143,7 +142,7 @@ TopologyLocation::flip()
 void
 TopologyLocation::setAllLocations(int locValue)
 {
-	for (size_t i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		location[i]=locValue;
 	}
 }
@@ -152,7 +151,7 @@ TopologyLocation::setAllLocations(int locValue)
 void
 TopologyLocation::setAllLocationsIfNull(int locValue)
 {
-	for (size_t i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		if (location[i]==Location::UNDEF) location[i]=locValue;
 	}
 }
@@ -172,7 +171,7 @@ TopologyLocation::setLocation(int locValue)
 }
 
 /*public*/
-const vector<int> &
+const int*
 TopologyLocation::getLocations() const
 {
 	return location;
@@ -182,7 +181,7 @@ TopologyLocation::getLocations() const
 void
 TopologyLocation::setLocations(int on, int left, int right)
 {
-	assert(location.size() >= 3);
+	assert(locationSize >= 3);
 	location[Position::ON]=on;
 	location[Position::LEFT]=left;
 	location[Position::RIGHT]=right;
@@ -192,7 +191,7 @@ TopologyLocation::setLocations(int on, int left, int right)
 bool
 TopologyLocation::allPositionsEqual(int loc) const
 {
-	for (size_t i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		if (location[i]!=loc) return false;
 	}
 	return true;
@@ -203,32 +202,32 @@ void
 TopologyLocation::merge(const TopologyLocation &gl)
 {
 	// if the src is an Area label & and the dest is not, increase the dest to be an Area
-	size_t sz=location.size();
-	size_t glsz=gl.location.size();
+	size_t sz=locationSize;
+	size_t glsz=gl.locationSize;
 	if (glsz>sz) {
-		location.resize(3);
+		locationSize = 3;
 		location[Position::LEFT]=Location::UNDEF;
 		location[Position::RIGHT]=Location::UNDEF;
 	}
-	for (size_t i=0; i<sz; ++i) {
+	for (size_t i=0; i<locationSize; ++i) {
 		if (location[i]==Location::UNDEF && i<glsz)
 			location[i]=gl.location[i];
 	}
 }
 
-string
+std::string
 TopologyLocation::toString() const
 {
-	stringstream ss;
+	std::stringstream ss;
 	ss << *this;
 	return ss.str();
 }
 
 std::ostream& operator<< (std::ostream& os, const TopologyLocation& tl)
 {
-	if (tl.location.size()>1) os << Location::toLocationSymbol(tl.location[Position::LEFT]);
+	if (tl.locationSize>1) os << Location::toLocationSymbol(tl.location[Position::LEFT]);
 	os << Location::toLocationSymbol(tl.location[Position::ON]);
-	if (tl.location.size()>1) os << Location::toLocationSymbol(tl.location[Position::RIGHT]);
+	if (tl.locationSize>1) os << Location::toLocationSymbol(tl.location[Position::RIGHT]);
 	return os;
 }
 

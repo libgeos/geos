@@ -140,10 +140,10 @@ Envelope::Envelope(const string &str)
   vector<string> values = split(coordString, ":,");
 
   // create a new envelopet
-  init(::atof(values[0].c_str()),
-       ::atof(values[1].c_str()),
-       ::atof(values[2].c_str()),
-       ::atof(values[3].c_str()));
+  init(strtod(values[0].c_str(), NULL),
+       strtod(values[1].c_str(), NULL),
+       strtod(values[2].c_str(), NULL),
+       strtod(values[3].c_str(), NULL));
 }
 
 /*public*/
