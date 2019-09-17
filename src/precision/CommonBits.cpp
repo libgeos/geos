@@ -44,6 +44,7 @@ CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
 int64
 CommonBits::zeroLowerBits(int64 bits, int nBits)
 {
+    if (nBits >= 64) return 0;
     int64 invMask = (1 << nBits) - 1;
     int64 mask = ~ invMask;
     int64 zeroed = bits & mask;
