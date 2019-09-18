@@ -12,7 +12,7 @@ Changes in 3.6.4
   - Static library does not contain C API (#878)
   - Prevent crash when querying empty STRtree (#730)
   - Overlay performance improvement (#986, Paul Ramsey)
-  - Allocate default geometryfactory on the stack (#714)
+
 
 Changes in 3.6.3
 2018-08-06
