@@ -43,7 +43,7 @@ CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
 int64
 CommonBits::zeroLowerBits(int64 bits, int nBits)
 {
-	if (nBits >= 64 || nBits < 1) return 0;
+	if (nBits >= 64 || nBits < 0) return 0;
 	int64 bits_ = static_cast<int64>(bits);
 	int64 invMask = (1ull << nBits) - 1;
 	int64 mask = ~ invMask;
