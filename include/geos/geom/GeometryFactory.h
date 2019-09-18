@@ -164,7 +164,7 @@ public:
     const PrecisionModel* getPrecisionModel() const;
 
     /// Creates an EMPTY Point
-    Point* createPoint() const;
+    std::unique_ptr<Point> createPoint() const;
 
     /// Creates a Point using the given Coordinate
     Point* createPoint(const Coordinate& coordinate) const;
@@ -176,10 +176,10 @@ public:
     Point* createPoint(const CoordinateSequence& coordinates) const;
 
     /// Construct an EMPTY GeometryCollection
-    GeometryCollection* createGeometryCollection() const;
+    std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 
     /// Construct the EMPTY Geometry
-    Geometry* createEmptyGeometry() const;
+    std::unique_ptr<Geometry> createEmptyGeometry() const;
 
     /// Construct a GeometryCollection taking ownership of given arguments
     GeometryCollection* createGeometryCollection(
@@ -193,7 +193,7 @@ public:
         const std::vector<const Geometry*>& newGeoms) const;
 
     /// Construct an EMPTY MultiLineString
-    MultiLineString* createMultiLineString() const;
+    std::unique_ptr<MultiLineString> createMultiLineString() const;
 
     /// Construct a MultiLineString taking ownership of given arguments
     MultiLineString* createMultiLineString(
@@ -210,7 +210,7 @@ public:
             std::vector<std::unique_ptr<Geometry>> && fromLines) const;
 
     /// Construct an EMPTY MultiPolygon
-    MultiPolygon* createMultiPolygon() const;
+    std::unique_ptr<MultiPolygon> createMultiPolygon() const;
 
     /// Construct a MultiPolygon taking ownership of given arguments
     MultiPolygon* createMultiPolygon(std::vector<Geometry*>* newPolys) const;
@@ -226,7 +226,7 @@ public:
             std::vector<std::unique_ptr<Geometry>> && fromPolys) const;
 
     /// Construct an EMPTY LinearRing
-    LinearRing* createLinearRing() const;
+    std::unique_ptr<LinearRing> createLinearRing() const;
 
     /// Construct a LinearRing taking ownership of given arguments
     LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
@@ -239,7 +239,7 @@ public:
         const CoordinateSequence& coordinates) const;
 
     /// Constructs an EMPTY <code>MultiPoint</code>.
-    MultiPoint* createMultiPoint() const;
+    std::unique_ptr<MultiPoint> createMultiPoint() const;
 
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
@@ -265,7 +265,7 @@ public:
         const std::vector<Coordinate>& fromCoords) const;
 
     /// Construct an EMPTY Polygon
-    Polygon* createPolygon() const;
+    std::unique_ptr<Polygon> createPolygon() const;
 
     /// Construct a Polygon taking ownership of given arguments
     Polygon* createPolygon(LinearRing* shell,
@@ -281,7 +281,7 @@ public:
                            const std::vector<LinearRing*>& holes) const;
 
     /// Construct an EMPTY LineString
-    LineString* createLineString() const;
+    std::unique_ptr<LineString> createLineString() const;
 
     /// Copy a LineString
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;

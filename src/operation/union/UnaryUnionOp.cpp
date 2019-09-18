@@ -132,7 +132,7 @@ UnaryUnionOp::Union()
     }
 
     if(! ret.get()) {
-        ret.reset(geomFact->createGeometryCollection());
+        ret = geomFact->createGeometryCollection();
     }
 
     return ret;

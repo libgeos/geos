@@ -107,7 +107,7 @@ template<>
 void object::test<4>
 ()
 {
-    g_.reset(factory_->createEmptyGeometry());
+    g_= factory_->createEmptyGeometry();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -122,7 +122,7 @@ template<>
 void object::test<5>
 ()
 {
-    g_.reset(factory_->createEmptyGeometry());
+    g_ = factory_->createEmptyGeometry();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -138,7 +138,7 @@ template<>
 void object::test<6>
 ()
 {
-    g_.reset(factory_->createPoint());
+    g_ = factory_->createPoint();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -153,7 +153,7 @@ template<>
 void object::test<7>
 ()
 {
-    g_.reset(factory_->createPoint());
+    g_ = factory_->createPoint();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -169,7 +169,7 @@ template<>
 void object::test<8>
 ()
 {
-    g_.reset(factory_->createLineString());
+    g_ = factory_->createLineString();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -184,7 +184,7 @@ template<>
 void object::test<9>
 ()
 {
-    g_.reset(factory_->createLineString());
+    g_ = factory_->createLineString();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -199,7 +199,7 @@ template<>
 void object::test<10>
 ()
 {
-    g_.reset(factory_->createPolygon());
+    g_ = factory_->createPolygon();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -214,7 +214,7 @@ template<>
 void object::test<11>
 ()
 {
-    g_.reset(factory_->createPolygon());
+    g_ = factory_->createPolygon();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -230,7 +230,7 @@ template<>
 void object::test<12>
 ()
 {
-    g_.reset(factory_->createMultiPoint());
+    g_ = factory_->createMultiPoint();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -245,7 +245,7 @@ template<>
 void object::test<13>
 ()
 {
-    g_.reset(factory_->createMultiPoint());
+    g_ = factory_->createMultiPoint();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -261,7 +261,7 @@ template<>
 void object::test<14>
 ()
 {
-    g_.reset(factory_->createMultiLineString());
+    g_ = factory_->createMultiLineString();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -276,7 +276,7 @@ template<>
 void object::test<15>
 ()
 {
-    g_.reset(factory_->createMultiLineString());
+    g_ = factory_->createMultiLineString();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;
@@ -292,7 +292,7 @@ template<>
 void object::test<16>
 ()
 {
-    g_.reset(factory_->createMultiPolygon());
+    g_ = factory_->createMultiPolygon();
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -307,7 +307,7 @@ template<>
 void object::test<17>
 ()
 {
-    g_.reset(factory_->createMultiPolygon());
+    g_ = factory_->createMultiPolygon();
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;

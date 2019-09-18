@@ -1272,7 +1272,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 gRealRes->normalize();
             }
             else {
-                gRealRes.reset(factory->createPoint());
+                gRealRes = factory->createPoint();
             }
             gRealRes->normalize();
 
@@ -1471,7 +1471,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 gRealRes->normalize();
             }
             else {
-                gRealRes.reset(factory->createPoint());
+                gRealRes = factory->createPoint();
             }
 
             if(gRes->compareTo(gRealRes.get()) == 0) {

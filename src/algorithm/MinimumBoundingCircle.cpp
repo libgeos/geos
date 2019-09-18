@@ -66,7 +66,7 @@ MinimumBoundingCircle::getFarthestPoints()
     compute();
     switch(extremalPts.size()) {
     case 0:
-        return input->getFactory()->createLineString();
+        return input->getFactory()->createLineString().release();
     case 1:
         return input->getFactory()->createPoint(centre);
     }
@@ -86,7 +86,7 @@ MinimumBoundingCircle::getDiameter()
     compute();
     switch(extremalPts.size()) {
     case 0:
-        return input->getFactory()->createLineString();
+        return input->getFactory()->createLineString().release();
     case 1:
         return input->getFactory()->createPoint(centre);
     }

@@ -2284,7 +2284,7 @@ extern "C" {
             if(ret == nullptr) {
                 const GeometryFactory* gf = handle->geomFactory;
                 // return an empty point
-                return gf->createPoint();
+                return gf->createPoint().release();
             }
             return ret.release();
         }
@@ -2985,7 +2985,7 @@ extern "C" {
             Geometry* ret = g->getCentroid().release();
             if(0 == ret) {
                 const GeometryFactory* gf = handle->geomFactory;
-                return gf->createPoint();
+                return gf->createPoint().release();
             }
             return ret;
         }
@@ -3021,7 +3021,7 @@ extern "C" {
         try {
             const GeometryFactory* gf = handle->geomFactory;
 
-            Geometry* g = 0;
+            std::unique_ptr<Geometry> g = 0;
             switch(type) {
             case GEOS_GEOMETRYCOLLECTION:
                 g = gf->createGeometryCollection();
@@ -3041,7 +3041,7 @@ extern "C" {
 
             }
 
-            return g;
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3201,7 +3201,7 @@ extern "C" {
 
             auto polys = plgnzr.getPolygons();
             if (polys->empty()) {
-                out = handle->geomFactory->createGeometryCollection();
+                out = handle->geomFactory->createGeometryCollection().release();
             } else if (polys->size() == 1) {
                 out = (*polys)[0].release();
             } else {
@@ -4137,7 +4137,7 @@ extern "C" {
 
         try {
             const GeometryFactory* gf = handle->geomFactory;
-            return gf->createPoint();
+            return gf->createPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4248,7 +4248,7 @@ extern "C" {
         try {
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createLineString();
+            return gf->createLineString().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4303,7 +4303,7 @@ extern "C" {
 
         try {
             const GeometryFactory* gf = handle->geomFactory;
-            return gf->createPolygon();
+            return gf->createPolygon().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

@@ -296,10 +296,10 @@ GeometryFactory::getPrecisionModel() const
 }
 
 /*public*/
-Point*
+std::unique_ptr<Point>
 GeometryFactory::createPoint() const
 {
-    return new Point(nullptr, this);
+    return std::unique_ptr<Point>(new Point(nullptr, this));
 }
 
 /*public*/
@@ -307,7 +307,7 @@ Point*
 GeometryFactory::createPoint(const Coordinate& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint();
+        return createPoint().release();
     }
     else {
         return new Point(coordinate, this);
@@ -331,10 +331,10 @@ GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 }
 
 /*public*/
-MultiLineString*
+std::unique_ptr<MultiLineString>
 GeometryFactory::createMultiLineString() const
 {
-    return new MultiLineString(nullptr, this);
+    return std::unique_ptr<MultiLineString>(new MultiLineString(nullptr, this));
 }
 
 /*public*/
@@ -378,17 +378,17 @@ GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<Geometry>> &&
 }
 
 /*public*/
-GeometryCollection*
+std::unique_ptr<GeometryCollection>
 GeometryFactory::createGeometryCollection() const
 {
-    return new GeometryCollection(nullptr, this);
+    return std::unique_ptr<GeometryCollection>(new GeometryCollection(nullptr, this));
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 GeometryFactory::createEmptyGeometry() const
 {
-    return new GeometryCollection(nullptr, this);
+    return createGeometryCollection();
 }
 
 /*public*/
@@ -418,10 +418,10 @@ GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fr
 }
 
 /*public*/
-MultiPolygon*
+std::unique_ptr<MultiPolygon>
 GeometryFactory::createMultiPolygon() const
 {
-    return new MultiPolygon(nullptr, this);
+    return std::unique_ptr<MultiPolygon>(new MultiPolygon(nullptr, this));
 }
 
 /*public*/
@@ -459,10 +459,10 @@ GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPoly
 }
 
 /*public*/
-LinearRing*
+std::unique_ptr<LinearRing>
 GeometryFactory::createLinearRing() const
 {
-    return new LinearRing(nullptr, this);
+    return std::unique_ptr<LinearRing>(new LinearRing(nullptr, this));
 }
 
 /*public*/
@@ -522,10 +522,10 @@ GeometryFactory::createMultiPoint(const vector<const Geometry*>& fromPoints) con
 }
 
 /*public*/
-MultiPoint*
+std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint() const
 {
-    return new MultiPoint(nullptr, this);
+    return std::unique_ptr<MultiPoint>(new MultiPoint(nullptr, this));
 }
 
 /*public*/
@@ -557,10 +557,10 @@ GeometryFactory::createMultiPoint(const std::vector<Coordinate>& fromCoords) con
 }
 
 /*public*/
-Polygon*
+std::unique_ptr<Polygon>
 GeometryFactory::createPolygon() const
 {
-    return new Polygon(nullptr, nullptr, this);
+    return std::unique_ptr<Polygon>(new Polygon(nullptr, nullptr, this));
 }
 
 /*public*/
@@ -604,10 +604,10 @@ const
 }
 
 /*public*/
-LineString*
+std::unique_ptr<LineString>
 GeometryFactory::createLineString() const
 {
-    return new LineString(nullptr, this);
+    return std::unique_ptr<LineString>(new LineString(nullptr, this));
 }
 
 /*public*/
@@ -654,7 +654,7 @@ GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
     if(newGeoms->empty()) {
         // we do not need the vector anymore
         delete newGeoms;
-        return createGeometryCollection();
+        return createGeometryCollection().release();
     }
 
     bool isHeterogeneous = false;
@@ -707,7 +707,7 @@ GeometryFactory::buildGeometry(const vector<const Geometry*>& fromGeoms) const
 {
     size_t geomsSize = fromGeoms.size();
     if(geomsSize == 0) {
-        return createGeometryCollection();
+        return createGeometryCollection().release();
     }
 
     if(geomsSize == 1) {
