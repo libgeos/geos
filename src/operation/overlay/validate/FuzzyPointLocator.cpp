@@ -37,7 +37,6 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
-using namespace std;
 using namespace geos::geom;
 using namespace geos::algorithm;
 
@@ -62,30 +61,17 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 {
     ::geos::ignore_unused_variable_warning(geom);
 
-    vector<Geometry*>* lineGeoms = new vector<Geometry*>();
-    try { // geoms array will leak if an exception is thrown
+    std::vector<std::unique_ptr<Geometry>> lineGeoms;
 
-        for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
-            const Geometry* gComp = g.getGeometryN(i);
-            Geometry* lineGeom = nullptr;
+    for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+        const Geometry* gComp = g.getGeometryN(i);
 
-            // only get linework for polygonal components
-            if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary().release();
-                lineGeoms->push_back(lineGeom);
-            }
+        // only get linework for polygonal components
+        if(gComp->getDimension() == Dimension::A) {
+            lineGeoms.push_back(gComp->getBoundary());
         }
-        return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
-
     }
-    catch(...) {    // avoid leaks
-        for(size_t i = 0, n = lineGeoms->size(); i < n; ++i) {
-            delete(*lineGeoms)[i];
-        }
-        delete lineGeoms;
-        throw;
-    }
-
+    return g.getFactory()->buildGeometry(std::move(lineGeoms));
 }
 
 /*private*/
@@ -94,39 +80,25 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 {
     ::geos::ignore_unused_variable_warning(geom);
 
-    vector<Geometry*>* lineGeoms = new vector<Geometry*>();
-    try { // geoms array will leak if an exception is thrown
+    std::vector<std::unique_ptr<Geometry>> lineGeoms;
+    for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+        const Geometry* gComp = g.getGeometryN(i);
 
-        for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
-            const Geometry* gComp = g.getGeometryN(i);
-            Geometry* lineGeom;
-            if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary().release();
-            }
-            else {
-                lineGeom = gComp->clone().release();
-            }
-            lineGeoms->push_back(lineGeom);
+        if(gComp->getDimension() == 2) {
+            lineGeoms.push_back(gComp->getBoundary());
+        } else {
+            lineGeoms.push_back(gComp->clone());
         }
-        return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
-
-    }
-    catch(...) {    // avoid leaks
-        for(size_t i = 0, n = lineGeoms->size(); i < n; ++i) {
-
-            delete(*lineGeoms)[i];
-        }
-        delete lineGeoms;
-        throw;
     }
 
+    return g.getFactory()->buildGeometry(std::move(lineGeoms));
 }
 
 /* public */
 Location
 FuzzyPointLocator::getLocation(const Coordinate& pt)
 {
-    unique_ptr<Geometry> point(g.getFactory()->createPoint(pt));
+    std::unique_ptr<Geometry> point(g.getFactory()->createPoint(pt));
 
     double dist = linework->distance(point.get());
 
