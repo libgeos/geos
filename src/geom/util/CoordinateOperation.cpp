@@ -34,12 +34,12 @@ CoordinateOperation::edit(const Geometry* geometry,
         const CoordinateSequence* coords = ring->getCoordinatesRO();
         auto newCoords = edit(coords, geometry);
         // LinearRing instance takes over ownership of newCoords instance
-        return std::unique_ptr<Geometry>(factory->createLinearRing(newCoords.release()));
+        return factory->createLinearRing(std::move(newCoords));
     }
     if(const LineString* line = dynamic_cast<const LineString*>(geometry)) {
         const CoordinateSequence* coords = line->getCoordinatesRO();
         auto newCoords = edit(coords, geometry);
-        return std::unique_ptr<Geometry>(factory->createLineString(newCoords.release()));
+        return factory->createLineString(std::move(newCoords));
     }
     if(const Point* point = dynamic_cast<const Point*>(geometry)) {
         auto coords = point->getCoordinatesRO();
