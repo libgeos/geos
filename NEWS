@@ -4,7 +4,6 @@ Changes in 3.7.3dev
 - Bug fixes / improvements
   - Union performance regression (#867, Paul Ramsey)
   - Overlay performance improvement (#986, Paul Ramsey)
-  - Allocate default geometryfactory on the stack (#714)
 
 
 Changes in 3.7.2
