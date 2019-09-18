@@ -783,8 +783,8 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 const GeometryFactory*
 GeometryFactory::getDefaultInstance() 
 {
-	static GeometryFactory* defInstance = new GeometryFactory();
-	return defInstance;
+	static GeometryFactory defInstance;
+	return &defInstance;
 }
 
 /*private*/
