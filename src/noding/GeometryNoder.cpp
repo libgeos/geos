@@ -98,22 +98,19 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
     std::set< OrientedCoordinateArray > ocas;
 
     // Create a geometry out of the noded substrings.
-    std::vector< geom::Geometry* >* lines = new std::vector< geom::Geometry* >();
-    lines->reserve(nodedEdges.size());
+    std::vector<std::unique_ptr<geom::Geometry>> lines;
+    lines.reserve(nodedEdges.size());
     for(auto& ss :  nodedEdges) {
         const geom::CoordinateSequence* coords = ss->getCoordinates();
 
         // Check if an equivalent edge is known
         OrientedCoordinateArray oca1(*coords);
         if(ocas.insert(oca1).second) {
-            geom::Geometry* tmp = geomFact->createLineString(coords->clone().release());
-            lines->push_back(tmp);
+            lines.push_back(geomFact->createLineString(coords->clone()));
         }
     }
 
-    std::unique_ptr<geom::Geometry> noded(geomFact->createMultiLineString(lines));
-
-    return noded;
+    return geomFact->createMultiLineString(std::move(lines));
 }
 
 /* public */
