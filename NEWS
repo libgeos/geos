@@ -20,6 +20,7 @@ Changes in 3.8.0
   - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
   - Improve overlay performance (Paul Ramsey)
   - Improve cascaded union performance (Paul Ramsey, Martin Davis)
+  - Allocate default GeometryFactory singleton on the stack (Sandro Mani)
 
 
 Changes in 3.7.2
