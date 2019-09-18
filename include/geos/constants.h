@@ -30,7 +30,6 @@ typedef __int64 int64;
 #include <cmath>
 #include <limits>
 #include <cinttypes>
-#include <stdint.h>
 
 #ifdef M_PI
 #undef M_PI

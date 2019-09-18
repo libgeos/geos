@@ -44,10 +44,10 @@ int64
 CommonBits::zeroLowerBits(int64 bits, int nBits)
 {
 	if (nBits >= 64 || nBits < 1) return 0;
-	const uint64_t bits_ = static_cast<uint64_t>(bits);
-	const uint64_t invMask = (1ull << nBits) - 1;
-	const uint64_t mask = ~ invMask;
-	const uint64_t zeroed = bits_ & mask;
+	int64 bits_ = static_cast<int64>(bits);
+	int64 invMask = (1ull << nBits) - 1;
+	int64 mask = ~ invMask;
+	int64 zeroed = bits_ & mask;
 	return static_cast<int64>(zeroed);
 }
 
