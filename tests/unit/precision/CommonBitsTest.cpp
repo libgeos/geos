@@ -53,4 +53,28 @@ void object::test<3>
     ensure_equals(CommonBits::getBit(val, 63), 1);
 }
 
+// zeroLowerBits.
+template<>
+template<>
+void object::test<4>()
+{
+    constexpr int64 val = static_cast<int64>(0xffffffffffffffffull);
+    ensure_equals(sizeof(val), 8);
+
+    ensure_equals(CommonBits::zeroLowerBits(val, -1), 0);
+    ensure_equals(CommonBits::zeroLowerBits(val, 0), 0);
+    ensure_equals(CommonBits::zeroLowerBits(val, 1), -2);
+    ensure_equals(CommonBits::zeroLowerBits(val, 2), -4);
+    ensure_equals(CommonBits::zeroLowerBits(val, 16), -65536);
+    ensure_equals(CommonBits::zeroLowerBits(val, 31), -2147483648ll);
+    ensure_equals(CommonBits::zeroLowerBits(val, 32), -4294967296ll);
+    ensure_equals(CommonBits::zeroLowerBits(val, 62), -4611686018427387904ll);
+    ensure_equals(static_cast<uint64_t>(CommonBits::zeroLowerBits(val, 62)), 0xc000000000000000ull);
+    ensure_equals(static_cast<uint64_t>(CommonBits::zeroLowerBits(val, 63)), 9223372036854775808ull);
+    ensure_equals(static_cast<uint64_t>(CommonBits::zeroLowerBits(val, 63)), 0x8000000000000000ull);
+    ensure_equals(CommonBits::zeroLowerBits(val, 64), 0);
+    ensure_equals(CommonBits::zeroLowerBits(val, 10000), 0);
+}
+
+
 } // namespace tut
