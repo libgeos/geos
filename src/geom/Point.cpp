@@ -164,7 +164,7 @@ Point::getGeometryType() const
 std::unique_ptr<Geometry>
 Point::getBoundary() const
 {
-    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+    return getFactory()->createGeometryCollection();
 }
 
 Envelope::Ptr

@@ -99,7 +99,7 @@ std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
     if(isEmpty()) {
-        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+        return getFactory()->createGeometryCollection();
     }
 
     GeometryGraph gg(0, this);
