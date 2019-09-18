@@ -62,7 +62,7 @@ namespace tut
 		ensure_equals(sizeof(val), 8);
 
 		ensure_equals(CommonBits::zeroLowerBits(val, -1), 0);
-		ensure_equals(CommonBits::zeroLowerBits(val, 0), 0);
+		ensure_equals(CommonBits::zeroLowerBits(val, 0), -1);
 		ensure_equals(CommonBits::zeroLowerBits(val, 1), -2);
 		ensure_equals(CommonBits::zeroLowerBits(val, 2), -4);
 		ensure_equals(CommonBits::zeroLowerBits(val, 16), -65536);
