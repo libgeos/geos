@@ -93,7 +93,7 @@ public:
     * @return a empty LineString if the input is empty
     * @return a Point if the input is a point
     */
-    geom::Geometry* getFarthestPoints();
+    std::unique_ptr<geom::Geometry> getFarthestPoints();
 
     /**
     * Gets a geometry representing the diameter of the computed Minimum Bounding
@@ -103,7 +103,7 @@ public:
     * @return a empty LineString if the input is empty
     * @return a Point if the input is a point
     */
-    geom::Geometry* getDiameter();
+    std::unique_ptr<geom::Geometry> getDiameter();
 
     /**
     * Gets the extremal points which define the computed Minimum Bounding Circle.
