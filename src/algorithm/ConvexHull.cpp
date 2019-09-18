@@ -227,7 +227,7 @@ ConvexHull::getConvexHull()
     size_t nInputPts = inputPts.size();
 
     if(nInputPts == 0) { // Return an empty geometry
-        return std::unique_ptr<Geometry>(geomFactory->createEmptyGeometry());
+        return geomFactory->createEmptyGeometry();
     }
 
     if(nInputPts == 1) { // Return a Point
@@ -238,7 +238,7 @@ ConvexHull::getConvexHull()
     if(nInputPts == 2) { // Return a LineString
         // Copy all Coordinates from the ConstVect
         auto cs = toCoordinateSequence(inputPts);
-        return std::unique_ptr<Geometry>(geomFactory->createLineString(cs.release()));
+        return geomFactory->createLineString(std::move(cs));
     }
 
     // use heuristic to reduce points, if large
