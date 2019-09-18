@@ -147,27 +147,27 @@ std::unique_ptr<GeometryCollection>
 GeometryEditor::editGeometryCollection(const GeometryCollection* collection, GeometryEditorOperation* operation)
 {
     auto newCollection = operation->edit(collection, factory);
-    auto geometries = detail::make_unique<std::vector<Geometry*>>();
+    std::vector<std::unique_ptr<Geometry>> geometries;
     for(std::size_t i = 0, n = newCollection->getNumGeometries(); i < n; i++) {
         auto geometry = edit(newCollection->getGeometryN(i),
                                   operation);
         if(geometry->isEmpty()) {
             continue;
         }
-        geometries->push_back(geometry.release());
+        geometries.push_back(std::move(geometry));
     }
 
     if(newCollection->getGeometryTypeId() == GEOS_MULTIPOINT) {
-        return std::unique_ptr<GeometryCollection>(factory->createMultiPoint(geometries.release()));
+        return factory->createMultiPoint(std::move(geometries));
     }
     else if(newCollection->getGeometryTypeId() == GEOS_MULTILINESTRING) {
-        return std::unique_ptr<GeometryCollection>(factory->createMultiLineString(geometries.release()));
+        return factory->createMultiLineString(std::move(geometries));
     }
     else if(newCollection->getGeometryTypeId() == GEOS_MULTIPOLYGON) {
-        return std::unique_ptr<GeometryCollection>(factory->createMultiPolygon(geometries.release()));
+        return factory->createMultiPolygon(std::move(geometries));
     }
     else {
-        return std::unique_ptr<GeometryCollection>(factory->createGeometryCollection(geometries.release()));
+        return factory->createGeometryCollection(std::move(geometries));
     }
 }
 
