@@ -144,7 +144,7 @@ struct test_polygonizetest_data {
 typedef test_group<test_polygonizetest_data> group;
 typedef group::object object;
 
-group test_polygonizetest_group("geos::operation::polygonize::Polygonizer");
+group test_polygonizetest_group("geos::operation::polygonize::Polygonize");
 
 // test1() in JTS
 template<>

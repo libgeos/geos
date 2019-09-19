@@ -33,7 +33,7 @@ struct test_computeorientation_data {
 typedef test_group<test_computeorientation_data> group;
 typedef group::object object;
 
-group test_computeorientation_group("geos::algorithm::Orientation::index");
+group test_computeorientation_group("geos::algorithm::CGAlgorithms::computeOrientation");
 
 //
 // Test Cases

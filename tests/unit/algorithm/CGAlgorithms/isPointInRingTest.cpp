@@ -41,7 +41,7 @@ struct test_ispointinring_data {
 typedef test_group<test_ispointinring_data> group;
 typedef group::object object;
 
-group test_ispointintring_group("geos::algorithm::PointLocation::isInRing");
+group test_ispointintring_group("geos::algorithm::CGAlgorithms::isPointInRing");
 
 //
 // Test Cases

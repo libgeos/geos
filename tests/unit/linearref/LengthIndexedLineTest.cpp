@@ -153,7 +153,7 @@ struct test_lengthindexedline_data {
 typedef test_group<test_lengthindexedline_data> group;
 typedef group::object object;
 
-group test_lengthindexedline_group("geos::linearref::LocationIndexedLine");
+group test_lengthindexedline_group("geos::linearref::LengthIndexedLine");
 
 // testML
 template<>

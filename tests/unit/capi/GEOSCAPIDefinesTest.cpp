@@ -23,7 +23,7 @@ struct basic {};
 typedef test_group<basic> group;
 typedef group::object object;
 
-group test_capidefines_group("capi::defines");
+group test_capidefines_group("capi::GEOSCAPIDefines");
 
 // Make sure version elements all defined
 template<>
