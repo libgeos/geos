@@ -224,8 +224,8 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        std::vector<LineSegment*>* segs;
         const Envelope env;
+        std::vector<LineSegment*>* segs;
 
     public:
 
