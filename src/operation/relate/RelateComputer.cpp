@@ -413,11 +413,10 @@ RelateComputer::computeDisjointIM(IntersectionMatrix* imX)
 void
 RelateComputer::labelNodeEdges()
 {
-    std::map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodes.nodeMap;
-    std::map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
-    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
-        assert(dynamic_cast<RelateNode*>(nodeIt->second));
-        RelateNode* node = static_cast<RelateNode*>(nodeIt->second);
+    auto& nMap = nodes.nodeMap;
+    for(auto& entry : nMap) {
+        assert(dynamic_cast<RelateNode*>(entry.second));
+        RelateNode* node = static_cast<RelateNode*>(entry.second);
 #if GEOS_DEBUG
         std::cerr << "RelateComputer::labelNodeEdges: "
                   << "node edges: " << *(node->getEdges())
@@ -433,22 +432,16 @@ RelateComputer::labelNodeEdges()
 void
 RelateComputer::updateIM(IntersectionMatrix& imX)
 {
-    //Debug.println(im);
     std::vector<Edge*>::iterator ei = isolatedEdges.begin();
     for(; ei < isolatedEdges.end(); ++ei) {
         Edge* e = *ei;
         e->GraphComponent::updateIM(imX);
-        //Debug.println(im);
     }
-    std::map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodes.nodeMap;
-    std::map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
-    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
-        RelateNode* node = (RelateNode*) nodeIt->second;
+    auto& nMap = nodes.nodeMap;
+    for(auto& entry : nMap) {
+        RelateNode* node = (RelateNode*) entry.second;
         node->updateIM(imX);
-        //Debug.println(im);
         node->updateIMFromEdges(imX);
-        //Debug.println(im);
-        //node.print(System.out);
     }
 }
 

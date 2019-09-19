@@ -87,10 +87,9 @@ ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent()
 {
     assert(geomGraph);
 
-    map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodeGraph.getNodeMap();
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
-    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
-        relate::RelateNode* node = static_cast<relate::RelateNode*>(nodeIt->second);
+    auto& nMap = nodeGraph.getNodeMap();
+    for(auto& entry : nMap) {
+        relate::RelateNode* node = static_cast<relate::RelateNode*>(entry.second);
         if(!node->getEdges()->isAreaLabelsConsistent(*geomGraph)) {
             invalidPoint = node->getCoordinate();
             return false;
@@ -103,11 +102,10 @@ ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent()
 bool
 ConsistentAreaTester::hasDuplicateRings()
 {
-    map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodeGraph.getNodeMap();
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
-    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); ++nodeIt) {
-        assert(dynamic_cast<relate::RelateNode*>(nodeIt->second));
-        relate::RelateNode* node = static_cast<relate::RelateNode*>(nodeIt->second);
+    auto& nMap = nodeGraph.getNodeMap();
+    for(auto& entry : nMap) {
+        assert(dynamic_cast<relate::RelateNode*>(entry.second));
+        relate::RelateNode* node = static_cast<relate::RelateNode*>(entry.second);
         EdgeEndStar* ees = node->getEdges();
         EdgeEndStar::iterator endIt = ees->end();
         for(EdgeEndStar::iterator it = ees->begin(); it != endIt; ++it) {

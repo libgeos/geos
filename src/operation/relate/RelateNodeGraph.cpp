@@ -49,7 +49,7 @@ RelateNodeGraph::~RelateNodeGraph()
     delete nodes;
 }
 
-map<Coordinate*, Node*, CoordinateLessThen>&
+NodeMap::container&
 RelateNodeGraph::getNodeMap()
 {
     return nodes->nodeMap;
@@ -124,13 +124,11 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
 void
 RelateNodeGraph::copyNodesAndLabels(GeometryGraph* geomGraph, int argIndex)
 {
-    map<Coordinate*, Node*, CoordinateLessThen>& nMap = geomGraph->getNodeMap()->nodeMap;
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
-    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
-        Node* graphNode = nodeIt->second;
+    auto& nMap = geomGraph->getNodeMap()->nodeMap;
+    for(auto& entry : nMap) {
+        Node* graphNode = entry.second;
         Node* newNode = nodes->addNode(graphNode->getCoordinate());
         newNode->setLabel(argIndex, graphNode->getLabel().getLocation(argIndex));
-        //node.print(System.out);
     }
 }
 
