@@ -59,7 +59,7 @@ template<>
 void object::test<4>()
 {
     constexpr int64 val = static_cast<int64>(0xffffffffffffffffull);
-    ensure_equals(sizeof(val), 8);
+    ensure_equals(sizeof(val), 8u);
 
     ensure_equals(CommonBits::zeroLowerBits(val, -1), 0);
     ensure_equals(CommonBits::zeroLowerBits(val, 0), -1);
