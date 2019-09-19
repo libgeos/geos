@@ -328,6 +328,8 @@ public:
      */
     Geometry* buildGeometry(std::vector<Geometry*>* geoms) const;
 
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const;
+
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //
     /// Will clone the geometries accessible trough the iterator.

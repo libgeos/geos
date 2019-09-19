@@ -60,15 +60,15 @@ MinimumBoundingCircle::getCircle()
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 MinimumBoundingCircle::getFarthestPoints()
 {
     compute();
     switch(extremalPts.size()) {
     case 0:
-        return input->getFactory()->createLineString().release();
+        return input->getFactory()->createLineString();
     case 1:
-        return input->getFactory()->createPoint(centre);
+        return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
     }
 
     size_t dims = input->getCoordinateDimension();
@@ -76,19 +76,19 @@ MinimumBoundingCircle::getFarthestPoints()
     auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
     cs->setAt(extremalPts[0], 0);
     cs->setAt(extremalPts[extremalPts.size() - 1], 1);
-    return input->getFactory()->createLineString(cs.release());
+    return input->getFactory()->createLineString(std::move(cs));
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 MinimumBoundingCircle::getDiameter()
 {
     compute();
     switch(extremalPts.size()) {
     case 0:
-        return input->getFactory()->createLineString().release();
+        return input->getFactory()->createLineString();
     case 1:
-        return input->getFactory()->createPoint(centre);
+        return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
     }
     size_t dims = input->getCoordinateDimension();
     size_t len = 2;
@@ -97,7 +97,7 @@ MinimumBoundingCircle::getDiameter()
     // them through the centre point with len = 2*radius
     cs->setAt(extremalPts[0], 0);
     cs->setAt(extremalPts[1], 1);
-    return input->getFactory()->createLineString(cs.release());
+    return input->getFactory()->createLineString(std::move(cs));
 }
 
 /*public*/

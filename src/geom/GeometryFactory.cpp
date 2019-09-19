@@ -647,6 +647,32 @@ const
     return g;
 }
 
+template<typename T>
+GeometryTypeId commonType(const T& geoms) {
+    if (geoms.empty()) {
+        return GEOS_GEOMETRYCOLLECTION;
+    }
+
+    if (geoms.size() == 1) {
+        return geoms[0]->getGeometryTypeId();
+    }
+
+    GeometryTypeId type = geoms[0]->getGeometryTypeId();
+    for (size_t i = 1; i < geoms.size(); i++) {
+        if (geoms[i]->getGeometryTypeId() != type) {
+            return GEOS_GEOMETRYCOLLECTION;
+        }
+    }
+
+    switch(geoms[0]->getGeometryTypeId()) {
+        case GEOS_POINT: return GEOS_MULTIPOINT;
+        case GEOS_LINEARRING:
+        case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
+        case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
+        default: return GEOS_GEOMETRYCOLLECTION;
+    }
+}
+
 /*public*/
 Geometry*
 GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
@@ -657,91 +683,63 @@ GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
         return createGeometryCollection().release();
     }
 
-    bool isHeterogeneous = false;
-    bool hasGeometryCollection = false;
-    GeometryTypeId type = (*newGeoms)[0]->getGeometryTypeId();
-
-    for(Geometry* gp : *newGeoms) {
-        GeometryTypeId geometryType = gp->getGeometryTypeId();
-        if(type != geometryType) {
-            isHeterogeneous = true;
-        }
-        if(geometryType == GEOS_GEOMETRYCOLLECTION) {
-            hasGeometryCollection = true;
-        }
+    if (newGeoms->size() == 1) {
+        Geometry* ret = (*newGeoms)[0];
+        delete newGeoms;
+        return ret;
     }
 
-    if(isHeterogeneous || hasGeometryCollection) {
-        return createGeometryCollection(newGeoms);
+    auto resultType = commonType(*newGeoms);
+
+    switch(resultType) {
+        case GEOS_MULTIPOINT: return createMultiPoint(newGeoms);
+        case GEOS_MULTILINESTRING: return createMultiLineString(newGeoms);
+        case GEOS_MULTIPOLYGON: return createMultiPolygon(newGeoms);
+        default: return createGeometryCollection(newGeoms);
+    }
+}
+
+std::unique_ptr<Geometry>
+GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const
+{
+    if (geoms.empty()) {
+        return createGeometryCollection();
     }
 
-    // At this point we know the collection is not hetereogenous.
-    bool isCollection = newGeoms->size() > 1;
-    if(isCollection) {
-        if(type == GEOS_POLYGON) {
-            return createMultiPolygon(newGeoms);
-        }
-        else if(type == GEOS_LINESTRING) {
-            return createMultiLineString(newGeoms);
-        }
-        else if(type == GEOS_LINEARRING) {
-            return createMultiLineString(newGeoms);
-        }
-        else if(type == GEOS_POINT) {
-            return createMultiPoint(newGeoms);
-        }
-        else {
-            return createGeometryCollection(newGeoms);
-        }
+    if (geoms.size() == 1) {
+        return std::move(geoms[0]);
     }
 
-    // since this is not a collection we can delete vector
-    Geometry* geom0 = (*newGeoms)[0];
-    delete newGeoms;
-    return geom0;
+    auto resultType = commonType(geoms);
+
+    switch(resultType) {
+        case GEOS_MULTIPOINT: return createMultiPoint(std::move(geoms));
+        case GEOS_MULTILINESTRING: return createMultiLineString(std::move(geoms));
+        case GEOS_MULTIPOLYGON: return createMultiPolygon(std::move(geoms));
+        default: return createGeometryCollection(std::move(geoms));
+    }
 }
 
 /*public*/
 Geometry*
 GeometryFactory::buildGeometry(const vector<const Geometry*>& fromGeoms) const
 {
-    size_t geomsSize = fromGeoms.size();
-    if(geomsSize == 0) {
+    if(fromGeoms.empty()) {
         return createGeometryCollection().release();
     }
 
-    if(geomsSize == 1) {
+    if(fromGeoms.size() == 1) {
         return fromGeoms[0]->clone().release();
     }
 
-    bool isHeterogeneous = false;
-    GeometryTypeId type = fromGeoms[0]->getGeometryTypeId();
+    auto resultType = commonType(fromGeoms);
 
-    for(const Geometry* gp : fromGeoms) {
-        GeometryTypeId geometryType = gp->getGeometryTypeId();
-        if(type != geometryType) {
-            isHeterogeneous = true;
-        }
+    switch(resultType) {
+        case GEOS_MULTIPOINT: return createMultiPoint(fromGeoms);
+        case GEOS_MULTILINESTRING: return createMultiLineString(fromGeoms);
+        case GEOS_MULTIPOLYGON: return createMultiPolygon(fromGeoms);
+        default: return createGeometryCollection(fromGeoms);
     }
-
-    if(isHeterogeneous) {
-        return createGeometryCollection(fromGeoms);
-    }
-
-    if(type == GEOS_POLYGON) {
-        return createMultiPolygon(fromGeoms);
-    }
-    else if(type == GEOS_LINESTRING) {
-        return createMultiLineString(fromGeoms);
-    }
-    else if(type == GEOS_LINEARRING) {
-        return createMultiLineString(fromGeoms);
-    }
-    else if(type == GEOS_POINT) {
-        return createMultiPoint(fromGeoms);
-    }
-
-    throw geos::util::GEOSException("GeometryFactory::buildGeometry encountered an unknown geometry type!");
 }
 
 /*public*/

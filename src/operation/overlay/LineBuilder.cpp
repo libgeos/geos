@@ -84,12 +84,10 @@ LineBuilder::build(OverlayOp::OpCode opCode)
 void
 LineBuilder::findCoveredLineEdges()
 {
-// first set covered for all L edges at nodes which have A edges too
-    map<Coordinate*, Node*, CoordinateLessThen>& nodeMap = op->getGraph().getNodeMap()->nodeMap;
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator it = nodeMap.begin();
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator endIt = nodeMap.end();
-    for(; it != endIt; ++it) {
-        Node* node = it->second;
+    // first set covered for all L edges at nodes which have A edges too
+    auto& nodeMap = op->getGraph().getNodeMap()->nodeMap;
+    for(auto& entry : nodeMap) {
+        Node* node = entry.second;
         //node.print(System.out);
         assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
         DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(node->getEdges());
