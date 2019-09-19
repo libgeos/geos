@@ -1,114 +1,92 @@
-Compatibility notes
-===================
+## Building GEOS From Source
 
-OS/X 10.6, compile with gcc-4.0 rather than the default gcc that 
-comes with XCode.
+### Prerequisites
 
-  CC=gcc-4.0 CXX=g++-4.0 ./configure
+GEOS has no external library dependencies and can be built with any C++11
+compiler.
 
-Quickstart
-==========
+### Unix
 
-As root:
+GEOS can be built on Unix systems using either the autotools or CMake build
+systems.
 
-   ./configure
-   make
-   make install
+#### Using Autotools:
 
-The default install location for GEOS is /usr/local.
+When building GEOS using autotools, a `configure` script must first be generated
+using the `autogen.sh` file included in the root of the repository:
 
-Linux: Make sure that /usr/local/lib is added to /etc/ld.so.conf 
-       Make sure that you run /sbin/ldconfig afterwards 
+    ./autogen.sh
 
-Solaris: Make sure that /usr/local/lib is added to LD_LIBRARY_PATH
+An out-of-tree build can then be initiated by creating a subdirectory and
+running the generated `configure` script from that subdirectory:
 
+    mkdir obj && cd obj && ../configure
 
-Basic Installation
-==================
+Once the `configure` script has run, GEOS can be built by running `make` and
+installed by running `make install`. The test suite can be run using `make
+check`.
 
-The simplest way to compile this package is:
+#### Using CMake:
 
+To build `GEOS` using CMake, create a build directory and run the `cmake` command
+from that location:
 
-  1. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.  If you're
-     using `csh' on an old version of System V, you might need to type
-     `sh ./configure' instead to prevent `csh' from trying to execute
-     `configure' itself.
+    mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
 
-     Running `configure' takes awhile.  While running, it prints some
-     messages telling which features it is checking for.
+Setting `CMAKE_BUILD_TYPE` to `Release` is necessary to enable compiler
+optimizations.
 
-  2. Type `make' to compile the package.
+Once the `cmake` tool has run, GEOS can be built by running `make` and
+installed by running `make install`.
 
-  3. Optionally, type `make check' to run any self-tests that come with
-     the package.
+The entire test suite can be run using `make check`.
+Alternatively, the `ctest` command can be used, which provides more control over test execution.
+For example, `ctest -R unit-capi -j2` uses a regular expression to run all tests
+associated with the C API, using two processes in parallel.
+A list of available tests can be obtained using `ctest -N`.
 
-  4. Type `make install' to install the programs and any data files and
-     documentation.
+### Microsoft Windows
 
-  5. You can remove the program binaries and object files from the
-     source code directory by typing `make clean'.  To also remove the
-     files that `configure' created (so you can compile the package for
-     a different kind of computer), type `make distclean'.  There is
-     also a `make maintainer-clean' target, but that is intended mainly
-     for the package's developers.  If you use it, you may have to get
-     all sorts of other programs in order to regenerate files that came
-     with the distribution.
+GEOS can be built with Microsoft Visual C++ by opening the `CMakeLists.txt` in
+the project root using `File > Open > CMake`.
 
+If you prefer the command-line
 
-Compilers and Options
-=====================
+#### Build with CMake generator for Ninja (fast)
 
-   Some systems require unusual options for compilation or linking that
-the `configure' script does not know about.  You can give `configure'
-initial values for variables by setting them in the environment.  Using
-a Bourne-compatible shell, you can do that on the command line like
-this:
-     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+In the Visual Studio 2019 command prompt, `x64 Native Tools Command Prompt for VS 2019` or `x64_x86 Cross Tools Command Prompt for VS 2019`:
 
-Or on systems that have the `env' program, you can do it like this:
-     env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+```
+cmake -S . -B _build_vs2019_ninja -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build _build_vs2019_ninja -j 16 --verbose
+```
 
+#### Build with CMake generator for MSBuild (default)
 
-Installation Names
-==================
+In the non-specific Command Prompt:
 
-   By default, `make install' will install the package's files in
-`/usr/local/bin', `/usr/local/man', etc.  You can specify an
-installation prefix other than `/usr/local' by giving `configure' the
-option `--prefix=PATH'.
+##### 64-bit
 
+```
+cmake -S . -B _build_vs2019x64 -G "Visual Studio 16 2019" -A x64 -DCMAKE_GENERATOR_TOOLSET=host=x64
+cmake --build _build_vs2019x64 --config Release -j 16 --verbose
+```
 
-Operation Controls
-==================
+##### 32-bit
 
-`configure' recognizes the following options to control how it
-operates.
+```
+cmake -S . -B _build_vs2019x32 -G "Visual Studio 16 2019" -A x32 -DCMAKE_GENERATOR_TOOLSET=host=x64
+cmake --build _build_vs2019x32 --config Release -j 16 --verbose
+```
 
---cache-file=FILE
-     Use and save the results of the tests in FILE instead of
-     `./config.cache'.  Set FILE to `/dev/null' to disable caching, for
-     debugging `configure'.
+#### Test using CMake
 
---help
-     Print a summary of the options to `configure', and exit.
+```
+cd <build directory>
+ctest --show-only
+ctest
+ctest --output-on-failure
+ctest -V
+ctest -VV
+```
 
---quiet
---silent
--q
-     Do not print messages saying which checks are being made.  To
-     suppress all normal output, redirect it to `/dev/null' (any error
-     messages will still be shown).
-
---srcdir=DIR
-     Look for the package's source code in directory DIR.  Usually
-     `configure' can determine that directory automatically.
-
---version
-     Print the version of Autoconf used to generate the `configure'
-     script, and exit.
-
---prefix
-     Change the default installation location
-
-`configure' also accepts some other, not widely useful, options.
