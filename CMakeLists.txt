@@ -53,6 +53,7 @@ cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "Build with compilation flags useful for development" ON
   "GEOS_BUILD_FROM_GIT" OFF)
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
+cmake_policy(SET CMP0092 NEW)
 
 #-----------------------------------------------------------------------------
 # Setup build directories
