@@ -101,8 +101,7 @@ OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::
             disjointGeoms.push_back(elem->clone());
         }
     }
-    std::unique_ptr<Geometry> intersectingGeom(geomFactory->buildGeometry(intersectingGeoms));
-    return std::move(intersectingGeom);
+    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(intersectingGeoms));
 }
 
 /* private */
