@@ -143,9 +143,6 @@ public:
     Profiler(const Profiler&) = delete;
     Profiler& operator=(const Profiler&) = delete;
 
-    Profiler(const Profiler&) = delete;
-    Profiler& operator=(const Profiler&) = delete;
-
     /**
      * \brief
      * Return the singleton instance of the
