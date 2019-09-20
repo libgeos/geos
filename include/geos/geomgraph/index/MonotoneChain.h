@@ -49,7 +49,7 @@ private:
 
     MonotoneChain(const MonotoneChain& other) = delete;
     MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
-	
+
 public:
 
     MonotoneChain(MonotoneChainEdge* newMce, size_t newChainIndex):

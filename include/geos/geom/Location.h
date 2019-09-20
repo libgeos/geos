@@ -30,7 +30,7 @@ namespace geom { // geos::geom
  * For a description of the DE-9IM, see the
  * [OpenGIS Simple Features Specification for SQL](http://www.opengis.org/techno/specs.htm").
  */
-#undef Location
+
 enum class GEOS_DLL Location : char {
     /**
      *  Used for uninitialized location values.
