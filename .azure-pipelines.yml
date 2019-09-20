@@ -187,7 +187,7 @@ stages:
         mkdir build.cxx%CXXSTD%
         cd build.cxx%CXXSTD%
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=%CXXSTD% -DBUILD_SHARED_LIBS=OFF ..
+        cmake -DCMAKE_CXX_STANDARD=%CXXSTD% -DBUILD_SHARED_LIBS=ON ..
       displayName: 'CMake'
     - script: |
         cd build.cxx%CXXSTD%
