@@ -94,6 +94,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/issue/issue-geos-398.xml \
 	$(srcdir)/tests/issue/issue-geos-434.xml \
 	$(srcdir)/tests/issue/issue-geos-459.xml \
+	$(srcdir)/tests/issue/issue-geos-488.xml \
 	$(srcdir)/tests/issue/issue-geos-527.xml \
 	$(srcdir)/tests/issue/issue-geos-569.xml \
 	$(srcdir)/tests/issue/issue-geos-582.xml \
@@ -118,7 +119,6 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/failure/issue-geos-488.xml \
 	$(srcdir)/tests/failure/issue-geos-344.xml \
 	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
 	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \
