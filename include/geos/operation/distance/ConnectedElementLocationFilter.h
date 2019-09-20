@@ -51,7 +51,8 @@ private:
 
     std::vector<std::unique_ptr<GeometryLocation>> locations;
     ConnectedElementLocationFilter() = default;
-
+    ConnectedElementLocationFilter(const ConnectedElementLocationFilter&) = delete;
+    ConnectedElementLocationFilter& operator=(const ConnectedElementLocationFilter&) = delete;
 public:
     /** \brief
      * Returns a list containing a point from each Polygon, LineString, and

@@ -54,6 +54,12 @@ cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "GEOS_BUILD_FROM_GIT" OFF)
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
 
+if (POLICY CMP0092)
+  # dont set /W3 warning flags by default, we already
+  # set /W4 anyway
+  cmake_policy(SET CMP0092 NEW)
+endif()
+
 #-----------------------------------------------------------------------------
 # Setup build directories
 #-----------------------------------------------------------------------------

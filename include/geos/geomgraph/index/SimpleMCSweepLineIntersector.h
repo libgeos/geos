@@ -90,6 +90,9 @@ private:
     void processOverlaps(size_t start, size_t end,
                          SweepLineEvent* ev0,
                          SegmentIntersector* si);
+    // Declare type as noncopyable
+    SimpleMCSweepLineIntersector(const SimpleMCSweepLineIntersector& other) = delete;
+    SimpleMCSweepLineIntersector& operator=(const SimpleMCSweepLineIntersector& rhs) = delete;
 };
 
 } // namespace geos.geomgraph.index
