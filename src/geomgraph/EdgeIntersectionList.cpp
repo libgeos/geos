@@ -40,7 +40,6 @@
 #include <iostream>
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -99,7 +98,7 @@ EdgeIntersectionList::addEndpoints()
 }
 
 void
-EdgeIntersectionList::addSplitEdges(vector<Edge*>* edgeList)
+EdgeIntersectionList::addSplitEdges(std::vector<Edge*>* edgeList)
 {
     // ensure that the list has entries for the first and last point
     // of the edge
@@ -146,29 +145,29 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
     cerr << "    npts:" << npts << endl;
 #endif // GEOS_DEBUG
 
-    vector<Coordinate>* vc = new vector<Coordinate>();
-    vc->reserve(npts);
+    std::vector<Coordinate> vc;
+    vc.reserve(npts);
 
-    vc->push_back(ei0->coord);
+    vc.push_back(ei0->coord);
     for(auto i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; ++i) {
         if(! useIntPt1 && ei1->segmentIndex == i) {
-            vc->push_back(ei1->coord);
+            vc.push_back(ei1->coord);
         }
         else {
-            vc->push_back(edge->pts->getAt(i));
+            vc.push_back(edge->pts->getAt(i));
         }
     }
 
     if(useIntPt1) {
-        vc->push_back(ei1->coord);
+        vc.push_back(ei1->coord);
     }
 
-    CoordinateSequence* pts = new CoordinateArraySequence(vc);
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateArraySequence(std::move(vc)));
 
-    return new Edge(pts, edge->getLabel());
+    return new Edge(pts.release(), edge->getLabel());
 }
 
-string
+std::string
 EdgeIntersectionList::print() const
 {
     std::stringstream ss;
@@ -181,7 +180,7 @@ operator<< (std::ostream& os, const EdgeIntersectionList& e)
 {
     os << "Intersections:" << std::endl;
     for(const auto & ei : e) {
-        os << ei << endl;
+        os << ei << std::endl;
     }
     return os;
 }
