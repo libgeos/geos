@@ -38,7 +38,7 @@ class QuadEdge;
  */
 class QuadEdgeLocator {
 public:
-    virtual ~QuadEdgeLocator() = 0; //not implemented
+    virtual ~QuadEdgeLocator() = default;
     virtual QuadEdge* locate(const Vertex& v) = 0; //not implemented
 };
 

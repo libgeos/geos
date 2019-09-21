@@ -70,7 +70,7 @@ public:
     /// A vector of const Polygon pointers
     typedef std::vector<const Polygon*> ConstVect;
 
-    ~Polygon() override;
+    ~Polygon() override = default;
 
     /**
      * Creates and returns a full copy of this {@link Polygon} object.

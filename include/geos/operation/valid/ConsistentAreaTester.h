@@ -95,7 +95,7 @@ public:
      */
     ConsistentAreaTester(geomgraph::GeometryGraph* newGeomGraph);
 
-    ~ConsistentAreaTester();
+    ~ConsistentAreaTester() = default;
 
     /**
      * @return the intersection point, or <code>null</code>

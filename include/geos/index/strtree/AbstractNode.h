@@ -46,7 +46,7 @@ private:
     int level;
 public:
     AbstractNode(int newLevel, size_t capacity = 10);
-    ~AbstractNode() override;
+    ~AbstractNode() override = default;
 
     // TODO: change signature to return by ref,
     // document ownership of the return

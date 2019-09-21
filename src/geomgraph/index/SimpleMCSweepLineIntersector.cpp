@@ -33,8 +33,6 @@ SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
 {
 }
 
-SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector() = default;
-
 void
 SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
         SegmentIntersector* si, bool testAllSegments)

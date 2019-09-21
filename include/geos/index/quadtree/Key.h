@@ -49,7 +49,7 @@ public:
     Key(const geom::Envelope& itemEnv);
 
     // used to be virtual, but I don't see subclasses...
-    ~Key();
+    ~Key() = default;
 
     /// Returned object ownership retained by this class
     const geom::Coordinate& getPoint() const;

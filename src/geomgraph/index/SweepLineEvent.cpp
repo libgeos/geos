@@ -40,8 +40,6 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
     }
 }
 
-SweepLineEvent::~SweepLineEvent() = default;
-
 /**
  * ProjectionEvents are ordered first by their x-value, and then by their
  * eventType.

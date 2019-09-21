@@ -169,9 +169,9 @@ std::ostream& operator<< (std::ostream&, const Label&);
 } // namespace geos
 
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/Label.inl"
-//#endif
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Label.inl"
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_LABEL_H
 

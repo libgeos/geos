@@ -59,14 +59,6 @@ MaximalEdgeRing::MaximalEdgeRing(DirectedEdge* start,
 }
 
 /*public*/
-MaximalEdgeRing::~MaximalEdgeRing()
-{
-#if GEOS_DEBUG
-    cerr << "MaximalEdgeRing[" << this << "] dtor" << endl;
-#endif
-}
-
-/*public*/
 DirectedEdge*
 MaximalEdgeRing::getNext(DirectedEdge* de)
 {

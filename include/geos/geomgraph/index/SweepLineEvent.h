@@ -49,7 +49,7 @@ public:
                    SweepLineEvent* newInsertEvent,
                    SweepLineEventOBJ* newObj);
 
-    virtual ~SweepLineEvent();
+    virtual ~SweepLineEvent() = default;
 
     bool
     isInsert()

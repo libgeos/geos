@@ -77,7 +77,7 @@ public:
         return std::unique_ptr<Geometry>(new GeometryCollection(*this));
     }
 
-    ~GeometryCollection() override;
+    ~GeometryCollection() override = default;
 
     void setSRID(int) override;
 

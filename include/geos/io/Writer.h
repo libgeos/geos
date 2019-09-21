@@ -36,7 +36,7 @@ class GEOS_DLL Writer {
 public:
     Writer();
     void reserve(std::size_t capacity);
-    ~Writer();
+    ~Writer() = default;
     void write(const std::string& txt);
     const std::string& toString();
 private:

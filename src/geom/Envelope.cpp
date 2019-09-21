@@ -179,9 +179,6 @@ Envelope::Envelope(const string& str)
 }
 
 /*public*/
-Envelope::~Envelope(void) {}
-
-/*public*/
 void
 Envelope::init()
 {

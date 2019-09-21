@@ -35,10 +35,6 @@ SweepLineSegment::SweepLineSegment(Edge* newEdge, size_t newPtIndex):
     //ptIndex=newPtIndex;
 }
 
-SweepLineSegment::~SweepLineSegment()
-{
-}
-
 double
 SweepLineSegment::getMinX()
 {

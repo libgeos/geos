@@ -105,8 +105,6 @@ public:
      */
     Envelope(const std::string& str);
 
-    ~Envelope(void);
-
     /** \brief
      * Test the point `q` to see whether it intersects the Envelope
      * defined by `p1-p2`.

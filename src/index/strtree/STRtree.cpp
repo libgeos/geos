@@ -95,11 +95,6 @@ STRtree::STRtree(size_t p_nodeCapacity): AbstractSTRtree(p_nodeCapacity)
 {
 }
 
-/*public*/
-STRtree::~STRtree()
-{
-}
-
 bool
 STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 {

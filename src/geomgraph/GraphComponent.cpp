@@ -47,10 +47,6 @@ GraphComponent::GraphComponent(const Label& newLabel):
 {
 }
 
-GraphComponent::~GraphComponent()
-{
-}
-
 void
 GraphComponent::setCovered(bool p_isCovered)
 {

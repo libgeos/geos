@@ -63,9 +63,7 @@ public:
 
     friend std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 
-    TopologyLocation();
-
-    ~TopologyLocation();
+    TopologyLocation() = default;
 
     /** \brief
      * Constructs a TopologyLocation specifying how points on, to the
@@ -140,9 +138,9 @@ std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/TopologyLocation.inl"
-//#endif
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/TopologyLocation.inl"
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)

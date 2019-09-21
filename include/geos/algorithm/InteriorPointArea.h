@@ -88,8 +88,6 @@ public:
      */
     InteriorPointArea(const geom::Geometry* g);
 
-    ~InteriorPointArea();
-
     /**
      * Gets the computed interior point.
      *

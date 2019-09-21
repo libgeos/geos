@@ -452,8 +452,6 @@ Polygon::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-Polygon::~Polygon() = default;
-
 GeometryTypeId
 Polygon::getGeometryTypeId() const
 {

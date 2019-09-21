@@ -46,10 +46,6 @@ VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
 {
 }
 
-VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
-{
-}
-
 void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {

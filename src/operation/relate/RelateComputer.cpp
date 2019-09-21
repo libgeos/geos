@@ -65,10 +65,6 @@ RelateComputer::RelateComputer(std::vector<GeometryGraph*>* newArg):
 {
 }
 
-RelateComputer::~RelateComputer()
-{
-}
-
 std::unique_ptr<IntersectionMatrix>
 RelateComputer::computeIM()
 {
