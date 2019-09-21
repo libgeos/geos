@@ -55,7 +55,7 @@ EdgeEndBuilder::computeEdgeEnds(Edge* edge, std::vector<EdgeEnd*>* l)
     // ensure that the list has entries for the first and last point of the edge
     eiList.addEndpoints();
 
-    EdgeIntersectionList::iterator it = eiList.begin();
+    EdgeIntersectionList::const_iterator it = eiList.begin();
     // no intersections, so there is nothing to do
     if(it == eiList.end()) {
         return;

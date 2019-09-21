@@ -92,6 +92,13 @@ public:
         return dist;
     }
 
+    bool operator==(const EdgeIntersection& other) const {
+        return segmentIndex == other.segmentIndex &&
+            dist == other.dist;
+
+        // We don't check the coordinate, consistent with operator<
+    }
+
 };
 
 /// Strict weak ordering operator for EdgeIntersection

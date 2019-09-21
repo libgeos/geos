@@ -46,17 +46,31 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-EdgeIntersectionList::EdgeIntersectionList(Edge* newEdge):
+EdgeIntersectionList::EdgeIntersectionList(const Edge* newEdge):
+    sorted(false),
     edge(newEdge)
 {
 }
 
-const EdgeIntersection&
+void
 EdgeIntersectionList::add(const Coordinate& coord,
                           size_t segmentIndex, double dist)
 {
-    pair<EdgeIntersectionList::iterator, bool> p = nodeMap.emplace(coord, segmentIndex, dist);
-    return *(p.first);
+    if (nodeMap.empty()) {
+        nodeMap.emplace_back(coord, segmentIndex, dist);
+        return;
+    }
+
+    if (nodeMap.back().segmentIndex == segmentIndex && nodeMap.back().dist == dist) {
+        return; // don't add duplicate
+    }
+
+    nodeMap.emplace_back(coord, segmentIndex, dist);
+    // Did our addition break the sortedness of the vector? If so, we'll have to
+    // sort before we iterate over the intersections again.
+    if (sorted && (!(nodeMap[nodeMap.size() - 2] < nodeMap[nodeMap.size() - 1]))) {
+        sorted = false;
+    }
 }
 
 bool
@@ -91,13 +105,13 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*>* edgeList)
     // of the edge
     addEndpoints();
 
-    EdgeIntersectionList::iterator it = nodeMap.begin();
+    EdgeIntersectionList::const_iterator it = begin();
 
     // there should always be at least two entries in the list
     const EdgeIntersection* eiPrev = &*it;
     ++it;
 
-    while(it != nodeMap.end()) {
+    while(it != end()) {
         const EdgeIntersection* ei = &*it;
         Edge* newEdge = createSplitEdge(eiPrev, ei);
         edgeList->push_back(newEdge);
@@ -113,7 +127,7 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
 #if GEOS_DEBUG
     cerr << "[" << this << "] EdgeIntersectionList::createSplitEdge()" << endl;
 #endif // GEOS_DEBUG
-    auto npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+    auto npts = 2ul + ei1->segmentIndex - ei0->segmentIndex;
 
     const Coordinate& lastSegStartPt = edge->pts->getAt(ei1->segmentIndex);
 
