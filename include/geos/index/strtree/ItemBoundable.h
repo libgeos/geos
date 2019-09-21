@@ -32,11 +32,16 @@ namespace strtree { // geos::index::strtree
 class GEOS_DLL ItemBoundable: public Boundable {
 public:
 
-    ItemBoundable(const void* newBounds, void* newItem);
+    ItemBoundable(const void* newBounds, void* newItem) : bounds(newBounds), item(newItem) {}
     ~ItemBoundable() override = default;
 
-    const void* getBounds() const override;
-    void* getItem() const;
+    const void* getBounds() const override {
+        return bounds;
+    }
+
+    void* getItem() const {
+        return item;
+    }
 
 private:
 
