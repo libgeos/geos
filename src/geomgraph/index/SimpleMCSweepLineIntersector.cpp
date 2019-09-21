@@ -80,8 +80,7 @@ SimpleMCSweepLineIntersector::add(Edge* edge, void* edgeSet)
     MonotoneChainEdge* mce = edge->getMonotoneChainEdge();
     auto& startIndex = mce->getStartIndexes();
     size_t n = startIndex.size() - 1;
-    events.reserve(events.size() + (n * 2));
-    chains.reserve(chains.size() + n);
+
     for(size_t i = 0; i < n; ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
         MonotoneChain* mc = new MonotoneChain(mce, i);

@@ -338,12 +338,9 @@ RelateComputer::computeIntersectionNodes(int argIndex)
         Edge* e = *i;
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
-        EdgeIntersectionList::iterator it = eiL.begin();
-        EdgeIntersectionList::iterator end = eiL.end();
-        for(; it != end; ++it) {
-            EdgeIntersection* ei = *it;
-            assert(dynamic_cast<RelateNode*>(nodes.addNode(ei->coord)));
-            RelateNode* n = static_cast<RelateNode*>(nodes.addNode(ei->coord));
+        for(const EdgeIntersection & ei : eiL) {
+            assert(dynamic_cast<RelateNode*>(nodes.addNode(ei.coord)));
+            RelateNode* n = static_cast<RelateNode*>(nodes.addNode(ei.coord));
             if(eLoc == Location::BOUNDARY) {
                 n->setLabelBoundary(argIndex);
             }
@@ -371,12 +368,9 @@ RelateComputer::labelIntersectionNodes(int argIndex)
         Edge* e = *i;
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
-        EdgeIntersectionList::iterator eiIt = eiL.begin();
-        EdgeIntersectionList::iterator eiEnd = eiL.end();
 
-        for(; eiIt != eiEnd; ++eiIt) {
-            EdgeIntersection* ei = *eiIt;
-            RelateNode* n = (RelateNode*) nodes.find(ei->coord);
+        for(const EdgeIntersection& ei : eiL) {
+            RelateNode* n = (RelateNode*) nodes.find(ei.coord);
             if(n->getLabel().isNull(argIndex)) {
                 if(eLoc == Location::BOUNDARY) {
                     n->setLabelBoundary(argIndex);
