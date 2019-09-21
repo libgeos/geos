@@ -15,6 +15,7 @@
 #ifndef GEOS_INDEX_STRTREE_ABSTRACTNODE_H
 #define GEOS_INDEX_STRTREE_ABSTRACTNODE_H
 
+#include <cassert>
 #include <cstddef>
 #include <geos/export.h>
 #include <geos/index/strtree/Boundable.h> // for inheritance
@@ -45,7 +46,16 @@ private:
     std::vector<Boundable*> childBoundables;
     int level;
 public:
-    AbstractNode(int newLevel, size_t capacity = 10);
+
+    /*
+     * Constructs an AbstractNode at the given level in the tree
+     * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
+     * the root node will have the highest level
+     */
+    AbstractNode(int newLevel, size_t capacity = 10) : level(newLevel), bounds(nullptr) {
+        childBoundables.reserve(capacity);
+    }
+
     ~AbstractNode() override = default;
 
     // TODO: change signature to return by ref,
@@ -76,11 +86,29 @@ public:
      *
      * @see AbstractSTRtree::IntersectsOp
      */
-    const void* getBounds() const override;
+    const void* getBounds() const override {
+        if(bounds == nullptr) {
+            bounds = computeBounds();
+        }
+        return bounds;
+    }
 
-    int getLevel();
+    /**
+    * Returns 0 if this node is a leaf, 1 if a parent of a leaf, and so on; the
+    * root node will have the highest level
+    */
+    int getLevel() {
+        return level;
+    }
 
-    void addChildBoundable(Boundable* childBoundable);
+    /**
+     * Adds either an AbstractNode, or if this is a leaf node, a data object
+     * (wrapped in an ItemBoundable)
+     */
+    void addChildBoundable(Boundable* childBoundable) {
+        assert(bounds == nullptr);
+        childBoundables.push_back(childBoundable);
+    }
 
 protected:
 
