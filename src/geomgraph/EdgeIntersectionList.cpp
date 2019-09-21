@@ -51,29 +51,12 @@ EdgeIntersectionList::EdgeIntersectionList(Edge* newEdge):
 {
 }
 
-EdgeIntersectionList::~EdgeIntersectionList()
-{
-    for(EdgeIntersectionList::iterator it = nodeMap.begin(),
-            endIt = nodeMap.end();
-            it != endIt; ++it) {
-        delete *it;
-    }
-}
-
-EdgeIntersection*
+const EdgeIntersection&
 EdgeIntersectionList::add(const Coordinate& coord,
                           size_t segmentIndex, double dist)
 {
-    EdgeIntersection* eiNew = new EdgeIntersection(coord, segmentIndex, dist);
-
-    pair<EdgeIntersectionList::iterator, bool> p = nodeMap.insert(eiNew);
-    if(p.second) {    // new EdgeIntersection inserted
-        return eiNew;
-    }
-    else {
-        delete eiNew;
-        return *(p.first);
-    }
+    pair<EdgeIntersectionList::iterator, bool> p = nodeMap.emplace(coord, segmentIndex, dist);
+    return *(p.first);
 }
 
 bool
@@ -85,13 +68,8 @@ EdgeIntersectionList::isEmpty() const
 bool
 EdgeIntersectionList::isIntersection(const Coordinate& pt) const
 {
-    EdgeIntersectionList::const_iterator
-    it = nodeMap.begin(),
-    endIt = nodeMap.end();
-
-    for(; it != endIt; ++it) {
-        EdgeIntersection* ei = *it;
-        if(ei->coord == pt) {
+    for(const EdgeIntersection& ei : nodeMap) {
+        if(ei.coord == pt) {
             return true;
         }
     }
@@ -116,11 +94,11 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*>* edgeList)
     EdgeIntersectionList::iterator it = nodeMap.begin();
 
     // there should always be at least two entries in the list
-    EdgeIntersection* eiPrev = *it;
+    const EdgeIntersection* eiPrev = &*it;
     ++it;
 
     while(it != nodeMap.end()) {
-        EdgeIntersection* ei = *it;
+        const EdgeIntersection* ei = &*it;
         Edge* newEdge = createSplitEdge(eiPrev, ei);
         edgeList->push_back(newEdge);
         eiPrev = ei;
@@ -129,8 +107,8 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*>* edgeList)
 }
 
 Edge*
-EdgeIntersectionList::createSplitEdge(EdgeIntersection* ei0,
-                                      EdgeIntersection* ei1)
+EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
+                                      const EdgeIntersection* ei1)
 {
 #if GEOS_DEBUG
     cerr << "[" << this << "] EdgeIntersectionList::createSplitEdge()" << endl;
@@ -188,10 +166,8 @@ std::ostream&
 operator<< (std::ostream& os, const EdgeIntersectionList& e)
 {
     os << "Intersections:" << std::endl;
-    EdgeIntersectionList::const_iterator it = e.begin(), endIt = e.end();
-    for(; it != endIt; ++it) {
-        EdgeIntersection* ei = *it;
-        os << *ei << endl;
+    for(const auto & ei : e) {
+        os << ei << endl;
     }
     return os;
 }

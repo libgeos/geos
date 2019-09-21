@@ -483,11 +483,8 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
         Edge* e = *i;
         Location eLoc = e->getLabel().getLocation(p_argIndex);
         EdgeIntersectionList& eiL = e->eiList;
-        for(EdgeIntersectionList::iterator
-                eiIt = eiL.begin(), eiEnd = eiL.end();
-                eiIt != eiEnd; ++eiIt) {
-            EdgeIntersection* ei = *eiIt;
-            addSelfIntersectionNode(p_argIndex, ei->coord, eLoc);
+        for(const EdgeIntersection& ei : eiL) {
+            addSelfIntersectionNode(p_argIndex, ei.coord, eLoc);
             GEOS_CHECK_FOR_INTERRUPTS();
         }
     }

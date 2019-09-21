@@ -123,6 +123,13 @@ struct GEOS_DLL  EdgeIntersectionLessThen {
     {
         return *ei1 < *ei2;
     }
+
+    bool
+    operator()(const EdgeIntersection& ei1,
+               const EdgeIntersection& ei2) const
+    {
+        return ei1 < ei2;
+    }
 };
 
 /// Output operator

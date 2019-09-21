@@ -405,22 +405,19 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 {
     set<const Coordinate*, CoordinateLessThen>nodeSet;
     bool isFirst = true;
-    EdgeIntersectionList::iterator it = eiList.begin();
-    EdgeIntersectionList::iterator end = eiList.end();
-    for(; it != end; ++it) {
-        EdgeIntersection* ei = *it;
+    for(const EdgeIntersection& ei : eiList) {
         if(isFirst) {
             isFirst = false;
             continue;
         }
-        if(nodeSet.find(&ei->coord) != nodeSet.end()) {
+        if(nodeSet.find(&ei.coord) != nodeSet.end()) {
             validErr = new TopologyValidationError(
                 TopologyValidationError::eRingSelfIntersection,
-                ei->coord);
+                ei.coord);
             return;
         }
         else {
-            nodeSet.insert(&ei->coord);
+            nodeSet.insert(&ei.coord);
         }
     }
 }

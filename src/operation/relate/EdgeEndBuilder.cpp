@@ -61,17 +61,17 @@ EdgeEndBuilder::computeEdgeEnds(Edge* edge, std::vector<EdgeEnd*>* l)
         return;
     }
 
-    EdgeIntersection* eiPrev = nullptr;
-    EdgeIntersection* eiCurr = nullptr;
+    const EdgeIntersection* eiPrev = nullptr;
+    const EdgeIntersection* eiCurr = nullptr;
 
-    EdgeIntersection* eiNext = *it;
+    const EdgeIntersection* eiNext = &*it;
     it++;
     do {
         eiPrev = eiCurr;
         eiCurr = eiNext;
         eiNext = nullptr;
         if(it != eiList.end()) {
-            eiNext = *it;
+            eiNext = &*it;
             it++;
         }
         if(eiCurr != nullptr) {
@@ -92,7 +92,7 @@ EdgeEndBuilder::computeEdgeEnds(Edge* edge, std::vector<EdgeEnd*>* l)
  */
 void
 EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, std::vector<EdgeEnd*>* l,
-                                     EdgeIntersection* eiCurr, EdgeIntersection* eiPrev)
+                                     const EdgeIntersection* eiCurr, const EdgeIntersection* eiPrev)
 {
     auto iPrev = eiCurr->segmentIndex;
     if(eiCurr->dist == 0.0) {
@@ -125,7 +125,7 @@ EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, std::vector<EdgeEnd*>* l,
  */
 void
 EdgeEndBuilder::createEdgeEndForNext(Edge* edge, std::vector<EdgeEnd*>* l,
-                                     EdgeIntersection* eiCurr, EdgeIntersection* eiNext)
+                                     const EdgeIntersection* eiCurr, const EdgeIntersection* eiNext)
 {
     size_t iNext = eiCurr->segmentIndex + 1;
     // if there is no next edge there is nothing to do

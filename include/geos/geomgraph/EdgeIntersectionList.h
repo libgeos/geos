@@ -58,7 +58,7 @@ namespace geomgraph { // geos.geomgraph
  */
 class GEOS_DLL EdgeIntersectionList {
 public:
-    typedef std::set<EdgeIntersection*, EdgeIntersectionLessThen> container;
+    typedef std::set<EdgeIntersection, EdgeIntersectionLessThen> container;
     typedef container::iterator iterator;
     typedef container::const_iterator const_iterator;
 
@@ -69,14 +69,14 @@ public:
 
     Edge* edge;
     EdgeIntersectionList(Edge* edge);
-    ~EdgeIntersectionList();
+    ~EdgeIntersectionList() = default;
 
     /*
      * Adds an intersection into the list, if it isn't already there.
      * The input segmentIndex and dist are expected to be normalized.
      * @return the EdgeIntersection found or added
      */
-    EdgeIntersection* add(const geom::Coordinate& coord,
+    const EdgeIntersection& add(const geom::Coordinate& coord,
                           size_t segmentIndex, double dist);
 
     iterator
@@ -118,7 +118,7 @@ public:
      */
     void addSplitEdges(std::vector<Edge*>* edgeList);
 
-    Edge* createSplitEdge(EdgeIntersection* ei0, EdgeIntersection* ei1);
+    Edge* createSplitEdge(const EdgeIntersection* ei0, const EdgeIntersection* ei1);
     std::string print() const;
 
 };
