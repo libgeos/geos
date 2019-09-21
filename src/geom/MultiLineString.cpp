@@ -57,8 +57,6 @@ MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLi
         : GeometryCollection(std::move(newLines), factory)
 {}
 
-MultiLineString::~MultiLineString() {}
-
 Dimension::DimensionType
 MultiLineString::getDimension() const
 {

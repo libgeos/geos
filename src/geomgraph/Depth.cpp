@@ -55,8 +55,6 @@ Depth::Depth()
     }
 }
 
-Depth::~Depth() = default;
-
 int
 Depth::getDepth(int geomIndex, int posIndex) const
 {

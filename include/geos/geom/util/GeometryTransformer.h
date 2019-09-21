@@ -92,7 +92,7 @@ public:
 
     GeometryTransformer();
 
-    virtual ~GeometryTransformer();
+    virtual ~GeometryTransformer() = default;
 
     std::unique_ptr<Geometry> transform(const Geometry* nInputGeom);
 

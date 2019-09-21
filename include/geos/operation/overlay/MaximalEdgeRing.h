@@ -71,7 +71,7 @@ public:
                     const geom::GeometryFactory* geometryFactory);
     // throw(const TopologyException &)
 
-    ~MaximalEdgeRing() override;
+    ~MaximalEdgeRing() override = default;
 
     geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge* de) override;
 

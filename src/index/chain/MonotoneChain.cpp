@@ -43,8 +43,6 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
 {
 }
 
-MonotoneChain::~MonotoneChain() = default;
-
 const Envelope&
 MonotoneChain::getEnvelope() const
 {

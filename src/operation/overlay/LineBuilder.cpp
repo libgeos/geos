@@ -56,10 +56,6 @@ LineBuilder::LineBuilder(OverlayOp* newOp,
 {
 }
 
-LineBuilder::~LineBuilder()
-{
-}
-
 /*
  * @return a list of the LineStrings in the result of the
  *         specified overlay operation

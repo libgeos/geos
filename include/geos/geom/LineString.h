@@ -74,7 +74,7 @@ public:
     /// A vector of const LineString pointers
     typedef std::vector<const LineString*> ConstVect;
 
-    ~LineString() override;
+    ~LineString() override = default;
 
     /**
      * \brief

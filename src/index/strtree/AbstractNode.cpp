@@ -37,10 +37,6 @@ AbstractNode::AbstractNode(int newLevel, size_t capacity)
     level = newLevel;
 }
 
-AbstractNode::~AbstractNode()
-{
-}
-
 const void*
 AbstractNode::getBounds() const
 {

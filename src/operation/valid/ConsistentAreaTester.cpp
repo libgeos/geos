@@ -50,10 +50,6 @@ ConsistentAreaTester::ConsistentAreaTester(GeometryGraph* newGeomGraph)
 {
 }
 
-ConsistentAreaTester::~ConsistentAreaTester()
-{
-}
-
 Coordinate&
 ConsistentAreaTester::getInvalidPoint()
 {

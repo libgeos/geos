@@ -36,10 +36,6 @@ RelateNode::RelateNode(const Coordinate& p_coord, EdgeEndStar* p_edges):
     Node(p_coord, p_edges)
 {}
 
-RelateNode::~RelateNode()
-{
-}
-
 /**
  * Update the IM with the contribution for this component.
  * A component only contributes if it has a labelling for both parent geometries

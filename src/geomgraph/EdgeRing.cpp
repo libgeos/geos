@@ -75,14 +75,6 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     testInvariant();
 }
 
-EdgeRing::~EdgeRing()
-{
-    testInvariant();
-#ifdef GEOS_DEBUG
-    cerr << "EdgeRing[" << this << "] dtor" << endl;
-#endif
-}
-
 bool
 EdgeRing::isIsolated()
 {

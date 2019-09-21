@@ -59,7 +59,7 @@ public:
 
     SimpleMCSweepLineIntersector();
 
-    ~SimpleMCSweepLineIntersector() override;
+    ~SimpleMCSweepLineIntersector() override = default;
 
     void computeIntersections(std::vector<Edge*>* edges,
                               SegmentIntersector* si, bool testAllSegments) override;

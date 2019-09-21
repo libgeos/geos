@@ -49,8 +49,6 @@ MultiPoint::MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, cons
 
 }
 
-MultiPoint::~MultiPoint() {}
-
 Dimension::DimensionType
 MultiPoint::getDimension() const
 {

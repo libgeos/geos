@@ -104,8 +104,6 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
 }
 
 
-LineString::~LineString() = default;
-
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {

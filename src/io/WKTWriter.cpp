@@ -69,8 +69,6 @@ WKTWriter::setOutputDimension(int dims)
     defaultOutputDimension = dims;
 }
 
-WKTWriter::~WKTWriter() {}
-
 /*static*/
 string
 WKTWriter::toLineString(const CoordinateSequence& seq)

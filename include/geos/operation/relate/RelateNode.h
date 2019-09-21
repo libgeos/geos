@@ -49,7 +49,7 @@ public:
 
     RelateNode(const geom::Coordinate& coord, geomgraph::EdgeEndStar* edges);
 
-    ~RelateNode() override;
+    ~RelateNode() override = default;
 
     /**
      * Update the IM with the contribution for the EdgeEnds incident on this node.

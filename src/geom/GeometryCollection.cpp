@@ -372,8 +372,6 @@ GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-GeometryCollection::~GeometryCollection() = default;
-
 GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {

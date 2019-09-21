@@ -24,6 +24,8 @@
 
 #include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/LinearRing.h>
 
 #include <geos/inline.h>
 
@@ -41,10 +43,8 @@
 namespace geos {
 namespace geom {
 class GeometryFactory;
-class LinearRing;
 class Polygon;
 class Coordinate;
-class CoordinateArraySequence;
 }
 namespace geomgraph {
 class DirectedEdge;
@@ -65,7 +65,7 @@ public:
     EdgeRing(DirectedEdge* newStart,
              const geom::GeometryFactory* newGeometryFactory);
 
-    virtual ~EdgeRing();
+    virtual ~EdgeRing() = default;
 
     bool isIsolated();
 

@@ -54,7 +54,7 @@ public:
 
     friend class GeometryFactory;
 
-    ~MultiLineString() override;
+    ~MultiLineString() override = default;
 
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;

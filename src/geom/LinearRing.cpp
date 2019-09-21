@@ -74,13 +74,6 @@ LinearRing::validateConstruction()
     }
 }
 
-
-
-// superclass LineString will delete internal CoordinateSequence
-LinearRing::~LinearRing()
-{
-}
-
 int
 LinearRing::getBoundaryDimension() const
 {

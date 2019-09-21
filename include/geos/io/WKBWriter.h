@@ -90,7 +90,7 @@ public:
      * \brief
      * Destructor.
      */
-    virtual ~WKBWriter();
+    virtual ~WKBWriter() = default;
 
     /*
      * \brief
