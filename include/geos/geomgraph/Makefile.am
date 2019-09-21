@@ -24,10 +24,12 @@ geos_HEADERS = \
     GeometryGraph.inl \
     GraphComponent.h \
     Label.h \
+    Label.inl \
     NodeFactory.h \
     Node.h \
     NodeMap.h \
     PlanarGraph.h \
     Position.h \
     Quadrant.h \
-    TopologyLocation.h
+    TopologyLocation.h \
+    TopologyLocation.inl
