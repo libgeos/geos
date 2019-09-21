@@ -103,7 +103,9 @@ public:
         return label;
     }
 
-    virtual geom::Coordinate& getCoordinate();
+    virtual geom::Coordinate& getCoordinate() {
+        return p0;
+    }
 
     const geom::Coordinate&
     getCoordinate() const

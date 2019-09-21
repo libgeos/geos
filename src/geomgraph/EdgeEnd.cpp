@@ -107,13 +107,6 @@ EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
 
 /*public*/
 Coordinate&
-EdgeEnd::getCoordinate()
-{
-    return p0;
-}
-
-/*public*/
-Coordinate&
 EdgeEnd::getDirectedCoordinate()
 {
     return p1;
