@@ -35,7 +35,7 @@ namespace index { // geos::geomgraph::index
 
 //class SweepLineEventLessThen; // needed ??
 
-class GEOS_DLL SweepLineEvent {
+class GEOS_DLL SweepLineEvent final {
     friend class SweepLineEventLessThen;
 
 public:
@@ -49,7 +49,7 @@ public:
                    SweepLineEvent* newInsertEvent,
                    SweepLineEventOBJ* newObj);
 
-    virtual ~SweepLineEvent() = default;
+    ~SweepLineEvent() = default;
 
     bool
     isInsert()
@@ -61,6 +61,12 @@ public:
     isDelete()
     {
         return insertEvent != nullptr;
+    }
+
+    int
+    eventType()
+    {
+        return insertEvent == nullptr ? INSERT_EVENT : DELETE_EVENT;
     }
 
     SweepLineEvent*
@@ -101,8 +107,6 @@ private:
 
     double xValue;
 
-    int eventType;
-
     SweepLineEvent* insertEvent; // null if this is an INSERT_EVENT event
 
     size_t deleteEventIndex;
@@ -120,7 +124,7 @@ public:
         if(f->xValue > s->xValue) {
             return false;
         }
-        if(f->eventType < s->eventType) {
+        if(f->eventType() < s->eventType()) {
             return true;
         }
         return false;
