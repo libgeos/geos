@@ -259,7 +259,7 @@ public:
         return equals(*e);
     }
 
-    virtual geom::Envelope* getEnvelope();
+    virtual const geom::Envelope* getEnvelope();
 };
 
 
