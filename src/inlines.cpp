@@ -56,6 +56,7 @@
 #include <geos/geom/MultiLineString.inl>
 #include <geos/geom/MultiPolygon.inl>
 #include <geos/geom/CoordinateArraySequenceFactory.inl>
+#include <geos/geomgraph/Depth.inl>
 #include <geos/geomgraph/Label.inl>
 #include <geos/geomgraph/Quadrant.inl>
 #include <geos/geomgraph/TopologyLocation.inl>
