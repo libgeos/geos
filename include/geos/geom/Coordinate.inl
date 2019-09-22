@@ -105,24 +105,6 @@ Coordinate::distanceSquared(const Coordinate& p) const
     return dx * dx + dy * dy;
 }
 
-INLINE int
-Coordinate::hashCode() const
-{
-    //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-    int result = 17;
-    result = 37 * result + hashCode(x);
-    result = 37 * result + hashCode(y);
-    return result;
-}
-
-/*static*/
-INLINE int
-Coordinate::hashCode(double d)
-{
-    int64 f = (int64)(d);
-    return (int)(f ^ (f >> 32));
-}
-
 INLINE bool
 CoordinateLessThen::operator()(const Coordinate* a, const Coordinate* b) const
 {
@@ -155,6 +137,14 @@ INLINE bool
 operator!=(const Coordinate& a, const Coordinate& b)
 {
     return ! a.equals2D(b);
+}
+
+INLINE size_t
+Coordinate::HashCode::operator()(const geos::geom::Coordinate &c) const {
+    size_t h = std::hash<double>{}(c.x);
+    h ^= std::hash<double>{}(c.y) << 1;
+    h ^= std::hash<double>{}(c.z) << 1;
+    return h;
 }
 
 } // namespace geos::geom

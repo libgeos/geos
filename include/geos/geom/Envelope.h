@@ -453,7 +453,7 @@ public:
      */
     double distance(const Envelope* env) const;
 
-    int hashCode() const;
+    size_t hashCode() const;
 
 private:
 
