@@ -31,5 +31,6 @@ geos_HEADERS = \
     PlanarGraph.h \
     Position.h \
     Quadrant.h \
+    Quadrant.inl \
     TopologyLocation.h \
     TopologyLocation.inl

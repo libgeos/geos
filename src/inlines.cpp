@@ -57,6 +57,7 @@
 #include <geos/geom/MultiPolygon.inl>
 #include <geos/geom/CoordinateArraySequenceFactory.inl>
 #include <geos/geomgraph/Label.inl>
+#include <geos/geomgraph/Quadrant.inl>
 #include <geos/geomgraph/TopologyLocation.inl>
 #include <geos/noding/snapround/HotPixel.inl>
 #include <geos/noding/MCIndexNoder.inl>
