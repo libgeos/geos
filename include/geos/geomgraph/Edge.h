@@ -30,6 +30,7 @@
 #include <geos/geomgraph/Depth.h> // for member
 #include <geos/geomgraph/EdgeIntersectionList.h> // for composition
 #include <geos/geom/CoordinateSequence.h> // for inlines
+#include <geos/geom/Envelope.h>
 
 #include <geos/inline.h>
 
@@ -41,7 +42,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Envelope;
 class IntersectionMatrix;
 class Coordinate;
 }
@@ -71,8 +71,7 @@ private:
     /// Lazily-created, owned by Edge.
     std::unique_ptr<index::MonotoneChainEdge> mce;
 
-    /// Lazily-created, owned by Edge.
-    std::unique_ptr<geom::Envelope> env;
+    geom::Envelope env;
 
     Depth depth;
 

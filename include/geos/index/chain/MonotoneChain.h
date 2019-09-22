@@ -27,7 +27,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Envelope;
 class LineSegment;
 class CoordinateSequence;
 }
@@ -172,8 +171,8 @@ private:
     /// Externally owned
     const geom::CoordinateSequence& pts;
 
-    /// Owned by this class, lazely created
-    mutable std::unique_ptr<geom::Envelope> env;
+    /// Owned by this class
+    geom::Envelope env;
 
     /// user-defined information
     void* context;
