@@ -110,6 +110,10 @@ public:
         childBoundables.push_back(childBoundable);
     }
 
+    bool isLeaf() const override {
+        return false;
+    }
+
 protected:
 
     virtual void* computeBounds() const = 0;
