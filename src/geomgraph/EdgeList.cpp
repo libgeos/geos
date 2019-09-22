@@ -29,7 +29,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
 using namespace geos::noding;
 
 namespace geos {
@@ -44,12 +43,12 @@ void
 EdgeList::add(Edge* e)
 {
     edges.push_back(e);
-    OrientedCoordinateArray* oca = new OrientedCoordinateArray(*(e->getCoordinates()));
+    OrientedCoordinateArray oca(*e->getCoordinates());
     ocaMap[oca] = e;
 }
 
 void
-EdgeList::addAll(const vector<Edge*>& edgeColl)
+EdgeList::addAll(const std::vector<Edge*>& edgeColl)
 {
     for(std::size_t i = 0, s = edgeColl.size(); i < s ; ++i) {
         add(edgeColl[i]);
@@ -63,7 +62,7 @@ EdgeList::addAll(const vector<Edge*>& edgeColl)
  *          null otherwise
  */
 Edge*
-EdgeList::findEqualEdge(Edge* e)
+EdgeList::findEqualEdge(const Edge* e) const
 {
 #if PROFILE
     static Profile* prof = profiler->get("EdgeList::findEqualEdge(Edge *e)");
@@ -72,7 +71,7 @@ EdgeList::findEqualEdge(Edge* e)
 
     OrientedCoordinateArray oca(*(e->getCoordinates()));
 
-    EdgeMap::iterator it = ocaMap.find(&oca);
+    auto it = ocaMap.find(oca);
 
 #if PROFILE
     prof->stop();
@@ -96,7 +95,7 @@ EdgeList::get(int i)
  *          -1 otherwise
  */
 int
-EdgeList::findEdgeIndex(Edge* e)
+EdgeList::findEdgeIndex(const Edge* e) const
 {
     for(int i = 0, s = (int)edges.size(); i < s; ++i) {
         if(edges[i]->equals(e)) {
@@ -106,10 +105,10 @@ EdgeList::findEdgeIndex(Edge* e)
     return -1;
 }
 
-string
+std::string
 EdgeList::print()
 {
-    ostringstream ss;
+    std::ostringstream ss;
     ss << *this;
     return ss.str();
 #if 0
@@ -145,13 +144,6 @@ operator<< (std::ostream& os, const EdgeList& el)
         os << "  " << *e << std::endl;
     }
     return os;
-}
-
-EdgeList::~EdgeList()
-{
-    for(EdgeMap::iterator i = ocaMap.begin(), e = ocaMap.end(); i != e; ++i) {
-        delete i->first; // OrientedCoordinateArray
-    }
 }
 
 } // namespace geos.geomgraph

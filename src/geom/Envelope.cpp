@@ -438,15 +438,17 @@ operator==(const Envelope& a, const Envelope& b)
 }
 
 /*public*/
-int
+size_t
 Envelope::hashCode() const
 {
+    auto hash = std::hash<double>{};
+
     //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-    int result = 17;
-    result = 37 * result + Coordinate::hashCode(minx);
-    result = 37 * result + Coordinate::hashCode(maxx);
-    result = 37 * result + Coordinate::hashCode(miny);
-    result = 37 * result + Coordinate::hashCode(maxy);
+    size_t result = 17;
+    result = 37 * result + hash(minx);
+    result = 37 * result + hash(maxx);
+    result = 37 * result + hash(miny);
+    result = 37 * result + hash(maxy);
     return result;
 }
 

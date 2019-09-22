@@ -21,10 +21,7 @@
 
 #include <geos/export.h>
 
-//#include <vector>
-//#include <iostream>
-
-//#include <geos/inline.h>
+#include <cstddef>
 
 // Forward declarations
 namespace geos {
@@ -72,6 +69,11 @@ public:
      */
     int compareTo(const OrientedCoordinateArray& o1) const;
 
+    bool operator==(const OrientedCoordinateArray& other) const;
+
+    struct HashCode {
+        size_t operator()(const OrientedCoordinateArray & oca) const;
+    };
 
 private:
 
