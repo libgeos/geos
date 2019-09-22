@@ -85,7 +85,7 @@ Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
     :
     GraphComponent(newLabel),
     mce(nullptr),
-    env(nullptr),
+    env(newPts->getEnvelope()),
     depth(),
     depthDelta(0),
     isIsolatedVar(true),
@@ -100,7 +100,7 @@ Edge::Edge(CoordinateSequence* newPts)
     :
     GraphComponent(),
     mce(nullptr),
-    env(nullptr),
+    env(newPts->getEnvelope()),
     depth(),
     depthDelta(0),
     isIsolatedVar(true),
@@ -299,13 +299,7 @@ Edge::printReverse() const
 const Envelope*
 Edge::getEnvelope()
 {
-    // compute envelope lazily
-    if(env == nullptr) {
-        env = detail::make_unique<Envelope>();
-        pts->expandEnvelope(*env);
-    }
-    testInvariant();
-    return env.get();
+    return &env;
 }
 
 std::ostream&
