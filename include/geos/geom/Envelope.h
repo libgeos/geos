@@ -66,7 +66,7 @@ public:
     /** \brief
      * Creates a null Envelope.
      */
-    Envelope(void);
+    Envelope();
 
     /** \brief
      * Creates an Envelope for a region defined by maximum and minimum values.
