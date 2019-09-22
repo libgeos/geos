@@ -279,9 +279,6 @@ Edge::printReverse() const
     stringstream os;
 
     os << "EDGE (rev)";
-    if(name != "") {
-        os << " name:" << name;
-    }
 
     os << " label:" << label
        << " depthDelta:" << depthDelta
@@ -318,9 +315,6 @@ std::ostream&
 operator<< (std::ostream& os, const Edge& e)
 {
     os << "edge";
-    if(e.name != "") {
-        os << " " << e.name;
-    }
 
     os
             << "  LINESTRING"

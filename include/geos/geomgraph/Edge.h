@@ -68,8 +68,6 @@ class GEOS_DLL Edge: public GraphComponent {
 
 private:
 
-    std::string name;
-
     /// Lazily-created, owned by Edge.
     std::unique_ptr<index::MonotoneChainEdge> mce;
 
@@ -112,12 +110,6 @@ public:
     getNumPoints() const
     {
         return pts->getSize();
-    }
-
-    virtual void
-    setName(const std::string& newName)
-    {
-        name = newName;
     }
 
     virtual const geom::CoordinateSequence*
