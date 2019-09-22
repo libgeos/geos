@@ -35,6 +35,10 @@ public:
     ItemBoundable(const void* newBounds, void* newItem) : bounds(newBounds), item(newItem) {}
     ~ItemBoundable() override = default;
 
+    bool isLeaf() const override {
+        return true;
+    }
+
     const void* getBounds() const override {
         return bounds;
     }
