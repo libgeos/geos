@@ -99,5 +99,9 @@ public:
 } // namespace geos.geomgraph
 } // namespace geos
 
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Quadrant.inl"
+#endif
+
 #endif // ifndef GEOS_GEOMGRAPH_QUADRANT_H
 
