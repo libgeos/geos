@@ -67,7 +67,7 @@ public:
     /// Construct sequence allocating space for n coordinates
     CoordinateArraySequence(std::size_t n, std::size_t dimension = 0);
 
-    ~CoordinateArraySequence() override;
+    ~CoordinateArraySequence() override = default;
 
     bool
     isEmpty() const override
