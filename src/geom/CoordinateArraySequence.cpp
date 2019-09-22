@@ -204,8 +204,6 @@ CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
     vect[pos] = c;
 }
 
-CoordinateArraySequence::~CoordinateArraySequence() = default;
-
 void
 CoordinateArraySequence::expandEnvelope(Envelope& env) const
 {
