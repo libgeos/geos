@@ -296,16 +296,13 @@ Edge::printReverse() const
     return os.str();
 }
 
-Envelope*
+const Envelope*
 Edge::getEnvelope()
 {
     // compute envelope lazily
     if(env == nullptr) {
         env = detail::make_unique<Envelope>();
-        auto npts = getNumPoints();
-        for(size_t i = 0; i < npts; ++i) {
-            env->expandToInclude(pts->getAt(i));
-        }
+        pts->expandEnvelope(*env);
     }
     testInvariant();
     return env.get();
