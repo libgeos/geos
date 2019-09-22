@@ -63,4 +63,8 @@ private:
 } // namespace geos.geomgraph
 } // namespace geos
 
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Depth.inl"
+#endif
+
 #endif // ifndef GEOS_GEOMGRAPH_DEPTH_H

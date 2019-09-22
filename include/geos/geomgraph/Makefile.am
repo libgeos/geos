@@ -9,6 +9,7 @@ geosdir = $(includedir)/geos/geomgraph
 
 geos_HEADERS = \
     Depth.h \
+    Depth.inl \
     DirectedEdge.h \
     DirectedEdge.inl \
     DirectedEdgeStar.h \
