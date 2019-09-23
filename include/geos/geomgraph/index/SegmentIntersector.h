@@ -140,6 +140,10 @@ public:
 } // namespace geos.geomgraph
 } // namespace geos
 
+#ifdef GEOS_INLINE
+#include <geos/geomgraph/index/SegmentIntersector.inl>
+#endif
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
