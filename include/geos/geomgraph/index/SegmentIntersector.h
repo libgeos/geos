@@ -17,6 +17,7 @@
 #define GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 
 #include <geos/export.h>
+#include <array>
 #include <vector>
 
 #include <geos/geom/Coordinate.h> // for composition
@@ -76,12 +77,12 @@ private:
     int numIntersections;
 
     /// Elements are externally owned
-    std::vector<std::vector<Node*>*> bdyNodes;
+    std::array<std::vector<Node*>*, 2> bdyNodes;
 
     bool isTrivialIntersection(Edge* e0, size_t segIndex0, Edge* e1, size_t segIndex1);
 
     bool isBoundaryPoint(algorithm::LineIntersector* li,
-                         std::vector<std::vector<Node*>*>& tstBdyNodes);
+                         std::array<std::vector<Node*>*, 2>& tstBdyNodes);
 
     bool isBoundaryPoint(algorithm::LineIntersector* li,
                          std::vector<Node*>* tstBdyNodes);
@@ -110,7 +111,7 @@ public:
         includeProper(newIncludeProper),
         recordIsolated(newRecordIsolated),
         numIntersections(0),
-        bdyNodes(2),
+        bdyNodes{nullptr, nullptr},
         numTests(0)
     {}
 

@@ -88,7 +88,7 @@ SegmentIntersector::hasProperInteriorIntersection()
 /*private*/
 INLINE bool
 SegmentIntersector::isBoundaryPoint(algorithm::LineIntersector* p_li,
-                                    std::vector<std::vector<Node*>*>& tstBdyNodes)
+                                    std::array<std::vector<Node*>*, 2>& tstBdyNodes)
 {
     return isBoundaryPoint(p_li, tstBdyNodes[0]) || isBoundaryPoint(p_li, tstBdyNodes[1]);
 }
