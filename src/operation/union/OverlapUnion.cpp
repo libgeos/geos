@@ -111,7 +111,7 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
     try {
         return geom0->Union(geom1);
     }
-    catch (geos::util::TopologyException ex) {
+    catch (geos::util::TopologyException & ex) {
         /**
          * If the overlay union fails,
          * try a buffer union, which often succeeds
