@@ -9,6 +9,7 @@ geosdir = $(includedir)/geos/noding
 
 geos_HEADERS = \
 	BasicSegmentString.h \
+	BasicSegmentString.inl \
 	FastNodingValidator.h \
 	FastSegmentSetIntersectionFinder.h \
 	GeometryNoder.h \

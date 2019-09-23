@@ -61,6 +61,7 @@
 #include <geos/geomgraph/Quadrant.inl>
 #include <geos/geomgraph/TopologyLocation.inl>
 #include <geos/noding/snapround/HotPixel.inl>
+#include <geos/noding/BasicSegmentString.inl>
 #include <geos/noding/MCIndexNoder.inl>
 
 #endif // defined __CYGWIN__
