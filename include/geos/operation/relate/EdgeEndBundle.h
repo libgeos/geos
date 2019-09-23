@@ -48,7 +48,7 @@ class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd {
 public:
     EdgeEndBundle(geomgraph::EdgeEnd* e);
     ~EdgeEndBundle() override;
-    std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
+    const std::vector<geomgraph::EdgeEnd*>& getEdgeEnds();
     void insert(geomgraph::EdgeEnd* e);
 
     void computeLabel(const algorithm::BoundaryNodeRule& bnr) override;
@@ -62,7 +62,7 @@ public:
 
     std::string print() const override;
 protected:
-    std::vector<geomgraph::EdgeEnd*>* edgeEnds;
+    std::vector<geomgraph::EdgeEnd*> edgeEnds;
 
     /**
      * Compute the overall ON location for the list of EdgeStubs.
