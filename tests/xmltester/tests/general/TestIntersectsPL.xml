@@ -1,0 +1,37 @@
+<run>
+  <desc>Test P/L intersects cases that require robust determinant. See discussion http://trac.osgeo.org/geos/ticket/591</desc>
+  <!-- first occurrence is used -->
+  <precisionModel type="FLOATING"/> <!-- passes -->
+  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/> <!-- passes -->
+
+<case>
+  <desc>Point on segment between 3rd and 4th vertex of line</desc>
+  <a>
+    POINT(-23.1094689600055 50.5195368635957)
+  </a>
+  <b>
+    LINESTRING(-23.122057005539 50.5201976774794,-23.1153476966995 50.5133404815199,-23.1094689600055 50.5223376452201,-23.1094689600055 50.5169177629559,-23.0961967920942 50.5330464848094,-23.0887991006034 50.5258515213185,-23.0852302622362 50.5264582238409)
+  </b>
+<test>
+  <op name="intersects" arg1="A" arg2="B">
+    true
+  </op>
+</test>
+</case>
+
+<case>
+  <desc>Point on the 3rd vertex of line</desc>
+  <a>
+    POINT(-23.1094689600055 50.5223376452201)
+  </a>
+  <b>
+    LINESTRING(-23.122057005539 50.5201976774794,-23.1153476966995 50.5133404815199,-23.1094689600055 50.5223376452201,-23.1094689600055 50.5169177629559,-23.0961967920942 50.5330464848094,-23.0887991006034 50.5258515213185,-23.0852302622362 50.5264582238409)
+  </b>
+<test>
+  <op name="intersects" arg1="A" arg2="B">
+    true
+  </op>
+</test>
+</case>
+
+</run>

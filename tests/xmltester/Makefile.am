@@ -34,7 +34,9 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
 	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
+	$(srcdir)/tests/general/TestIntersectsPL.xml \
 	$(srcdir)/tests/general/TestMinimumClearance.xml \
+	$(srcdir)/tests/general/TestPreparedIntersectsPL.xml \
 	$(srcdir)/tests/general/TestPreparedPointPredicate.xml \
 	$(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
 	$(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
