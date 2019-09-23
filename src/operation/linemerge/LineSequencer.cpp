@@ -65,8 +65,7 @@ LineSequencer::isSequenced(const Geometry* geom)
     const Coordinate* lastNode = nullptr;
 
     for(std::size_t i = 0, n = mls->getNumGeometries(); i < n; ++i) {
-        const LineString* lineptr = \
-                                    dynamic_cast<const LineString*>(mls->getGeometryN(i));
+        const LineString* lineptr = mls->getGeometryN(i);
         assert(lineptr);
         const LineString& line = *lineptr;
 

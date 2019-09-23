@@ -165,7 +165,7 @@ GeometryTransformer::transformMultiPoint(
     std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
-        const Point* p = dynamic_cast<const Point*>(geom->getGeometryN(i));
+        const Point* p = geom->getGeometryN(i);
         assert(p);
 
         Geometry::Ptr transformGeom = transformPoint(p, geom);
@@ -241,8 +241,7 @@ GeometryTransformer::transformMultiLineString(
     std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
-        const LineString* l = dynamic_cast<const LineString*>(
-                                  geom->getGeometryN(i));
+        const LineString* l = geom->getGeometryN(i);
         assert(l);
 
         Geometry::Ptr transformGeom = transformLineString(l, geom);
@@ -340,8 +339,7 @@ GeometryTransformer::transformMultiPolygon(
     std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(std::size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
-        const Polygon* p = dynamic_cast<const Polygon*>(
-                               geom->getGeometryN(i));
+        const Polygon* p = geom->getGeometryN(i);
         assert(p);
 
         Geometry::Ptr transformGeom = transformPolygon(p, geom);

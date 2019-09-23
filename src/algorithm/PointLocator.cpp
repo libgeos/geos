@@ -83,13 +83,13 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
     }
     else if(const MultiLineString* mls = dynamic_cast<const MultiLineString*>(geom)) {
         for(std::size_t i = 0, n = mls->getNumGeometries(); i < n; ++i) {
-            const LineString* l = dynamic_cast<const LineString*>(mls->getGeometryN(i));
+            const LineString* l = mls->getGeometryN(i);
             updateLocationInfo(locate(p, l));
         }
     }
     else if(const MultiPolygon* mpo = dynamic_cast<const MultiPolygon*>(geom)) {
         for(std::size_t i = 0, n = mpo->getNumGeometries(); i < n; ++i) {
-            const Polygon* p_po = dynamic_cast<const Polygon*>(mpo->getGeometryN(i));
+            const Polygon* p_po = mpo->getGeometryN(i);
             updateLocationInfo(locate(p, p_po));
         }
     }
