@@ -59,14 +59,11 @@ public:
     DirectedEdgeStar()
         :
         EdgeEndStar(),
-        resultAreaEdgeList(nullptr),
-        label()
+        label(),
+        resultAreaEdgesComputed(false)
     {}
 
-    ~DirectedEdgeStar() override
-    {
-        delete resultAreaEdgeList;
-    }
+    ~DirectedEdgeStar() override = default;
 
     /// Insert a directed edge in the list
     void insert(EdgeEnd* ee) override;
@@ -140,14 +137,17 @@ private:
     /**
      * A list of all outgoing edges in the result, in CCW order
      */
-    std::vector<DirectedEdge*>* resultAreaEdgeList;
+    std::vector<DirectedEdge*> resultAreaEdgeList;
 
     Label label;
 
+    bool resultAreaEdgesComputed;
+
     /// \brief
-    /// Returned vector is onwed by DirectedEdgeStar object, but
+    /// Returned vector is owned by DirectedEdgeStar object, but
     /// lazily created
-    std::vector<DirectedEdge*>* getResultAreaEdges();
+    const std::vector<DirectedEdge*>& getResultAreaEdges();
+
 
     /// States for linResultDirectedEdges
     enum {

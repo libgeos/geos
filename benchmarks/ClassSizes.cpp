@@ -52,6 +52,7 @@ main()
 {
     check(geomgraph::Depth);
     check(geomgraph::DirectedEdge);
+    check(geomgraph::DirectedEdgeStar);
     check(geomgraph::Edge);
     check(geomgraph::EdgeEnd);
     check(geomgraph::PlanarGraph);
