@@ -64,22 +64,15 @@ MCIndexNoder::intersectChains()
 
     SegmentOverlapAction overlapAction(*segInt);
 
-    for(vector<MonotoneChain*>::iterator
-            i = monoChains.begin(), iEnd = monoChains.end();
-            i != iEnd;
-            ++i) {
-
+    vector<void*> overlapChains;
+    for(MonotoneChain* queryChain : monoChains) {
         GEOS_CHECK_FOR_INTERRUPTS();
 
-        MonotoneChain* queryChain = *i;
         assert(queryChain);
-        vector<void*> overlapChains;
+        overlapChains.clear();
         index.query(&(queryChain->getEnvelope()), overlapChains);
-        for(vector<void*>::iterator
-                j = overlapChains.begin(), jEnd = overlapChains.end();
-                j != jEnd;
-                ++j) {
-            MonotoneChain* testChain = static_cast<MonotoneChain*>(*j);
+        for(void* hit : overlapChains) {
+            MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
             assert(testChain);
 
             /**
