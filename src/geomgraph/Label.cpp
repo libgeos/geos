@@ -23,6 +23,10 @@
 #include <sstream>
 #include <iostream>
 
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/Label.inl>
+#endif
+
 
 using namespace geos::geom;
 

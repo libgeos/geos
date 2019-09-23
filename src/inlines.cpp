@@ -26,7 +26,7 @@
 // otherwise linker will complain "multiple definition" errors.
 // If using MingW with GEOS_INLINE to build a DLL then MingW's gcc
 // has already generated the stubs for the contents of this file.
-// Hence we need to supress it to avoid "multiple definition" errors
+// Hence we need to suppress it to avoid "multiple definition" errors
 // during the final link phase
 #if !defined(_MSC_VER) && (!defined(__MINGW32__) || defined(__MINGW32__) && !defined(GEOS_DLL_EXPORT) && !defined(DLL_EXPORT) )
 

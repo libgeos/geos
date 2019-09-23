@@ -26,6 +26,10 @@
 #include <iostream>
 #include <cassert>
 
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/TopologyLocation.inl>
+#endif
+
 using namespace geos::geom;
 
 namespace geos {

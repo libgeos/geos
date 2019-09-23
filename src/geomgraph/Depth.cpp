@@ -25,6 +25,10 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/Location.h>
 
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/Depth.inl>
+#endif
+
 using namespace geos::geom;
 
 namespace geos {

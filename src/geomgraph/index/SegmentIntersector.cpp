@@ -24,6 +24,11 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/index/SegmentIntersector.inl>
+#endif
+
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
