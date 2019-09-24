@@ -59,7 +59,7 @@ namespace geos {
 namespace operation { // geos::operation
 namespace polygonize { // geos::operation::polygonize
 
-/**\brief
+/** \brief
  * Represents a ring of PolygonizeDirectedEdge which form
  * a ring of a polygon.  The ring may be either an outer shell or a hole.
  */
