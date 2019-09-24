@@ -45,7 +45,7 @@ public:
      * @param line the line coordinates
      * @return true if the point is a vertex of the line or lies in the interior
      *         of a line segment in the line
-    */
+     */
     static bool isOnLine(const geom::Coordinate& p, const geom::CoordinateSequence* line);
 
     /** \brief
@@ -68,17 +68,17 @@ public:
     static bool isInRing(const geom::Coordinate& p, const geom::CoordinateSequence* ring);
 
     /** \brief
-    * Determines whether a point lies in the interior, on the boundary, or in the
-    * exterior of a ring. The ring may be oriented in either direction.
-    *
-    * This method does *not* first check the point against the envelope of
-    * the ring.
-    *
-    * @param p point to check for ring inclusion
-    * @param ring an array of coordinates representing the ring (which must have
-    *             first point identical to last point)
+     * Determines whether a point lies in the interior, on the boundary, or in the
+     * exterior of a ring. The ring may be oriented in either direction.
+     *
+     * This method does *not* first check the point against the envelope of
+     * the ring.
+     *
+     * @param p point to check for ring inclusion
+     * @param ring an array of coordinates representing the ring (which must have
+     *             first point identical to last point)
      * @return the [Location](@ref geom::Location) of p relative to the ring
-    */
+     */
     static geom::Location locateInRing(const geom::Coordinate& p, const std::vector<const geom::Coordinate*>& ring);
     static geom::Location locateInRing(const geom::Coordinate& p, const geom::CoordinateSequence& ring);
 

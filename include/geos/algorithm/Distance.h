@@ -36,19 +36,19 @@ class GEOS_DLL Distance {
 public:
 
     /**
-    * Computes the distance from a line segment AB to a line segment CD
-    *
-    * Note: NON-ROBUST!
-    *
-    * @param A
-    *          a point of one line
-    * @param B
-    *          the second point of (must be different to A)
-    * @param C
-    *          one point of the line
-    * @param D
-    *          another point of the line (must be different to A)
-    */
+     * Computes the distance from a line segment AB to a line segment CD
+     *
+     * Note: NON-ROBUST!
+     *
+     * @param A
+     *          a point of one line
+     * @param B
+     *          the second point of (must be different to A)
+     * @param C
+     *          one point of the line
+     * @param D
+     *          another point of the line (must be different to A)
+     */
     // formerly distanceLineLine
     static double segmentToSegment(const geom::Coordinate& A,
                                    const geom::Coordinate& B,

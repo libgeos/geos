@@ -90,12 +90,12 @@ public:
 
 protected:
     /**
-    * Computes the full topological <tt>contains</tt> predicate.
-    * Used when short-circuit tests are not conclusive.
-    *
-    * @param geom the test geometry
-    * @return true if this prepared polygon contains the test geometry
-    */
+     * Computes the full topological <tt>contains</tt> predicate.
+     * Used when short-circuit tests are not conclusive.
+     *
+     * @param geom the test geometry
+     * @return true if this prepared polygon contains the test geometry
+     */
     bool fullTopologicalPredicate(const geom::Geometry* geom) override;
 
 };

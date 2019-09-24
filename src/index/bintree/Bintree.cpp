@@ -131,8 +131,8 @@ Bintree::query(double x)
 }
 
 /**
-* min and max may be the same value
-*/
+ * min and max may be the same value
+ */
 vector<void*>*
 Bintree::query(Interval* interval)
 {

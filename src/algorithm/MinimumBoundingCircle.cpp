@@ -182,10 +182,10 @@ MinimumBoundingCircle::computeCirclePoints()
         return;
     }
 
-    /**
-    * The problem is simplified by reducing to the convex hull.
-    * Computing the convex hull also has the useful effect of eliminating duplicate points
-    */
+    /*
+     * The problem is simplified by reducing to the convex hull.
+     * Computing the convex hull also has the useful effect of eliminating duplicate points
+     */
     std::unique_ptr<Geometry> convexHull(input->convexHull());
 
     std::unique_ptr<CoordinateSequence> cs(convexHull->getCoordinates());
@@ -197,9 +197,9 @@ MinimumBoundingCircle::computeCirclePoints()
         pts.pop_back();
     }
 
-    /**
-    * Optimization for the trivial case where the CH has fewer than 3 points
-    */
+    /*
+     * Optimization for the trivial case where the CH has fewer than 3 points
+     */
     if(pts.size() <= 2) {
         extremalPts = pts;
         return;
@@ -211,13 +211,13 @@ MinimumBoundingCircle::computeCirclePoints()
     // find a point Q such that the angle that PQ makes with the x-axis is minimal
     Coordinate Q = pointWitMinAngleWithX(pts, P);
 
-    /**
-    * Iterate over the remaining points to find
-    * a pair or triplet of points which determine the minimal circle.
-    * By the design of the algorithm,
-    * at most <tt>pts.length</tt> iterations are required to terminate
-    * with a correct result.
-    */
+    /*
+     * Iterate over the remaining points to find
+     * a pair or triplet of points which determine the minimal circle.
+     * By the design of the algorithm,
+     * at most <tt>pts.length</tt> iterations are required to terminate
+     * with a correct result.
+     */
     size_t i = 0, n = pts.size();
     while(i++ < n) {
         Coordinate R = pointWithMinAngleWithSegment(pts, P, Q);

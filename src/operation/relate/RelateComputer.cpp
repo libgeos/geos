@@ -205,7 +205,7 @@ RelateComputer::computeIM()
 
     labelNodeEdges();
 
-    /**
+    /*
      * Compute the labeling for isolated components.
      * Isolated components are components that do not touch any
      * other components in the graph.
@@ -249,22 +249,22 @@ RelateComputer::computeProperIntersectionIM(SegmentIntersector* intersector, Int
     bool hasProper = intersector->hasProperIntersection();
     bool hasProperInterior = intersector->hasProperInteriorIntersection();
     // For Geometry's of dim 0 there can never be proper intersections.
-    /**
-    * If edge segments of Areas properly intersect, the areas must properly overlap.
-    */
+    /*
+     * If edge segments of Areas properly intersect, the areas must properly overlap.
+     */
     if(dimA == 2 && dimB == 2) {
         if(hasProper) {
             imX->setAtLeast("212101212");
         }
     }
-    /**
-    * If an Line segment properly intersects an edge segment of an Area,
-    * it follows that the Interior of the Line intersects the Boundary of the Area.
-    * If the intersection is a proper <i>interior</i> intersection, then
-    * there is an Interior-Interior intersection too.
-    * Note that it does not follow that the Interior of the Line intersects the Exterior
-    * of the Area, since there may be another Area component which contains the rest of the Line.
-    */
+    /*
+     * If an Line segment properly intersects an edge segment of an Area,
+     * it follows that the Interior of the Line intersects the Boundary of the Area.
+     * If the intersection is a proper *interior* intersection, then
+     * there is an Interior-Interior intersection too.
+     * Note that it does not follow that the Interior of the Line intersects the Exterior
+     * of the Area, since there may be another Area component which contains the rest of the Line.
+     */
     else if(dimA == 2 && dimB == 1) {
         if(hasProper) {
             imX->setAtLeast("FFF0FFFF2");

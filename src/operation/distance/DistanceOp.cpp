@@ -99,10 +99,10 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
 {}
 
 /**
-* Report the distance between the closest points on the input geometries.
-*
-* @return the distance between the geometries
-*/
+ * Report the distance between the closest points on the input geometries.
+ *
+ * @return the distance between the geometries
+ */
 double
 DistanceOp::distance()
 {

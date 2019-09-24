@@ -33,9 +33,9 @@ PointExtracter::getPoints(const Geometry& geom, Point::ConstVect& ret)
 }
 
 /**
-* Constructs a PointExtracterFilter with a list in which
-* to store Points found.
-*/
+ * Constructs a PointExtracterFilter with a list in which
+ * to store Points found.
+ */
 PointExtracter::PointExtracter(Point::ConstVect& newComps)
     :
     comps(newComps)

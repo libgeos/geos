@@ -47,8 +47,8 @@ MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
 }
 
 /**
-* @return the index of the last point in the monotone chain
-*/
+ * @return the index of the last point in the monotone chain
+ */
 size_t
 MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, size_t start)
 {
