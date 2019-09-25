@@ -1679,6 +1679,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->getEnvelope().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1705,7 +1706,9 @@ extern "C" {
         }
 
         try {
-            return g1->intersection(g2).release();
+            Geometry* g3 = g1->intersection(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1732,6 +1735,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->buffer(width, quadrantsegments).release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1782,6 +1786,7 @@ extern "C" {
             bp.setMitreLimit(mitreLimit);
             BufferOp op(g1, bp);
             Geometry* g3 = op.getResultGeometry(width);
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1828,7 +1833,7 @@ extern "C" {
             }
             BufferBuilder bufBuilder(bp);
             Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
-
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1872,7 +1877,7 @@ extern "C" {
             bool isLeftSide = leftSide == 0 ? false : true;
             BufferBuilder bufBuilder(bp);
             Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
-
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1900,6 +1905,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->convexHull().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1928,8 +1934,9 @@ extern "C" {
 
         try {
             geos::algorithm::MinimumDiameter m(g);
-
-            return m.getMinimumRectangle().release();
+            Geometry* g3 = m.getMinimumRectangle().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1956,8 +1963,9 @@ extern "C" {
 
         try {
             geos::algorithm::MinimumDiameter m(g);
-
-            return m.getDiameter().release();
+            Geometry* g3 = m.getDiameter().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1984,7 +1992,9 @@ extern "C" {
 
         try {
             geos::precision::MinimumClearance mc(g);
-            return mc.getLine().release();
+            Geometry *g3 = mc.getLine().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2040,7 +2050,9 @@ extern "C" {
         }
 
         try {
-            return g1->difference(g2).release();
+            Geometry *g3 = g1->difference(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2067,6 +2079,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->getBoundary().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -2093,7 +2106,9 @@ extern "C" {
         }
 
         try {
-            return g1->symDifference(g2).release();
+            Geometry *g3 = g1->symDifference(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2120,7 +2135,9 @@ extern "C" {
         }
 
         try {
-            return g1->Union(g2).release();
+            Geometry *g3 = g1->Union(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
@@ -2153,7 +2170,9 @@ extern "C" {
         }
 
         try {
-            return geos::operation::geounion::CoverageUnion::Union(g).release();
+            Geometry *g3 = geos::operation::geounion::CoverageUnion::Union(g).release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2180,6 +2199,7 @@ extern "C" {
 
         try {
             GeomPtr g3(g->Union());
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2214,6 +2234,7 @@ extern "C" {
 
         try {
             std::unique_ptr<Geometry> g3 = geos::noding::GeometryNoder::node(*g);
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2254,7 +2275,9 @@ extern "C" {
             }
 
             using geos::operation::geounion::CascadedPolygonUnion;
-            return CascadedPolygonUnion::Union(p);
+            Geometry *g3 = CascadedPolygonUnion::Union(p);
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2286,6 +2309,7 @@ extern "C" {
                 // return an empty point
                 return gf->createPoint().release();
             }
+            ret->setSRID(g1->getSRID());
             return ret.release();
         }
         catch(const std::exception& e) {
@@ -2316,6 +2340,7 @@ extern "C" {
             using geos::operation::intersection::RectangleIntersection;
             Rectangle rect(xmin, ymin, xmax, ymax);
             std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2987,6 +3012,7 @@ extern "C" {
                 const GeometryFactory* gf = handle->geomFactory;
                 return gf->createPoint().release();
             }
+            ret->setSRID(g->getSRID());
             return ret;
         }
         catch(const std::exception& e) {
@@ -3179,24 +3205,26 @@ extern "C" {
     Geometry*
     GEOSPolygonize_valid_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
     {
-        if(0 == extHandle) {
-            return 0;
+        if(nullptr == extHandle) {
+            return nullptr;
         }
 
-        GEOSContextHandleInternal_t* handle = 0;
+        GEOSContextHandleInternal_t* handle = nullptr;
         handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
         if(0 == handle->initialized) {
-            return 0;
+            return nullptr;
         }
 
-        Geometry* out = 0;
+        Geometry* out = nullptr;
 
         try {
             // Polygonize
             using geos::operation::polygonize::Polygonizer;
             Polygonizer plgnzr(true);
+            int srid = 0;
             for(std::size_t i = 0; i < ngeoms; ++i) {
                 plgnzr.add(g[i]);
+                srid = g[i]->getSRID();
             }
 
             auto polys = plgnzr.getPolygons();
@@ -3212,6 +3240,7 @@ extern "C" {
 
                 out = handle->geomFactory->createMultiPolygon(geoms);
             }
+            out->setSRID(srid);
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3243,6 +3272,7 @@ extern "C" {
             using geos::operation::polygonize::BuildArea;
             BuildArea builder;
             out = builder.build(g).release();
+            out->setSRID(g->getSRID());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3274,6 +3304,7 @@ extern "C" {
             using geos::operation::valid::MakeValid;
             MakeValid makeValid;
             out = makeValid.build(g).release();
+            out->setSRID(g->getSRID());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3304,8 +3335,10 @@ extern "C" {
             // Polygonize
             using geos::operation::polygonize::Polygonizer;
             Polygonizer plgnzr;
+            int srid = 0;
             for(std::size_t i = 0; i < ngeoms; ++i) {
                 plgnzr.add(g[i]);
+                srid = g[i]->getSRID();
             }
 
 #if GEOS_DEBUG
@@ -3334,6 +3367,7 @@ extern "C" {
             // The below takes ownership of the passed vector,
             // so we must *not* delete it
             out = gf->createGeometryCollection(linevec);
+            out->setSRID(srid);
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3417,7 +3451,9 @@ extern "C" {
                 (*polyvec)[i] = (*polys)[i].release();
             }
 
-            return gf->createGeometryCollection(polyvec);
+            Geometry* out = gf->createGeometryCollection(polyvec);
+            out->setSRID(g->getSRID());
+            return out;
 
         }
         catch(const std::exception& e) {
@@ -3466,6 +3502,7 @@ extern "C" {
 
             const GeometryFactory* gf = handle->geomFactory;
             out = gf->buildGeometry(geoms);
+            out->setSRID(g->getSRID());
 
             // XXX: old version
             //out = gf->createGeometryCollection(geoms);
@@ -3496,7 +3533,9 @@ extern "C" {
         }
 
         try {
-            return g->reverse().release();
+            Geometry* g3 = g->reverse().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4668,8 +4707,9 @@ extern "C" {
 
         try {
             using namespace geos::simplify;
-            Geometry::Ptr g(DouglasPeuckerSimplifier::simplify(g1, tolerance));
-            return g.release();
+            Geometry::Ptr g3(DouglasPeuckerSimplifier::simplify(g1, tolerance));
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4696,8 +4736,9 @@ extern "C" {
 
         try {
             using namespace geos::simplify;
-            Geometry::Ptr g(TopologyPreservingSimplifier::simplify(g1, tolerance));
-            return g.release();
+            Geometry::Ptr g3(TopologyPreservingSimplifier::simplify(g1, tolerance));
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -6168,6 +6209,7 @@ extern "C" {
             geos::geom::Coordinate coord = lil.extractPoint(d);
             const GeometryFactory* gf = handle->geomFactory;
             Geometry* point = gf->createPoint(coord);
+            point->setSRID(g->getSRID());
             return point;
         }
         catch(const std::exception& e) {
@@ -6236,7 +6278,9 @@ extern "C" {
             }
 
             /* 3: create a multipoint */
-            return factory->createMultiPoint(points);
+            Geometry* out = factory->createMultiPoint(points);
+            out->setSRID(g->getSRID());
+            return out;
 
         }
         catch(const std::exception& e) {
@@ -6354,6 +6398,7 @@ extern "C" {
             factory->createGeometryCollection(out.release())
         );
 
+        outg->setSRID(g1->getSRID());
         return outg.release();
 
     }
@@ -6376,6 +6421,7 @@ extern "C" {
         try {
             GeometrySnapper snapper(*g1);
             std::unique_ptr<Geometry> ret = snapper.snapTo(*g2, tolerance);
+            ret->setSRID(g1->getSRID());
             return ret.release();
         }
         catch(const std::exception& e) {
@@ -6586,6 +6632,7 @@ extern "C" {
         try {
             BufferOp op(g1, *bp);
             Geometry* g3 = op.getResultGeometry(width);
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -6619,10 +6666,14 @@ extern "C" {
             builder.setSites(*g1);
 
             if(onlyEdges) {
-                return builder.getEdges(*g1->getFactory()).release();
+                Geometry* out = builder.getEdges(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
             else {
-                return builder.getTriangles(*g1->getFactory()).release();
+                Geometry* out = builder.getTriangles(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
 
         }
@@ -6659,10 +6710,14 @@ extern "C" {
                 builder.setClipEnvelope(env->getEnvelopeInternal());
             }
             if(onlyEdges) {
-                return builder.getDiagramEdges(*g1->getFactory()).release();
+                Geometry* out = builder.getDiagramEdges(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
             else {
-                return builder.getDiagram(*g1->getFactory()).release();
+                Geometry* out = builder.getDiagram(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
         }
         catch(const std::exception& e) {
