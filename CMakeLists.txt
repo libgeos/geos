@@ -141,7 +141,7 @@ unset(_version_patch)
 unset(_version_patch_word)
 
 message(STATUS "GEOS: Version ${GEOS_VERSION_FULL}")
-message(STATUS "GEOS: C API soversion ${CAPI_SOVERSION}")
+message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
 
 #-----------------------------------------------------------------------------
@@ -245,9 +245,9 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
 
-  set_target_properties(geos_c PROPERTIES VERSION ${GEOS_VERSION})
+  set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
   if(NOT WIN32)
-    set_target_properties(geos_c PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
+    set_target_properties(geos_c PROPERTIES SOVERSION ${CAPI_VERSION_MAJOR})
   endif()
 endif()
 
