@@ -162,7 +162,7 @@ if(NOT DISABLE_GEOS_INLINE)
   target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
 else()
   message(STATUS
-  "Setting DISABLE GEOS compilation with small functions inlining - ${DISABLE_GEOS_INLINE}")
+  "GEOS: DISABLING inlining of small functions")
 endif()
 
 #-----------------------------------------------------------------------------
