@@ -44,7 +44,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
-#include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -2988,6 +2988,39 @@ extern "C" {
                 return gf->createPoint().release();
             }
             return ret;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return NULL;
+    }
+
+    Geometry*
+    GEOSMinimumBoundingCircle_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(0 == extHandle) {
+            return NULL;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return NULL;
+        }
+
+        try {
+            geos::algorithm::MinimumBoundingCircle mc(g);
+            std::unique_ptr<Geometry> ret = mc.getCircle();
+            if(!ret) {
+                const GeometryFactory* gf = handle->geomFactory;
+                return gf->createPolygon().release();
+            }
+            ret->setSRID(g->getSRID());
+            return ret.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
