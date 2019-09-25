@@ -106,9 +106,6 @@ set(CAPI_VERSION_MAJOR ${_version_capi_major})
 set(CAPI_VERSION_MINOR ${_version_capi_age})
 set(CAPI_VERSION_PATCH ${_version_capi_revision})
 set(CAPI_VERSION "${_version_capi_major}.${_version_capi_age}.${_version_capi_revision}")
-if(NOT WIN32)
-  set(CAPI_SOVERSION ${_version_capi_age})
-endif()
 
 unset(_version_capi_current)
 unset(_version_capi_major)
@@ -230,9 +227,7 @@ if(BUILD_SHARED_LIBS)
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
-  if(NOT WIN32)
-    set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
-  endif()
+  set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION})
 endif()
 
 #-----------------------------------------------------------------------------
@@ -284,12 +279,21 @@ configure_file(cmake/geos-config.cmake
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
   COPYONLY)
 
-install(TARGETS geos geos_c geos_cxx_flags
+install(TARGETS geos geos_cxx_flags
+  EXPORT geos-targets
+  LIBRARY DESTINATION lib NAMELINK_SKIP
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+  )
+
+install(TARGETS geos_c
   EXPORT geos-targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
-  INCLUDES DESTINATION include)
+  INCLUDES DESTINATION include
+  )
 
 install(EXPORT geos-targets
   FILE geos-targets.cmake
