@@ -39,7 +39,7 @@ struct test_capiminimumboundingcircle_data {
     }
 
     test_capiminimumboundingcircle_data()
-        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
+        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), wkt_(nullptr)
     {
         initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
