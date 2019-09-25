@@ -29,7 +29,7 @@ namespace quadedge { //geos.triangulate.quadedge
 //fwd declarations
 class QuadEdgeSubdivision;
 
-/**
+/** \brief
 * Locates {@link QuadEdge}s in a {@link QuadEdgeSubdivision},
 * optimizing the search by starting in the
 * locality of the last edge found.

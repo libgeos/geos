@@ -26,9 +26,10 @@
 namespace geos {
 namespace noding { // geos.noding
 
-/**
+/** \brief
  * Implements a robust method of comparing the relative position of two
  * points along the same segment.
+ *
  * The coordinates are assumed to lie "near" the segment.
  * This means that this algorithm will only return correct results
  * if the input coordinates
@@ -40,7 +41,7 @@ class GEOS_DLL SegmentPointComparator {
 
 public:
 
-    /**
+    /** \brief
      * Compares two Coordinates for their relative position along a
      * segment lying in the specified Octant.
      *

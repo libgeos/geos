@@ -51,8 +51,9 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 
-/**
+/** \brief
  * A list of edge intersections along an Edge.
+ *
  * Implements splitting an edge with intersections
  * into multiple resultant edges.
  */

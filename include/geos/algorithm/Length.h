@@ -26,7 +26,7 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
+/** \brief
 * Functions for computing length.
 *
 * @author Martin Davis

@@ -42,7 +42,8 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-
+/// \brief Computes the intersection of line segments, and adds the
+/// intersection to the edges containing the segments.
 class GEOS_DLL SegmentIntersector {
 
 private:

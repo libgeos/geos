@@ -49,7 +49,7 @@ class Edge;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
+/** \brief
  * A EdgeList is a list of Edges.
  *
  * It supports locating edges

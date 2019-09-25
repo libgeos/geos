@@ -42,6 +42,8 @@ class GeometryFactory;
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// Find shared paths among two linear Geometry objects.
 namespace sharedpaths { // geos.operation.sharedpaths
 
 /** \brief
@@ -53,7 +55,7 @@ namespace sharedpaths { // geos.operation.sharedpaths
  * Paths reported as shared are given in the direction they
  * appear in the first geometry.
  *
- * Developed by Sandro Santilli (strk@kbt.io)
+ * \remark Developed by Sandro Santilli (strk@kbt.io)
  * for Faunalia (http://www.faunalia.it)
  * with funding from Regione Toscana - Settore SISTEMA INFORMATIVO
  * TERRITORIALE ED AMBIENTALE - for the project: "Sviluppo strumenti
