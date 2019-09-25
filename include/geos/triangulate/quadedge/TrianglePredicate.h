@@ -24,9 +24,10 @@ namespace geom { // geos.geom
 
 class Coordinate;
 
-/**
+/** \brief
  * Algorithms for computing values and predicates
  * associated with triangles.
+ *
  * For some algorithms extended-precision
  * implementations are provided, which are more robust
  * (i.e. they produce correct answers in more cases).

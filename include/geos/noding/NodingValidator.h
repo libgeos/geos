@@ -38,7 +38,7 @@ class SegmentString;
 namespace geos {
 namespace noding { // geos.noding
 
-/**
+/** \brief
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  * Throws a TopologyException if a noding error is found.
  *

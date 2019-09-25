@@ -17,6 +17,8 @@
 
 namespace geos {
 namespace operation {
+
+/// Classes which implement topological predicates optimized for particular kinds of geometries.
 namespace predicate {
 
 } // namespace predicate

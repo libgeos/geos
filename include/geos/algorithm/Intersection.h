@@ -22,7 +22,7 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
+/** \brief
 * Computes the intersection point of two lines.
 * If the lines are parallel or collinear this case is detected
 * and <code>null</code> is returned.

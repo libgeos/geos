@@ -39,13 +39,14 @@ namespace geos {
 namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
 
-/**
- * Unions MultiPolygons efficiently by
- * using full topological union only for polygons which may overlap
- * by virtue of intersecting the common area of the inputs.
- * Other polygons are simply combined with the union result,
- * which is much more performant.
- * <p>
+/** \brief
+ * Unions MultiPolygons efficiently by using full topological union only
+ * for polygons which may overlap by virtue of intersecting the common
+ * area of the inputs.
+ *
+ * Other polygons are simply combined with the union result, which is much
+ * more performant.
+ *
  * This situation is likely to occur during cascaded polygon union,
  * since the partitioning of polygons is done heuristically
  * and thus may group disjoint polygons which can lie far apart.

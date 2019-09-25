@@ -28,8 +28,9 @@ namespace geos {
 namespace operation {
 namespace polygonize {
 
-/**
+/** \brief
  * Assigns hole rings to shell rings during polygonization.
+ *
  * Uses spatial indexing to improve performance of shell lookup.
  *
  * @author mdavis

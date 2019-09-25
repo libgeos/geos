@@ -37,6 +37,8 @@ class Label;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/// \brief A Depth object records the topological depth of the sides of an Edge
+/// for up to two Geometries.
 class GEOS_DLL Depth {
 public:
     static int depthAtLocation(geom::Location location);
