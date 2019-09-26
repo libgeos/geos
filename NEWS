@@ -26,6 +26,10 @@ Changes in 3.8.0
     test running (Paul Ramsey)
   - CMake modernization (Mateusz Loskot)
 
+- Changes:
+  - Constructive geometry functions in CAPI now preserve SRID
+    of input arguments in output (#896)
+
 
 Changes in 3.7.2
 2019-05-02
