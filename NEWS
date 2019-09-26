@@ -8,6 +8,7 @@ Changes in 3.8.0
   - CAPI: GEOSCoverageUnion (Dan Baston)
   - CAPI: GEOSCoordSeq_setXY, GEOSCoordSeq_setXYZ,
           GEOSCoordSeq_getXY, GEOSCoordSeq_getXYZ (Dan Baston)
+  - CAPI: GEOSMinimumBoundingCircle (#735)
 
 - Improvements:
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
