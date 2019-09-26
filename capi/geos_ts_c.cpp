@@ -3000,7 +3000,8 @@ extern "C" {
     }
 
     Geometry*
-    GEOSMinimumBoundingCircle_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    GEOSMinimumBoundingCircle_r(GEOSContextHandle_t extHandle, const Geometry* g,
+        double* radius, Geometry** center)
     {
         if(0 == extHandle) {
             return NULL;
@@ -3015,10 +3016,14 @@ extern "C" {
         try {
             geos::algorithm::MinimumBoundingCircle mc(g);
             std::unique_ptr<Geometry> ret = mc.getCircle();
+            const GeometryFactory* gf = handle->geomFactory;
             if(!ret) {
-                const GeometryFactory* gf = handle->geomFactory;
+                if (center) *center = NULL;
+                if (radius) *radius = 0.0;
                 return gf->createPolygon().release();
             }
+            if (center) *center = static_cast<Geometry*>(gf->createPoint(mc.getCentre()));
+            if (radius) *radius = mc.getRadius();
             ret->setSRID(g->getSRID());
             return ret.release();
         }

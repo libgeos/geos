@@ -706,9 +706,9 @@ extern "C" {
     }
 
     Geometry*
-    GEOSMinimumBoundingCircle(const Geometry* g)
+    GEOSMinimumBoundingCircle(const Geometry* g, double* radius, Geometry** center)
     {
-        return GEOSMinimumBoundingCircle_r(handle, g);
+        return GEOSMinimumBoundingCircle_r(handle, g, radius, center);
     }
 
     Geometry*
