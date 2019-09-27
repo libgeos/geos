@@ -706,6 +706,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMinimumBoundingCircle(const Geometry* g, double* radius, Geometry** center)
+    {
+        return GEOSMinimumBoundingCircle_r(handle, g, radius, center);
+    }
+
+    Geometry*
     GEOSGeom_createCollection(int type, Geometry** geoms, unsigned int ngeoms)
     {
         return GEOSGeom_createCollection_r(handle, type, geoms, ngeoms);

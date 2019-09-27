@@ -44,7 +44,7 @@ namespace index { // geos::geomgraph::index
 class GEOS_DLL MonotoneChainEdge {
 public:
     //MonotoneChainEdge();
-    ~MonotoneChainEdge();
+    ~MonotoneChainEdge() = default;
     MonotoneChainEdge(Edge* newE);
     const geom::CoordinateSequence* getCoordinates();
     std::vector<size_t>& getStartIndexes();

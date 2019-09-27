@@ -103,6 +103,8 @@ public:
         return getAt(i);
     }
 
+    virtual Envelope getEnvelope() const;
+
     /** \brief
      * Write Coordinate at position i to given Coordinate.
      */

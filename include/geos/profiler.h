@@ -106,6 +106,7 @@ public:
     std::string name;
 
 
+
 private:
     /* \brief current start and stop times */
     std::chrono::high_resolution_clock::time_point starttime, stoptime;
@@ -138,6 +139,9 @@ public:
 
     Profiler() = default;
     ~Profiler() = default;
+
+    Profiler(const Profiler&) = delete;
+    Profiler& operator=(const Profiler&) = delete;
 
     /**
      * \brief

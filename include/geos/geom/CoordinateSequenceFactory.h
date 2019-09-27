@@ -105,7 +105,7 @@ public:
      */
     virtual std::unique_ptr<CoordinateSequence> create(const CoordinateSequence& coordSeq) const = 0;
 
-    virtual ~CoordinateSequenceFactory();
+    virtual ~CoordinateSequenceFactory() = default;
 };
 
 } // namespace geos::geom

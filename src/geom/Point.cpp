@@ -164,7 +164,7 @@ Point::getGeometryType() const
 std::unique_ptr<Geometry>
 Point::getBoundary() const
 {
-    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+    return getFactory()->createGeometryCollection();
 }
 
 Envelope::Ptr
@@ -272,11 +272,6 @@ Point::compareToSameClass(const Geometry* g) const
 {
     const Point* p = dynamic_cast<const Point*>(g);
     return getCoordinate()->compareTo(*(p->getCoordinate()));
-}
-
-Point::~Point()
-{
-    //delete coordinates;
 }
 
 GeometryTypeId

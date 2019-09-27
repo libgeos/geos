@@ -32,10 +32,6 @@ SimplePointInRing::SimplePointInRing(geom::LinearRing* ring)
     pts = ring->getCoordinatesRO();
 }
 
-SimplePointInRing::~SimplePointInRing()
-{
-}
-
 bool
 SimplePointInRing::isInside(const geom::Coordinate& pt)
 {

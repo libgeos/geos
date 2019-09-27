@@ -28,10 +28,12 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/export.h>
 #include <geos/inline.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <memory>
 #include <cassert>
+#include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
 namespace geom {
@@ -154,7 +156,7 @@ public:
     //
     /// Returned Geometry can be a Point, a Polygon or an EMPTY geom.
     ///
-    Geometry* toGeometry(const Envelope* envelope) const;
+    std::unique_ptr<Geometry> toGeometry(const Envelope* envelope) const;
 
     /// \brief
     /// Returns the PrecisionModel that Geometries created by this
@@ -162,7 +164,7 @@ public:
     const PrecisionModel* getPrecisionModel() const;
 
     /// Creates an EMPTY Point
-    Point* createPoint() const;
+    std::unique_ptr<Point> createPoint() const;
 
     /// Creates a Point using the given Coordinate
     Point* createPoint(const Coordinate& coordinate) const;
@@ -174,10 +176,10 @@ public:
     Point* createPoint(const CoordinateSequence& coordinates) const;
 
     /// Construct an EMPTY GeometryCollection
-    GeometryCollection* createGeometryCollection() const;
+    std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 
     /// Construct the EMPTY Geometry
-    Geometry* createEmptyGeometry() const;
+    std::unique_ptr<Geometry> createEmptyGeometry() const;
 
     /// Construct a GeometryCollection taking ownership of given arguments
     GeometryCollection* createGeometryCollection(
@@ -191,7 +193,7 @@ public:
         const std::vector<const Geometry*>& newGeoms) const;
 
     /// Construct an EMPTY MultiLineString
-    MultiLineString* createMultiLineString() const;
+    std::unique_ptr<MultiLineString> createMultiLineString() const;
 
     /// Construct a MultiLineString taking ownership of given arguments
     MultiLineString* createMultiLineString(
@@ -208,7 +210,7 @@ public:
             std::vector<std::unique_ptr<Geometry>> && fromLines) const;
 
     /// Construct an EMPTY MultiPolygon
-    MultiPolygon* createMultiPolygon() const;
+    std::unique_ptr<MultiPolygon> createMultiPolygon() const;
 
     /// Construct a MultiPolygon taking ownership of given arguments
     MultiPolygon* createMultiPolygon(std::vector<Geometry*>* newPolys) const;
@@ -224,7 +226,7 @@ public:
             std::vector<std::unique_ptr<Geometry>> && fromPolys) const;
 
     /// Construct an EMPTY LinearRing
-    LinearRing* createLinearRing() const;
+    std::unique_ptr<LinearRing> createLinearRing() const;
 
     /// Construct a LinearRing taking ownership of given arguments
     LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
@@ -237,7 +239,7 @@ public:
         const CoordinateSequence& coordinates) const;
 
     /// Constructs an EMPTY <code>MultiPoint</code>.
-    MultiPoint* createMultiPoint() const;
+    std::unique_ptr<MultiPoint> createMultiPoint() const;
 
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
@@ -263,7 +265,7 @@ public:
         const std::vector<Coordinate>& fromCoords) const;
 
     /// Construct an EMPTY Polygon
-    Polygon* createPolygon() const;
+    std::unique_ptr<Polygon> createPolygon() const;
 
     /// Construct a Polygon taking ownership of given arguments
     Polygon* createPolygon(LinearRing* shell,
@@ -279,7 +281,7 @@ public:
                            const std::vector<LinearRing*>& holes) const;
 
     /// Construct an EMPTY LineString
-    LineString* createLineString() const;
+    std::unique_ptr<LineString> createLineString() const;
 
     /// Copy a LineString
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;
@@ -326,6 +328,8 @@ public:
      */
     Geometry* buildGeometry(std::vector<Geometry*>* geoms) const;
 
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const;
+
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //
     /// Will clone the geometries accessible trough the iterator.
@@ -359,7 +363,7 @@ public:
 
         // for the single geometry, return a clone
         if(count == 1) {
-            return std::unique_ptr<Geometry>((*from)->clone());
+            return (*from)->clone();
         }
 
         // Now we know it is a collection
@@ -368,31 +372,24 @@ public:
         // Until we tweak all the createMulti* interfaces
         // to support taking iterators we'll have to build
         // a custom vector here.
-        std::vector<const Geometry*> fromGeoms;
+        std::vector<std::unique_ptr<Geometry>> fromGeoms;
         for(T i = from; i != toofar; ++i) {
-            const Geometry* g = *i;
-            fromGeoms.push_back(g);
+            fromGeoms.push_back((*i)->clone());
         }
-
 
         // for an heterogeneous ...
         if(isHeterogeneous) {
-            return std::unique_ptr<Geometry>(createGeometryCollection(fromGeoms));
+            return createGeometryCollection(std::move(fromGeoms));
         }
 
         // At this point we know the collection is not hetereogenous.
-        if(dynamic_cast<const Polygon*>(*from)) {
-            return std::unique_ptr<Geometry>(createMultiPolygon(fromGeoms));
+        switch((*from)->getDimension()) {
+            case Dimension::A: return createMultiPolygon(std::move(fromGeoms));
+            case Dimension::L: return createMultiLineString(std::move(fromGeoms));
+            case Dimension::P: return createMultiPoint(std::move(fromGeoms));
+            default:
+                throw geos::util::IllegalArgumentException("Invalid geometry type.");
         }
-        else if(dynamic_cast<const LineString*>(*from)) {
-            return std::unique_ptr<Geometry>(createMultiLineString(fromGeoms));
-        }
-        else if(dynamic_cast<const Point*>(*from)) {
-            return std::unique_ptr<Geometry>(createMultiPoint(fromGeoms));
-        }
-        // FIXME: Why not to throw an exception? --mloskot
-        assert(0); // buildGeomtry encountered an unkwnon geometry type
-        return std::unique_ptr<Geometry>(); // nullptr
     }
 
     /** \brief

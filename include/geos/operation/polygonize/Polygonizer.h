@@ -110,7 +110,7 @@ private:
 
     static void findValidRings(const std::vector<EdgeRing*>& edgeRingList,
                                std::vector<EdgeRing*>& validEdgeRingList,
-                               std::vector<geom::LineString*>& invalidRingList);
+                               std::vector<std::unique_ptr<geom::LineString>>& invalidRingList);
 
     void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 
@@ -129,7 +129,7 @@ protected:
     // initialize with empty collections, in case nothing is computed
     std::vector<const geom::LineString*> dangles;
     std::vector<const geom::LineString*> cutEdges;
-    std::vector<geom::LineString*> invalidRingLines;
+    std::vector<std::unique_ptr<geom::LineString>> invalidRingLines;
 
     std::vector<EdgeRing*> holeList;
     std::vector<EdgeRing*> shellList;
@@ -145,7 +145,7 @@ public:
      */
     explicit Polygonizer(bool onlyPolygonal = false);
 
-    ~Polygonizer();
+    ~Polygonizer() = default;
 
     /** \brief
      * Add a collection of geometries to be polygonized.
@@ -226,7 +226,7 @@ public:
      *         the input LineStrings which form invalid rings
      *
      */
-    const std::vector<geom::LineString*>& getInvalidRingLines();
+    const std::vector<std::unique_ptr<geom::LineString>>& getInvalidRingLines();
 
     bool hasInvalidRingLines();
 

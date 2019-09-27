@@ -89,7 +89,7 @@ GeometryCombiner::combine()
 
     if(elems.empty()) {
         if(geomFactory != nullptr) {
-            return std::unique_ptr<Geometry>(geomFactory->createGeometryCollection(nullptr));
+            return std::unique_ptr<Geometry>(geomFactory->createGeometryCollection());
         }
         return nullptr;
     }

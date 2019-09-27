@@ -24,6 +24,8 @@
 
 #include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/LinearRing.h>
 
 #include <geos/inline.h>
 
@@ -41,10 +43,8 @@
 namespace geos {
 namespace geom {
 class GeometryFactory;
-class LinearRing;
 class Polygon;
 class Coordinate;
-class CoordinateArraySequence;
 }
 namespace geomgraph {
 class DirectedEdge;
@@ -65,7 +65,7 @@ public:
     EdgeRing(DirectedEdge* newStart,
              const geom::GeometryFactory* newGeometryFactory);
 
-    virtual ~EdgeRing();
+    virtual ~EdgeRing() = default;
 
     bool isIsolated();
 
@@ -124,18 +124,14 @@ public:
     testInvariant() const
     {
         // pts are never NULL
-        assert(pts);
+        // assert(pts);
 
 #ifndef NDEBUG
         // If this is not an hole, check that
         // each hole is not null and
         // has 'this' as it's shell
         if(! shell) {
-            for(std::vector<EdgeRing*>::const_iterator
-                    it = holes.begin(), itEnd = holes.end();
-                    it != itEnd;
-                    ++it) {
-                EdgeRing* hole = *it;
+            for(const auto& hole : holes) {
                 assert(hole);
                 assert(hole->getShell() == this);
             }
@@ -171,7 +167,7 @@ protected:
     void addPoints(Edge* edge, bool isForward, bool isFirstEdge);
 
     /// a list of EdgeRings which are holes in this EdgeRing
-    std::vector<EdgeRing*> holes;
+    std::vector<std::unique_ptr<EdgeRing>> holes;
 
 private:
 
@@ -180,13 +176,13 @@ private:
     /// the DirectedEdges making up this EdgeRing
     std::vector<DirectedEdge*> edges;
 
-    geom::CoordinateArraySequence* pts;
+    std::unique_ptr<geom::CoordinateArraySequence> pts;
 
     // label stores the locations of each geometry on the
     // face surrounded by this ring
     Label label;
 
-    geom::LinearRing* ring;  // the ring created for this EdgeRing
+    std::unique_ptr<geom::LinearRing> ring;  // the ring created for this EdgeRing
 
     bool isHoleVar;
 

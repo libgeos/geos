@@ -207,12 +207,10 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph& graph)
         Edge* e = *i;
         auto maxSegmentIndex = e->getMaximumSegmentIndex();
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
-        for(EdgeIntersectionList::iterator eiIt = eiL.begin(),
-                eiEnd = eiL.end(); eiIt != eiEnd; ++eiIt) {
-            EdgeIntersection* ei = *eiIt;
-            if(!ei->isEndPoint(maxSegmentIndex)) {
+        for(const EdgeIntersection& ei : eiL) {
+            if(!ei.isEndPoint(maxSegmentIndex)) {
                 nonSimpleLocation.reset(
-                    new Coordinate(ei->getCoordinate())
+                    new Coordinate(ei.getCoordinate())
                 );
                 return true;
             }

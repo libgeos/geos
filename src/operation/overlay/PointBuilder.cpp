@@ -61,11 +61,9 @@ PointBuilder::build(OverlayOp::OpCode opCode)
 void
 PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
 {
-    map<Coordinate*, Node*, CoordinateLessThen>& nodeMap =
-        op->getGraph().getNodeMap()->nodeMap;
-    map<Coordinate*, Node*, CoordinateLessThen>::iterator it = nodeMap.begin();
-    for(; it != nodeMap.end(); ++it) {
-        Node* n = it->second;
+    auto& nodeMap = op->getGraph().getNodeMap()->nodeMap;
+    for(auto& entry : nodeMap) {
+        Node* n = entry.second;
 
         // filter out nodes which are known to be in the result
         if(n->isInResult()) {

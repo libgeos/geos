@@ -145,18 +145,6 @@ EdgeRing::EdgeRing(const GeometryFactory* newFactory)
 #endif // DEBUG_ALLOC
 }
 
-EdgeRing::~EdgeRing()
-{
-#ifdef DEBUG_ALLOC
-    cerr << "[" << this << "] ~EdgeRing()" << endl;
-#endif // DEBUG_ALLOC
-    if(holes) {
-        for(auto& hole : *holes) {
-            delete hole;
-        }
-    }
-}
-
 void
 EdgeRing::build(PolygonizeDirectedEdge* startDE) {
     auto de = startDE;
@@ -187,9 +175,9 @@ void
 EdgeRing::addHole(LinearRing* hole)
 {
     if(holes == nullptr) {
-        holes.reset(new vector<LinearRing*>());
+        holes.reset(new std::vector<std::unique_ptr<LinearRing>>());
     }
-    holes->push_back(hole);
+    holes->emplace_back(hole);
 }
 
 void
@@ -203,8 +191,11 @@ EdgeRing::addHole(EdgeRing* holeER) {
 std::unique_ptr<Polygon>
 EdgeRing::getPolygon()
 {
-    std::unique_ptr<Polygon> poly(factory->createPolygon(ring.release(), holes.release()));
-    return poly;
+    if (holes) {
+        return factory->createPolygon(std::move(ring), std::move(*holes));
+    } else {
+        return factory->createPolygon(std::move(ring));
+    }
 }
 
 /*public*/

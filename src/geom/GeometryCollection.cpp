@@ -372,8 +372,6 @@ GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-GeometryCollection::~GeometryCollection() = default;
-
 GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {
@@ -387,16 +385,16 @@ GeometryCollection::reverse() const
         return clone();
     }
 
-    auto* reversed = new std::vector<Geometry*> {geometries.size()};
+    std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
 
     std::transform(geometries.begin(),
                    geometries.end(),
-                   reversed->begin(),
+                   reversed.begin(),
     [](const std::unique_ptr<Geometry> & g) {
-        return g->reverse().release();
+        return g->reverse();
     });
 
-    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(reversed));
+    return getFactory()->createGeometryCollection(std::move(reversed));
 }
 
 } // namespace geos::geom

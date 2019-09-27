@@ -72,7 +72,7 @@ public:
     /// A vector of const Point pointers
     typedef std::vector<const Point*> ConstVect;
 
-    ~Point() override;
+    ~Point() override = default;
 
     /**
      * Creates and returns a full copy of this {@link Point} object.

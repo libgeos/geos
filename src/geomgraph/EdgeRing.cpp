@@ -75,23 +75,6 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     testInvariant();
 }
 
-EdgeRing::~EdgeRing()
-{
-    testInvariant();
-
-    if(ring != nullptr) {
-        delete ring;
-    }
-
-    for(size_t i = 0, n = holes.size(); i < n; ++i) {
-        delete holes[i];
-    }
-
-#ifdef GEOS_DEBUG
-    cerr << "EdgeRing[" << this << "] dtor" << endl;
-#endif
-}
-
 bool
 EdgeRing::isIsolated()
 {
@@ -117,8 +100,7 @@ LinearRing*
 EdgeRing::getLinearRing()
 {
     testInvariant();
-//	return new LinearRing(*ring);
-    return ring;
+    return ring.get();
 }
 
 Label&
@@ -155,7 +137,7 @@ EdgeRing::setShell(EdgeRing* newShell)
 void
 EdgeRing::addHole(EdgeRing* edgeRing)
 {
-    holes.push_back(edgeRing);
+    holes.emplace_back(edgeRing);
     testInvariant();
 }
 
@@ -191,8 +173,8 @@ EdgeRing::computeRing()
     if(ring != nullptr) {
         return;    // don't compute more than once
     }
-    ring = geometryFactory->createLinearRing(pts);
-    isHoleVar = Orientation::isCCW(pts);
+    isHoleVar = Orientation::isCCW(pts.get());
+    ring = geometryFactory->createLinearRing(std::move(pts));
 
     testInvariant();
 }
@@ -383,8 +365,7 @@ EdgeRing::containsPoint(const Coordinate& p)
         return false;
     }
 
-    for(vector<EdgeRing*>::iterator i = holes.begin(); i < holes.end(); ++i) {
-        EdgeRing* hole = *i;
+    for(const auto& hole : holes) {
         assert(hole);
         if(hole->containsPoint(p)) {
             return false;
@@ -398,7 +379,7 @@ operator<< (std::ostream& os, const EdgeRing& er)
 {
     os << "EdgeRing[" << &er << "]: "
        << std::endl
-       << "Points: " << er.pts
+       << "Points: " << er.pts.get()
        << std::endl;
     return os;
 }

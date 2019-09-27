@@ -197,7 +197,7 @@ private:
         //using geos::operation::overlay::snap::SnapIfNeededOverlayOp;
 
         if(! empty.get()) {
-            empty.reset(geomFact->createEmptyGeometry());
+            empty = geomFact->createEmptyGeometry();
         }
         //return SnapIfNeededOverlayOp::overlayOp(g0, *empty, OverlayOp::opUNION);
         return BinaryOp(&g0, empty.get(), overlay::overlayOp(OverlayOp::opUNION));

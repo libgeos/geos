@@ -46,7 +46,7 @@ struct test_isccw_data {
 typedef test_group<test_isccw_data> group;
 typedef group::object object;
 
-group test_isccw_group("geos::algorithm::Orientation::isCCW");
+group test_isccw_group("geos::algorithm::CGAlgorithms::isCCW");
 
 //
 // Test Cases

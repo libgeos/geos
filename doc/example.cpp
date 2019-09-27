@@ -341,7 +341,7 @@ create_circle(double centerX, double centerY, double radius)
     // same as:
     //	shapefactory.setHeight(radius);
     //	shapefactory.setWidth(radius);
-    return shapefactory.createCircle();
+    return shapefactory.createCircle().release();
 }
 
 //
@@ -355,7 +355,7 @@ create_ellipse(double centerX, double centerY, double width, double height)
     shapefactory.setCentre(Coordinate(centerX, centerY));
     shapefactory.setHeight(height);
     shapefactory.setWidth(width);
-    return shapefactory.createCircle();
+    return shapefactory.createCircle().release();
 }
 
 //
@@ -372,7 +372,7 @@ create_rectangle(double llX, double llY, double width, double height)
     shapefactory.setWidth(width);
     shapefactory.setNumPoints(4); // we don't need more then 4 points for a rectangle...
     // can use setSize for a square
-    return shapefactory.createRectangle();
+    return shapefactory.createRectangle().release();
 }
 
 //
@@ -389,7 +389,7 @@ create_arc(double llX, double llY, double width, double height, double startang,
     shapefactory.setWidth(width);
     // shapefactory.setNumPoints(100); // the default (100 pts)
     // can use setSize for a square
-    return shapefactory.createArc(startang, endang);
+    return shapefactory.createArc(startang, endang).release();
 }
 
 unique_ptr<Polygon>

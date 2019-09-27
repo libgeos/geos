@@ -101,8 +101,7 @@ OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::
             disjointGeoms.push_back(elem->clone());
         }
     }
-    std::unique_ptr<Geometry> intersectingGeom(geomFactory->buildGeometry(intersectingGeoms));
-    return std::move(intersectingGeom);
+    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(intersectingGeoms));
 }
 
 /* private */
@@ -112,7 +111,7 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
     try {
         return geom0->Union(geom1);
     }
-    catch (geos::util::TopologyException ex) {
+    catch (geos::util::TopologyException & ex) {
         /**
          * If the overlay union fails,
          * try a buffer union, which often succeeds
@@ -224,8 +223,8 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        std::vector<LineSegment*>* segs;
         const Envelope env;
+        std::vector<LineSegment*>* segs;
 
     public:
 

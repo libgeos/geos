@@ -20,6 +20,7 @@
 #define GEOS_OP_RELATE_RELATENODEGRAPH_H
 
 #include <geos/export.h>
+#include <geos/geomgraph/NodeMap.h>
 
 #include <map>
 #include <vector>
@@ -35,7 +36,6 @@ namespace geomgraph {
 class Node;
 class GeometryGraph;
 class EdgeEnd;
-class NodeMap;
 }
 }
 
@@ -73,8 +73,7 @@ public:
 
     virtual ~RelateNodeGraph();
 
-    std::map<geom::Coordinate*, geomgraph::Node*,
-        geom::CoordinateLessThen>& getNodeMap();
+    geomgraph::NodeMap::container& getNodeMap();
 
     void build(geomgraph::GeometryGraph* geomGraph);
 

@@ -30,8 +30,6 @@ public:
 
     Interval();
 
-    ~Interval();
-
     Interval(double nmin, double nmax);
 
     /// TODO: drop this, rely on copy ctor

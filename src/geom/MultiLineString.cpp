@@ -57,8 +57,6 @@ MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLi
         : GeometryCollection(std::move(newLines), factory)
 {}
 
-MultiLineString::~MultiLineString() {}
-
 Dimension::DimensionType
 MultiLineString::getDimension() const
 {
@@ -99,7 +97,7 @@ std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
     if(isEmpty()) {
-        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+        return getFactory()->createGeometryCollection();
     }
 
     GeometryGraph gg(0, this);

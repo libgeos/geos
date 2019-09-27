@@ -23,6 +23,7 @@
 
 #include <geos/export.h>
 #include <cassert>
+#include <memory>
 
 #include <geos/geom/Coordinate.h>
 
@@ -79,7 +80,7 @@ protected:
         void setHeight(double nHeight);
 
         // Return newly-allocated object, ownership transferred
-        geom::Envelope* getEnvelope() const;
+        std::unique_ptr<geom::Envelope> getEnvelope() const;
     };
     const geom::GeometryFactory* geomFact; // externally owned
     const geom::PrecisionModel* precModel; // externally owned
@@ -112,7 +113,7 @@ public:
      * @param angExtent size of angle in radians
      * @return an elliptical arc
      */
-    geom::LineString* createArc(double startAng, double angExtent);
+    std::unique_ptr<geom::LineString> createArc(double startAng, double angExtent);
 
     /**
      * \brief Creates an elliptical arc polygon.
@@ -125,21 +126,21 @@ public:
      * @param angExt size of angle in radians
      * @return an elliptical arc polygon
      */
-    geom::Polygon* createArcPolygon(double startAng, double angExt);
+    std::unique_ptr<geom::Polygon> createArcPolygon(double startAng, double angExt);
 
     /**
      * \brief Creates a circular Polygon.
      *
      * @return a circle
      */
-    geom::Polygon* createCircle();
+    std::unique_ptr<geom::Polygon> createCircle();
 
     /**
      * \brief Creates a rectangular Polygon.
      *
      * @return a rectangular Polygon
      */
-    geom::Polygon* createRectangle();
+    std::unique_ptr<geom::Polygon> createRectangle();
 
     /**
      * \brief

@@ -42,7 +42,6 @@ namespace strtree { // geos::index::strtree
 
 /// A list of boundables. TODO: use a list
 typedef std::vector<Boundable*> BoundableList;
-//typedef std::list<Boundable*> BoundableList;
 
 /// list contains boundables or lists of boundables. The lists are owned by
 /// this class, the plain boundables are held by reference only.
@@ -223,16 +222,6 @@ protected:
     ///  Also builds the tree, if necessary.
     void query(const void* searchBounds, std::vector<void*>& foundItems);
 
-#if 0
-    ///  Also builds the tree, if necessary.
-    std::vector<void*>*
-    query(const void* searchBounds)
-    {
-        vector<void*>* matches = new vector<void*>();
-        query(searchBounds, *matches);
-        return matches;
-    }
-#endif
     ///  Also builds the tree, if necessary.
     void query(const void* searchBounds, ItemVisitor& visitor);
 

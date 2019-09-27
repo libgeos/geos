@@ -40,7 +40,7 @@ namespace index { // geos::geomgraph::index
 class GEOS_DLL SweepLineSegment: public SweepLineEventOBJ {
 public:
     SweepLineSegment(Edge* newEdge, size_t newPtIndex);
-    ~SweepLineSegment() override;
+    ~SweepLineSegment() override = default;
     double getMinX();
     double getMaxX();
     void computeIntersections(SweepLineSegment* ss, SegmentIntersector* si);

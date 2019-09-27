@@ -52,7 +52,8 @@ public:
      * GraphComponent copies the given Label.
      */
     GraphComponent(const Label& newLabel);
-    virtual ~GraphComponent();
+
+    virtual ~GraphComponent() = default;
 
     Label&
     getLabel()

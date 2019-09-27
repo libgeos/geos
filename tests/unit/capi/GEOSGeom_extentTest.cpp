@@ -39,7 +39,7 @@ struct test_capigeosgeom_extent {
 typedef test_group<test_capigeosgeom_extent> group;
 typedef group::object object;
 
-group test_capigeosgeom_extent_group("capi::GEOSGeom_getXYMinMax");
+group test_capigeosgeom_extent_group("capi::GEOSGeom_extent");
 
 template<>
 template<>

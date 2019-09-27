@@ -62,10 +62,6 @@ Key::Key(const Envelope& itemEnv)
     computeKey(itemEnv);
 }
 
-Key::~Key()
-{
-}
-
 const Coordinate&
 Key::getPoint() const
 {

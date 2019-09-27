@@ -58,6 +58,58 @@ geos_unit_SOURCES = \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \
+	capi/GEOSBufferTest.cpp \
+	capi/GEOSBuildAreaTest.cpp \
+	capi/GEOSCAPIDefinesTest.cpp \
+	capi/GEOSClipByRectTest.cpp \
+	capi/GEOSContainsTest.cpp \
+	capi/GEOSConvexHullTest.cpp \
+	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSCoverageUnionTest.cpp \
+	capi/GEOSDelaunayTriangulationTest.cpp \
+	capi/GEOSDistanceTest.cpp \
+	capi/GEOSEqualsTest.cpp \
+	capi/GEOSFrechetDistanceTest.cpp \
+	capi/GEOSGeom_createCollectionTest.cpp \
+	capi/GEOSGeom_createTest.cpp \
+	capi/GEOSGeom_extentTest.cpp \
+	capi/GEOSGeom_extractUniquePointsTest.cpp \
+	capi/GEOSGeomFromWKBTest.cpp \
+	capi/GEOSGeom_setPrecisionTest.cpp \
+	capi/GEOSGeomToWKTTest.cpp \
+	capi/GEOSGetCentroidTest.cpp \
+	capi/GEOSHausdorffDistanceTest.cpp \
+	capi/GEOSInterpolateTest.cpp \
+	capi/GEOSInterruptTest.cpp \
+	capi/GEOSIntersectionTest.cpp \
+	capi/GEOSIntersectsTest.cpp \
+	capi/GEOSisClosedTest.cpp \
+	capi/GEOSisValidDetailTest.cpp \
+	capi/GEOSLineString_PointTest.cpp \
+	capi/GEOSMakeValidTest.cpp \
+	capi/GEOSMinimumBoundingCircleTest.cpp \
+	capi/GEOSMinimumClearanceTest.cpp \
+	capi/GEOSMinimumRectangleTest.cpp \
+	capi/GEOSMinimumWidthTest.cpp \
+	capi/GEOSNearestPointsTest.cpp \
+	capi/GEOSNodeTest.cpp \
+	capi/GEOSOffsetCurveTest.cpp \
+	capi/GEOSOrientationIndexTest.cpp \
+	capi/GEOSPointOnSurfaceTest.cpp \
+	capi/GEOSPolygonizeTest.cpp \
+	capi/GEOSPreparedGeometryTest.cpp \
+	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
+	capi/GEOSRelatePatternMatchTest.cpp \
+	capi/GEOSReverseTest.cpp \
+	capi/GEOSSegmentIntersectionTest.cpp \
+	capi/GEOSSharedPathsTest.cpp \
+	capi/GEOSSimplifyTest.cpp \
+	capi/GEOSSnapTest.cpp \
+	capi/GEOSSTRtreeTest.cpp \
+	capi/GEOSUnaryUnionTest.cpp \
+	capi/GEOSUserDataTest.cpp \
+	capi/GEOSVoronoiDiagramTest.cpp \
+	capi/GEOSWithinTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
@@ -65,13 +117,16 @@ geos_unit_SOURCES = \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \
 	geom/FixedSizeCoordinateSequenceTest.cpp \
+	geom/Geometry/cloneTest.cpp \
 	geom/GeometryCollectionTest.cpp \
-	geom/Geometry/clone.cpp \
+	geom/GeometryComponentFilterTest.cpp \
 	geom/Geometry/coversTest.cpp \
 	geom/Geometry/equalsTest.cpp \
-	geom/Geometry/isRectangleTest.cpp \
-	geom/Geometry/normalize.cpp \
 	geom/GeometryFactoryTest.cpp \
+	geom/GeometryFilterTest.cpp \
+	geom/Geometry/isRectangleTest.cpp \
+	geom/Geometry/normalizeTest.cpp \
+	geom/Geometry/touchesTest.cpp \
 	geom/IntersectionMatrixTest.cpp \
 	geom/LinearRingTest.cpp \
 	geom/LineSegmentTest.cpp \
@@ -84,6 +139,7 @@ geos_unit_SOURCES = \
 	geom/PolygonTest.cpp \
 	geom/PrecisionModelTest.cpp \
 	geom/prep/PreparedGeometryFactoryTest.cpp \
+	geom/prep/PreparedGeometry/touchesTest.cpp \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
@@ -97,7 +153,7 @@ geos_unit_SOURCES = \
 	linearref/LengthIndexedLineTest.cpp \
 	noding/BasicSegmentStringTest.cpp \
 	noding/NodedSegmentStringTest.cpp \
-	noding/OrientedCoordinateArray.cpp \
+	noding/OrientedCoordinateArrayTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/snapround/HotPixelTest.cpp \
@@ -107,83 +163,36 @@ geos_unit_SOURCES = \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/distance/IndexedFacetDistanceTest.cpp \
+	operation/geounion/CascadedPolygonUnionTest.cpp \
+	operation/geounion/CoverageUnionTest.cpp \
+	operation/geounion/UnaryUnionOpTest.cpp \
 	operation/intersection/RectangleIntersectionTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
 	operation/overlay/OverlayOpUnionTest.cpp \
+	operation/overlay/snap/GeometrySnapperTest.cpp \
+	operation/overlay/snap/LineStringSnapperTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
-	operation/overlay/snap/GeometrySnapperTest.cpp \
-	operation/overlay/snap/LineStringSnapperTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
-	operation/union/CascadedPolygonUnionTest.cpp \
-	operation/union/UnaryUnionOpTest.cpp \
-	operation/valid/IsValidTest.cpp \
+	operation/valid/IsValidOpTest.cpp \
 	operation/valid/RepeatedPointRemoverTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
-	precision/SimpleGeometryPrecisionReducerTest.cpp \
+	precision/CommonBitsTest.cpp \
 	precision/GeometryPrecisionReducerTest.cpp \
+	precision/SimpleGeometryPrecisionReducerTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
-	triangulate/quadedge/QuadEdgeTest.cpp \
-	triangulate/quadedge/QuadEdgeSubdivisionTest.cpp \
-	triangulate/quadedge/VertexTest.cpp \
 	triangulate/DelaunayTest.cpp \
+	triangulate/quadedge/QuadEdgeSubdivisionTest.cpp \
+	triangulate/quadedge/QuadEdgeTest.cpp \
+	triangulate/quadedge/VertexTest.cpp \
 	triangulate/VoronoiTest.cpp \
-	util/UniqueCoordinateArrayFilterTest.cpp \
-	capi/GEOSClipByRectTest.cpp \
-	capi/GEOSCoordSeqTest.cpp \
-	capi/GEOSCoverageUnionTest.cpp \
-	capi/GEOSDelaunayTriangulationTest.cpp \
-	capi/GEOSVoronoiDiagramTest.cpp \
-	capi/GEOSGeomFromWKBTest.cpp \
-	capi/GEOSGeomToWKTTest.cpp \
-	capi/GEOSGeom_extentTest.cpp \
-	capi/GEOSGeom_setPrecisionTest.cpp \
-	capi/GEOSGetCentroidTest.cpp \
-	capi/GEOSCAPIDefinesTest.cpp \
-	capi/GEOSContainsTest.cpp \
-	capi/GEOSConvexHullTest.cpp \
-	capi/GEOSDistanceTest.cpp \
-	capi/GEOSHausdorffDistanceTest.cpp \
-	capi/GEOSFrechetDistanceTest.cpp \
-	capi/GEOSEqualsTest.cpp \
-	capi/GEOSInterruptTest.cpp \
-	capi/GEOSIntersectsTest.cpp \
-	capi/GEOSIntersectionTest.cpp \
-	capi/GEOSMinimumClearanceTest.cpp \
-	capi/GEOSMinimumRectangleTest.cpp \
-	capi/GEOSMinimumWidthTest.cpp \
-	capi/GEOSNearestPointsTest.cpp \
-	capi/GEOSWithinTest.cpp \
-	capi/GEOSSimplifyTest.cpp \
-	capi/GEOSUserDataTest.cpp \
-	capi/GEOSPreparedGeometryTest.cpp \
-	capi/GEOSPointOnSurfaceTest.cpp \
-	capi/GEOSPolygonizeTest.cpp \
-	capi/GEOSBufferTest.cpp \
-	capi/GEOSOffsetCurveTest.cpp \
-	capi/GEOSGeom_create.cpp \
-	capi/GEOSGeom_extractUniquePointsTest.cpp \
-	capi/GEOSOrientationIndex.cpp \
-	capi/GEOSLineString_PointTest.cpp \
-	capi/GEOSNodeTest.cpp \
-	capi/GEOSSnapTest.cpp \
-	capi/GEOSSharedPathsTest.cpp \
-	capi/GEOSSTRtreeTest.cpp \
-	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
-	capi/GEOSRelatePatternMatchTest.cpp \
-	capi/GEOSReverseTest.cpp \
-	capi/GEOSUnaryUnionTest.cpp \
-	capi/GEOSisValidDetailTest.cpp \
-	capi/GEOSisClosedTest.cpp \
-	capi/GEOSInterpolateTest.cpp \
-	capi/GEOSBuildArea.cpp \
-	capi/GEOSMakeValid.cpp
+	util/UniqueCoordinateArrayFilterTest.cpp
 
 noinst_HEADERS = \
 	utility.h

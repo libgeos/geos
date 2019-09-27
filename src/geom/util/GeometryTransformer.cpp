@@ -44,8 +44,6 @@
 #include <iostream>
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
@@ -63,10 +61,6 @@ GeometryTransformer::GeometryTransformer()
     skipTransformedInvalidInteriorRings(false)
 {}
 
-GeometryTransformer::~GeometryTransformer()
-{
-}
-
 void
 GeometryTransformer::setSkipTransformedInvalidInteriorRings(bool b)
 {
@@ -74,7 +68,7 @@ GeometryTransformer::setSkipTransformedInvalidInteriorRings(bool b)
 }
 
 /*public*/
-unique_ptr<Geometry>
+std::unique_ptr<Geometry>
 GeometryTransformer::transform(const Geometry* nInputGeom)
 {
     using geos::util::IllegalArgumentException;
@@ -168,7 +162,7 @@ GeometryTransformer::transformMultiPoint(
               std::endl;
 #endif
 
-    vector<Geometry*>* transGeomList = new vector<Geometry*>();
+    std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         const Point* p = dynamic_cast<const Point*>(geom->getGeometryN(i));
@@ -182,11 +176,10 @@ GeometryTransformer::transformMultiPoint(
             continue;
         }
 
-        // If an exception is thrown we'll leak
-        transGeomList->push_back(transformGeom.release());
+        transGeomList.push_back(std::move(transformGeom));
     }
 
-    return Geometry::Ptr(factory->buildGeometry(transGeomList));
+    return factory->buildGeometry(std::move(transGeomList));
 
 }
 
@@ -245,7 +238,7 @@ GeometryTransformer::transformMultiLineString(
               << std::endl;
 #endif
 
-    vector<Geometry*>* transGeomList = new vector<Geometry*>();
+    std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         const LineString* l = dynamic_cast<const LineString*>(
@@ -260,11 +253,10 @@ GeometryTransformer::transformMultiLineString(
             continue;
         }
 
-        // If an exception is thrown we'll leak
-        transGeomList->push_back(transformGeom.release());
+        transGeomList.push_back(std::move(transformGeom));
     }
 
-    return Geometry::Ptr(factory->buildGeometry(transGeomList));
+    return factory->buildGeometry(std::move(transGeomList));
 
 }
 
@@ -292,7 +284,7 @@ GeometryTransformer::transformPolygon(
         isAllValidLinearRings = false;
     }
 
-    vector<LinearRing*>* holes = new vector<LinearRing*>();
+    std::vector<std::unique_ptr<LinearRing>> holes;
     for(size_t i = 0, n = geom->getNumInteriorRing(); i < n; i++) {
         const LinearRing* p_lr = geom->getInteriorRingN(i);
         assert(p_lr);
@@ -303,35 +295,32 @@ GeometryTransformer::transformPolygon(
             continue;
         }
 
-        if(! dynamic_cast<LinearRing*>(hole.get())) {
+        if(dynamic_cast<LinearRing*>(hole.get())) {
+            holes.emplace_back(dynamic_cast<LinearRing*>(hole.release()));
+        } else {
             if(skipTransformedInvalidInteriorRings) {
                 continue;
             }
             isAllValidLinearRings = false;
         }
 
-        holes->push_back(dynamic_cast<LinearRing*>(hole.release()));
     }
 
     if(isAllValidLinearRings) {
-        Geometry* sh = shell.release();
-        LinearRing* p_lr = dynamic_cast<LinearRing*>(sh);
-        assert(p_lr);
-        return Geometry::Ptr(factory->createPolygon(p_lr, holes));
+        std::unique_ptr<LinearRing> shell_lr(dynamic_cast<LinearRing*>(shell.release()));
+        return factory->createPolygon(std::move(shell_lr), std::move(holes));
     }
     else {
-        // would like to use a manager constructor here
-        vector<Geometry*>* components = new vector<Geometry*>();
+        std::vector<std::unique_ptr<Geometry>> components;
         if(shell.get() != nullptr) {
-            components->push_back(shell.release());
+            components.push_back(std::move(shell));
         }
 
-        components->insert(components->end(),
-                           holes->begin(), holes->end());
+        for (auto& g : holes) {
+            components.push_back(std::move(g));
+        }
 
-        delete holes; // :(
-
-        return Geometry::Ptr(factory->buildGeometry(components));
+        return factory->buildGeometry(std::move(components));
     }
 
 }
@@ -348,7 +337,7 @@ GeometryTransformer::transformMultiPolygon(
               std::endl;
 #endif
 
-    unique_ptr< vector<Geometry*> > transGeomList(new vector<Geometry*>());
+    std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(std::size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         const Polygon* p = dynamic_cast<const Polygon*>(
@@ -363,11 +352,10 @@ GeometryTransformer::transformMultiPolygon(
             continue;
         }
 
-        // If an exception is thrown we'll leak
-        transGeomList->push_back(transformGeom.release());
+        transGeomList.push_back(std::move(transformGeom));
     }
 
-    return Geometry::Ptr(factory->buildGeometry(transGeomList.release()));
+    return factory->buildGeometry(std::move(transGeomList));
 
 }
 
@@ -383,7 +371,7 @@ GeometryTransformer::transformGeometryCollection(
               << ");" << std::endl;
 #endif
 
-    vector<Geometry*>* transGeomList = new vector<Geometry*>();
+    std::vector<std::unique_ptr<Geometry>> transGeomList;
 
     for(std::size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         Geometry::Ptr transformGeom = transform(
@@ -395,16 +383,14 @@ GeometryTransformer::transformGeometryCollection(
             continue;
         }
 
-        // If an exception is thrown we'll leak
-        transGeomList->push_back(transformGeom.release());
+        transGeomList.push_back(std::move(transformGeom));
     }
 
     if(preserveGeometryCollectionType) {
-        return Geometry::Ptr(factory->createGeometryCollection(
-                                 transGeomList));
+        return factory->createGeometryCollection(std::move(transGeomList));
     }
     else {
-        return Geometry::Ptr(factory->buildGeometry(transGeomList));
+        return factory->buildGeometry(std::move(transGeomList));
     }
 
 }

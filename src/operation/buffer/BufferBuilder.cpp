@@ -372,7 +372,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     }
     else {
         delete mergedLinesGeom;
-        return geomFact->createLineString();
+        return geomFact->createLineString().release();
     }
 }
 
@@ -722,7 +722,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 geom::Geometry*
 BufferBuilder::createEmptyResultGeometry() const
 {
-    geom::Geometry* emptyGeom = geomFact->createPolygon(nullptr, nullptr);
+    geom::Geometry* emptyGeom = geomFact->createPolygon().release();
     return emptyGeom;
 }
 

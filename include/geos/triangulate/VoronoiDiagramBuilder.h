@@ -51,7 +51,7 @@ public:
      */
     VoronoiDiagramBuilder();
 
-    ~VoronoiDiagramBuilder();
+    ~VoronoiDiagramBuilder() = default;
 
     /** \brief
      * Sets the sites (point or vertices) which will be diagrammed.

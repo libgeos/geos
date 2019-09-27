@@ -71,7 +71,7 @@ namespace valid { // geos::operation::valid
 class GEOS_DLL ConnectedInteriorTester {
 public:
     ConnectedInteriorTester(geomgraph::GeometryGraph& newGeomGraph);
-    ~ConnectedInteriorTester();
+    ~ConnectedInteriorTester() = default;
     geom::Coordinate& getCoordinate();
     bool isInteriorsConnected();
     static const geom::Coordinate& findDifferentPoint(

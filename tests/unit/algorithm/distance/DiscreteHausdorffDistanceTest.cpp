@@ -83,7 +83,7 @@ const double test_DiscreteHausdorffDistance_data::TOLERANCE = 0.00001;
 typedef test_group<test_DiscreteHausdorffDistance_data> group;
 typedef group::object object;
 
-group test_DiscreteHausdorffDistance_group("geos::algorithm::distace::DiscreteHausdorffDistance");
+group test_DiscreteHausdorffDistance_group("geos::algorithm::distance::DiscreteHausdorffDistance");
 
 
 

@@ -353,7 +353,7 @@ private:
     * * #opDIFFERENCE - result has the dimension of the left-hand input
     * * #opSYMDIFFERENCE - result has the dimension of the highest input dimension
     */
-    static geom::Geometry* createEmptyResult(
+    static std::unique_ptr<geom::Geometry> createEmptyResult(
         OverlayOp::OpCode overlayOpCode, const geom::Geometry* a,
         const geom::Geometry* b, const geom::GeometryFactory* geomFact);
 

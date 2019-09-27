@@ -104,8 +104,6 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
 }
 
 
-LineString::~LineString() = default;
-
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
@@ -255,25 +253,7 @@ LineString::computeEnvelopeInternal() const
         return Envelope::Ptr(new Envelope());
     }
 
-    assert(points.get());
-    const Coordinate& c = points->getAt(0);
-    double minx = c.x;
-    double miny = c.y;
-    double maxx = c.x;
-    double maxy = c.y;
-    std::size_t npts = points->getSize();
-    for(std::size_t i = 1; i < npts; i++) {
-        const Coordinate& c1 = points->getAt(i);
-        minx = minx < c1.x ? minx : c1.x;
-        maxx = maxx > c1.x ? maxx : c1.x;
-        miny = miny < c1.y ? miny : c1.y;
-        maxy = maxy > c1.y ? maxy : c1.y;
-    }
-
-    // caller expects a newly allocated Envelope.
-    // this function won't be called twice, unless
-    // cached Envelope is invalidated (set to NULL)
-    return Envelope::Ptr(new Envelope(minx, maxx, miny, maxy));
+    return detail::make_unique<Envelope>(points->getEnvelope());
 }
 
 bool

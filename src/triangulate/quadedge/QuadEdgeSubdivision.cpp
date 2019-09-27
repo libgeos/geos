@@ -408,7 +408,7 @@ public:
             coordSeq->setAt(v.getCoordinate(), i);
         }
         coordSeq->setAt(triEdges[0]->orig().getCoordinate(), 3);
-        triCoords->push_back(coordSeq.release());
+        triCoords->push_back(std::move(coordSeq));
     }
 };
 
@@ -502,10 +502,9 @@ QuadEdgeSubdivision::getTriangles(const GeometryFactory& geomFact)
     std::vector<std::unique_ptr<Geometry>> tris;
     tris.reserve(triPtsList.size());
 
-    for(CoordinateSequence* coordSeq : triPtsList) {
-        Polygon* tri = geomFact.createPolygon(
-                           geomFact.createLinearRing(coordSeq), nullptr);
-        tris.emplace_back(tri);
+    for(auto& coordSeq : triPtsList) {
+        tris.push_back(
+                geomFact.createPolygon(geomFact.createLinearRing(std::move(coordSeq))));
     }
 
     return geomFact.createGeometryCollection(std::move(tris));

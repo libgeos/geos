@@ -13,7 +13,6 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 libgeom_la_SOURCES = \
     Coordinate.cpp \
     CoordinateSequence.cpp \
-    CoordinateSequenceFactory.cpp  \
     CoordinateArraySequence.cpp \
     CoordinateArraySequenceFactory.cpp \
     Dimension.cpp \

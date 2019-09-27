@@ -16,87 +16,16 @@
  *
  **********************************************************************/
 
-#include <sstream>
-
 #include <geos/geomgraph/Quadrant.h>
-#include <geos/util/IllegalArgumentException.h>
 
-#include <geos/geom/Coordinate.h>
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/Quadrant.inl>
+#endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
-
-/* public static */
-int
-Quadrant::quadrant(double dx, double dy)
-{
-    if(dx == 0.0 && dy == 0.0) {
-        ostringstream s;
-        s << "Cannot compute the quadrant for point ";
-        s << "(" << dx << "," << dy << ")" << endl;
-        throw util::IllegalArgumentException(s.str());
-    }
-    if(dx >= 0) {
-        if(dy >= 0) {
-            return NE;
-        }
-        else {
-            return SE;
-        }
-    }
-    else {
-        if(dy >= 0) {
-            return NW;
-        }
-        else {
-            return SW;
-        }
-    }
-}
-
-/* public static */
-int
-Quadrant::quadrant(const Coordinate& p0, const Coordinate& p1)
-{
-    if(p1.x == p0.x && p1.y == p0.y) {
-        throw util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
-    }
-
-    if(p1.x >= p0.x) {
-        if(p1.y >= p0.y) {
-            return NE;
-        }
-        else {
-            return SE;
-        }
-    }
-    else {
-        if(p1.y >= p0.y) {
-            return NW;
-        }
-        else {
-            return SW;
-        }
-    }
-}
-
-/* public static */
-bool
-Quadrant::isOpposite(int quad1, int quad2)
-{
-    if(quad1 == quad2) {
-        return false;
-    }
-    int diff = (quad1 - quad2 + 4) % 4;
-    // if quadrants are not adjacent, they are opposite
-    if(diff == 2) {
-        return true;
-    }
-    return false;
-}
 
 /* public static */
 int
@@ -135,12 +64,6 @@ Quadrant::isInHalfPlane(int quad, int halfPlane)
     return quad == halfPlane || quad == halfPlane + 1;
 }
 
-/* public static */
-bool
-Quadrant::isNorthern(int quad)
-{
-    return quad == NE || quad == NW;
-}
 
 } // namespace geos.geomgraph
 } // namespace geos
