@@ -9,8 +9,10 @@ Changes in 3.8.0
   - CAPI: GEOSCoordSeq_setXY, GEOSCoordSeq_setXYZ,
           GEOSCoordSeq_getXY, GEOSCoordSeq_getXYZ (Dan Baston)
   - CAPI: GEOSMinimumBoundingCircle (#735)
+  - CAPI: GEOSGeom_createPointFromXY (Dan Baston)
 
 - Improvements:
+  - Improve overall performance by reducing of heap allocations (Dan Baston)
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
   - Improve performance of GEOSPolygonize for cases with many potential
     holes (#748, Dan Baston)
@@ -18,13 +20,16 @@ Changes in 3.8.0
     shells (Dan Baston, Martin Davis)
   - Improve performance of Delaunay triangulations / Voronoi Diagrams
     (Dan Baston)
+  - Improve performance of prepared geometry operations (Dan Baston)
   - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
-  - Improve overlay and buffer performance (Paul Ramsey)
+  - Improve performance of unary union for lines (Dan Baston)
+  - Improve general predicate, overlay, and buffer performance (Dan Baston, Paul Ramsey)
   - Improve cascaded union performance (Paul Ramsey, Martin Davis)
   - Allocate default GeometryFactory singleton on the stack (Sandro Mani)
   - Harmonize XML tests with JTS and harmonize cmake/autoconf
     test running (Paul Ramsey)
-  - CMake modernization (Mateusz Loskot)
+  - CMake modernization (Mateusz Loskot, Paul Ramsey, Dan Baston)
+  - Return unique_ptr from most methods that produce a new geometry (Dan Baston)
 
 - Changes:
   - Constructive geometry functions in CAPI now preserve SRID
