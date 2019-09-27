@@ -34,9 +34,9 @@ struct test_geometry_normalize_data {
     runTest(const char* from, const char* exp)
     {
         GeomPtr g1(reader.read(from));
-        ensure(g1.get());
+        ensure(g1.get() != 0);
         GeomPtr g2(g1->clone());
-        ensure(g2.get());
+        ensure(g2.get() != 0);
         g2->normalize();
 
         GeomPtr ge(reader.read(exp));

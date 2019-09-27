@@ -147,7 +147,7 @@ template<> template<> void object::test<3>
     std::unique_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
     for(std::size_t i = 0; i < polys->getNumGeometries(); ++i) {
         const Polygon* p = dynamic_cast<const Polygon*>(polys->getGeometryN(i));
-        ensure(p);
+        ensure(p != nullptr);
         std::unique_ptr<CoordinateSequence> cs(
             p->getExteriorRing()->getCoordinates()
         );
