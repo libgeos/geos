@@ -100,7 +100,7 @@ UnaryUnionOp::Union()
         try {
             auto combinedLines = geomFact->buildGeometry(lines.begin(), lines.end());
             unionLines = unionNoOpt(*combinedLines);
-        } catch (geos::util::TopologyException & e) {
+        } catch (geos::util::TopologyException &) {
             unionLines.reset(CascadedUnion::Union(lines.begin(),
                                                   lines.end()));
             if(unionLines.get()) {
