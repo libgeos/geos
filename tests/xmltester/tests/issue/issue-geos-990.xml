@@ -1,0 +1,19 @@
+<run>
+<precisionModel type="FLOATING" />
+<case>
+<desc>
+Difference of two 3D geometries
+</desc>
+<a>
+LINESTRING(0 0,0 10,10 10,10 0,0 0)
+</a>
+<b>
+GEOMETRYCOLLECTION Z (GEOMETRYCOLLECTION Z (MULTILINESTRING Z ((0 0 10,10 0 20),(10 0 20,10 10 30)),LINESTRING Z (0 10 20,10 10 30)),LINESTRING Z (0 0 10,0 10 20))'::geometry
+</b>
+<test>
+<op name="difference" arg1="A" arg2="B">
+LINESTRING EMPTY
+</op>
+</test>
+</case>
+</run>

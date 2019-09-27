@@ -143,7 +143,7 @@ INLINE size_t
 Coordinate::HashCode::operator()(const geos::geom::Coordinate &c) const {
     size_t h = std::hash<double>{}(c.x);
     h ^= std::hash<double>{}(c.y) << 1;
-    h ^= std::hash<double>{}(c.z) << 1;
+    // z ordinate ignored for consistency with operator==
     return h;
 }
 
