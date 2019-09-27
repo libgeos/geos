@@ -283,7 +283,7 @@ void object::test<7>
     GEOSCoordSeq_setY(cs_, 3, 0);
 
     ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 1);
-    ensure(ccw);
+    ensure(ccw != 0);
 }
 
 template<>

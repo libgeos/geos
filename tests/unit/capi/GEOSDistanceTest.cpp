@@ -123,8 +123,8 @@ void object::test<2>
     GEOSGeometry* g2 = random_polygon(14, 22, 6, 500);
 
     double d_raw, d_indexed;
-    ensure(GEOSDistance(g1, g2, &d_raw));
-    ensure(GEOSDistanceIndexed(g1, g2, &d_indexed));
+    ensure(GEOSDistance(g1, g2, &d_raw) != 0);
+    ensure(GEOSDistanceIndexed(g1, g2, &d_indexed) != 0);
 
     ensure_equals(d_indexed, d_raw);
 

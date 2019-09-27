@@ -49,7 +49,7 @@ struct test_capigeosvoronoidiagram_data {
 
         GEOSNormalize(g);
         GEOSNormalize(exp_g);
-        bool eq = GEOSEqualsExact(g, exp_g, 1e-10);
+        bool eq = GEOSEqualsExact(g, exp_g, 1e-10) != 0;
         if(! eq) {
             using namespace std;
             char* wkt_exp = GEOSWKTWriter_write(w_, exp_g);

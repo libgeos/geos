@@ -148,7 +148,7 @@ void object::test<5>
 
     GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5))");
 
-    ensure(GEOSEquals(geom2_, expected));
+    ensure(GEOSEquals(geom2_, expected) != 0);
 
     GEOSGeom_destroy(expected);
 }
@@ -184,7 +184,7 @@ void object::test<7>
 
     GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))");
 
-    ensure(GEOSEquals(geom2_, expected));
+    ensure(GEOSEquals(geom2_, expected) != 0);
 
     GEOSGeom_destroy(expected);
 }

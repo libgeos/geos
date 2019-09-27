@@ -39,7 +39,7 @@ struct test_capigeosclipbyrect_data {
     isEqual(GEOSGeom g, const char* exp_wkt)
     {
         geom3_ = GEOSGeomFromWKT(exp_wkt);
-        bool eq = GEOSEquals(geom3_, g);
+        bool eq = GEOSEquals(geom3_, g) != 0;
         if(! eq) {
             std::printf("EXP: %s\n", exp_wkt);
             char* obt_wkt = GEOSWKTWriter_write(w_, g);

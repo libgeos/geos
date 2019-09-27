@@ -38,7 +38,7 @@ struct test_capigeosgeomsetprecision_data {
     fromWKT(const char* wkt)
     {
         GEOSGeometry* g = GEOSGeomFromWKT(wkt);
-        ensure(g);
+        ensure(g != 0);
         return g;
     }
     std::string
@@ -92,11 +92,11 @@ void object::test<1>
 ()
 {
     geom1_ = fromWKT("POLYGON EMPTY");
-    ensure(geom1_);
+    ensure(geom1_ != 0);
     double scale = GEOSGeom_getPrecision(geom1_);
     ensure_equals(scale, 0.0);
     geom3_ = GEOSGeom_setPrecision(geom1_, 2.0, 0);
-    ensure(geom3_);
+    ensure(geom3_ != 0);
     ensure_equals(toWKT(geom3_), std::string("POLYGON EMPTY"));
     scale = GEOSGeom_getPrecision(geom3_);
     ensure_equals(scale, 2.0);
@@ -108,9 +108,9 @@ void object::test<2>
 ()
 {
     geom1_ = fromWKT("LINESTRING(-3 6, 9 1)");
-    ensure(geom1_);
+    ensure(geom1_ != 0);
     geom3_ = GEOSGeom_setPrecision(geom1_, 2.0, 0);
-    ensure(geom3_);
+    ensure(geom3_ != 0);
     ensure_equals(toWKT(geom3_), std::string("LINESTRING (-2 6, 10 2)"));
 }
 
@@ -121,37 +121,37 @@ void object::test<3>
 ()
 {
     geom1_ = fromWKT("LINESTRING(2 10, 4 30)");
-    ensure(geom1_);
+    ensure(geom1_ != 0);
     geom2_ = fromWKT("LINESTRING(4 10, 2 30)");
-    ensure(geom2_);
+    ensure(geom2_ != 0);
     geom3_ = GEOSIntersection(geom1_, geom2_);
-    ensure(geom3_);
+    ensure(geom3_ != 0);
     ensure_equals(toWKT(geom3_), std::string("POINT (3 20)"));
 
     GEOSGeometry* g;
 
     // Both inputs with precision grid of 2.0
     g = GEOSGeom_setPrecision(geom1_, 2.0, 0);
-    ensure(g);
+    ensure(g != 0);
     GEOSGeom_destroy(geom1_);
     geom1_ = g;
     g = GEOSGeom_setPrecision(geom2_, 2.0, 0);
-    ensure(g);
+    ensure(g != 0);
     GEOSGeom_destroy(geom2_);
     geom2_ = g;
     GEOSGeom_destroy(geom3_);
     geom3_ = GEOSIntersection(geom1_, geom2_);
-    ensure(geom3_);
+    ensure(geom3_ != 0);
     ensure_equals(toWKT(geom3_), std::string("POINT (4 20)"));
 
     // One input with precision grid of 0.5, the other of 2.0
     g = GEOSGeom_setPrecision(geom1_, 0.5, 0);
-    ensure(g);
+    ensure(g != 0);
     GEOSGeom_destroy(geom1_);
     geom1_ = g;
     GEOSGeom_destroy(geom3_);
     geom3_ = GEOSIntersection(geom1_, geom2_);
-    ensure(geom3_);
+    ensure(geom3_ != 0);
     ensure_equals(toWKT(geom3_), std::string("POINT (3 20)"));
     double scale = GEOSGeom_getPrecision(geom1_);
     ensure_equals(scale, 0.5);
@@ -166,7 +166,7 @@ void object::test<4>
 ()
 {
     geom1_ = fromWKT("POLYGON((10 10,20 10,16 15,20 20, 10 20, 14 15, 10 10))");
-    ensure(geom1_);
+    ensure(geom1_ != 0);
     geom2_ = GEOSGeom_setPrecision(geom1_, 5.0, 0);
     ensure_equals(toWKT(geom2_), std::string(
                       "MULTIPOLYGON (((10 10, 15 15, 20 10, 10 10)), ((15 15, 10 20, 20 20, 15 15)))"
@@ -184,7 +184,7 @@ void object::test<5>
 ()
 {
     geom1_ = fromWKT("LINESTRING(1 0, 2 0)");
-    ensure(geom1_);
+    ensure(geom1_ != 0);
     geom2_ = GEOSGeom_setPrecision(geom1_, 5.0, 0);
     ensure_equals(toWKT(geom2_), std::string(
                       "LINESTRING EMPTY"
