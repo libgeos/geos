@@ -52,7 +52,7 @@ void object::test<1>
         ensure(nullptr != derived);
         ensure(typeid(derived).name(), typeid(derived) == typeid(CoordinateArrayFactoryCPtr));
     }
-    catch(std::exception& e) {
+    catch(std::exception& /* e */) {
         /** ignore failure.  TODO figure out why this fails on BSD/Clang
         *  https://trac.osgeo.org/geos/ticket/894 and then put back**/
         //fail( e.what() );
