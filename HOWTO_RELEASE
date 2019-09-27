@@ -20,18 +20,18 @@
 
 4. Commit the changes in the NEWS file.
 
-5. Tag the release:
-
-   $ git tag MAJOR.MINOR.PATCH
-   $ git push --follow-tags
-
-6. Run 'make dist-bzip2'.
+5. Run 'make dist-bzip2'.
 
    $ ./autogen.sh && ./configure && make dist-bzip2
 
-7. Verify that you can un-pack and build the tarball.
+6. Verify that you can un-pack and build the tarball.
 
-8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+7. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+
+8. Tag the release:
+
+   $ git tag MAJOR.MINOR.PATCH
+   $ git push --follow-tags
 
 9. Increment all the version numbers for the next release (described in 1 above).
 
