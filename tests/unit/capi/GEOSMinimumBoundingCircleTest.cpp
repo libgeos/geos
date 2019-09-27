@@ -102,7 +102,7 @@ void object::test<2>
 
     // wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    bool eq = GEOSEqualsExact(geom2_, geom3_, 0.0001);
+    bool eq = GEOSEqualsExact(geom2_, geom3_, 0.0001) != 0;
     ensure(eq);
 }
 
@@ -121,7 +121,7 @@ void object::test<3>
     // wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
     // std::cout << wkt_ << std::endl;
 
-    bool eq = GEOSEqualsExact(geom2_, geom3_, 0.0001);
+    bool eq = GEOSEqualsExact(geom2_, geom3_, 0.0001) != 0;
     ensure(eq);
 }
 
@@ -145,10 +145,10 @@ void object::test<4>
     // std::cout << wkt_ << std::endl;
 
     bool eq;
-    eq = GEOSEqualsExact(geom2_, geom3_, 0.0001);
+    eq = GEOSEqualsExact(geom2_, geom3_, 0.0001) != 0;
     ensure(eq);
 
-    eq = GEOSEqualsExact(center, center_expected, 0.0001);
+    eq = GEOSEqualsExact(center, center_expected, 0.0001) != 0;
     ensure(eq);
     GEOSGeom_destroy(center);
     GEOSGeom_destroy(center_expected);
