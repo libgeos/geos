@@ -73,7 +73,7 @@ void object::test<4>() {
     try {
         seq.setOrdinate(0, 17, 5.5);
         fail();
-    } catch (geos::util::IllegalArgumentException & e) {}
+    } catch (geos::util::IllegalArgumentException &) {}
 
     ensure(seq[0].equals3D(geos::geom::Coordinate{2.2, 3.3, 4.4}));
 }

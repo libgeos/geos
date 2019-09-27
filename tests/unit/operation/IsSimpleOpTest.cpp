@@ -136,7 +136,7 @@ void object::test<4>
 
     try {
         g->isSimple();
-    } catch (geos::util::GEOSException & e) {
+    } catch (geos::util::GEOSException &) {
         // no memory leaks or invalid reads on exception
     }
 }

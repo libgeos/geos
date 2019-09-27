@@ -560,7 +560,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -594,7 +594,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -628,7 +628,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -662,7 +662,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -696,7 +696,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -730,7 +730,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -764,7 +764,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -803,7 +803,7 @@ do_all()
                 auto im = g1->relate(g2);
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -837,7 +837,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -872,7 +872,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -907,7 +907,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -945,7 +945,7 @@ do_all()
                 newgeoms->push_back(g3);
             }
             // It's illegal to union a collection ...
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -980,7 +980,7 @@ do_all()
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as intersection argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -1013,7 +1013,7 @@ do_all()
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as difference argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -1046,7 +1046,7 @@ do_all()
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as symdifference argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
