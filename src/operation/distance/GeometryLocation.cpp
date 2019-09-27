@@ -46,7 +46,7 @@ GeometryLocation::GeometryLocation(const Geometry* newComponent, const Coordinat
 {
     component = newComponent;
     inside_area = true;
-    segIndex = INSIDE_AREA;
+    segIndex = (size_t) INSIDE_AREA;
     pt = newPt;
 }
 
