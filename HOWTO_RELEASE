@@ -27,18 +27,19 @@
     - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
       [ THIS MUST BE CAREFULLY AVOIDED ]
 
-11. Increment release version:
-    - In configure.ac
-    - In include/geos/version.h.vc
-    - In capi/geos_c.h.in
-      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
-      - VERSION_MINOR for NEW interfaces in the C lib
-      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
-        [ THIS MUST BE CAREFULLY AVOIDED ]
-    - In main CMakeLists.txt main one
-       - On section: "# Set GEOS project"
-         - CHANGE the line: project(GEOS VERSION <mayor>.<minor>.<micro> LANGUAGES C CXX)
-         - CHANGE the line: SET(GEOS_PATCH_WORD "dev")
+11. Increment release versions in Version.txt
+
+      - GEOS_VERSION_PATCH
+      - GEOS_VERSION_MINOR
+      - GEOS_VERSION_MAJOR
+
+      - CAPI_INTERFACE_CURRENT
+      - CAPI_INTERFACE_REVISION
+      - CAPI_INTERFACE_AGE
+
+      Always increase the revision value.
+      Increase the current value whenever an interface has been added, removed or changed.
+      Increase the age value only if the changes made to the ABI are backward compatible.
 
 12. Update wiki page https://trac.osgeo.org/geos/ at Download section
     - Add latest release
