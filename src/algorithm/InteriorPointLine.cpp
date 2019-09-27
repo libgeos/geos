@@ -53,10 +53,6 @@ InteriorPointLine::InteriorPointLine(const Geometry* g)
     }
 }
 
-InteriorPointLine::~InteriorPointLine()
-{
-}
-
 /* private
  *
  * Tests the interior vertices (if any)

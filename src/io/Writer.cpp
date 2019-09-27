@@ -20,8 +20,6 @@
 #include <geos/io/Writer.h>
 #include <string>
 
-using namespace std;
-
 namespace geos {
 namespace io { // geos.io
 
@@ -33,10 +31,6 @@ void
 Writer::reserve(std::size_t capacity)
 {
     str.reserve(capacity);
-}
-
-Writer::~Writer()
-{
 }
 
 void

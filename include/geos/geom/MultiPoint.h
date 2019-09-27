@@ -56,7 +56,7 @@ public:
 
     friend class GeometryFactory;
 
-    ~MultiPoint() override;
+    ~MultiPoint() override = default;
 
     /// Returns point dimension (0)
     Dimension::DimensionType getDimension() const override;

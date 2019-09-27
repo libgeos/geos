@@ -62,22 +62,23 @@ SimplePointInAreaLocator::isContained(const Coordinate& p, const Geometry* geom)
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* geom)
 {
-    if(const Polygon* poly = dynamic_cast<const Polygon*>(geom)) {
-        return locatePointInPolygon(p, poly);
-    }
-
-    if(!geom->getEnvelopeInternal()->contains(p)) {
+    if (geom->getDimension() < 2) {
         return Location::EXTERIOR;
     }
-    if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
-        for(auto& g2 : *col) {
-            assert(g2.get() != geom);
-            Location loc = locateInGeometry(p, g2.get());
+
+    if (geom->getNumGeometries() == 1) {
+        return locatePointInPolygon(p, dynamic_cast<const Polygon*>(geom->getGeometryN(0)));
+    } else {
+        for (size_t i = 0; i < geom->getNumGeometries(); i++) {
+            const Geometry* gi = geom->getGeometryN(i);
+
+            auto loc = locateInGeometry(p, gi);
             if(loc != Location::EXTERIOR) {
                 return loc;
             }
         }
     }
+
     return Location::EXTERIOR;
 }
 

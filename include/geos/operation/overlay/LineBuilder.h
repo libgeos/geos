@@ -68,7 +68,7 @@ public:
                 const geom::GeometryFactory* newGeometryFactory,
                 algorithm::PointLocator* newPtLocator);
 
-    ~LineBuilder();
+    ~LineBuilder() = default;
 
     /**
      * @return a list of the LineStrings in the result of the specified overlay operation

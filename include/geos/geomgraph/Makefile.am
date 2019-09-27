@@ -9,6 +9,7 @@ geosdir = $(includedir)/geos/geomgraph
 
 geos_HEADERS = \
     Depth.h \
+    Depth.inl \
     DirectedEdge.h \
     DirectedEdge.inl \
     DirectedEdgeStar.h \
@@ -24,10 +25,13 @@ geos_HEADERS = \
     GeometryGraph.inl \
     GraphComponent.h \
     Label.h \
+    Label.inl \
     NodeFactory.h \
     Node.h \
     NodeMap.h \
     PlanarGraph.h \
     Position.h \
     Quadrant.h \
-    TopologyLocation.h
+    Quadrant.inl \
+    TopologyLocation.h \
+    TopologyLocation.inl

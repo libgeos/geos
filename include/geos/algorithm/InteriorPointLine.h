@@ -49,9 +49,6 @@ class GEOS_DLL InteriorPointLine {
 public:
 
     InteriorPointLine(const geom::Geometry* g);
-
-    ~InteriorPointLine();
-
     //Coordinate* getInteriorPoint() const;
 
     bool getInteriorPoint(geom::Coordinate& ret) const;

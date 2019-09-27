@@ -23,20 +23,12 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/Interrupt.h>
 
-using namespace std;
-
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
-SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
-{
-}
-
-SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector() = default;
-
 void
-SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
+SimpleMCSweepLineIntersector::computeIntersections(std::vector<Edge*>* edges,
         SegmentIntersector* si, bool testAllSegments)
 {
     if(testAllSegments) {
@@ -49,8 +41,8 @@ SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
 }
 
 void
-SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges0,
-        vector<Edge*>* edges1, SegmentIntersector* si)
+SimpleMCSweepLineIntersector::computeIntersections(std::vector<Edge*>* edges0,
+        std::vector<Edge*>* edges1, SegmentIntersector* si)
 {
     add(edges0, edges0);
     add(edges1, edges1);
@@ -58,7 +50,7 @@ SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*>* edges0,
 }
 
 void
-SimpleMCSweepLineIntersector::add(vector<Edge*>* edges)
+SimpleMCSweepLineIntersector::add(std::vector<Edge*>* edges)
 {
     for(size_t i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
@@ -68,7 +60,7 @@ SimpleMCSweepLineIntersector::add(vector<Edge*>* edges)
 }
 
 void
-SimpleMCSweepLineIntersector::add(vector<Edge*>* edges, void* edgeSet)
+SimpleMCSweepLineIntersector::add(std::vector<Edge*>* edges, void* edgeSet)
 {
     for(size_t i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
@@ -82,15 +74,16 @@ SimpleMCSweepLineIntersector::add(Edge* edge, void* edgeSet)
     MonotoneChainEdge* mce = edge->getMonotoneChainEdge();
     auto& startIndex = mce->getStartIndexes();
     size_t n = startIndex.size() - 1;
-    events.reserve(events.size() + (n * 2));
-    chains.reserve(chains.size() + n);
+
     for(size_t i = 0; i < n; ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
-        MonotoneChain* mc = new MonotoneChain(mce, i);
-        chains.emplace_back(mc);
-        SweepLineEvent* insertEvent = new SweepLineEvent(edgeSet, mce->getMinX(i), nullptr, mc);
-        events.emplace_back(insertEvent);
-        events.emplace_back(new SweepLineEvent(edgeSet, mce->getMaxX(i), insertEvent, mc));
+        chains.emplace_back(mce, i);
+        MonotoneChain* mc = &chains.back();
+
+        eventStore.emplace_back(edgeSet, mce->getMinX(i), nullptr, mc);
+        SweepLineEvent* insertEvent = &eventStore.back();
+
+        eventStore.emplace_back(edgeSet, mce->getMaxX(i), insertEvent, mc);
     }
 }
 
@@ -102,6 +95,12 @@ SimpleMCSweepLineIntersector::add(Edge* edge, void* edgeSet)
 void
 SimpleMCSweepLineIntersector::prepareEvents()
 {
+    events.clear();
+    events.reserve(eventStore.size());
+    for (auto& e : eventStore) {
+        events.push_back(&e);
+    }
+
     sort(events.begin(), events.end(), SweepLineEventLessThen());
     for(size_t i = 0; i < events.size(); ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
@@ -121,7 +120,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector* si)
         GEOS_CHECK_FOR_INTERRUPTS();
         auto& ev = events[i];
         if(ev->isInsert()) {
-            processOverlaps(i, ev->getDeleteEventIndex(), ev.get(), si);
+            processOverlaps(i, ev->getDeleteEventIndex(), ev, si);
         }
         if(si->getIsDone()) {
             break;

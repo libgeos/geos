@@ -25,100 +25,14 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/Location.h>
 
-#define NULL_VALUE -1
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/Depth.inl>
+#endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
-
-int
-Depth::depthAtLocation(geom::Location location)
-{
-    if(location == Location::EXTERIOR) {
-        return 0;
-    }
-    if(location == Location::INTERIOR) {
-        return 1;
-    }
-    return NULL_VALUE;
-}
-
-Depth::Depth()
-{
-    // initialize depth array to a sentinel value
-    for(int i = 0; i < 2; i++) {
-        for(int j = 0; j < 3; j++) {
-            depth[i][j] = NULL_VALUE;
-        }
-    }
-}
-
-Depth::~Depth() = default;
-
-int
-Depth::getDepth(int geomIndex, int posIndex) const
-{
-    return depth[geomIndex][posIndex];
-}
-
-void
-Depth::setDepth(int geomIndex, int posIndex, int depthValue)
-{
-    depth[geomIndex][posIndex] = depthValue;
-}
-
-Location
-Depth::getLocation(int geomIndex, int posIndex) const
-{
-    if(depth[geomIndex][posIndex] <= 0) {
-        return Location::EXTERIOR;
-    }
-    return Location::INTERIOR;
-}
-
-void
-Depth::add(int geomIndex, int posIndex, Location location)
-{
-    if(location == Location::INTERIOR) {
-        depth[geomIndex][posIndex]++;
-    }
-}
-
-/**
- * A Depth object is null (has never been initialized) if all depths are null.
- */
-bool
-Depth::isNull() const
-{
-    for(int i = 0; i < 2; i++) {
-        for(int j = 0; j < 3; j++) {
-            if(depth[i][j] != NULL_VALUE) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-bool
-Depth::isNull(int geomIndex) const
-{
-    return depth[geomIndex][1] == NULL_VALUE;
-}
-
-bool
-Depth::isNull(int geomIndex, int posIndex) const
-{
-    return depth[geomIndex][posIndex] == NULL_VALUE;
-}
-
-int
-Depth::getDelta(int geomIndex) const
-{
-    return depth[geomIndex][Position::RIGHT] - depth[geomIndex][Position::LEFT];
-}
 
 /**
  * Normalize the depths for each geometry, if they are non-null.
@@ -171,10 +85,10 @@ Depth::add(const Label& lbl)
     }
 }
 
-string
+std::string
 Depth::toString() const
 {
-    ostringstream s;
+    std::ostringstream s;
     s << "A:" << depth[0][1] << "," << depth[0][2] << " ";
     s << "B:" << depth[1][1] << "," << depth[1][2] << "]";
     return s.str();

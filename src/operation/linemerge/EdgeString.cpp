@@ -48,10 +48,6 @@ EdgeString::EdgeString(const GeometryFactory* newFactory):
 {
 }
 
-EdgeString::~EdgeString()
-{
-}
-
 /**
  * Adds a directed edge which is known to form part of this line.
  */

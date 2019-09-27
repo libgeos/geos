@@ -66,7 +66,7 @@ public:
     /** \brief
      * Creates a null Envelope.
      */
-    Envelope(void);
+    Envelope();
 
     /** \brief
      * Creates an Envelope for a region defined by maximum and minimum values.
@@ -104,8 +104,6 @@ public:
      * by Envelope::toString()
      */
     Envelope(const std::string& str);
-
-    ~Envelope(void);
 
     /** \brief
      * Test the point `q` to see whether it intersects the Envelope
@@ -455,7 +453,7 @@ public:
      */
     double distance(const Envelope* env) const;
 
-    int hashCode() const;
+    size_t hashCode() const;
 
 private:
 

@@ -58,7 +58,7 @@ public:
 
     container& getNodeMap();
 
-    virtual ~NodeMap();
+    virtual ~NodeMap() = default;
 
     /**
      * \brief

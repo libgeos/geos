@@ -30,10 +30,6 @@ NodeMap::NodeMap()
 {
 }
 
-NodeMap::~NodeMap()
-{
-}
-
 NodeMap::container&
 NodeMap::getNodeMap()
 {

@@ -36,10 +36,6 @@ ElevationMatrixCell::ElevationMatrixCell(): ztot(0)
 {
 }
 
-ElevationMatrixCell::~ElevationMatrixCell()
-{
-}
-
 void
 ElevationMatrixCell::add(const Coordinate& c)
 {

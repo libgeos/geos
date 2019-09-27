@@ -61,10 +61,6 @@ GeometryTransformer::GeometryTransformer()
     skipTransformedInvalidInteriorRings(false)
 {}
 
-GeometryTransformer::~GeometryTransformer()
-{
-}
-
 void
 GeometryTransformer::setSkipTransformedInvalidInteriorRings(bool b)
 {

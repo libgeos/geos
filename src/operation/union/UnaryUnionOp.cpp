@@ -97,10 +97,15 @@ UnaryUnionOp::Union()
          * [2](http://trac.osgeo.org/geos/ticket/482
          *
          */
-        unionLines.reset(CascadedUnion::Union(lines.begin(),
-                                              lines.end()));
-        if(unionLines.get()) {
-            unionLines = unionNoOpt(*unionLines);
+        try {
+            auto combinedLines = geomFact->buildGeometry(lines.begin(), lines.end());
+            unionLines = unionNoOpt(*combinedLines);
+        } catch (geos::util::TopologyException & e) {
+            unionLines.reset(CascadedUnion::Union(lines.begin(),
+                                                  lines.end()));
+            if(unionLines.get()) {
+                unionLines = unionNoOpt(*unionLines);
+            }
         }
     }
 

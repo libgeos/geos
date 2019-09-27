@@ -23,8 +23,8 @@
 #define GEOS_GEOMGRAPH_EDGEINTERSECTIONLIST_H
 
 #include <geos/export.h>
+#include <algorithm>
 #include <vector>
-#include <set>
 #include <string>
 
 #include <geos/geomgraph/EdgeIntersection.h> // for EdgeIntersectionLessThen
@@ -58,40 +58,38 @@ namespace geomgraph { // geos.geomgraph
  */
 class GEOS_DLL EdgeIntersectionList {
 public:
-    typedef std::set<EdgeIntersection*, EdgeIntersectionLessThen> container;
-    typedef container::iterator iterator;
-    typedef container::const_iterator const_iterator;
+    // Instead of storing edge intersections in a set, as JTS does, we store them
+    // in a vector and then sort the vector if needed before iterating among the
+    // edges. This is much faster.
+    using container = std::vector<EdgeIntersection>;
+    using const_iterator = container::const_iterator;
 
 private:
-    container nodeMap;
+    mutable container nodeMap;
+    mutable bool sorted;
 
 public:
 
-    Edge* edge;
-    EdgeIntersectionList(Edge* edge);
-    ~EdgeIntersectionList();
+    const Edge* edge;
+    EdgeIntersectionList(const Edge* edge);
+    ~EdgeIntersectionList() = default;
 
     /*
      * Adds an intersection into the list, if it isn't already there.
      * The input segmentIndex and dist are expected to be normalized.
      * @return the EdgeIntersection found or added
      */
-    EdgeIntersection* add(const geom::Coordinate& coord,
-                          size_t segmentIndex, double dist);
+    void add(const geom::Coordinate& coord, size_t segmentIndex, double dist);
 
-    iterator
-    begin()
-    {
-        return nodeMap.begin();
-    }
-    iterator
-    end()
-    {
-        return nodeMap.end();
-    }
     const_iterator
     begin() const
     {
+        if (!sorted) {
+            std::sort(nodeMap.begin(), nodeMap.end());
+            nodeMap.erase(std::unique(nodeMap.begin(), nodeMap.end()), nodeMap.end());
+            sorted = true;
+        }
+
         return nodeMap.begin();
     }
     const_iterator
@@ -118,9 +116,8 @@ public:
      */
     void addSplitEdges(std::vector<Edge*>* edgeList);
 
-    Edge* createSplitEdge(EdgeIntersection* ei0, EdgeIntersection* ei1);
+    Edge* createSplitEdge(const EdgeIntersection* ei0, const EdgeIntersection* ei1);
     std::string print() const;
-
 };
 
 std::ostream& operator<< (std::ostream&, const EdgeIntersectionList&);

@@ -40,22 +40,20 @@ EdgeEndBundle::EdgeEndBundle(EdgeEnd* e):
             e->getDirectedCoordinate(),
             e->getLabel())
 {
-    edgeEnds = new vector<EdgeEnd*>();
     insert(e);
 }
 
 EdgeEndBundle::~EdgeEndBundle()
 {
-    for(size_t i = 0, n = edgeEnds->size(); i < n; i++) {
-        delete(*edgeEnds)[i];
+    for(size_t i = 0, n = edgeEnds.size(); i < n; i++) {
+        delete edgeEnds[i];
     }
-    delete edgeEnds;
 }
 
 //Not needed
 //public Iterator iterator() { return edgeEnds.iterator(); }
 
-vector<EdgeEnd*>*
+const vector<EdgeEnd*>&
 EdgeEndBundle::getEdgeEnds()
 {
     return edgeEnds;
@@ -66,7 +64,7 @@ EdgeEndBundle::insert(EdgeEnd* e)
 {
     // Assert: start point is the same
     // Assert: direction is the same
-    edgeEnds->push_back(e);
+    edgeEnds.push_back(e);
 }
 
 
@@ -83,7 +81,7 @@ EdgeEndBundle::computeLabel(
     // the label must be an area label
     bool isArea = false;
 
-    for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(), itEnd = edgeEnds->end();
+    for(vector<EdgeEnd*>::iterator it = edgeEnds.begin(), itEnd = edgeEnds.end();
             it != itEnd; it++) {
         EdgeEnd* e = *it;
         if(e->getLabel().isArea()) {
@@ -113,7 +111,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
     int boundaryCount = 0;
     bool foundInterior = false;
 
-    for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(); it < edgeEnds->end(); it++) {
+    for(vector<EdgeEnd*>::iterator it = edgeEnds.begin(); it < edgeEnds.end(); it++) {
         EdgeEnd* e = *it;
         Location loc = e->getLabel().getLocation(geomIndex);
         if(loc == Location::BOUNDARY) {
@@ -162,7 +160,7 @@ EdgeEndBundle::computeLabelSides(int geomIndex)
 void
 EdgeEndBundle::computeLabelSide(int geomIndex, int side)
 {
-    for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(); it < edgeEnds->end(); it++) {
+    for(vector<EdgeEnd*>::iterator it = edgeEnds.begin(); it < edgeEnds.end(); it++) {
         EdgeEnd* e = *it;
         if(e->getLabel().isArea()) {
             Location loc = e->getLabel().getLocation(geomIndex, side);
@@ -187,8 +185,7 @@ string
 EdgeEndBundle::print() const
 {
     string out = "EdgeEndBundle--> Label: " + label.toString() + "\n";
-    for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(); it < edgeEnds->end(); it++) {
-        EdgeEnd* e = *it;
+    for(auto& e : edgeEnds) {
         out += e->print();
         out += "\n";
     }

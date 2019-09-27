@@ -24,6 +24,11 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
+#ifndef GEOS_INLINE
+# include <geos/geomgraph/index/SegmentIntersector.inl>
+#endif
+
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -34,7 +39,6 @@
 #include <iostream>
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -42,71 +46,6 @@ namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
 using namespace geos::algorithm;
-
-bool
-SegmentIntersector::isAdjacentSegments(size_t i1, size_t i2)
-{
-    return (i1 > i2 ? i1 - i2 : i2 - i1) == 1;
-}
-
-void
-SegmentIntersector::setBoundaryNodes(vector<Node*>* bdyNodes0,
-                                     vector<Node*>* bdyNodes1)
-{
-    bdyNodes[0] = bdyNodes0;
-    bdyNodes[1] = bdyNodes1;
-}
-
-/*
- * @return the proper intersection point, or <code>null</code>
- * if none was found
- */
-Coordinate&
-SegmentIntersector::getProperIntersectionPoint()
-{
-    return properIntersectionPoint;
-}
-
-bool
-SegmentIntersector::hasIntersection()
-{
-    return hasIntersectionVar;
-}
-
-void
-SegmentIntersector::setIsDoneIfProperInt(bool idwpi)
-{
-    isDoneWhenProperInt = idwpi;
-}
-
-bool
-SegmentIntersector::getIsDone()
-{
-    return isDone;
-}
-
-/*
- * A proper intersection is an intersection which is interior to at least two
- * line segments.  Note that a proper intersection is not necessarily
- * in the interior of the entire Geometry, since another edge may have
- * an endpoint equal to the intersection, which according to SFS semantics
- * can result in the point being on the Boundary of the Geometry.
- */
-bool
-SegmentIntersector::hasProperIntersection()
-{
-    return hasProper;
-}
-
-/*
- * A proper interior intersection is a proper intersection which is <b>not</b>
- * contained in the set of boundary nodes set for this SegmentIntersector.
- */
-bool
-SegmentIntersector::hasProperInteriorIntersection()
-{
-    return hasProperInterior;
-}
 
 /*
  * A trivial intersection is an apparent self-intersection which in fact
@@ -216,13 +155,13 @@ SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_
 /*private*/
 bool
 SegmentIntersector::isBoundaryPoint(LineIntersector* p_li,
-                                    vector<Node*>* tstBdyNodes)
+                                    std::vector<Node*>* tstBdyNodes)
 {
     if(! tstBdyNodes) {
         return false;
     }
 
-    for(vector<Node*>::iterator i = tstBdyNodes->begin(); i < tstBdyNodes->end(); i++) {
+    for(std::vector<Node*>::iterator i = tstBdyNodes->begin(); i < tstBdyNodes->end(); i++) {
         Node* node = *i;
         const Coordinate& pt = node->getCoordinate();
         if(p_li->isIntersection(pt)) {
@@ -232,20 +171,6 @@ SegmentIntersector::isBoundaryPoint(LineIntersector* p_li,
     return false;
 }
 
-
-/*private*/
-bool
-SegmentIntersector::isBoundaryPoint(LineIntersector* p_li,
-                                    vector<vector<Node*>*>& tstBdyNodes)
-{
-    if(isBoundaryPoint(p_li, tstBdyNodes[0])) {
-        return true;
-    }
-    if(isBoundaryPoint(p_li, tstBdyNodes[1])) {
-        return true;
-    }
-    return false;
-}
 
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph

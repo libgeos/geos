@@ -50,10 +50,6 @@ ConsistentAreaTester::ConsistentAreaTester(GeometryGraph* newGeomGraph)
 {
 }
 
-ConsistentAreaTester::~ConsistentAreaTester()
-{
-}
-
 Coordinate&
 ConsistentAreaTester::getInvalidPoint()
 {
@@ -111,7 +107,7 @@ ConsistentAreaTester::hasDuplicateRings()
         for(EdgeEndStar::iterator it = ees->begin(); it != endIt; ++it) {
             assert(dynamic_cast<relate::EdgeEndBundle*>(*it));
             relate::EdgeEndBundle* eeb = static_cast<relate::EdgeEndBundle*>(*it);
-            if(eeb->getEdgeEnds()->size() > 1) {
+            if(eeb->getEdgeEnds().size() > 1) {
                 invalidPoint = eeb->getEdge()->getCoordinate(0);
                 return true;
             }

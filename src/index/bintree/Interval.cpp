@@ -30,10 +30,6 @@ Interval::Interval(double nmin, double nmax)
     init(nmin, nmax);
 }
 
-Interval::~Interval()
-{
-}
-
 Interval::Interval(const Interval* interval)
 {
     init(interval->min, interval->max);

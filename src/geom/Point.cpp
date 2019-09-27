@@ -274,11 +274,6 @@ Point::compareToSameClass(const Geometry* g) const
     return getCoordinate()->compareTo(*(p->getCoordinate()));
 }
 
-Point::~Point()
-{
-    //delete coordinates;
-}
-
 GeometryTypeId
 Point::getGeometryTypeId() const
 {

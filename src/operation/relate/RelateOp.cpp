@@ -64,10 +64,6 @@ RelateOp::RelateOp(const Geometry* g0, const Geometry* g1,
 {
 }
 
-RelateOp::~RelateOp()
-{
-}
-
 std::unique_ptr<IntersectionMatrix>
 RelateOp::getIntersectionMatrix()
 {

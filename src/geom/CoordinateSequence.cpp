@@ -204,6 +204,13 @@ CoordinateSequence::expandEnvelope(Envelope& env) const
     }
 }
 
+Envelope
+CoordinateSequence::getEnvelope() const {
+    Envelope e;
+    expandEnvelope(e);
+    return e;
+}
+
 std::ostream&
 operator<< (std::ostream& os, const CoordinateSequence& cs)
 {

@@ -61,7 +61,7 @@ namespace overlay { // geos::operation::overlay
 class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter {
 public:
     ElevationMatrixFilter(ElevationMatrix& em);
-    ~ElevationMatrixFilter() override;
+    ~ElevationMatrixFilter() override = default;
     void filter_rw(geom::Coordinate* c) const override;
     void filter_ro(const geom::Coordinate* c) override;
 private:
@@ -81,7 +81,7 @@ class GEOS_DLL ElevationMatrix {
 public:
     ElevationMatrix(const geom::Envelope& extent, unsigned int rows,
                     unsigned int cols);
-    ~ElevationMatrix();
+    ~ElevationMatrix() = default;
     void add(const geom::Geometry* geom);
     void elevate(geom::Geometry* geom) const;
     // set Z value for each cell w/out one

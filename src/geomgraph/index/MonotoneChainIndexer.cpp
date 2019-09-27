@@ -55,7 +55,8 @@ MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, size_t start)
     // determine quadrant for chain
     auto chainQuad = Quadrant::quadrant(pts->getAt(start), pts->getAt(start + 1));
     auto last = start + 1;
-    while(last < pts->size()) {
+    auto sz = pts->size(); // virtual call, doesn't inline
+    while(last < sz) {
         // compute quadrant for next possible segment in chain
         auto quad = Quadrant::quadrant(pts->getAt(last - 1), pts->getAt(last));
         if(quad != chainQuad) {

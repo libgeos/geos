@@ -95,11 +95,8 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
         Edge* e = *edgeIt;
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
-        EdgeIntersectionList::iterator eiIt = eiL.begin();
-        EdgeIntersectionList::iterator eiEnd = eiL.end();
-        for(; eiIt != eiEnd; ++eiIt) {
-            EdgeIntersection* ei = *eiIt;
-            RelateNode* n = (RelateNode*) nodes->addNode(ei->coord);
+        for(const EdgeIntersection& ei : eiL) {
+            RelateNode* n = (RelateNode*) nodes->addNode(ei.coord);
             if(eLoc == Location::BOUNDARY) {
                 n->setLabelBoundary(argIndex);
             }

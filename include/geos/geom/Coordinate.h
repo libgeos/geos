@@ -115,13 +115,9 @@ public:
 
     double distanceSquared(const Coordinate& p) const;
 
-    int hashCode() const;
-
-    /**
-     * Returns a hash code for a double value, using the algorithm from
-     * Joshua Bloch's book <i>Effective Java</i>
-     */
-    static int hashCode(double d);
+    struct GEOS_DLL HashCode {
+        size_t operator()(const Coordinate & c) const;
+    };
 
 };
 

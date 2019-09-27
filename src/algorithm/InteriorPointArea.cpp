@@ -294,10 +294,6 @@ InteriorPointArea::InteriorPointArea(const Geometry* g)
     process(g);
 }
 
-InteriorPointArea::~InteriorPointArea()
-{
-}
-
 bool
 InteriorPointArea::getInteriorPoint(Coordinate& ret) const
 {

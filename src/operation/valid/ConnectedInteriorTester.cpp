@@ -74,10 +74,6 @@ ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph& newGeomGraph):
 {
 }
 
-ConnectedInteriorTester::~ConnectedInteriorTester()
-{
-}
-
 Coordinate&
 ConnectedInteriorTester::getCoordinate()
 {

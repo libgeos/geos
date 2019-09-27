@@ -48,10 +48,6 @@ namespace index { // geos.geomgraph.index
  * @version 1.1
  */
 
-MonotoneChainEdge::~MonotoneChainEdge()
-{
-}
-
 MonotoneChainEdge::MonotoneChainEdge(Edge* newE):
     e(newE),
     pts(newE->getCoordinates())

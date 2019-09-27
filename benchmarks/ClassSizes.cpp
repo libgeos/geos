@@ -39,6 +39,7 @@
 #include <geos/profiler.h>
 #include <geos/constants.h>
 #include <iostream>
+#include <geos/geomgraph/index/SweepLineEvent.h>
 
 using namespace std;
 using namespace geos;
@@ -51,10 +52,12 @@ main()
 {
     check(geomgraph::Depth);
     check(geomgraph::DirectedEdge);
+    check(geomgraph::DirectedEdgeStar);
     check(geomgraph::Edge);
     check(geomgraph::EdgeEnd);
     check(geomgraph::PlanarGraph);
     check(geomgraph::TopologyLocation);
+    check(geomgraph::index::SweepLineEvent);
     check(noding::NodedSegmentString);
     check(geom::Geometry);
     check(geom::Point);

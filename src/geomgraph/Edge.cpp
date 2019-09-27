@@ -85,7 +85,7 @@ Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
     :
     GraphComponent(newLabel),
     mce(nullptr),
-    env(nullptr),
+    env(newPts->getEnvelope()),
     depth(),
     depthDelta(0),
     isIsolatedVar(true),
@@ -100,7 +100,7 @@ Edge::Edge(CoordinateSequence* newPts)
     :
     GraphComponent(),
     mce(nullptr),
-    env(nullptr),
+    env(newPts->getEnvelope()),
     depth(),
     depthDelta(0),
     isIsolatedVar(true),
@@ -279,9 +279,6 @@ Edge::printReverse() const
     stringstream os;
 
     os << "EDGE (rev)";
-    if(name != "") {
-        os << " name:" << name;
-    }
 
     os << " label:" << label
        << " depthDelta:" << depthDelta
@@ -299,28 +296,16 @@ Edge::printReverse() const
     return os.str();
 }
 
-Envelope*
+const Envelope*
 Edge::getEnvelope()
 {
-    // compute envelope lazily
-    if(env == nullptr) {
-        env = detail::make_unique<Envelope>();
-        auto npts = getNumPoints();
-        for(size_t i = 0; i < npts; ++i) {
-            env->expandToInclude(pts->getAt(i));
-        }
-    }
-    testInvariant();
-    return env.get();
+    return &env;
 }
 
 std::ostream&
 operator<< (std::ostream& os, const Edge& e)
 {
     os << "edge";
-    if(e.name != "") {
-        os << " " << e.name;
-    }
 
     os
             << "  LINESTRING"

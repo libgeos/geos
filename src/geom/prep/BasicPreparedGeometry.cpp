@@ -65,11 +65,6 @@ BasicPreparedGeometry::BasicPreparedGeometry(const Geometry* geom)
     setGeometry(geom);
 }
 
-BasicPreparedGeometry::~BasicPreparedGeometry()
-{
-}
-
-
 bool
 BasicPreparedGeometry::isAnyTargetComponentInTest(const geom::Geometry* testGeom) const
 {
