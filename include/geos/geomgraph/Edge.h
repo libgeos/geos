@@ -88,6 +88,7 @@ public:
         assert(pts->size() > 1);
     }
 
+
     friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
     static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
@@ -96,6 +97,8 @@ public:
     std::unique_ptr<geom::CoordinateSequence> pts;
 
     EdgeIntersectionList eiList;
+
+    //Edge();
 
     /// Takes ownership of CoordinateSequence
     Edge(geom::CoordinateSequence* newPts, const Label& newLabel);

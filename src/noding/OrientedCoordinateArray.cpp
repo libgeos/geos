@@ -21,8 +21,12 @@
 
 #include <geos/noding/OrientedCoordinateArray.h>
 
+//#include <geos/util/IllegalArgumentException.h>
+//#include <geos/noding/Octant.h>
+//#include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
+//using namespace std;
 using namespace geos::geom;
 
 #ifdef _MSC_VER
@@ -95,53 +99,6 @@ OrientedCoordinateArray::compareOriented(const geom::CoordinateSequence& pts1,
             return 0;
         }
     }
-}
-
-bool
-OrientedCoordinateArray::operator==(const OrientedCoordinateArray& other) const {
-    auto sz1 = pts->size();
-    auto sz2 = other.pts->size();
-
-    if (sz1 != sz2) {
-        return false;
-    }
-
-    if (orientationVar == other.orientationVar) {
-        for (size_t i = 0; i < sz1; i++) {
-            if (pts->getAt(i) != other.pts->getAt(i)) {
-                return false;
-            }
-        }
-    } else {
-        for (size_t i = 0; i < sz1; i++) {
-            if (pts->getAt(i) != other.pts->getAt(sz2 - i - 1)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-size_t
-OrientedCoordinateArray::HashCode::operator()(const geos::noding::OrientedCoordinateArray &oca) const {
-    Coordinate::HashCode coordHash;
-
-    auto sz = oca.pts->getSize();
-
-    size_t result = std::hash<size_t>{}(sz);
-
-    if (oca.orientationVar) {
-        for (size_t i = 0; i < sz; i++) {
-            result ^= coordHash(oca.pts->getAt(i));
-        }
-    } else {
-        for (size_t i = sz; i > 0; i--) {
-            result ^= coordHash(oca.pts->getAt(i-1));
-        }
-    }
-
-    return result;
 }
 
 } // namespace geos.noding

@@ -23,7 +23,7 @@
 
 #include <geos/export.h>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <iostream>
 
@@ -73,10 +73,13 @@ private:
 
     /**
      * An index of the edges, for fast lookup.
+     *
+     * OrientedCoordinateArray objects are owned by us.
+     * TODO: optimize by dropping the OrientedCoordinateArray
+     *       construction as a whole, and use CoordinateSequence
+     *       directly instead..
      */
-    typedef std::unordered_map<noding::OrientedCoordinateArray,
-                               Edge*,
-                               noding::OrientedCoordinateArray::HashCode> EdgeMap;
+    typedef std::map<noding::OrientedCoordinateArray*, Edge*, OcaCmp> EdgeMap;
     EdgeMap ocaMap;
 
 public:
@@ -88,7 +91,7 @@ public:
         ocaMap()
     {}
 
-    virtual ~EdgeList() = default;
+    virtual ~EdgeList();
 
     /**
      * Insert an edge unless it is already in the list
@@ -103,11 +106,11 @@ public:
         return edges;
     }
 
-    Edge* findEqualEdge(const Edge* e) const;
+    Edge* findEqualEdge(Edge* e);
 
     Edge* get(int i);
 
-    int findEdgeIndex(const Edge* e) const;
+    int findEdgeIndex(Edge* e);
 
     std::string print();
 

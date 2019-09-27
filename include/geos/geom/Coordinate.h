@@ -115,7 +115,7 @@ public:
 
     double distanceSquared(const Coordinate& p) const;
 
-    struct GEOS_DLL HashCode {
+   struct GEOS_DLL HashCode {
         size_t operator()(const Coordinate & c) const;
     };
 
