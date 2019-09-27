@@ -910,11 +910,11 @@ Coordinate
 LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
                                   const Coordinate& q1, const Coordinate& q2) const
 {
-    Coordinate intPt = Intersection::intersection(p1, p2, q1, q2);
-    if (intPt.isNull()) {
-        intPt = nearestEndpoint(p1, p2, q1, q2);
+    Coordinate ptInt = Intersection::intersection(p1, p2, q1, q2);
+    if (ptInt.isNull()) {
+        ptInt = nearestEndpoint(p1, p2, q1, q2);
     }
-    return intPt;
+    return ptInt;
 }
 
 
