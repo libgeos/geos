@@ -16,6 +16,8 @@ Changes in 3.8.0
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
   - Improve performance of GEOSPolygonize for cases with many potential
     holes (#748, Dan Baston)
+  - Support extended precision calculations (ttmath) and port JTS
+    improvements related to extended precision (Paul Ramsey, Mateusz Loskot)
   - Improve performance of GEOSPolygonize for cases with many or complex
     shells (Dan Baston, Martin Davis)
   - Improve performance of Delaunay triangulations / Voronoi Diagrams
