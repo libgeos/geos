@@ -108,7 +108,7 @@ BufferSubgraph::add(Node* node, vector<Node*>* nodeStack)
         dirEdgeList.push_back(de);
         DirectedEdge* sym = de->getSym();
         Node* symNode = sym->getNode();
-        /**
+        /*
          * NOTE: this is a depth-first traversal of the graph.
          * This will cause a large depth of recursion.
          * It might be better to do a breadth-first traversal.
@@ -216,7 +216,7 @@ BufferSubgraph::findResultEdges()
     for(size_t i = 0, n = dirEdgeList.size(); i < n; ++i) {
         DirectedEdge* de = dirEdgeList[i];
 
-        /**
+        /*
          * Select edges which have an interior depth on the RHS
          * and an exterior depth on the LHS.
          * Note that because of weird rounding effects there may be

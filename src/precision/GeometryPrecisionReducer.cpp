@@ -46,7 +46,7 @@ GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
 {
     GeometryEditor geomEdit(newFactory);
 
-    /**
+    /*
      * For polygonal geometries, collapses are always removed, in order
      * to produce correct topology
      */
@@ -102,7 +102,7 @@ GeometryPrecisionReducer::GeometryPrecisionReducer(const GeometryFactory& change
 unique_ptr<Geometry>
 GeometryPrecisionReducer::fixPolygonalTopology(const geom::Geometry& geom)
 {
-    /**
+    /*
      * If precision model was *not* changed, need to flip
      * geometry to targetPM, buffer in that model, then flip back
      */

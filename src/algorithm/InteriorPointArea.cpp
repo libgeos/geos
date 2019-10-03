@@ -151,11 +151,11 @@ public:
     {
         vector<double> crossings;
 
-        /**
+        /*
          * This results in returning a null Coordinate
          */
         if (polygon.isEmpty()) return;
-        /**
+        /*
          * set default interior point in case polygon has zero area
          */
         interiorPoint = *polygon.getCoordinate();

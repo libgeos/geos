@@ -102,7 +102,7 @@ NodingIntersectionFinder::processIntersections(
         return;
     }
 
-    /**
+    /*
      * If enabled, only test end segments (on either segString).
      */
     if(isCheckEndSegmentsOnly) {

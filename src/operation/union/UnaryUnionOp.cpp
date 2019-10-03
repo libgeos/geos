@@ -72,7 +72,7 @@ UnaryUnionOp::Union()
         return ret;
     }
 
-    /**
+    /*
      * For points and lines, only a single union operation is
      * required, since the OGC model allowings self-intersecting
      * MultiPoint and MultiLineStrings.
@@ -115,7 +115,7 @@ UnaryUnionOp::Union()
                             polygons.end()));
     }
 
-    /**
+    /*
      * Performing two unions is somewhat inefficient,
      * but is mitigated by unioning lines and points first
      */

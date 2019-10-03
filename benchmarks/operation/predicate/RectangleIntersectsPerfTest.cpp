@@ -52,7 +52,7 @@ public:
             createSineStar(origin, size, nPts)->getBoundary()
         );
 
-        /**
+        /*
          * Make the geometry "crinkly" by rounding off the points.
          * This defeats the  MonotoneChain optimization in the full relate
          * algorithm, and provides a more realistic test.

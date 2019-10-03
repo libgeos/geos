@@ -84,7 +84,7 @@ OffsetSegmentGenerator::OffsetSegmentGenerator(
     // the points are rounded as they are inserted into the curve line
     filletAngleQuantum = PI / 2.0 / bufParams.getQuadrantSegments();
 
-    /**
+    /*
      * Non-round joins cause issues with short closing segments,
      * so don't use them.  In any case, non-round joins
      * only really make sense for relatively small buffer distances.
@@ -108,7 +108,7 @@ OffsetSegmentGenerator::init(double newDistance)
     segList.reset();
     segList.setPrecisionModel(precisionModel);
 
-    /**
+    /*
      * Choose the min vertex separation as a small fraction of
      * the offset distance.
      */
@@ -322,7 +322,7 @@ OffsetSegmentGenerator::createSquare(const Coordinate& p, double p_distance)
 void
 OffsetSegmentGenerator::addCollinear(bool addStartPoint)
 {
-    /**
+    /*
      * This test could probably be done more efficiently,
      * but the situation of exact collinearity should be fairly rare.
      */
@@ -330,13 +330,13 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
     li.computeIntersection(s0, s1, s1, s2);
     auto numInt = li.getIntersectionNum();
 
-    /**
+    /*
      * if numInt is<2, the lines are parallel and in the same direction.
      * In this case the point can be ignored, since the offset lines
      * will also be parallel.
      */
     if(numInt >= 2) {
-        /**
+        /*
          * Segments are collinear but reversing.
          * Add an "end-cap" fillet
          * all the way around to other direction
@@ -364,7 +364,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
 void
 OffsetSegmentGenerator::addOutsideTurn(int orientation, bool addStartPoint)
 {
-    /**
+    /*
      * Heuristic: If offset endpoints are very close together,
      * just use one of them as the corner vertex.
      * This avoids problems with computing mitre corners in the case
@@ -429,13 +429,13 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
     // (But not too short, since that would defeat it's purpose).
     // This is the purpose of the closingSegLengthFactor heuristic value.
 
-    /**
+    /*
      * The intersection test above is vulnerable to robustness errors;
-    * i.e. it may be that the offsets should intersect very close to
-    * their endpoints, but aren't reported as such due to rounding.
-    * To handle this situation appropriately, we use the following test:
-    * If the offset points are very close, don't add closing segments
-    * but simply use one of the offset points
+     * i.e. it may be that the offsets should intersect very close to
+     * their endpoints, but aren't reported as such due to rounding.
+     * To handle this situation appropriately, we use the following test:
+     * If the offset points are very close, don't add closing segments
+     * but simply use one of the offset points
      */
 
     if(offset0.p1.distance(offset1.p0) <
@@ -481,7 +481,7 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
                                      const geom::LineSegment& p_offset1,
                                      double p_distance)
 {
-    /**
+    /*
      * This computation is unstable if the offset segments are nearly collinear.
      * However, this situation should have been eliminated earlier by the check
      * for whether the offset segment endpoints are almost coincident

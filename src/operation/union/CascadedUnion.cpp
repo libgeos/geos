@@ -47,7 +47,7 @@ CascadedUnion::Union()
 
     geomFactory = inputGeoms->front()->getFactory();
 
-    /**
+    /*
      * A spatial index to organize the collection
      * into groups of close geometries.
      * This makes unioning more efficient, since vertices are more likely
@@ -71,7 +71,7 @@ geom::Geometry*
 CascadedUnion::unionTree(
     index::strtree::ItemsList* geomTree)
 {
-    /**
+    /*
      * Recursively unions all subtrees in the list into single geometries.
      * The result is a list of Geometry's only
      */

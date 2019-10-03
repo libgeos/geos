@@ -294,7 +294,7 @@ DistanceOp::computeFacetDistance()
 
     array<unique_ptr<GeometryLocation>, 2> locGeom;
 
-    /**
+    /*
      * Geometries are not wholly inside, so compute distance from lines
      * and points of one to lines and points of the other
      */

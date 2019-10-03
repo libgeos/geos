@@ -136,10 +136,10 @@ Bintree::query(double x)
 vector<void*>*
 Bintree::query(Interval* interval)
 {
-    /**
-    * the items that are matched are all items in intervals
-    * which overlap the query interval
-    */
+    /*
+     * the items that are matched are all items in intervals
+     * which overlap the query interval
+     */
     vector<void*>* foundItems = new vector<void*>();
     query(interval, foundItems);
     return foundItems;

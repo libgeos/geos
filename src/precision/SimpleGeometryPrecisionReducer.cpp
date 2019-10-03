@@ -135,7 +135,7 @@ SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
     //newPrecisionModel = pm;
 }
 
-/**
+/*
  * Sets whether the reduction will result in collapsed components
  * being removed completely, or simply being collapsed to an (invalid)
  * Geometry of the same type.

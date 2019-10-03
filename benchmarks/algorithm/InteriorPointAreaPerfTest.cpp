@@ -53,7 +53,7 @@ public:
         std::unique_ptr<geos::geom::Polygon> sinePoly =
             createSineStar(origin, SIZE, nPts);
 
-        /**
+        /*
          * Make the geometry "crinkly" by rounding off the points.
          * This defeats the  MonotoneChain optimization in the full relate
          * algorithm, and provides a more realistic test.

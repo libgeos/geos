@@ -84,7 +84,7 @@ LengthLocationMap::getLocationForward(double length) const
 
     LinearIterator it(linearGeom);
     while(it.hasNext()) {
-        /**
+        /*
          * Special handling is required for the situation when the
          * length references exactly to a component endpoint.
          * In this case, the endpoint location of the current component

@@ -190,7 +190,7 @@ ConvexHull::reduce(Coordinate::ConstVect& pts)
     Coordinate::ConstSet reducedSet;
     reducedSet.insert(polyPts.begin(), polyPts.end());
 
-    /**
+    /*
      * Add all unique points not in the interior poly.
      * CGAlgorithms.isPointInRing is not defined for points
      * actually on the ring, but this doesn't matter since

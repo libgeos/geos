@@ -128,8 +128,8 @@ SIRtree::createNode(int level)
 }
 
 /**
-* Inserts an item having the given bounds into the tree.
-*/
+ * Inserts an item having the given bounds into the tree.
+ */
 void
 SIRtree::insert(double x1, double x2, void* item)
 {

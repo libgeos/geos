@@ -63,7 +63,7 @@ IndexedNestedRingTester::isNonNested()
                                          searchRing,
                                          graph);
 
-            /**
+            /*
              * If no non-node pts can be found, this means
              * that the searchRing touches ALL of the innerRing vertices.
              * This indicates an invalid polygon, since either

@@ -71,7 +71,7 @@ LengthIndexOfPoint::indexOfAfter(const Coordinate& inputPt, double minIndex) con
     }
 
     double closestAfter = indexOfFromStart(inputPt, minIndex);
-    /**
+    /*
      * Return the minDistanceLocation found.
      * This will not be null, since it was initialized to minLocation
      */

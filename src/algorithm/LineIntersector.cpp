@@ -435,7 +435,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
         return computeCollinearIntersection(p1, p2, q1, q2);
     }
 
-    /**
+    /*
      * At this point we know that there is a single intersection point
      * (since the lines are not collinear).
      */
@@ -493,7 +493,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
 #endif
         }
 
-        /**
+        /*
          * Now check to see if any endpoint lies on the interior of the other segment.
          */
         else if(Pq1 == 0) {

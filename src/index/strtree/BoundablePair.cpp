@@ -92,7 +92,7 @@ BoundablePair::expandToQueue(BoundablePairQueue& priQ, double minDistance)
     bool isComp1 = isComposite(boundable1);
     bool isComp2 = isComposite(boundable2);
 
-    /**
+    /*
      * HEURISTIC: If both boundables are composite,
      * choose the one with largest area to expand.
      * Otherwise, simply expand whichever is composite.

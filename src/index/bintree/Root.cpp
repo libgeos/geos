@@ -37,13 +37,13 @@ Root::insert(Interval* itemInterval, void* item)
         return;
     }
 
-    /**
+    /*
      * the item must be contained in one interval, so insert it into the
      * tree for that interval (which may not yet exist)
      */
     Node* node = subnode[index];
 
-    /**
+    /*
      *  If the subnode doesn't exist or this item is not contained in it,
      *  have to expand the tree upward to contain the item.
      */
@@ -52,10 +52,10 @@ Root::insert(Interval* itemInterval, void* item)
 //		delete subnode[index];
         subnode[index] = largerNode;
     }
-    /**
-    * At this point we have a subnode which exists and must contain
-    * contains the env for the item.  Insert the item into the tree.
-    */
+    /*
+     * At this point we have a subnode which exists and must contain
+     * contains the env for the item.  Insert the item into the tree.
+     */
     insertContained(subnode[index], itemInterval, item);
     //System.out.println("depth = " + root.depth() + " size = " + root.size());
 }
@@ -67,7 +67,7 @@ Root::insertContained(Node* tree, Interval* itemInterval, void* item)
 
     assert(tree->getInterval()->contains(itemInterval));
 
-    /**
+    /*
      * Do NOT create a new node for zero-area intervals - this would lead
      * to infinite recursion. Instead, use a heuristic of simply returning
      * the smallest existing node containing the query

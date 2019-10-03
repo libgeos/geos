@@ -275,9 +275,9 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
             continue;
         }
 
-        /**
-        * The sin of the angle is a simpler proxy for the angle itself
-        */
+        /*
+         * The sin of the angle is a simpler proxy for the angle itself
+         */
         double dx = p.x - P.x;
         double dy = p.y - P.y;
         if(dy < 0) {
