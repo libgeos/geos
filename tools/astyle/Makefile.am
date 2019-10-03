@@ -10,8 +10,6 @@ EXTRA_DIST = \
 	CMakeLists.txt
 
 noinst_PROGRAMS = astyle
-#check_PROGRAMS =
-#bin_PROGRAMS = astyle
 
 astyle_SOURCES = \
 	ASBeautifier.cpp \

@@ -25,11 +25,15 @@ SUBDIRS = \
 
 BUILT_SOURCES =
 
-EXTRA_DIST = acsite.m4 .editorconfig \
-	Version.txt CMakeLists.txt \
+EXTRA_DIST = \
+	README.md \
+	acsite.m4 \
+	.editorconfig \
+	Version.txt \
+	CMakeLists.txt \
 	cmake/cmake_uninstall.cmake.in \
 	cmake/geos-config.cmake \
-	README.md
+	cmake/FindMakeDistCheck.cmake
 
 ACLOCAL_AMFLAGS = -I macros
 

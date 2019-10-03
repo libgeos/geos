@@ -26,6 +26,9 @@
 
 6. Verify that you can un-pack and build the tarball.
 
+   - autotools: ./configure && make check
+   - cmake: mkdir build && cd build && cmake .. && make && make check
+
 7. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
 8. Tag the release:
