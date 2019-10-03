@@ -49,7 +49,7 @@ namespace geom { // geos::geom
 #endif
 
 /// Models a collection of {@link Polygon}s.
-//
+///
 /// As per the OGC SFS specification,
 /// the Polygons in a MultiPolygon may not overlap,
 /// and may only touch at single points.

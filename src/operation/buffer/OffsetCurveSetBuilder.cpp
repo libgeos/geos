@@ -332,7 +332,7 @@ OffsetCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
         return true;
     }
 
-    /**
+    /*
      * The following is a heuristic test to determine whether an
      * inside buffer will be eroded completely->
      * It is based on the fact that the minimum diameter of the ring

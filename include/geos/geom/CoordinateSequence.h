@@ -160,7 +160,7 @@ public:
             CoordinateSequence* c);
 
     /// Return position of a Coordinate, or -1 if not found
-    //
+    ///
     /// FIXME: return std::size_t, using numeric_limits<std::size_t>::max
     /// as 'not found' value.
     ///

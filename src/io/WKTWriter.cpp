@@ -252,11 +252,11 @@ WKTWriter::appendLineStringTaggedText(const LineString* lineString, int p_level,
     appendLineStringText(lineString, p_level, false, writer);
 }
 
-/*
- * Converts a <code>LinearRing</code> to &lt;LinearRing Tagged Text&gt;
+/**
+ * Converts a `LinearRing` to \<LinearRing Tagged Text\>
  * format, then appends it to the writer.
  *
- * @param  linearRing  the <code>LinearRing</code> to process
+ * @param  linearRing  the `LinearRing` to process
  * @param  writer      the output writer to append to
  */
 void

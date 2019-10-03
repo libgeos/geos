@@ -55,7 +55,7 @@ public:
     {}
 
     /// Ownership of returned CoordinateSequence to caller
-    //
+    ///
     /// virtual function
     std::unique_ptr<geom::CoordinateSequence> edit(const geom::CoordinateSequence* coordinates,
                                                    const geom::Geometry* geom) override;

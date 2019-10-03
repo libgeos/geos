@@ -90,13 +90,13 @@ public:
     double getLength() const;
 
     /// Tests whether the segment is horizontal.
-    //
+    ///
     /// @return <code>true</code> if the segment is horizontal
     ///
     bool isHorizontal() const;
 
     /// Tests whether the segment is vertical.
-    //
+    ///
     /// @return <code>true</code> if the segment is vertical
     ///
     bool isVertical() const;

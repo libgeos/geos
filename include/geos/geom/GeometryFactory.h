@@ -153,7 +153,7 @@ public:
                                         const Geometry* exemplar) const;
 
     /// Converts an Envelope to a Geometry.
-    //
+    ///
     /// Returned Geometry can be a Point, a Polygon or an EMPTY geom.
     ///
     std::unique_ptr<Geometry> toGeometry(const Envelope* envelope) const;
@@ -415,7 +415,7 @@ public:
     void destroyGeometry(Geometry* g) const;
 
     /// Request that the instance is deleted.
-    //
+    ///
     /// It will really be deleted only after last child Geometry is
     /// deleted. Do not use the instance anymore after calling this function
     /// (unless you're a live child!).

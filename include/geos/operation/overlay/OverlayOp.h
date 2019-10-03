@@ -63,7 +63,7 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 /// \brief Computes the geometric overlay of two Geometry.
-//
+///
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
 ///
@@ -72,7 +72,7 @@ class GEOS_DLL OverlayOp: public GeometryGraphOperation {
 public:
 
     ///  \brief The spatial functions supported by this class.
-    //
+    ///
     /// These operations implement various boolean combinations of
     /// the resultants of the overlay.
     ///
@@ -116,13 +116,13 @@ public:
     static bool isResultOfOp(const geomgraph::Label& label, OpCode opCode);
 
     /// \brief This method will handle arguments of Location.NULL correctly
-    //
+    ///
     /// @return true if the locations correspond to the opCode
     ///
     static bool isResultOfOp(geom::Location loc0, geom::Location loc1, OpCode opCode);
 
     /// \brief Construct an OverlayOp with the given Geometry args.
-    //
+    ///
     /// Ownership of passed args will remain to caller, and
     /// the OverlayOp won't change them in any way.
     ///

@@ -119,7 +119,7 @@ private:
     /// \brief
     /// Finds a src segment which snaps to (is close to) the given snap
     /// point.
-    //
+    ///
     /// Only a single segment is selected for snapping.
     /// This prevents multiple segments snapping to the same snap vertex,
     /// which would almost certainly cause invalid geometry

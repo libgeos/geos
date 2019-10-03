@@ -20,7 +20,7 @@
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/operation/predicate/SegmentIntersectionTester.h>
 
-/// for EnvelopeIntersectsVisitor inheritance
+// for EnvelopeIntersectsVisitor inheritance
 #include <geos/geom/util/ShortCircuitedGeometryVisitor.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 

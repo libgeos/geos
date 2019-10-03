@@ -77,7 +77,7 @@ private:
     std::unique_ptr<geom::Geometry> getLineWork(const geom::Geometry& geom);
 
     /// Extracts linework for polygonal components.
-    //
+    ///
     /// @param geom the geometry from which to extract
     /// @return a lineal geometry containing the extracted linework
     std::unique_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);

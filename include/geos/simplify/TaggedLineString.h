@@ -53,9 +53,7 @@ namespace simplify { // geos::simplify
 
 
 /** \brief
- *
- * Contains and owns a list of TaggedLineSegments
- *
+ * Contains and owns a list of TaggedLineSegments.
  */
 class GEOS_DLL TaggedLineString {
 
