@@ -10,6 +10,8 @@ sudo: false
 
 language: cpp
 
+dist: trusty
+
 compiler:
     - g++
     - clang
