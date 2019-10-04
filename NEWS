@@ -1,16 +1,10 @@
-Changes in 3.5.3
-2018-XX-XX
+Changes in 3.5.2
+2019-10-04
 
--Bug fixes / improvements
+- Bug fixes / improvements
   - Fix crash in GEOSUnaryUnion with empty LineString (#928, Sergey Fedoseev)
   - Polygon build failure in Overlay difference (#789, Paul Ramsey)
   - Performance improvement in overlay (#986, Paul Ramsey)
-
-
-Changes in 3.5.2
-2018-08-06
-
--Bug fixes / improvements
   - Fix infinite loop in GEOSClipByRect (#865, Dan Baston and Raúl Marín)
 
 Changes in 3.5.1
