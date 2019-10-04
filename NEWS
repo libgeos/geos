@@ -1,5 +1,5 @@
 Changes in 3.6.4
-2018-XX-XX
+2019-10-04
 
 - Bug fixes / improvements
   - Fix crash in GEOSUnaryUnion with empty LineString
@@ -12,7 +12,6 @@ Changes in 3.6.4
   - Static library does not contain C API (#878)
   - Prevent crash when querying empty STRtree (#730)
   - Overlay performance improvement (#986, Paul Ramsey)
-
 
 Changes in 3.6.3
 2018-08-06
