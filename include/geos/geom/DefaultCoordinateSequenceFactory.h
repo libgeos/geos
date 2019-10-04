@@ -25,19 +25,19 @@ namespace geom {
 class GEOS_DLL DefaultCoordinateSequenceFactory : public CoordinateSequenceFactory {
 public:
 
-    std::unique_ptr<CoordinateSequence> create() const final {
+    std::unique_ptr<CoordinateSequence> create() const final override {
         return detail::make_unique<CoordinateArraySequence>();
     }
 
-    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> *coords, std::size_t dims = 0) const final {
+    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> *coords, std::size_t dims = 0) const final override {
         return detail::make_unique<CoordinateArraySequence>(coords, dims);
     }
 
-    std::unique_ptr <CoordinateSequence> create(std::vector <Coordinate> &&coords, std::size_t dims = 0) const final {
+    std::unique_ptr <CoordinateSequence> create(std::vector <Coordinate> &&coords, std::size_t dims = 0) const final override {
         return detail::make_unique<CoordinateArraySequence>(std::move(coords), dims);
     }
 
-    std::unique_ptr <CoordinateSequence> create(std::size_t size, std::size_t dims = 0) const final {
+    std::unique_ptr <CoordinateSequence> create(std::size_t size, std::size_t dims = 0) const final override {
         switch(size) {
             case 5: return detail::make_unique<FixedSizeCoordinateSequence<5>>(dims);
             case 4: return detail::make_unique<FixedSizeCoordinateSequence<4>>(dims);
@@ -49,7 +49,7 @@ public:
         }
     }
 
-    std::unique_ptr <CoordinateSequence> create(const CoordinateSequence &coordSeq) const final {
+    std::unique_ptr <CoordinateSequence> create(const CoordinateSequence &coordSeq) const final override {
         auto cs = create(coordSeq.size(), coordSeq.getDimension());
         for (size_t i = 0; i < cs->size(); i++) {
             cs->setAt(coordSeq[i], i);
