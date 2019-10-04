@@ -17,7 +17,7 @@ target_link_libraries(perf_memleak_mp_prep geos_c)
 
 add_test(perf_memleak_mp_prep ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_memleak_mp_prep)
 
-add_test(perf_memleak_mp_prep ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_memleak_mp_prep)
+add_test(perf_intersection ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_intersection)
 
 add_executable(perf_intersection IntersectionPerfTest.cpp)
 target_link_libraries(perf_intersection geos_c)
