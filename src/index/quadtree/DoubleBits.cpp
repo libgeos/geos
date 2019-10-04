@@ -22,6 +22,7 @@
 
 #include <string>
 #include <cstring>
+#include <bitset>
 
 #if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
@@ -168,20 +169,16 @@ DoubleBits::numCommonMantissaBits(const DoubleBits& db) const
 string
 DoubleBits::toString() const
 {
-    // TODO: Fix it!
+    int64 bit;
+    memcpy(&bit, &x, sizeof(x));
+    string bitStr = bitset<64>(bit).to_string();
 
-    return "FIXME: unimplemented DoubleBits::toString()";
+    string str = bitStr.substr(0, 1) + "  "
+        + bitStr.substr(1, 11) + "(" + std::to_string(getExponent()) + ") "
+        + bitStr.substr(12)
+        + " [ " + std::to_string(x) + " ]";
 
-    //String numStr = Long.toBinaryString(xBits);
-    //// 64 zeroes!
-    //String zero64 = "0000000000000000000000000000000000000000000000000000000000000000";
-    //String padStr =  zero64 + numStr;
-    //String bitStr = padStr.substring(padStr.length() - 64);
-    //String str = bitStr.substring(0, 1) + "  "
-    //+ bitStr.substring(1, 12) + "(" + getExponent() + ") "
-    //+ bitStr.substring(12)
-    //+ " [ " + x + " ]";
-    //return str;
+    return str;
 }
 
 } // namespace geos.index.quadtree
