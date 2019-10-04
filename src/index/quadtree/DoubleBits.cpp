@@ -157,7 +157,6 @@ int
 DoubleBits::numCommonMantissaBits(const DoubleBits& db) const
 {
     for(int i = 0; i < 52; i++) {
-        //int bitIndex=i+12;
         if(getBit(i) != db.getBit(i)) {
             return i;
         }
