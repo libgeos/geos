@@ -319,11 +319,16 @@ Edge*
 PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
                                      const Coordinate& p1)
 {
-    for(size_t i = 0, n = edges->size(); i < n; i++) {
-        Edge* e = (*edges)[i];
-        assert(e);
+    Node* node = getNodeMap()->find(p0);
+    if (node == nullptr) {
+        return nullptr;
+    }
+
+    for (const auto& ee : *(node->getEdges())) {
+        Edge* e = ee->getEdge();
 
         const CoordinateSequence* eCoord = e->getCoordinates();
+
         assert(eCoord);
 
         size_t nCoords = eCoord->size();
