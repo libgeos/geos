@@ -388,7 +388,7 @@ public:
             case Dimension::L: return createMultiLineString(std::move(fromGeoms));
             case Dimension::P: return createMultiPoint(std::move(fromGeoms));
             default:
-                throw geos::util::IllegalArgumentException("Invalid geometry type.");
+                throw geos::util::IllegalArgumentException(std::string("Invalid geometry type."));
         }
     }
 
