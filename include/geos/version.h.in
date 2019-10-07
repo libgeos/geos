@@ -26,6 +26,23 @@
 #define GEOS_VERSION_PATCH @VERSION_PATCH@
 #endif
 
+#ifndef GEOS_VERSION_HEX
+/**
+ * \brief Full version expressed in hex: 0xMMmmpp, where MM=major, mm=minor, pp=patch.
+ *
+ * Defined by (major << 16) + (minor << 8) + patch.
+ */
+/* VERSION_PATCH hard coded for testing, following doesn't work presently with autotools, for builds with GEOS_PATCH_WORD set
+# define GEOS_VERSION_HEX  GEOS_VERSION_CHECK(@VERSION_MAJOR@, @VERSION_MINOR@, @VERSION_PATCH@)
+*/
+# define GEOS_VERSION_HEX  GEOS_VERSION_CHECK(@VERSION_MAJOR@, @VERSION_MINOR@, 0)
+#endif
+
+/* can be used like #if (GEOS_VERSION_FULL >= GEOS_VERSION_CHECK(4, 4, 0)) */
+#ifndef GEOS_VERSION_CHECK
+#define GEOS_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
+#endif
+
 #ifndef GEOS_VERSION
 #define GEOS_VERSION "@VERSION@"
 #endif

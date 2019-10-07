@@ -16,12 +16,13 @@ SUBDIRS = \
     triangulate \
     util
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 geosdir = $(includedir)/geos
 
 geos_HEADERS = \
     constants.h \
+    deprecated.h \
     export.h \
     geomgraph.h \
     geomgraphindex.h \
