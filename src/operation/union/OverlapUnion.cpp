@@ -124,12 +124,12 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 std::unique_ptr<Geometry>
 OverlapUnion::unionBuffer(const Geometry* geom0, const Geometry* geom1)
 {
+    const GeometryFactory* factory = geom0->getFactory();
     std::unique_ptr<Geometry> copy0 = geom0->clone();
     std::unique_ptr<Geometry> copy1 = geom1->clone();
     std::vector<std::unique_ptr<Geometry>> geoms;
     geoms.push_back(std::move(copy0));
     geoms.push_back(std::move(copy1));
-    const GeometryFactory* factory = copy0->getFactory();
     std::unique_ptr<GeometryCollection> gColl(factory->createGeometryCollection(std::move(geoms)));
     return gColl->buffer(0.0);
 }
