@@ -231,7 +231,6 @@ LineSegment::closestPoints(const LineSegment& line)
     line.closestPoint(p1, close11);
     dist = close11.distance(p1);
     if(dist < minDistance) {
-        minDistance = dist;
         closestPt[0] = p1;
         closestPt[1] = close11;
     }
