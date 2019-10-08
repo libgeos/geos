@@ -107,6 +107,8 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/issue/issue-geos-716.xml \
 	$(srcdir)/tests/issue/issue-geos-837.xml \
 	$(srcdir)/tests/issue/issue-geos-838.xml \
+	$(srcdir)/tests/issue/issue-geos-990.xml \
+	$(srcdir)/tests/issue/issue-geos-994.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \
