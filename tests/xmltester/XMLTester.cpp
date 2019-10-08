@@ -367,8 +367,9 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << ": " << (success ? "ok." : "failed.");
         std::cout << " (" << std::setprecision(15) << java_math_round(prof.getTot() / 1000) << " ms)" << std::endl;
 
-        // print geometry etc for -v -v and above
-        if (verbose > 1) {
+        // print geometry on failure for -v
+        // print geometry no matter what for -v -v and above
+        if (verbose > 1 || (verbose == 1 && !success)) {
             std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
             if(gA) {
