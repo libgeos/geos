@@ -6266,8 +6266,10 @@ extern "C" {
                             const Geometry* p)
     {
 
-        double length = NAN;
-        GEOSLength_r(extHandle, g, &length);
+        double length;
+        if(GEOSLength_r(extHandle, g, &length) != 1) {
+			return -1.0;
+		};
         return GEOSProject_r(extHandle, g, p) / length;
     }
 
@@ -6276,8 +6278,10 @@ extern "C" {
     GEOSInterpolateNormalized_r(GEOSContextHandle_t extHandle, const Geometry* g,
                                 double d)
     {
-        double length = 0;
-        GEOSLength_r(extHandle, g, &length);
+        double length;
+        if (GEOSLength_r(extHandle, g, &length) != 1) {
+			return 0;
+		}
         return GEOSInterpolate_r(extHandle, g, d * length);
     }
 
