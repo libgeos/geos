@@ -25,7 +25,7 @@
 
 namespace geos {
 namespace operation {
-namespace  geounion {
+namespace geounion {
 
 // https://github.com/locationtech/jts/blob/master/modules/core/src/main/java/org/locationtech/jts/operation/union/OverlapUnion.java
 
@@ -141,12 +141,7 @@ OverlapUnion::isBorderSegmentsSame(const Geometry* result, const Envelope& env)
     std::vector<LineSegment> segsBefore = extractBorderSegments(g0, g1, env);
     std::vector<LineSegment> segsAfter;
     extractBorderSegments(result, env, segsAfter);
-    //std::cout << ("# seg before: " << segsBefore.size() << " - # seg after: " << segsAfter.size() << std::endl;
     bool eq = isEqual(segsBefore, segsAfter);
-
-    // Clean up temporary segment arrays
-    // for (auto seg : segsBefore) delete seg;
-    // for (auto seg : segsAfter) delete seg;
 
     return eq;
 }
@@ -248,8 +243,7 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
             const Coordinate& p1 = seq.getAt(i  );
             bool isBorder = intersects(env, p0, p1) && ! containsProperly(env, p0, p1);
             if (isBorder) {
-                LineSegment ls(p0, p1);
-                segs->push_back(ls);
+                segs->emplace_back(LineSegment(p0, p1));
             }
         };
 
