@@ -243,7 +243,7 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
             const Coordinate& p1 = seq.getAt(i  );
             bool isBorder = intersects(env, p0, p1) && ! containsProperly(env, p0, p1);
             if (isBorder) {
-                segs->emplace_back(LineSegment(p0, p1));
+                segs->emplace_back(p0, p1);
             }
         };
 
