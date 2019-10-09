@@ -22,6 +22,7 @@
 #define GEOS_OPERATION_ISSIMPLEOP_H
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 #include <geos/geom/Coordinate.h> // for dtor visibility by unique_ptr (compos)
 
 #include <map>
@@ -103,6 +104,7 @@ public:
      *
      * @deprecated use IsSimpleOp(Geometry)
      */
+    GEOS_DEPRECATED_VERSION_X_3_2("use IsSimpleOp(Geometry)")
     IsSimpleOp();
 
     /** \brief
@@ -155,6 +157,7 @@ public:
      *
      * @deprecated use isSimple()
      */
+    GEOS_DEPRECATED_VERSION_X_3_2("use isSimple()")
     bool isSimple(const geom::LineString* geom);
 
     /** \brief
@@ -165,6 +168,7 @@ public:
      *
      * @deprecated use isSimple()
      */
+    GEOS_DEPRECATED_VERSION_X_3_2("use isSimple()")
     bool isSimple(const geom::MultiLineString* geom);
 
     /** \brief
@@ -172,6 +176,7 @@ public:
      *
      * @deprecated use isSimple()
      */
+    GEOS_DEPRECATED_VERSION_X_3_2("use isSimple()")
     bool isSimple(const geom::MultiPoint* mp);
 
     bool isSimpleLinearGeometry(const geom::Geometry* geom);

@@ -21,6 +21,7 @@
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
+#include <geos/deprecated.h>
 #include <geos/export.h>
 #include <geos/operation/buffer/BufferParameters.h> // for enum values
 
@@ -143,7 +144,7 @@ public:
         /// Specifies a square line buffer end cap style.
         /// @deprecated use BufferParameters
         CAP_SQUARE = BufferParameters::CAP_SQUARE
-    };
+    } GEOS_DEPRECATED_VERSION_X_3_2("use BufferParameters::");
 
     /** \brief
      * Computes the buffer for a geometry for a given buffer distance

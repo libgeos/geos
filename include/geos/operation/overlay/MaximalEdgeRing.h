@@ -19,6 +19,7 @@
 #ifndef GEOS_OP_OVERLAY_MAXIMALEDGERING_H
 #define GEOS_OP_OVERLAY_MAXIMALEDGERING_H
 
+#include <geos/deprecated.h>
 #include <geos/export.h>
 
 #include <vector>
@@ -83,6 +84,7 @@ public:
     ///
     /// @deprecated pass the vector yourself instead
     ///
+    GEOS_DEPRECATED_VERSION_X_3_2("pass the vector yourself instead")
     std::vector<MinimalEdgeRing*>* buildMinimalRings();
 
     /// \brief

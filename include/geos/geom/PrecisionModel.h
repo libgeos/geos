@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_PRECISIONMODEL_H
 #define GEOS_GEOM_PRECISIONMODEL_H
 
+#include <geos/deprecated.h>
 #include <geos/export.h>
 #include <geos/inline.h>
 
@@ -112,7 +113,7 @@ public:
          * single-precision floating-point representation, which is
          * based on the IEEE-754 standard
          */
-        FLOATING_SINGLE
+         FLOATING_SINGLE
 
     } Type;
 
@@ -127,6 +128,7 @@ public:
     ///
     PrecisionModel(Type nModelType);
 
+#if GEOS_DEPRECATED_SINCE(1, 0)
     /** \brief
      * Creates a <code>PrecisionModel</code> with Fixed precision.
      *
@@ -142,7 +144,9 @@ public:
      * @deprecated offsets are no longer supported, since internal
      * representation is rounded floating point
      */
+    GEOS_DEPRECATED
     PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
+#endif
 
     /**
      * \brief
@@ -217,12 +221,13 @@ public:
     /// Returns the multiplying factor used to obtain a precise coordinate.
     double getScale() const;
 
+#if GEOS_DEPRECATED_SINCE(2, 0)
     /// Returns the x-offset used to obtain a precise coordinate.
     //
     /// @return the amount by which to subtract the x-coordinate before
     ///         multiplying by the scale
     /// @deprecated Offsets are no longer used
-    ///
+    GEOS_DEPRECATED
     double getOffsetX() const;
 
     /// Returns the y-offset used to obtain a precise coordinate.
@@ -230,8 +235,9 @@ public:
     /// @return the amount by which to subtract the y-coordinate before
     ///         multiplying by the scale
     /// @deprecated Offsets are no longer used
-    ///
+    GEOS_DEPRECATED
     double getOffsetY() const;
+#endif
 
     /*
      *  Sets ´internal` to the precise representation of `external`.

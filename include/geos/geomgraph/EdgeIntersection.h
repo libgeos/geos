@@ -23,6 +23,7 @@
 #define GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 
 #include <geos/geom/Coordinate.h> // for composition and inlines
 
@@ -137,7 +138,7 @@ struct GEOS_DLL  EdgeIntersectionLessThen {
     {
         return ei1 < ei2;
     }
-};
+} GEOS_DEPRECATED_VERSION_3_3;
 
 /// Output operator
 inline std::ostream&

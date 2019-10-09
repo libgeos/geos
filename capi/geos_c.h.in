@@ -150,6 +150,7 @@ typedef int (*GEOSDistanceCallback)(const void *item1, const void* item2, double
  ***********************************************************************/
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 
 /*
  * Register an interruption checking callback
@@ -169,12 +170,14 @@ extern void GEOS_DLL GEOS_interruptCancel();
  *     initialize using GEOS_init_r() and set the message handlers using
  *     GEOSContext_setNoticeHandler_r and/or GEOSContext_setErrorHandler_r
  */
+GEOS_DEPRECATED_VERSION_X_3_5("initialize using GEOS_init_r() and set the message handlers using GEOSContext_setNoticeHandler_r and/or GEOSContext_setErrorHandler_r")
 extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
                                     GEOSMessageHandler notice_function,
                                     GEOSMessageHandler error_function);
 /*
  * @deprecated in 3.5.0 replaced by GEOS_finish_r.
  */
+GEOS_DEPRECATED_VERSION_X_3_5("replaced by GEOS_finish_r")
 extern void GEOS_DLL finishGEOS_r(GEOSContextHandle_t handle);
 
 extern GEOSContextHandle_t GEOS_DLL GEOS_init_r();
@@ -465,6 +468,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
 
 /* These functions return NULL on exception. Only LINESTRINGs are accepted. */
 /* @deprecated in 3.3.0: use GEOSOffsetCurve instead */
+GEOS_DEPRECATED_X("use GEOSOffsetCurve instead")
 extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
 	GEOSContextHandle_t handle,
 	const GEOSGeometry* g, double width, int quadsegs,
@@ -596,6 +600,7 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(GEOSContextHandle_t handle,
                                                   const GEOSGeometry* g);
 /* @deprecated in 3.3.0: use GEOSUnaryUnion_r instead */
+GEOS_DEPRECATED_X("GEOSUnaryUnion_r instead")
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle,
                                                   const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
@@ -1530,6 +1535,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(const GEOSGeometry* g,
 
 /* These functions return NULL on exception. Only LINESTRINGs are accepted. */
 /* @deprecated in 3.3.0: use GEOSOffsetCurve instead */
+GEOS_DEPRECATED_X("use GEOSOffsetCurve instead")
 extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer(const GEOSGeometry* g,
     double width, int quadsegs, int joinStyle, double mitreLimit,
     int leftSide);
@@ -1644,6 +1650,7 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
 /* @deprecated in 3.3.0: use GEOSUnaryUnion instead */
+GEOS_DEPRECATED_X("GEOSUnaryUnion instead")
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g);

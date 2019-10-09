@@ -21,6 +21,7 @@
 #define GEOS_IO_WKTREADER_H
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -70,6 +71,7 @@ public:
     WKTReader(const geom::GeometryFactory& gf);
 
     /** @deprecated in 3.4.0 */
+    GEOS_DEPRECATED_VERSION_X_3_4("use initializer with GeometryFactory passed by reference")
     WKTReader(const geom::GeometryFactory* gf);
 
     /**

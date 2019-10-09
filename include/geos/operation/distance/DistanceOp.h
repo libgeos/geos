@@ -21,6 +21,7 @@
 #define GEOS_OP_DISTANCE_DISTANCEOP_H
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/operation/distance/GeometryLocation.h>
@@ -85,6 +86,7 @@ public:
                            const geom::Geometry& g1);
 
     /// @deprecated, use the version taking references
+    GEOS_DEPRECATED_VERSION_X_3_2("use the version taking references")
     static double distance(const geom::Geometry* g0,
                            const geom::Geometry* g1);
 
@@ -119,6 +121,7 @@ public:
         const geom::Geometry* g1);
 
     /// @deprecated use the one taking references
+    GEOS_DEPRECATED_VERSION_X_3_2("use the initializer taking references")
     DistanceOp(const geom::Geometry* g0, const geom::Geometry* g1);
 
     /**

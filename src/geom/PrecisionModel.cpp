@@ -107,6 +107,7 @@ PrecisionModel::PrecisionModel(Type nModelType)
 
 
 /*public (deprecated) */
+#if GEOS_DEPRECATED_SINCE(1, 0)
 PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
 //throw(IllegalArgumentException *)
     :
@@ -122,6 +123,7 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
     //modelType = FIXED;
     setScale(newScale);
 }
+#endif
 
 /*public*/
 PrecisionModel::PrecisionModel(double newScale)
@@ -189,6 +191,7 @@ PrecisionModel::setScale(double newScale)
 }
 
 /*public*/
+#if GEOS_DEPRECATED_SINCE(2, 0)
 double
 PrecisionModel::getOffsetX() const
 {
@@ -201,7 +204,7 @@ PrecisionModel::getOffsetY() const
 {
     return 0;
 }
-
+#endif
 
 string
 PrecisionModel::toString() const

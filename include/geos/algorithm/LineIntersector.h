@@ -21,6 +21,7 @@
 #define GEOS_ALGORITHM_LINEINTERSECTOR_H
 
 #include <geos/export.h>
+#include <geos/deprecated.h>
 #include <string>
 
 #include <geos/geom/Coordinate.h>
@@ -128,12 +129,17 @@ public:
     /// Same as above but doen's compute intersection point. Faster.
     static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-    // These are deprecated, due to ambiguous naming
+#if GEOS_DEPRECATED_SINCE(3, 2)
+    /// \deprecated These are deprecated since 3.2, due to ambiguous naming.
     enum {
+        /// Indicates that line segments do not intersect
         DONT_INTERSECT = 0,
+        /// Indicates that line segments intersect in a single point
         DO_INTERSECT = 1,
+        /// Indicates that line segments intersect in a line segment
         COLLINEAR = 2
-    };
+    } GEOS_DEPRECATED;
+#endif
 
     enum {
         /// Indicates that line segments do not intersect
