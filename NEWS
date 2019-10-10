@@ -2,7 +2,7 @@ Changes in 3.8.1
 2019-xx-xx
 
 - Bug fixes / improvements
-  - 
+  - Stack allocate line segments in OverlapUnion (Paul Ramsey)
 
 
 Changes in 3.8.0
