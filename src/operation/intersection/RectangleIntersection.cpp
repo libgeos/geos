@@ -573,8 +573,7 @@ RectangleIntersection::clip_multipoint(const geom::MultiPoint* g,
         return;
     }
     for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
-        clip_point(dynamic_cast<const geom::Point*>(g->getGeometryN(i)),
-                   parts, rect);
+        clip_point(g->getGeometryN(i), parts, rect);
     }
 }
 
@@ -588,8 +587,7 @@ RectangleIntersection::clip_multilinestring(const geom::MultiLineString* g,
     }
 
     for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
-        clip_linestring(dynamic_cast<const geom::LineString*>(g->getGeometryN(i)),
-                        parts, rect);
+        clip_linestring(g->getGeometryN(i), parts, rect);
     }
 }
 
@@ -604,8 +602,7 @@ RectangleIntersection::clip_multipolygon(const geom::MultiPolygon* g,
     }
 
     for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
-        clip_polygon(dynamic_cast<const geom::Polygon*>(g->getGeometryN(i)),
-                     parts, rect, keep_polygons);
+        clip_polygon(g->getGeometryN(i), parts, rect, keep_polygons);
     }
 }
 

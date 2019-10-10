@@ -76,7 +76,7 @@ nodeLineWithFirstCoordinate(const geom::Geometry* geom)
   } else {
       auto mls = dynamic_cast<const geom::MultiLineString*>(geom);
       assert(mls);
-      auto line = dynamic_cast<const geom::LineString*>(mls->getGeometryN(0));
+      auto line = mls->getGeometryN(0);
       assert(line);
       point = line->getPointN(0);
   }

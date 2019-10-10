@@ -275,7 +275,7 @@ IsValidOp::checkValid(const MultiPolygon* g)
     vector<const Polygon*>polys(ngeoms);
 
     for(size_t i = 0; i < ngeoms; ++i) {
-        const Polygon* p = dynamic_cast<const Polygon*>(g->getGeometryN(i));
+        const Polygon* p = g->getGeometryN(i);
 
         checkInvalidCoordinates(p);
         if(validErr != nullptr) {
@@ -489,8 +489,7 @@ void
 IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
 {
     for (size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i) {
-        const Polygon* p = dynamic_cast<const Polygon*>(
-                               mp->getGeometryN(i));
+        const Polygon* p = mp->getGeometryN(i);
 
         const LinearRing* shell = p->getExteriorRing();
 
@@ -501,8 +500,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
                 continue;
             }
 
-            const Polygon* p2 = dynamic_cast<const Polygon*>(
-                                    mp->getGeometryN(j));
+            const Polygon* p2 = mp->getGeometryN(j);
 
             if (p2->isEmpty()) {
                 continue;

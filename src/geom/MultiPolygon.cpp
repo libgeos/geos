@@ -34,13 +34,11 @@
 # include "geos/geom/MultiPolygon.inl"
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-MultiPolygon::MultiPolygon(vector<Geometry*>* newPolys, const GeometryFactory* factory)
+MultiPolygon::MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* factory)
       : GeometryCollection(newPolys, factory)
 {}
 
@@ -66,7 +64,7 @@ MultiPolygon::getBoundaryDimension() const
     return 1;
 }
 
-string
+std::string
 MultiPolygon::getGeometryType() const
 {
     return "MultiPolygon";
@@ -79,7 +77,7 @@ MultiPolygon::getBoundary() const
         return std::unique_ptr<Geometry>(getFactory()->createMultiLineString());
     }
 
-    vector<std::unique_ptr<Geometry>> allRings;
+    std::vector<std::unique_ptr<Geometry>> allRings;
     for(const auto& pg : geometries) {
         auto g = pg->getBoundary();
 
@@ -127,6 +125,12 @@ MultiPolygon::reverse() const
     });
 
     return getFactory()->createMultiPolygon(std::move(reversed));
+}
+
+const Polygon*
+MultiPolygon::getGeometryN(size_t i) const
+{
+    return static_cast<const Polygon*>(geometries[i].get());
 }
 
 } // namespace geos::geom
