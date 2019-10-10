@@ -5,7 +5,7 @@ Changes in 3.9.0
   - 
 
 - Improvements:
-  - 
+  - Stack allocate segments in OverlapUnion (Paul Ramsey)
 
 
 Changes in 3.8.0
