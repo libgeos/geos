@@ -260,28 +260,15 @@ DistanceOp::computeInside(vector<unique_ptr<GeometryLocation>> & locs,
 {
     for(auto& loc : locs) {
         for(const auto& poly : polys) {
-            computeInside(loc, poly, locPtPoly);
-            if(minDistance <= terminateDistance) {
-                return;
-            }
+			const Coordinate& pt = loc->getCoordinate();
+
+			if (Location::EXTERIOR != ptLocator.locate(pt, static_cast<const Geometry*>(poly))) {
+				minDistance = 0.0;
+				locPtPoly[0] = std::move(loc);
+				locPtPoly[1].reset(new GeometryLocation(poly, pt));
+				return;
+			}
         }
-    }
-}
-
-/*private*/
-void
-DistanceOp::computeInside(std::unique_ptr<GeometryLocation> & ptLoc,
-                          const Polygon* poly,
-                          array<std::unique_ptr<GeometryLocation>, 2> & locPtPoly)
-{
-    const Coordinate& pt = ptLoc->getCoordinate();
-
-    // if pt is not in exterior, distance to geom is 0
-    if(Location::EXTERIOR != ptLocator.locate(pt, static_cast<const Geometry*>(poly))) {
-        minDistance = 0.0;
-        locPtPoly[0] = std::move(ptLoc);
-        locPtPoly[1].reset(new GeometryLocation(poly, pt));
-        return;
     }
 }
 
