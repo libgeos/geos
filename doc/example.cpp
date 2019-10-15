@@ -411,9 +411,8 @@ do_all()
     vector<const Geometry*>* geoms = new vector<const Geometry*>;
     vector<const Geometry*>* newgeoms;
 
-    // Define a precision model using 0,0 as the reference origin
-    // and 2.0 as coordinates scale.
-    PrecisionModel* pm = new PrecisionModel(2.0, 0, 0);
+    // Define a precision model using 2.0 as coordinates scale.
+    PrecisionModel* pm = new PrecisionModel(2.0);
 
     // Initialize global factory with defined PrecisionModel
     // and a SRID of -1 (undefined).

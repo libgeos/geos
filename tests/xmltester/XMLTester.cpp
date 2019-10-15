@@ -544,17 +544,7 @@ XMLTester::parsePrecisionModel(const tinyxml2::XMLElement* el)
         char* stopstring;
 
         double scale = std::strtod(scaleStr, &stopstring);
-        double offsetX = 0;
-        double offsetY = 2;
-
-        if(! el->QueryDoubleAttribute("offsetx", &offsetX))
-        {} // std::cerr << "No offsetx" << std::endl;
-
-        if(! el->QueryDoubleAttribute("offsety", &offsetY))
-        {} // std::cerr << "No offsety" << std::endl;
-
-        // NOTE: PrecisionModel discards offsets anyway...
-        pm.reset(new PrecisionModel(scale, offsetX, offsetY));
+        pm.reset(new PrecisionModel(scale));
     }
 }
 
