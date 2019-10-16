@@ -300,7 +300,7 @@ Coordinate
 MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts, Coordinate& P, Coordinate& Q)
 {
     double minAng = std::numeric_limits<double>::max();
-    const Coordinate* minAngPt = nullptr;
+    const Coordinate* minAngPt = &pts[0];
 
     for(const auto& p : pts) {
         if(p == P) {
