@@ -40,6 +40,9 @@
 #include <geos/constants.h>
 #include <iostream>
 #include <geos/geomgraph/index/SweepLineEvent.h>
+#include <geos/triangulate/quadedge/QuadEdge.h>
+#include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
+#include <geos/triangulate/quadedge/Vertex.h>
 
 using namespace std;
 using namespace geos;
@@ -71,6 +74,9 @@ main()
     check(geom::CoordinateArraySequence);
     check(geom::FixedSizeCoordinateSequence<1>);
     check(geom::FixedSizeCoordinateSequence<2>);
+    check(triangulate::quadedge::QuadEdge);
+    check(triangulate::quadedge::QuadEdgeQuartet);
+    check(triangulate::quadedge::Vertex);
     check(int64);
 }
 

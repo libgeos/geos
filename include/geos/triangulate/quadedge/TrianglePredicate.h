@@ -19,6 +19,8 @@
 #ifndef GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
 #define GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace geom { // geos.geom
 
@@ -38,7 +40,7 @@ class Coordinate;
  * @author Benjamin Campbell
  *
  */
-class TrianglePredicate {
+class GEOS_DLL TrianglePredicate {
 public:
     /**
      * Tests if a point is inside the circle defined by

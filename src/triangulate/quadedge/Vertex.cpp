@@ -78,14 +78,6 @@ Vertex::classify(const Vertex& p0, const Vertex& p1)
 }
 
 bool
-Vertex::isInCircle(const Vertex& a, const Vertex& b, const Vertex& c) const
-{
-    return TrianglePredicate::isInCircleRobust(a.p, b.p, c.p, this->p);
-    // non-robust - best to not use
-    //return TrianglePredicate.isInCircle(a.p, b.p, c.p, this->p);
-}
-
-bool
 Vertex::rightOf(const QuadEdge& e) const
 {
     return isCCW(e.dest(), e.orig());
