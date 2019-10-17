@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2012 Excensus LLC.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -67,21 +68,7 @@ QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope& env, double p_tol
 {
     edgeCoincidenceTolerance = tolerance / EDGE_COINCIDENCE_TOL_FACTOR;
     createFrame(env);
-    initSubdiv(startingEdges);
-    quadEdges.push_back(startingEdges[0]);
-    createdEdges.push_back(startingEdges[0]);
-    quadEdges.push_back(startingEdges[1]);
-    createdEdges.push_back(startingEdges[1]);
-    quadEdges.push_back(startingEdges[2]);
-    createdEdges.push_back(startingEdges[2]);
-}
-
-QuadEdgeSubdivision::~QuadEdgeSubdivision()
-{
-    for(QuadEdgeList::iterator iter = createdEdges.begin(); iter != createdEdges.end(); ++iter) {
-        (*iter)->free();
-        delete *iter;
-    }
+    initSubdiv();
 }
 
 void
@@ -107,51 +94,32 @@ QuadEdgeSubdivision::createFrame(const geom::Envelope& env)
     frameEnv.expandToInclude(frameVertex[2].getCoordinate());
 }
 void
-QuadEdgeSubdivision::initSubdiv(QuadEdge* initEdges[3])
+QuadEdgeSubdivision::initSubdiv()
 {
-    std::unique_ptr<QuadEdge> tmp_ptr;
+    assert(quadEdges.empty());
+
     // build initial subdivision from frame
-    tmp_ptr = QuadEdge::makeEdge(frameVertex[0], frameVertex[1]);
-    initEdges[0] = tmp_ptr.get();
-    tmp_ptr.release();
+    startingEdges[0] = QuadEdge::makeEdge(frameVertex[0], frameVertex[1], quadEdges);
+    startingEdges[1] = QuadEdge::makeEdge(frameVertex[1], frameVertex[2], quadEdges);
+    QuadEdge::splice(startingEdges[0]->sym(), *startingEdges[1]);
 
-
-    tmp_ptr = QuadEdge::makeEdge(frameVertex[1], frameVertex[2]);
-    initEdges[1] = tmp_ptr.get();
-    tmp_ptr.release();
-
-    QuadEdge::splice(initEdges[0]->sym(), *initEdges[1]);
-
-    tmp_ptr = QuadEdge::makeEdge(frameVertex[2], frameVertex[0]);
-    initEdges[2] = tmp_ptr.get();
-    tmp_ptr.release();
-
-    QuadEdge::splice(initEdges[1]->sym(), *initEdges[2]);
-    QuadEdge::splice(initEdges[2]->sym(), *initEdges[0]);
+    startingEdges[2] = QuadEdge::makeEdge(frameVertex[2], frameVertex[0], quadEdges);
+    QuadEdge::splice(startingEdges[1]->sym(), *startingEdges[2]);
+    QuadEdge::splice(startingEdges[2]->sym(), *startingEdges[0]);
 }
 
 QuadEdge&
 QuadEdgeSubdivision::makeEdge(const Vertex& o, const Vertex& d)
 {
-    std::unique_ptr<QuadEdge> q0 = QuadEdge::makeEdge(o, d);
-    QuadEdge* q0_ptr = q0.get();
-    q0.release();
-
-    createdEdges.push_back(q0_ptr);
-    quadEdges.push_back(q0_ptr);
-    return *q0_ptr;
+    QuadEdge* e = QuadEdge::makeEdge(o, d, quadEdges);
+    return *e;
 }
 
 QuadEdge&
 QuadEdgeSubdivision::connect(QuadEdge& a, QuadEdge& b)
 {
-    std::unique_ptr<QuadEdge> q0 = QuadEdge::connect(a, b);
-    QuadEdge* q0_ptr = q0.get();
-    q0.release();
-
-    createdEdges.push_back(q0_ptr);
-    quadEdges.push_back(q0_ptr);
-    return *q0_ptr;
+    QuadEdge* e = QuadEdge::connect(a, b, quadEdges);
+    return *e;
 }
 
 void
@@ -160,8 +128,11 @@ QuadEdgeSubdivision::remove(QuadEdge& e)
     QuadEdge::splice(e, e.oPrev());
     QuadEdge::splice(e.sym(), e.sym().oPrev());
 
-    // this is inefficient on a std::vector, but this method should be called infrequently
-    quadEdges.erase(std::remove(quadEdges.begin(), quadEdges.end(), &e), quadEdges.end());
+    // this is inefficient but this should be called infrequently
+    quadEdges.erase(
+            std::remove_if(quadEdges.begin(), quadEdges.end(),
+                           [&e](QuadEdgeQuartet& es) { return &es.base() == &e; }),
+            quadEdges.end());
 
     //mark these edges as removed
     e.remove();
@@ -191,7 +162,7 @@ QuadEdgeSubdivision::locateFromEdge(const Vertex& v,
          * since the orientation predicates may experience precision failures.
          */
         if(iter > maxIter) {
-            throw LocateFailureException("");
+            throw LocateFailureException("Could not locate vertex.");
         }
 
         if((v.equals(e->orig())) || (v.equals(e->dest()))) {
@@ -403,7 +374,7 @@ public:
     visit(QuadEdge* triEdges[3]) override
     {
         auto coordSeq = coordSeqFact.create(4, 0);
-        for(int i = 0; i < 3; i++) {
+        for(size_t i = 0; i < 3; i++) {
             Vertex v = triEdges[i]->orig();
             coordSeq->setAt(v.getCoordinate(), i);
         }
@@ -447,7 +418,7 @@ void
 QuadEdgeSubdivision::prepareVisit() {
     if (!visit_state_clean) {
         for (auto& qe : quadEdges) {
-            qe->setVisited(false);
+            qe.setVisited(false);
         }
     }
 
@@ -633,7 +604,8 @@ QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
     auto edges = detail::make_unique<QuadEdgeList>();
     std::set<Vertex> visitedVertices; // TODO unordered_set of Vertex* ?
 
-    for(QuadEdge* qe : quadEdges) {
+    for(auto& quartet : quadEdges) {
+        QuadEdge* qe = &quartet.base();
         const Vertex& v = qe->orig();
 
         if(visitedVertices.find(v) == visitedVertices.end()) {	//if v not found

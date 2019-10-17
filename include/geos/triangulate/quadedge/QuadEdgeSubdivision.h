@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2012 Excensus LLC.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -26,7 +27,9 @@
 #include <vector>
 
 #include <geos/geom/MultiLineString.h>
+#include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeLocator.h>
+#include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
 #include <geos/triangulate/quadedge/Vertex.h>
 
 namespace geos {
@@ -45,7 +48,6 @@ class Envelope;
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-class QuadEdge;
 class TriangleVisitor;
 
 const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
@@ -91,12 +93,11 @@ public:
                                  const QuadEdge* triEdge[3]);
 
 private:
-    QuadEdgeList quadEdges;
-    QuadEdgeList createdEdges;
-    QuadEdge* startingEdges[3];
+    std::deque<QuadEdgeQuartet> quadEdges;
+    std::array<QuadEdge*, 3> startingEdges;
     double tolerance;
     double edgeCoincidenceTolerance;
-    Vertex frameVertex[3];
+    std::array<Vertex, 3> frameVertex;
     geom::Envelope frameEnv;
     std::unique_ptr<QuadEdgeLocator> locator;
     bool visit_state_clean;
@@ -112,12 +113,12 @@ public:
      */
     QuadEdgeSubdivision(const geom::Envelope& env, double tolerance);
 
-    virtual ~QuadEdgeSubdivision();
+    virtual ~QuadEdgeSubdivision() = default;
 
 private:
     virtual void createFrame(const geom::Envelope& env);
 
-    virtual void initSubdiv(QuadEdge* initEdges[3]);
+    virtual void initSubdiv();
 
 public:
     /** \brief
@@ -148,8 +149,8 @@ public:
      *
      * @return a QuadEdgeList
      */
-    inline const QuadEdgeList&
-    getEdges() const
+    inline std::deque<QuadEdgeQuartet>&
+    getEdges()
     {
         return quadEdges;
     }
@@ -192,8 +193,7 @@ public:
      * Deletes a quadedge from the subdivision. Linked quadedges are updated to
      * reflect the deletion.
      *
-     * @param e
-     *          the quadedge to delete
+     * @param e the quadedge to delete
      */
     void remove(QuadEdge& e);
 
