@@ -46,8 +46,8 @@
 #include <geos/geom/util/SineStarFactory.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/opLinemerge.h>
-#include <geos/opPolygonize.h>
+#include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/constants.h>
 #include <vector>
 #include <sstream>

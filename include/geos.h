@@ -25,7 +25,15 @@
 #include <geos/version.h>
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <geos/io.h>
+#include <geos/io/ByteOrderDataInStream.h>
+#include <geos/io/ByteOrderValues.h>
+#include <geos/io/ParseException.h>
+#include <geos/io/WKBConstants.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/io/CLocalizer.h>
 #include <geos/unload.h>
 
 /// Basic namespace for all GEOS functionalities.
