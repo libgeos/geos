@@ -222,10 +222,9 @@ public:
     inline bool
     isCCW(const Vertex& b, const Vertex& c) const
     {
-        // is equal to the signed area of the triangle
-
+        // check if signed area is positive
         return (b.p.x - p.x) * (c.p.y - p.y)
-               - (b.p.y - p.y) * (c.p.x - p.x) > 0;
+               > (b.p.y - p.y) * (c.p.x - p.x);
     }
 
     bool rightOf(const QuadEdge& e) const;
