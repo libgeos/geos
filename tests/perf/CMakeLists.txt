@@ -25,6 +25,7 @@ if(GEOS_ENABLE_TESTS)
   add_test(perf_class_sizes
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_class_sizes)
 
+  add_subdirectory(algorithm)
   add_subdirectory(operation)
   add_subdirectory(capi)
 
