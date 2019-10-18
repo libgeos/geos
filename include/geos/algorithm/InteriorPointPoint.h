@@ -30,7 +30,7 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 
 /**
- * \class InteriorPointPoint geosAlgorithm.h geos/geosAlgorithm.h
+ * \class InteriorPointPoint
  * \brief
  * Computes a point in the interior of an point geometry.
  *

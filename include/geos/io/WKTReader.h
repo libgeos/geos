@@ -52,7 +52,7 @@ namespace geos {
 namespace io {
 
 /**
- * \class WKTReader io.h geos.h
+ * \class WKTReader
  * \brief WKT parser class; see also WKTWriter.
  */
 class GEOS_DLL WKTReader {

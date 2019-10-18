@@ -59,7 +59,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \class OffsetCurveSetBuilder opBuffer.h geos/opBuffer.h
+ * \class OffsetCurveSetBuilder
  *
  * \brief
  * Creates all the raw offset curves for a buffer of a Geometry.

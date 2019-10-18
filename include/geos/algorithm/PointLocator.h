@@ -39,7 +39,7 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 
 /**
- * \class PointLocator geosAlgorithm.h geos/geosAlgorithm.h
+ * \class PointLocator
  *
  * \brief
  * Computes the topological relationship (Location)

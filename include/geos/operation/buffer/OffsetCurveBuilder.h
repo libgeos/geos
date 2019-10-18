@@ -46,7 +46,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \class OffsetCurveBuilder opBuffer.h geos/opBuffer.h
+ * \class OffsetCurveBuilder
  *
  * \brief
  * Computes the raw offset curve for a

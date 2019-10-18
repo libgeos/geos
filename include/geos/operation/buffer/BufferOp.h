@@ -44,7 +44,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \class BufferOp opBuffer.h geos/opBuffer.h
+ * \class BufferOp
  *
  * \brief
  * Computes the buffer of a geometry, for both positive and negative

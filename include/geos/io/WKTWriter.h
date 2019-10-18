@@ -56,7 +56,7 @@ namespace geos {
 namespace io {
 
 /**
- * \class WKTWriter io.h geos.h
+ * \class WKTWriter
  *
  * \brief Outputs the textual representation of a Geometry.
  * See also WKTReader.

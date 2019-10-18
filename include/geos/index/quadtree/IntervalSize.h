@@ -26,7 +26,7 @@ namespace index { // geos::index
 namespace quadtree { // geos::index::quadtree
 
 /**
- * \class IntervalSize indexQuadtree.h geos/indexQuadtree.h
+ * \class IntervalSize
  *
  * \brief
  * Provides a test for whether an interval is
