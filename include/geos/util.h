@@ -83,9 +83,6 @@ make_unique(Args &&...) = delete;
 #endif
 }
 
-/// Utility classes for GEOS.
-namespace util { // geos.util
-} // geos.util
 }
 
 #endif // GEOS_UTIL_H
