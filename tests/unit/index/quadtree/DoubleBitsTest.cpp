@@ -31,6 +31,19 @@ void object::test<1>
     ensure_equals(DoubleBits::exponent(128.0), 7);
 }
 
+// 2 - Test toString()
+template<>
+template<>
+void object::test<2>
+()
+{
+    ensure_equals(DoubleBits(-1).toString(),
+        "1  01111111111(0) 0000000000000000000000000000000000000000000000000000 [ -1.000000 ]");
+    ensure_equals(DoubleBits(8.0).toString(),
+        "0  10000000010(3) 0000000000000000000000000000000000000000000000000000 [ 8.000000 ]");
+    ensure_equals(DoubleBits(128.0).toString(),
+        "0  10000000110(7) 0000000000000000000000000000000000000000000000000000 [ 128.000000 ]");
+}
 
 } // namespace tut
 

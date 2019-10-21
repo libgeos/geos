@@ -31,7 +31,6 @@
 # include "geos/geom/MultiLineString.inl"
 #endif
 
-using namespace std;
 using namespace geos::algorithm;
 //using namespace geos::operation;
 using namespace geos::geomgraph;
@@ -40,7 +39,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-MultiLineString::MultiLineString(vector<Geometry*>* newLines,
+MultiLineString::MultiLineString(std::vector<Geometry*>* newLines,
                                  const GeometryFactory* factory)
     :
     GeometryCollection(newLines, factory)
@@ -72,7 +71,7 @@ MultiLineString::getBoundaryDimension() const
     return 0;
 }
 
-string
+std::string
 MultiLineString::getGeometryType() const
 {
     return "MultiLineString";
@@ -134,6 +133,12 @@ MultiLineString::reverse() const
         revLines[nLines - 1 - i] = iLS->reverse();
     }
     return getFactory()->createMultiLineString(std::move(revLines));
+}
+
+const LineString*
+MultiLineString::getGeometryN(size_t i) const
+{
+    return static_cast<const LineString*>(geometries[i].get());
 }
 
 } // namespace geos::geom

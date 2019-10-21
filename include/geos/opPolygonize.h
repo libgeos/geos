@@ -18,6 +18,8 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// An API for polygonizing sets of lines.
 namespace polygonize { // geos.operation.polygonize
 
 } // namespace geos.operation.polygonize

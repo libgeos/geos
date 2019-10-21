@@ -430,9 +430,7 @@ WKTWriter::appendMultiPointText(const MultiPoint* multiPoint,
                 writer->write(", ");
             }
 
-            appendCoordinate(
-                dynamic_cast<const Point*>(multiPoint->getGeometryN(i))->getCoordinate(),
-                writer);
+            appendCoordinate(multiPoint->getGeometryN(i)->getCoordinate(), writer);
         }
         writer->write(")");
     }
@@ -456,9 +454,7 @@ WKTWriter::appendMultiLineStringText(const MultiLineString* multiLineString, int
                 level2 = p_level + 1;
                 doIndent = true;
             }
-            const LineString* ls = dynamic_cast<const LineString*>(
-                                       multiLineString->getGeometryN(i)
-                                   );
+            const LineString* ls = multiLineString->getGeometryN(i);
             appendLineStringText(ls, level2, doIndent, writer);
         }
         writer->write(")");
@@ -482,9 +478,7 @@ WKTWriter::appendMultiPolygonText(const MultiPolygon* multiPolygon, int p_level,
                 level2 = p_level + 1;
                 doIndent = true;
             }
-            const Polygon* p = dynamic_cast<const Polygon*>(
-                                   multiPolygon->getGeometryN(i)
-                               );
+            const Polygon* p = multiPolygon->getGeometryN(i);
             appendPolygonText(p, level2, doIndent, writer);
         }
         writer->write(")");

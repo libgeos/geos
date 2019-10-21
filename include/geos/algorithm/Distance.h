@@ -26,7 +26,7 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
+/** \brief
  * Functions to compute distance between basic geometric structures.
  *
  * @author Martin Davis

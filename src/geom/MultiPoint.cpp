@@ -93,5 +93,11 @@ MultiPoint::getGeometryTypeId() const
     return GEOS_MULTIPOINT;
 }
 
+const Point*
+MultiPoint::getGeometryN(size_t i) const
+{
+    return static_cast<const Point*>(geometries[i].get());
+}
+
 } // namespace geos::geom
 } // namespace geos

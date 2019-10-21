@@ -33,12 +33,14 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-/*
- * This is derived from a Java interface.
+/** \brief
+ * An EdgeSetIntersector computes all the intersections between the edges in the set.
+ *
+ * \note This is derived from a Java interface.
  */
 class GEOS_DLL EdgeSetIntersector {
 public:
-    /**
+    /** \brief
      * Computes all self-intersections between edges in a set of edges,
      * allowing client to choose whether self-intersections are computed.
      *
@@ -49,7 +51,7 @@ public:
     virtual void computeIntersections(std::vector<Edge*>* edges,
                                       SegmentIntersector* si, bool testAllSegments) = 0;
 
-    /**
+    /** \brief
      * Computes all mutual intersections between two sets of edges
      */
     virtual void computeIntersections(std::vector<Edge*>* edges0,

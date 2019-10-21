@@ -41,6 +41,8 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
+/// \brief MonotoneChains are a way of partitioning the segments of an edge to
+/// allow for fast searching of intersections.
 class GEOS_DLL MonotoneChainEdge {
 public:
     //MonotoneChainEdge();

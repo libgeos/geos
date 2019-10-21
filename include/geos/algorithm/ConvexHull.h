@@ -45,7 +45,7 @@ class GeometryFactory;
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**
+/** \brief
  * Computes the convex hull of a Geometry.
  *
  * The convex hull is the smallest convex Geometry that contains all the

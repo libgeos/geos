@@ -18,6 +18,9 @@
 
 namespace geos {
 namespace geomgraph {
+
+/// \brief Contains classes that implement indexes for performing noding on
+/// geometry graph edges.
 namespace index {
 }
 }

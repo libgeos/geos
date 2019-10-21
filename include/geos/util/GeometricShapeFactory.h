@@ -48,7 +48,7 @@ namespace geos {
 namespace util { // geos::util
 
 
-/**
+/** \brief
  * Computes various kinds of common geometric shapes.
  *
  * Allows various ways of specifying the location and extent of the shapes,

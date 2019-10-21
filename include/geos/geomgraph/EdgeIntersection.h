@@ -34,7 +34,7 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
+/** \brief
  * Represents a point on an edge which intersects with another edge.
  *
  * The intersection may either be a single point, or a line segment

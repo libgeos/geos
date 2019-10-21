@@ -26,11 +26,11 @@
 namespace geos {
 namespace io {
 
-/*
+/**
  * \class ByteOrderValues io.h geos.h
  *
- * Methods to read and write primitive datatypes from/to byte
- * sequences, allowing the byte order to be specified
+ * \brief Methods to read and write primitive datatypes from/to byte
+ * sequences, allowing the byte order to be specified.
  *
  * Similar to the standard Java <code>ByteBuffer</code> class.
  */

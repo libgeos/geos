@@ -81,6 +81,8 @@ public:
      */
     std::unique_ptr<Geometry> getBoundary() const override;
 
+    const Polygon* getGeometryN(std::size_t n) const override;
+
     std::string getGeometryType() const override;
 
     GeometryTypeId getGeometryTypeId() const override;

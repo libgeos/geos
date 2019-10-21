@@ -30,7 +30,28 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-
+/// \brief MonotoneChains are a way of partitioning the segments of an edge to
+/// allow for fast searching of intersections.
+///
+/// Specifically, a sequence of contiguous line segments is a monotone chain
+/// iff all the vectors defined by the oriented segments lies in the same
+/// quadrant.
+///
+/// Monotone Chains have the following useful properties:
+///
+/// - the segments within a monotone chain will never intersect each other
+///
+/// - the envelope of any contiguous subset of the segments in a monotone chain
+///   is simply the envelope of the endpoints of the subset.
+///
+/// Property 1 means that there is no need to test pairs of segments from
+/// within the same monotone chain for intersection. Property 2 allows binary
+/// search to be used to find the intersection points of two monotone chains.
+/// For many types of real-world data, these properties eliminate a large
+/// number of segment comparisons, producing substantial speed gains.
+///
+/// \note Due to the efficient intersection test, there is no need to limit the
+/// size of chains to obtain fast performance.
 class GEOS_DLL MonotoneChainIndexer {
 
 public:

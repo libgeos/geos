@@ -36,7 +36,7 @@ namespace geos {
 namespace operation { // geos::operation
 namespace polygonize { // geos::operation::polygonize
 
-/* \brief
+/** \brief
  * An edge of a polygonization graph.
  *
  * @version 1.4

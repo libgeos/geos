@@ -20,6 +20,8 @@
 namespace geos {
 namespace operation {
 namespace valid {
+
+    /// Removes repeated, consecutive equal, coordinates from a CoordinateSequence.
     class GEOS_DLL RepeatedPointRemover {
 
     /// \brief

@@ -24,6 +24,7 @@
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geom/Point.h> // for covariant return type
 
 #include <geos/inline.h>
 
@@ -78,6 +79,8 @@ public:
      * @see Geometry#getBoundary
      */
     std::unique_ptr<Geometry> getBoundary() const override;
+
+    const Point* getGeometryN(std::size_t n) const override;
 
     std::string getGeometryType() const override;
 

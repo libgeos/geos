@@ -25,7 +25,7 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-/**
+/** \brief
  * An interface for algorithms which process the triangles in a {@link QuadEdgeSubdivision}.
  *
  * @author JTS: Martin Davis

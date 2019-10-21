@@ -125,7 +125,7 @@ bool
 RepeatedPointTester::hasRepeatedPoint(const MultiPolygon* gc)
 {
     for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
-        const Geometry* g = gc->getGeometryN(i);
+        const Polygon* g = gc->getGeometryN(i);
         if(hasRepeatedPoint(g)) {
             return true;
         }
@@ -137,7 +137,7 @@ bool
 RepeatedPointTester::hasRepeatedPoint(const MultiLineString* gc)
 {
     for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
-        const Geometry* g = gc->getGeometryN(i);
+        const LineString* g = gc->getGeometryN(i);
         if(hasRepeatedPoint(g)) {
             return true;
         }

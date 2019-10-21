@@ -35,6 +35,11 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
+/// \brief Finds all intersections in one or two sets of edges, using the
+/// straightforward method of comparing all segments.
+///
+/// \note This algorithm is too slow for production use, but is useful for
+/// testing purposes.
 class GEOS_DLL SimpleEdgeSetIntersector: public EdgeSetIntersector {
 
 public:

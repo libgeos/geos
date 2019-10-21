@@ -32,7 +32,7 @@ class QuadEdge;
 class QuadEdgeSubdivision;
 }
 
-/**
+/** \brief
  * Computes a Delauanay Triangulation of a set of {@link quadedge::Vertex}es,
  * using an incrementatal insertion algorithm.
  *
