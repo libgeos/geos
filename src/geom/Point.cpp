@@ -46,56 +46,49 @@ namespace geom { // geos::geom
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     :
     Geometry(factory),
-    empty(false)
+    coordinates(newCoords)
 {
-    std::unique_ptr<CoordinateSequence> coords(newCoords);
-
-    if(coords == nullptr) {
-        empty = true;
-        return;
-    }
-
-    if (coords->getSize() == 1) {
-        coordinates.setAt(coords->getAt(0), 0);
-    } else if (coords->getSize() > 1) {
-        throw util::IllegalArgumentException("Point coordinate list must contain a single element");
-    } else {
-        empty = true;
-    }
+	if (coordinates.get() == nullptr) {
+		coordinates = factory->getCoordinateSequenceFactory()->create();
+		return;
+	}
+	if (coordinates->getSize() != 1)
+	{
+		throw util::IllegalArgumentException("Point coordinate list must contain a single element");
+	}
 }
 
 Point::Point(const Coordinate & c, const GeometryFactory* factory) :
     Geometry(factory),
-    empty(false)
+    coordinates(factory->getCoordinateSequenceFactory()->create(1))
 {
-    coordinates.setAt(c, 0);
+    coordinates->setAt(c, 0);
 }
 
 /*protected*/
 Point::Point(const Point& p)
     :
     Geometry(p),
-    coordinates(p.coordinates),
-    empty(p.empty)
+    coordinates(p.coordinates->clone())
 {
 }
 
 std::unique_ptr<CoordinateSequence>
 Point::getCoordinates() const
 {
-    return coordinates.clone();
+    return coordinates->clone();
 }
 
 size_t
 Point::getNumPoints() const
 {
-    return empty ? 0 : 1;
+    return coordinates->getSize();
 }
 
 bool
 Point::isEmpty() const
 {
-    return empty;
+    return coordinates->isEmpty();
 }
 
 bool
@@ -113,7 +106,7 @@ Point::getDimension() const
 int
 Point::getCoordinateDimension() const
 {
-    return (int) coordinates.getDimension();
+    return (int) coordinates->getDimension();
 }
 
 int
@@ -152,7 +145,7 @@ Point::getZ() const
 const Coordinate*
 Point::getCoordinate() const
 {
-    return empty ? nullptr : &coordinates[0];
+    return isEmpty() ? nullptr : &coordinates->getAt(0);
 }
 
 string
@@ -191,7 +184,7 @@ Point::apply_ro(CoordinateFilter* filter) const
 void
 Point::apply_rw(const CoordinateFilter* filter)
 {
-    coordinates.apply_rw(filter);
+    coordinates->apply_rw(filter);
 }
 
 void
@@ -224,7 +217,7 @@ Point::apply_rw(CoordinateSequenceFilter& filter)
     if(isEmpty()) {
         return;
     }
-    filter.filter_rw(coordinates, 0);
+    filter.filter_rw(*coordinates, 0);
     if(filter.isGeometryChanged()) {
         geometryChanged();
     }
@@ -236,7 +229,7 @@ Point::apply_ro(CoordinateSequenceFilter& filter) const
     if(isEmpty()) {
         return;
     }
-    filter.filter_ro(coordinates, 0);
+    filter.filter_ro(*coordinates, 0);
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
@@ -284,7 +277,7 @@ Point::getGeometryTypeId() const
 const CoordinateSequence*
 Point::getCoordinatesRO() const
 {
-    return &coordinates;
+    return coordinates.get();
 }
 
 } // namespace geos::geom

@@ -177,8 +177,7 @@ private:
     /**
      *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
      */
-    FixedSizeCoordinateSequence<1> coordinates;
-    bool empty;
+    std::unique_ptr<CoordinateSequence> coordinates;
 };
 
 } // namespace geos::geom

@@ -549,5 +549,15 @@ void object::test<43>
     ensure(!point_->isDimensionStrict(geos::geom::Dimension::A));
 }
 
+// empty point has size-0 coordinate sequence
+template<>
+template<>
+void object::test<44>
+()
+{
+    ensure_equals(empty_point_->getCoordinates()->getSize(), 0u);
+    ensure_equals(empty_point_->getCoordinatesRO()->getSize(), 0u);
+}
+
 } // namespace tut
 
