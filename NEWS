@@ -3,6 +3,7 @@ Changes in 3.8.1
 
 - Bug fixes / improvements
   - Stack allocate line segments in OverlapUnion (Paul Ramsey)
+  - Avoid assertion failure with MSVC 2017 / 2019 (#1002, Dan Baston)
 
 
 Changes in 3.8.0
