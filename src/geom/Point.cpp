@@ -41,6 +41,7 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
+const static FixedSizeCoordinateSequence<0> emptyCoords;
 
 /*protected*/
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
@@ -83,7 +84,7 @@ Point::Point(const Point& p)
 std::unique_ptr<CoordinateSequence>
 Point::getCoordinates() const
 {
-    return coordinates.clone();
+    return getCoordinatesRO()->clone();
 }
 
 size_t
@@ -113,7 +114,7 @@ Point::getDimension() const
 int
 Point::getCoordinateDimension() const
 {
-    return (int) coordinates.getDimension();
+    return (int) getCoordinatesRO()->getDimension();
 }
 
 int
@@ -191,6 +192,9 @@ Point::apply_ro(CoordinateFilter* filter) const
 void
 Point::apply_rw(const CoordinateFilter* filter)
 {
+    if (isEmpty()) {
+        return;
+    }
     coordinates.apply_rw(filter);
 }
 
@@ -284,6 +288,9 @@ Point::getGeometryTypeId() const
 const CoordinateSequence*
 Point::getCoordinatesRO() const
 {
+    if (isEmpty()) {
+        return &emptyCoords;
+    }
     return &coordinates;
 }
 
