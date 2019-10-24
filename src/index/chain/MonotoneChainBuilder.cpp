@@ -96,29 +96,28 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
     // (which is the starting quadrant)
     int chainQuad = Quadrant::quadrant(pts[safeStart],
                                        pts[safeStart + 1]);
-    std::size_t last = start + 1;
 
-    const Coordinate* prev = &pts[last-1]; // avoid repeated coordinate access by index (virtual call)
-    const Coordinate* curr = &pts[last];
+    const Coordinate* prev; // avoid repeated coordinate access by index (virtual call)
+    const Coordinate* curr = &pts[start];
 
-    while(last < npts) {
+    for(size_t last = start + 1; last < npts; last++) {
+        prev = curr;
+        curr = &pts[last];
+
         // skip zero-length segments, but include them in the chain
         if(!prev->equals2D(*curr)) {
             // compute quadrant for next possible segment in chain
             int quad = Quadrant::quadrant(*prev, *curr);
             if(quad != chainQuad) {
-                break;
+                return last - 1;
             }
         }
-        ++last;
-        prev = curr;
-        curr = &pts[last];
     }
 #if GEOS_DEBUG
     std::cerr << "MonotoneChainBuilder::findChainEnd() returning" << std::endl;
 #endif
 
-    return last - 1;
+    return npts - 1;
 }
 
 } // namespace geos.index.chain
