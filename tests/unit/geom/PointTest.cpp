@@ -559,5 +559,26 @@ void object::test<44>
     ensure_equals(empty_point_->getCoordinatesRO()->getSize(), 0u);
 }
 
+// check dimensionality of empty points
+template<>
+template<>
+void object::test<45>
+()
+{
+    auto empty3d = factory_->createPoint();
+    ensure_equals(empty3d->getCoordinateDimension(), 3);
+
+    geos::geom::FixedSizeCoordinateSequence<0> seq2(2);
+    ensure_equals(seq2.getDimension(), 2u);
+    ensure_equals(factory_->createPoint(seq2)->getCoordinateDimension(), 2);
+
+    geos::geom::FixedSizeCoordinateSequence<0> seq3(3);
+    ensure_equals(seq3.getDimension(), 3u);
+    ensure_equals(factory_->createPoint(seq3)->getCoordinateDimension(), 3);
+
+
+
+}
+
 } // namespace tut
 
