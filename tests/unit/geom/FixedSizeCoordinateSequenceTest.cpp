@@ -124,4 +124,20 @@ void object::test<5>() {
     ensure_equals(seq1_3d.getDimension(), 3ul);
 }
 
+// test clone
+template<>
+template<>
+void object::test<6>
+()
+{
+    FixedSizeCoordinateSequence<1> a(2);
+    a.setAt({ 1, 2, 3 }, 0);
+
+    ensure_equals(a.getDimension(), 2);
+
+    auto b = a.clone();
+    ensure_equals(b->getDimension(), 2);
+    ensure(a.getAt(0).equals3D(b->getAt(0)));
+}
+
 }

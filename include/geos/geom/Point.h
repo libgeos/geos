@@ -178,7 +178,9 @@ private:
      *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
      */
     FixedSizeCoordinateSequence<1> coordinates;
-    bool empty;
+
+    bool empty2d;
+    bool empty3d;
 };
 
 } // namespace geos::geom

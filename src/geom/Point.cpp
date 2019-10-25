@@ -41,18 +41,20 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-const static FixedSizeCoordinateSequence<0> emptyCoords;
+const static FixedSizeCoordinateSequence<0> emptyCoords2d(2);
+const static FixedSizeCoordinateSequence<0> emptyCoords3d(3);
 
 /*protected*/
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     :
     Geometry(factory),
-    empty(false)
+    empty2d(false),
+    empty3d(false)
 {
     std::unique_ptr<CoordinateSequence> coords(newCoords);
 
     if(coords == nullptr) {
-        empty = true;
+        empty3d = true;
         return;
     }
 
@@ -60,14 +62,17 @@ Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
         coordinates.setAt(coords->getAt(0), 0);
     } else if (coords->getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
+    } else if (coords->getDimension() == 3) {
+        empty3d = true;
     } else {
-        empty = true;
+        empty2d = true;
     }
 }
 
 Point::Point(const Coordinate & c, const GeometryFactory* factory) :
     Geometry(factory),
-    empty(false)
+    empty2d(false),
+    empty3d(false)
 {
     coordinates.setAt(c, 0);
 }
@@ -77,7 +82,8 @@ Point::Point(const Point& p)
     :
     Geometry(p),
     coordinates(p.coordinates),
-    empty(p.empty)
+    empty2d(p.empty3d),
+    empty3d(p.empty3d)
 {
 }
 
@@ -90,13 +96,13 @@ Point::getCoordinates() const
 size_t
 Point::getNumPoints() const
 {
-    return empty ? 0 : 1;
+    return isEmpty() ? 0 : 1;
 }
 
 bool
 Point::isEmpty() const
 {
-    return empty;
+    return empty2d || empty3d;
 }
 
 bool
@@ -153,7 +159,7 @@ Point::getZ() const
 const Coordinate*
 Point::getCoordinate() const
 {
-    return empty ? nullptr : &coordinates[0];
+    return isEmpty() ? nullptr : &coordinates[0];
 }
 
 string
@@ -288,8 +294,10 @@ Point::getGeometryTypeId() const
 const CoordinateSequence*
 Point::getCoordinatesRO() const
 {
-    if (isEmpty()) {
-        return &emptyCoords;
+    if (empty2d) {
+        return &emptyCoords2d;
+    } else if (empty3d) {
+        return &emptyCoords3d;
     }
     return &coordinates;
 }
