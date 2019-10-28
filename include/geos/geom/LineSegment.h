@@ -335,10 +335,9 @@ public:
      * intersection, the LineIntersector class should be used.
      *
      * @param line
-     * @param coord the Coordinate to write the result into
-     * @return true if an intersection was found, false otherwise
+     * @return intersection if found, setNull() otherwise
      */
-    bool intersection(const LineSegment& line, Coordinate& coord) const;
+    Coordinate intersection(const LineSegment& line) const;
 
     /** \brief
      * Computes the intersection point of the lines defined
@@ -353,11 +352,10 @@ public:
      * be used.
      *
      * @param line a line segment defining a straight line
-     * @param ret will be set to the intersection point (if any)
-     * @return true if an intersection was found, false otherwise
+     * @return intersection if found, setNull() otherwise
      *
      */
-    bool lineIntersection(const LineSegment& line, Coordinate& ret) const;
+    Coordinate lineIntersection(const LineSegment& line) const;
 
     /**
      * Creates a LineString with the same coordinates as this segment

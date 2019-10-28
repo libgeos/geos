@@ -291,7 +291,7 @@ WKBReader::readLineString()
     cout << "WKB npoints: " << size << endl;
 #endif
     auto pts = readCoordinateSequence(size);
-    return std::unique_ptr<LineString>(factory.createLineString(pts.release()));
+    return factory.createLineString(std::move(pts));
 }
 
 std::unique_ptr<LinearRing>
@@ -302,7 +302,7 @@ WKBReader::readLinearRing()
     cout << "WKB npoints: " << size << endl;
 #endif
     auto pts = readCoordinateSequence(size);
-    return std::unique_ptr<LinearRing>(factory.createLinearRing(pts.release()));
+    return factory.createLinearRing(std::move(pts));
 }
 
 std::unique_ptr<Polygon>

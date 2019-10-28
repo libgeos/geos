@@ -33,6 +33,10 @@
 namespace tut
 {
 
+template<class T>
+void
+ignore_unused_variable_warning(T const &) {}
+
 template <class, int>
 class test_group;
 
@@ -235,9 +239,8 @@ class test_group : public group_base, public test_group_posix
                         " an SEH exception");
                 }
 #else
-                bool d;
-                d = delete_obj(); // on separate line from declaration to
-                                  // avoid MVSC warning
+                bool d = delete_obj();
+                ignore_unused_variable_warning(d);
                 assert(d && "delete failed with SEH disabled: runtime bug?");
 #endif
             }

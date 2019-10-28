@@ -13,9 +13,9 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 libgeom_la_SOURCES = \
     Coordinate.cpp \
     CoordinateSequence.cpp \
-    CoordinateSequenceFactory.cpp  \
     CoordinateArraySequence.cpp \
     CoordinateArraySequenceFactory.cpp \
+    DefaultCoordinateSequenceFactory.cpp \
     Dimension.cpp \
     Envelope.cpp \
     Geometry.cpp \

@@ -117,15 +117,15 @@ static void findFaceHoles(std::vector<std::unique_ptr<Face>>& faces) {
 
 static std::unique_ptr<geom::MultiPolygon> collectFacesWithEvenAncestors(
     std::vector<std::unique_ptr<Face>>& faces) {
-    std::vector<geom::Geometry*>* geoms = new std::vector<geom::Geometry*>();
+    std::vector<std::unique_ptr<geom::Geometry>> geoms;
     for( auto& face: faces ) {
         if( face->countParents() % 2 ) {
             continue; /* we skip odd parents geoms */
         }
-        geoms->push_back(face->poly->clone().release());
+        geoms.push_back(face->poly->clone());
     }
-    return std::unique_ptr<geom::MultiPolygon>(
-        GeometryFactory::create()->createMultiPolygon(geoms));
+    // TODO don't create new GeometryFactory here
+    return GeometryFactory::create()->createMultiPolygon(std::move(geoms));
 }
 
 #ifdef DUMP_GEOM
@@ -145,6 +145,7 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
 
     // No geometries in collection, early out
     if( polys->empty() ) {
+        // TODO don't create new GeometryFactory here
         auto emptyGeomCollection = unique_ptr<geom::Geometry>(
             GeometryFactory::create()->createGeometryCollection());
         emptyGeomCollection->setSRID(geom->getSRID());

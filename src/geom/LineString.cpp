@@ -104,8 +104,6 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
 }
 
 
-LineString::~LineString() = default;
-
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
@@ -163,15 +161,15 @@ LineString::getNumPoints() const
     return points->getSize();
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getPointN(size_t n) const
 {
     assert(getFactory());
     assert(points.get());
-    return getFactory()->createPoint(points->getAt(n));
+    return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt(n)));
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getStartPoint() const
 {
     if(isEmpty()) {
@@ -181,7 +179,7 @@ LineString::getStartPoint() const
     return getPointN(0);
 }
 
-Point*
+std::unique_ptr<Point>
 LineString::getEndPoint() const
 {
     if(isEmpty()) {
@@ -224,11 +222,10 @@ LineString::getBoundary() const
     if(isClosed()) {
         return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
-    vector<Geometry*>* pts = new vector<Geometry*>();
-    pts->push_back(getStartPoint());
-    pts->push_back(getEndPoint());
-    MultiPoint* mp = getFactory()->createMultiPoint(pts);
-    return std::unique_ptr<Geometry>(mp);
+    std::vector<std::unique_ptr<Point>> pts(2);
+    pts[0] = getStartPoint();
+    pts[1] = getEndPoint();
+    return getFactory()->createMultiPoint(std::move(pts));
 }
 
 bool
@@ -256,25 +253,7 @@ LineString::computeEnvelopeInternal() const
         return Envelope::Ptr(new Envelope());
     }
 
-    assert(points.get());
-    const Coordinate& c = points->getAt(0);
-    double minx = c.x;
-    double miny = c.y;
-    double maxx = c.x;
-    double maxy = c.y;
-    std::size_t npts = points->getSize();
-    for(std::size_t i = 1; i < npts; i++) {
-        const Coordinate& c1 = points->getAt(i);
-        minx = minx < c1.x ? minx : c1.x;
-        maxx = maxx > c1.x ? maxx : c1.x;
-        miny = miny < c1.y ? miny : c1.y;
-        maxy = maxy > c1.y ? maxy : c1.y;
-    }
-
-    // caller expects a newly allocated Envelope.
-    // this function won't be called twice, unless
-    // cached Envelope is invalidated (set to NULL)
-    return Envelope::Ptr(new Envelope(minx, maxx, miny, maxy));
+    return detail::make_unique<Envelope>(points->getEnvelope());
 }
 
 bool

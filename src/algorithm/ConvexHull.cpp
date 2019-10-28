@@ -105,19 +105,13 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
     const CoordinateSequenceFactory* csf =
         geomFactory->getCoordinateSequenceFactory();
 
-    // Create a new Coordinate::Vect for feeding it to
-    // the CoordinateSequenceFactory
-    Coordinate::Vect* vect = new Coordinate::Vect();
+    std::vector<Coordinate> vect(cv.size());
 
-    size_t n = cv.size();
-    vect->reserve(n); // avoid multiple reallocs
-
-    for(size_t i = 0; i < n; ++i) {
-        vect->push_back(*(cv[i])); // Coordinate copy
+    for(size_t i = 0; i < cv.size(); ++i) {
+        vect[i] = *(cv[i]); // Coordinate copy
     }
 
-    return csf->create(vect); // takes ownership of the vector
-
+    return csf->create(std::move(vect)); // takes ownership of the vector
 }
 
 /* private */
@@ -233,7 +227,7 @@ ConvexHull::getConvexHull()
     size_t nInputPts = inputPts.size();
 
     if(nInputPts == 0) { // Return an empty geometry
-        return std::unique_ptr<Geometry>(geomFactory->createEmptyGeometry());
+        return geomFactory->createEmptyGeometry();
     }
 
     if(nInputPts == 1) { // Return a Point
@@ -244,7 +238,7 @@ ConvexHull::getConvexHull()
     if(nInputPts == 2) { // Return a LineString
         // Copy all Coordinates from the ConstVect
         auto cs = toCoordinateSequence(inputPts);
-        return std::unique_ptr<Geometry>(geomFactory->createLineString(cs.release()));
+        return geomFactory->createLineString(std::move(cs));
     }
 
     // use heuristic to reduce points, if large
@@ -352,12 +346,11 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
     if(cleaned.size() == 3) { // shouldn't this be 2 ??
         cleaned.resize(2);
         auto cl1 = toCoordinateSequence(cleaned);
-        std::unique_ptr<Geometry> ret(geomFactory->createLineString(cl1.release()));
-        return ret;
+        return geomFactory->createLineString(std::move(cl1));
     }
     auto cl2 = toCoordinateSequence(cleaned);
-    LinearRing* linearRing = geomFactory->createLinearRing(cl2.release());
-    return std::unique_ptr<Geometry>(geomFactory->createPolygon(linearRing, nullptr));
+    std::unique_ptr<LinearRing> linearRing = geomFactory->createLinearRing(std::move(cl2));
+    return geomFactory->createPolygon(std::move(linearRing));
 }
 
 /*private*/

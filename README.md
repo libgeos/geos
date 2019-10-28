@@ -14,97 +14,13 @@ More information is available the [project homepage](https://trac.osgeo.org/geos
 
 | branch / CI | Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor | Bessie | Bessie32 |
 |:---         |:---    |:---    |:---    |:---       |:---       |:---      |:---    |:---    |
-| master      | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=master)](https://dronie.osgeo.org/geos/geos?branch=master) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=master)](https://travis-ci.com/libgeos/geos?branch=master) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/master/build.svg)](https://gitlab.com/geos/libgeos/commits/master) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/master?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/master) | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) ||
-| 3.7     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.7/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.7)](https://dronie.osgeo.org/geos/geos?branch=3.7) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.7)](https://travis-ci.com/libgeos/geos?branch=3.7) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.7/build.svg)](https://gitlab.com/geos/libgeos/commits/3.7) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/3.7?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/3.7) ||
-| 3.6     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.6)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.6/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=svn-3.6)](https://dronie.osgeo.org/geos/geos?branch=svn-3.6) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=svn-3.6)](https://travis-ci.com/libgeos/geos?branch=svn-3.6) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.6/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-3.6) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/svn-3.6?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/svn-3.6) |
+| master      | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=master)](https://dronie.osgeo.org/geos/geos?branch=master) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=master)](https://travis-ci.com/libgeos/geos?branch=master) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/master/build.svg)](https://gitlab.com/geos/libgeos/commits/master) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/master?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/master) | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) |
+| 3.8     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.8)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.8/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.8/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.8/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.8)](https://dronie.osgeo.org/geos/geos?branch=3.8) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.8)](https://travis-ci.com/libgeos/geos?branch=3.8) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.8/build.svg)](https://gitlab.com/geos/libgeos/commits/3.8) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/3.8?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/3.8) |
+| 3.7     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.7/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.7)](https://dronie.osgeo.org/geos/geos?branch=3.7) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.7)](https://travis-ci.com/libgeos/geos?branch=3.7) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.7/build.svg)](https://gitlab.com/geos/libgeos/commits/3.7) | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/3.7?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/3.7) |
 
-## Building GEOS From Source
+## Build/install
 
-### Prerequisites
-
-GEOS has no external library dependencies and can be built with any C++11
-compiler.
-
-### Unix
-
-GEOS can be built on Unix systems using either the autotools or CMake build
-systems.
-
-#### Using Autotools:
-
-When building GEOS using autotools, a `configure` script must first be generated
-using the `autogen.sh` file included in the root of the repository:
-
-    ./autogen.sh
-
-An out-of-tree build can then be initiated by creating a subdirectory and
-running the generated `configure` script from that subdirectory:
-
-    mkdir obj && cd obj && ../configure
-
-Once the `configure` script has run, GEOS can be built by running `make` and
-installed by running `make install`. The test suite can be run using `make
-check`.
-
-#### Using CMake:
-
-To build `GEOS` using CMake, create a build directory and run the `cmake` command
-from that location:
-
-    mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
-
-Setting `CMAKE_BUILD_TYPE` to `Release` is necessary to enable compiler
-optimizations.
-
-Once the `cmake` tool has run, GEOS can be built by running `make` and
-installed by running `make install`. The test suite can be run using `make
-check`.
-
-### Microsoft Windows
-
-GEOS can be built with Microsoft Visual C++ by opening the `CMakeLists.txt` in
-the project root using `File > Open > CMake`.
-
-If you prefer the command-line
-
-#### Build with CMake generator for Ninja (fast)
-
-In the Visual Studio 2019 command prompt, `x64 Native Tools Command Prompt for VS 2019` or `x64_x86 Cross Tools Command Prompt for VS 2019`:
-
-```
-cmake -S . -B _build_vs2019_ninja -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build _build_vs2019_ninja -j 16 --verbose
-```
-
-#### Build with CMake generator for MSBuild (default)
-
-In the non-specific Command Prompt:
-
-##### 64-bit
-
-```
-cmake -S . -B _build_vs2019x64 -G "Visual Studio 16 2019" -A x64 -DCMAKE_GENERATOR_TOOLSET=host=x64
-cmake --build _build_vs2019x64 --config Release -j 16 --verbose
-```
-
-##### 32-bit
-
-```
-cmake -S . -B _build_vs2019x32 -G "Visual Studio 16 2019" -A x32 -DCMAKE_GENERATOR_TOOLSET=host=x64
-cmake --build _build_vs2019x32 --config Release -j 16 --verbose
-```
-
-#### Test using CMake
-
-```
-cd <build directory>
-ctest --show-only
-ctest
-ctest --output-on-failure
-ctest -V
-ctest -VV
-```
-
+See INSTALL file
 
 ## Client applications
 
@@ -186,10 +102,18 @@ Python bindings are available via:
 
 ## Documentation
 
-To build Doxygen documentation:
+Doxygen documentation can be generated using either the autotools or CMake build
+systems.
+
+### Using Autotools:
 
     cd doc
     make doxygen-html
+
+### Using CMake:
+
+    cmake -DBUILD_DOCUMENTATION=YES
+    make docs
 
 ## Style
 

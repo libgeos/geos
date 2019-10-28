@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2012 Excensus LLC.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -17,6 +18,7 @@
  **********************************************************************/
 
 #include <geos/triangulate/quadedge/QuadEdge.h>
+#include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -24,36 +26,14 @@ namespace quadedge { //geos.triangulate.quadedge
 
 using namespace geos::geom;
 
-std::unique_ptr<QuadEdge>
-QuadEdge::makeEdge(const Vertex& o, const Vertex& d)
-{
-    QuadEdge* q0 = new QuadEdge();
-    //q1-q3 are free()'d by q0
-    QuadEdge* q1 = new QuadEdge();
-    QuadEdge* q2 = new QuadEdge();
-    QuadEdge* q3 = new QuadEdge();
-
-    q0->_rot = q1;
-    q1->_rot = q2;
-    q2->_rot = q3;
-    q3->_rot = q0;
-
-    q0->setNext(q0);
-    q1->setNext(q3);
-    q2->setNext(q2);
-    q3->setNext(q1);
-
-    QuadEdge* base = q0;
-    base->setOrig(o);
-    base->setDest(d);
-
-    return std::unique_ptr<QuadEdge>(base);
+QuadEdge* QuadEdge::makeEdge(const Vertex& o, const Vertex& d, std::deque<QuadEdgeQuartet> & edges) {
+    return &QuadEdgeQuartet::makeEdge(o, d, edges);
 }
 
-std::unique_ptr<QuadEdge>
-QuadEdge::connect(QuadEdge& a, QuadEdge& b)
+QuadEdge*
+QuadEdge::connect(QuadEdge& a, QuadEdge& b, std::deque<QuadEdgeQuartet> & edges)
 {
-    std::unique_ptr<QuadEdge> q0 = makeEdge(a.dest(), b.orig());
+    QuadEdge* q0 = makeEdge(a.dest(), b.orig(), edges);
     splice(*q0, a.lNext());
     splice(q0->sym(), b);
     return q0;
@@ -89,32 +69,8 @@ QuadEdge::swap(QuadEdge& e)
     e.setDest(b.dest());
 }
 
-QuadEdge::QuadEdge() : _rot(nullptr), vertex(), next(nullptr), data(nullptr), isAlive(true)
-{ }
-
-QuadEdge::~QuadEdge()
-{
-}
-
-void
-QuadEdge::free()
-{
-    if(_rot) {
-        if(_rot->_rot) {
-            if(_rot->_rot->_rot) {
-                delete _rot->_rot->_rot;
-                _rot->_rot->_rot = nullptr;
-            }
-            delete _rot->_rot;
-            _rot->_rot = nullptr;
-        }
-        delete _rot;
-        _rot = nullptr;
-    }
-}
-
 const QuadEdge&
-QuadEdge::getPrimary() const
+QuadEdge::getPrimary()
 {
     if(orig().getCoordinate().compareTo(dest().getCoordinate()) <= 0) {
         return *this;
@@ -122,18 +78,6 @@ QuadEdge::getPrimary() const
     else {
         return sym();
     }
-}
-
-void
-QuadEdge::setData(void* p_data)
-{
-    this->data = p_data;
-}
-
-void*
-QuadEdge::getData()
-{
-    return data;
 }
 
 void

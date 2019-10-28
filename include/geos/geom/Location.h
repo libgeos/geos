@@ -30,11 +30,12 @@ namespace geom { // geos::geom
  * For a description of the DE-9IM, see the
  * [OpenGIS Simple Features Specification for SQL](http://www.opengis.org/techno/specs.htm").
  */
-GEOS_DLL enum class Location : char {
+
+enum class GEOS_DLL Location : char {
     /**
      *  Used for uninitialized location values.
      */
-    UNDEF = -1, // Instead of NULL
+    UNDEF = (char)(-1), // Instead of NULL
 
     /**
      * DE-9IM row index of the interior of the first geometry and
@@ -58,7 +59,7 @@ GEOS_DLL enum class Location : char {
     EXTERIOR = 2
 };
 
-std::ostream& operator<<(std::ostream& os, const Location& loc);
+GEOS_DLL std::ostream& operator<<(std::ostream& os, const Location& loc);
 
 } // namespace geos::geom
 } // namespace geos

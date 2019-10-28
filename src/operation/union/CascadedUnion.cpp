@@ -168,7 +168,7 @@ geom::Geometry*
 CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
         geom::Geometry* g1, geom::Envelope const& common)
 {
-    std::vector<geom::Geometry*> disjointPolys;
+    std::vector<const geom::Geometry*> disjointPolys;
 
     std::unique_ptr<geom::Geometry> g0Int(extractByEnvelope(common, g0, disjointPolys));
     std::unique_ptr<geom::Geometry> g1Int(extractByEnvelope(common, g1, disjointPolys));
@@ -181,12 +181,12 @@ CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
 
 geom::Geometry*
 CascadedUnion::extractByEnvelope(geom::Envelope const& env,
-                                 geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms)
+                                 geom::Geometry* geom, std::vector<const geom::Geometry*>& disjointGeoms)
 {
-    std::vector<geom::Geometry*> intersectingGeoms;
+    std::vector<const geom::Geometry*> intersectingGeoms;
 
     for(std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        geom::Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
+        const geom::Geometry* elem = geom->getGeometryN(i);
         if(elem->getEnvelopeInternal()->intersects(env)) {
             intersectingGeoms.push_back(elem);
         }

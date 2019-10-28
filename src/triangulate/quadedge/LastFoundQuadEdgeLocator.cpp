@@ -38,7 +38,7 @@ QuadEdge*
 LastFoundQuadEdgeLocator::findEdge()
 {
     // assume there is an edge
-    return *(subdiv->getEdges().begin());
+    return &(subdiv->getEdges()[0].base());
 }
 
 QuadEdge*

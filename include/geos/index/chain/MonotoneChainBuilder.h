@@ -55,18 +55,18 @@ public:
     /** \brief
      * Return a newly-allocated vector of newly-allocated
      * MonotoneChain objects for the given CoordinateSequence.
-     *
-     * @note Remember to deep-delete the result.
      */
     static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
         const geom::CoordinateSequence* pts,
         void* context);
 
     /** \brief
-     * Fill the provided vector with newly-allocated MonotoneChain objects
-     * for the given CoordinateSequence.
+     * Computes a list of the {@link MonotoneChain}s for a list of coordinates,
+     * attaching a context data object to each.
      *
-     * @note Remember to delete vector elements!
+     * @param pts the list of points to compute chains for
+     * @param context a data object to attach to each chain
+     * @param[out] mcList a list of the monotone chains for the points
      */
     static void getChains(const geom::CoordinateSequence* pts,
                           void* context,
@@ -77,16 +77,6 @@ public:
     {
         return getChains(pts, nullptr);
     }
-
-    /** \brief
-     * Fill the given vector with start/end indexes of the monotone chains
-     * for the given CoordinateSequence.
-     *
-     * The last entry in the array points to the end point of the point
-     * array, for use as a sentinel.
-     */
-    static void getChainStartIndices(const geom::CoordinateSequence& pts,
-                                     std::vector<std::size_t>& startIndexList);
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this
@@ -102,9 +92,11 @@ private:
      * Finds the index of the last point in a monotone chain
      * starting at a given point.
      *
-     * Any repeated points (0-length segments) will be included
+     * Repeated points (0-length segments) are included
      * in the monotone chain returned.
      *
+     * @param pts the points to scan
+     * @param start the index of the start of this chain
      * @return the index of the last point in the monotone chain
      *         starting at <code>start</code>.
      *

@@ -948,14 +948,14 @@ struct GEOS_DLL GeometryGreaterThen {
 
 
 /// Return current GEOS version
-std::string geosversion();
+GEOS_DLL std::string geosversion();
 
 /**
  * \brief
  * Return the version of JTS this GEOS
  * release has been ported from.
  */
-std::string jtsport();
+GEOS_DLL std::string jtsport();
 
 // We use this instead of std::pair<unique_ptr<Geometry>> because C++11
 // forbids that construct:

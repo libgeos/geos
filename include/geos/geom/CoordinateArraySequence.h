@@ -56,6 +56,10 @@ public:
     /// Construct an empty sequence
     CoordinateArraySequence();
 
+    /// Construct sequence moving from given Coordinate vector
+    CoordinateArraySequence(std::vector<Coordinate> && coords,
+                            std::size_t dimension = 0);
+
     /// Construct sequence taking ownership of given Coordinate vector
     CoordinateArraySequence(std::vector<Coordinate>* coords,
                             std::size_t dimension = 0);
@@ -63,7 +67,7 @@ public:
     /// Construct sequence allocating space for n coordinates
     CoordinateArraySequence(std::size_t n, std::size_t dimension = 0);
 
-    ~CoordinateArraySequence() override;
+    ~CoordinateArraySequence() override = default;
 
     bool
     isEmpty() const override
@@ -113,9 +117,6 @@ public:
     void setAt(const Coordinate& c, std::size_t pos) override;
 
     void setPoints(const std::vector<Coordinate>& v) override;
-
-    double getOrdinate(std::size_t index,
-                       size_t ordinateIndex) const override;
 
     void setOrdinate(std::size_t index, std::size_t ordinateIndex,
                      double value) override;

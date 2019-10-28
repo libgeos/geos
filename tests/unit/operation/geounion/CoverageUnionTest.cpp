@@ -44,16 +44,13 @@ namespace tut {
 
         WKTReader reader(gfact.get());
 
-        std::vector<Geometry*> geoms;
+        std::vector<std::unique_ptr<Geometry>> geoms;
 
         for (const auto& wkt : wkt_geoms) {
-            geoms.push_back(reader.read(wkt).release());
+            geoms.push_back(reader.read(wkt));
         }
 
-        std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(geoms));
-        for (auto& g : geoms) {
-            delete g;
-        }
+        std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(std::move(geoms)));
 
         auto u1 = UnaryUnionOp::Union(*coll);
         auto u2 = CoverageUnion::Union(coll.get());
@@ -70,16 +67,13 @@ namespace tut {
 
         WKTReader reader(gfact.get());
 
-        std::vector<Geometry*> geoms;
+        std::vector<std::unique_ptr<Geometry>> geoms;
 
         for (const auto& wkt : wkt_geoms) {
-            geoms.push_back(reader.read(wkt).release());
+            geoms.push_back(reader.read(wkt));
         }
 
-        std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(geoms));
-        for (auto& g : geoms) {
-            delete g;
-        }
+        std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(std::move(geoms)));
 
         try {
             auto u1 = CoverageUnion::Union(coll.get());

@@ -79,7 +79,7 @@ namespace io {
 class GEOS_DLL WKTWriter {
 public:
     WKTWriter();
-    ~WKTWriter();
+    ~WKTWriter() = default;
 
     //string(count, ch) can be used for this
     //static string stringOfChar(char ch, int count);

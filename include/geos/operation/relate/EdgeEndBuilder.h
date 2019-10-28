@@ -49,20 +49,20 @@ class GEOS_DLL EdgeEndBuilder {
 public:
     EdgeEndBuilder() {}
 
-    std::vector<geomgraph::EdgeEnd*>* computeEdgeEnds(std::vector<geomgraph::Edge*>* edges);
+    std::vector<geomgraph::EdgeEnd*> computeEdgeEnds(std::vector<geomgraph::Edge*>* edges);
     void computeEdgeEnds(geomgraph::Edge* edge, std::vector<geomgraph::EdgeEnd*>* l);
 
 protected:
 
     void createEdgeEndForPrev(geomgraph::Edge* edge,
                               std::vector<geomgraph::EdgeEnd*>* l,
-                              geomgraph::EdgeIntersection* eiCurr,
-                              geomgraph::EdgeIntersection* eiPrev);
+                              const geomgraph::EdgeIntersection* eiCurr,
+                              const geomgraph::EdgeIntersection* eiPrev);
 
     void createEdgeEndForNext(geomgraph::Edge* edge,
                               std::vector<geomgraph::EdgeEnd*>* l,
-                              geomgraph::EdgeIntersection* eiCurr,
-                              geomgraph::EdgeIntersection* eiNext);
+                              const geomgraph::EdgeIntersection* eiCurr,
+                              const geomgraph::EdgeIntersection* eiNext);
 };
 
 } // namespace geos:operation:relate

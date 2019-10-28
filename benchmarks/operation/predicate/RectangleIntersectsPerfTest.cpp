@@ -127,7 +127,7 @@ private:
                 Envelope envRect(
                     baseX, baseX + dx,
                     baseY, baseY + dy);
-                Geometry* rect = fact->toGeometry(&envRect);
+                Geometry* rect = fact->toGeometry(&envRect).release();
                 rectList.push_back(rect);
             }
         }

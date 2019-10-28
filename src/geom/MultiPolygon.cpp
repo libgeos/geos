@@ -34,13 +34,11 @@
 # include "geos/geom/MultiPolygon.inl"
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-MultiPolygon::MultiPolygon(vector<Geometry*>* newPolys, const GeometryFactory* factory)
+MultiPolygon::MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* factory)
       : GeometryCollection(newPolys, factory)
 {}
 
@@ -66,7 +64,7 @@ MultiPolygon::getBoundaryDimension() const
     return 1;
 }
 
-string
+std::string
 MultiPolygon::getGeometryType() const
 {
     return "MultiPolygon";
@@ -78,27 +76,22 @@ MultiPolygon::getBoundary() const
     if(isEmpty()) {
         return std::unique_ptr<Geometry>(getFactory()->createMultiLineString());
     }
-    vector<Geometry*>* allRings = new vector<Geometry*>();
-    for(size_t i = 0; i < geometries.size(); i++) {
-        Polygon* pg = dynamic_cast<Polygon*>(geometries[i].get());
-        assert(pg);
+
+    std::vector<std::unique_ptr<Geometry>> allRings;
+    for(const auto& pg : geometries) {
         auto g = pg->getBoundary();
-        if(LineString* ls = dynamic_cast<LineString*>(g.get())) {
-            allRings->push_back(ls);
-            g.release();
-        }
-        else {
-            GeometryCollection* rings = dynamic_cast<GeometryCollection*>(g.get());
-            for(size_t j = 0, jn = rings->getNumGeometries();
-                    j < jn; ++j) {
-                allRings->push_back(rings->getGeometryN(j)->clone().release());
+
+        if(g->getNumGeometries() == 1) {
+            allRings.push_back(std::move(g));
+        } else {
+            for(size_t i = 0; i < g->getNumGeometries(); ++i) {
+                // TODO avoid this clone
+                allRings.push_back(g->getGeometryN(i)->clone());
             }
         }
     }
 
-    Geometry* ret = getFactory()->createMultiLineString(allRings);
-
-    return std::unique_ptr<Geometry>(ret);
+    return getFactory()->createMultiLineString(std::move(allRings));
 }
 
 bool
@@ -122,16 +115,22 @@ MultiPolygon::reverse() const
         return clone();
     }
 
-    auto* reversed = new std::vector<Geometry*> {geometries.size()};
+    std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
 
     std::transform(geometries.begin(),
                    geometries.end(),
-                   reversed->begin(),
+                   reversed.begin(),
     [](const std::unique_ptr<Geometry> & g) {
-        return g->reverse().release();
+        return g->reverse();
     });
 
-    return std::unique_ptr<Geometry>(getFactory()->createMultiPolygon(reversed));
+    return getFactory()->createMultiPolygon(std::move(reversed));
+}
+
+const Polygon*
+MultiPolygon::getGeometryN(size_t i) const
+{
+    return static_cast<const Polygon*>(geometries[i].get());
 }
 
 } // namespace geos::geom

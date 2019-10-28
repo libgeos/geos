@@ -23,7 +23,7 @@
 
 #include <geos/export.h>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <iostream>
 
@@ -49,7 +49,7 @@ class Edge;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
+/** \brief
  * A EdgeList is a list of Edges.
  *
  * It supports locating edges
@@ -73,13 +73,10 @@ private:
 
     /**
      * An index of the edges, for fast lookup.
-     *
-     * OrientedCoordinateArray objects are owned by us.
-     * TODO: optimize by dropping the OrientedCoordinateArray
-     *       construction as a whole, and use CoordinateSequence
-     *       directly instead..
      */
-    typedef std::map<noding::OrientedCoordinateArray*, Edge*, OcaCmp> EdgeMap;
+    typedef std::unordered_map<noding::OrientedCoordinateArray,
+                               Edge*,
+                               noding::OrientedCoordinateArray::HashCode> EdgeMap;
     EdgeMap ocaMap;
 
 public:
@@ -91,7 +88,7 @@ public:
         ocaMap()
     {}
 
-    virtual ~EdgeList();
+    virtual ~EdgeList() = default;
 
     /**
      * Insert an edge unless it is already in the list
@@ -106,11 +103,11 @@ public:
         return edges;
     }
 
-    Edge* findEqualEdge(Edge* e);
+    Edge* findEqualEdge(const Edge* e) const;
 
     Edge* get(int i);
 
-    int findEdgeIndex(Edge* e);
+    int findEdgeIndex(const Edge* e) const;
 
     std::string print();
 

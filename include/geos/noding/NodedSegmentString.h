@@ -101,10 +101,7 @@ public:
         , pts(newPts)
     {}
 
-    ~NodedSegmentString() override
-    {
-        delete pts;
-    }
+    ~NodedSegmentString() override = default;
 
     /** \brief
      * Adds an intersection node for a given point and segment to this segment string.
@@ -201,7 +198,7 @@ private:
 
     SegmentNodeList nodeList;
 
-    geom::CoordinateSequence* pts;
+    std::unique_ptr<geom::CoordinateSequence> pts;
 
     static int safeOctant(const geom::Coordinate& p0, const geom::Coordinate& p1);
 

@@ -22,7 +22,7 @@ namespace util { // geos::util
 
 #define GEOS_CHECK_FOR_INTERRUPTS() geos::util::Interrupt::process()
 
-/** Used to manage interruption requests and callbacks */
+/** \brief Used to manage interruption requests and callbacks. */
 class GEOS_DLL Interrupt {
 
 public:

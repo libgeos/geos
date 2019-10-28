@@ -40,6 +40,12 @@ CoordinateArraySequence::CoordinateArraySequence(size_t n,
 {
 }
 
+CoordinateArraySequence::CoordinateArraySequence(std::vector<Coordinate> && coords, size_t dimension_in):
+        vect(std::move(coords)),
+        dimension(dimension_in)
+{
+}
+
 CoordinateArraySequence::CoordinateArraySequence(
     std::vector<Coordinate>* coords, size_t dimension_in)
     : dimension(dimension_in)
@@ -198,28 +204,11 @@ CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
     vect[pos] = c;
 }
 
-CoordinateArraySequence::~CoordinateArraySequence() = default;
-
 void
 CoordinateArraySequence::expandEnvelope(Envelope& env) const
 {
     for(const auto& coord : vect) {
         env.expandToInclude(coord);
-    }
-}
-
-double
-CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
-{
-    switch(ordinateIndex) {
-    case CoordinateSequence::X:
-        return vect[index].x;
-    case CoordinateSequence::Y:
-        return vect[index].y;
-    case CoordinateSequence::Z:
-        return vect[index].z;
-    default:
-        return DoubleNotANumber;
     }
 }
 

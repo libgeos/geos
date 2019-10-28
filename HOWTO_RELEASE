@@ -1,48 +1,47 @@
-1. Verify that the versions currently set (see 10 and 11 below) make
+1. Verify that the versions currently set in Version.txt
    sense for this release.
+
+    - GEOS_VERSION_PATCH
+    - GEOS_VERSION_MINOR
+    - GEOS_VERSION_MAJOR
+
+    - CAPI_INTERFACE_CURRENT
+    - CAPI_INTERFACE_REVISION
+    - CAPI_INTERFACE_AGE
+
+    Always increase the revision value.
+    Increase the current value whenever an interface has been added, removed or changed.
+    Increase the age value only if the changes made to the ABI are backward compatible.
 
 2. Run 'make distcheck', fix any problem with it.
 
 3. Update the NEWS file (extract most important things from the
-   repository log). Make sure to update the release date
+   repository log). Make sure to update the release date.
 
 4. Commit the changes in the NEWS file.
 
-5. Tag the release:
-   $ git tag MAJOR.MINOR.PATCH
+5. Run 'make dist-bzip2'.
 
-6. Run 'make dist-bzip2'.
    $ ./autogen.sh && ./configure && make dist-bzip2
 
-7. Verify that you can unpack and build the tarball
+6. Verify that you can un-pack and build the tarball.
 
-8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+   - autotools: ./configure && make check
+   - cmake: mkdir build && cd build && cmake .. && make && make check
 
-9. Increment all the version numbers for the next release, as below.
+7. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
-10. Increment CAPI_INTERFACE_X in configure.ac
-    - For a release with no interface changes just bump REVISION.
-      [ Even if *nothing* changed in CAPI ]
-    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
-    - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
-      [ THIS MUST BE CAREFULLY AVOIDED ]
+8. Tag the release:
 
-11. Increment release version:
-    - In configure.ac
-    - In include/geos/version.h.vc
-    - In capi/geos_c.h.in
-      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
-      - VERSION_MINOR for NEW interfaces in the C lib
-      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
-        [ THIS MUST BE CAREFULLY AVOIDED ]
-    - In main CMakeLists.txt main one
-       - On section: "# Set GEOS project"
-         - CHANGE the line: project(GEOS VERSION <mayor>.<minor>.<micro> LANGUAGES C CXX)
-         - CHANGE the line: SET(GEOS_PATCH_WORD "dev")
+   $ git tag MAJOR.MINOR.PATCH
+   $ git push origin MAJOR.MINOR.PATCH
 
-12. Update wiki page https://trac.osgeo.org/geos/ at Download section
+9. Increment all the version numbers for the next release (described in 1 above).
+
+10. Update wiki page https://trac.osgeo.org/geos/ at Download section
+
     - Add latest release
-    - Remove previos patch level release (if any)
+    - Remove previous patch level release (if any)
 
-13. Announce
+11. Announce on geos-devel
 

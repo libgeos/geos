@@ -18,8 +18,6 @@
 #include <geos/geomgraph/index/SweepLineEvent.h>
 #include <geos/geomgraph/index/SweepLineEventObj.h>
 
-using namespace std;
-
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
@@ -32,20 +30,6 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
     insertEvent(newInsertEvent),
     deleteEventIndex(0)
 {
-    if(insertEvent != nullptr) {
-        eventType = DELETE_EVENT;
-    }
-    else {
-        eventType = INSERT_EVENT;
-    }
-}
-
-SweepLineEvent::~SweepLineEvent()
-{
-    if(eventType == DELETE_EVENT) {
-        delete insertEvent;
-        delete obj;
-    }
 }
 
 /**
@@ -64,24 +48,24 @@ SweepLineEvent::compareTo(SweepLineEvent* sle)
     if(xValue > sle->xValue) {
         return 1;
     }
-    if(eventType < sle->eventType) {
+    if(eventType() < sle->eventType()) {
         return -1;
     }
-    if(eventType > sle->eventType) {
+    if(eventType() > sle->eventType()) {
         return 1;
     }
     return 0;
 }
 
-string
+std::string
 SweepLineEvent::print()
 {
-    ostringstream s;
+    std::ostringstream s;
 
     s << "SweepLineEvent:";
     s << " xValue=" << xValue << " deleteEventIndex=" << deleteEventIndex;
-    s << ((eventType == INSERT_EVENT) ? " INSERT_EVENT" : " DELETE_EVENT");
-    s << endl << "\tinsertEvent=";
+    s << ((eventType() == INSERT_EVENT) ? " INSERT_EVENT" : " DELETE_EVENT");
+    s << std::endl << "\tinsertEvent=";
     if(insertEvent) {
         s << insertEvent->print();
     }

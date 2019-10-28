@@ -28,9 +28,10 @@
 namespace geos {
 namespace linearref { // geos::linearref
 
-/**
- * Computes the LinearLocation for a given length
- * along a linear [Geometry](@ref geom::Geometry).
+/** \brief
+ * Computes the LinearLocation for a given length along a linear
+ * [Geometry](@ref geom::Geometry).
+ *
  * Negative lengths are measured in reverse from end of the linear geometry.
  * Out-of-range values are clamped.
  */

@@ -19,3 +19,6 @@ target_link_libraries(perf_memleak_mp_prep PRIVATE geos_c)
 
 add_executable(perf_geospreparedcontains GEOSPreparedContainsPerfTest.cpp)
 target_link_libraries(perf_geospreparedcontains PRIVATE geos geos_c)
+
+add_executable(perf_intersection IntersectionPerfTest.cpp)
+target_link_libraries(perf_intersection PRIVATE geos geos_c)

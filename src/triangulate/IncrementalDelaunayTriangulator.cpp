@@ -54,7 +54,7 @@ IncrementalDelaunayTriangulator::insertSite(const Vertex& v)
     QuadEdge* e = subdiv->locate(v);
 
     if(!e) {
-        throw LocateFailureException("");
+        throw LocateFailureException("Could not locate vertex.");
     }
 
     if(subdiv->isVertexOfEdge(*e, v)) {

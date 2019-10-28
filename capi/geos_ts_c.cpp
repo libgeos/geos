@@ -32,6 +32,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
@@ -43,7 +44,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
-#include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -431,7 +432,7 @@ extern "C" {
     char
     GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -462,7 +463,7 @@ extern "C" {
     char
     GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -489,7 +490,7 @@ extern "C" {
     char
     GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -516,7 +517,7 @@ extern "C" {
     char
     GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -543,7 +544,7 @@ extern "C" {
     char
     GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -574,7 +575,7 @@ extern "C" {
     char
     GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -601,7 +602,7 @@ extern "C" {
     char
     GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -628,7 +629,7 @@ extern "C" {
     char
     GEOSCovers_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -655,7 +656,7 @@ extern "C" {
     char
     GEOSCoveredBy_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -687,7 +688,7 @@ extern "C" {
     char
     GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, const char* pat)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -716,7 +717,7 @@ extern "C" {
     GEOSRelatePatternMatch_r(GEOSContextHandle_t extHandle, const char* mat,
                              const char* pat)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -749,7 +750,7 @@ extern "C" {
     char*
     GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -784,7 +785,7 @@ extern "C" {
     char*
     GEOSRelateBoundaryNodeRule_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, int bnr)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -851,7 +852,7 @@ extern "C" {
     char
     GEOSisValid_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -888,7 +889,7 @@ extern "C" {
     char*
     GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -936,7 +937,7 @@ extern "C" {
     GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry* g,
                         int flags, char** reason, Geometry** location)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -992,7 +993,7 @@ extern "C" {
     char
     GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -1019,7 +1020,7 @@ extern "C" {
     char
     GEOSEqualsExact_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double tolerance)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -1048,7 +1049,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1077,7 +1078,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1106,7 +1107,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1136,7 +1137,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1165,7 +1166,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1195,7 +1196,7 @@ extern "C" {
     {
         assert(0 != dist);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1224,7 +1225,7 @@ extern "C" {
     {
         assert(0 != area);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1253,7 +1254,7 @@ extern "C" {
     {
         assert(0 != length);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -1280,7 +1281,7 @@ extern "C" {
     CoordinateSequence*
     GEOSNearestPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1310,7 +1311,7 @@ extern "C" {
     Geometry*
     GEOSGeomFromWKT_r(GEOSContextHandle_t extHandle, const char* wkt)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1340,7 +1341,7 @@ extern "C" {
     char*
     GEOSGeomToWKT_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1370,7 +1371,7 @@ extern "C" {
     {
         assert(0 != size);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1410,7 +1411,7 @@ extern "C" {
     Geometry*
     GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char* wkb, size_t size)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1445,7 +1446,7 @@ extern "C" {
     unsigned char*
     GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry* g, size_t* size)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1483,7 +1484,7 @@ extern "C" {
     Geometry*
     GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char* hex, size_t size)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1517,7 +1518,7 @@ extern "C" {
     char
     GEOSisEmpty_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -1543,7 +1544,7 @@ extern "C" {
     char
     GEOSisSimple_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -1570,7 +1571,7 @@ extern "C" {
     char
     GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -1606,7 +1607,7 @@ extern "C" {
     char*
     GEOSGeomType_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1636,7 +1637,7 @@ extern "C" {
     int
     GEOSGeomTypeId_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -1666,7 +1667,7 @@ extern "C" {
     Geometry*
     GEOSEnvelope_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1678,6 +1679,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->getEnvelope().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1693,7 +1695,7 @@ extern "C" {
     Geometry*
     GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1704,7 +1706,9 @@ extern "C" {
         }
 
         try {
-            return g1->intersection(g2).release();
+            Geometry* g3 = g1->intersection(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1719,7 +1723,7 @@ extern "C" {
     Geometry*
     GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadrantsegments)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1731,6 +1735,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->buffer(width, quadrantsegments).release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1751,7 +1756,7 @@ extern "C" {
         using geos::operation::buffer::BufferOp;
         using geos::util::IllegalArgumentException;
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1781,6 +1786,7 @@ extern "C" {
             bp.setMitreLimit(mitreLimit);
             BufferOp op(g1, bp);
             Geometry* g3 = op.getResultGeometry(width);
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1797,7 +1803,7 @@ extern "C" {
     GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadsegs, int joinStyle,
                       double mitreLimit)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1827,7 +1833,7 @@ extern "C" {
             }
             BufferBuilder bufBuilder(bp);
             Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
-
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1845,7 +1851,7 @@ extern "C" {
     GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadsegs, int joinStyle,
                             double mitreLimit, int leftSide)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1871,7 +1877,7 @@ extern "C" {
             bool isLeftSide = leftSide == 0 ? false : true;
             BufferBuilder bufBuilder(bp);
             Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
-
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1887,7 +1893,7 @@ extern "C" {
     Geometry*
     GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1899,6 +1905,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->convexHull().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1915,7 +1922,7 @@ extern "C" {
     Geometry*
     GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1927,8 +1934,8 @@ extern "C" {
 
         try {
             geos::algorithm::MinimumDiameter m(g);
-
-            Geometry* g3 = m.getMinimumRectangle();
+            Geometry* g3 = m.getMinimumRectangle().release();
+            g3->setSRID(g->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1944,7 +1951,7 @@ extern "C" {
     Geometry*
     GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1956,8 +1963,8 @@ extern "C" {
 
         try {
             geos::algorithm::MinimumDiameter m(g);
-
-            Geometry* g3 = m.getDiameter();
+            Geometry* g3 = m.getDiameter().release();
+            g3->setSRID(g->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -1973,7 +1980,7 @@ extern "C" {
     Geometry*
     GEOSMinimumClearanceLine_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -1985,7 +1992,9 @@ extern "C" {
 
         try {
             geos::precision::MinimumClearance mc(g);
-            return mc.getLine().release();
+            Geometry *g3 = mc.getLine().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2000,7 +2009,7 @@ extern "C" {
     int
     GEOSMinimumClearance_r(GEOSContextHandle_t extHandle, const Geometry* g, double* d)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -2030,7 +2039,7 @@ extern "C" {
     Geometry*
     GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2041,7 +2050,9 @@ extern "C" {
         }
 
         try {
-            return g1->difference(g2).release();
+            Geometry *g3 = g1->difference(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2056,7 +2067,7 @@ extern "C" {
     Geometry*
     GEOSBoundary_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2068,6 +2079,7 @@ extern "C" {
 
         try {
             Geometry* g3 = g1->getBoundary().release();
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -2083,7 +2095,7 @@ extern "C" {
     Geometry*
     GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2094,7 +2106,9 @@ extern "C" {
         }
 
         try {
-            return g1->symDifference(g2).release();
+            Geometry *g3 = g1->symDifference(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2110,7 +2124,7 @@ extern "C" {
     Geometry*
     GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2121,7 +2135,9 @@ extern "C" {
         }
 
         try {
-            return g1->Union(g2).release();
+            Geometry *g3 = g1->Union(g2).release();
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
@@ -2143,7 +2159,7 @@ extern "C" {
     Geometry*
     GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2154,7 +2170,9 @@ extern "C" {
         }
 
         try {
-            return geos::operation::geounion::CoverageUnion::Union(g).release();
+            Geometry *g3 = geos::operation::geounion::CoverageUnion::Union(g).release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2169,7 +2187,7 @@ extern "C" {
     Geometry*
     GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2181,6 +2199,7 @@ extern "C" {
 
         try {
             GeomPtr g3(g->Union());
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2203,7 +2222,7 @@ extern "C" {
     Geometry*
     GEOSNode_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2215,6 +2234,7 @@ extern "C" {
 
         try {
             std::unique_ptr<Geometry> g3 = geos::noding::GeometryNoder::node(*g);
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2237,7 +2257,7 @@ extern "C" {
     Geometry*
     GEOSUnionCascaded_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2255,7 +2275,9 @@ extern "C" {
             }
 
             using geos::operation::geounion::CascadedPolygonUnion;
-            return CascadedPolygonUnion::Union(p);
+            Geometry *g3 = CascadedPolygonUnion::Union(p);
+            g3->setSRID(g1->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2270,7 +2292,7 @@ extern "C" {
     Geometry*
     GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2285,8 +2307,9 @@ extern "C" {
             if(ret == nullptr) {
                 const GeometryFactory* gf = handle->geomFactory;
                 // return an empty point
-                return gf->createPoint();
+                return gf->createPoint().release();
             }
+            ret->setSRID(g1->getSRID());
             return ret.release();
         }
         catch(const std::exception& e) {
@@ -2302,7 +2325,7 @@ extern "C" {
     Geometry*
     GEOSClipByRect_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin, double xmax, double ymax)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2317,6 +2340,7 @@ extern "C" {
             using geos::operation::intersection::RectangleIntersection;
             Rectangle rect(xmin, ymin, xmax, ymax);
             std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
+            g3->setSRID(g->getSRID());
             return g3.release();
         }
         catch(const std::exception& e) {
@@ -2353,7 +2377,7 @@ extern "C" {
             delete a;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -2365,7 +2389,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -2383,7 +2407,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -2401,7 +2425,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -2420,7 +2444,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -2452,7 +2476,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -2479,7 +2503,7 @@ extern "C" {
     int
     GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -2512,7 +2536,7 @@ extern "C" {
     int
     GEOSGetNumGeometries_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -2543,7 +2567,7 @@ extern "C" {
     const Geometry*
     GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2573,7 +2597,7 @@ extern "C" {
     Geometry*
     GEOSGeomGetPointN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2590,7 +2614,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getPointN(n);
+            return ls->getPointN(n).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2608,7 +2632,7 @@ extern "C" {
     Geometry*
     GEOSGeomGetStartPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2625,7 +2649,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getStartPoint();
+            return ls->getStartPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2643,7 +2667,7 @@ extern "C" {
     Geometry*
     GEOSGeomGetEndPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2660,7 +2684,7 @@ extern "C" {
                 handle->ERROR_MESSAGE("Argument is not a LineString");
                 return NULL;
             }
-            return ls->getEndPoint();
+            return ls->getEndPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2679,7 +2703,7 @@ extern "C" {
     char
     GEOSisClosed_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -2723,7 +2747,7 @@ extern "C" {
     int
     GEOSGeomGetLength_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* length)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -2759,7 +2783,7 @@ extern "C" {
     int
     GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -2795,7 +2819,7 @@ extern "C" {
     int
     GEOSGeomGetX_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* x)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -2832,7 +2856,7 @@ extern "C" {
     int
     GEOSGeomGetY_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* y)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -2869,7 +2893,7 @@ extern "C" {
     int
     GEOSGeomGetZ_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* z)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -2906,7 +2930,7 @@ extern "C" {
     const Geometry*
     GEOSGetExteriorRing_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2941,7 +2965,7 @@ extern "C" {
     const Geometry*
     GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2972,7 +2996,7 @@ extern "C" {
     Geometry*
     GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -2986,9 +3010,48 @@ extern "C" {
             Geometry* ret = g->getCentroid().release();
             if(0 == ret) {
                 const GeometryFactory* gf = handle->geomFactory;
-                return gf->createPoint();
+                return gf->createPoint().release();
             }
+            ret->setSRID(g->getSRID());
             return ret;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return NULL;
+    }
+
+    Geometry*
+    GEOSMinimumBoundingCircle_r(GEOSContextHandle_t extHandle, const Geometry* g,
+        double* radius, Geometry** center)
+    {
+        if(nullptr == extHandle) {
+            return NULL;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return NULL;
+        }
+
+        try {
+            geos::algorithm::MinimumBoundingCircle mc(g);
+            std::unique_ptr<Geometry> ret = mc.getCircle();
+            const GeometryFactory* gf = handle->geomFactory;
+            if(!ret) {
+                if (center) *center = NULL;
+                if (radius) *radius = 0.0;
+                return gf->createPolygon().release();
+            }
+            if (center) *center = static_cast<Geometry*>(gf->createPoint(mc.getCentre()));
+            if (radius) *radius = mc.getRadius();
+            ret->setSRID(g->getSRID());
+            return ret.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3003,7 +3066,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createEmptyCollection_r(GEOSContextHandle_t extHandle, int type)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -3022,7 +3085,7 @@ extern "C" {
         try {
             const GeometryFactory* gf = handle->geomFactory;
 
-            Geometry* g = 0;
+            std::unique_ptr<Geometry> g = 0;
             switch(type) {
             case GEOS_GEOMETRYCOLLECTION:
                 g = gf->createGeometryCollection();
@@ -3042,7 +3105,7 @@ extern "C" {
 
             }
 
-            return g;
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3057,7 +3120,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry** geoms, unsigned int ngeoms)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -3114,7 +3177,7 @@ extern "C" {
     Geometry*
     GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3180,29 +3243,31 @@ extern "C" {
     Geometry*
     GEOSPolygonize_valid_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
     {
-        if(0 == extHandle) {
-            return 0;
+        if(nullptr == extHandle) {
+            return nullptr;
         }
 
-        GEOSContextHandleInternal_t* handle = 0;
+        GEOSContextHandleInternal_t* handle = nullptr;
         handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
         if(0 == handle->initialized) {
-            return 0;
+            return nullptr;
         }
 
-        Geometry* out = 0;
+        Geometry* out = nullptr;
 
         try {
             // Polygonize
             using geos::operation::polygonize::Polygonizer;
             Polygonizer plgnzr(true);
+            int srid = 0;
             for(std::size_t i = 0; i < ngeoms; ++i) {
                 plgnzr.add(g[i]);
+                srid = g[i]->getSRID();
             }
 
             auto polys = plgnzr.getPolygons();
             if (polys->empty()) {
-                out = handle->geomFactory->createGeometryCollection();
+                out = handle->geomFactory->createGeometryCollection().release();
             } else if (polys->size() == 1) {
                 out = (*polys)[0].release();
             } else {
@@ -3213,6 +3278,7 @@ extern "C" {
 
                 out = handle->geomFactory->createMultiPolygon(geoms);
             }
+            out->setSRID(srid);
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3244,6 +3310,7 @@ extern "C" {
             using geos::operation::polygonize::BuildArea;
             BuildArea builder;
             out = builder.build(g).release();
+            out->setSRID(g->getSRID());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3275,6 +3342,7 @@ extern "C" {
             using geos::operation::valid::MakeValid;
             MakeValid makeValid;
             out = makeValid.build(g).release();
+            out->setSRID(g->getSRID());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3289,7 +3357,7 @@ extern "C" {
     Geometry*
     GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3305,8 +3373,10 @@ extern "C" {
             // Polygonize
             using geos::operation::polygonize::Polygonizer;
             Polygonizer plgnzr;
+            int srid = 0;
             for(std::size_t i = 0; i < ngeoms; ++i) {
                 plgnzr.add(g[i]);
+                srid = g[i]->getSRID();
             }
 
 #if GEOS_DEBUG
@@ -3335,6 +3405,7 @@ extern "C" {
             // The below takes ownership of the passed vector,
             // so we must *not* delete it
             out = gf->createGeometryCollection(linevec);
+            out->setSRID(srid);
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3350,7 +3421,7 @@ extern "C" {
     GEOSPolygonize_full_r(GEOSContextHandle_t extHandle, const Geometry* g,
                           Geometry** cuts, Geometry** dangles, Geometry** invalid)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3401,7 +3472,7 @@ extern "C" {
 
             if(invalid) {
 
-                const std::vector<LineString*>& lines = plgnzr.getInvalidRingLines();
+                const std::vector<std::unique_ptr<LineString>>& lines = plgnzr.getInvalidRingLines();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
                     (*linevec)[i] = lines[i]->clone().release();
@@ -3418,7 +3489,9 @@ extern "C" {
                 (*polyvec)[i] = (*polys)[i].release();
             }
 
-            return gf->createGeometryCollection(polyvec);
+            Geometry* out = gf->createGeometryCollection(polyvec);
+            out->setSRID(g->getSRID());
+            return out;
 
         }
         catch(const std::exception& e) {
@@ -3434,7 +3507,7 @@ extern "C" {
     Geometry*
     GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3467,6 +3540,7 @@ extern "C" {
 
             const GeometryFactory* gf = handle->geomFactory;
             out = gf->buildGeometry(geoms);
+            out->setSRID(g->getSRID());
 
             // XXX: old version
             //out = gf->createGeometryCollection(geoms);
@@ -3486,7 +3560,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return nullptr;
         }
 
@@ -3497,7 +3571,9 @@ extern "C" {
         }
 
         try {
-            return g->reverse().release();
+            Geometry* g3 = g->reverse().release();
+            g3->setSRID(g->getSRID());
+            return g3;
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3514,7 +3590,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3542,7 +3618,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3582,7 +3658,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -3606,7 +3682,7 @@ extern "C" {
     int
     GEOS_getWKBOutputDims_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -3622,7 +3698,7 @@ extern "C" {
     int
     GEOS_setWKBOutputDims_r(GEOSContextHandle_t extHandle, int newdims)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -3645,7 +3721,7 @@ extern "C" {
     int
     GEOS_getWKBByteOrder_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -3661,7 +3737,7 @@ extern "C" {
     int
     GEOS_setWKBByteOrder_r(GEOSContextHandle_t extHandle, int byteOrder)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -3681,7 +3757,7 @@ extern "C" {
     CoordinateSequence*
     GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size, unsigned int dims)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -3692,8 +3768,16 @@ extern "C" {
         }
 
         try {
-            const GeometryFactory* gf = handle->geomFactory;
-            return gf->getCoordinateSequenceFactory()->create(size, dims).release();
+            switch (size) {
+                case 1:
+                    return new geos::geom::FixedSizeCoordinateSequence<1>(dims);
+                case 2:
+                    return new geos::geom::FixedSizeCoordinateSequence<2>(dims);
+                default: {
+                    const GeometryFactory *gf = handle->geomFactory;
+                    return gf->getCoordinateSequenceFactory()->create(size, dims).release();
+                }
+            }
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -3710,7 +3794,7 @@ extern "C" {
                                unsigned int idx, unsigned int dim, double val)
     {
         assert(0 != cs);
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3752,12 +3836,68 @@ extern "C" {
         return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 2, val);
     }
 
+    int
+    GEOSCoordSeq_setXY_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y)
+    {
+        assert(0 != cs);
+        if(nullptr == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            cs->setAt({x, y}, idx);
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    int
+    GEOSCoordSeq_setXYZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y, double z)
+    {
+        assert(0 != cs);
+        if(nullptr == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            cs->setAt({x, y, z}, idx);
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
     CoordinateSequence*
     GEOSCoordSeq_clone_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs)
     {
         assert(0 != cs);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -3787,7 +3927,7 @@ extern "C" {
         assert(0 != cs);
         assert(0 != val);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3832,12 +3972,73 @@ extern "C" {
     }
 
     int
+    GEOSCoordSeq_getXY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y)
+    {
+        assert(0 != cs);
+        if(nullptr == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            auto& c = cs->getAt(idx);
+            *x = c.x;
+            *y = c.y;
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    int
+    GEOSCoordSeq_getXYZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y, double* z)
+    {
+        assert(0 != cs);
+        if(nullptr == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            auto& c = cs->getAt(idx);
+            *x = c.x;
+            *y = c.y;
+            *z = c.z;
+            return 1;
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    int
     GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int* size)
     {
         assert(0 != cs);
         assert(0 != size);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3868,7 +4069,7 @@ extern "C" {
         assert(0 != cs);
         assert(0 != dims);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -3934,7 +4135,7 @@ extern "C" {
             delete s;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -3946,7 +4147,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -3962,7 +4163,7 @@ extern "C" {
     const CoordinateSequence*
     GEOSGeom_getCoordSeq_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4001,7 +4202,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createEmptyPoint_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4013,7 +4214,7 @@ extern "C" {
 
         try {
             const GeometryFactory* gf = handle->geomFactory;
-            return gf->createPoint();
+            return gf->createPoint().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4028,7 +4229,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createPoint_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4053,9 +4254,37 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_createPointFromXY_r(GEOSContextHandle_t extHandle, double x, double y)
+    {
+        if(nullptr == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        try {
+            const GeometryFactory* gf = handle->geomFactory;
+            geos::geom::Coordinate c(x, y);
+            return gf->createPoint(c);
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return 0;
+    }
+
+    Geometry*
     GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4083,7 +4312,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createEmptyLineString_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4096,7 +4325,7 @@ extern "C" {
         try {
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createLineString();
+            return gf->createLineString().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4111,7 +4340,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4139,7 +4368,7 @@ extern "C" {
     Geometry*
     GEOSGeom_createEmptyPolygon_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4151,7 +4380,7 @@ extern "C" {
 
         try {
             const GeometryFactory* gf = handle->geomFactory;
-            return gf->createPolygon();
+            return gf->createPolygon().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4169,7 +4398,7 @@ extern "C" {
         // FIXME: holes must be non-nullptr or may be nullptr?
         //assert(0 != holes);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4216,7 +4445,7 @@ extern "C" {
     {
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4247,7 +4476,7 @@ extern "C" {
 
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4300,7 +4529,7 @@ extern "C" {
 
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -4328,7 +4557,7 @@ extern "C" {
     int
     GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4354,7 +4583,7 @@ extern "C" {
     int
     GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4380,7 +4609,7 @@ extern "C" {
     int
     GEOSGeom_getXMin_r(GEOSContextHandle_t extHandle, const Geometry* g, double* value)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4411,7 +4640,7 @@ extern "C" {
     int
     GEOSGeom_getXMax_r(GEOSContextHandle_t extHandle, const Geometry* g, double* value)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4442,7 +4671,7 @@ extern "C" {
     int
     GEOSGeom_getYMin_r(GEOSContextHandle_t extHandle, const Geometry* g, double* value)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4473,7 +4702,7 @@ extern "C" {
     int
     GEOSGeom_getYMax_r(GEOSContextHandle_t extHandle, const Geometry* g, double* value)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4504,7 +4733,7 @@ extern "C" {
     Geometry*
     GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry* g1, double tolerance)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4516,8 +4745,9 @@ extern "C" {
 
         try {
             using namespace geos::simplify;
-            Geometry::Ptr g(DouglasPeuckerSimplifier::simplify(g1, tolerance));
-            return g.release();
+            Geometry::Ptr g3(DouglasPeuckerSimplifier::simplify(g1, tolerance));
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4532,7 +4762,7 @@ extern "C" {
     Geometry*
     GEOSTopologyPreserveSimplify_r(GEOSContextHandle_t extHandle, const Geometry* g1, double tolerance)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4544,8 +4774,9 @@ extern "C" {
 
         try {
             using namespace geos::simplify;
-            Geometry::Ptr g(TopologyPreservingSimplifier::simplify(g1, tolerance));
-            return g.release();
+            Geometry::Ptr g3(TopologyPreservingSimplifier::simplify(g1, tolerance));
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4562,7 +4793,7 @@ extern "C" {
     WKTReader*
     GEOSWKTReader_create_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4595,7 +4826,7 @@ extern "C" {
             delete reader;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4607,7 +4838,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4626,7 +4857,7 @@ extern "C" {
     {
         assert(0 != reader);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4654,7 +4885,7 @@ extern "C" {
     WKTWriter*
     GEOSWKTWriter_create_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4688,7 +4919,7 @@ extern "C" {
             delete Writer;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4700,7 +4931,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4719,7 +4950,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4749,7 +4980,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -4767,7 +4998,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -4785,7 +5016,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -4811,7 +5042,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -4841,7 +5072,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -4858,7 +5089,7 @@ extern "C" {
     WKBReader*
     GEOSWKBReader_create_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -4891,7 +5122,7 @@ extern "C" {
             delete reader;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4903,7 +5134,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -4929,7 +5160,7 @@ extern "C" {
         assert(0 != reader);
         assert(0 != wkb);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4967,7 +5198,7 @@ extern "C" {
         assert(0 != reader);
         assert(0 != hex);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -4999,7 +5230,7 @@ extern "C" {
     WKBWriter*
     GEOSWKBWriter_create_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -5032,7 +5263,7 @@ extern "C" {
             delete Writer;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5044,7 +5275,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5066,7 +5297,7 @@ extern "C" {
         assert(0 != geom);
         assert(0 != size);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -5106,7 +5337,7 @@ extern "C" {
         assert(0 != geom);
         assert(0 != size);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -5143,7 +5374,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -5168,7 +5399,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -5192,7 +5423,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -5218,7 +5449,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -5242,7 +5473,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1;
         }
 
@@ -5268,7 +5499,7 @@ extern "C" {
     {
         assert(0 != writer);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return;
         }
 
@@ -5292,7 +5523,7 @@ extern "C" {
     const geos::geom::prep::PreparedGeometry*
     GEOSPrepare_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -5326,7 +5557,7 @@ extern "C" {
             delete a;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5338,7 +5569,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5358,7 +5589,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5389,7 +5620,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5420,7 +5651,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5451,7 +5682,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5482,7 +5713,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5513,7 +5744,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5544,7 +5775,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5575,7 +5806,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5606,7 +5837,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5637,7 +5868,7 @@ extern "C" {
         assert(0 != pg);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5669,7 +5900,7 @@ extern "C" {
     GEOSSTRtree_create_r(GEOSContextHandle_t extHandle,
                          size_t nodeCapacity)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -5708,7 +5939,7 @@ extern "C" {
             tree->insert(g->getEnvelopeInternal(), item);
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5720,7 +5951,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5750,7 +5981,7 @@ extern "C" {
             tree->query(g->getEnvelopeInternal(), visitor);
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5762,7 +5993,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5828,7 +6059,7 @@ extern "C" {
             }
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return NULL;
             }
 
@@ -5840,7 +6071,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return NULL;
             }
 
@@ -5870,7 +6101,7 @@ extern "C" {
             tree->iterate(visitor);
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5882,7 +6113,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5904,7 +6135,7 @@ extern "C" {
         assert(0 != tree);
         assert(0 != g);
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -5938,7 +6169,7 @@ extern "C" {
             delete tree;
         }
         catch(const std::exception& e) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5950,7 +6181,7 @@ extern "C" {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {
-            if(0 == extHandle) {
+            if(nullptr == extHandle) {
                 return;
             }
 
@@ -5968,7 +6199,7 @@ extern "C" {
                   const Geometry* g,
                   const Geometry* p)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return -1.0;
         }
         GEOSContextHandleInternal_t* handle =
@@ -6002,7 +6233,7 @@ extern "C" {
     Geometry*
     GEOSInterpolate_r(GEOSContextHandle_t extHandle, const Geometry* g, double d)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
         GEOSContextHandleInternal_t* handle =
@@ -6016,6 +6247,7 @@ extern "C" {
             geos::geom::Coordinate coord = lil.extractPoint(d);
             const GeometryFactory* gf = handle->geomFactory;
             Geometry* point = gf->createPoint(coord);
+            point->setSRID(g->getSRID());
             return point;
         }
         catch(const std::exception& e) {
@@ -6053,7 +6285,7 @@ extern "C" {
     GEOSGeom_extractUniquePoints_r(GEOSContextHandle_t extHandle,
                                    const GEOSGeometry* g)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
         GEOSContextHandleInternal_t* handle = 0;
@@ -6084,7 +6316,9 @@ extern "C" {
             }
 
             /* 3: create a multipoint */
-            return factory->createMultiPoint(points);
+            Geometry* out = factory->createMultiPoint(points);
+            out->setSRID(g->getSRID());
+            return out;
 
         }
         catch(const std::exception& e) {
@@ -6105,7 +6339,7 @@ extern "C" {
         using geos::geom::Coordinate;
         using geos::algorithm::Orientation;
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 2;
         }
 
@@ -6135,7 +6369,7 @@ extern "C" {
     {
         using namespace geos::operation::sharedpaths;
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
         GEOSContextHandleInternal_t* handle =
@@ -6202,6 +6436,7 @@ extern "C" {
             factory->createGeometryCollection(out.release())
         );
 
+        outg->setSRID(g1->getSRID());
         return outg.release();
 
     }
@@ -6212,7 +6447,7 @@ extern "C" {
     {
         using namespace geos::operation::overlay::snap;
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
         GEOSContextHandleInternal_t* handle =
@@ -6224,6 +6459,7 @@ extern "C" {
         try {
             GeometrySnapper snapper(*g1);
             std::unique_ptr<Geometry> ret = snapper.snapTo(*g2, tolerance);
+            ret->setSRID(g1->getSRID());
             return ret.release();
         }
         catch(const std::exception& e) {
@@ -6239,7 +6475,7 @@ extern "C" {
     BufferParameters*
     GEOSBufferParams_create_r(GEOSContextHandle_t extHandle)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -6274,7 +6510,7 @@ extern "C" {
     GEOSBufferParams_setEndCapStyle_r(GEOSContextHandle_t extHandle,
                                       GEOSBufferParams* p, int style)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6305,7 +6541,7 @@ extern "C" {
     GEOSBufferParams_setJoinStyle_r(GEOSContextHandle_t extHandle,
                                     GEOSBufferParams* p, int style)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6336,7 +6572,7 @@ extern "C" {
     GEOSBufferParams_setMitreLimit_r(GEOSContextHandle_t extHandle,
                                      GEOSBufferParams* p, double limit)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6364,7 +6600,7 @@ extern "C" {
     GEOSBufferParams_setQuadrantSegments_r(GEOSContextHandle_t extHandle,
                                            GEOSBufferParams* p, int segs)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6392,7 +6628,7 @@ extern "C" {
     GEOSBufferParams_setSingleSided_r(GEOSContextHandle_t extHandle,
                                       GEOSBufferParams* p, int ss)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6421,7 +6657,7 @@ extern "C" {
     {
         using geos::operation::buffer::BufferOp;
 
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -6434,6 +6670,7 @@ extern "C" {
         try {
             BufferOp op(g1, *bp);
             Geometry* g3 = op.getResultGeometry(width);
+            g3->setSRID(g1->getSRID());
             return g3;
         }
         catch(const std::exception& e) {
@@ -6449,7 +6686,7 @@ extern "C" {
     Geometry*
     GEOSDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry* g1, double tolerance, int onlyEdges)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -6467,10 +6704,14 @@ extern "C" {
             builder.setSites(*g1);
 
             if(onlyEdges) {
-                return builder.getEdges(*g1->getFactory()).release();
+                Geometry* out = builder.getEdges(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
             else {
-                return builder.getTriangles(*g1->getFactory()).release();
+                Geometry* out = builder.getTriangles(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
 
         }
@@ -6487,7 +6728,7 @@ extern "C" {
     GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* env, double tolerance,
                          int onlyEdges)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return NULL;
         }
 
@@ -6507,10 +6748,14 @@ extern "C" {
                 builder.setClipEnvelope(env->getEnvelopeInternal());
             }
             if(onlyEdges) {
-                return builder.getDiagramEdges(*g1->getFactory()).release();
+                Geometry* out = builder.getDiagramEdges(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
             else {
-                return builder.getDiagram(*g1->getFactory()).release();
+                Geometry* out = builder.getDiagram(*g1->getFactory()).release();
+                out->setSRID(g1->getSRID());
+                return out;
             }
         }
         catch(const std::exception& e) {
@@ -6529,7 +6774,7 @@ extern "C" {
                               double bx0, double by0, double bx1, double by1,
                               double* cx, double* cy)
     {
-        if(0 == extHandle) {
+        if(nullptr == extHandle) {
             return 0;
         }
 
@@ -6542,11 +6787,9 @@ extern "C" {
         try {
             geos::geom::LineSegment a(ax0, ay0, ax1, ay1);
             geos::geom::LineSegment b(bx0, by0, bx1, by1);
-            geos::geom::Coordinate isect;
+            geos::geom::Coordinate isect = a.intersection(b);
 
-            bool intersects = a.intersection(b, isect);
-
-            if(!intersects) {
+            if(isect.isNull()) {
                 return -1;
             }
 

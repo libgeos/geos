@@ -23,12 +23,11 @@
 #include <geos/geom/LineString.h> // for toGeometry
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/HCoordinate.h>
-#include <geos/algorithm/NotRepresentableException.h>
+#include <geos/algorithm/Intersection.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/profiler.h>
 #include <geos/inline.h>
@@ -41,11 +40,6 @@
 # include <geos/geom/LineSegment.inl>
 #endif
 
-using namespace std;
-//using namespace geos::algorithm;
-using geos::algorithm::HCoordinate;
-using geos::algorithm::NotRepresentableException;
-using geos::algorithm::LineIntersector;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -194,8 +188,8 @@ std::array<Coordinate, 2>
 LineSegment::closestPoints(const LineSegment& line)
 {
     // test for intersection
-    Coordinate intPt;
-    if(intersection(line, intPt)) {
+    Coordinate intPt = intersection(line);
+    if(!intPt.isNull()) {
         return { intPt, intPt };
     }
 
@@ -245,29 +239,23 @@ LineSegment::closestPoints(const LineSegment& line)
     return closestPt;
 }
 
-bool
-LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
+Coordinate
+LineSegment::intersection(const LineSegment& line) const
 {
     algorithm::LineIntersector li;
     li.computeIntersection(p0, p1, line.p0, line.p1);
     if(li.hasIntersection()) {
-        ret = li.getIntersection(0);
-        return true;
+        return li.getIntersection(0);
     }
-    return false;
+    Coordinate rv;
+    rv.setNull();
+    return rv;
 }
 
-bool
-LineSegment::lineIntersection(const LineSegment& line, Coordinate& ret) const
+Coordinate
+LineSegment::lineIntersection(const LineSegment& line) const
 {
-    try {
-        HCoordinate::intersection(p0, p1, line.p0, line.p1, ret);
-        return true;
-    }
-    catch(const NotRepresentableException& /*ex*/) {
-        // eat this exception, and return null;
-    }
-    return false;
+    return algorithm::Intersection::intersection(p0, p1, line.p0, line.p1);
 }
 
 
@@ -310,12 +298,11 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    CoordinateSequence* cl = new CoordinateArraySequence(2);
+    auto cl = gf.getCoordinateSequenceFactory()->create(2, 0);
+
     cl->setAt(p0, 0);
     cl->setAt(p1, 1);
-    return std::unique_ptr<LineString>(
-               gf.createLineString(cl) // ownership transferred
-           );
+    return gf.createLineString(std::move(cl));
 }
 
 } // namespace geos::geom

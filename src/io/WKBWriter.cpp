@@ -65,10 +65,6 @@ WKBWriter::setOutputDimension(int dims)
     defaultOutputDimension = dims;
 }
 
-WKBWriter::~WKBWriter()
-{
-}
-
 void
 WKBWriter::writeHEX(const Geometry& g, ostream& os)
 {

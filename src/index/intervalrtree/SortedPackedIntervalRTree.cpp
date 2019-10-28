@@ -34,9 +34,15 @@ namespace intervalrtree {
 void
 SortedPackedIntervalRTree::init()
 {
-    if(root != nullptr) {
+    // Already built
+    if(root != nullptr)
         return;
-    }
+
+    /**
+    * if leaves is empty then nothing has been inserted.
+    * In this case it is safe to leave the tree in an open state
+    */
+    if (leaves.empty()) return;
 
     root = buildTree();
 }
@@ -111,6 +117,10 @@ void
 SortedPackedIntervalRTree::query(double min, double max, index::ItemVisitor* visitor)
 {
     init();
+
+    // if root is null tree must be empty
+    if (root == nullptr)
+      return;
 
     root->query(min, max, visitor);
 }

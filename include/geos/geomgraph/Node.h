@@ -58,7 +58,7 @@ class NodeFactory;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/** The node component of a geometry graph */
+/** \brief The node component of a geometry graph. */
 class GEOS_DLL Node: public GraphComponent {
     using GraphComponent::setLabel;
 

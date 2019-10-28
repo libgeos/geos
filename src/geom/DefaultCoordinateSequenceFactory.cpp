@@ -3,26 +3,28 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: geom/CoordinateSequenceFactory.java r591 (JTS-1.12)
- *
  **********************************************************************/
 
-#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/DefaultCoordinateSequenceFactory.h>
 
 namespace geos {
 namespace geom { // geos::geom
 
-CoordinateSequenceFactory::~CoordinateSequenceFactory()
-{}
+static DefaultCoordinateSequenceFactory defaultCoordinateSequenceFactory;
+
+const CoordinateSequenceFactory*
+DefaultCoordinateSequenceFactory::instance()
+{
+    return &defaultCoordinateSequenceFactory;
+}
 
 } // namespace geos::geom
-}
+} // namespace geos
+

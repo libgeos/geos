@@ -88,7 +88,7 @@ public:
         return std::unique_ptr<Geometry>(new LinearRing(*this));
     }
 
-    ~LinearRing() override;
+    ~LinearRing() override = default;
 
     /** \brief
      * Returns <code>Dimension.FALSE</code>, since by definition

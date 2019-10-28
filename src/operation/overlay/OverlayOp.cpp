@@ -661,12 +661,12 @@ OverlayOp::resultDimension(OverlayOp::OpCode overlayOpCode,
     return resultDimension;
 }
 
-geom::Geometry*
+std::unique_ptr<geom::Geometry>
 OverlayOp::createEmptyResult(OverlayOp::OpCode overlayOpCode,
                              const geom::Geometry* a, const geom::Geometry* b,
                              const GeometryFactory* geomFact)
 {
-    geom::Geometry* result = nullptr;
+    std::unique_ptr<geom::Geometry> result = nullptr;
     switch(resultDimension(overlayOpCode, a, b)) {
     case Dimension::P:
         result = geomFact->createPoint();
@@ -714,7 +714,7 @@ OverlayOp::computeGeometry(vector<Point*>* nResultPointList,
 
     if(geomList->empty()) {
         return createEmptyResult(opCode, arg[0]->getGeometry(),
-                                 arg[1]->getGeometry(), geomFact);
+                                 arg[1]->getGeometry(), geomFact).release();
     }
     // build the most specific geometry possible
     Geometry* g = geomFact->buildGeometry(geomList.release());
@@ -758,9 +758,9 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     GEOS_CHECK_FOR_INTERRUPTS();
 
     // node the input Geometries
-    delete arg[0]->computeSelfNodes(li, false, env);
+    arg[0]->computeSelfNodes(li, false, env);
     GEOS_CHECK_FOR_INTERRUPTS();
-    delete arg[1]->computeSelfNodes(li, false, env);
+    arg[1]->computeSelfNodes(li, false, env);
 
 #if GEOS_DEBUG
     cerr << "OverlayOp::computeOverlay: computed SelfNodes" << endl;
@@ -769,7 +769,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     GEOS_CHECK_FOR_INTERRUPTS();
 
     // compute intersections between edges of the two input geometries
-    delete arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
+    arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
 
 #if GEOS_DEBUG
     cerr << "OverlayOp::computeOverlay: computed EdgeIntersections" << endl;

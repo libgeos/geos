@@ -67,7 +67,7 @@ public:
      */
     EdgeString(const geom::GeometryFactory* newFactory);
 
-    ~EdgeString();
+    ~EdgeString() = default;
 
     /**
     * Adds a directed edge which is known to form part of this line.

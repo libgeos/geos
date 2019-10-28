@@ -73,7 +73,7 @@ using geos::util::IllegalArgumentException;
 
 
 // Prototypes
-void wkt_print_geoms(vector<Geometry*>* geoms);
+void wkt_print_geoms(vector<const Geometry*>* geoms);
 
 
 // This object will be used to construct our geometries.
@@ -93,7 +93,7 @@ GeometryFactory::Ptr global_factory;
 //	- remove debugging lines (on stream state)
 //
 void
-WKBtest(vector<Geometry*>* geoms)
+WKBtest(vector<const Geometry*>* geoms)
 {
     stringstream s(ios_base::binary | ios_base::in | ios_base::out);
     io::WKBReader wkbReader(*global_factory);
@@ -107,7 +107,7 @@ WKBtest(vector<Geometry*>* geoms)
 
     size_t ngeoms = geoms->size();
     for(unsigned int i = 0; i < ngeoms; ++i) {
-        Geometry* gin = (*geoms)[i];
+        const Geometry* gin = (*geoms)[i];
 
 #if DEBUG_STREAM_STATE
         cout << "State of stream before WRITE: ";
@@ -171,7 +171,7 @@ WKBtest(vector<Geometry*>* geoms)
              " fail:" << s.fail() << endl;
 #endif
 
-        gin->normalize();
+        const_cast<Geometry*>(gin)->normalize();
         gout->normalize();
         int failed = gin->compareTo(gout);
         if(failed) {
@@ -202,7 +202,7 @@ WKBtest(vector<Geometry*>* geoms)
 // format to stdout. As a side-effect, will test WKB
 // output and input, using the WKBtest function.
 void
-wkt_print_geoms(vector<Geometry*>* geoms)
+wkt_print_geoms(vector<const Geometry*>* geoms)
 {
     WKBtest(geoms); // test WKB parser
 
@@ -320,7 +320,7 @@ create_square_polygon(double xoffset, double yoffset, double side)
 // containing copies of all Geometries in given vector.
 //
 GeometryCollection*
-create_simple_collection(vector<Geometry*>* geoms)
+create_simple_collection(vector<const Geometry*>* geoms)
 {
     return global_factory->createGeometryCollection(*geoms);
     // if you wanted to transfer ownership of vector end
@@ -341,7 +341,7 @@ create_circle(double centerX, double centerY, double radius)
     // same as:
     //	shapefactory.setHeight(radius);
     //	shapefactory.setWidth(radius);
-    return shapefactory.createCircle();
+    return shapefactory.createCircle().release();
 }
 
 //
@@ -355,7 +355,7 @@ create_ellipse(double centerX, double centerY, double width, double height)
     shapefactory.setCentre(Coordinate(centerX, centerY));
     shapefactory.setHeight(height);
     shapefactory.setWidth(width);
-    return shapefactory.createCircle();
+    return shapefactory.createCircle().release();
 }
 
 //
@@ -372,7 +372,7 @@ create_rectangle(double llX, double llY, double width, double height)
     shapefactory.setWidth(width);
     shapefactory.setNumPoints(4); // we don't need more then 4 points for a rectangle...
     // can use setSize for a square
-    return shapefactory.createRectangle();
+    return shapefactory.createRectangle().release();
 }
 
 //
@@ -389,7 +389,7 @@ create_arc(double llX, double llY, double width, double height, double startang,
     shapefactory.setWidth(width);
     // shapefactory.setNumPoints(100); // the default (100 pts)
     // can use setSize for a square
-    return shapefactory.createArc(startang, endang);
+    return shapefactory.createArc(startang, endang).release();
 }
 
 unique_ptr<Polygon>
@@ -408,8 +408,8 @@ create_sinestar(double cx, double cy, double size, int nArms, double armLenRat)
 void
 do_all()
 {
-    vector<Geometry*>* geoms = new vector<Geometry*>;
-    vector<Geometry*>* newgeoms;
+    vector<const Geometry*>* geoms = new vector<const Geometry*>;
+    vector<const Geometry*>* newgeoms;
 
     // Define a precision model using 0,0 as the reference origin
     // and 2.0 as coordinates scale.
@@ -463,9 +463,9 @@ do_all()
     /////////////////////////////////////////////
 
     // Find centroid of each base geometry
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g = (*geoms)[i];
+        const Geometry* g = (*geoms)[i];
         newgeoms->push_back(g->getCentroid().release());
     }
 
@@ -483,9 +483,9 @@ do_all()
     // BUFFER
     /////////////////////////////////////////////
 
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g = (*geoms)[i];
+        const Geometry* g = (*geoms)[i];
         try {
             Geometry* g2 = g->buffer(10).release();
             newgeoms->push_back(g2);
@@ -508,9 +508,9 @@ do_all()
     /////////////////////////////////////////////
 
     // Make convex hulls of geometries
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g = (*geoms)[i];
+        const Geometry* g = (*geoms)[i];
         newgeoms->push_back(g->convexHull().release());
     }
 
@@ -547,10 +547,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->disjoint(g2)) {
                     cout << " 1\t";
@@ -560,7 +560,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -581,10 +581,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->touches(g2)) {
                     cout << " 1\t";
@@ -594,7 +594,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -615,10 +615,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->intersects(g2)) {
                     cout << " 1\t";
@@ -628,7 +628,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -649,10 +649,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->crosses(g2)) {
                     cout << " 1\t";
@@ -662,7 +662,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -683,10 +683,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->within(g2)) {
                     cout << " 1\t";
@@ -696,7 +696,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -717,10 +717,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->contains(g2)) {
                     cout << " 1\t";
@@ -730,7 +730,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -751,10 +751,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->overlaps(g2)) {
                     cout << " 1\t";
@@ -764,7 +764,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -785,10 +785,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 // second argument is intersectionPattern
                 string pattern = "212101212";
@@ -803,7 +803,7 @@ do_all()
                 auto im = g1->relate(g2);
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -824,10 +824,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 if(g1->equals(g2)) {
                     cout << " 1\t";
@@ -837,7 +837,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -858,10 +858,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 // second argument is a tolerance
                 if(g1->equalsExact(g2, 0.5)) {
@@ -872,7 +872,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -893,10 +893,10 @@ do_all()
     }
     cout << endl;
     for(unsigned int i = 0; i < geoms->size(); i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 // second argument is the distance
                 if(g1->isWithinDistance(g2, 2)) {
@@ -907,7 +907,7 @@ do_all()
                 }
             }
             // Geometry Collection is not a valid argument
-            catch(const IllegalArgumentException& exc) {
+            catch(const IllegalArgumentException&) {
                 cout << " X\t";
             }
             catch(const std::exception& exc) {
@@ -935,17 +935,17 @@ do_all()
     /////////////////////////////////////////////
 
     // Make unions of all geoms
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 Geometry* g3 = g1->Union(g2).release();
                 newgeoms->push_back(g3);
             }
             // It's illegal to union a collection ...
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -969,18 +969,18 @@ do_all()
     // INTERSECTION
     /////////////////////////////////////////////
 
-    // Compute intersection of adhiacent geometries
-    newgeoms = new vector<Geometry*>;
+    // Compute intersection of adjacent geometries
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 Geometry* g3 = g1->intersection(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as intersection argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -1003,17 +1003,17 @@ do_all()
     /////////////////////////////////////////////
 
     // Compute difference of adhiacent geometries
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 Geometry* g3 = g1->difference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as difference argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -1036,17 +1036,17 @@ do_all()
     /////////////////////////////////////////////
 
     // Compute symmetric difference of adhiacent geometries
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
-        Geometry* g1 = (*geoms)[i];
+        const Geometry* g1 = (*geoms)[i];
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
-            Geometry* g2 = (*geoms)[j];
+            const Geometry* g2 = (*geoms)[j];
             try {
                 Geometry* g3 = g1->symDifference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as symdifference argument
-            catch(const IllegalArgumentException& ill) {
+            catch(const IllegalArgumentException&) {
                 //cerr <<ill.toString()<<"\n";
             }
             catch(const std::exception& exc) {
@@ -1074,7 +1074,7 @@ do_all()
     LineMerger lm;
     lm.add(geoms);
     vector<LineString*>* mls = lm.getMergedLineStrings();
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < mls->size(); i++) {
         newgeoms->push_back((*mls)[i]);
     }
@@ -1099,7 +1099,7 @@ do_all()
     Polygonizer plgnzr;
     plgnzr.add(geoms);
     auto polys = plgnzr.getPolygons();
-    newgeoms = new vector<Geometry*>;
+    newgeoms = new vector<const Geometry*>;
     for(unsigned int i = 0; i < polys->size(); i++) {
         newgeoms->push_back((*polys)[i].release());
     }

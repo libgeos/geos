@@ -62,7 +62,7 @@ DouglasPeuckerLineSimplifier::simplify()
     CoordsVectAutoPtr coordList(new CoordsVect());
 
     // empty coordlist is the simplest, won't simplify further
-    if(! pts.size()) {
+    if(pts.empty()) {
         return coordList;
     }
 

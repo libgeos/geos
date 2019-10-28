@@ -49,8 +49,6 @@ MultiPoint::MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, cons
 
 }
 
-MultiPoint::~MultiPoint() {}
-
 Dimension::DimensionType
 MultiPoint::getDimension() const
 {
@@ -93,6 +91,12 @@ GeometryTypeId
 MultiPoint::getGeometryTypeId() const
 {
     return GEOS_MULTIPOINT;
+}
+
+const Point*
+MultiPoint::getGeometryN(size_t i) const
+{
+    return static_cast<const Point*>(geometries[i].get());
 }
 
 } // namespace geos::geom

@@ -45,7 +45,7 @@ struct test_signedarea_data {
 typedef test_group<test_signedarea_data> group;
 typedef group::object object;
 
-group test_signedarea_group("geos::algorithm::Area::ofRingSigned");
+group test_signedarea_group("geos::algorithm::CGAlgorithms::signedArea");
 
 //
 // Test Cases

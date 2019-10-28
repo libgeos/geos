@@ -215,7 +215,7 @@ IsValidOp::checkValid(const LinearRing* g)
     }
 
     LineIntersector li;
-    delete graph.computeSelfNodes(&li, true, true);
+    graph.computeSelfNodes(&li, true, true);
     checkNoSelfIntersectingRings(&graph);
 }
 
@@ -275,7 +275,7 @@ IsValidOp::checkValid(const MultiPolygon* g)
     vector<const Polygon*>polys(ngeoms);
 
     for(size_t i = 0; i < ngeoms; ++i) {
-        const Polygon* p = dynamic_cast<const Polygon*>(g->getGeometryN(i));
+        const Polygon* p = g->getGeometryN(i);
 
         checkInvalidCoordinates(p);
         if(validErr != nullptr) {
@@ -405,22 +405,19 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 {
     set<const Coordinate*, CoordinateLessThen>nodeSet;
     bool isFirst = true;
-    EdgeIntersectionList::iterator it = eiList.begin();
-    EdgeIntersectionList::iterator end = eiList.end();
-    for(; it != end; ++it) {
-        EdgeIntersection* ei = *it;
+    for(const EdgeIntersection& ei : eiList) {
         if(isFirst) {
             isFirst = false;
             continue;
         }
-        if(nodeSet.find(&ei->coord) != nodeSet.end()) {
+        if(nodeSet.find(&ei.coord) != nodeSet.end()) {
             validErr = new TopologyValidationError(
                 TopologyValidationError::eRingSelfIntersection,
-                ei->coord);
+                ei.coord);
             return;
         }
         else {
-            nodeSet.insert(&ei->coord);
+            nodeSet.insert(&ei.coord);
         }
     }
 }
@@ -492,8 +489,7 @@ void
 IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
 {
     for (size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i) {
-        const Polygon* p = dynamic_cast<const Polygon*>(
-                               mp->getGeometryN(i));
+        const Polygon* p = mp->getGeometryN(i);
 
         const LinearRing* shell = p->getExteriorRing();
 
@@ -504,8 +500,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
                 continue;
             }
 
-            const Polygon* p2 = dynamic_cast<const Polygon*>(
-                                    mp->getGeometryN(j));
+            const Polygon* p2 = mp->getGeometryN(j);
 
             if (p2->isEmpty()) {
                 continue;

@@ -43,7 +43,7 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 
 
-/**
+/** \brief
  * A utility class which creates Delaunay Triangulations
  * from collections of points and extract the resulting
  * triangulation edges or triangles as geometries.

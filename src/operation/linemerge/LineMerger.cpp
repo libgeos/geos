@@ -44,11 +44,10 @@ namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
 void
-LineMerger::add(vector<Geometry*>* geometries)
+LineMerger::add(vector<const Geometry*>* geometries)
 {
-    for(size_t i = 0, n = geometries->size(); i < n; i++) {
-        Geometry* geometry = (*geometries)[i];
-        add(geometry);
+    for(const Geometry* g : *geometries) {
+        add(g);
     }
 }
 

@@ -103,6 +103,8 @@ public:
         return getAt(i);
     }
 
+    virtual Envelope getEnvelope() const;
+
     /** \brief
      * Write Coordinate at position i to given Coordinate.
      */
@@ -219,7 +221,7 @@ public:
      * @param ordinateIndex the ordinate index in the coordinate
      *                      (in range [0, dimension-1])
      */
-    virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const = 0;
+    virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const;
 
     /**
      * Returns ordinate X (0) of the specified coordinate.

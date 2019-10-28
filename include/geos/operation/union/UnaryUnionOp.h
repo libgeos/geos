@@ -78,7 +78,7 @@ namespace geounion {  // geos::operation::geounion
  *   [LineMerger](@ref operation::linemerge::LineMerger) class
  *   can be used.
  * - Unioning a set of [Points](@ref geom::Point) has the effect of merging
- *   al identical points (producing a set with no duplicates).
+ *   all identical points (producing a set with no duplicates).
  *
  * `UnaryUnion` always operates on the individual components of
  * MultiGeometries.
@@ -140,7 +140,7 @@ public:
      * \brief
      * Gets the union of the input geometries.
      *
-     * If no input geometries were provided, a POINT EMPTY is returned.
+     * If no input geometries were provided, an empty GEOMETRYCOLLECTION is returned.
      *
      * @return a Geometry containing the union
      * @return an empty GEOMETRYCOLLECTION if no geometries were provided
@@ -197,7 +197,7 @@ private:
         //using geos::operation::overlay::snap::SnapIfNeededOverlayOp;
 
         if(! empty.get()) {
-            empty.reset(geomFact->createEmptyGeometry());
+            empty = geomFact->createEmptyGeometry();
         }
         //return SnapIfNeededOverlayOp::overlayOp(g0, *empty, OverlayOp::opUNION);
         return BinaryOp(&g0, empty.get(), overlay::overlayOp(OverlayOp::opUNION));

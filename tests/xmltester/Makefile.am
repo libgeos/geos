@@ -34,7 +34,9 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
 	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
+	$(srcdir)/tests/general/TestIntersectsPL.xml \
 	$(srcdir)/tests/general/TestMinimumClearance.xml \
+	$(srcdir)/tests/general/TestPreparedIntersectsPL.xml \
 	$(srcdir)/tests/general/TestPreparedPointPredicate.xml \
 	$(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
 	$(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
@@ -94,6 +96,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/issue/issue-geos-398.xml \
 	$(srcdir)/tests/issue/issue-geos-434.xml \
 	$(srcdir)/tests/issue/issue-geos-459.xml \
+	$(srcdir)/tests/issue/issue-geos-488.xml \
 	$(srcdir)/tests/issue/issue-geos-527.xml \
 	$(srcdir)/tests/issue/issue-geos-569.xml \
 	$(srcdir)/tests/issue/issue-geos-582.xml \
@@ -104,6 +107,8 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/issue/issue-geos-716.xml \
 	$(srcdir)/tests/issue/issue-geos-837.xml \
 	$(srcdir)/tests/issue/issue-geos-838.xml \
+	$(srcdir)/tests/issue/issue-geos-990.xml \
+	$(srcdir)/tests/issue/issue-geos-994.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \
@@ -118,7 +123,6 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/failure/issue-geos-488.xml \
 	$(srcdir)/tests/failure/issue-geos-344.xml \
 	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
 	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \

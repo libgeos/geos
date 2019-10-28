@@ -25,7 +25,7 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-/**
+/** \brief
  * An interface for algorithms which process the triangles in a {@link QuadEdgeSubdivision}.
  *
  * @author JTS: Martin Davis
@@ -39,7 +39,7 @@ public:
      * @param triEdges an array of the 3 quad edges in a triangle (in CCW order)
      */
     virtual void visit(QuadEdge* triEdges[3]) = 0;
-    virtual ~TriangleVisitor() = 0 ;
+    virtual ~TriangleVisitor() = default;
 private:
 } ;
 

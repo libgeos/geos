@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2012 Excensus LLC.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -28,6 +29,9 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
+
+class GEOS_DLL QuadEdgeQuartet;
+
 /** \brief
  * A class that represents the edge data structure which implements the quadedge algebra.
  *
@@ -35,8 +39,7 @@ namespace quadedge { //geos.triangulate.quadedge
  * "Primitives for the manipulation of general subdivisions and the computation of Voronoi diagrams",
  * *ACM Transactions on Graphics*, 4(2), 1985, 75-123.
  *
- * Each edge object is part of a quartet of 4 edges, linked via their `_rot` references.
- * Any edge in the group may be accessed using a series of {@link #rot()} operations.
+ * Each edge object is part of a QuadEdgeQuartet of 4 edges, linked via relative memory addresses.
  * Quadedges in a subdivision are linked together via their `next` references.
  * The linkage between the quadedge quartets determines the topology
  * of the subdivision.
@@ -49,16 +52,17 @@ namespace quadedge { //geos.triangulate.quadedge
  * @author Benjamin Campbell
  * */
 class GEOS_DLL QuadEdge {
+    friend class QuadEdgeQuartet;
 public:
     /** \brief
      * Creates a new QuadEdge quartet from {@link Vertex} o to {@link Vertex} d.
      *
      * @param o the origin Vertex
      * @param d the destination Vertex
-     * @return the new QuadEdge* The caller is reponsible for
-     *         freeing the returned pointer
+     * @param edges a container in which to store the newly created quartet
+     * @return the new QuadEdge*,
      */
-    static std::unique_ptr<QuadEdge> makeEdge(const Vertex& o, const Vertex& d);
+    static QuadEdge* makeEdge(const Vertex& o, const Vertex & d, std::deque<QuadEdgeQuartet> & edges);
 
     /** \brief
      * Creates a new QuadEdge connecting the destination of a to the origin of
@@ -67,10 +71,9 @@ public:
      *
      * Additionally, the data pointers of the new edge are set.
      *
-     * @return the new QuadEdge* The caller is reponsible for
-     *         freeing the returned pointer
+     * @return the new QuadEdge*
      */
-    static std::unique_ptr<QuadEdge> connect(QuadEdge& a, QuadEdge& b);
+    static QuadEdge* connect(QuadEdge& a, QuadEdge& b, std::deque<QuadEdgeQuartet> & edges);
 
     /** \brief
      * Splices two edges together or apart.
@@ -97,30 +100,26 @@ public:
 
 private:
     //// the dual of this edge, directed from right to left
-    QuadEdge* _rot;
-    Vertex   vertex;			// The vertex that this edge represents
-    QuadEdge* next;			  // A reference to a connected edge
-    void*   data;
+    Vertex   vertex; // The vertex that this edge represents
+    QuadEdge* next;  // A reference to a connected edge
+
+    int8_t num;      // the position of the QuadEdge in the quartet (0-3)
+
     bool isAlive;
+    bool visited;
 
     /**
-     * Quadedges must be made using {@link makeEdge},
+     * Quadedges must be made using {@link QuadEdgeQuartet::makeEdge},
      * to ensure proper construction.
      */
-    QuadEdge();
+    explicit QuadEdge(int8_t _num) :
+        next(nullptr),
+        num(_num),
+        isAlive(true),
+        visited(false) {
+    }
 
 public:
-    virtual ~QuadEdge();
-
-    /** \brief
-     * Free the QuadEdge quartet associated with this QuadEdge by a connect()
-     * or makeEdge() call.
-     *
-     * @note DO NOT call this function on a QuadEdge that was not returned
-     * by connect() or makeEdge().
-     */
-    virtual void free();
-
     /** \brief
      * Gets the primary edge of this quadedge and its `sym`.
      *
@@ -130,21 +129,7 @@ public:
      *
      * @return the primary quadedge
      */
-    const QuadEdge& getPrimary() const;
-
-    /** \brief
-     * Sets the external data value for this edge.
-     *
-     * @param data an object containing external data
-     */
-    virtual void setData(void* data);
-
-    /** \brief
-     * Gets the external data value for this edge.
-     *
-     * @return the data object
-     */
-    virtual void* getData();
+    const QuadEdge& getPrimary();
 
     /** \brief
      * Marks this quadedge as being deleted.
@@ -165,11 +150,21 @@ public:
      * @return `true` if this edge has not been deleted.
      */
     inline bool
-    isLive()
+    isLive() const
     {
         return isAlive;
     }
 
+    inline bool
+    isVisited() const
+    {
+        return visited;
+    }
+
+    inline void
+    setVisited(bool v) {
+        visited = v;
+    }
 
     /** \brief
      * Sets the connected edge
@@ -192,10 +187,16 @@ public:
      *
      * @return the rotated edge
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     rot() const
     {
-        return *_rot;
+        return (num < 3) ? *(this + 1) : *(this - 3);
+    }
+
+    inline QuadEdge&
+    rot()
+    {
+        return (num < 3) ? *(this + 1) : *(this - 3);
     }
 
     /** \brief
@@ -203,10 +204,16 @@ public:
      *
      * @return the inverse rotated edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     invRot() const
     {
-        return rot().sym();
+        return (num > 0) ? *(this - 1) : *(this + 3);
+    }
+
+    inline QuadEdge&
+    invRot()
+    {
+        return (num > 0) ? *(this - 1) : *(this + 3);
     }
 
     /** \brief
@@ -214,10 +221,16 @@ public:
      *
      * @return the sym of the edge
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     sym() const
     {
-        return rot().rot();
+        return (num < 2) ? *(this + 2) : *(this - 2);
+    }
+
+    inline QuadEdge&
+    sym()
+    {
+        return (num < 2) ? *(this + 2) : *(this - 2);
     }
 
     /** \brief
@@ -225,8 +238,14 @@ public:
      *
      * @return the next linked edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     oNext() const
+    {
+        return *next;
+    }
+
+    inline QuadEdge&
+    oNext()
     {
         return *next;
     }
@@ -236,8 +255,14 @@ public:
      *
      * @return the previous edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     oPrev() const
+    {
+        return rot().oNext().rot();
+    }
+
+    inline QuadEdge&
+    oPrev()
     {
         return rot().oNext().rot();
     }
@@ -247,7 +272,7 @@ public:
      *
      * @return the next destination edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     dNext() const
     {
         return sym().oNext().sym();
@@ -258,8 +283,14 @@ public:
      *
      * @return the previous destination edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     dPrev() const
+    {
+        return invRot().oNext().invRot();
+    }
+
+    inline QuadEdge&
+    dPrev()
     {
         return invRot().oNext().invRot();
     }
@@ -269,8 +300,14 @@ public:
      *
      * @return the next left face edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     lNext() const
+    {
+        return invRot().oNext().rot();
+    }
+
+    inline QuadEdge&
+    lNext()
     {
         return invRot().oNext().rot();
     }
@@ -280,8 +317,14 @@ public:
      *
      * @return the previous left face edge.
      */
-    inline QuadEdge&
+    inline const QuadEdge&
     lPrev() const
+    {
+        return oNext().sym();
+    }
+
+    inline QuadEdge&
+    lPrev()
     {
         return oNext().sym();
     }
@@ -291,8 +334,8 @@ public:
      *
      * @return the next right face edge.
      */
-    inline QuadEdge&
-    rNext()
+    inline const QuadEdge&
+    rNext() const
     {
         return rot().oNext().invRot();
     }
@@ -302,8 +345,8 @@ public:
      *
      * @return the previous right face edge.
      */
-    inline QuadEdge&
-    rPrev()
+    inline const QuadEdge&
+    rPrev() const
     {
         return sym().oNext();
     }
@@ -393,9 +436,10 @@ public:
     std::unique_ptr<geom::LineSegment> toLineSegment() const;
 };
 
+
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
-} //namespace goes
+} //namespace geos
 
 #endif //GEOS_TRIANGULATE_QUADEDGE_QUADEDGE_H
 

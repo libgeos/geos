@@ -11,6 +11,7 @@ geos_HEADERS = \
     QuadEdge.h \
     Vertex.h \
 	TrianglePredicate.h \
+	QuadEdgeQuartet.h \
 	QuadEdgeSubdivision.h \
 	QuadEdgeLocator.h \
 	LastFoundQuadEdgeLocator.h \

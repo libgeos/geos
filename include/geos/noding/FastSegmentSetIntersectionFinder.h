@@ -20,6 +20,7 @@
 #ifndef GEOS_NODING_FASTSEGMENTSETINTERSECTIONFINDER_H
 #define GEOS_NODING_FASTSEGMENTSETINTERSECTIONFINDER_H
 
+#include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
 

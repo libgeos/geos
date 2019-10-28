@@ -110,7 +110,7 @@ public:
      * Any dimension of Geometry may be added; the constituent
      * linework will be extracted.
      */
-    void add(std::vector<geom::Geometry*>* geometries);
+    void add(std::vector<const geom::Geometry*>* geometries);
 
     /**
      * \brief

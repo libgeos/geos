@@ -87,6 +87,10 @@ namespace algorithm { // geos::algorithm
  */
 namespace locate {
 } // namespace geos::algorithm::locate
+
+/// \brief Classes to compute distance metrics between geometries.
+namespace distance { // namespace geos::algorithm::distance
+} // namespace geos::algorithm::distance
 } // namespace geos::algorithm
 } // namespace geos
 

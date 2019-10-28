@@ -54,37 +54,18 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
-                                vector<std::unique_ptr<MonotoneChain>>& mcList)
+                                std::vector<std::unique_ptr<MonotoneChain>>& mcList)
 {
-    vector<std::size_t> startIndex;
-    getChainStartIndices(*pts, startIndex);
-    std::size_t nindexes = startIndex.size();
-    if(nindexes > 0) {
-        std::size_t n = nindexes - 1;
-        for(std::size_t i = 0; i < n; i++) {
-            mcList.emplace_back(new MonotoneChain(*pts, startIndex[i], startIndex[i + 1], context));
-        }
-    }
-}
-
-/* static public */
-void
-MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence& pts,
-        vector<std::size_t>& startIndexList)
-{
-    // find the startpoint (and endpoints) of all monotone chains
-    // in this edge
-    std::size_t start = 0;
-    startIndexList.push_back(start);
-    const std::size_t n = pts.getSize() - 1;
+    std::size_t chainStart = 0;
     do {
-        std::size_t last = findChainEnd(pts, start);
-        startIndexList.push_back(last);
-        start = last;
+        std::size_t chainEnd = findChainEnd(*pts, chainStart);
+        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd, context);
+        mcList.emplace_back(mc);
+        chainStart = chainEnd;
     }
-    while(start < n);
-
+    while (chainStart < (pts->size() - 1));
 }
+
 
 /* private static */
 std::size_t
@@ -116,17 +97,22 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
     int chainQuad = Quadrant::quadrant(pts[safeStart],
                                        pts[safeStart + 1]);
     std::size_t last = start + 1;
+
+    const Coordinate* prev = &pts[last-1]; // avoid repeated coordinate access by index (virtual call)
+    const Coordinate* curr = &pts[last];
+
     while(last < npts) {
         // skip zero-length segments, but include them in the chain
-        if(! pts[last - 1].equals2D(pts[last])) {
+        if(!prev->equals2D(*curr)) {
             // compute quadrant for next possible segment in chain
-            int quad = Quadrant::quadrant(pts[last - 1],
-                                          pts[last]);
+            int quad = Quadrant::quadrant(*prev, *curr);
             if(quad != chainQuad) {
                 break;
             }
         }
         ++last;
+        prev = curr;
+        curr = &pts[last];
     }
 #if GEOS_DEBUG
     std::cerr << "MonotoneChainBuilder::findChainEnd() returning" << std::endl;

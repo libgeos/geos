@@ -101,5 +101,21 @@ void object::test<2>
     ensure_equals(valid, false);
 }
 
+template<>
+template<>
+void object::test<3>
+()
+{
+    // https://trac.osgeo.org/geos/ticket/588
+
+    std::string wkt("POLYGON (( -86.3958130146539250 114.3482370100377900, 64.7285128575111490 156.9678884302379600, 138.3490775437400700 43.1639042523018260, 87.9271046586986810 -10.5302909001479570, 87.9271046586986810 -10.5302909001479530, 55.7321237336437390 -44.8146215164960250, -86.3958130146539250 114.3482370100377900))");
+    auto g = wktreader.read(wkt);
+
+    ensure(g->isValid());
+
+    auto g_rev = g->reverse();
+
+    ensure(g_rev->isValid());
+}
 
 } // namespace tut

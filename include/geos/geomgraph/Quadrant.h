@@ -36,8 +36,10 @@ class Coordinate;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
- * Utility functions for working with quadrants, which are numbered as follows:
+/** \brief
+ * Utility functions for working with quadrants.
+ *
+ * The quadrants are numbered as follows:
  * <pre>
  * 1 | 0
  * --+--
@@ -98,6 +100,10 @@ public:
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Quadrant.inl"
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_QUADRANT_H
 

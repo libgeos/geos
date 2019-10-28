@@ -24,6 +24,7 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/HCoordinate.h>
+#include <geos/triangulate/quadedge/TrianglePredicate.h>
 
 
 //fwd declarations
@@ -76,7 +77,7 @@ public:
     Vertex(const geom::Coordinate& _p);
 
     Vertex();
-    virtual ~Vertex() {};
+    ~Vertex() {};
 
     inline double
     getX() const
@@ -126,7 +127,7 @@ public:
         return false;
     }
 
-    virtual int classify(const Vertex& p0, const Vertex& p1);
+    int classify(const Vertex& p0, const Vertex& p1);
 
     /**
      * Computes the cross product k = u X v.
@@ -206,7 +207,9 @@ public:
      * @param c a vertex of the triangle
      * @return true if this vertex is in the circumcircle of (a,b,c)
      */
-    virtual bool isInCircle(const Vertex& a, const Vertex& b, const Vertex& c) const;
+    bool isInCircle(const Vertex& a, const Vertex& b, const Vertex& c) const {
+        return geom::TrianglePredicate::isInCircleRobust(a.p, b.p, c.p, this->p);
+    }
 
     /**
      * Tests whether the triangle formed by this vertex and two
@@ -219,10 +222,9 @@ public:
     inline bool
     isCCW(const Vertex& b, const Vertex& c) const
     {
-        // is equal to the signed area of the triangle
-
+        // check if signed area is positive
         return (b.p.x - p.x) * (c.p.y - p.y)
-               - (b.p.y - p.y) * (c.p.x - p.x) > 0;
+               > (b.p.y - p.y) * (c.p.x - p.x);
     }
 
     bool rightOf(const QuadEdge& e) const;
@@ -248,7 +250,7 @@ private:
      * @param c third vertex of the triangle
      * @return ratio of circumradius to shortest edge.
      */
-    virtual double circumRadiusRatio(const Vertex& b, const Vertex& c);
+    double circumRadiusRatio(const Vertex& b, const Vertex& c);
 
     /**
      * returns a new vertex that is mid-way between this vertex and another end point.
@@ -256,7 +258,7 @@ private:
      * @param a the other end point.
      * @return the point mid-way between this and that.
      */
-    virtual std::unique_ptr<Vertex> midPoint(const Vertex& a);
+    std::unique_ptr<Vertex> midPoint(const Vertex& a);
 
     /**
      * Computes the centre of the circumcircle of this vertex and two others.
@@ -265,14 +267,13 @@ private:
      * @param c
      * @return the Coordinate which is the circumcircle of the 3 points.
      */
-    virtual std::unique_ptr<Vertex> circleCenter(const Vertex& b, const Vertex& c) const;
+    std::unique_ptr<Vertex> circleCenter(const Vertex& b, const Vertex& c) const;
 
     /**
-     * For this vertex enclosed in a triangle defined by three verticies v0, v1 and v2, interpolate
+     * For this vertex enclosed in a triangle defined by three vertices v0, v1 and v2, interpolate
      * a z value from the surrounding vertices.
      */
-    virtual double interpolateZValue(const Vertex& v0, const Vertex& v1,
-                                     const Vertex& v2) const;
+    double interpolateZValue(const Vertex& v0, const Vertex& v1, const Vertex& v2) const;
 
     /**
      * Interpolates the Z-value (height) of a point enclosed in a triangle

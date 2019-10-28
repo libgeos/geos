@@ -6,6 +6,7 @@
 #include <geos/geom/Coordinate.h>
 // std
 #include <cmath>
+#include <unordered_set>
 
 namespace tut {
 //
@@ -194,6 +195,27 @@ void object::test<9>
     ensure(0 != std::isnan(null_coord.x));
     ensure(0 != std::isnan(null_coord.y));
     ensure(0 != std::isnan(null_coord.z));
+}
+
+template<>
+template<>
+void object::test<10>
+()
+{
+    using geos::geom::Coordinate;
+
+    std::unordered_set<Coordinate, Coordinate::HashCode> coords;
+
+    coords.emplace(1, 2);
+    ensure_equals(coords.size(), 1ul);
+
+    coords.emplace(2, 1);
+    ensure_equals(coords.size(), 2ul);
+
+    // hash function defined consistently with equality operator
+    // and considers X and Y only
+    coords.emplace(1, 2, 3);
+    ensure_equals(coords.size(), 2ul);
 }
 
 } // namespace tut

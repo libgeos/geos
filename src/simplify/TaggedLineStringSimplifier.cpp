@@ -76,7 +76,7 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
               << std::endl;
 #endif
 
-    if(! linePts->size()) {
+    if(linePts->isEmpty()) {
         return;
     }
     simplifySection(0, linePts->size() - 1, 0);

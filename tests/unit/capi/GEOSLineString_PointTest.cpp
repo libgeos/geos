@@ -49,7 +49,7 @@ struct test_capilinestringpoint_data {
 typedef test_group<test_capilinestringpoint_data> group;
 typedef group::object object;
 
-group test_capilinestringpoint_group("capi::GEOSLineStringPoint");
+group test_capilinestringpoint_group("capi::GEOSLineString_Point");
 
 //
 // Test Cases

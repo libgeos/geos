@@ -87,13 +87,10 @@ void object::test<1>
     ensure_equals(gf->getSRID(), 0);
     ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
 
-    geos::geom::Geometry* geo = gf->createEmptyGeometry();
+    auto geo = gf->createEmptyGeometry();
     ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
     ensure_equals(geo->getSRID(), gf->getSRID());
     ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
-
-    // FREE MEMORY
-    gf->destroyGeometry(geo);
 }
 
 // Test of user's constructor
@@ -117,13 +114,10 @@ void object::test<2>
 
         ensure_equals(&csf, gf->getCoordinateSequenceFactory());
 
-        GeometryPtr geo = gf->createEmptyGeometry();
+        auto geo = gf->createEmptyGeometry();
         ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED);
-
-        // FREE MEMORY
-        gf->destroyGeometry(geo);
     }
     // csf lifetime must exceed lifetime of the GeometryFactory instance
 
@@ -146,13 +140,10 @@ void object::test<3>
         ensure_equals(gf->getSRID(), 0);
         ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
 
-        GeometryPtr geo = gf->createEmptyGeometry();
+        auto geo = gf->createEmptyGeometry();
         ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
-
-        // FREE MEMORY
-        gf->destroyGeometry(geo);
     }
     // csf lifetime must exceed lifetime of the GeometryFactory instance
 }
@@ -172,13 +163,10 @@ void object::test<4>
     ensure_equals(gf->getSRID(), 0);
     ensure_equals(gf->getPrecisionModel()->getType(), PrecisionModel::FIXED);
 
-    GeometryPtr geo = gf->createEmptyGeometry();
+    auto geo = gf->createEmptyGeometry();
     ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
     ensure_equals(geo->getSRID(), gf->getSRID());
     ensure_equals(geo->getPrecisionModel()->getType(), PrecisionModel::FIXED);
-
-    // FREE MEMORY
-    gf->destroyGeometry(geo);
 }
 
 // Test of user's constructor
@@ -196,13 +184,10 @@ void object::test<5>
     ensure_equals(gf->getSRID(), srid_);
     ensure_equals(gf->getPrecisionModel()->getType(), PrecisionModel::FIXED);
 
-    GeometryPtr geo = gf->createEmptyGeometry();
+    auto geo = gf->createEmptyGeometry();
     ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
     ensure_equals(geo->getSRID(), gf->getSRID());
     ensure_equals(geo->getPrecisionModel()->getType(), PrecisionModel::FIXED);
-
-    // FREE MEMORY
-    gf->destroyGeometry(geo);
 }
 
 // Test of copy constructor
@@ -224,7 +209,7 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr geo = factory_->createEmptyGeometry();
+    auto geo = factory_->createEmptyGeometry();
 
     ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
     ensure("createEmptyGeometry() returned non-empty geometry.", geo->isEmpty());
@@ -238,9 +223,6 @@ void object::test<7>
     ensure( geo->getCentroid() == 0 );
     ensure( geo->getCoordinate() == 0 );
     */
-
-    // FREE MEMORY
-    factory_->destroyGeometry(geo);
 }
 
 // Test of createPoint() const
@@ -249,7 +231,7 @@ template<>
 void object::test<8>
 ()
 {
-    PointPtr pt = factory_->createPoint();
+    auto pt = factory_->createPoint();
 
     ensure("createPoint() returned null pointer.", pt != nullptr);
     ensure("createPoint() returned non-empty point.", pt->isEmpty());
@@ -277,9 +259,6 @@ void object::test<8>
     ensure_equals(pt->getNumPoints(), 0u);
     ensure_equals(pt->getLength(), 0.0);
     ensure_equals(pt->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(pt);
 }
 
 // Test of createPoint(const Coordinate &coordinate) const
@@ -446,7 +425,7 @@ template<>
 void object::test<12>
 ()
 {
-    LinearRingPtr lr = factory_->createLinearRing();
+    auto lr = factory_->createLinearRing();
 
     ensure("createLinearRing() returned null pointer.", lr != nullptr);
     ensure("createLinearRing() returned non-empty point.", lr->isEmpty());
@@ -469,9 +448,6 @@ void object::test<12>
     ensure_equals(lr->getNumPoints(), 0u);
     ensure_equals(lr->getLength(), 0.0);
     ensure_equals(lr->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(lr);
 }
 
 // Test of createLinearRing(CoordinateSequence* newCoords) const
@@ -538,7 +514,7 @@ template<>
 void object::test<15>
 ()
 {
-    LineStringPtr line = factory_->createLineString();
+    auto line = factory_->createLineString();
 
     ensure("createLineString() returned null pointer.", line != nullptr);
     ensure("createLineString() returned non-empty point.", line->isEmpty());
@@ -569,9 +545,6 @@ void object::test<15>
     ensure_equals(line->getNumPoints(), 0u);
     ensure_equals(line->getLength(), 0.0);
     ensure_equals(line->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(line);
 }
 
 // Test of createLineString(CoordinateSequence* coordinates) const
@@ -637,7 +610,7 @@ template<>
 void object::test<18>
 ()
 {
-    PolygonPtr poly = factory_->createPolygon();
+    auto poly = factory_->createPolygon();
 
     ensure("createPolygon() returned null pointer.", poly != nullptr);
     ensure("createPolygon() returned non-empty point.", poly->isEmpty());
@@ -671,9 +644,6 @@ void object::test<18>
     ensure_equals(poly->getNumPoints(), 0u);
     ensure_equals(poly->getLength(), 0.0);
     ensure_equals(poly->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(poly);
 }
 
 // Test of createPolygon(LinearRing* shell, std::vector<Geometry*>* holes) const
@@ -803,7 +773,7 @@ template<>
 void object::test<21>
 ()
 {
-    GeometryColPtr col = factory_->createGeometryCollection();
+    auto col = factory_->createGeometryCollection();
 
     ensure("createGeometryCollection() returned null pointer.", col != nullptr);
     ensure(col->isEmpty());
@@ -815,9 +785,6 @@ void object::test<21>
     ensure_equals(col->getNumPoints(), 0u);
     ensure_equals(col->getLength(), 0.0);
     ensure_equals(col->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(col);
 }
 
 // Test of createGeometryCollection(std::vector<Geometry*>* newGeoms) const
@@ -866,7 +833,7 @@ void object::test<23>
     const std::size_t size = 3;
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    std::vector<GeometryPtr> vec;
+    std::vector<const geos::geom::Geometry*> vec;
 
     GeometryPtr geo = nullptr;
     geo = factory_->createPoint(coord);
@@ -892,9 +859,8 @@ void object::test<23>
 
     // FREE MEMORY
     factory_->destroyGeometry(col);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = vec.begin(); it != vec.end(); ++it) {
-        delete(*it);
+    for(auto& g : vec) {
+        delete g;
     }
 }
 
@@ -904,7 +870,7 @@ template<>
 void object::test<24>
 ()
 {
-    MultiPointPtr mp = factory_->createMultiPoint();
+    auto mp = factory_->createMultiPoint();
 
     ensure("createMultiPoint() returned null pointer.", mp != nullptr);
     ensure("createMultiPoint() returned non-empty point.", mp->isEmpty());
@@ -935,9 +901,6 @@ void object::test<24>
     ensure_equals(mp->getNumPoints(), 0u);
     ensure_equals(mp->getLength(), 0.0);
     ensure_equals(mp->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(mp);
 }
 
 // Test of createMultiPoint(std::vector<Geometry*>* newPoints) const
@@ -991,7 +954,7 @@ void object::test<26>
     const std::size_t size = 3;
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    std::vector<GeometryPtr> vec;
+    std::vector<const geos::geom::Geometry*> vec;
 
     GeometryPtr geo = nullptr;
     geo = factory_->createPoint(coord);
@@ -1019,9 +982,8 @@ void object::test<26>
 
     // FREE MEMORY
     factory_->destroyGeometry(mp);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = vec.begin(); it != vec.end(); ++it) {
-        delete(*it);
+    for(auto& g : vec) {
+        delete g;
     }
 }
 
@@ -1058,7 +1020,7 @@ template<>
 void object::test<28>
 ()
 {
-    MultiLineStringPtr mls = factory_->createMultiLineString();
+    auto mls = factory_->createMultiLineString();
 
     ensure("createMultiLineString() returned null pointer.", mls != nullptr);
     ensure("createMultiLineString() returned non-empty point.", mls->isEmpty());
@@ -1089,9 +1051,6 @@ void object::test<28>
     ensure_equals(mls->getNumPoints(), 0u);
     ensure_equals(mls->getLength(), 0.0);
     ensure_equals(mls->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(mls);
 }
 
 // Test of createMultiLineString(std::vector<Geometry*>* newLines) const
@@ -1147,7 +1106,7 @@ void object::test<30>
     const std::size_t size = 5;
     const std::size_t lineSize = 2;
 
-    std::vector<GeometryPtr> lines;
+    std::vector<const geos::geom::Geometry*> lines;
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
@@ -1176,9 +1135,8 @@ void object::test<30>
 
     // FREE MEMORY
     factory_->destroyGeometry(mls);
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = lines.begin(); it != lines.end(); ++it) {
-        delete(*it);
+    for(auto& g : lines) {
+        delete g;
     }
 }
 

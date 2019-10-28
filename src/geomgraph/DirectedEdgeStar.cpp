@@ -198,14 +198,12 @@ DirectedEdgeStar::updateLabelling(const Label& nodeLabel)
 }
 
 /*private*/
-std::vector<DirectedEdge*>*
+const std::vector<DirectedEdge*>&
 DirectedEdgeStar::getResultAreaEdges()
 {
-    if(resultAreaEdgeList != nullptr) {
+    if(resultAreaEdgesComputed) {
         return resultAreaEdgeList;
     }
-
-    resultAreaEdgeList = new std::vector<DirectedEdge*>();
 
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
@@ -213,9 +211,11 @@ DirectedEdgeStar::getResultAreaEdges()
         assert(dynamic_cast<DirectedEdge*>(*it));
         DirectedEdge* de = static_cast<DirectedEdge*>(*it);
         if(de->isInResult() || de->getSym()->isInResult()) {
-            resultAreaEdgeList->push_back(de);
+            resultAreaEdgeList.push_back(de);
         }
     }
+
+    resultAreaEdgesComputed = true;
     return resultAreaEdgeList;
 }
 
@@ -231,11 +231,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
     DirectedEdge* incoming = nullptr;
     int state = SCANNING_FOR_INCOMING;
     // link edges in CCW order
-    for(std::vector<DirectedEdge*>::iterator
-            i = resultAreaEdgeList->begin(), iEnd = resultAreaEdgeList->end();
-            i != iEnd;
-            ++i) {
-        DirectedEdge* nextOut = *i;
+    for(DirectedEdge* nextOut : resultAreaEdgeList) {
         assert(nextOut);
 
         // skip de's that we're not interested in
@@ -290,10 +286,9 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing* er)
 
     // link edges in CW order
     for(std::vector<DirectedEdge*>::reverse_iterator
-            i = resultAreaEdgeList->rbegin(), iEnd = resultAreaEdgeList->rend();
+            i = resultAreaEdgeList.rbegin(), iEnd = resultAreaEdgeList.rend();
             i != iEnd;
             ++i) {
-        //DirectedEdge *nextOut=(*resultAreaEdgeList)[i];
         DirectedEdge* nextOut = *i;
         assert(nextOut);
 

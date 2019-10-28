@@ -28,11 +28,6 @@
 #include <vector>
 
 // Forward declarations
-namespace geos {
-namespace algorithm {
-//class LineIntersector;
-}
-}
 
 namespace geos {
 namespace noding { // geos.noding
@@ -102,5 +97,8 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // ndef GEOS_NODING_BASICSEGMENTSTRING_H
+#ifdef GEOS_INLINE
+#include <geos/noding/BasicSegmentString.inl>
+#endif
 
+#endif // ndef GEOS_NODING_BASICSEGMENTSTRING_H

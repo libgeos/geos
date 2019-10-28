@@ -75,7 +75,7 @@ namespace relate { // geos::operation::relate
 class GEOS_DLL RelateComputer {
 public:
     RelateComputer(std::vector<geomgraph::GeometryGraph*>* newArg);
-    ~RelateComputer();
+    ~RelateComputer() = default;
 
     std::unique_ptr<geom::IntersectionMatrix> computeIM();
 private:

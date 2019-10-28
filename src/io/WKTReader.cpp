@@ -252,7 +252,7 @@ WKTReader::readPointText(StringTokenizer* tokenizer)
     size_t dim;
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<Point>(geometryFactory->createPoint(Coordinate::getNull()));
+        return geometryFactory->createPoint();
     }
 
     Coordinate coord;
@@ -281,7 +281,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint());
+        return geometryFactory->createMultiPoint();
     }
 
     int tok = tokenizer->peekNextToken();
@@ -352,7 +352,7 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<Polygon>(geometryFactory->createPolygon(nullptr, nullptr));
+        return geometryFactory->createPolygon();
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;
@@ -371,7 +371,7 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<MultiLineString>(geometryFactory->createMultiLineString(nullptr));
+        return geometryFactory->createMultiLineString();
     }
 
     std::vector<std::unique_ptr<LineString>> lineStrings;
@@ -388,7 +388,7 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<MultiPolygon>(geometryFactory->createMultiPolygon(nullptr));
+        return geometryFactory->createMultiPolygon();
     }
 
     std::vector<std::unique_ptr<Polygon>> polygons;
@@ -405,7 +405,7 @@ WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return std::unique_ptr<GeometryCollection>(geometryFactory->createGeometryCollection(nullptr));
+        return geometryFactory->createGeometryCollection();
     }
 
     std::vector<std::unique_ptr<Geometry>> geoms;

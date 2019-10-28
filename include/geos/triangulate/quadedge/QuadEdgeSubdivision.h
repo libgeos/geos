@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2012 Excensus LLC.
+ * Copyright (C) 2019 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -26,7 +27,9 @@
 #include <vector>
 
 #include <geos/geom/MultiLineString.h>
+#include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeLocator.h>
+#include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
 #include <geos/triangulate/quadedge/Vertex.h>
 
 namespace geos {
@@ -45,7 +48,6 @@ class Envelope;
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-class QuadEdge;
 class TriangleVisitor;
 
 const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
@@ -91,14 +93,14 @@ public:
                                  const QuadEdge* triEdge[3]);
 
 private:
-    QuadEdgeList quadEdges;
-    QuadEdgeList createdEdges;
-    QuadEdge* startingEdges[3];
+    std::deque<QuadEdgeQuartet> quadEdges;
+    std::array<QuadEdge*, 3> startingEdges;
     double tolerance;
     double edgeCoincidenceTolerance;
-    Vertex frameVertex[3];
+    std::array<Vertex, 3> frameVertex;
     geom::Envelope frameEnv;
     std::unique_ptr<QuadEdgeLocator> locator;
+    bool visit_state_clean;
 
 public:
     /** \brief
@@ -111,12 +113,12 @@ public:
      */
     QuadEdgeSubdivision(const geom::Envelope& env, double tolerance);
 
-    virtual ~QuadEdgeSubdivision();
+    virtual ~QuadEdgeSubdivision() = default;
 
 private:
     virtual void createFrame(const geom::Envelope& env);
 
-    virtual void initSubdiv(QuadEdge* initEdges[3]);
+    virtual void initSubdiv();
 
 public:
     /** \brief
@@ -147,8 +149,8 @@ public:
      *
      * @return a QuadEdgeList
      */
-    inline const QuadEdgeList&
-    getEdges() const
+    inline std::deque<QuadEdgeQuartet>&
+    getEdges()
     {
         return quadEdges;
     }
@@ -191,8 +193,7 @@ public:
      * Deletes a quadedge from the subdivision. Linked quadedges are updated to
      * reflect the deletion.
      *
-     * @param e
-     *          the quadedge to delete
+     * @param e the quadedge to delete
      */
     void remove(QuadEdge& e);
 
@@ -348,8 +349,7 @@ public:
 
 private:
     typedef std::stack<QuadEdge*> QuadEdgeStack;
-    typedef std::unordered_set<QuadEdge*> QuadEdgeSet;
-    typedef std::vector<geom::CoordinateSequence*> TriList;
+    typedef std::vector<std::unique_ptr<geom::CoordinateSequence>> TriList;
 
     /** \brief
      * The quadedges forming a single triangle.
@@ -357,6 +357,11 @@ private:
      * Only one visitor is allowed to be active at a time, so this is safe.
      */
     QuadEdge* triEdges[3];
+
+    /** \brief
+     * Resets the `visited` flag of each `QuadEdge` prior to iteration, if necessary.
+     */
+    void prepareVisit();
 
     /** \brief
      * Stores the edges for a visited triangle. Also pushes sym (neighbour) edges
@@ -369,8 +374,7 @@ private:
      * @return `null` if the triangle should not be visited (for instance, if it is
      *         outer)
      */
-    QuadEdge** fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame,
-                                    QuadEdgeSet& visitedEdges);
+    QuadEdge** fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame);
 
     /** \brief
      * Gets the coordinates for each triangle in the subdivision as an array.
@@ -458,7 +462,7 @@ public:
      * @param geomFact a geometry factory
      * @return a List of LineString
      */
-    std::unique_ptr< std::vector<geom::Geometry*> > getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
+    std::vector<std::unique_ptr<geom::Geometry>> getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
 
     /** \brief
      * Gets a collection of [QuadEdges](@ref QuadEdge) whose origin vertices are a unique set

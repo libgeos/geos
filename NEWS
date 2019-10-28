@@ -1,18 +1,51 @@
+Changes in 3.9.0
+2020-xx-xx
+
+- New things:
+  - 
+
+- Improvements:
+  - Stack allocate segments in OverlapUnion (Paul Ramsey)
+
+
 Changes in 3.8.0
-2019-MM-DD
+2019-10-10
 
 - New things:
   - CAPI: GEOSBuildArea (#952, Even Rouault)
   - CAPI: GEOSMakeValid (#952, Even Rouault)
   - CAPI: GEOSPolygonize_valid (#727, Dan Baston)
   - CAPI: GEOSCoverageUnion (Dan Baston)
+  - CAPI: GEOSCoordSeq_setXY, GEOSCoordSeq_setXYZ,
+          GEOSCoordSeq_getXY, GEOSCoordSeq_getXYZ (Dan Baston)
+  - CAPI: GEOSMinimumBoundingCircle (#735)
+  - CAPI: GEOSGeom_createPointFromXY (Dan Baston)
 
 - Improvements:
+  - Improve overall performance by reducing of heap allocations (Dan Baston)
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
   - Improve performance of GEOSPolygonize for cases with many potential
     holes (#748, Dan Baston)
+  - Support extended precision calculations (ttmath) and port JTS
+    improvements related to extended precision (Paul Ramsey, Mateusz Loskot)
   - Improve performance of GEOSPolygonize for cases with many or complex
     shells (Dan Baston, Martin Davis)
+  - Improve performance of Delaunay triangulations / Voronoi Diagrams
+    (Dan Baston)
+  - Improve performance of prepared geometry operations (Dan Baston)
+  - Improve robustness of Delaunay triangulations (Paul Ramsey, Martin Davis)
+  - Improve performance of unary union for lines (Dan Baston)
+  - Improve general predicate, overlay, and buffer performance (Dan Baston, Paul Ramsey)
+  - Improve cascaded union performance (Paul Ramsey, Martin Davis)
+  - Allocate default GeometryFactory singleton on the stack (Sandro Mani)
+  - Harmonize XML tests with JTS and harmonize cmake/autoconf
+    test running (Paul Ramsey)
+  - CMake modernization (Mateusz Loskot, Paul Ramsey, Dan Baston)
+  - Return unique_ptr from most methods that produce a new geometry (Dan Baston)
+
+- Changes:
+  - Constructive geometry functions in CAPI now preserve SRID
+    of input arguments in output (#896)
 
 
 Changes in 3.7.2

@@ -2,6 +2,7 @@
 # Part of CMake configuration for GEOS
 #
 # Copyright (C) 2018 Mateusz Loskot <mateusz@loskot.net>
+# Copyright (C) 2019 Daniel Baston <dbaston@gmail.com>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
@@ -23,7 +24,14 @@ target_include_directories(test_xmltester
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml)
 
-file(GLOB_RECURSE _tests ${CMAKE_CURRENT_LIST_DIR}/tests/*.xml CONFIGURE_DEPEND)
-list(FILTER _tests EXCLUDE REGEX failure)
-add_test(NAME test_xml COMMAND test_xmltester --test-valid-output ${_tests})
-unset(_tests)
+foreach(_testdir general issue misc robust validate)
+    file(GLOB_RECURSE _testfiles ${CMAKE_CURRENT_LIST_DIR}/tests/${_testdir}/*.xml CONFIGURE_DEPEND)
+    foreach(_testfile ${_testfiles})
+        get_filename_component(_testname ${_testfile} NAME_WE)
+        add_test(NAME ${_testdir}-${_testname} COMMAND test_xmltester -v --test-valid-output ${_testfile})
+    endforeach()
+endforeach()
+unset(_testdir)
+unset(_testname)
+unset(_testfile)
+unset(_testfiles)

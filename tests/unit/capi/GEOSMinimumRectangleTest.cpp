@@ -57,7 +57,7 @@ struct test_capigeosminimumrectangle_data {
 typedef test_group<test_capigeosminimumrectangle_data> group;
 typedef group::object object;
 
-group test_capigeosminimumrectangle_group("capi::GEOSMinimumRotatedRectangle");
+group test_capigeosminimumrectangle_group("capi::GEOSMinimumRectangle");
 
 //
 // Test Cases

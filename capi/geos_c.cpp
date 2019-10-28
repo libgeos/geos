@@ -706,6 +706,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMinimumBoundingCircle(const Geometry* g, double* radius, Geometry** center)
+    {
+        return GEOSMinimumBoundingCircle_r(handle, g, radius, center);
+    }
+
+    Geometry*
     GEOSGeom_createCollection(int type, Geometry** geoms, unsigned int ngeoms)
     {
         return GEOSGeom_createCollection_r(handle, type, geoms, ngeoms);
@@ -845,6 +851,18 @@ extern "C" {
         return GEOSCoordSeq_setOrdinate(s, idx, 2, val);
     }
 
+    int
+    GEOSCoordSeq_setXY(CoordinateSequence* s, unsigned int idx, double x, double y)
+    {
+        return GEOSCoordSeq_setXY_r(handle, s, idx, x, y);
+    }
+
+    int
+    GEOSCoordSeq_setXYZ(CoordinateSequence* s, unsigned int idx, double x, double y, double z)
+    {
+        return GEOSCoordSeq_setXYZ_r(handle, s, idx, x, y, z);
+    }
+
     CoordinateSequence*
     GEOSCoordSeq_clone(const CoordinateSequence* s)
     {
@@ -873,6 +891,18 @@ extern "C" {
     GEOSCoordSeq_getZ(const CoordinateSequence* s, unsigned int idx, double* val)
     {
         return GEOSCoordSeq_getOrdinate(s, idx, 2, val);
+    }
+
+    int
+    GEOSCoordSeq_getXY(const CoordinateSequence* s, unsigned int idx, double* x, double* y)
+    {
+        return GEOSCoordSeq_getXY_r(handle, s, idx, x, y);
+    }
+
+    int
+    GEOSCoordSeq_getXYZ(const CoordinateSequence* s, unsigned int idx, double* x, double* y, double* z)
+    {
+        return GEOSCoordSeq_getXYZ_r(handle, s, idx, x, y, z);
     }
 
     int
@@ -909,6 +939,12 @@ extern "C" {
     GEOSGeom_createPoint(CoordinateSequence* cs)
     {
         return GEOSGeom_createPoint_r(handle, cs);
+    }
+
+    Geometry*
+    GEOSGeom_createPointFromXY(double x, double y)
+    {
+        return GEOSGeom_createPointFromXY_r(handle, x, y);
     }
 
     Geometry*

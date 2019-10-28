@@ -34,7 +34,7 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
+/** \brief
  * Represents a point on an edge which intersects with another edge.
  *
  * The intersection may either be a single point, or a line segment
@@ -92,6 +92,13 @@ public:
         return dist;
     }
 
+    bool operator==(const EdgeIntersection& other) const {
+        return segmentIndex == other.segmentIndex &&
+            dist == other.dist;
+
+        // We don't check the coordinate, consistent with operator<
+    }
+
 };
 
 /// Strict weak ordering operator for EdgeIntersection
@@ -122,6 +129,13 @@ struct GEOS_DLL  EdgeIntersectionLessThen {
                const EdgeIntersection* ei2) const
     {
         return *ei1 < *ei2;
+    }
+
+    bool
+    operator()(const EdgeIntersection& ei1,
+               const EdgeIntersection& ei2) const
+    {
+        return ei1 < ei2;
     }
 };
 

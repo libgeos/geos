@@ -54,7 +54,7 @@ public:
 
     friend class GeometryFactory;
 
-    ~MultiLineString() override;
+    ~MultiLineString() override = default;
 
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;
@@ -72,6 +72,8 @@ public:
 
     /// Returns a (possibly empty) [MultiPoint](@ref geom::MultiPoint)
     std::unique_ptr<Geometry> getBoundary() const override;
+
+    const LineString* getGeometryN(std::size_t n) const override;
 
     std::string getGeometryType() const override;
 

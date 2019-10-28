@@ -67,7 +67,7 @@ Polygon::Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
     Geometry(newFactory)
 {
     if(newShell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell = getFactory()->createLinearRing();
     }
     else {
         if(newHoles != nullptr && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
@@ -93,7 +93,7 @@ Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
         shell(std::move(newShell))
 {
     if(shell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell = getFactory()->createLinearRing();
     }
 }
 
@@ -105,7 +105,7 @@ Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
                  holes(std::move(newHoles))
 {
     if(shell == nullptr) {
-        shell.reset(getFactory()->createLinearRing(nullptr));
+        shell = getFactory()->createLinearRing();
     }
 
     // TODO move into validateConstruction() method
@@ -125,22 +125,20 @@ Polygon::getCoordinates() const
         return getFactory()->getCoordinateSequenceFactory()->create();
     }
 
-    std::vector<Coordinate>* cl = new std::vector<Coordinate>;
-
-    // reserve space in the vector for all the polygon points
-    cl->reserve(getNumPoints());
+    std::vector<Coordinate> cl;
+    cl.reserve(getNumPoints());
 
     // Add shell points
     const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
-    shellCoords->toVector(*cl);
+    shellCoords->toVector(cl);
 
     // Add holes points
     for(const auto& hole : holes) {
         const CoordinateSequence* childCoords = hole->getCoordinatesRO();
-        childCoords->toVector(*cl);
+        childCoords->toVector(cl);
     }
 
-    return getFactory()->getCoordinateSequenceFactory()->create(cl);
+    return getFactory()->getCoordinateSequenceFactory()->create(std::move(cl));
 }
 
 size_t
@@ -232,23 +230,22 @@ Polygon::getBoundary() const
         return std::unique_ptr<Geometry>(gf->createLineString(*shell));
     }
 
-    std::vector<Geometry*>* rings = new std::vector<Geometry*>(holes.size() + 1);
+    std::vector<std::unique_ptr<Geometry>> rings(holes.size() + 1);
 
-    (*rings)[0] = gf->createLineString(*shell).release();
+    rings[0] = gf->createLineString(*shell);
     for(size_t i = 0, n = holes.size(); i < n; ++i) {
         const LinearRing* hole = holes[i].get();
-        assert(hole);
-        LineString* ls = gf->createLineString(*hole).release();
-        (*rings)[i + 1] = ls;
+        std::unique_ptr<LineString> ls = gf->createLineString(*hole);
+        rings[i + 1] = std::move(ls);
     }
-    MultiLineString* ret = getFactory()->createMultiLineString(rings);
-    return std::unique_ptr<Geometry>(ret);
+
+    return getFactory()->createMultiLineString(std::move(rings));
 }
 
 Envelope::Ptr
 Polygon::computeEnvelopeInternal() const
 {
-    return Envelope::Ptr(new Envelope(*(shell->getEnvelopeInternal())));
+    return detail::make_unique<Envelope>(*(shell->getEnvelopeInternal()));
 }
 
 bool
@@ -455,8 +452,6 @@ Polygon::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-Polygon::~Polygon() = default;
-
 GeometryTypeId
 Polygon::getGeometryTypeId() const
 {
@@ -513,17 +508,17 @@ Polygon::reverse() const
         return clone();
     }
 
-    auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse().release());
-    auto* interiorRingsReversed = new std::vector<LinearRing*> {holes.size()};
+    std::unique_ptr<LinearRing> exteriorRingReversed(static_cast<LinearRing*>(shell->reverse().release()));
+    std::vector<std::unique_ptr<LinearRing>> interiorRingsReversed(holes.size());
 
     std::transform(holes.begin(),
                    holes.end(),
-                   interiorRingsReversed->begin(),
+                   interiorRingsReversed.begin(),
     [](const std::unique_ptr<LinearRing> & g) {
-        return dynamic_cast<LinearRing*>(g->reverse().release());
+        return std::unique_ptr<LinearRing>(static_cast<LinearRing*>(g->reverse().release()));
     });
 
-    return std::unique_ptr<Geometry>(getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed));
+    return getFactory()->createPolygon(std::move(exteriorRingReversed), std::move(interiorRingsReversed));
 }
 
 } // namespace geos::geom

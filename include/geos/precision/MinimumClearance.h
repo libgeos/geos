@@ -25,6 +25,8 @@
 
 namespace geos {
 namespace precision {
+
+/// Computes the Minimum Clearance of a Geometry.
 class GEOS_DLL MinimumClearance {
 private:
     const geom::Geometry* inputGeom;

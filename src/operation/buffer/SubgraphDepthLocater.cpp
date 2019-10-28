@@ -163,9 +163,8 @@ SubgraphDepthLocater::getDepth(const Coordinate& p)
         return 0;
     }
 
-    sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLessThen());
-
-    DepthSegment* ds = stabbedSegments[0];
+    DepthSegment *ds = *std::min_element(stabbedSegments.begin(),
+        stabbedSegments.end(), DepthSegmentLessThen());
     int ret = ds->leftDepth;
 
 #if GEOS_DEBUG

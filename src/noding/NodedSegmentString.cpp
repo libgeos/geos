@@ -157,7 +157,7 @@ NodedSegmentString::getCoordinate(size_t i) const
 geom::CoordinateSequence*
 NodedSegmentString::getCoordinates() const
 {
-    return pts;
+    return pts.get();
 }
 
 /* virtual public */

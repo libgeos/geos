@@ -11,6 +11,7 @@ geos_HEADERS = \
     CascadedPolygonUnion.h \
     CascadedUnion.h \
     CoverageUnion.h \
+    OverlapUnion.h \
     GeometryListHolder.h \
     PointGeometryUnion.h \
     UnaryUnionOp.h

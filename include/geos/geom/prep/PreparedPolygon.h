@@ -23,6 +23,8 @@
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 #include <geos/noding/SegmentString.h>
 
+#include <memory>
+
 namespace geos {
 namespace noding {
 class FastSegmentSetIntersectionFinder;
@@ -48,8 +50,8 @@ namespace prep { // geos::geom::prep
 class PreparedPolygon : public BasicPreparedGeometry {
 private:
     bool isRectangle;
-    mutable noding::FastSegmentSetIntersectionFinder* segIntFinder;
-    mutable algorithm::locate::PointOnGeometryLocator* ptOnGeomLoc;
+    mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
+    mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ptOnGeomLoc;
     mutable noding::SegmentString::ConstVect segStrings;
 
 protected:

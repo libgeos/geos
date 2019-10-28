@@ -49,9 +49,6 @@ ElevationMatrixFilter::ElevationMatrixFilter(ElevationMatrix& newEm):
     em(newEm)
 { }
 
-ElevationMatrixFilter::~ElevationMatrixFilter()
-{ }
-
 void
 ElevationMatrixFilter::filter_rw(Coordinate* c) const
 {
@@ -109,10 +106,6 @@ ElevationMatrix::ElevationMatrix(const Envelope& newEnv,
     if(! cellheight) {
         rows = 1;
     }
-}
-
-ElevationMatrix::~ElevationMatrix()
-{
 }
 
 void

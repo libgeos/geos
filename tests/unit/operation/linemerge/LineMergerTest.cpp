@@ -34,8 +34,8 @@ struct test_linemerger_data {
     typedef geos::geom::Geometry Geom;
     typedef geos::geom::Geometry::Ptr GeomPtr;
 
-    GeomVect inpGeoms;
-    GeomVect expGeoms;
+    std::vector<const geos::geom::Geometry*> inpGeoms;
+    std::vector<const geos::geom::Geometry*> expGeoms;
     LineVect* mrgGeoms;
 
     test_linemerger_data()
@@ -61,7 +61,7 @@ struct test_linemerger_data {
     }
 
     void
-    readWKT(const char* const* inputWKT, std::vector<Geom*>& geoms)
+    readWKT(const char* const* inputWKT, std::vector<const Geom*>& geoms)
     {
         for(const char* const* ptr = inputWKT; *ptr; ++ptr) {
             geoms.push_back(readWKT(*ptr).release());
@@ -88,9 +88,7 @@ struct test_linemerger_data {
     void
     delAll(TargetContainer& geoms)
     {
-        for(typename TargetContainer::const_iterator i = geoms.begin(),
-                e = geoms.end(); i != e; ++i) {
-            Geom* g = dynamic_cast<Geom*>(*i);
+        for(auto& g : geoms) {
             delete g;
         }
     }
@@ -102,10 +100,7 @@ struct test_linemerger_data {
             bool compareDirections)
     {
         ensure_equals(actualGeometries.size(), expectedGeometries.size());
-        for(typename TargetContainer1::const_iterator
-                i = expectedGeometries.begin(),
-                e = expectedGeometries.end(); i != e; ++i) {
-            Geom* g = dynamic_cast<Geom*>(*i);
+        for(auto & g : expectedGeometries) {
             ensure(contains(actualGeometries, g, compareDirections));
         }
     }

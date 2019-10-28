@@ -35,6 +35,7 @@ namespace geomgraph { // geos.geomgraph
 /** \brief
  * A <code>Label</code> indicates the topological relationship of a component
  * of a topology graph to a given <code>Geometry</code>.
+ *
  * This class supports labels for relationships to two <code>Geometry</code>s,
  * which is sufficient for algorithms for binary operations.
  *
@@ -169,9 +170,9 @@ std::ostream& operator<< (std::ostream&, const Label&);
 } // namespace geos
 
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/Label.inl"
-//#endif
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Label.inl"
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_LABEL_H
 

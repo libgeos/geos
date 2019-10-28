@@ -114,7 +114,7 @@ protected:
 
 public:
 
-    ~STRtree() override;
+    ~STRtree() override = default;
 
     /**
      * Constructs an STRtree with the given maximum number of child nodes that

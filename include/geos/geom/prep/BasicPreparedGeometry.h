@@ -89,7 +89,7 @@ protected:
 public:
     BasicPreparedGeometry(const Geometry* geom);
 
-    ~BasicPreparedGeometry() override;
+    ~BasicPreparedGeometry() override = default;
 
     const geom::Geometry&
     getGeometry() const override

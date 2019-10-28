@@ -25,6 +25,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/util/Interrupt.h>
 #include <geos/index/strtree/STRtree.h>
 // std
@@ -70,13 +71,6 @@ Polygonizer::Polygonizer(bool onlyPolygonal):
     shellList(),
     polyList(nullptr)
 {
-}
-
-Polygonizer::~Polygonizer()
-{
-    for(auto& r : invalidRingLines) {
-        delete r;
-    }
 }
 
 /*
@@ -195,7 +189,7 @@ Polygonizer::hasCutEdges()
 }
 
 /* public */
-const vector<LineString*>&
+const std::vector<std::unique_ptr<LineString>>&
 Polygonizer::getInvalidRingLines()
 {
     polygonize();
@@ -268,14 +262,14 @@ Polygonizer::polygonize()
 void
 Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
                             vector<EdgeRing*>& validEdgeRingList,
-                            vector<LineString*>& invalidRingList)
+                            vector<std::unique_ptr<LineString>>& invalidRingList)
 {
     for(const auto& er : edgeRingList) {
         if(er->isValid()) {
             validEdgeRingList.push_back(er);
         }
         else {
-            invalidRingList.push_back(er->getLineString().release());
+            invalidRingList.push_back(er->getLineString());
         }
         GEOS_CHECK_FOR_INTERRUPTS();
     }

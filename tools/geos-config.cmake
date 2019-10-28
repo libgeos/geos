@@ -59,7 +59,7 @@ case $1 in
       echo -L@CMAKE_INSTALL_PREFIX@/lib -lgeos -lm
       ;;
     --ldflags)
-      echo -L@CMAKE_INSTALL_PREFIX@/lib -lgeos
+      echo -L@CMAKE_INSTALL_PREFIX@/lib 
       ;;
     --includes)
       echo @CMAKE_INSTALL_PREFIX@/include

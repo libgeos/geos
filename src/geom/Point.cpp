@@ -46,41 +46,56 @@ namespace geom { // geos::geom
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     :
     Geometry(factory),
-    coordinates(newCoords)
+    empty(false)
 {
-    if(coordinates.get() == nullptr) {
-        coordinates = factory->getCoordinateSequenceFactory()->create();
+    std::unique_ptr<CoordinateSequence> coords(newCoords);
+
+    if(coords == nullptr) {
+        empty = true;
         return;
     }
-    if(coordinates->getSize() != 1) {
+
+    if (coords->getSize() == 1) {
+        coordinates.setAt(coords->getAt(0), 0);
+    } else if (coords->getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
+    } else {
+        empty = true;
     }
+}
+
+Point::Point(const Coordinate & c, const GeometryFactory* factory) :
+    Geometry(factory),
+    empty(false)
+{
+    coordinates.setAt(c, 0);
 }
 
 /*protected*/
 Point::Point(const Point& p)
     :
     Geometry(p),
-    coordinates(p.coordinates->clone())
+    coordinates(p.coordinates),
+    empty(p.empty)
 {
 }
 
 std::unique_ptr<CoordinateSequence>
 Point::getCoordinates() const
 {
-    return coordinates->clone();
+    return coordinates.clone();
 }
 
 size_t
 Point::getNumPoints() const
 {
-    return isEmpty() ? 0 : 1;
+    return empty ? 0 : 1;
 }
 
 bool
 Point::isEmpty() const
 {
-    return coordinates->isEmpty();
+    return empty;
 }
 
 bool
@@ -98,7 +113,7 @@ Point::getDimension() const
 int
 Point::getCoordinateDimension() const
 {
-    return (int) coordinates->getDimension();
+    return (int) coordinates.getDimension();
 }
 
 int
@@ -137,7 +152,7 @@ Point::getZ() const
 const Coordinate*
 Point::getCoordinate() const
 {
-    return coordinates->getSize() != 0 ? &(coordinates->getAt(0)) : nullptr;
+    return empty ? nullptr : &coordinates[0];
 }
 
 string
@@ -149,7 +164,7 @@ Point::getGeometryType() const
 std::unique_ptr<Geometry>
 Point::getBoundary() const
 {
-    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+    return getFactory()->createGeometryCollection();
 }
 
 Envelope::Ptr
@@ -176,12 +191,7 @@ Point::apply_ro(CoordinateFilter* filter) const
 void
 Point::apply_rw(const CoordinateFilter* filter)
 {
-    if(isEmpty()) {
-        return;
-    }
-    Coordinate newcoord = coordinates->getAt(0);
-    filter->filter_rw(&newcoord);
-    coordinates->setAt(newcoord, 0);
+    coordinates.apply_rw(filter);
 }
 
 void
@@ -214,7 +224,7 @@ Point::apply_rw(CoordinateSequenceFilter& filter)
     if(isEmpty()) {
         return;
     }
-    filter.filter_rw(*coordinates, 0);
+    filter.filter_rw(coordinates, 0);
     if(filter.isGeometryChanged()) {
         geometryChanged();
     }
@@ -226,7 +236,7 @@ Point::apply_ro(CoordinateSequenceFilter& filter) const
     if(isEmpty()) {
         return;
     }
-    filter.filter_ro(*coordinates, 0);
+    filter.filter_ro(coordinates, 0);
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
@@ -264,11 +274,6 @@ Point::compareToSameClass(const Geometry* g) const
     return getCoordinate()->compareTo(*(p->getCoordinate()));
 }
 
-Point::~Point()
-{
-    //delete coordinates;
-}
-
 GeometryTypeId
 Point::getGeometryTypeId() const
 {
@@ -279,7 +284,7 @@ Point::getGeometryTypeId() const
 const CoordinateSequence*
 Point::getCoordinatesRO() const
 {
-    return coordinates.get();
+    return &coordinates;
 }
 
 } // namespace geos::geom

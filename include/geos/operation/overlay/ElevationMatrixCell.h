@@ -43,7 +43,7 @@ namespace overlay { // geos::operation::overlay
 class GEOS_DLL ElevationMatrixCell {
 public:
     ElevationMatrixCell();
-    ~ElevationMatrixCell();
+    ~ElevationMatrixCell() = default;
     void add(const geom::Coordinate& c);
     void add(double z);
     double getAvg(void) const;

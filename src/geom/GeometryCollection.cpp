@@ -99,18 +99,18 @@ GeometryCollection::setSRID(int newSRID)
 std::unique_ptr<CoordinateSequence>
 GeometryCollection::getCoordinates() const
 {
-    auto coordinates = detail::make_unique<std::vector<Coordinate>>(getNumPoints());
+    std::vector<Coordinate> coordinates(getNumPoints());
 
     size_t k = 0;
     for(const auto& g : geometries) {
-        auto childCoordinates = g->getCoordinates(); // TODO avoid this copy
+        auto childCoordinates = g->getCoordinates(); // TODO avoid this copy where getCoordinateRO() exists
         size_t npts = childCoordinates->getSize();
         for(size_t j = 0; j < npts; ++j) {
-            (*coordinates)[k] = childCoordinates->getAt(j);
+            coordinates[k] = childCoordinates->getAt(j);
             k++;
         }
     }
-    return CoordinateArraySequenceFactory::instance()->create(coordinates.release());
+    return CoordinateArraySequenceFactory::instance()->create(std::move(coordinates));
 }
 
 bool
@@ -372,8 +372,6 @@ GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-GeometryCollection::~GeometryCollection() = default;
-
 GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {
@@ -387,16 +385,16 @@ GeometryCollection::reverse() const
         return clone();
     }
 
-    auto* reversed = new std::vector<Geometry*> {geometries.size()};
+    std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
 
     std::transform(geometries.begin(),
                    geometries.end(),
-                   reversed->begin(),
+                   reversed.begin(),
     [](const std::unique_ptr<Geometry> & g) {
-        return g->reverse().release();
+        return g->reverse();
     });
 
-    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(reversed));
+    return getFactory()->createGeometryCollection(std::move(reversed));
 }
 
 bool

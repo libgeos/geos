@@ -13,6 +13,7 @@ geos_HEADERS = \
     MonotoneChainEdge.h \
     MonotoneChainIndexer.h \
     SegmentIntersector.h \
+    SegmentIntersector.inl \
     SimpleEdgeSetIntersector.h \
     SimpleMCSweepLineIntersector.h \
     SimpleSweepLineIntersector.h \

@@ -103,6 +103,7 @@ main(int argc, const char* argv[])
     }
     catch(const std::exception& ex) {
         std::cerr << "!!! GEOS Test Suite raised exception: " << ex.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
     // XXX - mloskot - this should be removed in future!

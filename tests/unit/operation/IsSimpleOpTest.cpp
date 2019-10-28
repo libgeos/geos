@@ -11,8 +11,12 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
+#include <geos/util/GEOSException.h>
+
 // std
 #include <string>
+#include <sstream>
 #include <memory>
 
 using namespace geos::geom;
@@ -100,6 +104,41 @@ void object::test<3>
     bool simple = op.isSimpleLinearGeometry(geom.get());
 
     ensure(true == simple);
+}
+
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    // Adapted from https://trac.osgeo.org/geos/ticket/858
+    constexpr char kData[] =
+            "00000000020000000e0000000000000000"
+            "0000000000000000240424242424242424"
+            "24242424280000000000ffffffffffff3b"
+            "ffffffffffffffffffffffff4000010800"
+            "0000030000003b01980000000000000000"
+            "0000000000000000000000000000002900"
+            "000000000100000000490001f34e537437"
+            "6c6f63616c653500000000000000000000"
+            "2800000000000000000000000000000000"
+            "fb0000000000010700000000003a000000"
+            "f100000000000000000000f60000000000"
+            "0000000000000000000000000000000000"
+            "0000000000000000200000000000000000"
+            "0000000000000000000000000000000000";
+
+    geos::io::WKBReader reader;
+    std::istringstream s(kData);
+
+    auto g = reader.readHEX(s);
+
+    try {
+        g->isSimple();
+    } catch (geos::util::GEOSException &) {
+        // no memory leaks or invalid reads on exception
+    }
 }
 
 } // namespace tut

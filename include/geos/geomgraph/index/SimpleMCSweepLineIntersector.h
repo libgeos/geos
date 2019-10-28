@@ -17,10 +17,13 @@
 #define GEOS_GEOMGRAPH_INDEX_SIMPLEMCSWEEPLINEINTERSECTOR_H
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
 #include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geomgraph/index/SweepLineEvent.h>
+#include <geos/geomgraph/index/MonotoneChain.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -31,10 +34,6 @@
 namespace geos {
 namespace geomgraph {
 class Edge;
-namespace index {
-// class SegmentIntersector;
-class SweepLineEvent;
-}
 }
 }
 
@@ -55,9 +54,9 @@ class GEOS_DLL SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 
 public:
 
-    SimpleMCSweepLineIntersector();
+    SimpleMCSweepLineIntersector() = default;
 
-    ~SimpleMCSweepLineIntersector() override;
+    ~SimpleMCSweepLineIntersector() override = default;
 
     void computeIntersections(std::vector<Edge*>* edges,
                               SegmentIntersector* si, bool testAllSegments) override;
@@ -68,7 +67,15 @@ public:
 
 protected:
 
+    // SweepLineEvents need to refer to each other, and to MonotoneChains.
+    // To avoid individually heap-allocating all of these, we store them
+    // in deques so that subsequent inserts preserve addresses. However,
+    // we also need to sort the SweepLineEvents after they have all been
+    // inserted, so we keep a pointer to each event in a separate vector,
+    // which can be freely reordered without breaking linkages.
     std::vector<SweepLineEvent*> events;
+    std::deque<SweepLineEvent> eventStore;
+    std::deque<MonotoneChain> chains;
 
     // statistics information
     int nOverlaps;
@@ -87,6 +94,9 @@ private:
     void processOverlaps(size_t start, size_t end,
                          SweepLineEvent* ev0,
                          SegmentIntersector* si);
+    // Declare type as noncopyable
+    SimpleMCSweepLineIntersector(const SimpleMCSweepLineIntersector& other) = delete;
+    SimpleMCSweepLineIntersector& operator=(const SimpleMCSweepLineIntersector& rhs) = delete;
 };
 
 } // namespace geos.geomgraph.index

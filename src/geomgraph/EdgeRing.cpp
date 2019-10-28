@@ -36,6 +36,7 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -74,23 +75,6 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     testInvariant();
 }
 
-EdgeRing::~EdgeRing()
-{
-    testInvariant();
-
-    if(ring != nullptr) {
-        delete ring;
-    }
-
-    for(size_t i = 0, n = holes.size(); i < n; ++i) {
-        delete holes[i];
-    }
-
-#ifdef GEOS_DEBUG
-    cerr << "EdgeRing[" << this << "] dtor" << endl;
-#endif
-}
-
 bool
 EdgeRing::isIsolated()
 {
@@ -116,8 +100,7 @@ LinearRing*
 EdgeRing::getLinearRing()
 {
     testInvariant();
-//	return new LinearRing(*ring);
-    return ring;
+    return ring.get();
 }
 
 Label&
@@ -154,28 +137,31 @@ EdgeRing::setShell(EdgeRing* newShell)
 void
 EdgeRing::addHole(EdgeRing* edgeRing)
 {
-    holes.push_back(edgeRing);
+    holes.emplace_back(edgeRing);
     testInvariant();
 }
 
 /*public*/
-Polygon*
+std::unique_ptr<Polygon>
 EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
 {
     testInvariant();
 
-    size_t nholes = holes.size();
-    vector<LinearRing*>* holeLR = new vector<LinearRing*>(nholes);
-    for(size_t i = 0; i < nholes; ++i) {
-        (*holeLR)[i] = new LinearRing(*(holes[i]->getLinearRing()));
-    }
-
     // We don't use "clone" here because
     // GeometryFactory::createPolygon really
     // wants a LinearRing
-    //
-    LinearRing* shellLR = new LinearRing(*(getLinearRing()));
-    return p_geometryFactory->createPolygon(shellLR, holeLR);
+    auto shellLR = detail::make_unique<LinearRing>(*(getLinearRing()));
+    if (holes.empty()) {
+        return p_geometryFactory->createPolygon(std::move(shellLR));
+    } else {
+        size_t nholes = holes.size();
+        std::vector<std::unique_ptr<LinearRing>> holeLR(nholes);
+        for(size_t i = 0; i < nholes; ++i) {
+            holeLR[i] = detail::make_unique<LinearRing>(*(holes[i]->getLinearRing()));
+        }
+
+        return p_geometryFactory->createPolygon(std::move(shellLR), std::move(holeLR));
+    }
 }
 
 /*public*/
@@ -187,8 +173,8 @@ EdgeRing::computeRing()
     if(ring != nullptr) {
         return;    // don't compute more than once
     }
-    ring = geometryFactory->createLinearRing(pts);
-    isHoleVar = Orientation::isCCW(pts);
+    isHoleVar = Orientation::isCCW(pts.get());
+    ring = geometryFactory->createLinearRing(std::move(pts));
 
     testInvariant();
 }
@@ -379,8 +365,7 @@ EdgeRing::containsPoint(const Coordinate& p)
         return false;
     }
 
-    for(vector<EdgeRing*>::iterator i = holes.begin(); i < holes.end(); ++i) {
-        EdgeRing* hole = *i;
+    for(const auto& hole : holes) {
         assert(hole);
         if(hole->containsPoint(p)) {
             return false;
@@ -394,7 +379,7 @@ operator<< (std::ostream& os, const EdgeRing& er)
 {
     os << "EdgeRing[" << &er << "]: "
        << std::endl
-       << "Points: " << er.pts
+       << "Points: " << er.pts.get()
        << std::endl;
     return os;
 }

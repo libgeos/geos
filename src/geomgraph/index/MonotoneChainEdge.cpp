@@ -48,17 +48,13 @@ namespace index { // geos.geomgraph.index
  * @version 1.1
  */
 
-MonotoneChainEdge::~MonotoneChainEdge()
-{
-}
-
 MonotoneChainEdge::MonotoneChainEdge(Edge* newE):
     e(newE),
     pts(newE->getCoordinates())
 {
     assert(e);
-    MonotoneChainIndexer mcb;
-    mcb.getChainStartIndices(pts, startIndex);
+    MonotoneChainIndexer mci;
+    mci.getChainStartIndices(pts, startIndex);
     assert(e);
 }
 

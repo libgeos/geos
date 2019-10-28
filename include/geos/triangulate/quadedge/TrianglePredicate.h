@@ -19,14 +19,17 @@
 #ifndef GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
 #define GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace geom { // geos.geom
 
 class Coordinate;
 
-/**
+/** \brief
  * Algorithms for computing values and predicates
  * associated with triangles.
+ *
  * For some algorithms extended-precision
  * implementations are provided, which are more robust
  * (i.e. they produce correct answers in more cases).
@@ -38,7 +41,7 @@ class Coordinate;
  * @author Benjamin Campbell
  *
  */
-class TrianglePredicate {
+class GEOS_DLL TrianglePredicate {
 public:
     /**
      * Tests if a point is inside the circle defined by

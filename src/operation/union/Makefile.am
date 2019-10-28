@@ -10,6 +10,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 libopunion_la_SOURCES = \
     CascadedPolygonUnion.cpp \
     CascadedUnion.cpp \
+    OverlapUnion.cpp \
     CoverageUnion.cpp \
     PointGeometryUnion.cpp \
     UnaryUnionOp.cpp

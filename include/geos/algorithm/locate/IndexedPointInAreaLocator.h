@@ -54,6 +54,7 @@ private:
     class IntervalIndexedGeometry {
     private:
         index::intervalrtree::SortedPackedIntervalRTree index;
+        bool isEmpty;
 
         void init(const geom::Geometry& g);
         void addLine(const geom::CoordinateSequence* pts);

@@ -25,13 +25,13 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cmath>
 #include <memory>
 
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -81,7 +81,7 @@ GeometricShapeFactory::setHeight(double height)
     dim.setHeight(height);
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometricShapeFactory::createRectangle()
 {
     int i;
@@ -94,37 +94,36 @@ GeometricShapeFactory::createRectangle()
     double XsegLen = env->getWidth() / nSide;
     double YsegLen = env->getHeight() / nSide;
 
-    vector<Coordinate>* vc = new vector<Coordinate>(4 * nSide + 1);
-    //CoordinateSequence* pts=new CoordinateArraySequence(4*nSide+1);
+    std::vector<Coordinate> vc(4 * nSide + 1);
 
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX() + i * XsegLen;
         double y = env->getMinY();
-        (*vc)[ipt++] = coord(x, y);
+        vc[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMaxX();
         double y = env->getMinY() + i * YsegLen;
-        (*vc)[ipt++] = coord(x, y);
+        vc[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMaxX() - i * XsegLen;
         double y = env->getMaxY();
-        (*vc)[ipt++] = coord(x, y);
+        vc[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX();
         double y = env->getMaxY() - i * YsegLen;
-        (*vc)[ipt++] = coord(x, y);
+        vc[ipt++] = coord(x, y);
     }
-    (*vc)[ipt++] = (*vc)[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(vc);
-    LinearRing* ring = geomFact->createLinearRing(cs.release());
-    Polygon* poly = geomFact->createPolygon(ring, nullptr);
+    vc[ipt++] = vc[0];
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(vc));
+    auto ring = geomFact->createLinearRing(std::move(cs));
+    auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometricShapeFactory::createCircle()
 {
     std::unique_ptr<Envelope> env(dim.getEnvelope());
@@ -135,22 +134,22 @@ GeometricShapeFactory::createCircle()
     double centreY = env->getMinY() + yRadius;
     env.reset();
 
-    vector<Coordinate>* pts = new vector<Coordinate>(nPts + 1);
+    std::vector<Coordinate> pts(nPts + 1);
     int iPt = 0;
     for(int i = 0; i < nPts; i++) {
         double ang = i * (2 * 3.14159265358979 / nPts);
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        (*pts)[iPt++] = coord(x, y);
+        pts[iPt++] = coord(x, y);
     }
-    (*pts)[iPt++] = (*pts)[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LinearRing* ring = geomFact->createLinearRing(cs.release());
-    Polygon* poly = geomFact->createPolygon(ring, nullptr);
+    pts[iPt++] = pts[0];
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
+    auto ring = geomFact->createLinearRing(std::move(cs));
+    auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }
 
-LineString*
+std::unique_ptr<LineString>
 GeometricShapeFactory::createArc(double startAng, double angExtent)
 {
     std::unique_ptr<Envelope> env(dim.getEnvelope());
@@ -167,20 +166,20 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    vector<Coordinate>* pts = new vector<Coordinate>(nPts);
+    std::vector<Coordinate> pts(nPts);
     int iPt = 0;
     for(int i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        (*pts)[iPt++] = coord(x, y);
+        pts[iPt++] = coord(x, y);
     }
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LineString* line = geomFact->createLineString(cs.release());
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
+    auto line = geomFact->createLineString(std::move(cs));
     return line;
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 {
     std::unique_ptr<Envelope> env(dim.getEnvelope());
@@ -197,21 +196,21 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    vector<Coordinate>* pts = new vector<Coordinate>(nPts + 2);
+    std::vector<Coordinate> pts(nPts + 2);
     int iPt = 0;
-    (*pts)[iPt++] = coord(centreX, centreY);
+    pts[iPt++] = coord(centreX, centreY);
     for(int i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        (*pts)[iPt++] = coord(x, y);
+        pts[iPt++] = coord(x, y);
     }
-    (*pts)[iPt++] = coord(centreX, centreY);
+    pts[iPt++] = coord(centreX, centreY);
 
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LinearRing* ring = geomFact->createLinearRing(cs.release());
-    Polygon* geom = geomFact->createPolygon(ring, nullptr);
-    return geom;
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
+    auto ring = geomFact->createLinearRing(std::move(cs));
+
+    return geomFact->createPolygon(std::move(ring));
 }
 
 GeometricShapeFactory::Dimensions::Dimensions()
@@ -252,16 +251,16 @@ GeometricShapeFactory::Dimensions::setHeight(double nHeight)
     height = nHeight;
 }
 
-Envelope*
+std::unique_ptr<Envelope>
 GeometricShapeFactory::Dimensions::getEnvelope() const
 {
     if(!base.isNull()) {
-        return new Envelope(base.x, base.x + width, base.y, base.y + height);
+        return detail::make_unique<Envelope>(base.x, base.x + width, base.y, base.y + height);
     }
     if(!centre.isNull()) {
-        return new Envelope(centre.x - width / 2, centre.x + width / 2, centre.y - height / 2, centre.y + height / 2);
+        return detail::make_unique<Envelope>(centre.x - width / 2, centre.x + width / 2, centre.y - height / 2, centre.y + height / 2);
     }
-    return new Envelope(0, width, 0, height);
+    return detail::make_unique<Envelope>(0, width, 0, height);
 }
 
 /*protected*/

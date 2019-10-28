@@ -72,9 +72,9 @@ struct test_rectangleintersectiontest_data {
     doLineClipTest(const char* inputWKT, const std::string& expectedWKT, const Rectangle& rect, double tolerance = 0)
     {
         GeomPtr g = readWKT(inputWKT);
-        ensure(g.get());
+        ensure(g.get() != 0);
         GeomPtr obt = RectangleIntersection::clipBoundary(*g, rect);
-        ensure(obt.get());
+        ensure(obt.get() != nullptr);
         bool ok = isEqual(*readWKT(expectedWKT), *obt, tolerance);
         ensure(ok);
     }
@@ -83,9 +83,9 @@ struct test_rectangleintersectiontest_data {
     doClipTest(const char* inputWKT, const std::string& expectedWKT, const Rectangle& rect, double tolerance = 0)
     {
         GeomPtr g = readWKT(inputWKT);
-        ensure(g.get());
+        ensure(g.get() != nullptr);
         GeomPtr obt = RectangleIntersection::clip(*g, rect);
-        ensure(obt.get());
+        ensure(obt.get() != nullptr);
         bool ok = isEqual(*readWKT(expectedWKT), *obt, tolerance);
         ensure(ok);
 // Compare with GEOSIntersection output

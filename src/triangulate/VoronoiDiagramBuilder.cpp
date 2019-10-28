@@ -46,10 +46,6 @@ VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
 {
 }
 
-VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
-{
-}
-
 void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
@@ -143,27 +139,23 @@ VoronoiDiagramBuilder::clipGeometryCollection(std::vector<std::unique_ptr<Geomet
     auto gfact = geoms[0]->getFactory();
 
     std::unique_ptr<geom::Geometry> clipPoly(gfact->toGeometry(&clipEnv));
-    auto clipped = make_unique<std::vector<Geometry*>>();
+    std::vector<std::unique_ptr<Geometry>> clipped;
 
     for(auto& g : geoms) {
-        std::unique_ptr<Geometry> result;
-
         // don't clip unless necessary
         if(clipEnv.contains(g->getEnvelopeInternal())) {
-            result = std::move(g);
+            clipped.push_back(std::move(g));
             // TODO: check if userData is correctly cloned here?
-        }
-        else if(clipEnv.intersects(g->getEnvelopeInternal())) {
-            result = clipPoly->intersection(g.get());
+        } else if(clipEnv.intersects(g->getEnvelopeInternal())) {
+            auto result = clipPoly->intersection(g.get());
             result->setUserData(g->getUserData()); // TODO: needed ?
-        }
-
-        if(result.get() && !result->isEmpty()) {
-            clipped->push_back(result.release());
+            if (!result->isEmpty()) {
+                clipped.push_back(std::move(result));
+            }
         }
     }
 
-    return std::unique_ptr<GeometryCollection>(gfact->createGeometryCollection(clipped.release()));
+    return gfact->createGeometryCollection(std::move(clipped));
 }
 
 } //namespace geos.triangulate

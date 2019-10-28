@@ -18,6 +18,8 @@ target_include_directories(geos_c
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include/geos>)
 
+# Copy these over so they match the @VARIABLES@ used by autoconf
+# in geos_c.h.in
 set(VERSION ${GEOS_VERSION})
 set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
 set(VERSION_MINOR ${GEOS_VERSION_MINOR})

@@ -30,6 +30,7 @@
 #include <geos/geomgraph/Depth.h> // for member
 #include <geos/geomgraph/EdgeIntersectionList.h> // for composition
 #include <geos/geom/CoordinateSequence.h> // for inlines
+#include <geos/geom/Envelope.h>
 
 #include <geos/inline.h>
 
@@ -41,7 +42,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Envelope;
 class IntersectionMatrix;
 class Coordinate;
 }
@@ -68,19 +68,16 @@ class GEOS_DLL Edge: public GraphComponent {
 
 private:
 
-    std::string name;
-
     /// Lazily-created, owned by Edge.
-    index::MonotoneChainEdge* mce;
+    std::unique_ptr<index::MonotoneChainEdge> mce;
 
-    /// Lazily-created, owned by Edge.
-    geom::Envelope* env;
-
-    bool isIsolatedVar;
+    geom::Envelope env;
 
     Depth depth;
 
     int depthDelta;   // the change in area depth from the R to L side of this edge
+
+    bool isIsolatedVar;
 
 public:
 
@@ -91,17 +88,14 @@ public:
         assert(pts->size() > 1);
     }
 
-
     friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
     static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
 
     /// Externally-set, owned by Edge. FIXME: refuse ownership
-    geom::CoordinateSequence* pts;
+    std::unique_ptr<geom::CoordinateSequence> pts;
 
     EdgeIntersectionList eiList;
-
-    //Edge();
 
     /// Takes ownership of CoordinateSequence
     Edge(geom::CoordinateSequence* newPts, const Label& newLabel);
@@ -117,17 +111,11 @@ public:
         return pts->getSize();
     }
 
-    virtual void
-    setName(const std::string& newName)
-    {
-        name = newName;
-    }
-
     virtual const geom::CoordinateSequence*
     getCoordinates() const
     {
         testInvariant();
-        return pts;
+        return pts.get();
     }
 
     virtual const geom::Coordinate&
@@ -270,7 +258,7 @@ public:
         return equals(*e);
     }
 
-    virtual geom::Envelope* getEnvelope();
+    virtual const geom::Envelope* getEnvelope();
 };
 
 

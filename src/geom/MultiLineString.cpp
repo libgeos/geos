@@ -31,7 +31,6 @@
 # include "geos/geom/MultiLineString.inl"
 #endif
 
-using namespace std;
 using namespace geos::algorithm;
 //using namespace geos::operation;
 using namespace geos::geomgraph;
@@ -40,7 +39,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-MultiLineString::MultiLineString(vector<Geometry*>* newLines,
+MultiLineString::MultiLineString(std::vector<Geometry*>* newLines,
                                  const GeometryFactory* factory)
     :
     GeometryCollection(newLines, factory)
@@ -57,8 +56,6 @@ MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLi
         : GeometryCollection(std::move(newLines), factory)
 {}
 
-MultiLineString::~MultiLineString() {}
-
 Dimension::DimensionType
 MultiLineString::getDimension() const
 {
@@ -74,7 +71,7 @@ MultiLineString::getBoundaryDimension() const
     return 0;
 }
 
-string
+std::string
 MultiLineString::getGeometryType() const
 {
     return "MultiLineString";
@@ -99,7 +96,7 @@ std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
     if(isEmpty()) {
-        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
+        return getFactory()->createGeometryCollection();
     }
 
     GeometryGraph gg(0, this);
@@ -129,13 +126,19 @@ MultiLineString::reverse() const
     }
 
     size_t nLines = geometries.size();
-    Geometry::NonConstVect* revLines = new Geometry::NonConstVect(nLines);
+    std::vector<std::unique_ptr<Geometry>> revLines(nLines);
+
     for(size_t i = 0; i < nLines; ++i) {
-        LineString* iLS = dynamic_cast<LineString*>(geometries[i].get());
-        assert(iLS);
-        (*revLines)[nLines - 1 - i] = iLS->reverse().release();
+        const LineString* iLS = static_cast<LineString*>(geometries[i].get());
+        revLines[nLines - 1 - i] = iLS->reverse();
     }
-    return std::unique_ptr<Geometry>(getFactory()->createMultiLineString(revLines));
+    return getFactory()->createMultiLineString(std::move(revLines));
+}
+
+const LineString*
+MultiLineString::getGeometryN(size_t i) const
+{
+    return static_cast<const LineString*>(geometries[i].get());
 }
 
 } // namespace geos::geom

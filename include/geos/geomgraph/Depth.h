@@ -37,11 +37,13 @@ class Label;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/// \brief A Depth object records the topological depth of the sides of an Edge
+/// for up to two Geometries.
 class GEOS_DLL Depth {
 public:
     static int depthAtLocation(geom::Location location);
     Depth();
-    virtual ~Depth(); // FIXME: shoudn't be virtual!
+    virtual ~Depth() = default; // FIXME: shoudn't be virtual!
     int getDepth(int geomIndex, int posIndex) const;
     void setDepth(int geomIndex, int posIndex, int depthValue);
     geom::Location getLocation(int geomIndex, int posIndex) const;
@@ -62,5 +64,9 @@ private:
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/Depth.inl"
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_DEPTH_H

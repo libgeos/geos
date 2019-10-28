@@ -93,7 +93,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
         lines.push_back(line);
         ++it;
     }
-    return std::unique_ptr<Geometry>(fact->buildGeometry(lines));
+    return std::unique_ptr<Geometry>(fact->buildGeometry(lines.begin(), lines.end()));
 }
 
 }
@@ -372,7 +372,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     }
     else {
         delete mergedLinesGeom;
-        return geomFact->createLineString();
+        return geomFact->createLineString().release();
     }
 }
 
@@ -408,7 +408,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
                   << " curves" << std::endl;
 #endif
         // short-circuit test
-        if(bufferSegStrList.size() <= 0) {
+        if(bufferSegStrList.empty()) {
             return createEmptyResultGeometry();
         }
 
@@ -722,7 +722,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 geom::Geometry*
 BufferBuilder::createEmptyResultGeometry() const
 {
-    geom::Geometry* emptyGeom = geomFact->createPolygon(nullptr, nullptr);
+    geom::Geometry* emptyGeom = geomFact->createPolygon().release();
     return emptyGeom;
 }
 

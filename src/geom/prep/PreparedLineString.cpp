@@ -32,7 +32,6 @@ namespace prep { // geos.geom.prep
 
 PreparedLineString::~PreparedLineString()
 {
-    delete segIntFinder;
     for(noding::SegmentString::ConstVect::size_type i = 0,
             ni = segStrings.size(); i < ni; ++i) {
         delete segStrings[ i ];
@@ -44,10 +43,10 @@ PreparedLineString::getIntersectionFinder()
 {
     if(! segIntFinder) {
         noding::SegmentStringUtil::extractSegmentStrings(&getGeometry(), segStrings);
-        segIntFinder = new noding::FastSegmentSetIntersectionFinder(&segStrings);
+        segIntFinder.reset(new noding::FastSegmentSetIntersectionFinder(&segStrings));
     }
 
-    return segIntFinder;
+    return segIntFinder.get();
 }
 
 bool

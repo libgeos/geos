@@ -13,6 +13,9 @@
 # modes for specific C/C++ language standard levels.
 cmake_minimum_required(VERSION 3.8)
 
+# Default to release build so packagers don't release debug builds
+set(DEFAULT_BUILD_TYPE Release)
+
 # Require CMake 3.13+ with VS generator for complete support of VS versions
 # and support by AppVeyor.
 if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
@@ -27,7 +30,14 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
-message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+# Make sure we know our build type
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
+  message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
+else()
+  message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
 
 #-----------------------------------------------------------------------------
 # Options
@@ -43,6 +53,12 @@ cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "Build with compilation flags useful for development" ON
   "GEOS_BUILD_FROM_GIT" OFF)
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
+
+if (POLICY CMP0092)
+  # dont set /W3 warning flags by default, we already
+  # set /W4 anyway
+  cmake_policy(SET CMP0092 NEW)
+endif()
 
 #-----------------------------------------------------------------------------
 # Setup build directories
@@ -90,9 +106,6 @@ set(CAPI_VERSION_MAJOR ${_version_capi_major})
 set(CAPI_VERSION_MINOR ${_version_capi_age})
 set(CAPI_VERSION_PATCH ${_version_capi_revision})
 set(CAPI_VERSION "${_version_capi_major}.${_version_capi_age}.${_version_capi_revision}")
-if(NOT WIN32)
-  set(CAPI_SOVERSION ${_version_capi_age})
-endif()
 
 unset(_version_capi_current)
 unset(_version_capi_major)
@@ -125,7 +138,7 @@ unset(_version_patch)
 unset(_version_patch_word)
 
 message(STATUS "GEOS: Version ${GEOS_VERSION_FULL}")
-message(STATUS "GEOS: C API soversion ${CAPI_SOVERSION}")
+message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
 
 #-----------------------------------------------------------------------------
@@ -149,7 +162,7 @@ if(NOT DISABLE_GEOS_INLINE)
   target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
 else()
   message(STATUS
-  "Setting DISABLE GEOS compilation with small functions inlining - ${DISABLE_GEOS_INLINE}")
+  "GEOS: DISABLING inlining of small functions")
 endif()
 
 #-----------------------------------------------------------------------------
@@ -214,9 +227,7 @@ if(BUILD_SHARED_LIBS)
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
-  if(NOT WIN32)
-    set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
-  endif()
+  set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION})
 endif()
 
 #-----------------------------------------------------------------------------
@@ -229,9 +240,9 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
     PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
 
-  set_target_properties(geos_c PROPERTIES VERSION ${GEOS_VERSION})
+  set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
   if(NOT WIN32)
-    set_target_properties(geos_c PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
+    set_target_properties(geos_c PROPERTIES SOVERSION ${CAPI_VERSION_MAJOR})
   endif()
 endif()
 
@@ -268,12 +279,21 @@ configure_file(cmake/geos-config.cmake
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
   COPYONLY)
 
-install(TARGETS geos geos_c geos_cxx_flags
+install(TARGETS geos geos_cxx_flags
+  EXPORT geos-targets
+  LIBRARY DESTINATION lib NAMELINK_SKIP
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+  )
+
+install(TARGETS geos_c
   EXPORT geos-targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
-  INCLUDES DESTINATION include)
+  INCLUDES DESTINATION include
+  )
 
 install(EXPORT geos-targets
   FILE geos-targets.cmake

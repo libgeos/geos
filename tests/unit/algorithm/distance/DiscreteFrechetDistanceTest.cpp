@@ -82,7 +82,7 @@ const double test_DiscreteFrechetDistance_data::TOLERANCE = 0.00001;
 typedef test_group<test_DiscreteFrechetDistance_data> group;
 typedef group::object object;
 
-group test_DiscreteFrechetDistance_group("geos::algorithm::distace::DiscreteFrechetDistance");
+group test_DiscreteFrechetDistance_group("geos::algorithm::distance::DiscreteFrechetDistance");
 
 
 
