@@ -162,24 +162,34 @@ void object::test<7>
     geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
     geom2 = readWKT("POLYGON((200 0,300 0, 300 100, 200 100,200 0))");
     ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
-    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
 
     geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
     geom2 = readWKT("POLYGON((300 0,400 0, 400 100, 300 100,300 0))");
     ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
-    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
 
     //multipolygon-multipolygon
     geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
     geom2 = readWKT("MULTIPOLYGON(((200 0,300 0, 300 100, 200 100,200 0)),((600 0,700 0, 700 100, 600 100,600 0)))");
     //technically these envelopes don't intersect, but to calculate that would require a O(NxM) algorithm
     ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
-    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
 
     geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
     geom2 = readWKT("MULTIPOLYGON(((300 0,400 0, 400 100, 300 100,300 0)),((600 0,700 0, 700 100, 600 100,600 0)))");
     ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
-    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
+
+    geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
+    geom2 = readWKT("MULTIPOLYGON(((200 0,300 0, 300 100, 200 100,200 0)),((200 200,300 200, 300 300, 200 300,200 200)))");
+    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
+
+    geom1 = readWKT("MULTIPOLYGON(((0 0,100 0, 100 100, 0 100,0 0)),((400 0,500 0, 500 100, 400 100,400 0)))");
+    geom2 = readWKT("MULTIPOLYGON(((200 -200,300 -200, 300 -100, 200 -100,200 -200)),((200 200,300 200, 300 300, 200 300,200 200)))");
+    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom1.get(), geom2.get()));
+    ensure(!geos::geom::GeometryCollection::envelopeIntersects(geom2.get(), geom1.get()));
 }
 
 } // namespace tut

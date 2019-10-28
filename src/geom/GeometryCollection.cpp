@@ -427,7 +427,7 @@ GeometryCollection::envelopeIntersects(const Geometry *geom1, const Geometry *ge
         Envelope intersection;
         if (e1->intersection(*e2, intersection))
         {
-            return collection1->intersectsWithEnvelope(intersection) || collection2->intersectsWithEnvelope(intersection);
+            return collection1->intersectsWithEnvelope(intersection) && collection2->intersectsWithEnvelope(intersection);
         }
         return false;
     }
