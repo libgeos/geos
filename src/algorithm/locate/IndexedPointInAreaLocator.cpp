@@ -56,6 +56,8 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init(const geom::Geometry& g
         addLine(line->getCoordinatesRO());
     }
 
+    index = index::intervalrtree::SortedPackedIntervalRTree(segments.size());
+
     for(geom::LineSegment& seg : segments) {
         index.insert(
             std::min(seg.p0.y, seg.p1.y),
