@@ -19,6 +19,7 @@
 #include <geos/index/intervalrtree/IntervalRTreeNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeBranchNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeLeafNode.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 // forward declarations
 namespace geos {
@@ -84,7 +85,13 @@ public:
      *
      * @throw IllegalStateException if the index has already been queried
      */
-    void insert(double min, double max, void* item);
+    void insert(double min, double max, void* item) {
+        if(root != nullptr) {
+            throw util::UnsupportedOperationException("Index cannot be added to once it has been queried");
+        }
+
+        leaves.emplace_back(min, max, item);
+    }
 
     /**
      * Search for intervals in the index which intersect the given closed interval

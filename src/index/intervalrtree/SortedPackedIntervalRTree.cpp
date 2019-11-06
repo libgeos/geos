@@ -17,7 +17,6 @@
 #include <geos/index/intervalrtree/IntervalRTreeLeafNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeBranchNode.h>
 #include <geos/index/ItemVisitor.h>
-#include <geos/util/UnsupportedOperationException.h>
 
 #include <algorithm>
 
@@ -103,15 +102,6 @@ SortedPackedIntervalRTree::buildLevel(IntervalRTreeNode::ConstVect& src, Interva
 // public:
 //
 
-void
-SortedPackedIntervalRTree::insert(double min, double max, void* item)
-{
-    if(root != nullptr) {
-        throw util::UnsupportedOperationException("Index cannot be added to once it has been queried");
-    }
-
-    leaves.emplace_back(min, max, item);
-}
 
 void
 SortedPackedIntervalRTree::query(double min, double max, index::ItemVisitor* visitor)
