@@ -156,11 +156,13 @@ stages:
   - job: 'Windows'
     strategy:
       matrix:
-        VS 2019 C++20 Strict:
-          TOOLSET: msvc-14.2
-          CXXSTD: 20
-          CXXFLAGS: -permissive-
-          VM_IMAGE: 'windows-2019'
+        #Disabled until MSVC 16.4 is released
+        #(see https://developercommunity.visualstudio.com/content/problem/726778/this-snippet-compiles-totally-fine-on-godbolt-msvc.html?childToView=744771#comment-744771)
+        #VS 2019 C++20 Strict:
+        #  TOOLSET: msvc-14.2
+        #  CXXSTD: 20
+        #  CXXFLAGS: -permissive-
+        #  VM_IMAGE: 'windows-2019'
         VS 2017 C++17:
           TOOLSET: msvc-14.1
           CXXSTD: 17
