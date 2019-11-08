@@ -36,7 +36,7 @@ ShortCircuitedGeometryVisitor::applyTo(const Geometry& geom)
             continue;
         }
 
-		if(dynamic_cast<const GeometryCollection*>(element)) {
+        if(dynamic_cast<const GeometryCollection*>(element)) {
             applyTo(*element);
         }
         else {

@@ -79,8 +79,8 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
 
-	std::vector<Coordinate> v;
-	v.push_back(coord);
+    std::vector<Coordinate> v;
+    v.push_back(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {

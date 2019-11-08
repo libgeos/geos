@@ -6268,8 +6268,8 @@ extern "C" {
 
         double length;
         if(GEOSLength_r(extHandle, g, &length) != 1) {
-			return -1.0;
-		};
+            return -1.0;
+        };
         return GEOSProject_r(extHandle, g, p) / length;
     }
 
@@ -6280,8 +6280,8 @@ extern "C" {
     {
         double length;
         if (GEOSLength_r(extHandle, g, &length) != 1) {
-			return 0;
-		}
+            return 0;
+        }
         return GEOSInterpolate_r(extHandle, g, d * length);
     }
 

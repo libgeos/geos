@@ -49,7 +49,7 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
 
     // # of points without closing endpoint
     const std::size_t nPts = ring->getSize() - 1;
-	assert(nPts >= 3); // This is here for scan-build
+    assert(nPts >= 3); // This is here for scan-build
 
     // find highest point
     const geom::Coordinate* hiPt = &ring->getAt(0);

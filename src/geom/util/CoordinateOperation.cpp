@@ -30,9 +30,9 @@ std::unique_ptr<Geometry>
 CoordinateOperation::edit(const Geometry* geometry,
                           const GeometryFactory* factory)
 {
-	if (geometry == nullptr) {
-		return nullptr;
-	}
+    if (geometry == nullptr) {
+        return nullptr;
+    }
 
     if(const LinearRing* ring = dynamic_cast<const LinearRing*>(geometry)) {
         const CoordinateSequence* coords = ring->getCoordinatesRO();
