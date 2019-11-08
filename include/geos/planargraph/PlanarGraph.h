@@ -45,7 +45,7 @@ namespace geos {
 namespace planargraph { // geos.planargraph
 
 /**
- * \class PlanarGraph planargraph.h geos/planargraph.h
+ * \class PlanarGraph
  * \brief
  * Represents a directed graph which is embeddable in a planar surface.
  *

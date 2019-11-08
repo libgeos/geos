@@ -32,7 +32,7 @@ namespace geos {
 namespace io {
 
 /**
- * \class ByteOrderDataInStream io.h geos.h
+ * \class ByteOrderDataInStream
  *
  * \brief Allows reading an stream of primitive datatypes from an underlying
  * istream, with the representation being in either common byte ordering.

@@ -21,7 +21,8 @@
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
-#include <geos/spatialIndex.h>
+#include <geos/index/SpatialIndex.h>
+#include <geos/index/ItemVisitor.h>
 #include <geos/geom/Envelope.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
 #include <geos/index/chain/MonotoneChain.h>

@@ -16,40 +16,17 @@ SUBDIRS = \
     triangulate \
     util
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 geosdir = $(includedir)/geos
 
 geos_HEADERS = \
     constants.h \
     export.h \
-    geomgraph.h \
-    geomgraphindex.h \
     geom.h \
-    geomUtil.h \
-    geosAlgorithm.h \
-    indexBintree.h \
-    indexChain.h \
-    indexQuadtree.h \
-    indexStrtree.h \
-    indexSweepline.h \
     inline.h \
-    io.h \
-    noding.h \
-    nodingSnapround.h \
-    opBuffer.h \
-    opDistance.h \
-    operation.h \
-    opLinemerge.h \
-    opOverlay.h \
-    opPolygonize.h \
-    opPredicate.h \
-    opRelate.h \
-    opValid.h \
-    planargraph.h \
-    precision.h \
+    namespaces.h \
     profiler.h \
-    spatialIndex.h \
     unload.h \
     util.h
 

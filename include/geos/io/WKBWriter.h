@@ -49,7 +49,7 @@ namespace io {
 
 /**
  *
- * \class WKBWriter io.h geos.h
+ * \class WKBWriter
  *
  * \brief Writes a Geometry into Well-Known Binary format.
  *

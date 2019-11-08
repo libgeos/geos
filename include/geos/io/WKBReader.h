@@ -61,7 +61,7 @@ namespace geos {
 namespace io {
 
 /**
- * \class WKBReader io.h geos.h
+ * \class WKBReader
  *
  * \brief Reads a Geometry from Well-Known Binary format.
  *

@@ -46,7 +46,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \class SubgraphDepthLocater opBuffer.h geos/opBuffer.h
+ * \class SubgraphDepthLocater
  *
  * \brief
  * Locates a subgraph inside a set of subgraphs,

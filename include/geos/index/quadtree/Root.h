@@ -40,7 +40,7 @@ namespace index { // geos::index
 namespace quadtree { // geos::index::quadtree
 
 /**
- * \class Root indexQuadtree.h geos/indexQuadtree.h
+ * \class Root
  *
  * \brief
  * QuadRoot is the root of a single Quadtree.  It is centred at the origin,
