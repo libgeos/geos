@@ -3,6 +3,8 @@ Changes in 3.8.1
 
 - Bug fixes / improvements
   - Stack allocate line segments in OverlapUnion (Paul Ramsey)
+  - Avoid returning non-empty CoordinateSequence from empty Point
+    (#1001, Dan Baston)
   - Avoid assertion failure with MSVC 2017 / 2019 (#1002, Dan Baston)
 
 
