@@ -1285,7 +1285,6 @@ extern "C" {
         return execute(extHandle, [&]() {
             auto ret = g1->getInteriorPoint();
             if(ret == nullptr) {
-                // TODO check if it is really possible for getInteriorPoint to return null
                 const GeometryFactory* gf = g1->getFactory();
                 // return an empty point
                 ret = gf->createPoint();
@@ -1683,31 +1682,31 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
 
             const GeometryFactory* gf = handle->geomFactory;
-            // TODO avoid new here
-            std::vector<Geometry*>* vgeoms = new std::vector<Geometry*>(geoms, geoms + ngeoms);
 
-            Geometry* g = 0;
+            std::vector<std::unique_ptr<Geometry>> vgeoms(ngeoms);
+            for (size_t i = 0; i < ngeoms; i++) {
+                vgeoms[i].reset(geoms[i]);
+            }
+
+            std::unique_ptr<Geometry> g;
             switch(type) {
             case GEOS_GEOMETRYCOLLECTION:
-                g = gf->createGeometryCollection(vgeoms);
+                g = gf->createGeometryCollection(std::move(vgeoms));
                 break;
             case GEOS_MULTIPOINT:
-                g = gf->createMultiPoint(vgeoms);
+                g = gf->createMultiPoint(std::move(vgeoms));
                 break;
             case GEOS_MULTILINESTRING:
-                g = gf->createMultiLineString(vgeoms);
+                g = gf->createMultiLineString(std::move(vgeoms));
                 break;
             case GEOS_MULTIPOLYGON:
-                g = gf->createMultiPolygon(vgeoms);
+                g = gf->createMultiPolygon(std::move(vgeoms));
                 break;
             default:
                 handle->ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
-                delete vgeoms;
-                g = 0;
-
             }
 
-            return g;
+            return g.release();
         });
     }
 
