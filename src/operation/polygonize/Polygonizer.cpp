@@ -63,13 +63,13 @@ Polygonizer::LineStringAdder::filter_ro(const Geometry* g)
 Polygonizer::Polygonizer(bool onlyPolygonal):
     lineStringAdder(this),
     extractOnlyPolygonal(onlyPolygonal),
+    computed(false),
     graph(nullptr),
     dangles(),
     cutEdges(),
     invalidRingLines(),
     holeList(),
-    shellList(),
-    polyList(nullptr)
+    shellList()
 {
 }
 
@@ -152,7 +152,7 @@ Polygonizer::add(const LineString* line)
  * Gets the list of polygons formed by the polygonization.
  * @return a collection of Polygons
  */
-unique_ptr<vector<unique_ptr<Polygon>>>
+std::vector<std::unique_ptr<Polygon>>
 Polygonizer::getPolygons()
 {
     polygonize();
@@ -215,13 +215,13 @@ void
 Polygonizer::polygonize()
 {
     // check if already computed
-    if(polyList != nullptr) {
+    if(computed) {
         return;
     }
 
     // if no geometries were supplied it's possible graph could be null
     if(graph == nullptr) {
-        polyList.reset(new std::vector<std::unique_ptr<Polygon>>());
+        polyList.clear();
         return;
     }
 
@@ -256,6 +256,8 @@ Polygonizer::polygonize()
         includeAll = false;
     }
     polyList = extractPolygons(shellList, includeAll);
+
+    computed = true;
 }
 
 /* private */
@@ -320,13 +322,13 @@ Polygonizer::findOuterShells(vector<EdgeRing*> & shells)
     }
 }
 
-std::unique_ptr<std::vector<std::unique_ptr<Polygon>>>
+std::vector<std::unique_ptr<Polygon>>
 Polygonizer::extractPolygons(vector<EdgeRing*> & shells, bool includeAll)
 {
-    std::unique_ptr<std::vector<std::unique_ptr<Polygon>>> polys(new std::vector<std::unique_ptr<Polygon>>);
+    std::vector<std::unique_ptr<Polygon>> polys;
     for (EdgeRing* er : shells) {
         if (includeAll || er->isIncluded()) {
-            polys->emplace_back(er->getPolygon());
+            polys.emplace_back(er->getPolygon());
         }
     }
 

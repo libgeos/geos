@@ -118,9 +118,10 @@ private:
 
     static void findOuterShells(std::vector<EdgeRing*>& shellList);
 
-    static std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> extractPolygons(std::vector<EdgeRing*> & shellList, bool includeAll);
+    static std::vector<std::unique_ptr<geom::Polygon>> extractPolygons(std::vector<EdgeRing*> & shellList, bool includeAll);
 
     bool extractOnlyPolygonal;
+    bool computed;
 
 protected:
 
@@ -133,7 +134,7 @@ protected:
 
     std::vector<EdgeRing*> holeList;
     std::vector<EdgeRing*> shellList;
-    std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> polyList;
+    std::vector<std::unique_ptr<geom::Polygon>> polyList;
 
 public:
 
@@ -194,7 +195,7 @@ public:
      * calls will return NULL.
      * @return a collection of Polygons
      */
-    std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> getPolygons();
+    std::vector<std::unique_ptr<geom::Polygon>> getPolygons();
 
     /** \brief
      * Get the list of dangling lines found during polygonization.

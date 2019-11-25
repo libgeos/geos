@@ -398,12 +398,6 @@ GeometryFactory::createGeometryCollection(vector<Geometry*>* newGeoms) const
     return new GeometryCollection(newGeoms, this);
 }
 
-std::unique_ptr<GeometryCollection>
-GeometryFactory::createGeometryCollection(std::vector<std::unique_ptr<geos::geom::Geometry>> && newGeoms) const {
-    // Can't use make_unique because constructor is protected
-    return std::unique_ptr<GeometryCollection>(new GeometryCollection(std::move(newGeoms), *this));
-}
-
 /*public*/
 GeometryCollection*
 GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fromGeoms) const

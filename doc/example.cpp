@@ -1100,8 +1100,8 @@ do_all()
     plgnzr.add(geoms);
     auto polys = plgnzr.getPolygons();
     newgeoms = new vector<const Geometry*>;
-    for(unsigned int i = 0; i < polys->size(); i++) {
-        newgeoms->push_back((*polys)[i].release());
+    for(unsigned int i = 0; i < polys.size(); i++) {
+        newgeoms->push_back(polys[i].release());
     }
 
     cout << endl << "----- HERE IS POLYGONIZE OUTPUT ------" << endl;

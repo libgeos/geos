@@ -119,18 +119,17 @@ struct test_polygonizetest_data {
             polygonizer.add(p.get());
         }
 
-        std::unique_ptr<std::vector<std::unique_ptr<Poly>> > retGeoms;
-        retGeoms = polygonizer.getPolygons();
-        for (const auto& g : *retGeoms) {
+        auto retGeoms = polygonizer.getPolygons();
+        for (const auto& g : retGeoms) {
             g->normalize();
         }
 
-        bool ok = compare(expectGeoms, *retGeoms);
+        bool ok = compare(expectGeoms, retGeoms);
         if(! ok) {
             cout << "EXPECTED(" << expectGeoms.size() << "): " << std::endl;
             printAll(cout, expectGeoms);
-            cout << "OBTAINED(" << retGeoms->size() << "): " << std::endl;
-            printAll(cout, *retGeoms);
+            cout << "OBTAINED(" << retGeoms.size() << "): " << std::endl;
+            printAll(cout, retGeoms);
             cout << endl;
 
             ensure("not all expected geometries in the obtained set", 0);

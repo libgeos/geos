@@ -185,8 +185,12 @@ public:
     GeometryCollection* createGeometryCollection(
         std::vector<Geometry*>* newGeoms) const;
 
+    template<typename T>
     std::unique_ptr<GeometryCollection> createGeometryCollection(
-            std::vector<std::unique_ptr<Geometry>> && newGeoms) const;
+            std::vector<std::unique_ptr<T>> && newGeoms) const {
+        // Can't use make_unique because constructor is protected
+        return std::unique_ptr<GeometryCollection>(new GeometryCollection(std::move(newGeoms), *this));
+    }
 
     /// Constructs a GeometryCollection with a deep-copy of args
     GeometryCollection* createGeometryCollection(

@@ -1726,31 +1726,8 @@ extern "C" {
             }
 
             auto polys = plgnzr.getPolygons();
-            assert(0 != polys);
-
-            // We need a vector of Geometry pointers, not Polygon pointers.
-            // STL vector doesn't allow transparent upcast of this
-            // nature, so we explicitly convert.
-            // (it's just a waste of processor and memory, btw)
-            //
-            // XXX mloskot: Why not to extent GeometryFactory to accept
-            // vector of polygons or extend Polygonizer to return list of Geometry*
-            // or add a wrapper which semantic is similar to:
-            // std::vector<as_polygon<Geometry*> >
-
-            // TODO avoid new here
-            std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
-
-            for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i].release();
-            }
-            polys = 0;
-
             const GeometryFactory* gf = handle->geomFactory;
-
-            // The below takes ownership of the passed vector,
-            // so we must *not* delete it
-            return gf->createGeometryCollection(polyvec);
+            return gf->createGeometryCollection(std::move(polys)).release();
         });
     }
 
@@ -1772,18 +1749,12 @@ extern "C" {
             }
 
             auto polys = plgnzr.getPolygons();
-            if (polys->empty()) {
+            if (polys.empty()) {
                 out = handle->geomFactory->createGeometryCollection().release();
-            } else if (polys->size() == 1) {
-                return (*polys)[0].release();
+            } else if (polys.size() == 1) {
+                return polys[0].release();
             } else {
-                // TODO avoid new here
-                auto geoms = new std::vector<Geometry *>(polys->size());
-                for (size_t i = 0; i < polys->size(); i++) {
-                    (*geoms)[i] = (*polys)[i].release();
-                }
-
-                return handle->geomFactory->createMultiPolygon(geoms);
+                return handle->geomFactory->createMultiPolygon(std::move(polys)).release();
             }
 
             out->setSRID(srid);
@@ -1876,54 +1847,37 @@ extern "C" {
             const GeometryFactory* gf = g->getFactory();
 
             if(cuts) {
-                // TODO avoid "new" here
-
                 const std::vector<const LineString*>& lines = plgnzr.getCutEdges();
-                std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
+                std::vector<std::unique_ptr<Geometry>> linevec(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone().release();
+                    linevec[i] = lines[i]->clone();
                 }
 
-                // The below takes ownership of the passed vector,
-                // so we must *not* delete it
-                *cuts = gf->createGeometryCollection(linevec);
+                *cuts = gf->createGeometryCollection(std::move(linevec)).release();
             }
 
             if(dangles) {
-                // TODO avoid "new" here
-
                 const std::vector<const LineString*>& lines = plgnzr.getDangles();
-                std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
+                std::vector<std::unique_ptr<Geometry>> linevec(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone().release();
+                    linevec[i] = lines[i]->clone();
                 }
 
-                // The below takes ownership of the passed vector,
-                // so we must *not* delete it
-                *dangles = gf->createGeometryCollection(linevec);
+                *dangles = gf->createGeometryCollection(std::move(linevec)).release();
             }
 
             if(invalid) {
-                // TODO avoid "new" here
-
                 const std::vector<std::unique_ptr<LineString>>& lines = plgnzr.getInvalidRingLines();
-                std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
+                std::vector<std::unique_ptr<Geometry>> linevec(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone().release();
+                    linevec[i] = lines[i]->clone();
                 }
 
-                // The below takes ownership of the passed vector,
-                // so we must *not* delete it
-                *invalid = gf->createGeometryCollection(linevec);
+                *invalid = gf->createGeometryCollection(std::move(linevec)).release();
             }
 
             auto polys = plgnzr.getPolygons();
-            std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
-            for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i].release();
-            }
-
-            Geometry* out = gf->createGeometryCollection(polyvec);
+            Geometry* out = gf->createGeometryCollection(std::move(polys)).release();
             out->setSRID(g->getSRID());
             return out;
         });

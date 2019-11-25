@@ -97,11 +97,11 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
     auto polygons = p.getPolygons();
     segment_geoms.reset();
 
-    if (polygons->size() == 1) {
-        return std::unique_ptr<Geometry>((*polygons)[0].release());
+    if (polygons.size() == 1) {
+        return std::move(polygons[0]);
     }
 
-    return gf->createMultiPolygon(std::move(*polygons));
+    return gf->createMultiPolygon(std::move(polygons));
 }
 
 std::unique_ptr<geom::Geometry> CoverageUnion::Union(const geom::Geometry* geom) {

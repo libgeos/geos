@@ -144,7 +144,7 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     auto polys = polygonizer.getPolygons();
 
     // No geometries in collection, early out
-    if( polys->empty() ) {
+    if( polys.empty() ) {
         // TODO don't create new GeometryFactory here
         auto emptyGeomCollection = unique_ptr<geom::Geometry>(
             GeometryFactory::create()->createGeometryCollection());
@@ -153,8 +153,8 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     }
 
     // Return first geometry if we only have one in collection
-    if( polys->size() == 1 ) {
-        auto ret = std::unique_ptr<geom::Geometry>((*polys)[0].release());
+    if( polys.size() == 1 ) {
+        std::unique_ptr<Geometry> ret = std::move(polys[0]);
         ret->setSRID(geom->getSRID());
         return ret;
     }
@@ -189,7 +189,7 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
 
     /* Prepare face structures for later analysis */
     std::vector<std::unique_ptr<Face>> faces;
-    for(auto& poly: *polys) {
+    for(const auto& poly: polys) {
         faces.emplace_back(newFace(poly.get()));
     }
 
