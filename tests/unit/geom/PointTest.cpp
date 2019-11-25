@@ -570,14 +570,13 @@ void object::test<45>
 
     geos::geom::FixedSizeCoordinateSequence<0> seq2(2);
     ensure_equals(seq2.getDimension(), 2u);
-    ensure_equals(factory_->createPoint(seq2)->getCoordinateDimension(), 2);
+    std::unique_ptr<geos::geom::Point> pt2(factory_->createPoint(seq2));
+    ensure_equals(pt2->getCoordinateDimension(), 2);
 
     geos::geom::FixedSizeCoordinateSequence<0> seq3(3);
     ensure_equals(seq3.getDimension(), 3u);
-    ensure_equals(factory_->createPoint(seq3)->getCoordinateDimension(), 3);
-
-
-
+    std::unique_ptr<geos::geom::Point> pt3(factory_->createPoint(seq3));
+    ensure_equals(pt3->getCoordinateDimension(), 3);
 }
 
 } // namespace tut
