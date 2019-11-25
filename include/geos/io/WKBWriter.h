@@ -134,7 +134,7 @@ public:
      * Returns whether SRID values are output by the
      * <code>WKBWriter</code>.
      */
-    virtual int
+    virtual bool
     getIncludeSRID() const
     {
         return includeSRID;
@@ -145,9 +145,9 @@ public:
      * <code>WKBWriter</code>.
      */
     virtual void
-    setIncludeSRID(int newIncludeSRID)
+    setIncludeSRID(bool newIncludeSRID)
     {
-        includeSRID = (0 == newIncludeSRID ? false : true);
+        includeSRID = newIncludeSRID;
     }
 
     /**
