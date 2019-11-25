@@ -485,6 +485,7 @@ extern "C" {
     GEOSFree_r(GEOSContextHandle_t extHandle, void* buffer)
     {
         assert(nullptr != extHandle);
+        geos::ignore_unused_variable_warning(extHandle);
 
         free(buffer);
     }
