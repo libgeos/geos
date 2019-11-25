@@ -1392,7 +1392,10 @@ extern "C" {
     GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
         return execute(extHandle, [&]() {
-            return g1->getGeometryN(n);
+            if(n < 0) {
+                throw IllegalArgumentException("Index must be non-negative.");
+            }
+            return g1->getGeometryN(static_cast<size_t>(n));
         });
     }
 
@@ -1410,7 +1413,10 @@ extern "C" {
             if(!ls) {
                 throw IllegalArgumentException("Argument is not a LineString");
             }
-            return ls->getPointN(n).release();
+            if(n < 0) {
+                throw IllegalArgumentException("Index must be non-negative.");
+            }
+            return ls->getPointN(static_cast<size_t>(n)).release();
         });
     }
 
@@ -1595,7 +1601,10 @@ extern "C" {
             if(!p) {
                 throw IllegalArgumentException("Invalid argument (must be a Polygon)");
             }
-            return p->getInteriorRingN(n);
+            if(n < 0) {
+                throw IllegalArgumentException("Index must be non-negative.");
+            }
+            return p->getInteriorRingN(static_cast<size_t>(n));
         });
     }
 
