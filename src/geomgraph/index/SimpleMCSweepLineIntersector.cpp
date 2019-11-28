@@ -143,6 +143,14 @@ SimpleMCSweepLineIntersector::processOverlaps(size_t start, size_t end,
         auto& ev1 = events[i];
         if(ev1->isInsert()) {
             MonotoneChain* mc1 = (MonotoneChain*) ev1->getObject();
+
+            if (mc1 == mc0) {
+                // Don't try to compute intersections between a MonotoneChain
+                // and itself. SegmentIntersector::addIntersections will just
+                // ignore them anyway.
+                continue;
+            }
+
             // don't compare edges in same group
             // null group indicates that edges should be compared
             if(ev0->edgeSet == nullptr || (ev0->edgeSet != ev1->edgeSet)) {
