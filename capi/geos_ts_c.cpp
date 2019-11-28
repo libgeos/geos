@@ -2928,7 +2928,7 @@ extern "C" {
         return execute(extHandle, -1.0, [&]() {
             const geos::geom::Point* point = dynamic_cast<const geos::geom::Point*>(p);
             if(!point) {
-                throw std::runtime_error("third argument of GEOSProject_r mmust be Point");
+                throw std::runtime_error("third argument of GEOSProject_r must be Point");
             }
             const geos::geom::Coordinate* inputPt = p->getCoordinate();
             return geos::linearref::LengthIndexedLine(g).project(*inputPt);
