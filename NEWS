@@ -2,10 +2,11 @@ Changes in 3.9.0
 2020-xx-xx
 
 - New things:
-  - 
+  -
 
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
+  - Improve performance of GEOSisValid (Dan Baston)
 
 
 Changes in 3.8.0
