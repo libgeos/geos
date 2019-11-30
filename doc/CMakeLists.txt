@@ -13,9 +13,11 @@
 add_executable(example example.cpp)
 
 target_link_libraries(example PRIVATE geos)
-target_include_directories(test_geos_unit
+if(BUILD_TESTING)
+    target_include_directories(test_geos_unit
         PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+endif()
 
 option(BUILD_DOCUMENTATION "Build Doxygen documentation" OFF)
 
