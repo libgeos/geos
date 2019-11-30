@@ -74,4 +74,5 @@ authors.git
 !/docker/**/Makefile
 /.vs*
 .idea/
+.project
 out/
