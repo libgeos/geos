@@ -65,6 +65,16 @@ LineSegment::~LineSegment()
 {
 }
 
+INLINE const LineSegment&
+LineSegment::operator=(const LineSegment& ls)
+{
+    if (this != &ls) {
+        p0 = ls.p0;
+        p1 = ls.p1;
+    }
+    return *this;
+}
+
 INLINE double
 LineSegment::distancePerpendicular(const Coordinate& p) const
 {
