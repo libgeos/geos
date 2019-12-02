@@ -163,6 +163,8 @@ public:
     /// destructor
     ~PrecisionModel(void);
 
+    // copy operator
+    const PrecisionModel& operator=(const PrecisionModel& pm);
 
     /// The maximum precise value representable in a double.
     //

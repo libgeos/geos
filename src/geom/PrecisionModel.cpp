@@ -146,6 +146,16 @@ PrecisionModel::PrecisionModel(const PrecisionModel& pm)
 #endif
 }
 
+const PrecisionModel&
+PrecisionModel::operator=(const PrecisionModel& pm)
+{
+    if (this != &pm) {
+        this->modelType = pm.modelType;
+        this->scale = pm.scale;
+    }
+    return *this;
+}
+
 /*public*/
 bool
 PrecisionModel::isFloating() const
