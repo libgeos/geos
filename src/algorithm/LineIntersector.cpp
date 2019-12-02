@@ -92,7 +92,6 @@ nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
     }
     dist = Distance::pointToSegment(q2, p1, p2);
     if(dist < minDist) {
-        minDist = dist;
         nearestPt = &q2;
     }
     return *nearestPt;

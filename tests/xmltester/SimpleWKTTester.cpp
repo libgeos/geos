@@ -61,6 +61,8 @@ main(int /*argc*/, char** /*argv*/)
         out.flush();
         out.close();
         cout << "End of Testing" << endl;
+        delete r;
+        delete w;
 
     }
     catch(const GEOSException& ge) {

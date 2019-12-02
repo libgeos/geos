@@ -32,6 +32,10 @@ ShortCircuitedGeometryVisitor::applyTo(const Geometry& geom)
 {
     for(std::size_t i = 0, n = geom.getNumGeometries(); i < n; ++i) {
         const Geometry* element = geom.getGeometryN(i);
+        if (element == nullptr) {
+            continue;
+        }
+
         if(dynamic_cast<const GeometryCollection*>(element)) {
             applyTo(*element);
         }

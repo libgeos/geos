@@ -84,9 +84,9 @@ class Big
 
 public:
 
-Int<exp>  exponent;
-UInt<man> mantissa;
-unsigned char info;
+Int<exp>  exponent{0};
+UInt<man> mantissa{0};
+unsigned char info{0};
 
 
 /*!

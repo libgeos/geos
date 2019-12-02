@@ -103,6 +103,18 @@ matrix:
       env:
         - E="TOOL=cmake && BUILD_TYPE=Release && CXX=clang++ && ARCH=-m64 && CC=clang"
 
+    - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
+      addons:
+        apt:
+          sources: *sources
+          packages: ['clang','ccache','doxygen']
+      env:
+        - E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64
+
 before_install:
   - eval "${E}"
   - export CXXFLAGS=${ARCH}

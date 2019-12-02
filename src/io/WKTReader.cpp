@@ -79,17 +79,17 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
 
-    auto coordinates = detail::make_unique<CoordinateArraySequence>(0, dim);
-    coordinates->add(coord);
+    std::vector<Coordinate> v;
+    v.push_back(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {
         getPreciseCoordinate(tokenizer, coord, dim);
-        coordinates->add(coord);
+        v.push_back(coord);
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
-    return std::move(coordinates);
+    return geometryFactory->getCoordinateSequenceFactory()->create(std::move(v), dim);
 }
 
 

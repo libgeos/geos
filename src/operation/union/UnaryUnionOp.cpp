@@ -121,16 +121,13 @@ UnaryUnionOp::Union()
      */
 
     GeomPtr unionLA = unionWithNull(std::move(unionLines), std::move(unionPolygons));
-    assert(!unionLines.get());
-    assert(!unionPolygons.get());
+
 
     if(! unionPoints.get()) {
         ret = std::move(unionLA);
-        assert(!unionLA.get());
     }
     else if(! unionLA.get()) {
         ret = std::move(unionPoints);
-        assert(!unionPoints.get());
     }
     else {
         ret = PointGeometryUnion::Union(*unionPoints, *unionLA);
