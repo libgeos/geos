@@ -92,7 +92,7 @@ private:
 
     double x;
 
-    int64 xBits;
+    int64 xBits = 0;
 };
 
 } // namespace geos::index::quadtree
