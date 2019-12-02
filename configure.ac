@@ -152,8 +152,8 @@ fi
 dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
-
-AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
+AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX(11, noext, mandatory)
 
 WARNFLAGS=""
 AC_LANG_PUSH([C++])
