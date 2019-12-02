@@ -45,56 +45,6 @@
 //#define GEOS_DEBUG_CASCADED_UNION 1
 //#define GEOS_DEBUG_CASCADED_UNION_PRINT_INVALID 1
 
-namespace {
-
-inline bool
-check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThrow = false, bool validOnly = false)
-{
-    using namespace geos;
-
-    if(g.isLineal()) {
-        if(! validOnly) {
-            operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
-            if(! sop.isSimple()) {
-                if(doThrow) {
-                    throw geos::util::TopologyException(
-                        label + " is not simple");
-                }
-                return false;
-            }
-        }
-    }
-    else {
-        operation::valid::IsValidOp ivo(&g);
-        if(! ivo.isValid()) {
-            using operation::valid::TopologyValidationError;
-            TopologyValidationError* err = ivo.getValidationError();
-#ifdef GEOS_DEBUG_CASCADED_UNION
-            std::cerr << label << " is INVALID: "
-                      << err->toString()
-                      << " (" << std::setprecision(20)
-                      << err->getCoordinate() << ")"
-                      << std::endl
-#ifdef GEOS_DEBUG_CASCADED_UNION_PRINT_INVALID
-                      << "<a>" << std::endl
-                      << g.toString() << std::endl
-                      << "</a>" << std::endl
-#endif
-                      ;
-#endif // GEOS_DEBUG_CASCADED_UNION
-            if(doThrow) {
-                throw geos::util::TopologyException(
-                    label + " is invalid: " + err->toString(),
-                    err->getCoordinate());
-            }
-            return false;
-        }
-    }
-    return true;
-}
-
-} // anonymous namespace
-
 namespace geos {
 namespace operation { // geos.operation
 namespace geounion {  // geos.operation.geounion
