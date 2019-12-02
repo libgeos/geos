@@ -191,51 +191,6 @@ AC_SUBST(AM_CXXFLAGS)
 AC_SUBST(AM_CFLAGS)
 
 dnl --------------------------------------------------------------------
-dnl - Look for finite and/or isfinite macros/functions
-dnl --------------------------------------------------------------------
-
-dnl These two tests need the math library or they won't link
-dnl on OpenBSD, even if the functions exist.
-save_LIBS=$LIBS
-LIBS="$LIBS -lm"
-AC_CACHE_CHECK([for finite], ac_cv_finite,
- [AC_TRY_LINK([#include <math.h>],
- [double x; int y; y = finite(x);],
- ac_cv_finite=yes,
- ac_cv_finite=no
-)])
-if test x"$ac_cv_finite" = x"yes"; then
-  AC_DEFINE(HAVE_FINITE, [1], [Has finite])
-fi
-
-AC_CACHE_CHECK([for isfinite], ac_cv_isfinite,
- [AC_TRY_LINK([#include <math.h>],
- [double x; int y; y = isfinite(x);],
- ac_cv_isfinite=yes,
- ac_cv_isfinite=no
-)])
-if test x"$ac_cv_isfinite" = x"yes"; then
-  AC_DEFINE(HAVE_ISFINITE, [1], [Has isfinite])
-fi
-
-dnl --------------------------------------------------------------------
-dnl Test for presence of isnan function when using C++ and <cmath>
-dnl This is for a particular bug in OS/X where <cmath> drops the definition
-dnl of isnan().
-
-AC_LANG_PUSH([C++])
-AC_CACHE_CHECK([for isnan], ac_cv_isnan,
- [AC_TRY_LINK([#include <cmath>],
- [double x; int y; y = std::isnan(x);],
- ac_cv_isnan=yes,
- ac_cv_isnan=no
-)])
-if test x"$ac_cv_isnan" = x"yes"; then
-  AC_DEFINE(HAVE_ISNAN, [1], [Has isnan])
-fi
-AC_LANG_POP([C++])
-
-dnl --------------------------------------------------------------------
 
 LIBS=$save_LIBS
 
