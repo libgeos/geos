@@ -37,7 +37,11 @@ namespace geom {
         std::unique_ptr<CoordinateSequence> clone() const final override {
             auto seq = detail::make_unique<FixedSizeCoordinateSequence<N>>(dimension);
             seq->m_data = m_data;
+#if defined __GNUC__ && ((__GNUC__ == 4) && (__GNUC_MINOR__ == 8))
             return std::move(seq); // move needed for gcc 4.8
+#else
+            return seq;
+#endif
         }
 
         const Coordinate& getAt(size_t i) const final override {
