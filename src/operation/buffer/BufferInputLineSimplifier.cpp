@@ -136,7 +136,11 @@ BufferInputLineSimplifier::collapseLine() const
         }
     }
 
-    return std::move(coordList);
+#if defined __GNUC__ && ((__GNUC__ == 4) && (__GNUC_MINOR__ == 8))
+    return std::move(coordList); // move needed for gcc 4.8
+#else
+    return coordList;
+#endif
 }
 
 /* private */
