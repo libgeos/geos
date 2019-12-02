@@ -103,8 +103,6 @@ MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector()
 MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 {
     delete index;
-
-    MonoChains::iterator i, e;
 }
 
 /* public */
