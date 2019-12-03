@@ -56,7 +56,7 @@ public:
 
 
     /// Computes the "edge distance" of an intersection point p in an edge.
-    //
+    ///
     /// The edge distance is a metric of the point along the edge.
     /// The metric used is a robust and easy to compute metric function.
     /// It is <b>not</b> equivalent to the usual Euclidean metric.
@@ -106,7 +106,7 @@ public:
     bool isInteriorIntersection(int inputLineIndex);
 
     /// Force computed intersection to be rounded to a given precision model.
-    //
+    ///
     /// No getter is provided, because the precision model is not required
     /// to be specified.
     /// @param newPM the PrecisionModel to use for rounding
@@ -118,14 +118,14 @@ public:
     }
 
     /// Compute the intersection of a point p and the line p1-p2.
-    //
+    ///
     /// This function computes the boolean value of the hasIntersection test.
     /// The actual value of the intersection (if there is one)
     /// is equal to the value of <code>p</code>.
     ///
     void computeIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-    /// Same as above but doen's compute intersection point. Faster.
+    /// Same as above but doesn't compute intersection point. Faster.
     static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
     // These are deprecated, due to ambiguous naming
@@ -164,7 +164,7 @@ public:
     }
 
     /// Returns the number of intersection points found.
-    //
+    ///
     /// This will be either 0, 1 or 2.
     ///
     size_t
@@ -175,7 +175,7 @@ public:
 
 
     /// Returns the intIndex'th intersection point
-    //
+    ///
     /// @param intIndex is 0 or 1
     ///
     /// @return the intIndex'th intersection point
@@ -187,7 +187,7 @@ public:
     }
 
     /// Returns false if both numbers are zero.
-    //
+    ///
     /// @return true if both numbers are positive or if both numbers are negative.
     ///
     static bool isSameSignAndNonZero(double a, double b);

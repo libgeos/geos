@@ -36,7 +36,7 @@ class CoordinateSequence;
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/**\brief
+/** \brief
  * Computes the centroid of a [Geometry](@ref geom::Geometry) of any dimension.
  *
  * If the geometry is nomimally of higher dimension, but contains only

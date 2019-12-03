@@ -80,7 +80,7 @@ private:
     void addReachable(geomgraph::Node* startNode);
 
     /// Adds the argument node and all its out edges to the subgraph
-    //
+    ///
     /// @param node the node to add
     /// @param nodeStack the current set of nodes being traversed
     ///

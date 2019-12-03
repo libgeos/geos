@@ -63,12 +63,12 @@ GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLe
 }
 
 /**
-* Creates a circle
-* @param x the centre x coord
-* @param y the centre y coord
-* @param size the size of the envelope of the star
-* @param nPts the number of points in the star
-*/
+ * Creates a circle
+ * @param x the centre x coord
+ * @param y the centre y coord
+ * @param size the size of the envelope of the star
+ * @param nPts the number of points in the star
+ */
 CoordinateSequence*
 GeometryTestFactory::createCircle(double basex, double basey, double size, int nPts)
 {
@@ -93,14 +93,14 @@ GeometryTestFactory::createCircle(GeometryFactory* fact, double basex, double ba
 }
 
 /**
-* Creates a star from a "circular" sine wave
-* @param basex the centre x coord
-* @param basey the centre y coord
-* @param size the size of the envelope of the star
-* @param armLen the length of an arm of the star
-* @param nArms the number of arms of the star
-* @param nPts the number of points in the star
-*/
+ * Creates a star from a "circular" sine wave
+ * @param basex the centre x coord
+ * @param basey the centre y coord
+ * @param size the size of the envelope of the star
+ * @param armLen the length of an arm of the star
+ * @param nArms the number of arms of the star
+ * @param nPts the number of points in the star
+ */
 CoordinateSequence*
 GeometryTestFactory::createSineStar(double basex, double basey, double size, double armLen, int nArms, int nPts)
 {

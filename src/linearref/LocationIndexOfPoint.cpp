@@ -113,7 +113,7 @@ LocationIndexOfPoint::indexOfAfter(const Coordinate& inputPt,
     }
 
     LinearLocation closestAfter = indexOfFromStart(inputPt, minIndex);
-    /**
+    /*
      * Return the minDistanceLocation found.
      * This will not be null, since it was initialized to minLocation
      */

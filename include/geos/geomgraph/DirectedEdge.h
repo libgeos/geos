@@ -85,7 +85,7 @@ public:
     int getDepthDelta() const;
 
     /// Marks both DirectedEdges attached to a given Edge.
-    //
+    ///
     /// This is used for edges corresponding to lines, which will only
     /// appear oriented in a single direction in the result.
     ///

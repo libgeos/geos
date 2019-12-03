@@ -30,14 +30,12 @@ namespace quadedge { //geos.triangulate.quadedge
 class QuadEdgeSubdivision;
 
 /** \brief
-* Locates {@link QuadEdge}s in a {@link QuadEdgeSubdivision},
-* optimizing the search by starting in the
-* locality of the last edge found.
-*
-* @author JTS: Martin Davis
-* @author Benjamin Campbell
-*/
-
+ * Locates {@link QuadEdge}s in a {@link QuadEdgeSubdivision}, optimizing the
+ * search by starting in the locality of the last edge found.
+ *
+ * @author JTS: Martin Davis
+ * @author Benjamin Campbell
+ */
 class LastFoundQuadEdgeLocator : public QuadEdgeLocator {
 private:
     QuadEdgeSubdivision* subdiv;

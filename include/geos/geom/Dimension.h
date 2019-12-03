@@ -22,7 +22,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /// Constants representing the dimensions of a point, a curve and a surface.
-//
+///
 /// Also, constants representing the dimensions of the empty geometry and
 /// non-empty geometries, and a wildcard dimension meaning "any dimension".
 ///

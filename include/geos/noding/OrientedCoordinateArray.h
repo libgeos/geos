@@ -88,7 +88,7 @@ private:
      *
      * @param pts the array to test
      * @return <code>true</code> if the points are oriented forwards
-     * @return <code>false</code if the points are oriented in reverse
+     * @return <code>false</code> if the points are oriented in reverse
      */
     static bool orientation(const geom::CoordinateSequence& pts);
 
@@ -100,7 +100,7 @@ private:
 };
 
 /// Strict weak ordering operator for OrientedCoordinateArray
-//
+///
 /// This is the C++ equivalent of JTS's compareTo
 inline bool
 operator< (const OrientedCoordinateArray& oca1,

@@ -107,13 +107,13 @@ public:
     int
     compareTo(const DepthSegment& other) const
     {
-        /**
+        /*
          * try and compute a determinate orientation for the segments.
          * Test returns 1 if other is left of this (i.e. this > other)
          */
         int orientIndex = upwardSeg.orientationIndex(&(other.upwardSeg));
 
-        /**
+        /*
          * If comparison between this and other is indeterminate,
          * try the opposite call order.
          * orientationIndex value is 1 if this is left of other,
@@ -213,7 +213,7 @@ SubgraphDepthLocater::findStabbedSegments(
     vector<DepthSegment*>& stabbedSegments)
 {
 
-    /**
+    /*
      * Check all forward DirectedEdges only. This is still general,
      * because each Edge has a forward DirectedEdge.
      */

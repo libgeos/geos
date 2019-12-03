@@ -53,12 +53,12 @@ public:
     {}
 
     /**
-    * Reports whether the HotPixel caused a node to be added in any target
-    * segmentString (including its own). If so, the HotPixel must be added as a
-    * node as well.
-    *
-    * @return true if a node was added in any target segmentString.
-    */
+     * Reports whether the HotPixel caused a node to be added in any target
+     * segmentString (including its own). If so, the HotPixel must be added as a
+     * node as well.
+     *
+     * @return true if a node was added in any target segmentString.
+     */
     bool
     isNodeAdded() const
     {
@@ -66,12 +66,12 @@ public:
     }
 
     /**
-    * Check if a segment of the monotone chain intersects
-    * the hot pixel vertex and introduce a snap node if so.
-    * Optimized to avoid noding segments which
-    * contain the vertex (which otherwise
-    * would cause every vertex to be noded).
-    */
+     * Check if a segment of the monotone chain intersects
+     * the hot pixel vertex and introduce a snap node if so.
+     * Optimized to avoid noding segments which
+     * contain the vertex (which otherwise
+     * would cause every vertex to be noded).
+     */
     void
     select(chain::MonotoneChain& mc, size_t startIndex) override
     {

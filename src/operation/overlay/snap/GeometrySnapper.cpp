@@ -161,7 +161,7 @@ GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g)
 {
     double snapTolerance = computeSizeBasedSnapTolerance(g);
 
-    /**
+    /*
      * Overlay is carried out in the precision model
      * of the two inputs.
      * If this precision model is of type FIXED, then the snap tolerance
@@ -199,7 +199,7 @@ GeometrySnapper::snap(const geom::Geometry& g0,
     GeometrySnapper snapper0(g0);
     snapGeom.first = snapper0.snapTo(g1, snapTolerance);
 
-    /**
+    /*
      * Snap the second geometry to the snapped first geometry
      * (this strategy minimizes the number of possible different
      * points in the result)

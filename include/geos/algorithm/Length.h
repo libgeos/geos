@@ -27,20 +27,19 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 
 /** \brief
-* Functions for computing length.
-*
-* @author Martin Davis
-*
-*/
+ * Functions for computing length.
+ *
+ * @author Martin Davis
+ */
 class GEOS_DLL Length {
 public:
 
     /**
-    * Computes the length of a linestring specified by a sequence of points.
-    *
-    * @param ring the points specifying the linestring
-    * @return the length of the linestring
-    */
+     * Computes the length of a linestring specified by a sequence of points.
+     *
+     * @param ring the points specifying the linestring
+     * @return the length of the linestring
+     */
     static double ofLine(const geom::CoordinateSequence* ring);
 
 };

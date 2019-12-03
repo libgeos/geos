@@ -93,7 +93,7 @@ public:
     /// \brief
     /// Return a pointer to the CoordinateSequence associated
     /// with this SegmentString.
-    //
+    ///
     /// @note The CoordinateSequence is owned by this SegmentString!
     ///
     virtual geom::CoordinateSequence* getCoordinates() const = 0;

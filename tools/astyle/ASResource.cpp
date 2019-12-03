@@ -327,11 +327,11 @@ void ASResource::buildIndentableHeaders(vector<const string*>* indentableHeaders
 }
 
 /**
-* Build the vector of indentable macros pairs.
-* Initialized by ASFormatter, used by ONLY ASEnhancer.cpp
-*
-* @param indentableMacros       a reference to the vector to be built.
-*/
+ * Build the vector of indentable macros pairs.
+ * Initialized by ASFormatter, used by ONLY ASEnhancer.cpp
+ *
+ * @param indentableMacros       a reference to the vector to be built.
+ */
 void ASResource::buildIndentableMacros(vector<const pair<const string, const string>* >* indentableMacros)
 {
 	const size_t elements = 10;

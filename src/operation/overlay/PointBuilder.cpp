@@ -79,7 +79,7 @@ PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
         if(n->getEdges()->getDegree() == 0 ||
                 opCode == OverlayOp::opINTERSECTION) {
 
-            /**
+            /*
              * For nodes on edges, only INTERSECTION can result
              * in edge nodes being included even
              * if none of their incident edges are included

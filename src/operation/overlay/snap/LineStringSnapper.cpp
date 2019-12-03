@@ -406,7 +406,7 @@ LineStringSnapper::findSegmentToSnap(
         cerr << " Checking segment " << seg << endl;
 #endif
 
-        /**
+        /*
          * Check if the snap pt is equal to one of
          * the segment endpoints.
          *

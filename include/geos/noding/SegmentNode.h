@@ -66,7 +66,7 @@ public:
     size_t segmentIndex;
 
     /// Construct a node on the given NodedSegmentString
-    //
+    ///
     /// @param ss the parent NodedSegmentString
     ///
     /// @param nCoord the coordinate of the intersection, will be copied

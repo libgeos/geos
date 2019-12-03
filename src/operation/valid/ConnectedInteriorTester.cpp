@@ -253,7 +253,7 @@ ConnectedInteriorTester::visitInteriorRing(const LineString* ring, PlanarGraph& 
     const CoordinateSequence* pts = ring->getCoordinatesRO();
     const Coordinate& pt0 = pts->getAt(0);
 
-    /**
+    /*
      * Find first point in coord list different to initial point.
      * Need special check since the first point may be repeated.
      */

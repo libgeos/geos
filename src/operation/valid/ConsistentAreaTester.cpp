@@ -61,14 +61,14 @@ ConsistentAreaTester::isNodeConsistentArea()
 {
     using geomgraph::index::SegmentIntersector;
 
-    /**
+    /*
      * To fully check validity, it is necessary to
      * compute ALL intersections, including self-intersections within a single edge.
      */
     unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
-    /**
-    * A proper intersection means that the area is not consistent.
-    */
+    /*
+     * A proper intersection means that the area is not consistent.
+     */
     if(intersector->hasProperIntersection()) {
         invalidPoint = intersector->getProperIntersectionPoint();
         return false;

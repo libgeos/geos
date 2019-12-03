@@ -78,7 +78,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
         nodingIterationCount++;
         int nodesCreated = numInteriorIntersections;
 
-        /**
+        /*
          * Fail if the number of nodes created is not declining.
          * However, allow a few iterations at least before doing this
          */

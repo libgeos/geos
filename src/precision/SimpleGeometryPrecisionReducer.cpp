@@ -89,7 +89,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     // much as possible.
     std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
 
-    /**
+    /*
      * Check to see if the removal of repeated points
      * collapsed the coordinate List to an invalid length
      * for the type of the parent geometry.
@@ -135,7 +135,7 @@ SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
     //newPrecisionModel = pm;
 }
 
-/**
+/*
  * Sets whether the reduction will result in collapsed components
  * being removed completely, or simply being collapsed to an (invalid)
  * Geometry of the same type.

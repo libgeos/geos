@@ -222,7 +222,7 @@ private:
     /// \brief
     /// Return the externally-set noding::Noder OR a newly created
     /// one using the given precisionModel.
-    //
+    ///
     /// NOTE: if an externally-set noding::Noder is available no
     /// check is performed to ensure it will use the
     /// given PrecisionModel

@@ -99,10 +99,10 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
 {}
 
 /**
-* Report the distance between the closest points on the input geometries.
-*
-* @return the distance between the geometries
-*/
+ * Report the distance between the closest points on the input geometries.
+ *
+ * @return the distance between the geometries
+ */
 double
 DistanceOp::distance()
 {
@@ -281,7 +281,7 @@ DistanceOp::computeFacetDistance()
 
     array<unique_ptr<GeometryLocation>, 2> locGeom;
 
-    /**
+    /*
      * Geometries are not wholly inside, so compute distance from lines
      * and points of one to lines and points of the other
      */

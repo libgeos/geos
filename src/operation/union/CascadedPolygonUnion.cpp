@@ -99,14 +99,14 @@ namespace geos {
 namespace operation { // geos.operation
 namespace geounion {  // geos.operation.geounion
 
-///////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 void
 GeometryListHolder::deleteItem(geom::Geometry* item)
 {
     delete item;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 geom::Geometry*
 CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
 {
@@ -136,7 +136,7 @@ CascadedPolygonUnion::Union()
 
     geomFactory = inputPolys->front()->getFactory();
 
-    /**
+    /*
      * A spatial index to organize the collection
      * into groups of close geometries.
      * This makes unioning more efficient, since vertices are more likely
@@ -160,7 +160,7 @@ geom::Geometry*
 CascadedPolygonUnion::unionTree(
     index::strtree::ItemsList* geomTree)
 {
-    /**
+    /*
      * Recursively unions all subtrees in the list into single geometries.
      * The result is a list of Geometry's only
      */

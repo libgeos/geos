@@ -439,11 +439,11 @@ IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
         if (hole->isEmpty()) continue;
 
         const Coordinate* holePt = findPtNotNode(hole->getCoordinatesRO(), shell, graph);
-        /**
-        * If no non-node hole vertex can be found, the hole must
-        * split the polygon into disconnected interiors.
-        * This will be caught by a subsequent check.
-        */
+        /*
+         * If no non-node hole vertex can be found, the hole must
+         * split the polygon into disconnected interiors.
+         * This will be caught by a subsequent check.
+         */
         if (holePt == nullptr) return;
         bool outside = isShellEmpty || (Location::EXTERIOR == ipial.locate(holePt));
         if (outside) {
@@ -547,7 +547,7 @@ IsValidOp::checkShellNotNested(const LinearRing* shell, const Polygon* p,
         return;
     }
 
-    /**
+    /*
      * Check if the shell is inside one of the holes.
      * This is the case if one of the calls to checkShellInsideHole
      * returns a null coordinate.

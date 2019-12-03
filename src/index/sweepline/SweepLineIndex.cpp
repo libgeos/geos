@@ -83,7 +83,7 @@ void
 SweepLineIndex::processOverlaps(size_t start, size_t end,
                                 SweepLineInterval* s0, SweepLineOverlapAction* action)
 {
-    /**
+    /*
      * Since we might need to test for self-intersections,
      * include current insert event object in list of event objects to test.
      * Last index can be skipped, because it must be a Delete event.

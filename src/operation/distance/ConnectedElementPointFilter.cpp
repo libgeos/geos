@@ -33,10 +33,10 @@ namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
 /**
-* Returns a list containing a Coordinate from each Polygon, LineString, and Point
-* found inside the specified geometry. Thus, if the specified geometry is
-* not a GeometryCollection, an empty list will be returned.
-*/
+ * Returns a list containing a Coordinate from each Polygon, LineString, and Point
+ * found inside the specified geometry. Thus, if the specified geometry is
+ * not a GeometryCollection, an empty list will be returned.
+ */
 vector<const Coordinate*>*
 ConnectedElementPointFilter::getCoordinates(const Geometry* geom)
 {

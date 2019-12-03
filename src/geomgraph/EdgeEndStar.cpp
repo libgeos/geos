@@ -105,7 +105,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
     propagateSideLabels(0);
     propagateSideLabels(1);
 
-    /**
+    /*
      * If there are edges that still have null labels for a geometry
      * this must be because there are no area edges for that geometry
      * incident on this node.
@@ -322,7 +322,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
                 currLoc = leftLoc;
             }
             else {
-                /**
+                /*
                  * RHS is null - LHS must be null too.
                  * This must be an edge from the other
                  * geometry, which has no location

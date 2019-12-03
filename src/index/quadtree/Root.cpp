@@ -116,7 +116,7 @@ Root::insertContained(Node* tree, const Envelope* itemEnv, void* item)
 {
     assert(tree->getEnvelope()->contains(itemEnv));
 
-    /**
+    /*
      * Do NOT create a new quad for zero-area envelopes - this would lead
      * to infinite recursion. Instead, use a heuristic of simply returning
      * the smallest existing quad containing the query

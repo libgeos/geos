@@ -39,7 +39,7 @@ namespace geos {
 namespace planargraph { // geos.planargraph
 
 /// \brief A subgraph of a PlanarGraph.
-//
+///
 /// A subgraph may contain any subset of {@link Edge}s
 /// from the parent graph.
 /// It will also automatically contain all {@link DirectedEdge}s

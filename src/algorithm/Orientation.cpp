@@ -99,7 +99,7 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
 
     int disc = Orientation::index(*prev, *hiPt, *next);
 
-    /**
+    /*
      *  If disc is exactly 0, lines are collinear.
      * There are two possible cases:
      *  (1) the lines lie along the x axis in opposite directions

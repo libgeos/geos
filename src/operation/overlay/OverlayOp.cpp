@@ -795,7 +795,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     GEOS_CHECK_FOR_INTERRUPTS();
 
 #ifdef ENABLE_EDGE_NODING_VALIDATOR // {
-    /**
+    /*
      * Check that the noding completed correctly.
      *
      * This test is slow, but necessary in order to catch

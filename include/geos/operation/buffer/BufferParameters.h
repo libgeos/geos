@@ -87,7 +87,7 @@ public:
     /// \brief
     /// The default number of facets into which to divide a fillet
     /// of 90 degrees.
-    //
+    ///
     /// A value of 8 gives less than 2% max error in the buffer distance.
     /// For a max error of < 1%, use QS = 12.
     /// For a max error of < 0.1%, use QS = 18.
@@ -95,7 +95,7 @@ public:
     static const int DEFAULT_QUADRANT_SEGMENTS = 8;
 
     /// The default mitre limit
-    //
+    ///
     /// Allows fairly pointy mitres.
     ///
     static const double DEFAULT_MITRE_LIMIT; // 5.0 (in .cpp file)
@@ -104,7 +104,7 @@ public:
     BufferParameters();
 
     /// Creates a set of parameters with the given quadrantSegments value.
-    //
+    ///
     /// @param quadrantSegments the number of quadrant segments to use
     ///
     BufferParameters(int quadrantSegments);
@@ -112,7 +112,7 @@ public:
     /// \brief
     /// Creates a set of parameters with the
     /// given quadrantSegments and endCapStyle values.
-    //
+    ///
     /// @param quadrantSegments the number of quadrant segments to use
     /// @param endCapStyle the end cap style to use
     ///
@@ -121,7 +121,7 @@ public:
     /// \brief
     /// Creates a set of parameters with the
     /// given parameter values.
-    //
+    ///
     /// @param quadrantSegments the number of quadrant segments to use
     /// @param endCapStyle the end cap style to use
     /// @param joinStyle the join style to use
@@ -131,7 +131,7 @@ public:
                      JoinStyle joinStyle, double mitreLimit);
 
     /// Gets the number of quadrant segments which will be used
-    //
+    ///
     /// @return the number of quadrant segments
     ///
     int
@@ -143,7 +143,7 @@ public:
     /// \brief
     /// Sets the number of line segments used to approximate
     /// an angle fillet.
-    //
+    ///
     /// - If <tt>quadSegs</tt> >= 1, joins are round,
     ///   and <tt>quadSegs</tt> indicates the number of
     ///   segments to use to approximate a quarter-circle.
@@ -166,15 +166,13 @@ public:
     /// (in other words, the computed buffer curve is always inside
     ///  the true curve).
     ///
-    /// @param quadSegs the number of segments in a
-    ///               fillet for a quadrant
-    ////
+    /// @param quadSegs the number of segments in a fillet for a quadrant
     void setQuadrantSegments(int quadSegs);
 
     /// \brief
     /// Computes the maximum distance error due to a given level
     /// of approximation to a true arc.
-    //
+    ///
     /// @param quadSegs the number of segments used to approximate
     ///                 a quarter-circle
     /// @return the error of approximation
@@ -182,7 +180,7 @@ public:
     static double bufferDistanceError(int quadSegs);
 
     /// Gets the end cap style.
-    //
+    ///
     /// @return the end cap style
     ///
     EndCapStyle
@@ -192,7 +190,7 @@ public:
     }
 
     /// Specifies the end cap style of the generated buffer.
-    //
+    ///
     /// The styles supported are CAP_ROUND, CAP_BUTT,
     /// and CAP_SQUARE.
     ///
@@ -207,7 +205,7 @@ public:
     }
 
     /// Gets the join style.
-    //
+    ///
     /// @return the join style
     ///
     JoinStyle
@@ -219,10 +217,10 @@ public:
     /// \brief
     /// Sets the join style for outside (reflex) corners between
     /// line segments.
-    //
+    ///
     /// Allowable values are JOIN_ROUND (which is the default),
     /// JOIN_MITRE and JOIN_BEVEL.
-    //
+    ///
     /// @param style the code for the join style
     ///
     void
@@ -232,7 +230,7 @@ public:
     }
 
     /// Gets the mitre ratio limit.
-    //
+    ///
     /// @return the limit value
     ///
     double
@@ -242,7 +240,7 @@ public:
     }
 
     /// Sets the limit on the mitre ratio used for very sharp corners.
-    //
+    ///
     /// The mitre ratio is the ratio of the distance from the corner
     /// to the end of the mitred offset corner.
     /// When two line segments meet at a sharp angle,

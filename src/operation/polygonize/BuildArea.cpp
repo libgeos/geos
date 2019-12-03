@@ -160,32 +160,32 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     }
 
     /*
-    * Polygonizer returns a polygon for each face in the built topology.
-    *
-    * This means that for any face with holes we'll have other faces
-    * representing each hole. We can imagine a parent-child relationship
-    * between these faces.
-    *
-    * In order to maximize the number of visible rings in output we
-    * only use those faces which have an even number of parents.
-    *
-    * Example:
-    *
-    *   +---------------+
-    *   |     L0        |  L0 has no parents
-    *   |  +---------+  |
-    *   |  |   L1    |  |  L1 is an hole of L0
-    *   |  |  +---+  |  |
-    *   |  |  |L2 |  |  |  L2 is an hole of L1 (which is an hole of L0)
-    *   |  |  |   |  |  |
-    *   |  |  +---+  |  |
-    *   |  +---------+  |
-    *   |               |
-    *   +---------------+
-    *
-    * See http://trac.osgeo.org/postgis/ticket/1806
-    *
-    */
+     * Polygonizer returns a polygon for each face in the built topology.
+     *
+     * This means that for any face with holes we'll have other faces
+     * representing each hole. We can imagine a parent-child relationship
+     * between these faces.
+     *
+     * In order to maximize the number of visible rings in output we
+     * only use those faces which have an even number of parents.
+     *
+     * Example:
+     *
+     *   +---------------+
+     *   |     L0        |  L0 has no parents
+     *   |  +---------+  |
+     *   |  |   L1    |  |  L1 is an hole of L0
+     *   |  |  +---+  |  |
+     *   |  |  |L2 |  |  |  L2 is an hole of L1 (which is an hole of L0)
+     *   |  |  |   |  |  |
+     *   |  |  +---+  |  |
+     *   |  +---------+  |
+     *   |               |
+     *   +---------------+
+     *
+     * See http://trac.osgeo.org/postgis/ticket/1806
+     *
+     */
 
     /* Prepare face structures for later analysis */
     std::vector<std::unique_ptr<Face>> faces;

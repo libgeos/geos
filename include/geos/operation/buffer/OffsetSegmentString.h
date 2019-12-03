@@ -34,7 +34,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /// A dynamic list of the vertices in a constructed offset curve.
-//
+///
 /// Automatically removes close vertices
 /// which are closer than a given tolerance.
 ///
@@ -154,7 +154,7 @@ public:
     }
 
     /// Check that points are a ring
-    //
+    ///
     /// add the startpoint again if they are not
     void
     closeRing()
@@ -172,7 +172,7 @@ public:
     }
 
     /// Get coordinates by taking ownership of them
-    //
+    ///
     /// After this call, the coordinates reference in
     /// this object are dropped. Calling twice will
     /// segfault...

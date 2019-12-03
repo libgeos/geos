@@ -53,14 +53,14 @@ public:
     static const int NONE = Orientation::COLLINEAR;
 
     /// Converts from radians to degrees.
-    //
+    ///
     /// @param radians an angle in radians
     /// @return the angle in degrees
     ///
     static double toDegrees(double radians);
 
     /// Converts from degrees to radians.
-    //
+    ///
     /// @param angleDegrees an angle in degrees
     /// @return the angle in radians
     ///
@@ -69,7 +69,7 @@ public:
     /// \brief
     /// Returns the angle of the vector from p0 to p1,
     /// relative to the positive X-axis.
-    //
+    ///
     /// The angle is normalized to be in the range [ -Pi, Pi ].
     ///
     /// @return the normalized angle (in radians) that p0-p1 makes
@@ -90,7 +90,7 @@ public:
     static double angle(const geom::Coordinate& p);
 
     /// Tests whether the angle between p0-p1-p2 is acute.
-    //
+    ///
     /// An angle is acute if it is less than 90 degrees.
     ///
     /// Note: this implementation is not precise (determistic) for
@@ -105,7 +105,7 @@ public:
                         const geom::Coordinate& p2);
 
     /// Tests whether the angle between p0-p1-p2 is obtuse.
-    //
+    ///
     /// An angle is obtuse if it is greater than 90 degrees.
     ///
     /// Note: this implementation is not precise (determistic) for
@@ -120,7 +120,7 @@ public:
                          const geom::Coordinate& p2);
 
     /// Returns the unoriented smallest angle between two vectors.
-    //
+    ///
     /// The computed angle will be in the range [0, Pi).
     ///
     /// @param tip1 the tip of one vector
@@ -133,7 +133,7 @@ public:
                                const geom::Coordinate& tip2);
 
     /// Returns the oriented smallest angle between two vectors.
-    //
+    ///
     /// The computed angle will be in the range (-Pi, Pi].
     /// A positive result corresponds to a counterclockwise rotation
     /// from v1 to v2;
@@ -149,7 +149,7 @@ public:
                                        const geom::Coordinate& tip2);
 
     /// Computes the interior angle between two segments of a ring.
-    //
+    ///
     /// The ring is assumed to be oriented in a clockwise direction.
     /// The computed angle will be in the range [0, 2Pi]
     ///
@@ -207,7 +207,7 @@ public:
 
 
     /// Computes the unoriented smallest difference between two angles.
-    //
+    ///
     /// The angles are assumed to be normalized to the range [-Pi, Pi].
     /// The result will be in the range [0, Pi].
     ///

@@ -60,7 +60,7 @@ private:
     geom::CoordinateArraySequence* coordinates;
     geom::CoordinateSequence* getCoordinates();
 public:
-    /*
+    /**
      * \brief
      * Constructs an EdgeString with the given factory used to
      * convert this EdgeString to a LineString
@@ -74,7 +74,7 @@ public:
     */
     void add(LineMergeDirectedEdge* directedEdge);
 
-    /*
+    /**
      * Converts this EdgeString into a LineString.
      */
     geom::LineString* toLineString();

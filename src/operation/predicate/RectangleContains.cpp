@@ -133,7 +133,7 @@ RectangleContains::isLineSegmentContainedInBoundary(const Coordinate& p0,
         }
     }
 
-    /**
+    /*
      * Either
      *   both x and y values are different
      * or

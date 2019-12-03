@@ -91,7 +91,7 @@
 namespace geos {
 
 /// Contains the <CODE>Geometry</CODE> interface hierarchy and supporting classes.
-//
+///
 /// The Java Topology Suite (JTS) is a Java API that implements a core
 /// set of spatial data operations using an explicit precision model
 /// and robust geometric algorithms. JTS is int ended to be used in the

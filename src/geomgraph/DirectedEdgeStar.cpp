@@ -366,7 +366,7 @@ DirectedEdgeStar::findCoveredLineEdges()
     // Since edges are stored in CCW order around the node,
     // as we move around the ring we move from the right to the left side of the edge
 
-    /**
+    /*
      * Find first DirectedEdge of result area (if any).
      * The interior of the result is on the RHS of the edge,
      * so the start location will be:
@@ -401,7 +401,7 @@ DirectedEdgeStar::findCoveredLineEdges()
         return;
     }
 
-    /**
+    /*
      * move around ring, keeping track of the current location
      * (Interior or Exterior) for the result area.
      * If L edges are found, mark them as covered if they are in the interior

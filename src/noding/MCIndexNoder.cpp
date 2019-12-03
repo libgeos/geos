@@ -75,7 +75,7 @@ MCIndexNoder::intersectChains()
             MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
             assert(testChain);
 
-            /**
+            /*
              * following test makes sure we only compare each
              * pair of chains once and that we don't compare a
              * chain to itself

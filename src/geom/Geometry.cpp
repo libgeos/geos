@@ -303,7 +303,7 @@ Geometry::intersects(const Geometry* g) const
     }
 #endif
 
-    /**
+    /*
      * TODO: (MD) Add optimizations:
      *
      * - for P-A case:
@@ -523,9 +523,9 @@ Geometry::convexHull() const
 std::unique_ptr<Geometry>
 Geometry::intersection(const Geometry* other) const
 {
-    /**
-    * TODO: MD - add optimization for P-A case using Point-In-Polygon
-    */
+    /*
+     * TODO: MD - add optimization for P-A case using Point-In-Polygon
+     */
 
     // special case: if one input is empty ==> empty
     if(isEmpty() || other->isEmpty()) {
