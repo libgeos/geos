@@ -19,6 +19,7 @@
 #ifndef GEOS_OP_VALID_OFFSETCURVEVERTEXLIST_H
 #define GEOS_OP_VALID_OFFSETCURVEVERTEXLIST_H
 
+#include <cstddef>
 #include <vector> // for composition
 
 // Forward declarations

@@ -149,35 +149,6 @@ private:
     void checkShellsNotNested(const geom::MultiPolygon* mp,
                               geomgraph::GeometryGraph* graph);
 
-    /**
-     * Check if a shell is incorrectly nested within a polygon.
-     * This is the case if the shell is inside the polygon shell,
-     * but not inside a polygon hole.
-     * (If the shell is inside a polygon hole, the nesting is valid.)
-     *
-     * The algorithm used relies on the fact that the rings must be
-     * properly contained.
-     * E.g. they cannot partially overlap (this has been previously
-     * checked by <code>checkRelateConsistency</code>
-     */
-    void checkShellNotNested(const geom::LinearRing* shell,
-                             const geom::Polygon* p,
-                             geomgraph::GeometryGraph* graph);
-
-    /**
-     * This routine checks to see if a shell is properly contained
-     * in a hole.
-     * It assumes that the edges of the shell and hole do not
-     * properly intersect.
-     *
-     * @return <code>null</code> if the shell is properly contained, or
-     *   a Coordinate which is not inside the hole if it is not
-     *
-     */
-    const geom::Coordinate* checkShellInsideHole(
-        const geom::LinearRing* shell,
-        const geom::LinearRing* hole,
-        geomgraph::GeometryGraph* graph);
 
     void checkConnectedInteriors(geomgraph::GeometryGraph& graph);
 
@@ -201,7 +172,7 @@ public:
     static const geom::Coordinate* findPtNotNode(
         const geom::CoordinateSequence* testCoords,
         const geom::LinearRing* searchRing,
-        geomgraph::GeometryGraph* graph);
+        const geomgraph::GeometryGraph* graph);
 
     /** \brief
      * Checks whether a coordinate is valid for processing.

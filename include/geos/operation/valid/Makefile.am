@@ -11,6 +11,7 @@ geos_HEADERS = \
     ConnectedInteriorTester.h   \
     ConsistentAreaTester.h      \
     IsValidOp.h                 \
+    IndexedNestedShellTester.h  \
     MakeValid.h                 \
     QuadtreeNestedRingTester.h  \
     RepeatedPointRemover.h      \
