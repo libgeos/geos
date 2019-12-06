@@ -466,9 +466,9 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     //SimpleNestedRingTester nestedTester(graph);
     //SweeplineNestedRingTester nestedTester(graph);
     //QuadtreeNestedRingTester nestedTester(graph);
-    IndexedNestedRingTester nestedTester(graph);
-
     auto nholes = p->getNumInteriorRing();
+
+    IndexedNestedRingTester nestedTester(graph, nholes);
     for (size_t i = 0; i < nholes; ++i) {
         const LinearRing* innerHole = p->getInteriorRingN(i);
 
