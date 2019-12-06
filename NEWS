@@ -12,6 +12,7 @@ Changes in 3.8.1
     (#1013, Dan Baston)
   - Fix missing vtable for LineString and CoordinateArraySequenceFactory
     (#299 and #1016, Evgen Bodunov)
+  - Reduce performance regression in GEOSBuffer (#1020)
 
 Changes in 3.8.0
 2019-10-10

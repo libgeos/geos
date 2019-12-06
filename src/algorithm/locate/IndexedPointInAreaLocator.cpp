@@ -96,13 +96,15 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
             &&	areaGeomId != typeid(geom::LinearRing)) {
         throw util::IllegalArgumentException("Argument must be Polygonal or LinearRing");
     }
-
-    buildIndex(areaGeom);
 }
 
 geom::Location
 IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
 {
+    if (index == nullptr) {
+        buildIndex(areaGeom);
+    }
+
     algorithm::RayCrossingCounter rcc(*p);
 
     IndexedPointInAreaLocator::SegmentVisitor visitor(&rcc);
