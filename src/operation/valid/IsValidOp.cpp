@@ -326,7 +326,9 @@ IsValidOp::checkValid(const MultiPolygon* g)
         }
     }
 
-    checkShellsNotNested(g, &graph);
+    if (ngeoms > 1) {
+        checkShellsNotNested(g, &graph);
+    }
     if(validErr != nullptr) {
         return;
     }
