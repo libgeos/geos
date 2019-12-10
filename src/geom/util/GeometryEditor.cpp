@@ -118,29 +118,28 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
         }
     }
 
-    std::unique_ptr<LinearRing> shell(dynamic_cast<LinearRing*>(
-            edit(newPolygon->getExteriorRing(), operation).release()));
+    auto shellGeom = edit(newPolygon->getExteriorRing(), operation);
+    auto shell = detail::unique_ptr_cast<LinearRing>(shellGeom);
 
     if(shell->isEmpty()) {
         //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
         return std::unique_ptr<Polygon>(factory->createPolygon(nullptr, nullptr));
     }
 
-    auto holes = detail::make_unique<std::vector<LinearRing*>>();
+    std::vector<std::unique_ptr<LinearRing>> holes;
     for(size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
-
-        std::unique_ptr<LinearRing> hole(dynamic_cast<LinearRing*>(
-                edit(newPolygon->getInteriorRingN(i), operation).release()));
+        auto holeGeom = edit(newPolygon->getInteriorRingN(i), operation);
+        auto hole = detail::unique_ptr_cast<LinearRing>(holeGeom);
 
         assert(hole);
 
         if(hole->isEmpty()) {
             continue;
         }
-        holes->push_back(hole.release());
+        holes.push_back(std::move(hole));
     }
 
-    return std::unique_ptr<Polygon>(factory->createPolygon(shell.release(), holes.release()));
+    return factory->createPolygon(std::move(shell), std::move(holes));
 }
 
 std::unique_ptr<GeometryCollection>

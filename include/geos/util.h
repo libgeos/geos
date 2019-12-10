@@ -80,9 +80,20 @@ template<class T, class... Args>
 typename _Unique_if<T>::_Known_bound
 make_unique(Args &&...) = delete;
 
-#endif
+#endif // __cplusplus >= 201402L
+
+// Use a dynamic_cast to convert from unique_ptr<From> to unique_ptr<To.
+// If the cast is unsuccessful, ownership will remain with the input unique_ptr.
+template<typename To, typename From>
+std::unique_ptr<To> unique_ptr_cast(std::unique_ptr<From> & src) noexcept {
+    if (dynamic_cast<To*>(src.get())) {
+        return std::unique_ptr<To>(static_cast<To*>(src.release()));
+    } else {
+        return std::unique_ptr<To>(nullptr);
+    }
 }
 
+}
 }
 
 #endif // GEOS_UTIL_H
