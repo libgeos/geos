@@ -41,7 +41,6 @@
 #include <cassert>
 #include <iostream> // for operator<<
 
-using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -179,7 +178,7 @@ EdgeRing::computeRing()
 }
 
 /*public*/
-vector<DirectedEdge*>&
+std::vector<DirectedEdge*>&
 EdgeRing::getEdges()
 {
     testInvariant();
