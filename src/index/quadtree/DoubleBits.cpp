@@ -24,21 +24,14 @@
 #include <cstring>
 #include <bitset>
 
-#if __STDC_IEC_559__
-#define ASSUME_IEEE_DOUBLE 1
-#else
-#define ASSUME_IEEE_DOUBLE 0
-#endif
-
-#if ! ASSUME_IEEE_DOUBLE
-#include <cmath>
-#endif
-
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 using namespace std;
+
+static_assert(std::numeric_limits<double>::is_iec559,
+              "Failed to meet IEEE 754 floating point standard requirement");
 
 double
 DoubleBits::powerOf2(int exp)
@@ -46,15 +39,11 @@ DoubleBits::powerOf2(int exp)
     if(exp > 1023 || exp < -1022) {
         throw util::IllegalArgumentException("Exponent out of bounds");
     }
-#if ASSUME_IEEE_DOUBLE
     int64 expBias = exp + EXPONENT_BIAS;
     int64 bits = expBias << 52;
     double ret;
     memcpy(&ret, &bits, sizeof(int64));
     return ret;
-#else
-    return pow(2.0, exp);
-#endif
 }
 
 int
@@ -98,9 +87,7 @@ DoubleBits::maximumCommonMantissa(double d1, double d2)
 /*public*/
 DoubleBits::DoubleBits(double nx)
 {
-#if ASSUME_IEEE_DOUBLE
     memcpy(&xBits, &nx, sizeof(double));
-#endif
     x = nx;
 }
 
@@ -125,14 +112,7 @@ DoubleBits::biasedExponent() const
 int
 DoubleBits::getExponent() const
 {
-#if ASSUME_IEEE_DOUBLE
     return static_cast<int>(biasedExponent() - EXPONENT_BIAS);
-#else
-    if(x <= 0) {
-        return 0;    // EDOM || ERANGE
-    }
-    return (int)((log(x) / log(2.0)) + (x < 1 ? -0.9 : 0.00000000001));
-#endif
 }
 
 /*public*/
