@@ -309,6 +309,13 @@ install(DIRECTORY
   "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
   DESTINATION include
   FILES_MATCHING PATTERN "*.h")
+if(NOT DISABLE_GEOS_INLINE)
+  install(DIRECTORY
+    "${CMAKE_CURRENT_LIST_DIR}/include/geos"
+    "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.inl")
+endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION include)
 
