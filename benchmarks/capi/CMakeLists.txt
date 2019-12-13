@@ -22,3 +22,6 @@ target_link_libraries(perf_geospreparedcontains PRIVATE geos geos_c)
 
 add_executable(perf_intersection IntersectionPerfTest.cpp)
 target_link_libraries(perf_intersection PRIVATE geos geos_c)
+
+add_executable(perf_unary UnaryOpPerfTest.cpp)
+target_link_libraries(perf_unary PRIVATE geos geos_c)

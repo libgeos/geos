@@ -426,12 +426,16 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 void
 IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
 {
+    auto nholes = p->getNumInteriorRing();
+    if (nholes == 0) {
+        return;
+    }
+
     const LinearRing* shell = p->getExteriorRing();
 
     bool isShellEmpty = shell->isEmpty();
 
     locate::IndexedPointInAreaLocator ipial(*shell);
-    auto nholes = p->getNumInteriorRing();
 
     for(size_t i = 0; i < nholes; ++i) {
         const LinearRing* hole = p->getInteriorRingN(i);
@@ -462,9 +466,9 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     //SimpleNestedRingTester nestedTester(graph);
     //SweeplineNestedRingTester nestedTester(graph);
     //QuadtreeNestedRingTester nestedTester(graph);
-    IndexedNestedRingTester nestedTester(graph);
-
     auto nholes = p->getNumInteriorRing();
+
+    IndexedNestedRingTester nestedTester(graph, nholes);
     for (size_t i = 0; i < nholes; ++i) {
         const LinearRing* innerHole = p->getInteriorRingN(i);
 

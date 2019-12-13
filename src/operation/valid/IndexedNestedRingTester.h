@@ -19,6 +19,7 @@
 #ifndef GEOS_OP_VALID_OFFSETCURVEVERTEXLIST_H
 #define GEOS_OP_VALID_OFFSETCURVEVERTEXLIST_H
 
+#include <cstddef>
 #include <vector> // for composition
 
 // Forward declarations
@@ -49,13 +50,13 @@ namespace valid { // geos.operation.valid
 class IndexedNestedRingTester {
 public:
     // @param newGraph : ownership retained by caller
-    IndexedNestedRingTester(geomgraph::GeometryGraph* newGraph)
+    IndexedNestedRingTester(geomgraph::GeometryGraph* newGraph, size_t initialCapacity)
         :
         graph(newGraph),
-        //totalEnv(0),
         index(nullptr),
         nestedPt(nullptr)
     {
+        rings.reserve(initialCapacity);
     }
 
     ~IndexedNestedRingTester();
@@ -88,9 +89,6 @@ private:
 
     /// Ownership of this vector elements are externally owned
     std::vector<const geom::LinearRing*> rings;
-
-    // CHECK: Owned by (seems unused)?
-    //geom::Envelope* totalEnv;
 
     // Owned by us (use unique_ptr ?)
     geos::index::SpatialIndex* index; // 'index' in JTS
