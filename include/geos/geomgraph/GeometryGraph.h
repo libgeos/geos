@@ -187,7 +187,7 @@ public:
     /// Returned object is owned by this GeometryGraph
     geom::CoordinateSequence* getBoundaryPoints();
 
-    Edge* findEdge(const geom::LineString* line);
+    Edge* findEdge(const geom::LineString* line) const;
 
     void computeSplitEdges(std::vector<Edge*>* edgelist);
 

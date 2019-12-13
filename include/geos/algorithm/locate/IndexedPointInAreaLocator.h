@@ -104,6 +104,10 @@ public:
      */
     IndexedPointInAreaLocator(const geom::Geometry& g);
 
+    const geom::Geometry&  getGeometry() const {
+        return areaGeom;
+    }
+
     /** \brief
      * Determines the [Location](@ref geom::Location) of a point in an areal
      * [Geometry](@ref geom::Geometry).

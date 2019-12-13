@@ -147,7 +147,7 @@ GeometryGraph::getBoundaryPoints()
 }
 
 Edge*
-GeometryGraph::findEdge(const LineString* line)
+GeometryGraph::findEdge(const LineString* line) const
 {
     return lineEdgeMap.find(line)->second;
 }
