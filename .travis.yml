@@ -18,6 +18,8 @@ ref:
 
 matrix:
   fast_finish: true
+  allow_failures:
+    env: E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64"
   include:
     - os: linux
       cache:
@@ -113,7 +115,7 @@ matrix:
           sources: *sources
           packages: ['clang','ccache','doxygen']
       env:
-        - E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64
+        - E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64"
 
 before_install:
   - eval "${E}"
