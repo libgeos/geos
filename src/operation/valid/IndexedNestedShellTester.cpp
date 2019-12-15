@@ -204,8 +204,7 @@ IndexedNestedShellTester::checkShellInsideHole(const geom::LinearRing* shell,
     }
 
     // should never reach here: points in hole and shell appear to be equal
-    // TODO throw?
-    return nullptr;
+    throw util::GEOSException("Hole and shell appear to be equal in IndexedNestedShellTester");
 }
 
 }
