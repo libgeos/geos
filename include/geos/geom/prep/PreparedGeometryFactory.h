@@ -55,11 +55,11 @@ class GEOS_DLL PreparedGeometryFactory {
 public:
 
     /**
-    * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
-    *
-    * @param geom the geometry to prepare
-    * @return the prepared geometry
-    */
+     * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
+     *
+     * @param geom the geometry to prepare
+     * @return the prepared geometry
+     */
     static std::unique_ptr<PreparedGeometry>
     prepare(const geom::Geometry* geom)
     {
@@ -68,10 +68,10 @@ public:
     }
 
     /**
-    * Destroys {@link PreparedGeometry} allocated with the factory.
-    *
-    * @param geom to be deallocated
-    */
+     * Destroys {@link PreparedGeometry} allocated with the factory.
+     *
+     * @param geom to be deallocated
+     */
     static void
     destroy(const PreparedGeometry* geom)
     {
@@ -79,11 +79,11 @@ public:
     }
 
     /**
-    * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
-    *
-    * @param geom the geometry to prepare
-    * @return the prepared geometry
-    */
+     * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
+     *
+     * @param geom the geometry to prepare
+     * @return the prepared geometry
+     */
     std::unique_ptr<PreparedGeometry> create(const geom::Geometry* geom) const;
 
 };
