@@ -65,7 +65,7 @@ protected:
     bool fullTopologicalPredicate(const geom::Geometry* geom) override;
 
 public:
-    /**
+    /** \brief
      * Computes the <tt>covers</tt> predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
@@ -80,7 +80,7 @@ public:
         return polyInt.covers(geom);
     }
 
-    /**
+    /** \brief
      * Creates an instance of this operation.
      *
      * @param prep the PreparedPolygon to evaluate
@@ -89,7 +89,7 @@ public:
         :	AbstractPreparedPolygonContains(prep, false)
     { }
 
-    /**
+    /** \brief
      * Tests whether this PreparedPolygon <tt>covers</tt> a given geometry.
      *
      * @param geom the test geometry

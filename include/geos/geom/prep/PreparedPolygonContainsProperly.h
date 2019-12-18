@@ -60,7 +60,7 @@ class PreparedPolygonContainsProperly : public PreparedPolygonPredicate {
 private:
 protected:
 public:
-    /**
+    /** \brief
      * Computes the <tt>containsProperly</tt> predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
@@ -76,7 +76,7 @@ public:
         return polyInt.containsProperly(geom);
     }
 
-    /**
+    /** \brief
      * Creates an instance of this operation.
      *
      * @param prep the PreparedPolygon to evaluate
@@ -85,7 +85,7 @@ public:
         :	PreparedPolygonPredicate(prep)
     { }
 
-    /**
+    /** \brief
      * Tests whether this PreparedPolygon containsProperly a given geometry.
      *
      * @param geom the test geometry

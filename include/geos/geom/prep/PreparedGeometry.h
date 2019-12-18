@@ -55,14 +55,14 @@ public:
     virtual
     ~PreparedGeometry() {}
 
-    /**
+    /** \brief
      * Gets the original {@link Geometry} which has been prepared.
      *
      * @return the base geometry
      */
     virtual const geom::Geometry& getGeometry() const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} contains a given geometry.
      *
      * @param geom the Geometry to test
@@ -113,7 +113,7 @@ public:
      */
     virtual bool containsProperly(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} is covered by a given geometry.
      *
      * @param geom the Geometry to test
@@ -123,7 +123,7 @@ public:
      */
     virtual bool coveredBy(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} covers a given geometry.
      *
      * @param geom the Geometry to test
@@ -133,7 +133,7 @@ public:
      */
     virtual bool covers(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} crosses a given geometry.
      *
      * @param geom the Geometry to test
@@ -143,7 +143,7 @@ public:
      */
     virtual bool crosses(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} is disjoint from a given geometry.
      *
      * @param geom the Geometry to test
@@ -153,7 +153,7 @@ public:
      */
     virtual bool disjoint(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} intersects a given geometry.
      *
      * @param geom the Geometry to test
@@ -163,7 +163,7 @@ public:
      */
     virtual bool intersects(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} overlaps a given geometry.
      *
      * @param geom the Geometry to test
@@ -173,7 +173,7 @@ public:
      */
     virtual bool overlaps(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} touches a given geometry.
      *
      * @param geom the Geometry to test
@@ -183,7 +183,7 @@ public:
      */
     virtual bool touches(const geom::Geometry* geom) const = 0;
 
-    /**
+    /** \brief
      * Tests whether the base {@link Geometry} is within a given geometry.
      *
      * @param geom the Geometry to test

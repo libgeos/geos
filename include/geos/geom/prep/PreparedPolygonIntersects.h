@@ -51,7 +51,7 @@ class PreparedPolygonIntersects : public PreparedPolygonPredicate {
 private:
 protected:
 public:
-    /**
+    /** \brief
      * Computes the intersects predicate between a {@link PreparedPolygon}
      * and a {@link Geometry}.
      *
@@ -66,7 +66,7 @@ public:
         return polyInt.intersects(geom);
     }
 
-    /**
+    /** \brief
      * Creates an instance of this operation.
      *
      * @param prep the PreparedPolygon to evaluate
@@ -75,7 +75,7 @@ public:
         :	PreparedPolygonPredicate(prep)
     { }
 
-    /**
+    /** \brief
      * Tests whether this PreparedPolygon intersects a given geometry.
      *
      * @param geom the test geometry
