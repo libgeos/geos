@@ -48,10 +48,10 @@ MinimumClearance::getLine()
 
     // return empty line string if no min pts were found
     if(minClearance == std::numeric_limits<double>::infinity()) {
-        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
+        return inputGeom->getFactory()->createLineString();
     }
 
-    return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone().release()));
+    return inputGeom->getFactory()->createLineString(minClearancePts->clone());
 }
 
 void
