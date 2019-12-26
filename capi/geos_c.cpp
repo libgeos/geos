@@ -21,6 +21,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -39,6 +40,7 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSSTRtree geos::index::strtree::STRtree
+#define GEOSIndexedFacetDistance geos::operation::distance::IndexedFacetDistance
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader

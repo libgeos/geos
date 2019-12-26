@@ -110,6 +110,7 @@ typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 typedef struct GEOSSTRtree_t GEOSSTRtree;
 typedef struct GEOSBufParams_t GEOSBufferParams;
+typedef struct GEOSIndexedFacetDistance_t GEOSIndexedFacetDistance;
 #endif
 
 /* Those are compatibility definitions for source compatibility
@@ -904,6 +905,38 @@ extern char GEOS_DLL GEOSSTRtree_remove_r(GEOSContextHandle_t handle,
                                           void *item);
 extern void GEOS_DLL GEOSSTRtree_destroy_r(GEOSContextHandle_t handle,
                                            GEOSSTRtree *tree);
+
+
+/************************************************************************
+ *
+ *  IndexedFacetDistance functions
+ *
+ ***********************************************************************/
+
+/*
+ * Creates an IndexedFacetDistance object, which can be used for optimised
+ * calculation of minimum distances between a single GEOSGeometry and multiple other geometries.
+ *
+ * Must be destroyed using GEOSIndexedFacetDistance_destroy_r when finished.
+ *
+ * GEOSGeometry ownership is retained by caller
+ */
+extern const GEOSIndexedFacetDistance GEOS_DLL *GEOSIndexedFacetDistance_create_r(
+                                            GEOSContextHandle_t handle,
+                                            const GEOSGeometry* g);
+/*
+ * Calculates the minimum distance between the original geometry and another
+ * GEOSGeometry.
+ */
+extern int GEOS_DLL GEOSIndexedFacetDistance_distance_r(GEOSContextHandle_t handle,
+                                          GEOSIndexedFacetDistance *index,
+                                          const GEOSGeometry *g,
+                                          double *distance);
+/*
+ * Destroy an IndexedFacetDistance object.
+ */
+extern void GEOS_DLL GEOSIndexedFacetDistance_destroy_r(GEOSContextHandle_t handle,
+                                           GEOSIndexedFacetDistance *index);
 
 
 /************************************************************************

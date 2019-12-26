@@ -107,6 +107,7 @@
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::STRtree
+#define GEOSIndexedFacetDistance geos::operation::distance::IndexedFacetDistance
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader
@@ -144,6 +145,7 @@ using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
 
+using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
@@ -2919,6 +2921,42 @@ extern "C" {
             delete tree;
         });
     }
+
+
+//-----------------------------------------------------------------
+// IndexedFacetDistance
+//-----------------------------------------------------------------
+
+    const geos::operation::distance::IndexedFacetDistance*
+    GEOSIndexedFacetDistance_create_r(GEOSContextHandle_t extHandle,
+                         const geos::geom::Geometry* g)
+    {
+        return execute(extHandle, [&]() {
+            return new geos::operation::distance::IndexedFacetDistance(g);
+        });
+    }
+
+    int
+    GEOSIndexedFacetDistance_distance_r(GEOSContextHandle_t extHandle,
+                          geos::operation::distance::IndexedFacetDistance* index,
+                          const geos::geom::Geometry* geom,
+                          double* distance)
+    {
+      return execute(extHandle, 0, [&]() {
+          *distance = index->distance(geom);
+          return 1;
+      });
+    }
+
+    void
+    GEOSIndexedFacetDistance_destroy_r(GEOSContextHandle_t extHandle,
+                          geos::operation::distance::IndexedFacetDistance* index)
+    {
+        return execute(extHandle, [&]() {
+            delete index;
+        });
+    }
+
 
     double
     GEOSProject_r(GEOSContextHandle_t extHandle,
