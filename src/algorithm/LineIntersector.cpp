@@ -866,7 +866,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
         intPtOut = nearestEndpoint(p1, p2, q1, q2);
 #if GEOS_DEBUG
         cerr << "Intersection outside segment envelopes, snapped to "
-             << intPt.toString() << endl;
+             << intPtOut.toString() << endl;
 #endif
     }
 

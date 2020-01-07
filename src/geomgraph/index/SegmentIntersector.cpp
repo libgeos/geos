@@ -33,7 +33,9 @@
 #define GEOS_DEBUG 0
 #endif
 
+#ifndef DEBUG_INTERSECT
 #define DEBUG_INTERSECT 0
+#endif
 
 #if GEOS_DEBUG || DEBUG_INTERSECT
 #include <iostream>
