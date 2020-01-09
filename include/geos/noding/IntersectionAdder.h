@@ -32,9 +32,6 @@
 
 // Forward declarations
 namespace geos {
-namespace geom {
-class Coordinate;
-}
 namespace noding {
 class SegmentString;
 }
@@ -71,7 +68,7 @@ private:
     bool hasInterior;
 
     // the proper intersection point found
-    const geom::Coordinate* properIntersectionPoint;
+    geom::Coordinate properIntersectionPoint;
 
     algorithm::LineIntersector& li;
     // bool isSelfIntersection;
@@ -105,7 +102,7 @@ public:
         hasProper(false),
         hasProperInterior(false),
         hasInterior(false),
-        properIntersectionPoint(nullptr),
+        properIntersectionPoint(),
         li(newLi),
         numIntersections(0),
         numInteriorIntersections(0),
@@ -120,10 +117,10 @@ public:
     }
 
     /**
-     * @return the proper intersection point, or `NULL`
+     * @return the proper intersection point, or `Coordinate::getNull()`
      *         if none was found
      */
-    const geom::Coordinate*
+    const geom::Coordinate&
     getProperIntersectionPoint()
     {
         return properIntersectionPoint;

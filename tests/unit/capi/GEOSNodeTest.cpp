@@ -123,6 +123,24 @@ void object::test<3>
                  );
 }
 
+// https://gis.stackexchange.com/questions/345341/get-location-of-postgis-geos-topology-exception/345482#345482
+template<>
+template<>
+void object::test<4>
+()
+{
+    std::string wkb = "010500000002000000010200000003000000dc874d65fcc25ec176032c6b350c5341b336429ffec25ec1f962bbd"
+                      "9480c5341fc849518ffc25ec15be20f5f500c5341010200000006000000fa9bbfd3fcc25ec1b978232f390c5341"
+                      "b336429ffec25ec1f962bbd9480c5341a77e6be5fec25ec1357c21334d0c5341c3eba27bfec25ec11be5a4c34a0"
+                      "c5341b61d8cacfcc25ec1bcf273143c0c5341fa9bbfd3fcc25ec1b978232f390c5341";
+
+    geom1_ = GEOSGeomFromHEX_buf((const unsigned char*) wkb.c_str(), wkb.size());
+    geom2_ = GEOSNode(geom1_);
+
+    // Noding currently fails for this case.
+    // ensure(geom2_);
+}
+
 
 } // namespace tut
 
