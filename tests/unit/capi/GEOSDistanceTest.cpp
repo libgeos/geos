@@ -92,7 +92,7 @@ random_polygon(double x, double y, double r, size_t num_points)
 
 
     for(size_t i = 0; i < num_points; i++) {
-        angle[i] = 2 * geos::M_PI * std::rand() / RAND_MAX;
+        angle[i] = 2 * geos::MATH_PI * std::rand() / RAND_MAX;
         radius[i] = r * std::rand() / RAND_MAX;
     }
 
