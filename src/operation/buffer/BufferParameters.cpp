@@ -125,7 +125,7 @@ BufferParameters::setQuadrantSegments(int quadSegs)
 double
 BufferParameters::bufferDistanceError(int quadSegs)
 {
-    double alpha = M_PI / 2.0 / quadSegs;
+    double alpha = MATH_PI / 2.0 / quadSegs;
     return 1 - cos(alpha / 2.0);
 }
 

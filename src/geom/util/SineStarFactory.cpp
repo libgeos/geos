@@ -65,7 +65,7 @@ SineStarFactory::createSineStar() const
 
         // the angle for the current arm - in [0,2Pi]
         // (each arm is a complete sine wave cycle)
-        double armAng = 2 * M_PI * armAngFrac;
+        double armAng = 2 * MATH_PI * armAngFrac;
         // the current length of the arm
         double armLenFrac = (cos(armAng) + 1.0) / 2.0;
 
@@ -73,7 +73,7 @@ SineStarFactory::createSineStar() const
         double curveRadius = insideRadius + armMaxLen * armLenFrac;
 
         // the current angle of the curve
-        double ang = i * (2 * M_PI / nPts);
+        double ang = i * (2 * MATH_PI / nPts);
         double x = curveRadius * cos(ang) + centreX;
         double y = curveRadius * sin(ang) + centreY;
         pts[iPt++] = coord(x, y);
