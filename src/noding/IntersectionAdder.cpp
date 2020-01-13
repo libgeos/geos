@@ -88,7 +88,6 @@ IntersectionAdder::processIntersections(
     numIntersections++;
 
     if(li.isInteriorIntersection()) {
-
         numInteriorIntersections++;
         hasInterior = true;
     }
@@ -110,7 +109,7 @@ IntersectionAdder::processIntersections(
             numProperIntersections++;
             //Debug.println(li.toString());
             //Debug.println(li.getIntersection(0));
-//properIntersectionPoint = (Coordinate) li.getIntersection(0).clone();
+            properIntersectionPoint = li.getIntersection(0);
             hasProper = true;
             hasProperInterior = true;
         }
