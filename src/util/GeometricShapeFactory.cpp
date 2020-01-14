@@ -161,8 +161,8 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     env.reset();
 
     double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * M_PI) {
-        angSize = 2 * M_PI;
+    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
+        angSize = 2 * MATH_PI;
     }
     double angInc = angSize / (nPts - 1);
 
@@ -191,8 +191,8 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     env.reset();
 
     double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * M_PI) {
-        angSize = 2 * M_PI;
+    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
+        angSize = 2 * MATH_PI;
     }
     double angInc = angSize / (nPts - 1);
 
