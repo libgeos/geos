@@ -26,6 +26,7 @@
 //#include <geos/planargraph/GraphComponent.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/LineString.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <functional>
@@ -52,7 +53,6 @@ LineMerger::add(vector<const Geometry*>* geometries)
 }
 
 LineMerger::LineMerger():
-    mergedLineStrings(nullptr),
     factory(nullptr)
 {
 }
@@ -105,7 +105,7 @@ LineMerger::add(const LineString* lineString)
 void
 LineMerger::merge()
 {
-    if(mergedLineStrings != nullptr) {
+    if(!mergedLineStrings.empty()) {
         return;
     }
 
@@ -124,10 +124,10 @@ LineMerger::merge()
     buildEdgeStringsForIsolatedLoops();
 
     auto numEdgeStrings = edgeStrings.size();
-    mergedLineStrings = new vector<LineString*>(numEdgeStrings);
+    mergedLineStrings.reserve(numEdgeStrings);
     for(size_t i = 0; i < numEdgeStrings; ++i) {
         EdgeString* edgeString = edgeStrings[i];
-        (*mergedLineStrings)[i] = edgeString->toLineString();
+        mergedLineStrings.emplace_back(edgeString->toLineString());
     }
 }
 
@@ -227,14 +227,14 @@ LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge* start)
 /**
  * Returns the LineStrings built by the merging process.
  */
-vector<LineString*>*
+std::vector<std::unique_ptr<LineString>>
 LineMerger::getMergedLineStrings()
 {
     merge();
 
     // Explicitly give ownership to the caller.
-    vector<LineString*>* ret = mergedLineStrings;
-    mergedLineStrings = nullptr;
+    auto ret = std::move(mergedLineStrings);
+    mergedLineStrings.clear();
     return ret;
 }
 

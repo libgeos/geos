@@ -1073,12 +1073,11 @@ do_all()
     /////////////////////////////////////////////
     LineMerger lm;
     lm.add(geoms);
-    vector<LineString*>* mls = lm.getMergedLineStrings();
+    auto mls = lm.getMergedLineStrings();
     newgeoms = new vector<const Geometry*>;
-    for(unsigned int i = 0; i < mls->size(); i++) {
-        newgeoms->push_back((*mls)[i]);
+    for(unsigned int i = 0; i < mls.size(); i++) {
+        newgeoms->push_back(mls[i].release());
     }
-    delete mls;
 
     cout << endl << "----- HERE IS THE LINEMERGE OUTPUT ------" << endl;
     wkt_print_geoms(newgeoms);

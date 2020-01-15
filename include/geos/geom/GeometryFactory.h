@@ -334,6 +334,12 @@ public:
 
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const;
 
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Point>> && geoms) const;
+
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<LineString>> && geoms) const;
+
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) const;
+
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //
     /// Will clone the geometries accessible trough the iterator.
