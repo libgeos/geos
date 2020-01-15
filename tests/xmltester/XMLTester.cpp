@@ -1544,11 +1544,9 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             LineMerger merger;
             merger.add(p_gT);
-            std::unique_ptr< std::vector<geom::LineString*> > lines(merger.getMergedLineStrings());
-            std::vector<geom::Geometry*>* newgeoms = new std::vector<geom::Geometry*>(lines->begin(),
-                    lines->end());
+            auto lines = merger.getMergedLineStrings();
 
-            GeomPtr gRealRes(factory->createGeometryCollection(newgeoms));
+            GeomPtr gRealRes(factory->createGeometryCollection(std::move(lines)));
             gRealRes->normalize();
 
             if(gRes->compareTo(gRealRes.get()) == 0) {

@@ -255,7 +255,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
     Coordinate coord;
 
     if(envelope->isNull()) {
-        return std::unique_ptr<Geometry>(createPoint());
+        return createPoint();
     }
     if(envelope->getMinX() == envelope->getMaxX() && envelope->getMinY() == envelope->getMaxY()) {
         coord.x = envelope->getMinX();
@@ -712,6 +712,48 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) 
         case GEOS_MULTIPOLYGON: return createMultiPolygon(std::move(geoms));
         default: return createGeometryCollection(std::move(geoms));
     }
+}
+
+std::unique_ptr<Geometry>
+GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Point>> && geoms) const
+{
+    if (geoms.empty()) {
+        return createGeometryCollection();
+    }
+
+    if (geoms.size() == 1) {
+        return std::move(geoms[0]);
+    }
+
+    return createMultiPoint(std::move(geoms));
+}
+
+std::unique_ptr<Geometry>
+GeometryFactory::buildGeometry(std::vector<std::unique_ptr<LineString>> && geoms) const
+{
+    if (geoms.empty()) {
+        return createGeometryCollection();
+    }
+
+    if (geoms.size() == 1) {
+        return std::move(geoms[0]);
+    }
+
+    return createMultiLineString(std::move(geoms));
+}
+
+std::unique_ptr<Geometry>
+GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) const
+{
+    if (geoms.empty()) {
+        return createGeometryCollection();
+    }
+
+    if (geoms.size() == 1) {
+        return std::move(geoms[0]);
+    }
+
+    return createMultiPolygon(std::move(geoms));
 }
 
 /*public*/
