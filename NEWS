@@ -6,6 +6,7 @@ Changes in 3.8.1
   - Avoid returning non-empty CoordinateSequence from empty Point
     (#1001, Dan Baston)
   - Avoid assertion failure with MSVC 2017 / 2019 (#1002, Dan Baston)
+  - Remove whitespace from end of GEOSversion() output (azhi)
 
 
 Changes in 3.8.0
