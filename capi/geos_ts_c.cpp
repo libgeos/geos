@@ -1893,9 +1893,9 @@ extern "C" {
             LineMerger lmrgr;
             lmrgr.add(g);
 
-            std::vector<LineString*>* lines = lmrgr.getMergedLineStrings();
+            auto lines = lmrgr.getMergedLineStrings();
 
-            auto out = gf->buildGeometry(lines->begin(), lines->end());
+            auto out = gf->buildGeometry(std::move(lines));
             out->setSRID(g->getSRID());
 
             return out.release();
