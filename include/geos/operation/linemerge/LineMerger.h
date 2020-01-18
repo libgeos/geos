@@ -133,6 +133,9 @@ public:
 
     void add(const geom::LineString* lineString);
 
+    // Declare type as noncopyable
+    LineMerger(const LineMerger& other) = delete;
+    LineMerger& operator=(const LineMerger& rhs) = delete;
 };
 
 } // namespace geos::operation::linemerge
