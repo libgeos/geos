@@ -36,7 +36,7 @@ public:
         GEOSException("IllegalStateException", msg)
     {}
 
-    ~IllegalStateException() throw() override {}
+    ~IllegalStateException() noexcept override {}
 };
 
 } // namespace geos::util

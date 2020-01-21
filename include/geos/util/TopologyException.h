@@ -50,7 +50,7 @@ public:
         pt(newPt)
     {}
 
-    ~TopologyException() throw() override {}
+    ~TopologyException() noexcept override {}
     geom::Coordinate&
     getCoordinate()
     {

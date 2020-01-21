@@ -41,7 +41,7 @@ public:
         GEOSException("AssertionFailedException", msg)
     {}
 
-    ~AssertionFailedException() throw() override {}
+    ~AssertionFailedException() noexcept override {}
 };
 
 } // namespace geos.util
