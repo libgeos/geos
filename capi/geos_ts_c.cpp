@@ -639,8 +639,9 @@ extern "C" {
                                           BoundaryNodeRule::getBoundaryMonovalentEndPoint());
                     break;
                 default:
-                    // FIXME retain reporting of what the invalid rule was
-                    throw std::runtime_error("Invalid boundary node rule");
+                    std::ostringstream ss;
+                    ss << "Invalid boundary node rule " << bnr;
+                    throw std::runtime_error(ss.str());
             }
 
             if(!im) {
