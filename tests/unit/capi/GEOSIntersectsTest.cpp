@@ -127,7 +127,7 @@ void object::test<4>
 {
     GEOSCoordSequence* cs = GEOSCoordSeq_create(5, 2);
 
-    double nan = std::numeric_limits<double>::quiet_NaN();
+    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
     GEOSCoordSeq_setX(cs, 0, 1);
     GEOSCoordSeq_setY(cs, 0, 1);
     for(unsigned int i = 1; i < 4; ++i) {

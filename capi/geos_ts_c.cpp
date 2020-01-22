@@ -1368,7 +1368,6 @@ extern "C" {
             const Polygon* p = dynamic_cast<const Polygon*>(g1);
             if(!p) {
                 throw IllegalArgumentException("Argument is not a Polygon");
-                return -1;
             }
             return static_cast<int>(p->getNumInteriorRing());
         });
