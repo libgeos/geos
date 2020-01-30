@@ -119,7 +119,7 @@ MultiLineString::reverse() const
 	{
 		LineString *iLS = dynamic_cast<LineString*>((*geometries)[i]);
 		assert(iLS);
-		(*revLines)[nLines-1-i] = iLS->reverse();
+		(*revLines)[i] = iLS->reverse();
 	}
 	return getFactory()->createMultiLineString(revLines);
 }

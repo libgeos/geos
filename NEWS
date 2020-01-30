@@ -4,6 +4,8 @@ Changes in 3.7.3dev
 - Bug fixes / improvements
   - Union performance regression (#867, Paul Ramsey)
   - Overlay performance improvement (#986, Paul Ramsey)
+  - Avoid changing MultiLineString component order in GEOSReverse
+    (#1013, Dan Baston)
 
 
 Changes in 3.7.2

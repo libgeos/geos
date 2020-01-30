@@ -91,7 +91,7 @@ namespace tut
     void object::test<4>()
     {
         testReverse("MULTILINESTRING ((1 1, 2 2), (3 3, 4 4))",
-                    "MULTILINESTRING ((4 4, 3 3), (2 2, 1 1))");
+                    "MULTILINESTRING ((2 2, 1 1), (4 4, 3 3))");
     }
 
     template<>
