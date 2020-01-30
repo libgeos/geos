@@ -8,6 +8,8 @@ Changes in 3.8.1
   - Avoid assertion failure with MSVC 2017 / 2019 (#1002, Dan Baston)
   - Remove whitespace from end of GEOSversion() output (azhi)
   - Improve performance of GEOSisValid (#1008, Dan Baston)
+  - Avoid changing MultiLineString component order in GEOSReverse
+    (#1013, Dan Baston)
 
 Changes in 3.8.0
 2019-10-10

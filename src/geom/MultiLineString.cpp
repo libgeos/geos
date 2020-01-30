@@ -126,14 +126,16 @@ MultiLineString::reverse() const
         return clone();
     }
 
-    size_t nLines = geometries.size();
-    std::vector<std::unique_ptr<Geometry>> revLines(nLines);
+    std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
 
-    for(size_t i = 0; i < nLines; ++i) {
-        const LineString* iLS = static_cast<LineString*>(geometries[i].get());
-        revLines[nLines - 1 - i] = iLS->reverse();
-    }
-    return getFactory()->createMultiLineString(std::move(revLines));
+    std::transform(geometries.begin(),
+                   geometries.end(),
+                   reversed.begin(),
+                   [](const std::unique_ptr<Geometry> & g) {
+                       return g->reverse();
+                   });
+
+    return getFactory()->createMultiLineString(std::move(reversed));
 }
 
 } // namespace geos::geom
