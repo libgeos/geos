@@ -12,6 +12,7 @@
 #include <tut/tut_reporter.hpp>
 // geos
 #include <geos/unload.h>
+#include <stdlib.h>
 // std
 #include <cstdlib>
 #include <iomanip>
