@@ -86,7 +86,7 @@ public:
 
 Int<exp>  exponent;
 UInt<man> mantissa;
-unsigned char info;
+unsigned char info = 0;
 
 
 /*!
