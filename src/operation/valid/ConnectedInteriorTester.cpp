@@ -43,6 +43,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -51,8 +52,6 @@
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
-
-//#define GEOS_CAST_PARANOIA 1
 
 #if GEOS_DEBUG
 #include <iostream>
@@ -174,8 +173,7 @@ ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph& graph)
     std::vector<EdgeEnd*>* ee = graph.getEdgeEnds();
     for(size_t i = 0, n = ee->size(); i < n; ++i) {
         // Unexpected non DirectedEdge in graphEdgeEnds
-        assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
-        DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         if(de->getLabel().getLocation(0, Position::RIGHT) == Location::INTERIOR) {
             de->setInResult(true);
         }
@@ -195,10 +193,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*>* dirEdges,
 
     //std::vector<MinimalEdgeRing*> minEdgeRings;
     for(EdgeEnds::size_type i = 0, n = dirEdges->size(); i < n; ++i) {
-#ifdef GEOS_CAST_PARANOIA
-        assert(dynamic_cast<DirectedEdge*>((*dirEdges)[i]));
-#endif
-        DirectedEdge* de = static_cast<DirectedEdge*>((*dirEdges)[i]);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>((*dirEdges)[i]);
 
 #if GEOS_DEBUG
         cerr << "DirectedEdge " << i << ": " << de->print() << endl;

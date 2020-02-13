@@ -30,6 +30,7 @@
 #include <geos/planargraph/Subgraph.h>
 #include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
 #include <geos/util/Assert.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <limits>
@@ -206,8 +207,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
         for(planargraph::DirectedEdge::NonConstList::iterator i2 = seq.begin(),
                 i2End = seq.end(); i2 != i2End; ++i2) {
             const planargraph::DirectedEdge* de = *i2;
-            assert(dynamic_cast<LineMergeEdge* >(de->getEdge()));
-            LineMergeEdge* e = static_cast<LineMergeEdge* >(de->getEdge());
+            LineMergeEdge* e = detail::down_cast<LineMergeEdge* >(de->getEdge());
             const LineString* line = e->getLine();
 
             // lineToAdd will be a *copy* of input things
@@ -218,8 +218,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
             }
             else {
                 Geometry* lineClone = line->clone().release();
-                lineToAdd = dynamic_cast<LineString*>(lineClone);
-                assert(lineToAdd);
+                lineToAdd = detail::down_cast<LineString*>(lineClone);
             }
 
             lines->push_back(lineToAdd);

@@ -25,6 +25,7 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/util.h>
 
 #include <map>
 #include <vector>
@@ -85,8 +86,7 @@ LineBuilder::findCoveredLineEdges()
     for(auto& entry : nodeMap) {
         Node* node = entry.second;
         //node.print(System.out);
-        assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(node->getEdges());
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(node->getEdges());
         des->findCoveredLineEdges();
         //((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
     }
@@ -97,8 +97,7 @@ LineBuilder::findCoveredLineEdges()
      */
     vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
     for(size_t i = 0, s = ee->size(); i < s; ++i) {
-        assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
-        DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         Edge* e = de->getEdge();
         if(de->isLineEdge() && !e->isCoveredSet()) {
             bool isCovered = op->isCoveredByA(de->getCoordinate());
@@ -112,8 +111,7 @@ LineBuilder::collectLines(OverlayOp::OpCode opCode)
 {
     vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
     for(size_t i = 0, s = ee->size(); i < s; ++i) {
-        assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
-        DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         collectLineEdge(de, opCode, &lineEdgesList);
         collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
     }

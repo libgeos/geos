@@ -26,6 +26,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LineString.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -73,8 +74,7 @@ EdgeString::getCoordinates()
                 reverseDirectedEdges++;
             }
 
-            assert(dynamic_cast<LineMergeEdge*>(directedEdge->getEdge()));
-            LineMergeEdge* lme = static_cast<LineMergeEdge*>(directedEdge->getEdge());
+            LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
 
             coordinates->add(lme->getLine()->getCoordinatesRO(),
                              false,

@@ -24,6 +24,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <vector>
@@ -81,8 +82,7 @@ MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
         Node* node = de->getNode();
         EdgeEndStar* ees = node->getEdges();
 
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
 
         des->linkMinimalDirectedEdges(this);
 

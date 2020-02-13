@@ -27,6 +27,7 @@
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/Position.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <vector>
@@ -103,8 +104,7 @@ BufferSubgraph::add(Node* node, vector<Node*>* nodeStack)
     EdgeEndStar::iterator it = ees->begin();
     EdgeEndStar::iterator endIt = ees->end();
     for(; it != endIt; ++it) {
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         dirEdgeList.push_back(de);
         DirectedEdge* sym = de->getSym();
         Node* symNode = sym->getNode();
@@ -157,15 +157,13 @@ BufferSubgraph::computeNodeDepth(Node* n)
     // find a visited dirEdge to start at
     DirectedEdge* startEdge = nullptr;
 
-    assert(dynamic_cast<DirectedEdgeStar*>(n->getEdges()));
-    DirectedEdgeStar* ees = static_cast<DirectedEdgeStar*>(n->getEdges());
+    DirectedEdgeStar* ees = detail::down_cast<DirectedEdgeStar*>(n->getEdges());
 
     EdgeEndStar::iterator endIt = ees->end();
 
     EdgeEndStar::iterator it = ees->begin();
     for(; it != endIt; ++it) {
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         if(de->isVisited() || de->getSym()->isVisited()) {
             startEdge = de;
             break;
@@ -185,8 +183,7 @@ BufferSubgraph::computeNodeDepth(Node* n)
 
     // copy depths to sym edges
     for(it = ees->begin(); it != endIt; ++it) {
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         de->setVisited(true);
         copySymDepths(de);
     }
@@ -284,8 +281,7 @@ BufferSubgraph::computeDepths(DirectedEdge* startEdge)
         EdgeEndStar::iterator endIt = ees->end();
         EdgeEndStar::iterator it = ees->begin();
         for(; it != endIt; ++it) {
-            assert(dynamic_cast<DirectedEdge*>(*it));
-            DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+            DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
             DirectedEdge* sym = de->getSym();
             if(sym->isVisited()) {
                 continue;

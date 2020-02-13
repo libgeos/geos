@@ -26,6 +26,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <exception>
@@ -116,7 +117,7 @@ SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
     for(SegmentString::NonConstVect::const_iterator
             i = segStrings.begin(), iEnd = segStrings.end();
             i != iEnd; ++i) {
-        NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
+        NodedSegmentString* ss = detail::down_cast<NodedSegmentString*>(*i);
 
         computeSnaps(ss, snapPts);
     }
@@ -171,13 +172,11 @@ SimpleSnapRounder::computeVertexSnaps(const SegmentString::NonConstVect& edges)
     for(SegmentString::NonConstVect::const_iterator
             i0 = edges.begin(), i0End = edges.end();
             i0 != i0End; ++i0) {
-        NodedSegmentString* edge0 = dynamic_cast<NodedSegmentString*>(*i0);
-        assert(edge0);
+        NodedSegmentString* edge0 = detail::down_cast<NodedSegmentString*>(*i0);
         for(SegmentString::NonConstVect::const_iterator
                 i1 = edges.begin(), i1End = edges.end();
                 i1 != i1End; ++i1) {
-            NodedSegmentString* edge1 = dynamic_cast<NodedSegmentString*>(*i1);
-            assert(edge1);
+            NodedSegmentString* edge1 = detail::down_cast<NodedSegmentString*>(*i1);
             computeVertexSnaps(edge0, edge1);
         }
     }

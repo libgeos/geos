@@ -27,6 +27,7 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <vector>
@@ -62,7 +63,7 @@ PolygonizeGraph::getDegree(Node* node, long label)
     auto edges = node->getOutEdges()->getEdges();
     int degree = 0;
     for(const auto& de : edges) {
-        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto pde = detail::down_cast<PolygonizeDirectedEdge*>(de);
         if(pde->getLabel() == label) {
             ++degree;
         }
@@ -235,7 +236,7 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList)
 
     // find all edgerings
     for(DirectedEdge* de : dirEdges) {
-        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto pde = detail::down_cast<PolygonizeDirectedEdge*>(de);
         if(pde->isMarked()) {
             continue;
         }
@@ -255,7 +256,7 @@ PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*>& dirEdges,
     // label the edge rings formed
     long currLabel = 1;
     for(DirectedEdge* de : dirEdges) {
-        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto pde = detail::down_cast<PolygonizeDirectedEdge*>(de);
 
         if(pde->isMarked()) {
             continue;
@@ -291,20 +292,20 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*>& cutLines)
      * Delete them, and record them
      */
     for(DirectedEdge* de : dirEdges) {
-        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto pde = detail::down_cast<PolygonizeDirectedEdge*>(de);
 
         if(de->isMarked()) {
             continue;
         }
 
-        auto sym = dynamic_cast<PolygonizeDirectedEdge*>(de->getSym());
+        auto sym = detail::down_cast<PolygonizeDirectedEdge*>(de->getSym());
 
         if(pde->getLabel() == sym->getLabel()) {
             de->setMarked(true);
             sym->setMarked(true);
 
             // save the line as a cut edge
-            auto e = dynamic_cast<PolygonizeEdge*>(de->getEdge());
+            auto e = detail::down_cast<PolygonizeEdge*>(de->getEdge());
 
             cutLines.push_back(e->getLine());
         }
@@ -323,7 +324,7 @@ void
 PolygonizeGraph::label(std::vector<DirectedEdge*>& dirEdges, long label)
 {
     for(auto& de : dirEdges) {
-        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto pde = detail::down_cast<PolygonizeDirectedEdge*>(de);
         pde->setLabel(label);
     }
 }
@@ -338,7 +339,7 @@ PolygonizeGraph::computeNextCWEdges(Node* node)
     // the edges are stored in CCW order around the star
     std::vector<DirectedEdge*>& pde = deStar->getEdges();
     for(DirectedEdge* de : pde) {
-        auto outDE = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        auto outDE = detail::down_cast<PolygonizeDirectedEdge*>(de);
         if(outDE->isMarked()) {
             continue;
         }
@@ -346,13 +347,13 @@ PolygonizeGraph::computeNextCWEdges(Node* node)
             startDE = outDE;
         }
         if(prevDE != nullptr) {
-            auto sym = dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym());
+            auto sym = detail::down_cast<PolygonizeDirectedEdge*>(prevDE->getSym());
             sym->setNext(outDE);
         }
         prevDE = outDE;
     }
     if(prevDE != nullptr) {
-        auto sym = dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym());
+        auto sym = detail::down_cast<PolygonizeDirectedEdge*>(prevDE->getSym());
         sym->setNext(startDE);
     }
 }
@@ -374,8 +375,8 @@ PolygonizeGraph::computeNextCCWEdges(Node* node, long label)
     std::vector<DirectedEdge*>& edges = deStar->getEdges();
 
     for(auto i = edges.size(); i > 0; --i) {
-        PolygonizeDirectedEdge* de = dynamic_cast<PolygonizeDirectedEdge*>(edges[i - 1]);
-        PolygonizeDirectedEdge* sym = dynamic_cast<PolygonizeDirectedEdge*>(de->getSym());
+        PolygonizeDirectedEdge* de = detail::down_cast<PolygonizeDirectedEdge*>(edges[i - 1]);
+        PolygonizeDirectedEdge* sym = detail::down_cast<PolygonizeDirectedEdge*>(de->getSym());
         PolygonizeDirectedEdge* outDE = nullptr;
         if(de->getLabel() == label) {
             outDE = de;
@@ -446,7 +447,7 @@ PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
                 sym->setMarked(true);
             }
             // save the line as a dangle
-            auto e = dynamic_cast<PolygonizeEdge*>(de->getEdge());
+            auto e = detail::down_cast<PolygonizeEdge*>(de->getEdge());
             const LineString* ls = e->getLine();
             if(uniqueDangles.insert(ls).second) {
                 dangleLines.push_back(ls);

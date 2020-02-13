@@ -32,6 +32,7 @@
 //#include <geos/util/math.h>
 
 #include <memory>
+#include <type_traits>
 
 //
 // Private macros definition
@@ -81,8 +82,29 @@ typename _Unique_if<T>::_Known_bound
 make_unique(Args &&...) = delete;
 
 #endif
+
+/** Use detail::down_cast<Derived*>(pointer_to_base) as equivalent of
+ * static_cast<Derived*>(pointer_to_base) with safe checking in debug
+ * mode.
+ *
+ * Only works if no virtual inheritance is involved.
+ *
+ * @param f pointer to a base class
+ * @return pointer to a derived class
+ */
+template<typename To, typename From> inline To down_cast(From* f)
+{
+    static_assert(
+        (std::is_base_of<From,
+                        typename std::remove_pointer<To>::type>::value),
+        "target type not derived from source type");
+#if GEOS_DEBUG
+    assert(f == nullptr || dynamic_cast<To>(f) != nullptr);
+#endif
+    return static_cast<To>(f);
 }
 
-}
+} // namespace detail
+} // namespace geos
 
 #endif // GEOS_UTIL_H
