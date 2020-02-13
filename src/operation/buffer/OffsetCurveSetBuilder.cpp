@@ -39,6 +39,7 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/NodedSegmentString.h>
+#include <geos/util.h>
 
 #include <algorithm> // for min
 #include <cmath>
@@ -254,8 +255,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         const LineString* hls = p->getInteriorRingN(i);
-        assert(dynamic_cast<const LinearRing*>(hls));
-        const LinearRing* hole = static_cast<const LinearRing*>(hls);
+        const LinearRing* hole = detail::down_cast<const LinearRing*>(hls);
 
         // optimization - don't bother computing buffer for this hole
         // if the hole would be completely covered

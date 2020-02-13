@@ -200,9 +200,8 @@ LineMerger::buildEdgeStringsStartingAt(Node* node)
     vector<planargraph::DirectedEdge*>& edges = node->getOutEdges()->getEdges();
     size_t size = edges.size();
     for(size_t i = 0; i < size; i++) {
-        assert(dynamic_cast<LineMergeDirectedEdge*>(edges[i]));
-        LineMergeDirectedEdge* directedEdge = \
-                                              static_cast<LineMergeDirectedEdge*>(edges[i]);
+        LineMergeDirectedEdge* directedEdge =
+                            detail::down_cast<LineMergeDirectedEdge*>(edges[i]);
         if(directedEdge->getEdge()->isMarked()) {
             continue;
         }

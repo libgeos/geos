@@ -23,6 +23,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 using namespace geos::geom;
 
@@ -53,9 +54,8 @@ IntersectionFinderAdder::processIntersections(
                 interiorIntersections.push_back(li.getIntersection(intIndex));
             }
 
-            NodedSegmentString* ee0 = dynamic_cast<NodedSegmentString*>(e0);
-            NodedSegmentString* ee1 = dynamic_cast<NodedSegmentString*>(e1);
-            assert(ee0 && ee1);
+            NodedSegmentString* ee0 = detail::down_cast<NodedSegmentString*>(e0);
+            NodedSegmentString* ee1 = detail::down_cast<NodedSegmentString*>(e1);
             ee0->addIntersections(&li, segIndex0, 0);
             ee1->addIntersections(&li, segIndex1, 1);
         }

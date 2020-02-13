@@ -240,8 +240,7 @@ PlanarGraph::linkResultDirectedEdges()
 
         EdgeEndStar* ees = node->getEdges();
         assert(ees);
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
 
         // this might throw an exception
         des->linkResultDirectedEdges();
@@ -268,8 +267,7 @@ PlanarGraph::linkAllDirectedEdges()
         assert(ees);
 
         // Unespected non-DirectedEdgeStar in node
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
 
         des->linkAllDirectedEdges();
     }

@@ -243,8 +243,7 @@ EdgeRing::computeMaxNodeDegree()
     do {
         Node* node = de->getNode();
         EdgeEndStar* ees = node->getEdges();
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
         int degree = des->getOutgoingDegree(this);
         if(degree > maxNodeDegree) {
             maxNodeDegree = degree;

@@ -37,6 +37,7 @@
 #include <geos/geomgraph/EdgeIntersection.h>
 
 #include <geos/util/Interrupt.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -339,8 +340,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         for(const EdgeIntersection & ei : eiL) {
-            assert(dynamic_cast<RelateNode*>(nodes.addNode(ei.coord)));
-            RelateNode* n = static_cast<RelateNode*>(nodes.addNode(ei.coord));
+            RelateNode* n = detail::down_cast<RelateNode*>(nodes.addNode(ei.coord));
             if(eLoc == Location::BOUNDARY) {
                 n->setLabelBoundary(argIndex);
             }
@@ -405,8 +405,7 @@ RelateComputer::labelNodeEdges()
 {
     auto& nMap = nodes.nodeMap;
     for(auto& entry : nMap) {
-        assert(dynamic_cast<RelateNode*>(entry.second));
-        RelateNode* node = static_cast<RelateNode*>(entry.second);
+        RelateNode* node = detail::down_cast<RelateNode*>(entry.second);
 #if GEOS_DEBUG
         std::cerr << "RelateComputer::labelNodeEdges: "
                   << "node edges: " << *(node->getEdges())

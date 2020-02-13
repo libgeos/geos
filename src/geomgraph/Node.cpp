@@ -26,6 +26,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <cmath>
 #include <string>
@@ -123,8 +124,7 @@ Node::isIncidentEdgeInResult() const
     EdgeEndStar::iterator endIt = edges->end();
     for(; it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         if(de->getEdge()->isInResult()) {
             return true;
         }
