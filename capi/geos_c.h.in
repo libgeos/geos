@@ -1223,11 +1223,12 @@ extern int GEOS_DLL GEOSOrientationIndex_r(GEOSContextHandle_t handle,
  *
  ***********************************************************************/
 
+#ifndef GEOSWKTReader
 typedef struct GEOSWKTReader_t GEOSWKTReader;
 typedef struct GEOSWKTWriter_t GEOSWKTWriter;
 typedef struct GEOSWKBReader_t GEOSWKBReader;
 typedef struct GEOSWKBWriter_t GEOSWKBWriter;
-
+#endif
 
 /* WKT Reader */
 extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create_r(
