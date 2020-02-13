@@ -51,7 +51,7 @@ namespace geom { // geos::geom
  * must be equal (in 2D). If these conditions are not met, the constructors
  * throw an {@link geos::util::IllegalArgumentException}
  */
-class GEOS_DLL LinearRing : public LineString {
+class GEOS_DLL LinearRing final: public LineString {
 
 public:
 

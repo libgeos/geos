@@ -49,7 +49,7 @@ namespace locate { // geos::algorithm::locate
  *
  * Polygonal and [LinearRing](@ref geom::LinearRing) geometries are supported.
  */
-class IndexedPointInAreaLocator : public PointOnGeometryLocator {
+class IndexedPointInAreaLocator final: public PointOnGeometryLocator {
 private:
     class IntervalIndexedGeometry {
     private:
@@ -69,7 +69,7 @@ private:
     };
 
 
-    class SegmentVisitor : public index::ItemVisitor {
+    class SegmentVisitor final: public index::ItemVisitor {
     private:
         algorithm::RayCrossingCounter* counter;
 

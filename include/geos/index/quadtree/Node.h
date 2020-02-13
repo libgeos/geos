@@ -52,7 +52,7 @@ namespace quadtree { // geos::index::quadtree
  * the node's position in the quadtree.
  *
  */
-class GEOS_DLL Node: public NodeBase {
+class GEOS_DLL Node final: public NodeBase {
 
 private:
 

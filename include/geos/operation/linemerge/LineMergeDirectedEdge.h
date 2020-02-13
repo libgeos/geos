@@ -44,7 +44,7 @@ namespace linemerge { // geos::operation::linemerge
  * A [DirectedEdge](@ref planargraph::DirectedEdge) of a LineMergeGraph.
  *
  */
-class GEOS_DLL LineMergeDirectedEdge: public planargraph::DirectedEdge {
+class GEOS_DLL LineMergeDirectedEdge final: public planargraph::DirectedEdge {
 public:
     /** \brief
      * Constructs a LineMergeDirectedEdge connecting the `from`

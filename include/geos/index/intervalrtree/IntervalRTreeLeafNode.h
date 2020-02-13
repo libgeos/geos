@@ -32,7 +32,7 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeLeafNode : public IntervalRTreeNode {
+class IntervalRTreeLeafNode final: public IntervalRTreeNode {
 private:
     /// externally owned
     void* item;

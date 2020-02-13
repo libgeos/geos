@@ -56,7 +56,7 @@ namespace geom { // geos::geom
 /// This allows the topological point-set semantics
 /// to be well-defined.
 ///
-class GEOS_DLL MultiPolygon: public GeometryCollection {
+class GEOS_DLL MultiPolygon final: public GeometryCollection {
 public:
 
     friend class GeometryFactory;

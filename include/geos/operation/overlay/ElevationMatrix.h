@@ -58,7 +58,7 @@ namespace overlay { // geos::operation::overlay
  * values to the matrix.
  * filter_rw is used to actually elevate Geometries.
  */
-class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter {
+class GEOS_DLL ElevationMatrixFilter final: public geom::CoordinateFilter {
 public:
     ElevationMatrixFilter(ElevationMatrix& em);
     ~ElevationMatrixFilter() override = default;

@@ -59,7 +59,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** \brief The node component of a geometry graph. */
-class GEOS_DLL Node: public GraphComponent {
+class GEOS_DLL Node /*non-final*/: public GraphComponent {
     using GraphComponent::setLabel;
 
 public:

@@ -32,7 +32,7 @@ namespace index { // geos::index
 namespace bintree { // geos::index::bintree
 
 /// A node of a Bintree.
-class GEOS_DLL Node: public NodeBase {
+class GEOS_DLL Node final: public NodeBase {
 
 public:
 

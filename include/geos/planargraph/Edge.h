@@ -51,7 +51,7 @@ namespace planargraph { // geos.planargraph
  * Usually a client using a PlanarGraph will subclass Edge
  * to add its own application-specific data and methods.
  */
-class GEOS_DLL Edge: public GraphComponent {
+class GEOS_DLL Edge /*non-final*/: public GraphComponent {
 
 public:
 

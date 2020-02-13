@@ -60,7 +60,7 @@ namespace geom { // geos::geom
 
 namespace {
 
-class gfCoordinateOperation: public util::CoordinateOperation {
+class gfCoordinateOperation final: public util::CoordinateOperation {
     using CoordinateOperation::edit;
     const CoordinateSequenceFactory* _gsf;
 public:

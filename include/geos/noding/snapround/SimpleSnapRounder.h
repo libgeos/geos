@@ -70,7 +70,7 @@ namespace snapround { // geos::noding::snapround
  * results are not 100% guaranteed to be correctly noded.
  *
  */
-class GEOS_DLL SimpleSnapRounder: public Noder { // implements NoderIface
+class GEOS_DLL SimpleSnapRounder final: public Noder { // implements NoderIface
 
 public:
 

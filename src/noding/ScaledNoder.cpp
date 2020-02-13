@@ -74,7 +74,7 @@ sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
 
 } // anonym namespace
 
-class ScaledNoder::Scaler : public geom::CoordinateFilter {
+class ScaledNoder::Scaler final: public geom::CoordinateFilter {
 public:
     const ScaledNoder& sn;
     Scaler(const ScaledNoder& n): sn(n)
@@ -101,7 +101,7 @@ private:
     Scaler& operator=(const Scaler& rhs) = delete;
 };
 
-class ScaledNoder::ReScaler: public geom::CoordinateFilter {
+class ScaledNoder::ReScaler final: public geom::CoordinateFilter {
 public:
     const ScaledNoder& sn;
     ReScaler(const ScaledNoder& n): sn(n)

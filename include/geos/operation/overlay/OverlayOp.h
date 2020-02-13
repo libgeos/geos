@@ -67,7 +67,7 @@ namespace overlay { // geos::operation::overlay
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
 ///
-class GEOS_DLL OverlayOp: public GeometryGraphOperation {
+class GEOS_DLL OverlayOp final: public GeometryGraphOperation {
 
 public:
 

@@ -27,7 +27,7 @@ using namespace geos::index::strtree;
 namespace geos {
 namespace operation {
 namespace distance {
-struct Deleter : public index::ItemVisitor {
+struct Deleter final: public index::ItemVisitor {
     void
     visitItem(void* item) override
     {
@@ -54,7 +54,7 @@ IndexedFacetDistance::nearestPoints(const geom::Geometry* g1, const geom::Geomet
 double
 IndexedFacetDistance::distance(const Geometry* g) const
 {
-    struct : public ItemDistance {
+    struct final: public ItemDistance {
         double
         distance(const ItemBoundable* item1, const ItemBoundable* item2) override
         {
@@ -81,7 +81,7 @@ IndexedFacetDistance::distance(const Geometry* g) const
 std::vector<GeometryLocation>
 IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
 {
-    struct : public ItemDistance {
+    struct final: public ItemDistance {
         double
         distance(const ItemBoundable* item1, const ItemBoundable* item2) override
         {

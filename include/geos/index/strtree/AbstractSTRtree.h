@@ -91,7 +91,7 @@ public:
     } item;
 };
 
-class ItemsList : public std::vector<ItemsListItem> {
+class ItemsList final: public std::vector<ItemsListItem> {
 private:
     typedef std::vector<ItemsListItem> base_type;
 

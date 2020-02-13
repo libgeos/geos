@@ -42,7 +42,7 @@ namespace planargraph { // geos.planargraph
  * data and methods.
  *
  */
-class GEOS_DLL Node: public GraphComponent {
+class GEOS_DLL Node final: public GraphComponent {
 protected:
 
     /// The location of this Node

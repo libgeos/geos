@@ -61,12 +61,12 @@ namespace strtree { // geos::index::strtree
  * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002.
  *
  */
-class GEOS_DLL STRtree: public AbstractSTRtree, public SpatialIndex {
+class GEOS_DLL STRtree final: public AbstractSTRtree, public SpatialIndex {
     using AbstractSTRtree::insert;
     using AbstractSTRtree::query;
 
 private:
-    class GEOS_DLL STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
+    class GEOS_DLL STRIntersectsOp final: public AbstractSTRtree::IntersectsOp {
     public:
         bool intersects(const void* aBounds, const void* bBounds) override;
     };

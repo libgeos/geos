@@ -60,7 +60,7 @@ namespace ttmath
 	value_size = 1,2,3,4,5,6....
 */
 template<uint value_size>
-class Int : public UInt<value_size>
+class Int final: public UInt<value_size>
 {
 public:
 

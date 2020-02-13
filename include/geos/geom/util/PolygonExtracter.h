@@ -28,7 +28,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 2-dimensional (Polygon) components from a Geometry.
  */
-class GEOS_DLL PolygonExtracter: public GeometryFilter {
+class GEOS_DLL PolygonExtracter final: public GeometryFilter {
 
 public:
 

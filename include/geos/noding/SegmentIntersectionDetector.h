@@ -39,7 +39,7 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class SegmentIntersectionDetector : public SegmentIntersector {
+class SegmentIntersectionDetector final: public SegmentIntersector {
 private:
     algorithm::LineIntersector* li;
 

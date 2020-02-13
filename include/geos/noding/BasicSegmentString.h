@@ -41,7 +41,7 @@ namespace noding { // geos.noding
  * useful for preserving topological or parentage information.
  * All noded substrings are initialized with the same context object.
  */
-class GEOS_DLL BasicSegmentString : public SegmentString {
+class GEOS_DLL BasicSegmentString final: public SegmentString {
 
 public:
 

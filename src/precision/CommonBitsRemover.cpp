@@ -36,7 +36,7 @@ using namespace geos::geom;
 namespace geos {
 namespace precision { // geos.precision
 
-class Translater: public geom::CoordinateFilter {
+class Translater final: public geom::CoordinateFilter {
 
 private:
 
@@ -65,7 +65,7 @@ public:
 };
 
 
-class CommonCoordinateFilter: public geom::CoordinateFilter {
+class CommonCoordinateFilter final: public geom::CoordinateFilter {
 private:
     CommonBits commonBitsX;
     CommonBits commonBitsY;

@@ -215,7 +215,7 @@ containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1
 void
 OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<LineSegment>& psegs)
 {
-    class BorderSegmentFilter : public CoordinateSequenceFilter {
+    class BorderSegmentFilter final: public CoordinateSequenceFilter {
 
     private:
         const Envelope env;

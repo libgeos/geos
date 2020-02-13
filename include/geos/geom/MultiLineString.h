@@ -48,7 +48,7 @@ namespace geom { // geos::geom
 #endif
 
 /// Models a collection of [LineStrings](@ref geom::LineString).
-class GEOS_DLL MultiLineString: public GeometryCollection {
+class GEOS_DLL MultiLineString final: public GeometryCollection {
 
 public:
 

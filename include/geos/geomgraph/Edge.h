@@ -63,7 +63,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** The edge component of a geometry graph */
-class GEOS_DLL Edge: public GraphComponent {
+class GEOS_DLL Edge final: public GraphComponent {
     using GraphComponent::updateIM;
 
 private:

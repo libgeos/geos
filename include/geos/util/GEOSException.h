@@ -35,7 +35,7 @@ namespace util { // geos.util
  *
  * Use what() to get a readable message.
  */
-class GEOS_DLL GEOSException: public std::runtime_error {
+class GEOS_DLL GEOSException /*non-final*/: public std::runtime_error {
 
 public:
 

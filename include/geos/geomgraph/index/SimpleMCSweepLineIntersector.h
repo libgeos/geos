@@ -50,7 +50,7 @@ namespace index { // geos::geomgraph::index
  * The use of MonotoneChains as the items in the index
  * seems to offer an improvement in performance over a sweep-line alone.
  */
-class GEOS_DLL SimpleMCSweepLineIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleMCSweepLineIntersector final: public EdgeSetIntersector {
 
 public:
 

@@ -47,7 +47,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPolygonIntersects : public PreparedPolygonPredicate {
+class PreparedPolygonIntersects final: public PreparedPolygonPredicate {
 private:
 protected:
 public:

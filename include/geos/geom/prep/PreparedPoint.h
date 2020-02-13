@@ -33,7 +33,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPoint: public BasicPreparedGeometry {
+class PreparedPoint final: public BasicPreparedGeometry {
 private:
 protected:
 public:

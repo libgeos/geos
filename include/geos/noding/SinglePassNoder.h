@@ -48,7 +48,7 @@ namespace noding { // geos.noding
  * TODO: Noder inheritance (that's just an interface!)
  *
  */
-class GEOS_DLL SinglePassNoder : public Noder { // implements Noder
+class GEOS_DLL SinglePassNoder /*non-final*/: public Noder { // implements Noder
 
 protected:
 

@@ -41,7 +41,7 @@ namespace strtree { // geos::index::strtree
  * then we say that this node is a "leaf node".
  *
  */
-class GEOS_DLL AbstractNode: public Boundable {
+class GEOS_DLL AbstractNode /*non-final*/: public Boundable {
 private:
     std::vector<Boundable*> childBoundables;
     int level;

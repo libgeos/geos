@@ -47,7 +47,7 @@ namespace prep { // geos::geom::prep
  * @author mbdavis
  *
  */
-class PreparedPolygon : public BasicPreparedGeometry {
+class PreparedPolygon final: public BasicPreparedGeometry {
 private:
     bool isRectangle;
     mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;

@@ -998,7 +998,7 @@ OverlayOp::computeLabelsFromDepths()
     }
 }
 
-struct PointCoveredByAny: public geom::CoordinateFilter {
+struct PointCoveredByAny final: public geom::CoordinateFilter {
     const vector<const Geometry*>& geoms;
     PointLocator locator;
     PointCoveredByAny(const vector<const Geometry*>& nGeoms)

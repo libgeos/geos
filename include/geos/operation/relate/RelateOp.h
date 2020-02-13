@@ -54,7 +54,7 @@ namespace relate { // geos::operation::relate
  * computed by a custom Boundary Node Rule.
  *
  */
-class GEOS_DLL RelateOp: public GeometryGraphOperation {
+class GEOS_DLL RelateOp final: public GeometryGraphOperation {
 
 public:
 

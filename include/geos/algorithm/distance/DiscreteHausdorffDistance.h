@@ -154,7 +154,7 @@ public:
         return ptDist.getCoordinates();
     }
 
-    class MaxPointDistanceFilter : public geom::CoordinateFilter {
+    class MaxPointDistanceFilter final: public geom::CoordinateFilter {
     public:
         MaxPointDistanceFilter(const geom::Geometry& p_geom)
             :
@@ -188,7 +188,7 @@ public:
     };
 
     class MaxDensifiedByFractionDistanceFilter
-        : public geom::CoordinateSequenceFilter {
+        final: public geom::CoordinateSequenceFilter {
     public:
 
         MaxDensifiedByFractionDistanceFilter(

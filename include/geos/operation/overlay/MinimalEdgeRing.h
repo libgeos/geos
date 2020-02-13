@@ -53,7 +53,7 @@ namespace overlay { // geos::operation::overlay
  * @see operation::overlay::MaximalEdgeRing
  *
  */
-class GEOS_DLL MinimalEdgeRing: public geomgraph::EdgeRing {
+class GEOS_DLL MinimalEdgeRing final: public geomgraph::EdgeRing {
 
 public:
 

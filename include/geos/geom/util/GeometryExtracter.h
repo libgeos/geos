@@ -61,7 +61,7 @@ public:
 private:
 
     template <class ComponentType, class TargetContainer>
-    struct Extracter: public GeometryFilter {
+    struct Extracter final: public GeometryFilter {
 
         /**
          * Constructs a filter with a list in which to store the elements found.

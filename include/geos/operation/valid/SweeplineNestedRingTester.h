@@ -104,7 +104,7 @@ public:
 
     bool isNonNested();
     bool isInside(geom::LinearRing* innerRing, geom::LinearRing* searchRing);
-    class OverlapAction: public index::sweepline::SweepLineOverlapAction {
+    class OverlapAction final: public index::sweepline::SweepLineOverlapAction {
     public:
         bool isNonNested;
         OverlapAction(SweeplineNestedRingTester* p);

@@ -32,7 +32,7 @@ namespace util { // geos.util
  * Indicates an invalid or inconsistent topological situation encountered
  * during processing
  */
-class GEOS_DLL TopologyException: public GEOSException {
+class GEOS_DLL TopologyException final: public GEOSException {
 public:
     TopologyException()
         :

@@ -46,7 +46,7 @@ using LinesMap = std::unordered_map<const geom::Geometry*, TaggedLineString*>;
 
 namespace { // module-statics
 
-class LineStringTransformer: public geom::util::GeometryTransformer {
+class LineStringTransformer final: public geom::util::GeometryTransformer {
 
 public:
 
@@ -185,7 +185,7 @@ LineStringTransformer::transformCoordinates(
  * TODO: Consider container of unique_ptr
  *
  */
-class LineStringMapBuilderFilter: public geom::GeometryComponentFilter {
+class LineStringMapBuilderFilter final: public geom::GeometryComponentFilter {
 
 public:
 

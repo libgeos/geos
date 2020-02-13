@@ -69,7 +69,7 @@ private:
     static std::unique_ptr<Coordinate::Vect> densifyPoints(const Coordinate::Vect pts, double distanceTolerance,
             const PrecisionModel* precModel);
 
-    class GEOS_DLL DensifyTransformer: public GeometryTransformer {
+    class GEOS_DLL DensifyTransformer final: public GeometryTransformer {
     public:
         DensifyTransformer(double distanceTolerance);
         double distanceTolerance;

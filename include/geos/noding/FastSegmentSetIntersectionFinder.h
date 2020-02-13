@@ -31,7 +31,6 @@ namespace geos {
 namespace noding {
 class SegmentIntersectionDetector;
 class SegmentSetMutualIntersector;
-//class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector;
 }
 }
 

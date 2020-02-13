@@ -46,7 +46,7 @@ namespace quadtree { // geos::index::quadtree
  * QuadRoot is the root of a single Quadtree.  It is centred at the origin,
  * and does not have a defined extent.
  */
-class GEOS_DLL Root: public NodeBase {
+class GEOS_DLL Root final: public NodeBase {
 //friend class Unload;
 
 private:

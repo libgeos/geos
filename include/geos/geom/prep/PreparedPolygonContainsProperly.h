@@ -56,7 +56,7 @@ namespace prep { // geos::geom::prep
  *
  * @author Martin Davis
  */
-class PreparedPolygonContainsProperly : public PreparedPolygonPredicate {
+class PreparedPolygonContainsProperly final: public PreparedPolygonPredicate {
 private:
 protected:
 public:

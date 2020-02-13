@@ -55,7 +55,7 @@ namespace util { // geos::geom::util
  * @author Martin Davis
  *
  */
-class GEOS_DLL SineStarFactory : public geos::util::GeometricShapeFactory  {
+class GEOS_DLL SineStarFactory final: public geos::util::GeometricShapeFactory  {
 
 protected:
 

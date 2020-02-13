@@ -31,7 +31,7 @@ namespace geounion {  // geos::operation::geounion
  * \brief Helper class holding Geometries, part of which are held by reference
  *        others are held exclusively.
  */
-class GeometryListHolder : public std::vector<geom::Geometry*> {
+class GeometryListHolder final: public std::vector<geom::Geometry*> {
 private:
     typedef std::vector<geom::Geometry*> base_type;
 

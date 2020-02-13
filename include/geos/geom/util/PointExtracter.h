@@ -28,7 +28,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 0-dimensional (Point) components from a Geometry.
  */
-class GEOS_DLL PointExtracter: public GeometryFilter {
+class GEOS_DLL PointExtracter final: public GeometryFilter {
 
 public:
     /**

@@ -61,7 +61,7 @@ namespace noding { // geos.noding
  *
  * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
  */
-class GEOS_DLL MCIndexNoder : public SinglePassNoder {
+class GEOS_DLL MCIndexNoder final: public SinglePassNoder {
 
 private:
     std::vector<index::chain::MonotoneChain*> monoChains;
@@ -100,7 +100,7 @@ public:
 
     void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
-    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
+    class SegmentOverlapAction final: public index::chain::MonotoneChainOverlapAction {
     public:
         SegmentOverlapAction(SegmentIntersector& newSi)
             :

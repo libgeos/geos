@@ -44,7 +44,7 @@ namespace snap { // geos.operation.overlay.snap
 
 const double GeometrySnapper::snapPrecisionFactor = 1e-9;
 
-class SnapTransformer: public geos::geom::util::GeometryTransformer {
+class SnapTransformer final: public geos::geom::util::GeometryTransformer {
 
 private:
 

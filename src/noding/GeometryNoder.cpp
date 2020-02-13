@@ -47,7 +47,7 @@ namespace {
 /**
  * Add every linear element in a geometry into SegmentString vector
  */
-class SegmentStringExtractor: public geom::GeometryComponentFilter {
+class SegmentStringExtractor final: public geom::GeometryComponentFilter {
 public:
     SegmentStringExtractor(SegmentString::NonConstVect& to)
         : _to(to)

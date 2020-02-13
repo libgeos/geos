@@ -29,7 +29,7 @@ namespace strtree { // geos::index::strtree
  *
  * \todo TODO: It's unclear who takes ownership of passed newBounds and newItem objects.
  */
-class GEOS_DLL ItemBoundable: public Boundable {
+class GEOS_DLL ItemBoundable final: public Boundable {
 public:
 
     ItemBoundable(const void* newBounds, void* newItem) : bounds(newBounds), item(newItem) {}

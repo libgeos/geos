@@ -54,7 +54,7 @@ namespace noding { // geos.noding
  * This class is an example of the *Strategy* pattern.
  *
  */
-class GEOS_DLL IntersectionAdder: public SegmentIntersector {
+class GEOS_DLL IntersectionAdder final: public SegmentIntersector {
 
 private:
 

@@ -51,7 +51,7 @@ namespace geom { // geos::geom
  *
  * Any collection of Points is a valid MultiPoint.
  */
-class GEOS_DLL MultiPoint: public GeometryCollection {
+class GEOS_DLL MultiPoint final: public GeometryCollection {
 
 public:
 

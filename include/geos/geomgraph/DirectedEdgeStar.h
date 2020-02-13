@@ -52,7 +52,7 @@ namespace geomgraph { // geos.geomgraph
  * MaximalEdgeRings and MinimalEdgeRings.
  *
  */
-class GEOS_DLL DirectedEdgeStar: public EdgeEndStar {
+class GEOS_DLL DirectedEdgeStar final: public EdgeEndStar {
 
 public:
 

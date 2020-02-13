@@ -24,7 +24,7 @@ namespace geos {
 namespace util { // geos::util
 
 /// Indicates an illegal state
-class GEOS_DLL IllegalStateException: public GEOSException {
+class GEOS_DLL IllegalStateException final: public GEOSException {
 public:
     IllegalStateException()
         :

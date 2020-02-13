@@ -360,7 +360,7 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge* edge,
 }
 
 class
-    QuadEdgeSubdivision::TriangleCoordinatesVisitor : public TriangleVisitor {
+    QuadEdgeSubdivision::TriangleCoordinatesVisitor final: public TriangleVisitor {
 private:
     QuadEdgeSubdivision::TriList* triCoords;
     CoordinateArraySequenceFactory coordSeqFact;
@@ -385,7 +385,7 @@ public:
 
 
 class
-    QuadEdgeSubdivision::TriangleCircumcentreVisitor : public TriangleVisitor {
+    QuadEdgeSubdivision::TriangleCircumcentreVisitor final: public TriangleVisitor {
 public:
     void
     visit(QuadEdge* triEdges[3]) override

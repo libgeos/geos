@@ -38,7 +38,7 @@ namespace prep { // geos.geom.prep
 //
 // protected:
 //
-struct LocationMatchingFilter : public GeometryComponentFilter {
+struct LocationMatchingFilter final: public GeometryComponentFilter {
     explicit LocationMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, Location loc) :
         pt_locator(locator), test_loc(loc), found(false) {}
 
@@ -60,7 +60,7 @@ struct LocationMatchingFilter : public GeometryComponentFilter {
     }
 };
 
-struct LocationNotMatchingFilter : public GeometryComponentFilter {
+struct LocationNotMatchingFilter final: public GeometryComponentFilter {
     explicit LocationNotMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, Location loc) :
             pt_locator(locator), test_loc(loc), found(false) {}
 
@@ -82,7 +82,7 @@ struct LocationNotMatchingFilter : public GeometryComponentFilter {
     }
 };
 
-struct OutermostLocationFilter : public GeometryComponentFilter {
+struct OutermostLocationFilter final: public GeometryComponentFilter {
     explicit OutermostLocationFilter(algorithm::locate::PointOnGeometryLocator* locator) :
     pt_locator(locator),
     outermost_loc(geom::Location::UNDEF),

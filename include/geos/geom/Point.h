@@ -63,7 +63,7 @@ namespace geom { // geos::geom
  *   (i.e does not have an NaN X or Y ordinate)
  *
  */
-class GEOS_DLL Point : public Geometry {
+class GEOS_DLL Point final: public Geometry {
 
 public:
 

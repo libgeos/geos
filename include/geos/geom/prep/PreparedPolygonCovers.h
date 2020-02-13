@@ -52,7 +52,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPolygonCovers : public AbstractPreparedPolygonContains {
+class PreparedPolygonCovers final: public AbstractPreparedPolygonContains {
 private:
 protected:
     /**

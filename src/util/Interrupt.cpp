@@ -25,7 +25,7 @@ geos::util::Interrupt::Callback* callback = nullptr;
 namespace geos {
 namespace util { // geos::util
 
-class GEOS_DLL InterruptedException: public GEOSException {
+class GEOS_DLL InterruptedException final: public GEOSException {
 public:
     InterruptedException() :
         GEOSException("InterruptedException", "Interrupted!") {}

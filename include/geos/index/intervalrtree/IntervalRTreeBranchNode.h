@@ -32,7 +32,7 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeBranchNode : public IntervalRTreeNode {
+class IntervalRTreeBranchNode final: public IntervalRTreeNode {
 private:
     const IntervalRTreeNode* node1;
     const IntervalRTreeNode* node2;

@@ -31,7 +31,7 @@ namespace io {
  * \class ParseException
  * \brief Notifies a parsing error
  */
-class GEOS_DLL ParseException : public util::GEOSException {
+class GEOS_DLL ParseException final: public util::GEOSException {
 
 public:
 

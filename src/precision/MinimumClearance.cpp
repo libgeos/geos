@@ -57,7 +57,7 @@ MinimumClearance::getLine()
 void
 MinimumClearance::compute()
 {
-    class MinClearanceDistance : public ItemDistance {
+    class MinClearanceDistance final: public ItemDistance {
     private:
         double minDist;
         std::vector<Coordinate> minPts;
@@ -165,7 +165,7 @@ MinimumClearance::compute()
         }
     };
 
-    struct ItemDeleter : public index::ItemVisitor {
+    struct ItemDeleter final: public index::ItemVisitor {
         void
         visitItem(void* item) override
         {

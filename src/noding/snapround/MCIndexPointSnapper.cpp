@@ -37,7 +37,7 @@ namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
-class HotPixelSnapAction: public index::chain::MonotoneChainSelectAction {
+class HotPixelSnapAction final: public index::chain::MonotoneChainSelectAction {
 
 public:
 
@@ -104,7 +104,7 @@ private:
     HotPixelSnapAction& operator=(const HotPixelSnapAction& rhs) = delete;
 };
 
-class MCIndexPointSnapperVisitor: public ItemVisitor {
+class MCIndexPointSnapperVisitor final: public ItemVisitor {
 
 public:
     MCIndexPointSnapperVisitor(const Envelope& nPixelEnv, HotPixelSnapAction& nAction)

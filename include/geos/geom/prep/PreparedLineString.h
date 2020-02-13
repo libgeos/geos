@@ -37,7 +37,7 @@ namespace prep { // geos::geom::prep
  * @author mbdavis
  *
  */
-class PreparedLineString : public BasicPreparedGeometry {
+class PreparedLineString final: public BasicPreparedGeometry {
 private:
     std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable noding::SegmentString::ConstVect segStrings;

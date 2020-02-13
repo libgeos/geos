@@ -40,7 +40,7 @@ namespace geom { // geos::geom
  * Creates CoordinateSequences internally represented as an array of
  * Coordinates.
  */
-class GEOS_DLL CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
+class GEOS_DLL CoordinateArraySequenceFactory final: public CoordinateSequenceFactory {
 
 public:
     std::unique_ptr<CoordinateSequence> create() const override;

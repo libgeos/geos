@@ -43,7 +43,7 @@ using namespace geos::geom;
 namespace geos {
 namespace simplify { // geos::simplify
 
-class DPTransformer: public geom::util::GeometryTransformer {
+class DPTransformer final: public geom::util::GeometryTransformer {
 
 public:
 

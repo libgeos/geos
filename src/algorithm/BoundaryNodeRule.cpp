@@ -41,7 +41,7 @@ namespace {
  * @author Martin Davis
  * @version 1.7
  */
-class Mod2BoundaryNodeRule : public BoundaryNodeRule {
+class Mod2BoundaryNodeRule final: public BoundaryNodeRule {
 public:
     bool
     isInBoundary(int boundaryCount) const override
@@ -79,7 +79,7 @@ public:
  * @author Martin Davis
  * @version 1.7
  */
-class EndPointBoundaryNodeRule : public BoundaryNodeRule {
+class EndPointBoundaryNodeRule final: public BoundaryNodeRule {
     bool
     isInBoundary(int boundaryCount) const override
     {
@@ -97,7 +97,7 @@ class EndPointBoundaryNodeRule : public BoundaryNodeRule {
  * @author Martin Davis
  * @version 1.7
  */
-class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
+class MultiValentEndPointBoundaryNodeRule final: public BoundaryNodeRule {
     bool
     isInBoundary(int boundaryCount) const override
     {
@@ -114,7 +114,7 @@ class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
  * @author Martin Davis
  * @version 1.7
  */
-class MonoValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
+class MonoValentEndPointBoundaryNodeRule final: public BoundaryNodeRule {
     bool
     isInBoundary(int boundaryCount) const override
     {

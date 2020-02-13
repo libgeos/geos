@@ -46,7 +46,7 @@ namespace simplify { // geos::simplify
 /**
  * ItemVisitor subclass to reduce volume of query results.
  */
-class LineSegmentVisitor: public index::ItemVisitor {
+class LineSegmentVisitor final: public index::ItemVisitor {
 
 // MD - only seems to make about a 10% difference in overall time.
 

@@ -38,7 +38,7 @@ namespace util { // geos.geom.util
  * Geometry.
  * Operates on Geometry subclasses which contains a single coordinate list.
  */
-class GEOS_DLL CoordinateOperation: public GeometryEditorOperation {
+class GEOS_DLL CoordinateOperation /*non-final*/: public GeometryEditorOperation {
 
 public:
 

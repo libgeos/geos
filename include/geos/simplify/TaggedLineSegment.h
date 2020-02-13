@@ -51,7 +51,7 @@ namespace simplify { // geos::simplify
  * Used to index the segments in a geometry and recover the segment locations
  * from the index.
  */
-class GEOS_DLL TaggedLineSegment: public geom::LineSegment {
+class GEOS_DLL TaggedLineSegment final: public geom::LineSegment {
 
 public:
 

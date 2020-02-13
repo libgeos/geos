@@ -44,7 +44,7 @@ namespace distance { // geos::operation::distance
  * (e.g. a polygon, linestring or point)
  * and returns them in a list
  */
-class GEOS_DLL ConnectedElementPointFilter: public geom::GeometryFilter {
+class GEOS_DLL ConnectedElementPointFilter final: public geom::GeometryFilter {
 
 private:
     std::vector<const geom::Coordinate*>* pts;

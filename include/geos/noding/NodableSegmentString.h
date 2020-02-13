@@ -34,7 +34,7 @@ namespace noding { // geos::noding
  *
  * @author Martin Davis
  */
-class GEOS_DLL NodableSegmentString : public SegmentString {
+class GEOS_DLL NodableSegmentString /*non-final*/: public SegmentString {
 private:
 protected:
 public:

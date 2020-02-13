@@ -22,7 +22,7 @@
 namespace geos {
 namespace geom {
 
-class GEOS_DLL DefaultCoordinateSequenceFactory : public CoordinateSequenceFactory {
+class GEOS_DLL DefaultCoordinateSequenceFactory final: public CoordinateSequenceFactory {
 public:
 
     std::unique_ptr<CoordinateSequence> create() const final override {

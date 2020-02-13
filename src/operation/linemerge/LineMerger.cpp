@@ -65,7 +65,7 @@ LineMerger::~LineMerger()
 }
 
 
-struct LMGeometryComponentFilter: public GeometryComponentFilter {
+struct LMGeometryComponentFilter final: public GeometryComponentFilter {
     LineMerger* lm;
 
     LMGeometryComponentFilter(LineMerger* newLm): lm(newLm) {}

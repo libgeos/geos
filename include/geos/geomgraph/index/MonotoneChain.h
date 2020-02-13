@@ -42,7 +42,7 @@ namespace index { // geos::geomgraph::index
 /**
  * A chain in a MonotoneChainEdge
  */
-class GEOS_DLL MonotoneChain: public SweepLineEventOBJ {
+class GEOS_DLL MonotoneChain final: public SweepLineEventOBJ {
 private:
     MonotoneChainEdge* mce;
     size_t chainIndex;

@@ -48,7 +48,7 @@ namespace index { // geos::geomgraph::index
  * While still O(n^2) in the worst case, this algorithm
  * drastically improves the average-case time.
  */
-class GEOS_DLL SimpleSweepLineIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleSweepLineIntersector final: public EdgeSetIntersector {
 
 public:
 

@@ -38,7 +38,7 @@ namespace strtree { // geos::index::strtree
  *
  * @see STRtree
  */
-class GEOS_DLL SIRtree: public AbstractSTRtree {
+class GEOS_DLL SIRtree final: public AbstractSTRtree {
     using AbstractSTRtree::insert;
     using AbstractSTRtree::query;
 
@@ -91,7 +91,7 @@ public:
 
 protected:
 
-    class SIRIntersectsOp: public AbstractSTRtree::IntersectsOp {
+    class SIRIntersectsOp final: public AbstractSTRtree::IntersectsOp {
     public:
         bool intersects(const void* aBounds, const void* bBounds) override;
     };

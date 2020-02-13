@@ -41,7 +41,7 @@ namespace polygonize { // geos::operation::polygonize
  *
  * @version 1.4
  */
-class GEOS_DLL PolygonizeEdge: public planargraph::Edge {
+class GEOS_DLL PolygonizeEdge final: public planargraph::Edge {
 private:
     // Externally owned
     const geom::LineString* line;

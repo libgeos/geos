@@ -43,7 +43,7 @@ namespace planargraph { // geos.planargraph
  * will subclass DirectedEdge to add its own application-specific
  * data and methods.
  */
-class GEOS_DLL DirectedEdge: public GraphComponent {
+class GEOS_DLL DirectedEdge /*non-final*/: public GraphComponent {
 
 public:
 

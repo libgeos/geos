@@ -44,7 +44,7 @@ namespace noding { // geos.noding
  *
  * @version 1.7
  */
-class NodingIntersectionFinder: public SegmentIntersector {
+class NodingIntersectionFinder final: public SegmentIntersector {
 
 public:
 

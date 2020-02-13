@@ -44,7 +44,7 @@ namespace predicate { // geos.operation.predicate
 // EnvelopeIntersectsVisitor
 //----------------------------------------------------------------
 
-class EnvelopeIntersectsVisitor: public geom::util::ShortCircuitedGeometryVisitor {
+class EnvelopeIntersectsVisitor final: public geom::util::ShortCircuitedGeometryVisitor {
 private:
 
     const geom::Envelope& rectEnv;
@@ -125,7 +125,7 @@ public:
  * Tests whether it can be concluded
  * that a geometry contains a corner point of a rectangle.
  */
-class ContainsPointVisitor: public geom::util::ShortCircuitedGeometryVisitor {
+class ContainsPointVisitor final: public geom::util::ShortCircuitedGeometryVisitor {
 private:
 
     const geom::Envelope& rectEnv;
@@ -201,7 +201,7 @@ public:
 // LineIntersectsVisitor
 //----------------------------------------------------------------
 
-class LineIntersectsVisitor: public geom::util::ShortCircuitedGeometryVisitor {
+class LineIntersectsVisitor final: public geom::util::ShortCircuitedGeometryVisitor {
 private:
 
     //const geom::Polygon& rectangle;

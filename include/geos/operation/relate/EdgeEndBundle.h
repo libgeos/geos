@@ -44,7 +44,7 @@ namespace relate { // geos::operation::relate
  * A collection of geomgraph::EdgeEnd objects which
  * originate at the same point and have the same direction.
  */
-class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd {
+class GEOS_DLL EdgeEndBundle final: public geomgraph::EdgeEnd {
 public:
     EdgeEndBundle(geomgraph::EdgeEnd* e);
     ~EdgeEndBundle() override;

@@ -58,7 +58,7 @@ namespace noding { // geos.noding
  * available precision.
  *
  */
-class GEOS_DLL ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
+class GEOS_DLL ScaledNoder final: public Noder { // , public geom::CoordinateFilter { // implements Noder
 
 public:
 

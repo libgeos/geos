@@ -33,7 +33,7 @@ namespace util { // geos::util
  *
  * Last port: util/CoordinateArrayFilter.java rev. 1.15
  */
-class GEOS_DLL CoordinateArrayFilter: public geom::CoordinateFilter {
+class GEOS_DLL CoordinateArrayFilter final: public geom::CoordinateFilter {
 private:
     geom::Coordinate::ConstVect& pts; // target vector reference
 public:

@@ -27,7 +27,7 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-class GEOS_DLL LocateFailureException : public geos::util::GEOSException {
+class GEOS_DLL LocateFailureException final: public geos::util::GEOSException {
 public:
     LocateFailureException(std::string const& msg);
 };

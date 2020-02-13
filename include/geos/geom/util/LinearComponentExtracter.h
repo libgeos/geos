@@ -31,7 +31,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 1-dimensional (LineString) components from a Geometry.
  */
-class GEOS_DLL LinearComponentExtracter: public GeometryComponentFilter {
+class GEOS_DLL LinearComponentExtracter final: public GeometryComponentFilter {
 
 private:
 

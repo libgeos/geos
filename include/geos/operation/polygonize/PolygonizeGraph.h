@@ -66,7 +66,7 @@ namespace polygonize { // geos::operation::polygonize
  * has be logically deleted from the graph.
  *
  */
-class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
+class GEOS_DLL PolygonizeGraph final: public planargraph::PlanarGraph {
 
 public:
 

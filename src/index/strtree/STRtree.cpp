@@ -354,7 +354,7 @@ bool STRtree::isWithinDistance(BoundablePair* initBndPair, double maxDistance)
 }
 
 
-class STRAbstractNode: public AbstractNode {
+class STRAbstractNode final: public AbstractNode {
 public:
 
     STRAbstractNode(int p_level, size_t capacity)

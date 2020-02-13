@@ -52,7 +52,7 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
+class MCIndexSegmentSetMutualIntersector final: public SegmentSetMutualIntersector {
 public:
 
     MCIndexSegmentSetMutualIntersector();
@@ -70,7 +70,7 @@ public:
     // NOTE: re-populates the MonotoneChain vector with newly created chains
     void process(SegmentString::ConstVect* segStrings) override;
 
-    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
+    class SegmentOverlapAction final: public index::chain::MonotoneChainOverlapAction {
     private:
         SegmentIntersector& si;
 

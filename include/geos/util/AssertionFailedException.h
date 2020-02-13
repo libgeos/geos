@@ -27,7 +27,7 @@ namespace util { // geos.util
 /** \class AssertionFailedException util.h geos.h
  * \brief Indicates a bug in GEOS code.
  */
-class GEOS_DLL AssertionFailedException: public GEOSException {
+class GEOS_DLL AssertionFailedException final: public GEOSException {
 
 public:
 

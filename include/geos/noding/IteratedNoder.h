@@ -52,7 +52,7 @@ namespace noding { // geos::noding
  * Clients can choose to rerun the noding using a lower precision model.
  *
  */
-class GEOS_DLL IteratedNoder : public Noder { // implements Noder
+class GEOS_DLL IteratedNoder final: public Noder { // implements Noder
 
 private:
     static const int MAX_ITER = 5;

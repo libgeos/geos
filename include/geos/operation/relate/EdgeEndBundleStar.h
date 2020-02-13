@@ -45,7 +45,7 @@ namespace relate { // geos::operation::relate
  * around the node
  * for efficient lookup and topology building.
  */
-class GEOS_DLL EdgeEndBundleStar: public geomgraph::EdgeEndStar {
+class GEOS_DLL EdgeEndBundleStar final: public geomgraph::EdgeEndStar {
 public:
 
     /// Creates a new empty EdgeEndBundleStar

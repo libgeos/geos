@@ -68,7 +68,7 @@ namespace quadtree { // geos::index::quadtree
  * This data structure is also known as an <i>MX-CIF quadtree</i>
  * following the usage of Samet and others.
  */
-class GEOS_DLL Quadtree: public SpatialIndex {
+class GEOS_DLL Quadtree final: public SpatialIndex {
 
 private:
 

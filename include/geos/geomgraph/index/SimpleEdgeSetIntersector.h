@@ -40,7 +40,7 @@ namespace index { // geos::geomgraph::index
 ///
 /// \note This algorithm is too slow for production use, but is useful for
 /// testing purposes.
-class GEOS_DLL SimpleEdgeSetIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleEdgeSetIntersector final: public EdgeSetIntersector {
 
 public:
 

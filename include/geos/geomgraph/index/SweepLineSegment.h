@@ -37,7 +37,7 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-class GEOS_DLL SweepLineSegment: public SweepLineEventOBJ {
+class GEOS_DLL SweepLineSegment final: public SweepLineEventOBJ {
 public:
     SweepLineSegment(Edge* newEdge, size_t newPtIndex);
     ~SweepLineSegment() override = default;

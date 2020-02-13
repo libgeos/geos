@@ -31,7 +31,7 @@ class CoordinateSequence;
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class GEOS_DLL SimplePointInRing: public PointInRing {
+class GEOS_DLL SimplePointInRing final: public PointInRing {
 public:
     SimplePointInRing(geom::LinearRing* ring);
     ~SimplePointInRing() override = default;

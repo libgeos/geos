@@ -51,7 +51,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPolygonContains : public AbstractPreparedPolygonContains {
+class PreparedPolygonContains final: public AbstractPreparedPolygonContains {
 public:
 
     /**

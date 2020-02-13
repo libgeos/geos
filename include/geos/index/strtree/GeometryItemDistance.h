@@ -25,7 +25,7 @@
 namespace geos {
 namespace index {
 namespace strtree {
-class GEOS_DLL GeometryItemDistance : public ItemDistance {
+class GEOS_DLL GeometryItemDistance final: public ItemDistance {
 public:
     /**
      * Computes the distance between two {@link Geometry} items,

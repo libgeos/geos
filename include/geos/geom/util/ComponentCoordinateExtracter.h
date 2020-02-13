@@ -34,7 +34,7 @@ namespace util { // geos::geom::util
  *
  * @version 1.9
  */
-class ComponentCoordinateExtracter : public GeometryComponentFilter {
+class ComponentCoordinateExtracter final: public GeometryComponentFilter {
 public:
     /**
      * Push the linear components from a single geometry into

@@ -31,7 +31,7 @@ namespace util { // geos::util
  * trying to apply set-theoretic methods to a
  * GeometryCollection object.
  */
-class GEOS_DLL IllegalArgumentException: public GEOSException {
+class GEOS_DLL IllegalArgumentException final: public GEOSException {
 public:
     IllegalArgumentException()
         :

@@ -47,7 +47,7 @@ FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
     std::unique_ptr<std::vector<FacetSequence*> > sections(new std::vector<FacetSequence*>());
 
     class FacetSequenceAdder;
-    class FacetSequenceAdder : public geom::GeometryComponentFilter {
+    class FacetSequenceAdder final: public geom::GeometryComponentFilter {
         std::vector<FacetSequence*>*  m_sections;
 
     public :

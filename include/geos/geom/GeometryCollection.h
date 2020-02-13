@@ -52,7 +52,7 @@ namespace geom { // geos::geom
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
-class GEOS_DLL GeometryCollection : public Geometry {
+class GEOS_DLL GeometryCollection /*non-final*/: public Geometry {
 
 public:
     friend class GeometryFactory;

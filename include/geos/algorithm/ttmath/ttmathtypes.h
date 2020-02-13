@@ -601,7 +601,7 @@ namespace ttmath
 		the name and the line of a file where the macro TTMATH_REFERENCE_ASSERT
 		was used)
 	*/
-	class ReferenceError : public std::logic_error, public ExceptionInfo
+	class ReferenceError final: public std::logic_error, public ExceptionInfo
 	{
 	public:
 
@@ -633,7 +633,7 @@ namespace ttmath
 		the name and the line of a file where the macro TTMATH_ASSERT
 		was used)
 	*/
-	class RuntimeError : public std::runtime_error, public ExceptionInfo
+	class RuntimeError final: public std::runtime_error, public ExceptionInfo
 	{
 	public:
 

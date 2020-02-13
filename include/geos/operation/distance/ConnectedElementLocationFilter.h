@@ -46,7 +46,7 @@ namespace distance { // geos::operation::distance
  *
  * The elements of the list are GeometryLocation.
  */
-class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
+class GEOS_DLL ConnectedElementLocationFilter final: public geom::GeometryFilter {
 private:
 
     std::vector<std::unique_ptr<GeometryLocation>> locations;

@@ -40,7 +40,7 @@ namespace linemerge { // geos::operation::linemerge
  * An edge of a LineMergeGraph. The <code>marked</code> field indicates
  * whether this Edge has been logically deleted from the graph.
  */
-class GEOS_DLL LineMergeEdge: public planargraph::Edge {
+class GEOS_DLL LineMergeEdge final: public planargraph::Edge {
 private:
     const geom::LineString* line;
 public:

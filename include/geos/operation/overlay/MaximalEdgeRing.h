@@ -63,7 +63,7 @@ namespace overlay { // geos::operation::overlay
  *
  * @see com.vividsolutions.jts.operation.overlay.MinimalEdgeRing
  */
-class GEOS_DLL MaximalEdgeRing: public geomgraph::EdgeRing {
+class GEOS_DLL MaximalEdgeRing final: public geomgraph::EdgeRing {
 
 public:
 

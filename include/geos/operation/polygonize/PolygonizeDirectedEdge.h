@@ -51,7 +51,7 @@ namespace polygonize { // geos::operation::polygonize
  * May be logically deleted from the graph by setting the
  * <code>marked</code> flag.
  */
-class GEOS_DLL PolygonizeDirectedEdge: public planargraph::DirectedEdge {
+class GEOS_DLL PolygonizeDirectedEdge final: public planargraph::DirectedEdge {
 
 private:
 

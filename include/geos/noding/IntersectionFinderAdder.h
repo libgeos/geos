@@ -50,7 +50,7 @@ namespace noding { // geos.noding
  * and adds them as nodes.
  *
  */
-class GEOS_DLL IntersectionFinderAdder: public SegmentIntersector {
+class GEOS_DLL IntersectionFinderAdder final: public SegmentIntersector {
 
 public:
 

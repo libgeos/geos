@@ -62,7 +62,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class AbstractPreparedPolygonContains : public PreparedPolygonPredicate {
+class AbstractPreparedPolygonContains /*non-final*/: public PreparedPolygonPredicate {
 private:
     // information about geometric situation
     bool hasSegmentIntersection;

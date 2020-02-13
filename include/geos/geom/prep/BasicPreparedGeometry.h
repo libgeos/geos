@@ -56,7 +56,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class BasicPreparedGeometry: public PreparedGeometry {
+class BasicPreparedGeometry /*non-final*/: public PreparedGeometry {
 private:
     const geom::Geometry* baseGeom;
     Coordinate::ConstVect representativePts;

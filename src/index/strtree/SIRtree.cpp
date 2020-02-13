@@ -86,7 +86,7 @@ SIRtree::~SIRtree()
 }
 
 
-class SIRAbstractNode: public AbstractNode {
+class SIRAbstractNode final: public AbstractNode {
 public:
     SIRAbstractNode(int p_level, size_t capacity)
         :

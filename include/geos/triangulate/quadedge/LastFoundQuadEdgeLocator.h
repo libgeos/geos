@@ -36,7 +36,7 @@ class QuadEdgeSubdivision;
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
  */
-class LastFoundQuadEdgeLocator : public QuadEdgeLocator {
+class LastFoundQuadEdgeLocator final: public QuadEdgeLocator {
 private:
     QuadEdgeSubdivision* subdiv;
     QuadEdge*			lastEdge;

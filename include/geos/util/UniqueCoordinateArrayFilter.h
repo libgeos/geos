@@ -39,7 +39,7 @@ namespace util { // geos::util
  *
  *  Last port: util/UniqueCoordinateArrayFilter.java rev. 1.17
  */
-class GEOS_DLL UniqueCoordinateArrayFilter: public geom::CoordinateFilter {
+class GEOS_DLL UniqueCoordinateArrayFilter final: public geom::CoordinateFilter {
 public:
     /**
      * Constructs a CoordinateArrayFilter.

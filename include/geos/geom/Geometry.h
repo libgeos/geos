@@ -920,7 +920,7 @@ protected:
 
 private:
 
-    class GEOS_DLL GeometryChangedFilter : public GeometryComponentFilter {
+    class GEOS_DLL GeometryChangedFilter final: public GeometryComponentFilter {
     public:
         void filter_rw(Geometry* geom) override;
     };

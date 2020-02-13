@@ -54,7 +54,7 @@ namespace noding { // geos::noding
  * All noded substrings are initialized with the same context object.
  *
  */
-class GEOS_DLL NodedSegmentString : public NodableSegmentString {
+class GEOS_DLL NodedSegmentString final: public NodableSegmentString {
 public:
 
     // TODO: provide a templated method using an output iterator
