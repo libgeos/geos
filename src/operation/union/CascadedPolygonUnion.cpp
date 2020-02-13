@@ -47,6 +47,7 @@
 
 namespace {
 
+#if GEOS_DEBUG
 inline bool
 check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThrow = false, bool validOnly = false)
 {
@@ -92,6 +93,7 @@ check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThro
     }
     return true;
 }
+#endif
 
 } // anonymous namespace
 
