@@ -55,7 +55,7 @@ namespace io {
  * \class WKTReader
  * \brief WKT parser class; see also WKTWriter.
  */
-class GEOS_DLL WKTReader {
+struct GEOS_DLL WKTReader {
 public:
     //WKTReader();
 

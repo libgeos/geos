@@ -69,7 +69,7 @@ namespace io {
  *
  * @see WKBReader
  */
-class GEOS_DLL WKBWriter {
+struct GEOS_DLL WKBWriter {
 
 public:
     /*

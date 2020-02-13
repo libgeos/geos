@@ -76,7 +76,7 @@ namespace io {
  * See WKTReader for parsing.
  *
  */
-class GEOS_DLL WKTWriter {
+struct GEOS_DLL WKTWriter {
 public:
     WKTWriter();
     ~WKTWriter() = default;

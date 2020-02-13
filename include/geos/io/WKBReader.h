@@ -76,7 +76,7 @@ namespace io {
  * representing 3-dimensional coordinates.
  *
  */
-class GEOS_DLL WKBReader {
+struct GEOS_DLL WKBReader {
 
 public:
 
