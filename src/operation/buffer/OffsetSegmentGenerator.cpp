@@ -286,7 +286,7 @@ OffsetSegmentGenerator::addFillet(const Coordinate& p, double startAngle,
 
     double currAngle = initAngle;
     Coordinate pt;
-    while(currAngle < totalAngle) {
+    while(currAngle < totalAngle - 1e-12) { // avoid adding tiny segment
         double angle = startAngle + directionFactor * currAngle;
         pt.x = p.x + radius * cos(angle);
         pt.y = p.y + radius * sin(angle);
