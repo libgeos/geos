@@ -27,7 +27,7 @@ steps:
     image: *test-image
     commands:
       - make doxygen-checked
-  - name: valgrindcheck
-    image: *test-image
-    commands:
-      - CXXFLAGS="-O0" make valgrindcheck V=0
+  # - name: valgrindcheck
+  #   image: *test-image
+  #   commands:
+  #     - CXXFLAGS="-O0" make valgrindcheck V=0
