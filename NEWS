@@ -7,6 +7,9 @@ Changes in 3.9.0
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
   - Improve performance of GEOSisValid (Dan Baston)
+  - Update geos-config tool for consistency 
+    and escape paths (https://git.osgeo.org/gitea/geos/geos/pulls/99) 
+    changes mostly affect CMake MSVC builds (#1015, Mike Taves)
 
 
 Changes in 3.8.0
