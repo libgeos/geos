@@ -1,8 +1,14 @@
-#!/bin/bash -e
+#!/bin/sh
 
 # escape paths
-prefix=$(printf %q "@prefix@")
-libdir=$(printf %q "@libdir@")
+escape() {
+  echo "$1" | sed 's/ /\\ /g'
+}
+
+prefix=`escape "@prefix@"`
+# exec_prefix is interpolated in @libdir@
+exec_prefix=`escape "@exec_prefix@"`
+libdir=`escape "@libdir@"`
 
 usage()
 {
