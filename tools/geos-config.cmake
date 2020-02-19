@@ -1,7 +1,6 @@
-#!/bin/bash -e
+#!/bin/sh
 
-# escape path
-prefix=$(printf %q "@CMAKE_INSTALL_PREFIX@")
+prefix=@ESCAPED_INSTALL_PREFIX@
 libdir=${prefix}/lib
 
 usage()

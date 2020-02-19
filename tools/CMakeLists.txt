@@ -13,6 +13,8 @@
 
 
 if(NOT MSVC)
+  # Consider CMAKE_INSTALL_PREFIX with spaces
+  string(REPLACE " " "\\ " ESCAPED_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/geos-config.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/geos-config
