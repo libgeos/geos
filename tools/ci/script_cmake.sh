@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh
 #
 # Travis CI script for GEOS build with CMake
 #
@@ -9,7 +9,14 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
+
+if [ -z "${TRAVIS_BUILD_DIR+x}" ]; then
+  echo TRAVIS_BUILD_DIR not defined
+  exit 1
+fi
+
+# source common functions
+. ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
 cmake --version
 
@@ -19,5 +26,6 @@ cmake --build . --target docs
 ctest --output-on-failure .
 
 if [ "${BUILD_TYPE}" = "Coverage" ]; then
-    bash <(curl -s https://codecov.io/bash)
+    curl -o codecov.sh https://codecov.io/bash
+    bash codecov.sh
 fi
