@@ -21,5 +21,5 @@ fi
 cd ${TRAVIS_BUILD_DIR}
 ./autogen.sh
 cd -
-${TRAVIS_BUILD_DIR}/configure CC=clang CXX=clang++ CXXFLAGS="-std=c++11"
-scan-build --status-bugs make -j2
+scan-build ${TRAVIS_BUILD_DIR}/configure CC=clang-9 CXX=clang++-9 CXXFLAGS="-std=c++11"
+scan-build --keep-cc --status-bugs make -j2
