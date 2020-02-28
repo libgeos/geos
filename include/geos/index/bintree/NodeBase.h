@@ -70,6 +70,12 @@ protected:
     Node* subnode[2];
 
     virtual bool isSearchMatch(Interval* interval) = 0;
+
+private:
+
+    NodeBase(const NodeBase&) = delete;
+    NodeBase& operator=(const NodeBase&) = delete;
+
 };
 
 } // namespace geos::index::bintree

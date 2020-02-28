@@ -194,6 +194,9 @@ private:
                               const geom::Coordinate& p1,
                               const geom::Coordinate& ep0,
                               const geom::Coordinate& ep1);
+
+    PlanarGraph(const PlanarGraph&) = delete;
+    PlanarGraph& operator=(const PlanarGraph&) = delete;
 };
 
 

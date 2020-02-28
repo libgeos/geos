@@ -77,6 +77,8 @@ private:
         return false;
     }
 
+    OffsetSegmentString(const OffsetSegmentString&) = delete;
+    OffsetSegmentString& operator=(const OffsetSegmentString&) = delete;
 
 public:
 
