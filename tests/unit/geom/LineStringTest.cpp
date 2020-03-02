@@ -69,7 +69,7 @@ void object::test<1>
 {
     using geos::geom::Coordinate;
 
-    // Empty sequence of coordiantes
+    // Empty sequence of coordinates
     CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", pseq != nullptr);
 
@@ -81,7 +81,7 @@ void object::test<1>
     ensure(ls->isValid());
 }
 
-// Test of non-tempty LineString created with user's constructor
+// Test of non-empty LineString created with user's constructor
 template<>
 template<>
 void object::test<2>
@@ -89,7 +89,7 @@ void object::test<2>
 {
     using geos::geom::Coordinate;
 
-    // Non-empty sequence of coordiantes
+    // Non-empty sequence of coordinates
     const size_t size3 = 3;
 
     CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
@@ -101,7 +101,7 @@ void object::test<2>
 
     ensure_equals(pseq->size(), size3);
 
-    // Create non-empty linstring instance
+    // Create non-empty LineString instance
     LineStringAutoPtr ls(factory_->createLineString(pseq));
 
     ensure(!ls->isEmpty());
@@ -139,7 +139,7 @@ template<>
 void object::test<3>
 ()
 {
-    // Single-element sequence of coordiantes
+    // Single-element sequence of coordinates
     CoordArrayPtr pseq = nullptr;
     try {
         pseq = new geos::geom::CoordinateArraySequence();
@@ -147,7 +147,7 @@ void object::test<3>
         pseq->add(geos::geom::Coordinate(0, 0, 0));
         ensure_equals(pseq->size(), 1u);
 
-        // Create incomplete linstring
+        // Create incomplete LineString
         LineStringAutoPtr ls(factory_->createLineString(pseq));
         fail("IllegalArgumentException expected.");
     }
@@ -169,7 +169,7 @@ void object::test<4>
 {
     using geos::geom::Coordinate;
 
-    // Non-empty sequence of coordiantes
+    // Non-empty sequence of coordinates
     const size_t size = 3;
 
     CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
@@ -181,7 +181,7 @@ void object::test<4>
 
     ensure_equals(pseq->size(), size);
 
-    // Create examplar of linstring instance
+    // Create example of LineString instance
     LineStringAutoPtr examplar(factory_->createLineString(pseq));
 
     // Create copy
