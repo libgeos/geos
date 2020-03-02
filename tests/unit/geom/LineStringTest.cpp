@@ -512,5 +512,20 @@ void object::test<28>
     ensure(geo->isDimensionStrict(geos::geom::Dimension::L));
     ensure(!geo->isDimensionStrict(geos::geom::Dimension::A));
 }
+
+// test dynamic_cast for LineString (shows that vtable is created)
+// https://github.com/libgeos/geos/issues/285
+template<>
+template<>
+void object::test<29>
+()
+{
+    std::unique_ptr<geos::geom::LineString> a = geos::geom::GeometryFactory::getDefaultInstance()->createLineString();
+    geos::geom::Geometry *b = a.get(); // ok
+    geos::geom::LineString *c = dynamic_cast<geos::geom::LineString *>(b);
+
+    ensure(c != nullptr);
+}
+
 } // namespace tut
 
