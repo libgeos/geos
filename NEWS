@@ -1,5 +1,5 @@
 Changes in 3.8.1
-2019-xx-xx
+2020-xx-xx
 
 - Bug fixes / improvements
   - Stack allocate line segments in OverlapUnion (Paul Ramsey)
@@ -10,6 +10,8 @@ Changes in 3.8.1
   - Improve performance of GEOSisValid (#1008, Dan Baston)
   - Avoid changing MultiLineString component order in GEOSReverse
     (#1013, Dan Baston)
+  - Fix missing vtable for LineString and CoordinateArraySequenceFactory
+    (#299 and #1016, Evgen Bodunov)
 
 Changes in 3.8.0
 2019-10-10
