@@ -69,6 +69,9 @@ private:
     geom::Coordinate* nestedPt;
     void buildIndex();
 
+    SweeplineNestedRingTester(const SweeplineNestedRingTester&) = delete;
+    SweeplineNestedRingTester& operator=(const SweeplineNestedRingTester&) = delete;
+
 public:
 
     SweeplineNestedRingTester(geomgraph::GeometryGraph* newGraph)

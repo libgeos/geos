@@ -115,6 +115,9 @@ private:
     double minExtent;
 
     void collectStats(Interval* interval);
+
+    Bintree(const Bintree&) = delete;
+    Bintree& operator=(const Bintree&) = delete;
 };
 
 } // namespace geos::index::bintree

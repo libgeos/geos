@@ -78,6 +78,9 @@ private:
     /// it from build()
     std::vector<geom::Point*>* resultPointList;
 
+    PointBuilder(const PointBuilder&) = delete;
+    PointBuilder& operator=(const PointBuilder&) = delete;
+
 public:
 
     PointBuilder(OverlayOp* newOp,
