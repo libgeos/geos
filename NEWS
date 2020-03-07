@@ -10,6 +10,7 @@ Changes in 3.9.0
   - Update geos-config tool for consistency 
     and escape paths (https://git.osgeo.org/gitea/geos/geos/pulls/99) 
     changes mostly affect CMake MSVC builds (#1015, Mike Taves)
+  - Testing on Rasberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
 
 
 Changes in 3.8.0
