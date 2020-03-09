@@ -27,7 +27,7 @@ struct test_monotonechain_data {
 typedef test_group<test_monotonechain_data> group;
 typedef group::object object;
 
-group test_monotonechain_group("geos::index::chain::MonotoneChain");
+group test_monotonechain_group("geos::index::chain::MonotoneChainBuilder");
 
 //
 // Test Cases
