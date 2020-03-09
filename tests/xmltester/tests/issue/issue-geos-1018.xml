@@ -1,0 +1,19 @@
+<run>
+<precisionModel type="FLOATING" />
+<case>
+<desc>
+Difference of two geometries
+</desc>
+<a>
+POLYGON((0.1 0.1, 4.0 0.1, 4.0 1.9, 0.1 1.9, 0.1 0.1))
+</a>
+<b>
+POLYGON((0 0, 0 2, 2 2, 2 0, 0 0))
+</b>
+<test>
+<op name="difference" arg1="a" arg2="b">
+POLYGON ((2.0 1.9, 4.0 1.9, 4.0 0.1, 2.0 0.1, 2.0 1.9))
+</op>
+</test>
+</case>
+</run>
