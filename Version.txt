@@ -5,7 +5,7 @@ GEOS_VERSION_MINOR=8
 GEOS_VERSION_PATCH=1
 
 # OPTIONS: "", "dev", "rc1" etc.
-GEOS_PATCH_WORD=dev
+GEOS_PATCH_WORD=
 
 # GEOS CAPI Versions
 #
@@ -15,7 +15,7 @@ GEOS_PATCH_WORD=dev
 # Increase the age value only if the changes made to the ABI
 # are backward compatible.
 CAPI_INTERFACE_CURRENT=14
-CAPI_INTERFACE_REVISION=2
+CAPI_INTERFACE_REVISION=3
 CAPI_INTERFACE_AGE=13
 
 # JTS Port
