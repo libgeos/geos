@@ -207,7 +207,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
     case BufferParameters::CAP_ROUND:
         // add offset seg points with a fillet between them
         segList.addPt(offsetL.p1);
-        addFillet(p1, angle + PI / 2.0, angle - PI / 2.0,
+        addDirectedFillet(p1, angle + PI / 2.0, angle - PI / 2.0,
                   Orientation::CLOCKWISE, distance);
         segList.addPt(offsetR.p1);
         break;
@@ -237,7 +237,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
 
 /*private*/
 void
-OffsetSegmentGenerator::addFillet(const Coordinate& p, const Coordinate& p0,
+OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, const Coordinate& p0,
                                   const Coordinate& p1, int direction, double radius)
 {
     double dx0 = p0.x - p.x;
@@ -259,14 +259,14 @@ OffsetSegmentGenerator::addFillet(const Coordinate& p, const Coordinate& p0,
     }
 
     segList.addPt(p0);
-    addFillet(p, startAngle, endAngle, direction, radius);
+    addDirectedFillet(p, startAngle, endAngle, direction, radius);
     segList.addPt(p1);
 }
 
 /*private*/
 void
-OffsetSegmentGenerator::addFillet(const Coordinate& p, double startAngle,
-                                  double endAngle, int direction, double radius)
+OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, double startAngle,
+                                          double endAngle, int direction, double radius)
 {
     int directionFactor = direction == Orientation::CLOCKWISE ? -1 : 1;
 
@@ -274,27 +274,18 @@ OffsetSegmentGenerator::addFillet(const Coordinate& p, double startAngle,
     int nSegs = (int)(totalAngle / filletAngleQuantum + 0.5);
 
     // no segments because angle is less than increment-nothing to do!
-    if(nSegs < 1) {
-        return;
-    }
+    if(nSegs < 1) return;
 
-    double initAngle, currAngleInc;
-
-    // choose angle increment so that each segment has equal length
-    initAngle = 0.0;
-    currAngleInc = totalAngle / nSegs;
-
-    double currAngle = initAngle;
+    // double initAngle, currAngleInc;
+    double angleInc = totalAngle / nSegs;
     Coordinate pt;
-    while(currAngle < totalAngle) {
-        double angle = startAngle + directionFactor * currAngle;
+    for (int i = 0; i < nSegs; i++) {
+        double angle = startAngle + directionFactor * i * angleInc;
         pt.x = p.x + radius * cos(angle);
         pt.y = p.y + radius * sin(angle);
         segList.addPt(pt);
-        currAngle += currAngleInc;
     }
 }
-
 
 /*private*/
 void
@@ -303,7 +294,7 @@ OffsetSegmentGenerator::createCircle(const Coordinate& p, double p_distance)
     // add start point
     Coordinate pt(p.x + p_distance, p.y);
     segList.addPt(pt);
-    addFillet(p, 0.0, 2.0 * PI, -1, p_distance);
+    addDirectedFillet(p, 0.0, 2.0 * PI, -1, p_distance);
     segList.closeRing();
 }
 
@@ -354,7 +345,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
             segList.addPt(offset1.p0);
         }
         else {
-            addFillet(s1, offset0.p1, offset1.p0,
+            addDirectedFillet(s1, offset0.p1, offset1.p0,
                       Orientation::CLOCKWISE, distance);
         }
     }
@@ -392,7 +383,7 @@ OffsetSegmentGenerator::addOutsideTurn(int orientation, bool addStartPoint)
         }
 
         // TESTING - comment out to produce beveled joins
-        addFillet(s1, offset0.p1, offset1.p0, orientation, distance);
+        addDirectedFillet(s1, offset0.p1, offset1.p0, orientation, distance);
         segList.addPt(offset1.p0);
     }
 }
