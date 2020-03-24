@@ -329,7 +329,7 @@ private:
      * @param direction the orientation of the fillet
      * @param radius the radius of the fillet
      */
-    void addFillet(const geom::Coordinate& p, const geom::Coordinate& p0,
+    void addDirectedFillet(const geom::Coordinate& p, const geom::Coordinate& p0,
                    const geom::Coordinate& p1,
                    int direction, double radius);
 
@@ -342,7 +342,7 @@ private:
      * @param direction is -1 for a CW angle, 1 for a CCW angle
      * @param radius the radius of the fillet
      */
-    void addFillet(const geom::Coordinate& p, double startAngle,
+    void addDirectedFillet(const geom::Coordinate& p, double startAngle,
                    double endAngle, int direction, double radius);
 private:
     // An OffsetSegmentGenerator cannot be copied because of member "const BufferParameters& bufParams"
