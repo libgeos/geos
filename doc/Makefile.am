@@ -5,12 +5,17 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
-noinst_PROGRAMS = example
+noinst_PROGRAMS = \
+	example \
+	examplemic
 
 LIBS = $(top_builddir)/src/libgeos.la
 
 example_SOURCES = example.cpp
 example_LDADD = $(LIBS)
+
+examplemic_SOURCES = examplemic.cpp
+examplemic_LDADD = $(LIBS)
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
