@@ -38,13 +38,13 @@ namespace algorithm { // geos.algorithm
 std::unique_ptr<Geometry>
 MaximumInscribedCircle::getCircle()
 {
-    // handle degenerate or trivial cases
-    if(inputGeom->isEmpty()) {
-        return std::unique_ptr<Geometry>(inputGeom->getFactory()->createPolygon());
-    } else if(inputGeom->getNumPoints() == 1) {
-        return std::unique_ptr<Geometry>(inputGeom->clone());
-    }
     compute();
+    // handle degenerate or trivial cases
+    if(inputPoly->isEmpty()) {
+        return std::unique_ptr<Geometry>(inputPoly->getFactory()->createPolygon());
+    } else if(inputPoly->getNumPoints() == 1) {
+        return std::unique_ptr<Geometry>(inputPoly->clone());
+    }
 }
 
 /*private*/
@@ -52,20 +52,21 @@ void
 MaximumInscribedCircle::compute()
 {
     // handle degenerate or trivial cases
-    if(inputGeom->isEmpty()) {
+    if(inputPoly->isEmpty()) {
         return;
     }
-    if(inputGeom->getNumPoints() == 1) {
+    if(inputPoly->getNumPoints() == 1) {
+        center = *(inputPoly->getCoordinate());
         return;
     }
-    // computeSites();
+    computeSites(inputPoly);
 }
 
 /*private*/
 void
-MaximumInscribedCircle::computeSites(geom::Polygon& poly)
+MaximumInscribedCircle::computeSites(const geom::Polygon* poly)
 {
-    const LineString* exterior = poly.getExteriorRing();
+    const LineString* exterior = poly->getExteriorRing();
     const LineString* interior;
 
     // Initialize bounding box
@@ -76,8 +77,8 @@ MaximumInscribedCircle::computeSites(geom::Polygon& poly)
 
     addRingSites(exterior);
 
-    for(unsigned int i = 0; i < poly.getNumInteriorRing(); i++) {
-        interior = poly.getInteriorRingN(i);
+    for(unsigned int i = 0; i < poly->getNumInteriorRing(); i++) {
+        interior = poly->getInteriorRingN(i);
         addRingSites(interior);
     }
 }

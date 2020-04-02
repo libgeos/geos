@@ -30,7 +30,7 @@ class GEOS_DLL MaximumInscribedCircle {
     private:
 
         // member variables
-        const geom::Geometry* inputGeom;
+        const geom::Polygon* inputPoly;
         const int* inputNumSegments;
         std::vector<geom::Coordinate> sites;
         std::vector<geom::Coordinate> voronoiVertices;
@@ -40,18 +40,18 @@ class GEOS_DLL MaximumInscribedCircle {
 
         void addRingSites(const geom::LineString* ring);
         void compute();
-        void computeSites(geom::Polygon& poly);
+        void computeSites(const geom::Polygon* poly);
         void computeVoronoiVertices();
         void computeCenterAndRadius(geom::Polygon& poly);
 
     public:
 
-        MaximumInscribedCircle(const geom::Geometry* geom, const int* numSegments):
-            inputGeom(nullptr),
+        MaximumInscribedCircle(const geom::Polygon* poly, const int* numSegments):
+            inputPoly(nullptr),
             inputNumSegments(0),
             radius(0.0)
         {
-            inputGeom = geom;
+            inputPoly = poly;
             inputNumSegments = numSegments;
             center.setNull();
         }
