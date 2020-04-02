@@ -325,10 +325,8 @@ do_all()
 ////////////////////////////////////////////////////////////////////////
 
     // Read function bodies to see the magic behind them
-    geoms->push_back(create_square_polygon(0, 200, 300));
-    geoms->push_back(create_square_polygon(0, 250, 300));
-    polys->push_back(create_square_polygon(0, 200, 300));
-    polys->push_back(create_square_polygon(0, 250, 300));
+    geoms->push_back(create_square_polygon(0, 0, 30));
+    polys->push_back(create_square_polygon(0, 0, 30));
 
     // Print all geoms.
     cout << "--------HERE ARE THE BASE GEOMS ----------" << endl;
