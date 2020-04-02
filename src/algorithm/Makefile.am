@@ -24,6 +24,7 @@ libalgorithm_la_SOURCES = \
 	Intersection.cpp \
 	LineIntersector.cpp \
 	Length.cpp \
+	MaximumInscribedCircle.cpp \
 	MinimumBoundingCircle.cpp \
 	MinimumDiameter.cpp \
 	NotRepresentableException.cpp \
