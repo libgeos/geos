@@ -101,8 +101,8 @@ void
 MaximumInscribedCircle::addRingSites(const LineString* ring)
 {
     double fromX, fromY, toX, toY, segmentX, segmentY;
-    Point* fromPoint;
-    Point* toPoint;
+    std::unique_ptr<Point> fromPoint;
+    std::unique_ptr<Point> toPoint;
 
     for(unsigned int i = 0; i < ring->getNumPoints(); i++) {
         fromPoint = ring->getPointN(i);
@@ -140,7 +140,8 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
 
 // TODO: Figure out if I can use one of the extractor functions defined
 //       in GEOSGeom or MakeValid.
-static std::unique_ptr<geom::Geometry> extractUniquePoints(const geom::Geometry* geom)
+static std::unique_ptr<geom::Geometry>
+extractUniquePoints(const geom::Geometry* geom)
 {
 
     // Code taken from GEOSGeom_extractUniquePoints_r()
@@ -167,7 +168,7 @@ void
 MaximumInscribedCircle::computeVoronoiVertices()
 {
     VoronoiDiagramBuilder builder;
-    CoordinateSequence* coords;
+    std::unique_ptr<CoordinateSequence> coords;
     CoordinateSequenceFactory* coordSeqFactory;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     std::unique_ptr<Geometry> results;
@@ -180,6 +181,13 @@ MaximumInscribedCircle::computeVoronoiVertices()
             voronoiVertices.push_back(coords->getAt(j));
         }
     }
+}
+
+/*private*/
+void
+MaximumInscribedCircle::computeCenterAndRadius(geom::Polygon& poly)
+{
+    
 }
 
 } // namespace geos.algorithm
