@@ -212,7 +212,19 @@ wkt_print_geoms(vector<const Geometry*>* geoms)
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         string tmp = wkt->write(g);
-        cout << "[" << i << "] (WKT) " << tmp << endl;
+        cout << "[" << i << "] (WKT) (Is Polygonal: " << g->isPolygonal() << ") " << tmp << endl;
+    }
+    delete wkt;
+}
+
+void wkt_print_coordinates(vector<const Geometry*>* geoms)
+{
+    io::WKTWriter* wkt = new io::WKTWriter();
+    for(unsigned int i = 0; i < geoms->size(); i++) {
+        const Geometry* g = (*geoms)[i];
+        std::unique_ptr<CoordinateSequence> cs = g->getCoordinates();
+        string tmp = cs->toString();
+        cout << "[" << i << "] (Coordinate Sequence) " << tmp << endl;
     }
     delete wkt;
 }
@@ -331,6 +343,10 @@ do_all()
     // Print all geoms.
     cout << "--------HERE ARE THE BASE GEOMS ----------" << endl;
     wkt_print_geoms(geoms);
+
+    // Print all coordinate sequences.
+    cout << "--------HERE ARE THE COORDINATE SEQUENCES ----------" << endl;
+    wkt_print_coordinates(geoms);
 
     // Print ring coordinates
     cout << "--------HERE ARE THE RING COORDINATES ----------" << endl;
