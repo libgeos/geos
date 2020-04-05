@@ -62,7 +62,9 @@ MaximumInscribedCircle::compute()
         return;
     }
     if(typeid(*input) == typeid(MultiPolygon)) {
-        // todo: handle case of multi-polygon
+        const geom::MultiPolygon* multiPoly = dynamic_cast<const geom::MultiPolygon*>(input);
+        const geom::Polygon* maxAreaPoly = polygonOfMaxArea(multiPoly);
+        computeSites(maxAreaPoly);
         return;
     }
     // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
@@ -196,6 +198,31 @@ void
 MaximumInscribedCircle::computeCenterAndRadius(geom::Polygon& poly)
 {
     
+}
+
+/**
+* This function takes a multipolygon and returns the polygon of largest area
+* in the collection.
+*
+* @param multiPoly
+* @return the Polygon of largest area
+*/
+/*private*/
+const geom::Polygon*
+MaximumInscribedCircle::polygonOfMaxArea(const geom::MultiPolygon* multiPoly)
+{
+    double currentArea = 0, maxArea = 0;
+    unsigned int maxAreaPolyIndex;
+
+    for(unsigned int i = 0; i < multiPoly->getNumGeometries(); i++) {
+        currentArea = multiPoly->getGeometryN(i)->getArea();
+        if(currentArea > maxArea) {
+            maxArea = currentArea;
+            maxAreaPolyIndex = i;
+        }
+    }
+
+    return multiPoly->getGeometryN(maxAreaPolyIndex);
 }
 
 } // namespace geos.algorithm

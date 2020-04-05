@@ -43,6 +43,7 @@ class GEOS_DLL MaximumInscribedCircle {
         void computeSites(const geom::Polygon* poly);
         void computeVoronoiVertices();
         void computeCenterAndRadius(geom::Polygon& poly);
+        const geom::Polygon* polygonOfMaxArea(const geom::MultiPolygon* multiPoly);
 
     public:
 
