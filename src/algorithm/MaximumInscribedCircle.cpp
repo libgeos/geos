@@ -18,6 +18,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
@@ -40,10 +41,10 @@ MaximumInscribedCircle::getCircle()
 {
     compute();
     // handle degenerate or trivial cases
-    if(inputPoly->isEmpty()) {
-        return std::unique_ptr<Geometry>(inputPoly->getFactory()->createPolygon());
-    } else if(inputPoly->getNumPoints() == 1) {
-        return std::unique_ptr<Geometry>(inputPoly->clone());
+    if(input->isEmpty()) {
+        return std::unique_ptr<Geometry>(input->getFactory()->createPolygon());
+    } else if(input->getNumPoints() == 1) {
+        return std::unique_ptr<Geometry>(input->clone());
     }
 }
 
@@ -51,15 +52,21 @@ MaximumInscribedCircle::getCircle()
 void
 MaximumInscribedCircle::compute()
 {
-    // handle degenerate or trivial cases
-    if(inputPoly->isEmpty()) {
+    if(typeid(*input) == typeid(Point)) {
+        center = *(input->getCoordinate());
         return;
     }
-    if(inputPoly->getNumPoints() == 1) {
-        center = *(inputPoly->getCoordinate());
+    if(typeid(*input) == typeid(Polygon)) {
+        const geom::Polygon* poly = dynamic_cast<const geom::Polygon*>(input);
+        computeSites(poly);
         return;
     }
-    computeSites(inputPoly);
+    if(typeid(*input) == typeid(MultiPolygon)) {
+        // todo: handle case of multi-polygon
+        return;
+    }
+    // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
+    return;
 }
 
 /*private*/
@@ -117,9 +124,9 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
         sites.push_back(*(fromPoint->getCoordinate()));
 
         // Push segments
-        for(unsigned int k = 0; k < *inputNumSegments; k++) {
-            segmentX = fromX + (toX - fromX) * k / *inputNumSegments;
-            segmentY = fromY + (toY - fromY) * k / *inputNumSegments;
+        for(unsigned int k = 0; k < inputNumSegments; k++) {
+            segmentX = fromX + (toX - fromX) * k / inputNumSegments;
+            segmentY = fromY + (toY - fromY) * k / inputNumSegments;
             sites.push_back(Coordinate(segmentX, segmentY));
         }
 
