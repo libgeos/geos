@@ -37,6 +37,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKBReader.h>
@@ -49,6 +50,7 @@
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/constants.h>
+#include <geos/algorithm/MaximumInscribedCircle.h>
 #include <vector>
 #include <sstream>
 #include <iomanip>
@@ -217,6 +219,25 @@ wkt_print_geoms(vector<const Geometry*>* geoms)
     delete wkt;
 }
 
+void
+wkt_print_mic_sites(vector<const Geometry*>* geoms)
+{
+    std::size_t dimension = 2;
+    const CoordinateSequenceFactory* coordSeqFactory = global_factory->getCoordinateSequenceFactory();
+    io::WKTWriter* wkt = new io::WKTWriter();
+    for(unsigned int i = 0; i < geoms->size(); i++) {
+        const Geometry* g = (*geoms)[i];
+        geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
+        cout << "Executing getSites method." << endl;
+        std::vector<geom::Coordinate>* sites = mic->getSites();
+        cout << "Executed getSites. Creating CoordinateSequence from sites." << endl;
+        std::unique_ptr<CoordinateSequence> cs = coordSeqFactory->create(sites);
+        string tmp = cs->toString();
+        cout << "Created CoordinateSequence [" << i << "] (Coordinate Sequence) " << tmp << endl;
+    }
+    delete wkt;
+}
+
 void wkt_print_coordinates(vector<const Geometry*>* geoms)
 {
     io::WKTWriter* wkt = new io::WKTWriter();
@@ -343,6 +364,10 @@ do_all()
     // Print all geoms.
     cout << "--------HERE ARE THE BASE GEOMS ----------" << endl;
     wkt_print_geoms(geoms);
+
+    // Print max-inscribed-circle sites.
+    cout << "--------HERE ARE THE MIC SITES ----------" << endl;
+    wkt_print_mic_sites(geoms);
 
     // Print all coordinate sequences.
     cout << "--------HERE ARE THE COORDINATE SEQUENCES ----------" << endl;

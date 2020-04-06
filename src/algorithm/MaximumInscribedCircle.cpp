@@ -27,7 +27,9 @@
 #include <memory> // for unique_ptr
 #include <typeinfo>
 #include <vector>
+#include <cstdlib>
 
+using namespace std;
 using namespace geos::geom;
 using namespace geos::triangulate;
 using namespace geos::util;
@@ -48,26 +50,44 @@ MaximumInscribedCircle::getCircle()
     }
 }
 
+/**
+ * Temporary development helper. To be removed in final version.
+ */
+/*public*/
+std::vector<geom::Coordinate>*
+MaximumInscribedCircle::getSites()
+{
+    compute();
+    return sites;
+}
+
 /*private*/
 void
 MaximumInscribedCircle::compute()
 {
+    cout << "Checking Point" << endl;
     if(typeid(*input) == typeid(Point)) {
+        cout << "Geometry is of type Point" << endl;
         center = *(input->getCoordinate());
         return;
     }
+    cout << "Checking Polygon" << endl;
     if(typeid(*input) == typeid(Polygon)) {
+        cout << "Geometry is of type Polygon" << endl;
         const geom::Polygon* poly = dynamic_cast<const geom::Polygon*>(input);
         computeSites(poly);
         return;
     }
+    cout << "Checking MultiPolygon" << endl;
     if(typeid(*input) == typeid(MultiPolygon)) {
+        cout << "Geometry is of type MultiPolygon" << endl;
         const geom::MultiPolygon* multiPoly = dynamic_cast<const geom::MultiPolygon*>(input);
         const geom::Polygon* maxAreaPoly = polygonOfMaxArea(multiPoly);
         computeSites(maxAreaPoly);
         return;
     }
     // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
+    cout << "Geometry is of other type" << endl;
     return;
 }
 
@@ -97,7 +117,7 @@ MaximumInscribedCircle::computeSites(const geom::Polygon* poly)
 * nodeJS module max-inscribed-circle (npmjs.com/package/max-inscribed-circle).
 * It takes a ring, and n-sects each segment of the ring, where n is the
 * number of segments MaximumInscribedCircle has been called with. It then
-* adds all of these n-sect coordinates into an array of coorinates that
+* adds all of these n-sect coordinates into an array of coordinates that
 * will eventually be converted to a CoordinateSequence and used to call
 * Voronoi.
 *
@@ -113,6 +133,7 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
     double fromX, fromY, toX, toY, segmentX, segmentY;
     std::unique_ptr<Point> fromPoint;
     std::unique_ptr<Point> toPoint;
+    sites = new std::vector<geom::Coordinate>;
 
     for(unsigned int i = 0; i < ring->getNumPoints(); i++) {
         fromPoint = ring->getPointN(i);
@@ -123,13 +144,12 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
         toY = toPoint->getY();
 
         // Push fromPoint
-        sites.push_back(*(fromPoint->getCoordinate()));
-
+        sites->push_back(*(fromPoint->getCoordinate()));
         // Push segments
-        for(unsigned int k = 0; k < inputNumSegments; k++) {
+        for(size_t k = 0; k < inputNumSegments; k++) {
             segmentX = fromX + (toX - fromX) * k / inputNumSegments;
             segmentY = fromY + (toY - fromY) * k / inputNumSegments;
-            sites.push_back(Coordinate(segmentX, segmentY));
+            sites->push_back(Coordinate(segmentX, segmentY));
         }
 
         // Update bounding box
@@ -182,7 +202,7 @@ MaximumInscribedCircle::computeVoronoiVertices()
     CoordinateSequenceFactory* coordSeqFactory;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     std::unique_ptr<Geometry> results;
-    builder.setSites(*(coordSeqFactory->create(&sites)));
+    builder.setSites(*(coordSeqFactory->create(sites)));
 
     results = builder.getDiagramEdges(geomFact);
     for(unsigned int i = 0; i < results->getNumGeometries(); i++) {
@@ -212,7 +232,7 @@ const geom::Polygon*
 MaximumInscribedCircle::polygonOfMaxArea(const geom::MultiPolygon* multiPoly)
 {
     double currentArea = 0, maxArea = 0;
-    unsigned int maxAreaPolyIndex;
+    unsigned int maxAreaPolyIndex = 0;
 
     for(unsigned int i = 0; i < multiPoly->getNumGeometries(); i++) {
         currentArea = multiPoly->getGeometryN(i)->getArea();

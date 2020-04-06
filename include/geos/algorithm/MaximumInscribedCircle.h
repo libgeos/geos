@@ -32,7 +32,7 @@ class GEOS_DLL MaximumInscribedCircle {
         // member variables
         const geom::Geometry* input;
         int inputNumSegments;
-        std::vector<geom::Coordinate> sites;
+        std::vector<geom::Coordinate>* sites;
         std::vector<geom::Coordinate> voronoiVertices;
         geom::Coordinate center;
         double radius;
@@ -89,6 +89,11 @@ class GEOS_DLL MaximumInscribedCircle {
          * @return null if the input is empty
          */
         geom::Coordinate getCenter();
+
+        /**
+         * A helper function for easily checking the resulting sites.
+         */
+        std::vector<geom::Coordinate>* getSites();
 
         /**
          * Gets the radius of the computed Maximum Inscribed Circle.
