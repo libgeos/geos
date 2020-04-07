@@ -65,29 +65,25 @@ MaximumInscribedCircle::getSites()
 void
 MaximumInscribedCircle::compute()
 {
-    cout << "Checking Point" << endl;
     if(typeid(*input) == typeid(Point)) {
         cout << "Geometry is of type Point" << endl;
         center = *(input->getCoordinate());
         return;
-    }
-    cout << "Checking Polygon" << endl;
-    if(typeid(*input) == typeid(Polygon)) {
+    } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
         const geom::Polygon* poly = dynamic_cast<const geom::Polygon*>(input);
         computeSites(poly);
         return;
-    }
-    cout << "Checking MultiPolygon" << endl;
-    if(typeid(*input) == typeid(MultiPolygon)) {
+    } else if(typeid(*input) == typeid(MultiPolygon)) {
         cout << "Geometry is of type MultiPolygon" << endl;
         const geom::MultiPolygon* multiPoly = dynamic_cast<const geom::MultiPolygon*>(input);
         const geom::Polygon* maxAreaPoly = polygonOfMaxArea(multiPoly);
         computeSites(maxAreaPoly);
         return;
+    } else {
+        // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
+        return;
     }
-    // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
-    cout << "Geometry is of other type" << endl;
     return;
 }
 
