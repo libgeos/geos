@@ -68,6 +68,7 @@ std::vector<geom::Coordinate>
 MaximumInscribedCircle::getVoronoiVertices()
 {
     compute();
+    computeVoronoiVertices();
     return voronoiVertices;
 }
 
@@ -91,7 +92,7 @@ MaximumInscribedCircle::compute()
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
         return;
     }
-    computeVoronoiVertices();
+    // computeVoronoiVertices();
     return;
 }
 
@@ -207,8 +208,8 @@ MaximumInscribedCircle::computeVoronoiVertices()
 {
     VoronoiDiagramBuilder builder;
     std::unique_ptr<CoordinateSequence> coords;
-    CoordinateSequenceFactory* coordSeqFactory;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
+    const CoordinateSequenceFactory* coordSeqFactory = geomFact.getCoordinateSequenceFactory();
     std::unique_ptr<Geometry> results;
     builder.setSites(*(coordSeqFactory->create(sites)));
 
