@@ -238,7 +238,27 @@ wkt_print_mic_sites(vector<const Geometry*>* geoms)
     delete wkt;
 }
 
-void wkt_print_coordinates(vector<const Geometry*>* geoms)
+void
+wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
+{
+    std::size_t dimension = 2;
+    io::WKTWriter* wkt = new io::WKTWriter();
+    for(unsigned int i = 0; i < geoms->size(); i++) {
+        const Geometry* g = (*geoms)[i];
+        geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
+        cout << "Executing getVoronoiVertices method." << endl;
+        std::vector<geom::Coordinate> vertices = mic->getVoronoiVertices();
+        for(unsigned int j = 0; j < vertices.size(); j++) {
+            geom::Coordinate vertex = vertices[j];
+            string tmp = vertex.toString();
+            cout << "Voronoi vertex [" << j << "] (Coordinate) " << tmp << endl;
+        }
+    }
+    delete wkt;
+}
+
+void
+wkt_print_coordinates(vector<const Geometry*>* geoms)
 {
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
@@ -372,6 +392,10 @@ do_all()
     // Print all coordinate sequences.
     cout << "--------HERE ARE THE COORDINATE SEQUENCES ----------" << endl;
     wkt_print_coordinates(geoms);
+
+    // Print all voronoi coordinates
+    cout << "--------HERE ARE THE VORONOI VERTEX COORDINATES ----------" << endl;
+    wkt_print_mic_voronoi_vertices(geoms);
 
     // Print ring coordinates
     cout << "--------HERE ARE THE RING COORDINATES ----------" << endl;

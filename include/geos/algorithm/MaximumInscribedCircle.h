@@ -97,6 +97,11 @@ class GEOS_DLL MaximumInscribedCircle {
         std::vector<geom::Coordinate>* getSites();
 
         /**
+         * A helper function for easily checking the resulting voronoi vertices.
+         */
+        std::vector<geom::Coordinate> getVoronoiVertices();
+
+        /**
          * Gets the radius of the computed Maximum Inscribed Circle.
          *
          * @return the radius of the Maximum Inscribed Circle

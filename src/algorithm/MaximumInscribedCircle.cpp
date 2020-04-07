@@ -61,6 +61,16 @@ MaximumInscribedCircle::getSites()
     return sites;
 }
 
+/**
+ * Temporary development helper. To be removed in final version.
+ */
+std::vector<geom::Coordinate>
+MaximumInscribedCircle::getVoronoiVertices()
+{
+    compute();
+    return voronoiVertices;
+}
+
 /*private*/
 void
 MaximumInscribedCircle::compute()
@@ -84,6 +94,7 @@ MaximumInscribedCircle::compute()
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
         return;
     }
+    computeVoronoiVertices();
     return;
 }
 
