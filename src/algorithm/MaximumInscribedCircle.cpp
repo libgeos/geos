@@ -207,18 +207,15 @@ void
 MaximumInscribedCircle::computeVoronoiVertices()
 {
     VoronoiDiagramBuilder builder;
-    std::unique_ptr<CoordinateSequence> coords;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     const CoordinateSequenceFactory* coordSeqFactory = geomFact.getCoordinateSequenceFactory();
-    std::unique_ptr<Geometry> results;
     builder.setSites(*(coordSeqFactory->create(sites)));
 
-    results = builder.getDiagramEdges(geomFact);
-    for(unsigned int i = 0; i < results->getNumGeometries(); i++) {
-        coords = extractUniquePoints(results->getGeometryN(i))->getCoordinates();
-        for(unsigned int j = 0; j < coords->getSize(); j++) {
-            voronoiVertices.push_back(coords->getAt(j));
-        }
+    std::unique_ptr<Geometry> diagramEdges = builder.getDiagramEdges(geomFact);
+    std::shared_ptr<Geometry> edges = std::move(diagramEdges);
+    std::unique_ptr<CoordinateSequence> coords = extractUniquePoints(edges.get())->getCoordinates();
+    for(unsigned int i = 0; i < coords->getSize(); i++) {
+        voronoiVertices.push_back(coords->getAt(i));
     }
 }
 
