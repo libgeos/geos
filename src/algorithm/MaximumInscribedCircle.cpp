@@ -150,7 +150,7 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
         toY = toPoint->getY();
 
         // Push segments
-        for(size_t k = 0; k < inputNumSegments; k++) {
+        for(unsigned int k = 0; k < inputNumSegments; k++) {
             segmentX = fromX + (toX - fromX) * k / inputNumSegments;
             segmentY = fromY + (toY - fromY) * k / inputNumSegments;
             sites->push_back(Coordinate(segmentX, segmentY));
