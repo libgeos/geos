@@ -50,7 +50,8 @@ class GEOS_DLL MaximumInscribedCircle {
         MaximumInscribedCircle(const geom::Geometry* geom, const int numSegments):
             input(nullptr),
             inputNumSegments(2),
-            radius(0.0)
+            radius(0.0),
+            sites(nullptr)
         {
             input = geom;
             inputNumSegments = numSegments;

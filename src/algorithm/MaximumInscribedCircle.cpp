@@ -95,6 +95,13 @@ MaximumInscribedCircle::compute()
 void
 MaximumInscribedCircle::computeSites(const geom::Polygon* poly)
 {
+    if(sites == nullptr) {
+        cout << "Instantiating sites." << endl;
+        sites = new std::vector<Coordinate>;
+    } else {
+        return;
+    }
+
     const LineString* exterior = poly->getExteriorRing();
     const LineString* interior;
 
@@ -133,7 +140,6 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
     double fromX, fromY, toX, toY, segmentX, segmentY;
     std::unique_ptr<Point> fromPoint;
     std::unique_ptr<Point> toPoint;
-    sites = new std::vector<geom::Coordinate>;
 
     for(unsigned int i = 0; i < ring->getNumPoints(); i++) {
         fromPoint = ring->getPointN(i);
