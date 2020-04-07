@@ -141,7 +141,7 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
     std::unique_ptr<Point> fromPoint;
     std::unique_ptr<Point> toPoint;
 
-    for(unsigned int i = 0; i < ring->getNumPoints(); i++) {
+    for(unsigned int i = 0; i < ring->getNumPoints()-1; i++) {
         fromPoint = ring->getPointN(i);
         toPoint = ring->getPointN(i+1);
         fromX = fromPoint->getX();
