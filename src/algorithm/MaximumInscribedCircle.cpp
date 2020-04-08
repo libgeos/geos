@@ -64,7 +64,7 @@ MaximumInscribedCircle::getSites()
 /**
  * Temporary development helper. To be removed in final version.
  */
-std::vector<geom::Coordinate>
+std::vector<const geom::Point*>
 MaximumInscribedCircle::getVoronoiVertices()
 {
     compute();
@@ -179,7 +179,7 @@ MaximumInscribedCircle::addRingSites(const LineString* ring)
 
 // TODO: Figure out if I can use one of the extractor functions defined
 //       in GEOSGeom or MakeValid.
-static std::unique_ptr<geom::Geometry>
+static std::unique_ptr<geom::MultiPoint>
 extractUniquePoints(const geom::Geometry* geom)
 {
 
@@ -215,8 +215,14 @@ MaximumInscribedCircle::computeVoronoiVertices()
     std::shared_ptr<Geometry> edges = std::move(diagramEdges);
     std::unique_ptr<CoordinateSequence> coords = extractUniquePoints(edges.get())->getCoordinates();
     for(unsigned int i = 0; i < coords->getSize(); i++) {
-        voronoiVertices.push_back(coords->getAt(i));
+        voronoiVertices.push_back(geomFact.createPoint(coords->getAt(i)));
     }
+
+    // TODO: Figure out if I can get this to work without buffer overflows so I can just use points returned by extractUniquePoints.
+    // std::unique_ptr<MultiPoint> uniquePoints = extractUniquePoints(edges.get());
+    // for(unsigned int i = 0; i < uniquePoints->getNumGeometries(); i++) {
+    //     voronoiVertices.push_back(uniquePoints->getGeometryN(i));
+    // }
 }
 
 /*private*/
