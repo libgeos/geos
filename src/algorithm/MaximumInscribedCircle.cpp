@@ -38,6 +38,16 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /*public*/
+geom::Coordinate
+MaximumInscribedCircle::getCenter()
+{
+    compute();
+    computeVoronoiVertices();
+    computeCenterAndRadius();
+    return center;
+}
+
+/*public*/
 std::unique_ptr<Geometry>
 MaximumInscribedCircle::getCircle()
 {
@@ -230,11 +240,38 @@ MaximumInscribedCircle::computeVoronoiVertices()
     // }
 }
 
+/**
+ * This function takes the voronoi vertices and begins computing the distances to the polygon's exterior
+ * and interior rings, keeping track of the greatest distance. Whichever vertex is the greatest distance
+ * from the rings is considered the center and the distance is the radius.
+ */
 /*private*/
 void
 MaximumInscribedCircle::computeCenterAndRadius()
 {
-    
+    double vertexDistance = 0, interiorRingDistance = 0, maxDistance = 0;
+    const Point* bestCenterCandidate;
+    const LineString* exteriorRing = poly->getExteriorRing();
+    std::vector<const LineString*> interiorRings;
+    for(auto vertex : voronoiVertices) {
+        // Initialize the vertex distance
+        vertexDistance = exteriorRing->distance(vertex);
+        for(auto interiorRing : interiorRings) {
+            // If any interior rings are closer, update the vertex distance
+            interiorRingDistance = interiorRing->distance(vertex);
+            if(interiorRingDistance < vertexDistance) {
+                vertexDistance = interiorRingDistance;
+            }
+        }
+
+        if(vertexDistance > maxDistance) {
+            maxDistance = vertexDistance;
+            bestCenterCandidate = vertex;
+        }
+    }
+
+    radius = maxDistance;
+    center = *(bestCenterCandidate->getCoordinate());
 }
 
 /**

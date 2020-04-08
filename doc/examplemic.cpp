@@ -257,6 +257,22 @@ wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
 }
 
 void
+wkt_print_mic_center(vector<const Geometry*>* geoms)
+{
+    std::size_t dimension = 2;
+    io::WKTWriter* wkt = new io::WKTWriter();
+    for(unsigned int i = 0; i < geoms->size(); i++) {
+        const Geometry* g = (*geoms)[i];
+        geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
+        cout << "Executing getCenter method." << endl;
+        geom::Coordinate center = mic->getCenter();
+        string tmp = center.toString();
+        cout << "Max inscribed circle center: " << tmp << endl;
+    }
+    delete wkt;
+}
+
+void
 wkt_print_coordinates(vector<const Geometry*>* geoms)
 {
     io::WKTWriter* wkt = new io::WKTWriter();
@@ -381,23 +397,27 @@ do_all()
     polys->push_back(create_square_polygon(0, 0, 30));
 
     // Print all geoms.
-    cout << "--------HERE ARE THE BASE GEOMS ----------" << endl;
+    cout << "-------- HERE ARE THE BASE GEOMS ----------" << endl;
     wkt_print_geoms(geoms);
 
     // Print max-inscribed-circle sites.
-    cout << "--------HERE ARE THE MIC SITES ----------" << endl;
+    cout << "-------- HERE ARE THE MIC SITES ----------" << endl;
     wkt_print_mic_sites(geoms);
 
     // Print all coordinate sequences.
-    cout << "--------HERE ARE THE COORDINATE SEQUENCES ----------" << endl;
+    cout << "-------- HERE ARE THE COORDINATE SEQUENCES ----------" << endl;
     wkt_print_coordinates(geoms);
 
     // Print all voronoi coordinates
-    cout << "--------HERE ARE THE VORONOI VERTEX COORDINATES ----------" << endl;
+    cout << "-------- HERE ARE THE VORONOI VERTEX COORDINATES ----------" << endl;
     wkt_print_mic_voronoi_vertices(geoms);
 
+    // Print the max inscribed circle center
+    cout << "-------- HERE IS THE MAX INSCRIBED CIRCLE CENTER COORDINATE ----------" << endl;
+    wkt_print_mic_center(geoms);
+
     // Print ring coordinates
-    cout << "--------HERE ARE THE RING COORDINATES ----------" << endl;
+    cout << "-------- HERE ARE THE RING COORDINATES ----------" << endl;
     wkt_print_ring_coordinates(polys);
 
     /////////////////////////////////////////////
