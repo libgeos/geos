@@ -230,7 +230,6 @@ wkt_print_mic_sites(vector<const Geometry*>* geoms)
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
         cout << "Executing getSites method." << endl;
         std::vector<geom::Coordinate>* sites = mic->getSites();
-        cout << "Executed getSites. Creating CoordinateSequence from sites." << endl;
         std::unique_ptr<CoordinateSequence> cs = coordSeqFactory->create(sites);
         string tmp = cs->toString();
         cout << "Created CoordinateSequence [" << i << "] (Coordinate Sequence) " << tmp << endl;

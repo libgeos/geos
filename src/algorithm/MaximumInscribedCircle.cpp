@@ -101,7 +101,6 @@ void
 MaximumInscribedCircle::computeSites(const geom::Polygon* poly)
 {
     if(sites == nullptr) {
-        cout << "Instantiating sites." << endl;
         sites = new std::vector<Coordinate>;
     } else {
         return;
