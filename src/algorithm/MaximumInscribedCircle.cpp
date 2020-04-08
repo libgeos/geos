@@ -81,13 +81,13 @@ MaximumInscribedCircle::compute()
         center = *(input->getCoordinate());
     } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
-        const geom::Polygon* poly = dynamic_cast<const geom::Polygon*>(input);
-        computeSites(poly);
+        poly = dynamic_cast<const geom::Polygon*>(input);
+        computeSites();
     } else if(typeid(*input) == typeid(MultiPolygon)) {
         cout << "Geometry is of type MultiPolygon" << endl;
         const geom::MultiPolygon* multiPoly = dynamic_cast<const geom::MultiPolygon*>(input);
-        const geom::Polygon* maxAreaPoly = polygonOfMaxArea(multiPoly);
-        computeSites(maxAreaPoly);
+        const geom::Polygon* poly = polygonOfMaxArea(multiPoly);
+        computeSites();
     } else {
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
         return;
@@ -98,7 +98,7 @@ MaximumInscribedCircle::compute()
 
 /*private*/
 void
-MaximumInscribedCircle::computeSites(const geom::Polygon* poly)
+MaximumInscribedCircle::computeSites()
 {
     if(sites == nullptr) {
         sites = new std::vector<Coordinate>;
@@ -215,7 +215,7 @@ MaximumInscribedCircle::computeVoronoiVertices()
     std::unique_ptr<CoordinateSequence> coords = extractUniquePoints(edges.get())->getCoordinates();
     for(unsigned int i = 0; i < coords->getSize(); i++) {
         const Point* point = geomFact.createPoint(coords->getAt(i));
-        if(input->intersects(point)) {
+        if(poly->intersects(point)) {
             voronoiVertices.push_back(point);
         }
     }
@@ -224,7 +224,7 @@ MaximumInscribedCircle::computeVoronoiVertices()
     // std::unique_ptr<MultiPoint> uniquePoints = extractUniquePoints(edges.get());
     // for(unsigned int i = 0; i < uniquePoints->getNumGeometries(); i++) {
     //     const Point* point  = uniquePoints->getGeometryN(i);
-    //     if(input->intersects(point)) {
+    //     if(poly->intersects(point)) {
     //         voronoiVertices.push_back(point);
     //     }
     // }
@@ -232,7 +232,7 @@ MaximumInscribedCircle::computeVoronoiVertices()
 
 /*private*/
 void
-MaximumInscribedCircle::computeCenterAndRadius(geom::Polygon& poly)
+MaximumInscribedCircle::computeCenterAndRadius()
 {
     
 }
