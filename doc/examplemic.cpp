@@ -247,11 +247,11 @@ wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
         const Geometry* g = (*geoms)[i];
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
         cout << "Executing getVoronoiVertices method." << endl;
-        std::vector<geom::Coordinate> vertices = mic->getVoronoiVertices();
+        std::vector<const geom::Point*> vertices = mic->getVoronoiVertices();
         for(unsigned int j = 0; j < vertices.size(); j++) {
-            geom::Coordinate vertex = vertices[j];
-            string tmp = vertex.toString();
-            cout << "Voronoi vertex [" << j << "] (Coordinate) " << tmp << endl;
+            const geom::Point* vertex = vertices[j];
+            string tmp = vertex->toString();
+            cout << "Voronoi vertex [" << j << "] (Point) " << tmp << endl;
         }
     }
     delete wkt;
