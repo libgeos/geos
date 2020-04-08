@@ -214,13 +214,19 @@ MaximumInscribedCircle::computeVoronoiVertices()
     std::shared_ptr<Geometry> edges = std::move(diagramEdges);
     std::unique_ptr<CoordinateSequence> coords = extractUniquePoints(edges.get())->getCoordinates();
     for(unsigned int i = 0; i < coords->getSize(); i++) {
-        voronoiVertices.push_back(geomFact.createPoint(coords->getAt(i)));
+        const Point* point = geomFact.createPoint(coords->getAt(i));
+        if(input->intersects(point)) {
+            voronoiVertices.push_back(point);
+        }
     }
 
-    // TODO: Figure out if I can get this to work without buffer overflows so I can just use points returned by extractUniquePoints.
+    // // TODO: Figure out if I can get this to work without buffer overflows so I can just use points returned by extractUniquePoints.
     // std::unique_ptr<MultiPoint> uniquePoints = extractUniquePoints(edges.get());
     // for(unsigned int i = 0; i < uniquePoints->getNumGeometries(); i++) {
-    //     voronoiVertices.push_back(uniquePoints->getGeometryN(i));
+    //     const Point* point  = uniquePoints->getGeometryN(i);
+    //     if(input->intersects(point)) {
+    //         voronoiVertices.push_back(point);
+    //     }
     // }
 }
 
