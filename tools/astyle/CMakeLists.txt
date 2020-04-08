@@ -12,5 +12,8 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB_RECURSE astyle_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_executable(astyle ${astyle_SOURCES})
+if(MSVC)
+  target_compile_options(astyle PRIVATE /source-charset:utf-8)
+endif()
 # message(STATUS "Enable AStyle")
 
