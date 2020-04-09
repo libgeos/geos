@@ -42,8 +42,6 @@ geom::Coordinate
 MaximumInscribedCircle::getCenter()
 {
     compute();
-    computeVoronoiVertices();
-    computeCenterAndRadius();
     return center;
 }
 
@@ -68,7 +66,7 @@ std::vector<geom::Coordinate>*
 MaximumInscribedCircle::getSites()
 {
     compute();
-    return sites;
+    return computeSites();
 }
 
 /**
@@ -89,6 +87,7 @@ MaximumInscribedCircle::compute()
     if(typeid(*input) == typeid(Point)) {
         cout << "Geometry is of type Point" << endl;
         center = *(input->getCoordinate());
+        return;
     } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
         poly = dynamic_cast<const geom::Polygon*>(input);
@@ -102,19 +101,16 @@ MaximumInscribedCircle::compute()
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
         return;
     }
-    // computeVoronoiVertices();
+    computeVoronoiVertices();
+    computeCenterAndRadius();
     return;
 }
 
 /*private*/
-void
+std::vector<geom::Coordinate>*
 MaximumInscribedCircle::computeSites()
 {
-    if(sites == nullptr) {
-        sites = new std::vector<Coordinate>;
-    } else {
-        return;
-    }
+    std::vector<geom::Coordinate>* sites = new std::vector<Coordinate>;
 
     const LineString* exterior = poly->getExteriorRing();
     const LineString* interior;
@@ -125,12 +121,14 @@ MaximumInscribedCircle::computeSites()
     ymin = exterior->getStartPoint()->getY();
     ymax = ymin;
 
-    addRingSites(exterior);
+    addRingSites(sites, exterior);
 
     for(unsigned int i = 0; i < poly->getNumInteriorRing(); i++) {
         interior = poly->getInteriorRingN(i);
-        addRingSites(interior);
+        addRingSites(sites, interior);
     }
+
+    return sites;
 }
 
 /**
@@ -149,7 +147,7 @@ MaximumInscribedCircle::computeSites()
 */
 /*private*/
 void
-MaximumInscribedCircle::addRingSites(const LineString* ring)
+MaximumInscribedCircle::addRingSites(std::vector<geom::Coordinate>* sites, const LineString* ring)
 {
     double fromX, fromY, toX, toY, segmentX, segmentY;
     std::unique_ptr<Point> fromPoint;
@@ -218,8 +216,9 @@ MaximumInscribedCircle::computeVoronoiVertices()
     VoronoiDiagramBuilder builder;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     const CoordinateSequenceFactory* coordSeqFactory = geomFact.getCoordinateSequenceFactory();
-    builder.setSites(*(coordSeqFactory->create(sites)));
 
+    std::vector<geom::Coordinate>* sites = computeSites();
+    builder.setSites(*(coordSeqFactory->create(sites)));
     std::unique_ptr<Geometry> diagramEdges = builder.getDiagramEdges(geomFact);
     std::shared_ptr<Geometry> edges = std::move(diagramEdges);
     std::unique_ptr<CoordinateSequence> coords = extractUniquePoints(edges.get())->getCoordinates();
