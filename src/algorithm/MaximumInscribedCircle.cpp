@@ -116,12 +116,6 @@ MaximumInscribedCircle::computeSites()
     const LineString* exterior = poly->getExteriorRing();
     const LineString* interior;
 
-    // Initialize bounding box
-    xmin = exterior->getStartPoint()->getX();
-    xmax = xmin;
-    ymin = exterior->getStartPoint()->getY();
-    ymax = ymin;
-
     addRingSites(sites, exterior);
 
     for(unsigned int i = 0; i < poly->getNumInteriorRing(); i++) {
@@ -167,20 +161,6 @@ MaximumInscribedCircle::addRingSites(std::vector<Coordinate>* sites, const LineS
             segmentX = fromX + (toX - fromX) * k / inputNumSegments;
             segmentY = fromY + (toY - fromY) * k / inputNumSegments;
             sites->push_back(Coordinate(segmentX, segmentY));
-        }
-
-        // Update bounding box
-        if(fromX < xmin) {
-            xmin = fromX;
-        }
-        if(fromX > xmax) {
-            xmax = fromX;
-        }
-        if(fromY < ymin) {
-            ymin = fromY;
-        }
-        if(fromY > ymax) {
-            ymax = fromY;
         }
     }
 }
