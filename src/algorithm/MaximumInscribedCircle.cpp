@@ -91,12 +91,10 @@ MaximumInscribedCircle::compute()
     } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
         poly = dynamic_cast<const Polygon*>(input);
-        computeSites();
     } else if(typeid(*input) == typeid(MultiPolygon)) {
         cout << "Geometry is of type MultiPolygon" << endl;
         const MultiPolygon* multiPoly = dynamic_cast<const MultiPolygon*>(input);
         const Polygon* poly = polygonOfMaxArea(multiPoly);
-        computeSites();
     } else {
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
         return;
