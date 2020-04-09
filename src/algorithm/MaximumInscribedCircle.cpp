@@ -240,10 +240,10 @@ MaximumInscribedCircle::computeCenterAndRadius()
     const Point* bestCenterCandidate;
     const LineString* exteriorRing = poly->getExteriorRing();
     std::vector<const LineString*> interiorRings;
-    for(auto vertex : voronoiVertices) {
+    for(const Point* vertex : voronoiVertices) {
         // Initialize the vertex distance
         vertexDistance = exteriorRing->distance(vertex);
-        for(auto interiorRing : interiorRings) {
+        for(const LineString* interiorRing : interiorRings) {
             // If any interior rings are closer, update the vertex distance
             interiorRingDistance = interiorRing->distance(vertex);
             if(interiorRingDistance < vertexDistance) {
