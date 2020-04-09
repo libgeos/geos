@@ -22,6 +22,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
+#include <geos/operation/valid/MakeValid.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 
 #include <memory> // for unique_ptr
@@ -29,7 +30,7 @@
 #include <vector>
 #include <cstdlib>
 
-using namespace std;
+using namespace std; // Remove when we remove cout statements.
 using namespace geos::geom;
 using namespace geos::triangulate;
 using namespace geos::util;
@@ -38,7 +39,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /*public*/
-geom::Coordinate
+Coordinate
 MaximumInscribedCircle::getCenter()
 {
     compute();
@@ -62,7 +63,7 @@ MaximumInscribedCircle::getCircle()
  * Temporary development helper. To be removed in final version.
  */
 /*public*/
-std::vector<geom::Coordinate>*
+std::vector<Coordinate>*
 MaximumInscribedCircle::getSites()
 {
     compute();
@@ -72,7 +73,7 @@ MaximumInscribedCircle::getSites()
 /**
  * Temporary development helper. To be removed in final version.
  */
-std::vector<const geom::Point*>
+std::vector<const Point*>
 MaximumInscribedCircle::getVoronoiVertices()
 {
     compute();
@@ -90,12 +91,12 @@ MaximumInscribedCircle::compute()
         return;
     } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
-        poly = dynamic_cast<const geom::Polygon*>(input);
+        poly = dynamic_cast<const Polygon*>(input);
         computeSites();
     } else if(typeid(*input) == typeid(MultiPolygon)) {
         cout << "Geometry is of type MultiPolygon" << endl;
-        const geom::MultiPolygon* multiPoly = dynamic_cast<const geom::MultiPolygon*>(input);
-        const geom::Polygon* poly = polygonOfMaxArea(multiPoly);
+        const MultiPolygon* multiPoly = dynamic_cast<const MultiPolygon*>(input);
+        const Polygon* poly = polygonOfMaxArea(multiPoly);
         computeSites();
     } else {
         // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
@@ -107,10 +108,10 @@ MaximumInscribedCircle::compute()
 }
 
 /*private*/
-std::vector<geom::Coordinate>*
+std::vector<Coordinate>*
 MaximumInscribedCircle::computeSites()
 {
-    std::vector<geom::Coordinate>* sites = new std::vector<Coordinate>;
+    std::vector<Coordinate>* sites = new std::vector<Coordinate>;
 
     const LineString* exterior = poly->getExteriorRing();
     const LineString* interior;
@@ -147,7 +148,7 @@ MaximumInscribedCircle::computeSites()
 */
 /*private*/
 void
-MaximumInscribedCircle::addRingSites(std::vector<geom::Coordinate>* sites, const LineString* ring)
+MaximumInscribedCircle::addRingSites(std::vector<Coordinate>* sites, const LineString* ring)
 {
     double fromX, fromY, toX, toY, segmentX, segmentY;
     std::unique_ptr<Point> fromPoint;
@@ -186,14 +187,14 @@ MaximumInscribedCircle::addRingSites(std::vector<geom::Coordinate>* sites, const
 
 // TODO: Figure out if I can use one of the extractor functions defined
 //       in GEOSGeom or MakeValid.
-static std::unique_ptr<geom::MultiPoint>
-extractUniquePoints(const geom::Geometry* geom)
+static std::unique_ptr<MultiPoint>
+extractUniquePoints(const Geometry* geom)
 {
 
     // Code taken from GEOSGeom_extractUniquePoints_r()
 
     /* 1: extract points */
-    std::vector<const geom::Coordinate*> coords;
+    std::vector<const Coordinate*> coords;
     UniqueCoordinateArrayFilter filter(coords);
     geom->apply_ro(&filter);
 
@@ -217,7 +218,7 @@ MaximumInscribedCircle::computeVoronoiVertices()
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     const CoordinateSequenceFactory* coordSeqFactory = geomFact.getCoordinateSequenceFactory();
 
-    std::vector<geom::Coordinate>* sites = computeSites();
+    std::vector<Coordinate>* sites = computeSites();
     builder.setSites(*(coordSeqFactory->create(sites)));
     std::unique_ptr<Geometry> diagramEdges = builder.getDiagramEdges(geomFact);
     std::shared_ptr<Geometry> edges = std::move(diagramEdges);
@@ -281,8 +282,8 @@ MaximumInscribedCircle::computeCenterAndRadius()
 * @return the Polygon of largest area
 */
 /*private*/
-const geom::Polygon*
-MaximumInscribedCircle::polygonOfMaxArea(const geom::MultiPolygon* multiPoly)
+const Polygon*
+MaximumInscribedCircle::polygonOfMaxArea(const MultiPolygon* multiPoly)
 {
     double currentArea = 0, maxArea = 0;
     unsigned int maxAreaPolyIndex = 0;
