@@ -50,12 +50,11 @@ std::unique_ptr<Geometry>
 MaximumInscribedCircle::getCircle()
 {
     compute();
-    // handle degenerate or trivial cases
-    if(input->isEmpty()) {
-        return std::unique_ptr<Geometry>(input->getFactory()->createPolygon());
-    } else if(input->getNumPoints() == 1) {
-        return std::unique_ptr<Geometry>(input->clone());
+    std::unique_ptr<Geometry> centerPoint(input->getFactory()->createPoint(center));
+    if(radius == 0.0) {
+        return centerPoint;
     }
+    return centerPoint->buffer(radius);
 }
 
 /**
@@ -84,6 +83,10 @@ MaximumInscribedCircle::getVoronoiVertices()
 void
 MaximumInscribedCircle::compute()
 {
+    if(!center.isNull()) {
+        return;
+    }
+
     if(typeid(*input) == typeid(Point)) {
         cout << "Geometry is of type Point" << endl;
         center = *(input->getCoordinate());
