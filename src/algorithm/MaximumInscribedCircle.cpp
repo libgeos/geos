@@ -22,7 +22,6 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
-#include <geos/operation/valid/MakeValid.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 
 #include <memory> // for unique_ptr
