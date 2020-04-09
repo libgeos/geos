@@ -207,14 +207,12 @@ WKBtest(vector<const Geometry*>* geoms)
 void
 wkt_print_geoms(vector<const Geometry*>* geoms)
 {
-    WKBtest(geoms); // test WKB parser
-
     // WKT-print given geometries
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         string tmp = wkt->write(g);
-        cout << "[" << i << "] (WKT) (Is Polygonal: " << g->isPolygonal() << ") " << tmp << endl;
+        cout << "[" << i << "] (WKT) " << tmp << endl;
     }
     delete wkt;
 }
@@ -228,7 +226,6 @@ wkt_print_mic_sites(vector<const Geometry*>* geoms)
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        cout << "Executing getSites method." << endl;
         std::vector<geom::Coordinate>* sites = mic->getSites();
         std::unique_ptr<CoordinateSequence> cs = coordSeqFactory->create(sites);
         string tmp = cs->toString();
@@ -245,7 +242,6 @@ wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        cout << "Executing getVoronoiVertices method." << endl;
         std::vector<const geom::Point*> vertices = mic->getVoronoiVertices();
         for(unsigned int j = 0; j < vertices.size(); j++) {
             const geom::Point* vertex = vertices[j];
@@ -257,51 +253,18 @@ wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
 }
 
 void
-wkt_print_mic_center(vector<const Geometry*>* geoms)
+wkt_print_mic(vector<const Geometry*>* geoms)
 {
     std::size_t dimension = 2;
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        cout << "Executing getCenter method." << endl;
         geom::Coordinate center = mic->getCenter();
         string tmp = center.toString();
         cout << "Max inscribed circle center: " << tmp << endl;
-    }
-    delete wkt;
-}
-
-void
-wkt_print_coordinates(vector<const Geometry*>* geoms)
-{
-    io::WKTWriter* wkt = new io::WKTWriter();
-    for(unsigned int i = 0; i < geoms->size(); i++) {
-        const Geometry* g = (*geoms)[i];
-        std::unique_ptr<CoordinateSequence> cs = g->getCoordinates();
-        string tmp = cs->toString();
-        cout << "[" << i << "] (Coordinate Sequence) " << tmp << endl;
-    }
-    delete wkt;
-}
-
-void
-wkt_print_ring_coordinates(vector<const Polygon*>* polys)
-{
-    // WKBtest(polys); // test WKB parser
-
-    // WKT-print coordinates of given geometries
-    io::WKTWriter* wkt = new io::WKTWriter();
-    for(unsigned int i = 0; i < polys->size(); i++) {
-        const Polygon* p = (*polys)[i];
-        const LineString* exterior = p->getExteriorRing();
-        string tmp = exterior->toString();
-        cout << "[" << i << "] (Exterior Ring) " << tmp << endl;
-        for(unsigned int j = 0; j < p->getNumInteriorRing(); j++) {
-            const LineString* interior = p->getInteriorRingN(j);
-            string tmp = interior->toString();
-            cout << "[" << i << "." << j <<"] (Interior Ring) " << tmp << endl;
-        }
+        cout << "Max inscribed circle radius: " << mic->getRadius() << endl;
+        cout << "Max inscribed circle: " << mic->getCircle()->toString() << endl;
     }
     delete wkt;
 }
@@ -400,25 +363,17 @@ do_all()
     cout << "-------- HERE ARE THE BASE GEOMS ----------" << endl;
     wkt_print_geoms(geoms);
 
-    // Print max-inscribed-circle sites.
+    // Print max inscribed circle sites.
     cout << "-------- HERE ARE THE MIC SITES ----------" << endl;
     wkt_print_mic_sites(geoms);
-
-    // Print all coordinate sequences.
-    cout << "-------- HERE ARE THE COORDINATE SEQUENCES ----------" << endl;
-    wkt_print_coordinates(geoms);
 
     // Print all voronoi coordinates
     cout << "-------- HERE ARE THE VORONOI VERTEX COORDINATES ----------" << endl;
     wkt_print_mic_voronoi_vertices(geoms);
 
-    // Print the max inscribed circle center
-    cout << "-------- HERE IS THE MAX INSCRIBED CIRCLE CENTER COORDINATE ----------" << endl;
-    wkt_print_mic_center(geoms);
-
-    // Print ring coordinates
-    cout << "-------- HERE ARE THE RING COORDINATES ----------" << endl;
-    wkt_print_ring_coordinates(polys);
+    // Print the max inscribed circle
+    cout << "-------- HERE IS THE MAX INSCRIBED CIRCLE ----------" << endl;
+    wkt_print_mic(geoms);
 
     /////////////////////////////////////////////
     // CLEANUP
