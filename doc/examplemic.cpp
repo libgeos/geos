@@ -220,7 +220,6 @@ wkt_print_geoms(vector<const Geometry*>* geoms)
 void
 wkt_print_mic_sites(vector<const Geometry*>* geoms)
 {
-    std::size_t dimension = 2;
     const CoordinateSequenceFactory* coordSeqFactory = global_factory->getCoordinateSequenceFactory();
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
@@ -237,7 +236,6 @@ wkt_print_mic_sites(vector<const Geometry*>* geoms)
 void
 wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
 {
-    std::size_t dimension = 2;
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
@@ -255,7 +253,6 @@ wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
 void
 wkt_print_mic(vector<const Geometry*>* geoms)
 {
-    std::size_t dimension = 2;
     io::WKTWriter* wkt = new io::WKTWriter();
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];

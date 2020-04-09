@@ -32,7 +32,7 @@ class GEOS_DLL MaximumInscribedCircle {
         // member variables
         const geom::Geometry* input;
         const geom::Polygon* poly;
-        int inputNumSegments;
+        unsigned int inputNumSegments;
         std::vector<const geom::Point*> voronoiVertices;
         geom::Coordinate center;
         double radius;
@@ -46,7 +46,7 @@ class GEOS_DLL MaximumInscribedCircle {
 
     public:
 
-        MaximumInscribedCircle(const geom::Geometry* geom, const int numSegments):
+        MaximumInscribedCircle(const geom::Geometry* geom, unsigned int numSegments):
             input(nullptr),
             inputNumSegments(2),
             radius(0.0)
