@@ -52,6 +52,7 @@ geos_unit_SOURCES = \
 	algorithm/IntersectionTest.cpp \
 	algorithm/LengthTest.cpp \
 	algorithm/LocatePointInRingTest.cpp \
+	algorithm/MaximumInscribedCircleTest.cpp \
 	algorithm/MinimumBoundingCircleTest.cpp \
 	algorithm/MinimumDiameterTest.cpp \
 	algorithm/OrientationIndexFailureTest.cpp \
