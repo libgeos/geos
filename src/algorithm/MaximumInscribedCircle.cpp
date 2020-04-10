@@ -29,7 +29,6 @@
 #include <vector>
 #include <cstdlib>
 
-using namespace std; // Remove when we remove cout statements.
 using namespace geos::geom;
 using namespace geos::triangulate;
 using namespace geos::util;
@@ -95,14 +94,11 @@ MaximumInscribedCircle::compute()
     }
 
     if(typeid(*input) == typeid(Point)) {
-        cout << "Geometry is of type Point" << endl;
         centre = *(input->getCoordinate());
         return;
     } else if(typeid(*input) == typeid(Polygon)) {
-        cout << "Geometry is of type Polygon" << endl;
         poly = dynamic_cast<const Polygon*>(input);
     } else if(typeid(*input) == typeid(MultiPolygon)) {
-        cout << "Geometry is of type MultiPolygon" << endl;
         const MultiPolygon* multiPoly = dynamic_cast<const MultiPolygon*>(input);
         poly = polygonOfMaxArea(multiPoly);
     } else {
