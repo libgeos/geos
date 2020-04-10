@@ -42,8 +42,8 @@ struct test_maximuminscribedcircle_data {
         MaximumInscribedCircle mic(geom.get(), 2);
         double actualRadius = mic.getRadius();
         geos::geom::Coordinate actualCenter = mic.getCenter();
-
-        if(centreOut.isNull()) {
+        
+        if(!centreOut.isNull()) {
             ensure(centreOut.distance(actualCenter) < 0.0001);
         }
         if(radiusOut >= 0) {
@@ -66,6 +66,7 @@ template<>
 void object::test<1>
 ()
 {
+    // Trivial point
     Coordinate c(10, 10);
     doMaximumInscribedCircleTest(
         "POINT (10 10)",
@@ -79,11 +80,57 @@ template<>
 void object::test<2>
 ()
 {
+    // Trivial square
+    Coordinate c(1, 1);
+    doMaximumInscribedCircleTest(
+        "POLYGON ((0.0 0.0, 2.0 0.0, 2.0 2.0, 0.0 2.0, 0.0 0.0))",
+        c,
+        1
+    );
+}
+
+template<>
+template<>
+void object::test<3>
+()
+{
+    // Square with the center cut out. True centroid lies inside hole.
     Coordinate c(5, 12.5);
     doMaximumInscribedCircleTest(
-        "POLYGON ((0.0 0.0, 0.0 30.0, 30.0 30.0, 30.0 0.0, 0.0 0.0), (10.0 10.0, 10.0 20.0, 20.0 20.0, 20.0 10.0, 10.0 10.0))",
+        "POLYGON ((0.0 0.0, 0.0 30.0, 30.0 30.0, 30.0 0.0, 0.0 0.0), \
+                  (10.0 10.0, 10.0 20.0, 20.0 20.0, 20.0 10.0, 10.0 10.0))",
         c,
         5
+    );
+}
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    // Polygon with no holes, but centroid does not intersect polygon
+    Coordinate c(1.25, 3.5);
+    doMaximumInscribedCircleTest(
+        "POLYGON ((0.0 0.0, 1.0 0.0, 1.0 3.0, 2.0 3.0, 2.0 0.0, 3.0 0.0, 3.0 4.0, 0.0 4.0, 0.0 0.0))",
+        c,
+        0.5
+    );
+}
+
+template<>
+template<>
+void object::test<5>
+()
+{
+    // Multipolygon where polygon of smallest area actually contains largest inscribed circle.
+    // However, algorithm uses polygon of largest area in calculation. This polygon is same as in test 4.
+    Coordinate c(1.25, 3.5);
+    doMaximumInscribedCircleTest(
+        "MULTIPOLYGON (((0.0 0.0, 1.0 0.0, 1.0 3.0, 2.0 3.0, 2.0 0.0, 3.0 0.0, 3.0 4.0, 0.0 4.0, 0.0 0.0)), \
+                       ((-3.0 -3.0, -1.0 -3.0, -1.0 -1.0, -3.0 -1.0, -3.0 -3.0)))",
+        c,
+        0.5
     );
 }
 
