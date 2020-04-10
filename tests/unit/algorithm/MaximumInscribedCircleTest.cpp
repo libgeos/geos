@@ -35,8 +35,8 @@ struct test_maximuminscribedcircle_data {
     {}
 
     void
-    doMaximumInscribedCircleTest(std::string wktIn, unsigned int numSegments, geos::geom::Coordinate& centreOut,
-                                 double radiusOut)
+    doMaximumInscribedCircleTest(std::string wktIn, unsigned int numSegments,
+                                 geos::geom::Coordinate& centreOut, double radiusOut)
     {
         geom = reader.read(wktIn);
         MaximumInscribedCircle mic(geom.get(), numSegments);
