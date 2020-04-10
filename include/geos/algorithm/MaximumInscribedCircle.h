@@ -34,13 +34,13 @@ class GEOS_DLL MaximumInscribedCircle {
         const geom::Polygon* poly;
         unsigned int inputNumSegments;
         std::vector<const geom::Point*> voronoiVertices;
-        geom::Coordinate center;
+        geom::Coordinate centre;
         double radius;
 
         void addRingSites(std::vector<geom::Coordinate>* sites, const geom::LineString* ring);
         void compute();
         void computeVoronoiVertices();
-        void computeCenterAndRadius();
+        void computeCentreAndRadius();
         std::vector<geom::Coordinate>* computeSites();
         const geom::Polygon* polygonOfMaxArea(const geom::MultiPolygon* multiPoly);
 
@@ -53,7 +53,7 @@ class GEOS_DLL MaximumInscribedCircle {
         {
             input = geom;
             inputNumSegments = numSegments;
-            center.setNull();
+            centre.setNull();
         }
 
         ~MaximumInscribedCircle() {}; // This is a destructor and is required to free resources
@@ -82,12 +82,12 @@ class GEOS_DLL MaximumInscribedCircle {
         std::unique_ptr<geom::Geometry> getCircle();
 
         /**
-         * Gets the center point of the computed Maximum Inscribed Circle.
+         * Gets the centre point of the computed Maximum Inscribed Circle.
          *
-         * @return the center point of the Maximum Incribed Circle
+         * @return the centre point of the Maximum Incribed Circle
          * @return null if the input is empty
          */
-        geom::Coordinate getCenter();
+        geom::Coordinate getCentre();
 
         /**
          * A helper function for easily checking the resulting sites.

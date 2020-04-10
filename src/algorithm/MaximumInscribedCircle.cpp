@@ -39,10 +39,10 @@ namespace algorithm { // geos.algorithm
 
 /*public*/
 Coordinate
-MaximumInscribedCircle::getCenter()
+MaximumInscribedCircle::getCentre()
 {
     compute();
-    return center;
+    return centre;
 }
 
 /*public*/
@@ -50,11 +50,11 @@ std::unique_ptr<Geometry>
 MaximumInscribedCircle::getCircle()
 {
     compute();
-    std::unique_ptr<Geometry> centerPoint(input->getFactory()->createPoint(center));
+    std::unique_ptr<Geometry> centrePoint(input->getFactory()->createPoint(centre));
     if(radius == 0.0) {
-        return centerPoint;
+        return centrePoint;
     }
-    return centerPoint->buffer(radius);
+    return centrePoint->buffer(radius);
 }
 
 /*public*/
@@ -90,13 +90,13 @@ MaximumInscribedCircle::getVoronoiVertices()
 void
 MaximumInscribedCircle::compute()
 {
-    if(!center.isNull()) {
+    if(!centre.isNull()) {
         return;
     }
 
     if(typeid(*input) == typeid(Point)) {
         cout << "Geometry is of type Point" << endl;
-        center = *(input->getCoordinate());
+        centre = *(input->getCoordinate());
         return;
     } else if(typeid(*input) == typeid(Polygon)) {
         cout << "Geometry is of type Polygon" << endl;
@@ -110,7 +110,7 @@ MaximumInscribedCircle::compute()
         return;
     }
     computeVoronoiVertices();
-    computeCenterAndRadius();
+    computeCentreAndRadius();
     return;
 }
 
@@ -230,14 +230,14 @@ MaximumInscribedCircle::computeVoronoiVertices()
 /**
  * This function takes the voronoi vertices and begins computing the distances to the polygon's exterior
  * and interior rings, keeping track of the greatest distance. Whichever vertex is the greatest distance
- * from the rings is considered the center and the distance is the radius.
+ * from the rings is considered the centre and the distance is the radius.
  */
 /*private*/
 void
-MaximumInscribedCircle::computeCenterAndRadius()
+MaximumInscribedCircle::computeCentreAndRadius()
 {
     double vertexDistance = 0, interiorRingDistance = 0, maxDistance = 0;
-    const Point* bestCenterCandidate;
+    const Point* bestCentreCandidate;
     const LineString* exteriorRing = poly->getExteriorRing();
     std::vector<const LineString*> interiorRings;
     for(const Point* vertex : voronoiVertices) {
@@ -253,12 +253,12 @@ MaximumInscribedCircle::computeCenterAndRadius()
 
         if(vertexDistance > maxDistance) {
             maxDistance = vertexDistance;
-            bestCenterCandidate = vertex;
+            bestCentreCandidate = vertex;
         }
     }
 
     radius = maxDistance;
-    center = *(bestCenterCandidate->getCoordinate());
+    centre = *(bestCentreCandidate->getCoordinate());
 }
 
 /**

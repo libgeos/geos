@@ -257,9 +257,9 @@ wkt_print_mic(vector<const Geometry*>* geoms)
     for(unsigned int i = 0; i < geoms->size(); i++) {
         const Geometry* g = (*geoms)[i];
         geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        geom::Coordinate center = mic->getCenter();
-        string tmp = center.toString();
-        cout << "Max inscribed circle center: " << tmp << endl;
+        geom::Coordinate centre = mic->getCentre();
+        string tmp = centre.toString();
+        cout << "Max inscribed circle centre: " << tmp << endl;
         cout << "Max inscribed circle radius: " << mic->getRadius() << endl;
         cout << "Max inscribed circle: " << mic->getCircle()->toString() << endl;
     }

@@ -41,13 +41,13 @@ struct test_maximuminscribedcircle_data {
         geom = reader.read(wktIn);
         MaximumInscribedCircle mic(geom.get(), numSegments);
         double actualRadius = mic.getRadius();
-        geos::geom::Coordinate actualCenter = mic.getCenter();
+        geos::geom::Coordinate actualCentre = mic.getCentre();
 
-        geos::geom::Point* centerPoint = geomFact->createPoint(actualCenter);
-        bool intersects = geom->intersects(centerPoint);
+        geos::geom::Point* centrePoint = geomFact->createPoint(actualCentre);
+        bool intersects = geom->intersects(centrePoint);
 
         if(!centreOut.isNull()) {
-            ensure(centreOut.distance(actualCenter) < 0.0001);
+            ensure(centreOut.distance(actualCentre) < 0.0001);
         }
         if(radiusOut >= 0) {
             ensure(fabs(radiusOut - actualRadius) < 0.0001);
@@ -100,7 +100,7 @@ template<>
 void object::test<3>
 ()
 {
-    // Square with the center cut out. True centroid lies inside hole.
+    // Square with the centre cut out. True centroid lies inside hole.
     Coordinate c(5, 12.5);
     doMaximumInscribedCircleTest(
         "POLYGON ((0.0 0.0, 0.0 30.0, 30.0 30.0, 30.0 0.0, 0.0 0.0), \
