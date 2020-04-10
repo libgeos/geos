@@ -35,11 +35,11 @@ struct test_maximuminscribedcircle_data {
     {}
 
     void
-    doMaximumInscribedCircleTest(std::string wktIn, geos::geom::Coordinate& centreOut,
+    doMaximumInscribedCircleTest(std::string wktIn, unsigned int numSegments, geos::geom::Coordinate& centreOut,
                                  double radiusOut)
     {
         geom = reader.read(wktIn);
-        MaximumInscribedCircle mic(geom.get(), 2);
+        MaximumInscribedCircle mic(geom.get(), numSegments);
         double actualRadius = mic.getRadius();
         geos::geom::Coordinate actualCenter = mic.getCenter();
         
@@ -70,6 +70,7 @@ void object::test<1>
     Coordinate c(10, 10);
     doMaximumInscribedCircleTest(
         "POINT (10 10)",
+        2,
         c,
         0
     );
@@ -84,6 +85,7 @@ void object::test<2>
     Coordinate c(1, 1);
     doMaximumInscribedCircleTest(
         "POLYGON ((0.0 0.0, 2.0 0.0, 2.0 2.0, 0.0 2.0, 0.0 0.0))",
+        2,
         c,
         1
     );
@@ -99,6 +101,7 @@ void object::test<3>
     doMaximumInscribedCircleTest(
         "POLYGON ((0.0 0.0, 0.0 30.0, 30.0 30.0, 30.0 0.0, 0.0 0.0), \
                   (10.0 10.0, 10.0 20.0, 20.0 20.0, 20.0 10.0, 10.0 10.0))",
+        2,
         c,
         5
     );
@@ -113,6 +116,7 @@ void object::test<4>
     Coordinate c(1.25, 3.5);
     doMaximumInscribedCircleTest(
         "POLYGON ((0.0 0.0, 1.0 0.0, 1.0 3.0, 2.0 3.0, 2.0 0.0, 3.0 0.0, 3.0 4.0, 0.0 4.0, 0.0 0.0))",
+        2,
         c,
         0.5
     );
@@ -129,9 +133,59 @@ void object::test<5>
     doMaximumInscribedCircleTest(
         "MULTIPOLYGON (((0.0 0.0, 1.0 0.0, 1.0 3.0, 2.0 3.0, 2.0 0.0, 3.0 0.0, 3.0 4.0, 0.0 4.0, 0.0 0.0)), \
                        ((-3.0 -3.0, -1.0 -3.0, -1.0 -1.0, -3.0 -1.0, -3.0 -3.0)))",
+        2,
         c,
         0.5
     );
 }
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    // Triangle that demonstrates more accurate results with increased segments.
+    // Bisecting
+    Coordinate c(3.75, 0.25);
+    doMaximumInscribedCircleTest(
+        "POLYGON ((0.0 0.0, 5.0 0.0, 5.0 1.0, 0.0 0.0))",
+        2,
+        c,
+        0.25
+    );
+}
+
+template<>
+template<>
+void object::test<7>
+()
+{
+    // Triangle that demonstrates more accurate results with increased segments.
+    // 10-secting
+    Coordinate c(4.55, 0.45);
+    doMaximumInscribedCircleTest(
+        "POLYGON ((0.0 0.0, 5.0 0.0, 5.0 1.0, 0.0 0.0))",
+        10,
+        c,
+        0.45
+    );
+}
+
+template<>
+template<>
+void object::test<8>
+()
+{
+    // Triangle that demonstrates more accurate results with increased segments.
+    // 100-secting
+    Coordinate c(4.54944, 0.450556);
+    doMaximumInscribedCircleTest(
+        "POLYGON ((0.0 0.0, 5.0 0.0, 5.0 1.0, 0.0 0.0))",
+        100,
+        c,
+        0.450413
+    );
+}
+
 
 } // namespace tut
