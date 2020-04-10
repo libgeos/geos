@@ -42,13 +42,17 @@ struct test_maximuminscribedcircle_data {
         MaximumInscribedCircle mic(geom.get(), numSegments);
         double actualRadius = mic.getRadius();
         geos::geom::Coordinate actualCenter = mic.getCenter();
-        
+
+        geos::geom::Point* centerPoint = geomFact->createPoint(actualCenter);
+        bool intersects = geom->intersects(centerPoint);
+
         if(!centreOut.isNull()) {
             ensure(centreOut.distance(actualCenter) < 0.0001);
         }
         if(radiusOut >= 0) {
             ensure(fabs(radiusOut - actualRadius) < 0.0001);
         }
+        ensure(intersects);
     }
 };
 
