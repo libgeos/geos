@@ -218,39 +218,6 @@ wkt_print_geoms(vector<const Geometry*>* geoms)
 }
 
 void
-wkt_print_mic_sites(vector<const Geometry*>* geoms)
-{
-    const CoordinateSequenceFactory* coordSeqFactory = global_factory->getCoordinateSequenceFactory();
-    io::WKTWriter* wkt = new io::WKTWriter();
-    for(unsigned int i = 0; i < geoms->size(); i++) {
-        const Geometry* g = (*geoms)[i];
-        geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        std::vector<geom::Coordinate>* sites = mic->getSites();
-        std::unique_ptr<CoordinateSequence> cs = coordSeqFactory->create(sites);
-        string tmp = cs->toString();
-        cout << "Created CoordinateSequence [" << i << "] (Coordinate Sequence) " << tmp << endl;
-    }
-    delete wkt;
-}
-
-void
-wkt_print_mic_voronoi_vertices(vector<const Geometry*>* geoms)
-{
-    io::WKTWriter* wkt = new io::WKTWriter();
-    for(unsigned int i = 0; i < geoms->size(); i++) {
-        const Geometry* g = (*geoms)[i];
-        geos::algorithm::MaximumInscribedCircle* mic = new geos::algorithm::MaximumInscribedCircle(g, 2);
-        std::vector<const geom::Point*> vertices = mic->getVoronoiVertices();
-        for(unsigned int j = 0; j < vertices.size(); j++) {
-            const geom::Point* vertex = vertices[j];
-            string tmp = vertex->toString();
-            cout << "Voronoi vertex [" << j << "] (Point) " << tmp << endl;
-        }
-    }
-    delete wkt;
-}
-
-void
 wkt_print_mic(vector<const Geometry*>* geoms)
 {
     io::WKTWriter* wkt = new io::WKTWriter();
@@ -359,14 +326,6 @@ do_all()
     // Print all geoms.
     cout << "-------- HERE ARE THE BASE GEOMS ----------" << endl;
     wkt_print_geoms(geoms);
-
-    // Print max inscribed circle sites.
-    cout << "-------- HERE ARE THE MIC SITES ----------" << endl;
-    wkt_print_mic_sites(geoms);
-
-    // Print all voronoi coordinates
-    cout << "-------- HERE ARE THE VORONOI VERTEX COORDINATES ----------" << endl;
-    wkt_print_mic_voronoi_vertices(geoms);
 
     // Print the max inscribed circle
     cout << "-------- HERE IS THE MAX INSCRIBED CIRCLE ----------" << endl;

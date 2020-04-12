@@ -64,27 +64,6 @@ MaximumInscribedCircle::getRadius()
     return radius;
 }
 
-/**
- * Temporary development helper. To be removed in final version.
- */
-/*public*/
-std::vector<Coordinate>*
-MaximumInscribedCircle::getSites()
-{
-    compute();
-    return computeSites();
-}
-
-/**
- * Temporary development helper. To be removed in final version.
- */
-std::vector<const Point*>
-MaximumInscribedCircle::getVoronoiVertices()
-{
-    compute();
-    return voronoiVertices;
-}
-
 /*private*/
 void
 MaximumInscribedCircle::compute()
