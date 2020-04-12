@@ -88,6 +88,7 @@ geos_unit_SOURCES = \
 	capi/GEOSisValidDetailTest.cpp \
 	capi/GEOSLineString_PointTest.cpp \
 	capi/GEOSMakeValidTest.cpp \
+	capi/GEOSMaximumInscribedCircleTest.cpp \
 	capi/GEOSMinimumBoundingCircleTest.cpp \
 	capi/GEOSMinimumClearanceTest.cpp \
 	capi/GEOSMinimumRectangleTest.cpp \

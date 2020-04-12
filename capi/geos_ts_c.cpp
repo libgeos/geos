@@ -45,6 +45,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/MaximumInscribedCircle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
@@ -1619,6 +1620,28 @@ extern "C" {
                 const GeometryFactory* gf = g->getFactory();
                 ret =  gf->createPoint();
             }
+            ret->setSRID(g->getSRID());
+            return ret.release();
+        });
+    }
+
+    Geometry*
+    GEOSMaximumInscribedCircle_r(GEOSContextHandle_t extHandle, const Geometry* g,
+        unsigned int numSegments, double* radius, Geometry** center)
+    {
+        return execute(extHandle, [&]() -> Geometry* {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+
+            geos::algorithm::MaximumInscribedCircle mic(g, numSegments);
+            std::unique_ptr<Geometry> ret = mic.getCircle();
+            const GeometryFactory* gf = handle->geomFactory;
+            if(!ret) {
+                if (center) *center = NULL;
+                if (radius) *radius = 0.0;
+                return gf->createPolygon().release();
+            }
+            if (center) *center = static_cast<Geometry*>(gf->createPoint(mic.getCentre()));
+            if (radius) *radius = mic.getRadius();
             ret->setSRID(g->getSRID());
             return ret.release();
         });

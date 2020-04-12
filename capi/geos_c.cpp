@@ -706,6 +706,13 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMaximumInscribedCircle(const Geometry* g, unsigned int numSegments,
+                               double* radius, Geometry** center)
+    {
+        return GEOSMaximumInscribedCircle_r(handle, g, numSegments, radius, center);
+    }
+
+    Geometry*
     GEOSMinimumBoundingCircle(const Geometry* g, double* radius, Geometry** center)
     {
         return GEOSMinimumBoundingCircle_r(handle, g, radius, center);
