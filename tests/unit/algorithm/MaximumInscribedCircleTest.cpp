@@ -48,11 +48,11 @@ struct test_maximuminscribedcircle_data {
 
         if(!centreOut.isNull()) {
             ensure(centreOut.distance(actualCentre) < 0.0001);
+            ensure(intersects);
         }
         if(radiusOut >= 0) {
             ensure(fabs(radiusOut - actualRadius) < 0.0001);
         }
-        ensure(intersects);
     }
 };
 
@@ -85,6 +85,22 @@ template<>
 void object::test<2>
 ()
 {
+    // Degenerate polygon
+    Coordinate c;
+    c.setNull();
+    doMaximumInscribedCircleTest(
+        "POLYGON EMPTY",
+        2,
+        c,
+        0
+    );
+}
+
+template<>
+template<>
+void object::test<3>
+()
+{
     // Trivial square
     Coordinate c(1, 1);
     doMaximumInscribedCircleTest(
@@ -97,7 +113,7 @@ void object::test<2>
 
 template<>
 template<>
-void object::test<3>
+void object::test<4>
 ()
 {
     // Square with the centre cut out. True centroid lies inside hole.
@@ -113,7 +129,7 @@ void object::test<3>
 
 template<>
 template<>
-void object::test<4>
+void object::test<5>
 ()
 {
     // Polygon with no holes, but centroid does not intersect polygon
@@ -128,7 +144,7 @@ void object::test<4>
 
 template<>
 template<>
-void object::test<5>
+void object::test<6>
 ()
 {
     // Multipolygon where polygon of smallest area actually contains largest inscribed circle.
@@ -145,7 +161,7 @@ void object::test<5>
 
 template<>
 template<>
-void object::test<6>
+void object::test<7>
 ()
 {
     // Triangle that demonstrates more accurate results with increased segments.
@@ -161,7 +177,7 @@ void object::test<6>
 
 template<>
 template<>
-void object::test<7>
+void object::test<8>
 ()
 {
     // Triangle that demonstrates more accurate results with increased segments.
@@ -177,7 +193,7 @@ void object::test<7>
 
 template<>
 template<>
-void object::test<8>
+void object::test<9>
 ()
 {
     // Triangle that demonstrates more accurate results with increased segments.
