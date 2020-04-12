@@ -93,7 +93,10 @@ MaximumInscribedCircle::compute()
         return;
     }
 
-    if(typeid(*input) == typeid(Point)) {
+    if(input->isEmpty()) {
+        // Handle degenerate or trivial cases
+        return;
+    } else if(typeid(*input) == typeid(Point)) {
         centre = *(input->getCoordinate());
         return;
     } else if(typeid(*input) == typeid(Polygon)) {
@@ -102,7 +105,7 @@ MaximumInscribedCircle::compute()
         const MultiPolygon* multiPoly = dynamic_cast<const MultiPolygon*>(input);
         poly = polygonOfMaxArea(multiPoly);
     } else {
-        // degenerate/trivial cases, LineString, MultiLineString, and MultiPoint
+        // LineString, MultiLineString, and MultiPoint
         return;
     }
     computeVoronoiVertices();
