@@ -60,18 +60,13 @@ class GEOS_DLL MaximumInscribedCircle {
 
         /**
          * Gets a geometry which represents the Maximum Inscribed Circle.
-         * If the input is degenerate (empty or a single unique point),
-         * this method will return an empty geometry or a single Point geometry.
-         * If the input is a Polygon, it will return the approximation of the
-         * Maximum Inscribed Circle for the given polygon. If the input is a
+         * If the input is degenerate (empty), this method will return an empty
+         * geometry. If the input is a single Point, then the input Point will
+         * be returned. If the input is a Polygon, it will return the approximation
+         * of the Maximum Inscribed Circle for the given polygon. If the input is a
          * MultiPolygon, then it will return the approximation of the Maximum
          * Inscribed Circle for the polygon with the largest area. In all other
          * cases an empty geometry will be returned.
-         *
-         * If the input is a Geometry Collection, then each geometry will be
-         * run through the algorithm and a Geometry Collection of all inscribed
-         * circles will be returned. Otherwise, a Polygon will be returned which
-         * approximates the Maximum Inscribed Circle.
          *
          * (Note that because this algorithm only approximates the medial axis
          * via Voronoi, the result will not necessarily be the true Maximum
@@ -85,7 +80,7 @@ class GEOS_DLL MaximumInscribedCircle {
          * Gets the centre point of the computed Maximum Inscribed Circle.
          *
          * @return the centre point of the Maximum Incribed Circle
-         * @return null if the input is empty
+         * @return null if the input is degenerate or not a Point, Polygon or MultiPolygon
          */
         geom::Coordinate getCentre();
 

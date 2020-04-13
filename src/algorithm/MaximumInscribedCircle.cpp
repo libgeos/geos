@@ -125,10 +125,7 @@ MaximumInscribedCircle::computeSites()
 * will eventually be converted to a CoordinateSequence and used to call
 * Voronoi.
 *
-* This function also updates the coordinates of a bounding box that will
-* be passed on the same call to Voronoi.
-*
-* @param ring an internal or external ring
+* This function modifies the passed in sites variable.
 */
 /*private*/
 void
@@ -178,6 +175,11 @@ extractUniquePoints(const Geometry* geom)
     return factory->createMultiPoint(std::move(points));
 }
 
+/**
+ * Computes the voronoi diagram over the generated sites. It then converts each to a point and, if
+ * this point intersects the input geometry, it adds it to the `voronoiVertices` vector as a
+ * candidate for the centroid of the maximum inscribed circle.
+ */
 /*private*/
 void
 MaximumInscribedCircle::computeVoronoiVertices()
@@ -236,9 +238,6 @@ MaximumInscribedCircle::computeCentreAndRadius()
 /**
 * This function takes a multipolygon and returns the polygon of largest area
 * in the collection.
-*
-* @param multiPoly
-* @return the Polygon of largest area
 */
 /*private*/
 const Polygon*
