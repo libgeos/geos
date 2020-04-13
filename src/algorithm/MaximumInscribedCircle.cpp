@@ -68,24 +68,29 @@ MaximumInscribedCircle::getRadius()
 void
 MaximumInscribedCircle::compute()
 {
-    if(!centre.isNull()) {
+    if(!centre.isNull() || input->isEmpty()) {
+        // Return if we have already computed the centre or the input is degenerate/trivial
         return;
     }
 
-    if(input->isEmpty()) {
-        // Handle degenerate or trivial cases
-        return;
-    } else if(typeid(*input) == typeid(Point)) {
-        centre = *(input->getCoordinate());
-        return;
-    } else if(typeid(*input) == typeid(Polygon)) {
-        poly = dynamic_cast<const Polygon*>(input);
-    } else if(typeid(*input) == typeid(MultiPolygon)) {
-        const MultiPolygon* multiPoly = dynamic_cast<const MultiPolygon*>(input);
-        poly = polygonOfMaxArea(multiPoly);
-    } else {
-        // LineString, MultiLineString, and MultiPoint
-        return;
+    const MultiPolygon* multiPoly;
+    GeometryTypeId inputType = input->getGeometryTypeId();
+
+    switch( inputType ) {
+        case GEOS_POINT:
+            centre = *(input->getCoordinate());
+            return;
+            break;
+        case GEOS_POLYGON:
+            poly = dynamic_cast<const Polygon*>(input);
+            break;
+        case GEOS_MULTIPOLYGON:
+            multiPoly = dynamic_cast<const MultiPolygon*>(input);
+            poly = polygonOfMaxArea(multiPoly);
+            break;
+        default:
+            return;
+            break;
     }
     computeVoronoiVertices();
     computeCentreAndRadius();
