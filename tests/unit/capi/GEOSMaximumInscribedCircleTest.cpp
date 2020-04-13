@@ -200,7 +200,7 @@ void object::test<6>()
 }
 
 // Multipolygon where polygon of smallest area actually contains largest inscribed circle.
-    // However, algorithm uses polygon of largest area in calculation. This polygon is same as in test 4.
+// However, algorithm uses polygon of largest area in calculation. This polygon is same as in test 4.
 template<>
 template<>
 void object::test<7>()

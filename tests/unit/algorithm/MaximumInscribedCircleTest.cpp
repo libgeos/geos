@@ -85,7 +85,7 @@ template<>
 void object::test<2>
 ()
 {
-    // Degenerate polygon
+    // Linestring
     Coordinate c;
     c.setNull();
     doMaximumInscribedCircleTest(
@@ -164,7 +164,7 @@ void object::test<7>
 ()
 {
     // Multipolygon where polygon of smallest area actually contains largest inscribed circle.
-    // However, algorithm uses polygon of largest area in calculation. This polygon is same as in test 4.
+    // However, algorithm uses polygon of largest area in calculation. This polygon is same as in test 6.
     Coordinate c(1.25, 3.5);
     doMaximumInscribedCircleTest(
         "MULTIPOLYGON (((0.0 0.0, 1.0 0.0, 1.0 3.0, 2.0 3.0, 2.0 0.0, 3.0 0.0, 3.0 4.0, 0.0 4.0, 0.0 0.0)), \
