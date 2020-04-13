@@ -185,7 +185,7 @@ void
 MaximumInscribedCircle::computeVoronoiVertices()
 {
     VoronoiDiagramBuilder builder;
-    const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
+    const GeometryFactory& geomFact = *(input->getFactory());
     const CoordinateSequenceFactory* coordSeqFactory = geomFact.getCoordinateSequenceFactory();
 
     std::vector<Coordinate>* sites = computeSites();
