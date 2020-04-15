@@ -30,6 +30,8 @@ namespace math { // geos.math
  */
 class GEOS_DLL DD {
     private:
+
+        double SPLIT = 134217729.0; // 2^27+1, for IEEE double
         double hi;
         double lo;
 
@@ -39,52 +41,85 @@ class GEOS_DLL DD {
     public:
         DD(double p_hi, double p_lo) : hi(p_hi), lo(p_lo) {};
         DD(double x) : hi(x), lo(0.0) {};
-        DD(DD &dd) : hi(dd.hi), lo(dd.lo) {};
+        DD(const DD &dd) : hi(dd.hi), lo(dd.lo) {};
+        DD() : hi(0.0), lo(0.0) {};
 
-        bool operator==(DD const &rhs) const
+        bool operator==(const DD &rhs) const
         {
             return hi == rhs.hi && lo == rhs.lo;
         }
 
-        bool operator!=(DD const &rhs) const
+        bool operator!=(const DD &rhs) const
         {
             return hi != rhs.hi || lo != rhs.lo;
         }
 
-        bool operator<(DD const &rhs) const
+        bool operator<(const DD &rhs) const
         {
             return (hi < rhs.hi) || (hi == rhs.hi && lo < rhs.lo);
         }
 
-        bool operator<=(DD const &rhs) const
+        bool operator<=(const DD &rhs) const
         {
             return (hi < rhs.hi) || (hi == rhs.hi && lo <= rhs.lo);
         }
 
-        bool operator>(DD const &rhs) const
+        bool operator>(const DD &rhs) const
         {
             return (hi > rhs.hi) || (hi == rhs.hi && lo > rhs.lo);
         }
 
-        bool operator>=(DD const &rhs) const
+        bool operator>=(const DD &rhs) const
         {
             return (hi > rhs.hi) || (hi == rhs.hi && lo >= rhs.lo);
         }
 
-        DD operator+(DD const &rhs) const;
-        DD operator+(double rhs) const;
+        friend DD operator+ (const DD &lhs, const DD &rhs);
+        friend DD operator+ (const DD &lhs, double rhs);
+        friend DD operator- (const DD &lhs, const DD &rhs);
+        friend DD operator- (const DD &lhs, double rhs);
+        friend DD operator* (const DD &lhs, const DD &rhs);
+        friend DD operator* (const DD &lhs, double rhs);
+        friend DD operator/ (const DD &lhs, const DD &rhs);
+        friend DD operator/ (const DD &lhs, double rhs);
 
+        bool isNaN() const;
+        bool isNegative() const;
+        bool isPositive() const;
+        bool isZero() const;
+        double doubleValue() const;
+        int intValue() const;
 
-        bool isNaN();
-        bool isNegative();
-        bool isPositive();
-        bool isZero();
-        double doubleValue();
-        int intValue();
+        DD negate() const;
+        DD reciprocal() const;
+        DD floor() const;
+        DD ceil() const;
+        int signum() const;
+        DD rint() const;
+        DD trunc() const;
+        DD abs() const;
+        DD sqr() const;
 
-        void selfAdd(DD const &d);
+        void selfSqr();
+
+        void selfAdd(const DD &d);
         void selfAdd(double p_hi, double p_lo);
         void selfAdd(double y);
+
+        void selfSubtract(const DD &d);
+        void selfSubtract(double p_hi, double p_lo);
+        void selfSubtract(double y);
+
+        void selfMultiply(double p_hi, double p_lo);
+        void selfMultiply(const DD &d);
+        void selfMultiply(double y);
+
+        void selfDivide(double p_hi, double p_lo);
+        void selfDivide(const DD &d);
+        void selfDivide(double y);
+
+        double ToDouble() const { return doubleValue(); }
+
 };
 
 } // namespace geos::math
