@@ -7,6 +7,7 @@ SUBDIRS = \
     index \
     io \
     linearref \
+    math \
     noding \
     operation \
     planargraph \
