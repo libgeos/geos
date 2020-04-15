@@ -3,7 +3,6 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2020 Crunchy Data
  *
  * This is free software; you can redistribute and/or modify it under
@@ -15,8 +14,6 @@
 
 #ifndef GEOS_MATH_TOPOLOGYEXCEPTION_H
 #define GEOS_MATH_TOPOLOGYEXCEPTION_H
-
-#include <cassert>
 
 namespace geos {
 namespace math { // geos.math
@@ -35,7 +32,7 @@ class GEOS_DLL DD {
         double hi;
         double lo;
 
-        DD parse(std::string &str);
+        // DD parse(std::string &str);
         int magnitude(double x);
 
     public:

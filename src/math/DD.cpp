@@ -1,11 +1,20 @@
-#include <geos/profiler.h>
-#include <string>
-#include <sstream>
-#include <utility>
-
-using namespace std;
+/**********************************************************************
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.osgeo.org
+ *
+ * Copyright (C) 2020 Crunchy Data
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
 
 #include <cmath>
+
+#include <geos/profiler.h>
 #include <geos/math/DD.h>
 
 namespace geos {
@@ -13,12 +22,12 @@ namespace math { // geos.util
 
 
 /* private */
-DD
-DD::parse(std::string &str)
-{
-    DD d(0.0, 0.0);
-    return d;
-}
+// DD
+// DD::parse(std::string &str)
+// {
+//     DD d(0.0, 0.0);
+//     return d;
+// }
 
 /* private */
 int
