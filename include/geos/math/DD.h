@@ -12,8 +12,8 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_MATH_TOPOLOGYEXCEPTION_H
-#define GEOS_MATH_TOPOLOGYEXCEPTION_H
+#ifndef GEOS_MATH_DD_H
+#define GEOS_MATH_DD_H
 
 namespace geos {
 namespace math { // geos.math
@@ -123,4 +123,4 @@ class GEOS_DLL DD {
 } // namespace geos
 
 
-#endif // GEOS_MATH_TOPOLOGYEXCEPTION_H
+#endif // GEOS_MATH_DD_H
