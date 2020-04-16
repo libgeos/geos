@@ -22,14 +22,6 @@ namespace math { // geos.util
 
 
 /* private */
-// DD
-// DD::parse(std::string &str)
-// {
-//     DD d(0.0, 0.0);
-//     return d;
-// }
-
-/* private */
 int
 DD::magnitude(double x) const
 {
