@@ -88,6 +88,7 @@ AC_HEADER_STAT
 AC_STRUCT_TM
 AC_TYPE_SIZE_T
 AC_C_CONST
+AC_C_BIGENDIAN
 
 dnl --------------------------------------------------------------------
 dnl - Check for inline and cassert settings
@@ -436,6 +437,7 @@ AC_OUTPUT([
 	include/geos/index/sweepline/Makefile
 	include/geos/io/Makefile
 	include/geos/linearref/Makefile
+	include/geos/math/Makefile
 	include/geos/noding/Makefile
 	include/geos/noding/snapround/Makefile
 	include/geos/operation/Makefile
@@ -468,6 +470,7 @@ AC_OUTPUT([
 	src/index/sweepline/Makefile
 	src/io/Makefile
 	src/linearref/Makefile
+	src/math/Makefile
 	src/noding/Makefile
 	src/noding/snapround/Makefile
 	src/operation/Makefile

@@ -22,7 +22,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Location.h>
-#include <geos/algorithm/ttmath/ttmath.h>
 
 #include <vector>
 

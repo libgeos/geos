@@ -148,6 +148,8 @@ message(STATUS "GEOS: Require C++${CMAKE_CXX_STANDARD}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
+
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
@@ -207,6 +209,17 @@ target_compile_options(geos_developer_cxx_flags
 if(WIN32)
   target_compile_definitions(geos_cxx_flags
     INTERFACE TTMATH_NOASM)
+endif()
+
+#-----------------------------------------------------------------------------
+# Platform
+#-----------------------------------------------------------------------------
+include (TestBigEndian)
+test_big_endian(IS_BIGENDIAN)
+if(IS_BIGENDIAN)
+  target_compile_definitions(geos_cxx_flags
+    INTERFACE
+      WORDS_BIGENDIAN)
 endif()
 
 #-----------------------------------------------------------------------------

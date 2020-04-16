@@ -35,7 +35,7 @@ namespace {
 double constexpr DP_SAFE_EPSILON =  1e-15;
 
 inline int
-OrientationDD(DD const& dd)
+OrientationDD(const DD &dd)
 {
     static DD const zero(0.0);
     if(dd < zero) {
@@ -49,10 +49,7 @@ OrientationDD(DD const& dd)
     return CGAlgorithmsDD::STRAIGHT;
 }
 
-// inline std::string ToStringDD(DD const& dd)
-// {
-//     return dd.ToString();
-// }
+
 }
 
 namespace geos {
