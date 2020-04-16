@@ -31,7 +31,7 @@ namespace math { // geos.util
 
 /* private */
 int
-DD::magnitude(double x)
+DD::magnitude(double x) const
 {
     double xAbs = std::fabs(x);
     double xLog10 = std::log(xAbs) / std::log(10);
@@ -262,10 +262,11 @@ DD operator/(const DD &lhs, double rhs)
     return rv;
 }
 
+/* public */
 DD DD::negate() const
 {
     DD rv(hi, lo);
-    if (isNaN())
+    if (rv.isNaN())
     {
         return rv;
     }
@@ -274,6 +275,7 @@ DD DD::negate() const
     return rv;
 }
 
+/* public static */
 DD DD::reciprocal() const
 {
     double  hc, tc, hy, ty, C, c, U, u;
@@ -286,8 +288,7 @@ DD DD::reciprocal() const
     c = ((((1.0-U)-u))-C*lo)/hi;
     double zhi = C+c;
     double zlo = (C-zhi)+c;
-    DD rv(zhi, zlo);
-    return rv;
+    return DD(zhi, zlo);
 }
 
 DD DD::floor() const
@@ -335,42 +336,75 @@ DD DD::rint() const
 {
     DD rv(hi, lo);
     if (isNaN()) return rv;
-    return (rv + 0.5).floor();
+     return (rv + 0.5).floor();
 }
 
-DD DD::trunc() const
+/* public static */
+DD DD::trunc(const DD &d)
 {
-    DD rv(hi, lo);
-    if (isNaN()) return rv;
-    if (isPositive())
+    DD rv(d);
+    if (rv.isNaN()) return rv;
+    if (rv.isPositive())
         return rv.floor();
     return rv.ceil();
 }
 
-DD DD::abs() const
+/* public static */
+DD DD::abs(const DD &d)
 {
-    DD rv(hi, lo);
-    if (isNaN()) return rv;
-    if (isNegative())
+    DD rv(d);
+    if (rv.isNaN()) return rv;
+    if (rv.isNegative())
         return rv.negate();
 
     return rv;
 }
 
-DD DD::sqr() const
+/* public static */
+DD DD::determinant(const DD &x1, const DD &y1, const DD &x2, const DD &y2)
 {
-    DD rv(hi, lo);
-    return rv * rv;
+    return (x1 * y2) - (y1 * x2);
 }
 
-void DD::selfSqr()
+/* public static */
+DD DD::determinant(double x1, double y1, double x2, double y2)
 {
-    DD rhs(hi, lo);
-    selfMultiply(rhs);
-    return;
+    return determinant(DD(x1), DD(y1), DD(x2), DD(y2) );
 }
 
+/**
+* Computes the value of this number raised to an integral power.
+* Follows semantics of Java Math.pow as closely as possible.
+*/
+/* public static */
+DD DD::pow(const DD &d, int exp)
+{
+    if (exp == 0.0)
+        return DD(1.0);
 
+    DD r(d);
+    DD s(1.0);
+    int n = std::abs(exp);
+
+    if (n > 1) {
+        /* Use binary exponentiation */
+        while (n > 0) {
+        if (n % 2 == 1) {
+            s.selfMultiply(r);
+        }
+        n /= 2;
+        if (n > 0)
+            r = r*r;
+        }
+    } else {
+        s = r;
+    }
+
+    /* Compute the reciprocal if n is negative. */
+    if (exp < 0)
+        return s.reciprocal();
+    return s;
+}
 
 
 }

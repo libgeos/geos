@@ -15,6 +15,8 @@
 #ifndef GEOS_MATH_DD_H
 #define GEOS_MATH_DD_H
 
+#include <cmath>
+
 namespace geos {
 namespace math { // geos.math
 
@@ -27,13 +29,14 @@ namespace math { // geos.math
  */
 class GEOS_DLL DD {
     private:
-
         double SPLIT = 134217729.0; // 2^27+1, for IEEE double
         double hi;
         double lo;
 
-        // DD parse(std::string &str);
-        int magnitude(double x);
+        int magnitude(double x) const;
+        int signum() const;
+        DD rint() const;
+
 
     public:
         DD(double p_hi, double p_lo) : hi(p_hi), lo(p_lo) {};
@@ -80,24 +83,23 @@ class GEOS_DLL DD {
         friend DD operator/ (const DD &lhs, const DD &rhs);
         friend DD operator/ (const DD &lhs, double rhs);
 
+        static DD determinant(const DD &x1, const DD &y1, const DD &x2, const DD &y2);
+        static DD determinant(double x1, double y1, double x2, double y2);
+        static DD abs(const DD &d);
+        static DD pow(const DD &d, int exp);
+        static DD trunc(const DD &d);
+
         bool isNaN() const;
         bool isNegative() const;
         bool isPositive() const;
         bool isZero() const;
         double doubleValue() const;
+        double ToDouble() const { return doubleValue(); }
         int intValue() const;
-
         DD negate() const;
         DD reciprocal() const;
         DD floor() const;
         DD ceil() const;
-        int signum() const;
-        DD rint() const;
-        DD trunc() const;
-        DD abs() const;
-        DD sqr() const;
-
-        void selfSqr();
 
         void selfAdd(const DD &d);
         void selfAdd(double p_hi, double p_lo);
@@ -114,10 +116,8 @@ class GEOS_DLL DD {
         void selfDivide(double p_hi, double p_lo);
         void selfDivide(const DD &d);
         void selfDivide(double y);
-
-        double ToDouble() const { return doubleValue(); }
-
 };
+
 
 } // namespace geos::math
 } // namespace geos
