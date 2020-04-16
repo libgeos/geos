@@ -224,7 +224,7 @@ add_subdirectory(src)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
   set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION})
@@ -238,7 +238,7 @@ target_link_libraries(geos_c PRIVATE geos)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
   set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
   if(NOT WIN32)
