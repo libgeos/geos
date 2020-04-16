@@ -73,5 +73,4 @@ valgrindcheck:
 check-local:
 	! find $(srcdir) -name '*.cpp' -o -name '*.h' | \
 		grep -v tests/xmltester/tinyxml | \
-		grep -v include/geos/algorithm/ttmath | \
 		xargs grep -n '[[:space:]]$$'

@@ -853,7 +853,6 @@ EXCLUDE_PATTERNS       = */examples/* \
                          */test/* \
                          */bigtest/* \
                          */io/markup/* \
-                         */ttmath/* \
                          config.h \
                          acconfig.h \
                          CoordinateList.cpp \

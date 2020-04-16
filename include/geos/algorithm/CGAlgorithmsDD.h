@@ -19,23 +19,7 @@
 #ifndef GEOS_ALGORITHM_CGALGORITHMDD_H
 #define GEOS_ALGORITHM_CGALGORITHMDD_H
 #include <geos/export.h>
-
-// #define USE_TTMATH
-
-#ifdef USE_TTMATH
-
-#include <geos/algorithm/ttmath/ttmath.h>
-
-/// Usage: `ttmath::Big<exponent, mantissa>`
-typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
-//typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(128)> DD;
-//typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(256)> DD;
-//typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(256)> DD;
-#else
 #include <geos/math/DD.h>
-using namespace geos::math;
-#endif
-
 
 // Forward declarations
 namespace geos {
@@ -44,6 +28,8 @@ class Coordinate;
 class CoordinateSequence;
 }
 }
+
+using namespace geos::math;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
