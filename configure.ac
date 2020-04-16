@@ -376,7 +376,6 @@ AC_OUTPUT([
 	include/geos/algorithm/Makefile
 	include/geos/algorithm/locate/Makefile
 	include/geos/algorithm/distance/Makefile
-	include/geos/algorithm/ttmath/Makefile
 	include/geos/geom/Makefile
 	include/geos/geom/prep/Makefile
 	include/geos/geom/util/Makefile
@@ -391,6 +390,7 @@ AC_OUTPUT([
 	include/geos/index/sweepline/Makefile
 	include/geos/io/Makefile
 	include/geos/linearref/Makefile
+	include/geos/math/Makefile
 	include/geos/noding/Makefile
 	include/geos/noding/snapround/Makefile
 	include/geos/operation/Makefile
@@ -423,6 +423,7 @@ AC_OUTPUT([
 	src/index/sweepline/Makefile
 	src/io/Makefile
 	src/linearref/Makefile
+	src/math/Makefile
 	src/noding/Makefile
 	src/noding/snapround/Makefile
 	src/operation/Makefile

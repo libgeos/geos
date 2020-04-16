@@ -3,8 +3,7 @@
 #
 SUBDIRS = \
 	locate \
-	distance \
-	ttmath
+	distance 
 
 EXTRA_DIST =
 

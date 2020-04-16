@@ -45,7 +45,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace geom { // geos::geom
 
-LineString::~LineString(){};
+LineString::~LineString(){}
 
 /*protected*/
 LineString::LineString(const LineString& ls)
