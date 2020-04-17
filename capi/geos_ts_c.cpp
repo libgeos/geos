@@ -233,7 +233,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    NOTICE_MESSAGE(string fmt, ...)
+    NOTICE_MESSAGE(const char *fmt, ...)
     {
         if(NULL == noticeMessageOld && NULL == noticeMessageNew) {
             return;
@@ -241,7 +241,7 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
-        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt.c_str(), args);
+        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
         va_end(args);
 
         if(result > 0) {
@@ -255,7 +255,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    ERROR_MESSAGE(string fmt, ...)
+    ERROR_MESSAGE(const char *fmt, ...)
     {
         if(NULL == errorMessageOld && NULL == errorMessageNew) {
             return;
@@ -263,7 +263,7 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
-        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt.c_str(), args);
+        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
         va_end(args);
 
         if(result > 0) {
