@@ -42,7 +42,7 @@ namespace distance { // geos::operation::distance
 /** \brief
  * A ConnectedElementPointFilter extracts a single point from each connected
  * element in a Geometry (e.g. a polygon, linestring or point) and returns
- * them in a list.
+ * them in a list. Empty geometries do not provide a location item.
  *
  * The elements of the list are GeometryLocation.
  */

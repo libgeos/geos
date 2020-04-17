@@ -64,6 +64,8 @@ namespace distance { // geos::operation::distance
  * the coordinate computed is a close
  * approximation to the exact point.
  *
+ * Empty geometry collection components are ignored.
+ *
  * The algorithms used are straightforward O(n^2)
  * comparisons.  This worst-case performance could be improved on
  * by using Voronoi techniques or spatial indexes.
