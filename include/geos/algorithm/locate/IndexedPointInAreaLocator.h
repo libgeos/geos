@@ -48,6 +48,9 @@ namespace locate { // geos::algorithm::locate
  * or segments will return [Location::BOUNDARY](@ref geom::Location::BOUNDARY).
  *
  * Polygonal and [LinearRing](@ref geom::LinearRing) geometries are supported.
+ *
+ * The index is lazy-loaded, which allows creating instances even if they are not used.
+ *
  */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
