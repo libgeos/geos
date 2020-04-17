@@ -12,6 +12,7 @@ Changes in 3.9.0
     changes mostly affect CMake MSVC builds (#1015, Mike Taves)
   - Testing on Rasberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
   - Replace ttmath with JTS DD double-double implementation (Paul Ramsey)
+  - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
 
 
 Changes in 3.8.0
