@@ -5,6 +5,7 @@ Changes in 3.8.2
   - DistanceOp against geometry with empty components 
     crashes (#1026, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
+  - WKT writing of MULTIPOINT with EMPTY component crash (#1027, Paul Ramsey)
 
 
 Changes in 3.8.1
