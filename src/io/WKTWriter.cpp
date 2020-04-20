@@ -426,11 +426,17 @@ WKTWriter::appendMultiPointText(const MultiPoint* multiPoint,
         writer->write("(");
         for(size_t i = 0, n = multiPoint->getNumGeometries();
                 i < n; ++i) {
+
             if(i > 0) {
                 writer->write(", ");
             }
-
-            appendCoordinate(multiPoint->getGeometryN(i)->getCoordinate(), writer);
+            const Coordinate* coord = multiPoint->getGeometryN(i)->getCoordinate();
+            if(coord == nullptr) {
+                writer->write("EMPTY");
+            }
+            else {
+                appendCoordinate(coord, writer);
+            }
         }
         writer->write(")");
     }
