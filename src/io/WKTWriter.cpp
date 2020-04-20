@@ -76,7 +76,7 @@ string
 WKTWriter::toLineString(const CoordinateSequence& seq)
 {
 	stringstream buf(ios_base::in|ios_base::out);
-    buf << "LINESTRING ";
+	buf << "LINESTRING ";
 	unsigned int npts = static_cast<unsigned int>(seq.getSize());
 	if ( npts == 0 )
 	{
@@ -112,7 +112,7 @@ WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
 #if PRINT_Z
 	ret << " " << p1.z;
 #endif
-    ret << ")";
+	ret << ")";
 
 	return ret.str();
 }
@@ -122,7 +122,7 @@ string
 WKTWriter::toPoint(const Coordinate& p0)
 {
 	stringstream ret(ios_base::in|ios_base::out);
-    ret << "POINT (";
+	ret << "POINT (";
 #if PRINT_Z
 	ret << p0.x << " " << p0.y  << " " << p0.z << " )";
 #else
@@ -169,9 +169,9 @@ void WKTWriter::writeFormatted(const Geometry *geometry, Writer *writer) {
 
 void
 WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted,
-                          Writer *writer)
+						  Writer *writer)
 {
-        CLocalizer clocale;
+		CLocalizer clocale;
 	this->isFormatted=isFormatted;
   decimalPlaces = roundingPrecision == -1 ? geometry->getPrecisionModel()->getMaximumSignificantDigits() : roundingPrecision;
 	appendGeometryTaggedText(geometry, 0, writer);
@@ -182,51 +182,51 @@ WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
   outputDimension = std::min( defaultOutputDimension,
-                         geometry->getCoordinateDimension() );
+						 geometry->getCoordinateDimension() );
 
   indent(level, writer);
   if ( const Point* point = dynamic_cast<const Point*>(geometry) )
   {
-    appendPointTaggedText(point->getCoordinate(),level,writer);
+	appendPointTaggedText(point->getCoordinate(),level,writer);
   }
   else if ( const LinearRing* lr =
-    dynamic_cast<const LinearRing*>(geometry) )
+	dynamic_cast<const LinearRing*>(geometry) )
   {
-    appendLinearRingTaggedText(lr, level, writer);
+	appendLinearRingTaggedText(lr, level, writer);
   }
   else if ( const LineString* ls =
-    dynamic_cast<const LineString*>(geometry) )
+	dynamic_cast<const LineString*>(geometry) )
   {
-    appendLineStringTaggedText(ls, level, writer);
+	appendLineStringTaggedText(ls, level, writer);
   }
   else if ( const Polygon* x =
-    dynamic_cast<const Polygon*>(geometry) )
+	dynamic_cast<const Polygon*>(geometry) )
   {
-    appendPolygonTaggedText(x, level, writer);
+	appendPolygonTaggedText(x, level, writer);
   }
   else if ( const MultiPoint* x =
-    dynamic_cast<const MultiPoint*>(geometry) )
+	dynamic_cast<const MultiPoint*>(geometry) )
   {
-    appendMultiPointTaggedText(x, level, writer);
+	appendMultiPointTaggedText(x, level, writer);
   }
   else if ( const MultiLineString* x =
-    dynamic_cast<const MultiLineString*>(geometry) )
+	dynamic_cast<const MultiLineString*>(geometry) )
   {
-    appendMultiLineStringTaggedText(x, level, writer);
+	appendMultiLineStringTaggedText(x, level, writer);
   }
   else if ( const MultiPolygon* x =
-    dynamic_cast<const MultiPolygon*>(geometry) )
+	dynamic_cast<const MultiPolygon*>(geometry) )
   {
-    appendMultiPolygonTaggedText(x, level, writer);
+	appendMultiPolygonTaggedText(x, level, writer);
   }
   else if ( const GeometryCollection* x =
-    dynamic_cast<const GeometryCollection*>(geometry) )
+	dynamic_cast<const GeometryCollection*>(geometry) )
   {
-    appendGeometryCollectionTaggedText(x, level, writer);
+	appendGeometryCollectionTaggedText(x, level, writer);
   }
   else
   {
-    assert(0); // Unsupported Geometry implementation
+	assert(0); // Unsupported Geometry implementation
   }
 }
 
@@ -401,9 +401,13 @@ WKTWriter::appendMultiPointText(const MultiPoint *multiPoint,
 			{
 				writer->write(", ");
 			}
-			appendCoordinate(
-				dynamic_cast<const Point*>(multiPoint->getGeometryN(i))->getCoordinate(),
-				writer);
+			const Coordinate* coord = multiPoint->getGeometryN(i)->getCoordinate();
+			if(coord == nullptr) {
+				writer->write("EMPTY");
+			}
+			else {
+				appendCoordinate(coord, writer);
+			}
 		}
 		writer->write(")");
 	}

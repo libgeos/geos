@@ -6,6 +6,8 @@ Changes in 3.7.3dev
   - Overlay performance improvement (#986, Paul Ramsey)
   - Avoid changing MultiLineString component order in GEOSReverse
     (#1013, Dan Baston)
+  - WKT writing of MULTIPOINT with EMPTY component crash
+    (#1027, Paul Ramsey)
 
 
 Changes in 3.7.2

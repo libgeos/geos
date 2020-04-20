@@ -9,6 +9,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
 // std
 #include <sstream>
 #include <string>
@@ -35,11 +37,11 @@ namespace tut
 		WKTWriter wktwriter;
 
 		test_wktwriter_data()
-                :
-                pm(1000.0),
-                gf(GeometryFactory::create(&pm)),
-                wktreader(gf.get())
-            {}
+				:
+				pm(1000.0),
+				gf(GeometryFactory::create(&pm)),
+				wktreader(gf.get())
+			{}
 
 	};
 
@@ -58,93 +60,120 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-        GeomPtr geom ( wktreader.read("POINT(-117 33)") );
-        std::string  result;
+		GeomPtr geom ( wktreader.read("POINT(-117 33)") );
+		std::string  result;
 
-        wktwriter.setTrim(false);
-        result = wktwriter.write( geom.get() );
+		wktwriter.setTrim(false);
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result , "POINT (-117.000 33.000)" );
+		ensure_equals( result , "POINT (-117.000 33.000)" );
 
-        wktwriter.setTrim(true);
-        result = wktwriter.write( geom.get() );
+		wktwriter.setTrim(true);
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result , "POINT (-117 33)" );
-    }
+		ensure_equals( result , "POINT (-117 33)" );
+	}
 
 	// 2 - Test the output precision capability
 	template<>
 	template<>
 	void object::test<2>()
 	{
-        GeomPtr geom ( wktreader.read("POINT(-117.1234567 33.1234567)") );
-        std::string  result;
+		GeomPtr geom ( wktreader.read("POINT(-117.1234567 33.1234567)") );
+		std::string  result;
 
-        wktwriter.setTrim(false);
-        result = wktwriter.write( geom.get() );
+		wktwriter.setTrim(false);
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result , "POINT (-117.123 33.123)" );
+		ensure_equals( result , "POINT (-117.123 33.123)" );
 
-        wktwriter.setRoundingPrecision(2);
-        result = wktwriter.write( geom.get() );
+		wktwriter.setRoundingPrecision(2);
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result , "POINT (-117.12 33.12)" );
+		ensure_equals( result , "POINT (-117.12 33.12)" );
 
-    }
+	}
 
 	// 3 - Test 3D generation from a 3D geometry.
 	template<>
 	template<>
 	void object::test<3>()
 	{
-        GeomPtr geom ( wktreader.read("POINT Z (-117 33 120)") );
-        std::string  result;
+		GeomPtr geom ( wktreader.read("POINT Z (-117 33 120)") );
+		std::string  result;
 
-        wktwriter.setOutputDimension(3);
-        wktwriter.setTrim( true );
-        wktwriter.setOld3D( false );
+		wktwriter.setOutputDimension(3);
+		wktwriter.setTrim( true );
+		wktwriter.setOld3D( false );
 
-        result = wktwriter.write( geom.get() );
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result, std::string("POINT Z (-117 33 120)") );
+		ensure_equals( result, std::string("POINT Z (-117 33 120)") );
 
-        wktwriter.setOld3D( true );
-        result = wktwriter.write( geom.get() );
+		wktwriter.setOld3D( true );
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result, std::string("POINT (-117 33 120)") );
+		ensure_equals( result, std::string("POINT (-117 33 120)") );
 
-    }
+	}
 
 	// 4 - Test 2D generation from a 3D geometry.
 	template<>
 	template<>
 	void object::test<4>()
 	{
-        GeomPtr geom ( wktreader.read("POINT(-117 33 120)") );
-        std::string  result;
+		GeomPtr geom ( wktreader.read("POINT(-117 33 120)") );
+		std::string  result;
 
-        wktwriter.setOutputDimension(2);
-        wktwriter.setTrim( true );
-        wktwriter.setOld3D( false );
+		wktwriter.setOutputDimension(2);
+		wktwriter.setTrim( true );
+		wktwriter.setOld3D( false );
 
-        result = wktwriter.write( geom.get() );
+		result = wktwriter.write( geom.get() );
 
-        ensure_equals( result, std::string("POINT (-117 33)") );
-    }
+		ensure_equals( result, std::string("POINT (-117 33)") );
+	}
 
   // 5 - Test negative number of digits in precision model
   template<>
   template<>
   void object::test<5>()
   {
-    PrecisionModel pm3(0.001);
-    GeometryFactory::Ptr gf3(GeometryFactory::create(&pm3));
-    WKTReader wktreader3(gf3.get());
-    GeomPtr geom ( wktreader3.read("POINT(123456 654321)") );
+	PrecisionModel pm3(0.001);
+	GeometryFactory::Ptr gf3(GeometryFactory::create(&pm3));
+	WKTReader wktreader3(gf3.get());
+	GeomPtr geom ( wktreader3.read("POINT(123456 654321)") );
 
-    std::string  result = wktwriter.write( geom.get() );
-    ensure_equals( result, std::string("POINT (123000 654000)") );
+	std::string  result = wktwriter.write( geom.get() );
+	ensure_equals( result, std::string("POINT (123000 654000)") );
   }
+
+
+// 6 - Test writing out a multipoint with an empty member
+template<>
+template<>
+void object::test<6>
+()
+{
+	PrecisionModel pm_e(1000);
+	geos::geom::GeometryFactory::Ptr gf_e(GeometryFactory::create(&pm_e, 0));
+
+	std::unique_ptr<geos::geom::Point> empty_pt(gf_e->createPoint());
+	ensure(empty_pt != nullptr);
+
+	geos::geom::Coordinate coord(1, 2);
+	std::unique_ptr<geos::geom::Geometry> point(gf_e->createPoint(coord));
+	ensure(point != nullptr);
+
+	const std::vector<geos::geom::Geometry*> geoms{empty_pt.release(), point.release()};
+
+	std::unique_ptr<geos::geom::Geometry> col(gf_e->createMultiPoint(geoms));
+
+	wktwriter.setRoundingPrecision(2);
+	wktwriter.setTrim(true);
+	std::string result = wktwriter.write(col.get());
+	ensure_equals(result, std::string("MULTIPOINT (EMPTY, 1 2)"));
+}
 
 } // namespace tut
 
