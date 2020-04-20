@@ -13,6 +13,7 @@ Changes in 3.9.0
   - Testing on Rasberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
   - Replace ttmath with JTS DD double-double implementation (Paul Ramsey)
   - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
+  - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
 
 
 Changes in 3.8.0
