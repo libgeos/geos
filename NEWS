@@ -4,6 +4,7 @@ Changes in 3.8.2
 - Bug fixes / improvements
   - DistanceOp against geometry with empty components 
     crashes (#1026, Paul Ramsey)
+  - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
 
 
 Changes in 3.8.1
