@@ -10,7 +10,7 @@
 # See the COPYING file for more information.
 #
 # auto tools
-if false; then
+if true; then
     sh autogen.sh
     ./configure
     make
@@ -19,7 +19,7 @@ fi
 
 
 # cmake
-if true; then
+if false; then
     rm -rf build
     mkdir -p build
     cd build

@@ -14,6 +14,7 @@ Changes in 3.9.0
   - Replace ttmath with JTS DD double-double implementation (Paul Ramsey)
   - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
+  - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
 
 
 Changes in 3.8.0
