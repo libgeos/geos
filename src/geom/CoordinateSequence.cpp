@@ -158,6 +158,19 @@ CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
     return 1;
 }
 
+/* public static */
+bool
+CoordinateSequence::isRing(const CoordinateSequence *pts)
+{
+    if (pts->size() < 4) return false;
+
+    if (pts->getAt(0) != pts->getAt(pts->size()-1)) {
+        return false;
+    }
+
+    return true;
+}
+
 void
 CoordinateSequence::reverse(CoordinateSequence* cl)
 {

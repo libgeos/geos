@@ -88,6 +88,20 @@ public:
         return bufParams;
     }
 
+    /**
+     * Tests whether the offset curve for line or point geometries
+     * at the given offset distance is empty (does not exist).
+     * This is the case if:
+     * <ul>
+     * <li>the distance is zero,
+     * <li>the distance is negative, except for the case of singled-sided buffers
+     * </ul>
+     *
+     * @param distance the offset curve distance
+     * @return true if the offset curve is empty
+     */
+    bool isLineOffsetEmpty(double distance);
+
     /** \brief
      * This method handles single points as well as lines.
      *
@@ -139,7 +153,6 @@ public:
     void getRingCurve(const geom::CoordinateSequence* inputPts, int side,
                       double distance,
                       std::vector<geom::CoordinateSequence*>& lineList);
-
 
 private:
 

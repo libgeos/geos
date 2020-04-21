@@ -183,6 +183,7 @@ OffsetCurveSetBuilder::addCollection(const GeometryCollection* gc)
 void
 OffsetCurveSetBuilder::addPoint(const Point* p)
 {
+    // a zero or negative width buffer of a point is empty
     if(distance <= 0.0) {
         return;
     }
@@ -197,21 +198,31 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
 void
 OffsetCurveSetBuilder::addLineString(const LineString* line)
 {
-    if(distance <= 0.0 && ! curveBuilder.getBufferParameters().isSingleSided()) {
+    if (curveBuilder.isLineOffsetEmpty(distance)) {
         return;
     }
 
-#if GEOS_DEBUG
-    std::cerr << __FUNCTION__ << ": " << line->toString() << std::endl;
-#endif
     auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
-#if GEOS_DEBUG
-    std::cerr << " After coordinate removal: " << coord->toString() << std::endl;
-#endif
-    std::vector<CoordinateSequence*> lineList;
-    curveBuilder.getLineCurve(coord.get(), distance, lineList);
-    addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+
+    /**
+     * Rings (closed lines) are generated with a continuous curve,
+     * with no end arcs. This produces better quality linework,
+     * and avoids noding issues with arcs around almost-parallel end segments.
+     * See JTS #523 and #518.
+     *
+     * Singled-sided buffers currently treat rings as if they are lines.
+     */
+    if (CoordinateSequence::isRing(coord.get()) && ! curveBuilder.getBufferParameters().isSingleSided()) {
+        addRingBothSides(coord.get(), distance);
+    }
+    else {
+        std::vector<CoordinateSequence*> lineList;
+        curveBuilder.getLineCurve(coord.get(), distance, lineList);
+        addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+    }
+
 }
+
 
 /*private*/
 void
@@ -245,7 +256,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
-    addPolygonRing(
+    addRingSide(
         shellCoord.get(),
         offsetDistance,
         offsetSide,
@@ -268,7 +279,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
-        addPolygonRing(
+        addRingSide(
             holeCoord.get(),
             offsetDistance,
             Position::opposite(offsetSide),
@@ -279,7 +290,22 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
 /* private */
 void
-OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
+OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double distance)
+{
+    addRingSide(coord, distance,
+                Position::LEFT,
+                Location::EXTERIOR, Location::INTERIOR);
+    /* Add the opposite side of the ring
+    */
+    addRingSide(coord, distance,
+                Position::RIGHT,
+                Location::INTERIOR, Location::EXTERIOR);
+}
+
+
+/* private */
+void
+OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
                                       double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
