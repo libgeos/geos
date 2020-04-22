@@ -12,13 +12,13 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/construct/MaximumInscribedCircle.java
+ * Last port: algorithm/construct/LargestEmptyCircle.java
  * https://github.com/locationtech/jts/commit/98274a7ea9b40651e9de6323dc10fb2cac17a245
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_CONSTRUCT_MAXIMUMCIRCLE_H
-#define GEOS_ALGORITHM_CONSTRUCT_MAXIMUMCIRCLE_H
+#ifndef GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H
+#define GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -60,58 +60,42 @@ namespace construct { // geos::algorithm::construct
  *
  * Also computes two points which are separated by the distance.
  */
-class MaximumInscribedCircle {
+class LargestEmptyCircle {
 
 public:
 
-    MaximumInscribedCircle(const geom::Geometry *polygonal, double tolerance);
-
     /**
-    * Gets the center point of the maximum inscribed circle
-    * (up to the tolerance distance).
+    * Creates a new instance of a Largest Empty Circle construction.
     *
-    * @return the center point of the maximum inscribed circle
+    * @param obstacles a geometry representing the obstacles (points and lines)
+    * @param tolerance the distance tolerance for computing the circle center point
     */
-    std::unique_ptr<geom::Point> getCenter();
+    LargestEmptyCircle(const geom::Geometry *polygonal, double tolerance);
 
     /**
-    * Gets a point defining the radius of the Maximum Inscribed Circle.
-    * This is a point on the boundary which is
-    * nearest to the computed center of the Maximum Inscribed Circle.
-    * The line segment from the center to this point
-    * is a radius of the constructed circle, and this point
-    * lies on the boundary of the circle.
+    * Computes the center point of the Largest Empty Circle
+    * `within a set of obstacles, up to a given tolerance distance.
     *
-    * @return a point defining the radius of the Maximum Inscribed Circle
-    */
-    std::unique_ptr<geom::Point> getRadiusPoint();
-
-    /**
-    * Gets a line representing a radius of the Largest Empty Circle.
-    *
-    * @return a line from the center of the circle to a point on the edge
-    */
-    std::unique_ptr<geom::LineString> getRadiusLine();
-
-    /**
-    * Computes the center point of the Maximum Inscribed Circle
-    * of a polygonal geometry, up to a given tolerance distance.
-    *
-    * @param polygonal a polygonal geometry
+    * @param obstacles a geometry representing the obstacles (points and lines)
     * @param tolerance the distance tolerance for computing the center point
-    * @return the center point of the maximum inscribed circle
+    * @return the center point of the Largest Empty Circle
     */
     static std::unique_ptr<geom::Point> getCenter(const geom::Geometry *polygonal, double tolerance);
 
     /**
-    * Computes a radius line of the Maximum Inscribed Circle
-    * of a polygonal geometry, up to a given tolerance distance.
+    * Computes a radius line of the Largest Empty Circle
+    * within a set of obstacles, up to a given distance tolerance.
     *
-    * @param polygonal a polygonal geometry
+    * @param obstacles a geometry representing the obstacles (points and lines)
     * @param tolerance the distance tolerance for computing the center point
-    * @return a line from the center to a point on the circle
+    * @return a line from the center of the circle to a point on the edge
     */
     static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry *polygonal, double tolerance);
+
+    std::unique_ptr<geom::Point> getCenter();
+    std::unique_ptr<geom::Point> getRadiusPoint();
+    std::unique_ptr<geom::LineString> getRadiusLine();
+
 
 private:
 
@@ -126,12 +110,12 @@ private:
             double maxDist;
 
         public:
-            Cell(double p_x, double p_y, double p_hSize, double p_distanceToBoundary)
+            Cell(double p_x, double p_y, double p_hSize, double p_distanceToConstraints)
                     : x(p_x)
                     , y(p_y)
                     , hSize(p_hSize)
-                    , distance(p_distanceToBoundary)
-                    , maxDist(p_distanceToBoundary*p_hSize*SQRT2)
+                    , distance(p_distanceToConstraints)
+                    , maxDist(p_distanceToConstraints*p_hSize*SQRT2)
                     {};
 
             geom::Envelope getEnvelope() const {
@@ -139,6 +123,8 @@ private:
                 return env;
             }
 
+            bool isFullyOutside() const { return maxDist < 0.0; }
+            bool isOutside() const { return distance < 0.0; }
             double getMaxDistance() const { return maxDist; }
             double getDistance() const { return distance; }
             double getHSize() const { return hSize; }
@@ -150,19 +136,36 @@ private:
     };
 
     /* private members */
-    const geom::Geometry *inputGeom;
     double tolerance;
+    const geom::Geometry *obstacles;
     const geom::GeometryFactory *factory;
+    std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
     std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> obstacleDistance;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
     bool done;
 
     /* private methods */
-    double distanceToBoundary(const geom::Coordinate &c);
-    double distanceToBoundary(double x, double y);
+    void setBoundary(const geom::Geometry *obstacles);
+
+    /**
+    * Computes the signed distance from a point to the constraints
+    * (obstacles and boundary).
+    * Points outside the boundary polygon are assigned a negative distance.
+    * Their containing cells will be last in the priority queue
+    * (but will still end up being tested since they may be refined).
+    *
+    * @param p the point to compute the distance for
+    * @return the signed distance to the constraints (negative indicates outside the boundary)
+    */
+    double distanceToConstraints(const geom::Coordinate &c);
+
+
+    double distanceToConstraints(double x, double y);
     void compute();
+    bool mayContainCircleCenter(const Cell &cell, const Cell &farthestCell);
     void createInitialGrid(const geom::Envelope *env, std::priority_queue<Cell> &cellQueue);
     Cell createCentroidCell(const geom::Geometry *geom);
 
@@ -173,4 +176,4 @@ private:
 } // geos::algorithm
 } // geos
 
-#endif // GEOS_ALGORITHM_CONSTRUCT_MAXIMUMCIRCLE_H
+#endif // GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H

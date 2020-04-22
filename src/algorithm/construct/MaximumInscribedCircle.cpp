@@ -118,21 +118,22 @@ MaximumInscribedCircle::createInitialGrid(const Envelope *env, std::priority_que
     double width = env->getWidth();
     double height = env->getHeight();
     double cellSize = std::min(width, height);
-    double hSide = cellSize / 2.0;
+    double hSize = cellSize / 2.0;
 
     // compute initial grid of cells to cover area
     for (double x = minX; x < maxX; x += cellSize) {
         for (double y = minY; y < maxY; y += cellSize) {
-            cellQueue.emplace(x + hSide, y + hSide, hSide, distanceToBoundary(x + hSide, y + hSide));
+            cellQueue.emplace(x+hSize, y+hSize, hSize, distanceToBoundary(x+hSize, y+hSize));
         }
     }
 }
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(const Coordinate &c) {
-    Point *pt = factory->createPoint(c);
-    double dist = indexedDistance->distance(pt);
+MaximumInscribedCircle::distanceToBoundary(const Coordinate &c)
+{
+    std::unique_ptr<Point> pt(factory->createPoint(c));
+    double dist = indexedDistance->distance(pt.get());
     bool isOutide = Location::EXTERIOR == ptLocater->locate(&c);
     if (isOutide) return -dist;
     return dist;
@@ -140,14 +141,16 @@ MaximumInscribedCircle::distanceToBoundary(const Coordinate &c) {
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(double x, double y) {
+MaximumInscribedCircle::distanceToBoundary(double x, double y)
+{
     Coordinate coord(x, y);
     return distanceToBoundary(coord);
 }
 
 /* private */
 MaximumInscribedCircle::Cell
-MaximumInscribedCircle::createCentroidCell(const Geometry *geom) {
+MaximumInscribedCircle::createCentroidCell(const Geometry *geom)
+{
     Coordinate c;
     bool gotCentroid = geom->getCentroid(c);
     Cell cell(c.x, c.y, 0, distanceToBoundary(c));
@@ -156,7 +159,8 @@ MaximumInscribedCircle::createCentroidCell(const Geometry *geom) {
 
 /* private */
 void
-MaximumInscribedCircle::compute() {
+MaximumInscribedCircle::compute()
+{
 
     // check if already computed
     if (done) return;
@@ -174,30 +178,30 @@ MaximumInscribedCircle::compute() {
      * of the cell space
      */
     while (!cellQueue.empty()) {
-      // pick the most promising cell from the queue
-      Cell cell = cellQueue.top();
-      cellQueue.pop();
+        // pick the most promising cell from the queue
+        Cell cell = cellQueue.top();
+        cellQueue.pop();
 
-      // update the center cell if the candidate is further from the boundary
-      if (cell.getDistance() > farthestCell.getDistance()) {
-        farthestCell = cell;
-      }
-      /**
-       * Refine this cell if the potential distance improvement
-       * is greater than the required tolerance.
-       * Otherwise the cell is pruned (not investigated further),
-       * since no point in it is further than
-       * the current farthest distance.
-       */
-      double potentialIncrease = cell.getMaxDistance() - farthestCell.getDistance();
-      if (potentialIncrease > tolerance) {
-        // split the cell into four sub-cells
-        double h2 = cell.getHSide() / 2;
-        cellQueue.emplace(cell.getX()-h2, cell.getY()-h2, h2, distanceToBoundary(cell.getX()-h2, cell.getY()-h2));
-        cellQueue.emplace(cell.getX()+h2, cell.getY()-h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()-h2));
-        cellQueue.emplace(cell.getX()-h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()-h2, cell.getY()+h2));
-        cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()+h2));
-      }
+        // update the center cell if the candidate is further from the boundary
+        if (cell.getDistance() > farthestCell.getDistance()) {
+            farthestCell = cell;
+        }
+        /**
+        * Refine this cell if the potential distance improvement
+        * is greater than the required tolerance.
+        * Otherwise the cell is pruned (not investigated further),
+        * since no point in it is further than
+        * the current farthest distance.
+        */
+        double potentialIncrease = cell.getMaxDistance() - farthestCell.getDistance();
+        if (potentialIncrease > tolerance) {
+            // split the cell into four sub-cells
+            double h2 = cell.getHSize() / 2;
+            cellQueue.emplace(cell.getX()-h2, cell.getY()-h2, h2, distanceToBoundary(cell.getX()-h2, cell.getY()-h2));
+            cellQueue.emplace(cell.getX()+h2, cell.getY()-h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()-h2));
+            cellQueue.emplace(cell.getX()-h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()-h2, cell.getY()+h2));
+            cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()+h2));
+        }
     }
     // the farthest cell is the best approximation to the MIC center
     Cell centerCell = farthestCell;
@@ -211,7 +215,7 @@ MaximumInscribedCircle::compute() {
 
     // flag computation
     done = true;
-  }
+}
 
 
 
