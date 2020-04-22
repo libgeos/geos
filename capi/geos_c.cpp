@@ -470,6 +470,18 @@ extern "C" {
     }
 
     Geometry*
+    GEOSLargestEmptyCircleCenter(const Geometry* g, double tolerance)
+    {
+        return GEOSMaximumInscribedCircleCenter_r(handle, g, tolerance);
+    }
+
+    Geometry*
+    GEOSLargestEmptyCircleRadius(const Geometry* g, double tolerance)
+    {
+        return GEOSMaximumInscribedCircleRadius_r(handle, g, tolerance);
+    }
+
+    Geometry*
     GEOSMinimumWidth(const Geometry* g)
     {
         return GEOSMinimumWidth_r(handle, g);

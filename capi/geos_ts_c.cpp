@@ -1183,6 +1183,28 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMLargestEmptyCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::MaximumInscribedCircle m(g, tolerance);
+            auto g3 = m.getCenter();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSLargestEmptyCircleRadius_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::LargestEmptyCircle m(g, tolerance);
+            auto g3 = m.getRadiusLine();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
