@@ -561,6 +561,10 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
 
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleCenter_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
+
+
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that
  * contains the geometry, where a band is a strip of the plane defined
@@ -1598,6 +1602,25 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
  * be used as an extremely generalized representation for the given geometry.
  */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle(const GEOSGeometry* g);
+
+/* Constructs the Maximum Inscribed Circle for a  polygonal geometry, up to a specified tolerance.
+ * The Maximum Inscribed Circle is determined by a point in the interior of the area
+ * which has the farthest distance from the area boundary, along with a boundary point at that distance.
+ * In the context of geography the center of the Maximum Inscribed Circle is known as the
+ * Pole of Inaccessibility. A cartographic use case is to determine a suitable point
+ * to place a map label within a polygon.
+ * The radius length of the Maximum Inscribed Circle is a  measure of how "narrow" a polygon is. It is the
+ * distance at which the negative buffer becomes empty.
+ * The class supports polygons with holes and multipolygons.
+ * The implementation uses a successive-approximation technique over a grid of square cells covering the area geometry.
+ * The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant
+ * way by using spatial indexes.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleCenter(const GEOSGeometry* g, double tolerance);
+/* Returns a two-point linestring, with one point at the center of the inscribed circle and the other
+ * on the boundary of the inscribed circle.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius(const GEOSGeometry* g, double tolerance);
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that
