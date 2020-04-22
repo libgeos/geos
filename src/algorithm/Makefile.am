@@ -3,7 +3,8 @@
 #
 SUBDIRS = \
 	locate \
-	distance
+	distance \
+	construct
 
 noinst_LTLIBRARIES = libalgorithm.la
 

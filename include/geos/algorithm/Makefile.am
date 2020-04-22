@@ -3,7 +3,8 @@
 #
 SUBDIRS = \
 	locate \
-	distance 
+	distance \
+	construct
 
 EXTRA_DIST =
 
