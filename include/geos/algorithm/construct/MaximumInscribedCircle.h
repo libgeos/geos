@@ -23,6 +23,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Envelope.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 
 #include <memory>
 #include <queue>
@@ -41,11 +42,6 @@ class Point;
 namespace operation {
 namespace distance {
 class IndexedFacetDistance;
-}
-}
-namespace algorithm {
-namespace locate {
-class IndexedPointInAreaLocator;
 }
 }
 }
