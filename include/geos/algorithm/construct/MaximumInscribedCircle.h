@@ -64,7 +64,7 @@ class MaximumInscribedCircle {
 
 public:
 
-    MaximumInscribedCircle(const geom::Geometry *polygonal, double tolerance);
+    MaximumInscribedCircle(const geom::Geometry* polygonal, double tolerance);
 
     /**
     * Gets the center point of the maximum inscribed circle
@@ -101,7 +101,7 @@ public:
     * @param tolerance the distance tolerance for computing the center point
     * @return the center point of the maximum inscribed circle
     */
-    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry *polygonal, double tolerance);
+    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry* polygonal, double tolerance);
 
     /**
     * Computes a radius line of the Maximum Inscribed Circle
@@ -111,48 +111,73 @@ public:
     * @param tolerance the distance tolerance for computing the center point
     * @return a line from the center to a point on the circle
     */
-    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry *polygonal, double tolerance);
+    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* polygonal, double tolerance);
 
 private:
 
     /* private class */
     class Cell {
-        private:
-            static constexpr double SQRT2 = 1.4142135623730951;
-            double x;
-            double y;
-            double hSize;
-            double distance;
-            double maxDist;
+    private:
+        static constexpr double SQRT2 = 1.4142135623730951;
+        double x;
+        double y;
+        double hSize;
+        double distance;
+        double maxDist;
 
-        public:
-            Cell(double p_x, double p_y, double p_hSize, double p_distanceToBoundary)
-                    : x(p_x)
-                    , y(p_y)
-                    , hSize(p_hSize)
-                    , distance(p_distanceToBoundary)
-                    , maxDist(p_distanceToBoundary*p_hSize*SQRT2)
-                    {};
+    public:
+        Cell(double p_x, double p_y, double p_hSize, double p_distanceToBoundary)
+            : x(p_x)
+            , y(p_y)
+            , hSize(p_hSize)
+            , distance(p_distanceToBoundary)
+            , maxDist(p_distanceToBoundary*p_hSize*SQRT2)
+        {};
 
-            geom::Envelope getEnvelope() const {
-                geom::Envelope env(x-hSize, x+hSize, y-hSize, y+hSize);
-                return env;
-            }
+        geom::Envelope getEnvelope() const
+        {
+            geom::Envelope env(x-hSize, x+hSize, y-hSize, y+hSize);
+            return env;
+        }
 
-            double getMaxDistance() const { return maxDist; }
-            double getDistance() const { return distance; }
-            double getHSize() const { return hSize; }
-            double getX() const { return x; }
-            double getY() const { return y; }
-            bool operator< (const Cell &rhs) const { return maxDist <  rhs.maxDist; }
-            bool operator> (const Cell &rhs) const { return maxDist >  rhs.maxDist; }
-            bool operator==(const Cell &rhs) const { return maxDist == rhs.maxDist; }
+        double getMaxDistance() const
+        {
+            return maxDist;
+        }
+        double getDistance() const
+        {
+            return distance;
+        }
+        double getHSize() const
+        {
+            return hSize;
+        }
+        double getX() const
+        {
+            return x;
+        }
+        double getY() const
+        {
+            return y;
+        }
+        bool operator< (const Cell& rhs) const
+        {
+            return maxDist <  rhs.maxDist;
+        }
+        bool operator> (const Cell& rhs) const
+        {
+            return maxDist >  rhs.maxDist;
+        }
+        bool operator==(const Cell& rhs) const
+        {
+            return maxDist == rhs.maxDist;
+        }
     };
 
     /* private members */
-    const geom::Geometry *inputGeom;
+    const geom::Geometry* inputGeom;
     double tolerance;
-    const geom::GeometryFactory *factory;
+    const geom::GeometryFactory* factory;
     std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
     std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
     geom::Coordinate centerPt;
@@ -160,11 +185,11 @@ private:
     bool done;
 
     /* private methods */
-    double distanceToBoundary(const geom::Coordinate &c);
+    double distanceToBoundary(const geom::Coordinate& c);
     double distanceToBoundary(double x, double y);
     void compute();
-    void createInitialGrid(const geom::Envelope *env, std::priority_queue<Cell> &cellQueue);
-    Cell createCentroidCell(const geom::Geometry *geom);
+    void createInitialGrid(const geom::Envelope* env, std::priority_queue<Cell>& cellQueue);
+    Cell createCentroidCell(const geom::Geometry* geom);
 
 };
 

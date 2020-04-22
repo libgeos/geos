@@ -70,7 +70,7 @@ public:
     * @param obstacles a geometry representing the obstacles (points and lines)
     * @param tolerance the distance tolerance for computing the circle center point
     */
-    LargestEmptyCircle(const geom::Geometry *polygonal, double tolerance);
+    LargestEmptyCircle(const geom::Geometry* polygonal, double tolerance);
 
     /**
     * Computes the center point of the Largest Empty Circle
@@ -80,7 +80,7 @@ public:
     * @param tolerance the distance tolerance for computing the center point
     * @return the center point of the Largest Empty Circle
     */
-    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry *polygonal, double tolerance);
+    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry* polygonal, double tolerance);
 
     /**
     * Computes a radius line of the Largest Empty Circle
@@ -90,7 +90,7 @@ public:
     * @param tolerance the distance tolerance for computing the center point
     * @return a line from the center of the circle to a point on the edge
     */
-    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry *polygonal, double tolerance);
+    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* polygonal, double tolerance);
 
     std::unique_ptr<geom::Point> getCenter();
     std::unique_ptr<geom::Point> getRadiusPoint();
@@ -101,44 +101,75 @@ private:
 
     /* private class */
     class Cell {
-        private:
-            static constexpr double SQRT2 = 1.4142135623730951;
-            double x;
-            double y;
-            double hSize;
-            double distance;
-            double maxDist;
+    private:
+        static constexpr double SQRT2 = 1.4142135623730951;
+        double x;
+        double y;
+        double hSize;
+        double distance;
+        double maxDist;
 
-        public:
-            Cell(double p_x, double p_y, double p_hSize, double p_distanceToConstraints)
-                    : x(p_x)
-                    , y(p_y)
-                    , hSize(p_hSize)
-                    , distance(p_distanceToConstraints)
-                    , maxDist(p_distanceToConstraints*p_hSize*SQRT2)
-                    {};
+    public:
+        Cell(double p_x, double p_y, double p_hSize, double p_distanceToConstraints)
+            : x(p_x)
+            , y(p_y)
+            , hSize(p_hSize)
+            , distance(p_distanceToConstraints)
+            , maxDist(p_distanceToConstraints*p_hSize*SQRT2)
+        {};
 
-            geom::Envelope getEnvelope() const {
-                geom::Envelope env(x-hSize, x+hSize, y-hSize, y+hSize);
-                return env;
-            }
+        geom::Envelope getEnvelope() const
+        {
+            geom::Envelope env(x-hSize, x+hSize, y-hSize, y+hSize);
+            return env;
+        }
 
-            bool isFullyOutside() const { return maxDist < 0.0; }
-            bool isOutside() const { return distance < 0.0; }
-            double getMaxDistance() const { return maxDist; }
-            double getDistance() const { return distance; }
-            double getHSize() const { return hSize; }
-            double getX() const { return x; }
-            double getY() const { return y; }
-            bool operator< (const Cell &rhs) const { return maxDist <  rhs.maxDist; }
-            bool operator> (const Cell &rhs) const { return maxDist >  rhs.maxDist; }
-            bool operator==(const Cell &rhs) const { return maxDist == rhs.maxDist; }
+        bool isFullyOutside() const
+        {
+            return maxDist < 0.0;
+        }
+        bool isOutside() const
+        {
+            return distance < 0.0;
+        }
+        double getMaxDistance() const
+        {
+            return maxDist;
+        }
+        double getDistance() const
+        {
+            return distance;
+        }
+        double getHSize() const
+        {
+            return hSize;
+        }
+        double getX() const
+        {
+            return x;
+        }
+        double getY() const
+        {
+            return y;
+        }
+        bool operator< (const Cell& rhs) const
+        {
+            return maxDist <  rhs.maxDist;
+        }
+        bool operator> (const Cell& rhs) const
+        {
+            return maxDist >  rhs.maxDist;
+        }
+        bool operator==(const Cell& rhs) const
+        {
+            return maxDist == rhs.maxDist;
+        }
     };
 
     /* private members */
     double tolerance;
-    const geom::Geometry *obstacles;
-    const geom::GeometryFactory *factory;
+    const geom::Geometry* obstacles;
+    const geom::GeometryFactory* factory;
     std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
     std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
     std::unique_ptr<operation::distance::IndexedFacetDistance> obstacleDistance;
@@ -148,7 +179,7 @@ private:
     bool done;
 
     /* private methods */
-    void setBoundary(const geom::Geometry *obstacles);
+    void setBoundary(const geom::Geometry* obstacles);
 
     /**
     * Computes the signed distance from a point to the constraints
@@ -160,14 +191,14 @@ private:
     * @param p the point to compute the distance for
     * @return the signed distance to the constraints (negative indicates outside the boundary)
     */
-    double distanceToConstraints(const geom::Coordinate &c);
+    double distanceToConstraints(const geom::Coordinate& c);
 
 
     double distanceToConstraints(double x, double y);
     void compute();
-    bool mayContainCircleCenter(const Cell &cell, const Cell &farthestCell);
-    void createInitialGrid(const geom::Envelope *env, std::priority_queue<Cell> &cellQueue);
-    Cell createCentroidCell(const geom::Geometry *geom);
+    bool mayContainCircleCenter(const Cell& cell, const Cell& farthestCell);
+    void createInitialGrid(const geom::Envelope* env, std::priority_queue<Cell>& cellQueue);
+    Cell createCentroidCell(const geom::Geometry* geom);
 
 };
 
