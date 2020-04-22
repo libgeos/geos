@@ -42,7 +42,7 @@ namespace construct { // geos.algorithm.construct
 
 
 
-LargestEmptyCircle::LargestEmptyCircle(const Geometry *p_obstacles, double p_tolerance)
+LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tolerance)
 {
     if (p_obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
@@ -66,7 +66,7 @@ LargestEmptyCircle::LargestEmptyCircle(const Geometry *p_obstacles, double p_tol
 
 /* public static */
 std::unique_ptr<Point>
-LargestEmptyCircle::getCenter(const Geometry *polygonal, double tolerance)
+LargestEmptyCircle::getCenter(const Geometry* polygonal, double tolerance)
 {
     LargestEmptyCircle lec(polygonal, tolerance);
     return lec.getCenter();
@@ -74,7 +74,7 @@ LargestEmptyCircle::getCenter(const Geometry *polygonal, double tolerance)
 
 /* public static */
 std::unique_ptr<LineString>
-LargestEmptyCircle::getRadiusLine(const Geometry *polygonal, double tolerance)
+LargestEmptyCircle::getRadiusLine(const Geometry* polygonal, double tolerance)
 {
     LargestEmptyCircle lec(polygonal, tolerance);
     return lec.getRadiusLine();
@@ -82,7 +82,8 @@ LargestEmptyCircle::getRadiusLine(const Geometry *polygonal, double tolerance)
 
 /* public */
 std::unique_ptr<Point>
-LargestEmptyCircle::getCenter() {
+LargestEmptyCircle::getCenter()
+{
     compute();
     auto pt = factory->createPoint(centerPt);
     return std::unique_ptr<Point>(pt);
@@ -112,7 +113,7 @@ LargestEmptyCircle::getRadiusLine()
 
 /* private */
 void
-LargestEmptyCircle::createInitialGrid(const Envelope *env, std::priority_queue<Cell> &cellQueue)
+LargestEmptyCircle::createInitialGrid(const Envelope* env, std::priority_queue<Cell>& cellQueue)
 {
     double minX = env->getMinX();
     double maxX = env->getMaxX();
@@ -133,14 +134,14 @@ LargestEmptyCircle::createInitialGrid(const Envelope *env, std::priority_queue<C
 
 /* private */
 bool
-LargestEmptyCircle::mayContainCircleCenter(const Cell &cell, const Cell &farthestCell)
+LargestEmptyCircle::mayContainCircleCenter(const Cell& cell, const Cell& farthestCell)
 {
     /**
      * Every point in the cell lies outside the boundary,
      * so they cannot be the center point
      */
     if (cell.isFullyOutside())
-      return false;
+        return false;
 
     /**
      * The cell is outside, but overlaps the boundary
@@ -165,7 +166,7 @@ LargestEmptyCircle::mayContainCircleCenter(const Cell &cell, const Cell &farthes
 
 /* private */
 double
-LargestEmptyCircle::distanceToConstraints(const Coordinate &c)
+LargestEmptyCircle::distanceToConstraints(const Coordinate& c)
 {
     bool isOutide = Location::EXTERIOR == ptLocater->locate(&c);
     std::unique_ptr<Point> pt(factory->createPoint(c));
@@ -186,7 +187,7 @@ LargestEmptyCircle::distanceToConstraints(double x, double y)
 
 /* private */
 LargestEmptyCircle::Cell
-LargestEmptyCircle::createCentroidCell(const Geometry *geom)
+LargestEmptyCircle::createCentroidCell(const Geometry* geom)
 {
     Coordinate c;
     bool gotCentroid = geom->getCentroid(c);
@@ -197,18 +198,19 @@ LargestEmptyCircle::createCentroidCell(const Geometry *geom)
 
 /* private */
 void
-LargestEmptyCircle::compute() {
+LargestEmptyCircle::compute()
+{
 
     // check if already computed
     if (done) return;
 
     // if ptLocater is not present then result is degenerate (represented as zero-radius circle)
     if (!ptLocater) {
-      const Coordinate *pt = obstacles->getCoordinate();
-      centerPt = *pt;
-      radiusPt = *pt;
-      done = true;
-      return;
+        const Coordinate* pt = obstacles->getCoordinate();
+        centerPt = *pt;
+        radiusPt = *pt;
+        done = true;
+        return;
     }
 
     // Priority queue of cells, ordered by decreasing distance from constraints
@@ -246,7 +248,6 @@ LargestEmptyCircle::compute() {
             cellQueue.emplace(cell.getX()+h2, cell.getY()-h2, h2, distanceToConstraints(cell.getX()+h2, cell.getY()-h2));
             cellQueue.emplace(cell.getX()-h2, cell.getY()+h2, h2, distanceToConstraints(cell.getX()-h2, cell.getY()+h2));
             cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToConstraints(cell.getX()+h2, cell.getY()+h2));
-
         }
     }
 

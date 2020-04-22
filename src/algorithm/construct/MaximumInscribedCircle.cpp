@@ -42,10 +42,10 @@ namespace construct { // geos.algorithm.construct
 
 
 /* public */
-MaximumInscribedCircle::MaximumInscribedCircle(const Geometry *polygonal, double p_tolerance)
+MaximumInscribedCircle::MaximumInscribedCircle(const Geometry* polygonal, double p_tolerance)
 {
     if (!(typeid(*polygonal) == typeid(Polygon) ||
-          typeid(*polygonal) == typeid(MultiPolygon))) {
+            typeid(*polygonal) == typeid(MultiPolygon))) {
         throw util::IllegalArgumentException("Input geometry must be a Polygon or MultiPolygon");
     }
 
@@ -64,7 +64,7 @@ MaximumInscribedCircle::MaximumInscribedCircle(const Geometry *polygonal, double
 
 /* public static */
 std::unique_ptr<Point>
-MaximumInscribedCircle::getCenter(const Geometry *polygonal, double tolerance)
+MaximumInscribedCircle::getCenter(const Geometry* polygonal, double tolerance)
 {
     MaximumInscribedCircle mic(polygonal, tolerance);
     return mic.getCenter();
@@ -72,7 +72,7 @@ MaximumInscribedCircle::getCenter(const Geometry *polygonal, double tolerance)
 
 /* public static */
 std::unique_ptr<LineString>
-MaximumInscribedCircle::getRadiusLine(const Geometry *polygonal, double tolerance)
+MaximumInscribedCircle::getRadiusLine(const Geometry* polygonal, double tolerance)
 {
     MaximumInscribedCircle mic(polygonal, tolerance);
     return mic.getRadiusLine();
@@ -80,7 +80,8 @@ MaximumInscribedCircle::getRadiusLine(const Geometry *polygonal, double toleranc
 
 /* public */
 std::unique_ptr<Point>
-MaximumInscribedCircle::getCenter() {
+MaximumInscribedCircle::getCenter()
+{
     compute();
     auto pt = factory->createPoint(centerPt);
     return std::unique_ptr<Point>(pt);
@@ -109,7 +110,7 @@ MaximumInscribedCircle::getRadiusLine()
 
 /* private */
 void
-MaximumInscribedCircle::createInitialGrid(const Envelope *env, std::priority_queue<Cell> &cellQueue)
+MaximumInscribedCircle::createInitialGrid(const Envelope* env, std::priority_queue<Cell>& cellQueue)
 {
     double minX = env->getMinX();
     double maxX = env->getMaxX();
@@ -130,7 +131,7 @@ MaximumInscribedCircle::createInitialGrid(const Envelope *env, std::priority_que
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(const Coordinate &c)
+MaximumInscribedCircle::distanceToBoundary(const Coordinate& c)
 {
     std::unique_ptr<Point> pt(factory->createPoint(c));
     double dist = indexedDistance->distance(pt.get());
@@ -149,7 +150,7 @@ MaximumInscribedCircle::distanceToBoundary(double x, double y)
 
 /* private */
 MaximumInscribedCircle::Cell
-MaximumInscribedCircle::createCentroidCell(const Geometry *geom)
+MaximumInscribedCircle::createCentroidCell(const Geometry* geom)
 {
     Coordinate c;
     bool gotCentroid = geom->getCentroid(c);
