@@ -115,6 +115,21 @@ public:
 
 private:
 
+    /* private members */
+    const geom::Geometry* inputGeom;
+    double tolerance;
+    const geom::GeometryFactory* factory;
+    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+    geom::Coordinate centerPt;
+    geom::Coordinate radiusPt;
+    bool done;
+
+    /* private methods */
+    double distanceToBoundary(const geom::Coordinate& c);
+    double distanceToBoundary(double x, double y);
+    void compute();
+
     /* private class */
     class Cell {
     private:
@@ -174,20 +189,6 @@ private:
         }
     };
 
-    /* private members */
-    const geom::Geometry* inputGeom;
-    double tolerance;
-    const geom::GeometryFactory* factory;
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
-    geom::Coordinate centerPt;
-    geom::Coordinate radiusPt;
-    bool done;
-
-    /* private methods */
-    double distanceToBoundary(const geom::Coordinate& c);
-    double distanceToBoundary(double x, double y);
-    void compute();
     void createInitialGrid(const geom::Envelope* env, std::priority_queue<Cell>& cellQueue);
     Cell createCentroidCell(const geom::Geometry* geom);
 
