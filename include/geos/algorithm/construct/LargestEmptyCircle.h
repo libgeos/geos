@@ -99,6 +99,35 @@ public:
 
 private:
 
+    /* private members */
+    double tolerance;
+    const geom::Geometry* obstacles;
+    const geom::GeometryFactory* factory;
+    std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
+    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> obstacleDistance;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
+    geom::Coordinate centerPt;
+    geom::Coordinate radiusPt;
+    bool done;
+
+    /* private methods */
+    void setBoundary(const geom::Geometry* obstacles);
+
+    /**
+    * Computes the signed distance from a point to the constraints
+    * (obstacles and boundary).
+    * Points outside the boundary polygon are assigned a negative distance.
+    * Their containing cells will be last in the priority queue
+    * (but will still end up being tested since they may be refined).
+    *
+    * @param p the point to compute the distance for
+    * @return the signed distance to the constraints (negative indicates outside the boundary)
+    */
+    double distanceToConstraints(const geom::Coordinate& c);
+    double distanceToConstraints(double x, double y);
+    void compute();
+
     /* private class */
     class Cell {
     private:
@@ -166,36 +195,6 @@ private:
         }
     };
 
-    /* private members */
-    double tolerance;
-    const geom::Geometry* obstacles;
-    const geom::GeometryFactory* factory;
-    std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> obstacleDistance;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
-    geom::Coordinate centerPt;
-    geom::Coordinate radiusPt;
-    bool done;
-
-    /* private methods */
-    void setBoundary(const geom::Geometry* obstacles);
-
-    /**
-    * Computes the signed distance from a point to the constraints
-    * (obstacles and boundary).
-    * Points outside the boundary polygon are assigned a negative distance.
-    * Their containing cells will be last in the priority queue
-    * (but will still end up being tested since they may be refined).
-    *
-    * @param p the point to compute the distance for
-    * @return the signed distance to the constraints (negative indicates outside the boundary)
-    */
-    double distanceToConstraints(const geom::Coordinate& c);
-
-
-    double distanceToConstraints(double x, double y);
-    void compute();
     bool mayContainCircleCenter(const Cell& cell, const Cell& farthestCell);
     void createInitialGrid(const geom::Envelope* env, std::priority_queue<Cell>& cellQueue);
     Cell createCentroidCell(const geom::Geometry* geom);
