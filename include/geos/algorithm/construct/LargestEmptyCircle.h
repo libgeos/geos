@@ -56,7 +56,7 @@ namespace construct { // geos::algorithm::construct
  *
  * Also computes two points which are separated by the distance.
  */
-class LargestEmptyCircle {
+class GEOS_DLL LargestEmptyCircle {
 
 public:
 
@@ -67,6 +67,7 @@ public:
     * @param tolerance the distance tolerance for computing the circle center point
     */
     LargestEmptyCircle(const geom::Geometry* polygonal, double tolerance);
+    ~LargestEmptyCircle() = default;
 
     /**
     * Computes the center point of the Largest Empty Circle

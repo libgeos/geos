@@ -56,11 +56,12 @@ namespace construct { // geos::algorithm::construct
  *
  * Also computes two points which are separated by the distance.
  */
-class MaximumInscribedCircle {
+class GEOS_DLL MaximumInscribedCircle {
 
 public:
 
     MaximumInscribedCircle(const geom::Geometry* polygonal, double tolerance);
+    ~MaximumInscribedCircle() = default;
 
     /**
     * Gets the center point of the maximum inscribed circle
