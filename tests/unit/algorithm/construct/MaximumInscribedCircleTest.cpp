@@ -69,8 +69,8 @@ struct test_mic_data {
         std::unique_ptr<LineString> radiusLine = mic.getRadiusLine();
         double actualRadius = radiusLine->getLength();
         ensure_equals("radius", actualRadius, expectedRadius, tolerance);
-        const Coordinate linePt0 = radiusLine->getCoordinateN(0);
-        const Coordinate linePt1 = radiusLine->getCoordinateN(1);
+        const Coordinate& linePt0 = radiusLine->getCoordinateN(0);
+        const Coordinate& linePt1 = radiusLine->getCoordinateN(1);
 
         ensure_equals_coordinate(*centerPt, linePt0, tolerance);
         const Coordinate* radiusPt = mic.getRadiusPoint()->getCoordinate();
@@ -101,7 +101,7 @@ void object::test<1>
 ()
 {
     checkCircle("POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))",
-                0.001, 150, 150, 50 );
+                0.001, 150, 150, 50);
 }
 
 // template<>

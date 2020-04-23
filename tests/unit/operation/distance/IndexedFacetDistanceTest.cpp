@@ -180,6 +180,21 @@ void object::test<7>
     ensure_equals(d, 50);
 }
 
+template<>
+template<>
+void object::test<8>
+()
+{
+    using geos::operation::distance::IndexedFacetDistance;
+    std::string wkt0("POLYGON((100 200, 200 200, 200 100, 100 100, 100 200))");
+    std::string wkt1("POINT(150 150)");
+    GeomPtr g0(wktreader.read(wkt0));
+    GeomPtr g1(wktreader.read(wkt1));
+    IndexedFacetDistance ifd(g0.get());
+    double d = ifd.distance(g1.get());
+    ensure_equals(d, 50);
+}
+
 
 
 // TODO: finish the tests by adding:

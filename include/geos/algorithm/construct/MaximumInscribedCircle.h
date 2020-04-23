@@ -24,6 +24,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/Envelope.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 
 #include <memory>
 #include <queue>
@@ -39,13 +40,10 @@ class GeometryFactory;
 class LineString;
 class Point;
 }
-namespace operation {
-namespace distance {
-class IndexedFacetDistance;
-}
-}
 }
 
+using geos::algorithm::locate::IndexedPointInAreaLocator;
+using geos::operation::distance::IndexedFacetDistance;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -114,10 +112,11 @@ private:
 
     /* private members */
     const geom::Geometry* inputGeom;
+    std::unique_ptr<geom::Geometry> inputGeomBoundary;
     double tolerance;
     const geom::GeometryFactory* factory;
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+    IndexedPointInAreaLocator ptLocator;
+    IndexedFacetDistance indexedDistance;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
     bool done;

@@ -43,22 +43,22 @@ namespace construct { // geos.algorithm.construct
 
 /* public */
 MaximumInscribedCircle::MaximumInscribedCircle(const Geometry* polygonal, double p_tolerance)
+    : inputGeomBoundary(polygonal->getBoundary())
+    , indexedDistance(inputGeomBoundary.get())
+    , ptLocator(*polygonal)
+    , inputGeom(polygonal)
+    , factory(polygonal->getFactory())
+    , done(false)
+    , tolerance(p_tolerance)
 {
     if (!(typeid(*polygonal) == typeid(Polygon) ||
-            typeid(*polygonal) == typeid(MultiPolygon))) {
+          typeid(*polygonal) == typeid(MultiPolygon))) {
         throw util::IllegalArgumentException("Input geometry must be a Polygon or MultiPolygon");
     }
 
     if (polygonal->isEmpty()) {
         throw util::IllegalArgumentException("Empty input geometry is not supported");
     }
-
-    done = false;
-    inputGeom = polygonal;
-    factory = polygonal->getFactory();
-    tolerance = p_tolerance;
-    ptLocater = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(*polygonal);
-    indexedDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(polygonal->getBoundary().get());
 }
 
 
@@ -134,9 +134,9 @@ double
 MaximumInscribedCircle::distanceToBoundary(const Coordinate& c)
 {
     std::unique_ptr<Point> pt(factory->createPoint(c));
-    double dist = indexedDistance->distance(pt.get());
-    bool isOutide = Location::EXTERIOR == ptLocater->locate(&c);
-    if (isOutide) return -dist;
+    double dist = indexedDistance.distance(pt.get());
+    bool isOutside = Location::EXTERIOR == ptLocator.locate(&c);
+    if (isOutside) return -dist;
     return dist;
 }
 
@@ -211,7 +211,7 @@ MaximumInscribedCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    std::vector<geom::Coordinate> nearestPts = indexedDistance->nearestPoints(centerPoint.get());
+    std::vector<geom::Coordinate> nearestPts = indexedDistance.nearestPoints(centerPoint.get());
     radiusPt = nearestPts[0];
 
     // flag computation
