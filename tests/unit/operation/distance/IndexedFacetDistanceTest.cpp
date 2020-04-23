@@ -49,10 +49,10 @@ struct test_facetdistanceop_data {
         std::vector<geos::geom::Coordinate> pts;
         pts = IndexedFacetDistance::nearestPoints(g1.get(), g2.get());
         ensure(fabs(pts[0].distance(pts[1])-distance) < 1e08);
-        ensure(fabs(pts[0].x - p1.x) < 1e08);
-        ensure(fabs(pts[0].y - p1.y) < 1e08);
-        ensure(fabs(pts[1].x - p2.x) < 1e08);
-        ensure(fabs(pts[1].y - p2.y) < 1e08);
+        ensure(fabs(pts[0].x - p1.x) < 1e-08);
+        ensure(fabs(pts[0].y - p1.y) < 1e-08);
+        ensure(fabs(pts[1].x - p2.x) < 1e-08);
+        ensure(fabs(pts[1].y - p2.y) < 1e-08);
         return;
     }
 
@@ -74,7 +74,6 @@ void object::test<1>
 ()
 {
     using geos::operation::distance::IndexedFacetDistance;
-    using geos::geom::Coordinate;
 
     std::string wkt0("POINT(0 0)");
     std::string wkt1("POINT(10 0)");
@@ -89,7 +88,6 @@ template<>
 void object::test<2>
 ()
 {
-    using geos::operation::distance::DistanceOp;
     using geos::geom::Coordinate;
 
     std::string wkt0("POLYGON ((200 180, 60 140, 60 260, 200 180))");
@@ -106,7 +104,6 @@ template<>
 void object::test<3>
 ()
 {
-    using geos::operation::distance::DistanceOp;
     using geos::geom::Coordinate;
 
     std::string wkt0("POLYGON ((200 180, 60 140, 60 260, 200 180))");
@@ -123,7 +120,6 @@ template<>
 void object::test<4>
 ()
 {
-    using geos::operation::distance::DistanceOp;
     using geos::geom::Coordinate;
 
     std::string wkt0("LINESTRING (100 100, 200 100, 200 200, 100 200, 100 100)");
@@ -140,7 +136,6 @@ template<>
 void object::test<5>
 ()
 {
-    using geos::operation::distance::DistanceOp;
     using geos::geom::Coordinate;
 
     std::string wkt0("POLYGON ((76 185, 125 283, 331 276, 324 122, 177 70, 184 155, 69 123, 76 185), (267 237, 148 248, 135 185, 223 189, 251 151, 286 183, 267 237))");
@@ -152,22 +147,40 @@ void object::test<5>
     checkDistanceNearestPoints(wkt0, wkt1, dist, p1, p2);
 }
 
+
+//
 template<>
 template<>
 void object::test<6>
 ()
 {
-    using geos::operation::distance::DistanceOp;
-    using geos::geom::Coordinate;
+    using geos::operation::distance::IndexedFacetDistance;
 
-    std::string wkt0("POLYGON ((76 185, 125 283, 331 276, 324 122, 177 70, 184 155, 69 123, 76 185), (267 237, 148 248, 135 185, 223 189, 251 151, 286 183, 267 237))");
-    std::string wkt1("LINESTRING (120 215, 185 224, 209 207, 238 222, 254 186)");
-    double dist = 0.0;
-    Coordinate p1(120, 215);
-    Coordinate p2(120, 215);
-
-    checkDistanceNearestPoints(wkt0, wkt1, dist, p1, p2);
+    std::string wkt0("POLYGON((100 200, 200 200, 200 100, 100 100, 100 200))");
+    std::string wkt1("POINT(150 150)");
+    GeomPtr g0(wktreader.read(wkt0));
+    GeomPtr g1(wktreader.read(wkt1));
+    double d = IndexedFacetDistance::distance(g0.get(), g1.get());
+    ensure_equals(d, 50);
 }
+
+
+template<>
+template<>
+void object::test<7>
+()
+{
+    using geos::operation::distance::IndexedFacetDistance;
+
+    std::string wkt0("POLYGON((100 200, 200 200, 200 100, 100 100, 100 200))");
+    std::string wkt1("POINT(150 150)");
+    GeomPtr g0(wktreader.read(wkt0));
+    GeomPtr g1(wktreader.read(wkt1));
+    double d = IndexedFacetDistance::distance(g0.get(), g1.get());
+    ensure_equals(d, 50);
+}
+
+
 
 // TODO: finish the tests by adding:
 // 	LINESTRING - *all*
