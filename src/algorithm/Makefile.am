@@ -37,4 +37,5 @@ libalgorithm_la_SOURCES = \
 
 libalgorithm_la_LIBADD = \
 	locate/liblocation.la \
-	distance/libdistance.la
+	distance/libdistance.la \
+	construct/libconstruct.la
