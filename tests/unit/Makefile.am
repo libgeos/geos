@@ -46,6 +46,8 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
+	algorithm/construct/LargestEmptyCircleTest.cpp \
+	algorithm/construct/MaximumInscribedCircleTest.cpp \
 	algorithm/distance/DiscreteFrechetDistanceTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/InteriorPointAreaTest.cpp \
