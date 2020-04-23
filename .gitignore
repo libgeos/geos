@@ -8,6 +8,7 @@ Makefile
 .vimrc
 .dirstamp
 .tm_properties
+*~
 *.o
 *.orig
 *.lo

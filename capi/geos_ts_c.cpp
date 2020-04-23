@@ -1164,8 +1164,8 @@ extern "C" {
     GEOSMaximumInscribedCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::MaximumInscribedCircle m(g, tolerance);
-            auto g3 = m.getCenter();
+            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            auto g3 = mic.getCenter();
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -1175,8 +1175,8 @@ extern "C" {
     GEOSMaximumInscribedCircleRadius_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::MaximumInscribedCircle m(g, tolerance);
-            auto g3 = m.getRadiusLine();
+            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            auto g3 = mic.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -1186,8 +1186,8 @@ extern "C" {
     GEOSMLargestEmptyCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::MaximumInscribedCircle m(g, tolerance);
-            auto g3 = m.getCenter();
+            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            auto g3 = lec.getCenter();
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -1197,8 +1197,8 @@ extern "C" {
     GEOSLargestEmptyCircleRadius_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::LargestEmptyCircle m(g, tolerance);
-            auto g3 = m.getRadiusLine();
+            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            auto g3 = lec.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();
         });
