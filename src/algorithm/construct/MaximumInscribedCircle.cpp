@@ -153,7 +153,7 @@ MaximumInscribedCircle::Cell
 MaximumInscribedCircle::createCentroidCell(const Geometry* geom)
 {
     Coordinate c;
-    bool gotCentroid = geom->getCentroid(c);
+    geom->getCentroid(c);
     Cell cell(c.x, c.y, 0, distanceToBoundary(c));
     return cell;
 }

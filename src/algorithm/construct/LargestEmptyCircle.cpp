@@ -168,10 +168,12 @@ LargestEmptyCircle::mayContainCircleCenter(const Cell& cell, const Cell& farthes
 double
 LargestEmptyCircle::distanceToConstraints(const Coordinate& c)
 {
-    bool isOutide = Location::EXTERIOR == ptLocater->locate(&c);
+    bool isOutside = Location::EXTERIOR == ptLocater->locate(&c);
     std::unique_ptr<Point> pt(factory->createPoint(c));
-    if (isOutide) {
+    if (isOutside) {
         double boundaryDist = boundaryDistance->distance(pt.get());
+        return -boundaryDist;
+
     }
     double dist = obstacleDistance->distance(pt.get());
     return dist;
@@ -190,7 +192,7 @@ LargestEmptyCircle::Cell
 LargestEmptyCircle::createCentroidCell(const Geometry* geom)
 {
     Coordinate c;
-    bool gotCentroid = geom->getCentroid(c);
+    geom->getCentroid(c);
     Cell cell(c.x, c.y, 0, distanceToConstraints(c));
     return cell;
 }
