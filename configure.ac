@@ -367,6 +367,7 @@ AC_OUTPUT([
 	src/algorithm/construct/Makefile
 	src/algorithm/distance/Makefile
 	src/algorithm/locate/Makefile
+	src/algorithm/construct/Makefile
 	src/geom/Makefile
 	src/geom/prep/Makefile
 	src/geom/util/Makefile
@@ -377,6 +378,7 @@ AC_OUTPUT([
 	include/geos/algorithm/Makefile
 	include/geos/algorithm/locate/Makefile
 	include/geos/algorithm/distance/Makefile
+	include/geos/algorithm/construct/Makefile
 	include/geos/geom/Makefile
 	include/geos/geom/prep/Makefile
 	include/geos/geom/util/Makefile
