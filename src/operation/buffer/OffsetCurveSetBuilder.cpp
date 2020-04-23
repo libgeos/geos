@@ -290,14 +290,14 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
 /* private */
 void
-OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double distance)
+OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
 {
-    addRingSide(coord, distance,
+    addRingSide(coord, p_distance,
                 Position::LEFT,
                 Location::EXTERIOR, Location::INTERIOR);
     /* Add the opposite side of the ring
     */
-    addRingSide(coord, distance,
+    addRingSide(coord, p_distance,
                 Position::RIGHT,
                 Location::INTERIOR, Location::EXTERIOR);
 }

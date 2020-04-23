@@ -251,8 +251,8 @@ void object::test<7>
     GEOSSTRtree* tree = GEOSSTRtree_create(16);
     GEOSGeometry* q = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))");
     GEOSSTRtree_query(tree, q, [](void* item, void* userdata) {
-        assert(item); // make unused parameter warning go away
-        assert(userdata);
+        (void)(item); // make unused parameter warning go away
+        (void)(userdata); // make unused parameter warning go away
     }, nullptr);
 
     GEOSGeom_destroy(q);

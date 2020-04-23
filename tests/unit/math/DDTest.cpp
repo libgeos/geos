@@ -204,13 +204,13 @@ struct test_dd_data {
      *    Pi / 4  =  4 arctan(1/5) - arctan(1/239)
      */
 
-    DD computePiByMachin()
+    DD computePiByMachine()
     {
         DD t1 = DD(1.0) / DD(5.0);
         DD t2 = DD(1.0) / DD(239.0);
-        DD pi4 = (DD(4.0) * arctan(t1)) - arctan(t2);
-        DD pi = DD(4.0) * pi4;
-        return pi;
+        DD pie4 = (DD(4.0) * arctan(t1)) - arctan(t2);
+        DD pie = DD(4.0) * pie4;
+        return pie;
     }
 
     test_dd_data():
@@ -236,7 +236,7 @@ template<>
 void object::test<1>
 ()
 {
-    DD testPi = computePiByMachin();
+    DD testPi = computePiByMachine();
     double err = std::abs((testPi - pi).doubleValue());
     // std::cout << "Difference from PI = " << err << std::endl;
     ensure("Test PI calculation", err < 8*eps);
