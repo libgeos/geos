@@ -120,15 +120,11 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
                                         std::vector<GeometryLocation> *locs) const
 {
     double minDistance = std::numeric_limits<double>::infinity();
-    double dist;
 
     for(size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
         const Coordinate& q0 = facetSeq.pts->getAt(i);
         const Coordinate& q1 = facetSeq.pts->getAt(i + 1);
-        dist = Distance::pointToSegment(pt, q0, q1);
-        if(dist == 0.0) {
-            return dist;
-        }
+        double dist = Distance::pointToSegment(pt, q0, q1);
         if(dist < minDistance) {
             minDistance = dist;
             if (locs != nullptr) {

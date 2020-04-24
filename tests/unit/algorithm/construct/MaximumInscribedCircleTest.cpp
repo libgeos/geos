@@ -54,7 +54,7 @@ struct test_mic_data {
     ensure_equals_coordinate(const geos::geom::Coordinate &lhs,
                              const geos::geom::Coordinate &rhs, double tolerance)
     {
-        ensure_equals("x coordinate does not match", lhs.x, rhs.y, tolerance);
+        ensure_equals("x coordinate does not match", lhs.x, rhs.x, tolerance);
         ensure_equals("y coordinate does not match", lhs.y, rhs.y, tolerance);
     }
 
@@ -91,9 +91,8 @@ typedef group::object object;
 
 group test_mic_group("geos::algorithm::construct::MaximumInscribedCircle");
 
-
 //
-// Square
+// testSquare
 //
 template<>
 template<>
@@ -104,21 +103,70 @@ void object::test<1>
                 0.001, 150, 150, 50);
 }
 
-// template<>
-// template<>
-// void object::test<2>
-// ()
-// {
-//     checkAreaOfRingSigned("LINESTRING (100 200, 200 200, 200 100, 100 100, 100 200)", 10000.0);
-// }
+//
+// testDiamond
+//
+template<>
+template<>
+void object::test<2>
+()
+{
+    checkCircle("POLYGON ((150 250, 50 150, 150 50, 250 150, 150 250))",
+                0.001, 150, 150, 70.71 );
+}
 
-// template<>
-// template<>
-// void object::test<3>
-// ()
-// {
-//     checkAreaOfRingSigned("LINESTRING (100 200, 100 100, 200 100, 200 200, 100 200)", -10000.0);
-// }
+//
+// testCircle
+//
+template<>
+template<>
+void object::test<3>
+()
+{
+    std::unique_ptr<Geometry> geom(reader_.read("POINT (100 100)"));
+    std::unique_ptr<Geometry> circle(geom->buffer(100, 20));
+    // MIC radius is less than 100 because buffer boundary segments lie inside circle
+    checkCircle(circle.get(), 0.01, 100, 100, 99.53);
+}
+
+//
+// testDoubleKite
+//
+template<>
+template<>
+void object::test<4>
+()
+{
+    checkCircle("MULTIPOLYGON (((150 200, 100 150, 150 100, 250 150, 150 200)), ((400 250, 300 150, 400 50, 560 150, 400 250)))",
+       0.01, 411.328, 150.39, 78.445 );
+}
+
+//
+// Invalid polygon collapsed to a line
+//
+template<>
+template<>
+void object::test<5>
+()
+{
+    checkCircle("POLYGON ((100 100, 200 200, 100 100, 100 100))",
+       0.01, 150, 150, 0 );
+}
+
+
+// //
+// // Invalid polygon collapsed to a point
+// //
+template<>
+template<>
+void object::test<6>
+()
+{
+     checkCircle("POLYGON ((100 100, 100 100, 100 100, 100 100))",
+       0.01, 100, 100, 0 );
+}
+
+
 
 
 } // namespace tut

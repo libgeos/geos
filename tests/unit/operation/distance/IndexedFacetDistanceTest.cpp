@@ -64,7 +64,6 @@ typedef group::object object;
 group test_facetdistanceop_group("geos::operation::distance::IndexedFacetDistance");
 
 
-
 //
 // Test Cases
 //
@@ -195,6 +194,25 @@ void object::test<8>
     ensure_equals(d, 50);
 }
 
+// Invalid polygon collapsed to a line
+template<>
+template<>
+void object::test<9>
+()
+{
+    using geos::operation::distance::IndexedFacetDistance;
+    std::string wkt0("POLYGON((100 100, 200 200, 100 100, 100 100))");
+    std::string wkt1("POINT(150 150)");
+    GeomPtr g0(wktreader.read(wkt0));
+    GeomPtr g1(wktreader.read(wkt1));
+    IndexedFacetDistance ifd(g0.get());
+    double d = ifd.distance(g1.get());
+    ensure_equals("incorrect distance", d, 0.0, 0.001);
+
+    std::vector<geos::geom::Coordinate> nearestPts = ifd.nearestPoints(g1.get());
+    ensure_equals("nearest points x", nearestPts[0].x, nearestPts[1].x, 0.00001);
+    ensure_equals("nearest points y", nearestPts[0].y, nearestPts[1].y, 0.00001);
+}
 
 
 // TODO: finish the tests by adding:
