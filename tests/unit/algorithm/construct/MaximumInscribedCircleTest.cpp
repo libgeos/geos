@@ -13,6 +13,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 // std
 #include <sstream>
 #include <string>
@@ -36,10 +37,11 @@ struct test_mic_data {
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
+    geos::io::WKTWriter writer_;
 
     test_mic_data():
         geom_(nullptr),
-        pm_(1),
+        pm_(geos::geom::PrecisionModel::FLOATING),
         factory_(GeometryFactory::create(&pm_, 0)),
         reader_(factory_.get())
     {}
@@ -71,6 +73,10 @@ struct test_mic_data {
         ensure_equals("radius", actualRadius, expectedRadius, tolerance);
         const Coordinate& linePt0 = radiusLine->getCoordinateN(0);
         const Coordinate& linePt1 = radiusLine->getCoordinateN(1);
+
+        // std::cout << std::endl;
+        // std::cout << writer_.write(geom) << std::endl;
+        // std::cout << writer_.write(radiusLine.get()) << std::endl;
 
         ensure_equals_coordinate(*centerPt, linePt0, tolerance);
         const Coordinate* radiusPt = mic.getRadiusPoint()->getCoordinate();
@@ -126,7 +132,7 @@ void object::test<3>
     std::unique_ptr<Geometry> geom(reader_.read("POINT (100 100)"));
     std::unique_ptr<Geometry> circle(geom->buffer(100, 20));
     // MIC radius is less than 100 because buffer boundary segments lie inside circle
-    checkCircle(circle.get(), 0.01, 100, 100, 99.53);
+    checkCircle(circle.get(), 0.01, 100, 100, 99.9229);
 }
 
 //
@@ -138,7 +144,7 @@ void object::test<4>
 ()
 {
     checkCircle("MULTIPOLYGON (((150 200, 100 150, 150 100, 250 150, 150 200)), ((400 250, 300 150, 400 50, 560 150, 400 250)))",
-       0.01, 411.328, 150.39, 78.445 );
+       0.01, 411.383, 149.994, 78.7553 );
 }
 
 //

@@ -135,7 +135,8 @@ MaximumInscribedCircle::distanceToBoundary(const Coordinate& c)
 {
     std::unique_ptr<Point> pt(factory->createPoint(c));
     double dist = indexedDistance.distance(pt.get());
-    bool isOutside = Location::EXTERIOR == ptLocator.locate(&c);
+    // double dist = inputGeomBoundary->distance(pt.get());
+    bool isOutside = (Location::EXTERIOR == ptLocator.locate(&c));
     if (isOutside) return -dist;
     return dist;
 }
@@ -183,6 +184,8 @@ MaximumInscribedCircle::compute()
         Cell cell = cellQueue.top();
         cellQueue.pop();
 
+        // std::cout << i << ": (" << cell.getX() << ", " << cell.getY() << ") " << cell.getHSize() << " dist = " << cell.getDistance() << std::endl;
+
         // update the center cell if the candidate is further from the boundary
         if (cell.getDistance() > farthestCell.getDistance()) {
             farthestCell = cell;
@@ -204,6 +207,8 @@ MaximumInscribedCircle::compute()
             cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()+h2));
         }
     }
+    // std::cout << "number of iterations: " << i << std::endl;
+
     // the farthest cell is the best approximation to the MIC center
     Cell centerCell = farthestCell;
     centerPt.x = centerCell.getX();

@@ -141,7 +141,7 @@ private:
             , y(p_y)
             , hSize(p_hSize)
             , distance(p_distanceToConstraints)
-            , maxDist(p_distanceToConstraints*p_hSize*SQRT2)
+            , maxDist(p_distanceToConstraints + (p_hSize*SQRT2))
         {};
 
         geom::Envelope getEnvelope() const
