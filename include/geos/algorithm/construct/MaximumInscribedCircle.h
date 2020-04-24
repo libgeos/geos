@@ -142,7 +142,7 @@ private:
             , y(p_y)
             , hSize(p_hSize)
             , distance(p_distanceToBoundary)
-            , maxDist(p_distanceToBoundary*p_hSize*SQRT2)
+            , maxDist(p_distanceToBoundary+(p_hSize*SQRT2))
         {};
 
         geom::Envelope getEnvelope() const
