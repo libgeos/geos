@@ -1160,6 +1160,47 @@ extern "C" {
         });
     }
 
+    int
+    GEOSMaximumInscribedCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance, Geometry **center, double *radius)
+    {
+        return execute(extHandle, 0, [&]() {
+            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            auto g_center = mic.getCenter();
+            g_center->setSRID(g->getSRID());
+            if (center)
+            {
+                *center = g_center.release();
+            }
+            if (radius)
+            {
+                auto g_radius = mic.getRadiusPoint();
+                *radius = g_center->distance(g_radius.get());
+            }
+            return 1;
+        });
+    }
+
+    int
+    GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance, Geometry **center, double *radius)
+    {
+        return execute(extHandle, 0, [&]() {
+            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            auto g_center = lec.getCenter();
+            g_center->setSRID(g->getSRID());
+            if (center)
+            {
+                *center = g_center.release();
+            }
+            if (radius)
+            {
+                auto g_radius = lec.getRadiusPoint();
+                *radius = g_center->distance(g_radius.get());
+            }
+            return 1;
+        });
+    }
+
+
     Geometry*
     GEOSMaximumInscribedCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
@@ -1183,7 +1224,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSMLargestEmptyCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    GEOSLargestEmptyCircleCenter_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
             geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);

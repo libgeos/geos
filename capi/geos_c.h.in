@@ -566,6 +566,9 @@ extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius_r(GEOSContextHand
 extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleCenter_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
 extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleRadius_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
 
+extern int GEOS_DLL GEOSMaximumInscribedCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
+extern int GEOS_DLL GEOSLargestEmptyCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
+
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that
  * contains the geometry, where a band is a strip of the plane defined
@@ -1639,6 +1642,10 @@ extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleCenter(const GEOSGeometry* g
  * on the boundary of the inscribed circle.
  */
 extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleRadius(const GEOSGeometry* g, double tolerance);
+
+extern int GEOS_DLL GEOSMaximumInscribedCircle(const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
+extern int GEOS_DLL GEOSLargestEmptyCircle(const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
+
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that

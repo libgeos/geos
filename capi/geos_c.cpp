@@ -457,6 +457,18 @@ extern "C" {
         return GEOSMinimumRotatedRectangle_r(handle, g);
     }
 
+    int
+    GEOSMaximumInscribedCircle(const Geometry* g, double tolerance, Geometry** center, double *radius)
+    {
+        return GEOSMaximumInscribedCircle_r(handle, g, tolerance, center, radius);
+    }
+
+    int
+    GEOSLargestEmptyCircle(const Geometry* g, double tolerance, Geometry** center, double *radius)
+    {
+        return GEOSLargestEmptyCircle_r(handle, g, tolerance, center, radius);
+    }
+
     Geometry*
     GEOSMaximumInscribedCircleCenter(const Geometry* g, double tolerance)
     {
