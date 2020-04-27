@@ -158,11 +158,10 @@ stages:
       matrix:
         #Disabled until MSVC 16.4 is released
         #(see https://developercommunity.visualstudio.com/content/problem/726778/this-snippet-compiles-totally-fine-on-godbolt-msvc.html?childToView=744771#comment-744771)
-        #VS 2019 C++20 Strict:
-        #  TOOLSET: msvc-14.2
-        #  CXXSTD: 20
-        #  CXXFLAGS: -permissive-
-        #  VM_IMAGE: 'windows-2019'
+        VS 2019 C++20 Strict:
+          TOOLSET: msvc-14.2
+          CXXSTD: 20
+          VM_IMAGE: 'windows-2019'
         VS 2017 C++17:
           TOOLSET: msvc-14.1
           CXXSTD: 17
@@ -171,10 +170,6 @@ stages:
           TOOLSET: msvc-14.1
           CXXSTD: 14 # default
           VM_IMAGE: 'vs2017-win2016'
-        VS 2015 C++14:
-          TOOLSET: msvc-14.0
-          CXXSTD: 14 # default
-          VM_IMAGE: 'vs2015-win2012r2'
     pool:
       vmImage: $(VM_IMAGE)
     steps:
@@ -202,7 +197,7 @@ stages:
 
   - job: 'macOS'
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'macOS-10.14'
     strategy:
       matrix:
         Xcode 10.1:
@@ -230,15 +225,6 @@ stages:
         Xcode 9.1:
           CXXSTD: 11
           XCODE_APP: /Applications/Xcode_9.1.app
-        Xcode 9.0.1:
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_9.0.1.app
-        Xcode 9.0:
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_9.app
-        Xcode 8.3.3:
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_8.3.3.app
     steps:
     - script: |
         set -e
