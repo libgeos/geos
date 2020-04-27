@@ -152,14 +152,14 @@ class GEOS_DLL DD {
             return (hi > rhs.hi) || (hi == rhs.hi && lo >= rhs.lo);
         }
 
-        friend DD operator+ (const DD &lhs, const DD &rhs);
-        friend DD operator+ (const DD &lhs, double rhs);
-        friend DD operator- (const DD &lhs, const DD &rhs);
-        friend DD operator- (const DD &lhs, double rhs);
-        friend DD operator* (const DD &lhs, const DD &rhs);
-        friend DD operator* (const DD &lhs, double rhs);
-        friend DD operator/ (const DD &lhs, const DD &rhs);
-        friend DD operator/ (const DD &lhs, double rhs);
+        friend GEOS_DLL DD operator+ (const DD &lhs, const DD &rhs);
+        friend GEOS_DLL DD operator+ (const DD &lhs, double rhs);
+        friend GEOS_DLL DD operator- (const DD &lhs, const DD &rhs);
+        friend GEOS_DLL DD operator- (const DD &lhs, double rhs);
+        friend GEOS_DLL DD operator* (const DD &lhs, const DD &rhs);
+        friend GEOS_DLL DD operator* (const DD &lhs, double rhs);
+        friend GEOS_DLL DD operator/ (const DD &lhs, const DD &rhs);
+        friend GEOS_DLL DD operator/ (const DD &lhs, double rhs);
 
         static DD determinant(const DD &x1, const DD &y1, const DD &x2, const DD &y2);
         static DD determinant(double x1, double y1, double x2, double y2);
