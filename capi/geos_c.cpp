@@ -472,13 +472,13 @@ extern "C" {
     Geometry*
     GEOSLargestEmptyCircleCenter(const Geometry* g, double tolerance)
     {
-        return GEOSMaximumInscribedCircleCenter_r(handle, g, tolerance);
+        return GEOSLargestEmptyCircleCenter_r(handle, g, tolerance);
     }
 
     Geometry*
     GEOSLargestEmptyCircleRadius(const Geometry* g, double tolerance)
     {
-        return GEOSMaximumInscribedCircleRadius_r(handle, g, tolerance);
+        return GEOSLargestEmptyCircleRadius_r(handle, g, tolerance);
     }
 
     Geometry*
