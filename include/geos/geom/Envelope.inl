@@ -262,6 +262,25 @@ Envelope::setToNull()
     maxy = -1;
 }
 
+INLINE double
+Envelope::distanceToCoordinate(const Coordinate & c, const Coordinate & p0, const Coordinate & p1) {
+    return std::sqrt(distanceSquaredToCoordinate(c, p0, p1));
+}
+
+INLINE double
+Envelope::distanceSquaredToCoordinate(const Coordinate & c, const Coordinate & p0, const Coordinate & p1) {
+    double xa = c.x - p0.x;
+    double xb = c.x - p1.x;
+    double ya = c.y - p0.y;
+    double yb = c.y - p1.y;
+
+    // If sign of a and b are not the same, then Envelope spans c and distance is zero.
+    double dx = (std::signbit(xa) == std::signbit(xb)) * std::min(std::abs(xa), std::abs(xb));
+    double dy = (std::signbit(ya) == std::signbit(yb)) * std::min(std::abs(ya), std::abs(yb));
+
+    return dx*dx + dy*dy;
+}
+
 } // namespace geos::geom
 } // namespace geos
 
