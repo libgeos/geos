@@ -24,6 +24,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/Envelope.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 
 #include <memory>
 #include <queue>
@@ -101,9 +102,9 @@ private:
     const geom::Geometry* obstacles;
     const geom::GeometryFactory* factory;
     std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocater;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> obstacleDistance;
     std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
+    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
+    operation::distance::IndexedFacetDistance obstacleDistance;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
     bool done;
@@ -180,11 +181,11 @@ private:
         }
         bool operator< (const Cell& rhs) const
         {
-            return maxDist <  rhs.maxDist;
+            return maxDist < rhs.maxDist;
         }
         bool operator> (const Cell& rhs) const
         {
-            return maxDist >  rhs.maxDist;
+            return maxDist > rhs.maxDist;
         }
         bool operator==(const Cell& rhs) const
         {

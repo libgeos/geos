@@ -95,6 +95,9 @@ FacetSequence::nearestLocations(const FacetSequence& facetSeq)  const
         const Coordinate& seqPt = facetSeq.pts->getAt(facetSeq.start);
         GeometryLocation gl1(geom, start, pt);
         GeometryLocation gl2(facetSeq.geom, facetSeq.start, seqPt);
+        locs.clear();
+        locs.push_back(gl1);
+        locs.push_back(gl2);
     }
     else if (isPointThis) {
         const Coordinate& pt = pts->getAt(start);

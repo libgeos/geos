@@ -43,24 +43,22 @@ namespace construct { // geos.algorithm.construct
 
 
 LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tolerance)
+    : done(false)
+    , tolerance(p_tolerance)
+    , obstacles(p_obstacles)
+    , factory(p_obstacles->getFactory())
+    , obstacleDistance(p_obstacles)
+    , boundary(p_obstacles->convexHull())
 {
     if (p_obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
     }
 
-    done = false;
-    obstacles = p_obstacles;
-    factory = obstacles->getFactory();
-    tolerance = p_tolerance;
-    obstacleDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(p_obstacles);
-    boundary = obstacles->convexHull();
-
-    // if boundary does not enclose an area cannot create a ptLocater
+    // if boundary does not enclose an area cannot create a ptLocator
     if (boundary->getDimension() >= 2) {
-        ptLocater = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(*(boundary.get()));
-        obstacleDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(boundary.get());
+        ptLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*(boundary.get())));
+        boundaryDistance.reset(new operation::distance::IndexedFacetDistance(boundary.get()));
     }
-
 }
 
 
@@ -85,8 +83,7 @@ std::unique_ptr<Point>
 LargestEmptyCircle::getCenter()
 {
     compute();
-    auto pt = factory->createPoint(centerPt);
-    return std::unique_ptr<Point>(pt);
+    return std::unique_ptr<Point>(factory->createPoint(centerPt));
 }
 
 /* public */
@@ -94,8 +91,7 @@ std::unique_ptr<Point>
 LargestEmptyCircle::getRadiusPoint()
 {
     compute();
-    auto pt = factory->createPoint(radiusPt);
-    return std::unique_ptr<Point>(pt);
+    return std::unique_ptr<Point>(factory->createPoint(radiusPt));
 }
 
 /* public */
@@ -168,14 +164,14 @@ LargestEmptyCircle::mayContainCircleCenter(const Cell& cell, const Cell& farthes
 double
 LargestEmptyCircle::distanceToConstraints(const Coordinate& c)
 {
-    bool isOutside = Location::EXTERIOR == ptLocater->locate(&c);
+    bool isOutside = ptLocator && (Location::EXTERIOR == ptLocator->locate(&c));
     std::unique_ptr<Point> pt(factory->createPoint(c));
     if (isOutside) {
         double boundaryDist = boundaryDistance->distance(pt.get());
         return -boundaryDist;
 
     }
-    double dist = obstacleDistance->distance(pt.get());
+    double dist = obstacleDistance.distance(pt.get());
     return dist;
 }
 
@@ -206,8 +202,8 @@ LargestEmptyCircle::compute()
     // check if already computed
     if (done) return;
 
-    // if ptLocater is not present then result is degenerate (represented as zero-radius circle)
-    if (!ptLocater) {
+    // if ptLocator is not present then result is degenerate (represented as zero-radius circle)
+    if (!ptLocator) {
         const Coordinate* pt = obstacles->getCoordinate();
         centerPt = *pt;
         radiusPt = *pt;
@@ -260,7 +256,7 @@ LargestEmptyCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    std::vector<geom::Coordinate> nearestPts = obstacleDistance->nearestPoints(centerPoint.get());
+    std::vector<geom::Coordinate> nearestPts = obstacleDistance.nearestPoints(centerPoint.get());
     radiusPt = nearestPts[0];
 
     // flag computation
