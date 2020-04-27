@@ -221,11 +221,14 @@ LargestEmptyCircle::compute()
      * Carry out the branch-and-bound search
      * of the cell space
      */
+    int i = 0;
     while (!cellQueue.empty()) {
 
         // pick the most promising cell from the queue
         Cell cell = cellQueue.top();
         cellQueue.pop();
+
+        i++;
 
         // update the center cell if the candidate is further from the constraints
         if (cell.getDistance() > farthestCell.getDistance()) {
@@ -248,6 +251,7 @@ LargestEmptyCircle::compute()
             cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToConstraints(cell.getX()+h2, cell.getY()+h2));
         }
     }
+    std::cout << "iterations: " << i << std::endl;
 
     // the farthest cell is the best approximation to the MIC center
     Cell centerCell = farthestCell;

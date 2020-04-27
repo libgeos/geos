@@ -85,6 +85,33 @@ struct test_lec_data {
     }
 
     void
+    checkCircleZeroRadius(const Geometry *geom, double tolerance)
+    {
+        LargestEmptyCircle lec(geom, tolerance);
+        std::unique_ptr<Point> centerPoint = lec.getCenter();
+        const Coordinate* centerPt = centerPoint->getCoordinate();
+        std::unique_ptr<LineString> radiusLine = lec.getRadiusLine();
+        double actualRadius = radiusLine->getLength();
+        ensure_equals("radius", actualRadius, 0.0, tolerance);
+
+        const Coordinate& linePt0 = radiusLine->getCoordinateN(0);
+        const Coordinate& linePt1 = radiusLine->getCoordinateN(1);
+
+        ensure_equals_coordinate(*centerPt, linePt0, tolerance);
+        const Coordinate* radiusPt = lec.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(*radiusPt, linePt1, tolerance);
+
+
+    }
+
+    void
+    checkCircleZeroRadius(std::string wkt, double tolerance)
+    {
+        std::unique_ptr<Geometry> geom(reader_.read(wkt));
+        checkCircleZeroRadius(geom.get(), tolerance);
+    }
+
+    void
     checkCircle(std::string wkt, double tolerance, double x, double y, double expectedRadius)
     {
         std::unique_ptr<Geometry> geom(reader_.read(wkt));
@@ -185,29 +212,29 @@ checkCircle("GEOMETRYCOLLECTION (LINESTRING (100 100, 300 100), POINT (250 200))
 }
 
 
-// //
-// // testPointsLinesTriangle
-// //
-// template<>
-// template<>
-// void object::test<8>
-// ()
-// {
-// checkCircleZeroRadius("POINT (100 100)",
-//        0.01 );
-// }
+//
+// testPointsLinesTriangle
+//
+template<>
+template<>
+void object::test<8>
+()
+{
+checkCircleZeroRadius("POINT (100 100)",
+       0.01 );
+}
 
-// //
-// // testLineFlat
-// //
-// template<>
-// template<>
-// void object::test<9>
-// ()
-// {
-//  checkCircleZeroRadius("LINESTRING (0 0, 50 50)",
-//        0.01 );
-// }
+//
+// testLineFlat
+//
+template<>
+template<>
+void object::test<9>
+()
+{
+ checkCircleZeroRadius("LINESTRING (0 0, 50 50)",
+       0.01 );
+}
 
 
 } // namespace tut
