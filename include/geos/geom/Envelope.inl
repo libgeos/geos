@@ -19,7 +19,9 @@
 #ifndef GEOS_GEOM_ENVELOPE_INL
 #define GEOS_GEOM_ENVELOPE_INL
 
+#include <algorithm> // std::min, std::max
 #include <cassert>
+#include <numeric> // std::signbit
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 
