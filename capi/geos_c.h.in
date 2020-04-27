@@ -561,13 +561,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
 
-extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleCenter_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
-extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleCenter_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleRadius_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
-
-extern int GEOS_DLL GEOSMaximumInscribedCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
-extern int GEOS_DLL GEOSLargestEmptyCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
+extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that
@@ -1619,12 +1614,10 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle(const GEOSGeometry* g)
  * The implementation uses a successive-approximation technique over a grid of square cells covering the area geometry.
  * The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant
  * way by using spatial indexes.
- */
-extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleCenter(const GEOSGeometry* g, double tolerance);
-/* Returns a two-point linestring, with one point at the center of the inscribed circle and the other
+ * Returns a two-point linestring, with one point at the center of the inscribed circle and the other
  * on the boundary of the inscribed circle.
- */
-extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius(const GEOSGeometry* g, double tolerance);
+*/
+extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle(const GEOSGeometry* g, double tolerance);
 
 /* Constructs the Largest Empty Circle for a set of obstacle geometries, up to a
  * specified tolerance. The obstacles are point and line geometries.
@@ -1636,16 +1629,10 @@ extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircleRadius(const GEOSGeometr
  * The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary.
  * The grid is refined using a branch-and-bound algorithm.  Point containment and distance are computed in a performant
  * way by using spatial indexes.
- */
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleCenter(const GEOSGeometry* g, double tolerance);
-/* Returns a two-point linestring, with one point at the center of the inscribed circle and the other
+ * Returns a two-point linestring, with one point at the center of the inscribed circle and the other
  * on the boundary of the inscribed circle.
  */
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircleRadius(const GEOSGeometry* g, double tolerance);
-
-extern int GEOS_DLL GEOSMaximumInscribedCircle(const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
-extern int GEOS_DLL GEOSLargestEmptyCircle(const GEOSGeometry* g, double tolerance, GEOSGeometry** center, double* radius);
-
+extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle(const GEOSGeometry* g, double tolerance);
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that

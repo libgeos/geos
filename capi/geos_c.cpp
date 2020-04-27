@@ -457,40 +457,16 @@ extern "C" {
         return GEOSMinimumRotatedRectangle_r(handle, g);
     }
 
-    int
-    GEOSMaximumInscribedCircle(const Geometry* g, double tolerance, Geometry** center, double *radius)
+    Geometry*
+    GEOSMaximumInscribedCircle(const Geometry* g, double tolerance)
     {
-        return GEOSMaximumInscribedCircle_r(handle, g, tolerance, center, radius);
-    }
-
-    int
-    GEOSLargestEmptyCircle(const Geometry* g, double tolerance, Geometry** center, double *radius)
-    {
-        return GEOSLargestEmptyCircle_r(handle, g, tolerance, center, radius);
+        return GEOSMaximumInscribedCircle_r(handle, g, tolerance);
     }
 
     Geometry*
-    GEOSMaximumInscribedCircleCenter(const Geometry* g, double tolerance)
+    GEOSLargestEmptyCircle(const Geometry* g, double tolerance)
     {
-        return GEOSMaximumInscribedCircleCenter_r(handle, g, tolerance);
-    }
-
-    Geometry*
-    GEOSMaximumInscribedCircleRadius(const Geometry* g, double tolerance)
-    {
-        return GEOSMaximumInscribedCircleRadius_r(handle, g, tolerance);
-    }
-
-    Geometry*
-    GEOSLargestEmptyCircleCenter(const Geometry* g, double tolerance)
-    {
-        return GEOSLargestEmptyCircleCenter_r(handle, g, tolerance);
-    }
-
-    Geometry*
-    GEOSLargestEmptyCircleRadius(const Geometry* g, double tolerance)
-    {
-        return GEOSLargestEmptyCircleRadius_r(handle, g, tolerance);
+        return GEOSLargestEmptyCircle_r(handle, g, tolerance);
     }
 
     Geometry*
