@@ -242,5 +242,67 @@ void object::test<9>
     ensure(empty == exemplar);
 }
 
+// Test point-to-envelope distance
+template<>
+template<>
+void object::test<10>
+()
+{
+    using geos::geom::Coordinate;
+    using geos::geom::Envelope;
+
+    // Create a 5x5 grid of points and use them to test various
+    // spatial arrangements of the envelope and test point
+
+    //  0  1  2  3  4
+    //  5  6  7  8  9
+    // 10 11 12 13 14
+    // 15 16 17 18 19
+    // 20 21 22 23 24
+    std::vector<Coordinate> c(25);
+
+    std::cout<<std::endl;
+    for (size_t i = 0; i < c.size(); i++) {
+        c[i].x = static_cast<double>(i % 5);
+        c[i].y = static_cast<double>(5 - (i / 5));
+        std::cout<< c[i] << std::endl;
+    }
+
+    // point contained in envelope
+    ensure_equals( Envelope::distanceToCoordinate(c[18], c[22], c[9]), 0);
+    ensure_equals( Envelope::distanceToCoordinate(c[18], c[14], c[18]), 0);
+    ensure_equals( Envelope::distanceToCoordinate(c[18], c[14], c[17]), 0);
+    ensure_equals( Envelope::distanceToCoordinate(c[18], c[19], c[22]), 0);
+
+    // envelope above point
+    ensure_equals(Envelope::distanceToCoordinate(c[17], c[5], c[4]), 2);
+
+    // envelope below point
+    ensure_equals(Envelope::distanceToCoordinate(c[7], c[20], c[19]), 2);
+
+    // envelope left of point
+    ensure_equals(Envelope::distanceToCoordinate(c[13], c[20], c[11]), 2);
+
+    // envelope right of point
+    ensure_equals(Envelope::distanceToCoordinate(c[5], c[9], c[8]), 3);
+
+    // envelope upper-left of point
+    ensure_equals(Envelope::distanceToCoordinate(c[17], c[6], c[0]),
+            c[17].distance(c[6]));
+
+    // envelope upper-right of point
+    ensure_equals(Envelope::distanceToCoordinate(c[21], c[9], c[13]),
+            c[21].distance(c[13]));
+
+    // envelope lower-left of point
+    ensure_equals(Envelope::distanceToCoordinate(c[3], c[10], c[21]),
+                  c[3].distance(c[11]));
+
+    // envelope lower-right of point
+    ensure_equals(Envelope::distanceToCoordinate(c[6], c[12], c[14]),
+                  c[6].distance(c[12]));
+
+}
+
 } // namespace tut
 

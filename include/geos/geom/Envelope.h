@@ -453,6 +453,28 @@ public:
      */
     double distance(const Envelope* env) const;
 
+    /** \brief
+     * Computes the distance between one Coordinate and an Envelope
+     * defined by two other Coordinates. The order of the Coordinates
+     * used to define the envelope is not significant.
+     *
+     * @param c the coordinate to from which distance should be found
+     * @param p1 first coordinate defining an envelope
+     * @param p2 second coordinate defining an envelope.
+     */
+    static double distanceToCoordinate(const Coordinate & c, const Coordinate & p1, const Coordinate & p2);
+
+    /** \brief
+     * Computes the squared distance between one Coordinate and an Envelope
+     * defined by two other Coordinates. The order of the Coordinates
+     * used to define the envelope is not significant.
+     *
+     * @param c the coordinate to from which distance should be found
+     * @param p1 first coordinate defining an envelope
+     * @param p2 second coordinate defining an envelope.
+     */
+    static double distanceSquaredToCoordinate(const Coordinate & c, const Coordinate & p1, const Coordinate & p2);
+
     size_t hashCode() const;
 
 private:
