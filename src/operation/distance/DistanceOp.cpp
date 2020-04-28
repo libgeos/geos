@@ -447,7 +447,7 @@ DistanceOp::computeMinDistance(
 
         Envelope segEnv0(p00, p01);
 
-        if (segEnv0.distance(lineEnv1) > minDistance) {
+        if (segEnv0.distanceSquared(lineEnv1) > minDistance*minDistance) {
             continue;
         }
 
@@ -457,7 +457,7 @@ DistanceOp::computeMinDistance(
 
             Envelope segEnv1(p10, p11);
 
-            if (segEnv0.distance(&segEnv1) > minDistance) {
+            if (segEnv0.distanceSquared(&segEnv1) > minDistance*minDistance) {
                 continue;
             }
 

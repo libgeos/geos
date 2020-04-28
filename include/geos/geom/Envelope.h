@@ -454,6 +454,14 @@ public:
     double distance(const Envelope* env) const;
 
     /** \brief
+     * Computes the square of the distance between this and another Envelope.
+     *
+     * The distance between overlapping Envelopes is 0. Otherwise, the
+     * distance is the Euclidean distance between the closest points.
+     */
+    double distanceSquared(const Envelope* env) const;
+
+    /** \brief
      * Computes the distance between one Coordinate and an Envelope
      * defined by two other Coordinates. The order of the Coordinates
      * used to define the envelope is not significant.
