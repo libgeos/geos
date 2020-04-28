@@ -15,6 +15,7 @@ Changes in 3.9.0
   - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
   - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
+  - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
 
 
 Changes in 3.8.0

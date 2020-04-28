@@ -56,6 +56,7 @@ private:
     geom::Coordinate pointWitMinAngleWithX(std::vector<geom::Coordinate>& pts, geom::Coordinate& P);
     geom::Coordinate pointWithMinAngleWithSegment(std::vector<geom::Coordinate>& pts,
             geom::Coordinate& P, geom::Coordinate& Q);
+    std::vector<geom::Coordinate> farthestPoints(std::vector<geom::Coordinate>& pts);
 
 
 public:
@@ -93,7 +94,7 @@ public:
     * @return a empty LineString if the input is empty
     * @return a Point if the input is a point
     */
-    std::unique_ptr<geom::Geometry> getFarthestPoints();
+    std::unique_ptr<geom::Geometry> getMaximumDiameter();
 
     /**
     * Gets a geometry representing the diameter of the computed Minimum Bounding
