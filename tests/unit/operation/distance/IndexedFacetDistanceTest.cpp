@@ -84,7 +84,7 @@ struct test_facetdistanceop_data {
     {
         geos::geom::CoordinateArraySequence cs;
         std::vector<geos::geom::Coordinate> coords;
-        for (int i = 0; i < nvertices; i++) {
+        for (size_t i = 0; i < nvertices; i++) {
             geos::geom::Coordinate c;
             angle2sincircle(i*360.0/nvertices, radius, amplitude, &c.x, &c.y);
             cs.add(c);
@@ -308,7 +308,7 @@ void object::test<10>
     for (auto it = m.begin() ; it != m.end(); ++it)
     {
         prof.start(profiles[*it]);
-        for (int j = 0; j < pts.size(); j++) {
+        for (size_t j = 0; j < pts.size(); j++) {
             double dist_ifd, dist_geom;
             if (*it == TestIndexedFacetDistance || *it == TestBoth)
                 dist_ifd = ifd.distance(pts[j].get());
