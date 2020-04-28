@@ -265,6 +265,18 @@ Envelope::setToNull()
 }
 
 INLINE double
+Envelope::distance(const Envelope* env) const {
+    double dx = std::max(0.0,
+                         std::max(maxx, env->maxx) - std::min(minx, env->minx) - (maxx - minx) -
+                         (env->maxx - env->minx));
+    double dy = std::max(0.0,
+                         std::max(maxy, env->maxy) - std::min(miny, env->miny) - (maxy - miny) -
+                         (env->maxy - env->miny));
+
+    return std::sqrt(dx * dx + dy * dy);
+}
+
+INLINE double
 Envelope::distanceToCoordinate(const Coordinate & c, const Coordinate & p0, const Coordinate & p1) {
     return std::sqrt(distanceSquaredToCoordinate(c, p0, p1));
 }
