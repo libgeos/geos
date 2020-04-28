@@ -442,17 +442,30 @@ DistanceOp::computeMinDistance(
 
     // brute force approach!
     for(size_t i = 0; i < npts0 - 1; ++i) {
+        auto& p00 = coord0->getAt(i);
+        auto& p01 = coord0->getAt(i+1);
+
+        Envelope e0(p00, p01);
+
         for(size_t j = 0; j < npts1 - 1; ++j) {
-            double dist = Distance::segmentToSegment(coord0->getAt(i), coord0->getAt(i + 1),
-                          coord1->getAt(j), coord1->getAt(j + 1));
+            auto& p10 = coord1->getAt(j);
+            auto& p11 = coord1->getAt(j+1);
+
+            Envelope e1(p10, p11);
+
+            if (e0.distance(&e1) > minDistance) {
+                continue;
+            }
+
+            double dist = Distance::segmentToSegment(p00, p01, p10, p11);
             if(dist < minDistance) {
                 minDistance = dist;
 
                 // TODO avoid copy from constructing segs, maybe
                 // by making a static closestPoints that takes four
                 // coordinate references
-                LineSegment seg0(coord0->getAt(i), coord0->getAt(i + 1));
-                LineSegment seg1(coord1->getAt(j), coord1->getAt(j + 1));
+                LineSegment seg0(p00, p01);
+                LineSegment seg1(p10, p11);
                 auto closestPt = seg0.closestPoints(seg1);
 
                 locGeom[0].reset(new GeometryLocation(line0, i, closestPt[0]));
