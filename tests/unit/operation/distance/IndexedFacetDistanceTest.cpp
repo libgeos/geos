@@ -298,7 +298,7 @@ void object::test<10>
                                          "TestGeometryDistance",
                                          "TestBoth"};
 
-    bool perfTest = true;
+    bool perfTest = false;
     std::vector<int> m = {TestBoth};
     if (perfTest) {
         m.push_back(TestIndexedFacetDistance);
