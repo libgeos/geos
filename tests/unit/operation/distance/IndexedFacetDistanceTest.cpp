@@ -309,7 +309,7 @@ void object::test<10>
     {
         prof.start(profiles[*it]);
         for (size_t j = 0; j < pts.size(); j++) {
-            double dist_ifd, dist_geom;
+            double dist_ifd = 0.0, dist_geom = 0.0;
             if (*it == TestIndexedFacetDistance || *it == TestBoth)
                 dist_ifd = ifd.distance(pts[j].get());
 
