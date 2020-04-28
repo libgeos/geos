@@ -447,6 +447,10 @@ DistanceOp::computeMinDistance(
 
         Envelope e0(p00, p01);
 
+        if (e0.distance(env1) > minDistance) {
+            continue;
+        }
+
         for(size_t j = 0; j < npts1 - 1; ++j) {
             auto& p10 = coord1->getAt(j);
             auto& p11 = coord1->getAt(j+1);
