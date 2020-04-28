@@ -1,11 +1,12 @@
 //
 // Test Suite for geos::operation::distance::DistanceOp class.
 
+#define _USE_MATH_DEFINES
+
 // std
 #include <memory>
 #include <string>
 #include <vector>
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 // tut
