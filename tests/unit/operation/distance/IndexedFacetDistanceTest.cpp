@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 namespace tut {
