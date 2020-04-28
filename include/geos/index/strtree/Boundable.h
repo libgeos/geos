@@ -40,8 +40,7 @@ public:
     virtual const void* getBounds() const = 0;
 
     virtual bool isLeaf() const = 0;
-    virtual
-    ~Boundable() {}
+    virtual ~Boundable() {}
 };
 
 

@@ -261,22 +261,24 @@ void object::test<10>
 ()
 {
     int npoints = 1000; // vertices in sinstar test shape
-    int ncells = 20; // number of colums/rows in test grid square
+    int ncells = 100; // number of colums/rows in test grid square
 
     double radius = 100.0;
     double amplitude = 0.3; // how far the sin deviates from perfect circle (0.0)
     double width = radius * (1+amplitude); // total radius of shape
     double cellsize = 2.0*width/ncells; // how big a cell is
 
+    // Build a sine star of the requested size and prepare
+    // the IndexedFacetDistance for it
     using geos::operation::distance::IndexedFacetDistance;
     std::unique_ptr<geos::geom::LineString> ls = makeSinCircle(npoints, radius, amplitude);
+    IndexedFacetDistance ifd(ls.get());
     // std::string wkt = _wktwriter.write(ls.get());
     // std::cout << wkt << std::endl;
 
-    IndexedFacetDistance ifd(ls.get());
-
+    // Build out the set of test points ahead of time so that
+    // point creation overhead isn't included in the test timings
     std::vector<std::unique_ptr<geos::geom::Point>> pts;
-
     for (double x = -width; x < width; x += cellsize) {
         for (double y = -width; y < width; y += cellsize) {
             geos::geom::Coordinate c(x, y);
@@ -284,27 +286,46 @@ void object::test<10>
         }
     }
 
-    std::vector<std::string> tests = {"ifd alone", "geom alone", "both"};
-
     geos::util::Profiler prof;
-    for (int mode = 0; mode < 3; mode++) {
-        prof.start(tests[mode]);
 
+    enum modes {
+        TestIndexedFacetDistance = 0,
+        TestGeometryDistance = 1,
+        TestBoth = 2
+    };
+
+    std::vector<std::string> profiles = {"TestIndexedFacetDistance",
+                                         "TestGeometryDistance",
+                                         "TestBoth"};
+
+    bool unitTest = true;
+    std::vector<int> m = {TestBoth};
+    if (!unitTest) {
+        m.push_back(TestIndexedFacetDistance);
+        m.push_back(TestGeometryDistance);
+    }
+
+    for (auto it = m.begin() ; it != m.end(); ++it)
+    {
+        prof.start(profiles[*it]);
         for (int j = 0; j < pts.size(); j++) {
             double dist_ifd, dist_geom;
-            if (mode == 0 || mode == 2)
+            if (*it == TestIndexedFacetDistance || *it == TestBoth)
                 dist_ifd = ifd.distance(pts[j].get());
 
-            if (mode == 1 || mode == 2)
+            if (*it == TestGeometryDistance || *it == TestBoth)
                 dist_geom = ls->distance(pts[j].get());
 
-            if (mode == 2)
+            if (*it == TestBoth)
                 ensure_equals("distance", dist_ifd, dist_geom, 0.00001);
         }
 
-        prof.stop(tests[mode]);
+        prof.stop(profiles[*it]);
     }
-    // std::cout << prof << std::endl;
+    if (!unitTest) {
+        std::cout << "npoints=" << npoints << " ncells=" << ncells << std::endl;
+        std::cout << prof << std::endl;
+    }
 }
 
 

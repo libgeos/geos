@@ -77,7 +77,8 @@ BoundablePair::isLeaves() const
 bool
 BoundablePair::isComposite(const Boundable* item)
 {
-    return dynamic_cast<const AbstractNode*>(item) != nullptr;
+    return !(item->isLeaf());
+    // return dynamic_cast<const AbstractNode*>(item) != nullptr;
 }
 
 double
