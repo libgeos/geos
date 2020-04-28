@@ -61,8 +61,9 @@ struct test_mic_data {
     }
 
     void
-    checkCircle(const Geometry *geom, double tolerance, double x, double y, double expectedRadius)
+    checkCircle(const Geometry *geom, double build_tolerance, double x, double y, double expectedRadius)
     {
+        double tolerance = 2*build_tolerance;
         MaximumInscribedCircle mic(geom, tolerance);
         std::unique_ptr<Point> centerPoint = mic.getCenter();
         const Coordinate* centerPt = centerPoint->getCoordinate();
@@ -144,7 +145,7 @@ void object::test<4>
 ()
 {
     checkCircle("MULTIPOLYGON (((150 200, 100 150, 150 100, 250 150, 150 200)), ((400 250, 300 150, 400 50, 560 150, 400 250)))",
-       0.01, 411.383, 149.994, 78.7553 );
+       0.001, 411.38877, 149.9996185, 78.7634662 );
 }
 
 //
