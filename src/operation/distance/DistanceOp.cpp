@@ -429,9 +429,9 @@ DistanceOp::computeMinDistance(
 {
     using geos::algorithm::Distance;
 
-    const Envelope* env0 = line0->getEnvelopeInternal();
-    const Envelope* env1 = line1->getEnvelopeInternal();
-    if(env0->distance(env1) > minDistance) {
+    const Envelope* lineEnv0 = line0->getEnvelopeInternal();
+    const Envelope* lineEnv1 = line1->getEnvelopeInternal();
+    if(lineEnv0->distance(lineEnv1) > minDistance) {
         return;
     }
 
@@ -445,9 +445,9 @@ DistanceOp::computeMinDistance(
         auto& p00 = coord0->getAt(i);
         auto& p01 = coord0->getAt(i+1);
 
-        Envelope e0(p00, p01);
+        Envelope segEnv0(p00, p01);
 
-        if (e0.distance(env1) > minDistance) {
+        if (segEnv0.distance(lineEnv1) > minDistance) {
             continue;
         }
 
@@ -455,9 +455,9 @@ DistanceOp::computeMinDistance(
             auto& p10 = coord1->getAt(j);
             auto& p11 = coord1->getAt(j+1);
 
-            Envelope e1(p10, p11);
+            Envelope segEnv1(p10, p11);
 
-            if (e0.distance(&e1) > minDistance) {
+            if (segEnv0.distance(&segEnv1) > minDistance) {
                 continue;
             }
 
