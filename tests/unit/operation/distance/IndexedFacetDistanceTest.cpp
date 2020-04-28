@@ -1,6 +1,13 @@
 //
 // Test Suite for geos::operation::distance::DistanceOp class.
 
+// std
+#include <memory>
+#include <string>
+#include <vector>
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 // tut
 #include <tut/tut.hpp>
 // geos
@@ -18,12 +25,6 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
-// std
-#include <memory>
-#include <string>
-#include <vector>
-#define _USE_MATH_DEFINES
-#include <cmath>
 
 namespace tut {
 //
