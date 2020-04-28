@@ -43,12 +43,12 @@ namespace construct { // geos.algorithm.construct
 
 
 LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tolerance)
-    : done(false)
-    , tolerance(p_tolerance)
+    : tolerance(p_tolerance)
     , obstacles(p_obstacles)
     , factory(p_obstacles->getFactory())
-    , obstacleDistance(p_obstacles)
     , boundary(p_obstacles->convexHull())
+    , obstacleDistance(p_obstacles)
+    , done(false)
 {
     if (p_obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");

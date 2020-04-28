@@ -114,12 +114,12 @@ private:
     const geom::Geometry* inputGeom;
     std::unique_ptr<geom::Geometry> inputGeomBoundary;
     double tolerance;
-    const geom::GeometryFactory* factory;
-    IndexedPointInAreaLocator ptLocator;
     IndexedFacetDistance indexedDistance;
+    IndexedPointInAreaLocator ptLocator;
+    const geom::GeometryFactory* factory;
+    bool done;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
-    bool done;
 
     /* private methods */
     double distanceToBoundary(const geom::Coordinate& c);

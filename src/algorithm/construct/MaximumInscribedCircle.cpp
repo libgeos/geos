@@ -43,13 +43,13 @@ namespace construct { // geos.algorithm.construct
 
 /* public */
 MaximumInscribedCircle::MaximumInscribedCircle(const Geometry* polygonal, double p_tolerance)
-    : inputGeomBoundary(polygonal->getBoundary())
+    : inputGeom(polygonal)
+    , inputGeomBoundary(polygonal->getBoundary())
+    , tolerance(p_tolerance)
     , indexedDistance(inputGeomBoundary.get())
     , ptLocator(*polygonal)
-    , inputGeom(polygonal)
     , factory(polygonal->getFactory())
     , done(false)
-    , tolerance(p_tolerance)
 {
     if (!(typeid(*polygonal) == typeid(Polygon) ||
           typeid(*polygonal) == typeid(MultiPolygon))) {

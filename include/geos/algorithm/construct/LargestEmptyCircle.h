@@ -102,12 +102,12 @@ private:
     const geom::Geometry* obstacles;
     const geom::GeometryFactory* factory;
     std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
-    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
     operation::distance::IndexedFacetDistance obstacleDistance;
+    bool done;
+    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
+    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
-    bool done;
 
     /* private methods */
     void setBoundary(const geom::Geometry* obstacles);
