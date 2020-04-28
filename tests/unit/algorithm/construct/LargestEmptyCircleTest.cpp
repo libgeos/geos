@@ -62,8 +62,9 @@ struct test_lec_data {
     }
 
     void
-    checkCircle(const Geometry *geom, double tolerance, double x, double y, double expectedRadius)
+    checkCircle(const Geometry *geom, double build_tolerance, double x, double y, double expectedRadius)
     {
+        double tolerance = 2*build_tolerance;
         LargestEmptyCircle lec(geom, tolerance);
         std::unique_ptr<Point> centerPoint = lec.getCenter();
         const Coordinate* centerPt = centerPoint->getCoordinate();
