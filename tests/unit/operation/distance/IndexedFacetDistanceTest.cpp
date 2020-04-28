@@ -298,9 +298,9 @@ void object::test<10>
                                          "TestGeometryDistance",
                                          "TestBoth"};
 
-    bool unitTest = true;
+    bool perfTest = true;
     std::vector<int> m = {TestBoth};
-    if (!unitTest) {
+    if (perfTest) {
         m.push_back(TestIndexedFacetDistance);
         m.push_back(TestGeometryDistance);
     }
@@ -322,7 +322,7 @@ void object::test<10>
 
         prof.stop(profiles[*it]);
     }
-    if (!unitTest) {
+    if (perfTest) {
         std::cout << "npoints=" << npoints << " ncells=" << ncells << std::endl;
         std::cout << prof << std::endl;
     }
