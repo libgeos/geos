@@ -78,7 +78,9 @@ namespace tut {
         try {
             auto u1 = CoverageUnion::Union(coll.get());
             fail();
-        } catch(const geos::util::TopologyException & e) {}
+        } catch(const geos::util::TopologyException & e) {
+            (void)(e); // silence unused warning
+        }
     }
 
     template<>

@@ -210,21 +210,9 @@ stages:
         Xcode 9.4.1:
           CXXSTD: 11, 14, 17
           XCODE_APP: /Applications/Xcode_9.4.1.app
-        Xcode 9.4:
-          CXXSTD: 11, 14, 17
-          XCODE_APP: /Applications/Xcode_9.4.app
         Xcode 9.3.1:
           CXXSTD: 11, 14, 17
           XCODE_APP: /Applications/Xcode_9.3.1.app
-        Xcode 9.3:
-          CXXSTD: 11, 14
-          XCODE_APP: /Applications/Xcode_9.3.app
-        Xcode 9.2:
-          CXXSTD: 11, 14
-          XCODE_APP: /Applications/Xcode_9.2.app
-        Xcode 9.1:
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_9.1.app
     steps:
     - script: |
         set -e

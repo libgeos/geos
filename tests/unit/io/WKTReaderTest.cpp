@@ -126,14 +126,14 @@ void object::test<6>
 
     try {
         geom = wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))");
-        fail("Didn't get expected exception");
+        fail("Did not get expected exception");
     }
     catch(const geos::util::IllegalArgumentException& ex) {
         ensure("Got expected exception", true);
-        ex.what();
+        (void)(ex.what());
     }
     catch(...) {
-        fail("Got unexpected execpetion.");
+        fail("Got unexpected exception");
     }
 }
 
@@ -162,7 +162,7 @@ void object::test<7>
     }
     catch(const geos::util::IllegalArgumentException& ex) {
         ensure("Got expected exception", true);
-        ex.what();
+        (void)(ex.what());
     }
     catch(...) {
         fail("Got unexpected exception");
