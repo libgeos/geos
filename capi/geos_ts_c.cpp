@@ -48,6 +48,8 @@
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
@@ -1153,6 +1155,28 @@ extern "C" {
         return execute(extHandle, [&]() {
             geos::algorithm::MinimumDiameter m(g);
             auto g3 = m.getMinimumRectangle();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSMaximumInscribedCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            auto g3 = mic.getRadiusLine();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            auto g3 = lec.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();
         });
