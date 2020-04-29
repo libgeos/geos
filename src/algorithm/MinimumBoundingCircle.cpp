@@ -61,22 +61,54 @@ MinimumBoundingCircle::getCircle()
 
 /*public*/
 std::unique_ptr<Geometry>
-MinimumBoundingCircle::getFarthestPoints()
+MinimumBoundingCircle::getMaximumDiameter()
 {
     compute();
-    switch(extremalPts.size()) {
-    case 0:
-        return input->getFactory()->createLineString();
-    case 1:
-        return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
-    }
-
     size_t dims = input->getCoordinateDimension();
     size_t len = 2;
-    auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
-    cs->setAt(extremalPts[0], 0);
-    cs->setAt(extremalPts[extremalPts.size() - 1], 1);
-    return input->getFactory()->createLineString(std::move(cs));
+    switch(extremalPts.size()) {
+        case 0:
+            return input->getFactory()->createLineString();
+        case 1:
+            return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
+        case 2: {
+            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            cs->setAt(extremalPts.front(), 0);
+            cs->setAt(extremalPts.back(), 1);
+            return input->getFactory()->createLineString(std::move(cs));
+        }
+        default: {
+            std::vector<Coordinate> fp = farthestPoints(extremalPts);
+            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            cs->setAt(fp.front(), 0);
+            cs->setAt(fp.back(), 1);
+            return input->getFactory()->createLineString(std::move(cs));
+        }
+    }
+
+}
+
+/* private */
+std::vector<Coordinate>
+MinimumBoundingCircle::farthestPoints(std::vector<Coordinate>& pts)
+{
+    std::vector<Coordinate> fp;
+    double dist01 = pts[0].distance(pts[1]);
+    double dist12 = pts[1].distance(pts[2]);
+    double dist20 = pts[2].distance(pts[0]);
+    if (dist01 >= dist12 && dist01 >= dist20) {
+        fp.push_back(pts[0]);
+        fp.push_back(pts[1]);
+        return fp;
+    }
+    if (dist12 >= dist01 && dist12 >= dist20) {
+        fp.push_back(pts[1]);
+        fp.push_back(pts[2]);
+        return fp;
+    }
+    fp.push_back(pts[2]);
+    fp.push_back(pts[0]);
+    return fp;
 }
 
 /*public*/
@@ -99,6 +131,7 @@ MinimumBoundingCircle::getDiameter()
     cs->setAt(extremalPts[1], 1);
     return input->getFactory()->createLineString(std::move(cs));
 }
+
 
 /*public*/
 std::vector<Coordinate>
