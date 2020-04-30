@@ -15,7 +15,6 @@
 
 #include <geos/index/bintree/Key.h>
 #include <geos/index/bintree/Interval.h>
-#include <geos/index/quadtree/DoubleBits.h>
 
 #include <cmath>
 
@@ -26,10 +25,9 @@ namespace bintree { // geos.index.bintree
 int
 Key::computeLevel(Interval* newInterval)
 {
-    using geos::index::quadtree::DoubleBits;
     double dx = newInterval->getWidth();
-    //int level = BinaryPower.exponent(dx) + 1;
-    int level = DoubleBits::exponent(dx) + 1;
+    int level;
+    frexp(dx, &level);
     return level;
 }
 
@@ -85,10 +83,7 @@ Key::computeKey(Interval* itemInterval)
 void
 Key::computeInterval(int p_level, Interval* itemInterval)
 {
-    using geos::index::quadtree::DoubleBits;
-
-    double size = DoubleBits::powerOf2(p_level);
-    //double size = pow2.power(p_level);
+    double size = exp2(p_level);
     pt = std::floor(itemInterval->getMin() / size) * size;
     interval->init(pt, pt + size);
 }

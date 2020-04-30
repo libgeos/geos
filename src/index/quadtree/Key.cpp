@@ -19,7 +19,6 @@
  **********************************************************************/
 
 #include <geos/index/quadtree/Key.h>
-#include <geos/index/quadtree/DoubleBits.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
 
@@ -46,7 +45,8 @@ Key::computeQuadLevel(const Envelope& env)
     double dx = env.getWidth();
     double dy = env.getHeight();
     double dMax = dx > dy ? dx : dy;
-    int level = DoubleBits::exponent(dMax) + 1;
+    int level;
+    frexp(dMax, &level);
 #if GEOS_DEBUG
     std::cerr << "Maxdelta:" << dMax << " exponent:" << (level - 1) << std::endl;
 #endif
@@ -113,8 +113,7 @@ Key::computeKey(const Envelope& itemEnv)
 void
 Key::computeKey(int p_level, const Envelope& itemEnv)
 {
-    double quadSize = DoubleBits::powerOf2(p_level);
-    //double quadSize=pow2.power(level);
+    double quadSize = exp2(p_level);
     pt.x = std::floor(itemEnv.getMinX() / quadSize) * quadSize;
     pt.y = std::floor(itemEnv.getMinY() / quadSize) * quadSize;
     env.init(pt.x, pt.x + quadSize, pt.y, pt.y + quadSize);
