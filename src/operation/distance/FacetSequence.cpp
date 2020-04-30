@@ -170,6 +170,11 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
         if (p0 == p1)
             continue;
 
+        Envelope pEnv(p0, p1);
+        if (pEnv.distanceSquared(*facetSeq.getEnvelope()) > minDistance*minDistance) {
+            continue;
+        }
+
         for(size_t j = facetSeq.start; j < facetSeq.end - 1; j++) {
             const Coordinate& q0 = facetSeq.pts->getAt(j);
             const Coordinate& q1 = facetSeq.pts->getAt(j + 1);
@@ -177,6 +182,11 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
             // Avoid calculating distance to zero-length segment
             if (q0 == q1)
                 continue;
+
+            Envelope qEnv(q0, q1);
+            if (pEnv.distanceSquared(qEnv) > minDistance*minDistance) {
+                continue;
+            }
 
             double dist = Distance::segmentToSegment(p0, p1, q0, q1);
             if(dist <= minDistance) {
