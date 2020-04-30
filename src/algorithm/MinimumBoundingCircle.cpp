@@ -332,6 +332,7 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
 Coordinate
 MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts, Coordinate& P, Coordinate& Q)
 {
+    assert(!pts.empty());
     double minAng = std::numeric_limits<double>::max();
     const Coordinate* minAngPt = &pts[0];
 
