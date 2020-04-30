@@ -431,7 +431,7 @@ DistanceOp::computeMinDistance(
 
     const Envelope* lineEnv0 = line0->getEnvelopeInternal();
     const Envelope* lineEnv1 = line1->getEnvelopeInternal();
-    if(lineEnv0->distance(lineEnv1) > minDistance) {
+    if(lineEnv0->distance(*lineEnv1) > minDistance) {
         return;
     }
 
@@ -442,22 +442,22 @@ DistanceOp::computeMinDistance(
 
     // brute force approach!
     for(size_t i = 0; i < npts0 - 1; ++i) {
-        auto& p00 = coord0->getAt(i);
-        auto& p01 = coord0->getAt(i+1);
+        const Coordinate& p00 = coord0->getAt(i);
+        const Coordinate& p01 = coord0->getAt(i+1);
 
         Envelope segEnv0(p00, p01);
 
-        if (segEnv0.distanceSquared(lineEnv1) > minDistance*minDistance) {
+        if (segEnv0.distanceSquared(*lineEnv1) > minDistance*minDistance) {
             continue;
         }
 
         for(size_t j = 0; j < npts1 - 1; ++j) {
-            auto& p10 = coord1->getAt(j);
-            auto& p11 = coord1->getAt(j+1);
+            const Coordinate& p10 = coord1->getAt(j);
+            const Coordinate& p11 = coord1->getAt(j+1);
 
             Envelope segEnv1(p10, p11);
 
-            if (segEnv0.distanceSquared(&segEnv1) > minDistance*minDistance) {
+            if (segEnv0.distanceSquared(segEnv1) > minDistance*minDistance) {
                 continue;
             }
 
@@ -492,7 +492,7 @@ DistanceOp::computeMinDistance(const LineString* line,
 
     const Envelope* env0 = line->getEnvelopeInternal();
     const Envelope* env1 = pt->getEnvelopeInternal();
-    if(env0->distance(env1) > minDistance) {
+    if(env0->distance(*env1) > minDistance) {
         return;
     }
     const CoordinateSequence* coord0 = line->getCoordinatesRO();

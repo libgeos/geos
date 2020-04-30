@@ -153,7 +153,7 @@ Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
 {
     const Envelope* env0 = getEnvelopeInternal();
     const Envelope* env1 = geom->getEnvelopeInternal();
-    double envDist = env0->distance(env1);
+    double envDist = env0->distance(*env1);
 
     if(envDist > cDistance) {
         return false;

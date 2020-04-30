@@ -265,19 +265,19 @@ Envelope::setToNull()
 }
 
 INLINE double
-Envelope::distanceSquared(const Envelope* env) const {
+Envelope::distanceSquared(const Envelope& env) const {
     double dx = std::max(0.0,
-                         std::max(maxx, env->maxx) - std::min(minx, env->minx) - (maxx - minx) -
-                         (env->maxx - env->minx));
+                         std::max(maxx, env.maxx) - std::min(minx, env.minx) - (maxx - minx) -
+                         (env.maxx - env.minx));
     double dy = std::max(0.0,
-                         std::max(maxy, env->maxy) - std::min(miny, env->miny) - (maxy - miny) -
-                         (env->maxy - env->miny));
+                         std::max(maxy, env.maxy) - std::min(miny, env.miny) - (maxy - miny) -
+                         (env.maxy - env.miny));
 
     return dx * dx + dy * dy;
 }
 
 INLINE double
-Envelope::distance(const Envelope* env) const {
+Envelope::distance(const Envelope& env) const {
     return std::sqrt(distanceSquared(env));
 }
 
