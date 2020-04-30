@@ -81,8 +81,8 @@ struct test_lec_data {
         // std::cout << writer_.write(radiusLine.get()) << std::endl;
 
         ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate* radiusPt = lec.getRadiusPoint()->getCoordinate();
-        ensure_equals_coordinate(*radiusPt, linePt1, tolerance);
+        const Coordinate radiusPt = *lec.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 
     void
@@ -99,10 +99,8 @@ struct test_lec_data {
         const Coordinate& linePt1 = radiusLine->getCoordinateN(1);
 
         ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate* radiusPt = lec.getRadiusPoint()->getCoordinate();
-        ensure_equals_coordinate(*radiusPt, linePt1, tolerance);
-
-
+        const Coordinate radiusPt = *lec.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 
     void

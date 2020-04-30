@@ -80,8 +80,8 @@ struct test_mic_data {
         // std::cout << writer_.write(radiusLine.get()) << std::endl;
 
         ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate* radiusPt = mic.getRadiusPoint()->getCoordinate();
-        ensure_equals_coordinate(*radiusPt, linePt1, tolerance);
+        const Coordinate radiusPt = *mic.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 
     void
