@@ -98,8 +98,6 @@ public:
     /// \return the nearest points
     std::vector<geom::Coordinate> nearestPoints(const geom::Geometry* g) const;
 
-    ~IndexedFacetDistance();
-
 private:
     std::unique_ptr<geos::index::strtree::STRtree> cachedTree;
 
