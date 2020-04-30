@@ -8,7 +8,7 @@ Makefile
 .vimrc
 .dirstamp
 .tm_properties
-*~
+*\~
 *.o
 *.orig
 *.lo
@@ -41,6 +41,7 @@ benchmarks/operation/buffer/IteratedBufferStressTest
 benchmarks/operation/predicate/RectangleIntersectsPerfTest
 benchmarks/capi/memleak_mp_prep
 benchmarks/ClassSizes
+include/config.h.in~
 include/geos/platform.h
 include/geos/platform.h.disabled
 include/geos/stamp-h2
