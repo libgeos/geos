@@ -38,25 +38,19 @@ private:
 
     static void addFacetSequences(const geom::Geometry* geom,
                                   const geom::CoordinateSequence* pts,
-                                  std::vector<std::unique_ptr<FacetSequence>> & sections);
-    static std::vector<std::unique_ptr<FacetSequence>> computeFacetSequences(const geom::Geometry* g);
+                                  std::vector<FacetSequence> & sections);
+    static std::vector<FacetSequence> computeFacetSequences(const geom::Geometry* g);
 
     class FacetSequenceTree : public geos::index::strtree::STRtree {
-
-        using geos::index::strtree::STRtree::STRtree;
-
-        struct Deleter : public index::ItemVisitor {
-            void
-            visitItem(void* item) override
-            {
-                delete static_cast<FacetSequence*>(item);
-            }
-        } deleter;
-
     public:
-        ~FacetSequenceTree() override {
-            iterate(deleter);
+        FacetSequenceTree(std::vector<FacetSequence> &&seq) : STRtree(STR_TREE_NODE_CAPACITY), sequences(seq) {
+            for (auto& fs : sequences) {
+                STRtree::insert(fs.getEnvelope(), &fs);
+            }
         }
+
+    private:
+        std::vector<FacetSequence> sequences;
     };
 
 public:

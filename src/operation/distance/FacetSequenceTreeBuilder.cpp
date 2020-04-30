@@ -30,28 +30,22 @@ namespace distance {
 std::unique_ptr<STRtree>
 FacetSequenceTreeBuilder::build(const Geometry* g)
 {
-    auto tree = std::unique_ptr<STRtree>(new FacetSequenceTree(STR_TREE_NODE_CAPACITY));
-    std::vector<std::unique_ptr<FacetSequence>> sections(computeFacetSequences(g));
-
-    for(auto& section : sections) {
-        const Envelope* e = section->getEnvelope();
-        tree->insert(e, section.release());
-    }
+    auto tree = std::unique_ptr<STRtree>(new FacetSequenceTree(computeFacetSequences(g)));
 
     tree->build();
     return tree;
 }
 
-std::vector<std::unique_ptr<FacetSequence>>
+std::vector<FacetSequence>
 FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
 {
-    std::vector<std::unique_ptr<FacetSequence>> sections;
+    std::vector<FacetSequence> sections;
 
     class FacetSequenceAdder : public geom::GeometryComponentFilter {
-        std::vector<std::unique_ptr<FacetSequence>>&  m_sections;
+        std::vector<FacetSequence>&  m_sections;
 
     public :
-        FacetSequenceAdder(std::vector<std::unique_ptr<FacetSequence>> & p_sections) :
+        FacetSequenceAdder(std::vector<FacetSequence> & p_sections) :
             m_sections(p_sections) {}
         void
         filter_ro(const Geometry* geom) override
@@ -75,7 +69,7 @@ FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
 
 void
 FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const CoordinateSequence* pts,
-        std::vector<std::unique_ptr<FacetSequence>> & sections)
+        std::vector<FacetSequence> & sections)
 {
     size_t i = 0;
     size_t size = pts->size();
@@ -87,8 +81,7 @@ FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const Coordina
         if(end >= size - 1) {
             end = size;
         }
-        std::unique_ptr<FacetSequence> sect = detail::make_unique<FacetSequence>(geom, pts, i, end);
-        sections.emplace_back(std::move(sect));
+        sections.emplace_back(geom, pts, i, end);
         i += FACET_SEQUENCE_SIZE;
     }
 }
