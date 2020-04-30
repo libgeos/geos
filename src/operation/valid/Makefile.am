@@ -23,6 +23,7 @@ libopvalid_la_SOURCES = \
     TopologyValidationError.cpp \
     IndexedNestedRingTester.cpp \
     IndexedNestedRingTester.h \
+    IndexedNestedShellTester.cpp \
     MakeValid.cpp
 
 libopvalid_la_LIBADD =

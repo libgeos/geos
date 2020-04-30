@@ -59,7 +59,7 @@ BoundablePair::distance() const
     if (!e1 || !e2) {
         throw util::GEOSException("Can't compute envelope of item in BoundablePair");
     }
-    return e1->distance(e2);
+    return e1->distance(*e2);
 }
 
 double
@@ -77,7 +77,8 @@ BoundablePair::isLeaves() const
 bool
 BoundablePair::isComposite(const Boundable* item)
 {
-    return dynamic_cast<const AbstractNode*>(item) != nullptr;
+    return !(item->isLeaf());
+    // return dynamic_cast<const AbstractNode*>(item) != nullptr;
 }
 
 double
@@ -92,7 +93,7 @@ BoundablePair::expandToQueue(BoundablePairQueue& priQ, double minDistance)
     bool isComp1 = isComposite(boundable1);
     bool isComp2 = isComposite(boundable2);
 
-    /**
+    /*
      * HEURISTIC: If both boundables are composite,
      * choose the one with largest area to expand.
      * Otherwise, simply expand whichever is composite.
@@ -125,8 +126,8 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
                       double minDistance)
 {
     std::vector<Boundable*>* children = ((AbstractNode*) bndComposite)->getChildBoundables();
-    for (std::vector<Boundable*>::iterator it = children->begin(); it != children->end(); ++it) {
-        Boundable* child = *it;
+    for (auto& child : *children) {
+
         std::unique_ptr<BoundablePair> bp;
         if (isFlipped) {
             bp.reset(new BoundablePair(bndOther, child, itemDistance));
@@ -138,6 +139,7 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
         if (minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
             priQ.push(bp.release());
         }
+
     }
 }
 

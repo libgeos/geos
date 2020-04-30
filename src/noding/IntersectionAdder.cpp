@@ -21,6 +21,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 using namespace geos::geom;
 
@@ -88,7 +89,6 @@ IntersectionAdder::processIntersections(
     numIntersections++;
 
     if(li.isInteriorIntersection()) {
-
         numInteriorIntersections++;
         hasInterior = true;
     }
@@ -100,9 +100,8 @@ IntersectionAdder::processIntersections(
     if(! isTrivialIntersection(e0, segIndex0, e1, segIndex1)) {
         hasIntersectionVar = true;
 
-        NodedSegmentString* ee0 = dynamic_cast<NodedSegmentString*>(e0);
-        NodedSegmentString* ee1 = dynamic_cast<NodedSegmentString*>(e1);
-        assert(ee0 && ee1);
+        NodedSegmentString* ee0 = detail::down_cast<NodedSegmentString*>(e0);
+        NodedSegmentString* ee1 = detail::down_cast<NodedSegmentString*>(e1);
         ee0->addIntersections(&li, segIndex0, 0);
         ee1->addIntersections(&li, segIndex1, 1);
 
@@ -110,7 +109,7 @@ IntersectionAdder::processIntersections(
             numProperIntersections++;
             //Debug.println(li.toString());
             //Debug.println(li.getIntersection(0));
-//properIntersectionPoint = (Coordinate) li.getIntersection(0).clone();
+            properIntersectionPoint = li.getIntersection(0);
             hasProper = true;
             hasProperInterior = true;
         }

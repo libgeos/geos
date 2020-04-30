@@ -25,6 +25,14 @@ namespace geom { // geos::geom
 
 static CoordinateArraySequenceFactory defaultCoordinateSequenceFactory;
 
+std::unique_ptr<CoordinateSequence>
+CoordinateArraySequenceFactory::create() const
+{
+    return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(
+                    reinterpret_cast<std::vector<Coordinate>*>(0), 0));
+}
+
 const CoordinateSequenceFactory*
 CoordinateArraySequenceFactory::instance()
 {

@@ -102,7 +102,7 @@ public:
 };
 
 /// Strict weak ordering operator for EdgeIntersection
-//
+///
 /// This is the C++ equivalent of JTS's compareTo
 inline bool
 operator< (const EdgeIntersection& ei1, const EdgeIntersection& ei2)

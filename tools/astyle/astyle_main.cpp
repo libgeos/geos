@@ -125,11 +125,11 @@ ASStreamIterator<T>::~ASStreamIterator()
 }
 
 /**
-* get the length of the input stream.
-* streamLength variable is set by the constructor.
-*
-* @return     length of the input file stream, converted to an int.
-*/
+ * get the length of the input stream.
+ * streamLength variable is set by the constructor.
+ *
+ * @return     length of the input file stream, converted to an int.
+ */
 template<typename T>
 int ASStreamIterator<T>::getStreamLength() const
 {

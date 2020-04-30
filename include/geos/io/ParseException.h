@@ -43,7 +43,7 @@ public:
 
     ParseException(const std::string& msg, double num);
 
-    ~ParseException() throw() override {}
+    ~ParseException() noexcept override {}
 
 private:
     static std::string stringify(double num);

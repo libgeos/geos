@@ -28,6 +28,7 @@
 #include <geos/geomgraph/Quadrant.h>
 #include <geos/geom/Location.h>
 #include <geos/util/TopologyException.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <string>
@@ -48,8 +49,7 @@ void
 DirectedEdgeStar::insert(EdgeEnd* ee)
 {
     assert(ee);
-    assert(dynamic_cast<DirectedEdge*>(ee));
-    DirectedEdge* de = static_cast<DirectedEdge*>(ee);
+    DirectedEdge* de = detail::down_cast<DirectedEdge*>(ee);
     insertEdgeEnd(de);
 }
 
@@ -61,8 +61,7 @@ DirectedEdgeStar::getOutgoingDegree()
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         if(de->isInResult()) {
             ++degree;
         }
@@ -78,8 +77,7 @@ DirectedEdgeStar::getOutgoingDegree(EdgeRing* er)
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         if(de->getEdgeRing() == er) {
             ++degree;
         }
@@ -97,8 +95,7 @@ DirectedEdgeStar::getRightmostEdge()
     }
 
     assert(*it);
-    assert(dynamic_cast<DirectedEdge*>(*it));
-    DirectedEdge* de0 = static_cast<DirectedEdge*>(*it);
+    DirectedEdge* de0 = detail::down_cast<DirectedEdge*>(*it);
     ++it;
     if(it == end()) {
         return de0;
@@ -108,8 +105,7 @@ DirectedEdgeStar::getRightmostEdge()
     --it;
 
     assert(*it);
-    assert(dynamic_cast<DirectedEdge*>(*it));
-    DirectedEdge* deLast = static_cast<DirectedEdge*>(*it);
+    DirectedEdge* deLast = detail::down_cast<DirectedEdge*>(*it);
 
     assert(de0);
     int quad0 = de0->getQuadrant();
@@ -170,8 +166,7 @@ DirectedEdgeStar::mergeSymLabels()
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         Label& deLabel = de->getLabel();
 
         DirectedEdge* deSym = de->getSym();
@@ -189,8 +184,8 @@ DirectedEdgeStar::updateLabelling(const Label& nodeLabel)
 {
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
-        DirectedEdge* de = dynamic_cast<DirectedEdge*>(*it);
-        assert(de);
+        assert(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         Label& deLabel = de->getLabel();
         deLabel.setAllLocationsIfNull(0, nodeLabel.getLocation(0));
         deLabel.setAllLocationsIfNull(1, nodeLabel.getLocation(1));
@@ -208,8 +203,7 @@ DirectedEdgeStar::getResultAreaEdges()
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         if(de->isInResult() || de->getSym()->isInResult()) {
             resultAreaEdgeList.push_back(de);
         }
@@ -340,8 +334,7 @@ DirectedEdgeStar::linkAllDirectedEdges()
     EdgeEndStar::reverse_iterator rendIt = rend();
     for(EdgeEndStar::reverse_iterator it = rbeginIt; it != rendIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* nextOut = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* nextOut = detail::down_cast<DirectedEdge*>(*it);
 
         DirectedEdge* nextIn = nextOut->getSym();
         assert(nextIn);
@@ -366,7 +359,7 @@ DirectedEdgeStar::findCoveredLineEdges()
     // Since edges are stored in CCW order around the node,
     // as we move around the ring we move from the right to the left side of the edge
 
-    /**
+    /*
      * Find first DirectedEdge of result area (if any).
      * The interior of the result is on the RHS of the edge,
      * so the start location will be:
@@ -378,8 +371,7 @@ DirectedEdgeStar::findCoveredLineEdges()
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* nextOut = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* nextOut = detail::down_cast<DirectedEdge*>(*it);
 
         DirectedEdge* nextIn = nextOut->getSym();
         assert(nextIn);
@@ -401,7 +393,7 @@ DirectedEdgeStar::findCoveredLineEdges()
         return;
     }
 
-    /**
+    /*
      * move around ring, keeping track of the current location
      * (Interior or Exterior) for the result area.
      * If L edges are found, mark them as covered if they are in the interior
@@ -409,8 +401,7 @@ DirectedEdgeStar::findCoveredLineEdges()
     Location currLoc = startLoc;
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* nextOut = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* nextOut = detail::down_cast<DirectedEdge*>(*it);
 
         DirectedEdge* nextIn = nextOut->getSym();
         assert(nextIn);
@@ -461,8 +452,7 @@ DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
     int currDepth = startDepth;
     for(EdgeEndStar::iterator it = startIt; it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* nextDe = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* nextDe = detail::down_cast<DirectedEdge*>(*it);
 
         nextDe->setEdgeDepths(Position::RIGHT, currDepth);
         currDepth = nextDe->getDepth(Position::LEFT);
@@ -479,8 +469,7 @@ DirectedEdgeStar::print() const
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         assert(*it);
-        assert(dynamic_cast<DirectedEdge*>(*it));
-        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
         assert(de);
         out += "out ";
         out += de->print();

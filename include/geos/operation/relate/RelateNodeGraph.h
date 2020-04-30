@@ -87,6 +87,10 @@ public:
 private:
 
     geomgraph::NodeMap* nodes;
+
+    RelateNodeGraph(const RelateNodeGraph&) = delete;
+    RelateNodeGraph& operator=(const RelateNodeGraph&) = delete;
+
 };
 
 

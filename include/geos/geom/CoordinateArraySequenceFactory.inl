@@ -23,14 +23,6 @@ namespace geos {
 namespace geom { // geos::geom
 
 INLINE std::unique_ptr<CoordinateSequence>
-CoordinateArraySequenceFactory::create() const
-{
-    return std::unique_ptr<CoordinateSequence>(
-            new CoordinateArraySequence(
-                    reinterpret_cast<std::vector<Coordinate>*>(0), 0));
-}
-
-INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create(std::vector<Coordinate>* coords,
                                        size_t dimension) const
 {

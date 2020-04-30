@@ -48,6 +48,10 @@ class GEOS_DLL EdgeSetNoder {
 private:
     algorithm::LineIntersector* li;
     std::vector<geomgraph::Edge*>* inputEdges;
+
+    EdgeSetNoder(const EdgeSetNoder&) = delete;
+    EdgeSetNoder& operator=(const EdgeSetNoder&) = delete;
+
 public:
     EdgeSetNoder(algorithm::LineIntersector* newLi)
         :

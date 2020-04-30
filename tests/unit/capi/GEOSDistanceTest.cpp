@@ -92,7 +92,7 @@ random_polygon(double x, double y, double r, size_t num_points)
 
 
     for(size_t i = 0; i < num_points; i++) {
-        angle[i] = 2 * geos::M_PI * std::rand() / RAND_MAX;
+        angle[i] = 2 * geos::MATH_PI * std::rand() / RAND_MAX;
         radius[i] = r * std::rand() / RAND_MAX;
     }
 
@@ -132,6 +132,20 @@ void object::test<2>
     GEOSGeom_destroy(g2);
 }
 
+// https://github.com/libgeos/geos/issues/295
+template<>
+template<>
+void object::test<3>
+()
+{
+    GEOSGeometry* g1 = GEOSGeomFromWKT("MultiPolygon Z (EMPTY,((-0.14000000000000001 44.89999999999999858 0, -0.14699999999999999 44.90400000000000347 0, -0.14729999999999999 44.90500000000000114 0, -0.14000000000000001 44.89999999999999858 0)))");
+    GEOSGeometry* g2 = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+
+    double d;
+    int status = GEOSDistance(g1, g2, &d);
+
+    ensure_equals(status, 1);
+}
 
 } // namespace tut
 

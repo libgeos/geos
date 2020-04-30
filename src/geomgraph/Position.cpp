@@ -31,9 +31,9 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /**
-* Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
-* otherwise.
-*/
+ * Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
+ * otherwise.
+ */
 int
 Position::opposite(int position)
 {

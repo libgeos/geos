@@ -19,6 +19,7 @@
 #ifndef GEOS_OPERATION_DISTANCE_FACETSEQUENCETREEBUILDER_H
 #define GEOS_OPERATION_DISTANCE_FACETSEQUENCETREEBUILDER_H
 
+#include <geos/index/ItemVisitor.h>
 #include <geos/index/strtree/STRtree.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -37,11 +38,35 @@ private:
 
     static void addFacetSequences(const geom::Geometry* geom,
                                   const geom::CoordinateSequence* pts,
-                                  std::vector<FacetSequence*>& sections);
-    static std::vector<FacetSequence*>* computeFacetSequences(const geom::Geometry* g);
+                                  std::vector<std::unique_ptr<FacetSequence>> & sections);
+    static std::vector<std::unique_ptr<FacetSequence>> computeFacetSequences(const geom::Geometry* g);
+
+    class FacetSequenceTree : public geos::index::strtree::STRtree {
+
+        using geos::index::strtree::STRtree::STRtree;
+
+        struct Deleter : public index::ItemVisitor {
+            void
+            visitItem(void* item) override
+            {
+                delete static_cast<FacetSequence*>(item);
+            }
+        } deleter;
+
+    public:
+        ~FacetSequenceTree() override {
+            iterate(deleter);
+        }
+    };
 
 public:
-    static geos::index::strtree::STRtree* build(const geom::Geometry* g);
+    /** \brief
+     * Return a tree of FacetSequences constructed from the supplied Geometry.
+     *
+     * The FacetSequences are owned by the tree and are automatically deleted by
+     * the tree on destruction.
+     */
+    static std::unique_ptr<geos::index::strtree::STRtree> build(const geom::Geometry* g);
 };
 }
 }

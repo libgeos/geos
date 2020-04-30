@@ -76,11 +76,15 @@ struct test_minimumboundingcircle_data {
         }
         ensure(isEqual);
 
-        if(centreOut.isNull()) {
-            ensure(centreOut.distance(actualCentre) < 0.0001);
+        if(!centreOut.isNull()) {
+            if (centreOut.distance(actualCentre) > 0.001) {
+                std::cout << "centreOut " << centreOut << std::endl;
+                std::cout << "actualCentre " << actualCentre << std::endl;
+            }
+            ensure_equals("centerOut", centreOut.distance(actualCentre), 0.0, 0.001);
         }
         if(radiusOut >= 0) {
-            ensure(fabs(radiusOut - actualRadius) < 0.0001);
+            ensure_equals("radius", actualRadius, radiusOut, 0.0001);
         }
     }
 
@@ -100,14 +104,9 @@ typedef group::object object;
 group test_minimumboundingcircle_group("geos::algorithm::MinimumBoundingCircle");
 
 
-
-
-
-
 //
 // Test Cases
 //
-
 
 template<>
 template<>
@@ -201,7 +200,44 @@ void object::test<7>
         247.4360455914027);
 }
 
+template<>
+template<>
+void object::test<8>
+()
+{
+    Coordinate c(196.026, 159.103);
+    doMinimumBoundingCircleTest(
+        "POLYGON ((100 200, 300 150, 110 100, 100 200))",
+        "MULTIPOINT ((110 100), (300 150), (100 200))",
+        c,
+        104.372);
+}
 
+template<>
+template<>
+void object::test<9>
+()
+{
+    Coordinate c(196.026, 140.897);
+    doMinimumBoundingCircleTest(
+        "POLYGON ((110 200, 300 150, 100 100, 110 200))",
+        "MULTIPOINT ((100 100), (300 150), (110 200))",
+        c,
+        104.37204);
+}
+
+template<>
+template<>
+void object::test<10>
+()
+{
+    Coordinate c(3, 2);
+    doMinimumBoundingCircleTest(
+        "POLYGON ((0 0, 6 0, 5 5, 0 0))",
+        "MULTIPOINT ((0 0), (6 0), (5 5))",
+        c,
+        3.60555);
+}
 
 } // namespace tut
 

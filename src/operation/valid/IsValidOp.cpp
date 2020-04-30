@@ -41,6 +41,7 @@
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/valid/IndexedNestedShellTester.h>
 #include <geos/util/UnsupportedOperationException.h>
 
 
@@ -66,7 +67,7 @@ namespace valid { // geos.operation.valid
  */
 const Coordinate*
 IsValidOp::findPtNotNode(const CoordinateSequence* testCoords,
-                         const LinearRing* searchRing, GeometryGraph* graph)
+                         const LinearRing* searchRing, const GeometryGraph* graph)
 {
     // find edge corresponding to searchRing.
     Edge* searchEdge = graph->findEdge(searchRing);
@@ -325,7 +326,9 @@ IsValidOp::checkValid(const MultiPolygon* g)
         }
     }
 
-    checkShellsNotNested(g, &graph);
+    if (ngeoms > 1) {
+        checkShellsNotNested(g, &graph);
+    }
     if(validErr != nullptr) {
         return;
     }
@@ -426,12 +429,16 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 void
 IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
 {
+    auto nholes = p->getNumInteriorRing();
+    if (nholes == 0) {
+        return;
+    }
+
     const LinearRing* shell = p->getExteriorRing();
 
     bool isShellEmpty = shell->isEmpty();
 
     locate::IndexedPointInAreaLocator ipial(*shell);
-    auto nholes = p->getNumInteriorRing();
 
     for(size_t i = 0; i < nholes; ++i) {
         const LinearRing* hole = p->getInteriorRingN(i);
@@ -439,11 +446,11 @@ IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
         if (hole->isEmpty()) continue;
 
         const Coordinate* holePt = findPtNotNode(hole->getCoordinatesRO(), shell, graph);
-        /**
-        * If no non-node hole vertex can be found, the hole must
-        * split the polygon into disconnected interiors.
-        * This will be caught by a subsequent check.
-        */
+        /*
+         * If no non-node hole vertex can be found, the hole must
+         * split the polygon into disconnected interiors.
+         * This will be caught by a subsequent check.
+         */
         if (holePt == nullptr) return;
         bool outside = isShellEmpty || (Location::EXTERIOR == ipial.locate(holePt));
         if (outside) {
@@ -462,9 +469,9 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     //SimpleNestedRingTester nestedTester(graph);
     //SweeplineNestedRingTester nestedTester(graph);
     //QuadtreeNestedRingTester nestedTester(graph);
-    IndexedNestedRingTester nestedTester(graph);
-
     auto nholes = p->getNumInteriorRing();
+
+    IndexedNestedRingTester nestedTester(graph, nholes);
     for (size_t i = 0; i < nholes; ++i) {
         const LinearRing* innerHole = p->getInteriorRingN(i);
 
@@ -488,121 +495,21 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
 void
 IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
 {
-    for (size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i) {
-        const Polygon* p = mp->getGeometryN(i);
+    auto ngeoms = mp->getNumGeometries();
 
-        const LinearRing* shell = p->getExteriorRing();
+    IndexedNestedShellTester tester(*graph, ngeoms);
 
-        if (shell->isEmpty()) return;
-
-        for (size_t j = 0; j < ngeoms; ++j) {
-            if (i == j) {
-                continue;
-            }
-
-            const Polygon* p2 = mp->getGeometryN(j);
-
-            if (p2->isEmpty()) {
-                continue;
-            }
-
-            checkShellNotNested(shell, p2, graph);
-
-            if (validErr != nullptr) {
-                return;
-            }
-        }
+    for (size_t i = 0; i < ngeoms; ++i) {
+        tester.add(*mp->getGeometryN(i));
     }
+
+    if (!tester.isNonNested()) {
+        validErr = new TopologyValidationError(TopologyValidationError::eNestedShells,
+                *tester.getNestedPoint());
+    }
+
 }
 
-/*private*/
-void
-IsValidOp::checkShellNotNested(const LinearRing* shell, const Polygon* p,
-                               GeometryGraph* graph)
-{
-    const CoordinateSequence* shellPts = shell->getCoordinatesRO();
-
-    // test if shell is inside polygon shell
-    const LinearRing* polyShell = p->getExteriorRing();
-    const CoordinateSequence* polyPts = polyShell->getCoordinatesRO();
-    const Coordinate* shellPt = findPtNotNode(shellPts, polyShell, graph);
-
-    // if no point could be found, we can assume that the shell
-    // is outside the polygon
-    if(shellPt == nullptr) {
-        return;
-    }
-
-    bool insidePolyShell = PointLocation::isInRing(*shellPt, polyPts);
-    if(!insidePolyShell) {
-        return;
-    }
-
-    // if no holes, this is an error!
-    auto nholes = p->getNumInteriorRing();
-    if(nholes <= 0) {
-        validErr = new TopologyValidationError(
-            TopologyValidationError::eNestedShells,
-            *shellPt);
-        return;
-    }
-
-    /**
-     * Check if the shell is inside one of the holes.
-     * This is the case if one of the calls to checkShellInsideHole
-     * returns a null coordinate.
-     * Otherwise, the shell is not properly contained in a hole, which is
-     * an error.
-     */
-    const Coordinate* badNestedPt = nullptr;
-    for(size_t i = 0; i < nholes; ++i) {
-        const LinearRing* hole = p->getInteriorRingN(i);
-        badNestedPt = checkShellInsideHole(shell, hole, graph);
-        if(badNestedPt == nullptr) {
-            return;
-        }
-    }
-    validErr = new TopologyValidationError(
-        TopologyValidationError::eNestedShells, *badNestedPt
-    );
-}
-
-/*private*/
-const Coordinate*
-IsValidOp::checkShellInsideHole(const LinearRing* shell,
-                                const LinearRing* hole,
-                                GeometryGraph* graph)
-{
-    const CoordinateSequence* shellPts = shell->getCoordinatesRO();
-    const CoordinateSequence* holePts = hole->getCoordinatesRO();
-
-    // TODO: improve performance of this - by sorting pointlists
-    // for instance?
-    const Coordinate* shellPt = findPtNotNode(shellPts, hole, graph);
-
-    // if point is on shell but not hole, check that the shell is
-    // inside the hole
-    if(shellPt) {
-        bool insideHole = PointLocation::isInRing(*shellPt, holePts);
-        if(!insideHole) {
-            return shellPt;
-        }
-    }
-
-    const Coordinate* holePt = findPtNotNode(holePts, shell, graph);
-
-    // if point is on hole but not shell, check that the hole is
-    // outside the shell
-    if(holePt) {
-        bool insideShell = PointLocation::isInRing(*holePt, shellPts);
-        if(insideShell) {
-            return holePt;
-        }
-        return nullptr;
-    }
-    assert(0); // points in shell and hole appear to be equal
-    return nullptr;
-}
 
 /*private*/
 void

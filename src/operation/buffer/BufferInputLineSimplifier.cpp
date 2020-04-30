@@ -79,7 +79,7 @@ BufferInputLineSimplifier::simplify(double nDistanceTol)
 bool
 BufferInputLineSimplifier::deleteShallowConcavities()
 {
-    /**
+    /*
      * Do not simplify end line segments of the line string.
      * This ensures that end caps are generated consistently.
      */

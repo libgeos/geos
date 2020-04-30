@@ -153,7 +153,7 @@ public:
                                         const Geometry* exemplar) const;
 
     /// Converts an Envelope to a Geometry.
-    //
+    ///
     /// Returned Geometry can be a Point, a Polygon or an EMPTY geom.
     ///
     std::unique_ptr<Geometry> toGeometry(const Envelope* envelope) const;
@@ -189,7 +189,7 @@ public:
     std::unique_ptr<GeometryCollection> createGeometryCollection(
             std::vector<std::unique_ptr<T>> && newGeoms) const {
         // Can't use make_unique because constructor is protected
-        return std::unique_ptr<GeometryCollection>(new GeometryCollection(std::move(newGeoms), *this));
+        return std::unique_ptr<GeometryCollection>(new GeometryCollection(Geometry::toGeometryArray(std::move(newGeoms)), *this));
     }
 
     /// Constructs a GeometryCollection with a deep-copy of args
@@ -334,6 +334,12 @@ public:
 
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const;
 
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Point>> && geoms) const;
+
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<LineString>> && geoms) const;
+
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) const;
+
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //
     /// Will clone the geometries accessible trough the iterator.
@@ -419,7 +425,7 @@ public:
     void destroyGeometry(Geometry* g) const;
 
     /// Request that the instance is deleted.
-    //
+    ///
     /// It will really be deleted only after last child Geometry is
     /// deleted. Do not use the instance anymore after calling this function
     /// (unless you're a live child!).

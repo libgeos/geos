@@ -143,6 +143,11 @@ public:
         return deStar->getIndex(edge);
     }
 
+private:
+
+    Node(const Node&) = delete;
+    Node& operator=(const Node&) = delete;
+
 };
 
 /// Print a Node

@@ -55,5 +55,14 @@ void object::test<2>
         std::string(EXPAND_AND_QUOTE(GEOS_VERSION_PATCH)));
 }
 
+// Make sure define is consistent with function
+template<>
+template<>
+void object::test<3>
+()
+{
+    ensure_equals(GEOS_CAPI_VERSION, std::string(GEOSversion()));
+}
+
 } // namespace tut
 

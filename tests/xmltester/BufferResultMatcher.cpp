@@ -41,7 +41,7 @@ BufferResultMatcher::isBufferResultMatch(const geom::Geometry& actualBuffer,
         return true;
     }
 
-    /**
+    /*
      * MD - need some more checks here - symDiffArea won't catch
      * very small holes ("tears")
      * near the edge of computed buffers (which can happen

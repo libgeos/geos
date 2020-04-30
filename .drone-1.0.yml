@@ -1,7 +1,7 @@
 # This is for the dronie 1.0 agent
 # https://docs.drone.io/user-guide/pipeline/steps/ https://docs.drone.io/user-guide/pipeline/migrating/
-# See https://git.osgeo.org/gogs/geos/geos-docker
-test-image: &test-image docker.kbt.io/geos/build-test:alpine
+# See https://git.osgeo.org/gitea/geos/geos-docker
+test-image: &test-image docker.osgeo.org/geos/build-test:alpine
 
 kind: pipeline
 name: default
@@ -23,11 +23,11 @@ steps:
     image: *test-image
     commands:
       - CXXFLAGS="-O0" make check V=0
-  - name: valgrindcheck
-    image: *test-image
-    commands:
-      - CXXFLAGS="-O0" make valgrindcheck V=0
   - name: docs
     image: *test-image
     commands:
       - make doxygen-checked
+  # - name: valgrindcheck
+  #   image: *test-image
+  #   commands:
+  #     - CXXFLAGS="-O0" make valgrindcheck V=0

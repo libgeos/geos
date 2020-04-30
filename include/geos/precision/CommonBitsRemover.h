@@ -45,6 +45,9 @@ private:
 
     CommonCoordinateFilter* ccFilter;
 
+    CommonBitsRemover(const CommonBitsRemover&) = delete;
+    CommonBitsRemover& operator=(const CommonBitsRemover&) = delete;
+
 public:
 
     CommonBitsRemover();

@@ -131,15 +131,15 @@ Bintree::query(double x)
 }
 
 /**
-* min and max may be the same value
-*/
+ * min and max may be the same value
+ */
 vector<void*>*
 Bintree::query(Interval* interval)
 {
-    /**
-    * the items that are matched are all items in intervals
-    * which overlap the query interval
-    */
+    /*
+     * the items that are matched are all items in intervals
+     * which overlap the query interval
+     */
     vector<void*>* foundItems = new vector<void*>();
     query(interval, foundItems);
     return foundItems;

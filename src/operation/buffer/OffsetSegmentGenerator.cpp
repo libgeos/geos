@@ -84,7 +84,7 @@ OffsetSegmentGenerator::OffsetSegmentGenerator(
     // the points are rounded as they are inserted into the curve line
     filletAngleQuantum = PI / 2.0 / bufParams.getQuadrantSegments();
 
-    /**
+    /*
      * Non-round joins cause issues with short closing segments,
      * so don't use them.  In any case, non-round joins
      * only really make sense for relatively small buffer distances.
@@ -108,7 +108,7 @@ OffsetSegmentGenerator::init(double newDistance)
     segList.reset();
     segList.setPrecisionModel(precisionModel);
 
-    /**
+    /*
      * Choose the min vertex separation as a small fraction of
      * the offset distance.
      */
@@ -207,7 +207,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
     case BufferParameters::CAP_ROUND:
         // add offset seg points with a fillet between them
         segList.addPt(offsetL.p1);
-        addFillet(p1, angle + PI / 2.0, angle - PI / 2.0,
+        addDirectedFillet(p1, angle + PI / 2.0, angle - PI / 2.0,
                   Orientation::CLOCKWISE, distance);
         segList.addPt(offsetR.p1);
         break;
@@ -237,7 +237,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
 
 /*private*/
 void
-OffsetSegmentGenerator::addFillet(const Coordinate& p, const Coordinate& p0,
+OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, const Coordinate& p0,
                                   const Coordinate& p1, int direction, double radius)
 {
     double dx0 = p0.x - p.x;
@@ -259,14 +259,14 @@ OffsetSegmentGenerator::addFillet(const Coordinate& p, const Coordinate& p0,
     }
 
     segList.addPt(p0);
-    addFillet(p, startAngle, endAngle, direction, radius);
+    addDirectedFillet(p, startAngle, endAngle, direction, radius);
     segList.addPt(p1);
 }
 
 /*private*/
 void
-OffsetSegmentGenerator::addFillet(const Coordinate& p, double startAngle,
-                                  double endAngle, int direction, double radius)
+OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, double startAngle,
+                                          double endAngle, int direction, double radius)
 {
     int directionFactor = direction == Orientation::CLOCKWISE ? -1 : 1;
 
@@ -274,27 +274,18 @@ OffsetSegmentGenerator::addFillet(const Coordinate& p, double startAngle,
     int nSegs = (int)(totalAngle / filletAngleQuantum + 0.5);
 
     // no segments because angle is less than increment-nothing to do!
-    if(nSegs < 1) {
-        return;
-    }
+    if(nSegs < 1) return;
 
-    double initAngle, currAngleInc;
-
-    // choose angle increment so that each segment has equal length
-    initAngle = 0.0;
-    currAngleInc = totalAngle / nSegs;
-
-    double currAngle = initAngle;
+    // double initAngle, currAngleInc;
+    double angleInc = totalAngle / nSegs;
     Coordinate pt;
-    while(currAngle < totalAngle) {
-        double angle = startAngle + directionFactor * currAngle;
+    for (int i = 0; i < nSegs; i++) {
+        double angle = startAngle + directionFactor * i * angleInc;
         pt.x = p.x + radius * cos(angle);
         pt.y = p.y + radius * sin(angle);
         segList.addPt(pt);
-        currAngle += currAngleInc;
     }
 }
-
 
 /*private*/
 void
@@ -303,7 +294,7 @@ OffsetSegmentGenerator::createCircle(const Coordinate& p, double p_distance)
     // add start point
     Coordinate pt(p.x + p_distance, p.y);
     segList.addPt(pt);
-    addFillet(p, 0.0, 2.0 * PI, -1, p_distance);
+    addDirectedFillet(p, 0.0, 2.0 * PI, -1, p_distance);
     segList.closeRing();
 }
 
@@ -322,7 +313,7 @@ OffsetSegmentGenerator::createSquare(const Coordinate& p, double p_distance)
 void
 OffsetSegmentGenerator::addCollinear(bool addStartPoint)
 {
-    /**
+    /*
      * This test could probably be done more efficiently,
      * but the situation of exact collinearity should be fairly rare.
      */
@@ -330,13 +321,13 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
     li.computeIntersection(s0, s1, s1, s2);
     auto numInt = li.getIntersectionNum();
 
-    /**
+    /*
      * if numInt is<2, the lines are parallel and in the same direction.
      * In this case the point can be ignored, since the offset lines
      * will also be parallel.
      */
     if(numInt >= 2) {
-        /**
+        /*
          * Segments are collinear but reversing.
          * Add an "end-cap" fillet
          * all the way around to other direction
@@ -354,7 +345,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
             segList.addPt(offset1.p0);
         }
         else {
-            addFillet(s1, offset0.p1, offset1.p0,
+            addDirectedFillet(s1, offset0.p1, offset1.p0,
                       Orientation::CLOCKWISE, distance);
         }
     }
@@ -364,7 +355,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
 void
 OffsetSegmentGenerator::addOutsideTurn(int orientation, bool addStartPoint)
 {
-    /**
+    /*
      * Heuristic: If offset endpoints are very close together,
      * just use one of them as the corner vertex.
      * This avoids problems with computing mitre corners in the case
@@ -392,7 +383,7 @@ OffsetSegmentGenerator::addOutsideTurn(int orientation, bool addStartPoint)
         }
 
         // TESTING - comment out to produce beveled joins
-        addFillet(s1, offset0.p1, offset1.p0, orientation, distance);
+        addDirectedFillet(s1, offset0.p1, offset1.p0, orientation, distance);
         segList.addPt(offset1.p0);
     }
 }
@@ -429,13 +420,13 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
     // (But not too short, since that would defeat it's purpose).
     // This is the purpose of the closingSegLengthFactor heuristic value.
 
-    /**
+    /*
      * The intersection test above is vulnerable to robustness errors;
-    * i.e. it may be that the offsets should intersect very close to
-    * their endpoints, but aren't reported as such due to rounding.
-    * To handle this situation appropriately, we use the following test:
-    * If the offset points are very close, don't add closing segments
-    * but simply use one of the offset points
+     * i.e. it may be that the offsets should intersect very close to
+     * their endpoints, but aren't reported as such due to rounding.
+     * To handle this situation appropriately, we use the following test:
+     * If the offset points are very close, don't add closing segments
+     * but simply use one of the offset points
      */
 
     if(offset0.p1.distance(offset1.p0) <
@@ -481,7 +472,7 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
                                      const geom::LineSegment& p_offset1,
                                      double p_distance)
 {
-    /**
+    /*
      * This computation is unstable if the offset segments are nearly collinear.
      * However, this situation should have been eliminated earlier by the check
      * for whether the offset segment endpoints are almost coincident

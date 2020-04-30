@@ -71,8 +71,7 @@ Intersection::intersection(const geom::Coordinate& p1, const geom::Coordinate& p
     double yInt = y/w;
     geom::Coordinate rv;
     // check for parallel lines
-    if (std::isnan(xInt) || std::isnan(yInt) ||
-        std::isinf(xInt) || std::isinf(yInt)) {
+    if (!std::isfinite(xInt) || !std::isfinite(yInt)) {
         rv.setNull();
         return rv;
     }

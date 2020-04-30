@@ -31,7 +31,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -39,16 +38,20 @@ namespace noding { // geos.noding
 
 /* private */
 void
-IteratedNoder::node(vector<SegmentString*>* segStrings,
-                    int* numInteriorIntersections)
+IteratedNoder::node(std::vector<SegmentString*>* segStrings,
+                    int& numInteriorIntersections,
+                    Coordinate& intersectionPoint)
 {
     IntersectionAdder si(li);
     MCIndexNoder noder;
     noder.setSegmentIntersector(&si);
     noder.computeNodes(segStrings);
     nodedSegStrings = noder.getNodedSubstrings();
-    *numInteriorIntersections = si.numInteriorIntersections;
-//System.out.println("# intersection tests: " + si.numTests);
+    numInteriorIntersections = si.numInteriorIntersections;
+
+    if (si.hasProperInteriorIntersection()) {
+        intersectionPoint = si.getProperIntersectionPoint();
+    }
 }
 
 /* public */
@@ -60,11 +63,12 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
     nodedSegStrings = segStrings;
     int nodingIterationCount = 0;
     int lastNodesCreated = -1;
-    vector<SegmentString*>* lastStrings = nullptr;
-    do {
+    std::vector<SegmentString*>* lastStrings = nullptr;
+    Coordinate intersectionPoint = Coordinate::getNull();
 
+    do {
         // NOTE: will change this.nodedSegStrings
-        node(nodedSegStrings, &numInteriorIntersections);
+        node(nodedSegStrings, numInteriorIntersections, intersectionPoint);
 
         // Delete noded strings from previous iteration
         if(lastStrings) {
@@ -78,7 +82,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
         nodingIterationCount++;
         int nodesCreated = numInteriorIntersections;
 
-        /**
+        /*
          * Fail if the number of nodes created is not declining.
          * However, allow a few iterations at least before doing this
          */
@@ -86,9 +90,19 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
         if(lastNodesCreated > 0
                 && nodesCreated >= lastNodesCreated
                 && nodingIterationCount > maxIter) {
-            stringstream s;
+
+            // Delete noded strings from previous iteration
+            if(lastStrings) {
+                for(auto& s : *lastStrings) {
+                    delete s;
+                }
+                delete lastStrings;
+            }
+
+            std::stringstream s;
             s << "Iterated noding failed to converge after " <<
-              nodingIterationCount << " iterations";
+              nodingIterationCount << " iterations (near " <<
+              intersectionPoint << ")";
             throw util::TopologyException(s.str());
         }
         lastNodesCreated = nodesCreated;

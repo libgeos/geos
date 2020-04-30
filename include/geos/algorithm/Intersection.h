@@ -23,27 +23,26 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 
 /** \brief
-* Computes the intersection point of two lines.
-* If the lines are parallel or collinear this case is detected
-* and <code>null</code> is returned.
-* <p>
-* In general it is not possible to accurately compute
-* the intersection point of two lines, due to
-* numerical roundoff.
-* This is particularly true when the input lines are nearly parallel.
-* This routine uses numerical conditioning on the input values
-* to ensure that the computed value should be very close to the correct value.
-*
-* @param p1 an endpoint of line 1
-* @param p2 an endpoint of line 1
-* @param q1 an endpoint of line 2
-* @param q2 an endpoint of line 2
-* @return the intersection point between the lines, if there is one,
-* or null if the lines are parallel or collinear
-*
-* @see CGAlgorithmsDD#intersection(Coordinate, Coordinate, Coordinate, Coordinate)
-*/
-
+ * Computes the intersection point of two lines.
+ * If the lines are parallel or collinear this case is detected
+ * and <code>null</code> is returned.
+ * <p>
+ * In general it is not possible to accurately compute
+ * the intersection point of two lines, due to
+ * numerical roundoff.
+ * This is particularly true when the input lines are nearly parallel.
+ * This routine uses numerical conditioning on the input values
+ * to ensure that the computed value should be very close to the correct value.
+ *
+ * @param p1 an endpoint of line 1
+ * @param p2 an endpoint of line 1
+ * @param q1 an endpoint of line 2
+ * @param q2 an endpoint of line 2
+ * @return the intersection point between the lines, if there is one,
+ * or null if the lines are parallel or collinear
+ *
+ * @see CGAlgorithmsDD#intersection(Coordinate, Coordinate, Coordinate, Coordinate)
+ */
 class GEOS_DLL Intersection {
 
 public:

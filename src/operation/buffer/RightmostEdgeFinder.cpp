@@ -25,6 +25,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/TopologyException.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -120,8 +121,7 @@ RightmostEdgeFinder::findRightmostEdgeAtNode()
     Node* node = minDe->getNode();
     assert(node);
 
-    assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
-    DirectedEdgeStar* star = static_cast<DirectedEdgeStar*>(node->getEdges());
+    DirectedEdgeStar* star = detail::down_cast<DirectedEdgeStar*>(node->getEdges());
 
     // Warning! NULL could be returned if the star is empty!
     minDe = star->getRightmostEdge();

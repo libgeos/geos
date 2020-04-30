@@ -240,8 +240,7 @@ PlanarGraph::linkResultDirectedEdges()
 
         EdgeEndStar* ees = node->getEdges();
         assert(ees);
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
 
         // this might throw an exception
         des->linkResultDirectedEdges();
@@ -268,8 +267,7 @@ PlanarGraph::linkAllDirectedEdges()
         assert(ees);
 
         // Unespected non-DirectedEdgeStar in node
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
 
         des->linkAllDirectedEdges();
     }
@@ -319,11 +317,16 @@ Edge*
 PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
                                      const Coordinate& p1)
 {
-    for(size_t i = 0, n = edges->size(); i < n; i++) {
-        Edge* e = (*edges)[i];
-        assert(e);
+    Node* node = getNodeMap()->find(p0);
+    if (node == nullptr) {
+        return nullptr;
+    }
+
+    for (const auto& ee : *(node->getEdges())) {
+        Edge* e = ee->getEdge();
 
         const CoordinateSequence* eCoord = e->getCoordinates();
+
         assert(eCoord);
 
         size_t nCoords = eCoord->size();

@@ -19,9 +19,10 @@
 #include "IndexedNestedRingTester.h"
 
 #include <geos/geom/LinearRing.h> // for use
-#include <geos/algorithm/PointLocation.h> // for use
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/valid/IsValidOp.h> // for use (findPtNotNode)
 #include <geos/index/strtree/STRtree.h> // for use
+#include <geos/geom/Location.h>
 
 // Forward declarations
 namespace geos {
@@ -40,32 +41,35 @@ IndexedNestedRingTester::isNonNested()
 {
     buildIndex();
 
+    std::vector<void*> results;
     for(size_t i = 0, n = rings.size(); i < n; ++i) {
-        const geom::LinearRing* innerRing = rings[i];
-        const geom::CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
-        std::vector<void*> results;
-        index->query(innerRing->getEnvelopeInternal(), results);
-        for(size_t j = 0, jn = results.size(); j < jn; ++j) {
-            const geom::LinearRing* searchRing = static_cast<const geom::LinearRing*>(results[j]);
-            const geom::CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
+        results.clear();
 
-            if(innerRing == searchRing) {
+        const geom::LinearRing* outerRing = rings[i];
+
+        geos::algorithm::locate::IndexedPointInAreaLocator locator(*outerRing);
+
+        index->query(outerRing->getEnvelopeInternal(), results);
+        for(const auto& result : results) {
+            const geom::LinearRing* possibleInnerRing = static_cast<const geom::LinearRing*>(result);
+            const geom::CoordinateSequence* possibleInnerRingPts = possibleInnerRing->getCoordinatesRO();
+
+            if(outerRing == possibleInnerRing) {
                 continue;
             }
 
-            if(!innerRing->getEnvelopeInternal()->intersects(
-                        searchRing->getEnvelopeInternal())) {
+            if(!outerRing->getEnvelopeInternal()->covers(possibleInnerRing->getEnvelopeInternal())) {
                 continue;
             }
 
             const geom::Coordinate* innerRingPt =
-                IsValidOp::findPtNotNode(innerRingPts,
-                                         searchRing,
+                IsValidOp::findPtNotNode(possibleInnerRingPts,
+                                         outerRing,
                                          graph);
 
-            /**
+            /*
              * If no non-node pts can be found, this means
-             * that the searchRing touches ALL of the innerRing vertices.
+             * that the possibleInnerRing touches ALL of the outerRing vertices.
              * This indicates an invalid polygon, since either
              * the two holes create a disconnected interior,
              * or they touch in an infinite number of points
@@ -77,12 +81,7 @@ IndexedNestedRingTester::isNonNested()
                 continue;
             }
 
-            // Unable to find a ring point not a node of
-            // the search ring
-            assert(innerRingPt != nullptr);
-
-            bool isInside = algorithm::PointLocation::isInRing(
-                                *innerRingPt, searchRingPts);
+            bool isInside = locator.locate(innerRingPt) != geom::Location::EXTERIOR;
 
             if(isInside) {
                 nestedPt = innerRingPt;

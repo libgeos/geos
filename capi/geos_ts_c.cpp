@@ -48,6 +48,8 @@
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
@@ -234,7 +236,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    NOTICE_MESSAGE(string fmt, ...)
+    NOTICE_MESSAGE(const char *fmt, ...)
     {
         if(nullptr == noticeMessageOld && nullptr == noticeMessageNew) {
             return;
@@ -242,7 +244,7 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
-        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt.c_str(), args);
+        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
         va_end(args);
 
         if(result > 0) {
@@ -256,7 +258,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    ERROR_MESSAGE(string fmt, ...)
+    ERROR_MESSAGE(const char *fmt, ...)
     {
         if(nullptr == errorMessageOld && nullptr == errorMessageNew) {
             return;
@@ -264,7 +266,7 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
-        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt.c_str(), args);
+        int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
         va_end(args);
 
         if(result > 0) {
@@ -639,8 +641,9 @@ extern "C" {
                                           BoundaryNodeRule::getBoundaryMonovalentEndPoint());
                     break;
                 default:
-                    // FIXME retain reporting of what the invalid rule was
-                    throw std::runtime_error("Invalid boundary node rule");
+                    std::ostringstream ss;
+                    ss << "Invalid boundary node rule " << bnr;
+                    throw std::runtime_error(ss.str());
             }
 
             if(!im) {
@@ -1158,6 +1161,28 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMaximumInscribedCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            auto g3 = mic.getRadiusLine();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return execute(extHandle, [&]() {
+            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            auto g3 = lec.getRadiusLine();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
@@ -1367,7 +1392,6 @@ extern "C" {
             const Polygon* p = dynamic_cast<const Polygon*>(g1);
             if(!p) {
                 throw IllegalArgumentException("Argument is not a Polygon");
-                return -1;
             }
             return static_cast<int>(p->getNumInteriorRing());
         });
@@ -1893,9 +1917,9 @@ extern "C" {
             LineMerger lmrgr;
             lmrgr.add(g);
 
-            std::vector<LineString*>* lines = lmrgr.getMergedLineStrings();
+            auto lines = lmrgr.getMergedLineStrings();
 
-            auto out = gf->buildGeometry(lines->begin(), lines->end());
+            auto out = gf->buildGeometry(std::move(lines));
             out->setSRID(g->getSRID());
 
             return out.release();
@@ -1931,7 +1955,7 @@ extern "C" {
     const char* GEOSversion()
     {
         static char version[256];
-        sprintf(version, "%s ", GEOS_CAPI_VERSION);
+        sprintf(version, "%s", GEOS_CAPI_VERSION);
         return version;
     }
 

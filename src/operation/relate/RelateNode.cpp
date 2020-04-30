@@ -22,6 +22,7 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Node.h>
+#include <geos/util.h>
 
 #include <cassert>
 
@@ -49,8 +50,7 @@ RelateNode::computeIM(IntersectionMatrix& im)
 void
 RelateNode::updateIMFromEdges(IntersectionMatrix& im)
 {
-    assert(dynamic_cast<EdgeEndBundleStar*>(edges));
-    EdgeEndBundleStar* eebs = static_cast<EdgeEndBundleStar*>(edges);
+    EdgeEndBundleStar* eebs = detail::down_cast<EdgeEndBundleStar*>(edges);
 
     eebs->updateIM(im);
 }

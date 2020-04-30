@@ -67,7 +67,7 @@ PreparedPolygonContainsProperly::containsProperly(const geom::Geometry* geom)
         return false;
     }
 
-    /**
+    /*
      * Given that no segments intersect, if any vertex of the target
      * is contained in some test component.
      * the test is NOT properly contained.

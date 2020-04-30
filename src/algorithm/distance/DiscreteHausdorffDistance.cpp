@@ -32,7 +32,7 @@ void
 DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
     const geom::CoordinateSequence& seq, size_t index)
 {
-    /**
+    /*
      * This logic also handles skipping Point geometries
      */
     if(index == 0) {

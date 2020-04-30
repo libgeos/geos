@@ -443,7 +443,7 @@ do_all()
     geoms->push_back(create_rectangle(-5, -5, 10, 10)); // a square
     geoms->push_back(create_rectangle(-5, -5, 10, 20)); // a rectangle
     // The upper-right quarter of a vertical ellipse
-    geoms->push_back(create_arc(0, 0, 10, 20, 0, M_PI / 2));
+    geoms->push_back(create_arc(0, 0, 10, 20, 0, MATH_PI / 2));
     geoms->push_back(create_sinestar(10, 10, 100, 5, 2).release()); // a sine star
 #endif
 
@@ -1073,12 +1073,11 @@ do_all()
     /////////////////////////////////////////////
     LineMerger lm;
     lm.add(geoms);
-    vector<LineString*>* mls = lm.getMergedLineStrings();
+    auto mls = lm.getMergedLineStrings();
     newgeoms = new vector<const Geometry*>;
-    for(unsigned int i = 0; i < mls->size(); i++) {
-        newgeoms->push_back((*mls)[i]);
+    for(unsigned int i = 0; i < mls.size(); i++) {
+        newgeoms->push_back(mls[i].release());
     }
-    delete mls;
 
     cout << endl << "----- HERE IS THE LINEMERGE OUTPUT ------" << endl;
     wkt_print_geoms(newgeoms);

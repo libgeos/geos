@@ -61,22 +61,54 @@ MinimumBoundingCircle::getCircle()
 
 /*public*/
 std::unique_ptr<Geometry>
-MinimumBoundingCircle::getFarthestPoints()
+MinimumBoundingCircle::getMaximumDiameter()
 {
     compute();
-    switch(extremalPts.size()) {
-    case 0:
-        return input->getFactory()->createLineString();
-    case 1:
-        return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
-    }
-
     size_t dims = input->getCoordinateDimension();
     size_t len = 2;
-    auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
-    cs->setAt(extremalPts[0], 0);
-    cs->setAt(extremalPts[extremalPts.size() - 1], 1);
-    return input->getFactory()->createLineString(std::move(cs));
+    switch(extremalPts.size()) {
+        case 0:
+            return input->getFactory()->createLineString();
+        case 1:
+            return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
+        case 2: {
+            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            cs->setAt(extremalPts.front(), 0);
+            cs->setAt(extremalPts.back(), 1);
+            return input->getFactory()->createLineString(std::move(cs));
+        }
+        default: {
+            std::vector<Coordinate> fp = farthestPoints(extremalPts);
+            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            cs->setAt(fp.front(), 0);
+            cs->setAt(fp.back(), 1);
+            return input->getFactory()->createLineString(std::move(cs));
+        }
+    }
+
+}
+
+/* private */
+std::vector<Coordinate>
+MinimumBoundingCircle::farthestPoints(std::vector<Coordinate>& pts)
+{
+    std::vector<Coordinate> fp;
+    double dist01 = pts[0].distance(pts[1]);
+    double dist12 = pts[1].distance(pts[2]);
+    double dist20 = pts[2].distance(pts[0]);
+    if (dist01 >= dist12 && dist01 >= dist20) {
+        fp.push_back(pts[0]);
+        fp.push_back(pts[1]);
+        return fp;
+    }
+    if (dist12 >= dist01 && dist12 >= dist20) {
+        fp.push_back(pts[1]);
+        fp.push_back(pts[2]);
+        return fp;
+    }
+    fp.push_back(pts[2]);
+    fp.push_back(pts[0]);
+    return fp;
 }
 
 /*public*/
@@ -99,6 +131,7 @@ MinimumBoundingCircle::getDiameter()
     cs->setAt(extremalPts[1], 1);
     return input->getFactory()->createLineString(std::move(cs));
 }
+
 
 /*public*/
 std::vector<Coordinate>
@@ -182,10 +215,10 @@ MinimumBoundingCircle::computeCirclePoints()
         return;
     }
 
-    /**
-    * The problem is simplified by reducing to the convex hull.
-    * Computing the convex hull also has the useful effect of eliminating duplicate points
-    */
+    /*
+     * The problem is simplified by reducing to the convex hull.
+     * Computing the convex hull also has the useful effect of eliminating duplicate points
+     */
     std::unique_ptr<Geometry> convexHull(input->convexHull());
 
     std::unique_ptr<CoordinateSequence> cs(convexHull->getCoordinates());
@@ -197,9 +230,9 @@ MinimumBoundingCircle::computeCirclePoints()
         pts.pop_back();
     }
 
-    /**
-    * Optimization for the trivial case where the CH has fewer than 3 points
-    */
+    /*
+     * Optimization for the trivial case where the CH has fewer than 3 points
+     */
     if(pts.size() <= 2) {
         extremalPts = pts;
         return;
@@ -211,13 +244,13 @@ MinimumBoundingCircle::computeCirclePoints()
     // find a point Q such that the angle that PQ makes with the x-axis is minimal
     Coordinate Q = pointWitMinAngleWithX(pts, P);
 
-    /**
-    * Iterate over the remaining points to find
-    * a pair or triplet of points which determine the minimal circle.
-    * By the design of the algorithm,
-    * at most <tt>pts.length</tt> iterations are required to terminate
-    * with a correct result.
-    */
+    /*
+     * Iterate over the remaining points to find
+     * a pair or triplet of points which determine the minimal circle.
+     * By the design of the algorithm,
+     * at most <tt>pts.length</tt> iterations are required to terminate
+     * with a correct result.
+     */
     size_t i = 0, n = pts.size();
     while(i++ < n) {
         Coordinate R = pointWithMinAngleWithSegment(pts, P, Q);
@@ -275,9 +308,9 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
             continue;
         }
 
-        /**
-        * The sin of the angle is a simpler proxy for the angle itself
-        */
+        /*
+         * The sin of the angle is a simpler proxy for the angle itself
+         */
         double dx = p.x - P.x;
         double dy = p.y - P.y;
         if(dy < 0) {
@@ -299,6 +332,7 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
 Coordinate
 MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts, Coordinate& P, Coordinate& Q)
 {
+    assert(!pts.empty());
     double minAng = std::numeric_limits<double>::max();
     const Coordinate* minAngPt = &pts[0];
 

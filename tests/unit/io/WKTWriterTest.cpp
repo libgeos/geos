@@ -9,6 +9,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
 // std
 #include <sstream>
 #include <string>
@@ -23,6 +24,8 @@ namespace tut {
 struct test_wktwriter_data {
     typedef geos::geom::PrecisionModel PrecisionModel;
     typedef geos::geom::GeometryFactory GeometryFactory;
+    typedef geos::geom::Geometry Geometry;
+    typedef geos::geom::GeometryCollection GeometryCollection;
     typedef geos::io::WKTReader WKTReader;
     typedef geos::io::WKTWriter WKTWriter;
     typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
@@ -147,6 +150,36 @@ void object::test<5>
 
     std::string  result = wktwriter.write(geom.get());
     ensure_equals(result, std::string("POINT (123000 654000)"));
+}
+
+
+// 6 - Test writing out a multipoint with an empty member
+template<>
+template<>
+void object::test<6>
+()
+{
+    PrecisionModel pm3(PrecisionModel::FLOATING);
+    GeometryFactory::Ptr gf3(GeometryFactory::create(&pm3));
+    std::unique_ptr<Geometry> empty_point(gf3->createPoint());
+    ensure(empty_point != nullptr);
+
+    geos::geom::Coordinate coord(1, 2);
+    std::unique_ptr<Geometry> point(gf3->createPoint(coord));
+    ensure(point != nullptr);
+
+    std::vector<const Geometry*> geoms{empty_point.get(), point.get()};
+    std::unique_ptr<Geometry> col(gf3->createMultiPoint(geoms));
+    ensure(col != nullptr);
+
+    ensure(col->getCoordinate() != nullptr);
+    ensure_equals(col->getCoordinate()->x, 1);
+    ensure_equals(col->getCoordinate()->y, 2);
+
+    wktwriter.setRoundingPrecision(2);
+    wktwriter.setTrim(true);
+    std::string result = wktwriter.write(col.get());
+    ensure_equals(result, std::string("MULTIPOINT (EMPTY, 1 2)"));
 }
 
 } // namespace tut

@@ -160,7 +160,7 @@ public:
             CoordinateSequence* c);
 
     /// Return position of a Coordinate, or -1 if not found
-    //
+    ///
     /// FIXME: return std::size_t, using numeric_limits<std::size_t>::max
     /// as 'not found' value.
     ///
@@ -196,6 +196,17 @@ public:
      * NOTE: this method is found in CoordinateArrays class for JTS
      */
     static int increasingDirection(const CoordinateSequence& pts);
+
+
+    /** \brief
+    * Tests whether an array of {@link Coordinate}s forms a ring,
+    * by checking length and closure.
+    * Self-intersection is not checked.
+    *
+    * @param pts an array of Coordinates
+    * @return true if the coordinate form a ring.
+    */
+    static bool isRing(const CoordinateSequence *pts);
 
     /// Reverse Coordinate order in given CoordinateSequence
     static void reverse(CoordinateSequence* cl);

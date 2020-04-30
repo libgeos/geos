@@ -121,7 +121,7 @@ protected:
                                         const geom::Coordinate::ConstVect* targetRepPts) const;
 
 public:
-    /**
+    /** \brief
      * Creates an instance of this operation.
      *
      * @param p_prepPoly the PreparedPolygon to evaluate

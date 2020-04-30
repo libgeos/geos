@@ -35,7 +35,7 @@ namespace prep { // geos.geom.prep
 bool
 PreparedLineStringIntersects::isAnyTestPointInTarget(const geom::Geometry* testGeom) const
 {
-    /**
+    /*
      * This could be optimized by using the segment index on the lineal target.
      * However, it seems like the L/P case would be pretty rare in practice.
      */

@@ -28,6 +28,7 @@
 #include <geos/operation/relate/RelateNodeGraph.h>
 #include <geos/operation/relate/RelateNode.h>
 #include <geos/operation/relate/EdgeEndBundle.h>
+#include <geos/util.h>
 
 #include <memory> // unique_ptr
 #include <cassert>
@@ -61,14 +62,14 @@ ConsistentAreaTester::isNodeConsistentArea()
 {
     using geomgraph::index::SegmentIntersector;
 
-    /**
+    /*
      * To fully check validity, it is necessary to
      * compute ALL intersections, including self-intersections within a single edge.
      */
     unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
-    /**
-    * A proper intersection means that the area is not consistent.
-    */
+    /*
+     * A proper intersection means that the area is not consistent.
+     */
     if(intersector->hasProperIntersection()) {
         invalidPoint = intersector->getProperIntersectionPoint();
         return false;
@@ -100,13 +101,11 @@ ConsistentAreaTester::hasDuplicateRings()
 {
     auto& nMap = nodeGraph.getNodeMap();
     for(auto& entry : nMap) {
-        assert(dynamic_cast<relate::RelateNode*>(entry.second));
-        relate::RelateNode* node = static_cast<relate::RelateNode*>(entry.second);
+        relate::RelateNode* node = detail::down_cast<relate::RelateNode*>(entry.second);
         EdgeEndStar* ees = node->getEdges();
         EdgeEndStar::iterator endIt = ees->end();
         for(EdgeEndStar::iterator it = ees->begin(); it != endIt; ++it) {
-            assert(dynamic_cast<relate::EdgeEndBundle*>(*it));
-            relate::EdgeEndBundle* eeb = static_cast<relate::EdgeEndBundle*>(*it);
+            relate::EdgeEndBundle* eeb = detail::down_cast<relate::EdgeEndBundle*>(*it);
             if(eeb->getEdgeEnds().size() > 1) {
                 invalidPoint = eeb->getEdge()->getCoordinate(0);
                 return true;

@@ -117,7 +117,7 @@ void object::test<3>
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-    ensure(gBuffer->getNumPoints() > std::size_t(129));
+    ensure(gBuffer->getNumPoints() >= std::size_t(129));
 }
 
 template<>
@@ -143,7 +143,7 @@ void object::test<4>
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= std::size_t(245));
+        ensure(gBuffer->getNumPoints() >= std::size_t(243));
     }
 
     // Buffer point with custom parameters: 32 quadrant segments
@@ -156,7 +156,7 @@ void object::test<4>
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= std::size_t(318));
+        ensure(gBuffer->getNumPoints() >= std::size_t(317));
     }
 }
 
@@ -365,6 +365,33 @@ MULTILINESTRING(  \
     // meaningful result.
     ensure_equals(gBuffer->getNumPoints(), std::size_t(47));
     ensure_equals(int(gBuffer->getArea()), 3520);
+}
+
+template<>
+template<>
+void object::test<12>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt0("POINT(100 100)");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    // Buffer point with custom parameters: 32 quadrant segments
+    int const segments = 53;
+    int expected_segments = 4 * segments + 1;
+    BufferParameters params(segments);
+
+    BufferOp op(g0.get(), params);
+
+    double const distance = 80.0;
+    GeomPtr gBuffer(op.getResultGeometry(distance));
+
+    ensure_not(gBuffer->isEmpty());
+    ensure(gBuffer->isValid());
+    ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
+    ensure(gBuffer->getNumPoints() >= std::size_t(expected_segments));
 }
 
 } // namespace tut

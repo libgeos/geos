@@ -42,9 +42,9 @@ Edge::setDirectedEdges(DirectedEdge* de0, DirectedEdge* de1)
 }
 
 /**
-* Returns one of the DirectedEdges associated with this Edge.
-* @param i 0 or 1
-*/
+ * Returns one of the DirectedEdges associated with this Edge.
+ * @param i 0 or 1
+ */
 DirectedEdge*
 Edge::getDirEdge(int i)
 {
@@ -70,9 +70,9 @@ Edge::getDirEdge(Node* fromNode)
 }
 
 /**
-* If <code>node</code> is one of the two nodes associated with this Edge,
-* returns the other node; otherwise returns null.
-*/
+ * If <code>node</code> is one of the two nodes associated with this Edge,
+ * returns the other node; otherwise returns null.
+ */
 Node*
 Edge::getOppositeNode(Node* node)
 {

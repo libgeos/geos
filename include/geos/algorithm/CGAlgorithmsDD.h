@@ -19,17 +19,7 @@
 #ifndef GEOS_ALGORITHM_CGALGORITHMDD_H
 #define GEOS_ALGORITHM_CGALGORITHMDD_H
 #include <geos/export.h>
-#include <geos/algorithm/ttmath/ttmath.h>
-
-/// \file CGAlgorithmsDD.h
-
-/// \brief Close to DoubleDouble equivalent used by JTS
-///
-/// Usage: `ttmath::Big<exponent, mantissa>`
-typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
-//typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(128)> DD;
-//typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(256)> DD;
-//typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(256)> DD;
+#include <geos/math/DD.h>
 
 // Forward declarations
 namespace geos {
@@ -38,6 +28,8 @@ class Coordinate;
 class CoordinateSequence;
 }
 }
+
+using namespace geos::math;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -139,7 +131,7 @@ public:
      * The circumcentre does not necessarily lie within the triangle. For example,
      * the circumcentre of an obtuse isosceles triangle lies outside the triangle.
      *
-     * This method uses @ref DD extended-precision arithmetic to provide more accurate
+     * This method uses @ref geos::math::DD extended-precision arithmetic to provide more accurate
      * results than [circumcentre(Coordinate, Coordinate, Coordinate)]
      * (@ref geos::geom::Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)).
      *

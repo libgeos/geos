@@ -113,7 +113,7 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 
     bool isValidToSimplify = true;
 
-    /**
+    /*
      * Following logic ensures that there is enough points in the
      * output line.
      * If there is already more points than the minimum, there's

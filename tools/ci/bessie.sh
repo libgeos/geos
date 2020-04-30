@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh
 #
 # FreeBSD 64 (bessie) CI script runner for GEOS
 #

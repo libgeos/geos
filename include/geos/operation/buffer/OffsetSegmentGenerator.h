@@ -94,7 +94,7 @@ public:
                           const geom::Coordinate& nS2, int nSide);
 
     /// Get coordinates by taking ownership of them
-    //
+    ///
     /// After this call, the coordinates reference in
     /// this object are dropped. Calling twice will
     /// segfault...
@@ -203,7 +203,7 @@ private:
     int closingSegLengthFactor; // 1;
 
     /// Owned by this object, destroyed by dtor
-    //
+    ///
     /// This actually gets created multiple times
     /// and each of the old versions is pushed
     /// to the ptLists std::vector to ensure all
@@ -237,7 +237,7 @@ private:
     void addCollinear(bool addStartPoint);
 
     /// The mitre will be beveled if it exceeds the mitre ratio limit.
-    //
+    ///
     /// @param offset0 the first offset segment
     /// @param offset1 the second offset segment
     /// @param distance the offset distance
@@ -248,7 +248,7 @@ private:
                       double distance);
 
     /// Adds a limited mitre join connecting the two reflex offset segments.
-    //
+    ///
     /// A limited mitre is a mitre which is beveled at the distance
     /// determined by the mitre ratio limit.
     ///
@@ -265,7 +265,7 @@ private:
     /// \brief
     /// Adds a bevel join connecting the two offset segments
     /// around a reflex corner.
-    //
+    ///
     /// @param offset0 the first offset segment
     /// @param offset1 the second offset segment
     ///
@@ -289,14 +289,14 @@ private:
     static const double SIMPLIFY_FACTOR; // 100.0;
 
     /// Adds the offset points for an outside (convex) turn
-    //
+    ///
     /// @param orientation
     /// @param addStartPoint
     ///
     void addOutsideTurn(int orientation, bool addStartPoint);
 
     /// Adds the offset points for an inside (concave) turn
-    //
+    ///
     /// @param orientation
     /// @param addStartPoint
     ///
@@ -329,7 +329,7 @@ private:
      * @param direction the orientation of the fillet
      * @param radius the radius of the fillet
      */
-    void addFillet(const geom::Coordinate& p, const geom::Coordinate& p0,
+    void addDirectedFillet(const geom::Coordinate& p, const geom::Coordinate& p0,
                    const geom::Coordinate& p1,
                    int direction, double radius);
 
@@ -342,7 +342,7 @@ private:
      * @param direction is -1 for a CW angle, 1 for a CCW angle
      * @param radius the radius of the fillet
      */
-    void addFillet(const geom::Coordinate& p, double startAngle,
+    void addDirectedFillet(const geom::Coordinate& p, double startAngle,
                    double endAngle, int direction, double radius);
 private:
     // An OffsetSegmentGenerator cannot be copied because of member "const BufferParameters& bufParams"

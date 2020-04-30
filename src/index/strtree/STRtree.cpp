@@ -226,7 +226,7 @@ STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance)
         BoundablePair* bndPair = priQ.top();
         double currentDistance = bndPair->getDistance();
 
-        /**
+        /*
          * If the distance for the first node in the queue
          * is >= the current minimum distance, all other nodes
          * in the queue must also have a greater distance.
@@ -239,7 +239,7 @@ STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance)
 
         priQ.pop();
 
-        /**
+        /*
          * If the pair members are leaves
          * then their distance is the exact lower bound.
          * Update the distanceLowerBound to reflect this
@@ -251,7 +251,7 @@ STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance)
             minPair = bndPair;
         }
         else {
-            /**
+            /*
              * Otherwise, expand one side of the pair,
              * (the choice of which side to expand is heuristically determined)
              * and insert the new expanded pairs into the queue
@@ -307,32 +307,32 @@ bool STRtree::isWithinDistance(BoundablePair* initBndPair, double maxDistance)
         BoundablePair* bndPair = priQ.top();
         double currentDistance = bndPair->getDistance();
 
-        /**
-        * If the distance for the first pair in the queue
-        * is >= maxDistance, other pairs
-        * in the queue must also have a greater distance.
-        * So can conclude no items are within the distance
-        * and terminate with false
-        */
+        /*
+         * If the distance for the first pair in the queue
+         * is >= maxDistance, other pairs
+         * in the queue must also have a greater distance.
+         * So can conclude no items are within the distance
+         * and terminate with false
+         */
         if (currentDistance > maxDistance)
             return false;
 
-        /**
-        * There must be some pair of items in the nodes which
-        * are closer than the max distance,
-        * so can terminate with true.
-        *
-        * NOTE: using the Envelope MinMaxDistance would provide a tighter bound,
-        * but not sure how to compute this!
-        */
+        /*
+         * There must be some pair of items in the nodes which
+         * are closer than the max distance,
+         * so can terminate with true.
+         *
+         * NOTE: using the Envelope MinMaxDistance would provide a tighter bound,
+         * but not sure how to compute this!
+         */
         if (bndPair->maximumDistance() <= maxDistance)
             return true;
 
-        /**
-        * If the pair members are leaves
-        * then their distance is an upper bound.
-        * Update the distanceUpperBound to reflect this
-        */
+        /*
+         * If the pair members are leaves
+         * then their distance is an upper bound.
+         * Update the distanceUpperBound to reflect this
+         */
         if (bndPair->isLeaves()) {
             distanceUpperBound = currentDistance;
 
@@ -342,11 +342,11 @@ bool STRtree::isWithinDistance(BoundablePair* initBndPair, double maxDistance)
                 return true;
         }
         else {
-            /**
-            * Otherwise, expand one side of the pair,
-            * and insert the expanded pairs into the queue.
-            * The choice of which side to expand is determined heuristically.
-            */
+            /*
+             * Otherwise, expand one side of the pair,
+             * and insert the expanded pairs into the queue.
+             * The choice of which side to expand is determined heuristically.
+             */
             bndPair->expandToQueue(priQ, distanceUpperBound);
         }
     }

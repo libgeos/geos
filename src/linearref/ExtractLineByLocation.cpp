@@ -120,7 +120,7 @@ ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLoca
         newCoordinateArray.add(start.getCoordinate(line));
     }
 
-    /**
+    /*
      * Ensure there is enough coordinates to build a valid line.
      * Make a 2-point line with duplicate coordinates, if necessary.
      * There will always be at least one coordinate in the coordList.

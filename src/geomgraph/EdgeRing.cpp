@@ -30,7 +30,6 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
@@ -42,7 +41,6 @@
 #include <cassert>
 #include <iostream> // for operator<<
 
-using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -57,7 +55,6 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     holes(),
     maxNodeDegree(-1),
     edges(),
-    pts(new CoordinateArraySequence()),
     label(Location::UNDEF), // new Label(Location::UNDEF)),
     ring(nullptr),
     isHoleVar(false),
@@ -173,14 +170,15 @@ EdgeRing::computeRing()
     if(ring != nullptr) {
         return;    // don't compute more than once
     }
-    isHoleVar = Orientation::isCCW(pts.get());
-    ring = geometryFactory->createLinearRing(std::move(pts));
+    auto coordSeq = geometryFactory->getCoordinateSequenceFactory()->create(std::move(pts));
+    ring = geometryFactory->createLinearRing(std::move(coordSeq));
+    isHoleVar = Orientation::isCCW(ring->getCoordinatesRO());
 
     testInvariant();
 }
 
 /*public*/
-vector<DirectedEdge*>&
+std::vector<DirectedEdge*>&
 EdgeRing::getEdges()
 {
     testInvariant();
@@ -245,8 +243,7 @@ EdgeRing::computeMaxNodeDegree()
     do {
         Node* node = de->getNode();
         EdgeEndStar* ees = node->getEdges();
-        assert(dynamic_cast<DirectedEdgeStar*>(ees));
-        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
         int degree = des->getOutgoingDegree(this);
         if(degree > maxNodeDegree) {
             maxNodeDegree = degree;
@@ -319,15 +316,15 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
     assert(edgePts);
     size_t numEdgePts = edgePts->getSize();
 
-    assert(pts);
-
+    pts.reserve(pts.size() + numEdgePts);
     if(isForward) {
-        size_t startIndex = 1;
         if(isFirstEdge) {
-            startIndex = 0;
-        }
-        for(size_t i = startIndex; i < numEdgePts; ++i) {
-            pts->add(edgePts->getAt(i));
+            edgePts->toVector(pts);
+            return;
+        } else {
+            for(size_t i = 1; i < numEdgePts; ++i) {
+                pts.push_back(edgePts->getAt(i));
+            }
         }
     }
 
@@ -336,21 +333,18 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
         if(isFirstEdge) {
             startIndex = numEdgePts;
         }
-        //for (int i=startIndex;i>=0;i--)
         for(size_t i = startIndex; i > 0; --i) {
-            pts->add(edgePts->getAt(i - 1));
+            pts.push_back(edgePts->getAt(i - 1));
         }
     }
 
     testInvariant();
-
 }
 
 /*public*/
 bool
 EdgeRing::containsPoint(const Coordinate& p)
 {
-
     testInvariant();
 
     assert(ring);
@@ -378,8 +372,6 @@ std::ostream&
 operator<< (std::ostream& os, const EdgeRing& er)
 {
     os << "EdgeRing[" << &er << "]: "
-       << std::endl
-       << "Points: " << er.pts.get()
        << std::endl;
     return os;
 }

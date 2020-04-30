@@ -20,8 +20,10 @@
 #define GEOS_OP_LINEMERGE_LINEMERGER_H
 
 #include <geos/export.h>
+#include <geos/geom/LineString.h>
 #include <geos/operation/linemerge/LineMergeGraph.h> // for composition
 
+#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -32,7 +34,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
 class GeometryFactory;
 class Geometry;
 }
@@ -78,7 +79,7 @@ private:
 
     LineMergeGraph graph;
 
-    std::vector<geom::LineString*>* mergedLineStrings;
+    std::vector<std::unique_ptr<geom::LineString>> mergedLineStrings;
 
     std::vector<EdgeString*> edgeStrings;
 
@@ -128,10 +129,13 @@ public:
      *
      * Ownership of vector _and_ its elements to caller.
      */
-    std::vector<geom::LineString*>* getMergedLineStrings();
+    std::vector<std::unique_ptr<geom::LineString>> getMergedLineStrings();
 
     void add(const geom::LineString* lineString);
 
+    // Declare type as noncopyable
+    LineMerger(const LineMerger& other) = delete;
+    LineMerger& operator=(const LineMerger& rhs) = delete;
 };
 
 } // namespace geos::operation::linemerge

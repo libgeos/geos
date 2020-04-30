@@ -90,7 +90,7 @@ BufferParameters::setQuadrantSegments(int quadSegs)
 {
     quadrantSegments = quadSegs;
 
-    /**
+    /*
      * Indicates how to construct fillets.
      * If qs >= 1, fillet is round, and qs indicates number of
      * segments to use to approximate a quarter-circle.
@@ -112,7 +112,7 @@ BufferParameters::setQuadrantSegments(int quadSegs)
         quadrantSegments = 1;
     }
 
-    /**
+    /*
      * If join style was set by the quadSegs value,
      * use the default for the actual quadrantSegments value.
      */
@@ -125,7 +125,7 @@ BufferParameters::setQuadrantSegments(int quadSegs)
 double
 BufferParameters::bufferDistanceError(int quadSegs)
 {
-    double alpha = M_PI / 2.0 / quadSegs;
+    double alpha = MATH_PI / 2.0 / quadSegs;
     return 1 - cos(alpha / 2.0);
 }
 

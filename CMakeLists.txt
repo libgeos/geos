@@ -224,7 +224,7 @@ add_subdirectory(src)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
   set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION})
@@ -238,7 +238,7 @@ target_link_libraries(geos_c PRIVATE geos)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
   set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
   if(NOT WIN32)
@@ -270,14 +270,21 @@ add_subdirectory(doc)
 # Install and export targets - support 'make install' or equivalent
 #-----------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
+
+set(GEOS_INSTALL_FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake")
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
   VERSION ${GEOS_VERSION}
   COMPATIBILITY AnyNewerVersion)
 
-configure_file(cmake/geos-config.cmake
-  "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
-  COPYONLY)
+if(NOT MSVC)
+  configure_file(cmake/geos-config.cmake
+    "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
+    COPYONLY)
+  list(APPEND GEOS_INSTALL_FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake")
+endif()
 
 install(TARGETS geos geos_cxx_flags
   EXPORT geos-targets
@@ -301,14 +308,20 @@ install(EXPORT geos-targets
   DESTINATION lib/cmake/GEOS)
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
+  ${GEOS_INSTALL_FILES}
   DESTINATION lib/cmake/GEOS)
 install(DIRECTORY
   "${CMAKE_CURRENT_LIST_DIR}/include/geos"
   "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
   DESTINATION include
   FILES_MATCHING PATTERN "*.h")
+if(NOT DISABLE_GEOS_INLINE)
+  install(DIRECTORY
+    "${CMAKE_CURRENT_LIST_DIR}/include/geos"
+    "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.inl")
+endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION include)
 

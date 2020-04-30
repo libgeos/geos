@@ -70,7 +70,7 @@ public:
     typedef std::vector<geom::LineString*> PathList;
 
     /// Find paths shared between two linear geometries
-    //
+    ///
     /// @param g1
     ///   First geometry. Must be linear.
     ///
@@ -93,7 +93,7 @@ public:
                               PathList& oppositeDirection);
 
     /// Constructor
-    //
+    ///
     /// @param g1
     ///   First geometry. Must be linear.
     ///
@@ -103,7 +103,7 @@ public:
     SharedPathsOp(const geom::Geometry& g1, const geom::Geometry& g2);
 
     /// Get shared paths
-    //
+    ///
     /// @param sameDirection
     ///   Shared edges having the same direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
@@ -122,7 +122,7 @@ public:
 private:
 
     /// Get all the linear intersections
-    //
+    ///
     /// Ownership of linestring pushed to the given container
     /// is transferred to caller. See clearEdges for a deep
     /// release if you need one.
@@ -130,7 +130,7 @@ private:
     void findLinearIntersections(PathList& to);
 
     /// Check if the given edge goes forward or backward on the given line.
-    //
+    ///
     /// PRECONDITION: It is assumed the edge fully lays on the geometry
     ///
     bool isForward(const geom::LineString& edge,

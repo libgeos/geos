@@ -37,7 +37,7 @@ std::unique_ptr<Geometry>
 OverlapUnion::doUnion()
 {
     Envelope overlapEnv = overlapEnvelope(g0, g1);
-    /**
+    /*
      * If no overlap, can just combine the geometries
      */
     if (overlapEnv.isNull()) {
@@ -112,7 +112,7 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
         return geom0->Union(geom1);
     }
     catch (geos::util::TopologyException &) {
-        /**
+        /*
          * If the overlay union fails,
          * try a buffer union, which often succeeds
          */

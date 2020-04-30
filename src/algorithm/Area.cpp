@@ -48,7 +48,7 @@ Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
     }
 
     double sum = 0.0;
-    /**
+    /*
      * Based on the Shoelace formula.
      * http://en.wikipedia.org/wiki/Shoelace_formula
      */
@@ -70,10 +70,10 @@ Area::ofRingSigned(const geom::CoordinateSequence* ring)
     if(n < 3) {
         return 0.0;
     }
-    /**
-    * Based on the Shoelace formula.
-    * http://en.wikipedia.org/wiki/Shoelace_formula
-    */
+    /*
+     * Based on the Shoelace formula.
+     * http://en.wikipedia.org/wiki/Shoelace_formula
+     */
     geom::Coordinate p0, p1, p2;
     p1 = ring->getAt(0);
     p2 = ring->getAt(1);

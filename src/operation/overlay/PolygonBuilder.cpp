@@ -81,8 +81,7 @@ PolygonBuilder::add(PlanarGraph* graph)
 
     vector<DirectedEdge*> dirEdges(eeSize);
     for(size_t i = 0; i < eeSize; ++i) {
-        assert(dynamic_cast<DirectedEdge*>(ee[i]));
-        DirectedEdge* de = static_cast<DirectedEdge*>(ee[i]);
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(ee[i]);
         dirEdges[i] = de;
     }
 

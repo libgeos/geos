@@ -54,7 +54,7 @@ void object::test<1>
 
     // Create coordinates sequence
     const size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, coords_size);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 

@@ -235,37 +235,6 @@ Envelope::toString() const
 }
 
 /*public*/
-double
-Envelope::distance(const Envelope* env) const
-{
-    if(intersects(env)) {
-        return 0;
-    }
-    double dx = 0.0;
-    if(maxx < env->minx) {
-        dx = env->minx - maxx;
-    }
-    if(minx > env->maxx) {
-        dx = minx - env->maxx;
-    }
-    double dy = 0.0;
-    if(maxy < env->miny) {
-        dy = env->miny - maxy;
-    }
-    if(miny > env->maxy) {
-        dy = miny - env->maxy;
-    }
-    // if either is zero, the envelopes overlap either vertically or horizontally
-    if(dx == 0.0) {
-        return dy;
-    }
-    if(dy == 0.0) {
-        return dx;
-    }
-    return sqrt(dx * dx + dy * dy);
-}
-
-/*public*/
 bool
 operator==(const Envelope& a, const Envelope& b)
 {

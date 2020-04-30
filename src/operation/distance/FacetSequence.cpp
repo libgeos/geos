@@ -95,6 +95,9 @@ FacetSequence::nearestLocations(const FacetSequence& facetSeq)  const
         const Coordinate& seqPt = facetSeq.pts->getAt(facetSeq.start);
         GeometryLocation gl1(geom, start, pt);
         GeometryLocation gl2(facetSeq.geom, facetSeq.start, seqPt);
+        locs.clear();
+        locs.push_back(gl1);
+        locs.push_back(gl2);
     }
     else if (isPointThis) {
         const Coordinate& pt = pts->getAt(start);
@@ -120,15 +123,11 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
                                         std::vector<GeometryLocation> *locs) const
 {
     double minDistance = std::numeric_limits<double>::infinity();
-    double dist;
 
     for(size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
         const Coordinate& q0 = facetSeq.pts->getAt(i);
         const Coordinate& q1 = facetSeq.pts->getAt(i + 1);
-        dist = Distance::pointToSegment(pt, q0, q1);
-        if(dist == 0.0) {
-            return dist;
-        }
+        double dist = Distance::pointToSegment(pt, q0, q1);
         if(dist < minDistance) {
             minDistance = dist;
             if (locs != nullptr) {
@@ -152,11 +151,9 @@ FacetSequence::updateNearestLocationsPointLine(const Coordinate& pt,
     geom::LineSegment seg(q0, q1);
     Coordinate segClosestPoint;
     seg.closestPoint(pt, segClosestPoint);
-    GeometryLocation gl0(geom, start, pt);
-    GeometryLocation gl1(facetSeq.geom, i, segClosestPoint);
     locs->clear();
-    locs->push_back(gl0);
-    locs->push_back(gl1);
+    locs->emplace_back(geom, start, pt);
+    locs->emplace_back(facetSeq.geom, i, segClosestPoint);
     return;
 }
 
@@ -198,12 +195,10 @@ FacetSequence::updateNearestLocationsLineLine(size_t i, const Coordinate& p0, co
     LineSegment seg1(q0, q1);
 
     auto closestPts = seg0.closestPoints(seg1);
-    GeometryLocation gl0(geom, i, closestPts[0]);
-    GeometryLocation gl1(facetSeq.geom, j, closestPts[1]);
 
     locs->clear();
-    locs->push_back(gl0);
-    locs->push_back(gl1);
+    locs->emplace_back(geom, i, closestPts[0]);
+    locs->emplace_back(facetSeq.geom, j, closestPts[1]);
 }
 
 void

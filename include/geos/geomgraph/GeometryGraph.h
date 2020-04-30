@@ -24,6 +24,7 @@
 
 #include <geos/export.h>
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <memory>
 
@@ -86,8 +87,7 @@ private:
      * Following the above description there's no need to
      * compare LineStrings other then by pointer value.
      */
-//std::map<const geom::LineString*,Edge*,geom::LineStringLT> lineEdgeMap;
-    std::map<const geom::LineString*, Edge*> lineEdgeMap;
+    std::unordered_map<const geom::LineString*, Edge*> lineEdgeMap;
 
     /**
      * If this flag is true, the Boundary Determination Rule will
@@ -187,7 +187,7 @@ public:
     /// Returned object is owned by this GeometryGraph
     geom::CoordinateSequence* getBoundaryPoints();
 
-    Edge* findEdge(const geom::LineString* line);
+    Edge* findEdge(const geom::LineString* line) const;
 
     void computeSplitEdges(std::vector<Edge*>* edgelist);
 

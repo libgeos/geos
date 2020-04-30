@@ -24,6 +24,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
+#include <geos/geom/Envelope.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/util/Interrupt.h>
@@ -406,7 +407,7 @@ LineStringSnapper::findSegmentToSnap(
         cerr << " Checking segment " << seg << endl;
 #endif
 
-        /**
+        /*
          * Check if the snap pt is equal to one of
          * the segment endpoints.
          *
@@ -429,6 +430,10 @@ LineStringSnapper::findSegmentToSnap(
 #endif
                 return too_far;
             }
+        }
+
+        if (Envelope::distanceSquaredToCoordinate(snapPt, seg.p0, seg.p1) >= minDist*minDist) {
+            continue;
         }
 
         double dist = seg.distance(snapPt);

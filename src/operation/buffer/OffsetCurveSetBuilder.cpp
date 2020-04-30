@@ -39,6 +39,7 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/NodedSegmentString.h>
+#include <geos/util.h>
 
 #include <algorithm> // for min
 #include <cmath>
@@ -183,6 +184,7 @@ OffsetCurveSetBuilder::addCollection(const GeometryCollection* gc)
 void
 OffsetCurveSetBuilder::addPoint(const Point* p)
 {
+    // a zero or negative width buffer of a point is empty
     if(distance <= 0.0) {
         return;
     }
@@ -197,21 +199,31 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
 void
 OffsetCurveSetBuilder::addLineString(const LineString* line)
 {
-    if(distance <= 0.0 && ! curveBuilder.getBufferParameters().isSingleSided()) {
+    if (curveBuilder.isLineOffsetEmpty(distance)) {
         return;
     }
 
-#if GEOS_DEBUG
-    std::cerr << __FUNCTION__ << ": " << line->toString() << std::endl;
-#endif
     auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
-#if GEOS_DEBUG
-    std::cerr << " After coordinate removal: " << coord->toString() << std::endl;
-#endif
-    std::vector<CoordinateSequence*> lineList;
-    curveBuilder.getLineCurve(coord.get(), distance, lineList);
-    addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+
+    /**
+     * Rings (closed lines) are generated with a continuous curve,
+     * with no end arcs. This produces better quality linework,
+     * and avoids noding issues with arcs around almost-parallel end segments.
+     * See JTS #523 and #518.
+     *
+     * Singled-sided buffers currently treat rings as if they are lines.
+     */
+    if (CoordinateSequence::isRing(coord.get()) && ! curveBuilder.getBufferParameters().isSingleSided()) {
+        addRingBothSides(coord.get(), distance);
+    }
+    else {
+        std::vector<CoordinateSequence*> lineList;
+        curveBuilder.getLineCurve(coord.get(), distance, lineList);
+        addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+    }
+
 }
+
 
 /*private*/
 void
@@ -245,7 +257,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
-    addPolygonRing(
+    addRingSide(
         shellCoord.get(),
         offsetDistance,
         offsetSide,
@@ -254,8 +266,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         const LineString* hls = p->getInteriorRingN(i);
-        assert(dynamic_cast<const LinearRing*>(hls));
-        const LinearRing* hole = static_cast<const LinearRing*>(hls);
+        const LinearRing* hole = detail::down_cast<const LinearRing*>(hls);
 
         // optimization - don't bother computing buffer for this hole
         // if the hole would be completely covered
@@ -268,7 +279,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
-        addPolygonRing(
+        addRingSide(
             holeCoord.get(),
             offsetDistance,
             Position::opposite(offsetSide),
@@ -279,7 +290,22 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
 /* private */
 void
-OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
+OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
+{
+    addRingSide(coord, p_distance,
+                Position::LEFT,
+                Location::EXTERIOR, Location::INTERIOR);
+    /* Add the opposite side of the ring
+    */
+    addRingSide(coord, p_distance,
+                Position::RIGHT,
+                Location::INTERIOR, Location::EXTERIOR);
+}
+
+
+/* private */
+void
+OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
                                       double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
@@ -332,7 +358,7 @@ OffsetCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
         return true;
     }
 
-    /**
+    /*
      * The following is a heuristic test to determine whether an
      * inside buffer will be eroded completely->
      * It is based on the fact that the minimum diameter of the ring

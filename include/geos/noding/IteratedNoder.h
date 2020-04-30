@@ -68,7 +68,8 @@ private:
      * and create the split edges between the nodes
      */
     void node(std::vector<SegmentString*>* segStrings,
-              int* numInteriorIntersections);
+              int& numInteriorIntersections,
+              geom::Coordinate& intersectionPoint);
 
 public:
 

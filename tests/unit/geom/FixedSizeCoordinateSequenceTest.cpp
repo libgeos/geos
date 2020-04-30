@@ -133,10 +133,10 @@ void object::test<6>
     FixedSizeCoordinateSequence<1> a(2);
     a.setAt({ 1, 2, 3 }, 0);
 
-    ensure_equals(a.getDimension(), 2);
+    ensure_equals(a.getDimension(), 2u);
 
     auto b = a.clone();
-    ensure_equals(b->getDimension(), 2);
+    ensure_equals(b->getDimension(), 2u);
     ensure(a.getAt(0).equals3D(b->getAt(0)));
 }
 

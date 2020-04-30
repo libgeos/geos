@@ -27,55 +27,55 @@ namespace geos {
 namespace operation {
 namespace distance {
 
-STRtree*
+std::unique_ptr<STRtree>
 FacetSequenceTreeBuilder::build(const Geometry* g)
 {
-    std::unique_ptr<STRtree> tree(new STRtree(STR_TREE_NODE_CAPACITY));
-    std::unique_ptr<std::vector<FacetSequence*> > sections(computeFacetSequences(g));
-    for(std::vector<FacetSequence*>::iterator it = sections->begin(); it != sections->end(); ++it) {
-        FacetSequence* section = *it;
-        tree->insert(section->getEnvelope(), section);
+    auto tree = std::unique_ptr<STRtree>(new FacetSequenceTree(STR_TREE_NODE_CAPACITY));
+    std::vector<std::unique_ptr<FacetSequence>> sections(computeFacetSequences(g));
+
+    for(auto& section : sections) {
+        const Envelope* e = section->getEnvelope();
+        tree->insert(e, section.release());
     }
 
     tree->build();
-    return tree.release();
+    return tree;
 }
 
-std::vector<FacetSequence*>*
+std::vector<std::unique_ptr<FacetSequence>>
 FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
 {
-    std::unique_ptr<std::vector<FacetSequence*> > sections(new std::vector<FacetSequence*>());
+    std::vector<std::unique_ptr<FacetSequence>> sections;
 
-    class FacetSequenceAdder;
     class FacetSequenceAdder : public geom::GeometryComponentFilter {
-        std::vector<FacetSequence*>*  m_sections;
+        std::vector<std::unique_ptr<FacetSequence>>&  m_sections;
 
     public :
-        FacetSequenceAdder(std::vector<FacetSequence*>* p_sections) :
+        FacetSequenceAdder(std::vector<std::unique_ptr<FacetSequence>> & p_sections) :
             m_sections(p_sections) {}
         void
         filter_ro(const Geometry* geom) override
         {
             if(const LineString* ls = dynamic_cast<const LineString*>(geom)) {
                 const CoordinateSequence* seq = ls->getCoordinatesRO();
-                addFacetSequences(geom, seq, *m_sections);
+                addFacetSequences(geom, seq, m_sections);
             }
             else if(const Point* pt = dynamic_cast<const Point*>(geom)) {
                 const CoordinateSequence* seq = pt->getCoordinatesRO();
-                addFacetSequences(geom, seq, *m_sections);
+                addFacetSequences(geom, seq, m_sections);
             }
         }
     };
 
-    FacetSequenceAdder facetSequenceAdder(sections.get());
+    FacetSequenceAdder facetSequenceAdder(sections);
     g->apply_ro(&facetSequenceAdder);
 
-    return sections.release();
+    return sections;
 }
 
 void
 FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const CoordinateSequence* pts,
-        std::vector<FacetSequence*>& sections)
+        std::vector<std::unique_ptr<FacetSequence>> & sections)
 {
     size_t i = 0;
     size_t size = pts->size();
@@ -87,8 +87,8 @@ FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const Coordina
         if(end >= size - 1) {
             end = size;
         }
-        FacetSequence* sect = new FacetSequence(geom, pts, i, end);
-        sections.push_back(sect);
+        std::unique_ptr<FacetSequence> sect = detail::make_unique<FacetSequence>(geom, pts, i, end);
+        sections.emplace_back(std::move(sect));
         i += FACET_SEQUENCE_SIZE;
     }
 }

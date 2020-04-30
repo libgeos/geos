@@ -61,13 +61,13 @@ RelateNodeGraph::build(GeometryGraph* geomGraph)
     // compute nodes for intersections between previously noded edges
     computeIntersectionNodes(geomGraph, 0);
 
-    /**
+    /*
      * Copy the labelling for the nodes in the parent Geometry.  These override
      * any labels determined by intersections.
      */
     copyNodesAndLabels(geomGraph, 0);
 
-    /**
+    /*
      * Build EdgeEnds for all intersections.
      */
     EdgeEndBuilder eeBuilder;

@@ -163,6 +163,9 @@ private:
 
     ItemsList* itemsTree(AbstractNode* node);
 
+    AbstractSTRtree(const AbstractSTRtree&) = delete;
+    AbstractSTRtree& operator=(const AbstractSTRtree&) = delete;
+
 protected:
 
     /** \brief

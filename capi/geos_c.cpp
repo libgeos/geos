@@ -39,10 +39,10 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSSTRtree geos::index::strtree::STRtree
-#define GEOSWKTReader_t geos::io::WKTReader
-#define GEOSWKTWriter_t geos::io::WKTWriter
-#define GEOSWKBReader_t geos::io::WKBReader
-#define GEOSWKBWriter_t geos::io::WKBWriter
+#define GEOSWKTReader geos::io::WKTReader
+#define GEOSWKTWriter geos::io::WKTWriter
+#define GEOSWKBReader geos::io::WKBReader
+#define GEOSWKBWriter geos::io::WKBWriter
 typedef struct GEOSBufParams_t GEOSBufferParams;
 
 #include "geos_c.h"
@@ -455,6 +455,18 @@ extern "C" {
     GEOSMinimumRotatedRectangle(const Geometry* g)
     {
         return GEOSMinimumRotatedRectangle_r(handle, g);
+    }
+
+    Geometry*
+    GEOSMaximumInscribedCircle(const Geometry* g, double tolerance)
+    {
+        return GEOSMaximumInscribedCircle_r(handle, g, tolerance);
+    }
+
+    Geometry*
+    GEOSLargestEmptyCircle(const Geometry* g, double tolerance)
+    {
+        return GEOSLargestEmptyCircle_r(handle, g, tolerance);
     }
 
     Geometry*

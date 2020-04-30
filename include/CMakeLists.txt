@@ -8,7 +8,11 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.h  CONFIGURE_DEPEND)
+if(DISABLE_GEOS_INLINE)
+  file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.h  CONFIGURE_DEPEND)
+else()
+  file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.h  ${CMAKE_CURRENT_LIST_DIR}/*.inl CONFIGURE_DEPEND)
+endif()
 target_sources(geos PRIVATE ${_headers})
 unset(_headers)
 

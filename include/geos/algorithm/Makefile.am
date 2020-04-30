@@ -4,7 +4,7 @@
 SUBDIRS = \
 	locate \
 	distance \
-	ttmath
+	construct
 
 EXTRA_DIST =
 

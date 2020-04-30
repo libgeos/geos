@@ -46,6 +46,8 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
+	algorithm/construct/LargestEmptyCircleTest.cpp \
+	algorithm/construct/MaximumInscribedCircleTest.cpp \
 	algorithm/distance/DiscreteFrechetDistanceTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/InteriorPointAreaTest.cpp \
@@ -87,6 +89,7 @@ geos_unit_SOURCES = \
 	capi/GEOSisValidDetailTest.cpp \
 	capi/GEOSLineString_PointTest.cpp \
 	capi/GEOSMakeValidTest.cpp \
+	capi/GEOSMaximumInscribedCircleTest.cpp \
 	capi/GEOSMinimumBoundingCircleTest.cpp \
 	capi/GEOSMinimumClearanceTest.cpp \
 	capi/GEOSMinimumRectangleTest.cpp \
@@ -151,6 +154,7 @@ geos_unit_SOURCES = \
 	io/WKTWriterTest.cpp \
 	io/WriterTest.cpp \
 	linearref/LengthIndexedLineTest.cpp \
+	math/DDTest.cpp \
 	noding/BasicSegmentStringTest.cpp \
 	noding/NodedSegmentStringTest.cpp \
 	noding/OrientedCoordinateArrayTest.cpp \

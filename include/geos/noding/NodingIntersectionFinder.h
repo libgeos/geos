@@ -60,8 +60,7 @@ public:
         interiorIntersection(geom::Coordinate::getNull()),
         intersectionCount(0),
         isCheckEndSegmentsOnly(false),
-        findAllIntersections(false),
-        keepIntersections(true)
+        findAllIntersections(false)
     {
     }
 
@@ -168,7 +167,6 @@ private:
     size_t intersectionCount;
     bool isCheckEndSegmentsOnly;
     bool findAllIntersections;
-    bool keepIntersections;
     std::vector<geom::Coordinate> intSegments;
 
     // Declare type as noncopyable

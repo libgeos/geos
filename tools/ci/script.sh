@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh
 #
 # Travis CI script runner for GEOS
 #
@@ -9,10 +9,17 @@
 # by the Free Software Foundation. 
 # See the COPYING file for more information.
 #
-source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
+
+if [ -z "${TRAVIS_BUILD_DIR+x}" ]; then
+  echo TRAVIS_BUILD_DIR not defined
+  exit 1
+fi
+
+# source common functions
+. ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
 # prepare build directory
-builddir="${TRAVIS_BUILD_DIR}/_build"
+builddir=${TRAVIS_BUILD_DIR}/_build
 mkdir -p ${builddir}
 cd ${builddir}
 

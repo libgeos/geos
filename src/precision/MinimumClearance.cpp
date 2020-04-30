@@ -23,7 +23,6 @@
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/operation/distance/FacetSequenceTreeBuilder.h>
 #include <geos/geom/LineSegment.h>
-#include <geos/index/ItemVisitor.h>
 
 using namespace geos::geom;
 using namespace geos::operation::distance;
@@ -48,10 +47,10 @@ MinimumClearance::getLine()
 
     // return empty line string if no min pts were found
     if(minClearance == std::numeric_limits<double>::infinity()) {
-        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
+        return inputGeom->getFactory()->createLineString();
     }
 
-    return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone().release()));
+    return inputGeom->getFactory()->createLineString(minClearancePts->clone());
 }
 
 void
@@ -165,28 +164,6 @@ MinimumClearance::compute()
         }
     };
 
-    struct ItemDeleter : public index::ItemVisitor {
-        void
-        visitItem(void* item) override
-        {
-            delete static_cast<FacetSequence*>(item);
-        }
-    };
-
-    struct ManagedResourceSTRtree {
-        STRtree* m_tree;
-
-        ManagedResourceSTRtree(STRtree* p_tree) : m_tree(p_tree) {}
-
-        ~ManagedResourceSTRtree()
-        {
-            ItemDeleter id;
-            m_tree->iterate(id);
-
-            delete m_tree;
-        }
-    };
-
     // already computed
     if(minClearancePts.get() != nullptr) {
         return;
@@ -202,9 +179,9 @@ MinimumClearance::compute()
         return;
     }
 
-    ManagedResourceSTRtree tree(FacetSequenceTreeBuilder::build(inputGeom));
+    auto tree = FacetSequenceTreeBuilder::build(inputGeom);
     MinClearanceDistance mcd;
-    std::pair<const void*, const void*> nearest = tree.m_tree->nearestNeighbour(&mcd);
+    std::pair<const void*, const void*> nearest = tree->nearestNeighbour(&mcd);
 
     minClearance = mcd.distance(
                        static_cast<const FacetSequence*>(nearest.first),

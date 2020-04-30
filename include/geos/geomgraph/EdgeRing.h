@@ -71,7 +71,7 @@ public:
 
     bool isHole();
 
-    /*
+    /**
      * Return a pointer to the LinearRing owned by
      * this object. Make a copy if you need it beyond
      * this objects's lifetime.
@@ -145,7 +145,7 @@ protected:
 
     const geom::GeometryFactory* geometryFactory;
 
-    /// throw(const TopologyException &)
+    /// @throws util::TopologyException
     void computePoints(DirectedEdge* newStart);
 
     void mergeLabel(const Label& deLabel);
@@ -176,7 +176,7 @@ private:
     /// the DirectedEdges making up this EdgeRing
     std::vector<DirectedEdge*> edges;
 
-    std::unique_ptr<geom::CoordinateArraySequence> pts;
+    std::vector<geom::Coordinate> pts;
 
     // label stores the locations of each geometry on the
     // face surrounded by this ring

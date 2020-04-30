@@ -152,7 +152,7 @@ QuadEdgeSubdivision::locateFromEdge(const Vertex& v,
 
     for(;;) {
         ++iter;
-        /**
+        /*
          * So far it has always been the case that failure to locate indicates an
          * invalid subdivision. So just fail completely. (An alternative would be
          * to perform an exhaustive search for the containing triangle, but this

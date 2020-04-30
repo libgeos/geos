@@ -89,7 +89,7 @@ void object::test<1>
     params.setEndCapStyle(BufferParameters::CAP_FLAT);
     params.setQuadrantSegments(8);
     params.setJoinStyle(BufferParameters::JOIN_MITRE);
-    params.setMitreLimit(5.57F);
+    params.setMitreLimit(5.57);
     //params.setSingleSided(true); // DO NOT switch for non-areal input, see ticket #633
     BufferBuilder builder(params);
     ensure(distance > 0);

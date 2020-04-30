@@ -17,7 +17,6 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
-#include <geos/index/ItemVisitor.h>
 #include <geos/index/strtree/STRtree.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 
@@ -27,13 +26,6 @@ using namespace geos::index::strtree;
 namespace geos {
 namespace operation {
 namespace distance {
-struct Deleter : public index::ItemVisitor {
-    void
-    visitItem(void* item) override
-    {
-        delete static_cast<FacetSequence*>(item);
-    }
-} deleter;
 
 /*public static*/
 double
@@ -73,8 +65,6 @@ IndexedFacetDistance::distance(const Geometry* g) const
 
     double p_distance = fs1->distance(*fs2);
 
-    tree2->iterate(deleter);
-
     return p_distance;
 }
 
@@ -96,7 +86,6 @@ IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
     const FacetSequence *fs2 = static_cast<const FacetSequence*>(obj.second);
     std::vector<GeometryLocation> locs;
     locs = fs1->nearestLocations(*fs2);
-    tree2->iterate(deleter);
     return locs;
 }
 
@@ -110,11 +99,6 @@ IndexedFacetDistance::nearestPoints(const geom::Geometry* g) const
     return nearestPts;
 }
 
-
-IndexedFacetDistance::~IndexedFacetDistance()
-{
-    cachedTree->iterate(deleter);
-}
 }
 }
 }

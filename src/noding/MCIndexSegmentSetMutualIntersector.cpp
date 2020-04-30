@@ -57,8 +57,10 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
+    std::vector<void*> overlapChains;
     for(const auto& queryChain : monoChains) {
-        std::vector<void*> overlapChains;
+        overlapChains.clear();
+
         index->query(&(queryChain->getEnvelope()), overlapChains);
 
         for(std::size_t j = 0, nj = overlapChains.size(); j < nj; j++) {
@@ -103,8 +105,6 @@ MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector()
 MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 {
     delete index;
-
-    MonoChains::iterator i, e;
 }
 
 /* public */

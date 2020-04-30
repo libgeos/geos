@@ -120,7 +120,7 @@ public:
     PrecisionModel(void);
 
     /// Creates a PrecisionModel specifying an explicit precision model type.
-    //
+    ///
     /// If the model type is FIXED the scale factor will default to 1.
     ///
     /// @param nModelType the type of the precision model
@@ -165,7 +165,7 @@ public:
 
 
     /// The maximum precise value representable in a double.
-    //
+    ///
     /// Since IEE754 double-precision numbers allow 53 bits of mantissa,
     /// the value is equal to 2^53 - 1.
     /// This provides <i>almost</i> 16 decimal digits of precision.
@@ -190,7 +190,7 @@ public:
     void makePrecise(Coordinate* coord) const;
 
     /// Tests whether the precision model supports floating point
-    //
+    ///
     /// @return <code>true</code> if the precision model supports
     /// floating point
     ///
@@ -199,7 +199,7 @@ public:
     /// \brief
     /// Returns the maximum number of significant digits provided by
     /// this precision model.
-    //
+    ///
     /// Intended for use by routines which need to print out precise
     /// values.
     ///
@@ -209,7 +209,7 @@ public:
     int getMaximumSignificantDigits() const;
 
     /// Gets the type of this PrecisionModel
-    //
+    ///
     /// @return the type of this PrecisionModel
     ///
     Type getType() const;
@@ -218,7 +218,7 @@ public:
     double getScale() const;
 
     /// Returns the x-offset used to obtain a precise coordinate.
-    //
+    ///
     /// @return the amount by which to subtract the x-coordinate before
     ///         multiplying by the scale
     /// @deprecated Offsets are no longer used
@@ -226,7 +226,7 @@ public:
     double getOffsetX() const;
 
     /// Returns the y-offset used to obtain a precise coordinate.
-    //
+    ///
     /// @return the amount by which to subtract the y-coordinate before
     ///         multiplying by the scale
     /// @deprecated Offsets are no longer used
@@ -281,7 +281,7 @@ public:
     /// \brief
     /// Compares this PrecisionModel object with the specified object
     /// for order.
-    //
+    ///
     /// A PrecisionModel is greater than another if it provides greater
     /// precision.
     /// The comparison is based on the value returned by the

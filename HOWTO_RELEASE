@@ -43,5 +43,7 @@
     - Add latest release
     - Remove previous patch level release (if any)
 
-11. Announce on geos-devel
+11. Close current trac milestone and add new one for next release
+
+12. Announce on geos-devel
 

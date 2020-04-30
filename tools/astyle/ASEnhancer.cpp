@@ -246,7 +246,7 @@ size_t ASEnhancer::findCaseColon(const string& line, size_t caseIndex) const
 }
 
 /**
-* indent a line by a given number of tabsets
+ * indent a line by a given number of tabsets
  *    by inserting leading whitespace to the line argument.
  *
  * @param line          a reference to the line to indent.

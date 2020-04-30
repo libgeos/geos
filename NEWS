@@ -2,11 +2,20 @@ Changes in 3.9.0
 2020-xx-xx
 
 - New things:
-  -
+  -  MaximumInscribedCircle and LargestEmptyCircle (JTS-530, Paul Ramsey)
 
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
   - Improve performance of GEOSisValid (Dan Baston)
+  - Update geos-config tool for consistency
+    and escape paths (https://git.osgeo.org/gitea/geos/geos/pulls/99)
+    changes mostly affect CMake MSVC builds (#1015, Mike Taves)
+  - Testing on Rasberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
+  - Replace ttmath with JTS DD double-double implementation (Paul Ramsey)
+  - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
+  - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
+  - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
+  - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
 
 
 Changes in 3.8.0

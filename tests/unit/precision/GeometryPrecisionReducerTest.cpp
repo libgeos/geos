@@ -109,7 +109,7 @@ void object::test<4>
 ()
 {
     GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 1.4, .4 .4, .4 0, 0 0 ))"));
-    /**
+    /*
      * For polygonal geometries, collapses are always removed, in order
      * to produce correct topology
      */

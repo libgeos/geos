@@ -64,7 +64,7 @@ public:
      * by the three points
      * ( `Orientation::COUNTERCLOCKWISE`,
      * `Orientation::CLOCKWISE`, or `Orientation::STRAIGHT` )
-    */
+     */
     static int index(const geom::Coordinate& p1, const geom::Coordinate& p2,
                      const geom::Coordinate& q);
 
@@ -83,7 +83,7 @@ public:
      * @return `true` if the ring is oriented counter-clockwise.
      * @throws IllegalArgumentException
      *           if there are too few points to determine orientation (&lt; 4)
-    */
+     */
     static bool isCCW(const geom::CoordinateSequence* ring);
 
 };

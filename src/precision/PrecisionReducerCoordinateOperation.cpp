@@ -59,7 +59,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     // much as possible.
     std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
 
-    /**
+    /*
      * Check to see if the removal of repeated points
      * collapsed the coordinate List to an invalid length
      * for the type of the parent geometry.

@@ -35,7 +35,7 @@ namespace {
 double constexpr DP_SAFE_EPSILON =  1e-15;
 
 inline int
-OrientationDD(DD const& dd)
+OrientationDD(const DD &dd)
 {
     static DD const zero(0.0);
     if(dd < zero) {
@@ -49,10 +49,7 @@ OrientationDD(DD const& dd)
     return CGAlgorithmsDD::STRAIGHT;
 }
 
-// inline std::string ToStringDD(DD const& dd)
-// {
-//     return dd.ToString();
-// }
+
 }
 
 namespace geos {
@@ -63,7 +60,7 @@ CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                  const Coordinate& p2,
                                  const Coordinate& q)
 {
-    if(std::isnan(q.x) || std::isnan(q.y) || !std::isfinite(q.x) || !std::isfinite(q.y)) {
+    if(!std::isfinite(q.x) || !std::isfinite(q.y)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
     }
 
@@ -99,8 +96,7 @@ CGAlgorithmsDD::signOfDet2x2(const DD& x1, const DD& y1, const DD& x2, const DD&
 int
 CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
 {
-    if(std::isnan(dx1)    ||  std::isnan(dy1)    ||  std::isnan(dx2)    ||  std::isnan(dy2) ||
-            !std::isfinite(dx1) || !std::isfinite(dy1) || !std::isfinite(dx2) || !std::isfinite(dy2)) {
+    if(!std::isfinite(dx1) || !std::isfinite(dy1) || !std::isfinite(dx2) || !std::isfinite(dy2)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::signOfDet2x2 encountered NaN/Inf numbers");
     }
     DD x1(dx1);
@@ -178,8 +174,7 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
 
     Coordinate rv;
 
-    if (std::isnan(xInt) || std::isnan(yInt) ||
-        std::isinf(xInt) || std::isinf(yInt)) {
+    if (!std::isfinite(xInt) || !std::isfinite(yInt)) {
         rv.setNull();
         return rv;
     }

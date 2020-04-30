@@ -2076,13 +2076,13 @@ void ASFormatter::setBreakElseIfsMode(bool state)
 }
 
 /**
-* set comma padding mode.
-* options:
-*    true     statement commas and semicolons will be padded with spaces around them.
-*    false    statement commas and semicolons will not be padded.
-*
-* @param state         the padding mode.
-*/
+ * set comma padding mode.
+ * options:
+ *    true     statement commas and semicolons will be padded with spaces around them.
+ *    false    statement commas and semicolons will not be padded.
+ *
+ * @param state         the padding mode.
+ */
 void ASFormatter::setCommaPaddingMode(bool state)
 {
 	shouldPadCommas = state;
@@ -2177,11 +2177,11 @@ void ASFormatter::setParensUnPaddingMode(bool state)
 }
 
 /**
-* set the state of the preprocessor indentation option.
-* If true, #ifdef blocks at level 0 will be indented.
-*
-* @param   state             state of option.
-*/
+ * set the state of the preprocessor indentation option.
+ * If true, #ifdef blocks at level 0 will be indented.
+ *
+ * @param   state             state of option.
+ */
 void ASFormatter::setPreprocBlockIndent(bool state)
 {
 	shouldIndentPreprocBlock = state;
@@ -2327,17 +2327,17 @@ void ASFormatter::setBreakOneLineBlocksMode(bool state)
 }
 
 /**
-* set one line headers breaking mode
-*/
+ * set one line headers breaking mode
+ */
 void ASFormatter::setBreakOneLineHeadersMode(bool state)
 {
 	shouldBreakOneLineHeaders = state;
 }
 
 /**
-* set option to break/not break lines consisting of multiple statements.
-*
-* @param state        true = break, false = don't break.
+ * set option to break/not break lines consisting of multiple statements.
+ *
+ * @param state        true = break, false = don't break.
 */
 void ASFormatter::setBreakOneLineStatementsMode(bool state)
 {
@@ -3084,10 +3084,10 @@ bool ASFormatter::isNumericVariable(string word) const
 }
 
 /**
-* check if a colon is a class initializer separator
-*
-* @return        whether it is a class initializer separator
-*/
+ * check if a colon is a class initializer separator
+ *
+ * @return        whether it is a class initializer separator
+ */
 bool ASFormatter::isClassInitializer() const
 {
 	assert(currentChar == ':');
@@ -3712,11 +3712,11 @@ bool ASFormatter::isNextCharOpeningBrace(int startChar) const
 }
 
 /**
-* Check if operator and, pointer, and reference padding is disabled.
-* Disabling is done thru a NOPAD tag in an ending comment.
-*
-* @return              true if the formatting on this line is disabled.
-*/
+ * Check if operator and, pointer, and reference padding is disabled.
+ * Disabling is done thru a NOPAD tag in an ending comment.
+ *
+ * @return              true if the formatting on this line is disabled.
+ */
 bool ASFormatter::isOperatorPaddingDisabled() const
 {
 	size_t commentStart = currentLine.find("//", charNum);
@@ -3740,9 +3740,9 @@ bool ASFormatter::isOperatorPaddingDisabled() const
 }
 
 /**
-* Determine if an opening array-type brace should have a leading space pad.
-* This is to identify C++11 uniform initializers.
-*/
+ * Determine if an opening array-type brace should have a leading space pad.
+ * This is to identify C++11 uniform initializers.
+ */
 bool ASFormatter::isUniformInitializerBrace() const
 {
 	if (isCStyle() && !isInEnum && !isImmediatelyPostPreprocessor)
@@ -3756,8 +3756,8 @@ bool ASFormatter::isUniformInitializerBrace() const
 }
 
 /**
-* Determine if there is a following statement on the current line.
-*/
+ * Determine if there is a following statement on the current line.
+ */
 bool ASFormatter::isMultiStatementLine() const
 {
 	assert((isImmediatelyPostHeader || foundClosingHeader));
@@ -4691,11 +4691,11 @@ void ASFormatter::padParens()
 }
 
 /**
-* add or remove space padding to objective-c method prefix (- or +)
-* if this is a '(' it begins a return type
-* these options have precedence over the padParens methods
-* the padParens method has already been called, this method adjusts
-*/
+ * add or remove space padding to objective-c method prefix (- or +)
+ * if this is a '(' it begins a return type
+ * these options have precedence over the padParens methods
+ * the padParens method has already been called, this method adjusts
+ */
 void ASFormatter::padObjCMethodPrefix()
 {
 	assert(isInObjCMethodDefinition && isImmediatelyPostObjCMethodPrefix);
@@ -4735,10 +4735,10 @@ void ASFormatter::padObjCMethodPrefix()
 }
 
 /**
-* add or remove space padding to objective-c parens
-* these options have precedence over the padParens methods
-* the padParens method has already been called, this method adjusts
-*/
+ * add or remove space padding to objective-c parens
+ * these options have precedence over the padParens methods
+ * the padParens method has already been called, this method adjusts
+ */
 void ASFormatter::padObjCReturnType()
 {
 	assert(currentChar == ')' && isInObjCReturnType);
@@ -4785,10 +4785,10 @@ void ASFormatter::padObjCReturnType()
 }
 
 /**
-* add or remove space padding to objective-c parens
-* these options have precedence over the padParens methods
-* the padParens method has already been called, this method adjusts
-*/
+ * add or remove space padding to objective-c parens
+ * these options have precedence over the padParens methods
+ * the padParens method has already been called, this method adjusts
+ */
 void ASFormatter::padObjCParamType()
 {
 	assert((currentChar == '(' || currentChar == ')') && isInObjCMethodDefinition);
@@ -5529,8 +5529,8 @@ void ASFormatter::convertTabToSpaces()
 }
 
 /**
-* is it ok to break this block?
-*/
+ * is it ok to break this block?
+ */
 bool ASFormatter::isOkToBreakBlock(BraceType braceType) const
 {
 	// Actually, there should not be an ARRAY_TYPE brace here.
@@ -5550,8 +5550,8 @@ bool ASFormatter::isOkToBreakBlock(BraceType braceType) const
 }
 
 /**
-* check if a sharp header is a paren or non-paren header
-*/
+ * check if a sharp header is a paren or non-paren header
+ */
 bool ASFormatter::isSharpStyleWithParen(const string* header) const
 {
 	return (isSharpStyle() && peekNextChar() == '('
@@ -6902,12 +6902,12 @@ bool ASFormatter::isStructAccessModified(const string& firstLine, size_t index) 
 }
 
 /**
-* Look ahead in the file to see if a preprocessor block is indentable.
-*
-* @param firstLine     a reference to the line to indent.
-* @param index         the current line index.
-* @return              true if the block is indentable.
-*/
+ * Look ahead in the file to see if a preprocessor block is indentable.
+ *
+ * @param firstLine     a reference to the line to indent.
+ * @param index         the current line index.
+ * @return              true if the block is indentable.
+ */
 bool ASFormatter::isIndentablePreprocessorBlock(const string& firstLine, size_t index)
 {
 	assert(firstLine[index] == '#');

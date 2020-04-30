@@ -151,11 +151,11 @@ public:
     {
         vector<double> crossings;
 
-        /**
+        /*
          * This results in returning a null Coordinate
          */
         if (polygon.isEmpty()) return;
-        /**
+        /*
          * set default interior point in case polygon has zero area
          */
         interiorPoint = *polygon.getCoordinate();
@@ -200,7 +200,6 @@ private:
         // edge intersects scan line, so add a crossing
         double xInt = intersection(p0, p1, scanY);
         crossings.push_back(xInt);
-        //checkIntersectionDD(p0, p1, scanY, xInt);
     }
 
     void findBestMidpoint(vector<double>& crossings)

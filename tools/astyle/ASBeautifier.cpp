@@ -521,10 +521,10 @@ void ASBeautifier::setSpaceIndentation(int length)
 }
 
 /**
-* indent continuation lines using a number of indents.
-*
-* @param   indent     number of indents per line.
-*/
+ * indent continuation lines using a number of indents.
+ *
+ * @param   indent     number of indents per line.
+ */
 void ASBeautifier::setContinuationIndentation(int indent)
 {
 	continuationIndent = indent;
@@ -586,11 +586,11 @@ void ASBeautifier::setBraceIndent(bool state)
 }
 
 /**
-* set the state of the brace indent VTK option. If true, braces will
-* be indented one additional indent, except for the opening brace.
-*
-* @param   state             state of option.
-*/
+ * set the state of the brace indent VTK option. If true, braces will
+ * be indented one additional indent, except for the opening brace.
+ *
+ * @param   state             state of option.
+ */
 void ASBeautifier::setBraceIndentVtk(bool state)
 {
 	// need to set both of these
@@ -666,10 +666,10 @@ void ASBeautifier::setNamespaceIndent(bool state)
 }
 
 /**
-* set the state of the indent after parens option.
-*
-* @param   state             state of option.
-*/
+ * set the state of the indent after parens option.
+ *
+ * @param   state             state of option.
+ */
 void ASBeautifier::setAfterParenIndent(bool state)
 {
 	shouldIndentAfterParen = state;
@@ -770,10 +770,10 @@ bool ASBeautifier::getForceTabIndentation() const
 }
 
 /**
-* Get the state of the Objective-C align method colon option.
-*
-* @return   state of shouldAlignMethodColon option.
-*/
+ * Get the state of the Objective-C align method colon option.
+ *
+ * @return   state of shouldAlignMethodColon option.
+ */
 bool ASBeautifier::getAlignMethodColon() const
 {
 	return shouldAlignMethodColon;
@@ -800,11 +800,11 @@ bool ASBeautifier::getBraceIndent() const
 }
 
 /**
-* Get the state of the namespace indentation option. If true, blocks
-* of the 'namespace' statement will be indented one additional indent.
-*
-* @return   state of namespaceIndent option.
-*/
+ * Get the state of the namespace indentation option. If true, blocks
+ * of the 'namespace' statement will be indented one additional indent.
+ *
+ * @return   state of namespaceIndent option.
+ */
 bool ASBeautifier::getNamespaceIndent() const
 {
 	return namespaceIndent;
@@ -1349,8 +1349,8 @@ void ASBeautifier::registerContinuationIndent(const string& line, int i, int spa
 }
 
 /**
-* Register a continuation indent for a class header or a class initializer colon.
-*/
+ * Register a continuation indent for a class header or a class initializer colon.
+ */
 void ASBeautifier::registerContinuationIndentColon(const string& line, int i, int tabIncrementIn)
 {
 	assert(line[i] == ':');

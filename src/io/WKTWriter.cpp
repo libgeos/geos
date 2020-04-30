@@ -252,11 +252,11 @@ WKTWriter::appendLineStringTaggedText(const LineString* lineString, int p_level,
     appendLineStringText(lineString, p_level, false, writer);
 }
 
-/*
- * Converts a <code>LinearRing</code> to &lt;LinearRing Tagged Text&gt;
+/**
+ * Converts a `LinearRing` to \<LinearRing Tagged Text\>
  * format, then appends it to the writer.
  *
- * @param  linearRing  the <code>LinearRing</code> to process
+ * @param  linearRing  the `LinearRing` to process
  * @param  writer      the output writer to append to
  */
 void
@@ -426,11 +426,17 @@ WKTWriter::appendMultiPointText(const MultiPoint* multiPoint,
         writer->write("(");
         for(size_t i = 0, n = multiPoint->getNumGeometries();
                 i < n; ++i) {
+
             if(i > 0) {
                 writer->write(", ");
             }
-
-            appendCoordinate(multiPoint->getGeometryN(i)->getCoordinate(), writer);
+            const Coordinate* coord = multiPoint->getGeometryN(i)->getCoordinate();
+            if(coord == nullptr) {
+                writer->write("EMPTY");
+            }
+            else {
+                appendCoordinate(coord, writer);
+            }
         }
         writer->write(")");
     }
