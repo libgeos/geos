@@ -206,7 +206,7 @@ FacetSequence::computeEnvelope()
 {
     env = Envelope();
     for(size_t i = start; i < end; i++) {
-        env.expandToInclude(pts->getX(i), pts->getY(i));
+        env.expandToInclude(pts->getAt(i));
     }
 }
 
