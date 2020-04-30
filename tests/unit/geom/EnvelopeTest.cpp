@@ -304,5 +304,57 @@ void object::test<10>
 
 }
 
+// Test envelope distance
+template<>
+template<>
+void object::test<11>
+()
+{
+    using geos::geom::Coordinate;
+    using geos::geom::Envelope;
+
+    // b touches a
+    Envelope a{{0, 0}, {5, 5}};
+    Envelope b({5, 5}, {10, 10});
+    ensure_equals(a.distance(b), 0);
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b within a
+    a = Envelope({0, 0}, {10, 10});
+    b = Envelope({3, 3}, {3, 3});
+    ensure_equals(a.distance(b), 0);
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b overlaps a
+    a = Envelope({0, 0}, {5, 5});
+    b = Envelope({2, 2}, {8, 8});
+    ensure_equals(a.distance(b), 0);
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b above a
+    a = Envelope({2, 3}, {5, 7});
+    b = Envelope({0, 10}, {10, 20});
+    ensure_equals(a.distance(b), 3);
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b right of a
+    a = Envelope({2, 3}, {5, 7});
+    b = Envelope({9, 4}, {11, 12});
+    ensure_equals(a.distance(b), 4);
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b above and right of a
+    a = Envelope({0, 0}, {5, 7});
+    b = Envelope({9, 13}, {12, 28});
+    ensure_equals(a.distance(b), Coordinate(5, 7).distance(Coordinate(9, 13)));
+    ensure_equals(a.distance(b), b.distance(a));
+
+    // b below and right of a
+    a = Envelope({10, 11}, {13, 28});
+    b = Envelope({17, 3}, {20, 5});
+    ensure_equals(a.distance(b), Coordinate(13, 11).distance(Coordinate(17, 5)));
+    ensure_equals(a.distance(b), b.distance(a));
+}
+
 } // namespace tut
 

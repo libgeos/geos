@@ -59,7 +59,7 @@ BoundablePair::distance() const
     if (!e1 || !e2) {
         throw util::GEOSException("Can't compute envelope of item in BoundablePair");
     }
-    return e1->distance(e2);
+    return e1->distance(*e2);
 }
 
 double
