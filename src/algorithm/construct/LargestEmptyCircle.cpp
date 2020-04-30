@@ -64,17 +64,17 @@ LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tol
 
 /* public static */
 std::unique_ptr<Point>
-LargestEmptyCircle::getCenter(const Geometry* polygonal, double tolerance)
+LargestEmptyCircle::getCenter(const Geometry* p_obstacles, double p_tolerance)
 {
-    LargestEmptyCircle lec(polygonal, tolerance);
+    LargestEmptyCircle lec(p_obstacles, p_tolerance);
     return lec.getCenter();
 }
 
 /* public static */
 std::unique_ptr<LineString>
-LargestEmptyCircle::getRadiusLine(const Geometry* polygonal, double tolerance)
+LargestEmptyCircle::getRadiusLine(const Geometry* p_obstacles, double p_tolerance)
 {
-    LargestEmptyCircle lec(polygonal, tolerance);
+    LargestEmptyCircle lec(p_obstacles, p_tolerance);
     return lec.getRadiusLine();
 }
 

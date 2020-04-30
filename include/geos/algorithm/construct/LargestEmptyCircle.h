@@ -64,31 +64,31 @@ public:
     /**
     * Creates a new instance of a Largest Empty Circle construction.
     *
-    * @param obstacles a geometry representing the obstacles (points and lines)
-    * @param tolerance the distance tolerance for computing the circle center point
+    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_tolerance the distance tolerance for computing the circle center point
     */
-    LargestEmptyCircle(const geom::Geometry* polygonal, double tolerance);
+    LargestEmptyCircle(const geom::Geometry* p_obstacles, double p_tolerance);
     ~LargestEmptyCircle() = default;
 
     /**
     * Computes the center point of the Largest Empty Circle
     * `within a set of obstacles, up to a given tolerance distance.
     *
-    * @param obstacles a geometry representing the obstacles (points and lines)
-    * @param tolerance the distance tolerance for computing the center point
+    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_tolerance the distance tolerance for computing the center point
     * @return the center point of the Largest Empty Circle
     */
-    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry* polygonal, double tolerance);
+    static std::unique_ptr<geom::Point> getCenter(const geom::Geometry* p_obstacles, double p_tolerance);
 
     /**
     * Computes a radius line of the Largest Empty Circle
     * within a set of obstacles, up to a given distance tolerance.
     *
-    * @param obstacles a geometry representing the obstacles (points and lines)
-    * @param tolerance the distance tolerance for computing the center point
+    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_tolerance the distance tolerance for computing the center point
     * @return a line from the center of the circle to a point on the edge
     */
-    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* polygonal, double tolerance);
+    static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* p_obstacles, double p_tolerance);
 
     std::unique_ptr<geom::Point> getCenter();
     std::unique_ptr<geom::Point> getRadiusPoint();
@@ -119,7 +119,7 @@ private:
     * Their containing cells will be last in the priority queue
     * (but will still end up being tested since they may be refined).
     *
-    * @param p the point to compute the distance for
+    * @param c the point to compute the distance for
     * @return the signed distance to the constraints (negative indicates outside the boundary)
     */
     double distanceToConstraints(const geom::Coordinate& c);
