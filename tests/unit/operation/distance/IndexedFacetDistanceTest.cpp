@@ -93,7 +93,8 @@ struct test_facetdistanceop_data {
         std::vector<geos::geom::Coordinate> coords;
         for (size_t i = 0; i < nvertices; i++) {
             geos::geom::Coordinate c;
-            angle2sincircle(i*360.0/nvertices, radius, amplitude, &c.x, &c.y);
+            double angle = (double)i*360.0/(double)nvertices;
+            angle2sincircle(angle, radius, amplitude, &c.x, &c.y);
             cs.add(c);
         }
 
