@@ -18,7 +18,6 @@
  **********************************************************************/
 
 #include <geos/index/quadtree/IntervalSize.h>
-#include <geos/index/quadtree/DoubleBits.h>
 
 #include <algorithm>
 #include <cmath>
@@ -40,7 +39,9 @@ IntervalSize::isZeroWidth(double mn, double mx)
 
     double maxAbs = max(fabs(mn), fabs(mx));
     double scaledInterval = width / maxAbs;
-    int level = DoubleBits::exponent(scaledInterval);
+    int level;
+    frexp(scaledInterval, &level);
+    level -= 1;
     return level <= MIN_BINARY_EXPONENT;
 }
 

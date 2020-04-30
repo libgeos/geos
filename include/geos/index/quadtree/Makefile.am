@@ -1,14 +1,13 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-SUBDIRS = 
+SUBDIRS =
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 geosdir = $(includedir)/geos/index/quadtree
 
 geos_HEADERS = \
-    DoubleBits.h \
     IntervalSize.h \
     Key.h \
     NodeBase.h \
