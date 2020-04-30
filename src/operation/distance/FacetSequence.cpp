@@ -161,17 +161,24 @@ double
 FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vector<GeometryLocation> *locs) const
 {
     double minDistance = std::numeric_limits<double>::infinity();
-    double dist;
 
     for(size_t i = start; i < end - 1; i++) {
         const Coordinate& p0 = pts->getAt(i);
         const Coordinate& p1 = pts->getAt(i + 1);
 
+        // Avoid calculating distance from zero-length segment
+        if (p0 == p1)
+            continue;
+
         for(size_t j = facetSeq.start; j < facetSeq.end - 1; j++) {
             const Coordinate& q0 = facetSeq.pts->getAt(j);
             const Coordinate& q1 = facetSeq.pts->getAt(j + 1);
 
-            dist = Distance::segmentToSegment(p0, p1, q0, q1);
+            // Avoid calculating distance to zero-length segment
+            if (q0 == q1)
+                continue;
+
+            double dist = Distance::segmentToSegment(p0, p1, q0, q1);
             if(dist <= minDistance) {
                 minDistance = dist;
                 if(locs != nullptr) {
