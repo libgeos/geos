@@ -381,5 +381,81 @@ void object::test<15>
     );
 }
 
+
+// 16 - Read a empty multipoint
+template<>
+template<>
+void object::test<16>
+()
+{
+
+    testInputOutput(
+        // WKT
+        "MULTIPOINT EMPTY",
+        // NDR HEXWKB
+        "010400000000000000",
+        // XDR HEXWKB
+        "000000000400000000"
+    );
+
+}
+
+
+// 17 - Read a empty linestring
+template<>
+template<>
+void object::test<17>
+()
+{
+
+    testInputOutput(
+        // WKT
+        "LINESTRING EMPTY",
+        // NDR HEXWKB
+        "010200000000000000",
+        // XDR HEXWKB
+        "000000000200000000"
+    );
+
+}
+
+
+// 18 - Read a empty polygon
+template<>
+template<>
+void object::test<18>
+()
+{
+
+    testInputOutput(
+        // WKT
+        "POLYGON EMPTY",
+        // NDR HEXWKB
+        "010300000000000000",
+        // XDR HEXWKB
+        "000000000300000000"
+    );
+
+}
+
+// 19 - Read a empty collection
+template<>
+template<>
+void object::test<19>
+()
+{
+
+    testInputOutput(
+        // WKT
+        "GEOMETRYCOLLECTION EMPTY",
+        // NDR HEXWKB
+        "010700000000000000",
+        // XDR HEXWKB
+        "000000000700000000"
+    );
+
+}
+
+
 } // namespace tut
 
