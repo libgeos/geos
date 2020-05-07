@@ -1172,10 +1172,10 @@ extern "C" {
     }
 
     Geometry*
-    GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, const GEOSGeometry* boundary, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::LargestEmptyCircle lec(g, tolerance);
+            geos::algorithm::construct::LargestEmptyCircle lec(g, boundary, tolerance);
             auto g3 = lec.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();

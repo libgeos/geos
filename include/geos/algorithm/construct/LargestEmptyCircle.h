@@ -68,6 +68,7 @@ public:
     * @param p_tolerance the distance tolerance for computing the circle center point
     */
     LargestEmptyCircle(const geom::Geometry* p_obstacles, double p_tolerance);
+    LargestEmptyCircle(const geom::Geometry* p_obstacles, const geom::Geometry* p_boundary, double p_tolerance);
     ~LargestEmptyCircle() = default;
 
     /**

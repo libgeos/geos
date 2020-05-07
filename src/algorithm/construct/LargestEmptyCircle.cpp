@@ -43,15 +43,34 @@ namespace construct { // geos.algorithm.construct
 
 
 LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tolerance)
+    : LargestEmptyCircle(p_obstacles, nullptr, p_tolerance)
+{
+}
+
+LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, const Geometry* p_boundary, double p_tolerance)
     : tolerance(p_tolerance)
     , obstacles(p_obstacles)
     , factory(p_obstacles->getFactory())
-    , boundary(p_obstacles->convexHull())
     , obstacleDistance(p_obstacles)
     , done(false)
 {
-    if (p_obstacles->isEmpty()) {
+    if (!p_boundary)
+    {
+        boundary = p_obstacles->convexHull();
+    }
+    else
+    {
+        boundary = p_boundary->clone();
+    }
+
+    if (obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
+    }
+    if (boundary->isEmpty()) {
+        throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
+    }
+    if (!boundary->covers(obstacles)) {
+        throw util::IllegalArgumentException("Boundary geometry does not cover obstacles");
     }
 
     // if boundary does not enclose an area cannot create a ptLocator
@@ -60,7 +79,6 @@ LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tol
         boundaryDistance.reset(new operation::distance::IndexedFacetDistance(boundary.get()));
     }
 }
-
 
 /* public static */
 std::unique_ptr<Point>

@@ -562,7 +562,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t 
                                                const GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double tolerance);
+extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle_r(GEOSContextHandle_t handle, const GEOSGeometry* g, const GEOSGeometry* boundary, double tolerance);
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that
@@ -1632,7 +1632,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle(const GEOSGeometry* g, 
  * Returns a two-point linestring, with one point at the center of the inscribed circle and the other
  * on the boundary of the inscribed circle.
  */
-extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle(const GEOSGeometry* g, double tolerance);
+extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle(const GEOSGeometry* g, const GEOSGeometry* boundary, double tolerance);
 
 /* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
  * The minimum diameter is defined to be the width of the smallest band that

@@ -93,7 +93,7 @@ void object::test<2>
 {
     geom1_ = GEOSGeomFromWKT("MULTIPOINT ((100 100), (100 200), (200 200), (200 100))");
     ensure(nullptr != geom1_);
-    geom2_ = GEOSLargestEmptyCircle(geom1_, 0.001);
+    geom2_ = GEOSLargestEmptyCircle(geom1_, nullptr, 0.001);
     ensure(nullptr != geom2_);
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);

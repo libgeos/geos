@@ -464,9 +464,9 @@ extern "C" {
     }
 
     Geometry*
-    GEOSLargestEmptyCircle(const Geometry* g, double tolerance)
+    GEOSLargestEmptyCircle(const Geometry* g, const Geometry* boundary, double tolerance)
     {
-        return GEOSLargestEmptyCircle_r(handle, g, tolerance);
+        return GEOSLargestEmptyCircle_r(handle, g, boundary, tolerance);
     }
 
     Geometry*
