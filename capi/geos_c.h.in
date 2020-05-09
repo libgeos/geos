@@ -1020,7 +1020,7 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
     const GEOSGeometry *g,
     const GEOSGeometry *env,
     double tolerance,
-    int onlyEdges);
+    int flags);
 
 /** \see GEOSSegmentIntersection */
 extern int GEOS_DLL GEOSSegmentIntersection_r(
@@ -3768,6 +3768,17 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
 extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
     const GEOSGeometry *g);
 
+/** Change behaviour of \ref GEOSVoronoiDiagram */
+enum GEOSVoronoiFlags
+{
+    /** Return only edges of the Voronoi cells, as a MultiLineString **/
+    GEOS_VORONOI_ONLY_EDGES = 1,
+    /** Preserve order of inputs, such that the nth cell in the result corresponds
+     *  to the nth vertex in the input. If this cannot be done, such as for inputs
+     *  that contain repeated points, \ref GEOSVoronoiDiagram will return NULL. **/
+    GEOS_VORONOI_PRESERVE_ORDER = 2
+};
+
 /**
 * Returns the Voronoi polygons or edges of the vertices of the given geometry.
 *
@@ -3777,9 +3788,7 @@ extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
                    place. This argument can be finicky and is known to cause
                    the algorithm to fail in several cases. If you're using
                    tolerance and getting a failure, try setting it to 0.0.
-* \param onlyEdges whether to return only edges of the voronoi cells.
-*                  If non-zero, the result will be a MultiLineString, otherwise
-*                  it will be a GeometryCollection of Polygons.
+* \param flags A value from the \ref GEOSVoronoiFlags enum
 * \param env clipping envelope for the returned diagram, automatically
 *            determined if env is NULL.
 *            The diagram will be clipped to the larger
@@ -3792,7 +3801,7 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
     const GEOSGeometry *g,
     const GEOSGeometry *env,
     double tolerance,
-    int onlyEdges);
+    int flags);
 
 ///@}
 

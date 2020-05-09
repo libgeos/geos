@@ -22,6 +22,7 @@
 #include <geos/geom/Envelope.h> // for composition
 #include <memory>
 #include <iostream>
+#include <unordered_map>
 
 namespace geos {
 namespace geom {
@@ -67,6 +68,17 @@ public:
      * @param coords a collection of Coordinates.
      */
     void setSites(const geom::CoordinateSequence& coords);
+
+    /** \brief
+     * Specify whether the geometries in the generated diagram should
+     * reflect the order of coordinates in the input. If the generated
+     * diagram cannot be consistent with the input coordinate order
+     * (e.g., for repeated input points that become a single cell) an
+     * exception will be thrown.
+     *
+     * @param isOrdered should the geometries reflect the input order?
+     */
+    void setOrdered(bool isOrdered);
 
     /** \brief
      * Sets the envelope to clip the diagram to.
@@ -115,19 +127,30 @@ public:
      */
     std::unique_ptr<geom::MultiLineString> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
+    void reorderCellsToInput(std::vector<std::unique_ptr<geom::Geometry>> & polys) const;
+
 private:
+    using CoordinateCellMap = std::unordered_map<geom::CoordinateXY, std::unique_ptr<geom::Geometry>, geom::Coordinate::HashCode>;
 
     std::unique_ptr<geom::CoordinateSequence> siteCoords;
     double tolerance;
     std::unique_ptr<quadedge::QuadEdgeSubdivision> subdiv;
     const geom::Envelope* clipEnv; // externally owned
+    const geom::Geometry* inputGeom;
+    const geom::CoordinateSequence* inputSeq;
     geom::Envelope diagramEnv;
+    bool isOrdered;
 
     void create();
+
+    std::size_t getNumInputPoints() const;
 
     static std::unique_ptr<geom::GeometryCollection>
     clipGeometryCollection(std::vector<std::unique_ptr<geom::Geometry>> & geoms, const geom::Envelope& clipEnv);
 
+
+    static void addCellsForCoordinates(CoordinateCellMap& cellMap, const geom::Geometry& g, std::vector<std::unique_ptr<geom::Geometry>> & polys);
+    static void addCellsForCoordinates(CoordinateCellMap& cellMap, const geom::CoordinateSequence& g, std::vector<std::unique_ptr<geom::Geometry>> & polys);
 };
 
 } //namespace geos.triangulate

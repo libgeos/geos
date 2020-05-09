@@ -98,9 +98,28 @@ static void BM_VoronoiFromGeom(benchmark::State& state) {
     }
 }
 
+static void BM_OrderedVoronoiFromGeom(benchmark::State& state) {
+    Envelope e(0, 100, 0, 100);
+    auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+
+    std::size_t i = 0;
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto nPts = static_cast<std::size_t>(state.range(0));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        state.ResumeTiming();
+
+        geos::triangulate::VoronoiDiagramBuilder vdb;
+        vdb.setOrdered(true);
+        vdb.setSites(*sites);
+        auto result = vdb.getDiagram(*gfact);
+    }
+}
+
 BENCHMARK(BM_DelaunayFromSeq)->Range(10, 1e6);
 BENCHMARK(BM_DelaunayFromGeom)->Range(10, 1e6);
 BENCHMARK(BM_VoronoiFromSeq)->Range(10, 1e6);
 BENCHMARK(BM_VoronoiFromGeom)->Range(10, 1e6);
+BENCHMARK(BM_OrderedVoronoiFromGeom)->Range(10, 1e6);
 
 BENCHMARK_MAIN();
