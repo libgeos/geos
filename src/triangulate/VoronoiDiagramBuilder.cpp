@@ -22,6 +22,7 @@
 #include <math.h>
 #include <vector>
 #include <iostream>
+#include <unordered_map>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -42,7 +43,7 @@ using namespace geos::geom;
 
 
 VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
-    tolerance(0.0), clipEnv(nullptr)
+    tolerance(0.0), clipEnv(nullptr), inputGeom(nullptr)
 {
 }
 
@@ -50,6 +51,7 @@ void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
     siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
+    inputGeom = &geom;
 }
 
 void
@@ -107,6 +109,19 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
     create();
 
     auto polys = subdiv->getVoronoiCellPolygons(geomFact);
+
+    if (inputGeom != nullptr &&
+        inputGeom->getGeometryTypeId() == GEOS_MULTIPOINT &&
+        polys.size() == inputGeom->getNumGeometries()) {
+            reorderCellsToInput(polys);
+    }
+
+    for (auto& p : polys) {
+        // Don't let references to Vertex objects
+        // owned by the QuadEdgeSubdivision escape
+        p->setUserData(nullptr);
+    }
+
     auto ret = clipGeometryCollection(polys, diagramEnv);
 
     if (ret == nullptr) {
@@ -116,11 +131,39 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
     return ret;
 }
 
-std::unique_ptr<geom::Geometry>
-VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
-{
-    create();
-    std::unique_ptr<geom::MultiLineString> edges = subdiv->getVoronoiDiagramEdges(geomFact);
+void VoronoiDiagramBuilder::reorderCellsToInput(std::vector<std::unique_ptr<Geometry>> & polys) const {
+    std::unordered_map<Coordinate, std::unique_ptr<Geometry>, Coordinate::HashCode> cellMap;
+    std::vector<std::unique_ptr<Geometry>> reorderedPolys;
+    reorderedPolys.reserve(polys.size());
+
+    auto ngeoms = inputGeom->getNumGeometries();
+
+    for (auto& p : polys) {
+        const Coordinate* c = reinterpret_cast<const Coordinate*>(p->getUserData());
+        cellMap.emplace(*c, std::move(p));
+    }
+
+    for (size_t i = 0; i < ngeoms; i++) {
+        const Coordinate* c = inputGeom->getGeometryN(i)->getCoordinate();
+
+        auto cell = cellMap.find(*c);
+        if (cell == cellMap.end()) {
+            std::stringstream ss;
+            ss << "No cell found for input coordinate " << *c;
+            throw util::GEOSException(ss.str());
+        }
+
+        reorderedPolys.push_back(std::move(cell->second));
+    }
+
+    polys = std::move(reorderedPolys);
+}
+
+    std::unique_ptr<geom::Geometry>
+    VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
+    {
+        create();
+        std::unique_ptr<geom::MultiLineString> edges = subdiv->getVoronoiDiagramEdges(geomFact);
     if(edges->isEmpty()) {
         return std::unique_ptr<Geometry>(edges.release());
     }
@@ -145,10 +188,8 @@ VoronoiDiagramBuilder::clipGeometryCollection(std::vector<std::unique_ptr<Geomet
         // don't clip unless necessary
         if(clipEnv.contains(g->getEnvelopeInternal())) {
             clipped.push_back(std::move(g));
-            // TODO: check if userData is correctly cloned here?
         } else if(clipEnv.intersects(g->getEnvelopeInternal())) {
             auto result = clipPoly->intersection(g.get());
-            result->setUserData(g->getUserData()); // TODO: needed ?
             if (!result->isEmpty()) {
                 clipped.push_back(std::move(result));
             }

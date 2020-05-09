@@ -116,12 +116,15 @@ public:
      */
     std::unique_ptr<geom::Geometry> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
+    void reorderCellsToInput(std::vector<std::unique_ptr<geom::Geometry>> & polys) const;
+
 private:
 
     std::unique_ptr<geom::CoordinateSequence> siteCoords;
     double tolerance;
     std::unique_ptr<quadedge::QuadEdgeSubdivision> subdiv;
     const geom::Envelope* clipEnv; // externally owned
+    const geom::Geometry* inputGeom;
     geom::Envelope diagramEnv;
 
     void create();

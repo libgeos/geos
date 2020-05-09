@@ -558,11 +558,9 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
     auto seq = geomFact.getCoordinateSequenceFactory()->create(std::move(cellPts));
     std::unique_ptr<Geometry> cellPoly = geomFact.createPolygon(geomFact.createLinearRing(std::move(seq)));
 
-    // FIXME why is this returning a pointer to a local variable?
-    Vertex v = startQE->orig();
-    Coordinate c(0, 0);
-    c = v.getCoordinate();
-    cellPoly->setUserData(reinterpret_cast<void*>(&c));
+    const Vertex& v = startQE->orig();
+    const Coordinate& c = v.getCoordinate();
+    cellPoly->setUserData(const_cast<Coordinate*>(&c));
     return cellPoly;
 }
 
@@ -590,11 +588,9 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
     std::unique_ptr<geom::Geometry> cellEdge(
         geomFact.createLineString(new geom::CoordinateArraySequence(std::move(cellPts))));
 
-    // FIXME why is this returning a pointer to a local variable?
-    Vertex v = startQE->orig();
-    Coordinate c(0, 0);
-    c = v.getCoordinate();
-    cellEdge->setUserData(reinterpret_cast<void*>(&c));
+    const Vertex& v = startQE->orig();
+    const Coordinate& c = v.getCoordinate();
+    cellEdge->setUserData(const_cast<Coordinate*>(&c));
     return cellEdge;
 }
 

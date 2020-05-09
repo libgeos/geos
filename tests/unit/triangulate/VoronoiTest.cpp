@@ -73,6 +73,13 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
     builder.setTolerance(tolerance);
     results = builder.getDiagram(geomFact);
 
+    // Check ordering for MultiPoint inputs with non-repeating points
+    if (sites->getGeometryTypeId() == GEOS_MULTIPOINT && sites->getNumGeometries() == results->getNumGeometries()) {
+        for (size_t i = 0; i < sites->getNumGeometries(); i++) {
+            ensure( results->getGeometryN(i)->contains(sites->getGeometryN(i)) );
+        }
+    }
+
     results->normalize();
     expected->normalize();
 
@@ -231,6 +238,25 @@ void object::test<10>
         "GEOMETRYCOLLECTION EMPTY";
 
     runVoronoi(wkt, expected, 100);
+}
+
+//11. Polygon order reflects component order in input MultiPoint
+template<>
+template<>
+void object::test<11>
+()
+{
+    const char *wkt1 = "MULTIPOINT ((280 300), (420 330), (380 230), (320 160))";
+    const char *wkt2 = "MULTIPOINT ((280 300), (380 230), (420 330), (320 160))";
+    const char *wkt3 = "MULTIPOINT ((320 160), (280 300), (380 230), (420 330))";
+
+    // We check result component order independently of how it's specified in WKT,
+    // so the three input arrangements can all use the same expected value.
+    const char *expected =
+            "GEOMETRYCOLLECTION (POLYGON ((110 175.71428571428572, 110 500, 310.35714285714283 500, 353.515625 298.59375, 306.875 231.96428571428572, 110 175.71428571428572)), POLYGON ((590 204, 590 -10, 589.1666666666666 -10, 306.875 231.96428571428572, 353.515625 298.59375, 590 204)), POLYGON ((110 -10, 110 175.71428571428572, 306.875 231.96428571428572, 589.1666666666666 -10, 110 -10)), POLYGON ((310.35714285714283 500, 590 500, 590 204, 353.515625 298.59375, 310.35714285714283 500)))";
+    runVoronoi(wkt1, expected, 0);
+    runVoronoi(wkt2, expected, 0);
+    runVoronoi(wkt3, expected, 0);
 }
 
 } // namespace tut
