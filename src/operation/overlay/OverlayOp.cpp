@@ -729,6 +729,23 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     const Envelope* env = nullptr;
     const Envelope* env0 = getArgGeometry(0)->getEnvelopeInternal();
     const Envelope* env1 = getArgGeometry(1)->getEnvelopeInternal();
+
+    if (opCode == opINTERSECTION)
+    {
+        const Geometry* geom0 = getArgGeometry(0);
+        const Geometry* geom1 = getArgGeometry(1);
+        if (geom0->isRectangle() && env0->contains(env1))
+        {
+            resultGeom = geom1->clone().release();
+            return;
+        }
+        if (geom1->isRectangle() && env1->contains(env0))
+        {
+            resultGeom = geom0->clone().release();
+            return;
+        }
+    }
+
     Envelope opEnv;
     if(resultPrecisionModel->isFloating()) {
         // Envelope-based optimization only works in floating precision
