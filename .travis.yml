@@ -20,6 +20,19 @@ matrix:
   fast_finish: true
   include:
     - os: linux
+      arch: s390x
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-7','ccache','doxygen','git2cl']
+      env:
+        - E="TOOL=autotools && BUILD_TYPE=Release && CXX=g++-7 && CC=gcc-7"
+
+    - os: linux
       cache:
         apt: true
         directories:
