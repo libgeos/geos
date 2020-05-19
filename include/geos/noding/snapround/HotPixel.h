@@ -25,6 +25,11 @@
 
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for unique_ptr
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/io/WKTWriter.h>
+
+
+#include <array>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -63,11 +68,16 @@ class GEOS_DLL HotPixel {
 
 private:
 
+    static constexpr double SAFE_ENV_EXPANSION_FACTOR = 0.75;
+    static constexpr size_t UPPER_RIGHT = 0;
+    static constexpr size_t UPPER_LEFT  = 1;
+    static constexpr size_t LOWER_LEFT  = 2;
+    static constexpr size_t LOWER_RIGHT = 3;
+
     algorithm::LineIntersector& li;
 
-    geom::Coordinate pt;
+    geom::Coordinate ptHot;
     const geom::Coordinate& originalPt;
-    geom::Coordinate ptScaled;
 
     mutable geom::Coordinate p0Scaled;
     mutable geom::Coordinate p1Scaled;
@@ -79,6 +89,8 @@ private:
     double miny;
     double maxy;
 
+    int snapCount;
+
     /** \brief
      * The corners of the hot pixel
      *
@@ -86,17 +98,20 @@ private:
      *  1 0
      *  2 3
      */
-    std::vector<geom::Coordinate> corner;
+    std::array<geom::Coordinate, 4> corner;
 
     /// Owned by this class, constructed on demand
     mutable std::unique_ptr<geom::Envelope> safeEnv;
 
     void initCorners(const geom::Coordinate& pt);
 
-    double scale(double val) const;
+    double scaleRound(double val) const;
+    geom::Coordinate scaleRound(const geom::Coordinate& p) const;
 
     void copyScaled(const geom::Coordinate& p,
                     geom::Coordinate& pScaled) const;
+
+    double scale(double val) const;
 
     /** \brief
      * Tests whether the segment p0-p1 intersects the hot pixel
@@ -119,14 +134,13 @@ private:
      * @param p1
      * @return
      */
-    bool intersectsToleranceSquare(const geom::Coordinate& p0,
+    bool intersectsToleranceSquareScaled(const geom::Coordinate& p0,
                                    const geom::Coordinate& p1) const;
 
 
-    /** \brief
+    /**
      * Test whether the given segment intersects
      * the closure of this hot pixel.
-     *
      * This is NOT the test used in the standard snap-rounding
      * algorithm, which uses the partially closed tolerance square
      * instead.
@@ -134,14 +148,22 @@ private:
      *
      * @param p0 the start point of a line segment
      * @param p1 the end point of a line segment
-     * @return <code>true</code> if the segment intersects the
-     *         closure of the pixel's tolerance square
+     * @return <code>true</code> if the segment intersects the closure of the pixel's tolerance square
      */
     bool intersectsPixelClosure(const geom::Coordinate& p0,
                                 const geom::Coordinate& p1);
 
     bool intersectsScaled(const geom::Coordinate& p0,
                           const geom::Coordinate& p1) const;
+
+    /**
+     * Tests if a scaled coordinate snaps (rounds) to this pixel.
+     *
+     * @param p the point to test
+     * @return true if the coordinate snaps to this pixel
+     */
+    bool equalsPointScaled(const geom::Coordinate& p) const;
+
 
     // Declare type as noncopyable
     HotPixel(const HotPixel& other) = delete;
@@ -200,6 +222,11 @@ public:
      */
     bool addSnappedNode(NodedSegmentString& segStr, std::size_t segIndex);
 
+    void incrementSnapCount();
+    int getSnapCount();
+    geom::Coordinate getCoordinate();
+
+    std::ostream& operator<< (std::ostream& os);
 };
 
 } // namespace geos::noding::snapround

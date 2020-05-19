@@ -30,16 +30,30 @@ namespace snapround { // geos::noding::snapround
 INLINE double
 HotPixel::scale(double val) const
 {
+    return val * scaleFactor;
+}
+
+INLINE double
+HotPixel::scaleRound(double val) const
+{
     // Math.round
     //return round(val*scaleFactor);
     return util::round(val * scaleFactor);
 }
 
+INLINE geom::Coordinate
+HotPixel::scaleRound(const geom::Coordinate& p) const
+{
+    geom::Coordinate pScaled;
+    copyScaled(p, pScaled);
+    return pScaled;
+}
+
 INLINE void
 HotPixel::copyScaled(const geom::Coordinate& p, geom::Coordinate& pScaled) const
 {
-    pScaled.x = scale(p.x);
-    pScaled.y = scale(p.y);
+    pScaled.x = scaleRound(p.x);
+    pScaled.y = scaleRound(p.y);
 }
 
 } // namespace geos::noding::snapround

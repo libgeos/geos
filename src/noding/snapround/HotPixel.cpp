@@ -41,30 +41,54 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
                    LineIntersector& newLi)
     :
     li(newLi),
-    pt(newPt),
+    ptHot(newPt),
     originalPt(newPt),
-    scaleFactor(newScaleFactor)
+    scaleFactor(newScaleFactor),
+    snapCount(0)
 {
-    if(scaleFactor != 1.0) {
-        assert(scaleFactor != 0);   // or should it be an IllegalArgumentException ?
-        pt.x = scale(pt.x);
-        pt.y = scale(pt.y);
+    if(scaleFactor <= 0.0) {
+        throw util::IllegalArgumentException("Scale factor must be non-zero");
     }
-    initCorners(pt);
+    if(scaleFactor != 1.0) {
+        ptHot.x = scaleRound(newPt.x);
+        ptHot.y = scaleRound(newPt.y);
+    }
+    initCorners(ptHot);
 }
 
+/*public*/
+void
+HotPixel::incrementSnapCount()
+{
+    snapCount++;
+}
+
+/*public*/
+int
+HotPixel::getSnapCount()
+{
+    return snapCount;
+}
+
+/*public*/
+geom::Coordinate
+HotPixel::getCoordinate()
+{
+    return originalPt;
+}
+
+/*public*/
 const Envelope&
 HotPixel::getSafeEnvelope() const
 {
-    static const double SAFE_ENV_EXPANSION_FACTOR = 0.75;
-
     if(safeEnv.get() == nullptr) {
         double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / scaleFactor;
-        safeEnv = unique_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
-                                       originalPt.x + safeTolerance,
-                                       originalPt.y - safeTolerance,
-                                       originalPt.y + safeTolerance
-                                                   ));
+        safeEnv = unique_ptr<Envelope>(new Envelope(
+                        originalPt.x - safeTolerance,
+                        originalPt.x + safeTolerance,
+                        originalPt.y - safeTolerance,
+                        originalPt.y + safeTolerance
+                    ));
     }
     return *safeEnv;
 }
@@ -79,13 +103,13 @@ HotPixel::initCorners(const Coordinate& p_pt)
     miny = p_pt.y - tolerance;
     maxy = p_pt.y + tolerance;
 
-    corner.resize(4);
-    corner[0] = Coordinate(maxx, maxy);
-    corner[1] = Coordinate(minx, maxy);
-    corner[2] = Coordinate(minx, miny);
-    corner[3] = Coordinate(maxx, miny);
+    corner[UPPER_RIGHT] = Coordinate(maxx, maxy);
+    corner[UPPER_LEFT] = Coordinate(minx, maxy);
+    corner[LOWER_LEFT] = Coordinate(minx, miny);
+    corner[LOWER_RIGHT] = Coordinate(maxx, miny);
 }
 
+/*public*/
 bool
 HotPixel::intersects(const Coordinate& p0,
                      const Coordinate& p1) const
@@ -120,7 +144,7 @@ HotPixel::intersectsScaled(const Coordinate& p0,
         return false;
     }
 
-    bool p_intersects = intersectsToleranceSquare(p0, p1);
+    bool p_intersects = intersectsToleranceSquareScaled(p0, p1);
 
     // Found bad envelope test
     assert(!(isOutsidePixelEnv && p_intersects));
@@ -130,70 +154,82 @@ HotPixel::intersectsScaled(const Coordinate& p0,
 
 /*private*/
 bool
-HotPixel::intersectsToleranceSquare(const Coordinate& p0,
+HotPixel::intersectsToleranceSquareScaled(const Coordinate& p0,
                                     const Coordinate& p1) const
 {
-    bool intersectsLeft = false;
+    bool intersectsTop = false;
     bool intersectsBottom = false;
 
-    li.computeIntersection(p0, p1, corner[0], corner[1]);
-    if(li.isProper()) {
-        return true;
-    }
+    li.computeIntersection(p0, p1, corner[UPPER_LEFT], corner[LOWER_LEFT]);
+    if(li.isProper()) return true;
 
-    li.computeIntersection(p0, p1, corner[1], corner[2]);
-    if(li.isProper()) {
-        return true;
-    }
+    li.computeIntersection(p0, p1, corner[LOWER_RIGHT], corner[UPPER_RIGHT]);
+    if(li.isProper()) return true;
+
+    li.computeIntersection(p0, p1, corner[UPPER_RIGHT], corner[UPPER_LEFT]);
+    if(li.isProper()) return true;
     if(li.hasIntersection()) {
-        intersectsLeft = true;
+        intersectsTop = true;
     }
 
-    li.computeIntersection(p0, p1, corner[2], corner[3]);
-    if(li.isProper()) {
-        return true;
-    }
+    li.computeIntersection(p0, p1, corner[LOWER_LEFT], corner[LOWER_RIGHT]);
+    if(li.isProper()) return true;
     if(li.hasIntersection()) {
         intersectsBottom = true;
     }
 
-    li.computeIntersection(p0, p1, corner[3], corner[0]);
-    if(li.isProper()) {
+    /**
+     * Check for an edge crossing pixel exactly on a diagonal.
+     * The code handles both diagonals.
+     */
+    if(intersectsTop && intersectsBottom) {
         return true;
     }
 
-    if(intersectsLeft && intersectsBottom) {
-        return true;
-    }
-
-    if(p0.equals2D(pt)) {
-        return true;
-    }
-    if(p1.equals2D(pt)) {
-        return true;
-    }
+    /**
+     * Tests if either endpoint snaps to this pixel.
+     * This is needed because a (un-rounded) segment may
+     * terminate in a hot pixel without crossing a pixel edge interior
+     * (e.g. it may enter through a corner)
+     */
+    if(equalsPointScaled(p0)) return true;
+    if(equalsPointScaled(p1)) return true;
 
     return false;
 }
+
+/**
+* Tests if a scaled coordinate snaps (rounds) to this pixel.
+*
+* @param p the point to test
+* @return true if the coordinate snaps to this pixel
+*/
+bool
+HotPixel::equalsPointScaled(const geom::Coordinate& p) const
+{
+    return util::round(p.x) == ptHot.x
+        && util::round(p.y) == ptHot.y;
+}
+
 
 /*private*/
 bool
 HotPixel::intersectsPixelClosure(const Coordinate& p0,
                                  const Coordinate& p1)
 {
-    li.computeIntersection(p0, p1, corner[0], corner[1]);
+    li.computeIntersection(p0, p1, corner[UPPER_RIGHT], corner[UPPER_LEFT]);
     if(li.hasIntersection()) {
         return true;
     }
-    li.computeIntersection(p0, p1, corner[1], corner[2]);
+    li.computeIntersection(p0, p1, corner[UPPER_LEFT], corner[LOWER_LEFT]);
     if(li.hasIntersection()) {
         return true;
     }
-    li.computeIntersection(p0, p1, corner[2], corner[3]);
+    li.computeIntersection(p0, p1, corner[LOWER_LEFT], corner[LOWER_RIGHT]);
     if(li.hasIntersection()) {
         return true;
     }
-    li.computeIntersection(p0, p1, corner[3], corner[0]);
+    li.computeIntersection(p0, p1, corner[LOWER_RIGHT], corner[UPPER_RIGHT]);
     if(li.hasIntersection()) {
         return true;
     }
@@ -213,6 +249,13 @@ HotPixel::addSnappedNode(NodedSegmentString& segStr, size_t segIndex)
         return true;
     }
     return false;
+}
+
+std::ostream&
+HotPixel::operator<< (std::ostream& os)
+{
+    os << "HP(" << io::WKTWriter::toPoint(ptHot) << ")";
+    return os;
 }
 
 
