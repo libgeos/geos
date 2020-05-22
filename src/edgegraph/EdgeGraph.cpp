@@ -36,9 +36,9 @@ EdgeGraph::createEdge(const Coordinate& orig)
     // TODO: Overhead of many heap allocations might be
     // a problem. Replace EdgeGraph::edges with a
     // pool of some kind?
-    edges.emplace_back(new HalfEdge(orig));
-    return edges.back().get();
-#endif
+    edges.emplace_back(orig);
+
+    return &(edges.back());
 }
 
 /*private*/

@@ -61,7 +61,7 @@ private:
 
     static constexpr size_t HalfEdgeArraySize = 32;
 
-    std::vector<std::unique_ptr<HalfEdge>> edges;
+    std::deque<HalfEdge> edges;
     std::map<geom::Coordinate, HalfEdge*> vertexMap;
 
 
