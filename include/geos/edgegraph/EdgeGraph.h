@@ -61,22 +61,8 @@ private:
 
     static constexpr size_t HalfEdgeArraySize = 32;
 
-    /*
-    * This ungainly structure is so we can heap allocate
-    * a big block of static space in the array,
-    * all our HalfEdge pointers can point to the
-    * elements of those arrays without worrying about
-    * them moving around, since the arrays will
-    * never be reallocated
-    */
-#ifdef EDGEGRAPH_HEAPHACK
-    std::vector<std::unique_ptr<std::array<HalfEdge, HalfEdgeArraySize>>> edges;
-    size_t edgeCount, edgeArrayCount;
-#else
     std::vector<std::unique_ptr<HalfEdge>> edges;
-#endif
     std::map<geom::Coordinate, HalfEdge*> vertexMap;
-    // std::vector<std::unique_ptr<HalfEdge>> edges;
 
 
     HalfEdge* create(const geom::Coordinate& p0, const geom::Coordinate& p1);

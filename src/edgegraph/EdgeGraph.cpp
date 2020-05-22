@@ -33,35 +33,9 @@ namespace edgegraph { // geos.edgegraph
 HalfEdge*
 EdgeGraph::createEdge(const Coordinate& orig)
 {
-#ifdef EDGEGRAPH_HEAPHACK
-    // We avoid allocating lots of tiny HalfEdge objects
-    // by allocating one big array on the heap, and adding
-    // new arrays as necessary. This seems like a hack.
-    if (edges.empty()) {
-        edges.emplace_back(new std::array<HalfEdge, HalfEdgeArraySize>);
-    }
-
-    // Take a reference to the next slot in our array.
-    // This seems ugly, but the size of the array is fixed
-    // so it should work.
-    HalfEdge* he = &((*edges[edgeArrayCount])[edgeCount++]);
-
-    // Dereference the pointer and copy in the new value.
-    *he = HalfEdge(orig);
-
-    // Out of space on this array, allocate a new one
-    // and update the counters.
-    if (edgeCount == HalfEdgeArraySize) {
-        edges.emplace_back(new std::array<HalfEdge, HalfEdgeArraySize>);
-        edgeArrayCount++;
-        edgeCount = 0;
-    }
-    return he;
-
-#else
-    // Original Java-like return of heap-allocated pointer...
-    // Stored in array of unique_ptr for auto-release at
-    // end of EdgeGraph lifecycle.
+    // TODO: Overhead of many heap allocations might be
+    // a problem. Replace EdgeGraph::edges with a
+    // pool of some kind?
     edges.emplace_back(new HalfEdge(orig));
     return edges.back().get();
 #endif
