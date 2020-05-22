@@ -1,8 +1,9 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 SUBDIRS = \
     algorithm \
+    edgegraph \
     geom \
     index \
     io \
@@ -35,6 +36,7 @@ libgeos_la_SOURCES = \
 
 libgeos_la_LIBADD = \
     algorithm/libalgorithm.la \
+    edgegraph/libedgegraph.la \
     geom/libgeom.la \
     geomgraph/libgeomgraph.la \
     index/libindex.la \
@@ -47,4 +49,4 @@ libgeos_la_LIBADD = \
     precision/libprecision.la \
     simplify/libsimplify.la \
     triangulate/libtriangulate.la \
-    util/libutil.la  
+    util/libutil.la
