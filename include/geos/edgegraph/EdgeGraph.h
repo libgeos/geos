@@ -59,11 +59,8 @@ class GEOS_DLL EdgeGraph {
 
 private:
 
-    static constexpr size_t HalfEdgeArraySize = 32;
-
     std::deque<HalfEdge> edges;
     std::map<geom::Coordinate, HalfEdge*> vertexMap;
-
 
     HalfEdge* create(const geom::Coordinate& p0, const geom::Coordinate& p1);
 
