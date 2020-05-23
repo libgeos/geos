@@ -20,6 +20,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #ifndef GEOS_INLINE
 # include "geos/noding/snapround/HotPixel.inl"
@@ -160,22 +161,40 @@ HotPixel::intersectsToleranceSquareScaled(const Coordinate& p0,
     bool intersectsTop = false;
     bool intersectsBottom = false;
 
+    // check intersection with pixel left edge
     li.computeIntersection(p0, p1, corner[UPPER_LEFT], corner[LOWER_LEFT]);
     if(li.isProper()) return true;
 
+    // check intersection with pixel right edge
     li.computeIntersection(p0, p1, corner[LOWER_RIGHT], corner[UPPER_RIGHT]);
     if(li.isProper()) return true;
 
+    // check intersection with pixel top edge
     li.computeIntersection(p0, p1, corner[UPPER_RIGHT], corner[UPPER_LEFT]);
     if(li.isProper()) return true;
     if(li.hasIntersection()) {
         intersectsTop = true;
     }
 
+    // check intersection with pixel bottom edge
     li.computeIntersection(p0, p1, corner[LOWER_LEFT], corner[LOWER_RIGHT]);
     if(li.isProper()) return true;
     if(li.hasIntersection()) {
         intersectsBottom = true;
+    }
+
+    // check intersection of vertical segment overlapping pixel left edge
+    if (p0.x == corner[LOWER_LEFT].x && p1.x == corner[LOWER_LEFT].x) {
+        if (p0.y < corner[UPPER_LEFT].y || p1.y < corner[UPPER_LEFT].y) {
+            return true;
+        }
+    }
+
+    // check intersection of horizontal segment overlapping pixel bottome edge
+    if (p0.y == corner[LOWER_LEFT].y && p1.y == corner[LOWER_LEFT].y) {
+        if (p0.x < corner[LOWER_RIGHT].x || p1.x < corner[LOWER_RIGHT].x) {
+            return true;
+        }
     }
 
     /**

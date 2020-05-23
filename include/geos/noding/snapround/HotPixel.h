@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_H
-#define GEOS_NODING_SNAPROUND_HOTPIXEL_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -25,7 +24,6 @@
 
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for unique_ptr
-#include <geos/util/IllegalArgumentException.h>
 #include <geos/io/WKTWriter.h>
 
 
@@ -241,4 +239,3 @@ public:
 # include "geos/noding/snapround/HotPixel.inl"
 #endif
 
-#endif // GEOS_NODING_SNAPROUND_HOTPIXEL_H

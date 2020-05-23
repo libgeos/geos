@@ -14,7 +14,6 @@
 
 #include <geos/noding/snapround/HotPixelIndex.h>
 
-
 #include <algorithm> // for std::min and std::max
 #include <cassert>
 #include <memory>
@@ -28,7 +27,7 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 /*public*/
-HotPixelIndex::HotPixelIndex(const geom::PrecisionModel* p_pm)
+HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
     :
     pm(p_pm),
     li(p_pm),
@@ -38,34 +37,44 @@ HotPixelIndex::HotPixelIndex(const geom::PrecisionModel* p_pm)
 }
 
 /*public*/
-HotPixelIndex::~HotPixelIndex()
+const HotPixel*
+HotPixelIndex::add(const Coordinate& pt)
 {
-    // Free all the HotPixel* in the map
-    auto it = hotPixelMap.begin();
-    while(it != hotPixelMap.end())
-    {
-        delete it->second;
-        it++;
+    Coordinate ptRound = round(pt);
+
+    /* Is the HotPixel already in the map? */
+    auto hpSearch = hotPixelMap.find(ptRound);
+    if (hpSearch != hotPixelMap.end()) {
+        return &(hpSearch->second);
     }
+
+    /* Carefully instantiate the key and value into the map */
+    hotPixelMap.emplace(std::piecewise_construct,
+                        std::forward_as_tuple(ptRound),
+                        std::forward_as_tuple(ptRound, scaleFactor, li));
+
+    /* So we can pull a pointer back off the map */
+    const HotPixel* ptrHp;
+    auto hpSearch2 = hotPixelMap.find(ptRound);
+    if (hpSearch2 != hotPixelMap.end()) {
+        ptrHp = &(hpSearch2->second);
+    }
+
+    /* And use that pointer to add to the STRtree */
+    const Envelope& hpEnv = ptrHp->getSafeEnvelope();
+    index->insert(&hpEnv, (void*)ptrHp);
+
+    /* And return that pointer to the caller */
+    return ptrHp;
 }
 
 /*public*/
-const HotPixel*
-HotPixelIndex::add(const Coordinate& p)
+void
+HotPixelIndex::add(const std::vector<Coordinate> pts)
 {
-    Coordinate pRound = round(p);
-
-    /* Is the HotPixel already in the map? */
-    auto hpSearch = hotPixelMap.find(pRound);
-    if (hpSearch != hotPixelMap.end()) {
-        return hpSearch->second;
+    for (auto pt: pts) {
+        add(pt);
     }
-
-    HotPixel *hp = new HotPixel(pRound, scaleFactor, li);
-    const Envelope& hpEnv = hp->getSafeEnvelope();
-    hotPixelMap.insert(std::make_pair(pRound, hp));
-    index->insert(&hpEnv, hp);
-    return hp;
 }
 
 /*private*/
@@ -78,22 +87,12 @@ HotPixelIndex::round(const Coordinate& pt)
 }
 
 /*public*/
-std::vector<const HotPixel*>
-HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1)
+void
+HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::ItemVisitor& visitor)
 {
     Envelope queryEnv(p0, p1);
-    std::vector<void*> voidHotPixels;
-    std::vector<const HotPixel*> hotPixels;
-    index->query(&queryEnv, voidHotPixels);
-    // TODO: replace with visitor or some magic cast to avoid this
-    // stupid casting step?
-    hotPixels.reserve(voidHotPixels.size());
-    for (auto voidhp: voidHotPixels) {
-        hotPixels.push_back(static_cast<const HotPixel*>(voidhp));
-    }
-    return hotPixels;
+    index->query(&queryEnv, visitor);
 }
-
 
 
 } // namespace geos.noding.snapround
