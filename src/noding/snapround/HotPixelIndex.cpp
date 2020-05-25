@@ -43,26 +43,26 @@ HotPixelIndex::add(const Coordinate& pt)
     Coordinate ptRound = round(pt);
 
     /* Is the HotPixel already in the map? */
-    auto hpSearch = hotPixelMap.find(ptRound);
-    if (hpSearch != hotPixelMap.end()) {
-        return &(hpSearch->second);
+    auto itSearch = hotPixelMap.find(ptRound);
+    if (itSearch != hotPixelMap.end()) {
+        return &(itSearch->second);
     }
 
     /* Carefully instantiate the key and value into the map */
-    hotPixelMap.emplace(std::piecewise_construct,
-                        std::forward_as_tuple(ptRound),
-                        std::forward_as_tuple(ptRound, scaleFactor, li));
+    auto rsltEmplace = hotPixelMap.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(ptRound),
+                    std::forward_as_tuple(ptRound, scaleFactor));
 
-    /* So we can pull a pointer back off the map */
-    const HotPixel* ptrHp;
-    auto hpSearch2 = hotPixelMap.find(ptRound);
-    if (hpSearch2 != hotPixelMap.end()) {
-        ptrHp = &(hpSearch2->second);
+    /* Read inserted HotPixel back. */
+    /* std::map.emplace() returns std::pair<iterator, bool> */
+    auto itEmplace = rsltEmplace.first;
+    auto inserted = rsltEmplace.second;
+    const HotPixel *ptrHp = &(itEmplace->second);
+
+    if (inserted) {
+        const Envelope& hpEnv = ptrHp->getSafeEnvelope();
+        index->insert(&hpEnv, (void*)ptrHp);
     }
-
-    /* And use that pointer to add to the STRtree */
-    const Envelope& hpEnv = ptrHp->getSafeEnvelope();
-    index->insert(&hpEnv, (void*)ptrHp);
 
     /* And return that pointer to the caller */
     return ptrHp;

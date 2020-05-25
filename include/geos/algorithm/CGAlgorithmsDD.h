@@ -67,6 +67,12 @@ public:
     static int orientationIndex(const geom::Coordinate& p1,
                                 const geom::Coordinate& p2,
                                 const geom::Coordinate& q);
+
+
+    static int orientationIndex(double p1x, double p1y,
+                                double p2x, double p2y,
+                                double qx,  double qy);
+
     /** \brief
      * A filter for computing the orientation index of three coordinates.
      *

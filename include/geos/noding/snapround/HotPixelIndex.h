@@ -67,6 +67,7 @@ private:
     const geom::PrecisionModel* pm;
     algorithm::LineIntersector li;
     double scaleFactor;
+    /* TODO, check this to a KDtree */
     std::unique_ptr<geos::index::strtree::STRtree> index;
     std::map<geom::Coordinate, HotPixel> hotPixelMap;
 

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_INL
-#define GEOS_NODING_SNAPROUND_HOTPIXEL_INL
+#pragma once
 
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/util/math.h>
@@ -27,38 +26,28 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
-INLINE double
-HotPixel::scale(double val) const
-{
-    return val * scaleFactor;
-}
 
 INLINE double
 HotPixel::scaleRound(double val) const
 {
-    // Math.round
-    //return round(val*scaleFactor);
+    // Use Java-compatible round implementation
     return util::round(val * scaleFactor);
 }
 
 INLINE geom::Coordinate
 HotPixel::scaleRound(const geom::Coordinate& p) const
 {
-    geom::Coordinate pScaled;
-    copyScaled(p, pScaled);
-    return pScaled;
+    return geom::Coordinate(scaleRound(p.x), scaleRound(p.y));
 }
 
-INLINE void
-HotPixel::copyScaled(const geom::Coordinate& p, geom::Coordinate& pScaled) const
+INLINE double
+HotPixel::scale(double val) const
 {
-    pScaled.x = scaleRound(p.x);
-    pScaled.y = scaleRound(p.y);
+    return val * scaleFactor;
 }
+
 
 } // namespace geos::noding::snapround
 } // namespace geos::noding
 } // namespace geos
-
-#endif // GEOS_NODING_SNAPROUND_HOTPIXEL_INL
 

@@ -55,6 +55,15 @@ OrientationDD(const DD &dd)
 namespace geos {
 namespace algorithm { // geos::algorithm
 
+
+int
+CGAlgorithmsDD::orientationIndex(double p1x, double p1y,
+                                 double p2x, double p2y,
+                                 double qx,  double qy)
+{
+    return orientationIndex(Coordinate(p1x, p1y), Coordinate(p2x, p2y), Coordinate(qx, qy));
+}
+
 int
 CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                  const Coordinate& p2,
