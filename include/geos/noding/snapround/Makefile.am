@@ -13,4 +13,5 @@ geos_HEADERS = \
     HotPixelIndex.h \
     MCIndexPointSnapper.h \
     MCIndexSnapRounder.h \
-    SimpleSnapRounder.h
+    SimpleSnapRounder.h \
+    SnapIntersectionAdder.h
