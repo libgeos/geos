@@ -44,9 +44,8 @@ void object::test<1>
 ()
 {
 
-    LineIntersector li;
     Coordinate pt(10, 10);
-    HotPixel hp(pt, 1, li);
+    HotPixel hp(pt, 1);
 
     ensure_equals(hp.getCoordinate(), pt);
 
@@ -73,9 +72,8 @@ void object::test<2>
 ()
 {
 
-    LineIntersector li;
     Coordinate pt(10, 10);
-    HotPixel hp(pt, 10, li);
+    HotPixel hp(pt, 10);
 
     ensure_equals(hp.getCoordinate(), pt);
 
@@ -105,8 +103,7 @@ void object::test<3>
     Coordinate p3(1, 1);
 
     PrecisionModel pm(scale);
-    LineIntersector li(&pm);
-    HotPixel hp(p3, scale, li);
+    HotPixel hp(p3, scale);
 
     ensure(hp.intersects(p1, p2));
 
