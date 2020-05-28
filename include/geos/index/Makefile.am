@@ -7,6 +7,7 @@ SUBDIRS = \
     strtree \
     quadtree \
     bintree \
+    kdtree \
     chain
 
 EXTRA_DIST = 

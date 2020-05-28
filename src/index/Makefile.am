@@ -3,6 +3,7 @@
 #
 SUBDIRS = \
 	bintree \
+	kdtree \
 	chain \
 	intervalrtree \
 	quadtree \
@@ -15,6 +16,7 @@ libindex_la_SOURCES =
 
 libindex_la_LIBADD = \
 	bintree/libindexbintree.la \
+	kdtree/libindexkdtree.la \
 	chain/libindexchain.la \
 	intervalrtree/libintervalrtree.la \
 	quadtree/libindexquadtree.la \

@@ -387,6 +387,7 @@ AC_OUTPUT([
 	include/geos/geomgraph/index/Makefile
 	include/geos/index/Makefile
 	include/geos/index/bintree/Makefile
+	include/geos/index/kdtree/Makefile
 	include/geos/index/chain/Makefile
 	include/geos/index/intervalrtree/Makefile
 	include/geos/index/quadtree/Makefile
@@ -420,6 +421,7 @@ AC_OUTPUT([
 	include/geos/version.h
 	src/index/Makefile
 	src/index/bintree/Makefile
+	src/index/kdtree/Makefile
 	src/index/chain/Makefile
 	src/index/intervalrtree/Makefile
 	src/index/quadtree/Makefile
