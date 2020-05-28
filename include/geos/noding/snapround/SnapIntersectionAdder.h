@@ -10,10 +10,6 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: noding/snapround/SimpleSnapRounder.java r320 (JTS-1.12)
- *
  **********************************************************************/
 
 #pragma once
@@ -28,6 +24,7 @@
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
 #include <geos/geom/PrecisionModel.h> // for inlines (should drop)
+#include <geos/noding/SegmentIntersector.h>
 
 
 // Forward declarations
@@ -52,10 +49,10 @@ class GEOS_DLL SnapIntersectionAdder: public SegmentIntersector { // implements 
 
 private:
 
-    constexpr int NEARNESS_FACTOR = 100;
+    static constexpr int NEARNESS_FACTOR = 100;
 
     algorithm::LineIntersector li;
-    std::array<geom::Coordinate> intersections;
+    std::unique_ptr<std::vector<geom::Coordinate>> intersections;
     geom::PrecisionModel& pm;
     double nearnessTol;
 
@@ -78,9 +75,9 @@ private:
 
 public:
 
-    SnapIntersectionAdder::SnapIntersectionAdder(geom::PrecisionModel& newPm);
+    SnapIntersectionAdder(geom::PrecisionModel& newPm);
 
-    const std::vector<geom::Coordinate>& getIntersections() { return intersections; };
+    std::unique_ptr<std::vector<geom::Coordinate>> getIntersections() { return std::move(intersections); };
 
     /**
     * This method is called by clients

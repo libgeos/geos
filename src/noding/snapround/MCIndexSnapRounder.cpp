@@ -56,7 +56,7 @@ MCIndexSnapRounder::computeIntersectionSnaps(vector<Coordinate>& snapPts)
             it != itEnd;
             ++it) {
         Coordinate& snapPt = *it;
-        HotPixel hotPixel(snapPt, scaleFactor, li);
+        HotPixel hotPixel(snapPt, scaleFactor);
         pointSnapper->snap(hotPixel);
     }
 }
@@ -67,7 +67,7 @@ MCIndexSnapRounder::computeVertexSnaps(NodedSegmentString* e)
 {
     CoordinateSequence& pts0 = *(e->getCoordinates());
     for(size_t i = 0, n = pts0.size() - 1; i < n; ++i) {
-        HotPixel hotPixel(pts0[i], scaleFactor, li);
+        HotPixel hotPixel(pts0[i], scaleFactor);
         bool isNodeAdded = pointSnapper->snap(hotPixel, e, i);
         // if a node is created for a vertex, that vertex must be noded too
         if(isNodeAdded) {

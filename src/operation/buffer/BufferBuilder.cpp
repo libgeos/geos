@@ -521,11 +521,9 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
      * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(size_t) const:
      * Assertion `pos<vect->size()' failed.
      */
-    //Noder* noder = new snapround::SimpleSnapRounder(*pm);
 
     Noder* noder = new IteratedNoder(pm);
 
-    Noder noder = new SimpleSnapRounder(pm);
     Noder noder = new MCIndexSnapRounder(pm);
     Noder noder = new ScaledNoder(
         new MCIndexSnapRounder(new PrecisionModel(1.0)),

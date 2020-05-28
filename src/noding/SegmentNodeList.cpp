@@ -249,49 +249,81 @@ SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEd
 SegmentString*
 SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 {
-    assert(ei0);
-    assert(ei1);
+    std::unique_ptr<std::vector<Coordinate>> pts(new std::vector<Coordinate>);
+    createSplitEdgePts(ei0, ei1, *pts);
+    return new NodedSegmentString(new CoordinateArraySequence(pts.release()), nullptr);
+}
 
-    size_t npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+
+/*private*/
+void
+SegmentNodeList::createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vector<Coordinate>& pts)
+{
+    int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+
+    // if only two points in split edge they must be the node points
+    if (npts == 2) {
+        pts.emplace_back(ei0->coord);
+        pts.emplace_back(ei1->coord);
+        return;
+    }
 
     const Coordinate& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);
-
-    // if the last intersection point is not equal to the its
-    // segment start pt, add it to the points list as well.
-    // (This check is needed because the distance metric is not
-    // totally reliable!)
-
-    // The check for point equality is 2D only - Z values are ignored
-
-    // Added check for npts being == 2 as in that case NOT using second point
-    // would mean creating a SegmentString with a single point
-    // FIXME: check with mbdavis about this, ie: is it a bug in the caller ?
-    //
-    bool useIntPt1 = npts == 2 || (ei1->isInterior() || ! ei1->coord.equals2D(lastSegStartPt));
-
-    if(! useIntPt1) {
+    /**
+    * If the last intersection point is not equal to the its segment start pt,
+    * add it to the points list as well.
+    * This check is needed because the distance metric is not totally reliable!
+    * Also ensure that the created edge always has at least 2 points.
+    * The check for point equality is 2D only - Z values are ignored
+    */
+    bool useIntPt1 = ei1->isInterior() || ! ei1->coord.equals2D(lastSegStartPt);
+    if (!useIntPt1) {
         npts--;
     }
 
-    CoordinateSequence* pts = new CoordinateArraySequence(npts);
-    size_t ipt = 0;
-    pts->setAt(ei0->coord, ipt++);
-    for(size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
-        pts->setAt(edge.getCoordinate(i), ipt++);
+    pts.emplace_back(ei0->coord);
+    for (size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
+        pts.emplace_back(edge.getCoordinate(i));
     }
-    if(useIntPt1) {
-        pts->setAt(ei1->coord, ipt++);
+    if (useIntPt1) {
+        pts.emplace_back(ei1->coord);
     }
-
-    // SegmentString takes ownership of CoordinateList 'pts'
-    SegmentString* ret = new NodedSegmentString(pts, edge.getData());
-
-#if GEOS_DEBUG
-    std::cerr << " SegmentString created" << std::endl;
-#endif
-
-    return ret;
+    return;
 }
+
+
+/*public*/
+std::unique_ptr<std::vector<Coordinate>>
+SegmentNodeList::getSplitCoordinates()
+{
+    // ensure that the list has entries for the first and last point of the edge
+    addEndpoints();
+    std::unique_ptr<std::vector<Coordinate>> coordList;
+    // there should always be at least two entries in the list, since the endpoints are nodes
+    iterator it = begin();
+    SegmentNode* eiPrev = *it;
+    for(iterator itEnd = end(); it != itEnd; ++it) {
+        SegmentNode* ei = *it;
+        addEdgeCoordinates(eiPrev, ei, *coordList);
+        eiPrev = ei;
+    }
+    return coordList;
+}
+
+
+/*private*/
+void
+SegmentNodeList::addEdgeCoordinates(SegmentNode* ei0, SegmentNode* ei1, std::vector<Coordinate>& coordList)
+{
+    std::vector<Coordinate> pts;
+    createSplitEdgePts(ei0, ei1, pts);
+    // Append pts to coordList
+    coordList.insert(coordList.end(), pts.begin(), pts.end());
+    // Remove duplicate Coordinates from coordList
+    coordList.erase(std::unique(coordList.begin(), coordList.end()), coordList.end());
+}
+
+
 
 std::ostream&
 operator<< (std::ostream& os, const SegmentNodeList& nlist)

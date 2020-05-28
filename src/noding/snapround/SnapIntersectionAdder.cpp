@@ -40,10 +40,12 @@ namespace snapround { // geos.noding.snapround
 
 
 SnapIntersectionAdder::SnapIntersectionAdder(geom::PrecisionModel& newPm):
+    SegmentIntersector(),
     pm(newPm)
 {
-    double snapGridSize = 1.0 / newPm->getScale();
-    nearnessTol = snapGridSize / NEARESS_FACTOR;
+    double snapGridSize = 1.0 / newPm.getScale();
+    nearnessTol = snapGridSize / NEARNESS_FACTOR;
+    intersections.reset(new std::vector<geom::Coordinate>);
 }
 
 /*public*/
@@ -65,10 +67,10 @@ SnapIntersectionAdder::processIntersections(
         if (li.isInteriorIntersection()) {
             for (int intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
                 // Take a copy of the intersection coordinate
-                intersections.emplace_back(li.getIntersection(intIndex));
+                intersections->emplace_back(li.getIntersection(intIndex));
             }
-            static_cast<NodedSegmentString*>(e0)->addIntersections(li, segIndex0, 0);
-            static_cast<NodedSegmentString*>(e1)->addIntersections(li, segIndex1, 1);
+            static_cast<NodedSegmentString*>(e0)->addIntersections(&li, segIndex0, 0);
+            static_cast<NodedSegmentString*>(e1)->addIntersections(&li, segIndex1, 1);
             return;
         }
     }
@@ -101,7 +103,7 @@ SnapIntersectionAdder::processNearVertex(
 
     double distSeg = algorithm::Distance::pointToSegment(p, p0, p1);
     if (distSeg < nearnessTol) {
-        intersections.emplace_back(p);
+        intersections->emplace_back(p);
         static_cast<NodedSegmentString*>(edge)->addIntersection(p, segIndex);
     }
 }
