@@ -69,7 +69,8 @@ KdNode*
 KdTree::insert(const Coordinate& p, const void* data)
 {
     if (root == nullptr) {
-        return createNode(p, data);
+        root = createNode(p, data);
+        return root;
     }
 
     /**
