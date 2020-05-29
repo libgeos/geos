@@ -113,6 +113,7 @@ geos_unit_SOURCES = \
 	capi/GEOSUserDataTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSWithinTest.cpp \
+	edgegraph/EdgeGraphTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
