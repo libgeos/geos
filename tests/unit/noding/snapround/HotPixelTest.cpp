@@ -11,6 +11,9 @@
 // std
 #include <memory>
 
+using namespace geos::geom;
+using namespace geos::noding::snapround;
+
 namespace tut {
 //
 // Test Group
@@ -19,13 +22,19 @@ namespace tut {
 // Common data used by all tests
 struct test_hotpixel_data {
 
-    typedef geos::geom::Coordinate Coordinate;
-    typedef geos::geom::Envelope Envelope;
-    typedef geos::geom::PrecisionModel PrecisionModel;
-    typedef geos::algorithm::LineIntersector LineIntersector;
-    typedef geos::noding::snapround::HotPixel HotPixel;
+    void checkIntersects(std::string testname, bool expected,
+        double x, double y, double scale,
+        double x1, double y1, double x2, double y2)
+    {
+        Coordinate p(x, y);
+        HotPixel hp(p, scale);
+        Coordinate p1(x1,y1);
+        Coordinate p2(x2,y2);
+        bool actual = hp.intersects(p1, p2);
+        ensure(testname, expected == actual);
+    }
 
-    test_hotpixel_data() {}
+    // test_hotpixel_data() {}
 };
 
 typedef test_group<test_hotpixel_data> group;
@@ -37,79 +46,267 @@ group test_hotpixel_group("geos::noding::snapround::HotPixel");
 // Test Cases
 //
 
-// Test with scaleFactor=1
+// testBelow
 template<>
 template<>
 void object::test<1>
 ()
 {
-
-    Coordinate pt(10, 10);
-    HotPixel hp(pt, 1);
-
-    ensure_equals(hp.getCoordinate(), pt);
-
-    const Envelope& env = hp.getSafeEnvelope();
-    ensure_equals(env.toString(), "Env[9.25:10.75,9.25:10.75]");
-
-    Coordinate p0(0, 10);
-    Coordinate p1(20, 10);
-    ensure("hp.intersects 0 10, 20 10", hp.intersects(p0, p1));
-
-    p1.y = 11; // intersection point within 0.75 distance
-    ensure("hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
-
-    p1.y = 20;
-    ensure_not("!hp.intersects(0 10, 20 20)", hp.intersects(p0, p1));
-
+    checkIntersects("testBelow", false, 1, 1, 100,
+        1, 0.98, 3, 0.5);
 }
-
-// Test with scaleFactor=10
-// See http://trac.osgeo.org/geos/ticket/498
+// testAbove
 template<>
 template<>
 void object::test<2>
 ()
 {
-
-    Coordinate pt(10, 10);
-    HotPixel hp(pt, 10);
-
-    ensure_equals(hp.getCoordinate(), pt);
-
-    const Envelope& env = hp.getSafeEnvelope();
-    ensure_equals(env.toString(), "Env[9.925:10.075,9.925:10.075]");
-
-    Coordinate p0(0, 10);
-    Coordinate p1(20, 10);
-    ensure("hp.intersects 0 10, 20 10", hp.intersects(p0, p1));
-
-    p1.y = 11; // intersection point not within 0.075 distance
-    ensure_not("hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
-
+    checkIntersects("testAbove", false, 1, 1, 100,
+        1, 1.011, 3, 1.5);
 }
-
-// Test intersects
-// See http://trac.osgeo.org/geos/ticket/635
+// testRightSideVerticalTouchAbove
 template<>
 template<>
 void object::test<3>
 ()
 {
-
-    double scale = 1.0;
-    Coordinate p1(0, 0);
-    Coordinate p2(3, 2);
-    Coordinate p3(1, 1);
-
-    PrecisionModel pm(scale);
-    HotPixel hp(p3, scale);
-
-    ensure(hp.intersects(p1, p2));
-
+    checkIntersects("testRightSideVerticalTouchAbove", false, 1.2, 1.2, 10,
+        1.25, 1.25, 1.25, 2);
+}
+// testRightSideVerticalTouchBelow
+template<>
+template<>
+void object::test<4>
+()
+{
+    checkIntersects("testRightSideVerticalTouchBelow", false, 1.2, 1.2, 10,
+        1.25, 0, 1.25, 1.15);
+}
+// testRightSideVerticalOverlap
+template<>
+template<>
+void object::test<5>
+()
+{
+    checkIntersects("testRightSideVerticalOverlap", false, 1.2, 1.2, 10,
+        1.25, 0, 1.25, 1.5);
 }
 
-// TODO: test addSnappedNode !
+//-----------------------------
+
+// testTopSideHorizontalTouchRight
+template<>
+template<>
+void object::test<6>
+()
+{
+    checkIntersects("testTopSideHorizontalTouchRight", false, 1.2, 1.2, 10,
+        1.25, 1.25, 2, 1.25);
+}
+// testTopSideHorizontalTouchLeft
+template<>
+template<>
+void object::test<7>
+()
+{
+    checkIntersects("testTopSideHorizontalTouchLeft", false, 1.2, 1.2, 10,
+        0, 1.25, 1.15, 1.25);
+}
+// testTopSideHorizontalOverlap
+template<>
+template<>
+void object::test<8>
+()
+{
+    checkIntersects("testTopSideHorizontalOverlap", false, 1.2, 1.2, 10,
+        0, 1.25, 1.9, 1.25);
+}
+
+//-----------------------------
+
+// testLeftSideVerticalTouchAbove
+template<>
+template<>
+void object::test<9>
+()
+{
+    checkIntersects("testLeftSideVerticalTouchAbove", false, 1.2, 1.2, 10,
+        1.15, 1.25, 1.15, 2);
+}
+// testLeftSideVerticalOverlap
+template<>
+template<>
+void object::test<10>
+()
+{
+    checkIntersects("testLeftSideVerticalOverlap", true, 1.2, 1.2, 10,
+        1.15, 0, 1.15, 1.8);
+}
+// testLeftSideVerticalTouchBelow
+template<>
+template<>
+void object::test<11>
+()
+{
+    checkIntersects("testLeftSideVerticalTouchBelow", true, 1.2, 1.2, 10,
+        1.15, 0, 1.15, 1.15);
+}
+// testLeftSideCrossRight
+template<>
+template<>
+void object::test<12>
+()
+{
+    checkIntersects("testLeftSideCrossRight", true, 1.2, 1.2, 10,
+        0, 1.19, 2, 1.21);
+}
+// testLeftSideCrossTop
+template<>
+template<>
+void object::test<13>
+()
+{
+    checkIntersects("testLeftSideCrossTop", true, 1.2, 1.2, 10,
+        0.8, 0.8, 1.3, 1.39);
+}
+// testLeftSideCrossBottom
+template<>
+template<>
+void object::test<14>
+()
+{
+    checkIntersects("testLeftSideCrossBottom", true, 1.2, 1.2, 10,
+        1, 1.5, 1.3, 0.9 );
+}
+
+//-----------------------------
+
+// testBottomSideHorizontalTouchRight
+template<>
+template<>
+void object::test<15>
+()
+{
+    checkIntersects("testBottomSideHorizontalTouchRight", false, 1.2, 1.2, 10,
+        1.25, 1.15, 2, 1.15);
+}
+// testBottomSideHorizontalTouchLeft
+template<>
+template<>
+void object::test<16>
+()
+{
+    checkIntersects("testBottomSideHorizontalTouchLeft", true, 1.2, 1.2, 10,
+        0, 1.15, 1.15, 1.15);
+}
+// testBottomSideHorizontalOverlapLeft
+template<>
+template<>
+void object::test<17>
+()
+{
+    checkIntersects("testBottomSideHorizontalOverlapLeft", true, 1.2, 1.2, 10,
+        0, 1.15, 1.2, 1.15);
+}
+// testBottomSideHorizontalOverlap
+template<>
+template<>
+void object::test<18>
+()
+{
+    checkIntersects("testBottomSideHorizontalOverlap", true, 1.2, 1.2, 10,
+        0, 1.15, 1.9, 1.15);
+}
+// testBottomSideHorizontalOverlapRight
+template<>
+template<>
+void object::test<19>
+()
+{
+    checkIntersects("testBottomSideHorizontalOverlapRight", true, 1.2, 1.2, 10,
+        1.2, 1.15, 1.4, 1.15);
+}
+// testBottomSideCrossRight
+template<>
+template<>
+void object::test<20>
+()
+{
+    checkIntersects("testBottomSideCrossRight", true, 1.2, 1.2, 10,
+        1.1, 1, 1.4, 1.4);
+}
+// testBottomSideCrossTop
+template<>
+template<>
+void object::test<21>
+()
+{
+    checkIntersects("testBottomSideCrossTop", true, 1.2, 1.2, 10,
+        1.1, 0.9, 1.3, 1.6);
+}
+
+
+//-----------------------------
+
+// testDiagonalDown
+template<>
+template<>
+void object::test<22>
+()
+{
+    checkIntersects("testDiagonalDown", true, 1.2, 1.2, 10,
+        0.9, 1.5, 1.4, 1 );
+}
+// testDiagonalUp
+template<>
+template<>
+void object::test<23>
+()
+{
+    checkIntersects("testDiagonalUp", true, 1.2, 1.2, 10,
+        0.9, 0.9, 1.5, 1.5 );
+}
+
+
+//-----------------------------
+// Test segments entering through a corder and terminating inside pixel
+
+// testCornerULEndInside
+template<>
+template<>
+void object::test<24>
+()
+{
+    checkIntersects("testCornerULEndInside", true, 1, 1, 10,
+        0.7, 1.3, 0.98, 1.02 );
+}
+// testCornerLLEndInside
+template<>
+template<>
+void object::test<25>
+()
+{
+    checkIntersects("testCornerLLEndInside", true, 1, 1, 10,
+        0.8, 0.8, 0.98, 0.98 );
+}
+// testCornerURStartInside
+template<>
+template<>
+void object::test<26>
+()
+{
+    checkIntersects("testCornerURStartInside", true, 1, 1, 10,
+        1.02, 1.02, 1.3, 1.3 );
+}
+// testCornerLRStartInside
+template<>
+template<>
+void object::test<27>
+()
+{
+    checkIntersects("testCornerLRStartInside", true, 1, 1, 10,
+        1.02, 0.98, 1.3, 0.7 );
+}
 
 
 } // namespace tut

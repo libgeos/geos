@@ -42,11 +42,7 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
     :
     ptHot(newPt),
     originalPt(newPt),
-    scaleFactor(newScaleFactor),
-    minx(newPt.x - TOLERANCE),
-    maxx(newPt.x + TOLERANCE),
-    miny(newPt.y - TOLERANCE),
-    maxy(newPt.y + TOLERANCE)
+    scaleFactor(newScaleFactor)
 {
     if(scaleFactor <= 0.0) {
         throw util::IllegalArgumentException("Scale factor must be non-zero");
@@ -54,6 +50,11 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
     if(scaleFactor != 1.0) {
         ptHot = scaleRound(newPt);
     }
+
+    minx = ptHot.x - TOLERANCE;
+    maxx = ptHot.x + TOLERANCE;
+    miny = ptHot.y - TOLERANCE;
+    maxy = ptHot.y + TOLERANCE;
 }
 
 /*public*/
@@ -201,7 +202,7 @@ HotPixel::intersectsScaled(double p0x, double p0y, double p1x, double p1y) const
 
 /*private*/
 bool
-HotPixel::intersectsPixelClosure(const Coordinate& p0, const Coordinate& p1)
+HotPixel::intersectsPixelClosure(const Coordinate& p0, const Coordinate& p1) const
 {
     LineIntersector li;
     std::array<Coordinate, 4> corner;

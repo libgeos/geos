@@ -93,7 +93,7 @@ private:
     double scale(double val) const;
 
     bool intersectsPixelClosure(const geom::Coordinate& p0,
-                                const geom::Coordinate& p1);
+                                const geom::Coordinate& p1) const;
 
     bool intersectsScaled(double p0x, double p0y, double p1x, double p1y) const;
 
@@ -102,6 +102,12 @@ private:
     HotPixel& operator=(const HotPixel& rhs) = delete;
 
 public:
+
+
+    /**
+    * Gets the width of the hot pixel in the original coordinate system.
+    */
+    double getWidth() const { return 1.0 / scaleFactor; };
 
     /** \brief
      * Returns a "safe" envelope that is guaranteed to contain
