@@ -26,20 +26,20 @@ namespace kdtree { // geos.index.kdtree
 
 /*public static*/
 std::unique_ptr<std::vector<Coordinate>>
-KdTree::toCoordinates(std::deque<KdNode>& kdnodes)
+KdTree::toCoordinates(std::vector<KdNode*>& kdnodes)
 {
     return toCoordinates(kdnodes, false);
 }
 
 /*public static*/
 std::unique_ptr<std::vector<Coordinate>>
-KdTree::toCoordinates(std::deque<KdNode>& kdnodes, bool includeRepeated)
+KdTree::toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated)
 {
     std::unique_ptr<std::vector<Coordinate>> coord(new std::vector<Coordinate>);
     for (auto node: kdnodes) {
-        size_t count = includeRepeated ? node.getCount() : 1;
+        size_t count = includeRepeated ? node->getCount() : 1;
         for (size_t i = 0; i < count; i++) {
-            coord->emplace_back(node.getCoordinate());
+            coord->emplace_back(node->getCoordinate());
         }
     }
     if (!includeRepeated) {

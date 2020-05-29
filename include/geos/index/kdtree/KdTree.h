@@ -124,7 +124,7 @@ public:
     *          a collection of nodes
     * @return an vector of the coordinates represented by the nodes
     */
-    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::deque<KdNode>& kdnodes);
+    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes);
 
     /**
     * Converts a collection of {@link KdNode}s
@@ -137,7 +137,7 @@ public:
     *   be included multiple times
     * @return an vector of the coordinates represented by the nodes
     */
-    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::deque<KdNode>& kdnodes, bool includeRepeated);
+    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated);
 
     KdTree() :
         tolerance(0.0),
