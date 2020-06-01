@@ -21,8 +21,10 @@
 #define GEOS_GEOMGRAPH_DEPTH_INL
 
 #include <geos/geomgraph/Depth.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
+
+using geos::geom::Position;
 
 namespace geos {
 namespace geomgraph {

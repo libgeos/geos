@@ -28,7 +28,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 
 #include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>

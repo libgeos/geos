@@ -13,13 +13,13 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Quadrant.java rev. 1.8 (JTS-1.10)
+ * Last port: geom/Quadrant.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_QUADRANT_H
-#define GEOS_GEOMGRAPH_QUADRANT_H
+#ifndef GEOS_GEOM_QUADRANT_H
+#define GEOS_GEOM_QUADRANT_H
 
 #include <geos/export.h>
 #include <string>
@@ -34,7 +34,7 @@ class Coordinate;
 }
 
 namespace geos {
-namespace geomgraph { // geos.geomgraph
+namespace geom { // geos.geom
 
 /** \brief
  * Utility functions for working with quadrants.
@@ -98,12 +98,12 @@ public:
 };
 
 
-} // namespace geos.geomgraph
+} // namespace geos.geom
 } // namespace geos
 
 #ifdef GEOS_INLINE
-# include "geos/geomgraph/Quadrant.inl"
+# include "geos/geom/Quadrant.inl"
 #endif
 
-#endif // ifndef GEOS_GEOMGRAPH_QUADRANT_H
+#endif // ifndef GEOS_GEOM_QUADRANT_H
 

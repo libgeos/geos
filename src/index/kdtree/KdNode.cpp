@@ -22,17 +22,17 @@ namespace kdtree { // geos.index.kdtree
 
 KdNode::KdNode(double p_x, double p_y, const void* p_data) :
     p(p_x, p_y),
+    data(p_data),
     left(nullptr),
     right(nullptr),
-    count(1),
-    data(p_data) {}
+    count(1) {}
 
 KdNode::KdNode(const Coordinate& p_p, const void* p_data) :
     p(p_p),
+    data(p_data),
     left(nullptr),
     right(nullptr),
-    count(1),
-    data(p_data) {}
+    count(1) {}
 
 
 } // namespace geos.index.kdtree

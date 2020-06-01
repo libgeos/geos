@@ -19,10 +19,12 @@
 
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/TopologyLocation.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
 #include <cassert>
+
+using geos::geom::Position;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph

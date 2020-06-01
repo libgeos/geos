@@ -22,7 +22,7 @@
 
 #include <geos/geomgraph/Depth.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
 #ifndef GEOS_INLINE

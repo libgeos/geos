@@ -21,7 +21,7 @@
 #include <geos/operation/buffer/RightmostEdgeFinder.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/TopologyException.h>

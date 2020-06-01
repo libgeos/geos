@@ -22,7 +22,7 @@
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/edgegraph/HalfEdge.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util/Assert.h>
 
@@ -188,8 +188,8 @@ HalfEdge::compareAngularDirection(const HalfEdge* e) const
     if (dx == dx2 && dy == dy2)
         return 0;
 
-    int quadrant = geomgraph::Quadrant::quadrant(dx, dy);
-    int quadrant2 = geomgraph::Quadrant::quadrant(dx2, dy2);
+    int quadrant = geom::Quadrant::quadrant(dx, dy);
+    int quadrant2 = geom::Quadrant::quadrant(dx2, dy2);
 
     /**
     * If the direction vectors are in different quadrants,

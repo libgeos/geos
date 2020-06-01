@@ -29,7 +29,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/NodeMap.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 
 #include <geos/algorithm/Orientation.h>
 

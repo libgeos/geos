@@ -140,14 +140,16 @@ public:
     static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated);
 
     KdTree() :
-        tolerance(0.0),
+        root(nullptr),
         numberOfNodes(0),
-        root(nullptr) {};
+        tolerance(0.0)
+        {};
 
     KdTree(double p_tolerance) :
-        tolerance(p_tolerance),
+        root(nullptr),
         numberOfNodes(0),
-        root(nullptr) {};
+        tolerance(p_tolerance)
+        {};
 
     bool isEmpty() { return root == nullptr; }
 

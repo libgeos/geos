@@ -18,7 +18,7 @@
  **********************************************************************/
 
 #include <geos/geomgraph/TopologyLocation.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
 #include <vector>

@@ -31,7 +31,7 @@
 
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Edge.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

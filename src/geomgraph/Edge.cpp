@@ -27,7 +27,7 @@
 #include <sstream>
 
 #include <geos/geomgraph/Edge.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/index/MonotoneChainEdge.h>
 #include <geos/algorithm/LineIntersector.h>

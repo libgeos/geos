@@ -23,7 +23,7 @@
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/GeometryGraph.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 
 #include <vector>
 

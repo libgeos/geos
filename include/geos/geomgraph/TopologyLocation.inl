@@ -20,7 +20,7 @@
 #ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_INL
 #define GEOS_GEOMGRAPH_TOPOLOGYLOCATION_INL
 
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
 #include <cassert>
@@ -28,6 +28,7 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+using geos::geom::Position;
 using geos::geom::Location;
 
 /*public*/

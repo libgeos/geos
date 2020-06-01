@@ -12,20 +12,20 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Quadrant.java rev. 1.8 (JTS-1.10)
+ * Last port: geom/Quadrant.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 
 #ifndef GEOS_INLINE
-# include <geos/geomgraph/Quadrant.inl>
+# include <geos/geom/Quadrant.inl>
 #endif
 
 using namespace geos::geom;
 
 namespace geos {
-namespace geomgraph { // geos.geomgraph
+namespace geom { // geos.geom
 
 /* public static */
 int
@@ -65,5 +65,5 @@ Quadrant::isInHalfPlane(int quad, int halfPlane)
 }
 
 
-} // namespace geos.geomgraph
+} // namespace geos.geom
 } // namespace geos

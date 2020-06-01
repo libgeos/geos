@@ -24,7 +24,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 
 #include <geos/inline.h>
 

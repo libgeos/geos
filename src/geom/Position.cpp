@@ -13,11 +13,11 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Position.java rev. 1.4 (JTS-1.10)
+ * Last port: geom/Position.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -28,7 +28,7 @@
 #endif
 
 namespace geos {
-namespace geomgraph { // geos.geomgraph
+namespace geom { // geos.geom
 
 /**
  * Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
@@ -50,5 +50,5 @@ Position::opposite(int position)
     return position;
 }
 
-} // namespace geos.geomgraph
+} // namespace geos.geom
 } // namespace geos

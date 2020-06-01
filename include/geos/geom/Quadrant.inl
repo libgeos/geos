@@ -13,21 +13,21 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Quadrant.java rev. 1.8 (JTS-1.10)
+ * Last port: geom/Quadrant.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_QUADRANT_INL
-#define GEOS_GEOMGRAPH_QUADRANT_INL
+#ifndef GEOS_GEOM_QUADRANT_INL
+#define GEOS_GEOM_QUADRANT_INL
 
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 
 #include <sstream>
 
 namespace geos {
-namespace geomgraph {
+namespace geom {
 
 /* public static */
 INLINE int

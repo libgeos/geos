@@ -13,13 +13,13 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Position.java rev. 1.4 (JTS-1.10)
+ * Last port: geom/Position.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_POSITION_H
-#define GEOS_GEOMGRAPH_POSITION_H
+#ifndef GEOS_GEOM_POSITION_H
+#define GEOS_GEOM_POSITION_H
 
 #include <geos/export.h>
 #include <map>
@@ -30,7 +30,7 @@
 
 
 namespace geos {
-namespace geomgraph { // geos.geomgraph
+namespace geom { // geos.geom
 
 /** \brief
  * A Position indicates the position of a Location relative to a graph
@@ -65,8 +65,8 @@ public:
     static int opposite(int position);
 };
 
-} // namespace geos.geomgraph
+} // namespace geos.geom
 } // namespace geos
 
-#endif // ifndef GEOS_GEOMGRAPH_POSITION_H
+#endif // ifndef GEOS_GEOM_POSITION_H
 

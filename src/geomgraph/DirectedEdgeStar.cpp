@@ -24,8 +24,8 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/EdgeRing.h>
-#include <geos/geomgraph/Position.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Position.h>
+#include <geos/geom/Quadrant.h>
 #include <geos/geom/Location.h>
 #include <geos/util/TopologyException.h>
 #include <geos/util.h>

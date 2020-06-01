@@ -43,7 +43,7 @@
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/NodedSegmentString.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Node.h>
