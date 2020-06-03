@@ -12,6 +12,7 @@ libsnapround_la_SOURCES = \
     HotPixelIndex.cpp \
     MCIndexPointSnapper.cpp \
     MCIndexSnapRounder.cpp \
-    SnapIntersectionAdder.cpp
+    SnapRoundingNoder.cpp \
+    SnapRoundingIntersectionAdder.cpp
 
 libsnapround_la_LIBADD =
