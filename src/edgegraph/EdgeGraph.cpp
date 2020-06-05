@@ -33,11 +33,7 @@ namespace edgegraph { // geos.edgegraph
 HalfEdge*
 EdgeGraph::createEdge(const Coordinate& orig)
 {
-    // TODO: Overhead of many heap allocations might be
-    // a problem. Replace EdgeGraph::edges with a
-    // pool of some kind?
     edges.emplace_back(orig);
-
     return &(edges.back());
 }
 
