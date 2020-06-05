@@ -135,6 +135,13 @@ NodedSegmentString::getNodedSubstrings(
     }
 }
 
+/* public */
+std::unique_ptr<std::vector<Coordinate>>
+NodedSegmentString::getNodedCoordinates() {
+    return nodeList.getSplitCoordinates();
+}
+
+
 /* public static */
 SegmentString::NonConstVect*
 NodedSegmentString::getNodedSubstrings(

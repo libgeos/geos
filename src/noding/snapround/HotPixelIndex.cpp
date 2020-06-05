@@ -13,6 +13,9 @@
  *********************************************************************/
 
 #include <geos/noding/snapround/HotPixelIndex.h>
+#include <geos/index/kdtree/KdTree.h>
+#include <geos/index/ItemVisitor.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #include <algorithm> // for std::min and std::max
 #include <cassert>
@@ -20,7 +23,8 @@
 
 using namespace geos::algorithm;
 using namespace geos::geom;
-using namespace geos::index::strtree;
+using geos::index::kdtree::KdTree;
+using geos::index::ItemVisitor;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -32,7 +36,7 @@ HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
     pm(p_pm),
     li(p_pm),
     scaleFactor(p_pm->getScale()),
-    index(new STRtree())
+    index(new KdTree())
 {
 }
 
@@ -61,7 +65,7 @@ HotPixelIndex::add(const Coordinate& pt)
 
     if (inserted) {
         const Envelope& hpEnv = ptrHp->getSafeEnvelope();
-        index->insert(&hpEnv, (void*)ptrHp);
+        index->insert(ptrHp->getCoordinate(), (void*)ptrHp);
     }
 
     /* And return that pointer to the caller */
@@ -70,7 +74,16 @@ HotPixelIndex::add(const Coordinate& pt)
 
 /*public*/
 void
-HotPixelIndex::add(const std::vector<Coordinate> pts)
+HotPixelIndex::add(const CoordinateSequence *pts)
+{
+    for (size_t i = 0, sz = pts->size(); i < sz; i++) {
+        add(pts->getAt(i));
+    }
+}
+
+/*public*/
+void
+HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
     for (auto pt: pts) {
         add(pt);
@@ -88,10 +101,10 @@ HotPixelIndex::round(const Coordinate& pt)
 
 /*public*/
 void
-HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::ItemVisitor& visitor)
+HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::kdtree::KdNodeVisitor& visitor)
 {
     Envelope queryEnv(p0, p1);
-    index->query(&queryEnv, visitor);
+    index->query(queryEnv, visitor);
 }
 
 

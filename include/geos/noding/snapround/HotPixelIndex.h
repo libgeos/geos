@@ -17,11 +17,9 @@
 #include <geos/export.h>
 #include <geos/geom/Envelope.h> // for unique_ptr
 #include <geos/geom/Coordinate.h> // for composition
-#include <geos/index/strtree/STRtree.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/geom/PrecisionModel.h>
-#include <geos/index/ItemVisitor.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/io/WKTWriter.h>
 
@@ -37,14 +35,15 @@
 
 // Forward declarations
 namespace geos {
-// namespace geom {
-// class Envelope;
-// }
 namespace algorithm {
 class LineIntersector;
 }
 namespace index {
 class ItemVisitor;
+namespace kdtree {
+class KdTree;
+class KdNodeVisitor;
+}
 }
 namespace noding {
 namespace snapround {
@@ -67,8 +66,8 @@ private:
     const geom::PrecisionModel* pm;
     algorithm::LineIntersector li;
     double scaleFactor;
-    /* TODO, check this to a KDtree */
-    std::unique_ptr<geos::index::strtree::STRtree> index;
+
+    std::unique_ptr<geos::index::kdtree::KdTree> index;
     std::map<geom::Coordinate, HotPixel> hotPixelMap;
 
     /* methods */
@@ -78,8 +77,9 @@ public:
 
     HotPixelIndex(const geom::PrecisionModel* p_pm);
     const HotPixel* add(const geom::Coordinate& pt);
-    void add(const std::vector<geom::Coordinate> pts);
-    void query(const geom::Coordinate& p0, const geom::Coordinate& p1, index::ItemVisitor& visitor);
+    void add(const geom::CoordinateSequence* pts);
+    void add(const std::vector<geom::Coordinate>& pts);
+    void query(const geom::Coordinate& p0, const geom::Coordinate& p1, index::kdtree::KdNodeVisitor& visitor);
 
 };
 

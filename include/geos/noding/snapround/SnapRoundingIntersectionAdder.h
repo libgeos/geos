@@ -45,7 +45,7 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
-class GEOS_DLL SnapIntersectionAdder: public SegmentIntersector { // implements SegmentIntersector
+class GEOS_DLL SnapRoundingIntersectionAdder: public SegmentIntersector { // implements SegmentIntersector
 
 private:
 
@@ -53,7 +53,7 @@ private:
 
     algorithm::LineIntersector li;
     std::unique_ptr<std::vector<geom::Coordinate>> intersections;
-    geom::PrecisionModel& pm;
+    const geom::PrecisionModel* pm;
     double nearnessTol;
 
     /**
@@ -75,7 +75,7 @@ private:
 
 public:
 
-    SnapIntersectionAdder(geom::PrecisionModel& newPm);
+    SnapRoundingIntersectionAdder(const geom::PrecisionModel* newPm);
 
     std::unique_ptr<std::vector<geom::Coordinate>> getIntersections() { return std::move(intersections); };
 

@@ -85,6 +85,8 @@ public:
     static SegmentString::NonConstVect* getNodedSubstrings(
         const SegmentString::NonConstVect& segStrings);
 
+    std::unique_ptr<std::vector<geom::Coordinate>> getNodedCoordinates();
+
 
     /** \brief
      * Creates a new segment string from a list of vertices.
@@ -99,6 +101,12 @@ public:
         : NodableSegmentString(newContext)
         , nodeList(this)
         , pts(newPts)
+    {}
+
+    NodedSegmentString(SegmentString* ss)
+        : NodableSegmentString(ss->getData())
+        , nodeList(this)
+        , pts(ss->getCoordinates()->clone())
     {}
 
     ~NodedSegmentString() override = default;

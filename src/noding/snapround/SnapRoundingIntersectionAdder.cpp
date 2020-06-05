@@ -12,12 +12,11 @@
  *
  **********************************************************************/
 
-#include <geos/noding/snapround/SnapIntersectionAdder.h>
+#include <geos/noding/snapround/SnapRoundingIntersectionAdder.h>
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/NodingValidator.h>
-#include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/IntersectionFinderAdder.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -39,18 +38,18 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 
-SnapIntersectionAdder::SnapIntersectionAdder(geom::PrecisionModel& newPm):
-    SegmentIntersector(),
-    pm(newPm)
+SnapRoundingIntersectionAdder::SnapRoundingIntersectionAdder(const geom::PrecisionModel* newPm)
+    : SegmentIntersector()
+    , intersections(new std::vector<geom::Coordinate>)
+    , pm(newPm)
 {
-    double snapGridSize = 1.0 / newPm.getScale();
+    double snapGridSize = 1.0 / newPm->getScale();
     nearnessTol = snapGridSize / NEARNESS_FACTOR;
-    intersections.reset(new std::vector<geom::Coordinate>);
 }
 
 /*public*/
 void
-SnapIntersectionAdder::processIntersections(
+SnapRoundingIntersectionAdder::processIntersections(
     SegmentString* e0, size_t segIndex0,
     SegmentString* e1, size_t segIndex1)
 {
@@ -89,7 +88,7 @@ SnapIntersectionAdder::processIntersections(
 
 /*private*/
 void
-SnapIntersectionAdder::processNearVertex(
+SnapRoundingIntersectionAdder::processNearVertex(
     const geom::Coordinate& p, SegmentString* edge, size_t segIndex,
     const geom::Coordinate& p0, const geom::Coordinate& p1)
 {
