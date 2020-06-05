@@ -35,5 +35,6 @@ geos_HEADERS = \
 	SegmentString.h \
 	SegmentStringUtil.h \
 	SimpleNoder.h \
+	SinglePassNoder.h \
 	NodingIntersectionFinder.h \
-	SinglePassNoder.h
+	ValidatingNoder.h
