@@ -23,6 +23,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/noding/snapround/HotPixelIndex.h>
+#include <geos/noding/Noder.h>
 
 
 // Forward declarations
@@ -40,7 +41,7 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
-class GEOS_DLL SnapRoundingNoder {
+class GEOS_DLL SnapRoundingNoder : public Noder {
 
 private:
 
@@ -109,9 +110,9 @@ public:
     /**
     * @return a Collection of NodedSegmentStrings representing the substrings
     */
-    void getNodedSubstrings(std::vector<SegmentString*>& result);
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-    void computeNodes(std::vector<SegmentString*>* inputSegStrings); //override
+    void computeNodes(std::vector<SegmentString*>* inputSegStrings) override; //override
 
 };
 

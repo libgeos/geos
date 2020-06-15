@@ -22,6 +22,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/index/kdtree/KdTree.h>
+#include <geos/index/kdtree/KdNodeVisitor.h>
 
 #include <array>
 #include <map>
@@ -40,10 +42,6 @@ class LineIntersector;
 }
 namespace index {
 class ItemVisitor;
-namespace kdtree {
-class KdTree;
-class KdNodeVisitor;
-}
 }
 namespace noding {
 namespace snapround {

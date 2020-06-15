@@ -40,7 +40,7 @@ ValidatingNoder::validate()
 }
 
 std::vector<SegmentString*>*
-ValidatingNoder::getNodedSubstrings()
+ValidatingNoder::getNodedSubstrings() const
 {
     return nodedSS;
 }

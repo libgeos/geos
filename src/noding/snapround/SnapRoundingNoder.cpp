@@ -28,10 +28,7 @@
 #include <memory>
 
 using namespace geos::geom;
-
-using geos::index::kdtree::KdNodeVisitor;
-using geos::index::kdtree::KdNode;
-using geos::index::kdtree::KdTree;
+using namespace geos::index::kdtree;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -39,11 +36,10 @@ namespace snapround { // geos.noding.snapround
 
 
 /*public*/
-void
-SnapRoundingNoder::getNodedSubstrings(std::vector<SegmentString*>& result)
+std::vector<SegmentString*>*
+SnapRoundingNoder::getNodedSubstrings() const
 {
-    NodedSegmentString::getNodedSubstrings(snappedResult, &result);
-    return;
+    return NodedSegmentString::getNodedSubstrings(snappedResult);
 }
 
 /*public*/

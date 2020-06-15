@@ -47,11 +47,11 @@ public:
         : noder(noderArg)
         {}
 
-    void computeNodes(std::vector<SegmentString*>* segStrings);
+    void computeNodes(std::vector<SegmentString*>* segStrings) override;
 
     void validate();
 
-    std::vector<SegmentString*>* getNodedSubstrings();
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
 };
 
