@@ -164,8 +164,8 @@ SnapRoundingNoder::computeSnaps(NodedSegmentString* ss)
     * in preparation for snapping to the Hot Pixels
     */
     std::unique_ptr<std::vector<Coordinate>> pts = ss->getNodedCoordinates();
-    // std::unique_ptr<std::vector<Coordinate>> ptsRound = ;
-    std::unique_ptr<geom::CoordinateArraySequence> ptsRound(new CoordinateArraySequence(round(*pts).release()));
+    std::unique_ptr<std::vector<Coordinate>> ptsRoundVec = round(*pts);
+    std::unique_ptr<geom::CoordinateArraySequence> ptsRound(new CoordinateArraySequence(ptsRoundVec.release()));
 
     // if complete collapse this edge can be eliminated
     if (ptsRound->size() <= 1)

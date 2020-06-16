@@ -64,7 +64,6 @@ HotPixelIndex::add(const Coordinate& pt)
     const HotPixel *ptrHp = &(itEmplace->second);
 
     if (inserted) {
-        const Envelope& hpEnv = ptrHp->getSafeEnvelope();
         index->insert(ptrHp->getCoordinate(), (void*)ptrHp);
     }
 

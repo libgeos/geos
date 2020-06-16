@@ -67,7 +67,6 @@ class GEOS_DLL HotPixel {
 private:
 
     static constexpr double TOLERANCE = 0.5;
-    static constexpr double SAFE_ENV_EXPANSION_FACTOR = 0.75;
 
     static constexpr int UPPER_RIGHT = 0;
     static constexpr int UPPER_LEFT  = 1;
@@ -75,7 +74,7 @@ private:
     static constexpr int LOWER_RIGHT = 3;
 
     geom::Coordinate ptHot;
-    const geom::Coordinate& originalPt;
+    geom::Coordinate originalPt;
 
     double scaleFactor;
 
@@ -83,9 +82,6 @@ private:
     double maxx;
     double miny;
     double maxy;
-
-    // Owned by this class, constructed on demand
-    mutable std::unique_ptr<geom::Envelope> safeEnv;
 
     double scaleRound(double val) const;
     geom::Coordinate scaleRound(const geom::Coordinate& p) const;
@@ -103,21 +99,12 @@ private:
 
 public:
 
-
     /**
     * Gets the width of the hot pixel in the original coordinate system.
     */
     double getWidth() const { return 1.0 / scaleFactor; };
 
-    /** \brief
-     * Returns a "safe" envelope that is guaranteed to contain
-     * the hot pixel. Keeps ownership of it.
-     *
-     * The envelope returned will be larger than the exact envelope of the
-     * pixel.
-     */
-    const geom::Envelope& getSafeEnvelope() const;
-
+    double getScaleFactor() const { return scaleFactor; };
 
     /**
      * Creates a new hot pixel.

@@ -149,7 +149,7 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
                           SegmentString* parentEdge,
                           size_t vertexIndex)
 {
-    const Envelope& pixelEnv = hotPixel.getSafeEnvelope();
+    Envelope pixelEnv = getSafeEnvelope(hotPixel);
     HotPixelSnapAction hotPixelSnapAction(hotPixel, parentEdge, vertexIndex);
     MCIndexPointSnapperVisitor visitor(pixelEnv, hotPixelSnapAction);
 
@@ -157,6 +157,17 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
 
     return hotPixelSnapAction.isNodeAdded();
 }
+
+/* public */
+Envelope
+MCIndexPointSnapper::getSafeEnvelope(const HotPixel& hp) const
+{
+    double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / hp.getScaleFactor();
+    Envelope safeEnv(hp.getCoordinate());
+    safeEnv.expandBy(safeTolerance);
+    return safeEnv;
+}
+
 
 } // namespace geos.noding.snapround
 } // namespace geos.noding

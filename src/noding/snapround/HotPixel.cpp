@@ -65,22 +65,6 @@ HotPixel::getCoordinate() const {
 
 
 /*public*/
-const Envelope&
-HotPixel::getSafeEnvelope() const
-{
-    if(safeEnv == nullptr) {
-        double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / scaleFactor;
-        safeEnv = std::unique_ptr<Envelope>(new Envelope(
-                        originalPt.x - safeTolerance,
-                        originalPt.x + safeTolerance,
-                        originalPt.y - safeTolerance,
-                        originalPt.y + safeTolerance
-                    ));
-    }
-    return *safeEnv;
-}
-
-/*public*/
 bool
 HotPixel::intersects(const Coordinate& p0,
                      const Coordinate& p1) const

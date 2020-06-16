@@ -298,7 +298,7 @@ SegmentNodeList::getSplitCoordinates()
 {
     // ensure that the list has entries for the first and last point of the edge
     addEndpoints();
-    std::unique_ptr<std::vector<Coordinate>> coordList;
+    std::unique_ptr<std::vector<Coordinate>> coordList(new std::vector<Coordinate>);
     // there should always be at least two entries in the list, since the endpoints are nodes
     iterator it = begin();
     SegmentNode* eiPrev = *it;

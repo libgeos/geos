@@ -26,6 +26,9 @@
 
 // Forward declarations
 namespace geos {
+namespace geom {
+class Envelope;
+}
 namespace index {
 class SpatialIndex;
 }
@@ -77,8 +80,12 @@ public:
         return snap(hotPixel, nullptr, 0);
     }
 
+    geom::Envelope getSafeEnvelope(const HotPixel& hp) const;
+
 
 private:
+
+    static constexpr double SAFE_ENV_EXPANSION_FACTOR = 0.75;
 
     index::SpatialIndex& index;
 
