@@ -166,6 +166,31 @@ void object::test<7> ()
 
 
 
+//
+// testSinglePoint
+//
+template<>
+template<>
+void object::test<8> ()
+{
+    KdTree index(.001);
+    KdNode* node1 = index.insert(Coordinate(1, 1));
+    KdNode* node2 = index.insert(Coordinate(1, 1));
+
+    ensure("Inserting 2 identical points should create one node", node1 == node2);
+
+    Envelope queryEnv(0, 10, 0, 10);
+    std::unique_ptr<std::vector<KdNode*>> result = index.query(queryEnv);
+
+    ensure(result->size() == 1);
+
+    KdNode* node = (KdNode*)(*result)[0];
+    ensure(node->getCount() == 2);
+    ensure(node->isRepeated());
+}
+
+
+
 
 } // namespace tut
 

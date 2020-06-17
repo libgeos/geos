@@ -184,6 +184,36 @@ KdTree::queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd,
     }
 }
 
+/*private*/
+KdNode*
+KdTree::queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd)
+{
+    if (currentNode == nullptr)
+        return nullptr;
+    if (currentNode->getCoordinate().equals2D(queryPt))
+        return currentNode;
+
+    double ord;
+    double discriminant;
+    if (odd) {
+        ord = queryPt.x;
+        discriminant = currentNode->getX();
+    }
+    else {
+        ord = queryPt.y;
+        discriminant = currentNode->getY();
+    }
+
+    bool searchLeft = (ord < discriminant);
+    if (searchLeft) {
+        return queryNodePoint(currentNode->getLeft(), queryPt, !odd);
+    }
+    else {
+        return queryNodePoint(currentNode->getRight(), queryPt, !odd);
+    }
+}
+
+
 /*public*/
 void
 KdTree::query(const geom::Envelope& queryEnv, KdNodeVisitor& visitor)
@@ -208,6 +238,11 @@ KdTree::query(const geom::Envelope& queryEnv, std::vector<KdNode*>& result)
     queryNode(root, queryEnv, true, visitor);
 }
 
+/*public*/
+KdNode*
+KdTree::query(const geom::Coordinate& queryPt) {
+    return queryNodePoint(root, queryPt, true);
+}
 
 
 /**********************************************************************/

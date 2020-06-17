@@ -65,6 +65,7 @@ private:
     KdNode* insertExact(const geom::Coordinate& p, const void* data);
 
     void queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd, KdNodeVisitor& visitor);
+    KdNode* queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd);
 
     /**
     * Create a node on a locally managed deque to allow easy
@@ -173,6 +174,14 @@ public:
     * Performs a range search of the points in the index.
     */
     void query(const geom::Envelope& queryEnv, std::vector<KdNode*>& result);
+
+    /**
+    * Searches for a given point in the index and returns its node if found.
+    *
+    * @param queryPt the point to query
+    * @return the point node, if it is found in the index, or null if not
+    */
+    KdNode* query(const geom::Coordinate& queryPt);
 
 };
 

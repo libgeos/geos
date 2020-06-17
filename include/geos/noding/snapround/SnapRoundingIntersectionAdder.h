@@ -93,7 +93,7 @@ public:
     * Always process all intersections
     *
     */
-    bool isDone() { return false; }
+    bool isDone() const { return false; }
 
 
 };

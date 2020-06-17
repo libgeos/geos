@@ -196,19 +196,19 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0, const Coordinate& p1) con
     corner[LOWER_RIGHT] = Coordinate(maxx, miny);
 
     li.computeIntersection(p0, p1, corner[UPPER_RIGHT], corner[UPPER_LEFT]);
-    if(li.hasIntersection()) {
+    if (li.hasIntersection()) {
         return true;
     }
     li.computeIntersection(p0, p1, corner[UPPER_LEFT], corner[LOWER_LEFT]);
-    if(li.hasIntersection()) {
+    if (li.hasIntersection()) {
         return true;
     }
     li.computeIntersection(p0, p1, corner[LOWER_LEFT], corner[LOWER_RIGHT]);
-    if(li.hasIntersection()) {
+    if (li.hasIntersection()) {
         return true;
     }
     li.computeIntersection(p0, p1, corner[LOWER_RIGHT], corner[UPPER_RIGHT]);
-    if(li.hasIntersection()) {
+    if (li.hasIntersection()) {
         return true;
     }
 

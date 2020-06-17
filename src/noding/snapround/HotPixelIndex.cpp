@@ -34,41 +34,34 @@ namespace snapround { // geos.noding.snapround
 HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
     :
     pm(p_pm),
-    li(p_pm),
     scaleFactor(p_pm->getScale()),
     index(new KdTree())
 {
 }
 
+
 /*public*/
 const HotPixel*
-HotPixelIndex::add(const Coordinate& pt)
+HotPixelIndex::add(const Coordinate& p)
 {
-    Coordinate ptRound = round(pt);
+    Coordinate pRound = round(p);
+    const HotPixel* hp = find(p);
+    if (hp != nullptr)
+        return hp;
 
-    /* Is the HotPixel already in the map? */
-    auto itSearch = hotPixelMap.find(ptRound);
-    if (itSearch != hotPixelMap.end()) {
-        return &(itSearch->second);
-    }
+    // Store the HotPixel in a std::deque to avoid individually
+    // allocating a pile of HotPixels on the heap and to
+    // get them freed automatically when the std::deque
+    // goes away when this object is disposed.
+    hotPixelQue.emplace_back(pRound, scaleFactor);
 
-    /* Carefully instantiate the key and value into the map */
-    auto rsltEmplace = hotPixelMap.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(ptRound),
-                    std::forward_as_tuple(ptRound, scaleFactor));
+    // Pick up a pointer to the most recently added
+    // HotPixel.
+    hp = &(hotPixelQue.back());
 
-    /* Read inserted HotPixel back. */
-    /* std::map.emplace() returns std::pair<iterator, bool> */
-    auto itEmplace = rsltEmplace.first;
-    auto inserted = rsltEmplace.second;
-    const HotPixel *ptrHp = &(itEmplace->second);
+    index->insert(hp->getCoordinate(), (void*)hp);
+    return hp;
 
-    if (inserted) {
-        index->insert(ptrHp->getCoordinate(), (void*)ptrHp);
-    }
-
-    /* And return that pointer to the caller */
-    return ptrHp;
 }
 
 /*public*/
@@ -90,6 +83,17 @@ HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 }
 
 /*private*/
+const HotPixel*
+HotPixelIndex::find(const geom::Coordinate& pixelPt)
+{
+    index::kdtree::KdNode *kdNode = index->query(pixelPt);
+    if (kdNode == nullptr) {
+        return nullptr;
+    }
+    return (const HotPixel*)(kdNode->getData());
+}
+
+/*private*/
 Coordinate
 HotPixelIndex::round(const Coordinate& pt)
 {
@@ -98,11 +102,13 @@ HotPixelIndex::round(const Coordinate& pt)
     return p2;
 }
 
+
 /*public*/
 void
 HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::kdtree::KdNodeVisitor& visitor)
 {
     Envelope queryEnv(p0, p1);
+    queryEnv.expandBy(1.0 / scaleFactor);
     index->query(queryEnv, visitor);
 }
 

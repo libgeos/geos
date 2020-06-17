@@ -62,14 +62,13 @@ private:
 
     /* members */
     const geom::PrecisionModel* pm;
-    algorithm::LineIntersector li;
     double scaleFactor;
-
     std::unique_ptr<geos::index::kdtree::KdTree> index;
-    std::map<geom::Coordinate, HotPixel> hotPixelMap;
+    std::deque<HotPixel> hotPixelQue;
 
     /* methods */
     geom::Coordinate round(const geom::Coordinate& c);
+    const HotPixel* find(const geom::Coordinate& pixelPt);
 
 public:
 

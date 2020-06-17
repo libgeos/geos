@@ -139,19 +139,41 @@ group test_snaproundingnoder_group("geos::noding::snapround::SnapRoundingNoder")
 // Test Cases
 //
 
-// testBelow
+// testSimple
 template<>
 template<>
 void object::test<1>
 ()
 {
-
-    std::string wkt = "MULTILINESTRING (( 2.45167 48.96709, 2.45768 48.9731 ), (2.4526978 48.968811, 2.4537277 48.9691544, 2.4578476 48.9732742))";
-    std::string expected = "";
-    checkRounding(wkt, 100000, expected);
+    std::string wkt = "MULTILINESTRING ((1 1, 9 2), (3 3, 3 0))";
+    std::string expected = "MULTILINESTRING ((1 1, 3 1), (3 1, 9 2), (3 3, 3 1), (3 1, 3 0))";
+    checkRounding(wkt, 1, expected);
 }
 
+/**
+* This test checks the HotPixel test for overlapping horizontal line
+* testHorizontalLinesWithMiddleNode
+*/
+template<>
+template<>
+void object::test<2>
+()
+{
+    std::string wkt = "MULTILINESTRING ((2.5117493 49.0278625, 2.5144958 49.0278625), (2.511749 49.027863, 2.513123 49.027863, 2.514496 49.027863))";
+    std::string expected = "MULTILINESTRING ((2.511749 49.027863, 2.513123 49.027863), (2.511749 49.027863, 2.513123 49.027863), (2.513123 49.027863, 2.514496 49.027863), (2.513123 49.027863, 2.514496 49.027863))";
+    checkRounding(wkt, 1000000.0, expected);
+}
 
+// testNearbyCorner
+template<>
+template<>
+void object::test<3>
+()
+{
+    std::string wkt = "MULTILINESTRING ((0.2 1.1, 1.6 1.4, 1.9 2.9), (0.9 0.9, 2.3 1.7))";
+    std::string expected = "MULTILINESTRING ((0 1, 1 1), (1 1, 2 1), (1 1, 2 1), (2 1, 2 2), (2 1, 2 2), (2 2, 2 3))";
+    checkRounding(wkt, 1.0, expected);
+}
 
 
 
