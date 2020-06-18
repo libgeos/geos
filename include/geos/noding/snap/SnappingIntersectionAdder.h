@@ -18,9 +18,6 @@
 
 #include <vector>
 
-#include <geos/inline.h>
-
-#include <geos/noding/Noder.h> // for inheritance
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
 #include <geos/geom/PrecisionModel.h> // for inlines (should drop)
@@ -35,26 +32,23 @@ class PrecisionModel;
 namespace noding {
 class SegmentString;
 class NodedSegmentString;
-namespace snapround {
-class HotPixel;
+namespace snap {
+class SnappingPointIndex;
 }
 }
 }
 
 namespace geos {
 namespace noding { // geos::noding
-namespace snapround { // geos::noding::snapround
+namespace snap { // geos::noding::snap
 
-class GEOS_DLL SnapRoundingIntersectionAdder: public SegmentIntersector { // implements SegmentIntersector
+class GEOS_DLL SnappingIntersectionAdder: public SegmentIntersector { // implements SegmentIntersector
 
 private:
 
-    static constexpr int NEARNESS_FACTOR = 100;
-
     algorithm::LineIntersector li;
-    std::unique_ptr<std::vector<geom::Coordinate>> intersections;
-    const geom::PrecisionModel* pm;
-    double nearnessTol;
+    double snapTolerance;
+    SnappingPointIndex& snapPointIndex;
 
     /**
     * If an endpoint of one segment is near
@@ -69,15 +63,26 @@ private:
     * result in the snapped segment A crossing segment B
     * without a node being introduced.
     */
-    void processNearVertex(const geom::Coordinate& p, SegmentString* edge, size_t segIndex,
-                           const geom::Coordinate& p0, const geom::Coordinate& p1);
+    void processNearVertex(
+        SegmentString* srcSS,
+        size_t srcIndex,
+        const geom::Coordinate& p,
+        SegmentString* ss,
+        size_t segIndex,
+        const geom::Coordinate& p0,
+        const geom::Coordinate& p1);
+
+    /**
+    * Tests if segments are adjacent on the same SegmentString.
+    * Closed segStrings require a check for the point shared by the beginning
+    * and end segments.
+    */
+    static bool isAdjacent(SegmentString* ss0, size_t segIndex0, SegmentString* ss1, size_t segIndex1);
 
 
 public:
 
-    SnapRoundingIntersectionAdder(const geom::PrecisionModel* newPm);
-
-    std::unique_ptr<std::vector<geom::Coordinate>> getIntersections() { return std::move(intersections); };
+    SnappingIntersectionAdder(double p_snapTolerance, SnappingPointIndex& p_snapPointIndex);
 
     /**
     * This method is called by clients
@@ -89,11 +94,7 @@ public:
     */
     void processIntersections(SegmentString* e0, size_t segIndex0, SegmentString* e1, size_t segIndex1);
 
-    /**
-    * Always process all intersections
-    *
-    */
-    bool isDone() const { return false; }
+    bool isDone() const { return false; };
 
 
 };

@@ -1,7 +1,9 @@
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
-SUBDIRS = snapround
+SUBDIRS = \
+	snapround \
+	snap
 
 noinst_LTLIBRARIES = libnoding.la
 
@@ -31,4 +33,6 @@ libnoding_la_SOURCES = \
 	NodingIntersectionFinder.cpp \
 	ValidatingNoder.cpp
 
-libnoding_la_LIBADD = snapround/libsnapround.la
+libnoding_la_LIBADD = \
+	snapround/libsnapround.la \
+	snap/libsnap.la

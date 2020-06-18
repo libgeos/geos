@@ -40,6 +40,7 @@
 namespace geos {
 namespace geom {
 class LineSegment;
+class Envelope;
 }
 namespace noding {
 class SegmentString;
@@ -70,6 +71,7 @@ private:
     std::vector<SegmentString*>* nodedSegStrings;
     // statistics
     int nOverlaps;
+    double overlapTolerance;
 
     void intersectChains();
 
@@ -77,12 +79,13 @@ private:
 
 public:
 
-    MCIndexNoder(SegmentIntersector* nSegInt = nullptr)
+    MCIndexNoder(SegmentIntersector* nSegInt = nullptr, double p_overlapTolerance = 0.0)
         :
         SinglePassNoder(nSegInt),
         idCounter(0),
         nodedSegStrings(nullptr),
-        nOverlaps(0)
+        nOverlaps(0),
+        overlapTolerance(p_overlapTolerance)
     {}
 
     ~MCIndexNoder() override;

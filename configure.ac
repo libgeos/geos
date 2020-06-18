@@ -397,6 +397,7 @@ AC_OUTPUT([
 	include/geos/linearref/Makefile
 	include/geos/math/Makefile
 	include/geos/noding/Makefile
+	include/geos/noding/snap/Makefile
 	include/geos/noding/snapround/Makefile
 	include/geos/operation/Makefile
 	include/geos/operation/buffer/Makefile
@@ -431,6 +432,7 @@ AC_OUTPUT([
 	src/linearref/Makefile
 	src/math/Makefile
 	src/noding/Makefile
+	src/noding/snap/Makefile
 	src/noding/snapround/Makefile
 	src/operation/Makefile
 	src/operation/buffer/Makefile

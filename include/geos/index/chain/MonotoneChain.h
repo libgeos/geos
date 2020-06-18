@@ -100,7 +100,8 @@ public:
     ~MonotoneChain() = default;
 
     /// Returned envelope is owned by this class
-    const geom::Envelope& getEnvelope() const;
+    const geom::Envelope& getEnvelope();
+    const geom::Envelope& getEnvelope(double expansionDistance);
 
     size_t
     getStartIndex() const
@@ -137,6 +138,9 @@ public:
     void computeOverlaps(MonotoneChain* mc,
                          MonotoneChainOverlapAction* mco);
 
+    void computeOverlaps(MonotoneChain* mc, double overlapTolerance,
+                         MonotoneChainOverlapAction* mco);
+
     void
     setId(int nId)
     {
@@ -164,15 +168,23 @@ private:
 
     void computeOverlaps(std::size_t start0, std::size_t end0, MonotoneChain& mc,
                          std::size_t start1, std::size_t end1,
+                         double overlapTolerance,
                          MonotoneChainOverlapAction& mco);
 
-    bool overlaps(size_t start0, size_t end0, const MonotoneChain& mc, size_t start1, size_t end1);
+    bool overlaps(size_t start0, size_t end0,
+                  const MonotoneChain& mc, size_t start1, size_t end1,
+                  double overlapTolerance) const;
+
+    bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                  const geom::Coordinate& q1, const geom::Coordinate& q2,
+                  double overlapTolerance) const;
 
     /// Externally owned
     const geom::CoordinateSequence& pts;
 
     /// Owned by this class
     geom::Envelope env;
+    bool envIsSet;
 
     /// user-defined information
     void* context;

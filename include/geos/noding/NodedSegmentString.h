@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  * Copyright (C) 2011 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -29,7 +30,6 @@
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/SegmentString.h>
-//#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
 #include <cstddef>
