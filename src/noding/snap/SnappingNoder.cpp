@@ -41,7 +41,8 @@ SnappingNoder::computeNodes(std::vector<SegmentString*>* inputSegStrings)
 {
     std::vector<SegmentString*> snappedSS;
     snapVertices(*inputSegStrings, snappedSS);
-    nodedResult = snapIntersections(snappedSS);
+    auto result = snapIntersections(snappedSS);
+    nodedResult = result.release();
 }
 
 
@@ -95,7 +96,12 @@ SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
     return std::move(result);
 }
 
-
+/*public*/
+std::vector<SegmentString*>*
+SnappingNoder::getNodedSubstrings() const
+{
+    return nodedResult;
+};
 
 
 } // namespace geos.noding.snap

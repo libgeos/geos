@@ -3,6 +3,7 @@
 
 #include <tut/tut.hpp>
 #include <utility.h>
+#include <util/NodingTestUtil.h>
 
 // geos
 #include <geos/noding/Noder.h>
@@ -14,7 +15,6 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/noding/snap/SnappingNoder.h>
 
@@ -39,23 +39,24 @@ struct test_snappingnoder_data {
 
     WKTReader r;
 
-    // void
-    // checkRounding(std::string& wkt, double scale, std::string& expected_wkt)
-    // {
-    //     std::unique_ptr<Geometry> geom = r.read(wkt);
-    //     PrecisionModel pm(scale);
-    //     SnapRoundingNoder noder(&pm);
-    //     std::unique_ptr<Geometry> result = nodeValidated(geom.get(), nullptr, noder);
+    void
+    checkRounding(const std::string& wkt1, const std::string& wkt2, double snapDist, std::string& expected_wkt)
+    {
+        std::unique_ptr<Geometry> geom1 = r.read(wkt1);
+        std::unique_ptr<Geometry> geom2(nullptr);
+        if (wkt2.size() > 0) {
+            geom2 = r.read(wkt2);
+        }
+        SnappingNoder noder(snapDist);
+        std::unique_ptr<Geometry> result = geos::NodingTestUtil::nodeValidated(geom1.get(), geom2.get(), &noder);
 
-    //     // only check if expected was provided
-    //     if (expected_wkt.size() == 0) return;
+        // only check if expected was provided
+        if (expected_wkt.size() == 0) return;
 
-    //     std::unique_ptr<Geometry> expected = r.read(expected_wkt);
-    //     ensure_equals_geometry(expected.get(), result.get());
-    // }
+        std::unique_ptr<Geometry> expected = r.read(expected_wkt);
+        ensure_equals_geometry(expected.get(), result.get());
+    }
 
-
-    // test_snappingnoder_data() {}
 };
 
 typedef test_group<test_snappingnoder_data> group;
@@ -67,18 +68,61 @@ group test_snappingnoder_group("geos::noding::snap::SnappingNoder");
 // Test Cases
 //
 
-// testSimple
+
+//  testOverlappingLinesWithNearVertex
 template<>
 template<>
 void object::test<1> ()
 {
-    std::string wkt = "MULTILINESTRING ((1 1, 9 2), (3 3, 3 0))";
-    std::string expected = "MULTILINESTRING ((1 1, 3 1), (3 1, 9 2), (3 3, 3 1), (3 1, 3 0))";
-    // checkRounding(wkt, 1, expected);
+    std::string wkt1 = "LINESTRING (100 100, 300 100)";
+    std::string wkt2 = "LINESTRING (200 100.1, 400 100)";
+    std::string expected = "MULTILINESTRING ((100 100, 200 100.1), (200 100.1, 300 100), (200 100.1, 300 100), (300 100, 400 100))";
+    checkRounding(wkt1, wkt2, 1, expected);
 }
 
+//  testSnappedVertex
+template<>
+template<>
+void object::test<2> ()
+{
+    std::string wkt1 = "LINESTRING (100 100, 200 100, 300 100)";
+    std::string wkt2 = "LINESTRING (200 100.3, 400 110)";
+    std::string expected = "MULTILINESTRING ((100 100, 200 100), (200 100, 300 100), (200 100, 400 110))";
+    checkRounding(wkt1, wkt2, 1, expected);
+}
 
+//  testSelfSnap
+template<>
+template<>
+void object::test<3> ()
+{
+    std::string wkt1 = "LINESTRING (100 200, 100 100, 300 100, 200 99.3, 200 0)";
+    std::string wkt2 = "";
+    std::string expected = "MULTILINESTRING ((100 200, 100 100, 200 99.3), (200 99.3, 300 100), (300 100, 200 99.3), (200 99.3, 200 0))";
+    checkRounding(wkt1, wkt2, 1, expected);
+}
 
+//  testLineCondensePointsp
+template<>
+template<>
+void object::test<4> ()
+{
+    std::string wkt1 = "LINESTRING (1 1, 1.3 1, 1.6 1, 1.9 1, 2.2 1, 2.5 1, 2.8 1, 3.1 1, 3.5 1, 4 1)";
+    std::string wkt2 = "";
+    std::string expected = "LINESTRING (1 1, 2.2 1, 3.5 1)";
+    checkRounding(wkt1, wkt2, 1, expected);
+}
+
+//  testLineDensePointsSelfSnap
+template<>
+template<>
+void object::test<5> ()
+{
+    std::string wkt1 = "LINESTRING (1 1, 1.3 1, 1.6 1, 1.9 1, 2.2 1, 2.5 1, 2.8 1, 3.1 1, 3.5 1, 4.8 1, 3.8 3.1, 2.5 1.1, 0.5 3.1)";
+    std::string wkt2 = "";
+    std::string expected = "MULTILINESTRING ((1 1, 2.2 1), (2.2 1, 3.5 1, 4.8 1, 3.8 3.1, 2.2 1), (2.2 1, 1 1), (1 1, 0.5 3.1))";
+    checkRounding(wkt1, wkt2, 1, expected);
+}
 
 
 

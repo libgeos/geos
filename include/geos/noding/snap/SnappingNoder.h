@@ -70,7 +70,7 @@ private:
     // Members
     SnappingPointIndex snapIndex;
     double snapTolerance;
-    std::unique_ptr<std::vector<SegmentString*>> nodedResult;
+    std::vector<SegmentString*>* nodedResult;
 
     // Methods
     void snapVertices(std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings);
@@ -100,7 +100,7 @@ public:
     /**
     * @return a Collection of NodedSegmentStrings representing the substrings
     */
-    std::vector<SegmentString*>* getNodedSubstrings() { return nodedResult.release(); };
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
     void computeNodes(std::vector<SegmentString*>* inputSegStrings) override;
 
