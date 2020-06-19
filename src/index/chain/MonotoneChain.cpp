@@ -35,11 +35,11 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              size_t nstart, size_t nend, void* nContext)
     :
     pts(newPts),
-    // env(newPts[nstart], newPts[nend]),
-    envIsSet(false),
     context(nContext),
     start(nstart),
     end(nend),
+    env(newPts[nstart], newPts[nend]),
+    envIsSet(false),
     id(-1)
 {
 }

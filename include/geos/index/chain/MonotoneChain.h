@@ -182,10 +182,6 @@ private:
     /// Externally owned
     const geom::CoordinateSequence& pts;
 
-    /// Owned by this class
-    geom::Envelope env;
-    bool envIsSet;
-
     /// user-defined information
     void* context;
 
@@ -195,8 +191,13 @@ private:
     /// Index of chain end vertex into the CoordinateSequence, 0 based.
     size_t end;
 
+    /// Owned by this class
+    geom::Envelope env;
+    bool envIsSet;
+
     /// useful for optimizing chain comparisons
     int id;
+
 
     // Declare type as noncopyable
     MonotoneChain(const MonotoneChain& other) = delete;
