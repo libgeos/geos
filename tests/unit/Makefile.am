@@ -164,6 +164,7 @@ geos_unit_SOURCES = \
 	noding/snapround/HotPixelTest.cpp \
 	noding/snapround/MCIndexSnapRounderTest.cpp \
 	noding/snapround/SnapRoundingNoderTest.cpp \
+	noding/snap/SnapingNoderTest.cpp \
 	operation/buffer/BufferBuilderTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \

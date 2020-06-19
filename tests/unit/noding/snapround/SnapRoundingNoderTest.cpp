@@ -3,6 +3,7 @@
 
 #include <tut/tut.hpp>
 #include <utility.h>
+#include <util/NodingTestUtil.h>
 
 // geos
 #include <geos/noding/Noder.h>
@@ -38,86 +39,13 @@ struct test_snaproundingnoder_data {
 
     WKTReader r;
 
-    std::unique_ptr<Geometry>
-    toLines(const std::vector<SegmentString*>* nodedList, const GeometryFactory* geomFact)
-    {
-        std::vector<std::unique_ptr<Geometry>> lines;
-
-        for (auto nss : *nodedList) {
-          CoordinateSequence* pts = nss->getCoordinates();
-          // pts is owned by nss, so we make a copy to build the line
-          // on top of. Lines are 100% self-contained and own all their parts.
-          // Input nodedList can be freed.
-          lines.emplace_back(geomFact->createLineString(pts->clone()));
-        }
-        if (lines.size() == 1) return std::move(lines[0]);
-
-        // move the lines to pass ownership to the multiLineString
-        return geomFact->createMultiLineString(std::move(lines));
-    }
-
-
-    std::vector<SegmentString*>
-    toSegmentStrings(std::vector<const LineString*>& lines)
-    {
-        std::vector<SegmentString*> nssList;
-        for (auto line : lines) {
-            // line->getCoordinates() clones CoordinateSequence
-            // into a unique_ptr<> which we have to release() to the
-            // NodedSegmentString constructor, so
-            // nss now owns nss->pts
-            NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), line);
-            nssList.push_back(nss);
-        }
-        return nssList;
-    }
-
-    std::unique_ptr<Geometry>
-    nodeValidated(const Geometry* geom1, const Geometry* geom2, SnapRoundingNoder& noder)
-    {
-        std::vector<const LineString*> lines;
-        // lines are const* to linear components of geom1, geom1 still
-        // owns all coordinates, etc
-        LinearComponentExtracter::getLines(*geom1, lines);
-        if (geom2 != nullptr) {
-            LinearComponentExtracter::getLines(*geom2, lines);
-        }
-
-        // ssList needs to be disposed after noder is done working
-        std::vector<SegmentString*> ssList = toSegmentStrings(lines);
-
-        ValidatingNoder noderValid(noder);
-        // computeNotes might alster ssList, but ssList still
-        // holds all memory
-        noderValid.computeNodes(&ssList);
-
-        // getNodedSubstrings calls NodedSegmentString::getNodedSubStrings()
-        // which creates new NodedSegmentString and new pts member, so complete
-        // new copy of data. Can be disposed of after geometries are constructed
-        std::vector<SegmentString*>* nodedList = noder.getNodedSubstrings();
-
-        // Dispose of ssList
-        for (auto ss: ssList) {
-            delete ss;
-        }
-
-        std::unique_ptr<Geometry> lineGeom = toLines(nodedList, geom1->getFactory());
-
-        // Dispose of nodedList
-        for (auto nss: *nodedList) {
-            delete nss;
-        }
-
-        return lineGeom;
-    }
-
     void
     checkRounding(std::string& wkt, double scale, std::string& expected_wkt)
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         PrecisionModel pm(scale);
         SnapRoundingNoder noder(&pm);
-        std::unique_ptr<Geometry> result = nodeValidated(geom.get(), nullptr, noder);
+        std::unique_ptr<Geometry> result = geos::NodingTestUtil::nodeValidated(geom.get(), nullptr, &noder);
 
         // only check if expected was provided
         if (expected_wkt.size() == 0) return;
