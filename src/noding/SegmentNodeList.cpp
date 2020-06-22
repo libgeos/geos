@@ -251,7 +251,7 @@ SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 {
     std::unique_ptr<std::vector<Coordinate>> pts(new std::vector<Coordinate>);
     createSplitEdgePts(ei0, ei1, *pts);
-    return new NodedSegmentString(new CoordinateArraySequence(pts.release()), nullptr);
+    return new NodedSegmentString(new CoordinateArraySequence(pts.release()), edge.getData());
 }
 
 
