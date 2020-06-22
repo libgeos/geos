@@ -406,6 +406,7 @@ AC_OUTPUT([
 	include/geos/operation/linemerge/Makefile
 	include/geos/operation/overlay/Makefile
 	include/geos/operation/overlay/snap/Makefile
+	include/geos/operation/overlayng/Makefile
 	include/geos/operation/polygonize/Makefile
 	include/geos/operation/predicate/Makefile
 	include/geos/operation/relate/Makefile
@@ -440,6 +441,7 @@ AC_OUTPUT([
 	src/operation/intersection/Makefile
 	src/operation/linemerge/Makefile
 	src/operation/overlay/Makefile
+	src/operation/overlayng/Makefile
 	src/operation/polygonize/Makefile
 	src/operation/predicate/Makefile
 	src/operation/relate/Makefile
