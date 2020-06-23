@@ -39,6 +39,7 @@ class GEOS_DLL EdgeSourceInfo {
 
 private:
 
+    // Members
     int index;
     int dim = -999;
     bool edgeIsHole = false;

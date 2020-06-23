@@ -98,17 +98,18 @@ class GEOS_DLL OverlayLabel {
 
 private:
 
+    // Members
     int aDim = DIM_NOT_PART;
     bool aIsHole = false;
     Location aLocLeft = LOC_UNKNOWN;
     Location aLocRight = LOC_UNKNOWN;
     Location aLocLine = LOC_UNKNOWN;
-
     int bDim = DIM_NOT_PART;
     bool bIsHole = false;
     Location bLocLeft = LOC_UNKNOWN;
     Location bLocRight = LOC_UNKNOWN;
     Location bLocLine = LOC_UNKNOWN;
+
 
     std::string dimensionSymbol(int dim) const;
     void locationString(int index, std::ostream& os) const;
