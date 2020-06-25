@@ -9,7 +9,12 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 libopoverlayng_la_SOURCES = \
     EdgeSourceInfo.cpp \
     InputGeometry.cpp \
-    OverlayLabel.cpp
+    InputNoder.cpp \
+    LineLimiter.cpp \
+    OverlayLabel.cpp \
+    OverlayUtil.cpp \
+    RingClipper.cpp 
+
 
 libopoverlayng_la_LIBADD =
 

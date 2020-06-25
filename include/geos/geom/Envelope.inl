@@ -246,6 +246,26 @@ Envelope::intersects(double x, double y) const
     return (x <= maxx && x >= minx && y <= maxy && y >= miny);
 }
 
+/*public*/
+INLINE bool
+Envelope::disjoint(const Envelope& other) const
+{
+    return disjoint(&other);
+}
+
+/*public*/
+INLINE bool
+Envelope::disjoint(const Envelope* other) const
+{
+    if (isNull() || other->isNull()) {
+        return true;
+    }
+    return other->minx > maxx ||
+        other->maxx < minx ||
+        other->miny > maxy ||
+        other->maxy < miny;
+}
+
 
 /*public*/
 INLINE bool
