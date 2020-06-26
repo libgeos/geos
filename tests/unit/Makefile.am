@@ -183,6 +183,8 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
+	operation/overlayng/RingClipperTest.cpp \
+	operation/overlayng/LineLimiterTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \

@@ -40,7 +40,7 @@ std::unique_ptr<CoordinateArraySequence>
 RingClipper::clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const
 {
     // TODO: is it possible to avoid copying array 4 times?
-    std::unique_ptr<CoordinateArraySequence> ptsClip(new CoordinateArraySequence(pts->size()));
+    std::unique_ptr<CoordinateArraySequence> ptsClip(new CoordinateArraySequence());
 
     Coordinate p0;
     pts->getAt(pts->size() - 1, p0);
