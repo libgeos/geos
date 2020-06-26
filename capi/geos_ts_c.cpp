@@ -921,13 +921,8 @@ extern "C" {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
 
-            std::string wkbstring(reinterpret_cast<const char*>(wkb), size); // make it binary !
             WKBReader r(*(static_cast<GeometryFactory const*>(handle->geomFactory)));
-            std::istringstream is(std::ios_base::binary);
-            is.str(wkbstring);
-            is.seekg(0, std::ios::beg); // rewind reader pointer
-            auto g = r.read(is);
-            return g.release();
+            return r.read(wkb, size).release();
         });
     }
 
@@ -2705,11 +2700,7 @@ extern "C" {
     GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader* reader, const unsigned char* wkb, size_t size)
     {
         return execute(extHandle, [&]() {
-            // http://stackoverflow.com/questions/2079912/simpler-way-to-create-a-c-memorystream-from-char-size-t-without-copying-t
-            membuf mb((char*)wkb, size);
-            istream is(&mb);
-
-            return reader->read(is).release();
+            return reader->read(wkb, size).release();
         });
     }
 
