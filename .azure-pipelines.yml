@@ -258,3 +258,14 @@ stages:
         ctest -V --output-on-failure -C $BUILD_TYPE
       displayName: 'Build C++20'
       condition: contains(variables['CXXSTD'], '20')
+
+  - job: Code_quality_checks
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+    - script: |
+        set -e
+        sudo -E apt-get update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
+        ./tools/cppcheck.sh
+      displayName: 'cppcheck'
