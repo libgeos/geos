@@ -65,14 +65,14 @@ EdgeEndBuilder::computeEdgeEnds(Edge* edge, std::vector<EdgeEnd*>* l)
     const EdgeIntersection* eiCurr = nullptr;
 
     const EdgeIntersection* eiNext = &*it;
-    it++;
+    ++it;
     do {
         eiPrev = eiCurr;
         eiCurr = eiNext;
         eiNext = nullptr;
         if(it != eiList.end()) {
             eiNext = &*it;
-            it++;
+            ++it;
         }
         if(eiCurr != nullptr) {
             createEdgeEndForPrev(edge, l, eiCurr, eiPrev);

@@ -49,9 +49,8 @@ NodeMap::NodeMap(const NodeFactory& newNodeFact)
 
 NodeMap::~NodeMap()
 {
-    NodeMap::const_iterator it = nodeMap.begin();
-    for(; it != nodeMap.end(); it++) {
-        delete it->second;
+    for(auto& it: nodeMap) {
+        delete it.second;
     }
 }
 
@@ -143,9 +142,8 @@ NodeMap::find(const Coordinate& coord) const
 void
 NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>& bdyNodes) const
 {
-    NodeMap::const_iterator it = nodeMap.begin();
-    for(; it != nodeMap.end(); it++) {
-        Node* node = it->second;
+    for(auto& it: nodeMap) {
+        Node* node = it.second;
         if(node->getLabel().getLocation(geomIndex) == Location::BOUNDARY) {
             bdyNodes.push_back(node);
         }
@@ -156,9 +154,8 @@ string
 NodeMap::print() const
 {
     string out = "";
-    NodeMap::const_iterator it = nodeMap.begin();
-    for(; it != nodeMap.end(); it++) {
-        Node* node = it->second;
+    for(auto& it: nodeMap) {
+        Node* node = it.second;
         out += node->print();
     }
     return out;

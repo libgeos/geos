@@ -72,13 +72,8 @@ AbstractSTRtree::createParentBoundables(BoundableList* childBoundables,
 
     std::unique_ptr< BoundableList > sortedChildBoundables(sortBoundables(childBoundables));
 
-    for(BoundableList::iterator i = sortedChildBoundables->begin(),
-            e = sortedChildBoundables->end();
-            i != e; i++)
-        //for(std::size_t i=0, scbsize=sortedChildBoundables->size(); i<scbsize; ++i)
+    for(Boundable* childBoundable: *sortedChildBoundables)
     {
-        Boundable* childBoundable = *i; // (*sortedChildBoundables)[i];
-
         AbstractNode* last = lastNode(parentBoundables.get());
         if(last->getChildBoundables()->size() == nodeCapacity) {
             last = createNode(newLevel);
@@ -160,9 +155,7 @@ AbstractSTRtree::query(const void* searchBounds, const AbstractNode& node,
 
     const BoundableList& boundables = *(node.getChildBoundables());
 
-    for(BoundableList::const_iterator i = boundables.begin(), e = boundables.end();
-            i != e; i++) {
-        const Boundable* childBoundable = *i;
+    for(const Boundable* childBoundable: boundables) {
         if(!getIntersectsOp()->intersects(childBoundable->getBounds(), searchBounds)) {
             continue;
         }
