@@ -164,7 +164,7 @@ PlanarGraph::getNodes(vector<Node*>& values)
     while(it != nodes->nodeMap.end()) {
         assert(it->second);
         values.push_back(it->second);
-        it++;
+        ++it;
     }
 }
 
@@ -233,9 +233,8 @@ PlanarGraph::linkResultDirectedEdges()
 #if GEOS_DEBUG
     cerr << "PlanarGraph::linkResultDirectedEdges called" << endl;
 #endif
-    NodeMap::iterator nodeit = nodes->nodeMap.begin();
-    for(; nodeit != nodes->nodeMap.end(); nodeit++) {
-        Node* node = nodeit->second;
+    for(auto& nodeIt: nodes->nodeMap) {
+        Node* node = nodeIt.second;
         assert(node);
 
         EdgeEndStar* ees = node->getEdges();
@@ -258,9 +257,8 @@ PlanarGraph::linkAllDirectedEdges()
 #if GEOS_DEBUG
     cerr << "PlanarGraph::linkAllDirectedEdges called" << endl;
 #endif
-    NodeMap::iterator nodeit = nodes->nodeMap.begin();
-    for(; nodeit != nodes->nodeMap.end(); nodeit++) {
-        Node* node = nodeit->second;
+    for(auto& nodeIt: nodes->nodeMap) {
+        Node* node = nodeIt.second;
         assert(node);
 
         EdgeEndStar* ees = node->getEdges();

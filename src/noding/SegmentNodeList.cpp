@@ -190,7 +190,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
     iterator it = begin();
     SegmentNode* eiPrev = *it;
     assert(eiPrev);
-    it++;
+    ++it;
     for(iterator itEnd = end(); it != itEnd; ++it) {
         SegmentNode* ei = *it;
         assert(ei);
@@ -327,12 +327,7 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 {
     os << "Intersections: (" << nlist.nodeMap.size() << "):" << std::endl;
 
-    std::set<SegmentNode*, SegmentNodeLT>::const_iterator
-    it = nlist.nodeMap.begin(),
-    itEnd = nlist.nodeMap.end();
-
-    for(; it != itEnd; it++) {
-        SegmentNode* ei = *it;
+    for(const SegmentNode* ei: nlist.nodeMap) {
         os << " " << *ei;
     }
     return os;

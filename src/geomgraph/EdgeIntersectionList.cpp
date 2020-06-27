@@ -115,7 +115,7 @@ EdgeIntersectionList::addSplitEdges(std::vector<Edge*>* edgeList)
         Edge* newEdge = createSplitEdge(eiPrev, ei);
         edgeList->push_back(newEdge);
         eiPrev = ei;
-        it++;
+        ++it;
     }
 }
 

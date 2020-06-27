@@ -234,8 +234,7 @@ RelateComputer::computeIM()
 void
 RelateComputer::insertEdgeEnds(std::vector<EdgeEnd*>* ee)
 {
-    for(std::vector<EdgeEnd*>::iterator i = ee->begin(); i < ee->end(); i++) {
-        EdgeEnd* e = *i;
+    for(EdgeEnd* e: *ee) {
         nodes.add(e);
     }
 }
@@ -311,10 +310,8 @@ void
 RelateComputer::copyNodesAndLabels(int argIndex)
 {
     const NodeMap* nm = (*arg)[argIndex]->getNodeMap();
-    NodeMap::const_iterator nodeIt = nm->begin(), nodeEnd = nm->end();
-
-    for(; nodeIt != nodeEnd; nodeIt++) {
-        Node* graphNode = nodeIt->second;
+    for(const auto& it: *nm) {
+        const Node* graphNode = it.second;
         Node* newNode = nodes.addNode(graphNode->getCoordinate());
         newNode->setLabel(argIndex,
                           graphNode->getLabel().getLocation(argIndex));
@@ -335,8 +332,7 @@ void
 RelateComputer::computeIntersectionNodes(int argIndex)
 {
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
-    for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
-        Edge* e = *i;
+    for(Edge* e: *edges) {
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         for(const EdgeIntersection & ei : eiL) {
@@ -364,8 +360,7 @@ void
 RelateComputer::labelIntersectionNodes(int argIndex)
 {
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
-    for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
-        Edge* e = *i;
+    for(Edge* e: *edges) {
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
 
@@ -439,8 +434,7 @@ void
 RelateComputer::labelIsolatedEdges(int thisIndex, int targetIndex)
 {
     std::vector<Edge*>* edges = (*arg)[thisIndex]->getEdges();
-    for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
-        Edge* e = *i;
+    for(Edge* e: *edges) {
         if(e->isIsolated()) {
             labelIsolatedEdge(e, targetIndex, (*arg)[targetIndex]->getGeometry());
             isolatedEdges.push_back(e);
@@ -470,9 +464,8 @@ RelateComputer::labelIsolatedEdge(Edge* e, int targetIndex, const Geometry* targ
 void
 RelateComputer::labelIsolatedNodes()
 {
-    NodeMap::iterator nodeIt = nodes.begin(), nodeEnd = nodes.end();
-    for(; nodeIt != nodeEnd; nodeIt++) {
-        Node* n = nodeIt->second;
+    for(const auto& it: nodes) {
+        Node* n = it.second;
         const Label& label = n->getLabel();
         // isolated nodes should always have at least one geometry in their label
         assert(label.getGeometryCount() > 0); // node with empty label found

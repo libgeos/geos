@@ -132,8 +132,7 @@ RelateNodeGraph::copyNodesAndLabels(GeometryGraph* geomGraph, int argIndex)
 void
 RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*>* ee)
 {
-    for(vector<EdgeEnd*>::iterator i = ee->begin(); i < ee->end(); i++) {
-        EdgeEnd* e = *i;
+    for(EdgeEnd* e: *ee) {
         nodes->add(e);
     }
 }
