@@ -220,6 +220,9 @@ OverlayNoder::createEdgeSourceInfo(int index, int depthDelta, bool isHole)
 void
 OverlayNoder::addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info)
 {
+    // TODO: manage these internally to OverlayNoder in a std::deque,
+    // since they do not have a life span longer than the OverlayNoder
+    // in OverlayNG::buildGraph()
     NodedSegmentString* ss = new NodedSegmentString(cas.release(), reinterpret_cast<const void*>(info));
     segStrings->push_back(ss);
 }

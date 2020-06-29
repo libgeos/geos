@@ -8,6 +8,7 @@ SUBDIRS =
 geosdir = $(includedir)/geos/operation/overlayng
 
 geos_HEADERS = \
+    Edge.h \
     EdgeSourceInfo.h \
     InputGeometry.h \
     InputNoder.h \
