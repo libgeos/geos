@@ -69,6 +69,9 @@ public:
     int compareTo(const EdgeKey* ek) const;
     bool equals(const EdgeKey* ek) const;
 
+    friend bool operator< (const EdgeKey& ek1, const EdgeKey& ek2);
+    friend bool operator== (const EdgeKey& ek1, const EdgeKey& ek2);
+
 
 };
 

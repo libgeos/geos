@@ -9,6 +9,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 libopoverlayng_la_SOURCES = \
     Edge.cpp \
     EdgeKey.cpp \
+    EdgeMerger.cpp \
     EdgeSourceInfo.cpp \
     InputGeometry.cpp \
     InputNoder.cpp \

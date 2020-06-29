@@ -82,6 +82,19 @@ EdgeKey::equals(const EdgeKey* ek) const
         && p1y == ek->p1y;
 }
 
+bool
+operator<(const EdgeKey& ek1, const EdgeKey& ek2)
+{
+    return ek1.compareTo(&ek2) < 0;
+}
+
+bool
+operator==(const EdgeKey& ek1, const EdgeKey& ek2)
+{
+    return ek1.equals(&ek2);
+}
+
+
 
 
 } // namespace geos.operation.overlayng
