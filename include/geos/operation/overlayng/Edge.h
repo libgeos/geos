@@ -119,7 +119,7 @@ public:
     const geom::CoordinateSequence* getCoordinates() const;
     const geom::Coordinate& getCoordinate(size_t index)  const;
 
-    int size() const;
+    std::size_t size() const;
     bool direction() const;
 
     /**

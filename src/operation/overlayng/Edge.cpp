@@ -51,7 +51,7 @@ Edge::getCoordinate(size_t index)  const
 }
 
 /*public*/
-int
+std::size_t
 Edge::size() const
 {
     return pts->size();
