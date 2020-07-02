@@ -58,7 +58,7 @@ class GEOS_DLL Edge {
 private:
 
     // Members
-    geom::CoordinateSequence* pts;
+    std::unique_ptr<geom::CoordinateSequence> pts;
     int aDim = OverlayLabel::DIM_UNKNOWN;
     int aDepthDelta = 0;
     bool aIsHole = false;
@@ -114,9 +114,11 @@ public:
         , bIsHole(false)
         {};
 
+    // takes ownership of pts from caller
     Edge(geom::CoordinateSequence* p_pts, const EdgeSourceInfo* info);
 
-    const geom::CoordinateSequence* getCoordinates() const;
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates();
+    const geom::CoordinateSequence* getCoordinatesRO() const;
     const geom::Coordinate& getCoordinate(size_t index)  const;
 
     std::size_t size() const;

@@ -38,9 +38,16 @@ Edge::Edge(CoordinateSequence* p_pts, const EdgeSourceInfo* info)
 
 /*public*/
 const CoordinateSequence*
-Edge::getCoordinates() const
+Edge::getCoordinatesRO() const
 {
-    return pts;
+    return pts.get();
+}
+
+/*public*/
+std::unique_ptr<CoordinateSequence>
+Edge::getCoordinates()
+{
+    return std::move(pts);
 }
 
 /*public*/

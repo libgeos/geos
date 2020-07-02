@@ -14,6 +14,9 @@ libopoverlayng_la_SOURCES = \
     InputGeometry.cpp \
     InputNoder.cpp \
     LineLimiter.cpp \
+    MaximalEdgeRing.cpp \
+    OverlayEdge.cpp \
+    OverlayEdgeRing.cpp \
     OverlayLabel.cpp \
     OverlayUtil.cpp \
     RingClipper.cpp 

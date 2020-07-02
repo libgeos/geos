@@ -15,6 +15,9 @@ geos_HEADERS = \
     InputGeometry.h \
     InputNoder.h \
     LineLimiter.h \
+    MaximalEdgeRing.h \
+    OverlayEdge.h \
+    OverlayEdgeRing.h \
     OverlayLabel.h \
     OverlayUtil.h \
     RingClipper.h 
