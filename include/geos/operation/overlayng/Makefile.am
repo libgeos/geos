@@ -18,6 +18,7 @@ geos_HEADERS = \
     MaximalEdgeRing.h \
     OverlayEdge.h \
     OverlayEdgeRing.h \
+    OverlayGraph.h \
     OverlayLabel.h \
     OverlayUtil.h \
     RingClipper.h 

@@ -30,8 +30,8 @@ using namespace geos::geom;
 using geos::util::GEOSException;
 
 /*public*/
-Edge::Edge(CoordinateSequence* p_pts, const EdgeSourceInfo* info)
-    : pts(p_pts)
+Edge::Edge(std::unique_ptr<CoordinateSequence> p_pts, const EdgeSourceInfo* info)
+    : pts(p_pts.release())
 {
     copyInfo(info);
 }
@@ -143,7 +143,7 @@ Edge::dimension(int geomIndex) const
 */
 /*private*/
 void
-Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole)
+Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole) const
 {
     int dimLabel = labelDim(dim, depthDelta);
 
@@ -301,6 +301,15 @@ Edge::isHoleMerged(int geomIndex, const Edge* edge1, const Edge* edge2) const
     bool isShellMerged = isShell1 || isShell2;
     // flip since isHole is stored
     return !isShellMerged;
+}
+
+/*public*/
+void
+Edge::createLabel(OverlayLabel &lbl) const
+{
+    initLabel(lbl, 0, aDim, aDepthDelta, aIsHole);
+    initLabel(lbl, 1, bDim, bDepthDelta, bIsHole);
+    return;
 }
 
 

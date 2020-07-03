@@ -17,6 +17,7 @@ libopoverlayng_la_SOURCES = \
     MaximalEdgeRing.cpp \
     OverlayEdge.cpp \
     OverlayEdgeRing.cpp \
+    OverlayGraph.cpp \
     OverlayLabel.cpp \
     OverlayUtil.cpp \
     RingClipper.cpp 

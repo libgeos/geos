@@ -288,6 +288,10 @@ OverlayEdge::setEdgeRingMax(const MaximalEdgeRing* p_maximalEdgeRing)
     maxEdgeRing = p_maximalEdgeRing;
 }
 
+
+
+
+
 // /*public*/
 // std::string
 // toString()

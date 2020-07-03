@@ -83,7 +83,7 @@ private:
     * For line edges the line location is not significant
     * (since there is no parent area for which to determine location).
     */
-    void initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole);
+    void initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole) const;
 
     int labelDim(int dim, int depthDelta) const;
     bool isHole(int index) const;
@@ -115,7 +115,7 @@ public:
         {};
 
     // takes ownership of pts from caller
-    Edge(geom::CoordinateSequence* p_pts, const EdgeSourceInfo* info);
+    Edge(std::unique_ptr<geom::CoordinateSequence> p_pts, const EdgeSourceInfo* info);
 
     std::unique_ptr<geom::CoordinateSequence> getCoordinates();
     const geom::CoordinateSequence* getCoordinatesRO() const;
@@ -137,6 +137,7 @@ public:
     */
     void merge(const Edge* edge);
 
+    void createLabel(OverlayLabel &ovl) const;
 
 };
 
