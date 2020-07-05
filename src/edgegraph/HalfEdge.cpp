@@ -73,7 +73,7 @@ HalfEdge::find(const Coordinate& dest)
 bool
 HalfEdge::equals(const Coordinate& p0, const Coordinate& p1) const
 {
-    return m_orig.equals2D(p0) && m_sym->m_orig.equals(p1);
+    return m_orig.equals2D(p0) && m_sym->m_orig.equals2D(p1);
 }
 
 /*public*/
@@ -151,7 +151,7 @@ HalfEdge::isEdgesSorted() const
     do {
         HalfEdge* eNext = e->oNext();
         if (eNext == lowest) break;
-        bool isSorted = eNext->compareTo(e) > 0;
+        bool isSorted = (eNext->compareTo(e) > 0);
         if (!isSorted) {
             return false;
         }
@@ -209,7 +209,8 @@ HalfEdge::compareAngularDirection(const HalfEdge* e) const
 
 /*public*/
 int
-HalfEdge::degree() {
+HalfEdge::degree()
+{
     int degree = 0;
     HalfEdge* e = this;
     do {

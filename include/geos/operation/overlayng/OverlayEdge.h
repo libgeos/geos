@@ -84,7 +84,7 @@ public:
 
     bool isForward() const;
 
-    const Coordinate& directionPt() const;
+    const Coordinate& directionPt() const override;
 
     const OverlayLabel* getLabel() const;
 

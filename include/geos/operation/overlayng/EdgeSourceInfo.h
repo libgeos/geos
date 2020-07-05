@@ -41,9 +41,9 @@ private:
 
     // Members
     int index;
-    int dim = -999;
-    bool edgeIsHole = false;
-    int depthDelta = 0;
+    int dim;
+    bool edgeIsHole;
+    int depthDelta;
 
 
 public:

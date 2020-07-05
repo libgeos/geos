@@ -116,7 +116,7 @@ protected:
     *
     * @return the direction point for the edge
     */
-    const geom::Coordinate& directionPt() const { return dest(); };
+    virtual const geom::Coordinate& directionPt() const { return dest(); };
 
 
 public:
@@ -280,7 +280,7 @@ public:
     * </ul>
     */
     int compareAngularDirection(const HalfEdge* e) const;
-    int compareTo(const HalfEdge* e) { return compareAngularDirection(e); };
+    int compareTo(const HalfEdge* e) const { return compareAngularDirection(e); };
 
     /**
     * Computes the degree of the origin vertex.

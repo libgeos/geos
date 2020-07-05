@@ -22,6 +22,8 @@ namespace overlayng { // geos.operation.overlayng
 EdgeSourceInfo::EdgeSourceInfo(int p_index)
     : index(p_index)
     , dim(geom::Dimension::L)
+    , edgeIsHole(false)
+    , depthDelta(0)
     {};
 
 EdgeSourceInfo::EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole)
