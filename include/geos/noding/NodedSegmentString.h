@@ -157,6 +157,7 @@ public:
     const geom::Coordinate& getCoordinate(size_t i) const override;
 
     geom::CoordinateSequence* getCoordinates() const override;
+    geom::CoordinateSequence* releaseCoordinates();
 
     bool isClosed() const override;
 

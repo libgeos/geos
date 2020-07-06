@@ -11,9 +11,9 @@ geos_HEADERS = \
     Edge.h \
     EdgeKey.h \
     EdgeMerger.h \
+    EdgeNodingBuilder.h \
     EdgeSourceInfo.h \
     InputGeometry.h \
-    InputNoder.h \
     LineLimiter.h \
     MaximalEdgeRing.h \
     OverlayEdge.h \
@@ -21,5 +21,5 @@ geos_HEADERS = \
     OverlayGraph.h \
     OverlayLabel.h \
     OverlayUtil.h \
-    RingClipper.h 
+    RingClipper.h
 

@@ -10,9 +10,9 @@ libopoverlayng_la_SOURCES = \
     Edge.cpp \
     EdgeKey.cpp \
     EdgeMerger.cpp \
+    EdgeNodingBuilder.cpp \
     EdgeSourceInfo.cpp \
     InputGeometry.cpp \
-    InputNoder.cpp \
     LineLimiter.cpp \
     MaximalEdgeRing.cpp \
     OverlayEdge.cpp \
@@ -20,8 +20,7 @@ libopoverlayng_la_SOURCES = \
     OverlayGraph.cpp \
     OverlayLabel.cpp \
     OverlayUtil.cpp \
-    RingClipper.cpp 
+    RingClipper.cpp
 
 
 libopoverlayng_la_LIBADD =
-

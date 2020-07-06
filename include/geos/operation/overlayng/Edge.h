@@ -35,24 +35,27 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 
-// using geos::geom::Location;
-// using geos::geom::Position;
-
 /**
- * Represents a single edge in a topology graph,
- * carrying the topology information
+ * Represents the underlying linework for edges in a topology graph,
+ * and carries the topology information
  * derived from the two parent geometries.
- * The edge may be the result of the merger of
- * two or more edges which happen to have the same underlying linework
+ * The edge may be the result of the merging of
+ * two or more edges which have the same underlying linework
  * (although possibly different orientations).
  * In this case the topology information is
  * derived from the merging of the information in the
- * constituent edges.
+ * source edges.
+ * Merged edges can occur in the following situations
+ *
+ *  - Due to topology collapse caused by snapping or rounding
+ *    of polygonal geometries.
+ *  - Due to coincident linework in a linear input
+ *
+ * The source edges may have the same parent geometry,
+ * or different ones, or a mix of the two.
  *
  * @author mdavis
- *
  */
-
 class GEOS_DLL Edge {
 
 private:
@@ -112,13 +115,21 @@ public:
         , bDim(OverlayLabel::DIM_UNKNOWN)
         , bDepthDelta(0)
         , bIsHole(false)
+        , pts(nullptr)
         {};
 
-    // takes ownership of pts from caller
-    Edge(std::unique_ptr<geom::CoordinateSequence> p_pts, const EdgeSourceInfo* info);
+    static bool isCollapsed(const geom::CoordinateSequence* pts);
 
+    // takes ownership of pts from caller
+    Edge(geom::CoordinateSequence* p_pts, const EdgeSourceInfo* info);
+
+    // return a clone of the underlying points
     std::unique_ptr<geom::CoordinateSequence> getCoordinates();
+    // return a read-only pointer to the underlying points
     const geom::CoordinateSequence* getCoordinatesRO() const;
+    // release the underlying points to the caller
+    geom::CoordinateSequence* releaseCoordinates();
+
     const geom::Coordinate& getCoordinate(size_t index)  const;
 
     std::size_t size() const;
@@ -137,7 +148,7 @@ public:
     */
     void merge(const Edge* edge);
 
-    void createLabel(OverlayLabel &ovl) const;
+    void populateLabel(OverlayLabel &ovl) const;
 
 };
 

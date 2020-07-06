@@ -34,6 +34,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
+#include <geos/operation/overlayng/Edge.h>
 #include <geos/operation/overlayng/RingClipper.h>
 #include <geos/operation/overlayng/LineLimiter.h>
 #include <geos/operation/overlayng/EdgeSourceInfo.h>
@@ -58,18 +59,21 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /**
- * The overlay noder does the following:
+ * Builds a set of noded, unique, labelled Edges from
+ * the edges of the two input geometries.
  *
- * - Extracts input edges, and attaches topological information
- * - if clipping is enabled, handles clipping or limiting input geometry
- * - chooses a Noder based on provided precision model, unless a custom one is supplied
- * - calls the chosen Noder, with precision model
- * - removes any fully collapsed noded edges
+ * It performs the following steps:
+ *
+ *  - Extracts input edges, and attaches topological information
+ *  - if clipping is enabled, handles clipping or limiting input geometry
+ *  - chooses a {@link Noder} based on provided precision model, unless a custom one is supplied
+ *  - calls the chosen Noder, with precision model
+ *  - removes any fully collapsed noded edges
+ *  - builds {@link Edge}s and merges them
  *
  * @author mdavis
- *
  */
-class GEOS_DLL OverlayNoder {
+class GEOS_DLL EdgeNodingBuilder {
 
 private:
 
@@ -79,10 +83,9 @@ private:
 
     // Members
     const PrecisionModel* pm;
-    std::vector<SegmentString*>* segStrings;
+    std::vector<SegmentString*>* inputEdges;
     Noder* customNoder;
-    bool hasEdgesA;
-    bool hasEdgesB;
+    std::array<bool, 2> hasEdges;
     const Envelope* clipEnv;
     std::unique_ptr<RingClipper> clipper;
     std::unique_ptr<LineLimiter> limiter;
@@ -92,8 +95,9 @@ private:
     IntersectionAdder intAdder;
     std::unique_ptr<Noder> internalNoder;
     std::unique_ptr<Noder> spareInternalNoder;
-    // EdgeSourceInfo* owned by OverlayNoder, stored in deque
+    // EdgeSourceInfo* owned by EdgeNodingBuilder, stored in deque
     std::deque<EdgeSourceInfo> edgeSourceInfoQue;
+    std::deque<Edge> edgeQue;
 
     /**
     * Gets a noder appropriate for the precision model supplied.
@@ -107,14 +111,6 @@ private:
     std::unique_ptr<Noder> createFixedPrecisionNoder(const PrecisionModel* pm);
     std::unique_ptr<Noder> createFloatingPrecisionNoder(bool doValidation);
 
-    /**
-    * Records if each geometry has edges present after noding.
-    * If a geometry has collapsed to a point due to low precision,
-    * no edges will be present.
-    *
-    * @param segStrings noded edges to scan
-    */
-    void scanForEdges(std::vector<SegmentString*>* segStringsToScan);
 
     void addCollection(const GeometryCollection* gc, int geomIndex);
     void addPolygon(const Polygon* poly, int geomIndex);
@@ -124,7 +120,7 @@ private:
     void addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info);
     void addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info);
 
-    // Create a EdgeSourceInfo* owned by OverlayNoder
+    // Create a EdgeSourceInfo* owned by EdgeNodingBuilder
     const EdgeSourceInfo* createEdgeSourceInfo(int index, int depthDelta, bool isHole);
     const EdgeSourceInfo* createEdgeSourceInfo(int index);
 
@@ -175,26 +171,39 @@ private:
 
     int computeDepthDelta(const LinearRing* ring, bool isHole);
 
+    void add(const Geometry* g, int geomIndex);
+
+    /**
+    * Nodes a set of segment strings and creates {@link Edge}s from the result.
+    * The input segment strings each carry a {@link EdgeSourceInfo} object,
+    * which is used to provide source topology info to the constructed Edges
+    * (and is then discarded).
+    */
+    void node(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& nodedEdges);
+
+    void createEdges(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& createdEdges);
+
 
 public:
 
-    OverlayNoder(const PrecisionModel* p_pm)
+    /**
+    * Creates a new builder, with an optional custom noder.
+    * If the noder is not provided, a suitable one will
+    * be used based on the supplied precision model.
+    */
+    EdgeNodingBuilder(const PrecisionModel* p_pm, Noder* p_customNoder)
         : pm(p_pm)
-        , segStrings(new std::vector<SegmentString*>)
-        , customNoder(nullptr)
-        , hasEdgesA(false)
-        , hasEdgesB(false)
+        , inputEdges(new std::vector<SegmentString*>)
+        , customNoder(p_customNoder)
+        , hasEdges({false,false})
         , clipEnv(nullptr)
         , intAdder(lineInt)
         {};
 
-
-    void setNoder(Noder* noder);
-
     void setClipEnvelope(const Envelope* clipEnv);
 
     // returns newly allocated vector and segmentstrings
-    std::vector<SegmentString*>* node();
+    // std::vector<SegmentString*>* node();
 
     /**
     * Reports whether there are noded edges
@@ -208,7 +217,20 @@ public:
     */
     bool hasEdgesFor(int geomIndex);
 
-    void add(const Geometry* g, int geomIndex);
+    /**
+    * Creates a set of labelled {Edge}s.
+    * representing the fully noded edges of the input geometries.
+    * Coincident edges (from the same or both geometries)
+    * are merged along with their labels
+    * into a single unique, fully labelled edge.
+    *
+    * @param geom0 the first geometry
+    * @param geom1 the second geometry
+    * @return the noded, merged, labelled edges
+    */
+    void build(const Geometry* geom0, const Geometry* geom1, std::vector<Edge*>& builtEdges);
+
+
 
 };
 

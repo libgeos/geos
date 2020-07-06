@@ -27,11 +27,9 @@ using namespace geos::geom;
 /**
 * Creates a new graph for a set of noded, labelled {@link Edge}s.
 */
-OverlayGraph::OverlayGraph(std::vector<std::unique_ptr<Edge>> && edges)
-    : inputEdges(std::move(edges))
-{
-    build();
-}
+//std::vector<std::unique_ptr<Edge>> && edges
+OverlayGraph::OverlayGraph()
+{}
 
 /*public*/
 std::vector<OverlayEdge*>&
@@ -75,29 +73,23 @@ OverlayGraph::getResultAreaEdges()
     return resultEdges;
 }
 
-/*private*/
-void
-OverlayGraph::build()
-{
-    for (auto& e: inputEdges) {
-        addEdge(e.get());
-    }
-}
-
-/*private*/
+/*public*/
 OverlayEdge*
-OverlayGraph::addEdge(const Edge* edge)
+OverlayGraph::addEdge(Edge* edge)
 {
-    OverlayEdge* e = createEdges(edge->getCoordinatesRO(), createOverlayLabel(edge));
+    // CoordinateSequence* pts = = edge->getCoordinates().release();
+    CoordinateSequence* pts = edge->releaseCoordinates();
+    OverlayEdge* e = createEdgePair(pts, createOverlayLabel(edge));
     insert(e);
-    insert(static_cast<OverlayEdge*>(e->sym()));
+    insert(e->symOE());
     return e;
 }
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createEdges(const CoordinateSequence *pts, const OverlayLabel *lbl)
+OverlayGraph::createEdgePair(const CoordinateSequence *pts, const OverlayLabel *lbl)
 {
+    csQue.emplace_back(pts);
     OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
     OverlayEdge* e1 = createOverlayEdge(pts, lbl, false);
     e0->link(e1);
@@ -124,7 +116,7 @@ OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, const OverlayLabe
     return &ove;
 }
 
-/*private*/
+/*public*/
 const OverlayLabel*
 OverlayGraph::createOverlayLabel(const Edge* edge)
 {
@@ -133,18 +125,9 @@ OverlayGraph::createOverlayLabel(const Edge* edge)
     // Read back a reference
     OverlayLabel& ovl = ovLabelQue.back();
     // Initialize the reference with values from edge
-    edge->createLabel(ovl);
+    edge->populateLabel(ovl);
     // Return as pointer.
     return &ovl;
-}
-
-
-/*private*/
-bool
-OverlayGraph::isValidEdge(const Coordinate& orig, const Coordinate& dest) const
-{
-    int cmp = dest.compareTo(orig);
-    return cmp != 0;
 }
 
 /*private*/
@@ -153,6 +136,11 @@ OverlayGraph::insert(OverlayEdge* e)
 {
     edges.push_back(e);
 
+    /**
+     * If the edge origin node is already in the graph,
+     * insert the edge into the star of edges around the node.
+     * Otherwise, add a new node for the origin.
+     */
     auto it = nodeMap.find(e->orig());
     if (it != nodeMap.end()) {
         // found in map
@@ -160,8 +148,6 @@ OverlayGraph::insert(OverlayEdge* e)
         nodeEdge->insert(e);
     }
     else {
-        // add edge origin to node map
-        // (sym is also added in separate call)
         nodeMap[e->orig()] = e;
     }
 }

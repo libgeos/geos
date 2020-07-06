@@ -64,41 +64,21 @@ private:
     // Locally store the OverlayEdge and OverlayLabel
     std::deque<OverlayEdge> ovEdgeQue;
     std::deque<OverlayLabel> ovLabelQue;
+    std::vector<std::unique_ptr<const CoordinateSequence>> csQue;
 
     // Methods
-    void build();
-
-    /**
-    * Adds an edge between the coordinates orig and dest
-    * to this graph.
-    * Only valid edges can be added (in particular, zero-length segments cannot be added)
-    *
-    * @see #isValidEdge(Coordinate, Coordinate)
-    */
-    OverlayEdge* addEdge(const Edge* edge);
 
     /**
     * Create and add HalfEdge pairs to map and vector containers,
     * using local std::deque storage for objects.
     */
-    OverlayEdge* createEdges(const CoordinateSequence* pts, const OverlayLabel* lbl);
+    OverlayEdge* createEdgePair(const CoordinateSequence* pts, const OverlayLabel* lbl);
 
     /**
     * Create a single OverlayEdge in local std::deque storage, and return the
     * pointer.
     */
     OverlayEdge* createOverlayEdge(const CoordinateSequence* pts, const OverlayLabel* lbl, bool direction);
-
-    /**
-    * Create a single OverlayLabel in local std::deque storage
-    * and return a pointer to the stored object.
-    */
-    const OverlayLabel* createOverlayLabel(const Edge* edge);
-
-    /**
-    * Tests if the given coordinates form a valid edge (with non-zero length).
-    */
-    bool isValidEdge(const Coordinate& orig, const Coordinate& dest) const;
 
     void insert(OverlayEdge* e);
 
@@ -109,7 +89,15 @@ public:
     /**
     * Creates a new graph for a set of noded, labelled {@link Edge}s.
     */
-    OverlayGraph(std::vector<std::unique_ptr<Edge>> && edges);
+    OverlayGraph();
+
+    /**
+    * Adds an edge between the coordinates orig and dest
+    * to this graph.
+    * Only valid edges can be added (in particular, zero-length segments cannot be added)
+    *
+    */
+    OverlayEdge* addEdge(Edge* edge);
 
     /**
     * Gets the set of edges in this graph.
@@ -136,6 +124,11 @@ public:
     */
     std::unique_ptr<std::vector<OverlayEdge*>> getResultAreaEdges();
 
+    /**
+    * Create a single OverlayLabel in local std::deque storage
+    * and return a pointer to the stored object.
+    */
+    const OverlayLabel* createOverlayLabel(const Edge* edge);
 
 
 };

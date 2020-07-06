@@ -30,10 +30,33 @@ using namespace geos::geom;
 using geos::util::GEOSException;
 
 /*public*/
-Edge::Edge(std::unique_ptr<CoordinateSequence> p_pts, const EdgeSourceInfo* info)
-    : pts(p_pts.release())
+Edge::Edge(CoordinateSequence* p_pts, const EdgeSourceInfo* info)
+    : aDim(OverlayLabel::DIM_UNKNOWN)
+    , aDepthDelta(0)
+    , aIsHole(false)
+    , bDim(OverlayLabel::DIM_UNKNOWN)
+    , bDepthDelta(0)
+    , bIsHole(false)
+    , pts(p_pts)
 {
     copyInfo(info);
+}
+
+/*public static*/
+bool
+Edge::isCollapsed(const CoordinateSequence* pts) {
+    std::size_t sz = pts->size();
+    if (sz < 2)
+        return true;
+    // zero-length line
+    if (pts->getAt(0).equals2D(pts->getAt(1)))
+        return true;
+    // TODO: is pts > 2 with equal points ever expected?
+    if (sz > 2) {
+        if (pts->getAt(sz-1).equals2D(pts->getAt(sz - 2)))
+            return true;
+    }
+    return false;
 }
 
 /*public*/
@@ -47,8 +70,20 @@ Edge::getCoordinatesRO() const
 std::unique_ptr<CoordinateSequence>
 Edge::getCoordinates()
 {
-    return std::move(pts);
+    // std::unique_ptr<CoordinateSequence> tmp = std::move(pts);
+    // pts.reset(nullptr);
+    return pts->clone();
 }
+
+/*public*/
+geom::CoordinateSequence*
+Edge::releaseCoordinates()
+{
+    CoordinateSequence* cs = pts.release();
+    pts.reset(nullptr);
+    return cs;
+}
+
 
 /*public*/
 const Coordinate&
@@ -119,12 +154,6 @@ Edge::dimension(int geomIndex) const
     return bDim;
 }
 
-/*public*/
-// OverlayLabel
-// createLabel()
-// {
-//     // IMPLEMENT THIS ON OverlayGraph
-// }
 
 /**
 * Populates the label for an edge resulting from an input geometry.
@@ -305,7 +334,7 @@ Edge::isHoleMerged(int geomIndex, const Edge* edge1, const Edge* edge2) const
 
 /*public*/
 void
-Edge::createLabel(OverlayLabel &lbl) const
+Edge::populateLabel(OverlayLabel &lbl) const
 {
     initLabel(lbl, 0, aDim, aDepthDelta, aIsHole);
     initLabel(lbl, 1, bDim, bDepthDelta, bIsHole);

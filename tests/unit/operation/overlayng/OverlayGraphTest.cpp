@@ -35,8 +35,6 @@ struct test_overlaygraph_data {
 
     WKTReader r;
     WKTWriter w;
-    std::vector<std::unique_ptr<Edge>> edges;
-    std::vector<EdgeSourceInfo> esis;
 
     void
     checkNodeValid(const OverlayEdge* e)
@@ -47,23 +45,17 @@ struct test_overlaygraph_data {
     }
 
     void
-    resetEdges()
-    {
-        edges.clear();
-        esis.clear();
-    }
-
-    void
-    addEdge(const char *wktLine)
+    addEdge(OverlayGraph* graph, const char* wktLine)
     {
         std::unique_ptr<Geometry> geom = r.read(std::string(wktLine));
         LineString* line = dynamic_cast<LineString*>(geom.get());
-        const CoordinateSequence* cs = line->getCoordinatesRO();
-        std::unique_ptr<CoordinateSequence> csCopy(cs->clone());
-        esis.emplace_back(0);
-        const EdgeSourceInfo* esi = &(esis.back());
-        std::unique_ptr<Edge> e(new Edge(std::move(csCopy), esi));
-        edges.push_back(std::move(e));
+        std::unique_ptr<CoordinateSequence> cs = line->getCoordinates();
+
+        EdgeSourceInfo esi(0);
+        Edge e(cs.release(), &esi);
+        std::unique_ptr<CoordinateSequence> pts = e.getCoordinates();
+
+        graph->addEdge(&e);
     }
 
 
@@ -83,11 +75,10 @@ template<>
 template<>
 void object::test<1> ()
 {
-    resetEdges();
-    addEdge("LINESTRING(50 39, 35 42, 37 30)");
-    addEdge("LINESTRING(50 39, 50 60, 20 60)");
-    addEdge("LINESTRING(50 39, 68 35)");
-    OverlayGraph graph(std::move(edges));
+    OverlayGraph graph;
+    addEdge(&graph, "LINESTRING(50 39, 35 42, 37 30)");
+    addEdge(&graph, "LINESTRING(50 39, 50 60, 20 60)");
+    addEdge(&graph, "LINESTRING(50 39, 68 35)");
     OverlayEdge* node = graph.getNodeEdge(Coordinate(50, 39));
     checkNodeValid(node);
 }
@@ -97,9 +88,8 @@ template<>
 template<>
 void object::test<2> ()
 {
-    resetEdges();
-    addEdge("LINESTRING(0 0, 5 -5, 10 0, 5 5, 0 0)");
-    OverlayGraph graph(std::move(edges));
+    OverlayGraph graph;
+    addEdge(&graph, "LINESTRING(0 0, 5 -5, 10 0, 5 5, 0 0)");
     OverlayEdge* node = graph.getNodeEdge(Coordinate(0, 0));
     checkNodeValid(node);
 }
@@ -109,10 +99,9 @@ template<>
 template<>
 void object::test<3> ()
 {
-    resetEdges();
-    addEdge("LINESTRING(0 0, 5 -5, 10 0)");
-    addEdge("LINESTRING(0 0, 5 5, 10 0)");
-    OverlayGraph graph(std::move(edges));
+    OverlayGraph graph;
+    addEdge(&graph, "LINESTRING(0 0, 5 -5, 10 0)");
+    addEdge(&graph, "LINESTRING(0 0, 5 5, 10 0)");
     OverlayEdge* node = graph.getNodeEdge(Coordinate(0, 0));
     checkNodeValid(node);
 }
@@ -122,11 +111,10 @@ template<>
 template<>
 void object::test<4> ()
 {
-    resetEdges();
-    addEdge("LINESTRING(50 200, 0 200)");
-    addEdge("LINESTRING(50 200, 190 50, 50 50)");
-    addEdge("LINESTRING(50 200, 200 200, 100 210, 0 200)");
-    OverlayGraph graph(std::move(edges));
+    OverlayGraph graph;
+    addEdge(&graph, "LINESTRING(50 200, 0 200)");
+    addEdge(&graph, "LINESTRING(50 200, 190 50, 50 50)");
+    addEdge(&graph, "LINESTRING(50 200, 200 200, 100 210, 0 200)");
     OverlayEdge* node = graph.getNodeEdge(Coordinate(50, 200));
     checkNodeValid(node);
 }

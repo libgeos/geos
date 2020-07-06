@@ -12,7 +12,8 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlayng/OverlayNoder.h>
+#include <geos/operation/overlayng/EdgeNodingBuilder.h>
+#include <geos/operation/overlayng/EdgeMerger.h>
 
 using geos::operation::valid::RepeatedPointRemover;
 
@@ -22,7 +23,7 @@ namespace overlayng { // geos.operation.overlayng
 
 /*private*/
 Noder*
-OverlayNoder::getNoder()
+EdgeNodingBuilder::getNoder()
 {
     if (customNoder != nullptr) {
         return customNoder;
@@ -39,7 +40,7 @@ OverlayNoder::getNoder()
 
 /*private*/
 std::unique_ptr<Noder>
-OverlayNoder::createFixedPrecisionNoder(const PrecisionModel* pm)
+EdgeNodingBuilder::createFixedPrecisionNoder(const PrecisionModel* pm)
 {
     std::unique_ptr<SnapRoundingNoder> srNoder(new SnapRoundingNoder(pm));
     return srNoder;
@@ -47,7 +48,7 @@ OverlayNoder::createFixedPrecisionNoder(const PrecisionModel* pm)
 
 /*private*/
 std::unique_ptr<Noder>
-OverlayNoder::createFloatingPrecisionNoder(bool doValidation)
+EdgeNodingBuilder::createFloatingPrecisionNoder(bool doValidation)
 {
     std::unique_ptr<MCIndexNoder> mcNoder(new MCIndexNoder());
     mcNoder->setSegmentIntersector(&intAdder);
@@ -64,14 +65,7 @@ OverlayNoder::createFloatingPrecisionNoder(bool doValidation)
 
 /*public*/
 void
-OverlayNoder::setNoder(Noder* noder)
-{
-    customNoder = noder;
-}
-
-/*public*/
-void
-OverlayNoder::setClipEnvelope(const Envelope* p_clipEnv)
+EdgeNodingBuilder::setClipEnvelope(const Envelope* p_clipEnv)
 {
     clipEnv = p_clipEnv;
     clipper.reset(new RingClipper(p_clipEnv));
@@ -79,47 +73,70 @@ OverlayNoder::setClipEnvelope(const Envelope* p_clipEnv)
 }
 
 /*public*/
-std::vector<SegmentString*>*
-OverlayNoder::node()
+void
+EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1, std::vector<Edge*>& builtEdges)
+{
+    add(geom0, 0);
+    add(geom1, 1);
+    std::vector<Edge*> nodedEdges;
+    // std::vector<*SegmentStrings> inputEdges
+    node(inputEdges, nodedEdges);
+
+    /**
+     * Merge the noded edges to eliminate duplicates.
+     * Labels are combined.
+     */
+    EdgeMerger::merge(nodedEdges, builtEdges);
+    return;
+}
+
+/*private*/
+void
+EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& nodedEdges)
 {
     Noder* noder = getNoder();
     noder->computeNodes(segStrings);
 
     std::vector<SegmentString*>* nodedSS = noder->getNodedSubstrings();
-    scanForEdges(nodedSS);
 
-    return nodedSS;
+    createEdges(nodedSS, nodedEdges);
+    return;
 }
 
 /*private*/
 void
-OverlayNoder::scanForEdges(std::vector<SegmentString*>* segStrings)
+EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& createdEdges)
 {
     for (SegmentString* ss : *segStrings) {
+        const CoordinateSequence* pts = ss->getCoordinates();
+
+        // don't create edges from collapsed lines
+        if (Edge::isCollapsed(pts)) continue;
+
+        // This EdgeSourceInfo is already managed locally in a std::deque
         const EdgeSourceInfo* info = static_cast<const EdgeSourceInfo*>(ss->getData());
-        int geomIndex = info->getIndex();
-        if (geomIndex == 0) {
-            hasEdgesA = true;
-        }
-        else if (geomIndex == 1) {
-            hasEdgesB = true;
-        }
-        // short-circuit if both have been found
-        if (hasEdgesA && hasEdgesB) return;
+        // Record that a non-collapsed edge exists for the parent geometry
+        hasEdges[info->getIndex()] = true;
+        // Allocate the new Edge locally in a std::deque
+        std::unique_ptr<CoordinateSequence> ssPts = ss->getCoordinates()->clone();
+        edgeQue.emplace_back(ssPts.release(), info);
+        Edge* newEdge = &(edgeQue.back());
+        createdEdges.push_back(newEdge);
     }
 }
 
-/*public*/
-bool
-OverlayNoder::hasEdgesFor(int geomIndex )
-{
-    if (geomIndex == 0) return hasEdgesA;
-    return hasEdgesB;
-}
 
 /*public*/
+bool
+EdgeNodingBuilder::hasEdgesFor(int geomIndex)
+{
+    assert(geomIndex >= 0 && geomIndex < 2);
+    return hasEdges[geomIndex];
+}
+
+/*private*/
 void
-OverlayNoder::add(const Geometry* g, int geomIndex)
+EdgeNodingBuilder::add(const Geometry* g, int geomIndex)
 {
     if (g == nullptr || g->isEmpty())
         return;
@@ -148,7 +165,7 @@ OverlayNoder::add(const Geometry* g, int geomIndex)
 
 /*private*/
 void
-OverlayNoder::addCollection(const GeometryCollection* gc, int geomIndex)
+EdgeNodingBuilder::addCollection(const GeometryCollection* gc, int geomIndex)
 {
     for (std::size_t i = 0; i < gc->getNumGeometries(); i++) {
         const Geometry* g = gc->getGeometryN(i);
@@ -158,7 +175,7 @@ OverlayNoder::addCollection(const GeometryCollection* gc, int geomIndex)
 
 /*private*/
 void
-OverlayNoder::addPolygon(const Polygon* poly, int geomIndex)
+EdgeNodingBuilder::addPolygon(const Polygon* poly, int geomIndex)
 {
     const LinearRing* shell = poly->getExteriorRing();
     addPolygonRing(shell, false, geomIndex);
@@ -175,7 +192,7 @@ OverlayNoder::addPolygon(const Polygon* poly, int geomIndex)
 
 /*private*/
 void
-OverlayNoder::addPolygonRing(const LinearRing* ring, bool isHole, int index)
+EdgeNodingBuilder::addPolygonRing(const LinearRing* ring, bool isHole, int index)
   {
     // don't add empty rings
     if (ring->isEmpty()) return;
@@ -198,47 +215,47 @@ OverlayNoder::addPolygonRing(const LinearRing* ring, bool isHole, int index)
 
 /*private*/
 const EdgeSourceInfo*
-OverlayNoder::createEdgeSourceInfo(int index)
+EdgeNodingBuilder::createEdgeSourceInfo(int index)
 {
     // Concentrate small memory allocations via std::deque and
-    // retain ownership of the EdgeSourceInfo* in the OverlayNoder
+    // retain ownership of the EdgeSourceInfo* in the EdgeNodingBuilder
     edgeSourceInfoQue.emplace_back(index);
     return &(edgeSourceInfoQue.back());
 }
 
 /*private*/
 const EdgeSourceInfo*
-OverlayNoder::createEdgeSourceInfo(int index, int depthDelta, bool isHole)
+EdgeNodingBuilder::createEdgeSourceInfo(int index, int depthDelta, bool isHole)
 {
     // Concentrate small memory allocations via std::deque and
-    // retain ownership of the EdgeSourceInfo* in the OverlayNoder
+    // retain ownership of the EdgeSourceInfo* in the EdgeNodingBuilder
     edgeSourceInfoQue.emplace_back(index, depthDelta, isHole);
     return &(edgeSourceInfoQue.back());
 }
 
 /*private*/
 void
-OverlayNoder::addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info)
+EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info)
 {
-    // TODO: manage these internally to OverlayNoder in a std::deque,
-    // since they do not have a life span longer than the OverlayNoder
+    // TODO: manage these internally to EdgeNodingBuilder in a std::deque,
+    // since they do not have a life span longer than the EdgeNodingBuilder
     // in OverlayNG::buildGraph()
     NodedSegmentString* ss = new NodedSegmentString(cas.release(), reinterpret_cast<const void*>(info));
-    segStrings->push_back(ss);
+    inputEdges->push_back(ss);
 }
 
 /*private*/
 void
-OverlayNoder::addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info)
+EdgeNodingBuilder::addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info)
 {
     CoordinateArraySequence* cas = new CoordinateArraySequence(pts.release());
     NodedSegmentString* ss = new NodedSegmentString(cas, reinterpret_cast<const void*>(info));
-    segStrings->push_back(ss);
+    inputEdges->push_back(ss);
 }
 
 /*private*/
 bool
-OverlayNoder::isClippedCompletely(const Envelope* env)
+EdgeNodingBuilder::isClippedCompletely(const Envelope* env)
 {
     if (clipEnv == nullptr) return false;
     return clipEnv->disjoint(env);
@@ -246,7 +263,7 @@ OverlayNoder::isClippedCompletely(const Envelope* env)
 
 /* private */
 std::unique_ptr<geom::CoordinateArraySequence>
-OverlayNoder::clip(const LinearRing* ring)
+EdgeNodingBuilder::clip(const LinearRing* ring)
 {
     const Envelope* env = ring->getEnvelopeInternal();
 
@@ -263,7 +280,7 @@ OverlayNoder::clip(const LinearRing* ring)
 
 /*private*/
 std::unique_ptr<CoordinateArraySequence>
-OverlayNoder::removeRepeatedPoints(const LineString* line)
+EdgeNodingBuilder::removeRepeatedPoints(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();
     return RepeatedPointRemover::removeRepeatedPoints(pts);
@@ -271,7 +288,7 @@ OverlayNoder::removeRepeatedPoints(const LineString* line)
 
 /*private*/
 int
-OverlayNoder::computeDepthDelta(const LinearRing* ring, bool isHole)
+EdgeNodingBuilder::computeDepthDelta(const LinearRing* ring, bool isHole)
 {
     /**
      * Compute the orientation of the ring, to
@@ -306,7 +323,7 @@ OverlayNoder::computeDepthDelta(const LinearRing* ring, bool isHole)
 
 /*private*/
 void
-OverlayNoder::addLine(const LineString* line, int geomIndex)
+EdgeNodingBuilder::addLine(const LineString* line, int geomIndex)
 {
     // don't add empty lines
     if (line->isEmpty()) return;
@@ -328,7 +345,7 @@ OverlayNoder::addLine(const LineString* line, int geomIndex)
 
 /*private*/
 void
-OverlayNoder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, int geomIndex)
+EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, int geomIndex)
 {
     /**
      * Don't add edges that collapse to a point
@@ -342,7 +359,7 @@ OverlayNoder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, int geomInd
 
 /*private*/
 bool
-OverlayNoder::isToBeLimited(const LineString* line)
+EdgeNodingBuilder::isToBeLimited(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();
     if (limiter == nullptr || pts->size() <= MIN_LIMIT_PTS) {
@@ -360,7 +377,7 @@ OverlayNoder::isToBeLimited(const LineString* line)
 
 /*private*/
 std::vector<std::unique_ptr<CoordinateArraySequence>>&
-OverlayNoder::limit(const LineString* line)
+EdgeNodingBuilder::limit(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();
     return limiter->limit(pts);

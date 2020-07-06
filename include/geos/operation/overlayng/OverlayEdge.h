@@ -47,7 +47,7 @@ class GEOS_DLL OverlayEdge : public edgegraph::HalfEdge {
 private:
 
     // Members
-    const CoordinateSequence* pts; // owned by originating Edge
+    const CoordinateSequence* pts;
     /**
     * 'true' indicates direction is forward along segString
     * 'false' is reverse direction
@@ -69,6 +69,7 @@ private:
 
 public:
 
+    // takes ownershiph of CoordinateSequence
     OverlayEdge(const Coordinate& orig, const Coordinate& p_dirPt,
                 bool p_direction, const OverlayLabel* p_label,
                 const CoordinateSequence* p_pts)
