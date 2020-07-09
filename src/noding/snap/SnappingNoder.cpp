@@ -93,7 +93,7 @@ SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
     MCIndexNoder noder(&intAdder, 2 * snapTolerance);
     noder.computeNodes(&inputSS);
     std::unique_ptr<std::vector<SegmentString*>> result(noder.getNodedSubstrings());
-    return std::move(result);
+    return result;
 }
 
 /*public*/

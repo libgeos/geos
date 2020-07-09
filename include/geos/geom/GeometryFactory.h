@@ -301,6 +301,15 @@ public:
         const CoordinateSequence& coordinates) const;
 
     /**
+    * Creates an empty atomic geometry of the given dimension.
+    * If passed a dimension of -1 will create an empty {@link GeometryCollection}.
+    *
+    * @param dimension the required dimension (-1, 0, 1 or 2)
+    * @return an empty atomic geometry of given dimension
+    */
+    std::unique_ptr<Geometry> createEmpty(int dimension) const;
+
+    /**
      *  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
      *  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
      *  it.

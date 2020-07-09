@@ -72,13 +72,13 @@ private:
     * Create and add HalfEdge pairs to map and vector containers,
     * using local std::deque storage for objects.
     */
-    OverlayEdge* createEdgePair(const CoordinateSequence* pts, const OverlayLabel* lbl);
+    OverlayEdge* createEdgePair(const CoordinateSequence* pts, OverlayLabel* lbl);
 
     /**
     * Create a single OverlayEdge in local std::deque storage, and return the
     * pointer.
     */
-    OverlayEdge* createOverlayEdge(const CoordinateSequence* pts, const OverlayLabel* lbl, bool direction);
+    OverlayEdge* createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl, bool direction);
 
     void insert(OverlayEdge* e);
 
@@ -112,7 +112,7 @@ public:
     * a single representative edge is included.
     * The other edges around the node can be found by following the next and prev links.
     */
-    std::unique_ptr<std::vector<OverlayEdge*>> getNodeEdges();
+    std::vector<OverlayEdge*> getNodeEdges();
 
     /**
     * Gets an edge originating at the given node point.
@@ -122,13 +122,13 @@ public:
     /**
     * Gets the representative edges marked as being in the result area.
     */
-    std::unique_ptr<std::vector<OverlayEdge*>> getResultAreaEdges();
+    std::vector<OverlayEdge*> getResultAreaEdges();
 
     /**
     * Create a single OverlayLabel in local std::deque storage
     * and return a pointer to the stored object.
     */
-    const OverlayLabel* createOverlayLabel(const Edge* edge);
+    OverlayLabel* createOverlayLabel(const Edge* edge);
 
 
 };

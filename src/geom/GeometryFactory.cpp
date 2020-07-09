@@ -34,6 +34,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/CoordinateOperation.h>
 #include <geos/geom/util/GeometryEditor.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
 #include <cassert>
@@ -640,6 +641,21 @@ const
     g = new LineString(newCoords.release(), this);
     return g;
 }
+
+/*public*/
+std::unique_ptr<Geometry>
+GeometryFactory::createEmpty(int dimension) const
+{
+    switch (dimension) {
+        case -1: return createGeometryCollection();
+        case 0: return createPoint();
+        case 1: return createLineString();
+        case 2: return createPolygon();
+        default:
+            throw geos::util::IllegalArgumentException("Invalid dimension");
+    }
+}
+
 
 template<typename T>
 GeometryTypeId commonType(const T& geoms) {

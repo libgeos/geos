@@ -13,13 +13,21 @@ geos_HEADERS = \
     EdgeMerger.h \
     EdgeNodingBuilder.h \
     EdgeSourceInfo.h \
+    IndexedPointOnLineLocator.h \
     InputGeometry.h \
+    IntersectionPointBuilder.h \
+    LineBuilder.h \
     LineLimiter.h \
     MaximalEdgeRing.h \
     OverlayEdge.h \
     OverlayEdgeRing.h \
     OverlayGraph.h \
     OverlayLabel.h \
+    OverlayLabeller.h \
+    OverlayMixedPoints.h \
+    OverlayPoints.h
+    OverlayNG.h \
     OverlayUtil.h \
-    RingClipper.h
-
+    PolygonBuilder.h \
+    RingClipper.h \
+    RobustClipEnvelopeComputer.h

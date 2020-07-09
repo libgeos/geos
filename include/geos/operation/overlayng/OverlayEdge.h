@@ -55,7 +55,7 @@ private:
     */
     bool direction;
     Coordinate dirPt;
-    const OverlayLabel* label;
+    OverlayLabel* label;
     bool m_isInResultArea;
     bool m_isInResultLine;
     bool m_isVisited;
@@ -71,7 +71,7 @@ public:
 
     // takes ownershiph of CoordinateSequence
     OverlayEdge(const Coordinate& orig, const Coordinate& p_dirPt,
-                bool p_direction, const OverlayLabel* p_label,
+                bool p_direction, OverlayLabel* p_label,
                 const CoordinateSequence* p_pts)
         : HalfEdge(orig)
         , pts(p_pts)
@@ -87,7 +87,7 @@ public:
 
     const Coordinate& directionPt() const override;
 
-    const OverlayLabel* getLabel() const;
+    OverlayLabel* getLabel() const;
 
     Location getLocation(int index, int position) const;
 

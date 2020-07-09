@@ -42,7 +42,7 @@ OverlayEdge::directionPt() const
 }
 
 /*public*/
-const OverlayLabel*
+OverlayLabel*
 OverlayEdge::getLabel() const
 {
     return label;
@@ -86,7 +86,7 @@ OverlayEdge::getCoordinatesOriented()
     }
     std::unique_ptr<CoordinateSequence> ptsCopy = pts->clone();
     CoordinateSequence::reverse(ptsCopy.get());
-    return std::move(ptsCopy);
+    return ptsCopy;
 }
 
 /**

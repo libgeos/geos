@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/export.h>
 
@@ -22,7 +23,6 @@ namespace geos {
 namespace algorithm {
 namespace locate {
 class PointOnGeometryLocator;
-class IndexedPointInAreaLocator;
 }
 }
 namespace geom {
@@ -59,7 +59,7 @@ private:
     std::unique_ptr<IndexedPointInAreaLocator> locator;
     OverlayEdgeRing* shell;
     // a list of EdgeRings which are holes in this EdgeRing
-    std::vector<std::unique_ptr<OverlayEdgeRing>> holes;
+    std::vector<OverlayEdgeRing*> holes;
 
     // Methods
     void computeRingPts(OverlayEdge* start, CoordinateArraySequence& pts);
@@ -141,7 +141,7 @@ public:
     * @return containing EdgeRing, if there is one
     * or null if no containing EdgeRing is found
     */
-    OverlayEdgeRing* findEdgeRingContaining(std::vector<std::unique_ptr<OverlayEdgeRing>>& erList);
+    OverlayEdgeRing* findEdgeRingContaining(std::vector<OverlayEdgeRing*>& erList);
 
 
 };

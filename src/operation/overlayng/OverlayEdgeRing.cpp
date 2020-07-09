@@ -112,7 +112,7 @@ OverlayEdgeRing::getShell() const
 void
 OverlayEdgeRing::addHole(OverlayEdgeRing* ring)
 {
-    holes.emplace_back(ring);
+    holes.push_back(ring);
 }
 
 void
@@ -187,14 +187,14 @@ OverlayEdgeRing::getCoordinates()
 */
 /*public*/
 OverlayEdgeRing*
-OverlayEdgeRing::findEdgeRingContaining(std::vector<std::unique_ptr<OverlayEdgeRing>>& erList)
+OverlayEdgeRing::findEdgeRingContaining(std::vector<OverlayEdgeRing*>& erList)
 {
     const LinearRing* testRing = ring.get();
     const Envelope* testEnv = testRing->getEnvelopeInternal();
 
     OverlayEdgeRing* minRing = nullptr;
     const Envelope* minRingEnv = nullptr;
-    for (auto& tryEdgeRing: erList) {
+    for (auto tryEdgeRing: erList) {
         const LinearRing* tryRing = tryEdgeRing->getRingPtr();
         const Envelope* tryShellEnv = tryRing->getEnvelopeInternal();
         // the hole envelope cannot equal the shell envelope
@@ -209,7 +209,7 @@ OverlayEdgeRing::findEdgeRingContaining(std::vector<std::unique_ptr<OverlayEdgeR
         // check if the new containing ring is smaller than the current minimum ring
         if (isContained) {
             if (minRing == nullptr || minRingEnv->contains(tryShellEnv)) {
-                minRing = tryEdgeRing.get();
+                minRing = tryEdgeRing;
                 minRingEnv = minRing->getRingPtr()->getEnvelopeInternal();
             }
         }

@@ -107,12 +107,11 @@ MaximalEdgeRing::attachEdges(OverlayEdge* startEdge)
 }
 
 /*public*/
-void
-MaximalEdgeRing::buildMinimalRings(const GeometryFactory* geometryFactory,
-                  std::vector<std::unique_ptr<OverlayEdgeRing>>& outOERs)
+std::vector<std::unique_ptr<OverlayEdgeRing>>
+MaximalEdgeRing::buildMinimalRings(const GeometryFactory* geometryFactory)
 {
     linkMinimalRings();
-
+    std::vector<std::unique_ptr<OverlayEdgeRing>> outOERs;
     OverlayEdge* e = startEdge;
     do {
         if (e->getEdgeRing() == nullptr) {
@@ -121,7 +120,7 @@ MaximalEdgeRing::buildMinimalRings(const GeometryFactory* geometryFactory,
         e = e->nextResultMax();
     }
     while (e != startEdge);
-    return;
+    return outOERs;
 }
 
 /*private*/

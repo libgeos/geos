@@ -93,36 +93,35 @@ public:
         attachEdges(e);
     };
 
-    void buildMinimalRings(const GeometryFactory* geometryFactory,
-                           std::vector<std::unique_ptr<OverlayEdgeRing>>& outOERs);
+    std::vector<std::unique_ptr<OverlayEdgeRing>> buildMinimalRings(const GeometryFactory* geometryFactory);
 
+    /**
+    * Traverses the star of edges originating at a node
+    * and links consecutive result edges together
+    * into maximal edge rings.
+    * To link two edges the resultNextMax< pointer
+    * for an incoming< result edge
+    * is set to the next outgoing result edge.
+    *
+    * Edges are linked when:
+    * - they belong to an area (i.e. they have sides)
+    * - they are marked as being in the result
+    *
+    * Edges are linked in CCW order
+    * (which is the order they are linked in the underlying graph).
+    * This means that rings have their face on the Right
+    * (in other words,
+    * the topological location of the face is given by the RHS label of the DirectedEdge).
+    * This produces rings with CW orientation.
+    *
+    * PRECONDITIONS:
+    * - This edge is in the result
+    * - This edge is not yet linked
+    * - The edge and its sym are NOT both marked as being in the result
+    */
     static void linkResultAreaMaxRingAtNode(OverlayEdge* nodeEdge);
 
 
-/**
-* Traverses the star of edges originating at a node
-* and links consecutive result edges together
-* into maximal edge rings.
-* To link two edges the resultNextMax< pointer
-* for an incoming< result edge
-* is set to the next outgoing result edge.
-*
-* Edges are linked when:
-* - they belong to an area (i.e. they have sides)
-* - they are marked as being in the result
-*
-* Edges are linked in CCW order
-* (which is the order they are linked in the underlying graph).
-* This means that rings have their face on the Right
-* (in other words,
-* the topological location of the face is given by the RHS label of the DirectedEdge).
-* This produces rings with CW orientation.
-*
-* PRECONDITIONS:
-* - This edge is in the result
-* - This edge is not yet linked
-* - The edge and its sym are NOT both marked as being in the result
-*/
 
 
 

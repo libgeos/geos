@@ -12,15 +12,24 @@ libopoverlayng_la_SOURCES = \
     EdgeMerger.cpp \
     EdgeNodingBuilder.cpp \
     EdgeSourceInfo.cpp \
+    IndexedPointOnLineLocator.cpp \
     InputGeometry.cpp \
+    IntersectionPointBuilder.cpp \
+    LineBuilder.cpp \
     LineLimiter.cpp \
     MaximalEdgeRing.cpp \
     OverlayEdge.cpp \
     OverlayEdgeRing.cpp \
     OverlayGraph.cpp \
     OverlayLabel.cpp \
+    OverlayLabeller.cpp \
+    OverlayMixedPoints.cpp \
+    OverlayPoints.cpp \
+    OverlayNG.cpp \
     OverlayUtil.cpp \
-    RingClipper.cpp
+    PolygonBuilder.cpp \
+    RingClipper.cpp \
+    RobustClipEnvelopeComputer.cpp
 
 
 libopoverlayng_la_LIBADD =

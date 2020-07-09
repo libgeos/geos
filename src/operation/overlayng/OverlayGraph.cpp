@@ -39,12 +39,12 @@ OverlayGraph::getEdges()
 }
 
 /*public*/
-std::unique_ptr<std::vector<OverlayEdge*>>
+std::vector<OverlayEdge*>
 OverlayGraph::getNodeEdges()
 {
-    std::unique_ptr<std::vector<OverlayEdge*>> nodeEdges(new std::vector<OverlayEdge*>);
+    std::vector<OverlayEdge*> nodeEdges;
     for (auto nodeMapPair : nodeMap) {
-        nodeEdges->push_back(nodeMapPair.second);
+        nodeEdges.push_back(nodeMapPair.second);
     }
     return nodeEdges;
 }
@@ -61,13 +61,13 @@ OverlayGraph::getNodeEdge(const Coordinate& nodePt) const
 }
 
 /*public*/
-std::unique_ptr<std::vector<OverlayEdge*>>
+std::vector<OverlayEdge*>
 OverlayGraph::getResultAreaEdges()
 {
-    std::unique_ptr<std::vector<OverlayEdge*>> resultEdges(new std::vector<OverlayEdge*>());
+    std::vector<OverlayEdge*> resultEdges;
     for (OverlayEdge* edge : getEdges()) {
         if (edge->isInResultArea()) {
-            resultEdges->push_back(edge);
+            resultEdges.push_back(edge);
         }
     }
     return resultEdges;
@@ -87,7 +87,7 @@ OverlayGraph::addEdge(Edge* edge)
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createEdgePair(const CoordinateSequence *pts, const OverlayLabel *lbl)
+OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
 {
     csQue.emplace_back(pts);
     OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
@@ -98,7 +98,7 @@ OverlayGraph::createEdgePair(const CoordinateSequence *pts, const OverlayLabel *
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, const OverlayLabel* lbl, bool direction)
+OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl, bool direction)
 {
     Coordinate origin;
     Coordinate dirPt;
@@ -117,7 +117,7 @@ OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, const OverlayLabe
 }
 
 /*public*/
-const OverlayLabel*
+OverlayLabel*
 OverlayGraph::createOverlayLabel(const Edge* edge)
 {
     // Instantate OverlayLabel on the std::deque
