@@ -81,6 +81,10 @@ public:
         , m_isInResultArea(false)
         , m_isInResultLine(false)
         , m_isVisited(false)
+        , nextResultEdge(nullptr)
+        , edgeRing(nullptr)
+        , maxEdgeRing(nullptr)
+        , nextResultMaxEdge(nullptr)
      {}
 
     bool isForward() const;

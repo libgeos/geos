@@ -48,8 +48,8 @@ private:
 
 public:
 
-    EdgeSourceInfo(int p_index);
     EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole);
+    EdgeSourceInfo(int p_index);
 
     int getIndex() const { return index; }
     int getDimension() const { return dim; }

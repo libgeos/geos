@@ -104,20 +104,20 @@ OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
 {
     bool isFirstEdge = coords->size() > 0;
     if (direction) {
-        std::size_t startIndex = 1;
+        int startIndex = 1;
         if (isFirstEdge) {
             startIndex = 0;
         }
-        for (std::size_t i = startIndex, sz = pts->size(); i < sz; i++) {
+        for (int i = startIndex, sz = pts->size(); i < sz; i++) {
             coords->add(pts->getAt(i), false);
         }
     }
     else { // is backward
-        std::size_t startIndex = pts->size() - 2;
+        int startIndex = pts->size() - 2;
         if (isFirstEdge) {
             startIndex = pts->size() - 1;
         }
-        for (std::size_t i = startIndex; i >= 0; i--) {
+        for (int i = startIndex; i >= 0; i--) {
             coords->add(pts->getAt(i), false);
         }
     }

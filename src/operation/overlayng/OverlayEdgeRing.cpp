@@ -32,11 +32,12 @@ namespace overlayng { // geos.operation.overlayng
 using namespace geos::geom;
 using geos::operation::polygonize::EdgeRing;
 
-/*public*/
+
+
 OverlayEdgeRing::OverlayEdgeRing(OverlayEdge* start, const GeometryFactory* geometryFactory)
     : startEdge(start)
-    , m_isHole(false)
     , ring(nullptr)
+    , m_isHole(false)
     , locator(nullptr)
     , shell(nullptr)
 {

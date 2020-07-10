@@ -48,15 +48,15 @@ class GEOS_DLL OverlayNG {
 private:
 
     // Members
-    int opCode;
+    const geom::PrecisionModel* pm;
     InputGeometry inputGeom;
     const geom::GeometryFactory* geomFact;
-    const geom::PrecisionModel* pm;
+    int opCode;
     noding::Noder* noder;
-    bool isOptimized = true;
-    bool isOutputEdges = false;
-    bool isOutputResultEdges = false;
-    bool isOutputNodedEdges = false;
+    bool isOptimized;
+    bool isOutputEdges;
+    bool isOutputResultEdges;
+    bool isOutputNodedEdges;
 
     // Methods
     std::unique_ptr<geom::Geometry> computeEdgeOverlay();
@@ -98,6 +98,11 @@ public:
         , inputGeom(geom0, geom1)
         , geomFact(geom0->getFactory())
         , opCode(p_opCode)
+        , noder(nullptr)
+        , isOptimized(true)
+        , isOutputEdges(false)
+        , isOutputResultEdges(false)
+        , isOutputNodedEdges(false)
     {}
 
     /**
@@ -114,18 +119,11 @@ public:
     * If errors occur a {@link TopologyException} is thrown.
     */
     OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, int p_opCode)
-        : pm(geom0->getFactory()->getPrecisionModel())
-        , inputGeom(geom0, geom1)
-        , geomFact(geom0->getFactory())
-        , opCode(p_opCode)
-
+        : OverlayNG(geom0, geom1, geom0->getFactory()->getPrecisionModel(), p_opCode)
     {}
 
     OverlayNG(const geom::Geometry* geom0, const geom::PrecisionModel* p_pm)
-        : pm(p_pm)
-        , inputGeom(geom0, nullptr)
-        , geomFact(geom0->getFactory())
-        , opCode(UNION)
+        : OverlayNG(geom0, nullptr, p_pm, UNION)
     {}
 
     /**

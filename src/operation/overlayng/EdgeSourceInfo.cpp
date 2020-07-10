@@ -19,18 +19,15 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 
-EdgeSourceInfo::EdgeSourceInfo(int p_index)
-    : index(p_index)
-    , dim(geom::Dimension::L)
-    , edgeIsHole(false)
-    , depthDelta(0)
-    {};
-
 EdgeSourceInfo::EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole)
     : index(p_index)
     , dim(geom::Dimension::A)
     , edgeIsHole(p_isHole)
     , depthDelta(p_depthDelta)
+    {};
+
+EdgeSourceInfo::EdgeSourceInfo(int p_index)
+    : EdgeSourceInfo(p_index, 0, false)
     {};
 
 

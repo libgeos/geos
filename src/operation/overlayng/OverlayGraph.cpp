@@ -107,7 +107,7 @@ OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl
         dirPt = pts->getAt(1);
     }
     else {
-        std::size_t ilast = pts->size() - 1;
+        int ilast = pts->size() - 1;
         origin = pts->getAt(ilast);
         dirPt = pts->getAt(ilast-1);
     }
