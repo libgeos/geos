@@ -5,12 +5,6 @@
 #include <tut/tut.hpp>
 #include <utility.h>
 // geos
-#include <geos/io/WKTReader.h>
-#include <geos/io/WKTWriter.h>
-#include <geos/geom/PrecisionModel.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h>
-#include <geos/geom/LineString.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 // std
 #include <string>
@@ -146,13 +140,16 @@ void object::test<5>
     std::string wkt("POLYGON((20 220, 40 220, 60 220, 80 220, \
                     100 220, 120 220, 140 220, 140 180, 100 180, \
                     60 180, 20 180, 20 220))");
-
     GeomPtr g(wktreader.read(wkt));
+
+    std::string wkt_exp("POLYGON ((20 220, 140 220, 140 180, 20 180, 20 220))");
+    GeomPtr exp(wktreader.read(wkt_exp));
+
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
     ensure("Simplified geometry is invalid!", simplified->isValid());
     ensure("Simplified and original geometry inequal", simplified->equals(g.get()));
-    ensure_equals_geometry(g.get(), simplified.get());
+    ensure_equals_geometry(exp.get(), simplified.get());
 }
 
 // PolygonNoReductionWithConflicts
@@ -201,14 +198,16 @@ template<>
 void object::test<8>
 ()
 {
-    std::string wkt("POLYGON ((0 0, 50 0, 53 0, 55 0, 100 0, \
-                    70 1, 60 1, 50 1, 40 1, 0 0))");
-
+    std::string wkt("POLYGON ((0 0, 50 0, 53 0, 55 0, 100 0, 70 1, 60 1, 50 1, 40 1, 0 0))");
     GeomPtr g(wktreader.read(wkt));
+
+    std::string wkt_exp("POLYGON ((0 0, 50 0, 100 0, 70 1, 0 0))");
+    GeomPtr exp(wktreader.read(wkt_exp));
+
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
     ensure("Simplified geometry is invalid!", simplified->isValid());
-    ensure_equals_geometry(g.get(), simplified.get());
+    ensure_equals_geometry(exp.get(), simplified.get());
 }
 
 // PolygonWithFlattishHole
@@ -237,12 +236,15 @@ void object::test<10>
 ()
 {
     std::string wkt("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))");
-
     GeomPtr g(wktreader.read(wkt));
+
+    std::string wkt_exp("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 5))");
+    GeomPtr exp(wktreader.read(wkt_exp));
+
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
     ensure("Simplified geometry is invalid!", simplified->isValid());
-    ensure_equals_geometry(g.get(), simplified.get());
+    ensure_equals_geometry(exp.get(), simplified.get());
 }
 
 // TinyLineString
@@ -252,12 +254,15 @@ void object::test<11>
 ()
 {
     std::string wkt("LINESTRING (0 5, 1 5, 2 5, 5 5)");
-
     GeomPtr g(wktreader.read(wkt));
+
+    std::string wkt_exp("LINESTRING (0 5, 5 5)");
+    GeomPtr exp(wktreader.read(wkt_exp));
+
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
     ensure("Simplified geometry is invalid!", simplified->isValid());
-    ensure_equals_geometry(g.get(), simplified.get());
+    ensure_equals_geometry(exp.get(), simplified.get());
 }
 
 // TinyClosedLineString
@@ -297,14 +302,16 @@ template<>
 void object::test<14>
 ()
 {
-    std::string wkt("MULTILINESTRING((0 0, 50 0, 70 0, 80 0, 100 0), \
-                    (0 0, 50 1, 60 1, 100 0))");
-
+    std::string wkt("MULTILINESTRING((0 0, 50 0, 70 0, 80 0, 100 0), (0 0, 50 1, 60 1, 100 0))");
     GeomPtr g(wktreader.read(wkt));
+
+    std::string wkt_exp("MULTILINESTRING ((0 0, 100 0), (0 0, 50 1, 100 0))");
+    GeomPtr exp(wktreader.read(wkt_exp));
+
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
     ensure("Simplified geometry is invalid!", simplified->isValid());
-    ensure_equals_geometry(g.get(), simplified.get());
+    ensure_equals_geometry(exp.get(), simplified.get());
 }
 
 // GeometryCollection
