@@ -1,5 +1,6 @@
 //
-// Test Suite for geos::noding::snapround::SnapRoundingNoder class.
+// Test Suite for geos::operation::overlayng::OverlayGraph class.
+
 
 #include <tut/tut.hpp>
 #include <utility.h>

@@ -1,5 +1,5 @@
 //
-// Test Suite for geos::noding::snapround::SnapRoundingNoder class.
+// Test Suite for geos::operation::overlayng::LineLimiter class.
 
 #include <tut/tut.hpp>
 #include <utility.h>

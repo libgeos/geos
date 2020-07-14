@@ -1,5 +1,5 @@
 //
-// Test Suite for geos::noding::snapround::SnapRoundingNoder class.
+// Test Suite for geos::operation::overlayng::OverlayNG class.
 
 #include <tut/tut.hpp>
 #include <utility.h>
@@ -452,9 +452,6 @@ void object::test<35> ()
     testOverlayNoOpt(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
-
- // public void testDisjointIntersectionNoOpt() {
- //  }
 
 
 } // namespace tut

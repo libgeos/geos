@@ -185,6 +185,9 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
 	operation/overlayng/RingClipperTest.cpp \
 	operation/overlayng/LineLimiterTest.cpp \
+	operation/overlayng/OverlayGraphTest.cpp \
+	operation/overlayng/OverlayNGPointsTest.cpp \
+	operation/overlayng/OverlayNGTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \
