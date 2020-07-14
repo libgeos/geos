@@ -5,9 +5,6 @@
 #include <utility.h>
 
 // geos
-#include <geos/io/WKTReader.h>
-#include <geos/io/WKTWriter.h>
-#include <geos/geom/Geometry.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 
 // std
