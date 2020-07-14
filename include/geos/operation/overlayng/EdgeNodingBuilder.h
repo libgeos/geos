@@ -95,7 +95,7 @@ private:
     IntersectionAdder intAdder;
     std::unique_ptr<Noder> internalNoder;
     std::unique_ptr<Noder> spareInternalNoder;
-    // EdgeSourceInfo* owned by EdgeNodingBuilder, stored in deque
+    // EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque
     std::deque<EdgeSourceInfo> edgeSourceInfoQue;
     std::deque<Edge> edgeQue;
 

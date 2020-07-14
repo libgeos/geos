@@ -241,6 +241,21 @@ operator<< (std::ostream& os, const HalfEdge& e)
     return os;
 }
 
+/*public static*/
+void
+HalfEdge::toStringNode(const HalfEdge* he, std::ostream& os)
+{
+    os << "Node( " << he->orig() << " )" << std::endl;
+    const HalfEdge* e = he;
+    do {
+        os << "  -> " << e << std::endl;
+        e = e->oNext();
+    } while (e != he);
+    return;
+}
+
+
+
 
 } // namespace geos.edgegraph
 } // namespace geos

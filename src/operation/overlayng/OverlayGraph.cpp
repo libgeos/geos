@@ -152,6 +152,27 @@ OverlayGraph::insert(OverlayEdge* e)
     }
 }
 
+/*public friend*/
+std::ostream&
+operator<<(std::ostream& os, const OverlayGraph& og)
+{
+    os << "OGRPH " << std::endl << "NODEMAP [" << og.nodeMap.size() << "]";
+    // pair<Coordinate, OverlayEdge&>
+    for (auto& pr: og.nodeMap) {
+        os << std::endl << " ";
+        os << pr.first << " ";
+        os << *(pr.second);
+    }
+    os << std::endl;
+    os << "EDGES [" << og.edges.size() << "]";
+    // pair<Coordinate, OverlayEdge&>
+    for (auto& e: og.edges) {
+        os << std::endl << " ";
+        os << *e << " ";
+    }
+    os << std::endl;
+    return os;
+}
 
 
 

@@ -177,18 +177,22 @@ Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool 
     int dimLabel = labelDim(dim, depthDelta);
 
     switch (dimLabel) {
-        case OverlayLabel::DIM_NOT_PART:
+        case OverlayLabel::DIM_NOT_PART: {
             lbl.initNotPart(geomIndex);
             break;
-        case OverlayLabel::DIM_BOUNDARY:
+        }
+        case OverlayLabel::DIM_BOUNDARY: {
             lbl.initBoundary(geomIndex, locationLeft(depthDelta), locationRight(depthDelta), isHole);
             break;
-        case OverlayLabel::DIM_COLLAPSE:
+        }
+        case OverlayLabel::DIM_COLLAPSE: {
             lbl.initCollapse(geomIndex, isHole);
             break;
-        case OverlayLabel::DIM_LINE:
+        }
+        case OverlayLabel::DIM_LINE: {
             lbl.initLine(geomIndex);
             break;
+        }
     }
 }
 
@@ -342,6 +346,7 @@ Edge::populateLabel(OverlayLabel &lbl) const
 }
 
 
+
 // public String toString() {
 
 //   String ptsStr = toStringPts(pts);
@@ -385,8 +390,10 @@ Edge::populateLabel(OverlayLabel &lbl) const
 //   return dim == OverlayLabel.DIM_BOUNDARY || dim == OverlayLabel.DIM_COLLAPSE;
 // }
 
-
-
+bool EdgeComparator(const Edge* a, const Edge* b)
+{
+    return a->compareTo(*b);
+};
 
 
 } // namespace geos.operation.overlayng

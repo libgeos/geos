@@ -112,7 +112,7 @@ private:
 
 
     std::string dimensionSymbol(int dim) const;
-    void locationString(int index, std::ostream& os) const;
+    void locationString(int index, bool isForward, std::ostream& os) const;
 
 
 public:
@@ -240,6 +240,7 @@ public:
 
 
     friend std::ostream& operator<<(std::ostream& os, const OverlayLabel& ol);
+    void toString(bool isForward, std::ostream& os) const;
 
 
 };

@@ -154,6 +154,8 @@ public:
     const MaximalEdgeRing* getEdgeRingMax() const;
     void setEdgeRingMax(const MaximalEdgeRing* maximalEdgeRing);
 
+    friend std::ostream& operator<<(std::ostream& os, const OverlayEdge& oe);
+    std::string resultSymbol() const;
 
 };
 

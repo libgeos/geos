@@ -62,7 +62,8 @@ private:
     /**
     * For all OverlayEdge*s in result, form them into MaximalEdgeRings
     */
-    std::vector<MaximalEdgeRing> buildMaximalRings(std::vector<OverlayEdge*>& edges);
+    std::vector<std::unique_ptr<MaximalEdgeRing>>
+        buildMaximalRings(std::vector<OverlayEdge*>& edges);
 
     /**
     * The lifespan of the OverlayEdgeRings is tieds to the lifespan
@@ -71,7 +72,7 @@ private:
     */
     std::vector<OverlayEdgeRing*> storeMinimalRings(std::vector<std::unique_ptr<OverlayEdgeRing>>& minRings);
 
-    void buildMinimalRings(std::vector<MaximalEdgeRing>& maxRings);
+    void buildMinimalRings(std::vector<std::unique_ptr<MaximalEdgeRing>>& maxRings);
 
     void assignShellsAndHoles(std::vector<OverlayEdgeRing*>& minRings);
 

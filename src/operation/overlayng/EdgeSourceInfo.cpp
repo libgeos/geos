@@ -27,7 +27,10 @@ EdgeSourceInfo::EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole)
     {};
 
 EdgeSourceInfo::EdgeSourceInfo(int p_index)
-    : EdgeSourceInfo(p_index, 0, false)
+    : index(p_index)
+    , dim(geom::Dimension::L)
+    , edgeIsHole(false)
+    , depthDelta(0)
     {};
 
 

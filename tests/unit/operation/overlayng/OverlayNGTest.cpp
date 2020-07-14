@@ -37,15 +37,23 @@ struct test_overlayng_data {
         std::unique_ptr<Geometry> geom_b = r.read(b);
         std::unique_ptr<Geometry> geom_expected = r.read(expected);
         std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, &pm);
+        // std::string wkt_result = w.write(geom_result.get());
+        // std::cout << std::endl << wkt_result << std::endl;
         ensure_equals_geometry(geom_expected.get(), geom_result.get());
     }
 
-  // public static Geometry intersectionNoOpt(Geometry a, Geometry b, double scaleFactor) {
-  //   PrecisionModel pm = new PrecisionModel(scaleFactor);
-  //   OverlayNG ov = new OverlayNG(a, b, pm, INTERSECTION);
-  //   ov.setOptimized(false);
-  //   return ov.getResult();
-  // }
+    void
+    testOverlayNoOpt(const std::string& a, const std::string& b, const std::string& expected, int opCode, double scaleFactor)
+    {
+        PrecisionModel pm(scaleFactor);
+        std::unique_ptr<Geometry> geom_a = r.read(a);
+        std::unique_ptr<Geometry> geom_b = r.read(b);
+        std::unique_ptr<Geometry> geom_expected = r.read(expected);
+        OverlayNG ov(geom_a.get(), geom_b.get(), &pm, opCode);
+        ov.setOptimized(true);
+        std::unique_ptr<Geometry> geom_result = ov.getResult();
+        ensure_equals_geometry(geom_expected.get(), geom_result.get());
+    }
 
 };
 
@@ -223,27 +231,27 @@ void object::test<15> ()
     testOverlay(a, b, exp, OverlayNG::UNION, 1);
 }
 
-// //  test2spikesIntersection
-// template<>
-// template<>
-// void object::test<16> ()
-// {
-//     std::string a = "POLYGON ((0 100, 40 100, 40 0, 0 0, 0 100))";
-//     std::string b = "POLYGON ((70 80, 10 80, 60 50, 11 20, 69 11, 70 80))";
-//     std::string exp = "MULTIPOLYGON (((40 80, 40 62, 10 80, 40 80)), ((40 38, 40 16, 11 20, 40 38)))";
-//     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
-// }
+//  test2spikesIntersection
+template<>
+template<>
+void object::test<16> ()
+{
+    std::string a = "POLYGON ((0 100, 40 100, 40 0, 0 0, 0 100))";
+    std::string b = "POLYGON ((70 80, 10 80, 60 50, 11 20, 69 11, 70 80))";
+    std::string exp = "MULTIPOLYGON (((40 80, 40 62, 10 80, 40 80)), ((40 38, 40 16, 11 20, 40 38)))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
 
 // //  test2spikesUnion
-// template<>
-// template<>
-// void object::test<17> ()
-// {
-//     std::string a = "POLYGON ((0 100, 40 100, 40 0, 0 0, 0 100))";
-//     std::string b = "POLYGON ((70 80, 10 80, 60 50, 11 20, 69 11, 70 80))";
-//     std::string exp = "POLYGON ((0 100, 40 100, 40 80, 70 80, 69 11, 40 16, 40 0, 0 0, 0 100), (40 62, 40 38, 60 50, 40 62))";
-//     testOverlay(a, b, exp, OverlayNG::UNION, 1);
-// }
+template<>
+template<>
+void object::test<17> ()
+{
+    std::string a = "POLYGON ((0 100, 40 100, 40 0, 0 0, 0 100))";
+    std::string b = "POLYGON ((70 80, 10 80, 60 50, 11 20, 69 11, 70 80))";
+    std::string exp = "POLYGON ((0 100, 40 100, 40 80, 70 80, 69 11, 40 16, 40 0, 0 0, 0 100), (40 62, 40 38, 60 50, 40 62))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
 
 //  testTriBoxIntersection
 template<>
@@ -278,19 +286,174 @@ void object::test<20> ()
     testOverlay(a, b, exp, OverlayNG::UNION, 1);
 }
 
+//  testATouchingNestedPolyUnion
+template<>
+template<>
+void object::test<21> ()
+{
+    std::string a = "MULTIPOLYGON (((0 200, 200 200, 200 0, 0 0, 0 200), (50 50, 190 50, 50 200, 50 50)), ((60 100, 100 60, 50 50, 60 100)))";
+    std::string b = "POLYGON ((135 176, 180 176, 180 130, 135 130, 135 176))";
+    std::string exp = "MULTIPOLYGON (((0 0, 0 200, 50 200, 200 200, 200 0, 0 0), (50 50, 190 50, 50 200, 50 50)), ((50 50, 60 100, 100 60, 50 50)))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
 
 
+// testTouchingPolyDifference
+template<>
+template<>
+void object::test<22> ()
+{
+    std::string a = "POLYGON ((200 200, 200 0, 0 0, 0 200, 200 200), (100 100, 50 100, 50 200, 100 100))";
+    std::string b = "POLYGON ((150 100, 100 100, 150 200, 150 100))";
+    std::string exp = "MULTIPOLYGON (((0 0, 0 200, 50 200, 50 100, 100 100, 150 100, 150 200, 200 200, 200 0, 0 0)), ((50 200, 150 200, 100 100, 50 200)))";
+    testOverlay(a, b, exp, OverlayNG::DIFFERENCE, 1);
+}
 
+// testTouchingHoleUnion
+template<>
+template<>
+void object::test<23> ()
+{
+    std::string a = "POLYGON ((100 300, 300 300, 300 100, 100 100, 100 300), (200 200, 150 200, 200 300, 200 200))";
+    std::string b = "POLYGON ((130 160, 260 160, 260 120, 130 120, 130 160))";
+    std::string exp = "POLYGON ((100 100, 100 300, 200 300, 300 300, 300 100, 100 100), (150 200, 200 200, 200 300, 150 200))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
 
+// testTouchingMultiHoleUnion
+template<>
+template<>
+void object::test<24> ()
+{
+    std::string a = "POLYGON ((100 300, 300 300, 300 100, 100 100, 100 300), (200 200, 150 200, 200 300, 200 200), (250 230, 216 236, 250 300, 250 230), (235 198, 300 200, 237 175, 235 198))";
+    std::string b = "POLYGON ((130 160, 260 160, 260 120, 130 120, 130 160))";
+    std::string exp = "POLYGON ((100 300, 200 300, 250 300, 300 300, 300 200, 300 100, 100 100, 100 300), (200 300, 150 200, 200 200, 200 300), (250 300, 216 236, 250 230, 250 300), (300 200, 235 198, 237 175, 300 200))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
 
+// testBoxLineIntersection
+template<>
+template<>
+void object::test<25> ()
+{
+    std::string a = "POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))";
+    std::string b = "LINESTRING (50 150, 150 150)";
+    std::string exp = "LINESTRING (100 150, 150 150)";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// testBoxLineUnion
+template<>
+template<>
+void object::test<26> ()
+{
+    std::string a = "POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))";
+    std::string b = "LINESTRING (50 150, 150 150)";
+    std::string exp = "GEOMETRYCOLLECTION (POLYGON ((100 200, 200 200, 200 100, 100 100, 100 150, 100 200)), LINESTRING (50 150, 100 150))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
+
+// testAdjacentBoxesIntersection
+template<>
+template<>
+void object::test<27> ()
+{
+    std::string a = "POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))";
+    std::string b = "POLYGON ((300 200, 300 100, 200 100, 200 200, 300 200))";
+    std::string exp = "LINESTRING (200 100, 200 200)";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// testAdjacentBoxesUnion
+template<>
+template<>
+void object::test<28> ()
+{
+    std::string a = "POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))";
+    std::string b = "POLYGON ((300 200, 300 100, 200 100, 200 200, 300 200))";
+    std::string exp = "POLYGON ((100 100, 100 200, 200 200, 300 200, 300 100, 200 100, 100 100))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
+
+// testCollapseBoxGoreIntersection
+template<>
+template<>
+void object::test<29> ()
+{
+    std::string a = "MULTIPOLYGON (((1 1, 5 1, 5 0, 1 0, 1 1)), ((1 1, 5 2, 5 4, 1 4, 1 1)))";
+    std::string b = "POLYGON ((1 0, 1 2, 2 2, 2 0, 1 0))";
+    std::string exp = "POLYGON ((2 0, 1 0, 1 1, 1 2, 2 2, 2 1, 2 0))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// testCollapseBoxGoreUnion
+template<>
+template<>
+void object::test<30> ()
+{
+    std::string a = "MULTIPOLYGON (((1 1, 5 1, 5 0, 1 0, 1 1)), ((1 1, 5 2, 5 4, 1 4, 1 1)))";
+    std::string b = "POLYGON ((1 0, 1 2, 2 2, 2 0, 1 0))";
+    std::string exp = "POLYGON ((2 0, 1 0, 1 1, 1 2, 1 4, 5 4, 5 2, 2 1, 5 1, 5 0, 2 0))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
+
+// testSnapBoxGoreIntersection
+template<>
+template<>
+void object::test<31> ()
+{
+    std::string a = "MULTIPOLYGON (((1 1, 5 1, 5 0, 1 0, 1 1)), ((1 1, 5 2, 5 4, 1 4, 1 1)))";
+    std::string b = "POLYGON ((4 3, 5 3, 5 0, 4 0, 4 3))";
+    std::string exp = "MULTIPOLYGON (((4 3, 5 3, 5 2, 4 2, 4 3)), ((4 0, 4 1, 5 1, 5 0, 4 0)))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// testSnapBoxGoreUnion
+template<>
+template<>
+void object::test<32> ()
+{
+    std::string a = "MULTIPOLYGON (((1 1, 5 1, 5 0, 1 0, 1 1)), ((1 1, 5 2, 5 4, 1 4, 1 1)))";
+    std::string b = "POLYGON ((4 3, 5 3, 5 0, 4 0, 4 3))";
+    std::string exp = "POLYGON ((1 1, 1 4, 5 4, 5 3, 5 2, 5 1, 5 0, 4 0, 1 0, 1 1), (1 1, 4 1, 4 2, 1 1))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
+
+// testCollapseTriBoxIntersection
+template<>
+template<>
+void object::test<33> ()
+{
+    std::string a = "POLYGON ((1 2, 1 1, 9 1, 1 2))";
+    std::string b = "POLYGON ((9 2, 9 1, 8 1, 8 2, 9 2))";
+    std::string exp = "POINT (8 1)";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// testCollapseTriBoxUnion
+template<>
+template<>
+void object::test<34> ()
+{
+    std::string a = "POLYGON ((1 2, 1 1, 9 1, 1 2))";
+    std::string b = "POLYGON ((9 2, 9 1, 8 1, 8 2, 9 2))";
+    std::string exp = "MULTIPOLYGON (((1 1, 1 2, 8 1, 1 1)), ((8 1, 8 2, 9 2, 9 1, 8 1)))";
+    testOverlay(a, b, exp, OverlayNG::UNION, 1);
+}
+
+// testDisjointIntersectionNoOpt
+template<>
+template<>
+void object::test<35> ()
+{
+    std::string a = "POLYGON ((60 90, 90 90, 90 60, 60 60, 60 90))";
+    std::string b = "POLYGON ((200 300, 300 300, 300 200, 200 200, 200 300))";
+    std::string exp = "POLYGON EMPTY";
+    testOverlayNoOpt(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
 
 
  // public void testDisjointIntersectionNoOpt() {
- //    Geometry a = read("POLYGON ((60 90, 90 90, 90 60, 60 60, 60 90))");
- //    Geometry b = read("POLYGON ((200 300, 300 300, 300 200, 200 200, 200 300))");
- //    Geometry expected = read("POLYGON EMPTY");
- //    Geometry actual = intersectionNoOpt(a, b, 1);
- //    checkEqual(expected, actual);
  //  }
 
 

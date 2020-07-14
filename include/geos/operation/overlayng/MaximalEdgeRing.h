@@ -68,7 +68,7 @@ private:
     * @param nodeEdge an edge originating at this node
     * @param maxRing the maximal ring to link
     */
-    void linkMinRingEdgesAtNode(OverlayEdge* nodeEdge, MaximalEdgeRing* maxRing);
+    static void linkMinRingEdgesAtNode(OverlayEdge* nodeEdge, MaximalEdgeRing* maxRing);
 
     /**
     * Tests if an edge of the maximal edge ring is already linked into
@@ -79,10 +79,10 @@ private:
     * @param maxRing the maximal edgering
     * @return true if the edge has already been linked into a minimal edgering.
     */
-    bool isAlreadyLinked(OverlayEdge* edge, MaximalEdgeRing* maxRing) const;
+    static bool isAlreadyLinked(OverlayEdge* edge, MaximalEdgeRing* maxRing);
 
-    OverlayEdge* selectMaxOutEdge(OverlayEdge* currOut, MaximalEdgeRing* maxEdgeRing) const;
-    OverlayEdge* linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut, MaximalEdgeRing* maxEdgeRing) const;
+    static OverlayEdge* selectMaxOutEdge(OverlayEdge* currOut, MaximalEdgeRing* maxEdgeRing);
+    static OverlayEdge* linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut, MaximalEdgeRing* maxEdgeRing);
 
 
 public:
@@ -121,10 +121,7 @@ public:
     */
     static void linkResultAreaMaxRingAtNode(OverlayEdge* nodeEdge);
 
-
-
-
-
+    friend std::ostream& operator<<(std::ostream& os, const MaximalEdgeRing& mer);
 
 };
 

@@ -288,39 +288,31 @@ OverlayEdge::setEdgeRingMax(const MaximalEdgeRing* p_maximalEdgeRing)
     maxEdgeRing = p_maximalEdgeRing;
 }
 
+/*public friend*/
+std::ostream&
+operator<<(std::ostream& os, const OverlayEdge& oe)
+{
+    os << "OE( " << oe.orig();
+    if (oe.pts->size() > 2) {
+        os << ", " << oe.directionPt();
+    }
+    os << " .. " << oe.dest() << " ) ";
+    oe.label->toString(oe.direction, os);
+    os << oe.resultSymbol();
+    os << " / Sym: ";
+    oe.symOE()->getLabel()->toString(oe.symOE()->direction, os);
+    os << oe.symOE()->resultSymbol();
+    return os;
+}
 
-
-
-
-// /*public*/
-// std::string
-// toString()
-// {
-//     const Coordinate& orig = orig();
-//     const Coordinate& dest = dest();
-//     String dirPtStr = (pts.length > 2)
-//         ? ", " + WKTWriter.format(directionPt())
-//             : "";
-
-//     return "OE( "+ WKTWriter.format(orig)
-//         + dirPtStr
-//         + " .. " + WKTWriter.format(dest)
-//         + " ) "
-//         + label.toString(direction)
-//         + resultSymbol()
-//         + " / Sym: " + symOE().getLabel().toString(symOE().direction)
-//         + symOE().resultSymbol()
-//         ;
-// }
-
-// /*private*/
-// std::string
-// resultSymbol()
-// {
-//     if (isInResultArea) return " resA";
-//     if (isInResultLine) return " resL";
-//     return "";
-// }
+/*public*/
+std::string
+OverlayEdge::resultSymbol() const
+{
+    if (isInResultArea()) return std::string(" resA");
+    if (isInResultLine()) return std::string(" resL");
+    return std::string("");
+}
 
 
 

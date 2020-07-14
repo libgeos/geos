@@ -30,6 +30,7 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
 
+#include <algorithm>
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -193,6 +194,8 @@ OverlayNG::computeEdgeOverlay()
     * Edge* list allocated in the EdgeNodingBuilder survives
     * long enough to be copied into the OverlayGraph
     */
+    // XXX sort the edges first
+    // std::sort(edges.begin(), edges.end(), EdgeComparator);
     OverlayGraph graph;
     for (Edge* e : edges) {
         graph.addEdge(e);

@@ -60,7 +60,7 @@ void
 PolygonBuilder::buildRings(std::vector<OverlayEdge*>& resultAreaEdges)
 {
     linkResultAreaEdgesMax(resultAreaEdges);
-    std::vector<MaximalEdgeRing> maxRings = buildMaximalRings(resultAreaEdges);
+    std::vector<std::unique_ptr<MaximalEdgeRing>> maxRings = buildMaximalRings(resultAreaEdges);
     buildMinimalRings(maxRings);
     placeFreeHoles(shellList, freeHoleList);
 }
@@ -76,16 +76,16 @@ PolygonBuilder::linkResultAreaEdgesMax(std::vector<OverlayEdge*>& resultEdges)
 }
 
 /*private*/
-std::vector<MaximalEdgeRing>
+std::vector<std::unique_ptr<MaximalEdgeRing>>
 PolygonBuilder::buildMaximalRings(std::vector<OverlayEdge*>& edges)
 {
-    std::vector<MaximalEdgeRing> edgeRings;
+    std::vector<std::unique_ptr<MaximalEdgeRing>> edgeRings;
     for (OverlayEdge* e : edges) {
         if (e->isInResultArea() && e->getLabel()->isBoundaryEither()) {
             // if this edge has not yet been processed
             if (e->getEdgeRingMax() == nullptr) {
                 // Add a MaximalEdgeRing to the vector
-                edgeRings.emplace_back(e);
+                edgeRings.emplace_back(new MaximalEdgeRing(e));
             }
         }
     }
@@ -106,10 +106,10 @@ PolygonBuilder::storeMinimalRings(std::vector<std::unique_ptr<OverlayEdgeRing>>&
 
 /*private*/
 void
-PolygonBuilder::buildMinimalRings(std::vector<MaximalEdgeRing>& maxRings)
+PolygonBuilder::buildMinimalRings(std::vector<std::unique_ptr<MaximalEdgeRing>>& maxRings)
 {
-    for (MaximalEdgeRing& erMax : maxRings) {
-        auto minRings = erMax.buildMinimalRings(geometryFactory);
+    for (auto& erMax : maxRings) {
+        auto minRings = erMax->buildMinimalRings(geometryFactory);
         std::vector<OverlayEdgeRing*> minRingPtrs = storeMinimalRings(minRings);
         assignShellsAndHoles(minRingPtrs);
     }

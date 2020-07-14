@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/operation/overlayng/OverlayLabel.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/export.h>
 
 // Forward declarations
@@ -150,7 +151,36 @@ public:
 
     void populateLabel(OverlayLabel &ovl) const;
 
+    /*public*/
+    bool compareTo(const Edge& e) const
+    {
+        const geom::Coordinate& ca = getCoordinate(0);
+        const geom::Coordinate& cb = e.getCoordinate(0);
+        if(ca.compareTo(cb) < 0) {
+            return true;
+        }
+        else if (ca.compareTo(cb) > 0) {
+            return false;
+        }
+        else {
+            const geom::Coordinate& cca = getCoordinate(1);
+            const geom::Coordinate& ccb = e.getCoordinate(1);
+            if(cca.compareTo(ccb) < 0) {
+                return true;
+            }
+            else if (cca.compareTo(ccb) > 0) {
+                return false;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
 };
+
+bool EdgeComparator(const Edge* a, const Edge* b);
+
 
 
 } // namespace geos.operation.overlayng

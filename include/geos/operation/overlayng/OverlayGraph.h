@@ -58,9 +58,6 @@ private:
     std::map<Coordinate, OverlayEdge*> nodeMap;
     std::vector<OverlayEdge*> edges;
 
-    // Take ownership of constructor edges (and thus their pts)
-    std::vector<std::unique_ptr<Edge>> inputEdges;
-
     // Locally store the OverlayEdge and OverlayLabel
     std::deque<OverlayEdge> ovEdgeQue;
     std::deque<OverlayLabel> ovLabelQue;
@@ -130,6 +127,7 @@ public:
     */
     OverlayLabel* createOverlayLabel(const Edge* edge);
 
+    friend std::ostream& operator<<(std::ostream& os, const OverlayGraph& og);
 
 };
 

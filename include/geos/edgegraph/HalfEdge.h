@@ -302,6 +302,7 @@ public:
     HalfEdge* prevNode();
 
     friend std::ostream& operator<< (std::ostream& os, const HalfEdge& el);
+    static void toStringNode(const HalfEdge* he, std::ostream& os);
 
 };
 

@@ -360,18 +360,24 @@ OverlayLabel::dimensionSymbol(int dim) const
 std::ostream&
 operator<<(std::ostream& os, const OverlayLabel& ol)
 {
-    os << "A:";
-    ol.locationString(0, os);
-    os << "/B:";
-    ol.locationString(1, os);
+    ol.toString(true, os);
     return os;
+}
+
+/*public*/
+void
+OverlayLabel::toString(bool isForward, std::ostream& os) const
+{
+    os << "A:";
+    locationString(0, isForward, os);
+    os << "/B:";
+    locationString(1, isForward, os);
 }
 
 /*private*/
 void
-OverlayLabel::locationString(int index, std::ostream& os) const
+OverlayLabel::locationString(int index, bool isForward, std::ostream& os) const
 {
-    bool isForward = true;
     if (isBoundary(index)) {
         os << getLocation(index, Position::LEFT, isForward);
         os << getLocation(index, Position::RIGHT, isForward);

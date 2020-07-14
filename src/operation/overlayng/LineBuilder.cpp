@@ -36,12 +36,8 @@ LineBuilder::getLines()
     markResultLines();
     addResultLines();
 
-    // Take local ownership of all the lines before returning
-    // them to the new owner
-    std::vector<std::unique_ptr<LineString>> myLines;
-    for (auto& line: lines) {
-        myLines.emplace_back(line.release());
-    }
+    // Transfer ownership of all the lines to the
+    // caller
     return std::move(lines);
 }
 
@@ -176,7 +172,7 @@ LineBuilder::buildLine(OverlayEdge* node)
 {
     // assert: edgeStart degree = 1
     // assert: edgeStart direction = forward
-    std::unique_ptr<CoordinateArraySequence> pts;
+    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
     pts->add(node->orig(), false);
 
     bool isForward = node->isForward();

@@ -21,7 +21,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/TopologyException.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
-
+#include <geos/io/WKTWriter.h>
 
 #include <cassert>
 
@@ -135,7 +135,7 @@ MaximalEdgeRing::linkMinimalRings()
     while (e != startEdge);
 }
 
-/*private*/
+/*private static*/
 void
 MaximalEdgeRing::linkMinRingEdgesAtNode(OverlayEdge* nodeEdge, MaximalEdgeRing* maxRing)
 {
@@ -168,18 +168,18 @@ MaximalEdgeRing::linkMinRingEdgesAtNode(OverlayEdge* nodeEdge, MaximalEdgeRing* 
     }
 }
 
-/*private*/
+/*private static*/
 bool
-MaximalEdgeRing::isAlreadyLinked(OverlayEdge* edge, MaximalEdgeRing* maxRing) const
+MaximalEdgeRing::isAlreadyLinked(OverlayEdge* edge, MaximalEdgeRing* maxRing)
 {
     bool isLinked = (edge->getEdgeRingMax() == maxRing) &&
                     (edge->isResultLinked());
     return isLinked;
 }
 
-/*private*/
+/*private static*/
 OverlayEdge*
-MaximalEdgeRing::selectMaxOutEdge(OverlayEdge* currOut, MaximalEdgeRing* maxEdgeRing) const
+MaximalEdgeRing::selectMaxOutEdge(OverlayEdge* currOut, MaximalEdgeRing* maxEdgeRing)
 {
     // select if currOut edge is part of this max ring
     if (currOut->getEdgeRingMax() ==  maxEdgeRing)
@@ -188,12 +188,11 @@ MaximalEdgeRing::selectMaxOutEdge(OverlayEdge* currOut, MaximalEdgeRing* maxEdge
     return nullptr;
 }
 
-/*private*/
+/*private static*/
 OverlayEdge*
-MaximalEdgeRing::linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut, MaximalEdgeRing* maxEdgeRing) const
+MaximalEdgeRing::linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut, MaximalEdgeRing* maxEdgeRing)
 {
     OverlayEdge* currIn = currOut->symOE();
-    // currIn is not in this max-edgering, so keep looking
     if (currIn->getEdgeRingMax() !=  maxEdgeRing)
         return currMaxRingOut;
 
@@ -201,36 +200,27 @@ MaximalEdgeRing::linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut
     return nullptr;
 }
 
+/*public*/
+std::ostream&
+operator<<(std::ostream& os, const MaximalEdgeRing& mer)
+{
+    CoordinateArraySequence coords;
+    OverlayEdge* edge = mer.startEdge;
+    do {
+        coords.add(edge->orig());
+        if (edge == nullptr)
+            break;
+        if (edge->nextResultMax() == nullptr)
+            break;
+        edge = edge->nextResultMax();
+    }
+    while (edge != mer.startEdge);
+    coords.add(edge->dest());
+    std::string wkt = io::WKTWriter::toLineString(coords);
+    os << wkt;
+    return os;
 
-
-// /*public*/
-// String toString()
-// {
-//     Coordinate[] pts = getCoordinates();
-//     return WKTWriter.toLineString(pts);
-// }
-
-// /*private*/
-// Coordinate[]
-// getCoordinates()
-// {
-//     CoordinateList coords = new CoordinateList();
-//     OverlayEdge* edge = startEdge;
-//     do {
-//       coords.add(edge->orig());
-//       if (edge == nullptr)
-//         break;
-//       if (edge->nextResultMax() == nullptr) {
-//         break;
-//       }
-//       edge = edge->nextResultMax();
-//     } while (edge != startEdge);
-//     // add last coordinate
-//     coords.add(edge->dest());
-//     return coords.toCoordinateArray();
-// }
-
-
+}
 
 
 
