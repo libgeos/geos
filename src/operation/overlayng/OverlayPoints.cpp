@@ -148,13 +148,8 @@ OverlayPoints::buildPointMap(const Geometry* geom)
         * This provides the merging semantics of overlay
         */
         if (map.find(p) == map.end()) {
-            std::unique_ptr<Geometry> g = pt->clone();
-            Point* rawPt = static_cast<Point*>(g.release());
-            std::unique_ptr<Point> ptPtr(rawPt);
-            map[p] = std::move(ptPtr);
-
-            // std::unique_ptr<Point> ptPtr(new Point(*pt));
-            // map[p] = std::move(ptPtr);
+            std::unique_ptr<Point> newPt(pt->getFactory()->createPoint(p));
+            map[p] = std::move(newPt);
         }
     }
     return map;
