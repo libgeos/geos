@@ -233,7 +233,7 @@ OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
 std::unique_ptr<CoordinateArraySequence>
 OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* pm) const
 {
-    std::unique_ptr<CoordinateArraySequence> coords;
+    std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
     std::size_t n = points->getNumGeometries();
     for (std::size_t i = 0; i < n; i++) {
         const Point* point = static_cast<const Point*>(points->getGeometryN(i));
