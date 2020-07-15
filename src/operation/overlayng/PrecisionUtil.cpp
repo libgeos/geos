@@ -195,6 +195,8 @@ PrecisionUtil::numberOfDecimals(double value)
     while (std::fabs(value - std::round(value)) > threshold) {
         digits++;
         value *= 10.0;
+        if (digits >= 17)
+            return digits;
     }
     return digits;
 }
