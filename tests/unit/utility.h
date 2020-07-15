@@ -25,6 +25,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 // std
 #include <memory>
 #include <cstdlib>
@@ -95,6 +96,10 @@ instanceOf(InstanceType const* instance)
 // Geometries structure comparators
 //
 
+
+
+
+
 template <typename T1, typename T2>
 inline void
 ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
@@ -107,13 +112,19 @@ ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
 
 template <typename T>
 inline void
-ensure_equals_geometry(T const* lhs, T const* rhs)
+ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
 {
-    assert(nullptr != lhs);
-    assert(nullptr != rhs);
+    assert(nullptr != lhs_in);
+    assert(nullptr != rhs_in);
 
     using geos::geom::Polygon;
     using geos::geom::GeometryCollection;
+
+    // Take clones so we can normalize them
+    std::unique_ptr<geos::geom::Geometry> lhs = lhs_in->clone();
+    std::unique_ptr<geos::geom::Geometry> rhs = rhs_in->clone();
+    lhs->normalize();
+    rhs->normalize();
 
     ensure_equals("is-valid do not match",
                   lhs->isValid(), rhs->isValid());
@@ -121,8 +132,8 @@ ensure_equals_geometry(T const* lhs, T const* rhs)
     ensure_equals("is-empty do not match",
                   lhs->isEmpty(), rhs->isEmpty());
 
-    if(!isInstanceOf<GeometryCollection>(lhs)
-            && !isInstanceOf<GeometryCollection>(rhs)) {
+    if(!isInstanceOf<GeometryCollection>(lhs.get()) &&
+       !isInstanceOf<GeometryCollection>(rhs.get())) {
         ensure_equals("is-simple do not match",
                       lhs->isSimple(), rhs->isSimple());
     }
@@ -141,21 +152,26 @@ ensure_equals_geometry(T const* lhs, T const* rhs)
 
     // NOTE - mloskot: Intentionally disabled, so simplified geometry
     // can be compared to its original
-    //ensure_equals("number of points do not match",
-    //              lhs->getNumPoints(), rhs->getNumPoints());
+    ensure_equals("number of points do not match",
+                  lhs->getNumPoints(), rhs->getNumPoints());
 
+    bool areEqual = lhs->equalsExact(rhs.get(), tolerance);
+
+    ensure("coordinates do not match", areEqual);
     // Dispatch to run more specific testes
-    if(isInstanceOf<Polygon>(lhs)
-            && isInstanceOf<Polygon>(rhs)) {
-        ensure_equals_geometry(instanceOf<Polygon>(lhs),
-                               instanceOf<Polygon>(rhs));
-    }
-    else if(isInstanceOf<GeometryCollection>(lhs)
-            && isInstanceOf<GeometryCollection>(rhs)) {
-        ensure_equals_geometry(instanceOf<GeometryCollection>(lhs),
-                               instanceOf<GeometryCollection>(rhs));
-    }
+    // if(isInstanceOf<Polygon>(lhs)
+    //         && isInstanceOf<Polygon>(rhs)) {
+    //     ensure_equals_geometry(instanceOf<Polygon>(lhs),
+    //                            instanceOf<Polygon>(rhs));
+    // }
+    // else if(isInstanceOf<GeometryCollection>(lhs)
+    //         && isInstanceOf<GeometryCollection>(rhs)) {
+    //     ensure_equals_geometry(instanceOf<GeometryCollection>(lhs),
+    //                            instanceOf<GeometryCollection>(rhs));
+    // }
 }
+
+
 
 template <>
 inline void
