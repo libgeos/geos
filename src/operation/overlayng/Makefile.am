@@ -28,6 +28,7 @@ libopoverlayng_la_SOURCES = \
     OverlayNG.cpp \
     OverlayUtil.cpp \
     PolygonBuilder.cpp \
+    PrecisionReducer.cpp \
     PrecisionUtil.cpp \
     RingClipper.cpp \
     RobustClipEnvelopeComputer.cpp

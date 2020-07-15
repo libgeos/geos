@@ -193,6 +193,8 @@ geos_unit_SOURCES = \
 	operation/overlayng/OverlayNGSnappingNoderTest.cpp \
 	operation/overlayng/OverlayNGSnappingOneTest.cpp \
 	operation/overlayng/OverlayNGTest.cpp \
+	operation/overlayng/PrecisionReducerTest.cpp \
+	operation/overlayng/PrecisionUtilTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \

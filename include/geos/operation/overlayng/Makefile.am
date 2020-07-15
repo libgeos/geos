@@ -29,6 +29,7 @@ geos_HEADERS = \
     OverlayNG.h \
     OverlayUtil.h \
     PolygonBuilder.h \
+    PrecisionReducer.h \
     PrecisionUtil.h \
     RingClipper.h \
     RobustClipEnvelopeComputer.h
