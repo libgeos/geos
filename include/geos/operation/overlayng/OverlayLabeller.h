@@ -60,7 +60,8 @@ private:
     * must be disconnected from the boundary edges of the parent
     * (because otherwise the location would have
     * been propagated from them).
-    * They can be now located based on their parent ring role (shell or hole).
+    * This can occur with a collapsed hole or shell.
+    * The edges can be labeled based on their parent ring role (shell or hole).
     * (This cannot be done earlier, because the location
     * based on the boundary edges must take precedence.
     * There are situations where a collapsed edge has a location
@@ -73,9 +74,11 @@ private:
     * because that is done against the unreduced input geometry,
     * which may give an invalid result due to topology collapse.
     *
-    * The labeling is propagated to other connected edges,
+    * The labeling is propagated to other connected linear edges,
     * since there may be NOT_PART edges which are connected,
-    * and they need to be labeled in the same way.
+    * and they can be labeled in the same way.
+    * (These would get labeled anyway during subsequent disconnected labeling pass,
+    * but may be more efficient and accurate to do it here.)
     */
     void labelCollapsedEdges();
     void labelCollapsedEdge(OverlayEdge* edge, int geomIndex);
@@ -86,14 +89,15 @@ private:
     * In this case line location is propagated to the connected edges.
     */
     void labelConnectedLinearEdges();
-    void propagateLineLocations(int geomIndex);
-    void propagateLineLocations(int geomIndex, std::deque<OverlayEdge*>& edgeStack);
-    void propagateLineLocation(OverlayEdge* eStart, int geomIndex, std::deque<OverlayEdge*>& edgeStack, InputGeometry* inputGeometry);
+    void propagateLinearLocations(int geomIndex);
+    static void propagateLinearLocationAtNode(OverlayEdge* eNode, int geomIndex, bool isInputLine, std::deque<OverlayEdge*>& edgeStack);
 
     /**
-    * Finds all OverlayEdge*s which are labelled as L dimension.
+    * Finds all OverlayEdges which are linear
+    * (i.e. line or collapsed) and have a known location
+    * for the given input geometry.
     */
-    std::vector<OverlayEdge*> findLinearEdgesWithLocation(int geomIndex);
+    static std::vector<OverlayEdge*> findLinearEdgesWithLocation(std::vector<OverlayEdge*>& edges, int geomIndex);
 
     /**
     * At this point there may still be edges which have unknown location
@@ -146,8 +150,8 @@ private:
     geom::Location locateEdgeBothEnds(int geomIndex, OverlayEdge* edge);
 
     /**
-    * Labels node edges based on the arrangement
-    * of boundary edges incident on them.
+    * Labels edges around nodes based on the arrangement
+    * of incident area boundary edges.
     * Also propagates the labelling to connected linear edges.
     */
     void labelAreaNodeEdges(std::vector<OverlayEdge*>& nodes);

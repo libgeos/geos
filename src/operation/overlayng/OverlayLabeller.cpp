@@ -161,88 +161,79 @@ void
 OverlayLabeller::labelConnectedLinearEdges()
 {
     //TODO: can these be merged to avoid two scans?
-    propagateLineLocations(0);
+    propagateLinearLocations(0);
     if (inputGeometry->hasEdges(1)) {
-        propagateLineLocations(1);
+        propagateLinearLocations(1);
     }
 }
 
 /*private*/
 void
-OverlayLabeller::propagateLineLocations(int geomIndex)
+OverlayLabeller::propagateLinearLocations(int geomIndex)
 {
-    // find L edges
-    std::vector<OverlayEdge*> lineEdges = findLinearEdgesWithLocation(geomIndex);
+    std::vector<OverlayEdge*> linearEdges = findLinearEdgesWithLocation(edges, geomIndex);
+    if (linearEdges.size() <= 0) return;
 
     std::deque<OverlayEdge*> edgeStack;
-    edgeStack.insert(edgeStack.end(), lineEdges.begin(), lineEdges.end());
-
-    propagateLineLocations(geomIndex, edgeStack);
-}
-
-/*private*/
-void
-OverlayLabeller::propagateLineLocations(int geomIndex, std::deque<OverlayEdge*>& edgeStack)
-{
-    // traverse line edges, labelling unknown ones that are connected
+    bool isInputLine = inputGeometry->isLine(geomIndex);
+    // traverse connected linear edges, labeling unknown ones
     while (! edgeStack.empty()) {
         OverlayEdge* lineEdge = edgeStack.front();
         edgeStack.pop_front();
-        // assert: lineEdge.getLabel().isLine(geomIndex);
 
         // for any edges around origin with unknown location for this geomIndex,
         // add those edges to stack to continue traversal
-        propagateLineLocation(lineEdge, geomIndex, edgeStack, inputGeometry);
+        propagateLinearLocationAtNode(lineEdge, geomIndex, isInputLine, edgeStack);
     }
 }
 
-/*private*/
+/*private static*/
 void
-OverlayLabeller::propagateLineLocation(OverlayEdge* eStart, int geomIndex, std::deque<OverlayEdge*>& edgeStack, InputGeometry* inputGeometry)
+OverlayLabeller::propagateLinearLocationAtNode(OverlayEdge* eNode,
+    int geomIndex, bool isInputLine,
+    std::deque<OverlayEdge*>& edgeStack)
 {
-    OverlayEdge* e = eStart->oNextOE();
-    Location lineLoc = eStart->getLabel()->getLineLocation(geomIndex);
-
+    Location lineLoc = eNode->getLabel()->getLineLocation(geomIndex);
     /**
-    * If the parent geom is an L (dim 1)
+    * If the parent geom is a Line
     * then only propagate EXTERIOR locations.
     */
-    if (inputGeometry->isLine(geomIndex) && lineLoc != Location::EXTERIOR) {
+    if (isInputLine && lineLoc != Location::EXTERIOR)
         return;
-    }
 
+    OverlayEdge* e = eNode->oNextOE();
     do {
         OverlayLabel* label = e->getLabel();
         if (label->isLineLocationUnknown(geomIndex)) {
             /**
-            * If edge is not a boundary edge,
-            * its location is now known for this area
-            */
+             * If edge is not a boundary edge,
+             * its location is now known for this area
+             */
             label->setLocationLine(geomIndex, lineLoc);
-
             /**
-            * Add sym edge to stack for graph traversal
-            * (Don't add e itself, since e origin node has now been scanned)
-            */
+             * Add sym edge to stack for graph traversal
+             * (Don't add e itself, since e origin node has now been scanned)
+             */
             edgeStack.push_front(e->symOE());
-        }
-        e = e->oNextOE();
+      }
+      e = e->oNextOE();
     }
-    while (e != eStart);
+    while (e != eNode);
 }
 
-/*private*/
+/*private static*/
 std::vector<OverlayEdge*>
-OverlayLabeller::findLinearEdgesWithLocation(int geomIndex)
+OverlayLabeller::findLinearEdgesWithLocation(std::vector<OverlayEdge*>& edges, int geomIndex)
 {
-    std::vector<OverlayEdge*> lineEdges;
+    std::vector<OverlayEdge*> linearEdges;
     for (OverlayEdge* edge : edges) {
         OverlayLabel* lbl = edge->getLabel();
+        // keep if linear with known location
         if (lbl->isLinear(geomIndex) && !lbl->isLineLocationUnknown(geomIndex)) {
-            lineEdges.push_back(edge);
+            linearEdges.push_back(edge);
         }
     }
-    return lineEdges;
+    return linearEdges;
 }
 
 /*private*/
