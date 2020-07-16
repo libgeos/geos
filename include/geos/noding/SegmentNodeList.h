@@ -55,6 +55,7 @@ namespace noding { // geos::noding
 class GEOS_DLL SegmentNodeList {
 private:
     std::set<SegmentNode*, SegmentNodeLT> nodeMap;
+    std::deque<SegmentNode> nodeQue;
 
     // the parent edge
     const NodedSegmentString& edge;
@@ -142,10 +143,6 @@ public:
     {
         return edge;
     }
-
-    // TODO: Is this a final class ?
-    // Should remove the virtual in that case
-    virtual ~SegmentNodeList();
 
     /**
      * Adds an intersection into the list, if it isn't already there.
