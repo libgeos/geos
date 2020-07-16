@@ -56,6 +56,13 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
+	$(srcdir)/tests/general/TestNGOverlayA.xml \
+	$(srcdir)/tests/general/TestNGOverlayAPrec.xml \
+	$(srcdir)/tests/general/TestNGOverlayEmpty.xml \
+	$(srcdir)/tests/general/TestNGOverlayL.xml \
+	$(srcdir)/tests/general/TestNGOverlayLPrec.xml \
+	$(srcdir)/tests/general/TestNGOverlayP.xml \
+	$(srcdir)/tests/general/TestNGOverlayPPrec.xml \
 	$(srcdir)/tests/misc/Buffer-1.xml \
 	$(srcdir)/tests/misc/Buffer-2.xml \
 	$(srcdir)/tests/misc/InvalidRelates.xml \

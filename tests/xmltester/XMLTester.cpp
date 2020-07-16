@@ -38,6 +38,7 @@
 #include <geos/geom/util/Densifier.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
@@ -91,6 +92,7 @@ using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 using namespace geos::geom::prep;
 using std::runtime_error;
+using geos::operation::overlayng::OverlayNG;
 
 namespace {
 
@@ -503,6 +505,7 @@ XMLTester::parseRun(const tinyxml2::XMLNode* node)
     factory = geom::GeometryFactory::create(pm.get());
     wktreader.reset(new io::WKTReader(factory.get()));
     wktwriter.reset(new io::WKTWriter());
+    wktwriter->setTrim(true);
     wkbreader.reset(new io::WKBReader(*factory));
     wkbwriter.reset(new io::WKBWriter());
 
@@ -900,6 +903,247 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 #else
             GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
 #endif
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+        else if(opName == "intersectionng") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+
+            profile.start();
+
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::INTERSECTION);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+        else if(opName == "unionng") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+
+            profile.start();
+
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+        else if(opName == "differenceng") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+
+            profile.start();
+
+            const geom::Geometry* dgA = gA;
+            const geom::Geometry* dgB = gB;
+
+            // Swap arguments if necessary
+            if((opArg1 == "B" || opArg1 == "b") && gB) {
+                dgA = gB;
+                dgB = gA;
+            }
+
+            GeomPtr gRealRes = OverlayNG::overlay(dgA, dgB, OverlayNG::DIFFERENCE);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+        else if(opName == "symdifferenceng") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+
+            profile.start();
+
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::SYMDIFFERENCE);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+
+        else if(opName == "intersectionsr") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+            double precision = 1.0;
+
+            if(opArg3 != "") {
+                precision = std::atof(opArg3.c_str());
+            }
+
+            profile.start();
+            geom::PrecisionModel pm(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::INTERSECTION, &pm);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+
+        else if(opName == "unionsr") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+            double precision = 1.0;
+
+            if(opArg3 != "") {
+                precision = std::atof(opArg3.c_str());
+            }
+
+            profile.start();
+            geom::PrecisionModel pm(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION, &pm);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+        else if(opName == "differencesr") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+            double precision = 1.0;
+
+            if(opArg3 != "") {
+                precision = std::atof(opArg3.c_str());
+            }
+
+            const geom::Geometry* dgA = gA;
+            const geom::Geometry* dgB = gB;
+
+            // Swap arguments if necessary
+            if((opArg1 == "B" || opArg1 == "b") && gB) {
+                dgA = gB;
+                dgB = gA;
+            }
+
+            profile.start();
+            geom::PrecisionModel pm(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(dgA, dgB, OverlayNG::DIFFERENCE, &pm);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
+
+        else if(opName == "symdifferencesr") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+            double precision = 1.0;
+
+            if(opArg3 != "") {
+                precision = std::atof(opArg3.c_str());
+            }
+
+            profile.start();
+            geom::PrecisionModel pm(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::SYMDIFFERENCE, &pm);
 
             profile.stop();
 

@@ -216,23 +216,6 @@ public:
     overlay(const Geometry* geom0, const Geometry* geom1,
             int opCode, noding::Noder* noder);
 
-
-    /**
-    * Computes an overlay operation on
-    * the given geometry operands,
-    * using an automatically-determined fixed precision model
-    * which maximizes precision while ensuring robust computation.
-    * WARNING: This is quite slow, so not recommended for production use.
-    *
-    * @param geom0 the first geometry argument
-    * @param geom1 the second geometry argument
-    * @param opCode the code for the desired overlay operation
-    * @return the result of the overlay operation
-    */
-    // static std::unique_ptr<Geometry>
-    // overlayFixedPrecision(const Geometry* geom0, const Geometry* geom1, int opCode);
-
-
     /**
     * Computes an overlay operation on
     * the given geometry operands,

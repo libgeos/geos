@@ -209,6 +209,8 @@ protected:
 private:
 
     void validateConstruction();
+    void normalizeClosed();
+
 
 };
 

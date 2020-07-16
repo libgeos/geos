@@ -101,15 +101,6 @@ OverlayNG::overlay(const Geometry* geom0, const Geometry* geom1,
     return ov.getResult();
 }
 
-// /*public static*/
-// std::unique_ptr<Geometry>
-// OverlayNG::overlayFixedPrecision(const Geometry* geom0, const Geometry* geom1, int opCode)
-// {
-//     PrecisionModel pm = PrecisionUtil::robustPM(geom0, geom1);
-//     OverlayNG ov(geom0, geom1, &pm, opCode);
-//     return ov.getResult();
-// }
-
 /*public static*/
 std::unique_ptr<Geometry>
 OverlayNG::overlay(const Geometry* geom0, const Geometry* geom1, int opCode)
