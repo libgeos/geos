@@ -46,7 +46,7 @@ struct test_precisionutil_data {
 typedef test_group<test_precisionutil_data> group;
 typedef group::object object;
 
-group test_precisionutil_group("geos::overation::overlayng::PrecisionUtil");
+group test_precisionutil_group("geos::operation::overlayng::PrecisionUtil");
 
 //
 // Test Cases

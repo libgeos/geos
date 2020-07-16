@@ -76,7 +76,7 @@ struct test_linelimiter_data {
 typedef test_group<test_linelimiter_data> group;
 typedef group::object object;
 
-group test_linelimiter_group("geos::overation::overlayng::LineLimiter");
+group test_linelimiter_group("geos::operation::overlayng::LineLimiter");
 
 //
 // Test Cases

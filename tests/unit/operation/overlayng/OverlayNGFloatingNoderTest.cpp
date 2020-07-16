@@ -74,7 +74,7 @@ struct test_overlayngfloating_data {
 typedef test_group<test_overlayngfloating_data> group;
 typedef group::object object;
 
-group test_overlayngfloating_group("geos::overation::overlayng::FloatingNoder");
+group test_overlayngfloating_group("geos::operation::overlayng::OverlayNGFloatingNoder");
 
 //
 // Test Cases

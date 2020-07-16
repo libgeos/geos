@@ -44,7 +44,7 @@ struct test_overlayngpoints_data {
 typedef test_group<test_overlayngpoints_data> group;
 typedef group::object object;
 
-group test_overlayngpoints_group("geos::overation::overlayng::OverlayPoints");
+group test_overlayngpoints_group("geos::operation::overlayng::OverlayNGPoints");
 
 //
 // Test Cases

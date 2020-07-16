@@ -14,4 +14,5 @@ geos_HEADERS = \
     OverlapUnion.h \
     GeometryListHolder.h \
     PointGeometryUnion.h \
-    UnaryUnionOp.h
+    UnaryUnionOp.h \
+    UnionStrategy.h

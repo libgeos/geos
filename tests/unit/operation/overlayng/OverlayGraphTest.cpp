@@ -65,7 +65,7 @@ struct test_overlaygraph_data {
 typedef test_group<test_overlaygraph_data> group;
 typedef group::object object;
 
-group test_overlaygraph_group("geos::overation::overlayng::OverlayGraph");
+group test_overlaygraph_group("geos::operation::overlayng::OverlayGraph");
 
 //
 // Test Cases

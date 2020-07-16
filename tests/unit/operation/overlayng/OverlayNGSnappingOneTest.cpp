@@ -47,7 +47,7 @@ struct test_overlayngsnappingone_data {
 typedef test_group<test_overlayngsnappingone_data> group;
 typedef group::object object;
 
-group test_overlayngsnappingone_group("geos::overation::overlayng::SnappingOne");
+group test_overlayngsnappingone_group("geos::operation::overlayng::OverlayNGSnappingOne");
 
 //
 // Test Cases

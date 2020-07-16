@@ -40,7 +40,7 @@ struct test_precisionreducer_data {
 typedef test_group<test_precisionreducer_data> group;
 typedef group::object object;
 
-group test_precisionreducer_group("geos::overation::overlayng::PrecisionReducer");
+group test_precisionreducer_group("geos::operation::overlayng::PrecisionReducer");
 
 //
 // Test Cases

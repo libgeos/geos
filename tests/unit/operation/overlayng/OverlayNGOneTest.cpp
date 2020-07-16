@@ -44,7 +44,7 @@ struct test_overlayngone_data {
 typedef test_group<test_overlayngone_data> group;
 typedef group::object object;
 
-group test_overlayngone_group("geos::overation::overlayng::OverlayNGOne");
+group test_overlayngone_group("geos::operation::overlayng::OverlayNGOne");
 
 //
 // Test Cases

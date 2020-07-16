@@ -57,7 +57,7 @@ struct test_ringclipper_data {
 typedef test_group<test_ringclipper_data> group;
 typedef group::object object;
 
-group test_ringclipper_group("geos::overation::overlayng::RingClipper");
+group test_ringclipper_group("geos::operation::overlayng::RingClipper");
 
 //
 // Test Cases
