@@ -149,7 +149,7 @@ public:
      *              ownership of elements *and* vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
-    static geom::Geometry* Union(std::vector<geom::Polygon*>* polys, UnionStrategy& unionFun);
+    static geom::Geometry* Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun);
 
     /** \brief
      * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
@@ -160,19 +160,7 @@ public:
      */
     template <class T>
     static geom::Geometry*
-    Union(T start, T end)
-    {
-        std::vector<geom::Polygon*> polys;
-        for(T i = start; i != end; ++i) {
-            const geom::Polygon* p = dynamic_cast<const geom::Polygon*>(*i);
-            polys.push_back(const_cast<geom::Polygon*>(p));
-        }
-        return Union(&polys);
-    }
-
-    template <class T>
-    static geom::Geometry*
-    Union(T start, T end, UnionStrategy &unionStrat)
+    Union(T start, T end, UnionStrategy *unionStrat)
     {
         std::vector<geom::Polygon*> polys;
         for(T i = start; i != end; ++i) {
@@ -200,10 +188,10 @@ public:
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
         : inputPolys(polys)
         , geomFactory(nullptr)
-        , unionFunction(defaultUnionFunction)
+        , unionFunction(&defaultUnionFunction)
     {}
 
-    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys, UnionStrategy& unionFun)
+    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
         : inputPolys(polys)
         , geomFactory(nullptr)
         , unionFunction(unionFun)
@@ -219,7 +207,7 @@ public:
 
 private:
 
-    UnionStrategy& unionFunction;
+    UnionStrategy* unionFunction;
     ClassicUnionStrategy defaultUnionFunction;
 
     geom::Geometry* unionTree(index::strtree::ItemsList* geomTree);

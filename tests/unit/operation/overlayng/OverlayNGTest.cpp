@@ -449,6 +449,15 @@ void object::test<35> ()
     testOverlayNoOpt(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
-
+// testMultiPolygonNarrowGap
+template<>
+template<>
+void object::test<36> ()
+{
+    std::string a = "MULTIPOLYGON (((1 9, 5.7 9, 5.7 1, 1 1, 1 9)), ((9 9, 9 1, 6 1, 6 9, 9 9)))";
+    std::string b = "POLYGON EMPTY";
+    std::string exp = "POLYGON ((1 9, 6 9, 9 9, 9 1, 6 1, 1 1, 1 9))";
+    testOverlayNoOpt(a, b, exp, OverlayNG::UNION, 1);
+}
 
 } // namespace tut

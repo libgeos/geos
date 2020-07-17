@@ -195,6 +195,7 @@ geos_unit_SOURCES = \
 	operation/overlayng/OverlayNGTest.cpp \
 	operation/overlayng/PrecisionReducerTest.cpp \
 	operation/overlayng/PrecisionUtilTest.cpp \
+	operation/overlayng/UnaryUnionNGTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \

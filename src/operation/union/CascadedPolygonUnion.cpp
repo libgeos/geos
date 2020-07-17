@@ -27,7 +27,6 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/util/GeometryCombiner.h>
 #include <geos/geom/util/PolygonExtracter.h>
 #include <geos/index/strtree/STRtree.h>
 // std
@@ -120,7 +119,7 @@ CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
 }
 
 geom::Geometry*
-CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy& unionFun)
+CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
 {
     CascadedPolygonUnion op(polys, unionFun);
     return op.Union();
@@ -260,13 +259,12 @@ geom::Geometry*
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
     std::unique_ptr<geom::Geometry> ug;
-    if (unionFunction.isFloatingPrecision()) {
-        OverlapUnion unionOp(g0, g1);
+    if (unionFunction->isFloatingPrecision()) {
+        OverlapUnion unionOp(g0, g1, unionFunction);
         ug = unionOp.doUnion();
     }
     else {
-        OverlapUnion unionOp(g0, g1, unionFunction);
-        ug = unionOp.doUnion();
+        ug = unionFunction->Union(g0, g1);
     }
     return restrictToPolygons(std::move(ug)).release();
 }

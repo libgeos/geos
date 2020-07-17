@@ -94,7 +94,7 @@ class GEOS_DLL OverlapUnion {
 
 public:
 
-    OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1, geounion::UnionStrategy& unionFun)
+    OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1, geounion::UnionStrategy* unionFun)
         : g0(p_g0)
         , g1(p_g1)
         , unionFunction(unionFun)
@@ -103,7 +103,7 @@ public:
         {};
 
     OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1)
-        : OverlapUnion(p_g0, p_g1, defaultUnionFunction)
+        : OverlapUnion(p_g0, p_g1, &defaultUnionFunction)
         {};
 
 
@@ -115,7 +115,7 @@ private:
     const geom::Geometry* g0;
     const geom::Geometry* g1;
     bool isUnionSafe;
-    geounion::UnionStrategy& unionFunction;
+    geounion::UnionStrategy* unionFunction;
     geounion::ClassicUnionStrategy defaultUnionFunction;
 
     geom::Envelope overlapEnvelope(const geom::Geometry* geom0, const geom::Geometry* geom1);

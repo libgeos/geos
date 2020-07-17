@@ -31,7 +31,8 @@ libopoverlayng_la_SOURCES = \
     PrecisionReducer.cpp \
     PrecisionUtil.cpp \
     RingClipper.cpp \
-    RobustClipEnvelopeComputer.cpp
+    RobustClipEnvelopeComputer.cpp \
+    UnaryUnionNG.cpp
 
 
 libopoverlayng_la_LIBADD =

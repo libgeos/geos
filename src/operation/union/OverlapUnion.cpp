@@ -120,7 +120,7 @@ OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
         return geom0->clone();
     }
 
-    return unionFunction.Union(geom0, geom1);
+    return unionFunction->Union(geom0, geom1);
 }
 
 /* private */

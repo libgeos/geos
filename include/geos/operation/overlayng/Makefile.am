@@ -32,4 +32,5 @@ geos_HEADERS = \
     PrecisionReducer.h \
     PrecisionUtil.h \
     RingClipper.h \
-    RobustClipEnvelopeComputer.h
+    RobustClipEnvelopeComputer.h \
+    UnaryUnionNG.h
