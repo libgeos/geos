@@ -26,6 +26,7 @@ libopoverlayng_la_SOURCES = \
     OverlayMixedPoints.cpp \
     OverlayPoints.cpp \
     OverlayNG.cpp \
+    OverlayNGSnapIfNeeded.cpp \
     OverlayUtil.cpp \
     PolygonBuilder.cpp \
     PrecisionReducer.cpp \

@@ -27,6 +27,7 @@ geos_HEADERS = \
     OverlayMixedPoints.h \
     OverlayPoints.h
     OverlayNG.h \
+    OverlayNGSnapIfNeeded.h \
     OverlayUtil.h \
     PolygonBuilder.h \
     PrecisionReducer.h \
