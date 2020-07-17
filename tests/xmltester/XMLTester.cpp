@@ -39,6 +39,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
@@ -93,6 +94,7 @@ using namespace geos::operation::linemerge;
 using namespace geos::geom::prep;
 using std::runtime_error;
 using geos::operation::overlayng::OverlayNG;
+using geos::operation::overlayng::OverlayNGSnapIfNeeded;
 
 namespace {
 
@@ -744,6 +746,71 @@ XMLTester::printGeom(const geom::Geometry* g)
         return wktwriter->write(g);
     }
 }
+
+/**
+* Computes the maximum area delta value
+* resulting from identity equations over the overlay operations.
+* The delta value is normalized to the total area of the geometries.
+* If the overlay operations are computed correctly
+* the area delta is expected to be very small (e.g. < 1e-6).
+*/
+double
+XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp)
+{
+    double areaA = a == nullptr ? 0 : a->getArea();
+    double areaB = b == nullptr ? 0 : b->getArea();
+
+    // if an input is non-polygonal delta is 0
+    if (areaA == 0 || areaB == 0)
+      return 0;
+
+    double areaU   = OverlayNGSnapIfNeeded::Union(a, b)->getArea();
+    double areaI   = OverlayNGSnapIfNeeded::Intersection(a, b)->getArea();
+    double areaDab = OverlayNGSnapIfNeeded::Difference(a, b)->getArea();
+    double areaDba = OverlayNGSnapIfNeeded::Difference(b, a)->getArea();
+    double areaSD  = OverlayNGSnapIfNeeded::SymDifference(a, b)->getArea();
+
+    double maxDelta = 0;
+
+    // & : intersection
+    // - : difference
+    // + : union
+    // ^ : symdifference
+
+    double delta = std::abs(areaA - areaI - areaDab);
+    if (delta > maxDelta) {
+        rsltMaxDiffOp = "A = ( A & B ) + ( A - B )";
+        maxDelta = delta;
+    }
+
+    delta = std::abs(areaB - areaI - areaDba);
+    if (delta > maxDelta) {
+        rsltMaxDiffOp = "B = ( A & B ) + ( B - A )";
+        maxDelta = delta;
+    }
+
+    delta = std::abs(areaDab + areaDba - areaSD);
+    if (delta > maxDelta) {
+        maxDelta = delta;
+        rsltMaxDiffOp = "( A ^ B ) = ( A - B ) + ( B - A )";
+    }
+
+    delta = std::abs(areaI + areaSD - areaU);
+    if (delta > maxDelta) {
+        maxDelta = delta;
+        rsltMaxDiffOp = "( A + B ) = ( A & B ) + ( A ^ B )";
+    }
+
+    delta = std::abs(areaU - areaI - areaDab - areaDba);
+    if (delta > maxDelta) {
+        maxDelta = delta;
+        rsltMaxDiffOp = "( A + B ) = ( A & B ) + ( A - B ) + ( A - B )";
+    }
+
+    // normalize the area delta value
+    return maxDelta / (areaA + areaB);
+}
+
 
 void
 XMLTester::parseTest(const tinyxml2::XMLNode* node)
@@ -1808,6 +1875,23 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if(testValidOutput) {
                 success &= int(testValid(gRealRes.get(), "result"));
             }
+        }
+
+        else if(opName == "overlayareatest") {
+
+            std::string maxDiffOp;
+            double areaDiff = areaDelta(gA, gB, maxDiffOp);
+            double maxDiff = 1e-6;
+
+            std::stringstream p_tmp;
+            p_tmp << maxDiffOp << ": " << areaDiff;
+            actual_result = p_tmp.str();
+            p_tmp.str("");
+            p_tmp << maxDiff;
+            expected_result = p_tmp.str();
+
+            if (areaDiff < maxDiff)
+                success = 1;
         }
 
         else if(opName == "areatest") {
