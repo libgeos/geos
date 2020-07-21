@@ -16,6 +16,7 @@
 
 #include <geos/export.h>
 #include <vector>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -59,8 +60,8 @@ class GEOS_DLL IntersectionPointBuilder {
 private:
 
     // Members
-    const geom::GeometryFactory* geometryFactory;
     OverlayGraph* graph;
+    const geom::GeometryFactory* geometryFactory;
     std::vector<std::unique_ptr<geom::Point>> points;
 
     // Methods

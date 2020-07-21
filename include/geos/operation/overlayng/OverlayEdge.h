@@ -19,6 +19,8 @@
 
 #include <geos/export.h>
 
+#include <memory>
+
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -70,10 +72,10 @@ private:
 public:
 
     // takes ownershiph of CoordinateSequence
-    OverlayEdge(const Coordinate& orig, const Coordinate& p_dirPt,
+    OverlayEdge(const Coordinate& p_orig, const Coordinate& p_dirPt,
                 bool p_direction, OverlayLabel* p_label,
                 const CoordinateSequence* p_pts)
-        : HalfEdge(orig)
+        : HalfEdge(p_orig)
         , pts(p_pts)
         , direction(p_direction)
         , dirPt(p_dirPt)

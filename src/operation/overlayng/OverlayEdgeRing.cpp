@@ -111,9 +111,9 @@ OverlayEdgeRing::getShell() const
 
 /*public*/
 void
-OverlayEdgeRing::addHole(OverlayEdgeRing* ring)
+OverlayEdgeRing::addHole(OverlayEdgeRing* p_ring)
 {
-    holes.push_back(ring);
+    holes.push_back(p_ring);
 }
 
 void
@@ -148,10 +148,10 @@ OverlayEdgeRing::computeRingPts(OverlayEdge* start, CoordinateArraySequence& pts
 
 /*private*/
 void
-OverlayEdgeRing::computeRing(const CoordinateArraySequence& ringPts, const GeometryFactory* geometryFactory)
+OverlayEdgeRing::computeRing(const CoordinateArraySequence& p_ringPts, const GeometryFactory* geometryFactory)
 {
     if (ring != nullptr) return;   // don't compute more than once
-    ring.reset(geometryFactory->createLinearRing(ringPts));
+    ring.reset(geometryFactory->createLinearRing(p_ringPts));
     m_isHole = algorithm::Orientation::isCCW(ring->getCoordinatesRO());
 }
 
@@ -255,7 +255,7 @@ OverlayEdgeRing::toPolygon(const GeometryFactory* factory)
 {
     std::vector<std::unique_ptr<LinearRing>> holeLR;
     if (holes.size() > 0) {
-        for (int i = 0; i < holes.size(); i++) {
+        for (std::size_t i = 0; i < holes.size(); i++) {
             std::unique_ptr<LinearRing> r = holes[i]->getRing();
             holeLR.push_back(std::move(r));
         }

@@ -68,8 +68,8 @@ class GEOS_DLL SnappingNoder : public Noder {
 private:
 
     // Members
-    SnappingPointIndex snapIndex;
     double snapTolerance;
+    SnappingPointIndex snapIndex;
     std::vector<SegmentString*>* nodedResult;
 
     // Methods

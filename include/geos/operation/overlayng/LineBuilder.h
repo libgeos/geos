@@ -70,11 +70,11 @@ class GEOS_DLL LineBuilder {
 private:
 
     // Members
-    const geom::GeometryFactory* geometryFactory;
     OverlayGraph* graph;
     int opCode;
-    int inputAreaIndex;
+    const geom::GeometryFactory* geometryFactory;
     bool hasResultArea;
+    int inputAreaIndex;
     std::vector<std::unique_ptr<geom::LineString>> lines;
 
     void markResultLines();

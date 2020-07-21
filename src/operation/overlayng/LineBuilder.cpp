@@ -20,6 +20,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 
 
 
@@ -91,8 +92,8 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
     Location aLoc = effectiveLocation(0, lbl);
     Location bLoc = effectiveLocation(1, lbl);
 
-    bool isInResult = OverlayNG::isResultOfOp(opCode, aLoc, bLoc);
-    return isInResult;
+    bool inResult = OverlayNG::isResultOfOp(opCode, aLoc, bLoc);
+    return inResult;
 }
 
 /*private*/
@@ -175,7 +176,7 @@ LineBuilder::buildLine(OverlayEdge* node)
     std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
     pts->add(node->orig(), false);
 
-    bool isForward = node->isForward();
+    bool isNodeForward = node->isForward();
 
     OverlayEdge* e = node;
     do {
@@ -190,6 +191,10 @@ LineBuilder::buildLine(OverlayEdge* node)
         // e will be nullptr if next edge has been visited, which indicates a ring
     }
     while (e != nullptr);
+    // reverse coordinates before constructing
+    if(!isNodeForward) {
+        CoordinateSequence::reverse(pts.get());
+    }
 
     return geometryFactory->createLineString(std::move(pts));
 }

@@ -89,9 +89,9 @@ MaximalEdgeRing::linkResultAreaMaxRingAtNode(OverlayEdge* nodeEdge)
 
 /*private*/
 void
-MaximalEdgeRing::attachEdges(OverlayEdge* startEdge)
+MaximalEdgeRing::attachEdges(OverlayEdge* p_startEdge)
 {
-    OverlayEdge* edge = startEdge;
+    OverlayEdge* edge = p_startEdge;
     do {
         if (edge == nullptr)
             throw util::TopologyException("Found null edge in ring");
@@ -103,7 +103,7 @@ MaximalEdgeRing::attachEdges(OverlayEdge* startEdge)
         edge->setEdgeRingMax(this);
         edge = edge->nextResultMax();
     }
-    while (edge != startEdge);
+    while (edge != p_startEdge);
 }
 
 /*public*/

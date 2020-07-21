@@ -24,14 +24,14 @@ EdgeSourceInfo::EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole)
     , dim(geom::Dimension::A)
     , edgeIsHole(p_isHole)
     , depthDelta(p_depthDelta)
-    {};
+    {}
 
 EdgeSourceInfo::EdgeSourceInfo(int p_index)
     : index(p_index)
     , dim(geom::Dimension::L)
     , edgeIsHole(false)
     , depthDelta(0)
-    {};
+    {}
 
 
 } // namespace geos.operation.overlayng

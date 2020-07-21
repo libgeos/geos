@@ -218,7 +218,7 @@ OverlayNG::labelGraph(OverlayGraph* graph)
 
 /*private*/
 std::unique_ptr<Geometry>
-OverlayNG::extractResult(int opCode, OverlayGraph* graph)
+OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
 {
     //--- Build polygons
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
@@ -228,8 +228,8 @@ OverlayNG::extractResult(int opCode, OverlayGraph* graph)
 
     //--- Build lines
     std::vector<std::unique_ptr<LineString>> resultLineList;
-    if (opCode != INTERSECTION || ! hasResultComponents) {
-        LineBuilder lineBuilder(&inputGeom, graph, hasResultComponents, opCode, geomFact);
+    if (p_opCode != INTERSECTION || ! hasResultComponents) {
+        LineBuilder lineBuilder(&inputGeom, graph, hasResultComponents, p_opCode, geomFact);
         resultLineList = lineBuilder.getLines();
         hasResultComponents = resultLineList.size() > 0;
     }

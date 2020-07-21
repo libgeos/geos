@@ -60,7 +60,7 @@ EdgeNodingBuilder::createFloatingPrecisionNoder(bool doValidation)
         return validNoder;
     }
 
-    return mcNoder;
+    return std::unique_ptr<Noder>(mcNoder.release());
 }
 
 /*public*/

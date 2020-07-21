@@ -108,14 +108,14 @@ OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
         if (isFirstEdge) {
             startIndex = 0;
         }
-        for (int i = startIndex, sz = pts->size(); i < sz; i++) {
+        for (std::size_t i = startIndex, sz = pts->size(); i < sz; i++) {
             coords->add(pts->getAt(i), false);
         }
     }
     else { // is backward
-        int startIndex = pts->size() - 2;
+        int startIndex = (int)(pts->size()) - 2;
         if (isFirstEdge) {
-            startIndex = pts->size() - 1;
+            startIndex = (int)(pts->size()) - 1;
         }
         for (int i = startIndex; i >= 0; i--) {
             coords->add(pts->getAt(i), false);

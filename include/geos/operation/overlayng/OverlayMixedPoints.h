@@ -17,6 +17,8 @@
 #include <geos/export.h>
 
 #include <set>
+#include <memory>
+#include <vector>
 
 
 // Forward declarations

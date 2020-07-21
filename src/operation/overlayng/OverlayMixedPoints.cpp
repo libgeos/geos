@@ -100,16 +100,19 @@ OverlayMixedPoints::getResult()
 
 /*private*/
 std::unique_ptr<PointOnGeometryLocator>
-OverlayMixedPoints::createLocator(const Geometry* geomNonPoint)
+OverlayMixedPoints::createLocator(const Geometry* p_geomNonPoint)
 {
     if (geomNonPointDim == 2) {
-        std::unique_ptr<IndexedPointInAreaLocator> ipial(new IndexedPointInAreaLocator(*geomNonPoint));
+        std::unique_ptr<PointOnGeometryLocator> ipial(new IndexedPointInAreaLocator(*p_geomNonPoint));
         return ipial;
     }
     else {
-        std::unique_ptr<IndexedPointOnLineLocator> ipoll(new IndexedPointOnLineLocator(*geomNonPoint));
+        std::unique_ptr<PointOnGeometryLocator> ipoll(new IndexedPointOnLineLocator(*p_geomNonPoint));
         return ipoll;
     }
+    // never get here
+    std::unique_ptr<PointOnGeometryLocator> n(nullptr);
+    return n;
 }
 
 
@@ -183,7 +186,7 @@ OverlayMixedPoints::createPointResult(std::vector<std::unique_ptr<Point>>& point
     }
     else if (points.size() == 1) {
         auto& pt = points[0];
-        std::unique_ptr<Point> rsltPt(pt.release());
+        std::unique_ptr<Geometry> rsltPt(pt.release());
         return rsltPt;
     }
     return geometryFactory->createMultiPoint(std::move(points));
@@ -231,7 +234,7 @@ OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
 
 /*private*/
 std::unique_ptr<CoordinateArraySequence>
-OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* pm) const
+OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
 {
     std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
     std::size_t n = points->getNumGeometries();
@@ -241,7 +244,7 @@ OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionMo
             continue;
         }
         Coordinate coord;
-        OverlayUtil::round(point, pm, coord);
+        OverlayUtil::round(point, p_pm, coord);
         coords->add(coord, true);
     }
     return coords;

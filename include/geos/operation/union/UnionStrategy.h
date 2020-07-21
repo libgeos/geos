@@ -16,6 +16,8 @@
 
 #include <geos/export.h>
 
+#include <memory>
+
 
 // Forward declarations
 namespace geos {

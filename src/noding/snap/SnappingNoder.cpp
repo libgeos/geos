@@ -101,7 +101,7 @@ std::vector<SegmentString*>*
 SnappingNoder::getNodedSubstrings() const
 {
     return nodedResult;
-};
+}
 
 
 } // namespace geos.noding.snap
