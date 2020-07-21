@@ -126,8 +126,8 @@ public:
     *
     * @param orig the origin coordinate
     */
-    HalfEdge(const geom::Coordinate& orig) :
-        m_orig(orig)
+    HalfEdge(const geom::Coordinate& p_orig) :
+        m_orig(p_orig)
     {};
 
     /**
@@ -146,7 +146,7 @@ public:
     *
     * @param e the sym edge to link.
     */
-    void link(HalfEdge* sym);
+    void link(HalfEdge* p_sym);
 
     /**
     * Gets the origin coordinate of this edge.

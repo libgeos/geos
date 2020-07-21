@@ -54,18 +54,18 @@ HalfEdge::link(HalfEdge* p_sym)
 
 /*public*/
 HalfEdge*
-HalfEdge::find(const Coordinate& dest)
+HalfEdge::find(const Coordinate& p_dest)
 {
-    HalfEdge* oNext = this;
+    HalfEdge* oNxt = this;
     do {
-        if (oNext == nullptr) {
+        if (oNxt == nullptr) {
             return nullptr;
         }
-        if (oNext->dest().equals2D(dest)) {
-            return oNext;
+        if (oNxt->dest().equals2D(p_dest)) {
+            return oNxt;
         }
-        oNext = oNext->oNext();
-    } while (oNext != this);
+        oNxt = oNxt->oNext();
+    } while (oNxt != this);
     return nullptr;
 }
 
@@ -211,13 +211,13 @@ HalfEdge::compareAngularDirection(const HalfEdge* e) const
 int
 HalfEdge::degree()
 {
-    int degree = 0;
+    int deg = 0;
     HalfEdge* e = this;
     do {
-        degree++;
+        deg++;
         e = e->oNext();
     } while (e != this);
-    return degree;
+    return deg;
 }
 
 /*public*/
