@@ -85,7 +85,7 @@ void
 EdgeGraphBuilder::add(const LineString* line)
 {
     const CoordinateSequence* seq = line->getCoordinatesRO();
-    for (int i = 1, sz = seq->getSize(); i < sz; i++) {
+    for (std::size_t i = 1, sz = seq->getSize(); i < sz; i++) {
         graph->addEdge(seq->getAt(i-1), seq->getAt(i));
     }
 }

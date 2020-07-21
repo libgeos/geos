@@ -46,7 +46,7 @@ public:
     * This method may throw a {@link Toppology Exception}
     * if one is encountered
     */
-    virtual std::unique_ptr<geom::Geometry> Union(const geom::Geometry*, const geom::Geometry*) = 0;;
+    virtual std::unique_ptr<geom::Geometry> Union(const geom::Geometry*, const geom::Geometry*) = 0;
 
     /**
     * Indicates whether the union function operates using
@@ -57,7 +57,7 @@ public:
     * Otherwise, the union result extent may not be the same as the extent of the inputs,
     * which prevents using some optimizations.
     */
-    virtual bool isFloatingPrecision() const = 0;;
+    virtual bool isFloatingPrecision() const = 0;
 
 
 };

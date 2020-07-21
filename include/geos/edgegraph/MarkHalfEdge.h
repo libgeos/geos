@@ -44,8 +44,8 @@ public:
     *
     * @param orig the coordinate of the edge origin
     */
-    MarkHalfEdge(const geom::Coordinate& orig) :
-        HalfEdge(orig),
+    MarkHalfEdge(const geom::Coordinate& p_orig) :
+        HalfEdge(p_orig),
         m_isMarked(false)
     {};
 
@@ -105,7 +105,7 @@ public:
     *
     * @param isMarked the mark value to set
     */
-    void setMark(bool isMarked) { m_isMarked = isMarked; }
+    void setMark(bool p_isMarked) { m_isMarked = p_isMarked; }
 
 };
 
