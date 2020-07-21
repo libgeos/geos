@@ -26,6 +26,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <memory>
 
 #include <geos/noding/SegmentNode.h> // for composition
 
