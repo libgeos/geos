@@ -1894,6 +1894,22 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 success = 1;
         }
 
+        else if(opName == "unionlength") {
+
+            char* rest;
+            GeomPtr result = OverlayNGSnapIfNeeded::Union(gA);
+            double resultLength = result->getLength();
+            double expectedLength = std::strtod(opRes.c_str(), &rest);
+            if(rest == opRes.c_str()) {
+                throw std::runtime_error("malformed testcase: missing expected length 'unionlength' op");
+            }
+
+            if (std::abs(expectedLength-resultLength) < expectedLength / 100.0) {
+                success = 1;
+            }
+
+        }
+
         else if(opName == "areatest") {
             char* rest;
             double toleratedDiff = std::strtod(opRes.c_str(), &rest);
