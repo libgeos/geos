@@ -139,21 +139,21 @@ public:
         , bLocRight(LOC_UNKNOWN)
         , bLocLine(LOC_UNKNOWN) {};
 
-    OverlayLabel(int index)
+    OverlayLabel(int p_index)
         : OverlayLabel()
     {
-        initLine(index);
+        initLine(p_index);
     };
 
-    OverlayLabel(int index, Location locLeft, Location locRight, bool isHole)
+    OverlayLabel(int p_index, Location p_locLeft, Location p_locRight, bool p_isHole)
         : OverlayLabel()
     {
-        initBoundary(index, locLeft, locRight, isHole);
+        initBoundary(p_index, p_locLeft, p_locRight, p_isHole);
     };
 
     int dimension(int index) const { return index == 0 ? aDim : bDim; };
-    void initBoundary(int index, Location locLeft, Location locRight, bool isHole);
-    void initCollapse(int index, bool isHole);
+    void initBoundary(int index, Location locLeft, Location locRight, bool p_isHole);
+    void initCollapse(int index, bool p_isHole);
     void initLine(int index);
     void initNotPart(int index);
 

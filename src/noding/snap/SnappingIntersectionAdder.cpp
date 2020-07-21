@@ -120,9 +120,9 @@ SnappingIntersectionAdder::isAdjacent(SegmentString* ss0, size_t segIndex0, Segm
         return true;
     }
     if (ss0->isClosed()) {
-        int maxSegIndex = ss0->size() - 1;
-        if ((segIndex0 == 0 && segIndex1 == maxSegIndex) ||
-            (segIndex1 == 0 && segIndex0 == maxSegIndex)) {
+        std::size_t maxSegIndex = ss0->size();
+        if ((segIndex0 == 0 && (segIndex1 + 1) == maxSegIndex) ||
+            (segIndex1 == 0 && (segIndex0 + 1) == maxSegIndex)) {
             return true;
         }
     }

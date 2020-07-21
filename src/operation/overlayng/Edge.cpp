@@ -172,7 +172,7 @@ Edge::dimension(int geomIndex) const
 */
 /*private*/
 void
-Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole) const
+Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool p_isHole) const
 {
     int dimLabel = labelDim(dim, depthDelta);
 
@@ -182,11 +182,11 @@ Edge::initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool 
             break;
         }
         case OverlayLabel::DIM_BOUNDARY: {
-            lbl.initBoundary(geomIndex, locationLeft(depthDelta), locationRight(depthDelta), isHole);
+            lbl.initBoundary(geomIndex, locationLeft(depthDelta), locationRight(depthDelta), p_isHole);
             break;
         }
         case OverlayLabel::DIM_COLLAPSE: {
-            lbl.initCollapse(geomIndex, isHole);
+            lbl.initCollapse(geomIndex, p_isHole);
             break;
         }
         case OverlayLabel::DIM_LINE: {
@@ -393,7 +393,7 @@ Edge::populateLabel(OverlayLabel &lbl) const
 bool EdgeComparator(const Edge* a, const Edge* b)
 {
     return a->compareTo(*b);
-};
+}
 
 
 } // namespace geos.operation.overlayng

@@ -17,6 +17,7 @@
 #include <geos/export.h>
 
 #include <vector>
+#include <memory>
 
 #include <geos/inline.h>
 

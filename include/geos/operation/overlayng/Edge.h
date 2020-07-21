@@ -18,6 +18,8 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/export.h>
 
+#include <memory>
+
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -62,13 +64,13 @@ class GEOS_DLL Edge {
 private:
 
     // Members
-    std::unique_ptr<geom::CoordinateSequence> pts;
     int aDim = OverlayLabel::DIM_UNKNOWN;
     int aDepthDelta = 0;
     bool aIsHole = false;
     int bDim = OverlayLabel::DIM_UNKNOWN;
     int bDepthDelta = 0;
     bool bIsHole = false;
+    std::unique_ptr<geom::CoordinateSequence> pts;
 
     // Methods
 

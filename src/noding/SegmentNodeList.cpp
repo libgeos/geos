@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <set>
+#include <algorithm>
 
 #include <geos/profiler.h>
 #include <geos/util/GEOSException.h>
@@ -250,10 +251,11 @@ SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 void
 SegmentNodeList::createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vector<Coordinate>& pts)
 {
-    int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+    //int npts = ei1->segmentIndex - (ei0->segmentIndex + 2);
+    bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
 
     // if only two points in split edge they must be the node points
-    if (npts == 2) {
+    if (twoPoints) {
         pts.emplace_back(ei0->coord);
         pts.emplace_back(ei1->coord);
         return;
@@ -268,9 +270,9 @@ SegmentNodeList::createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vec
     * The check for point equality is 2D only - Z values are ignored
     */
     bool useIntPt1 = ei1->isInterior() || ! ei1->coord.equals2D(lastSegStartPt);
-    if (!useIntPt1) {
-        npts--;
-    }
+    //if (!useIntPt1) {
+    //    npts--;
+    //}
 
     pts.emplace_back(ei0->coord);
     for (size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {

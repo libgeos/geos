@@ -40,9 +40,9 @@ EdgeNodingBuilder::getNoder()
 
 /*private*/
 std::unique_ptr<Noder>
-EdgeNodingBuilder::createFixedPrecisionNoder(const PrecisionModel* pm)
+EdgeNodingBuilder::createFixedPrecisionNoder(const PrecisionModel* p_pm)
 {
-    std::unique_ptr<SnapRoundingNoder> srNoder(new SnapRoundingNoder(pm));
+    std::unique_ptr<Noder> srNoder(new SnapRoundingNoder(p_pm));
     return srNoder;
 }
 
@@ -56,7 +56,7 @@ EdgeNodingBuilder::createFloatingPrecisionNoder(bool doValidation)
     if (doValidation) {
         spareInternalNoder = std::move(mcNoder);
         Noder* noder = spareInternalNoder.get();
-        std::unique_ptr<ValidatingNoder> validNoder(new ValidatingNoder(*noder));
+        std::unique_ptr<Noder> validNoder(new ValidatingNoder(*noder));
         return validNoder;
     }
 

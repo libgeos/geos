@@ -64,7 +64,7 @@ SnapRoundingIntersectionAdder::processIntersections(
     li.computeIntersection(p00, p01, p10, p11);
     if (li.hasIntersection()) {
         if (li.isInteriorIntersection()) {
-            for (int intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
+            for (std::size_t intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
                 // Take a copy of the intersection coordinate
                 intersections->emplace_back(li.getIntersection(intIndex));
             }
