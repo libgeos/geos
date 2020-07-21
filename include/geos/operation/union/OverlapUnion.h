@@ -111,11 +111,12 @@ public:
 
 private:
 
-    const geom::GeometryFactory* geomFactory;
     const geom::Geometry* g0;
     const geom::Geometry* g1;
-    bool isUnionSafe;
     geounion::UnionStrategy* unionFunction;
+    const geom::GeometryFactory* geomFactory;
+    bool isUnionSafe;
+
     geounion::ClassicUnionStrategy defaultUnionFunction;
 
     geom::Envelope overlapEnvelope(const geom::Geometry* geom0, const geom::Geometry* geom1);

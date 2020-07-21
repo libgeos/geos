@@ -44,11 +44,11 @@ PolygonBuilder::getShellRings()
 
 /*private*/
 std::vector<std::unique_ptr<Polygon>>
-PolygonBuilder::computePolygons(std::vector<OverlayEdgeRing*> shellList)
+PolygonBuilder::computePolygons(std::vector<OverlayEdgeRing*> shells)
 {
     std::vector<std::unique_ptr<Polygon>> resultPolyList;
     // add Polygons for all shells
-    for (OverlayEdgeRing* er : shellList) {
+    for (OverlayEdgeRing* er : shells) {
         std::unique_ptr<Polygon> poly = er->toPolygon(geometryFactory);
         resultPolyList.push_back(std::move(poly));
     }
@@ -166,13 +166,13 @@ PolygonBuilder::assignHoles(OverlayEdgeRing* shell, std::vector<OverlayEdgeRing*
 
 /*private*/
 void
-PolygonBuilder::placeFreeHoles(std::vector<OverlayEdgeRing*> shellList, std::vector<OverlayEdgeRing*> freeHoleList)
+PolygonBuilder::placeFreeHoles(std::vector<OverlayEdgeRing*> shells, std::vector<OverlayEdgeRing*> freeHoles)
 {
     // TODO: use a spatial index to improve performance
-    for (OverlayEdgeRing* hole : freeHoleList) {
+    for (OverlayEdgeRing* hole : freeHoles) {
         // only place this hole if it doesn't yet have a shell
         if (hole->getShell() == nullptr) {
-            OverlayEdgeRing* shell = hole->findEdgeRingContaining(shellList);
+            OverlayEdgeRing* shell = hole->findEdgeRingContaining(shells);
             // only when building a polygon-valid result
             if (isEnforcePolygonal && shell == nullptr) {
                 throw util::TopologyException("unable to assign free hole to a shell", hole->getCoordinate());

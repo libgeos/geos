@@ -45,37 +45,37 @@ OverlayPoints::getResult()
     std::map<Coordinate, std::unique_ptr<Point>> map0 = buildPointMap(geom0);
     std::map<Coordinate, std::unique_ptr<Point>> map1 = buildPointMap(geom1);
 
-    std::vector<std::unique_ptr<Point>> resultList;
+    std::vector<std::unique_ptr<Point>> rsltList;
     switch (opCode) {
         case OverlayNG::INTERSECTION: {
-            computeIntersection(map0, map1, resultList);
+            computeIntersection(map0, map1, rsltList);
             break;
         }
         case OverlayNG::UNION: {
-            computeUnion(map0, map1, resultList);
+            computeUnion(map0, map1, rsltList);
             break;
         }
         case OverlayNG::DIFFERENCE: {
-            computeDifference(map0, map1, resultList);
+            computeDifference(map0, map1, rsltList);
             break;
         }
         case OverlayNG::SYMDIFFERENCE: {
-            computeDifference(map0, map1, resultList);
-            computeDifference(map1, map0, resultList);
+            computeDifference(map0, map1, rsltList);
+            computeDifference(map1, map0, rsltList);
             break;
         }
     }
-    if (resultList.empty())
+    if (rsltList.empty())
         return OverlayUtil::createEmptyResult(0, geometryFactory);
 
-    return geometryFactory->buildGeometry(std::move(resultList));
+    return geometryFactory->buildGeometry(std::move(rsltList));
 }
 
 /*private*/
 void
 OverlayPoints::computeIntersection(std::map<Coordinate, std::unique_ptr<Point>>& map0,
                     std::map<Coordinate, std::unique_ptr<Point>>& map1,
-                    std::vector<std::unique_ptr<Point>>& resultList)
+                    std::vector<std::unique_ptr<Point>>& rsltList)
 {
     // for each entry in map0
     for (auto& ent : map0) {
@@ -83,7 +83,7 @@ OverlayPoints::computeIntersection(std::map<Coordinate, std::unique_ptr<Point>>&
         const auto& it = map1.find(ent.first);
         if (it != map1.end()) {
             // add it to the result, taking ownership
-            resultList.emplace_back(ent.second.release());
+            rsltList.emplace_back(ent.second.release());
         }
     }
 }
@@ -92,7 +92,7 @@ OverlayPoints::computeIntersection(std::map<Coordinate, std::unique_ptr<Point>>&
 void
 OverlayPoints::computeDifference(std::map<Coordinate, std::unique_ptr<Point>>& map0,
                   std::map<Coordinate, std::unique_ptr<Point>>& map1,
-                  std::vector<std::unique_ptr<Point>>& resultList)
+                  std::vector<std::unique_ptr<Point>>& rsltList)
 {
     // for each entry in map0
     for (auto& ent : map0) {
@@ -100,7 +100,7 @@ OverlayPoints::computeDifference(std::map<Coordinate, std::unique_ptr<Point>>& m
         const auto& it = map1.find(ent.first);
         if (it == map1.end()) {
             // add it to the result, taking ownership
-            resultList.emplace_back(ent.second.release());
+            rsltList.emplace_back(ent.second.release());
         }
     }
 }
@@ -109,11 +109,11 @@ OverlayPoints::computeDifference(std::map<Coordinate, std::unique_ptr<Point>>& m
 void
 OverlayPoints::computeUnion(std::map<Coordinate, std::unique_ptr<Point>>& map0,
              std::map<Coordinate, std::unique_ptr<Point>>& map1,
-             std::vector<std::unique_ptr<Point>>& resultList)
+             std::vector<std::unique_ptr<Point>>& rsltList)
 {
     // take all map0 points
     for (auto& ent : map0) {
-        resultList.emplace_back(ent.second.release());
+        rsltList.emplace_back(ent.second.release());
     }
 
     // find any map1 points that aren't already in the result
@@ -122,7 +122,7 @@ OverlayPoints::computeUnion(std::map<Coordinate, std::unique_ptr<Point>>& map0,
         const auto& it = map0.find(ent.first);
         if (it == map0.end()) {
             // add it to the result, taking ownership
-            resultList.emplace_back(ent.second.release());
+            rsltList.emplace_back(ent.second.release());
         }
     }
 }
@@ -158,13 +158,13 @@ OverlayPoints::buildPointMap(const Geometry* geom)
 
 /*private*/
 Coordinate
-OverlayPoints::roundCoord(const Point* pt, const PrecisionModel* pm) const
+OverlayPoints::roundCoord(const Point* pt, const PrecisionModel* p_pm) const
 {
     const Coordinate* p = pt->getCoordinate();
-    if (OverlayUtil::isFloating(pm))
+    if (OverlayUtil::isFloating(p_pm))
         return *p;
     Coordinate p2 = *p;
-    pm->makePrecise(p2);
+    p_pm->makePrecise(p2);
     return p2;
 }
 
