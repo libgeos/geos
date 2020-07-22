@@ -49,8 +49,8 @@ struct test_overlayngfloating_data {
     {
         std::unique_ptr<Geometry> geom_expected = r.read(expected);
         std::unique_ptr<Geometry> geom_result = geomOverlay(a, b, OverlayNG::UNION);
-        std::string wkt_result = w.write(geom_result.get());
-        std::cout << std::endl << wkt_result << std::endl;
+        // std::string wkt_result = w.write(geom_result.get());
+        // std::cout << std::endl << wkt_result << std::endl;
         ensure_equals_geometry(geom_expected.get(), geom_result.get(), checkTolerance);
     }
 

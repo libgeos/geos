@@ -33,8 +33,8 @@ struct test_unaryunionng_data {
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
         PrecisionModel pm(scaleFactor);
         std::unique_ptr<Geometry> result = UnaryUnionNG::Union(geom.get(), pm);
-        std::string wkt_result = w.write(result.get());
-        std::cout << std::endl << wkt_result << std::endl;
+        // std::string wkt_result = w.write(result.get());
+        // std::cout << std::endl << wkt_result << std::endl;
         ensure_equals_geometry(result.get(), expected.get());
     }
 
