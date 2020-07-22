@@ -200,6 +200,14 @@ public:
         , intAdder(lineInt)
         {};
 
+    ~EdgeNodingBuilder()
+    {
+        for (SegmentString* ss: *inputEdges) {
+            delete ss;
+        }
+        delete inputEdges;
+    }
+
     void setClipEnvelope(const Envelope* clipEnv);
 
     // returns newly allocated vector and segmentstrings

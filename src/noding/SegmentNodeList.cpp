@@ -60,7 +60,6 @@ SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
         return eiNew;
     }
     else {
-
         // sanity check
         assert(eiNew->coord.equals2D(intPt));
         nodeQue.pop_back();
