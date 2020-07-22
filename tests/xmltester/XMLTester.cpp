@@ -1108,8 +1108,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             profile.start();
-            geom::PrecisionModel pm(precision);
-            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::INTERSECTION, &pm);
+            geom::PrecisionModel precMod(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::INTERSECTION, &precMod);
 
             profile.stop();
 
@@ -1139,8 +1139,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             profile.start();
-            geom::PrecisionModel pm(precision);
-            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION, &pm);
+            geom::PrecisionModel precMod(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION, &precMod);
 
             profile.stop();
 
@@ -1178,8 +1178,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             profile.start();
-            geom::PrecisionModel pm(precision);
-            GeomPtr gRealRes = OverlayNG::overlay(dgA, dgB, OverlayNG::DIFFERENCE, &pm);
+            geom::PrecisionModel precMod(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(dgA, dgB, OverlayNG::DIFFERENCE, &precMod);
 
             profile.stop();
 
@@ -1209,8 +1209,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             profile.start();
-            geom::PrecisionModel pm(precision);
-            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::SYMDIFFERENCE, &pm);
+            geom::PrecisionModel precMod(precision);
+            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::SYMDIFFERENCE, &precMod);
 
             profile.stop();
 
