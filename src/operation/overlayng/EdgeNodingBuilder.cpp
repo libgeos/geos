@@ -100,6 +100,13 @@ EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edg
     std::vector<SegmentString*>* nodedSS = noder->getNodedSubstrings();
 
     createEdges(nodedSS, nodedEdges);
+
+    // Clean up now that all the info is transferred to Edges
+    for (SegmentString* ss : *nodedSS) {
+        delete ss;
+    }
+    delete nodedSS;
+
     return;
 }
 
