@@ -102,7 +102,8 @@ EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edg
 
     // Clean up now that all the info is transferred to Edges
     for (SegmentString* ss : *nodedSS) {
-        delete ss;
+        NodedSegmentString* nss = static_cast<NodedSegmentString*>(ss);
+        delete nss;
     }
 
     return;
