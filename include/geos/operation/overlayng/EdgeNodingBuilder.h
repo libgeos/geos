@@ -83,7 +83,7 @@ private:
 
     // Members
     const PrecisionModel* pm;
-    std::vector<SegmentString*>* inputEdges;
+    std::unique_ptr<std::vector<SegmentString*>> inputEdges;
     Noder* customNoder;
     std::array<bool, 2> hasEdges;
     const Envelope* clipEnv;
@@ -205,7 +205,6 @@ public:
         for (SegmentString* ss: *inputEdges) {
             delete ss;
         }
-        delete inputEdges;
     }
 
     void setClipEnvelope(const Envelope* clipEnv);

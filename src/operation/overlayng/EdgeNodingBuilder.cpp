@@ -80,7 +80,7 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1, std::vect
     add(geom1, 1);
     std::vector<Edge*> nodedEdges;
     // std::vector<*SegmentStrings> inputEdges
-    node(inputEdges, nodedEdges);
+    node(inputEdges.get(), nodedEdges);
 
     /**
      * Merge the noded edges to eliminate duplicates.
