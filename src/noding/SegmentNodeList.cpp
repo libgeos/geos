@@ -49,23 +49,53 @@ static Profiler* profiler = Profiler::instance();
 #endif
 
 
+// SegmentNode*
+// SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
+// {
+//     nodeQue.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+//     SegmentNode* eiNew = &(nodeQue.back());
+
+//     std::pair<SegmentNodeList::iterator, bool> p = nodeMap.insert(eiNew);
+//     if(p.second) {    // new SegmentNode inserted
+//         return eiNew;
+//     }
+//     else {
+//         // sanity check
+//         assert(eiNew->coord.equals2D(intPt));
+//         nodeQue.pop_back();
+//         return *(p.first);
+//     }
+// }
+
+
+SegmentNodeList::~SegmentNodeList()
+{
+    std::set<SegmentNode*, SegmentNodeLT>::iterator it = nodeMap.begin();
+    for(; it != nodeMap.end(); it++) {
+        delete *it;
+    }
+}
+
 SegmentNode*
 SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 {
-    nodeQue.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    SegmentNode* eiNew = &(nodeQue.back());
+    SegmentNode* eiNew = new SegmentNode(edge, intPt, segmentIndex,
+                                         edge.getSegmentOctant(segmentIndex));
 
     std::pair<SegmentNodeList::iterator, bool> p = nodeMap.insert(eiNew);
     if(p.second) {    // new SegmentNode inserted
         return eiNew;
     }
     else {
+
         // sanity check
         assert(eiNew->coord.equals2D(intPt));
-        nodeQue.pop_back();
+
+        delete eiNew;
         return *(p.first);
     }
 }
+
 
 void
 SegmentNodeList::addEndpoints()

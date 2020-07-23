@@ -113,10 +113,7 @@ NodedSegmentString::addIntersection(const Coordinate& intPt,
      * Add the intersection point to edge intersection list
      * (unless the node is already known)
      */
-    //SegmentNode *ei=
     nodeList.add(intPt, normalizedSegmentIndex);
-
-
 }
 
 /* public static */

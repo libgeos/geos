@@ -139,6 +139,8 @@ public:
 
     SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
 
+    ~SegmentNodeList();
+
     const NodedSegmentString&
     getEdge() const
     {

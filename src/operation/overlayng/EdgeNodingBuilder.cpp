@@ -55,8 +55,7 @@ EdgeNodingBuilder::createFloatingPrecisionNoder(bool doValidation)
 
     if (doValidation) {
         spareInternalNoder = std::move(mcNoder);
-        Noder* noder = spareInternalNoder.get();
-        std::unique_ptr<Noder> validNoder(new ValidatingNoder(*noder));
+        std::unique_ptr<Noder> validNoder(new ValidatingNoder(*spareInternalNoder));
         return validNoder;
     }
 
@@ -102,8 +101,7 @@ EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edg
 
     // Clean up now that all the info is transferred to Edges
     for (SegmentString* ss : *nodedSS) {
-        NodedSegmentString* nss = static_cast<NodedSegmentString*>(ss);
-        delete nss;
+        delete ss;
     }
 
     return;
