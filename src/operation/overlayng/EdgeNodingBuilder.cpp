@@ -79,7 +79,6 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1, std::vect
     add(geom0, 0);
     add(geom1, 1);
     std::vector<Edge*> nodedEdges;
-    // std::vector<*SegmentStrings> inputEdges
     node(inputEdges.get(), nodedEdges);
 
     /**
@@ -97,15 +96,14 @@ EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edg
     Noder* noder = getNoder();
     noder->computeNodes(segStrings);
 
-    std::vector<SegmentString*>* nodedSS = noder->getNodedSubstrings();
+    std::unique_ptr<std::vector<SegmentString*>> nodedSS(noder->getNodedSubstrings());
 
-    createEdges(nodedSS, nodedEdges);
+    createEdges(nodedSS.get(), nodedEdges);
 
     // Clean up now that all the info is transferred to Edges
     for (SegmentString* ss : *nodedSS) {
         delete ss;
     }
-    delete nodedSS;
 
     return;
 }
