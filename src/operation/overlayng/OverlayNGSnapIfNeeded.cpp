@@ -96,7 +96,7 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
 
         return result;
     }
-    catch (std::runtime_error ex) {
+    catch (const std::runtime_error &ex) {
         /**
         * Capture original exception,
         * so it can be rethrown if the remaining strategies all fail.
@@ -150,8 +150,9 @@ OverlayNGSnapIfNeeded::overlaySnapping(const Geometry* geom0, const Geometry* ge
     try {
         return overlaySnapTol(geom0, geom1, opCode, snapTol);
     }
-    catch (geos::util::TopologyException ex) {
+    catch (const geos::util::TopologyException &ex) {
         //---- ignore this exception, just return a nullptr result
+        // TODO: print a debug message here, beware of leaks
     }
     return nullptr;
 }
@@ -165,8 +166,9 @@ OverlayNGSnapIfNeeded::overlaySnapBoth(const Geometry* geom0, const Geometry* ge
         std::unique_ptr<Geometry> snap1 = overlaySnapTol(geom1, nullptr, OverlayNG::UNION, snapTol);
         return overlaySnapTol(snap0.get(), snap1.get(), opCode, snapTol);
     }
-    catch (geos::util::TopologyException ex) {
+    catch (const geos::util::TopologyException &ex) {
         //---- ignore this exception, just return a nullptr result
+        // TODO: print a debug message here, beware of leaks
     }
     return nullptr;
 }
@@ -227,9 +229,10 @@ OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, i
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
         return result;
     }
-    catch (geos::util::TopologyException ex) {
+    catch (const geos::util::TopologyException &ex) {
         // ignore this exception, since the operation will be rerun
         //System.out.println("Overlay failed");
+        // TODO: print debug line, beware of leaks
     }
     // on failure retry with a "safe" fixed PM
     // this should not throw an exception, but if it does just let it go
