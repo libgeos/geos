@@ -152,7 +152,7 @@ SnapRoundingNoder::computeSnaps(const std::vector<SegmentString*>& segStrings, s
 
 
 /**
-* Add snapped vertices to a segemnt string.
+* Add snapped vertices to a segment string.
 * If the segment string collapses completely due to rounding,
 * null is returned.
 *
