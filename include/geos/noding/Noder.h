@@ -55,6 +55,8 @@ public:
      * others may only add some or none at all.
      *
      * @param segStrings a collection of {@link SegmentString}s to node
+     *        The caller remains responsible for releasing the memory
+     *        associated with the container and its elements.
      */
     virtual void computeNodes(std::vector<SegmentString*>* segStrings) = 0;
 
@@ -62,7 +64,8 @@ public:
      * Returns a collection of fully noded [SegmentStrings](@ref SegmentString).
      * The SegmentStrings have the same context as their parent.
      *
-     * @return a newly allocated std::vector of const SegmentStrings.
+     * @return a newly allocated std::vector of newly allocated
+     *         SegmentStrings (copies of input, if needs be).
      *         Caller is responsible to delete container and elements.
      */
     virtual std::vector<SegmentString*>* getNodedSubstrings() const = 0;
