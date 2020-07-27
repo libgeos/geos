@@ -92,9 +92,9 @@ public:
     * this call for segment pairs which they have determined do not intersect
     * (e.g. by an disjoint envelope test).
     */
-    void processIntersections(SegmentString* e0, size_t segIndex0, SegmentString* e1, size_t segIndex1);
+    void processIntersections(SegmentString* e0, size_t segIndex0, SegmentString* e1, size_t segIndex1) override;
 
-    bool isDone() const { return false; };
+    bool isDone() const override { return false; };
 
 
 };

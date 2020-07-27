@@ -83,7 +83,7 @@ private:
         BestMatchVisitor(const geom::Coordinate& p_p, double p_tolerance);
         geom::Envelope queryEnvelope();
         KdNode* getNode();
-        void visit(KdNode* node);
+        void visit(KdNode* node) override;
 
     private:
         // Members
@@ -104,7 +104,7 @@ private:
     public:
         AccumulatingVisitor(std::vector<KdNode*>& p_nodeList) :
             nodeList(p_nodeList) {};
-        void visit(KdNode* node) { nodeList.push_back(node); }
+        void visit(KdNode* node) override { nodeList.push_back(node); }
 
     private:
         // Members
