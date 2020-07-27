@@ -25,7 +25,7 @@ geos_HEADERS = \
     OverlayLabel.h \
     OverlayLabeller.h \
     OverlayMixedPoints.h \
-    OverlayPoints.h
+    OverlayPoints.h \
     OverlayNG.h \
     OverlayNGSnapIfNeeded.h \
     OverlayUtil.h \
