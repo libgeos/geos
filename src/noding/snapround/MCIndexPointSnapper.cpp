@@ -87,12 +87,12 @@ public:
     }
 
     bool
-    addSnappedNode(HotPixel& hotPixel, NodedSegmentString* segStr, size_t segIndex)
+    addSnappedNode(HotPixel& p_hotPixel, NodedSegmentString* segStr, size_t segIndex)
     {
         const Coordinate& p0 = segStr->getCoordinate(segIndex);
         const Coordinate& p1 = segStr->getCoordinate(segIndex + 1);
-        if (hotPixel.intersects(p0, p1)) {
-            segStr->addIntersection(hotPixel.getCoordinate(), segIndex);
+        if (p_hotPixel.intersects(p0, p1)) {
+            segStr->addIntersection(p_hotPixel.getCoordinate(), segIndex);
             return true;
         }
         return false;

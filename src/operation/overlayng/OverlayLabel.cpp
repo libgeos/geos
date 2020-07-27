@@ -20,18 +20,18 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public*/
 void
-OverlayLabel::initBoundary(int index, Location locLeft, Location locRight, bool isHole)
+OverlayLabel::initBoundary(int index, Location locLeft, Location locRight, bool p_isHole)
 {
     if (index == 0) {
         aDim = DIM_BOUNDARY;
-        aIsHole = isHole;
+        aIsHole = p_isHole;
         aLocLeft = locLeft;
         aLocRight = locRight;
         aLocLine = Location::INTERIOR;
     }
     else {
         bDim = DIM_BOUNDARY;
-        bIsHole = isHole;
+        bIsHole = p_isHole;
         bLocLeft = locLeft;
         bLocRight = locRight;
         bLocLine = Location::INTERIOR;
@@ -40,15 +40,15 @@ OverlayLabel::initBoundary(int index, Location locLeft, Location locRight, bool 
 
 /*public*/
 void
-OverlayLabel::initCollapse(int index, bool isHole)
+OverlayLabel::initCollapse(int index, bool p_isHole)
 {
     if (index == 0) {
         aDim = DIM_COLLAPSE;
-        aIsHole = isHole;
+        aIsHole = p_isHole;
     }
     else {
         bDim = DIM_COLLAPSE;
-        bIsHole = isHole;
+        bIsHole = p_isHole;
     }
 }
 
@@ -390,8 +390,8 @@ OverlayLabel::locationString(int index, bool isForward, std::ostream& os) const
       os << dimensionSymbol(index == 0 ? aDim : bDim);
     }
     if (isCollapse(index)) {
-        bool isHole = (index == 0 ? aIsHole : bIsHole);
-        if (isHole)
+        bool p_isHole = (index == 0 ? aIsHole : bIsHole);
+        if (p_isHole)
             os << "h";
         else
             os << "s";

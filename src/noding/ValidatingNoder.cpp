@@ -15,6 +15,7 @@
 #include <geos/noding/FastNodingValidator.h>
 #include <geos/noding/ValidatingNoder.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/SegmentString.h>
 
 
 #include <memory> // for unique_ptr
@@ -29,7 +30,17 @@ ValidatingNoder::computeNodes(std::vector<SegmentString*>* segStrings)
 {
     noder.computeNodes(segStrings);
     nodedSS = noder.getNodedSubstrings();
-    validate();
+    try {
+            validate();
+    }
+    catch (const std::exception& ex) {
+        for (SegmentString* ss: *nodedSS) {
+            delete ss;
+        }
+        delete nodedSS;
+        nodedSS = nullptr;
+        throw;
+    }
 }
 
 void

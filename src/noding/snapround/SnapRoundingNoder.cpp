@@ -39,7 +39,12 @@ namespace snapround { // geos.noding.snapround
 std::vector<SegmentString*>*
 SnapRoundingNoder::getNodedSubstrings() const
 {
-    return NodedSegmentString::getNodedSubstrings(snappedResult);
+    std::vector<SegmentString*>* nssResult = NodedSegmentString::getNodedSubstrings(snappedResult);
+    for (auto nss: snappedResult) {
+        delete nss;
+    }
+
+    return nssResult;
 }
 
 /*public*/
