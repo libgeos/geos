@@ -24,6 +24,7 @@ EXTRA_DIST = \
 	tut/tut_result.hpp \
 	tut/tut_runner.hpp \
 	tut/tut_xml_reporter.hpp \
+	util/NodingTestUtil.h \
 	CMakeLists.txt
 
 
@@ -212,6 +213,7 @@ geos_unit_SOURCES = \
 	triangulate/quadedge/QuadEdgeTest.cpp \
 	triangulate/quadedge/VertexTest.cpp \
 	triangulate/VoronoiTest.cpp \
+	util/NodingTestUtil.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 
 noinst_HEADERS = \
