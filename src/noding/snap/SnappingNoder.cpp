@@ -42,6 +42,9 @@ SnappingNoder::computeNodes(std::vector<SegmentString*>* inputSegStrings)
     std::vector<SegmentString*> snappedSS;
     snapVertices(*inputSegStrings, snappedSS);
     auto result = snapIntersections(snappedSS);
+    for (SegmentString* ss: snappedSS) {
+        delete ss;
+    }
     nodedResult = result.release();
 }
 
