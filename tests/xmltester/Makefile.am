@@ -89,6 +89,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/misc/split.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-misc-5.xml \
 	$(srcdir)/tests/issue/issue-geos-176.xml \
 	$(srcdir)/tests/issue/issue-geos-188.xml \
 	$(srcdir)/tests/issue/issue-geos-234.xml \
@@ -130,7 +131,6 @@ SAFE_XMLTESTS= \
 INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
-	$(srcdir)/tests/failure/TestOverlay.xml \
 	$(srcdir)/tests/failure/issue-geos-344.xml \
 	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
 	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \
