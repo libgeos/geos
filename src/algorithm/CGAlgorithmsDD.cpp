@@ -55,27 +55,28 @@ OrientationDD(const DD &dd)
 namespace geos {
 namespace algorithm { // geos::algorithm
 
+
 int
-CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
-                                 const Coordinate& p2,
-                                 const Coordinate& q)
+CGAlgorithmsDD::orientationIndex(double p1x, double p1y,
+                                 double p2x, double p2y,
+                                 double qx,  double qy)
 {
-    if(!std::isfinite(q.x) || !std::isfinite(q.y)) {
+    if(!std::isfinite(qx) || !std::isfinite(qy)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
     }
 
     // fast filter for orientation index
     // avoids use of slow extended-precision arithmetic in many cases
-    int index = orientationIndexFilter(p1, p2, q);
+    int index = orientationIndexFilter(p1x, p1y, p2x, p2y, qx, qy);
     if(index <= 1) {
         return index;
     }
 
     // normalize coordinates
-    DD dx1 = DD(p2.x) + DD(-p1.x);
-    DD dy1 = DD(p2.y) + DD(-p1.y);
-    DD dx2 = DD(q.x) + DD(-p2.x);
-    DD dy2 = DD(q.y) + DD(-p2.y);
+    DD dx1 = DD(p2x) + DD(-p1x);
+    DD dy1 = DD(p2y) + DD(-p1y);
+    DD dx2 = DD(qx) + DD(-p2x);
+    DD dy2 = DD(qy) + DD(-p2y);
 
     // sign of determinant - inlined for performance
     DD mx1y2(dx1 * dy2);
@@ -83,6 +84,17 @@ CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
     DD d = mx1y2 - my1x2;
     return OrientationDD(d);
 }
+
+
+int
+CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
+                                 const Coordinate& p2,
+                                 const Coordinate& q)
+{
+
+    return orientationIndex(p1.x, p1.y, p2.x, p2.y, q.x, q.y);
+}
+
 
 int
 CGAlgorithmsDD::signOfDet2x2(const DD& x1, const DD& y1, const DD& x2, const DD& y2)
@@ -107,13 +119,13 @@ CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
 }
 
 int
-CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
-                                       const Coordinate& pb,
-                                       const Coordinate& pc)
+CGAlgorithmsDD::orientationIndexFilter(double pax, double pay,
+                                       double pbx, double pby,
+                                       double pcx, double pcy)
 {
     double detsum;
-    double const detleft = (pa.x - pc.x) * (pb.y - pc.y);
-    double const detright = (pa.y - pc.y) * (pb.x - pc.x);
+    double const detleft = (pax - pcx) * (pby - pcy);
+    double const detright = (pay - pcy) * (pbx - pcx);
     double const det = detleft - detright;
 
     if(detleft > 0.0) {

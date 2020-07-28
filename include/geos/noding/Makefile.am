@@ -1,7 +1,9 @@
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
-SUBDIRS = snapround
+SUBDIRS = \
+	snapround \
+	snap
 
 EXTRA_DIST =
 
@@ -35,5 +37,6 @@ geos_HEADERS = \
 	SegmentString.h \
 	SegmentStringUtil.h \
 	SimpleNoder.h \
+	SinglePassNoder.h \
 	NodingIntersectionFinder.h \
-	SinglePassNoder.h
+	ValidatingNoder.h

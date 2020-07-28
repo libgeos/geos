@@ -21,6 +21,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainBuilder.h>
+#include <geos/geom/Envelope.h>
 #include <geos/util/Interrupt.h>
 
 #include <cassert>
@@ -70,7 +71,8 @@ MCIndexNoder::intersectChains()
 
         assert(queryChain);
         overlapChains.clear();
-        index.query(&(queryChain->getEnvelope()), overlapChains);
+        const geom::Envelope& queryEnv = queryChain->getEnvelope(overlapTolerance);
+        index.query(&queryEnv, overlapChains);
         for(void* hit : overlapChains) {
             MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
             assert(testChain);
@@ -81,8 +83,7 @@ MCIndexNoder::intersectChains()
              * chain to itself
              */
             if(testChain->getId() > queryChain->getId()) {
-                queryChain->computeOverlaps(testChain,
-                                            &overlapAction);
+                queryChain->computeOverlaps(testChain, overlapTolerance, &overlapAction);
                 nOverlaps++;
             }
 
@@ -109,7 +110,8 @@ MCIndexNoder::add(SegmentString* segStr)
         assert(mc);
 
         mc->setId(idCounter++);
-        index.insert(&(mc->getEnvelope()), mc.get());
+        // index.insert(&(mc->getEnvelope()), mc.get());
+        index.insert(&(mc->getEnvelope(overlapTolerance)), mc.get());
 
         // MonotoneChain objects deletion delegated to destructor
         monoChains.push_back(mc.release());

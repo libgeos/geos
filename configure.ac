@@ -367,6 +367,7 @@ AC_OUTPUT([
 	src/algorithm/construct/Makefile
 	src/algorithm/distance/Makefile
 	src/algorithm/locate/Makefile
+	src/edgegraph/Makefile
 	src/geom/Makefile
 	src/geom/prep/Makefile
 	src/geom/util/Makefile
@@ -378,6 +379,7 @@ AC_OUTPUT([
 	include/geos/algorithm/locate/Makefile
 	include/geos/algorithm/distance/Makefile
 	include/geos/algorithm/construct/Makefile
+	include/geos/edgegraph/Makefile
 	include/geos/geom/Makefile
 	include/geos/geom/prep/Makefile
 	include/geos/geom/util/Makefile
@@ -385,6 +387,7 @@ AC_OUTPUT([
 	include/geos/geomgraph/index/Makefile
 	include/geos/index/Makefile
 	include/geos/index/bintree/Makefile
+	include/geos/index/kdtree/Makefile
 	include/geos/index/chain/Makefile
 	include/geos/index/intervalrtree/Makefile
 	include/geos/index/quadtree/Makefile
@@ -394,6 +397,7 @@ AC_OUTPUT([
 	include/geos/linearref/Makefile
 	include/geos/math/Makefile
 	include/geos/noding/Makefile
+	include/geos/noding/snap/Makefile
 	include/geos/noding/snapround/Makefile
 	include/geos/operation/Makefile
 	include/geos/operation/buffer/Makefile
@@ -402,6 +406,7 @@ AC_OUTPUT([
 	include/geos/operation/linemerge/Makefile
 	include/geos/operation/overlay/Makefile
 	include/geos/operation/overlay/snap/Makefile
+	include/geos/operation/overlayng/Makefile
 	include/geos/operation/polygonize/Makefile
 	include/geos/operation/predicate/Makefile
 	include/geos/operation/relate/Makefile
@@ -418,6 +423,7 @@ AC_OUTPUT([
 	include/geos/version.h
 	src/index/Makefile
 	src/index/bintree/Makefile
+	src/index/kdtree/Makefile
 	src/index/chain/Makefile
 	src/index/intervalrtree/Makefile
 	src/index/quadtree/Makefile
@@ -427,6 +433,7 @@ AC_OUTPUT([
 	src/linearref/Makefile
 	src/math/Makefile
 	src/noding/Makefile
+	src/noding/snap/Makefile
 	src/noding/snapround/Makefile
 	src/operation/Makefile
 	src/operation/buffer/Makefile
@@ -434,6 +441,7 @@ AC_OUTPUT([
 	src/operation/intersection/Makefile
 	src/operation/linemerge/Makefile
 	src/operation/overlay/Makefile
+	src/operation/overlayng/Makefile
 	src/operation/polygonize/Makefile
 	src/operation/predicate/Makefile
 	src/operation/relate/Makefile

@@ -43,7 +43,7 @@
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/NodedSegmentString.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Node.h>
@@ -521,11 +521,9 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
      * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(size_t) const:
      * Assertion `pos<vect->size()' failed.
      */
-    //Noder* noder = new snapround::SimpleSnapRounder(*pm);
 
     Noder* noder = new IteratedNoder(pm);
 
-    Noder noder = new SimpleSnapRounder(pm);
     Noder noder = new MCIndexSnapRounder(pm);
     Noder noder = new ScaledNoder(
         new MCIndexSnapRounder(new PrecisionModel(1.0)),

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SEGMENTNODELIST_H
-#define GEOS_NODING_SEGMENTNODELIST_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -27,6 +26,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <memory>
 
 #include <geos/noding/SegmentNode.h> // for composition
 
@@ -56,6 +56,7 @@ namespace noding { // geos::noding
 class GEOS_DLL SegmentNodeList {
 private:
     std::set<SegmentNode*, SegmentNodeLT> nodeMap;
+    std::deque<SegmentNode> nodeQue;
 
     // the parent edge
     const NodedSegmentString& edge;
@@ -77,6 +78,18 @@ private:
      * ownership of return value is transferred
      */
     SegmentString* createSplitEdge(SegmentNode* ei0, SegmentNode* ei1);
+
+    /**
+    * Extracts the points for a split edge running between two nodes.
+    * The extracted points should contain no duplicate points.
+    * There should always be at least two points extracted
+    * (which will be the given nodes).
+    *
+    * @param ei0 the start node of the split edge
+    * @param ei1 the end node of the split edge
+    * @return the points for the split edge
+    */
+    void createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vector<geom::Coordinate>& pts);
 
     /**
      * Adds nodes for any collapsed edge pairs.
@@ -108,6 +121,8 @@ private:
     bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
                            size_t& collapsedVertexIndex);
 
+    void addEdgeCoordinates(SegmentNode* ei0, SegmentNode* ei1, std::vector<geom::Coordinate>& coordList);
+
     // Declare type as noncopyable
     SegmentNodeList(const SegmentNodeList& other) = delete;
     SegmentNodeList& operator=(const SegmentNodeList& rhs) = delete;
@@ -124,15 +139,13 @@ public:
 
     SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
 
+    ~SegmentNodeList();
+
     const NodedSegmentString&
     getEdge() const
     {
         return edge;
     }
-
-    // TODO: Is this a final class ?
-    // Should remove the virtual in that case
-    virtual ~SegmentNodeList();
 
     /**
      * Adds an intersection into the list, if it isn't already there.
@@ -211,7 +224,18 @@ public:
         addSplitEdges(*edgeList);
     }
 
-    //string print();
+    /**
+    * Gets the list of coordinates for the fully noded segment string,
+    * including all original segment string vertices and vertices
+    * introduced by nodes in this list.
+    * Repeated coordinates are collapsed.
+    *
+    * @return an array of Coordinates
+    *
+    */
+    std::unique_ptr<std::vector<geom::Coordinate>> getSplitCoordinates();
+
+
 };
 
 std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
@@ -223,4 +247,3 @@ std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 #pragma warning(pop)
 #endif
 
-#endif

@@ -24,6 +24,7 @@ EXTRA_DIST = \
 	tut/tut_result.hpp \
 	tut/tut_runner.hpp \
 	tut/tut_xml_reporter.hpp \
+	util/NodingTestUtil.h \
 	CMakeLists.txt
 
 
@@ -113,6 +114,7 @@ geos_unit_SOURCES = \
 	capi/GEOSUserDataTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSWithinTest.cpp \
+	edgegraph/EdgeGraphTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
@@ -146,6 +148,7 @@ geos_unit_SOURCES = \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \
 	index/strtree/SIRtreeTest.cpp \
+	index/kdtree/KdTreeTest.cpp \
 	io/ByteOrderValuesTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/WKBWriterTest.cpp \
@@ -161,6 +164,8 @@ geos_unit_SOURCES = \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/snapround/HotPixelTest.cpp \
 	noding/snapround/MCIndexSnapRounderTest.cpp \
+	noding/snapround/SnapRoundingNoderTest.cpp \
+	noding/snap/SnappingNoderTest.cpp \
 	operation/buffer/BufferBuilderTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
@@ -179,6 +184,19 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
+	operation/overlayng/RingClipperTest.cpp \
+	operation/overlayng/LineLimiterTest.cpp \
+	operation/overlayng/OverlayGraphTest.cpp \
+	operation/overlayng/OverlayNGFloatingNoderTest.cpp \
+	operation/overlayng/OverlayNGOneTest.cpp \
+	operation/overlayng/OverlayNGPointsTest.cpp \
+	operation/overlayng/OverlayNGMixedPointsTest.cpp \
+	operation/overlayng/OverlayNGSnappingNoderTest.cpp \
+	operation/overlayng/OverlayNGSnappingOneTest.cpp \
+	operation/overlayng/OverlayNGTest.cpp \
+	operation/overlayng/PrecisionReducerTest.cpp \
+	operation/overlayng/PrecisionUtilTest.cpp \
+	operation/overlayng/UnaryUnionNGTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \
@@ -195,6 +213,7 @@ geos_unit_SOURCES = \
 	triangulate/quadedge/QuadEdgeTest.cpp \
 	triangulate/quadedge/VertexTest.cpp \
 	triangulate/VoronoiTest.cpp \
+	util/NodingTestUtil.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 
 noinst_HEADERS = \

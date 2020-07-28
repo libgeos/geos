@@ -7,6 +7,7 @@ SUBDIRS = \
     intersection \
     linemerge \
     overlay \
+    overlayng \
     polygonize \
     predicate \
     relate \
@@ -28,6 +29,7 @@ liboperation_la_LIBADD = \
     intersection/libopintersection.la \
     linemerge/liboplinemerge.la \
     overlay/libopoverlay.la \
+    overlayng/libopoverlayng.la \
     polygonize/liboppolygonize.la \
     predicate/liboppredicate.la \
     relate/liboprelate.la \

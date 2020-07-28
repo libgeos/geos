@@ -36,7 +36,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Triangle.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/util.h>

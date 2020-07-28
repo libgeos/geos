@@ -113,10 +113,7 @@ NodedSegmentString::addIntersection(const Coordinate& intPt,
      * Add the intersection point to edge intersection list
      * (unless the node is already known)
      */
-    //SegmentNode *ei=
     nodeList.add(intPt, normalizedSegmentIndex);
-
-
 }
 
 /* public static */
@@ -134,6 +131,13 @@ NodedSegmentString::getNodedSubstrings(
         ss->getNodeList().addSplitEdges(resultEdgeList);
     }
 }
+
+/* public */
+std::unique_ptr<std::vector<Coordinate>>
+NodedSegmentString::getNodedCoordinates() {
+    return nodeList.getSplitCoordinates();
+}
+
 
 /* public static */
 SegmentString::NonConstVect*

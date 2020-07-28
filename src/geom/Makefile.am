@@ -33,6 +33,8 @@ libgeom_la_SOURCES = \
     Point.cpp \
     Polygon.cpp \
     PrecisionModel.cpp \
+    Position.cpp \
+    Quadrant.cpp \
     Triangle.cpp
 
 

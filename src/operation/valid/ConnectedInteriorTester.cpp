@@ -41,7 +41,7 @@
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/util.h>
 

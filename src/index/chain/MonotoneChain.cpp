@@ -35,17 +35,31 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              size_t nstart, size_t nend, void* nContext)
     :
     pts(newPts),
-    env(newPts[nstart], newPts[nend]),
     context(nContext),
     start(nstart),
     end(nend),
+    env(newPts[nstart], newPts[nend]),
+    envIsSet(false),
     id(-1)
 {
 }
 
 const Envelope&
-MonotoneChain::getEnvelope() const
+MonotoneChain::getEnvelope()
 {
+    return getEnvelope(0.0);
+}
+
+const Envelope&
+MonotoneChain::getEnvelope(double expansionDistance)
+{
+    if (!envIsSet) {
+        env.init(pts[start], pts[end]);
+        if (expansionDistance > 0.0) {
+            env.expandBy(expansionDistance);
+        }
+        envIsSet = true;
+    }
     return env;
 }
 
@@ -104,7 +118,15 @@ void
 MonotoneChain::computeOverlaps(MonotoneChain* mc,
                                MonotoneChainOverlapAction* mco)
 {
-    computeOverlaps(start, end, *mc, mc->start, mc->end, *mco);
+    computeOverlaps(start, end, *mc, mc->start, mc->end, 0.0, *mco);
+}
+
+/* public */
+void
+MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
+                               MonotoneChainOverlapAction* mco)
+{
+    computeOverlaps(start, end, *mc, mc->start, mc->end, overlapTolerance, *mco);
 }
 
 /*private*/
@@ -112,6 +134,7 @@ void
 MonotoneChain::computeOverlaps(size_t start0, size_t end0,
                                MonotoneChain& mc,
                                size_t start1, size_t end1,
+                               double overlapTolerance,
                                MonotoneChainOverlapAction& mco)
 {
     // terminating condition for the recursion
@@ -121,7 +144,7 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
     }
 
     // nothing to do if the envelopes of these subchains don't overlap
-    if(!overlaps(start0, end0, mc, start1, end1)) {
+    if(!overlaps(start0, end0, mc, start1, end1, overlapTolerance)) {
         return;
     }
 
@@ -134,30 +157,63 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
     // check terminating conditions before recursing
     if(start0 < mid0) {
         if(start1 < mid1) {
-            computeOverlaps(start0, mid0, mc, start1, mid1, mco);
+            computeOverlaps(start0, mid0, mc, start1, mid1, overlapTolerance, mco);
         }
         if(mid1 < end1) {
-            computeOverlaps(start0, mid0, mc, mid1, end1, mco);
+            computeOverlaps(start0, mid0, mc, mid1, end1, overlapTolerance, mco);
         }
     }
 
     if(mid0 < end0) {
         if(start1 < mid1) {
-            computeOverlaps(mid0, end0, mc, start1, mid1, mco);
+            computeOverlaps(mid0, end0, mc, start1, mid1, overlapTolerance, mco);
         }
         if(mid1 < end1) {
-            computeOverlaps(mid0, end0, mc, mid1, end1, mco);
+            computeOverlaps(mid0, end0, mc, mid1, end1, overlapTolerance, mco);
         }
     }
 }
 
 /*private*/
 bool
-MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc, size_t start1, size_t end1)
+MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc,
+                        size_t start1, size_t end1, double overlapTolerance) const
 {
+    if (overlapTolerance > 0.0) {
+        return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);
+    }
     return Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
                                 mc.pts.getAt(start1), mc.pts.getAt(end1));
 }
+
+/*private*/
+bool
+MonotoneChain::overlaps(const Coordinate& p1, const Coordinate& p2,
+                        const Coordinate& q1, const Coordinate& q2,
+                        double overlapTolerance) const
+{
+    double minq = std::min(q1.x, q2.x);
+    double maxq = std::max(q1.x, q2.x);
+    double minp = std::min(p1.x, p2.x);
+    double maxp = std::max(p1.x, p2.x);
+
+    if (minp > (maxq + overlapTolerance))
+        return false;
+    if (maxp < (minq - overlapTolerance))
+        return false;
+
+    minq = std::min(q1.y, q2.y);
+    maxq = std::max(q1.y, q2.y);
+    minp = std::min(p1.y, p2.y);
+    maxp = std::max(p1.y, p2.y);
+
+    if (minp > (maxq + overlapTolerance))
+        return false;
+    if (maxp < (minq - overlapTolerance))
+        return false;
+    return true;
+}
+
 
 } // namespace geos.index.chain
 } // namespace geos.index

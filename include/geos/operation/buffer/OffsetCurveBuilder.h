@@ -145,7 +145,7 @@ public:
      * as well as rings.
      *
      * @param inputPts input points
-     * @param side a [Position](@ref geomgraph::Position)
+     * @param side a [Position](@ref geom::Position)
      * @param distance offset distance
      * @param lineList the std::vector to which CoordinateSequences will
      *                 be pushed_back

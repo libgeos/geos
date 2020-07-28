@@ -18,7 +18,7 @@
 #include <geos/geomgraph/index/MonotoneChainIndexer.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 
 using namespace std;
 using namespace geos::geom;

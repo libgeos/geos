@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_H
-#define GEOS_NODING_SNAPROUND_HOTPIXEL_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -25,6 +24,10 @@
 
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for unique_ptr
+#include <geos/io/WKTWriter.h>
+
+
+#include <array>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -63,14 +66,15 @@ class GEOS_DLL HotPixel {
 
 private:
 
-    algorithm::LineIntersector& li;
+    static constexpr double TOLERANCE = 0.5;
 
-    geom::Coordinate pt;
-    const geom::Coordinate& originalPt;
-    geom::Coordinate ptScaled;
+    static constexpr int UPPER_RIGHT = 0;
+    static constexpr int UPPER_LEFT  = 1;
+    static constexpr int LOWER_LEFT  = 2;
+    static constexpr int LOWER_RIGHT = 3;
 
-    mutable geom::Coordinate p0Scaled;
-    mutable geom::Coordinate p1Scaled;
+    geom::Coordinate ptHot;
+    geom::Coordinate originalPt;
 
     double scaleFactor;
 
@@ -79,75 +83,28 @@ private:
     double miny;
     double maxy;
 
-    /** \brief
-     * The corners of the hot pixel
-     *
-     * In the order:
-     *  1 0
-     *  2 3
-     */
-    std::vector<geom::Coordinate> corner;
-
-    /// Owned by this class, constructed on demand
-    mutable std::unique_ptr<geom::Envelope> safeEnv;
-
-    void initCorners(const geom::Coordinate& pt);
+    double scaleRound(double val) const;
+    geom::Coordinate scaleRound(const geom::Coordinate& p) const;
 
     double scale(double val) const;
 
-    void copyScaled(const geom::Coordinate& p,
-                    geom::Coordinate& pScaled) const;
-
-    /** \brief
-     * Tests whether the segment p0-p1 intersects the hot pixel
-     * tolerance square.
-     *
-     * Because the tolerance square point set is partially open (along the
-     * top and right) the test needs to be more sophisticated than
-     * simply checking for any intersection.  However, it
-     * can take advantage of the fact that because the hot pixel edges
-     * do not lie on the coordinate grid.  It is sufficient to check
-     * if there is at least one of:
-     *
-     * - a proper intersection with the segment and any hot pixel edge
-     * - an intersection between the segment and both the left
-     *   and bottom edges
-     * - an intersection between a segment endpoint and the hot
-     *   pixel coordinate
-     *
-     * @param p0
-     * @param p1
-     * @return
-     */
-    bool intersectsToleranceSquare(const geom::Coordinate& p0,
-                                   const geom::Coordinate& p1) const;
-
-
-    /** \brief
-     * Test whether the given segment intersects
-     * the closure of this hot pixel.
-     *
-     * This is NOT the test used in the standard snap-rounding
-     * algorithm, which uses the partially closed tolerance square
-     * instead.
-     * This routine is provided for testing purposes only.
-     *
-     * @param p0 the start point of a line segment
-     * @param p1 the end point of a line segment
-     * @return <code>true</code> if the segment intersects the
-     *         closure of the pixel's tolerance square
-     */
     bool intersectsPixelClosure(const geom::Coordinate& p0,
-                                const geom::Coordinate& p1);
+                                const geom::Coordinate& p1) const;
 
-    bool intersectsScaled(const geom::Coordinate& p0,
-                          const geom::Coordinate& p1) const;
+    bool intersectsScaled(double p0x, double p0y, double p1x, double p1y) const;
 
     // Declare type as noncopyable
     HotPixel(const HotPixel& other) = delete;
     HotPixel& operator=(const HotPixel& rhs) = delete;
 
 public:
+
+    /**
+    * Gets the width of the hot pixel in the original coordinate system.
+    */
+    double getWidth() const { return 1.0 / scaleFactor; };
+
+    double getScaleFactor() const { return scaleFactor; };
 
     /**
      * Creates a new hot pixel.
@@ -158,27 +115,14 @@ public:
      * @param li the intersector to use for testing intersection with
      *        line segments
      */
-    HotPixel(const geom::Coordinate& pt,
-             double scaleFact,
-             algorithm::LineIntersector& li);
+    HotPixel(const geom::Coordinate& pt, double scaleFactor);
 
-    /// \brief
-    /// Return reference to original Coordinate
-    /// (the one provided at construction time)
-    const geom::Coordinate&
-    getCoordinate() const
-    {
-        return originalPt;
-    }
-
-    /** \brief
-     * Returns a "safe" envelope that is guaranteed to contain
-     * the hot pixel. Keeps ownership of it.
-     *
-     * The envelope returned will be larger than the exact envelope of the
-     * pixel.
-     */
-    const geom::Envelope& getSafeEnvelope() const;
+    /*
+    * Gets the coordinate this hot pixel is based at.
+    *
+    * @return the coordinate of the pixel
+    */
+    const geom::Coordinate& getCoordinate() const;
 
     /**
      * Tests whether the line segment (p0-p1) intersects this hot pixel.
@@ -190,16 +134,8 @@ public:
     bool intersects(const geom::Coordinate& p0,
                     const geom::Coordinate& p1) const;
 
-    /**
-     * Adds a new node (equal to the snap pt) to the specified segment
-     * if the segment passes through the hot pixel
-     *
-     * @param segStr
-     * @param segIndex
-     * @return true if a node was added to the segment
-     */
-    bool addSnappedNode(NodedSegmentString& segStr, std::size_t segIndex);
 
+    std::ostream& operator<< (std::ostream& os);
 };
 
 } // namespace geos::noding::snapround
@@ -214,4 +150,3 @@ public:
 # include "geos/noding/snapround/HotPixel.inl"
 #endif
 
-#endif // GEOS_NODING_SNAPROUND_HOTPIXEL_H

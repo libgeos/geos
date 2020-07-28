@@ -398,6 +398,17 @@ public:
 
     bool intersects(const Envelope& other) const;
 
+    /**
+    * Tests if the region defined by other
+    * is disjoint from the region of this Envelope
+    *
+    * @param other  the Envelope being checked for disjointness
+    * @return  true if the Envelopes are disjoint
+    */
+    bool disjoint(const Envelope* other) const;
+
+    bool disjoint(const Envelope& other) const;
+
     /** \brief
      * Tests if the given point lies in or on the envelope.
      *

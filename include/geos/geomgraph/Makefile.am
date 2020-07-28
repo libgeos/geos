@@ -30,8 +30,5 @@ geos_HEADERS = \
     Node.h \
     NodeMap.h \
     PlanarGraph.h \
-    Position.h \
-    Quadrant.h \
-    Quadrant.inl \
     TopologyLocation.h \
     TopologyLocation.inl

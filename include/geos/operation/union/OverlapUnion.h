@@ -26,6 +26,8 @@
 #include <unordered_set>
 
 #include <geos/geom/Geometry.h>
+#include <geos/operation/union/UnionStrategy.h>
+#include <geos/operation/union/CascadedPolygonUnion.h>
 
 // Forward declarations
 namespace geos {
@@ -92,21 +94,30 @@ class GEOS_DLL OverlapUnion {
 
 public:
 
+    OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1, geounion::UnionStrategy* unionFun)
+        : g0(p_g0)
+        , g1(p_g1)
+        , unionFunction(unionFun)
+        , geomFactory(p_g0->getFactory())
+        , isUnionSafe(false)
+        {};
+
     OverlapUnion(const geom::Geometry* p_g0, const geom::Geometry* p_g1)
-        : g0(p_g0), g1(p_g1)
-    {
-        geomFactory = g0->getFactory();
-        isUnionSafe = false;
-    };
+        : OverlapUnion(p_g0, p_g1, &defaultUnionFunction)
+        {};
+
 
     std::unique_ptr<geom::Geometry> doUnion();
 
 private:
 
-    const geom::GeometryFactory* geomFactory;
     const geom::Geometry* g0;
     const geom::Geometry* g1;
+    geounion::UnionStrategy* unionFunction;
+    const geom::GeometryFactory* geomFactory;
     bool isUnionSafe;
+
+    geounion::ClassicUnionStrategy defaultUnionFunction;
 
     geom::Envelope overlapEnvelope(const geom::Geometry* geom0, const geom::Geometry* geom1);
     std::unique_ptr<geom::Geometry> extractByEnvelope(const geom::Envelope& env, const geom::Geometry* geom, std::vector<std::unique_ptr<geom::Geometry>>& disjointGeoms);

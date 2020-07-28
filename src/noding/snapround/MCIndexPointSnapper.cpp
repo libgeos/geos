@@ -18,7 +18,6 @@
 
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
 #include <geos/noding/snapround/HotPixel.h>
-#include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/index/SpatialIndex.h>
@@ -43,12 +42,12 @@ public:
 
     HotPixelSnapAction(HotPixel& nHotPixel,
                        SegmentString* nParentEdge,
-                       size_t nVertexIndex)
+                       size_t nHotPixelVertexIndex)
         :
         MonotoneChainSelectAction(),
         hotPixel(nHotPixel),
         parentEdge(nParentEdge),
-        vertexIndex(nVertexIndex),
+        hotPixelVertexIndex(nHotPixelVertexIndex),
         isNodeAddedVar(false)
     {}
 
@@ -78,13 +77,25 @@ public:
         // This is casting away 'constness'!
         NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
 
-        if (parentEdge == &ss) {
+        if (parentEdge != nullptr && parentEdge == &ss) {
             // exit if hotpixel is equal to endpoint of target segment
-            if (startIndex == vertexIndex || startIndex + 1 == vertexIndex)
+            if (startIndex == hotPixelVertexIndex || (startIndex + 1) == hotPixelVertexIndex)
                 return;
         }
         // snap and record if a node was created
-        isNodeAddedVar |= hotPixel.addSnappedNode(ss, startIndex);
+        isNodeAddedVar |= addSnappedNode(hotPixel, &ss, startIndex);
+    }
+
+    bool
+    addSnappedNode(HotPixel& p_hotPixel, NodedSegmentString* segStr, size_t segIndex)
+    {
+        const Coordinate& p0 = segStr->getCoordinate(segIndex);
+        const Coordinate& p1 = segStr->getCoordinate(segIndex + 1);
+        if (p_hotPixel.intersects(p0, p1)) {
+            segStr->addIntersection(p_hotPixel.getCoordinate(), segIndex);
+            return true;
+        }
+        return false;
     }
 
     void
@@ -96,7 +107,7 @@ public:
 private:
     HotPixel& hotPixel;
     SegmentString* parentEdge;
-    size_t vertexIndex;
+    size_t hotPixelVertexIndex;
     bool isNodeAddedVar;
 
     // Declare type as noncopyable
@@ -138,7 +149,7 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
                           SegmentString* parentEdge,
                           size_t vertexIndex)
 {
-    const Envelope& pixelEnv = hotPixel.getSafeEnvelope();
+    Envelope pixelEnv = getSafeEnvelope(hotPixel);
     HotPixelSnapAction hotPixelSnapAction(hotPixel, parentEdge, vertexIndex);
     MCIndexPointSnapperVisitor visitor(pixelEnv, hotPixelSnapAction);
 
@@ -146,6 +157,17 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
 
     return hotPixelSnapAction.isNodeAdded();
 }
+
+/* public */
+Envelope
+MCIndexPointSnapper::getSafeEnvelope(const HotPixel& hp) const
+{
+    double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / hp.getScaleFactor();
+    Envelope safeEnv(hp.getCoordinate());
+    safeEnv.expandBy(safeTolerance);
+    return safeEnv;
+}
+
 
 } // namespace geos.noding.snapround
 } // namespace geos.noding

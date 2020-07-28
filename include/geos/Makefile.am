@@ -3,6 +3,7 @@
 #
 SUBDIRS = \
     algorithm \
+    edgegraph \
     geom \
     geomgraph \
     index \

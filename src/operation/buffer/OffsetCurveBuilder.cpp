@@ -27,7 +27,7 @@
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
@@ -42,7 +42,6 @@
 #endif
 
 using namespace std;
-using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::geom;
 

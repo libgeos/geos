@@ -46,6 +46,9 @@ geos_HEADERS = \
     MultiPolygon.inl \
     Point.h \
     Polygon.h \
+    Position.h \
     PrecisionModel.h \
     PrecisionModel.inl \
+    Quadrant.h \
+    Quadrant.inl \
     Triangle.h

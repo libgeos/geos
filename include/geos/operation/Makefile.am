@@ -6,8 +6,9 @@ SUBDIRS = \
     distance \
     intersection \
     linemerge \
-    overlay \
     polygonize \
+    overlay \
+    overlayng \
     predicate \
     relate \
     union \

@@ -27,7 +27,8 @@
 #include <algorithm>
 #include <memory>
 
-#include "GeometryListHolder.h"
+#include <geos/operation/union/GeometryListHolder.h>
+#include <geos/operation/union/UnionStrategy.h>
 
 // Forward declarations
 namespace geos {
@@ -48,6 +49,49 @@ class ItemsList;
 namespace geos {
 namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
+
+
+/**
+* \brief
+* Implementation of UnionStrategy that provides overlay using
+* the first generation overlay routines.
+*/
+class GEOS_DLL ClassicUnionStrategy : public UnionStrategy {
+
+public:
+
+    ClassicUnionStrategy() {};
+
+    /**
+    * Computes the union of two geometries.
+    * This method may throw a {@link Toppology Exception}
+    * if one is encountered
+    */
+    std::unique_ptr<geom::Geometry> Union(const geom::Geometry*, const geom::Geometry*) override;
+
+    /**
+    * Indicates whether the union function operates using
+    * a floating (full) precision model.
+    * If this is the case, then the unary union code
+    * can make use of the {@link OverlapUnion} performance optimization,
+    * and perhaps other optimizations as well.
+    * Otherwise, the union result extent may not be the same as the extent of the inputs,
+    * which prevents using some optimizations.
+    */
+    bool isFloatingPrecision() const override;
+
+private:
+
+    /**
+    * An alternative way of unioning polygonal geometries
+    * by using <code>bufer(0)</code>.
+    * Only worth using if regular overlay union fails.
+    */
+    std::unique_ptr<geom::Geometry> unionPolygonsByBuffer(const geom::Geometry* g0, const geom::Geometry* g1);
+
+};
+
+
 
 /**
  * \brief
@@ -105,6 +149,7 @@ public:
      *              ownership of elements *and* vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
+    static geom::Geometry* Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun);
 
     /** \brief
      * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
@@ -115,14 +160,14 @@ public:
      */
     template <class T>
     static geom::Geometry*
-    Union(T start, T end)
+    Union(T start, T end, UnionStrategy *unionStrat)
     {
         std::vector<geom::Polygon*> polys;
         for(T i = start; i != end; ++i) {
             const geom::Polygon* p = dynamic_cast<const geom::Polygon*>(*i);
             polys.push_back(const_cast<geom::Polygon*>(p));
         }
-        return Union(&polys);
+        return Union(&polys, unionStrat);
     }
 
     /** \brief
@@ -141,8 +186,15 @@ public:
      *              Ownership of elements *and* vector are left to caller.
      */
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
-        : inputPolys(polys),
-          geomFactory(nullptr)
+        : inputPolys(polys)
+        , geomFactory(nullptr)
+        , unionFunction(&defaultUnionFunction)
+    {}
+
+    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
+        : inputPolys(polys)
+        , geomFactory(nullptr)
+        , unionFunction(unionFun)
     {}
 
     /** \brief
@@ -154,6 +206,10 @@ public:
     geom::Geometry* Union();
 
 private:
+
+    UnionStrategy* unionFunction;
+    ClassicUnionStrategy defaultUnionFunction;
+
     geom::Geometry* unionTree(index::strtree::ItemsList* geomTree);
 
     /**
@@ -202,8 +258,12 @@ private:
      * @param g1
      * @return
      */
-    static geom::Geometry* unionActual(geom::Geometry* g0, geom::Geometry* g1);
+    geom::Geometry* unionActual(geom::Geometry* g0, geom::Geometry* g1);
 };
+
+
+
+
 
 } // namespace geos::operation::union
 } // namespace geos::operation

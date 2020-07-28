@@ -26,7 +26,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/EdgeEndStar.h>
-#include <geos/geomgraph/Position.h>
+#include <geos/geom/Position.h>
 #include <geos/util.h>
 
 #include <cassert>

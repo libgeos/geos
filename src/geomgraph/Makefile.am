@@ -25,8 +25,6 @@ libgeomgraph_la_SOURCES = \
 	NodeFactory.cpp \
 	NodeMap.cpp \
 	PlanarGraph.cpp \
-	Position.cpp \
-	Quadrant.cpp \
 	TopologyLocation.cpp 
 
 libgeomgraph_la_LIBADD = index/libgeomgraphindex.la

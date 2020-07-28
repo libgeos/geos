@@ -22,7 +22,7 @@
 #include <geos/geomgraph/Node.h> // for assertions
 #include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 #include <geos/geom/Coordinate.h>
 
 #include <typeinfo>

@@ -112,7 +112,7 @@ UnaryUnionOp::Union()
     GeomPtr unionPolygons;
     if(!polygons.empty()) {
         unionPolygons.reset(CascadedPolygonUnion::Union(polygons.begin(),
-                            polygons.end()));
+                            polygons.end(), unionFunction));
     }
 
     /*

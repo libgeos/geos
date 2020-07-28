@@ -30,6 +30,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/util/GeometryExtracter.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/union/CascadedPolygonUnion.h>
 //#include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 
 #ifdef _MSC_VER
@@ -115,25 +116,30 @@ public:
 
     template <class T>
     UnaryUnionOp(const T& geoms, geom::GeometryFactory& geomFactIn)
-        :
-        geomFact(&geomFactIn)
+        : geomFact(&geomFactIn)
+        , unionFunction(&defaultUnionFunction)
     {
         extractGeoms(geoms);
     }
 
     template <class T>
     UnaryUnionOp(const T& geoms)
-        :
-        geomFact(nullptr)
+        : geomFact(nullptr)
+        , unionFunction(&defaultUnionFunction)
     {
         extractGeoms(geoms);
     }
 
     UnaryUnionOp(const geom::Geometry& geom)
-        :
-        geomFact(geom.getFactory())
+        : geomFact(geom.getFactory())
+        , unionFunction(&defaultUnionFunction)
     {
         extract(geom);
+    }
+
+    void setUnionFunction(UnionStrategy* unionFun)
+    {
+        unionFunction = unionFun;
     }
 
     /**
@@ -200,7 +206,7 @@ private:
             empty = geomFact->createEmptyGeometry();
         }
         //return SnapIfNeededOverlayOp::overlayOp(g0, *empty, OverlayOp::opUNION);
-        return BinaryOp(&g0, empty.get(), overlay::overlayOp(OverlayOp::opUNION));
+        return unionFunction->Union(&g0, empty.get());
     }
 
     /**
@@ -212,16 +218,22 @@ private:
      * @return the union of the input(s)
      * @return null if both inputs are null
      */
-    std::unique_ptr<geom::Geometry> unionWithNull(std::unique_ptr<geom::Geometry> g0,
-            std::unique_ptr<geom::Geometry> g1);
+    std::unique_ptr<geom::Geometry> unionWithNull(
+        std::unique_ptr<geom::Geometry> g0,
+        std::unique_ptr<geom::Geometry> g1
+        );
 
+    // Members
     std::vector<const geom::Polygon*> polygons;
     std::vector<const geom::LineString*> lines;
     std::vector<const geom::Point*> points;
 
     const geom::GeometryFactory* geomFact;
-
     std::unique_ptr<geom::Geometry> empty;
+
+    UnionStrategy* unionFunction;
+    ClassicUnionStrategy defaultUnionFunction;
+
 };
 
 

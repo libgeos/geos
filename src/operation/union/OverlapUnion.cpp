@@ -108,16 +108,19 @@ OverlapUnion::extractByEnvelope(const Envelope& env, const Geometry* geom, std::
 std::unique_ptr<Geometry>
 OverlapUnion::unionFull(const Geometry* geom0, const Geometry* geom1)
 {
-    try {
-        return geom0->Union(geom1);
+    // try {
+    //     return geom0->Union(geom1);
+    // }
+    // catch (geos::util::TopologyException &) {
+    //      // If the overlay union fails,
+    //      // try a buffer union, which often succeeds
+    //     return unionBuffer(geom0, geom1);
+    // }
+    if (geom0->getNumGeometries() == 0 && geom1->getNumGeometries() == 0) {
+        return geom0->clone();
     }
-    catch (geos::util::TopologyException &) {
-        /*
-         * If the overlay union fails,
-         * try a buffer union, which often succeeds
-         */
-        return unionBuffer(geom0, geom1);
-    }
+
+    return unionFunction->Union(geom0, geom1);
 }
 
 /* private */

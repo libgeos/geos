@@ -19,7 +19,7 @@
 #include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Quadrant.h>
 
 #include <cassert>
 #include <cstdio>
@@ -34,7 +34,6 @@
 #endif
 
 using namespace std;
-using namespace geos::geomgraph;
 using namespace geos::geom;
 
 namespace geos {

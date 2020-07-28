@@ -79,7 +79,7 @@ void object::test<1>
     free(wkt_c);
 
     ensure_equals(out,
-                  "MULTILINESTRING ((5 5, 10 0, 10 10, 5 5), (0 10, 5 5), (0 0, 5 5))"
+                  "MULTILINESTRING ((5 5, 10 10, 10 0, 5 5), (0 10, 5 5), (0 0, 5 5))"
                  );
 }
 

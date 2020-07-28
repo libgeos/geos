@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  * Copyright (C) 2011 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -29,7 +30,6 @@
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/SegmentString.h>
-//#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
 #include <cstddef>
@@ -85,6 +85,8 @@ public:
     static SegmentString::NonConstVect* getNodedSubstrings(
         const SegmentString::NonConstVect& segStrings);
 
+    std::unique_ptr<std::vector<geom::Coordinate>> getNodedCoordinates();
+
 
     /** \brief
      * Creates a new segment string from a list of vertices.
@@ -99,6 +101,12 @@ public:
         : NodableSegmentString(newContext)
         , nodeList(this)
         , pts(newPts)
+    {}
+
+    NodedSegmentString(SegmentString* ss)
+        : NodableSegmentString(ss->getData())
+        , nodeList(this)
+        , pts(ss->getCoordinates()->clone())
     {}
 
     ~NodedSegmentString() override = default;
@@ -149,6 +157,7 @@ public:
     const geom::Coordinate& getCoordinate(size_t i) const override;
 
     geom::CoordinateSequence* getCoordinates() const override;
+    geom::CoordinateSequence* releaseCoordinates();
 
     bool isClosed() const override;
 

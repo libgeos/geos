@@ -33,7 +33,6 @@
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/MCIndexNoder.h>
 
-#include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 
 #include <memory> // for unique_ptr
@@ -173,9 +172,6 @@ GeometryNoder::getNoder()
         IteratedNoder* in = new IteratedNoder(pm);
         //in->setMaximumIterations(0);
         noder.reset(in);
-
-        //using snapround::SimpleSnapRounder;
-        //noder.reset( new SimpleSnapRounder(*pm) );
 
         //using snapround::MCIndexSnapRounder;
         //noder.reset( new MCIndexSnapRounder(*pm) );
