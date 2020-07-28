@@ -755,7 +755,7 @@ XMLTester::printGeom(const geom::Geometry* g)
 * the area delta is expected to be very small (e.g. < 1e-6).
 */
 double
-XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp)
+XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff)
 {
     double areaA = a == nullptr ? 0 : a->getArea();
     double areaB = b == nullptr ? 0 : b->getArea();
@@ -764,11 +764,18 @@ XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::stri
     if (areaA == 0 || areaB == 0)
       return 0;
 
-    double areaU   = OverlayNGSnapIfNeeded::Union(a, b)->getArea();
-    double areaI   = OverlayNGSnapIfNeeded::Intersection(a, b)->getArea();
-    double areaDab = OverlayNGSnapIfNeeded::Difference(a, b)->getArea();
-    double areaDba = OverlayNGSnapIfNeeded::Difference(b, a)->getArea();
-    double areaSD  = OverlayNGSnapIfNeeded::SymDifference(a, b)->getArea();
+    std::unique_ptr<geom::Geometry> geomU = OverlayNGSnapIfNeeded::Union(a, b);
+    std::unique_ptr<geom::Geometry> geomI = OverlayNGSnapIfNeeded::Intersection(a, b);
+    std::unique_ptr<geom::Geometry> geomDab = OverlayNGSnapIfNeeded::Difference(a, b);
+    std::unique_ptr<geom::Geometry> geomDba = OverlayNGSnapIfNeeded::Difference(b, a);
+    std::unique_ptr<geom::Geometry> geomSD = OverlayNGSnapIfNeeded::SymDifference(a, b);
+
+    double areaU   = geomU->getArea();
+    double areaI   = geomI->getArea();
+    double areaDab = geomDab->getArea();
+    double areaDba = geomDba->getArea();
+    double areaSD  = geomSD->getArea();
+
 
     double maxDelta = 0;
 
@@ -808,7 +815,28 @@ XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::stri
     }
 
     // normalize the area delta value
-    return maxDelta / (areaA + areaB);
+    double diffScore = maxDelta / (areaA + areaB);
+#if 0
+    if (diffScore > maxDiff) {
+        std::cout << std::endl << "A" << std::endl;
+        std::cout << *a;
+        std::cout << std::endl << "B" << std::endl;
+        std::cout << *b;
+        std::cout << std::endl << "geomU" << std::endl;
+        std::cout << *geomU;
+        std::cout << std::endl << "geomI" << std::endl;
+        std::cout << *geomI;
+        std::cout << std::endl << "geomDab" << std::endl;
+        std::cout << *geomDab;
+        std::cout << std::endl << "geomDba" << std::endl;
+        std::cout << *geomDba;
+        std::cout << std::endl << "geomSD" << std::endl;
+        std::cout << *geomSD;
+        std::cout << std::endl;
+    }
+#endif
+
+    return diffScore;
 }
 
 
@@ -1880,8 +1908,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "overlayareatest") {
 
             std::string maxDiffOp;
-            double areaDiff = areaDelta(gA, gB, maxDiffOp);
             double maxDiff = 1e-6;
+            double areaDiff = areaDelta(gA, gB, maxDiffOp, maxDiff);
 
             std::stringstream p_tmp;
             p_tmp << maxDiffOp << ": " << areaDiff;
@@ -1904,7 +1932,31 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 throw std::runtime_error("malformed testcase: missing expected length 'unionlength' op");
             }
 
-            if (std::abs(expectedLength-resultLength) < expectedLength / 100.0) {
+            std::stringstream ss;
+            ss << resultLength;
+            actual_result = ss.str();
+
+            if (std::abs(expectedLength-resultLength) / expectedLength < 1e-3) {
+                success = 1;
+            }
+
+        }
+
+        else if(opName == "unionarea") {
+
+            char* rest;
+            GeomPtr result = OverlayNGSnapIfNeeded::Union(gA);
+            double resultArea  = result->getArea();
+            double expectedArea = std::strtod(opRes.c_str(), &rest);
+            if(rest == opRes.c_str()) {
+                throw std::runtime_error("malformed testcase: missing expected area 'unionarea' op");
+            }
+
+            std::stringstream ss;
+            ss << resultArea;
+            actual_result = ss.str();
+
+            if (std::abs(expectedArea-resultArea) / expectedArea < 1e-3) {
                 success = 1;
             }
 
