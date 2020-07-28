@@ -21,7 +21,7 @@ namespace noding { // geos.noding
 namespace snap { // geos.noding.snap
 
 SnappingPointIndex::SnappingPointIndex(double p_snapTolerance) :
-    snapTolerance(p_snapTolerance),
+    // snapTolerance(p_snapTolerance),
     snapPointIndex(new index::kdtree::KdTree(p_snapTolerance)) {}
 
 

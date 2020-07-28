@@ -30,7 +30,7 @@ class GEOS_DLL SnappingPointIndex {
 
 private:
 
-    double snapTolerance;
+    // double snapTolerance;
     std::unique_ptr<index::kdtree::KdTree> snapPointIndex;
 
 

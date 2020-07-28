@@ -54,7 +54,7 @@ private:
 
     algorithm::LineIntersector li;
     std::unique_ptr<std::vector<geom::Coordinate>> intersections;
-    const geom::PrecisionModel* pm;
+    // const geom::PrecisionModel* pm;
     double nearnessTol;
 
     /**
