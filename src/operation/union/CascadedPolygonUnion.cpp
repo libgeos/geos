@@ -326,8 +326,8 @@ std::unique_ptr<geom::Geometry>
 ClassicUnionStrategy::unionPolygonsByBuffer(const geom::Geometry* g0, const geom::Geometry* g1)
 {
     std::vector<std::unique_ptr<geom::Geometry>> geoms;
-    geoms.push_back(std::move(g0->clone()));
-    geoms.push_back(std::move(g1->clone()));
+    geoms.push_back(g0->clone());
+    geoms.push_back(g1->clone());
     std::unique_ptr<geom::GeometryCollection> coll = g0->getFactory()->createGeometryCollection(std::move(geoms));
     return coll->buffer(0);
 }
