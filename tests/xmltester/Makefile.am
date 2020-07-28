@@ -90,6 +90,48 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-misc-5.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-1034.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-153.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-234.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-275.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-350.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-358.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-360.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-368.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-392-lines.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-392.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-398.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-459.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-488.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-522.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-527.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-586.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-599.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-600-lines.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-615.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-737.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-837.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-838.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-979.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-994.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-fail.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-slow.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-list.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-gisse-345341-lines.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-isochrone.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-jts-300.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-misc-1.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-misc-2.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-misc-4.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-misc-5.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-osmwater.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-pg-4182-2.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-pg-4538.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-pg-list.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-qgis-29400.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-qgis-31552.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-qgis-37032.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-shapely-829.xml \
 	$(srcdir)/tests/issue/issue-geos-176.xml \
 	$(srcdir)/tests/issue/issue-geos-188.xml \
 	$(srcdir)/tests/issue/issue-geos-234.xml \
@@ -131,11 +173,12 @@ SAFE_XMLTESTS= \
 INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
+	$(srcdir)/tests/failure/robust-overlay-misc-3.xml \
+	$(srcdir)/tests/failure/robust-overlay-stmlf.xml \
 	$(srcdir)/tests/failure/issue-geos-344.xml \
-	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
 	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \
-	$(srcdir)/tests/failure/misc-TestSameDirection.xml
-
+	$(srcdir)/tests/failure/misc-TestSameDirection.xml \
+	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml
 
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)

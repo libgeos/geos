@@ -104,7 +104,7 @@ POLYGON((5417148.36 5658440.81,5417149.233
 5658453.127,5417146.41 5658446.6,5417148.36 5658440.81))
 </b>
 <test>
-	<op name="difference" arg1="A" arg2="B">
+	<op name="differencesr" arg1="A" arg2="B">
 POLYGON EMPTY
 	</op>
 </test>
