@@ -30,8 +30,15 @@ ValidatingNoder::computeNodes(std::vector<SegmentString*>* segStrings)
 {
     noder.computeNodes(segStrings);
     nodedSS = noder.getNodedSubstrings();
+    validate();
+}
+
+void
+ValidatingNoder::validate()
+{
+    FastNodingValidator nv(*nodedSS);
     try {
-            validate();
+        nv.checkValid();
     }
     catch (const std::exception& ex) {
         for (SegmentString* ss: *nodedSS) {
@@ -41,13 +48,6 @@ ValidatingNoder::computeNodes(std::vector<SegmentString*>* segStrings)
         nodedSS = nullptr;
         throw;
     }
-}
-
-void
-ValidatingNoder::validate()
-{
-    FastNodingValidator nv(*nodedSS);
-    nv.checkValid();
 }
 
 std::vector<SegmentString*>*
