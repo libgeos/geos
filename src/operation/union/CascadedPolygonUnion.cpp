@@ -307,7 +307,7 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
         // return SnapIfNeededOverlayOp.union(g0, g1);
         return geom::BinaryOp(g0, g1, overlay::overlayOp(OverlayOp::opUNION));
     }
-    catch (util::TopologyException ex) {
+    catch (const util::TopologyException &ex) {
         // union-by-buffer only works for polygons
         if (g0->getDimension() != 2 || g1->getDimension() != 2)
           throw ex;

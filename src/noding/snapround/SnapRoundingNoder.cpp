@@ -227,7 +227,7 @@ SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentStrin
         SnapRoundingVisitor(Coordinate& pp0, Coordinate& pp1, NodedSegmentString* pss, size_t psegIndex)
             : p0(pp0), p1(pp1), ss(pss), segIndex(psegIndex) {};
 
-        void visit(KdNode* node) {
+        void visit(KdNode* node) override {
             const HotPixel* hp = static_cast<const HotPixel*>(node->getData());
             if (hp->intersects(p0, p1)) {
                 ss->addIntersection(hp->getCoordinate(), segIndex);
