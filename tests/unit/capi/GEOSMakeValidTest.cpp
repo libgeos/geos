@@ -19,6 +19,7 @@ struct test_capimakevalid_data {
     GEOSWKTWriter* wktw_;
     GEOSGeometry* geom1_ = nullptr;
     GEOSGeometry* geom2_ = nullptr;
+    GEOSGeometry* expect_ = nullptr;
 
     static void
     notice(const char* fmt, ...)
@@ -76,6 +77,9 @@ void object::test<1>
 {
     geom1_ = GEOSGeomFromWKT("POLYGON((0 0,1 1,0 1,1 0,0 0))");
     geom2_ = GEOSMakeValid(geom1_);
-    ensure_equals(toWKT(geom2_), std::string("MULTIPOLYGON (((0 0, 0.5 0.5, 1 0, 0 0)), ((0.5 0.5, 0 1, 1 1, 0.5 0.5)))"));
+    expect_ = GEOSGeomFromWKT("MULTIPOLYGON (((0 0, 0.5 0.5, 1 0, 0 0)), ((0.5 0.5, 0 1, 1 1, 0.5 0.5)))");
+    GEOSNormalize(geom2_);
+    GEOSNormalize(expect_);
+    ensure(GEOSEqualsExact(geom2_, expect_, 0.01));
 }
 } // namespace tut

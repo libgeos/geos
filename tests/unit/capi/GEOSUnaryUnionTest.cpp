@@ -183,9 +183,10 @@ void object::test<7>
     ensure(nullptr != geom2_);
 
     GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))");
+    GEOSNormalize(geom2_);
+    GEOSNormalize(expected);
 
     ensure(GEOSEquals(geom2_, expected) != 0);
-
     GEOSGeom_destroy(expected);
 }
 
@@ -201,9 +202,12 @@ void object::test<8>
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_), std::string(
-                      "GEOMETRYCOLLECTION (POINT (6 6.5), POINT (12 2), LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))"
-                  ));
+    GEOSGeometry* expected = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (6 6.5), POINT (12 2), LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))");
+    GEOSNormalize(geom2_);
+    GEOSNormalize(expected);
+
+    ensure(GEOSEquals(geom2_, expected));
+    GEOSGeom_destroy(expected);
 }
 
 // Self-union a geometry with NaN coordinates

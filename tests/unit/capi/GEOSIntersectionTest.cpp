@@ -2,6 +2,7 @@
 // Test Suite for C-API GEOSintersection
 
 #include <tut/tut.hpp>
+
 // geos
 #include <geos_c.h>
 // std
@@ -20,6 +21,7 @@ struct test_capigeosintersection_data {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSGeometry* geom3_;
+    GEOSGeometry* expected_;
 
     static void
     notice(const char* fmt, ...)
@@ -41,6 +43,10 @@ struct test_capigeosintersection_data {
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
+        geom1_ = nullptr;
+        geom2_ = nullptr;
+        geom3_ = nullptr;
+        expected_ = nullptr;
     }
 
     std::string
@@ -52,15 +58,25 @@ struct test_capigeosintersection_data {
         return ret;
     }
 
+    int
+    same(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
+    {
+        GEOSNormalize(g1);
+        GEOSNormalize(g2);
+        return GEOSEqualsExact(g1, g2, tolerance);
+    }
+
     ~test_capigeosintersection_data()
     {
         GEOSWKTWriter_destroy(wktw_);
         GEOSGeom_destroy(geom1_);
         GEOSGeom_destroy(geom2_);
         GEOSGeom_destroy(geom3_);
+        if (expected_) GEOSGeom_destroy(expected_);
         geom1_ = nullptr;
         geom2_ = nullptr;
         geom3_ = nullptr;
+        expected_ = nullptr;
         finishGEOS();
     }
 
@@ -114,6 +130,7 @@ void object::test<3>
 {
     geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
     geom2_ = GEOSGeomFromWKT("POLYGON((-1 1,-1 2,2 2,2 1,-1 1))");
+    expected_ = GEOSGeomFromWKT("POLYGON ((0 1, 0 2, 2 2, 2 1, 0 1))");
 
     ensure(nullptr != geom1_);
     ensure(nullptr != geom2_);
@@ -121,7 +138,7 @@ void object::test<3>
     geom3_ = GEOSIntersection(geom1_, geom2_);
 
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_), std::string("POLYGON ((0 1, 0 2, 2 2, 2 1, 0 1))"));
+    ensure(same(geom3_, expected_, 0.1));
 }
 
 /* See http://trac.osgeo.org/geos/ticket/719 */

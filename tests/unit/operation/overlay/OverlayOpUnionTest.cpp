@@ -49,13 +49,14 @@ void object::test<1>
     GeometryPtr line2(reader.read("LINESTRING(0 5, 5 5)"));
     GeometryPtr line3(reader.read("LINESTRING(5 5, 5 0)"));
     GeometryPtr line4(reader.read("LINESTRING(5 0, 0 0)"));
+    GeometryPtr expect(reader.read("LINESTRING(0 0,0 5,5 5,5 0,0 0)"));
 
     // union segments incrementally
     GeometryPtr lines12(line1->Union(line2.get()));
     GeometryPtr lines123(lines12->Union(line3.get()));
     GeometryPtr lines1234(lines123->Union(line4.get()));
 
-    ensure_equals(lines1234->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    ensure(expect->contains(lines1234.get()));
 
     // NOTE: Since the union operation makes no effort to simplify and
     // drop nodes of degree 2 from the built topology,
