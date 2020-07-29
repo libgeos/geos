@@ -51,6 +51,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/version.h>
@@ -550,7 +551,11 @@ Geometry::intersection(const Geometry* other) const
     }
 #endif
 
+#ifdef USE_OVERLAYNG
+    return operation::overlayng::OverlayNGSnapIfNeeded::Intersection(this, other);
+#else
     return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION));
+#endif
 }
 
 std::unique_ptr<Geometry>
@@ -602,7 +607,11 @@ Geometry::Union(const Geometry* other) const
     }
 #endif
 
+#ifdef USE_OVERLAYNG
+    return operation::overlayng::OverlayNGSnapIfNeeded::Union(this, other);
+#else
     return BinaryOp(this, other, overlayOp(OverlayOp::opUNION));
+#endif
 }
 
 /* public */
@@ -610,7 +619,11 @@ Geometry::Ptr
 Geometry::Union() const
 {
     using geos::operation::geounion::UnaryUnionOp;
+#ifdef USE_OVERLAYNG
+    return operation::overlayng::OverlayNGSnapIfNeeded::Union(this);
+#else
     return UnaryUnionOp::Union(*this);
+#endif
 }
 
 std::unique_ptr<Geometry>
@@ -625,7 +638,11 @@ Geometry::difference(const Geometry* other) const
         return clone();
     }
 
+#ifdef USE_OVERLAYNG
+    return operation::overlayng::OverlayNGSnapIfNeeded::Difference(this, other);
+#else
     return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE));
+#endif
 }
 
 std::unique_ptr<Geometry>
@@ -673,7 +690,12 @@ Geometry::symDifference(const Geometry* other) const
         return std::unique_ptr<Geometry>(_factory->buildGeometry(v));
     }
 
+#ifdef USE_OVERLAYNG
+    return operation::overlayng::OverlayNGSnapIfNeeded::SymDifference(this, other);
+#else
     return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE));
+#endif
+
 }
 
 int

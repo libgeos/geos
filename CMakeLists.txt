@@ -166,6 +166,17 @@ else()
 endif()
 
 #-----------------------------------------------------------------------------
+# Target geos_cxx_flags: overlayng code
+#-----------------------------------------------------------------------------
+option(DISABLE_OVERLAYNG "Disable overlayng algorithms" ON)
+if(NOT DISABLE_OVERLAYNG)
+  target_compile_definitions(geos_cxx_flags INTERFACE USE_OVERLAYNG)
+else()
+  message(STATUS
+  "GEOS: DISABLING overlayng algorithms")
+endif()
+
+#-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
 #-----------------------------------------------------------------------------
 # Do NOT install this target for end-users!

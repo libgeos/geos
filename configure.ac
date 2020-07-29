@@ -149,6 +149,26 @@ else
     AC_MSG_RESULT([no])
 fi
 
+
+dnl --------------------------------------------------------------------
+dnl - check whether user has requested overlayng
+dnl --------------------------------------------------------------------
+
+AC_ARG_ENABLE([overlayng], [  --enable-overlayng    Enable use of new overlay],
+	[case "${enableval}" in
+		yes) use_overlayng=true ;;
+		no)  use_overlayng=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-overlayng) ;;
+	esac],
+	[use_overlayng=false]
+)
+
+if test x"$use_overlayng" = xtrue; then
+	OVERLAYNG_FLAGS="-DUSE_OVERLAYNG"
+else
+	OVERLAYNG_FLAGS=""
+fi
+
 dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
@@ -183,7 +203,7 @@ NUMERICFLAGS=""
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
 
 HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
-DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING}"
+DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
 
 AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
 AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"
@@ -293,6 +313,7 @@ if test x"$use_ruby" = xtrue; then
 
 fi
 AM_CONDITIONAL(ENABLE_RUBY, [ test x"$use_ruby" = xtrue ])
+
 
 dnl --------------------------------------------------------------------
 dnl - do operating-system specific things
@@ -482,5 +503,6 @@ dnl -- echo "Boost UTF: $use_boost_utf"
 echo "Swig: $use_swig"
 echo "Python bindings: $use_python"
 echo "Ruby bindings: $use_ruby"
+echo "OverlayNG: $use_overlayng"
 
 dnl -- echo "---------------------------------------"
