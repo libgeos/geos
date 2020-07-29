@@ -79,6 +79,14 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
     std::runtime_error exOriginal("");
 
     /**
+    * If input geometry has a non-floating precision model, just run
+    * in snap-rounding mode with that precision.
+    */
+    if (!geom0->getPrecisionModel()->isFloating()) {
+        return OverlayNG::overlay(geom0, geom1, opCode, geom0->getPrecisionModel());
+    }
+
+    /**
      * First try overlay with a FLOAT noder, which is fastest and causes least
      * change to geometry coordinates
      * By default the noder is validated, which is required in order
