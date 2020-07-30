@@ -34,7 +34,6 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
-#include <geos/geom/BinaryOp.h>
 #include <geos/geom/util/Densifier.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
@@ -84,9 +83,6 @@
 #include <windows.h>
 #include "Stackwalker.h"
 #endif
-
-// Geometry methods do use BinaryOp internally
-#undef USE_BINARYOP
 
 using namespace geos;
 using namespace geos::operation::polygonize;
@@ -994,11 +990,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             profile.start();
 
-#ifndef USE_BINARYOP
             GeomPtr gRealRes(gA->intersection(gB));
-#else
-            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
-#endif
 
             profile.stop();
 
@@ -1287,11 +1279,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             GeomPtr gRealRes;
             if(gB) {
-#ifndef USE_BINARYOP
                 gRealRes = gA->Union(gB);
-#else
-                gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
-#endif
             }
             else {
                 gRealRes = gA->Union();
@@ -1314,11 +1302,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-#ifndef USE_BINARYOP
             GeomPtr gRealRes(gA->difference(gB));
-#else
-            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
-#endif
 
             gRealRes->normalize();
 
@@ -1338,11 +1322,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-#ifndef USE_BINARYOP
             GeomPtr gRealRes(gA->symDifference(gB));
-#else
-            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
-#endif
 
             gRealRes->normalize();
 
@@ -1975,12 +1955,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if(verbose > 1) {
                 std::cerr << "Running intersection for areatest" << std::endl;
             }
-#ifndef USE_BINARYOP
             GeomPtr gI(gA->intersection(gB));
-#else
-            GeomPtr gI = BinaryOp(gA, gB,
-                                  overlayOp(OverlayOp::opINTERSECTION));
-#endif
 
             if(testValidOutput) {
                 validOut &= int(testValid(gI.get(), "areatest intersection"));
@@ -1990,12 +1965,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 std::cerr << "Running difference(A,B) for areatest" << std::endl;
             }
 
-#ifndef USE_BINARYOP
             GeomPtr gDab(gA->difference(gB));
-#else
-            GeomPtr gDab = BinaryOp(gA, gB,
-                                    overlayOp(OverlayOp::opDIFFERENCE));
-#endif
 
             if(testValidOutput) {
                 validOut &= int(testValid(gI.get(), "areatest difference(a,b)"));
@@ -2005,12 +1975,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 std::cerr << "Running difference(B,A) for areatest" << std::endl;
             }
 
-#ifndef USE_BINARYOP
             GeomPtr gDba(gB->difference(gA));
-#else
-            GeomPtr gDba = BinaryOp(gB, gA,
-                                    overlayOp(OverlayOp::opDIFFERENCE));
-#endif
 
             if(testValidOutput) {
                 validOut &= int(testValid(gI.get(), "areatest difference(b,a)"));
@@ -2020,12 +1985,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 std::cerr << "Running symdifference for areatest" << std::endl;
             }
 
-#ifndef USE_BINARYOP
             GeomPtr gSD(gA->symDifference(gB));
-#else
-            GeomPtr gSD = BinaryOp(gA, gB,
-                                   overlayOp(OverlayOp::opSYMDIFFERENCE));
-#endif
 
             if(testValidOutput) {
                 validOut &= int(testValid(gI.get(), "areatest symdifference"));
@@ -2035,12 +1995,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 std::cerr << "Running union for areatest" << std::endl;
             }
 
-#ifndef USE_BINARYOP
             GeomPtr gU(gA->Union(gB));
-#else
-            GeomPtr gU = BinaryOp(gA, gB,
-                                  overlayOp(OverlayOp::opUNION));
-#endif
 
             double areaA = gA->getArea();
             double areaB = gB->getArea();
