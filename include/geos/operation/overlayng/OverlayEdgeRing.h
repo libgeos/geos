@@ -16,6 +16,7 @@
 
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/export.h>
 
 // Forward declarations

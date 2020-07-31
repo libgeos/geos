@@ -13,8 +13,6 @@
  **********************************************************************/
 
 #include <geos/operation/overlayng/EdgeMerger.h>
-#include <geos/operation/overlayng/EdgeKey.h>
-#include <geos/operation/overlayng/Edge.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>

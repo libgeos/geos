@@ -15,6 +15,8 @@
 #pragma once
 
 #include <geos/operation/overlayng/OverlayLabel.h>
+#include <geos/operation/overlayng/EdgeKey.h>
+#include <geos/operation/overlayng/Edge.h>
 #include <geos/export.h>
 
 #include <vector>
