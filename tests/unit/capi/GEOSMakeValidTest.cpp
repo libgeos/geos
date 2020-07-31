@@ -8,7 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
-#include <string>
+#include <cstring>
 
 namespace tut {
 //
