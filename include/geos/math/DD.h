@@ -119,7 +119,6 @@ class GEOS_DLL DD {
     public:
         DD(double p_hi, double p_lo) : hi(p_hi), lo(p_lo) {};
         DD(double x) : hi(x), lo(0.0) {};
-        DD(const DD &dd) : hi(dd.hi), lo(dd.lo) {};
         DD() : hi(0.0), lo(0.0) {};
 
         bool operator==(const DD &rhs) const
