@@ -39,7 +39,7 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using geos::geom::Coordinate;
+using namespace geos::geom;
 
 /**
  * A planar graph of {@link OverlayEdge}s, representing
