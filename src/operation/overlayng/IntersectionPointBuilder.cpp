@@ -18,7 +18,6 @@
 #include <geos/operation/overlayng/OverlayGraph.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Point.h>
 
 
 

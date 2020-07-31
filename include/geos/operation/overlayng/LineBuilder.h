@@ -18,6 +18,7 @@
 
 #include <geos/operation/overlayng/InputGeometry.h>
 #include <geos/geom/Location.h>
+#include <geos/geom/LineString.h>
 
 #include <vector>
 

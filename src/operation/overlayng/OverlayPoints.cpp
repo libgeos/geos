@@ -17,7 +17,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Point.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayUtil.h>

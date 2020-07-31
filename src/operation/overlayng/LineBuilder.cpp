@@ -18,7 +18,6 @@
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 

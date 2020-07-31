@@ -20,9 +20,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
-#include <geos/geom/Point.h>
-#include <geos/geom/Polygon.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/operation/overlayng/IndexedPointOnLineLocator.h>
 #include <geos/operation/overlayng/OverlayEdge.h>

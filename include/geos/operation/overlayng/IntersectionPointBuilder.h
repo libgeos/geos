@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <geos/geom/Point.h>
+
 #include <geos/export.h>
 #include <vector>
 #include <memory>
@@ -22,7 +24,6 @@
 namespace geos {
 namespace geom {
 class GeometryFactory;
-class Point;
 }
 namespace operation {
 namespace overlayng {

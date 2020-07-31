@@ -13,7 +13,7 @@
  **********************************************************************/
 
 #include <geos/operation/overlayng/OverlayGraph.h>
-#include <geos/operation/overlayng/OverlayEdge.h>
+
 #include <geos/operation/overlayng/Edge.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>

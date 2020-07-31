@@ -16,10 +16,8 @@
 
 #include <geos/operation/overlayng/InputGeometry.h>
 #include <geos/operation/overlayng/OverlayGraph.h>
-#include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/operation/overlayng/OverlayNG.h>

@@ -15,8 +15,11 @@
 #pragma once
 
 #include <geos/export.h>
+
+#include <geos/geom/Polygon.h>
 #include <geos/operation/overlayng/OverlayEdge.h>
 #include <geos/operation/overlayng/OverlayEdgeRing.h>
+#include <geos/operation/overlayng/MaximalEdgeRing.h>
 
 #include <vector>
 
@@ -31,7 +34,6 @@ class Polygon;
 namespace operation {
 namespace overlayng {
 class Edge;
-class MaximalEdgeRing;
 }
 }
 }

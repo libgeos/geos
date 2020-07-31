@@ -14,7 +14,6 @@
 
 #include <geos/operation/overlayng/MaximalEdgeRing.h>
 #include <geos/operation/overlayng/OverlayEdge.h>
-#include <geos/operation/overlayng/OverlayEdgeRing.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>

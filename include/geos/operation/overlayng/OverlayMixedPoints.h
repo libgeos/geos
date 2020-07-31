@@ -14,6 +14,11 @@
 
 #pragma once
 
+
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+
 #include <geos/export.h>
 
 #include <set>
@@ -27,9 +32,6 @@ namespace geom {
 class GeometryFactory;
 class PrecisionModel;
 class Geometry;
-class Point;
-class Polygon;
-class LineString;
 class Coordinate;
 class CoordinateArraySequence;
 }

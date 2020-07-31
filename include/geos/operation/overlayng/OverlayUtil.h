@@ -14,6 +14,11 @@
 
 #pragma once
 
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Geometry.h>
+
 #include <geos/export.h>
 
 #include <vector>
@@ -25,11 +30,7 @@ namespace geom {
 class Coordinate;
 class CoordinateSequence;
 class Envelope;
-class Geometry;
 class GeometryFactory;
-class LineString;
-class Point;
-class Polygon;
 class PrecisionModel;
 }
 namespace operation {

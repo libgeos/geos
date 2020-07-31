@@ -17,6 +17,7 @@
 #include <geos/export.h>
 #include <geos/operation/overlayng/OverlayEdge.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #include <map>
 #include <vector>

@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <geos/operation/overlayng/OverlayEdgeRing.h>
+
 #include <vector>
 #include <memory>
 #include <geos/export.h>
@@ -28,7 +30,6 @@ class GeometryFactory;
 namespace operation {
 namespace overlayng {
 class OverlayEdge;
-class OverlayEdgeRing;
 class EdgeRing;
 }
 }

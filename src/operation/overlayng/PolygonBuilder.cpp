@@ -14,10 +14,8 @@
 
 #include <geos/operation/overlayng/PolygonBuilder.h>
 
-#include <geos/operation/overlayng/MaximalEdgeRing.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 

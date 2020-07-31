@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <geos/geom/CoordinateArraySequence.h>
+
 #include <geos/export.h>
 #include <array>
 #include <memory>
@@ -25,7 +27,6 @@ namespace geom {
 class Envelope;
 class Coordinate;
 class CoordinateSequence;
-class CoordinateArraySequence;
 }
 }
 

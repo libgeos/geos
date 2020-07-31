@@ -14,7 +14,6 @@
 
 #include <geos/operation/overlayng/LineLimiter.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
 

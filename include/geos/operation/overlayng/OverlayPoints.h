@@ -17,6 +17,7 @@
 #include <geos/export.h>
 
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
 
 #include <map>
 #include <vector>
@@ -28,7 +29,6 @@ class Coordinate;
 class CoordinateSequence;
 class GeometryFactory;
 class Geometry;
-class Point;
 class PrecisionModel;
 }
 }
