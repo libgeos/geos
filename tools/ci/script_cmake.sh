@@ -20,7 +20,7 @@ fi
 
 cmake --version
 
-cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_DOCUMENTATION=YES ${TRAVIS_BUILD_DIR}
+cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_DOCUMENTATION=NO ${TRAVIS_BUILD_DIR}
 run_make
 cmake --build . --target docs
 ctest --output-on-failure .
