@@ -62,7 +62,7 @@ private:
     // Locally store the OverlayEdge and OverlayLabel
     std::deque<OverlayEdge> ovEdgeQue;
     std::deque<OverlayLabel> ovLabelQue;
-    std::vector<std::unique_ptr<const CoordinateSequence>> csQue;
+    std::vector<std::unique_ptr<const geom::CoordinateSequence>> csQue;
 
     // Methods
 
