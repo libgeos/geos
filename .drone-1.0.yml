@@ -23,10 +23,10 @@ steps:
     image: *test-image
     commands:
       - CXXFLAGS="-O0" make check V=0
-  - name: docs
-    image: *test-image
-    commands:
-      - make doxygen-checked
+  # - name: docs
+  #   image: *test-image
+  #   commands:
+  #     - make doxygen-checked
   # - name: valgrindcheck
   #   image: *test-image
   #   commands:
