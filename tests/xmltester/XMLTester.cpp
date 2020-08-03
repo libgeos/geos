@@ -170,7 +170,7 @@ tolower(std::string& str)
         str.begin(),
         str.end(),
         str.begin(),
-        [](unsigned char c){ return std::tolower(c); }
+        [](char c){ return (char)std::tolower(c); }
         );
 }
 

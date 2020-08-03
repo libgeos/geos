@@ -62,6 +62,7 @@ private:
     // Locally store the OverlayEdge and OverlayLabel
     std::deque<OverlayEdge> ovEdgeQue;
     std::deque<OverlayLabel> ovLabelQue;
+
     std::vector<std::unique_ptr<const geom::CoordinateSequence>> csQue;
 
     // Methods
@@ -88,6 +89,9 @@ public:
     * Creates a new graph for a set of noded, labelled {@link Edge}s.
     */
     OverlayGraph();
+
+    OverlayGraph(const OverlayGraph& g) = delete;
+    OverlayGraph& operator=(const OverlayGraph& g) = delete;
 
     /**
     * Adds an edge between the coordinates orig and dest

@@ -154,6 +154,8 @@ public:
         , hasResultArea(p_hasResultArea)
         , inputAreaIndex(inputGeom->getAreaIndex()) {}
 
+    LineBuilder(const LineBuilder&) = delete;
+    LineBuilder& operator=(const LineBuilder&) = delete;
 
     std::vector<std::unique_ptr<geom::LineString>> getLines();
 

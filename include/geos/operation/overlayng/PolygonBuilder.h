@@ -134,6 +134,9 @@ public:
         buildRings(resultAreaEdges);
     }
 
+    PolygonBuilder(const PolygonBuilder&) = delete;
+    PolygonBuilder& operator=(const PolygonBuilder&) = delete;
+
     // Methods
     std::vector<std::unique_ptr<geom::Polygon>> getPolygons();
     std::vector<OverlayEdgeRing*> getShellRings();

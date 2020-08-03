@@ -98,6 +98,8 @@ public:
         , pm(p_pm)
         , geometryFactory(p_geom0->getFactory()) {}
 
+    OverlayPoints(const OverlayPoints&) = delete;
+    OverlayPoints& operator=(const OverlayPoints&) = delete;
 
     /**
     * Performs an overlay operation on inputs which are both point geometries.

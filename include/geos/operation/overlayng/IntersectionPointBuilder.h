@@ -87,8 +87,8 @@ public:
 
     std::vector<std::unique_ptr<geom::Point>> getPoints();
 
-
-
+    IntersectionPointBuilder(const IntersectionPointBuilder&) = delete;
+    IntersectionPointBuilder& operator=(const IntersectionPointBuilder&) = delete;
 };
 
 

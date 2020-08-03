@@ -89,7 +89,7 @@ OverlayGraph::addEdge(Edge* edge)
 OverlayEdge*
 OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
 {
-    csQue.emplace_back(pts);
+    csQue.emplace_back(const_cast<CoordinateSequence *>(pts));
     OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
     OverlayEdge* e1 = createOverlayEdge(pts, lbl, false);
     e0->link(e1);
