@@ -152,6 +152,13 @@ OverlayEdge::isInResultAreaBoth() const
 }
 
 /*public*/
+bool
+OverlayEdge::isInResultEither() const
+{
+    return isInResult() || symOE()->isInResult();
+}
+
+/*public*/
 void
 OverlayEdge::unmarkFromResultAreaBoth()
 {

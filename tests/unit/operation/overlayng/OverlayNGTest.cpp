@@ -195,14 +195,15 @@ void object::test<12> ()
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
-//  testPolygoPolygonWithLineTouchIntersection
+//  testAreaLineIntersection
 template<>
 template<>
 void object::test<13> ()
 {
     std::string a = "POLYGON ((360 200, 220 200, 220 180, 300 180, 300 160, 300 140, 360 200))";
     std::string b = "MULTIPOLYGON (((280 180, 280 160, 300 160, 300 180, 280 180)), ((220 230, 240 230, 240 180, 220 180, 220 230)))";
-    std::string exp = "POLYGON ((220 200, 240 200, 240 180, 220 180, 220 200))";
+    // std::string exp = "POLYGON ((220 200, 240 200, 240 180, 220 180, 220 200))";
+    std::string exp = "GEOMETRYCOLLECTION (LINESTRING (280 180, 300 180), LINESTRING (300 160, 300 180), POLYGON ((220 180, 220 200, 240 200, 240 180, 220 180)))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
@@ -471,16 +472,28 @@ void object::test<37> ()
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
-// infiniteLoop
+// testAreaLinePointIntersection
 template<>
 template<>
 void object::test<38> ()
 {
-    std::string a = "MULTIPOLYGON (((0 7, 9 7, 9 0, 0 0, 0 7), (1 6, 8 6, 8 1, 1 1, 1 6)), ((1.5 5.7, 3.9 1.2, 7 1.3, 5.5 5.5, 1.5 5.7)))";
-    std::string b = "POLYGON ((0 7, 10 7, 10 0, 0 0, 0 7), (7.8 5, 7.5 2, 9.5 2, 10 5, 7.8 5))";
-    std::string exp = "POLYGON ((0 7, 9 7, 9 5, 8 5, 8 6, 6 6, 7 1, 8 1, 8 2, 9 2, 9 0, 0 0, 0 7), (1 6, 1 1, 4 1, 2 6, 1 6))";
+    std::string a = "POLYGON ((100 100, 200 100, 200 150, 250 100, 300 100, 300 150, 350 100, 350 200, 100 200, 100 100))";
+    std::string b = "POLYGON ((100 140, 170 140, 200 100, 400 100, 400 30, 100 30, 100 140))";
+    std::string exp = "GEOMETRYCOLLECTION (POINT (350 100), LINESTRING (250 100, 300 100), POLYGON ((100 100, 100 140, 170 140, 200 100, 100 100)))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
+
+// testPolyPolyTouchIntersection
+template<>
+template<>
+void object::test<39> ()
+{
+    std::string a = "POLYGON ((300 0, 100 0, 100 100, 300 100, 300 0))";
+    std::string b = "POLYGON ((100 200, 300 200, 300 100, 200 100, 200 0, 100 0, 100 200))";
+    std::string exp = "GEOMETRYCOLLECTION (LINESTRING (200 100, 300 100), POLYGON ((200 0, 100 0, 100 100, 200 100, 200 0)))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
 
 
 

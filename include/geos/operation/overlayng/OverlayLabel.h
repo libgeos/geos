@@ -43,50 +43,43 @@ namespace overlayng { // geos.operation.overlayng
 * of the originating ring (which allows
 * determination of the edge role in collapse cases).
 *
-* For each input geometry, the label indicates that an edge is in one of the following states
-* (denoted by the <code>dim</code> field).
+* For each input geometry, the label indicates that an edge
+* is in one of the following states (identified by the "dim" field).
 * Each state has some additional information about the edge.
 *
-* <li>A <b>Boundary</b> edge of an input Area (polygon)
-*   <ul>
-*   <li><code>dim</code> = DIM_BOUNDARY</li>
-*   <li><code>locLeft, locRight</code> : the locations of the edge sides for the input Area</li>
-*   <li><code>isHole</code> : whether the
-* edge was in a shell or a hole</li>
-*   </ul>
-* </li>
-* <li>A <b>Collapsed</b> edge of an input Area
-* (which had two or more parent edges)
-*   <ul>
-*   <li><code>dim</code> = DIM_COLLAPSE</li>
-*   <li><code>locLine</code> : the location of the
-* edge relative to the input Area</li>
-*   <li><code>isHole</code> : whether some
-* contributing edge was in a shell (<code>false</code>),
-* or otherwise that all were in holes</li> (<code>true</code>)
-*   </ul>
-* </li>
-* <li>An edge from an input <b>Line</b>
-*   <ul>
-*   <li><code>dim</code> = DIM_LINE</li>
-*   <li><code>locLine</code> : initialized to LOC_UNKNOWN,
-*          to simplify logic.</li>
-*   </ul>
-* </li>
-* <li>An edge which is <b>Not Part</b> of an input geometry
-* (and thus must be part of the other geometry).
-*   <ul>
-*   <li><code>dim</code> = NOT_PART</li>
-*   </ul>
-* </li>
-* </ul>
+* * A Boundary edge of an input Area (polygon)
+*
+*   * dim = DIM_BOUNDARY
+*   * locLeft, locRight : the locations of the edge sides for the input Area
+*   * isHole : whether the edge was in a shell or a hole
+*
+* * A Collapsed edge of an input Area
+*   (which had two or more parent edges)
+*
+*   * dim = DIM_COLLAPSE
+*   * locLine : the location of the
+*     edge relative to the input Area
+*   * isHole : whether some
+*     contributing edge was in a shell (false),
+*     or otherwise that all were in holes (true)
+*
+* * An edge from an input Line
+*
+*   * dim = DIM_LINE
+*   * locLine : initialized to LOC_UNKNOWN, to simplify logic.
+*
+* * An edge which is Not Part of an input geometry
+*   (and thus must be part of the other geometry).
+*
+*   * dim = NOT_PART
+*
 * Note that:
-* <ul>
-* <li>an edge cannot be both a Collapse edge and a Line edge in the same input geometry,
-* because each input geometry must be homogeneous.
-* <li>an edge may be an Boundary edge in one input geometry
-* and a Line or Collapse edge in the other input.
-* </ul>
+*
+* * an edge cannot be both a Collapse edge and a Line edge in the same input geometry,
+*   because each input geometry must be homogeneous.
+* * an edge may be an Boundary edge in one input geometry
+*   and a Line or Collapse edge in the other input.
+*
 * @author Martin Davis
 */
 
@@ -191,6 +184,12 @@ public:
     * @return true if the label is for a collapse coincident with a boundary
     */
     bool isBoundaryCollapse() const;
+
+    /**
+    * Tests if a label is for an edge where two
+    * area touch along their boundary.
+    */
+    bool isBoundaryTouch() const;
     bool isBoundary(int index) const;
     bool isLineLocationUnknown(int index) const;
 

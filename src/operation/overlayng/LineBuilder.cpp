@@ -47,33 +47,40 @@ LineBuilder::markResultLines()
 {
     std::vector<OverlayEdge*>& edges = graph->getEdges();
     for (OverlayEdge* edge : edges) {
-        if (isInResult(edge))
+              /**
+        * If the edge linework is already marked as in the result,
+        * it is not included as a line.
+        * This occurs when an edge either is in a result area
+        * or has already been included as a line.
+        */
+        if (edge->isInResultEither()) {
             continue;
+        }
         if (isResultLine(edge->getLabel())) {
             edge->markInResultLine();
         }
     }
 }
 
-/*private*/
-bool
-LineBuilder::isInResult(OverlayEdge* edge) const
-{
-    return edge->isInResult() || edge->symOE()->isInResult();
-}
 
 /*private*/
 bool
 LineBuilder::isResultLine(const OverlayLabel* lbl) const
 {
     /**
-    * Edges which are just collapses along boundaries
-    * are not output.
-    * In other words, an edge must be from a source line
-    * or two (coincident) area boundaries.
+    * Edges which are collapses along boundaries are not output.
+    * I.e a result line edge must be from a input line
+    * or two coincident area boundaries.
     */
     if (lbl->isBoundaryCollapse())
         return false;
+
+
+    if (OverlayNG::ALLOW_INT_MIXED_INT_RESULT &&
+        opCode == OverlayNG::INTERSECTION &&
+        lbl->isBoundaryTouch()) {
+        return true;
+    }
 
     /**
     * Skip edges that are inside result area, if there is one.
@@ -88,8 +95,8 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
     if (hasResultArea && lbl->isLineInArea(inputAreaIndex))
         return false;
 
-    Location aLoc = effectiveLocation(0, lbl);
-    Location bLoc = effectiveLocation(1, lbl);
+    Location aLoc = effectiveLocation(lbl, 0);
+    Location bLoc = effectiveLocation(lbl, 1);
 
     bool inResult = OverlayNG::isResultOfOp(opCode, aLoc, bLoc);
     return inResult;
@@ -97,7 +104,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
 
 /*private*/
 Location
-LineBuilder::effectiveLocation(int geomIndex, const OverlayLabel* lbl) const
+LineBuilder::effectiveLocation(const OverlayLabel* lbl, int geomIndex) const
 {
     if (lbl->isCollapse(geomIndex)) {
         return Location::INTERIOR;
@@ -107,6 +114,7 @@ LineBuilder::effectiveLocation(int geomIndex, const OverlayLabel* lbl) const
     }
     return lbl->getLineLocation(geomIndex);
 }
+
 
 /*private*/
 void

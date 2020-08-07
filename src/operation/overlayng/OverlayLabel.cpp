@@ -188,6 +188,14 @@ OverlayLabel::isBoundaryCollapse() const
 
 /*public*/
 bool
+OverlayLabel::isBoundaryTouch() const
+{
+    return isBoundaryBoth() &&
+        getLocation(0, Position::RIGHT, true) != getLocation(1, Position::RIGHT, true);
+}
+
+/*public*/
+bool
 OverlayLabel::isBoundary(int index) const
 {
     if (index == 0) {

@@ -135,6 +135,8 @@ public:
 
     bool isInResult() const;
 
+    bool isInResultEither() const;
+
     void setNextResult(OverlayEdge* e);
 
     OverlayEdge* nextResult() const;

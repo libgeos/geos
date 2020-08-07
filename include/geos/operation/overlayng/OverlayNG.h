@@ -87,6 +87,7 @@ public:
     static constexpr int UNION          = overlay::OverlayOp::opUNION;
     static constexpr int DIFFERENCE     = overlay::OverlayOp::opDIFFERENCE;
     static constexpr int SYMDIFFERENCE  = overlay::OverlayOp::opSYMDIFFERENCE;
+    static constexpr bool ALLOW_INT_MIXED_INT_RESULT = true;
 
     /**
     * Creates an overlay operation on the given geometries,

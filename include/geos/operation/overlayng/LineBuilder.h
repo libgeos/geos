@@ -81,12 +81,6 @@ private:
     void markResultLines();
 
     /**
-    * If the edge linework is already in the result,
-    * this edge does not need to be included as a line.
-    */
-    bool isInResult(OverlayEdge* edge) const;
-
-    /**
     * Checks if the topology indicated by an edge label
     * determines that this edge should be part of a result line.
     *
@@ -106,7 +100,7 @@ private:
     * (For instance, the intersection of line edge and a collapsed boundary
     * is included in the result).
     */
-    geom::Location effectiveLocation(int geomIndex, const OverlayLabel* lbl) const;
+    geom::Location effectiveLocation(const OverlayLabel* lbl, int geomIndex) const;
 
     void addResultLines();
     void addResultLinesMerged();
@@ -161,8 +155,6 @@ public:
     LineBuilder& operator=(const LineBuilder&) = delete;
 
     std::vector<std::unique_ptr<geom::LineString>> getLines();
-
-
 
 };
 

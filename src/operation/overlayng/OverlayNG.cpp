@@ -229,19 +229,22 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     bool hasResultComponents = resultPolyList.size() > 0;
 
     //--- Build lines
+    bool allowMixedIntResult = ! hasResultComponents || ALLOW_INT_MIXED_INT_RESULT;
     std::vector<std::unique_ptr<LineString>> resultLineList;
-    if (p_opCode != INTERSECTION || ! hasResultComponents) {
+    if (p_opCode != INTERSECTION || allowMixedIntResult) {
         LineBuilder lineBuilder(&inputGeom, graph, hasResultComponents, p_opCode, geomFact);
         resultLineList = lineBuilder.getLines();
-        hasResultComponents = resultLineList.size() > 0;
     }
+
+    hasResultComponents = hasResultComponents || resultLineList.size() > 0;
     /**
      * Since operations with point inputs are handled elsewhere,
      * this only handles the case where non-point inputs
-     * intersect in points ONLY.
+     * intersect in points.
      */
     std::vector<std::unique_ptr<Point>> resultPointList;
-    if (opCode == INTERSECTION && ! hasResultComponents) {
+    allowMixedIntResult = ! hasResultComponents || ALLOW_INT_MIXED_INT_RESULT;
+    if (opCode == INTERSECTION && allowMixedIntResult) {
         IntersectionPointBuilder pointBuilder(graph, geomFact);
         resultPointList = pointBuilder.getPoints();
     }
