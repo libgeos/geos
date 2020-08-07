@@ -739,7 +739,7 @@ XMLTester::printGeom(const geom::Geometry* g)
         return s2.str();
     }
     else {
-        wktwriter->setRoundingPrecision(12);
+        // wktwriter->setRoundingPrecision(32);
         return wktwriter->write(g);
     }
 }
