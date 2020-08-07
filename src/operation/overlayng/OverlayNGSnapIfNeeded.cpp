@@ -83,6 +83,7 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
     * in snap-rounding mode with that precision.
     */
     if (!geom0->getPrecisionModel()->isFloating()) {
+        // std::cout << std::endl << "Using fixed precision overlay." << std::endl;
         return OverlayNG::overlay(geom0, geom1, opCode, geom0->getPrecisionModel());
     }
 
@@ -95,13 +96,14 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
      */
     try {
         geom::PrecisionModel PM_FLOAT;
+        // std::cout << std::endl << "Using floating point overlay." << std::endl;
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
 
         // Simple noding with no validation
         // There are cases where this succeeds with invalid noding (e.g. STMLF 1608).
         // So currently it is NOT safe to run overlay without noding validation
         //result = OverlayNG.overlay(geom0, geom1, opCode, createFloatingNoValidNoder());
-
+        // std::cout << std::endl << "Floating point overlay success." << std::endl;
         return result;
     }
     catch (const std::runtime_error &ex) {
@@ -111,6 +113,8 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
         */
         exOriginal = ex;
     }
+
+    // std::cout << std::endl << "Floating point overlay FAILURE." << std::endl;
 
     /**
      * On failure retry using snapping noding with a "safe" tolerance.

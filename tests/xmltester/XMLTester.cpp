@@ -1148,6 +1148,36 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
         }
 
+        else if(opName == "intersectionsin") {
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+            double precision = 1.0;
+
+            if(opArg3 != "") {
+                precision = std::atof(opArg3.c_str());
+            }
+
+            profile.start();
+            geom::PrecisionModel precMod(precision);
+            GeomPtr gRealRes = OverlayNGSnapIfNeeded::Intersection(gA, gB);
+
+            profile.stop();
+
+            gRealRes->normalize();
+
+            if(gRes->compareTo(gRealRes.get()) == 0) {
+                success = 1;
+            }
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
+            }
+        }
+
 
         else if(opName == "unionsr") {
 
