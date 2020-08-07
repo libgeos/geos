@@ -325,24 +325,6 @@ OverlayLabel::copy() const
     return lbl;
 }
 
-/*public*/
-OverlayLabel
-OverlayLabel::copyFlip() const
-{
-    OverlayLabel lbl;
-
-    lbl.aLocLeft = aLocRight;
-    lbl.aLocRight = aLocLeft;
-    lbl.aLocLine = aLocLine;
-    lbl.aDim = aDim;
-
-    lbl.bLocLeft = bLocRight;
-    lbl.bLocRight = bLocLeft;
-    lbl.bLocLine = bLocLine;
-    lbl.bDim = bDim;
-
-    return lbl;
-}
 
 /*private*/
 std::string

@@ -109,6 +109,9 @@ private:
     geom::Location effectiveLocation(int geomIndex, const OverlayLabel* lbl) const;
 
     void addResultLines();
+    void addResultLinesMerged();
+
+    std::unique_ptr<geom::LineString> toLine(OverlayEdge* edge);
 
     void addResultLinesForNodes();
 

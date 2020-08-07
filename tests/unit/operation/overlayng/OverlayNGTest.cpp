@@ -460,4 +460,28 @@ void object::test<36> ()
     testOverlayNoOpt(a, b, exp, OverlayNG::UNION, 1);
 }
 
+// testCollapseTriBoxUnion
+template<>
+template<>
+void object::test<37> ()
+{
+    std::string a = "POLYGON ((1 3.3, 1.3 1.4, 3.1 1.4, 3.1 0.9, 1.3 0.9, 1 -0.2, 0.8 1.3, 1 3.3))";
+    std::string b = "POLYGON ((1 2.9, 2.9 2.9, 2.9 1.3, 1.7 1, 1.3 0.9, 1 0.4, 1 2.9))";
+    std::string exp = "POLYGON EMPTY";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+// infiniteLoop
+template<>
+template<>
+void object::test<38> ()
+{
+    std::string a = "MULTIPOLYGON (((0 7, 9 7, 9 0, 0 0, 0 7), (1 6, 8 6, 8 1, 1 1, 1 6)), ((1.5 5.7, 3.9 1.2, 7 1.3, 5.5 5.5, 1.5 5.7)))";
+    std::string b = "POLYGON ((0 7, 10 7, 10 0, 0 0, 0 7), (7.8 5, 7.5 2, 9.5 2, 10 5, 7.8 5))";
+    std::string exp = "POLYGON ((0 7, 9 7, 9 5, 8 5, 8 6, 6 6, 7 1, 8 1, 8 2, 9 2, 9 0, 0 0, 0 7), (1 6, 1 1, 4 1, 2 6, 1 6))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+
+
 } // namespace tut

@@ -68,15 +68,24 @@ private:
 
     /* methods */
     geom::Coordinate round(const geom::Coordinate& c);
-    const HotPixel* find(const geom::Coordinate& pixelPt);
+    HotPixel* find(const geom::Coordinate& pixelPt);
 
 public:
 
     HotPixelIndex(const geom::PrecisionModel* p_pm);
-    const HotPixel* add(const geom::Coordinate& pt);
+    HotPixel* add(const geom::Coordinate& pt);
     void add(const geom::CoordinateSequence* pts);
     void add(const std::vector<geom::Coordinate>& pts);
-    void query(const geom::Coordinate& p0, const geom::Coordinate& p1, index::kdtree::KdNodeVisitor& visitor);
+    void addNodes(const geom::CoordinateSequence* pts);
+    void addNodes(const std::vector<geom::Coordinate>& pts);
+
+    /**
+    * Visits all the hot pixels which may intersect a segment (p0-p1).
+    * The visitor must determine whether each hot pixel actually intersects
+    * the segment.
+    */
+    void query(const geom::Coordinate& p0, const geom::Coordinate& p1,
+               index::kdtree::KdNodeVisitor& visitor);
 
 };
 

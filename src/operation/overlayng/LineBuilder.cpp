@@ -110,10 +110,37 @@ LineBuilder::effectiveLocation(int geomIndex, const OverlayLabel* lbl) const
 
 /*private*/
 void
-LineBuilder::addResultLines()
+LineBuilder::addResultLinesMerged()
 {
     addResultLinesForNodes();
     addResultLinesRings();
+}
+
+/*private*/
+void
+LineBuilder::addResultLines()
+{
+    std::vector<OverlayEdge*>& edges = graph->getEdges();
+
+    for (OverlayEdge* edge : edges) {
+        if (! edge->isInResultLine())
+            continue;
+        if (edge->isVisited())
+            continue;
+
+        lines.push_back(toLine(edge));
+        edge->markVisitedBoth();
+    }
+}
+
+std::unique_ptr<LineString>
+LineBuilder::toLine(OverlayEdge* edge)
+{
+    bool isForward = edge->isForward();
+    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
+    pts->add(edge->orig(), false);
+    edge->addCoordinates(pts.get());
+    return geometryFactory->createLineString(std::move(pts));
 }
 
 /**

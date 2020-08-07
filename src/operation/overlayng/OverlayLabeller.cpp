@@ -175,6 +175,7 @@ OverlayLabeller::propagateLinearLocations(int geomIndex)
     if (linearEdges.size() <= 0) return;
 
     std::deque<OverlayEdge*> edgeStack;
+    edgeStack.insert(edgeStack.begin(), linearEdges.begin(), linearEdges.end());
     bool isInputLine = inputGeometry->isLine(geomIndex);
     // traverse connected linear edges, labeling unknown ones
     while (! edgeStack.empty()) {

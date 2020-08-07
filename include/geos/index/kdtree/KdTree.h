@@ -62,7 +62,7 @@ private:
     double tolerance;
 
     KdNode* findBestMatchNode(const geom::Coordinate& p);
-    KdNode* insertExact(const geom::Coordinate& p, const void* data);
+    KdNode* insertExact(const geom::Coordinate& p, void* data);
 
     void queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd, KdNodeVisitor& visitor);
     KdNode* queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd);
@@ -71,7 +71,7 @@ private:
     * Create a node on a locally managed deque to allow easy
     * disposal and hopefully faster allocation as well.
     */
-    KdNode* createNode(const geom::Coordinate& p, const void* data);
+    KdNode* createNode(const geom::Coordinate& p, void* data);
 
 
     /**
@@ -158,7 +158,7 @@ public:
     * Inserts a new point in the kd-tree.
     */
     KdNode* insert(const geom::Coordinate& p);
-    KdNode* insert(const geom::Coordinate& p, const void* data);
+    KdNode* insert(const geom::Coordinate& p, void* data);
 
     /**
     * Performs a range search of the points in the index and visits all nodes found.

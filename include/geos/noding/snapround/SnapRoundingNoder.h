@@ -41,6 +41,33 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
+/**
+ * Uses Snap Rounding to compute a rounded,
+ * fully noded arrangement from a set of {@link SegmentString}s,
+ * in a performant way, and avoiding unnecessary noding.
+ *
+ * Implements the Snap Rounding technique described in
+ * the papers by Hobby, Guibas &amp; Marimont, and Goodrich et al.
+ * Snap Rounding enforces that all output vertices lie on a uniform grid,
+ * which is determined by the provided {@link PrecisionModel}.
+ *
+ * Input vertices do not have to be rounded to the grid beforehand;
+ * this is done during the snap-rounding process.
+ * In fact, rounding cannot be done a priori,
+ * since rounding vertices by themselves can distort the rounded topology
+ * of the arrangement (i.e. by moving segments away from hot pixels
+ * that would otherwise intersect them, or by moving vertices
+ * across segments).
+ *
+ * To minimize the number of introduced nodes,
+ * the Snap-Rounding Noder avoids creating nodes
+ * at edge vertices if there is no intersection or snap at that location.
+ * However, if two different input edges contain identical segments,
+ * each of the segment vertices will be noded.
+ * This still provides fully-noded output.
+ * This is the same behaviour provided by other noders,
+ * such as {@link MCIndexNoder} and {@link SnappingNoder}.
+ */
 class GEOS_DLL SnapRoundingNoder : public Noder {
 
 private:
@@ -51,12 +78,23 @@ private:
     std::vector<SegmentString*> snappedResult;
 
     // Methods
-    void snapRound(const std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments);
+    void snapRound(std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments);
 
-    static void createNodedStrings(const std::vector<SegmentString*>& segStrings,
-        std::vector<SegmentString*>& nodedStrings);
+    /**
+    * Creates HotPixels for each vertex in the input segStrings.
+    * The HotPixels are not marked as nodes, since they will
+    * only be nodes in the final line arrangement
+    * if they interact with other segments (or they are already
+    * created as intersection nodes).
+    */
+    void addVertexPixels(std::vector<SegmentString*>& segStrings);
 
-    void addVertexPixels(const std::vector<SegmentString*>& segStrings);
+    /**
+    * Detects interior intersections in the collection of {@link SegmentString}s,
+    * and adds nodes for them to the segment strings.
+    * Also creates HotPixel nodes for the intersection points.
+    */
+    void addIntersectionPixels(std::vector<SegmentString*>& segStrings);
 
     void round(const geom::Coordinate& pt, geom::Coordinate& ptOut);
 
@@ -70,24 +108,14 @@ private:
     std::unique_ptr<std::vector<geom::Coordinate>> round(const std::vector<geom::Coordinate>& pts);
 
     /**
-    * Computes all interior intersections in the collection of {@link SegmentString}s,
-    * and returns their {@link Coordinate}s.
-    *
-    * Also adds the intersection nodes to the segments.
-    *
-    * @return a list of Coordinates for the intersections
-    */
-    std::unique_ptr<std::vector<geom::Coordinate>> findInteriorIntersections(std::vector<SegmentString*>& inputSS);
-
-    /**
     * Computes new segment strings which are rounded and contain
-    * any intersections added as a result of snapping segments to snap points (hot pixels).
+    * intersections added as a result of snapping segments to snap points (hot pixels).
     *
     * @param segStrings segments to snap
     * @return the snapped segment strings
     */
     void computeSnaps(const std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& snapped);
-    NodedSegmentString* computeSnaps(NodedSegmentString* ss);
+    NodedSegmentString* computeSegmentSnaps(NodedSegmentString* ss);
 
     /**
     * Snaps a segment in a segmentString to HotPixels that it intersects.
@@ -99,6 +127,13 @@ private:
     */
     void snapSegment(geom::Coordinate& p0, geom::Coordinate& p1, NodedSegmentString* ss, size_t segIndex);
 
+    /**
+    * Add nodes for any vertices in hot pixels that were
+    * added as nodes during segment noding.
+    */
+    void addVertexNodeSnaps(NodedSegmentString* ss);
+
+    void snapVertexNode(const geom::Coordinate& p0, NodedSegmentString* ss, size_t segIndex);
 
 public:
 
@@ -112,6 +147,10 @@ public:
     */
     std::vector<SegmentString*>* getNodedSubstrings() const override;
 
+    /**
+    * Computes the nodes in the snap-rounding line arrangement.
+    * The nodes are added to the {@link NodedSegmentString}s provided as the input.
+    */
     void computeNodes(std::vector<SegmentString*>* inputSegStrings) override; //override
 
 };

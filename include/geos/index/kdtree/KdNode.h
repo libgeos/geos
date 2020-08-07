@@ -29,20 +29,20 @@ class GEOS_DLL KdNode {
 private:
 
     geom::Coordinate p;
-    const void* data;
+    void* data;
     KdNode* left;
     KdNode* right;
     std::size_t count;
 
 public:
 
-    KdNode(double p_x, double p_y, const void* p_data);
-    KdNode(const geom::Coordinate& p_p, const void* p_data);
+    KdNode(double p_x, double p_y, void* p_data);
+    KdNode(const geom::Coordinate& p_p, void* p_data);
 
     double getX() { return p.x; }
     double getY() { return p.y; }
     const geom::Coordinate& getCoordinate() { return p; }
-    const void* getData() { return data; }
+    void* getData() { return data; }
     KdNode* getLeft() { return left; }
     KdNode* getRight() { return right; }
     void increment() { count++; }

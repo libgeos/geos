@@ -51,7 +51,7 @@ KdTree::toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated)
 
 /*private*/
 KdNode*
-KdTree::createNode(const Coordinate& p, const void* data)
+KdTree::createNode(const Coordinate& p, void* data)
 {
     auto it = nodeQue.emplace(nodeQue.end(), p, data);
     return &(*it);
@@ -66,7 +66,7 @@ KdTree::insert(const Coordinate& p)
 
 /*public*/
 KdNode*
-KdTree::insert(const Coordinate& p, const void* data)
+KdTree::insert(const Coordinate& p, void* data)
 {
     if (root == nullptr) {
         root = createNode(p, data);
@@ -98,7 +98,7 @@ KdTree::findBestMatchNode(const Coordinate& p) {
 }
 
 KdNode*
-KdTree::insertExact(const geom::Coordinate& p, const void* data)
+KdTree::insertExact(const geom::Coordinate& p, void* data)
 {
     KdNode* currentNode = root;
     KdNode* leafNode = root;

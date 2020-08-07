@@ -198,6 +198,8 @@ OverlayNG::computeEdgeOverlay()
 
     labelGraph(&graph);
 
+    // std::cout << std::endl << graph << std::endl;
+
     if (isOutputEdges || isOutputResultEdges) {
         return OverlayUtil::toLines(&graph, isOutputEdges, geomFact);
     }

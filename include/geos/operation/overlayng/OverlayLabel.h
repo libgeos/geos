@@ -235,7 +235,6 @@ public:
     Location getLocation(int index, int position, bool isForward) const;
     bool hasSides(int index) const;
 
-    OverlayLabel copyFlip() const;
     OverlayLabel copy() const;
 
 

@@ -76,6 +76,7 @@ private:
     geom::Coordinate ptHot;
     geom::Coordinate originalPt;
 
+    bool hpIsNode;
     double scaleFactor;
 
     double minx;
@@ -134,6 +135,16 @@ public:
     bool intersects(const geom::Coordinate& p0,
                     const geom::Coordinate& p1) const;
 
+    /**
+    * Tests whether a coordinate lies in (intersects) this hot pixel.
+    *
+    * @param p the coordinate to test
+    * @return true if the coordinate intersects this hot pixel
+    */
+    bool intersects(const geom::Coordinate& p) const;
+
+    bool isNode() const { return hpIsNode; };
+    void setToNode() { hpIsNode = true; };
 
     std::ostream& operator<< (std::ostream& os);
 };

@@ -46,10 +46,29 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
+/**
+ * Finds intersections between line segments which will be snap-rounded,
+ * and adds them as nodes to the segments.
+ *
+ * Intersections are detected and computed using full precision.
+ * Snapping takes place in a subsequent phase.
+ *
+ * The intersection points are recorded, so that HotPixels can be created for them.
+ *
+ * To avoid robustness issues with vertices which lie very close to line segments
+ * a heuristic is used:
+ * nodes are created if a vertex lies within a tolerance distance
+ * of the interior of a segment.
+ * The tolerance distance is chosen to be significantly below the snap-rounding grid size.
+ * This has empirically proven to eliminate noding failures.
+ */
 class GEOS_DLL SnapRoundingIntersectionAdder: public SegmentIntersector { // implements SegmentIntersector
 
 private:
-
+    /**
+    * The division factor used to determine
+    * nearness distance tolerance for interior intersection detection.
+    */
     static constexpr int NEARNESS_FACTOR = 100;
 
     algorithm::LineIntersector li;
@@ -59,10 +78,10 @@ private:
 
     /**
     * If an endpoint of one segment is near
-    * the <i>interior</i> of the other segment, add it as an intersection.
+    * the interior of the other segment, add it as an intersection.
     * EXCEPT if the endpoint is also close to a segment endpoint
     * (since this can introduce "zigs" in the linework).
-    * <p>
+    *
     * This resolves situations where
     * a segment A endpoint is extremely close to another segment B,
     * but is not quite crossing.  Due to robustness issues
@@ -84,7 +103,7 @@ public:
     * This method is called by clients
     * of the {@link SegmentIntersector} class to process
     * intersections for two segments of the {@link SegmentString}s being intersected.
-    * Note that some clients (such as <code>MonotoneChain</code>s) may optimize away
+    * Note that some clients (such as MonotoneChains) may optimize away
     * this call for segment pairs which they have determined do not intersect
     * (e.g. by an disjoint envelope test).
     */

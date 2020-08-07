@@ -16,8 +16,9 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/noding/snapround/HotPixel.h>
+
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
@@ -39,10 +40,10 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
-    :
-    ptHot(newPt),
-    originalPt(newPt),
-    scaleFactor(newScaleFactor)
+    : ptHot(newPt)
+    , originalPt(newPt)
+    , hpIsNode(false)
+    , scaleFactor(newScaleFactor)
 {
     if(scaleFactor <= 0.0) {
         throw util::IllegalArgumentException("Scale factor must be non-zero");
@@ -59,10 +60,27 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
 
 /*public*/
 const geom::Coordinate&
-HotPixel::getCoordinate() const {
+HotPixel::getCoordinate() const
+{
     return originalPt;
 }
 
+/* public */
+bool
+HotPixel::intersects(const Coordinate& p) const
+{
+    double x = scale(p.x);
+    double y = scale(p.y);
+    if (x >= maxx) return false;
+    // check Left side
+    if (x < minx) return false;
+    // check Top side
+    if (y >= maxy) return false;
+    // check Bottom side
+    if (y < miny) return false;
+    // finally
+    return true;
+}
 
 /*public*/
 bool

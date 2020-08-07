@@ -41,18 +41,31 @@ HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
 
 
 /*public*/
-const HotPixel*
+HotPixel*
 HotPixelIndex::add(const Coordinate& p)
 {
     Coordinate pRound = round(p);
-    const HotPixel* hp = find(p);
-    if (hp != nullptr)
+    HotPixel* hp = find(pRound);
+
+    /**
+     * Hot Pixels which are added more than once
+     * must have more than one vertex in them
+     * and thus must be nodes.
+     */
+    if (hp != nullptr) {
+        hp->setToNode();
         return hp;
+    }
+    /**
+     * A pixel containing the point was not found, so create a new one.
+     * It is initially set to NOT be a node
+     * (but may become one later on).
+     */
 
     // Store the HotPixel in a std::deque to avoid individually
     // allocating a pile of HotPixels on the heap and to
-    // get them freed automatically when the std::deque
-    // goes away when this object is disposed.
+    // get them freed automatically as the std::deque
+    // goes away when this HotPixelIndex is deleted.
     hotPixelQue.emplace_back(pRound, scaleFactor);
 
     // Pick up a pointer to the most recently added
@@ -61,7 +74,6 @@ HotPixelIndex::add(const Coordinate& p)
 
     index->insert(hp->getCoordinate(), (void*)hp);
     return hp;
-
 }
 
 /*public*/
@@ -69,7 +81,7 @@ void
 HotPixelIndex::add(const CoordinateSequence *pts)
 {
     for (size_t i = 0, sz = pts->size(); i < sz; i++) {
-        add(pts->getAt(i));
+        HotPixel* hp = add(pts->getAt(i));
     }
 }
 
@@ -78,19 +90,39 @@ void
 HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
     for (auto pt: pts) {
-        add(pt);
+        HotPixel* hp = add(pt);
+    }
+}
+
+/*public*/
+void
+HotPixelIndex::addNodes(const CoordinateSequence *pts)
+{
+    for (size_t i = 0, sz = pts->size(); i < sz; i++) {
+        HotPixel* hp = add(pts->getAt(i));
+        hp->setToNode();
+    }
+}
+
+/*public*/
+void
+HotPixelIndex::addNodes(const std::vector<geom::Coordinate>& pts)
+{
+    for (auto pt: pts) {
+        HotPixel* hp = add(pt);
+        hp->setToNode();
     }
 }
 
 /*private*/
-const HotPixel*
+HotPixel*
 HotPixelIndex::find(const geom::Coordinate& pixelPt)
 {
     index::kdtree::KdNode *kdNode = index->query(pixelPt);
     if (kdNode == nullptr) {
         return nullptr;
     }
-    return (const HotPixel*)(kdNode->getData());
+    return (HotPixel*)(kdNode->getData());
 }
 
 /*private*/

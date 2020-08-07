@@ -261,11 +261,11 @@ void object::test<10>
     // 20 21 22 23 24
     std::vector<Coordinate> c(25);
 
-    std::cout<<std::endl;
+    // std::cout<<std::endl;
     for (size_t i = 0; i < c.size(); i++) {
         c[i].x = static_cast<double>(i % 5);
         c[i].y = static_cast<double>(5 - (i / 5));
-        std::cout<< c[i] << std::endl;
+        // std::cout<< c[i] << std::endl;
     }
 
     // point contained in envelope
