@@ -154,10 +154,13 @@ void object::test<4>
     ensure(nullptr != geom2_);
 
     geom3_ = GEOSIntersection(geom1_, geom2_);
+    GEOSNormalize(geom3_);
 
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_),
-                  std::string("GEOMETRYCOLLECTION (LINESTRING (1 2, 2 2), LINESTRING (2 1, 1 1), POLYGON ((0.5 1, 1 2, 1 1, 0.5 1)), POLYGON ((9 2, 9.5 1, 2 1, 2 2, 9 2)))"));
+
+    expected_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (LINESTRING (1 2, 2 2), LINESTRING (2 1, 1 1), POLYGON ((0.5 1, 1 2, 1 1, 0.5 1)), POLYGON ((9 2, 9.5 1, 2 1, 2 2, 9 2)))");
+    GEOSNormalize(expected_);
+    ensure(GEOSEqualsExact(expected_, geom3_, 0.00001));
 }
 
 } // namespace tut
