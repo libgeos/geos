@@ -127,7 +127,8 @@ matrix:
           - $HOME/.ccache
       addons:
         apt:
-          sources: *sources
+          sources:
+          - ubuntu-toolchain-r-test
           packages: ['doxygen']
       env:
         - E="TOOL=cmake && BUILD_TYPE=Release && CXX=clang++ && CC=clang"
