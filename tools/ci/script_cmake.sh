@@ -18,6 +18,9 @@ fi
 # source common functions
 . ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
+# return on first failure
+set -e
+
 cmake --version
 
 cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_DOCUMENTATION=NO ${TRAVIS_BUILD_DIR}
