@@ -58,10 +58,8 @@ int
 DirectedEdgeStar::getOutgoingDegree()
 {
     int degree = 0;
-    EdgeEndStar::iterator endIt = end();
-    for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
-        assert(*it);
-        DirectedEdge* de = detail::down_cast<DirectedEdge*>(*it);
+    for (EdgeEnd* ee: *this) {
+        DirectedEdge* de = detail::down_cast<DirectedEdge*>(ee);
         if(de->isInResult()) {
             ++degree;
         }

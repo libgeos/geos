@@ -49,17 +49,12 @@ SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
 {
     nodedSegStrings = inputSegmentStrings;
 
-    for(SegmentString::NonConstVect::const_iterator
-            i0 = inputSegmentStrings->begin(), i0End = inputSegmentStrings->end();
-            i0 != i0End; ++i0) {
-        SegmentString* edge0 = *i0;
-        for(SegmentString::NonConstVect::iterator
-                i1 = inputSegmentStrings->begin(), i1End = inputSegmentStrings->end();
-                i1 != i1End; ++i1) {
-            SegmentString* edge1 = *i1;
+    for (SegmentString* edge0: *inputSegmentStrings) {
+        for (SegmentString* edge1: *inputSegmentStrings) {
             computeIntersects(edge0, edge1);
         }
     }
+
 }
 
 

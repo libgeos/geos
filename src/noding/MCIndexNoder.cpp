@@ -120,11 +120,9 @@ MCIndexNoder::add(SegmentString* segStr)
 
 MCIndexNoder::~MCIndexNoder()
 {
-    for(vector<MonotoneChain*>::iterator
-            i = monoChains.begin(), iEnd = monoChains.end();
-            i != iEnd; ++i) {
-        assert(*i);
-        delete *i;
+    for(MonotoneChain* mc: monoChains) {
+        assert(mc);
+        delete mc;
     }
 }
 

@@ -86,9 +86,8 @@ private:
         vector<const Geometry*> rects;
         createRectangles(*target.getEnvelopeInternal(), nRect, rectSize, rects);
         test(rects, target);
-        for(vector<const Geometry*>::iterator i = rects.begin(), n = rects.end();
-                i != n; ++i) {
-            delete *i;
+        for (const Geometry* g: rects) {
+            delete g;
         }
     }
 

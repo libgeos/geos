@@ -51,14 +51,11 @@ MCIndexSnapRounder::findInteriorIntersections(MCIndexNoder& noder,
 void
 MCIndexSnapRounder::computeIntersectionSnaps(vector<Coordinate>& snapPts)
 {
-    for(vector<Coordinate>::iterator
-            it = snapPts.begin(), itEnd = snapPts.end();
-            it != itEnd;
-            ++it) {
-        Coordinate& snapPt = *it;
+    for (Coordinate& snapPt: snapPts) {
         HotPixel hotPixel(snapPt, scaleFactor);
         pointSnapper->snap(hotPixel);
     }
+
 }
 
 /*private*/
