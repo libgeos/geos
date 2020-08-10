@@ -61,7 +61,7 @@ namespace snap {   // geos::noding::snap
  * given a small enough snap tolerance.
  *
  * The correctness of the output is not verified by this noder.
- * If required this can be done by {@link ValidatingNoder}.
+ * If required this can be done by {@link noding::ValidatingNoder}.
  */
 class GEOS_DLL SnappingNoder : public Noder {
 

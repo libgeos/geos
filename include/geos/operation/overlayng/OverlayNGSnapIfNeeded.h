@@ -39,20 +39,20 @@ namespace overlayng { // geos.operation.overlayng
  * The noding strategies used are:
  *
  *  - A simple, fast noder using FLOATING precision.
- *  - A {@link SnappingNoder} using an automatically-determined snap tolerance
+ *  - A {@link noding::snap::SnappingNoder} using an automatically-determined snap tolerance
  *  - First snapping each geometry to itself,
  *    and then overlaying them using a SnappingNoder.
  *  - The above two strategies are repeated with increasing snap tolerance, up to a limit.
  *
  * If the above heuristics still fail to compute a valid overlay,
- * the original {@link TopologyException} is thrown.
+ * the original {@link util::TopologyException} is thrown.
  *
  * This algorithm relies on each overlay operation execution
- * throwing a {@link TopologyException} if it is unable
+ * throwing a {@link util::TopologyException} if it is unable
  * to compute the overlay correctly.
  * Generally this occurs because the noding phase does
  * not produce a valid noding.
- * This requires the use of a {@link ValidatingNoder}
+ * This requires the use of a {@link noding::ValidatingNoder}
  * in order to check the results of using a floating noder.
  *
  * @author Martin Davis
@@ -141,7 +141,7 @@ public:
 
     /**
     * Computes a heuristic snap tolerance distance
-    * for overlaying a pair of geometries using a {@link SnappingNoder}.
+    * for overlaying a pair of geometries using a {@link noding::snap::SnappingNoder}.
     */
     static double snapTolerance(const Geometry* geom0, const Geometry* geom1);
 

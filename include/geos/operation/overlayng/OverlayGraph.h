@@ -42,7 +42,7 @@ namespace overlayng { // geos.operation.overlayng
 using namespace geos::geom;
 
 /**
- * A planar graph of {@link OverlayEdge}s, representing
+ * A planar graph of {@link OverlayEdge}, representing
  * the topology resulting from an overlay operation.
  * Each source {@link Edge} is represented
  * by two OverlayEdges, with opposite orientation.

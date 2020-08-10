@@ -43,13 +43,13 @@ namespace snapround { // geos::noding::snapround
 
 /**
  * Uses Snap Rounding to compute a rounded,
- * fully noded arrangement from a set of {@link SegmentString}s,
+ * fully noded arrangement from a set of {@link noding::SegmentString}s,
  * in a performant way, and avoiding unnecessary noding.
  *
  * Implements the Snap Rounding technique described in
  * the papers by Hobby, Guibas &amp; Marimont, and Goodrich et al.
  * Snap Rounding enforces that all output vertices lie on a uniform grid,
- * which is determined by the provided {@link PrecisionModel}.
+ * which is determined by the provided {@link geom::PrecisionModel}.
  *
  * Input vertices do not have to be rounded to the grid beforehand;
  * this is done during the snap-rounding process.
@@ -66,7 +66,7 @@ namespace snapround { // geos::noding::snapround
  * each of the segment vertices will be noded.
  * This still provides fully-noded output.
  * This is the same behaviour provided by other noders,
- * such as {@link MCIndexNoder} and {@link SnappingNoder}.
+ * such as {@link noding::MCIndexNoder} and {@link noding::snap::SnappingNoder}.
  */
 class GEOS_DLL SnapRoundingNoder : public Noder {
 

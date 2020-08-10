@@ -64,7 +64,7 @@ public:
 
     /**
     * Computes the union of two geometries.
-    * This method may throw a {@link Toppology Exception}
+    * This method may throw a {@link util::TopologyException}
     * if one is encountered
     */
     std::unique_ptr<geom::Geometry> Union(const geom::Geometry*, const geom::Geometry*) override;
@@ -157,17 +157,18 @@ public:
      * @tparam T an iterator yelding something castable to const Polygon *
      * @param start start iterator
      * @param end end iterator
+     * @param unionStrategy strategy to apply
      */
     template <class T>
     static geom::Geometry*
-    Union(T start, T end, UnionStrategy *unionStrat)
+    Union(T start, T end, UnionStrategy *unionStrategy)
     {
         std::vector<geom::Polygon*> polys;
         for(T i = start; i != end; ++i) {
             const geom::Polygon* p = dynamic_cast<const geom::Polygon*>(*i);
             polys.push_back(const_cast<geom::Polygon*>(p));
         }
-        return Union(&polys, unionStrat);
+        return Union(&polys, unionStrategy);
     }
 
     /** \brief

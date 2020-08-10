@@ -72,7 +72,7 @@ public:
     void add(const geom::LineString* linestring);
 
     /**
-    * Adds the edges in a collection of {@link Geometry}s to the graph.
+    * Adds the edges in a collection of {@link geom::Geometry} to the graph.
     * May be called multiple times.
     * Any dimension of Geometry may be added.
     *

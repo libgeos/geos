@@ -39,7 +39,7 @@ using namespace geos::geom;
 
 /**
 * Reduces the precision of a geometry by rounding it to the
-* supplied {@link PrecisionModel}.
+* supplied {@link geom::PrecisionModel}.
 *
 * The output is always a valid geometry.  This implies that input components
 * may be merged if they are closer than the grid precision.
@@ -47,7 +47,7 @@ using namespace geos::geom;
 * should be processed separately.
 *
 * The output is fully noded.
-* This provides an effective way to node / snap-round a collection of {@link LineString}s.
+* This provides an effective way to node / snap-round a collection of {@link geom::LineString}s.
 */
 class GEOS_DLL PrecisionReducer {
 

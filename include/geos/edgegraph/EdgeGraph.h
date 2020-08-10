@@ -43,12 +43,12 @@ namespace edgegraph { // geos.edgegraph
  * It supports tracking the vertices in the graph
  * via edges incident on them,
  * to allow efficient lookup of edges and vertices.
- * <p>
+ *
  * This class may be subclassed to use a
  * different subclass of HalfEdge,
- * by overriding {@link #createEdge(Coordinate)}.
+ * by overriding {@link createEdge}.
  * If additional logic is required to initialize
- * edges then {@link EdgeGraph#addEdge(Coordinate, Coordinate)}
+ * edges then {@link addEdge}
  * can be overridden as well.
  *
  * @author Martin Davis
@@ -104,7 +104,7 @@ public:
     * @return the created edge
     * @return null if the edge was invalid and not added
     *
-    * @see #isValidEdge(Coordinate, Coordinate)
+    * @see isValidEdge(Coordinate, Coordinate)
     */
     HalfEdge* addEdge(const geom::Coordinate& orig, const geom::Coordinate& dest);
 

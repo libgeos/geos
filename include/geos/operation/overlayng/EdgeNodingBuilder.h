@@ -66,7 +66,7 @@ namespace overlayng { // geos.operation.overlayng
  *
  *  - Extracts input edges, and attaches topological information
  *  - if clipping is enabled, handles clipping or limiting input geometry
- *  - chooses a {@link Noder} based on provided precision model, unless a custom one is supplied
+ *  - chooses a {@link noding::Noder} based on provided precision model, unless a custom one is supplied
  *  - calls the chosen Noder, with precision model
  *  - removes any fully collapsed noded edges
  *  - builds {@link Edge}s and merges them

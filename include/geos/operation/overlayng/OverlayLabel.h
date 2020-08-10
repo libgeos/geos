@@ -23,6 +23,11 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
+
+using geos::geom::Location;
+using geos::geom::Position;
+
+
 /**
 * A label for a pair of {@link OverlayEdge}s which records
 * the topological information for the edge
@@ -32,11 +37,11 @@ namespace overlayng { // geos.operation.overlayng
 * Accessors for orientation-sensitive information
 * require the orientation of the containing OverlayEdge.
 *
-* A label contains the topological {@link Location}s for
+* A label contains the topological {@link geom::Location}s for
 * the two overlay input geometries.
 * A labelled input geometry may be either a Line or an Area.
 * In both cases, the label locations are populated
-* with the locations for the edge {@link Position}s
+* with the locations for the edge {@link geom::Position}s
 * once they are computed by topological evaluation.
 * The label also records the dimension of each geometry,
 * and in the case of area boundary edges, the role
@@ -82,11 +87,6 @@ namespace overlayng { // geos.operation.overlayng
 *
 * @author Martin Davis
 */
-
-using geos::geom::Location;
-using geos::geom::Position;
-
-
 class GEOS_DLL OverlayLabel {
 
 private:

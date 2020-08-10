@@ -54,13 +54,15 @@ namespace geounion {  // geos::operation::geounion
  * and thus may group disjoint polygons which can lie far apart.
  * It may also occur in real world data which contains many disjoint polygons
  * (e.g. polygons representing parcels on different street blocks).
- * <h2>Algorithm</h2>
+ *
+ * # Algorithm
+ *
  * The overlap region is determined as the common envelope of intersection.
  * The input polygons are partitioned into two sets:
- * <ul>
- * <li>Overlapping: Polygons which intersect the overlap region, and thus potentially overlap each other
- * <li>Disjoint: Polygons which are disjoint from (lie wholly outside) the overlap region
- * </ul>
+ *
+ * * Overlapping: Polygons which intersect the overlap region, and thus potentially overlap each other
+ * * Disjoint: Polygons which are disjoint from (lie wholly outside) the overlap region
+ *
  * The Overlapping set is fully unioned, and then combined with the Disjoint set.
  * Performing a simple combine works because
  * the disjoint polygons do not interact with each
@@ -68,7 +70,8 @@ namespace geounion {  // geos::operation::geounion
  * They also do not interact with the Overlapping polygons,
  * since they are outside their envelope.
  *
- * <h2>Verification</h2>
+ * # Verification
+ *
  * In the general case the Overlapping set of polygons will
  * extend beyond the overlap envelope.  This means that the union result
  * will extend beyond the overlap region.
@@ -80,7 +83,7 @@ namespace geounion {  // geos::operation::geounion
  * Detection is done by a fairly efficient comparison of edge segments which
  * extend beyond the overlap region.  If any segments have changed
  * then there is a risk of introduced intersections, and full union is performed.
- * <p>
+ *
  * This situation has not been observed in JTS using floating precision,
  * but it could happen due to snapping.  It has been observed
  * in other APIs (e.g. GEOS) due to more aggressive snapping.
@@ -89,7 +92,6 @@ namespace geounion {  // geos::operation::geounion
  * @author mbdavis
  *
  */
-
 class GEOS_DLL OverlapUnion {
 
 public:

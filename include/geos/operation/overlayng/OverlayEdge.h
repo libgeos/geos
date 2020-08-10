@@ -43,7 +43,9 @@ namespace overlayng { // geos.operation.overlayng
 
 using namespace geos::geom;
 
-
+/**
+* Creates a single OverlayEdge.
+*/
 class GEOS_DLL OverlayEdge : public edgegraph::HalfEdge {
 
 private:

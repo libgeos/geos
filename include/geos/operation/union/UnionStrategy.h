@@ -45,7 +45,7 @@ public:
 
     /**
     * Computes the union of two geometries.
-    * This method may throw a {@link Toppology Exception}
+    * This method may throw a {@link util::TopologyException}
     * if one is encountered
     */
     virtual std::unique_ptr<geom::Geometry> Union(const geom::Geometry*, const geom::Geometry*) = 0;
@@ -54,7 +54,7 @@ public:
     * Indicates whether the union function operates using
     * a floating (full) precision model.
     * If this is the case, then the unary union code
-    * can make use of the {@link OverlapUnion} performance optimization,
+    * can make use of the operation::union::OverlapUnion performance optimization,
     * and perhaps other optimizations as well.
     * Otherwise, the union result extent may not be the same as the extent of the inputs,
     * which prevents using some optimizations.

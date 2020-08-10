@@ -111,10 +111,10 @@ public:
     * This assumes that complete collapse does not occur.
     *
     * The result dimension is computed according to the following rules:
-    * - {@link OverlayNG#INTERSECTION} - result has the dimension of the lowest input dimension
-    * - {@link OverlayNG#UNION} - result has the dimension of the highest input dimension
-    * - {@link OverlayNG#DIFFERENCE} - result has the dimension of the left-hand input
-    * - {@link OverlayNG#SYMDIFFERENCE} - result has the dimension of the highest input dimension
+    * - OverlayNG::INTERSECTION - result has the dimension of the lowest input dimension
+    * - OverlayNG::UNION - result has the dimension of the highest input dimension
+    * - OverlayNG::DIFFERENCE - result has the dimension of the left-hand input
+    * - OverlayNG::SYMDIFFERENCE - result has the dimension of the highest input dimension
     * (since the Symmetric Difference is the Union of the Differences).
     */
     static int resultDimension(int opCode, int dim0, int dim1);

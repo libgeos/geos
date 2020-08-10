@@ -73,7 +73,7 @@ public:
                                 double p2x, double p2y,
                                 double qx,  double qy);
 
-    /** \brief
+    /**
      * A filter for computing the orientation index of three coordinates.
      *
      * If the orientation can be computed safely using standard DP arithmetic,
@@ -86,13 +86,7 @@ public:
      * average performance.
      *
      * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
-     *
-     * @param pa a coordinate
-     * @param pb a coordinate
-     * @param pc a coordinate
-     * @return the orientation index if it can be computed safely
-     * @return `i > 1` if the orientation index cannot be computed safely
-    */
+     */
     static int orientationIndexFilter(double pax, double pay,
                                       double pbx, double pby,
                                       double pcx, double pcy);

@@ -55,12 +55,10 @@ namespace snapround { // geos::noding::snapround
  * Implements a "hot pixel" as used in the Snap Rounding algorithm.
  *
  * A hot pixel contains the interior of the tolerance square and
- * the boundary
- * <b>minus</b> the top and right segments.
+ * the boundary minus the top and right segments.
  *
  * The hot pixel operations are all computed in the integer domain
  * to avoid rounding problems.
- *
  */
 class GEOS_DLL HotPixel {
 
@@ -112,10 +110,7 @@ public:
      *
      * @param pt the coordinate at the centre of the pixel.
      *           Will be kept by reference, so make sure to keep it alive.
-     * @param scaleFact the scaleFactor determining the pixel size
-     * @param li the intersector to use for testing intersection with
-     *        line segments
-     */
+     * @param scaleFactor the scaleFactor determining the pixel size     */
     HotPixel(const geom::Coordinate& pt, double scaleFactor);
 
     /*

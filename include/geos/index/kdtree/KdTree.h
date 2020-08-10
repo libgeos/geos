@@ -119,17 +119,16 @@ private:
 public:
 
     /**
-    * Converts a collection of {@link KdNode}s to an vector of {@link Coordinate}s.
+    * Converts a collection of {@link KdNode}s to an vector of {@link geom::Coordinate}s.
     *
-    * @param kdnodes
-    *          a collection of nodes
+    * @param kdnodes a collection of nodes
     * @return an vector of the coordinates represented by the nodes
     */
     static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes);
 
     /**
     * Converts a collection of {@link KdNode}s
-    * to an vector of {@link Coordinate}s,
+    * to an vector of {@link geom::Coordinate}s,
     * specifying whether repeated nodes should be represented
     * by multiple coordinates.
     *
@@ -177,9 +176,6 @@ public:
 
     /**
     * Searches for a given point in the index and returns its node if found.
-    *
-    * @param queryPt the point to query
-    * @return the point node, if it is found in the index, or null if not
     */
     KdNode* query(const geom::Coordinate& queryPt);
 

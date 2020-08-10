@@ -24,6 +24,9 @@ namespace geos {
 namespace index { // geos::index
 namespace kdtree { // geos::index::kdtree
 
+/**
+ * A node of a {@link KdTree}, which represents one or more points in the same location.
+ */
 class GEOS_DLL KdNode {
 
 private:

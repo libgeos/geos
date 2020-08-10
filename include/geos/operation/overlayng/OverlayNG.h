@@ -41,8 +41,47 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-
-
+/**
+ * Computes the geometric overlay of two {@link geom::Geometry}s,
+ * using an explicit precision model to allow robust computation.
+ * The overlay can be used to determine any of the
+ * following set-theoretic operations (boolean combinations) of the geometries:
+ *
+ * * INTERSECTION - all points which lie in both geometries
+ * * UNION - all points which lie in at least one geometry
+ * * DIFFERENCE - all points which lie in the first geometry but not the second
+ * * SYMDIFFERENCE - all points which lie in one geometry but not both
+ *
+ * Input geometries may have different dimension.
+ * Collections must be homogeneous
+ * (all elements must have the same dimension).
+ *
+ * The precision model used for the computation can be supplied
+ * independent of the precision model of the input geometry.
+ * The main use for this is to allow using a fixed precision
+ * for geometry with a floating precision model.
+ * This does two things: ensures robust computation;
+ * and forces the output to be validly rounded to the precision model.
+ *
+ * For fixed precision models noding is performed using a {@link noding::snapround::SnapRoundingNoder}.
+ * This provides robust computation (as long as precision is limited to
+ * around 13 decimal digits).
+ *
+ * For floating precision an {@link noding::MCIndexNoder} is used.
+ * This is not fully robust, so can sometimes result in
+ * {@link util::TopologyException}s being thrown.
+ * For robust full-precision overlay see {@link OverlayNGSnapIfNeeded}.
+ *
+ * Note: If a {@link noding::snap::SnappingNoder} is used
+ * it is best to specify a fairly small snap tolerance,
+ * since the intersection clipping optimization can
+ * interact with the snapping to alter the result.
+ *
+ * @author mdavis
+ *
+ * @see OverlayNGSnapIfNeeded
+ *
+ */
 class GEOS_DLL OverlayNG {
 
 private:
@@ -117,7 +156,7 @@ public:
     *  - For {@link PrecisionModel#FLOATING}
     * a non-snapping noder is used,
     * and this computation may not be robust.
-    * If errors occur a {@link TopologyException} is thrown.
+    * If errors occur a {@link util::TopologyException} is thrown.
     */
     OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, int p_opCode)
         : OverlayNG(geom0, geom1, geom0->getFactory()->getPrecisionModel(), p_opCode)
@@ -133,7 +172,7 @@ public:
     * for testing purposes.
     * Default is TRUE (optimization enabled).
     *
-    * @param isOptimized whether to optimize processing
+    * @param p_isOptimized whether to optimize processing
     */
     void setOptimized(bool p_isOptimized) { isOptimized = p_isOptimized; }
     void setOutputEdges(bool p_isOutputEdges) { isOutputEdges = p_isOutputEdges; }
@@ -149,7 +188,7 @@ public:
     std::unique_ptr<Geometry> getResult();
 
     /**
-    * Tests whether a point with a given topological {@link Label}
+    * Tests whether a point with a given topological {@link OverlayLabel}
     * relative to two geometries is contained in
     * the result of overlaying the geometries using
     * a given overlay operation.
@@ -159,7 +198,7 @@ public:
     static bool isResultOfOpPoint(const OverlayLabel* label, int opCode);
 
     /**
-    * Tests whether a point with given {@link Location}s
+    * Tests whether a point with given {@link geom::Location}s
     * relative to two geometries would be contained in
     * the result of overlaying the geometries using
     * a given overlay operation.
@@ -189,7 +228,7 @@ public:
 
     /**
     * Computes an overlay operation on the given geometry operands,
-    * using a supplied {@link Noder}.
+    * using a supplied {@link noding::Noder}.
     *
     * @param geom0 the first geometry argument
     * @param geom1 the second geometry argument
@@ -205,7 +244,7 @@ public:
 
     /**
     * Computes an overlay operation on the given geometry operands,
-    * using a supplied {@link Noder}.
+    * using a supplied {@link noding::Noder}.
     *
     * @param geom0 the first geometry argument
     * @param geom1 the second geometry argument
@@ -225,12 +264,12 @@ public:
     *
     * The noder is chosen according to the precision model specified.
     *
-    *  - For {@link PrecisionModel#FIXED}
+    *  - For {@link geom::PrecisionModel#FIXED}
     *    a snap-rounding noder is used, and the computation is robust.
-    *  - For {@link PrecisionModel#FLOATING}
+    *  - For {@link geom::PrecisionModel#FLOATING}
     *    a non-snapping noder is used,
     *    and this computation may not be robust.
-    * If errors occur a {@link TopologyException} is thrown.
+    * If errors occur a {@link util::TopologyException} is thrown.
     *
     * @param geom0 the first argument geometry
     * @param geom1 the second argument geometry
@@ -250,11 +289,7 @@ public:
     * The input must be a valid geometry.
     * Collections must be homogeneous.
     *
-    * To union an overlapping set of polygons in a more performant way use {@link UnaryUnionNG}.
-    * To union a polyonal coverage or linear network in a more performant way,
-    * use {@link CoverageUnion}.
-    *
-    * @param geom0 the geometry
+    * @param geom the geometry
     * @param pm the precision model to use
     * @return the result of the union operation
     *

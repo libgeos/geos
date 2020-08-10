@@ -32,26 +32,26 @@ namespace edgegraph { // geos.edgegraph
 
 /**
  * Represents a directed component of an edge in an {@link EdgeGraph}.
- * HalfEdges link vertices whose locations are defined by {@link Coordinate}s.
- * HalfEdges start at an <b>origin</b> vertex,
- * and terminate at a <b>destination</b> vertex.
- * HalfEdges always occur in symmetric pairs, with the {@link #sym()} method
+ * HalfEdges link vertices whose locations are defined by {@link geom::Coordinate}s.
+ * HalfEdges start at an origin vertex,
+ * and terminate at a destination vertex.
+ * HalfEdges always occur in symmetric pairs, with the {@link sym()} method
  * giving access to the oppositely-oriented component.
  * HalfEdges and the methods on them form an edge algebra,
  * which can be used to traverse and query the topology
  * of the graph formed by the edges.
- * <p>
+ *
  * To support graphs where the edges are sequences of coordinates
  * each edge may also have a direction point supplied.
  * This is used to determine the ordering
  * of the edges around the origin.
  * HalfEdges with the same origin are ordered
  * so that the ring of edges formed by them is oriented CCW.
- * <p>
+ *
  * By design HalfEdges carry minimal information
  * about the actual usage of the graph they represent.
  * They can be subclassed to carry more information if required.
- * <p>
+ *
  * HalfEdges form a complete and consistent data structure by themselves,
  * but an {@link EdgeGraph} is useful to allow retrieving edges
  * by vertex and edge location, as well as ensuring
@@ -124,7 +124,7 @@ public:
     /**
     * Creates a half-edge originating from a given coordinate.
     *
-    * @param orig the origin coordinate
+    * @param p_orig the origin coordinate
     */
     HalfEdge(const geom::Coordinate& p_orig) :
         m_orig(p_orig)
@@ -144,7 +144,7 @@ public:
     * Links this edge with its sym (opposite) edge.
     * This must be done for each pair of edges created.
     *
-    * @param e the sym edge to link.
+    * @param p_sym the sym edge to link.
     */
     void link(HalfEdge* p_sym);
 
@@ -258,26 +258,25 @@ public:
 
     /**
     * Implements the total order relation:
-    * <p>
+    *
     *    The angle of edge a is greater than the angle of edge b,
     *    where the angle of an edge is the angle made by
     *    the first segment of the edge with the positive x-axis
-    * <p>
+    *
     * When applied to a list of edges originating at the same point,
     * this produces a CCW ordering of the edges around the point.
-    * <p>
+    *
     * Using the obvious algorithm of computing the angle is not robust,
     * since the angle calculation is susceptible to roundoff error.
     * A robust algorithm is:
-    * <ul>
-    * <li>First, compare the quadrants the edge vectors lie in.
-    * If the quadrants are different,
-    * it is trivial to determine which edge has a greater angle.
     *
-    * <li>if the vectors lie in the same quadrant, the
-    * {@link Orientation#index(Coordinate, Coordinate, Coordinate)} function
-    * can be used to determine the relative orientation of the vectors.
-    * </ul>
+    * * First, compare the quadrants the edge vectors lie in.
+    *   If the quadrants are different,
+    *   it is trivial to determine which edge has a greater angle.
+    *
+    * * if the vectors lie in the same quadrant, the
+    *   geom::Orientation::index() function
+    *   can be used to determine the relative orientation of the vectors.
     */
     int compareAngularDirection(const HalfEdge* e) const;
     int compareTo(const HalfEdge* e) const { return compareAngularDirection(e); };

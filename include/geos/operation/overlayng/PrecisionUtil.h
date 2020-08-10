@@ -132,7 +132,7 @@ public:
     /**
     * Computes a safe scale factor for a numeric value.
     * A safe scale factor ensures that rounded
-    * number has no more than {@link MAX_PRECISION_DIGITS}
+    * number has no more than MAX_PRECISION_DIGITS
     * digits of precision.
     */
     static double safeScale(double value);
@@ -140,7 +140,7 @@ public:
     /**
     * Computes a safe scale factor for a geometry.
     * A safe scale factor ensures that the rounded
-    * ordinates have no more than {@link MAX_PRECISION_DIGITS}
+    * ordinates have no more than MAX_PRECISION_DIGITS
     * digits of precision.
     */
     static double safeScale(const Geometry* geom);
@@ -148,7 +148,7 @@ public:
     /**
     * Computes a safe scale factor for two geometries.
     * A safe scale factor ensures that the rounded
-    * ordinates have no more than {@link MAX_PRECISION_DIGITS}
+    * ordinates have no more than MAX_PRECISION_DIGITS
     * digits of precision.
     */
     static double safeScale(const Geometry* a, const Geometry* b);
