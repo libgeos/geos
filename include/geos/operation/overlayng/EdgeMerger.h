@@ -76,9 +76,9 @@ public:
     // Methods
     EdgeMerger(std::vector<Edge*>& p_edges);
 
-    static void merge(std::vector<Edge*>& edges, std::vector<Edge*>& medgedEdges);
+    static std::vector<Edge*> merge(std::vector<Edge*>& edges);
 
-    void merge(std::vector<Edge*>& medgedEdges);
+    std::vector<Edge*> merge();
 
 
 };

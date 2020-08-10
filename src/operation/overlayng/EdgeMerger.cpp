@@ -26,19 +26,20 @@ EdgeMerger::EdgeMerger(std::vector<Edge*>& p_edges)
     : edges(p_edges) {}
 
 /*public static */
-void
-EdgeMerger::merge(std::vector<Edge*>& edges, std::vector<Edge*>& medgedEdges)
+std::vector<Edge*>
+EdgeMerger::merge(std::vector<Edge*>& edges)
 {
     EdgeMerger merger(edges);
-    merger.merge(medgedEdges);
-    return;
+    return merger.merge();
 }
 
 
 /*public static */
-void
-EdgeMerger::merge(std::vector<Edge*>& medgedEdges)
+std::vector<Edge*>
+EdgeMerger::merge()
 {
+    std::vector<Edge*> mergedEdges;
+
     for (Edge* edge : edges) {
         EdgeKey edgeKey(edge);
         auto it = edgeMap.find(edgeKey);
@@ -63,8 +64,9 @@ EdgeMerger::merge(std::vector<Edge*>& medgedEdges)
 
     // copy map values into return vector
     for (auto it: edgeMap) {
-        medgedEdges.push_back(it.second);
+        mergedEdges.push_back(it.second);
     }
+    return mergedEdges;
 }
 
 

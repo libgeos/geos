@@ -47,7 +47,7 @@ LineBuilder::markResultLines()
 {
     std::vector<OverlayEdge*>& edges = graph->getEdges();
     for (OverlayEdge* edge : edges) {
-              /**
+        /**
         * If the edge linework is already marked as in the result,
         * it is not included as a line.
         * This occurs when an edge either is in a result area

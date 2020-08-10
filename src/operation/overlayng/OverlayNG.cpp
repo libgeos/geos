@@ -166,11 +166,9 @@ OverlayNG::computeEdgeOverlay()
         }
     }
 
-    std::vector<Edge*> edges;
-    nodingBuilder.build(
+    std::vector<Edge*> edges = nodingBuilder.build(
         inputGeom.getGeometry(0),
-        inputGeom.getGeometry(1),
-        edges);
+        inputGeom.getGeometry(1));
 
     /**
      * Record if an input geometry has collapsed.

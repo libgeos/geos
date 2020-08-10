@@ -135,7 +135,7 @@ private:
     * Lines that have few vertices or are covered
     * by the clip extent do not need to be limited.
     */
-    bool isToBeLimited(const LineString* line);
+    bool isToBeLimited(const LineString* line) const;
 
     /**
     * If limiter is provided,
@@ -179,9 +179,8 @@ private:
     * which is used to provide source topology info to the constructed Edges
     * (and is then discarded).
     */
-    void node(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& nodedEdges);
-
-    void createEdges(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& createdEdges);
+    std::vector<Edge*> node(std::vector<SegmentString*>* segStrings);
+    std::vector<Edge*> createEdges(std::vector<SegmentString*>* segStrings);
 
 
 public:
@@ -222,7 +221,7 @@ public:
     * @param geomIndex index of input geometry
     * @return true if there are edges for the geometry
     */
-    bool hasEdgesFor(int geomIndex);
+    bool hasEdgesFor(int geomIndex) const;
 
     /**
     * Creates a set of labelled {Edge}s.
@@ -235,7 +234,7 @@ public:
     * @param geom1 the second geometry
     * @return the noded, merged, labelled edges
     */
-    void build(const Geometry* geom0, const Geometry* geom1, std::vector<Edge*>& builtEdges);
+    std::vector<Edge*> build(const Geometry* geom0, const Geometry* geom1);
 
 
 

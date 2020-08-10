@@ -72,45 +72,47 @@ EdgeNodingBuilder::setClipEnvelope(const Envelope* p_clipEnv)
 }
 
 /*public*/
-void
-EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1, std::vector<Edge*>& builtEdges)
+std::vector<Edge*>
+EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 {
     add(geom0, 0);
     add(geom1, 1);
-    std::vector<Edge*> nodedEdges;
-    node(inputEdges.get(), nodedEdges);
+    std::vector<Edge*> nodedEdges = node(inputEdges.get());
 
     /**
      * Merge the noded edges to eliminate duplicates.
      * Labels are combined.
      */
-    EdgeMerger::merge(nodedEdges, builtEdges);
-    return;
+    return EdgeMerger::merge(nodedEdges);
 }
 
 /*private*/
-void
-EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& nodedEdges)
+std::vector<Edge*>
+EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings)
 {
+    std::vector<Edge*> nodedEdges;
+
     Noder* noder = getNoder();
     noder->computeNodes(segStrings);
 
     std::unique_ptr<std::vector<SegmentString*>> nodedSS(noder->getNodedSubstrings());
 
-    createEdges(nodedSS.get(), nodedEdges);
+    nodedEdges = createEdges(nodedSS.get());
 
     // Clean up now that all the info is transferred to Edges
     for (SegmentString* ss : *nodedSS) {
         delete ss;
     }
 
-    return;
+    return nodedEdges;
 }
 
 /*private*/
-void
-EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings, std::vector<Edge*>& createdEdges)
+std::vector<Edge*>
+EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
 {
+    std::vector<Edge*> createdEdges;
+
     for (SegmentString* ss : *segStrings) {
         const CoordinateSequence* pts = ss->getCoordinates();
 
@@ -127,12 +129,13 @@ EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings, std::vec
         Edge* newEdge = &(edgeQue.back());
         createdEdges.push_back(newEdge);
     }
+    return createdEdges;
 }
 
 
 /*public*/
 bool
-EdgeNodingBuilder::hasEdgesFor(int geomIndex)
+EdgeNodingBuilder::hasEdgesFor(int geomIndex) const
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     return hasEdges[geomIndex];
@@ -311,10 +314,10 @@ EdgeNodingBuilder::computeDepthDelta(const LinearRing* ring, bool isHole)
      */
     bool isOriented = true;
     if (!isHole) {
-      isOriented = !isCCW;
+        isOriented = !isCCW;
     }
     else {
-      isOriented = isCCW;
+        isOriented = isCCW;
     }
     /**
      * Depth delta can now be computed.
@@ -363,7 +366,7 @@ EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, int ge
 
 /*private*/
 bool
-EdgeNodingBuilder::isToBeLimited(const LineString* line)
+EdgeNodingBuilder::isToBeLimited(const LineString* line) const
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();
     if (limiter == nullptr || pts->size() <= MIN_LIMIT_PTS) {
