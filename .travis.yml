@@ -118,6 +118,20 @@ matrix:
       env:
         - E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64"
 
+    - os: linux
+      dist: bionic
+      arch: arm64
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
+      addons:
+        apt:
+          sources: *sources
+          packages: ['doxygen']
+      env:
+        - E="TOOL=cmake && BUILD_TYPE=Release && CXX=clang++ && CC=clang"
+
   allow_failures:
     - env: E="TOOL=autotools_scanbuild && BUILD_TYPE=Release && ARCH=-m64"
 
