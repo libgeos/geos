@@ -43,7 +43,8 @@ private:
     geom::Geometry* parseGeometry(const std::string& in, const char* label = "parsed");
     static std::string trimBlanks(const std::string& in);
     void printGeom(std::ostream& os, const geom::Geometry* g);
-    double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff);
+    double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
+
     std::string printGeom(const geom::Geometry* g);
     void printTest(bool success, const std::string& expected_result, const std::string& actual_result,
                    const util::Profile&);

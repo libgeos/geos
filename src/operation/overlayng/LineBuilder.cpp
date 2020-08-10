@@ -144,7 +144,7 @@ LineBuilder::addResultLines()
 std::unique_ptr<LineString>
 LineBuilder::toLine(OverlayEdge* edge)
 {
-    bool isForward = edge->isForward();
+    // bool isForward = edge->isForward();
     std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
     pts->add(edge->orig(), false);
     edge->addCoordinates(pts.get());

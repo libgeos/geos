@@ -254,7 +254,7 @@ void
 SnapRoundingNoder::addVertexNodeSnaps(NodedSegmentString* ss)
 {
     const CoordinateSequence* pts = ss->getCoordinates();
-    for (int i = 1; i < pts->size() - 1; i++) {
+    for (std::size_t i = 1; i < pts->size() - 1; i++) {
         const Coordinate& p0 = pts->getAt(i);
         snapVertexNode(p0, ss, i);
     }

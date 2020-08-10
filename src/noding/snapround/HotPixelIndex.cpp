@@ -81,7 +81,7 @@ void
 HotPixelIndex::add(const CoordinateSequence *pts)
 {
     for (size_t i = 0, sz = pts->size(); i < sz; i++) {
-        HotPixel* hp = add(pts->getAt(i));
+        add(pts->getAt(i));
     }
 }
 
@@ -90,7 +90,7 @@ void
 HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
     for (auto pt: pts) {
-        HotPixel* hp = add(pt);
+        add(pt);
     }
 }
 

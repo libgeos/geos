@@ -752,7 +752,7 @@ XMLTester::printGeom(const geom::Geometry* g)
 * the area delta is expected to be very small (e.g. < 1e-6).
 */
 double
-XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff)
+XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss)
 {
     double areaA = a == nullptr ? 0 : a->getArea();
     double areaB = b == nullptr ? 0 : b->getArea();
@@ -813,25 +813,24 @@ XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::stri
 
     // normalize the area delta value
     double diffScore = maxDelta / (areaA + areaB);
-#if 0
+
     if (diffScore > maxDiff) {
-        std::cout << std::endl << "A" << std::endl;
-        std::cout << *a;
-        std::cout << std::endl << "B" << std::endl;
-        std::cout << *b;
-        std::cout << std::endl << "geomU" << std::endl;
-        std::cout << *geomU;
-        std::cout << std::endl << "geomI" << std::endl;
-        std::cout << *geomI;
-        std::cout << std::endl << "geomDab" << std::endl;
-        std::cout << *geomDab;
-        std::cout << std::endl << "geomDba" << std::endl;
-        std::cout << *geomDba;
-        std::cout << std::endl << "geomSD" << std::endl;
-        std::cout << *geomSD;
-        std::cout << std::endl;
+        ss << std::endl << "A" << std::endl;
+        ss << *a;
+        ss << std::endl << "B" << std::endl;
+        ss << *b;
+        ss << std::endl << "geomU" << std::endl;
+        ss << *geomU;
+        ss << std::endl << "geomI" << std::endl;
+        ss << *geomI;
+        ss << std::endl << "geomDab" << std::endl;
+        ss << *geomDab;
+        ss << std::endl << "geomDba" << std::endl;
+        ss << *geomDba;
+        ss << std::endl << "geomSD" << std::endl;
+        ss << *geomSD;
+        ss << std::endl;
     }
-#endif
 
     return diffScore;
 }
@@ -1919,10 +1918,16 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "overlayareatest") {
 
             std::string maxDiffOp;
-            double maxDiff = 1e-6;
-            double areaDiff = areaDelta(gA, gB, maxDiffOp, maxDiff);
-
             std::stringstream p_tmp;
+            double maxDiff = 1e-6;
+            double areaDiff = areaDelta(gA, gB, maxDiffOp, maxDiff, p_tmp);
+
+            // Debug output of actual geometries returned
+            if (areaDiff < maxDiff && false) {
+                std::cout << p_tmp.str();
+            }
+
+            p_tmp.str("");
             p_tmp << maxDiffOp << ": " << areaDiff;
             actual_result = p_tmp.str();
             p_tmp.str("");
