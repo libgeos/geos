@@ -79,7 +79,7 @@ public:
      * for the given Geometry.
      *
      * Other geometry location will be set to
-     * Location::UNDEF.
+     * Location::NONE.
      */
     Label(int geomIndex, geom::Location onLoc);
 
@@ -96,7 +96,7 @@ public:
     Label& operator= (const Label& l);
 
     /** \brief
-     * Initialize both locations to Location::UNDEF
+     * Initialize both locations to Location::NONE
      *
      * isNull() should return true after this kind of construction
      */
@@ -106,7 +106,7 @@ public:
      * Construct a Label with On, Left and Right locations for the
      * given Geometries.
      * Initialize the locations for the other Geometry to
-     * Location::UNDEF
+     * Location::NONE
      */
     Label(int geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc);
 

@@ -55,7 +55,7 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     holes(),
     maxNodeDegree(-1),
     edges(),
-    label(Location::UNDEF), // new Label(Location::UNDEF)),
+    label(Location::NONE), // new Label(Location::NONE)),
     ring(nullptr),
     isHoleVar(false),
     shell(nullptr)
@@ -292,12 +292,12 @@ EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
 
     Location loc = deLabel.getLocation(geomIndex, Position::RIGHT);
     // no information to be had from this label
-    if(loc == Location::UNDEF) {
+    if(loc == Location::NONE) {
         return;
     }
 
     // if there is no current RHS value, set it
-    if(label.getLocation(geomIndex) == Location::UNDEF) {
+    if(label.getLocation(geomIndex) == Location::NONE) {
         label.setLocation(geomIndex, loc);
         return;
     }

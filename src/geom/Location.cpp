@@ -35,7 +35,7 @@ operator<<(std::ostream& os, const Location& loc)
         case Location::INTERIOR:
             os << 'i';
             break;
-        case Location::UNDEF:
+        case Location::NONE:
             os << '-';
             break;
     }

@@ -140,7 +140,7 @@ DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*>* geom)
 
     // determine the overall labelling for this DirectedEdgeStar
     // (i.e. for the node it is based at)
-    label = Label(Location::UNDEF);
+    label = Label(Location::NONE);
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
         EdgeEnd* ee = *it;
@@ -364,7 +364,7 @@ DirectedEdgeStar::findCoveredLineEdges()
      * - INTERIOR if the edge is outgoing
      * - EXTERIOR if the edge is incoming
      */
-    Location startLoc = Location::UNDEF;
+    Location startLoc = Location::NONE;
 
     EdgeEndStar::iterator endIt = end();
     for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
@@ -387,7 +387,7 @@ DirectedEdgeStar::findCoveredLineEdges()
     }
 
     // no A edges found, so can't determine if L edges are covered or not
-    if(startLoc == Location::UNDEF) {
+    if(startLoc == Location::NONE) {
         return;
     }
 

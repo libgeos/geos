@@ -107,7 +107,7 @@ public:
      * the result of overlaying the geometries using
      * a given overlay operation.
      *
-     * The method handles arguments of [Location::UNDEF](@ref geom::Location::UNDEF) correctly
+     * The method handles arguments of [Location::NONE](@ref geom::Location::NONE) correctly
      *
      * @param label the topological label of the point
      * @param opCode the code for the overlay operation to test

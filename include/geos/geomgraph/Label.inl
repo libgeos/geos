@@ -33,7 +33,7 @@ namespace geomgraph { // geos.geomgraph
 INLINE Label
 Label::toLineLabel(const Label& label)
 {
-    Label lineLabel(geom::Location::UNDEF);
+    Label lineLabel(geom::Location::NONE);
     for(int i = 0; i < 2; i++) {
         lineLabel.setLocation(i, label.getLocation(i));
     }
@@ -50,7 +50,7 @@ Label::Label(geom::Location onLoc) :
 /*public*/
 INLINE
 Label::Label(int geomIndex, geom::Location onLoc) :
-    elt{TopologyLocation(geom::Location::UNDEF), TopologyLocation(geom::Location::UNDEF)}
+    elt{TopologyLocation(geom::Location::NONE), TopologyLocation(geom::Location::NONE)}
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[geomIndex].setLocation(onLoc);
@@ -66,7 +66,7 @@ Label::Label(geom::Location onLoc, geom::Location leftLoc, geom::Location rightL
 /*public*/
 INLINE
 Label::Label()
-    : elt{TopologyLocation(geom::Location::UNDEF), TopologyLocation(geom::Location::UNDEF)}
+    : elt{TopologyLocation(geom::Location::NONE), TopologyLocation(geom::Location::NONE)}
 {
 }
 
@@ -90,8 +90,8 @@ Label::operator=(const Label& l)
 INLINE
 Label::Label(int geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc)
 {
-    elt[0] = TopologyLocation(geom::Location::UNDEF, geom::Location::UNDEF, geom::Location::UNDEF);
-    elt[1] = TopologyLocation(geom::Location::UNDEF, geom::Location::UNDEF, geom::Location::UNDEF);
+    elt[0] = TopologyLocation(geom::Location::NONE, geom::Location::NONE, geom::Location::NONE);
+    elt[1] = TopologyLocation(geom::Location::NONE, geom::Location::NONE, geom::Location::NONE);
     elt[geomIndex].setLocations(onLoc, leftLoc, rightLoc);
 }
 

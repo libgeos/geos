@@ -52,7 +52,7 @@ namespace geomgraph { // geos.geomgraph
  * topological relationship attribute, ON.
  *
  * The possible values of a topological location are
- * {Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY, Location::INTERIOR}
+ * {Location::NONE, Location::EXTERIOR, Location::BOUNDARY, Location::INTERIOR}
  *
  * The labelling is stored in an array location[j] where
  * where j has the values ON, LEFT, RIGHT
@@ -71,7 +71,7 @@ public:
      * Geometry.
      *
      * Possible values for the
-     * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY,
+     * parameters are Location::NONE, Location::EXTERIOR, Location::BOUNDARY,
      * and Location::INTERIOR.
      *
      * @see Location
@@ -87,12 +87,12 @@ public:
     geom::Location get(std::size_t posIndex) const;
 
     /**
-     * @return true if all locations are Location::UNDEF
+     * @return true if all locations are Location::NONE
      */
     bool isNull() const;
 
     /**
-     * @return true if any locations is Location::UNDEF
+     * @return true if any locations is Location::NONE
      */
     bool isAnyNull() const;
 

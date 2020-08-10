@@ -35,7 +35,7 @@ enum class GEOS_DLL Location : char {
     /**
      *  Used for uninitialized location values.
      */
-    UNDEF = (char)(-1), // Instead of NULL
+    NONE = (char)(-1), // Instead of NULL
 
     /**
      * DE-9IM row index of the interior of the first geometry and

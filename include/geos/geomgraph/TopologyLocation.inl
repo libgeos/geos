@@ -46,7 +46,7 @@ INLINE
 TopologyLocation::TopologyLocation(Location on):
         locationSize(1)
 {
-    location.fill(Location::UNDEF);
+    location.fill(Location::NONE);
     location[Position::ON] = on;
 }
 
@@ -76,7 +76,7 @@ TopologyLocation::get(size_t posIndex) const
     if(posIndex < locationSize) {
         return location[posIndex];
     }
-    return Location::UNDEF;
+    return Location::NONE;
 }
 
 /*public*/
@@ -84,7 +84,7 @@ INLINE bool
 TopologyLocation::isNull() const
 {
     for(size_t i = 0; i < locationSize; ++i) {
-        if(location[i] != Location::UNDEF) {
+        if(location[i] != Location::NONE) {
             return false;
         }
     }
@@ -96,7 +96,7 @@ INLINE bool
 TopologyLocation::isAnyNull() const
 {
     for(size_t i = 0; i < locationSize; ++i) {
-        if(location[i] == Location::UNDEF) {
+        if(location[i] == Location::NONE) {
             return true;
         }
     }
@@ -146,7 +146,7 @@ INLINE void
 TopologyLocation::setAllLocationsIfNull(Location locValue)
 {
     for(size_t i = 0; i < locationSize; ++i) {
-        if(location[i] == Location::UNDEF) {
+        if(location[i] == Location::NONE) {
             location[i] = locValue;
         }
     }

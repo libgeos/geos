@@ -44,11 +44,11 @@ TopologyLocation::merge(const TopologyLocation& gl)
     size_t glsz = gl.locationSize;
     if(glsz > sz) {
         locationSize = 3;
-        location[Position::LEFT] = Location::UNDEF;
-        location[Position::RIGHT] = Location::UNDEF;
+        location[Position::LEFT] = Location::NONE;
+        location[Position::RIGHT] = Location::NONE;
     }
     for(size_t i = 0; i < locationSize; ++i) {
-        if(location[i] == Location::UNDEF && i < glsz) {
+        if(location[i] == Location::NONE && i < glsz) {
             location[i] = gl.location[i];
         }
     }

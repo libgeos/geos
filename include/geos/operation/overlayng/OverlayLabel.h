@@ -110,7 +110,7 @@ private:
 
 public:
 
-    static constexpr Location LOC_UNKNOWN = Location::UNDEF;
+    static constexpr Location LOC_UNKNOWN = Location::NONE;
 
     enum {
         DIM_UNKNOWN = -1,

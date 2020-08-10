@@ -80,17 +80,17 @@ void object::test<3>
 {
     TopologyLocation b(Location::EXTERIOR, Location::INTERIOR, Location::BOUNDARY);
 
-    b.setAllLocations(Location::UNDEF);
+    b.setAllLocations(Location::NONE);
 
-    ensure_equals(b.get(0), Location::UNDEF);
-    ensure_equals(b.get(1), Location::UNDEF);
-    ensure_equals(b.get(2), Location::UNDEF);
+    ensure_equals(b.get(0), Location::NONE);
+    ensure_equals(b.get(1), Location::NONE);
+    ensure_equals(b.get(2), Location::NONE);
 
     b.setLocation(0, Location::BOUNDARY);
 
     ensure_equals(b.get(0), Location::BOUNDARY);
-    ensure_equals(b.get(1), Location::UNDEF);
-    ensure_equals(b.get(2), Location::UNDEF);
+    ensure_equals(b.get(1), Location::NONE);
+    ensure_equals(b.get(2), Location::NONE);
 
     b.setAllLocationsIfNull(Location::EXTERIOR);
 

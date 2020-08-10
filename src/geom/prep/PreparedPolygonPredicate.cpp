@@ -85,7 +85,7 @@ struct LocationNotMatchingFilter : public GeometryComponentFilter {
 struct OutermostLocationFilter : public GeometryComponentFilter {
     explicit OutermostLocationFilter(algorithm::locate::PointOnGeometryLocator* locator) :
     pt_locator(locator),
-    outermost_loc(geom::Location::UNDEF),
+    outermost_loc(geom::Location::NONE),
     done(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
@@ -96,7 +96,7 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
         const Coordinate* pt = g->getCoordinate();
         auto loc = pt_locator->locate(pt);
 
-        if (outermost_loc == Location::UNDEF || outermost_loc == Location::INTERIOR) {
+        if (outermost_loc == Location::NONE || outermost_loc == Location::INTERIOR) {
             outermost_loc = loc;
         } else if (loc == Location::EXTERIOR) {
             outermost_loc = loc;

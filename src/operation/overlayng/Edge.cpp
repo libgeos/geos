@@ -253,11 +253,11 @@ Edge::locationRight(int depthDelta) const
 {
     int sgn = delSign(depthDelta);
     switch (sgn) {
-        case 0: return Location::UNDEF;
+        case 0: return Location::NONE;
         case 1: return Location::INTERIOR;
         case -1: return Location::EXTERIOR;
     }
-    return Location::UNDEF;
+    return Location::NONE;
 }
 
 /*private*/
@@ -267,11 +267,11 @@ Edge::locationLeft(int depthDelta) const
     // TODO: is it always safe to ignore larger depth deltas?
     int sgn = delSign(depthDelta);
     switch (sgn) {
-        case 0: return Location::UNDEF;
+        case 0: return Location::NONE;
         case 1: return Location::EXTERIOR;
         case -1: return Location::INTERIOR;
     }
-    return Location::UNDEF;
+    return Location::NONE;
 }
 
 /*private*/

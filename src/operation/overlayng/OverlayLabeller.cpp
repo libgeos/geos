@@ -101,7 +101,7 @@ OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex)
                 throw util::TopologyException("side location conflict", e->getCoordinate());
             }
             Location locLeft = e->getLocation(geomIndex, Position::LEFT);
-            if (locLeft == Location::UNDEF) {
+            if (locLeft == Location::NONE) {
                 util::Assert::shouldNeverReachHere("found single null side");
             }
             currLoc = locLeft;

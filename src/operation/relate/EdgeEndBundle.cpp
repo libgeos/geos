@@ -89,10 +89,10 @@ EdgeEndBundle::computeLabel(
         }
     }
     if(isArea) {
-        label = Label(Location::UNDEF, Location::UNDEF, Location::UNDEF);
+        label = Label(Location::NONE, Location::NONE, Location::NONE);
     }
     else {
-        label = Label(Location::UNDEF);
+        label = Label(Location::NONE);
     }
     // compute the On label, and the side labels if present
     for(int i = 0; i < 2; i++) {
@@ -121,7 +121,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
             foundInterior = true;
         }
     }
-    Location loc = Location::UNDEF;
+    Location loc = Location::NONE;
     if(foundInterior) {
         loc = Location::INTERIOR;
     }

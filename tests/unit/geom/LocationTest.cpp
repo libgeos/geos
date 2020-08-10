@@ -20,7 +20,7 @@ struct test_location_data {
     geos::geom::Location boundary;
     geos::geom::Location exterior;
     test_location_data()
-        : undef(geos::geom::Location::UNDEF),
+        : undef(geos::geom::Location::NONE),
           interior(geos::geom::Location::INTERIOR),
           boundary(geos::geom::Location::BOUNDARY),
           exterior(geos::geom::Location::EXTERIOR)
@@ -70,7 +70,7 @@ void object::test<2>
     s.str(""); // reset
     s.clear();
 
-    s << Location::UNDEF;
+    s << Location::NONE;
     ensure_equals(s.str(), "-");
 }
 
