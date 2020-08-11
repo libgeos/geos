@@ -40,7 +40,7 @@ ValidatingNoder::validate()
     try {
         nv.checkValid();
     }
-    catch (const std::exception& ex) {
+    catch (const std::exception &) {
         for (SegmentString* ss: *nodedSS) {
             delete ss;
         }

@@ -62,7 +62,7 @@ struct test_overlayngfloating_data {
                 geomOverlay(a, b, OverlayNG::INTERSECTION);
             return geom_result->getArea();
         }
-        catch (geos::util::TopologyException& ex) {
+        catch (geos::util::TopologyException &) {
             // This exception is expected if the
             // geometries are not perturbed by clipping
         }

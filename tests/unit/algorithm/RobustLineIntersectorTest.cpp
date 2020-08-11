@@ -67,7 +67,7 @@ void object::test<1>
     Coordinate x(15, 15);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), LineIntersector::POINT_INTERSECTION);
+    ensure_equals(i.getIntersectionNum(), (unsigned int)LineIntersector::POINT_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 1UL);
     ensure_equals(i.getIntersection(0), x);
     ensure("isProper", i.isProper());

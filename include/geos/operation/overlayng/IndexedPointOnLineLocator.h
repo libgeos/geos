@@ -38,7 +38,7 @@ namespace overlayng { // geos.operation.overlayng
  *
  * @author mdavis
  */
-class GEOS_DLL IndexedPointOnLineLocator : public algorithm::locate::PointOnGeometryLocator {
+class IndexedPointOnLineLocator : public algorithm::locate::PointOnGeometryLocator {
 
 private:
 
