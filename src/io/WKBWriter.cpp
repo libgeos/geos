@@ -30,6 +30,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
 
 #include <ostream>
@@ -121,10 +122,25 @@ WKBWriter::write(const Geometry& g, ostream& os)
 }
 
 void
+WKBWriter::writePointEmpty(const Point& g)
+{
+    writeByteOrder();
+    writeGeometryType(WKBConstants::wkbPoint, g.getSRID());
+    writeSRID(g.getSRID());
+
+    Coordinate c(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
+    CoordinateArraySequence cas(std::size_t(1), g.getCoordinateDimension());
+    cas.setAt(c, 0);
+
+    writeCoordinateSequence(cas, false);
+}
+
+void
 WKBWriter::writePoint(const Point& g)
 {
-    if(g.isEmpty()) throw
-        util::IllegalArgumentException("Empty Points cannot be represented in WKB");
+    if(g.isEmpty()) {
+        return writePointEmpty(g);
+    }
 
     writeByteOrder();
 

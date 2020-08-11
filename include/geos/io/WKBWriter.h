@@ -184,6 +184,7 @@ private:
     unsigned char buf[8];
 
     void writePoint(const geom::Point& p);
+    void writePointEmpty(const geom::Point& p);
     // throws IOException
 
     void writeLineString(const geom::LineString& ls);

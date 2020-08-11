@@ -173,5 +173,30 @@ void object::test<5>
     assert(geom->equals(geom2.get()));
 }
 
+
+// 5 - Check WKB representation of empty polygon
+// See http://trac.osgeo.org/geos/ticket/680
+template<>
+template<>
+void object::test<6>
+()
+{
+    auto geom = wktreader.read("POINT EMPTY");
+    geom->setSRID(4326);
+    std::stringstream result_stream;
+
+    wkbwriter.setOutputDimension(2);
+    wkbwriter.setByteOrder(1);
+    wkbwriter.setIncludeSRID(1);
+    wkbwriter.writeHEX(*geom, result_stream);
+
+    std::string actual = result_stream.str();
+    ensure_equals(actual, "0101000020E6100000000000000000F87F000000000000F87F");
+
+    auto geom2 = wkbreader.readHEX(result_stream);
+    assert(geom->equals(geom2.get()));
+}
+
+
 } // namespace tut
 
