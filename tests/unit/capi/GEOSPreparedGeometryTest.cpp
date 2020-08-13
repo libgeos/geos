@@ -6,6 +6,7 @@
 #include <geos_c.h>
 #include <geos/io/WKBReader.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
 // std
 #include <cstdarg>
 #include <cstdio>

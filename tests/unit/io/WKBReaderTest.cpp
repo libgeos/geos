@@ -33,6 +33,7 @@ struct test_wkbreader_data {
     geos::io::WKBReader wkbreader;
     geos::io::WKBWriter xdrwkbwriter;
     geos::io::WKBWriter ndrwkbwriter;
+    geos::io::WKBWriter ndr3dwkbwriter;
     geos::io::WKTReader wktreader;
 
     typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
@@ -46,8 +47,22 @@ struct test_wkbreader_data {
         xdrwkbwriter(2, geos::io::WKBConstants::wkbXDR),
         // 2D only, NDR (little endian)
         ndrwkbwriter(2, geos::io::WKBConstants::wkbNDR),
+        // 3D only, NDR (little endian)
+        ndr3dwkbwriter(3, geos::io::WKBConstants::wkbNDR),
         wktreader(gf.get())
     {}
+
+    void
+    testInput(const std::string& hexwkb,
+              const std::string& expected)
+    {
+        std::stringstream hexin(hexwkb);
+        GeomPtr g(wkbreader.readHEX(hexin));
+        std::stringstream ndr_out;
+        ndr3dwkbwriter.writeHEX(*g, ndr_out);
+        ensure_equals("hex output",
+                      ndr_out.str(), expected.c_str());
+    }
 
     void
     testInputNdr(const std::string& WKT,
@@ -456,6 +471,58 @@ void object::test<19>
 
 }
 
+
+// POINT M (1 2 3)
+template<>
+template<>
+void object::test<20>
+()
+{
+    testInput(
+        "01D1070000000000000000F03F00000000000000400000000000000840",
+        "0101000000000000000000F03F0000000000000040"
+    );
+
+}
+
+// POINT ZM (1 2 3 4)
+template<>
+template<>
+void object::test<21>
+()
+{
+    testInput(
+        "01B90B0000000000000000F03F000000000000004000000000000008400000000000001040",
+        "0101000080000000000000F03F00000000000000400000000000000840"
+    );
+
+}
+
+// LINESTRING M (1 2 3, 4 5 6)
+template<>
+template<>
+void object::test<22>
+()
+{
+    testInput(
+        "01D207000002000000000000000000F03F00000000000000400000000000000840000000000000104000000000000014400000000000001840",
+        "010200000002000000000000000000F03F000000000000004000000000000010400000000000001440"
+    );
+
+}
+
+// LINESTRING ZM (1 2 3 4, 5 6 7 8)
+template<>
+template<>
+void object::test<23>
+()
+{
+    testInput(
+        "01BA0B000002000000000000000000F03F000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001C400000000000002040",
+        "010200008002000000000000000000F03F00000000000000400000000000000840000000000000144000000000000018400000000000001C40"
+    );
+
+}
 
 } // namespace tut
 

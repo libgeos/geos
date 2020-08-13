@@ -46,10 +46,16 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
+WKBReader::WKBReader(geom::GeometryFactory const& f)
+    : factory(f)
+    , inputDimension(2)
+    , hasZ(false)
+    , hasM(false)
+    {}
+
 WKBReader::WKBReader()
-    :
-    factory(*(GeometryFactory::getDefaultInstance()))
-{}
+    : WKBReader(*(GeometryFactory::getDefaultInstance()))
+    {}
 
 ostream&
 WKBReader::printHEX(istream& is, ostream& os)
@@ -195,21 +201,25 @@ WKBReader::readGeometry()
     /* ISO type range 1000 is Z, 2000 is M, 3000 is ZM */
     int isoTypeRange = (typeInt & 0xffff) / 1000;
     int isoHasZ = (isoTypeRange == 1) || (isoTypeRange == 3);
-    //int isoHasM = (isoTypeRange == 2) || (isoTypeRange == 3);
+    int isoHasM = (isoTypeRange == 2) || (isoTypeRange == 3);
     /* SFSQL high bit flag for Z, next bit for M */
     int sfsqlHasZ = (typeInt & 0x80000000) != 0;
-    //int sfsqlHasM = (typeInt & 0x40000000) != 0;
+    int sfsqlHasM = (typeInt & 0x40000000) != 0;
 
 #if DEBUG_WKB_READER
     cout << "WKB geometryType: " << geometryType << endl;
 #endif
 
-    bool hasZ = sfsqlHasZ || isoHasZ;
-    if(hasZ) {
+    hasZ = sfsqlHasZ || isoHasZ;
+    hasM = sfsqlHasM || isoHasM;
+    if(hasZ && hasM) {
+        inputDimension = 4;
+    }
+    else if (hasZ || hasM) {
         inputDimension = 3;
     }
     else {
-        inputDimension = 2;    // doesn't handle M currently
+        inputDimension = 2;
     }
 
 #if DEBUG_WKB_READER
@@ -229,12 +239,6 @@ WKBReader::readGeometry()
     int SRID = 0;
     if(hasSRID) {
         SRID = dis.readInt();    // read SRID
-    }
-
-
-    // allocate space for ordValues
-    if(ordValues.size() < inputDimension) {
-        ordValues.resize(inputDimension);
     }
 
     std::unique_ptr<Geometry> result;
@@ -275,7 +279,7 @@ std::unique_ptr<Point>
 WKBReader::readPoint()
 {
     readCoordinate();
-    if(inputDimension == 3) {
+    if (hasZ) {
         return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2])));
     }
     else {
@@ -377,7 +381,7 @@ WKBReader::readMultiPolygon()
         if(!dynamic_cast<Polygon*>(geoms[i].get())) {
             stringstream err;
             err << BAD_GEOM_TYPE_MSG << " Polygon";
-            throw  ParseException(err.str());
+            throw ParseException(err.str());
         }
     }
 
@@ -400,12 +404,12 @@ WKBReader::readGeometryCollection()
 std::unique_ptr<CoordinateSequence>
 WKBReader::readCoordinateSequence(int size)
 {
-    auto seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
-    auto targetDim = seq->getDimension();
+    unsigned int targetDim = 2 + (hasZ ? 1 : 0);
+    auto seq = factory.getCoordinateSequenceFactory()->create(size, targetDim);
     if(targetDim > inputDimension) {
         targetDim = inputDimension;
     }
-    for(int i = 0; i < size; i++) {
+    for(unsigned int i = 0; i < size; i++) {
         readCoordinate();
         for(unsigned int j = 0; j < targetDim; j++) {
             seq->setOrdinate(i, j, ordValues[j]);
@@ -418,12 +422,16 @@ void
 WKBReader::readCoordinate()
 {
     const PrecisionModel& pm = *factory.getPrecisionModel();
-    for(unsigned int i = 0; i < inputDimension; ++i) {
-        if(i <= 1) {
+    for(std::size_t i = 0; i < inputDimension; ++i) {
+        if (i < 2) {
             ordValues[i] = pm.makePrecise(dis.readDouble());
         }
-        else {
+        else if (hasZ) {
             ordValues[i] = dis.readDouble();
+        }
+        else {
+            // Read and throw away any extra (M) dimensions
+            dis.readDouble();
         }
     }
 #if DEBUG_WKB_READER

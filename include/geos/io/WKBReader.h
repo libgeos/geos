@@ -22,12 +22,12 @@
 
 #include <geos/export.h>
 
-#include <geos/geom/GeometryFactory.h>
 #include <geos/io/ByteOrderDataInStream.h> // for composition
 
 #include <iosfwd> // ostream, istream
 #include <memory>
-#include <vector>
+// #include <vector>
+#include <array>
 
 #define BAD_GEOM_TYPE_MSG "Bad geometry type encountered in"
 
@@ -40,7 +40,7 @@
 namespace geos {
 namespace geom {
 
-//class GeometryFactory;
+class GeometryFactory;
 class Coordinate;
 class Geometry;
 class GeometryCollection;
@@ -52,6 +52,7 @@ class MultiPoint;
 class MultiLineString;
 class MultiPolygon;
 class PrecisionModel;
+class CoordinateSequence;
 
 } // namespace geom
 } // namespace geos
@@ -80,7 +81,7 @@ class GEOS_DLL WKBReader {
 
 public:
 
-    WKBReader(geom::GeometryFactory const& f): factory(f) {}
+    WKBReader(geom::GeometryFactory const& f);
 
     /// Inizialize parser with default GeometryFactory.
     WKBReader();
@@ -119,10 +120,12 @@ private:
 
     // for now support the WKB standard only - may be generalized later
     unsigned int inputDimension;
+    bool hasZ;
+    bool hasM;
 
     ByteOrderDataInStream dis;
 
-    std::vector<double> ordValues;
+    std::array<double, 4> ordValues;
 
     std::unique_ptr<geom::Geometry> readGeometry();
 
