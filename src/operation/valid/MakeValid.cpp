@@ -21,6 +21,7 @@
 
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/valid/IsValidOp.h>
+
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/union/UnaryUnionOp.h>
@@ -33,8 +34,10 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/UnsupportedOperationException.h>
+
 
 // std
 #include <cassert>
@@ -231,6 +234,8 @@ static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
     */
     while( cut_edges->getNumGeometries() ) {
 
+        GEOS_CHECK_FOR_INTERRUPTS();
+
         // ASSUMPTION: cut_edges should already be fully noded
         auto new_area = geos::operation::polygonize::BuildArea().build(cut_edges.get());
         assert(new_area); // never return nullptr, but exception
@@ -247,6 +252,8 @@ static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
         // Now symdif new and old area
         std::unique_ptr<geom::Geometry> symdif = makeValidSymDifference(area.get(), new_area.get());
         assert(symdif);
+
+        GEOS_CHECK_FOR_INTERRUPTS();
 
         area = std::move(symdif);
 
