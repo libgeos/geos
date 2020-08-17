@@ -156,13 +156,13 @@ EdgeNodingBuilder::add(const Geometry* g, int geomIndex)
         case GEOS_POLYGON:
             return addPolygon(static_cast<const Polygon*>(g), geomIndex);
         case GEOS_LINESTRING:
+        case GEOS_LINEARRING:
             return addLine(static_cast<const LineString*>(g), geomIndex);
         case GEOS_MULTILINESTRING:
         case GEOS_MULTIPOLYGON:
         case GEOS_GEOMETRYCOLLECTION:
             return addCollection(static_cast<const GeometryCollection*>(g), geomIndex);
         case GEOS_POINT:
-        case GEOS_LINEARRING:
         case GEOS_MULTIPOINT:
             return; // do nothing
         default:
