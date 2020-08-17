@@ -530,7 +530,7 @@ Geometry::intersection(const Geometry* other) const
 
     // special case: if one input is empty ==> empty
     if(isEmpty() || other->isEmpty()) {
-        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
+        return OverlayOp::createEmptyResult(OverlayOp::opINTERSECTION, this, other, getFactory());
     }
 
 #ifdef USE_RECTANGLE_INTERSECTION
@@ -561,12 +561,14 @@ Geometry::intersection(const Geometry* other) const
 std::unique_ptr<Geometry>
 Geometry::Union(const Geometry* other) const
 {
-    // special case: if one input is empty ==> other input
-    if(isEmpty()) {
-        return other->clone();
-    }
-    if(other->isEmpty()) {
-        return clone();
+    // handle empty geometry cases
+    if(isEmpty() || other->isEmpty() ) {
+      if(isEmpty() && other->isEmpty() ) {
+        return OverlayOp::createEmptyResult(OverlayOp::opUNION, this, other, getFactory());
+      }
+      // special case: if one input is empty ==> other input
+      if(isEmpty()) return other->clone();
+      if(other->isEmpty()) return clone();
     }
 
 #ifdef SHORTCIRCUIT_PREDICATES
@@ -632,7 +634,7 @@ Geometry::difference(const Geometry* other) const
 {
     // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
     if(isEmpty()) {
-        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
+        return OverlayOp::createEmptyResult(OverlayOp::opDIFFERENCE, this, other, getFactory());
     }
     if(other->isEmpty()) {
         return clone();
@@ -648,12 +650,14 @@ Geometry::difference(const Geometry* other) const
 std::unique_ptr<Geometry>
 Geometry::symDifference(const Geometry* other) const
 {
-    // special case: if either input is empty ==> other input
-    if(isEmpty()) {
-        return other->clone();
-    }
-    if(other->isEmpty()) {
-        return clone();
+    // handle empty geometry cases
+    if(isEmpty() || other->isEmpty() ) {
+      if(isEmpty() && other->isEmpty() ) {
+        return OverlayOp::createEmptyResult(OverlayOp::opSYMDIFFERENCE, this, other, getFactory());
+      }
+      // special case: if either input is empty ==> other input
+      if(isEmpty()) return other->clone();
+      if(other->isEmpty()) return clone();
     }
 
     // if envelopes are disjoint return a MULTI geom or

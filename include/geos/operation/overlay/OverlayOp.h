@@ -175,6 +175,23 @@ public:
      * a geometry in the list.
      */
 
+    /**
+    * Creates an empty result geometry of the appropriate dimension,
+    * based on the given overlay operation and the dimensions of the inputs.
+    * The created geometry is always an atomic geometry,
+    * not a collection.
+    *
+    * The empty result is constructed using the following rules:
+    *
+    * * #opINTERSECTION  result has the dimension of the lowest input dimension
+    * * #opUNION - result has the dimension of the highest input dimension
+    * * #opDIFFERENCE - result has the dimension of the left-hand input
+    * * #opSYMDIFFERENCE - result has the dimension of the highest input dimension
+    */
+    static std::unique_ptr<geom::Geometry> createEmptyResult(
+        OverlayOp::OpCode overlayOpCode, const geom::Geometry* a,
+        const geom::Geometry* b, const geom::GeometryFactory* geomFact);
+
 protected:
 
     /** \brief
@@ -339,23 +356,6 @@ private:
     */
     static geom::Dimension::DimensionType resultDimension(OverlayOp::OpCode overlayOpCode,
             const geom::Geometry* g0, const geom::Geometry* g1);
-
-    /**
-    * Creates an empty result geometry of the appropriate dimension,
-    * based on the given overlay operation and the dimensions of the inputs.
-    * The created geometry is always an atomic geometry,
-    * not a collection.
-    *
-    * The empty result is constructed using the following rules:
-    *
-    * * #opINTERSECTION  result has the dimension of the lowest input dimension
-    * * #opUNION - result has the dimension of the highest input dimension
-    * * #opDIFFERENCE - result has the dimension of the left-hand input
-    * * #opSYMDIFFERENCE - result has the dimension of the highest input dimension
-    */
-    static std::unique_ptr<geom::Geometry> createEmptyResult(
-        OverlayOp::OpCode overlayOpCode, const geom::Geometry* a,
-        const geom::Geometry* b, const geom::GeometryFactory* geomFact);
 
     /**
      * Build a Geometry containing all Geometries in the given vectors.

@@ -104,7 +104,7 @@ void object::test<1>
 
     geom3_ = GEOSIntersection(geom1_, geom2_);
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_), std::string("GEOMETRYCOLLECTION EMPTY"));
+    ensure_equals(toWKT(geom3_), std::string("POLYGON EMPTY"));
 }
 
 template<>

@@ -23,16 +23,6 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestDistance.xml \
 	$(srcdir)/tests/general/TestDensify.xml \
 	$(srcdir)/tests/general/TestEqualsExact.xml \
-	$(srcdir)/tests/general/TestFunctionAA.xml \
-	$(srcdir)/tests/general/TestFunctionAAPrec.xml \
-	$(srcdir)/tests/general/TestFunctionLA.xml \
-	$(srcdir)/tests/general/TestFunctionLAPrec.xml \
-	$(srcdir)/tests/general/TestFunctionLL.xml \
-	$(srcdir)/tests/general/TestFunctionLLPrec.xml \
-	$(srcdir)/tests/general/TestFunctionPA.xml \
-	$(srcdir)/tests/general/TestFunctionPL.xml \
-	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
-	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
 	$(srcdir)/tests/general/TestIntersectsPL.xml \
 	$(srcdir)/tests/general/TestMinimumClearance.xml \
@@ -43,6 +33,17 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestNGOverlayLPrec.xml \
 	$(srcdir)/tests/general/TestNGOverlayP.xml \
 	$(srcdir)/tests/general/TestNGOverlayPPrec.xml \
+	$(srcdir)/tests/general/TestOverlayAA.xml \
+	$(srcdir)/tests/general/TestOverlayPLPrec.xml \
+	$(srcdir)/tests/general/TestOverlayLLPrec.xml \
+	$(srcdir)/tests/general/TestOverlayLL.xml \
+	$(srcdir)/tests/general/TestOverlayLA.xml \
+	$(srcdir)/tests/general/TestOverlayAAPrec.xml \
+	$(srcdir)/tests/general/TestOverlayPL.xml \
+	$(srcdir)/tests/general/TestOverlayPA.xml \
+	$(srcdir)/tests/general/TestOverlayEmpty.xml \
+	$(srcdir)/tests/general/TestOverlayPP.xml \
+	$(srcdir)/tests/general/TestOverlayLAPrec.xml \
 	$(srcdir)/tests/general/TestPreparedIntersectsPL.xml \
 	$(srcdir)/tests/general/TestPreparedPointPredicate.xml \
 	$(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
