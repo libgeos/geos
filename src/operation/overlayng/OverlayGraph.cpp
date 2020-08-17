@@ -18,6 +18,10 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -80,6 +84,9 @@ OverlayGraph::addEdge(Edge* edge)
     // CoordinateSequence* pts = = edge->getCoordinates().release();
     CoordinateSequence* pts = edge->releaseCoordinates();
     OverlayEdge* e = createEdgePair(pts, createOverlayLabel(edge));
+#if GEOS_DEBUG
+    std::cerr << "added edge: " << *e << std::endl;
+#endif
     insert(e);
     insert(e->symOE());
     return e;

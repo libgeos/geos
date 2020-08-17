@@ -32,6 +32,11 @@
 
 #include <algorithm>
 
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -220,6 +225,11 @@ OverlayNG::labelGraph(OverlayGraph* graph)
 std::unique_ptr<Geometry>
 OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
 {
+
+#if GEOS_DEBUG
+    std::cerr << "OverlayNG::extractResult: graph: " << *graph << std::endl;
+#endif
+
     //--- Build polygons
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
     PolygonBuilder polyBuilder(resultAreaEdges, geomFact);
