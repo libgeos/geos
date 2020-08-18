@@ -26,6 +26,10 @@
 
 #include <stdexcept>
 
+#ifndef GEOS_DEBUG
+# define GEOS_DEBUG 0
+#endif
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -83,7 +87,9 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
     * in snap-rounding mode with that precision.
     */
     if (!geom0->getPrecisionModel()->isFloating()) {
-        // std::cout << std::endl << "Using fixed precision overlay." << std::endl;
+#if GEOS_DEBUG
+        std::cout << std::endl << "Using fixed precision overlay." << std::endl;
+#endif
         return OverlayNG::overlay(geom0, geom1, opCode, geom0->getPrecisionModel());
     }
 
@@ -114,7 +120,9 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
         exOriginal = ex;
     }
 
-    // std::cout << std::endl << "Floating point overlay FAILURE." << std::endl;
+#if GEOS_DEBUG
+    std::cout << std::endl << "Floating point overlay FAILURE." << std::endl;
+#endif
 
     /**
      * On failure retry using snapping noding with a "safe" tolerance.
