@@ -118,11 +118,10 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
         * so it can be rethrown if the remaining strategies all fail.
         */
         exOriginal = ex;
-    }
-
 #if GEOS_DEBUG
-    std::cout << std::endl << "Floating point overlay FAILURE." << std::endl;
+        std::cout << std::endl << "Floating point overlay FAILURE: " << ex.what() << std::endl;
 #endif
+    }
 
     /**
      * On failure retry using snapping noding with a "safe" tolerance.
@@ -170,9 +169,16 @@ OverlayNGSnapIfNeeded::overlaySnapping(const Geometry* geom0, const Geometry* ge
     try {
         return overlaySnapTol(geom0, geom1, opCode, snapTol);
     }
-    catch (const geos::util::TopologyException &) {
+    catch (const geos::util::TopologyException &
+#if GEOS_DEBUG
+            ex
+#endif
+    )
+    {
         //---- ignore this exception, just return a nullptr result
-        // TODO: print a debug message here, beware of leaks
+#if GEOS_DEBUG
+        std::cout << std::endl << "overlaySnapping(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+#endif
     }
     return nullptr;
 }
@@ -186,9 +192,16 @@ OverlayNGSnapIfNeeded::overlaySnapBoth(const Geometry* geom0, const Geometry* ge
         std::unique_ptr<Geometry> snap1 = overlaySnapTol(geom1, nullptr, OverlayNG::UNION, snapTol);
         return overlaySnapTol(snap0.get(), snap1.get(), opCode, snapTol);
     }
-    catch (const geos::util::TopologyException &) {
+    catch (const geos::util::TopologyException &
+#if GEOS_DEBUG
+      ex
+#endif
+    )
+    {
         //---- ignore this exception, just return a nullptr result
-        // TODO: print a debug message here, beware of leaks
+#if GEOS_DEBUG
+        std::cout << std::endl << "overlaySnapBoth(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+#endif
     }
     return nullptr;
 }
@@ -249,10 +262,17 @@ OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, i
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
         return result;
     }
-    catch (const geos::util::TopologyException &) {
+    catch (const geos::util::TopologyException &
+#if GEOS_DEBUG
+            ex
+#endif
+    )
+    {
         // ignore this exception, since the operation will be rerun
         //System.out.println("Overlay failed");
-        // TODO: print debug line, beware of leaks
+#if GEOS_DEBUG
+        std::cout << std::endl << "overlaySR(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+#endif
     }
     // on failure retry with a "safe" fixed PM
     // this should not throw an exception, but if it does just let it go
