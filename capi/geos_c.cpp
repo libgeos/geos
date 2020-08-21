@@ -21,10 +21,6 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
-#include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/union/CascadedPolygonUnion.h>
-#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
-#include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
@@ -76,9 +72,6 @@ using geos::io::WKBWriter;
 
 using geos::index::strtree::STRtree;
 
-using geos::operation::overlay::OverlayOp;
-using geos::operation::overlay::overlayOp;
-using geos::operation::geounion::CascadedPolygonUnion;
 
 typedef std::unique_ptr<Geometry> GeomPtr;
 

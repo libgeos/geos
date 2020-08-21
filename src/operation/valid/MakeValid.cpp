@@ -25,7 +25,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/union/UnaryUnionOp.h>
-#include <geos/geom/BinaryOp.h>
+#include <geos/geom/HeuristicOverlay.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
@@ -60,19 +60,19 @@ namespace valid { // geos.operation.valid
 static std::unique_ptr<geom::Geometry>
 makeValidSymDifference(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return BinaryOp(g0, g1, overlayOp(OverlayOp::opSYMDIFFERENCE));
+    return HeuristicOverlay(g0, g1, OverlayOp::opSYMDIFFERENCE);
 }
 
 static std::unique_ptr<geom::Geometry>
 makeValidDifference(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return BinaryOp(g0, g1, overlayOp(OverlayOp::opDIFFERENCE));
+    return HeuristicOverlay(g0, g1, OverlayOp::opDIFFERENCE);
 }
 
 static std::unique_ptr<geom::Geometry>
 makeValidUnion(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return BinaryOp(g0, g1, overlayOp(OverlayOp::opUNION));
+    return HeuristicOverlay(g0, g1, OverlayOp::opUNION);
 }
 
 /*

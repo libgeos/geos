@@ -18,7 +18,7 @@
  *
  **********************************************************************/
 
-#include <geos/geom/BinaryOp.h>
+#include <geos/geom/HeuristicOverlay.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -554,7 +554,7 @@ Geometry::intersection(const Geometry* other) const
 #ifdef USE_OVERLAYNG
     return operation::overlayng::OverlayNGSnapIfNeeded::Intersection(this, other);
 #else
-    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION));
+    return HeuristicOverlay(this, other, OverlayOp::opINTERSECTION);
 #endif
 }
 
@@ -612,7 +612,7 @@ Geometry::Union(const Geometry* other) const
 #ifdef USE_OVERLAYNG
     return operation::overlayng::OverlayNGSnapIfNeeded::Union(this, other);
 #else
-    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION));
+    return HeuristicOverlay(this, other, OverlayOp::opUNION);
 #endif
 }
 
@@ -643,7 +643,7 @@ Geometry::difference(const Geometry* other) const
 #ifdef USE_OVERLAYNG
     return operation::overlayng::OverlayNGSnapIfNeeded::Difference(this, other);
 #else
-    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE));
+    return HeuristicOverlay(this, other, OverlayOp::opDIFFERENCE);
 #endif
 }
 
@@ -697,7 +697,7 @@ Geometry::symDifference(const Geometry* other) const
 #ifdef USE_OVERLAYNG
     return operation::overlayng::OverlayNGSnapIfNeeded::SymDifference(this, other);
 #else
-    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE));
+    return HeuristicOverlay(this, other, OverlayOp::opSYMDIFFERENCE);
 #endif
 
 }

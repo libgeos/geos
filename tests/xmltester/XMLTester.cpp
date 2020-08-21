@@ -2393,7 +2393,7 @@ main(int argC, char* argV[])
  *         error on load of requested tests.
  *
  * Revision 1.32  2006/04/14 14:57:15  strk
- * XMLTester binary ops invoked using the new BinaryOp template function.
+ * XMLTester binary ops invoked using the new HeuristicOverlay template function.
  *
  * Revision 1.31  2006/04/07 13:26:38  strk
  * Use of unique_ptr<> to prevent confusing leaks in tester

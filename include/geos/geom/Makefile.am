@@ -10,7 +10,7 @@ SUBDIRS = \
 geosdir = $(includedir)/geos/geom
 
 geos_HEADERS = \
-    BinaryOp.h \
+    HeuristicOverlay.h \
     CoordinateArraySequenceFactory.h \
     CoordinateArraySequenceFactory.inl \
     CoordinateArraySequence.h \

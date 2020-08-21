@@ -21,7 +21,7 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/OverlapUnion.h>
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/geom/BinaryOp.h>
+#include <geos/geom/HeuristicOverlay.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -305,7 +305,7 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
 {
     try {
         // return SnapIfNeededOverlayOp.union(g0, g1);
-        return geom::BinaryOp(g0, g1, overlay::overlayOp(OverlayOp::opUNION));
+        return geom::HeuristicOverlay(g0, g1, overlay::OverlayOp::opUNION);
     }
     catch (const util::TopologyException &ex) {
         // union-by-buffer only works for polygons

@@ -22,6 +22,7 @@ libgeom_la_SOURCES = \
     GeometryCollection.cpp \
     GeometryComponentFilter.cpp \
     GeometryFactory.cpp \
+    HeuristicOverlay.cpp \
     IntersectionMatrix.cpp \
     LinearRing.cpp \
     LineSegment.cpp \

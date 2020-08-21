@@ -400,27 +400,6 @@ private:
 
 };
 
-/** \brief
- * OverlayOp::overlayOp Adapter for use with geom::BinaryOp
- */
-struct overlayOp {
-
-    OverlayOp::OpCode opCode;
-
-    overlayOp(OverlayOp::OpCode code)
-        :
-        opCode(code)
-    {}
-
-    geom::Geometry*
-    operator()(const geom::Geometry* g0,
-               const geom::Geometry* g1)
-    {
-        return OverlayOp::overlayOp(g0, g1, opCode);
-    }
-
-};
-
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos

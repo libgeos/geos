@@ -63,11 +63,10 @@
 #include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/overlayng/OverlayNG.h>
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/PrecisionReducer.h>
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
@@ -141,6 +140,7 @@ using geos::geom::LinearRing;
 using geos::geom::MultiLineString;
 using geos::geom::MultiPolygon;
 using geos::geom::Polygon;
+using geos::geom::PrecisionModel;
 using geos::geom::CoordinateSequence;
 using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
@@ -150,19 +150,19 @@ using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
 
-using geos::geom::PrecisionModel;
-using geos::operation::overlay::OverlayOp;
+using geos::algorithm::distance::DiscreteFrechetDistance;
+using geos::algorithm::distance::DiscreteHausdorffDistance;
+
+using geos::operation::buffer::BufferBuilder;
+using geos::operation::buffer::BufferParameters;
+using geos::operation::distance::IndexedFacetDistance;
+using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::OverlayNGSnapIfNeeded;
-using geos::operation::overlay::overlayOp;
-using geos::operation::geounion::CascadedPolygonUnion;
-using geos::operation::distance::IndexedFacetDistance;
-using geos::operation::buffer::BufferParameters;
-using geos::operation::buffer::BufferBuilder;
+
 using geos::precision::GeometryPrecisionReducer;
+
 using geos::util::IllegalArgumentException;
-using geos::algorithm::distance::DiscreteHausdorffDistance;
-using geos::algorithm::distance::DiscreteFrechetDistance;
 
 typedef std::unique_ptr<Geometry> GeomPtr;
 
