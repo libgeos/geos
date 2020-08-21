@@ -145,6 +145,10 @@ OverlayNGSnapIfNeeded::overlaySnapTries(const Geometry* geom0, const Geometry* g
 
     for (std::size_t i = 0; i < NUM_SNAP_TRIES; i++) {
 
+#if GEOS_DEBUG
+        std::cout << std::endl << "Trying overlaySnapping(tol " << snapTol << ")." << std::endl;
+#endif
+
         result = overlaySnapping(geom0, geom1, opCode, snapTol);
         if (result != nullptr) return result;
 
@@ -271,7 +275,7 @@ OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, i
         // ignore this exception, since the operation will be rerun
         //System.out.println("Overlay failed");
 #if GEOS_DEBUG
-        std::cout << std::endl << "overlaySR(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+        std::cout << std::endl << "overlaySR FAILURE: " << ex.what() << std::endl;
 #endif
     }
     // on failure retry with a "safe" fixed PM
