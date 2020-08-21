@@ -550,6 +550,10 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(GEOSContextHandle_t handle,
                                                  const GEOSGeometry* g1,
                                                  const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec_r(GEOSContextHandle_t handle,
+                                                 const GEOSGeometry* g1,
+                                                 const GEOSGeometry* g2,
+                                                 double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
 
@@ -583,16 +587,31 @@ extern int GEOS_DLL GEOSMinimumClearance_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSDifference_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g1,
                                                const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSDifferencePrec_r(GEOSContextHandle_t handle,
+                                                   const GEOSGeometry* g1,
+                                                   const GEOSGeometry* g2,
+                                                   double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference_r(GEOSContextHandle_t handle,
                                                   const GEOSGeometry* g1,
                                                   const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSSymDifferencePrec_r(GEOSContextHandle_t handle,
+                                                      const GEOSGeometry* g1,
+                                                      const GEOSGeometry* g2,
+                                                      double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary_r(GEOSContextHandle_t handle,
                                              const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g1,
                                           const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnionPrec_r(GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g1,
+                                              const GEOSGeometry* g2,
+                                              double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec_r(GEOSContextHandle_t handle,
+                                          const GEOSGeometry* g,
+                                          double gridSize);
 /* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
  * noded and do not overlap. It will not generate an error (return NULL) for inputs that
  * do not satisfy this constraint. */
@@ -1593,6 +1612,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 
 /* Returns the minimum rotated rectangular POLYGON which encloses the input geometry. The rectangle
@@ -1669,10 +1689,14 @@ extern int GEOS_DLL GEOSMinimumClearance(const GEOSGeometry* g, double* d);
 extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
 
 extern GEOSGeometry GEOS_DLL *GEOSDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSDifferencePrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSSymDifferencePrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnionPrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(const GEOSGeometry* g, double gridSize);
 
 /* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
  * noded and do not overlap. It will not generate an error (return NULL) for inputs that

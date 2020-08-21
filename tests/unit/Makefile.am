@@ -85,6 +85,7 @@ geos_unit_SOURCES = \
 	capi/GEOSInterpolateTest.cpp \
 	capi/GEOSInterruptTest.cpp \
 	capi/GEOSIntersectionTest.cpp \
+	capi/GEOSIntersectionPrecTest.cpp \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSisClosedTest.cpp \
 	capi/GEOSisValidDetailTest.cpp \
@@ -110,6 +111,8 @@ geos_unit_SOURCES = \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSSnapTest.cpp \
 	capi/GEOSSTRtreeTest.cpp \
+	capi/GEOSUnionTest.cpp \
+	capi/GEOSUnionPrecTest.cpp \
 	capi/GEOSUnaryUnionTest.cpp \
 	capi/GEOSUserDataTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \
