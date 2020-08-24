@@ -45,11 +45,9 @@
  *
  **********************************************************************/
 
-#define GEOS_DEBUG_HEURISTICOVERLAY 1
-#define GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID 1
-
 #include <geos/geom/HeuristicOverlay.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
@@ -72,6 +70,9 @@
 
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 
+#define GEOS_DEBUG_HEURISTICOVERLAY 1
+#define GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID 0
+
 
 #ifdef GEOS_DEBUG_HEURISTICOVERLAY
 # include <iostream>
@@ -91,6 +92,20 @@
  * Check validity of operation between original geometries
  */
 #define GEOS_CHECK_ORIGINAL_RESULT_VALIDITY 0
+
+/*
+ * Define this to use OverlayNG policy with fixed precision
+ */
+#ifndef USE_FIXED_PRECISION_OVERLAYNG
+# define USE_FIXED_PRECISION_OVERLAYNG 0
+#endif
+
+/*
+ * Define this to use OverlayNG policy with whatever precision
+ */
+#ifndef USE_OVERLAYNG_SNAPIFNEEDED
+# define USE_OVERLAYNG_SNAPIFNEEDED 0
+#endif
 
 
 /*
@@ -163,6 +178,7 @@
 #define GEOS_CHECK_SNAPPINGOP_VALIDITY 0
 
 using geos::operation::overlay::OverlayOp;
+using geos::operation::overlayng::OverlayNG;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -470,6 +486,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 
 #endif // USE_SNAPPING_POLICY }
 
+
 // {
 #if USE_PRECISION_REDUCTION_POLICY
 
@@ -489,7 +506,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
                   << std::endl;
 #endif
 
-        double maxScale = 1e16;
+        double maxScale = 1e16; // TODO: compute from input
+        double minScale = 1; // TODO: compute from input
 
         // Don't use a scale bigger than the input one
         if(g0scale && static_cast<double>(g0scale) < maxScale) {
@@ -500,7 +518,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
         }
 
 
-        for(double scale = maxScale; scale >= 1; scale /= 10) {
+        for(double scale = maxScale; scale >= minScale; scale /= 10) {
             PrecisionModel pm(scale);
             GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
 #if GEOS_DEBUG_HEURISTICOVERLAY
@@ -558,6 +576,74 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
 // USE_PRECISION_REDUCTION_POLICY }
 
+// {
+#if USE_FIXED_PRECISION_OVERLAYNG
+
+
+    // Try OverlayNG with fixed precision
+    try {
+        long unsigned int g0scale =
+            static_cast<long unsigned int>(g0->getFactory()->getPrecisionModel()->getScale());
+        long unsigned int g1scale =
+            static_cast<long unsigned int>(g1->getFactory()->getPrecisionModel()->getScale());
+
+#if GEOS_DEBUG_HEURISTICOVERLAY
+        std::cerr << "Original input scales are: "
+                  << g0scale
+                  << " and "
+                  << g1scale
+                  << std::endl;
+#endif
+
+        double maxScale = 1e16; // TODO: compute from input
+        double minScale = 1e10; // TODO: compute from input
+
+        // Don't use a scale bigger than the input one
+        if(g0scale && static_cast<double>(g0scale) < maxScale) {
+            maxScale = static_cast<double>(g0scale);
+        }
+        if(g1scale && static_cast<double>(g1scale) < maxScale) {
+            maxScale = static_cast<double>(g1scale);
+        }
+
+
+        for(double scale = maxScale; scale >= minScale; scale /= 10) {
+            PrecisionModel pm(scale);
+#if GEOS_DEBUG_HEURISTICOVERLAY
+            std::cerr << "Trying with precision scale " << scale << std::endl;
+#endif
+
+            try {
+                ret = OverlayNG::overlay(g0, g1, opCode, &pm);
+
+#if GEOS_DEBUG_HEURISTICOVERLAY
+                std::cerr << "Attempt with fixedNG scale " << scale << " succeeded" << std::endl;
+#endif
+                return ret;
+            }
+            catch(const geos::util::TopologyException& ex) {
+#if GEOS_DEBUG_HEURISTICOVERLAY
+                std::cerr << "fixedNG with scale (" << scale << "): "
+                          << ex.what() << std::endl;
+#endif
+                if(scale == 1) {
+                    throw ex;
+                }
+            }
+
+        }
+
+    }
+    catch(const geos::util::TopologyException& ex) {
+#if GEOS_DEBUG_HEURISTICOVERLAY
+        std::cerr << "Reduced: " << ex.what() << std::endl;
+#endif
+        ::geos::ignore_unused_variable_warning(ex);
+    }
+
+#endif
+// USE_FIXED_PRECISION_OVERLAYNG }
+
 
 // {
 #if USE_TP_SIMPLIFY_POLICY
@@ -606,6 +692,9 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 // USE_TP_SIMPLIFY_POLICY }
 
 
+// {
+#if USE_OVERLAYNG_SNAPIFNEEDED
+
 #if GEOS_DEBUG_HEURISTICOVERLAY
     std::cerr << "Trying with OverlayNGSnapIfNeeded" << std::endl;
 #endif
@@ -625,6 +714,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
         std::cerr << "OverlayNGSnapIfNeeded: " << ex.what() << std::endl;
 #endif
     }
+#endif // USE_OVERLAYNG_SNAPIFNEEDED }
 
 
 #if GEOS_DEBUG_HEURISTICOVERLAY
