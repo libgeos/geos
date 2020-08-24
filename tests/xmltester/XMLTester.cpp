@@ -410,7 +410,7 @@ XMLTester::run(const std::string& source)
                   //       The 'WITH OIDS' parameter is supported back to
                   //       PostgreSQL 7.2, so if you run an older version
                   //       rebuild with the next line commented out.
-                  << " WITH OIDS"
+                  //<< " WITH OIDS"
 
                   << ";" << std::endl;
     }
