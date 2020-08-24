@@ -117,6 +117,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-994.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-fail.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-slow.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-1046-union-lines.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-list.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-gisse-345341-lines.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-isochrone.xml \
