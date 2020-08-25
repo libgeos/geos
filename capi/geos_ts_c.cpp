@@ -63,6 +63,8 @@
 #include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/PrecisionReducer.h>
 #include <geos/operation/overlayng/OverlayNG.h>
@@ -148,7 +150,10 @@ using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
 
+using geos::geom::PrecisionModel;
 using geos::operation::overlay::OverlayOp;
+using geos::operation::overlayng::OverlayNG;
+using geos::operation::overlayng::OverlayNGSnapIfNeeded;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::distance::IndexedFacetDistance;
@@ -1043,6 +1048,28 @@ extern "C" {
     }
 
     Geometry*
+    GEOSIntersectionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+            using geos::geom::PrecisionModel;
+
+            std::unique_ptr<PrecisionModel> pm;
+            if(gridSize != 0) {
+                pm.reset(new PrecisionModel(1.0 / gridSize));
+            }
+            else {
+                pm.reset(new PrecisionModel());
+            }
+            auto g3 = gridSize != 0 ?
+              OverlayNG::overlay(g1, g2, OverlayNG::INTERSECTION, pm.get())
+              :
+              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::INTERSECTION);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadrantsegments)
     {
         return execute(extHandle, [&]() {
@@ -1229,6 +1256,27 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDifferencePrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+
+            std::unique_ptr<PrecisionModel> pm;
+            if(gridSize != 0) {
+                pm.reset(new PrecisionModel(1.0 / gridSize));
+            }
+            else {
+                pm.reset(new PrecisionModel());
+            }
+            auto g3 = gridSize != 0 ?
+                OverlayNG::overlay(g1, g2, OverlayNG::DIFFERENCE, pm.get())
+                :
+                OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::DIFFERENCE);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSBoundary_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
@@ -1249,10 +1297,52 @@ extern "C" {
     }
 
     Geometry*
+    GEOSSymDifferencePrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+
+            std::unique_ptr<PrecisionModel> pm;
+            if(gridSize != 0) {
+                pm.reset(new PrecisionModel(1.0 / gridSize));
+            }
+            else {
+                pm.reset(new PrecisionModel());
+            }
+            auto g3 = gridSize != 0 ?
+              OverlayNG::overlay(g1, g2, OverlayNG::SYMDIFFERENCE, pm.get())
+              :
+              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::SYMDIFFERENCE);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, [&]() {
             auto g3 = g1->Union(g2);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSUnionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+
+            std::unique_ptr<PrecisionModel> pm;
+            if(gridSize != 0) {
+                pm.reset(new PrecisionModel(1.0 / gridSize));
+            }
+            else {
+                pm.reset(new PrecisionModel());
+            }
+            auto g3 = gridSize != 0 ?
+              OverlayNG::overlay(g1, g2, OverlayNG::UNION, pm.get())
+              :
+              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::UNION);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1274,6 +1364,27 @@ extern "C" {
         return execute(extHandle, [&]() {
             GeomPtr g3(g->Union());
             g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSUnaryUnionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+
+            std::unique_ptr<PrecisionModel> pm;
+            if(gridSize != 0) {
+                pm.reset(new PrecisionModel(1.0 / gridSize));
+            }
+            else {
+                pm.reset(new PrecisionModel());
+            }
+            auto g3 = gridSize != 0 ?
+              OverlayNG::geomunion(g1, pm.get())
+              :
+              OverlayNGSnapIfNeeded::Union(g1);
+            g3->setSRID(g1->getSRID());
             return g3.release();
         });
     }

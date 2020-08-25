@@ -2,7 +2,8 @@ Changes in 3.9.0
 2020-xx-xx
 
 - New things:
-  -  MaximumInscribedCircle and LargestEmptyCircle (JTS-530, Paul Ramsey)
+  - MaximumInscribedCircle and LargestEmptyCircle (JTS-530, Paul Ramsey)
+  - CAPI: Fixed precision overlay operations (Sandro Santilli, Paul Ramsey)
 
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)

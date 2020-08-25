@@ -416,6 +416,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSIntersectionPrec(const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return GEOSIntersectionPrec_r(handle, g1, g2, gridSize);
+    }
+
+    Geometry*
     GEOSBuffer(const Geometry* g, double width, int quadrantsegments)
     {
         return GEOSBuffer_r(handle, g, width, quadrantsegments);
@@ -494,6 +500,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDifferencePrec(const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return GEOSDifferencePrec_r(handle, g1, g2, gridSize);
+    }
+
+    Geometry*
     GEOSBoundary(const Geometry* g)
     {
         return GEOSBoundary_r(handle, g);
@@ -506,15 +518,33 @@ extern "C" {
     }
 
     Geometry*
+    GEOSSymDifferencePrec(const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return GEOSSymDifferencePrec_r(handle, g1, g2, gridSize);
+    }
+
+    Geometry*
     GEOSUnion(const Geometry* g1, const Geometry* g2)
     {
         return GEOSUnion_r(handle, g1, g2);
     }
 
     Geometry*
+    GEOSUnionPrec(const Geometry* g1, const Geometry* g2, double gridSize)
+    {
+        return GEOSUnionPrec_r(handle, g1, g2, gridSize);
+    }
+
+    Geometry*
     GEOSUnaryUnion(const Geometry* g)
     {
         return GEOSUnaryUnion_r(handle, g);
+    }
+
+    Geometry*
+    GEOSUnaryUnionPrec(const Geometry* g, double gridSize)
+    {
+        return GEOSUnaryUnionPrec_r(handle, g, gridSize);
     }
 
     Geometry*
