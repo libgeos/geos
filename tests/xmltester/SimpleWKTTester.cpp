@@ -13,8 +13,6 @@
  *
  **********************************************************************/
 
-// CTS.cpp : Testing class
-//
 
 #include <iostream>
 #include <fstream>

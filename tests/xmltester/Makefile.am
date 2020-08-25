@@ -189,14 +189,8 @@ XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 EXTRA_DIST += $(XMLTESTS)
 
 noinst_PROGRAMS = SimpleWKTTester XMLTester
-#bin_PROGRAMS = XMLTester
-# CTS
 
 LIBS = $(top_builddir)/src/libgeos.la
-# -lmpatrol -lbfd -lintl -liberty -limagehlp
-
-# CTS_SOURCES = CTS.cpp
-# CTS_LDADD = $(LIBS)
 
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)
