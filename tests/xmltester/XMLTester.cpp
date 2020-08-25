@@ -216,6 +216,9 @@ checkOverlaySuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes)
 static int
 checkBufferSuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes, double dist)
 {
+
+    using geos::xmltester::BufferResultMatcher;
+
     int success = 1;
     do {
 
@@ -238,11 +241,7 @@ checkBufferSuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes, d
                       << std::endl;
         }
 
-
-        geos::xmltester::BufferResultMatcher matcher;
-        if(! matcher.isBufferResultMatch(gRealRes,
-                                         gRes,
-                                         dist)) {
+        if(!BufferResultMatcher::isBufferResultMatch(gRealRes, gRes, dist)) {
             std::cerr << "BufferResultMatcher FAILED" << std::endl;
             success = 0;
             break;
