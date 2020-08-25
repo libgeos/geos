@@ -324,7 +324,8 @@ LineString::normalizeClosed()
 
     CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
     uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-    if(algorithm::Orientation::isCCW(uniqueCoordinates.get())) {
+
+    if(uniqueCoordinates->size() >= 4 && algorithm::Orientation::isCCW(uniqueCoordinates.get())) {
         CoordinateSequence::reverse(uniqueCoordinates.get());
     }
     points = uniqueCoordinates.get()->clone();

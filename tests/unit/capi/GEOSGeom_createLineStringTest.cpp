@@ -1,7 +1,4 @@
 #include <tut/tut.hpp>
-// geos
-#include <geos_c.h>
-
 #include "capi_test_utils.h"
 
 namespace tut {

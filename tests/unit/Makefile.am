@@ -25,6 +25,7 @@ EXTRA_DIST = \
 	tut/tut_runner.hpp \
 	tut/tut_xml_reporter.hpp \
 	util/NodingTestUtil.h \
+	capi/capi_test_utils.h \
 	CMakeLists.txt
 
 

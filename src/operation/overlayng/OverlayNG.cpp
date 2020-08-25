@@ -101,7 +101,7 @@ std::unique_ptr<Geometry>
 OverlayNG::overlay(const Geometry* geom0, const Geometry* geom1,
         int opCode, noding::Noder* noder)
 {
-    OverlayNG ov(geom0, geom1, nullptr, opCode);
+    OverlayNG ov(geom0, geom1, static_cast<PrecisionModel*>(nullptr), opCode);
     ov.setNoder(noder);
     return ov.getResult();
 }

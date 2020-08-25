@@ -26,8 +26,10 @@ namespace overlayng { // geos.operation.overlayng
 std::unique_ptr<Geometry>
 PrecisionReducer::reducePrecision(const Geometry* geom, const PrecisionModel* pm)
 {
-    std::unique_ptr<Geometry> reduced = OverlayNG::geomunion(geom, pm);
-    return reduced;
+    auto gf = GeometryFactory::create(pm, geom->getSRID());
+    // OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::GeometryFactory* p_geomFact, int p_opCode)
+    OverlayNG ov(geom, nullptr, gf.get(), OverlayNG::UNION);
+    return ov.getResult();
 }
 
 

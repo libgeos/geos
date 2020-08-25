@@ -133,6 +133,23 @@ public:
     * with a defined precision model.
     * The noding strategy is determined by the precision model.
     */
+    OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::GeometryFactory* p_geomFact, int p_opCode)
+        : pm(p_geomFact->getPrecisionModel())
+        , inputGeom(geom0, geom1)
+        , geomFact(p_geomFact)
+        , opCode(p_opCode)
+        , noder(nullptr)
+        , isOptimized(true)
+        , isOutputEdges(false)
+        , isOutputResultEdges(false)
+        , isOutputNodedEdges(false)
+    {}
+
+    /**
+    * Creates an overlay operation on the given geometries,
+    * with a defined precision model.
+    * The noding strategy is determined by the precision model.
+    */
     OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::PrecisionModel* p_pm, int p_opCode)
         : pm(p_pm)
         , inputGeom(geom0, geom1)

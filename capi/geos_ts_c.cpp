@@ -64,6 +64,8 @@
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
+#include <geos/operation/overlayng/PrecisionReducer.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
@@ -2336,15 +2338,23 @@ extern "C" {
             else {
                 newpm.reset(new PrecisionModel());
             }
+            Geometry* ret;
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(newpm.get(), g->getSRID());
-            Geometry* ret;
             if(gridSize != 0 && cursize != gridSize) {
                 // We need to snap the geometry
-                GeometryPrecisionReducer reducer(*gf);
-                reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
-                reducer.setRemoveCollapsedComponents(!(flags & GEOS_PREC_KEEP_COLLAPSED));
-                ret = reducer.reduce(*g).release();
+                if (flags) {
+                    GeometryPrecisionReducer reducer(*gf);
+                    reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
+                    reducer.setRemoveCollapsedComponents(!(flags & GEOS_PREC_KEEP_COLLAPSED));
+                    ret = reducer.reduce(*g).release();
+                }
+                else {
+                    // OverlayNG reducer preserves topology and drops collapsed elements
+                    // All it really is, is a call to OverlayNG::geomunion()
+                    auto reducedGeom = geos::operation::overlayng::PrecisionReducer::reducePrecision(g, newpm.get());
+                    ret = reducedGeom.release();
+                }
             }
             else {
                 // No need or willing to snap, just change the factory

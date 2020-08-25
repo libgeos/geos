@@ -3,14 +3,8 @@
 
 #include <tut/tut.hpp>
 #include <utility.h> // wkb_hex_decoder
-// geos
-#include <geos_c.h>
-// std
-#include <string>
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
-#include <memory>
+
+#include "capi_test_utils.h"
 
 namespace tut {
 //
@@ -18,23 +12,10 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosgeomfromwkb_data {
+struct test_capigeosgeomfromwkb_data : public capitest::test_handlers {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSWKTReader* reader_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     test_capigeosgeomfromwkb_data()
         : geom1_(nullptr), geom2_(nullptr), reader_(nullptr)
