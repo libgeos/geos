@@ -1,14 +1,8 @@
 //
 // Test Suite for C-API GEOSintersection
 
-#include <tut/tut.hpp>
+#include "capi_test_utils.h"
 
-// geos
-#include <geos_c.h>
-// std
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
 
 namespace tut {
 //
@@ -16,30 +10,18 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosintersection_data {
+struct test_capigeosintersection_data : public capitest::utility
+{
+
     GEOSWKTWriter* wktw_;
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSGeometry* geom3_;
     GEOSGeometry* expected_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeosintersection_data()
         : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
@@ -47,23 +29,6 @@ struct test_capigeosintersection_data {
         geom2_ = nullptr;
         geom3_ = nullptr;
         expected_ = nullptr;
-    }
-
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
-    }
-
-    int
-    same(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
-    {
-        GEOSNormalize(g1);
-        GEOSNormalize(g2);
-        return GEOSEqualsExact(g1, g2, tolerance);
     }
 
     ~test_capigeosintersection_data()
@@ -77,7 +42,6 @@ struct test_capigeosintersection_data {
         geom2_ = nullptr;
         geom3_ = nullptr;
         expected_ = nullptr;
-        finishGEOS();
     }
 
 };
@@ -104,7 +68,7 @@ void object::test<1>
 
     geom3_ = GEOSIntersection(geom1_, geom2_);
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_), std::string("POLYGON EMPTY"));
+    ensure_geometry_equals(geom3_, "POLYGON EMPTY");
 }
 
 template<>
@@ -120,7 +84,7 @@ void object::test<2>
 
     geom3_ = GEOSIntersection(geom1_, geom2_);
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_), std::string("POINT (2 2)"));
+    ensure_geometry_equals(geom3_, "POINT (2 2)");
 }
 
 template<>
@@ -138,7 +102,7 @@ void object::test<3>
     geom3_ = GEOSIntersection(geom1_, geom2_);
 
     ensure(nullptr != geom3_);
-    ensure(same(geom3_, expected_, 0.1));
+    ensure_geometry_equals(geom3_, expected_, 0.1);
 }
 
 /* See http://trac.osgeo.org/geos/ticket/719 */

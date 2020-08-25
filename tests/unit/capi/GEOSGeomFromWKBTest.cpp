@@ -12,7 +12,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosgeomfromwkb_data : public capitest::test_handlers {
+struct test_capigeosgeomfromwkb_data : public capitest::utility {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSWKTReader* reader_;

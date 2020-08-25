@@ -9,7 +9,7 @@ namespace tut {
 // Test Group
 //
 
-struct test_geosunion_data : public capitest::test_handlers {};
+struct test_geosunion_data : public capitest::utility {};
 
 typedef test_group<test_geosunion_data> group;
 typedef group::object object;
