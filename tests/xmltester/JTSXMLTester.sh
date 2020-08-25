@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ######################################################################
 #
@@ -28,22 +28,8 @@ do
   THE_CLASSPATH=${THE_CLASSPATH}:${i}
 done
 
-#---------------------------------#
-# Handle/translate some switches  #
-#---------------------------------#
-
-opts=
-while test `expr "$1" : '-'` = 1; do
-  opt="$1"
-  if test "$opt" = "-v"; then
-    opt="-verbose";
-  fi
-  opts="$opts $opt";
-  shift
-done
-
 #---------------------------#
 # run the program           #
 #---------------------------#
 java -cp ".:${THE_CLASSPATH}" \
-org.locationtech.jtstest.testrunner.TopologyTestApp $opts -files $@
+org.locationtech.jtstest.testrunner.JTSTestRunnerCmd $@
