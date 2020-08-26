@@ -71,6 +71,8 @@ geos_unit_SOURCES = \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSCoverageUnionTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
+	capi/GEOSDifferenceTest.cpp \
+	capi/GEOSDifferencePrecTest.cpp \
 	capi/GEOSDistanceTest.cpp \
 	capi/GEOSEqualsTest.cpp \
 	capi/GEOSFrechetDistanceTest.cpp \
