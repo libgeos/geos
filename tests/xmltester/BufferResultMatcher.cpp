@@ -28,10 +28,6 @@
 namespace geos {
 namespace xmltester {
 
-double BufferResultMatcher::MAX_RELATIVE_AREA_DIFFERENCE = 1.0E-3;
-double BufferResultMatcher::MIN_DISTANCE_TOLERANCE = 1.0e-8;
-double BufferResultMatcher::MAX_HAUSDORFF_DISTANCE_FACTOR = 100;
-
 bool
 BufferResultMatcher::isBufferResultMatch(const geom::Geometry& actualBuffer,
         const geom::Geometry& expectedBuffer,

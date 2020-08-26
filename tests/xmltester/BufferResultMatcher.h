@@ -31,27 +31,27 @@ namespace xmltester {
 
 class BufferResultMatcher {
 public:
-    bool isBufferResultMatch(const geom::Geometry& actualBuffer,
+
+    static bool isBufferResultMatch(const geom::Geometry& actualBuffer,
                              const geom::Geometry& expectedBuffer,
                              double distance);
 
 private:
 
-    static double MAX_RELATIVE_AREA_DIFFERENCE;
-
-    static double MAX_HAUSDORFF_DISTANCE_FACTOR;
+    static constexpr double MAX_RELATIVE_AREA_DIFFERENCE = 1.0E-3;
+    static constexpr double MAX_HAUSDORFF_DISTANCE_FACTOR = 100;
 
     /*
      * The minimum distance tolerance which will be used.
      * This is required because densified vertices do no lie
      * precisely on their parent segment.
      */
-    static double MIN_DISTANCE_TOLERANCE;
+    static constexpr double MIN_DISTANCE_TOLERANCE = 1.0e-8;
 
-    bool isSymDiffAreaInTolerance(const geom::Geometry& actualBuffer,
+    static bool isSymDiffAreaInTolerance(const geom::Geometry& actualBuffer,
                                   const geom::Geometry& expectedBuffer);
 
-    bool isBoundaryHausdorffDistanceInTolerance(
+    static bool isBoundaryHausdorffDistanceInTolerance(
         const geom::Geometry& actualBuffer,
         const geom::Geometry& expectedBuffer,
         double distance);
