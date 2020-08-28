@@ -56,14 +56,14 @@ public:
      *
      * The return value is one of:
      *
-     * - [Location::INTERIOR](@ref geom::Location::INTERIOR)
+     * - geom::Location::INTERIOR
      *   if the point is in the geometry interior
-     * - [Location::BOUNDARY](@ref geom::Location::BOUNDARY)
+     * - geom::Location::BOUNDARY
      *   if the point lies exactly on the boundary
-     * - [Location::EXTERIOR](@ref geom::Location::EXTERIOR)
+     * - geom::Location::EXTERIOR
      *   if the point is outside the geometry
      *
-     * Computes `Location::BOUNDARY` if the point lies exactly
+     * Computes `geom::Location::BOUNDARY` if the point lies exactly
      * on the polygon boundary.
      *
      * @param p the point to test

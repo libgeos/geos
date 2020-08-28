@@ -45,7 +45,7 @@ namespace locate { // geos::algorithm::locate
  * an areal geometry, using indexing for efficiency.
  *
  * The Location is computed precisely, in that points located on the geometry boundary
- * or segments will return [Location::BOUNDARY](@ref geom::Location::BOUNDARY).
+ * or segments will return [geom::Location::BOUNDARY](@ref geom::Location).
  *
  * Polygonal and [LinearRing](@ref geom::LinearRing) geometries are supported.
  *
