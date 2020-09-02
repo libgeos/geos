@@ -5,6 +5,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/io/WKTReader.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -56,6 +57,14 @@ runPtLocator(Location expected, const Coordinate& pt,
     ensure_equals(loc, expected);
 }
 
+void
+runSimplePtLocator(Location expected, const Coordinate& pt,
+             const std::string& wkt)
+{
+    GeomPtr geom(reader.read(wkt));
+    Location loc = geos::algorithm::locate::SimplePointInAreaLocator::locate(pt, geom.get());
+    ensure_equals(loc, expected);
+}
 
 //
 // Test Cases
@@ -109,6 +118,16 @@ void object::test<5>
 {
     runPtLocator(Location::INTERIOR, Coordinate(0, 0),
                  "MULTIPOINT ((1 1), (0 0))");
+}
+
+// 6 - TestPointLocator Point inside GeometryCollection containing MultiPolygon, using SimplePointInAreaLocator.
+template<>
+template<>
+void object::test<6>
+()
+{
+    runSimplePtLocator(Location::INTERIOR, Coordinate(0, 0),
+                       "GEOMETRYCOLLECTION (MULTIPOLYGON (((-1 -1, 1 -1, 1 1, -1 1, -1 -1))))");
 }
 
 } // namespace tut
