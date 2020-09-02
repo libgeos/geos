@@ -2,6 +2,9 @@ Changes in 3.8.2
 2020-xx-xx
 
 - Bug fixes / improvements
+
+  - Fix segfault in SimplePointInAreaLocator caused by casting
+    MultiPolygon to Polygon (#1047, Oliver Tan)
   - DistanceOp against geometry with empty components
     crashes (#1026, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
