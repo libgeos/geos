@@ -67,15 +67,17 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
     }
 
     if (geom->getNumGeometries() == 1) {
-        return locatePointInPolygon(p, dynamic_cast<const Polygon*>(geom->getGeometryN(0)));
-    } else {
-        for (size_t i = 0; i < geom->getNumGeometries(); i++) {
-            const Geometry* gi = geom->getGeometryN(i);
-
-            auto loc = locateInGeometry(p, gi);
-            if(loc != Location::EXTERIOR) {
-                return loc;
-            }
+        auto poly = dynamic_cast<const Polygon*>(geom->getGeometryN(0));
+        if (poly) {
+            return locatePointInPolygon(p, poly);
+        }
+        // Else it is a collection with a single element. Will be handled below.
+    }
+    for (size_t i = 0; i < geom->getNumGeometries(); i++) {
+        const Geometry* gi = geom->getGeometryN(i);
+        auto loc = locateInGeometry(p, gi);
+        if(loc != Location::EXTERIOR) {
+            return loc;
         }
     }
 
