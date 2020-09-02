@@ -129,7 +129,7 @@ WKBWriter::writePointEmpty(const Point& g)
     writeSRID(g.getSRID());
 
     Coordinate c(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
-    CoordinateArraySequence cas(std::size_t(1), g.getCoordinateDimension());
+    CoordinateArraySequence cas(std::size_t(1), std::size_t(g.getCoordinateDimension()));
     cas.setAt(c, 0);
 
     writeCoordinateSequence(cas, false);
@@ -256,7 +256,7 @@ WKBWriter::setByteOrder(int bo)
 void
 WKBWriter::writeGeometryType(int typeId, int SRID)
 {
-    int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
+    int flag3D = (outputDimension == 3) ? int(0x80000000) : 0;
     int typeInt = typeId | flag3D;
 
     if(includeSRID && SRID != 0) {
