@@ -207,8 +207,6 @@ operator<<(std::ostream& os, const MaximalEdgeRing& mer)
     OverlayEdge* edge = mer.startEdge;
     do {
         coords.add(edge->orig());
-        if (edge == nullptr)
-            break;
         if (edge->nextResultMax() == nullptr)
             break;
         edge = edge->nextResultMax();
