@@ -284,67 +284,62 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
         return geometryFactory->createMultiPoint();
     }
 
-    int tok = tokenizer->peekNextToken();
+    std::vector<std::unique_ptr<Point>> points;
+    do {
+      auto tok = tokenizer->peekNextToken();
 
-    if(tok == StringTokenizer::TT_NUMBER) {
-        size_t dim;
+      if(tok == StringTokenizer::TT_NUMBER) {
+          // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
+          size_t dim;
+          Coordinate coord;
+          getPreciseCoordinate(tokenizer, coord, dim);
+          points.push_back(std::unique_ptr<Point>(geometryFactory->createPoint(coord)));
+      }
 
-        // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
-        auto coords = detail::make_unique<CoordinateArraySequence>();
+      else if(tok == '(') {
+          // Try to parse correct form "MULTIPOINT((0 0), (1 1))"
+          points.push_back(readPointText(tokenizer));
+      }
 
-        do {
-            Coordinate coord;
-            getPreciseCoordinate(tokenizer, coord, dim);
-            coords->add(coord);
-            nextToken = getNextCloserOrComma(tokenizer);
-        }
-        while(nextToken == ",");
+      else if(tok == StringTokenizer::TT_WORD && tokenizer->getSVal() == "EMPTY") {
+          points.push_back(geometryFactory->createPoint());
+          tokenizer->nextToken();
+      }
 
-        return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint(*coords));
-    }
+      else {
+          stringstream err;
+          err << "Unexpected token: ";
+          switch(tok) {
+          case StringTokenizer::TT_WORD:
+              err << "WORD " << tokenizer->getSVal();
+              break;
+          case StringTokenizer::TT_NUMBER:
+              err << "NUMBER " << tokenizer->getNVal();
+              break;
+          case StringTokenizer::TT_EOF:
+          case StringTokenizer::TT_EOL:
+              err << "EOF or EOL";
+              break;
+          case '(':
+              err << "(";
+              break;
+          case ')':
+              err << ")";
+              break;
+          case ',':
+              err << ",";
+              break;
+          default:
+              err << "??";
+              break;
+          }
+          err << endl;
+          throw ParseException(err.str());
+      }
 
-    else if(tok == '(') {
-        // Try to parse correct form "MULTIPOINT((0 0), (1 1))"
-        std::vector<std::unique_ptr<Point>> points;
-
-        do {
-            points.push_back(readPointText(tokenizer));
-            nextToken = getNextCloserOrComma(tokenizer);
-        } while(nextToken == ",");
-
-        return geometryFactory->createMultiPoint(std::move(points));
-    }
-
-    else {
-        stringstream err;
-        err << "Unexpected token: ";
-        switch(tok) {
-        case StringTokenizer::TT_WORD:
-            err << "WORD " << tokenizer->getSVal();
-            break;
-        case StringTokenizer::TT_NUMBER:
-            err << "NUMBER " << tokenizer->getNVal();
-            break;
-        case StringTokenizer::TT_EOF:
-        case StringTokenizer::TT_EOL:
-            err << "EOF or EOL";
-            break;
-        case '(':
-            err << "(";
-            break;
-        case ')':
-            err << ")";
-            break;
-        case ',':
-            err << ",";
-            break;
-        default:
-            err << "??";
-            break;
-        }
-        err << endl;
-        throw ParseException(err.str());
-    }
+      nextToken = getNextCloserOrComma(tokenizer);
+    } while(nextToken == ",");
+    return geometryFactory->createMultiPoint(std::move(points));
 }
 
 std::unique_ptr<Polygon>

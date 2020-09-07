@@ -193,4 +193,17 @@ void object::test<8>
     }
 }
 
+// 9 - check we can read MULTIPOINT containing empty elements
+template<>
+template<>
+void object::test<9>
+()
+{
+    GeomPtr geom(wktreader.read("MULTIPOINT Z (0 1 2, EMPTY, 1 2 3, 3 4 5, EMPTY)"));
+    GeomPtr geom2(wktreader.read("MULTIPOINT Z ((0 1 2), EMPTY, (1 2 3), (3 4 5), EMPTY)"));
+    std::string expected("MULTIPOINT Z (0 1 2, EMPTY, 1 2 3, 3 4 5, EMPTY)");
+    ensure_equals(wktwriter.write(geom.get()), expected);
+    ensure_equals(wktwriter.write(geom2.get()), expected);
+}
+
 } // namespace tut

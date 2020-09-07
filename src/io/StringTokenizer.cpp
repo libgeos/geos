@@ -135,30 +135,29 @@ int
 StringTokenizer::peekNextToken()
 {
 
-    string::size_type pos;
     string tok = "";
     if(iter == str.end()) {
         return StringTokenizer::TT_EOF;
     }
 
-    pos = str.find_first_not_of(" \r\n\t", iter - str.begin());
+    auto startPos = str.find_first_not_of(" \r\n\t", iter - str.begin());
 
-    if(pos == string::npos) {
+    if(startPos == string::npos) {
         return StringTokenizer::TT_EOF;
     }
-    switch(str[pos]) {
+    switch(str[startPos]) {
     case '(':
     case ')':
     case ',':
-        return str[pos];
+        return str[startPos];
     }
 
     // It's either a Number or a Word, let's
     // see when it ends
 
-    pos = str.find_first_of("\n\r\t() ,", iter - str.begin());
+    auto endPos = str.find_first_of("\n\r\t() ,", startPos);
 
-    if(pos == string::npos) {
+    if(endPos == string::npos) {
         if(iter != str.end()) {
             tok.assign(iter, str.end());
         }
@@ -167,7 +166,7 @@ StringTokenizer::peekNextToken()
         }
     }
     else {
-        tok.assign(iter, str.begin() + pos); //str.end());
+        tok.assign(str.begin() + startPos, str.begin() + endPos); //str.end());
     }
 
     char* stopstring;
