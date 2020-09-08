@@ -51,7 +51,7 @@ private:
     std::vector<OverlayEdge*>& edges;
 
     /**
-    * Finds a boundary edge for this geom, if one exists
+    * Finds a boundary edge for this geom, if one exists.
     */
     static OverlayEdge* findPropagationStartEdge(OverlayEdge* nodeEdge, int geomIndex);
 
@@ -176,7 +176,7 @@ public:
     * for a given area geometry to all edges (and their sym)
     * with unknown locations for that geometry.
     */
-    static void propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex);
+    void propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex);
 
     void markResultAreaEdges(int overlayOpCode);
 

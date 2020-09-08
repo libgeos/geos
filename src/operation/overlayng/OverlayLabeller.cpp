@@ -36,6 +36,7 @@ OverlayLabeller::computeLabelling()
 {
     std::vector<OverlayEdge*> nodes = graph->getNodeEdges();
     labelAreaNodeEdges(nodes);
+    labelConnectedLinearEdges();
 
     //TODO: is there a way to avoid scanning all edges in these steps?
     /**
@@ -44,6 +45,8 @@ OverlayLabeller::computeLabelling()
      * They can be located based on their parent ring role (shell or hole).
      */
     labelCollapsedEdges();
+    labelConnectedLinearEdges();
+
     labelDisconnectedEdges();
 }
 
@@ -58,14 +61,20 @@ OverlayLabeller::labelAreaNodeEdges(std::vector<OverlayEdge*>& nodes)
             propagateAreaLocations(nodeEdge, 1);
         }
     }
-    labelConnectedLinearEdges();
 }
 
-/*public static*/
+/*public*/
 void
 OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex)
 {
+    /*
+     * Only propagate for area geometries
+     */
+    if (!inputGeometry->isArea(geomIndex))
+        return;
+
     /**
+     * No need to propagate if node has only one edge.
      * This handles dangling edges created by overlap limiting
      */
     if (nodeEdge->degree() == 1)
@@ -138,7 +147,6 @@ OverlayLabeller::labelCollapsedEdges()
             labelCollapsedEdge(edge, 1);
         }
     }
-    labelConnectedLinearEdges();
 }
 
 /*private*/
