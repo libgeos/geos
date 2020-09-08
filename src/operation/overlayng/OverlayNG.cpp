@@ -234,25 +234,25 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
     PolygonBuilder polyBuilder(resultAreaEdges, geomFact);
     std::vector<std::unique_ptr<Polygon>> resultPolyList = polyBuilder.getPolygons();
-    bool hasResultComponents = resultPolyList.size() > 0;
+    bool hasResultAreaComponents = resultPolyList.size() > 0;
 
     //--- Build lines
-    bool allowMixedIntResult = ! hasResultComponents || ALLOW_INT_MIXED_INT_RESULT;
     std::vector<std::unique_ptr<LineString>> resultLineList;
-    if (p_opCode != INTERSECTION || allowMixedIntResult) {
-        LineBuilder lineBuilder(&inputGeom, graph, hasResultComponents, p_opCode, geomFact);
+    bool allowResultLines = ! hasResultAreaComponents || ALLOW_INT_MIXED_RESULT;
+    if(allowResultLines) {
+        LineBuilder lineBuilder(&inputGeom, graph, hasResultAreaComponents, p_opCode, geomFact);
         resultLineList = lineBuilder.getLines();
     }
 
-    hasResultComponents = hasResultComponents || resultLineList.size() > 0;
+    bool hasResultComponents = hasResultAreaComponents || resultLineList.size() > 0;
     /**
-     * Since operations with point inputs are handled elsewhere,
-     * this only handles the case where non-point inputs
-     * intersect in points.
+     * Operations with point inputs are handled elsewhere.
+     * Only an intersection op can produce point results
+     * from non-point inputs.
      */
     std::vector<std::unique_ptr<Point>> resultPointList;
-    allowMixedIntResult = ! hasResultComponents || ALLOW_INT_MIXED_INT_RESULT;
-    if (opCode == INTERSECTION && allowMixedIntResult) {
+    bool allowResultPoints = ! hasResultComponents || ALLOW_INT_MIXED_RESULT;
+    if (opCode == INTERSECTION && allowResultPoints) {
         IntersectionPointBuilder pointBuilder(graph, geomFact);
         resultPointList = pointBuilder.getPoints();
     }

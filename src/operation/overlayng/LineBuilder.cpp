@@ -76,7 +76,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
         return false;
 
 
-    if (OverlayNG::ALLOW_INT_MIXED_INT_RESULT &&
+    if (OverlayNG::ALLOW_INT_MIXED_RESULT &&
         opCode == OverlayNG::INTERSECTION &&
         lbl->isBoundaryTouch()) {
         return true;
