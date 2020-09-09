@@ -68,6 +68,13 @@ bool
 LineBuilder::isResultLine(const OverlayLabel* lbl) const
 {
     /**
+     * An edge which is a boundary of a single geometry cannot form a line result.
+     * This is a short-circuit for area edges if no collapses or lines are present.
+     */
+    if (lbl->isBoundarySingleton())
+        return false;
+
+    /**
     * Edges which are collapses along boundaries are not output.
     * I.e a result line edge must be from a input line
     * or two coincident area boundaries.

@@ -194,6 +194,12 @@ public:
     bool isLineLocationUnknown(int index) const;
 
     /**
+    * Tests whether a label is for an edge which is a boundary of one geometry
+    * and not part of the other.
+    */
+    bool isBoundarySingleton() const;
+
+    /**
     * Tests if a line edge is inside
     * @param index
     * @return

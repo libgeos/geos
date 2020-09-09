@@ -206,6 +206,21 @@ OverlayLabel::isBoundary(int index) const
 
 /*public*/
 bool
+OverlayLabel::isBoundarySingleton() const
+{
+    if (aDim == DIM_BOUNDARY && bDim == DIM_NOT_PART) {
+        return true;
+    }
+
+    if (bDim == DIM_BOUNDARY && aDim == DIM_NOT_PART) {
+        return true;
+    }
+
+    return false;
+}
+
+/*public*/
+bool
 OverlayLabel::isLineLocationUnknown(int index) const
 {
     if (index == 0) {

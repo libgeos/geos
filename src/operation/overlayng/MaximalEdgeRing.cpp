@@ -93,11 +93,11 @@ MaximalEdgeRing::attachEdges(OverlayEdge* p_startEdge)
     OverlayEdge* edge = p_startEdge;
     do {
         if (edge == nullptr)
-            throw util::TopologyException("Found null edge in ring");
+            throw util::TopologyException("Ring edge is null");
         if (edge->getEdgeRingMax() == this)
-            throw util::TopologyException("Edge visited twice during ring-building", edge->getCoordinate());
+            throw util::TopologyException("Ring edge visited twice", edge->getCoordinate());
         if (edge->nextResultMax() == nullptr) {
-            throw util::TopologyException("Found null edge in ring", edge->dest());
+            throw util::TopologyException("Ring edge missing", edge->dest());
         }
         edge->setEdgeRingMax(this);
         edge = edge->nextResultMax();
