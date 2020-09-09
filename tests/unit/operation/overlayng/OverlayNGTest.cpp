@@ -494,7 +494,16 @@ void object::test<39> ()
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
-
+// testPolygonFlatCollapseIntersection
+template<>
+template<>
+void object::test<40> ()
+{
+    std::string a = "POLYGON ((200 100, 150 200, 250 200, 150 200, 100 100, 200 100))";
+    std::string b = "POLYGON ((50 150, 250 150, 250 50, 50 50, 50 150))";
+    std::string exp = "POLYGON ((175 150, 200 100, 100 100, 125 150, 175 150))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
 
 
 } // namespace tut
