@@ -270,8 +270,18 @@ void object::test<16> ()
     checkRounding(wkt, 1, expected);
 }
 
-
-
+/**
+* Complex lines are snapped to a simpler arrangement
+*/
+// testHammerheads
+template<>
+template<>
+void object::test<17> ()
+{
+    std::string wkt =      "MULTILINESTRING ((1 3.3, 1.3 1.4, 3.1 1.4, 3.1 0.9, 1.3 0.9, 1 -0.2, 0.8 1.3, 1 3.3), (1 2.9, 2.9 2.9, 2.9 1.3, 1.7 1, 1.3 0.9, 1 0.4, 1 2.9))";
+    std::string expected = "MULTILINESTRING ((1 3, 1 1), (1 1, 2 1), (2 1, 3 1), (3 1, 2 1), (2 1, 1 1), (1 1, 1 0), (1 0, 1 1), (1 1, 1 3), (1 3, 3 3, 3 1), (3 1, 2 1), (2 1, 1 1), (1 1, 1 0), (1 0, 1 1), (1 1, 1 3))";
+    checkRounding(wkt, 1.0, expected);
+}
 
 
 } // namespace tut
