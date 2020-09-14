@@ -28,11 +28,11 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/operation/overlayng/PrecisionReducer.h>
 
 #include <vector>
 #include <typeinfo>
 
-using namespace std;
 using namespace geos::geom;
 using namespace geos::geom::util;
 
@@ -40,11 +40,68 @@ namespace geos {
 namespace precision { // geos.precision
 
 
+/* public */
+GeometryPrecisionReducer::GeometryPrecisionReducer(const GeometryFactory& changeFactory)
+    :
+    newFactory(&changeFactory),
+    targetPM(*(changeFactory.getPrecisionModel())),
+    removeCollapsed(true),
+    useAreaReducer(false),
+    isPointwise(false)
+{}
+
+
+/* public */
+std::unique_ptr<Geometry>
+GeometryPrecisionReducer::reduce(const Geometry& geom)
+{
+    if (useAreaReducer && geom.isPolygonal()) {
+        std::unique_ptr<Geometry> reduced =
+            operation::overlayng::PrecisionReducer::reducePrecision(
+                &geom, &targetPM, changePrecisionModel);
+        // GEOS overlayng::PrecisionReducer::reducePrecision
+        // takes changePrecisionModel directly to avoid extra steps in JTS
+        // if (changePrecisionModel) {
+        //     return changePM(reduced, targetPM);
+        // }
+        return reduced;
+    }
+
+    /**
+     * Process pointwise reduction
+     * (which is only strategy used for linear and point geoms)
+     */
+    std::unique_ptr<Geometry> reducePW = reducePointwise(geom);
+
+    if (isPointwise)
+        return reducePW;
+
+    if(!reducePW->isPolygonal()) {
+        return reducePW;
+    }
+
+    // Geometry is polygonal - test if topology needs to be fixed
+    if(reducePW->isValid()) {
+        return reducePW;
+    }
+
+    // hack to fix topology.
+    return fixPolygonalTopology(*reducePW);
+}
+
+
 /* private */
-unique_ptr<Geometry>
+std::unique_ptr<Geometry>
 GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
 {
-    GeometryEditor geomEdit(newFactory);
+    std::unique_ptr<GeometryEditor> geomEdit;
+
+    if (changePrecisionModel) {
+        geomEdit.reset(new GeometryEditor(newFactory));
+    }
+    else {
+        geomEdit.reset(new GeometryEditor());
+    }
 
     /*
      * For polygonal geometries, collapses are always removed, in order
@@ -56,57 +113,20 @@ GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
     }
 
     PrecisionReducerCoordinateOperation prco(targetPM, finalRemoveCollapsed);
-
-    std::unique_ptr<Geometry> g(geomEdit.edit(&geom, &prco));
-
+    std::unique_ptr<Geometry> g(geomEdit->edit(&geom, &prco));
     return g;
 }
 
-/* public */
-unique_ptr<Geometry>
-GeometryPrecisionReducer::reduce(const Geometry& geom)
-{
-    unique_ptr<Geometry> reducePW = reducePointwise(geom);
-
-    if(isPointwise) {
-        return reducePW;
-    }
-
-    //TODO: handle GeometryCollections containing polys
-    if(!reducePW->isPolygonal()) {
-        return reducePW;
-    }
-
-    // Geometry is polygonal - test if topology needs to be fixed
-    if(reducePW->isValid()) {
-        return reducePW;
-    }
-
-    // hack to fix topology.
-    // TODO: implement snap-rounding and use that.
-    return fixPolygonalTopology(*reducePW);
-
-}
-
-
-/* public */
-GeometryPrecisionReducer::GeometryPrecisionReducer(const GeometryFactory& changeFactory)
-    :
-    newFactory(&changeFactory),
-    targetPM(*(changeFactory.getPrecisionModel())),
-    removeCollapsed(true),
-    isPointwise(false)
-{}
 
 /* private */
-unique_ptr<Geometry>
-GeometryPrecisionReducer::fixPolygonalTopology(const geom::Geometry& geom)
+std::unique_ptr<Geometry>
+GeometryPrecisionReducer::fixPolygonalTopology(const Geometry& geom)
 {
     /*
      * If precision model was *not* changed, need to flip
      * geometry to targetPM, buffer in that model, then flip back
      */
-    unique_ptr<Geometry> tmp;
+    std::unique_ptr<geom::Geometry> tmp;
     GeometryFactory::Ptr tmpFactory;
 
     const Geometry* geomToBuffer = &geom;
@@ -117,7 +137,7 @@ GeometryPrecisionReducer::fixPolygonalTopology(const geom::Geometry& geom)
         geomToBuffer = tmp.get();
     }
 
-    unique_ptr<Geometry> bufGeom(geomToBuffer->buffer(0));
+    std::unique_ptr<Geometry> bufGeom(geomToBuffer->buffer(0));
 
     if(! newFactory) {
         // a slick way to copy the geometry with the original precision factory
@@ -139,6 +159,8 @@ GeometryPrecisionReducer::createFactory(const GeometryFactory& oldGF,
     );
     return p_newFactory;
 }
+
+
 
 } // namespace geos.precision
 } // namespace geos

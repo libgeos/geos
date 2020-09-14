@@ -17,9 +17,12 @@
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/util/GEOSException.h>
+#include <geos/io/WKBWriter.h>
 
 
 namespace geos {      // geos
@@ -346,49 +349,18 @@ Edge::populateLabel(OverlayLabel &lbl) const
 }
 
 
+/*public friend*/
+std::ostream&
+operator<<(std::ostream& os, const Edge& e)
+{
+    auto gf = GeometryFactory::create();
+    auto cs = e.getCoordinatesRO();
+    auto line = gf->createLineString(cs->clone());
+    io::WKBWriter w;
+    w.writeHEX(*line, os);
+    return os;
+}
 
-// public String toString() {
-
-//   String ptsStr = toStringPts(pts);
-
-//   String aInfo = infoString(0, aDim, aIsHole, aDepthDelta );
-//   String bInfo = infoString(1, bDim, bIsHole, bDepthDelta );
-
-//   return "Edge( " + ptsStr  + " ) "
-//       + aInfo + "/" + bInfo;
-// }
-// public String toLineString() {
-//   return WKTWriter.toLineString(pts);
-// }
-
-// private static String toStringPts(Coordinate[] pts) {
-//   Coordinate orig = pts[0];
-//   Coordinate dest = pts[pts.length - 1];
-//   String dirPtStr = (pts.length > 2)
-//       ? ", " + WKTWriter.format(pts[1])
-//           : "";
-//   String ptsStr = WKTWriter.format(orig)
-//       + dirPtStr
-//       + " .. " + WKTWriter.format(dest);
-//   return ptsStr;
-// }
-
-// public static String infoString(int index, int dim, boolean isHole, int depthDelta) {
-//   return
-//       (index == 0 ? "A:" : "B:")
-//       + OverlayLabel.dimensionSymbol(dim)
-//       + ringRoleSymbol( dim, isHole )
-//       + Integer.toString(depthDelta);  // force to string
-// }
-
-// public static String ringRoleSymbol(int dim, boolean isHole) {
-//   if (hasAreaParent(dim)) return "" + OverlayLabel.ringRoleSymbol(isHole);
-//   return "";
-// }
-
-// private static boolean hasAreaParent(int dim) {
-//   return dim == OverlayLabel.DIM_BOUNDARY || dim == OverlayLabel.DIM_COLLAPSE;
-// }
 
 bool EdgeComparator(const Edge* a, const Edge* b)
 {

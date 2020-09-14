@@ -91,7 +91,7 @@ InputGeometry::getAreaIndex() const
 bool
 InputGeometry::isLine(int geomIndex) const
 {
-    return geom[geomIndex]->getDimension() == 1;
+    return getDimension(geomIndex) == 1;
 }
 
 /*public*/

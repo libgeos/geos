@@ -4,6 +4,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/geom/Geometry.h>
@@ -45,6 +46,7 @@ struct test_gpr_data {
         reducerChangePM_(*factory_fixed_)
     {
         reducerKeepCollapse_.setRemoveCollapsedComponents(false);
+        reducerChangePM_.setChangePrecisionModel(true);
     }
 };
 
@@ -68,7 +70,7 @@ void object::test<1>
 
     GeometryPtr result(reducer_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -83,7 +85,7 @@ void object::test<2>
 
     GeometryPtr result(reducer_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -98,7 +100,7 @@ void object::test<3>
 
     GeometryPtr result(reducer_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -117,7 +119,7 @@ void object::test<4>
 
     GeometryPtr result(reducerKeepCollapse_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -132,7 +134,7 @@ void object::test<5>
 
     GeometryPtr result(reducer_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -147,7 +149,7 @@ void object::test<6>
 
     GeometryPtr result(reducer_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -162,7 +164,7 @@ void object::test<7>
 
     GeometryPtr result(reducerKeepCollapse_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
+    ensure_equals_geometry(g2.get(), result.get());
     ensure(result->getFactory() == g2->getFactory());
 }
 
@@ -177,8 +179,8 @@ void object::test<8>
 
     GeometryPtr result(reducerChangePM_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
-    ensure(result->getFactory() == factory_fixed_.get());
+    ensure_equals_geometry(g2.get(), result.get());
+    ensure(result->getFactory() != g2->getFactory());
 }
 
 // Test points with changed PM
@@ -192,8 +194,8 @@ void object::test<9>
 
     GeometryPtr result(reducerChangePM_.reduce(*g1));
 
-    ensure(result->equalsExact(g2.get()));
-    ensure(result->getFactory() == factory_fixed_.get());
+    ensure_equals_geometry(g2.get(), result.get());
+    ensure(result->getFactory() != g2->getFactory());
 }
 
 

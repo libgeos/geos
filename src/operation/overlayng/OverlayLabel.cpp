@@ -254,9 +254,39 @@ OverlayLabel::isHole(int index) const
 }
 
 /*public*/
-bool OverlayLabel::isCollapse(int index) const
+bool
+OverlayLabel::isCollapse(int index) const
 {
     return dimension(index) == DIM_COLLAPSE;
+}
+
+/*public*/
+bool
+OverlayLabel::isInteriorCollapse() const
+{
+    if (aDim == DIM_COLLAPSE && aLocLine == Location::INTERIOR)
+        return true;
+    if (bDim == DIM_COLLAPSE && bLocLine == Location::INTERIOR)
+        return true;
+
+    return false;
+}
+
+/*public*/
+bool
+OverlayLabel::isCollapseAndNotPartInterior() const
+{
+    if (aDim == DIM_COLLAPSE &&
+        bDim == DIM_NOT_PART &&
+        bLocLine == Location::INTERIOR)
+        return true;
+
+    if (bDim == DIM_COLLAPSE &&
+        aDim == DIM_NOT_PART &&
+        aLocLine == Location::INTERIOR)
+        return true;
+
+    return false;
 }
 
 /*public*/

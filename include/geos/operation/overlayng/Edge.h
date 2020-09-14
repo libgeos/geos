@@ -121,6 +121,8 @@ public:
         , pts(nullptr)
         {};
 
+    friend std::ostream& operator<<(std::ostream& os, const Edge& e);
+
     static bool isCollapsed(const geom::CoordinateSequence* pts);
 
     // takes ownership of pts from caller

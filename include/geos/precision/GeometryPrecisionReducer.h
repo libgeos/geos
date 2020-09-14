@@ -38,7 +38,22 @@ namespace precision { // geos.precision
 /** \brief
  * Reduces the precision of a {@link geom::Geometry}
  * according to the supplied {@link geom::PrecisionModel},
- * ensuring that the result is topologically valid.
+ * ensuring that the result is valid (unless specified otherwise).
+ *
+ * By default the reduced result is topologically valid
+ * To ensure this a polygonal geometry is reduced in a topologically valid fashion
+ * (technically, by using snap-rounding).
+ * It can be forced to be reduced pointwise by using setPointwise(boolean).
+ * Note that in this case the result geometry may be invalid.
+ * Linear and point geometry is always reduced pointwise (i.e. without further change to
+ * its topology or stucture), since this does not change validity.
+ *
+ * By default the geometry precision model is not changed.
+ * This can be overridden by usingsetChangePrecisionModel(boolean).
+ *
+ * Normally collapsed components (e.g. lines collapsing to a point)
+ * are not included in the result.
+ * This behavior can be changed by using setRemoveCollapsedComponents(boolean).
  */
 class GEOS_DLL GeometryPrecisionReducer {
 
@@ -50,13 +65,13 @@ private:
     const geom::PrecisionModel& targetPM;
 
     bool removeCollapsed;
-
+    bool changePrecisionModel;
+    bool useAreaReducer;
     bool isPointwise;
 
     std::unique_ptr<geom::Geometry> reducePointwise(const geom::Geometry& geom);
 
-    std::unique_ptr<geom::Geometry> fixPolygonalTopology(
-        const geom::Geometry& geom);
+    std::unique_ptr<geom::Geometry> fixPolygonalTopology(const geom::Geometry& geom);
 
     geom::GeometryFactory::Ptr createFactory(
         const geom::GeometryFactory& oldGF,
@@ -109,11 +124,11 @@ public:
     }
 
     GeometryPrecisionReducer(const geom::PrecisionModel& pm)
-        :
-        newFactory(nullptr),
-        targetPM(pm),
-        removeCollapsed(true),
-        isPointwise(false)
+        : newFactory(nullptr)
+        , targetPM(pm)
+        , removeCollapsed(true)
+        , changePrecisionModel(false)
+        , isPointwise(false)
     {}
 
     /**
@@ -133,12 +148,34 @@ public:
      * being removed completely, or simply being collapsed to an (invalid)
      * Geometry of the same type.
      *
-     * @param remove if <code>true</code> collapsed components will be removed
+     * @param remove if true collapsed components will be removed
      */
     void
     setRemoveCollapsedComponents(bool remove)
     {
         removeCollapsed = remove;
+    }
+
+    /** \brief
+    * Sets whether the {@link geom::PrecisionModel} of the new reduced Geometry
+    * will be changed to be the {@link geom::PrecisionModel} supplied to
+    * specify the precision reduction.
+    * The default is to not change the precision model
+    *
+    * @param change if true the precision
+    * model of the created Geometry will be the
+    * the precisionModel supplied in the constructor.
+    */
+    void
+    setChangePrecisionModel(bool change)
+    {
+        changePrecisionModel = change;
+    }
+
+    void
+    setUseAreaReducer(bool useAR)
+    {
+        useAreaReducer = useAR;
     }
 
     /** \brief

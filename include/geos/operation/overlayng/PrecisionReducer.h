@@ -62,7 +62,7 @@ public:
 
     PrecisionReducer() {};
 
-    static std::unique_ptr<Geometry> reducePrecision(const Geometry* geom, const PrecisionModel* pm);
+    static std::unique_ptr<Geometry> reducePrecision(const Geometry* geom, const PrecisionModel* pm, bool replacePrecisionModel = false);
 
 
 

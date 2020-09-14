@@ -21,6 +21,7 @@ struct test_capigeosgeomsetprecision_data : public capitest::utility {
         ensure(g != 0);
         return g;
     }
+
     std::string
     toWKT(GEOSGeometry* g)
     {
@@ -31,9 +32,8 @@ struct test_capigeosgeomsetprecision_data : public capitest::utility {
     }
 
     test_capigeosgeomsetprecision_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
+        : geom1_(0), geom2_(0), geom3_(0), wktw_(0)
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
@@ -44,13 +44,13 @@ struct test_capigeosgeomsetprecision_data : public capitest::utility {
     {
         GEOSGeom_destroy(geom1_);
         GEOSGeom_destroy(geom2_);
-        if(geom3_) {
+        if(geom3_)
             GEOSGeom_destroy(geom3_);
-        }
-        GEOSWKTWriter_destroy(wktw_);
+        if (wktw_)
+            GEOSWKTWriter_destroy(wktw_);
 
-        geom1_ = geom2_ = geom3_ = nullptr;
-        finishGEOS();
+        geom1_ = geom2_ = geom3_ = 0;
+        wktw_ = 0;
     }
 
 };

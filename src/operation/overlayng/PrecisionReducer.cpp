@@ -24,12 +24,27 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public static*/
 std::unique_ptr<Geometry>
-PrecisionReducer::reducePrecision(const Geometry* geom, const PrecisionModel* pm)
+PrecisionReducer::reducePrecision(const Geometry* geom, const PrecisionModel* pm, bool replacePrecisionModel)
 {
-    auto gf = GeometryFactory::create(pm, geom->getSRID());
-    // OverlayNG(const geom::Geometry* geom0, const geom::Geometry* geom1, const geom::GeometryFactory* p_geomFact, int p_opCode)
-    OverlayNG ov(geom, nullptr, gf.get(), OverlayNG::UNION);
-    return ov.getResult();
+    if (replacePrecisionModel) {
+        auto gf = GeometryFactory::create(pm, geom->getSRID());
+        OverlayNG ov(geom, nullptr, gf.get(), OverlayNG::UNION);
+        /**
+         * Ensure reducing a area only produces polygonal result.
+         * (I.e. collapse lines are not output)
+         */
+        if (geom->getDimension() == 2)
+            ov.setAreaResultOnly(true);
+
+        return ov.getResult();
+    }
+    else {
+        OverlayNG ov(geom, nullptr, pm, OverlayNG::UNION);
+        if (geom->getDimension() == 2)
+            ov.setAreaResultOnly(true);
+
+        return ov.getResult();
+    }
 }
 
 

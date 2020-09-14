@@ -86,6 +86,13 @@ class GEOS_DLL OverlayNG {
 
 private:
 
+    /**
+    * Indicates whether the old overlay result semantics are used:
+    * - Intersection result can be mixed-dimension
+    * - Results can include lines caused by Area topology collapse
+    */
+    static constexpr bool USE_OLD_RESULT_SEMANTICS = true;
+
     // Members
     const geom::PrecisionModel* pm;
     InputGeometry inputGeom;
@@ -93,6 +100,7 @@ private:
     int opCode;
     noding::Noder* noder;
     bool isOptimized;
+    bool isAreaResultOnly;
     bool isOutputEdges;
     bool isOutputResultEdges;
     bool isOutputNodedEdges;
@@ -126,7 +134,22 @@ public:
     static constexpr int UNION          = overlay::OverlayOp::opUNION;
     static constexpr int DIFFERENCE     = overlay::OverlayOp::opDIFFERENCE;
     static constexpr int SYMDIFFERENCE  = overlay::OverlayOp::opSYMDIFFERENCE;
-    static constexpr bool ALLOW_INT_MIXED_RESULT = true;
+
+
+    /**
+    * Indicates whether intersections are allowed to produce
+    * heterogeneous results including proper boundary touches.
+    * This does not control inclusion of touches along collapses.
+    * True provides the original JTS semantics.
+    */
+    static constexpr bool ALLOW_INT_MIXED_RESULT = USE_OLD_RESULT_SEMANTICS;
+
+    /**
+    * Allow lines created by area topology collapses
+    * to appear in the result.
+    * True provides the original JTS semantics.
+    */
+    static constexpr bool ALLOW_COLLAPSE_LINES = USE_OLD_RESULT_SEMANTICS;
 
     /**
     * Creates an overlay operation on the given geometries,
@@ -140,6 +163,7 @@ public:
         , opCode(p_opCode)
         , noder(nullptr)
         , isOptimized(true)
+        , isAreaResultOnly(false)
         , isOutputEdges(false)
         , isOutputResultEdges(false)
         , isOutputNodedEdges(false)
@@ -157,6 +181,7 @@ public:
         , opCode(p_opCode)
         , noder(nullptr)
         , isOptimized(true)
+        , isAreaResultOnly(false)
         , isOutputEdges(false)
         , isOutputResultEdges(false)
         , isOutputNodedEdges(false)
@@ -192,6 +217,7 @@ public:
     * @param p_isOptimized whether to optimize processing
     */
     void setOptimized(bool p_isOptimized) { isOptimized = p_isOptimized; }
+    void setAreaResultOnly(bool p_areaResultOnly) { isAreaResultOnly = p_areaResultOnly; }
     void setOutputEdges(bool p_isOutputEdges) { isOutputEdges = p_isOutputEdges; }
     void setOutputResultEdges(bool p_isOutputResultEdges) { isOutputResultEdges = p_isOutputResultEdges; }
     void setNoder(noding::Noder* p_noder) { noder = p_noder; }
@@ -305,6 +331,7 @@ public:
     *
     * The input must be a valid geometry.
     * Collections must be homogeneous.
+    * IMPORTANT: You probably want OverlayNGUnaryUnion, not this.
     *
     * @param geom the geometry
     * @param pm the precision model to use
@@ -323,6 +350,10 @@ public:
     * Computes a union of a single geometry using a custom noder.
     *
     * The primary use of this is to support coverage union.
+    *
+    * The input must be a valid geometry.
+    * Collections must be homogeneous.
+    * IMPORTANT: You probably want OverlayNGUnaryUnion, not this.
     *
     * @param geom the geometry to union
     * @param pm the precision model to use (maybe be null)

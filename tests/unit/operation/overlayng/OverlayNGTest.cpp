@@ -29,11 +29,16 @@ struct test_overlayng_data {
     void
     testOverlay(const std::string& a, const std::string& b, const std::string& expected, int opCode, double scaleFactor)
     {
-        PrecisionModel pm(scaleFactor);
+        std::unique_ptr<PrecisionModel> pm;
+        if (scaleFactor > 0)
+            pm.reset(new PrecisionModel(scaleFactor));
+        else
+            pm.reset(new PrecisionModel());
+
         std::unique_ptr<Geometry> geom_a = r.read(a);
         std::unique_ptr<Geometry> geom_b = r.read(b);
         std::unique_ptr<Geometry> geom_expected = r.read(expected);
-        std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, &pm);
+        std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
         // std::string wkt_result = w.write(geom_result.get());
         // std::cout << std::endl << wkt_result << std::endl;
         ensure_equals_geometry(geom_expected.get(), geom_result.get());
@@ -424,7 +429,7 @@ void object::test<33> ()
 {
     std::string a = "POLYGON ((1 2, 1 1, 9 1, 1 2))";
     std::string b = "POLYGON ((9 2, 9 1, 8 1, 8 2, 9 2))";
-    std::string exp = "POINT (8 1)";
+    std::string exp = "LINESTRING (8 1, 9 1)";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
@@ -468,7 +473,7 @@ void object::test<37> ()
 {
     std::string a = "POLYGON ((1 3.3, 1.3 1.4, 3.1 1.4, 3.1 0.9, 1.3 0.9, 1 -0.2, 0.8 1.3, 1 3.3))";
     std::string b = "POLYGON ((1 2.9, 2.9 2.9, 2.9 1.3, 1.7 1, 1.3 0.9, 1 0.4, 1 2.9))";
-    std::string exp = "POLYGON EMPTY";
+    std::string exp = "MULTILINESTRING ((1 1, 1 0), (1 3, 1 1), (1 1, 2 1), (2 1, 3 1))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
@@ -505,5 +510,25 @@ void object::test<40> ()
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
+// testCollapseTriBoxesIntersection
+template<>
+template<>
+void object::test<41> ()
+{
+    std::string a = "MULTIPOLYGON (((1 4, 1 1, 2 1, 2 4, 1 4)), ((9 4, 9 1, 10 1, 10 4, 9 4)))";
+    std::string b = "POLYGON ((0 2, 11 3, 11 2, 0 2))";
+    std::string exp = "GEOMETRYCOLLECTION (LINESTRING (1 2, 2 2), POLYGON ((9 2, 9 3, 10 3, 10 2, 9 2)))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
+}
+
+template<>
+template<>
+void object::test<42> ()
+{
+    std::string a = "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 1, 1 1), (1 2, 1 3, 2 3, 1 2), (2 3, 3 3, 3 2, 2 3))";
+    std::string b = "POLYGON ((2 1, 3 1, 3 2, 2 1))";
+    std::string exp = "POLYGON ((3 2, 3 1, 2 1, 3 2))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
 
 } // namespace tut

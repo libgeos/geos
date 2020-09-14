@@ -210,6 +210,18 @@ public:
     Location getLineLocation(int index) const;
 
     /**
+    * Tests if a label is a Collapse has location INTERIOR,
+    * to at least one source geometry.
+    */
+    bool isInteriorCollapse() const;
+
+    /**
+    * Tests if a label is a Collapse
+    * and NotPart with location INTERIOR for the other geometry.
+    */
+    bool isCollapseAndNotPartInterior() const;
+
+    /**
     * Tests if a line is in the interior of a source geometry.
     *
     * @param index source geometry

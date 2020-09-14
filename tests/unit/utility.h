@@ -156,6 +156,9 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
                   lhs->getNumPoints(), rhs->getNumPoints());
 
     bool areEqual = lhs->equalsExact(rhs.get(), tolerance);
+    if(!areEqual) {
+        std::cout << std::endl << rhs->toText() << std::endl << lhs->toText() << std::endl;
+    }
 
     ensure("coordinates do not match", areEqual);
     // Dispatch to run more specific testes

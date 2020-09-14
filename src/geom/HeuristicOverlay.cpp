@@ -70,7 +70,7 @@
 
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 
-#define GEOS_DEBUG_HEURISTICOVERLAY 1
+#define GEOS_DEBUG_HEURISTICOVERLAY 0
 #define GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID 0
 
 
@@ -526,6 +526,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
 
             precision::GeometryPrecisionReducer reducer(*gf);
+            reducer.setUseAreaReducer(false);
+            reducer.setChangePrecisionModel(true);
             GeomPtr rG0(reducer.reduce(*g0));
             GeomPtr rG1(reducer.reduce(*g1));
 

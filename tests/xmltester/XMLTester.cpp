@@ -39,6 +39,7 @@
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/UnaryUnionNG.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
@@ -90,6 +91,7 @@ using namespace geos::operation::linemerge;
 using namespace geos::geom::prep;
 using std::runtime_error;
 using geos::operation::overlayng::OverlayNG;
+using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGSnapIfNeeded;
 
 namespace {
@@ -1182,16 +1184,24 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
             double precision = 1.0;
+            GeomPtr gRealRes;
 
-            if(opArg3 != "") {
-                precision = std::atof(opArg3.c_str());
+            if (gB) {
+                geom::PrecisionModel precMod(precision);
+                gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION, &precMod);
+                if(opArg3 != "") {
+                    precision = std::atof(opArg3.c_str());
+                }
             }
+            else {
+                geom::PrecisionModel precMod(precision);
 
-            profile.start();
-            geom::PrecisionModel precMod(precision);
-            GeomPtr gRealRes = OverlayNG::overlay(gA, gB, OverlayNG::UNION, &precMod);
-
-            profile.stop();
+                // gRealRes = OverlayNG::geomunion(gA, &precMod);
+                gRealRes = UnaryUnionNG::Union(gA, precMod);
+                if(opArg2 != "") {
+                    precision = std::atof(opArg2.c_str());
+                }
+            }
 
             gRealRes->normalize();
 

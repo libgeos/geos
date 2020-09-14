@@ -88,7 +88,7 @@ OverlayNG::overlay(const Geometry* geom0, const Geometry* geom1,
 
 /*public static*/
 std::unique_ptr<Geometry>
-overlay(const Geometry* geom0, const Geometry* geom1,
+OverlayNG::overlay(const Geometry* geom0, const Geometry* geom1,
         int opCode, const PrecisionModel* pm, noding::Noder* noder)
 {
     OverlayNG ov(geom0, geom1, pm, opCode);
@@ -236,25 +236,27 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     std::vector<std::unique_ptr<Polygon>> resultPolyList = polyBuilder.getPolygons();
     bool hasResultAreaComponents = resultPolyList.size() > 0;
 
-    //--- Build lines
     std::vector<std::unique_ptr<LineString>> resultLineList;
-    bool allowResultLines = ! hasResultAreaComponents || ALLOW_INT_MIXED_RESULT;
-    if(allowResultLines) {
-        LineBuilder lineBuilder(&inputGeom, graph, hasResultAreaComponents, p_opCode, geomFact);
-        resultLineList = lineBuilder.getLines();
-    }
-
-    bool hasResultComponents = hasResultAreaComponents || resultLineList.size() > 0;
-    /**
-     * Operations with point inputs are handled elsewhere.
-     * Only an intersection op can produce point results
-     * from non-point inputs.
-     */
     std::vector<std::unique_ptr<Point>> resultPointList;
-    bool allowResultPoints = ! hasResultComponents || ALLOW_INT_MIXED_RESULT;
-    if (opCode == INTERSECTION && allowResultPoints) {
-        IntersectionPointBuilder pointBuilder(graph, geomFact);
-        resultPointList = pointBuilder.getPoints();
+
+    if (!isAreaResultOnly) {
+        //--- Build lines
+        bool allowResultLines = ! hasResultAreaComponents || ALLOW_INT_MIXED_RESULT;
+        if (allowResultLines) {
+            LineBuilder lineBuilder(&inputGeom, graph, hasResultAreaComponents, p_opCode, geomFact);
+            resultLineList = lineBuilder.getLines();
+        }
+        /**
+         * Operations with point inputs are handled elsewhere.
+         * Only an intersection op can produce point results
+         * from non-point inputs.
+         */
+        bool hasResultComponents = hasResultAreaComponents || resultLineList.size() > 0;
+        bool allowResultPoints = ! hasResultComponents || ALLOW_INT_MIXED_RESULT;
+        if (opCode == INTERSECTION && allowResultPoints) {
+            IntersectionPointBuilder pointBuilder(graph, geomFact);
+            resultPointList = pointBuilder.getPoints();
+        }
     }
 
     if (resultPolyList.size() == 0 &&

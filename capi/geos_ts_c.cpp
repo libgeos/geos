@@ -67,6 +67,7 @@
 #include <geos/operation/overlayng/PrecisionReducer.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/UnaryUnionNG.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
@@ -158,6 +159,7 @@ using geos::operation::buffer::BufferParameters;
 using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
+using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGSnapIfNeeded;
 
 using geos::precision::GeometryPrecisionReducer;
@@ -1381,7 +1383,7 @@ extern "C" {
                 pm.reset(new PrecisionModel());
             }
             auto g3 = gridSize != 0 ?
-              OverlayNG::geomunion(g1, pm.get())
+              UnaryUnionNG::Union(g1, *pm)
               :
               OverlayNGSnapIfNeeded::Union(g1);
             g3->setSRID(g1->getSRID());
@@ -2433,7 +2435,7 @@ extern "C" {
         });
     }
 
-    GEOSGeometry*
+    Geometry*
     GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g,
                             double gridSize, int flags)
     {
@@ -2444,7 +2446,7 @@ extern "C" {
             double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             std::unique_ptr<PrecisionModel> newpm;
             if(gridSize != 0) {
-                newpm.reset(new PrecisionModel(1.0 / gridSize));
+                newpm.reset(new PrecisionModel(1.0 / std::abs(gridSize)));
             }
             else {
                 newpm.reset(new PrecisionModel());
@@ -2453,19 +2455,12 @@ extern "C" {
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(newpm.get(), g->getSRID());
             if(gridSize != 0 && cursize != gridSize) {
-                // We need to snap the geometry
-                if (flags) {
-                    GeometryPrecisionReducer reducer(*gf);
-                    reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
-                    reducer.setRemoveCollapsedComponents(!(flags & GEOS_PREC_KEEP_COLLAPSED));
-                    ret = reducer.reduce(*g).release();
-                }
-                else {
-                    // OverlayNG reducer preserves topology and drops collapsed elements
-                    // All it really is, is a call to OverlayNG::geomunion()
-                    auto reducedGeom = geos::operation::overlayng::PrecisionReducer::reducePrecision(g, newpm.get());
-                    ret = reducedGeom.release();
-                }
+                GeometryPrecisionReducer reducer(*gf);
+                reducer.setChangePrecisionModel(true);
+                reducer.setUseAreaReducer(!(flags & GEOS_PREC_NO_TOPO));
+                reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
+                reducer.setRemoveCollapsedComponents(!(flags & GEOS_PREC_KEEP_COLLAPSED));
+                ret = reducer.reduce(*g).release();
             }
             else {
                 // No need or willing to snap, just change the factory
