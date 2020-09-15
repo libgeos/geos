@@ -30,11 +30,11 @@
  * slightly modified versions of the input. The following heuristic
  * is used:
  *
- *	- Try with original input.
- *	- Try removing common bits from input coordinate values
- *	- Try snaping input geometries to each other
- *	- Try snaping input coordinates to a increasing grid (size from 1/25 to 1)
- *	- Try simplifiying input with increasing tolerance (from 0.01 to 0.04)
+ *  - Try with original input.
+ *  - Try removing common bits from input coordinate values
+ *  - Try snaping input geometries to each other
+ *  - Try snaping input coordinates to a increasing grid (size from 1/25 to 1)
+ *  - Try simplifiying input with increasing tolerance (from 0.01 to 0.04)
  *
  * If none of the step succeeds the original exception is thrown.
  *
@@ -82,6 +82,13 @@
 
 
 /*
+ * Define this to use OverlayNG policy with whatever precision
+ */
+#if ! defined(USE_OVERLAYNG_SNAPIFNEEDED) && defined(USE_OVERLAYNG)
+# define USE_OVERLAYNG_SNAPIFNEEDED
+#endif
+
+/*
  * Always try original input first
  */
 #ifndef USE_ORIGINAL_INPUT
@@ -99,14 +106,6 @@
 #ifndef USE_FIXED_PRECISION_OVERLAYNG
 # define USE_FIXED_PRECISION_OVERLAYNG 0
 #endif
-
-/*
- * Define this to use OverlayNG policy with whatever precision
- */
-#ifndef USE_OVERLAYNG_SNAPIFNEEDED
-# define USE_OVERLAYNG_SNAPIFNEEDED 0
-#endif
-
 
 /*
  * Define this to use PrecisionReduction policy
@@ -368,6 +367,71 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     GeomPtr ret;
     geos::util::TopologyException origException;
 
+
+/**************************************************************************/
+
+/*
+* overlayng::OverlayNGSnapIfNeeded carries out the following steps
+*
+* 1. Perform overlay operation using PrecisionModel(float).
+*    If no exception return result.
+* 2. Perform overlay operation using SnappingNoder(tolerance), starting
+*    with a very very small tolerance and increasing it for 5 iterations.
+*    The SnappingNoder moves only nodes that are within tolerance of
+*    other nodes and lines, leaving all the rest undisturbed, for a very
+*    clean result, if it manages to create one.
+*    If a result is found with no exception, return.
+* 3. Peform overlay operation using a PrecisionModel(scale), which
+*    uses a SnapRoundingNoder. Every vertex will be noded to the snapping
+*    grid, resulting in a modified geometry. The SnapRoundingNoder approach
+*    reliably produces results, assuming valid inputs.
+*
+* Running overlayng::OverlayNGSnapIfNeeded at this stage should guarantee
+* that none of the other heuristics are ever needed.
+*/
+#ifdef USE_OVERLAYNG_SNAPIFNEEDED
+
+#if GEOS_DEBUG_HEURISTICOVERLAY
+    std::cerr << "Trying with OverlayNGSnapIfNeeded" << std::endl;
+#endif
+
+    try {
+        if (g0 == nullptr && g1 == nullptr) {
+            return std::unique_ptr<Geometry>(nullptr);
+        }
+        else if (g0 == nullptr) {
+            // Use a uniary union for the one-parameter case, as the pairwise
+            // union with one parameter is very intolerant to invalid
+            // collections and multi-polygons.
+            ret = operation::overlayng::OverlayNGSnapIfNeeded::Union(g1);
+        }
+        else if (g1 == nullptr) {
+            // Use a uniary union for the one-parameter case, as the pairwise
+            // union with one parameter is very intolerant to invalid
+            // collections and multi-polygons.
+            ret = operation::overlayng::OverlayNGSnapIfNeeded::Union(g0);
+        }
+        else {
+            ret = operation::overlayng::OverlayNGSnapIfNeeded::Overlay(g0, g1, opCode);
+        }
+
+#if GEOS_DEBUG_HEURISTICOVERLAY
+        std::cerr << "Attempt with OverlayNGSnapIfNeeded succeeded" << std::endl;
+#endif
+
+        return ret;
+    }
+    catch(const geos::util::TopologyException& ex) {
+        ::geos::ignore_unused_variable_warning(ex);
+#if GEOS_DEBUG_HEURISTICOVERLAY
+        std::cerr << "OverlayNGSnapIfNeeded: " << ex.what() << std::endl;
+#endif
+    }
+#endif // USE_OVERLAYNG_SNAPIFNEEDED }
+
+
+/**************************************************************************/
+
 #ifdef USE_ORIGINAL_INPUT
     // Try with original input
     try {
@@ -392,6 +456,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
     }
 #endif // USE_ORIGINAL_INPUT
+
+/**************************************************************************/
 
     check_valid(*g0, "Input geom 0", true, true);
     check_valid(*g1, "Input geom 1", true, true);
@@ -453,12 +519,14 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     }
 #endif
 
-    // Try with snapping
-    //
-    // TODO: possible optimization would be reusing the
-    //       already common-bit-removed inputs and just
-    //       apply geometry snapping, whereas the current
-    //       SnapOp function does both.
+/**************************************************************************/
+
+// Try with snapping
+//
+// TODO: possible optimization would be reusing the
+//       already common-bit-removed inputs and just
+//       apply geometry snapping, whereas the current
+//       SnapOp function does both.
 // {
 #if USE_SNAPPING_POLICY
 
@@ -486,6 +554,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 
 #endif // USE_SNAPPING_POLICY }
 
+/**************************************************************************/
 
 // {
 #if USE_PRECISION_REDUCTION_POLICY
@@ -578,9 +647,10 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
 // USE_PRECISION_REDUCTION_POLICY }
 
+/**************************************************************************/
+
 // {
 #if USE_FIXED_PRECISION_OVERLAYNG
-
 
     // Try OverlayNG with fixed precision
     try {
@@ -646,6 +716,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
 // USE_FIXED_PRECISION_OVERLAYNG }
 
+/**************************************************************************/
 
 // {
 #if USE_TP_SIMPLIFY_POLICY
@@ -693,31 +764,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
 // USE_TP_SIMPLIFY_POLICY }
 
-
-// {
-#if USE_OVERLAYNG_SNAPIFNEEDED
-
-#if GEOS_DEBUG_HEURISTICOVERLAY
-    std::cerr << "Trying with OverlayNGSnapIfNeeded" << std::endl;
-#endif
-
-    try {
-        ret = operation::overlayng::OverlayNGSnapIfNeeded::Overlay(g0, g1, opCode);
-
-#if GEOS_DEBUG_HEURISTICOVERLAY
-        std::cerr << "Attempt with OverlayNGSnapIfNeeded succeeded" << std::endl;
-#endif
-
-        return ret;
-    }
-    catch(const geos::util::TopologyException& ex) {
-        ::geos::ignore_unused_variable_warning(ex);
-#if GEOS_DEBUG_HEURISTICOVERLAY
-        std::cerr << "OverlayNGSnapIfNeeded: " << ex.what() << std::endl;
-#endif
-    }
-#endif // USE_OVERLAYNG_SNAPIFNEEDED }
-
+/**************************************************************************/
 
 #if GEOS_DEBUG_HEURISTICOVERLAY
     std::cerr << "No attempts worked to union " << std::endl;

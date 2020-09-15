@@ -551,11 +551,7 @@ Geometry::intersection(const Geometry* other) const
     }
 #endif
 
-#ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGSnapIfNeeded::Intersection(this, other);
-#else
     return HeuristicOverlay(this, other, OverlayOp::opINTERSECTION);
-#endif
 }
 
 std::unique_ptr<Geometry>
@@ -609,11 +605,7 @@ Geometry::Union(const Geometry* other) const
     }
 #endif
 
-#ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGSnapIfNeeded::Union(this, other);
-#else
     return HeuristicOverlay(this, other, OverlayOp::opUNION);
-#endif
 }
 
 /* public */
@@ -640,11 +632,7 @@ Geometry::difference(const Geometry* other) const
         return clone();
     }
 
-#ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGSnapIfNeeded::Difference(this, other);
-#else
     return HeuristicOverlay(this, other, OverlayOp::opDIFFERENCE);
-#endif
 }
 
 std::unique_ptr<Geometry>
@@ -694,11 +682,7 @@ Geometry::symDifference(const Geometry* other) const
         return std::unique_ptr<Geometry>(_factory->buildGeometry(v));
     }
 
-#ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGSnapIfNeeded::SymDifference(this, other);
-#else
     return HeuristicOverlay(this, other, OverlayOp::opSYMDIFFERENCE);
-#endif
 
 }
 

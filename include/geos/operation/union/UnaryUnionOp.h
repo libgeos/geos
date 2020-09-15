@@ -24,7 +24,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/HeuristicOverlay.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
