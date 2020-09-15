@@ -132,6 +132,16 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
     if (result != nullptr)
         return result;
 
+    /**
+     * On failure retry using snap-rounding with a heuristic scale factor (grid size).
+     */
+    result = overlaySR(geom0, geom1, opCode);
+    if (result != nullptr)
+        return result;
+
+    /**
+     * Just can't get overlay to work, so throw original error.
+     */
     throw exOriginal;
 }
 
@@ -179,7 +189,7 @@ OverlayNGSnapIfNeeded::overlaySnapping(const Geometry* geom0, const Geometry* ge
 #endif
     )
     {
-        //---- ignore this exception, just return a nullptr result
+        //---- ignore exception, return null result to indicate failure
 #if GEOS_DEBUG
         std::cout << std::endl << "overlaySnapping(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
 #endif
@@ -202,7 +212,7 @@ OverlayNGSnapIfNeeded::overlaySnapBoth(const Geometry* geom0, const Geometry* ge
 #endif
     )
     {
-        //---- ignore this exception, just return a nullptr result
+        //---- ignore this exception, just return a nullptr result to indicate failure
 #if GEOS_DEBUG
         std::cout << std::endl << "overlaySnapBoth(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
 #endif
@@ -261,29 +271,24 @@ OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, i
 {
     std::unique_ptr<Geometry> result;
     try {
-        // start with operation using floating PM
-        geom::PrecisionModel PM_FLOAT;
-        result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
+        double scaleSafe = PrecisionUtil::safeScale(geom0, geom1);
+        PrecisionModel pmSafe(scaleSafe);
+        result = OverlayNG::overlay(geom0, geom1, opCode, &pmSafe);
         return result;
     }
     catch (const geos::util::TopologyException &
 #if GEOS_DEBUG
-            ex
+        //---- ignore exception, return null result to indicate failure
+        ex
 #endif
     )
     {
         // ignore this exception, since the operation will be rerun
-        //System.out.println("Overlay failed");
 #if GEOS_DEBUG
-        std::cout << std::endl << "overlaySR FAILURE: " << ex.what() << std::endl;
+        std::cout << std::endl << "OverlayNGSnapIfNeeded::overlaySR FAILURE: " << ex.what() << std::endl;
 #endif
     }
-    // on failure retry with a "safe" fixed PM
-    // this should not throw an exception, but if it does just let it go
-    double scaleSafe = PrecisionUtil::safeScale(geom0, geom1);
-    PrecisionModel pmSafe(scaleSafe);
-    result = OverlayNG::overlay(geom0, geom1, opCode, &pmSafe);
-    return result;
+    return nullptr;
 }
 
 
