@@ -9,10 +9,10 @@ namespace tut {
 // Common data used in test cases.
 struct test_capigeosgeomsetprecision_data : public capitest::utility {
 
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
+    GEOSWKTWriter* wktw_ = nullptr;
+    GEOSGeometry* geom1_ = nullptr;
+    GEOSGeometry* geom2_ = nullptr;
+    GEOSGeometry* geom3_ = nullptr;
 
     GEOSGeometry*
     fromWKT(const char* wkt)
@@ -32,7 +32,6 @@ struct test_capigeosgeomsetprecision_data : public capitest::utility {
     }
 
     test_capigeosgeomsetprecision_data()
-        : geom1_(0), geom2_(0), geom3_(0), wktw_(0)
     {
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
