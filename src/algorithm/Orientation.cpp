@@ -45,7 +45,7 @@ bool
 Orientation::isCCW(const geom::CoordinateSequence* ring)
 {
     // # of points without closing endpoint
-    int nPts = ring->size() - 1;
+    int nPts = static_cast<int>(ring->size()) - 1;
     // sanity check
     if (nPts < 3)
         throw util::IllegalArgumentException(
