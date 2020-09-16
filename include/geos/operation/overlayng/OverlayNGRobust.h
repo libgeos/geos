@@ -57,7 +57,7 @@ namespace overlayng { // geos.operation.overlayng
  *
  * @author Martin Davis
  */
-class GEOS_DLL OverlayNGSnapIfNeeded {
+class GEOS_DLL OverlayNGRobust {
 
 private:
 
@@ -108,7 +108,7 @@ public:
 
         std::unique_ptr<geom::Geometry> Union(const geom::Geometry* g0, const geom::Geometry* g1) override
         {
-            return OverlayNGSnapIfNeeded::Overlay(g0, g1, OverlayNG::UNION);
+            return OverlayNGRobust::Overlay(g0, g1, OverlayNG::UNION);
         };
 
         bool isFloatingPrecision() const override

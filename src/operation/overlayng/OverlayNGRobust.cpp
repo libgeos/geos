@@ -12,7 +12,7 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayUtil.h>
@@ -39,35 +39,35 @@ using namespace geos::geom;
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::Intersection(const Geometry* g0, const Geometry* g1)
+OverlayNGRobust::Intersection(const Geometry* g0, const Geometry* g1)
 {
     return Overlay(g0, g1, OverlayNG::INTERSECTION);
 }
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::Union(const Geometry* g0, const Geometry* g1)
+OverlayNGRobust::Union(const Geometry* g0, const Geometry* g1)
 {
     return Overlay(g0, g1, OverlayNG::UNION);
 }
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::Difference(const Geometry* g0, const Geometry* g1)
+OverlayNGRobust::Difference(const Geometry* g0, const Geometry* g1)
 {
     return Overlay(g0, g1, OverlayNG::DIFFERENCE);
 }
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::SymDifference(const Geometry* g0, const Geometry* g1)
+OverlayNGRobust::SymDifference(const Geometry* g0, const Geometry* g1)
 {
     return Overlay(g0, g1, OverlayNG::SYMDIFFERENCE);
 }
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::Union(const Geometry* a)
+OverlayNGRobust::Union(const Geometry* a)
 {
     geounion::UnaryUnionOp op(*a);
     SRUnionStrategy unionSRFun;
@@ -77,7 +77,7 @@ OverlayNGSnapIfNeeded::Union(const Geometry* a)
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int opCode)
+OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCode)
 {
     std::unique_ptr<Geometry> result;
     std::runtime_error exOriginal("");
@@ -148,7 +148,7 @@ OverlayNGSnapIfNeeded::Overlay(const Geometry* geom0, const Geometry* geom1, int
 
 /*private static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::overlaySnapTries(const Geometry* geom0, const Geometry* geom1, int opCode)
+OverlayNGRobust::overlaySnapTries(const Geometry* geom0, const Geometry* geom1, int opCode)
 {
     std::unique_ptr<Geometry> result;
     double snapTol = snapTolerance(geom0, geom1);
@@ -178,17 +178,14 @@ OverlayNGSnapIfNeeded::overlaySnapTries(const Geometry* geom0, const Geometry* g
 
 /*private static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::overlaySnapping(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
+OverlayNGRobust::overlaySnapping(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
 {
     try {
         return overlaySnapTol(geom0, geom1, opCode, snapTol);
     }
-    catch (const geos::util::TopologyException &
-#if GEOS_DEBUG
-            ex
-#endif
-    )
+    catch (const geos::util::TopologyException& ex)
     {
+        ::geos::ignore_unused_variable_warning(ex);
         //---- ignore exception, return null result to indicate failure
 #if GEOS_DEBUG
         std::cout << std::endl << "overlaySnapping(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
@@ -199,19 +196,16 @@ OverlayNGSnapIfNeeded::overlaySnapping(const Geometry* geom0, const Geometry* ge
 
 /*private static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::overlaySnapBoth(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
+OverlayNGRobust::overlaySnapBoth(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
 {
     try {
         std::unique_ptr<Geometry> snap0 = overlaySnapTol(geom0, nullptr, OverlayNG::UNION, snapTol);
         std::unique_ptr<Geometry> snap1 = overlaySnapTol(geom1, nullptr, OverlayNG::UNION, snapTol);
         return overlaySnapTol(snap0.get(), snap1.get(), opCode, snapTol);
     }
-    catch (const geos::util::TopologyException &
-#if GEOS_DEBUG
-      ex
-#endif
-    )
+    catch (const geos::util::TopologyException& ex)
     {
+        ::geos::ignore_unused_variable_warning(ex);
         //---- ignore this exception, just return a nullptr result to indicate failure
 #if GEOS_DEBUG
         std::cout << std::endl << "overlaySnapBoth(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
@@ -222,7 +216,7 @@ OverlayNGSnapIfNeeded::overlaySnapBoth(const Geometry* geom0, const Geometry* ge
 
 /*private static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::overlaySnapTol(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
+OverlayNGRobust::overlaySnapTol(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
 {
     noding::snap::SnappingNoder snapNoder(snapTol);
     return OverlayNG::overlay(geom0, geom1, opCode, &snapNoder);
@@ -230,7 +224,7 @@ OverlayNGSnapIfNeeded::overlaySnapTol(const Geometry* geom0, const Geometry* geo
 
 /*public static*/
 double
-OverlayNGSnapIfNeeded::snapTolerance(const Geometry* geom0, const Geometry* geom1)
+OverlayNGRobust::snapTolerance(const Geometry* geom0, const Geometry* geom1)
 {
     double tol0 = snapTolerance(geom0);
     double tol1 = snapTolerance(geom1);
@@ -240,7 +234,7 @@ OverlayNGSnapIfNeeded::snapTolerance(const Geometry* geom0, const Geometry* geom
 
 /*private static*/
 double
-OverlayNGSnapIfNeeded::snapTolerance(const Geometry* geom)
+OverlayNGRobust::snapTolerance(const Geometry* geom)
 {
     double magnitude = ordinateMagnitude(geom);
     return magnitude / SNAP_TOL_FACTOR;
@@ -249,7 +243,7 @@ OverlayNGSnapIfNeeded::snapTolerance(const Geometry* geom)
 
 /*private static*/
 double
-OverlayNGSnapIfNeeded::ordinateMagnitude(const Geometry* geom)
+OverlayNGRobust::ordinateMagnitude(const Geometry* geom)
 {
     if (geom == nullptr) return 0;
     const Envelope* env = geom->getEnvelopeInternal();
@@ -267,7 +261,7 @@ OverlayNGSnapIfNeeded::ordinateMagnitude(const Geometry* geom)
 
 /*private static*/
 std::unique_ptr<Geometry>
-OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, int opCode)
+OverlayNGRobust::overlaySR(const Geometry* geom0, const Geometry* geom1, int opCode)
 {
     std::unique_ptr<Geometry> result;
     try {
@@ -276,16 +270,12 @@ OverlayNGSnapIfNeeded::overlaySR(const Geometry* geom0, const Geometry* geom1, i
         result = OverlayNG::overlay(geom0, geom1, opCode, &pmSafe);
         return result;
     }
-    catch (const geos::util::TopologyException &
-#if GEOS_DEBUG
-        //---- ignore exception, return null result to indicate failure
-        ex
-#endif
-    )
+    catch (const geos::util::TopologyException& ex)
     {
+        ::geos::ignore_unused_variable_warning(ex);
         // ignore this exception, since the operation will be rerun
 #if GEOS_DEBUG
-        std::cout << std::endl << "OverlayNGSnapIfNeeded::overlaySR FAILURE: " << ex.what() << std::endl;
+        std::cout << std::endl << "OverlayNGRobust::overlaySR FAILURE: " << ex.what() << std::endl;
 #endif
     }
     return nullptr;

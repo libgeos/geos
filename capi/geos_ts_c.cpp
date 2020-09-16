@@ -66,7 +66,7 @@
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/PrecisionReducer.h>
 #include <geos/operation/overlayng/OverlayNG.h>
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/overlayng/UnaryUnionNG.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -160,7 +160,7 @@ using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
-using geos::operation::overlayng::OverlayNGSnapIfNeeded;
+using geos::operation::overlayng::OverlayNGRobust;
 
 using geos::precision::GeometryPrecisionReducer;
 
@@ -1065,7 +1065,7 @@ extern "C" {
             auto g3 = gridSize != 0 ?
               OverlayNG::overlay(g1, g2, OverlayNG::INTERSECTION, pm.get())
               :
-              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::INTERSECTION);
+              OverlayNGRobust::Overlay(g1, g2, OverlayNG::INTERSECTION);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1272,7 +1272,7 @@ extern "C" {
             auto g3 = gridSize != 0 ?
                 OverlayNG::overlay(g1, g2, OverlayNG::DIFFERENCE, pm.get())
                 :
-                OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::DIFFERENCE);
+                OverlayNGRobust::Overlay(g1, g2, OverlayNG::DIFFERENCE);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1313,7 +1313,7 @@ extern "C" {
             auto g3 = gridSize != 0 ?
               OverlayNG::overlay(g1, g2, OverlayNG::SYMDIFFERENCE, pm.get())
               :
-              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::SYMDIFFERENCE);
+              OverlayNGRobust::Overlay(g1, g2, OverlayNG::SYMDIFFERENCE);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1344,7 +1344,7 @@ extern "C" {
             auto g3 = gridSize != 0 ?
               OverlayNG::overlay(g1, g2, OverlayNG::UNION, pm.get())
               :
-              OverlayNGSnapIfNeeded::Overlay(g1, g2, OverlayNG::UNION);
+              OverlayNGRobust::Overlay(g1, g2, OverlayNG::UNION);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1385,7 +1385,7 @@ extern "C" {
             auto g3 = gridSize != 0 ?
               UnaryUnionNG::Union(g1, *pm)
               :
-              OverlayNGSnapIfNeeded::Union(g1);
+              OverlayNGRobust::Union(g1);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });

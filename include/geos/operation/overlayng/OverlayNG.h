@@ -70,7 +70,7 @@ namespace overlayng { // geos.operation.overlayng
  * For floating precision an {@link noding::MCIndexNoder} is used.
  * This is not fully robust, so can sometimes result in
  * {@link util::TopologyException}s being thrown.
- * For robust full-precision overlay see {@link OverlayNGSnapIfNeeded}.
+ * For robust full-precision overlay see {@link OverlayNGRobust}.
  *
  * Note: If a {@link noding::snap::SnappingNoder} is used
  * it is best to specify a fairly small snap tolerance,
@@ -79,7 +79,7 @@ namespace overlayng { // geos.operation.overlayng
  *
  * @author mdavis
  *
- * @see OverlayNGSnapIfNeeded
+ * @see OverlayNGRobust
  *
  */
 class GEOS_DLL OverlayNG {

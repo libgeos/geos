@@ -38,7 +38,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/OverlayNG.h>
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/overlayng/UnaryUnionNG.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -92,7 +92,7 @@ using namespace geos::geom::prep;
 using std::runtime_error;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
-using geos::operation::overlayng::OverlayNGSnapIfNeeded;
+using geos::operation::overlayng::OverlayNGRobust;
 
 namespace {
 
@@ -740,7 +740,7 @@ XMLTester::printGeom(const geom::Geometry* g)
         return s2.str();
     }
     else {
-        // wktwriter->setRoundingPrecision(32);
+        wktwriter->setRoundingPrecision(32);
         return wktwriter->write(g);
     }
 }
@@ -762,11 +762,11 @@ XMLTester::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::stri
     if (areaA == 0 || areaB == 0)
       return 0;
 
-    std::unique_ptr<geom::Geometry> geomU = OverlayNGSnapIfNeeded::Union(a, b);
-    std::unique_ptr<geom::Geometry> geomI = OverlayNGSnapIfNeeded::Intersection(a, b);
-    std::unique_ptr<geom::Geometry> geomDab = OverlayNGSnapIfNeeded::Difference(a, b);
-    std::unique_ptr<geom::Geometry> geomDba = OverlayNGSnapIfNeeded::Difference(b, a);
-    std::unique_ptr<geom::Geometry> geomSD = OverlayNGSnapIfNeeded::SymDifference(a, b);
+    std::unique_ptr<geom::Geometry> geomU = OverlayNGRobust::Union(a, b);
+    std::unique_ptr<geom::Geometry> geomI = OverlayNGRobust::Intersection(a, b);
+    std::unique_ptr<geom::Geometry> geomDab = OverlayNGRobust::Difference(a, b);
+    std::unique_ptr<geom::Geometry> geomDba = OverlayNGRobust::Difference(b, a);
+    std::unique_ptr<geom::Geometry> geomSD = OverlayNGRobust::SymDifference(a, b);
 
     double areaU   = geomU->getArea();
     double areaI   = geomI->getArea();
@@ -1160,7 +1160,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             profile.start();
             geom::PrecisionModel precMod(precision);
-            GeomPtr gRealRes = OverlayNGSnapIfNeeded::Intersection(gA, gB);
+            GeomPtr gRealRes = OverlayNGRobust::Intersection(gA, gB);
 
             profile.stop();
 
@@ -1950,7 +1950,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "unionlength") {
 
             char* rest;
-            GeomPtr result = OverlayNGSnapIfNeeded::Union(gA);
+            GeomPtr result = OverlayNGRobust::Union(gA);
             double resultLength = result->getLength();
             double expectedLength = std::strtod(opRes.c_str(), &rest);
             if(rest == opRes.c_str()) {
@@ -1970,7 +1970,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "unionarea") {
 
             char* rest;
-            GeomPtr result = OverlayNGSnapIfNeeded::Union(gA);
+            GeomPtr result = OverlayNGRobust::Union(gA);
             double resultArea  = result->getArea();
             double expectedArea = std::strtod(opRes.c_str(), &rest);
             if(rest == opRes.c_str()) {

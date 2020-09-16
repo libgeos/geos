@@ -48,7 +48,7 @@
 #include <geos/geom/HeuristicOverlay.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlayng/OverlayNG.h>
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/IsSimpleOp.h>
@@ -218,7 +218,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow = false, b
 #endif
             if(doThrow) {
                 throw geos::util::TopologyException(
-                    label + " is invalid: " + err->toString(),
+                    label + " is invalid: " + err->getMessage(),
                     err->getCoordinate());
             }
             return false;
@@ -371,7 +371,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 /**************************************************************************/
 
 /*
-* overlayng::OverlayNGSnapIfNeeded carries out the following steps
+* overlayng::OverlayNGRobust carries out the following steps
 *
 * 1. Perform overlay operation using PrecisionModel(float).
 *    If no exception return result.
@@ -386,13 +386,13 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 *    grid, resulting in a modified geometry. The SnapRoundingNoder approach
 *    reliably produces results, assuming valid inputs.
 *
-* Running overlayng::OverlayNGSnapIfNeeded at this stage should guarantee
+* Running overlayng::OverlayNGRobust at this stage should guarantee
 * that none of the other heuristics are ever needed.
 */
 #ifdef USE_OVERLAYNG_SNAPIFNEEDED
 
 #if GEOS_DEBUG_HEURISTICOVERLAY
-    std::cerr << "Trying with OverlayNGSnapIfNeeded" << std::endl;
+    std::cerr << "Trying with OverlayNGRobust" << std::endl;
 #endif
 
     try {
@@ -403,30 +403,35 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
             // Use a uniary union for the one-parameter case, as the pairwise
             // union with one parameter is very intolerant to invalid
             // collections and multi-polygons.
-            ret = operation::overlayng::OverlayNGSnapIfNeeded::Union(g1);
+            ret = operation::overlayng::OverlayNGRobust::Union(g1);
         }
         else if (g1 == nullptr) {
             // Use a uniary union for the one-parameter case, as the pairwise
             // union with one parameter is very intolerant to invalid
             // collections and multi-polygons.
-            ret = operation::overlayng::OverlayNGSnapIfNeeded::Union(g0);
+            ret = operation::overlayng::OverlayNGRobust::Union(g0);
         }
         else {
-            ret = operation::overlayng::OverlayNGSnapIfNeeded::Overlay(g0, g1, opCode);
+            ret = operation::overlayng::OverlayNGRobust::Overlay(g0, g1, opCode);
         }
 
 #if GEOS_DEBUG_HEURISTICOVERLAY
-        std::cerr << "Attempt with OverlayNGSnapIfNeeded succeeded" << std::endl;
+        std::cerr << "Attempt with OverlayNGRobust succeeded" << std::endl;
 #endif
 
         return ret;
     }
-    catch(const geos::util::TopologyException& ex) {
+    catch(const std::exception& ex) {
         ::geos::ignore_unused_variable_warning(ex);
+
 #if GEOS_DEBUG_HEURISTICOVERLAY
-        std::cerr << "OverlayNGSnapIfNeeded: " << ex.what() << std::endl;
+        std::cerr << "OverlayNGRobust: " << ex.what() << std::endl;
 #endif
     }
+
+        check_valid(*g0, "Input geom 0", true, true);
+        check_valid(*g1, "Input geom 1", true, true);
+
 #endif // USE_OVERLAYNG_SNAPIFNEEDED }
 
 

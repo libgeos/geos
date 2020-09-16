@@ -51,7 +51,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/IsSimpleOp.h>
-#include <geos/operation/overlayng/OverlayNGSnapIfNeeded.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/version.h>
@@ -614,7 +614,7 @@ Geometry::Union() const
 {
     using geos::operation::geounion::UnaryUnionOp;
 #ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGSnapIfNeeded::Union(this);
+    return operation::overlayng::OverlayNGRobust::Union(this);
 #else
     return UnaryUnionOp::Union(*this);
 #endif
