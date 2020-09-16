@@ -409,7 +409,7 @@ WKBReader::readCoordinateSequence(int size)
     if(targetDim > inputDimension) {
         targetDim = inputDimension;
     }
-    for(unsigned int i = 0; i < size; i++) {
+    for(int i = 0; i < size; i++) {
         readCoordinate();
         for(unsigned int j = 0; j < targetDim; j++) {
             seq->setOrdinate(i, j, ordValues[j]);
