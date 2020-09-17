@@ -1,5 +1,11 @@
 //
-// Test Suite for geos::operation::overlayng::OverlayNG class.
+// Test Suite for geos::operation::overlayng::OverlayNGRobust class.
+//
+// Useful place for test cases raised by 3rd party software, that will be using
+// Geometry->Intersection(), Geometry->Union(), etc, that call into the
+// OverlayNGRobust utility class that bundles up different precision models
+// and noders to provide a "best case" overlay for all inputs.
+//
 
 #include <tut/tut.hpp>
 #include <utility.h>
@@ -49,7 +55,7 @@ group test_overlayngrobust_data("geos::operation::overlayng::OverlayNGRobust");
 // Test Cases
 //
 
-//  Square overlapping square
+// 2020-09-17, GDAL exposed error in result clipping routine
 template<>
 template<>
 void object::test<1> ()
