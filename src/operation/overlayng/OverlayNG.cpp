@@ -188,10 +188,12 @@ OverlayNG::computeEdgeOverlay()
     * Edge* list allocated in the EdgeNodingBuilder survives
     * long enough to be copied into the OverlayGraph
     */
-    // XXX sort the edges first
+    // Sort the edges first, for comparison with JTS results
     // std::sort(edges.begin(), edges.end(), EdgeComparator);
     OverlayGraph graph;
     for (Edge* e : edges) {
+        // Write out edge graph as hex for examination
+        // std::cout << *e << std::endl;
         graph.addEdge(e);
     }
 

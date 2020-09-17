@@ -361,6 +361,14 @@ public:
         return isDimensionStrict(Dimension::A);
     }
 
+    bool isCollection() const {
+        int t = getGeometryTypeId();
+        return t == GEOS_GEOMETRYCOLLECTION ||
+               t == GEOS_MULTIPOINT ||
+               t == GEOS_MULTILINESTRING ||
+               t == GEOS_MULTIPOLYGON;
+    }
+
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
     virtual int getCoordinateDimension() const = 0; //Abstract
 

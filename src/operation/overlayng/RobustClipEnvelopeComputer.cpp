@@ -58,7 +58,7 @@ RobustClipEnvelopeComputer::add(const Geometry* g)
 
     if (g->getGeometryTypeId() == GEOS_POLYGON)
         addPolygon(static_cast<const Polygon*>(g));
-    else if (g->getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION)
+    else if (g->isCollection())
         addCollection(static_cast<const GeometryCollection*>(g));
 }
 

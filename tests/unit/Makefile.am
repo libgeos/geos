@@ -196,6 +196,7 @@ geos_unit_SOURCES = \
 	operation/overlayng/OverlayNGFloatingNoderTest.cpp \
 	operation/overlayng/OverlayNGPointsTest.cpp \
 	operation/overlayng/OverlayNGMixedPointsTest.cpp \
+	operation/overlayng/OverlayNGRobustTest.cpp \
 	operation/overlayng/OverlayNGSnappingNoderTest.cpp \
 	operation/overlayng/OverlayNGSnappingOneTest.cpp \
 	operation/overlayng/OverlayNGTest.cpp \
