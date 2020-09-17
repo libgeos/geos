@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/Point.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 
 #include <geos/export.h>
 #include <vector>
@@ -64,6 +65,12 @@ private:
     OverlayGraph* graph;
     const geom::GeometryFactory* geometryFactory;
     std::vector<std::unique_ptr<geom::Point>> points;
+    /**
+    * Controls whether lines created by area topology collapses
+    * to participate in the result computation.
+    * True provides the original JTS semantics.
+    */
+    bool isAllowCollapseLines;
 
     // Methods
     void addResultPoints();
@@ -77,18 +84,26 @@ private:
     bool isEdgeOf(const OverlayLabel* label, int i) const;
 
 
-
 public:
 
 
     IntersectionPointBuilder(OverlayGraph* p_graph, const geom::GeometryFactory* geomFact)
         : graph(p_graph)
-        , geometryFactory(geomFact) {}
+        , geometryFactory(geomFact)
+        , isAllowCollapseLines(!OverlayNG::STRICT_MODE_DEFAULT)
+        {}
 
     std::vector<std::unique_ptr<geom::Point>> getPoints();
 
     IntersectionPointBuilder(const IntersectionPointBuilder&) = delete;
     IntersectionPointBuilder& operator=(const IntersectionPointBuilder&) = delete;
+
+    void setStrictMode(bool p_isStrictMode)
+    {
+        isAllowCollapseLines = ! p_isStrictMode;
+    }
+
+
 };
 
 

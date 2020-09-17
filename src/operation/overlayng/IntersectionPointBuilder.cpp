@@ -75,6 +75,9 @@ IntersectionPointBuilder::isResultPoint(OverlayEdge* nodeEdge) const
 bool
 IntersectionPointBuilder::isEdgeOf(const OverlayLabel* label, int i) const
 {
+    if (!isAllowCollapseLines && label->isBoundaryCollapse()) {
+        return false;
+    }
     return label->isBoundary(i) || label->isLine(i);
 }
 

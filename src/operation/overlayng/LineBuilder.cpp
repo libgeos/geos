@@ -82,7 +82,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
     * OR two coincident area boundaries.
     * This logic is only used if not including collapse lines in result.
     */
-    if (! OverlayNG::ALLOW_COLLAPSE_LINES && lbl->isBoundaryCollapse())
+    if (!isAllowCollapseLines && lbl->isBoundaryCollapse())
         return false;
 
     /**
@@ -120,7 +120,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
     * Include line edge formed by touching area boundaries,
     * if enabled.
     */
-    if (OverlayNG::ALLOW_INT_MIXED_RESULT &&
+    if (isAllowMixedResult &&
         opCode == OverlayNG::INTERSECTION &&
         lbl->isBoundaryTouch()) {
         return true;

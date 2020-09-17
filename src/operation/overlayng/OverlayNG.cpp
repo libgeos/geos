@@ -232,6 +232,8 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     std::cerr << "OverlayNG::extractResult: graph: " << *graph << std::endl;
 #endif
 
+    bool isAllowMixedIntResult = ! isStrictMode;
+
     //--- Build polygons
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
     PolygonBuilder polyBuilder(resultAreaEdges, geomFact);
@@ -243,9 +245,14 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
 
     if (!isAreaResultOnly) {
         //--- Build lines
-        bool allowResultLines = ! hasResultAreaComponents || ALLOW_INT_MIXED_RESULT;
+        bool allowResultLines = !hasResultAreaComponents ||
+                                isAllowMixedIntResult ||
+                                opCode == SYMDIFFERENCE ||
+                                opCode == UNION;
+
         if (allowResultLines) {
             LineBuilder lineBuilder(&inputGeom, graph, hasResultAreaComponents, p_opCode, geomFact);
+            lineBuilder.setStrictMode(isStrictMode);
             resultLineList = lineBuilder.getLines();
         }
         /**
@@ -254,9 +261,10 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
          * from non-point inputs.
          */
         bool hasResultComponents = hasResultAreaComponents || resultLineList.size() > 0;
-        bool allowResultPoints = ! hasResultComponents || ALLOW_INT_MIXED_RESULT;
+        bool allowResultPoints = ! hasResultComponents || isAllowMixedIntResult;
         if (opCode == INTERSECTION && allowResultPoints) {
             IntersectionPointBuilder pointBuilder(graph, geomFact);
+            pointBuilder.setStrictMode(isStrictMode);
             resultPointList = pointBuilder.getPoints();
         }
     }

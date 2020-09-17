@@ -17,6 +17,7 @@
 #include <geos/export.h>
 
 #include <geos/operation/overlayng/InputGeometry.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/LineString.h>
 
@@ -77,6 +78,21 @@ private:
     bool hasResultArea;
     int inputAreaIndex;
     std::vector<std::unique_ptr<geom::LineString>> lines;
+
+    /**
+    * Indicates whether intersections are allowed to produce
+    * heterogeneous results including proper boundary touches.
+    * This does not control inclusion of touches along collapses.
+    * True provides the original JTS semantics.
+    */
+    bool isAllowMixedResult = ! OverlayNG::STRICT_MODE_DEFAULT;
+
+    /**
+    * Allow lines created by area topology collapses
+    * to appear in the result.
+    * True provides the original JTS semantics.
+    */
+    bool isAllowCollapseLines = ! OverlayNG::STRICT_MODE_DEFAULT;
 
     void markResultLines();
 
@@ -149,12 +165,21 @@ public:
         , opCode(p_opCode)
         , geometryFactory(geomFact)
         , hasResultArea(p_hasResultArea)
-        , inputAreaIndex(inputGeom->getAreaIndex()) {}
+        , inputAreaIndex(inputGeom->getAreaIndex())
+        , isAllowMixedResult(! OverlayNG::STRICT_MODE_DEFAULT)
+        , isAllowCollapseLines(! OverlayNG::STRICT_MODE_DEFAULT)
+        {}
 
     LineBuilder(const LineBuilder&) = delete;
     LineBuilder& operator=(const LineBuilder&) = delete;
 
     std::vector<std::unique_ptr<geom::LineString>> getLines();
+
+    void setStrictMode(bool p_isStrictResultMode)
+    {
+        isAllowCollapseLines = ! p_isStrictResultMode;
+        isAllowMixedResult = ! p_isStrictResultMode;
+    }
 
 };
 

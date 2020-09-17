@@ -194,11 +194,12 @@ geos_unit_SOURCES = \
 	operation/overlayng/LineLimiterTest.cpp \
 	operation/overlayng/OverlayGraphTest.cpp \
 	operation/overlayng/OverlayNGFloatingNoderTest.cpp \
-	operation/overlayng/OverlayNGPointsTest.cpp \
 	operation/overlayng/OverlayNGMixedPointsTest.cpp \
+	operation/overlayng/OverlayNGPointsTest.cpp \
 	operation/overlayng/OverlayNGRobustTest.cpp \
 	operation/overlayng/OverlayNGSnappingNoderTest.cpp \
 	operation/overlayng/OverlayNGSnappingOneTest.cpp \
+	operation/overlayng/OverlayNGStrictModeTest.cpp \
 	operation/overlayng/OverlayNGTest.cpp \
 	operation/overlayng/PrecisionReducerTest.cpp \
 	operation/overlayng/PrecisionUtilTest.cpp \

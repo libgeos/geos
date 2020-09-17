@@ -77,8 +77,21 @@ namespace overlayng { // geos.operation.overlayng
  * since the intersection clipping optimization can
  * interact with the snapping to alter the result.
  *
- * @author mdavis
+ * TOptionally the overlay computation can process using strict mode
+ * (via setStrictMode(boolean). In strict mode result semantics are:
  *
+ *  - Result geometries are homogeneous (all components are of same dimension),
+ *    except for some cases of symmetricDifference.
+ *  - Lines and Points resulting from topology collapses are not included in the result
+ *
+ * Strict mode has the following benefits:
+ *
+ *  - Results are simpler
+ *  - Overlay operations are easily chainable
+ *
+ * The original JTS overlay semantics correspond to non-strict mode.
+ *
+ * @author mdavis
  * @see OverlayNGRobust
  *
  */
@@ -86,19 +99,13 @@ class GEOS_DLL OverlayNG {
 
 private:
 
-    /**
-    * Indicates whether the old overlay result semantics are used:
-    * - Intersection result can be mixed-dimension
-    * - Results can include lines caused by Area topology collapse
-    */
-    static constexpr bool USE_OLD_RESULT_SEMANTICS = true;
-
     // Members
     const geom::PrecisionModel* pm;
     InputGeometry inputGeom;
     const geom::GeometryFactory* geomFact;
     int opCode;
     noding::Noder* noder;
+    bool isStrictMode;
     bool isOptimized;
     bool isAreaResultOnly;
     bool isOutputEdges;
@@ -129,27 +136,21 @@ private:
 
 
 public:
+    /**
+    * The default setting for Strict Mode.
+    *
+    * The original JTS overlay semantics used non-strict result
+    * semantics, including;
+    * - An Intersection result can be mixed-dimension,
+    *   due to inclusion of intersection components of all dimensions
+    * - Results can include lines caused by Area topology collapse
+    */
+    static constexpr bool STRICT_MODE_DEFAULT = false;
 
     static constexpr int INTERSECTION   = overlay::OverlayOp::opINTERSECTION;
     static constexpr int UNION          = overlay::OverlayOp::opUNION;
     static constexpr int DIFFERENCE     = overlay::OverlayOp::opDIFFERENCE;
     static constexpr int SYMDIFFERENCE  = overlay::OverlayOp::opSYMDIFFERENCE;
-
-
-    /**
-    * Indicates whether intersections are allowed to produce
-    * heterogeneous results including proper boundary touches.
-    * This does not control inclusion of touches along collapses.
-    * True provides the original JTS semantics.
-    */
-    static constexpr bool ALLOW_INT_MIXED_RESULT = USE_OLD_RESULT_SEMANTICS;
-
-    /**
-    * Allow lines created by area topology collapses
-    * to appear in the result.
-    * True provides the original JTS semantics.
-    */
-    static constexpr bool ALLOW_COLLAPSE_LINES = USE_OLD_RESULT_SEMANTICS;
 
     /**
     * Creates an overlay operation on the given geometries,
@@ -162,6 +163,7 @@ public:
         , geomFact(p_geomFact)
         , opCode(p_opCode)
         , noder(nullptr)
+        , isStrictMode(STRICT_MODE_DEFAULT)
         , isOptimized(true)
         , isAreaResultOnly(false)
         , isOutputEdges(false)
@@ -180,6 +182,7 @@ public:
         , geomFact(geom0->getFactory())
         , opCode(p_opCode)
         , noder(nullptr)
+        , isStrictMode(STRICT_MODE_DEFAULT)
         , isOptimized(true)
         , isAreaResultOnly(false)
         , isOutputEdges(false)
@@ -217,6 +220,7 @@ public:
     * @param p_isOptimized whether to optimize processing
     */
     void setOptimized(bool p_isOptimized) { isOptimized = p_isOptimized; }
+    void setStrictMode(bool p_isStrictMode) { isStrictMode = p_isStrictMode; }
     void setAreaResultOnly(bool p_areaResultOnly) { isAreaResultOnly = p_areaResultOnly; }
     void setOutputEdges(bool p_isOutputEdges) { isOutputEdges = p_isOutputEdges; }
     void setOutputResultEdges(bool p_isOutputResultEdges) { isOutputResultEdges = p_isOutputResultEdges; }
