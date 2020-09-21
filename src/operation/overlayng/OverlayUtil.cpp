@@ -70,7 +70,7 @@ OverlayUtil::safeEnv(const Envelope* env, const PrecisionModel* pm, Envelope& rs
 
 /*private static*/
 bool
-OverlayUtil::overlapEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope)
+OverlayUtil::resultEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope)
 {
     switch (opCode) {
         case OverlayNG::INTERSECTION: {
@@ -94,8 +94,8 @@ OverlayUtil::overlapEnvelope(int opCode, const InputGeometry* inputGeom, const P
 bool
 OverlayUtil::clippingEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope)
 {
-    bool overlapEnv = overlapEnvelope(opCode, inputGeom, pm, rsltEnvelope);
-    if (!overlapEnv)
+    bool resultEnv = resultEnvelope(opCode, inputGeom, pm, rsltEnvelope);
+    if (!resultEnv)
       return false;
 
     Envelope clipEnv = RobustClipEnvelopeComputer::getEnvelope(

@@ -61,7 +61,18 @@ private:
     static constexpr double SAFE_ENV_BUFFER_FACTOR = 0.1;
     static constexpr int SAFE_ENV_GRID_FACTOR = 3;
 
-    static bool overlapEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope);
+    /**
+    * Computes an envelope which covers the extent of the result of
+    * a given overlay operation for given inputs.
+    * The operations which have a result envelope smaller than the extent of the inputs
+    * are:
+    *
+    * - INTERSECTION: result envelope is the intersection of the input envelopes
+    * - DIFERENCE: result envelope is the envelope of the A input geometry
+    *
+    * Otherwise, <code>null</code> is returned to indicate full extent.
+    */
+    static bool resultEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope);
     static double safeExpandDistance(const Envelope* env, const PrecisionModel* pm);
     static bool safeEnv(const Envelope* env, const PrecisionModel* pm, Envelope& rsltEnvelope);
 
@@ -78,6 +89,22 @@ private:
 public:
 
     static bool isFloating(const PrecisionModel* pm);
+
+    /**
+    * Computes a clipping envelope for overlay input geometries.
+    * The clipping envelope encloses all geometry line segments which
+    * might participate in the overlay, with a buffer to
+    * account for numerical precision
+    * (in particular, rounding due to a precision model.
+    * The clipping envelope is used in both the {@link RingClipper}
+    * and in the {@link LineLimiter}.
+    *
+    * Some overlay operations (i.e. UNION and SYMDIFFERENCE
+    * cannot use clipping as an optimization,
+    * since the result envelope is the full extent of the two input geometries.
+    * In this case the returned
+    * envelope is null to indicate this.
+    */
     static bool clippingEnvelope(int opCode, const InputGeometry* inputGeom, const PrecisionModel* pm, Envelope& rsltEnvelope);
 
     /**
