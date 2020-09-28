@@ -136,6 +136,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/overlay/TestOverlay-qgis-37032.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-shapely-829.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-stmlf.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlayNG-geos-1051.xml
 	$(srcdir)/tests/issue/issue-geos-176.xml \
 	$(srcdir)/tests/issue/issue-geos-188.xml \
 	$(srcdir)/tests/issue/issue-geos-234.xml \

@@ -16,6 +16,7 @@
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util/TopologyException.h>
 
 
 namespace geos {      // geos
@@ -54,7 +55,12 @@ EdgeMerger::merge()
             // Assert: edges are identical (up to direction)
             // this is a fast (but incomplete) sanity check
             Edge *baseEdge = it->second;
-            assert(baseEdge->size() == edge->size());
+            /* NOTE: we throw a TopologyException here as per
+             * https://trac.osgeo.org/geos/ticket/1051#comment:7
+             */
+            if ( baseEdge->size() != edge->size() ) {
+                throw geos::util::TopologyException("Merge of edges of different sizes - probable noding error.");
+            }
 
             baseEdge->merge(edge);
             //Debug.println("edge merged: " + existing);
