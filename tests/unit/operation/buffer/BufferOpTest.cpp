@@ -394,5 +394,32 @@ void object::test<12>
     ensure(gBuffer->getNumPoints() >= std::size_t(expected_segments));
 }
 
+// Test for ticket #960
+template<>
+template<>
+void object::test<13>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt0("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
+
+    GeomPtr g0(wktreader.read(wkt0));
+
+    BufferParameters param;
+    param.setEndCapStyle(geos::operation::buffer::BufferParameters::CAP_FLAT);
+    param.setQuadrantSegments(6);
+
+    BufferOp op(g0.get(), param);
+
+    double const distance = 40.0;
+    GeomPtr gBuffer(op.getResultGeometry(distance));
+
+    ensure_not(gBuffer->isEmpty());
+    ensure(gBuffer->isValid());
+    ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
+}
+
 } // namespace tut
 
