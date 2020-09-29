@@ -118,6 +118,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-fail.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-997-union-slow.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-1046-union-lines.xml \
+	$(srcdir)/tests/robust/overlay/TestOverlay-geos-1051.xml
 	$(srcdir)/tests/robust/overlay/TestOverlay-geos-list.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-gisse-345341-lines.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-isochrone.xml \
@@ -136,7 +137,6 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/overlay/TestOverlay-qgis-37032.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-shapely-829.xml \
 	$(srcdir)/tests/robust/overlay/TestOverlay-stmlf.xml \
-	$(srcdir)/tests/robust/overlay/TestOverlayNG-geos-1051.xml
 	$(srcdir)/tests/issue/issue-geos-176.xml \
 	$(srcdir)/tests/issue/issue-geos-188.xml \
 	$(srcdir)/tests/issue/issue-geos-234.xml \
