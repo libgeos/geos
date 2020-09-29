@@ -71,16 +71,15 @@ private:
     static constexpr int LOWER_LEFT  = 2;
     static constexpr int LOWER_RIGHT = 3;
 
-    geom::Coordinate ptHot;
     geom::Coordinate originalPt;
-
-    bool hpIsNode;
     double scaleFactor;
 
-    double minx;
-    double maxx;
-    double miny;
-    double maxy;
+    /* Indicates if this hot pixel must be a node in the output. */
+    bool hpIsNode;
+
+    /* The scaled ordinates of the hot pixel point */
+    double hpx;
+    double hpy;
 
     double scaleRound(double val) const;
     geom::Coordinate scaleRound(const geom::Coordinate& p) const;

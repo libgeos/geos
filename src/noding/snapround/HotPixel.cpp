@@ -40,22 +40,19 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
-    : ptHot(newPt)
-    , originalPt(newPt)
+    : originalPt(newPt)
     , hpIsNode(false)
     , scaleFactor(newScaleFactor)
+    , hpx(newPt.x)
+    , hpy(newPt.y)
 {
     if(scaleFactor <= 0.0) {
         throw util::IllegalArgumentException("Scale factor must be non-zero");
     }
     if(scaleFactor != 1.0) {
-        ptHot = scaleRound(newPt);
+        hpx = scaleRound(newPt.x);
+        hpy = scaleRound(newPt.y);
     }
-
-    minx = ptHot.x - TOLERANCE;
-    maxx = ptHot.x + TOLERANCE;
-    miny = ptHot.y - TOLERANCE;
-    maxy = ptHot.y + TOLERANCE;
 }
 
 /*public*/
@@ -71,13 +68,13 @@ HotPixel::intersects(const Coordinate& p) const
 {
     double x = scale(p.x);
     double y = scale(p.y);
-    if (x >= maxx) return false;
+    if (x >= hpx + TOLERANCE) return false;
     // check Left side
-    if (x < minx) return false;
+    if (x < hpx - TOLERANCE) return false;
     // check Top side
-    if (y >= maxy) return false;
+    if (y >= hpy + TOLERANCE) return false;
     // check Bottom side
-    if (y < miny) return false;
+    if (y < hpy - TOLERANCE) return false;
     // finally
     return true;
 }
@@ -120,15 +117,19 @@ HotPixel::intersectsScaled(double p0x, double p0y, double p1x, double p1y) const
     * are open (not part of the pixel).
     */
     // check Right side
+    double maxx = hpx + TOLERANCE;
     double segMinx = std::min(px, qx);
     if (segMinx >= maxx) return false;
     // check Left side
+    double minx = hpx - TOLERANCE;
     double segMaxx = std::max(px, qx);
     if (segMaxx < minx) return false;
     // check Top side
+    double maxy = hpy + TOLERANCE;
     double segMiny = std::min(py, qy);
     if (segMiny >= maxy) return false;
     // check Bottom side
+    double miny = hpy - TOLERANCE;
     double segMaxy = std::max(py, qy);
     if (segMaxy < miny) return false;
 
@@ -208,6 +209,12 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0, const Coordinate& p1) con
 {
     LineIntersector li;
     std::array<Coordinate, 4> corner;
+
+    double minx = hpx - TOLERANCE;
+    double maxx = hpx + TOLERANCE;
+    double miny = hpy - TOLERANCE;
+    double maxy = hpy + TOLERANCE;
+
     corner[UPPER_RIGHT] = Coordinate(maxx, maxy);
     corner[UPPER_LEFT]  = Coordinate(minx, maxy);
     corner[LOWER_LEFT]  = Coordinate(minx, miny);
@@ -237,7 +244,7 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0, const Coordinate& p1) con
 std::ostream&
 HotPixel::operator<< (std::ostream& os)
 {
-    os << "HP(" << io::WKTWriter::toPoint(ptHot) << ")";
+    os << "HP(" << io::WKTWriter::toPoint(originalPt) << ")";
     return os;
 }
 
