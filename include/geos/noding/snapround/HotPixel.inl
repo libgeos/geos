@@ -34,11 +34,6 @@ HotPixel::scaleRound(double val) const
     return util::round(val * scaleFactor);
 }
 
-INLINE geom::Coordinate
-HotPixel::scaleRound(const geom::Coordinate& p) const
-{
-    return geom::Coordinate(scaleRound(p.x), scaleRound(p.y));
-}
 
 INLINE double
 HotPixel::scale(double val) const

@@ -308,5 +308,67 @@ void object::test<27>
         1.02, 0.98, 1.3, 0.7 );
 }
 
+//-----------------------------
+// Test segments tangent to a corner
+
+// testCornerLLTangent
+template<>
+template<>
+void object::test<28>()
+{
+    checkIntersects("testCornerLLTangent", true, 1, 1, 10,
+        0.9, 1, 1, 0.9 );
+}
+
+// testCornerLLTangentNoTouch
+template<>
+template<>
+void object::test<29>()
+{
+    checkIntersects("testCornerLLTangentNoTouch", false, 1, 1, 10,
+        0.9, 0.9, 1, 0.9 );
+}
+
+// testCornerULTangent
+template<>
+template<>
+void object::test<30>()
+{
+    // does not intersect due to open top
+    checkIntersects("testCornerULTangent", false, 1, 1, 10,
+        0.9, 1, 1, 1.1 );
+}
+
+// testCornerURTangent
+template<>
+template<>
+void object::test<31>()
+{
+    // does not intersect due to open top
+    checkIntersects("testCornerURTangent", false, 1, 1, 10,
+        1, 1.1, 1.1, 1 );
+}
+
+// testCornerLRTangent
+template<>
+template<>
+void object::test<32>()
+{
+    // does not intersect due to open right side
+    checkIntersects("testCornerLRTangent", false, 1, 1, 10,
+        1, 0.9, 1.1, 1 );
+}
+
+// testCornerULTouchEnd
+template<>
+template<>
+void object::test<33>()
+{
+    // does not intersect due to bounding box check for open top
+    checkIntersects("testCornerULTouchEnd", false, 1, 1, 10,
+        0.9, 1.1, 0.95, 1.05 );
+}
+
+
 
 } // namespace tut

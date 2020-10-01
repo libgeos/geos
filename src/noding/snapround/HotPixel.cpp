@@ -160,13 +160,17 @@ HotPixel::intersectsScaled(double p0x, double p0y, double p1x, double p1y) const
     */
     int orientUL = CGAlgorithmsDD::orientationIndex(px, py, qx, qy, minx, maxy);
     if (orientUL == 0) {
-      if (py < qy) return false;
-      return true;
+        // upward segment does not intersect pixel interior
+        if (py < qy) return false;
+        // downward segment must intersect pixel interior
+        return true;
     }
 
     int orientUR = CGAlgorithmsDD::orientationIndex(px, py, qx, qy, maxx, maxy);
     if (orientUR == 0) {
+        // downward segment does not intersect pixel interior
         if (py > qy) return false;
+        // upward segment must intersect pixel interior
         return true;
     }
     // check crossing Top side
@@ -175,7 +179,7 @@ HotPixel::intersectsScaled(double p0x, double p0y, double p1x, double p1y) const
     }
 
     int orientLL = CGAlgorithmsDD::orientationIndex(px, py, qx, qy, minx, miny);
-    if (orientUL == 0) {
+    if (orientLL == 0) {
         // LL corner is the only one in pixel interior
         return true;
     }
@@ -186,7 +190,9 @@ HotPixel::intersectsScaled(double p0x, double p0y, double p1x, double p1y) const
 
     int orientLR = CGAlgorithmsDD::orientationIndex(px, py, qx, qy, maxx, miny);
     if (orientLR == 0) {
+        // upward segment does not intersect pixel interior
         if (py < qy) return false;
+        // downward segment must intersect pixel interior
         return true;
     }
 

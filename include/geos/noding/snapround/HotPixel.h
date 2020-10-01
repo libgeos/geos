@@ -82,7 +82,6 @@ private:
     double hpy;
 
     double scaleRound(double val) const;
-    geom::Coordinate scaleRound(const geom::Coordinate& p) const;
 
     double scale(double val) const;
 
