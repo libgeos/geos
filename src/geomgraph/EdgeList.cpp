@@ -129,7 +129,7 @@ void
 EdgeList::clearList()
 {
     for(unsigned int pos = 0; pos < edges.size(); pos++) {
-        delete *(&edges[pos]);
+        delete edges[pos];
     }
 
     edges.clear();
