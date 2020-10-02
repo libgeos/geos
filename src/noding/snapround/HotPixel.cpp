@@ -41,8 +41,8 @@ namespace snapround { // geos.noding.snapround
 
 HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
     : originalPt(newPt)
-    , hpIsNode(false)
     , scaleFactor(newScaleFactor)
+    , hpIsNode(false)
     , hpx(newPt.x)
     , hpy(newPt.y)
 {
