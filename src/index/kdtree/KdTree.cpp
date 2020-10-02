@@ -112,15 +112,13 @@ KdTree::insertExact(const geom::Coordinate& p, void* data)
 
     while (currentNode != nullptr) {
         // test if point is already a node (not strictly necessary)
-        if (currentNode != nullptr) {
-            bool isInTolerance = p.distance(currentNode->getCoordinate()) <= tolerance;
+        bool isInTolerance = p.distance(currentNode->getCoordinate()) <= tolerance;
 
-            // check if point is already in tree (up to tolerance) and if so simply
-            // return existing node
-            if (isInTolerance) {
-                currentNode->increment();
-                return currentNode;
-            }
+        // check if point is already in tree (up to tolerance) and if so simply
+        // return existing node
+        if (isInTolerance) {
+            currentNode->increment();
+            return currentNode;
         }
 
         if (isOddLevel) {
