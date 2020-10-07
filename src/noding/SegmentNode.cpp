@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/SegmentNode.java rev. 1.6 (JTS-1.9)
+ * Last port: noding/SegmentNode.java 4667170ea (JTS-1.17)
  *
  **********************************************************************/
 
@@ -98,6 +98,13 @@ SegmentNode::compareTo(const SegmentNode& other)
 #if GEOS_DEBUG
     cerr << " Coordinates do not equal!" << endl;
 #endif
+
+    // an exterior node is the segment start point,
+    // so always sorts first
+    // this guards against a robustness problem
+    // where the octants are not reliable
+    if (! isInteriorVar) return -1;
+    if (! other.isInteriorVar) return 1;
 
     return SegmentPointComparator::compare(segmentOctant, coord,
                                            other.coord);
