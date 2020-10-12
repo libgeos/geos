@@ -8,18 +8,21 @@
 //
 
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 #include <utility.h>
 
 // geos
 #include <geos/operation/overlayng/OverlayNGRobust.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 
 // std
 #include <memory>
 
 using namespace geos::geom;
-using namespace geos::operation::overlayng;
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
+using geos::operation::overlayng::OverlayNGRobust;
+using geos::operation::overlayng::OverlayNG;
 
 namespace tut {
 //
@@ -49,8 +52,7 @@ struct test_overlayngrobust_data {
     {
         std::unique_ptr<Geometry> geom_a = r.read(a);
         std::unique_ptr<Geometry> geom_b = r.read(b);
-        std::unique_ptr<Geometry> geom_expected = r.read(expected);
-		ensure_nothrow( OverlayNGRobust::Overlay(geom_a.get(), geom_b.get(), opCode) );
+        ensure_NO_THROW( OverlayNGRobust::Overlay(geom_a.get(), geom_b.get(), opCode) );
     }
 
 };
