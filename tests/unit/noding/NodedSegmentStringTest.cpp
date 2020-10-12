@@ -2,15 +2,27 @@
 // Test Suite for geos::noding::NodedSegmentString class.
 
 #include <tut/tut.hpp>
+#include <utility.h>
 // geos
+#include <geos/io/WKTReader.h>
 #include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/SegmentString.h>
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/util.h>
 // std
 #include <memory>
+
+using geos::io::WKTReader;
+using geos::geom::CoordinateSequence;
+using geos::geom::Geometry;
+//using geos::geom::LineString;
+using geos::geom::GeometryFactory;
+using geos::noding::SegmentString;
 
 namespace tut {
 //
@@ -28,12 +40,52 @@ struct test_nodedsegmentstring_data {
 
     const geos::geom::CoordinateSequenceFactory* csFactory;
 
+    WKTReader r;
+
     SegmentStringAutoPtr
     makeSegmentString(geos::geom::CoordinateSequence* cs, void* d = nullptr)
     {
         return SegmentStringAutoPtr(
                    new geos::noding::NodedSegmentString(cs, d)
                );
+    }
+
+    std::unique_ptr<Geometry>
+    toLines(SegmentString::NonConstVect& ss, const GeometryFactory* gf)
+    {
+        std::vector<Geometry *> *lines = new std::vector<Geometry *>();
+        for (auto s: ss)
+        {
+            std::unique_ptr<CoordinateSequence> cs = s->getCoordinates()->clone();
+            lines->push_back(gf->createLineString(*cs));
+        }
+        return std::unique_ptr<Geometry>(gf->createMultiLineString(lines));
+    }
+
+    void
+    checkNoding(const std::string& wktLine, const std::string& wktNodes, std::vector<int> segmentIndex, const std::string& wktExpected)
+    {
+        using geos::noding::NodedSegmentString;
+
+        std::unique_ptr<Geometry> line = r.read(wktLine);
+        std::unique_ptr<Geometry> pts = r.read(wktNodes);
+
+        NodedSegmentString nss(line->getCoordinates().release(), 0);
+        std::unique_ptr<CoordinateSequence> node = pts->getCoordinates();
+
+        for (size_t i = 0, n=node->size(); i < n; ++i) {
+          nss.addIntersection(node->getAt(i), segmentIndex.at(i));
+        }
+
+        SegmentString::NonConstVect nodedSS;
+        nss.getNodeList().addSplitEdges(nodedSS);
+        std::unique_ptr<Geometry> result = toLines(nodedSS, line->getFactory());
+        //System.out.println(result);
+        for (auto ss: nodedSS) {
+            delete ss;
+        }
+        std::unique_ptr<Geometry> expected = r.read(wktExpected);
+        ensure_equals_geometry(expected.get(), result.get());
     }
 
     test_nodedsegmentstring_data()
@@ -235,6 +287,33 @@ void object::test<5>
     ensure_equals(ss->getNodeList().size(), 2u);
 
 }
+
+/**
+ * Tests a case which involves nodes added when using the SnappingNoder.
+ * In this case one of the added nodes is relatively "far" from its segment,
+ * and "near" the start vertex of the segment.
+ * Computing the noding correctly requires the fix to {@link SegmentNode#compareTo(Object)}
+ * added in https://github.com/locationtech/jts/pull/399
+ *
+ * See https://trac.osgeo.org/geos/ticket/1051
+ */
+template<>
+template<>
+void object::test<6>
+()
+{
+    std::vector<int> segmentIndex;
+    segmentIndex.push_back(0);
+    segmentIndex.push_back(0);
+    segmentIndex.push_back(1);
+    segmentIndex.push_back(1);
+    checkNoding("LINESTRING(655103.6628454948 1794805.456674405, 655016.20226 1794940.10998, 655014.8317182435 1794941.5196832407)",
+        "MULTIPOINT((655016.29615051334 1794939.965427252),(655016.20226531825 1794940.1099718122), (655016.20226 1794940.10998),(655016.20225819293 1794940.1099794197))",
+        segmentIndex,
+        "MULTILINESTRING ((655014.8317182435 1794941.5196832407,655016.2022581929 1794940.1099794197), (655016.2022581929 1794940.1099794197, 655016.20226 1794940.10998), (655016.20226 1794940.10998, 655016.2022653183 1794940.1099718122), (655016.2022653183 1794940.1099718122, 655016.2961505133 1794939.965427252), (655016.2961505133 1794939.965427252, 655103.6628454948 1794805.456674405))");
+  }
+
+
 
 // TODO: test getting noded substrings
 //  template<>
