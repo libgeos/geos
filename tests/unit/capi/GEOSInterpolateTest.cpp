@@ -65,4 +65,16 @@ void object::test<1>
     ensure_equals(GEOSisEmpty(geom2), 1);
     GEOSGeom_destroy(geom2);
 }
+
+template<>
+template<>
+void object::test<2>
+()
+{
+    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION EMPTY");
+    GEOSGeometry* geom2 = GEOSInterpolate(geom1_, 1);
+    ensure_equals(GEOSisEmpty(geom2), 1);
+    GEOSGeom_destroy(geom2);
+}
+
 } // namespace tut
