@@ -151,7 +151,14 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 void
 LinearLocation::setToEnd(const Geometry* linear)
 {
-    componentIndex = linear->getNumGeometries() - 1;
+    componentIndex = linear->getNumGeometries();
+    if ( componentIndex == 0 )
+    {
+        segmentIndex = 0;
+        segmentFraction = 0;
+        return;
+    }
+    componentIndex--;
     const LineString* lastLine = dynamic_cast<const LineString*>(linear->getGeometryN(componentIndex));
     segmentIndex = lastLine->getNumPoints() - 1;
     segmentFraction = 1.0;
@@ -189,12 +196,12 @@ LinearLocation::isVertex() const
 Coordinate
 LinearLocation::getCoordinate(const Geometry* linearGeom) const
 {
+    if(linearGeom->isEmpty()) {
+        return Coordinate::getNull();
+    }
     const LineString* lineComp = dynamic_cast<const LineString*>(linearGeom->getGeometryN(componentIndex));
     if(! lineComp) {
         throw util::IllegalArgumentException("LinearLocation::getCoordinate only works with LineString geometries");
-    }
-    if(linearGeom->isEmpty()) {
-        return Coordinate::getNull();
     }
     Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
     if(segmentIndex >= lineComp->getNumPoints() - 1) {
