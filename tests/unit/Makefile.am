@@ -98,6 +98,7 @@ geos_unit_SOURCES = \
 	capi/GEOSPointOnSurfaceTest.cpp \
 	capi/GEOSPolygonizeTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
+	capi/GEOSProjectTest.cpp \
 	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
 	capi/GEOSRelatePatternMatchTest.cpp \
 	capi/GEOSReverseTest.cpp \

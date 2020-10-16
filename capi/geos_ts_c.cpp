@@ -6265,10 +6265,17 @@ extern "C" {
     GEOSProjectNormalized_r(GEOSContextHandle_t extHandle, const Geometry* g,
                             const Geometry* p)
     {
-
         double length;
-        GEOSLength_r(extHandle, g, &length);
-        return GEOSProject_r(extHandle, g, p) / length;
+        double distance;
+        if(GEOSLength_r(extHandle, g, &length) != 1) {
+            return -1.0;
+        };
+        distance = GEOSProject_r(extHandle, g, p);
+        if (distance == -1.0) {
+            return -1.0;
+        } else {
+            return distance / length;
+        }
     }
 
 
