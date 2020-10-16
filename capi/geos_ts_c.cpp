@@ -3098,10 +3098,16 @@ extern "C" {
     {
 
         double length;
+        double distance;
         if(GEOSLength_r(extHandle, g, &length) != 1) {
             return -1.0;
         };
-        return GEOSProject_r(extHandle, g, p) / length;
+        distance = GEOSProject_r(extHandle, g, p);
+        if (distance == -1.0) {
+            return -1.0;
+        } else {
+            return distance / length;
+        }
     }
 
 
