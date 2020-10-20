@@ -9,7 +9,7 @@ Changes in 3.8.2
   - Fix buffering problem (#1022, JTS-525, Paul Ramsey)
   - Fix segfault in GEOSInterpolate against empty eollections (#1055,
     Sandro Santilli)
-  - Fix GEOSProjectNormalized return -1 on exception (Joris Van den Bossche)
+  - Fix GEOSProjectNormalized return -1 on exception (#1058, Joris Van den Bossche)
 
 
 Changes in 3.8.1
