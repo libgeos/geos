@@ -53,17 +53,17 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, size_t segI
     const Coordinate& p10 = seg1->getCoordinate(segIndex1);
     const Coordinate& p11 = seg1->getCoordinate(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
     /**
-     * Process single point intersections only.
-     * Two-point (collinear) ones are handled by the near-vertex code
+     * Don't node intersections which are just
+     * due to the shared vertex of adjacent segments.
      */
-    if (li.hasIntersection() && li.getIntersectionNum() == 1) {
+    if (!isAdjacent(seg0, segIndex0, seg1, segIndex1)) {
+        li.computeIntersection(p00, p01, p10, p11);
         /**
-        * Don't node intersections which are just
-        * due to the shared vertex of adjacent segments.
-        */
-        if (!isAdjacent(seg0, segIndex0, seg1, segIndex1)) {
+         * Process single point intersections only.
+         * Two-point (collinear) ones are handled by the near-vertex code
+         */
+        if (li.hasIntersection() && li.getIntersectionNum() == 1) {
 
             const Coordinate& intPt = li.getIntersection(0);
             const Coordinate& snapPt = snapPointIndex.snap(intPt);

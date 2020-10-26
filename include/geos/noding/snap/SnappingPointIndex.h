@@ -28,15 +28,28 @@ namespace snap { // geos::noding::snap
 
 class GEOS_DLL SnappingPointIndex {
 
+/**
+ * An index providing fast creation and lookup of snap points.
+ * @author mdavis
+ */
+
 private:
 
     // double snapTolerance;
     std::unique_ptr<index::kdtree::KdTree> snapPointIndex;
 
-
 public:
 
     SnappingPointIndex(double p_snapTolerance);
+
+    /**
+    * Snaps a coordinate to an existing snap point,
+    * if it is within the snap tolerance distance.
+    * Otherwise adds the coordinate to the snap point index.
+    *
+    * @param p the point to snap
+    * @return the point it snapped to, or the input point
+    */
     const geom::Coordinate& snap(const geom::Coordinate& p);
 
 };

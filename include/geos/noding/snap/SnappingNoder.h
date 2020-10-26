@@ -92,6 +92,10 @@ private:
 
 public:
 
+    /**
+     * Creates a snapping noder using the given snap distance tolerance.
+     * @param p_snapTolerance points are snapped if within this distance
+     */
     SnappingNoder(double p_snapTolerance)
         : snapTolerance(p_snapTolerance)
         , snapIndex(p_snapTolerance)
