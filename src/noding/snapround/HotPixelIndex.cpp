@@ -80,7 +80,17 @@ HotPixelIndex::add(const Coordinate& p)
 void
 HotPixelIndex::add(const CoordinateSequence *pts)
 {
-    for (size_t i = 0, sz = pts->size(); i < sz; i++) {
+    /*
+    * Add the points to the tree in random order
+    * to avoid getting an unbalanced tree from
+    * spatially autocorrelated coordinates
+    */
+    std::vector<int> idxs;
+    for (size_t i = 0, sz = pts->size(); i < sz; i++)
+        idxs.push_back(i);
+
+    std::random_shuffle(idxs.begin(), idxs.end());
+    for (auto i : idxs) {
         add(pts->getAt(i));
     }
 }
