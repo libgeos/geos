@@ -99,8 +99,14 @@ HotPixelIndex::add(const CoordinateSequence *pts)
 void
 HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
-    for (auto pt: pts) {
-        add(pt);
+    std::vector<int> idxs;
+    for (size_t i = 0, sz = pts.size(); i < sz; i++)
+        idxs.push_back(i);
+
+    std::random_shuffle(idxs.begin(), idxs.end());
+
+    for (auto i : idxs) {
+        add(pts[i]);
     }
 }
 
