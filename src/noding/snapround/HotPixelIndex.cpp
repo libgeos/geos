@@ -85,7 +85,7 @@ HotPixelIndex::add(const CoordinateSequence *pts)
     * to avoid getting an unbalanced tree from
     * spatially autocorrelated coordinates
     */
-    std::vector<int> idxs;
+    std::vector<std::size_t> idxs;
     for (size_t i = 0, sz = pts->size(); i < sz; i++)
         idxs.push_back(i);
 
@@ -99,7 +99,7 @@ HotPixelIndex::add(const CoordinateSequence *pts)
 void
 HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
-    std::vector<int> idxs;
+    std::vector<std::size_t> idxs;
     for (size_t i = 0, sz = pts.size(); i < sz; i++)
         idxs.push_back(i);
 
