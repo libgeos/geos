@@ -136,7 +136,7 @@ BufferInputLineSimplifier::collapseLine() const
         }
     }
 
-    return std::move(coordList);
+    return coordList;
 }
 
 /* private */
