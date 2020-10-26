@@ -10,6 +10,10 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlayng/OverlayNGRobust.java 6ef89b09
+ *
  **********************************************************************/
 
 #include <geos/operation/overlayng/OverlayNGRobust.h>
@@ -199,8 +203,8 @@ std::unique_ptr<Geometry>
 OverlayNGRobust::overlaySnapBoth(const Geometry* geom0, const Geometry* geom1, int opCode, double snapTol)
 {
     try {
-        std::unique_ptr<Geometry> snap0 = overlaySnapTol(geom0, nullptr, OverlayNG::UNION, snapTol);
-        std::unique_ptr<Geometry> snap1 = overlaySnapTol(geom1, nullptr, OverlayNG::UNION, snapTol);
+        std::unique_ptr<Geometry> snap0 = snapSelf(geom0, snapTol);
+        std::unique_ptr<Geometry> snap1 = snapSelf(geom1, snapTol);
         return overlaySnapTol(snap0.get(), snap1.get(), opCode, snapTol);
     }
     catch (const geos::util::TopologyException& ex)
@@ -212,6 +216,22 @@ OverlayNGRobust::overlaySnapBoth(const Geometry* geom0, const Geometry* geom1, i
 #endif
     }
     return nullptr;
+}
+
+/*private static*/
+std::unique_ptr<Geometry>
+OverlayNGRobust::snapSelf(const Geometry* geom, double snapTol)
+{
+	OverlayNG ov(geom, nullptr);
+	noding::snap::SnappingNoder snapNoder(snapTol);
+	ov.setNoder(&snapNoder);
+	/**
+	 * Ensure the result is not mixed-dimension,
+	 * since it will be used in further overlay computation.
+	 * It may however be lower dimension, if it collapses completely due to snapping.
+	 */
+	ov.setStrictMode(true);
+	return ov.getResult();
 }
 
 /*private static*/

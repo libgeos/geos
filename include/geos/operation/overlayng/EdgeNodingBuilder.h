@@ -10,6 +10,10 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlayng/EdgeNodingBuilder.java 6ef89b096
+ *
  **********************************************************************/
 
 #pragma once
@@ -113,6 +117,7 @@ private:
 
 
     void addCollection(const GeometryCollection* gc, int geomIndex);
+    void addGeometryCollection(const GeometryCollection* gc, int geomIndex, int expectedDim);
     void addPolygon(const Polygon* poly, int geomIndex);
     void addPolygonRing(const LinearRing* ring, bool isHole, int geomIndex);
     void addLine(const LineString* line, int geomIndex);

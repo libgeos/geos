@@ -10,6 +10,10 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlayng/OverlayNGRobust.java 6ef89b09
+ *
  **********************************************************************/
 
 #pragma once
@@ -100,6 +104,19 @@ private:
     static std::unique_ptr<Geometry>
     overlaySR(const Geometry* geom0, const Geometry* geom1, int opCode);
 
+	/**
+   	 * Self-snaps a geometry by running a union operation with it as the only input.
+   	 * This helps to remove narrow spike/gore artifacts to simplify the geometry,
+   	 * which improves robustness.
+   	 * Collapsed artifacts are removed from the result to allow using
+   	 * it in further overlay operations.
+   	 *
+   	 * @param geom geometry to self-snap
+   	 * @param snapTol snap tolerance
+   	 * @return the snapped geometry (homogeneous)
+   	 */
+	static std::unique_ptr<Geometry>
+	snapSelf(const Geometry* geom, double snapTol);
 
 
 public:

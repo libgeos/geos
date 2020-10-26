@@ -10,6 +10,10 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlayng/EdgeNodingBuilder.java 6ef89b096
+ *
  **********************************************************************/
 
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
@@ -160,8 +164,9 @@ EdgeNodingBuilder::add(const Geometry* g, int geomIndex)
             return addLine(static_cast<const LineString*>(g), geomIndex);
         case GEOS_MULTILINESTRING:
         case GEOS_MULTIPOLYGON:
-        case GEOS_GEOMETRYCOLLECTION:
             return addCollection(static_cast<const GeometryCollection*>(g), geomIndex);
+        case GEOS_GEOMETRYCOLLECTION:
+            return addGeometryCollection(static_cast<const GeometryCollection*>(g), geomIndex, g->getDimension());
         case GEOS_POINT:
         case GEOS_MULTIPOINT:
             return; // do nothing
@@ -176,6 +181,19 @@ EdgeNodingBuilder::addCollection(const GeometryCollection* gc, int geomIndex)
 {
     for (std::size_t i = 0; i < gc->getNumGeometries(); i++) {
         const Geometry* g = gc->getGeometryN(i);
+        add(g, geomIndex);
+    }
+}
+
+/*private*/
+void
+EdgeNodingBuilder::addGeometryCollection(const GeometryCollection* gc, int geomIndex, int expectedDim)
+{
+    for (std::size_t i = 0; i < gc->getNumGeometries(); i++) {
+        const Geometry* g = gc->getGeometryN(i);
+        if (g->getDimension() != expectedDim) {
+            throw geos::util::IllegalArgumentException("Overlay input is mixed-dimension");
+        }
         add(g, geomIndex);
     }
 }
