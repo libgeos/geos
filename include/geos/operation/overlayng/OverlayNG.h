@@ -83,9 +83,9 @@ namespace overlayng { // geos.operation.overlayng
  *  - Lines and Points resulting from topology collapses are not included
  *    in the result
  *  - Result geometry is homogeneous for the
- *    {@link INTERSECTION} and {@link DIFFERENCE} operations.
+ *    INTERSECTION and DIFFERENCE operations.
  *  - Result geometry is homogeneous for the
- *    {@link UNION} and {@link SYMDIFFERENCE} operations if
+ *    UNION and SYMDIFFERENCE operations if
  *    the inputs have the same dimension.
  *
  * Strict mode has the following benefits:
@@ -97,7 +97,7 @@ namespace overlayng { // geos.operation.overlayng
  * The original JTS overlay semantics correspond to non-strict mode.
  *
  *
- * If a robustness error occurs, a {@link TopologyException} is thrown.
+ * If a robustness error occurs, a TopologyException is thrown.
  * These are usually caused by numerical rounding causing the noding
  * output to not be fully noded.
  * For robust computation with full-precision {@link OverlayNGRobust}
