@@ -164,7 +164,7 @@ public:
     const PrecisionModel* getPrecisionModel() const;
 
     /// Creates an EMPTY Point
-    std::unique_ptr<Point> createPoint() const;
+    std::unique_ptr<Point> createPoint(std::size_t coordinateDimension = 2) const;
 
     /// Creates a Point using the given Coordinate
     Point* createPoint(const Coordinate& coordinate) const;
@@ -269,7 +269,7 @@ public:
         const std::vector<Coordinate>& fromCoords) const;
 
     /// Construct an EMPTY Polygon
-    std::unique_ptr<Polygon> createPolygon() const;
+    std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
 
     /// Construct a Polygon taking ownership of given arguments
     Polygon* createPolygon(LinearRing* shell,
@@ -285,7 +285,7 @@ public:
                            const std::vector<LinearRing*>& holes) const;
 
     /// Construct an EMPTY LineString
-    std::unique_ptr<LineString> createLineString() const;
+    std::unique_ptr<LineString> createLineString(std::size_t coordinateDimension = 2) const;
 
     /// Copy a LineString
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;

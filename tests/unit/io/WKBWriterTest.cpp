@@ -197,6 +197,74 @@ void object::test<6>
     assert(geom->equals(geom2.get()));
 }
 
+// https://trac.osgeo.org/geos/ticket/1048
+// Higher dimension empty. Need correct support in WKT reader and in
+// WKB writer.
+template<>
+template<>
+void object::test<7>
+()
+{
+    auto geom = wktreader.read("POINT Z EMPTY");
+    geom->setSRID(4326);
+    std::stringstream result_stream;
+
+    wkbwriter.setOutputDimension(3);
+    wkbwriter.setByteOrder(1);
+    wkbwriter.setIncludeSRID(1);
+    wkbwriter.writeHEX(*geom, result_stream);
+
+    std::string actual = result_stream.str();
+    ensure_equals(actual, "01010000A0E6100000000000000000F87F000000000000F87F000000000000F87F");
+
+    auto geom2 = wkbreader.readHEX(result_stream);
+    assert(geom->equals(geom2.get()));
+}
+
+template<>
+template<>
+void object::test<8>
+()
+{
+    auto geom = wktreader.read("LINESTRING Z EMPTY");
+    geom->setSRID(4326);
+    std::stringstream result_stream;
+
+    wkbwriter.setOutputDimension(3);
+    wkbwriter.setByteOrder(1);
+    wkbwriter.setIncludeSRID(1);
+    wkbwriter.writeHEX(*geom, result_stream);
+
+    std::string actual = result_stream.str();
+    ensure_equals(actual, "01020000A0E610000000000000");
+
+    auto geom2 = wkbreader.readHEX(result_stream);
+    assert(geom->equals(geom2.get()));
+}
+
+template<>
+template<>
+void object::test<9>
+()
+{
+    auto geom = wktreader.read("GEOMETRYCOLLECTION (POINT EMPTY)");
+    geom->setSRID(4326);
+    std::stringstream result_stream;
+
+    wkbwriter.setOutputDimension(3);
+    wkbwriter.setByteOrder(1);
+    wkbwriter.setIncludeSRID(0);
+    wkbwriter.writeHEX(*geom, result_stream);
+
+    std::string actual = result_stream.str();
+    ensure_equals(actual, "0107000000010000000101000000000000000000F87F000000000000F87F");
+
+    auto geom2 = wkbreader.readHEX(result_stream);
+    assert(geom->equals(geom2.get()));
+}
+
+
+
 
 } // namespace tut
 

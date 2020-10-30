@@ -70,10 +70,10 @@ WKTReader::read(const string& wellKnownText)
 std::unique_ptr<CoordinateSequence>
 WKTReader::getCoordinates(StringTokenizer* tokenizer)
 {
-    size_t dim;
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
-        return geometryFactory->getCoordinateSequenceFactory()->create();
+        return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), dim);
     }
 
     Coordinate coord;
@@ -148,9 +148,14 @@ WKTReader::getNextNumber(StringTokenizer* tokenizer)
 }
 
 string
-WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer)
+WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer, std::size_t& dim)
 {
     string nextWord = getNextWord(tokenizer);
+
+    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
+    if(nextWord == "Z" || nextWord == "ZM") {
+        dim = 3;
+    }
 
     // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
     if(nextWord == "Z" || nextWord == "M" || nextWord == "ZM") {
@@ -249,10 +254,10 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer)
 std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer)
 {
-    size_t dim;
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPoint();
+        return geometryFactory->createPoint(dim);
     }
 
     Coordinate coord;
@@ -279,7 +284,8 @@ WKTReader::readLinearRingText(StringTokenizer* tokenizer)
 std::unique_ptr<MultiPoint>
 WKTReader::readMultiPointText(StringTokenizer* tokenizer)
 {
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiPoint();
     }
@@ -287,7 +293,6 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
     int tok = tokenizer->peekNextToken();
 
     if(tok == StringTokenizer::TT_NUMBER) {
-        size_t dim;
 
         // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
         auto coords = detail::make_unique<CoordinateArraySequence>();
@@ -350,9 +355,10 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
 std::unique_ptr<Polygon>
 WKTReader::readPolygonText(StringTokenizer* tokenizer)
 {
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPolygon();
+        return geometryFactory->createPolygon(dim);
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;
@@ -369,7 +375,8 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer)
 std::unique_ptr<MultiLineString>
 WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
 {
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiLineString();
     }
@@ -386,7 +393,8 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
 std::unique_ptr<MultiPolygon>
 WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
 {
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiPolygon();
     }
@@ -403,7 +411,8 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
 std::unique_ptr<GeometryCollection>
 WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer)
 {
-    string nextToken = getNextEmptyOrOpener(tokenizer);
+    size_t dim = 2;
+    string nextToken = getNextEmptyOrOpener(tokenizer, dim);
     if(nextToken == "EMPTY") {
         return geometryFactory->createGeometryCollection();
     }

@@ -566,7 +566,7 @@ void object::test<45>
 ()
 {
     auto empty3d = factory_->createPoint();
-    ensure_equals(empty3d->getCoordinateDimension(), 3);
+    ensure_equals(empty3d->getCoordinateDimension(), 2);
 
     geos::geom::FixedSizeCoordinateSequence<0> seq2(2);
     ensure_equals(seq2.getDimension(), 2u);

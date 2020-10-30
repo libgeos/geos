@@ -298,8 +298,12 @@ GeometryFactory::getPrecisionModel() const
 
 /*public*/
 std::unique_ptr<Point>
-GeometryFactory::createPoint() const
+GeometryFactory::createPoint(std::size_t coordinateDimension) const
 {
+    if (coordinateDimension == 3) {
+        geos::geom::FixedSizeCoordinateSequence<0> seq(coordinateDimension);
+        return std::unique_ptr<Point>(createPoint(seq));
+    }
     return std::unique_ptr<Point>(new Point(nullptr, this));
 }
 
@@ -553,9 +557,11 @@ GeometryFactory::createMultiPoint(const std::vector<Coordinate>& fromCoords) con
 
 /*public*/
 std::unique_ptr<Polygon>
-GeometryFactory::createPolygon() const
+GeometryFactory::createPolygon(std::size_t coordinateDimension) const
 {
-    return std::unique_ptr<Polygon>(new Polygon(nullptr, nullptr, this));
+    auto cs = coordinateListFactory->create(std::size_t(0), coordinateDimension);
+    auto lr = createLinearRing(cs.release());
+    return std::unique_ptr<Polygon>(createPolygon(lr, nullptr));
 }
 
 /*public*/
@@ -600,8 +606,11 @@ const
 
 /*public*/
 std::unique_ptr<LineString>
-GeometryFactory::createLineString() const
+GeometryFactory::createLineString(std::size_t coordinateDimension) const
 {
+    if (coordinateDimension == 3) {
+        return createLineString(coordinateListFactory->create(std::size_t(0), coordinateDimension));
+    }
     return std::unique_ptr<LineString>(new LineString(nullptr, this));
 }
 
