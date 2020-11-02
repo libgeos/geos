@@ -17,6 +17,7 @@
 #include <geos/index/ItemVisitor.h>
 #include <geos/geom/CoordinateSequence.h>
 
+#include <random>
 #include <algorithm> // for std::min and std::max
 #include <cassert>
 #include <memory>
@@ -89,7 +90,10 @@ HotPixelIndex::add(const CoordinateSequence *pts)
     for (size_t i = 0, sz = pts->size(); i < sz; i++)
         idxs.push_back(i);
 
-    std::random_shuffle(idxs.begin(), idxs.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(idxs.begin(), idxs.end(), g);
+
     for (auto i : idxs) {
         add(pts->getAt(i));
     }
@@ -103,7 +107,9 @@ HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
     for (size_t i = 0, sz = pts.size(); i < sz; i++)
         idxs.push_back(i);
 
-    std::random_shuffle(idxs.begin(), idxs.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(idxs.begin(), idxs.end(), g);
 
     for (auto i : idxs) {
         add(pts[i]);

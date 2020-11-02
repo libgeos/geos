@@ -6,10 +6,13 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 // std
 #include <cmath>
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace geos::geom;
 using namespace geos::operation::valid;
@@ -65,5 +68,41 @@ void object::test<1>
 
     ensure(validGeom->isValid());
 }
+
+template<>
+template<>
+void object::test<2>
+()
+{
+
+
+    std::ifstream ifs("GoesBathymetryBug.txt");
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+                       (std::istreambuf_iterator<char>()));
+
+    geos::io::WKTReader reader;
+    auto geom(reader.read(content));
+
+    // auto gf = GeometryFactory::getDefaultInstance();
+
+    // auto cs = gf->getCoordinateSequenceFactory()->create(std::move(v));
+    // auto lr = gf->createLinearRing(std::move(cs));
+    // auto errplyg = gf->createPolygon(std::move(lr));
+
+    // ensure(!errplyg->isValid());
+
+    MakeValid mkvalid;
+    auto validGeom = mkvalid.build(geom.get());
+    ensure("MakeValid output is not valid", validGeom->isValid());
+
+    geos::io::WKTWriter writer;
+    writer.setOutputDimension(2);
+    writer.setTrim(true);
+    std::string result = writer.write(validGeom.get());
+    std::cout << result << std::endl;
+
+}
+
+
 
 } // namespace tut

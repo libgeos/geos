@@ -128,14 +128,7 @@ public:
     /// Same as above but doesn't compute intersection point. Faster.
     static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-    // These are deprecated, due to ambiguous naming
-    enum {
-        DONT_INTERSECT = 0,
-        DO_INTERSECT = 1,
-        COLLINEAR = 2
-    };
-
-    enum {
+    enum intersection_type : unsigned char {
         /// Indicates that line segments do not intersect
         NO_INTERSECTION = 0,
 
