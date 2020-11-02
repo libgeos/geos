@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/ConnectedElementLocationFilter.java rev. 1.4 (JTS-1.10)
+ * Last port: operation/distance/ConnectedElementLocationFilter.java b98e8234
  *
  **********************************************************************/
 
@@ -45,6 +45,8 @@ namespace distance { // geos::operation::distance
  * them in a list. Empty geometries do not provide a location item.
  *
  * The elements of the list are GeometryLocation.
+ *
+ * Empty geometries do not provide a location item.
  */
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:

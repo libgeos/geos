@@ -25,6 +25,10 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 
+#if GEOS_DEBUG
+# include <iostream>
+#endif
+
 namespace geos {
 namespace geom { // geos::geom
 

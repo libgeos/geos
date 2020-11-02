@@ -19,13 +19,17 @@
 #ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
 #define GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
 
+#include <vector>
+#include <memory>
 #include <geos/export.h>
 
 // Forward declarations
 namespace geos {
-namespace geom {
-class Geometry;
-}
+    namespace geom {
+        class Geometry;
+        class Coordinate;
+        class CoordinateSequence;
+    }
 }
 
 
@@ -192,6 +196,16 @@ public:
      * @see Geometry#within(Geometry)
      */
     virtual bool within(const geom::Geometry* geom) const = 0;
+
+    /** \brief
+     * Compute the nearest locations on the base {@link Geometry} and
+     * the given geometry.
+     *
+     * @param geom the Geometry to compute the nearest point to
+     * @return true the nearest points
+     *
+     */
+    virtual std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const = 0;
 };
 
 

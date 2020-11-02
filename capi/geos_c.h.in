@@ -882,6 +882,14 @@ extern char GEOS_DLL GEOSPreparedWithin_r(GEOSContextHandle_t handle,
                                           const GEOSPreparedGeometry* pg1,
                                           const GEOSGeometry* g2);
 
+/* Return 0 on exception, the closest points of the two geometries otherwise.
+ * The first point comes from pg1 geometry and the second point comes from g2.
+ */
+extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints_r(
+                                          GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
+
 /************************************************************************
  *
  *  STRtree functions
@@ -1868,6 +1876,7 @@ extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, con
 extern char GEOS_DLL GEOSPreparedOverlaps(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedTouches(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedWithin(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
 /************************************************************************
  *

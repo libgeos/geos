@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/ConnectedElementLocationFilter.java rev. 1.4 (JTS-1.10)
+ * Last port: operation/distance/ConnectedElementLocationFilter.java b98e8234
  *
  **********************************************************************/
 

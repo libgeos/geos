@@ -23,6 +23,7 @@
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 
 #include <memory>
 
@@ -41,6 +42,8 @@ class PreparedLineString : public BasicPreparedGeometry {
 private:
     std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable noding::SegmentString::ConstVect segStrings;
+    mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() const;
 
 protected:
 public:
@@ -55,6 +58,7 @@ public:
     noding::FastSegmentSetIntersectionFinder* getIntersectionFinder();
 
     bool intersects(const geom::Geometry* g) const override;
+    std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const override;
 
 };
 

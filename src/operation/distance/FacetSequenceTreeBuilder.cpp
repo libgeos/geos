@@ -73,6 +73,7 @@ FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const Coordina
 {
     size_t i = 0;
     size_t size = pts->size();
+    if ( size == 0 ) return;
 
     while(i <= size - 1) {
         size_t end = i + FACET_SEQUENCE_SIZE + 1;
