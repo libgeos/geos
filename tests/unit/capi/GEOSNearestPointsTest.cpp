@@ -117,5 +117,45 @@ void object::test<2>
     GEOSCoordSeq_destroy(coords_);
 }
 
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
+    geom2_ = GEOSGeomFromWKT("POINT(2 2)");
+
+    ensure(nullptr != geom1_);
+    ensure(nullptr != geom2_);
+
+    GEOSCoordSequence* coords_;
+    coords_ = GEOSNearestPoints(geom1_, geom2_);
+
+    ensure(nullptr != coords_);
+
+    unsigned int size;
+    GEOSCoordSeq_getSize(coords_, &size);
+    ensure(2 == size);
+
+    double  x1, x2, y1, y2;
+
+    /* Point in geom1_
+     */
+    GEOSCoordSeq_getOrdinate(coords_, 0, 0, &x1);
+    GEOSCoordSeq_getOrdinate(coords_, 0, 1, &y1);
+
+    /* Point in geom2_
+     */
+    GEOSCoordSeq_getOrdinate(coords_, 1, 0, &x2);
+    GEOSCoordSeq_getOrdinate(coords_, 1, 1, &y2);
+
+    ensure(2 == x1);
+    ensure(2 == y1);
+    ensure(2 == x2);
+    ensure(2 == y2);
+
+    GEOSCoordSeq_destroy(coords_);
+}
+
 } // namespace tut
 
