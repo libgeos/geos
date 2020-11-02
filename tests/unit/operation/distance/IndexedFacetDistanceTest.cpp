@@ -11,6 +11,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 // geos
 #include <geos/profiler.h>
 #include <geos/constants.h>
@@ -26,6 +27,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/util/GEOSException.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -334,6 +336,34 @@ void object::test<10>
         std::cout << "npoints=" << npoints << " ncells=" << ncells << std::endl;
         std::cout << prof << std::endl;
     }
+}
+
+// EMPTY polygon
+template<>
+template<>
+void object::test<11>
+()
+{
+    using geos::operation::distance::IndexedFacetDistance;
+    using geos::util::GEOSException;
+
+    std::string wkt0("POLYGON EMPTY");
+    std::string wkt1("POINT(150 150)");
+    GeomPtr g0(_wktreader.read(wkt0));
+    GeomPtr g1(_wktreader.read(wkt1));
+    IndexedFacetDistance ifd(g0.get());
+
+    try {
+        ifd.distance(g1.get());
+        fail("IndexedFacedDistance::distance did not throw on empty input");
+    }
+    catch (const GEOSException&) { }
+
+    try {
+        ifd.nearestPoints(g1.get());
+        fail("IndexedFacedDistance::nearestPoints did not throw on empty input");
+    }
+    catch (const GEOSException&) { }
 }
 
 
