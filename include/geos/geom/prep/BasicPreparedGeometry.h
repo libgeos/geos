@@ -171,6 +171,11 @@ public:
      */
     bool within(const geom::Geometry* g) const override;
 
+    /**
+     * Default implementation.
+     */
+    std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const override;
+
     std::string toString();
 
 };

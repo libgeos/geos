@@ -19,8 +19,11 @@
 
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/geom/prep/PreparedLineStringIntersects.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -60,6 +63,28 @@ PreparedLineString::intersects(const geom::Geometry* g) const
 
     return PreparedLineStringIntersects::intersects(prep, g);
 }
+
+/* private */
+operation::distance::IndexedFacetDistance*
+PreparedLineString::
+getIndexedFacetDistance() const
+{
+    if(! indexedDistance ) {
+        indexedDistance.reset(new operation::distance::IndexedFacetDistance(&getGeometry()));
+    }
+    return indexedDistance.get();
+}
+
+
+std::unique_ptr<geom::CoordinateSequence>
+PreparedLineString::nearestPoints(const geom::Geometry* g) const
+{
+    const GeometryFactory *gf = getGeometry().getFactory();
+    const CoordinateSequenceFactory *cf = gf->getCoordinateSequenceFactory();
+    operation::distance::IndexedFacetDistance *idf = getIndexedFacetDistance();
+    return cf->create(idf->nearestPoints(g));
+}
+
 
 } // namespace geos.geom.prep
 } // namespace geos.geom

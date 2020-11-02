@@ -39,7 +39,7 @@ namespace prep { // geos.geom.prep
 // public:
 //
 PreparedPolygon::PreparedPolygon(const geom::Geometry* geom)
-    : BasicPreparedGeometry(geom), segIntFinder(nullptr), ptOnGeomLoc(nullptr)
+    : BasicPreparedGeometry(geom)
 {
     isRectangle = getGeometry().isRectangle();
 }

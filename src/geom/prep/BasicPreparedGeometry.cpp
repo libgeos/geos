@@ -21,6 +21,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/util/ComponentCoordinateExtracter.h>
+#include <geos/operation/distance/DistanceOp.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -145,6 +146,13 @@ bool
 BasicPreparedGeometry::within(const geom::Geometry* g) const
 {
     return baseGeom->within(g);
+}
+
+std::unique_ptr<geom::CoordinateSequence>
+BasicPreparedGeometry::nearestPoints(const geom::Geometry* g) const
+{
+    operation::distance::DistanceOp dist(baseGeom, g);
+    return dist.nearestPoints();
 }
 
 std::string

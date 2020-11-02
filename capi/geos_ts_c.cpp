@@ -2940,6 +2940,17 @@ extern "C" {
         });
     }
 
+    CoordinateSequence*
+    GEOSPreparedNearestPoints_r(GEOSContextHandle_t extHandle,
+                         const geos::geom::prep::PreparedGeometry* pg, const Geometry* g)
+    {
+        using namespace geos::geom;
+
+        return execute(extHandle, [&]() -> CoordinateSequence* {
+            return pg->nearestPoints(g).release();
+        });
+    }
+
 //-----------------------------------------------------------------
 // STRtree
 //-----------------------------------------------------------------
