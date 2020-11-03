@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  * Author: Sandro Santilli <strk@kbt.io>
@@ -62,7 +62,7 @@ notice(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "NOTICE: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -74,7 +74,7 @@ log_and_exit(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "ERROR: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -108,7 +108,7 @@ log_and_exit2(const char *fmt, ...) {
         pthread_exit(NULL);
 }
 
-GEOSGeometry* 
+GEOSGeometry*
 fineGrainedReconstructionTest(const GEOSGeometry* g1)
 {
 	GEOSCoordSequence* cs;
@@ -143,7 +143,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1)
 			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(gtmp));
 			shell = GEOSGeom_createLinearRing(cs);
 			ngeoms = GEOSGetNumInteriorRings(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN(g1, i);
@@ -159,7 +159,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1)
 		case GEOS_MULTIPOLYGON:
 		case GEOS_GEOMETRYCOLLECTION:
 			ngeoms = GEOSGetNumGeometries(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetGeometryN(g1, i);
@@ -167,7 +167,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1)
 			}
 			g2 = GEOSGeom_createCollection(type, geoms, ngeoms);
 			free(geoms);
-			return g2; 
+			return g2;
 			break;
 		default:
 			log_and_exit("Unknown geometry type %d\n", type);
@@ -217,7 +217,7 @@ do_all(char *inputfile)
 
 	/* WKT output */
 	ptr = GEOSGeomToWKT(g1);
-	printf("Input (WKT): %s\n", ptr); 
+	printf("Input (WKT): %s\n", ptr);
 	free(ptr);
 
 	/* WKB output */
@@ -255,7 +255,7 @@ do_all(char *inputfile)
 		log_and_exit("GEOSConvexHull() raised an exception");
 	}
 	ptr = GEOSGeomToWKT(g2);
-	printf("ConvexHull: %s\n", ptr); 
+	printf("ConvexHull: %s\n", ptr);
 	free(ptr);
 
 	/* Buffer */
@@ -266,7 +266,7 @@ do_all(char *inputfile)
 		log_and_exit("GEOSBuffer() raised an exception");
 	}
 	ptr = GEOSGeomToWKT(g1);
-	printf("Buffer: %s\n", ptr); 
+	printf("Buffer: %s\n", ptr);
 	free(ptr);
 
 
@@ -280,27 +280,27 @@ do_all(char *inputfile)
 		log_and_exit("Intersection(g, Buffer(g)) didn't return g");
 	}
 	ptr = GEOSGeomToWKT(g3);
-	printf("Intersection: %s\n", ptr); 
+	printf("Intersection: %s\n", ptr);
 	GEOSGeom_destroy(g3);
 	free(ptr);
 
 	/* Difference */
 	g3 = GEOSDifference(g1, g2);
 	ptr = GEOSGeomToWKT(g3);
-	printf("Difference: %s\n", ptr); 
+	printf("Difference: %s\n", ptr);
 	GEOSGeom_destroy(g3);
 	free(ptr);
 
 	/* SymDifference */
 	g3 = GEOSSymDifference(g1, g2);
 	ptr = GEOSGeomToWKT(g3);
-	printf("SymDifference: %s\n", ptr); 
+	printf("SymDifference: %s\n", ptr);
 	free(ptr);
 
 	/* Boundary */
 	g4 = GEOSBoundary(g3);
 	ptr = GEOSGeomToWKT(g4);
-	printf("Boundary: %s\n", ptr); 
+	printf("Boundary: %s\n", ptr);
 	GEOSGeom_destroy(g3);
 	GEOSGeom_destroy(g4);
 	free(ptr);
@@ -315,13 +315,13 @@ do_all(char *inputfile)
 		log_and_exit("Union(g, Buffer(g)) didn't return Buffer(g)");
 	}
 	ptr = GEOSGeomToWKT(g3);
-	printf("Union: %s\n", ptr); 
+	printf("Union: %s\n", ptr);
 	free(ptr);
 
 	/* PointOnSurcace */
 	g4 = GEOSPointOnSurface(g3);
 	ptr = GEOSGeomToWKT(g4);
-	printf("PointOnSurface: %s\n", ptr); 
+	printf("PointOnSurface: %s\n", ptr);
 	GEOSGeom_destroy(g3);
 	GEOSGeom_destroy(g4);
 	free(ptr);
@@ -329,7 +329,7 @@ do_all(char *inputfile)
 	/* Centroid */
 	g3 = GEOSGetCentroid(g2);
 	ptr = GEOSGeomToWKT(g3);
-	printf("Centroid: %s\n", ptr); 
+	printf("Centroid: %s\n", ptr);
 	GEOSGeom_destroy(g3);
 	free(ptr);
 
@@ -342,7 +342,7 @@ do_all(char *inputfile)
 		free(ptr);
 		log_and_exit("! RelatePattern(g1, g2, Relate(g1, g2))");
 	}
-	printf("Relate: %s\n", ptr); 
+	printf("Relate: %s\n", ptr);
 	free(ptr);
 
 	/* Polygonize */
@@ -357,7 +357,7 @@ do_all(char *inputfile)
 	}
 	ptr = GEOSGeomToWKT(g3);
 	GEOSGeom_destroy(g3);
-	printf("Polygonize: %s\n", ptr); 
+	printf("Polygonize: %s\n", ptr);
 	free(ptr);
 
 	/* LineMerge */
@@ -367,7 +367,7 @@ do_all(char *inputfile)
 		log_and_exit("Exception running GEOSLineMerge");
 	}
 	ptr = GEOSGeomToWKT(g3);
-	printf("LineMerge: %s\n", ptr); 
+	printf("LineMerge: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy(g3);
 
@@ -392,14 +392,14 @@ do_all(char *inputfile)
 	/* Simplify */
 	g3 = GEOSSimplify(g1, 0.5);
 	ptr = GEOSGeomToWKT(g3);
-	printf("Simplify: %s\n", ptr); 
+	printf("Simplify: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy(g3);
-    
+
 	/* Topology Preserve Simplify */
 	g3 = GEOSTopologyPreserveSimplify(g1, 0.5);
 	ptr = GEOSGeomToWKT(g3);
-	printf("Simplify: %s\n", ptr); 
+	printf("Simplify: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy(g3);
 
