@@ -369,7 +369,8 @@ extern int GEOS_DLL GEOSCoordSeq_isCCW_r(GEOSContextHandle_t handle,
 
 
 /* Return distance of point 'p' projected on 'g' from origin
- * of 'g'. Geometry 'g' must be a lineal geometry */
+ * of 'g'. Geometry 'g' must be a lineal geometry.
+ * Return -1 on exception*/
 extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
                                      const GEOSGeometry *g,
                                      const GEOSGeometry *p);
@@ -1461,7 +1462,8 @@ extern int GEOS_DLL GEOSCoordSeq_isCCW(const GEOSCoordSequence* s, char* is_ccw)
 
 
 /* Return distance of point 'p' projected on 'g' from origin
- * of 'g'. Geometry 'g' must be a lineal geometry */
+ * of 'g'. Geometry 'g' must be a lineal geometry.
+ * Return -1 on exception */
 extern double GEOS_DLL GEOSProject(const GEOSGeometry *g,
                                    const GEOSGeometry* p);
 
