@@ -436,10 +436,10 @@ public:
     std::unique_ptr<geom::LineSegment> toLineSegment() const;
 };
 
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const QuadEdge* e);
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace geos
 
 #endif //GEOS_TRIANGULATE_QUADEDGE_QUADEDGE_H
-

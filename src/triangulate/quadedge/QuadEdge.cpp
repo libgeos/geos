@@ -118,7 +118,13 @@ QuadEdge::toLineSegment() const
                new geom::LineSegment(vertex.getCoordinate(), dest().getCoordinate()));
 }
 
+std::ostream&
+operator<< (std::ostream& os, const QuadEdge* e)
+{
+    os << "( " << e->orig().getCoordinate() << ", " << e->dest().getCoordinate() << " )";
+    return os;
+}
+
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace goes
-
