@@ -133,11 +133,8 @@ QuadEdgeSubdivision::remove(QuadEdge& e)
     // rot edges do not need to be tested because they are not removed
     quadEdges.erase(
             std::remove_if(quadEdges.begin(), quadEdges.end(),
-                           [e](QuadEdgeQuartet& es) { return &es.base() == &e; }),
-            quadEdges.end());
-    quadEdges.erase(
-            std::remove_if(quadEdges.begin(), quadEdges.end(),
-                           [e](QuadEdgeQuartet& es) { return &es.base() == &e.sym(); }),
+                           [e](QuadEdgeQuartet& es) {
+                               return &es.base() == &e || &es.base() == &e.sym(); }),
             quadEdges.end());
     //mark these edges as removed
     e.remove();
