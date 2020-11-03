@@ -613,10 +613,10 @@ Geometry::Ptr
 Geometry::Union() const
 {
     using geos::operation::geounion::UnaryUnionOp;
-#ifdef USE_OVERLAYNG
-    return operation::overlayng::OverlayNGRobust::Union(this);
-#else
+#ifdef DISABLE_OVERLAYNG
     return UnaryUnionOp::Union(*this);
+#else
+    return operation::overlayng::OverlayNGRobust::Union(this);
 #endif
 }
 

@@ -168,10 +168,9 @@ endif()
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: overlayng code
 #-----------------------------------------------------------------------------
-option(DISABLE_OVERLAYNG "Disable overlayng algorithms" ON)
-if(NOT DISABLE_OVERLAYNG)
-  target_compile_definitions(geos_cxx_flags INTERFACE USE_OVERLAYNG)
-else()
+option(DISABLE_OVERLAYNG "Disable overlayng algorithms" OFF)
+if(DISABLE_OVERLAYNG)
+  target_compile_definitions(geos_cxx_flags INTERFACE DISABLE_OVERLAYNG)
   message(STATUS
   "GEOS: DISABLING overlayng algorithms")
 endif()

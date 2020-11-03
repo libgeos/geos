@@ -308,7 +308,7 @@ XMLTester::XMLTester()
     testValidOutput(false),
     testValidInput(false),
     sqlOutput(false),
-    HEXWKB_output(false)
+    HEXWKB_output(true)
 {
     setVerbosityLevel(0);
 }
@@ -740,7 +740,7 @@ XMLTester::printGeom(const geom::Geometry* g)
         return s2.str();
     }
     else {
-        wktwriter->setRoundingPrecision(32);
+        wktwriter->setRoundingPrecision(16);
         return wktwriter->write(g);
     }
 }
