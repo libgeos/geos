@@ -94,7 +94,8 @@ dnl - Check for inline and cassert settings
 dnl --------------------------------------------------------------------
 
 
-AC_ARG_ENABLE([inline], [  --disable-inline    Disable inlining],
+AC_ARG_ENABLE([inline],
+	[  --disable-inline        Disable inlining],
 	[case "${enableval}" in
 		yes) enable_inline=true ;;
 		no)  enable_inline=false ;;
@@ -103,7 +104,8 @@ AC_ARG_ENABLE([inline], [  --disable-inline    Disable inlining],
 	[enable_inline=true]
 )
 
-AC_ARG_ENABLE([cassert], [  --disable-cassert   Disable assertion checking],
+AC_ARG_ENABLE([cassert],
+	[  --disable-cassert       Disable assertion checking],
 	[case "${enableval}" in
 		yes) enable_cassert=true ;;
 		no)  enable_cassert=false ;;
@@ -112,7 +114,8 @@ AC_ARG_ENABLE([cassert], [  --disable-cassert   Disable assertion checking],
 	[enable_cassert=true]
 )
 
-AC_ARG_ENABLE([glibcxx-debug], [  --enable-glibcxx-debug    Enable libstdc++ debug mode],
+AC_ARG_ENABLE([glibcxx-debug],
+	[  --enable-glibcxx-debug  Enable libstdc++ debug mode],
 	[case "${enableval}" in
 		yes) enable_glibcxx_debug=true ;;
 		no)  enable_glibcxx_debug=false ;;
@@ -154,19 +157,20 @@ dnl --------------------------------------------------------------------
 dnl - check whether user has requested overlayng
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE([overlayng], [  --enable-overlayng    Enable use of new overlay],
+AC_ARG_ENABLE([overlayng],
+	[  --disable-overlayng     Disable use of new overlay],
 	[case "${enableval}" in
 		yes) use_overlayng=true ;;
 		no)  use_overlayng=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-overlayng) ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --disable-overlayng) ;;
 	esac],
-	[use_overlayng=false]
+	[use_overlayng=true]
 )
 
 if test x"$use_overlayng" = xtrue; then
-	OVERLAYNG_FLAGS="-DUSE_OVERLAYNG"
-else
 	OVERLAYNG_FLAGS=""
+else
+	OVERLAYNG_FLAGS="-DDISABLE_OVERLAYNG"
 fi
 
 dnl --------------------------------------------------------------------
@@ -236,7 +240,8 @@ dnl --------------------------------------------------------------------
 dnl - check whether python is required for the build
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE([python], [  --enable-python    Enable build of python module],
+AC_ARG_ENABLE([python],
+	[  --enable-python         Enable build of python module],
 	[case "${enableval}" in
 		yes) use_python=true ;;
 		no)  use_python=false ;;
@@ -250,7 +255,8 @@ dnl --------------------------------------------------------------------
 dnl - check whether ruby is required for the build
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE([ruby], [  --enable-ruby    Enable build of ruby module],
+AC_ARG_ENABLE([ruby],
+	[  --enable-ruby           Enable build of ruby module],
 	[case "${enableval}" in
 		yes) use_ruby=true ;;
 		no)  use_ruby=false ;;

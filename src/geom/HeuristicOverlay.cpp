@@ -84,7 +84,7 @@
 /*
  * Define this to use OverlayNG policy with whatever precision
  */
-#if ! defined(USE_OVERLAYNG_SNAPIFNEEDED) && defined(USE_OVERLAYNG)
+#if ! defined(DISABLE_OVERLAYNG) && ! defined(USE_OVERLAYNG_SNAPIFNEEDED)
 # define USE_OVERLAYNG_SNAPIFNEEDED
 #endif
 
