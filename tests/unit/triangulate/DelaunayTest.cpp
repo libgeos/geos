@@ -227,6 +227,34 @@ void object::test<10>
     }
 }
 
+// 11 - Regular grid of points, tol = 0 (see https://trac.osgeo.org/geos/ticket/1035)
+template<>
+template<>
+void object::test<11>
+()
+{
+    const char* wkt =
+"MULTIPOINT ((-10 40), (5 40), (20 40), (-10 55), (5 55), (20 55), (-10 70), (5 70), (20 70))";
+    const char* expectedEdges =
+        "GEOMETRYCOLLECTION (POLYGON ((5 70, 20 70, 20 55, 5 70)), POLYGON ((5 55, 20 55, 20 40, 5 55)), POLYGON ((5 55, 5 70, 20 55, 5 55)), POLYGON ((5 40, 5 55, 20 40, 5 40)), POLYGON ((-10 70, 5 70, 5 55, -10 70)), POLYGON ((-10 55, 5 55, 5 40, -10 55)), POLYGON ((-10 55, -10 70, 5 55, -10 55)), POLYGON ((-10 40, -10 55, 5 40, -10 40)))";
+    if(sizeof(long double) > sizeof(double)) {
+        runDelaunay(wkt, true, expectedEdges, 0.0);
+    }
+}
+
+// 12 - Regular grid of points, tol > 0 (see https://trac.osgeo.org/geos/ticket/1035)
+template<>
+template<>
+void object::test<12>
+()
+{
+    const char* wkt =
+"MULTIPOINT ((-10 40), (5 40), (20 40), (-10 55), (5 55), (20 55), (-10 70), (5 70), (20 70))";
+    const char* expectedEdges =
+        "GEOMETRYCOLLECTION (POLYGON ((5 70, 20 70, 20 55, 5 70)), POLYGON ((5 55, 20 55, 20 40, 5 55)), POLYGON ((5 55, 5 70, 20 55, 5 55)), POLYGON ((5 40, 5 55, 20 40, 5 40)), POLYGON ((-10 70, 5 70, 5 55, -10 70)), POLYGON ((-10 55, 5 55, 5 40, -10 55)), POLYGON ((-10 55, -10 70, 5 55, -10 55)), POLYGON ((-10 40, -10 55, 5 40, -10 40)))";
+    if(sizeof(long double) > sizeof(double)) {
+        runDelaunay(wkt, true, expectedEdges, 0.01);
+    }
+}
 
 } // namespace tut
-
