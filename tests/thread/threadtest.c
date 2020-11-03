@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  * Author: Sandro Santilli <strk@kbt.io>
@@ -38,7 +38,7 @@ notice1(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "NOTICE1: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -50,7 +50,7 @@ notice2(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "NOTICE2: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -62,7 +62,7 @@ log_and_exit(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "ERROR: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -75,7 +75,7 @@ log_and_exit1(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "ERROR1: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -88,7 +88,7 @@ log_and_exit2(const char *fmt, ...) {
 	va_list ap;
 
         fprintf( stdout, "ERROR2: ");
-        
+
 	va_start (ap, fmt);
         vfprintf( stdout, fmt, ap);
         va_end(ap);
@@ -96,8 +96,8 @@ log_and_exit2(const char *fmt, ...) {
 	pthread_exit(NULL);
 }
 
-GEOSGeometry* 
-fineGrainedReconstructionTest(const GEOSGeometry* g1, 
+GEOSGeometry*
+fineGrainedReconstructionTest(const GEOSGeometry* g1,
                               GEOSContextHandle_t handle)
 {
 	GEOSCoordSequence* cs;
@@ -113,36 +113,36 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1,
 	switch ( type )
 	{
 		case GEOS_POINT:
-			cs = GEOSCoordSeq_clone_r(handle, 
+			cs = GEOSCoordSeq_clone_r(handle,
                                  GEOSGeom_getCoordSeq_r(handle, g1));
 			g2 = GEOSGeom_createPoint_r(handle, cs);
 			return g2;
 			break;
 		case GEOS_LINESTRING:
-			cs = GEOSCoordSeq_clone_r(handle, 
+			cs = GEOSCoordSeq_clone_r(handle,
                                  GEOSGeom_getCoordSeq_r(handle, g1));
 			g2 = GEOSGeom_createLineString_r(handle, cs);
 			return g2;
 			break;
 		case GEOS_LINEARRING:
-			cs = GEOSCoordSeq_clone_r(handle, 
+			cs = GEOSCoordSeq_clone_r(handle,
                                  GEOSGeom_getCoordSeq_r(handle, g1));
 			g2 = GEOSGeom_createLinearRing_r(handle, cs);
 			return g2;
 			break;
 		case GEOS_POLYGON:
 			gtmp = GEOSGetExteriorRing_r(handle, g1);
-			cs = GEOSCoordSeq_clone_r(handle, 
+			cs = GEOSCoordSeq_clone_r(handle,
                                  GEOSGeom_getCoordSeq_r(handle, gtmp));
 			shell = GEOSGeom_createLinearRing_r(handle, cs);
 			ngeoms = GEOSGetNumInteriorRings_r(handle, g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN_r(handle, g1, i);
-				cs = GEOSCoordSeq_clone_r(handle, 
+				cs = GEOSCoordSeq_clone_r(handle,
                                          GEOSGeom_getCoordSeq_r(handle, gtmp));
-				geoms[i] = GEOSGeom_createLinearRing_r(handle, 
+				geoms[i] = GEOSGeom_createLinearRing_r(handle,
                                                                         cs);
 			}
 			g2 = GEOSGeom_createPolygon_r(handle, shell, geoms,
@@ -155,7 +155,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1,
 		case GEOS_MULTIPOLYGON:
 		case GEOS_GEOMETRYCOLLECTION:
 			ngeoms = GEOSGetNumGeometries_r(handle, g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetGeometryN_r(handle, g1, i);
@@ -165,7 +165,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1,
 			g2 = GEOSGeom_createCollection_r(handle, type, geoms,
                                                           ngeoms);
 			free(geoms);
-			return g2; 
+			return g2;
 			break;
 		default:
 			log_and_exit("Unknown geometry type %d\n", type);
@@ -215,7 +215,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 
 	/* WKT output */
 	ptr = GEOSGeomToWKT_r(handle, g1);
-	printf("Input (WKT): %s\n", ptr); 
+	printf("Input (WKT): %s\n", ptr);
 	free(ptr);
 
 	/* WKB output */
@@ -253,7 +253,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		log_and_exit("GEOSConvexHull() raised an exception");
 	}
 	ptr = GEOSGeomToWKT_r(handle, g2);
-	printf("ConvexHull: %s\n", ptr); 
+	printf("ConvexHull: %s\n", ptr);
 	free(ptr);
 
 	/* Buffer */
@@ -264,7 +264,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		log_and_exit("GEOSBuffer() raised an exception");
 	}
 	ptr = GEOSGeomToWKT_r(handle, g1);
-	printf("Buffer: %s\n", ptr); 
+	printf("Buffer: %s\n", ptr);
 	free(ptr);
 
 
@@ -278,27 +278,27 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		log_and_exit("Intersection(g, Buffer(g)) didn't return g");
 	}
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Intersection: %s\n", ptr); 
+	printf("Intersection: %s\n", ptr);
 	GEOSGeom_destroy_r(handle, g3);
 	free(ptr);
 
 	/* Difference */
 	g3 = GEOSDifference_r(handle, g1, g2);
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Difference: %s\n", ptr); 
+	printf("Difference: %s\n", ptr);
 	GEOSGeom_destroy_r(handle, g3);
 	free(ptr);
 
 	/* SymDifference */
 	g3 = GEOSSymDifference_r(handle, g1, g2);
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("SymDifference: %s\n", ptr); 
+	printf("SymDifference: %s\n", ptr);
 	free(ptr);
 
 	/* Boundary */
 	g4 = GEOSBoundary_r(handle, g3);
 	ptr = GEOSGeomToWKT_r(handle, g4);
-	printf("Boundary: %s\n", ptr); 
+	printf("Boundary: %s\n", ptr);
 	GEOSGeom_destroy_r(handle, g3);
 	GEOSGeom_destroy_r(handle, g4);
 	free(ptr);
@@ -313,13 +313,13 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		log_and_exit("Union(g, Buffer(g)) didn't return Buffer(g)");
 	}
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Union: %s\n", ptr); 
+	printf("Union: %s\n", ptr);
 	free(ptr);
 
 	/* PointOnSurcace */
 	g4 = GEOSPointOnSurface_r(handle, g3);
 	ptr = GEOSGeomToWKT_r(handle, g4);
-	printf("PointOnSurface: %s\n", ptr); 
+	printf("PointOnSurface: %s\n", ptr);
 	GEOSGeom_destroy_r(handle, g3);
 	GEOSGeom_destroy_r(handle, g4);
 	free(ptr);
@@ -327,7 +327,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 	/* Centroid */
 	g3 = GEOSGetCentroid_r(handle, g2);
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Centroid: %s\n", ptr); 
+	printf("Centroid: %s\n", ptr);
 	GEOSGeom_destroy_r(handle, g3);
 	free(ptr);
 
@@ -340,7 +340,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		free(ptr);
 		log_and_exit("! RelatePattern(g1, g2, Relate(g1, g2))");
 	}
-	printf("Relate: %s\n", ptr); 
+	printf("Relate: %s\n", ptr);
 	free(ptr);
 
 	/* Polygonize */
@@ -355,7 +355,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 	}
 	ptr = GEOSGeomToWKT_r(handle, g3);
 	GEOSGeom_destroy_r(handle, g3);
-	printf("Polygonize: %s\n", ptr); 
+	printf("Polygonize: %s\n", ptr);
 	free(ptr);
 
 	/* LineMerge */
@@ -365,7 +365,7 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 		log_and_exit("Exception running GEOSLineMerge");
 	}
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("LineMerge: %s\n", ptr); 
+	printf("LineMerge: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy_r(handle, g3);
 
@@ -390,14 +390,14 @@ do_all(char *inputfile, GEOSContextHandle_t handle)
 	/* Simplify */
 	g3 = GEOSSimplify_r(handle, g1, 0.5);
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Simplify: %s\n", ptr); 
+	printf("Simplify: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy_r(handle, g3);
-    
+
 	/* Topology Preserve Simplify */
 	g3 = GEOSTopologyPreserveSimplify_r(handle, g1, 0.5);
 	ptr = GEOSGeomToWKT_r(handle, g3);
-	printf("Simplify: %s\n", ptr); 
+	printf("Simplify: %s\n", ptr);
 	free(ptr);
 	GEOSGeom_destroy_r(handle, g3);
 
@@ -411,7 +411,7 @@ void *threadfunc1( void *arg )
     GEOSContextHandle_t handle = NULL;
 
     handle = initGEOS_r( notice1, log_and_exit1 );
-    printf("GEOS version %s\n", GEOSversion(handle));
+    printf("GEOS version %s\n", GEOSversion());
     putc('.', stderr); fflush(stderr);
     do_all((char*)arg, handle);
     putc('+', stderr); fflush(stderr);
@@ -425,7 +425,7 @@ void *threadfunc2( void *arg )
     GEOSContextHandle_t handle = NULL;
 
     handle = initGEOS_r( notice2, log_and_exit2 );
-    printf("GEOS version %s\n", GEOSversion(handle));
+    printf("GEOS version %s\n", GEOSversion());
     putc('.', stderr); fflush(stderr);
     do_all((char *)arg, handle);
     putc('+', stderr); fflush(stderr);
