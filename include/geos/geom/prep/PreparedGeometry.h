@@ -205,7 +205,7 @@ public:
      * @return true the nearest points
      *
      */
-    virtual std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const = 0;
+    virtual std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* geom) const = 0;
 };
 
 
