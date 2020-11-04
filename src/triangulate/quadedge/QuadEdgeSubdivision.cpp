@@ -128,17 +128,10 @@ QuadEdgeSubdivision::remove(QuadEdge& e)
     QuadEdge::splice(e, e.oPrev());
     QuadEdge::splice(e.sym(), e.sym().oPrev());
 
-    // this is inefficient but this should be called infrequently
-    // check base edge against both edge and sym, since either may be removed
-    // rot edges do not need to be tested because they are not removed
-    quadEdges.erase(
-            std::remove_if(quadEdges.begin(), quadEdges.end(),
-                           [e](QuadEdgeQuartet& es) {
-                               return &es.base() == &e || &es.base() == &e.sym(); }),
-            quadEdges.end());
-    //mark these edges as removed
-    e.remove();
+    // because QuadEdge pointers must be stable, do not remove edge from quadedges container
+    // This is fine since they are detached from the subdivision
 
+    e.remove();
 }
 
 QuadEdge*

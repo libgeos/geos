@@ -93,6 +93,10 @@ public:
                                  const QuadEdge* triEdge[3]);
 
 private:
+    /**
+     * Use a deque to ensure QuadEdge pointers are stable.
+     * Note that it is NOT safe to erase entries from the deque.
+     */
     std::deque<QuadEdgeQuartet> quadEdges;
     std::array<QuadEdge*, 3> startingEdges;
     double tolerance;
