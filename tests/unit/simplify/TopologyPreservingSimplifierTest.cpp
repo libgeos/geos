@@ -309,7 +309,7 @@ void object::test<14>
     GeomPtr exp(wktreader.read(wkt_exp));
 
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
-
+    std::cout << *exp << std::endl;
     ensure("Simplified geometry is invalid!", simplified->isValid());
     ensure_equals_geometry(exp.get(), simplified.get());
 }
