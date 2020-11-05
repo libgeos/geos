@@ -111,7 +111,6 @@ class GEOS_DLL DD {
         double hi;
         double lo;
 
-        int magnitude(double x) const;
         int signum() const;
         DD rint() const;
 

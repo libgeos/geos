@@ -21,24 +21,6 @@ namespace geos {
 namespace math { // geos.util
 
 
-/* private */
-int
-DD::magnitude(double x) const
-{
-    double xAbs = std::fabs(x);
-    double xLog10 = std::log(xAbs) / std::log(10);
-    int xMag = (int) std::floor(xLog10);
-    /**
-     * Since log computation is inexact, there may be an off-by-one error
-     * in the computed magnitude.
-     * Following tests that magnitude is correct, and adjusts it if not
-     */
-    double xApprox = std::pow(10, xMag);
-    if (xApprox * 10 <= xAbs)
-      xMag += 1;
-
-    return xMag;
-}
 
 /* public */
 bool DD::isNaN() const
