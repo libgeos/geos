@@ -1,8 +1,9 @@
-Changes in 3.8.2
+Changes in 3.8.2dev
 2020-xx-xx
 
 - Bug fixes / improvements
 
+  - Fix Voronoi polygons robustness issue (#976)
   - Fix segfault in SimplePointInAreaLocator caused by casting
     MultiPolygon to Polygon (#1047, Oliver Tan)
   - DistanceOp against geometry with empty components
