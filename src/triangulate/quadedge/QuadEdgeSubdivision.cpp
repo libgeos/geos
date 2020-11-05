@@ -388,10 +388,9 @@ public:
         Triangle triangle(triEdges[0]->orig().getCoordinate(),
                           triEdges[1]->orig().getCoordinate(), triEdges[2]->orig().getCoordinate());
         Coordinate cc;
-        if (triangle.isIsoceles())
-            triangle.circumcentreDD(cc);
-        else
-            triangle.circumcentre(cc);
+
+        //TODO: identify heuristic to allow calling faster circumcentre() when possible
+        triangle.circumcentreDD(cc);
 
         Vertex ccVertex(cc);
 
