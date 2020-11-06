@@ -44,6 +44,7 @@ namespace geom { // geos::geom
 const static FixedSizeCoordinateSequence<0> emptyCoords2d(2);
 const static FixedSizeCoordinateSequence<0> emptyCoords3d(3);
 
+
 /*protected*/
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     :

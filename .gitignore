@@ -18,6 +18,7 @@ Makefile
 *.swp
 *.trs
 *.exe
+.DS_Store
 macros/libtool.m4
 macros/ltoptions.m4
 macros/ltsugar.m4

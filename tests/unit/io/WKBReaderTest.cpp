@@ -52,6 +52,14 @@ struct test_wkbreader_data {
         wktreader(gf.get())
     {}
 
+    GeomPtr
+    readHex(const std::string& hexwkb)
+    {
+        std::stringstream hexin(hexwkb);
+        GeomPtr g(wkbreader.readHEX(hexin));
+        return g;
+    }
+
     void
     testInput(const std::string& hexwkb,
               const std::string& expected)
@@ -523,6 +531,47 @@ void object::test<23>
     );
 
 }
+
+// EMPTY WKB TESTS
+template<>
+template<>
+void object::test<24>
+()
+{
+    GeomPtr g;
+
+    // POINT EMPTY
+    g = readHex(std::string("0101000000000000000000F87F000000000000F87F"));
+    ensure_equals("POINT EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("POINT EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
+
+    // POINT Z EMPTY
+    g = readHex(std::string("0101000080000000000000F87F000000000000F87F000000000000F87F"));
+    ensure_equals("POINT Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("POINT Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // LINESTRING EMPTY
+    g = readHex(std::string("010200000000000000"));
+    ensure_equals("LINESTRING EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("LINESTRING EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
+
+    // LINESTRING Z EMPTY
+    g = readHex(std::string("010200008000000000"));
+    ensure_equals("LINESTRING Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("LINESTRING Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // POLYGON EMPTY
+    g = readHex(std::string("010300000000000000"));
+    ensure_equals("POLYGON EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("POLYGON EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
+
+    // POLYGON Z EMPTY
+    g = readHex(std::string("010300008000000000"));
+    ensure_equals("POLYGON Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure_equals("POLYGON Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+}
+
 
 } // namespace tut
 

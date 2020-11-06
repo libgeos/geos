@@ -279,6 +279,12 @@ std::unique_ptr<Point>
 WKBReader::readPoint()
 {
     readCoordinate();
+
+    // POINT EMPTY
+    if (std::isnan(ordValues[0]) && std::isnan(ordValues[1])) {
+        return std::unique_ptr<Point>(factory.createPoint(hasZ ? 3 : 2));
+    }
+
     if (hasZ) {
         return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2])));
     }
@@ -317,6 +323,10 @@ WKBReader::readPolygon()
 #if DEBUG_WKB_READER
     cout << "WKB numRings: " << numRings << endl;
 #endif
+
+    if(numRings == 0) {
+        return factory.createPolygon(hasZ ? 3 : 2);
+    }
 
     std::unique_ptr<LinearRing> shell;
     if(numRings > 0) {
