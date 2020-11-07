@@ -41,64 +41,12 @@
 #include <iostream>
 #endif
 
-#ifndef COMPUTE_Z
-#define COMPUTE_Z 1
-#endif // COMPUTE_Z
-
 using namespace std;
 
 using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
-
-namespace { // anonymous
-
-/**
- * Finds the endpoint of the segments P and Q which
- * is closest to the other segment.
- * This is a reasonable surrogate for the true
- * intersection points in ill-conditioned cases
- * (e.g. where two segments are nearly coincident,
- * or where the endpoint of one segment lies almost on the other segment).
- * <p>
- * This replaces the older CentralEndpoint heuristic,
- * which chose the wrong endpoint in some cases
- * where the segments had very distinct slopes
- * and one endpoint lay almost on the other segment.
- *
- * @param p1 an endpoint of segment P
- * @param p2 an endpoint of segment P
- * @param q1 an endpoint of segment Q
- * @param q2 an endpoint of segment Q
- * @return the nearest endpoint to the other segment
- */
-Coordinate
-nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
-                const Coordinate& q1, const Coordinate& q2)
-{
-    const Coordinate* nearestPt = &p1;
-    double minDist = Distance::pointToSegment(p1, q1, q2);
-
-    double dist = Distance::pointToSegment(p2, q1, q2);
-    if(dist < minDist) {
-        minDist = dist;
-        nearestPt = &p2;
-    }
-    dist = Distance::pointToSegment(q1, p1, p2);
-    if(dist < minDist) {
-        minDist = dist;
-        nearestPt = &q1;
-    }
-    dist = Distance::pointToSegment(q2, p1, p2);
-    if(dist < minDist) {
-        nearestPt = &q2;
-    }
-    return *nearestPt;
-}
-
-
-} // anonymous namespace
 
 /*public static*/
 double
@@ -347,21 +295,6 @@ LineIntersector::computeIntersection(const Coordinate& p, const Coordinate& p1, 
             if((p == p1) || (p == p2)) { // 2d only test
                 isProperVar = false;
             }
-#if COMPUTE_Z
-            intPt[0] = p;
-#if GEOS_DEBUG
-            cerr << "RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ" << endl;
-#endif
-            double z = interpolateZ(p, p1, p2);
-            if(!std::isnan(z)) {
-                if(std::isnan(intPt[0].z)) {
-                    intPt[0].z = z;
-                }
-                else {
-                    intPt[0].z = (intPt[0].z + z) / 2;
-                }
-            }
-#endif // COMPUTE_Z
             result = POINT_INTERSECTION;
             return;
         }
@@ -426,6 +359,9 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
         return NO_INTERSECTION;
     }
 
+    /**
+     * Intersection is collinear if each endpoint lies on the other line.
+     */
     bool collinear = Pq1 == 0 && Pq2 == 0 && Qp1 == 0 && Qp2 == 0;
     if(collinear) {
 #if GEOS_DEBUG
@@ -449,12 +385,16 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
      * since at this point we know that the inputLines must
      *  intersect.
      */
+    Coordinate p;
+    double z = std::numeric_limits<double>::quiet_NaN();
+
     if(Pq1 == 0 || Pq2 == 0 || Qp1 == 0 || Qp2 == 0) {
-#if COMPUTE_Z
-        int hits = 0;
-        double z = 0.0;
-#endif
+
         isProperVar = false;
+
+#if GEOS_DEBUG
+        cerr << " intersection is NOT proper" << endl;
+#endif
 
         /* Check for two equal endpoints.
          * This is done explicitly rather than by the orientation tests
@@ -469,81 +409,61 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
          * LINESTRING ( -48.51001596420236 -22.063180333403878,
          * 			19.850257749638203 46.29709338043669 )
          *
-         * which used to produce the result:
+         * which used to produce the INCORRECT result:
          * (20.31970698357233, 46.76654261437082, NaN)
          */
 
-        if(p1.equals2D(q1) || p1.equals2D(q2)) {
-            intPt[0] = p1;
-#if COMPUTE_Z
-            if(!std::isnan(p1.z)) {
-                z += p1.z;
-                hits++;
-            }
-#endif
+        if (p1.equals2D(q1)) {
+            p = p1;
+            z = zGet(p1, q1);
         }
-        else if(p2.equals2D(q1) || p2.equals2D(q2)) {
-            intPt[0] = p2;
-#if COMPUTE_Z
-            if(!std::isnan(p2.z)) {
-                z += p2.z;
-                hits++;
-            }
-#endif
+        else if (p1.equals2D(q2)) {
+            p = p1;
+            z = zGet(p1, q2);
         }
-
+        else if (p2.equals2D(q1)) {
+            p = p2;
+            z = zGet(p2, q1);
+        }
+        else if (p2.equals2D(q2)) {
+            p = p2;
+            z = zGet(p2, q2);
+        }
         /*
          * Now check to see if any endpoint lies on the interior of the other segment.
          */
         else if(Pq1 == 0) {
-            intPt[0] = q1;
-#if COMPUTE_Z
-            if(!std::isnan(q1.z)) {
-                z += q1.z;
-                hits++;
-            }
-#endif
+            p = q1;
+            z = zGetOrInterpolate(q1, p1, p2);
         }
         else if(Pq2 == 0) {
-            intPt[0] = q2;
-#if COMPUTE_Z
-            if(!std::isnan(q2.z)) {
-                z += q2.z;
-                hits++;
-            }
-#endif
+            p = q2;
+            z = zGetOrInterpolate(q2, p1, p2);
         }
         else if(Qp1 == 0) {
-            intPt[0] = p1;
-#if COMPUTE_Z
-            if(!std::isnan(p1.z)) {
-                z += p1.z;
-                hits++;
-            }
-#endif
+            p = p1;
+            z = zGetOrInterpolate(p1, q1, q2);
         }
         else if(Qp2 == 0) {
-            intPt[0] = p2;
-#if COMPUTE_Z
-            if(!std::isnan(p2.z)) {
-                z += p2.z;
-                hits++;
-            }
-#endif
+            p = p2;
+            z = zGetOrInterpolate(p2, q1, q2);
         }
-#if COMPUTE_Z
-#if GEOS_DEBUG
-        cerr << "LineIntersector::computeIntersect: z:" << z << " hits:" << hits << endl;
-#endif // GEOS_DEBUG
-        if(hits) {
-            intPt[0].z = z / hits;
-        }
-#endif // COMPUTE_Z
     }
     else {
+#if GEOS_DEBUG
+        cerr << " intersection is proper" << endl;
+#endif // GEOS_DEBUG
         isProperVar = true;
-        intPt[0] = intersection(p1, p2, q1, q2);
+        p = intersection(p1, p2, q1, q2);
+#if GEOS_DEBUG
+        cerr << " computed intersection point: " << p << endl;
+#endif // GEOS_DEBUG
+        z = zInterpolate(p, p1, p2, q1, q2);
+#if GEOS_DEBUG
+        cerr << " computed proper intersection Z: " << z << endl;
+#endif // GEOS_DEBUG
     }
+    intPt[0] = Coordinate(p.x, p.y, z);
 #if GEOS_DEBUG
     cerr << " POINT_INTERSECTION; intPt[0]:" << intPt[0].toString() << endl;
 #endif // GEOS_DEBUG
@@ -555,14 +475,6 @@ int
 LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2,
                                               const Coordinate& q1, const Coordinate& q2)
 {
-#if COMPUTE_Z
-    double ztot;
-    int hits;
-    double p2z;
-    double p1z;
-    double q1z;
-    double q2z;
-#endif // COMPUTE_Z
 
 #if GEOS_DEBUG
     cerr << "LineIntersector::computeCollinearIntersection called" << endl;
@@ -570,270 +482,84 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordi
          endl;
 #endif // GEOS_DEBUG
 
-    bool p1q1p2 = Envelope::intersects(p1, p2, q1);
-    bool p1q2p2 = Envelope::intersects(p1, p2, q2);
-    bool q1p1q2 = Envelope::intersects(q1, q2, p1);
-    bool q1p2q2 = Envelope::intersects(q1, q2, p2);
+    bool q1inP = Envelope::intersects(p1, p2, q1);
+    bool q2inP = Envelope::intersects(p1, p2, q2);
+    bool p1inQ = Envelope::intersects(q1, q2, p1);
+    bool p2inQ = Envelope::intersects(q1, q2, p2);
 
-    if(p1q1p2 && p1q2p2) {
+    if(q1inP && q2inP) {
 #if GEOS_DEBUG
-        cerr << " p1q1p2 && p1q2p2" << endl;
+        cerr << " q1inP && q2inP" << endl;
 #endif
-        intPt[0] = q1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q1z = interpolateZ(q1, p1, p2);
-        if(!std::isnan(q1z)) {
-            ztot += q1z;
-            hits++;
-        }
-        if(!std::isnan(q1.z)) {
-            ztot += q1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = q2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q2z = interpolateZ(q2, p1, p2);
-        if(!std::isnan(q2z)) {
-            ztot += q2z;
-            hits++;
-        }
-        if(!std::isnan(q2.z)) {
-            ztot += q2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        intPt[0] = zGetOrInterpolateCopy(q1, p1, p2);
+        intPt[1] = zGetOrInterpolateCopy(q2, p1, p2);
 #if GEOS_DEBUG
         cerr << " intPt[0]: " << intPt[0].toString() << endl;
         cerr << " intPt[1]: " << intPt[1].toString() << endl;
 #endif
         return COLLINEAR_INTERSECTION;
     }
-    if(q1p1q2 && q1p2q2) {
+    if(p1inQ && p2inQ) {
 #if GEOS_DEBUG
-        cerr << " q1p1q2 && q1p2q2" << endl;
+        cerr << " p1inQ && p2inQ" << endl;
 #endif
-        intPt[0] = p1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p1z = interpolateZ(p1, q1, q2);
-        if(!std::isnan(p1z)) {
-            ztot += p1z;
-            hits++;
-        }
-        if(!std::isnan(p1.z)) {
-            ztot += p1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = p2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p2z = interpolateZ(p2, q1, q2);
-        if(!std::isnan(p2z)) {
-            ztot += p2z;
-            hits++;
-        }
-        if(!std::isnan(p2.z)) {
-            ztot += p2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        intPt[0] = zGetOrInterpolateCopy(p1, q1, q2);
+        intPt[1] = zGetOrInterpolateCopy(p2, q1, q2);
         return COLLINEAR_INTERSECTION;
     }
-    if(p1q1p2 && q1p1q2) {
+    if(q1inP && p1inQ) {
 #if GEOS_DEBUG
-        cerr << " p1q1p2 && q1p1q2" << endl;
+        cerr << " q1inP && p1inQ" << endl;
 #endif
-        intPt[0] = q1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q1z = interpolateZ(q1, p1, p2);
-        if(!std::isnan(q1z)) {
-            ztot += q1z;
-            hits++;
-        }
-        if(!std::isnan(q1.z)) {
-            ztot += q1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = p1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p1z = interpolateZ(p1, q1, q2);
-        if(!std::isnan(p1z)) {
-            ztot += p1z;
-            hits++;
-        }
-        if(!std::isnan(p1.z)) {
-            ztot += p1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        // if pts are equal Z is chosen arbitrarily
+        intPt[0] = zGetOrInterpolateCopy(q1, p1, p2);
+        intPt[1] = zGetOrInterpolateCopy(p1, q1, q2);
+
 #if GEOS_DEBUG
         cerr << " intPt[0]: " << intPt[0].toString() << endl;
         cerr << " intPt[1]: " << intPt[1].toString() << endl;
 #endif
-        return (q1 == p1) && !p1q2p2 && !q1p2q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        return (q1 == p1) && !q2inP && !p2inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
     }
-    if(p1q1p2 && q1p2q2) {
+    if(q1inP && p2inQ) {
 #if GEOS_DEBUG
-        cerr << " p1q1p2 && q1p2q2" << endl;
+        cerr << " q1inP && p2inQ" << endl;
 #endif
-        intPt[0] = q1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q1z = interpolateZ(q1, p1, p2);
-        if(!std::isnan(q1z)) {
-            ztot += q1z;
-            hits++;
-        }
-        if(!std::isnan(q1.z)) {
-            ztot += q1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = p2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p2z = interpolateZ(p2, q1, q2);
-        if(!std::isnan(p2z)) {
-            ztot += p2z;
-            hits++;
-        }
-        if(!std::isnan(p2.z)) {
-            ztot += p2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        // if pts are equal Z is chosen arbitrarily
+        intPt[0] = zGetOrInterpolateCopy(q1, p1, p2);
+        intPt[1] = zGetOrInterpolateCopy(p2, q1, q2);
+
 #if GEOS_DEBUG
         cerr << " intPt[0]: " << intPt[0].toString() << endl;
         cerr << " intPt[1]: " << intPt[1].toString() << endl;
 #endif
-        return (q1 == p2) && !p1q2p2 && !q1p1q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        return (q1 == p2) && !q2inP && !p1inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
     }
-    if(p1q2p2 && q1p1q2) {
+    if(q2inP && p1inQ) {
 #if GEOS_DEBUG
-        cerr << " p1q2p2 && q1p1q2" << endl;
+        cerr << " q2inP && p1inQ" << endl;
 #endif
-        intPt[0] = q2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q2z = interpolateZ(q2, p1, p2);
-        if(!std::isnan(q2z)) {
-            ztot += q2z;
-            hits++;
-        }
-        if(!std::isnan(q2.z)) {
-            ztot += q2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = p1;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p1z = interpolateZ(p1, q1, q2);
-        if(!std::isnan(p1z)) {
-            ztot += p1z;
-            hits++;
-        }
-        if(!std::isnan(p1.z)) {
-            ztot += p1.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        // if pts are equal Z is chosen arbitrarily
+        intPt[0] = zGetOrInterpolateCopy(q2, p1, p2);
+        intPt[1] = zGetOrInterpolateCopy(p1, q1, q2);
 #if GEOS_DEBUG
         cerr << " intPt[0]: " << intPt[0].toString() << endl;
         cerr << " intPt[1]: " << intPt[1].toString() << endl;
 #endif
-        return (q2 == p1) && !p1q1p2 && !q1p2q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        return (q2 == p1) && !q1inP && !p2inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
     }
-    if(p1q2p2 && q1p2q2) {
+    if(q2inP && p2inQ) {
 #if GEOS_DEBUG
-        cerr << " p1q2p2 && q1p2q2" << endl;
+        cerr << " q2inP && p2inQ" << endl;
 #endif
-        intPt[0] = q2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        q2z = interpolateZ(q2, p1, p2);
-        if(!std::isnan(q2z)) {
-            ztot += q2z;
-            hits++;
-        }
-        if(!std::isnan(q2.z)) {
-            ztot += q2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[0].z = ztot / hits;
-        }
-#endif
-        intPt[1] = p2;
-#if COMPUTE_Z
-        ztot = 0;
-        hits = 0;
-        p2z = interpolateZ(p2, q1, q2);
-        if(!std::isnan(p2z)) {
-            ztot += p2z;
-            hits++;
-        }
-        if(!std::isnan(p2.z)) {
-            ztot += p2.z;
-            hits++;
-        }
-        if(hits) {
-            intPt[1].z = ztot / hits;
-        }
-#endif
+        // if pts are equal Z is chosen arbitrarily
+        intPt[0] = zGetOrInterpolateCopy(q2, p1, p2);
+        intPt[1] = zGetOrInterpolateCopy(p2, q1, q2);
 #if GEOS_DEBUG
         cerr << " intPt[0]: " << intPt[0].toString() << endl;
         cerr << " intPt[1]: " << intPt[1].toString() << endl;
 #endif
-        return (q2 == p2) && !p1q1p2 && !q1p1q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        return (q2 == p2) && !q1inP && !p1inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
     }
     return NO_INTERSECTION;
 }
@@ -874,24 +600,6 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
         precisionModel->makePrecise(intPtOut);
     }
 
-
-#if COMPUTE_Z
-    double ztot = 0;
-    double zvals = 0;
-    double zp = interpolateZ(intPtOut, p1, p2);
-    double zq = interpolateZ(intPtOut, q1, q2);
-    if(!std::isnan(zp)) {
-        ztot += zp;
-        zvals++;
-    }
-    if(!std::isnan(zq)) {
-        ztot += zq;
-        zvals++;
-    }
-    if(zvals) {
-        intPtOut.z = ztot / zvals;
-    }
-#endif // COMPUTE_Z
     return intPtOut;
 }
 
@@ -916,6 +624,142 @@ LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
     return ptInt;
 }
 
+/* private static */
+double
+LineIntersector::zGet(const Coordinate& p, const Coordinate& q)
+{
+    double z = p.z;
+    if ( std::isnan(z) ) {
+        z = q.z; // may be NaN
+    }
+    return z;
+}
+
+/* private static */
+double
+LineIntersector::zInterpolate(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
+{
+#if GEOS_DEBUG
+    cerr << " zInterpolate " << p << ", " << p1 << ", " << p2 << std::endl;
+#endif
+    double p1z = p1.z;
+    double p2z = p2.z;
+    if (std::isnan(p1z)) {
+      return p2z; // may be NaN
+    }
+    if (std::isnan(p2z)) {
+      return p1z; // may be NaN
+    }
+    if (p.equals2D(p1)) {
+      return p1z; // not NaN
+    }
+    if (p.equals2D(p2)) {
+      return p2z; // not NaN
+    }
+    double dz = p2z - p1z;
+    if (dz == 0.0) {
+      return p1z;
+    }
+#if GEOS_DEBUG
+    cerr << " Interpolating Z from distance of p along p1-p2" << endl;
+#endif
+    // interpolate Z from distance of p along p1-p2
+    double dx = (p2.x - p1.x);
+    double dy = (p2.y - p1.y);
+    // seg has non-zero length since p1 < p < p2
+    double seglen = (dx * dx + dy * dy);
+    double xoff = (p.x - p1.x);
+    double yoff = (p.y - p1.y);
+    double plen = (xoff * xoff + yoff * yoff);
+    double frac = sqrt(plen / seglen);
+    double zoff = dz * frac;
+    double zInterpolated = p1z + zoff;
+#if GEOS_DEBUG
+    cerr << " interpolated Z: " << zInterpolated << std::endl;
+#endif
+    return zInterpolated;
+}
+
+
+/* private static */
+double
+LineIntersector::zGetOrInterpolate(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
+{
+    double z = p.z;
+    if (! std::isnan(z) ) return z;
+    return zInterpolate(p, p1, p2); // may be NaN
+}
+
+/* private static */
+Coordinate
+LineIntersector::zGetOrInterpolateCopy(
+    const Coordinate& p,
+    const Coordinate& p1,
+    const Coordinate& p2)
+{
+    Coordinate pCopy = p;
+    double z = zGetOrInterpolate(p, p1, p2);
+    pCopy.z = z;
+    return pCopy;
+}
+
+
+double
+LineIntersector::zInterpolate(const Coordinate& p,
+                              const Coordinate& p1,
+                              const Coordinate& p2,
+                              const Coordinate& q1,
+                              const Coordinate& q2)
+{
+#if GEOS_DEBUG
+    cerr << " zInterpolate(5 coords) called" << endl;
+#endif // GEOS_DEBUG
+    double zp = zInterpolate(p, p1, p2);
+#if GEOS_DEBUG
+    cerr << " zp: " << zp << endl;
+#endif // GEOS_DEBUG
+    double zq = zInterpolate(p, q1, q2);
+#if GEOS_DEBUG
+    cerr << " zq: " << zq << endl;
+#endif // GEOS_DEBUG
+    if (std::isnan(zp)) {
+      return zq; // may be NaN
+    }
+    if (std::isnan(zq)) {
+      return zp; // may be NaN
+    }
+#if GEOS_DEBUG
+    cerr << " averaging Z" << endl;
+#endif // GEOS_DEBUG
+    // both Zs have values, so average them
+    return (zp + zq) / 2.0;
+}
+
+
+/* private static */
+Coordinate
+LineIntersector::nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
+                const Coordinate& q1, const Coordinate& q2)
+{
+    const Coordinate* nearestPt = &p1;
+    double minDist = Distance::pointToSegment(p1, q1, q2);
+
+    double dist = Distance::pointToSegment(p2, q1, q2);
+    if(dist < minDist) {
+        minDist = dist;
+        nearestPt = &p2;
+    }
+    dist = Distance::pointToSegment(q1, p1, p2);
+    if(dist < minDist) {
+        minDist = dist;
+        nearestPt = &q1;
+    }
+    dist = Distance::pointToSegment(q2, p1, p2);
+    if(dist < minDist) {
+        nearestPt = &q2;
+    }
+    return *nearestPt;
+}
 
 } // namespace geos.algorithm
 } // namespace geos

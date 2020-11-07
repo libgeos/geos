@@ -92,6 +92,21 @@ instanceOf(InstanceType const* instance)
     return dynamic_cast<Type const*>(instance);
 }
 
+inline void
+ensure_equals_xyz(geos::geom::Coordinate const& actual,
+                 geos::geom::Coordinate const& expected)
+{
+    ensure_equals("Coordinate X", actual.x, expected.x );
+    ensure_equals("Coordinate Y", actual.y, expected.y );
+    if ( std::isnan(expected.z) ) {
+        ensure("Coordinate Z should be NaN", std::isnan(actual.z) );
+    } else {
+        ensure_equals("Coordinate Z", actual.z, expected.z );
+    }
+}
+
+
+
 //
 // Geometries structure comparators
 //

@@ -343,7 +343,55 @@ private:
     geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
                                       const geom::Coordinate& q1, const geom::Coordinate& q2) const;
 
+    /**
+     * Finds the endpoint of the segments P and Q which
+     * is closest to the other segment.
+     * This is a reasonable surrogate for the true
+     * intersection points in ill-conditioned cases
+     * (e.g. where two segments are nearly coincident,
+     * or where the endpoint of one segment lies almost on the other segment).
+     * <p>
+     * This replaces the older CentralEndpoint heuristic,
+     * which chose the wrong endpoint in some cases
+     * where the segments had very distinct slopes
+     * and one endpoint lay almost on the other segment.
+     *
+     * @param p1 an endpoint of segment P
+     * @param p2 an endpoint of segment P
+     * @param q1 an endpoint of segment Q
+     * @param q2 an endpoint of segment Q
+     * @return the nearest endpoint to the other segment
+     */
+    static geom::Coordinate nearestEndpoint(const geom::Coordinate& p1,
+                                            const geom::Coordinate& p2,
+                                            const geom::Coordinate& q1,
+                                            const geom::Coordinate& q2);
+
+    static double zGet(const geom::Coordinate& p, const geom::Coordinate& q);
+
+    static double zGetOrInterpolate(const geom::Coordinate& p,
+                                    const geom::Coordinate& p0,
+                                    const geom::Coordinate& p1);
+
+    static geom::Coordinate zGetOrInterpolateCopy(const geom::Coordinate& p,
+                                                  const geom::Coordinate& p0,
+                                                  const geom::Coordinate& p1);
+
+    /// \brief
+    /// Return a Z value being the interpolation of Z from p0 to p1 at
+    /// the given point p
+    static double zInterpolate(const geom::Coordinate& p,
+                               const geom::Coordinate& p0,
+                               const geom::Coordinate& p1);
+
+    static double zInterpolate(const geom::Coordinate& p,
+                               const geom::Coordinate& p1,
+                               const geom::Coordinate& p2,
+                               const geom::Coordinate& q1,
+                               const geom::Coordinate& q2);
+
 };
+
 
 } // namespace geos::algorithm
 } // namespace geos

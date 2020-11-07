@@ -62,6 +62,7 @@ geos_unit_SOURCES = \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \
+	algorithm/RobustLineIntersectorZTest.cpp \
 	capi/GEOSBufferTest.cpp \
 	capi/GEOSBuildAreaTest.cpp \
 	capi/GEOSCAPIDefinesTest.cpp \
@@ -203,6 +204,7 @@ geos_unit_SOURCES = \
 	operation/overlayng/OverlayNGSnappingOneTest.cpp \
 	operation/overlayng/OverlayNGStrictModeTest.cpp \
 	operation/overlayng/OverlayNGTest.cpp \
+	operation/overlayng/OverlayNGZTest.cpp \
 	operation/overlayng/PrecisionReducerTest.cpp \
 	operation/overlayng/PrecisionUtilTest.cpp \
 	operation/overlayng/UnaryUnionNGTest.cpp \
