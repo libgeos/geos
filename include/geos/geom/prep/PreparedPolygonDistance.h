@@ -17,41 +17,51 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDLINESTRINGDISTANCE_H
-#define GEOS_GEOM_PREP_PREPAREDLINESTRINGDISTANCE_H
+#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H
+#define GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H
+
+// Forward declarations
+namespace geos {
+    namespace geom {
+        class Geometry;
+        namespace prep {
+            class PreparedPolygon;
+        }
+    }
+}
 
 namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
-class PreparedLineString;
+class PreparedPolygon;
 
-class PreparedLineStringDistance {
+class PreparedPolygonDistance {
 public:
 
-    static double distance(const PreparedLineString& prep, const geom::Geometry* geom)
+    static double distance(const PreparedPolygon& prep, const geom::Geometry* geom)
     {
-        PreparedLineStringDistance op(prep);
+        PreparedPolygonDistance op(prep);
         return op.distance(geom);
     }
 
-    PreparedLineStringDistance(const PreparedLineString& prep)
-        : prepLine(prep)
+    PreparedPolygonDistance(const PreparedPolygon& prep)
+        : prepPoly(prep)
     { }
 
     double distance(const geom::Geometry* g) const;
 
 protected:
 
-    const PreparedLineString& prepLine;
+    const PreparedPolygon& prepPoly;
 
     // Declare type as noncopyable
-    PreparedLineStringDistance(const PreparedLineStringDistance& other) = delete;
-    PreparedLineStringDistance& operator=(const PreparedLineStringDistance& rhs) = delete;
+    PreparedPolygonDistance(const PreparedPolygonDistance& other) = delete;
+    PreparedPolygonDistance& operator=(const PreparedPolygonDistance& rhs) = delete;
 };
 
 } // namespace geos::geom::prep
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDLINESTRINGDISTANCE_H
+#endif // GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H

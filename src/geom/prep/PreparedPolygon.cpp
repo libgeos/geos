@@ -21,6 +21,7 @@
 #include <geos/geom/prep/PreparedPolygonContains.h>
 #include <geos/geom/prep/PreparedPolygonContainsProperly.h>
 #include <geos/geom/prep/PreparedPolygonCovers.h>
+#include <geos/geom/prep/PreparedPolygonDistance.h>
 #include <geos/geom/prep/PreparedPolygonIntersects.h>
 #include <geos/geom/prep/PreparedPolygonPredicate.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
@@ -143,7 +144,7 @@ intersects(const geom::Geometry* g) const
     return PreparedPolygonIntersects::intersects(this, g);
 }
 
-/* private */
+/* public */
 operation::distance::IndexedFacetDistance*
 PreparedPolygon::
 getIndexedFacetDistance() const
@@ -157,16 +158,7 @@ getIndexedFacetDistance() const
 double
 PreparedPolygon::distance(const geom::Geometry* g) const
 {
-    if ( getGeometry().isEmpty() || g->isEmpty() )
-    {
-        return std::numeric_limits<double>::infinity();
-    }
-
-    if ( intersects(g) ) return 0.0;
-
-    /* Not intersecting, compute distance from facets */
-    operation::distance::IndexedFacetDistance *idf = getIndexedFacetDistance();
-    return idf->distance(g);
+    return PreparedPolygonDistance::distance(*this, g);
 }
 
 } // namespace geos.geom.prep

@@ -20,9 +20,10 @@ libgeomprep_la_SOURCES = \
     PreparedLineStringIntersects.cpp \
     PreparedLineStringNearestPoints.cpp \
     PreparedPoint.cpp \
+    PreparedPolygon.cpp \
     PreparedPolygonContains.cpp \
     PreparedPolygonContainsProperly.cpp \
     PreparedPolygonCovers.cpp \
-    PreparedPolygon.cpp \
+		PreparedPolygonDistance.cpp \
     PreparedPolygonIntersects.cpp \
     PreparedPolygonPredicate.cpp

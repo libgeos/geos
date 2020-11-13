@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -55,7 +56,6 @@ private:
     mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ptOnGeomLoc;
     mutable noding::SegmentString::ConstVect segStrings;
     mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
-    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() const;
 
 protected:
 public:
@@ -64,6 +64,7 @@ public:
 
     noding::FastSegmentSetIntersectionFinder* getIntersectionFinder() const;
     algorithm::locate::PointOnGeometryLocator* getPointLocator() const;
+    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() const;
 
     bool contains(const geom::Geometry* g) const override;
     bool containsProperly(const geom::Geometry* g) const override;

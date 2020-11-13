@@ -20,6 +20,7 @@ geos_HEADERS = \
     PreparedPolygonContains.h \
     PreparedPolygonContainsProperly.h \
     PreparedPolygonCovers.h \
+    PreparedPolygonDistance.h \
     PreparedPolygon.h \
     PreparedPolygonIntersects.h \
     PreparedPolygonPredicate.h
