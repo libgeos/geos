@@ -135,17 +135,6 @@ PrecisionModel::PrecisionModel(double newScale)
     setScale(newScale);
 }
 
-
-PrecisionModel::PrecisionModel(const PrecisionModel& pm)
-    :
-    modelType(pm.modelType),
-    scale(pm.scale)
-{
-#if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "] ctor(pm[" << &pm << "])" << endl;
-#endif
-}
-
 /*public*/
 bool
 PrecisionModel::isFloating() const

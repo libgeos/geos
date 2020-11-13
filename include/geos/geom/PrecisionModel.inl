@@ -28,12 +28,6 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*public*/
-INLINE
-PrecisionModel::~PrecisionModel(void)
-{
-}
-
-/*public*/
 INLINE void
 PrecisionModel::makePrecise(Coordinate* coord) const
 {
