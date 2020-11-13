@@ -60,21 +60,21 @@ struct test_capigeosnearestpoints_data {
 
         unsigned int size;
         GEOSCoordSeq_getSize(coords_, &size);
-        ensure_equals(size, 2u);
+        ensure_equals("CoordSeq size", size, 2u);
 
         double  ox, oy;
 
         /* Point in geom1_ */
         GEOSCoordSeq_getOrdinate(coords_, 0, 0, &ox);
         GEOSCoordSeq_getOrdinate(coords_, 0, 1, &oy);
-        ensure_equals(ox, x1);
-        ensure_equals(oy, y1);
+        ensure_equals("P1 x", ox, x1);
+        ensure_equals("P1 y", oy, y1);
 
         /* Point in geom2_ */
         GEOSCoordSeq_getOrdinate(coords_, 1, 0, &ox);
         GEOSCoordSeq_getOrdinate(coords_, 1, 1, &oy);
-        ensure_equals(ox, x2);
-        ensure_equals(oy, y2);
+        ensure_equals("P2 x", ox, x2);
+        ensure_equals("P2 y", oy, y2);
 
         GEOSCoordSeq_destroy(coords_);
     }
@@ -156,6 +156,19 @@ void object::test<5>
         "LINESTRING(0 0,10 10)",
         "LINESTRING(0 10,10 0)",
         5, 5, 5, 5
+    );
+}
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    checkNearestPoints(
+        "POLYGON((0 0,10 0,10 10,0 10,0 0))",
+        "LINESTRING(8 5,12 5)",
+        /* But could also be the intersection point... */
+        8, 5, 8, 5
     );
 }
 
