@@ -67,7 +67,7 @@ private:
      *
      * @param splitEdges the split edges for this edge (in order)
      */
-    void checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges);
+    void checkSplitEdgesCorrectness(const std::vector<SegmentString*>& splitEdges) const;
 
     /**
      * Create a new "split edge" with the section of points between
@@ -77,7 +77,7 @@ private:
      *
      * ownership of return value is transferred
      */
-    std::unique_ptr<SegmentString> createSplitEdge(SegmentNode* ei0, SegmentNode* ei1);
+    std::unique_ptr<SegmentString> createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const;
 
     /**
     * Extracts the points for a split edge running between two nodes.
@@ -89,7 +89,7 @@ private:
     * @param ei1 the end node of the split edge
     * @return the points for the split edge
     */
-    void createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vector<geom::Coordinate>& pts);
+    void createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& pts) const;
 
     /**
      * Adds nodes for any collapsed edge pairs.
@@ -106,7 +106,7 @@ private:
      * which are pre-existing in the vertex list.
      */
     void findCollapsesFromExistingVertices(
-        std::vector<std::size_t>& collapsedVertexIndexes);
+        std::vector<std::size_t>& collapsedVertexIndexes) const;
 
     /**
      * Adds nodes for any collapsed edge pairs caused by inserted nodes
@@ -116,12 +116,12 @@ private:
      * the vertex must be added as a node as well.
      */
     void findCollapsesFromInsertedNodes(
-        std::vector<std::size_t>& collapsedVertexIndexes);
+        std::vector<std::size_t>& collapsedVertexIndexes) const;
 
-    bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
-                           size_t& collapsedVertexIndex);
+    bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
+                           size_t& collapsedVertexIndex) const;
 
-    void addEdgeCoordinates(SegmentNode* ei0, SegmentNode* ei1, std::vector<geom::Coordinate>& coordList);
+    void addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& coordList) const;
 
     // Declare type as noncopyable
     SegmentNodeList(const SegmentNodeList& other) = delete;

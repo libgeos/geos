@@ -104,7 +104,7 @@ SegmentNodeList::addCollapsedNodes()
 /* private */
 void
 SegmentNodeList::findCollapsesFromExistingVertices(
-    std::vector<size_t>& collapsedVertexIndexes)
+    std::vector<size_t>& collapsedVertexIndexes) const
 {
     if(edge.size() < 2) {
         return;    // or we'll never exit the loop below
@@ -123,7 +123,7 @@ SegmentNodeList::findCollapsesFromExistingVertices(
 /* private */
 void
 SegmentNodeList::findCollapsesFromInsertedNodes(
-    std::vector<size_t>& collapsedVertexIndexes)
+    std::vector<size_t>& collapsedVertexIndexes) const
 {
     size_t collapsedVertexIndex;
 
@@ -146,8 +146,8 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 
 /* private */
 bool
-SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
-                                   size_t& collapsedVertexIndex)
+SegmentNodeList::findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
+                                   size_t& collapsedVertexIndex) const
 {
     assert(ei1.segmentIndex >= ei0.segmentIndex);
     // only looking for equal nodes
@@ -215,7 +215,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 
 /*private*/
 void
-SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges)
+SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& splitEdges) const
 {
     const CoordinateSequence* edgePts = edge.getCoordinates();
     assert(edgePts);
@@ -244,7 +244,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEd
 
 /*private*/
 std::unique_ptr<SegmentString>
-SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
+SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
     std::vector<Coordinate> pts;
     createSplitEdgePts(ei0, ei1, pts);
@@ -254,7 +254,7 @@ SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 
 /*private*/
 void
-SegmentNodeList::createSplitEdgePts(SegmentNode* ei0, SegmentNode* ei1, std::vector<Coordinate>& pts)
+SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<Coordinate>& pts) const
 {
     //int npts = ei1->segmentIndex - (ei0->segmentIndex + 2);
     bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
@@ -311,8 +311,7 @@ SegmentNodeList::getSplitCoordinates()
 
 /*private*/
 void
-SegmentNodeList::addEdgeCoordinates(SegmentNode* ei0, SegmentNode* ei1, std::vector<Coordinate>& coordList)
-{
+SegmentNodeList::addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<Coordinate>& coordList) const {
     std::vector<Coordinate> pts;
     createSplitEdgePts(ei0, ei1, pts);
     // Append pts to coordList
