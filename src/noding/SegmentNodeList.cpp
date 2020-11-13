@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <geos/profiler.h>
+#include <geos/util.h>
 #include <geos/util/GEOSException.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/NodedSegmentString.h>
@@ -199,8 +200,8 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
             continue;
         }
 
-        SegmentString* newEdge = createSplitEdge(eiPrev, ei);
-        edgeList.push_back(newEdge);
+        std::unique_ptr<SegmentString> newEdge = createSplitEdge(eiPrev, ei);
+        edgeList.push_back(newEdge.release());
 #if GEOS_DEBUG
         testingSplitEdges.push_back(newEdge);
 #endif
@@ -242,12 +243,12 @@ SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEd
 }
 
 /*private*/
-SegmentString*
+std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 {
     std::vector<Coordinate> pts;
     createSplitEdgePts(ei0, ei1, pts);
-    return new NodedSegmentString(new CoordinateArraySequence(std::move(pts)), edge.getData());
+    return detail::make_unique<NodedSegmentString>(new CoordinateArraySequence(std::move(pts)), edge.getData());
 }
 
 

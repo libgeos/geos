@@ -77,7 +77,7 @@ private:
      *
      * ownership of return value is transferred
      */
-    SegmentString* createSplitEdge(SegmentNode* ei0, SegmentNode* ei1);
+    std::unique_ptr<SegmentString> createSplitEdge(SegmentNode* ei0, SegmentNode* ei1);
 
     /**
     * Extracts the points for a split edge running between two nodes.
