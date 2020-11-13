@@ -245,9 +245,9 @@ SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEd
 SegmentString*
 SegmentNodeList::createSplitEdge(SegmentNode* ei0, SegmentNode* ei1)
 {
-    std::unique_ptr<std::vector<Coordinate>> pts(new std::vector<Coordinate>);
-    createSplitEdgePts(ei0, ei1, *pts);
-    return new NodedSegmentString(new CoordinateArraySequence(pts.release()), edge.getData());
+    std::vector<Coordinate> pts;
+    createSplitEdgePts(ei0, ei1, pts);
+    return new NodedSegmentString(new CoordinateArraySequence(std::move(pts)), edge.getData());
 }
 
 
