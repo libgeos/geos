@@ -106,6 +106,7 @@ geos_unit_SOURCES = \
 	capi/GEOSOrientationIndexTest.cpp \
 	capi/GEOSPointOnSurfaceTest.cpp \
 	capi/GEOSPolygonizeTest.cpp \
+	capi/GEOSPreparedDistanceTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPreparedNearestPointsTest.cpp \
 	capi/GEOSProjectTest.cpp \

@@ -5,6 +5,7 @@ Changes in 3.9.0
   - MaximumInscribedCircle and LargestEmptyCircle (JTS-530, Paul Ramsey)
   - CAPI: Fixed precision overlay operations (Sandro Santilli, Paul Ramsey)
   - CAPI: GEOSPreparedNearestPoints (#1007, Sandro Santilli)
+  - CAPI: GEOSPreparedDistance (#1066, Sandro Santilli)
 
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)

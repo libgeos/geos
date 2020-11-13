@@ -176,6 +176,11 @@ public:
      */
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const override;
 
+    /**
+     * Default implementation.
+     */
+    double distance(const geom::Geometry* g) const override;
+
     std::string toString();
 
 };

@@ -890,6 +890,11 @@ extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints_r(
                                           const GEOSPreparedGeometry* pg1,
                                           const GEOSGeometry* g2);
 
+extern int GEOS_DLL GEOSPreparedDistance_r(
+                                GEOSContextHandle_t handle,
+                                const GEOSPreparedGeometry* pg1,
+                                const GEOSGeometry* g2, double *dist);
+
 /************************************************************************
  *
  *  STRtree functions
@@ -1877,6 +1882,7 @@ extern char GEOS_DLL GEOSPreparedOverlaps(const GEOSPreparedGeometry* pg1, const
 extern char GEOS_DLL GEOSPreparedTouches(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedWithin(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern int GEOS_DLL GEOSPreparedDistance(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2, double *dist);
 
 /************************************************************************
  *

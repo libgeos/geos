@@ -143,6 +143,32 @@ intersects(const geom::Geometry* g) const
     return PreparedPolygonIntersects::intersects(this, g);
 }
 
+/* private */
+operation::distance::IndexedFacetDistance*
+PreparedPolygon::
+getIndexedFacetDistance() const
+{
+    if(! indexedDistance ) {
+        indexedDistance.reset(new operation::distance::IndexedFacetDistance(&getGeometry()));
+    }
+    return indexedDistance.get();
+}
+
+double
+PreparedPolygon::distance(const geom::Geometry* g) const
+{
+    if ( getGeometry().isEmpty() || g->isEmpty() )
+    {
+        return std::numeric_limits<double>::infinity();
+    }
+
+    if ( intersects(g) ) return 0.0;
+
+    /* Not intersecting, compute distance from facets */
+    operation::distance::IndexedFacetDistance *idf = getIndexedFacetDistance();
+    return idf->distance(g);
+}
+
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos

@@ -1305,6 +1305,12 @@ extern "C" {
         return GEOSPreparedNearestPoints_r(handle, g1, g2);
     }
 
+    int
+    GEOSPreparedDistance(const geos::geom::prep::PreparedGeometry* g1, const Geometry* g2, double *dist)
+    {
+        return GEOSPreparedDistance_r(handle, g1, g2, dist);
+    }
+
     STRtree*
     GEOSSTRtree_create(size_t nodeCapacity)
     {

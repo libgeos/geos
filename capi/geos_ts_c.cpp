@@ -2951,6 +2951,17 @@ extern "C" {
         });
     }
 
+    int
+    GEOSPreparedDistance_r(GEOSContextHandle_t extHandle,
+                         const geos::geom::prep::PreparedGeometry* pg,
+                         const Geometry* g, double* dist)
+    {
+        return execute(extHandle, 0, [&]() {
+            *dist = pg->distance(g);
+            return 1;
+        });
+    }
+
 //-----------------------------------------------------------------
 // STRtree
 //-----------------------------------------------------------------

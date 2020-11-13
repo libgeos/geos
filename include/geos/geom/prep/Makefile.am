@@ -1,9 +1,9 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-#SUBDIRS = 
+#SUBDIRS =
 
-#EXTRA_DIST = 
+#EXTRA_DIST =
 
 geosdir = $(includedir)/geos/geom/prep
 
@@ -13,7 +13,9 @@ geos_HEADERS = \
     PreparedGeometryFactory.h \
     PreparedGeometry.h \
     PreparedLineString.h \
+    PreparedLineStringDistance.h \
     PreparedLineStringIntersects.h \
+    PreparedLineStringNearestPoints.h \
     PreparedPoint.h \
     PreparedPolygonContains.h \
     PreparedPolygonContainsProperly.h \

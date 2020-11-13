@@ -22,6 +22,7 @@
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 #include <geos/noding/SegmentString.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 
 #include <memory>
 
@@ -53,6 +54,8 @@ private:
     mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ptOnGeomLoc;
     mutable noding::SegmentString::ConstVect segStrings;
+    mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() const;
 
 protected:
 public:
@@ -66,6 +69,7 @@ public:
     bool containsProperly(const geom::Geometry* g) const override;
     bool covers(const geom::Geometry* g) const override;
     bool intersects(const geom::Geometry* g) const override;
+    double distance(const geom::Geometry* g) const override;
 
 };
 

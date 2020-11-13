@@ -206,6 +206,16 @@ public:
      *
      */
     virtual std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* geom) const = 0;
+
+    /** \brief
+     * Compute the minimum distance between the base {@link Geometry} and
+     * the given geometry.
+     *
+     * @param geom the Geometry to compute the distance to
+     * @return the minimum distance between the two geometries
+     *
+     */
+    virtual double distance(const geom::Geometry* geom) const = 0;
 };
 
 

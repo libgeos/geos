@@ -155,6 +155,14 @@ BasicPreparedGeometry::nearestPoints(const geom::Geometry* g) const
     return dist.nearestPoints();
 }
 
+double
+BasicPreparedGeometry::distance(const geom::Geometry* g) const
+{
+    std::unique_ptr<geom::CoordinateSequence> coords = nearestPoints(g);
+    if ( ! coords ) return std::numeric_limits<double>::infinity();
+    return coords->getAt(0).distance( coords->getAt(1) );
+}
+
 std::string
 BasicPreparedGeometry::toString()
 {
