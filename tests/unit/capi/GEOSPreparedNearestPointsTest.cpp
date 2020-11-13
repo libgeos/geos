@@ -51,6 +51,52 @@ struct test_capigeospreparednearestpoints_data {
         finishGEOS();
     }
 
+    void checkNearestPoints(const char* wkt1, const char* wkt2,
+                            double x1, double y1,
+                            double x2, double y2)
+    {
+        geom1_ = GEOSGeomFromWKT(wkt1);
+        ensure(nullptr != geom1_);
+        pgeom1_ = GEOSPrepare(geom1_);
+        ensure(nullptr != pgeom1_);
+        geom2_ = GEOSGeomFromWKT(wkt2);
+        ensure(nullptr != geom2_);
+        GEOSCoordSequence* coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
+
+        unsigned int size;
+        GEOSCoordSeq_getSize(coords_, &size);
+        ensure_equals(size, 2u);
+
+        double  ox, oy;
+
+        /* Point in geom1_ */
+        GEOSCoordSeq_getOrdinate(coords_, 0, 0, &ox);
+        GEOSCoordSeq_getOrdinate(coords_, 0, 1, &oy);
+        ensure_equals(ox, x1);
+        ensure_equals(oy, y1);
+
+        /* Point in geom2_ */
+        GEOSCoordSeq_getOrdinate(coords_, 1, 0, &ox);
+        GEOSCoordSeq_getOrdinate(coords_, 1, 1, &oy);
+        ensure_equals(ox, x2);
+        ensure_equals(oy, y2);
+
+        GEOSCoordSeq_destroy(coords_);
+    }
+
+    void checkNearestPointsNull(const char* wkt1, const char* wkt2)
+    {
+        geom1_ = GEOSGeomFromWKT(wkt1);
+        ensure(nullptr != geom1_);
+        pgeom1_ = GEOSPrepare(geom1_);
+        ensure(nullptr != pgeom1_);
+        geom2_ = GEOSGeomFromWKT(wkt2);
+        ensure(nullptr != geom2_);
+        GEOSCoordSequence* coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
+
+        ensure(nullptr == coords_);
+    }
+
 };
 
 typedef test_group<test_capigeospreparednearestpoints_data> group;
@@ -67,17 +113,7 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    pgeom1_ = GEOSPrepare(geom1_);
-    geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
-
-    ensure(nullptr != pgeom1_);
-    ensure(nullptr != geom2_);
-
-    GEOSCoordSequence* coords_;
-    coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
-
-    ensure(nullptr == coords_);
+    checkNearestPointsNull("POLYGON EMPTY", "POLYGON EMPTY");
 }
 
 template<>
@@ -85,39 +121,12 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
-    pgeom1_ = GEOSPrepare(geom1_);
-    geom2_ = GEOSGeomFromWKT("POLYGON((8 8, 9 9, 9 10, 8 8))");
+    checkNearestPoints(
+        "POLYGON((1 1,1 5,5 5,5 1,1 1))",
+        "POLYGON((8 8, 9 9, 9 10, 8 8))",
+        5, 5, 8, 8
+    );
 
-    ensure(nullptr != pgeom1_);
-    ensure(nullptr != geom2_);
-
-    GEOSCoordSequence* coords_;
-    coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
-
-    ensure(nullptr != coords_);
-
-    unsigned int size;
-    GEOSCoordSeq_getSize(coords_, &size);
-    ensure_equals(size, 2u);
-
-    double  x1, x2, y1, y2;
-
-    /* Point in pgeom1_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 0, 0, &x1);
-    GEOSCoordSeq_getOrdinate(coords_, 0, 1, &y1);
-    ensure_equals(x1, 5);
-    ensure_equals(y1, 5);
-
-    /* Point in geom2_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 1, 0, &x2);
-    GEOSCoordSeq_getOrdinate(coords_, 1, 1, &y2);
-    ensure_equals(x2, 8);
-    ensure_equals(y2, 8);
-
-    GEOSCoordSeq_destroy(coords_);
 }
 
 template<>
@@ -125,39 +134,11 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
-    pgeom1_ = GEOSPrepare(geom1_);
-    geom2_ = GEOSGeomFromWKT("POINT(2 2)");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
-
-    GEOSCoordSequence* coords_;
-    coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
-
-    ensure(nullptr != coords_);
-
-    unsigned int size;
-    GEOSCoordSeq_getSize(coords_, &size);
-    ensure_equals(size, 2u);
-
-    double  x1, x2, y1, y2;
-
-    /* Point in geom1_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 0, 0, &x1);
-    GEOSCoordSeq_getOrdinate(coords_, 0, 1, &y1);
-    ensure_equals(x1, 2);
-    ensure_equals(y1, 2);
-
-    /* Point in geom2_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 1, 0, &x2);
-    GEOSCoordSeq_getOrdinate(coords_, 1, 1, &y2);
-    ensure_equals(x2, 2);
-    ensure_equals(y2, 2);
-
-    GEOSCoordSeq_destroy(coords_);
+    checkNearestPoints(
+        "POLYGON((1 1,1 5,5 5,5 1,1 1))",
+        "POINT(2 2)",
+        2, 2, 2, 2
+    );
 }
 
 template<>
@@ -165,40 +146,23 @@ template<>
 void object::test<4>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING(1 5,5 5,5 1,1 1)");
-    pgeom1_ = GEOSPrepare(geom1_);
-    geom2_ = GEOSGeomFromWKT("POINT(2 2)");
+    checkNearestPoints(
+        "LINESTRING(1 5,5 5,5 1,1 1)",
+        "POINT(2 2)",
+        2, 1, 2, 2
+    );
+}
 
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
-
-    GEOSCoordSequence* coords_;
-    coords_ = GEOSPreparedNearestPoints(pgeom1_, geom2_);
-
-    ensure(nullptr != coords_);
-
-    unsigned int size;
-    GEOSCoordSeq_getSize(coords_, &size);
-    ensure_equals(size, 2u);
-
-    double  x1, x2, y1, y2;
-
-    /* Point in geom1_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 0, 0, &x1);
-    GEOSCoordSeq_getOrdinate(coords_, 0, 1, &y1);
-    ensure_equals(x1, 2);
-    ensure_equals(y1, 1);
-
-
-    /* Point in geom2_
-     */
-    GEOSCoordSeq_getOrdinate(coords_, 1, 0, &x2);
-    GEOSCoordSeq_getOrdinate(coords_, 1, 1, &y2);
-    ensure_equals(x2, 2);
-    ensure_equals(y2, 2);
-
-    GEOSCoordSeq_destroy(coords_);
+template<>
+template<>
+void object::test<5>
+()
+{
+    checkNearestPoints(
+        "LINESTRING(0 0,10 10)",
+        "LINESTRING(0 10,10 0)",
+        5, 5, 5, 5
+    );
 }
 
 } // namespace tut
