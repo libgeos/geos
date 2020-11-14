@@ -145,6 +145,9 @@ void object::test<3>
     int status = GEOSDistance(g1, g2, &d);
 
     ensure_equals(status, 1);
+
+    GEOSGeom_destroy(g1);
+    GEOSGeom_destroy(g2);
 }
 
 } // namespace tut

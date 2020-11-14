@@ -77,6 +77,7 @@ namespace capitest {
                 GEOSFree(wkt1);
                 GEOSFree(wkt2);
             }
+            GEOSGeom_destroy(g2);
             tut::ensure_equals("GEOSEqualsExact(g1, g2, 1e-12)", rslt, 1);
             return;
         }
