@@ -235,6 +235,98 @@ ensure_equals_geometry(geos::geom::Geometry const* lhs,
     ensure_equals_geometry(lhs, &pg);
 }
 
+template <typename T>
+inline void
+ensure_equals_dims(T const *, T const *,
+                   unsigned int dims,
+                   double tolerance = 0.0);
+
+template <>
+inline void
+ensure_equals_dims(const geos::geom::CoordinateSequence *seq1,
+                   const geos::geom::CoordinateSequence *seq2,
+                   unsigned int dims, double tolerance)
+{
+    assert(nullptr != seq1);
+    assert(nullptr != seq2);
+
+    ensure_equals (seq1->size(), seq2->size());
+
+    ensure( seq1->getDimension() >= dims );
+    ensure( seq2->getDimension() >= dims );
+
+    for (unsigned int i = 0; i < seq1->size(); i++) {
+      for (unsigned int j = 0; j < dims; j++) {
+        double val1 = seq1->getOrdinate(i, j);
+        double val2 = seq2->getOrdinate(i, j);
+        if ( std::isnan(val1) )
+        {
+            ensure( std::isnan(val2) );
+        }
+        else
+        {
+            if ( tolerance )
+                ensure_distance( val1, val2, tolerance );
+            else
+                ensure_equals( val1, val2 );
+        }
+      }
+    }
+}
+
+template <typename T> inline void ensure_equals_exact_geometry_xyz(const T *lhs_in, const T *rhs_in, double tolerance = 0.0);
+
+template <>
+inline void
+ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
+                                 const geos::geom::Geometry *rhs_in,
+                                 double tolerance)
+{
+    assert(nullptr != lhs_in);
+    assert(nullptr != rhs_in);
+
+    using geos::geom::Point;
+    using geos::geom::LineString;
+    using geos::geom::Polygon;
+    using geos::geom::CoordinateSequence;
+    using geos::geom::GeometryCollection;
+
+    ensure_equals("type id do not match",
+                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
+
+
+    if (const Point* g = dynamic_cast<const Point *>(lhs_in)) {
+      const Point *g2 = static_cast<const Point *>(rhs_in);
+      return ensure_equals_dims( g->getCoordinatesRO(), g2->getCoordinatesRO(), 3, tolerance);
+    }
+    else if (const LineString* g = dynamic_cast<const LineString *>(lhs_in)) {
+      const LineString *g2 = static_cast<const LineString *>(rhs_in);
+      return ensure_equals_dims( g->getCoordinatesRO(), g2->getCoordinatesRO(), 3, tolerance);
+    }
+    else if (dynamic_cast<const Polygon *>(lhs_in)) {
+      assert("Not implemented yet" == 0);
+    }
+    else if (const GeometryCollection* g = dynamic_cast<const GeometryCollection *>(lhs_in)) {
+      const GeometryCollection *g2 = static_cast<const GeometryCollection *>(rhs_in);
+      for (unsigned int i = 0; i < g->getNumGeometries(); i++) {
+        ensure_equals_exact_geometry_xyz(g->getGeometryN(i), g2->getGeometryN(i), tolerance);
+      }
+    }
+}
+
+template <typename T>
+inline void
+ensure_equals_geometry_xyz(const T *lhs_in,
+                           const T *rhs_in,
+                           double tolerance=0.0)
+{
+    std::unique_ptr<geos::geom::Geometry> g1 = lhs_in->clone();
+    g1->normalize();
+    std::unique_ptr<geos::geom::Geometry> g2 = rhs_in->clone();
+    g2->normalize();
+    ensure_equals_exact_geometry_xyz(g1.get(), g2.get(), tolerance);
+}
+
 //
 // Utility functions
 //
