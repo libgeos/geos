@@ -281,20 +281,14 @@ add_subdirectory(doc)
 #-----------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
 
-set(GEOS_INSTALL_FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake")
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
   VERSION ${GEOS_VERSION}
   COMPATIBILITY AnyNewerVersion)
 
-if(NOT MSVC)
-  configure_file(cmake/geos-config.cmake
-    "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
-    COPYONLY)
-  list(APPEND GEOS_INSTALL_FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake")
-endif()
+configure_file(cmake/geos-config.cmake
+  "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
+  COPYONLY)
 
 install(TARGETS geos geos_cxx_flags
   EXPORT geos-targets
@@ -318,7 +312,8 @@ install(EXPORT geos-targets
   DESTINATION lib/cmake/GEOS)
 
 install(FILES
-  ${GEOS_INSTALL_FILES}
+  "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
   DESTINATION lib/cmake/GEOS)
 install(DIRECTORY
   "${CMAKE_CURRENT_LIST_DIR}/include/geos"
