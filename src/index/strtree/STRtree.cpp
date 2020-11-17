@@ -37,59 +37,6 @@ namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
 
-static bool
-yComparator(Boundable* a, Boundable* b)
-{
-    assert(a);
-    assert(b);
-    const void* aBounds = a->getBounds();
-    const void* bBounds = b->getBounds();
-    assert(aBounds);
-    assert(bBounds);
-    const Envelope* aEnv = static_cast<const Envelope*>(aBounds);
-    const Envelope* bEnv = static_cast<const Envelope*>(bBounds);
-
-    // NOTE - mloskot:
-    // The problem of instability is directly related to mathematical definition of
-    // "strict weak ordering" as a fundamental requirement for binary predicate:
-    //
-    // if a is less than b then b is not less than a,
-    // if a is less than b and b is less than c
-    // then a is less than c,
-    // and so on.
-    //
-    // For some very low values, this predicate does not fulfill this requiremnet,
-
-    // NOTE - strk:
-    // It seems that the '<' comparison here gives unstable results.
-    // In particular, when inlines are on (for Envelope::getMinY and getMaxY)
-    // things are fine, but when they are off we can even get a memory corruption !!
-    //return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
-
-    // NOTE - mloskot:
-    // This comparison does not answer if a is "lower" than b
-    // what is required for sorting. This comparison only answeres
-    // if a and b are "almost the same" or different
-
-    /*NOTE - cfis
-      In debug mode VC++ checks the predicate in both directions.
-
-      If !_Pred(_Left, _Right)
-      Then an exception is thrown if _Pred(_Right, _Left).
-      See xutility around line 320:
-
-      	bool __CLRCALL_OR_CDECL _Debug_lt_pred(_Pr _Pred, _Ty1& _Left, _Ty2& _Right,
-    	const wchar_t *_Where, unsigned int _Line)*/
-
-    //return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30
-
-    // NOTE - strk:
-    // See http://trac.osgeo.org/geos/ticket/293
-    // as for why simple comparison (<) isn't used here
-    return AbstractSTRtree::compareDoubles(STRtree::centreY(aEnv),
-                                           STRtree::centreY(bEnv));
-}
-
 /*public*/
 STRtree::STRtree(size_t p_nodeCapacity): AbstractSTRtree(p_nodeCapacity)
 {
@@ -108,7 +55,7 @@ STRtree::createParentBoundables(BoundableList* childBoundables, int newLevel)
     assert(!childBoundables->empty());
     int minLeafCount = (int) ceil((double)childBoundables->size() / (double)getNodeCapacity());
 
-    std::unique_ptr<BoundableList> sortedChildBoundables(sortBoundables(childBoundables));
+    std::unique_ptr<BoundableList> sortedChildBoundables(sortBoundablesX(childBoundables));
 
     std::unique_ptr< vector<BoundableList*> > verticalSlicesV(
         verticalSlices(sortedChildBoundables.get(), (int)ceil(sqrt((double)minLeafCount)))
@@ -411,15 +358,95 @@ STRtree::insert(const Envelope* itemEnv, void* item)
     AbstractSTRtree::insert(itemEnv, item);
 }
 
+// HISTORICAL NOTES - pramsey - 2020-11-17
+// http://trac.osgeo.org/geos/ticket/293
+// 10 years ago, a bug in MinGW resulted in a simple < comparison
+// not returning an expected result, and a lot of fiddling
+// with alternatives. I have returned to simpler logic
+// now but am retaining the comment history for posterity.
+
+// NOTE - mloskot:
+// The problem of instability is directly related to mathematical definition of
+// "strict weak ordering" as a fundamental requirement for binary predicate:
+//
+// if a is less than b then b is not less than a,
+// if a is less than b and b is less than c
+// then a is less than c,
+// and so on.
+//
+// For some very low values, this predicate does not fulfill this requiremnet,
+
+// NOTE - strk:
+// It seems that the '<' comparison here gives unstable results.
+// In particular, when inlines are on (for Envelope::getMinY and getMaxY)
+// things are fine, but when they are off we can even get a memory corruption !!
+// return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
+
+// NOTE - mloskot:
+// This comparison does not answer if a is "lower" than b
+// what is required for sorting. This comparison only answeres
+// if a and b are "almost the same" or different
+
+/*NOTE - cfis
+  In debug mode VC++ checks the predicate in both directions.
+
+  If !_Pred(_Left, _Right)
+  Then an exception is thrown if _Pred(_Right, _Left).
+  See xutility around line 320:
+
+    bool __CLRCALL_OR_CDECL _Debug_lt_pred(_Pr _Pred, _Ty1& _Left, _Ty2& _Right,
+    const wchar_t *_Where, unsigned int _Line)*/
+
+// return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30
+
+// NOTE - strk:
+// See http://trac.osgeo.org/geos/ticket/293
+// as for why simple comparison (<) isn't used here
+
+
 /*private*/
 std::unique_ptr<BoundableList>
-STRtree::sortBoundables(const BoundableList* input)
+STRtree::sortBoundablesX(const BoundableList* input)
 {
     assert(input);
     std::unique_ptr<BoundableList> output(new BoundableList(*input));
     assert(output->size() == input->size());
 
-    sort(output->begin(), output->end(), yComparator);
+    struct {
+        bool operator()(Boundable* a, Boundable* b) const
+        {
+            const geom::Envelope* ea = static_cast<const geom::Envelope*>(a->getBounds());
+            const geom::Envelope* eb = static_cast<const geom::Envelope*>(b->getBounds());
+            double xa = (ea->getMinX() + ea->getMaxX()) / 2.0;
+            double xb = (eb->getMinX() + eb->getMaxX()) / 2.0;
+            return xa < xb ? true : false;
+        }
+    } nodeSortByX;
+
+    sort(output->begin(), output->end(), nodeSortByX);
+    return output;
+}
+
+/*private*/
+std::unique_ptr<BoundableList>
+STRtree::sortBoundablesY(const BoundableList* input)
+{
+    assert(input);
+    std::unique_ptr<BoundableList> output(new BoundableList(*input));
+    assert(output->size() == input->size());
+
+    struct {
+        bool operator()(Boundable* a, Boundable* b) const
+        {
+            const geom::Envelope* ea = static_cast<const geom::Envelope*>(a->getBounds());
+            const geom::Envelope* eb = static_cast<const geom::Envelope*>(b->getBounds());
+            double ya = (ea->getMinY() + ea->getMaxY()) / 2.0;
+            double yb = (eb->getMinY() + eb->getMaxY()) / 2.0;
+            return ya < yb ? true : false;
+        }
+    } nodeSortByY;
+
+    sort(output->begin(), output->end(), nodeSortByY);
     return output;
 }
 

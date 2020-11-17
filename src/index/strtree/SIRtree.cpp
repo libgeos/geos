@@ -31,8 +31,8 @@ namespace strtree { // geos.index.strtree
 static bool
 compareSIRBoundables(Boundable* a, Boundable* b)
 {
-    return AbstractSTRtree::compareDoubles(((Interval*)a->getBounds())->getCentre(),
-                                           ((Interval*)b->getBounds())->getCentre());
+    return ((Interval*)a->getBounds())->getCentre() <
+           ((Interval*)b->getBounds())->getCentre() ? true : false;
 }
 
 /*protected*/

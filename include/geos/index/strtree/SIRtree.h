@@ -111,7 +111,7 @@ protected:
         return intersectsOp;
     }
 
-    std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
+    std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
 private:
     IntersectsOp* intersectsOp;

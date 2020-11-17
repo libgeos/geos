@@ -156,7 +156,7 @@ private:
         BoundableList* boundablesOfALevel,
         int level);
 
-    virtual std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) = 0;
+    std::unique_ptr<BoundableList> sortBoundablesY(const BoundableList* input);
 
     bool remove(const void* searchBounds, AbstractNode& node, void* item);
     bool removeItem(AbstractNode& node, void* item);
@@ -261,16 +261,6 @@ public:
         nodeCapacity(newNodeCapacity)
     {
         assert(newNodeCapacity > 1);
-    }
-
-    static bool
-    compareDoubles(double a, double b)
-    {
-        // NOTE - strk:
-        // Ternary operation is a workaround for
-        // a probable MingW bug, see
-        // http://trac.osgeo.org/geos/ticket/293
-        return (a < b) ? true : false;
     }
 
     virtual ~AbstractSTRtree();

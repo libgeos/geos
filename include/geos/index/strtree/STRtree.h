@@ -85,7 +85,8 @@ private:
 
     STRIntersectsOp intersectsOp;
 
-    std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
+    std::unique_ptr<BoundableList> sortBoundablesY(const BoundableList* input);
+    std::unique_ptr<BoundableList> sortBoundablesX(const BoundableList* input);
 
     std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
         BoundableList* childBoundables,
