@@ -25,7 +25,7 @@
 
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // for inheritance
 #include <geos/noding/SinglePassNoder.h> // for inheritance
-#include <geos/index/strtree/STRtree.h> // for composition
+#include <geos/index/strtree/SimpleSTRtree.h> // for composition
 #include <geos/util.h>
 
 #include <vector>
@@ -66,7 +66,7 @@ class GEOS_DLL MCIndexNoder : public SinglePassNoder {
 
 private:
     std::vector<index::chain::MonotoneChain*> monoChains;
-    index::strtree::STRtree index;
+    index::strtree::SimpleSTRtree index;
     int idCounter;
     std::vector<SegmentString*>* nodedSegStrings;
     // statistics
