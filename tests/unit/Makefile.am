@@ -158,6 +158,7 @@ geos_unit_SOURCES = \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \
 	index/strtree/SIRtreeTest.cpp \
+	index/strtree/SimpeSTRtreeTest.cpp \
 	index/kdtree/KdTreeTest.cpp \
 	io/ByteOrderValuesTest.cpp \
 	io/WKBReaderTest.cpp \

@@ -18,4 +18,6 @@ geos_HEADERS = \
     ItemBoundable.h \
     ItemDistance.h \
     SIRtree.h \
-    STRtree.h
+    STRtree.h \
+    SimpleSTRtree.h \
+    SimpleSTRnode.h

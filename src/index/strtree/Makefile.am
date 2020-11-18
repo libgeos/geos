@@ -12,6 +12,8 @@ libindexstrtree_la_SOURCES = \
     GeometryItemDistance.cpp \
     Interval.cpp \
     SIRtree.cpp \
-    STRtree.cpp
+    STRtree.cpp \
+    SimpleSTRtree.cpp \
+    SimpleSTRnode.cpp
 
 libindexstrtree_la_LIBADD =
