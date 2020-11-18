@@ -317,6 +317,7 @@ public:
      * @param other the Envelope to merge with
      */
     void expandToInclude(const Envelope* other);
+    void expandToInclude(const Envelope& other);
 
     /** \brief
      * Tests if the Envelope `other` lies wholly inside this Envelope

@@ -173,6 +173,12 @@ Envelope::expandToInclude(const Envelope* other)
     }
 }
 
+void
+Envelope::expandToInclude(const Envelope& other)
+{
+    return expandToInclude(&other);
+}
+
 /*public*/
 bool
 Envelope::covers(double x, double y) const
