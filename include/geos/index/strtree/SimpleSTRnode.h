@@ -51,9 +51,8 @@ public:
      * Constructs an AbstractNode at the given level in the tree
      */
     SimpleSTRnode(std::size_t newLevel, const geom::Envelope *itemEnv, void* item, size_t capacity = 10)
-        : level(newLevel)
-        , bounds()
-        , item(item)
+        : item(item)
+        , level(newLevel)
     {
         childNodes.reserve(capacity);
         if (itemEnv) {
