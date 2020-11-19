@@ -1,5 +1,7 @@
 //
-// Ported from JTS junit/algorithm/RobustLineIntersectorZTest.java e85881c1c179a49976fe38f0dbbff7d9fa61e65a
+// Ported from JTS
+// junit/algorithm/RobustLineIntersectorZTest.java
+// 1ecc94caa9e188beb63bfb95089e7dd6869bab20
 
 #include <tut/tut.hpp>
 #include <utility.h>
