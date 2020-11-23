@@ -89,7 +89,7 @@ public:
         return bounds;
     }
 
-    const void* getBounds() const {
+    const void* getBounds() const override {
         return &bounds;
     }
 
@@ -115,7 +115,7 @@ public:
         childNodes.push_back(childNode);
     }
 
-    bool isLeaf() const
+    bool isLeaf() const override
     {
         return item != nullptr;
     }
