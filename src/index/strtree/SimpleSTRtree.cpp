@@ -3,21 +3,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2006 Refractions Research Inc.
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2020 Paul Ramsey
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: index/strtree/STRtree.java rev. 1.11
- *
  **********************************************************************/
 
 #include <geos/index/strtree/SimpleSTRtree.h>
+#include <geos/index/strtree/SimpleSTRdistance.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -40,9 +36,9 @@ namespace strtree { // geos.index.strtree
 SimpleSTRnode*
 SimpleSTRtree::createNode(int newLevel, const geom::Envelope* itemEnv, void* item)
 {
-    storedNodes.emplace_back(newLevel, itemEnv, item, nodeCapacity);
-    SimpleSTRnode* node = &(storedNodes.back());
-    return node;
+    nodesQue.emplace_back(newLevel, itemEnv, item, nodeCapacity);
+    SimpleSTRnode& node = nodesQue.back();
+    return &node;
 }
 
 /* private */
@@ -74,8 +70,8 @@ SimpleSTRtree::sortNodesY(std::vector<SimpleSTRnode*>& nodeList)
     struct {
         bool operator()(SimpleSTRnode* a, SimpleSTRnode* b) const
         {
-            const geom::Envelope& ea = a->getBounds();
-            const geom::Envelope& eb = b->getBounds();
+            const geom::Envelope& ea = a->getEnvelope();
+            const geom::Envelope& eb = b->getEnvelope();
             double ya = (ea.getMinY() + ea.getMaxY()) / 2.0;
             double yb = (eb.getMinY() + eb.getMaxY()) / 2.0;
             return ya < yb;
@@ -92,8 +88,8 @@ SimpleSTRtree::sortNodesX(std::vector<SimpleSTRnode*>& nodeList)
     struct {
         bool operator()(SimpleSTRnode* a, SimpleSTRnode* b) const
         {
-            const geom::Envelope& ea = a->getBounds();
-            const geom::Envelope& eb = b->getBounds();
+            const geom::Envelope& ea = a->getEnvelope();
+            const geom::Envelope& eb = b->getEnvelope();
             double xa = (ea.getMinX() + ea.getMaxX()) / 2.0;
             double xb = (eb.getMinX() + eb.getMaxX()) / 2.0;
             return xa < xb;
@@ -202,7 +198,7 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv, ItemVisitor& visitor)
         return;
     }
 
-    if(root->getBounds().intersects(searchEnv)) {
+    if(root->getEnvelope().intersects(searchEnv)) {
         query(searchEnv, root, visitor);
     }
 }
@@ -214,7 +210,7 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 {
     for(auto* childNode: node->getChildNodes()) {
 
-        if(!childNode->getBounds().intersects(searchEnv)) {
+        if(!childNode->getEnvelope().intersects(searchEnv)) {
             continue;
         }
 
@@ -239,7 +235,7 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv, std::vector<void*>& matche
         return;
     }
 
-    if(root->getBounds().intersects(searchEnv)) {
+    if(root->getEnvelope().intersects(searchEnv)) {
         query(searchEnv, root, matches);
     }
 }
@@ -253,7 +249,7 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 
     for(auto* childNode: node->getChildNodes()) {
 
-        if(!childNode->getBounds().intersects(searchEnv)) {
+        if(!childNode->getEnvelope().intersects(searchEnv)) {
             continue;
         }
 
@@ -276,7 +272,7 @@ SimpleSTRtree::remove(const geom::Envelope* itemEnv, void* item)
 
 /*public static*/
 std::ostream&
-operator<<(std::ostream& os, const SimpleSTRtree& tree)
+operator<<(std::ostream& os, SimpleSTRtree& tree)
 {
 
     os << "nodeCapacity: " << tree.getNodeCapacity() << std::endl;
@@ -288,6 +284,45 @@ operator<<(std::ostream& os, const SimpleSTRtree& tree)
         tree.getRoot()->toString(os, 1);
     return os;
 }
+
+/*********************************************************************************/
+
+/*public*/
+std::pair<const void*, const void*>
+SimpleSTRtree::nearestNeighbour(ItemDistance* itemDist)
+{
+    SimpleSTRdistance strDist(this->getRoot(), this->getRoot(), itemDist);
+    return strDist.nearestNeighbour();
+}
+
+
+/*public*/
+const void*
+SimpleSTRtree::nearestNeighbour(const geom::Envelope* p_env, const void* p_item, ItemDistance* itemDist)
+{
+    std::unique_ptr<SimpleSTRnode> ssn(new SimpleSTRnode(0, p_env, (void*)p_item));
+    SimpleSTRdistance strDist(getRoot(), ssn.get(), itemDist);
+    std::pair<const void*, const void*> result = strDist.nearestNeighbour();
+    return result.first;
+}
+
+
+/*public*/
+std::pair<const void*, const void*>
+SimpleSTRtree::nearestNeighbour(SimpleSTRtree& tree, ItemDistance* itemDist)
+{
+    SimpleSTRdistance strDist(this->getRoot(), tree.getRoot(), itemDist);
+    return strDist.nearestNeighbour();
+}
+
+/*public*/
+bool
+SimpleSTRtree::isWithinDistance(SimpleSTRtree& tree, ItemDistance* itemDist, double maxDistance)
+{
+    SimpleSTRdistance strDist(this->getRoot(), tree.getRoot(), itemDist);
+    return strDist.isWithinDistance(maxDistance);
+}
+
 
 
 

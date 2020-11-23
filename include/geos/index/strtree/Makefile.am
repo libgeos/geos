@@ -20,4 +20,5 @@ geos_HEADERS = \
     SIRtree.h \
     STRtree.h \
     SimpleSTRtree.h \
-    SimpleSTRnode.h
+    SimpleSTRnode.h \
+    SimpleSTRdistance.h

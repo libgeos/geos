@@ -14,6 +14,7 @@ libindexstrtree_la_SOURCES = \
     SIRtree.cpp \
     STRtree.cpp \
     SimpleSTRtree.cpp \
-    SimpleSTRnode.cpp
+    SimpleSTRnode.cpp \
+    SimpleSTRdistance.cpp
 
 libindexstrtree_la_LIBADD =

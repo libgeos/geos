@@ -15,9 +15,9 @@
 #pragma once
 
 #include <cassert>
-#include <cstddef>
 #include <geos/export.h>
 #include <geos/geom/Envelope.h>
+#include <geos/index/strtree/ItemBoundable.h>
 
 #include <vector>
 
@@ -34,12 +34,12 @@ namespace strtree { // geos::index::strtree
  * A node of the STR tree.
  *
  */
-class GEOS_DLL SimpleSTRnode {
+class GEOS_DLL SimpleSTRnode : public ItemBoundable {
 
 private:
 
-    void *item;
     std::vector<SimpleSTRnode*> childNodes;
+    void *item;
     geom::Envelope bounds;
     std::size_t level;
 
@@ -50,13 +50,15 @@ public:
     /*
      * Constructs an AbstractNode at the given level in the tree
      */
-    SimpleSTRnode(std::size_t newLevel, const geom::Envelope *itemEnv, void* item, size_t capacity = 10)
-        : item(item)
+    SimpleSTRnode(std::size_t newLevel, const geom::Envelope *p_env, void* p_item, size_t capacity = 10)
+        : ItemBoundable(p_env, p_item)
+        , item(p_item)
+        , bounds()
         , level(newLevel)
     {
         childNodes.reserve(capacity);
-        if (itemEnv) {
-            bounds = *itemEnv;
+        if (p_env) {
+            bounds = *p_env;
         }
 
     }
@@ -65,7 +67,7 @@ public:
         : SimpleSTRnode(newLevel, nullptr, nullptr)
     {}
 
-    void toString(std::ostream& os, int level) const;
+    void toString(std::ostream& os, int indentLevel) const;
 
     const std::vector<SimpleSTRnode*>&
     getChildNodes() const
@@ -80,11 +82,15 @@ public:
     /**
      * Returns a representation of space that encloses this Node
      */
-    const geom::Envelope& getBounds() {
+    const geom::Envelope& getEnvelope() {
         if(bounds.isNull()) {
             computeBounds();
         }
         return bounds;
+    }
+
+    const void* getBounds() const {
+        return &bounds;
     }
 
     /**
@@ -112,6 +118,16 @@ public:
     bool isLeaf() const
     {
         return item != nullptr;
+    }
+
+    bool isComposite() const
+    {
+        return ! isLeaf();
+    }
+
+    double area()
+    {
+        return getEnvelope().getArea();
     }
 
 

@@ -3,17 +3,12 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2006 Refractions Research Inc.
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2020 Paul Ramsey
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
- *
- **********************************************************************
- *
- * Last port: index/strtree/STRtree.java rev. 1.11
  *
  **********************************************************************/
 
@@ -32,21 +27,20 @@ void
 SimpleSTRnode::computeBounds()
 {
     for (auto* node: childNodes) {
-        bounds.expandToInclude(node->getBounds());
+        bounds.expandToInclude(node->getEnvelope());
     }
 }
 
-
 /*public*/
 void
-SimpleSTRnode::toString(std::ostream& os, int level) const
+SimpleSTRnode::toString(std::ostream& os, int indentLevel) const
 {
-    for (int i = 0; i < level; i++) {
+    for (int i = 0; i < indentLevel; i++) {
         os << "  ";
     }
     os << bounds << std::endl;
     for (auto* node: childNodes) {
-        node->toString(os, level+1);
+        node->toString(os, indentLevel+1);
     }
 }
 

@@ -20,6 +20,8 @@
 #include <geos/index/strtree/SimpleSTRnode.h>
 
 #include <vector>
+#include <utility>
+
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -33,8 +35,12 @@ namespace geom {
 class Geometry;
 class Envelope;
 }
+namespace index {
+namespace strtree {
+class ItemDistance;
 }
-
+}
+}
 
 
 namespace geos {
@@ -62,14 +68,14 @@ class GEOS_DLL SimpleSTRtree: public SpatialIndex {
 private:
 
     /* Members */
-    std::deque<SimpleSTRnode> storedNodes;
+    std::deque<SimpleSTRnode> nodesQue;
     std::vector<SimpleSTRnode*> nodes;
     std::size_t nodeCapacity;
     SimpleSTRnode* root;
     bool built;
 
     /*
-    * Allocate node in storedNodes std::deque for memory locality,
+    * Allocate node in nodesQue std::deque for memory locality,
     * return reference to node.
     */
     SimpleSTRnode* createNode(int newLevel, const geom::Envelope* itemEnv, void* item);
@@ -125,7 +131,8 @@ public:
         return built;
     }
 
-    SimpleSTRnode* getRoot() const {
+    SimpleSTRnode* getRoot() {
+        build();
         return root;
     }
 
@@ -140,6 +147,22 @@ public:
     bool remove(const geom::Envelope* itemEnv, void* item) override;
 
     friend std::ostream& operator<<(std::ostream& os, const SimpleSTRtree& tree);
+
+
+    /*********************************************************************************/
+    /* Nearest neighbor searches, public API */
+
+    /* Internal nearest node to node */
+    std::pair<const void*, const void*> nearestNeighbour(ItemDistance* itemDist);
+
+    /* Nearest to another geometry/item */
+    const void* nearestNeighbour(const geom::Envelope* env, const void* item, ItemDistance* itemDist);
+
+    /* Nearest to another tree */
+    std::pair<const void*, const void*> nearestNeighbour(SimpleSTRtree& tree, ItemDistance* itemDist);
+
+    /* Radius test */
+    bool isWithinDistance(SimpleSTRtree& tree, ItemDistance* itemDist, double maxDistance);
 
 
 };
