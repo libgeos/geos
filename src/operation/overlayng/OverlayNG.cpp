@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
@@ -10,12 +11,17 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last Port: operation/overlayng/OverlayNG.java 459bc7f8e
+ *
  **********************************************************************/
 
 #include <geos/operation/overlayng/OverlayNG.h>
 
 #include <geos/operation/overlayng/Edge.h>
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
+#include <geos/operation/overlayng/ElevationModel.h>
 #include <geos/operation/overlayng/InputGeometry.h>
 #include <geos/operation/overlayng/IntersectionPointBuilder.h>
 #include <geos/operation/overlayng/LineBuilder.h>
@@ -32,10 +38,16 @@
 
 #include <algorithm>
 
-
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
+
+#if GEOS_DEBUG
+# include <iostream>
+# include <geos/io/WKTWriter.h>
+#endif
+
+
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -135,21 +147,57 @@ OverlayNG::geomunion(const Geometry* geom, const PrecisionModel* pm, noding::Nod
 std::unique_ptr<Geometry>
 OverlayNG::getResult()
 {
-    if (OverlayUtil::isEmptyResult(opCode, inputGeom.getGeometry(0), inputGeom.getGeometry(1), pm)) {
+    const Geometry *ig0 = inputGeom.getGeometry(0);
+    const Geometry *ig1 = inputGeom.getGeometry(1);
+
+    if ( OverlayUtil::isEmptyResult(opCode, ig0, ig1, pm) )
+    {
         return createEmptyResult();
     }
 
-    // special logic for Point-Point inputs
+    /**
+     * The elevation model is only computed if the input geometries have Z values.
+     */
+    std::unique_ptr<ElevationModel> elevModel;
+    if ( ig1 ) {
+        elevModel = ElevationModel::create(*ig0, *ig1);
+    } else {
+        elevModel = ElevationModel::create(*ig0);
+    }
+    std::unique_ptr<Geometry> result;
+
     if (inputGeom.isAllPoints()) {
-        return OverlayPoints::overlay(opCode, inputGeom.getGeometry(0), inputGeom.getGeometry(1), pm);
+        // handle Point-Point inputs
+        result = OverlayPoints::overlay(opCode, ig0, ig1, pm);
+    }
+    else if (! inputGeom.isSingle() &&  inputGeom.hasPoints()) {
+        // handle Point-nonPoint inputs
+        result = OverlayMixedPoints::overlay(opCode, ig0, ig1, pm);
+    }
+    else {
+        // handle case where both inputs are formed of edges (Lines and Polygons)
+        result = computeEdgeOverlay();
     }
 
-    // special logic for Point-nonPoint inputs
-    if (! inputGeom.isSingle() &&  inputGeom.hasPoints()) {
-        return OverlayMixedPoints::overlay(opCode, inputGeom.getGeometry(0), inputGeom.getGeometry(1), pm);
-    }
+#if GEOS_DEBUG
+    io::WKTWriter w;
+    w.setOutputDimension(3);
+    w.setTrim(true);
 
-    return computeEdgeOverlay();
+    std::cout << "Before populatingZ: " << w.write(result.get()) << std::endl;
+#endif
+
+    /**
+     * This is a no-op if the elevation model was not computed due to
+     * Z not present
+     */
+    elevModel->populateZ(*result);
+
+#if GEOS_DEBUG
+    std::cout << " After populatingZ: " << w.write(result.get()) << std::endl;
+#endif
+
+    return result;
 }
 
 

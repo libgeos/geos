@@ -3,12 +3,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last Port: operation/overlayng/OverlayNG.java 459bc7f8e
  *
  **********************************************************************/
 

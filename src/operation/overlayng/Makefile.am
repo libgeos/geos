@@ -12,6 +12,7 @@ libopoverlayng_la_SOURCES = \
     EdgeMerger.cpp \
     EdgeNodingBuilder.cpp \
     EdgeSourceInfo.cpp \
+    ElevationModel.cpp \
     IndexedPointOnLineLocator.cpp \
     InputGeometry.cpp \
     IntersectionPointBuilder.cpp \

@@ -13,6 +13,7 @@ geos_HEADERS = \
     EdgeMerger.h \
     EdgeNodingBuilder.h \
     EdgeSourceInfo.h \
+    ElevationModel.h \
     IndexedPointOnLineLocator.h \
     InputGeometry.h \
     IntersectionPointBuilder.h \

@@ -222,6 +222,10 @@ public:
      */
     virtual std::size_t getDimension() const = 0;
 
+    bool hasZ() const {
+        return getDimension() > 2;
+    }
+
     /**
      * Returns the ordinate of a coordinate in this sequence.
      * Ordinate indices 0 and 1 are assumed to be X and Y.

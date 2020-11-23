@@ -195,6 +195,7 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
+	operation/overlayng/ElevationModelTest.cpp \
 	operation/overlayng/RingClipperTest.cpp \
 	operation/overlayng/LineLimiterTest.cpp \
 	operation/overlayng/OverlayGraphTest.cpp \
