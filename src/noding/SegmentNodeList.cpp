@@ -91,11 +91,7 @@ SegmentNodeList::addCollapsedNodes()
     findCollapsesFromExistingVertices(collapsedVertexIndexes);
 
     // node the collapses
-    for(std::vector<size_t>::iterator
-            i = collapsedVertexIndexes.begin(),
-            e = collapsedVertexIndexes.end();
-            i != e; ++i) {
-        auto vertexIndex = *i;
+    for(std::size_t vertexIndex : collapsedVertexIndexes) {
         add(edge.getCoordinate(vertexIndex), vertexIndex);
     }
 }
