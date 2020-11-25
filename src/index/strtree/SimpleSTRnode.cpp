@@ -23,14 +23,6 @@ namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
 
-void
-SimpleSTRnode::computeBounds()
-{
-    for (auto* node: childNodes) {
-        bounds.expandToInclude(node->getEnvelope());
-    }
-}
-
 /*public*/
 void
 SimpleSTRnode::toString(std::ostream& os, int indentLevel) const
@@ -43,6 +35,19 @@ SimpleSTRnode::toString(std::ostream& os, int indentLevel) const
         node->toString(os, indentLevel+1);
     }
 }
+
+/*public*/
+void
+SimpleSTRnode::addChildNode(SimpleSTRnode* childNode)
+{
+    if (bounds.isNull())
+        bounds = childNode->getEnvelope();
+    else
+        bounds.expandToInclude(childNode->getEnvelope());
+
+    childNodes.push_back(childNode);
+}
+
 
 
 } // namespace geos.index.strtree

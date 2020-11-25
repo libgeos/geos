@@ -43,8 +43,6 @@ private:
     geom::Envelope bounds;
     std::size_t level;
 
-    void computeBounds();
-
 public:
 
     /*
@@ -83,9 +81,6 @@ public:
      * Returns a representation of space that encloses this Node
      */
     const geom::Envelope& getEnvelope() {
-        if(bounds.isNull()) {
-            computeBounds();
-        }
         return bounds;
     }
 
@@ -109,11 +104,7 @@ public:
      * Adds either an AbstractNode, or if this is a leaf node, a data object
      * (wrapped in an ItemBoundable)
      */
-    void addChildNode(SimpleSTRnode* childNode)
-    {
-        assert(bounds.isNull());
-        childNodes.push_back(childNode);
-    }
+    void addChildNode(SimpleSTRnode* childNode);
 
     bool isLeaf() const override
     {
