@@ -60,8 +60,9 @@ void object::test<1>
             void
             visitItem(void* item) override
             {
-                count++;
-                // geom::Point* pt = static_cast<geom::Point*>(item);
+                geom::Point* pt = static_cast<geom::Point*>(item);
+                if (!pt->isEmpty())
+                    count++;
                 // std::cout << pt << std::endl;
             }
     };
