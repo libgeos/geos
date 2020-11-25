@@ -80,7 +80,7 @@ public:
     /**
      * Returns a representation of space that encloses this Node
      */
-    const geom::Envelope& getEnvelope() {
+    const inline geom::Envelope& getEnvelope() const {
         return bounds;
     }
 
@@ -116,9 +116,9 @@ public:
         return ! isLeaf();
     }
 
-    double area()
+    double area() const
     {
-        return getEnvelope().getArea();
+        return bounds.getArea();
     }
 
 
