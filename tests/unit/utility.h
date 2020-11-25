@@ -295,21 +295,21 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
                   lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
 
 
-    if (const Point* g = dynamic_cast<const Point *>(lhs_in)) {
-      const Point *g2 = static_cast<const Point *>(rhs_in);
-      return ensure_equals_dims( g->getCoordinatesRO(), g2->getCoordinatesRO(), 3, tolerance);
+    if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
+      const Point *gpt2 = static_cast<const Point *>(rhs_in);
+      return ensure_equals_dims( gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), 3, tolerance);
     }
-    else if (const LineString* g = dynamic_cast<const LineString *>(lhs_in)) {
-      const LineString *g2 = static_cast<const LineString *>(rhs_in);
-      return ensure_equals_dims( g->getCoordinatesRO(), g2->getCoordinatesRO(), 3, tolerance);
+    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
+      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+      return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 3, tolerance);
     }
     else if (dynamic_cast<const Polygon *>(lhs_in)) {
       assert("Not implemented yet" == 0);
     }
-    else if (const GeometryCollection* g = dynamic_cast<const GeometryCollection *>(lhs_in)) {
-      const GeometryCollection *g2 = static_cast<const GeometryCollection *>(rhs_in);
-      for (unsigned int i = 0; i < g->getNumGeometries(); i++) {
-        ensure_equals_exact_geometry_xyz(g->getGeometryN(i), g2->getGeometryN(i), tolerance);
+    else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
+      const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
+      for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
+        ensure_equals_exact_geometry_xyz(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
       }
     }
 }
