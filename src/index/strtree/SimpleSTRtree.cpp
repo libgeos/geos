@@ -107,9 +107,9 @@ SimpleSTRtree::createParentNodes(
 {
     assert(!childNodes.empty());
 
-    std::size_t minLeafCount = (std::size_t)std::ceil((double)childNodes.size() / (double)nodeCapacity);
+    std::size_t minLeafCount = (std::size_t)std::ceil((double)(childNodes.size()) / (double)nodeCapacity);
     std::size_t sliceCount = (std::size_t)std::ceil(std::sqrt((double)minLeafCount));
-    std::size_t sliceCapacity = (std::size_t)std::ceil(childNodes.size() / (double)sliceCount);
+    std::size_t sliceCapacity = (std::size_t)std::ceil((double)(childNodes.size()) / (double)sliceCount);
 
     sortNodesX(childNodes);
 
@@ -265,8 +265,10 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 bool
 SimpleSTRtree::remove(const geom::Envelope* itemEnv, void* item)
 {
-    // no implementation of remove() yet!
-    return false;
+    if (itemEnv || item) // no implementation of remove() yet!
+        return false;
+    else
+        return false;
 }
 
 

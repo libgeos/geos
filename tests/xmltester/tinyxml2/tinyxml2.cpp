@@ -432,17 +432,17 @@ void XMLUtil::ConvertUTF32ToUTF8( unsigned long input, char* output, int* length
             --output;
             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
             input >>= 6;
-            // fall through
+            /* FALLTHRU */
         case 3:
             --output;
             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
             input >>= 6;
-            // fall through
+            /* FALLTHRU */
         case 2:
             --output;
             *output = (char)((input | BYTE_MARK) & BYTE_MASK);
             input >>= 6;
-            // fall through
+            /* FALLTHRU */
         case 1:
             --output;
             *output = (char)(input | FIRST_BYTE_MARK[*length]);
