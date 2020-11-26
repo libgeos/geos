@@ -202,12 +202,8 @@ AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
-# To make numerical computation more stable, we use --ffloat-store
-NUMERICFLAGS=""
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
-
 HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
-DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
+DEFAULTFLAGS="${WARNFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
 
 AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
 AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"
