@@ -226,6 +226,8 @@ geos_unit_SOURCES = \
 	triangulate/quadedge/QuadEdgeTest.cpp \
 	triangulate/quadedge/VertexTest.cpp \
 	triangulate/VoronoiTest.cpp \
+	shape/fractal/HilbertCodeTest.cpp \
+	shape/fractal/MortonCodeTest.cpp \
 	util/NodingTestUtil.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 

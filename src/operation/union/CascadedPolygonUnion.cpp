@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/OverlapUnion.h>
 #include <geos/operation/overlay/OverlayOp.h>
@@ -29,6 +30,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/util/PolygonExtracter.h>
 #include <geos/index/strtree/STRtree.h>
+
 // std
 #include <cassert>
 #include <cstddef>
@@ -153,6 +155,7 @@ CascadedPolygonUnion::Union()
      * This makes unioning more efficient, since vertices are more likely
      * to be eliminated on each round.
      */
+
     index::strtree::STRtree index(STRTREE_NODE_CAPACITY);
 
     typedef std::vector<geom::Polygon*>::iterator iterator_type;

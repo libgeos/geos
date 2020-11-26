@@ -16,6 +16,7 @@ SUBDIRS = \
     precision \
     simplify \
     triangulate \
+    shape \
     util
 
 EXTRA_DIST = dirlist.mk CMakeLists.txt info.plist.in
@@ -49,4 +50,5 @@ libgeos_la_LIBADD = \
     precision/libprecision.la \
     simplify/libsimplify.la \
     triangulate/libtriangulate.la \
+    shape/libshape.la \
     util/libutil.la

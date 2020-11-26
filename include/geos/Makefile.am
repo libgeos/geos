@@ -16,6 +16,7 @@ SUBDIRS = \
     precision \
     simplify \
     triangulate \
+    shape \
     util
 
 EXTRA_DIST =

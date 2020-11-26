@@ -202,8 +202,17 @@ AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
+# To make numerical computation more stable, we use --ffloat-store
+# on 32-bit platforms
+NUMERICFLAGS=""
+# 32-bit platforms have a 4-byte pointer
+AC_CHECK_SIZEOF([void *])
+if test $ac_cv_sizeof_void_p -eq 4 ; then
+  AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
+fi
+
 HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
-DEFAULTFLAGS="${WARNFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
+DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
 
 AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
 AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"
@@ -442,6 +451,8 @@ AC_OUTPUT([
 	include/geos/simplify/Makefile
 	include/geos/triangulate/Makefile
 	include/geos/triangulate/quadedge/Makefile
+	include/geos/shape/Makefile
+	include/geos/shape/fractal/Makefile
 	include/geos/util/Makefile
 	include/geos/version.h
 	src/index/Makefile
@@ -476,6 +487,8 @@ AC_OUTPUT([
 	src/simplify/Makefile
 	src/triangulate/Makefile
 	src/triangulate/quadedge/Makefile
+	src/shape/Makefile
+	src/shape/fractal/Makefile
 	src/util/Makefile
 	swig/geos.i
 	swig/Makefile
