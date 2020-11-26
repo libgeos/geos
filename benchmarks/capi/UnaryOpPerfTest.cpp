@@ -27,6 +27,7 @@ int main(int argc, char** argv) {
         std::cout << std::endl;
         std::cout << "The following operations are supported:" << std::endl;
         std::cout << "- valid" << std::endl;
+        std::cout << "- union" << std::endl;
         std::cout << std::endl;
         std::cout << "Usage: perf_unary [wktfile] [operation] [n]" << std::endl;
         return 0;
@@ -68,6 +69,10 @@ int main(int argc, char** argv) {
     if (op == "valid") {
         for (const auto& g : geoms) {
             GEOSisValid(g);
+        }
+    } else if (op == "union") {
+        for (const auto& g : geoms) {
+            GEOSUnaryUnion(g);
         }
     }
 
