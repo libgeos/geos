@@ -70,7 +70,6 @@ using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
 
-using geos::index::strtree::STRtree;
 
 
 typedef std::unique_ptr<Geometry> GeomPtr;
@@ -1311,14 +1310,14 @@ extern "C" {
         return GEOSPreparedDistance_r(handle, g1, g2, dist);
     }
 
-    STRtree*
+    GEOSSTRtree*
     GEOSSTRtree_create(size_t nodeCapacity)
     {
         return GEOSSTRtree_create_r(handle, nodeCapacity);
     }
 
     void
-    GEOSSTRtree_insert(geos::index::strtree::STRtree* tree,
+    GEOSSTRtree_insert(GEOSSTRtree* tree,
                        const geos::geom::Geometry* g,
                        void* item)
     {
@@ -1326,7 +1325,7 @@ extern "C" {
     }
 
     void
-    GEOSSTRtree_query(geos::index::strtree::STRtree* tree,
+    GEOSSTRtree_query(GEOSSTRtree* tree,
                       const geos::geom::Geometry* g,
                       GEOSQueryCallback cb,
                       void* userdata)
@@ -1335,7 +1334,7 @@ extern "C" {
     }
 
     const GEOSGeometry*
-    GEOSSTRtree_nearest(geos::index::strtree::STRtree* tree,
+    GEOSSTRtree_nearest(GEOSSTRtree* tree,
                         const geos::geom::Geometry* g)
     {
         return GEOSSTRtree_nearest_r(handle, tree, g);
@@ -1351,7 +1350,7 @@ extern "C" {
     }
 
     void
-    GEOSSTRtree_iterate(geos::index::strtree::STRtree* tree,
+    GEOSSTRtree_iterate(GEOSSTRtree* tree,
                         GEOSQueryCallback callback,
                         void* userdata)
     {
@@ -1359,7 +1358,7 @@ extern "C" {
     }
 
     char
-    GEOSSTRtree_remove(geos::index::strtree::STRtree* tree,
+    GEOSSTRtree_remove(GEOSSTRtree* tree,
                        const geos::geom::Geometry* g,
                        void* item)
     {
@@ -1367,7 +1366,7 @@ extern "C" {
     }
 
     void
-    GEOSSTRtree_destroy(geos::index::strtree::STRtree* tree)
+    GEOSSTRtree_destroy(GEOSSTRtree* tree)
     {
         GEOSSTRtree_destroy_r(handle, tree);
     }

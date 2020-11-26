@@ -37,7 +37,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
-#include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/SimpleSTRtree.h>
 #include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
@@ -112,7 +112,7 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
-#define GEOSSTRtree geos::index::strtree::STRtree
+#define GEOSSTRtree geos::index::strtree::SimpleSTRtree
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader
@@ -2966,18 +2966,18 @@ extern "C" {
 // STRtree
 //-----------------------------------------------------------------
 
-    geos::index::strtree::STRtree*
+    GEOSSTRtree*
     GEOSSTRtree_create_r(GEOSContextHandle_t extHandle,
                          size_t nodeCapacity)
     {
         return execute(extHandle, [&]() {
-            return new geos::index::strtree::STRtree(nodeCapacity);
+            return new GEOSSTRtree(nodeCapacity);
         });
     }
 
     void
     GEOSSTRtree_insert_r(GEOSContextHandle_t extHandle,
-                         geos::index::strtree::STRtree* tree,
+                         GEOSSTRtree* tree,
                          const geos::geom::Geometry* g,
                          void* item)
     {
@@ -2988,7 +2988,7 @@ extern "C" {
 
     void
     GEOSSTRtree_query_r(GEOSContextHandle_t extHandle,
-                        geos::index::strtree::STRtree* tree,
+                        GEOSSTRtree* tree,
                         const geos::geom::Geometry* g,
                         GEOSQueryCallback callback,
                         void* userdata)
@@ -3001,7 +3001,7 @@ extern "C" {
 
     const GEOSGeometry*
     GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
-                          geos::index::strtree::STRtree* tree,
+                          GEOSSTRtree* tree,
                           const geos::geom::Geometry* geom)
     {
         return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r(extHandle, tree, geom, geom, nullptr, nullptr);
@@ -3009,7 +3009,7 @@ extern "C" {
 
     const void*
     GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
-                                  geos::index::strtree::STRtree* tree,
+                                  GEOSSTRtree* tree,
                                   const void* item,
                                   const geos::geom::Geometry* itemEnvelope,
                                   GEOSDistanceCallback distancefn,
@@ -3053,7 +3053,7 @@ extern "C" {
 
     void
     GEOSSTRtree_iterate_r(GEOSContextHandle_t extHandle,
-                          geos::index::strtree::STRtree* tree,
+                          GEOSSTRtree* tree,
                           GEOSQueryCallback callback,
                           void* userdata)
     {
@@ -3065,7 +3065,7 @@ extern "C" {
 
     char
     GEOSSTRtree_remove_r(GEOSContextHandle_t extHandle,
-                         geos::index::strtree::STRtree* tree,
+                         GEOSSTRtree* tree,
                          const geos::geom::Geometry* g,
                          void* item) {
         return execute(extHandle, 2, [&]() {
@@ -3075,7 +3075,7 @@ extern "C" {
 
     void
     GEOSSTRtree_destroy_r(GEOSContextHandle_t extHandle,
-                          geos::index::strtree::STRtree* tree)
+                          GEOSSTRtree* tree)
     {
         return execute(extHandle, [&]() {
             delete tree;

@@ -140,6 +140,8 @@ public:
 
     void insert(const geom::Envelope* itemEnv, void* item) override;
 
+    void iterate(ItemVisitor& visitor);
+
     void query(const geom::Envelope* searchEnv, std::vector<void*>& matches) override;
 
     void query(const geom::Envelope* searchEnv, ItemVisitor& visitor) override;

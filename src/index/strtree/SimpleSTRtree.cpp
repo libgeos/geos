@@ -17,6 +17,7 @@
 #include <geos/index/ItemVisitor.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -59,6 +60,8 @@ SimpleSTRtree::insert(geom::Geometry* geom)
 void
 SimpleSTRtree::insert(const geom::Envelope* itemEnv, void* item)
 {
+    if (itemEnv->isNull())
+        return;
     SimpleSTRnode *node = createNode(0, itemEnv, item);
     nodes.push_back(node);
 }
@@ -175,7 +178,7 @@ SimpleSTRtree::build()
     if (built) return;
 
     if (nodes.empty()) {
-        root = createNode(0);
+        root = nullptr;
     }
     else {
         std::vector<SimpleSTRnode*> nodeTree = createHigherLevels(nodes, -1);
@@ -185,16 +188,21 @@ SimpleSTRtree::build()
     built = true;
 }
 
+void
+SimpleSTRtree::iterate(ItemVisitor& visitor)
+{
+    for(auto* leafNode: nodes) {
+        visitor.visitItem(leafNode->getItem());
+    }
+}
+
 /* public */
 void
 SimpleSTRtree::query(const geom::Envelope* searchEnv, ItemVisitor& visitor)
 {
-    if(!built) {
-        build();
-    }
+    build();
 
-    if(nodes.empty()) {
-        assert(root == nullptr);
+    if(nodes.empty() || !root) {
         return;
     }
 
@@ -226,12 +234,9 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 void
 SimpleSTRtree::query(const geom::Envelope* searchEnv, std::vector<void*>& matches)
 {
-    if(!built) {
-        build();
-    }
+    build();
 
-    if(nodes.empty()) {
-        assert(root == nullptr);
+    if(nodes.empty() || !root) {
         return;
     }
 
@@ -265,10 +270,9 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 bool
 SimpleSTRtree::remove(const geom::Envelope* itemEnv, void* item)
 {
-    if (itemEnv || item) // no implementation of remove() yet!
-        return false;
-    else
-        return false;
+    ::geos::ignore_unused_variable_warning(itemEnv);
+    ::geos::ignore_unused_variable_warning(item);
+    assert(false);
 }
 
 
@@ -280,10 +284,15 @@ operator<<(std::ostream& os, SimpleSTRtree& tree)
     os << "nodeCapacity: " << tree.getNodeCapacity() << std::endl;
     os << "nodes.size(): " << tree.getNumLeafNodes() << std::endl;
     os << "built: " << tree.getBuilt() << std::endl;
-    os << "tree: " << std::endl;
 
-    if (tree.getRoot())
+
+    if (tree.getRoot()) {
+        os << "tree: " << std::endl;
         tree.getRoot()->toString(os, 1);
+    }
+    else {
+        os << "tree: empty" << std::endl;
+    }
     return os;
 }
 
@@ -293,6 +302,9 @@ operator<<(std::ostream& os, SimpleSTRtree& tree)
 std::pair<const void*, const void*>
 SimpleSTRtree::nearestNeighbour(ItemDistance* itemDist)
 {
+    if (!this->getRoot()) {
+        return std::pair<const void*, const void*>(nullptr, nullptr);
+    }
     SimpleSTRdistance strDist(this->getRoot(), this->getRoot(), itemDist);
     return strDist.nearestNeighbour();
 }
@@ -302,6 +314,9 @@ SimpleSTRtree::nearestNeighbour(ItemDistance* itemDist)
 const void*
 SimpleSTRtree::nearestNeighbour(const geom::Envelope* p_env, const void* p_item, ItemDistance* itemDist)
 {
+    if (!this->getRoot()) {
+        return nullptr;
+    }
     std::unique_ptr<SimpleSTRnode> ssn(new SimpleSTRnode(0, p_env, (void*)p_item));
     SimpleSTRdistance strDist(getRoot(), ssn.get(), itemDist);
     std::pair<const void*, const void*> result = strDist.nearestNeighbour();
@@ -313,6 +328,9 @@ SimpleSTRtree::nearestNeighbour(const geom::Envelope* p_env, const void* p_item,
 std::pair<const void*, const void*>
 SimpleSTRtree::nearestNeighbour(SimpleSTRtree& tree, ItemDistance* itemDist)
 {
+    if (!(this->getRoot() && tree.getRoot())) {
+        return std::pair<const void*, const void*>(nullptr, nullptr);
+    }
     SimpleSTRdistance strDist(this->getRoot(), tree.getRoot(), itemDist);
     return strDist.nearestNeighbour();
 }
@@ -321,6 +339,9 @@ SimpleSTRtree::nearestNeighbour(SimpleSTRtree& tree, ItemDistance* itemDist)
 bool
 SimpleSTRtree::isWithinDistance(SimpleSTRtree& tree, ItemDistance* itemDist, double maxDistance)
 {
+    if (!(this->getRoot() && tree.getRoot())) {
+        return false;
+    }
     SimpleSTRdistance strDist(this->getRoot(), tree.getRoot(), itemDist);
     return strDist.isWithinDistance(maxDistance);
 }
