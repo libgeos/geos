@@ -17,7 +17,7 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Position.h>
 #include <geos/export.h>
-
+#include <geos/inline.h>
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
@@ -265,4 +265,8 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
+
+#ifdef GEOS_INLINE
+#include "geos/operation/overlayng/OverlayLabel.inl"
+#endif
 
