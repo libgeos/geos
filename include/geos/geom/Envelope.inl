@@ -75,6 +75,41 @@ Envelope::expandToInclude(const Coordinate& p)
     expandToInclude(p.x, p.y);
 }
 
+INLINE void
+Envelope::expandToInclude(const Envelope& other)
+{
+    return expandToInclude(&other);
+}
+
+/*public*/
+INLINE void
+Envelope::expandToInclude(const Envelope* other)
+{
+    if(other->isNull()) {
+        return;
+    }
+    if(isNull()) {
+        minx = other->getMinX();
+        maxx = other->getMaxX();
+        miny = other->getMinY();
+        maxy = other->getMaxY();
+    }
+    else {
+        if(other->minx < minx) {
+            minx = other->minx;
+        }
+        if(other->maxx > maxx) {
+            maxx = other->maxx;
+        }
+        if(other->miny < miny) {
+            miny = other->miny;
+        }
+        if(other->maxy > maxy) {
+            maxy = other->maxy;
+        }
+    }
+}
+
 /*public*/
 INLINE void
 Envelope::expandToInclude(double x, double y)
