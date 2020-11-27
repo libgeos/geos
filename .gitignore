@@ -32,6 +32,7 @@ tests/unit/geos_unit
 tests/xmltester/SimpleWKTTester
 tests/xmltester/XMLTester
 tests/xmltester/testrunner
+tools/geos.pc
 tools/geos-config
 tools/astyle/astyle
 tests/bigtest/TestSweepLineSpeed

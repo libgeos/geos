@@ -385,6 +385,9 @@ AC_SUBST(CAPI_INTERFACE_CURRENT)
 AC_SUBST(CAPI_INTERFACE_REVISION)
 AC_SUBST(CAPI_INTERFACE_AGE)
 
+dnl pkg-config file -------------------------------------------------------
+AC_CONFIG_FILES([tools/geos.pc])
+
 dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT([

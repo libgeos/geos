@@ -8,6 +8,7 @@ Changes in 3.9.0
   - CAPI: GEOSPreparedDistance (#1066, Sandro Santilli)
   - SimpleSTRTree spatial index implementation (Paul Ramsey)
   - SimpleSTRTree used for C API (Paul Ramsey)
+  - Add support for pkg-config for GEOS C API (#1073, Mike Taves)
 
 - Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
