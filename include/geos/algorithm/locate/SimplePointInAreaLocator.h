@@ -44,7 +44,7 @@ namespace locate { // geos::algorithm::locate
  * This algorithm is suitable for use in cases where only a few points will be tested.
  * If many points will be tested, IndexedPointInAreaLocator may provide better performance.
  */
-class SimplePointInAreaLocator : public PointOnGeometryLocator {
+class GEOS_DLL SimplePointInAreaLocator : public PointOnGeometryLocator {
 
 public:
 
