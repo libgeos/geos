@@ -60,21 +60,6 @@ Envelope::Envelope(const Coordinate& p)
 }
 
 /*public*/
-INLINE
-Envelope::Envelope(const Envelope& env)
-        :
-        minx(env.minx),
-        maxx(env.maxx),
-        miny(env.miny),
-        maxy(env.maxy)
-{
-#if GEOS_DEBUG
-    std::cerr << "Envelope copy" << std::endl;
-#endif
-    //init(env.minx, env.maxx, env.miny, env.maxy);
-}
-
-/*public*/
 INLINE double
 Envelope::distance(double x0, double y0, double x1, double y1)
 {

@@ -352,21 +352,6 @@ Envelope::expandBy(double deltaX, double deltaY)
     }
 }
 
-/*public*/
-Envelope&
-Envelope::operator=(const Envelope& e)
-{
-#if GEOS_DEBUG
-    std::cerr << "Envelope assignment" << std::endl;
-#endif
-    if(&e != this) {  // is this check useful ?
-        minx = e.minx;
-        maxx = e.maxx;
-        miny = e.miny;
-        maxy = e.maxy;
-    }
-    return *this;
-}
 
 
 } // namespace geos::geom
