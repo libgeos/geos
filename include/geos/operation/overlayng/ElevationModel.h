@@ -141,7 +141,7 @@ public:
      * If the location lies outside the model grid extent,
      * this returns the Z value of the nearest grid cell.
      * If the model has no elevation computed (i.e. due
-     * to empty input), the value is returned as {@link Double#NaN}.
+     * to empty input), the value is returned as a double NaN.
      *
      * @param x the x ordinate of the location
      * @param y the y ordinate of the location
