@@ -83,10 +83,7 @@ and basic C++ usage examples can be found in `doc/example.cpp`.
 
 #### Ruby
 
-Ruby bindings are part of GEOS. To build, use the `--enable-ruby` option
-when configuring:
-
-    ./configure .. --enable-ruby
+Ruby bindings are available via [RGeo](https://github.com/rgeo/rgeo).
 
 #### PHP
 
@@ -97,8 +94,9 @@ PHP bindings for GEOS are available separately from
 
 Python bindings are available via:
 
- 1. [Shapely](http://pypi.python.org/pypi/Shapely) package.
- 2. Calling functions from `libgeos_c` via Python ctypes.
+ 1. [Shapely](http://pypi.python.org/pypi/Shapely)
+ 2. [PyGEOS](https://github.com/pygeos/pygeos)
+ 3. Calling functions from `libgeos_c` via Python ctypes
 
 
 ## Documentation
