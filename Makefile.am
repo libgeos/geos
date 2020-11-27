@@ -35,6 +35,9 @@ EXTRA_DIST = \
 	cmake/geos-config.cmake \
 	cmake/FindMakeDistCheck.cmake
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = tools/geos.pc
+
 ACLOCAL_AMFLAGS = -I macros
 
 dist-hook: gen-ChangeLog

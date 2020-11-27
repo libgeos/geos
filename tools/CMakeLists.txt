@@ -27,6 +27,17 @@ if(NOT MSVC)
       OWNER_READ OWNER_EXECUTE
       GROUP_READ GROUP_EXECUTE
       WORLD_READ WORLD_EXECUTE)
+
+  # pkg-config support
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/geos.pc.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/geos.pc
+    @ONLY)
+
+  install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/geos.pc
+    DESTINATION lib/pkgconfig)
+
 endif()
 
 add_subdirectory(astyle)
