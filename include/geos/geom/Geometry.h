@@ -370,7 +370,7 @@ public:
     }
 
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
-    virtual int getCoordinateDimension() const = 0; //Abstract
+    virtual uint8_t getCoordinateDimension() const = 0; //Abstract
 
     /**
      * \brief

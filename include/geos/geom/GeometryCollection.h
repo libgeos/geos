@@ -110,7 +110,7 @@ public:
     bool isDimensionStrict(Dimension::DimensionType d) const override;
 
     /// Returns coordinate dimension.
-    int getCoordinateDimension() const override;
+    uint8_t getCoordinateDimension() const override;
 
     std::unique_ptr<Geometry> getBoundary() const override;
 

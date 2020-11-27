@@ -150,7 +150,7 @@ LineIntersector::isIntersection(const Coordinate& pt) const
 
 /*public*/
 const Coordinate&
-LineIntersector::getIntersectionAlongSegment(int segmentIndex, int intIndex)
+LineIntersector::getIntersectionAlongSegment(size_t segmentIndex, size_t intIndex)
 {
     // lazily compute int line array
     computeIntLineIndex();
@@ -158,8 +158,8 @@ LineIntersector::getIntersectionAlongSegment(int segmentIndex, int intIndex)
 }
 
 /*public*/
-int
-LineIntersector::getIndexAlongSegment(int segmentIndex, int intIndex)
+size_t
+LineIntersector::getIndexAlongSegment(size_t segmentIndex, size_t intIndex)
 {
     computeIntLineIndex();
     return intLineIndex[segmentIndex][intIndex];
@@ -167,7 +167,7 @@ LineIntersector::getIndexAlongSegment(int segmentIndex, int intIndex)
 
 /*private*/
 void
-LineIntersector::computeIntLineIndex(int segmentIndex)
+LineIntersector::computeIntLineIndex(size_t segmentIndex)
 {
     double dist0 = getEdgeDistance(segmentIndex, 0);
     double dist1 = getEdgeDistance(segmentIndex, 1);
@@ -206,7 +206,7 @@ LineIntersector::isInteriorIntersection()
 
 /*public*/
 bool
-LineIntersector::isInteriorIntersection(int inputLineIndex)
+LineIntersector::isInteriorIntersection(size_t inputLineIndex)
 {
     for(size_t i = 0; i < result; ++i) {
         if(!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
@@ -316,7 +316,7 @@ LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, cons
 }
 
 /*private*/
-int
+uint8_t
 LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
                                   const Coordinate& q1, const Coordinate& q2)
 {

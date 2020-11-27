@@ -92,7 +92,7 @@ public:
     Dimension::DimensionType getDimension() const override;
 
     /// Returns coordinate dimension.
-    int getCoordinateDimension() const override;
+    uint8_t getCoordinateDimension() const override;
 
     /// Returns 1 (Polygon boundary is a MultiLineString)
     int getBoundaryDimension() const override;

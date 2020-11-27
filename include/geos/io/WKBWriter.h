@@ -24,6 +24,7 @@
 
 #include <geos/util/Machine.h> // for getMachineByteOrder
 #include <iosfwd>
+#include <cstdint>
 
 // Forward declarations
 namespace geos {
@@ -97,7 +98,7 @@ public:
      * Returns the output dimension used by the
      * <code>WKBWriter</code>.
      */
-    virtual int
+    virtual uint8_t
     getOutputDimension() const
     {
         return defaultOutputDimension;
@@ -172,8 +173,8 @@ public:
 
 private:
 
-    int defaultOutputDimension;
-    int outputDimension;
+    uint8_t defaultOutputDimension;
+    uint8_t outputDimension;
 
     int byteOrder;
 

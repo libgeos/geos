@@ -157,10 +157,10 @@ Polygon::getDimension() const
     return Dimension::A; // area
 }
 
-int
+uint8_t
 Polygon::getCoordinateDimension() const
 {
-    int dimension = 2;
+    uint8_t dimension = 2;
 
     if(shell != nullptr) {
         dimension = std::max(dimension, shell->getCoordinateDimension());

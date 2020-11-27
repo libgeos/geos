@@ -130,6 +130,8 @@ public:
         m_orig(p_orig)
     {};
 
+    virtual ~HalfEdge() {};
+
     /**
     * Creates a HalfEdge pair representing an edge
     * between two vertices located at coordinates p0 and p1.

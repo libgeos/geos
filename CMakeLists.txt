@@ -38,7 +38,6 @@ else()
   message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-
 #-----------------------------------------------------------------------------
 # Options
 #-----------------------------------------------------------------------------
@@ -212,12 +211,6 @@ target_compile_options(geos_developer_cxx_flags
     $<$<CXX_COMPILER_ID:MSVC>:-W4>
     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates>)
-
-# Disable TTMath ASM support on Windows due to build issues
-if(WIN32)
-  target_compile_definitions(geos_cxx_flags
-    INTERFACE TTMATH_NOASM)
-endif()
 
 #-----------------------------------------------------------------------------
 # Define a coverage build

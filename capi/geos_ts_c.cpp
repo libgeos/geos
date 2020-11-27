@@ -113,10 +113,10 @@
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::SimpleSTRtree
-#define GEOSWKTReader_t geos::io::WKTReader
-#define GEOSWKTWriter_t geos::io::WKTWriter
-#define GEOSWKBReader_t geos::io::WKBReader
-#define GEOSWKBWriter_t geos::io::WKBWriter
+#define GEOSWKTReader geos::io::WKTReader
+#define GEOSWKTWriter geos::io::WKTWriter
+#define GEOSWKBReader geos::io::WKBReader
+#define GEOSWKBWriter geos::io::WKBWriter
 
 #include "geos_c.h"
 
@@ -2494,7 +2494,7 @@ extern "C" {
     GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, 0, [&]() {
-            return g->getCoordinateDimension();
+            return (int)(g->getCoordinateDimension());
         });
     }
 

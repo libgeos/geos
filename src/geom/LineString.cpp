@@ -136,7 +136,7 @@ LineString::getDimension() const
     return Dimension::L; // line
 }
 
-int
+uint8_t
 LineString::getCoordinateDimension() const
 {
     return (int) points->getDimension();

@@ -416,7 +416,7 @@ OverlayOp::labelIncompleteNode(Node* n, int targetIndex)
 
     // Only do this if input does have Z
     // See https://trac.osgeo.org/geos/ticket/811
-    if(targetGeom->getCoordinateDimension() < 3) {
+    if(targetGeom->getCoordinateDimension() < 3u) {
         return;
     }
 

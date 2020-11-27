@@ -98,7 +98,7 @@ public:
     Dimension::DimensionType getDimension() const override;
 
     /// Returns coordinate dimension.
-    int getCoordinateDimension() const override;
+    uint8_t getCoordinateDimension() const override;
 
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;

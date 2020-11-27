@@ -152,10 +152,10 @@ GeometryCollection::getBoundaryDimension() const
     return dimension;
 }
 
-int
+uint8_t
 GeometryCollection::getCoordinateDimension() const
 {
-    int dimension = 2;
+    uint8_t dimension = 2;
 
     for(const auto& g : geometries) {
         dimension = std::max(dimension, g->getCoordinateDimension());

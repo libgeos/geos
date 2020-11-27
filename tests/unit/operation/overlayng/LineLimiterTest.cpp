@@ -65,7 +65,7 @@ struct test_linelimiter_data {
             geomRslt = std::move(lines[0]);
         }
         else {
-            geomRslt = std::move(factory->createMultiLineString(std::move(lines)));
+            geomRslt = factory->createMultiLineString(std::move(lines));
         }
         return geomRslt;
     }

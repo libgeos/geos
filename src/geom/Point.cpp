@@ -118,7 +118,7 @@ Point::getDimension() const
     return Dimension::P; // point
 }
 
-int
+uint8_t
 Point::getCoordinateDimension() const
 {
     return (int) getCoordinatesRO()->getDimension();

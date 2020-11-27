@@ -103,7 +103,7 @@ public:
      * @return <code>true</code> if either intersection point is in
      * the interior of the input segment
      */
-    bool isInteriorIntersection(int inputLineIndex);
+    bool isInteriorIntersection(size_t inputLineIndex);
 
     /// Force computed intersection to be rounded to a given precision model.
     ///
@@ -128,7 +128,7 @@ public:
     /// Same as above but doesn't compute intersection point. Faster.
     static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-    enum intersection_type : unsigned char {
+    enum intersection_type : uint8_t {
         /// Indicates that line segments do not intersect
         NO_INTERSECTION = 0,
 
@@ -227,7 +227,7 @@ public:
      * @return the intIndex'th intersection point in the direction of the
      *         specified input line segment
      */
-    const geom::Coordinate& getIntersectionAlongSegment(int segmentIndex, int intIndex);
+    const geom::Coordinate& getIntersectionAlongSegment(size_t segmentIndex, size_t intIndex);
 
     /** \brief
      * Computes the index of the intIndex'th intersection point in the direction of
@@ -238,7 +238,7 @@ public:
      *
      * @return the index of the intersection point along the segment (0 or 1)
      */
-    int getIndexAlongSegment(int segmentIndex, int intIndex);
+    size_t getIndexAlongSegment(size_t segmentIndex, size_t intIndex);
 
     /** \brief
      * Computes the "edge distance" of an intersection point along the specified
@@ -273,7 +273,7 @@ private:
      * The indexes of the endpoints of the intersection lines, in order along
      * the corresponding line
      */
-    int intLineIndex[2][2];
+    size_t intLineIndex[2][2];
 
     bool isProperVar;
     //Coordinate &pa;
@@ -285,8 +285,8 @@ private:
         return result == COLLINEAR_INTERSECTION;
     }
 
-    int computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                         const geom::Coordinate& q1, const geom::Coordinate& q2);
+    uint8_t computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                             const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     bool
     isEndPoint() const
@@ -296,7 +296,7 @@ private:
 
     void computeIntLineIndex();
 
-    void computeIntLineIndex(int segmentIndex);
+    void computeIntLineIndex(size_t segmentIndex);
 
     int computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
                                      const geom::Coordinate& q1, const geom::Coordinate& q2);

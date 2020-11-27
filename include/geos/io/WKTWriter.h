@@ -24,6 +24,7 @@
 #include <geos/export.h>
 
 #include <string>
+#include <cctype>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -261,8 +262,8 @@ private:
 
     int level;
 
-    int defaultOutputDimension;
-    int outputDimension;
+    uint8_t defaultOutputDimension;
+    uint8_t outputDimension;
     bool old3D;
 
     void writeFormatted(

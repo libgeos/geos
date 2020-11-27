@@ -34,7 +34,7 @@ namespace locate { // geos::algorithm::locate
  *
  * @author Martin Davis
  */
-class PointOnGeometryLocator {
+class GEOS_DLL PointOnGeometryLocator {
 private:
 protected:
 public:

@@ -64,7 +64,7 @@ std::unique_ptr<Geometry>
 MinimumBoundingCircle::getMaximumDiameter()
 {
     compute();
-    size_t dims = input->getCoordinateDimension();
+    uint8_t dims = input->getCoordinateDimension();
     size_t len = 2;
     switch(extremalPts.size()) {
         case 0:
@@ -122,7 +122,7 @@ MinimumBoundingCircle::getDiameter()
     case 1:
         return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
     }
-    size_t dims = input->getCoordinateDimension();
+    uint8_t dims = input->getCoordinateDimension();
     size_t len = 2;
     auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
     // TODO: handle case of 3 extremal points, by computing a line from one of

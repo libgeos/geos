@@ -27,7 +27,7 @@ struct test_hilbertcode_data {
     void checkDecodeEncodeForLevel(uint32_t level)
     {
         uint32_t n = HilbertCode::levelSize(level);
-        for (int i = 0; i < n; i++) {
+        for (uint32_t i = 0; i < n; i++) {
             checkDecodeEncode(level, i);
         }
     }
@@ -53,13 +53,13 @@ template<>
 void object::test<1>
 ()
 {
-    ensure_equals( HilbertCode::levelSize( 0 ), 1);
-    ensure_equals( HilbertCode::levelSize( 1 ), 4);
-    ensure_equals( HilbertCode::levelSize( 2 ), 16);
-    ensure_equals( HilbertCode::levelSize( 3 ), 64);
-    ensure_equals( HilbertCode::levelSize( 4 ), 256);
-    ensure_equals( HilbertCode::levelSize( 5 ), 1024);
-    ensure_equals( HilbertCode::levelSize( 6 ), 4096);
+    ensure_equals( HilbertCode::levelSize( 0 ), 1u);
+    ensure_equals( HilbertCode::levelSize( 1 ), 4u);
+    ensure_equals( HilbertCode::levelSize( 2 ), 16u);
+    ensure_equals( HilbertCode::levelSize( 3 ), 64u);
+    ensure_equals( HilbertCode::levelSize( 4 ), 256u);
+    ensure_equals( HilbertCode::levelSize( 5 ), 1024u);
+    ensure_equals( HilbertCode::levelSize( 6 ), 4096u);
 }
 
 
@@ -68,25 +68,25 @@ template<>
 void object::test<2>
 ()
 {
-    ensure_equals( HilbertCode::level( 1 ), 0);
+    ensure_equals( HilbertCode::level( 1 ), 0u);
 
-    ensure_equals( HilbertCode::level( 2 ), 1);
-    ensure_equals( HilbertCode::level( 3 ), 1);
-    ensure_equals( HilbertCode::level( 4 ), 1);
+    ensure_equals( HilbertCode::level( 2 ), 1u);
+    ensure_equals( HilbertCode::level( 3 ), 1u);
+    ensure_equals( HilbertCode::level( 4 ), 1u);
 
-    ensure_equals( HilbertCode::level( 5 ), 2);
-    ensure_equals( HilbertCode::level( 13 ), 2);
-    ensure_equals( HilbertCode::level( 15 ), 2);
-    ensure_equals( HilbertCode::level( 16 ), 2);
+    ensure_equals( HilbertCode::level( 5 ), 2u);
+    ensure_equals( HilbertCode::level( 13 ), 2u);
+    ensure_equals( HilbertCode::level( 15 ), 2u);
+    ensure_equals( HilbertCode::level( 16 ), 2u);
 
-    ensure_equals( HilbertCode::level( 17 ), 3);
-    ensure_equals( HilbertCode::level( 63 ), 3);
-    ensure_equals( HilbertCode::level( 64 ), 3);
+    ensure_equals( HilbertCode::level( 17 ), 3u);
+    ensure_equals( HilbertCode::level( 63 ), 3u);
+    ensure_equals( HilbertCode::level( 64 ), 3u);
 
-    ensure_equals( HilbertCode::level( 65 ), 4);
-    ensure_equals( HilbertCode::level( 255 ), 4);
-    ensure_equals( HilbertCode::level( 255 ), 4);
-    ensure_equals( HilbertCode::level( 256 ), 4);
+    ensure_equals( HilbertCode::level( 65 ), 4u);
+    ensure_equals( HilbertCode::level( 255 ), 4u);
+    ensure_equals( HilbertCode::level( 255 ), 4u);
+    ensure_equals( HilbertCode::level( 256 ), 4u);
 }
 
 
