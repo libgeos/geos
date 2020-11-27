@@ -46,8 +46,8 @@ struct test_overlayng_elevationmodel_data {
         std::unique_ptr<Geometry> g1 = r.read(wkt1);
         std::unique_ptr<Geometry> g2 = r.read(wkt2);
         std::unique_ptr<ElevationModel> model = ElevationModel::create(*g1, *g2);
-        unsigned int numPts = ords.size() / 3;
-        assert ( 3 * numPts == ords.size());
+        // unsigned int numPts = ords.size() / 3;
+        // assert ( 3 * numPts == ords.size());
         for ( std::initializer_list<double>::iterator i=ords.begin(), e=ords.end();
               i != e; ++i )
         {

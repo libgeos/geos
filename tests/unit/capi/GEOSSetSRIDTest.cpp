@@ -21,10 +21,10 @@ template<>
 void object::test<1>
 ()
 {
+    int expected_srid = 1234;
     GEOSGeometry* input = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
-    GEOSSetSRID(input, 1234);
-
-    ensure_equals(GEOSGetSRID(input), 1234);
+    GEOSSetSRID(input, expected_srid);
+    ensure_equals(GEOSGetSRID(input), expected_srid);
 
     GEOSGeom_destroy(input);
 }
