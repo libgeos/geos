@@ -61,7 +61,7 @@ WKTWriter::WKTWriter():
 
 /* public */
 void
-WKTWriter::setOutputDimension(int dims)
+WKTWriter::setOutputDimension(uint8_t dims)
 {
     if(dims < 2 || dims > 3) {
         throw util::IllegalArgumentException("WKT output dimension must be 2 or 3");

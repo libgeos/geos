@@ -139,7 +139,7 @@ LineString::getDimension() const
 uint8_t
 LineString::getCoordinateDimension() const
 {
-    return (int) points->getDimension();
+    return (uint8_t) points->getDimension();
 }
 
 int

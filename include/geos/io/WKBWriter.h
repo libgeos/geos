@@ -85,7 +85,7 @@ public:
      * @param incudeSRID true if SRID should be included in WKB (an
      * extension).
      */
-    WKBWriter(int dims = 2, int bo = getMachineByteOrder(), bool includeSRID = false);
+    WKBWriter(uint8_t dims = 2, int bo = getMachineByteOrder(), bool includeSRID = false);
 
     /*
      * \brief
@@ -111,7 +111,7 @@ public:
      * Note that 3 indicates up to 3 dimensions will be written but
      * 2D WKB is still produced for 2D geometries.
      */
-    virtual void setOutputDimension(int newOutputDimension);
+    virtual void setOutputDimension(uint8_t newOutputDimension);
 
     /*
      * \brief

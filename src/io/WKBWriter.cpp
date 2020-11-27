@@ -45,7 +45,7 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
-WKBWriter::WKBWriter(int dims, int bo, bool srid):
+WKBWriter::WKBWriter(uint8_t dims, int bo, bool srid):
     defaultOutputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(nullptr)
 {
     if(dims < 2 || dims > 3) {
@@ -57,7 +57,7 @@ WKBWriter::WKBWriter(int dims, int bo, bool srid):
 
 /* public */
 void
-WKBWriter::setOutputDimension(int dims)
+WKBWriter::setOutputDimension(uint8_t dims)
 {
     if(dims < 2 || dims > 3) {
         throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");

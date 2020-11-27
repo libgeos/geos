@@ -174,7 +174,7 @@ public:
      *        Note that 3 indicates up to 3 dimensions will be
      *        written but 2D WKB is still produced for 2D geometries.
      */
-    void setOutputDimension(int newOutputDimension);
+    void setOutputDimension(uint8_t newOutputDimension);
 
 protected:
 
