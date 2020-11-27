@@ -54,7 +54,6 @@ libtool
 ltmain.sh
 missing
 py-compile
-swig/geos.i
 autom4te.cache/
 capi/geos_c.h
 config.guess

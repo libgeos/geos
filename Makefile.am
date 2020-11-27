@@ -18,7 +18,6 @@ SUBDIRS = \
 	capi    \
 	doc     \
 	macros  \
-	swig    \
 	tests   \
 	benchmarks \
 	tools

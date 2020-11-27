@@ -22,6 +22,8 @@ Changes in 3.9.0
   - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
   - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
 
+- Changes:
+  - Drop SWIG bindings, including for Ruby and Python (#1076, Mike Taves)
 
 Changes in 3.8.0
 2019-10-10

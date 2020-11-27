@@ -22,7 +22,7 @@
  *
  * Geometry Engine Open Source is a C++ port of the Java Topology Suite
  * released under the LGPL license.
- * It has interfaces for C++, C and python (though swig).
+ * It has interfaces for C++ and C.
  *
  * \section getstart_sec Getting Started
  *
