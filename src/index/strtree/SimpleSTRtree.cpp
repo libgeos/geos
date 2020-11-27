@@ -273,6 +273,7 @@ SimpleSTRtree::remove(const geom::Envelope* itemEnv, void* item)
     ::geos::ignore_unused_variable_warning(itemEnv);
     ::geos::ignore_unused_variable_warning(item);
     assert(false);
+    return false;
 }
 
 
