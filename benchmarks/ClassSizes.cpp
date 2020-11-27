@@ -46,6 +46,7 @@
 #include <geos/operation/overlayng/Edge.h>
 #include <geos/operation/overlayng/EdgeSourceInfo.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
+#include <geos/index/chain/MonotoneChain.h>
 
 using namespace geos;
 
@@ -64,6 +65,7 @@ main()
     check(geomgraph::TopologyLocation);
     check(geomgraph::index::SweepLineEvent);
     check(noding::NodedSegmentString);
+    check(index::chain::MonotoneChain);
     check(geom::Geometry);
     check(geom::Point);
     check(geom::LineString);
