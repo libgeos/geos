@@ -106,6 +106,8 @@ private:
         std::vector<SimpleSTRnode*>& childNodes,
         int newLevel);
 
+    bool remove(const geom::Envelope* searchBounds, SimpleSTRnode* node, void* item);
+
 
 public:
 
@@ -124,8 +126,10 @@ public:
     }
 
     std::size_t getNumLeafNodes() const {
-        return nodes.size();
+        return root->getNumLeafNodes();
     }
+
+
 
     bool getBuilt() const {
         return built;
@@ -146,7 +150,7 @@ public:
 
     void query(const geom::Envelope* searchEnv, ItemVisitor& visitor) override;
 
-    bool remove(const geom::Envelope* itemEnv, void* item) override;
+    bool remove(const geom::Envelope* searchBounds, void* item) override;
 
     friend std::ostream& operator<<(std::ostream& os, const SimpleSTRtree& tree);
 

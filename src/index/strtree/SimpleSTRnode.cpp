@@ -15,6 +15,7 @@
 #include <geos/index/strtree/SimpleSTRnode.h>
 #include <geos/geom/Envelope.h>
 
+#include <iostream>
 
 using namespace geos::geom;
 
@@ -46,6 +47,54 @@ SimpleSTRnode::addChildNode(SimpleSTRnode* childNode)
         bounds.expandToInclude(childNode->getEnvelope());
 
     childNodes.push_back(childNode);
+}
+
+/*public*/
+std::size_t
+SimpleSTRnode::getNumNodes() const
+{
+    std::size_t count = 1;
+    if (isLeaf())
+        return count;
+
+    for (auto* node: getChildNodes())
+        count += node->getNumNodes();
+
+    return count;
+}
+
+/*public*/
+std::size_t
+SimpleSTRnode::getNumLeafNodes() const
+{
+    std::size_t count = isLeaf() ? 1 : 0;
+    for (auto* node: getChildNodes())
+        count += node->getNumLeafNodes();
+    return count;
+}
+
+bool
+SimpleSTRnode::removeItem(void *item)
+{
+    for (auto it = childNodes.begin(); it != childNodes.end(); ++it) {
+        if ((*it)->getItem() == item) {
+            childNodes.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
+SimpleSTRnode::removeChild(SimpleSTRnode *child)
+{
+    for (auto it = childNodes.begin(); it != childNodes.end(); ++it) {
+        if ((*it) == child) {
+            childNodes.erase(it);
+            return true;
+        }
+    }
+    return false;
 }
 
 

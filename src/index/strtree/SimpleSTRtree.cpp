@@ -268,12 +268,45 @@ SimpleSTRtree::query(const geom::Envelope* searchEnv,
 
 /* public */
 bool
-SimpleSTRtree::remove(const geom::Envelope* itemEnv, void* item)
+SimpleSTRtree::remove(const geom::Envelope* searchBounds, void* item)
 {
-    ::geos::ignore_unused_variable_warning(itemEnv);
-    ::geos::ignore_unused_variable_warning(item);
-    assert(false);
+    build();
+    if(root->getEnvelope().intersects(searchBounds)) {
+        return remove(searchBounds, root, item);
+    }
     return false;
+}
+
+/* private */
+bool
+SimpleSTRtree::remove(const geom::Envelope* searchBounds,
+    SimpleSTRnode* node, void* item)
+{
+    bool found = node->removeItem(item);
+    if (found)
+        return true;
+
+    SimpleSTRnode* childToPrune = nullptr;
+    auto childNodes = node->getChildNodes();
+    for (auto* child: childNodes) {
+        if (! searchBounds->intersects(child->getEnvelope())) {
+            continue;
+        }
+        if (!child->isLeaf()) {
+            found = remove(searchBounds, child, item);
+            if (found) {
+                childToPrune = child;
+                break;
+            }
+        }
+    }
+    if (childToPrune != nullptr) {
+        // Only remove empty child nodes
+        if (childToPrune->getChildNodes().empty()) {
+            node->removeChild(childToPrune);
+        }
+    }
+    return found;
 }
 
 

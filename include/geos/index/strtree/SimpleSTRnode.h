@@ -67,6 +67,9 @@ public:
 
     void toString(std::ostream& os, int indentLevel) const;
 
+    std::size_t getNumNodes() const;
+    std::size_t getNumLeafNodes() const;
+
     const std::vector<SimpleSTRnode*>&
     getChildNodes() const
     {
@@ -76,6 +79,9 @@ public:
     void* getItem() const {
         return item;
     }
+
+    bool removeItem(void *item);
+    bool removeChild(SimpleSTRnode *child);
 
     /**
      * Returns a representation of space that encloses this Node

@@ -6,6 +6,7 @@
 #include <geos/index/strtree/SimpleSTRtree.h>
 #include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
+#include <geos/io/WKTReader.h>
 
 
 using namespace geos;
@@ -112,6 +113,43 @@ void object::test<2>
     ensure_equals(g2->getX(), 11.0);
     ensure_equals(g2->getY(), 11.0);
 }
+
+
+template<>
+template<>
+void object::test<3>
+()
+{
+    auto gf = geom::GeometryFactory::create();
+    geos::io::WKTReader wkt(*gf);
+    index::strtree::SimpleSTRtree t(10);
+    std::vector<std::unique_ptr<geom::Geometry>> geoms;
+    geoms.emplace_back(wkt.read(std::string("LINESTRING(0 0, 10 10)")).release());
+    geoms.emplace_back(wkt.read(std::string("LINESTRING(5 5, 15 15)")).release());
+    geoms.emplace_back(wkt.read(std::string("LINESTRING(10 10, 20 20)")).release());
+    geoms.emplace_back(wkt.read(std::string("LINESTRING(15 15, 25 25)")).release());
+
+    for (auto& g: geoms) {
+        t.insert(g.get());
+    }
+
+    std::size_t leaf_before = t.getRoot()->getNumLeafNodes();
+    // std::cout << "leaf_before " << leaf_before << std::endl;
+    std::size_t all_before = t.getRoot()->getNumNodes();
+    // std::cout << "all_before " << all_before << std::endl;
+    ensure(leaf_before = 4u);
+    ensure(all_before  = 5u);
+
+    t.remove(geoms[3]->getEnvelopeInternal(), geoms[3].get());
+
+    std::size_t leaf_after = t.getRoot()->getNumLeafNodes();
+    // std::cout << "leaf_after " << leaf_after << std::endl;
+    std::size_t all_after = t.getRoot()->getNumNodes();
+    // std::cout << "all_after " << all_after << std::endl;
+    ensure(leaf_after = 3u);
+    ensure(all_after  = 4u);
+}
+
 
 
 } // namespace tut
