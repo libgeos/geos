@@ -262,13 +262,7 @@ geom::Geometry*
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
     std::unique_ptr<geom::Geometry> ug;
-    if (unionFunction->isFloatingPrecision()) {
-        OverlapUnion unionOp(g0, g1, unionFunction);
-        ug = unionOp.doUnion();
-    }
-    else {
-        ug = unionFunction->Union(g0, g1);
-    }
+    ug = unionFunction->Union(g0, g1);
     return restrictToPolygons(std::move(ug)).release();
 }
 

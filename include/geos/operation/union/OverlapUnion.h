@@ -89,6 +89,8 @@ namespace geounion {  // geos::operation::geounion
  * in other APIs (e.g. GEOS) due to more aggressive snapping.
  * And it will be more likely to happen if a snap-rounding overlay is used.
  *
+ * DEPRECATED: This optimization has been removed, since it impairs performance.
+ *
  * @author mbdavis
  *
  */
