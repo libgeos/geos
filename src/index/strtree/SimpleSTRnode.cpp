@@ -74,10 +74,10 @@ SimpleSTRnode::getNumLeafNodes() const
 }
 
 bool
-SimpleSTRnode::removeItem(void *item)
+SimpleSTRnode::removeItem(void *itemToRemove)
 {
     for (auto it = childNodes.begin(); it != childNodes.end(); ++it) {
-        if ((*it)->getItem() == item) {
+        if ((*it)->getItem() == itemToRemove) {
             childNodes.erase(it);
             return true;
         }
