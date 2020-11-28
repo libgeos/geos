@@ -157,13 +157,6 @@ public:
      */
     PrecisionModel(double newScale);
 
-    // copy constructor
-    PrecisionModel(const PrecisionModel& pm);
-
-    /// destructor
-    ~PrecisionModel(void);
-
-
     /// The maximum precise value representable in a double.
     ///
     /// Since IEE754 double-precision numbers allow 53 bits of mantissa,
