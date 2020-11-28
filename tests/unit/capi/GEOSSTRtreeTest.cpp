@@ -277,8 +277,8 @@ void object::test<8>
         tree,
         q,
         [](void* item, void* userdata) {
-            GList* geoms = (GList*)userdata;
-            geoms->push_back((GEOSGeometry*)item);
+            GList* gl = (GList*)userdata;
+            gl->push_back((GEOSGeometry*)item);
         },
         &geoms);
 
@@ -318,8 +318,8 @@ void object::test<9>
         tree,
         q,
         [](void* item, void* userdata) {
-            IList* items = (IList*)userdata;
-            items->push_back((int*)item);
+            IList* il = (IList*)userdata;
+            il->push_back((int*)item);
         },
         &items);
 
