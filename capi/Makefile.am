@@ -30,4 +30,4 @@ libgeos_c_la_LDFLAGS = \
 dist-local:
 	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
 
-EXTRA_DIST = geos_c.h CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt

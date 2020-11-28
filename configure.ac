@@ -426,6 +426,5 @@ AC_OUTPUT([
 
 dnl -- echo "---------------------------------------"
 dnl -- echo "Boost UTF: $use_boost_utf"
-echo "OverlayNG: $use_overlayng"
-
+dnl -- echo "OverlayNG: $use_overlayng"
 dnl -- echo "---------------------------------------"
