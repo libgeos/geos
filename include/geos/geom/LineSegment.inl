@@ -32,14 +32,6 @@ namespace geos {
 namespace geom { // geos::geom
 
 INLINE
-LineSegment::LineSegment(const LineSegment& ls)
-    :
-    p0(ls.p0),
-    p1(ls.p1)
-{
-}
-
-INLINE
 LineSegment::LineSegment(const Coordinate& c0, const Coordinate& c1)
     :
     p0(c0),
@@ -57,11 +49,6 @@ LineSegment::LineSegment(double x0, double y0, double x1, double y1)
 
 INLINE
 LineSegment::LineSegment()
-{
-}
-
-INLINE
-LineSegment::~LineSegment()
 {
 }
 
