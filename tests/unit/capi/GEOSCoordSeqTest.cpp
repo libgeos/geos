@@ -151,9 +151,9 @@ void object::test<3>
     double z = 12;
 
     // X, Y, Z
-    GEOSCoordSeq_setOrdinate(cs_, 0, 0, x);
-    GEOSCoordSeq_setOrdinate(cs_, 0, 1, y);
-    GEOSCoordSeq_setOrdinate(cs_, 0, 2, z);
+    ensure(0 != GEOSCoordSeq_setOrdinate(cs_, 0, 0, x));
+    ensure(0 != GEOSCoordSeq_setOrdinate(cs_, 0, 1, y));
+    ensure(0 != GEOSCoordSeq_setOrdinate(cs_, 0, 2, z));
 
     double xcheck, ycheck, zcheck;
     ensure(0 != GEOSCoordSeq_getOrdinate(cs_, 0, 1, &ycheck));
@@ -163,6 +163,9 @@ void object::test<3>
     ensure_equals(xcheck, x);
     ensure_equals(ycheck, y);
     ensure_equals(zcheck, z);
+
+    // correct error on wrong ordinate index
+    ensure(0 == GEOSCoordSeq_setOrdinate(cs_, 0, 3, z));
 }
 
 // Test swapped setX calls (see bug #133, fixed)

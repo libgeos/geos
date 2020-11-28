@@ -2164,7 +2164,7 @@ extern "C" {
     GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs,
                                unsigned int idx, unsigned int dim, double val)
     {
-        return execute(extHandle, 1, [&]() {
+        return execute(extHandle, 0, [&]() {
             cs->setOrdinate(idx, dim, val);
             return 1;
         });
