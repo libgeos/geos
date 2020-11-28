@@ -258,49 +258,10 @@ void object::test<7>
     GEOSSTRtree_destroy(tree);
 }
 
-
 // querying tree with box
 template<>
 template<>
 void object::test<8>
-()
-{
-    GEOSSTRtree* tree = GEOSSTRtree_create(10);
-    GEOSGeometry* g = GEOSGeomFromWKT("POINT (2 3)");
-    GEOSSTRtree_insert(tree, g, g);
-    GEOSGeometry* q = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
-
-    typedef std::vector<GEOSGeometry*> GList;
-    GList geoms;
-    ensure_equals(geoms.size(), 0);
-    GEOSSTRtree_query(
-        tree,
-        q,
-        [](void* item, void* userdata) {
-            GList* gl = (GList*)userdata;
-            gl->push_back((GEOSGeometry*)item);
-        },
-        &geoms);
-
-    ensure_equals(geoms.size(), 1);
-    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(geoms[0]);
-
-    double x = -1;
-    double y = -1;
-    GEOSCoordSeq_getXY(seq,  0, &x, &y);
-    ensure_equals(x, 2.0);
-    ensure_equals(y, 3.0);
-
-    GEOSGeom_destroy(q);
-    GEOSGeom_destroy(g);
-    GEOSSTRtree_destroy(tree);
-}
-
-
-// querying tree with box
-template<>
-template<>
-void object::test<9>
 ()
 {
     GEOSSTRtree* tree = GEOSSTRtree_create(10);
@@ -333,13 +294,41 @@ void object::test<9>
 }
 
 
-// >>> import pygeos
-// >>> pygeos.geos_version
-// (3, 9, 0)
-// >>> point = pygeos.Geometry("POINT (2 3)")
-// >>> tree = pygeos.STRtree([point])
-// >>> tree.query(pygeos.box(0, 0, 10, 10))
-// array([], dtype=int64)
+// Index a null pointer
+template<>
+template<>
+void object::test<9>
+()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(10);
+
+    GEOSGeometry* g = GEOSGeomFromWKT("POINT (2 3)");
+    GEOSSTRtree_insert(tree, g, (void*)0);
+
+    GEOSGeometry* q = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+
+    typedef std::vector<int*> IList;
+    IList items;
+    ensure_equals(items.size(), 0);
+    GEOSSTRtree_query(
+        tree,
+        q,
+        [](void* item, void* userdata) {
+            IList* il = (IList*)userdata;
+            il->push_back((int*)item);
+        },
+        &items);
+
+    ensure_equals(items.size(), 1);
+
+    ensure_equals(items[0], (void*)0);
+
+    GEOSGeom_destroy(q);
+    GEOSGeom_destroy(g);
+    GEOSSTRtree_destroy(tree);
+}
+
+
 
 
 } // namespace tut

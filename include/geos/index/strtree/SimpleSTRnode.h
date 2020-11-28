@@ -114,7 +114,7 @@ public:
 
     bool isLeaf() const override
     {
-        return item != nullptr;
+        return childNodes.size() == 0;
     }
 
     bool isComposite() const
