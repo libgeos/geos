@@ -4,6 +4,7 @@ bin_SCRIPTS = geos-config
 
 EXTRA_DIST = \
 	CMakeLists.txt \
-	geos-config.cmake
+	geos-config.cmake \
+	geos.pc.cmake
 
 SUBDIRS = astyle

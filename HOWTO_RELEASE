@@ -1,5 +1,5 @@
 1. Verify that the versions currently set in Version.txt
-   sense for this release.
+   make sense for this release.
 
     - GEOS_VERSION_PATCH
     - GEOS_VERSION_MINOR

@@ -9,7 +9,8 @@ top_builddir=@top_builddir@
 check_PROGRAMS = \
 	memleak_mp_prep \
 	GEOSPreparedContainsPerfTest \
-	IntersectionPerfTest
+	IntersectionPerfTest \
+	UnaryOpPerfTest
 
 LIBS = $(top_builddir)/capi/libgeos_c.la
 AM_CPPFLAGS = -I$(top_builddir)/capi -I$(top_srcdir)/include
@@ -22,5 +23,8 @@ GEOSPreparedContainsPerfTest_LDADD = $(top_builddir)/src/libgeos.la
 
 IntersectionPerfTest_SOURCES = IntersectionPerfTest.cpp
 IntersectionPerfTest_LDADD = $(top_builddir)/src/libgeos.la
+
+UnaryOpPerfTest_SOURCES = UnaryOpPerfTest.cpp
+UnaryOpPerfTest_LDADD = $(top_builddir)/src/libgeos.la
 
 EXTRA_DIST = CMakeLists.txt
