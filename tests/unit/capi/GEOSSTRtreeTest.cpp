@@ -297,6 +297,42 @@ void object::test<8>
 }
 
 
+// querying tree with box
+template<>
+template<>
+void object::test<9>
+()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(10);
+
+    GEOSGeometry* g = GEOSGeomFromWKT("POINT (2 3)");
+    int payload = 876;
+    GEOSSTRtree_insert(tree, g, &payload);
+
+    GEOSGeometry* q = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+
+    typedef std::vector<int*> IList;
+    IList items;
+    ensure_equals(items.size(), 0);
+    GEOSSTRtree_query(
+        tree,
+        q,
+        [](void* item, void* userdata) {
+            IList* items = (IList*)userdata;
+            items->push_back((int*)item);
+        },
+        &items);
+
+    ensure_equals(items.size(), 1);
+
+    ensure_equals(*(items[0]), payload);
+
+    GEOSGeom_destroy(q);
+    GEOSGeom_destroy(g);
+    GEOSSTRtree_destroy(tree);
+}
+
+
 // >>> import pygeos
 // >>> pygeos.geos_version
 // (3, 9, 0)
