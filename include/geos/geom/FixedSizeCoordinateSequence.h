@@ -74,7 +74,7 @@ namespace geom {
                     break;
                 default: {
                     std::stringstream ss;
-                    ss << "Unknown ordinate index " << index;
+                    ss << "Unknown ordinate index " << ordinateIndex;
                     throw geos::util::IllegalArgumentException(ss.str());
                     break;
                 }

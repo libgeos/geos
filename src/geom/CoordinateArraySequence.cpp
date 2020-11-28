@@ -228,7 +228,7 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
         break;
     default: {
         std::stringstream ss;
-        ss << "Unknown ordinate index " << index;
+        ss << "Unknown ordinate index " << ordinateIndex;
         throw util::IllegalArgumentException(ss.str());
         break;
     }
