@@ -116,6 +116,17 @@ Envelope::expandToInclude(double x, double y)
     }
 }
 
+INLINE Envelope
+Envelope::fromXY(double xmin, double ymin, double xmax, double ymax) {
+    Envelope ret;
+    ret.minx = xmin;
+    ret.maxx = xmax;
+    ret.miny = ymin;
+    ret.maxy = ymax;
+
+    return ret;
+}
+
 /*public*/
 INLINE double
 Envelope::getMaxY() const

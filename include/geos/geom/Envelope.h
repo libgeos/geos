@@ -117,6 +117,8 @@ public:
     static bool intersects(const Coordinate& p1, const Coordinate& p2,
                            const Coordinate& q);
 
+    static Envelope fromXY(double xmin, double ymin, double xmax, double ymax);
+
     /** \brief
      * Test the envelope defined by `p1-p2` for intersection
      * with the envelope defined by `q1-q2`.
