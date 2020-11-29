@@ -39,6 +39,10 @@ Coordinate::isNull() const
 }
 
 INLINE
+Coordinate::Coordinate() : x(0.0), y(0.0), z(DoubleNotANumber)
+{}
+
+INLINE
 Coordinate::Coordinate(double xNew, double yNew, double zNew)
     :
     x(xNew),
