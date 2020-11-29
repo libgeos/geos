@@ -31,7 +31,7 @@ SimpleSTRnode::toString(std::ostream& os, int indentLevel) const
     for (int i = 0; i < indentLevel; i++) {
         os << "  ";
     }
-    os << bounds << std::endl;
+    os << bounds << " [" << level << "]" << std::endl;
     for (auto* node: childNodes) {
         node->toString(os, indentLevel+1);
     }

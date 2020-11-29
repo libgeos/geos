@@ -8,6 +8,7 @@
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
 
+#include <iostream>
 
 using namespace geos;
 
@@ -42,13 +43,13 @@ void object::test<1>
         }
     }
 
-    // std::cout << t << std::endl;
-
     geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
     std::vector<void*> matches;
     t.query(&qe, matches);
     // std::cout << matches.size() << std::endl;
     ensure(matches.size() == 4);
+
+    // std::cout << t << std::endl;
 
     class SimpleTestVisitor: public index::ItemVisitor {
         public:
@@ -139,6 +140,8 @@ void object::test<3>
     // std::cout << "all_before " << all_before << std::endl;
     ensure(leaf_before = 4u);
     ensure(all_before  = 5u);
+
+    // std::cout << t << std::endl;
 
     t.remove(geoms[3]->getEnvelopeInternal(), geoms[3].get());
 

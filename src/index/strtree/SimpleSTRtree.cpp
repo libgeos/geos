@@ -181,7 +181,7 @@ SimpleSTRtree::build()
         root = nullptr;
     }
     else {
-        std::vector<SimpleSTRnode*> nodeTree = createHigherLevels(nodes, -1);
+        std::vector<SimpleSTRnode*> nodeTree = createHigherLevels(nodes, 0);
         assert(nodeTree.size()==1);
         root = nodeTree[0];
     }
@@ -309,20 +309,18 @@ SimpleSTRtree::remove(const geom::Envelope* searchBounds,
     return found;
 }
 
-
 /*public static*/
 std::ostream&
-operator<<(std::ostream& os, SimpleSTRtree& tree)
+operator<<(std::ostream& os, const SimpleSTRtree& tree)
 {
 
     os << "nodeCapacity: " << tree.getNodeCapacity() << std::endl;
     os << "nodes.size(): " << tree.getNumLeafNodes() << std::endl;
     os << "built: " << tree.getBuilt() << std::endl;
 
-
-    if (tree.getRoot()) {
+    if (tree.root) {
         os << "tree: " << std::endl;
-        tree.getRoot()->toString(os, 1);
+        tree.root->toString(os, 1);
     }
     else {
         os << "tree: empty" << std::endl;

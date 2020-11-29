@@ -71,7 +71,6 @@ private:
     std::deque<SimpleSTRnode> nodesQue;
     std::vector<SimpleSTRnode*> nodes;
     std::size_t nodeCapacity;
-    SimpleSTRnode* root;
     bool built;
 
     /*
@@ -111,6 +110,9 @@ private:
 
 public:
 
+    /* Member */
+    SimpleSTRnode* root;
+
     /**
      * Constructs an STRtree with the given maximum number of child nodes that
      * a node may have
@@ -126,7 +128,10 @@ public:
     }
 
     std::size_t getNumLeafNodes() const {
-        return root->getNumLeafNodes();
+        if (!root)
+            return 0;
+        else
+            return root->getNumLeafNodes();
     }
 
 
