@@ -12,6 +12,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/geom/CoordinateSequence.h>
 // std
 #include <memory>
@@ -27,6 +28,7 @@ namespace tut {
 struct test_bufferop_data {
     const geos::geom::GeometryFactory& gf;
     geos::io::WKTReader wktreader;
+    geos::io::WKTWriter wktwriter;
     int const default_quadrant_segments;
 
     typedef geos::geom::Geometry::Ptr GeomPtr;
@@ -363,7 +365,7 @@ MULTILINESTRING(  \
 
     // We're basically only interested an rough sense of a
     // meaningful result.
-    ensure_equals(gBuffer->getNumPoints(), std::size_t(47));
+    ensure_equals(gBuffer->getNumPoints(), std::size_t(46));
     ensure_equals(int(gBuffer->getArea()), 3520);
 }
 
@@ -419,6 +421,30 @@ void object::test<13>
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
+}
+
+// Test for GEOSwift regression failure
+template<>
+template<>
+void object::test<14>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt0("GEOMETRYCOLLECTION (POINT (1 2), MULTIPOINT ((1 2), (3 4)), LINESTRING (1 2, 3 4), MULTILINESTRING ((1 2, 3 4), (5 6, 7 8)), POLYGON ((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), ((7 2, 3 2, 3 -2, 7 -2, 7 2))))");
+
+    GeomPtr g0(wktreader.read(wkt0));
+    BufferOp op(g0.get());
+
+    double const distance = 0.5;
+    GeomPtr gBuffer(op.getResultGeometry(distance));
+
+    std::cout << wktwriter.write(gBuffer.get()) << std::endl;
+
+    ensure_not(gBuffer->isEmpty());
+    ensure(gBuffer->isValid());
+    ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
 }
 
 } // namespace tut
