@@ -219,4 +219,39 @@ void object::test<9>
 }
 
 
+// Handle WKT with mixed dimensionality in
+// coordinate sequence. This is the old behaviour, wherein
+// the first coordinate of a coordinate sequence dictates the
+// dimensionality of the following coordinates. This ignores
+// dimensionality tags (Z/M). It also has strange behaviour
+// in the multipoint case, but we leave this unchanged for now
+// as this test is being written just prior to 3.9 release.
+template<>
+template<>
+void object::test<10>
+()
+{
+    GeomPtr geom;
+    geom = wktreader.read("MULTIPOINT (1 1, 2 2)");
+    ensure("dimension(MULTIPOINT (1 1, 2 2)) == 2", geom->getCoordinateDimension() == 2);
+
+    geom = wktreader.read("LINESTRING (1 1, 2 2)");
+    ensure("dimension(LINESTRING (1 1, 2 2)) == 2", geom->getCoordinateDimension() == 2);
+
+    geom = wktreader.read("MULTIPOINT (1 1 1, 2 2)");
+    ensure("dimension(MULTIPOINT (1 1 1, 2 2)) == 3", geom->getCoordinateDimension() == 3);
+
+    geom = wktreader.read("MULTIPOINT (1 1, 2 2 2)");
+    ensure("dimension(MULTIPOINT (1 1, 2 2 2)) == 3", geom->getCoordinateDimension() == 3);
+
+    geom = wktreader.read("LINESTRING (1 1 1, 2 2)");
+    ensure("dimension(LINESTRING (1 1 1, 2 2)) == 3", geom->getCoordinateDimension() == 3);
+
+    geom = wktreader.read("LINESTRING (1 1, 2 2 2)");
+    ensure("dimension(LINESTRING (1 1, 2 2 2)) == 2", geom->getCoordinateDimension() == 2);
+
+    geom = wktreader.read("POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0))");
+    ensure("dimension(POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0)) == 2", geom->getCoordinateDimension() == 2);
+}
+
 } // namespace tut
