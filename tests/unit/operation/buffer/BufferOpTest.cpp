@@ -440,7 +440,7 @@ void object::test<14>
     double const distance = 0.5;
     GeomPtr gBuffer(op.getResultGeometry(distance));
 
-    std::cout << wktwriter.write(gBuffer.get()) << std::endl;
+    // std::cout << wktwriter.write(gBuffer.get()) << std::endl;
 
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
