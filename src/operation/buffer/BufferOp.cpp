@@ -34,6 +34,7 @@
 
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
+#include <geos/noding/snapround/SnapRoundingNoder.h>
 
 //FIXME: for temporary use, see other FIXME in file
 #include <geos/algorithm/LineIntersector.h>
@@ -222,26 +223,37 @@ BufferOp::bufferReducedPrecision(int precisionDigits)
 void
 BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 {
-
-
     PrecisionModel pm(1.0); // fixed as well
 
-#if 0 /* FIXME: MCIndexSnapRounder seems to be still bogus */
-    snapround::MCIndexSnapRounder inoder(pm);
+#define SNAP_WITH_NODER
+#ifdef SNAP_WITH_NODER
+    // Reduce precision using SnapRoundingNoder
+    //
+    // This more closely aligns with JTS implementation,
+    // and avoids reducing the precision of the input
+    // geometry.
+    //
+    // TODO: Add a finer fallback sequence. Full
+    //       precision, then SnappingNoder, then
+    //       SnapRoundingNoder.
+
+    snapround::SnapRoundingNoder inoder(&pm);
+    ScaledNoder noder(inoder, fixedPM.getScale());
+    BufferBuilder bufBuilder(bufParams);
+    bufBuilder.setWorkingPrecisionModel(&fixedPM);
+    bufBuilder.setNoder(&noder);
+    resultGeometry = bufBuilder.buffer(argGeom, distance);
+
 #else
     algorithm::LineIntersector li(&fixedPM);
     IntersectionAdder ia(li);
     MCIndexNoder inoder(&ia);
-#endif
-
     ScaledNoder noder(inoder, fixedPM.getScale());
-
     BufferBuilder bufBuilder(bufParams);
     bufBuilder.setWorkingPrecisionModel(&fixedPM);
-
     bufBuilder.setNoder(&noder);
 
-    // Reduce precision of the input geometry
+    // Snap by reducing the precision of the input geometry
     //
     // NOTE: this reduction is not in JTS and should supposedly
     //       not be needed because the PrecisionModel we pass
@@ -266,6 +278,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
     // this may throw an exception, if robustness errors are encountered
     resultGeometry = bufBuilder.buffer(workGeom, distance);
+#endif
 }
 
 } // namespace geos.operation.buffer
