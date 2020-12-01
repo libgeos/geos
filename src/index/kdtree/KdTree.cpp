@@ -16,6 +16,7 @@
 #include <geos/geom/Envelope.h>
 
 #include <vector>
+#include <algorithm>
 
 using namespace geos::geom;
 

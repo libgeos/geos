@@ -17,6 +17,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
 
+#include <algorithm>
 
 namespace geos {      // geos
 namespace operation { // geos.operation
