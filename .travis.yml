@@ -155,6 +155,7 @@ before_install:
   - eval "${E}"
   - export CXXFLAGS=${ARCH}
   - export CFLAGS=${ARCH}
+  - export LDFLAGS=${ARCH}
   - export GEOS_BUILD_TOOL=${TOOL}
   - export BUILD_TYPE=${BUILD_TYPE}
   - export CXX="ccache ${CXX}"
