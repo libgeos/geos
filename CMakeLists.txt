@@ -125,10 +125,10 @@ project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
   LANGUAGES C CXX
   ${_project_info})
 
-if("${_version_patch_word}" STREQUAL "")
-  set(GEOS_VERSION_FULL "${GEOS_VERSION}")
-else()
-  set(GEOS_VERSION_FULL "${GEOS_VERSION}${_version_patch_word}")
+if(NOT "${_version_patch_word}" STREQUAL "")
+  # Re-write VERSION variables after project()
+  set(GEOS_VERSION "${GEOS_VERSION}${_version_patch_word}")
+  set(GEOS_VERSION_PATCH "${_version_patch}${_version_patch_word}")
 endif()
 
 unset(_version_major)
@@ -136,7 +136,7 @@ unset(_version_minor)
 unset(_version_patch)
 unset(_version_patch_word)
 
-message(STATUS "GEOS: Version ${GEOS_VERSION_FULL}")
+message(STATUS "GEOS: Version ${GEOS_VERSION}")
 message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
 
@@ -348,7 +348,7 @@ if(NOT _is_multi_config_generator)
   set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
   set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
   set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION}")
 
   set(CPACK_SOURCE_IGNORE_FILES
     "/\\\\.git"

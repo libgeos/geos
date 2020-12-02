@@ -29,7 +29,7 @@ if(BUILD_DOCUMENTATION)
     endif()
 
     set(srcdir ${CMAKE_CURRENT_SOURCE_DIR})
-    set(VERSION ${GEOS_VERSION_FULL})
+    set(VERSION ${GEOS_VERSION})
     set(DOXYGEN_LOGFILE ${CMAKE_CURRENT_BINARY_DIR}/doxygen.log)
     set(CHECK_ERROR_SCRIPT "check_doxygen_errors.cmake")
     configure_file(
