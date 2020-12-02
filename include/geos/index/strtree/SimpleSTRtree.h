@@ -119,8 +119,8 @@ public:
      */
     SimpleSTRtree(std::size_t capacity = 10)
         : nodeCapacity(capacity)
-        , root(nullptr)
         , built(false)
+        , root(nullptr)
         {};
 
     std::size_t getNodeCapacity() const {
