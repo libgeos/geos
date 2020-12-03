@@ -14,7 +14,7 @@ GEOS_PATCH_WORD=beta2
 # added, removed or changed.
 # Increase the age value only if the changes made to the ABI
 # are backward compatible.
-CAPI_INTERFACE_CURRENT=15
+CAPI_INTERFACE_CURRENT=16
 CAPI_INTERFACE_REVISION=1
 CAPI_INTERFACE_AGE=15
 
