@@ -105,7 +105,7 @@ TopologyLocation::isAnyNull() const
 
 /*public*/
 INLINE bool
-TopologyLocation::isEqualOnSide(const TopologyLocation& le, int locIndex) const
+TopologyLocation::isEqualOnSide(const TopologyLocation& le, std::size_t locIndex) const
 {
     return location[locIndex] == le.location[locIndex];
 }

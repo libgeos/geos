@@ -65,8 +65,8 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
     geom::Coordinate upLowPt;
     upLowPt.setNull();
     // const geom::Coordinate& upLowPt = nullptr;
-    int iUpHi = 0;
-    for (int i = 1; i <= nPts; i++) {
+    uint32_t iUpHi = 0;
+    for (uint32_t i = 1; i <= nPts; i++) {
         double py = ring->getY(i);
         /**
         * If segment is upwards and endpoint is higher, record it
@@ -88,13 +88,13 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
      * (e.g. a falling segment).
      * This must exist since ring is not flat.
      */
-    int iDownLow = iUpHi;
+    uint32_t iDownLow = iUpHi;
     do {
         iDownLow = (iDownLow + 1) % nPts;
     } while (iDownLow != iUpHi && ring->getY(iDownLow) == upHiPt.y );
 
     const geom::Coordinate& downLowPt = ring->getAt(iDownLow);
-    int iDownHi = iDownLow > 0 ? iDownLow - 1 : nPts - 1;
+    uint32_t iDownHi = iDownLow > 0 ? iDownLow - 1 : nPts - 1;
     const geom::Coordinate& downHiPt = ring->getAt(iDownHi);
 
     /**

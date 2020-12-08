@@ -121,8 +121,8 @@ ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
 {
     assert(0 != lhs);
     assert(0 != rhs);
-
     assert(!"DIFFERENT TYPES ARE NOT OF THE SAME STRUCTURE");
+    ensure(lhs != 0 && rhs != 0 && lhs != rhs);
 }
 
 template <typename T>
@@ -265,7 +265,7 @@ ensure_equals_dims(const geos::geom::CoordinateSequence *seq1,
         }
         else
         {
-            if ( tolerance )
+            if ( tolerance > 0.0 )
                 ensure_distance( val1, val2, tolerance );
             else
                 ensure_equals( val1, val2 );

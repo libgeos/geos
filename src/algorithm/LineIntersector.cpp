@@ -256,7 +256,7 @@ LineIntersector::interpolateZ(const Coordinate& p,
 
     //double zgap = fabs(p2.z - p1.z);
     double zgap = p2.z - p1.z;
-    if(! zgap) {
+    if(zgap == 0.0) {
 #if GEOS_DEBUG
         cerr << " no zgap, returning " << p2.z << endl;
 #endif
@@ -471,7 +471,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
 }
 
 /*private*/
-int
+uint8_t
 LineIntersector::computeCollinearIntersection(const Coordinate& p1, const Coordinate& p2,
                                               const Coordinate& q1, const Coordinate& q2)
 {

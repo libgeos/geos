@@ -298,8 +298,8 @@ private:
 
     void computeIntLineIndex(size_t segmentIndex);
 
-    int computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                                     const geom::Coordinate& q1, const geom::Coordinate& q2);
+    uint8_t computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                         const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     /** \brief
      * This method computes the actual value of the intersection point.

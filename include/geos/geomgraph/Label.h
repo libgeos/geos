@@ -81,7 +81,7 @@ public:
      * Other geometry location will be set to
      * Location::NONE.
      */
-    Label(int geomIndex, geom::Location onLoc);
+    Label(uint32_t geomIndex, geom::Location onLoc);
 
     /** \brief
      * Construct a Label with On, Left and Right locations for both Geometries.
@@ -108,21 +108,21 @@ public:
      * Initialize the locations for the other Geometry to
      * Location::NONE
      */
-    Label(int geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc);
+    Label(uint32_t geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc);
 
     void flip();
 
-    geom::Location getLocation(int geomIndex, int posIndex) const;
+    geom::Location getLocation(uint32_t geomIndex, uint32_t posIndex) const;
 
-    geom::Location getLocation(int geomIndex) const;
+    geom::Location getLocation(uint32_t geomIndex) const;
 
-    void setLocation(int geomIndex, int posIndex, geom::Location location);
+    void setLocation(uint32_t geomIndex, uint32_t posIndex, geom::Location location);
 
-    void setLocation(int geomIndex, geom::Location location);
+    void setLocation(uint32_t geomIndex, geom::Location location);
 
-    void setAllLocations(int geomIndex, geom::Location location);
+    void setAllLocations(uint32_t geomIndex, geom::Location location);
 
-    void setAllLocationsIfNull(int geomIndex, geom::Location location);
+    void setAllLocationsIfNull(uint32_t geomIndex, geom::Location location);
 
     void setAllLocationsIfNull(geom::Location location);
 
@@ -138,24 +138,24 @@ public:
 
     bool isNull() const;
 
-    bool isNull(int geomIndex) const;
+    bool isNull(uint32_t geomIndex) const;
 
-    bool isAnyNull(int geomIndex) const;
+    bool isAnyNull(uint32_t geomIndex) const;
 
     bool isArea() const;
 
-    bool isArea(int geomIndex) const;
+    bool isArea(uint32_t geomIndex) const;
 
-    bool isLine(int geomIndex) const;
+    bool isLine(uint32_t geomIndex) const;
 
     bool isEqualOnSide(const Label& lbl, int side) const;
 
-    bool allPositionsEqual(int geomIndex, geom::Location loc) const;
+    bool allPositionsEqual(uint32_t geomIndex, geom::Location loc) const;
 
     /** \brief
      * Converts one GeometryLocation to a Line location
      */
-    void toLine(int geomIndex);
+    void toLine(uint32_t geomIndex);
 
     std::string toString() const;
 

@@ -49,7 +49,7 @@ Label::Label(geom::Location onLoc) :
 
 /*public*/
 INLINE
-Label::Label(int geomIndex, geom::Location onLoc) :
+Label::Label(uint32_t geomIndex, geom::Location onLoc) :
     elt{TopologyLocation(geom::Location::NONE), TopologyLocation(geom::Location::NONE)}
 {
     assert(geomIndex >= 0 && geomIndex < 2);
@@ -88,7 +88,7 @@ Label::operator=(const Label& l)
 
 /*public*/
 INLINE
-Label::Label(int geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc)
+Label::Label(uint32_t geomIndex, geom::Location onLoc, geom::Location leftLoc, geom::Location rightLoc)
 {
     elt[0] = TopologyLocation(geom::Location::NONE, geom::Location::NONE, geom::Location::NONE);
     elt[1] = TopologyLocation(geom::Location::NONE, geom::Location::NONE, geom::Location::NONE);
@@ -105,49 +105,49 @@ Label::flip()
 
 /*public*/
 INLINE geom::Location
-Label::getLocation(int geomIndex, int posIndex) const
+Label::getLocation(uint32_t geomIndex, uint32_t posIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].get(posIndex);
 }
 
 /*public*/
 INLINE geom::Location
-Label::getLocation(int geomIndex) const
+Label::getLocation(uint32_t geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].get(Position::ON);
 }
 
 /*public*/
 INLINE void
-Label::setLocation(int geomIndex, int posIndex, geom::Location location)
+Label::setLocation(uint32_t geomIndex, uint32_t posIndex, geom::Location location)
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     elt[geomIndex].setLocation(posIndex, location);
 }
 
 /*public*/
 INLINE void
-Label::setLocation(int geomIndex, geom::Location location)
+Label::setLocation(uint32_t geomIndex, geom::Location location)
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     elt[geomIndex].setLocation(Position::ON, location);
 }
 
 /*public*/
 INLINE void
-Label::setAllLocations(int geomIndex, geom::Location location)
+Label::setAllLocations(uint32_t geomIndex, geom::Location location)
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     elt[geomIndex].setAllLocations(location);
 }
 
 /*public*/
 INLINE void
-Label::setAllLocationsIfNull(int geomIndex, geom::Location location)
+Label::setAllLocationsIfNull(uint32_t geomIndex, geom::Location location)
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     elt[geomIndex].setAllLocationsIfNull(location);
 }
 
@@ -184,9 +184,9 @@ Label::getGeometryCount() const
 
 /*public*/
 INLINE bool
-Label::isNull(int geomIndex) const
+Label::isNull(uint32_t geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].isNull();
 }
 
@@ -199,9 +199,9 @@ Label::isNull() const
 
 /*public*/
 INLINE bool
-Label::isAnyNull(int geomIndex) const
+Label::isAnyNull(uint32_t geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].isAnyNull();
 }
 
@@ -214,17 +214,17 @@ Label::isArea() const
 
 /*public*/
 INLINE bool
-Label::isArea(int geomIndex) const
+Label::isArea(uint32_t geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].isArea();
 }
 
 /*public*/
 INLINE bool
-Label::isLine(int geomIndex) const
+Label::isLine(uint32_t geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].isLine();
 }
 
@@ -238,17 +238,17 @@ Label::isEqualOnSide(const Label& lbl, int side) const
 
 /*public*/
 INLINE bool
-Label::allPositionsEqual(int geomIndex, geom::Location loc) const
+Label::allPositionsEqual(uint32_t geomIndex, geom::Location loc) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return elt[geomIndex].allPositionsEqual(loc);
 }
 
 /*public*/
 INLINE void
-Label::toLine(int geomIndex)
+Label::toLine(uint32_t geomIndex)
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     if(elt[geomIndex].isArea()) {
         elt[geomIndex] = TopologyLocation(elt[geomIndex].getLocations()[0]);
     }
