@@ -34,7 +34,7 @@ INLINE Label
 Label::toLineLabel(const Label& label)
 {
     Label lineLabel(geom::Location::NONE);
-    for(int i = 0; i < 2; i++) {
+    for(uint32_t i = 0; i < 2; i++) {
         lineLabel.setLocation(i, label.getLocation(i));
     }
     return lineLabel;
@@ -52,7 +52,7 @@ INLINE
 Label::Label(uint32_t geomIndex, geom::Location onLoc) :
     elt{TopologyLocation(geom::Location::NONE), TopologyLocation(geom::Location::NONE)}
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     elt[geomIndex].setLocation(onLoc);
 }
 
@@ -230,7 +230,7 @@ Label::isLine(uint32_t geomIndex) const
 
 /*public*/
 INLINE bool
-Label::isEqualOnSide(const Label& lbl, int side) const
+Label::isEqualOnSide(const Label& lbl, uint32_t side) const
 {
     return elt[0].isEqualOnSide(lbl.elt[0], side)
             && elt[1].isEqualOnSide(lbl.elt[1], side);

@@ -96,7 +96,7 @@ public:
      */
     bool isAnyNull() const;
 
-    bool isEqualOnSide(const TopologyLocation& le, std::size_t locIndex) const;
+    bool isEqualOnSide(const TopologyLocation& le, uint32_t locIndex) const;
 
     bool isArea() const;
 

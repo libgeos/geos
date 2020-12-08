@@ -148,7 +148,7 @@ public:
 
     bool isLine(uint32_t geomIndex) const;
 
-    bool isEqualOnSide(const Label& lbl, int side) const;
+    bool isEqualOnSide(const Label& lbl, uint32_t side) const;
 
     bool allPositionsEqual(uint32_t geomIndex, geom::Location loc) const;
 
