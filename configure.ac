@@ -195,22 +195,33 @@ dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
 dnl
 AC_LIBTOOL_LANG_CXX_CONFIG
 
-# Set default AM_CXXFLAGS and AM_CFLAGS
-# -pedantic: ISO does not support long long
-# we add -Wno-long-long to avoid those messages
+dnl Set default AM_CXXFLAGS and AM_CFLAGS
+dnl -pedantic: ISO does not support long long
+dnl we add -Wno-long-long to avoid those messages
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
-# To make numerical computation more stable, we use --ffloat-store
-# on 32-bit platforms
+dnl -----------------------------------------------------------------------------
+dnl To make numerical computation more stable, we use --ffloat-store
+dnl on 32-bit platforms
 NUMERICFLAGS=""
-# 32-bit platforms have a 4-byte pointer
+dnl 32-bit platforms have a 4-byte pointer
 AC_CHECK_SIZEOF([void *])
 if test $ac_cv_sizeof_void_p -eq 4 ; then
   AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
 fi
 
+dnl -----------------------------------------------------------------------------
+dnl Add flags to prevent 'fused multiply-add' operations on targets (ARM64)
+dnl that allow it, as it breaks calculations in math/DD.cpp.
+dnl TODO: Replace DD calculations with 'long float' where target supports
+dnl true long float, and remove other cases where FMA causes regression
+dnl failures.
+dnl     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98207
+NUMERICFLAGS="$NUMERICFLAGS -ffp-contract=off"
+
+dnl -----------------------------------------------------------------------------
 HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
 DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
 
