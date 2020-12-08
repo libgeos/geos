@@ -161,7 +161,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
         EdgeEnd* e = *it;
         assert(e);
         Label& label = e->getLabel();
-        for(int geomi = 0; geomi < 2; ++geomi) {
+        for(uint32_t geomi = 0; geomi < 2; ++geomi) {
             if(label.isAnyNull(geomi)) {
                 Location loc = Location::NONE;
                 if(hasDimensionalCollapseEdge[geomi]) {
@@ -192,7 +192,7 @@ EdgeEndStar::computeEdgeEndLabels(
 
 /*public*/
 Location
-EdgeEndStar::getLocation(int geomIndex,
+EdgeEndStar::getLocation(uint32_t geomIndex,
                          const Coordinate& p, std::vector<GeometryGraph*>* geom)
 {
     // compute location only on demand
@@ -213,7 +213,7 @@ EdgeEndStar::isAreaLabelsConsistent(const GeometryGraph& geomGraph)
 
 /*private*/
 bool
-EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
+EdgeEndStar::checkAreaLabelsConsistent(uint32_t geomIndex)
 {
     // Since edges are stored in CCW order around the node,
     // As we move around the ring we move from the right to
@@ -262,7 +262,7 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 
 /*public*/
 void
-EdgeEndStar::propagateSideLabels(int geomIndex)
+EdgeEndStar::propagateSideLabels(uint32_t geomIndex)
 //throw(TopologyException *)
 {
     // Since edges are stored in CCW order around the node,

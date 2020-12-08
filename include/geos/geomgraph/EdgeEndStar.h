@@ -123,7 +123,7 @@ public:
 
     virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
 
-    virtual void propagateSideLabels(int geomIndex);
+    virtual void propagateSideLabels(uint32_t geomIndex);
     // throw(TopologyException *);
 
     //virtual int findIndex(EdgeEnd *eSearch);
@@ -150,7 +150,7 @@ protected:
 
 private:
 
-    virtual geom::Location getLocation(int geomIndex,
+    virtual geom::Location getLocation(uint32_t geomIndex,
                                        const geom::Coordinate& p,
                                        std::vector<GeometryGraph*>* geom);
 
@@ -162,7 +162,7 @@ private:
 
     virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
 
-    virtual bool checkAreaLabelsConsistent(int geomIndex);
+    virtual bool checkAreaLabelsConsistent(uint32_t geomIndex);
 
 };
 

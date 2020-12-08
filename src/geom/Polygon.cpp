@@ -473,7 +473,7 @@ Polygon::isRectangle() const
 
     // check vertices have correct values
     const Envelope& env = *getEnvelopeInternal();
-    for(int i = 0; i < 5; i++) {
+    for(uint32_t i = 0; i < 5; i++) {
         double x = seq.getX(i);
         if(!(x == env.getMinX() || x == env.getMaxX())) {
             return false;

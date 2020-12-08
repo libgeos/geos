@@ -151,7 +151,7 @@ bool
 DirectedEdge::isInteriorAreaEdge()
 {
     bool p_isInteriorAreaEdge = true;
-    for(int i = 0; i < 2; i++) {
+    for(uint32_t i = 0; i < 2; i++) {
         if(!(label.isArea(i)
                 && label.getLocation(i, Position::LEFT) == Location::INTERIOR
                 && label.getLocation(i, Position::RIGHT) == Location::INTERIOR)) {

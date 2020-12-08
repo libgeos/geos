@@ -58,7 +58,7 @@ GeometricShapeFactory::setCentre(const Coordinate& centre)
 }
 
 void
-GeometricShapeFactory::setNumPoints(int nNPts)
+GeometricShapeFactory::setNumPoints(uint32_t nNPts)
 {
     nPts = nNPts;
 }
@@ -86,7 +86,7 @@ GeometricShapeFactory::createRectangle()
 {
     int i;
     int ipt = 0;
-    int nSide = nPts / 4;
+    uint32_t nSide = nPts / 4;
     if(nSide < 1) {
         nSide = 1;
     }

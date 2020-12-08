@@ -148,7 +148,7 @@ DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*>* geom)
         Edge* e = ee->getEdge();
         assert(e);
         const Label& eLabel = e->getLabel();
-        for(int i = 0; i < 2; ++i) {
+        for(uint32_t i = 0; i < 2; ++i) {
             Location eLoc = eLabel.getLocation(i);
             if(eLoc == Location::INTERIOR || eLoc == Location::BOUNDARY) {
                 label.setLocation(i, Location::INTERIOR);

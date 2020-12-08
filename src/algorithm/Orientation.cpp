@@ -45,12 +45,13 @@ bool
 Orientation::isCCW(const geom::CoordinateSequence* ring)
 {
     // # of points without closing endpoint
-    int nPts = static_cast<int>(ring->size()) - 1;
+    int inPts = static_cast<int>(ring->size()) - 1;
     // sanity check
-    if (nPts < 3)
+    if (inPts < 3)
         throw util::IllegalArgumentException(
             "Ring has fewer than 4 points, so orientation cannot be determined");
 
+    uint32_t nPts = static_cast<uint32_t>(inPts);
     /**
      * Find first highest point after a lower point, if one exists
      * (e.g. a rising segment)

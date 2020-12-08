@@ -85,7 +85,7 @@ protected:
     const geom::GeometryFactory* geomFact; // externally owned
     const geom::PrecisionModel* precModel; // externally owned
     Dimensions dim;
-    int nPts;
+    uint32_t nPts;
 
     geom::Coordinate coord(double x, double y) const;
 
@@ -171,7 +171,7 @@ public:
     /**
      * \brief Sets the total number of points in the created Geometry
      */
-    void setNumPoints(int nNPts);
+    void setNumPoints(uint32_t nNPts);
 
     /**
      * \brief
