@@ -70,7 +70,7 @@ GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLe
  * @param nPts the number of points in the star
  */
 CoordinateSequence*
-GeometryTestFactory::createCircle(double basex, double basey, double size, int nPts)
+GeometryTestFactory::createCircle(double basex, double basey, double size, uint32_t nPts)
 {
     CoordinateArraySequence* pts = new CoordinateArraySequence(nPts + 1);
     double len = size / 2.0;
@@ -86,7 +86,7 @@ GeometryTestFactory::createCircle(double basex, double basey, double size, int n
 }
 
 Polygon*
-GeometryTestFactory::createCircle(GeometryFactory* fact, double basex, double basey, double size, int nPts)
+GeometryTestFactory::createCircle(GeometryFactory* fact, double basex, double basey, double size, uint32_t nPts)
 {
     CoordinateSequence* pts = createCircle(basex, basey, size, nPts);
     return fact->createPolygon(fact->createLinearRing(pts), nullptr);

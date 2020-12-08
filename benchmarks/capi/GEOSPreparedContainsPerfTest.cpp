@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 
     GEOSPreparedContainsPerfTest tester;
 
-    int n = std::atoi(argv[2]);
+    std::size_t n = static_cast<std::size_t>(std::atoi(argv[2]));
     std::cout << "Performing " << n << " point-in-polygon tests." << std::endl;
 
     std::string fname{argv[1]};
