@@ -128,6 +128,7 @@ public:
         , targetPM(pm)
         , removeCollapsed(true)
         , changePrecisionModel(false)
+        , useAreaReducer(false)
         , isPointwise(false)
     {}
 
@@ -136,12 +137,19 @@ public:
      * Create a reducer that will change the precision model of the
      * new reduced Geometry
      *
-     * @param gf the factory for the created Geometry.
+     * @param changeFactory the factory for the created Geometry.
      *           Its PrecisionModel will be used for the reduction.
      *           NOTE: ownership left to caller must be kept alive for
      *           the whole lifetime of the returned Geometry.
      */
-    GeometryPrecisionReducer(const geom::GeometryFactory& gf);
+    GeometryPrecisionReducer(const geom::GeometryFactory& changeFactory)
+        : newFactory(&changeFactory)
+        , targetPM(*(changeFactory.getPrecisionModel()))
+        , removeCollapsed(true)
+        , changePrecisionModel(false)
+        , useAreaReducer(false)
+        , isPointwise(false)
+    {}
 
     /**
      * Sets whether the reduction will result in collapsed components

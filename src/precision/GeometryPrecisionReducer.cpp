@@ -41,17 +41,6 @@ namespace precision { // geos.precision
 
 
 /* public */
-GeometryPrecisionReducer::GeometryPrecisionReducer(const GeometryFactory& changeFactory)
-    :
-    newFactory(&changeFactory),
-    targetPM(*(changeFactory.getPrecisionModel())),
-    removeCollapsed(true),
-    useAreaReducer(false),
-    isPointwise(false)
-{}
-
-
-/* public */
 std::unique_ptr<Geometry>
 GeometryPrecisionReducer::reduce(const Geometry& geom)
 {
