@@ -1,11 +1,13 @@
-Changes in 3.9.0beta1
-2020-11-27
+Changes in 3.9.0
+2020-12-09
 
 - New things:
+  - OverlayNG engine from JTS, now the default (Martin Davis, Paul Ramsey)
   - MaximumInscribedCircle and LargestEmptyCircle (JTS-530, Paul Ramsey)
-  - CAPI: Fixed precision overlay operations (Sandro Santilli, Paul Ramsey)
+  - CAPI: Fixed precision overlay operations (Sandro Santilli)
   - CAPI: GEOSPreparedNearestPoints (#1007, Sandro Santilli)
   - CAPI: GEOSPreparedDistance (#1066, Sandro Santilli)
+  - CAPI: GEOSGeom_setPrecision uses OverlayNG (Paul Ramsey)
   - SimpleSTRTree spatial index implementation (Paul Ramsey)
   - Add support for pkg-config for GEOS C API (#1073, Mike Taves)
 
