@@ -55,8 +55,7 @@ namespace noding { // geos::noding
  */
 class GEOS_DLL SegmentNodeList {
 private:
-    std::set<SegmentNode*, SegmentNodeLT> nodeMap;
-    std::deque<SegmentNode> nodeQue;
+    std::set<SegmentNode, SegmentNodeLT> nodeMap;
 
     // the parent edge
     const NodedSegmentString& edge;
@@ -131,7 +130,8 @@ public:
 
     friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
-    typedef std::set<SegmentNode*, SegmentNodeLT> container;
+    using container = decltype(nodeMap);
+
     typedef container::iterator iterator;
     typedef container::const_iterator const_iterator;
 
@@ -157,23 +157,12 @@ public:
      * @param intPt the intersection Coordinate, will be copied
      * @param segmentIndex
      */
-    SegmentNode* add(const geom::Coordinate& intPt, std::size_t segmentIndex);
+    void add(const geom::Coordinate& intPt, std::size_t segmentIndex);
 
-    SegmentNode*
+    void
     add(const geom::Coordinate* intPt, std::size_t segmentIndex)
     {
-        return add(*intPt, segmentIndex);
-    }
-
-    /*
-     * returns the set of SegmentNodes
-     */
-    //replaces iterator()
-    // TODO: obsolete this function
-    std::set<SegmentNode*, SegmentNodeLT>*
-    getNodes()
-    {
-        return &nodeMap;
+        add(*intPt, segmentIndex);
     }
 
     /// Return the number of nodes in this list

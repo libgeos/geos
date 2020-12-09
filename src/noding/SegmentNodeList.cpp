@@ -50,24 +50,11 @@ static Profiler* profiler = Profiler::instance();
 #endif
 
 
-SegmentNode*
+void
 SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
 {
-    nodeQue.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    SegmentNode* eiNew = &(nodeQue.back());
-
-    std::pair<SegmentNodeList::iterator, bool> p = nodeMap.insert(eiNew);
-    if(p.second) {    // new SegmentNode inserted
-        return eiNew;
-    }
-    else {
-        // sanity check
-        assert(eiNew->coord.equals2D(intPt));
-        nodeQue.pop_back();
-        return *(p.first);
-    }
+    nodeMap.emplace(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
 }
-
 
 SegmentNodeList::~SegmentNodeList()
 {
@@ -126,10 +113,10 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
     // there should always be at least two entries in the list,
     // since the endpoints are nodes
     iterator it = begin();
-    SegmentNode* eiPrev = *it;
+    const SegmentNode* eiPrev = &(*it);
     ++it;
     for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
+        const SegmentNode* ei = &(*it);
         bool isCollapsed = findCollapseIndex(*eiPrev, *ei,
                                              collapsedVertexIndex);
         if(isCollapsed) {
@@ -185,11 +172,11 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
     // there should always be at least two entries in the list
     // since the endpoints are nodes
     iterator it = begin();
-    SegmentNode* eiPrev = *it;
+    const SegmentNode* eiPrev = &(*it);
     assert(eiPrev);
     ++it;
     for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
+        const SegmentNode* ei = &(*it);
         assert(ei);
 
         if(! ei->compareTo(*eiPrev)) {
@@ -295,9 +282,9 @@ SegmentNodeList::getSplitCoordinates()
     std::unique_ptr<std::vector<Coordinate>> coordList(new std::vector<Coordinate>);
     // there should always be at least two entries in the list, since the endpoints are nodes
     iterator it = begin();
-    SegmentNode* eiPrev = *it;
+    const SegmentNode* eiPrev = &(*it);
     for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
+        const SegmentNode* ei = &(*it);
         addEdgeCoordinates(eiPrev, ei, *coordList);
         eiPrev = ei;
     }
@@ -323,8 +310,8 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 {
     os << "Intersections: (" << nlist.nodeMap.size() << "):" << std::endl;
 
-    for(const SegmentNode* ei: nlist.nodeMap) {
-        os << " " << *ei;
+    for(const SegmentNode& ei: nlist.nodeMap) {
+        os << " " << ei;
     }
     return os;
 }

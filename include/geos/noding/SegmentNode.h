@@ -103,7 +103,7 @@ public:
      * @return 1 this EdgeIntersection is located after the
      *           argument location
      */
-    int compareTo(const SegmentNode& other);
+    int compareTo(const SegmentNode& other) const;
 
     //string print() const;
 };
@@ -115,6 +115,12 @@ struct GEOS_DLL  SegmentNodeLT {
     operator()(SegmentNode* s1, SegmentNode* s2) const
     {
         return s1->compareTo(*s2) < 0;
+    }
+
+    bool
+    operator()(const SegmentNode& s1, const SegmentNode& s2) const
+    {
+        return s1.compareTo(s2) < 0;
     }
 };
 

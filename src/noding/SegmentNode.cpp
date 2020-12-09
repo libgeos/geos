@@ -73,7 +73,7 @@ SegmentNode::isEndPoint(unsigned int maxSegmentIndex) const
  * @return 1 this EdgeIntersection is located after the argument location
  */
 int
-SegmentNode::compareTo(const SegmentNode& other)
+SegmentNode::compareTo(const SegmentNode& other) const
 {
     if(segmentIndex < other.segmentIndex) {
         return -1;
