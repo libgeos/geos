@@ -97,6 +97,7 @@ NodingTestUtil::nodeValidated(const Geometry* geom1, const Geometry* geom2, Node
     for (auto nss: *nodedList) {
         delete nss;
     }
+    delete nodedList;
 
     return lineGeom;
 }
