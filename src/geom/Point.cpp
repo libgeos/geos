@@ -68,6 +68,8 @@ Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     } else {
         empty2d = true;
     }
+
+
 }
 
 Point::Point(const Coordinate & c, const GeometryFactory* factory) :
@@ -103,7 +105,12 @@ Point::getNumPoints() const
 bool
 Point::isEmpty() const
 {
-    return empty2d || empty3d;
+    if (empty2d || empty3d) return true;
+    const Coordinate& c = coordinates.getAt(0);
+    if (std::isnan(c.x) && std::isnan(c.y))
+        return true;
+    else
+        return false;
 }
 
 bool

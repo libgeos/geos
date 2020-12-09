@@ -12,6 +12,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/constants.h>
 // std
 #include <memory>
 #include <string>
@@ -577,6 +578,26 @@ void object::test<45>
     ensure_equals(seq3.getDimension(), 3u);
     std::unique_ptr<geos::geom::Point> pt3(factory_->createPoint(seq3));
     ensure_equals(pt3->getCoordinateDimension(), 3);
+}
+
+
+
+// Test hand-build POINT(NaN NaN)
+template<>
+template<>
+void object::test<46>
+()
+{
+    using geos::geom::Coordinate;
+    using geos::geom::CoordinateArraySequence;
+
+    CoordinateArraySequence* coords = new CoordinateArraySequence();
+    ensure(coords != nullptr);
+    coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
+
+    PointAutoPtr point(factory_->createPoint(coords));
+    ensure("point->isEmpty()", point->isEmpty());
+    ensure("point->getCoordinateDimension() == 2", point->getCoordinateDimension() == 2);
 }
 
 } // namespace tut

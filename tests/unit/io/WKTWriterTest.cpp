@@ -8,8 +8,11 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequence.h>
 // std
 #include <sstream>
 #include <string>
@@ -181,6 +184,29 @@ void object::test<6>
     std::string result = wktwriter.write(col.get());
     ensure_equals(result, std::string("MULTIPOINT (EMPTY, 1 2)"));
 }
+
+
+template<>
+template<>
+void object::test<7>
+()
+{
+    using geos::geom::Coordinate;
+    using geos::geom::CoordinateArraySequence;
+    using geos::geom::Point;
+
+    PrecisionModel pm;
+    auto factory_ = GeometryFactory::create(&pm);
+    CoordinateArraySequence* coords = new CoordinateArraySequence();
+    ensure(coords != nullptr);
+
+    coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
+    std::unique_ptr<Point> point(factory_->createPoint(coords));
+
+    std::string result = wktwriter.write(point.get());
+    ensure_equals(result, std::string("POINT EMPTY"));
+}
+
 
 } // namespace tut
 
