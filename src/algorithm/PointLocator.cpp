@@ -3,12 +3,13 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2020 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2005-2011 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -129,6 +130,7 @@ int
 PointLocator::locate(const Coordinate& p, const LineString *l)
 {
 	const CoordinateSequence* pt=l->getCoordinatesRO();
+	if ( pt->isEmpty() ) return Location::EXTERIOR;
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
 			return Location::BOUNDARY;
@@ -147,7 +149,7 @@ PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing *ring)
 
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
 
-	if (CGAlgorithms::isOnLine(p,cl)) 
+	if (CGAlgorithms::isOnLine(p,cl))
 		return Location::BOUNDARY;
 	if (CGAlgorithms::isPointInRing(p,cl))
 		return Location::INTERIOR;
