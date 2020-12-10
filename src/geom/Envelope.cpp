@@ -36,8 +36,6 @@
 #include <iostream>
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -60,20 +58,20 @@ bool
 Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
                      const Coordinate& q1, const Coordinate& q2)
 {
-    double minq = min(q1.x, q2.x);
-    double maxq = max(q1.x, q2.x);
-    double minp = min(p1.x, p2.x);
-    double maxp = max(p1.x, p2.x);
+    double minq = std::min(q1.x, q2.x);
+    double maxq = std::max(q1.x, q2.x);
+    double minp = std::min(p1.x, p2.x);
+    double maxp = std::max(p1.x, p2.x);
     if(minp > maxq) {
         return false;
     }
     if(maxp < minq) {
         return false;
     }
-    minq = min(q1.y, q2.y);
-    maxq = max(q1.y, q2.y);
-    minp = min(p1.y, p2.y);
-    maxp = max(p1.y, p2.y);
+    minq = std::min(q1.y, q2.y);
+    maxq = std::max(q1.y, q2.y);
+    minp = std::min(p1.y, p2.y);
+    maxp = std::max(p1.y, p2.y);
     if(minp > maxq) {
         return false;
     }
@@ -112,17 +110,17 @@ Envelope::intersects(const Coordinate& a, const Coordinate& b) const
 }
 
 /*public*/
-Envelope::Envelope(const string& str)
+Envelope::Envelope(const std::string& str)
 {
     // The string should be in the format:
     // Env[7.2:2.3,7.1:8.2]
 
     // extract out the values between the [ and ] characters
-    string::size_type index = str.find("[");
-    string coordString = str.substr(index + 1, str.size() - 1 - 1);
+    std::string::size_type index = str.find("[");
+    std::string coordString = str.substr(index + 1, str.size() - 1 - 1);
 
     // now split apart the string on : and , characters
-    vector<string> values = split(coordString, ":,");
+    std::vector<std::string> values = split(coordString, ":,");
 
     // create a new envelopet
     init(strtod(values[0].c_str(), nullptr),
@@ -232,10 +230,10 @@ operator<< (std::ostream& os, const Envelope& o)
 
 
 /*public*/
-string
+std::string
 Envelope::toString() const
 {
-    ostringstream s;
+    std::ostringstream s;
     s << *this;
     return s.str();
 }
@@ -263,7 +261,7 @@ Envelope::hashCode() const
     auto hash = std::hash<double>{};
 
     //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-    size_t result = 17;
+    std::size_t result = 17;
     result = 37 * result + hash(minx);
     result = 37 * result + hash(maxx);
     result = 37 * result + hash(miny);
@@ -272,16 +270,16 @@ Envelope::hashCode() const
 }
 
 /*public static*/
-vector<string>
-Envelope::split(const string& str, const string& delimiters)
+std::vector<std::string>
+Envelope::split(const std::string& str, const std::string& delimiters)
 {
-    vector<string> tokens;
+    std::vector<std::string> tokens;
 
     // Find first "non-delimiter".
-    string::size_type lastPos = 0;
-    string::size_type pos = str.find_first_of(delimiters, lastPos);
+    std::string::size_type lastPos = 0;
+    std::string::size_type pos = str.find_first_of(delimiters, lastPos);
 
-    while(string::npos != pos || string::npos != lastPos) {
+    while(std::string::npos != pos || std::string::npos != lastPos) {
         // Found a token, add it to the vector.
         tokens.push_back(str.substr(lastPos, pos - lastPos));
 

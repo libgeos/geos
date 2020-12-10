@@ -23,7 +23,7 @@
 #include <geos/linearref/LocationIndexOfLine.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
 
-using namespace std;
+
 
 using namespace geos::geom;
 

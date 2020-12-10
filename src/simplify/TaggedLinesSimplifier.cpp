@@ -34,7 +34,7 @@
 #endif
 
 using namespace geos::geom;
-using namespace std;
+
 
 namespace geos {
 namespace simplify { // geos::simplify

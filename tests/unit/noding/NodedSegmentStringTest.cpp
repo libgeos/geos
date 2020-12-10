@@ -73,7 +73,7 @@ struct test_nodedsegmentstring_data {
         NodedSegmentString nss(line->getCoordinates().release(), 0);
         std::unique_ptr<CoordinateSequence> node = pts->getCoordinates();
 
-        for (size_t i = 0, n=node->size(); i < n; ++i) {
+        for (std::size_t i = 0, n=node->size(); i < n; ++i) {
           nss.addIntersection(node->getAt(i), segmentIndex.at(i));
         }
 

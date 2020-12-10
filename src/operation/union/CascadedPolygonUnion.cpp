@@ -270,7 +270,7 @@ std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
 {
     using namespace geom;
-    using namespace std;
+
 
     if(g->isPolygonal()) {
         return g;
@@ -283,14 +283,14 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
         return std::unique_ptr<Geometry>(polygons[0]->clone());
     }
 
-    typedef vector<Geometry*> GeomVect;
+    typedef std::vector<Geometry*> GeomVect;
 
     Polygon::ConstVect::size_type n = polygons.size();
     GeomVect* newpolys = new GeomVect(n);
     for(Polygon::ConstVect::size_type i = 0; i < n; ++i) {
         (*newpolys)[i] = polygons[i]->clone().release();
     }
-    return unique_ptr<Geometry>(g->getFactory()->createMultiPolygon(newpolys));
+    return std::unique_ptr<Geometry>(g->getFactory()->createMultiPolygon(newpolys));
 }
 
 /************************************************************************/

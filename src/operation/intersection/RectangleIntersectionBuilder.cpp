@@ -276,7 +276,7 @@ distance(const Rectangle& rect,
  * \brief Reverse given segment in a coordinate vector
  */
 void
-reverse_points(std::vector<Coordinate>& v, size_t start, size_t end)
+reverse_points(std::vector<Coordinate>& v, std::size_t start, std::size_t end)
 {
     geom::Coordinate p1;
     geom::Coordinate p2;
@@ -302,9 +302,9 @@ normalize_ring(std::vector<Coordinate>& ring)
 
     // Find the "smallest" coordinate
 
-    size_t best_pos = 0;
+    std::size_t best_pos = 0;
     auto n = ring.size();
-    for(size_t pos = 0; pos < n; ++pos) {
+    for(std::size_t pos = 0; pos < n; ++pos) {
         // TODO: use CoordinateLessThan ?
         if(ring[pos].x < ring[best_pos].x) {
             best_pos = pos;
@@ -466,7 +466,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
                                cs[0].x,
                                cs[0].y);
                 // above function adds the 1st point
-                for(size_t i = 1; i < cs.size(); ++i) {
+                for(std::size_t i = 1; i < cs.size(); ++i) {
                     ring->push_back(cs[i]);
                 }
                 //ring->addSubLineString(line,1);

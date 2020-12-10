@@ -23,7 +23,7 @@
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-//#include <geos/geom/Geometry.h> // for unique_ptr destructor
+//#include <geos/geom/Geometry.h> // for std::unique_ptr destructor
 //#include <geos/geom/GeometryFactory.h>
 //#include <geos/geom/CoordinateSequenceFactory.h>
 
@@ -105,7 +105,7 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
         std::cerr << "single segment, no flattening"
                   << std::endl;
 #endif
-        unique_ptr<TaggedLineSegment> newSeg(new
+        std::unique_ptr<TaggedLineSegment> newSeg(new
                                              TaggedLineSegment(*(line->getSegment(i))));
 
         line->addToResult(std::move(newSeg));
@@ -155,7 +155,7 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 
     if(isValidToSimplify) {
 
-        unique_ptr<TaggedLineSegment> newSeg = flatten(i, j);
+        std::unique_ptr<TaggedLineSegment> newSeg = flatten(i, j);
 
 #if GEOS_DEBUG
         std::cerr << "isValidToSimplify, adding seg "
@@ -175,13 +175,13 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 
 
 /*private*/
-unique_ptr<TaggedLineSegment>
+std::unique_ptr<TaggedLineSegment>
 TaggedLineStringSimplifier::flatten(std::size_t start, std::size_t end)
 {
     // make a new segment for the simplified geometry
     const Coordinate& p0 = linePts->getAt(start);
     const Coordinate& p1 = linePts->getAt(end);
-    unique_ptr<TaggedLineSegment> newSeg(new TaggedLineSegment(p0, p1));
+    std::unique_ptr<TaggedLineSegment> newSeg(new TaggedLineSegment(p0, p1));
     // update the indexes
     remove(line, start, end);
     outputIndex->add(newSeg.get());
@@ -211,7 +211,7 @@ bool
 TaggedLineStringSimplifier::hasBadOutputIntersection(
     const LineSegment& candidateSeg)
 {
-    unique_ptr< vector<LineSegment*> > querySegs =
+    std::unique_ptr< std::vector<LineSegment*> > querySegs =
         outputIndex->query(&candidateSeg);
 
     for(const LineSegment* querySeg : *querySegs) {
@@ -240,7 +240,7 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
     const pair<std::size_t, std::size_t>& sectionIndex,
     const LineSegment& candidateSeg)
 {
-    unique_ptr< vector<LineSegment*> > querySegs =
+    std::unique_ptr< std::vector<LineSegment*> > querySegs =
         inputIndex->query(&candidateSeg);
 
     for(const LineSegment* ls : *querySegs) {

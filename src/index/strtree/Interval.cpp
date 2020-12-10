@@ -20,7 +20,7 @@
 #include <typeinfo>
 #include <cassert>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -42,8 +42,8 @@ Interval::getCentre()
 Interval*
 Interval::expandToInclude(const Interval* other)
 {
-    imax = max(imax, other->imax);
-    imin = min(imin, other->imin);
+    imax = std::max(imax, other->imax);
+    imin = std::min(imin, other->imin);
     return this;
 }
 

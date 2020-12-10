@@ -40,7 +40,7 @@ group test_geometrycomponentfilter_group("geos::geom::GeometryComponentFilter");
 class NumPointsInFirstNComponents : public geos::geom::GeometryComponentFilter {
 public:
 
-    NumPointsInFirstNComponents(size_t n) : components_remaining(n), num_points(0) {}
+    NumPointsInFirstNComponents(std::size_t n) : components_remaining(n), num_points(0) {}
 
     void
     filter_ro(const geos::geom::Geometry* g) override {
@@ -53,7 +53,7 @@ public:
         filter_ro(g);
     }
 
-    size_t numPoints() {
+    std::size_t numPoints() {
         return num_points;
     }
 
@@ -61,8 +61,8 @@ public:
         return components_remaining == 0;
     }
 private:
-    size_t components_remaining;
-    size_t num_points;
+    std::size_t components_remaining;
+    std::size_t num_points;
 };
 
 // Split components into two categories: Lineal and all other types

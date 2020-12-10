@@ -120,11 +120,11 @@ private:
      * @return the next non-deleted index, if any
      * @return inputLine.size() if there are no more non-deleted indices
      */
-    size_t findNextNonDeletedIndex(size_t index) const;
+    std::size_t findNextNonDeletedIndex(std::size_t index) const;
 
     std::unique_ptr<geom::CoordinateSequence> collapseLine() const;
 
-    bool isDeletable(size_t i0, size_t i1, size_t i2, double distanceTol) const;
+    bool isDeletable(std::size_t i0, std::size_t i1, std::size_t i2, double distanceTol) const;
 
     bool isShallowConcavity(const geom::Coordinate& p0,
                             const geom::Coordinate& p1,
@@ -146,7 +146,7 @@ private:
      */
     bool isShallowSampled(const geom::Coordinate& p0,
                           const geom::Coordinate& p2,
-                          size_t i0, size_t i2, double distanceTol) const;
+                          std::size_t i0, std::size_t i2, double distanceTol) const;
 
     bool isShallow(const geom::Coordinate& p0,
                    const geom::Coordinate& p1,

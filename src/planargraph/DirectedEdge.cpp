@@ -22,7 +22,7 @@
 #include <vector>
 #include <typeinfo>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -30,18 +30,18 @@ namespace planargraph {
 
 /*public*/
 void
-DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges, vector<Edge*>& edges)
+DirectedEdge::toEdges(std::vector<DirectedEdge*>& dirEdges, std::vector<Edge*>& edges)
 {
-    for(size_t i = 0, n = dirEdges.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = dirEdges.size(); i < n; ++i) {
         edges.push_back(dirEdges[i]->parentEdge);
     }
 }
 
 /*public*/
-vector<Edge*>*
-DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges)
+std::vector<Edge*>*
+DirectedEdge::toEdges(std::vector<DirectedEdge*>& dirEdges)
 {
-    vector<Edge*>* edges = new vector<Edge*>();
+    std::vector<Edge*>* edges = new std::vector<Edge*>();
     toEdges(dirEdges, *edges);
     return edges;
 }
@@ -166,10 +166,10 @@ DirectedEdge::compareDirection(const DirectedEdge* e) const
 }
 
 /*public*/
-string
+std::string
 DirectedEdge::print() const
 {
-    ostringstream s;
+    std::ostringstream s;
     s << *this;
     return s.str();
 }

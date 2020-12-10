@@ -42,7 +42,7 @@ Area::ofRing(const geom::CoordinateSequence* ring)
 double
 Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
 {
-    size_t rlen = ring.size();
+    std::size_t rlen = ring.size();
     if(rlen < 3) {
         return 0.0;
     }
@@ -53,7 +53,7 @@ Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
      * http://en.wikipedia.org/wiki/Shoelace_formula
      */
     double x0 = ring[0].x;
-    for(size_t i = 1; i < rlen - 1; i++) {
+    for(std::size_t i = 1; i < rlen - 1; i++) {
         double x = ring[i].x - x0;
         double y1 = ring[i + 1].y;
         double y2 = ring[i - 1].y;
@@ -66,7 +66,7 @@ Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
 double
 Area::ofRingSigned(const geom::CoordinateSequence* ring)
 {
-    size_t n = ring->size();
+    std::size_t n = ring->size();
     if(n < 3) {
         return 0.0;
     }
@@ -80,7 +80,7 @@ Area::ofRingSigned(const geom::CoordinateSequence* ring)
     double x0 = p1.x;
     p2.x -= x0;
     double sum = 0.0;
-    for(size_t i = 1; i < n - 1; i++) {
+    for(std::size_t i = 1; i < n - 1; i++) {
         p0.y = p1.y;
         p1.x = p2.x;
         p1.y = p2.y;

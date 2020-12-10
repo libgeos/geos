@@ -24,8 +24,6 @@
 # include <geos/geom/Coordinate.inl>
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -37,10 +35,10 @@ Coordinate::getNull()
     return _nullCoord;
 }
 
-string
+std::string
 Coordinate::toString() const
 {
-    ostringstream s;
+    std::ostringstream s;
     s << std::setprecision(17) << *this;
     return s.str();
 }

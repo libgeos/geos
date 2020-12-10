@@ -38,7 +38,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 //using namespace geos::planargraph;
 using namespace geos::geom;
 
@@ -54,7 +54,7 @@ LineMergeGraph::addEdge(const LineString* lineString)
     }
 
 #if GEOS_DEBUG
-    cerr << "Adding LineString " << lineString->toString() << endl;
+    std::cerr << "Adding LineString " << lineString->toString() << std::endl;
 #endif
 
     auto coordinates = valid::RepeatedPointRemover::removeRepeatedPoints(lineString->getCoordinatesRO());
@@ -72,8 +72,8 @@ LineMergeGraph::addEdge(const LineString* lineString)
     planargraph::Node* startNode = getNode(startCoordinate);
     planargraph::Node* endNode = getNode(endCoordinate);
 #if GEOS_DEBUG
-    cerr << " startNode: " << *startNode << endl;
-    cerr << " endNode: " << *endNode << endl;
+    std::cerr << " startNode: " << *startNode << std::endl;
+    std::cerr << " endNode: " << *endNode << std::endl;
 #endif
 
     planargraph::DirectedEdge* directedEdge0 = new LineMergeDirectedEdge(startNode,
@@ -91,15 +91,15 @@ LineMergeGraph::addEdge(const LineString* lineString)
     edge->setDirectedEdges(directedEdge0, directedEdge1);
 
 #if GEOS_DEBUG
-    cerr << " planargraph::Edge: " << *edge << endl;
+    std::cerr << " planargraph::Edge: " << *edge << std::endl;
 #endif
 
     add(edge);
 
 #if GEOS_DEBUG
-    cerr << " After addition to the graph:" << endl;
-    cerr << "  startNode: " << *startNode << endl;
-    cerr << "  endNode: " << *endNode << endl;
+    std::cerr << " After addition to the graph:" << std::endl;
+    std::cerr << "  startNode: " << *startNode << std::endl;
+    std::cerr << "  endNode: " << *endNode << std::endl;
 #endif
 
 }

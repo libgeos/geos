@@ -52,7 +52,7 @@ namespace valid {
 class IndexedNestedShellTester {
 
 public:
-    IndexedNestedShellTester(const geomgraph::GeometryGraph& g, size_t initialCapacity);
+    IndexedNestedShellTester(const geomgraph::GeometryGraph& g, std::size_t initialCapacity);
 
     void add(const geom::Polygon& p) {
         polys.push_back(&p);

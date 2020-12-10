@@ -329,13 +329,13 @@ extern "C" {
 
 // Remember to free the result!
     unsigned char*
-    GEOSGeomToWKB_buf(const Geometry* g, size_t* size)
+    GEOSGeomToWKB_buf(const Geometry* g, std::size_t* size)
     {
         return GEOSGeomToWKB_buf_r(handle, g, size);
     }
 
     Geometry*
-    GEOSGeomFromWKB_buf(const unsigned char* wkb, size_t size)
+    GEOSGeomFromWKB_buf(const unsigned char* wkb, std::size_t size)
     {
         return GEOSGeomFromWKB_buf_r(handle, wkb, size);
     }
@@ -343,13 +343,13 @@ extern "C" {
     /* Read/write wkb hex values.  Returned geometries are
        owned by the caller.*/
     unsigned char*
-    GEOSGeomToHEX_buf(const Geometry* g, size_t* size)
+    GEOSGeomToHEX_buf(const Geometry* g, std::size_t* size)
     {
         return GEOSGeomToHEX_buf_r(handle, g, size);
     }
 
     Geometry*
-    GEOSGeomFromHEX_buf(const unsigned char* hex, size_t size)
+    GEOSGeomFromHEX_buf(const unsigned char* hex, std::size_t size)
     {
         return GEOSGeomFromHEX_buf_r(handle, hex, size);
     }
@@ -1146,13 +1146,13 @@ extern "C" {
 
 
     Geometry*
-    GEOSWKBReader_read(WKBReader* reader, const unsigned char* wkb, size_t size)
+    GEOSWKBReader_read(WKBReader* reader, const unsigned char* wkb, std::size_t size)
     {
         return GEOSWKBReader_read_r(handle, reader, wkb, size);
     }
 
     Geometry*
-    GEOSWKBReader_readHEX(WKBReader* reader, const unsigned char* hex, size_t size)
+    GEOSWKBReader_readHEX(WKBReader* reader, const unsigned char* hex, std::size_t size)
     {
         return GEOSWKBReader_readHEX_r(handle, reader, hex, size);
     }
@@ -1173,14 +1173,14 @@ extern "C" {
 
     /* The caller owns the result */
     unsigned char*
-    GEOSWKBWriter_write(WKBWriter* writer, const Geometry* geom, size_t* size)
+    GEOSWKBWriter_write(WKBWriter* writer, const Geometry* geom, std::size_t* size)
     {
         return GEOSWKBWriter_write_r(handle, writer, geom, size);
     }
 
     /* The caller owns the result */
     unsigned char*
-    GEOSWKBWriter_writeHEX(WKBWriter* writer, const Geometry* geom, size_t* size)
+    GEOSWKBWriter_writeHEX(WKBWriter* writer, const Geometry* geom, std::size_t* size)
     {
         return GEOSWKBWriter_writeHEX_r(handle, writer, geom, size);
     }
@@ -1311,7 +1311,7 @@ extern "C" {
     }
 
     GEOSSTRtree*
-    GEOSSTRtree_create(size_t nodeCapacity)
+    GEOSSTRtree_create(std::size_t nodeCapacity)
     {
         return GEOSSTRtree_create_r(handle, nodeCapacity);
     }

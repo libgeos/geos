@@ -27,7 +27,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -61,7 +61,7 @@ void
 NodingValidator::checkCollapses(const SegmentString& ss) const
 {
     const CoordinateSequence& pts = *(ss.getCoordinates());
-    for(size_t i = 0, n = pts.size() - 2; i < n; ++i) {
+    for(std::size_t i = 0, n = pts.size() - 2; i < n; ++i) {
         checkCollapse(pts[i], pts[i + 1], pts[i + 2]);
     }
 }
@@ -104,8 +104,8 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 {
     const CoordinateSequence& pts0 = *(ss0.getCoordinates());
     const CoordinateSequence& pts1 = *(ss1.getCoordinates());
-    for(size_t i0 = 0, n0 = pts0.size(); i0 < n0 - 1; ++i0) {
-        for(size_t i1 = 0, n1 = pts1.size(); i1 < n1 - 1; ++i1) {
+    for(std::size_t i0 = 0, n0 = pts0.size(); i0 < n0 - 1; ++i0) {
+        for(std::size_t i1 = 0, n1 = pts1.size(); i1 < n1 - 1; ++i1) {
             checkInteriorIntersections(ss0, i0, ss1, i1);
         }
     }
@@ -115,8 +115,8 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 /* private */
 void
 NodingValidator::checkInteriorIntersections(
-    const SegmentString& e0, size_t segIndex0,
-    const SegmentString& e1, size_t segIndex1)
+    const SegmentString& e0, std::size_t segIndex0,
+    const SegmentString& e1, std::size_t segIndex1)
 {
     if(&e0 == &e1 && segIndex0 == segIndex1) {
         return;
@@ -166,9 +166,9 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
             ++it) {
         const SegmentString* ss0 = *it;
         const CoordinateSequence& pts = *(ss0->getCoordinates());
-        for(size_t j = 1, n = pts.size() - 1; j < n; ++j) {
+        for(std::size_t j = 1, n = pts.size() - 1; j < n; ++j) {
             if(pts[j].equals(testPt)) {
-                stringstream s;
+                std::stringstream s;
                 s << "found endpt/interior pt intersection ";
                 s << "at index " << j << " :pt " << testPt;
                 throw util::TopologyException(s.str());
@@ -186,7 +186,7 @@ bool
 NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
         const Coordinate& p0, const Coordinate& p1) const
 {
-    for(size_t i = 0, n = aLi.getIntersectionNum(); i < n; ++i) {
+    for(std::size_t i = 0, n = aLi.getIntersectionNum(); i < n; ++i) {
         const Coordinate& intPt = aLi.getIntersection(i);
         if(!(intPt == p0 || intPt == p1)) {
             return true;

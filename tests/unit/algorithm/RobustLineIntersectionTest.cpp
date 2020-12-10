@@ -57,7 +57,7 @@ struct test_robustlineintersection_data {
      */
     void
     checkIntersection(const std::vector<Coordinate>& pt,
-                      size_t expectedIntersectionNum,
+                      std::size_t expectedIntersectionNum,
                       const std::vector<Coordinate>& intPt,
                       double distanceTolerance)
     {
@@ -139,7 +139,7 @@ struct test_robustlineintersection_data {
         std::unique_ptr<CoordinateSequence> cs(g->getCoordinates());
 
         std::vector<Coordinate> intPt;
-        for(size_t i = 0; i < cs->size(); ++i) {
+        for(std::size_t i = 0; i < cs->size(); ++i) {
             intPt.push_back(cs->getAt(i));
         }
 

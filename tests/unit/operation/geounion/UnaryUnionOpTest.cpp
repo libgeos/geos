@@ -43,7 +43,7 @@ struct test_unaryuniontest_data {
     void
     delAll(std::vector<Geom*>& geoms)
     {
-        for(size_t i = 0; i < geoms.size(); ++i) {
+        for(std::size_t i = 0; i < geoms.size(); ++i) {
             delete geoms[i];
         }
     }

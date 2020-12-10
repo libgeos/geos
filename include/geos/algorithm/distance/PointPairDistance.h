@@ -71,7 +71,7 @@ public:
     }
 
     const geom::Coordinate&
-    getCoordinate(size_t i) const
+    getCoordinate(std::size_t i) const
     {
         assert(i < pt.size());
         return pt[i];

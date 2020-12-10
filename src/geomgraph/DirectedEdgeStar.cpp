@@ -38,7 +38,6 @@
 #define GEOS_DEBUG 1
 #endif
 
-//using namespace std;
 using namespace geos::geom;
 
 namespace geos {

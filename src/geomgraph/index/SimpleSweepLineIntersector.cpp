@@ -22,7 +22,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geomgraph/Edge.h>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -30,7 +30,7 @@ namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
 SimpleSweepLineIntersector::SimpleSweepLineIntersector():
-    //events(new vector<SweepLineEvent*>()),
+    //events(new std::vector<SweepLineEvent*>()),
     nOverlaps(0)
 {
 }
@@ -43,7 +43,7 @@ SimpleSweepLineIntersector::~SimpleSweepLineIntersector()
 }
 
 void
-SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
+SimpleSweepLineIntersector::computeIntersections(std::vector<Edge*>* edges,
         SegmentIntersector* si, bool testAllSegments)
 {
     if(testAllSegments) {
@@ -56,7 +56,7 @@ SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
 }
 
 void
-SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges0, vector<Edge*>* edges1, SegmentIntersector* si)
+SimpleSweepLineIntersector::computeIntersections(std::vector<Edge*>* edges0, std::vector<Edge*>* edges1, SegmentIntersector* si)
 {
     add(edges0, edges0);
     add(edges1, edges1);
@@ -64,7 +64,7 @@ SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges0, vector<E
 }
 
 void
-SimpleSweepLineIntersector::add(vector<Edge*>* edges)
+SimpleSweepLineIntersector::add(std::vector<Edge*>* edges)
 {
     for(unsigned int i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
@@ -74,7 +74,7 @@ SimpleSweepLineIntersector::add(vector<Edge*>* edges)
 }
 
 void
-SimpleSweepLineIntersector::add(vector<Edge*>* edges, void* edgeSet)
+SimpleSweepLineIntersector::add(std::vector<Edge*>* edges, void* edgeSet)
 {
     for(unsigned int i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
@@ -126,7 +126,7 @@ SimpleSweepLineIntersector::computeIntersections(SegmentIntersector* si)
 }
 
 void
-SimpleSweepLineIntersector::processOverlaps(size_t start, size_t end, SweepLineEvent* ev0,
+SimpleSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end, SweepLineEvent* ev0,
         SegmentIntersector* si)
 {
 

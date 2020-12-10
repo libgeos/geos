@@ -43,7 +43,7 @@ using std::cerr;
 using std::endl;
 #endif
 
-//using namespace std;
+//
 using namespace geos::geom;
 
 namespace geos {
@@ -78,24 +78,24 @@ LineStringSnapper::findVertexToSnap(
         Coordinate& c0 = *from;
 
 #if GEOS_DEBUG
-        cerr << " Checking vertex " << c0 << endl;
+        std::cerr << " Checking vertex " << c0 << std::endl;
 #endif
 
         double dist = c0.distance(snapPt);
         if(dist >= minDist) {
 #if GEOS_DEBUG
-            cerr << "   snap point distance " << dist
+            std::cerr << "   snap point distance " << dist
                  << " not smaller than tolerance "
                  << snapTolerance << " or previous closest "
-                 << minDist << endl;
+                 << minDist << std::endl;
 #endif
             continue;
         }
 
 #if GEOS_DEBUG
-        cerr << "   snap point distance " << dist << " within tolerance "
+        std::cerr << "   snap point distance " << dist << " within tolerance "
              << snapTolerance << " and closer than previous candidate "
-             << minDist << endl;
+             << minDist << std::endl;
 #endif
 
         if(dist == 0.0) {
@@ -122,7 +122,7 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
     }
 
 #if GEOS_DEBUG
-    cerr << "Snapping vertices of: " << srcCoords << endl;
+    std::cerr << "Snapping vertices of: " << srcCoords << std::endl;
 #endif
 
     for(Coordinate::ConstVect::const_iterator
@@ -134,7 +134,7 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
         const Coordinate& snapPt = *(*it);
 
 #if GEOS_DEBUG
-        cerr << "Checking for a vertex to snap to snapPt " << snapPt << endl;
+        std::cerr << "Checking for a vertex to snap to snapPt " << snapPt << std::endl;
 #endif
 
         CoordinateList::iterator too_far = srcCoords.end();
@@ -145,13 +145,13 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
             findVertexToSnap(snapPt, srcCoords.begin(), too_far);
         if(vertpos == too_far) {
 #if GEOS_DEBUG
-            cerr << " No vertex to snap" << endl;
+            std::cerr << " No vertex to snap" << std::endl;
 #endif
             continue;
         }
 
 #if GEOS_DEBUG
-        cerr << " Vertex to be snapped found, snapping" << endl;
+        std::cerr << " Vertex to be snapped found, snapping" << std::endl;
 #endif
         *vertpos = snapPt;
 
@@ -160,19 +160,19 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
             vertpos = srcCoords.end();
             --vertpos;
 #if GEOS_DEBUG
-            cerr << " Snapped vertex was first in a closed line, also snapping last" << endl;
+            std::cerr << " Snapped vertex was first in a closed line, also snapping last" << std::endl;
 #endif
             *vertpos = snapPt;
         }
 
 #if GEOS_DEBUG
-        cerr << " After snapping of vertex " << snapPt << ", srcCoors are: " << srcCoords << endl;
+        std::cerr << " After snapping of vertex " << snapPt << ", srcCoors are: " << srcCoords << std::endl;
 #endif
 
     }
 
 #if GEOS_DEBUG
-    cerr << " After vertices snapping, srcCoors are: " << srcCoords << endl;
+    std::cerr << " After vertices snapping, srcCoors are: " << srcCoords << std::endl;
 #endif
 
 }
@@ -196,14 +196,14 @@ LineStringSnapper::findSnapForVertex(const Coordinate& pt,
 
         if(snapPt.equals2D(pt)) {
 #if GEOS_DEBUG
-            cerr << " points are equal, returning not-found " << endl;
+            std::cerr << " points are equal, returning not-found " << std::endl;
 #endif
             return end;
         }
 
         double dist = snapPt.distance(pt);
 #if GEOS_DEBUG
-        cerr << " distance from snap point " << snapPt << ": " << dist << endl;
+        std::cerr << " distance from snap point " << snapPt << ": " << dist << std::endl;
 #endif
 
         if(dist < minDist) {
@@ -214,7 +214,7 @@ LineStringSnapper::findSnapForVertex(const Coordinate& pt,
 
 #if GEOS_DEBUG
     if(candidate == end) {
-        cerr << " no snap point within distance, returning not-found" << endl;
+        std::cerr << " no snap point within distance, returning not-found" << std::endl;
     }
 #endif
 
@@ -236,7 +236,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
     GEOS_CHECK_FOR_INTERRUPTS();
 
 #if GEOS_DEBUG
-    cerr << "Snapping segments of: " << srcCoords << endl;
+    std::cerr << "Snapping segments of: " << srcCoords << std::endl;
 #endif
 
     for(Coordinate::ConstVect::const_iterator
@@ -247,7 +247,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
         const Coordinate& snapPt = *(*it);
 
 #if GEOS_DEBUG
-        cerr << "Checking for a segment to snap to snapPt " << snapPt << endl;
+        std::cerr << "Checking for a segment to snap to snapPt " << snapPt << std::endl;
 #endif
 
         CoordinateList::iterator too_far = srcCoords.end();
@@ -256,7 +256,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             findSegmentToSnap(snapPt, srcCoords.begin(), too_far);
         if(segpos == too_far) {
 #if GEOS_DEBUG
-            cerr << " No segment to snap" << endl;
+            std::cerr << " No segment to snap" << std::endl;
 #endif
             continue;
         }
@@ -278,7 +278,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
         double pf = seg.projectionFactor(snapPt);
         if(pf >= 1.0) {
 #if GEOS_DEBUG
-            cerr << " Segment to be snapped is closer on his end point" << endl;
+            std::cerr << " Segment to be snapped is closer on his end point" << std::endl;
 #endif
             Coordinate newSnapPt = seg.p1;
             *to = seg.p1 = snapPt;
@@ -286,14 +286,14 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             if(to == too_far) {
                 if(isClosed) {
 #if GEOS_DEBUG
-                    cerr << " His end point is the last one, but is closed " << endl;
+                    std::cerr << " His end point is the last one, but is closed " << std::endl;
 #endif
                     *(srcCoords.begin()) = snapPt; // sync to start point
                     to = srcCoords.begin();
                 }
                 else {
 #if GEOS_DEBUG
-                    cerr << " His end point is the last one, inserting " << newSnapPt << " before it" << endl;
+                    std::cerr << " His end point is the last one, inserting " << newSnapPt << " before it" << std::endl;
 #endif
                     srcCoords.insert(to, newSnapPt);
                     continue;
@@ -303,14 +303,14 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             LineSegment nextSeg(seg.p1, *to);
             if(nextSeg.distance(newSnapPt) < seg.distance(newSnapPt)) {
 #if GEOS_DEBUG
-                cerr << " Next segment closer, inserting " << newSnapPt << " into " << nextSeg << endl;
+                std::cerr << " Next segment closer, inserting " << newSnapPt << " into " << nextSeg << std::endl;
 #endif
                 // insert into next segment
                 srcCoords.insert(to, newSnapPt);
             }
             else {
 #if GEOS_DEBUG
-                cerr << " This segment closer, inserting " << newSnapPt << " into " << seg << endl;
+                std::cerr << " This segment closer, inserting " << newSnapPt << " into " << seg << std::endl;
 #endif
                 // insert must happen one-past first point (before next point)
                 ++segpos;
@@ -319,7 +319,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
         }
         else if(pf <= 0.0) {
 #if GEOS_DEBUG
-            cerr << " Segment to be snapped is closer on his start point" << endl;
+            std::cerr << " Segment to be snapped is closer on his start point" << std::endl;
 #endif
             Coordinate newSnapPt = seg.p0;
             *segpos = seg.p0 = snapPt;
@@ -327,7 +327,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             if(segpos == srcCoords.begin()) {
                 if(isClosed) {
 #if GEOS_DEBUG
-                    cerr << " His start point is the first one, but is closed " << endl;
+                    std::cerr << " His start point is the first one, but is closed " << std::endl;
 #endif
                     segpos = srcCoords.end();
                     --segpos;
@@ -335,7 +335,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
                 }
                 else {
 #if GEOS_DEBUG
-                    cerr << " His start point is the first one, inserting " << newSnapPt << " before it" << endl;
+                    std::cerr << " His start point is the first one, inserting " << newSnapPt << " before it" << std::endl;
 #endif
                     ++segpos;
                     srcCoords.insert(segpos, newSnapPt);
@@ -344,15 +344,15 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             }
 
 #if GEOS_DEBUG
-            cerr << " Before seg-snapping, srcCoors are: " << srcCoords << endl;
+            std::cerr << " Before seg-snapping, srcCoors are: " << srcCoords << std::endl;
 #endif
 
             --segpos;
             LineSegment prevSeg(*segpos, seg.p0);
             if(prevSeg.distance(newSnapPt) < seg.distance(newSnapPt)) {
 #if GEOS_DEBUG
-                cerr << " Prev segment closer, inserting " << newSnapPt << " into "
-                     << prevSeg << endl;
+                std::cerr << " Prev segment closer, inserting " << newSnapPt << " into "
+                     << prevSeg << std::endl;
 #endif
                 // insert into prev segment
                 ++segpos;
@@ -360,7 +360,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             }
             else {
 #if GEOS_DEBUG
-                cerr << " This segment closer, inserting " << newSnapPt << " into " << seg << endl;
+                std::cerr << " This segment closer, inserting " << newSnapPt << " into " << seg << std::endl;
 #endif
                 // insert must happen one-past first point (before next point)
                 srcCoords.insert(to, newSnapPt);
@@ -369,7 +369,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
         else {
             //assert(pf != 0.0);
 #if GEOS_DEBUG
-            cerr << " Segment to be snapped found, projection factor is " << pf << ", inserting point" << endl;
+            std::cerr << " Segment to be snapped found, projection factor is " << pf << ", inserting point" << std::endl;
 #endif
             // insert must happen one-past first point (before next point)
             ++segpos;
@@ -378,7 +378,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
     }
 
 #if GEOS_DEBUG
-    cerr << " After segment snapping, srcCoors are: " << srcCoords << endl;
+    std::cerr << " After segment snapping, srcCoors are: " << srcCoords << std::endl;
 #endif
 
 }
@@ -404,7 +404,7 @@ LineStringSnapper::findSegmentToSnap(
         seg.p1 = *to;
 
 #if GEOS_DEBUG
-        cerr << " Checking segment " << seg << endl;
+        std::cerr << " Checking segment " << seg << std::endl;
 #endif
 
         /*
@@ -419,14 +419,14 @@ LineStringSnapper::findSegmentToSnap(
 
             if(allowSnappingToSourceVertices) {
 #if GEOS_DEBUG
-                cerr << "   snap point matches a segment endpoint, checking next segment"
-                     << endl;
+                std::cerr << "   snap point matches a segment endpoint, checking next segment"
+                     << std::endl;
 #endif
                 continue;
             }
             else {
 #if GEOS_DEBUG
-                cerr << "   snap point matches a segment endpoint, giving up seek" << endl;
+                std::cerr << "   snap point matches a segment endpoint, giving up seek" << std::endl;
 #endif
                 return too_far;
             }
@@ -439,18 +439,18 @@ LineStringSnapper::findSegmentToSnap(
         double dist = seg.distance(snapPt);
         if(dist >= minDist) {
 #if GEOS_DEBUG
-            cerr << "   snap point distance " << dist
+            std::cerr << "   snap point distance " << dist
                  << " not smaller than tolerance "
                  << snapTolerance << " or previous closest "
-                 << minDist << endl;
+                 << minDist << std::endl;
 #endif
             continue;
         }
 
 #if GEOS_DEBUG
-        cerr << "   snap point distance " << dist << " within tolerance "
+        std::cerr << "   snap point distance " << dist << " within tolerance "
              << snapTolerance << " and closer than previous candidate "
-             << minDist << endl;
+             << minDist << std::endl;
 #endif
 
         if(dist == 0.0) {

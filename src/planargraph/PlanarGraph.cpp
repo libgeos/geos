@@ -26,7 +26,7 @@
 #include <vector>
 #include <map>
 
-using namespace std;
+
 
 namespace geos {
 namespace planargraph {
@@ -97,7 +97,7 @@ void
 PlanarGraph::remove(Node* node)
 {
     // unhook all directed edges
-    vector<DirectedEdge*>& outEdges = node->getOutEdges()->getEdges();
+    std::vector<DirectedEdge*>& outEdges = node->getOutEdges()->getEdges();
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
         DirectedEdge* de = outEdges[i];
         DirectedEdge* sym = de->getSym();
@@ -128,17 +128,17 @@ PlanarGraph::remove(Node* node)
 }
 
 /*public*/
-vector<Node*>*
-PlanarGraph::findNodesOfDegree(size_t degree)
+std::vector<Node*>*
+PlanarGraph::findNodesOfDegree(std::size_t degree)
 {
-    vector<Node*>* nodesFound = new vector<Node*>();
+    std::vector<Node*>* nodesFound = new std::vector<Node*>();
     findNodesOfDegree(degree, *nodesFound);
     return nodesFound;
 }
 
 /*public*/
 void
-PlanarGraph::findNodesOfDegree(size_t degree, vector<Node*>& nodesFound)
+PlanarGraph::findNodesOfDegree(std::size_t degree, std::vector<Node*>& nodesFound)
 {
     NodeMap::container& nm = nodeMap.getNodeMap();
     for(NodeMap::container::iterator it = nm.begin(), itEnd = nm.end();

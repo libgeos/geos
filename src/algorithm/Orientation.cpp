@@ -150,7 +150,7 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
 
     // find highest point
     const geom::Coordinate* hiPt = &ring->getAt(0);
-    size_t hiIndex = 0;
+    std::size_t hiIndex = 0;
     for(std::size_t i = 1; i <= nPts; ++i) {
         const geom::Coordinate* p = &ring->getAt(i);
         if(p->y > hiPt->y) {

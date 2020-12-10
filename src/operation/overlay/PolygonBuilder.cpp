@@ -42,7 +42,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -59,7 +59,7 @@ PolygonBuilder::PolygonBuilder(const GeometryFactory* newGeometryFactory)
 
 PolygonBuilder::~PolygonBuilder()
 {
-    for(size_t i = 0, n = shellList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = shellList.size(); i < n; ++i) {
         delete shellList[i];
     }
 }
@@ -69,24 +69,24 @@ void
 PolygonBuilder::add(PlanarGraph* graph)
 //throw(TopologyException *)
 {
-    const vector<EdgeEnd*>* eeptr = graph->getEdgeEnds();
+    const std::vector<EdgeEnd*>* eeptr = graph->getEdgeEnds();
     assert(eeptr);
-    const vector<EdgeEnd*>& ee = *eeptr;
+    const std::vector<EdgeEnd*>& ee = *eeptr;
 
-    size_t eeSize = ee.size();
+    std::size_t eeSize = ee.size();
 
 #if GEOS_DEBUG
-    cerr << __FUNCTION__ << ": PlanarGraph has " << eeSize << " EdgeEnds" << endl;
+    std::cerr << __FUNCTION__ << ": PlanarGraph has " << eeSize << " EdgeEnds" << std::endl;
 #endif
 
-    vector<DirectedEdge*> dirEdges(eeSize);
-    for(size_t i = 0; i < eeSize; ++i) {
+    std::vector<DirectedEdge*> dirEdges(eeSize);
+    for(std::size_t i = 0; i < eeSize; ++i) {
         DirectedEdge* de = detail::down_cast<DirectedEdge*>(ee[i]);
         dirEdges[i] = de;
     }
 
     NodeMap::container& nodeMap = graph->getNodeMap()->nodeMap;
-    vector<Node*> nodes;
+    std::vector<Node*> nodes;
     nodes.reserve(nodeMap.size());
     for(NodeMap::iterator it = nodeMap.begin(), itEnd = nodeMap.end();
             it != itEnd; ++it) {
@@ -99,22 +99,22 @@ PolygonBuilder::add(PlanarGraph* graph)
 
 /*public*/
 void
-PolygonBuilder::add(const vector<DirectedEdge*>* dirEdges,
-                    const vector<Node*>* nodes)
+PolygonBuilder::add(const std::vector<DirectedEdge*>* dirEdges,
+                    const std::vector<Node*>* nodes)
 //throw(TopologyException *)
 {
     PlanarGraph::linkResultDirectedEdges(nodes->begin(), nodes->end());
 
-    vector<MaximalEdgeRing*> maxEdgeRings;
+    std::vector<MaximalEdgeRing*> maxEdgeRings;
     buildMaximalEdgeRings(dirEdges, maxEdgeRings);
 
-    vector<EdgeRing*> freeHoleList;
-    vector<MaximalEdgeRing*> edgeRings;
+    std::vector<EdgeRing*> freeHoleList;
+    std::vector<MaximalEdgeRing*> edgeRings;
     buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
 
     sortShellsAndHoles(edgeRings, shellList, freeHoleList);
 
-    vector<FastPIPRing> indexedshellist;
+    std::vector<FastPIPRing> indexedshellist;
     for(auto const& shell : shellList) {
         FastPIPRing pipRing { shell, new geos::algorithm::locate::IndexedPointInAreaLocator(*shell->getLinearRing()) };
         indexedshellist.push_back(pipRing);
@@ -128,33 +128,33 @@ PolygonBuilder::add(const vector<DirectedEdge*>* dirEdges,
 }
 
 /*public*/
-vector<Geometry*>*
+std::vector<Geometry*>*
 PolygonBuilder::getPolygons()
 {
-    vector<Geometry*>* resultPolyList = computePolygons(shellList);
+    std::vector<Geometry*>* resultPolyList = computePolygons(shellList);
     return resultPolyList;
 }
 
 
 /*private*/
 void
-PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*>* dirEdges,
-                                      vector<MaximalEdgeRing*>& maxEdgeRings)
+PolygonBuilder::buildMaximalEdgeRings(const std::vector<DirectedEdge*>* dirEdges,
+                                      std::vector<MaximalEdgeRing*>& maxEdgeRings)
 // throw(const TopologyException &)
 {
 #if GEOS_DEBUG
-    cerr << "PolygonBuilder::buildMaximalEdgeRings got " << dirEdges->size() << " dirEdges" << endl;
+    std::cerr << "PolygonBuilder::buildMaximalEdgeRings got " << dirEdges->size() << " dirEdges" << std::endl;
 #endif
 
-    vector<MaximalEdgeRing*>::size_type oldSize = maxEdgeRings.size();
+    std::vector<MaximalEdgeRing*>::size_type oldSize = maxEdgeRings.size();
 
-    for(size_t i = 0, n = dirEdges->size(); i < n; i++) {
+    for(std::size_t i = 0, n = dirEdges->size(); i < n; i++) {
         DirectedEdge* de = (*dirEdges)[i];
 #if GEOS_DEBUG
-        cerr << "  dirEdge " << i << endl
-             << de->printEdge() << endl
-             << " inResult:" << de->isInResult() << endl
-             << " isArea:" << de->getLabel().isArea() << endl;
+        std::cerr << "  dirEdge " << i << std::endl
+             << de->printEdge() << std::endl
+             << " inResult:" << de->isInResult() << std::endl
+             << " isArea:" << de->getLabel().isArea() << std::endl;
 #endif
         if(de->isInResult() && de->getLabel().isArea()) {
             // if this edge has not yet been processed
@@ -166,10 +166,10 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*>* dirEdges,
                 }
                 catch(util::GEOSException&) {
                     // cleanup if that happens (see stmlf-cases-20061020.xml)
-                    for(size_t p_i = oldSize, p_n = maxEdgeRings.size(); p_i < p_n; p_i++) {
+                    for(std::size_t p_i = oldSize, p_n = maxEdgeRings.size(); p_i < p_n; p_i++) {
                         delete maxEdgeRings[p_i];
                     }
-                    //cerr << "Exception! " << e.what() << endl;
+                    //cerr << "Exception! " << e.what() << std::endl;
                     throw;
                 }
                 maxEdgeRings.push_back(er);
@@ -179,25 +179,25 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*>* dirEdges,
         }
     }
 #if GEOS_DEBUG
-    cerr << "  pushed " << maxEdgeRings.size() - oldSize << " maxEdgeRings" << endl;
+    std::cerr << "  pushed " << maxEdgeRings.size() - oldSize << " maxEdgeRings" << std::endl;
 #endif
 }
 
 /*private*/
 void
 PolygonBuilder::buildMinimalEdgeRings(
-    vector<MaximalEdgeRing*>& maxEdgeRings,
-    vector<EdgeRing*>& newShellList, vector<EdgeRing*>& freeHoleList,
-    vector<MaximalEdgeRing*>& edgeRings)
+    std::vector<MaximalEdgeRing*>& maxEdgeRings,
+    std::vector<EdgeRing*>& newShellList, std::vector<EdgeRing*>& freeHoleList,
+    std::vector<MaximalEdgeRing*>& edgeRings)
 {
-    for(size_t i = 0, n = maxEdgeRings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = maxEdgeRings.size(); i < n; ++i) {
         MaximalEdgeRing* er = maxEdgeRings[i];
 #if GEOS_DEBUG
-        cerr << "buildMinimalEdgeRings: maxEdgeRing " << i << " has " << er->getMaxNodeDegree() << " maxNodeDegree" << endl;
+        std::cerr << "buildMinimalEdgeRings: maxEdgeRing " << i << " has " << er->getMaxNodeDegree() << " maxNodeDegree" << std::endl;
 #endif
         if(er->getMaxNodeDegree() > 2) {
             er->linkDirectedEdgesForMinimalEdgeRings();
-            vector<MinimalEdgeRing*> minEdgeRings;
+            std::vector<MinimalEdgeRing*> minEdgeRings;
             er->buildMinimalRings(minEdgeRings);
             // at this point we can go ahead and attempt to place
             // holes, if this EdgeRing is a polygon
@@ -221,16 +221,16 @@ PolygonBuilder::buildMinimalEdgeRings(
 
 /*private*/
 EdgeRing*
-PolygonBuilder::findShell(vector<MinimalEdgeRing*>* minEdgeRings)
+PolygonBuilder::findShell(std::vector<MinimalEdgeRing*>* minEdgeRings)
 {
     int shellCount = 0;
     EdgeRing* shell = nullptr;
 
 #if GEOS_DEBUG
-    cerr << "PolygonBuilder::findShell got " << minEdgeRings->size() << " minEdgeRings" << endl;
+    std::cerr << "PolygonBuilder::findShell got " << minEdgeRings->size() << " minEdgeRings" << std::endl;
 #endif
 
-    for(size_t i = 0, n = minEdgeRings->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = minEdgeRings->size(); i < n; ++i) {
         EdgeRing* er = (*minEdgeRings)[i];
         if(! er->isHole()) {
             shell = er;
@@ -248,9 +248,9 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*>* minEdgeRings)
 /*private*/
 void
 PolygonBuilder::placePolygonHoles(EdgeRing* shell,
-                                  vector<MinimalEdgeRing*>* minEdgeRings)
+                                  std::vector<MinimalEdgeRing*>* minEdgeRings)
 {
-    for(size_t i = 0, n = minEdgeRings->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = minEdgeRings->size(); i < n; ++i) {
         MinimalEdgeRing* er = (*minEdgeRings)[i];
         if(er->isHole()) {
             er->setShell(shell);
@@ -260,10 +260,10 @@ PolygonBuilder::placePolygonHoles(EdgeRing* shell,
 
 /*private*/
 void
-PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*>& edgeRings,
-                                   vector<EdgeRing*>& newShellList, vector<EdgeRing*>& freeHoleList)
+PolygonBuilder::sortShellsAndHoles(std::vector<MaximalEdgeRing*>& edgeRings,
+                                   std::vector<EdgeRing*>& newShellList, std::vector<EdgeRing*>& freeHoleList)
 {
-    for(size_t i = 0, n = edgeRings.size(); i < n; i++) {
+    for(std::size_t i = 0, n = edgeRings.size(); i < n; i++) {
         EdgeRing* er = edgeRings[i];
         //er->setInResult();
         if(er->isHole()) {
@@ -277,7 +277,7 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*>& edgeRings,
 
 /*private*/
 void
-PolygonBuilder::placeFreeHoles(vector<FastPIPRing>& newShellList,
+PolygonBuilder::placeFreeHoles(std::vector<FastPIPRing>& newShellList,
                                std::vector<EdgeRing*>& freeHoleList)
 {
     for(std::vector<EdgeRing*>::iterator
@@ -319,7 +319,7 @@ PolygonBuilder::placeFreeHoles(vector<FastPIPRing>& newShellList,
 /*private*/
 EdgeRing*
 PolygonBuilder::findEdgeRingContaining(EdgeRing* testEr,
-                                       vector<FastPIPRing>& newShellList)
+                                       std::vector<FastPIPRing>& newShellList)
 {
     LinearRing* testRing = testEr->getLinearRing();
     const Envelope* testEnv = testRing->getEnvelopeInternal();
@@ -361,16 +361,16 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing* testEr,
 }
 
 /*private*/
-vector<Geometry*>*
-PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
+std::vector<Geometry*>*
+PolygonBuilder::computePolygons(std::vector<EdgeRing*>& newShellList)
 {
 #if GEOS_DEBUG
-    cerr << "PolygonBuilder::computePolygons: got " << newShellList.size() << " shells" << endl;
+    std::cerr << "PolygonBuilder::computePolygons: got " << newShellList.size() << " shells" << std::endl;
 #endif
-    vector<Geometry*>* resultPolyList = new vector<Geometry*>();
+    std::vector<Geometry*>* resultPolyList = new std::vector<Geometry*>();
 
     // add Polygons for all shells
-    for(size_t i = 0, n = newShellList.size(); i < n; i++) {
+    for(std::size_t i = 0, n = newShellList.size(); i < n; i++) {
         EdgeRing* er = newShellList[i];
         Polygon* poly = er->toPolygon(geometryFactory).release();
         resultPolyList->push_back(poly);

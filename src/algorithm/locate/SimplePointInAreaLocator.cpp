@@ -73,7 +73,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
         }
         // Else it is a collection with a single element. Will be handled below.
     }
-    for (size_t i = 0; i < geom->getNumGeometries(); i++) {
+    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         const Geometry* gi = geom->getGeometryN(i);
         auto loc = locateInGeometry(p, gi);
         if(loc != Location::EXTERIOR) {
@@ -102,7 +102,7 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
     }
 
     // now test if the point lies in or on the holes
-    for(size_t i = 0, n = poly->getNumInteriorRing(); i < n; i++) {
+    for(std::size_t i = 0, n = poly->getNumInteriorRing(); i < n; i++) {
         const LineString* hole = poly->getInteriorRingN(i);
         if(hole->getEnvelopeInternal()->contains(p)) {
             cl = hole->getCoordinatesRO();

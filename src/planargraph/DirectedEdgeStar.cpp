@@ -19,7 +19,7 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -50,28 +50,28 @@ DirectedEdgeStar::remove(DirectedEdge* de)
     }
 }
 
-vector<DirectedEdge*>::iterator
+std::vector<DirectedEdge*>::iterator
 DirectedEdgeStar::begin()
 {
     sortEdges();
     return outEdges.begin();
 }
 
-vector<DirectedEdge*>::iterator
+std::vector<DirectedEdge*>::iterator
 DirectedEdgeStar::end()
 {
     sortEdges();
     return outEdges.end();
 }
 
-vector<DirectedEdge*>::const_iterator
+std::vector<DirectedEdge*>::const_iterator
 DirectedEdgeStar::begin() const
 {
     sortEdges();
     return outEdges.begin();
 }
 
-vector<DirectedEdge*>::const_iterator
+std::vector<DirectedEdge*>::const_iterator
 DirectedEdgeStar::end() const
 {
     sortEdges();
@@ -95,7 +95,7 @@ DirectedEdgeStar::getCoordinate() const
  * Returns the DirectedEdges, in ascending order by angle with
  * the positive x-axis.
  */
-vector<DirectedEdge*>&
+std::vector<DirectedEdge*>&
 DirectedEdgeStar::getEdges()
 {
     sortEdges();

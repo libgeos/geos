@@ -27,7 +27,7 @@
 #include <vector>
 #include <typeinfo>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -35,7 +35,7 @@ namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
 /*public*/
-vector<unique_ptr<GeometryLocation>>
+std::vector<std::unique_ptr<GeometryLocation>>
 ConnectedElementLocationFilter::getLocations(const Geometry* geom)
 {
     ConnectedElementLocationFilter c;

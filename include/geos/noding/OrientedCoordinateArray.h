@@ -72,7 +72,7 @@ public:
     bool operator==(const OrientedCoordinateArray& other) const;
 
     struct GEOS_DLL HashCode {
-        size_t operator()(const OrientedCoordinateArray & oca) const;
+        std::size_t operator()(const OrientedCoordinateArray & oca) const;
     };
 
 private:

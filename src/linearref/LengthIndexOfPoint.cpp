@@ -26,7 +26,7 @@
 
 #include <limits>
 
-using namespace std;
+
 
 using namespace geos::geom;
 
@@ -84,7 +84,7 @@ LengthIndexOfPoint::indexOfAfter(const Coordinate& inputPt, double minIndex) con
 double
 LengthIndexOfPoint::indexOfFromStart(const Coordinate& inputPt, double minIndex) const
 {
-    double minDistance = numeric_limits<double>::max();
+    double minDistance = std::numeric_limits<double>::max();
 
     double ptMeasure = minIndex;
     double segmentStartMeasure = 0.0;

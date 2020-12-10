@@ -30,7 +30,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -67,8 +67,8 @@ CommonBitsOp::intersection(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    unique_ptr<Geometry> rgeom0;
-    unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0;
+    std::unique_ptr<Geometry> rgeom1;
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->intersection(rgeom1.get()));
 }
@@ -79,8 +79,8 @@ CommonBitsOp::Union(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    unique_ptr<Geometry> rgeom0;
-    unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0;
+    std::unique_ptr<Geometry> rgeom1;
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->Union(rgeom1.get()));
 }
@@ -91,8 +91,8 @@ CommonBitsOp::difference(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    unique_ptr<Geometry> rgeom0;
-    unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0;
+    std::unique_ptr<Geometry> rgeom1;
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->difference(rgeom1.get()));
 }
@@ -103,8 +103,8 @@ CommonBitsOp::symDifference(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    unique_ptr<Geometry> rgeom0;
-    unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0;
+    std::unique_ptr<Geometry> rgeom1;
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->symDifference(rgeom1.get()));
 }
@@ -113,7 +113,7 @@ CommonBitsOp::symDifference(
 std::unique_ptr<Geometry>
 CommonBitsOp::buffer(const Geometry* geom0, double distance)
 {
-    unique_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+    std::unique_ptr<Geometry> rgeom0(removeCommonBits(geom0));
     return computeResultPrecision(rgeom0->buffer(distance));
 }
 
@@ -137,7 +137,7 @@ CommonBitsOp::removeCommonBits(const Geometry* geom0)
 
 #if GEOS_DEBUG
     const Coordinate& commonCoord = cbr->getCommonCoordinate();
-    cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
+    std::cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << std::endl;
 #endif
 
     auto geom = geom0->clone();
@@ -162,7 +162,7 @@ CommonBitsOp::removeCommonBits(
 
 #if GEOS_DEBUG
     const Coordinate& commonCoord = cbr->getCommonCoordinate();
-    cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
+    std::cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << std::endl;
 #endif
 
     rgeom0 = geom0->clone();

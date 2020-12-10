@@ -72,7 +72,6 @@
 #define SHORTCIRCUIT_PREDICATES 1
 //#define USE_RECTANGLE_INTERSECTION 1
 
-using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation::valid;
 using namespace geos::operation::relate;
@@ -89,7 +88,7 @@ namespace geom { // geos::geom
 /*
  * Return current GEOS version
  */
-string
+std::string
 geosversion()
 {
     return GEOS_VERSION;
@@ -99,7 +98,7 @@ geosversion()
  * Return the version of JTS this GEOS
  * release has been ported from.
  */
-string
+std::string
 jtsport()
 {
     return GEOS_JTS_PORT;
@@ -139,8 +138,8 @@ Geometry::Geometry(const Geometry& geom)
 bool
 Geometry::hasNullElements(const CoordinateSequence* list)
 {
-    size_t npts = list->getSize();
-    for(size_t i = 0; i < npts; ++i) {
+    std::size_t npts = list->getSize();
+    for(std::size_t i = 0; i < npts; ++i) {
         if(list->getAt(i).isNull()) {
             return true;
         }
@@ -275,7 +274,7 @@ Geometry::disjoint(const Geometry* g) const
         return true;
     }
 #endif
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isDisjoint();
     return res;
 }
@@ -289,7 +288,7 @@ Geometry::touches(const Geometry* g) const
         return false;
     }
 #endif
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isTouches(getDimension(), g->getDimension());
     return res;
 }
@@ -330,7 +329,7 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isIntersects();
     return res;
 }
@@ -364,7 +363,7 @@ Geometry::covers(const Geometry* g) const
         return true;
     }
 
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     return im->isCovers();
 }
 
@@ -378,7 +377,7 @@ Geometry::crosses(const Geometry* g) const
         return false;
     }
 #endif
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isCrosses(getDimension(), g->getDimension());
     return res;
 }
@@ -421,7 +420,7 @@ Geometry::contains(const Geometry* g) const
     //	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
     //}
 
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isContains();
     return res;
 }
@@ -435,15 +434,15 @@ Geometry::overlaps(const Geometry* g) const
         return false;
     }
 #endif
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isOverlaps(getDimension(), g->getDimension());
     return res;
 }
 
 bool
-Geometry::relate(const Geometry* g, const string& intersectionPattern) const
+Geometry::relate(const Geometry* g, const std::string& intersectionPattern) const
 {
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->matches(intersectionPattern);
     return res;
 }
@@ -465,7 +464,7 @@ Geometry::equals(const Geometry* g) const
         return isEmpty();
     }
 
-    unique_ptr<IntersectionMatrix> im(relate(g));
+    std::unique_ptr<IntersectionMatrix> im(relate(g));
     bool res = im->isEquals(getDimension(), g->getDimension());
     return res;
 }
@@ -476,7 +475,7 @@ Geometry::relate(const Geometry* other) const
     return RelateOp::relate(this, other);
 }
 
-string
+std::string
 Geometry::toString() const
 {
     return toText();
@@ -490,7 +489,7 @@ operator<< (std::ostream& os, const Geometry& geom)
     return os;
 }
 
-string
+std::string
 Geometry::toText() const
 {
     io::WKTWriter writer;
@@ -574,16 +573,16 @@ Geometry::Union(const Geometry* other) const
 //cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
         const GeometryCollection* coll;
 
-        size_t ngeomsThis = getNumGeometries();
-        size_t ngeomsOther = other->getNumGeometries();
+        std::size_t ngeomsThis = getNumGeometries();
+        std::size_t ngeomsOther = other->getNumGeometries();
 
         // Allocated for ownership transfer
-        vector<Geometry*>* v = new vector<Geometry*>();
+        std::vector<Geometry*>* v = new std::vector<Geometry*>();
         v->reserve(ngeomsThis + ngeomsOther);
 
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
-            for(size_t i = 0; i < ngeomsThis; ++i) {
+            for(std::size_t i = 0; i < ngeomsThis; ++i) {
                 v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
@@ -592,7 +591,7 @@ Geometry::Union(const Geometry* other) const
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
-            for(size_t i = 0; i < ngeomsOther; ++i) {
+            for(std::size_t i = 0; i < ngeomsOther; ++i) {
                 v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
@@ -653,16 +652,16 @@ Geometry::symDifference(const Geometry* other) const
     if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal())) {
         const GeometryCollection* coll;
 
-        size_t ngeomsThis = getNumGeometries();
-        size_t ngeomsOther = other->getNumGeometries();
+        std::size_t ngeomsThis = getNumGeometries();
+        std::size_t ngeomsOther = other->getNumGeometries();
 
         // Allocated for ownership transfer
-        vector<Geometry*>* v = new vector<Geometry*>();
+        std::vector<Geometry*>* v = new std::vector<Geometry*>();
         v->reserve(ngeomsThis + ngeomsOther);
 
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
-            for(size_t i = 0; i < ngeomsThis; ++i) {
+            for(std::size_t i = 0; i < ngeomsThis; ++i) {
                 v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
@@ -671,7 +670,7 @@ Geometry::symDifference(const Geometry* other) const
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
-            for(size_t i = 0; i < ngeomsOther; ++i) {
+            for(std::size_t i = 0; i < ngeomsOther; ++i) {
                 v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
@@ -739,10 +738,10 @@ Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
 }
 
 int
-Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
+Geometry::compare(std::vector<Coordinate> a, std::vector<Coordinate> b) const
 {
-    size_t i = 0;
-    size_t j = 0;
+    std::size_t i = 0;
+    std::size_t j = 0;
     while(i < a.size() && j < b.size()) {
         Coordinate& aCoord = a[i];
         Coordinate& bCoord = b[j];
@@ -763,10 +762,10 @@ Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
 }
 
 int
-Geometry::compare(vector<Geometry*> a, vector<Geometry*> b) const
+Geometry::compare(std::vector<Geometry*> a, std::vector<Geometry*> b) const
 {
-    size_t i = 0;
-    size_t j = 0;
+    std::size_t i = 0;
+    std::size_t j = 0;
     while(i < a.size() && j < b.size()) {
         Geometry* aGeom = a[i];
         Geometry* bGeom = b[j];
@@ -790,8 +789,8 @@ int
 Geometry::compare(const std::vector<std::unique_ptr<Geometry>> & a,
         const std::vector<std::unique_ptr<Geometry>> & b) const
 {
-    size_t i = 0;
-    size_t j = 0;
+    std::size_t i = 0;
+    std::size_t j = 0;
     while(i < a.size() && j < b.size()) {
         Geometry* aGeom = a[i].get();
         Geometry* bGeom = b[j].get();

@@ -20,7 +20,7 @@
 #include <geos/operation/relate/EdgeEndBundleStar.h>
 #include <geos/operation/relate/EdgeEndBundle.h>
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 

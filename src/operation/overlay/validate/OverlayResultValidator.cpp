@@ -43,7 +43,7 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
-using namespace std;
+
 using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
@@ -56,17 +56,17 @@ namespace validate { // geos.operation.overlay.validate
 namespace { // anonymous namespace
 
 #if GEOS_DEBUG
-unique_ptr<MultiPoint>
-toMultiPoint(vector<Coordinate>& coords)
+std::unique_ptr<MultiPoint>
+toMultiPoint(std::vector<Coordinate>& coords)
 {
     const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
     const CoordinateSequenceFactory& csf =
         *(gf.getCoordinateSequenceFactory());
 
-    unique_ptr< vector<Coordinate> > nc(new vector<Coordinate>(coords));
-    unique_ptr<CoordinateSequence> cs(csf.create(nc.release()));
+    std::unique_ptr< std::vector<Coordinate> > nc(new std::vector<Coordinate>(coords));
+    std::unique_ptr<CoordinateSequence> cs(csf.create(nc.release()));
 
-    unique_ptr<MultiPoint> mp(gf.createMultiPoint(*cs));
+    std::unique_ptr<MultiPoint> mp(gf.createMultiPoint(*cs));
 
     return mp;
 }
@@ -115,13 +115,13 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 
     if(! testValid(overlayOp)) {
 #if GEOS_DEBUG
-        cerr << "OverlayResultValidator:" << endl
-             << "Points:" << *toMultiPoint(testCoords) << endl
-             << "Geom0: " << g0 << endl
-             << "Geom1: " << g1 << endl
-             << "Reslt: " << gres << endl
+        std::cerr << "OverlayResultValidator:" << std::endl
+             << "Points:" << *toMultiPoint(testCoords) << std::endl
+             << "Geom0: " << g0 << std::endl
+             << "Geom1: " << g1 << std::endl
+             << "Reslt: " << gres << std::endl
              << "Locat: " << getInvalidLocation()
-             << endl;
+             << std::endl;
 #endif
         return false;
     }
@@ -135,7 +135,7 @@ void
 OverlayResultValidator::addTestPts(const Geometry& g)
 {
     OffsetPointGenerator ptGen(g, 5 * boundaryDistanceTolerance);
-    unique_ptr< vector<geom::Coordinate> > pts = ptGen.getPoints();
+    std::unique_ptr< std::vector<geom::Coordinate> > pts = ptGen.getPoints();
     testCoords.insert(testCoords.end(), pts->begin(), pts->end());
 }
 
@@ -145,10 +145,10 @@ OverlayResultValidator::addVertices(const Geometry& g)
 {
     // TODO: optimize this by not copying coordinates
     //       and pre-allocating memory
-    unique_ptr<CoordinateSequence> cs(g.getCoordinates());
+    std::unique_ptr<CoordinateSequence> cs(g.getCoordinates());
 
     testCoords.reserve(testCoords.size() + cs->size());
-    for (size_t i = 0; i < cs->size(); i++) {
+    for (std::size_t i = 0; i < cs->size(); i++) {
         testCoords.push_back(cs->getAt(i));
     }
 }
@@ -157,7 +157,7 @@ OverlayResultValidator::addVertices(const Geometry& g)
 bool
 OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp)
 {
-    for(size_t i = 0, n = testCoords.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = testCoords.size(); i < n; ++i) {
         Coordinate& pt = testCoords[i];
         if(! testValid(overlayOp, pt)) {
             invalidLocation = pt;
@@ -180,10 +180,10 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
     location[2] = fplres.getLocation(pt);
 
 #if GEOS_DEBUG
-    cerr << setprecision(10) << "Point " << pt << endl
-         << "Loc0: " << location[0] << endl
-         << "Loc1: " << location[1] << endl
-         << "Locr: " << location[2] << endl;
+    std::cerr << setprecision(10) << "Point " << pt << std::endl
+         << "Loc0: " << location[0] << std::endl
+         << "Loc1: " << location[1] << std::endl
+         << "Locr: " << location[2] << std::endl;
 #endif
 
     /*
@@ -192,8 +192,8 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
      */
     if(find(location.begin(), location.end(), Location::BOUNDARY) != location.end()) {
 #if GEOS_DEBUG
-        cerr << "OverlayResultValidator: testpoint " << pt <<
-             " is on the boundary, blindly returning a positive answer (is valid)" << endl;
+        std::cerr << "OverlayResultValidator: testpoint " << pt <<
+             " is on the boundary, blindly returning a positive answer (is valid)" << std::endl;
 #endif
         return true;
     }

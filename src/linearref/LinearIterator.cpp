@@ -57,7 +57,7 @@ LinearIterator::LinearIterator(const Geometry* p_linear, const LinearLocation& s
     loadCurrentLine();
 }
 
-LinearIterator::LinearIterator(const Geometry* p_linear, size_t p_componentIndex, size_t p_vertexIndex) :
+LinearIterator::LinearIterator(const Geometry* p_linear, std::size_t p_componentIndex, std::size_t p_vertexIndex) :
     vertexIndex(p_vertexIndex),
     componentIndex(p_componentIndex),
     linear(p_linear),

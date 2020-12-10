@@ -19,14 +19,14 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace std;
+
 
 namespace geos {
 namespace planargraph {
 
 /* static public */
 /* UNUSED */
-vector<Edge*>*
+std::vector<Edge*>*
 Node::getEdgesBetween(Node* node0, Node* node1)
 {
     std::vector<Edge*> edges0;

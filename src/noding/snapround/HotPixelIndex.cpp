@@ -87,7 +87,7 @@ HotPixelIndex::add(const CoordinateSequence *pts)
     * spatially autocorrelated coordinates
     */
     std::vector<std::size_t> idxs;
-    for (size_t i = 0, sz = pts->size(); i < sz; i++)
+    for (std::size_t i = 0, sz = pts->size(); i < sz; i++)
         idxs.push_back(i);
 
     std::random_device rd;
@@ -104,7 +104,7 @@ void
 HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 {
     std::vector<std::size_t> idxs;
-    for (size_t i = 0, sz = pts.size(); i < sz; i++)
+    for (std::size_t i = 0, sz = pts.size(); i < sz; i++)
         idxs.push_back(i);
 
     std::random_device rd;
@@ -120,7 +120,7 @@ HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 void
 HotPixelIndex::addNodes(const CoordinateSequence *pts)
 {
-    for (size_t i = 0, sz = pts->size(); i < sz; i++) {
+    for (std::size_t i = 0, sz = pts->size(); i < sz; i++) {
         HotPixel* hp = add(pts->getAt(i));
         hp->setToNode();
     }

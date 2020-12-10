@@ -36,7 +36,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 using namespace geos::index::quadtree;
 
@@ -54,7 +54,7 @@ private:
 
     const LineSegment* querySeg;
 
-    unique_ptr< vector<LineSegment*> > items;
+    std::unique_ptr< std::vector<LineSegment*> > items;
 
 public:
 
@@ -62,7 +62,7 @@ public:
         :
         ItemVisitor(),
         querySeg(s),
-        items(new vector<LineSegment*>())
+        items(new std::vector<LineSegment*>())
     {}
 
     ~LineSegmentVisitor() override
@@ -74,7 +74,7 @@ public:
         :
         ItemVisitor(),
         querySeg(o.querySeg),
-        items(new vector<LineSegment*>(*(o.items.get())))
+        items(new std::vector<LineSegment*>(*(o.items.get())))
     {
     }
 
@@ -85,7 +85,7 @@ public:
             return *this;
         }
         querySeg = o.querySeg;
-        items.reset(new vector<LineSegment*>(*(o.items.get())));
+        items.reset(new std::vector<LineSegment*>(*(o.items.get())));
         return *this;
     }
 
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    unique_ptr< vector<LineSegment*> >
+    std::unique_ptr< std::vector<LineSegment*> >
     getItems()
     {
         // NOTE: Apparently, this is 'source' method giving up the object resource.
@@ -144,7 +144,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 }
 
 /*public*/
-unique_ptr< vector<LineSegment*> >
+std::unique_ptr< std::vector<LineSegment*> >
 LineSegmentIndex::query(const LineSegment* querySeg)
 {
     Envelope env(querySeg->p0, querySeg->p1);
@@ -152,7 +152,7 @@ LineSegmentIndex::query(const LineSegment* querySeg)
     LineSegmentVisitor visitor(querySeg);
     index.query(&env, visitor);
 
-    unique_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
+    std::unique_ptr< std::vector<LineSegment*> > itemsFound = visitor.getItems();
 
     return itemsFound;
 }

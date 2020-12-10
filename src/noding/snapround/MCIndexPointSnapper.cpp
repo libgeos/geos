@@ -42,7 +42,7 @@ public:
 
     HotPixelSnapAction(HotPixel& nHotPixel,
                        SegmentString* nParentEdge,
-                       size_t nHotPixelVertexIndex)
+                       std::size_t nHotPixelVertexIndex)
         :
         MonotoneChainSelectAction(),
         hotPixel(nHotPixel),
@@ -72,7 +72,7 @@ public:
      * would cause every vertex to be noded).
      */
     void
-    select(chain::MonotoneChain& mc, size_t startIndex) override
+    select(chain::MonotoneChain& mc, std::size_t startIndex) override
     {
         // This is casting away 'constness'!
         NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
@@ -87,7 +87,7 @@ public:
     }
 
     bool
-    addSnappedNode(HotPixel& p_hotPixel, NodedSegmentString* segStr, size_t segIndex)
+    addSnappedNode(HotPixel& p_hotPixel, NodedSegmentString* segStr, std::size_t segIndex)
     {
         const Coordinate& p0 = segStr->getCoordinate(segIndex);
         const Coordinate& p1 = segStr->getCoordinate(segIndex + 1);
@@ -107,7 +107,7 @@ public:
 private:
     HotPixel& hotPixel;
     SegmentString* parentEdge;
-    size_t hotPixelVertexIndex;
+    std::size_t hotPixelVertexIndex;
     bool isNodeAddedVar;
 
     // Declare type as noncopyable
@@ -147,7 +147,7 @@ private:
 bool
 MCIndexPointSnapper::snap(HotPixel& hotPixel,
                           SegmentString* parentEdge,
-                          size_t vertexIndex)
+                          std::size_t vertexIndex)
 {
     Envelope pixelEnv = getSafeEnvelope(hotPixel);
     HotPixelSnapAction hotPixelSnapAction(hotPixel, parentEdge, vertexIndex);

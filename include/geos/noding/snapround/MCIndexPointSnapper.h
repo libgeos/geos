@@ -72,7 +72,7 @@ public:
      * @return `true` if a node was added for this pixel
      */
     bool snap(HotPixel& hotPixel, SegmentString* parentEdge,
-              size_t vertexIndex);
+              std::size_t vertexIndex);
 
     bool
     snap(HotPixel& hotPixel)

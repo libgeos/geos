@@ -25,7 +25,7 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -70,10 +70,10 @@ ElevationMatrixCell::getAvg() const
             DoubleNotANumber;
 }
 
-string
+std::string
 ElevationMatrixCell::print() const
 {
-    ostringstream ret;
+    std::ostringstream ret;
     //ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
     ret << "[" << getAvg() << "]";
     return ret.str();

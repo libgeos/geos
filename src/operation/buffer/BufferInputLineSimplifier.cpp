@@ -83,7 +83,7 @@ BufferInputLineSimplifier::deleteShallowConcavities()
      * Do not simplify end line segments of the line string.
      * This ensures that end caps are generated consistently.
      */
-    size_t index = 1;
+    std::size_t index = 1;
 
     auto midIndex = findNextNonDeletedIndex(index);
     auto lastIndex = findNextNonDeletedIndex(midIndex);
@@ -114,7 +114,7 @@ BufferInputLineSimplifier::deleteShallowConcavities()
 
 /* private */
 size_t
-BufferInputLineSimplifier::findNextNonDeletedIndex(size_t index) const
+BufferInputLineSimplifier::findNextNonDeletedIndex(std::size_t index) const
 {
     std::size_t next = index + 1;
     const std::size_t len = inputLine.size();
@@ -130,7 +130,7 @@ BufferInputLineSimplifier::collapseLine() const
 {
     auto coordList = new CoordinateArraySequence();
 
-    for(size_t i = 0, n = inputLine.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = inputLine.size(); i < n; ++i) {
         if(isDeleted[i] != DELETE) {
             coordList->add(inputLine[i], false);
         }
@@ -141,7 +141,7 @@ BufferInputLineSimplifier::collapseLine() const
 
 /* private */
 bool
-BufferInputLineSimplifier::isDeletable(size_t i0, size_t i1, size_t i2,
+BufferInputLineSimplifier::isDeletable(std::size_t i0, std::size_t i1, std::size_t i2,
                                        double p_distanceTol) const
 {
     const Coordinate& p0 = inputLine[i0];
@@ -182,7 +182,7 @@ BufferInputLineSimplifier::isShallowConcavity(const geom::Coordinate& p0,
 bool
 BufferInputLineSimplifier::isShallowSampled(const geom::Coordinate& p0,
         const geom::Coordinate& p2,
-        size_t i0, size_t i2,
+        std::size_t i0, std::size_t i2,
         double p_distanceTol) const
 {
     // check every n'th point to see if it is within tolerance
@@ -191,7 +191,7 @@ BufferInputLineSimplifier::isShallowSampled(const geom::Coordinate& p0,
         inc = 1;
     }
 
-    for(size_t i = i0; i < i2; i += inc) {
+    for(std::size_t i = i0; i < i2; i += inc) {
         if(! isShallow(p0, p2, inputLine[i], p_distanceTol)) {
             return false;
         }

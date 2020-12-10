@@ -164,7 +164,7 @@ OverlapUnion::isEqual(std::vector<LineSegment>& segs0, std::vector<LineSegment>&
     std::sort(segs0.begin(), segs0.end(), lineSegmentPtrCmp);
     std::sort(segs1.begin(), segs1.end(), lineSegmentPtrCmp);
 
-    size_t sz = segs0.size();
+    std::size_t sz = segs0.size();
     for (std::size_t i = 0; i < sz; i++) {
         if (segs0[i].p0.x != segs1[i].p0.x ||
             segs0[i].p0.y != segs1[i].p0.y ||

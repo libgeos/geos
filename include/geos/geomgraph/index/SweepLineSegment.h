@@ -39,7 +39,7 @@ namespace index { // geos::geomgraph::index
 
 class GEOS_DLL SweepLineSegment: public SweepLineEventOBJ {
 public:
-    SweepLineSegment(Edge* newEdge, size_t newPtIndex);
+    SweepLineSegment(Edge* newEdge, std::size_t newPtIndex);
     ~SweepLineSegment() override = default;
     double getMinX();
     double getMaxX();
@@ -47,7 +47,7 @@ public:
 protected:
     Edge* edge;
     const geom::CoordinateSequence* pts;
-    size_t ptIndex;
+    std::size_t ptIndex;
 };
 
 

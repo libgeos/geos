@@ -127,7 +127,7 @@ void
 EdgeEndBuilder::createEdgeEndForNext(Edge* edge, std::vector<EdgeEnd*>* l,
                                      const EdgeIntersection* eiCurr, const EdgeIntersection* eiNext)
 {
-    size_t iNext = eiCurr->segmentIndex + 1;
+    std::size_t iNext = eiCurr->segmentIndex + 1;
     // if there is no next edge there is nothing to do
     if(iNext >= edge->getNumPoints() && eiNext == nullptr) {
         return;

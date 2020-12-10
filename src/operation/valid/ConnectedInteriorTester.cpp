@@ -57,7 +57,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::operation::overlay;
@@ -84,8 +84,8 @@ ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence* coord,
         const Coordinate& pt)
 {
     assert(coord);
-    size_t npts = coord->getSize();
-    for(size_t i = 0; i < npts; ++i) {
+    std::size_t npts = coord->getSize();
+    for(std::size_t i = 0; i < npts; ++i) {
         if(!(coord->getAt(i) == pt)) {
             return coord->getAt(i);
         }
@@ -113,7 +113,7 @@ ConnectedInteriorTester::isInteriorsConnected()
     buildEdgeRings(graph.getEdgeEnds(), edgeRings);
 
 #if GEOS_DEBUG
-    cerr << "buildEdgeRings constructed " << edgeRings.size() << " edgeRings." << endl;
+    std::cerr << "buildEdgeRings constructed " << edgeRings.size() << " edgeRings." << std::endl;
 #endif
 
     /*
@@ -126,7 +126,7 @@ ConnectedInteriorTester::isInteriorsConnected()
     visitShellInteriors(geomGraph.getGeometry(), graph);
 
 #if GEOS_DEBUG
-    cerr << "after visitShellInteriors edgeRings are " << edgeRings.size() << " edgeRings." << endl;
+    std::cerr << "after visitShellInteriors edgeRings are " << edgeRings.size() << " edgeRings." << std::endl;
 #endif
 
     /*
@@ -139,18 +139,18 @@ ConnectedInteriorTester::isInteriorsConnected()
     bool res = !hasUnvisitedShellEdge(&edgeRings);
 
 #if GEOS_DEBUG
-    cerr << "releasing " << edgeRings.size() << " edgeRings." << endl;
+    std::cerr << "releasing " << edgeRings.size() << " edgeRings." << std::endl;
 #endif
     // Release memory allocated by buildEdgeRings
-    for(size_t i = 0, n = edgeRings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edgeRings.size(); i < n; ++i) {
         EdgeRing* er = edgeRings[i];
 #if GEOS_DEBUG
-        cerr << *er << endl;
+        std::cerr << *er << std::endl;
 #endif
         assert(er);
         delete er;
 #if GEOS_DEBUG
-        cerr << "releasing edgeRing at " << er << endl;
+        std::cerr << "releasing edgeRing at " << er << std::endl;
 #endif
     }
     edgeRings.clear();
@@ -159,7 +159,7 @@ ConnectedInteriorTester::isInteriorsConnected()
     // There should be no more references to this object
     // how to check this ? boost::shared_ptr<> comes to mind.
     //
-    for(size_t i = 0, n = maximalEdgeRings.size(); i < n; i++) {
+    for(std::size_t i = 0, n = maximalEdgeRings.size(); i < n; i++) {
         delete maximalEdgeRings[i];
     }
     maximalEdgeRings.clear();
@@ -171,7 +171,7 @@ void
 ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph& graph)
 {
     std::vector<EdgeEnd*>* ee = graph.getEdgeEnds();
-    for(size_t i = 0, n = ee->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = ee->size(); i < n; ++i) {
         // Unexpected non DirectedEdge in graphEdgeEnds
         DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         if(de->getLabel().getLocation(0, Position::RIGHT) == Location::INTERIOR) {
@@ -186,7 +186,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*>* dirEdges,
                                         std::vector<EdgeRing*>& minEdgeRings)
 {
 #if GEOS_DEBUG
-    cerr << __FUNCTION__ << " got " << dirEdges->size() << " EdgeEnd vector" << endl;
+    std::cerr << __FUNCTION__ << " got " << dirEdges->size() << " EdgeEnd vector" << std::endl;
 #endif
 
     typedef std::vector<EdgeEnd*> EdgeEnds;
@@ -196,7 +196,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*>* dirEdges,
         DirectedEdge* de = detail::down_cast<DirectedEdge*>((*dirEdges)[i]);
 
 #if GEOS_DEBUG
-        cerr << "DirectedEdge " << i << ": " << de->print() << endl;
+        std::cerr << "DirectedEdge " << i << ": " << de->print() << std::endl;
 #endif
 
         // if this edge has not yet been processed
@@ -230,7 +230,7 @@ ConnectedInteriorTester::visitShellInteriors(const Geometry* g, PlanarGraph& gra
     }
 
     if(const MultiPolygon* mp = dynamic_cast<const MultiPolygon*>(g)) {
-        for(size_t i = 0, n = mp->getNumGeometries(); i < n; i++) {
+        for(std::size_t i = 0, n = mp->getNumGeometries(); i < n; i++) {
             const Polygon* p = mp->getGeometryN(i);
             visitInteriorRing(p->getExteriorRing(), graph);
         }
@@ -290,7 +290,7 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*>* edgeRings
 {
 
 #if GEOS_DEBUG
-    cerr << "hasUnvisitedShellEdge called with " << edgeRings->size() << " edgeRings." << endl;
+    std::cerr << "hasUnvisitedShellEdge called with " << edgeRings->size() << " edgeRings." << std::endl;
 #endif
 
     for(std::vector<EdgeRing*>::iterator

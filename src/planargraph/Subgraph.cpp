@@ -21,15 +21,15 @@
 #include <utility>
 #include <vector>
 
-using namespace std;
+
 
 namespace geos {
 namespace planargraph {
 
-pair<Edge::NonConstSet::iterator, bool>
+std::pair<Edge::NonConstSet::iterator, bool>
 Subgraph::add(Edge* e)
 {
-    pair<Edge::NonConstSet::iterator, bool> p = edges.insert(e);
+    std::pair<Edge::NonConstSet::iterator, bool> p = edges.insert(e);
     if(!p.second) {
         return p;
     }

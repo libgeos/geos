@@ -40,7 +40,7 @@ struct test_polygon_data {
 
     PolygonAutoPtr empty_poly_;
     PolygonAutoPtr poly_;
-    const size_t poly_size_;
+    const std::size_t poly_size_;
 
     test_polygon_data()
         : pm_(1)
@@ -77,7 +77,7 @@ void object::test<1>
     using geos::geom::Coordinate;
 
     // Create non-empty Coordiantes sequence for Exterior LinearRing
-    const size_t size = 7;
+    const std::size_t size = 7;
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", coords != nullptr);
 
@@ -430,7 +430,7 @@ template<>
 void object::test<30>
 ()
 {
-    const size_t holesNum = 1;
+    const std::size_t holesNum = 1;
 
     auto geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
     ensure(geo != nullptr);
@@ -476,7 +476,7 @@ void object::test<32>
     ensure_equals(coords->getSize(), poly_size_);
 
     // Check first and last coordinates
-    const size_t lastPos = poly_size_ - 1;
+    const std::size_t lastPos = poly_size_ - 1;
     ensure_equals(coords->getAt(0), coords->getAt(lastPos));
 
     // Check coordinate	from the middle of ring

@@ -67,7 +67,7 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     //computePoints(start);
     //computeRing();
 #ifdef GEOS_DEBUG
-    cerr << "EdgeRing[" << this << "] ctor" << endl;
+    std::cerr << "EdgeRing[" << this << "] ctor" << std::endl;
 #endif
     testInvariant();
 }
@@ -151,9 +151,9 @@ EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
     if (holes.empty()) {
         return p_geometryFactory->createPolygon(std::move(shellLR));
     } else {
-        size_t nholes = holes.size();
+        std::size_t nholes = holes.size();
         std::vector<std::unique_ptr<LinearRing>> holeLR(nholes);
-        for(size_t i = 0; i < nholes; ++i) {
+        for(std::size_t i = 0; i < nholes; ++i) {
             holeLR[i] = detail::make_unique<LinearRing>(*(holes[i]->getLinearRing()));
         }
 
@@ -314,7 +314,7 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
     const CoordinateSequence* edgePts = edge->getCoordinates();
 
     assert(edgePts);
-    size_t numEdgePts = edgePts->getSize();
+    std::size_t numEdgePts = edgePts->getSize();
 
     pts.reserve(pts.size() + numEdgePts);
     if(isForward) {
@@ -322,18 +322,18 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
             edgePts->toVector(pts);
             return;
         } else {
-            for(size_t i = 1; i < numEdgePts; ++i) {
+            for(std::size_t i = 1; i < numEdgePts; ++i) {
                 pts.push_back(edgePts->getAt(i));
             }
         }
     }
 
     else { // is backward
-        size_t startIndex = numEdgePts - 1;
+        std::size_t startIndex = numEdgePts - 1;
         if(isFirstEdge) {
             startIndex = numEdgePts;
         }
-        for(size_t i = startIndex; i > 0; --i) {
+        for(std::size_t i = startIndex; i > 0; --i) {
             pts.push_back(edgePts->getAt(i - 1));
         }
     }

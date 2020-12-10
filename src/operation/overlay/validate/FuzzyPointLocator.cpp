@@ -63,7 +63,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 
     std::vector<std::unique_ptr<Geometry>> lineGeoms;
 
-    for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
         const Geometry* gComp = g.getGeometryN(i);
 
         // only get linework for polygonal components
@@ -81,7 +81,7 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
     ::geos::ignore_unused_variable_warning(geom);
 
     std::vector<std::unique_ptr<Geometry>> lineGeoms;
-    for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
         const Geometry* gComp = g.getGeometryN(i);
 
         if(gComp->getDimension() == 2) {

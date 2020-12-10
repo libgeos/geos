@@ -135,7 +135,7 @@ public:
     // release the underlying points to the caller
     geom::CoordinateSequence* releaseCoordinates();
 
-    const geom::Coordinate& getCoordinate(size_t index)  const;
+    const geom::Coordinate& getCoordinate(std::size_t index)  const;
 
     std::size_t size() const;
     bool direction() const;

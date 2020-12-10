@@ -63,7 +63,7 @@ public:
     geom::Coordinate coord;
 
     /// the index of the containing line segment in the parent edge
-    size_t segmentIndex;
+    std::size_t segmentIndex;
 
     /// Construct a node on the given NodedSegmentString
     ///
@@ -79,7 +79,7 @@ public:
     ///
     SegmentNode(const NodedSegmentString& ss,
                 const geom::Coordinate& nCoord,
-                size_t nSegmentIndex, int nSegmentOctant);
+                std::size_t nSegmentIndex, int nSegmentOctant);
 
     ~SegmentNode() {}
 

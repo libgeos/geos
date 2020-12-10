@@ -17,8 +17,6 @@
 
 #include <sstream>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -47,8 +45,8 @@ Dimension::toDimensionSymbol(int dimensionValue)
     case A:
         return '2';
     default:
-        ostringstream s;
-        s << "Unknown dimension value: " << dimensionValue << endl;
+        std::ostringstream s;
+        s << "Unknown dimension value: " << dimensionValue << std::endl;
         throw  util::IllegalArgumentException(s.str());
     }
 }
@@ -80,8 +78,8 @@ Dimension::toDimensionValue(char dimensionSymbol)
     case '2':
         return A;
     default:
-        ostringstream s;
-        s << "Unknown dimension symbol: " << dimensionSymbol << endl;
+        std::ostringstream s;
+        s << "Unknown dimension symbol: " << dimensionSymbol << std::endl;
         throw  util::IllegalArgumentException(s.str());
     }
 }

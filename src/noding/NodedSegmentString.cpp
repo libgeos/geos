@@ -54,7 +54,7 @@ NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1)
 
 /*public*/
 int
-NodedSegmentString::getSegmentOctant(size_t index) const
+NodedSegmentString::getSegmentOctant(std::size_t index) const
 {
     if(index >= size() - 1) {
         return -1;
@@ -66,9 +66,9 @@ NodedSegmentString::getSegmentOctant(size_t index) const
 /*public*/
 void
 NodedSegmentString::addIntersections(LineIntersector* li,
-                                     size_t segmentIndex, size_t geomIndex)
+                                     std::size_t segmentIndex, std::size_t geomIndex)
 {
-    for(size_t i = 0, n = li->getIntersectionNum(); i < n; ++i) {
+    for(std::size_t i = 0, n = li->getIntersectionNum(); i < n; ++i) {
         addIntersection(li, segmentIndex, geomIndex, i);
     }
 }
@@ -76,8 +76,8 @@ NodedSegmentString::addIntersections(LineIntersector* li,
 /*public*/
 void
 NodedSegmentString::addIntersection(LineIntersector* li,
-                                    size_t segmentIndex,
-                                    size_t geomIndex, size_t intIndex)
+                                    std::size_t segmentIndex,
+                                    std::size_t geomIndex, std::size_t intIndex)
 {
     ::geos::ignore_unused_variable_warning(geomIndex);
 
@@ -88,9 +88,9 @@ NodedSegmentString::addIntersection(LineIntersector* li,
 /*public*/
 void
 NodedSegmentString::addIntersection(const Coordinate& intPt,
-                                    size_t segmentIndex)
+                                    std::size_t segmentIndex)
 {
-    size_t normalizedSegmentIndex = segmentIndex;
+    std::size_t normalizedSegmentIndex = segmentIndex;
 
     if(segmentIndex > size() - 2) {
         throw util::IllegalArgumentException("SegmentString::addIntersection: SegmentIndex out of range");
@@ -152,7 +152,7 @@ NodedSegmentString::getNodedSubstrings(
 
 /* virtual public */
 const geom::Coordinate&
-NodedSegmentString::getCoordinate(size_t i) const
+NodedSegmentString::getCoordinate(std::size_t i) const
 {
     return pts->getAt(i);
 }

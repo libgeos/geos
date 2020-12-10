@@ -89,7 +89,7 @@ private:
     * result in the snapped segment A crossing segment B
     * without a node being introduced.
     */
-    void processNearVertex(const geom::Coordinate& p, SegmentString* edge, size_t segIndex,
+    void processNearVertex(const geom::Coordinate& p, SegmentString* edge, std::size_t segIndex,
                            const geom::Coordinate& p0, const geom::Coordinate& p1);
 
 
@@ -107,7 +107,7 @@ public:
     * this call for segment pairs which they have determined do not intersect
     * (e.g. by an disjoint envelope test).
     */
-    void processIntersections(SegmentString* e0, size_t segIndex0, SegmentString* e1, size_t segIndex1) override;
+    void processIntersections(SegmentString* e0, std::size_t segIndex0, SegmentString* e1, std::size_t segIndex1) override;
 
     /**
     * Always process all intersections

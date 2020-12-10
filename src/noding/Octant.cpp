@@ -23,7 +23,7 @@
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
-//using namespace std;
+//
 using namespace geos::geom;
 
 namespace geos {

@@ -25,7 +25,7 @@ namespace geos {
 namespace util { // geos.util
 
 void
-Assert::isTrue(bool assertion, const string& message)
+Assert::isTrue(bool assertion, const std::string& message)
 {
     if(!assertion) {
         if(message.empty()) {
@@ -39,7 +39,7 @@ Assert::isTrue(bool assertion, const string& message)
 
 void
 Assert::equals(const Coordinate& expectedValue,
-               const Coordinate& actualValue, const string& message)
+               const Coordinate& actualValue, const std::string& message)
 {
     if(!(actualValue == expectedValue)) {
         throw  AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
@@ -49,7 +49,7 @@ Assert::equals(const Coordinate& expectedValue,
 
 
 void
-Assert::shouldNeverReachHere(const string& message)
+Assert::shouldNeverReachHere(const std::string& message)
 {
     throw  AssertionFailedException("Should never reach here"
                                     + (!message.empty() ? ": " + message : ""));

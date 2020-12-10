@@ -77,7 +77,7 @@ SharedPathsOp::getSharedPaths(PathList& forwDir, PathList& backDir)
 {
     PathList paths;
     findLinearIntersections(paths);
-    for(size_t i = 0, n = paths.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = paths.size(); i < n; ++i) {
         LineString* path = paths[i];
         if(isSameDirection(*path)) {
             forwDir.push_back(path);
@@ -115,7 +115,7 @@ SharedPathsOp::findLinearIntersections(PathList& to)
     // NOTE: intersection of equal lines yelds splitted lines,
     //       should we sew them back ?
 
-    for(size_t i = 0, n = full->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = full->getNumGeometries(); i < n; ++i) {
         const Geometry* sub = full->getGeometryN(i);
         const LineString* path = dynamic_cast<const LineString*>(sub);
         if(path && ! path->isEmpty()) {

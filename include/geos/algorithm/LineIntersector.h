@@ -103,7 +103,7 @@ public:
      * @return <code>true</code> if either intersection point is in
      * the interior of the input segment
      */
-    bool isInteriorIntersection(size_t inputLineIndex);
+    bool isInteriorIntersection(std::size_t inputLineIndex);
 
     /// Force computed intersection to be rounded to a given precision model.
     ///
@@ -174,7 +174,7 @@ public:
     /// @return the intIndex'th intersection point
     ///
     const geom::Coordinate&
-    getIntersection(size_t intIndex) const
+    getIntersection(std::size_t intIndex) const
     {
         return intPt[intIndex];
     }
@@ -227,7 +227,7 @@ public:
      * @return the intIndex'th intersection point in the direction of the
      *         specified input line segment
      */
-    const geom::Coordinate& getIntersectionAlongSegment(size_t segmentIndex, size_t intIndex);
+    const geom::Coordinate& getIntersectionAlongSegment(std::size_t segmentIndex, std::size_t intIndex);
 
     /** \brief
      * Computes the index of the intIndex'th intersection point in the direction of
@@ -238,7 +238,7 @@ public:
      *
      * @return the index of the intersection point along the segment (0 or 1)
      */
-    size_t getIndexAlongSegment(size_t segmentIndex, size_t intIndex);
+    std::size_t getIndexAlongSegment(std::size_t segmentIndex, std::size_t intIndex);
 
     /** \brief
      * Computes the "edge distance" of an intersection point along the specified
@@ -249,7 +249,7 @@ public:
      *
      * @return the edge distance of the intersection point
      */
-    double getEdgeDistance(size_t geomIndex, size_t intIndex) const;
+    double getEdgeDistance(std::size_t geomIndex, std::size_t intIndex) const;
 
 private:
 
@@ -259,7 +259,7 @@ private:
      */
     const geom::PrecisionModel* precisionModel;
 
-    size_t result;
+    std::size_t result;
 
     const geom::Coordinate* inputLines[2][2];
 
@@ -273,7 +273,7 @@ private:
      * The indexes of the endpoints of the intersection lines, in order along
      * the corresponding line
      */
-    size_t intLineIndex[2][2];
+    std::size_t intLineIndex[2][2];
 
     bool isProperVar;
     //Coordinate &pa;
@@ -296,7 +296,7 @@ private:
 
     void computeIntLineIndex();
 
-    void computeIntLineIndex(size_t segmentIndex);
+    void computeIntLineIndex(std::size_t segmentIndex);
 
     uint8_t computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
                                          const geom::Coordinate& q1, const geom::Coordinate& q2);

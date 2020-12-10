@@ -106,12 +106,12 @@ template<>
 void object::test<2>
 ()
 {
-    size_t ngeoms = 100;
+    std::size_t ngeoms = 100;
     std::vector<GEOSGeometry*> geoms;
     std::vector<GEOSGeometry*> queryPoints;
     GEOSSTRtree* tree = GEOSSTRtree_create(8);
 
-    for(size_t i = 0; i < ngeoms; i++) {
+    for(std::size_t i = 0; i < ngeoms; i++) {
         GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
         GEOSCoordSeq_setX(seq, 0, std::rand());
         GEOSCoordSeq_setY(seq, 0, std::rand());
@@ -119,18 +119,18 @@ void object::test<2>
         GEOSSTRtree_insert(tree, geoms[i], geoms[i]);
     }
 
-    for(size_t i = 0; i < ngeoms; i++) {
+    for(std::size_t i = 0; i < ngeoms; i++) {
         GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
         GEOSCoordSeq_setX(seq, 0, std::rand());
         GEOSCoordSeq_setY(seq, 0, std::rand());
         queryPoints.push_back(GEOSGeom_createPoint(seq));
     }
 
-    for(size_t i = 0; i < ngeoms; i++) {
+    for(std::size_t i = 0; i < ngeoms; i++) {
         const GEOSGeometry* nearest = GEOSSTRtree_nearest(tree, queryPoints[i]);
         const GEOSGeometry* nearestBruteForce = nullptr;
         double nearestBruteForceDistance = std::numeric_limits<double>::max();
-        for(size_t j = 0; j < ngeoms; j++) {
+        for(std::size_t j = 0; j < ngeoms; j++) {
             double distance;
             GEOSDistance(queryPoints[i], geoms[j], &distance);
 
@@ -143,7 +143,7 @@ void object::test<2>
         ensure(nearest == nearestBruteForce || GEOSEquals(nearest, nearestBruteForce));
     }
 
-    for(size_t i = 0; i < ngeoms; i++) {
+    for(std::size_t i = 0; i < ngeoms; i++) {
         GEOSGeom_destroy(geoms[i]);
         GEOSGeom_destroy(queryPoints[i]);
     }

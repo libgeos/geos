@@ -495,7 +495,7 @@ public:
      */
     static double distanceSquaredToCoordinate(const Coordinate & c, const Coordinate & p1, const Coordinate & p2);
 
-    size_t hashCode() const;
+    std::size_t hashCode() const;
 
 private:
 

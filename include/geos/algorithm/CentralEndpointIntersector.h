@@ -113,7 +113,7 @@ private:
         const std::vector<geom::Coordinate>& pts)
     {
         geom::Coordinate avg(0, 0);
-        size_t n = pts.size();
+        std::size_t n = pts.size();
         if(! n) {
             return avg;
         }

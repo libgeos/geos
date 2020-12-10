@@ -90,7 +90,7 @@ Edge::releaseCoordinates()
 
 /*public*/
 const Coordinate&
-Edge::getCoordinate(size_t index)  const
+Edge::getCoordinate(std::size_t index)  const
 {
     return pts->getAt(index);
 }

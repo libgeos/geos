@@ -34,7 +34,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -63,7 +63,7 @@ Node::createExpanded(std::unique_ptr<Node> node, const Envelope& addEnv)
     }
 
 #if GEOS_DEBUG
-    cerr << "Node::createExpanded computed " << expandEnv.toString() << endl;
+    std::cerr << "Node::createExpanded computed " << expandEnv.toString() << std::endl;
 #endif
 
     std::unique_ptr<Node> largerNode = createNode(expandEnv);
@@ -187,10 +187,10 @@ Node::createSubnode(int index)
     return node;
 }
 
-string
+std::string
 Node::toString() const
 {
-    ostringstream os;
+    std::ostringstream os;
     os << "L" << level << " " << env->toString() << " Ctr[" << centre.toString() << "]";
     os << " " + NodeBase::toString();
     return os.str();

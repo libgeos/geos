@@ -35,10 +35,10 @@ namespace valid { // geos.operation.valid
 bool
 SimpleNestedRingTester::isNonNested()
 {
-    for(size_t i = 0, ni = rings.size(); i < ni; i++) {
+    for(std::size_t i = 0, ni = rings.size(); i < ni; i++) {
         LinearRing* innerRing = rings[i];
         const CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
-        for(size_t j = 0, nj = rings.size(); j < nj; j++) {
+        for(std::size_t j = 0, nj = rings.size(); j < nj; j++) {
             LinearRing* searchRing = rings[j];
             const CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
             if(innerRing == searchRing) {

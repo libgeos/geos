@@ -39,7 +39,7 @@
 #include <iostream>
 #endif
 
-//using namespace std;
+//
 using namespace geos::geom;
 
 namespace geos {
@@ -51,7 +51,7 @@ static Profiler* profiler = Profiler::instance();
 
 
 SegmentNode*
-SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
+SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
 {
     nodeQue.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
     SegmentNode* eiNew = &(nodeQue.back());
@@ -76,7 +76,7 @@ SegmentNodeList::~SegmentNodeList()
 void
 SegmentNodeList::addEndpoints()
 {
-    size_t maxSegIndex = edge.size() - 1;
+    std::size_t maxSegIndex = edge.size() - 1;
     add(&(edge.getCoordinate(0)), 0);
     add(&(edge.getCoordinate(maxSegIndex)), maxSegIndex);
 }
@@ -106,7 +106,7 @@ SegmentNodeList::findCollapsesFromExistingVertices(
         return;    // or we'll never exit the loop below
     }
 
-    for(size_t i = 0, n = edge.size() - 2; i < n; ++i) {
+    for(std::size_t i = 0, n = edge.size() - 2; i < n; ++i) {
         const Coordinate& p0 = edge.getCoordinate(i);
         const Coordinate& p2 = edge.getCoordinate(i + 2);
         if(p0.equals2D(p2)) {
@@ -121,7 +121,7 @@ void
 SegmentNodeList::findCollapsesFromInsertedNodes(
     std::vector<size_t>& collapsedVertexIndexes) const
 {
-    size_t collapsedVertexIndex;
+    std::size_t collapsedVertexIndex;
 
     // there should always be at least two entries in the list,
     // since the endpoints are nodes
@@ -276,7 +276,7 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     //}
 
     pts.emplace_back(ei0->coord);
-    for (size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
+    for (std::size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
         pts.emplace_back(edge.getCoordinate(i));
     }
     if (useIntPt1) {

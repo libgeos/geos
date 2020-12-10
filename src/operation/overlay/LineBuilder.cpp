@@ -37,7 +37,7 @@
 #endif
 #define COMPUTE_Z 1
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geom;
@@ -52,8 +52,8 @@ LineBuilder::LineBuilder(OverlayOp* newOp,
     op(newOp),
     geometryFactory(newGeometryFactory),
     ptLocator(newPtLocator),
-    //lineEdgesList(new vector<Edge *>()),
-    resultLineList(new vector<LineString *>())
+    //lineEdgesList(new std::vector<Edge *>()),
+    resultLineList(new std::vector<LineString *>())
 {
 }
 
@@ -61,7 +61,7 @@ LineBuilder::LineBuilder(OverlayOp* newOp,
  * @return a list of the LineStrings in the result of the
  *         specified overlay operation
  */
-vector<LineString*>*
+std::vector<LineString*>*
 LineBuilder::build(OverlayOp::OpCode opCode)
 {
     findCoveredLineEdges();
@@ -95,8 +95,8 @@ LineBuilder::findCoveredLineEdges()
      * For all L edges which weren't handled by the above,
      * use a point-in-poly test to determine whether they are covered
      */
-    vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
-    for(size_t i = 0, s = ee->size(); i < s; ++i) {
+    std::vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
+    for(std::size_t i = 0, s = ee->size(); i < s; ++i) {
         DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         Edge* e = de->getEdge();
         if(de->isLineEdge() && !e->isCoveredSet()) {
@@ -109,8 +109,8 @@ LineBuilder::findCoveredLineEdges()
 void
 LineBuilder::collectLines(OverlayOp::OpCode opCode)
 {
-    vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
-    for(size_t i = 0, s = ee->size(); i < s; ++i) {
+    std::vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
+    for(std::size_t i = 0, s = ee->size(); i < s; ++i) {
         DirectedEdge* de = detail::down_cast<DirectedEdge*>((*ee)[i]);
         collectLineEdge(de, opCode, &lineEdgesList);
         collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
@@ -119,7 +119,7 @@ LineBuilder::collectLines(OverlayOp::OpCode opCode)
 
 void
 LineBuilder::collectLineEdge(DirectedEdge* de, OverlayOp::OpCode opCode,
-                             vector<Edge*>* edges)
+                             std::vector<Edge*>* edges)
 {
 
     // include L edges which are in the result
@@ -145,7 +145,7 @@ LineBuilder::collectLineEdge(DirectedEdge* de, OverlayOp::OpCode opCode,
 /*private*/
 void
 LineBuilder::collectBoundaryTouchEdge(DirectedEdge* de,
-                                      OverlayOp::OpCode opCode, vector<Edge*>* edges)
+                                      OverlayOp::OpCode opCode, std::vector<Edge*>* edges)
 {
     if(de->isLineEdge()) {
         return;    // only interested in area edges
@@ -182,7 +182,7 @@ LineBuilder::collectBoundaryTouchEdge(DirectedEdge* de,
 void
 LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 {
-    for(size_t i = 0, s = lineEdgesList.size(); i < s; ++i) {
+    for(std::size_t i = 0, s = lineEdgesList.size(); i < s; ++i) {
         Edge* e = lineEdgesList[i];
         auto cs = e->getCoordinates()->clone();
 #if COMPUTE_Z
@@ -204,24 +204,24 @@ void
 LineBuilder::propagateZ(CoordinateSequence* cs)
 {
 #if GEOS_DEBUG
-    cerr << "LineBuilder::propagateZ() called" << endl;
+    std::cerr << "LineBuilder::propagateZ() called" << std::endl;
 #endif
 
-    vector<size_t> v3d; // vertex 3d
-    size_t cssize = cs->getSize();
-    for(size_t i = 0; i < cssize; ++i) {
+    std::vector<size_t> v3d; // vertex 3d
+    std::size_t cssize = cs->getSize();
+    for(std::size_t i = 0; i < cssize; ++i) {
         if(!std::isnan(cs->getAt(i).z)) {
             v3d.push_back(i);
         }
     }
 
 #if GEOS_DEBUG
-    cerr << "  found " << v3d.size() << " 3d vertexes" << endl;
+    std::cerr << "  found " << v3d.size() << " 3d vertexes" << std::endl;
 #endif
 
     if(v3d.empty()) {
 #if GEOS_DEBUG
-        cerr << "  nothing to do" << endl;
+        std::cerr << "  nothing to do" << std::endl;
 #endif
         return;
     }
@@ -231,7 +231,7 @@ LineBuilder::propagateZ(CoordinateSequence* cs)
     // fill initial part
     if(v3d[0] != 0) {
         double z = cs->getAt(v3d[0]).z;
-        for(size_t j = 0; j < v3d[0]; ++j) {
+        for(std::size_t j = 0; j < v3d[0]; ++j) {
             buf = cs->getAt(j);
             buf.z = z;
             cs->setAt(buf, j);
@@ -239,8 +239,8 @@ LineBuilder::propagateZ(CoordinateSequence* cs)
     }
 
     // interpolate inbetweens
-    size_t prev = v3d[0];
-    for(size_t i = 1; i < v3d.size(); ++i) {
+    std::size_t prev = v3d[0];
+    for(std::size_t i = 1; i < v3d.size(); ++i) {
         auto curr = v3d[i];
         auto dist = curr - prev;
         if(dist > 1) {
@@ -249,7 +249,7 @@ LineBuilder::propagateZ(CoordinateSequence* cs)
             double gap = cto.z - cfrom.z;
             double zstep = gap / static_cast<double>(dist);
             double z = cfrom.z;
-            for(size_t j = prev + 1; j < curr; ++j) {
+            for(std::size_t j = prev + 1; j < curr; ++j) {
                 buf = cs->getAt(j);
                 z += zstep;
                 buf.z = z;
@@ -262,7 +262,7 @@ LineBuilder::propagateZ(CoordinateSequence* cs)
     // fill final part
     if(prev < cssize - 1) {
         double z = cs->getAt(prev).z;
-        for(size_t j = prev + 1; j < cssize; j++) {
+        for(std::size_t j = prev + 1; j < cssize; j++) {
             buf = cs->getAt(j);
             buf.z = z;
             cs->setAt(buf, j);
@@ -274,9 +274,9 @@ LineBuilder::propagateZ(CoordinateSequence* cs)
 
 
 void
-LineBuilder::labelIsolatedLines(vector<Edge*>* edgesList)
+LineBuilder::labelIsolatedLines(std::vector<Edge*>* edgesList)
 {
-    for(size_t i = 0, s = edgesList->size(); i < s; ++i) {
+    for(std::size_t i = 0, s = edgesList->size(); i < s; ++i) {
         Edge* e = (*edgesList)[i];
         const Label& label = e->getLabel();
         //n.print(System.out);

@@ -25,6 +25,7 @@
 #include <geos/util/Machine.h> // for getMachineByteOrder
 #include <iosfwd>
 #include <cstdint>
+#include <cstddef>
 
 // Forward declarations
 namespace geos {
@@ -200,7 +201,7 @@ private:
     void writeCoordinateSequence(const geom::CoordinateSequence& cs, bool sized);
     // throws IOException
 
-    void writeCoordinate(const geom::CoordinateSequence& cs, size_t idx, bool is3d);
+    void writeCoordinate(const geom::CoordinateSequence& cs, std::size_t idx, bool is3d);
     // throws IOException
 
     void writeGeometryType(int geometryType, int SRID);

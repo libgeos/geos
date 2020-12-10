@@ -71,8 +71,8 @@ private:
                                     const SegmentString& ss1);
 
     void checkInteriorIntersections(
-        const SegmentString& e0, size_t segIndex0,
-        const SegmentString& e1, size_t segIndex1);
+        const SegmentString& e0, std::size_t segIndex0,
+        const SegmentString& e1, std::size_t segIndex1);
 
     /**
      * Checks for intersections between an endpoint of a segment string

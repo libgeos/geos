@@ -112,7 +112,7 @@ EdgeList::print()
     ss << *this;
     return ss.str();
 #if 0
-    string out = "EdgeList( ";
+    std::string out = "EdgeList( ";
     for(unsigned int j = 0, s = edges.size(); j < s; ++j) {
         Edge* e = edges[j];
         if(j) {

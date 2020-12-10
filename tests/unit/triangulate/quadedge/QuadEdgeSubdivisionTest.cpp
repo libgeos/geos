@@ -151,7 +151,7 @@ template<> template<> void object::test<3>
         std::unique_ptr<CoordinateSequence> cs(
             p->getExteriorRing()->getCoordinates()
         );
-        size_t from = cs->size();
+        std::size_t from = cs->size();
         cs = geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs.get());
         ensure_equals(from, cs->size());
     }

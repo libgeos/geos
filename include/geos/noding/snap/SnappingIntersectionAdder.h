@@ -65,10 +65,10 @@ private:
     */
     void processNearVertex(
         SegmentString* srcSS,
-        size_t srcIndex,
+        std::size_t srcIndex,
         const geom::Coordinate& p,
         SegmentString* ss,
-        size_t segIndex,
+        std::size_t segIndex,
         const geom::Coordinate& p0,
         const geom::Coordinate& p1);
 
@@ -77,7 +77,7 @@ private:
     * Closed segStrings require a check for the point shared by the beginning
     * and end segments.
     */
-    static bool isAdjacent(SegmentString* ss0, size_t segIndex0, SegmentString* ss1, size_t segIndex1);
+    static bool isAdjacent(SegmentString* ss0, std::size_t segIndex0, SegmentString* ss1, std::size_t segIndex1);
 
 
 public:
@@ -92,7 +92,7 @@ public:
     * this call for segment pairs which they have determined do not intersect
     * (e.g. by an disjoint envelope test).
     */
-    void processIntersections(SegmentString* e0, size_t segIndex0, SegmentString* e1, size_t segIndex1) override;
+    void processIntersections(SegmentString* e0, std::size_t segIndex0, SegmentString* e1, std::size_t segIndex1) override;
 
     bool isDone() const override { return false; };
 

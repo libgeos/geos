@@ -44,11 +44,10 @@
 #include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
 #include <geos/triangulate/quadedge/Vertex.h>
 
-using namespace std;
 using namespace geos;
 
 #define check(x) \
-	{ cout << "Size of " << #x << " is " << sizeof(x) << endl; }
+	{ std::cout << "Size of " << #x << " is " << sizeof(x) << std::endl; }
 
 int
 main()

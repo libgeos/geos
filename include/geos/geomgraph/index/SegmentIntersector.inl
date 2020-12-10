@@ -21,7 +21,7 @@ namespace geomgraph {
 namespace index {
 
 INLINE bool
-SegmentIntersector::isAdjacentSegments(size_t i1, size_t i2)
+SegmentIntersector::isAdjacentSegments(std::size_t i1, size_t i2)
 {
     return (i1 > i2 ? i1 - i2 : i2 - i1) == 1;
 }

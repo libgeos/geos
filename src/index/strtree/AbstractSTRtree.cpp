@@ -25,7 +25,7 @@
 #include <cstddef>
 #include <cassert>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -114,7 +114,7 @@ AbstractSTRtree::insert(const void* bounds, void* item)
 
 /*protected*/
 void
-AbstractSTRtree::query(const void* searchBounds, vector<void*>& matches)
+AbstractSTRtree::query(const void* searchBounds, std::vector<void*>& matches)
 {
     if(!built) {
         build();
@@ -249,7 +249,7 @@ AbstractSTRtree::removeItem(AbstractNode& node, void* item)
 /*public*/
 void
 AbstractSTRtree::query(const void* searchBounds,
-                       const AbstractNode* node, vector<void*>* matches)
+                       const AbstractNode* node, std::vector<void*>* matches)
 {
     assert(node);
 

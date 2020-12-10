@@ -64,7 +64,7 @@ PreparedPolygonIntersects::intersects(const geom::Geometry* geom)
     noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
     bool segsIntersect = prepPoly->getIntersectionFinder()->intersects(&lineSegStr);
 
-    for(size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
+    for(std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
         delete lineSegStr[ i ];
     }
 

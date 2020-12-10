@@ -31,7 +31,7 @@
 #include <cassert>
 #include <typeinfo>
 
-using namespace std;
+
 
 using namespace geos::geom;
 
@@ -86,7 +86,7 @@ ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLoca
     auto coordinates = line->getCoordinates();
     CoordinateArraySequence newCoordinateArray;
 
-    const size_t indexStep = 1;
+    const std::size_t indexStep = 1;
     auto startSegmentIndex = start.getSegmentIndex();
 
     if(start.getSegmentFraction() > 0.0) {

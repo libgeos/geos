@@ -37,7 +37,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 
@@ -55,7 +55,7 @@ MaximalEdgeRing::MaximalEdgeRing(DirectedEdge* start,
     computePoints(start);
     computeRing();
 #if GEOS_DEBUG
-    cerr << "MaximalEdgeRing[" << this << "] ctor" << endl;
+    std::cerr << "MaximalEdgeRing[" << this << "] ctor" << std::endl;
 #endif
 }
 
@@ -93,17 +93,17 @@ MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
 }
 
 /*public*/
-vector<MinimalEdgeRing*>*
+std::vector<MinimalEdgeRing*>*
 MaximalEdgeRing::buildMinimalRings()
 {
-    vector<MinimalEdgeRing*>* minEdgeRings = new vector<MinimalEdgeRing*>;
+    std::vector<MinimalEdgeRing*>* minEdgeRings = new std::vector<MinimalEdgeRing*>;
     buildMinimalRings(*minEdgeRings);
     return minEdgeRings;
 }
 
 /*public*/
 void
-MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
+MaximalEdgeRing::buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings)
 {
     DirectedEdge* de = startDe;
     do {
@@ -118,7 +118,7 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 
 /*public*/
 void
-MaximalEdgeRing::buildMinimalRings(vector<EdgeRing*>& minEdgeRings)
+MaximalEdgeRing::buildMinimalRings(std::vector<EdgeRing*>& minEdgeRings)
 {
     DirectedEdge* de = startDe;
     do {

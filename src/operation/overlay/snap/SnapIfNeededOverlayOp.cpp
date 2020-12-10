@@ -30,7 +30,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -39,12 +39,12 @@ namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
 
 /* public */
-unique_ptr<Geometry>
+std::unique_ptr<Geometry>
 SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
     using geos::util::TopologyException;
 
-    unique_ptr<Geometry> result;
+    std::unique_ptr<Geometry> result;
 
     TopologyException origEx;
 

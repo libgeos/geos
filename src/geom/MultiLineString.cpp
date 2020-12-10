@@ -138,7 +138,7 @@ MultiLineString::reverse() const
 }
 
 const LineString*
-MultiLineString::getGeometryN(size_t i) const
+MultiLineString::getGeometryN(std::size_t i) const
 {
     return static_cast<const LineString*>(geometries[i].get());
 }

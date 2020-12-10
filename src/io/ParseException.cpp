@@ -21,7 +21,7 @@
 #include <sstream>
 #include <string>
 
-using namespace std;
+
 
 namespace geos {
 namespace io { // geos.io
@@ -32,28 +32,28 @@ ParseException::ParseException()
 {
 }
 
-ParseException::ParseException(const string& msg)
+ParseException::ParseException(const std::string& msg)
     :
     GEOSException("ParseException", msg)
 {
 }
 
-ParseException::ParseException(const string& msg, const string& var)
+ParseException::ParseException(const std::string& msg, const std::string& var)
     :
     GEOSException("ParseException", msg + ": '" + var + "'")
 {
 }
 
-ParseException::ParseException(const string& msg, double num)
+ParseException::ParseException(const std::string& msg, double num)
     :
     GEOSException("ParseException", msg + ": '" + stringify(num) + "'")
 {
 }
 
-string
+std::string
 ParseException::stringify(double num)
 {
-    stringstream ss;
+    std::stringstream ss;
     ss << num;
     return ss.str();
 }

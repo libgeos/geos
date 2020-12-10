@@ -168,8 +168,8 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     // Create new nodedSS to allow adding any hot pixel nodes
     NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getData());
 
-    size_t snapSSindex = 0;
-    for (size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
+    std::size_t snapSSindex = 0;
+    for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
 
         const geom::Coordinate& currSnap = snapSS->getCoordinate(snapSSindex);
 
@@ -205,16 +205,16 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
 */
 /*private*/
 void
-SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentString* ss, size_t segIndex)
+SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentString* ss, std::size_t segIndex)
 {
     /* First define a visitor to use in the pixelIndex.query() */
     struct SnapRoundingVisitor : KdNodeVisitor {
         const Coordinate& p0;
         const Coordinate& p1;
         NodedSegmentString* ss;
-        size_t segIndex;
+        std::size_t segIndex;
 
-        SnapRoundingVisitor(const Coordinate& pp0, const Coordinate& pp1, NodedSegmentString* pss, size_t psegIndex)
+        SnapRoundingVisitor(const Coordinate& pp0, const Coordinate& pp1, NodedSegmentString* pss, std::size_t psegIndex)
             : p0(pp0), p1(pp1), ss(pss), segIndex(psegIndex) {};
 
         void visit(KdNode* node) override {
@@ -261,7 +261,7 @@ SnapRoundingNoder::addVertexNodeSnaps(NodedSegmentString* ss)
 }
 
 void
-SnapRoundingNoder::snapVertexNode(const Coordinate& p0, NodedSegmentString* ss, size_t segIndex)
+SnapRoundingNoder::snapVertexNode(const Coordinate& p0, NodedSegmentString* ss, std::size_t segIndex)
 {
 
     /* First define a visitor to use in the pixelIndex.query() */
@@ -269,9 +269,9 @@ SnapRoundingNoder::snapVertexNode(const Coordinate& p0, NodedSegmentString* ss, 
 
         const Coordinate& p0;
         NodedSegmentString* ss;
-        size_t segIndex;
+        std::size_t segIndex;
 
-        SnapRoundingVertexNodeVisitor(const Coordinate& pp0, NodedSegmentString* pss, size_t psegIndex)
+        SnapRoundingVertexNodeVisitor(const Coordinate& pp0, NodedSegmentString* pss, std::size_t psegIndex)
             : p0(pp0), ss(pss), segIndex(psegIndex) {};
 
         void visit(KdNode* node) override {

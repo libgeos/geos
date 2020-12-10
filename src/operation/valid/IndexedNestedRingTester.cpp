@@ -42,7 +42,7 @@ IndexedNestedRingTester::isNonNested()
     buildIndex();
 
     std::vector<void*> results;
-    for(size_t i = 0, n = rings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = rings.size(); i < n; ++i) {
         results.clear();
 
         const geom::LinearRing* outerRing = rings[i];
@@ -105,7 +105,7 @@ IndexedNestedRingTester::buildIndex()
     delete index;
 
     index = new index::strtree::STRtree();
-    for(size_t i = 0, n = rings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = rings.size(); i < n; ++i) {
         const geom::LinearRing* ring = rings[i];
         const geom::Envelope* env = ring->getEnvelopeInternal();
         index->insert(env, (void*)ring);

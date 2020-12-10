@@ -35,7 +35,7 @@ public:
         shellLoc(*poly.getExteriorRing())
     {
         auto n = poly.getNumInteriorRing();
-        for (size_t i = 0; i < n; i++) {
+        for (std::size_t i = 0; i < n; i++) {
             ringLoc.emplace_back(*poly.getInteriorRingN(i));
         }
     }
@@ -44,7 +44,7 @@ public:
         return shellLoc;
     }
 
-    Locator& getHoleLocator(size_t holeNum) {
+    Locator& getHoleLocator(std::size_t holeNum) {
         return ringLoc[holeNum];
     }
 
@@ -52,7 +52,7 @@ public:
         return &poly;
     }
 
-    const geom::LinearRing* getInteriorRingN(size_t n) const {
+    const geom::LinearRing* getInteriorRingN(std::size_t n) const {
         return poly.getInteriorRingN(n);
     }
 
@@ -62,7 +62,7 @@ private:
     std::deque<Locator> ringLoc;
 };
 
-IndexedNestedShellTester::IndexedNestedShellTester(const geos::geomgraph::GeometryGraph &g, size_t initialCapacity) :
+IndexedNestedShellTester::IndexedNestedShellTester(const geos::geomgraph::GeometryGraph &g, std::size_t initialCapacity) :
     graph(g),
     nestedPt(nullptr),
     processed(false)
@@ -159,7 +159,7 @@ IndexedNestedShellTester::checkShellNotNested(const geom::LinearRing* shell, Pol
     // Otherwise, the shell is not properly contained in a hole, which is
     // an error.
     const geom::Coordinate* badNestedPt = nullptr;
-    for (size_t i = 0; i < nholes; i++) {
+    for (std::size_t i = 0; i < nholes; i++) {
         const geom::LinearRing* hole = locs.getPolygon()->getInteriorRingN(i);
 
         if (hole->getEnvelopeInternal()->covers(shell->getEnvelopeInternal())) {

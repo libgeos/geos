@@ -36,7 +36,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -64,7 +64,7 @@ NodeBase::getSubnodeIndex(const Envelope* env, const Coordinate& centre)
         }
     }
 #if GEOS_DEBUG
-    cerr << "getSubNodeIndex(" << env->toString() << ", " << centre.toString() << ") returning " << subnodeIndex << endl;
+    std::cerr << "getSubNodeIndex(" << env->toString() << ", " << centre.toString() << ") returning " << subnodeIndex << std::endl;
 #endif
     return subnodeIndex;
 }
@@ -89,7 +89,7 @@ NodeBase::~NodeBase()
     subnodes[3] = nullptr;
 }
 
-vector<void*>&
+std::vector<void*>&
 NodeBase::getItems()
 {
     return items;
@@ -103,8 +103,8 @@ NodeBase::add(void* item)
     //GEOS_DEBUG System.out.print(itemCount);
 }
 
-vector<void*>&
-NodeBase::addAllItems(vector<void*>& resultItems) const
+std::vector<void*>&
+NodeBase::addAllItems(std::vector<void*>& resultItems) const
 {
     // this node may have items as well as subnodes (since items may not
     // be wholly contained in any single subnode
@@ -120,7 +120,7 @@ NodeBase::addAllItems(vector<void*>& resultItems) const
 
 void
 NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
-                                     vector<void*>& resultItems) const
+                                     std::vector<void*>& resultItems) const
 {
     if(!isSearchMatch(searchEnv)) {
         return;
@@ -159,7 +159,7 @@ NodeBase::depth() const
 size_t
 NodeBase::size() const
 {
-    size_t subSize = 0;
+    std::size_t subSize = 0;
     for(const auto& subnode : subnodes) {
         if(subnode != nullptr) {
             subSize += subnode->size();
@@ -171,7 +171,7 @@ NodeBase::size() const
 size_t
 NodeBase::getNodeCount() const
 {
-    size_t subSize = 0;
+    std::size_t subSize = 0;
     for(const auto& subnode : subnodes) {
         if(subnode != nullptr) {
             subSize += subnode->size();
@@ -181,12 +181,12 @@ NodeBase::getNodeCount() const
     return subSize + 1;
 }
 
-string
+std::string
 NodeBase::toString() const
 {
-    ostringstream s;
-    s << "ITEMS:" << items.size() << endl;
-    for(size_t i = 0; i < subnodes.size(); i++) {
+    std::ostringstream s;
+    s << "ITEMS:" << items.size() << std::endl;
+    for(std::size_t i = 0; i < subnodes.size(); i++) {
         s << "subnode[" << i << "] ";
         if(subnodes[i] == nullptr) {
             s << "NULL";
@@ -194,7 +194,7 @@ NodeBase::toString() const
         else {
             s << subnodes[i]->toString();
         }
-        s << endl;
+        s << std::endl;
     }
     return s.str();
 }

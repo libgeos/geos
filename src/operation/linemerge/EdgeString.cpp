@@ -31,7 +31,7 @@
 #include <vector>
 #include <cassert>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {

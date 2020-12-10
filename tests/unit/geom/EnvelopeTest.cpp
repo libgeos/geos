@@ -262,7 +262,7 @@ void object::test<10>
     std::vector<Coordinate> c(25);
 
     // std::cout<<std::endl;
-    for (size_t i = 0; i < c.size(); i++) {
+    for (std::size_t i = 0; i < c.size(); i++) {
         c[i].x = static_cast<double>(i % 5);
         c[i].y = static_cast<double>(5 - (i / 5));
         // std::cout<< c[i] << std::endl;

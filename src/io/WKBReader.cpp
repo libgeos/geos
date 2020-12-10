@@ -40,7 +40,7 @@
 
 //#define DEBUG_WKB_READER 1
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -57,13 +57,13 @@ WKBReader::WKBReader()
     : WKBReader(*(GeometryFactory::getDefaultInstance()))
     {}
 
-ostream&
-WKBReader::printHEX(istream& is, ostream& os)
+std::ostream&
+WKBReader::printHEX(std::istream& is, std::ostream& os)
 {
     static const char hex[] = "0123456789ABCDEF";
 
     std::streampos pos = is.tellg(); // take note of input stream get pointer
-    is.seekg(0, ios::beg); // rewind input stream
+    is.seekg(0, std::ios::beg); // rewind input stream
 
     char each = 0;
     while(is.read(&each, 1)) {
@@ -131,22 +131,22 @@ ASCIIHexToUChar(char val)
 
 }  // namespace
 
-// Must be an even number of characters in the istream.
+// Must be an even number of characters in the std::istream.
 // Throws a ParseException if there are an odd number of characters.
 std::unique_ptr<Geometry>
-WKBReader::readHEX(istream& is)
+WKBReader::readHEX(std::istream& is)
 {
     // setup input/output stream
-    stringstream os(ios_base::binary | ios_base::in | ios_base::out);
+    std::stringstream os(std::ios_base::binary | std::ios_base::in | std::ios_base::out);
 
     while(true) {
         const int input_high = is.get();
-        if(input_high == char_traits<char>::eof()) {
+        if(input_high == std::char_traits<char>::eof()) {
             break;
         }
 
         const int input_low = is.get();
-        if(input_low == char_traits<char>::eof()) {
+        if(input_low == std::char_traits<char>::eof()) {
             throw ParseException("Premature end of HEX string");
         }
 
@@ -160,7 +160,7 @@ WKBReader::readHEX(istream& is)
             static_cast<char>((result_high << 4) + result_low);
 
 #if DEBUG_HEX_READER
-        cout << "HEX " << high << low << " -> DEC " << (int)value << endl;
+        std::size_t << "HEX " << high << low << " -> DEC " << (int)value << std::endl;
 #endif
         // write the value to the output stream
         os << value;
@@ -197,7 +197,7 @@ WKBReader::readGeometry()
     unsigned char byteOrder = dis.readByte();
 
 #if DEBUG_WKB_READER
-    cout << "WKB byteOrder: " << (int)byteOrder << endl;
+    std::size_t << "WKB byteOrder: " << (int)byteOrder << std::endl;
 #endif
 
     // default is machine endian
@@ -220,7 +220,7 @@ WKBReader::readGeometry()
     int sfsqlHasM = (typeInt & 0x40000000) != 0;
 
 #if DEBUG_WKB_READER
-    cout << "WKB geometryType: " << geometryType << endl;
+    std::size_t << "WKB geometryType: " << geometryType << std::endl;
 #endif
 
     hasZ = sfsqlHasZ || isoHasZ;
@@ -236,17 +236,17 @@ WKBReader::readGeometry()
     }
 
 #if DEBUG_WKB_READER
-    cout << "WKB hasZ: " << hasZ << endl;
+    std::size_t << "WKB hasZ: " << hasZ << std::endl;
 #endif
 
 #if DEBUG_WKB_READER
-    cout << "WKB dimensions: " << inputDimension << endl;
+    std::size_t << "WKB dimensions: " << inputDimension << std::endl;
 #endif
 
     bool hasSRID = ((typeInt & 0x20000000) != 0);
 
 #if DEBUG_WKB_READER
-    cout << "WKB hasSRID: " << hasSRID << endl;
+    std::size_t << "WKB hasSRID: " << hasSRID << std::endl;
 #endif
 
     int SRID = 0;
@@ -279,7 +279,7 @@ WKBReader::readGeometry()
         result = readGeometryCollection();
         break;
     default:
-        stringstream err;
+        std::stringstream err;
         err << "Unknown WKB type " << geometryType;
         throw  ParseException(err.str());
     }
@@ -311,7 +311,7 @@ WKBReader::readLineString()
 {
     int size = dis.readInt();
 #if DEBUG_WKB_READER
-    cout << "WKB npoints: " << size << endl;
+    std::size_t << "WKB npoints: " << size << std::endl;
 #endif
     auto pts = readCoordinateSequence(size);
     return factory.createLineString(std::move(pts));
@@ -322,7 +322,7 @@ WKBReader::readLinearRing()
 {
     int size = dis.readInt();
 #if DEBUG_WKB_READER
-    cout << "WKB npoints: " << size << endl;
+    std::size_t << "WKB npoints: " << size << std::endl;
 #endif
     auto pts = readCoordinateSequence(size);
     return factory.createLinearRing(std::move(pts));
@@ -334,7 +334,7 @@ WKBReader::readPolygon()
     int numRings = dis.readInt();
 
 #if DEBUG_WKB_READER
-    cout << "WKB numRings: " << numRings << endl;
+    std::size_t << "WKB numRings: " << numRings << std::endl;
 #endif
 
     if(numRings == 0) {
@@ -366,7 +366,7 @@ WKBReader::readMultiPoint()
     for(int i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<Point*>(geoms[i].get())) {
-            stringstream err;
+            std::stringstream err;
             err << BAD_GEOM_TYPE_MSG << " MultiPoint";
             throw ParseException(err.str());
         }
@@ -384,7 +384,7 @@ WKBReader::readMultiLineString()
     for(int i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<LineString*>(geoms[i].get())) {
-            stringstream err;
+            std::stringstream err;
             err << BAD_GEOM_TYPE_MSG << " LineString";
             throw  ParseException(err.str());
         }
@@ -402,7 +402,7 @@ WKBReader::readMultiPolygon()
     for(int i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<Polygon*>(geoms[i].get())) {
-            stringstream err;
+            std::stringstream err;
             err << BAD_GEOM_TYPE_MSG << " Polygon";
             throw ParseException(err.str());
         }
@@ -458,7 +458,7 @@ WKBReader::readCoordinate()
         }
     }
 #if DEBUG_WKB_READER
-    cout << "WKB coordinate: " << ordValues[0] << "," << ordValues[1] << endl;
+    std::size_t << "WKB coordinate: " << ordValues[0] << "," << ordValues[1] << std::endl;
 #endif
 }
 

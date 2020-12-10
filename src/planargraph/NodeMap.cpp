@@ -18,7 +18,7 @@
 
 #include <map>
 
-using namespace std;
+
 
 namespace geos {
 namespace planargraph {
@@ -43,7 +43,7 @@ NodeMap::getNodeMap()
 Node*
 NodeMap::add(Node* n)
 {
-    nodeMap.insert(pair<geom::Coordinate, Node*>(n->getCoordinate(), n));
+    nodeMap.insert(std::pair<geom::Coordinate, Node*>(n->getCoordinate(), n));
     return n;
 }
 
@@ -61,7 +61,7 @@ NodeMap::remove(geom::Coordinate& pt)
 
 /* public */
 void
-NodeMap::getNodes(vector<Node*>& values)
+NodeMap::getNodes(std::vector<Node*>& values)
 {
     NodeMap::container::iterator it = nodeMap.begin(), itE = nodeMap.end();
     while(it != itE) {

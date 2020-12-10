@@ -33,7 +33,6 @@
 
 using namespace geos::geom;
 using namespace geos::io;
-using namespace std;
 
 class RectangleIntersectsPerfTest {
 public:
@@ -83,7 +82,7 @@ private:
     void
     testRectangles(const Geometry& target, int nRect, double rectSize)
     {
-        vector<const Geometry*> rects;
+        std::vector<const Geometry*> rects;
         createRectangles(*target.getEnvelopeInternal(), nRect, rectSize, rects);
         test(rects, target);
         for (const Geometry* g: rects) {
@@ -92,28 +91,25 @@ private:
     }
 
     void
-    test(vector<const Geometry*>& rect, const Geometry& g)
+    test(std::vector<const Geometry*>& rect, const Geometry& g)
     {
-        typedef vector<const Geometry*>::size_type size_type;
-
         geos::util::Profile sw("");
         sw.start();
 
-        for(int i = 0; i < MAX_ITER; i++) {
-            for(size_type j = 0; j < rect.size(); j++) {
+        for(std::size_t i = 0; i < MAX_ITER; i++) {
+            for(std::size_t j = 0; j < rect.size(); j++) {
                 rect[j]->intersects(&g);
             }
         }
 
         sw.stop();
-        cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl;
-
+        std::cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << std::endl;
     }
 
     // Push newly created geoms to rectLit
     void
     createRectangles(const Envelope& env, int nRect, double,
-                     vector<const Geometry*>& rectList)
+                     std::vector<const Geometry*>& rectList)
     {
         int nSide =  1 + (int)sqrt((double) nRect);
         double dx = env.getWidth() / nSide;

@@ -59,7 +59,7 @@ sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
     std::cerr << "COPY \"" << table
               << "\" FROM stdin;" << std::endl;
 
-    for(size_t i = 0, n = ssv.size(); i < n; i++) {
+    for(std::size_t i = 0, n = ssv.size(); i < n; i++) {
         SegmentString* ss = ssv[i];
         geom::CoordinateSequence* cs = ss->getCoordinates();
         assert(cs);
@@ -155,13 +155,13 @@ void
 ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 {
     Scaler scaler(*this);
-    for(size_t i = 0; i < segStrings.size(); i++) {
+    for(std::size_t i = 0; i < segStrings.size(); i++) {
         SegmentString* ss = segStrings[i];
 
         CoordinateSequence* cs = ss->getCoordinates();
 
 #ifndef NDEBUG
-        size_t npts = cs->size();
+        std::size_t npts = cs->size();
 #endif
         cs->apply_rw(&scaler);
         assert(cs->size() == npts);

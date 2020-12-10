@@ -34,7 +34,7 @@ SegmentIntersectionTester::hasIntersectionWithLineStrings(
     const LineString::ConstVect& lines)
 {
     hasIntersectionVar = false;
-    for(size_t i = 0, n = lines.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
         const LineString* testLine = lines[i];
         hasIntersection(line, *testLine);
         if(hasIntersectionVar) {

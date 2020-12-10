@@ -50,7 +50,7 @@
 #include <typeinfo>
 #include <set>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geom;
@@ -273,9 +273,9 @@ void
 IsValidOp::checkValid(const MultiPolygon* g)
 {
     auto ngeoms = g->getNumGeometries();
-    vector<const Polygon*>polys(ngeoms);
+    std::vector<const Polygon*>polys(ngeoms);
 
-    for(size_t i = 0; i < ngeoms; ++i) {
+    for(std::size_t i = 0; i < ngeoms; ++i) {
         const Polygon* p = g->getGeometryN(i);
 
         checkInvalidCoordinates(p);
@@ -339,7 +339,7 @@ IsValidOp::checkValid(const MultiPolygon* g)
 void
 IsValidOp::checkValid(const GeometryCollection* gc)
 {
-    for(size_t i = 0, ngeoms = gc->getNumGeometries(); i < ngeoms; ++i) {
+    for(std::size_t i = 0, ngeoms = gc->getNumGeometries(); i < ngeoms; ++i) {
         const Geometry* g = gc->getGeometryN(i);
         checkValid(g);
         if(validErr != nullptr) {
@@ -392,7 +392,7 @@ IsValidOp::checkConsistentArea(GeometryGraph* graph)
 void
 IsValidOp::checkNoSelfIntersectingRings(GeometryGraph* graph)
 {
-    vector<Edge*>* edges = graph->getEdges();
+    std::vector<Edge*>* edges = graph->getEdges();
     for(unsigned int i = 0; i < edges->size(); ++i) {
         Edge* e = (*edges)[i];
         checkNoSelfIntersectingRing(e->getEdgeIntersectionList());
@@ -406,7 +406,7 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph* graph)
 void
 IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 {
-    set<const Coordinate*, CoordinateLessThen>nodeSet;
+    std::set<const Coordinate*, CoordinateLessThen>nodeSet;
     bool isFirst = true;
     for(const EdgeIntersection& ei : eiList) {
         if(isFirst) {
@@ -440,7 +440,7 @@ IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
 
     locate::IndexedPointInAreaLocator ipial(*shell);
 
-    for(size_t i = 0; i < nholes; ++i) {
+    for(std::size_t i = 0; i < nholes; ++i) {
         const LinearRing* hole = p->getInteriorRingN(i);
 
         if (hole->isEmpty()) continue;
@@ -472,7 +472,7 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     auto nholes = p->getNumInteriorRing();
 
     IndexedNestedRingTester nestedTester(graph, nholes);
-    for (size_t i = 0; i < nholes; ++i) {
+    for (std::size_t i = 0; i < nholes; ++i) {
         const LinearRing* innerHole = p->getInteriorRingN(i);
 
         //empty holes always pass
@@ -499,7 +499,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
 
     IndexedNestedShellTester tester(*graph, ngeoms);
 
-    for (size_t i = 0; i < ngeoms; ++i) {
+    for (std::size_t i = 0; i < ngeoms; ++i) {
         tester.add(*mp->getGeometryN(i));
     }
 
@@ -529,7 +529,7 @@ void
 IsValidOp::checkInvalidCoordinates(const CoordinateSequence* cs)
 {
     auto size = cs->size();
-    for(size_t i = 0; i < size; ++i) {
+    for(std::size_t i = 0; i < size; ++i) {
         if(! isValid(cs->getAt(i))) {
             validErr = new TopologyValidationError(
                 TopologyValidationError::eInvalidCoordinate,
@@ -550,7 +550,7 @@ IsValidOp::checkInvalidCoordinates(const Polygon* poly)
     }
 
     auto nholes = poly->getNumInteriorRing();
-    for(size_t i = 0; i < nholes; ++i) {
+    for(std::size_t i = 0; i < nholes; ++i) {
         checkInvalidCoordinates(
             poly->getInteriorRingN(i)->getCoordinatesRO()
         );
@@ -571,7 +571,7 @@ IsValidOp::checkClosedRings(const Polygon* poly)
     }
 
     auto nholes = poly->getNumInteriorRing();
-    for(size_t i = 0; i < nholes; ++i) {
+    for(std::size_t i = 0; i < nholes; ++i) {
         lr = (const LinearRing*)poly->getInteriorRingN(i);
         checkClosedRing(lr);
         if(validErr) {

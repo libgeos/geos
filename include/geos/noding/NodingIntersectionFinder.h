@@ -152,8 +152,8 @@ public:
      * (e.g. by an disjoint envelope test).
      */
     void processIntersections(
-        SegmentString* e0,  size_t segIndex0,
-        SegmentString* e1,  size_t segIndex1) override;
+        SegmentString* e0,  std::size_t segIndex0,
+        SegmentString* e1,  std::size_t segIndex1) override;
 
     bool
     isDone() const override
@@ -164,7 +164,7 @@ public:
 private:
     algorithm::LineIntersector& li;
     geom::Coordinate interiorIntersection;
-    size_t intersectionCount;
+    std::size_t intersectionCount;
     bool isCheckEndSegmentsOnly;
     bool findAllIntersections;
     std::vector<geom::Coordinate> intSegments;
@@ -216,7 +216,7 @@ private:
      * @param index the index of a segment in the segment string
      * @return true if the segment is an end segment
      */
-    bool isEndSegment(const SegmentString* segStr, size_t index);
+    bool isEndSegment(const SegmentString* segStr, std::size_t index);
 
 
 };

@@ -56,8 +56,8 @@ public:
      * being intersected.
      */
     virtual void processIntersections(
-        SegmentString* e0,  size_t segIndex0,
-        SegmentString* e1,  size_t segIndex1) = 0;
+        SegmentString* e0,  std::size_t segIndex0,
+        SegmentString* e1,  std::size_t segIndex1) = 0;
 
     /**
      * \brief

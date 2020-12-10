@@ -32,7 +32,7 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
-                             size_t nstart, size_t nend, void* nContext)
+                             std::size_t nstart, std::size_t nend, void* nContext)
     :
     pts(newPts),
     context(nContext),
@@ -64,7 +64,7 @@ MonotoneChain::getEnvelope(double expansionDistance)
 }
 
 void
-MonotoneChain::getLineSegment(size_t index, LineSegment& ls) const
+MonotoneChain::getLineSegment(std::size_t index, LineSegment& ls) const
 {
     ls.p0 = pts[index];
     ls.p1 = pts[index + 1];
@@ -84,7 +84,7 @@ MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 
 void
 MonotoneChain::computeSelect(const Envelope& searchEnv,
-                             size_t start0, size_t end0,
+                             std::size_t start0, std::size_t end0,
                              MonotoneChainSelectAction& mcs)
 {
     const Coordinate& p0 = pts[start0];
@@ -100,7 +100,7 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
         return;
     }
     // the chains overlap,so split each in half and iterate (binary search)
-    size_t mid = (start0 + end0) / 2;
+    std::size_t mid = (start0 + end0) / 2;
 
     // Assert: mid != start or end (since we checked above for end-start <= 1)
     // check terminating conditions before recursing
@@ -131,9 +131,9 @@ MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
 
 /*private*/
 void
-MonotoneChain::computeOverlaps(size_t start0, size_t end0,
+MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
                                MonotoneChain& mc,
-                               size_t start1, size_t end1,
+                               std::size_t start1, std::size_t end1,
                                double overlapTolerance,
                                MonotoneChainOverlapAction& mco)
 {
@@ -149,8 +149,8 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
     }
 
     // the chains overlap,so split each in half and iterate (binary search)
-    size_t mid0 = (start0 + end0) / 2;
-    size_t mid1 = (start1 + end1) / 2;
+    std::size_t mid0 = (start0 + end0) / 2;
+    std::size_t mid1 = (start1 + end1) / 2;
 
     // Assert: mid != start or end (since we checked above for
     // end-start <= 1)
@@ -176,8 +176,8 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
 
 /*private*/
 bool
-MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc,
-                        size_t start1, size_t end1, double overlapTolerance) const
+MonotoneChain::overlaps(std::size_t start0, std::size_t end0, const MonotoneChain& mc,
+                        std::size_t start1, std::size_t end1, double overlapTolerance) const
 {
     if (overlapTolerance > 0.0) {
         return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);

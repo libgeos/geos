@@ -74,7 +74,7 @@
 // Other validators, not found in JTS
 //#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
 
-using namespace std;
+
 using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
@@ -164,7 +164,7 @@ OverlayOp::OverlayOp(const Geometry* g0, const Geometry* g1)
     elevationMatrix->add(g0);
     elevationMatrix->add(g1);
 #if GEOS_DEBUG
-    cerr << elevationMatrix->print() << endl;
+    std::cerr << elevationMatrix->print() << std::endl;
 #endif
 #endif // USE_ELEVATION_MATRIX
 #endif // COMPUTE_Z
@@ -175,7 +175,7 @@ OverlayOp::~OverlayOp()
     delete resultPolyList;
     delete resultLineList;
     delete resultPointList;
-    for(size_t i = 0; i < dupEdges.size(); i++) {
+    for(std::size_t i = 0; i < dupEdges.size(); i++) {
         delete dupEdges[i];
     }
 #if USE_ELEVATION_MATRIX
@@ -194,16 +194,16 @@ OverlayOp::getResultGeometry(OverlayOp::OpCode funcCode)
 
 /*private*/
 void
-OverlayOp::insertUniqueEdges(vector<Edge*>* edges, const Envelope* env)
+OverlayOp::insertUniqueEdges(std::vector<Edge*>* edges, const Envelope* env)
 {
-    for(size_t i = 0, n = edges->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edges->size(); i < n; ++i) {
         Edge* e = (*edges)[i];
         if(env && ! env->intersects(e->getEnvelope())) {
             dupEdges.push_back(e); // or could it be deleted directly ?
             continue;
         }
 #if GEOS_DEBUG
-        cerr << " " << e->print() << endl;
+        std::cerr << " " << e->print() << std::endl;
 #endif
         insertUniqueEdge(e);
     }
@@ -213,14 +213,14 @@ OverlayOp::insertUniqueEdges(vector<Edge*>* edges, const Envelope* env)
 void
 OverlayOp::replaceCollapsedEdges()
 {
-    vector<Edge*>& edges = edgeList.getEdges();
+    std::vector<Edge*>& edges = edgeList.getEdges();
 
-    for(size_t i = 0, nedges = edges.size(); i < nedges; ++i) {
+    for(std::size_t i = 0, nedges = edges.size(); i < nedges; ++i) {
         Edge* e = edges[i];
         assert(e);
         if(e->isCollapsed()) {
 #if GEOS_DEBUG
-            cerr << " replacing collapsed edge " << i << endl;
+            std::cerr << " replacing collapsed edge " << i << std::endl;
 #endif // GEOS_DEBUG
             //Debug.print(e);
             edges[i] = e->getCollapsedEdge();
@@ -266,7 +266,7 @@ OverlayOp::copyPoints(int argIndex, const Envelope* env)
     }
 
 #ifdef GEOS_DEBUG_COPY_POINTS
-    cerr << "Copied " << copied << " nodes out of " << nodeMap.size() << " for geom " << argIndex << endl;
+    std::cerr << "Copied " << copied << " nodes out of " << nodeMap.size() << " for geom " << argIndex << std::endl;
 #endif
 }
 
@@ -278,31 +278,31 @@ OverlayOp::computeLabelling()
     NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeLabelling(): at call time: " << edgeList.print() << endl;
+    std::cerr << "OverlayOp::computeLabelling(): at call time: " << edgeList.print() << std::endl;
 #endif
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeLabelling() scanning " << nodeMap.size() << " nodes from map:" << endl;
+    std::cerr << "OverlayOp::computeLabelling() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
     for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
             it != itEnd; ++it) {
         Node* node = it->second;
 #if GEOS_DEBUG
-        cerr << "     " << node->print() << " has " << node->getEdges()->getEdges().size() << " edgeEnds" << endl;
+        std::cerr << "     " << node->print() << " has " << node->getEdges()->getEdges().size() << " edgeEnds" << std::endl;
 #endif
         node->getEdges()->computeLabelling(&arg);
     }
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeLabelling(): after edge labelling: " << edgeList.print() << endl;
+    std::cerr << "OverlayOp::computeLabelling(): after edge labelling: " << edgeList.print() << std::endl;
 #endif
     mergeSymLabels();
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeLabelling(): after labels sym merging: " << edgeList.print() << endl;
+    std::cerr << "OverlayOp::computeLabelling(): after labels sym merging: " << edgeList.print() << std::endl;
 #endif
     updateNodeLabelling();
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeLabelling(): after node labeling update: " << edgeList.print() << endl;
+    std::cerr << "OverlayOp::computeLabelling(): after node labeling update: " << edgeList.print() << std::endl;
 #endif
 }
 
@@ -313,7 +313,7 @@ OverlayOp::mergeSymLabels()
     NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::mergeSymLabels() scanning " << nodeMap.size() << " nodes from map:" << endl;
+    std::cerr << "OverlayOp::mergeSymLabels() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
     for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
@@ -323,7 +323,7 @@ OverlayOp::mergeSymLabels()
         detail::down_cast<DirectedEdgeStar*>(ees)->mergeSymLabels();
         //((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
 #if GEOS_DEBUG
-        cerr << "     " << node->print() << endl;
+        std::cerr << "     " << node->print() << std::endl;
 #endif
         //node.print(System.out);
     }
@@ -341,8 +341,8 @@ OverlayOp::updateNodeLabelling()
     NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::updateNodeLabelling() scanning "
-         << nodeMap.size() << " nodes from map:" << endl;
+    std::cerr << "OverlayOp::updateNodeLabelling() scanning "
+         << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
     for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
@@ -353,7 +353,7 @@ OverlayOp::updateNodeLabelling()
         Label& lbl = des->getLabel();
         node->getLabel().merge(lbl);
 #if GEOS_DEBUG
-        cerr << "     " << node->print() << endl;
+        std::cerr << "     " << node->print() << std::endl;
 #endif
     }
 }
@@ -365,7 +365,7 @@ OverlayOp::labelIncompleteNodes()
     NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::labelIncompleteNodes() scanning " << nodeMap.size() << " nodes from map:" << endl;
+    std::cerr << "OverlayOp::labelIncompleteNodes() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
     for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
@@ -395,14 +395,14 @@ void
 OverlayOp::labelIncompleteNode(Node* n, int targetIndex)
 {
 #if GEOS_DEBUG
-    cerr << "OverlayOp::labelIncompleteNode(" << n->print() << ", " << targetIndex << ")" << endl;
+    std::cerr << "OverlayOp::labelIncompleteNode(" << n->print() << ", " << targetIndex << ")" << std::endl;
 #endif
     const Geometry* targetGeom = arg[targetIndex]->getGeometry();
     Location loc = ptLocator.locate(n->getCoordinate(), targetGeom);
     n->getLabel().setLocation(targetIndex, loc);
 
 #if GEOS_DEBUG
-    cerr << "   after location set: " << n->print() << endl;
+    std::cerr << "   after location set: " << n->print() << std::endl;
 #endif
 
 #if COMPUTE_Z
@@ -445,8 +445,8 @@ OverlayOp::getAverageZ(const Polygon* poly)
 
     const CoordinateSequence* pts =
         poly->getExteriorRing()->getCoordinatesRO();
-    size_t npts = pts->getSize();
-    for(size_t i = 0; i < npts; ++i) {
+    std::size_t npts = pts->getSize();
+    for(std::size_t i = 0; i < npts; ++i) {
         const Coordinate& c = pts->getAt(i);
         if(!std::isnan(c.z)) {
             totz += c.z;
@@ -492,7 +492,7 @@ OverlayOp::mergeZ(Node* n, const Polygon* poly) const
     if(found) {
         return 1;
     }
-    for(size_t i = 0, nr = poly->getNumInteriorRing(); i < nr; ++i) {
+    for(std::size_t i = 0, nr = poly->getNumInteriorRing(); i < nr; ++i) {
         ls = poly->getInteriorRingN(i);
         found = mergeZ(n, ls);
         if(found) {
@@ -509,7 +509,7 @@ OverlayOp::mergeZ(Node* n, const LineString* line) const
     const CoordinateSequence* pts = line->getCoordinatesRO();
     const Coordinate& p = n->getCoordinate();
     LineIntersector p_li;
-    for(size_t i = 1, size = pts->size(); i < size; ++i) {
+    for(std::size_t i = 1, size = pts->size(); i < size; ++i) {
         const Coordinate& p0 = pts->getAt(i - 1);
         const Coordinate& p1 = pts->getAt(i);
         p_li.computeIntersection(p, p0, p1);
@@ -534,8 +534,8 @@ OverlayOp::mergeZ(Node* n, const LineString* line) const
 void
 OverlayOp::findResultAreaEdges(OverlayOp::OpCode opCode)
 {
-    vector<EdgeEnd*>* ee = graph.getEdgeEnds();
-    for(size_t i = 0, e = ee->size(); i < e; ++i) {
+    std::vector<EdgeEnd*>* ee = graph.getEdgeEnds();
+    for(std::size_t i = 0, e = ee->size(); i < e; ++i) {
         DirectedEdge* de = (DirectedEdge*)(*ee)[i];
         // mark all dirEdges with the appropriate label
         const Label& label = de->getLabel();
@@ -557,8 +557,8 @@ OverlayOp::cancelDuplicateResultEdges()
 {
     // remove any dirEdges whose sym is also included
     // (they "cancel each other out")
-    vector<EdgeEnd*>* ee = graph.getEdgeEnds();
-    for(size_t i = 0, eesize = ee->size(); i < eesize; ++i) {
+    std::vector<EdgeEnd*>* ee = graph.getEdgeEnds();
+    for(std::size_t i = 0, eesize = ee->size(); i < eesize; ++i) {
         DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
         DirectedEdge* sym = de->getSym();
         if(de->isInResult() && sym->isInResult()) {
@@ -594,9 +594,9 @@ OverlayOp::isCoveredByA(const Coordinate& coord)
 
 /*private*/
 bool
-OverlayOp::isCovered(const Coordinate& coord, vector<Geometry*>* geomList)
+OverlayOp::isCovered(const Coordinate& coord, std::vector<Geometry*>* geomList)
 {
-    for(size_t i = 0, n = geomList->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (*geomList)[i];
         Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
@@ -608,9 +608,9 @@ OverlayOp::isCovered(const Coordinate& coord, vector<Geometry*>* geomList)
 
 /*private*/
 bool
-OverlayOp::isCovered(const Coordinate& coord, vector<LineString*>* geomList)
+OverlayOp::isCovered(const Coordinate& coord, std::vector<LineString*>* geomList)
 {
-    for(size_t i = 0, n = geomList->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (Geometry*)(*geomList)[i];
         Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
@@ -622,9 +622,9 @@ OverlayOp::isCovered(const Coordinate& coord, vector<LineString*>* geomList)
 
 /*private*/
 bool
-OverlayOp::isCovered(const Coordinate& coord, vector<Polygon*>* geomList)
+OverlayOp::isCovered(const Coordinate& coord, std::vector<Polygon*>* geomList)
 {
-    for(size_t i = 0, n = geomList->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (Geometry*)(*geomList)[i];
         Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
@@ -644,16 +644,16 @@ OverlayOp::resultDimension(OverlayOp::OpCode overlayOpCode,
     Dimension::DimensionType resultDimension = Dimension::False;
     switch(overlayOpCode) {
     case OverlayOp::opINTERSECTION:
-        resultDimension = min(dim0, dim1);
+        resultDimension = std::min(dim0, dim1);
         break;
     case OverlayOp::opUNION:
-        resultDimension = max(dim0, dim1);
+        resultDimension = std::max(dim0, dim1);
         break;
     case OverlayOp::opDIFFERENCE:
         resultDimension = dim0;
         break;
     case OverlayOp::opSYMDIFFERENCE:
-        resultDimension = max(dim0, dim1);
+        resultDimension = std::max(dim0, dim1);
         break;
     }
     return resultDimension;
@@ -684,16 +684,16 @@ OverlayOp::createEmptyResult(OverlayOp::OpCode overlayOpCode,
 
 /*private*/
 Geometry*
-OverlayOp::computeGeometry(vector<Point*>* nResultPointList,
-                           vector<LineString*>* nResultLineList,
-                           vector<Polygon*>* nResultPolyList,
+OverlayOp::computeGeometry(std::vector<Point*>* nResultPointList,
+                           std::vector<LineString*>* nResultLineList,
+                           std::vector<Polygon*>* nResultPolyList,
                            OverlayOp::OpCode opCode)
 {
-    size_t nPoints = nResultPointList->size();
-    size_t nLines = nResultLineList->size();
-    size_t nPolys = nResultPolyList->size();
+    std::size_t nPoints = nResultPointList->size();
+    std::size_t nLines = nResultLineList->size();
+    std::size_t nPolys = nResultPolyList->size();
 
-    std::unique_ptr<vector<Geometry*>> geomList{new vector<Geometry*>()};
+    std::unique_ptr<std::vector<Geometry*>> geomList{new std::vector<Geometry*>()};
     geomList->reserve(nPoints + nLines + nPolys);
 
     // element geometries of the result are always in the order P,L,A
@@ -761,7 +761,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     arg[1]->computeSelfNodes(li, false, env);
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeOverlay: computed SelfNodes" << endl;
+    std::cerr << "OverlayOp::computeOverlay: computed SelfNodes" << std::endl;
 #endif
 
     GEOS_CHECK_FOR_INTERRUPTS();
@@ -770,14 +770,14 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
 
 #if GEOS_DEBUG
-    cerr << "OverlayOp::computeOverlay: computed EdgeIntersections" << endl;
-    cerr << "OverlayOp::computeOverlay: li: " << li.toString() << endl;
+    std::cerr << "OverlayOp::computeOverlay: computed EdgeIntersections" << std::endl;
+    std::cerr << "OverlayOp::computeOverlay: li: " << li.toString() << std::endl;
 #endif
 
 
     GEOS_CHECK_FOR_INTERRUPTS();
 
-    vector<Edge*> baseSplitEdges;
+    std::vector<Edge*> baseSplitEdges;
     arg[0]->computeSplitEdges(&baseSplitEdges);
     GEOS_CHECK_FOR_INTERRUPTS();
     arg[1]->computeSplitEdges(&baseSplitEdges);
@@ -806,18 +806,18 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
      */
     try {
 #ifdef GEOS_DEBUG_VALIDATION
-        cout << "EdgeNodingValidator about to evaluate " << edgeList.getEdges().size() << " edges" << endl;
+        std::size_t << "EdgeNodingValidator about to evaluate " << edgeList.getEdges().size() << " edges" << std::endl;
 #endif
         // Will throw TopologyException if noding is
         // found to be invalid
         EdgeNodingValidator::checkValid(edgeList.getEdges());
 #ifdef GEOS_DEBUG_VALIDATION
-        cout << "EdgeNodingValidator accepted the noding" << endl;
+        std::size_t << "EdgeNodingValidator accepted the noding" << std::endl;
 #endif
     }
     catch(const util::TopologyException& ex) {
 #ifdef GEOS_DEBUG_VALIDATION
-        cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
+        std::size_t << "EdgeNodingValidator found noding invalid: " << ex.what() << std::endl;
 #endif
 
         // In the error scenario, the edgeList is not properly
@@ -865,10 +865,10 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     // might throw a TopologyException *
     polyBuilder.add(&graph);
 
-    vector<Geometry*>* gv = polyBuilder.getPolygons();
-    size_t gvsize = gv->size();
-    resultPolyList = new vector<Polygon*>(gvsize);
-    for(size_t i = 0; i < gvsize; ++i) {
+    std::vector<Geometry*>* gv = polyBuilder.getPolygons();
+    std::size_t gvsize = gv->size();
+    resultPolyList = new std::vector<Polygon*>(gvsize);
+    for(std::size_t i = 0; i < gvsize; ++i) {
         Polygon* p = dynamic_cast<Polygon*>((*gv)[i]);
         (*resultPolyList)[i] = p;
     }
@@ -899,7 +899,7 @@ OverlayOp::insertUniqueEdge(Edge* e)
 {
     //Debug.println(e);
 #if GEOS_DEBUG
-    cerr << "OverlayOp::insertUniqueEdge(" << e->print() << ")" << endl;
+    std::cerr << "OverlayOp::insertUniqueEdge(" << e->print() << ")" << std::endl;
 #endif
 
     //<FIX> MD 8 Oct 03  speed up identical edge lookup
@@ -910,7 +910,7 @@ OverlayOp::insertUniqueEdge(Edge* e)
     if(existingEdge) {
 
 #if GEOS_DEBUG
-        cerr << "  found identical edge, should merge Z" << endl;
+        std::cerr << "  found identical edge, should merge Z" << std::endl;
 #endif
 
         Label& existingLabel = existingEdge->getLabel();
@@ -941,7 +941,7 @@ OverlayOp::insertUniqueEdge(Edge* e)
     else {
         // no matching existing edge was found
 #if GEOS_DEBUG
-        cerr << "  no matching existing edge" << endl;
+        std::cerr << "  no matching existing edge" << std::endl;
 #endif
         // add this new edge to the list of edges in this graph
         //e.setName(name+edges.size());
@@ -997,16 +997,16 @@ OverlayOp::computeLabelsFromDepths()
 }
 
 struct PointCoveredByAny: public geom::CoordinateFilter {
-    const vector<const Geometry*>& geoms;
+    const std::vector<const Geometry*>& geoms;
     PointLocator locator;
-    PointCoveredByAny(const vector<const Geometry*>& nGeoms)
+    PointCoveredByAny(const std::vector<const Geometry*>& nGeoms)
         : geoms(nGeoms)
     {}
 
     void
     filter_ro(const Coordinate* coord) override
     {
-        for(size_t i = 0, n = geoms.size(); i < n; ++i) {
+        for(std::size_t i = 0, n = geoms.size(); i < n; ++i) {
             Location loc = locator.locate(*coord, geoms[i]);
             if(loc == Location::INTERIOR ||
                     loc == Location::BOUNDARY) {
@@ -1068,7 +1068,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
         // less obvious check:
         // each vertex in first geom must be either covered by
         // result or second geom
-        vector<const Geometry*> testGeoms;
+        std::vector<const Geometry*> testGeoms;
         testGeoms.reserve(2);
         testGeoms.push_back(resultGeom);
         testGeoms.push_back(arg[1]->getGeometry());
@@ -1090,7 +1090,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
         bool isvalid = validator.isValid(opCode);
         if(! isvalid) {
 #ifdef GEOS_DEBUG_VALIDATION
-            cout << "OverlayResultValidator considered result INVALID" << endl;
+            std::size_t << "OverlayResultValidator considered result INVALID" << std::endl;
 #endif
             throw util::TopologyException(
                 "Obviously wrong result: "
@@ -1098,18 +1098,18 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
                 "the result: \n"
                 "Invalid point: " +
                 validator.getInvalidLocation().toString() +
-                string("\nInvalid result: ") +
+                std::string("\nInvalid result: ") +
                 resultGeom->toString());
         }
 #ifdef GEOS_DEBUG_VALIDATION
         else {
-            cout << "OverlayResultValidator considered result valid" << endl;
+            std::size_t << "OverlayResultValidator considered result valid" << std::endl;
         }
 #endif
     }
 #ifdef GEOS_DEBUG_VALIDATION
     else {
-        cout << "Did not run OverlayResultValidator as the precision model is not floating" << endl;
+        std::size_t << "Did not run OverlayResultValidator as the precision model is not floating" << std::endl;
     }
 #endif // ndef GEOS_DEBUG
 #endif

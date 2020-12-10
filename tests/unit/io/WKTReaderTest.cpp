@@ -182,7 +182,7 @@ void object::test<8>
     wkt.push_back("MULTIPOLYGON(EMPTY(");
     wkt.push_back("GEOMETRYCOLLECTION(");
     wkt.push_back("GEOMETRYCOLLECTION(LINEARRING(");
-    for(size_t i = 0; i < wkt.size(); i++) {
+    for(std::size_t i = 0; i < wkt.size(); i++) {
         try {
             wktreader.read(wkt[i]);
             fail("Didn't get expected exception");

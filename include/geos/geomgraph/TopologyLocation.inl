@@ -70,7 +70,7 @@ TopologyLocation::operator= (const TopologyLocation& gl)
 
 /*public*/
 INLINE Location
-TopologyLocation::get(size_t posIndex) const
+TopologyLocation::get(std::size_t posIndex) const
 {
     // should be an assert() instead ?
     if(posIndex < locationSize) {
@@ -83,7 +83,7 @@ TopologyLocation::get(size_t posIndex) const
 INLINE bool
 TopologyLocation::isNull() const
 {
-    for(size_t i = 0; i < locationSize; ++i) {
+    for(std::size_t i = 0; i < locationSize; ++i) {
         if(location[i] != Location::NONE) {
             return false;
         }
@@ -95,7 +95,7 @@ TopologyLocation::isNull() const
 INLINE bool
 TopologyLocation::isAnyNull() const
 {
-    for(size_t i = 0; i < locationSize; ++i) {
+    for(std::size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::NONE) {
             return true;
         }
@@ -145,7 +145,7 @@ TopologyLocation::setAllLocations(Location locValue)
 INLINE void
 TopologyLocation::setAllLocationsIfNull(Location locValue)
 {
-    for(size_t i = 0; i < locationSize; ++i) {
+    for(std::size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::NONE) {
             location[i] = locValue;
         }
@@ -154,7 +154,7 @@ TopologyLocation::setAllLocationsIfNull(Location locValue)
 
 /*public*/
 INLINE void
-TopologyLocation::setLocation(size_t locIndex, Location locValue)
+TopologyLocation::setLocation(std::size_t locIndex, Location locValue)
 {
     location[locIndex] = locValue;
 }
@@ -187,7 +187,7 @@ TopologyLocation::setLocations(Location on, Location left, Location right)
 INLINE bool
 TopologyLocation::allPositionsEqual(Location loc) const
 {
-    for(size_t i = 0; i < locationSize; ++i) {
+    for(std::size_t i = 0; i < locationSize; ++i) {
         if(location[i] != loc) {
             return false;
         }

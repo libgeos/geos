@@ -32,7 +32,7 @@
 #include <functional>
 #include <vector>
 
-using namespace std;
+
 using namespace geos::planargraph;
 using namespace geos::geom;
 
@@ -45,7 +45,7 @@ namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
 void
-LineMerger::add(vector<const Geometry*>* geometries)
+LineMerger::add(std::vector<const Geometry*>* geometries)
 {
     for(const Geometry* g : *geometries) {
         add(g);
@@ -59,7 +59,7 @@ LineMerger::LineMerger():
 
 LineMerger::~LineMerger()
 {
-    for(size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
         delete edgeStrings[i];
     }
 }
@@ -115,7 +115,7 @@ LineMerger::merge()
     GraphComponent::setMarked(graph.edgeIterator(), graph.edgeEnd(),
                               false);
 
-    for(size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
         delete edgeStrings[i];
     }
     edgeStrings.clear();
@@ -125,7 +125,7 @@ LineMerger::merge()
 
     auto numEdgeStrings = edgeStrings.size();
     mergedLineStrings.reserve(numEdgeStrings);
-    for(size_t i = 0; i < numEdgeStrings; ++i) {
+    for(std::size_t i = 0; i < numEdgeStrings; ++i) {
         EdgeString* edgeString = edgeStrings[i];
         mergedLineStrings.emplace_back(edgeString->toLineString());
     }
@@ -147,7 +147,7 @@ void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
 #if GEOS_DEBUG
-    cerr << __FUNCTION__ << endl;
+    std::cerr << __FUNCTION__ << std::endl;
 #endif
     typedef std::vector<Node*> Nodes;
 
@@ -156,14 +156,14 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
     for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
         Node* node = nodes[i];
 #if GEOS_DEBUG
-        cerr << "Node " << i << ": " << *node << endl;
+        std::cerr << "Node " << i << ": " << *node << std::endl;
 #endif
         if(!node->isMarked()) {
             assert(node->getDegree() == 2);
             buildEdgeStringsStartingAt(node);
             node->setMarked(true);
 #if GEOS_DEBUG
-            cerr << " setMarked(true) : " << *node << endl;
+            std::cerr << " setMarked(true) : " << *node << std::endl;
 #endif
         }
     }
@@ -173,7 +173,7 @@ void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
 #if GEOS_DEBUG
-    cerr << __FUNCTION__ << endl;
+    std::cerr << __FUNCTION__ << std::endl;
 #endif
     typedef std::vector<Node*> Nodes;
 
@@ -182,13 +182,13 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
     for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
         Node* node = nodes[i];
 #if GEOS_DEBUG
-        cerr << "Node " << i << ": " << *node << endl;
+        std::cerr << "Node " << i << ": " << *node << std::endl;
 #endif
         if(node->getDegree() != 2) {
             buildEdgeStringsStartingAt(node);
             node->setMarked(true);
 #if GEOS_DEBUG
-            cerr << " setMarked(true) : " << *node << endl;
+            std::cerr << " setMarked(true) : " << *node << std::endl;
 #endif
         }
     }
@@ -197,9 +197,9 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 void
 LineMerger::buildEdgeStringsStartingAt(Node* node)
 {
-    vector<planargraph::DirectedEdge*>& edges = node->getOutEdges()->getEdges();
-    size_t size = edges.size();
-    for(size_t i = 0; i < size; i++) {
+    std::vector<planargraph::DirectedEdge*>& edges = node->getOutEdges()->getEdges();
+    std::size_t size = edges.size();
+    for(std::size_t i = 0; i < size; i++) {
         LineMergeDirectedEdge* directedEdge =
                             detail::down_cast<LineMergeDirectedEdge*>(edges[i]);
         if(directedEdge->getEdge()->isMarked()) {

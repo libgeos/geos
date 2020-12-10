@@ -73,11 +73,11 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
-    for(size_t i = 0, n = curveList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = curveList.size(); i < n; ++i) {
         SegmentString* ss = curveList[i];
         delete ss;
     }
-    for(size_t i = 0, n = newLabels.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = newLabels.size(); i < n; ++i) {
         delete newLabels[i];
     }
 }
@@ -95,7 +95,7 @@ void
 OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
                                  geom::Location leftLoc, geom::Location rightLoc)
 {
-    for(size_t i = 0, n = lineList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = lineList.size(); i < n; ++i) {
         CoordinateSequence* coords = lineList[i];
         addCurve(coords, leftLoc, rightLoc);
     }
@@ -174,7 +174,7 @@ OffsetCurveSetBuilder::add(const Geometry& g)
 void
 OffsetCurveSetBuilder::addCollection(const GeometryCollection* gc)
 {
-    for(size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+    for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
         const Geometry* g = gc->getGeometryN(i);
         add(*g);
     }
@@ -264,7 +264,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         Location::EXTERIOR,
         Location::INTERIOR);
 
-    for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         const LineString* hls = p->getInteriorRingN(i);
         const LinearRing* hole = detail::down_cast<const LinearRing*>(hls);
 

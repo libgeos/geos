@@ -41,7 +41,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -55,7 +55,7 @@ const double OffsetCurveBuilder::SIMPLIFY_FACTOR = 100.0;
 /*public*/
 void
 OffsetCurveBuilder::getLineCurve(const CoordinateSequence* inputPts,
-                                 double nDistance, vector<CoordinateSequence*>& lineList)
+                                 double nDistance, std::vector<CoordinateSequence*>& lineList)
 {
     distance = nDistance;
 
@@ -103,7 +103,7 @@ OffsetCurveBuilder::computePointCurve(const Coordinate& pt,
 /*public*/
 void
 OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
-        double p_distance, vector<CoordinateSequence*>& lineList, bool leftSide,
+        double p_distance, std::vector<CoordinateSequence*>& lineList, bool leftSide,
         bool rightSide)
 {
     // A zero or negative width buffer of a line/point is empty.
@@ -134,7 +134,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
         }
         segGen->initSideSegments(simp1[0], simp1[1], Position::LEFT);
         segGen->addFirstSegment();
-        for(size_t i = 2; i <= n1; ++i) {
+        for(std::size_t i = 2; i <= n1; ++i) {
             segGen->addNextSegment(simp1[i], true);
         }
         segGen->addLastSegment();
@@ -154,7 +154,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
         }
         segGen->initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
         segGen->addFirstSegment();
-        for(size_t i = n2 - 1; i > 0; --i) {
+        for(std::size_t i = n2 - 1; i > 0; --i) {
             segGen->addNextSegment(simp2[i - 1], true);
         }
         segGen->addLastSegment();
@@ -180,7 +180,7 @@ OffsetCurveBuilder::isLineOffsetEmpty(double p_distance)
 void
 OffsetCurveBuilder::getRingCurve(const CoordinateSequence* inputPts,
                                  int side, double nDistance,
-                                 vector<CoordinateSequence*>& lineList)
+                                 std::vector<CoordinateSequence*>& lineList)
 {
     distance = nDistance;
 
@@ -223,7 +223,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 
     auto n1 = simp1.size() - 1;
     segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
-    for(size_t i = 2; i <= n1; ++i) {
+    for(std::size_t i = 2; i <= n1; ++i) {
         segGen.addNextSegment(simp1[i], true);
     }
     segGen.addLastSegment();
@@ -238,7 +238,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 
     auto n2 = simp2.size() - 1;
     segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
-    for(size_t i = n2 - 1; i > 0; --i) {
+    for(std::size_t i = n2 - 1; i > 0; --i) {
         segGen.addNextSegment(simp2[i - 1], true);
     }
     segGen.addLastSegment();
@@ -265,7 +265,7 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
 
     auto n = simp.size() - 1;
     segGen.initSideSegments(simp[n - 1], simp[0], side);
-    for(size_t i = 1; i <= n; i++) {
+    for(std::size_t i = 1; i <= n; i++) {
         bool addStartPoint = i != 1;
         segGen.addNextSegment(simp[i], addStartPoint);
     }
@@ -294,7 +294,7 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
         auto n2 = simp2.size() - 1;
         segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
         segGen.addFirstSegment();
-        for(size_t  i = n2 - 1; i > 0; --i) {
+        for(std::size_t  i = n2 - 1; i > 0; --i) {
             segGen.addNextSegment(simp2[i - 1], true);
         }
 
@@ -313,7 +313,7 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
         auto n1 = simp1.size() - 1;
         segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
         segGen.addFirstSegment();
-        for(size_t i = 2; i <= n1; ++i) {
+        for(std::size_t i = 2; i <= n1; ++i) {
             segGen.addNextSegment(simp1[i], true);
         }
 

@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <limits>
 
-using namespace std;
+using std::string;
 
 namespace geos {
 namespace io { // geos.io

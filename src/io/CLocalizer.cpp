@@ -21,7 +21,7 @@
 #include <string>
 #include <clocale>
 
-using namespace std;
+
 
 namespace geos {
 namespace io {

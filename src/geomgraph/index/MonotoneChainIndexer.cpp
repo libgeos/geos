@@ -20,7 +20,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Quadrant.h>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -29,12 +29,12 @@ namespace index { // geos.geomgraph.index
 
 void
 MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
-        vector<size_t>& startIndexList)
+        std::vector<size_t>& startIndexList)
 {
     // find the startpoint (and endpoints) of all monotone chains
     // in this edge
-    size_t start = 0;
-    //vector<int>* startIndexList=new vector<int>();
+    std::size_t start = 0;
+    //vector<int>* startIndexList=new std::vector<int>();
     startIndexList.push_back(start);
     do {
         auto last = findChainEnd(pts, start);
@@ -50,7 +50,7 @@ MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
  * @return the index of the last point in the monotone chain
  */
 size_t
-MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, size_t start)
+MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, std::size_t start)
 {
     // determine quadrant for chain
     auto chainQuad = Quadrant::quadrant(pts->getAt(start), pts->getAt(start + 1));

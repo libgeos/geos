@@ -19,7 +19,6 @@
 #include <geos/geom/CoordinateArraySequence.h>
 //#include <stdio.h>
 #include <iostream>
-using namespace std;
 using namespace geos::triangulate;
 using namespace geos::triangulate::quadedge;
 using namespace geos::geom;
@@ -80,9 +79,9 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
     bool eq = results->equalsExact(expected.get(), 1e-7);
     if(! eq) {
         writer.setTrim(true);
-        cout << endl;
-        cout << " Expected: " << writer.write(expected.get()) << endl;
-        cout << " Obtained: " << writer.write(results.get()) << endl;
+        std::cout << std::endl;
+        std::cout << " Expected: " << writer.write(expected.get()) << std::endl;
+        std::cout << " Obtained: " << writer.write(results.get()) << std::endl;
     }
     ensure(eq);
 

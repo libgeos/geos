@@ -107,7 +107,7 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
 
     std::vector<Coordinate> vect(cv.size());
 
-    for(size_t i = 0; i < cv.size(); ++i) {
+    for(std::size_t i = 0; i < cv.size(); ++i) {
         vect[i] = *(cv[i]); // Coordinate copy
     }
 
@@ -122,7 +122,7 @@ ConvexHull::computeOctPts(const Coordinate::ConstVect& p_inputPts,
     // Initialize all slots with first input coordinate
     pts = Coordinate::ConstVect(8, p_inputPts[0]);
 
-    for(size_t i = 1, n = p_inputPts.size(); i < n; ++i) {
+    for(std::size_t i = 1, n = p_inputPts.size(); i < n; ++i) {
         if(p_inputPts[i]->x < pts[0]->x) {
             pts[0] = p_inputPts[i];
         }
@@ -199,7 +199,7 @@ ConvexHull::reduce(Coordinate::ConstVect& pts)
      *
      * @@TIP: there should be a std::algo for this
      */
-    for(size_t i = 0, n = pts.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
         if(!PointLocation::isInRing(*(pts[i]), polyPts)) {
             reducedSet.insert(pts[i]);
         }
@@ -216,7 +216,7 @@ ConvexHull::reduce(Coordinate::ConstVect& pts)
 void
 ConvexHull::padArray3(geom::Coordinate::ConstVect& pts)
 {
-    for(size_t i = pts.size(); i < 3; ++i) {
+    for(std::size_t i = pts.size(); i < 3; ++i) {
         pts.push_back(pts[0]);
     }
 }
@@ -224,7 +224,7 @@ ConvexHull::padArray3(geom::Coordinate::ConstVect& pts)
 std::unique_ptr<Geometry>
 ConvexHull::getConvexHull()
 {
-    size_t nInputPts = inputPts.size();
+    std::size_t nInputPts = inputPts.size();
 
     if(nInputPts == 0) { // Return an empty geometry
         return geomFactory->createEmptyGeometry();
@@ -269,7 +269,7 @@ ConvexHull::preSort(Coordinate::ConstVect& pts)
     // find the lowest point in the set. If two or more points have
     // the same minimum y coordinate choose the one with the minimum x.
     // This focal point is put in array location pts[0].
-    for(size_t i = 1, n = pts.size(); i < n; ++i) {
+    for(std::size_t i = 1, n = pts.size(); i < n; ++i) {
         const Coordinate* p0 = pts[0]; // this will change
         const Coordinate* pi = pts[i];
         if((pi->y < p0->y) || ((pi->y == p0->y) && (pi->x < p0->x))) {
@@ -292,7 +292,7 @@ ConvexHull::grahamScan(const Coordinate::ConstVect& c,
     ps.push_back(c[1]);
     ps.push_back(c[2]);
 
-    for(size_t i = 3, n = c.size(); i < n; ++i) {
+    for(std::size_t i = 3, n = c.size(); i < n; ++i) {
         const Coordinate* p = ps.back();
         ps.pop_back();
         while(!ps.empty() &&
@@ -358,7 +358,7 @@ void
 ConvexHull::cleanRing(const Coordinate::ConstVect& original,
                       Coordinate::ConstVect& cleaned)
 {
-    size_t npts = original.size();
+    std::size_t npts = original.size();
 
     const Coordinate* last = original[npts - 1];
 
@@ -367,7 +367,7 @@ ConvexHull::cleanRing(const Coordinate::ConstVect& original,
     assert(original[0]->equals2D(*last));
 
     const Coordinate* prev = nullptr;
-    for(size_t i = 0; i < npts - 1; ++i) {
+    for(std::size_t i = 0; i < npts - 1; ++i) {
         const Coordinate* curr = original[i];
         const Coordinate* next = original[i + 1];
 

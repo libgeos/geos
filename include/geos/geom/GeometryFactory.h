@@ -362,7 +362,7 @@ public:
     buildGeometry(T from, T toofar) const
     {
         bool isHeterogeneous = false;
-        size_t count = 0;
+        std::size_t count = 0;
         int geomClass = -1;
         for(T i = from; i != toofar; ++i) {
             ++count;

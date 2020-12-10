@@ -125,7 +125,7 @@ private:
     * @param ss the segment string to add intersections to
     * @param segIndex the index of the segment
     */
-    void snapSegment(geom::Coordinate& p0, geom::Coordinate& p1, NodedSegmentString* ss, size_t segIndex);
+    void snapSegment(geom::Coordinate& p0, geom::Coordinate& p1, NodedSegmentString* ss, std::size_t segIndex);
 
     /**
     * Add nodes for any vertices in hot pixels that were
@@ -133,7 +133,7 @@ private:
     */
     void addVertexNodeSnaps(NodedSegmentString* ss);
 
-    void snapVertexNode(const geom::Coordinate& p0, NodedSegmentString* ss, size_t segIndex);
+    void snapVertexNode(const geom::Coordinate& p0, NodedSegmentString* ss, std::size_t segIndex);
 
 public:
 

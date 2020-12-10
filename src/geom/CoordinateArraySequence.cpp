@@ -33,21 +33,21 @@ CoordinateArraySequence::CoordinateArraySequence():
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(size_t n,
-        size_t dimension_in):
+CoordinateArraySequence::CoordinateArraySequence(std::size_t n,
+        std::size_t dimension_in):
     vect(n),
     dimension(dimension_in)
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(std::vector<Coordinate> && coords, size_t dimension_in):
+CoordinateArraySequence::CoordinateArraySequence(std::vector<Coordinate> && coords, std::size_t dimension_in):
         vect(std::move(coords)),
         dimension(dimension_in)
 {
 }
 
 CoordinateArraySequence::CoordinateArraySequence(
-    std::vector<Coordinate>* coords, size_t dimension_in)
+    std::vector<Coordinate>* coords, std::size_t dimension_in)
     : dimension(dimension_in)
 {
     std::unique_ptr<std::vector<Coordinate>> coordp(coords);
@@ -73,7 +73,7 @@ CoordinateArraySequence::CoordinateArraySequence(
     vect(c.size()),
     dimension(c.getDimension())
 {
-    for(size_t i = 0, n = vect.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = vect.size(); i < n; ++i) {
         vect[i] = c.getAt(i);
     }
 }
@@ -142,7 +142,7 @@ CoordinateArraySequence::add(const CoordinateSequence* cl, bool allowRepeated, b
 
     const auto npts = cl->size();
     if(direction) {
-        for(size_t i = 0; i < npts; ++i) {
+        for(std::size_t i = 0; i < npts; ++i) {
             add(cl->getAt(i), allowRepeated);
         }
     }
@@ -155,12 +155,12 @@ CoordinateArraySequence::add(const CoordinateSequence* cl, bool allowRepeated, b
 
 /*public*/
 void
-CoordinateArraySequence::add(size_t i, const Coordinate& coord,
+CoordinateArraySequence::add(std::size_t i, const Coordinate& coord,
                              bool allowRepeated)
 {
     // don't add duplicate coordinates
     if(! allowRepeated) {
-        size_t sz = size();
+        std::size_t sz = size();
         if(sz > 0) {
             if(i > 0) {
                 const Coordinate& prev = getAt(i - 1);
@@ -187,19 +187,19 @@ CoordinateArraySequence::getSize() const
 }
 
 const Coordinate&
-CoordinateArraySequence::getAt(size_t pos) const
+CoordinateArraySequence::getAt(std::size_t pos) const
 {
     return vect[pos];
 }
 
 void
-CoordinateArraySequence::getAt(size_t pos, Coordinate& c) const
+CoordinateArraySequence::getAt(std::size_t pos, Coordinate& c) const
 {
     c = vect[pos];
 }
 
 void
-CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
+CoordinateArraySequence::setAt(const Coordinate& c, std::size_t pos)
 {
     vect[pos] = c;
 }
@@ -213,7 +213,7 @@ CoordinateArraySequence::expandEnvelope(Envelope& env) const
 }
 
 void
-CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
+CoordinateArraySequence::setOrdinate(std::size_t index, std::size_t ordinateIndex,
                                      double value)
 {
     switch(ordinateIndex) {

@@ -53,7 +53,7 @@
 #include <geos/inline.h>
 
 #include <vector>
-#include <memory> // unique_ptr
+#include <memory> // std::unique_ptr
 #include <cassert>
 #include <typeinfo>
 
@@ -65,7 +65,6 @@
 # include "geos/geomgraph/GeometryGraph.inl"
 #endif
 
-using namespace std;
 using namespace geos::geomgraph::index;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -115,11 +114,11 @@ GeometryGraph::createEdgeSetIntersector()
 }
 
 /*public*/
-vector<Node*>*
+std::vector<Node*>*
 GeometryGraph::getBoundaryNodes()
 {
     if(! boundaryNodes.get()) {
-        boundaryNodes.reset(new vector<Node*>());
+        boundaryNodes.reset(new std::vector<Node*>());
         getBoundaryNodes(*(boundaryNodes.get()));
     }
     return boundaryNodes.get();
@@ -132,10 +131,10 @@ GeometryGraph::getBoundaryPoints()
 
     if(! boundaryPoints.get()) {
         // Collection will be destroied by GeometryGraph dtor
-        vector<Node*>* coll = getBoundaryNodes();
+        std::vector<Node*>* coll = getBoundaryNodes();
         boundaryPoints.reset(new CoordinateArraySequence(coll->size()));
-        size_t i = 0;
-        for(vector<Node*>::iterator it = coll->begin(), endIt = coll->end();
+        std::size_t i = 0;
+        for(std::vector<Node*>::iterator it = coll->begin(), endIt = coll->end();
                 it != endIt; ++it) {
             Node* node = *it;
             boundaryPoints->setAt(node->getCoordinate(), i++);
@@ -153,22 +152,22 @@ GeometryGraph::findEdge(const LineString* line) const
 }
 
 void
-GeometryGraph::computeSplitEdges(vector<Edge*>* edgelist)
+GeometryGraph::computeSplitEdges(std::vector<Edge*>* edgelist)
 {
 #if GEOS_DEBUG
-    cerr << "[" << this << "] GeometryGraph::computeSplitEdges() scanning " << edges->size() << " local and " <<
-         edgelist->size() << " provided edges" << endl;
+    std::cerr << "[" << this << "] GeometryGraph::computeSplitEdges() scanning " << edges->size() << " local and " <<
+         edgelist->size() << " provided edges" << std::endl;
 #endif
-    for(vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
+    for(std::vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
             i != endIt; ++i) {
         Edge* e = *i;
 #if GEOS_DEBUG
-        cerr << "   " << e->print() << " adding split edges from arg" << endl;
+        std::cerr << "   " << e->print() << " adding split edges from arg" << std::endl;
 #endif
         e->eiList.addSplitEdges(edgelist);
     }
 #if GEOS_DEBUG
-    cerr << "[" << this << "] GeometryGraph::computeSplitEdges() completed " << endl;
+    std::cerr << "[" << this << "] GeometryGraph::computeSplitEdges() completed " << std::endl;
 #endif
 }
 
@@ -206,7 +205,7 @@ GeometryGraph::add(const Geometry* g)
     }
 
     else {
-        string out = typeid(*g).name();
+        std::string out = typeid(*g).name();
         throw util::UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: " + out);
     }
 }
@@ -214,7 +213,7 @@ GeometryGraph::add(const Geometry* g)
 void
 GeometryGraph::addCollection(const GeometryCollection* gc)
 {
-    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
         const Geometry* g = gc->getGeometryN(i);
         add(g);
     }
@@ -279,7 +278,7 @@ GeometryGraph::addPolygon(const Polygon* p)
     const LinearRing* lr = p->getExteriorRing();
 
     addPolygonRing(lr, Location::EXTERIOR, Location::INTERIOR);
-    for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         // Holes are topologically labelled opposite to the shell, since
         // the interior of the polygon lies on their opposite side
         // (on the left, if the hole is oriented CW)
@@ -365,15 +364,15 @@ GeometryGraph::computeSelfNodes(LineIntersector& li,
 {
     auto si = detail::make_unique<SegmentIntersector>(&li, true, false);
     si->setIsDoneIfProperInt(isDoneIfProperInt);
-    unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+    std::unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
-    typedef vector<Edge*> EC;
+    typedef std::vector<Edge*> EC;
     EC* se = edges;
     EC self_edges_copy;
 
     if(env && ! env->covers(parentGeom->getEnvelopeInternal())) {
         collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
-        //cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+        //cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << std::endl;
         se = &self_edges_copy;
     }
 
@@ -386,7 +385,7 @@ GeometryGraph::computeSelfNodes(LineIntersector& li,
     esi->computeIntersections(se, si.get(), computeAllSegments);
 
 #if GEOS_DEBUG
-    cerr << "SegmentIntersector # tests = " << si->numTests << endl;
+    std::cerr << "SegmentIntersector # tests = " << si->numTests << std::endl;
 #endif // GEOS_DEBUG
 
     addSelfIntersectionNodes(argIndex);
@@ -398,14 +397,14 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
                                         LineIntersector* li, bool includeProper, const Envelope* env)
 {
 #if GEOS_DEBUG
-    cerr << "GeometryGraph::computeEdgeIntersections call" << endl;
+    std::cerr << "GeometryGraph::computeEdgeIntersections call" << std::endl;
 #endif
-    unique_ptr<SegmentIntersector> si(new SegmentIntersector(li, includeProper, true));
+    std::unique_ptr<SegmentIntersector> si(new SegmentIntersector(li, includeProper, true));
 
     si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
-    unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+    std::unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
-    typedef vector<Edge*> EC;
+    typedef std::vector<Edge*> EC;
 
     EC self_edges_copy;
     EC other_edges_copy;
@@ -414,17 +413,17 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
     EC* oe = g->edges;
     if(env && ! env->covers(parentGeom->getEnvelopeInternal())) {
         collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
-        //cerr << "Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+        //cerr << "Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << std::endl;
         se = &self_edges_copy;
     }
     if(env && ! env->covers(g->parentGeom->getEnvelopeInternal())) {
         collect_intersecting_edges(env, oe->begin(), oe->end(), other_edges_copy);
-        //cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
+        //cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << std::endl;
         oe = &other_edges_copy;
     }
     esi->computeIntersections(se, oe, si.get());
 #if GEOS_DEBUG
-    cerr << "GeometryGraph::computeEdgeIntersections returns" << endl;
+    std::cerr << "GeometryGraph::computeEdgeIntersections returns" << std::endl;
 #endif
     return si;
 }
@@ -434,7 +433,7 @@ GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
                            geom::Location onLocation)
 {
 #if GEOS_DEBUG > 1
-    cerr << "GeometryGraph::insertPoint(" << coord.toString() << " called" << endl;
+    std::cerr << "GeometryGraph::insertPoint(" << coord.toString() << " called" << std::endl;
 #endif
     Node* n = nodes->addNode(coord);
     Label& lbl = n->getLabel();
@@ -478,7 +477,7 @@ GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
 void
 GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
 {
-    for(vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
+    for(std::vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
             i != endIt; ++i) {
         Edge* e = *i;
         Location eLoc = e->getLabel().getLocation(p_argIndex);
@@ -507,7 +506,7 @@ GeometryGraph::addSelfIntersectionNode(int p_argIndex,
     }
 }
 
-vector<Edge*>*
+std::vector<Edge*>*
 GeometryGraph::getEdges()
 {
     return edges;

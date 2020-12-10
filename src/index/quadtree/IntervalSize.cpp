@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cmath>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -37,7 +37,7 @@ IntervalSize::isZeroWidth(double mn, double mx)
         return true;
     }
 
-    double maxAbs = max(fabs(mn), fabs(mx));
+    double maxAbs = std::max(std::fabs(mn), std::fabs(mx));
     double scaledInterval = width / maxAbs;
     int level;
     frexp(scaledInterval, &level);

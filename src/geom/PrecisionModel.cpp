@@ -36,8 +36,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -48,7 +46,7 @@ double
 PrecisionModel::makePrecise(double val) const
 {
 #if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "]::makePrecise called" << endl;
+    std::cerr << "PrecisionModel[" << this << "]::makePrecise called" << std::endl;
 #endif
 
     if(modelType == FLOATING_SINGLE) {
@@ -71,7 +69,7 @@ PrecisionModel::PrecisionModel()
     scale(0.0)
 {
 #if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "] ctor()" << endl;
+    std::cerr << "PrecisionModel[" << this << "] ctor()" << std::endl;
 #endif
     //modelType=FLOATING;
     //scale=1.0;
@@ -84,7 +82,7 @@ PrecisionModel::PrecisionModel(Type nModelType)
     scale(1.0)
 {
 #if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "] ctor(Type)" << endl;
+    std::cerr << "PrecisionModel[" << this << "] ctor(Type)" << std::endl;
 #endif
     //modelType=nModelType;
     //if (modelType==FIXED) setScale(1.0);
@@ -102,7 +100,7 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
     ::geos::ignore_unused_variable_warning(newOffsetY);
 
 #if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "] ctor(scale,offsets)" << endl;
+    std::cerr << "PrecisionModel[" << this << "] ctor(scale,offsets)" << std::endl;
 #endif
 
     //modelType = FIXED;
@@ -116,7 +114,7 @@ PrecisionModel::PrecisionModel(double newScale)
     modelType(FIXED)
 {
 #if GEOS_DEBUG
-    cerr << "PrecisionModel[" << this << "] ctor(scale)" << endl;
+    std::cerr << "PrecisionModel[" << this << "] ctor(scale)" << std::endl;
 #endif
     setScale(newScale);
 }
@@ -178,10 +176,10 @@ PrecisionModel::getOffsetY() const
 }
 
 
-string
+std::string
 PrecisionModel::toString() const
 {
-    ostringstream s;
+    std::ostringstream s;
     if(modelType == FLOATING) {
         s << "Floating";
     }

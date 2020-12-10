@@ -85,7 +85,7 @@ bool
 RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence* coord)
 {
     auto npts = coord->getSize();
-    for(size_t i = 1; i < npts; ++i) {
+    for(std::size_t i = 1; i < npts; ++i) {
         if(coord->getAt(i - 1) == coord->getAt(i)) {
             repeatedCoord = coord->getAt(i);
             return true;
@@ -101,7 +101,7 @@ RepeatedPointTester::hasRepeatedPoint(const Polygon* p)
         return true;
     }
 
-    for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         if(hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinatesRO())) {
             return true;
         }
@@ -112,7 +112,7 @@ RepeatedPointTester::hasRepeatedPoint(const Polygon* p)
 bool
 RepeatedPointTester::hasRepeatedPoint(const GeometryCollection* gc)
 {
-    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
         const Geometry* g = gc->getGeometryN(i);
         if(hasRepeatedPoint(g)) {
             return true;
@@ -124,7 +124,7 @@ RepeatedPointTester::hasRepeatedPoint(const GeometryCollection* gc)
 bool
 RepeatedPointTester::hasRepeatedPoint(const MultiPolygon* gc)
 {
-    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
         const Polygon* g = gc->getGeometryN(i);
         if(hasRepeatedPoint(g)) {
             return true;
@@ -136,7 +136,7 @@ RepeatedPointTester::hasRepeatedPoint(const MultiPolygon* gc)
 bool
 RepeatedPointTester::hasRepeatedPoint(const MultiLineString* gc)
 {
-    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
         const LineString* g = gc->getGeometryN(i);
         if(hasRepeatedPoint(g)) {
             return true;

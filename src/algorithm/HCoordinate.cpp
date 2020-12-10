@@ -32,7 +32,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -45,12 +44,12 @@ HCoordinate::intersection(const Coordinate& p1, const Coordinate& p2,
 {
 
 #if GEOS_DEBUG
-    cerr << __FUNCTION__ << ":" << endl
+    std::cerr << __FUNCTION__ << ":" << std::endl
          << setprecision(20)
-         << " p1: " << p1 << endl
-         << " p2: " << p2 << endl
-         << " q1: " << q1 << endl
-         << " q2: " << q2 << endl;
+         << " p1: " << p1 << std::endl
+         << " p2: " << p2 << std::endl
+         << " q1: " << q1 << std::endl
+         << " q2: " << q2 << std::endl;
 #endif
 
     // unrolled computation

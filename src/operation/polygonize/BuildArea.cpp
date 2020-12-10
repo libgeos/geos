@@ -42,7 +42,7 @@
 #pragma warning(disable:4355)
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -55,9 +55,9 @@ struct Face {
     double envarea = 0.0; // envelope area
     Face* parent = nullptr; /* if this face is an hole of another one, or NULL */
 
-    size_t countParents() const {
+    std::size_t countParents() const {
         const Face* f = this;
-        size_t pcount = 0;
+        std::size_t pcount = 0;
         while ( f->parent ) {
             ++pcount;
             f = f->parent;
@@ -89,11 +89,11 @@ static void findFaceHoles(std::vector<std::unique_ptr<Face>>& faces) {
      * after their shells */
     std::sort(faces.begin(), faces.end(), CompareByEnvarea());
 
-    const size_t nfaces = faces.size();
-    for( size_t i = 0; i < nfaces; ++i ) {
+    const std::size_t nfaces = faces.size();
+    for( std::size_t i = 0; i < nfaces; ++i ) {
         auto& f = faces[i];
-        const size_t nholes = f->poly->getNumInteriorRing();
-        for( size_t h = 0; h < nholes; h++ ) {
+        const std::size_t nholes = f->poly->getNumInteriorRing();
+        for( std::size_t h = 0; h < nholes; h++ ) {
             const auto hole = f->poly->getInteriorRingN(h);
             for( auto j=i+1; j < nfaces; ++j ) {
                 auto& f2 = faces[j];
@@ -138,7 +138,7 @@ static void dumpGeometry(const geom::Geometry* geom)
 #endif
 
 /** Return the area built from the constituent linework of the input geometry. */
-unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
+std::unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     Polygonizer polygonizer;
     polygonizer.add(geom);
     auto polys = polygonizer.getPolygons();
@@ -146,7 +146,7 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     // No geometries in collection, early out
     if( polys.empty() ) {
         // TODO don't create new GeometryFactory here
-        auto emptyGeomCollection = unique_ptr<geom::Geometry>(
+        auto emptyGeomCollection = std::unique_ptr<geom::Geometry>(
             GeometryFactory::create()->createGeometryCollection());
         emptyGeomCollection->setSRID(geom->getSRID());
         return emptyGeomCollection;

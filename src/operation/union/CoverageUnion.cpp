@@ -44,7 +44,7 @@ void CoverageUnion::extractSegments(const Geometry* geom) {
             throw geos::util::IllegalArgumentException("Unhandled geometry type in CoverageUnion.");
         }
 
-        for (size_t i = 0; i < gc->getNumGeometries(); i++) {
+        for (std::size_t i = 0; i < gc->getNumGeometries(); i++) {
             extractSegments(gc->getGeometryN(i));
         }
     }
@@ -54,7 +54,7 @@ void CoverageUnion::extractSegments(const Polygon* p) {
     const LineString* ring = p->getExteriorRing();
 
     extractSegments(ring);
-    for (size_t i = 0; i < p->getNumInteriorRing(); i++) {
+    for (std::size_t i = 0; i < p->getNumInteriorRing(); i++) {
         extractSegments(p->getInteriorRingN(i));
     }
 }
@@ -65,7 +65,7 @@ void CoverageUnion::extractSegments(const LineString* ls) {
     if (coords->isEmpty())
         return;
 
-    for (size_t i = 1; i < coords->size(); i++) {
+    for (std::size_t i = 1; i < coords->size(); i++) {
         LineSegment segment{coords->getAt(i), coords->getAt(i-1)};
         segment.normalize();
 

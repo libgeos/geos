@@ -41,7 +41,6 @@
 #include <memory>
 #include <cassert>
 
-using namespace std;
 using namespace geos::algorithm;
 
 namespace geos {
@@ -124,7 +123,7 @@ LineString::getCoordinatesRO() const
 }
 
 const Coordinate&
-LineString::getCoordinateN(size_t n) const
+LineString::getCoordinateN(std::size_t n) const
 {
     assert(points.get());
     return points->getAt(n);
@@ -158,7 +157,7 @@ LineString::isEmpty() const
     return points->isEmpty();
 }
 
-size_t
+std::size_t
 LineString::getNumPoints() const
 {
     assert(points.get());
@@ -166,7 +165,7 @@ LineString::getNumPoints() const
 }
 
 std::unique_ptr<Point>
-LineString::getPointN(size_t n) const
+LineString::getPointN(std::size_t n) const
 {
     assert(getFactory());
     assert(points.get());
@@ -208,7 +207,7 @@ LineString::isRing() const
     return isClosed() && isSimple();
 }
 
-string
+std::string
 LineString::getGeometryType() const
 {
     return "LineString";
@@ -269,11 +268,11 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
 
     const LineString* otherLineString = dynamic_cast<const LineString*>(other);
     assert(otherLineString);
-    size_t npts = points->getSize();
+    std::size_t npts = points->getSize();
     if(npts != otherLineString->points->getSize()) {
         return false;
     }
-    for(size_t i = 0; i < npts; ++i) {
+    for(std::size_t i = 0; i < npts; ++i) {
         if(!equal(points->getAt(i), otherLineString->points->getAt(i), tolerance)) {
             return false;
         }
@@ -409,11 +408,11 @@ LineString::apply_ro(GeometryComponentFilter* filter) const
 void
 LineString::apply_rw(CoordinateSequenceFilter& filter)
 {
-    size_t npts = points->size();
+    std::size_t npts = points->size();
     if(!npts) {
         return;
     }
-    for(size_t i = 0; i < npts; ++i) {
+    for(std::size_t i = 0; i < npts; ++i) {
         filter.filter_rw(*points, i);
         if(filter.isDone()) {
             break;
@@ -427,11 +426,11 @@ LineString::apply_rw(CoordinateSequenceFilter& filter)
 void
 LineString::apply_ro(CoordinateSequenceFilter& filter) const
 {
-    size_t npts = points->size();
+    std::size_t npts = points->size();
     if(!npts) {
         return;
     }
-    for(size_t i = 0; i < npts; ++i) {
+    for(std::size_t i = 0; i < npts; ++i) {
         filter.filter_ro(*points, i);
         if(filter.isDone()) {
             break;

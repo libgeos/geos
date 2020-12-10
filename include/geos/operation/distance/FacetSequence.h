@@ -31,8 +31,8 @@ namespace distance {
 class FacetSequence {
 private:
     const geom::CoordinateSequence* pts;
-    const size_t start;
-    const size_t end;
+    const std::size_t start;
+    const std::size_t end;
     const geom::Geometry* geom;
     /*
     * Unlike JTS, we store the envelope in the FacetSequence so
@@ -49,13 +49,13 @@ private:
                                     std::vector<GeometryLocation> *locs) const;
 
     void updateNearestLocationsPointLine(const geom::Coordinate& pt,
-                                         const FacetSequence& facetSeq, size_t i,
+                                         const FacetSequence& facetSeq, std::size_t i,
                                          const geom::Coordinate& q0, const geom::Coordinate &q1,
                                          std::vector<GeometryLocation> *locs) const;
 
-    void updateNearestLocationsLineLine(size_t i, const geom::Coordinate& p0, const geom::Coordinate& p1,
+    void updateNearestLocationsLineLine(std::size_t i, const geom::Coordinate& p0, const geom::Coordinate& p1,
                                         const FacetSequence& facetSeq,
-                                        size_t j, const geom::Coordinate& q0, const geom::Coordinate &q1,
+                                        std::size_t j, const geom::Coordinate& q0, const geom::Coordinate &q1,
                                         std::vector<GeometryLocation> *locs) const;
 
     void computeEnvelope();
@@ -63,17 +63,17 @@ private:
 public:
     const geom::Envelope* getEnvelope() const;
 
-    const geom::Coordinate* getCoordinate(size_t index) const;
+    const geom::Coordinate* getCoordinate(std::size_t index) const;
 
-    size_t size() const;
+    std::size_t size() const;
 
     bool isPoint() const;
 
     double distance(const FacetSequence& facetSeq) const;
 
-    FacetSequence(const geom::CoordinateSequence* pts, size_t start, size_t end);
+    FacetSequence(const geom::CoordinateSequence* pts, std::size_t start, std::size_t end);
 
-    FacetSequence(const geom::Geometry* geom, const geom::CoordinateSequence* pts, size_t start, size_t end);
+    FacetSequence(const geom::Geometry* geom, const geom::CoordinateSequence* pts, std::size_t start, std::size_t end);
 
     std::vector<GeometryLocation> nearestLocations(const FacetSequence& facetSeq) const;
 

@@ -34,7 +34,7 @@
 #include <memory>
 #include <algorithm>
 
-//using namespace std;
+//
 using namespace geos::geom;
 
 namespace geos {
@@ -62,10 +62,10 @@ private:
         std::vector<Coordinate> coords;
         srcPts->toVector(coords);
         LineStringSnapper snapper(coords, snapTol);
-        unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
+        std::unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
         const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
-        return unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
+        return std::unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
     }
 
 public:
@@ -111,11 +111,11 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
     using geom::util::GeometryTransformer;
 
     // Get snap points
-    unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(g);
+    std::unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(g);
 
     // Apply a SnapTransformer to source geometry
     // (we need a pointer for dynamic polymorphism)
-    unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
     return snapTrans->transform(&srcGeom);
 }
 
@@ -128,11 +128,11 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
     using geom::util::GeometryTransformer;
 
     // Get snap points
-    unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(srcGeom);
+    std::unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(srcGeom);
 
     // Apply a SnapTransformer to source geometry
     // (we need a pointer for dynamic polymorphism)
-    unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 
     GeomPtr result = snapTrans->transform(&srcGeom);
 
@@ -207,8 +207,8 @@ GeometrySnapper::snap(const geom::Geometry& g0,
     GeometrySnapper snapper1(g1);
     snapGeom.second = snapper1.snapTo(*snapGeom.first, snapTolerance);
 
-//	cout << *snapGeom.first << endl;
-//	cout << *snapGeom.second << endl;
+//	std::size_t << *snapGeom.first << std::endl;
+//	std::size_t << *snapGeom.second << std::endl;
 
 }
 

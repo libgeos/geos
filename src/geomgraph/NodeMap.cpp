@@ -32,7 +32,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -43,7 +42,7 @@ NodeMap::NodeMap(const NodeFactory& newNodeFact)
     nodeFact(newNodeFact)
 {
 #if GEOS_DEBUG
-    cerr << "[" << this << "] NodeMap::NodeMap" << endl;
+    std::cerr << "[" << this << "] NodeMap::NodeMap" << std::endl;
 #endif
 }
 
@@ -58,12 +57,12 @@ Node*
 NodeMap::addNode(const Coordinate& coord)
 {
 #if GEOS_DEBUG
-    cerr << "[" << this << "] NodeMap::addNode(" << coord.toString() << ")";
+    std::cerr << "[" << this << "] NodeMap::addNode(" << coord.toString() << ")";
 #endif
     Node* node = find(coord);
     if(node == nullptr) {
 #if GEOS_DEBUG
-        cerr << " is new" << endl;
+        std::cerr << " is new" << std::endl;
 #endif
         node = nodeFact.createNode(coord);
         Coordinate* c = const_cast<Coordinate*>(
@@ -73,7 +72,7 @@ NodeMap::addNode(const Coordinate& coord)
     }
     else {
 #if GEOS_DEBUG
-        cerr << " already found (" << node->getCoordinate().toString() << ") - adding Z" << endl;
+        std::cerr << " already found (" << node->getCoordinate().toString() << ") - adding Z" << std::endl;
 #endif
         node->addZ(coord.z);
     }
@@ -88,21 +87,21 @@ NodeMap::addNode(Node* n)
     assert(n);
 
 #if GEOS_DEBUG
-    cerr << "[" << this << "] NodeMap::addNode(" << n->print() << ")";
+    std::cerr << "[" << this << "] NodeMap::addNode(" << n->print() << ")";
 #endif
     Coordinate* c = const_cast<Coordinate*>(&n->getCoordinate());
     Node* node = find(*c);
     if(node == nullptr) {
 #if GEOS_DEBUG
-        cerr << " is new" << endl;
+        std::cerr << " is new" << std::endl;
 #endif
         nodeMap[c] = n;
         return n;
     }
 #if GEOS_DEBUG
     else {
-        cerr << " found already, merging label" << endl;
-        const vector<double>& zvals = n->getZ();
+        std::cerr << " found already, merging label" << std::endl;
+        const std::vector<double>& zvals = n->getZ();
         for(unsigned int i = 0; i < zvals.size(); i++) {
             node->addZ(zvals[i]);
         }
@@ -140,7 +139,7 @@ NodeMap::find(const Coordinate& coord) const
 }
 
 void
-NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>& bdyNodes) const
+NodeMap::getBoundaryNodes(int geomIndex, std::vector<Node*>& bdyNodes) const
 {
     for(auto& it: nodeMap) {
         Node* node = it.second;
@@ -150,10 +149,10 @@ NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>& bdyNodes) const
     }
 }
 
-string
+std::string
 NodeMap::print() const
 {
-    string out = "";
+    std::string out = "";
     for(auto& it: nodeMap) {
         Node* node = it.second;
         out += node->print();

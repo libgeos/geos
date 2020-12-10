@@ -890,7 +890,7 @@ extern "C" {
 
     // Remember to free the result!
     unsigned char*
-    GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry* g, size_t* size)
+    GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry* g, std::size_t* size)
     {
         using geos::io::WKBWriter;
 
@@ -914,7 +914,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char* wkb, size_t size)
+    GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char* wkb, std::size_t size)
     {
         using geos::io::WKBReader;
 
@@ -929,7 +929,7 @@ extern "C" {
     /* Read/write wkb hex values.  Returned geometries are
        owned by the caller.*/
     unsigned char*
-    GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry* g, size_t* size)
+    GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry* g, std::size_t* size)
     {
         using geos::io::WKBWriter;
 
@@ -952,7 +952,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char* hex, size_t size)
+    GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char* hex, std::size_t size)
     {
         using geos::io::WKBReader;
 
@@ -1818,7 +1818,7 @@ extern "C" {
             const GeometryFactory* gf = handle->geomFactory;
 
             std::vector<std::unique_ptr<Geometry>> vgeoms(ngeoms);
-            for (size_t i = 0; i < ngeoms; i++) {
+            for (std::size_t i = 0; i < ngeoms; i++) {
                 vgeoms[i].reset(geoms[i]);
             }
 
@@ -2405,7 +2405,7 @@ extern "C" {
         return execute(extHandle, [&]() {
             auto vholes = geos::detail::make_unique<std::vector<LinearRing*>>(nholes);
 
-            for (size_t i = 0; i < nholes; i++) {
+            for (std::size_t i = 0; i < nholes; i++) {
                 (*vholes)[i] = dynamic_cast<LinearRing*>(holes[i]);
                 if ((*vholes)[i] == nullptr) {
                     throw IllegalArgumentException("Hole is not a LinearRing");
@@ -2697,7 +2697,7 @@ extern "C" {
     };
 
     Geometry*
-    GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader* reader, const unsigned char* wkb, size_t size)
+    GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader* reader, const unsigned char* wkb, std::size_t size)
     {
         return execute(extHandle, [&]() {
             return reader->read(wkb, size).release();
@@ -2705,7 +2705,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSWKBReader_readHEX_r(GEOSContextHandle_t extHandle, WKBReader* reader, const unsigned char* hex, size_t size)
+    GEOSWKBReader_readHEX_r(GEOSContextHandle_t extHandle, WKBReader* reader, const unsigned char* hex, std::size_t size)
     {
         return execute(extHandle, [&]() {
             std::string hexstring(reinterpret_cast<const char*>(hex), size);
@@ -2739,7 +2739,7 @@ extern "C" {
 
     /* The caller owns the result */
     unsigned char*
-    GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter* writer, const Geometry* geom, size_t* size)
+    GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter* writer, const Geometry* geom, std::size_t* size)
     {
         return execute(extHandle, [&]() {
             std::ostringstream os(std::ios_base::binary);
@@ -2757,7 +2757,7 @@ extern "C" {
 
     /* The caller owns the result */
     unsigned char*
-    GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter* writer, const Geometry* geom, size_t* size)
+    GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter* writer, const Geometry* geom, std::size_t* size)
     {
         return execute(extHandle, [&]() {
             std::ostringstream os(std::ios_base::binary);
@@ -2959,7 +2959,7 @@ extern "C" {
 
     GEOSSTRtree*
     GEOSSTRtree_create_r(GEOSContextHandle_t extHandle,
-                         size_t nodeCapacity)
+                         std::size_t nodeCapacity)
     {
         return execute(extHandle, [&]() {
             return new GEOSSTRtree(nodeCapacity);
@@ -3216,14 +3216,14 @@ extern "C" {
         // our output GeometryCollections...
 
         const GeometryFactory* factory = g1->getFactory();
-        size_t count;
+        std::size_t count;
 
         std::unique_ptr< std::vector<Geometry*> > out1(
             new std::vector<Geometry*>()
         );
         count = forw.size();
         out1->reserve(count);
-        for(size_t i = 0; i < count; ++i) {
+        for(std::size_t i = 0; i < count; ++i) {
             out1->push_back(forw[i]);
         }
         std::unique_ptr<Geometry> out1g(
@@ -3235,7 +3235,7 @@ extern "C" {
         );
         count = back.size();
         out2->reserve(count);
-        for(size_t i = 0; i < count; ++i) {
+        for(std::size_t i = 0; i < count; ++i) {
             out2->push_back(back[i]);
         }
         std::unique_ptr<Geometry> out2g(

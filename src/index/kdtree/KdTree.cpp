@@ -38,8 +38,8 @@ KdTree::toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated)
 {
     std::unique_ptr<std::vector<Coordinate>> coord(new std::vector<Coordinate>);
     for (auto node: kdnodes) {
-        size_t count = includeRepeated ? node->getCount() : 1;
-        for (size_t i = 0; i < count; i++) {
+        std::size_t count = includeRepeated ? node->getCount() : 1;
+        for (std::size_t i = 0; i < count; i++) {
             coord->emplace_back(node->getCoordinate());
         }
     }

@@ -44,7 +44,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -54,18 +54,18 @@ namespace geomgraph { // geos.geomgraph
 /*public*/
 PlanarGraph::PlanarGraph(const NodeFactory& nodeFact)
     :
-    edges(new vector<Edge*>()),
+    edges(new std::vector<Edge*>()),
     nodes(new NodeMap(nodeFact)),
-    edgeEndList(new vector<EdgeEnd*>())
+    edgeEndList(new std::vector<EdgeEnd*>())
 {
 }
 
 /*public*/
 PlanarGraph::PlanarGraph()
     :
-    edges(new vector<Edge*>()),
+    edges(new std::vector<Edge*>()),
     nodes(new NodeMap(NodeFactory::instance())),
-    edgeEndList(new vector<EdgeEnd*>())
+    edgeEndList(new std::vector<EdgeEnd*>())
 {
 }
 
@@ -78,20 +78,20 @@ PlanarGraph::~PlanarGraph()
 
     delete nodes;
 #if 1 // FIXME: PlanarGraph should *not* own edges!
-    for(size_t i = 0, n = edges->size(); i < n; i++) {
+    for(std::size_t i = 0, n = edges->size(); i < n; i++) {
         delete(*edges)[i];
     }
 #endif
     delete edges;
 
-    for(size_t i = 0, n = edgeEndList->size(); i < n; i++) {
+    for(std::size_t i = 0, n = edgeEndList->size(); i < n; i++) {
         delete(*edgeEndList)[i];
     }
     delete edgeEndList;
 }
 
 /*public*/
-vector<Edge*>::iterator
+std::vector<Edge*>::iterator
 PlanarGraph::getEdgeIterator()
 {
     assert(edges);
@@ -99,7 +99,7 @@ PlanarGraph::getEdgeIterator()
 }
 
 /*public*/
-vector<EdgeEnd*>*
+std::vector<EdgeEnd*>*
 PlanarGraph::getEdgeEnds()
 {
     return edgeEndList;
@@ -157,7 +157,7 @@ PlanarGraph::getNodeIterator()
 
 /*public*/
 void
-PlanarGraph::getNodes(vector<Node*>& values)
+PlanarGraph::getNodes(std::vector<Node*>& values)
 {
     assert(nodes);
     NodeMap::iterator it = nodes->nodeMap.begin();
@@ -176,8 +176,8 @@ PlanarGraph::addNode(Node* node)
 {
     assert(nodes);
 #if GEOS_DEBUG > 1
-    cerr << "PlanarGraph::addNode(Node * " << *node
-         << ")" << endl;
+    std::cerr << "PlanarGraph::addNode(Node * " << *node
+         << ")" << std::endl;
 #endif
     return nodes->addNode(node);
 }
@@ -187,8 +187,8 @@ Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
 #if GEOS_DEBUG > 1
-    cerr << "PlanarGraph::addNode(Coordinate& "
-         << coord << ")" << endl;
+    std::cerr << "PlanarGraph::addNode(Coordinate& "
+         << coord << ")" << std::endl;
 #endif
     return nodes->addNode(coord);
 }
@@ -203,10 +203,10 @@ PlanarGraph::find(Coordinate& coord)
 
 /*public*/
 void
-PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
+PlanarGraph::addEdges(const std::vector<Edge*>& edgesToAdd)
 {
     // create all the nodes for the edges
-    for(vector<Edge*>::const_iterator it = edgesToAdd.begin(),
+    for(std::vector<Edge*>::const_iterator it = edgesToAdd.begin(),
             endIt = edgesToAdd.end(); it != endIt; ++it) {
         Edge* e = *it;
         assert(e);
@@ -231,7 +231,7 @@ void
 PlanarGraph::linkResultDirectedEdges()
 {
 #if GEOS_DEBUG
-    cerr << "PlanarGraph::linkResultDirectedEdges called" << endl;
+    std::cerr << "PlanarGraph::linkResultDirectedEdges called" << std::endl;
 #endif
     for(auto& nodeIt: nodes->nodeMap) {
         Node* node = nodeIt.second;
@@ -255,7 +255,7 @@ void
 PlanarGraph::linkAllDirectedEdges()
 {
 #if GEOS_DEBUG
-    cerr << "PlanarGraph::linkAllDirectedEdges called" << endl;
+    std::cerr << "PlanarGraph::linkAllDirectedEdges called" << std::endl;
 #endif
     for(auto& nodeIt: nodes->nodeMap) {
         Node* node = nodeIt.second;
@@ -275,10 +275,10 @@ PlanarGraph::linkAllDirectedEdges()
 EdgeEnd*
 PlanarGraph::findEdgeEnd(Edge* e)
 {
-    vector<EdgeEnd*>* eev = getEdgeEnds();
+    std::vector<EdgeEnd*>* eev = getEdgeEnds();
     assert(eev);
 
-    for(vector<EdgeEnd*>::iterator i = eev->begin(), iEnd = eev->end();
+    for(std::vector<EdgeEnd*>::iterator i = eev->begin(), iEnd = eev->end();
             i != iEnd;
             ++i) {
         EdgeEnd* ee = *i;
@@ -296,7 +296,7 @@ PlanarGraph::findEdgeEnd(Edge* e)
 Edge*
 PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1)
 {
-    for(size_t i = 0, n = edges->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edges->size(); i < n; ++i) {
         Edge* e = (*edges)[i];
         assert(e);
 
@@ -327,7 +327,7 @@ PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
 
         assert(eCoord);
 
-        size_t nCoords = eCoord->size();
+        std::size_t nCoords = eCoord->size();
         assert(nCoords > 1);
 
         if(matchInSameDirection(p0, p1,
@@ -362,13 +362,13 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
     return false;
 }
 
-string
+std::string
 PlanarGraph::printEdges()
 {
 
     std::ostringstream oss;
     oss << "Edges: ";
-    for(size_t i = 0, n = edges->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edges->size(); i < n; ++i) {
         Edge* e = (*edges)[i];
         oss << "edge " << i << ":\n" << e->print() << e->eiList.print();
     }

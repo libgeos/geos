@@ -30,7 +30,7 @@ namespace noding { // geos.noding
 
 /* private */
 bool
-NodingIntersectionFinder::isEndSegment(const SegmentString* segStr, size_t index)
+NodingIntersectionFinder::isEndSegment(const SegmentString* segStr, std::size_t index)
 {
     if(index == 0) {
         return true;
@@ -85,8 +85,8 @@ NodingIntersectionFinder::isInteriorVertexIntersection(
 /* public (override) */
 void
 NodingIntersectionFinder::processIntersections(
-    SegmentString* e0,  size_t segIndex0,
-    SegmentString* e1,  size_t segIndex1)
+    SegmentString* e0,  std::size_t segIndex0,
+    SegmentString* e1,  std::size_t segIndex1)
 {
     using geos::geom::Coordinate;
 

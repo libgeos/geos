@@ -53,7 +53,7 @@ void object::test<1>
     using geos::noding::SegmentNode;
 
     // Create coordinates sequence
-    const size_t coords_size = 2;
+    const std::size_t coords_size = 2;
     auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
@@ -73,7 +73,7 @@ void object::test<1>
 
     // Construct a node on the given NodedSegmentString
     {
-        const size_t segment_index = 0;
+        const std::size_t segment_index = 0;
         SegmentNode node(segment, Coordinate(3, 3), segment_index,
                          segment.getSegmentOctant(segment_index));
 
@@ -102,7 +102,7 @@ void object::test<2>
     using geos::noding::SegmentNode;
 
     // Create coordinates sequence
-    const size_t coords_size = 2;
+    const std::size_t coords_size = 2;
     auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, coords_size);
 
     ensure(nullptr != cs.get());
@@ -122,7 +122,7 @@ void object::test<2>
 
     // Construct an interior node on the given NodedSegmentString
     {
-        const size_t segment_index = 0;
+        const std::size_t segment_index = 0;
         SegmentNode node(segment, Coordinate(0, 0), segment_index,
                          segment.getSegmentOctant(segment_index));
 
@@ -145,7 +145,7 @@ void object::test<3>
     using geos::noding::SegmentNode;
 
     // Create coordinates sequence
-    const size_t coords_size = 2;
+    const std::size_t coords_size = 2;
     auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, coords_size);
 
     ensure(nullptr != cs.get());
@@ -165,7 +165,7 @@ void object::test<3>
 
     // Construct an interior node on the given NodedSegmentString
     {
-        const size_t segment_index = 0;
+        const std::size_t segment_index = 0;
         SegmentNode node(segment, Coordinate(2, 2), segment_index,
                          segment.getSegmentOctant(segment_index));
 
@@ -188,7 +188,7 @@ void object::test<4>
     using geos::noding::SegmentNode;
 
     // Create coordinates sequence
-    const size_t coords_size = 2;
+    const std::size_t coords_size = 2;
     auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, coords_size);
 
     ensure(nullptr != cs.get());
@@ -208,7 +208,7 @@ void object::test<4>
 
     // Construct a node that doesn't even intersect !!
     {
-        const size_t segment_index = 0;
+        const std::size_t segment_index = 0;
         SegmentNode node(segment, Coordinate(1, 2), segment_index,
                          segment.getSegmentOctant(segment_index));
 
