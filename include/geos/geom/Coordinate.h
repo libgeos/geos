@@ -91,7 +91,9 @@ public:
 
     bool isNull() const;
 
-    Coordinate(double xNew = 0.0, double yNew = 0.0, double zNew = DoubleNotANumber);
+    Coordinate();
+
+    Coordinate(double xNew, double yNew, double zNew = DoubleNotANumber);
 
     bool equals2D(const Coordinate& other) const;
 
