@@ -52,7 +52,7 @@ SimpleMCSweepLineIntersector::computeIntersections(std::vector<Edge*>* edges0,
 void
 SimpleMCSweepLineIntersector::add(std::vector<Edge*>* edges)
 {
-    for(size_t i = 0; i < edges->size(); ++i) {
+    for(std::size_t i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
         // edge is its own group
         add(edge, edge);
@@ -62,7 +62,7 @@ SimpleMCSweepLineIntersector::add(std::vector<Edge*>* edges)
 void
 SimpleMCSweepLineIntersector::add(std::vector<Edge*>* edges, void* edgeSet)
 {
-    for(size_t i = 0; i < edges->size(); ++i) {
+    for(std::size_t i = 0; i < edges->size(); ++i) {
         Edge* edge = (*edges)[i];
         add(edge, edgeSet);
     }
@@ -73,9 +73,9 @@ SimpleMCSweepLineIntersector::add(Edge* edge, void* edgeSet)
 {
     MonotoneChainEdge* mce = edge->getMonotoneChainEdge();
     auto& startIndex = mce->getStartIndexes();
-    size_t n = startIndex.size() - 1;
+    std::size_t n = startIndex.size() - 1;
 
-    for(size_t i = 0; i < n; ++i) {
+    for(std::size_t i = 0; i < n; ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
         chains.emplace_back(mce, i);
         MonotoneChain* mc = &chains.back();
@@ -102,7 +102,7 @@ SimpleMCSweepLineIntersector::prepareEvents()
     }
 
     sort(events.begin(), events.end(), SweepLineEventLessThen());
-    for(size_t i = 0; i < events.size(); ++i) {
+    for(std::size_t i = 0; i < events.size(); ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
         auto& ev = events[i];
         if(ev->isDelete()) {
@@ -116,7 +116,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector* si)
 {
     nOverlaps = 0;
     prepareEvents();
-    for(size_t i = 0; i < events.size(); ++i) {
+    for(std::size_t i = 0; i < events.size(); ++i) {
         GEOS_CHECK_FOR_INTERRUPTS();
         auto& ev = events[i];
         if(ev->isInsert()) {
@@ -129,7 +129,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector* si)
 }
 
 void
-SimpleMCSweepLineIntersector::processOverlaps(size_t start, size_t end,
+SimpleMCSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end,
         SweepLineEvent* ev0, SegmentIntersector* si)
 {
     MonotoneChain* mc0 = (MonotoneChain*) ev0->getObject();

@@ -44,7 +44,7 @@ PreparedLineStringIntersects::isAnyTestPointInTarget(const geom::Geometry* testG
     geom::Coordinate::ConstVect coords;
     ComponentCoordinateExtracter::getCoordinates(*testGeom, coords);
 
-    for(size_t i = 0, n = coords.size(); i < n; i++) {
+    for(std::size_t i = 0, n = coords.size(); i < n; i++) {
         const geom::Coordinate& c = *(coords[i]);
         if(locator.intersects(c, &(prepLine.getGeometry()))) {
             return true;
@@ -62,7 +62,7 @@ PreparedLineStringIntersects::intersects(const geom::Geometry* g) const
     noding::FastSegmentSetIntersectionFinder* fssif = prepLine.getIntersectionFinder();
     bool segsIntersect = fssif->intersects(&lineSegStr); // prepLine.getIntersectionFinder()->intersects(lineSegStr);
 
-    for(size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
+    for(std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
         delete lineSegStr[ i ];
     }
 

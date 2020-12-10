@@ -83,7 +83,7 @@ MultiPoint::equalsExact(const Geometry* other, double tolerance) const
 }
 
 const Coordinate*
-MultiPoint::getCoordinateN(size_t n) const
+MultiPoint::getCoordinateN(std::size_t n) const
 {
     return geometries[n]->getCoordinate();
 }
@@ -94,7 +94,7 @@ MultiPoint::getGeometryTypeId() const
 }
 
 const Point*
-MultiPoint::getGeometryN(size_t i) const
+MultiPoint::getGeometryN(std::size_t i) const
 {
     return static_cast<const Point*>(geometries[i].get());
 }

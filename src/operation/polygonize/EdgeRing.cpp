@@ -41,7 +41,7 @@
 //#define DEBUG_ALLOC 1
 //#define GEOS_PARANOIA_LEVEL 2
 
-using namespace std;
+
 using namespace geos::planargraph;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -141,7 +141,7 @@ EdgeRing::EdgeRing(const GeometryFactory* newFactory)
     is_hole(false)
 {
 #ifdef DEBUG_ALLOC
-    cerr << "[" << this << "] EdgeRing(factory)" << endl;
+    std::cerr << "[" << this << "] EdgeRing(factory)" << std::endl;
 #endif // DEBUG_ALLOC
 }
 
@@ -248,7 +248,7 @@ EdgeRing::getRingInternal()
         // FIXME: print also ringPts
         std::cerr << "EdgeRing::getRingInternal: "
                   << e.what()
-                  << endl;
+                  << std::endl;
 #endif
         ::geos::ignore_unused_variable_warning(e);
     }

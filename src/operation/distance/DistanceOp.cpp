@@ -44,7 +44,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 //using namespace geos::algorithm;
 
@@ -143,7 +143,7 @@ DistanceOp::nearestPoints()
 }
 
 void
-DistanceOp::updateMinDistance(array<unique_ptr<GeometryLocation>, 2> & locGeom, bool flip)
+DistanceOp::updateMinDistance(std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom, bool flip)
 {
     // if not set then don't update
     if(locGeom[0] == nullptr) {
@@ -210,7 +210,7 @@ DistanceOp::computeContainmentDistance()
     // Expected to fill minDistanceLocation items
     // if minDistance <= terminateDistance
 
-    array<std::unique_ptr<GeometryLocation>, 2> locPtPoly;
+    std::array<std::unique_ptr<GeometryLocation>, 2> locPtPoly;
     // test if either geometry has a vertex inside the other
     if(! polys1.empty()) {
         auto insideLocs0 = ConnectedElementLocationFilter::getLocations(geom[0]);
@@ -254,9 +254,9 @@ DistanceOp::computeContainmentDistance()
 
 /*private*/
 void
-DistanceOp::computeInside(vector<unique_ptr<GeometryLocation>> & locs,
+DistanceOp::computeInside(std::vector<std::unique_ptr<GeometryLocation>> & locs,
                           const Polygon::ConstVect& polys,
-                          array<unique_ptr<GeometryLocation>, 2> & locPtPoly)
+                          std::array<std::unique_ptr<GeometryLocation>, 2> & locPtPoly)
 {
     for(auto& loc : locs) {
         for(const auto& poly : polys) {
@@ -279,7 +279,7 @@ DistanceOp::computeFacetDistance()
     using geom::util::LinearComponentExtracter;
     using geom::util::PointExtracter;
 
-    array<unique_ptr<GeometryLocation>, 2> locGeom;
+    std::array<std::unique_ptr<GeometryLocation>, 2> locGeom;
 
     /*
      * Geometries are not wholly inside, so compute distance from lines
@@ -375,7 +375,7 @@ void
 DistanceOp::computeMinDistancePoints(
     const Point::ConstVect& points0,
     const Point::ConstVect& points1,
-    array<unique_ptr<GeometryLocation>, 2> & locGeom)
+    std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom)
 {
     for(const Point* pt0 : points0) {
         for(const Point* pt1 : points1) {
@@ -437,11 +437,11 @@ DistanceOp::computeMinDistance(
 
     const CoordinateSequence* coord0 = line0->getCoordinatesRO();
     const CoordinateSequence* coord1 = line1->getCoordinatesRO();
-    size_t npts0 = coord0->getSize();
-    size_t npts1 = coord1->getSize();
+    std::size_t npts0 = coord0->getSize();
+    std::size_t npts1 = coord1->getSize();
 
     // brute force approach!
-    for(size_t i = 0; i < npts0 - 1; ++i) {
+    for(std::size_t i = 0; i < npts0 - 1; ++i) {
         const Coordinate& p00 = coord0->getAt(i);
         const Coordinate& p01 = coord0->getAt(i+1);
 
@@ -451,7 +451,7 @@ DistanceOp::computeMinDistance(
             continue;
         }
 
-        for(size_t j = 0; j < npts1 - 1; ++j) {
+        for(std::size_t j = 0; j < npts1 - 1; ++j) {
             const Coordinate& p10 = coord1->getAt(j);
             const Coordinate& p11 = coord1->getAt(j+1);
 
@@ -499,8 +499,8 @@ DistanceOp::computeMinDistance(const LineString* line,
     const Coordinate* coord = pt->getCoordinate();
 
     // brute force approach!
-    size_t npts0 = coord0->getSize();
-    for(size_t i = 0; i < npts0 - 1; ++i) {
+    std::size_t npts0 = coord0->getSize();
+    for(std::size_t i = 0; i < npts0 - 1; ++i) {
         double dist = Distance::pointToSegment(*coord, coord0->getAt(i), coord0->getAt(i + 1));
         if(dist < minDistance) {
             minDistance = dist;

@@ -37,7 +37,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -155,7 +155,7 @@ struct DepthSegmentLessThen {
 int
 SubgraphDepthLocater::getDepth(const Coordinate& p)
 {
-    vector<DepthSegment*> stabbedSegments;
+    std::vector<DepthSegment*> stabbedSegments;
     findStabbedSegments(p, stabbedSegments);
 
     // if no segments on stabbing line subgraph must be outside all others
@@ -168,10 +168,10 @@ SubgraphDepthLocater::getDepth(const Coordinate& p)
     int ret = ds->leftDepth;
 
 #if GEOS_DEBUG
-    cerr << "SubgraphDepthLocater::getDepth(" << p.toString() << "): " << ret << endl;
+    std::cerr << "SubgraphDepthLocater::getDepth(" << p.toString() << "): " << ret << std::endl;
 #endif
 
-    for(vector<DepthSegment*>::iterator
+    for(std::vector<DepthSegment*>::iterator
             it = stabbedSegments.begin(), itEnd = stabbedSegments.end();
             it != itEnd;
             ++it) {
@@ -186,8 +186,8 @@ void
 SubgraphDepthLocater::findStabbedSegments(const Coordinate& stabbingRayLeftPt,
         std::vector<DepthSegment*>& stabbedSegments)
 {
-    size_t size = subgraphs->size();
-    for(size_t i = 0; i < size; ++i) {
+    std::size_t size = subgraphs->size();
+    for(std::size_t i = 0; i < size; ++i) {
         BufferSubgraph* bsg = (*subgraphs)[i];
 
         // optimization - don't bother checking subgraphs
@@ -209,15 +209,15 @@ SubgraphDepthLocater::findStabbedSegments(const Coordinate& stabbingRayLeftPt,
 void
 SubgraphDepthLocater::findStabbedSegments(
     const Coordinate& stabbingRayLeftPt,
-    vector<DirectedEdge*>* dirEdges,
-    vector<DepthSegment*>& stabbedSegments)
+    std::vector<DirectedEdge*>* dirEdges,
+    std::vector<DepthSegment*>& stabbedSegments)
 {
 
     /*
      * Check all forward DirectedEdges only. This is still general,
      * because each Edge has a forward DirectedEdge.
      */
-    for(size_t i = 0, n = dirEdges->size(); i < n; ++i) {
+    for(std::size_t i = 0, n = dirEdges->size(); i < n; ++i) {
         DirectedEdge* de = (*dirEdges)[i];
         if(!de->isForward()) {
             continue;
@@ -231,7 +231,7 @@ void
 SubgraphDepthLocater::findStabbedSegments(
     const Coordinate& stabbingRayLeftPt,
     DirectedEdge* dirEdge,
-    vector<DepthSegment*>& stabbedSegments)
+    std::vector<DepthSegment*>& stabbedSegments)
 {
     const CoordinateSequence* pts = dirEdge->getEdge()->getCoordinates();
 
@@ -245,12 +245,12 @@ SubgraphDepthLocater::findStabbedSegments(
 #define SKIP_LS 1
 
     auto n = pts->getSize() - 1;
-    for(size_t i = 0; i < n; ++i) {
+    for(std::size_t i = 0; i < n; ++i) {
 #ifndef SKIP_LS
         seg.p0 = pts->getAt(i);
         seg.p1 = pts->getAt(i + 1);
 #if GEOS_DEBUG
-        cerr << " SubgraphDepthLocater::findStabbedSegments: segment " << i
+        std::cerr << " SubgraphDepthLocater::findStabbedSegments: segment " << i
              << " (" << seg << ") ";
 #endif
 
@@ -267,7 +267,7 @@ SubgraphDepthLocater::findStabbedSegments(
         {
             seg.reverse();
 #if GEOS_DEBUG
-            cerr << " reverse (" << seg << ") ";
+            std::cerr << " reverse (" << seg << ") ";
 #endif
         }
 #else
@@ -281,13 +281,13 @@ SubgraphDepthLocater::findStabbedSegments(
         // skip segment if it is left of the stabbing line
         // skip if segment is above or below stabbing line
 #ifndef SKIP_LS
-        double maxx = max(seg.p0.x, seg.p1.x);
+        double maxx = std::max(seg.p0.x, seg.p1.x);
 #else
-        double maxx = max(low->x, high->x);
+        double maxx = std::max(low->x, high->x);
 #endif
         if(maxx < stabbingRayLeftPt.x) {
 #if GEOS_DEBUG
-            cerr << " segment is left to stabbing line, skipping " << endl;
+            std::cerr << " segment is left to stabbing line, skipping " << std::endl;
 #endif
             continue;
         }
@@ -301,7 +301,7 @@ SubgraphDepthLocater::findStabbedSegments(
 #endif
         {
 #if GEOS_DEBUG
-            cerr << " segment is horizontal, skipping " << endl;
+            std::cerr << " segment is horizontal, skipping " << std::endl;
 #endif
             continue;
         }
@@ -316,7 +316,7 @@ SubgraphDepthLocater::findStabbedSegments(
 #endif
         {
 #if GEOS_DEBUG
-            cerr << " segment above or below stabbing line, skipping " << endl;
+            std::cerr << " segment above or below stabbing line, skipping " << std::endl;
 #endif
             continue;
         }
@@ -329,7 +329,7 @@ SubgraphDepthLocater::findStabbedSegments(
 #endif
                               stabbingRayLeftPt) == Orientation::RIGHT) {
 #if GEOS_DEBUG
-            cerr << " stabbing ray right of segment, skipping" << endl;
+            std::cerr << " stabbing ray right of segment, skipping" << std::endl;
 #endif
             continue;
         }
@@ -348,7 +348,7 @@ SubgraphDepthLocater::findStabbedSegments(
 #endif
 
 #if GEOS_DEBUG
-        cerr << " depth: " << depth << endl;
+        std::cerr << " depth: " << depth << std::endl;
 #endif
 
 #ifdef SKIP_LS

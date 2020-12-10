@@ -185,7 +185,7 @@ PointLocator::locate(const Coordinate& p, const Polygon* poly)
     }
 
     // now test if the point lies in or on the holes
-    for(size_t i = 0, n = poly->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = poly->getNumInteriorRing(); i < n; ++i) {
         const LinearRing* hole = poly->getInteriorRingN(i);
         Location holeLoc = locateInPolygonRing(p, hole);
         if(holeLoc == Location::INTERIOR) {

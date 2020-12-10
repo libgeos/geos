@@ -25,7 +25,7 @@
 #include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
@@ -36,19 +36,19 @@ namespace overlay { // geos.operation.overlay
 
 
 void
-EdgeSetNoder::addEdges(vector<Edge*>* edges)
+EdgeSetNoder::addEdges(std::vector<Edge*>* edges)
 {
     inputEdges->insert(inputEdges->end(), edges->begin(), edges->end());
 }
 
-vector<Edge*>*
+std::vector<Edge*>*
 EdgeSetNoder::getNodedEdges()
 {
     EdgeSetIntersector* esi = new SimpleMCSweepLineIntersector();
     SegmentIntersector* si = new SegmentIntersector(li, true, false);
     esi->computeIntersections(inputEdges, si, true);
     //Debug.println("has proper int = " + si.hasProperIntersection());
-    vector<Edge*>* splitEdges = new vector<Edge*>();
+    std::vector<Edge*>* splitEdges = new std::vector<Edge*>();
     for(int i = 0; i < (int)inputEdges->size(); i++) {
         Edge* e = (*inputEdges)[i];
         e->getEdgeIntersectionList().addSplitEdges(splitEdges);

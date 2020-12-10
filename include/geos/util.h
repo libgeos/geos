@@ -59,7 +59,7 @@ struct _Unique_if<T[]> {
     typedef std::unique_ptr<T[]> _Unknown_bound;
 };
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 struct _Unique_if<T[N]> {
     typedef void _Known_bound;
 };
@@ -72,7 +72,7 @@ make_unique(Args &&... args) {
 
 template<class T>
 typename _Unique_if<T>::_Unknown_bound
-make_unique(size_t n) {
+make_unique(std::size_t n) {
     typedef typename std::remove_extent<T>::type U;
     return std::unique_ptr<T>(new U[n]());
 }

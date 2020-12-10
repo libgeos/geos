@@ -50,7 +50,7 @@ namespace valid { // geos.operation.valid
 class IndexedNestedRingTester {
 public:
     // @param newGraph : ownership retained by caller
-    IndexedNestedRingTester(geomgraph::GeometryGraph* newGraph, size_t initialCapacity)
+    IndexedNestedRingTester(geomgraph::GeometryGraph* newGraph, std::size_t initialCapacity)
         :
         graph(newGraph),
         index(nullptr),

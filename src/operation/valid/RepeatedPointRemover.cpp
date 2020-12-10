@@ -37,7 +37,7 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
     const Coordinate* prevPt = &(seq->getAt(0));
     pts->push_back(*prevPt) ;
 
-    for (size_t i = 1; i < sz; i++) {
+    for (std::size_t i = 1; i < sz; i++) {
         const Coordinate* nextPt = &(seq->getAt(i));
         if (*nextPt != *prevPt) {
             pts->push_back(*nextPt);

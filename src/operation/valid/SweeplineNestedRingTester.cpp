@@ -67,7 +67,7 @@ void
 SweeplineNestedRingTester::buildIndex()
 {
     sweepLine = new SweepLineIndex();
-    for(size_t i = 0, n = rings.size(); i < n; i++) {
+    for(std::size_t i = 0, n = rings.size(); i < n; i++) {
         LinearRing* ring = rings[i];
         const Envelope* env = ring->getEnvelopeInternal();
         SweepLineInterval* sweepInt = new SweepLineInterval(env->getMinX(), env->getMaxX(), ring);

@@ -19,12 +19,12 @@
 #include <sstream>
 #include <utility>
 
-using namespace std;
+
 
 namespace geos {
 namespace util { // geos.util
 
-Profile::Profile(string newname) :
+Profile::Profile(std::string newname) :
     name(newname),
     totaltime(timeunit::zero())
 {}
@@ -75,25 +75,25 @@ Profile::getNumTimings() const
 }
 
 void
-Profiler::start(string name)
+Profiler::start(std::string name)
 {
     auto prof = get(name);
     prof->start();
 }
 
 void
-Profiler::stop(string name)
+Profiler::stop(std::string name)
 {
     auto iter = profs.find(name);
     if(iter == profs.end()) {
-        cerr << name << ": no such Profile started";
+        std::cerr << name << ": no such Profile started";
         return;
     }
     iter->second->stop();
 }
 
 Profile*
-Profiler::get(string name)
+Profiler::get(std::string name)
 {
     auto& prof = profs[name];
     if (prof == nullptr) {
@@ -111,8 +111,8 @@ Profiler::instance()
 }
 
 
-ostream&
-operator<< (ostream& os, const Profile& prof)
+std::ostream&
+operator<< (std::ostream& os, const Profile& prof)
 {
     os << " num:" << prof.getNumTimings() << " min:" <<
        prof.getMin() << " max:" << prof.getMax() <<
@@ -121,11 +121,11 @@ operator<< (ostream& os, const Profile& prof)
     return os;
 }
 
-ostream&
-operator<< (ostream& os, const Profiler& prof)
+std::ostream&
+operator<< (std::ostream& os, const Profiler& prof)
 {
     for(const auto& entry : prof.profs) {
-        os << *(entry.second) << endl;
+        os << *(entry.second) << std::endl;
     }
     return os;
 }

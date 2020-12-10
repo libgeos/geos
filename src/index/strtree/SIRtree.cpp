@@ -22,7 +22,7 @@
 #include <cassert>
 #include <algorithm>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -74,7 +74,7 @@ SIRtree::SIRtree():
 }
 
 /*public*/
-SIRtree::SIRtree(size_t p_nodeCapacity):
+SIRtree::SIRtree(std::size_t p_nodeCapacity):
     AbstractSTRtree(p_nodeCapacity),
     intersectsOp(new SIRIntersectsOp())
 {
@@ -88,7 +88,7 @@ SIRtree::~SIRtree()
 
 class SIRAbstractNode: public AbstractNode {
 public:
-    SIRAbstractNode(int p_level, size_t capacity)
+    SIRAbstractNode(int p_level, std::size_t capacity)
         :
         AbstractNode(p_level, capacity)
     {}

@@ -86,7 +86,7 @@ public:
 
     std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
-    size_t getNumPoints() const override;
+    std::size_t getNumPoints() const override;
 
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
@@ -111,7 +111,7 @@ public:
     const LinearRing* getExteriorRing() const;
 
     /// Returns number of interior rings (hole)
-    size_t getNumInteriorRing() const;
+    std::size_t getNumInteriorRing() const;
 
     /// Get nth interior ring (hole)
     const LinearRing* getInteriorRingN(std::size_t n) const;

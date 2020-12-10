@@ -26,7 +26,7 @@
 class SegmentUnaryUnionPerfTest {
 
 public:
-    void test(size_t num_lines) {
+    void test(std::size_t num_lines) {
         using namespace geos::geom;
 
         std::default_random_engine e(12345);
@@ -35,7 +35,7 @@ public:
 
         std::vector<std::unique_ptr<LineString>> lines;
 
-        for (size_t i = 0; i < num_lines; i++) {
+        for (std::size_t i = 0; i < num_lines; i++) {
             CoordinateArraySequence cas(2, 2);
             cas.setAt(Coordinate(dis(e), dis(e)), 0);
             cas.setAt(Coordinate(dis(e), dis(e)), 1);

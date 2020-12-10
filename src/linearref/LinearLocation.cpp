@@ -24,7 +24,7 @@
 #include <geos/linearref/LengthLocationMap.h>
 #include <geos/util/IllegalArgumentException.h>
 
-using namespace std;
+
 
 using namespace geos::geom;
 
@@ -60,7 +60,7 @@ LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordina
 }
 
 /* public */
-LinearLocation::LinearLocation(size_t p_segmentIndex,
+LinearLocation::LinearLocation(std::size_t p_segmentIndex,
                                double p_segmentFraction)
     :
     componentIndex(0),
@@ -70,8 +70,8 @@ LinearLocation::LinearLocation(size_t p_segmentIndex,
 
 
 /* public */
-LinearLocation::LinearLocation(size_t p_componentIndex,
-                               size_t p_segmentIndex, double p_segmentFraction)
+LinearLocation::LinearLocation(std::size_t p_componentIndex,
+                               std::size_t p_segmentIndex, double p_segmentFraction)
     :
     componentIndex(p_componentIndex),
     segmentIndex(p_segmentIndex),
@@ -137,7 +137,7 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
     const LineString* lineComp = dynamic_cast<const LineString*>(linearGeom->getGeometryN(componentIndex));
 
     // ensure segment index is valid
-    size_t segIndex = segmentIndex;
+    std::size_t segIndex = segmentIndex;
     if(segmentIndex >= lineComp->getNumPoints() - 1) {
         segIndex = lineComp->getNumPoints() - 2;
     }
@@ -279,8 +279,8 @@ LinearLocation::compareTo(const LinearLocation& other) const
 
 /* public */
 int
-LinearLocation::compareLocationValues(size_t componentIndex1,
-                                      size_t segmentIndex1, double segmentFraction1) const
+LinearLocation::compareLocationValues(std::size_t componentIndex1,
+                                      std::size_t segmentIndex1, double segmentFraction1) const
 {
     // compare component indices
     if(componentIndex < componentIndex1) {
@@ -311,9 +311,9 @@ LinearLocation::compareLocationValues(size_t componentIndex1,
 /* public static */
 int
 LinearLocation::compareLocationValues(
-    size_t componentIndex0, size_t segmentIndex0,
+    std::size_t componentIndex0, std::size_t segmentIndex0,
     double segmentFraction0,
-    size_t componentIndex1, size_t segmentIndex1,
+    std::size_t componentIndex1, std::size_t segmentIndex1,
     double segmentFraction1)
 {
     // compare component indices
@@ -377,8 +377,8 @@ LinearLocation::isEndpoint(const Geometry& linearGeom) const
 }
 
 
-ostream&
-operator<<(ostream& out, const LinearLocation& obj)
+std::ostream&
+operator<<(std::ostream& out, const LinearLocation& obj)
 {
     return out << "LinearLoc[" << obj.componentIndex << ", " <<
            obj.segmentIndex << ", " << obj.segmentFraction << "]";

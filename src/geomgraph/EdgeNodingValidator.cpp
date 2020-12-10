@@ -24,18 +24,17 @@
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/geom/CoordinateSequence.h>
 
-using namespace std;
 using namespace geos::noding;
 using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-vector<SegmentString*>&
-EdgeNodingValidator::toSegmentStrings(vector<Edge*>& edges)
+std::vector<SegmentString*>&
+EdgeNodingValidator::toSegmentStrings(std::vector<Edge*>& edges)
 {
     // convert Edges to SegmentStrings
-    for(size_t i = 0, n = edges.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = edges.size(); i < n; ++i) {
         Edge* e = edges[i];
         auto cs = e->getCoordinates()->clone();
         segStr.push_back(new BasicSegmentString(cs.get(), e));
@@ -53,7 +52,7 @@ EdgeNodingValidator::~EdgeNodingValidator()
         delete *i;
     }
 
-    for(size_t i = 0, n = newCoordSeq.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = newCoordSeq.size(); i < n; ++i) {
         delete newCoordSeq[i];
     }
 }

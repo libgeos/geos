@@ -164,7 +164,7 @@ GeometryTransformer::transformMultiPoint(
 
     std::vector<std::unique_ptr<Geometry>> transGeomList;
 
-    for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
+    for(std::size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         const Point* p = geom->getGeometryN(i);
         assert(p);
 
@@ -240,7 +240,7 @@ GeometryTransformer::transformMultiLineString(
 
     std::vector<std::unique_ptr<Geometry>> transGeomList;
 
-    for(size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
+    for(std::size_t i = 0, n = geom->getNumGeometries(); i < n; i++) {
         const LineString* l = geom->getGeometryN(i);
         assert(l);
 
@@ -284,7 +284,7 @@ GeometryTransformer::transformPolygon(
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;
-    for(size_t i = 0, n = geom->getNumInteriorRing(); i < n; i++) {
+    for(std::size_t i = 0, n = geom->getNumInteriorRing(); i < n; i++) {
         const LinearRing* p_lr = geom->getInteriorRingN(i);
         assert(p_lr);
 

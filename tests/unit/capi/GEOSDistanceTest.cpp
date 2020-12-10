@@ -85,13 +85,13 @@ void object::test<1>
 }
 
 GEOSGeometry*
-random_polygon(double x, double y, double r, size_t num_points)
+random_polygon(double x, double y, double r, std::size_t num_points)
 {
     std::vector<double> angle(num_points);
     std::vector<double> radius(num_points);
 
 
-    for(size_t i = 0; i < num_points; i++) {
+    for(std::size_t i = 0; i < num_points; i++) {
         angle[i] = 2 * geos::MATH_PI * std::rand() / RAND_MAX;
         radius[i] = r * std::rand() / RAND_MAX;
     }

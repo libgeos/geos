@@ -69,7 +69,7 @@ DelaunayTriangulationBuilder::toVertices(
 {
     IncrementalDelaunayTriangulator::VertexList vertexList(coords.size());
 
-    for(size_t i = 0; i < coords.size(); i++) {
+    for(std::size_t i = 0; i < coords.size(); i++) {
         vertexList[i] = quadedge::Vertex(coords.getAt(i));
     }
     return vertexList;

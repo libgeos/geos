@@ -75,7 +75,7 @@ void object::test<2>
 
         ensure(nullptr != col);
 
-        const size_t size0 = 0;
+        const std::size_t size0 = 0;
         auto sequence = factory->create(col);
 
         ensure(nullptr != sequence);
@@ -106,7 +106,7 @@ void object::test<3>
         col->push_back(Coordinate(1, 2, 3));
         col->push_back(Coordinate(5, 10, 15));
 
-        const size_t size2 = 2;
+        const std::size_t size2 = 2;
         auto sequence = factory->create(col);
 
         ensure(nullptr != sequence);
@@ -132,7 +132,7 @@ void object::test<4>
 
         ensure(nullptr != factory);
 
-        const size_t size1000 = 1000;
+        const std::size_t size1000 = 1000;
         auto sequence = factory->create(size1000, 3);
 
         ensure(nullptr != sequence);
@@ -160,7 +160,7 @@ void object::test<5>
 
         ensure(nullptr != factory);
 
-        const size_t size0 = 0;
+        const std::size_t size0 = 0;
         auto sequence = factory->create();
 
         ensure(nullptr != sequence);

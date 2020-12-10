@@ -61,7 +61,7 @@ RectangleContains::isContainedInBoundary(const Geometry& geom)
         return isLineStringContainedInBoundary(*l);
     }
 
-    for(size_t i = 0, n = geom.getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = geom.getNumGeometries(); i < n; ++i) {
         const Geometry& comp = *(geom.getGeometryN(i));
         if(!isContainedInBoundary(comp)) {
             return false;
@@ -99,7 +99,7 @@ bool
 RectangleContains::isLineStringContainedInBoundary(const LineString& line)
 {
     const CoordinateSequence& seq = *(line.getCoordinatesRO());
-    for(size_t i = 0, n = seq.size() - 1; i < n; ++i) {
+    for(std::size_t i = 0, n = seq.size() - 1; i < n; ++i) {
         const Coordinate& p0 = seq.getAt(i);
         const Coordinate& p1 = seq.getAt(i + 1);
         if(! isLineSegmentContainedInBoundary(p0, p1)) {

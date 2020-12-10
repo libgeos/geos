@@ -154,7 +154,7 @@ public:
         return pts->size();
     }
 
-    const geom::Coordinate& getCoordinate(size_t i) const override;
+    const geom::Coordinate& getCoordinate(std::size_t i) const override;
 
     geom::CoordinateSequence* getCoordinates() const override;
     geom::CoordinateSequence* releaseCoordinates();
@@ -171,7 +171,7 @@ public:
      *              Must not be the last index in the vertex list
      * @return the octant of the segment at the vertex
      */
-    int getSegmentOctant(size_t index) const;
+    int getSegmentOctant(std::size_t index) const;
 
     /** \brief
      * Add {@link SegmentNode}s for one or both
@@ -179,7 +179,7 @@ public:
      * intersection list.
      */
     void addIntersections(algorithm::LineIntersector* li,
-                          size_t segmentIndex, size_t geomIndex);
+                          std::size_t segmentIndex, std::size_t geomIndex);
 
     /** \brief
      * Add an SegmentNode for intersection intIndex.
@@ -189,8 +189,8 @@ public:
      * to use the higher of the two possible segmentIndexes
      */
     void addIntersection(algorithm::LineIntersector* li,
-                         size_t segmentIndex,
-                         size_t geomIndex, size_t intIndex);
+                         std::size_t segmentIndex,
+                         std::size_t geomIndex, std::size_t intIndex);
 
     /** \brief
      * Add an SegmentNode for intersection intIndex.
@@ -200,7 +200,7 @@ public:
      * to use the higher of the two possible segmentIndexes
      */
     void addIntersection(const geom::Coordinate& intPt,
-                         size_t segmentIndex);
+                         std::size_t segmentIndex);
 
 
 private:

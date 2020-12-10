@@ -34,7 +34,7 @@ namespace simplify { // geos::simplify
 TaggedLineSegment::TaggedLineSegment(const geom::Coordinate& p_p0,
                                      const geom::Coordinate& p_p1,
                                      const geom::Geometry* nParent,
-                                     size_t nIndex)
+                                     std::size_t nIndex)
     :
     LineSegment(p_p0, p_p1),
     parent(nParent),

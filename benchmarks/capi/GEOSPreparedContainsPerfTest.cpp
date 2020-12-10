@@ -32,7 +32,7 @@
 class GEOSPreparedContainsPerfTest {
 
 public:
-    void test(const GEOSGeometry* g, size_t num_points) {
+    void test(const GEOSGeometry* g, std::size_t num_points) {
         using namespace geos::geom;
 
         double xmin, xmax, ymin, ymax;
@@ -54,7 +54,7 @@ public:
         geos::util::Profile sw("GEOSPreparedContains");
         sw.start();
 
-        size_t hits = 0;
+        std::size_t hits = 0;
         auto prep = GEOSPrepare(g);
         for (const auto& c : coords) {
             auto pt = GEOSGeom_createPointFromXY(c.x, c.y);

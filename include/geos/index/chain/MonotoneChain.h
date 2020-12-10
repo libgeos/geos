@@ -162,8 +162,8 @@ public:
 private:
 
     void computeSelect(const geom::Envelope& searchEnv,
-                       size_t start0,
-                       size_t end0,
+                       std::size_t start0,
+                       std::size_t end0,
                        MonotoneChainSelectAction& mcs);
 
     void computeOverlaps(std::size_t start0, std::size_t end0, MonotoneChain& mc,
@@ -171,8 +171,8 @@ private:
                          double overlapTolerance,
                          MonotoneChainOverlapAction& mco);
 
-    bool overlaps(size_t start0, size_t end0,
-                  const MonotoneChain& mc, size_t start1, size_t end1,
+    bool overlaps(std::size_t start0, std::size_t end0,
+                  const MonotoneChain& mc, std::size_t start1, std::size_t end1,
                   double overlapTolerance) const;
 
     bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
@@ -186,10 +186,10 @@ private:
     void* context;
 
     /// Index of chain start vertex into the CoordinateSequence, 0 based.
-    size_t start;
+    std::size_t start;
 
     /// Index of chain end vertex into the CoordinateSequence, 0 based.
-    size_t end;
+    std::size_t end;
 
     /// Owned by this class
     geom::Envelope env;

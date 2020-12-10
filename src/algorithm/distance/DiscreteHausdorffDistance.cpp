@@ -30,7 +30,7 @@ namespace distance { // geos.algorithm.distance
 
 void
 DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
-    const geom::CoordinateSequence& seq, size_t index)
+    const geom::CoordinateSequence& seq, std::size_t index)
 {
     /*
      * This logic also handles skipping Point geometries
@@ -45,7 +45,7 @@ DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
     double delx = (p1.x - p0.x) / static_cast<double>(numSubSegs);
     double dely = (p1.y - p0.y) / static_cast<double>(numSubSegs);
 
-    for(size_t i = 0; i < numSubSegs; ++i) {
+    for(std::size_t i = 0; i < numSubSegs; ++i) {
         double x = p0.x + static_cast<double>(i) * delx;
         double y = p0.y + static_cast<double>(i) * dely;
         Coordinate pt(x, y);

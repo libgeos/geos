@@ -362,8 +362,8 @@ public:
     std::unique_ptr<LineString> toGeometry(const GeometryFactory& gf) const;
 
     struct HashCode {
-        size_t operator()(const LineSegment & s) const {
-            size_t h = std::hash<double>{}(s.p0.x);
+        std::size_t operator()(const LineSegment & s) const {
+            std::size_t h = std::hash<double>{}(s.p0.x);
             h ^= (std::hash<double>{}(s.p0.y) << 1);
             h ^= (std::hash<double>{}(s.p1.x) << 1);
             return h ^ (std::hash<double>{}(s.p1.y) << 1);

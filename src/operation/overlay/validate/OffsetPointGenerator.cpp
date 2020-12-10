@@ -35,7 +35,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 using namespace geos::algorithm;
 
@@ -58,9 +58,9 @@ std::unique_ptr< std::vector<geom::Coordinate> >
 OffsetPointGenerator::getPoints()
 {
     assert(offsetPts.get() == nullptr);
-    offsetPts.reset(new vector<Coordinate>());
+    offsetPts.reset(new std::vector<Coordinate>());
 
-    vector<const LineString*> lines;
+    std::vector<const LineString*> lines;
     geos::geom::util::LinearComponentExtracter::getLines(g, lines);
 
     for (const auto& line : lines) {
@@ -78,7 +78,7 @@ OffsetPointGenerator::extractPoints(const LineString* line)
     const CoordinateSequence& pts = *(line->getCoordinatesRO());
     assert(pts.size() > 1);
 
-    for(size_t i = 0, n = pts.size() - 1; i < n; ++i) {
+    for(std::size_t i = 0, n = pts.size() - 1; i < n; ++i) {
         computeOffsets(pts[i], pts[i + 1]);
     }
 }

@@ -127,7 +127,7 @@ GeometryNoder::getNoded()
         nodedEdges = p_noder.getNodedSubstrings();
     }
     catch(const std::exception&) {
-        for(size_t i = 0, n = p_lineList.size(); i < n; ++i) {
+        for(std::size_t i = 0, n = p_lineList.size(); i < n; ++i) {
             delete p_lineList[i];
         }
         throw;

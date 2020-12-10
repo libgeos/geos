@@ -82,7 +82,7 @@ Centroid::add(const Geometry& geom)
         add(*p);
     }
     else if(const GeometryCollection* g = dynamic_cast<const GeometryCollection*>(&geom)) {
-        for(size_t i = 0; i < g->getNumGeometries(); i++) {
+        for(std::size_t i = 0; i < g->getNumGeometries(); i++) {
             add(*g->getGeometryN(i));
         }
     }
@@ -100,7 +100,7 @@ void
 Centroid::add(const Polygon& poly)
 {
     addShell(*poly.getExteriorRing()->getCoordinatesRO());
-    for(size_t i = 0; i < poly.getNumInteriorRing(); i++) {
+    for(std::size_t i = 0; i < poly.getNumInteriorRing(); i++) {
         addHole(*poly.getInteriorRingN(i)->getCoordinatesRO());
     }
 }
@@ -109,12 +109,12 @@ Centroid::add(const Polygon& poly)
 void
 Centroid::addShell(const CoordinateSequence& pts)
 {
-    size_t len = pts.size();
+    std::size_t len = pts.size();
     if(len > 0) {
         setAreaBasePoint(pts[0]);
     }
     bool isPositiveArea = ! Orientation::isCCW(&pts);
-    for(size_t i = 0; i < len - 1; ++i) {
+    for(std::size_t i = 0; i < len - 1; ++i) {
         addTriangle(*areaBasePt, pts[i], pts[i + 1], isPositiveArea);
     }
     addLineSegments(pts);
@@ -125,7 +125,7 @@ void
 Centroid::addHole(const CoordinateSequence& pts)
 {
     bool isPositiveArea = Orientation::isCCW(&pts);
-    for(size_t i = 0, e = pts.size() - 1; i < e; ++i) {
+    for(std::size_t i = 0, e = pts.size() - 1; i < e; ++i) {
         addTriangle(*areaBasePt, pts[i], pts[i + 1], isPositiveArea);
     }
     addLineSegments(pts);
@@ -165,9 +165,9 @@ Centroid::area2(const Coordinate& p1, const Coordinate& p2, const Coordinate& p3
 void
 Centroid::addLineSegments(const CoordinateSequence& pts)
 {
-    size_t npts = pts.size();
+    std::size_t npts = pts.size();
     double lineLen = 0.0;
-    for(size_t i = 0; i < npts - 1; i++) {
+    for(std::size_t i = 0; i < npts - 1; i++) {
         double segmentLen = pts[i].distance(pts[i + 1]);
         if(segmentLen == 0.0) {
             continue;

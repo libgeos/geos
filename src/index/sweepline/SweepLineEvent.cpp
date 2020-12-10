@@ -57,7 +57,7 @@ SweepLineEvent::getDeleteEventIndex()
 }
 
 void
-SweepLineEvent::setDeleteEventIndex(size_t newDeleteEventIndex)
+SweepLineEvent::setDeleteEventIndex(std::size_t newDeleteEventIndex)
 {
     deleteEventIndex = newDeleteEventIndex;
 }

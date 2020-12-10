@@ -34,7 +34,6 @@
 #include <typeinfo>
 #include <memory> // for unique_ptr
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -86,7 +85,7 @@ public:
     getScanLineY()
     {
         process(*poly.getExteriorRing());
-        for (size_t i = 0; i < poly.getNumInteriorRing(); i++) {
+        for (std::size_t i = 0; i < poly.getNumInteriorRing(); i++) {
             process(*poly.getInteriorRingN(i));
         }
         double bisectY = avg(hiY, loY);
@@ -149,7 +148,7 @@ public:
     void
     process()
     {
-        vector<double> crossings;
+        std::vector<double> crossings;
 
         /*
          * This results in returning a null Coordinate
@@ -162,7 +161,7 @@ public:
 
         const LinearRing* shell = polygon.getExteriorRing();
         scanRing(*shell, crossings);
-        for (size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
+        for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
             const LinearRing* hole = polygon.getInteriorRingN(i);
             scanRing(*hole, crossings);
         }
@@ -175,21 +174,21 @@ private:
     double interiorSectionWidth = 0.0;
     Coordinate interiorPoint;
 
-    void scanRing(const LinearRing& ring, vector<double>& crossings)
+    void scanRing(const LinearRing& ring, std::vector<double>& crossings)
     {
         // skip rings which don't cross scan line
         if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), interiorPointY))
             return;
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
-        for (size_t i = 1; i < seq->size(); i++) {
+        for (std::size_t i = 1; i < seq->size(); i++) {
             const Coordinate& ptPrev = seq->getAt(i - 1);
             const Coordinate& pt = seq->getAt(i);
             addEdgeCrossing(ptPrev, pt, interiorPointY, crossings);
         }
     }
 
-    void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, vector<double>& crossings)
+    void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, std::vector<double>& crossings)
     {
         // skip non-crossing segments
         if (!intersectsHorizontalLine(p0, p1, scanY))
@@ -202,7 +201,7 @@ private:
         crossings.push_back(xInt);
     }
 
-    void findBestMidpoint(vector<double>& crossings)
+    void findBestMidpoint(std::vector<double>& crossings)
     {
         // zero-area polygons will have no crossings
         if (crossings.empty()) return;
@@ -214,7 +213,7 @@ private:
          * Entries in crossings list are expected to occur in pairs representing a
          * section of the scan line interior to the polygon (which may be zero-length)
         */
-        for (size_t i = 0; i < crossings.size(); i += 2) {
+        for (std::size_t i = 0; i < crossings.size(); i += 2) {
             double x1 = crossings[i];
             // crossings count must be even so this should be safe
             double x2 = crossings[i + 1];

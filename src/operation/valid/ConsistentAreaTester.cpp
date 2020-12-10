@@ -33,7 +33,7 @@
 #include <memory> // unique_ptr
 #include <cassert>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geom;
@@ -66,7 +66,7 @@ ConsistentAreaTester::isNodeConsistentArea()
      * To fully check validity, it is necessary to
      * compute ALL intersections, including self-intersections within a single edge.
      */
-    unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
+    std::unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
     /*
      * A proper intersection means that the area is not consistent.
      */

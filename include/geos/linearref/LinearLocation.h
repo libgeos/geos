@@ -43,8 +43,8 @@ namespace linearref { // geos::linearref
  */
 class LinearLocation {
 private:
-    size_t componentIndex;
-    size_t segmentIndex;
+    std::size_t componentIndex;
+    std::size_t segmentIndex;
     double segmentFraction;
 
     /** \brief
@@ -90,9 +90,9 @@ public:
     /** \brief
      * Creates a location referring to the start of a linear geometry
      */
-    LinearLocation(size_t segmentIndex = 0, double segmentFraction = 0.0);
+    LinearLocation(std::size_t segmentIndex = 0, double segmentFraction = 0.0);
 
-    LinearLocation(size_t componentIndex, size_t segmentIndex, double segmentFraction);
+    LinearLocation(std::size_t componentIndex, std::size_t segmentIndex, double segmentFraction);
 
     /** \brief
      * Ensures the indexes are valid for a given linear [Geometry](@ref geom::Geometry).
@@ -132,14 +132,14 @@ public:
      *
      * @return the component index
      */
-    size_t getComponentIndex() const;
+    std::size_t getComponentIndex() const;
 
     /** \brief
      * Gets the segment index for this location.
      *
      * @return the segment index
      */
-    size_t getSegmentIndex() const;
+    std::size_t getSegmentIndex() const;
 
     /** \brief
      * Gets the segment fraction for this location.
@@ -201,7 +201,7 @@ public:
      * @return a negative integer, zero, or a positive integer as this LinearLocation
      *         is less than, equal to, or greater than the specified locationValues
      */
-    int compareLocationValues(size_t componentIndex1, size_t segmentIndex1, double segmentFraction1) const;
+    int compareLocationValues(std::size_t componentIndex1, std::size_t segmentIndex1, double segmentFraction1) const;
 
     /** \brief
      *  Compares two sets of location values for order.
@@ -217,8 +217,8 @@ public:
      *         is less than, equal to, or greater than the second set of locationValues
      */
     static int compareLocationValues(
-        size_t componentIndex0, size_t segmentIndex0, double segmentFraction0,
-        size_t componentIndex1, size_t segmentIndex1, double segmentFraction1);
+        std::size_t componentIndex0, std::size_t segmentIndex0, double segmentFraction0,
+        std::size_t componentIndex1, std::size_t segmentIndex1, double segmentFraction1);
 
     /** \brief
      * Tests whether two locations are on the same

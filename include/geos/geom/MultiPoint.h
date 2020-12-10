@@ -128,7 +128,7 @@ protected:
 
     MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
-    const Coordinate* getCoordinateN(size_t n) const;
+    const Coordinate* getCoordinateN(std::size_t n) const;
 
     int
     getSortIndex() const override

@@ -157,7 +157,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
 
     // Start iterating
 
-    size_t i = 0;
+    std::size_t i = 0;
 
     while(i < n) {
         // Establish initial position
@@ -418,7 +418,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon* g,
     // - Clipped ones become linestrings
     // - Intact ones become new polygons without holes
 
-    for(size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
         if(clip_linestring_parts(g->getInteriorRingN(i), parts, rect)) {
             // clones
             LinearRing* hole = new LinearRing(*(g->getInteriorRingN(i)));
@@ -488,7 +488,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon* g,
     // - Intact ones become holes in new polygons formed by exterior parts
 
 
-    for(size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
         RectangleIntersectionBuilder holeparts(*_gf);
         const LinearRing* hole = g->getInteriorRingN(i);
         if(clip_linestring_parts(hole, holeparts, rect)) {
@@ -572,7 +572,7 @@ RectangleIntersection::clip_multipoint(const geom::MultiPoint* g,
     if(g == nullptr || g->isEmpty()) {
         return;
     }
-    for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
         clip_point(g->getGeometryN(i), parts, rect);
     }
 }
@@ -586,7 +586,7 @@ RectangleIntersection::clip_multilinestring(const geom::MultiLineString* g,
         return;
     }
 
-    for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
         clip_linestring(g->getGeometryN(i), parts, rect);
     }
 }
@@ -601,7 +601,7 @@ RectangleIntersection::clip_multipolygon(const geom::MultiPolygon* g,
         return;
     }
 
-    for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
         clip_polygon(g->getGeometryN(i), parts, rect, keep_polygons);
     }
 }
@@ -617,7 +617,7 @@ RectangleIntersection::clip_geometrycollection(
         return;
     }
 
-    for(size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
+    for(std::size_t i = 0, n = g->getNumGeometries(); i < n; ++i) {
         clip_geom(g->getGeometryN(i),
                   parts, rect, keep_polygons);
     }

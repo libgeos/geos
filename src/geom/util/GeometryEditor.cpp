@@ -127,7 +127,7 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
     }
 
     auto holes = detail::make_unique<std::vector<LinearRing*>>();
-    for(size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
 
         std::unique_ptr<LinearRing> hole(dynamic_cast<LinearRing*>(
                 edit(newPolygon->getInteriorRingN(i), operation).release()));

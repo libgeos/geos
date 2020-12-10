@@ -17,8 +17,6 @@
 
 #include <sstream>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 

@@ -20,7 +20,7 @@
 
 #include <algorithm>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -69,7 +69,7 @@ SweepLineIndex::computeOverlaps(SweepLineOverlapAction* action)
     buildIndex();
 
     const std::vector<SweepLineEvent*>::size_type n = events.size();
-    for(size_t i = 0; i < n; i++) {
+    for(std::size_t i = 0; i < n; i++) {
         SweepLineEvent* ev = events[i];
         if(ev->isInsert()) {
             processOverlaps(i,
@@ -80,7 +80,7 @@ SweepLineIndex::computeOverlaps(SweepLineOverlapAction* action)
 }
 
 void
-SweepLineIndex::processOverlaps(size_t start, size_t end,
+SweepLineIndex::processOverlaps(std::size_t start, std::size_t end,
                                 SweepLineInterval* s0, SweepLineOverlapAction* action)
 {
     /*

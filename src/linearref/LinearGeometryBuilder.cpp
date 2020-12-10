@@ -30,7 +30,7 @@
 
 #include <cassert>
 
-using namespace std;
+
 
 using namespace geos::geom;
 

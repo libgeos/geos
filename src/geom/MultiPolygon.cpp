@@ -84,7 +84,7 @@ MultiPolygon::getBoundary() const
         if(g->getNumGeometries() == 1) {
             allRings.push_back(std::move(g));
         } else {
-            for(size_t i = 0; i < g->getNumGeometries(); ++i) {
+            for(std::size_t i = 0; i < g->getNumGeometries(); ++i) {
                 // TODO avoid this clone
                 allRings.push_back(g->getGeometryN(i)->clone());
             }
@@ -128,7 +128,7 @@ MultiPolygon::reverse() const
 }
 
 const Polygon*
-MultiPolygon::getGeometryN(size_t i) const
+MultiPolygon::getGeometryN(std::size_t i) const
 {
     return static_cast<const Polygon*>(geometries[i].get());
 }

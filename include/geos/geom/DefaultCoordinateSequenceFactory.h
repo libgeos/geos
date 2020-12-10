@@ -51,7 +51,7 @@ public:
 
     std::unique_ptr <CoordinateSequence> create(const CoordinateSequence &coordSeq) const final override {
         auto cs = create(coordSeq.size(), coordSeq.getDimension());
-        for (size_t i = 0; i < cs->size(); i++) {
+        for (std::size_t i = 0; i < cs->size(); i++) {
             cs->setAt(coordSeq[i], i);
         }
         return cs;

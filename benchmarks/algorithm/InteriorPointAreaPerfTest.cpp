@@ -34,7 +34,6 @@
 
 using namespace geos::geom;
 using namespace geos::io;
-using namespace std;
 
 class InteriorPointAreaPerfTest {
 public:
@@ -65,7 +64,7 @@ public:
         std::unique_ptr<Geometry> sinePolyCrinkly(reducer.reduce(sinePoly.get()));
         sinePoly.reset();
 
-        //cout << sinePolyCrinkly->toText() << endl;
+        //std::cout << sinePolyCrinkly->toText() << std::endl;
 
         test(*sinePolyCrinkly);
     }
@@ -83,14 +82,14 @@ private:
 
     void
     showHeader() {
-        cout << "Interior Point Area perf test" << endl;
-        cout << "# Iterations: " << N_ITER << endl;
-        cout << "SineStar: origin: ("
+        std::cout << "Interior Point Area perf test" << std::endl;
+        std::cout << "# Iterations: " << N_ITER << std::endl;
+        std::cout << "SineStar: origin: ("
                 << ORG_X << ", " << ORG_Y
                 << ")  size: " << SIZE
                 << "  # arms: " << N_ARMS
                 << "  arm ratio: " << ARM_RATIO
-                << endl;
+                << std::endl;
     }
 
     void
@@ -104,7 +103,7 @@ private:
         }
 
         sw.stop();
-        cout << poly.getNumPoints() << " points: " << sw.getTotFormatted() << endl;
+        std::cout << poly.getNumPoints() << " points: " << sw.getTotFormatted() << std::endl;
     }
 
     std::unique_ptr<geos::geom::Polygon>

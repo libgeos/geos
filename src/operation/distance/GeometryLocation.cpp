@@ -31,7 +31,7 @@ namespace distance { // geos.operation.distance
  * Constructs a GeometryLocation specifying a point on a geometry, as well as the
  * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
  */
-GeometryLocation::GeometryLocation(const Geometry* newComponent, size_t newSegIndex, const Coordinate& newPt)
+GeometryLocation::GeometryLocation(const Geometry* newComponent, std::size_t newSegIndex, const Coordinate& newPt)
 {
     component = newComponent;
     segIndex = newSegIndex;
@@ -46,7 +46,7 @@ GeometryLocation::GeometryLocation(const Geometry* newComponent, const Coordinat
 {
     component = newComponent;
     inside_area = true;
-    segIndex = (size_t) INSIDE_AREA;
+    segIndex = (std::size_t) INSIDE_AREA;
     pt = newPt;
 }
 

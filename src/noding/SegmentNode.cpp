@@ -30,7 +30,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -39,7 +39,7 @@ namespace noding { // geos.noding
 
 /*public*/
 SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
-                         size_t nSegmentIndex, int nSegmentOctant)
+                         std::size_t nSegmentIndex, int nSegmentOctant)
     :
     segString(ss),
     segmentOctant(nSegmentOctant),
@@ -83,20 +83,20 @@ SegmentNode::compareTo(const SegmentNode& other)
     }
 
 #if GEOS_DEBUG
-    cerr << setprecision(17) << "compareTo: " << *this << ", " << other << endl;
+    std::cerr << setprecision(17) << "compareTo: " << *this << ", " << other << std::endl;
 #endif
 
     if(coord.equals2D(other.coord)) {
 
 #if GEOS_DEBUG
-        cerr << " Coordinates equal!" << endl;
+        std::cerr << " Coordinates equal!" << std::endl;
 #endif
 
         return 0;
     }
 
 #if GEOS_DEBUG
-    cerr << " Coordinates do not equal!" << endl;
+    std::cerr << " Coordinates do not equal!" << std::endl;
 #endif
 
     // an exterior node is the segment start point,
@@ -110,10 +110,10 @@ SegmentNode::compareTo(const SegmentNode& other)
                                            other.coord);
 }
 
-ostream&
-operator<< (ostream& os, const SegmentNode& n)
+std::ostream&
+operator<< (std::ostream& os, const SegmentNode& n)
 {
-    return os << n.coord << " seg#=" << n.segmentIndex << " octant#=" << n.segmentOctant << endl;
+    return os << n.coord << " seg#=" << n.segmentIndex << " octant#=" << n.segmentOctant << std::endl;
 }
 
 } // namespace geos.noding

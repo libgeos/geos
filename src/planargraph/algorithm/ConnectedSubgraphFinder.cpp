@@ -24,14 +24,14 @@
 #include <vector>
 #include <stack>
 
-using namespace std;
+
 
 namespace geos {
 namespace planargraph {
 namespace algorithm {
 
 void
-ConnectedSubgraphFinder::getConnectedSubgraphs(vector<Subgraph*>& subgraphs)
+ConnectedSubgraphFinder::getConnectedSubgraphs(std::vector<Subgraph*>& subgraphs)
 {
     GraphComponent::setVisitedMap(graph.nodeBegin(),
                                   graph.nodeEnd(), false);
@@ -63,7 +63,7 @@ void
 ConnectedSubgraphFinder::addReachable(Node* startNode,
                                       Subgraph* subgraph)
 {
-    stack<Node*> nodeStack;
+    std::stack<Node*> nodeStack;
     nodeStack.push(startNode);
     while(!nodeStack.empty()) {
         Node* node = nodeStack.top();
@@ -75,7 +75,7 @@ ConnectedSubgraphFinder::addReachable(Node* startNode,
 /*private*/
 void
 ConnectedSubgraphFinder::addEdges(Node* node,
-                                  stack<Node*>& nodeStack, Subgraph* subgraph)
+                                  std::stack<Node*>& nodeStack, Subgraph* subgraph)
 {
     node->setVisited(true);
     DirectedEdgeStar* des = node->getOutEdges();

@@ -26,7 +26,7 @@
 class VoronoiPerfTest {
 
 public:
-    void test(size_t num_points) {
+    void test(std::size_t num_points) {
         using namespace geos::geom;
 
         std::default_random_engine e(12345);

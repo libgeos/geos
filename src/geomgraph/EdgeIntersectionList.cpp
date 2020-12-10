@@ -53,7 +53,7 @@ EdgeIntersectionList::EdgeIntersectionList(const Edge* newEdge):
 
 void
 EdgeIntersectionList::add(const Coordinate& coord,
-                          size_t segmentIndex, double dist)
+                          std::size_t segmentIndex, double dist)
 {
     if (nodeMap.empty()) {
         nodeMap.emplace_back(coord, segmentIndex, dist);
@@ -124,7 +124,7 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
                                       const EdgeIntersection* ei1)
 {
 #if GEOS_DEBUG
-    cerr << "[" << this << "] EdgeIntersectionList::createSplitEdge()" << endl;
+    std::cerr << "[" << this << "] EdgeIntersectionList::createSplitEdge()" << std::endl;
 #endif // GEOS_DEBUG
     auto npts = 2ul + ei1->segmentIndex - ei0->segmentIndex;
 
@@ -142,7 +142,7 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
     }
 
 #if GEOS_DEBUG
-    cerr << "    npts:" << npts << endl;
+    std::cerr << "    npts:" << npts << std::endl;
 #endif // GEOS_DEBUG
 
     std::vector<Coordinate> vc;

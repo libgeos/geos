@@ -242,7 +242,7 @@ template<>
 void object::test<15>
 ()
 {
-    ensure_equals(empty_point_->getNumPoints(), (size_t)0);
+    ensure_equals(empty_point_->getNumPoints(), (std::size_t)0);
 }
 
 // Test of getLength() for empty Point
@@ -366,7 +366,7 @@ template<>
 void object::test<28>
 ()
 {
-    ensure_equals(point_->getNumPoints(), (size_t)1);
+    ensure_equals(point_->getNumPoints(), (std::size_t)1);
 }
 
 // Test of getLength() for non-empty Point

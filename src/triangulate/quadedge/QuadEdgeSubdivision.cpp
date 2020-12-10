@@ -43,7 +43,7 @@
 
 
 using namespace geos::geom;
-using namespace std;
+
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -140,7 +140,7 @@ QuadEdgeSubdivision::locateFromEdge(const Vertex& v,
 {
     ::geos::ignore_unused_variable_warning(startEdge);
 
-    size_t iter = 0;
+    std::size_t iter = 0;
     auto maxIter = quadEdges.size();
 
     QuadEdge* e = startingEdges[0];
@@ -369,7 +369,7 @@ public:
     visit(QuadEdge* triEdges[3]) override
     {
         auto coordSeq = coordSeqFact.create(4, 0);
-        for(size_t i = 0; i < 3; i++) {
+        for(std::size_t i = 0; i < 3; i++) {
             Vertex v = triEdges[i]->orig();
             coordSeq->setAt(v.getCoordinate(), i);
         }

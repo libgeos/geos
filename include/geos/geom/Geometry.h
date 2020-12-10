@@ -920,7 +920,7 @@ protected:
     static std::vector<std::unique_ptr<Geometry>> toGeometryArray(std::vector<std::unique_ptr<T>> && v) {
         static_assert(std::is_base_of<Geometry, T>::value, "");
         std::vector<std::unique_ptr<Geometry>> gv(v.size());
-        for (size_t i = 0; i < v.size(); i++) {
+        for (std::size_t i = 0; i < v.size(); i++) {
             gv[i] = std::move(v[i]);
         }
         return gv;

@@ -54,8 +54,6 @@
 # include <geos/geom/GeometryFactory.inl>
 #endif
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -188,10 +186,10 @@ GeometryFactory::create(const PrecisionModel* pm)
 
 /*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
-    :
-    SRID(newSRID),
-    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
-    , _refCount(0), _autoDestroy(false)
+    : SRID(newSRID)
+    , coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
+    , _refCount(0)
+    , _autoDestroy(false)
 {
 #if GEOS_DEBUG
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(PrecisionModel[" << pm << "], SRID)" <<
@@ -212,12 +210,12 @@ GeometryFactory::create(const PrecisionModel* pm, int newSRID)
 }
 
 /*protected*/
-GeometryFactory::GeometryFactory(const GeometryFactory& gf) :
-precisionModel(gf.precisionModel),
-SRID(gf.SRID),
-coordinateListFactory(gf.coordinateListFactory),
-_refCount(0),
-_autoDestroy(false)
+GeometryFactory::GeometryFactory(const GeometryFactory& gf)
+    : precisionModel(gf.precisionModel)
+    , SRID(gf.SRID)
+    , coordinateListFactory(gf.coordinateListFactory)
+    , _refCount(0)
+    , _autoDestroy(false)
 {}
 
 /*public static*/
@@ -344,7 +342,7 @@ GeometryFactory::createMultiLineString() const
 
 /*public*/
 MultiLineString*
-GeometryFactory::createMultiLineString(vector<Geometry*>* newLines)
+GeometryFactory::createMultiLineString(std::vector<Geometry*>* newLines)
 const
 {
     return new MultiLineString(newLines, this);
@@ -357,7 +355,7 @@ const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromLines.size());
 
-    for(size_t i = 0; i < fromLines.size(); i++) {
+    for(std::size_t i = 0; i < fromLines.size(); i++) {
         auto line = dynamic_cast<const LineString*>(fromLines[i]);
 
         if(!line) {
@@ -398,7 +396,7 @@ GeometryFactory::createEmptyGeometry() const
 
 /*public*/
 GeometryCollection*
-GeometryFactory::createGeometryCollection(vector<Geometry*>* newGeoms) const
+GeometryFactory::createGeometryCollection(std::vector<Geometry*>* newGeoms) const
 {
     return new GeometryCollection(newGeoms, this);
 }
@@ -409,7 +407,7 @@ GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fr
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromGeoms.size());
 
-    for(size_t i = 0; i < fromGeoms.size(); i++) {
+    for(std::size_t i = 0; i < fromGeoms.size(); i++) {
         newGeoms[i] = fromGeoms[i]->clone();
     }
 
@@ -425,7 +423,7 @@ GeometryFactory::createMultiPolygon() const
 
 /*public*/
 MultiPolygon*
-GeometryFactory::createMultiPolygon(vector<Geometry*>* newPolys) const
+GeometryFactory::createMultiPolygon(std::vector<Geometry*>* newPolys) const
 {
     return new MultiPolygon(newPolys, this);
 }
@@ -450,7 +448,7 @@ GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPoly
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPolys.size());
 
-    for(size_t i = 0; i < fromPolys.size(); i++) {
+    for(std::size_t i = 0; i < fromPolys.size(); i++) {
         newGeoms[i] = fromPolys[i]->clone();
     }
 
@@ -491,7 +489,7 @@ GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 
 /*public*/
 MultiPoint*
-GeometryFactory::createMultiPoint(vector<Geometry*>* newPoints) const
+GeometryFactory::createMultiPoint(std::vector<Geometry*>* newPoints) const
 {
     return new MultiPoint(newPoints, this);
 }
@@ -510,10 +508,10 @@ GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newP
 
 /*public*/
 MultiPoint*
-GeometryFactory::createMultiPoint(const vector<const Geometry*>& fromPoints) const
+GeometryFactory::createMultiPoint(const std::vector<const Geometry*>& fromPoints) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPoints.size());
-    for(size_t i = 0; i < fromPoints.size(); i++) {
+    for(std::size_t i = 0; i < fromPoints.size(); i++) {
         newGeoms[i] = fromPoints[i]->clone();
     }
 
@@ -531,10 +529,10 @@ GeometryFactory::createMultiPoint() const
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 {
-    size_t npts = fromCoords.getSize();
-    vector<std::unique_ptr<Geometry>> pts(npts);
+    std::size_t npts = fromCoords.getSize();
+    std::vector<std::unique_ptr<Geometry>> pts(npts);
 
-    for(size_t i = 0; i < npts; ++i) {
+    for(std::size_t i = 0; i < npts; ++i) {
         pts[i].reset(createPoint(fromCoords.getAt(i)));
     }
 
@@ -545,10 +543,10 @@ GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 MultiPoint*
 GeometryFactory::createMultiPoint(const std::vector<Coordinate>& fromCoords) const
 {
-    size_t npts = fromCoords.size();
+    std::size_t npts = fromCoords.size();
     std::vector<std::unique_ptr<Geometry>> pts(npts);
 
-    for(size_t i = 0; i < npts; ++i) {
+    for(std::size_t i = 0; i < npts; ++i) {
         pts[i].reset(createPoint(fromCoords[i]));
     }
 
@@ -566,7 +564,7 @@ GeometryFactory::createPolygon(std::size_t coordinateDimension) const
 
 /*public*/
 Polygon*
-GeometryFactory::createPolygon(LinearRing* shell, vector<LinearRing*>* holes)
+GeometryFactory::createPolygon(LinearRing* shell, std::vector<LinearRing*>* holes)
 const
 {
     return new Polygon(shell, holes, this);
@@ -597,7 +595,7 @@ const
 
     std::vector<std::unique_ptr<LinearRing>> newHoles(holes.size());
 
-    for(size_t i = 0; i < holes.size(); i++) {
+    for(std::size_t i = 0; i < holes.size(); i++) {
         newHoles[i].reset(new LinearRing(*holes[i]));
     }
 
@@ -677,7 +675,7 @@ GeometryTypeId commonType(const T& geoms) {
     }
 
     GeometryTypeId type = geoms[0]->getGeometryTypeId();
-    for (size_t i = 1; i < geoms.size(); i++) {
+    for (std::size_t i = 1; i < geoms.size(); i++) {
         if (geoms[i]->getGeometryTypeId() != type) {
             return GEOS_GEOMETRYCOLLECTION;
         }
@@ -694,7 +692,7 @@ GeometryTypeId commonType(const T& geoms) {
 
 /*public*/
 Geometry*
-GeometryFactory::buildGeometry(vector<Geometry*>* newGeoms) const
+GeometryFactory::buildGeometry(std::vector<Geometry*>* newGeoms) const
 {
     if(newGeoms->empty()) {
         // we do not need the vector anymore
@@ -783,7 +781,7 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) c
 
 /*public*/
 Geometry*
-GeometryFactory::buildGeometry(const vector<const Geometry*>& fromGeoms) const
+GeometryFactory::buildGeometry(const std::vector<const Geometry*>& fromGeoms) const
 {
     if(fromGeoms.empty()) {
         return createGeometryCollection().release();

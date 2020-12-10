@@ -57,8 +57,8 @@ using namespace geos::algorithm;
  */
 bool
 SegmentIntersector::isTrivialIntersection(Edge* e0,
-        size_t segIndex0, Edge* e1,
-        size_t segIndex1)
+        std::size_t segIndex0, Edge* e1,
+        std::size_t segIndex1)
 {
 //	if (e0->equals(e1))
     if(e0 == e1) {
@@ -85,11 +85,11 @@ SegmentIntersector::isTrivialIntersection(Edge* e0,
  * certain pairs of segments for efficiency reasons.
  */
 void
-SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_t segIndex1)
+SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, std::size_t segIndex1)
 {
 
 #if GEOS_DEBUG
-    cerr << "SegmentIntersector::addIntersections() called" << endl;
+    std::cerr << "SegmentIntersector::addIntersections() called" << std::endl;
 #endif
 
 //	if (e0->equals(e1) && segIndex0==segIndex1) return;
@@ -123,7 +123,7 @@ SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_
         // only intersection.
         if(!isTrivialIntersection(e0, segIndex0, e1, segIndex1)) {
 #if GEOS_DEBUG
-            cerr << "SegmentIntersector::addIntersections(): has !TrivialIntersection" << endl;
+            std::cerr << "SegmentIntersector::addIntersections(): has !TrivialIntersection" << std::endl;
 #endif // DEBUG_INTERSECT
             hasIntersectionVar = true;
             if(includeProper || !li->isProper()) {
@@ -131,14 +131,14 @@ SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_
                 e0->addIntersections(li, segIndex0, 0);
                 e1->addIntersections(li, segIndex1, 1);
 #if GEOS_DEBUG
-                cerr << "SegmentIntersector::addIntersections(): includeProper || !li->isProper()" << endl;
+                std::cerr << "SegmentIntersector::addIntersections(): includeProper || !li->isProper()" << std::endl;
 #endif // DEBUG_INTERSECT
             }
             if(li->isProper()) {
                 properIntersectionPoint = li->getIntersection(0);
 #if GEOS_DEBUG
-                cerr << "SegmentIntersector::addIntersections(): properIntersectionPoint: " << properIntersectionPoint.toString() <<
-                     endl;
+                std::cerr << "SegmentIntersector::addIntersections(): properIntersectionPoint: " << properIntersectionPoint.toString() <<
+                     std::endl;
 #endif // DEBUG_INTERSECT
                 hasProper = true;
                 if(isDoneWhenProperInt) {

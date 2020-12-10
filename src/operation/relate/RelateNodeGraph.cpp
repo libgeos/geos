@@ -31,7 +31,7 @@
 #include <vector>
 #include <map>
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 
@@ -89,8 +89,8 @@ void
 RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
         int argIndex)
 {
-    vector<Edge*>* edges = geomGraph->getEdges();
-    vector<Edge*>::iterator edgeIt = edges->begin();
+    std::vector<Edge*>* edges = geomGraph->getEdges();
+    std::vector<Edge*>::iterator edgeIt = edges->begin();
     for(; edgeIt < edges->end(); ++edgeIt) {
         Edge* e = *edgeIt;
         Location eLoc = e->getLabel().getLocation(argIndex);
@@ -130,7 +130,7 @@ RelateNodeGraph::copyNodesAndLabels(GeometryGraph* geomGraph, int argIndex)
 }
 
 void
-RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*>* ee)
+RelateNodeGraph::insertEdgeEnds(std::vector<EdgeEnd*>* ee)
 {
     for(EdgeEnd* e: *ee) {
         nodes->add(e);

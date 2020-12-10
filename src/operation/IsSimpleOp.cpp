@@ -39,7 +39,7 @@
 #include <set>
 #include <cassert>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
@@ -148,7 +148,7 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
     if(mp.isEmpty()) {
         return true;
     }
-    set<const Coordinate*, CoordinateLessThen> points;
+    std::set<const Coordinate*, CoordinateLessThen> points;
 
     for(std::size_t i = 0, n = mp.getNumGeometries(); i < n; ++i) {
         const Point* pt = mp.getGeometryN(i);
@@ -202,7 +202,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry* p_geom)
 bool
 IsSimpleOp::hasNonEndpointIntersection(GeometryGraph& graph)
 {
-    vector<Edge*>* edges = graph.getEdges();
+    std::vector<Edge*>* edges = graph.getEdges();
     for(Edge* e: *edges) {
         auto maxSegmentIndex = e->getMaximumSegmentIndex();
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
@@ -287,8 +287,8 @@ IsSimpleOp::isSimplePolygonal(const geom::Geometry* g)
 bool
 IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph& graph)
 {
-    map<const Coordinate*, EndpointInfo*, CoordinateLessThen> endPoints;
-    vector<Edge*>* edges = graph.getEdges();
+    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen> endPoints;
+    std::vector<Edge*>* edges = graph.getEdges();
     for(Edge* e: *edges) {
         //int maxSegmentIndex=e->getMaximumSegmentIndex();
         bool isClosed = e->isClosed();
@@ -298,7 +298,7 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph& graph)
         addEndpoint(endPoints, p1, isClosed);
     }
 
-    map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.begin();
+    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.begin();
     for(; it != endPoints.end(); ++it) {
         EndpointInfo* eiInfo = it->second;
         if(eiInfo->isClosed && eiInfo->degree != 2) {
@@ -327,10 +327,10 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph& graph)
 /*private*/
 void
 IsSimpleOp::addEndpoint(
-    map<const Coordinate*, EndpointInfo*, CoordinateLessThen>& endPoints,
+    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>& endPoints,
     const Coordinate* p, bool isClosed)
 {
-    map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.find(p);
+    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.find(p);
     EndpointInfo* eiInfo;
     if(it == endPoints.end()) {
         eiInfo = nullptr;

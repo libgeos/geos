@@ -31,7 +31,7 @@ struct test_multipoint_data {
 
     MultiPointAutoPtr empty_mp_;
     MultiPointPtr mp_;
-    const size_t mp_size_;
+    const std::size_t mp_size_;
 
     test_multipoint_data()
         :
@@ -70,7 +70,7 @@ template<>
 void object::test<1>
 ()
 {
-    const size_t size0 = 0;
+    const std::size_t size0 = 0;
     MultiPointAutoPtr mp(factory_->createMultiPoint());
 
     ensure(mp->isEmpty());
@@ -87,7 +87,7 @@ template<>
 void object::test<2>
 ()
 {
-    const size_t size0 = 0;
+    const std::size_t size0 = 0;
     MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone().release()));
     ensure(nullptr != copy.get());
 
@@ -105,7 +105,7 @@ template<>
 void object::test<3>
 ()
 {
-    const size_t size0 = 0;
+    const std::size_t size0 = 0;
     auto geo = reader_.read("MULTIPOINT EMPTY");
     MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo.get());
 

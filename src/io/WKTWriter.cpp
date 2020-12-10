@@ -42,7 +42,7 @@
 #include <cmath>
 #include <iomanip>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -70,10 +70,10 @@ WKTWriter::setOutputDimension(uint8_t dims)
 }
 
 /*static*/
-string
+std::string
 WKTWriter::toLineString(const CoordinateSequence& seq)
 {
-    stringstream buf(ios_base::in | ios_base::out);
+    std::stringstream buf(std::ios_base::in | std::ios_base::out);
     buf << "LINESTRING ";
     auto npts = seq.size();
     if(npts == 0) {
@@ -81,7 +81,7 @@ WKTWriter::toLineString(const CoordinateSequence& seq)
     }
     else {
         buf << "(";
-        for(size_t i = 0; i < npts; ++i) {
+        for(std::size_t i = 0; i < npts; ++i) {
             if(i) {
                 buf << ", ";
             }
@@ -97,10 +97,10 @@ WKTWriter::toLineString(const CoordinateSequence& seq)
 }
 
 /*static*/
-string
+std::string
 WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
 {
-    stringstream ret(ios_base::in | ios_base::out);
+    std::stringstream ret(std::ios_base::in | std::ios_base::out);
     ret << "LINESTRING (" << p0.x << " " << p0.y;
 #if PRINT_Z
     ret << " " << p0.z;
@@ -115,10 +115,10 @@ WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
 }
 
 /*static*/
-string
+std::string
 WKTWriter::toPoint(const Coordinate& p0)
 {
-    stringstream ret(ios_base::in | ios_base::out);
+    std::stringstream ret(std::ios_base::in | std::ios_base::out);
     ret << "POINT (";
 #if PRINT_Z
     ret << p0.x << " " << p0.y  << " " << p0.z << " )";
@@ -143,12 +143,12 @@ WKTWriter::setTrim(bool p0)
     trim = p0;
 }
 
-string
+std::string
 WKTWriter::write(const Geometry* geometry)
 {
     Writer sw;
     writeFormatted(geometry, false, &sw);
-    string res = sw.toString();
+    std::string res = sw.toString();
     return res;
 }
 
@@ -158,7 +158,7 @@ WKTWriter::write(const Geometry* geometry, Writer* writer)
     writeFormatted(geometry, false, writer);
 }
 
-string
+std::string
 WKTWriter::writeFormatted(const Geometry* geometry)
 {
     Writer sw;
@@ -354,7 +354,7 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 }
 
 /* protected */
-string
+std::string
 WKTWriter::writeNumber(double d)
 {
 
@@ -380,7 +380,7 @@ WKTWriter::appendLineStringText(const LineString* lineString, int p_level,
             indent(p_level, writer);
         }
         writer->write("(");
-        for(size_t i = 0, n = lineString->getNumPoints(); i < n; ++i) {
+        for(std::size_t i = 0, n = lineString->getNumPoints(); i < n; ++i) {
             if(i > 0) {
                 writer->write(", ");
                 if(i % 10 == 0) {
@@ -406,7 +406,7 @@ WKTWriter::appendPolygonText(const Polygon* polygon, int /*level*/,
         }
         writer->write("(");
         appendLineStringText(polygon->getExteriorRing(), level, false, writer);
-        for(size_t i = 0, n = polygon->getNumInteriorRing(); i < n; ++i) {
+        for(std::size_t i = 0, n = polygon->getNumInteriorRing(); i < n; ++i) {
             writer->write(", ");
             const LineString* ls = polygon->getInteriorRingN(i);
             appendLineStringText(ls, level + 1, true, writer);
@@ -424,7 +424,7 @@ WKTWriter::appendMultiPointText(const MultiPoint* multiPoint,
     }
     else {
         writer->write("(");
-        for(size_t i = 0, n = multiPoint->getNumGeometries();
+        for(std::size_t i = 0, n = multiPoint->getNumGeometries();
                 i < n; ++i) {
 
             if(i > 0) {
@@ -453,7 +453,7 @@ WKTWriter::appendMultiLineStringText(const MultiLineString* multiLineString, int
         int level2 = p_level;
         bool doIndent = indentFirst;
         writer->write("(");
-        for(size_t i = 0, n = multiLineString->getNumGeometries();
+        for(std::size_t i = 0, n = multiLineString->getNumGeometries();
                 i < n; ++i) {
             if(i > 0) {
                 writer->write(", ");
@@ -477,7 +477,7 @@ WKTWriter::appendMultiPolygonText(const MultiPolygon* multiPolygon, int p_level,
         int level2 = p_level;
         bool doIndent = false;
         writer->write("(");
-        for(size_t i = 0, n = multiPolygon->getNumGeometries();
+        for(std::size_t i = 0, n = multiPolygon->getNumGeometries();
                 i < n; ++i) {
             if(i > 0) {
                 writer->write(", ");
@@ -503,7 +503,7 @@ WKTWriter::appendGeometryCollectionText(
     else {
         int level2 = p_level;
         writer->write("(");
-        for(size_t i = 0, n = geometryCollection->getNumGeometries();
+        for(std::size_t i = 0, n = geometryCollection->getNumGeometries();
                 i < n; ++i) {
             if(i > 0) {
                 writer->write(", ");
@@ -522,7 +522,7 @@ WKTWriter::indent(int p_level, Writer* writer)
         return;
     }
     writer->write("\n");
-    writer->write(string(INDENT * p_level, ' '));
+    writer->write(std::string(INDENT * p_level, ' '));
 }
 
 } // namespace geos.io

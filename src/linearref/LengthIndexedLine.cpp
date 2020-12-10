@@ -26,7 +26,7 @@
 #include <geos/linearref/LengthIndexOfPoint.h>
 #include <geos/linearref/LocationIndexOfLine.h>
 
-using namespace std;
+
 
 using namespace geos::geom;
 
@@ -65,7 +65,7 @@ LengthIndexedLine::extractLine(double startIndex, double endIndex) const
     const bool resolveStartLower = (startIndex2 == endIndex2);
     const LinearLocation startLoc = locationOf(startIndex2, resolveStartLower);
     const LinearLocation endLoc = locationOf(endIndex2);
-//    LinearLocation endLoc = locationOf(endIndex2, true);
+//    LinearLocation std::endloc = locationOf(endIndex2, true);
 //    LinearLocation startLoc = locationOf(startIndex2);
     return ExtractLineByLocation::extract(linearGeom, startLoc, endLoc);
 }

@@ -80,7 +80,7 @@ public:
      * The input segmentIndex and dist are expected to be normalized.
      * @return the EdgeIntersection found or added
      */
-    void add(const geom::Coordinate& coord, size_t segmentIndex, double dist);
+    void add(const geom::Coordinate& coord, std::size_t segmentIndex, double dist);
 
     const_iterator
     begin() const

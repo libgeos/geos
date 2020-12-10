@@ -90,7 +90,7 @@ public:
     /// Returns a read-only pointer to internal CoordinateSequence
     const CoordinateSequence* getCoordinatesRO() const;
 
-    virtual const Coordinate& getCoordinateN(size_t n) const;
+    virtual const Coordinate& getCoordinateN(std::size_t n) const;
 
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;

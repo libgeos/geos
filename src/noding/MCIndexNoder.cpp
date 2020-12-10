@@ -36,7 +36,7 @@
 # include <geos/noding/MCIndexNoder.inl>
 #endif
 
-using namespace std;
+
 using namespace geos::index::chain;
 
 namespace geos {
@@ -65,7 +65,7 @@ MCIndexNoder::intersectChains()
 
     SegmentOverlapAction overlapAction(*segInt);
 
-    vector<void*> overlapChains;
+    std::vector<void*> overlapChains;
     for(MonotoneChain* queryChain : monoChains) {
         GEOS_CHECK_FOR_INTERRUPTS();
 
@@ -100,7 +100,7 @@ MCIndexNoder::intersectChains()
 void
 MCIndexNoder::add(SegmentString* segStr)
 {
-    vector<std::unique_ptr<MonotoneChain>> segChains;
+    std::vector<std::unique_ptr<MonotoneChain>> segChains;
 
     // segChains will contain nelwy allocated MonotoneChain objects
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
@@ -127,8 +127,8 @@ MCIndexNoder::~MCIndexNoder()
 }
 
 void
-MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, size_t start1,
-        MonotoneChain& mc2, size_t start2)
+MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, std::size_t start1,
+        MonotoneChain& mc2, std::size_t start2)
 {
     SegmentString* ss1 = const_cast<SegmentString*>(
                              static_cast<const SegmentString*>(mc1.getContext())

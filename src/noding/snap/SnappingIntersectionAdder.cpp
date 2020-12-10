@@ -43,7 +43,7 @@ SnappingIntersectionAdder::SnappingIntersectionAdder(double p_snapTolerance, Sna
 
 /*public*/
 void
-SnappingIntersectionAdder::processIntersections(SegmentString* seg0, size_t segIndex0, SegmentString* seg1, size_t segIndex1)
+SnappingIntersectionAdder::processIntersections(SegmentString* seg0, std::size_t segIndex0, SegmentString* seg1, std::size_t segIndex1)
 {
     // don't bother intersecting a segment with itself
     if (seg0 == seg1 && segIndex0 == segIndex1) return;
@@ -85,8 +85,8 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, size_t segI
 
 /*private*/
 void
-SnappingIntersectionAdder::processNearVertex(SegmentString* srcSS, size_t srcIndex, const geom::Coordinate& p,
-        SegmentString* ss, size_t segIndex, const geom::Coordinate& p0, const geom::Coordinate& p1)
+SnappingIntersectionAdder::processNearVertex(SegmentString* srcSS, std::size_t srcIndex, const geom::Coordinate& p,
+        SegmentString* ss, std::size_t segIndex, const geom::Coordinate& p0, const geom::Coordinate& p1)
 {
     /**
     * Don't add intersection if candidate vertex is near endpoints of segment.
@@ -109,7 +109,7 @@ SnappingIntersectionAdder::processNearVertex(SegmentString* srcSS, size_t srcInd
 
 /*private static*/
 bool
-SnappingIntersectionAdder::isAdjacent(SegmentString* ss0, size_t segIndex0, SegmentString* ss1, size_t segIndex1)
+SnappingIntersectionAdder::isAdjacent(SegmentString* ss0, std::size_t segIndex0, SegmentString* ss1, std::size_t segIndex1)
 {
     if (ss0 != ss1) return false;
     long l0 = segIndex0;

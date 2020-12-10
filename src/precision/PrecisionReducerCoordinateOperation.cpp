@@ -47,7 +47,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     auto vc = detail::make_unique<std::vector<Coordinate>>(csSize);
 
     // copy coordinates and reduce
-    for(size_t i = 0; i < csSize; ++i) {
+    for(std::size_t i = 0; i < csSize; ++i) {
         (*vc)[i] = cs->getAt(i);
         targetPM.makePrecise((*vc)[i]);
     }

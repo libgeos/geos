@@ -23,7 +23,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -65,14 +65,14 @@ MonotoneChainEdge::getCoordinates()
     return pts;
 }
 
-vector<size_t>&
+std::vector<size_t>&
 MonotoneChainEdge::getStartIndexes()
 {
     return startIndex;
 }
 
 double
-MonotoneChainEdge::getMinX(size_t chainIndex)
+MonotoneChainEdge::getMinX(std::size_t chainIndex)
 {
     double x1 = pts->getAt(startIndex[chainIndex]).x;
     double x2 = pts->getAt(startIndex[chainIndex + 1]).x;
@@ -80,7 +80,7 @@ MonotoneChainEdge::getMinX(size_t chainIndex)
 }
 
 double
-MonotoneChainEdge::getMaxX(size_t chainIndex)
+MonotoneChainEdge::getMaxX(std::size_t chainIndex)
 {
     double x1 = pts->getAt(startIndex[chainIndex]).x;
     double x2 = pts->getAt(startIndex[chainIndex + 1]).x;
@@ -91,18 +91,18 @@ void
 MonotoneChainEdge::computeIntersects(const MonotoneChainEdge& mce,
                                      SegmentIntersector& si)
 {
-    size_t I = startIndex.size() - 1;
-    size_t J = mce.startIndex.size() - 1;
-    for(size_t i = 0; i < I; ++i) {
-        for(size_t j = 0; j < J; ++j) {
+    std::size_t I = startIndex.size() - 1;
+    std::size_t J = mce.startIndex.size() - 1;
+    for(std::size_t i = 0; i < I; ++i) {
+        for(std::size_t j = 0; j < J; ++j) {
             computeIntersectsForChain(i, mce, j, si);
         }
     }
 }
 
 void
-MonotoneChainEdge::computeIntersectsForChain(size_t chainIndex0,
-        const MonotoneChainEdge& mce, size_t chainIndex1,
+MonotoneChainEdge::computeIntersectsForChain(std::size_t chainIndex0,
+        const MonotoneChainEdge& mce, std::size_t chainIndex1,
         SegmentIntersector& si)
 {
     computeIntersectsForChain(startIndex[chainIndex0],
@@ -113,8 +113,8 @@ MonotoneChainEdge::computeIntersectsForChain(size_t chainIndex0,
 }
 
 void
-MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
-        const MonotoneChainEdge& mce, size_t start1, size_t end1,
+MonotoneChainEdge::computeIntersectsForChain(std::size_t start0, std::size_t end0,
+        const MonotoneChainEdge& mce, std::size_t start1, std::size_t end1,
         SegmentIntersector& ei)
 {
     // terminating condition for the recursion
@@ -128,8 +128,8 @@ MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
     }
     // the chains overlap, so split each in half and iterate
     // (binary search)
-    size_t mid0 = (start0 + end0) / 2;
-    size_t mid1 = (start1 + end1) / 2;
+    std::size_t mid0 = (start0 + end0) / 2;
+    std::size_t mid1 = (start1 + end1) / 2;
 
     // Assert: mid != start or end
     // (since we checked above for end - start <= 1)
@@ -153,7 +153,7 @@ MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
 }
 
 bool
-MonotoneChainEdge::overlaps(size_t start0, size_t end0, const MonotoneChainEdge& mce, size_t start1, size_t end1)
+MonotoneChainEdge::overlaps(std::size_t start0, std::size_t end0, const MonotoneChainEdge& mce, std::size_t start1, std::size_t end1)
 {
     return Envelope::intersects(pts->getAt(start0), pts->getAt(end0),
                                 mce.pts->getAt(start1), mce.pts->getAt(end1));

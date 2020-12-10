@@ -25,7 +25,7 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 using namespace geos::algorithm;
 
-FacetSequence::FacetSequence(const Geometry *p_geom, const CoordinateSequence* p_pts, size_t p_start, size_t p_end) :
+FacetSequence::FacetSequence(const Geometry *p_geom, const CoordinateSequence* p_pts, std::size_t p_start, std::size_t p_end) :
     pts(p_pts),
     start(p_start),
     end(p_end),
@@ -34,7 +34,7 @@ FacetSequence::FacetSequence(const Geometry *p_geom, const CoordinateSequence* p
     computeEnvelope();
 }
 
-FacetSequence::FacetSequence(const CoordinateSequence* p_pts, size_t p_start, size_t p_end) :
+FacetSequence::FacetSequence(const CoordinateSequence* p_pts, std::size_t p_start, std::size_t p_end) :
     pts(p_pts),
     start(p_start),
     end(p_end),
@@ -124,7 +124,7 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
 {
     double minDistance = std::numeric_limits<double>::infinity();
 
-    for(size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
+    for(std::size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
         const Coordinate& q0 = facetSeq.pts->getAt(i);
         const Coordinate& q1 = facetSeq.pts->getAt(i + 1);
         double dist = Distance::pointToSegment(pt, q0, q1);
@@ -144,7 +144,7 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
 
 void
 FacetSequence::updateNearestLocationsPointLine(const Coordinate& pt,
-        const FacetSequence& facetSeq, size_t i,
+        const FacetSequence& facetSeq, std::size_t i,
         const Coordinate& q0, const Coordinate &q1,
         std::vector<GeometryLocation> *locs) const
 {
@@ -162,7 +162,7 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
 {
     double minDistance = std::numeric_limits<double>::infinity();
 
-    for(size_t i = start; i < end - 1; i++) {
+    for(std::size_t i = start; i < end - 1; i++) {
         const Coordinate& p0 = pts->getAt(i);
         const Coordinate& p1 = pts->getAt(i + 1);
 
@@ -175,7 +175,7 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
             continue;
         }
 
-        for(size_t j = facetSeq.start; j < facetSeq.end - 1; j++) {
+        for(std::size_t j = facetSeq.start; j < facetSeq.end - 1; j++) {
             const Coordinate& q0 = facetSeq.pts->getAt(j);
             const Coordinate& q1 = facetSeq.pts->getAt(j + 1);
 
@@ -203,9 +203,9 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
 }
 
 void
-FacetSequence::updateNearestLocationsLineLine(size_t i, const Coordinate& p0, const Coordinate& p1,
+FacetSequence::updateNearestLocationsLineLine(std::size_t i, const Coordinate& p0, const Coordinate& p1,
         const FacetSequence& facetSeq,
-        size_t j, const Coordinate& q0, const Coordinate &q1,
+        std::size_t j, const Coordinate& q0, const Coordinate &q1,
         std::vector<GeometryLocation> *locs) const
 {
     LineSegment seg0(p0, p1);
@@ -222,7 +222,7 @@ void
 FacetSequence::computeEnvelope()
 {
     env = Envelope();
-    for(size_t i = start; i < end; i++) {
+    for(std::size_t i = start; i < end; i++) {
         env.expandToInclude(pts->getAt(i));
     }
 }
@@ -234,7 +234,7 @@ FacetSequence::getEnvelope() const
 }
 
 const Coordinate*
-FacetSequence::getCoordinate(size_t index) const
+FacetSequence::getCoordinate(std::size_t index) const
 {
     return &(pts->getAt(start + index));
 }

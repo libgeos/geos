@@ -43,7 +43,7 @@ struct test_linearring_data {
 
     geos::geom::LinearRing empty_ring_;
     LinearRingPtr ring_;
-    const size_t ring_size_;
+    const std::size_t ring_size_;
 
     test_linearring_data()
         : pm_(1000), factory_(geos::geom::GeometryFactory::create(&pm_, 0))
@@ -86,7 +86,7 @@ void object::test<1>
     using geos::geom::Coordinate;
 
     // Non-empty sequence of coordiantes
-    const size_t size7 = 7;
+    const std::size_t size7 = 7;
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", coords != nullptr);
 

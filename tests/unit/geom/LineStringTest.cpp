@@ -90,7 +90,7 @@ void object::test<2>
     using geos::geom::Coordinate;
 
     // Non-empty sequence of coordinates
-    const size_t size3 = 3;
+    const std::size_t size3 = 3;
 
     CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", pseq != nullptr);
@@ -170,7 +170,7 @@ void object::test<4>
     using geos::geom::Coordinate;
 
     // Non-empty sequence of coordinates
-    const size_t size = 3;
+    const std::size_t size = 3;
 
     CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", pseq != nullptr);
@@ -430,7 +430,7 @@ template<>
 void object::test<22>
 ()
 {
-    const size_t size = 4;
+    const std::size_t size = 4;
     auto geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
     ensure(geo != nullptr);
 

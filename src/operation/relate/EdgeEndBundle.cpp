@@ -27,7 +27,7 @@
 
 #include <vector>
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 
@@ -45,7 +45,7 @@ EdgeEndBundle::EdgeEndBundle(EdgeEnd* e):
 
 EdgeEndBundle::~EdgeEndBundle()
 {
-    for(size_t i = 0, n = edgeEnds.size(); i < n; i++) {
+    for(std::size_t i = 0, n = edgeEnds.size(); i < n; i++) {
         delete edgeEnds[i];
     }
 }
@@ -53,7 +53,7 @@ EdgeEndBundle::~EdgeEndBundle()
 //Not needed
 //public Iterator iterator() { return edgeEnds.iterator(); }
 
-const vector<EdgeEnd*>&
+const std::vector<EdgeEnd*>&
 EdgeEndBundle::getEdgeEnds()
 {
     return edgeEnds;
@@ -177,10 +177,10 @@ EdgeEndBundle::updateIM(IntersectionMatrix& im)
     Edge::updateIM(label, im);
 }
 
-string
+std::string
 EdgeEndBundle::print() const
 {
-    string out = "EdgeEndBundle--> Label: " + label.toString() + "\n";
+    std::string out = "EdgeEndBundle--> Label: " + label.toString() + "\n";
     for(auto& e : edgeEnds) {
         out += e->print();
         out += "\n";

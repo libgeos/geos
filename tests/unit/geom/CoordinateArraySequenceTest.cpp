@@ -55,7 +55,7 @@ template<>
 void object::test<1>
 ()
 {
-    const size_t size = 0;
+    const std::size_t size = 0;
     geos::geom::CoordinateArraySequence sequence;
 
     ensure(sequence.isEmpty());
@@ -64,7 +64,7 @@ void object::test<1>
 
     ensure_equals(sequence.toString(), std::string("()"));
 
-    const size_t dim = 3;
+    const std::size_t dim = 3;
     ensure_equals(sequence.getDimension(), dim);
 }
 
@@ -74,7 +74,7 @@ template<>
 void object::test<2>
 ()
 {
-    const size_t size = 3;
+    const std::size_t size = 3;
     geos::geom::CoordinateArraySequence sequence(size);
 
     ensure(!sequence.isEmpty());
@@ -85,7 +85,7 @@ void object::test<2>
 
     ensure("Every coodinate in the default sequence should be same.", sequence.hasRepeatedPoints());
 
-    const size_t dim = 2; // default/empty coordinates now 2D.
+    const std::size_t dim = 2; // default/empty coordinates now 2D.
     ensure_equals(sequence.getDimension(), dim);
 }
 
@@ -97,7 +97,7 @@ void object::test<3>
 {
     using geos::geom::Coordinate;
 
-    const size_t size = 3;
+    const std::size_t size = 3;
     const double a = 0;
     const double b = 5.0;
     const double c = 10.0;
@@ -128,7 +128,7 @@ void object::test<4>
     using geos::geom::Coordinate;
 
     // Create empty sequence
-    const size_t sizeEmpty = 0;
+    const std::size_t sizeEmpty = 0;
     geos::geom::CoordinateArraySequence empty_original;
 
     ensure(empty_original.isEmpty());
@@ -143,7 +143,7 @@ void object::test<4>
     ensure_equals(empty_copy.toString(), std::string("()"));
 
     // Create non-empty sequence
-    const size_t sizeNonEmpty = 2;
+    const std::size_t sizeNonEmpty = 2;
     std::vector<Coordinate>* col = new std::vector<Coordinate>();
     col->push_back(Coordinate(1, 2, 3));
     col->push_back(Coordinate(5, 10, 15));
@@ -177,7 +177,7 @@ void object::test<5>
     col->push_back(Coordinate(1, 2));
     col->push_back(Coordinate(5, 10));
 
-    const size_t size = 2;
+    const std::size_t size = 2;
     geos::geom::CoordinateArraySequence sequence(col);
 
     ensure(!sequence.isEmpty());
@@ -202,7 +202,7 @@ void object::test<6>
     col->push_back(Coordinate(1, 2, 3));
     col->push_back(Coordinate(5, 10, 15));
 
-    const size_t size = 2;
+    const std::size_t size = 2;
     geos::geom::CoordinateArraySequence sequence(col);
 
     ensure(!sequence.isEmpty());
@@ -240,7 +240,7 @@ void object::test<7>
     using geos::geom::Coordinate;
 
     // Create empty sequence to fill with coordinates
-    const size_t size = 0;
+    const std::size_t size = 0;
     geos::geom::CoordinateArraySequence sequence;
 
     ensure(sequence.isEmpty());
@@ -249,7 +249,7 @@ void object::test<7>
     // Add coordinates
     Coordinate tmp(1, 2, 3);
     sequence.add(tmp); // insert copy of tmp
-    const size_t sizeOne = 1;
+    const std::size_t sizeOne = 1;
 
     ensure(!sequence.isEmpty());
     ensure_equals(sequence.size(), sizeOne);
@@ -258,7 +258,7 @@ void object::test<7>
     tmp.y = 10;
     tmp.z = 15;
     sequence.add(tmp); // insert copy of tmp
-    const size_t sizeTwo = 2;
+    const std::size_t sizeTwo = 2;
 
     ensure(!sequence.isEmpty());
     ensure_equals(sequence.size(), sizeTwo);
@@ -285,7 +285,7 @@ void object::test<8>
     using geos::geom::Coordinate;
 
     // Create sequence with 2 default coordinates
-    const size_t size = 2;
+    const std::size_t size = 2;
     geos::geom::CoordinateArraySequence sequence(size);
 
     ensure(!sequence.isEmpty());
@@ -324,7 +324,7 @@ void object::test<10>
     using geos::geom::Coordinate;
 
     // Create empty sequence
-    const size_t size = 0;
+    const std::size_t size = 0;
     geos::geom::CoordinateArraySequence sequence;
 
     ensure(sequence.isEmpty());

@@ -29,7 +29,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -44,11 +44,11 @@ SnapOverlayOp::computeSnapTolerance()
     snapTolerance = GeometrySnapper::computeOverlaySnapTolerance(geom0,
                     geom1);
 
-    // cout << "Snap tol = " <<  snapTolerance << endl;
+    // std::size_t << "Snap tol = " <<  snapTolerance << std::endl;
 }
 
 /* public */
-unique_ptr<Geometry>
+std::unique_ptr<Geometry>
 SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
     geom::GeomPtrPair prepGeom;

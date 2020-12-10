@@ -28,7 +28,7 @@
 #include <vector>
 #include <cassert>
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 using namespace geos::algorithm;
@@ -70,14 +70,14 @@ bool
 QuadtreeNestedRingTester::isNonNested()
 {
     buildQuadtree();
-    for(size_t i = 0, ni = rings.size(); i < ni; ++i) {
+    for(std::size_t i = 0, ni = rings.size(); i < ni; ++i) {
         const LinearRing* innerRing = rings[i];
         const CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
         const Envelope* envi = innerRing->getEnvelopeInternal();
 
-        vector<void*> results;
+        std::vector<void*> results;
         qt->query(envi, results);
-        for(size_t j = 0, nj = results.size(); j < nj; ++j) {
+        for(std::size_t j = 0, nj = results.size(); j < nj; ++j) {
             LinearRing* searchRing = (LinearRing*)results[j];
             const CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
 
@@ -117,7 +117,7 @@ void
 QuadtreeNestedRingTester::buildQuadtree()
 {
     qt = new Quadtree();
-    for(size_t i = 0, n = rings.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = rings.size(); i < n; ++i) {
         const LinearRing* ring = rings[i];
         const Envelope* env = ring->getEnvelopeInternal();
 

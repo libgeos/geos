@@ -46,7 +46,6 @@
 #include <iostream>
 #endif
 
-using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -151,13 +150,13 @@ Edge::getCollapsedEdge()
 
 /*public*/
 void
-Edge::addIntersections(LineIntersector* li, size_t segmentIndex, size_t geomIndex)
+Edge::addIntersections(LineIntersector* li, std::size_t segmentIndex, std::size_t geomIndex)
 {
 #if GEOS_DEBUG
-    cerr << "[" << this << "] Edge::addIntersections(" << li->toString() << ", " << segmentIndex << ", " << geomIndex <<
-         ") called" << endl;
+    std::cerr << "[" << this << "] Edge::addIntersections(" << li->toString() << ", " << segmentIndex << ", " << geomIndex <<
+         ") called" << std::endl;
 #endif
-    for(size_t i = 0; i < li->getIntersectionNum(); ++i) {
+    for(std::size_t i = 0; i < li->getIntersectionNum(); ++i) {
         addIntersection(li, segmentIndex, geomIndex, i);
     }
 
@@ -167,7 +166,7 @@ Edge::addIntersections(LineIntersector* li, size_t segmentIndex, size_t geomInde
 /*public*/
 void
 Edge::addIntersection(LineIntersector* li,
-                      size_t segmentIndex, size_t geomIndex, size_t intIndex)
+                      std::size_t segmentIndex, std::size_t geomIndex, std::size_t intIndex)
 {
 #if GEOS_DEBUG
     std::cerr << "[" << this << "] Edge::addIntersection(" << li->toString() << ", " << segmentIndex << ", " << geomIndex <<
@@ -194,7 +193,7 @@ Edge::addIntersection(LineIntersector* li,
      * Add the intersection point to edge intersection list.
      */
 #if GEOS_DEBUG
-    cerr << "Edge::addIntersection adding to edge intersection list point " << intPt.toString() << endl;
+    std::cerr << "Edge::addIntersection adding to edge intersection list point " << intPt.toString() << std::endl;
 #endif
     eiList.add(intPt, normalizedSegmentIndex, dist);
 
@@ -217,7 +216,7 @@ Edge::equals(const Edge& e) const
     bool isEqualForward = true;
     bool isEqualReverse = true;
 
-    for(size_t i = 0, iRev = npts1 - 1; i < npts1; ++i, --iRev) {
+    for(std::size_t i = 0, iRev = npts1 - 1; i < npts1; ++i, --iRev) {
         const Coordinate& e1pi = pts->getAt(i);
         const Coordinate& e2pi = e.pts->getAt(i);
         const Coordinate& e2piRev = e.pts->getAt(iRev);
@@ -242,7 +241,7 @@ Edge::isPointwiseEqual(const Edge* e) const
     testInvariant();
 
 #if GEOS_DEBUG > 2
-    cerr << "Edge::isPointwiseEqual call" << endl;
+    std::cerr << "Edge::isPointwiseEqual call" << std::endl;
 #endif
     auto npts = getNumPoints();
     auto enpts = e->getNumPoints();
@@ -250,7 +249,7 @@ Edge::isPointwiseEqual(const Edge* e) const
         return false;
     }
 #if GEOS_DEBUG
-    cerr << "Edge::isPointwiseEqual scanning " << enpts << "x" << npts << " points" << endl;
+    std::cerr << "Edge::isPointwiseEqual scanning " << enpts << "x" << npts << " points" << std::endl;
 #endif
     for(unsigned int i = 0; i < npts; ++i) {
         if(!pts->getAt(i).equals2D(e->pts->getAt(i))) {
@@ -260,7 +259,7 @@ Edge::isPointwiseEqual(const Edge* e) const
     return true;
 }
 
-string
+std::string
 Edge::print() const
 {
     testInvariant();
@@ -271,12 +270,12 @@ Edge::print() const
 }
 
 // Dunno how to implemente this in terms of operator<<
-string
+std::string
 Edge::printReverse() const
 {
     testInvariant();
 
-    stringstream os;
+    std::stringstream os;
 
     os << "EDGE (rev)";
 

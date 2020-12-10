@@ -23,7 +23,7 @@ namespace geos {
 namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
-using namespace std;
+
 
 Interval*
 Bintree::ensureExtent(const Interval* itemInterval, double minExtent)
@@ -116,15 +116,15 @@ Bintree::insert(Interval* itemInterval, void* item)
     */
 }
 
-vector<void*>*
+std::vector<void*>*
 Bintree::iterator()
 {
-    vector<void*>* foundItems = new vector<void*>();
+    std::vector<void*>* foundItems = new std::vector<void*>();
     root->addAllItems(foundItems);
     return foundItems;
 }
 
-vector<void*>*
+std::vector<void*>*
 Bintree::query(double x)
 {
     return query(new Interval(x, x));
@@ -133,20 +133,20 @@ Bintree::query(double x)
 /**
  * min and max may be the same value
  */
-vector<void*>*
+std::vector<void*>*
 Bintree::query(Interval* interval)
 {
     /*
      * the items that are matched are all items in intervals
      * which overlap the query interval
      */
-    vector<void*>* foundItems = new vector<void*>();
+    std::vector<void*>* foundItems = new std::vector<void*>();
     query(interval, foundItems);
     return foundItems;
 }
 
 void
-Bintree::query(Interval* interval, vector<void*>* foundItems)
+Bintree::query(Interval* interval, std::vector<void*>* foundItems)
 {
     root->addAllItemsFromOverlapping(interval, foundItems);
 }

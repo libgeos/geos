@@ -39,7 +39,7 @@
 
 #undef DEBUG_WKB_WRITER
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -67,10 +67,10 @@ WKBWriter::setOutputDimension(uint8_t dims)
 }
 
 void
-WKBWriter::writeHEX(const Geometry& g, ostream& os)
+WKBWriter::writeHEX(const Geometry& g, std::ostream& os)
 {
     // setup input/output stream
-    stringstream stream;
+    std::stringstream stream;
 
     // write the geometry in wkb format
     this->write(g, stream);
@@ -80,7 +80,7 @@ WKBWriter::writeHEX(const Geometry& g, ostream& os)
 }
 
 void
-WKBWriter::write(const Geometry& g, ostream& os)
+WKBWriter::write(const Geometry& g, std::ostream& os)
 {
     outputDimension = defaultOutputDimension;
     if(outputDimension > g.getCoordinateDimension()) {
@@ -301,11 +301,11 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence& cs,
 }
 
 void
-WKBWriter::writeCoordinate(const CoordinateSequence& cs, size_t idx,
+WKBWriter::writeCoordinate(const CoordinateSequence& cs, std::size_t idx,
                            bool is3d)
 {
 #if DEBUG_WKB_WRITER
-    cout << "writeCoordinate: X:" << cs.getX(idx) << " Y:" << cs.getY(idx) << endl;
+    std::size_t << "writeCoordinate: X:" << cs.getX(idx) << " Y:" << cs.getY(idx) << std::endl;
 #endif
     assert(outStream);
 

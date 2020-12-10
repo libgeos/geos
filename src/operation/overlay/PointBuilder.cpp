@@ -30,7 +30,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::geom;
 
@@ -43,7 +43,7 @@ namespace overlay { // geos.operation.overlay
  * @return a list of the Points in the result of the specified
  * overlay operation
  */
-vector<Point*>*
+std::vector<Point*>*
 PointBuilder::build(OverlayOp::OpCode opCode)
 {
     extractNonCoveredResultNodes(opCode);

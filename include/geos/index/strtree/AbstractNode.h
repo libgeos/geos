@@ -52,7 +52,7 @@ public:
      * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
      * the root node will have the highest level
      */
-    AbstractNode(int newLevel, size_t capacity = 10) : level(newLevel), bounds(nullptr) {
+    AbstractNode(int newLevel, std::size_t capacity = 10) : level(newLevel), bounds(nullptr) {
         childBoundables.reserve(capacity);
     }
 

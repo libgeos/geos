@@ -36,7 +36,7 @@
 #include <limits>
 #include <vector>
 
-using namespace std;
+
 //using namespace geos::planargraph;
 using namespace geos::geom;
 //using namespace geos::planargraph::algorithm;
@@ -131,9 +131,9 @@ LineSequencer::findSequences()
 {
     Sequences* sequences = new Sequences();
     planargraph::algorithm::ConnectedSubgraphFinder csFinder(graph);
-    vector<planargraph::Subgraph*> subgraphs;
+    std::vector<planargraph::Subgraph*> subgraphs;
     csFinder.getConnectedSubgraphs(subgraphs);
-    for(vector<planargraph::Subgraph*>::const_iterator
+    for(std::vector<planargraph::Subgraph*>::const_iterator
             it = subgraphs.begin(), endIt = subgraphs.end();
             it != endIt;
             ++it) {
@@ -179,7 +179,7 @@ LineSequencer::computeSequence()
         return;
     }
 
-    sequencedGeometry = unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
+    sequencedGeometry = std::unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
     isSequenceableVar = true;
 
     delAll(*sequences);
@@ -197,7 +197,7 @@ LineSequencer::computeSequence()
 Geometry*
 LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 {
-    unique_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
+    std::unique_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
 
     for(Sequences::const_iterator
             i1 = sequences.begin(), i1End = sequences.end();
@@ -248,7 +248,7 @@ LineSequencer::reverse(const LineString* line)
 const planargraph::Node*
 LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
-    size_t minDegree = numeric_limits<size_t>::max();
+    std::size_t minDegree = std::numeric_limits<size_t>::max();
     const planargraph::Node* minDegreeNode = nullptr;
     for(planargraph::NodeMap::container::const_iterator
             it = graph.nodeBegin(), itEnd = graph.nodeEnd();

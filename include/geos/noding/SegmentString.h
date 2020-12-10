@@ -86,9 +86,9 @@ public:
     }
 
 
-    virtual size_t size() const = 0;
+    virtual std::size_t size() const = 0;
 
-    virtual const geom::Coordinate& getCoordinate(size_t i) const = 0;
+    virtual const geom::Coordinate& getCoordinate(std::size_t i) const = 0;
 
     /// \brief
     /// Return a pointer to the CoordinateSequence associated

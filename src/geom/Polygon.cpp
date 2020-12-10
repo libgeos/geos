@@ -56,7 +56,7 @@ Polygon::Polygon(const Polygon& p)
     shell(detail::make_unique<LinearRing>(*p.shell)),
     holes(p.holes.size())
 {
-    for(size_t i = 0; i < holes.size(); ++i) {
+    for(std::size_t i = 0; i < holes.size(); ++i) {
         holes[i] = detail::make_unique<LinearRing>(*p.holes[i]);
     }
 }
@@ -144,7 +144,7 @@ Polygon::getCoordinates() const
 size_t
 Polygon::getNumPoints() const
 {
-    size_t numPoints = shell->getNumPoints();
+    std::size_t numPoints = shell->getNumPoints();
     for(const auto& lr : holes) {
         numPoints += lr->getNumPoints();
     }
@@ -198,7 +198,7 @@ Polygon::getNumInteriorRing() const
 }
 
 const LinearRing*
-Polygon::getInteriorRingN(size_t n) const
+Polygon::getInteriorRingN(std::size_t n) const
 {
     return holes[n].get();
 }
@@ -233,7 +233,7 @@ Polygon::getBoundary() const
     std::vector<std::unique_ptr<Geometry>> rings(holes.size() + 1);
 
     rings[0] = gf->createLineString(*shell);
-    for(size_t i = 0, n = holes.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = holes.size(); i < n; ++i) {
         const LinearRing* hole = holes[i].get();
         std::unique_ptr<LineString> ls = gf->createLineString(*hole);
         rings[i + 1] = std::move(ls);
@@ -260,13 +260,13 @@ Polygon::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
 
-    size_t nholes = holes.size();
+    std::size_t nholes = holes.size();
 
     if(nholes != otherPolygon->holes.size()) {
         return false;
     }
 
-    for(size_t i = 0; i < nholes; i++) {
+    for(std::size_t i = 0; i < nholes; i++) {
         const LinearRing* hole = holes[i].get();
         const LinearRing* otherhole = otherPolygon->holes[i].get();
         if(!hole->equalsExact(otherhole, tolerance)) {
@@ -403,7 +403,7 @@ Polygon::apply_ro(GeometryComponentFilter* filter) const
 {
     filter->filter_ro(this);
     shell->apply_ro(filter);
-    for(size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
+    for(std::size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
         holes[i]->apply_ro(filter);
     }
 }
@@ -413,7 +413,7 @@ Polygon::apply_rw(GeometryComponentFilter* filter)
 {
     filter->filter_rw(this);
     shell->apply_rw(filter);
-    for(size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
+    for(std::size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
         holes[i]->apply_rw(filter);
     }
 }
@@ -424,7 +424,7 @@ Polygon::apply_rw(CoordinateSequenceFilter& filter)
     shell->apply_rw(filter);
 
     if(! filter.isDone()) {
-        for(size_t i = 0, n = holes.size(); i < n; ++i) {
+        for(std::size_t i = 0, n = holes.size(); i < n; ++i) {
             holes[i]->apply_rw(filter);
             if(filter.isDone()) {
                 break;
@@ -442,7 +442,7 @@ Polygon::apply_ro(CoordinateSequenceFilter& filter) const
     shell->apply_ro(filter);
 
     if(! filter.isDone()) {
-        for(size_t i = 0, n = holes.size(); i < n; ++i) {
+        for(std::size_t i = 0, n = holes.size(); i < n; ++i) {
             holes[i]->apply_ro(filter);
             if(filter.isDone()) {
                 break;

@@ -33,7 +33,7 @@
 #include <vector>
 #include <set>
 
-//using namespace std;
+//
 using namespace geos::planargraph;
 using namespace geos::geom;
 

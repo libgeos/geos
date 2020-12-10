@@ -28,7 +28,7 @@
 #include <cassert>
 #include <limits>
 
-using namespace std;
+
 
 using namespace geos::geom;
 
@@ -39,9 +39,9 @@ LinearLocation
 LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
                                        const LinearLocation* minIndex) const
 {
-    double minDistance = numeric_limits<double>::max();
-    size_t minComponentIndex = 0;
-    size_t minSegmentIndex = 0;
+    double minDistance = std::numeric_limits<double>::max();
+    std::size_t minComponentIndex = 0;
+    std::size_t minSegmentIndex = 0;
     double minFrac = -1.0;
 
     LineSegment seg;

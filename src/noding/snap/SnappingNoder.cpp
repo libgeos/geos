@@ -74,7 +74,7 @@ std::unique_ptr<std::vector<Coordinate>>
 SnappingNoder::snap(CoordinateSequence* cs)
 {
     std::unique_ptr<std::vector<Coordinate>> snapCoords(new std::vector<Coordinate>);
-    for (size_t i = 0, sz = cs->size(); i < sz; i++) {
+    for (std::size_t i = 0, sz = cs->size(); i < sz; i++) {
         const Coordinate& pt = snapIndex.snap(cs->getAt(i));
         snapCoords->push_back(pt);
     }

@@ -38,7 +38,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::operation;
@@ -85,7 +85,7 @@ BufferSubgraph::create(Node* node)
 void
 BufferSubgraph::addReachable(Node* startNode)
 {
-    vector<Node*> nodeStack;
+    std::vector<Node*> nodeStack;
     nodeStack.push_back(startNode);
     while(!nodeStack.empty()) {
         Node* node = nodeStack.back();
@@ -96,7 +96,7 @@ BufferSubgraph::addReachable(Node* startNode)
 
 /*private*/
 void
-BufferSubgraph::add(Node* node, vector<Node*>* nodeStack)
+BufferSubgraph::add(Node* node, std::vector<Node*>* nodeStack)
 {
     node->setVisited(true);
     nodes.push_back(node);
@@ -123,7 +123,7 @@ BufferSubgraph::add(Node* node, vector<Node*>* nodeStack)
 void
 BufferSubgraph::clearVisitedEdges()
 {
-    for(size_t i = 0, n = dirEdgeList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = dirEdgeList.size(); i < n; ++i) {
         DirectedEdge* de = dirEdgeList[i];
         de->setVisited(false);
     }
@@ -137,7 +137,7 @@ BufferSubgraph::computeDepth(int outsideDepth)
     // find an outside edge to assign depth to
     DirectedEdge* de = finder.getEdge();
 #if GEOS_DEBUG
-    cerr << "outside depth: " << outsideDepth << endl;
+    std::cerr << "outside depth: " << outsideDepth << std::endl;
 #endif
     //Node *n=de->getNode();
     //Label *label=de->getLabel();
@@ -194,9 +194,9 @@ void
 BufferSubgraph::copySymDepths(DirectedEdge* de)
 {
 #if GEOS_DEBUG
-    cerr << "copySymDepths: " << de->getDepth(Position::LEFT)
+    std::cerr << "copySymDepths: " << de->getDepth(Position::LEFT)
          << ", " << de->getDepth(Position::RIGHT)
-         << endl;
+         << std::endl;
 #endif
     DirectedEdge* sym = de->getSym();
     sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
@@ -208,9 +208,9 @@ void
 BufferSubgraph::findResultEdges()
 {
 #if GEOS_DEBUG
-    cerr << "BufferSubgraph::findResultEdges got " << dirEdgeList.size() << " edges" << endl;
+    std::cerr << "BufferSubgraph::findResultEdges got " << dirEdgeList.size() << " edges" << std::endl;
 #endif
-    for(size_t i = 0, n = dirEdgeList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = dirEdgeList.size(); i < n; ++i) {
         DirectedEdge* de = dirEdgeList[i];
 
         /*
@@ -222,17 +222,17 @@ BufferSubgraph::findResultEdges()
          */
         // <FIX> - handle negative depths
 #if GEOS_DEBUG
-        cerr << " dirEdge " << i << ": " << de->printEdge() << endl
-             << "         depth right: " << de->getDepth(Position::RIGHT) << endl
-             << "          depth left: " << de->getDepth(Position::LEFT) << endl
-             << "    interiorAreaEdge: " << de->isInteriorAreaEdge() << endl;
+        std::cerr << " dirEdge " << i << ": " << de->printEdge() << std::endl
+             << "         depth right: " << de->getDepth(Position::RIGHT) << std::endl
+             << "          depth left: " << de->getDepth(Position::LEFT) << std::endl
+             << "    interiorAreaEdge: " << de->isInteriorAreaEdge() << std::endl;
 #endif
         if(de->getDepth(Position::RIGHT) >= 1
                 &&  de->getDepth(Position::LEFT) <= 0
                 && !de->isInteriorAreaEdge()) {
             de->setInResult(true);
 #if GEOS_DEBUG
-            cerr << "   IN RESULT" << endl;
+            std::cerr << "   IN RESULT" << std::endl;
 #endif
         }
     }
@@ -256,8 +256,8 @@ BufferSubgraph::compareTo(BufferSubgraph* graph)
 void
 BufferSubgraph::computeDepths(DirectedEdge* startEdge)
 {
-    set<Node*> nodesVisited;
-    list<Node*> nodeQueue; // Used to be a vector
+    std::set<Node*> nodesVisited;
+    std::list<Node*> nodeQueue; // Used to be a vector
     Node* startNode = startEdge->getNode();
     nodeQueue.push_back(startNode);
     //nodesVisited.push_back(startNode);
@@ -299,7 +299,7 @@ BufferSubgraph::computeDepths(DirectedEdge* startEdge)
 
 /*private*/
 bool
-BufferSubgraph::contains(set<Node*>& nodeSet, Node* node)
+BufferSubgraph::contains(std::set<Node*>& nodeSet, Node* node)
 {
     //bool result=false;
     if(nodeSet.find(node) != nodeSet.end()) {
@@ -334,11 +334,11 @@ operator<< (std::ostream& os, const BufferSubgraph& bs)
        << bs.nodes.size() << " nodes, "
        << bs.dirEdgeList.size() << " directed edges" << std::endl;
 
-    for(size_t i = 0, n = bs.nodes.size(); i < n; i++) {
+    for(std::size_t i = 0, n = bs.nodes.size(); i < n; i++) {
         os << "  Node " << i << ": " << *(bs.nodes[i]) << std::endl;
     }
 
-    for(size_t i = 0, n = bs.dirEdgeList.size(); i < n; i++) {
+    for(std::size_t i = 0, n = bs.dirEdgeList.size(); i < n; i++) {
         os << "  DirEdge " << i << ": " << std::endl
            << bs.dirEdgeList[i]->printEdge() << std::endl;
     }

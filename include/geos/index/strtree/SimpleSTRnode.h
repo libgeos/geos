@@ -48,7 +48,7 @@ public:
     /*
      * Constructs an AbstractNode at the given level in the tree
      */
-    SimpleSTRnode(std::size_t newLevel, const geom::Envelope *p_env, void* p_item, size_t capacity = 10)
+    SimpleSTRnode(std::size_t newLevel, const geom::Envelope *p_env, void* p_item, std::size_t capacity = 10)
         : ItemBoundable(p_env, p_item)
         , item(p_item)
         , bounds()

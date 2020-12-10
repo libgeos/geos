@@ -35,8 +35,8 @@ SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 
     const CoordinateSequence* pts0 = e0->getCoordinates();
     const CoordinateSequence* pts1 = e1->getCoordinates();
-    for(size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; i0++) {
-        for(size_t i1 = 0, n1 = pts1->getSize() - 1; i1 < n1; i1++) {
+    for(std::size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; i0++) {
+        for(std::size_t i1 = 0, n1 = pts1->getSize() - 1; i1 < n1; i1++) {
             segInt->processIntersections(e0, i0, e1, i1);
         }
     }

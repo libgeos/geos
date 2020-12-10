@@ -22,7 +22,7 @@
 
 #include <string>
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -71,13 +71,13 @@ TopologyValidationError::getCoordinate()
     return pt;
 }
 
-string
+std::string
 TopologyValidationError::getMessage()
 {
-    return string(errMsg[errorType]);
+    return std::string(errMsg[errorType]);
 }
 
-string
+std::string
 TopologyValidationError::toString()
 {
     return getMessage().append(" at or near point ").append(pt.toString());

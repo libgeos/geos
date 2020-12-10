@@ -53,7 +53,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init(const geom::Geometry& g
     geom::util::LinearComponentExtracter::getLines(g, lines);
 
     // pre-compute size of segment vector
-    size_t nsegs = 0;
+    std::size_t nsegs = 0;
     for(const geom::LineString* line : lines) {
         nsegs += line->getCoordinatesRO()->size() - 1;
     }
@@ -76,7 +76,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init(const geom::Geometry& g
 void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::CoordinateSequence* pts)
 {
-    for(size_t i = 1, ni = pts->size(); i < ni; i++) {
+    for(std::size_t i = 1, ni = pts->size(); i < ni; i++) {
         segments.emplace_back((*pts)[i - 1], (*pts)[i]);
     }
 }

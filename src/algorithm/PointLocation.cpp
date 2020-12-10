@@ -34,13 +34,13 @@ namespace algorithm { // geos.algorithm
 bool
 PointLocation::isOnLine(const geom::Coordinate& p, const geom::CoordinateSequence* pt)
 {
-    size_t ptsize = pt->getSize();
+    std::size_t ptsize = pt->getSize();
     if(ptsize == 0) {
         return false;
     }
 
     const geom::Coordinate* pp = &(pt->getAt(0));
-    for(size_t i = 1; i < ptsize; ++i) {
+    for(std::size_t i = 1; i < ptsize; ++i) {
         const geom::Coordinate& p1 = pt->getAt(i);
         if(LineIntersector::hasIntersection(p, *pp, p1)) {
             return true;

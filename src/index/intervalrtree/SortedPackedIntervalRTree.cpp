@@ -85,7 +85,7 @@ SortedPackedIntervalRTree::buildLevel(IntervalRTreeNode::ConstVect& src, Interva
 
     dest.clear();
 
-    for(size_t i = 0, ni = src.size(); i < ni; i += 2) {
+    for(std::size_t i = 0, ni = src.size(); i < ni; i += 2) {
         const IntervalRTreeNode* n1 = src[i];
 
         if(i + 1 < ni) {

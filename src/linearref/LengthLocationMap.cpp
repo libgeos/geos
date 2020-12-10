@@ -24,7 +24,7 @@
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LengthLocationMap.h>
 
-using namespace std;
+
 
 using namespace geos::geom;
 

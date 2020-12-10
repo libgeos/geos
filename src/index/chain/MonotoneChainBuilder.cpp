@@ -33,7 +33,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -45,7 +45,7 @@ std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 {
     // TODO clean this up with std::make_unique (C++14)
-    std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> mcList{new vector<std::unique_ptr<MonotoneChain>>()};
+    std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> mcList{new std::vector<std::unique_ptr<MonotoneChain>>()};
     getChains(pts, context, *mcList);
     return mcList;
 }
@@ -99,7 +99,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
     const Coordinate* prev; // avoid repeated coordinate access by index (virtual call)
     const Coordinate* curr = &pts[start];
 
-    for(size_t last = start + 1; last < npts; last++) {
+    for(std::size_t last = start + 1; last < npts; last++) {
         prev = curr;
         curr = &pts[last];
 

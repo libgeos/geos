@@ -31,7 +31,7 @@
 #include <iostream>
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -93,9 +93,9 @@ Quadtree::insert(const Envelope* itemEnv, void* item)
     }
     root.insert(insertEnv, item);
 #if GEOS_DEBUG
-    cerr << "Quadtree::insert(" << itemEnv->toString() << ", " << item << ")" << endl;
-    cerr << "       insertEnv:" << insertEnv->toString() << endl;
-    cerr << "       tree:" << endl << root.toString() << endl;
+    std::cerr << "Quadtree::insert(" << itemEnv->toString() << ", " << item << ")" << std::endl;
+    std::cerr << "       insertEnv:" << insertEnv->toString() << std::endl;
+    std::cerr << "       tree:" << std::endl << root.toString() << std::endl;
 #endif
 }
 
@@ -103,7 +103,7 @@ Quadtree::insert(const Envelope* itemEnv, void* item)
 /*public*/
 void
 Quadtree::query(const Envelope* searchEnv,
-                vector<void*>& foundItems)
+                std::vector<void*>& foundItems)
 {
     /*
      * the items that are matched are the items in quads which
@@ -111,18 +111,18 @@ Quadtree::query(const Envelope* searchEnv,
      */
     root.addAllItemsFromOverlapping(*searchEnv, foundItems);
 #if GEOS_DEBUG
-    cerr << "Quadtree::query returning " << foundItems.size()
+    std::cerr << "Quadtree::query returning " << foundItems.size()
          << " items over " << size()
-         << " items in index (of depth: " << depth() << ")" << endl;
-    cerr << " Root:\n" << root.toString() << endl;
+         << " items in index (of depth: " << depth() << ")" << std::endl;
+    std::cerr << " Root:\n" << root.toString() << std::endl;
 #endif
 }
 
 /*public*/
-vector<void*>*
+std::vector<void*>*
 Quadtree::queryAll()
 {
-    vector<void*>* foundItems = new vector<void*>();
+    std::vector<void*>* foundItems = new std::vector<void*>();
     root.addAllItems(*foundItems);
     return foundItems;
 }
@@ -155,10 +155,10 @@ Quadtree::collectStats(const Envelope& itemEnv)
 }
 
 /*public*/
-string
+std::string
 Quadtree::toString() const
 {
-    string ret = root.toString();
+    std::string ret = root.toString();
     return ret;
 }
 

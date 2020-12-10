@@ -40,14 +40,14 @@ void
 TopologyLocation::merge(const TopologyLocation& gl)
 {
     // if the src is an Area label & and the dest is not, increase the dest to be an Area
-    size_t sz = locationSize;
-    size_t glsz = gl.locationSize;
+    std::size_t sz = locationSize;
+    std::size_t glsz = gl.locationSize;
     if(glsz > sz) {
         locationSize = 3;
         location[Position::LEFT] = Location::NONE;
         location[Position::RIGHT] = Location::NONE;
     }
-    for(size_t i = 0; i < locationSize; ++i) {
+    for(std::size_t i = 0; i < locationSize; ++i) {
         if(location[i] == Location::NONE && i < glsz) {
             location[i] = gl.location[i];
         }

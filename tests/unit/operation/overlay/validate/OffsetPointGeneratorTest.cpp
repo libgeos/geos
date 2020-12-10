@@ -50,7 +50,7 @@ struct test_offsetpointgenerator_data {
         //
         dist *= 1.0000001;
 
-        for(size_t i = 0, n = coords.size(); i < n; ++i) {
+        for(std::size_t i = 0, n = coords.size(); i < n; ++i) {
             const Coordinate& c = coords[i];
             unique_ptr<Geometry> pg(gf.createPoint(c));
             double rdist =  g->distance(pg.get());

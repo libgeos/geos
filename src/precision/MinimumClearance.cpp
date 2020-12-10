@@ -118,8 +118,8 @@ MinimumClearance::compute()
         double
         vertexDistance(const FacetSequence* fs1, const FacetSequence* fs2)
         {
-            for(size_t i1 = 0; i1 < fs1->size(); i1++) {
-                for(size_t i2 = 0; i2 < fs2->size(); i2++) {
+            for(std::size_t i1 = 0; i1 < fs1->size(); i1++) {
+                for(std::size_t i2 = 0; i2 < fs2->size(); i2++) {
                     const Coordinate* p1 = fs1->getCoordinate(i1);
                     const Coordinate* p2 = fs2->getCoordinate(i2);
                     if(!p1->equals2D(*p2)) {
@@ -141,8 +141,8 @@ MinimumClearance::compute()
         double
         segmentDistance(const FacetSequence* fs1, const FacetSequence* fs2)
         {
-            for(size_t i1 = 0; i1 < fs1->size(); i1++) {
-                for(size_t i2 = 1; i2 < fs2->size(); i2++) {
+            for(std::size_t i1 = 0; i1 < fs1->size(); i1++) {
+                for(std::size_t i2 = 1; i2 < fs2->size(); i2++) {
                     const Coordinate* p = fs1->getCoordinate(i1);
 
                     const Coordinate* seg0 = fs2->getCoordinate(i2 - 1);

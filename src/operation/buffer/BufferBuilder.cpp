@@ -71,7 +71,7 @@
 #define JTS_DEBUG 0
 #endif
 
-//using namespace std;
+//
 using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::noding;
@@ -223,7 +223,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     delete nodedEdges;
 
-    for(size_t i = 0, n = curveList.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = curveList.size(); i < n; ++i) {
         delete curveList[i];
     }
     curveList.clear();
@@ -279,9 +279,9 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             // epsilon is removed.
             const double segLengthAllowance = 1.02 * distance;
 
-            size_t front = 0;
-            size_t back = coords->size() - 1;
-            size_t sz = back - front + 1;
+            std::size_t front = 0;
+            std::size_t back = coords->size() - 1;
+            std::size_t sz = back - front + 1;
 
             // Clean up the front of the list.
             // Loop until the line's end is not inside the buffer width from
@@ -336,7 +336,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
                     auto newSeq = seqFactory->create(sz, coords->getDimension());
 
-                    for (size_t i = 0; i < sz; i++) {
+                    for (std::size_t i = 0; i < sz; i++) {
                         newSeq->setAt(coords->getAt(i + front), i);
                     }
 
@@ -439,7 +439,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 #if GEOS_DEBUG
         std::cerr << "Created " << subgraphList.size() << " subgraphs" << std::endl;
 #if GEOS_DEBUG > 1
-        for(size_t i = 0, n = subgraphList.size(); i < n; i++) {
+        for(std::size_t i = 0, n = subgraphList.size(); i < n; i++) {
             std::cerr << std::setprecision(10) << *(subgraphList[i]) << std::endl;
         }
 #endif
@@ -456,7 +456,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         }
 
         // Get rid of the subgraphs, shouldn't be needed anymore
-        for(size_t i = 0, n = subgraphList.size(); i < n; i++) {
+        for(std::size_t i = 0, n = subgraphList.size(); i < n; i++) {
             delete subgraphList[i];
         }
         subgraphList.clear();
@@ -465,7 +465,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         std::cerr << "PolygonBuilder got " << resultPolyList->size()
                   << " polygons" << std::endl;
 #if GEOS_DEBUG > 1
-        for(size_t i = 0, n = resultPolyList->size(); i < n; i++) {
+        for(std::size_t i = 0, n = resultPolyList->size(); i < n; i++) {
             std::cerr << (*resultPolyList)[i]->toString() << std::endl;
         }
 #endif
@@ -483,7 +483,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
     catch(const util::GEOSException& /* exc */) {
 
         // In case they're still around
-        for(size_t i = 0, n = subgraphList.size(); i < n; i++) {
+        for(std::size_t i = 0, n = subgraphList.size(); i < n; i++) {
             delete subgraphList[i];
         }
         subgraphList.clear();
@@ -518,7 +518,7 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 
 #if 0
     /* CoordinateArraySequence.cpp:84:
-     * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(size_t) const:
+     * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(std::size_t) const:
      * Assertion `pos<vect->size()' failed.
      */
 
@@ -651,7 +651,7 @@ BufferBuilder::createSubgraphs(PlanarGraph* graph, std::vector<BufferSubgraph*>&
 {
     std::vector<Node*> nodes;
     graph->getNodes(nodes);
-    for(size_t i = 0, n = nodes.size(); i < n; i++) {
+    for(std::size_t i = 0, n = nodes.size(); i < n; i++) {
         Node* node = nodes[i];
         if(!node->isVisited()) {
             BufferSubgraph* subgraph = new BufferSubgraph();
@@ -679,7 +679,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
     std::cerr << __FUNCTION__ << " got " << subgraphList.size() << " subgraphs" << std::endl;
 #endif
     std::vector<BufferSubgraph*> processedGraphs;
-    for(size_t i = 0, n = subgraphList.size(); i < n; i++) {
+    for(std::size_t i = 0, n = subgraphList.size(); i < n; i++) {
         BufferSubgraph* subgraph = subgraphList[i];
         Coordinate* p = subgraph->getRightmostCoordinate();
         assert(p);

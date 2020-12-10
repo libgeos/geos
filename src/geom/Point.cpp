@@ -36,8 +36,6 @@
 #include <string>
 #include <memory>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -47,10 +45,9 @@ const static FixedSizeCoordinateSequence<0> emptyCoords3d(3);
 
 /*protected*/
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
-    :
-    Geometry(factory),
-    empty2d(false),
-    empty3d(false)
+    : Geometry(factory)
+    , empty2d(false)
+    , empty3d(false)
 {
     std::unique_ptr<CoordinateSequence> coords(newCoords);
 
@@ -68,27 +65,23 @@ Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     } else {
         empty2d = true;
     }
-
-
 }
 
-Point::Point(const Coordinate & c, const GeometryFactory* factory) :
-    Geometry(factory),
-    empty2d(false),
-    empty3d(false)
+Point::Point(const Coordinate & c, const GeometryFactory* factory)
+    : Geometry(factory)
+    , empty2d(false)
+    , empty3d(false)
 {
     coordinates.setAt(c, 0);
 }
 
 /*protected*/
 Point::Point(const Point& p)
-    :
-    Geometry(p),
-    coordinates(p.coordinates),
-    empty2d(p.empty2d),
-    empty3d(p.empty3d)
-{
-}
+    : Geometry(p)
+    , coordinates(p.coordinates)
+    , empty2d(p.empty2d)
+    , empty3d(p.empty3d)
+{}
 
 std::unique_ptr<CoordinateSequence>
 Point::getCoordinates() const
@@ -96,7 +89,7 @@ Point::getCoordinates() const
     return getCoordinatesRO()->clone();
 }
 
-size_t
+std::size_t
 Point::getNumPoints() const
 {
     return isEmpty() ? 0 : 1;
@@ -170,7 +163,7 @@ Point::getCoordinate() const
     return isEmpty() ? nullptr : &coordinates[0];
 }
 
-string
+std::string
 Point::getGeometryType() const
 {
     return "Point";

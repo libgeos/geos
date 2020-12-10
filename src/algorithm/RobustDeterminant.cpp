@@ -43,8 +43,6 @@
 #pragma warning(disable : 4127)
 #endif
 
-using namespace std; // for isfinite..
-
 namespace geos {
 namespace algorithm { // geos.algorithm
 

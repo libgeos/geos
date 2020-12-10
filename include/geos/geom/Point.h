@@ -90,7 +90,7 @@ public:
 
     const CoordinateSequence* getCoordinatesRO() const;
 
-    size_t getNumPoints() const override;
+    std::size_t getNumPoints() const override;
     bool isEmpty() const override;
     bool isSimple() const override;
 

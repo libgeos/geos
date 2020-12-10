@@ -28,8 +28,6 @@
 #include <iterator>
 #include <sstream>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -38,7 +36,7 @@ static Profiler* profiler = Profiler::instance();
 #endif
 
 double
-CoordinateSequence::getOrdinate(size_t index, size_t ordinateIndex) const
+CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) const
 {
     switch(ordinateIndex) {
         case CoordinateSequence::X:
@@ -69,7 +67,7 @@ CoordinateSequence::hasRepeatedPoints() const
  * given amount, or an empty coordinate array.
  */
 CoordinateSequence*
-CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
+CoordinateSequence::atLeastNCoordinatesOrNothing(std::size_t n,
         CoordinateSequence* c)
 {
     if(c->getSize() >= n) {
@@ -111,8 +109,8 @@ size_t
 CoordinateSequence::indexOf(const Coordinate* coordinate,
                             const CoordinateSequence* cl)
 {
-    size_t p_size = cl->size();
-    for(size_t i = 0; i < p_size; ++i) {
+    std::size_t p_size = cl->size();
+    for(std::size_t i = 0; i < p_size; ++i) {
         if((*coordinate) == cl->getAt(i)) {
             return i;
         }
@@ -132,7 +130,7 @@ CoordinateSequence::scroll(CoordinateSequence* cl,
     }
 
     const std::size_t length = cl->getSize();
-    vector<Coordinate> v(length);
+    std::vector<Coordinate> v(length);
     for(i = ind; i < length; i++) {
         v[j++] = cl->getAt(i);
     }
@@ -145,9 +143,9 @@ CoordinateSequence::scroll(CoordinateSequence* cl,
 int
 CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
 {
-    size_t ptsize = pts.size();
-    for(size_t i = 0, n = ptsize / 2; i < n; ++i) {
-        size_t j = ptsize - 1 - i;
+    std::size_t ptsize = pts.size();
+    for(std::size_t i = 0, n = ptsize / 2; i < n; ++i) {
+        std::size_t j = ptsize - 1 - i;
         // skip equal points on both ends
         int comp = pts[i].compareTo(pts[j]);
         if(comp != 0) {
@@ -177,7 +175,7 @@ CoordinateSequence::reverse(CoordinateSequence* cl)
     // FIXME: use a standard algorithm
     auto last = cl->size() - 1;
     auto mid = last / 2;
-    for(size_t i = 0; i <= mid; i++) {
+    for(std::size_t i = 0; i <= mid; i++) {
         const Coordinate tmp = cl->getAt(i);
         cl->setAt(cl->getAt(last - i), i);
         cl->setAt(tmp, last - i);
@@ -196,11 +194,11 @@ CoordinateSequence::equals(const CoordinateSequence* cl1,
     if(cl1 == nullptr || cl2 == nullptr) {
         return false;
     }
-    size_t npts1 = cl1->getSize();
+    std::size_t npts1 = cl1->getSize();
     if(npts1 != cl2->getSize()) {
         return false;
     }
-    for(size_t i = 0; i < npts1; i++) {
+    for(std::size_t i = 0; i < npts1; i++) {
         if(!(cl1->getAt(i) == cl2->getAt(i))) {
             return false;
         }
@@ -228,7 +226,7 @@ std::ostream&
 operator<< (std::ostream& os, const CoordinateSequence& cs)
 {
     os << "(";
-    for(size_t i = 0, n = cs.size(); i < n; ++i) {
+    for(std::size_t i = 0, n = cs.size(); i < n; ++i) {
         const Coordinate& c = cs[i];
         if(i) {
             os << ", ";

@@ -39,7 +39,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+
 using namespace geos::geom;
 
 namespace geos {
@@ -82,7 +82,7 @@ Polygonizer::Polygonizer(bool onlyPolygonal):
  * @param geomList a list of {@link Geometry}s with linework to be polygonized
  */
 void
-Polygonizer::add(vector<Geometry*>* geomList)
+Polygonizer::add(std::vector<Geometry*>* geomList)
 {
     for(auto& g : (*geomList)) {
         add(g);
@@ -98,7 +98,7 @@ Polygonizer::add(vector<Geometry*>* geomList)
  * @param geomList a list of {@link Geometry}s with linework to be polygonized
  */
 void
-Polygonizer::add(vector<const Geometry*>* geomList)
+Polygonizer::add(std::vector<const Geometry*>* geomList)
 {
     for(auto& g : (*geomList)) {
         add(g);
@@ -160,7 +160,7 @@ Polygonizer::getPolygons()
 }
 
 /* public */
-const vector<const LineString*>&
+const std::vector<const LineString*>&
 Polygonizer::getDangles()
 {
     polygonize();
@@ -174,7 +174,7 @@ Polygonizer::hasDangles() {
 }
 
 /* public */
-const vector<const LineString*>&
+const std::vector<const LineString*>&
 Polygonizer::getCutEdges()
 {
     polygonize();
@@ -229,23 +229,23 @@ Polygonizer::polygonize()
 
     graph->deleteCutEdges(cutEdges);
 
-    vector<EdgeRing*> edgeRingList;
+    std::vector<EdgeRing*> edgeRingList;
     graph->getEdgeRings(edgeRingList);
 #if GEOS_DEBUG
-    cerr << "Polygonizer::polygonize(): " << edgeRingList.size() << " edgeRings in graph" << endl;
+    std::cerr << "Polygonizer::polygonize(): " << edgeRingList.size() << " edgeRings in graph" << std::endl;
 #endif
-    vector<EdgeRing*> validEdgeRingList;
+    std::vector<EdgeRing*> validEdgeRingList;
     invalidRingLines.clear(); /* what if it was populated already ? we should clean ! */
     findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
 #if GEOS_DEBUG
-    cerr << "                           " << validEdgeRingList.size() << " valid" << endl;
-    cerr << "                           " << invalidRingLines.size() << " invalid" << endl;
+    std::cerr << "                           " << validEdgeRingList.size() << " valid" << std::endl;
+    std::cerr << "                           " << invalidRingLines.size() << " invalid" << std::endl;
 #endif
 
     findShellsAndHoles(validEdgeRingList);
 #if GEOS_DEBUG
-    cerr << "                           " << holeList.size() << " holes" << endl;
-    cerr << "                           " << shellList.size() << " shells" << endl;
+    std::cerr << "                           " << holeList.size() << " holes" << std::endl;
+    std::cerr << "                           " << shellList.size() << " shells" << std::endl;
 #endif
 
     HoleAssigner::assignHolesToShells(holeList, shellList);
@@ -262,9 +262,9 @@ Polygonizer::polygonize()
 
 /* private */
 void
-Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
-                            vector<EdgeRing*>& validEdgeRingList,
-                            vector<std::unique_ptr<LineString>>& invalidRingList)
+Polygonizer::findValidRings(const std::vector<EdgeRing*>& edgeRingList,
+                            std::vector<EdgeRing*>& validEdgeRingList,
+                            std::vector<std::unique_ptr<LineString>>& invalidRingList)
 {
     for(const auto& er : edgeRingList) {
         if(er->isValid()) {
@@ -279,7 +279,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
 
 /* private */
 void
-Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
+Polygonizer::findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList)
 {
     holeList.clear();
     shellList.clear();
@@ -311,7 +311,7 @@ Polygonizer::findDisjointShells() {
 }
 
 void
-Polygonizer::findOuterShells(vector<EdgeRing*> & shells)
+Polygonizer::findOuterShells(std::vector<EdgeRing*> & shells)
 {
     for (EdgeRing* er : shells) {
         auto outerHoleER = er->getOuterHole();
@@ -323,7 +323,7 @@ Polygonizer::findOuterShells(vector<EdgeRing*> & shells)
 }
 
 std::vector<std::unique_ptr<Polygon>>
-Polygonizer::extractPolygons(vector<EdgeRing*> & shells, bool includeAll)
+Polygonizer::extractPolygons(std::vector<EdgeRing*> & shells, bool includeAll)
 {
     std::vector<std::unique_ptr<Polygon>> polys;
     for (EdgeRing* er : shells) {

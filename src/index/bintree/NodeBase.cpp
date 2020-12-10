@@ -19,7 +19,7 @@
 
 #include <vector>
 
-using namespace std;
+
 
 namespace geos {
 namespace index { // geos.index
@@ -44,7 +44,7 @@ NodeBase::getSubnodeIndex(Interval* interval, double centre)
 
 NodeBase::NodeBase()
 {
-    items = new vector<void*>();
+    items = new std::vector<void*>();
     subnode[0] = nullptr;
     subnode[1] = nullptr;
 }
@@ -58,7 +58,7 @@ NodeBase::~NodeBase()
     subnode[1] = nullptr;
 }
 
-vector<void*>*
+std::vector<void*>*
 NodeBase::getItems()
 {
     return items;
@@ -70,8 +70,8 @@ NodeBase::add(void* item)
     items->push_back(item);
 }
 
-vector<void*>*
-NodeBase::addAllItems(vector<void*>* newItems)
+std::vector<void*>*
+NodeBase::addAllItems(std::vector<void*>* newItems)
 {
     items->insert(items->end(), newItems->begin(), newItems->end());
     for(int i = 0; i < 2; i++) {
@@ -82,8 +82,8 @@ NodeBase::addAllItems(vector<void*>* newItems)
     return items;
 }
 
-vector<void*>*
-NodeBase::addAllItemsFromOverlapping(Interval* interval, vector<void*>* resultItems)
+std::vector<void*>*
+NodeBase::addAllItemsFromOverlapping(Interval* interval, std::vector<void*>* resultItems)
 {
     if(!isSearchMatch(interval)) {
         return items;

@@ -65,7 +65,7 @@ static eAllocCheckOutput g_CallstackOutputType = ACOutput_Simple;
 // #############################################################################################
 #ifdef WITH_IMALLOC_SPY
 //forwards:
-void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize);
+void IMallocHashInsert(void *pData, CONTEXT &Context, std::size_t nDataSize);
 BOOL IMallocHashRemove(void *pData);
 
 // IMallocSpy-Interface
@@ -262,7 +262,7 @@ static void WriteDateTime(FILE *fFile, BOOL asXMLAttrs = FALSE) {
 
 typedef struct AllocHashEntryType {
   long                       lRequestID;    // RequestID from CRT (if 0, then this entry is empty)
-  size_t                     nDataSize;     // Size of the allocated memory
+  std::size_t                     nDataSize;     // Size of the allocated memory
   char                       cRemovedFlag;  // 0 => memory was not yet released
   struct AllocHashEntryType  *Next;
   // Callstack for EIP
@@ -287,17 +287,17 @@ static ULONG AllocHashCurrentCollisions = 0;
 
 // ##########################################################################################
 #ifdef WITH_IMALLOC_SPY
-// eigene Tabelle für die IMallocs:
+// eigene Tabelle fÃ¼r die IMallocs:
 typedef struct IMallocHashEntryType {
   void                       *pData;    // Key-Word
-  size_t                     nDataSize;     // größe des Datenblocks (optional)
+  std::size_t                     nDataSize;     // grÃ¶ÃŸe des Datenblocks (optional)
   char                       cRemovedFlag;  // 0 => nicht wurde noch nicht freigegeben
   struct IMallocHashEntryType  *Next;
-  // Callstack für EIP
+  // Callstack fÃ¼r EIP
   DWORD                      dwEIPOffset;
   DWORD                      dwEIPLen;
   char                       pcEIPAddr[MAX_EIP_LEN_BUF];
-  // Callstack für ESP
+  // Callstack fÃ¼r ESP
   DWORD                      dwESPOffset;
   DWORD                      dwESPLen;
   char                       pcESPAddr[MAX_ESP_LEN_BUF];
@@ -324,7 +324,7 @@ static ULONG IMallocHashFunction(void *pData) {
   ULONG ulTemp;
   DWORD dwPointer = (DWORD) pData;
 
-  // relativ simpler Mechanismus für die Hash-Funktion,
+  // relativ simpler Mechanismus fÃ¼r die Hash-Funktion,
   // mir ist nur nix besseres eingefallen...
   ulTemp = dwPointer % ALLOC_HASH_ENTRIES;
 
@@ -337,7 +337,7 @@ static ULONG IMallocHashFunction(void *pData) {
 //   pData: Key-Word (Pointer to address)
 //   pContext:   Context-Record, for retrieving Callstack (EIP and EBP is only needed)
 //   nDataSize:  How many bytes
-void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize) {
+void IMallocHashInsert(void *pData, CONTEXT &Context, std::size_t nDataSize) {
   ULONG HashIdx;
   IMallocHashEntryType *pHashEntry;
 
@@ -350,7 +350,7 @@ void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize) {
   // ermittle den Hash-Wert
   HashIdx = IMallocHashFunction(pData);
 
-  // Eintrag darf nicht größer als die Hash-Tabelle sein
+  // Eintrag darf nicht grÃ¶ÃŸer als die Hash-Tabelle sein
   _ASSERTE(HashIdx < ALLOC_HASH_ENTRIES);
 
   pHashEntry = &IMallocHashTable[HashIdx];
@@ -364,9 +364,9 @@ void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize) {
     if (IMallocHashCurrentCollisions > IMallocHashMaxCollisions)
       IMallocHashMaxCollisions = IMallocHashCurrentCollisions;
 
-    // Eintrag ist schon belegt, verkette die Einträge
-    // wenn dies oft vorkommt, sollte man entweder die Tabelle vergrößern oder eine
-    // andere Hash-Funktion wählen
+    // Eintrag ist schon belegt, verkette die EintrÃ¤ge
+    // wenn dies oft vorkommt, sollte man entweder die Tabelle vergrÃ¶ÃŸern oder eine
+    // andere Hash-Funktion wÃ¤hlen
     while(pHashEntry->Next != NULL) {
       pHashEntry = pHashEntry->Next;
     }
@@ -426,13 +426,13 @@ void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize) {
 }
 
 // IMallocHashFind
-//   Wird ALLOC_ENTRY_NOT_FOUND zurückgegeben, so wurde der Key nicht
-//   gefunden, ansonsten wird ein Zeiger auf den Hash-Eintrag zurückgegeben
+//   Wird ALLOC_ENTRY_NOT_FOUND zurÃ¼ckgegeben, so wurde der Key nicht
+//   gefunden, ansonsten wird ein Zeiger auf den Hash-Eintrag zurÃ¼ckgegeben
 //   ACHTUNG: In einem preemptiven Tasking-System kann hier nicht
-//            garantiert werden, ob der Zeiger noch gültig ist, wenn er
-//            zurückgegeben wird, da er von einem anderen Thread schon
-//            freigegeben sein könnte.
-//            Die synchronisation muß eine Ebene höher erfolgen
+//            garantiert werden, ob der Zeiger noch gÃ¼ltig ist, wenn er
+//            zurÃ¼ckgegeben wird, da er von einem anderen Thread schon
+//            freigegeben sein kÃ¶nnte.
+//            Die synchronisation muÃŸ eine Ebene hÃ¶her erfolgen
 static IMallocHashEntryType *IMallocHashFind(void *pData) {
   ULONG HashIdx;
   IMallocHashEntryType *pHashEntry;
@@ -440,7 +440,7 @@ static IMallocHashEntryType *IMallocHashFind(void *pData) {
   // ermittle den Hash-Wert
   HashIdx = IMallocHashFunction(pData);
 
-  // Eintrag darf nicht größer als die Hash-Tabelle sein
+  // Eintrag darf nicht grÃ¶ÃŸer als die Hash-Tabelle sein
   _ASSERTE(HashIdx < ALLOC_HASH_ENTRIES);
 
   pHashEntry = &IMallocHashTable[HashIdx];
@@ -465,7 +465,7 @@ BOOL IMallocHashRemove(void *pData) {
   // ermittle den Hash-Wert
   HashIdx = IMallocHashFunction(pData);
 
-  // Eintrag darf nicht größer als die Hash-Tabelle sein
+  // Eintrag darf nicht grÃ¶ÃŸer als die Hash-Tabelle sein
   _ASSERTE(HashIdx < ALLOC_HASH_ENTRIES);
 
   pHashEntryLast = NULL;
@@ -479,25 +479,25 @@ BOOL IMallocHashRemove(void *pData) {
       if (pHashEntryLast == NULL) {
         // Es ist ein Eintrag direkt in der Tabelle
         if (pHashEntry->Next == NULL) {
-          // Es ist der letze Eintrag lösche also die Tabelle
+          // Es ist der letze Eintrag lÃ¶sche also die Tabelle
           memset(&IMallocHashTable[HashIdx], 0, sizeof(IMallocHashTable[HashIdx]));
         }
         else {
-          // Es sind noch Einträge verkettet, überschreibe einfach den nicht mehr gebrauchten...
+          // Es sind noch EintrÃ¤ge verkettet, Ã¼berschreibe einfach den nicht mehr gebrauchten...
           *pHashEntry = *(pHashEntry->Next);
         }
         return TRUE;
       }
       else {
         // ich bin in einem dynamischen Bereich
-        // dies war eine kollisions, zähle also wieder zurück:
+        // dies war eine kollisions, zÃ¤hle also wieder zurÃ¼ck:
         IMallocHashCurrentCollisions--;
         pHashEntryLast->Next = pHashEntry->Next;
         _free_dbg(pHashEntry, _CRT_BLOCK);
         return TRUE;
       }
 #else
-      // erhöhe nur den Removed counter und behalte das Object im Speicher
+      // erhÃ¶he nur den Removed counter und behalte das Object im Speicher
       pHashEntry->cRemovedFlag++;
       return TRUE;  // erfolgreich
 #endif
@@ -512,7 +512,7 @@ BOOL IMallocHashRemove(void *pData) {
 
 
 
-//   Callback-Funtion for StackWalk für meine CallStack-Ausgabe aus der Hash-Tabelle
+//   Callback-Funtion for StackWalk fÃ¼r meine CallStack-Ausgabe aus der Hash-Tabelle
 #if API_VERSION_NUMBER >= 9
 static BOOL __stdcall ReadProcMemoryFromIMallocHash(HANDLE pData, DWORD lpBaseAddress, PVOID lpBuffer, DWORD nSize, PDWORD lpNumberOfBytesRead) {
 #else
@@ -581,11 +581,11 @@ ULONG IMallocHashOutLeaks(FILE *fFile) {
           c.Eip = pHashEntry->dwEIPOffset;
           c.Ebp = pHashEntry->dwESPOffset;
           ShowStackRM( NULL, c, fFile, &ReadProcMemoryFromIMallocHash, (HANDLE) pHashEntry->pData);
-          // Zähle zusammen wieviel Byte noch nicht freigegeben wurden
+          // ZÃ¤hle zusammen wieviel Byte noch nicht freigegeben wurden
           if (pHashEntry->nDataSize > 0)
             ulLeaksByte += pHashEntry->nDataSize;
           else
-            ulLeaksByte++;  // Wenn zwar Speicher allokiert wurde, dieser aber 0 Bytes lang war, so reserviere für diesen zumindest 1 Byte
+            ulLeaksByte++;  // Wenn zwar Speicher allokiert wurde, dieser aber 0 Bytes lang war, so reserviere fÃ¼r diesen zumindest 1 Byte
 
           if (g_CallstackOutputType == ACOutput_XML)
             _ftprintf(fFile, _T("</LEAK>\n"));  // terminate the xml-node
@@ -727,7 +727,7 @@ static ULONG AllocHashDeinit(void) {
       }
     }  // while
   }  // for
-  // Lösche die gesamte Hash-Tabelle
+  // LÃ¶sche die gesamte Hash-Tabelle
   memset(IMallocHashTable, 0, sizeof(IMallocHashTable));
 #endif
 
@@ -741,7 +741,7 @@ static ULONG AllocHashDeinit(void) {
 // AllocHashFunction
 // The has-function (very simple)
 static inline ULONG AllocHashFunction(long lRequestID) {
-  // I couldn´t find any better and faster
+  // I couldnÂ´t find any better and faster
   return lRequestID % ALLOC_HASH_ENTRIES;
 }  // AllocHashFunction
 
@@ -749,7 +749,7 @@ static inline ULONG AllocHashFunction(long lRequestID) {
 //   lRequestID: Key-Word (RequestID from AllocHook)
 //   pContext:   Context-Record, for retrieving Callstack (EIP and EBP is only needed)
 //   nDataSize:  How many bytes
-static void AllocHashInsert(long lRequestID, CONTEXT &Context, size_t nDataSize) {
+static void AllocHashInsert(long lRequestID, CONTEXT &Context, std::size_t nDataSize) {
   ULONG HashIdx;
   AllocHashEntryType *pHashEntry;
 
@@ -1049,9 +1049,9 @@ typedef struct _CrtMemBlockHeader
          * maintained in the debug heap.
          */
         int                         nBlockUse;
-        size_t                      nDataSize;
+        std::size_t                      nDataSize;
 #else  /* _WIN64 */
-        size_t                      nDataSize;
+        std::size_t                      nDataSize;
         int                         nBlockUse;
 #endif  /* _WIN64 */
         long                        lRequest;
@@ -1091,11 +1091,11 @@ static void DeactivateMallocStackwalker(void) {
 // Special case for VC 5
 #if _MSC_VER <= 1100
 static int MyAllocHook(int nAllocType, void *pvData,
-      size_t nSize, int nBlockUse, long lRequest,
+      std::size_t nSize, int nBlockUse, long lRequest,
       const char * szFileName, int nLine ) {
 #else
 static int MyAllocHook(int nAllocType, void *pvData,
-      size_t nSize, int nBlockUse, long lRequest,
+      std::size_t nSize, int nBlockUse, long lRequest,
       const unsigned char * szFileName, int nLine ) {
 #endif
   static TCHAR *operation[] = { _T(""), _T("ALLOCATIONG"), _T("RE-ALLOCATING"), _T("FREEING") };
@@ -1482,7 +1482,7 @@ static bool GetModuleListPSAPI(ModuleList &modules, DWORD pid, HANDLE hProcess, 
   pGMI = (tGMI) GetProcAddress( hPsapi, "GetModuleInformation" );
   if ( pEPM == 0 || pGMFNE == 0 || pGMBN == 0 || pGMI == 0 )
   {
-    // we couldn´t find all functions
+    // we couldnÂ´t find all functions
     FreeLibrary( hPsapi );
     return false;
   }
@@ -1632,7 +1632,7 @@ int InitAllocCheckWN(eAllocCheckOutput eOutput, LPCTSTR pszFileName, ULONG ulSho
 #ifdef WITH_IMALLOC_SPY
   HRESULT hr;
   // erzeuge mein malloc-Spy object
-  LPMALLOCSPY pMallocSpy = new CMallocSpy(); // wird später durch Release freigegeben
+  LPMALLOCSPY pMallocSpy = new CMallocSpy(); // wird spÃ¤ter durch Release freigegeben
   if (pMallocSpy != NULL)
   {
     // CoInitilize(); // ??? Ist dies notwendig ?
@@ -1814,7 +1814,7 @@ std::string SimpleXMLEncode(PCSTR szText)
 {
   std::string szRet;
 
-  for (size_t i=0; i<strlen(szText); i++)
+  for (std::size_t i=0; i<strlen(szText); i++)
   {
     switch(szText[i])
     {
@@ -1845,7 +1845,7 @@ std::string SimpleXMLEncode(PCSTR szText)
 // #################################################################################
 // Here the Stackwalk-Part begins.
 //   Some of the code is from an example from a book
-//   But I couldn´t find the reference anymore... sorry...
+//   But I couldnÂ´t find the reference anymore... sorry...
 //   If someone knowns, please let me know...
 // #################################################################################
 // #################################################################################
@@ -2004,7 +2004,7 @@ static void ShowStackRM( HANDLE hThread, CONTEXT& c, FILE *fLogFile, PREAD_PROCE
 // Critical section begin...
   EnterCriticalSection(&g_csFileOpenClose);
 
-  InterlockedIncrement((long*) &g_dwShowCount);  // erhöhe counter
+  InterlockedIncrement((long*) &g_dwShowCount);  // erhÃ¶he counter
 
 
   // NOTE: normally, the exe directory and the current directory should be taken

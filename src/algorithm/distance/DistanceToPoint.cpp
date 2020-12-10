@@ -47,7 +47,7 @@ DistanceToPoint::computeDistance(const geom::Geometry& geom,
         computeDistance(*pl, pt, ptDist);
     }
     else if(const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(&geom)) {
-        for(size_t i = 0; i < gc->getNumGeometries(); i++) {
+        for(std::size_t i = 0; i < gc->getNumGeometries(); i++) {
             const Geometry* g = gc->getGeometryN(i);
             computeDistance(*g, pt, ptDist);
         }
@@ -67,7 +67,7 @@ DistanceToPoint::computeDistance(const geom::LineString& line,
     const CoordinateSequence* coordsRO = line.getCoordinatesRO();
     const CoordinateSequence& coords = *coordsRO;
 
-    size_t npts = coords.size();
+    std::size_t npts = coords.size();
     if(! npts) {
         return;    // can this ever be ?
     }
@@ -77,7 +77,7 @@ DistanceToPoint::computeDistance(const geom::LineString& line,
 
     Coordinate* segPts[2] = { &(tempSegment.p0), &(tempSegment.p1) };
     tempSegment.p0 = coords.getAt(0);
-    for(size_t i = 1; i < npts; ++i) {
+    for(std::size_t i = 1; i < npts; ++i) {
         *(segPts[i % 2]) = coords.getAt(i);
 
         // this is somewhat inefficient - could do better
@@ -104,7 +104,7 @@ DistanceToPoint::computeDistance(const geom::Polygon& poly,
                                  PointPairDistance& ptDist)
 {
     computeDistance(*(poly.getExteriorRing()), pt, ptDist);
-    for(size_t i = 0, n = poly.getNumInteriorRing(); i < n; ++i) {
+    for(std::size_t i = 0, n = poly.getNumInteriorRing(); i < n; ++i) {
         computeDistance(*(poly.getInteriorRingN(i)), pt, ptDist);
     }
 }

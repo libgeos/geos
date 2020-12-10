@@ -29,7 +29,7 @@
 #include <iostream>
 #include <cassert>
 
-using namespace std;
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -50,8 +50,8 @@ SnapRoundingIntersectionAdder::SnapRoundingIntersectionAdder(const geom::Precisi
 /*public*/
 void
 SnapRoundingIntersectionAdder::processIntersections(
-    SegmentString* e0, size_t segIndex0,
-    SegmentString* e1, size_t segIndex1)
+    SegmentString* e0, std::size_t segIndex0,
+    SegmentString* e1, std::size_t segIndex1)
 {
     // don't bother intersecting a segment with itself
     if (e0 == e1 && segIndex0 == segIndex1) return;
@@ -89,7 +89,7 @@ SnapRoundingIntersectionAdder::processIntersections(
 /*private*/
 void
 SnapRoundingIntersectionAdder::processNearVertex(
-    const geom::Coordinate& p, SegmentString* edge, size_t segIndex,
+    const geom::Coordinate& p, SegmentString* edge, std::size_t segIndex,
     const geom::Coordinate& p0, const geom::Coordinate& p1)
 {
     /**

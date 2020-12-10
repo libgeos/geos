@@ -63,7 +63,7 @@ HoleAssigner::findShells(const geom::Envelope& e) {
 
     // TODO turn AbstractSTRtree::query into a template and remove this
     std::vector<EdgeRing*> shells{shellsVoid.size()};
-    for (size_t i = 0; i < shellsVoid.size(); i++) {
+    for (std::size_t i = 0; i < shellsVoid.size(); i++) {
         shells[i] = static_cast<EdgeRing*>(shellsVoid[i]);
     }
 

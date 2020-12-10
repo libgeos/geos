@@ -40,7 +40,7 @@ EdgeKey::initPoints(const Edge* edge)
              edge->getCoordinate(1));
     }
     else {
-        size_t len = edge->size();
+        std::size_t len = edge->size();
         init(edge->getCoordinate(len - 1),
              edge->getCoordinate(len - 2));
     }

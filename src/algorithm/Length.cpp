@@ -29,7 +29,7 @@ double
 Length::ofLine(const geom::CoordinateSequence* pts)
 {
     // optimized for processing CoordinateSequences
-    size_t n = pts->size();
+    std::size_t n = pts->size();
     if(n <= 1) {
         return 0.0;
     }
@@ -40,7 +40,7 @@ Length::ofLine(const geom::CoordinateSequence* pts)
     double x0 = p.x;
     double y0 = p.y;
 
-    for(size_t i = 1; i < n; i++) {
+    for(std::size_t i = 1; i < n; i++) {
         const geom::Coordinate& pi = pts->getAt(i);
         double x1 = pi.x;
         double y1 = pi.y;

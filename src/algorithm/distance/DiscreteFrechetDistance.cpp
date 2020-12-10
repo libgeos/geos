@@ -56,12 +56,12 @@ DiscreteFrechetDistance::distance(const geom::Geometry& g0,
 /* private */
 
 geom::Coordinate
-DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, size_t index)
+DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, std::size_t index)
 {
     if(densifyFrac > 0.0) {
-        size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
-        size_t i = index / numSubSegs;
-        size_t j = index % numSubSegs;
+        std::size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
+        std::size_t i = index / numSubSegs;
+        std::size_t j = index % numSubSegs;
         if(i >= seq.size() - 1) {
             return seq.getAt(seq.size() - 1);
         }
@@ -82,7 +82,7 @@ DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, size_t ind
 }
 
 PointPairDistance&
-DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, size_t i, size_t j,
+DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, std::size_t i, std::size_t j,
         const CoordinateSequence& p, const CoordinateSequence& q)
 {
     PointPairDistance p_ptDist;
@@ -122,9 +122,9 @@ DiscreteFrechetDistance::compute(
 {
     auto lp = discreteGeom.getCoordinates();
     auto lq = geom.getCoordinates();
-    size_t pSize, qSize;
+    std::size_t pSize, qSize;
     if(densifyFrac > 0) {
-        size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
+        std::size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
         pSize = numSubSegs * (lp->size() - 1) + 1;
         qSize = numSubSegs * (lq->size() - 1) + 1;
     }
@@ -133,8 +133,8 @@ DiscreteFrechetDistance::compute(
         qSize = lq->size();
     }
     std::vector< std::vector<PointPairDistance> > ca(pSize, std::vector<PointPairDistance>(qSize));
-    for(size_t i = 0; i < pSize; i++) {
-        for(size_t j = 0; j < qSize; j++) {
+    for(std::size_t i = 0; i < pSize; i++) {
+        for(std::size_t j = 0; j < qSize; j++) {
             ca[i][j].initialize();
         }
     }

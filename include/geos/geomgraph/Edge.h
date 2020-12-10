@@ -119,7 +119,7 @@ public:
     }
 
     virtual const geom::Coordinate&
-    getCoordinate(size_t i) const
+    getCoordinate(std::size_t i) const
     {
         testInvariant();
         return pts->getAt(i);
@@ -212,16 +212,16 @@ public:
      * Adds EdgeIntersections for one or both
      * intersections found for a segment of an edge to the edge intersection list.
      */
-    virtual void addIntersections(algorithm::LineIntersector* li, size_t segmentIndex,
-                                  size_t geomIndex);
+    virtual void addIntersections(algorithm::LineIntersector* li, std::size_t segmentIndex,
+                                  std::size_t geomIndex);
 
     /// Add an EdgeIntersection for intersection intIndex.
     //
     /// An intersection that falls exactly on a vertex of the edge is normalized
     /// to use the higher of the two possible segmentIndexes
     ///
-    virtual void addIntersection(algorithm::LineIntersector* li, size_t segmentIndex,
-                                 size_t geomIndex, size_t intIndex);
+    virtual void addIntersection(algorithm::LineIntersector* li, std::size_t segmentIndex,
+                                 std::size_t geomIndex, std::size_t intIndex);
 
     /// Update the IM with the contribution for this component.
     //

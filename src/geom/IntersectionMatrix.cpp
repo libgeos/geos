@@ -25,8 +25,6 @@
 #include <sstream>
 #include <cassert>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -41,7 +39,7 @@ IntersectionMatrix::IntersectionMatrix()
 }
 
 /*public*/
-IntersectionMatrix::IntersectionMatrix(const string& elements)
+IntersectionMatrix::IntersectionMatrix(const std::string& elements)
 {
     setAll(Dimension::False);
     set(elements);
@@ -57,8 +55,8 @@ IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix& other)
 void
 IntersectionMatrix::add(IntersectionMatrix* other)
 {
-    for(size_t i = 0; i < firstDim; i++) {
-        for(size_t j = 0; j < secondDim; j++) {
+    for(std::size_t i = 0; i < firstDim; i++) {
+        for(std::size_t j = 0; j < secondDim; j++) {
             setAtLeast(static_cast<Location>(i), static_cast<Location>(j),
                     other->get(static_cast<Location>(i), static_cast<Location>(j)));
         }
@@ -68,16 +66,16 @@ IntersectionMatrix::add(IntersectionMatrix* other)
 
 /*public*/
 bool
-IntersectionMatrix::matches(const string& requiredDimensionSymbols) const
+IntersectionMatrix::matches(const std::string& requiredDimensionSymbols) const
 {
     if(requiredDimensionSymbols.length() != 9) {
-        ostringstream s;
+        std::ostringstream s;
         s << "IllegalArgumentException: Should be length 9, is "
-          << "[" << requiredDimensionSymbols << "] instead" << endl;
+          << "[" << requiredDimensionSymbols << "] instead" << std::endl;
         throw util::IllegalArgumentException(s.str());
     }
-    for(size_t ai = 0; ai < firstDim; ai++) {
-        for(size_t bi = 0; bi < secondDim; bi++) {
+    for(std::size_t ai = 0; ai < firstDim; ai++) {
+        for(std::size_t bi = 0; bi < secondDim; bi++) {
             if(!matches(matrix[ai][bi], requiredDimensionSymbols[3 * ai + bi])) {
                 return false;
             }
@@ -126,8 +124,8 @@ IntersectionMatrix::matches(int actualDimensionValue,
 
 /*public static*/
 bool
-IntersectionMatrix::matches(const string& actualDimensionSymbols,
-                            const string& requiredDimensionSymbols)
+IntersectionMatrix::matches(const std::string& actualDimensionSymbols,
+                            const std::string& requiredDimensionSymbols)
 {
     IntersectionMatrix m(actualDimensionSymbols);
     bool result = m.matches(requiredDimensionSymbols);
@@ -144,11 +142,11 @@ IntersectionMatrix::set(Location row, Location col, int dimensionValue)
 
 /*public*/
 void
-IntersectionMatrix::set(const string& dimensionSymbols)
+IntersectionMatrix::set(const std::string& dimensionSymbols)
 {
     auto limit = dimensionSymbols.length();
 
-    for(size_t i = 0; i < limit; i++) {
+    for(std::size_t i = 0; i < limit; i++) {
         auto row = i / firstDim;
         auto col = i % secondDim;
         matrix[row][col] = Dimension::toDimensionValue(dimensionSymbols[i]);
@@ -175,11 +173,11 @@ IntersectionMatrix::setAtLeastIfValid(Location row, Location col, int minimumDim
 
 /*public*/
 void
-IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
+IntersectionMatrix::setAtLeast(std::string minimumDimensionSymbols)
 {
     auto limit = minimumDimensionSymbols.length();
 
-    for(size_t i = 0; i < limit; i++) {
+    for(std::size_t i = 0; i < limit; i++) {
         auto row = static_cast<Location>(i / firstDim);
         auto col = static_cast<Location>(i % secondDim);
         setAtLeast(row, col, Dimension::toDimensionValue(minimumDimensionSymbols[i]));
@@ -381,12 +379,12 @@ IntersectionMatrix::transpose()
 }
 
 /*public*/
-string
+std::string
 IntersectionMatrix::toString() const
 {
-    string result("");
-    for(size_t ai = 0; ai < firstDim; ai++) {
-        for(size_t bi = 0; bi < secondDim; bi++) {
+    std::string result("");
+    for(std::size_t ai = 0; ai < firstDim; ai++) {
+        for(std::size_t bi = 0; bi < secondDim; bi++) {
             result += Dimension::toDimensionSymbol(matrix[ai][bi]);
         }
     }
