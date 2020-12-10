@@ -156,22 +156,22 @@ fi
 dnl --------------------------------------------------------------------
 dnl - check whether user has requested overlayng
 dnl --------------------------------------------------------------------
-
-AC_ARG_ENABLE([overlayng],
-	[  --disable-overlayng     Disable use of new overlay],
-	[case "${enableval}" in
-		yes) use_overlayng=true ;;
-		no)  use_overlayng=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --disable-overlayng) ;;
-	esac],
-	[use_overlayng=true]
-)
-
-if test x"$use_overlayng" = xtrue; then
-	OVERLAYNG_FLAGS=""
-else
-	OVERLAYNG_FLAGS="-DDISABLE_OVERLAYNG"
-fi
+dnl
+dnl AC_ARG_ENABLE([overlayng],
+dnl 	[  --disable-overlayng     Disable use of new overlay],
+dnl 	[case "${enableval}" in
+dnl 		yes) use_overlayng=true ;;
+dnl 		no)  use_overlayng=false ;;
+dnl 		*) AC_MSG_ERROR(bad value ${enableval} for --disable-overlayng) ;;
+dnl 	esac],
+dnl 	[use_overlayng=true]
+dnl )
+dnl
+dnl if test x"$use_overlayng" = xtrue; then
+dnl OVERLAYNG_FLAGS=""
+dnl else
+dnl 	OVERLAYNG_FLAGS="-DDISABLE_OVERLAYNG"
+dnl fi
 
 dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
@@ -223,7 +223,7 @@ NUMERICFLAGS="$NUMERICFLAGS -ffp-contract=off"
 
 dnl -----------------------------------------------------------------------------
 HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
-DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING} ${OVERLAYNG_FLAGS}"
+DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING}"
 
 AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
 AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"
@@ -283,17 +283,6 @@ dnl				AM_CXXFLAGS="$AM_CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
 		;;
 esac
 
-dnl --------------------------------------------------------------------
-dnl - check for boost
-dnl --------------------------------------------------------------------
-
-dnl -- AX_BOOST(1.32)
-dnl -- if test "x$ax_cv_boost_unit_test_framework" = "xyes"; then
-dnl -- 	use_boost_utf=yes
-dnl -- else
-dnl -- 	use_boost_utf=no
-dnl -- fi
-dnl -- AM_CONDITIONAL(ENABLE_BOOST_UTF, [test "x$use_boost_utf" = "xyes"])
 
 dnl things to substitute in output ----------------------------------------
 AC_SUBST(VERSION)
@@ -435,7 +424,9 @@ AC_OUTPUT([
 	tools/astyle/Makefile
 	])
 
-dnl -- echo "---------------------------------------"
-dnl -- echo "Boost UTF: $use_boost_utf"
-dnl -- echo "OverlayNG: $use_overlayng"
-dnl -- echo "---------------------------------------"
+dnl AC_MSG_RESULT([ ------------ GEOS Build ------------ ])
+dnl AC_MSG_RESULT([  Version:      ${VERSION}])
+dnl AC_MSG_RESULT([  Inlining:     ${enable_inline}])
+dnl AC_MSG_RESULT([ ------------------------------------ ])
+
+
