@@ -171,9 +171,22 @@ WKBReader::readHEX(istream& is)
 }
 
 std::unique_ptr<Geometry>
-WKBReader::read(istream& is)
+WKBReader::read(std::istream& is)
 {
-    dis.setInStream(&is); // will default to machine endian
+    is.seekg(0, std::ios::end);
+    auto size = is.tellg();
+    is.seekg(0, std::ios::beg);
+
+    std::vector<unsigned char> buf(size);
+    is.read((char*) buf.data(), size);
+
+    return read(buf.data(), buf.size());
+}
+
+std::unique_ptr<Geometry>
+WKBReader::read(const unsigned char* buf, size_t size)
+{
+    dis = ByteOrderDataInStream(buf, size); // will default to machine endian
     return readGeometry();
 }
 

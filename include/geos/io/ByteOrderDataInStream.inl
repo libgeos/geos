@@ -31,22 +31,17 @@ namespace geos {
 namespace io {
 
 INLINE
-ByteOrderDataInStream::ByteOrderDataInStream(std::istream* s)
+ByteOrderDataInStream::ByteOrderDataInStream(const unsigned char* buff, size_t buffsz)
     :
     byteOrder(getMachineByteOrder()),
-    stream(s)
+    buf(buff),
+    end(buff + buffsz)
 {
 }
 
 INLINE
 ByteOrderDataInStream::~ByteOrderDataInStream()
 {
-}
-
-INLINE void
-ByteOrderDataInStream::setInStream(std::istream* s)
-{
-    stream = s;
 }
 
 INLINE void
@@ -58,41 +53,52 @@ ByteOrderDataInStream::setOrder(int order)
 INLINE unsigned char
 ByteOrderDataInStream::readByte() // throws ParseException
 {
-    stream->read(reinterpret_cast<char*>(buf), 1);
-    if(stream->eof()) {
+    if(size() < 1) {
         throw  ParseException("Unexpected EOF parsing WKB");
     }
-    return buf[0];
+    auto ret = buf[0];
+    buf++;
+    return ret;
 }
 
 INLINE int
 ByteOrderDataInStream::readInt()
 {
-    stream->read(reinterpret_cast<char*>(buf), 4);
-    if(stream->eof()) {
-        throw  ParseException("Unexpected EOF parsing WKB");
+    if(size() < 4) {
+        throw ParseException("Unexpected EOF parsing WKB");
     }
-    return ByteOrderValues::getInt(buf, byteOrder);
+    auto ret =  ByteOrderValues::getInt(buf , byteOrder);
+    buf += 4;
+    return ret;
 }
 
 INLINE long
 ByteOrderDataInStream::readLong()
 {
-    stream->read(reinterpret_cast<char*>(buf), 8);
-    if(stream->eof()) {
-        throw  ParseException("Unexpected EOF parsing WKB");
+    if(size() < 8) {
+        throw ParseException("Unexpected EOF parsing WKB");
     }
-    return static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
+
+    auto ret = static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
+    buf += 8;
+    return ret;
 }
 
 INLINE double
 ByteOrderDataInStream::readDouble()
 {
-    stream->read(reinterpret_cast<char*>(buf), 8);
-    if(stream->eof()) {
+    if(size() < 8) {
         throw  ParseException("Unexpected EOF parsing WKB");
     }
-    return ByteOrderValues::getDouble(buf, byteOrder);
+    auto ret = ByteOrderValues::getDouble(buf, byteOrder);
+    buf += 8;
+    return ret;
+}
+
+INLINE size_t
+ByteOrderDataInStream::size() const
+{
+    return static_cast<size_t>(end - buf);
 }
 
 } // namespace io

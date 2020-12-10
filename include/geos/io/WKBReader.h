@@ -97,6 +97,17 @@ public:
     std::unique_ptr<geom::Geometry> read(std::istream& is);
 
     /**
+     * \brief Reads a Geometry from a buffer
+     *
+     * @param buf the buffer to read from
+     * @param size the size of the buffer in bytes
+     * @return the Geometry read
+     * @throws IOException
+     * @throws ParseException
+     */
+    std::unique_ptr<geom::Geometry> read(const unsigned char* buf, size_t size);
+
+    /**
      * \brief Reads a Geometry from an istream in hex format.
      *
      * @param is the stream to read from

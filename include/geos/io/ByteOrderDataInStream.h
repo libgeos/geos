@@ -42,15 +42,9 @@ class GEOS_DLL ByteOrderDataInStream {
 
 public:
 
-    ByteOrderDataInStream(std::istream* s = nullptr);
+    ByteOrderDataInStream(const unsigned char* buff = nullptr, size_t buff_sz = 0);
 
     ~ByteOrderDataInStream();
-
-    /**
-     * Allows a single ByteOrderDataInStream to be reused
-     * on multiple istream.
-     */
-    void setInStream(std::istream* s);
 
     void setOrder(int order);
 
@@ -62,13 +56,12 @@ public:
 
     double readDouble(); // throws ParseException
 
+    size_t size() const;
+
 private:
     int byteOrder;
-    std::istream* stream;
-
-    // buffers to hold primitive datatypes
-    unsigned char buf[8];
-
+    const unsigned char* buf;
+    const unsigned char* end;
 };
 
 } // namespace io

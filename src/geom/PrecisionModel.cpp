@@ -65,20 +65,6 @@ PrecisionModel::makePrecise(double val) const
 }
 
 /*public*/
-void
-PrecisionModel::makePrecise(Coordinate& coord) const
-{
-    // optimization for full precision
-    if(modelType == FLOATING) {
-        return;
-    }
-
-    coord.x = makePrecise(coord.x);
-    coord.y = makePrecise(coord.y);
-}
-
-
-/*public*/
 PrecisionModel::PrecisionModel()
     :
     modelType(FLOATING),

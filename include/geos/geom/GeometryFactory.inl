@@ -41,6 +41,13 @@ GeometryFactory::getCoordinateSequenceFactory() const
     return coordinateListFactory;
 }
 
+INLINE
+const PrecisionModel*
+GeometryFactory::getPrecisionModel() const
+{
+    return &precisionModel;
+}
+
 } // namespace geos::geom
 } // namespace geos
 
