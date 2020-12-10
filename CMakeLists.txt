@@ -155,39 +155,44 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 
 #-----------------------------------------------------------------------------
 # Add flags to prevent 'fused multiply-add' operations on targets (ARM64)
-# that allow it, as it breaks calculations in DD.cpp. 
+# that allow it, as it breaks calculations in DD.cpp.
 # TODO: Replace DD calculations with 'long float' where target supports
 # true long float, and remove other cases where FMA causes regression
 # failures.
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98207
 #-----------------------------------------------------------------------------
 
-target_compile_options(geos_cxx_flags INTERFACE 
+target_compile_options(geos_cxx_flags INTERFACE
 	"$<$<CXX_COMPILER_ID:Clang>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
-	
+
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
 option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
 if(NOT DISABLE_GEOS_INLINE)
   target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
+  message(STATUS
+    "GEOS: Function inlining ENABLED")
 else()
   message(STATUS
-  "GEOS: DISABLING inlining of small functions")
+    "GEOS: Function inlining DISABLED")
 endif()
 
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: overlayng code
 #-----------------------------------------------------------------------------
-option(DISABLE_OVERLAYNG "Disable overlayng algorithms" OFF)
-if(DISABLE_OVERLAYNG)
-  target_compile_definitions(geos_cxx_flags INTERFACE DISABLE_OVERLAYNG)
-  message(STATUS
-  "GEOS: DISABLING overlayng algorithms")
-endif()
+#option(DISABLE_OVERLAYNG "Disable overlayng algorithms" OFF)
+#if(DISABLE_OVERLAYNG)
+#  target_compile_definitions(geos_cxx_flags INTERFACE DISABLE_OVERLAYNG)
+#  message(STATUS
+#    "GEOS: OverlayNG DISABLED")
+#else()
+#  message(STATUS
+#    "GEOS: OverlayNG ENABLED")
+#endif()
 
 #-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
@@ -196,7 +201,7 @@ endif()
 add_library(geos_developer_cxx_flags INTERFACE)
 
 if(GEOS_BUILD_DEVELOPER)
-  message(STATUS "GEOS: Developer mode enabled")
+  message(STATUS "GEOS: Developer mode ENABLED")
 endif()
 
 # geos_cxx_flags inherits properties from geos_developer_cxx_flags when
