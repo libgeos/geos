@@ -214,6 +214,7 @@ geos_unit_SOURCES = \
 	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \
+	operation/valid/MakeValidTest.cpp \
 	operation/valid/RepeatedPointRemoverTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
