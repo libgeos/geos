@@ -23,7 +23,7 @@ endif()
 #################################################################################
 # Set GEOS project
 #################################################################################
-project(GEOS VERSION 3.7.3 LANGUAGES C CXX)
+project(GEOS VERSION 3.7.4 LANGUAGES C CXX)
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
