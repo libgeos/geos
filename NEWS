@@ -1,5 +1,5 @@
-Changes in 3.6.5dev
-2020-MM-DD
+Changes in 3.6.5
+2020-12-11
 
 - Bug fixes / improvements
   - Relate crash with empty components (#1085, Sandro Santilli)
