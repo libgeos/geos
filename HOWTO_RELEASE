@@ -39,6 +39,8 @@
     - In main CMakeLists.txt main one
        - CHANGE the lines: set(VERSION_*
        - CAPI_INTERFACE_*
+    - in NEWS
+       - Add new version section
 
 12. Update wiki page https://trac.osgeo.org/geos/ at Download section
     - Add latest release
