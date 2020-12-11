@@ -312,7 +312,11 @@ void object::test<14>
     // std::cout << "expected " << *exp << std::endl;
     // std::cout << "result " << *simplified << std::endl;
     ensure("Simplified geometry is invalid!", simplified->isValid());
+ /* Temporarily disable this component of the test only for MSVC
+    See https://trac.osgeo.org/geos/ticket/1081 */
+#ifndef _MSC_VER
     ensure_equals_geometry(exp.get(), simplified.get());
+#endif
 }
 
 // GeometryCollection
