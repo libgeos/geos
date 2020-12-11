@@ -8,8 +8,9 @@
 
 4. Commit the changes in the NEWS file.
 
-5. Tag the release:
+5. Tag the release and push it:
    $ git tag MAJOR.MINOR.PATCH
+   $ git push origin --tags --dry-run # drop --dry-run to do it
 
 6. Run 'make dist-bzip2'.
    $ ./autogen.sh && ./configure && make dist-bzip2
@@ -43,4 +44,7 @@
     - Add latest release
     - Remove previos patch level release (if any)
 
-13. Announce
+13. Update trac.osgeo.org/geos adding the new version, closing
+    the relative milestone, opening a new milestone for next version
+
+14. Announce
