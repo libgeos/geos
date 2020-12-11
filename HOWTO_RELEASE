@@ -32,7 +32,9 @@
    $ git tag MAJOR.MINOR.PATCH
    $ git push origin MAJOR.MINOR.PATCH
 
-9. Increment all the version numbers for the next release (described in 1 above).
+9. Create and push a release branch if this was a PATCH=0 release,
+   update the versions for next release in Version.txt (both in
+   master and release branch if this was a PATCH=0 release).
 
 10. Update wiki page https://trac.osgeo.org/geos/ at Download section
 
