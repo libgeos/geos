@@ -37,7 +37,6 @@
         [ THIS MUST BE CAREFULLY AVOIDED ]
     - In main CMakeLists.txt main one
        - CHANGE the line: project(GEOS VERSION <mayor>.<minor>.<micro> LANGUAGES C CXX)
-       - CHANGE the line: set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
        - CAPI_INTERFACE_*
 
     - In README.md make sure all links are pointing at new bot branches
