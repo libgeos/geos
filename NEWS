@@ -1,3 +1,9 @@
+Changes in 3.6.5dev
+2020-MM-DD
+
+- Bug fixes / improvements
+  - Relate crash with empty components (#1085, Sandro Santilli)
+
 Changes in 3.6.4
 2019-10-04
 
@@ -12,7 +18,6 @@ Changes in 3.6.4
   - Static library does not contain C API (#878)
   - Prevent crash when querying empty STRtree (#730)
   - Overlay performance improvement (#986, Paul Ramsey)
-  - Relate crash with empty components (#1085, Sandro Santilli)
 
 Changes in 3.6.3
 2018-08-06
