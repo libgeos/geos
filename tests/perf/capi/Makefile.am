@@ -15,7 +15,7 @@ memleak_mp_prep_SOURCES = memleak_mp_prep.c
 memleak_mp_prep_LDADD = $(LIBS)
 
 perf_intersection_SOURCES = IntersectionPerfTest.cpp
-perf_intersection_LDADD = $(LIBS)
+perf_intersection_LDADD = $(top_builddir)/src/libgeos.la
 
 EXTRA_DIST = CMakeLists.txt
 
