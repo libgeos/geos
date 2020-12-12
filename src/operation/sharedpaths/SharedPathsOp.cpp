@@ -112,7 +112,7 @@ SharedPathsOp::findLinearIntersections(PathList& to)
     std::unique_ptr<Geometry> full(OverlayOp::overlayOp(
                                        &_g1, &_g2, OverlayOp::opINTERSECTION));
 
-    // NOTE: intersection of equal lines yelds splitted lines,
+    // NOTE: intersection of equal lines yields splitted lines,
     //       should we sew them back ?
 
     for(std::size_t i = 0, n = full->getNumGeometries(); i < n; ++i) {

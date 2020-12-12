@@ -240,7 +240,7 @@ static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
         auto new_area = geos::operation::polygonize::BuildArea().build(cut_edges.get());
         assert(new_area); // never return nullptr, but exception
         if( new_area->isEmpty() ) {
-            /* no more rings can be build with thes edges */
+            /* no more rings can be built with these edges */
             break;
         }
 

@@ -262,7 +262,7 @@ void object::test<13>
 }
 
 // Test intersects: point on segment with FLOAT PM
-// X coordinate of 3rd and 4th vertises of the line are not
+// X coordinate of 3rd and 4th vertices of the line are not
 // float-point exact with X coordinate of the point.
 // The X values differ after 14th decimal place:
 // POINT (-23.1094689600055080 50.5195368635957180)
@@ -294,7 +294,7 @@ void object::test<14>
 }
 
 // Test intersects: point on segment with FIXED PM
-// X coordinate of 3rd and 4th vertises of the line are not
+// X coordinate of 3rd and 4th vertices of the line are not
 // float-point exact with X coordinate of the point.
 // The X values differ after 14th decimal place:
 // POINT (-23.1094689600055080 50.5195368635957180)

@@ -79,7 +79,7 @@ DirectedEdgeStar::end() const
 }
 
 /*
- * Returns the coordinate for the node at wich this star is based
+ * Returns the coordinate for the node at which this star is based
  */
 Coordinate&
 DirectedEdgeStar::getCoordinate() const

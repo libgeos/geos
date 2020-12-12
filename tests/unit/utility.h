@@ -69,7 +69,7 @@ typedef geos::geom::MultiLineString const* MultiLineStringCPtr;
 typedef geos::geom::MultiPolygon* MultiPolygonPtr;
 typedef geos::geom::MultiPolygon const* MultiPolygonCPtr;
 
-// prepared geometries always returend as const
+// prepared geometries always returned as const
 typedef geos::geom::prep::PreparedGeometry const* PreparedGeometryPtr;
 
 //

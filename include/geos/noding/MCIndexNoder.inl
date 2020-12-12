@@ -37,7 +37,7 @@ MCIndexNoder::getIndex()
 INLINE std::vector<SegmentString*>*
 MCIndexNoder::getNodedSubstrings() const
 {
-    assert(nodedSegStrings); // must have colled computeNodes before!
+    assert(nodedSegStrings); // must have called computeNodes before!
     return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 }
 

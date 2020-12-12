@@ -381,7 +381,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 *    other nodes and lines, leaving all the rest undisturbed, for a very
 *    clean result, if it manages to create one.
 *    If a result is found with no exception, return.
-* 3. Peform overlay operation using a PrecisionModel(scale), which
+* 3. Perform overlay operation using a PrecisionModel(scale), which
 *    uses a SnapRoundingNoder. Every vertex will be noded to the snapping
 *    grid, resulting in a modified geometry. The SnapRoundingNoder approach
 *    reliably produces results, assuming valid inputs.

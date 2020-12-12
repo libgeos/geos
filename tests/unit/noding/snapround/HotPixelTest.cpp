@@ -269,7 +269,7 @@ void object::test<23>
 
 
 //-----------------------------
-// Test segments entering through a corder and terminating inside pixel
+// Test segments entering through a corner and terminating inside pixel
 
 // testCornerULEndInside
 template<>

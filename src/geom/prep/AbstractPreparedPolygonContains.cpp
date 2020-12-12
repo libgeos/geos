@@ -124,7 +124,7 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 
     // Check if there is any intersection between the line segments
     // in target and test.
-    // In some important cases, finding a proper interesection implies that the
+    // In some important cases, finding a proper intersection implies that the
     // test geometry is NOT contained.
     // These cases are:
     // - If the test geometry is polygonal
@@ -152,7 +152,7 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
     //
     // (If non-proper (vertex) intersections ARE found, this may indicate
     // a situation where two shells touch at a single vertex, which admits
-    // the case where a line could cross between the shells and still be wholely contained in them.
+    // the case where a line could cross between the shells and still be wholly contained in them.
     if(hasSegmentIntersection && !hasNonProperIntersection) {
         return false;
     }
@@ -182,7 +182,7 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 }
 
 bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom, Location outermostLoc) {
-    // If we had a point on the ourside of the polygon,
+    // If we had a point on the outside of the polygon,
     // we aren't covered or contained.
     if (outermostLoc == Location::EXTERIOR) {
         return false;

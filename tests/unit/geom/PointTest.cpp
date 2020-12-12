@@ -482,7 +482,7 @@ void object::test<38>
     ensure(!p1->equals(p2.get()));
 }
 
-// Test of equals() for non-empty Points with negative coordiantes
+// Test of equals() for non-empty Points with negative coordinates
 template<>
 template<>
 void object::test<39>

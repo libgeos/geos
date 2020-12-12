@@ -238,7 +238,7 @@ SubgraphDepthLocater::findStabbedSegments(
 // It seems that LineSegment is *very* slow... undef this
 // to see yourself
 // LineSegment has been refactored to be mostly inline, still
-// it makes copies of the given coordinates, while the 'non-LineSemgent'
+// it makes copies of the given coordinates, while the 'non-LineSegment'
 // based code below uses pointers instead. I'll kip the SKIP_LS
 // defined until LineSegment switches to Coordinate pointers instead.
 //

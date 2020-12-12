@@ -655,7 +655,7 @@ void object::test<19>
     using geos::geom::Coordinate;
     const std::size_t size = 7;
 
-    // Create sequence of coordiantes
+    // Create sequence of coordinates
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);
@@ -705,7 +705,7 @@ void object::test<20>
     const std::size_t exteriorSize = 7;
     const std::size_t interiorSize = 5;
 
-    // Create sequence of coordiantes
+    // Create sequence of coordinates
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(exteriorSize);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);

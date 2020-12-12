@@ -269,8 +269,8 @@ Edge::print() const
     return ss.str();
 }
 
-// Dunno how to implemente this in terms of operator<<
 std::string
+// Dunno how to implement this in terms of operator<<
 Edge::printReverse() const
 {
     testInvariant();

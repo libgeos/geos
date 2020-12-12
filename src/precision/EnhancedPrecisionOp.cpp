@@ -61,7 +61,7 @@ EnhancedPrecisionOp::intersection(
         auto resultEP = cbo.intersection(geom0, geom1);
 
         // check that result is a valid geometry after
-        // the reshift to orginal precision
+        // the reshift to original precision
         if(! resultEP->isValid()) {
 #if GEOS_DEBUG
             std::cerr << "Reduced operation result is invalid"
@@ -106,7 +106,7 @@ EnhancedPrecisionOp::Union(
         auto resultEP = cbo.Union(geom0, geom1);
 
         // check that result is a valid geometry after
-        // the reshift to orginal precision
+        // the reshift to original precision
         if(! resultEP->isValid()) {
             throw originalEx;
         }
@@ -142,7 +142,7 @@ EnhancedPrecisionOp::difference(
         auto resultEP = cbo.difference(geom0, geom1);
 
         // check that result is a valid geometry after
-        // the reshift to orginal precision
+        // the reshift to original precision
         if(! resultEP->isValid()) {
             throw originalEx;
         }
@@ -177,7 +177,7 @@ EnhancedPrecisionOp::symDifference(
         auto resultEP = cbo.symDifference(geom0, geom1);
 
         // check that result is a valid geometry after
-        // the reshift to orginal precision
+        // the reshift to original precision
         if(! resultEP->isValid()) {
             throw originalEx;
         }
@@ -210,7 +210,7 @@ EnhancedPrecisionOp::buffer(const Geometry* geom, double distance)
         auto resultEP = cbo.buffer(geom, distance);
 
         // check that result is a valid geometry
-        // after the reshift to orginal precision
+        // after the reshift to original precision
         if(! resultEP->isValid()) {
             throw originalEx;
         }

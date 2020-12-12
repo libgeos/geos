@@ -154,7 +154,7 @@ public:
     /** \brief
      * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
      *
-     * @tparam T an iterator yelding something castable to const Polygon *
+     * @tparam T an iterator yielding something castable to const Polygon *
      * @param start start iterator
      * @param end end iterator
      * @param unionStrategy strategy to apply

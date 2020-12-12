@@ -50,7 +50,7 @@ RectangleContains::contains(const Geometry& geom)
 bool
 RectangleContains::isContainedInBoundary(const Geometry& geom)
 {
-    // polygons can never be wholely contained in the boundary
+    // polygons can never be wholly contained in the boundary
     if(dynamic_cast<const geom::Polygon*>(&geom)) {
         return false;
     }
@@ -140,7 +140,7 @@ RectangleContains::isLineSegmentContainedInBoundary(const Coordinate& p0,
      *   one of x and y are the same, but the other ordinate
      *   is not the same as a boundary ordinate
      *
-     * In either case, the segment is not wholely in the boundary
+     * In either case, the segment is not wholly in the boundary
      */
     return false;
 }

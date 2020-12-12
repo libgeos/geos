@@ -161,7 +161,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     std::unique_ptr<Geometry> buf;
 
     // This is a (temp?) hack to workaround the fact that
-    // BufferBuilder BufferParamaters are immutable after
+    // BufferBuilder BufferParameters are immutable after
     // construction, while we want to force the end cap
     // style to FLAT for single-sided buffering
     {
@@ -268,7 +268,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             // included.
             //
             // Let's try and estimate a more accurate bound instead of just assuming
-            // 98%. With 98%, the episilon grows as the buffer distance grows,
+            // 98%. With 98%, the epsilon grows as the buffer distance grows,
             // so that at large distance, artifacts may skip through this filter
             // Let the length of the line play a factor in the distance, which is still
             // going to be bounded by 98%. Take 10% of the length of the line  from the buffer distance
@@ -448,7 +448,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         GEOS_CHECK_FOR_INTERRUPTS();
 
         {
-            // scope for earlier PolygonBuilder cleanupt
+            // scope for earlier PolygonBuilder cleanup
             PolygonBuilder polyBuilder(geomFact);
             buildSubgraphs(subgraphList, polyBuilder);
 

@@ -76,7 +76,7 @@ NodingTestUtil::nodeValidated(const Geometry* geom1, const Geometry* geom2, Node
     std::vector<SegmentString*> ssList = toSegmentStrings(lines);
 
     ValidatingNoder noderValid(*noder);
-    // computeNotes might alster ssList, but ssList still
+    // computeNotes might alter ssList, but ssList still
     // holds all memory
     noderValid.computeNodes(&ssList);
 

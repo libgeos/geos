@@ -18,7 +18,7 @@ namespace tut {
 
 // Common data used by tests
 struct test_triangle_data {
-    // Coordiantes of simple triangle: ABC
+    // Coordinates of simple triangle: ABC
     geos::geom::Coordinate a;
     geos::geom::Coordinate b;
     geos::geom::Coordinate c;
@@ -52,7 +52,7 @@ void object::test<1>
     ensure("NOTE: Triangle has no default constructor.", true);
 }
 
-// Test of overriden ctor
+// Test of overridden ctor
 template<>
 template<>
 void object::test<2>

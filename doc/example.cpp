@@ -253,7 +253,7 @@ create_ushaped_linestring(double xoffset, double yoffset, double side)
 }
 
 // This function will create a LinearRing
-// geometry rapresenting a square with the given origin
+// geometry representing a square with the given origin
 // and side
 LinearRing*
 create_square_linearring(double xoffset, double yoffset, double side)
@@ -281,7 +281,7 @@ create_square_linearring(double xoffset, double yoffset, double side)
 }
 
 // This function will create a Polygon
-// geometry rapresenting a square with the given origin
+// geometry representing a square with the given origin
 // and side and with a central hole 1/3 sided.
 Polygon*
 create_square_polygon(double xoffset, double yoffset, double side)
@@ -1001,7 +1001,7 @@ do_all()
     // DIFFERENCE
     /////////////////////////////////////////////
 
-    // Compute difference of adhiacent geometries
+    // Compute difference of adjacent geometries
     newgeoms = new std::vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
         const Geometry* g1 = (*geoms)[i];
@@ -1034,7 +1034,7 @@ do_all()
     // SYMMETRIC DIFFERENCE
     /////////////////////////////////////////////
 
-    // Compute symmetric difference of adhiacent geometries
+    // Compute symmetric difference of adjacent geometries
     newgeoms = new std::vector<const Geometry*>;
     for(unsigned int i = 0; i < geoms->size() - 1; i++) {
         const Geometry* g1 = (*geoms)[i];

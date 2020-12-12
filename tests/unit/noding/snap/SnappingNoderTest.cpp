@@ -102,7 +102,7 @@ void object::test<3> ()
     checkRounding(wkt1, wkt2, 1, expected);
 }
 
-//  testLineCondensePointsp
+//  testLineCondensePoints
 template<>
 template<>
 void object::test<4> ()

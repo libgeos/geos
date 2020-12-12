@@ -291,7 +291,7 @@ void object::test<17>
 {
     using geos::geom::Location;
 
-    // Test on the original p0attern 'FFFFFFFFF' of the 'im_' object
+    // Test on the original pattern 'FFFFFFFFF' of the 'im_' object
     ensure_equals(im_.toString(), pattern_false_);
     ensure_equals(im_.get(Location::INTERIOR, Location::INTERIOR), geos::geom::Dimension::False);
 

@@ -76,7 +76,7 @@ void object::test<1>
 {
     using geos::geom::Coordinate;
 
-    // Create non-empty Coordiantes sequence for Exterior LinearRing
+    // Create non-empty Coordinate sequence for Exterior LinearRing
     const std::size_t size = 7;
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", coords != nullptr);

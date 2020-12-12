@@ -214,7 +214,7 @@ containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1
     return containsProperly(env, p0) && containsProperly(env, p1);
 }
 
-/* privatef */
+/* private */
 void
 OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, std::vector<LineSegment>& psegs)
 {

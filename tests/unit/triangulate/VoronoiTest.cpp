@@ -56,7 +56,7 @@ readTextOrHex(const char* wkt)
         return wktreader.read(wktstr);
 }
 
-//helper function for funning triangulation
+//helper function for running triangulation
 void
 runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance)
 {

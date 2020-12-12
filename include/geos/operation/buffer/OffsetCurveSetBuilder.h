@@ -73,7 +73,7 @@ class GEOS_DLL OffsetCurveSetBuilder {
 private:
 
     // To keep track of newly-created Labels.
-    // Labels will be relesed by object dtor
+    // Labels will be released by object dtor
     std::vector<geomgraph::Label*> newLabels;
 
     const geom::Geometry& inputGeom;

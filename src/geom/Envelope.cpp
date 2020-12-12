@@ -122,7 +122,7 @@ Envelope::Envelope(const std::string& str)
     // now split apart the string on : and , characters
     std::vector<std::string> values = split(coordString, ":,");
 
-    // create a new envelopet
+    // create a new envelope
     init(strtod(values[0].c_str(), nullptr),
          strtod(values[1].c_str(), nullptr),
          strtod(values[2].c_str(), nullptr),

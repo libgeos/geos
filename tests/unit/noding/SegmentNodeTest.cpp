@@ -42,7 +42,7 @@ group test_segmentnode_group("geos::noding::SegmentNode");
 // Test Cases
 //
 
-// Test of overriden constructor
+// Test of overridden constructor
 template<>
 template<>
 void object::test<1>

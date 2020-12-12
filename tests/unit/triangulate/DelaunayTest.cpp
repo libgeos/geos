@@ -77,7 +77,7 @@ void object::test<1>
 {
     //Create a subdivision centered at (0,0)
     QuadEdgeSubdivision sub(Envelope(-100, 100, -100, 100), .00001);
-    //make a triagulaor to work on sub
+    //make a triangulator to work on sub
     IncrementalDelaunayTriangulator triangulator(&sub);
 
     triangulator.insertSite(Vertex(0, 0));

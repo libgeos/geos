@@ -271,7 +271,7 @@ void object::test<10>
 ()
 {
     int npoints = 1000; // vertices in sinstar test shape
-    int ncells = 100; // number of colums/rows in test grid square
+    int ncells = 100; // number of columns/rows in test grid square
 
     double radius = 100.0;
     double amplitude = 0.3; // how far the sin deviates from perfect circle (0.0)

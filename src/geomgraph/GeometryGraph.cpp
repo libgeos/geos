@@ -130,7 +130,7 @@ GeometryGraph::getBoundaryPoints()
 {
 
     if(! boundaryPoints.get()) {
-        // Collection will be destroied by GeometryGraph dtor
+        // Collection will be destroyed by GeometryGraph dtor
         std::vector<Node*>* coll = getBoundaryNodes();
         boundaryPoints.reset(new CoordinateArraySequence(coll->size()));
         std::size_t i = 0;

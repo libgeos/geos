@@ -69,4 +69,4 @@ MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, std::size_t st
 
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
-} // namespage geos
+} // namespace geos

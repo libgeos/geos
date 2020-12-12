@@ -198,7 +198,7 @@ private:
      * If so, the edge is not inserted, but its label is merged
      * with the existing edge.
      *
-     * The function takes responsability of releasing the Edge parameter
+     * The function takes responsibility of releasing the Edge parameter
      * memory when appropriate.
      */
     void insertUniqueEdge(geomgraph::Edge* e);

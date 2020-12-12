@@ -23,7 +23,7 @@
 
 #include <geos/noding/Noder.h> // for inheritance
 #include <geos/noding/NodedSegmentString.h> // for inlines
-#include <geos/noding/snapround/MCIndexPointSnapper.h> // for inines
+#include <geos/noding/snapround/MCIndexPointSnapper.h> // for inlines
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
 #include <geos/geom/PrecisionModel.h> // for inlines
@@ -71,7 +71,7 @@ namespace snapround { // geos::noding::snapround
  * It will function with non-integer precision models, but the
  * results are not 100% guaranteed to be correctly noded.
  */
-class GEOS_DLL MCIndexSnapRounder: public Noder { // implments Noder
+class GEOS_DLL MCIndexSnapRounder: public Noder { // implements Noder
 
 public:
 

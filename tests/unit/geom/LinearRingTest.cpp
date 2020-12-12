@@ -85,7 +85,7 @@ void object::test<1>
 {
     using geos::geom::Coordinate;
 
-    // Non-empty sequence of coordiantes
+    // Non-empty sequence of coordinates
     const std::size_t size7 = 7;
     CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
     ensure("sequence is null pointer.", coords != nullptr);
@@ -115,7 +115,7 @@ void object::test<1>
     }
 }
 
-// Test of copy contructor
+// Test of copy constructor
 template<>
 template<>
 void object::test<2>

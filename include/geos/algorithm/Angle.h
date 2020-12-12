@@ -93,7 +93,7 @@ public:
     ///
     /// An angle is acute if it is less than 90 degrees.
     ///
-    /// Note: this implementation is not precise (determistic) for
+    /// Note: this implementation is not precise (deterministic) for
     ///       angles very close to 90 degrees.
     ///
     /// @param p0 an endpoint of the angle
@@ -108,7 +108,7 @@ public:
     ///
     /// An angle is obtuse if it is greater than 90 degrees.
     ///
-    /// Note: this implementation is not precise (determistic) for
+    /// Note: this implementation is not precise (deterministic) for
     ///       angles very close to 90 degrees.
     ///
     /// @param p0 an endpoint of the angle

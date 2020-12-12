@@ -47,7 +47,7 @@ void object::test<1>
     ensure("NOTE: Coordinate has no default constructor.", true);
 }
 
-// Test of overriden constructor
+// Test of overridden constructor
 template<>
 template<>
 void object::test<2>

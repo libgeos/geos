@@ -162,7 +162,7 @@ void object::test<9> ()
 }
 
 // XY Polygon gets Z value from Point
-// testPointPolygonXYUnionn
+// testPointPolygonXYUnion
 template<>
 template<>
 void object::test<10> ()

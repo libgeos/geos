@@ -135,7 +135,7 @@ template<>
 void object::test<6>
 ()
 {
-    // Heterogenous GeometryCollection does not pass isDimensionString for any input
+    // Heterogeneous GeometryCollection does not pass isDimensionString for any input
     auto gc = readWKT("GEOMETRYCOLLECTION(POINT (1 1), LINESTRING (1 1, 2 2))");
 
     ensure(!gc->isDimensionStrict(geos::geom::Dimension::P));

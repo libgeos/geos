@@ -266,7 +266,7 @@ do_all(char *inputfile)
 	printf("Union: %s\n", ptr);
 	free(ptr);
 
-	/* PointOnSurcace */
+	/* PointOnSurface */
 	g4 = GEOSPointOnSurface(g3);
 	ptr = GEOSGeomToWKT(g4);
 	printf("PointOnSurface: %s\n", ptr);

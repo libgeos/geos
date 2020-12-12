@@ -116,7 +116,7 @@ operator< (const EdgeIntersection& ei1, const EdgeIntersection& ei2)
         }
 
         // TODO: check if the Coordinate matches, or this will
-        //       be a robustness issue in computin distance
+        //       be a robustness issue in computing distance
         //       See http://trac.osgeo.org/geos/ticket/350
     }
     return false;

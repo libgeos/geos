@@ -374,7 +374,7 @@ STRtree::insert(const Envelope* itemEnv, void* item)
 // then a is less than c,
 // and so on.
 //
-// For some very low values, this predicate does not fulfill this requiremnet,
+// For some very low values, this predicate does not fulfill this requirement,
 
 // NOTE - strk:
 // It seems that the '<' comparison here gives unstable results.
@@ -384,7 +384,7 @@ STRtree::insert(const Envelope* itemEnv, void* item)
 
 // NOTE - mloskot:
 // This comparison does not answer if a is "lower" than b
-// what is required for sorting. This comparison only answeres
+// what is required for sorting. This comparison only answers
 // if a and b are "almost the same" or different
 
 /*NOTE - cfis
