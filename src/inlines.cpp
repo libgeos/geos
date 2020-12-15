@@ -35,6 +35,9 @@
 // the stubs correctly at link time by itself
 #if !defined(__CYGWIN__)
 
+// Same as above for Apple ARM64 platforms
+#if !(defined(__APPLE__) && defined(__aarch64__))
+
 // Undefine GEOS_INLINE so that .inl files
 // will be ready for an implementation file
 #undef GEOS_INLINE
@@ -64,6 +67,8 @@
 #include <geos/noding/snapround/HotPixel.inl>
 #include <geos/noding/BasicSegmentString.inl>
 #include <geos/noding/MCIndexNoder.inl>
+
+#endif // defined __APPLE__ && defined  __aarch64__
 
 #endif // defined __CYGWIN__
 
