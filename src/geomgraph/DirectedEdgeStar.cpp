@@ -25,7 +25,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geom/Position.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 #include <geos/geom/Location.h>
 #include <geos/util/TopologyException.h>
 #include <geos/util.h>
@@ -105,13 +105,13 @@ DirectedEdgeStar::getRightmostEdge()
     DirectedEdge* deLast = detail::down_cast<DirectedEdge*>(*it);
 
     assert(de0);
-    int quad0 = de0->getQuadrant();
+    auto quad0 = de0->getQuadrant();
     assert(deLast);
-    int quad1 = deLast->getQuadrant();
-    if(Quadrant::isNorthern(quad0) && Quadrant::isNorthern(quad1)) {
+    auto quad1 = deLast->getQuadrant();
+    if(Quadrants::isNorthern(quad0) && Quadrants::isNorthern(quad1)) {
         return de0;
     }
-    else if(!Quadrant::isNorthern(quad0) && !Quadrant::isNorthern(quad1)) {
+    else if(!Quadrants::isNorthern(quad0) && !Quadrants::isNorthern(quad1)) {
         return deLast;
     }
     else {

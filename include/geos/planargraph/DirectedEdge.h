@@ -19,6 +19,7 @@
 #include <geos/export.h>
 #include <geos/planargraph/GraphComponent.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
+#include <geos/geom/Quadrant.h>
 
 #include <vector> // for typedefs
 #include <list> // for typedefs
@@ -60,7 +61,7 @@ protected:
     geom::Coordinate p0, p1;
     DirectedEdge* sym;  // optional
     bool edgeDirection;
-    int quadrant;
+    geom::Quadrant quadrant;
     double angle;
 public:
 
@@ -121,10 +122,10 @@ public:
     void setEdge(Edge* newParentEdge);
 
     /**
-     * \brief Returns 0, 1, 2, or 3, indicating the quadrant in which
+     * \brief Returns the  quadrant in which
      * this DirectedEdge's orientation lies.
      */
-    int getQuadrant() const;
+    geom::Quadrant getQuadrant() const;
 
     /**
      * \brief Returns a point to which an imaginary line is drawn

@@ -19,7 +19,7 @@
 #include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 
 #include <cassert>
 #include <cstdio>
@@ -93,7 +93,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
 
     // determine overall quadrant for chain
     // (which is the starting quadrant)
-    int chainQuad = Quadrant::quadrant(pts[safeStart],
+    auto chainQuad = Quadrants::quadrant(pts[safeStart],
                                        pts[safeStart + 1]);
 
     const Coordinate* prev; // avoid repeated coordinate access by index (virtual call)
@@ -106,7 +106,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
         // skip zero-length segments, but include them in the chain
         if(!prev->equals2D(*curr)) {
             // compute quadrant for next possible segment in chain
-            int quad = Quadrant::quadrant(*prev, *curr);
+            auto quad = Quadrants::quadrant(*prev, *curr);
             if(quad != chainQuad) {
                 return last - 1;
             }

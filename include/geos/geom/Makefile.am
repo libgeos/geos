@@ -50,5 +50,6 @@ geos_HEADERS = \
     PrecisionModel.h \
     PrecisionModel.inl \
     Quadrant.h \
-    Quadrant.inl \
+    Quadrants.h \
+    Quadrants.inl \
     Triangle.h

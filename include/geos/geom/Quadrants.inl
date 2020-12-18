@@ -20,7 +20,7 @@
 #ifndef GEOS_GEOM_QUADRANT_INL
 #define GEOS_GEOM_QUADRANT_INL
 
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 
@@ -30,79 +30,79 @@ namespace geos {
 namespace geom {
 
 /* public static */
-INLINE int
-Quadrant::quadrant(double dx, double dy)
+INLINE Quadrant
+Quadrants::quadrant(double dx, double dy)
 {
     if(dx == 0.0 && dy == 0.0) {
         std::ostringstream s;
         s << "Cannot compute the quadrant for point ";
         s << "(" << dx << "," << dy << ")" << std::endl;
-        throw util::IllegalArgumentException(s.str());
+        throw geos::util::IllegalArgumentException(s.str());
     }
     if(dx >= 0) {
         if(dy >= 0) {
-            return NE;
+            return Quadrant::NE;
         }
         else {
-            return SE;
+            return Quadrant::SE;
         }
     }
     else {
         if(dy >= 0) {
-            return NW;
+            return Quadrant::NW;
         }
         else {
-            return SW;
+            return Quadrant::SW;
         }
     }
 }
 
 /* public static */
-INLINE int
-Quadrant::quadrant(const geom::Coordinate& p0, const geom::Coordinate& p1)
+INLINE Quadrant
+Quadrants::quadrant(const geom::Coordinate& p0, const geom::Coordinate& p1)
 {
     if(p1.x == p0.x && p1.y == p0.y) {
-        throw util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
+        throw geos::util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
     }
 
     if(p1.x >= p0.x) {
         if(p1.y >= p0.y) {
-            return NE;
+            return Quadrant::NE;
         }
         else {
-            return SE;
+            return Quadrant::SE;
         }
     }
     else {
         if(p1.y >= p0.y) {
-            return NW;
+            return Quadrant::NW;
         }
         else {
-            return SW;
+            return Quadrant::SW;
         }
     }
 }
 
 /* public static */
 INLINE bool
-Quadrant::isOpposite(int quad1, int quad2)
+Quadrants::isOpposite(Quadrant quad1, Quadrant quad2)
 {
-    if(quad1 == quad2) {
-        return false;
+    switch(quad1) {
+        case Quadrant::NE: return quad2 == Quadrant::SW;
+        case Quadrant::SE: return quad2 == Quadrant::NW;
+        case Quadrant::SW: return quad2 == Quadrant::NE;
+        case Quadrant::NW: return quad2 == Quadrant::SE;
+        default:
+            // never get here
+            return false;
     }
-    int diff = (quad1 - quad2 + 4) % 4;
-    // if quadrants are not adjacent, they are opposite
-    if(diff == 2) {
-        return true;
-    }
-    return false;
 }
 
 /* public static */
 INLINE bool
-Quadrant::isNorthern(int quad)
+Quadrants::isNorthern(Quadrant quad)
 {
-    return quad == NE || quad == NW;
+    return quad == Quadrant::NE || quad == Quadrant::NW;
 }
 
 }

@@ -24,6 +24,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
+#include <geos/geom/Quadrant.h>
 #include <geos/geomgraph/Label.h>  // for composition
 #include <geos/inline.h>
 
@@ -115,7 +116,7 @@ public:
 
     virtual geom::Coordinate& getDirectedCoordinate();
 
-    virtual int getQuadrant();
+    virtual geom::Quadrant getQuadrant();
 
     virtual double getDx();
 
@@ -171,7 +172,7 @@ private:
     /// the direction vector for this edge from its starting point
     double dx, dy;
 
-    int quadrant;
+    geom::Quadrant quadrant;
 };
 
 std::ostream& operator<< (std::ostream&, const EdgeEnd&);

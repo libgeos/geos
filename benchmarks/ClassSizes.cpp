@@ -38,6 +38,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/profiler.h>
 #include <geos/constants.h>
+#include <geos/index/chain/MonotoneChain.h>
 #include <iostream>
 #include <geos/geomgraph/index/SweepLineEvent.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
@@ -60,6 +61,7 @@ main()
     check(geomgraph::PlanarGraph);
     check(geomgraph::TopologyLocation);
     check(geomgraph::index::SweepLineEvent);
+    check(index::chain::MonotoneChain);
     check(noding::NodedSegmentString);
     check(geom::Geometry);
     check(geom::Point);

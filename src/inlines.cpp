@@ -61,7 +61,7 @@
 #include <geos/geom/CoordinateArraySequenceFactory.inl>
 #include <geos/geomgraph/Depth.inl>
 #include <geos/geomgraph/Label.inl>
-#include <geos/geom/Quadrant.inl>
+#include <geos/geom/Quadrants.inl>
 #include <geos/geomgraph/TopologyLocation.inl>
 #include <geos/geomgraph/index/SegmentIntersector.inl>
 #include <geos/noding/snapround/HotPixel.inl>

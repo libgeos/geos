@@ -29,7 +29,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/NodeMap.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 
 #include <geos/algorithm/Orientation.h>
 
@@ -356,7 +356,7 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
     }
 
     if(Orientation::index(p0, p1, ep1) == Orientation::COLLINEAR
-            && Quadrant::quadrant(p0, p1) == Quadrant::quadrant(ep0, ep1)) {
+            && Quadrants::quadrant(p0, p1) == Quadrants::quadrant(ep0, ep1)) {
         return true;
     }
     return false;

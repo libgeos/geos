@@ -14,7 +14,7 @@
 
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Node.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 #include <geos/algorithm/Orientation.h>
 
 #include <cmath>
@@ -57,7 +57,7 @@ DirectedEdge::DirectedEdge(Node* newFrom, Node* newTo,
     p1 = directionPt;
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
-    quadrant = geom::Quadrant::quadrant(dx, dy);
+    quadrant = geom::Quadrants::quadrant(dx, dy);
     angle = atan2(dy, dx);
     //Assert.isTrue(! (dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
 }
@@ -77,7 +77,7 @@ DirectedEdge::setEdge(Edge* newParentEdge)
 }
 
 /*public*/
-int
+Quadrant
 DirectedEdge::getQuadrant() const
 {
     return quadrant;

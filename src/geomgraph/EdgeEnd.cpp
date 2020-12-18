@@ -22,7 +22,7 @@
 #include <geos/geomgraph/Node.h> // for assertions
 #include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 #include <geos/geom/Coordinate.h>
 
 #include <typeinfo>
@@ -47,7 +47,7 @@ EdgeEnd::EdgeEnd()
     node(nullptr),
     dx(0.0),
     dy(0.0),
-    quadrant(0)
+    quadrant(Quadrant::NE)
 {
 }
 
@@ -59,7 +59,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge)
     node(nullptr),
     dx(0.0),
     dy(0.0),
-    quadrant(0)
+    quadrant(Quadrant::NE)
 {
 }
 
@@ -72,7 +72,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
     node(nullptr),
     dx(0.0),
     dy(0.0),
-    quadrant(0)
+    quadrant(Quadrant::NE)
 {
     init(newP0, newP1);
 }
@@ -86,7 +86,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
     node(nullptr),
     dx(0.0),
     dy(0.0),
-    quadrant(0)
+    quadrant(Quadrant::NE)
 {
     init(newP0, newP1);
 }
@@ -99,7 +99,7 @@ EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
     p1 = newP1;
     dx = p1.x - p0.x;
     dy = p1.y - p0.y;
-    quadrant = Quadrant::quadrant(dx, dy);
+    quadrant = Quadrants::quadrant(dx, dy);
 
     // "EdgeEnd with identical endpoints found");
     assert(!(dx == 0 && dy == 0));
@@ -113,7 +113,7 @@ EdgeEnd::getDirectedCoordinate()
 }
 
 /*public*/
-int
+Quadrant
 EdgeEnd::getQuadrant()
 {
     return quadrant;

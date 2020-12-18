@@ -18,7 +18,7 @@
 #include <geos/geomgraph/index/MonotoneChainIndexer.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/Quadrant.h>
+#include <geos/geom/Quadrants.h>
 
 
 using namespace geos::geom;
@@ -53,12 +53,12 @@ size_t
 MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, std::size_t start)
 {
     // determine quadrant for chain
-    auto chainQuad = Quadrant::quadrant(pts->getAt(start), pts->getAt(start + 1));
+    auto chainQuad = Quadrants::quadrant(pts->getAt(start), pts->getAt(start + 1));
     auto last = start + 1;
     auto sz = pts->size(); // virtual call, doesn't inline
     while(last < sz) {
         // compute quadrant for next possible segment in chain
-        auto quad = Quadrant::quadrant(pts->getAt(last - 1), pts->getAt(last));
+        auto quad = Quadrants::quadrant(pts->getAt(last - 1), pts->getAt(last));
         if(quad != chainQuad) {
             break;
         }
