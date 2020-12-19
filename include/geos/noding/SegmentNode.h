@@ -124,4 +124,8 @@ struct GEOS_DLL  SegmentNodeLT {
 } // namespace geos.noding
 } // namespace geos
 
+#ifdef GEOS_INLINE
+# include "geos/noding/SegmentNode.inl"
+#endif
+
 #endif // GEOS_NODING_SEGMENTNODE_H
