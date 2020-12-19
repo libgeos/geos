@@ -177,7 +177,7 @@ typedef struct GEOSContextHandle_HS {
     GEOSMessageHandler errorMessageOld;
     GEOSMessageHandler_r errorMessageNew;
     void* errorData;
-    int WKBOutputDims;
+    uint8_t WKBOutputDims;
     int WKBByteOrder;
     int initialized;
 
@@ -2108,7 +2108,7 @@ extern "C" {
             }
 
             const int olddims = handle->WKBOutputDims;
-            handle->WKBOutputDims = newdims;
+            handle->WKBOutputDims = static_cast<uint8_t>(newdims);
 
             return olddims;
         });
@@ -2649,7 +2649,7 @@ extern "C" {
     GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, WKTWriter* writer, int dim)
     {
         execute(extHandle, [&]() {
-            writer->setOutputDimension(dim);
+            writer->setOutputDimension(static_cast<uint8_t>(dim));
         });
     }
 
@@ -2784,7 +2784,7 @@ extern "C" {
     GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* writer, int newDimension)
     {
         execute(extHandle, [&]() {
-            writer->setOutputDimension(newDimension);
+            writer->setOutputDimension(static_cast<uint8_t>(newDimension));
         });
     }
 
