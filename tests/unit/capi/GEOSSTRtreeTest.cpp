@@ -274,7 +274,7 @@ void object::test<8>
 
     typedef std::vector<int*> IList;
     IList items;
-    ensure_equals(items.size(), 0);
+    ensure_equals(items.size(), 0U);
     GEOSSTRtree_query(
         tree,
         q,
@@ -284,7 +284,7 @@ void object::test<8>
         },
         &items);
 
-    ensure_equals(items.size(), 1);
+    ensure_equals(items.size(), 1U);
 
     ensure_equals(*(items[0]), payload);
 
@@ -309,7 +309,7 @@ void object::test<9>
 
     typedef std::vector<int*> IList;
     IList items;
-    ensure_equals(items.size(), 0);
+    ensure_equals(items.size(), 0U);
     GEOSSTRtree_query(
         tree,
         q,
@@ -319,7 +319,7 @@ void object::test<9>
         },
         &items);
 
-    ensure_equals(items.size(), 1);
+    ensure_equals(items.size(), 1U);
 
     ensure_equals(items[0], (void*)0);
 

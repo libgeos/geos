@@ -75,7 +75,7 @@ GeometryTestFactory::createCircle(double basex, double basey, double size, uint3
     CoordinateArraySequence* pts = new CoordinateArraySequence(nPts + 1);
     double len = size / 2.0;
 
-    for(int i = 0; i < nPts; i++) {
+    for(uint32_t i = 0; i < nPts; i++) {
         double ang = i * (2 * PI / nPts);
         double x = len * cos(ang) + basex;
         double y = len * sin(ang) + basey;

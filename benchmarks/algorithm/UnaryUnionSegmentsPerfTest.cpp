@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     auto num_lines = std::atol(argv[1]);
     auto num_reps = argc > 2 ? std::atol(argv[2]) : 1;
 
-    for (std::size_t i = 0; i < num_reps; i++) {
+    for (decltype(num_reps) i = 0; i < num_reps; i++) {
         tester.test(num_lines);
     }
 }
