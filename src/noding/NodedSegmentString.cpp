@@ -20,7 +20,6 @@
 
 
 #include <geos/noding/NodedSegmentString.h>
-#include <geos/noding/Octant.h>
 #include <geos/algorithm/LineIntersector.h>
 
 using namespace geos::algorithm;
@@ -39,81 +38,6 @@ SegmentNodeList&
 NodedSegmentString::getNodeList()
 {
     return nodeList;
-}
-
-/*static private*/
-int
-NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1)
-{
-    if(p0.equals2D(p1)) {
-        return 0;
-    }
-    return Octant::octant(p0, p1);
-}
-
-
-/*public*/
-int
-NodedSegmentString::getSegmentOctant(std::size_t index) const
-{
-    if(index >= size() - 1) {
-        return -1;
-    }
-    return safeOctant(getCoordinate(index), getCoordinate(index + 1));
-    //return Octant::octant(getCoordinate(index), getCoordinate(index+1));
-}
-
-/*public*/
-void
-NodedSegmentString::addIntersections(LineIntersector* li,
-                                     std::size_t segmentIndex, std::size_t geomIndex)
-{
-    for(std::size_t i = 0, n = li->getIntersectionNum(); i < n; ++i) {
-        addIntersection(li, segmentIndex, geomIndex, i);
-    }
-}
-
-/*public*/
-void
-NodedSegmentString::addIntersection(LineIntersector* li,
-                                    std::size_t segmentIndex,
-                                    std::size_t geomIndex, std::size_t intIndex)
-{
-    ::geos::ignore_unused_variable_warning(geomIndex);
-
-    const Coordinate& intPt = li->getIntersection(intIndex);
-    addIntersection(intPt, segmentIndex);
-}
-
-/*public*/
-void
-NodedSegmentString::addIntersection(const Coordinate& intPt,
-                                    std::size_t segmentIndex)
-{
-    std::size_t normalizedSegmentIndex = segmentIndex;
-
-    if(segmentIndex > size() - 2) {
-        throw util::IllegalArgumentException("SegmentString::addIntersection: SegmentIndex out of range");
-    }
-
-    // normalize the intersection point location
-    auto nextSegIndex = normalizedSegmentIndex + 1;
-    if(nextSegIndex < size()) {
-        const Coordinate& nextPt = pts->getAt(nextSegIndex);
-
-        // Normalize segment index if intPt falls on vertex
-        // The check for point equality is 2D only -
-        // Z values are ignored
-        if(intPt.equals2D(nextPt)) {
-            normalizedSegmentIndex = nextSegIndex;
-        }
-    }
-
-    /*
-     * Add the intersection point to edge intersection list
-     * (unless the node is already known)
-     */
-    nodeList.add(intPt, normalizedSegmentIndex);
 }
 
 /* public static */
@@ -185,3 +109,7 @@ NodedSegmentString::print(std::ostream& os) const
 
 } // geos::noding
 } // geos
+
+#ifndef GEOS_INLINE
+#include "geos/noding/NodedSegmentString.inl"
+#endif

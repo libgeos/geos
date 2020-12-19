@@ -23,6 +23,7 @@
 #ifndef GEOS_NODING_NODEDSEGMENTSTRING_H
 #define GEOS_NODING_NODEDSEGMENTSTRING_H
 
+#include <geos/inline.h>
 #include <geos/export.h>
 #include <geos/noding/NodableSegmentString.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for inlines
@@ -185,6 +186,10 @@ private:
 
 #ifdef _MSC_VER
 #pragma warning(pop)
+#endif
+
+#ifdef GEOS_INLINE
+#include "geos/noding/NodedSegmentString.inl"
 #endif
 
 #endif // GEOS_NODING_NODEDSEGMENTSTRING_H

@@ -23,6 +23,7 @@ geos_HEADERS = \
 	MCIndexSegmentSetMutualIntersector.h \
 	NodableSegmentString.h \
 	NodedSegmentString.h \
+	NodedSegmentString.inl \
 	Noder.h \
 	NodingValidator.h \
 	Octant.h \
