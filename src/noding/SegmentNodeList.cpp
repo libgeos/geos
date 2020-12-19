@@ -58,10 +58,6 @@ SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
     ready = false;
 }
 
-SegmentNodeList::~SegmentNodeList()
-{
-}
-
 void SegmentNodeList::prepare() const {
     if (!ready) {
         std::sort(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
@@ -74,34 +70,6 @@ void SegmentNodeList::prepare() const {
 
         ready = true;
     }
-}
-
-SegmentNodeList::iterator
-SegmentNodeList::begin()
-{
-    prepare();
-    return nodeMap.begin();
-}
-
-SegmentNodeList::const_iterator
-SegmentNodeList::begin() const
-{
-    prepare();
-    return nodeMap.begin();
-}
-
-SegmentNodeList::iterator
-SegmentNodeList::end()
-{
-    prepare();
-    return nodeMap.end();
-}
-
-SegmentNodeList::const_iterator
-SegmentNodeList::end() const
-{
-    prepare();
-    return nodeMap.end();
 }
 
 void
@@ -174,7 +142,7 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 /* private */
 bool
 SegmentNodeList::findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
-                                   size_t& collapsedVertexIndex) const
+                                   size_t& collapsedVertexIndex)
 {
     assert(ei1.segmentIndex >= ei0.segmentIndex);
     // only looking for equal nodes
@@ -215,11 +183,11 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 
     // there should always be at least two entries in the list
     // since the endpoints are nodes
-    iterator it = begin();
+    auto it = begin();
     const SegmentNode* eiPrev = &(*it);
     assert(eiPrev);
     ++it;
-    for(iterator itEnd = end(); it != itEnd; ++it) {
+    for(auto itEnd = end(); it != itEnd; ++it) {
         const SegmentNode* ei = &(*it);
         assert(ei);
 
@@ -313,23 +281,22 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     if (useIntPt1) {
         pts.emplace_back(ei1->coord);
     }
-    return;
 }
 
 
 /*public*/
-std::unique_ptr<std::vector<Coordinate>>
+std::vector<Coordinate>
 SegmentNodeList::getSplitCoordinates()
 {
     // ensure that the list has entries for the first and last point of the edge
     addEndpoints();
-    std::unique_ptr<std::vector<Coordinate>> coordList(new std::vector<Coordinate>);
+    std::vector<Coordinate> coordList;
     // there should always be at least two entries in the list, since the endpoints are nodes
-    iterator it = begin();
+    auto it = begin();
     const SegmentNode* eiPrev = &(*it);
-    for(iterator itEnd = end(); it != itEnd; ++it) {
+    for(auto itEnd = end(); it != itEnd; ++it) {
         const SegmentNode* ei = &(*it);
-        addEdgeCoordinates(eiPrev, ei, *coordList);
+        addEdgeCoordinates(eiPrev, ei, coordList);
         eiPrev = ei;
     }
     return coordList;

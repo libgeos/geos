@@ -85,7 +85,7 @@ public:
     static SegmentString::NonConstVect* getNodedSubstrings(
         const SegmentString::NonConstVect& segStrings);
 
-    std::unique_ptr<std::vector<geom::Coordinate>> getNodedCoordinates();
+    std::vector<geom::Coordinate> getNodedCoordinates();
 
 
     /** \brief

@@ -124,29 +124,28 @@ private:
     void findCollapsesFromInsertedNodes(
         std::vector<std::size_t>& collapsedVertexIndexes) const;
 
-    bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
-                           size_t& collapsedVertexIndex) const;
+    static bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
+                           size_t& collapsedVertexIndex);
 
     void addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& coordList) const;
+
+public:
 
     // Declare type as noncopyable
     SegmentNodeList(const SegmentNodeList& other) = delete;
     SegmentNodeList& operator=(const SegmentNodeList& rhs) = delete;
 
-public:
-
     friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
     using container = decltype(nodeMap);
+    using iterator = container::iterator;
+    using const_iterator = container::const_iterator;
 
-    typedef container::iterator iterator;
-    typedef container::const_iterator const_iterator;
+    explicit SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
 
-    SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
+    explicit SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
 
-    SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
-
-    ~SegmentNodeList();
+    ~SegmentNodeList() = default;
 
     const NodedSegmentString&
     getEdge() const
@@ -180,13 +179,25 @@ public:
         return nodeMap.size();
     }
 
-    iterator begin();
+    iterator begin() {
+        prepare();
+        return nodeMap.begin();
+    }
 
-    const_iterator begin() const;
+    const_iterator begin() const {
+        prepare();
+        return nodeMap.begin();
+    }
 
-    iterator end();
+    iterator end() {
+        prepare();
+        return nodeMap.end();
+    }
 
-    const_iterator end() const;
+    const_iterator end() const {
+        prepare();
+        return nodeMap.end();
+    }
 
     /**
      * Adds entries for the first and last points of the edge to the list
@@ -217,7 +228,7 @@ public:
     * @return an array of Coordinates
     *
     */
-    std::unique_ptr<std::vector<geom::Coordinate>> getSplitCoordinates();
+    std::vector<geom::Coordinate> getSplitCoordinates();
 
 
 };

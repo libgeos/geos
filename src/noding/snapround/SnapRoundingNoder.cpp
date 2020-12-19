@@ -157,8 +157,8 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     * The coordinates are now rounded to the grid,
     * in preparation for snapping to the Hot Pixels
     */
-    std::unique_ptr<std::vector<Coordinate>> pts = ss->getNodedCoordinates();
-    std::unique_ptr<std::vector<Coordinate>> ptsRoundVec = round(*pts);
+    std::vector<Coordinate> pts = ss->getNodedCoordinates();
+    std::unique_ptr<std::vector<Coordinate>> ptsRoundVec = round(pts);
     std::unique_ptr<geom::CoordinateArraySequence> ptsRound(new CoordinateArraySequence(ptsRoundVec.release()));
 
     // if complete collapse this edge can be eliminated
@@ -169,20 +169,20 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getData());
 
     std::size_t snapSSindex = 0;
-    for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
+    for (std::size_t i = 0, sz = pts.size()-1; i < sz; i++ ) {
 
         const geom::Coordinate& currSnap = snapSS->getCoordinate(snapSSindex);
 
         /**
         * If the segment has collapsed completely, skip it
         */
-        Coordinate p1 = (*pts)[i+1];
+        Coordinate p1 = pts[i+1];
         Coordinate p1Round;
         round(p1, p1Round);
         if (p1Round.equals2D(currSnap))
             continue;
 
-        Coordinate p0 = (*pts)[i];
+        Coordinate p0 = pts[i];
 
         /**
         * Add any Hot Pixel intersections with *original* segment to rounded segment.
