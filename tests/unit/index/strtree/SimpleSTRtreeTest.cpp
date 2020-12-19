@@ -134,23 +134,23 @@ void object::test<3>
         t.insert(g.get());
     }
 
-    std::size_t leaf_before = t.getRoot()->getNumLeafNodes();
+    const std::size_t leaf_before = t.getRoot()->getNumLeafNodes();
     // std::cout << "leaf_before " << leaf_before << std::endl;
-    std::size_t all_before = t.getRoot()->getNumNodes();
+    const std::size_t all_before = t.getRoot()->getNumNodes();
     // std::cout << "all_before " << all_before << std::endl;
-    ensure(leaf_before = 4u);
-    ensure(all_before  = 5u);
+    ensure_equals(leaf_before, 4u);
+    ensure_equals(all_before, 5u);
 
     // std::cout << t << std::endl;
 
     t.remove(geoms[3]->getEnvelopeInternal(), geoms[3].get());
 
-    std::size_t leaf_after = t.getRoot()->getNumLeafNodes();
+    const std::size_t leaf_after = t.getRoot()->getNumLeafNodes();
     // std::cout << "leaf_after " << leaf_after << std::endl;
-    std::size_t all_after = t.getRoot()->getNumNodes();
+    const std::size_t all_after = t.getRoot()->getNumNodes();
     // std::cout << "all_after " << all_after << std::endl;
-    ensure(leaf_after = 3u);
-    ensure(all_after  = 4u);
+    ensure_equals(leaf_after, 3u);
+    ensure_equals(all_after, 4u);
 }
 
 
