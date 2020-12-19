@@ -199,12 +199,11 @@ LineSegment::closestPoints(const LineSegment& line)
      */
     std::array<Coordinate, 2> closestPt;
 
-    double minDistance = DoubleMax;
     double dist;
 
     Coordinate close00;
     closestPoint(line.p0, close00);
-    minDistance = close00.distance(line.p0);
+    double minDistance = close00.distance(line.p0);
 
     closestPt[0] = close00;
     closestPt[1] = line.p0;
