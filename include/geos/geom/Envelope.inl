@@ -52,6 +52,35 @@ Envelope::Envelope(const Coordinate& p1, const Coordinate& p2)
     init(p1, p2);
 }
 
+INLINE
+Envelope::Envelope(const Coordinate& p1, const Coordinate& p2, const Quadrant& q) {
+    switch(q) {
+        case Quadrant::NE:
+            minx = p1.x;
+            miny = p1.y;
+            maxx = p2.x;
+            maxy = p2.y;
+            break;
+        case Quadrant::NW:
+            minx = p2.x;
+            miny = p1.y;
+            maxx = p1.x;
+            maxy = p2.y;
+            break;
+        case Quadrant::SE:
+            minx = p1.x;
+            miny = p2.y;
+            maxx = p2.x;
+            maxy = p1.y;
+            break;
+        case Quadrant::SW:
+            minx = p2.x;
+            miny = p2.y;
+            maxx = p1.x;
+            maxy = p1.y;
+    }
+}
+
 /*public*/
 INLINE
 Envelope::Envelope(const Coordinate& p)

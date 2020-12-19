@@ -95,7 +95,7 @@ public:
     ///   Ownership left to caller, this class holds a reference.
     ///
     MonotoneChain(const geom::CoordinateSequence& pts,
-                  std::size_t start, std::size_t end, void* context);
+                  std::size_t start, std::size_t end, geom::Quadrant quadrant, void* context);
 
     ~MonotoneChain() = default;
 
@@ -159,6 +159,11 @@ public:
         return context;
     }
 
+    geom::Quadrant
+    getQuadrant() const {
+        return quadrant;
+    }
+
 private:
 
     void computeSelect(const geom::Envelope& searchEnv,
@@ -191,12 +196,15 @@ private:
     /// Index of chain end vertex into the CoordinateSequence, 0 based.
     std::size_t end;
 
-    /// Owned by this class
-    geom::Envelope env;
+    geom::Quadrant quadrant;
+
     bool envIsSet;
 
     /// useful for optimizing chain comparisons
     int id;
+
+    /// Owned by this class
+    geom::Envelope env;
 
 
     // Declare type as noncopyable

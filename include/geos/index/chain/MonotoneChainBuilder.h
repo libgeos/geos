@@ -20,6 +20,7 @@
 #define GEOS_IDX_CHAIN_MONOTONECHAINBUILDER_H
 
 #include <geos/export.h>
+#include <geos/geom/Quadrant.h>
 #include <memory>
 #include <vector>
 #include <cstddef>
@@ -102,8 +103,8 @@ private:
      *
      * @note aborts if 'start' is >= pts.getSize()
      */
-    static std::size_t findChainEnd(const geom::CoordinateSequence& pts,
-                                    std::size_t start);
+    static std::pair<std::size_t, geom::Quadrant> findChainEnd(const geom::CoordinateSequence& pts,
+                                                         std::size_t start);
 };
 
 } // namespace geos::index::chain

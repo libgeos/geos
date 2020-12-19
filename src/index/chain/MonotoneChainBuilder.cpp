@@ -57,17 +57,17 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
 {
     std::size_t chainStart = 0;
     do {
-        std::size_t chainEnd = findChainEnd(*pts, chainStart);
-        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd, context);
+        auto chainEnd = findChainEnd(*pts, chainStart);
+        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd.first, chainEnd.second, context);
         mcList.emplace_back(mc);
-        chainStart = chainEnd;
+        chainStart = chainEnd.first;
     }
     while (chainStart < (pts->size() - 1));
 }
 
 
 /* private static */
-std::size_t
+std::pair<std::size_t, Quadrant>
 MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t start)
 {
 
@@ -88,7 +88,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
 
     // check if there are NO non-zero-length segments
     if(safeStart >= npts - 1) {
-        return npts - 1;
+        return std::make_pair(npts - 1, Quadrant::NE);
     }
 
     // determine overall quadrant for chain
@@ -108,7 +108,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
             // compute quadrant for next possible segment in chain
             auto quad = Quadrants::quadrant(*prev, *curr);
             if(quad != chainQuad) {
-                return last - 1;
+                return std::make_pair(last - 1, chainQuad);
             }
         }
     }
@@ -116,7 +116,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
     std::cerr << "MonotoneChainBuilder::findChainEnd() returning" << std::endl;
 #endif
 
-    return npts - 1;
+    return std::make_pair(npts - 1, chainQuad);
 }
 
 } // namespace geos.index.chain

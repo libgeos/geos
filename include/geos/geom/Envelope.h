@@ -23,6 +23,7 @@
 #include <geos/export.h>
 #include <geos/inline.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Quadrant.h>
 
 #include <string>
 #include <vector>
@@ -85,6 +86,15 @@ public:
      * @param  p2  the second Coordinate
      */
     Envelope(const Coordinate& p1, const Coordinate& p2);
+
+    /** \brief
+     * Creates an Envelope for a region defined by two Coordinates.
+     *
+     * @param  p1  the first Coordinate
+     * @param  p2  the second Coordinate
+     * @param  q   the Quadrant occupied by the segment p1-p2
+     */
+    Envelope(const Coordinate& p1, const Coordinate& p2, const Quadrant& q);
 
     /** \brief
      * Creates an Envelope for a region defined by a single Coordinate.

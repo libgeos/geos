@@ -23,6 +23,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Quadrants.h>
 #include <geos/util.h>
 
 using namespace geos::geom;
@@ -32,15 +33,17 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
-                             std::size_t nstart, std::size_t nend, void* nContext)
+                             std::size_t nstart, std::size_t nend,
+                             geom::Quadrant p_Quadrant, void* nContext)
     :
     pts(newPts),
     context(nContext),
     start(nstart),
     end(nend),
-    env(newPts[nstart], newPts[nend]),
     envIsSet(false),
-    id(-1)
+    id(-1),
+    quadrant(p_Quadrant),
+    env(newPts[start], newPts[end], quadrant)
 {
 }
 
@@ -54,7 +57,6 @@ const Envelope&
 MonotoneChain::getEnvelope(double expansionDistance)
 {
     if (!envIsSet) {
-        env.init(pts[start], pts[end]);
         if (expansionDistance > 0.0) {
             env.expandBy(expansionDistance);
         }
