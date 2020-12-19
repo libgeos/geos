@@ -4434,7 +4434,8 @@ extern "C" {
             const GeometryFactory* gf = handle->geomFactory;
 
             /* Create unique_ptr version for constructor */
-            std::vector<std::unique_ptr<LinearRing>> vholes(nholes);
+            std::vector<std::unique_ptr<LinearRing>> vholes;
+            vholes.reserve(nholes);
             for (LinearRing* lr: tmpholes) {
                 vholes.emplace_back(lr);
             }
