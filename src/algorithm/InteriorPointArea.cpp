@@ -188,7 +188,7 @@ private:
         }
     }
 
-    void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, std::vector<double>& crossings)
+    static void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, std::vector<double>& crossings)
     {
         // skip non-crossing segments
         if (!intersectsHorizontalLine(p0, p1, scanY))

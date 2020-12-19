@@ -54,7 +54,7 @@ private:
 
     const Coordinate* origin;
 
-    int
+    static int
     polarCompare(const Coordinate* o, const Coordinate* p,
                  const Coordinate* q)
     {
