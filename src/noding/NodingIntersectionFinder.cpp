@@ -28,59 +28,6 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-/* private */
-bool
-NodingIntersectionFinder::isEndSegment(const SegmentString* segStr, std::size_t index)
-{
-    if(index == 0) {
-        return true;
-    }
-    if(index >= segStr->size() - 2) {
-        return true;
-    }
-    return false;
-}
-
-/* private */
-bool
-NodingIntersectionFinder::isInteriorVertexIntersection(
-    const Coordinate& p0, const Coordinate& p1,
-    bool isEnd0, bool isEnd1)
-{
-    // Intersections between endpoints are valid nodes, so not reported
-    if(isEnd0 && isEnd1) {
-        return false;
-    }
-
-    if(p0.equals2D(p1)) {
-        return true;
-    }
-
-    return false;
-}
-
-
-/* private */
-bool
-NodingIntersectionFinder::isInteriorVertexIntersection(
-    const Coordinate& p00, const Coordinate& p01, const Coordinate& p10, const Coordinate& p11,
-    bool isEnd00, bool isEnd01, bool isEnd10, bool isEnd11)
-{
-    if(isInteriorVertexIntersection(p00, p10, isEnd00, isEnd10)) {
-        return true;
-    }
-    if(isInteriorVertexIntersection(p00, p11, isEnd00, isEnd11)) {
-        return true;
-    }
-    if(isInteriorVertexIntersection(p01, p10, isEnd01, isEnd10)) {
-        return true;
-    }
-    if(isInteriorVertexIntersection(p01, p11, isEnd01, isEnd11)) {
-        return true;
-    }
-    return false;
-}
-
 
 /* public (override) */
 void
@@ -151,6 +98,9 @@ NodingIntersectionFinder::processIntersections(
     }
 }
 
+#ifndef GEOS_INLINE
+#include "geos/noding/NodingIntersectionFinder.inl"
+#endif
 
 } // namespace geos.noding
 } // namespace geos

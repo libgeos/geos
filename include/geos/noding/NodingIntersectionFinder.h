@@ -15,6 +15,7 @@
 #ifndef GEOS_NODING_NODINGINTERSECTIONFINDER_H
 #define GEOS_NODING_NODINGINTERSECTIONFINDER_H
 
+#include <geos/inline.h>
 #include <geos/noding/SegmentIntersector.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
 
@@ -183,7 +184,7 @@ private:
      * @param isEnd1 true if vertex is a segmentString endpoint
      * @return true if an intersection is found
     */
-    bool isInteriorVertexIntersection(
+    static bool isInteriorVertexIntersection(
         const geom::Coordinate& p0, const geom::Coordinate& p1,
         bool isEnd0, bool isEnd1);
 
@@ -203,7 +204,7 @@ private:
      * @param isEnd11 true if vertex is a segmentString endpoint
      * @return true if an intersection is found
      */
-    bool isInteriorVertexIntersection(
+    static bool isInteriorVertexIntersection(
         const geom::Coordinate& p00, const geom::Coordinate& p01,
         const geom::Coordinate& p10, const geom::Coordinate& p11,
         bool isEnd00, bool isEnd01, bool isEnd10, bool isEnd11);
@@ -216,12 +217,16 @@ private:
      * @param index the index of a segment in the segment string
      * @return true if the segment is an end segment
      */
-    bool isEndSegment(const SegmentString* segStr, std::size_t index);
+    static bool isEndSegment(const SegmentString* segStr, std::size_t index);
 
 
 };
 
 } // namespace geos.noding
 } // namespace geos
+
+#ifdef GEOS_INLINE
+#include "geos/noding/NodingIntersectionFinder.inl"
+#endif
 
 #endif // GEOS_NODING_NODINGINTERSECTIONFINDER_H
