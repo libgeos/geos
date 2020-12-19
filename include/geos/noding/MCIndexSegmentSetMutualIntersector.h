@@ -96,7 +96,7 @@ public:
 
 private:
 
-    typedef std::vector<std::unique_ptr<index::chain::MonotoneChain>> MonoChains;
+    typedef std::vector<index::chain::MonotoneChain> MonoChains;
     MonoChains monoChains;
 
     /*
@@ -113,7 +113,7 @@ private:
     /* memory management helper, holds MonotoneChain objects used
      * in the SpatialIndex. It's cleared when the SpatialIndex is
      */
-    MonoChains chainStore;
+    std::vector<MonoChains> chainStore;
 
     void addToIndex(SegmentString* segStr);
 

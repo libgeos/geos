@@ -37,36 +37,32 @@ namespace noding { // geos::noding
 void
 MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
-    MonoChains segChains;
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, segChains);
+    MonoChains segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
 
-    MonoChains::size_type n = segChains.size();
-    chainStore.reserve(chainStore.size() + n);
     for(auto& mc : segChains) {
-        mc->setId(indexCounter++);
-        index->insert(&(mc->getEnvelope()), mc.get());
-        chainStore.push_back(std::move(mc));
+        //mc.setId(indexCounter++);
+        index->insert(&(mc.getEnvelope()), &mc);
     }
+    chainStore.push_back(std::move(segChains));
 }
 
 
-/*private*/
+    /*private*/
 void
 MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
     std::vector<void*> overlapChains;
-    for(const auto& queryChain : monoChains) {
+    for(MonotoneChain& queryChain : monoChains) {
         overlapChains.clear();
 
-        index->query(&(queryChain->getEnvelope()), overlapChains);
+        index->query(&(queryChain.getEnvelope()), overlapChains);
 
-        for(std::size_t j = 0, nj = overlapChains.size(); j < nj; j++) {
-            MonotoneChain* testChain = (MonotoneChain*)(overlapChains[j]);
+        for(void* hit : overlapChains) {
+            MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
 
-            queryChain->computeOverlaps(testChain, &overlapAction);
+            queryChain.computeOverlaps(testChain, &overlapAction);
             nOverlaps++;
             if(segInt->isDone()) {
                 return;
@@ -79,15 +75,13 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 void
 MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
-    MonoChains segChains;
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, segChains);
+    MonoChains segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
 
     MonoChains::size_type n = segChains.size();
     monoChains.reserve(monoChains.size() + n);
     for(auto& mc : segChains) {
-        mc->setId(processCounter++);
-        monoChains.push_back(std::move(mc));
+        mc.setId(processCounter++);
+        monoChains.push_back(mc);
     }
 }
 
@@ -112,9 +106,8 @@ void
 MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* segStrings)
 {
     // NOTE - mloskot: const qualifier is removed silently, dirty.
-
-    for(std::size_t i = 0, n = segStrings->size(); i < n; i++) {
-        const SegmentString* css = (*segStrings)[i];
+    chainStore.reserve(segStrings->size());
+    for(const SegmentString* css : *segStrings) {
         SegmentString* ss = const_cast<SegmentString*>(css);
         addToIndex(ss);
     }

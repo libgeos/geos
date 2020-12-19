@@ -51,13 +51,13 @@ class GEOS_DLL MonotoneChainBuilder {
 
 public:
 
-    MonotoneChainBuilder() {}
+    MonotoneChainBuilder() = default;
 
     /** \brief
      * Return a newly-allocated vector of newly-allocated
      * MonotoneChain objects for the given CoordinateSequence.
      */
-    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
+    static std::vector<MonotoneChain> getChains(
         const geom::CoordinateSequence* pts,
         void* context);
 
@@ -71,13 +71,7 @@ public:
      */
     static void getChains(const geom::CoordinateSequence* pts,
                           void* context,
-                          std::vector<std::unique_ptr<MonotoneChain>>& mcList);
-
-    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
-    getChains(const geom::CoordinateSequence* pts)
-    {
-        return getChains(pts, nullptr);
-    }
+                          std::vector<MonotoneChain>& mcList);
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this
@@ -99,12 +93,12 @@ private:
      * @param pts the points to scan
      * @param start the index of the start of this chain
      * @return the index of the last point in the monotone chain
-     *         starting at <code>start</code>.
+     *         starting at <code>start</code> and the Quadrant
+     *         associated with this chain.
      *
      * @note aborts if 'start' is >= pts.getSize()
      */
-    static std::pair<std::size_t, geom::Quadrant> findChainEnd(const geom::CoordinateSequence& pts,
-                                                         std::size_t start);
+    static std::pair<std::size_t, geom::Quadrant> findChainEnd(const geom::CoordinateSequence& pts, std::size_t start);
 };
 
 } // namespace geos::index::chain

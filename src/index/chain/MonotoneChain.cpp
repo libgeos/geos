@@ -40,9 +40,9 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
     context(nContext),
     start(nstart),
     end(nend),
+    quadrant(p_Quadrant),
     envIsSet(false),
     id(-1),
-    quadrant(p_Quadrant),
     env(newPts[start], newPts[end], quadrant)
 {
 }

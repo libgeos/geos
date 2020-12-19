@@ -41,26 +41,27 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 /* static public */
-std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
+std::vector<MonotoneChain>
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 {
-    // TODO clean this up with std::make_unique (C++14)
-    std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> mcList{new std::vector<std::unique_ptr<MonotoneChain>>()};
-    getChains(pts, context, *mcList);
+    std::vector<MonotoneChain> mcList;
+    getChains(pts, context, mcList);
     return mcList;
 }
 
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
-                                std::vector<std::unique_ptr<MonotoneChain>>& mcList)
+                                std::vector<MonotoneChain>& mcList)
 {
     std::size_t chainStart = 0;
     do {
-        auto chainEnd = findChainEnd(*pts, chainStart);
-        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd.first, chainEnd.second, context);
-        mcList.emplace_back(mc);
-        chainStart = chainEnd.first;
+        auto end = findChainEnd(*pts, chainStart);
+        std::size_t& chainEnd = end.first;
+        Quadrant& chainQuad = end.second;
+        MonotoneChain mc(*pts, chainStart, chainEnd, chainQuad, context);
+        mcList.push_back(mc);
+        chainStart = chainEnd;
     }
     while (chainStart < (pts->size() - 1));
 }
