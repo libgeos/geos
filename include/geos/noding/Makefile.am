@@ -41,4 +41,5 @@ geos_HEADERS = \
 	SimpleNoder.h \
 	SinglePassNoder.h \
 	NodingIntersectionFinder.h \
+	NodingIntersectionFinder.inl \
 	ValidatingNoder.h
