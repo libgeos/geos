@@ -20,6 +20,7 @@
 #ifndef GEOS_ALGORITHM_LINEINTERSECTOR_H
 #define GEOS_ALGORITHM_LINEINTERSECTOR_H
 
+#include <geos/inline.h>
 #include <geos/export.h>
 #include <string>
 
@@ -78,14 +79,14 @@ public:
     static double nonRobustComputeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p1,
             const geom::Coordinate& p2);
 
-    LineIntersector(const geom::PrecisionModel* initialPrecisionModel = nullptr)
+    explicit LineIntersector(const geom::PrecisionModel* initialPrecisionModel = nullptr)
         :
         precisionModel(initialPrecisionModel),
         result(0),
         isProperVar(false)
     {}
 
-    ~LineIntersector() {}
+    ~LineIntersector() = default;
 
     /** \brief
      * Tests whether either intersection point is an interior point of
@@ -396,6 +397,9 @@ private:
 } // namespace geos::algorithm
 } // namespace geos
 
+#ifdef GEOS_INLINE
+# include "geos/algorithm/LineIntersector.inl"
+#endif
 
 #endif // GEOS_ALGORITHM_LINEINTERSECTOR_H
 

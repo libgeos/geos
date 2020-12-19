@@ -134,17 +134,6 @@ LineIntersector::computeIntLineIndex()
     computeIntLineIndex(1);
 }
 
-/*public*/
-bool
-LineIntersector::isIntersection(const Coordinate& pt) const
-{
-    for(std::size_t i = 0; i < result; ++i) {
-        if(intPt[i].equals2D(pt)) {
-            return true;
-        }
-    }
-    return false;
-}
 
 /*public*/
 const Coordinate&
@@ -187,32 +176,6 @@ LineIntersector::getEdgeDistance(std::size_t segmentIndex, std::size_t intIndex)
                                       *inputLines[segmentIndex][0],
                                       *inputLines[segmentIndex][1]);
     return dist;
-}
-
-/*public*/
-bool
-LineIntersector::isInteriorIntersection()
-{
-    if(isInteriorIntersection(0)) {
-        return true;
-    }
-    if(isInteriorIntersection(1)) {
-        return true;
-    }
-    return false;
-}
-
-/*public*/
-bool
-LineIntersector::isInteriorIntersection(std::size_t inputLineIndex)
-{
-    for(std::size_t i = 0; i < result; ++i) {
-        if(!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
-                || intPt[i].equals2D(*inputLines[inputLineIndex][1]))) {
-            return true;
-        }
-    }
-    return false;
 }
 
 /*public static*/
@@ -624,17 +587,6 @@ LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
 
 /* private static */
 double
-LineIntersector::zGet(const Coordinate& p, const Coordinate& q)
-{
-    double z = p.z;
-    if ( std::isnan(z) ) {
-        z = q.z; // may be NaN
-    }
-    return z;
-}
-
-/* private static */
-double
 LineIntersector::zInterpolate(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
 {
 #if GEOS_DEBUG
@@ -678,28 +630,6 @@ LineIntersector::zInterpolate(const Coordinate& p, const Coordinate& p1, const C
     return zInterpolated;
 }
 
-
-/* private static */
-double
-LineIntersector::zGetOrInterpolate(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
-{
-    double z = p.z;
-    if (! std::isnan(z) ) return z;
-    return zInterpolate(p, p1, p2); // may be NaN
-}
-
-/* private static */
-Coordinate
-LineIntersector::zGetOrInterpolateCopy(
-    const Coordinate& p,
-    const Coordinate& p1,
-    const Coordinate& p2)
-{
-    Coordinate pCopy = p;
-    double z = zGetOrInterpolate(p, p1, p2);
-    pCopy.z = z;
-    return pCopy;
-}
 
 
 double
@@ -761,3 +691,7 @@ LineIntersector::nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
 
 } // namespace geos.algorithm
 } // namespace geos
+
+#ifndef GEOS_INLINE
+# include "geos/algorithm/LineIntersector.inl"
+#endif
