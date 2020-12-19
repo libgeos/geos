@@ -195,8 +195,8 @@ void object::test<7>
     using geos::geom::CoordinateArraySequence;
     using geos::geom::Point;
 
-    PrecisionModel pm;
-    auto factory_ = GeometryFactory::create(&pm);
+    PrecisionModel pmLocal;
+    auto factory_ = GeometryFactory::create(&pmLocal);
     CoordinateArraySequence* coords = new CoordinateArraySequence();
     ensure(coords != nullptr);
 
