@@ -18,6 +18,7 @@
 #include <geos/geom/Location.h>
 
 #include <geos/export.h>
+#include <geos/inline.h>
 
 #include <memory>
 
@@ -171,3 +172,6 @@ public:
 } // namespace geos.operation
 } // namespace geos
 
+#ifdef GEOS_INLINE
+#include "geos/operation/overlayng/OverlayEdge.inl"
+#endif

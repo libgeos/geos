@@ -18,7 +18,6 @@
 #include <geos/operation/overlayng/OverlayEdgeRing.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 
 namespace geos {      // geos
@@ -26,56 +25,6 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 using namespace geos::geom;
-
-/*public*/
-bool
-OverlayEdge::isForward() const
-{
-    return direction;
-}
-
-/*public*/
-const Coordinate&
-OverlayEdge::directionPt() const
-{
-    return dirPt;
-}
-
-/*public*/
-OverlayLabel*
-OverlayEdge::getLabel() const
-{
-    return label;
-}
-
-/*public*/
-Location
-OverlayEdge::getLocation(int index, int position) const
-{
-    return label->getLocation(index, position, direction);
-}
-
-/*public*/
-const Coordinate&
-OverlayEdge::getCoordinate() const
-{
-    return orig();
-}
-
-/*public*/
-const CoordinateSequence*
-OverlayEdge::getCoordinatesRO() const
-{
-    return pts;
-}
-
-/*public*/
-std::unique_ptr<CoordinateSequence>
-OverlayEdge::OverlayEdge::getCoordinates()
-{
-    // return a copy of pts
-    return pts->clone();
-}
 
 /*public*/
 std::unique_ptr<CoordinateSequence>
@@ -122,179 +71,6 @@ OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
         }
     }
 }
-
-/*public*/
-OverlayEdge*
-OverlayEdge::symOE() const
-{
-    return static_cast<OverlayEdge*>(sym());
-}
-
-/*public*/
-OverlayEdge*
-OverlayEdge::oNextOE() const
-{
-    return static_cast<OverlayEdge*>(oNext());
-}
-
-/*public*/
-bool
-OverlayEdge::isInResultArea() const
-{
-    return m_isInResultArea;
-}
-
-/*public*/
-bool
-OverlayEdge::isInResultAreaBoth() const
-{
-    return m_isInResultArea && symOE()->m_isInResultArea;
-}
-
-/*public*/
-bool
-OverlayEdge::isInResultEither() const
-{
-    return isInResult() || symOE()->isInResult();
-}
-
-/*public*/
-void
-OverlayEdge::unmarkFromResultAreaBoth()
-{
-    m_isInResultArea = false;
-    symOE()->m_isInResultArea = false;
-}
-
-/*public*/
-void
-OverlayEdge::markInResultArea()
-{
-    m_isInResultArea  = true;
-}
-
-/*public*/
-void
-OverlayEdge::markInResultAreaBoth()
-{
-    m_isInResultArea  = true;
-    symOE()->m_isInResultArea = true;
-}
-
-/*public*/
-bool
-OverlayEdge::isInResultLine() const
-{
-    return m_isInResultLine;
-}
-
-/*public*/
-void
-OverlayEdge::markInResultLine()
-{
-    m_isInResultLine  = true;
-    symOE()->m_isInResultLine = true;
-}
-
-/*public*/
-bool
-OverlayEdge::isInResult() const
-{
-    return m_isInResultArea || m_isInResultLine;
-}
-
-void
-OverlayEdge::setNextResult(OverlayEdge* e)
-{
-    // Assert: e.orig() == this.dest();
-    nextResultEdge = e;
-}
-
-/*public*/
-OverlayEdge*
-OverlayEdge::nextResult() const
-{
-    return nextResultEdge;
-}
-
-/*public*/
-bool
-OverlayEdge::isResultLinked() const
-{
-    return nextResultEdge != nullptr;
-}
-
-void
-OverlayEdge::setNextResultMax(OverlayEdge* e)
-{
-    // Assert: e.orig() == this.dest();
-    nextResultMaxEdge = e;
-}
-
-/*public*/
-OverlayEdge*
-OverlayEdge::nextResultMax() const
-{
-    return nextResultMaxEdge;
-}
-
-/*public*/
-bool
-OverlayEdge::isResultMaxLinked() const
-{
-    return nextResultMaxEdge != nullptr;
-}
-
-/*public*/
-bool
-OverlayEdge::isVisited() const
-{
-    return m_isVisited;
-}
-
-/*private*/
-void
-OverlayEdge::markVisited()
-{
-    m_isVisited = true;
-}
-
-/*public*/
-void
-OverlayEdge::markVisitedBoth()
-{
-    markVisited();
-    symOE()->markVisited();
-}
-
-/*public*/
-void
-OverlayEdge::setEdgeRing(const OverlayEdgeRing* p_edgeRing)
-{
-    edgeRing = p_edgeRing;
-}
-
-/*public*/
-const OverlayEdgeRing*
-OverlayEdge::getEdgeRing() const
-{
-    return edgeRing;
-}
-
-/*public*/
-const MaximalEdgeRing*
-OverlayEdge::getEdgeRingMax() const
-{
-    return maxEdgeRing;
-}
-
-/*public*/
-void
-OverlayEdge::setEdgeRingMax(const MaximalEdgeRing* p_maximalEdgeRing)
-{
-    maxEdgeRing = p_maximalEdgeRing;
-}
-
 /*public friend*/
 std::ostream&
 operator<<(std::ostream& os, const OverlayEdge& oe)
@@ -326,3 +102,7 @@ OverlayEdge::resultSymbol() const
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
+
+#ifndef GEOS_INLINE
+#include "geos/operation/overlayng/OverlayEdge.inl"
+#endif
