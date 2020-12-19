@@ -23,6 +23,7 @@ geos_HEADERS = \
     LineLimiter.h \
     MaximalEdgeRing.h \
     OverlayEdge.h \
+    OverlayEdge.inl \
     OverlayEdgeRing.h \
     OverlayGraph.h \
     OverlayLabel.h \
