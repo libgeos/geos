@@ -96,8 +96,6 @@ private:
     */
     void addIntersectionPixels(std::vector<SegmentString*>& segStrings);
 
-    void round(const geom::Coordinate& pt, geom::Coordinate& ptOut);
-
     /**
     * Gets a list of the rounded coordinates.
     * Duplicate (collapsed) coordinates are removed.
@@ -105,7 +103,7 @@ private:
     * @param pts the coordinates to round
     * @return array of rounded coordinates
     */
-    std::unique_ptr<std::vector<geom::Coordinate>> round(const std::vector<geom::Coordinate>& pts);
+    std::vector<geom::Coordinate> round(const std::vector<geom::Coordinate>& pts) const;
 
     /**
     * Computes new segment strings which are rounded and contain
