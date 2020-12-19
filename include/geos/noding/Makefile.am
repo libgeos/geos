@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 SUBDIRS = \
 	snapround \
@@ -31,6 +31,7 @@ geos_HEADERS = \
 	SegmentIntersectionDetector.h \
 	SegmentIntersector.h \
 	SegmentNode.h \
+	SegmentNode.inl \
 	SegmentNodeList.h \
 	SegmentPointComparator.h \
 	SegmentSetMutualIntersector.h \

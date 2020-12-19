@@ -50,27 +50,26 @@ static Profiler* profiler = Profiler::instance();
 #endif
 
 
-SegmentNode*
+void
 SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
 {
-    nodeQue.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    SegmentNode* eiNew = &(nodeQue.back());
-
-    std::pair<SegmentNodeList::iterator, bool> p = nodeMap.insert(eiNew);
-    if(p.second) {    // new SegmentNode inserted
-        return eiNew;
-    }
-    else {
-        // sanity check
-        assert(eiNew->coord.equals2D(intPt));
-        nodeQue.pop_back();
-        return *(p.first);
-    }
+    SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    nodeMap.push_back(sn);
+    ready = false;
 }
 
+void SegmentNodeList::prepare() const {
+    if (!ready) {
+        std::sort(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
+            return s1.compareTo(s2) < 0;
+        });
 
-SegmentNodeList::~SegmentNodeList()
-{
+        nodeMap.erase(std::unique(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
+            return s1.compareTo(s2) == 0;
+        }), nodeMap.end());
+
+        ready = true;
+    }
 }
 
 void
@@ -125,11 +124,11 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 
     // there should always be at least two entries in the list,
     // since the endpoints are nodes
-    iterator it = begin();
-    SegmentNode* eiPrev = *it;
+    auto it = begin();
+    const SegmentNode* eiPrev = &(*it);
     ++it;
-    for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
+    for(auto itEnd = end(); it != itEnd; ++it) {
+        const SegmentNode* ei = &(*it);
         bool isCollapsed = findCollapseIndex(*eiPrev, *ei,
                                              collapsedVertexIndex);
         if(isCollapsed) {
@@ -143,7 +142,7 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 /* private */
 bool
 SegmentNodeList::findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
-                                   size_t& collapsedVertexIndex) const
+                                   size_t& collapsedVertexIndex)
 {
     assert(ei1.segmentIndex >= ei0.segmentIndex);
     // only looking for equal nodes
@@ -184,12 +183,12 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 
     // there should always be at least two entries in the list
     // since the endpoints are nodes
-    iterator it = begin();
-    SegmentNode* eiPrev = *it;
+    auto it = begin();
+    const SegmentNode* eiPrev = &(*it);
     assert(eiPrev);
     ++it;
-    for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
+    for(auto itEnd = end(); it != itEnd; ++it) {
+        const SegmentNode* ei = &(*it);
         assert(ei);
 
         if(! ei->compareTo(*eiPrev)) {
@@ -282,23 +281,22 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     if (useIntPt1) {
         pts.emplace_back(ei1->coord);
     }
-    return;
 }
 
 
 /*public*/
-std::unique_ptr<std::vector<Coordinate>>
+std::vector<Coordinate>
 SegmentNodeList::getSplitCoordinates()
 {
     // ensure that the list has entries for the first and last point of the edge
     addEndpoints();
-    std::unique_ptr<std::vector<Coordinate>> coordList(new std::vector<Coordinate>);
+    std::vector<Coordinate> coordList;
     // there should always be at least two entries in the list, since the endpoints are nodes
-    iterator it = begin();
-    SegmentNode* eiPrev = *it;
-    for(iterator itEnd = end(); it != itEnd; ++it) {
-        SegmentNode* ei = *it;
-        addEdgeCoordinates(eiPrev, ei, *coordList);
+    auto it = begin();
+    const SegmentNode* eiPrev = &(*it);
+    for(auto itEnd = end(); it != itEnd; ++it) {
+        const SegmentNode* ei = &(*it);
+        addEdgeCoordinates(eiPrev, ei, coordList);
         eiPrev = ei;
     }
     return coordList;
@@ -323,8 +321,8 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 {
     os << "Intersections: (" << nlist.nodeMap.size() << "):" << std::endl;
 
-    for(const SegmentNode* ei: nlist.nodeMap) {
-        os << " " << *ei;
+    for(const SegmentNode& ei: nlist.nodeMap) {
+        os << " " << ei;
     }
     return os;
 }

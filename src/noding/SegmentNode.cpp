@@ -26,7 +26,6 @@
 #include <iomanip>
 
 #include <geos/noding/SegmentNode.h>
-#include <geos/noding/SegmentPointComparator.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 
@@ -36,81 +35,25 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-
 /*public*/
-SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
+SegmentNode::SegmentNode(const NodedSegmentString& ss, const geom::Coordinate& nCoord,
                          std::size_t nSegmentIndex, int nSegmentOctant)
-    :
-    segString(ss),
-    segmentOctant(nSegmentOctant),
-    coord(nCoord),
-    segmentIndex(nSegmentIndex)
+        :
+        segString(&ss),
+        segmentOctant(nSegmentOctant),
+        coord(nCoord),
+        segmentIndex(nSegmentIndex)
 {
     // Number of points in NodedSegmentString is one-more number of segments
-    assert(segmentIndex < segString.size());
+    assert(segmentIndex < segString->size());
 
     isInteriorVar = \
-                    !coord.equals2D(segString.getCoordinate(segmentIndex));
+            !coord.equals2D(segString->getCoordinate(segmentIndex));
 
 }
 
 
-bool
-SegmentNode::isEndPoint(unsigned int maxSegmentIndex) const
-{
-    if(segmentIndex == 0 && ! isInteriorVar) {
-        return true;
-    }
-    if(segmentIndex == maxSegmentIndex) {
-        return true;
-    }
-    return false;
-}
-
-/**
- * @return -1 this EdgeIntersection is located before the argument location
- * @return 0 this EdgeIntersection is at the argument location
- * @return 1 this EdgeIntersection is located after the argument location
- */
-int
-SegmentNode::compareTo(const SegmentNode& other)
-{
-    if(segmentIndex < other.segmentIndex) {
-        return -1;
-    }
-    if(segmentIndex > other.segmentIndex) {
-        return 1;
-    }
-
-#if GEOS_DEBUG
-    std::cerr << setprecision(17) << "compareTo: " << *this << ", " << other << std::endl;
-#endif
-
-    if(coord.equals2D(other.coord)) {
-
-#if GEOS_DEBUG
-        std::cerr << " Coordinates equal!" << std::endl;
-#endif
-
-        return 0;
-    }
-
-#if GEOS_DEBUG
-    std::cerr << " Coordinates do not equal!" << std::endl;
-#endif
-
-    // an exterior node is the segment start point,
-    // so always sorts first
-    // this guards against a robustness problem
-    // where the octants are not reliable
-    if (! isInteriorVar) return -1;
-    if (! other.isInteriorVar) return 1;
-
-    return SegmentPointComparator::compare(segmentOctant, coord,
-                                           other.coord);
-}
-
-std::ostream&
+    std::ostream&
 operator<< (std::ostream& os, const SegmentNode& n)
 {
     return os << n.coord << " seg#=" << n.segmentIndex << " octant#=" << n.segmentOctant << std::endl;
@@ -118,4 +61,8 @@ operator<< (std::ostream& os, const SegmentNode& n)
 
 } // namespace geos.noding
 } // namespace geos
+
+#ifndef GEOS_INLINE
+# include "geos/noding/SegmentNode.inl"
+#endif
 

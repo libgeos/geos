@@ -55,8 +55,14 @@ namespace noding { // geos::noding
  */
 class GEOS_DLL SegmentNodeList {
 private:
-    std::set<SegmentNode*, SegmentNodeLT> nodeMap;
-    std::deque<SegmentNode> nodeQue;
+    // Since we are adding frequently to the SegmentNodeList and iterating infrequently,
+    // it is faster to store all the SegmentNodes in a vector and sort/remove duplicates
+    // before iteration, rather than storing them in a set and continuously maintaining
+    // a sorted order.
+    mutable std::vector<SegmentNode> nodeMap;
+    mutable bool ready = false;
+
+    void prepare() const;
 
     // the parent edge
     const NodedSegmentString& edge;
@@ -118,28 +124,28 @@ private:
     void findCollapsesFromInsertedNodes(
         std::vector<std::size_t>& collapsedVertexIndexes) const;
 
-    bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
-                           size_t& collapsedVertexIndex) const;
+    static bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
+                           size_t& collapsedVertexIndex);
 
     void addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& coordList) const;
+
+public:
 
     // Declare type as noncopyable
     SegmentNodeList(const SegmentNodeList& other) = delete;
     SegmentNodeList& operator=(const SegmentNodeList& rhs) = delete;
 
-public:
-
     friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
-    typedef std::set<SegmentNode*, SegmentNodeLT> container;
-    typedef container::iterator iterator;
-    typedef container::const_iterator const_iterator;
+    using container = decltype(nodeMap);
+    using iterator = container::iterator;
+    using const_iterator = container::const_iterator;
 
-    SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
+    explicit SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
 
-    SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
+    explicit SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
 
-    ~SegmentNodeList();
+    ~SegmentNodeList() = default;
 
     const NodedSegmentString&
     getEdge() const
@@ -157,50 +163,39 @@ public:
      * @param intPt the intersection Coordinate, will be copied
      * @param segmentIndex
      */
-    SegmentNode* add(const geom::Coordinate& intPt, std::size_t segmentIndex);
+    void add(const geom::Coordinate& intPt, std::size_t segmentIndex);
 
-    SegmentNode*
+    void
     add(const geom::Coordinate* intPt, std::size_t segmentIndex)
     {
-        return add(*intPt, segmentIndex);
-    }
-
-    /*
-     * returns the set of SegmentNodes
-     */
-    //replaces iterator()
-    // TODO: obsolete this function
-    std::set<SegmentNode*, SegmentNodeLT>*
-    getNodes()
-    {
-        return &nodeMap;
+        add(*intPt, segmentIndex);
     }
 
     /// Return the number of nodes in this list
     size_t
     size() const
     {
+        prepare();
         return nodeMap.size();
     }
 
-    container::iterator
-    begin()
-    {
+    iterator begin() {
+        prepare();
         return nodeMap.begin();
     }
-    container::const_iterator
-    begin() const
-    {
+
+    const_iterator begin() const {
+        prepare();
         return nodeMap.begin();
     }
-    container::iterator
-    end()
-    {
+
+    iterator end() {
+        prepare();
         return nodeMap.end();
     }
-    container::const_iterator
-    end() const
-    {
+
+    const_iterator end() const {
+        prepare();
         return nodeMap.end();
     }
 
@@ -233,7 +228,7 @@ public:
     * @return an array of Coordinates
     *
     */
-    std::unique_ptr<std::vector<geom::Coordinate>> getSplitCoordinates();
+    std::vector<geom::Coordinate> getSplitCoordinates();
 
 
 };
