@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/inline.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/export.h>
@@ -91,7 +92,7 @@ private:
     */
     void initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole) const;
 
-    int labelDim(int dim, int depthDelta) const;
+    static int labelDim(int dim, int depthDelta);
     bool isHole(int index) const;
     bool isBoundary(int geomIndex) const;
 
@@ -101,12 +102,12 @@ private:
     */
     bool isShell(int geomIndex) const;
 
-    geom::Location locationRight(int depthDelta) const;
-    geom::Location locationLeft(int depthDelta) const;
+    static geom::Location locationRight(int depthDelta);
+    static geom::Location locationLeft(int depthDelta);
 
-    int delSign(int depthDel) const;
+    static int delSign(int depthDel);
     void copyInfo(const EdgeSourceInfo* info);
-    bool isHoleMerged(int geomIndex, const Edge* edge1, const Edge* edge2) const;
+    static bool isHoleMerged(int geomIndex, const Edge* edge1, const Edge* edge2);
 
 
 public:
@@ -153,7 +154,7 @@ public:
     */
     void merge(const Edge* edge);
 
-    void populateLabel(OverlayLabel &ovl) const;
+    void populateLabel(OverlayLabel &lbl) const;
 
     /*public*/
     bool compareTo(const Edge& e) const
@@ -191,3 +192,6 @@ bool EdgeComparator(const Edge* a, const Edge* b);
 } // namespace geos.operation
 } // namespace geos
 
+#ifdef GEOS_INLINE
+#include "geos/operation/overlayng/Edge.inl"
+#endif
