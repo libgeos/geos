@@ -55,7 +55,14 @@ namespace noding { // geos::noding
  */
 class GEOS_DLL SegmentNodeList {
 private:
-    std::set<SegmentNode, SegmentNodeLT> nodeMap;
+    // Since we are adding frequently to the SegmentNodeList and iterating infrequently,
+    // it is faster to store all the SegmentNodes in a vector and sort/remove duplicates
+    // before iteration, rather than storing them in a set and continuously maintaining
+    // a sorted order.
+    mutable std::vector<SegmentNode> nodeMap;
+    mutable bool ready = false;
+
+    void prepare() const;
 
     // the parent edge
     const NodedSegmentString& edge;
@@ -169,29 +176,17 @@ public:
     size_t
     size() const
     {
+        prepare();
         return nodeMap.size();
     }
 
-    container::iterator
-    begin()
-    {
-        return nodeMap.begin();
-    }
-    container::const_iterator
-    begin() const
-    {
-        return nodeMap.begin();
-    }
-    container::iterator
-    end()
-    {
-        return nodeMap.end();
-    }
-    container::const_iterator
-    end() const
-    {
-        return nodeMap.end();
-    }
+    iterator begin();
+
+    const_iterator begin() const;
+
+    iterator end();
+
+    const_iterator end() const;
 
     /**
      * Adds entries for the first and last points of the edge to the list

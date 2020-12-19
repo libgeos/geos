@@ -46,15 +46,11 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL SegmentNode {
 private:
-    const NodedSegmentString& segString;
+    const NodedSegmentString* segString;
 
     int segmentOctant;
 
     bool isInteriorVar;
-
-    // Declare type as noncopyable
-    SegmentNode(const SegmentNode& other) = delete;
-    SegmentNode& operator=(const SegmentNode& rhs) = delete;
 
 public:
     friend std::ostream& operator<< (std::ostream& os, const SegmentNode& n);

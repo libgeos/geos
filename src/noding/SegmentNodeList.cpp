@@ -53,11 +53,55 @@ static Profiler* profiler = Profiler::instance();
 void
 SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
 {
-    nodeMap.emplace(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    nodeMap.push_back(sn);
+    ready = false;
 }
 
 SegmentNodeList::~SegmentNodeList()
 {
+}
+
+void SegmentNodeList::prepare() const {
+    if (!ready) {
+        std::sort(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
+            return s1.compareTo(s2) < 0;
+        });
+
+        nodeMap.erase(std::unique(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
+            return s1.compareTo(s2) == 0;
+        }), nodeMap.end());
+
+        ready = true;
+    }
+}
+
+SegmentNodeList::iterator
+SegmentNodeList::begin()
+{
+    prepare();
+    return nodeMap.begin();
+}
+
+SegmentNodeList::const_iterator
+SegmentNodeList::begin() const
+{
+    prepare();
+    return nodeMap.begin();
+}
+
+SegmentNodeList::iterator
+SegmentNodeList::end()
+{
+    prepare();
+    return nodeMap.end();
+}
+
+SegmentNodeList::const_iterator
+SegmentNodeList::end() const
+{
+    prepare();
+    return nodeMap.end();
 }
 
 void
@@ -112,10 +156,10 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 
     // there should always be at least two entries in the list,
     // since the endpoints are nodes
-    iterator it = begin();
+    auto it = begin();
     const SegmentNode* eiPrev = &(*it);
     ++it;
-    for(iterator itEnd = end(); it != itEnd; ++it) {
+    for(auto itEnd = end(); it != itEnd; ++it) {
         const SegmentNode* ei = &(*it);
         bool isCollapsed = findCollapseIndex(*eiPrev, *ei,
                                              collapsedVertexIndex);

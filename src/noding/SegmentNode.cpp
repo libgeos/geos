@@ -41,16 +41,16 @@ namespace noding { // geos.noding
 SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
                          std::size_t nSegmentIndex, int nSegmentOctant)
     :
-    segString(ss),
+    segString(&ss),
     segmentOctant(nSegmentOctant),
     coord(nCoord),
     segmentIndex(nSegmentIndex)
 {
     // Number of points in NodedSegmentString is one-more number of segments
-    assert(segmentIndex < segString.size());
+    assert(segmentIndex < segString->size());
 
     isInteriorVar = \
-                    !coord.equals2D(segString.getCoordinate(segmentIndex));
+                    !coord.equals2D(segString->getCoordinate(segmentIndex));
 
 }
 
