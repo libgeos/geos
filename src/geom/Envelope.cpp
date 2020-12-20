@@ -142,40 +142,6 @@ Envelope::init(Envelope env)
 }
 #endif // 0
 
-/*public*/
-void
-Envelope::expandToInclude(const Envelope* other)
-{
-    if(other->isNull()) {
-        return;
-    }
-    if(isNull()) {
-        minx = other->getMinX();
-        maxx = other->getMaxX();
-        miny = other->getMinY();
-        maxy = other->getMaxY();
-    }
-    else {
-        if(other->minx < minx) {
-            minx = other->minx;
-        }
-        if(other->maxx > maxx) {
-            maxx = other->maxx;
-        }
-        if(other->miny < miny) {
-            miny = other->miny;
-        }
-        if(other->maxy > maxy) {
-            maxy = other->maxy;
-        }
-    }
-}
-
-void
-Envelope::expandToInclude(const Envelope& other)
-{
-    return expandToInclude(&other);
-}
 
 /*public*/
 bool
@@ -352,21 +318,6 @@ Envelope::expandBy(double deltaX, double deltaY)
     }
 }
 
-/*public*/
-Envelope&
-Envelope::operator=(const Envelope& e)
-{
-#if GEOS_DEBUG
-    std::cerr << "Envelope assignment" << std::endl;
-#endif
-    if(&e != this) {  // is this check useful ?
-        minx = e.minx;
-        maxx = e.maxx;
-        miny = e.miny;
-        maxy = e.maxy;
-    }
-    return *this;
-}
 
 
 } // namespace geos::geom

@@ -60,21 +60,6 @@ Envelope::Envelope(const Coordinate& p)
 }
 
 /*public*/
-INLINE
-Envelope::Envelope(const Envelope& env)
-        :
-        minx(env.minx),
-        maxx(env.maxx),
-        miny(env.miny),
-        maxy(env.maxy)
-{
-#if GEOS_DEBUG
-    std::cerr << "Envelope copy" << std::endl;
-#endif
-    //init(env.minx, env.maxx, env.miny, env.maxy);
-}
-
-/*public*/
 INLINE double
 Envelope::distance(double x0, double y0, double x1, double y1)
 {
@@ -88,6 +73,41 @@ INLINE void
 Envelope::expandToInclude(const Coordinate& p)
 {
     expandToInclude(p.x, p.y);
+}
+
+INLINE void
+Envelope::expandToInclude(const Envelope& other)
+{
+    return expandToInclude(&other);
+}
+
+/*public*/
+INLINE void
+Envelope::expandToInclude(const Envelope* other)
+{
+    if(other->isNull()) {
+        return;
+    }
+    if(isNull()) {
+        minx = other->getMinX();
+        maxx = other->getMaxX();
+        miny = other->getMinY();
+        maxy = other->getMaxY();
+    }
+    else {
+        if(other->minx < minx) {
+            minx = other->minx;
+        }
+        if(other->maxx > maxx) {
+            maxx = other->maxx;
+        }
+        if(other->miny < miny) {
+            miny = other->miny;
+        }
+        if(other->maxy > maxy) {
+            maxy = other->maxy;
+        }
+    }
 }
 
 /*public*/

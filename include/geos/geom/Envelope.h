@@ -93,12 +93,6 @@ public:
      */
     Envelope(const Coordinate& p);
 
-    /// Copy constructor
-    Envelope(const Envelope& env);
-
-    /// Assignment operator
-    Envelope& operator=(const Envelope& e);
-
     /** \brief
      * Create an Envelope from an Envelope string representation produced
      * by Envelope::toString()
