@@ -224,8 +224,7 @@ Node::setLabelBoundary(int argIndex)
 Location
 Node::computeMergedLocation(const Label& label2, int eltIndex)
 {
-    Location loc = Location::NONE;
-    loc = label.getLocation(eltIndex);
+    Location loc = label.getLocation(eltIndex);
     if(!label2.isNull(eltIndex)) {
         Location nLoc = label2.getLocation(eltIndex);
         if(loc != Location::BOUNDARY) {
