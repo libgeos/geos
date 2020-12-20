@@ -14,6 +14,7 @@ Changes in 3.8.2dev
   - Fix segfault in GEOSInterpolate against empty eollections (#1055,
     Sandro Santilli)
   - Fix GEOSProjectNormalized return -1 on exception (#1058, Joris Van den Bossche)
+  - Fix memory management quirk in CAPI (#1050, Paul Ramsey)
 
 
 Changes in 3.8.1

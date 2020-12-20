@@ -4411,16 +4411,21 @@ extern "C" {
         try {
             using geos::geom::LinearRing;
 
-            auto vholes = geos::detail::make_unique<std::vector<LinearRing*>>(nholes);
-
+            /*
+            * First check that we can cast these generic
+            * geometry pointers into linearrings. Then
+            * convert them to unique_ptr to pass to the constructor
+            * so we can get a no-copy transfer of the data
+            */
+            std::vector<LinearRing*> tmpholes(nholes);
             for (size_t i = 0; i < nholes; i++) {
-                (*vholes)[i] = dynamic_cast<LinearRing*>(holes[i]);
-                if ((*vholes)[i] == nullptr) {
+                LinearRing* lr = dynamic_cast<LinearRing*>(holes[i]);
+                if (! lr) {
                     handle->ERROR_MESSAGE("Hole is not a LinearRing");
                     return NULL;
                 }
+                tmpholes[i] = lr;
             }
-
             LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
             if(! nshell) {
                 handle->ERROR_MESSAGE("Shell is not a LinearRing");
@@ -4428,7 +4433,15 @@ extern "C" {
             }
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createPolygon(nshell, vholes.release());
+            /* Create unique_ptr version for constructor */
+            std::vector<std::unique_ptr<LinearRing>> vholes;
+            vholes.reserve(nholes);
+            for (LinearRing* lr: tmpholes) {
+                vholes.emplace_back(lr);
+            }
+            std::unique_ptr<LinearRing> shell(nshell);
+
+            return gf->createPolygon(std::move(shell), std::move(vholes)).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
