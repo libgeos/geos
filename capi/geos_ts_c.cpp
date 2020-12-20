@@ -2408,22 +2408,31 @@ extern "C" {
         //assert(0 != holes);
 
         return execute(extHandle, [&]() {
-            auto vholes = geos::detail::make_unique<std::vector<LinearRing*>>(nholes);
 
+            std::vector<LinearRing*> tmpholes(nholes);
             for (size_t i = 0; i < nholes; i++) {
-                (*vholes)[i] = dynamic_cast<LinearRing*>(holes[i]);
-                if ((*vholes)[i] == nullptr) {
+                LinearRing* lr = dynamic_cast<LinearRing*>(holes[i]);
+                if (! lr) {
                     throw IllegalArgumentException("Hole is not a LinearRing");
                 }
+                tmpholes[i] = lr;
             }
-
             LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
             if(! nshell) {
                 throw IllegalArgumentException("Shell is not a LinearRing");
             }
-            const GeometryFactory* gf = shell->getFactory();
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createPolygon(nshell, vholes.release());
+            /* Create unique_ptr version for constructor */
+            std::vector<std::unique_ptr<LinearRing>> vholes;
+            vholes.reserve(nholes);
+            for (LinearRing* lr: tmpholes) {
+                vholes.emplace_back(lr);
+            }
+            std::unique_ptr<LinearRing> shell(nshell);
+
+            return gf->createPolygon(std::move(shell), std::move(vholes)).release();
         });
     }
 
