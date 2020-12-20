@@ -3,7 +3,7 @@ Changes in 3.9.1
 2021-xx-xx
 
 - Bug fixes / improvements:
-
+  - Windows memory management quirk in createPolygon CAPI (#1050, Paul Ramsey)
 
 
 Changes in 3.9.0
