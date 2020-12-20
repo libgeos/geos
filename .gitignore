@@ -36,9 +36,13 @@ tests/bigtest/TestSweepLineSpeed
 tests/bigtest/bug234
 tests/geostest/geostest
 benchmarks/algorithm/InteriorPointAreaPerfTest
+benchmarks/algorithm/UnaryUnionSegmentsPerfTest
+benchmarks/algorithm/VoronoiPerfTest
+benchmarks/capi/GEOSPreparedContainsPerfTest
+benchmarks/capi/IntersectionPerfTest
+benchmarks/capi/memleak_mp_prep
 benchmarks/operation/buffer/IteratedBufferStressTest
 benchmarks/operation/predicate/RectangleIntersectsPerfTest
-benchmarks/capi/memleak_mp_prep
 benchmarks/ClassSizes
 include/geos/platform.h
 include/geos/platform.h.disabled

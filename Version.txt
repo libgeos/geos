@@ -9,13 +9,13 @@ GEOS_PATCH_WORD=dev
 
 # GEOS CAPI Versions
 #
-# Always increase the revision value.
-# Increase the current value whenever an interface has been
-# added, removed or changed.
-# Increase the age value only if the changes made to the ABI
-# are backward compatible.
+# - For a release with no interface changes just bump REVISION.
+#   ( Even if *nothing* changed in CAPI )
+# - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
+# - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
+#   ( THIS MUST BE CAREFULLY AVOIDED )
 CAPI_INTERFACE_CURRENT=14
-CAPI_INTERFACE_REVISION=3
+CAPI_INTERFACE_REVISION=4
 CAPI_INTERFACE_AGE=13
 
 # JTS Port

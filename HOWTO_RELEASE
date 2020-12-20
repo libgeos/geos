@@ -9,10 +9,6 @@
     - CAPI_INTERFACE_REVISION
     - CAPI_INTERFACE_AGE
 
-    Always increase the revision value.
-    Increase the current value whenever an interface has been added, removed or changed.
-    Increase the age value only if the changes made to the ABI are backward compatible.
-
 2. Run 'make distcheck', fix any problem with it.
 
 3. Update the NEWS file (extract most important things from the

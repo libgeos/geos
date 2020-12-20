@@ -1,0 +1,19 @@
+<run>
+  <precisionModel />
+
+<case>
+<desc>
+Empty component in multilinestring
+See https://trac.osgeo.org/geos/ticket/1085
+</desc>
+  <a>
+    LINESTRING(0 0, 10 0)
+  </a>
+  <b>
+    MULTILINESTRING((0 10,10 -10),EMPTY)
+  </b>
+<test><op name="relate" arg3="0F1FF0102" arg1="A" arg2="B">true </op> </test>
+</case>
+
+
+</run>
