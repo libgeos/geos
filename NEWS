@@ -15,6 +15,7 @@ Changes in 3.8.2dev
     Sandro Santilli)
   - Fix GEOSProjectNormalized return -1 on exception (#1058, Joris Van den Bossche)
   - Fix memory management quirk in CAPI (#1050, Paul Ramsey)
+  - Allow build on Apple ARM64 (Taras Zakharko)
 
 
 Changes in 3.8.1
