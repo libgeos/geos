@@ -4,6 +4,8 @@ Changes in 3.9.1
 
 - Bug fixes / improvements:
   - Windows memory management quirk in createPolygon CAPI (#1050, Paul Ramsey)
+  - Allow build on Apple ARM64 (Taras Zakharko)
+
 
 
 Changes in 3.9.0
