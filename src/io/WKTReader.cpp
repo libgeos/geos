@@ -88,7 +88,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
-    return std::move(coordinates);
+    return RETURN_UNIQUE_PTR(coordinates);
 }
 
 
