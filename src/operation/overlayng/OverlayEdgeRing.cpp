@@ -41,8 +41,9 @@ OverlayEdgeRing::OverlayEdgeRing(OverlayEdge* start, const GeometryFactory* geom
     , locator(nullptr)
     , shell(nullptr)
 {
-    computeRingPts(start, ringPts);
-    computeRing(ringPts, geometryFactory);
+    auto ringPts = detail::make_unique<CoordinateArraySequence>();
+    computeRingPts(start, *ringPts);
+    computeRing(std::move(ringPts), geometryFactory);
 }
 
 /*public*/
@@ -143,15 +144,14 @@ OverlayEdgeRing::computeRingPts(OverlayEdge* start, CoordinateArraySequence& pts
     }
     while (edge != start);
     closeRing(pts);
-    return;
 }
 
 /*private*/
 void
-OverlayEdgeRing::computeRing(const CoordinateArraySequence& p_ringPts, const GeometryFactory* geometryFactory)
+OverlayEdgeRing::computeRing(std::unique_ptr<CoordinateArraySequence> && p_ringPts, const GeometryFactory* geometryFactory)
 {
     if (ring != nullptr) return;   // don't compute more than once
-    ring.reset(geometryFactory->createLinearRing(p_ringPts));
+    ring = geometryFactory->createLinearRing(std::move(p_ringPts));
     m_isHole = algorithm::Orientation::isCCW(ring->getCoordinatesRO());
 }
 
@@ -165,7 +165,7 @@ OverlayEdgeRing::computeRing(const CoordinateArraySequence& p_ringPts, const Geo
 const CoordinateArraySequence&
 OverlayEdgeRing::getCoordinates()
 {
-    return ringPts;
+    return *(detail::down_cast<const CoordinateArraySequence*>(ring->getCoordinatesRO()));
 }
 
 /**
@@ -242,7 +242,7 @@ OverlayEdgeRing::isInRing(const Coordinate& pt)
 const Coordinate&
 OverlayEdgeRing::getCoordinate()
 {
-    return ringPts.getAt(0);
+    return ring->getCoordinatesRO()->getAt(0);
 }
 
 /**

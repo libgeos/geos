@@ -18,6 +18,7 @@
 
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
 #include <geos/operation/overlayng/EdgeMerger.h>
+#include <geos/util.h>
 
 using geos::operation::valid::RepeatedPointRemover;
 
@@ -128,8 +129,8 @@ EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
         // Record that a non-collapsed edge exists for the parent geometry
         hasEdges[info->getIndex()] = true;
         // Allocate the new Edge locally in a std::deque
-        std::unique_ptr<CoordinateSequence> ssPts = ss->getCoordinates()->clone();
-        edgeQue.emplace_back(ssPts.release(), info);
+        NodedSegmentString* nss = detail::down_cast<NodedSegmentString*>(ss);
+        edgeQue.emplace_back(nss->releaseCoordinates(), info);
         Edge* newEdge = &(edgeQue.back());
         createdEdges.push_back(newEdge);
     }

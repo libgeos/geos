@@ -88,6 +88,12 @@ NodedSegmentString::getCoordinates() const
     return pts.get();
 }
 
+geom::CoordinateSequence*
+NodedSegmentString::releaseCoordinates()
+{
+    return pts.release();
+}
+
 /* virtual public */
 bool
 NodedSegmentString::isClosed() const
