@@ -103,6 +103,19 @@ void object::test<1>
 
 // }
 
+template<>
+template<>
+void object::test<3>()
+{
+    auto gf = GeometryFactory::getDefaultInstance();
+
+    auto mp = gf->createMultiPolygon();
+
+    MakeValid mv;
+    auto result = mv.build(mp.get());
+
+    ensure(result->isValid());
+}
 
 
 } // namespace tut
