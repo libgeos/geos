@@ -37,9 +37,7 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
     , context(nContext)
     , start(nstart)
     , end(nend)
-    , env(newPts[nstart], newPts[nend])
-    , id(-1)
-    , envIsSet(false)
+    , env()
 {}
 
 const Envelope&
@@ -51,12 +49,11 @@ MonotoneChain::getEnvelope()
 const Envelope&
 MonotoneChain::getEnvelope(double expansionDistance)
 {
-    if (!envIsSet) {
+    if (env.isNull()) {
         env.init(pts[start], pts[end]);
         if (expansionDistance > 0.0) {
             env.expandBy(expansionDistance);
         }
-        envIsSet = true;
     }
     return env;
 }

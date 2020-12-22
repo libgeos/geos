@@ -55,7 +55,6 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
 
     if (!indexBuilt) {
         for(auto& mc : monoChains) {
-            mc.setId(idCounter++);
             index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
         }
         indexBuilt = true;
@@ -89,7 +88,7 @@ MCIndexNoder::intersectChains()
              * pair of chains once and that we don't compare a
              * chain to itself
              */
-            if(testChain->getId() > queryChain.getId()) {
+            if(testChain > &queryChain) {
                 queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
                 nOverlaps++;
             }

@@ -51,11 +51,6 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
                                     segStr, monoChains);
 
-    // std::size_t n = segChains.size();
-    // monoChains.reserve(monoChains.size() + n);
-    for(auto& mc : monoChains) {
-        mc.setId(processCounter++);
-    }
 }
 
 
@@ -102,7 +97,6 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings
 {
     if (!indexBuilt) {
         for (auto& mc: indexChains) {
-            mc.setId(indexCounter++);
             index->insert(&(mc.getEnvelope()), &mc);
         }
         indexBuilt = true;

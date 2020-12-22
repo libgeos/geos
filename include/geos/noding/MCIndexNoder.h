@@ -68,7 +68,6 @@ class GEOS_DLL MCIndexNoder : public SinglePassNoder {
 private:
     std::vector<index::chain::MonotoneChain> monoChains;
     index::strtree::SimpleSTRtree index;
-    int idCounter;
     std::vector<SegmentString*>* nodedSegStrings;
     // statistics
     int nOverlaps;
@@ -83,7 +82,6 @@ public:
 
     MCIndexNoder(SegmentIntersector* nSegInt = nullptr, double p_overlapTolerance = 0.0)
         : SinglePassNoder(nSegInt)
-        , idCounter(0)
         , nodedSegStrings(nullptr)
         , nOverlaps(0)
         , overlapTolerance(p_overlapTolerance)
