@@ -28,12 +28,6 @@ using namespace geos::algorithm;
 
 namespace {
 
-/**
- * A value which is safely greater than the relative round-off
- * error in double-precision numbers
- */
-double constexpr DP_SAFE_EPSILON =  1e-15;
-
 inline int
 OrientationDD(const DD &dd)
 {
@@ -86,6 +80,7 @@ CGAlgorithmsDD::orientationIndex(double p1x, double p1y,
 }
 
 
+// inlining this method worsened performance slighly
 int
 CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                  const Coordinate& p2,
@@ -116,43 +111,6 @@ CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
     DD x2(dx2);
     DD y2(dy2);
     return CGAlgorithmsDD::signOfDet2x2(x1, y1, x2, y2);
-}
-
-int
-CGAlgorithmsDD::orientationIndexFilter(double pax, double pay,
-                                       double pbx, double pby,
-                                       double pcx, double pcy)
-{
-    double detsum;
-    double const detleft = (pax - pcx) * (pby - pcy);
-    double const detright = (pay - pcy) * (pbx - pcx);
-    double const det = detleft - detright;
-
-    if(detleft > 0.0) {
-        if(detright <= 0.0) {
-            return orientation(det);
-        }
-        else {
-            detsum = detleft + detright;
-        }
-    }
-    else if(detleft < 0.0) {
-        if(detright >= 0.0) {
-            return orientation(det);
-        }
-        else {
-            detsum = -detleft - detright;
-        }
-    }
-    else {
-        return orientation(det);
-    }
-
-    double const errbound = DP_SAFE_EPSILON * detsum;
-    if((det >= errbound) || (-det >= errbound)) {
-        return orientation(det);
-    }
-    return CGAlgorithmsDD::FAILURE;
 }
 
 Coordinate
@@ -229,6 +187,10 @@ CGAlgorithmsDD::detDD(const DD& x1, const DD& y1, const DD& x2, const DD& y2)
 {
     return (x1 * y2) - (y1 * x2);
 }
+
+#ifndef GEOS_INLINE
+#include "geos/algorithm/CGAlgorithmsDD.inl"
+#endif
 
 } // namespace geos::algorithm
 } // namespace geos

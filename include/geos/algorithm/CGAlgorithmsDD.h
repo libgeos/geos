@@ -19,6 +19,7 @@
 #ifndef GEOS_ALGORITHM_CGALGORITHMDD_H
 #define GEOS_ALGORITHM_CGALGORITHMDD_H
 #include <geos/export.h>
+#include <geos/inline.h>
 #include <geos/math/DD.h>
 
 // Forward declarations
@@ -154,5 +155,9 @@ protected:
 
 } // namespace geos::algorithm
 } // namespace geos
+
+#ifdef GEOS_INLINE
+#include "geos/algorithm/CGAlgorithmsDD.inl"
+#endif
 
 #endif // GEOS_ALGORITHM_CGALGORITHM_H

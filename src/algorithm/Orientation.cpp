@@ -32,6 +32,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /* public static */
+// inlining this method worsened performance slightly
 int
 Orientation::index(const geom::Coordinate& p1, const geom::Coordinate& p2,
                    const geom::Coordinate& q)
