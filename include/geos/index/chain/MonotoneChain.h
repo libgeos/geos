@@ -193,11 +193,11 @@ private:
 
     /// Owned by this class
     geom::Envelope env;
-    bool envIsSet;
 
     /// useful for optimizing chain comparisons
     int id;
 
+    bool envIsSet;
 
     // Declare type as noncopyable
     // XXXXXX uncomment for MSVC support

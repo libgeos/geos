@@ -33,16 +33,14 @@ namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              std::size_t nstart, std::size_t nend, void* nContext)
-    :
-    pts(newPts),
-    context(nContext),
-    start(nstart),
-    end(nend),
-    env(newPts[nstart], newPts[nend]),
-    envIsSet(false),
-    id(-1)
-{
-}
+    : pts(newPts)
+    , context(nContext)
+    , start(nstart)
+    , end(nend)
+    , env(newPts[nstart], newPts[nend])
+    , id(-1)
+    , envIsSet(false)
+{}
 
 const Envelope&
 MonotoneChain::getEnvelope()
