@@ -53,9 +53,17 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
         add(s);
     }
 
+    if (!indexBuilt) {
+        for(auto& mc : monoChains) {
+            mc.setId(idCounter++);
+            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+        }
+        indexBuilt = true;
+    }
+
     intersectChains();
-//cerr<<"MCIndexNoder: # chain overlaps = "<<nOverlaps<<endl;
 }
+
 
 /*private*/
 void
@@ -66,12 +74,11 @@ MCIndexNoder::intersectChains()
     SegmentOverlapAction overlapAction(*segInt);
 
     std::vector<void*> overlapChains;
-    for(MonotoneChain* queryChain : monoChains) {
+    for(MonotoneChain& queryChain : monoChains) {
         GEOS_CHECK_FOR_INTERRUPTS();
 
-        assert(queryChain);
         overlapChains.clear();
-        const geom::Envelope& queryEnv = queryChain->getEnvelope(overlapTolerance);
+        const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);
         index.query(&queryEnv, overlapChains);
         for(void* hit : overlapChains) {
             MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
@@ -82,8 +89,8 @@ MCIndexNoder::intersectChains()
              * pair of chains once and that we don't compare a
              * chain to itself
              */
-            if(testChain->getId() > queryChain->getId()) {
-                queryChain->computeOverlaps(testChain, overlapTolerance, &overlapAction);
+            if(testChain->getId() > queryChain.getId()) {
+                queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
                 nOverlaps++;
             }
 
@@ -100,31 +107,14 @@ MCIndexNoder::intersectChains()
 void
 MCIndexNoder::add(SegmentString* segStr)
 {
-    std::vector<std::unique_ptr<MonotoneChain>> segChains;
+    // std::vector<std::unique_ptr<MonotoneChain>> segChains;
 
     // segChains will contain newly allocated MonotoneChain objects
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, segChains);
+                                    segStr, monoChains);
 
-    for(auto& mc : segChains) {
-        assert(mc);
-
-        mc->setId(idCounter++);
-        // index.insert(&(mc->getEnvelope()), mc.get());
-        index.insert(&(mc->getEnvelope(overlapTolerance)), mc.get());
-
-        // MonotoneChain objects deletion delegated to destructor
-        monoChains.push_back(mc.release());
-    }
 }
 
-MCIndexNoder::~MCIndexNoder()
-{
-    for(MonotoneChain* mc: monoChains) {
-        assert(mc);
-        delete mc;
-    }
-}
 
 void
 MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, std::size_t start1,
