@@ -141,18 +141,6 @@ public:
     void computeOverlaps(MonotoneChain* mc, double overlapTolerance,
                          MonotoneChainOverlapAction* mco);
 
-    void
-    setId(int nId)
-    {
-        id = nId;
-    }
-
-    inline int
-    getId() const
-    {
-        return id;
-    }
-
     void*
     getContext()
     {
@@ -193,15 +181,11 @@ private:
 
     /// Owned by this class
     geom::Envelope env;
-    bool envIsSet;
-
-    /// useful for optimizing chain comparisons
-    int id;
-
 
     // Declare type as noncopyable
-    MonotoneChain(const MonotoneChain& other) = delete;
-    MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
+    // XXXXXX uncomment for MSVC support
+    // MonotoneChain(const MonotoneChain& other) = delete;
+    // MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
 };
 
 } // namespace geos::index::chain

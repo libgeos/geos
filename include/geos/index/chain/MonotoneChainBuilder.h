@@ -53,14 +53,6 @@ public:
     MonotoneChainBuilder() {}
 
     /** \brief
-     * Return a newly-allocated vector of newly-allocated
-     * MonotoneChain objects for the given CoordinateSequence.
-     */
-    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
-        const geom::CoordinateSequence* pts,
-        void* context);
-
-    /** \brief
      * Computes a list of the {@link MonotoneChain}s for a list of coordinates,
      * attaching a context data object to each.
      *
@@ -70,13 +62,7 @@ public:
      */
     static void getChains(const geom::CoordinateSequence* pts,
                           void* context,
-                          std::vector<std::unique_ptr<MonotoneChain>>& mcList);
-
-    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
-    getChains(const geom::CoordinateSequence* pts)
-    {
-        return getChains(pts, nullptr);
-    }
+                          std::vector<MonotoneChain>& mcList);
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this

@@ -40,26 +40,16 @@ namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
-/* static public */
-std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
-MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
-{
-    // TODO clean this up with std::make_unique (C++14)
-    std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> mcList{new std::vector<std::unique_ptr<MonotoneChain>>()};
-    getChains(pts, context, *mcList);
-    return mcList;
-}
 
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
-                                std::vector<std::unique_ptr<MonotoneChain>>& mcList)
+                                std::vector<MonotoneChain>& mcList)
 {
     std::size_t chainStart = 0;
     do {
         std::size_t chainEnd = findChainEnd(*pts, chainStart);
-        MonotoneChain *mc = new MonotoneChain(*pts, chainStart, chainEnd, context);
-        mcList.emplace_back(mc);
+        mcList.emplace_back(*pts, chainStart, chainEnd, context);
         chainStart = chainEnd;
     }
     while (chainStart < (pts->size() - 1));
