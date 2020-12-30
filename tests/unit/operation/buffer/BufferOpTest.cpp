@@ -3,6 +3,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -446,6 +447,23 @@ void object::test<14>
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
 }
+
+
+// This now works since buffer ring orientation is changed to use signed-area test.
+// testBowtiePolygonLargestAreaRetained
+template<>
+template<>
+void object::test<15>
+()
+{
+    std::string wkt0("POLYGON ((10 10, 50 10, 25 35, 35 35, 10 10))");
+    GeomPtr g0(wktreader.read(wkt0));
+    GeomPtr gresult = g0->buffer(0.0);
+    std::string wkt1("POLYGON ((10 10, 30 30, 50 10, 10 10))");
+    GeomPtr gexpected(wktreader.read(wkt1));
+    ensure_equals_geometry(gresult.get(), gexpected.get());
+}
+
 
 } // namespace tut
 

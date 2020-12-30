@@ -2,6 +2,7 @@
 // Test Suite for geos::simplify::DouglasPeuckerSimplifierTest
 
 #include <tut/tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
@@ -353,7 +354,7 @@ void object::test<11>
 // 13 - Polygon with inner ring whose extent is less than the simplify distance (#741)
 template<>
 template<>
-void object::test<13>
+void object::test<12>
 ()
 {
     std::string wkt_in("POLYGON ((0 0,0 1,1 1,0 0),(0.1 0.1,0.2 0.1,0.2 0.2,0.1 0.1))");
@@ -371,6 +372,28 @@ void object::test<13>
 
     ensure(simplified->equalsExact(expected.get()));
 }
+
+/**
+* Test that a polygon made invalid by simplification
+* is fixed in a sensible way.
+* Fixed by buffer(0) area-base orientation
+* See https://github.com/locationtech/jts/issues/498
+*/
+template<>
+template<>
+void object::test<13>
+()
+{
+    std::string wkt_in("POLYGON ((21.32686 47.78723, 21.32386 47.79023, 21.32186 47.80223, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.33886 47.81123, 21.32686 47.82023, 21.32586 47.82723, 21.32786 47.82323, 21.33886 47.82623, 21.34186 47.82123, 21.36386 47.82223, 21.40686 47.81723, 21.32686 47.78723))");
+    std::string wkt_ex("POLYGON ((21.32686 47.78723, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.328068201892744 47.823286782334385, 21.33886 47.82623, 21.34186 47.82123, 21.40686 47.81723, 21.32686 47.78723))");
+    GeomPtr g(wktreader.read(wkt_in));
+    GeomPtr expected(wktreader.read(wkt_ex));
+    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0.0036);
+    ensure(simplified->isValid());
+    ensure_equals_geometry(simplified.get(), expected.get());
+}
+
+
 
 } // namespace tut
 

@@ -89,6 +89,32 @@ public:
     */
     static bool isCCW(const geom::CoordinateSequence* ring);
 
+    /**
+    * Tests if a ring defined by a CoordinateSequence is
+    * oriented counter-clockwise, using the signed area of the ring.
+    *
+    *  * The list of points is assumed to have the first and last points equal.
+    *  * This handles coordinate lists which contain repeated points.
+    *  * This handles rings which contain collapsed segments
+    *    (in particular, along the top of the ring).
+    *  * This handles rings which are invalid due to self-intersection
+    *
+    * This algorithm is guaranteed to work with valid rings.
+    * For invalid rings (containing self-intersections),
+    * the algorithm determines the orientation of
+    * the largest enclosed area (including overlaps).
+    * This provides a more useful result in some situations, such as buffering.
+    *
+    * However, this approach may be less accurate in the case of
+    * rings with almost zero area.
+    * (Note that the orientation of rings with zero area is essentially
+    * undefined, and hence non-deterministic.)
+    *
+    * @param ring a CoordinateSequence forming a ring (with first and last point identical)
+    * @return true if the ring is oriented counter-clockwise.
+    */
+    static bool isCCWArea(const geom::CoordinateSequence* ring);
+
 };
 
 
