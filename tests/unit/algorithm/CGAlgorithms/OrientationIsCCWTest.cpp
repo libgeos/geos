@@ -40,7 +40,7 @@ struct test_isccw_data {
     }
 
     void
-    checkOrientationCCW(bool expectedCCW, const std::string& wkt)
+    checkCCW(bool expectedCCW, const std::string& wkt)
     {
         GeometryPtr geom(reader_.read(wkt));
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(geom.get());
@@ -48,6 +48,17 @@ struct test_isccw_data {
         const geos::geom::CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
         bool actualCCW = Orientation::isCCW(cs);
         ensure_equals("CoordinateSequence isCCW", expectedCCW, actualCCW);
+    }
+
+    void
+    checkCCWArea(bool expectedCCWArea, const std::string& wkt)
+    {
+        GeometryPtr geom(reader_.read(wkt));
+        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(geom.get());
+        ensure("WKT must be POLYGON)", poly != nullptr);
+        const geos::geom::CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
+        bool actualCCWArea = Orientation::isCCWArea(cs);
+        ensure_equals("CoordinateSequence isCCWArea", expectedCCWArea, actualCCWArea);
     }
 
     void
@@ -64,7 +75,7 @@ struct test_isccw_data {
 typedef test_group<test_isccw_data> group;
 typedef group::object object;
 
-group test_isccw_group("geos::algorithm::CGAlgorithms::isCCW");
+group test_isccw_group("geos::algorithm::CGAlgorithms::OrientationIsCCW");
 
 //
 // Test Cases
@@ -77,7 +88,7 @@ void object::test<1>
 ()
 {
     const std::string wkt("POLYGON ((60 180, 140 240, 140 240, 140 240, 200 180, 120 120, 60 180))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // 2 - Test if coordinates of polygon are counter-clockwise oriented
@@ -87,7 +98,7 @@ void object::test<2>
 ()
 {
     const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 60 180))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // 3 - Test the same polygon as in test No 2 but with duplicated top point
@@ -97,7 +108,7 @@ void object::test<3>
 ()
 {
     const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 140 240, 60 180))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // 4 - Test orientation the narrow (almost collapsed) ring
@@ -133,7 +144,7 @@ void object::test<6>
 ()
 {
     const std::string wkt("POLYGON ((1 1, 9 1, 5 9, 1 1))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // testFlatTopSegment
@@ -143,7 +154,7 @@ void object::test<7>
 ()
 {
     const std::string wkt("POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // testFlatMultipleTopSegment
@@ -153,7 +164,7 @@ void object::test<8>
 ()
 {
     const std::string wkt("POLYGON ((100 200, 127 200, 151 200, 173 200, 200 200, 100 100, 100 200))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // testDegenerateRingHorizontal
@@ -163,7 +174,7 @@ void object::test<9>
 ()
 {
     const std::string wkt("POLYGON ((100 200, 100 200, 200 200, 100 200))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // testDegenerateRingAngled
@@ -173,7 +184,7 @@ void object::test<10>
 ()
 {
     const std::string wkt("POLYGON ((100 100, 100 100, 200 200, 100 100))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // testDegenerateRingVertical
@@ -183,7 +194,7 @@ void object::test<11>
 ()
 {
     const std::string wkt("POLYGON ((200 100, 200 100, 200 200, 200 100))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 /**
@@ -196,7 +207,7 @@ void object::test<12>
 ()
 {
     const std::string wkt("POLYGON ((10 20, 61 20, 20 30, 50 60, 10 20))");
-    checkOrientationCCW(false, wkt);
+    checkCCW(false, wkt);
 }
 
 // testABATopFlatSegmentCollapse
@@ -206,7 +217,7 @@ void object::test<13>
 ()
 {
     const std::string wkt("POLYGON ((71 0, 40 40, 70 40, 40 40, 20 0, 71 0))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // testABATopFlatSegmentCollapseMiddleStart
@@ -216,7 +227,7 @@ void object::test<14>
 ()
 {
     const std::string wkt("POLYGON ((90 90, 50 90, 10 10, 90 10, 50 90, 90 90))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // testMultipleTopFlatSegmentCollapseSinglePoint
@@ -226,7 +237,7 @@ void object::test<15>
 ()
 {
     const std::string wkt("POLYGON ((100 100, 200 100, 150 200, 170 200, 200 200, 100 200, 150 200, 100 100))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 // testMultipleTopFlatSegmentCollapseFlatTop
@@ -236,7 +247,7 @@ void object::test<16>
 ()
 {
     const std::string wkt("POLYGON ((10 10, 90 10, 70 70, 90 70, 10 70, 30 70, 50 70, 10 10))");
-    checkOrientationCCW(true, wkt);
+    checkCCW(true, wkt);
 }
 
 
