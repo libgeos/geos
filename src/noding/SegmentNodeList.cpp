@@ -53,8 +53,8 @@ static Profiler* profiler = Profiler::instance();
 void
 SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
 {
-    SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    nodeMap.push_back(sn);
+    // SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    nodeMap.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
     ready = false;
 }
 
