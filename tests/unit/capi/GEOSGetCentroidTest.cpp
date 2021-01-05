@@ -43,7 +43,7 @@ struct test_capicentroid_data {
         initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
+        GEOSWKTWriter_setRoundingPrecision(wktw_, 6);
     }
 
     ~test_capicentroid_data()

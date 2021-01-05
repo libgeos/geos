@@ -178,8 +178,9 @@ WKTWriter::writeFormatted(const Geometry* geometry, bool p_isFormatted,
 {
     CLocalizer clocale;
     this->isFormatted = p_isFormatted;
-    decimalPlaces = roundingPrecision == -1 ? geometry->getPrecisionModel()->getMaximumSignificantDigits() :
-                    roundingPrecision;
+    decimalPlaces = roundingPrecision == -1
+                    ? geometry->getPrecisionModel()->getMaximumSignificantDigits()
+                    : roundingPrecision;
     appendGeometryTaggedText(geometry, 0, writer);
 }
 
@@ -357,14 +358,17 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 std::string
 WKTWriter::writeNumber(double d)
 {
-
     std::stringstream ss;
 
-    if(! trim) {
-        ss << std::fixed;
+    if (trim) {
+        int leftOfDecimal = std::ceil(std::log10(d));
+        int desiredPlaces = decimalPlaces >= 0 ? decimalPlaces : 0;
+        ss << std::setprecision(leftOfDecimal+desiredPlaces) << d;
     }
-    ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
-
+    else {
+        ss << std::fixed;
+        ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
+    }
     return ss.str();
 }
 
@@ -372,7 +376,7 @@ void
 WKTWriter::appendLineStringText(const LineString* lineString, int p_level,
                                 bool doIndent, Writer* writer)
 {
-    if(lineString->isEmpty()) {
+    if (lineString->isEmpty()) {
         writer->write("EMPTY");
     }
     else {

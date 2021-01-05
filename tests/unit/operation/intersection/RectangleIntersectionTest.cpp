@@ -36,6 +36,7 @@ struct test_rectangleintersectiontest_data {
         : wktreader()
     {
         wktwriter.setTrim(true);
+        // wktwriter.setRoundingPrecision(30);
     }
 
     GeomPtr
@@ -1676,6 +1677,6 @@ template<> template<> void object::test<208>
     GeomPtr isect{readWKT(clip)->intersection(readWKT(inp).get())};
     std::string exp = wktwriter.write(isect.get());
 
-    doClipTest(inp, exp, r, 1e-20);
+    doClipTest(inp, exp, r, 1e-10);
 }
 }
