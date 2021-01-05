@@ -46,7 +46,7 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL SegmentNode {
 private:
-    const NodedSegmentString* segString;
+    // const NodedSegmentString* segString;
 
     int segmentOctant;
 
