@@ -20,6 +20,7 @@ SUBDIRS = \
 	macros  \
 	tests   \
 	benchmarks \
+	util \
 	tools
 
 BUILT_SOURCES =
