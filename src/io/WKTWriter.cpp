@@ -359,11 +359,12 @@ std::string
 WKTWriter::writeNumber(double d)
 {
     std::stringstream ss;
-
     if (trim) {
-        int leftOfDecimal = std::ceil(std::log10(d));
-        int desiredPlaces = decimalPlaces >= 0 ? decimalPlaces : 0;
-        ss << std::setprecision(leftOfDecimal+desiredPlaces) << d;
+        int leftOfDecimal = std::log10(std::abs(d));
+        leftOfDecimal = leftOfDecimal < 0 ? 0 : leftOfDecimal + 1;
+        if (decimalPlaces >= 0) {
+            ss << std::setprecision(leftOfDecimal+decimalPlaces) << d;
+        }
     }
     else {
         ss << std::fixed;
