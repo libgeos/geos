@@ -422,11 +422,11 @@ AC_OUTPUT([
 	tools/Makefile
 	tools/geos-config
 	tools/astyle/Makefile
+	util/Makefile
+	util/geosop/Makefile
 	])
 
 dnl AC_MSG_RESULT([ ------------ GEOS Build ------------ ])
 dnl AC_MSG_RESULT([  Version:      ${VERSION}])
 dnl AC_MSG_RESULT([  Inlining:     ${enable_inline}])
 dnl AC_MSG_RESULT([ ------------------------------------ ])
-
-
