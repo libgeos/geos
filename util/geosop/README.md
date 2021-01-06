@@ -8,6 +8,7 @@ It can be used to:
 * Convert between WKT and WKB
 * Time the performance of operations
 * Check for memory leaks in operations
+* Check the semantics of GEOS operations
 
 ## Features
 
@@ -30,23 +31,23 @@ It can be used to:
 
 * Print usage instructions
 
-    geosop
+    `geosop`
 
 * Print usage instructions and list of available operations
 
-    geosop --help
+    `geosop --help`
 
 * Compute the area of geometries in a WKT file and output them as text
 
-    geosop -a geoms.wkt --format=txt area
+    `geosop -a geoms.wkt --format=txt area`
 
 * Compute the centroids of geometries in a WKT file and output them as WKT
 
-    geosop -a geoms.wkt -f wkt centroid
+    `geosop -a geoms.wkt -f wkt centroid`
 
 * Compute an operation on a list of geometries and output only geometry metrics and timing
 
-    geosop -v -a geoms.wkt isValid
+    `geosop -v -a geoms.wkt isValid`
 
 * Validate geometries from a WKT file, limiting the number of geometries read
 
@@ -54,43 +55,43 @@ It can be used to:
 
 * Compute the buffer with distance 10 of WKB geometries and output as WKT
 
-    geosop -a geoms.wkb -f wkt buffer 10
+    `geosop -a geoms.wkb -f wkt buffer 10`
 
 * Compute the unary union of a set of WKT geometries and output as WKB
 
-    geosop -a geoms.wkt --collect -f wkb unaryUnion
+    `geosop -a geoms.wkt --collect -f wkb unaryUnion`
 
 * Compute the buffer of a WKB literal and output as WKT
 
-    geosop -a 000000000140240000000000004024000000000000 -f wkt buffer 10
+    `geosop -a 000000000140240000000000004024000000000000 -f wkt buffer 10`
 
 * Polygonize lines and output the individual result polygons as WKT
 
-    geosop -a "MULTILINESTRING ((200 100, 100 100, 200 200), (200 200, 200 100), (200 200, 300 100, 200 100))" -v -e -f wkt polygonize
+    `geosop -a "MULTILINESTRING ((200 100, 100 100, 200 200), (200 200, 200 100), (200 200, 300 100, 200 100))" -v -e -f wkt polygonize`
 
 * Read geometries from a WKT file on stdin and output as WKB
 
-    geosop -a - -f wkb
+    `geosop -a - -f wkb`
 
 * Read geometries from a WKB file on stdin and output as WKT
 
-    geosop -a stdin.wkb -f wkt
+    `geosop -a stdin.wkb -f wkt`
 
 * Run a sequence of operations using a pipe
 
-    geosop -a "LINESTRING (10 10, 20 20)" -f wkt buffer 10 | geosop -a - -f wkt envelope
+    `geosop -a "LINESTRING (10 10, 20 20)" -f wkt buffer 10 | geosop -a - -f wkt envelope`
 
 * Compute the union of two geometries in WKT and WKB and output as WKT
 
-    geosop -a some-geom.wkt -b some-other-geom.wkb -f wkt union
+    `geosop -a some-geom.wkt -b some-other-geom.wkb -f wkt union`
 
 * TBD: Compute the buffer of a WKT literal for multiple distances
 
-    geosop -a "MULTIPOINT ( (0 0), (10 10) )" -f wkt buffer 1,2,3,4
+    `geosop -a "MULTIPOINT ( (0 0), (10 10) )" -f wkt buffer 1,2,3,4`
 
 * TBD: Compute the buffer of a WKT literal and output as WKB, with SRID set to 4326
 
-    geosop -a "POINT (10 10)" --srid=4326 -f wkb buffer 10
+    `geosop -a "POINT (10 10)" --srid=4326 -f wkb buffer 10`
 
 
 
