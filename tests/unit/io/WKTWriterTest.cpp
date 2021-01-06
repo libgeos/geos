@@ -88,13 +88,25 @@ void object::test<2>
 
     wktwriter.setTrim(false);
     result = wktwriter.write(geom.get());
-
     ensure_equals(result, "POINT (-117.123 33.123)");
 
     wktwriter.setRoundingPrecision(2);
     result = wktwriter.write(geom.get());
-
     ensure_equals(result, "POINT (-117.12 33.12)");
+
+    geom = wktreader.read("POINT(-117.000001 33.000001)");
+    wktwriter.setRoundingPrecision(2);
+    wktwriter.setTrim(true);
+    result = wktwriter.write(geom.get());
+    ensure_equals(result, "POINT (-117 33)");
+
+    geom = wktreader.read("POINT(-0.000001 -33.000001)");
+    result = wktwriter.write(geom.get());
+    ensure_equals(result, "POINT (-0 -33)");
+
+    geom = wktreader.read("POINT(-10000000.000001 -100000033.000001)");
+    result = wktwriter.write(geom.get());
+    ensure_equals(result, "POINT (-10000000 -100000033)");
 
 }
 
