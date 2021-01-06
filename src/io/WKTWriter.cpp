@@ -359,18 +359,33 @@ std::string
 WKTWriter::writeNumber(double d)
 {
     std::stringstream ss;
+
+    ss << std::fixed;
+    ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
+    std::string s = ss.str();
+
+    /*
+    * With std::fixed we always get a set number of digits
+    * after the decimal, but sometimes they are zeros!
+    * eg: 10000.040000, 0.0000500
+    * In trim mode, we strip them off string-wise, because
+    * that's all we can do, it seems.
+    */
     if (trim) {
-        int leftOfDecimal = std::log10(std::abs(d));
-        leftOfDecimal = leftOfDecimal < 0 ? 0 : leftOfDecimal + 1;
-        if (decimalPlaces >= 0) {
-            ss << std::setprecision(leftOfDecimal+decimalPlaces) << d;
+        std::size_t c = 0;
+        for (auto rit = s.crbegin(); rit!=s.crend(); ++rit) {
+            if (*rit == '.') {
+                c++;
+                break;
+            }
+            if (*rit != '0') {
+                break;
+            }
+            c++;
         }
+        s.erase(s.length() - c);
     }
-    else {
-        ss << std::fixed;
-        ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
-    }
-    return ss.str();
+    return s;
 }
 
 void
