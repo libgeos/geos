@@ -436,7 +436,7 @@ void GeosOp::output(Result* result) {
 }
 
 void GeosOp::outputExplode(std::unique_ptr<Geometry>& geom) {
-    for (int i = 0; i < geom->getNumGeometries(); i++) {
+    for (size_t i = 0; i < geom->getNumGeometries(); i++) {
         auto g = geom->getGeometryN(i);
         outputGeometry( g );
     }
