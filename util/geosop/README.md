@@ -37,6 +37,10 @@ It can be used to:
 
     `geosop --help`
 
+* Read a file of geometries in WKT and output them as WKB
+
+    `geosop -a geoms.wkt -f wkb`
+
 * Compute the area of geometries in a WKT file and output them as text
 
     `geosop -a geoms.wkt --format=txt area`
@@ -51,7 +55,7 @@ It can be used to:
 
 * Validate geometries from a WKT file, limiting the number of geometries read
 
-    geosop -a geoms.wkt --alimit 100 -f txt isValid
+    `geosop -a geoms.wkt --alimit 100 -f txt isValid`
 
 * Compute the buffer with distance 10 of WKB geometries and output as WKT
 
