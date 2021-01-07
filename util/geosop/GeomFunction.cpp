@@ -23,6 +23,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/MakeValid.h>
@@ -99,6 +101,11 @@ GeomFunction::init()
             return new Result( geom->intersects( geomB.get() ) );
         });
 
+    add("isSimple", "tests if geometry A is simple", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geom->isSimple() );
+        });
+
     add("isValid", "tests if geometry A is valid", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->isValid() );
@@ -112,6 +119,19 @@ GeomFunction::init()
     add("makeValid",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geos::operation::valid::MakeValid().build( geom.get() ) );
+        });
+
+    add("maxInscribedCircle", "computes maximum inscribed circle radius of Polygon A up to a distance tolerance", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geos::algorithm::construct::MaximumInscribedCircle mc( geom.get(), d );
+            std::unique_ptr<Geometry> res = mc.getRadiusLine();
+            return new Result( std::move(res) );
+        });
+    add("minBoundingCircle",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geos::algorithm::MinimumBoundingCircle mc( geom.get() );
+            std::unique_ptr<Geometry> res = mc.getCircle();
+            return new Result( std::move(res) );
         });
 
     add("nearestPoints", "computes nearest points of geometry A and B", 2, 0,
@@ -136,6 +156,11 @@ GeomFunction::init()
             Geometry * res = factory->createGeometryCollection(geoms);
             return new Result( res) ;
         });
+    add("reverse", "reverses geometry A", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geom->reverse() );
+        });
+
 
     add("containsPrep", "tests if geometry A contains geometry B, using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
@@ -236,22 +261,22 @@ GeomFunction::init()
             return new Result( geom->Union( geomB.get() ) );
         });
 
-    add("differenceSR", "computes difference of geometry A from B rounding to a precision scale factor", 2, 0,
+    add("differenceSR", "computes difference of geometry A from B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::DIFFERENCE, &pm) );
         });
-    add("intersectionSR", "computes intersection of geometry A and B", 2, 0,
+    add("intersectionSR", "computes intersection of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::INTERSECTION, &pm) );
         });
-    add("symDifferenceSR", "computes symmetric difference of geometry A and B", 2, 0,
+    add("symDifferenceSR", "computes symmetric difference of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::SYMDIFFERENCE, &pm) );
         });
-    add("unionSR", "computes union of geometry A and B", 2, 0,
+    add("unionSR", "computes union of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
