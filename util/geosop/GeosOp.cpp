@@ -320,7 +320,7 @@ void GeosOp::run() {
 
     if (args.isShowTime || args.isVerbose) {
         std::cout
-            << "Processed " <<  opCount << " operations ( "
+            << "Processed " <<  opCount << " " << args.opName << " ops ( "
             << vertexCount << " vertices)"
             << "  -- " << timeFormatted( totalTime )
             << std::endl;
