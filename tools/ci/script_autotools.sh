@@ -20,9 +20,8 @@ fi
 
 cd ${TRAVIS_BUILD_DIR}
 ./autogen.sh
-mkdir _build
-cd _build
-../configure
+cd -
+${TRAVIS_BUILD_DIR}/configure
 run_make
 make check
 make distcheck
