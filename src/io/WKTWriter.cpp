@@ -33,6 +33,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <ryu/ryu.h>
+
 #include <algorithm> // for min
 #include <typeinfo>
 #include <cstdio> // should avoid this
@@ -358,27 +360,23 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 std::string
 WKTWriter::writeNumber(double d)
 {
+
+    if (trim) {
+        char buf[128];
+        int precision = decimalPlaces >= 0 ? decimalPlaces : 0;
+        int len = geos_d2sfixed_buffered_n(d, precision, buf);
+        buf[len] = '\0';
+        std::string s(buf);
+        return s;
+    }
+
     std::stringstream ss;
 
     ss << std::fixed;
     ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
     std::string s = ss.str();
-    if (trim && decimalPlaces > 0) {
-        std::size_t c = 0;
-        for (auto rit = s.crbegin(); rit!=s.crend(); ++rit) {
-            if (*rit == '.') {
-                c++;
-                break;
-            }
-            if (*rit != '0') {
-                break;
-            }
-            c++;
-        }
-        s.erase(s.length() - c);
-    }
-
     return s;
+
 }
 
 void

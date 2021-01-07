@@ -102,7 +102,7 @@ void object::test<2>
 
     geom = wktreader.read("POINT(-0.000001 -33.000001)");
     result = wktwriter.write(geom.get());
-    ensure_equals(result, "POINT (-0 -33)");
+    ensure_equals(result, "POINT (0 -33)");
 
     geom = wktreader.read("POINT(-10000000.000001 -100000033.000001)");
     result = wktwriter.write(geom.get());
