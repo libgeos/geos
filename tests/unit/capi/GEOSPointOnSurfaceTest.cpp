@@ -43,7 +43,7 @@ struct test_capipointonsurface_data {
         initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
+        GEOSWKTWriter_setRoundingPrecision(wktw_, 4);
     }
 
     ~test_capipointonsurface_data()
@@ -150,7 +150,7 @@ void object::test<4>
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    ensure_equals(std::string(wkt_), std::string("POINT (56.528667 25.210167)"));
+    ensure_equals(std::string(wkt_), std::string("POINT (56.5287 25.2102)"));
 
 }
 
@@ -213,7 +213,7 @@ void object::test<7>
     ensure(nullptr != geom2_);
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
-    ensure_equals(std::string(wkt_), std::string("POINT (182077.08 141881.65)"));
+    ensure_equals(std::string(wkt_), std::string("POINT (182077.0753 141881.6525)"));
 }
 
 template<>
@@ -234,7 +234,7 @@ void object::test<8>
     ensure(nullptr != geom2_);
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
-    ensure_equals(std::string(wkt_), std::string("POINT (182476.76 141880.71)"));
+    ensure_equals(std::string(wkt_), std::string("POINT (182476.7586 141880.7091)"));
 }
 
 template<>
@@ -255,7 +255,7 @@ void object::test<9>
     ensure(nullptr != geom2_);
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
-    ensure_equals(std::string(wkt_), std::string("POINT (182755.89 141812.88)"));
+    ensure_equals(std::string(wkt_), std::string("POINT (182755.892 141812.8789)"));
 }
 
 } // namespace tut

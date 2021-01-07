@@ -316,6 +316,8 @@ AC_OUTPUT([
 	src/algorithm/construct/Makefile
 	src/algorithm/distance/Makefile
 	src/algorithm/locate/Makefile
+	src/deps/Makefile
+	src/deps/ryu/Makefile
 	src/edgegraph/Makefile
 	src/geom/Makefile
 	src/geom/prep/Makefile

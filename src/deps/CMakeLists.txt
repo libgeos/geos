@@ -8,9 +8,12 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp  CONFIGURE_DEPEND)
+file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.c  CONFIGURE_DEPEND)
 target_sources(geos PRIVATE ${_sources})
 unset(_sources)
 
-add_subdirectory(deps)
+target_include_directories(geos
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 

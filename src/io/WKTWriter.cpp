@@ -33,6 +33,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <ryu/ryu.h>
+
 #include <algorithm> // for min
 #include <typeinfo>
 #include <cstdio> // should avoid this
@@ -178,8 +180,9 @@ WKTWriter::writeFormatted(const Geometry* geometry, bool p_isFormatted,
 {
     CLocalizer clocale;
     this->isFormatted = p_isFormatted;
-    decimalPlaces = roundingPrecision == -1 ? geometry->getPrecisionModel()->getMaximumSignificantDigits() :
-                    roundingPrecision;
+    decimalPlaces = roundingPrecision == -1
+                    ? geometry->getPrecisionModel()->getMaximumSignificantDigits()
+                    : roundingPrecision;
     appendGeometryTaggedText(geometry, 0, writer);
 }
 
@@ -357,22 +360,36 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 std::string
 WKTWriter::writeNumber(double d)
 {
-
-    std::stringstream ss;
-
-    if(! trim) {
-        ss << std::fixed;
+    int precision = decimalPlaces >= 0 ? decimalPlaces : 0;
+    /*
+    * For a "trimmed" result, with no trailing zeros we use
+    * the ryu library.
+    */
+    if (trim) {
+        char buf[128];
+        int len = geos_d2sfixed_buffered_n(d, precision, buf);
+        buf[len] = '\0';
+        std::string s(buf);
+        return s;
     }
-    ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
-
-    return ss.str();
+    /*
+    * For an "untrimmed" result, compatible with the old
+    * format, we continue to use std::fixed.
+    */
+    else {
+        std::stringstream ss;
+        ss << std::fixed;
+        ss << std::setprecision(precision);
+        ss << d;
+        return ss.str();
+    }
 }
 
 void
 WKTWriter::appendLineStringText(const LineString* lineString, int p_level,
                                 bool doIndent, Writer* writer)
 {
-    if(lineString->isEmpty()) {
+    if (lineString->isEmpty()) {
         writer->write("EMPTY");
     }
     else {
