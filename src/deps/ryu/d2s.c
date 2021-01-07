@@ -629,8 +629,8 @@ static inline int to_chars_fixed(const floating_decimal_64 v, const bool sign, u
 	printf("EXP=%d\n", v.exponent);
 	printf("INTEGER=%lu\n", integer_part);
 	printf("DECIMAL=%lu\n", decimal_part);
-	printf("EXTRA TRAILING ZEROS=%lu\n", trailing_integer_zeros);
-	printf("EXTRA LEADING ZEROS=%lu\n", leading_decimal_zeros);
+	printf("EXTRA TRAILING ZEROS=%u\n", trailing_integer_zeros);
+	printf("EXTRA LEADING ZEROS=%u\n", leading_decimal_zeros);
 #endif
 
 	/* If we have removed all digits, it may happen that we have -0 and we want it to be just 0 */
