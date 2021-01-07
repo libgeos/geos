@@ -379,7 +379,7 @@ WKTWriter::writeNumber(double d)
     else {
         std::stringstream ss;
         ss << std::fixed;
-        ss << std::setprecision(precision : 0);
+        ss << std::setprecision(precision);
         ss << d;
         return ss.str();
     }
