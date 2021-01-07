@@ -455,10 +455,9 @@ void GeosOp::outputGeometry(const Geometry * geom) {
         // output as text/WKT
         WKTWriter writer;
         // turn off stoopid fixed precision
-        //writer.setTrim(true);
+        writer.setTrim(true);
         if (args.precision >= 0) {
-            writer.setTrim(true);
-            writer.setRoundingPrecision(args.precision);
+             writer.setRoundingPrecision(args.precision);
         }
         std::cout << writer.write(geom) << std::endl;
     }
