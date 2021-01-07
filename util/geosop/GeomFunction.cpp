@@ -23,6 +23,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/overlayng/OverlayNG.h>
@@ -77,29 +78,48 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->covers( geomB.get() ) );
         });
+
+    add("distance", "computes distance between geometry A and B", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geom->distance( geomB.get() ) );
+        });
+
      add("envelope",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->getCentroid() );
         });
+
     add("interiorPoint",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->getInteriorPoint() );
         });
+
     add("intersects", "tests if geometry A and B intersect", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->intersects( geomB.get() ) );
         });
+
     add("isValid", "tests if geometry A is valid", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->isValid() );
         });
+
     add("length",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->getLength() );
         });
+
     add("makeValid",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geos::operation::valid::MakeValid().build( geom.get() ) );
+        });
+
+    add("nearestPoints", "computes nearest points of geometry A and B", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            std::unique_ptr<CoordinateSequence> cs = geos::operation::distance::DistanceOp::nearestPoints(geom.get(), geomB.get());
+            auto factory = geom->getFactory();
+            auto res = factory->createLineString( std::move(cs) );
+            return new Result( std::move(res) );
         });
 
     add("polygonize",
@@ -147,7 +167,7 @@ GeomFunction::init()
             }
             return new Result( prepGeomCache->covers( geomB.get() ) );
         });
-    add("intersectsPrep", "tests if geometry A intersects geometry B using PreparedGeometry", 2, 0,
+    add("intersectsPrep", "tests if geometry A intersects B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             if (cacheKey == nullptr || cacheKey != geom.get()) {
                 auto pg = std::unique_ptr<const PreparedGeometry>(
@@ -156,6 +176,30 @@ GeomFunction::init()
                 cacheKey = geom.get();
             }
             return new Result( prepGeomCache->intersects( geomB.get() ) );
+        });
+
+    add("distancePrep", "computes distance between geometry A and B using PreparedGeometry", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            if (cacheKey == nullptr || cacheKey != geom.get()) {
+                auto pg = std::unique_ptr<const PreparedGeometry>(
+                    PreparedGeometryFactory::prepare( geom.get()) );
+                prepGeomCache = std::move( pg );
+                cacheKey = geom.get();
+            }
+            return new Result( prepGeomCache->distance( geomB.get() ) );
+        });
+    add("nearestPointsPrep", "computes nearest points of geometry A and B using PreparedGeometry", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            if (cacheKey == nullptr || cacheKey != geom.get()) {
+                auto pg = std::unique_ptr<const PreparedGeometry>(
+                    PreparedGeometryFactory::prepare( geom.get()) );
+                prepGeomCache = std::move( pg );
+                cacheKey = geom.get();
+            }
+            auto cs = prepGeomCache->nearestPoints( geomB.get() );
+            auto factory = geom->getFactory();
+            auto res = factory->createLineString( std::move(cs) );
+            return new Result( std::move(res) );
         });
 
 
