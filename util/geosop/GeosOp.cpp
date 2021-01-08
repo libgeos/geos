@@ -429,6 +429,9 @@ void GeosOp::output(Result* result) {
             outputGeometry( result->valGeom.get() );
         }
     }
+    else if (result->isGeometryList() ) {
+        outputGeometryList( result->valGeomList );
+    }
     else {
         // output as text/WKT
         std::cout << result->toString() << std::endl;
@@ -460,5 +463,11 @@ void GeosOp::outputGeometry(const Geometry * geom) {
              writer.setRoundingPrecision(args.precision);
         }
         std::cout << writer.write(geom) << std::endl;
+    }
+}
+
+void GeosOp::outputGeometryList(std::vector<std::unique_ptr<const Geometry>> & list) {
+    for (size_t i = 0; i < list.size(); i++) {
+        outputGeometry( list[i].get() );
     }
 }

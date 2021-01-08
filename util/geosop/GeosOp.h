@@ -79,6 +79,7 @@ private:
     void output(Result* result);
     void outputExplode(std::unique_ptr<Geometry>& geom);
     void outputGeometry( const Geometry* geom);
+    void outputGeometryList(std::vector<std::unique_ptr<const Geometry>> & val);
     void log(std::string s);
 };
 

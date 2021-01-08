@@ -33,22 +33,25 @@ public:
     double valDouble;
     std::string valStr;
     std::unique_ptr<Geometry> valGeom;
+    std::vector<std::unique_ptr<const Geometry>> valGeomList;
 
     Result(bool val);
     Result(int val);
     Result(std::string val);
     Result(double val);
     Result(std::unique_ptr<Geometry> val);
+    Result(std::vector<std::unique_ptr<const Geometry>> val);
     Result(Geometry * val);
     ~Result();
 
     bool isGeometry();
+    bool isGeometryList();
     std::string metadata();
     std::string toString();
 
 private:
     enum {
-        typeBool = 1, typeInt, typeDouble, typeString, typeGeometry
+        typeBool = 1, typeInt, typeDouble, typeString, typeGeometry, typeGeomList
     } typeCode;
 };
 

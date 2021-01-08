@@ -31,6 +31,8 @@
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
+#include <geos/triangulate/DelaunayTriangulationBuilder.h>
+#include <geos/triangulate/VoronoiDiagramBuilder.h>
 
 #include "GeomFunction.h"
 
@@ -142,20 +144,49 @@ GeomFunction::init()
             return new Result( std::move(res) );
         });
 
+    add("delaunay", "computes the Delaunay Triangulation of geometry A vertices", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geos::triangulate::DelaunayTriangulationBuilder builder;
+            builder.setTolerance(0);
+            builder.setSites( *geom );
+
+            Geometry* out = builder.getTriangles(*(geom->getFactory())).release();
+
+            std::vector<std::unique_ptr<const Geometry>> geoms;
+            for(unsigned int i = 0; i < out->getNumGeometries(); i++) {
+                geoms.push_back( std::unique_ptr< const Geometry>( out->getGeometryN(i) ) );
+            }
+            return new Result( std::move(geoms) ) ;
+        });
+
+    add("voronoi", "computes the Voronoi Diagram of geometry A vertices", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geos::triangulate::VoronoiDiagramBuilder builder;
+            builder.setTolerance(0);
+            builder.setSites( *geom );
+
+            Geometry* out = builder.getDiagram(*(geom->getFactory())).release();
+
+            std::vector<std::unique_ptr<const Geometry>> geoms;
+            for(unsigned int i = 0; i < out->getNumGeometries(); i++) {
+                geoms.push_back( std::unique_ptr< const Geometry>( out->getGeometryN(i) ) );
+            }
+            return new Result( std::move(geoms) ) ;
+        });
+
     add("polygonize",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geos::operation::polygonize::Polygonizer p;
             p.add(geom.get());
 
             auto polys = p.getPolygons();
-            std::vector<geom::Geometry*>* geoms = new std::vector<geom::Geometry*>;
+            std::vector<std::unique_ptr<const Geometry>> geoms;
             for(unsigned int i = 0; i < polys.size(); i++) {
-                geoms->push_back(polys[i].release());
+                geoms.push_back( std::move(polys[i]) );
             }
-            auto factory = geom->getFactory();
-            Geometry * res = factory->createGeometryCollection(geoms);
-            return new Result( res) ;
+            return new Result( std::move(geoms) ) ;
         });
+
     add("reverse", "reverses geometry A", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->reverse() );
@@ -395,6 +426,12 @@ Result::Result(Geometry * val)
     typeCode = typeGeometry;
 }
 
+Result::Result( std::vector<std::unique_ptr<const Geometry>> val )
+{
+    valGeomList = std::move(val);
+    typeCode = typeGeomList;
+}
+
 Result::~Result()
 {
 }
@@ -402,6 +439,11 @@ Result::~Result()
 bool
 Result::isGeometry() {
     return typeCode == typeGeometry;
+}
+
+bool
+Result::isGeometryList() {
+    return typeCode == typeGeomList;
 }
 
 std::string
@@ -427,6 +469,9 @@ Result::toString() {
         if (valGeom == nullptr)
             return "null";
         return valGeom->toString();
+
+    case typeGeomList:
+       return metadata();
     }
     return "Value for Unknonwn type";
 }
@@ -443,6 +488,9 @@ Result::metadata() {
         if (valGeom == nullptr)
             return "null";
         return valGeom->getGeometryType() + "( " + std::to_string( valGeom->getNumPoints() ) + " )";
+
+    case typeGeomList:
+        return "Geometry[" + std::to_string( valGeomList.size()) + "]";
     }
     return "Unknonwn type";
 }
