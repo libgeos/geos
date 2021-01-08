@@ -57,6 +57,15 @@ void showHelp() {
     std::cout << "Usage: geosop [wktfile] opname args..." << std::endl;
 }
 
+static bool startsWith(const std::string& s, const std::string& prefix) {
+    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
+}
+
+static bool endsWith(const std::string& str, const std::string& suffix)
+{
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
 int main(int argc, char** argv) {
     GeomFunction::init();
 
@@ -86,9 +95,13 @@ int main(int argc, char** argv) {
         if (result.count("help")) {
             std::cout << "geosop - GEOS v. " << geosversion() << std::endl;
         }
+        options.positional_help("opName opArg");
         std::cout << options.help() << std::endl;
         //showHelp();
         if (result.count("help")) {
+            std::cout << "Notes:" << std::endl;
+            std::cout << "- Negative numeric op arguments can be specified with leading N:  e.g. N-0.1" << std::endl;
+            std::cout << std::endl;
             std::cout << "Operations:" << std::endl;
             std::vector<std::string> ops = GeomFunction::list();
             for (auto opName : ops) {
@@ -122,6 +135,13 @@ int main(int argc, char** argv) {
         auto& v = result["opArgs"].as<std::vector<std::string>>();
         if (v.size() >= 1) {
             auto val = v[0];
+            /**
+             * To get around cmdline parset limitation for parsing neg numbers,
+             * allow syntax "Nnum" as well
+             */
+            if (startsWith(val, "N")) {
+                val = val.substr(1, val.size()-1);
+            }
             cmdArgs.opArg1 = std::stod(val);
         }
     }
@@ -146,15 +166,6 @@ std::string timeFormatted(int n)
         insertPosition-=3;
     }
     return fmt + " usec";
-}
-
-static bool startsWith(const std::string& s, const std::string& prefix) {
-    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
-}
-
-static bool endsWith(const std::string& str, const std::string& suffix)
-{
-    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
 }
 
 std::vector<std::unique_ptr<Geometry>> collect( std::vector<std::unique_ptr<Geometry>>& geoms ) {

@@ -179,7 +179,7 @@ GeomFunction::init()
             geos::operation::polygonize::Polygonizer p;
             p.add(geom.get());
 
-            auto polys = p.getPolygons();
+            std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
             std::vector<std::unique_ptr<const Geometry>> geoms;
             for(unsigned int i = 0; i < polys.size(); i++) {
                 geoms.push_back( std::move(polys[i]) );
