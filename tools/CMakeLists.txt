@@ -22,7 +22,7 @@ if(NOT MSVC)
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/geos-config
-    DESTINATION bin
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
     PERMISSIONS
       OWNER_READ OWNER_EXECUTE
       GROUP_READ GROUP_EXECUTE
@@ -36,7 +36,7 @@ if(NOT MSVC)
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/geos.pc
-    DESTINATION lib/pkgconfig)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 endif()
 

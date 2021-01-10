@@ -298,6 +298,7 @@ add_subdirectory(doc)
 # Install and export targets - support 'make install' or equivalent
 #-----------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
@@ -310,43 +311,43 @@ configure_file(cmake/geos-config.cmake
 
 install(TARGETS geos geos_cxx_flags
   EXPORT geos-targets
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
-  INCLUDES DESTINATION include
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 
 install(TARGETS geos_c
   EXPORT geos-targets
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
-  INCLUDES DESTINATION include
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 
 install(EXPORT geos-targets
   FILE geos-targets.cmake
   NAMESPACE GEOS::
-  DESTINATION lib/cmake/GEOS)
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GEOS)
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
-  DESTINATION lib/cmake/GEOS)
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GEOS)
 install(DIRECTORY
   "${CMAKE_CURRENT_LIST_DIR}/include/geos"
   "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
-  DESTINATION include
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.h")
 if(NOT DISABLE_GEOS_INLINE)
   install(DIRECTORY
     "${CMAKE_CURRENT_LIST_DIR}/include/geos"
     "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
-    DESTINATION include
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.inl")
 endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
-  DESTINATION include)
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 add_subdirectory(tools)
 
