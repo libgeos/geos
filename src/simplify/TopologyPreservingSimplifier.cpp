@@ -233,11 +233,8 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 
     // Duplicated Geometry pointers shouldn't happen
     if(! linestringMap.insert(std::make_pair(geom, taggedLine)).second) {
-        std::cerr << __FILE__ << ":" << __LINE__
-                  << "Duplicated Geometry components detected"
-                  << std::endl;
-
         delete taggedLine;
+        throw util::GEOSException("Duplicated Geometry components detected");
     }
 }
 
