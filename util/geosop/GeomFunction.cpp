@@ -31,6 +31,8 @@
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
+#include <geos/simplify/DouglasPeuckerSimplifier.h>
+#include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
 
@@ -269,6 +271,14 @@ GeomFunction::init()
             std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
             return new Result( im->toString() );
         });
+    add("simplifyDP", "simplifies geometry A using Douglas-Peucker with a distance tolerance", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(geom.get(), d) );
+         });
+    add("simplifyTP", "simplifies geometry A using Douglas-Peucker with a distance tolerance, preserving topology", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(geom.get(), d) );
+         });
 
 
     add("difference", "computes difference of geometry A from B", 2, 0,

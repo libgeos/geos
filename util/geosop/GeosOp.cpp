@@ -77,10 +77,10 @@ int main(int argc, char** argv) {
         ("b", "source for B geometries (WKT, WKB, file, stdin, stdin.wkb)", cxxopts::value<std::string>( cmdArgs.srcB ))
         ("alimit", "Limit nunber of A geometries read", cxxopts::value<int>( cmdArgs.limitA ))
         ("c,collect", "Collect input into single geometry", cxxopts::value<bool>( cmdArgs.isCollect ))
-        ("e,explode", "Explode result", cxxopts::value<bool>( cmdArgs.isExplode))
-        ("f,format", "Output format", cxxopts::value<std::string>( ))
+        ("e,explode", "Explode results into conponent geometris", cxxopts::value<bool>( cmdArgs.isExplode))
+        ("f,format", "Output format (wkt, wkb or txt)", cxxopts::value<std::string>( ))
         ("h,help", "Print help")
-        ("p,precision", "Sets number of decimal places in WKT output", cxxopts::value<int>( cmdArgs.precision ) )
+        ("p,precision", "Sets number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
         ("t,time", "Print execution time", cxxopts::value<bool>( cmdArgs.isShowTime ) )
         ("v,verbose", "Verbose output", cxxopts::value<bool>( cmdArgs.isVerbose )->default_value("false"))
 
@@ -92,9 +92,7 @@ int main(int argc, char** argv) {
     auto result = options.parse(argc, argv);
 
     if (argc <= 1 || result.count("help")) {
-        if (result.count("help")) {
-            std::cout << "geosop - GEOS v. " << geosversion() << std::endl;
-        }
+        std::cout << "geosop - GEOS " << geosversion() << std::endl;
         options.positional_help("opName opArg");
         std::cout << options.help() << std::endl;
         //showHelp();
@@ -334,6 +332,7 @@ void GeosOp::run() {
             << "Processed " <<  opCount << " " << args.opName << " ops ( "
             << vertexCount << " vertices)"
             << "  -- " << timeFormatted( totalTime )
+            << "    (GEOS " << geosversion() << ")"
             << std::endl;
     }
 }
