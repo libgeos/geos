@@ -181,6 +181,11 @@ else()
     "GEOS: Function inlining DISABLED")
 endif()
 
+# Make sure NDEBUG is defined so that assert() is disabled for
+# any non-debug build. Use a generator expression so that this
+# works with multi-configuration generators.
+target_compile_definitions(geos_cxx_flags INTERFACE $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
+
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: overlayng code
 #-----------------------------------------------------------------------------
