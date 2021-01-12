@@ -32,6 +32,7 @@ public:
     bool isShowTime = false;
     bool isVerbose = false;
     int precision = -1;
+    int repeatNum = 1;
 
     //std::string format;
 
@@ -73,6 +74,9 @@ private:
     void execute();
     void executeUnary(GeomFunction * fun);
     void executeBinary(GeomFunction * fun);
+    Result* executeOpRepeat(GeomFunction * fun,
+        int indexA, const  std::unique_ptr<Geometry>& geomA,
+        int indexB, const  std::unique_ptr<Geometry>& geomB);
     Result* executeOp(GeomFunction * fun,
         int indexA, const  std::unique_ptr<Geometry>& geomA,
         int indexB, const  std::unique_ptr<Geometry>& geomB);
