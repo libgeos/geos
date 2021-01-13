@@ -145,6 +145,12 @@ GeomFunction::init()
             auto res = factory->createLineString( std::move(cs) );
             return new Result( std::move(res) );
         });
+    add("normalize", "normalizes geometry A", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            auto res = geom->clone();
+            res->normalize();
+            return new Result( std::move(res) );
+        });
 
     add("delaunay", "computes the Delaunay Triangulation of geometry A vertices", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
@@ -189,10 +195,28 @@ GeomFunction::init()
             return new Result( std::move(geoms) ) ;
         });
 
+    add("reducePrecision", "reduces precision of geometry to a precision scale factor", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            PrecisionModel pm(d);
+            return new Result( geos::precision::GeometryPrecisionReducer::reduce( *geom, pm ) );
+        });
+    add("relate", "computes DE-9IM matrix for geometry A and B", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
+            return new Result( im->toString() );
+        });
     add("reverse", "reverses geometry A", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->reverse() );
         });
+    add("simplifyDP", "simplifies geometry A using Douglas-Peucker with a distance tolerance", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(geom.get(), d) );
+         });
+    add("simplifyTP", "simplifies geometry A using Douglas-Peucker with a distance tolerance, preserving topology", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(geom.get(), d) );
+         });
 
 
     add("containsPrep", "tests if geometry A contains geometry B, using PreparedGeometry", 2, 0,
@@ -260,25 +284,6 @@ GeomFunction::init()
             return new Result( std::move(res) );
         });
 
-
-    add("reducePrecision", "reduces precision of geometry to a precision scale factor", 1, 1,
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            PrecisionModel pm(d);
-            return new Result( geos::precision::GeometryPrecisionReducer::reduce( *geom, pm ) );
-        });
-    add("relate", "computes DE-9IM matrix for geometry A and B", 2, 0,
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
-            return new Result( im->toString() );
-        });
-    add("simplifyDP", "simplifies geometry A using Douglas-Peucker with a distance tolerance", 1, 1,
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(geom.get(), d) );
-         });
-    add("simplifyTP", "simplifies geometry A using Douglas-Peucker with a distance tolerance, preserving topology", 1, 1,
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(geom.get(), d) );
-         });
 
 
     add("difference", "computes difference of geometry A from B", 2, 0,
