@@ -25,6 +25,7 @@
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
+#include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/MakeValid.h>
@@ -150,6 +151,20 @@ GeomFunction::init()
             auto res = geom->clone();
             res->normalize();
             return new Result( std::move(res) );
+        });
+
+    add("lineMerge", "merges the lines of geometry A", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geos::operation::linemerge::LineMerger lmrgr;
+            lmrgr.add(geom.get());
+
+            std::vector<std::unique_ptr<LineString>> lines = lmrgr.getMergedLineStrings();
+
+            std::vector<std::unique_ptr<const Geometry>> geoms;
+            for(unsigned int i = 0; i < lines.size(); i++) {
+                geoms.push_back( std::move(lines[i]) );
+            }
+            return new Result( std::move(geoms) ) ;
         });
 
     add("delaunay", "computes the Delaunay Triangulation of geometry A vertices", 1, 0,
