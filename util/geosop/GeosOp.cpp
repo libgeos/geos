@@ -157,7 +157,7 @@ GeosOp::GeosOp(GeosOpArgs& arg)
 GeosOp::~GeosOp() {
 }
 
-std::string timeFormatted(int n)
+std::string formatNum(int n)
 {
     auto fmt = std::to_string(n);
     int insertPosition = static_cast<int>(fmt.length()) - 3;
@@ -165,7 +165,7 @@ std::string timeFormatted(int n)
         fmt.insert(insertPosition, ",");
         insertPosition-=3;
     }
-    return fmt + " usec";
+    return fmt ;
 }
 
 std::vector<std::unique_ptr<Geometry>> collect( std::vector<std::unique_ptr<Geometry>>& geoms ) {
@@ -282,8 +282,8 @@ GeosOp::readInput(std::string name, std::string src, int limit) {
 }
 
 std::string geomStats(int geomCount, int geomVertices) {
-    return std::to_string(geomCount) + " geometries, "
-        + std::to_string(geomVertices) + " vertices";
+    return formatNum( geomCount) + " geometries, "
+        + formatNum( geomVertices) + " vertices";
 
 }
 std::string summaryStats(std::vector<std::unique_ptr<Geometry>>& geoms) {
@@ -307,7 +307,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
     auto geoms = readInput( name, src, limit );
     sw.stop();
     auto stats = summaryStats(geoms);
-    log("Read " + stats  + "  -- " + timeFormatted( sw.getTot() ));
+    log("Read " + stats  + "  -- " + formatNum( sw.getTot() ) + " usec");
     return geoms;
 }
 
@@ -333,9 +333,9 @@ void GeosOp::run() {
 
     if (args.isShowTime || args.isVerbose) {
         std::cout
-            << "Processed " <<  opCount << " " << args.opName << " ops ( "
-            << vertexCount << " vertices)"
-            << "  -- " << timeFormatted( totalTime )
+            << "Processed " <<  formatNum( opCount ) << " " << args.opName << " ops ( "
+            << formatNum( vertexCount ) << " vertices)"
+            << "  -- " << formatNum( totalTime ) <<  " usec"
             << "    (GEOS " << geosversion() << ")"
             << std::endl;
     }
@@ -431,7 +431,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
             + inputDesc("A", indexA, geomA) + " "
             + inputDesc("B", indexB, geomB)
             + " -> " + result->metadata()
-            + "  --  " + timeFormatted( time )
+            + "  --  " + formatNum( time ) + " usec"
         );
     }
 
