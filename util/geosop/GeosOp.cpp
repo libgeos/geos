@@ -365,7 +365,6 @@ void GeosOp::execute() {
 
 void GeosOp::executeUnary(GeomFunction * fun) {
     for (unsigned i = 0; i < geomA.size(); i++) {
-        opCount++;
         vertexCount += geomA[i]->getNumPoints();
         Result* result = executeOpRepeat(fun, i, geomA[i], 0, nullptr);
 
@@ -377,7 +376,6 @@ void GeosOp::executeUnary(GeomFunction * fun) {
 void GeosOp::executeBinary(GeomFunction * fun) {
     for (unsigned ia = 0; ia < geomA.size(); ia++) {
         for (unsigned ib = 0; ib < geomB.size(); ib++) {
-            opCount++;
             vertexCount += geomA[ia]->getNumPoints();
             vertexCount += geomB[ib]->getNumPoints();
             Result* result = executeOpRepeat(fun, ia, geomA[ia], ib, geomB[ib]);
@@ -417,6 +415,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
     int indexB,
     const std::unique_ptr<Geometry>& geomB) {
 
+    opCount++;
     geos::util::Profile sw( "op" );
     sw.start();
 
