@@ -48,8 +48,18 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     vc.reserve(csSize);
     cs->toVector(vc);
 
+    const Coordinate* cprev = nullptr;
+    bool hasRepeatedPoints = false;
     for (auto& c : vc) {
         targetPM.makePrecise(c);
+
+        if (!hasRepeatedPoints) {
+            if (cprev != nullptr && c.equals2D(*cprev)) {
+                hasRepeatedPoints = true;
+            }
+
+            cprev = &c;
+        }
     }
 
     // reducedCoords take ownership of 'vc'
@@ -57,7 +67,12 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
-    std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
+    std::unique_ptr<CoordinateSequence> noRepeatedCoords;
+    if (hasRepeatedPoints) {
+         noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
+    } else {
+        noRepeatedCoords = std::move(reducedCoords);
+    }
 
     /*
      * Check to see if the removal of repeated points
