@@ -69,7 +69,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     // much as possible.
     std::unique_ptr<CoordinateSequence> noRepeatedCoords;
     if (hasRepeatedPoints) {
-         noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
+        noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
     } else {
         noRepeatedCoords = std::move(reducedCoords);
     }
@@ -88,9 +88,9 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     unsigned int minLength = 0;
     if(dynamic_cast<const LineString*>(geom)) {
         minLength = 2;
-    }
-    if(dynamic_cast<const LinearRing*>(geom)) {
-        minLength = 4;
+        if(dynamic_cast<const LinearRing*>(geom)) {
+            minLength = 4;
+        }
     }
 
     if(removeCollapsed) {
