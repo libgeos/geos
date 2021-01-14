@@ -22,6 +22,7 @@
 
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util/math.h>
 
 #include <cassert>
 
@@ -47,6 +48,28 @@ PrecisionModel::makePrecise(Coordinate& coord) const
     coord.x = makePrecise(coord.x);
     coord.y = makePrecise(coord.y);
 }
+
+/*public*/
+INLINE double
+PrecisionModel::makePrecise(double val) const
+{
+#if GEOS_DEBUG
+    std::cerr << "PrecisionModel[" << this << "]::makePrecise called" << std::endl;
+#endif
+
+    if(modelType == FLOATING_SINGLE) {
+        float floatSingleVal = static_cast<float>(val);
+        return static_cast<double>(floatSingleVal);
+    }
+    if(modelType == FIXED) {
+        // Use whatever happens to be the default rounding method
+        const double ret = geos::util::round(val * scale) / scale;
+        return ret;
+    }
+    // modelType == FLOATING - no rounding necessary
+    return val;
+}
+
 
 /*public*/
 INLINE PrecisionModel::Type
