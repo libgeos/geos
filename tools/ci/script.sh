@@ -24,4 +24,4 @@ mkdir -p ${builddir}
 cd ${builddir}
 
 # build and run tests
-${TRAVIS_BUILD_DIR}/tools/ci/script_${GEOS_BUILD_TOOL}.sh
+${TRAVIS_BUILD_DIR}/tools/ci/script_cmake.sh

@@ -18,12 +18,11 @@
 
 5. Run 'make dist-bzip2'.
 
-   $ ./autogen.sh && ./configure && make dist-bzip2
+   $ mkdir build && cd build && cmake .. && cmake --build . --target dist
 
 6. Verify that you can un-pack and build the tarball.
 
-   - autotools: ./configure && make check
-   - cmake: mkdir build && cd build && cmake .. && make && make check
+   - mkdir build && cd build && cmake .. && make && make check
 
 7. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 

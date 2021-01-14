@@ -16,8 +16,9 @@ steps:
     image: *test-image
     pull: always
     commands:
-      - ./autogen.sh
-      - CXXFLAGS="-O0" ./configure
+      - mkdir build
+      - cd build
+      - CXXFLAGS="-O0" cmake ..
       - make V=0
   - name: check
     image: *test-image
