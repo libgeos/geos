@@ -44,12 +44,12 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         return nullptr;
     }
 
-    std::vector<Coordinate> vc(csSize);
+    std::vector<Coordinate> vc;
+    vc.reserve(csSize);
+    cs->toVector(vc);
 
-    // copy coordinates and reduce
-    for(std::size_t i = 0; i < csSize; ++i) {
-        vc[i] = cs->getAt(i);
-        targetPM.makePrecise(vc[i]);
+    for (auto& c : vc) {
+        targetPM.makePrecise(c);
     }
 
     // reducedCoords take ownership of 'vc'
