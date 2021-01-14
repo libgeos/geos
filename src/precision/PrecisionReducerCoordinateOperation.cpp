@@ -44,16 +44,16 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         return nullptr;
     }
 
-    auto vc = detail::make_unique<std::vector<Coordinate>>(csSize);
+    std::vector<Coordinate> vc(csSize);
 
     // copy coordinates and reduce
     for(std::size_t i = 0; i < csSize; ++i) {
-        (*vc)[i] = cs->getAt(i);
-        targetPM.makePrecise((*vc)[i]);
+        vc[i] = cs->getAt(i);
+        targetPM.makePrecise(vc[i]);
     }
 
     // reducedCoords take ownership of 'vc'
-    auto reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc.release());
+    auto reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(std::move(vc));
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
