@@ -366,10 +366,9 @@ void GeosOp::execute() {
 void GeosOp::executeUnary(GeomFunction * fun) {
     for (unsigned i = 0; i < geomA.size(); i++) {
         vertexCount += geomA[i]->getNumPoints();
-        Result* result = executeOpRepeat(fun, i, geomA[i], 0, nullptr);
+        Result result = executeOpRepeat(fun, i, geomA[i], 0, nullptr);
 
         output(result);
-        delete result;
     }
 }
 
@@ -378,10 +377,9 @@ void GeosOp::executeBinary(GeomFunction * fun) {
         for (unsigned ib = 0; ib < geomB.size(); ib++) {
             vertexCount += geomA[ia]->getNumPoints();
             vertexCount += geomB[ib]->getNumPoints();
-            Result* result = executeOpRepeat(fun, ia, geomA[ia], ib, geomB[ib]);
+            Result result = executeOpRepeat(fun, ia, geomA[ia], ib, geomB[ib]);
 
             output(result);
-            delete result;
         }
     }
 }
@@ -396,20 +394,20 @@ std::string inputDesc(std::string name, int index, const std::unique_ptr<Geometr
     return desc;
 }
 
-Result* GeosOp::executeOpRepeat(GeomFunction * fun,
+Result GeosOp::executeOpRepeat(GeomFunction * fun,
     int indexA,
     const std::unique_ptr<Geometry>& geomA,
     int indexB,
     const std::unique_ptr<Geometry>& geomB)
 {
-    Result * res;
+    Result res(nullptr);
     for (int i = 0; i < args.repeatNum; i++) {
         res = executeOp(fun, indexA, geomA, indexB, geomB);
     }
     return res;
 }
 
-Result* GeosOp::executeOp(GeomFunction * fun,
+Result GeosOp::executeOp(GeomFunction * fun,
     int indexA,
     const std::unique_ptr<Geometry>& geomA,
     int indexB,
@@ -417,9 +415,18 @@ Result* GeosOp::executeOp(GeomFunction * fun,
 
     opCount++;
     geos::util::Profile sw( "op" );
-    sw.start();
+    std::vector<Argument> call_args;
 
-    Result* result = fun->execute( geomA, geomB, args.opArg1  );
+    if (geomA) {
+        call_args.emplace_back(geomA.get());
+    }
+    if (geomB) {
+        call_args.emplace_back(geomB.get());
+    }
+    call_args.emplace_back(args.opArg1);
+
+    sw.start();
+    Result result = fun->execute(call_args);
     sw.stop();
     double time = sw.getTot();
     totalTime += time;
@@ -430,7 +437,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
             "[ " + std::to_string(opCount) + "] " + fun->name() + ": "
             + inputDesc("A", indexA, geomA) + " "
             + inputDesc("B", indexB, geomB)
-            + " -> " + result->metadata()
+            + " -> " + result.metadata()
             + "  --  " + formatNum( time ) + " usec"
         );
     }
@@ -438,25 +445,25 @@ Result* GeosOp::executeOp(GeomFunction * fun,
     return result;
 }
 
-void GeosOp::output(Result* result) {
+void GeosOp::output(Result& result) {
     //---- print result if format specified
     if (args.format == GeosOpArgs::fmtNone )
         return;
 
-    if (result->isGeometry() ) {
+    if (result.isGeometry() ) {
         if (args.isExplode) {
-            outputExplode( result->valGeom );
+            outputExplode( result.valGeom );
         }
         else {
-            outputGeometry( result->valGeom.get() );
+            outputGeometry( result.valGeom.get() );
         }
     }
-    else if (result->isGeometryList() ) {
-        outputGeometryList( result->valGeomList );
+    else if (result.isGeometryList() ) {
+        outputGeometryList( result.valGeomList );
     }
     else {
         // output as text/WKT
-        std::cout << result->toString() << std::endl;
+        std::cout << result.toString() << std::endl;
     }
 }
 

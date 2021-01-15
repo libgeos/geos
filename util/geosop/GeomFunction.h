@@ -35,14 +35,13 @@ public:
     std::unique_ptr<Geometry> valGeom;
     std::vector<std::unique_ptr<const Geometry>> valGeomList;
 
-    Result(bool val);
+    explicit Result(bool val);
     Result(int val);
     Result(std::string val);
     Result(double val);
     Result(std::unique_ptr<Geometry> val);
     Result(std::vector<std::unique_ptr<const Geometry>> val);
     Result(Geometry * val);
-    ~Result();
 
     bool isGeometry();
     bool isGeometryList();
@@ -55,8 +54,43 @@ private:
     } typeCode;
 };
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>&, const std::unique_ptr<Geometry>&, double d )>
-    geomFunSig;
+class Argument {
+
+public:
+    explicit Argument(double d) {
+        m_value.dbl_val = d;
+    }
+
+    explicit Argument(int i) {
+        m_value.int_val = i;
+    }
+
+    explicit Argument(const Geometry* g) {
+        m_value.geom_val = g;
+    }
+
+    double getDouble() const {
+        return m_value.dbl_val;
+    }
+
+    int getInt() const {
+        return m_value.int_val;
+    }
+
+    const Geometry* getGeometry() const {
+        return m_value.geom_val;
+    }
+
+private:
+
+    union {
+        double          dbl_val;
+        int             int_val;
+        const Geometry* geom_val;
+    } m_value;
+};
+
+using geomFunSig = std::function<Result(const std::vector<Argument> &)>;
 
 class GeomFunction {
 
@@ -69,8 +103,7 @@ public:
     bool isBinary();
     std::string signature();
 
-    Result * execute( const std::unique_ptr<Geometry>& geomA,
-        const std::unique_ptr<Geometry>& geomB, double d );
+    Result execute(const std::vector<Argument> & args);
 
 private:
     static void add(std::string name, geomFunSig geomfun);
