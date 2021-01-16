@@ -168,6 +168,11 @@ target_compile_options(geos_cxx_flags INTERFACE
 	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
 
+# Use -ffloat-store for 32-bit builds (needed to make some tests pass)
+target_compile_options(geos_cxx_flags INTERFACE
+  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
+)
+
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
