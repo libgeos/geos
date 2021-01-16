@@ -24,6 +24,7 @@ target_include_directories(test_xmltester
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml)
 
+# Scan the directories of XML tests and create a test for each.
 foreach(_testdir general issue misc robust validate)
     file(GLOB_RECURSE _testfiles ${CMAKE_CURRENT_LIST_DIR}/tests/${_testdir}/*.xml CONFIGURE_DEPEND)
     foreach(_testfile ${_testfiles})
@@ -31,6 +32,10 @@ foreach(_testdir general issue misc robust validate)
         add_test(NAME ${_testdir}-${_testname} COMMAND test_xmltester -v --test-valid-output ${_testfile})
     endforeach()
 endforeach()
+
+# Disable tests that are known to fail on 32-bit systems.
+set_tests_properties(issue-issue-geos-837 PROPERTIES DISABLED $<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>)
+
 unset(_testdir)
 unset(_testname)
 unset(_testfile)
