@@ -333,7 +333,7 @@ void GeosOp::run() {
 
     if (args.isShowTime || args.isVerbose) {
         std::cout
-            << "Processed " <<  formatNum( opCount ) << " " << args.opName << " ops ( "
+            << "Ran " <<  formatNum( opCount ) << " " << args.opName << " ops ( "
             << formatNum( vertexCount ) << " vertices)"
             << "  -- " << formatNum( totalTime ) <<  " usec"
             << "    (GEOS " << geosversion() << ")"

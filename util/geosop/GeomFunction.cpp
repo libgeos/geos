@@ -46,8 +46,26 @@ using geos::operation::overlayng::OverlayNG;
 /* static private */
 std::map<std::string, GeomFunction*> GeomFunction::registry;
 
-static std::unique_ptr<const PreparedGeometry> prepGeomCache;
-static Geometry *cacheKey;
+class PreparedGeometryCache {
+public:
+    const PreparedGeometry* get(const Geometry* key) {
+        if (m_key != key) {
+            m_pg = PreparedGeometryFactory::prepare(key);
+            m_key = key;
+        }
+
+        return m_pg.get();
+    }
+
+private:
+    std::unique_ptr<const PreparedGeometry> m_pg;
+    const Geometry* m_key;
+};
+
+PreparedGeometryCache prepGeomCache;
+
+//static std::unique_ptr<const PreparedGeometry> prepGeomCache;
+//static Geometry *cacheKey;
 
 /* static */
 void
@@ -236,64 +254,28 @@ GeomFunction::init()
 
     add("containsPrep", "tests if geometry A contains geometry B, using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            return new Result( prepGeomCache->contains( geomB.get() ) );
+            return new Result( prepGeomCache.get(geom.get())->contains( geomB.get() ) );
         });
     add("containsProperlyPrep", "tests if geometry A properly contains geometry B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            return new Result( prepGeomCache->containsProperly( geomB.get() ) );
+            return new Result( prepGeomCache.get(geom.get())->containsProperly( geomB.get() ) );
         });
     add("coversPrep", "tests if geometry A covers geometry B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            return new Result( prepGeomCache->covers( geomB.get() ) );
+            return new Result( prepGeomCache.get(geom.get())->covers( geomB.get() ) );
         });
     add("intersectsPrep", "tests if geometry A intersects B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            return new Result( prepGeomCache->intersects( geomB.get() ) );
+            return new Result( prepGeomCache.get(geom.get())->intersects( geomB.get() ) );
         });
 
     add("distancePrep", "computes distance between geometry A and B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            return new Result( prepGeomCache->distance( geomB.get() ) );
+            return new Result( prepGeomCache.get(geom.get())->distance( geomB.get() ) );
         });
     add("nearestPointsPrep", "computes nearest points of geometry A and B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            if (cacheKey == nullptr || cacheKey != geom.get()) {
-                auto pg = std::unique_ptr<const PreparedGeometry>(
-                    PreparedGeometryFactory::prepare( geom.get()) );
-                prepGeomCache = std::move( pg );
-                cacheKey = geom.get();
-            }
-            auto cs = prepGeomCache->nearestPoints( geomB.get() );
+            auto cs = prepGeomCache.get(geom.get())->nearestPoints( geomB.get() );
             auto factory = geom->getFactory();
             auto res = factory->createLineString( std::move(cs) );
             return new Result( std::move(res) );
