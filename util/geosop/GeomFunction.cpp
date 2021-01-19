@@ -124,6 +124,11 @@ GeomFunction::init()
             return new Result( geom->intersects( geomB.get() ) );
         });
 
+    add("isEmpty", "tests if geometry A is empty", 1, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            return new Result( geom->isEmpty() );
+        });
+
     add("isSimple", "tests if geometry A is simple", 1, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->isSimple() );
@@ -157,7 +162,7 @@ GeomFunction::init()
             return new Result( std::move(res) );
         });
 
-    add("nearestPoints", "computes nearest points of geometry A and B", 2, 0,
+    add("nearestPoints", "computes a line containing the nearest points of geometry A and B", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             std::unique_ptr<CoordinateSequence> cs = geos::operation::distance::DistanceOp::nearestPoints(geom.get(), geomB.get());
             auto factory = geom->getFactory();
@@ -273,7 +278,7 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( prepGeomCache.get(geom.get())->distance( geomB.get() ) );
         });
-    add("nearestPointsPrep", "computes nearest points of geometry A and B using PreparedGeometry", 2, 0,
+    add("nearestPointsPrep", "computes a line containing the nearest points of geometry A and B using PreparedGeometry", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             auto cs = prepGeomCache.get(geom.get())->nearestPoints( geomB.get() );
             auto factory = geom->getFactory();
