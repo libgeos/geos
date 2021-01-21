@@ -53,10 +53,25 @@ namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
 
 /**
- * Computes the Euclidean distance (L2 metric) from a Point to a Geometry.
- *
- * Also computes two points which are separated by the distance.
- */
+* Constructs the Largest Empty Circle for a set of obstacle geometries,
+* up to a specified tolerance. The obstacles are point and line geometries.
+*
+* The Largest Empty Circle is the largest circle which has its center
+* in the convex hull of the obstacles (the boundary), and whose
+* interior does not intersect with any obstacle. The circle center
+* is the point in the interior of the boundary which has the
+* farthest distance from the obstacles (up to tolerance).
+* The circle is determined by the center point and a point lying
+* on an obstacle indicating the circle radius.
+*
+* The implementation uses a successive-approximation technique
+* over a grid of square cells covering the obstacles and boundary.
+* The grid is refined using a branch-and-bound algorithm. Point
+* containment and distance are computed in a performant way
+* by using spatial indexes.
+*
+* \author Martin Davis
+*/
 class GEOS_DLL LargestEmptyCircle {
 
 public:
@@ -73,7 +88,7 @@ public:
 
     /**
     * Computes the center point of the Largest Empty Circle
-    * `within a set of obstacles, up to a given tolerance distance.
+    * within a set of obstacles, up to a given tolerance distance.
     *
     * @param p_obstacles a geometry representing the obstacles (points and lines)
     * @param p_tolerance the distance tolerance for computing the center point

@@ -989,6 +989,7 @@ extern "C" {
     GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
+            // both LineString* and LinearRing* can cast to LineString*
             const LineString* ls = dynamic_cast<const LineString*>(g);
             if(ls) {
                 return ls->isRing();
