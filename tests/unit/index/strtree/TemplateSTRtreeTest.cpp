@@ -30,7 +30,7 @@ template<>
 void object::test<1>
 ()
 {
-    TemplateSTRtree<Geometry> t(10);
+    TemplateSTRtree<geom::Geometry*> t(10);
     std::vector<std::unique_ptr<geom::Geometry>> geoms;
     const int gridSize = 10;
 
@@ -45,8 +45,8 @@ void object::test<1>
     }
 
     geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
-    std::vector<const Geometry*> matches;
-    t.query(&qe, matches);
+    std::vector<Geometry*> matches;
+    t.query(qe, matches);
     ensure(matches.size() == 4);
 
     // std::cout << t << std::endl;
@@ -69,7 +69,8 @@ void object::test<1>
     };
 
     SimpleTestVisitor vis;
-    t.query(&qe, vis);
+    geos::index::SpatialIndex& si = t;
+    si.query(&qe, vis);
     ensure(vis.count == 4);
 }
 
@@ -79,8 +80,8 @@ void object::test<2>
 ()
 {
     const int gridSize = 10;
-    TemplateSTRtree<Geometry> t1(10);
-    TemplateSTRtree<Geometry> t2(10);
+    TemplateSTRtree<Geometry*> t1(10);
+    TemplateSTRtree<Geometry*> t2(10);
     std::vector<std::unique_ptr<geom::Geometry>> geoms;
 
     auto gf = geom::GeometryFactory::create();
@@ -126,7 +127,7 @@ void object::test<3>
 {
     auto gf = geom::GeometryFactory::create();
     geos::io::WKTReader wkt(*gf);
-    TemplateSTRtree<Geometry> t(10);
+    TemplateSTRtree<Geometry*> t(10);
     std::vector<std::unique_ptr<geom::Geometry>> geoms;
     geoms.emplace_back(wkt.read(std::string("LINESTRING(0 0, 10 10)")).release());
     geoms.emplace_back(wkt.read(std::string("LINESTRING(5 5, 15 15)")).release());
@@ -154,6 +155,34 @@ void object::test<3>
     // std::cout << "all_after " << all_after << std::endl;
     ensure_equals(leaf_after, 3u);
     ensure_equals(all_after, 4u);
+}
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    // storing integers instead of geometry pointers
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    TemplateSTRtree<size_t> t1;
+
+    auto gf = geom::GeometryFactory::create();
+    size_t gridSize = 20;
+    size_t k = 0;
+    for (size_t i = 0; i < gridSize; ++i) {
+        for (size_t j = 0; j < gridSize; ++j) {
+            geom::Coordinate c1(static_cast<double>(i), static_cast<double>(j));
+            geom::Point *pt1 = gf->createPoint(c1);
+            geoms.emplace_back(pt1);
+            t1.insert(geom::Envelope(c1), k++);
+        }
+    }
+
+    std::vector<size_t> hits;
+    geom::Envelope queryEnv(2.5, 4.5, 2.5, 4.5);
+    t1.query(queryEnv, hits);
+
+    ensure_equals(hits.size(), 4);
 }
 
 

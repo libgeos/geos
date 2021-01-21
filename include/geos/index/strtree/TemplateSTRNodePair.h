@@ -40,7 +40,7 @@ public:
         return EnvelopeUtil::maximumDistance(getFirst().getEnvelope(), getSecond().getEnvelope());
     }
 
-    std::pair<const ItemType *, const ItemType *> getItems() const {
+    std::pair<ItemType, ItemType> getItems() const {
         assert(isLeaves());
         return std::make_pair(getFirst().getItem(), getSecond().getItem());
     }

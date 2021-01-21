@@ -34,18 +34,23 @@ namespace index {
 namespace strtree {
 
 template<typename ItemType>
-class TemplateSTRtree : public SpatialIndex {
+class TemplateSTRtreeImpl {
 public:
     using Node = TemplateSTRNode<ItemType>;
     using NodeList = std::vector<Node>;
     using NodeListIterator = typename NodeList::iterator;
 
-    explicit TemplateSTRtree(size_t p_nodeCapacity = 10) : root(nullptr), nodeCapacity(p_nodeCapacity) {}
+    explicit TemplateSTRtreeImpl(size_t p_nodeCapacity = 10) : root(nullptr), nodeCapacity(p_nodeCapacity) {}
 
-    TemplateSTRtree(size_t p_nodeCapacity, size_t itemCapacity) : root(nullptr), nodeCapacity(p_nodeCapacity) {
+    TemplateSTRtreeImpl(size_t p_nodeCapacity, size_t itemCapacity) : root(nullptr), nodeCapacity(p_nodeCapacity) {
         auto finalSize = treeSize(itemCapacity);
         nodes.reserve(finalSize);
     }
+
+protected:
+    // Prevent instantiation of base class.
+    ~TemplateSTRtreeImpl() {}
+public:
 
     bool built() const {
         return root != nullptr;
@@ -56,20 +61,17 @@ public:
         return root;
     }
 
-    void insert(const ItemType* item) {
+    void insert(const ItemType& item) {
         insert(*item->getEnvelopeInternal(), item);
     }
 
-    void insert(const geom::Envelope &itemEnv, const ItemType *item) {
+    void insert(const geom::Envelope& itemEnv, const ItemType& item) {
         createLeafNode(item, itemEnv);
     }
 
-    void insert(const geom::Envelope *itemEnv, void *item) override {
-        insert(*itemEnv, static_cast<ItemType *>(item));
-    }
 
     template<typename ItemDistance>
-    std::pair<const ItemType*, const ItemType*> nearestNeighbour(TemplateSTRtree<ItemType> & other) {
+    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType> & other) {
         if (!getRoot() || !other.getRoot()) {
             return { nullptr, nullptr };
         }
@@ -93,47 +95,36 @@ public:
         }
     }
 
-    void query(const geom::Envelope * queryEnv, std::vector<const ItemType*> & results) {
-        query(*queryEnv, [&results](const ItemType* x) {
+    void query(const geom::Envelope& queryEnv, std::vector<ItemType>& results) {
+        query(queryEnv, [&results](const ItemType& x) {
             results.push_back(x);
         });
     }
 
-    void query(const geom::Envelope *queryEnv, std::vector<void *> &results) override {
-        query(*queryEnv, [&results](const ItemType *x) {
-            results.push_back(const_cast<void*>(static_cast<const void*>(x)));
-        });
-    }
 
-    void query(const geom::Envelope *queryEnv, ItemVisitor &visitor) override {
-        query(*queryEnv, [&visitor](const ItemType *x) {
-            visitor.visitItem(const_cast<void*>(static_cast<const void*>(x)));
-        });
-    }
-
-    bool remove(const geom::Envelope *itemEnv, void *item) override {
+    bool remove(const geom::Envelope& itemEnv, const ItemType& item) {
         if (root == nullptr) {
             return false;
         }
 
         if (root->isLeaf()) {
-            if (root->getItem() == item) {
+            if (!root->isDeleted() && root->getItem() == item) {
                 root->removeItem();
                 return true;
             }
             return false;
         }
 
-        return remove(*itemEnv, *root, static_cast<ItemType *>(item));
+        return remove(itemEnv, *root, item);
     }
 
-private:
+protected:
 
     NodeList nodes;
     Node* root;
     size_t nodeCapacity;
 
-    void createLeafNode(const ItemType *item, const geom::Envelope &env) {
+    void createLeafNode(const ItemType& item, const geom::Envelope &env) {
         nodes.emplace_back(item, env);
     }
 
@@ -304,7 +295,7 @@ private:
 
     bool remove(const geom::Envelope &queryEnv,
                 const Node &node,
-                const ItemType *item) {
+                const ItemType& item) {
 
         assert(!node.isLeaf());
 
@@ -340,10 +331,43 @@ private:
         return static_cast<size_t>(std::ceil(static_cast<double>(numNodes) / static_cast<double>(numSlices)));
     }
 
-
 };
 
+template<typename ItemType>
+class TemplateSTRtree : public TemplateSTRtreeImpl<ItemType> {
+public:
+    using TemplateSTRtreeImpl<ItemType>::TemplateSTRtreeImpl;
+};
 
+template<typename ItemType>
+class TemplateSTRtree<ItemType*> : public TemplateSTRtreeImpl<ItemType*>, public SpatialIndex {
+public:
+    using TemplateSTRtreeImpl<ItemType*>::TemplateSTRtreeImpl;
+    using TemplateSTRtreeImpl<ItemType*>::insert;
+    using TemplateSTRtreeImpl<ItemType*>::query;
+    using TemplateSTRtreeImpl<ItemType*>::remove;
+
+    // The SpatialIndex methods only work when we are storing a pointer type.
+    void query(const geom::Envelope *queryEnv, std::vector<void*> &results) override {
+        query(*queryEnv, [&results](const ItemType* x) {
+            results.push_back(const_cast<void*>(static_cast<const void*>(x)));
+        });
+    }
+
+    void query(const geom::Envelope *queryEnv, ItemVisitor &visitor) override {
+        query(*queryEnv, [&visitor](const ItemType* x) {
+            visitor.visitItem(const_cast<void*>(static_cast<const void*>(x)));
+        });
+    }
+
+    bool remove(const geom::Envelope *itemEnv, void* item) override {
+        return remove(*itemEnv, static_cast<ItemType*>(item));
+    }
+
+    void insert(const geom::Envelope *itemEnv, void *item) override {
+        insert(*itemEnv, static_cast<ItemType*>(item));
+    }
+};
 
 
 }

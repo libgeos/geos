@@ -22,7 +22,7 @@ template<typename ItemType>
 class TemplateSTRNode {
 private:
     union {
-        const ItemType* item;
+        ItemType item;
         const TemplateSTRNode* childrenEnd;
     } data;
     const TemplateSTRNode* children;
@@ -34,9 +34,9 @@ private:
     bool deleted;
 
 public:
-    TemplateSTRNode() = delete;
+    //TemplateSTRNode() = delete;
 
-    TemplateSTRNode(const ItemType* p_item, const geom::Envelope& env) {
+    TemplateSTRNode(const ItemType& p_item, const geom::Envelope& env) {
         data.item = p_item;
         children = nullptr;
         bounds = env;
@@ -120,11 +120,11 @@ public:
         return count;
     }
 
-    const geom::Envelope &getEnvelope() const {
+    const geom::Envelope& getEnvelope() const {
         return bounds;
     }
 
-    const ItemType* getItem() const {
+    const ItemType& getItem() const {
         assert(!deleted);
         return data.item;
     }

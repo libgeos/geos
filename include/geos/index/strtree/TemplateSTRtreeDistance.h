@@ -28,6 +28,7 @@ template<typename ItemType, typename ItemDistance>
 class TemplateSTRtreeDistance {
     using Node = TemplateSTRNode<ItemType>;
     using NodePair = TemplateSTRNodePair<ItemType, ItemDistance>;
+    using ItemPair = std::pair<ItemType, ItemType>;
 
     struct PairQueueCompare {
         bool operator()(const NodePair &a, const NodePair &b) {
@@ -38,18 +39,18 @@ class TemplateSTRtreeDistance {
     using PairQueue = std::priority_queue <NodePair, std::vector<NodePair>, PairQueueCompare>;
 
 public:
-    std::pair<const ItemType *, const ItemType *> nearestNeighbour(const Node &root1, const Node &root2) {
+    ItemPair nearestNeighbour(const Node &root1, const Node &root2) {
         NodePair initPair(root1, root2);
         return nearestNeighbour(initPair);
     }
 
 private:
 
-    std::pair<const ItemType *, const ItemType *> nearestNeighbour(NodePair &initPair) {
+    ItemPair nearestNeighbour(NodePair &initPair) {
         return nearestNeighbour(initPair, std::numeric_limits<double>::infinity());
     }
 
-    std::pair<const ItemType *, const ItemType *> nearestNeighbour(NodePair &initPair, double maxDistance) {
+    ItemPair nearestNeighbour(NodePair &initPair, double maxDistance) {
         double distanceLowerBound = maxDistance;
         std::unique_ptr<NodePair> minPair;
 
