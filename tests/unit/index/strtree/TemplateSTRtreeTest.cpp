@@ -183,6 +183,18 @@ void object::test<4>
     t1.query(queryEnv, hits);
 
     ensure_equals(hits.size(), 4);
+
+    {
+        std::vector<size_t> orderedItems(t1.items().begin(), t1.items().end());
+        ensure_equals(orderedItems.size(), geoms.size());
+    }
+
+    {
+        auto removed = t1.remove(geom::Envelope(0, gridSize, 0, gridSize), 17);
+        ensure(removed);
+        std::vector<size_t> orderedItems(t1.items().begin(), t1.items().end());
+        ensure_equals(orderedItems.size(), geoms.size() - 1);
+    }
 }
 
 

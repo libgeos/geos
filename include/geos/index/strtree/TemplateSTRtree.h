@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2020 Daniel Baston
+ * Copyright (C) 2020-2021 Daniel Baston
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -123,6 +123,7 @@ protected:
     NodeList nodes;
     Node* root;
     size_t nodeCapacity;
+    size_t numItems;
 
     void createLeafNode(const ItemType& item, const geom::Envelope &env) {
         nodes.emplace_back(item, env);
@@ -138,9 +139,11 @@ protected:
             return;
         }
 
+        numItems = nodes.size();
+
         // compute final size of tree and set it aside in a single
         // block of memory
-        auto finalSize = treeSize(nodes.size());
+        auto finalSize = treeSize(numItems);
         nodes.reserve(finalSize);
 
         // begin and end define a range of nodes needing parents
@@ -305,7 +308,7 @@ protected:
                     if (!child->isDeleted() && child->getItem() == item) {
                         // const cast is ugly, but alternative seems to be to remove all
                         // const qualifiers in Node and open up mutability everywhere?
-                        auto mutableChild = const_cast<Node *>(child);
+                        auto mutableChild = const_cast<Node*>(child);
                         mutableChild->removeItem();
                         return true;
                     }
@@ -330,6 +333,75 @@ protected:
     static size_t sliceCapacity(size_t numNodes, size_t numSlices) {
         return static_cast<size_t>(std::ceil(static_cast<double>(numNodes) / static_cast<double>(numSlices)));
     }
+
+    class Iterator : public std::iterator<std::forward_iterator_tag, ItemType> {
+    public:
+        Iterator(typename NodeList::const_iterator && iter,
+                 typename NodeList::const_iterator && end) : m_iter(iter), m_end(end) {
+            skipDeleted();
+        }
+
+        const ItemType& operator*() const {
+            return m_iter->getItem();
+        }
+
+        Iterator& operator++() {
+            m_iter++;
+            skipDeleted();
+            return *this;
+        }
+
+#if 0
+        Iterator operator++(int) {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+#endif
+
+        friend bool operator==(const Iterator& a, const Iterator& b) {
+            return a.m_iter == b.m_iter;
+        }
+
+        friend bool operator!=(const Iterator& a, const Iterator& b) {
+            return a.m_iter != b.m_iter;
+        }
+
+    private:
+        void skipDeleted() {
+            while(m_iter->isDeleted() && m_iter != m_end) {
+                m_iter++;
+            }
+        }
+
+        typename NodeList::const_iterator m_iter;
+        typename NodeList::const_iterator m_end;
+    };
+
+    class Items {
+    public:
+        Items(TemplateSTRtreeImpl<ItemType>& tree) : m_tree(tree) {}
+
+        Iterator begin() {
+            return Iterator(m_tree.nodes.cbegin(),
+                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+        }
+
+        Iterator end() {
+            return Iterator(std::next(m_tree.nodes.cbegin(), m_tree.numItems),
+                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+        }
+    private:
+
+        TemplateSTRtreeImpl<ItemType>& m_tree;
+    };
+
+public:
+    Items items() {
+        build();
+        return Items(*this);
+    }
+
 
 };
 
