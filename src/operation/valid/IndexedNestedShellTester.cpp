@@ -15,7 +15,7 @@
 #include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/Polygon.h>
-#include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/operation/valid/IndexedNestedShellTester.h>
 #include <geos/operation/valid/IsValidOp.h>
 
@@ -90,23 +90,21 @@ IndexedNestedShellTester::compute() {
 
     processed = true;
 
-    index::strtree::STRtree tree;
+    index::strtree::TemplateSTRtree<const geom::LinearRing*> tree;
     for (const auto& p : polys) {
-        tree.insert(p->getEnvelopeInternal(), (void*) p->getExteriorRing());
+        tree.insert(p->getExteriorRing());
     }
 
-    std::vector<void*> hits;
+    std::vector<const geom::LinearRing*> hits;
     for (const auto& outerPoly : polys) {
         hits.clear();
 
         PolygonIndexedLocators locs(*outerPoly);
         const geom::LinearRing* outerShell = outerPoly->getExteriorRing();
 
-        tree.query(outerShell->getEnvelopeInternal(), hits);
+        tree.query(*outerShell->getEnvelopeInternal(), hits);
 
-        for (const auto& hit : hits) {
-            const geom::LinearRing* potentialInnerShell = static_cast<const geom::LinearRing*>(hit);
-
+        for (const auto& potentialInnerShell : hits) {
             if (potentialInnerShell == outerShell) {
                 continue;
             }
