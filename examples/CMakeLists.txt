@@ -11,10 +11,16 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(GEOS VERSION 1.0.0 LANGUAGES C CXX)
-find_package(GEOS 3.8 REQUIRED)
+find_package(GEOS 3.9 REQUIRED)
 
-add_executable(geos_client geos_client.cpp)
-target_link_libraries(geos_client PRIVATE GEOS::geos)
+add_executable(cpp_read cpp_read.cpp)
+target_link_libraries(cpp_read PRIVATE GEOS::geos)
 
-add_executable(geos_c_client geos_c_client.cpp)
-target_link_libraries(geos_c_client PRIVATE GEOS::geos_c)
+add_executable(capi_read capi_read.cpp)
+target_link_libraries(capi_read PRIVATE GEOS::geos_c)
+
+add_executable(capi_prepared capi_prepared.cpp)
+target_link_libraries(capi_prepared PRIVATE GEOS::geos_c)
+
+add_executable(capi_read_ts capi_read_ts.cpp)
+target_link_libraries(capi_read_ts PRIVATE GEOS::geos_c)

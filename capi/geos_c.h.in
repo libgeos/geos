@@ -124,26 +124,48 @@ typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 * those clients don't have access to the original C++ headers, by design.
 */
 #ifndef GEOSGeometry
+
 /**
-Geometry generic type. Geometry can be a point, linestring, polygon,
-multipoint, multilinestring, multipolygon, or geometrycollection.
-Geometry type can be read with \ref GEOSGeomTypeId. Most functions
-in GEOS either have GEOSGeometry* as a parameter or a return type.
-\see GEOSGeom_createPoint
-\see GEOSGeom_createLineString
-\see GEOSGeom_createPolygon
-\see GEOSGeom_createCollection
-\see GEOSGeom_destroy
+* Geometry generic type. Geometry can be a point, linestring, polygon,
+* multipoint, multilinestring, multipolygon, or geometrycollection.
+* Geometry type can be read with \ref GEOSGeomTypeId. Most functions
+* in GEOS either have GEOSGeometry* as a parameter or a return type.
+* \see GEOSGeom_createPoint
+* \see GEOSGeom_createLineString
+* \see GEOSGeom_createPolygon
+* \see GEOSGeom_createCollection
+* \see GEOSGeom_destroy
 */
 typedef struct GEOSGeom_t GEOSGeometry;
-/** Prepared geometry type. \see GEOSPrepare */
+
+/**
+* Prepared geometry type.
+* \see GEOSPrepare()
+* \see GEOSPreparedGeom_destroy()
+*/
 typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
-/** Coordinate sequence. \see GEOSCoordSeq_create */
+
+/**
+* Coordinate sequence.
+* \see GEOSCoordSeq_create()
+* \see GEOSCoordSeq_destroy()
+*/
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
-/** STRTree index. \see GEOSSTRtree_create */
+
+/**
+* STRTree index.
+* \see GEOSSTRtree_create()
+* \see GEOSSTRtree_destroy()
+*/
 typedef struct GEOSSTRtree_t GEOSSTRtree;
-/** Paramter object for buffering. \see GEOSBufferParams_create */
+
+/**
+* Paramter object for buffering.
+* \see GEOSBufferParams_create()
+* \see GEOSBufferParams_destroy()
+*/
 typedef struct GEOSBufParams_t GEOSBufferParams;
+
 #endif
 
 /** \cond */
@@ -1440,14 +1462,35 @@ extern int GEOS_DLL GEOSOrientationIndex_r(
 /* ========== Reader and Writer APIs ========== */
 
 #ifndef GEOSWKTReader
-/** Reader object to read Well-Known Text (WKT) format and construct Geometry. */
+
+/**
+* Reader object to read Well-Known Text (WKT) format and construct Geometry.
+* \see GEOSWKTReader_create
+* \see GEOSWKTReader_create_r
+*/
 typedef struct GEOSWKTReader_t GEOSWKTReader;
-/** Writer object to turn Geometry into Well-Known Text (WKT). */
+
+/**
+* Writer object to turn Geometry into Well-Known Text (WKT).
+* \see GEOSWKTWriter_create
+* \see GEOSWKTWriter_create_r
+*/
 typedef struct GEOSWKTWriter_t GEOSWKTWriter;
-/** Reader object to read Well-Known Binary (WKB) format and construct Geometry. */
+
+/**
+* Reader object to read Well-Known Binary (WKB) format and construct Geometry.
+* \see GEOSWKBReader_create
+* \see GEOSWKBReader_create_r
+*/
 typedef struct GEOSWKBReader_t GEOSWKBReader;
-/** Writer object to turn Geometry into Well-Known Binary (WKB). */
+
+/**
+* Writer object to turn Geometry into Well-Known Binary (WKB).
+* \see GEOSWKBWriter_create
+* \see GEOSWKBWriter_create_r
+*/
 typedef struct GEOSWKBWriter_t GEOSWKBWriter;
+
 #endif
 
 /* ========== WKT Reader ========== */
