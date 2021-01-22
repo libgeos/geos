@@ -23,7 +23,7 @@
 #include <geos/noding/SegmentSetMutualIntersector.h> // inherited
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // inherited
 #include <geos/index/chain/MonotoneChain.h> // inherited
-#include <geos/index/strtree/SimpleSTRtree.h> // inherited
+#include <geos/index/strtree/TemplateSTRtree.h> // inherited
 
 namespace geos {
 namespace index {
@@ -58,7 +58,6 @@ public:
 
     MCIndexSegmentSetMutualIntersector()
         : monoChains()
-        , index(new index::strtree::SimpleSTRtree())
         , indexCounter(0)
         , processCounter(0)
         , nOverlaps(0)
@@ -71,7 +70,7 @@ public:
     index::SpatialIndex*
     getIndex()
     {
-        return index.get();
+        return &index;
     }
 
     void setBaseSegments(SegmentString::ConstVect* segStrings) override;
@@ -113,7 +112,7 @@ private:
      * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
      * or index::strtree::STRtree).
      */
-    std::unique_ptr<index::SpatialIndex> index;
+    index::strtree::TemplateSTRtree<index::chain::MonotoneChain*> index;
     int indexCounter;
     int processCounter;
     // statistics

@@ -60,15 +60,13 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
-    std::vector<void*> overlapChains;
+    std::vector<MonotoneChain*> overlapChains;
     for(auto& queryChain : monoChains) {
         overlapChains.clear();
 
-        index->query(&(queryChain.getEnvelope()), overlapChains);
+        index.query(queryChain.getEnvelope(), overlapChains);
 
-        for(std::size_t j = 0, nj = overlapChains.size(); j < nj; j++) {
-            MonotoneChain* testChain = (MonotoneChain*)(overlapChains[j]);
-
+        for(MonotoneChain* testChain : overlapChains) {
             queryChain.computeOverlaps(testChain, &overlapAction);
             nOverlaps++;
             if(segInt->isDone()) {
@@ -97,7 +95,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings
 {
     if (!indexBuilt) {
         for (auto& mc: indexChains) {
-            index->insert(&(mc.getEnvelope()), &mc);
+            index.insert(&(mc.getEnvelope()), &mc);
         }
         indexBuilt = true;
     }
