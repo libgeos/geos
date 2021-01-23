@@ -268,7 +268,7 @@ typedef void (GEOSInterruptCallback)();
 * \return the previously configured callback
 * \see GEOSInterruptCallback
 */
-extern GEOSInterruptCallback* GEOS_DLL GEOS_interruptRegisterCallback(
+extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(
     GEOSInterruptCallback* cb);
 
 /**
