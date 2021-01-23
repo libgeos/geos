@@ -1,9 +1,0 @@
-#!/bin/sh
-
-if [ -n "$1" ]; then
-	table=$1
-else
-	table='test'
-fi
-
-grep '^\[' | sed "s/^\[[^]]*\]/INSERT INTO $table (geom) VALUES ('/" | sed "s/$/');/" | sed 's/LINEARRING/LINESTRING/g'

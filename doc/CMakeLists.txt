@@ -10,9 +10,6 @@
 # See the COPYING file for more information.
 ################################################################################
 
-add_executable(example example.cpp)
-
-target_link_libraries(example PRIVATE geos)
 if(BUILD_TESTING)
     target_include_directories(test_geos_unit
         PRIVATE
