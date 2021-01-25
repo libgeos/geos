@@ -23,23 +23,12 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-EdgeMerger::EdgeMerger(std::vector<Edge*>& p_edges)
-    : edges(p_edges) {}
-
 /*public static */
 std::vector<Edge*>
 EdgeMerger::merge(std::vector<Edge*>& edges)
 {
-    EdgeMerger merger(edges);
-    return merger.merge();
-}
-
-
-/*public static */
-std::vector<Edge*>
-EdgeMerger::merge()
-{
     std::vector<Edge*> mergedEdges;
+    std::map<EdgeKey, Edge*> edgeMap;
 
     for (Edge* edge : edges) {
         EdgeKey edgeKey(edge);
@@ -47,6 +36,7 @@ EdgeMerger::merge()
         if (it == edgeMap.end()) {
             // this is the first (and maybe only) edge for this line
             edgeMap[edgeKey] = edge;
+            mergedEdges.push_back(edge);
             //Debug.println("edge added: " + edge);
             //Debug.println(edge.toLineString());
         }
@@ -68,11 +58,6 @@ EdgeMerger::merge()
             //Debug.println("edge merged: " + existing);
             //Debug.println(edge.toLineString());
         }
-    }
-
-    // copy map values into return vector
-    for (auto it: edgeMap) {
-        mergedEdges.push_back(it.second);
     }
     return mergedEdges;
 }
