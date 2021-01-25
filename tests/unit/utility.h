@@ -327,6 +327,49 @@ ensure_equals_geometry_xyz(const T *lhs_in,
     ensure_equals_exact_geometry_xyz(g1.get(), g2.get(), tolerance);
 }
 
+/*
+ * Checks for geometries exactly equal in XY only
+ */
+
+template <typename T> inline void ensure_equals_exact_geometry(const T *lhs_in, const T *rhs_in, double tolerance = 0.0);
+
+template <>
+inline void
+ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
+                                 const geos::geom::Geometry *rhs_in,
+                                 double tolerance)
+{
+    assert(nullptr != lhs_in);
+    assert(nullptr != rhs_in);
+
+    using geos::geom::Point;
+    using geos::geom::LineString;
+    using geos::geom::Polygon;
+    using geos::geom::CoordinateSequence;
+    using geos::geom::GeometryCollection;
+
+    ensure_equals("type id do not match",
+                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
+
+    if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
+      const Point *gpt2 = static_cast<const Point *>(rhs_in);
+      return ensure_equals_dims( gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), 2, tolerance);
+    }
+    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
+      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+      return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
+    }
+    else if (dynamic_cast<const Polygon *>(lhs_in)) {
+      assert("Not implemented yet" == 0);
+    }
+    else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
+      const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
+      for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
+        ensure_equals_exact_geometry(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
+      }
+    }
+}
+
 //
 // Utility functions
 //
@@ -353,4 +396,3 @@ struct wkb_hex_decoder {
 } // namespace tut
 
 #endif // #ifndef GEOS_TUT_UTILITY_H_INCLUDED
-

@@ -59,27 +59,19 @@ namespace overlayng { // geos.operation.overlayng
  * This ensures that the overlay output line direction will be as consistent
  * as possible with input lines.
  *
+ * The merger also preserves the order of the edges in the input.
+ * This means that for polygon-line overlay
+ * the result lines will be in the same order as in the input
+ * (possibly with multiple result lines for a single input line).
+ *
  * @author mdavis
  *
  */
 class GEOS_DLL EdgeMerger {
 
-private:
-
-
-    // Members
-    std::vector<Edge*>& edges;
-    std::map<EdgeKey, Edge*> edgeMap;
-
 public:
 
-    // Methods
-    EdgeMerger(std::vector<Edge*>& p_edges);
-
     static std::vector<Edge*> merge(std::vector<Edge*>& edges);
-
-    std::vector<Edge*> merge();
-
 
 };
 
@@ -87,4 +79,3 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-

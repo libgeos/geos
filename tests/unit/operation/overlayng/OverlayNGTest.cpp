@@ -45,6 +45,24 @@ struct test_overlayng_data {
     }
 
     void
+    testOverlayExact(const std::string& a, const std::string& b, const std::string& expected, int opCode, double scaleFactor)
+    {
+        std::unique_ptr<PrecisionModel> pm;
+        if (scaleFactor > 0)
+            pm.reset(new PrecisionModel(scaleFactor));
+        else
+            pm.reset(new PrecisionModel());
+
+        std::unique_ptr<Geometry> geom_a = r.read(a);
+        std::unique_ptr<Geometry> geom_b = r.read(b);
+        std::unique_ptr<Geometry> geom_expected = r.read(expected);
+        std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
+        // std::string wkt_result = w.write(geom_result.get());
+        // std::cout << std::endl << wkt_result << std::endl;
+        ensure_equals_exact_geometry(geom_expected.get(), geom_result.get(), 0);
+    }
+
+    void
     testOverlayNoOpt(const std::string& a, const std::string& b, const std::string& expected, int opCode, double scaleFactor)
     {
         PrecisionModel pm(scaleFactor);
@@ -528,6 +546,16 @@ void object::test<42> ()
     std::string a = "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 1, 1 1), (1 2, 1 3, 2 3, 1 2), (2 3, 3 3, 3 2, 2 3))";
     std::string b = "POLYGON ((2 1, 3 1, 3 2, 2 1))";
     std::string exp = "POLYGON ((3 2, 3 1, 2 1, 3 2))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<43> ()
+{
+    std::string a = "POLYGON ((1 1, 1 9, 9 9, 9 7, 3 7, 3 3, 9 3, 9 1, 1 1))";
+    std::string b = "MULTILINESTRING ((2 10, 2 0), (4 10, 4 0))";
+    std::string exp = "MULTILINESTRING ((2 9, 2 1), (4 9, 4 7), (4 3, 4 1))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
 }
 
