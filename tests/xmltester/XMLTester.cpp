@@ -1312,6 +1312,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
         else if(opName == "union") {
             GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
 
             profile.start();
 
@@ -1324,6 +1325,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             profile.stop();
+            gRealRes->normalize();
 
             success = checkOverlaySuccess(*gRes, *gRealRes);
 
@@ -2414,4 +2416,3 @@ main(int argC, char* argV[])
  * Revision 1.29  2006/03/17 14:56:39  strk
  * Fixed filename normalizer for sql output
  **********************************************************************/
-
