@@ -25,6 +25,7 @@
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
+#include <geos/geom/util/Densifier.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
@@ -79,7 +80,7 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->getBoundary() );
         });
-    add("buffer", "cmputes the buffer of geometry A", 1, 1,
+    add("buffer", "computes the buffer of geometry A to a distance", 1, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->buffer( d ) );
         });
@@ -102,6 +103,13 @@ GeomFunction::init()
     add("covers", "tests if geometry A covers geometry B", 2, 0,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             return new Result( geom->covers( geomB.get() ) );
+        });
+
+    add("densify", "densifies geometry A to a distance ", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            geom::util::Densifier densifier( geom.get() );
+            densifier.setDistanceTolerance( d );
+            return new Result( densifier.getResultGeometry() );
         });
 
     add("distance", "computes distance between geometry A and B", 2, 0,

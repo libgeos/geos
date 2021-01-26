@@ -102,7 +102,7 @@ void object::test<3>
     std::string wkt_in("POLYGON ((120 120, 121 121, 122 122, 220 120, \
 					180 199, 160 200, 140 199, 120 120))");
 
-    std::string wkt_ex("POLYGON ((120 120, 140 199, 160 200, 180 199, 220 120, 120 120))");
+    std::string wkt_ex("POLYGON ((120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
 
     GeomPtr g(wktreader.read(wkt_in));
 
@@ -126,8 +126,8 @@ void object::test<4>
     std::string wkt_in("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), \
 					(120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
 
-    std::string wkt_ex("POLYGON ((80 200, 160 200, 240 200, 240 60, 80 60, 80 200), \
-					(160 200, 140 199, 120 120, 220 120, 180 199, 160 200)))");
+    std::string wkt_ex("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), \
+					(120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
 
     GeomPtr g(wktreader.read(wkt_in));
 
@@ -396,4 +396,3 @@ void object::test<13>
 
 
 } // namespace tut
-

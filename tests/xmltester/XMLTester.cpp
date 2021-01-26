@@ -1291,14 +1291,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             geom::Geometry* p_gT = gA;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
-            // gRes->normalize();
+            gRes->normalize();
 
             geom::util::Densifier den(p_gT);
             double distanceTolerance = std::atof(opArg2.c_str());
             den.setDistanceTolerance(distanceTolerance);
             GeomPtr gRealRes = den.getResultGeometry();
-
-            // gRealRes->normalize();
+            gRealRes->normalize();
 
             if(gRes->compareTo(gRealRes.get()) == 0) {
                 success = 1;

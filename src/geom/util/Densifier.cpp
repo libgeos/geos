@@ -91,6 +91,8 @@ Densifier::DensifyTransformer::transformMultiPolygon(const MultiPolygon* geom, c
 std::unique_ptr<Geometry>
 Densifier::DensifyTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
+    if (roughAreaGeom->isValid())
+        return Geometry::Ptr(roughAreaGeom->clone());
     return roughAreaGeom->buffer(0.0);
 }
 

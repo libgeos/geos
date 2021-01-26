@@ -95,7 +95,10 @@ DPTransformer::DPTransformer(double t)
 Geometry::Ptr
 DPTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
-    return Geometry::Ptr(roughAreaGeom->buffer(0.0));
+    bool isValidArea = roughAreaGeom->getDimension() == 2 && roughAreaGeom->isValid();
+    if (! isValidArea)
+        return Geometry::Ptr(roughAreaGeom->buffer(0.0));
+    return Geometry::Ptr(roughAreaGeom->clone());
 }
 
 CoordinateSequence::Ptr
