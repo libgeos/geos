@@ -9,6 +9,7 @@ Changes in 3.10.0
 
 - Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
+  - Check for invalid geometry before fixing polygonal result in Densifier and DPSimplifier (Martin Davis)
 
 Changes in 3.9.0
 2020-12-09
