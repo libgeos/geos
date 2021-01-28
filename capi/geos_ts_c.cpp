@@ -1116,10 +1116,6 @@ extern "C" {
     {
         using geos::geom::util::Densifier;
 
-        if (g == nullptr) {
-            return nullptr;
-        }
-
         return execute(extHandle, [&]() {
             if (g->isEmpty()) {
                 return g->clone().release();

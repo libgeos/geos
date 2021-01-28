@@ -213,21 +213,11 @@ void object::test<8>()
     ensure_equals("result == expected", GEOSEqualsExact(geom2_, geom1_, 0), 1);
 }
 
-// Densify a null geometry
-// Result should be null
-template<>
-template<>
-void object::test<9>()
-{
-    geom2_ = GEOSDensify(nullptr, 3.0);
-    ensure("result is null", geom2_ == nullptr);
-}
-
 // Densify with an invalid tolerances should fail
 // Note: this raises "IllegalArgumentException: Tolerance must be positive:
 template<>
 template<>
-void object::test<10>()
+void object::test<9>()
 {
     geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
     ensure(geom1_ != nullptr);
