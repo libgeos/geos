@@ -37,6 +37,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/util/Densifier.h>
 #include <geos/index/strtree/SimpleSTRtree.h>
 #include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
@@ -1107,6 +1108,28 @@ extern "C" {
             Geometry* g3 = op.getResultGeometry(width);
             g3->setSRID(g1->getSRID());
             return g3;
+        });
+    }
+
+    Geometry*
+    GEOSDensify_r(GEOSContextHandle_t extHandle, const Geometry* g1, double tolerance)
+    {
+        using geos::geom::util::Densifier;
+
+        if (g1 == nullptr) {
+            return nullptr;
+        }
+
+        return execute(extHandle, [&]() {
+            if (g1->isEmpty()) {
+                return g1->clone().release();
+            }
+
+            Densifier densifier(g1);
+            densifier.setDistanceTolerance(tolerance);
+            auto g3 = densifier.getResultGeometry();
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         });
     }
 

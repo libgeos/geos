@@ -582,6 +582,12 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(
     double width, int quadsegs, int endCapStyle,
 	int joinStyle, double mitreLimit);
 
+/** \see GEOSDensify */
+extern GEOSGeometry GEOS_DLL *GEOSDensify_r(
+    GEOSContextHandle_t handle,
+	const GEOSGeometry* g,
+    double tolerance);
+
 /** \see GEOSOffsetCurve */
 extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve_r(
     GEOSContextHandle_t handle,
@@ -2010,6 +2016,21 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
     int endCapStyle,
     int joinStyle,
     double mitreLimit);
+
+/**
+* Densifies a geometry using a given distance tolerance.
+* Additional vertices will be added to every line segment
+* that is greater than or equal to this tolerance; these
+* vertices will evenly subdivide that segment.
+* Only linear components of input geometry are densified.
+* \param g The geometry to densify
+* \param tolerance the distance tolerance to densify
+* \return The densified geometry, or NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDensify(
+    const GEOSGeometry* g1,
+    double tolerance);
 
 /**
 * Generates offset curve for linear geometry.
