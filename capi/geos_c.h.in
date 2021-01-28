@@ -2029,7 +2029,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSDensify(
-    const GEOSGeometry* g1,
+    const GEOSGeometry* g,
     double tolerance);
 
 /**

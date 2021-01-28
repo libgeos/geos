@@ -1112,23 +1112,23 @@ extern "C" {
     }
 
     Geometry*
-    GEOSDensify_r(GEOSContextHandle_t extHandle, const Geometry* g1, double tolerance)
+    GEOSDensify_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         using geos::geom::util::Densifier;
 
-        if (g1 == nullptr) {
+        if (g == nullptr) {
             return nullptr;
         }
 
         return execute(extHandle, [&]() {
-            if (g1->isEmpty()) {
-                return g1->clone().release();
+            if (g->isEmpty()) {
+                return g->clone().release();
             }
 
-            Densifier densifier(g1);
+            Densifier densifier(g);
             densifier.setDistanceTolerance(tolerance);
             auto g3 = densifier.getResultGeometry();
-            g3->setSRID(g1->getSRID());
+            g3->setSRID(g->getSRID());
             return g3.release();
         });
     }

@@ -428,9 +428,9 @@ extern "C" {
     }
 
     Geometry*
-    GEOSDensify(const Geometry* g1, double tolerance)
+    GEOSDensify(const Geometry* g, double tolerance)
     {
-        return GEOSDensify_r(handle, g1, tolerance);
+        return GEOSDensify_r(handle, g, tolerance);
     }
 
 
