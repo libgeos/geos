@@ -88,10 +88,10 @@ public:
 protected:
     std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer);
     double getNextNumber(io::StringTokenizer* tokenizer);
-    std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t& dim);
-    std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
-    std::string getNextCloser(io::StringTokenizer* tokenizer);
-    std::string getNextWord(io::StringTokenizer* tokenizer);
+    static std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t& dim);
+    static std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
+    static std::string getNextCloser(io::StringTokenizer* tokenizer);
+    static std::string getNextWord(io::StringTokenizer* tokenizer);
     std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer);
     std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer);
     std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer);
@@ -107,7 +107,7 @@ private:
 
     void getPreciseCoordinate(io::StringTokenizer* tokenizer, geom::Coordinate&, std::size_t& dim);
 
-    bool isNumberNext(io::StringTokenizer* tokenizer);
+    static bool isNumberNext(io::StringTokenizer* tokenizer);
 };
 
 } // namespace io
