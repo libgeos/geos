@@ -157,6 +157,10 @@ Densifier::setDistanceTolerance(double tol)
 Geometry::Ptr
 Densifier::getResultGeometry() const
 {
+    if (inputGeom->isEmpty()) {
+        return inputGeom->clone();
+    }
+
     DensifyTransformer dt(distanceTolerance);
     return dt.transform(inputGeom);
 }

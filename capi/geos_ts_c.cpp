@@ -1117,10 +1117,6 @@ extern "C" {
         using geos::geom::util::Densifier;
 
         return execute(extHandle, [&]() {
-            if (g->isEmpty()) {
-                return g->clone().release();
-            }
-
             Densifier densifier(g);
             densifier.setDistanceTolerance(tolerance);
             auto g3 = densifier.getResultGeometry();

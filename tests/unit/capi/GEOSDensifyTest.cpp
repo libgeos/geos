@@ -4,11 +4,9 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
-// std
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
+
+#include "capi_test_utils.h"
+
 
 namespace tut {
 //
@@ -16,28 +14,14 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosdensify_data {
+struct test_capigeosdensify_data : public capitest::utility {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
     GEOSWKTWriter* w_;
     char* wkt_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeosdensify_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
+        : geom1_(nullptr), geom2_(nullptr), w_(nullptr)
     {
         initGEOS(notice, notice);
         w_ = GEOSWKTWriter_create();
@@ -48,11 +32,9 @@ struct test_capigeosdensify_data {
     {
         GEOSGeom_destroy(geom1_);
         GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
         GEOSWKTWriter_destroy(w_);
         geom1_ = nullptr;
         geom2_ = nullptr;
-        geom3_ = nullptr;
         wkt_ = nullptr;
         finishGEOS();
     }
@@ -81,8 +63,8 @@ void object::test<1>()
     geom2_ = GEOSDensify(geom1_, 10.00000000001);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom2_, geom1_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), GEOSGetSRID(geom1_));
+    ensure_geometry_equals(geom2_, geom1_);
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 
@@ -96,15 +78,14 @@ void object::test<2>()
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSGeomFromWKT("POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
-    ensure(geom2_ != nullptr);
-    GEOSSetSRID(geom2_, 3857);
+    geom2_ = GEOSDensify(geom1_, 10.0);
 
-    geom3_ = GEOSDensify(geom1_, 10.0);
+    ensure("result not null", geom2_ != nullptr);
+    ensure_geometry_equals(
+        geom2_,
+        "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
 
-    ensure("result not null", geom3_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom3_, geom2_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom3_), GEOSGetSRID(geom2_));
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify with a tolerance that evenly subdivides all outer and inner edges.
@@ -115,13 +96,12 @@ void object::test<3>()
     geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 7, 7 7, 7 1, 1 1))");
     ensure(geom1_ != nullptr);
 
-    geom2_ = GEOSGeomFromWKT("POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 4, 1 7, 4 7, 7 7, 7 4, 7 1, 4 1, 1 1))");
-    ensure(geom2_ != nullptr);
+    geom2_ = GEOSDensify(geom1_, 5.00000000001);
 
-    geom3_ = GEOSDensify(geom1_, 5.00000000001);
-
-    ensure("result not null", geom3_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom3_, geom2_, 0), 1);
+    ensure("result not null", geom2_ != nullptr);
+    ensure_geometry_equals(
+        geom2_,
+        "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 4, 1 7, 4 7, 7 7, 7 4, 7 1, 4 1, 1 1))");
 }
 
 // Densify a LINESTRING
@@ -133,15 +113,14 @@ void object::test<4>()
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 2 2, 4 4, 6 6)");
-    ensure(geom2_ != nullptr);
-    GEOSSetSRID(geom2_, 3857);
-
-    geom3_ = GEOSDensify(geom1_, 3.0);
+    geom2_ = GEOSDensify(geom1_, 3.0);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom3_, geom2_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom3_), GEOSGetSRID(geom2_));
+    ensure_geometry_equals(
+        geom2_,
+        "LINESTRING (0 0, 2 2, 4 4, 6 6)");
+
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify a LINEARRING
@@ -153,15 +132,13 @@ void object::test<5>()
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSGeomFromWKT("LINEARRING (0 0, 0 2, 0 4, 0 6, 2 6, 4 6, 6 6, 4 4, 2 2, 0 0)");
-    ensure(geom2_ != nullptr);
-    GEOSSetSRID(geom2_, 3857);
-
-    geom3_ = GEOSDensify(geom1_, 3.0);
+    geom2_ = GEOSDensify(geom1_, 3.0);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom3_, geom2_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom3_), GEOSGetSRID(geom2_));
+    ensure_geometry_equals(
+        geom2_,
+        "LINEARRING (0 0, 0 2, 0 4, 0 6, 2 6, 4 6, 6 6, 4 4, 2 2, 0 0)");
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify a POINT
@@ -177,8 +154,8 @@ void object::test<6>()
     geom2_ = GEOSDensify(geom1_, 3.0);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom2_, geom1_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), GEOSGetSRID(geom1_));
+    ensure_geometry_equals(geom2_, geom1_);
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify a MULTIPOINT
@@ -194,8 +171,8 @@ void object::test<7>()
     geom2_ = GEOSDensify(geom1_, 3.0);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom2_, geom1_, 0), 1);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), GEOSGetSRID(geom1_));
+    ensure_geometry_equals(geom2_, geom1_);
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify an empty polygon
@@ -210,7 +187,7 @@ void object::test<8>()
     geom2_ = GEOSDensify(geom1_, 3.0);
 
     ensure("result not null", geom2_ != nullptr);
-    ensure_equals("result == expected", GEOSEqualsExact(geom2_, geom1_, 0), 1);
+    ensure_geometry_equals(geom2_, geom1_);
 }
 
 // Densify with an invalid tolerances should fail
