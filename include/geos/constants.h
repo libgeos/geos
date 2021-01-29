@@ -31,9 +31,6 @@ typedef __int64 int64;
 #include <limits>
 #include <cinttypes>
 
-
-typedef int64_t int64;
-
 namespace geos {
 
 constexpr double MATH_PI = 3.14159265358979323846;

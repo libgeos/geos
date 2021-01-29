@@ -61,7 +61,7 @@ ByteOrderDataInStream::readByte() // throws ParseException
     return ret;
 }
 
-INLINE int
+INLINE int32_t
 ByteOrderDataInStream::readInt()
 {
     if(size() < 4) {
@@ -72,14 +72,25 @@ ByteOrderDataInStream::readInt()
     return ret;
 }
 
-INLINE long
+INLINE uint32_t
+ByteOrderDataInStream::readUnsigned()
+{
+    if(size() < 4) {
+        throw ParseException("Unexpected EOF parsing WKB");
+    }
+    auto ret =  ByteOrderValues::getUnsigned(buf , byteOrder);
+    buf += 4;
+    return ret;
+}
+
+INLINE int64_t
 ByteOrderDataInStream::readLong()
 {
     if(size() < 8) {
         throw ParseException("Unexpected EOF parsing WKB");
     }
 
-    auto ret = static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
+    auto ret = ByteOrderValues::getLong(buf, byteOrder);
     buf += 8;
     return ret;
 }

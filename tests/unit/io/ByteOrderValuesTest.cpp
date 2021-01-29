@@ -146,6 +146,37 @@ void object::test<3>
     ensure_equals("getLong little endian", out, in);
 }
 
+// 4 - Read/write an unsigned int
+template<>
+template<>
+void object::test<4>()
+{
+    using geos::io::ByteOrderValues;
+
+    unsigned char buf[4];
+    uint32_t in = 3210000003;
+    uint32_t out;
+
+    ByteOrderValues::putUnsigned(in, buf, ByteOrderValues::ENDIAN_BIG);
+    ensure("putUnsigned big endian[0]", buf[0] == 0xbf);
+    ensure("putUnsigned big endian[1]", buf[1] == 0x54);
+    ensure("putUnsigned big endian[2]", buf[2] == 0xb6);
+    ensure("putUnsigned big endian[3]", buf[3] == 0x83);
+
+    out = ByteOrderValues::getUnsigned(buf,
+                                  geos::io::ByteOrderValues::ENDIAN_BIG);
+    ensure_equals("getInt big endian", out, in);
+
+    ByteOrderValues::putUnsigned(in, buf, geos::io::ByteOrderValues::ENDIAN_LITTLE);
+    ensure("putUnsigned little endian[0]", buf[0] == 0x83);
+    ensure("putUnsigned little endian[1]", buf[1] == 0xb6);
+    ensure("putUnsigned little endian[2]", buf[2] == 0x54);
+    ensure("pUtnsigned little endian[3]", buf[3] == 0xbf);
+
+    out = ByteOrderValues::getUnsigned(buf,
+                                  ByteOrderValues::ENDIAN_LITTLE);
+    ensure_equals("getInt little endian", out, in);
+}
 
 } // namespace tut
 

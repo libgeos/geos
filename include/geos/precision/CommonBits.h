@@ -16,7 +16,7 @@
 #define GEOS_PRECISION_COMMONBITS_H
 
 #include <geos/export.h>
-#include <geos/constants.h> // for int64
+#include <cstdint>
 
 namespace geos {
 namespace precision { // geos.precision
@@ -38,9 +38,9 @@ private:
 
     int commonMantissaBitsCount;
 
-    int64 commonBits;
+    int64_t commonBits;
 
-    int64 commonSignExp;
+    int64_t commonSignExp;
 
 public:
 
@@ -51,7 +51,7 @@ public:
      * @param num
      * @return the bit pattern for the sign and exponent
      */
-    static int64 signExpBits(int64 num);
+    static int64_t signExpBits(int64_t num);
 
     /** \brief
      * This computes the number of common most-significant
@@ -65,7 +65,7 @@ public:
      * @param num2
      * @return the number of common most-significant mantissa bits
      */
-    static int numCommonMostSigMantissaBits(int64 num1, int64 num2);
+    static int numCommonMostSigMantissaBits(int64_t num1, int64_t num2);
 
     /** \brief
      * Zeroes the lower n bits of a bitstring.
@@ -74,7 +74,7 @@ public:
      * @param nBits the number of bits to zero
      * @return the zeroed bitstring
      */
-    static int64 zeroLowerBits(int64 bits, int nBits);
+    static int64_t zeroLowerBits(int64_t bits, int nBits);
 
     /** \brief
      * Extracts the i'th bit of a bitstring.
@@ -83,7 +83,7 @@ public:
      * @param i the bit to extract
      * @return the value of the extracted bit
      */
-    static int getBit(int64 bits, int i);
+    static int getBit(int64_t bits, int i);
 
     CommonBits();
 
