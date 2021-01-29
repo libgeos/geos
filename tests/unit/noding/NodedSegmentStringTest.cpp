@@ -63,7 +63,7 @@ struct test_nodedsegmentstring_data {
     }
 
     void
-    checkNoding(const std::string& wktLine, const std::string& wktNodes, std::vector<int> segmentIndex, const std::string& wktExpected)
+    checkNoding(const std::string& wktLine, const std::string& wktNodes, std::vector<size_t> segmentIndex, const std::string& wktExpected)
     {
         using geos::noding::NodedSegmentString;
 
@@ -115,7 +115,7 @@ template<>
 void object::test<1>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -151,7 +151,7 @@ template<>
 void object::test<2>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -187,7 +187,7 @@ template<>
 void object::test<3>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -260,7 +260,7 @@ void object::test<5>
     geos::geom::Coordinate p1(10, 0);
 
 
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
     cs->add(p0);
     cs->add(p1);
 
@@ -302,7 +302,7 @@ template<>
 void object::test<6>
 ()
 {
-    std::vector<int> segmentIndex;
+    std::vector<size_t> segmentIndex;
     segmentIndex.push_back(0);
     segmentIndex.push_back(0);
     segmentIndex.push_back(1);

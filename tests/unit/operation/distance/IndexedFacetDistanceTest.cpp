@@ -270,7 +270,7 @@ template<>
 void object::test<10>
 ()
 {
-    int npoints = 1000; // vertices in sinstar test shape
+    std::size_t npoints = 1000; // vertices in sinstar test shape
     int ncells = 100; // number of columns/rows in test grid square
 
     double radius = 100.0;
@@ -309,7 +309,7 @@ void object::test<10>
                                          "TestBoth"};
 
     bool perfTest = false;
-    std::vector<int> m = {TestBoth};
+    std::vector<size_t> m = {TestBoth};
     if (perfTest) {
         m.push_back(TestIndexedFacetDistance);
         m.push_back(TestGeometryDistance);
