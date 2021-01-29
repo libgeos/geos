@@ -112,8 +112,8 @@ bool
 SnappingIntersectionAdder::isAdjacent(SegmentString* ss0, std::size_t segIndex0, SegmentString* ss1, std::size_t segIndex1)
 {
     if (ss0 != ss1) return false;
-    long l0 = segIndex0;
-    long l1 = segIndex1;
+    long l0 = static_cast<long>(segIndex0);
+    long l1 = static_cast<long>(segIndex1);
 
     bool isAdjacent = (std::abs(l0 - l1) == 1);
     if (isAdjacent) {

@@ -100,10 +100,10 @@ ElevationMatrix::ElevationMatrix(const Envelope& newEnv,
 {
     cellwidth = env.getWidth() / cols;
     cellheight = env.getHeight() / rows;
-    if(! cellwidth) {
+    if(cellwidth == 0) {
         cols = 1;
     }
-    if(! cellheight) {
+    if(cellheight == 0) {
         rows = 1;
     }
 }
@@ -159,7 +159,7 @@ ElevationMatrix::getCell(const Coordinate& c)
 {
     int col, row;
 
-    if(! cellwidth) {
+    if(cellwidth == 0) {
         col = 0;
     }
     else {
@@ -169,7 +169,7 @@ ElevationMatrix::getCell(const Coordinate& c)
             col = cols - 1;
         }
     }
-    if(! cellheight) {
+    if(cellheight == 0) {
         row = 0;
     }
     else {

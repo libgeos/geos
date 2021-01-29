@@ -190,7 +190,7 @@ LineSegment::closestPoints(const LineSegment& line)
     // test for intersection
     Coordinate intPt = intersection(line);
     if(!intPt.isNull()) {
-        return { intPt, intPt };
+        return {{ intPt, intPt }};
     }
 
     /*
