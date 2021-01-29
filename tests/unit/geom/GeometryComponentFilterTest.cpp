@@ -72,7 +72,7 @@ void object::test<1>
 ()
 {
     // collection of 4 geometries
-    GeometryPtr g(reader.read("GEOMETRYCOLLECTION("
+    GeometryPtr input(reader.read("GEOMETRYCOLLECTION("
                               "POINT(0 0),"
                               "LINESTRING(0 0,1 1,1 2),"
                               "POLYGON((0 0,4 0,4 4,0 4,0 0)),"
@@ -104,7 +104,7 @@ void object::test<1>
     GeometryRefArray lineal;
     GeometryRefArray nonlineal;
     GeometryComponentSplitter splitter(lineal, nonlineal);
-    g->apply_ro(&splitter);
+    input->apply_ro(&splitter);
 
     // TODO: Verify the actual results
     // lineal:

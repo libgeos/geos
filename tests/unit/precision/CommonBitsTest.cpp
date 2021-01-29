@@ -36,7 +36,7 @@ template<>
 void object::test<2>
 ()
 {
-    constexpr int64_t val = 0xffffffffffffffffull;
+    constexpr int64_t val = static_cast<int64_t>(0xffffffffffffffffull);
     for(int i = 0; i < 64; i++) {
         ensure_equals(CommonBits::getBit(val, i), 1);
     }
@@ -48,7 +48,7 @@ template<>
 void object::test<3>
 ()
 {
-    constexpr int64_t val = 0xffffffff00000000ull;
+    constexpr int64_t val = static_cast<int64_t>(0xffffffff00000000ull);
     ensure_equals(CommonBits::getBit(val, 0), 0);
     ensure_equals(CommonBits::getBit(val, 63), 1);
 }

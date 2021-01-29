@@ -199,7 +199,7 @@ public:
         : pm(p_pm)
         , inputEdges(new std::vector<SegmentString*>)
         , customNoder(p_customNoder)
-        , hasEdges({false,false})
+        , hasEdges{{false,false}}
         , clipEnv(nullptr)
         , intAdder(lineInt)
         {};

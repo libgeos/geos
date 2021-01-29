@@ -2092,7 +2092,7 @@ extern "C" {
     int
     GEOS_getWKBOutputDims_r(GEOSContextHandle_t extHandle)
     {
-        return execute(extHandle, -1, [&]() {
+        return execute(extHandle, -1, [&]() -> int {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             return handle->WKBOutputDims;
         });

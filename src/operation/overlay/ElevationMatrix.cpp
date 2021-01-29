@@ -166,7 +166,7 @@ ElevationMatrix::getCell(const Coordinate& c)
         double xoffset = c.x - env.getMinX();
         col = (int)(xoffset / cellwidth);
         if(col == (int)cols) {
-            col = cols - 1;
+            col = static_cast<int>(cols - 1);
         }
     }
     if(cellheight == 0) {
@@ -176,10 +176,10 @@ ElevationMatrix::getCell(const Coordinate& c)
         double yoffset = c.y - env.getMinY();
         row = (int)(yoffset / cellheight);
         if(row == (int)rows) {
-            row = rows - 1;
+            row = static_cast<int>(rows - 1);
         }
     }
-    int celloffset = (cols * row) + col;
+    int celloffset = static_cast<int>(cols) * row + col;
 
     if(celloffset < 0 || celloffset >= (int)(cols * rows)) {
         std::ostringstream s;
@@ -188,7 +188,7 @@ ElevationMatrix::getCell(const Coordinate& c)
         throw util::IllegalArgumentException(s.str());
     }
 
-    return cells[celloffset];
+    return cells[static_cast<std::size_t>(celloffset)];
 }
 
 const ElevationMatrixCell&

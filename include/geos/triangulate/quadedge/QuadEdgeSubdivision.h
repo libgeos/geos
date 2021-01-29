@@ -24,6 +24,7 @@
 #include <list>
 #include <stack>
 #include <unordered_set>
+#include <array>
 #include <vector>
 
 #include <geos/geom/MultiLineString.h>
@@ -360,7 +361,7 @@ private:
      *
      * Only one visitor is allowed to be active at a time, so this is safe.
      */
-    QuadEdge* triEdges[3];
+    std::array<QuadEdge*, 3> m_triEdges;
 
     /** \brief
      * Resets the `visited` flag of each `QuadEdge` prior to iteration, if necessary.
@@ -378,7 +379,7 @@ private:
      * @return `null` if the triangle should not be visited (for instance, if it is
      *         outer)
      */
-    QuadEdge** fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame);
+    std::array<QuadEdge*, 3>* fetchTriangleToVisit(QuadEdge* edge, QuadEdgeStack& edgeStack, bool includeFrame);
 
     /** \brief
      * Gets the coordinates for each triangle in the subdivision as an array.

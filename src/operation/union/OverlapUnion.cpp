@@ -80,7 +80,7 @@ OverlapUnion::overlapEnvelope(const Geometry* geom0, const Geometry* geom1)
 std::unique_ptr<Geometry>
 OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<std::unique_ptr<Geometry>>& disjointPolys)
 {
-    if (disjointPolys.size() <= 0)
+    if (disjointPolys.empty())
         return std::move(unionGeom);
 
     disjointPolys.push_back(std::move(unionGeom));
@@ -221,14 +221,14 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
     class BorderSegmentFilter : public CoordinateSequenceFilter {
 
     private:
-        const Envelope env;
-        std::vector<LineSegment>* segs;
+        const Envelope m_env;
+        std::vector<LineSegment>* m_segs;
 
     public:
 
-        BorderSegmentFilter(const Envelope& penv, std::vector<LineSegment>* psegs)
-            : env(penv),
-              segs(psegs) {};
+        BorderSegmentFilter(const Envelope& env, std::vector<LineSegment>* segs)
+            : m_env(env),
+              m_segs(segs) {};
 
         bool
         isDone() const override { return false; }
@@ -244,9 +244,9 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
             // extract LineSegment
             const Coordinate& p0 = seq.getAt(i-1);
             const Coordinate& p1 = seq.getAt(i  );
-            bool isBorder = intersects(env, p0, p1) && ! containsProperly(env, p0, p1);
+            bool isBorder = intersects(m_env, p0, p1) && ! containsProperly(m_env, p0, p1);
             if (isBorder) {
-                segs->emplace_back(p0, p1);
+                m_segs->emplace_back(p0, p1);
             }
         };
 

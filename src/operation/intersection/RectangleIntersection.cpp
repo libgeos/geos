@@ -228,10 +228,10 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                         Rectangle::onEdge(pos) &&
                         !Rectangle::onSameEdge(prev_pos, pos)	// discard if travels along edge
                   ) {
-                    std::vector<Coordinate>* coords = new std::vector<Coordinate>(2);
-                    (*coords)[0] = Coordinate(x0, y0);
-                    (*coords)[1] = Coordinate(x, y);
-                    auto seq = _csf->create(coords);
+                    std::vector<Coordinate> coords(2);
+                    coords[0] = Coordinate(x0, y0);
+                    coords[1] = Coordinate(x, y);
+                    auto seq = _csf->create(std::move(coords));
                     geom::LineString* line = _gf->createLineString(seq.release());
                     parts.add(line);
                 }
@@ -257,7 +257,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
         }
 
         else {
-            // The point is now stricly inside or on the edge.
+            // The point is now strictly inside or on the edge.
             // Keep iterating until the end or the point goes
             // outside. We may have to output partial linestrings
             // while iterating until we go strictly outside
@@ -290,19 +290,20 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                     // Output a LineString if it at least one segment long
 
                     if(start_index < i - 1 || add_start || through_box) {
-                        std::vector<Coordinate>* coords = new std::vector<Coordinate>();
+                        std::vector<Coordinate> coords;
                         if(add_start) {
-                            coords->push_back(Coordinate(x0, y0));
+                            coords.emplace_back(x0, y0);
                             add_start = false;
                         }
                         //line->addSubLineString(&g, start_index, i-1);
-                        coords->insert(coords->end(), cs.begin() + start_index, cs.begin() + i);
+                        coords.insert(coords.end(), cs.begin() + static_cast<long>(start_index), cs.begin() +
+                                                                                                 static_cast<long>(i));
 
                         if(through_box) {
-                            coords->push_back(Coordinate(x, y));
+                            coords.emplace_back(x, y);
                         }
 
-                        auto seq = _csf->create(coords);
+                        auto seq = _csf->create(std::move(coords));
                         geom::LineString* line = _gf->createLineString(seq.release());
                         parts.add(line);
                     }
@@ -313,17 +314,18 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                     if(Rectangle::onSameEdge(prev_pos, pos)) {
                         // Nothing to output if we haven't been elsewhere
                         if(start_index < i - 1 || add_start) {
-                            std::vector<Coordinate>* coords = new std::vector<Coordinate>();
+                            std::vector<Coordinate> coords;
                             //geom::LineString * line = new geom::LineString();
                             if(add_start) {
                                 //line->addPoint(x0,y0);
-                                coords->push_back(Coordinate(x0, y0));
+                                coords.emplace_back(x0, y0);
                                 add_start = false;
                             }
                             //line->addSubLineString(&g, start_index, i-1);
-                            coords->insert(coords->end(), cs.begin() + start_index, cs.begin() + i);
+                            coords.insert(coords.end(), cs.begin() + static_cast<long>(start_index), cs.begin() +
+                                                                                                     static_cast<long>(i));
 
-                            auto seq = _csf->create(coords);
+                            auto seq = _csf->create(std::move(coords));
                             geom::LineString* line = _gf->createLineString(seq.release());
                             parts.add(line);
                         }
@@ -346,17 +348,18 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
 
             if(!go_outside &&						// meaning data ended
                     (start_index < i - 1 || add_start)) {	// meaning something has to be generated
-                std::vector<Coordinate>* coords = new std::vector<Coordinate>();
+                std::vector<Coordinate> coords;
                 //geom::LineString * line = new geom::LineString();
                 if(add_start) {
                     //line->addPoint(x0,y0);
-                    coords->push_back(Coordinate(x0, y0));
+                    coords.emplace_back(x0, y0);
                     add_start = false;
                 }
                 //line->addSubLineString(&g, start_index, i-1);
-                coords->insert(coords->end(), cs.begin() + start_index, cs.begin() + i);
+                coords.insert(coords.end(), cs.begin() + static_cast<long>(start_index), cs.begin() +
+                                                                                         static_cast<long>(i));
 
-                auto seq = _csf->create(coords);
+                auto seq = _csf->create(std::move(coords));
                 geom::LineString* line = _gf->createLineString(seq.release());
                 parts.add(line);
             }
