@@ -99,9 +99,9 @@ Node::find(const Envelope* searchEnv)
     if(subnodeIndex == -1) {
         return this;
     }
-    if(subnodes[subnodeIndex] != nullptr) {
+    if(subnodes[static_cast<std::size_t>(subnodeIndex)] != nullptr) {
         // query lies in subquad, so search it
-        Node* node = subnodes[subnodeIndex];
+        Node* node = subnodes[static_cast<std::size_t>(subnodeIndex)];
         return node->find(searchEnv);
     }
     // no existing subquad, so return this one anyway
@@ -118,8 +118,8 @@ Node::insertNode(std::unique_ptr<Node> node)
 
     if(node->level == level - 1) {
         // We take ownership of node
-        delete subnodes[index];
-        subnodes[index] = node.release();
+        delete subnodes[static_cast<std::size_t>(index)];
+        subnodes[static_cast<std::size_t>(index)] = node.release();
 
         //System.out.println("inserted");
     }
@@ -132,8 +132,8 @@ Node::insertNode(std::unique_ptr<Node> node)
         childNode->insertNode(std::move(node));
 
         // We take ownership of childNode
-        delete subnodes[index];
-        subnodes[index] = childNode.release();
+        delete subnodes[static_cast<std::size_t>(index)];
+        subnodes[static_cast<std::size_t>(index)] = childNode.release();
     }
 }
 
@@ -141,10 +141,10 @@ Node*
 Node::getSubnode(int index)
 {
     assert(index >= 0 && index < 4);
-    if(subnodes[index] == nullptr) {
-        subnodes[index] = createSubnode(index).release();
+    if(subnodes[static_cast<std::size_t>(index)] == nullptr) {
+        subnodes[static_cast<std::size_t>(index)] = createSubnode(index).release();
     }
-    return subnodes[index];
+    return subnodes[static_cast<std::size_t>(index)];
 }
 
 std::unique_ptr<Node>
