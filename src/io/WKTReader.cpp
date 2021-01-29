@@ -60,7 +60,7 @@ namespace geos {
 namespace io { // geos.io
 
 std::unique_ptr<Geometry>
-WKTReader::read(const std::string& wellKnownText)
+WKTReader::read(const std::string& wellKnownText) const
 {
     CLocalizer clocale;
     StringTokenizer tokenizer(wellKnownText);
@@ -68,7 +68,7 @@ WKTReader::read(const std::string& wellKnownText)
 }
 
 std::unique_ptr<CoordinateSequence>
-WKTReader::getCoordinates(StringTokenizer* tokenizer)
+WKTReader::getCoordinates(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -95,7 +95,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
 void
 WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
                                 Coordinate& coord,
-                                size_t& dim)
+                                size_t& dim) const
 {
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
@@ -220,7 +220,7 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Geometry>
-WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer)
+WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer) const
 {
     std::string type = getNextWord(tokenizer);
     if(type == "POINT") {
@@ -251,7 +251,7 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Point>
-WKTReader::readPointText(StringTokenizer* tokenizer)
+WKTReader::readPointText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -267,21 +267,21 @@ WKTReader::readPointText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<LineString>
-WKTReader::readLineStringText(StringTokenizer* tokenizer)
+WKTReader::readLineStringText(StringTokenizer* tokenizer) const
 {
     auto&& coords = getCoordinates(tokenizer);
     return geometryFactory->createLineString(std::move(coords));
 }
 
 std::unique_ptr<LinearRing>
-WKTReader::readLinearRingText(StringTokenizer* tokenizer)
+WKTReader::readLinearRingText(StringTokenizer* tokenizer) const
 {
     auto&& coords = getCoordinates(tokenizer);
     return geometryFactory->createLinearRing(std::move(coords));
 }
 
 std::unique_ptr<MultiPoint>
-WKTReader::readMultiPointText(StringTokenizer* tokenizer)
+WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -352,7 +352,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Polygon>
-WKTReader::readPolygonText(StringTokenizer* tokenizer)
+WKTReader::readPolygonText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -372,7 +372,7 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<MultiLineString>
-WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
+WKTReader::readMultiLineStringText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -390,7 +390,7 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<MultiPolygon>
-WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
+WKTReader::readMultiPolygonText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
@@ -408,7 +408,7 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<GeometryCollection>
-WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer)
+WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer) const
 {
     std::size_t dim = 2;
     std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
