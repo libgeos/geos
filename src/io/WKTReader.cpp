@@ -78,7 +78,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
 
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
-    auto coordinates = detail::make_unique<CoordinateArraySequence>(0, dim);
+    auto coordinates = detail::make_unique<CoordinateArraySequence>(0u, dim);
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
@@ -200,10 +200,10 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
         throw  ParseException("Expected word but encountered number", tokenizer->getNVal());
     case StringTokenizer::TT_WORD: {
         std::string word = tokenizer->getSVal();
-        int i = static_cast<int>(word.size());
-
-        while(--i >= 0) {
-            word[i] = static_cast<char>(toupper(word[i]));
+        for (char& c : word) {
+            // Avoid UB if c is not representable as unsigned char
+            // https://en.cppreference.com/w/cpp/string/byte/toupper
+            c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
         }
         return word;
     }
