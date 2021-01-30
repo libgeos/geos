@@ -60,7 +60,7 @@ void object::test<1>()
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSDensify(geom1_, 10.00000000001);
+    geom2_ = GEOSDensify(geom1_, 10.0);
 
     ensure("result not null", geom2_ != nullptr);
     ensure_geometry_equals(geom2_, geom1_);
@@ -68,60 +68,64 @@ void object::test<1>()
 }
 
 
-// Densify with a tolerance equal to length of all outer edges.
-// Outer edges are densified; interior ring edges are not.
+// Densify with a tolerance that evenly subdivides all outer and inner edges.
 template<>
 template<>
 void object::test<2>()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
+    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 7, 7 7, 7 1, 1 1))");
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSDensify(geom1_, 10.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(
-        geom2_,
-        "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
-
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
-}
-
-// Densify with a tolerance that evenly subdivides all outer and inner edges.
-template<>
-template<>
-void object::test<3>()
-{
-    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 7, 7 7, 7 1, 1 1))");
-    ensure(geom1_ != nullptr);
-
-    geom2_ = GEOSDensify(geom1_, 5.00000000001);
+    geom2_ = GEOSDensify(geom1_, 5.0);
 
     ensure("result not null", geom2_ != nullptr);
     ensure_geometry_equals(
         geom2_,
         "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 4, 1 7, 4 7, 7 7, 7 4, 7 1, 4 1, 1 1))");
+
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
 // Densify a LINESTRING
 template<>
 template<>
-void object::test<4>()
+void object::test<3>()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 6 6)");
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 6 )");
     ensure(geom1_ != nullptr);
     GEOSSetSRID(geom1_, 3857);
 
-    geom2_ = GEOSDensify(geom1_, 3.0);
+    geom2_ = GEOSDensify(geom1_, 3);
 
     ensure("result not null", geom2_ != nullptr);
     ensure_geometry_equals(
         geom2_,
-        "LINESTRING (0 0, 2 2, 4 4, 6 6)");
+        "LINESTRING (0 0, 0 3, 0 6)");
 
     ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
+
+// Ensure that tolerance results in the right number of subdivisions
+// ceil(6 / 2.9999999) = 3 new segments; 2 new vertices
+template<>
+template<>
+void object::test<4>()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 6 )");
+    ensure(geom1_ != nullptr);
+    GEOSSetSRID(geom1_, 3857);
+
+    geom2_ = GEOSDensify(geom1_, 2.9999999);
+
+    ensure("result not null", geom2_ != nullptr);
+    ensure_geometry_equals(
+        geom2_,
+        "LINESTRING (0 0, 0 2, 0 4, 0 6)");
+
+    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+}
+
 
 // Densify a LINEARRING
 template<>
@@ -137,7 +141,7 @@ void object::test<5>()
     ensure("result not null", geom2_ != nullptr);
     ensure_geometry_equals(
         geom2_,
-        "LINEARRING (0 0, 0 2, 0 4, 0 6, 2 6, 4 6, 6 6, 4 4, 2 2, 0 0)");
+        "LINEARRING (0 0, 0 3, 0 6, 3 6, 6 6, 4 4, 2 2, 0 0)");
     ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
 }
 
@@ -205,7 +209,6 @@ void object::test<9>()
     geom2_ = GEOSDensify(geom1_, -1.0);
     ensure(geom2_ == nullptr);
 }
-
 
 } // namespace tut
 

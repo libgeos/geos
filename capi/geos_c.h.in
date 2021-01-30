@@ -2020,8 +2020,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
 /**
 * Densifies a geometry using a given distance tolerance.
 * Additional vertices will be added to every line segment
-* that is greater than or equal to this tolerance; these
-* vertices will evenly subdivide that segment.
+* that is greater this tolerance; these vertices will
+* evenly subdivide that segment.
 * Only linear components of input geometry are densified.
 * \param g The geometry to densify
 * \param tolerance the distance tolerance to densify
