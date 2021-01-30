@@ -139,7 +139,6 @@ private:
 
     std::array<double, 4> ordValues;
     geom::Coordinate curCoord;
-    std::vector<geom::Coordinate> curCoords;
 
     std::unique_ptr<geom::Geometry> readGeometry();
 

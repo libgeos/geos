@@ -435,7 +435,7 @@ WKBReader::readCoordinateSequence(uint32_t size)
     if(targetDim > inputDimension) {
         targetDim = inputDimension;
     }
-    curCoords.clear();
+    std::vector<geom::Coordinate> curCoords;
     for(uint32_t i = 0; i < size; i++) {
         readCoordinate();
         if (targetDim < 3) {
