@@ -61,6 +61,22 @@ struct test_wkbreader_data {
     }
 
     void
+    testParseError(const std::string& hexwkb, const std::string& errstr)
+    {
+        std::string exstr;
+        std::stringstream hexin(hexwkb);
+        try {
+            GeomPtr g(wkbreader.readHEX(hexin));
+        }
+        catch(const geos::util::GEOSException& ex) {
+            // std::cout << e.what() << std::endl;
+            exstr = ex.what();
+            ensure("Missing expected error", !exstr.empty());
+            ensure_equals("Parse error incorrect", exstr, errstr);
+        }
+    }
+
+    void
     testInput(const std::string& hexwkb,
               const std::string& expected)
     {
@@ -69,7 +85,7 @@ struct test_wkbreader_data {
         std::stringstream ndr_out;
         ndr3dwkbwriter.writeHEX(*g, ndr_out);
         ensure_equals("hex output",
-                      ndr_out.str(), expected.c_str());
+            ndr_out.str(), expected.c_str());
     }
 
     void
@@ -572,6 +588,30 @@ void object::test<24>
 
 }
 
+
+// Malformed WKB wrong coordinate count
+template<>
+template<>
+void object::test<25>
+()
+{
+    testParseError(
+        "010200000003000000000000000000F03F000000000000004000000000000008400000000000001040",
+        "ParseException: Unexpected EOF parsing WKB"
+    );
+}
+
+// Malformed WKB with very large coordinate count
+template<>
+template<>
+void object::test<26>
+()
+{
+    testParseError(
+        "010200000000000080000000000000F03F000000000000004000000000000008400000000000001040",
+        "ParseException: Unexpected EOF parsing WKB"
+    );
+}
 
 } // namespace tut
 
