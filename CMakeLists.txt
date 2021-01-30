@@ -26,7 +26,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # TODO: Follow CMake detection of git and version tagging
 #       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
-if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
+if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
