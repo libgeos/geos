@@ -294,15 +294,15 @@ WKBReader::readPoint()
     readCoordinate();
 
     // POINT EMPTY
-    if (std::isnan(ordValues[0]) && std::isnan(ordValues[1])) {
+    if (std::isnan(curCoord.x) && std::isnan(curCoord.y)) {
         return std::unique_ptr<Point>(factory.createPoint(hasZ ? 3 : 2));
     }
 
     if (hasZ) {
-        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2])));
+        return std::unique_ptr<Point>(factory.createPoint(Coordinate(curCoord.x, curCoord.y, curCoord.z)));
     }
     else {
-        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1])));
+        return std::unique_ptr<Point>(factory.createPoint(Coordinate(curCoord.x, curCoord.y)));
     }
 }
 
@@ -425,19 +425,24 @@ WKBReader::readGeometryCollection()
 }
 
 std::unique_ptr<CoordinateSequence>
-WKBReader::readCoordinateSequence(int size)
+WKBReader::readCoordinateSequence(uint32_t size)
 {
-    unsigned int targetDim = 2 + (hasZ ? 1 : 0);
-    auto seq = factory.getCoordinateSequenceFactory()->create(size, targetDim);
+    uint32_t targetDim = 2 + (hasZ ? 1 : 0);
+    // auto seq = factory.getCoordinateSequenceFactory()->create(size, targetDim);
     if(targetDim > inputDimension) {
         targetDim = inputDimension;
     }
-    for(int i = 0; i < size; i++) {
+    curCoords.clear();
+    for(uint32_t i = 0; i < size; i++) {
         readCoordinate();
-        for(unsigned int j = 0; j < targetDim; j++) {
-            seq->setOrdinate(i, j, ordValues[j]);
+        if (targetDim < 3) {
+            curCoord.z = std::numeric_limits<double>::quiet_NaN();
         }
+        curCoords.push_back(curCoord);
     }
+    auto csFactory = factory.getCoordinateSequenceFactory();
+    auto seq = csFactory->create(std::move(curCoords), targetDim);
+
     return seq;
 }
 
@@ -445,17 +450,17 @@ void
 WKBReader::readCoordinate()
 {
     const PrecisionModel& pm = *factory.getPrecisionModel();
-    for(std::size_t i = 0; i < inputDimension; ++i) {
-        if (i < 2) {
-            ordValues[i] = pm.makePrecise(dis.readDouble());
-        }
-        else if (hasZ) {
-            ordValues[i] = dis.readDouble();
-        }
-        else {
-            // Read and throw away any extra (M) dimensions
-            dis.readDouble();
-        }
+    // Read X
+    curCoord.x = pm.makePrecise(dis.readDouble());
+    // Read Y
+    curCoord.y = pm.makePrecise(dis.readDouble());
+    // Read Z if it's there
+    if (inputDimension > 2 && hasZ) {
+        curCoord.z = dis.readDouble();
+    }
+    if (inputDimension > 3) {
+        // Read and throw away any extra (M) dimensions
+        dis.readDouble();
     }
 #if DEBUG_WKB_READER
     std::size_t << "WKB coordinate: " << ordValues[0] << "," << ordValues[1] << std::endl;

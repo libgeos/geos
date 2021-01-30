@@ -23,6 +23,7 @@
 #include <geos/export.h>
 
 #include <geos/io/ByteOrderDataInStream.h> // for composition
+#include <geos/geom/Coordinate.h> // for composition
 
 #include <iosfwd> // ostream, istream
 #include <memory>
@@ -137,6 +138,8 @@ private:
     ByteOrderDataInStream dis;
 
     std::array<double, 4> ordValues;
+    geom::Coordinate curCoord;
+    std::vector<geom::Coordinate> curCoords;
 
     std::unique_ptr<geom::Geometry> readGeometry();
 
