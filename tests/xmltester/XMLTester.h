@@ -18,7 +18,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/profiler.h>
-#include "tinyxml2/tinyxml2.h"
+#include <tinyxml2.h>
 
 using namespace geos;
 
