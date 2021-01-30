@@ -159,7 +159,7 @@ private:
 
     std::unique_ptr<geom::GeometryCollection> readGeometryCollection();
 
-    std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(int); // throws IOException
+    std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(unsigned int); // throws IOException
 
     void readCoordinate(); // throws IOException
 

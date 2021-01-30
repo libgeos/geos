@@ -31,27 +31,46 @@
 namespace geos {
 namespace io { // geos.io
 
-int
+int32_t
 ByteOrderValues::getInt(const unsigned char* buf, int byteOrder)
 {
     if(byteOrder == ENDIAN_BIG) {
-        return ((int)(buf[0] & 0xff) << 24) |
-               ((int)(buf[1] & 0xff) << 16) |
-               ((int)(buf[2] & 0xff) << 8) |
-               ((int)(buf[3] & 0xff));
+        return ((int32_t)(buf[0] & 0xff) << 24) |
+               ((int32_t)(buf[1] & 0xff) << 16) |
+               ((int32_t)(buf[2] & 0xff) << 8) |
+               ((int32_t)(buf[3] & 0xff));
     }
     else { // ENDIAN_LITTLE
         assert(byteOrder == ENDIAN_LITTLE);
 
-        return ((int)(buf[3] & 0xff) << 24) |
-               ((int)(buf[2] & 0xff) << 16) |
-               ((int)(buf[1] & 0xff) << 8) |
-               ((int)(buf[0] & 0xff));
+        return ((int32_t)(buf[3] & 0xff) << 24) |
+               ((int32_t)(buf[2] & 0xff) << 16) |
+               ((int32_t)(buf[1] & 0xff) << 8) |
+               ((int32_t)(buf[0] & 0xff));
+    }
+}
+
+uint32_t
+ByteOrderValues::getUnsigned(const unsigned char* buf, int byteOrder)
+{
+    if(byteOrder == ENDIAN_BIG) {
+        return ((uint32_t)(buf[0] & 0xff) << 24) |
+               ((uint32_t)(buf[1] & 0xff) << 16) |
+               ((uint32_t)(buf[2] & 0xff) << 8) |
+               ((uint32_t)(buf[3] & 0xff));
+    }
+    else { // ENDIAN_LITTLE
+        assert(byteOrder == ENDIAN_LITTLE);
+
+        return ((uint32_t)(buf[3] & 0xff) << 24) |
+               ((uint32_t)(buf[2] & 0xff) << 16) |
+               ((uint32_t)(buf[1] & 0xff) << 8) |
+               ((uint32_t)(buf[0] & 0xff));
     }
 }
 
 void
-ByteOrderValues::putInt(int intValue, unsigned char* buf, int byteOrder)
+ByteOrderValues::putInt(int32_t intValue, unsigned char* buf, int byteOrder)
 {
     if(byteOrder == ENDIAN_BIG) {
         buf[0] = (unsigned char)(intValue >> 24);
@@ -69,37 +88,56 @@ ByteOrderValues::putInt(int intValue, unsigned char* buf, int byteOrder)
     }
 }
 
-int64
+void
+ByteOrderValues::putUnsigned(uint32_t intValue, unsigned char* buf, int byteOrder)
+{
+    if(byteOrder == ENDIAN_BIG) {
+        buf[0] = (unsigned char)(intValue >> 24);
+        buf[1] = (unsigned char)(intValue >> 16);
+        buf[2] = (unsigned char)(intValue >> 8);
+        buf[3] = (unsigned char) intValue;
+    }
+    else { // ENDIAN_LITTLE
+        assert(byteOrder == ENDIAN_LITTLE);
+
+        buf[3] = (unsigned char)(intValue >> 24);
+        buf[2] = (unsigned char)(intValue >> 16);
+        buf[1] = (unsigned char)(intValue >> 8);
+        buf[0] = (unsigned char) intValue;
+    }
+}
+
+int64_t
 ByteOrderValues::getLong(const unsigned char* buf, int byteOrder)
 {
     if(byteOrder == ENDIAN_BIG) {
         return
-            (int64)(buf[0]) << 56
-            | (int64)(buf[1] & 0xff) << 48
-            | (int64)(buf[2] & 0xff) << 40
-            | (int64)(buf[3] & 0xff) << 32
-            | (int64)(buf[4] & 0xff) << 24
-            | (int64)(buf[5] & 0xff) << 16
-            | (int64)(buf[6] & 0xff) <<  8
-            | (int64)(buf[7] & 0xff);
+            (int64_t)(buf[0]) << 56
+            | (int64_t)(buf[1] & 0xff) << 48
+            | (int64_t)(buf[2] & 0xff) << 40
+            | (int64_t)(buf[3] & 0xff) << 32
+            | (int64_t)(buf[4] & 0xff) << 24
+            | (int64_t)(buf[5] & 0xff) << 16
+            | (int64_t)(buf[6] & 0xff) <<  8
+            | (int64_t)(buf[7] & 0xff);
     }
     else { // ENDIAN_LITTLE
         assert(byteOrder == ENDIAN_LITTLE);
 
         return
-            (int64)(buf[7]) << 56
-            | (int64)(buf[6] & 0xff) << 48
-            | (int64)(buf[5] & 0xff) << 40
-            | (int64)(buf[4] & 0xff) << 32
-            | (int64)(buf[3] & 0xff) << 24
-            | (int64)(buf[2] & 0xff) << 16
-            | (int64)(buf[1] & 0xff) <<  8
-            | (int64)(buf[0] & 0xff);
+            (int64_t)(buf[7]) << 56
+            | (int64_t)(buf[6] & 0xff) << 48
+            | (int64_t)(buf[5] & 0xff) << 40
+            | (int64_t)(buf[4] & 0xff) << 32
+            | (int64_t)(buf[3] & 0xff) << 24
+            | (int64_t)(buf[2] & 0xff) << 16
+            | (int64_t)(buf[1] & 0xff) <<  8
+            | (int64_t)(buf[0] & 0xff);
     }
 }
 
 void
-ByteOrderValues::putLong(int64 longValue, unsigned char* buf, int byteOrder)
+ByteOrderValues::putLong(int64_t longValue, unsigned char* buf, int byteOrder)
 {
     if(byteOrder == ENDIAN_BIG) {
         buf[0] = (unsigned char)(longValue >> 56);
@@ -128,7 +166,7 @@ ByteOrderValues::putLong(int64 longValue, unsigned char* buf, int byteOrder)
 double
 ByteOrderValues::getDouble(const unsigned char* buf, int byteOrder)
 {
-    int64 longValue = getLong(buf, byteOrder);
+    int64_t longValue = getLong(buf, byteOrder);
     double ret;
     std::memcpy(&ret, &longValue, sizeof(double));
     return ret;
@@ -137,7 +175,7 @@ ByteOrderValues::getDouble(const unsigned char* buf, int byteOrder)
 void
 ByteOrderValues::putDouble(double doubleValue, unsigned char* buf, int byteOrder)
 {
-    int64 longValue;
+    int64_t longValue;
     std::memcpy(&longValue, &doubleValue, sizeof(double));
 #if DEBUG_BYTEORDER_VALUES
     std::cout << "ByteOrderValues::putDouble(" << doubleValue <<

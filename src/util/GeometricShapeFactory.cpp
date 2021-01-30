@@ -85,7 +85,7 @@ std::unique_ptr<Polygon>
 GeometricShapeFactory::createRectangle()
 {
     uint32_t i;
-    int ipt = 0;
+    uint32_t ipt = 0;
     uint32_t nSide = nPts / 4;
     if(nSide < 1) {
         nSide = 1;
@@ -135,7 +135,7 @@ GeometricShapeFactory::createCircle()
     env.reset();
 
     std::vector<Coordinate> pts(nPts + 1);
-    int iPt = 0;
+    uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = i * (2 * 3.14159265358979 / nPts);
         double x = xRadius * cos(ang) + centreX;
@@ -167,7 +167,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     double angInc = angSize / (nPts - 1);
 
     std::vector<Coordinate> pts(nPts);
-    int iPt = 0;
+    uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
         double x = xRadius * cos(ang) + centreX;
@@ -197,7 +197,7 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     double angInc = angSize / (nPts - 1);
 
     std::vector<Coordinate> pts(nPts + 2);
-    int iPt = 0;
+    uint32_t iPt = 0;
     pts[iPt++] = coord(centreX, centreY);
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;

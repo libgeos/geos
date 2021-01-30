@@ -83,11 +83,11 @@ template<>
 void object::test<2>
 ()
 {
-    std::array<GEOSGeom, geom_size> geoms = {
+    std::array<GEOSGeom, geom_size> geoms = {{
         GEOSGeom_createEmptyPoint_r(handle_),
         GEOSGeom_createEmptyPoint_r(handle_),
         GEOSGeom_createEmptyPoint_r(handle_)
-    };
+    }};
     // takes ownership of individual geometries
     geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT,
                                         geoms.data(), static_cast<int>(geoms.size()));

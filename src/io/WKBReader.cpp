@@ -67,7 +67,7 @@ WKBReader::printHEX(std::istream& is, std::ostream& os)
 
     char each = 0;
     while(is.read(&each, 1)) {
-        const unsigned char c = each;
+        const unsigned char c = static_cast<unsigned char>(each);
         int low = (c & 0x0F);
         int high = (c >> 4);
         os << hex[high] << hex[low];
@@ -157,7 +157,7 @@ WKBReader::readHEX(std::istream& is)
         const unsigned char result_low = ASCIIHexToUChar(low);
 
         const unsigned char value =
-            static_cast<char>((result_high << 4) + result_low);
+            static_cast<unsigned char>((result_high << 4) + result_low);
 
 #if DEBUG_HEX_READER
         std::size_t << "HEX " << high << low << " -> DEC " << (int)value << std::endl;
@@ -177,7 +177,7 @@ WKBReader::read(std::istream& is)
     auto size = is.tellg();
     is.seekg(0, std::ios::beg);
 
-    std::vector<unsigned char> buf(size);
+    std::vector<unsigned char> buf(static_cast<size_t>(size));
     is.read((char*) buf.data(), size);
 
     return read(buf.data(), buf.size());
@@ -208,13 +208,13 @@ WKBReader::readGeometry()
         dis.setOrder(ByteOrderValues::ENDIAN_BIG);
     }
 
-    int typeInt = dis.readInt();
+    uint32_t typeInt = dis.readUnsigned();
     /* Pick up both ISO and SFSQL geometry type */
-    int geometryType = (typeInt & 0xffff) % 1000;
+    uint32_t geometryType = (typeInt & 0xffff) % 1000;
     /* ISO type range 1000 is Z, 2000 is M, 3000 is ZM */
-    int isoTypeRange = (typeInt & 0xffff) / 1000;
-    int isoHasZ = (isoTypeRange == 1) || (isoTypeRange == 3);
-    int isoHasM = (isoTypeRange == 2) || (isoTypeRange == 3);
+    uint32_t isoTypeRange = (typeInt & 0xffff) / 1000;
+    bool isoHasZ = (isoTypeRange == 1) || (isoTypeRange == 3);
+    bool isoHasM = (isoTypeRange == 2) || (isoTypeRange == 3);
     /* SFSQL high bit flag for Z, next bit for M */
     int sfsqlHasZ = (typeInt & 0x80000000) != 0;
     int sfsqlHasM = (typeInt & 0x40000000) != 0;
@@ -309,7 +309,7 @@ WKBReader::readPoint()
 std::unique_ptr<LineString>
 WKBReader::readLineString()
 {
-    int size = dis.readInt();
+    uint32_t size = dis.readUnsigned();
 #if DEBUG_WKB_READER
     std::size_t << "WKB npoints: " << size << std::endl;
 #endif
@@ -320,7 +320,7 @@ WKBReader::readLineString()
 std::unique_ptr<LinearRing>
 WKBReader::readLinearRing()
 {
-    int size = dis.readInt();
+    uint32_t size = dis.readUnsigned();
 #if DEBUG_WKB_READER
     std::size_t << "WKB npoints: " << size << std::endl;
 #endif
@@ -331,7 +331,7 @@ WKBReader::readLinearRing()
 std::unique_ptr<Polygon>
 WKBReader::readPolygon()
 {
-    int numRings = dis.readInt();
+    uint32_t numRings = dis.readUnsigned();
 
 #if DEBUG_WKB_READER
     std::size_t << "WKB numRings: " << numRings << std::endl;
@@ -348,7 +348,7 @@ WKBReader::readPolygon()
 
     if(numRings > 1) {
         std::vector<std::unique_ptr<LinearRing>> holes(numRings - 1);
-        for(int i = 0; i < numRings - 1; i++) {
+        for(uint32_t i = 0; i < numRings - 1; i++) {
             holes[i] = readLinearRing();
         }
 
@@ -360,10 +360,10 @@ WKBReader::readPolygon()
 std::unique_ptr<MultiPoint>
 WKBReader::readMultiPoint()
 {
-    int numGeoms = dis.readInt();
+    uint32_t numGeoms = dis.readUnsigned();
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    for(int i = 0; i < numGeoms; i++) {
+    for(uint32_t i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<Point*>(geoms[i].get())) {
             std::stringstream err;
@@ -378,10 +378,10 @@ WKBReader::readMultiPoint()
 std::unique_ptr<MultiLineString>
 WKBReader::readMultiLineString()
 {
-    int numGeoms = dis.readInt();
+    uint32_t numGeoms = dis.readUnsigned();
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    for(int i = 0; i < numGeoms; i++) {
+    for(uint32_t i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<LineString*>(geoms[i].get())) {
             std::stringstream err;
@@ -396,10 +396,10 @@ WKBReader::readMultiLineString()
 std::unique_ptr<MultiPolygon>
 WKBReader::readMultiPolygon()
 {
-    int numGeoms = dis.readInt();
+    uint32_t numGeoms = dis.readUnsigned();
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    for(int i = 0; i < numGeoms; i++) {
+    for(uint32_t i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
         if(!dynamic_cast<Polygon*>(geoms[i].get())) {
             std::stringstream err;
@@ -414,10 +414,10 @@ WKBReader::readMultiPolygon()
 std::unique_ptr<GeometryCollection>
 WKBReader::readGeometryCollection()
 {
-    int numGeoms = dis.readInt();
+    uint32_t numGeoms = dis.readUnsigned();
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    for(int i = 0; i < numGeoms; i++) {
+    for(uint32_t i = 0; i < numGeoms; i++) {
         geoms[i] = readGeometry();
     }
 

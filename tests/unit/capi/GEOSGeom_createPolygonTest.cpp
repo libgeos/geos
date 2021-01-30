@@ -23,7 +23,7 @@ void object::test<1>
 
     double shell_coords[] = {0,0, 0,10, 10,10, 10,0, 0,0};
     double hole_coords[] = {5,5, 5,6, 6,6, 6,5, 5,5};
-    for (int i = 0; i < 5; i++) {
+    for (unsigned int i = 0; i < 5; i++) {
         GEOSCoordSeq_setXY(shell_seq, i, shell_coords[2*i], shell_coords[2*i+1]);
         GEOSCoordSeq_setXY(hole_seq, i, hole_coords[2*i], hole_coords[2*i+1]);
     }

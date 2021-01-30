@@ -487,7 +487,7 @@ Polygon::isRectangle() const
     // check vertices are in right order
     double prevX = seq.getX(0);
     double prevY = seq.getY(0);
-    for(int i = 1; i <= 4; i++) {
+    for(uint32_t i = 1; i <= 4; i++) {
         double x = seq.getX(i);
         double y = seq.getY(i);
         bool xChanged = (x != prevX);

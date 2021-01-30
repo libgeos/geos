@@ -177,7 +177,7 @@ CoordinateArraySequence::add(std::size_t i, const Coordinate& coord,
         }
     }
 
-    vect.insert(vect.begin() + i, coord);
+    vect.insert(std::next(vect.begin(), static_cast<std::ptrdiff_t>(i)), coord);
 }
 
 size_t

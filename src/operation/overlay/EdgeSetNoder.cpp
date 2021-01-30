@@ -49,8 +49,7 @@ EdgeSetNoder::getNodedEdges()
     esi->computeIntersections(inputEdges, si, true);
     //Debug.println("has proper int = " + si.hasProperIntersection());
     std::vector<Edge*>* splitEdges = new std::vector<Edge*>();
-    for(int i = 0; i < (int)inputEdges->size(); i++) {
-        Edge* e = (*inputEdges)[i];
+    for(Edge* e : *inputEdges) {
         e->getEdgeIntersectionList().addSplitEdges(splitEdges);
     }
     return splitEdges;

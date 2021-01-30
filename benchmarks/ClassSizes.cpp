@@ -76,6 +76,6 @@ main()
     check(triangulate::quadedge::QuadEdge);
     check(triangulate::quadedge::QuadEdgeQuartet);
     check(triangulate::quadedge::Vertex);
-    check(int64);
+    check(int64_t);
 }
 

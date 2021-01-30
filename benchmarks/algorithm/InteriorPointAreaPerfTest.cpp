@@ -46,7 +46,7 @@ public:
     }
 
     void
-    test(int nPts)
+    test(uint32_t nPts)
     {
         Coordinate origin(ORG_X, ORG_Y);
         std::unique_ptr<geos::geom::Polygon> sinePoly =
@@ -108,7 +108,7 @@ private:
 
     std::unique_ptr<geos::geom::Polygon>
     createSineStar(const Coordinate& origin,
-                   double size, int nPts)
+                   double size, uint32_t nPts)
     {
         using geos::geom::util::SineStarFactory;
 

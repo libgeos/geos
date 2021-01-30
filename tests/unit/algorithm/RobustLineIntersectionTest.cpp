@@ -111,7 +111,7 @@ struct test_robustlineintersection_data {
     void
     checkIntersection(const std::string& wkt1,
                       const std::string& wkt2,
-                      int expectedIntersectionNum,
+                      std::size_t expectedIntersectionNum,
                       const std::string& expectedWKT,
                       double distanceTolerance)
     //throws ParseException
@@ -150,7 +150,7 @@ struct test_robustlineintersection_data {
     void
     checkIntersection(const std::string& wkt1,
                       const std::string& wkt2,
-                      int expectedIntersectionNum,
+                      std::size_t expectedIntersectionNum,
                       const std::vector<Coordinate>& intPt,
                       double distanceTolerance)
     // throws ParseException
@@ -239,7 +239,7 @@ struct test_robustlineintersection_data {
         li.computeIntersection(pt[0], pt[1], pt[2], pt[3]);
 
         // check that input points are unchanged
-        for(int i = 0; i < 4; i++) {
+        for(std::size_t i = 0; i < 4; i++) {
             ensure_equals(savePt[i], pt[i]);
         }
     }

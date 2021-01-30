@@ -89,7 +89,7 @@ HilbertCode::descan(uint32_t x)
 
 /*private static*/
 void
-HilbertCode::checkLevel(int level)
+HilbertCode::checkLevel(uint32_t level)
 {
     if (level > MAX_LEVEL) {
         throw util::IllegalArgumentException("Level out of range");

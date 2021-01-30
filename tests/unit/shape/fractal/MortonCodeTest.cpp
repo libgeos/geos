@@ -16,7 +16,7 @@ namespace tut {
 // Common data used by tests
 struct test_mortoncode_data {
 
-    void checkDecode(uint32_t index, int x, int y)
+    static void checkDecode(uint32_t index, int x, int y)
     {
         Coordinate p = MortonCode::decode(index);
         //System.out.println(p);
@@ -24,7 +24,7 @@ struct test_mortoncode_data {
         ensure_equals(y, (int) p.y);
     }
 
-    void checkDecodeEncodeForLevel(uint32_t level)
+    static void checkDecodeEncodeForLevel(uint32_t level)
     {
         uint32_t n = MortonCode::levelSize(level);
         for (uint32_t i = 0; i < n; i++) {
@@ -33,11 +33,11 @@ struct test_mortoncode_data {
     }
 
 
-    void
+    static void
     checkDecodeEncode(uint32_t index)
     {
         Coordinate p = MortonCode::decode(index);
-        uint32_t encode = MortonCode::encode((uint32_t)(p.x), (uint32_t)(p.y));
+        uint32_t encode = MortonCode::encode(static_cast<int>(p.x), static_cast<int>(p.y));
         ensure_equals(index, encode);
     }
 

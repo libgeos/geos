@@ -358,9 +358,9 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 
 /* protected */
 std::string
-WKTWriter::writeNumber(double d)
+WKTWriter::writeNumber(double d) const
 {
-    int precision = decimalPlaces >= 0 ? decimalPlaces : 0;
+    uint32_t precision = decimalPlaces >= 0 ? static_cast<std::uint32_t>(decimalPlaces) : 0;
     /*
     * For a "trimmed" result, with no trailing zeros we use
     * the ryu library.
@@ -379,7 +379,7 @@ WKTWriter::writeNumber(double d)
     else {
         std::stringstream ss;
         ss << std::fixed;
-        ss << std::setprecision(precision);
+        ss << std::setprecision(static_cast<int>(precision));
         ss << d;
         return ss.str();
     }
@@ -533,13 +533,13 @@ WKTWriter::appendGeometryCollectionText(
 }
 
 void
-WKTWriter::indent(int p_level, Writer* writer)
+WKTWriter::indent(int p_level, Writer* writer) const
 {
     if(!isFormatted || p_level <= 0) {
         return;
     }
     writer->write("\n");
-    writer->write(std::string(INDENT * p_level, ' '));
+    writer->write(std::string(INDENT * static_cast<std::size_t>(p_level), ' '));
 }
 
 } // namespace geos.io

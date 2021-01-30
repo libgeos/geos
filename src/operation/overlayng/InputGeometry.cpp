@@ -21,8 +21,8 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public*/
 InputGeometry::InputGeometry(const Geometry* geomA, const Geometry* geomB)
-    : geom({geomA, geomB})
-    , isCollapsed({false, false})
+    : geom{{geomA, geomB}}
+    , isCollapsed{{false, false}}
 {}
 
 /*public*/

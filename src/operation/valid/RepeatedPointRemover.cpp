@@ -27,7 +27,7 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
     using geom::Coordinate;
 
     if (seq->isEmpty()) {
-        return detail::make_unique<geom::CoordinateArraySequence>(0, seq->getDimension());
+        return detail::make_unique<geom::CoordinateArraySequence>(0u, seq->getDimension());
     }
 
     auto pts = detail::make_unique<std::vector<Coordinate>>();

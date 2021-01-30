@@ -58,7 +58,7 @@ STRtree::createParentBoundables(BoundableList* childBoundables, int newLevel)
     std::unique_ptr<BoundableList> sortedChildBoundables(sortBoundablesX(childBoundables));
 
     std::unique_ptr< std::vector<BoundableList*> > verticalSlicesV(
-        verticalSlices(sortedChildBoundables.get(), (int)ceil(sqrt((double)minLeafCount)))
+        verticalSlices(sortedChildBoundables.get(), static_cast<std::size_t>(std::ceil(std::sqrt(static_cast<double>(minLeafCount)))))
     );
 
     std::unique_ptr<BoundableList> ret(

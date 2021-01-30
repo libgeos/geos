@@ -73,7 +73,7 @@ VoronoiDiagramBuilder::setTolerance(double nTolerance)
 void
 VoronoiDiagramBuilder::create()
 {
-    if(subdiv.get()) {
+    if(subdiv) {
         return;
     }
 
