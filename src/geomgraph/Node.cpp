@@ -173,7 +173,7 @@ Node::mergeLabel(const Node& n)
 void
 Node::mergeLabel(const Label& label2)
 {
-    for(int i = 0; i < 2; i++) {
+    for(uint8_t i = 0; i < 2; i++) {
         Location loc = computeMergedLocation(label2, i);
         Location thisLoc = label.getLocation(i);
         if(thisLoc == Location::NONE) {
@@ -185,7 +185,7 @@ Node::mergeLabel(const Label& label2)
 
 /*public*/
 void
-Node::setLabel(int argIndex, Location onLocation)
+Node::setLabel(uint8_t argIndex, Location onLocation)
 {
     if(label.isNull()) {
         label = Label(argIndex, onLocation);
@@ -199,7 +199,7 @@ Node::setLabel(int argIndex, Location onLocation)
 
 /*public*/
 void
-Node::setLabelBoundary(int argIndex)
+Node::setLabelBoundary(uint8_t argIndex)
 {
     Location loc = label.getLocation(argIndex);
     // flip the loc
@@ -222,7 +222,7 @@ Node::setLabelBoundary(int argIndex)
 
 /*public*/
 Location
-Node::computeMergedLocation(const Label& label2, int eltIndex)
+Node::computeMergedLocation(const Label& label2, uint8_t eltIndex)
 {
     Location loc = label.getLocation(eltIndex);
     if(!label2.isNull(eltIndex)) {

@@ -134,7 +134,7 @@ DirectedEdgeStar::getIndex(const Edge* edge)
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
         DirectedEdge* de = outEdges[i];
         if(de->getEdge() == edge) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;

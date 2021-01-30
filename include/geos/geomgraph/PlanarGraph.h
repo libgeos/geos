@@ -112,7 +112,7 @@ public:
 
     virtual std::vector<EdgeEnd*>* getEdgeEnds();
 
-    virtual bool isBoundaryNode(int geomIndex, const geom::Coordinate& coord);
+    virtual bool isBoundaryNode(uint8_t geomIndex, const geom::Coordinate& coord);
 
     virtual void add(EdgeEnd* e);
 

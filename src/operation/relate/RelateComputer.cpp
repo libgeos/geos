@@ -307,7 +307,7 @@ RelateComputer::computeProperIntersectionIM(SegmentIntersector* intersector, Int
  * in the interior due to the Boundary Determination Rule)
  */
 void
-RelateComputer::copyNodesAndLabels(int argIndex)
+RelateComputer::copyNodesAndLabels(uint8_t argIndex)
 {
     const NodeMap* nm = (*arg)[argIndex]->getNodeMap();
     for(const auto& it: *nm) {
@@ -329,7 +329,7 @@ RelateComputer::copyNodesAndLabels(int argIndex)
  * Endpoint nodes will already be labelled from when they were inserted.
  */
 void
-RelateComputer::computeIntersectionNodes(int argIndex)
+RelateComputer::computeIntersectionNodes(uint8_t argIndex)
 {
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(Edge* e: *edges) {
@@ -357,7 +357,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
  * Endpoint nodes will already be labelled from when they were inserted.
  */
 void
-RelateComputer::labelIntersectionNodes(int argIndex)
+RelateComputer::labelIntersectionNodes(uint8_t argIndex)
 {
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(Edge* e: *edges) {
@@ -431,7 +431,7 @@ RelateComputer::updateIM(IntersectionMatrix& imX)
 
 /*private*/
 void
-RelateComputer::labelIsolatedEdges(int thisIndex, int targetIndex)
+RelateComputer::labelIsolatedEdges(uint8_t thisIndex, uint8_t targetIndex)
 {
     std::vector<Edge*>* edges = (*arg)[thisIndex]->getEdges();
     for(Edge* e: *edges) {
@@ -444,7 +444,7 @@ RelateComputer::labelIsolatedEdges(int thisIndex, int targetIndex)
 
 /* private */
 void
-RelateComputer::labelIsolatedEdge(Edge* e, int targetIndex, const Geometry* target)
+RelateComputer::labelIsolatedEdge(Edge* e, uint8_t targetIndex, const Geometry* target)
 {
     // this won't work for GeometryCollections with both dim 2 and 1 geoms
     if(target->getDimension() > 0) {
@@ -482,7 +482,7 @@ RelateComputer::labelIsolatedNodes()
 
 /* private */
 void
-RelateComputer::labelIsolatedNode(Node* n, int targetIndex)
+RelateComputer::labelIsolatedNode(Node* n, uint8_t targetIndex)
 {
     Location loc = ptLocator.locate(n->getCoordinate(),
                                (*arg)[targetIndex]->getGeometry());

@@ -101,7 +101,7 @@ private:
      * the index of this geometry as an argument to a spatial function
      * (used for labelling)
      */
-    int argIndex;
+    uint8_t argIndex;
 
     /// Cache for fast responses to getBoundaryPoints
     std::unique_ptr< geom::CoordinateSequence > boundaryPoints;
@@ -129,7 +129,7 @@ private:
 
     void addLineString(const geom::LineString* line);
 
-    void insertPoint(int argIndex, const geom::Coordinate& coord,
+    void insertPoint(uint8_t p_argIndex, const geom::Coordinate& coord,
                      geom::Location onLocation);
 
     /** \brief
@@ -139,9 +139,9 @@ private:
      * This is used to add the boundary
      * points of dim-1 geometries (Curves/MultiCurves).
      */
-    void insertBoundaryPoint(int argIndex, const geom::Coordinate& coord);
+    void insertBoundaryPoint(uint8_t p_argIndex, const geom::Coordinate& coord);
 
-    void addSelfIntersectionNodes(int argIndex);
+    void addSelfIntersectionNodes(uint8_t p_argIndex);
 
     /** \brief
      * Add a node for a self-intersection.
@@ -150,7 +150,7 @@ private:
      * which is a boundary) then insert it as a potential boundary node.
      * Otherwise, just add it as a regular node.
      */
-    void addSelfIntersectionNode(int argIndex,
+    void addSelfIntersectionNode(uint8_t p_argIndex,
                                  const geom::Coordinate& coord, geom::Location loc);
 
     // Declare type as noncopyable
@@ -167,11 +167,9 @@ public:
         const algorithm::BoundaryNodeRule& boundaryNodeRule,
         int boundaryCount);
 
-    GeometryGraph();
+    GeometryGraph(uint8_t newArgIndex, const geom::Geometry* newParentGeom);
 
-    GeometryGraph(int newArgIndex, const geom::Geometry* newParentGeom);
-
-    GeometryGraph(int newArgIndex, const geom::Geometry* newParentGeom,
+    GeometryGraph(uint8_t newArgIndex, const geom::Geometry* newParentGeom,
                   const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
     ~GeometryGraph() override;

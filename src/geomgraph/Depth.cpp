@@ -45,7 +45,7 @@ namespace geomgraph { // geos.geomgraph
 void
 Depth::normalize()
 {
-    for(int i = 0; i < 2; i++) {
+    for(uint8_t i = 0; i < 2; i++) {
         if(!isNull(i)) {
             int minDepth = depth[i][1];
             if(depth[i][2] < minDepth) {
@@ -68,8 +68,8 @@ Depth::normalize()
 void
 Depth::add(const Label& lbl)
 {
-    for(uint32_t i = 0; i < 2; i++) {
-        for(uint32_t j = 1; j < 3; j++) {
+    for(uint8_t i = 0; i < 2; i++) {
+        for(uint8_t j = 1; j < 3; j++) {
             Location loc = lbl.getLocation(i, j);
             if(loc == Location::EXTERIOR || loc == Location::INTERIOR) {
                 // initialize depth if it is null, otherwise

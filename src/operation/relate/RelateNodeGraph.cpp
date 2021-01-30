@@ -86,8 +86,8 @@ RelateNodeGraph::build(GeometryGraph* geomGraph)
  * Precondition: edge intersections have been computed.
  */
 void
-RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
-        int argIndex)
+RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
+                                          uint8_t argIndex)
 {
     std::vector<Edge*>* edges = geomGraph->getEdges();
     std::vector<Edge*>::iterator edgeIt = edges->begin();
@@ -119,7 +119,7 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
  * in the interior due to the Boundary Determination Rule)
  */
 void
-RelateNodeGraph::copyNodesAndLabels(GeometryGraph* geomGraph, int argIndex)
+RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph, uint8_t argIndex)
 {
     auto& nMap = geomGraph->getNodeMap()->nodeMap;
     for(auto& entry : nMap) {

@@ -429,7 +429,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
 }
 
 void
-GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
+GeometryGraph::insertPoint(uint8_t p_argIndex, const Coordinate &coord,
                            geom::Location onLocation)
 {
 #if GEOS_DEBUG > 1
@@ -452,7 +452,7 @@ GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
  * iff if it is in the boundaries of an odd number of Geometries
  */
 void
-GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
+GeometryGraph::insertBoundaryPoint(uint8_t p_argIndex, const Coordinate &coord)
 {
     Node* n = nodes->addNode(coord);
     // nodes always have labels
@@ -475,11 +475,9 @@ GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
 
 /*private*/
 void
-GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
+GeometryGraph::addSelfIntersectionNodes(uint8_t p_argIndex)
 {
-    for(std::vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
-            i != endIt; ++i) {
-        Edge* e = *i;
+    for(Edge* e : *edges) {
         Location eLoc = e->getLabel().getLocation(p_argIndex);
         EdgeIntersectionList& eiL = e->eiList;
         for(const EdgeIntersection& ei : eiL) {
@@ -491,8 +489,8 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
 
 /*private*/
 void
-GeometryGraph::addSelfIntersectionNode(int p_argIndex,
-                                       const Coordinate& coord, Location loc)
+GeometryGraph::addSelfIntersectionNode(uint8_t p_argIndex,
+                                       const Coordinate &coord, Location loc)
 {
     // if this node is already a boundary node, don't change it
     if(isBoundaryNode(p_argIndex, coord)) {
@@ -524,7 +522,7 @@ GeometryGraph::getInvalidPoint()
     return invalidPoint;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex,
+GeometryGraph::GeometryGraph(uint8_t newArgIndex,
                              const geom::Geometry* newParentGeom)
     :
     PlanarGraph(),
@@ -539,7 +537,7 @@ GeometryGraph::GeometryGraph(int newArgIndex,
     }
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex,
+GeometryGraph::GeometryGraph(uint8_t newArgIndex,
                              const geom::Geometry* newParentGeom,
                              const algorithm::BoundaryNodeRule& bnr)
     :
@@ -554,18 +552,6 @@ GeometryGraph::GeometryGraph(int newArgIndex,
         add(parentGeom);
     }
 }
-
-GeometryGraph::GeometryGraph()
-    :
-    PlanarGraph(),
-    parentGeom(nullptr),
-    useBoundaryDeterminationRule(true),
-    boundaryNodeRule(algorithm::BoundaryNodeRule::getBoundaryOGCSFS()),
-    argIndex(-1),
-    hasTooFewPointsVar(false)
-{
-}
-
 
 /* public static */
 Location

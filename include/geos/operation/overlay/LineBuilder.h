@@ -118,7 +118,7 @@ private:
     /**
      * Label an isolated node with its relationship to the target geometry.
      */
-    void labelIsolatedLine(geomgraph::Edge* e, int targetIndex);
+    void labelIsolatedLine(geomgraph::Edge* e, uint8_t targetIndex);
 
     /*
      * If the given CoordinateSequence has mixed 3d/2d vertexes
