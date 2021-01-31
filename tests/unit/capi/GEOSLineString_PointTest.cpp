@@ -17,20 +17,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capilinestringpoint_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-
-    test_capilinestringpoint_data()
-        : geom1_(nullptr)
-    {}
-
-    ~test_capilinestringpoint_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-    }
-
-};
+struct test_capilinestringpoint_data : public capitest::utility {};
 
 typedef test_group<test_capilinestringpoint_data> group;
 typedef group::object object;

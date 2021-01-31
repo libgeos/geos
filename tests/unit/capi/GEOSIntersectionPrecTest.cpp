@@ -19,54 +19,18 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosintersectionprec_data : public capitest::utility {
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSGeometry* expected_;
-
-    test_capigeosintersectionprec_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
-    {
-        wktw_ = GEOSWKTWriter_create();
+    test_capigeosintersectionprec_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
     }
 
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
-    }
-
-    int
+    static int
     same(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
     {
         GEOSNormalize(g1);
         GEOSNormalize(g2);
         return GEOSEqualsExact(g1, g2, tolerance);
     }
-
-    ~test_capigeosintersectionprec_data()
-    {
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        if (expected_) GEOSGeom_destroy(expected_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosintersectionprec_data> group;

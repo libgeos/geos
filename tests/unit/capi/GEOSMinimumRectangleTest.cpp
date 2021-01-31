@@ -18,27 +18,10 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosminimumrectangle_data : public capitest::utility {
-    GEOSGeometry* input_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-
-    test_capigeosminimumrectangle_data()
-        : input_(nullptr), wkt_(nullptr)
-    {
-        wktw_ = GEOSWKTWriter_create();
+    test_capigeosminimumrectangle_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capigeosminimumrectangle_data()
-    {
-        GEOSGeom_destroy(input_);
-        input_ = nullptr;
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        wkt_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosminimumrectangle_data> group;

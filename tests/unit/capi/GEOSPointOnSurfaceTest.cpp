@@ -20,31 +20,11 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capipointonsurface_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-    double area_;
-
     test_capipointonsurface_data()
-        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
     {
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 4);
     }
-
-    ~test_capipointonsurface_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        wkt_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capipointonsurface_data> group;

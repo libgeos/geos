@@ -20,18 +20,6 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosgeomtowkt_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-
-    test_capigeosgeomtowkt_data()
-        : geom1_(nullptr)
-    {}
-
-    ~test_capigeosgeomtowkt_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-    }
-
     void
     test_wkt(std::string const& wkt)
     {

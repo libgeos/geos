@@ -17,8 +17,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosrelatepatternmatch_data : public capitest::utility {
-};
+struct test_capigeosrelatepatternmatch_data : public capitest::utility {};
 
 typedef test_group<test_capigeosrelatepatternmatch_data> group;
 typedef group::object object;

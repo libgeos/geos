@@ -19,30 +19,9 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capioffsetcurve_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-    double area_;
-
-    test_capioffsetcurve_data()
-        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
-    {
-        wktw_ = GEOSWKTWriter_create();
+    test_capioffsetcurve_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    ~test_capioffsetcurve_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        wkt_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capioffsetcurve_data> group;

@@ -19,11 +19,6 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosclipbyrect_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* w_;
-
     void
     isEqual(GEOSGeom g, const char* exp_wkt)
     {
@@ -31,7 +26,7 @@ struct test_capigeosclipbyrect_data : public capitest::utility {
         bool eq = GEOSEquals(geom3_, g) != 0;
         if(! eq) {
             std::printf("EXP: %s\n", exp_wkt);
-            char* obt_wkt = GEOSWKTWriter_write(w_, g);
+            char* obt_wkt = GEOSWKTWriter_write(wktw_, g);
             std::printf("OBT: %s\n", obt_wkt);
             free(obt_wkt);
         }
@@ -39,24 +34,10 @@ struct test_capigeosclipbyrect_data : public capitest::utility {
     }
 
     test_capigeosclipbyrect_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
     {
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
-        GEOSWKTWriter_setRoundingPrecision(w_, 8);
+        GEOSWKTWriter_setTrim(wktw_, 1);
+        GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capigeosclipbyrect_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosclipbyrect_data> group;

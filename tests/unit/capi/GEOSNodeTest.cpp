@@ -19,26 +19,10 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosnode_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* w_;
-
     test_capigeosnode_data()
-        : geom1_(nullptr), geom2_(nullptr), w_(nullptr)
     {
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
+        GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    ~test_capigeosnode_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosnode_data> group;
@@ -61,7 +45,7 @@ void object::test<1>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -81,7 +65,7 @@ void object::test<2>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -101,7 +85,7 @@ void object::test<3>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 

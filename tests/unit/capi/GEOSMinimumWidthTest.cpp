@@ -17,27 +17,11 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosminimumwidth_data : public capitest::utility {
-    GEOSGeometry* input_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-
     test_capigeosminimumwidth_data()
-        : input_(nullptr), wkt_(nullptr)
     {
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capigeosminimumwidth_data()
-    {
-        GEOSGeom_destroy(input_);
-        input_ = nullptr;
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        wkt_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosminimumwidth_data> group;

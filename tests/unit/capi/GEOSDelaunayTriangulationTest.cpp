@@ -19,36 +19,9 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosdelaunaytriangulation_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* w_;
-
-    test_capigeosdelaunaytriangulation_data()
-        : geom1_(nullptr), geom2_(nullptr)
-    {
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
+    test_capigeosdelaunaytriangulation_data() {
+        GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    void
-    ensure_equals_wkt(GEOSGeometry* g, const std::string& exp)
-    {
-        GEOSNormalize(g);
-        char* wkt_c = GEOSWKTWriter_write(w_, g);
-        std::string out(wkt_c);
-        free(wkt_c);
-        ensure_equals(out, exp);
-    }
-
-    ~test_capigeosdelaunaytriangulation_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosdelaunaytriangulation_data> group;
@@ -114,7 +87,7 @@ void object::test<3>
 
     GEOSGeom_destroy(geom2_);
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 1);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
     ensure_equals(out, "MULTILINESTRING ((5 0, 10 0), (0 0, 5 0))");
@@ -130,15 +103,13 @@ void object::test<4>
 
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 0);
     ensure(geom2_ != nullptr);
-    ensure_equals_wkt(geom2_,
-                      "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 10, 5 0, 0 0)))"
-                     );
+    ensure_geometry_equals(geom2_,
+                      "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 10, 5 0, 0 0)))");
 
     GEOSGeom_destroy(geom2_);
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 1);
-    ensure_equals_wkt(geom2_,
-                      "MULTILINESTRING ((5 0, 10 10), (0 0, 10 10), (0 0, 5 0))"
-                     );
+    ensure_geometry_equals(geom2_,
+                      "MULTILINESTRING ((5 0, 10 10), (0 0, 10 10), (0 0, 5 0))");
 }
 
 // A polygon with an hole
@@ -151,15 +122,13 @@ void object::test<5>
 
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 0);
     ensure(geom2_ != nullptr);
-    ensure_equals_wkt(geom2_,
-                      "GEOMETRYCOLLECTION (POLYGON ((8 2, 10 10, 8.5 1, 8 2)), POLYGON ((7 8, 10 10, 8 2, 7 8)), POLYGON ((3 8, 10 10, 7 8, 3 8)), POLYGON ((2 2, 8 2, 8.5 1, 2 2)), POLYGON ((2 2, 7 8, 8 2, 2 2)), POLYGON ((2 2, 3 8, 7 8, 2 2)), POLYGON ((0.5 9, 10 10, 3 8, 0.5 9)), POLYGON ((0.5 9, 3 8, 2 2, 0.5 9)), POLYGON ((0 0, 2 2, 8.5 1, 0 0)), POLYGON ((0 0, 0.5 9, 2 2, 0 0)))"
-                     );
+    ensure_geometry_equals(geom2_,
+                      "GEOMETRYCOLLECTION (POLYGON ((8 2, 10 10, 8.5 1, 8 2)), POLYGON ((7 8, 10 10, 8 2, 7 8)), POLYGON ((3 8, 10 10, 7 8, 3 8)), POLYGON ((2 2, 8 2, 8.5 1, 2 2)), POLYGON ((2 2, 7 8, 8 2, 2 2)), POLYGON ((2 2, 3 8, 7 8, 2 2)), POLYGON ((0.5 9, 10 10, 3 8, 0.5 9)), POLYGON ((0.5 9, 3 8, 2 2, 0.5 9)), POLYGON ((0 0, 2 2, 8.5 1, 0 0)), POLYGON ((0 0, 0.5 9, 2 2, 0 0)))");
 
     GEOSGeom_destroy(geom2_);
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 1);
-    ensure_equals_wkt(geom2_,
-                      "MULTILINESTRING ((8.5 1, 10 10), (8 2, 10 10), (8 2, 8.5 1), (7 8, 10 10), (7 8, 8 2), (3 8, 10 10), (3 8, 7 8), (2 2, 8.5 1), (2 2, 8 2), (2 2, 7 8), (2 2, 3 8), (0.5 9, 10 10), (0.5 9, 3 8), (0.5 9, 2 2), (0 0, 8.5 1), (0 0, 2 2), (0 0, 0.5 9))"
-                     );
+    ensure_geometry_equals(geom2_,
+                      "MULTILINESTRING ((8.5 1, 10 10), (8 2, 10 10), (8 2, 8.5 1), (7 8, 10 10), (7 8, 8 2), (3 8, 10 10), (3 8, 7 8), (2 2, 8.5 1), (2 2, 8 2), (2 2, 7 8), (2 2, 3 8), (0.5 9, 10 10), (0.5 9, 3 8), (0.5 9, 2 2), (0 0, 8.5 1), (0 0, 2 2), (0 0, 0.5 9))");
 }
 
 // Four points with a tolerance making one collapse
@@ -172,9 +141,8 @@ void object::test<6>
 
     GEOSGeom_destroy(geom2_);
     geom2_ = GEOSDelaunayTriangulation(geom1_, 2, 1);
-    ensure_equals_wkt(geom2_,
-                      "MULTILINESTRING ((10 0, 10 10), (0 0, 10 10), (0 0, 10 0))"
-                     );
+    ensure_geometry_equals(geom2_,
+                      "MULTILINESTRING ((10 0, 10 10), (0 0, 10 10), (0 0, 10 0))");
 }
 
 } // namespace tut

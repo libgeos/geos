@@ -18,23 +18,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeossimplify_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-
-    test_capigeossimplify_data()
-        : geom1_(nullptr), geom2_(nullptr)
-    {}
-
-    ~test_capigeossimplify_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-    }
-
-};
+struct test_capigeossimplify_data : public capitest::utility {};
 
 typedef test_group<test_capigeossimplify_data> group;
 typedef group::object object;

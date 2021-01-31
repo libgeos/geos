@@ -22,24 +22,17 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeospreparedgeometry_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-
     const GEOSPreparedGeometry* prepGeom1_;
     const GEOSPreparedGeometry* prepGeom2_;
 
     test_capigeospreparedgeometry_data()
-        : geom1_(nullptr), geom2_(nullptr), prepGeom1_(nullptr), prepGeom2_(nullptr)
+        : prepGeom1_(nullptr), prepGeom2_(nullptr)
     {}
 
     ~test_capigeospreparedgeometry_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
         GEOSPreparedGeom_destroy(prepGeom1_);
         GEOSPreparedGeom_destroy(prepGeom2_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
         prepGeom1_ = nullptr;
         prepGeom2_ = nullptr;
     }

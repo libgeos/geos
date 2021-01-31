@@ -17,20 +17,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capiinterpolate_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-
-    test_capiinterpolate_data()
-        : geom1_(nullptr)
-    {}
-
-    ~test_capiinterpolate_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-    }
-
-};
+struct test_capiinterpolate_data : public capitest::utility {};
 
 typedef test_group<test_capiinterpolate_data> group;
 typedef group::object object;

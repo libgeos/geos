@@ -18,33 +18,11 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capi_buildarea_data : public capitest::utility {
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom1_ = nullptr;
-    GEOSGeometry* geom2_ = nullptr;
-
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
-    }
-
     test_capi_buildarea_data()
     {
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
-
-    ~test_capi_buildarea_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(wktw_);
-    }
-
 };
 
 typedef test_group<test_capi_buildarea_data> group;

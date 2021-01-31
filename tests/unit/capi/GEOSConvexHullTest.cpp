@@ -18,22 +18,6 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosconvexhull_data : public capitest::utility {
-    GEOSGeometry* input_;
-    GEOSGeometry* expected_;
-
-    test_capigeosconvexhull_data()
-        : input_(nullptr), expected_(nullptr)
-    {
-    }
-
-    ~test_capigeosconvexhull_data()
-    {
-        GEOSGeom_destroy(input_);
-        GEOSGeom_destroy(expected_);
-        input_ = nullptr;
-        expected_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosconvexhull_data> group;

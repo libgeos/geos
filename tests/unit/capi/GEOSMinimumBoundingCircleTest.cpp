@@ -20,34 +20,11 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capiminimumboundingcircle_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-    double area_;
-
     test_capiminimumboundingcircle_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), wkt_(nullptr)
     {
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capiminimumboundingcircle_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        wkt_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capiminimumboundingcircle_data> group;

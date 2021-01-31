@@ -18,21 +18,15 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosrelateboundarynoderule_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
     char* pat_;
 
-    test_capigeosrelateboundarynoderule_data()
-        : geom1_(nullptr), geom2_(nullptr), pat_(nullptr)
+    test_capigeosrelateboundarynoderule_data() : pat_(nullptr)
     {}
 
     ~test_capigeosrelateboundarynoderule_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
         GEOSFree(pat_);
     }
-
 };
 
 typedef test_group<test_capigeosrelateboundarynoderule_data> group;

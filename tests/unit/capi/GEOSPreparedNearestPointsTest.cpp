@@ -19,22 +19,15 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeospreparednearestpoints_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
     const GEOSPreparedGeometry* pgeom1_;
 
     test_capigeospreparednearestpoints_data()
-        : geom1_(nullptr), geom2_(nullptr), pgeom1_(nullptr)
+        : pgeom1_(nullptr)
     {}
 
     ~test_capigeospreparednearestpoints_data()
     {
-        GEOSGeom_destroy(geom2_);
         GEOSPreparedGeom_destroy(pgeom1_);
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom1_ = nullptr;
     }
 
     void checkNearestPoints(const char* wkt1, const char* wkt2,

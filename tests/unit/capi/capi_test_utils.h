@@ -14,14 +14,44 @@
 namespace capitest {
 
     struct utility {
+        GEOSWKTWriter* wktw_ = nullptr;
+        GEOSGeometry* geom1_ = nullptr;
+        GEOSGeometry* geom2_ = nullptr;
+        GEOSGeometry* geom3_ = nullptr;
+        GEOSGeometry* input_ = nullptr;
+        GEOSGeometry* expected_ = nullptr;
+        char* wkt_ = nullptr;
 
         utility()
         {
             initGEOS(notice, notice);
+            wktw_ = GEOSWKTWriter_create();
+            GEOSWKTWriter_setTrim(wktw_, 1);
+            GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
         }
 
         ~utility()
         {
+            if (wktw_)
+                GEOSWKTWriter_destroy(wktw_);
+            if (geom1_) {
+                GEOSGeom_destroy(geom1_);
+            }
+            if (geom2_) {
+                GEOSGeom_destroy(geom2_);
+            }
+            if (geom3_) {
+                GEOSGeom_destroy(geom3_);
+            }
+            if (input_) {
+                GEOSGeom_destroy(input_);
+            }
+            if (expected_) {
+                GEOSGeom_destroy(expected_);
+            }
+            if (wkt_) {
+                GEOSFree(wkt_);
+            }
             finishGEOS();
         }
 
@@ -37,7 +67,24 @@ namespace capitest {
             std::fprintf(stdout, "\n");
         }
 
-        static void
+        GEOSGeometry*
+        fromWKT(const char* wkt)
+        {
+            GEOSGeometry* g = GEOSGeomFromWKT(wkt);
+            tut::ensure(g != nullptr);
+            return g;
+        }
+
+        std::string
+        toWKT(GEOSGeometry* g)
+        {
+            char* wkt = GEOSWKTWriter_write(wktw_, g);
+            std::string ret(wkt);
+            GEOSFree(wkt);
+            return ret;
+        }
+
+        void
         ensure_geometry_equals(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
         {
             GEOSNormalize(g1);
@@ -45,7 +92,7 @@ namespace capitest {
             char rslt = GEOSEqualsExact(g1, g2, tolerance);
             if (rslt != 1)
             {
-                char* wkt1 = GEOSGeomToWKT(g1);
+                char* wkt1 = GEOSWKTWriter_write(wktw_, g1);
                 char* wkt2 = GEOSGeomToWKT(g2);
                 std::fprintf(stdout, "\n%s != %s\n", wkt1, wkt2);
                 GEOSFree(wkt1);
@@ -54,13 +101,13 @@ namespace capitest {
             tut::ensure_equals("GEOSEqualsExact(g1, g2, tolerance)", rslt, 1);
         }
 
-        static void
+        void
         ensure_geometry_equals(GEOSGeometry* g1, GEOSGeometry* g2)
         {
             return ensure_geometry_equals(g1, g2, 1e-12);
         }
 
-        static void
+        void
         ensure_geometry_equals(GEOSGeometry* g1, const char* g2str)
         {
             GEOSGeometry* g2 = GEOSGeomFromWKT(g2str);
@@ -70,8 +117,8 @@ namespace capitest {
             char rslt = GEOSEqualsExact(g1, g2, 1e-12);
             if (rslt != 1)
             {
-                char* wkt1 = GEOSGeomToWKT(g1);
-                char* wkt2 = GEOSGeomToWKT(g2);
+                char* wkt1 = GEOSWKTWriter_write(wktw_, g1);
+                char* wkt2 = GEOSWKTWriter_write(wktw_, g2);
                 std::fprintf(stdout, "\n%s != %s\n", wkt1, wkt2);
                 GEOSFree(wkt1);
                 GEOSFree(wkt2);
@@ -79,6 +126,8 @@ namespace capitest {
             GEOSGeom_destroy(g2);
             tut::ensure_equals("GEOSEqualsExact(g1, g2, 1e-12)", rslt, 1);
         }
+
+
 
     };
 

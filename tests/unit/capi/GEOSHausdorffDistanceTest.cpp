@@ -20,29 +20,9 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeoshausdorffdistance_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* w_;
-
-    test_capigeoshausdorffdistance_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
-    {
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
+    test_capigeoshausdorffdistance_data() {
+        GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    ~test_capigeoshausdorffdistance_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeoshausdorffdistance_data> group;
