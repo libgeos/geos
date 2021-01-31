@@ -73,7 +73,7 @@ Edge::isCollapsed(const CoordinateSequence* pts) {
 */
 /*private*/
 void
-Edge::initLabel(OverlayLabel& lbl, uint8_t geomIndex, int dim, int depthDelta, bool p_isHole) const
+Edge::initLabel(OverlayLabel& lbl, uint8_t geomIndex, int dim, int depthDelta, bool p_isHole)
 {
     int dimLabel = labelDim(dim, depthDelta);
 

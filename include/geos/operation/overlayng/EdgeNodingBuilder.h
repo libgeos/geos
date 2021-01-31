@@ -112,7 +112,7 @@ private:
     *   In this case, a validation step is applied to the output from the noder.
     */
     Noder* getNoder();
-    std::unique_ptr<Noder> createFixedPrecisionNoder(const PrecisionModel* pm);
+    static std::unique_ptr<Noder> createFixedPrecisionNoder(const PrecisionModel* pm);
     std::unique_ptr<Noder> createFloatingPrecisionNoder(bool doValidation);
 
 
@@ -172,9 +172,9 @@ private:
     * @param line the line to process
     * @return the points of the line with repeated points removed
     */
-    std::unique_ptr<CoordinateArraySequence> removeRepeatedPoints(const LineString* line);
+    static std::unique_ptr<CoordinateArraySequence> removeRepeatedPoints(const LineString* line);
 
-    int computeDepthDelta(const LinearRing* ring, bool isHole);
+    static int computeDepthDelta(const LinearRing* ring, bool isHole);
 
     void add(const Geometry* g, uint8_t geomIndex);
 

@@ -116,12 +116,12 @@ private:
     * (For instance, the intersection of line edge and a collapsed boundary
     * is included in the result).
     */
-    static geom::Location effectiveLocation(const OverlayLabel* lbl, uint8_t geomIndex) ;
+    static geom::Location effectiveLocation(const OverlayLabel* lbl, uint8_t geomIndex);
 
     void addResultLines();
     void addResultLinesMerged();
 
-    std::unique_ptr<geom::LineString> toLine(OverlayEdge* edge);
+    std::unique_ptr<geom::LineString> toLine(OverlayEdge* edge) const;
 
     void addResultLinesForNodes();
 
