@@ -542,32 +542,32 @@ void object::test<24>
 
     // POINT EMPTY
     g = readHex(std::string("0101000000000000000000F87F000000000000F87F"));
-    ensure_equals("POINT EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("POINT EMPTY isEmpty", g->isEmpty());
     ensure_equals("POINT EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
 
     // POINT Z EMPTY
     g = readHex(std::string("0101000080000000000000F87F000000000000F87F000000000000F87F"));
-    ensure_equals("POINT Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("POINT Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("POINT Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
 
     // LINESTRING EMPTY
     g = readHex(std::string("010200000000000000"));
-    ensure_equals("LINESTRING EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("LINESTRING EMPTY isEmpty", g->isEmpty());
     ensure_equals("LINESTRING EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
 
     // LINESTRING Z EMPTY
     g = readHex(std::string("010200008000000000"));
-    ensure_equals("LINESTRING Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("LINESTRING Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("LINESTRING Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
 
     // POLYGON EMPTY
     g = readHex(std::string("010300000000000000"));
-    ensure_equals("POLYGON EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("POLYGON EMPTY isEmpty", g->isEmpty());
     ensure_equals("POLYGON EMPTY getCoordinateDimension", g->getCoordinateDimension(), 2);
 
     // POLYGON Z EMPTY
     g = readHex(std::string("010300008000000000"));
-    ensure_equals("POLYGON Z EMPTY isEmpty", g->isEmpty(), 1);
+    ensure("POLYGON Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("POLYGON Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
 
 }
