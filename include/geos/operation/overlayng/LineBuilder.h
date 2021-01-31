@@ -116,7 +116,7 @@ private:
     * (For instance, the intersection of line edge and a collapsed boundary
     * is included in the result).
     */
-    geom::Location effectiveLocation(const OverlayLabel* lbl, int geomIndex) const;
+    static geom::Location effectiveLocation(const OverlayLabel* lbl, uint8_t geomIndex) ;
 
     void addResultLines();
     void addResultLinesMerged();
@@ -149,12 +149,12 @@ private:
     * Finds the next edge around a node which forms
     * part of a result line.
     */
-    OverlayEdge* nextLineEdgeUnvisited(OverlayEdge* node) const;
+    static OverlayEdge* nextLineEdgeUnvisited(OverlayEdge* node) ;
 
     /**
     * Computes the degree of the line edges incident on a node
     */
-    int degreeOfLines(OverlayEdge* node) const;
+    static int degreeOfLines(OverlayEdge* node) ;
 
 
 

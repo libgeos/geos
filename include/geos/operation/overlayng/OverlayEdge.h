@@ -99,7 +99,7 @@ public:
 
     OverlayLabel* getLabel() const;
 
-    Location getLocation(int index, int position) const;
+    Location getLocation(uint8_t index, int position) const;
 
     const Coordinate& getCoordinate() const;
 

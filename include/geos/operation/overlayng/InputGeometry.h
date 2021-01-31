@@ -58,13 +58,13 @@ public:
     InputGeometry(const Geometry* geomA, const Geometry* geomB);
 
     bool isSingle() const;
-    int getDimension(int index) const;
-    const Geometry* getGeometry(int geomIndex) const;
-    const Envelope* getEnvelope(int geomIndex) const;
-    bool isEmpty(int geomIndex) const;
-    bool isArea(int geomIndex) const;
+    int getDimension(uint8_t index) const;
+    const Geometry* getGeometry(uint8_t geomIndex) const;
+    const Envelope* getEnvelope(uint8_t geomIndex) const;
+    bool isEmpty(uint8_t geomIndex) const;
+    bool isArea(uint8_t geomIndex) const;
     int getAreaIndex() const;
-    bool isLine(int geomIndex) const;
+    bool isLine(uint8_t geomIndex) const;
     bool isAllPoints() const;
     bool hasPoints() const;
 
@@ -75,7 +75,7 @@ public:
     * @param geomIndex
     * @return true if the input geometry has edges
     */
-    bool hasEdges(int geomIndex) const;
+    bool hasEdges(uint8_t geomIndex) const;
 
     /**
     * Determines the location within an area geometry.
@@ -88,10 +88,10 @@ public:
     *
     * @see Location
     */
-    Location locatePointInArea(int geomIndex, const Coordinate& pt);
+    Location locatePointInArea(uint8_t geomIndex, const Coordinate& pt);
 
-    PointOnGeometryLocator* getLocator(int geomIndex);
-    void setCollapsed(int geomIndex, bool isGeomCollapsed);
+    PointOnGeometryLocator* getLocator(uint8_t geomIndex);
+    void setCollapsed(uint8_t geomIndex, bool isGeomCollapsed);
 
 
 };

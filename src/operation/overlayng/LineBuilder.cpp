@@ -112,7 +112,8 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
         * because if line edges are present then there is only one input area,
         * and the result area must be the same as the input area.
         */
-        if (hasResultArea && lbl->isLineInArea(inputAreaIndex))
+        assert(inputAreaIndex == 0 || inputAreaIndex == 1);
+        if (hasResultArea && lbl->isLineInArea(static_cast<uint8_t>(inputAreaIndex)))
             return false;
     }
 
@@ -138,7 +139,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
 
 /*private*/
 Location
-LineBuilder::effectiveLocation(const OverlayLabel* lbl, int geomIndex) const
+LineBuilder::effectiveLocation(const OverlayLabel* lbl, uint8_t geomIndex)
 {
     if (lbl->isCollapse(geomIndex)) {
         return Location::INTERIOR;
@@ -269,7 +270,7 @@ LineBuilder::buildLine(OverlayEdge* node)
 
 /*private*/
 OverlayEdge*
-LineBuilder::nextLineEdgeUnvisited(OverlayEdge* node) const
+LineBuilder::nextLineEdgeUnvisited(OverlayEdge* node)
 {
     OverlayEdge* e = node;
     do {
@@ -287,7 +288,7 @@ LineBuilder::nextLineEdgeUnvisited(OverlayEdge* node) const
 
 /*private*/
 int
-LineBuilder::degreeOfLines(OverlayEdge* node) const
+LineBuilder::degreeOfLines(OverlayEdge* node)
 {
     int degree = 0;
     OverlayEdge* e = node;

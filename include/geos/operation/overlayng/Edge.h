@@ -90,7 +90,7 @@ private:
     * For line edges the line location is not significant
     * (since there is no parent area for which to determine location).
     */
-    void initLabel(OverlayLabel& lbl, int geomIndex, int dim, int depthDelta, bool isHole) const;
+    void initLabel(OverlayLabel& lbl, uint8_t geomIndex, int dim, int depthDelta, bool p_isHole) const;
 
     static int labelDim(int dim, int depthDelta);
     bool isHole(int index) const;
