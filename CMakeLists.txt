@@ -251,7 +251,7 @@ set(CMAKE_CXX_FLAGS_COVERAGE "-fprofile-arcs -ftest-coverage")
 # Target geos: C++ API library
 #-----------------------------------------------------------------------------
 add_library(geos "")
-target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE ryu)
+target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 add_subdirectory(include)
 add_subdirectory(src)
 
