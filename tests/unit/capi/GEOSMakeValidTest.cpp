@@ -10,30 +10,19 @@
 #include <cmath>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capimakevalid_data {
+struct test_capimakevalid_data : public capitest::utility {
     GEOSWKTWriter* wktw_;
     GEOSGeometry* geom1_ = nullptr;
     GEOSGeometry* geom2_ = nullptr;
     GEOSGeometry* expect_ = nullptr;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     std::string
     toWKT(GEOSGeometry* g)
@@ -46,7 +35,6 @@ struct test_capimakevalid_data {
 
     test_capimakevalid_data()
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
@@ -58,7 +46,6 @@ struct test_capimakevalid_data {
         if (geom2_) GEOSGeom_destroy(geom2_);
         if (expect_) GEOSGeom_destroy(expect_);
         GEOSWKTWriter_destroy(wktw_);
-        finishGEOS();
     }
 
 };

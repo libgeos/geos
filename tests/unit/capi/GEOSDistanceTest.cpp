@@ -12,35 +12,23 @@
 #include <memory>
 #include <math.h>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosdistance_data {
+struct test_capigeosdistance_data : public capitest::utility {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSGeometry* geom3_;
     GEOSWKTWriter* w_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeosdistance_data()
         : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
     {
-        initGEOS(notice, notice);
         w_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(w_, 1);
     }
@@ -54,7 +42,6 @@ struct test_capigeosdistance_data {
         geom1_ = nullptr;
         geom2_ = nullptr;
         geom3_ = nullptr;
-        finishGEOS();
     }
 
 };

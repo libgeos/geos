@@ -9,34 +9,22 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosminimumrectangle_data {
+struct test_capigeosminimumrectangle_data : public capitest::utility {
     GEOSGeometry* input_;
     GEOSWKTWriter* wktw_;
     char* wkt_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeosminimumrectangle_data()
         : input_(nullptr), wkt_(nullptr)
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
@@ -49,7 +37,6 @@ struct test_capigeosminimumrectangle_data {
         GEOSWKTWriter_destroy(wktw_);
         GEOSFree(wkt_);
         wkt_ = nullptr;
-        finishGEOS();
     }
 
 };

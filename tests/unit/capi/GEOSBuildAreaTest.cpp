@@ -9,29 +9,18 @@
 #include <cstdlib>
 #include <cmath>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capi_buildarea_data {
+struct test_capi_buildarea_data : public capitest::utility {
     GEOSWKTWriter* wktw_;
     GEOSGeometry* geom1_ = nullptr;
     GEOSGeometry* geom2_ = nullptr;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     std::string
     toWKT(GEOSGeometry* g)
@@ -44,7 +33,6 @@ struct test_capi_buildarea_data {
 
     test_capi_buildarea_data()
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
@@ -55,7 +43,6 @@ struct test_capi_buildarea_data {
         GEOSGeom_destroy(geom1_);
         GEOSGeom_destroy(geom2_);
         GEOSWKTWriter_destroy(wktw_);
-        finishGEOS();
     }
 
 };

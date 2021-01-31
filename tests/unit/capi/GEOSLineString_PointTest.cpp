@@ -9,39 +9,25 @@
 #include <cstdlib>
 #include <cmath>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capilinestringpoint_data {
+struct test_capilinestringpoint_data : public capitest::utility {
     GEOSGeometry* geom1_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     test_capilinestringpoint_data()
         : geom1_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
+    {}
 
     ~test_capilinestringpoint_data()
     {
         GEOSGeom_destroy(geom1_);
         geom1_ = nullptr;
-        finishGEOS();
     }
 
 };

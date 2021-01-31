@@ -64,7 +64,7 @@ namespace capitest {
         ensure_geometry_equals(GEOSGeometry* g1, const char* g2str)
         {
             GEOSGeometry* g2 = GEOSGeomFromWKT(g2str);
-            tut::ensure(g2 != 0);
+            tut::ensure(g2 != nullptr);
             GEOSNormalize(g1);
             GEOSNormalize(g2);
             char rslt = GEOSEqualsExact(g1, g2, 1e-12);

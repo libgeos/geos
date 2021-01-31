@@ -11,36 +11,24 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capipointonsurface_data {
+struct test_capipointonsurface_data : public capitest::utility {
     GEOSGeometry* geom1_;
     GEOSGeometry* geom2_;
     GEOSWKTWriter* wktw_;
     char* wkt_;
     double area_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capipointonsurface_data()
         : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 4);
@@ -55,7 +43,6 @@ struct test_capipointonsurface_data {
         geom1_ = nullptr;
         geom2_ = nullptr;
         wkt_ = nullptr;
-        finishGEOS();
     }
 
 };

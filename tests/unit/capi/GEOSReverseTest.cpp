@@ -8,35 +8,15 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosreverse {
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosreverse()
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeosreverse()
-    {
-        finishGEOS();
-    }
+struct test_capigeosreverse : public capitest::utility {
 };
 
 typedef test_group<test_capigeosreverse> group;

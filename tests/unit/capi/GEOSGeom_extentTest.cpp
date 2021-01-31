@@ -9,32 +9,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
-struct test_capigeosgeom_extent {
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosgeom_extent()
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeosgeom_extent()
-    {
-        finishGEOS();
-    }
-
-};
+struct test_capigeosgeom_extent : public capitest::utility {};
 
 typedef test_group<test_capigeosgeom_extent> group;
 typedef group::object object;

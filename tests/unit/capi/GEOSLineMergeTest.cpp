@@ -8,37 +8,15 @@
 #include <cstdarg>
 #include <cstdio>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeoslinemerge_data {
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeoslinemerge_data()
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeoslinemerge_data()
-    {
-        finishGEOS();
-    }
-
+struct test_capigeoslinemerge_data : public capitest::utility {
 };
 
 typedef test_group<test_capigeoslinemerge_data> group;

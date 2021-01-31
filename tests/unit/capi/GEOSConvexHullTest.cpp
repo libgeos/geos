@@ -9,33 +9,21 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosconvexhull_data {
+struct test_capigeosconvexhull_data : public capitest::utility {
     GEOSGeometry* input_;
     GEOSGeometry* expected_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     test_capigeosconvexhull_data()
         : input_(nullptr), expected_(nullptr)
     {
-        initGEOS(notice, notice);
     }
 
     ~test_capigeosconvexhull_data()
@@ -44,7 +32,6 @@ struct test_capigeosconvexhull_data {
         GEOSGeom_destroy(expected_);
         input_ = nullptr;
         expected_ = nullptr;
-        finishGEOS();
     }
 
 };

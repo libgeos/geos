@@ -11,35 +11,23 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capiisvaliddetail_data {
+struct test_capiisvaliddetail_data : public capitest::utility {
     GEOSWKTWriter* wktw_;
     GEOSGeometry* geom_;
     GEOSGeometry* loc_;
     char* reason_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capiisvaliddetail_data()
         : geom_(nullptr), loc_(nullptr), reason_(nullptr)
     {
-        initGEOS(notice, notice);
         wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
@@ -71,7 +59,6 @@ struct test_capiisvaliddetail_data {
         GEOSGeom_destroy(loc_);
         GEOSFree(reason_);
         GEOSWKTWriter_destroy(wktw_);
-        finishGEOS();
     }
 
 };

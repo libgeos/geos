@@ -10,6 +10,8 @@
 #include <cstring>
 #include <cmath>
 
+#include "capi_test_utils.h"
+
 struct INTPOINT {
     INTPOINT(int p_x, int p_y) : x(p_x), y(p_y) {}
     int x;
@@ -44,24 +46,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capistrtree_data {
-    test_capistrtree_data()
-    {
-        initGEOS(notice, notice);
-    }
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
+struct test_capistrtree_data : public capitest::utility {
 };
 
 typedef test_group<test_capistrtree_data> group;
