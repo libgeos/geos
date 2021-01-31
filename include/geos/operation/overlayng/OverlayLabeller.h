@@ -81,7 +81,7 @@ private:
     * but may be more efficient and accurate to do it here.)
     */
     void labelCollapsedEdges();
-    void labelCollapsedEdge(OverlayEdge* edge, int geomIndex);
+    static void labelCollapsedEdge(OverlayEdge* edge, int geomIndex);
 
     /**
     * There can be edges which have unknown location
@@ -187,7 +187,7 @@ public:
     * The relevant location is either the right side of a boundary edge,
     * or the line location of a non-boundary edge.
     */
-    void markInResultArea(OverlayEdge* e, int overlayOpCode);
+    static void markInResultArea(OverlayEdge* e, int overlayOpCode);
 
     /**
     * Unmarks result area edges where the sym edge

@@ -28,21 +28,21 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public*/
 std::vector<std::unique_ptr<Polygon>>
-PolygonBuilder::getPolygons()
+PolygonBuilder::getPolygons() const
 {
     return computePolygons(shellList);
 }
 
 /*public*/
 std::vector<OverlayEdgeRing*>
-PolygonBuilder::getShellRings()
+PolygonBuilder::getShellRings() const
 {
     return shellList;
 }
 
 /*private*/
 std::vector<std::unique_ptr<Polygon>>
-PolygonBuilder::computePolygons(std::vector<OverlayEdgeRing*> shells)
+PolygonBuilder::computePolygons(const std::vector<OverlayEdgeRing*>& shells) const
 {
     std::vector<std::unique_ptr<Polygon>> resultPolyList;
     // add Polygons for all shells
@@ -55,7 +55,7 @@ PolygonBuilder::computePolygons(std::vector<OverlayEdgeRing*> shells)
 
 /*private*/
 void
-PolygonBuilder::buildRings(std::vector<OverlayEdge*>& resultAreaEdges)
+PolygonBuilder::buildRings(const std::vector<OverlayEdge*>& resultAreaEdges)
 {
     linkResultAreaEdgesMax(resultAreaEdges);
     std::vector<std::unique_ptr<MaximalEdgeRing>> maxRings = buildMaximalRings(resultAreaEdges);
@@ -65,7 +65,7 @@ PolygonBuilder::buildRings(std::vector<OverlayEdge*>& resultAreaEdges)
 
 /*private*/
 void
-PolygonBuilder::linkResultAreaEdgesMax(std::vector<OverlayEdge*>& resultEdges)
+PolygonBuilder::linkResultAreaEdgesMax(const std::vector<OverlayEdge*>& resultEdges)
 {
     for (OverlayEdge* edge : resultEdges) {
         // TODO: find some way to skip nodes which are already linked
@@ -75,7 +75,7 @@ PolygonBuilder::linkResultAreaEdgesMax(std::vector<OverlayEdge*>& resultEdges)
 
 /*private*/
 std::vector<std::unique_ptr<MaximalEdgeRing>>
-PolygonBuilder::buildMaximalRings(std::vector<OverlayEdge*>& edges)
+PolygonBuilder::buildMaximalRings(const std::vector<OverlayEdge*>& edges)
 {
     std::vector<std::unique_ptr<MaximalEdgeRing>> edgeRings;
     for (OverlayEdge* e : edges) {
@@ -104,7 +104,7 @@ PolygonBuilder::storeMinimalRings(std::vector<std::unique_ptr<OverlayEdgeRing>>&
 
 /*private*/
 void
-PolygonBuilder::buildMinimalRings(std::vector<std::unique_ptr<MaximalEdgeRing>>& maxRings)
+PolygonBuilder::buildMinimalRings(const std::vector<std::unique_ptr<MaximalEdgeRing>>& maxRings)
 {
     for (auto& erMax : maxRings) {
         auto minRings = erMax->buildMinimalRings(geometryFactory);
@@ -115,7 +115,7 @@ PolygonBuilder::buildMinimalRings(std::vector<std::unique_ptr<MaximalEdgeRing>>&
 
 /*private*/
 void
-PolygonBuilder::assignShellsAndHoles(std::vector<OverlayEdgeRing*>& minRings)
+PolygonBuilder::assignShellsAndHoles(const std::vector<OverlayEdgeRing*> &minRings)
 {
     /**
     * Two situations may occur:
@@ -137,7 +137,7 @@ PolygonBuilder::assignShellsAndHoles(std::vector<OverlayEdgeRing*>& minRings)
 
 /*private*/
 OverlayEdgeRing*
-PolygonBuilder::findSingleShell(std::vector<OverlayEdgeRing*>& edgeRings) const
+PolygonBuilder::findSingleShell(const std::vector<OverlayEdgeRing*> &edgeRings)
 {
     std::size_t shellCount = 0;
     OverlayEdgeRing* shell = nullptr;
@@ -153,7 +153,7 @@ PolygonBuilder::findSingleShell(std::vector<OverlayEdgeRing*>& edgeRings) const
 
 /*private*/
 void
-PolygonBuilder::assignHoles(OverlayEdgeRing* shell, std::vector<OverlayEdgeRing*>& edgeRings)
+PolygonBuilder::assignHoles(OverlayEdgeRing* shell, const std::vector<OverlayEdgeRing*> &edgeRings)
 {
     for (auto er : edgeRings) {
         if (er->isHole()) {
@@ -164,7 +164,7 @@ PolygonBuilder::assignHoles(OverlayEdgeRing* shell, std::vector<OverlayEdgeRing*
 
 /*private*/
 void
-PolygonBuilder::placeFreeHoles(std::vector<OverlayEdgeRing*> shells, std::vector<OverlayEdgeRing*> freeHoles)
+PolygonBuilder::placeFreeHoles(const std::vector<OverlayEdgeRing*>& shells, const std::vector<OverlayEdgeRing*> & freeHoles) const
 {
     // TODO: use a spatial index to improve performance
     for (OverlayEdgeRing* hole : freeHoles) {

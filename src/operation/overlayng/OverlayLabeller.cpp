@@ -180,7 +180,7 @@ void
 OverlayLabeller::propagateLinearLocations(int geomIndex)
 {
     std::vector<OverlayEdge*> linearEdges = findLinearEdgesWithLocation(edges, geomIndex);
-    if (linearEdges.size() <= 0) return;
+    if (linearEdges.empty()) return;
 
     std::deque<OverlayEdge*> edgeStack;
     edgeStack.insert(edgeStack.begin(), linearEdges.begin(), linearEdges.end());
@@ -274,7 +274,7 @@ OverlayLabeller::labelDisconnectedEdge(OverlayEdge* edge, int geomIndex)
     if (!inputGeometry->isArea(geomIndex)) {
         label->setLocationAll(geomIndex, Location::EXTERIOR);
         return;
-    };
+    }
 
     /**
     * Locate edge in input area using a Point-In-Poly check.

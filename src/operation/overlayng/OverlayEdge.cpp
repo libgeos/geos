@@ -49,7 +49,7 @@ OverlayEdge::getCoordinatesOriented()
 */
 /*public*/
 void
-OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
+OverlayEdge::addCoordinates(CoordinateArraySequence* coords) const
 {
     bool isFirstEdge = coords->size() > 0;
     if (direction) {

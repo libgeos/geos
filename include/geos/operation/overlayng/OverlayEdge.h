@@ -118,7 +118,7 @@ public:
     *
     * @param coords the coordinate list to add to
     */
-    void addCoordinates(CoordinateArraySequence* coords);
+    void addCoordinates(CoordinateArraySequence* coords) const;
 
     OverlayEdge* symOE() const;
     OverlayEdge* oNextOE() const;
