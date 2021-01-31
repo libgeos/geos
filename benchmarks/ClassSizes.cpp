@@ -43,6 +43,9 @@
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeQuartet.h>
 #include <geos/triangulate/quadedge/Vertex.h>
+#include <geos/operation/overlayng/Edge.h>
+#include <geos/operation/overlayng/EdgeSourceInfo.h>
+#include <geos/operation/overlayng/OverlayLabel.h>
 
 using namespace geos;
 
@@ -76,6 +79,9 @@ main()
     check(triangulate::quadedge::QuadEdge);
     check(triangulate::quadedge::QuadEdgeQuartet);
     check(triangulate::quadedge::Vertex);
+    check(operation::overlayng::Edge);
+    check(operation::overlayng::EdgeSourceInfo);
+    check(operation::overlayng::OverlayLabel);
     check(int64_t);
 }
 

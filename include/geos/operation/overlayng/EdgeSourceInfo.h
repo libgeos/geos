@@ -41,7 +41,7 @@ private:
 
     // Members
     uint8_t index;
-    int dim;
+    int8_t dim;
     bool edgeIsHole;
     int depthDelta;
 
