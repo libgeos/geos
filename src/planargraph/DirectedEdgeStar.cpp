@@ -151,7 +151,7 @@ DirectedEdgeStar::getIndex(const DirectedEdge* dirEdge)
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
         DirectedEdge* de = outEdges[i];
         if(de == dirEdge) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;
@@ -161,7 +161,7 @@ DirectedEdgeStar::getIndex(const DirectedEdge* dirEdge)
  * Returns the remainder when i is divided by the number of edges in this
  * DirectedEdgeStar.
  */
-int
+unsigned int
 DirectedEdgeStar::getIndex(int i) const
 {
     int modi = i % (int)outEdges.size();
@@ -169,7 +169,7 @@ DirectedEdgeStar::getIndex(int i) const
     if(modi < 0) {
         modi += (int)outEdges.size();
     }
-    return modi;
+    return static_cast<unsigned int>(modi);
 }
 
 /*

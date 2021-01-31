@@ -55,7 +55,7 @@ CommonBits::zeroLowerBits(int64_t bits, int nBits)
 int
 CommonBits::getBit(int64_t bits, int i)
 {
-    int64_t mask = (1ull << i);
+    int64_t mask = static_cast<int64_t>(1ull << i);
     return (bits & mask) != 0 ? 1 : 0;
 }
 

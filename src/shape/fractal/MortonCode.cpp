@@ -89,7 +89,7 @@ MortonCode::checkLevel(uint32_t level)
 uint32_t
 MortonCode::encode(int x, int y)
 {
-    return (interleave(y) << 1) + interleave(x);
+    return (interleave(static_cast<uint32_t>(y)) << 1) + interleave(static_cast<uint32_t>(x));
 }
 
 uint32_t
