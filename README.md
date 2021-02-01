@@ -121,3 +121,9 @@ To format your code into the desired style, use the astyle
 version included in source tree:
 
     tools/astyle.sh <yourfile.cpp>
+
+## Tools
+
+* `geosop` - a CLI for GEOS.  Documentation is [here](https://git.osgeo.org/gitea/geos/geos/src/branch/master/util/geosop/README.md).
+
+
