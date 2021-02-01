@@ -428,6 +428,13 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDensify(const Geometry* g, double tolerance)
+    {
+        return GEOSDensify_r(handle, g, tolerance);
+    }
+
+
+    Geometry*
     GEOSSingleSidedBuffer(const Geometry* g, double width, int quadsegs,
                           int joinStyle, double mitreLimit, int leftSide)
     {
