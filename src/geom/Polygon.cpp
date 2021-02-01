@@ -329,7 +329,32 @@ int
 Polygon::compareToSameClass(const Geometry* g) const
 {
     const Polygon* p = dynamic_cast<const Polygon*>(g);
-    return shell->compareToSameClass(p->shell.get());
+    int shellComp = shell->compareToSameClass(p->shell.get());
+    if (shellComp != 0) {
+        return shellComp;
+    }
+
+    int nHole1 = getNumInteriorRing();
+    int nHole2 = p->getNumInteriorRing();
+    if (nHole1 < nHole2) {
+        return -1;
+    }
+    if (nHole1 > nHole2) {
+        return 1;
+    }
+
+    const LinearRing *lr1, *lr2;
+    int holeComp = 0;
+    for (int i=0; i < nHole1; i++) {
+        lr1 = dynamic_cast<const LinearRing*>(getInteriorRingN(i));
+        lr2 = dynamic_cast<const LinearRing*>(p->getInteriorRingN(i));
+        holeComp = lr1->compareToSameClass(lr2);
+        if (holeComp != 0) {
+            return holeComp;
+        }
+    }
+
+    return 0;
 }
 
 /*

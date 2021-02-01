@@ -611,4 +611,39 @@ void object::test<42>
     ensure(!poly_->isDimensionStrict(geos::geom::Dimension::L));
 }
 
+
+// test compareToSameClass for polygons including holes
+template<>
+template<>
+void object::test<43>
+()
+{
+    auto geo = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
+    ensure(geo != nullptr);
+
+    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo.get());
+    ensure(poly != nullptr);
+
+    auto geo2 = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2 3, 3 3, 3 2, 2 2))");
+    ensure(geo2 != nullptr);
+
+    PolygonPtr poly2 = dynamic_cast<PolygonPtr>(geo2.get());
+    ensure(poly2 != nullptr);
+
+    auto geo3 = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    ensure(geo3 != nullptr);
+
+    PolygonPtr poly3 = dynamic_cast<PolygonPtr>(geo3.get());
+    ensure(poly3 != nullptr);
+
+    // polygon should equal self
+    ensure(poly->compareToSameClass(poly) == 0);
+
+    // polygons with different holes but same shell are not equal
+    ensure(poly->compareToSameClass(poly2) != 0);
+
+    // polygons with and without holes are not equal
+    ensure(poly->compareToSameClass(poly3) != 0);
+}
+
 } // namespace tut
