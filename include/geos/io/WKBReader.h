@@ -158,6 +158,8 @@ private:
 
     std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(unsigned int); // throws IOException
 
+    void minMemSize(int geomType, uint32_t size);
+
     void readCoordinate(); // throws IOException
 
     // Declare type as noncopyable
