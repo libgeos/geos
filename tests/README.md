@@ -24,7 +24,7 @@ Run single unit test class
 
     geos_unit capi::GEOSNode
 
-Run test witin unit test class
+Run single test within unit test class
 
     geos_unit capi::GEOSNode 1
 
