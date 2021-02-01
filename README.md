@@ -122,6 +122,10 @@ version included in source tree:
 
     tools/astyle.sh <yourfile.cpp>
 
+## Testing
+
+See documentation [here](https://git.osgeo.org/gitea/geos/geos/src/branch/master/tests).
+
 ## Tools
 
 * `geosop` - a CLI for GEOS.  Documentation is [here](https://git.osgeo.org/gitea/geos/geos/src/branch/master/util/geosop/README.md).
