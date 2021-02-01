@@ -46,7 +46,7 @@ struct test_edgegraph_data {
     void checkEdgeRing(EdgeGraph& graph, Coordinate& p, std::vector<Coordinate>& dest) {
         HalfEdge* e = graph.findEdge(p, dest[0]);
         HalfEdge* onext = e;
-        int i = 0;
+        std::size_t i = 0;
         do {
             ensure(onext->dest().equals2D(dest[i++]));
             onext = onext->oNext();

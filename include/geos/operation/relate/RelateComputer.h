@@ -103,9 +103,9 @@ private:
         geomgraph::index::SegmentIntersector* intersector,
         geom::IntersectionMatrix* imX);
 
-    void copyNodesAndLabels(int argIndex);
-    void computeIntersectionNodes(int argIndex);
-    void labelIntersectionNodes(int argIndex);
+    void copyNodesAndLabels(uint8_t argIndex);
+    void computeIntersectionNodes(uint8_t argIndex);
+    void labelIntersectionNodes(uint8_t argIndex);
 
     /**
      * If the Geometries are disjoint, we need to enter their dimension and
@@ -128,7 +128,7 @@ private:
      * did, they would have caused an intersection to be computed and hence would
      * not be isolated)
      */
-    void labelIsolatedEdges(int thisIndex, int targetIndex);
+    void labelIsolatedEdges(uint8_t thisIndex, uint8_t targetIndex);
 
     /**
      * Label an isolated edge of a graph with its relationship to the target
@@ -137,7 +137,7 @@ private:
      * or the exterior.
      * If the target has dim 0, the edge must be in the exterior
      */
-    void labelIsolatedEdge(geomgraph::Edge* e, int targetIndex,
+    void labelIsolatedEdge(geomgraph::Edge* e, uint8_t targetIndex,
                            const geom::Geometry* target);
 
     /**
@@ -154,7 +154,7 @@ private:
     /**
      * Label an isolated node with its relationship to the target geometry.
      */
-    void labelIsolatedNode(geomgraph::Node* n, int targetIndex);
+    void labelIsolatedNode(geomgraph::Node* n, uint8_t targetIndex);
 };
 
 

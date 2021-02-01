@@ -29,7 +29,7 @@ namespace geomgraph { // geos::geomgraph
 INLINE void
 GeometryGraph::getBoundaryNodes(std::vector<Node*>& bdyNodes)
 {
-    nodes->getBoundaryNodes(argIndex, bdyNodes);
+    nodes->getBoundaryNodes(static_cast<uint8_t>(argIndex), bdyNodes);
 }
 
 INLINE const geom::Geometry*

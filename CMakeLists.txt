@@ -26,7 +26,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # TODO: Follow CMake detection of git and version tagging
 #       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
-if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
+if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
@@ -48,6 +48,7 @@ option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
 set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
 
 ## GEOS custom variables
+option(BUILD_BENCHMARKS "Build GEOS benchmarks" ON)
 cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "Build with compilation flags useful for development" ON
   "GEOS_BUILD_FROM_GIT" OFF)
@@ -292,7 +293,9 @@ endif()
 #-----------------------------------------------------------------------------
 # Benchmarks
 #-----------------------------------------------------------------------------
-add_subdirectory(benchmarks)
+if(BUILD_BENCHMARKS)
+  add_subdirectory(benchmarks)
+endif()
 
 #-----------------------------------------------------------------------------
 # Utils

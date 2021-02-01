@@ -49,11 +49,11 @@ OverlayEdge::getCoordinatesOriented()
 */
 /*public*/
 void
-OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
+OverlayEdge::addCoordinates(CoordinateArraySequence* coords) const
 {
     bool isFirstEdge = coords->size() > 0;
     if (direction) {
-        int startIndex = 1;
+        std::size_t startIndex = 1;
         if (isFirstEdge) {
             startIndex = 0;
         }
@@ -67,7 +67,7 @@ OverlayEdge::addCoordinates(CoordinateArraySequence* coords)
             startIndex = (int)(pts->size()) - 1;
         }
         for (int i = startIndex; i >= 0; i--) {
-            coords->add(pts->getAt(i), false);
+            coords->add(pts->getAt(static_cast<std::size_t>(i)), false);
         }
     }
 }

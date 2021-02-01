@@ -53,7 +53,7 @@ private:
     /**
     * Finds a boundary edge for this geom, if one exists.
     */
-    static OverlayEdge* findPropagationStartEdge(OverlayEdge* nodeEdge, int geomIndex);
+    static OverlayEdge* findPropagationStartEdge(OverlayEdge* nodeEdge, uint8_t geomIndex);
 
     /**
     * At this point collapsed edges with unknown location
@@ -81,7 +81,7 @@ private:
     * but may be more efficient and accurate to do it here.)
     */
     void labelCollapsedEdges();
-    void labelCollapsedEdge(OverlayEdge* edge, int geomIndex);
+    static void labelCollapsedEdge(OverlayEdge* edge, uint8_t geomIndex);
 
     /**
     * There can be edges which have unknown location
@@ -89,15 +89,15 @@ private:
     * In this case line location is propagated to the connected edges.
     */
     void labelConnectedLinearEdges();
-    void propagateLinearLocations(int geomIndex);
-    static void propagateLinearLocationAtNode(OverlayEdge* eNode, int geomIndex, bool isInputLine, std::deque<OverlayEdge*>& edgeStack);
+    void propagateLinearLocations(uint8_t geomIndex);
+    static void propagateLinearLocationAtNode(OverlayEdge* eNode, uint8_t geomIndex, bool isInputLine, std::deque<OverlayEdge*>& edgeStack);
 
     /**
     * Finds all OverlayEdges which are linear
     * (i.e. line or collapsed) and have a known location
     * for the given input geometry.
     */
-    static std::vector<OverlayEdge*> findLinearEdgesWithLocation(std::vector<OverlayEdge*>& edges, int geomIndex);
+    static std::vector<OverlayEdge*> findLinearEdgesWithLocation(const std::vector<OverlayEdge *> &edges, uint8_t geomIndex);
 
     /**
     * At this point there may still be edges which have unknown location
@@ -123,7 +123,7 @@ private:
     * The location is determined by checking
     * if the edge lies inside the target geometry area (if any).
     */
-    void labelDisconnectedEdge(OverlayEdge* edge, int geomIndex);
+    void labelDisconnectedEdge(OverlayEdge* edge, uint8_t geomIndex);
 
     /**
     * Determines the {@link Location} for an edge within an Area geometry
@@ -134,7 +134,7 @@ private:
     * and precision reduction may cause incorrect results for edges
     * which are close enough to a boundary to become connected.
     */
-    geom::Location locateEdge(int geomIndex, OverlayEdge* edge);
+    geom::Location locateEdge(uint8_t geomIndex, OverlayEdge* edge);
 
     /**
     * Determines the {@link Location} for an edge within an Area geometry
@@ -147,7 +147,7 @@ private:
     * and precision reduction may cause incorrect results for edges
     * which are close enough to a boundary to become connected.
     */
-    geom::Location locateEdgeBothEnds(int geomIndex, OverlayEdge* edge);
+    geom::Location locateEdgeBothEnds(uint8_t geomIndex, OverlayEdge* edge);
 
     /**
     * Labels edges around nodes based on the arrangement
@@ -176,7 +176,7 @@ public:
     * for a given area geometry to all edges (and their sym)
     * with unknown locations for that geometry.
     */
-    void propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex);
+    void propagateAreaLocations(OverlayEdge* nodeEdge, uint8_t geomIndex);
 
     void markResultAreaEdges(int overlayOpCode);
 
@@ -187,7 +187,7 @@ public:
     * The relevant location is either the right side of a boundary edge,
     * or the line location of a non-boundary edge.
     */
-    void markInResultArea(OverlayEdge* e, int overlayOpCode);
+    static void markInResultArea(OverlayEdge* e, int overlayOpCode);
 
     /**
     * Unmarks result area edges where the sym edge

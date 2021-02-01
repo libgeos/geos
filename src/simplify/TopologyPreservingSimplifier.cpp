@@ -224,7 +224,7 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 
     if(const LineString* ls =
                 dynamic_cast<const LineString*>(geom)) {
-        int minSize = ls->isClosed() ? 4 : 2;
+        std::size_t minSize = ls->isClosed() ? 4 : 2;
         taggedLine = new TaggedLineString(ls, minSize);
     }
     else {

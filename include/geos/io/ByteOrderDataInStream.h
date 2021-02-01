@@ -21,6 +21,7 @@
 #define GEOS_IO_BYTEORDERDATAINSTREAM_H
 
 #include <geos/export.h>
+#include <cstdint>
 
 //#include <geos/io/ParseException.h>
 //#include <geos/io/ByteOrderValues.h>
@@ -50,9 +51,11 @@ public:
 
     unsigned char readByte(); // throws ParseException
 
-    int readInt(); // throws ParseException
+    int32_t readInt(); // throws ParseException
 
-    long readLong(); // throws ParseException
+    uint32_t readUnsigned(); // throws ParseException
+
+    int64_t readLong(); // throws ParseException
 
     double readDouble(); // throws ParseException
 

@@ -9,38 +9,15 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosrelatepatternmatch_data {
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosrelatepatternmatch_data()
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeosrelatepatternmatch_data()
-    {
-        finishGEOS();
-    }
-
-};
+struct test_capigeosrelatepatternmatch_data : public capitest::utility {};
 
 typedef test_group<test_capigeosrelatepatternmatch_data> group;
 typedef group::object object;

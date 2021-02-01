@@ -45,7 +45,7 @@ OverlayEdge::getLabel() const
 
 /*public*/
 INLINE Location
-OverlayEdge::getLocation(int index, int position) const
+OverlayEdge::getLocation(uint8_t index, int position) const
 {
     return label->getLocation(index, position, direction);
 }

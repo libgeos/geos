@@ -157,8 +157,7 @@ protected:
         }
 
         // test each corner of rectangle for inclusion
-        for(int i = 0; i < 4; i++) {
-
+        for(unsigned int i = 0; i < 4; i++) {
             const geom::Coordinate& rectPt = rectSeq.getAt(i);
 
             if(!elementEnv.contains(rectPt)) {

@@ -162,7 +162,7 @@ protected:
      * information to the overall labelling, and is
      * simply skipped.
      */
-    void mergeLabel(const Label& deLabel, int geomIndex);
+    void mergeLabel(const Label& deLabel, uint8_t geomIndex);
 
     void addPoints(Edge* edge, bool isForward, bool isFirstEdge);
 

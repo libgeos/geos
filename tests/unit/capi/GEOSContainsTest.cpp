@@ -12,44 +12,15 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeoscontains_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeoscontains_data()
-        : geom1_(nullptr), geom2_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeoscontains_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        finishGEOS();
-    }
-
+struct test_capigeoscontains_data : public capitest::utility {
 };
 
 typedef test_group<test_capigeoscontains_data> group;

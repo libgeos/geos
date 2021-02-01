@@ -13,22 +13,21 @@
  *
  **********************************************************************/
 
-#include <geos/constants.h> // for int64
 #include <geos/precision/CommonBits.h>
 
 namespace geos {
 namespace precision { // geos.precision
 
 /*static public*/
-int64
-CommonBits::signExpBits(int64 num)
+int64_t
+CommonBits::signExpBits(int64_t num)
 {
     return num >> 52;
 }
 
 /*static public*/
 int
-CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
+CommonBits::numCommonMostSigMantissaBits(int64_t num1, int64_t num2)
 {
     int count = 0;
     for(int i = 52; i >= 0; i--) {
@@ -41,22 +40,22 @@ CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
 }
 
 /*static public*/
-int64
-CommonBits::zeroLowerBits(int64 bits, int nBits)
+int64_t
+CommonBits::zeroLowerBits(int64_t bits, int nBits)
 {
     if (nBits >= 64 || nBits < 0) return 0;
     const uint64_t bits_ = static_cast<uint64_t>(bits);
     const uint64_t invMask = (1ull << nBits) - 1;
     const uint64_t mask = ~ invMask;
     const uint64_t zeroed = bits_ & mask;
-    return static_cast<int64>(zeroed);
+    return static_cast<int64_t>(zeroed);
 }
 
 /*static public*/
 int
-CommonBits::getBit(int64 bits, int i)
+CommonBits::getBit(int64_t bits, int i)
 {
-    int64 mask = (1ull << i);
+    int64_t mask = static_cast<int64_t>(1ull << i);
     return (bits & mask) != 0 ? 1 : 0;
 }
 
@@ -72,14 +71,14 @@ CommonBits::CommonBits()
 void
 CommonBits::add(double num)
 {
-    int64 numBits = (int64)num;
+    int64_t numBits = (int64_t) num;
     if(isFirst) {
         commonBits = numBits;
         commonSignExp = signExpBits(commonBits);
         isFirst = false;
         return;
     }
-    int64 numSignExp = signExpBits(numBits);
+    int64_t numSignExp = signExpBits(numBits);
     if(numSignExp != commonSignExp) {
         commonBits = 0;
         return;

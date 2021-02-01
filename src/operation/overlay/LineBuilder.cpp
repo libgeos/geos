@@ -295,7 +295,7 @@ LineBuilder::labelIsolatedLines(std::vector<Edge*>* edgesList)
  * Label an isolated node with its relationship to the target geometry.
  */
 void
-LineBuilder::labelIsolatedLine(Edge* e, int targetIndex)
+LineBuilder::labelIsolatedLine(Edge* e, uint8_t targetIndex)
 {
     Location loc = ptLocator->locate(e->getCoordinate(),
                                 op->getArgGeometry(targetIndex));

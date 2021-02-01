@@ -12,38 +12,10 @@ namespace tut {
 // Common data used in test cases.
 struct test_capigeosintersection_data : public capitest::utility
 {
-
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSGeometry* expected_;
-
-    test_capigeosintersection_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
-    {
-        wktw_ = GEOSWKTWriter_create();
+    test_capigeosintersection_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
     }
-
-    ~test_capigeosintersection_data()
-    {
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        if (expected_) GEOSGeom_destroy(expected_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
-    }
-
 };
 
 typedef test_group<test_capigeosintersection_data> group;

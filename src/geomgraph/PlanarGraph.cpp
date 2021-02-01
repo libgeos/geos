@@ -107,7 +107,7 @@ PlanarGraph::getEdgeEnds()
 
 /*public*/
 bool
-PlanarGraph::isBoundaryNode(int geomIndex, const Coordinate& coord)
+PlanarGraph::isBoundaryNode(uint8_t geomIndex, const Coordinate& coord)
 {
     assert(nodes);
 

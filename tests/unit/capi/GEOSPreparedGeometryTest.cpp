@@ -13,51 +13,28 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeospreparedgeometry_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-
+struct test_capigeospreparedgeometry_data : public capitest::utility {
     const GEOSPreparedGeometry* prepGeom1_;
     const GEOSPreparedGeometry* prepGeom2_;
 
-
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeospreparedgeometry_data()
-        : geom1_(nullptr), geom2_(nullptr), prepGeom1_(nullptr), prepGeom2_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
+        : prepGeom1_(nullptr), prepGeom2_(nullptr)
+    {}
 
     ~test_capigeospreparedgeometry_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
         GEOSPreparedGeom_destroy(prepGeom1_);
         GEOSPreparedGeom_destroy(prepGeom2_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
         prepGeom1_ = nullptr;
         prepGeom2_ = nullptr;
-        finishGEOS();
     }
 
 };

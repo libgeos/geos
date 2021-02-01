@@ -141,7 +141,7 @@ public:
     * @return containing EdgeRing, if there is one
     * or null if no containing EdgeRing is found
     */
-    OverlayEdgeRing* findEdgeRingContaining(std::vector<OverlayEdgeRing*>& erList);
+    OverlayEdgeRing* findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList);
 
 
 };

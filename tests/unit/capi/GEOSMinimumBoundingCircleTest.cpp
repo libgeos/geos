@@ -11,56 +11,20 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capiminimumboundingcircle_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* wktw_;
-    char* wkt_;
-    double area_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
+struct test_capiminimumboundingcircle_data : public capitest::utility {
     test_capiminimumboundingcircle_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), wkt_(nullptr)
     {
-        initGEOS(notice, notice);
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capiminimumboundingcircle_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        wkt_ = nullptr;
-        finishGEOS();
-    }
-
 };
 
 typedef test_group<test_capiminimumboundingcircle_data> group;

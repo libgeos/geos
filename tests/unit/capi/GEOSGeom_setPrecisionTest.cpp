@@ -7,52 +7,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosgeomsetprecision_data : public capitest::utility {
-
-    GEOSWKTWriter* wktw_ = nullptr;
-    GEOSGeometry* geom1_ = nullptr;
-    GEOSGeometry* geom2_ = nullptr;
-    GEOSGeometry* geom3_ = nullptr;
-
-    GEOSGeometry*
-    fromWKT(const char* wkt)
-    {
-        GEOSGeometry* g = GEOSGeomFromWKT(wkt);
-        ensure(g != 0);
-        return g;
-    }
-
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
-    }
-
-    test_capigeosgeomsetprecision_data()
-    {
-        wktw_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
-        //GEOSWKTWriter_setOutputDimension(wktw_, 3);
-    }
-
-    ~test_capigeosgeomsetprecision_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        if(geom3_)
-            GEOSGeom_destroy(geom3_);
-        if (wktw_)
-            GEOSWKTWriter_destroy(wktw_);
-
-        geom1_ = geom2_ = geom3_ = 0;
-        wktw_ = 0;
-    }
-
-};
+struct test_capigeosgeomsetprecision_data : public capitest::utility {};
 
 typedef test_group<test_capigeosgeomsetprecision_data> group;
 typedef group::object object;

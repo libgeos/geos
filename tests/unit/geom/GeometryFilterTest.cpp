@@ -42,7 +42,7 @@ void object::test<1>
 ()
 {
     // collection of 4 geometries
-    GeometryPtr g(reader.read("GEOMETRYCOLLECTION("
+    GeometryPtr input(reader.read("GEOMETRYCOLLECTION("
                               "POINT(0 0),"
                               "LINESTRING(0 0,1 1,1 2),"
                               "POLYGON((0 0,4 0,4 4,0 4,0 0)),"
@@ -74,7 +74,7 @@ void object::test<1>
     GeometryRefArray lineal;
     GeometryRefArray nonlineal;
     GeometrySplitter splitter(lineal, nonlineal);
-    g->apply_ro(&splitter);
+    input->apply_ro(&splitter);
 
     // TODO: Verify the actual results
     // lineal:
@@ -91,7 +91,7 @@ void object::test<1>
     ensure_equals(nonlineal.size(), 3ul);
     // TODO: is 7, shouldn't be not 4?
     //ensure_equals(lineal.size() + nonlineal.size(), g->getNumGeometries());
-    ensure_equals(g->getNumGeometries(), 4ul);
+    ensure_equals(input->getNumGeometries(), 4ul);
     ensure_equals(lineal.size() + nonlineal.size(), 7ul);
 }
 

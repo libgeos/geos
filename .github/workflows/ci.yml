@@ -6,9 +6,6 @@
 name: CI
 on: [push, pull_request]
 
-env:
-  BUILD_TYPE: 'Release'
-
 jobs:
   linux:
     name: 'Linux'
@@ -17,7 +14,7 @@ jobs:
         ci:
         - {
           compiler: g++,
-          build: cmake,
+          build_type: Coverage,
           cxxstd: 11,
           arch: 64,
           packages: 'g++ cmake doxygen',
@@ -25,7 +22,7 @@ jobs:
         }
         - {
           compiler: g++,
-          build: cmake,
+          build_type: Release,
           cxxstd: 11,
           arch: 32,
           packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib cmake doxygen',
@@ -33,7 +30,7 @@ jobs:
         }
         - {
           compiler: clang++,
-          build: cmake,
+          build_type: Release,
           cxxstd: 11,
           arch: 64,
           packages: 'clang cmake doxygen',
@@ -41,7 +38,7 @@ jobs:
         }
         - {
           compiler: g++,
-          build: cmake,
+          build_type: Release,
           cxxstd: 11,
           arch: 64,
           packages: 'g++ cmake doxygen',
@@ -49,7 +46,7 @@ jobs:
         }
         - {
           compiler: clang++,
-          build: cmake,
+          build_type: Release,
           cxxstd: 11,
           arch: 64,
           packages: 'clang cmake doxygen',
@@ -57,7 +54,7 @@ jobs:
         }
         - {
           compiler: clang++,
-          build: cmake,
+          build_type: Release,
           cxxstd: 14,
           arch: 64,
           packages: 'clang cmake doxygen',
@@ -87,10 +84,18 @@ jobs:
         mkdir build.cmake
         cd build.cmake
         cmake --version
-        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
         cmake --build . -j 2
         cmake --build . --target docs
         ctest --output-on-failure .
+
+    - name: Upload coverage to Codecov
+      if: matrix.ci.build_type == 'Coverage'
+      run: |
+        curl -o codecov.sh https://codecov.io/bash
+        bash codecov.sh
+      shell: bash
+
 
 
 

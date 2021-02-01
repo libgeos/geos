@@ -11,51 +11,27 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capimaximuminscribedcircle_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* wktw_;
+struct test_capimaximuminscribedcircle_data : public capitest::utility {
     char* wkt_;
-    double area_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     test_capimaximuminscribedcircle_data()
-        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
+        : wkt_(nullptr)
     {
-        initGEOS(notice, notice);
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
 
     ~test_capimaximuminscribedcircle_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(wktw_);
         GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        wkt_ = nullptr;
-        finishGEOS();
     }
 
 };

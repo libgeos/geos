@@ -24,7 +24,7 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public*/
 void
-OverlayLabel::initBoundary(int index, Location locLeft, Location locRight, bool p_isHole)
+OverlayLabel::initBoundary(uint8_t index, Location locLeft, Location locRight, bool p_isHole)
 {
     if (index == 0) {
         aDim = DIM_BOUNDARY;
@@ -44,7 +44,7 @@ OverlayLabel::initBoundary(int index, Location locLeft, Location locRight, bool 
 
 /*public*/
 void
-OverlayLabel::initCollapse(int index, bool p_isHole)
+OverlayLabel::initCollapse(uint8_t index, bool p_isHole)
 {
     if (index == 0) {
         aDim = DIM_COLLAPSE;
@@ -58,7 +58,7 @@ OverlayLabel::initCollapse(int index, bool p_isHole)
 
 /*public*/
 void
-OverlayLabel::initLine(int index)
+OverlayLabel::initLine(uint8_t index)
 {
     if (index == 0) {
         aDim = DIM_LINE;
@@ -72,7 +72,7 @@ OverlayLabel::initLine(int index)
 
 /*public*/
 void
-OverlayLabel::initNotPart(int index)
+OverlayLabel::initNotPart(uint8_t index)
 {
     // this assumes locations are initialized to UNKNOWN
     if (index == 0) {
@@ -85,7 +85,7 @@ OverlayLabel::initNotPart(int index)
 
 /*public*/
 void
-OverlayLabel::setLocationLine(int index, Location loc)
+OverlayLabel::setLocationLine(uint8_t index, Location loc)
 {
     if (index == 0) {
         aLocLine = loc;
@@ -97,7 +97,7 @@ OverlayLabel::setLocationLine(int index, Location loc)
 
 /*public*/
 void
-OverlayLabel::setLocationAll(int index, Location loc)
+OverlayLabel::setLocationAll(uint8_t index, Location loc)
 {
     if (index == 0) {
         aLocLine = loc;
@@ -113,7 +113,7 @@ OverlayLabel::setLocationAll(int index, Location loc)
 
 /*public*/
 void
-OverlayLabel::setLocationCollapse(int index)
+OverlayLabel::setLocationCollapse(uint8_t index)
 {
     Location loc = isHole(index) ? Location::INTERIOR : Location::EXTERIOR;
     if (index == 0) {
@@ -144,7 +144,7 @@ OverlayLabel::isCollapseAndNotPartInterior() const
 
 /*public*/
 Location
-OverlayLabel::getLocation(int index, int position, bool isForward) const
+OverlayLabel::getLocation(uint8_t index, int position, bool isForward) const
 {
     if (index == 0) {
         switch (position) {
@@ -201,7 +201,7 @@ OverlayLabel::toString(bool isForward, std::ostream& os) const
 
 /*private*/
 void
-OverlayLabel::locationString(int index, bool isForward, std::ostream& os) const
+OverlayLabel::locationString(uint8_t index, bool isForward, std::ostream& os) const
 {
     if (isBoundary(index)) {
         os << getLocation(index, Position::LEFT, isForward);

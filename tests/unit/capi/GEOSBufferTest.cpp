@@ -10,52 +10,27 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosbuffer_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    char* wkt_;
+struct test_capigeosbuffer_data : public capitest::utility {
     GEOSBufferParams* bp_;
-    GEOSWKTWriter* wktw_;
     double area_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeosbuffer_data()
-        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr), bp_(nullptr)
+        : bp_(nullptr)
     {
-        initGEOS(notice, notice);
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
     }
 
     ~test_capigeosbuffer_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(wktw_);
         GEOSBufferParams_destroy(bp_);
-        GEOSFree(wkt_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        wkt_ = nullptr;
-        finishGEOS();
     }
 
 };

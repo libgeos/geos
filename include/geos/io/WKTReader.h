@@ -60,20 +60,20 @@ public:
     //WKTReader();
 
     /**
-     * \brief Inizialize parser with given GeometryFactory.
+     * \brief Initialize parser with given GeometryFactory.
      *
      * Note that all Geometry objects created by the
      * parser will contain a pointer to the given factory
      * so be sure you'll keep the factory alive for the
      * whole WKTReader and created Geometry life.
      */
-    WKTReader(const geom::GeometryFactory& gf);
+    explicit WKTReader(const geom::GeometryFactory& gf);
 
     /** @deprecated in 3.4.0 */
-    WKTReader(const geom::GeometryFactory* gf);
+    explicit WKTReader(const geom::GeometryFactory* gf);
 
     /**
-     * \brief Inizialize parser with default GeometryFactory.
+     * \brief Initialize parser with default GeometryFactory.
      *
      */
     WKTReader();
@@ -81,33 +81,33 @@ public:
     ~WKTReader();
 
     /// Parse a WKT string returning a Geometry
-    std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText);
+    std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
 
 //	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer);
-    double getNextNumber(io::StringTokenizer* tokenizer);
-    std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t& dim);
-    std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
-    std::string getNextCloser(io::StringTokenizer* tokenizer);
-    std::string getNextWord(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::LinearRing> readLinearRingText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::MultiPoint> readMultiPointText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::Polygon> readPolygonText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::MultiLineString> readMultiLineStringText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer) const;
+    static double getNextNumber(io::StringTokenizer* tokenizer);
+    static std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t& dim);
+    static std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
+    static std::string getNextCloser(io::StringTokenizer* tokenizer);
+    static std::string getNextWord(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::LinearRing> readLinearRingText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::MultiPoint> readMultiPointText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::Polygon> readPolygonText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::MultiLineString> readMultiLineStringText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer) const;
+    std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer) const;
 private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;
 
-    void getPreciseCoordinate(io::StringTokenizer* tokenizer, geom::Coordinate&, std::size_t& dim);
+    void getPreciseCoordinate(io::StringTokenizer* tokenizer, geom::Coordinate&, std::size_t& dim) const;
 
-    bool isNumberNext(io::StringTokenizer* tokenizer);
+    static bool isNumberNext(io::StringTokenizer* tokenizer);
 };
 
 } // namespace io

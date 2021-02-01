@@ -21,8 +21,8 @@ namespace overlayng { // geos.operation.overlayng
 
 /*public*/
 InputGeometry::InputGeometry(const Geometry* geomA, const Geometry* geomB)
-    : geom({geomA, geomB})
-    , isCollapsed({false, false})
+    : geom{{geomA, geomB}}
+    , isCollapsed{{false, false}}
 {}
 
 /*public*/
@@ -34,7 +34,7 @@ InputGeometry::isSingle() const
 
 /*public*/
 int
-InputGeometry::getDimension(int index) const
+InputGeometry::getDimension(uint8_t index) const
 {
     if (geom[index] == nullptr)
         return -1;
@@ -43,28 +43,28 @@ InputGeometry::getDimension(int index) const
 
 /*public*/
 const Geometry*
-InputGeometry::getGeometry(int geomIndex) const
+InputGeometry::getGeometry(uint8_t geomIndex) const
 {
     return geom[geomIndex];
 }
 
 /*public*/
 const Envelope*
-InputGeometry::getEnvelope(int geomIndex) const
+InputGeometry::getEnvelope(uint8_t geomIndex) const
 {
     return geom[geomIndex]->getEnvelopeInternal();
 }
 
 /*public*/
 bool
-InputGeometry::isEmpty(int geomIndex) const
+InputGeometry::isEmpty(uint8_t geomIndex) const
 {
     return geom[geomIndex]->isEmpty();
 }
 
 /*public*/
 bool
-InputGeometry::isArea(int geomIndex) const
+InputGeometry::isArea(uint8_t geomIndex) const
 {
     return geom[geomIndex] != nullptr && geom[geomIndex]->getDimension() == 2;
 }
@@ -89,7 +89,7 @@ InputGeometry::getAreaIndex() const
 
 /*public*/
 bool
-InputGeometry::isLine(int geomIndex) const
+InputGeometry::isLine(uint8_t geomIndex) const
 {
     return getDimension(geomIndex) == 1;
 }
@@ -118,7 +118,7 @@ InputGeometry::hasPoints() const
 */
 /*public*/
 bool
-InputGeometry::hasEdges(int geomIndex) const
+InputGeometry::hasEdges(uint8_t geomIndex) const
 {
     return geom[geomIndex] != nullptr && geom[geomIndex]->getDimension() > 0;
 }
@@ -136,7 +136,7 @@ InputGeometry::hasEdges(int geomIndex) const
 */
 /*public*/
 Location
-InputGeometry::locatePointInArea(int geomIndex, const Coordinate& pt)
+InputGeometry::locatePointInArea(uint8_t geomIndex, const Coordinate& pt)
 {
     if (isCollapsed[geomIndex] || getGeometry(geomIndex)->isEmpty())
         return Location::EXTERIOR;
@@ -149,7 +149,7 @@ InputGeometry::locatePointInArea(int geomIndex, const Coordinate& pt)
 
 /*private*/
 PointOnGeometryLocator*
-InputGeometry::getLocator(int geomIndex)
+InputGeometry::getLocator(uint8_t geomIndex)
 {
     if (geomIndex == 0) {
         if (ptLocatorA == nullptr)
@@ -166,7 +166,7 @@ InputGeometry::getLocator(int geomIndex)
 
 /*public*/
 void
-InputGeometry::setCollapsed(int geomIndex, bool isGeomCollapsed)
+InputGeometry::setCollapsed(uint8_t geomIndex, bool isGeomCollapsed)
 {
     isCollapsed[geomIndex] = isGeomCollapsed;
 }

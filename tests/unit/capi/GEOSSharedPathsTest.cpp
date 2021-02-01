@@ -10,51 +10,19 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeossharedpaths_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* w_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
+struct test_capigeossharedpaths_data : public capitest::utility {
     test_capigeossharedpaths_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
     {
-        initGEOS(notice, notice);
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
+        GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    ~test_capigeossharedpaths_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        finishGEOS();
-    }
-
 };
 
 typedef test_group<test_capigeossharedpaths_data> group;
@@ -89,7 +57,7 @@ void object::test<2>
     geom2_ = GEOSGeomFromWKT("LINESTRING (-29 -20, 50 60, 50 70, 51 0)");
     geom3_ = GEOSSharedPaths(geom1_, geom2_);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 

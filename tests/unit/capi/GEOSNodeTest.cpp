@@ -10,48 +10,19 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosnode_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* w_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
+struct test_capigeosnode_data : public capitest::utility {
     test_capigeosnode_data()
-        : geom1_(nullptr), geom2_(nullptr), w_(nullptr)
     {
-        initGEOS(notice, notice);
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
+        GEOSWKTWriter_setTrim(wktw_, 1);
     }
-
-    ~test_capigeosnode_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        finishGEOS();
-    }
-
 };
 
 typedef test_group<test_capigeosnode_data> group;
@@ -74,7 +45,7 @@ void object::test<1>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -94,7 +65,7 @@ void object::test<2>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -114,7 +85,7 @@ void object::test<3>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom2_);
     std::string out(wkt_c);
     free(wkt_c);
 

@@ -143,20 +143,17 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
      */
     bool hasDimensionalCollapseEdge[2] = {false, false};
 
-    EdgeEndStar::iterator endIt = end();
-    for(EdgeEndStar::iterator it = begin(); it != endIt; ++it) {
-        EdgeEnd* e = *it;
+    for(EdgeEnd* e : *this) {
         assert(e);
         const Label& label = e->getLabel();
-        for(int geomi = 0; geomi < 2; geomi++) {
+        for(uint8_t geomi = 0; geomi < 2; geomi++) {
             if(label.isLine(geomi) && label.getLocation(geomi) == Location::BOUNDARY) {
                 hasDimensionalCollapseEdge[geomi] = true;
             }
         }
     }
 
-    for(EdgeEndStar::iterator it = begin(); it != end(); ++it) {
-        EdgeEnd* e = *it;
+    for(EdgeEnd* e : *this) {
         assert(e);
         Label& label = e->getLabel();
         for(uint32_t geomi = 0; geomi < 2; ++geomi) {
@@ -310,9 +307,13 @@ EdgeEndStar::propagateSideLabels(uint32_t geomIndex)
             // if there is a right location, that is the next
             // location to propagate
             if(rightLoc != Location::NONE) {
-                if(rightLoc != currLoc)
-                    throw util::TopologyException("side location conflict",
-                                                  e->getCoordinate());
+                if(rightLoc != currLoc) {
+                    std::stringstream ss;
+                    ss << "side location conflict at ";
+                    ss << e->getCoordinate().toString();
+                    ss << ". This can occur if the input geometry is invalid.";
+                    throw util::TopologyException(ss.str());
+                }
                 if(leftLoc == Location::NONE) {
                     // found single null side at e->getCoordinate()
                     assert(0);

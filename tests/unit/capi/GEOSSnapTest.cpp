@@ -10,52 +10,20 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeossnap_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSWKTWriter* w_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
+struct test_capigeossnap_data : public capitest::utility {
     test_capigeossnap_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
     {
-        initGEOS(notice, notice);
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
-        GEOSWKTWriter_setRoundingPrecision(w_, 8);
+        GEOSWKTWriter_setTrim(wktw_, 1);
+        GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
-
-    ~test_capigeossnap_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        finishGEOS();
-    }
-
 };
 
 typedef test_group<test_capigeossnap_data> group;
@@ -77,7 +45,7 @@ void object::test<1>
     geom2_ = GEOSGeomFromWKT("POINT(0.5 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 1);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -94,7 +62,7 @@ void object::test<2>
     geom2_ = GEOSGeomFromWKT("LINESTRING (-29 -20, 40 60, 51 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -111,7 +79,7 @@ void object::test<3>
     geom2_ = GEOSGeomFromWKT("LINESTRING (-10 -9, 40 20, 80 79)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -130,7 +98,7 @@ void object::test<4>
     geom2_ = GEOSGeomFromWKT("LINESTRING(0 0, 9 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -147,7 +115,7 @@ void object::test<5>
     geom2_ = GEOSGeomFromWKT("LINESTRING(0 0, 9 0, 10 0, 11 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -165,7 +133,7 @@ void object::test<6>
     geom2_ = GEOSGeomFromWKT("MULTIPOINT(5 0,4 1)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -184,7 +152,7 @@ void object::test<7>
     geom2_ = GEOSGeomFromWKT("MULTIPOINT(4 1,5 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -202,7 +170,7 @@ void object::test<8>
     geom2_ = GEOSGeomFromWKT("MULTIPOINT(0 0,-1 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 3);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -218,7 +186,7 @@ void object::test<9>
     geom2_ = GEOSGeomFromWKT("POINT(5 0)");
     geom3_ = GEOSSnap(geom1_, geom2_, 3);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 
@@ -235,7 +203,7 @@ void object::test<10>
     geom2_ = GEOSGeomFromWKT("MULTIPOINT(-71.1261 42.2703,-71.1257 42.2703,-71.1261 42.2702)");
     geom3_ = GEOSSnap(geom1_, geom2_, 0.5);
 
-    char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+    char* wkt_c = GEOSWKTWriter_write(wktw_, geom3_);
     std::string out(wkt_c);
     free(wkt_c);
 

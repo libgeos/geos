@@ -11,47 +11,22 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capiisvaliddetail_data {
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom_;
+struct test_capiisvaliddetail_data : public capitest::utility {
     GEOSGeometry* loc_;
     char* reason_;
 
-    static void
-    notice(const char* fmt, ...)
+    test_capiisvaliddetail_data() : loc_(nullptr), reason_(nullptr)
     {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capiisvaliddetail_data()
-        : geom_(nullptr), loc_(nullptr), reason_(nullptr)
-    {
-        initGEOS(notice, notice);
-        wktw_ = GEOSWKTWriter_create();
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
-    }
-
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
     }
 
     void
@@ -67,11 +42,8 @@ struct test_capiisvaliddetail_data {
 
     ~test_capiisvaliddetail_data()
     {
-        GEOSGeom_destroy(geom_);
         GEOSGeom_destroy(loc_);
         GEOSFree(reason_);
-        GEOSWKTWriter_destroy(wktw_);
-        finishGEOS();
     }
 
 };
@@ -103,8 +75,8 @@ void object::test<2>
 {
     // Looks invalid (self-intersecting) but isn't
     // (is non-simple though)
-    geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 5 -5, 5 5)");
-    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 5 -5, 5 5)");
+    int r = GEOSisValidDetail(geom1_, 0, &reason_, &loc_);
     ensure_equals(r, 1); // valid
     ensure_equals(reason_, (void*)nullptr);
     ensure_equals(loc_, (void*)nullptr);
@@ -116,9 +88,9 @@ template<>
 void object::test<3>
 ()
 {
-    geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
-    ensure(nullptr != geom_);
-    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
+    ensure(nullptr != geom1_);
+    int r = GEOSisValidDetail(geom1_, 0, &reason_, &loc_);
     std::string wkt = toWKT(loc_);
     strToUpper(wkt);
     ensure_equals(r, 0); // invalid
@@ -141,8 +113,8 @@ template<>
 void object::test<4>
 ()
 {
-    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    int r = GEOSisValidDetail(geom1_, 0, &reason_, &loc_);
     ensure_equals(r, 0); // invalid
     ensure_equals(std::string(reason_), std::string("Ring Self-intersection"));
     ensure_equals(toWKT(loc_), "POINT (0 1)");
@@ -154,10 +126,10 @@ template<>
 void object::test<5>
 ()
 {
-    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
     int flags = GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE;
 
-    int r = GEOSisValidDetail(geom_, flags, &reason_, &loc_);
+    int r = GEOSisValidDetail(geom1_, flags, &reason_, &loc_);
     ensure_equals(r, 1); // valid
     ensure_equals(reason_, (void*)nullptr);
     ensure_equals(loc_, (void*)nullptr);
@@ -169,8 +141,8 @@ template<>
 void object::test<6>
 ()
 {
-    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-    int r = GEOSisValidDetail(geom_, 0, nullptr, nullptr);
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    int r = GEOSisValidDetail(geom1_, 0, nullptr, nullptr);
     ensure_equals(r, 0); // invalid
 }
 

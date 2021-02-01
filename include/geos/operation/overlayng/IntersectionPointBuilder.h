@@ -81,7 +81,7 @@ private:
     * inputs, and none of the edges are themselves in the result.
     */
     bool isResultPoint(OverlayEdge* nodeEdge) const;
-    bool isEdgeOf(const OverlayLabel* label, int i) const;
+    bool isEdgeOf(const OverlayLabel* label, uint8_t i) const;
 
 
 public:

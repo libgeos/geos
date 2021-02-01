@@ -10,45 +10,24 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeospreparednearestpoints_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
+struct test_capigeospreparednearestpoints_data : public capitest::utility {
     const GEOSPreparedGeometry* pgeom1_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeospreparednearestpoints_data()
-        : geom1_(nullptr), geom2_(nullptr), pgeom1_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
+        : pgeom1_(nullptr)
+    {}
 
     ~test_capigeospreparednearestpoints_data()
     {
-        GEOSGeom_destroy(geom2_);
         GEOSPreparedGeom_destroy(pgeom1_);
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom1_ = nullptr;
-        finishGEOS();
     }
 
     void checkNearestPoints(const char* wkt1, const char* wkt2,

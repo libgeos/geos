@@ -10,36 +10,15 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeospolygonize_data {
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeospolygonize_data()
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeospolygonize_data()
-    {
-        finishGEOS();
-    }
-
+struct test_capigeospolygonize_data : public capitest::utility {
 };
 
 typedef test_group<test_capigeospolygonize_data> group;

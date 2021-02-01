@@ -68,7 +68,7 @@ Quadtree::ensureExtent(const Envelope* itemEnv, double minExtent)
 }
 
 /*public*/
-int
+size_t
 Quadtree::depth()
 {
     return root.depth();

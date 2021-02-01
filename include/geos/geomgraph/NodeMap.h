@@ -102,7 +102,7 @@ public:
         return nodeMap.end();
     }
 
-    void getBoundaryNodes(int geomIndex,
+    void getBoundaryNodes(uint8_t geomIndex,
                           std::vector<Node*>& bdyNodes) const;
 
     std::string print() const;

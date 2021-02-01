@@ -62,7 +62,7 @@ Profile::getTotFormatted() const
     std::string fmt = usec.str();
     int insertPosition = static_cast<int>(fmt.length()) - 3;
     while (insertPosition > 0) {
-        fmt.insert(insertPosition, ",");
+        fmt.insert(static_cast<std::string::size_type>(insertPosition), ",");
         insertPosition-=3;
     }
     return fmt + " usec";

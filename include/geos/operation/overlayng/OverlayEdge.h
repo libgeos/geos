@@ -99,7 +99,7 @@ public:
 
     OverlayLabel* getLabel() const;
 
-    Location getLocation(int index, int position) const;
+    Location getLocation(uint8_t index, int position) const;
 
     const Coordinate& getCoordinate() const;
 
@@ -118,7 +118,7 @@ public:
     *
     * @param coords the coordinate list to add to
     */
-    void addCoordinates(CoordinateArraySequence* coords);
+    void addCoordinates(CoordinateArraySequence* coords) const;
 
     OverlayEdge* symOE() const;
     OverlayEdge* oNextOE() const;

@@ -233,7 +233,7 @@ OverlayOp::replaceCollapsedEdges()
 
 /*private*/
 void
-OverlayOp::copyPoints(int argIndex, const Envelope* env)
+OverlayOp::copyPoints(uint8_t argIndex, const Envelope* env)
 {
 //#define GEOS_DEBUG_COPY_POINTS 1
 
@@ -392,7 +392,7 @@ OverlayOp::labelIncompleteNodes()
 
 /*private*/
 void
-OverlayOp::labelIncompleteNode(Node* n, int targetIndex)
+OverlayOp::labelIncompleteNode(Node* n, uint8_t targetIndex)
 {
 #if GEOS_DEBUG
     std::cerr << "OverlayOp::labelIncompleteNode(" << n->print() << ", " << targetIndex << ")" << std::endl;
@@ -464,7 +464,7 @@ OverlayOp::getAverageZ(const Polygon* poly)
 
 /*private*/
 double
-OverlayOp::getAverageZ(int targetIndex)
+OverlayOp::getAverageZ(uint8_t targetIndex)
 {
     if(avgzcomputed[targetIndex]) {
         return avgz[targetIndex];
@@ -968,7 +968,7 @@ OverlayOp::computeLabelsFromDepths()
         }
 
         depth.normalize();
-        for(int i = 0; i < 2; i++) {
+        for(uint8_t i = 0; i < 2; i++) {
             if(!lbl.isNull(i) && lbl.isArea() && !depth.isNull(i)) {
                 /*
                  * if the depths are equal, this edge is the result of

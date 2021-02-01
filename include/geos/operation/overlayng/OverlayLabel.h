@@ -105,7 +105,7 @@ private:
 
 
     std::string dimensionSymbol(int dim) const;
-    void locationString(int index, bool isForward, std::ostream& os) const;
+    void locationString(uint8_t index, bool isForward, std::ostream& os) const;
 
 
 public:
@@ -132,23 +132,23 @@ public:
         , bLocRight(LOC_UNKNOWN)
         , bLocLine(LOC_UNKNOWN) {};
 
-    OverlayLabel(int p_index)
+    explicit OverlayLabel(uint8_t p_index)
         : OverlayLabel()
     {
         initLine(p_index);
     };
 
-    OverlayLabel(int p_index, Location p_locLeft, Location p_locRight, bool p_isHole)
+    OverlayLabel(uint8_t p_index, Location p_locLeft, Location p_locRight, bool p_isHole)
         : OverlayLabel()
     {
         initBoundary(p_index, p_locLeft, p_locRight, p_isHole);
     };
 
-    int dimension(int index) const { return index == 0 ? aDim : bDim; };
-    void initBoundary(int index, Location locLeft, Location locRight, bool p_isHole);
-    void initCollapse(int index, bool p_isHole);
-    void initLine(int index);
-    void initNotPart(int index);
+    int dimension(uint8_t index) const { return index == 0 ? aDim : bDim; };
+    void initBoundary(uint8_t index, Location locLeft, Location locRight, bool p_isHole);
+    void initCollapse(uint8_t index, bool p_isHole);
+    void initLine(uint8_t index);
+    void initNotPart(uint8_t index);
 
     /**
     * Sets the line location.
@@ -159,9 +159,9 @@ public:
     * @param index source to update
     * @param loc location to set
     */
-    void setLocationLine(int index, Location loc);
-    void setLocationAll(int index, Location loc);
-    void setLocationCollapse(int index);
+    void setLocationLine(uint8_t index, Location loc);
+    void setLocationAll(uint8_t index, Location loc);
+    void setLocationCollapse(uint8_t index);
 
     /*
     * Tests whether at least one of the sources is a Line.
@@ -169,10 +169,10 @@ public:
     * @return true if at least one source is a line
     */
     bool isLine() const;
-    bool isLine(int index) const;
-    bool isLinear(int index) const;
-    bool isKnown(int index) const;
-    bool isNotPart(int index) const;
+    bool isLine(uint8_t index) const;
+    bool isLinear(uint8_t index) const;
+    bool isKnown(uint8_t index) const;
+    bool isNotPart(uint8_t index) const;
     bool isBoundaryEither() const;
     bool isBoundaryBoth() const;
 
@@ -190,7 +190,7 @@ public:
     * area touch along their boundary.
     */
     bool isBoundaryTouch() const;
-    bool isBoundary(int index) const;
+    bool isBoundary(uint8_t index) const;
     bool isLineLocationUnknown(int index) const;
 
     /**
@@ -204,10 +204,10 @@ public:
     * @param index
     * @return
     */
-    bool isLineInArea(int index) const;
-    bool isHole(int index) const;
-    bool isCollapse(int index) const;
-    Location getLineLocation(int index) const;
+    bool isLineInArea(uint8_t index) const;
+    bool isHole(uint8_t index) const;
+    bool isCollapse(uint8_t index) const;
+    Location getLineLocation(uint8_t index) const;
 
     /**
     * Tests if a label is a Collapse has location INTERIOR,
@@ -227,7 +227,7 @@ public:
     * @param index source geometry
     * @return true if the label is a line and is interior
     */
-    bool isLineInterior(int index) const;
+    bool isLineInterior(uint8_t index) const;
 
     /**
     * Gets the location for this label for either
@@ -240,7 +240,7 @@ public:
     * @param isForward the direction for a boundary label
     * @return the location for the specified position
     */
-    Location getLocationBoundaryOrLine(int index, int position, bool isForward) const;
+    Location getLocationBoundaryOrLine(uint8_t index, int position, bool isForward) const;
 
     /**
     * Gets the linear location for the given source.
@@ -248,9 +248,9 @@ public:
     * @param index the source index
     * @return the linear location for the source
     */
-    Location getLocation(int index) const;
-    Location getLocation(int index, int position, bool isForward) const;
-    bool hasSides(int index) const;
+    Location getLocation(uint8_t index) const;
+    Location getLocation(uint8_t index, int position, bool isForward) const;
+    bool hasSides(uint8_t index) const;
 
     OverlayLabel copy() const;
 

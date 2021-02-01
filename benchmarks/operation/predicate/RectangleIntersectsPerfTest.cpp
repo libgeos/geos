@@ -43,7 +43,7 @@ public:
     {}
 
     void
-    test(int nPts)
+    test(uint32_t nPts)
     {
         double size = 100;
         Coordinate origin(0, 0);
@@ -130,7 +130,7 @@ private:
 
     Polygon::Ptr
     createSineStar(const Coordinate& origin,
-                   double size, int nPts)
+                   double size, uint32_t nPts)
     {
         using geos::geom::util::SineStarFactory;
 

@@ -48,7 +48,8 @@ Edge::setDirectedEdges(DirectedEdge* de0, DirectedEdge* de1)
 DirectedEdge*
 Edge::getDirEdge(int i)
 {
-    return dirEdge[i];
+    // keep signature signed to avoid conflict with Edge::getDirEdge(Node*) when i == 0
+    return dirEdge[static_cast<std::size_t>(i)];
 }
 
 /*

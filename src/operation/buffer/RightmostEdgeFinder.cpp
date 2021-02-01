@@ -165,8 +165,8 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
     assert(minIndex > 0);
     assert((std::size_t)minIndex < pts->getSize());
 
-    const Coordinate& pPrev = pts->getAt(minIndex - 1);
-    const Coordinate& pNext = pts->getAt(minIndex + 1);
+    const Coordinate& pPrev = pts->getAt(static_cast<std::size_t>(minIndex) - 1);
+    const Coordinate& pNext = pts->getAt(static_cast<std::size_t>(minIndex) + 1);
     int orientation = Orientation::index(
                           minCoord,
                           pNext,
@@ -256,12 +256,14 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge* de, int i)
     }
 
     // indicates edge is parallel to x-axis
-    if(coord->getAt(i).y == coord->getAt(i + 1).y) {
+    const Coordinate& p0 = coord->getAt(static_cast<std::size_t>(i));
+    const Coordinate& p1 = coord->getAt(static_cast<std::size_t>(i) + 1);
+    if(p0.y == p1.y) {
         return -1;
     }
 
     int pos = Position::LEFT;
-    if(coord->getAt(i).y < coord->getAt(i + 1).y) {
+    if(p0.y < p1.y) {
         pos = Position::RIGHT;
     }
     return pos;

@@ -13,26 +13,17 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosgeomfromwkb_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
     GEOSWKTReader* reader_;
 
-    test_capigeosgeomfromwkb_data()
-        : geom1_(nullptr), geom2_(nullptr), reader_(nullptr)
+    test_capigeosgeomfromwkb_data() : reader_(nullptr)
     {
-        initGEOS(notice, notice);
         reader_ = GEOSWKTReader_create();
     }
 
     ~test_capigeosgeomfromwkb_data()
     {
-        GEOSGeom_destroy(geom2_);
-        geom2_ = nullptr;
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
         GEOSWKTReader_destroy(reader_);
         reader_ = nullptr;
-        finishGEOS();
     }
 
     void

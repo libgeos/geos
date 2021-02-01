@@ -40,18 +40,18 @@ class GEOS_DLL EdgeSourceInfo {
 private:
 
     // Members
-    int index;
-    int dim;
+    uint8_t index;
+    int8_t dim;
     bool edgeIsHole;
     int depthDelta;
 
 
 public:
 
-    EdgeSourceInfo(int p_index, int p_depthDelta, bool p_isHole);
-    EdgeSourceInfo(int p_index);
+    EdgeSourceInfo(uint8_t p_index, int p_depthDelta, bool p_isHole);
+    EdgeSourceInfo(uint8_t p_index);
 
-    int getIndex() const { return index; }
+    uint8_t getIndex() const { return index; }
     int getDimension() const { return dim; }
     int getDepthDelta() const { return depthDelta; }
     bool isHole() const { return edgeIsHole; }

@@ -46,12 +46,12 @@ TrianglePredicate::isInCircleNormalized(
     // https://www.cs.cmu.edu/~quake/robust.html
     // https://www.cs.cmu.edu/afs/cs/project/quake/public/code/predicates.c
 
-    long double adx = a.x - p.x;
-    long double ady = a.y - p.y;
-    long double bdx = b.x - p.x;
-    long double bdy = b.y - p.y;
-    long double cdx = c.x - p.x;
-    long double cdy = c.y - p.y;
+    long double adx = static_cast<long double>(a.x) - static_cast<long double>(p.x);
+    long double ady = static_cast<long double>(a.y) - static_cast<long double>(p.y);
+    long double bdx = static_cast<long double>(b.x) - static_cast<long double>(p.x);
+    long double bdy = static_cast<long double>(b.y) - static_cast<long double>(p.y);
+    long double cdx = static_cast<long double>(c.x) - static_cast<long double>(p.x);
+    long double cdy = static_cast<long double>(c.y) - static_cast<long double>(p.y);
 
     long double bdxcdy = bdx * cdy;
     long double cdxbdy = cdx * bdy;

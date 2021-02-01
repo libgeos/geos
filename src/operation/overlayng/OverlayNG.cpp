@@ -286,7 +286,7 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
     PolygonBuilder polyBuilder(resultAreaEdges, geomFact);
     std::vector<std::unique_ptr<Polygon>> resultPolyList = polyBuilder.getPolygons();
-    bool hasResultAreaComponents = resultPolyList.size() > 0;
+    bool hasResultAreaComponents = (!resultPolyList.empty());
 
     std::vector<std::unique_ptr<LineString>> resultLineList;
     std::vector<std::unique_ptr<Point>> resultPointList;
@@ -308,7 +308,7 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
          * Only an intersection op can produce point results
          * from non-point inputs.
          */
-        bool hasResultComponents = hasResultAreaComponents || resultLineList.size() > 0;
+        bool hasResultComponents = hasResultAreaComponents || (!resultLineList.empty());
         bool allowResultPoints = ! hasResultComponents || isAllowMixedIntResult;
         if (opCode == INTERSECTION && allowResultPoints) {
             IntersectionPointBuilder pointBuilder(graph, geomFact);
@@ -317,9 +317,9 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
         }
     }
 
-    if (resultPolyList.size() == 0 &&
-        resultLineList.size() == 0 &&
-        resultPointList.size() == 0)
+    if (resultPolyList.empty() &&
+        resultLineList.empty() &&
+        resultPointList.empty())
     {
         return createEmptyResult();
     }

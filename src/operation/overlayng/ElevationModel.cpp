@@ -97,7 +97,7 @@ ElevationModel::ElevationModel(const Envelope& nExtent, int nNumCellX, int nNumC
     if(cellSizeY <= 0.0) {
         numCellY = 1;
     }
-    cells.resize(numCellX * numCellY);
+    cells.resize(static_cast<std::size_t>(numCellX) * static_cast<std::size_t>(numCellY));
 }
 
 /* public */
@@ -268,7 +268,7 @@ ElevationModel::getCell(double x, double y) //, bool isCreateIfMissing
               << " offset " << cellOffset << std::endl;
 #endif
     assert ( cellOffset < numCellX * numCellY );
-    ElevationModel::ElevationCell& cell = cells[cellOffset];
+    ElevationModel::ElevationCell& cell = cells[static_cast<std::size_t>(cellOffset)];
     return cell;
 }
 

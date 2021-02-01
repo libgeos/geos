@@ -10,76 +10,27 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosintersectionprec_data {
-    GEOSWKTWriter* wktw_;
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSGeometry* geom3_;
-    GEOSGeometry* expected_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosintersectionprec_data()
-        : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
-    {
-        initGEOS(notice, notice);
-        wktw_ = GEOSWKTWriter_create();
+struct test_capigeosintersectionprec_data : public capitest::utility {
+    test_capigeosintersectionprec_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
     }
 
-    std::string
-    toWKT(GEOSGeometry* g)
-    {
-        char* wkt = GEOSWKTWriter_write(wktw_, g);
-        std::string ret(wkt);
-        GEOSFree(wkt);
-        return ret;
-    }
-
-    int
+    static int
     same(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
     {
         GEOSNormalize(g1);
         GEOSNormalize(g2);
         return GEOSEqualsExact(g1, g2, tolerance);
     }
-
-    ~test_capigeosintersectionprec_data()
-    {
-        GEOSWKTWriter_destroy(wktw_);
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSGeom_destroy(geom3_);
-        if (expected_) GEOSGeom_destroy(expected_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        geom3_ = nullptr;
-        expected_ = nullptr;
-        finishGEOS();
-    }
-
 };
 
 typedef test_group<test_capigeosintersectionprec_data> group;

@@ -112,7 +112,7 @@ public:
         includeProper(newIncludeProper),
         recordIsolated(newRecordIsolated),
         numIntersections(0),
-        bdyNodes{nullptr, nullptr},
+        bdyNodes{{nullptr, nullptr}},
         numTests(0)
     {}
 

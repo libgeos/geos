@@ -22,6 +22,8 @@
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 
+#include <sstream>
+
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -65,7 +67,7 @@ OverlayLabeller::labelAreaNodeEdges(std::vector<OverlayEdge*>& nodes)
 
 /*public*/
 void
-OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex)
+OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, uint8_t geomIndex)
 {
     /*
      * Only propagate for area geometries
@@ -107,7 +109,11 @@ OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex)
              */
             Location locRight = e->getLocation(geomIndex, Position::RIGHT);
             if (locRight != currLoc) {
-                throw util::TopologyException("side location conflict", e->getCoordinate());
+                std::stringstream ss;
+                ss << "side location conflict at ";
+                ss << e->getCoordinate().toString();
+                ss << ". This can occur if the input geometry is invalid.";
+                throw util::TopologyException(ss.str());
             }
             Location locLeft = e->getLocation(geomIndex, Position::LEFT);
             if (locLeft == Location::NONE) {
@@ -121,7 +127,7 @@ OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, int geomIndex)
 
 /*private*/
 OverlayEdge*
-OverlayLabeller::findPropagationStartEdge(OverlayEdge* nodeEdge, int geomIndex)
+OverlayLabeller::findPropagationStartEdge(OverlayEdge* nodeEdge, uint8_t geomIndex)
 {
     OverlayEdge* eStart = nodeEdge;
     do {
@@ -151,7 +157,7 @@ OverlayLabeller::labelCollapsedEdges()
 
 /*private*/
 void
-OverlayLabeller::labelCollapsedEdge(OverlayEdge* edge, int geomIndex)
+OverlayLabeller::labelCollapsedEdge(OverlayEdge* edge, uint8_t geomIndex)
 {
     OverlayLabel* label = edge->getLabel();
     if (! label->isCollapse(geomIndex))
@@ -177,10 +183,10 @@ OverlayLabeller::labelConnectedLinearEdges()
 
 /*private*/
 void
-OverlayLabeller::propagateLinearLocations(int geomIndex)
+OverlayLabeller::propagateLinearLocations(uint8_t geomIndex)
 {
     std::vector<OverlayEdge*> linearEdges = findLinearEdgesWithLocation(edges, geomIndex);
-    if (linearEdges.size() <= 0) return;
+    if (linearEdges.empty()) return;
 
     std::deque<OverlayEdge*> edgeStack;
     edgeStack.insert(edgeStack.begin(), linearEdges.begin(), linearEdges.end());
@@ -199,8 +205,8 @@ OverlayLabeller::propagateLinearLocations(int geomIndex)
 /*private static*/
 void
 OverlayLabeller::propagateLinearLocationAtNode(OverlayEdge* eNode,
-    int geomIndex, bool isInputLine,
-    std::deque<OverlayEdge*>& edgeStack)
+                                               uint8_t geomIndex, bool isInputLine,
+                                               std::deque<OverlayEdge*>& edgeStack)
 {
     Location lineLoc = eNode->getLabel()->getLineLocation(geomIndex);
     /**
@@ -232,7 +238,7 @@ OverlayLabeller::propagateLinearLocationAtNode(OverlayEdge* eNode,
 
 /*private static*/
 std::vector<OverlayEdge*>
-OverlayLabeller::findLinearEdgesWithLocation(std::vector<OverlayEdge*>& edges, int geomIndex)
+OverlayLabeller::findLinearEdgesWithLocation(const std::vector<OverlayEdge*>& edges, uint8_t geomIndex)
 {
     std::vector<OverlayEdge*> linearEdges;
     for (OverlayEdge* edge : edges) {
@@ -261,7 +267,7 @@ OverlayLabeller::labelDisconnectedEdges()
 
 /*private*/
 void
-OverlayLabeller::labelDisconnectedEdge(OverlayEdge* edge, int geomIndex)
+OverlayLabeller::labelDisconnectedEdge(OverlayEdge* edge, uint8_t geomIndex)
 {
     OverlayLabel* label = edge->getLabel();
 
@@ -274,7 +280,7 @@ OverlayLabeller::labelDisconnectedEdge(OverlayEdge* edge, int geomIndex)
     if (!inputGeometry->isArea(geomIndex)) {
         label->setLocationAll(geomIndex, Location::EXTERIOR);
         return;
-    };
+    }
 
     /**
     * Locate edge in input area using a Point-In-Poly check.
@@ -289,7 +295,7 @@ OverlayLabeller::labelDisconnectedEdge(OverlayEdge* edge, int geomIndex)
 
 /*private*/
 Location
-OverlayLabeller::locateEdge(int geomIndex, OverlayEdge* edge)
+OverlayLabeller::locateEdge(uint8_t geomIndex, OverlayEdge* edge)
 {
     Location loc = inputGeometry->locatePointInArea(geomIndex, edge->orig());
     Location edgeLoc = loc != Location::EXTERIOR ? Location::INTERIOR : Location::EXTERIOR;
@@ -298,7 +304,7 @@ OverlayLabeller::locateEdge(int geomIndex, OverlayEdge* edge)
 
 /*private*/
 Location
-OverlayLabeller::locateEdgeBothEnds(int geomIndex, OverlayEdge* edge)
+OverlayLabeller::locateEdgeBothEnds(uint8_t geomIndex, OverlayEdge* edge)
 {
     /*
     * To improve the robustness of the point location,

@@ -37,6 +37,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/util/Densifier.h>
 #include <geos/index/strtree/SimpleSTRtree.h>
 #include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
@@ -1111,6 +1112,20 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDensify_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        using geos::geom::util::Densifier;
+
+        return execute(extHandle, [&]() {
+            Densifier densifier(g);
+            densifier.setDistanceTolerance(tolerance);
+            auto g3 = densifier.getResultGeometry();
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadsegs, int joinStyle,
                       double mitreLimit)
     {
@@ -2092,7 +2107,7 @@ extern "C" {
     int
     GEOS_getWKBOutputDims_r(GEOSContextHandle_t extHandle)
     {
-        return execute(extHandle, -1, [&]() {
+        return execute(extHandle, -1, [&]() -> int {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             return handle->WKBOutputDims;
         });
@@ -2400,35 +2415,31 @@ extern "C" {
     {
         using geos::geom::LinearRing;
 
-        // FIXME: holes must be non-nullptr or may be nullptr?
-        //assert(0 != holes);
-
         return execute(extHandle, [&]() {
-
-            std::vector<LinearRing*> tmpholes(nholes);
-            for (size_t i = 0; i < nholes; i++) {
-                LinearRing* lr = dynamic_cast<LinearRing*>(holes[i]);
-                if (! lr) {
-                    throw IllegalArgumentException("Hole is not a LinearRing");
-                }
-                tmpholes[i] = lr;
-            }
-            LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
-            if(! nshell) {
-                throw IllegalArgumentException("Shell is not a LinearRing");
-            }
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            /* Create unique_ptr version for constructor */
-            std::vector<std::unique_ptr<LinearRing>> vholes;
-            vholes.reserve(nholes);
-            for (LinearRing* lr: tmpholes) {
-                vholes.emplace_back(lr);
+            // Validate input before taking ownership
+            for (size_t i = 0; i < nholes; i++) {
+                if (!dynamic_cast<LinearRing*>(holes[i])) {
+                    throw IllegalArgumentException("Hole is not a LinearRing");
+                }
             }
-            std::unique_ptr<LinearRing> shell(nshell);
+            if (!dynamic_cast<LinearRing*>(shell)) {
+                throw IllegalArgumentException("Shell is not a LinearRing");
+            }
 
-            return gf->createPolygon(std::move(shell), std::move(vholes)).release();
+            std::unique_ptr<LinearRing> tmpshell(static_cast<LinearRing*>(shell));
+            if (nholes) {
+                std::vector<std::unique_ptr<LinearRing>> tmpholes(nholes);
+                for (size_t i = 0; i < nholes; i++) {
+                    tmpholes[i].reset(static_cast<LinearRing*>(holes[i]));
+                }
+
+                return gf->createPolygon(std::move(tmpshell), std::move(tmpholes)).release();
+            }
+
+            return gf->createPolygon(std::move(tmpshell)).release();
         });
     }
 

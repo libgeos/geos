@@ -188,7 +188,7 @@ OverlayEdgeRing::getCoordinates()
 */
 /*public*/
 OverlayEdgeRing*
-OverlayEdgeRing::findEdgeRingContaining(std::vector<OverlayEdgeRing*>& erList)
+OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList)
 {
     const LinearRing* testRing = ring.get();
     const Envelope* testEnv = testRing->getEnvelopeInternal();

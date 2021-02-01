@@ -10,39 +10,26 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeoscoordseq_data {
+struct test_capigeoscoordseq_data : public capitest::utility {
 
     GEOSCoordSequence* cs_;
 
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
     test_capigeoscoordseq_data() : cs_(nullptr)
     {
-        initGEOS(notice, notice);
     }
 
     ~test_capigeoscoordseq_data()
     {
         GEOSCoordSeq_destroy(cs_);
         cs_ = nullptr;
-        finishGEOS();
     }
 
 };

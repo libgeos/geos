@@ -105,7 +105,7 @@ public:
 
     Edge* findEqualEdge(const Edge* e) const;
 
-    Edge* get(int i);
+    Edge* get(std::size_t i);
 
     int findEdgeIndex(const Edge* e) const;
 

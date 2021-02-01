@@ -49,8 +49,8 @@ public:
     geom::Location getLocation(int geomIndex, int posIndex) const;
     void add(int geomIndex, int posIndex, geom::Location location);
     bool isNull() const;
-    bool isNull(int geomIndex) const;
-    bool isNull(int geomIndex, int posIndex) const;
+    bool isNull(uint8_t geomIndex) const;
+    bool isNull(uint8_t geomIndex, uint8_t posIndex) const;
     int getDelta(int geomIndex) const;
     void normalize();
     void add(const Label& lbl);

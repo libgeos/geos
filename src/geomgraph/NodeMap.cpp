@@ -139,7 +139,7 @@ NodeMap::find(const Coordinate& coord) const
 }
 
 void
-NodeMap::getBoundaryNodes(int geomIndex, std::vector<Node*>& bdyNodes) const
+NodeMap::getBoundaryNodes(uint8_t geomIndex, std::vector<Node*>& bdyNodes) const
 {
     for(auto& it: nodeMap) {
         Node* node = it.second;

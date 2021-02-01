@@ -10,42 +10,15 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeouserdata_data {
-    GEOSGeometry* geom_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeouserdata_data()
-        : geom_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeouserdata_data()
-    {
-        GEOSGeom_destroy(geom_);
-        geom_ = nullptr;
-        finishGEOS();
-    }
-
-};
+struct test_capigeouserdata_data : public capitest::utility {};
 
 typedef test_group<test_capigeouserdata_data> group;
 typedef group::object object;
@@ -62,14 +35,14 @@ template<>
 void object::test<1>
 ()
 {
-    geom_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-    ensure(0 != GEOSisEmpty(geom_));
+    ensure(0 != GEOSisEmpty(geom1_));
 
     int in = 1;
-    GEOSGeom_setUserData(geom_, &in);
+    GEOSGeom_setUserData(geom1_, &in);
 
-    int* out = (int*)GEOSGeom_getUserData(geom_);
+    int* out = (int*)GEOSGeom_getUserData(geom1_);
 
     ensure_equals(*out, 1);
 }
@@ -84,17 +57,17 @@ template<>
 void object::test<2>
 ()
 {
-    geom_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-    ensure(0 != GEOSisEmpty(geom_));
+    ensure(0 != GEOSisEmpty(geom1_));
 
     UserData in;
     in.a = 1;
     in.b = 2;
 
-    GEOSGeom_setUserData(geom_, &in);
+    GEOSGeom_setUserData(geom1_, &in);
 
-    struct UserData* out = (struct UserData*)GEOSGeom_getUserData(geom_);
+    struct UserData* out = (struct UserData*)GEOSGeom_getUserData(geom1_);
 
     ensure_equals(in.a, out->a);
     ensure_equals(in.b, out->b);

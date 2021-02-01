@@ -115,7 +115,7 @@ public:
     ~Quadtree() override = default;
 
     /// Returns the number of levels in the tree.
-    int depth();
+    std::size_t depth();
 
     /// Returns the number of items in the tree.
     std::size_t size();

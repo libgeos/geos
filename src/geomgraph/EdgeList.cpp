@@ -84,7 +84,7 @@ EdgeList::findEqualEdge(const Edge* e) const
 }
 
 Edge*
-EdgeList::get(int i)
+EdgeList::get(std::size_t i)
 {
     return edges[i];
 }
@@ -97,9 +97,9 @@ EdgeList::get(int i)
 int
 EdgeList::findEdgeIndex(const Edge* e) const
 {
-    for(int i = 0, s = (int)edges.size(); i < s; ++i) {
+    for(std::size_t i = 0; i < edges.size(); ++i) {
         if(edges[i]->equals(e)) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;
@@ -128,8 +128,8 @@ EdgeList::print()
 void
 EdgeList::clearList()
 {
-    for(unsigned int pos = 0; pos < edges.size(); pos++) {
-        delete edges[pos];
+    for(auto & edge : edges) {
+        delete edge;
     }
 
     edges.clear();

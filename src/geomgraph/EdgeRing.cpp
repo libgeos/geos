@@ -285,7 +285,7 @@ EdgeRing::mergeLabel(const Label& deLabel)
 
 /*protected*/
 void
-EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
+EdgeRing::mergeLabel(const Label& deLabel, uint8_t geomIndex)
 {
 
     testInvariant();

@@ -11,41 +11,15 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosgeomtowkt_data {
-    GEOSGeometry* geom1_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosgeomtowkt_data()
-        : geom1_(nullptr)
-    {
-        initGEOS(notice, notice);
-    }
-
-    ~test_capigeosgeomtowkt_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        geom1_ = nullptr;
-        finishGEOS();
-    }
-
+struct test_capigeosgeomtowkt_data : public capitest::utility {
     void
     test_wkt(std::string const& wkt)
     {

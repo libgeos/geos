@@ -78,9 +78,9 @@ public:
     void build(geomgraph::GeometryGraph* geomGraph);
 
     void computeIntersectionNodes(geomgraph::GeometryGraph* geomGraph,
-                                  int argIndex);
+                                  uint8_t argIndex);
 
-    void copyNodesAndLabels(geomgraph::GeometryGraph* geomGraph, int argIndex);
+    void copyNodesAndLabels(geomgraph::GeometryGraph* geomGraph, uint8_t argIndex);
 
     void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*>* ee);
 
