@@ -38,7 +38,7 @@ jobs:
         }
         - {
           compiler: g++,
-          build_type: Release,
+          build_type: Debug,
           cxxstd: 11,
           arch: 64,
           packages: 'g++ cmake doxygen',
