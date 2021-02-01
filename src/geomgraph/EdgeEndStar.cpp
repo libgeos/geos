@@ -307,9 +307,13 @@ EdgeEndStar::propagateSideLabels(uint32_t geomIndex)
             // if there is a right location, that is the next
             // location to propagate
             if(rightLoc != Location::NONE) {
-                if(rightLoc != currLoc)
-                    throw util::TopologyException("side location conflict",
-                                                  e->getCoordinate());
+                if(rightLoc != currLoc) {
+                    std::stringstream ss;
+                    ss << "side location conflict at ";
+                    ss << e->getCoordinate().toString();
+                    ss << ". This can occur if the input geometry is invalid.";
+                    throw util::TopologyException(ss.str());
+                }
                 if(leftLoc == Location::NONE) {
                     // found single null side at e->getCoordinate()
                     assert(0);

@@ -22,6 +22,8 @@
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 
+#include <sstream>
+
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -107,7 +109,11 @@ OverlayLabeller::propagateAreaLocations(OverlayEdge* nodeEdge, uint8_t geomIndex
              */
             Location locRight = e->getLocation(geomIndex, Position::RIGHT);
             if (locRight != currLoc) {
-                throw util::TopologyException("side location conflict", e->getCoordinate());
+                std::stringstream ss;
+                ss << "side location conflict at ";
+                ss << e->getCoordinate().toString();
+                ss << ". This can occur if the input geometry is invalid.";
+                throw util::TopologyException(ss.str());
             }
             Location locLeft = e->getLocation(geomIndex, Position::LEFT);
             if (locLeft == Location::NONE) {
