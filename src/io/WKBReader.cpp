@@ -171,36 +171,35 @@ WKBReader::readHEX(std::istream& is)
 }
 
 void
-WKBReader::minMemSize(int geomType, uint32_t size)
+WKBReader::minMemSize(int geomType, uint64_t size)
 {
-    uint64_t size64 = (std::size_t)size;
     uint64_t minMemSize = 0;
-    const uint64_t minCoordSize = 2 * sizeof(double);
-    const uint64_t minPtSize = (1+4) + minCoordSize;
-    const uint64_t minLineSize = (1+4+4); // empty line
-    const uint64_t minRingSize = 4; // empty ring
-    const uint64_t minPolySize = (1+4+4); // empty polygon
-    const uint64_t minGeomSize = minLineSize;
+    constexpr uint64_t minCoordSize = 2 * sizeof(double);
+    constexpr uint64_t minPtSize = (1+4) + minCoordSize;
+    constexpr uint64_t minLineSize = (1+4+4); // empty line
+    constexpr uint64_t minRingSize = 4; // empty ring
+    constexpr uint64_t minPolySize = (1+4+4); // empty polygon
+    constexpr uint64_t minGeomSize = minLineSize;
 
     switch(geomType) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
-            minMemSize = size64 * minCoordSize;
+            minMemSize = size * minCoordSize;
             break;
         case GEOS_POLYGON:
-            minMemSize = size64 * minRingSize;
+            minMemSize = size * minRingSize;
             break;
         case GEOS_MULTIPOINT:
-            minMemSize = size64 * minPtSize;
+            minMemSize = size * minPtSize;
             break;
         case GEOS_MULTILINESTRING:
-            minMemSize = size64 * minLineSize;
+            minMemSize = size * minLineSize;
             break;
         case GEOS_MULTIPOLYGON:
-            minMemSize = size64 * minPolySize;
+            minMemSize = size * minPolySize;
             break;
         case GEOS_GEOMETRYCOLLECTION:
-            minMemSize = size64 * minGeomSize;
+            minMemSize = size * minGeomSize;
             break;
     }
 

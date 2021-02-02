@@ -158,7 +158,7 @@ private:
 
     std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(unsigned int); // throws IOException
 
-    void minMemSize(int geomType, uint32_t size);
+    void minMemSize(int geomType, uint64_t size);
 
     void readCoordinate(); // throws IOException
 

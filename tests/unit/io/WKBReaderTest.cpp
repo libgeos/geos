@@ -59,7 +59,7 @@ struct test_wkbreader_data {
         std::stringstream hexin(hexwkb);
         try {
             GeomPtr g(wkbreader.readHEX(hexin));
-            ensure("Parse did not fail", !g);
+            fail();
         }
         catch(const geos::util::GEOSException& ex) {
             // std::cout << e.what() << std::endl;
