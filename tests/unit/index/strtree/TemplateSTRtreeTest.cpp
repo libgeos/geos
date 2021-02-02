@@ -3,6 +3,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/LineSegment.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
@@ -54,20 +55,9 @@ struct test_templatestrtree_data {
         }
         return t;
     }
-
-#if 0
-    template<typename TreeItemType>
-    static TemplateSTRtree<TreeItemType> makeTree(const std::vector<TreeItemType> & items) {
-        TemplateSTRtree<TreeItemType> t(10);
-        for (auto& g : items) {
-            t.insert(g);
-        }
-        return t;
-    }
-#endif
 };
 
-    using group = test_group<test_templatestrtree_data>;
+using group = test_group<test_templatestrtree_data>;
 using object = group::object;
 group test_templatestrtree_group("geos::index::strtree::TemplateSTRtree");
 
@@ -227,6 +217,27 @@ void object::test<5>
     }
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    TemplateSTRtree<geom::LineSegment> tree;
+
+    for (double i = 0; i < 100; i += 1.0) {
+        geom::Coordinate p0(i, i);
+        geom::Coordinate p1(i + 1, i + 1);
+
+        geom::LineSegment ls(p0, p1);
+        geom::Envelope e(p0, p1);
+        tree.insert(e, ls);
+    }
+
+    geom::Envelope qe(35.5, 38.5, 35.5, 38.5);
+    std::vector<geom::LineSegment> hits;
+    tree.query(qe, hits);
+
+    ensure_equals(hits.size(), 4u);
+}
 
 } // namespace tut
 

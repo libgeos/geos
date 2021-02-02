@@ -21,9 +21,20 @@ namespace strtree {
 template<typename ItemType>
 class TemplateSTRNode {
 private:
-    union {
+    union Body {
         ItemType item;
         const TemplateSTRNode* childrenEnd;
+
+        explicit Body (ItemType&& p_item) : item(std::forward<ItemType>(p_item)) {}
+
+        explicit Body (const ItemType& p_item) : item(p_item) {}
+
+        explicit Body (const TemplateSTRNode<ItemType>* p_childrenEnd) : childrenEnd(p_childrenEnd) {}
+
+        ~Body() {
+            // destruction handled by Node
+            // FIXME todo
+        }
     } data;
     const TemplateSTRNode* children;
 
@@ -36,18 +47,24 @@ private:
 public:
     //TemplateSTRNode() = delete;
 
-    TemplateSTRNode(const ItemType& p_item, const geom::Envelope& env) {
-        data.item = p_item;
-        children = nullptr;
-        bounds = env;
-        deleted = false;
-    }
+    TemplateSTRNode(ItemType&& p_item, const geom::Envelope& env) :
+        data(std::forward<ItemType>(p_item)),
+        children(nullptr),
+        bounds(env),
+        deleted(false) {}
 
-    TemplateSTRNode(const TemplateSTRNode* begin, const TemplateSTRNode* end) {
-        children = begin;
-        data.childrenEnd = end;
+    TemplateSTRNode(const ItemType& p_item, const geom::Envelope& env) :
+            data(p_item),
+            children(nullptr),
+            bounds(env),
+            deleted(false) {}
+
+    TemplateSTRNode(const TemplateSTRNode* begin, const TemplateSTRNode* end) :
+        data(end),
+        children(begin),
+        deleted(false)
+    {
         computeEnvelopeFromChildren();
-        deleted = false;
     }
 
     void setSortVal(double d) {

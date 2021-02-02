@@ -61,14 +61,17 @@ public:
         return root;
     }
 
-    void insert(const ItemType& item) {
-        insert(*item->getEnvelopeInternal(), item);
+    void insert(ItemType&& item) {
+        insert(*item->getEnvelopeInternal(), std::forward<ItemType>(item));
+    }
+
+    void insert(const geom::Envelope& itemEnv, ItemType&& item) {
+        createLeafNode(std::forward<ItemType>(item), itemEnv);
     }
 
     void insert(const geom::Envelope& itemEnv, const ItemType& item) {
         createLeafNode(item, itemEnv);
     }
-
 
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType> & other) {
@@ -101,7 +104,6 @@ public:
         });
     }
 
-
     bool remove(const geom::Envelope& itemEnv, const ItemType& item) {
         if (root == nullptr) {
             return false;
@@ -124,6 +126,10 @@ protected:
     Node* root;
     size_t nodeCapacity;
     size_t numItems;
+
+    void createLeafNode(ItemType&& item, const geom::Envelope &env) {
+        nodes.emplace_back(std::forward<ItemType>(item), env);
+    }
 
     void createLeafNode(const ItemType& item, const geom::Envelope &env) {
         nodes.emplace_back(item, env);
@@ -351,14 +357,6 @@ protected:
             return *this;
         }
 
-#if 0
-        Iterator operator++(int) {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-#endif
-
         friend bool operator==(const Iterator& a, const Iterator& b) {
             return a.m_iter == b.m_iter;
         }
@@ -380,7 +378,7 @@ protected:
 
     class Items {
     public:
-        Items(TemplateSTRtreeImpl<ItemType>& tree) : m_tree(tree) {}
+        explicit Items(TemplateSTRtreeImpl<ItemType>& tree) : m_tree(tree) {}
 
         Iterator begin() {
             return Iterator(m_tree.nodes.cbegin(),
@@ -437,7 +435,7 @@ public:
     }
 
     void insert(const geom::Envelope *itemEnv, void *item) override {
-        insert(*itemEnv, static_cast<ItemType*>(item));
+        insert(*itemEnv, std::move(static_cast<ItemType*>(item)));
     }
 };
 
