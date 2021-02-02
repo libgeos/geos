@@ -134,8 +134,6 @@ public:
 
     std::unique_ptr<Geometry> reverse() const override;
 
-    int compareToSameClass(const Geometry* p) const override; //was protected
-
     const Coordinate* getCoordinate() const override;
 
     double getArea() const override;
@@ -149,6 +147,8 @@ protected:
 
 
     Polygon(const Polygon& p);
+
+    int compareToSameClass(const Geometry* p) const override;
 
     /**
      * Constructs a <code>Polygon</code> with the given exterior

@@ -618,19 +618,18 @@ template<>
 void object::test<43>
 ()
 {
-    auto geo = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
-    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo.get());
+    auto poly = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
 
     ensure("polygon should equal self",
-        poly->compareToSameClass(poly) == 0);
+        poly->compareTo(poly.get()) == 0);
 
     auto poly2 = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2 3, 3 3, 3 2, 2 2))");
     ensure("polygons with different holes but same shell are not equal",
-        poly->compareToSameClass(poly2.get()) != 0);
+        poly->compareTo(poly2.get()) != 0);
 
     auto poly3 = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
     ensure("polygons with and without holes are not equal",
-        poly->compareToSameClass(poly3.get()) != 0);
+        poly->compareTo(poly3.get()) != 0);
 }
 
 } // namespace tut
