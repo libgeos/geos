@@ -204,7 +204,7 @@ public:
     * @param index
     * @return
     */
-    bool isLineInArea(uint8_t index) const;
+    bool isLineInArea(int8_t index) const;
     bool isHole(uint8_t index) const;
     bool isCollapse(uint8_t index) const;
     Location getLineLocation(uint8_t index) const;

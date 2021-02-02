@@ -123,7 +123,7 @@ OverlayLabel::isLineLocationUnknown(int index) const
 
 /*public*/
 INLINE bool
-OverlayLabel::isLineInArea(uint8_t index) const
+OverlayLabel::isLineInArea(int8_t index) const
 {
     if (index == 0) {
         return aLocLine == Location::INTERIOR;

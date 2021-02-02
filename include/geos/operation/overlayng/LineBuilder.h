@@ -76,7 +76,7 @@ private:
     int opCode;
     const geom::GeometryFactory* geometryFactory;
     bool hasResultArea;
-    int inputAreaIndex;
+    int8_t inputAreaIndex;
     std::vector<std::unique_ptr<geom::LineString>> lines;
 
     /**

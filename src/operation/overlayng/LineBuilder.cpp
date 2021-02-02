@@ -112,8 +112,7 @@ LineBuilder::isResultLine(const OverlayLabel* lbl) const
         * because if line edges are present then there is only one input area,
         * and the result area must be the same as the input area.
         */
-        assert(inputAreaIndex == 0 || inputAreaIndex == 1);
-        if (hasResultArea && lbl->isLineInArea(static_cast<uint8_t>(inputAreaIndex)))
+        if (hasResultArea && lbl->isLineInArea(inputAreaIndex))
             return false;
     }
 
