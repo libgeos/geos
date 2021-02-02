@@ -24,6 +24,7 @@ steps:
   - name: check
     image: *test-image
     commands:
+      - cd build
       - ctest --output-on-failure .
   # - name: docs
   #   image: *test-image
