@@ -334,8 +334,8 @@ Polygon::compareToSameClass(const Geometry* g) const
         return shellComp;
     }
 
-    int nHole1 = getNumInteriorRing();
-    int nHole2 = p->getNumInteriorRing();
+    size_t nHole1 = getNumInteriorRing();
+    size_t nHole2 = p->getNumInteriorRing();
     if (nHole1 < nHole2) {
         return -1;
     }
@@ -343,12 +343,10 @@ Polygon::compareToSameClass(const Geometry* g) const
         return 1;
     }
 
-    const LinearRing *lr1, *lr2;
     int holeComp = 0;
-    for (int i=0; i < nHole1; i++) {
-        lr1 = dynamic_cast<const LinearRing*>(getInteriorRingN(i));
-        lr2 = dynamic_cast<const LinearRing*>(p->getInteriorRingN(i));
-        holeComp = lr1->compareToSameClass(lr2);
+    for (size_t i=0; i < nHole1; i++) {
+        const LinearRing *lr = p->getInteriorRingN(i);
+        holeComp = getInteriorRingN(i)->compareToSameClass(lr);
         if (holeComp != 0) {
             return holeComp;
         }
