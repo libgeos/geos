@@ -95,6 +95,8 @@ public:
 
     std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
 
+    std::unique_ptr<geom::Geometry> read(const char* wellKnownText) const;
+
 //	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:

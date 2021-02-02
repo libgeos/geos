@@ -15,9 +15,59 @@ using geos::geom::Geometry;
 
 namespace tut {
 // dummy data, not used
-struct test_templatestrtree_data {};
+struct test_templatestrtree_data {
+    struct Grid {
+        double x0 = 0;
+        double y0 = 0;
+        double dx = 1;
+        double dy = 1;
+        std::size_t nx = 10;
+        std::size_t ny = 10;
 
-using group = test_group<test_templatestrtree_data>;
+        geom::Envelope getEnvelope() const {
+            return {x0, x0+dx*static_cast<double>(nx),
+                    y0, y0+dy*static_cast<double>(ny)};
+        }
+    };
+
+    static std::vector<std::unique_ptr<geom::Point>> pointGrid(const Grid & grid) {
+        std::vector<std::unique_ptr<geom::Point>> ret;
+
+        auto gf = geom::GeometryFactory::create();
+        for (std::size_t i = 0; i < grid.nx; ++i) {
+            for (std::size_t j = 0; j < grid.ny; ++j) {
+                geom::Coordinate c(grid.x0 + grid.dx*static_cast<double>(i),
+                                   grid.y0 + grid.dy*static_cast<double>(j));
+                geom::Point* pt = gf->createPoint(c);
+                ret.emplace_back(pt);
+            }
+        }
+
+        return ret;
+    }
+
+    template<typename TreeItemType, typename VectorItemType>
+    static TemplateSTRtree<TreeItemType> makeTree(const std::vector<VectorItemType> & items) {
+        TemplateSTRtree<TreeItemType> t(10);
+        for (auto& g : items) {
+            t.insert(g.get());
+        }
+        return t;
+    }
+
+#if 0
+    template<typename TreeItemType>
+    static TemplateSTRtree<TreeItemType> makeTree(const std::vector<TreeItemType> & items) {
+        TemplateSTRtree<TreeItemType> t(10);
+        for (auto& g : items) {
+            t.insert(g);
+        }
+        return t;
+    }
+#endif
+};
+
+    using group = test_group<test_templatestrtree_data>;
 using object = group::object;
 group test_templatestrtree_group("geos::index::strtree::TemplateSTRtree");
 
@@ -27,29 +77,34 @@ group test_templatestrtree_group("geos::index::strtree::TemplateSTRtree");
 
 template<>
 template<>
-void object::test<1>
-()
-{
-    TemplateSTRtree<geom::Geometry*> t(10);
-    std::vector<std::unique_ptr<geom::Geometry>> geoms;
-    const int gridSize = 10;
+void object::test<1>() {
+    Grid grid;
+    grid.x0 = grid.y0 = 0;
+    grid.dx = grid.dy = 1;
+    grid.nx = grid.ny = 10;
 
-    auto gf = geom::GeometryFactory::create();
-    for (int i = 0; i < gridSize; ++i) {
-        for (int j = 0; j < gridSize; ++j) {
-            geom::Coordinate c((double)i, (double)j);
-            geom::Point* pt = gf->createPoint(c);
-            geoms.emplace_back(pt);
-            t.insert(pt);
-        }
-    }
+    auto geoms = pointGrid(grid);
+    auto tree = makeTree<const geom::Point*>(geoms);
 
+    // Query by collecting items into a vector
     geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
-    std::vector<Geometry*> matches;
-    t.query(qe, matches);
+    std::vector<const geom::Point*> matches;
+    tree.query(qe, matches);
     ensure(matches.size() == 4);
+}
 
-    // std::cout << t << std::endl;
+template<>
+template<>
+void object::test<2>() {
+    Grid grid;
+    grid.x0 = grid.y0 = 0;
+    grid.dx = grid.dy = 1;
+    grid.nx = grid.ny = 10;
+
+    auto geoms = pointGrid(grid);
+    auto tree = makeTree<const geom::Point*>(geoms);
+
+    // Query using visitor
     class SimpleTestVisitor : public index::ItemVisitor {
         public:
             std::size_t count;
@@ -61,63 +116,15 @@ void object::test<1>
             void
             visitItem(void* item) override
             {
-                geom::Point* pt = static_cast<geom::Point*>(item);
+                auto pt = static_cast<geom::Point*>(item);
                 if (!pt->isEmpty())
                     count++;
-                // std::cout << pt << std::endl;
             }
     };
-
     SimpleTestVisitor vis;
-    geos::index::SpatialIndex& si = t;
-    si.query(&qe, vis);
+    geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
+    tree.query(&qe, vis);
     ensure(vis.count == 4);
-}
-
-template<>
-template<>
-void object::test<2>
-()
-{
-    const int gridSize = 10;
-    TemplateSTRtree<Geometry*> t1(10);
-    TemplateSTRtree<Geometry*> t2(10);
-    std::vector<std::unique_ptr<geom::Geometry>> geoms;
-
-    auto gf = geom::GeometryFactory::create();
-    for (int i = 0; i < gridSize; ++i) {
-        for (int j = 0; j < gridSize; ++j) {
-            geom::Coordinate c1((double)i, (double)j);
-            geom::Coordinate c2((double)(i+gridSize+1), (double)(j+gridSize+1));
-            geom::Point *pt1 = gf->createPoint(c1);
-            geom::Point *pt2 = gf->createPoint(c2);
-            geoms.emplace_back(pt1);
-            geoms.emplace_back(pt2);
-            t1.insert(pt1);
-            t2.insert(pt2);
-        }
-    }
-
-    std::pair<const Geometry*, const Geometry*> rslt;
-
-    struct GeometryDistance {
-        double operator()(const Geometry* a, const Geometry* b) {
-            return a->distance(b);
-        };
-    };
-
-    rslt = t1.nearestNeighbour<GeometryDistance>(t2);
-
-    const geom::Point* g1 = static_cast<const geom::Point*>(rslt.first);
-    const geom::Point* g2 = static_cast<const geom::Point*>(rslt.second);
-
-    // std::cout << *g1 << std::endl;
-    // std::cout << *g2 << std::endl;
-
-    ensure_equals(g1->getX(), 9.0);
-    ensure_equals(g1->getY(), 9.0);
-    ensure_equals(g2->getX(), 11.0);
-    ensure_equals(g2->getY(), 11.0);
 }
 
 template<>
@@ -125,36 +132,32 @@ template<>
 void object::test<3>
 ()
 {
-    auto gf = geom::GeometryFactory::create();
-    geos::io::WKTReader wkt(*gf);
-    TemplateSTRtree<Geometry*> t(10);
-    std::vector<std::unique_ptr<geom::Geometry>> geoms;
-    geoms.emplace_back(wkt.read(std::string("LINESTRING(0 0, 10 10)")).release());
-    geoms.emplace_back(wkt.read(std::string("LINESTRING(5 5, 15 15)")).release());
-    geoms.emplace_back(wkt.read(std::string("LINESTRING(10 10, 20 20)")).release());
-    geoms.emplace_back(wkt.read(std::string("LINESTRING(15 15, 25 25)")).release());
+    Grid grid1, grid2;
+    grid1.x0 = grid1.y0 = 0;
+    grid1.dx = grid1.dy = 1;
+    grid1.nx = grid1.ny = 10;
 
-    for (auto& g: geoms) {
-        t.insert(g.get());
-    }
+    grid2.x0 = grid2.y0 = 11;
+    grid2.dx = grid2.dy = 1;
+    grid2.nx = grid2.ny = 10;
 
-    const std::size_t leaf_before = t.getRoot()->getNumLeafNodes();
-    // std::cout << "leaf_before " << leaf_before << std::endl;
-    const std::size_t all_before = t.getRoot()->getNumNodes();
-    // std::cout << "all_before " << all_before << std::endl;
-    ensure_equals(leaf_before, 4u);
-    ensure_equals(all_before, 5u);
+    auto geoms1 = pointGrid(grid1);
+    auto geoms2 = pointGrid(grid2);
 
-    // std::cout << t << std::endl;
+    auto tree1 = makeTree<const geom::Point*>(geoms1);
+    auto tree2 = makeTree<const geom::Point*>(geoms2);
 
-    t.remove(geoms[3]->getEnvelopeInternal(), geoms[3].get());
+    struct GeometryDistance {
+        double operator()(const Geometry* a, const Geometry* b) {
+            return a->distance(b);
+        };
+    };
+    auto rslt = tree1.nearestNeighbour<GeometryDistance>(tree2);
 
-    const std::size_t leaf_after = t.getRoot()->getNumLeafNodes();
-    // std::cout << "leaf_after " << leaf_after << std::endl;
-    const std::size_t all_after = t.getRoot()->getNumNodes();
-    // std::cout << "all_after " << all_after << std::endl;
-    ensure_equals(leaf_after, 3u);
-    ensure_equals(all_after, 4u);
+    ensure_equals(rslt.first->getX(), 9.0);
+    ensure_equals(rslt.first->getY(), 9.0);
+    ensure_equals(rslt.second->getX(), 11.0);
+    ensure_equals(rslt.second->getY(), 11.0);
 }
 
 template<>
@@ -162,37 +165,64 @@ template<>
 void object::test<4>
 ()
 {
-    // storing integers instead of geometry pointers
-    std::vector<std::unique_ptr<Geometry>> geoms;
-    TemplateSTRtree<size_t> t1;
-
     auto gf = geom::GeometryFactory::create();
-    size_t gridSize = 20;
-    size_t k = 0;
-    for (size_t i = 0; i < gridSize; ++i) {
-        for (size_t j = 0; j < gridSize; ++j) {
-            geom::Coordinate c1(static_cast<double>(i), static_cast<double>(j));
-            geom::Point *pt1 = gf->createPoint(c1);
-            geoms.emplace_back(pt1);
-            t1.insert(geom::Envelope(c1), k++);
-        }
+    geos::io::WKTReader wkt(*gf);
+    std::vector<std::unique_ptr<geom::Geometry>> geoms;
+    geoms.emplace_back(wkt.read("LINESTRING(0 0, 10 10)"));
+    geoms.emplace_back(wkt.read("LINESTRING(5 5, 15 15)"));
+    geoms.emplace_back(wkt.read("LINESTRING(10 10, 20 20)"));
+    geoms.emplace_back(wkt.read("LINESTRING(15 15, 25 25)"));
+
+    auto tree = makeTree<Geometry*>(geoms);
+
+    const std::size_t leaf_before = tree.getRoot()->getNumLeafNodes();
+    const std::size_t all_before = tree.getRoot()->getNumNodes();
+    ensure_equals(leaf_before, 4u);
+    ensure_equals(all_before, 5u);
+
+    tree.remove(geoms[3]->getEnvelopeInternal(), geoms[3].get());
+
+    const std::size_t leaf_after = tree.getRoot()->getNumLeafNodes();
+    const std::size_t all_after = tree.getRoot()->getNumNodes();
+    ensure_equals(leaf_after, 3u);
+    ensure_equals(all_after, 4u);
+}
+
+template<>
+template<>
+void object::test<5>
+()
+{
+    Grid grid;
+    grid.x0 = grid.y0 = 0;
+    grid.dx = grid.dy = 1;
+    grid.nx = grid.ny = 20;
+
+    auto geoms = pointGrid(grid);
+
+    // storing integers instead of geometry pointers
+    TemplateSTRtree<size_t> tree;
+    for (std::size_t i = 0; i < geoms.size(); i++) {
+        tree.insert(*geoms[i]->getEnvelopeInternal(), i);
     }
 
+    // Query into vector
     std::vector<size_t> hits;
     geom::Envelope queryEnv(2.5, 4.5, 2.5, 4.5);
-    t1.query(queryEnv, hits);
+    tree.query(queryEnv, hits);
+    ensure_equals(hits.size(), 4u);
 
-    ensure_equals(hits.size(), 4);
-
+    // Get items in tree order
     {
-        std::vector<size_t> orderedItems(t1.items().begin(), t1.items().end());
+        std::vector<size_t> orderedItems(tree.items().begin(), tree.items().end());
         ensure_equals(orderedItems.size(), geoms.size());
     }
 
+    // Remove an item and get items in tree order
     {
-        auto removed = t1.remove(geom::Envelope(0, gridSize, 0, gridSize), 17);
+        auto removed = tree.remove(grid.getEnvelope(), 17);
         ensure(removed);
-        std::vector<size_t> orderedItems(t1.items().begin(), t1.items().end());
+        std::vector<size_t> orderedItems(tree.items().begin(), tree.items().end());
         ensure_equals(orderedItems.size(), geoms.size() - 1);
     }
 }

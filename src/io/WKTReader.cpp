@@ -67,6 +67,13 @@ WKTReader::read(const std::string& wellKnownText) const
     return readGeometryTaggedText(&tokenizer);
 }
 
+std::unique_ptr<Geometry>
+WKTReader::read(const char* wellKnownText) const
+{
+    std::string s(wellKnownText);
+    return read(s);
+}
+
 std::unique_ptr<CoordinateSequence>
 WKTReader::getCoordinates(StringTokenizer* tokenizer) const
 {
