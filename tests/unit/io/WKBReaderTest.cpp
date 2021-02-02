@@ -52,6 +52,23 @@ struct test_wkbreader_data {
         wktreader(gf.get())
     {}
 
+    void
+    testParseError(const std::string& hexwkb, const std::string& errstr)
+    {
+        std::string exstr;
+        std::stringstream hexin(hexwkb);
+        try {
+            GeomPtr g(wkbreader.readHEX(hexin));
+            fail();
+        }
+        catch(const geos::util::GEOSException& ex) {
+            // std::cout << e.what() << std::endl;
+            exstr = ex.what();
+            ensure("Missing expected error", !exstr.empty());
+            ensure_equals("Parse error incorrect", exstr, errstr);
+        }
+    }
+
     GeomPtr
     readHex(const std::string& hexwkb)
     {
@@ -572,6 +589,78 @@ void object::test<24>
 
 }
 
+// Malformed WKB wrong coordinate count
+template<>
+template<>
+void object::test<25>
+()
+{
+    testParseError(
+        "010200000003000000000000000000F03F000000000000004000000000000008400000000000001040",
+        "ParseException: Input buffer is smaller than requested object size"
+    );
+}
+
+// Malformed WKB with very large coordinate count
+template<>
+template<>
+void object::test<26>
+()
+{
+    testParseError(
+        "010200000000000080000000000000F03F000000000000004000000000000008400000000000001040",
+        "ParseException: Input buffer is smaller than requested object size"
+    );
+}
+
+
+// Malformed WKB polygon with very large ring count
+template<>
+template<>
+void object::test<27>
+()
+{
+    testParseError(
+        "01030000000000008001000000000000000000F03F000000000000004000000000000008400000000000001040",
+        "ParseException: Input buffer is smaller than requested object size"
+    );
+}
+
+// Malformed WKB polygon with slightly large ring count
+template<>
+template<>
+void object::test<28>
+()
+{
+    testParseError(
+        "01030000000200000000000000",
+        "ParseException: Input buffer is smaller than requested object size"
+    );
+}
+
+// Malformed WKB polygon with more buffer than data
+template<>
+template<>
+void object::test<29>
+()
+{
+    testInput(
+        "01030000000100000000000000000000000000F03F000000000000004000000000000008400000000000001040",
+        "010300000000000000"
+    );
+}
+
+// Malformed WKB collection with overly large geom count
+template<>
+template<>
+void object::test<30>
+()
+{
+    testParseError(
+        "010700000009000000010100000000000000000010400000000000001040",
+        "ParseException: Input buffer is smaller than requested object size"
+    );
+}
 
 } // namespace tut
 
