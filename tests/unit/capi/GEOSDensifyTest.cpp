@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSBuffer and GEOSBufferWithStyle
+// Test Suite for C-API GEOSDensify
 
 #include <tut/tut.hpp>
 // geos
@@ -7,38 +7,34 @@
 
 #include "capi_test_utils.h"
 
-
 namespace tut {
 //
 // Test Group
 //
 
-// Common data used in test cases.
-struct test_capigeosdensify_data : public capitest::utility {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* w_;
-    char* wkt_;
-
-    test_capigeosdensify_data()
-        : geom1_(nullptr), geom2_(nullptr), w_(nullptr)
+struct test_capigeosdensify_data : public capitest::utility
+{
+    void testDensify(const std::string &wkt_input,
+                            const std::string &wkt_output,
+                            double tolerance)
     {
-        initGEOS(notice, notice);
-        w_ = GEOSWKTWriter_create();
-        GEOSWKTWriter_setTrim(w_, 1);
-    }
+        int srid = 3857;
 
-    ~test_capigeosdensify_data()
-    {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
-        wkt_ = nullptr;
-        finishGEOS();
-    }
+        GEOSGeometry *input = GEOSGeomFromWKT(wkt_input.c_str());
+        GEOSSetSRID(input, srid);
 
+        GEOSGeometry *expected = GEOSGeomFromWKT(wkt_output.c_str());
+
+        GEOSGeometry *result = GEOSDensify(input, tolerance);
+        ensure("result not NULL", result != nullptr);
+
+        ensure_geometry_equals(result, expected);
+        ensure_equals("result SRID == expected SRID", GEOSGetSRID(result), srid);
+
+        GEOSGeom_destroy(input);
+        GEOSGeom_destroy(expected);
+        GEOSGeom_destroy(result);
+    }
 };
 
 typedef test_group<test_capigeosdensify_data> group;
@@ -50,165 +46,122 @@ group test_capigeosdensify_group("capi::GEOSDensify");
 // Test Cases
 //
 
-// Densify with a tolerance slightly larger than length of all edges.
+// Densify with a tolerance greater than or equal to length of all edges.
 // Result should match inputs.
-template<>
-template<>
+template <>
+template <>
 void object::test<1>()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 10.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(geom2_, geom1_);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))",
+        "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))",
+        10.0
+    );
 }
 
-
 // Densify with a tolerance that evenly subdivides all outer and inner edges.
-template<>
-template<>
+template <>
+template <>
 void object::test<2>()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 7, 7 7, 7 1, 1 1))");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 5.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(
-        geom2_,
-        "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 4, 1 7, 4 7, 7 7, 7 4, 7 1, 4 1, 1 1))");
-
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 7, 7 7, 7 1, 1 1))",
+        "POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0), (1 1, 1 4, 1 7, 4 7, 7 7, 7 4, 7 1, 4 1, 1 1))",
+        5.0
+    );
 }
 
 // Densify a LINESTRING
-template<>
-template<>
+template <>
+template <>
 void object::test<3>()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 6 )");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 3);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(
-        geom2_,
-        "LINESTRING (0 0, 0 3, 0 6)");
-
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "LINESTRING (0 0, 0 6 )",
+        "LINESTRING (0 0, 0 3, 0 6)",
+        3.0
+    );
 }
 
 // Ensure that tolerance results in the right number of subdivisions
 // ceil(6 / 2.9999999) = 3 new segments; 2 new vertices
-template<>
-template<>
+template <>
+template <>
 void object::test<4>()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 6 )");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 2.9999999);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(
-        geom2_,
-        "LINESTRING (0 0, 0 2, 0 4, 0 6)");
-
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "LINESTRING (0 0, 0 6 )",
+        "LINESTRING (0 0, 0 2, 0 4, 0 6)",
+        2.9999999
+    );
 }
 
-
 // Densify a LINEARRING
-template<>
-template<>
+template <>
+template <>
 void object::test<5>()
 {
-    geom1_ = GEOSGeomFromWKT("LINEARRING (0 0, 0 6, 6 6, 0 0)");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 3.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(
-        geom2_,
-        "LINEARRING (0 0, 0 3, 0 6, 3 6, 6 6, 4 4, 2 2, 0 0)");
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "LINEARRING (0 0, 0 6, 6 6, 0 0)",
+        "LINEARRING (0 0, 0 3, 0 6, 3 6, 6 6, 4 4, 2 2, 0 0)",
+        3.0
+    );
 }
 
 // Densify a POINT
 // Results should match inputs
-template<>
-template<>
+template <>
+template <>
 void object::test<6>()
 {
-    geom1_ = GEOSGeomFromWKT("POINT (0 0)");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 3.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(geom2_, geom1_);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "POINT (0 0)",
+        "POINT (0 0)",
+        3.0
+    );
 }
 
 // Densify a MULTIPOINT
 // Results should match inputs
-template<>
-template<>
+template <>
+template <>
 void object::test<7>()
 {
-    geom1_ = GEOSGeomFromWKT("MULTIPOINT ((0 0), (10 10))");
-    ensure(geom1_ != nullptr);
-    GEOSSetSRID(geom1_, 3857);
-
-    geom2_ = GEOSDensify(geom1_, 3.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(geom2_, geom1_);
-    ensure_equals("result SRID == expected SRID", GEOSGetSRID(geom2_), 3857);
+    testDensify(
+        "MULTIPOINT ((0 0), (10 10))",
+        "MULTIPOINT ((0 0), (10 10))",
+        3.0
+    );
 }
 
 // Densify an empty polygon
 // Results should match inputs
-template<>
-template<>
+template <>
+template <>
 void object::test<8>()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    ensure(geom1_ != nullptr);
-
-    geom2_ = GEOSDensify(geom1_, 3.0);
-
-    ensure("result not null", geom2_ != nullptr);
-    ensure_geometry_equals(geom2_, geom1_);
+    testDensify(
+        "POLYGON EMPTY",
+        "POLYGON EMPTY",
+        3.0
+    );
 }
 
 // Densify with an invalid tolerances should fail
 // Note: this raises "IllegalArgumentException: Tolerance must be positive:
-template<>
-template<>
+template <>
+template <>
 void object::test<9>()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
-    ensure(geom1_ != nullptr);
+    GEOSGeometry *input = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
 
-    geom2_ = GEOSDensify(geom1_, 0.0);
-    ensure(geom2_ == nullptr);
+    GEOSGeometry *result = GEOSDensify(input, 0.0);
+    ensure("result expected to be NULL", result == nullptr);
 
-    geom2_ = GEOSDensify(geom1_, -1.0);
-    ensure(geom2_ == nullptr);
+    result = GEOSDensify(input, -1.0);
+    ensure("result expected to be NULL", result == nullptr);
+
+    GEOSGeom_destroy(input);
 }
 
 } // namespace tut
-

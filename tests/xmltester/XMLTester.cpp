@@ -1305,7 +1305,6 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             actual_result = printGeom(gRealRes.get());
             expected_result = printGeom(gRes.get());
-
         }
 
 

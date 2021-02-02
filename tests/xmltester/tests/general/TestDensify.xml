@@ -1,65 +1,316 @@
 <run>
   <precisionModel type="FLOATING" />
 
-<case>
-  <desc>P - single point</desc>
-  <a>    POINT (10 10) </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>  POINT (10 10)	</op></test>
-</case>
+  <case>
+    <desc>P - single point</desc>
+    <a>
+POINT (10 10)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+POINT (10 10)
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>mP - multi point</desc>
-  <a>    MULTIPOINT ((10 10), (20 10)) </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>  MULTIPOINT ((10 10), (20 10))	</op></test>
-</case>
+  <case>
+    <desc>P - empty point</desc>
+    <a>
+POINT EMPTY
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+POINT EMPTY
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>L - single segment</desc>
-  <a>    LINESTRING(10 10, 100 10)  </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>
+  <case>
+    <desc>mP - multi point</desc>
+    <a>
+MULTIPOINT ((10 10), (20 10))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+MULTIPOINT ((10 10), (20 10))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>L - empty line</desc>
+    <a>
+LINESTRING EMPTY
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+LINESTRING EMPTY
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>L - single segment with length equal to densify tolerance</desc>
+    <a>
+LINESTRING(10 10, 20 10)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+LINESTRING(10 10, 20 10)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>L - single segment with length less than densify tolerance</desc>
+    <a>
+LINESTRING(10 10, 15 10)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+LINESTRING(10 10, 15 10)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>L - single segment with length greater than densify tolerance</desc>
+    <a>LINESTRING(10 10, 100 10)</a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
 	LINESTRING (10 10, 20 10, 30 10, 40 10, 50 10, 60 10, 70 10, 80 10, 90 10, 100 10)
-	</op></test>
-</case>
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>mL - multiple lines</desc>
-  <a>    MULTILINESTRING ((10 10, 30 30, 50 10, 70 30), (10 50, 40 50, 70 50))  </a>
-<test><op name="densify" arg1='A'  arg2='8.0'>
-	MULTILINESTRING ((10 10, 15 15, 20 20, 25 25, 30 30, 35 25, 40 20, 45 15, 50 10, 55 15, 60 20, 65 25, 70 30),
-  (10 50, 17.5 50, 25 50, 32.5 50, 40 50, 47.5 50, 55 50, 62.5 50, 70 50))
-	</op></test>
-</case>
+  <case>
+    <desc>L - single segment with non-integer tolerance, result is evenly subdivided</desc>
+    <a>LINESTRING (0 0, 0 6 )</a>
+    <test>
+      <op name="densify" arg1='A' arg2='2.999999'>
+LINESTRING (0 0, 0 2, 0 4, 0 6)
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>A - simple polygon</desc>
-  <a>    POLYGON ((0 0, 0 20, 20 20, 20 0, 0 0))  </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>
-  POLYGON ((0 0, 0 10, 0 20, 10 20, 20 20, 20 10, 20 0, 10 0, 0 0))
-  	</op></test>
-</case>
+  <case>
+    <desc>L - empty linear ring</desc>
+    <a>LINEARRING EMPTY</a>
+    <test>
+      <op name="densify" arg1='A' arg2='6'>
+LINEARRING EMPTY
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>A - polygon with hole</desc>
-  <a>    POLYGON ((0 0, 0 70, 70 70, 70 0, 0 0), (10 10, 10 60, 60 60, 10 10))  </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>
-  POLYGON ((0 0, 0 10, 0 20, 0 30, 0 40, 0 50, 0 60, 0 70, 10 70, 20 70, 30 70, 40 70, 50 70, 60 70, 70 70, 70 60, 70 50, 70 40, 70 30, 70 20, 70 10, 70 0, 60 0, 50 0, 40 0, 30 0, 20 0, 10 0, 0 0),
-  (10 10, 16.25 16.25, 22.5 22.5, 28.75 28.75, 35 35, 41.25 41.25, 47.5 47.5, 53.75 53.75, 60 60, 50 60, 40 60, 30 60, 20 60, 10 60, 10 50, 10 40, 10 30, 10 20, 10 10))
-  	</op></test>
-</case>
+  <case>
+    <desc>L - linear ring with segment lengths equal to densify tolerance</desc>
+    <a>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='6'>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+      </op>
+    </test>
+  </case>
 
-<case>
-  <desc>mA - multipolygon</desc>
-  <a>    MULTIPOLYGON (((0 0, 0 70, 70 70, 70 0, 0 0),
-  (10 10, 10 60, 60 60, 10 10)),
-  ((80 110, 80 70, 120 70, 120 110, 80 110)))  </a>
-<test><op name="densify" arg1='A'  arg2='10.0'>
-  MULTIPOLYGON (((80 70, 80 80, 80 90, 80 100, 80 110, 90 110, 100 110, 110 110, 120 110, 120 100, 120 90, 120 80, 120 70, 110 70, 100 70, 90 70, 80 70)),
-    ((0 0, 0 10, 0 20, 0 30, 0 40, 0 50, 0 60, 0 70, 10 70, 20 70, 30 70, 40 70, 50 70, 60 70, 70 70, 70 60, 70 50, 70 40, 70 30, 70 20, 70 10, 70 0, 60 0, 50 0, 40 0, 30 0, 20 0, 10 0, 0 0),
-    (10 10, 16.25 16.25, 22.5 22.5, 28.75 28.75, 35 35, 41.25 41.25, 47.5 47.5, 53.75 53.75, 60 60, 50 60, 40 60, 30 60, 20 60, 10 60, 10 50, 10 40, 10 30, 10 20, 10 10)))
-  </op></test>
-</case>
+  <case>
+    <desc>L - linear ring with segment lengths equal to densify tolerance</desc>
+    <a>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='6'>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+      </op>
+    </test>
+  </case>
 
+  <case>
+    <desc>L - linear ring with segment lengths greater than densify tolerance</desc>
+    <a>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='3'>
+LINEARRING (0 0, 0 3, 0 6, 3 6, 6 6, 6 3, 6 0, 3 0, 0 0)
+      </op>
+    </test>
+  </case>
 
+  <case>
+    <desc>L - linear ring with non-integer tolerance, result is evenly subdivided</desc>
+    <a>
+LINEARRING (0 0, 0 6, 6 6, 6 0, 0 0)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='2.999999'>
+LINEARRING (0 0, 0 2, 0 4, 0 6, 2 6, 4 6, 6 6, 6 4, 6 2, 6 0, 4 0, 2 0, 0 0)
+      </op>
+    </test>
+  </case>
 
+  <case>
+    <desc>mL - multiple lines with segment lengths equal to densify tolerance</desc>
+    <a>
+MULTILINESTRING ((0 0, 10 0), (20 0, 20 10))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+MULTILINESTRING ((0 0, 10 0), (20 0, 20 10))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>mL - multiple lines with segment lengths greater than densify tolerance</desc>
+    <a>
+MULTILINESTRING ((0 0, 10 0), (20 0, 20 10))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='5.0'>
+MULTILINESTRING ((0 0, 5 0, 10 0), (20 0, 20 5, 20 10))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>mL - multiple lines with non-integer tolerance, result is evenly subdivided</desc>
+    <a>
+MULTILINESTRING ((0 0, 10 0), (20 0, 20 10))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='2.999999'>
+MULTILINESTRING ((20 0, 20 2.5, 20 5, 20 7.5, 20 10), (0 0, 2.5 0, 5 0, 7.5 0, 10 0))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A - simple polygon with segment lengths equal to densify tolerance</desc>
+    <a>
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A - simple polygon with segment lengths greater than densify tolerance</desc>
+    <a>
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='5.0'>
+POLYGON ((0 0, 0 5, 0 10, 5 10, 10 10, 10 5, 10 0, 5 0, 0 0))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A - polygon with hole with segment lengths equal to densify tolerance</desc>
+    <a>
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (2 2, 2 8, 8 8, 8 2, 2 2))
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (2 2, 2 8, 8 8, 8 2, 2 2))
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A - polygon with hole with segment lengths greater than densify tolerance</desc>
+    <a>
+POLYGON (
+  (0 0, 0 10, 10 10, 10 0, 0 0),
+  (2 2, 2 8, 8 8, 8 2, 2 2)
+)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='5.0'>
+POLYGON (
+  (0 0, 0 5, 0 10, 5 10, 10 10, 10 5, 10 0, 5 0, 0 0),
+  (2 2, 2 5, 2 8, 5 8, 8 8, 8 5, 8 2, 5 2, 2 2)
+)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>A - polygon with hole with non-integer tolerance, result is evenly subdivided</desc>
+    <a>
+POLYGON (
+  (0 0, 0 10, 10 10, 10 0, 0 0),
+  (2 2, 2 8, 8 8, 8 2, 2 2)
+)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='2.999999'>
+POLYGON (
+  (0 0, 0 2.5, 0 5, 0 7.5, 0 10, 2.5 10, 5 10, 7.5 10, 10 10, 10 7.5, 10 5, 10 2.5, 10 0, 7.5 0, 5 0, 2.5 0, 0 0),
+  (2 2, 4 2, 6 2, 8 2, 8 4, 8 6, 8 8, 6 8, 4 8, 2 8, 2 6, 2 4, 2 2)
+)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>mA - multipolygon with segment lengths equal to densify tolerance</desc>
+    <a>
+MULTIPOLYGON (
+  ((0 0, 0 10, 10 10, 10 0, 0 0)),
+  ((20 20, 20 30, 30 30, 30 20, 20 20))
+)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='10.0'>
+MULTIPOLYGON (
+  ((0 0, 0 10, 10 10, 10 0, 0 0)),
+  ((20 20, 20 30, 30 30, 30 20, 20 20))
+)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>mA - multipolygon with segment lengths greater than densify tolerance</desc>
+    <a>
+MULTIPOLYGON (
+  ((0 0, 0 10, 10 10, 10 0, 0 0)),
+  ((20 20, 20 30, 30 30, 30 20, 20 20))
+)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='5.0'>
+MULTIPOLYGON (
+  ((20 20, 20 25, 20 30, 25 30, 30 30, 30 25, 30 20, 25 20, 20 20)),
+  ((0 0, 0 5, 0 10, 5 10, 10 10, 10 5, 10 0, 5 0, 0 0))
+)
+      </op>
+    </test>
+  </case>
+
+  <case>
+    <desc>mA - multipolygon with segment with non-integer tolerance, result is evenly subdivided</desc>
+    <a>
+MULTIPOLYGON (
+  ((20 20, 20 30, 30 30, 30 20, 20 20)),
+  ((0 0, 0 10, 10 10, 10 0, 0 0))
+)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='2.999999'>
+MULTIPOLYGON (
+  ((20 20, 20 22.5, 20 25, 20 27.5, 20 30, 22.5 30, 25 30, 27.5 30, 30 30, 30 27.5, 30 25, 30 22.5, 30 20, 27.5 20, 25 20, 22.5 20, 20 20)),
+  ((0 0, 0 2.5, 0 5, 0 7.5, 0 10, 2.5 10, 5 10, 7.5 10, 10 10, 10 7.5, 10 5, 10 2.5, 10 0, 7.5 0, 5 0, 2.5 0, 0 0))
+)
+      </op>
+    </test>
+  </case>
 
 </run>
