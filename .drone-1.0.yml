@@ -18,12 +18,13 @@ steps:
     commands:
       - mkdir build
       - cd build
+      - cmake --version
       - CXXFLAGS="-O0" cmake ..
       - make V=0
   - name: check
     image: *test-image
     commands:
-      - CXXFLAGS="-O0" make check V=0
+      - ctest --output-on-failure .
   # - name: docs
   #   image: *test-image
   #   commands:
