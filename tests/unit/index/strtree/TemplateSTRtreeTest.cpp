@@ -239,5 +239,87 @@ void object::test<6>()
     ensure_equals(hits.size(), 4u);
 }
 
+template<>
+template<>
+void object::test<7>() {
+    struct FloatBox {
+        FloatBox(double p_xmin, double p_xmax, double p_ymin, double p_ymax) :
+            xmin(static_cast<float>(p_xmin)),
+            xmax(static_cast<float>(p_xmax)),
+            ymin(static_cast<float>(p_ymin)),
+            ymax(static_cast<float>(p_ymax)) {
+
+            if (static_cast<double>(xmax) < p_xmax) {
+                xmax = std::nextafter(xmax, std::numeric_limits<float>::infinity());
+            }
+            if (static_cast<double>(xmin) > p_xmin) {
+                xmin = std::nextafter(xmin, -std::numeric_limits<float>::infinity());
+            }
+            if (static_cast<double>(ymax) < p_ymax) {
+                ymax = std::nextafter(ymax, std::numeric_limits<float>::infinity());
+            }
+            if (static_cast<double>(ymin) > p_ymin) {
+                ymin = std::nextafter(ymin, -std::numeric_limits<float>::infinity());
+            }
+        }
+
+        void expandToInclude(const FloatBox & other) {
+            xmin = std::min(xmin, other.xmin);
+            xmax = std::max(xmax, other.xmax);
+            ymin = std::min(ymin, other.ymin);
+            ymax = std::max(ymax, other.ymax);
+        }
+
+        bool intersects(const FloatBox & other) const {
+            return !(other.xmin > xmax ||
+                     other.xmax < xmin ||
+                     other.ymin > ymax ||
+                     other.ymax < ymin);
+        }
+
+        float xmin;
+        float xmax;
+        float ymin;
+        float ymax;
+    };
+
+    struct BoxTraits {
+        using BoundsType = FloatBox;
+
+        static bool intersects(const BoundsType & a, const BoundsType & b) {
+            return a.intersects(b);
+        }
+
+        static double getX(const BoundsType& a) {
+            return 0.5 * static_cast<double>(a.xmin + a.xmax);
+        }
+
+        static double getY(const BoundsType& a) {
+            return 0.5 * static_cast<double>(a.ymin + a.ymax);
+        }
+
+        static void expandToInclude(BoundsType& a, const BoundsType& b) {
+            a.expandToInclude(b);
+        }
+    };
+
+    TemplateSTRtree<geom::LineSegment, BoxTraits> tree;
+
+    for (double i = 0; i < 100; i += 1.0) {
+        geom::Coordinate p0(i, i);
+        geom::Coordinate p1(i + 1, i + 1);
+
+        geom::LineSegment ls(p0, p1);
+        FloatBox e(p0.x, p1.x, p0.y, p1.y);
+        tree.insert(e, ls);
+    }
+
+    FloatBox qe(35.5, 38.5, 35.5, 38.5);
+    std::vector<geom::LineSegment> hits;
+    tree.query(qe, hits);
+
+    ensure_equals(hits.size(), 4u);
+}
+
 } // namespace tut
 

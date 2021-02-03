@@ -34,7 +34,7 @@ Interval::Interval(double newMin, double newMax)
 }
 
 double
-Interval::getCentre()
+Interval::getCentre() const
 {
     return (imin + imax) / 2;
 }

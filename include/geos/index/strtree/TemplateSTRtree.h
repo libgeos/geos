@@ -14,17 +14,16 @@
 
 #pragma once
 
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/util.h>
 
-#include <geos/index/strtree/EnvelopeUtil.h>
 #include <geos/index/strtree/TemplateSTRNode.h>
 #include <geos/index/strtree/TemplateSTRNodePair.h>
 #include <geos/index/strtree/TemplateSTRtreeDistance.h>
+#include <geos/index/strtree/Interval.h>
 
 #include <vector>
 #include <queue>
@@ -33,12 +32,13 @@ namespace geos {
 namespace index {
 namespace strtree {
 
-template<typename ItemType>
+template<typename ItemType, typename BoundsTraits>
 class TemplateSTRtreeImpl {
 public:
-    using Node = TemplateSTRNode<ItemType>;
+    using Node = TemplateSTRNode<ItemType, BoundsTraits>;
     using NodeList = std::vector<Node>;
     using NodeListIterator = typename NodeList::iterator;
+    using BoundsType = typename BoundsTraits::BoundsType;
 
     explicit TemplateSTRtreeImpl(size_t p_nodeCapacity = 10) : root(nullptr), nodeCapacity(p_nodeCapacity) {}
 
@@ -65,31 +65,31 @@ public:
         insert(*item->getEnvelopeInternal(), std::forward<ItemType>(item));
     }
 
-    void insert(const geom::Envelope& itemEnv, ItemType&& item) {
+    void insert(const BoundsType& itemEnv, ItemType&& item) {
         createLeafNode(std::forward<ItemType>(item), itemEnv);
     }
 
-    void insert(const geom::Envelope& itemEnv, const ItemType& item) {
+    void insert(const BoundsType& itemEnv, const ItemType& item) {
         createLeafNode(item, itemEnv);
     }
 
     template<typename ItemDistance>
-    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType> & other) {
+    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other) {
         if (!getRoot() || !other.getRoot()) {
             return { nullptr, nullptr };
         }
 
-        TemplateSTRtreeDistance<ItemType, ItemDistance> td;
+        TemplateSTRtreeDistance<ItemType, BoundsTraits, ItemDistance> td;
         return td.nearestNeighbour(*root, *other.root);
     }
 
     template<typename Visitor>
-    void query(const geom::Envelope &queryEnv, Visitor &&visitor) {
+    void query(const BoundsType& queryEnv, Visitor &&visitor) {
         if (!built()) {
             build();
         }
 
-        if (root->envelopeIntersects(queryEnv)) {
+        if (root->boundsIntersect(queryEnv)) {
             if (root->isLeaf()) {
                 visitor(root->getItem());
             } else {
@@ -98,13 +98,13 @@ public:
         }
     }
 
-    void query(const geom::Envelope& queryEnv, std::vector<ItemType>& results) {
+    void query(const BoundsType& queryEnv, std::vector<ItemType>& results) {
         query(queryEnv, [&results](const ItemType& x) {
             results.push_back(x);
         });
     }
 
-    bool remove(const geom::Envelope& itemEnv, const ItemType& item) {
+    bool remove(const BoundsType& itemEnv, const ItemType& item) {
         if (root == nullptr) {
             return false;
         }
@@ -127,11 +127,11 @@ protected:
     size_t nodeCapacity;
     size_t numItems;
 
-    void createLeafNode(ItemType&& item, const geom::Envelope &env) {
+    void createLeafNode(ItemType&& item, const BoundsType& env) {
         nodes.emplace_back(std::forward<ItemType>(item), env);
     }
 
-    void createLeafNode(const ItemType& item, const geom::Envelope &env) {
+    void createLeafNode(const ItemType& item, const BoundsType& env) {
         nodes.emplace_back(item, env);
     }
 
@@ -257,15 +257,13 @@ protected:
 
     void setSortValuesX(const NodeListIterator &begin, const NodeListIterator &end) {
         std::for_each(begin, end, [](Node &n) {
-            const geom::Envelope &e = n.getEnvelope();
-            n.setSortVal(e.getMinX() + e.getMaxX());
+            n.setSortVal(BoundsTraits::getX(n.getBounds()));
         });
     }
 
     void setSortValuesY(const NodeListIterator &begin, const NodeListIterator &end) {
         std::for_each(begin, end, [](Node &n) {
-            const geom::Envelope &e = n.getEnvelope();
-            n.setSortVal(e.getMinY() + e.getMaxY());
+            n.setSortVal(BoundsTraits::getY(n.getBounds()));
         });
     }
 
@@ -285,14 +283,14 @@ protected:
     }
 
     template<typename Visitor>
-    void query(const geom::Envelope &queryEnv,
-               const Node &node,
-               Visitor &&visitor) {
+    void query(const BoundsType& queryEnv,
+               const Node& node,
+               Visitor&& visitor) {
 
         assert(!node.isLeaf());
 
         for (auto *child = node.beginChildren(); child < node.endChildren(); ++child) {
-            if (child->envelopeIntersects(queryEnv)) {
+            if (child->boundsIntersect(queryEnv)) {
                 if (child->isLeaf() && !child->isDeleted()) {
                     visitor(child->getItem());
                 } else {
@@ -302,14 +300,14 @@ protected:
         }
     }
 
-    bool remove(const geom::Envelope &queryEnv,
-                const Node &node,
+    bool remove(const BoundsType& queryEnv,
+                const Node& node,
                 const ItemType& item) {
 
         assert(!node.isLeaf());
 
         for (auto *child = node.beginChildren(); child < node.endChildren(); ++child) {
-            if (child->envelopeIntersects(queryEnv)) {
+            if (child->boundsIntersect(queryEnv)) {
                 if (child->isLeaf()) {
                     if (!child->isDeleted() && child->getItem() == item) {
                         // const cast is ugly, but alternative seems to be to remove all
@@ -378,7 +376,7 @@ protected:
 
     class Items {
     public:
-        explicit Items(TemplateSTRtreeImpl<ItemType>& tree) : m_tree(tree) {}
+        explicit Items(TemplateSTRtreeImpl<ItemType, BoundsTraits>& tree) : m_tree(tree) {}
 
         Iterator begin() {
             return Iterator(m_tree.nodes.cbegin(),
@@ -391,7 +389,7 @@ protected:
         }
     private:
 
-        TemplateSTRtreeImpl<ItemType>& m_tree;
+        TemplateSTRtreeImpl<ItemType, BoundsTraits>& m_tree;
     };
 
 public:
@@ -403,19 +401,77 @@ public:
 
 };
 
-template<typename ItemType>
-class TemplateSTRtree : public TemplateSTRtreeImpl<ItemType> {
-public:
-    using TemplateSTRtreeImpl<ItemType>::TemplateSTRtreeImpl;
+struct EnvelopeTraits {
+    using BoundsType = geom::Envelope;
+
+    static bool intersects(const BoundsType& a, const BoundsType& b) {
+        return a.intersects(b);
+    }
+
+    static double size(const BoundsType & a) {
+        return a.getArea();
+    }
+
+    static double distance(const BoundsType& a, const BoundsType& b) {
+        return a.distance(b);
+    }
+
+    static BoundsType empty() {
+        return {};
+    }
+
+    static double getX(const BoundsType& a) {
+        return 0.5*(a.getMinX() + a.getMaxX());
+    }
+
+    static double getY(const BoundsType& a) {
+        return 0.5*(a.getMinY() + a.getMaxY());
+    }
+
+    static void expandToInclude(BoundsType& a, const BoundsType& b) {
+        a.expandToInclude(b);
+    }
 };
 
-template<typename ItemType>
-class TemplateSTRtree<ItemType*> : public TemplateSTRtreeImpl<ItemType*>, public SpatialIndex {
+struct IntervalTraits {
+    using BoundsType = Interval;
+
+    static bool intersects(const BoundsType& a, const BoundsType& b) {
+        return a.intersects(&b);
+    }
+
+    static double size(const BoundsType & a) {
+        return a.getWidth();
+    }
+
+    static double getX(const BoundsType& a) {
+        return a.getCentre();
+    }
+
+    static double getY(const BoundsType& a) {
+        (void) a;
+        return 0;
+    }
+
+    static void expandToInclude(BoundsType& a, const BoundsType& b) {
+        a.expandToInclude(&b);
+    }
+};
+
+
+template<typename ItemType, typename BoundsTraits = EnvelopeTraits>
+class TemplateSTRtree : public TemplateSTRtreeImpl<ItemType, BoundsTraits> {
 public:
-    using TemplateSTRtreeImpl<ItemType*>::TemplateSTRtreeImpl;
-    using TemplateSTRtreeImpl<ItemType*>::insert;
-    using TemplateSTRtreeImpl<ItemType*>::query;
-    using TemplateSTRtreeImpl<ItemType*>::remove;
+    using TemplateSTRtreeImpl<ItemType, BoundsTraits>::TemplateSTRtreeImpl;
+};
+
+template<typename ItemType, typename BoundsTraits>
+class TemplateSTRtree<ItemType*, BoundsTraits> : public TemplateSTRtreeImpl<ItemType*, BoundsTraits>, public SpatialIndex {
+public:
+    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::TemplateSTRtreeImpl;
+    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::insert;
+    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::query;
+    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::remove;
 
     // The SpatialIndex methods only work when we are storing a pointer type.
     void query(const geom::Envelope *queryEnv, std::vector<void*> &results) override {

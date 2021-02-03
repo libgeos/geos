@@ -18,9 +18,31 @@ namespace geos {
 namespace index {
 namespace strtree {
 
-template<typename ItemType>
+template<typename X>
+struct BoundsTraits {
+
+
+    static bool intersects(const X& a, const X& b);
+
+    static double size(const X& a);
+
+    static double distance(const X& a, const X& b);
+
+    static X empty();
+
+    double getX(const X&);
+
+    double getY(const X&);
+
+    static void expandToInclude(X& a, const X& b);
+};
+
+
+template<typename ItemType, typename BoundsTraits>
 class TemplateSTRNode {
 private:
+    using BoundsType = typename BoundsTraits::BoundsType;
+
     union Body {
         ItemType item;
         const TemplateSTRNode* childrenEnd;
@@ -29,7 +51,7 @@ private:
 
         explicit Body (const ItemType& p_item) : item(p_item) {}
 
-        explicit Body (const TemplateSTRNode<ItemType>* p_childrenEnd) : childrenEnd(p_childrenEnd) {}
+        explicit Body (const TemplateSTRNode<ItemType, BoundsTraits>* p_childrenEnd) : childrenEnd(p_childrenEnd) {}
 
         ~Body() {
             // destruction handled by Node
@@ -38,7 +60,7 @@ private:
     } data;
     const TemplateSTRNode* children;
 
-    geom::Envelope bounds;
+    BoundsType bounds;
 
     double sortVal = std::numeric_limits<double>::quiet_NaN();
 
@@ -47,13 +69,13 @@ private:
 public:
     //TemplateSTRNode() = delete;
 
-    TemplateSTRNode(ItemType&& p_item, const geom::Envelope& env) :
+    TemplateSTRNode(ItemType&& p_item, const BoundsType& env) :
         data(std::forward<ItemType>(p_item)),
         children(nullptr),
         bounds(env),
         deleted(false) {}
 
-    TemplateSTRNode(const ItemType& p_item, const geom::Envelope& env) :
+    TemplateSTRNode(const ItemType& p_item, const BoundsType& env) :
             data(p_item),
             children(nullptr),
             bounds(env),
@@ -62,10 +84,9 @@ public:
     TemplateSTRNode(const TemplateSTRNode* begin, const TemplateSTRNode* end) :
         data(end),
         children(begin),
+        bounds(boundsFromChildren()),
         deleted(false)
-    {
-        computeEnvelopeFromChildren();
-    }
+    {}
 
     void setSortVal(double d) {
         sortVal = d;
@@ -95,19 +116,26 @@ public:
         return !isLeaf();
     }
 
-    bool envelopeIntersects(const geom::Envelope &queryEnv) const {
-        return getEnvelope().intersects(queryEnv);
+    bool boundsIntersect(const BoundsType& queryBounds) const {
+        return BoundsTraits::intersects(getBounds(), queryBounds);
     }
 
-    void computeEnvelopeFromChildren() {
-        bounds.setToNull();
-        for (auto *child = children; child < data.childrenEnd; ++child) {
-            bounds.expandToInclude(child->getEnvelope());
+    double getSize() const {
+        return BoundsTraits::size(getBounds());
+    }
+
+    BoundsType boundsFromChildren() {
+        BoundsType bnds = children->getBounds();
+
+        for (auto *child = children + 1; child < data.childrenEnd; ++child) {
+            BoundsTraits::expandToInclude(bnds, child->getBounds());
         }
+
+        return bnds;
     }
 
-    double getArea() const {
-        return getEnvelope().getArea();
+    const BoundsType& getBounds() const {
+        return bounds;
     }
 
     std::size_t getNumNodes() const
@@ -135,10 +163,6 @@ public:
             count += child->getNumNodes();
         }
         return count;
-    }
-
-    const geom::Envelope& getEnvelope() const {
-        return bounds;
     }
 
     const ItemType& getItem() const {

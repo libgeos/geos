@@ -20,10 +20,11 @@ namespace geos {
 namespace index {
 namespace strtree {
 
-template<typename ItemType, typename ItemDistance>
+template<typename ItemType, typename BoundsTraits, typename ItemDistance>
 class TemplateSTRNodePair {
 public:
-    using Node = TemplateSTRNode<ItemType>;
+    using Node = TemplateSTRNode<ItemType, BoundsTraits>;
+    using BoundsType = typename BoundsTraits::BoundsType;
 
     TemplateSTRNodePair(const Node &node1, const Node &node2)
             : m_node1(&node1), m_node2(&node2), m_distance(distance()) {}
@@ -34,10 +35,6 @@ public:
 
     double getDistance() const {
         return m_distance;
-    }
-
-    double maximumDistance() const {
-        return EnvelopeUtil::maximumDistance(getFirst().getEnvelope(), getSecond().getEnvelope());
     }
 
     std::pair<ItemType, ItemType> getItems() const {
@@ -58,7 +55,7 @@ public:
             // FIXME do we really need to instantiate ItemDistance?
             return ItemDistance()(getFirst().getItem(), getSecond().getItem());
         } else {
-            return getFirst().getEnvelope().distance(getSecond().getEnvelope());
+            return BoundsTraits::distance(getFirst().getBounds(), getSecond().getBounds());
         }
     }
 

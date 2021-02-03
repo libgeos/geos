@@ -24,10 +24,10 @@ namespace geos {
 namespace index {
 namespace strtree {
 
-template<typename ItemType, typename ItemDistance>
+template<typename ItemType, typename BoundsType, typename ItemDistance>
 class TemplateSTRtreeDistance {
-    using Node = TemplateSTRNode<ItemType>;
-    using NodePair = TemplateSTRNodePair<ItemType, ItemDistance>;
+    using Node = TemplateSTRNode<ItemType, BoundsType>;
+    using NodePair = TemplateSTRNodePair<ItemType, BoundsType, ItemDistance>;
     using ItemPair = std::pair<ItemType, ItemType>;
 
     struct PairQueueCompare {
@@ -117,7 +117,7 @@ private:
          * Otherwise, simply expand whichever is composite.
          */
         if (isComp1 && isComp2) {
-            if (node1.getArea() > node2.getArea()) {
+            if (node1.getSize() > node2.getSize()) {
                 expand(node1, node2, false, priQ, minDistance);
                 return;
             } else {
