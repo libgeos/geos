@@ -1,0 +1,113 @@
+# GitHub Actions for GEOS
+#
+# Paul Ramsey <pramsey at cleverelephant dot ca>
+# Based on AZP configuration by Mateusz Loskot <mateusz at loskot dot net>
+
+name: CI
+on: [push, pull_request]
+
+env:
+  BUILD_TYPE: 'Release'
+  MAKEFLAGS: '-j2'
+
+jobs:
+  linux:
+    name: 'Linux'
+    strategy:
+      matrix:
+        ci:
+        - {
+          compiler: g++,
+          build: cmake,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'g++ cmake doxygen',
+          os: ubuntu-18.04
+        }
+        - {
+          compiler: g++,
+          build: autotools,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'g++ automake doxygen git2cl',
+          os: ubuntu-18.04
+        }
+        - {
+          compiler: g++,
+          build: autotools,
+          cxxstd: 11,
+          arch: 32,
+          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib doxygen automake git2cl',
+          os: ubuntu-18.04
+        }
+        - {
+          compiler: clang++,
+          build: cmake,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang cmake doxygen',
+          os: ubuntu-18.04
+        }
+        - {
+          compiler: g++,
+          build: cmake,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'g++ cmake doxygen',
+          os: ubuntu-20.04
+        }
+        - {
+          compiler: clang++,
+          build: cmake,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang cmake doxygen',
+          os: ubuntu-16.04
+        }
+        - {
+          compiler: clang++,
+          build: cmake,
+          cxxstd: 14,
+          arch: 64,
+          packages: 'clang cmake doxygen',
+          os: ubuntu-20.04
+        }
+
+
+    runs-on: ${{ matrix.ci.os }}
+    steps:
+
+    - name: 'Install'
+      run: |
+        set -e
+        uname -a
+        sudo -E apt-get update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make ${{ matrix.ci.packages }}
+
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+
+    - name: 'Build'
+      run: |
+        set -e
+        if [ ${{ matrix.ci.build }} == 'cmake' ];
+        then
+          mkdir build.cmake
+          cd build.cmake
+          cmake --version
+          cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+          make
+          cmake --build . --target docs
+          ctest --output-on-failure .
+        else
+          set -e
+          ./autogen.sh
+          mkdir build.autotools
+          cd build.autotools
+          CFLAGS="-std=c++${{ matrix.ci.cxxstd }} -m${{ matrix.ci.arch }}"
+          ../configure CC=${{ matrix.ci.compiler }} CXX=${{ matrix.ci.compiler }} CXXFLAGS="$CFLAGS" CFLAGS="$CFLAGS"
+          make && make check && make distcheck
+        fi
+
+
+
