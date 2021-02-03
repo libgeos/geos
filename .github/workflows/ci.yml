@@ -16,13 +16,6 @@ jobs:
     strategy:
       matrix:
         ci:
-        - {
-          compiler: g++,
-          build: cmake,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++ cmake doxygen',
-          os: ubuntu-18.04
         }
         - {
           compiler: g++,
@@ -39,38 +32,6 @@ jobs:
           arch: 32,
           packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib doxygen automake git2cl',
           os: ubuntu-18.04
-        }
-        - {
-          compiler: clang++,
-          build: cmake,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang cmake doxygen',
-          os: ubuntu-18.04
-        }
-        - {
-          compiler: g++,
-          build: cmake,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++ cmake doxygen',
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: clang++,
-          build: cmake,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang cmake doxygen',
-          os: ubuntu-16.04
-        }
-        - {
-          compiler: clang++,
-          build: cmake,
-          cxxstd: 14,
-          arch: 64,
-          packages: 'clang cmake doxygen',
-          os: ubuntu-20.04
         }
 
 
