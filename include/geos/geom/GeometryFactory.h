@@ -353,7 +353,7 @@ public:
     //
     /// Will clone the geometries accessible trough the iterator.
     ///
-    /// @tparam T an iterator yelding something which casts to const Geometry*
+    /// @tparam T an iterator yielding something which casts to const Geometry*
     /// @param from start iterator
     /// @param toofar end iterator
     ///

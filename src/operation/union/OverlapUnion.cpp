@@ -84,7 +84,7 @@ OverlapUnion::combine(std::unique_ptr<Geometry>& unionGeom, std::vector<std::uni
         return std::move(unionGeom);
 
     disjointPolys.push_back(std::move(unionGeom));
-    return GeometryCombiner::combine(disjointPolys);
+    return GeometryCombiner::combine(std::move(disjointPolys));
 }
 
 /* private */
