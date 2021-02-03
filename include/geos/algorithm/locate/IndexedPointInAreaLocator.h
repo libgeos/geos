@@ -54,16 +54,21 @@ namespace locate { // geos::algorithm::locate
  */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
+    struct SegmentView {
+        SegmentView(const geom::Coordinate* p_p0, const geom::Coordinate* p_p1) : p0(p_p0), p1(p_p1) {}
+
+        const geom::Coordinate* p0;
+        const geom::Coordinate* p1;
+    };
+
     class IntervalIndexedGeometry {
     private:
-        index::strtree::TemplateSTRtree<geom::LineSegment*, index::strtree::IntervalTraits> index;
+
+        index::strtree::TemplateSTRtree<SegmentView, index::strtree::IntervalTraits> index;
         bool isEmpty;
 
         void init(const geom::Geometry& g);
         void addLine(const geom::CoordinateSequence* pts);
-
-        // To keep track of LineSegments
-        std::vector< geom::LineSegment > segments;
 
     public:
         IntervalIndexedGeometry(const geom::Geometry& g);
