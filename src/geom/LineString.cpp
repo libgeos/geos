@@ -122,6 +122,14 @@ LineString::getCoordinatesRO() const
     return points.get();
 }
 
+std::unique_ptr<CoordinateSequence>
+LineString::releaseCoordinates()
+{
+    auto ret = std::move(points);
+    geometryChanged();
+    return ret;
+}
+
 const Coordinate&
 LineString::getCoordinateN(std::size_t n) const
 {

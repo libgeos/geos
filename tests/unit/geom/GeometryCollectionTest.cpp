@@ -143,4 +143,15 @@ void object::test<6>
     ensure(!gc->isDimensionStrict(geos::geom::Dimension::A));
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    auto gc = geos::io::WKTReader().read<geos::geom::GeometryCollection>("GEOMETRYCOLLECTION (POINT (1 1), LINESTRING (1 1, 2 2))");
+    ensure_equals(*gc->getEnvelopeInternal(), geos::geom::Envelope(1, 2, 1, 2));
+
+    auto components = gc->releaseGeometries();
+    ensure_equals(components.size(), 2u);
+}
+
 } // namespace tut

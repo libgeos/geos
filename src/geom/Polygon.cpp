@@ -191,6 +191,13 @@ Polygon::getExteriorRing() const
     return shell.get();
 }
 
+std::unique_ptr<LinearRing>
+Polygon::releaseExteriorRing()
+{
+    envelope.reset();
+    return std::move(shell);
+}
+
 size_t
 Polygon::getNumInteriorRing() const
 {
@@ -201,6 +208,12 @@ const LinearRing*
 Polygon::getInteriorRingN(std::size_t n) const
 {
     return holes[n].get();
+}
+
+std::vector<std::unique_ptr<LinearRing>>
+Polygon::releaseInteriorRings()
+{
+    return std::move(holes);
 }
 
 std::string
@@ -312,6 +325,7 @@ Polygon::convexHull() const
 {
     return getExteriorRing()->convexHull();
 }
+
 
 void
 Polygon::normalize()

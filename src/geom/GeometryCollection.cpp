@@ -175,6 +175,14 @@ GeometryCollection::getGeometryN(std::size_t n) const
     return geometries[n].get();
 }
 
+std::vector<std::unique_ptr<Geometry>>
+GeometryCollection::releaseGeometries()
+{
+    auto ret = std::move(geometries);
+    geometryChanged();
+    return ret;
+}
+
 size_t
 GeometryCollection::getNumPoints() const
 {

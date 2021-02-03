@@ -163,6 +163,15 @@ public:
     const Geometry* getGeometryN(std::size_t n) const override;
 
     /**
+     * \brief
+     * Take ownership of the sub-geometries managed by this GeometryCollection.
+     * After releasing the sub-geometries, the collection should be considered
+     * in a moved-from state and should not be accessed.
+     * @return vector of sub-geometries
+     */
+    std::vector<std::unique_ptr<Geometry>> releaseGeometries();
+
+    /**
      * Creates a GeometryCollection with
      * every component reversed.
      * The order of the components in the collection are not reversed.

@@ -9,7 +9,10 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 // std
 #include <sstream>
@@ -252,6 +255,33 @@ void object::test<10>
 
     geom = wktreader.read("POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0))");
     ensure("dimension(POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0)) == 2", geom->getCoordinateDimension() == 2);
+}
+
+template<>
+template<>
+void object::test<11>
+()
+{
+    // Correct type
+    auto ls = wktreader.read<geos::geom::LineString>("LINESTRING (5 8, 5 7)");
+    ensure(ls != nullptr);
+
+    // Exception thrown on incorrect type
+    try {
+        auto poly = wktreader.read<geos::geom::LineString>("POINT (2 8)");
+        fail();
+    } catch (geos::util::GEOSException & e) {
+        ensure_equals(std::string(e.what()), "ParseException: Unexpected WKT type");
+    }
+
+    // Malformed
+    try {
+        auto ps = wktreader.read<geos::geom::Point>("POINT (2, 8)");
+        fail();
+    } catch (geos::util::GEOSException & e) {
+        ensure_equals(std::string(e.what()), "ParseException: Expected number but encountered ','");
+    }
+
 }
 
 } // namespace tut

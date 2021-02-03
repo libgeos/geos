@@ -92,6 +92,15 @@ public:
 
     virtual const Coordinate& getCoordinateN(std::size_t n) const;
 
+    /**
+     * \brief
+     * Take ownership of the CoordinateSequence managed by this geometry.
+     * After releasing the coordinates, the geometry should be considered
+     * in a moved-from state and should not be accessed.
+     * @return this Geometry's CoordinateSequence.
+     */
+    std::unique_ptr<CoordinateSequence> releaseCoordinates();
+
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;
 
