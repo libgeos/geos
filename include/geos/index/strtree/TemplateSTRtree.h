@@ -449,8 +449,7 @@ struct IntervalTraits {
     }
 
     static double getY(const BoundsType& a) {
-        (void) a;
-        return 0;
+        return a.getCentre();
     }
 
     static void expandToInclude(BoundsType& a, const BoundsType& b) {
