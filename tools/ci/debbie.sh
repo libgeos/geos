@@ -14,7 +14,7 @@ rm -rf build
 mkdir -p build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX:PATH=../rel-${GEOS_VER}w${OS_BUILD} ../
-make
+make && make install
 [ -f CMakeCache.txt ] && \
 ctest --output-on-failure . || \
 make check
