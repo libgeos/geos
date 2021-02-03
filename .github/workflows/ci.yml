@@ -16,7 +16,6 @@ jobs:
     strategy:
       matrix:
         ci:
-        }
         - {
           compiler: g++,
           build: autotools,
