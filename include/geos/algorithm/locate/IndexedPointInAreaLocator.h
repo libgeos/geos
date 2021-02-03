@@ -20,7 +20,7 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 #include <geos/index/ItemVisitor.h> // inherited
-#include <geos/index/intervalrtree/SortedPackedIntervalRTree.h> // inherited
+#include <geos/index/strtree/TemplateSTRtree.h>
 
 #include <memory>
 #include <vector> // composition
@@ -56,7 +56,7 @@ class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
     class IntervalIndexedGeometry {
     private:
-        index::intervalrtree::SortedPackedIntervalRTree index;
+        index::strtree::TemplateSTRtree<geom::LineSegment*, index::strtree::IntervalTraits> index;
         bool isEmpty;
 
         void init(const geom::Geometry& g);
@@ -68,25 +68,11 @@ private:
     public:
         IntervalIndexedGeometry(const geom::Geometry& g);
 
-        void query(double min, double max, index::ItemVisitor* visitor);
+        template<typename Visitor>
+        void query(double min, double max, Visitor&& f) {
+            index.query(index::strtree::Interval(min, max), f);
+        }
     };
-
-
-    class SegmentVisitor : public index::ItemVisitor {
-    private:
-        algorithm::RayCrossingCounter* counter;
-
-    public:
-        SegmentVisitor(algorithm::RayCrossingCounter* p_counter)
-            :	counter(p_counter)
-        { }
-
-        ~SegmentVisitor() override
-        { }
-
-        void visitItem(void* item) override;
-    };
-
 
     const geom::Geometry& areaGeom;
     std::unique_ptr<IntervalIndexedGeometry> index;

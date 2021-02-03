@@ -465,13 +465,16 @@ public:
     using TemplateSTRtreeImpl<ItemType, BoundsTraits>::TemplateSTRtreeImpl;
 };
 
-template<typename ItemType, typename BoundsTraits>
-class TemplateSTRtree<ItemType*, BoundsTraits> : public TemplateSTRtreeImpl<ItemType*, BoundsTraits>, public SpatialIndex {
+// When ItemType is a pointer and our bounds are geom::Envelope, adopt
+// the SpatialIndex interface which requires queries via an envelope
+// and items to be representable as void*.
+template<typename ItemType>
+class TemplateSTRtree<ItemType*, EnvelopeTraits> : public TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>, public SpatialIndex {
 public:
-    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::TemplateSTRtreeImpl;
-    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::insert;
-    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::query;
-    using TemplateSTRtreeImpl<ItemType*, BoundsTraits>::remove;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::TemplateSTRtreeImpl;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::insert;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::query;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::remove;
 
     // The SpatialIndex methods only work when we are storing a pointer type.
     void query(const geom::Envelope *queryEnv, std::vector<void*> &results) override {
