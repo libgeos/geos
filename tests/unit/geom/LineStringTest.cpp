@@ -527,5 +527,19 @@ void object::test<29>
     ensure(c != nullptr);
 }
 
+// releaseCoordinates
+template<>
+template<>
+void object::test<30>()
+{
+    auto ls = reader_.read<geos::geom::LineString>("LINESTRING (0 0, 10 10)");
+    auto env = ls->getEnvelopeInternal();
+    ensure_equals(*env, geos::geom::Envelope(0,10, 0, 10));
+
+    auto cs = ls->releaseCoordinates();
+    ensure_equals(cs->getSize(), 2u);
+}
+
+
 } // namespace tut
 

@@ -344,6 +344,11 @@ Envelope::distanceSquaredToCoordinate(const Coordinate & c, const Coordinate & p
     return dx*dx + dy*dy;
 }
 
+INLINE
+bool operator!=(const Envelope& a, const Envelope& b) {
+    return !(a == b);
+}
+
 } // namespace geos::geom
 } // namespace geos
 

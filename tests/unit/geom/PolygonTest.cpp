@@ -34,6 +34,10 @@ struct test_polygon_data {
     typedef std::unique_ptr<geos::geom::Polygon> PolygonAutoPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
+    using Geometry = geos::geom::Geometry;
+    using Envelope = geos::geom::Envelope;
+    using Polygon = geos::geom::Polygon;
+
     geos::geom::PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
@@ -630,6 +634,21 @@ void object::test<43>
     auto poly3 = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
     ensure("polygons with and without holes are not equal",
         poly->compareTo(poly3.get()) != 0);
+}
+
+template<>
+template<>
+void object::test<44>()
+{
+    auto poly = reader_.read<Polygon>("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2 3, 3 3, 3 2, 2 2))");
+    auto env = poly->getEnvelopeInternal();
+    ensure_equals(*env, Envelope(0,10, 0, 10));
+
+    auto shell = poly->releaseExteriorRing();
+    ensure_equals(*shell->getEnvelopeInternal(), Envelope(0, 10, 0, 10));
+
+    auto holes = poly->releaseInteriorRings();
+    ensure_equals(holes.size(), 1u);
 }
 
 } // namespace tut
