@@ -22,6 +22,8 @@
 #include <memory>
 #include <vector>
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -46,7 +48,7 @@ namespace util { // geos.geom.util
  *
  * @see GeometryFactory#buildGeometry
  */
-class GeometryCombiner {
+class GEOS_DLL GeometryCombiner {
 public:
     /** \brief
      * Copies a collection of geometries and combines the result.
