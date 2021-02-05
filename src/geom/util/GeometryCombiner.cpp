@@ -19,20 +19,15 @@
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/GeometryCollection.h>
 
 namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
 std::unique_ptr<Geometry>
-GeometryCombiner::combine(std::vector<std::unique_ptr<Geometry>> const& geoms)
+GeometryCombiner::combine(std::vector<std::unique_ptr<Geometry>>&& geoms)
 {
-    std::vector<const Geometry*> geomptrs;
-    for(const auto& g : geoms) {
-        geomptrs.push_back(g.get());
-    }
-    GeometryCombiner combiner(geomptrs);
+    GeometryCombiner combiner(std::move(geoms));
     return combiner.combine();
 }
 
@@ -55,6 +50,30 @@ GeometryCombiner::combine(const Geometry* g0, const Geometry* g1)
 }
 
 std::unique_ptr<Geometry>
+GeometryCombiner::combine(std::unique_ptr<Geometry> && g0,
+                          std::unique_ptr<Geometry> && g1)
+{
+    std::vector<std::unique_ptr<Geometry>> geoms(2);
+    geoms[0] = std::move(g0);
+    geoms[1] = std::move(g1);
+    GeometryCombiner combiner(std::move(geoms));
+    return combiner.combine();
+}
+
+std::unique_ptr<Geometry>
+GeometryCombiner::combine(std::unique_ptr<Geometry> && g0,
+                          std::unique_ptr<Geometry> && g1,
+                          std::unique_ptr<Geometry> && g2)
+{
+    std::vector<std::unique_ptr<Geometry>> geoms(3);
+    geoms[0] = std::move(g0);
+    geoms[1] = std::move(g1);
+    geoms[2] = std::move(g2);
+    GeometryCombiner combiner(std::move(geoms));
+    return combiner.combine();
+}
+
+std::unique_ptr<Geometry>
 GeometryCombiner::combine(const Geometry* g0, const Geometry* g1,
                           const Geometry* g2)
 {
@@ -67,51 +86,47 @@ GeometryCombiner::combine(const Geometry* g0, const Geometry* g1,
     return combiner.combine();
 }
 
-GeometryCombiner::GeometryCombiner(std::vector<const Geometry*> const& geoms)
-    : geomFactory(extractFactory(geoms)), skipEmpty(false), inputGeoms(geoms)
+GeometryCombiner::GeometryCombiner(std::vector<const Geometry*> const& geoms) : skipEmpty(false)
 {
+    for(const auto& geom : geoms) {
+        for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+            auto part = geom->getGeometryN(i);
+            inputGeoms.push_back(part->clone());
+        }
+    }
 }
 
-GeometryFactory const*
-GeometryCombiner::extractFactory(std::vector<const Geometry*> const& geoms)
+GeometryCombiner::GeometryCombiner(std::vector<std::unique_ptr<Geometry>> && geoms) : skipEmpty(false)
 {
-    return geoms.empty() ? nullptr : geoms.front()->getFactory();
+    for(auto& geom : geoms) {
+        auto coll = dynamic_cast<GeometryCollection *>(geom.get());
+        if (coll) {
+            for (auto &part : coll->releaseGeometries()) {
+                inputGeoms.push_back(std::move(part));
+            }
+        } else {
+            inputGeoms.push_back(std::move(geom));
+        }
+    }
 }
 
 std::unique_ptr<Geometry>
 GeometryCombiner::combine()
 {
-    std::vector<const Geometry*> elems;
+    auto geomFactory = inputGeoms.empty() ? GeometryFactory::getDefaultInstance() : inputGeoms.front()->getFactory();
 
-    for(const auto& geom : inputGeoms) {
-        extractElements(geom, elems);
-    }
-
-    if(elems.empty()) {
-        if(geomFactory != nullptr) {
-            return std::unique_ptr<Geometry>(geomFactory->createGeometryCollection());
-        }
-        return nullptr;
+    if (skipEmpty) {
+        inputGeoms.erase(std::remove_if(inputGeoms.begin(), inputGeoms.end(), [](std::unique_ptr<Geometry> & g) {
+            return g->isEmpty();
+        }), inputGeoms.end());
     }
 
     // return the "simplest possible" geometry
-    return std::unique_ptr<Geometry>(geomFactory->buildGeometry(elems));
+    return geomFactory->buildGeometry(std::move(inputGeoms));
 }
 
-void
-GeometryCombiner::extractElements(const Geometry* geom, std::vector<const Geometry*>& elems)
-{
-    if(geom == nullptr) {
-        return;
-    }
-
-    for(std::size_t i = 0; i < geom->getNumGeometries(); ++i) {
-        const Geometry* elemGeom = geom->getGeometryN(i);
-        if(skipEmpty && elemGeom->isEmpty()) {
-            continue;
-        }
-        elems.push_back(elemGeom);
-    }
+void GeometryCombiner::setSkipEmpty(bool b) {
+    skipEmpty = b;
 }
 
 } // namespace geos.geom.util
