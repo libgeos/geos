@@ -148,8 +148,8 @@ public:
      * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
      *              ownership of elements *and* vector are left to caller.
      */
-    static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
-    static geom::Geometry* Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun);
+    static std::unique_ptr<geom::Geometry> Union(std::vector<geom::Polygon*>* polys);
+    static std::unique_ptr<geom::Geometry> Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun);
 
     /** \brief
      * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
@@ -160,7 +160,7 @@ public:
      * @param unionStrategy strategy to apply
      */
     template <class T>
-    static geom::Geometry*
+    static std::unique_ptr<geom::Geometry>
     Union(T start, T end, UnionStrategy *unionStrategy)
     {
         std::vector<geom::Polygon*> polys;
@@ -177,7 +177,7 @@ public:
      * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
      *              Ownership of elements *and* vector are left to caller.
      */
-    static geom::Geometry* Union(const geom::MultiPolygon* polys);
+    static std::unique_ptr<geom::Geometry> Union(const geom::MultiPolygon* polys);
 
     /** \brief
      * Creates a new instance to union the given collection of
@@ -204,21 +204,12 @@ public:
      * @return the union of the input geometries
      * @return `null` if no input geometries were provided
      */
-    geom::Geometry* Union();
+    std::unique_ptr<geom::Geometry> Union();
 
 private:
 
     UnionStrategy* unionFunction;
     ClassicUnionStrategy defaultUnionFunction;
-
-    geom::Geometry* unionTree(index::strtree::ItemsList* geomTree);
-
-    /**
-     * Unions a list of geometries
-     * by treating the list as a flattened binary tree,
-     * and performing a cascaded union on the tree.
-     */
-    geom::Geometry* binaryUnion(GeometryListHolder* geoms);
 
     /**
      * Unions a section of a list using a recursive binary union on each half
@@ -229,17 +220,7 @@ private:
      * @param end the index after the end of the section
      * @return the union of the list section
      */
-    geom::Geometry* binaryUnion(GeometryListHolder* geoms, std::size_t start,
-                                std::size_t end);
-
-    /**
-     * Reduces a tree of geometries to a list of geometries
-     * by recursively unioning the subtrees in the list.
-     *
-     * @param geomTree a tree-structured list of geometries
-     * @return a list of Geometrys
-     */
-    GeometryListHolder* reduceToGeometries(index::strtree::ItemsList* geomTree);
+    std::unique_ptr<geom::Geometry> binaryUnion(const std::vector<const geom::Geometry*> & geoms, std::size_t start, std::size_t end);
 
     /**
      * Computes the union of two geometries,
@@ -250,7 +231,9 @@ private:
      * @return the union of the input(s)
      * @return null if both inputs are null
      */
-    geom::Geometry* unionSafe(geom::Geometry* g0, geom::Geometry* g1);
+    std::unique_ptr<geom::Geometry> unionSafe(const geom::Geometry* g0, const geom::Geometry* g1) const;
+
+    std::unique_ptr<geom::Geometry> unionSafe(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&);
 
     /**
      * Encapsulates the actual unioning of two polygonal geometries.
@@ -259,7 +242,9 @@ private:
      * @param g1
      * @return
      */
-    geom::Geometry* unionActual(geom::Geometry* g0, geom::Geometry* g1);
+    std::unique_ptr<geom::Geometry> unionActual(const geom::Geometry* g0, const geom::Geometry* g1) const;
+
+    std::unique_ptr<geom::Geometry> unionActual(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&) const;
 };
 
 

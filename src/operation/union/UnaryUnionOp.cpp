@@ -93,8 +93,7 @@ UnaryUnionOp::Union()
 
     GeomPtr unionPolygons;
     if(!polygons.empty()) {
-        unionPolygons.reset(CascadedPolygonUnion::Union(polygons.begin(),
-                            polygons.end(), unionFunction));
+        unionPolygons = CascadedPolygonUnion::Union(polygons.begin(), polygons.end(), unionFunction);
     }
 
     /*

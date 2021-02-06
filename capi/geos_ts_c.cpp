@@ -1424,9 +1424,9 @@ extern "C" {
                 throw IllegalArgumentException("Invalid argument (must be a MultiPolygon)");
             }
 
-            Geometry* g3 = CascadedPolygonUnion::Union(p);
+            auto g3 = CascadedPolygonUnion::Union(p);
             g3->setSRID(g1->getSRID());
-            return g3;
+            return g3.release();
         });
     }
 

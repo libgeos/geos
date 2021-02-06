@@ -65,6 +65,10 @@ public:
         insert(*item->getEnvelopeInternal(), std::forward<ItemType>(item));
     }
 
+    void insert(const ItemType& item) {
+        insert(*item->getEnvelopeInternal(), item);
+    }
+
     void insert(const BoundsType& itemEnv, ItemType&& item) {
         createLeafNode(std::forward<ItemType>(item), itemEnv);
     }
