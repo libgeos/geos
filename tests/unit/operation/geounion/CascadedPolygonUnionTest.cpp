@@ -59,7 +59,7 @@ unionIterated(
     return unionAll.release();
 }
 
-geos::geom::Geometry*
+std::unique_ptr<geos::geom::Geometry>
 unionCascaded(
     std::vector<geos::geom::Polygon*>* geoms)
 {

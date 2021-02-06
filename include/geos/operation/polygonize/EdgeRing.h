@@ -48,11 +48,6 @@ class Coordinate;
 namespace planargraph {
 class DirectedEdge;
 }
-namespace index {
-namespace strtree {
-class STRtree;
-}
-}
 }
 
 namespace geos {
