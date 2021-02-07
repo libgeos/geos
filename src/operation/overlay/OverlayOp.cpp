@@ -252,7 +252,7 @@ OverlayOp::copyPoints(uint8_t argIndex, const Envelope* env)
         assert(graphNode);
         const Coordinate& coord = graphNode->getCoordinate();
 
-        if(env && ! env->covers(coord)) {
+        if(env && ! env->covers(&coord)) {
             continue;
         }
 

@@ -91,13 +91,13 @@ public:
      *
      * @param  p  the Coordinate
      */
-    Envelope(const Coordinate& p);
+    explicit Envelope(const Coordinate& p);
 
     /** \brief
      * Create an Envelope from an Envelope string representation produced
      * by Envelope::toString()
      */
-    Envelope(const std::string& str);
+    explicit Envelope(const std::string& str);
 
     /** \brief
      * Test the point `q` to see whether it intersects the Envelope
@@ -138,7 +138,7 @@ public:
     /** \brief
      *  Initialize to a null Envelope.
      */
-    void init(void);
+    void init();
 
     /** \brief
      * Initialize an Envelope for a region defined by maximum and minimum values.
@@ -172,7 +172,7 @@ public:
      * Makes this `Envelope` a "null" envelope, that is, the envelope
      * of the empty geometry.
      */
-    void setToNull(void);
+    void setToNull();
 
     /** \brief
      * Returns `true` if this Envelope is a "null" envelope.
@@ -180,21 +180,21 @@ public:
      * @return `true` if this Envelope is uninitialized or is the
      *                envelope of the empty geometry.
      */
-    bool isNull(void) const;
+    bool isNull() const;
 
     /** \brief
      * Returns the difference between the maximum and minimum x values.
      *
      * @return  `max x - min x`, or 0 if this is a null Envelope
      */
-    double getWidth(void) const;
+    double getWidth() const;
 
     /** \brief
      * Returns the difference between the maximum and minimum y values.
      *
      * @return `max y - min y`, or 0 if this is a null Envelope
      */
-    double getHeight(void) const;
+    double getHeight() const;
 
     /** \brief
      * Gets the area of this envelope.
@@ -449,7 +449,7 @@ public:
      *
      * @return a `string` of the form `Env[minx:maxx,miny:maxy]`
      */
-    std::string toString(void) const;
+    std::string toString() const;
 
     /** \brief
      * Computes the distance between this and another Envelope.
@@ -499,7 +499,7 @@ private:
      * This is a generic function that really belongs in a utility
      * file somewhere
      */
-    std::vector<std::string> split(const std::string& str,
+    static std::vector<std::string> split(const std::string& str,
                                    const std::string& delimiters = " ");
 
     static double distance(double x0, double y0, double x1, double y1);

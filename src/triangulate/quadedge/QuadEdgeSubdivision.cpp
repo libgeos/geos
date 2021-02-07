@@ -74,6 +74,10 @@ QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope& env, double p_tol
 void
 QuadEdgeSubdivision::createFrame(const geom::Envelope& env)
 {
+    if (env.isNull()) {
+        throw util::IllegalArgumentException("Cannot create frame from empty Envelope.");
+    }
+
     double deltaX = env.getWidth();
     double deltaY = env.getHeight();
     double offset = 0.0;

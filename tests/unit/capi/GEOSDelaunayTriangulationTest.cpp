@@ -44,6 +44,7 @@ void object::test<1>
     ensure_equals(GEOSisEmpty(geom1_), 1);
 
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 0);
+    ensure (geom2_ != nullptr);
     ensure_equals(GEOSisEmpty(geom2_), 1);
     ensure_equals(GEOSGeomTypeId(geom2_), GEOS_GEOMETRYCOLLECTION);
 

@@ -38,7 +38,7 @@ void object::test<1>
     ensure_equals(empty.getHeight(), 0);
 }
 
-// 2 - Test of overriden constructor
+// 2 - Test of overridden constructor
 template<>
 template<>
 void object::test<2>
@@ -107,7 +107,7 @@ void object::test<5>
     ensure(!box.isNull());
 
     /* See http://trac.osgeo.org/geos/ticket/703 */
-    ensure(empty.equals(&empty));
+    ensure("empty envelopes are equal", empty.equals(&empty));
 
     ensure(!empty.equals(&zero));
     ensure(!zero.equals(&empty));
@@ -134,16 +134,19 @@ void object::test<6>
     ensure(!big.isNull());
 
     // Test empty envelope by reference
-    ensure("empty envelope is not empty!", !empty.contains(small));
-    ensure("empty envelope is not empty!", !small.contains(empty));
+    ensure("empty envelope does not contain non-empty envelope", !empty.contains(small));
+    ensure("non-empty envelope does not contain empty envelope", !small.contains(empty));
+    ensure("empty envelope does not contain self", !empty.contains(empty));
 
     // Test empty envelope by pointer
-    ensure("empty envelope is not empty!", !empty.contains(&small));
-    ensure("empty envelope is not empty!", !small.contains(&empty));
+    ensure("empty envelope does not contain non-empty envelope", !empty.contains(&small));
+    ensure("non-empty envelope does not contain empty envelope", !small.contains(&empty));
+    ensure("empty envelope does not contain self", !empty.contains(&empty));
 
     // Test non-empty envelope by reference
-    ensure(!small.contains(big));
-    ensure(big.contains(small));
+    ensure("small envelope does not contain big envelope", !small.contains(big));
+    ensure("big envelope contains small envelope", big.contains(small));
+    ensure("non-empty envelope contains itself", big.contains(big));
 
     // Test raw point
     ensure(small.contains(0, 0));
@@ -159,7 +162,7 @@ void object::test<6>
     ensure(small.contains(origin));
 }
 
-// Test of intersects()
+// Test of intersects() and disjoint()
 template<>
 template<>
 void object::test<7>
@@ -174,16 +177,27 @@ void object::test<7>
     ensure(!moved.isNull());
 
     // Test empty envelope by reference
-    ensure("empty envelope seems not empty!", !empty.intersects(with_origin));
-    ensure("empty envelope seems not empty!", !with_origin.intersects(empty));
+    ensure("empty envelope does not intersect non-empty envelope", !empty.intersects(with_origin));
+    ensure("non-empty envelope does not intersect empty envelope", !with_origin.intersects(empty));
+    ensure("empty envelope is disjoint with non-empty envelope", empty.disjoint(with_origin));
+    ensure("non-empty envelope is disjoint with empty envelope", with_origin.disjoint(empty));
 
     // Test empty envelope by pointer
-    ensure("empty envelope seems not empty!", !empty.intersects(&with_origin));
-    ensure("empty envelope seems not empty!", !with_origin.intersects(&empty));
+    ensure("empty envelope does not intersect non-empty envelope", !empty.intersects(&with_origin));
+    ensure("non-empty envelope does not intersect empty envelope", !with_origin.intersects(&empty));
+    ensure("empty envelope is disjoint with non-empty envelope", empty.disjoint(&with_origin));
+    ensure("non-empty envelope is disjoint with empty envelope", with_origin.disjoint(&empty));
+
+    // Test empty envelope does not intersect self
+    ensure("empty envelope does not intersect self", !empty.intersects(empty));
+    ensure("empty envelope is disjoint with self", empty.disjoint(empty));
 
     // Test non-empty envelope by reference
     ensure(with_origin.intersects(moved));
+    ensure(!with_origin.disjoint(moved));
+
     ensure(moved.intersects(with_origin));
+    ensure(!moved.disjoint(with_origin));
 
     // Test intersection with raw point
     ensure(with_origin.intersects(0, 0));
@@ -198,6 +212,7 @@ void object::test<7>
     ensure_equals(origin.z, 0);
     ensure(with_origin.intersects(origin));
 
+    ensure("empty envelope does not intersect coordinate", !empty.intersects(origin));
 }
 
 // Test of expand()
@@ -216,11 +231,13 @@ void object::test<8>
 
     // Expand box envelope to include null envelope
     box.expandToInclude(&empty);
-    ensure(box == exemplar);   // no change expected
+    ensure("expanding envelope to include null envelope has no effect",
+           box == exemplar);   // no change expected
 
     // Expand null envelope to include box envelope
     empty.expandToInclude(&box);
-    ensure(empty == exemplar);
+    ensure("expanding null envelope to include non-null envelope makes null envelope not null",
+           empty == exemplar);
 }
 
 // Second test of expand()

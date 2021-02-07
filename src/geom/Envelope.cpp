@@ -85,9 +85,11 @@ Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 bool
 Envelope::intersects(const Coordinate& a, const Coordinate& b) const
 {
-
+    // These comparisons look redundant, but an alternative using
+    // std::minmax performs no better and compiles down to more
+    // instructions.
     double envminx = (a.x < b.x) ? a.x : b.x;
-    if(envminx > maxx) {
+    if(!(maxx >= envminx)) { // awkward comparison catches cases where this->isNull()
         return false;
     }
 
@@ -116,7 +118,7 @@ Envelope::Envelope(const std::string& str)
     // Env[7.2:2.3,7.1:8.2]
 
     // extract out the values between the [ and ] characters
-    std::string::size_type index = str.find("[");
+    std::string::size_type index = str.find('[');
     std::string coordString = str.substr(index + 1, str.size() - 1 - 1);
 
     // now split apart the string on : and , characters
@@ -147,9 +149,6 @@ Envelope::init(Envelope env)
 bool
 Envelope::covers(double x, double y) const
 {
-    if(isNull()) {
-        return false;
-    }
     return x >= minx &&
            x <= maxx &&
            y >= miny &&
@@ -161,10 +160,6 @@ Envelope::covers(double x, double y) const
 bool
 Envelope::covers(const Envelope& other) const
 {
-    if(isNull() || other.isNull()) {
-        return false;
-    }
-
     return
         other.getMinX() >= minx &&
         other.getMaxX() <= maxx &&
@@ -208,16 +203,7 @@ Envelope::toString() const
 bool
 operator==(const Envelope& a, const Envelope& b)
 {
-    if(a.isNull()) {
-        return b.isNull();
-    }
-    if(b.isNull()) {
-        return a.isNull();
-    }
-    return a.getMaxX() == b.getMaxX() &&
-           a.getMaxY() == b.getMaxY() &&
-           a.getMinX() == b.getMinX() &&
-           a.getMinY() == b.getMinY();
+    return a.equals(&b);
 }
 
 /*public*/
@@ -303,10 +289,6 @@ Envelope::translate(double transX, double transY)
 void
 Envelope::expandBy(double deltaX, double deltaY)
 {
-    if(isNull()) {
-        return;
-    }
-
     minx -= deltaX;
     maxx += deltaX;
     miny -= deltaY;
