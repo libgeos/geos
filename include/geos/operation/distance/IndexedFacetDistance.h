@@ -99,7 +99,7 @@ public:
     std::vector<geom::Coordinate> nearestPoints(const geom::Geometry* g) const;
 
 private:
-    std::unique_ptr<geos::index::strtree::STRtree> cachedTree;
+    std::unique_ptr<geos::index::strtree::TemplateSTRtree<const FacetSequence*>> cachedTree;
 
 };
 }

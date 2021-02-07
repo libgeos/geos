@@ -46,47 +46,40 @@ IndexedFacetDistance::nearestPoints(const geom::Geometry* g1, const geom::Geomet
 double
 IndexedFacetDistance::distance(const Geometry* g) const
 {
-    struct : public ItemDistance {
-        double
-        distance(const ItemBoundable* item1, const ItemBoundable* item2) override
-        {
-            return static_cast<const FacetSequence*>(item1->getItem())->distance(*static_cast<const FacetSequence*>
-                    (item2->getItem()));
+    struct FacetDistance {
+        double operator()(const FacetSequence* a, const FacetSequence* b) {
+            return a->distance(*b);
         }
-    } itemDistance;
+    };
 
-    std::unique_ptr<STRtree> tree2(FacetSequenceTreeBuilder::build(g));
+    auto tree2 = FacetSequenceTreeBuilder::build(g);
+    auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
 
-    std::pair<const void*, const void*> obj = cachedTree->nearestNeighbour(tree2.get(),
-            dynamic_cast<ItemDistance*>(&itemDistance));
+    if (!nearest.first) {
+        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
+    }
 
-    const FacetSequence *fs1 = static_cast<const FacetSequence*>(obj.first);
-    const FacetSequence *fs2 = static_cast<const FacetSequence*>(obj.second);
-
-    double p_distance = fs1->distance(*fs2);
-
-    return p_distance;
+    return nearest.first->distance(*nearest.second);
 }
 
 std::vector<GeometryLocation>
 IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
 {
-    struct : public ItemDistance {
-        double
-        distance(const ItemBoundable* item1, const ItemBoundable* item2) override
+    struct FacetDistance {
+        double operator()(const FacetSequence* a, const FacetSequence* b) const
         {
-            return static_cast<const FacetSequence*>(item1->getItem())->distance(*static_cast<const FacetSequence*>
-                    (item2->getItem()));
+            return a->distance(*b);
         }
-    } itemDistance;
-    std::unique_ptr<STRtree> tree2(FacetSequenceTreeBuilder::build(g));
-    std::pair<const void*, const void*> obj = cachedTree->nearestNeighbour(tree2.get(),
-            dynamic_cast<ItemDistance*>(&itemDistance));
-    const FacetSequence *fs1 = static_cast<const FacetSequence*>(obj.first);
-    const FacetSequence *fs2 = static_cast<const FacetSequence*>(obj.second);
-    std::vector<GeometryLocation> locs;
-    locs = fs1->nearestLocations(*fs2);
-    return locs;
+    };
+
+    auto tree2 = FacetSequenceTreeBuilder::build(g);
+    auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
+
+    if (!nearest.first) {
+        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
+    }
+
+    return nearest.first->nearestLocations(*nearest.second);
 }
 
 std::vector<Coordinate>

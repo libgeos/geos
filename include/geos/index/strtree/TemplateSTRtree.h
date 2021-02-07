@@ -78,13 +78,31 @@ public:
     }
 
     template<typename ItemDistance>
-    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other) {
+    std::pair<ItemType, ItemType> nearestNeighbour(ItemDistance & distance) {
+        return nearestNeighbour(*this, distance);
+    }
+
+    template<typename ItemDistance>
+    std::pair<ItemType, ItemType> nearestNeighbour() {
+        ItemDistance id;
+        return nearestNeighbour(*this);
+    }
+
+    template<typename ItemDistance>
+    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other,
+                                                   ItemDistance & distance) {
         if (!getRoot() || !other.getRoot()) {
             return { nullptr, nullptr };
         }
 
-        TemplateSTRtreeDistance<ItemType, BoundsTraits, ItemDistance> td;
+        TemplateSTRtreeDistance<ItemType, BoundsTraits, ItemDistance> td(distance);
         return td.nearestNeighbour(*root, *other.root);
+    }
+
+    template<typename ItemDistance>
+    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other) {
+        ItemDistance id;
+        return nearestNeighbour(other, id);
     }
 
     template<typename Visitor>
@@ -124,28 +142,12 @@ public:
         return remove(itemEnv, *root, item);
     }
 
-protected:
-
-    NodeList nodes;
-    Node* root;
-    size_t nodeCapacity;
-    size_t numItems;
-
-    void createLeafNode(ItemType&& item, const BoundsType& env) {
-        nodes.emplace_back(std::forward<ItemType>(item), env);
-    }
-
-    void createLeafNode(const ItemType& item, const BoundsType& env) {
-        nodes.emplace_back(item, env);
-    }
-
-    void createBranchNode(const Node *begin, const Node *end) {
-        assert(nodes.size() < nodes.capacity());
-        nodes.emplace_back(begin, end);
-    }
-
     void build() {
         if (built()) {
+            return;
+        }
+
+        if (nodes.empty()) {
             return;
         }
 
@@ -169,6 +171,26 @@ protected:
         assert(finalSize == nodes.size());
 
         root = &nodes.back();
+    }
+
+protected:
+
+    NodeList nodes;
+    Node* root;
+    size_t nodeCapacity;
+    size_t numItems;
+
+    void createLeafNode(ItemType&& item, const BoundsType& env) {
+        nodes.emplace_back(std::forward<ItemType>(item), env);
+    }
+
+    void createLeafNode(const ItemType& item, const BoundsType& env) {
+        nodes.emplace_back(item, env);
+    }
+
+    void createBranchNode(const Node *begin, const Node *end) {
+        assert(nodes.size() < nodes.capacity());
+        nodes.emplace_back(begin, end);
     }
 
     // calculate what the tree size will be when it is build. This is simply

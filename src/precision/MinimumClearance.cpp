@@ -56,7 +56,7 @@ MinimumClearance::getLine()
 void
 MinimumClearance::compute()
 {
-    class MinClearanceDistance : public ItemDistance {
+    class MinClearanceDistance {
     private:
         double minDist;
         std::vector<Coordinate> minPts;
@@ -82,14 +82,9 @@ MinimumClearance::compute()
             return &minPts;
         }
 
-        double
-        distance(const ItemBoundable* b1, const ItemBoundable* b2) override
+        double operator()(const FacetSequence* fs1, const FacetSequence* fs2)
         {
-            FacetSequence* fs1 = static_cast<FacetSequence*>(b1->getItem());
-            FacetSequence* fs2 = static_cast<FacetSequence*>(b2->getItem());
-
             minDist = std::numeric_limits<double>::infinity();
-
             return distance(fs1, fs2);
         }
 
@@ -165,7 +160,7 @@ MinimumClearance::compute()
     };
 
     // already computed
-    if(minClearancePts.get() != nullptr) {
+    if(minClearancePts != nullptr) {
         return;
     }
 
@@ -181,11 +176,9 @@ MinimumClearance::compute()
 
     auto tree = FacetSequenceTreeBuilder::build(inputGeom);
     MinClearanceDistance mcd;
-    std::pair<const void*, const void*> nearest = tree->nearestNeighbour(&mcd);
+    auto nearest = tree->nearestNeighbour(mcd);
 
-    minClearance = mcd.distance(
-                       static_cast<const FacetSequence*>(nearest.first),
-                       static_cast<const FacetSequence*>(nearest.second));
+    minClearance = mcd.distance(nearest.first, nearest.second);
 
     const std::vector<Coordinate>* minClearancePtsVec = mcd.getCoordinates();
     minClearancePts->setAt((*minClearancePtsVec)[0], 0);

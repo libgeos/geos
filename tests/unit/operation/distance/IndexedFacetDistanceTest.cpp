@@ -351,16 +351,29 @@ void object::test<11>
     std::string wkt1("POINT(150 150)");
     GeomPtr g0(_wktreader.read(wkt0));
     GeomPtr g1(_wktreader.read(wkt1));
-    IndexedFacetDistance ifd(g0.get());
+    IndexedFacetDistance ifd0(g0.get());
+    IndexedFacetDistance ifd1(g1.get());
 
     try {
-        ifd.distance(g1.get());
+        ifd0.distance(g1.get());
         fail("IndexedFacedDistance::distance did not throw on empty input");
     }
     catch (const GEOSException&) { }
 
     try {
-        ifd.nearestPoints(g1.get());
+        ifd0.nearestPoints(g1.get());
+        fail("IndexedFacedDistance::nearestPoints did not throw on empty input");
+    }
+    catch (const GEOSException&) { }
+
+    try {
+        ifd1.distance(g0.get());
+        fail("IndexedFacedDistance::distance did not throw on empty input");
+    }
+    catch (const GEOSException&) { }
+
+    try {
+        ifd1.nearestPoints(g0.get());
         fail("IndexedFacedDistance::nearestPoints did not throw on empty input");
     }
     catch (const GEOSException&) { }

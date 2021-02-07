@@ -26,8 +26,8 @@ public:
     using Node = TemplateSTRNode<ItemType, BoundsTraits>;
     using BoundsType = typename BoundsTraits::BoundsType;
 
-    TemplateSTRNodePair(const Node &node1, const Node &node2)
-            : m_node1(&node1), m_node2(&node2), m_distance(distance()) {}
+    TemplateSTRNodePair(const Node &node1, const Node &node2, ItemDistance& id)
+            : m_node1(&node1), m_node2(&node2), m_distance(distance(id)) {}
 
     bool isLeaves() const {
         return getFirst().isLeaf() && getSecond().isLeaf();
@@ -50,10 +50,9 @@ public:
         return *m_node2;
     }
 
-    double distance() {
+    double distance(ItemDistance& id) {
         if (isLeaves()) {
-            // FIXME do we really need to instantiate ItemDistance?
-            return ItemDistance()(getFirst().getItem(), getSecond().getItem());
+            return id(getFirst().getItem(), getSecond().getItem());
         } else {
             return BoundsTraits::distance(getFirst().getBounds(), getSecond().getBounds());
         }

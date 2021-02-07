@@ -39,8 +39,10 @@ class TemplateSTRtreeDistance {
     using PairQueue = std::priority_queue <NodePair, std::vector<NodePair>, PairQueueCompare>;
 
 public:
+    TemplateSTRtreeDistance(ItemDistance & id) : m_id(id) {}
+
     ItemPair nearestNeighbour(const Node &root1, const Node &root2) {
-        NodePair initPair(root1, root2);
+        NodePair initPair(root1, root2, m_id);
         return nearestNeighbour(initPair);
     }
 
@@ -112,7 +114,7 @@ private:
         bool isComp2 = node2.isComposite();
 
         /**
-         * HEURISTIC: If both boundable are composite,
+         * HEURISTIC: If both boundables are composite,
          * choose the one with largest area to expand.
          * Otherwise, simply expand whichever is composite.
          */
@@ -140,14 +142,16 @@ private:
                 double minDistance) {
         for (const auto *child = nodeComposite.beginChildren();
              child < nodeComposite.endChildren(); ++child) {
-            NodePair sp = isFlipped ? NodePair(nodeOther, *child) : NodePair(*child, nodeOther);
+            NodePair sp = isFlipped ? NodePair(nodeOther, *child, m_id) : NodePair(*child, nodeOther, m_id);
 
             // only add to queue if this pair might contain the closest points
-            if (sp.getDistance() < minDistance) {
+            if (minDistance == std::numeric_limits<double>::infinity() || sp.getDistance() < minDistance) {
                 priQ.push(sp);
             }
         }
     }
+
+    ItemDistance& m_id;
 };
 }
 }
