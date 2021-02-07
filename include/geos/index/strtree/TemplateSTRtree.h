@@ -268,7 +268,7 @@ protected:
         // completely sorted. They need to be sorted enough for each node to end up
         // in the right vertical slice, but their relative position within the slice
         // doesn't matter. So we do a partial sort for each slice below instead.
-        //sortNodesX(begin, end);
+        sortNodes(begin, end);
 
         auto startOfSlice = begin;
         for (size_t j = 0; j < numSlices; j++) {
@@ -289,7 +289,7 @@ protected:
 
     void addParentNodesFromVerticalSlice(const NodeListIterator &begin, const NodeListIterator &end) {
         setSortValuesY(begin, end);
-        //sortNodesY(begin, end);
+        sortNodes(begin, end);
 
         // Arrange the nodes vertically and full up parent nodes sequentially until they're full.
         // A possible improvement would be to rewowk this such so that if we have 81 nodes we
@@ -300,7 +300,7 @@ protected:
             auto childrenForNode = std::min(nodeCapacity, childrenRemaining);
             auto lastChild = std::next(firstChild, childrenForNode);
 
-            partialSortNodes(firstChild, lastChild, end);
+            //partialSortNodes(firstChild, lastChild, end);
 
             // Ideally we would be able to store firstChild and lastChild instead of
             // having to convert them to pointers, but I wasn't sure how to access
@@ -326,7 +326,7 @@ protected:
         });
     }
 
-    void sortNodes(NodeListIterator &begin, NodeListIterator &end) {
+    void sortNodes(const NodeListIterator &begin, const NodeListIterator &end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return a.getSortVal() < b.getSortVal();
         });
