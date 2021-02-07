@@ -16,7 +16,7 @@
  ***********************************************************************/
 
 #include <geos/geom/prep/PreparedGeometryFactory.h>
-#include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
@@ -34,7 +34,7 @@
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
-#define GEOSSTRtree geos::index::strtree::STRtree
+#define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
