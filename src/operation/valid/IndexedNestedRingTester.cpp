@@ -41,17 +41,14 @@ IndexedNestedRingTester::isNonNested()
 {
     buildIndex();
 
-    std::vector<void*> results;
-    for(std::size_t i = 0, n = rings.size(); i < n; ++i) {
+    std::vector<const geom::LinearRing*> results;
+    for(const auto& outerRing : rings) {
         results.clear();
-
-        const geom::LinearRing* outerRing = rings[i];
 
         geos::algorithm::locate::IndexedPointInAreaLocator locator(*outerRing);
 
-        index->query(outerRing->getEnvelopeInternal(), results);
-        for(const auto& result : results) {
-            const geom::LinearRing* possibleInnerRing = static_cast<const geom::LinearRing*>(result);
+        index->query(*outerRing->getEnvelopeInternal(), results);
+        for(const auto& possibleInnerRing : results) {
             const geom::CoordinateSequence* possibleInnerRingPts = possibleInnerRing->getCoordinatesRO();
 
             if(outerRing == possibleInnerRing) {
@@ -94,21 +91,14 @@ IndexedNestedRingTester::isNonNested()
     return true;
 }
 
-IndexedNestedRingTester::~IndexedNestedRingTester()
-{
-    delete index;
-}
+IndexedNestedRingTester::~IndexedNestedRingTester() = default;
 
 void
 IndexedNestedRingTester::buildIndex()
 {
-    delete index;
-
-    index = new index::strtree::STRtree();
-    for(std::size_t i = 0, n = rings.size(); i < n; ++i) {
-        const geom::LinearRing* ring = rings[i];
-        const geom::Envelope* env = ring->getEnvelopeInternal();
-        index->insert(env, (void*)ring);
+    index.reset(new index::strtree::TemplateSTRtree<const geom::LinearRing*>(10, rings.size()));
+    for(const auto& ring : rings) {
+        index->insert(ring);
     }
 }
 

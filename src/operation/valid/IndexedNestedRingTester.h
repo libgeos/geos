@@ -22,6 +22,9 @@
 #include <cstddef>
 #include <vector> // for composition
 
+#include <geos/index/strtree/TemplateSTRtree.h>
+#include <memory>
+
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -90,8 +93,8 @@ private:
     /// Ownership of this vector elements are externally owned
     std::vector<const geom::LinearRing*> rings;
 
-    // Owned by us (use unique_ptr ?)
-    geos::index::SpatialIndex* index; // 'index' in JTS
+    // Owned by us
+    std::unique_ptr<geos::index::strtree::TemplateSTRtree<const geom::LinearRing*>> index;
 
     // Externally owned, if not null
     const geom::Coordinate* nestedPt;
