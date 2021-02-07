@@ -39,18 +39,18 @@ class TemplateSTRtreeDistance {
     using PairQueue = std::priority_queue <NodePair, std::vector<NodePair>, PairQueueCompare>;
 
 public:
-    TemplateSTRtreeDistance(ItemDistance & id) : m_id(id) {}
+    explicit TemplateSTRtreeDistance(ItemDistance & id) : m_id(id) {}
 
     ItemPair nearestNeighbour(const Node &root1, const Node &root2) {
         NodePair initPair(root1, root2, m_id);
         return nearestNeighbour(initPair);
     }
 
-private:
-
     ItemPair nearestNeighbour(NodePair &initPair) {
         return nearestNeighbour(initPair, std::numeric_limits<double>::infinity());
     }
+
+private:
 
     ItemPair nearestNeighbour(NodePair &initPair, double maxDistance) {
         double distanceLowerBound = maxDistance;

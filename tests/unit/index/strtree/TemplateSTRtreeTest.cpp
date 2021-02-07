@@ -301,6 +301,11 @@ void object::test<7>() {
         static void expandToInclude(BoundsType& a, const BoundsType& b) {
             a.expandToInclude(b);
         }
+
+        static bool isNull(const BoundsType & a) {
+            (void) a;
+            return false;
+        }
     };
 
     TemplateSTRtree<geom::LineSegment, BoxTraits> tree;

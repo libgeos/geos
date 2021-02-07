@@ -38,7 +38,7 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/Densifier.h>
-#include <geos/index/strtree/SimpleSTRtree.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
@@ -113,7 +113,7 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
-#define GEOSSTRtree geos::index::strtree::SimpleSTRtree
+#define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
@@ -299,6 +299,11 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
 public:
     CAPI_ItemVisitor(GEOSQueryCallback cb, void* ud)
         : ItemVisitor(), callback(cb), userdata(ud) {}
+
+    void operator()(void* item) {
+        callback(item, userdata);
+    }
+
     void
     visitItem(void* item) override
     {
@@ -3029,18 +3034,15 @@ extern "C" {
     {
         using namespace geos::index::strtree;
 
-        struct CustomItemDistance : public ItemDistance {
+        struct CustomItemDistance {
             CustomItemDistance(GEOSDistanceCallback p_distancefn, void* p_userdata)
                 : m_distancefn(p_distancefn), m_userdata(p_userdata) {}
 
             GEOSDistanceCallback m_distancefn;
             void* m_userdata;
 
-            double
-            distance(const ItemBoundable* item1, const ItemBoundable* item2) override
+            double operator()(const void* a, const void* b) const
             {
-                const void* a = item1->getItem();
-                const void* b = item2->getItem();
                 double d;
 
                 if(!m_distancefn(a, b, &d, m_userdata)) {
@@ -3051,14 +3053,19 @@ extern "C" {
             }
         };
 
+        struct GeometryDistance {
+            double operator()(void* a, void* b) const {
+                return static_cast<const Geometry*>(a)->distance(static_cast<const Geometry*>(b));
+            }
+        };
+
         return execute(extHandle, [&]() {
             if(distancefn) {
                 CustomItemDistance itemDistance(distancefn, userdata);
-                return tree->nearestNeighbour(itemEnvelope->getEnvelopeInternal(), item, &itemDistance);
+                return tree->nearestNeighbour(*itemEnvelope->getEnvelopeInternal(), (void*) item, itemDistance);
             }
             else {
-                GeometryItemDistance itemDistance = GeometryItemDistance();
-                return tree->nearestNeighbour(itemEnvelope->getEnvelopeInternal(), item, &itemDistance);
+                return tree->nearestNeighbour<GeometryDistance>(*itemEnvelope->getEnvelopeInternal(), (void*) item);
             }
         });
     }

@@ -70,11 +70,15 @@ public:
     }
 
     void insert(const BoundsType& itemEnv, ItemType&& item) {
-        createLeafNode(std::forward<ItemType>(item), itemEnv);
+        if (!BoundsTraits::isNull(itemEnv)) {
+            createLeafNode(std::forward<ItemType>(item), itemEnv);
+        }
     }
 
     void insert(const BoundsType& itemEnv, const ItemType& item) {
-        createLeafNode(item, itemEnv);
+        if (!BoundsTraits::isNull(itemEnv)) {
+            createLeafNode(item, itemEnv);
+        }
     }
 
     template<typename ItemDistance>
@@ -105,13 +109,34 @@ public:
         return nearestNeighbour(other, id);
     }
 
+    template<typename ItemDistance>
+    ItemType nearestNeighbour(const BoundsType& env, const ItemType& item, ItemDistance& itemDist) {
+        build();
+
+        if (getRoot() == nullptr) {
+            return nullptr;
+        }
+
+        TemplateSTRNode<ItemType, BoundsTraits> bnd(item, env);
+        TemplateSTRNodePair<ItemType, BoundsTraits, ItemDistance> pair(*getRoot(), bnd, itemDist);
+
+        TemplateSTRtreeDistance<ItemType, BoundsTraits, ItemDistance> td(itemDist);
+        return td.nearestNeighbour(pair).first;
+    }
+
+    template<typename ItemDistance>
+    ItemType nearestNeighbour(const BoundsType& env, const ItemType& item) {
+        ItemDistance id;
+        return nearestNeighbour(env, item, id);
+    }
+
     template<typename Visitor>
     void query(const BoundsType& queryEnv, Visitor &&visitor) {
         if (!built()) {
             build();
         }
 
-        if (root->boundsIntersect(queryEnv)) {
+        if (root && root->boundsIntersect(queryEnv)) {
             if (root->isLeaf()) {
                 visitor(root->getItem());
             } else {
@@ -140,6 +165,14 @@ public:
         }
 
         return remove(itemEnv, *root, item);
+    }
+
+    template<typename F>
+    void iterate(F&& func) {
+        auto n = built() ? numItems : nodes.size();
+        for (size_t i = 0; i < n; i++) {
+            func(nodes[i].getItem());
+        }
     }
 
     void build() {
@@ -246,7 +279,7 @@ protected:
             // Make sure that every node that should be in this slice ends up somewhere
             // between startOfSlice and endOfSlice. We don't require any ordering among
             // nodes between startOfSlice and endOfSlice.
-            partialSortNodes(startOfSlice, endOfSlice, end);
+            //partialSortNodes(startOfSlice, endOfSlice, end);
 
             addParentNodesFromVerticalSlice(startOfSlice, endOfSlice);
 
@@ -293,13 +326,11 @@ protected:
         });
     }
 
-#if 0
     void sortNodes(NodeListIterator &begin, NodeListIterator &end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return a.getSortVal() < b.getSortVal();
         });
     }
-#endif
 
     // Partially sort nodes between `begin` and `end` such that all nodes less than `mid` are placed before `mid`.
     void partialSortNodes(const NodeListIterator &begin, const NodeListIterator &mid, const NodeListIterator &end) {
@@ -457,6 +488,10 @@ struct EnvelopeTraits {
     static void expandToInclude(BoundsType& a, const BoundsType& b) {
         a.expandToInclude(b);
     }
+
+    static bool isNull(const BoundsType& a) {
+        return a.isNull();
+    }
 };
 
 struct IntervalTraits {
@@ -480,6 +515,11 @@ struct IntervalTraits {
 
     static void expandToInclude(BoundsType& a, const BoundsType& b) {
         a.expandToInclude(&b);
+    }
+
+    static bool isNull(const BoundsType& a) {
+        (void) a;
+        return false;
     }
 };
 
