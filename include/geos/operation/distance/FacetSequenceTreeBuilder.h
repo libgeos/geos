@@ -20,7 +20,7 @@
 #define GEOS_OPERATION_DISTANCE_FACETSEQUENCETREEBUILDER_H
 
 #include <geos/index/ItemVisitor.h>
-#include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/operation/distance/FacetSequence.h>
@@ -41,11 +41,13 @@ private:
                                   std::vector<FacetSequence> & sections);
     static std::vector<FacetSequence> computeFacetSequences(const geom::Geometry* g);
 
-    class FacetSequenceTree : public geos::index::strtree::STRtree {
+    class FacetSequenceTree : public geos::index::strtree::TemplateSTRtree<const FacetSequence*> {
     public:
-        FacetSequenceTree(std::vector<FacetSequence> &&seq) : STRtree(STR_TREE_NODE_CAPACITY), sequences(seq) {
+        // TODO support TemplateSTRtree<std::unique_ptr<FacetSequence>> and dispence with holding vector.
+        FacetSequenceTree(std::vector<FacetSequence> &&seq) :
+            TemplateSTRtree(STR_TREE_NODE_CAPACITY, seq.size()), sequences(seq) {
             for (auto& fs : sequences) {
-                STRtree::insert(fs.getEnvelope(), &fs);
+                TemplateSTRtree::insert(fs.getEnvelope(), &fs);
             }
         }
 
@@ -60,7 +62,7 @@ public:
      * The FacetSequences are owned by the tree and are automatically deleted by
      * the tree on destruction.
      */
-    static std::unique_ptr<geos::index::strtree::STRtree> build(const geom::Geometry* g);
+    static std::unique_ptr<geos::index::strtree::TemplateSTRtree<const FacetSequence*>> build(const geom::Geometry* g);
 };
 }
 }

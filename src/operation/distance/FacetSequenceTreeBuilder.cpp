@@ -27,10 +27,10 @@ namespace geos {
 namespace operation {
 namespace distance {
 
-std::unique_ptr<STRtree>
+std::unique_ptr<TemplateSTRtree<const FacetSequence*>>
 FacetSequenceTreeBuilder::build(const Geometry* g)
 {
-    auto tree = std::unique_ptr<STRtree>(new FacetSequenceTree(computeFacetSequences(g)));
+    std::unique_ptr<TemplateSTRtree<const FacetSequence*>> tree(new FacetSequenceTree(computeFacetSequences(g)));
 
     tree->build();
     return tree;
