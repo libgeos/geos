@@ -88,10 +88,10 @@ INLINE void
 Envelope::expandToInclude(const Envelope* other)
 {
     if(isNull()) {
-        minx = other->getMinX();
-        maxx = other->getMaxX();
-        miny = other->getMinY();
-        maxy = other->getMaxY();
+        minx = other->minx;
+        maxx = other->maxx;
+        miny = other->miny;
+        maxy = other->maxy;
     }
     else {
         if(other->minx < minx) {
@@ -139,6 +139,7 @@ Envelope::expandToInclude(double x, double y)
 INLINE double
 Envelope::getMaxY() const
 {
+    assert(!isNull());
     return maxy;
 }
 
@@ -146,6 +147,7 @@ Envelope::getMaxY() const
 INLINE double
 Envelope::getMaxX() const
 {
+    assert(!isNull());
     return maxx;
 }
 
@@ -153,6 +155,7 @@ Envelope::getMaxX() const
 INLINE double
 Envelope::getMinY() const
 {
+    assert(!isNull());
     return miny;
 }
 
@@ -160,6 +163,7 @@ Envelope::getMinY() const
 INLINE double
 Envelope::getMinX() const
 {
+    assert(!isNull());
     return minx;
 }
 

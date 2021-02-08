@@ -161,10 +161,10 @@ bool
 Envelope::covers(const Envelope& other) const
 {
     return
-        other.getMinX() >= minx &&
-        other.getMaxX() <= maxx &&
-        other.getMinY() >= miny &&
-        other.getMaxY() <= maxy;
+        other.minx >= minx &&
+        other.maxx <= maxx &&
+        other.miny >= miny &&
+        other.maxy <= maxy;
 }
 
 /*public*/
@@ -174,10 +174,10 @@ Envelope::equals(const Envelope* other) const
     if(isNull()) {
         return other->isNull();
     }
-    return  other->getMinX() == minx &&
-            other->getMaxX() == maxx &&
-            other->getMinY() == miny &&
-            other->getMaxY() == maxy;
+    return  other->minx == minx &&
+            other->maxx == maxx &&
+            other->miny == miny &&
+            other->maxy == maxy;
 }
 
 /* public */

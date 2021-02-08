@@ -83,17 +83,17 @@ RingClipper::intersection(const Coordinate& a, const Coordinate& b, int edgeInde
 {
     switch (edgeIndex) {
     case BOX_BOTTOM:
-        rsltPt = Coordinate(intersectionLineY(a, b, clipEnvMinY), clipEnvMinY);
+        rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMinY()), clipEnv.getMinY());
         break;
     case BOX_RIGHT:
-        rsltPt = Coordinate(clipEnvMaxX, intersectionLineX(a, b, clipEnvMaxX));
+        rsltPt = Coordinate(clipEnv.getMaxX(), intersectionLineX(a, b, clipEnv.getMaxX()));
         break;
     case BOX_TOP:
-        rsltPt = Coordinate(intersectionLineY(a, b, clipEnvMaxY), clipEnvMaxY);
+        rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMaxY()), clipEnv.getMaxY());
         break;
     case BOX_LEFT:
     default:
-        rsltPt = Coordinate(clipEnvMinX, intersectionLineX(a, b, clipEnvMinX));
+        rsltPt = Coordinate(clipEnv.getMinX(), intersectionLineX(a, b, clipEnv.getMinX()));
     }
     return;
 }
@@ -120,20 +120,24 @@ RingClipper::intersectionLineX(const Coordinate& a, const Coordinate& b, double 
 bool
 RingClipper::isInsideEdge(const Coordinate& p, int edgeIndex) const
 {
+    if (clipEnv.isNull()) {
+        return false;
+    }
+
     bool isInside = false;
     switch (edgeIndex) {
     case BOX_BOTTOM: // bottom
-        isInside = p.y > clipEnvMinY;
+        isInside = p.y > clipEnv.getMinY();
         break;
     case BOX_RIGHT: // right
-        isInside = p.x < clipEnvMaxX;
+        isInside = p.x < clipEnv.getMaxX();
         break;
     case BOX_TOP: // top
-        isInside = p.y < clipEnvMaxY;
+        isInside = p.y < clipEnv.getMaxY();
         break;
     case BOX_LEFT:
     default: // left
-        isInside = p.x > clipEnvMinX;
+        isInside = p.x > clipEnv.getMinX();
     }
     return isInside;
 }
