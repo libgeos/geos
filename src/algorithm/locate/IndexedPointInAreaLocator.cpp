@@ -111,6 +111,12 @@ IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
 
     algorithm::RayCrossingCounter rcc(*p);
 
+#if 0
+    index->query(p->y, p->y, [&rcc](const SegmentView* ls) {
+        rcc.countSegment(*ls->p0, *ls->p1);
+    });
+#endif
+
     index->query(p->y, p->y, [&rcc](const SegmentView& ls) {
         rcc.countSegment(*ls.p0, *ls.p1);
     });

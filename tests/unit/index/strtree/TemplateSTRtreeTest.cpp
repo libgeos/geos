@@ -285,6 +285,7 @@ void object::test<7>() {
 
     struct BoxTraits {
         using BoundsType = FloatBox;
+        using TwoDimensional = std::false_type;
 
         static bool intersects(const BoundsType & a, const BoundsType & b) {
             return a.intersects(b);

@@ -262,13 +262,13 @@ protected:
 
         // Cache a sort value to avoid computing it repeatedly. Not a huge win, but
         // we aren't doing anything else with the last 8 bytes in our Node struct.
-        setSortValuesX(begin, end);
+        //setSortValuesX(begin, end);
 
         // We could sort all of the nodes here, but we don't actually need them to be
         // completely sorted. They need to be sorted enough for each node to end up
         // in the right vertical slice, but their relative position within the slice
         // doesn't matter. So we do a partial sort for each slice below instead.
-        sortNodes(begin, end);
+        sortNodesX(begin, end);
 
         auto startOfSlice = begin;
         for (size_t j = 0; j < numSlices; j++) {
@@ -288,9 +288,9 @@ protected:
     }
 
     void addParentNodesFromVerticalSlice(const NodeListIterator &begin, const NodeListIterator &end) {
-        if (BoundsTraits::shouldSortY) {
-            setSortValuesY(begin, end);
-            sortNodes(begin, end);
+        if (BoundsTraits::TwoDimensional::value) {
+            //setSortValuesY(begin, end);
+            sortNodesY(begin, end);
         }
 
         // Arrange the nodes vertically and full up parent nodes sequentially until they're full.
@@ -331,6 +331,18 @@ protected:
     void sortNodes(const NodeListIterator &begin, const NodeListIterator &end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return a.getSortVal() < b.getSortVal();
+        });
+    }
+
+    void sortNodesX(const NodeListIterator &begin, const NodeListIterator &end) {
+        std::sort(begin, end, [](const Node &a, const Node &b) {
+            return BoundsTraits::getX(a.getBounds()) < BoundsTraits::getX(b.getBounds());
+        });
+    }
+
+    void sortNodesY(const NodeListIterator &begin, const NodeListIterator &end) {
+        std::sort(begin, end, [](const Node &a, const Node &b) {
+            return BoundsTraits::getY(a.getBounds()) < BoundsTraits::getY(b.getBounds());
         });
     }
 
@@ -462,8 +474,7 @@ public:
 
 struct EnvelopeTraits {
     using BoundsType = geom::Envelope;
-
-    static constexpr bool shouldSortY = true;
+    using TwoDimensional = std::true_type;
 
     static bool intersects(const BoundsType& a, const BoundsType& b) {
         return a.intersects(b);
@@ -482,11 +493,11 @@ struct EnvelopeTraits {
     }
 
     static double getX(const BoundsType& a) {
-        return 0.5*(a.getMinX() + a.getMaxX());
+        return a.getMinX() + a.getMaxX();
     }
 
     static double getY(const BoundsType& a) {
-        return 0.5*(a.getMinY() + a.getMaxY());
+        return a.getMinY() + a.getMaxY();
     }
 
     static void expandToInclude(BoundsType& a, const BoundsType& b) {
@@ -500,8 +511,7 @@ struct EnvelopeTraits {
 
 struct IntervalTraits {
     using BoundsType = Interval;
-
-    static constexpr bool shouldSortY = false;
+    using TwoDimensional = std::false_type;
 
     static bool intersects(const BoundsType& a, const BoundsType& b) {
         return a.intersects(&b);
@@ -512,11 +522,11 @@ struct IntervalTraits {
     }
 
     static double getX(const BoundsType& a) {
-        return a.getCentre();
+        return a.getMin() + a.getMax();
     }
 
     static double getY(const BoundsType& a) {
-        return a.getCentre();
+        return a.getMin() + a.getMax();
     }
 
     static void expandToInclude(BoundsType& a, const BoundsType& b) {
