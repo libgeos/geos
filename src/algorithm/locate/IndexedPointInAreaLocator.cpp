@@ -70,7 +70,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::Coordina
 {
     for(std::size_t i = 1, ni = pts->size(); i < ni; i++) {
         SegmentView seg(&pts->getAt(i-1), &pts->getAt(i));
-        auto r = std::minmax(seg.p0->y, seg.p1->y);
+        auto r = std::minmax(seg.p0().y, seg.p1().y);
 
         index.insert(index::strtree::Interval(r.first, r.second), seg);
     }
@@ -112,7 +112,7 @@ IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
     algorithm::RayCrossingCounter rcc(*p);
 
     index->query(p->y, p->y, [&rcc](const SegmentView& ls) {
-        rcc.countSegment(*ls.p0, *ls.p1);
+        rcc.countSegment(ls.p0(), ls.p1());
     });
 
     return rcc.getLocation();

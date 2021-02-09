@@ -55,10 +55,22 @@ namespace locate { // geos::algorithm::locate
 class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
     struct SegmentView {
-        SegmentView(const geom::Coordinate* p_p0, const geom::Coordinate* p_p1) : p0(p_p0), p1(p_p1) {}
+        SegmentView(const geom::Coordinate* p_p0, const geom::Coordinate* p_p1) : m_p0(p_p0) {
+            // All GEOS CoordinateSequences store their coordinates sequentially.
+            // Should that ever change, this assert will fail.
+            (void) p_p1;
+            assert(p_p0 + 1 == p_p1);
+        }
 
-        const geom::Coordinate* p0;
-        const geom::Coordinate* p1;
+        const geom::Coordinate& p0() const {
+            return *m_p0;
+        }
+
+        const geom::Coordinate& p1() const {
+            return *(m_p0 + 1);
+        }
+
+        const geom::Coordinate* m_p0;
     };
 
     class IntervalIndexedGeometry {
