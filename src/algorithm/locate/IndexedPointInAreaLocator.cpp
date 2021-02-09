@@ -39,12 +39,8 @@ namespace locate {
 // private:
 //
 IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry(const geom::Geometry& g)
-    : isEmpty(0)
 {
-    if (g.isEmpty())
-        isEmpty = true;
-    else
-        init(g);
+    init(g);
 }
 
 void

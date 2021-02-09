@@ -77,7 +77,6 @@ private:
     private:
 
         index::strtree::TemplateSTRtree<SegmentView, index::strtree::IntervalTraits> index;
-        bool isEmpty;
 
         void init(const geom::Geometry& g);
         void addLine(const geom::CoordinateSequence* pts);
