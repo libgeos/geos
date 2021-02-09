@@ -288,11 +288,13 @@ protected:
     }
 
     void addParentNodesFromVerticalSlice(const NodeListIterator &begin, const NodeListIterator &end) {
-        setSortValuesY(begin, end);
-        sortNodes(begin, end);
+        if (BoundsTraits::shouldSortY) {
+            setSortValuesY(begin, end);
+            sortNodes(begin, end);
+        }
 
         // Arrange the nodes vertically and full up parent nodes sequentially until they're full.
-        // A possible improvement would be to rewowk this such so that if we have 81 nodes we
+        // A possible improvement would be to rework this such so that if we have 81 nodes we
         // put 9 into each parent instead of 10 or 1.
         auto firstChild = begin;
         while (firstChild != end) {
@@ -461,6 +463,8 @@ public:
 struct EnvelopeTraits {
     using BoundsType = geom::Envelope;
 
+    static constexpr bool shouldSortY = true;
+
     static bool intersects(const BoundsType& a, const BoundsType& b) {
         return a.intersects(b);
     }
@@ -496,6 +500,8 @@ struct EnvelopeTraits {
 
 struct IntervalTraits {
     using BoundsType = Interval;
+
+    static constexpr bool shouldSortY = false;
 
     static bool intersects(const BoundsType& a, const BoundsType& b) {
         return a.intersects(&b);
