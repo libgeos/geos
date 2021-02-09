@@ -553,9 +553,32 @@ template<>
 template<>
 void object::test<43> ()
 {
+    set_test_name("testPolygonLineIntersectionOrder");
     std::string a = "POLYGON ((1 1, 1 9, 9 9, 9 7, 3 7, 3 3, 9 3, 9 1, 1 1))";
     std::string b = "MULTILINESTRING ((2 10, 2 0), (4 10, 4 0))";
     std::string exp = "MULTILINESTRING ((2 9, 2 1), (4 9, 4 7), (4 3, 4 1))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<44> ()
+{
+    set_test_name("testPolygonLineVerticalntersection");
+    std::string a = "POLYGON ((-200 -200, 200 -200, 200 200, -200 200, -200 -200))";
+    std::string b = "LINESTRING (-100 100, -100 -100)";
+    std::string exp = "LINESTRING (-100 100, -100 -100)";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<45> ()
+{
+    set_test_name("testPolygonLineHorizontalIntersection");
+    std::string a = "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90))";
+    std::string b = "LINESTRING (20 50, 80 50)";
+    std::string exp = "LINESTRING (20 50, 80 50)";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
 }
 
