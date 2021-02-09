@@ -25,7 +25,7 @@ Changes in 3.9.0
   - SimpleSTRTree spatial index implementation (Paul Ramsey)
   - Add support for pkg-config for GEOS C API (#1073, Mike Taves)
 
-- Improvements:
+- Fixes/Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
   - Improve performance of GEOSisValid (Dan Baston)
   - Update geos-config tool for consistency
@@ -37,6 +37,7 @@ Changes in 3.9.0
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
   - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
   - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
+  - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
 
 - Changes:
   - Drop SWIG bindings, including for Ruby and Python (#1076, Mike Taves)
