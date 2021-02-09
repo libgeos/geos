@@ -10,6 +10,8 @@ the algorithms used by [PostGIS](http://www.postgis.net/), the
 
 More information is available the [project homepage](https://trac.osgeo.org/geos).
 
+The official Git repository is at [OSGEO](http://geos.osgeo.org/).
+
 ## Build status
 
 | branch / CI | Debbie | Winnie | Dronie | GitLab CI | AppVeyor | GitHub | Bessie  | Bessie32 |
