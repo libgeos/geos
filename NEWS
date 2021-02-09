@@ -7,7 +7,7 @@ Changes in 3.9.1
   - Allow build on Apple ARM64 (Taras Zakharko)
   - Fix buffer to use largest enclosed area for invalid rings (#732, Paul Ramsey)
   - Preserve ordering of lines in overlay results (Martin Davis)
-
+  - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
 
 
 Changes in 3.9.0
