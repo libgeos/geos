@@ -8,9 +8,10 @@ Changes in 3.10.0
   - Full doxygen of the C-API (Paul Ramsey)
   - CAPI: GEOSDensify (Brendan Ward)
 
-- Improvements:
+- Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier and DPSimplifier (Martin Davis)
+  - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
 
 Changes in 3.9.0
 2020-12-09
@@ -37,7 +38,6 @@ Changes in 3.9.0
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
   - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
   - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
-  - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
 
 - Changes:
   - Drop SWIG bindings, including for Ruby and Python (#1076, Mike Taves)
