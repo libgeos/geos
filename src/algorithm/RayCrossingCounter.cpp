@@ -142,7 +142,7 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 
 
 geom::Location
-RayCrossingCounter::getLocation()
+RayCrossingCounter::getLocation() const
 {
     if(isPointOnSegment) {
         return geom::Location::BOUNDARY;
@@ -159,7 +159,7 @@ RayCrossingCounter::getLocation()
 
 
 bool
-RayCrossingCounter::isPointInPolygon()
+RayCrossingCounter::isPointInPolygon() const
 {
     return getLocation() != geom::Location::EXTERIOR;
 }

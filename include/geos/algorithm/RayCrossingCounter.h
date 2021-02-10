@@ -117,7 +117,7 @@ public:
      * @return `true` if the point lies exactly on a segment
      */
     bool
-    isOnSegment()
+    isOnSegment() const
     {
         return isPointOnSegment;
     }
@@ -132,7 +132,7 @@ public:
      *
      * @return the Location of the point
      */
-    geom::Location getLocation();
+    geom::Location getLocation() const;
 
     /** \brief
      * Tests whether the point lies in or on the ring, polygon or
@@ -143,7 +143,7 @@ public:
      *
      * @return `true` if the point lies in or on the supplied polygon
      */
-    bool isPointInPolygon();
+    bool isPointInPolygon() const;
 
 };
 
