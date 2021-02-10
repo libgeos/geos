@@ -1,5 +1,0 @@
-To build Doxygen documentation use:
-
-	make doxygen-html
-
-Take a look at example.cpp to get started.

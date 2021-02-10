@@ -34,10 +34,12 @@ namespace geom { // geos::geom
 
 /*public*/
 INLINE
-Envelope::Envelope()
-{
-    init();
-}
+Envelope::Envelope() :
+    minx(std::numeric_limits<double>::quiet_NaN()),
+    maxx(std::numeric_limits<double>::quiet_NaN()),
+    miny(std::numeric_limits<double>::quiet_NaN()),
+    maxy(std::numeric_limits<double>::quiet_NaN())
+{}
 
 /*public*/
 INLINE
@@ -85,14 +87,11 @@ Envelope::expandToInclude(const Envelope& other)
 INLINE void
 Envelope::expandToInclude(const Envelope* other)
 {
-    if(other->isNull()) {
-        return;
-    }
     if(isNull()) {
-        minx = other->getMinX();
-        maxx = other->getMaxX();
-        miny = other->getMinY();
-        maxy = other->getMaxY();
+        minx = other->minx;
+        maxx = other->maxx;
+        miny = other->miny;
+        maxy = other->maxy;
     }
     else {
         if(other->minx < minx) {
@@ -140,6 +139,7 @@ Envelope::expandToInclude(double x, double y)
 INLINE double
 Envelope::getMaxY() const
 {
+    assert(!isNull());
     return maxy;
 }
 
@@ -147,6 +147,7 @@ Envelope::getMaxY() const
 INLINE double
 Envelope::getMaxX() const
 {
+    assert(!isNull());
     return maxx;
 }
 
@@ -154,6 +155,7 @@ Envelope::getMaxX() const
 INLINE double
 Envelope::getMinY() const
 {
+    assert(!isNull());
     return miny;
 }
 
@@ -161,6 +163,7 @@ Envelope::getMinY() const
 INLINE double
 Envelope::getMinX() const
 {
+    assert(!isNull());
     return minx;
 }
 
@@ -246,21 +249,17 @@ Envelope::intersects(const Envelope& other) const
 INLINE bool
 Envelope::isNull(void) const
 {
-    return maxx < minx;
+    return std::isnan(maxx);
 }
 
 /*public*/
 INLINE bool
 Envelope::intersects(const Envelope* other) const
 {
-    // Optimized to reduce function calls
-    if(isNull() || other->isNull()) {
-        return false;
-    }
-    return !(other->minx > maxx ||
-             other->maxx < minx ||
-             other->miny > maxy ||
-             other->maxy < miny);
+    return other->minx <= maxx &&
+           other->maxx >= minx &&
+           other->miny <= maxy &&
+           other->maxy >= miny;
 }
 
 /*public*/
@@ -281,13 +280,10 @@ Envelope::disjoint(const Envelope& other) const
 INLINE bool
 Envelope::disjoint(const Envelope* other) const
 {
-    if (isNull() || other->isNull()) {
-        return true;
-    }
-    return other->minx > maxx ||
-        other->maxx < minx ||
-        other->miny > maxy ||
-        other->maxy < miny;
+    return !(other->minx <= maxx ||
+             other->maxx >= minx ||
+             other->miny <= maxy ||
+             other->maxy >= miny);
 }
 
 
@@ -302,10 +298,7 @@ Envelope::covers(const Coordinate* p) const
 INLINE void
 Envelope::setToNull()
 {
-    minx = 0;
-    maxx = -1;
-    miny = 0;
-    maxy = -1;
+    minx = maxx = miny = maxy = std::numeric_limits<double>::quiet_NaN();
 }
 
 INLINE double

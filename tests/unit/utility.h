@@ -125,6 +125,7 @@ ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
     ensure(lhs != 0 && rhs != 0 && lhs != rhs);
 }
 
+
 template <typename T>
 inline void
 ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
@@ -189,7 +190,21 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
     // }
 }
 
+template<typename T>
+inline void
+ensure_equals_geometry(const T& lhs, const char* rhs, double tolerance = 0.0) {
+    geos::io::WKTReader reader(lhs->getFactory());
+    auto rhs_geom = reader.read(rhs);
+    ensure_equals_geometry(lhs, rhs_geom.get(), tolerance);
+}
 
+template<typename T>
+inline void
+ensure_equals_geometry(const T& lhs, const std::string& rhs, double tolerance = 0.0) {
+    geos::io::WKTReader reader(lhs->getFactory());
+    auto rhs_geom = reader.read(rhs);
+    ensure_equals_geometry(lhs, rhs_geom.get(), tolerance);
+}
 
 template <>
 inline void

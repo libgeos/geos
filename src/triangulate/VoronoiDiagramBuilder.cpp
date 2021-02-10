@@ -77,7 +77,11 @@ VoronoiDiagramBuilder::create()
         return;
     }
 
-    diagramEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
+    if (siteCoords->isEmpty()) {
+        return;
+    }
+
+    diagramEnv = siteCoords->getEnvelope();
     //adding buffer around the final envelope
     double expandBy = std::max(diagramEnv.getWidth(), diagramEnv.getHeight());
     diagramEnv.expandBy(expandBy);
@@ -106,8 +110,11 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 {
     create();
 
-    auto polys = subdiv->getVoronoiCellPolygons(geomFact);
-    auto ret = clipGeometryCollection(polys, diagramEnv);
+    std::unique_ptr<GeometryCollection> ret;
+    if (subdiv) {
+        auto polys = subdiv->getVoronoiCellPolygons(geomFact);
+        ret = clipGeometryCollection(polys, diagramEnv);
+    }
 
     if (ret == nullptr) {
         return std::unique_ptr<geom::GeometryCollection>(geomFact.createGeometryCollection());
@@ -120,6 +127,11 @@ std::unique_ptr<geom::Geometry>
 VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
 {
     create();
+
+    if (!subdiv) {
+        return geomFact.createMultiLineString();
+    }
+
     std::unique_ptr<geom::MultiLineString> edges = subdiv->getVoronoiDiagramEdges(geomFact);
     if(edges->isEmpty()) {
         return std::unique_ptr<Geometry>(edges.release());

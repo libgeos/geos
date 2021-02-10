@@ -265,7 +265,7 @@ OverlayNGRobust::snapTolerance(const Geometry* geom)
 double
 OverlayNGRobust::ordinateMagnitude(const Geometry* geom)
 {
-    if (geom == nullptr) return 0;
+    if (geom == nullptr || geom->isEmpty()) return 0;
     const Envelope* env = geom->getEnvelopeInternal();
     double magMax = std::max(
         std::abs(env->getMaxX()),

@@ -101,10 +101,15 @@ DelaunayTriangulationBuilder::create()
         return;
     }
 
-    Envelope siteEnv;
-    siteCoords ->expandEnvelope(siteEnv);
+    if (siteCoords->isEmpty()) {
+        return;
+
+    }
+
+    Envelope siteEnv = siteCoords->getEnvelope();
     auto vertices = toVertices(*siteCoords);
-    std::sort(vertices.begin(), vertices.end()); // Best performance from locator when inserting points near each other
+    std::sort(vertices.begin(),
+              vertices.end()); // Best performance from locator when inserting points near each other
 
     subdiv.reset(new quadedge::QuadEdgeSubdivision(siteEnv, tolerance));
     IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv.get());
@@ -123,6 +128,10 @@ DelaunayTriangulationBuilder::getEdges(
     const GeometryFactory& geomFact)
 {
     create();
+    if (!subdiv) {
+        return geomFact.createMultiLineString();
+    }
+
     return subdiv->getEdges(geomFact);
 }
 
@@ -131,15 +140,17 @@ DelaunayTriangulationBuilder::getTriangles(
     const geom::GeometryFactory& geomFact)
 {
     create();
+    if (!subdiv) {
+        return geomFact.createGeometryCollection();
+    }
+
     return subdiv->getTriangles(geomFact);
 }
 
 geom::Envelope
 DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
 {
-    Envelope env;
-    coords.expandEnvelope(env);
-    return env;
+    return coords.getEnvelope();
 }
 
 

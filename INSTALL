@@ -7,24 +7,7 @@ compiler.
 
 ### Unix
 
-GEOS can be built on Unix systems using either the autotools or CMake build
-systems.
-
-#### Using Autotools:
-
-When building GEOS using autotools, a `configure` script must first be generated
-using the `autogen.sh` file included in the root of the repository:
-
-    ./autogen.sh
-
-An out-of-tree build can then be initiated by creating a subdirectory and
-running the generated `configure` script from that subdirectory:
-
-    mkdir obj && cd obj && ../configure
-
-Once the `configure` script has run, GEOS can be built by running `make` and
-installed by running `make install`. The test suite can be run using `make
-check`.
+GEOS can be built on Unix systems using the CMake build system.
 
 #### Using CMake:
 

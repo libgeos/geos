@@ -21,6 +21,7 @@
 
 #include <math.h>
 #include <memory>
+#include <cstring>
 
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/HCoordinate.h>
@@ -112,10 +113,7 @@ public:
     inline bool
     equals(const Vertex& _x) const
     {
-        if(p.x == _x.getX() && p.y == _x.getY()) {
-            return true;
-        }
-        return false;
+        return p.equals2D(_x.p);
     }
 
     inline bool

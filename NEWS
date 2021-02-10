@@ -8,9 +8,10 @@ Changes in 3.10.0
   - Full doxygen of the C-API (Paul Ramsey)
   - CAPI: GEOSDensify (Brendan Ward)
 
-- Improvements:
+- Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier and DPSimplifier (Martin Davis)
+  - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
 
 Changes in 3.9.0
 2020-12-09
@@ -25,7 +26,7 @@ Changes in 3.9.0
   - SimpleSTRTree spatial index implementation (Paul Ramsey)
   - Add support for pkg-config for GEOS C API (#1073, Mike Taves)
 
-- Improvements:
+- Fixes/Improvements:
   - Stack allocate segments in OverlapUnion (Paul Ramsey)
   - Improve performance of GEOSisValid (Dan Baston)
   - Update geos-config tool for consistency
