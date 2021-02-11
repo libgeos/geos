@@ -9,11 +9,11 @@
 # the terms of the GNU Lesser General Public Licence as published
 # by the Free Software Foundation.
 # See the COPYING file for more information.
-
+export REL_PATH=${WORKSPACE}/rel-${GEOS_VER}w${OS_BUILD}
 rm -rf build
 mkdir -p build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX:PATH=../rel-${GEOS_VER}w${OS_BUILD} ../
+cmake -DCMAKE_INSTALL_PREFIX:PATH=${REL_PATH} ../
 make && make install
 [ -f CMakeCache.txt ] && \
 ctest --output-on-failure . || \
