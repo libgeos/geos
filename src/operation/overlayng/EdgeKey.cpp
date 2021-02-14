@@ -19,11 +19,6 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-EdgeKey::EdgeKey(const Edge* edge)
-{
-    initPoints(edge);
-}
-
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos

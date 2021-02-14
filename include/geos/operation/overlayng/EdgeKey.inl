@@ -22,6 +22,12 @@ namespace geos {
 namespace operation {
 namespace overlayng {
 
+INLINE
+EdgeKey::EdgeKey(const Edge* edge)
+{
+    initPoints(edge);
+}
+
 /*private*/
 INLINE void
 EdgeKey::initPoints(const Edge* edge)
