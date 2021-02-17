@@ -55,34 +55,6 @@ Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 
 /*public*/
 bool
-Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
-                     const Coordinate& q1, const Coordinate& q2)
-{
-    double minq = std::min(q1.x, q2.x);
-    double maxq = std::max(q1.x, q2.x);
-    double minp = std::min(p1.x, p2.x);
-    double maxp = std::max(p1.x, p2.x);
-    if(minp > maxq) {
-        return false;
-    }
-    if(maxp < minq) {
-        return false;
-    }
-    minq = std::min(q1.y, q2.y);
-    maxq = std::max(q1.y, q2.y);
-    minp = std::min(p1.y, p2.y);
-    maxp = std::max(p1.y, p2.y);
-    if(minp > maxq) {
-        return false;
-    }
-    if(maxp < minq) {
-        return false;
-    }
-    return true;
-}
-
-/*public*/
-bool
 Envelope::intersects(const Coordinate& a, const Coordinate& b) const
 {
     // These comparisons look redundant, but an alternative using
