@@ -32,6 +32,26 @@ namespace geos {
 namespace index {
 namespace strtree {
 
+/**
+ * \brief
+ * A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm.
+ * For one- or two-dimensional spatial data.
+ *
+ * The STR packed R-tree is simple to implement and maximizes space
+ * utilization; that is, as many leaves as possible are filled to capacity.
+ * Overlap between nodes is far less than in a basic R-tree. However, once the
+ * tree has been built (explicitly or on the first call to #query), items may
+ * not be added or removed.
+ *
+ * A user will instantiate `TemplateSTRtree` instead of `TemplateSTRtreeImpl`;
+ * this structure is used so that `TemplateSTRtree` can implement the
+ * requirements of the `SpatialIndex` interface, which is only possible when
+ * `ItemType` is a pointer.
+ *
+ * Described in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial
+ * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002.
+ *
+ */
 template<typename ItemType, typename BoundsTraits>
 class TemplateSTRtreeImpl {
 public:
@@ -40,58 +60,126 @@ public:
     using NodeListIterator = typename NodeList::iterator;
     using BoundsType = typename BoundsTraits::BoundsType;
 
+    class Iterator : public std::iterator<std::forward_iterator_tag, ItemType> {
+    public:
+        Iterator(typename NodeList::const_iterator && iter,
+                 typename NodeList::const_iterator && end) : m_iter(iter), m_end(end) {
+            skipDeleted();
+        }
+
+        const ItemType& operator*() const {
+            return m_iter->getItem();
+        }
+
+        Iterator& operator++() {
+            m_iter++;
+            skipDeleted();
+            return *this;
+        }
+
+        friend bool operator==(const Iterator& a, const Iterator& b) {
+            return a.m_iter == b.m_iter;
+        }
+
+        friend bool operator!=(const Iterator& a, const Iterator& b) {
+            return a.m_iter != b.m_iter;
+        }
+
+    private:
+        void skipDeleted() {
+            while(m_iter->isDeleted() && m_iter != m_end) {
+                m_iter++;
+            }
+        }
+
+        typename NodeList::const_iterator m_iter;
+        typename NodeList::const_iterator m_end;
+    };
+
+    class Items {
+    public:
+        explicit Items(TemplateSTRtreeImpl& tree) : m_tree(tree) {}
+
+        Iterator begin() {
+            return Iterator(m_tree.nodes.cbegin(),
+                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+        }
+
+        Iterator end() {
+            return Iterator(std::next(m_tree.nodes.cbegin(), m_tree.numItems),
+                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+        }
+    private:
+        TemplateSTRtreeImpl& m_tree;
+    };
+
+    /// \defgroup construct Constructors
+    /// @{
+
+    /**
+     * Constructs a tree with the given maximum number of child nodes that
+     * a node may have.
+     */
     explicit TemplateSTRtreeImpl(size_t p_nodeCapacity = 10) : root(nullptr), nodeCapacity(p_nodeCapacity) {}
 
+    /**
+     * Constructs a tree with the given maximum number of child nodes that
+     * a node may have, with the expected total number of items in the tree used
+     * to pre-allocate storage.
+     */
     TemplateSTRtreeImpl(size_t p_nodeCapacity, size_t itemCapacity) : root(nullptr), nodeCapacity(p_nodeCapacity) {
         auto finalSize = treeSize(itemCapacity);
         nodes.reserve(finalSize);
     }
 
-protected:
-    // Prevent instantiation of base class.
-    ~TemplateSTRtreeImpl() {}
-public:
+    /// @}
+    /// \defgroup insert Insertion
+    /// @{
 
-    bool built() const {
-        return root != nullptr;
-    }
+    // FIXME remove hardcoded ->getEnvelopeInternal
 
-    const Node* getRoot() {
-        build();
-        return root;
-    }
-
+    /** Move the given item into the tree */
     void insert(ItemType&& item) {
-        insert(*item->getEnvelopeInternal(), std::forward<ItemType>(item));
+        insert(BoundsTraits::fromItem(item), std::forward<ItemType>(item));
     }
 
+    /** Insert a copy of the given item into the tree */
     void insert(const ItemType& item) {
-        insert(*item->getEnvelopeInternal(), item);
+        insert(BoundsTraits::fromItem(item), item);
     }
 
+    /** Move the given item into the tree */
     void insert(const BoundsType& itemEnv, ItemType&& item) {
         if (!BoundsTraits::isNull(itemEnv)) {
             createLeafNode(std::forward<ItemType>(item), itemEnv);
         }
     }
 
+    /** Insert a copy of the given item into the tree */
     void insert(const BoundsType& itemEnv, const ItemType& item) {
         if (!BoundsTraits::isNull(itemEnv)) {
             createLeafNode(item, itemEnv);
         }
     }
 
+    /// @}
+    /// \defgroup NN Nearest-neighbor
+    /// @{
+
+    /** Determine the two closest items in the tree using distance metric `distance`. */
     template<typename ItemDistance>
-    std::pair<ItemType, ItemType> nearestNeighbour(ItemDistance & distance) {
+    std::pair<ItemType, ItemType> nearestNeighbour(ItemDistance& distance) {
         return nearestNeighbour(*this, distance);
     }
 
+    /** Determine the two closest items in the tree using distance metric `distance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour() {
         ItemDistance id;
         return nearestNeighbour(*this);
     }
 
+    /** Determine the two closest items this tree and `other` tree using distance metric `distance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other,
                                                    ItemDistance & distance) {
@@ -103,6 +191,7 @@ public:
         return td.nearestNeighbour(*root, *other.root);
     }
 
+    /** Determine the two closest items this tree and `other` tree using distance metric `distance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other) {
         ItemDistance id;
@@ -130,6 +219,10 @@ public:
         return nearestNeighbour(env, item, id);
     }
 
+    /// @}
+    /// \defgroup query Query
+    /// @{
+
     template<typename Visitor>
     void query(const BoundsType& queryEnv, Visitor &&visitor) {
         if (!built()) {
@@ -151,6 +244,18 @@ public:
         });
     }
 
+    template<typename F>
+    void iterate(F&& func) {
+        auto n = built() ? numItems : nodes.size();
+        for (size_t i = 0; i < n; i++) {
+            func(nodes[i].getItem());
+        }
+    }
+
+    /// @}
+    /// \defgroup remove Item removal
+    /// @{
+
     bool remove(const BoundsType& itemEnv, const ItemType& item) {
         if (root == nullptr) {
             return false;
@@ -167,14 +272,24 @@ public:
         return remove(itemEnv, *root, item);
     }
 
-    template<typename F>
-    void iterate(F&& func) {
-        auto n = built() ? numItems : nodes.size();
-        for (size_t i = 0; i < n; i++) {
-            func(nodes[i].getItem());
-        }
+    /// @}
+    /// \defgroup introspect Introspection
+    /// @{
+
+    /** Determine whether the tree has been built, and no more items may be added. */
+    bool built() const {
+        return root != nullptr;
     }
 
+    /** Determine whether the tree has been built, and no more items may be added. */
+    const Node* getRoot() {
+        build();
+        return root;
+    }
+
+    /// @}
+
+    /** Build the tree if it has not already been built. */
     void build() {
         if (built()) {
             return;
@@ -207,11 +322,13 @@ public:
     }
 
 protected:
+    NodeList nodes;      //**< a list of all leaf and branch nodes in the tree. */
+    Node* root;          //**< a pointer to the root node, if the tree has been built. */
+    size_t nodeCapacity; //*< maximum number of children of each node */
+    size_t numItems;     //*< total number of items in the tree, if it has been built. */
 
-    NodeList nodes;
-    Node* root;
-    size_t nodeCapacity;
-    size_t numItems;
+    // Prevent instantiation of base class.
+    ~TemplateSTRtreeImpl() = default;
 
     void createLeafNode(ItemType&& item, const BoundsType& env) {
         nodes.emplace_back(std::forward<ItemType>(item), env);
@@ -260,10 +377,6 @@ protected:
         auto numSlices = sliceCount(numChildren);
         auto nodesPerSlice = sliceCapacity(numChildren, numSlices);
 
-        // Cache a sort value to avoid computing it repeatedly. Not a huge win, but
-        // we aren't doing anything else with the last 8 bytes in our Node struct.
-        //setSortValuesX(begin, end);
-
         // We could sort all of the nodes here, but we don't actually need them to be
         // completely sorted. They need to be sorted enough for each node to end up
         // in the right vertical slice, but their relative position within the slice
@@ -289,7 +402,6 @@ protected:
 
     void addParentNodesFromVerticalSlice(const NodeListIterator &begin, const NodeListIterator &end) {
         if (BoundsTraits::TwoDimensional::value) {
-            //setSortValuesY(begin, end);
             sortNodesY(begin, end);
         }
 
@@ -316,24 +428,6 @@ protected:
         }
     }
 
-    void setSortValuesX(const NodeListIterator &begin, const NodeListIterator &end) {
-        std::for_each(begin, end, [](Node &n) {
-            n.setSortVal(BoundsTraits::getX(n.getBounds()));
-        });
-    }
-
-    void setSortValuesY(const NodeListIterator &begin, const NodeListIterator &end) {
-        std::for_each(begin, end, [](Node &n) {
-            n.setSortVal(BoundsTraits::getY(n.getBounds()));
-        });
-    }
-
-    void sortNodes(const NodeListIterator &begin, const NodeListIterator &end) {
-        std::sort(begin, end, [](const Node &a, const Node &b) {
-            return a.getSortVal() < b.getSortVal();
-        });
-    }
-
     void sortNodesX(const NodeListIterator &begin, const NodeListIterator &end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return BoundsTraits::getX(a.getBounds()) < BoundsTraits::getX(b.getBounds());
@@ -343,13 +437,6 @@ protected:
     void sortNodesY(const NodeListIterator &begin, const NodeListIterator &end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return BoundsTraits::getY(a.getBounds()) < BoundsTraits::getY(b.getBounds());
-        });
-    }
-
-    // Partially sort nodes between `begin` and `end` such that all nodes less than `mid` are placed before `mid`.
-    void partialSortNodes(const NodeListIterator &begin, const NodeListIterator &mid, const NodeListIterator &end) {
-        std::nth_element(begin, mid, end, [](const Node &a, const Node &b) {
-            return a.getSortVal() < b.getSortVal();
         });
     }
 
@@ -409,59 +496,6 @@ protected:
         return static_cast<size_t>(std::ceil(static_cast<double>(numNodes) / static_cast<double>(numSlices)));
     }
 
-    class Iterator : public std::iterator<std::forward_iterator_tag, ItemType> {
-    public:
-        Iterator(typename NodeList::const_iterator && iter,
-                 typename NodeList::const_iterator && end) : m_iter(iter), m_end(end) {
-            skipDeleted();
-        }
-
-        const ItemType& operator*() const {
-            return m_iter->getItem();
-        }
-
-        Iterator& operator++() {
-            m_iter++;
-            skipDeleted();
-            return *this;
-        }
-
-        friend bool operator==(const Iterator& a, const Iterator& b) {
-            return a.m_iter == b.m_iter;
-        }
-
-        friend bool operator!=(const Iterator& a, const Iterator& b) {
-            return a.m_iter != b.m_iter;
-        }
-
-    private:
-        void skipDeleted() {
-            while(m_iter->isDeleted() && m_iter != m_end) {
-                m_iter++;
-            }
-        }
-
-        typename NodeList::const_iterator m_iter;
-        typename NodeList::const_iterator m_end;
-    };
-
-    class Items {
-    public:
-        explicit Items(TemplateSTRtreeImpl<ItemType, BoundsTraits>& tree) : m_tree(tree) {}
-
-        Iterator begin() {
-            return Iterator(m_tree.nodes.cbegin(),
-                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
-        }
-
-        Iterator end() {
-            return Iterator(std::next(m_tree.nodes.cbegin(), m_tree.numItems),
-                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
-        }
-    private:
-
-        TemplateSTRtreeImpl<ItemType, BoundsTraits>& m_tree;
-    };
 
 public:
     Items items() {
@@ -490,6 +524,16 @@ struct EnvelopeTraits {
 
     static BoundsType empty() {
         return {};
+    }
+
+    template<typename ItemType>
+    static const BoundsType& fromItem(const ItemType& i) {
+        return *(i->getEnvelopeInternal());
+    }
+
+    template<typename ItemType>
+    static const BoundsType& fromItem(ItemType && i) {
+        return *(i->getEnvelopeInternal());
     }
 
     static double getX(const BoundsType& a) {
