@@ -40,7 +40,7 @@ namespace strtree {
  * The STR packed R-tree is simple to implement and maximizes space
  * utilization; that is, as many leaves as possible are filled to capacity.
  * Overlap between nodes is far less than in a basic R-tree. However, once the
- * tree has been built (explicitly or on the first call to #query), items may
+ * tree has been built (explicitly or on the first call to `query`), items may
  * not be added or removed.
  *
  * A user will instantiate `TemplateSTRtree` instead of `TemplateSTRtreeImpl`;
@@ -62,8 +62,8 @@ public:
 
     class Iterator : public std::iterator<std::forward_iterator_tag, ItemType> {
     public:
-        Iterator(typename NodeList::const_iterator && iter,
-                 typename NodeList::const_iterator && end) : m_iter(iter), m_end(end) {
+        Iterator(typename NodeList::const_iterator&& iter,
+                 typename NodeList::const_iterator&& end) : m_iter(iter), m_end(end) {
             skipDeleted();
         }
 
@@ -120,14 +120,21 @@ public:
      * Constructs a tree with the given maximum number of child nodes that
      * a node may have.
      */
-    explicit TemplateSTRtreeImpl(size_t p_nodeCapacity = 10) : root(nullptr), nodeCapacity(p_nodeCapacity) {}
+    explicit TemplateSTRtreeImpl(size_t p_nodeCapacity = 10) :
+        root(nullptr),
+        nodeCapacity(p_nodeCapacity),
+        numItems(0)
+        {}
 
     /**
      * Constructs a tree with the given maximum number of child nodes that
      * a node may have, with the expected total number of items in the tree used
      * to pre-allocate storage.
      */
-    TemplateSTRtreeImpl(size_t p_nodeCapacity, size_t itemCapacity) : root(nullptr), nodeCapacity(p_nodeCapacity) {
+    TemplateSTRtreeImpl(size_t p_nodeCapacity, size_t itemCapacity) :
+        root(nullptr),
+        nodeCapacity(p_nodeCapacity),
+        numItems(0) {
         auto finalSize = treeSize(itemCapacity);
         nodes.reserve(finalSize);
     }
@@ -193,7 +200,7 @@ public:
 
     /** Determine the two closest items this tree and `other` tree using distance metric `distance`. */
     template<typename ItemDistance>
-    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits> & other) {
+    std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits>& other) {
         ItemDistance id;
         return nearestNeighbour(other, id);
     }
@@ -244,6 +251,18 @@ public:
         });
     }
 
+    /**
+     * Returns a depth-first iterator over all items in the tree.
+     */
+    Items items() {
+        build();
+        return Items(*this);
+    }
+
+    /**
+     * Iterate over all items added thus far.  Explicitly does not build
+     * the tree.
+     */
     template<typename F>
     void iterate(F&& func) {
         auto n = built() ? numItems : nodes.size();
@@ -369,7 +388,7 @@ protected:
         return nodesInTree;
     }
 
-    void createParentNodes(const NodeListIterator &begin, const NodeListIterator &end) {
+    void createParentNodes(const NodeListIterator& begin, const NodeListIterator& end) {
         // Arrange child nodes in two dimensions.
         // First, divide them into vertical slices of a given size (left-to-right)
         // Then create nodes within those slices (bottom-to-top)
@@ -400,7 +419,7 @@ protected:
         }
     }
 
-    void addParentNodesFromVerticalSlice(const NodeListIterator &begin, const NodeListIterator &end) {
+    void addParentNodesFromVerticalSlice(const NodeListIterator& begin, const NodeListIterator& end) {
         if (BoundsTraits::TwoDimensional::value) {
             sortNodesY(begin, end);
         }
@@ -428,13 +447,13 @@ protected:
         }
     }
 
-    void sortNodesX(const NodeListIterator &begin, const NodeListIterator &end) {
+    void sortNodesX(const NodeListIterator& begin, const NodeListIterator& end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return BoundsTraits::getX(a.getBounds()) < BoundsTraits::getX(b.getBounds());
         });
     }
 
-    void sortNodesY(const NodeListIterator &begin, const NodeListIterator &end) {
+    void sortNodesY(const NodeListIterator& begin, const NodeListIterator& end) {
         std::sort(begin, end, [](const Node &a, const Node &b) {
             return BoundsTraits::getY(a.getBounds()) < BoundsTraits::getY(b.getBounds());
         });
@@ -495,15 +514,6 @@ protected:
     static size_t sliceCapacity(size_t numNodes, size_t numSlices) {
         return static_cast<size_t>(std::ceil(static_cast<double>(numNodes) / static_cast<double>(numSlices)));
     }
-
-
-public:
-    Items items() {
-        build();
-        return Items(*this);
-    }
-
-
 };
 
 struct EnvelopeTraits {
@@ -514,7 +524,7 @@ struct EnvelopeTraits {
         return a.intersects(b);
     }
 
-    static double size(const BoundsType & a) {
+    static double size(const BoundsType& a) {
         return a.getArea();
     }
 
@@ -532,7 +542,7 @@ struct EnvelopeTraits {
     }
 
     template<typename ItemType>
-    static const BoundsType& fromItem(ItemType && i) {
+    static const BoundsType& fromItem(ItemType&& i) {
         return *(i->getEnvelopeInternal());
     }
 
@@ -561,7 +571,7 @@ struct IntervalTraits {
         return a.intersects(&b);
     }
 
-    static double size(const BoundsType & a) {
+    static double size(const BoundsType& a) {
         return a.getWidth();
     }
 
@@ -602,23 +612,23 @@ public:
     using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::remove;
 
     // The SpatialIndex methods only work when we are storing a pointer type.
-    void query(const geom::Envelope *queryEnv, std::vector<void*> &results) override {
+    void query(const geom::Envelope* queryEnv, std::vector<void*>& results) override {
         query(*queryEnv, [&results](const ItemType* x) {
             results.push_back(const_cast<void*>(static_cast<const void*>(x)));
         });
     }
 
-    void query(const geom::Envelope *queryEnv, ItemVisitor &visitor) override {
+    void query(const geom::Envelope* queryEnv, ItemVisitor& visitor) override {
         query(*queryEnv, [&visitor](const ItemType* x) {
             visitor.visitItem(const_cast<void*>(static_cast<const void*>(x)));
         });
     }
 
-    bool remove(const geom::Envelope *itemEnv, void* item) override {
+    bool remove(const geom::Envelope* itemEnv, void* item) override {
         return remove(*itemEnv, static_cast<ItemType*>(item));
     }
 
-    void insert(const geom::Envelope *itemEnv, void *item) override {
+    void insert(const geom::Envelope* itemEnv, void* item) override {
         insert(*itemEnv, std::move(static_cast<ItemType*>(item)));
     }
 };

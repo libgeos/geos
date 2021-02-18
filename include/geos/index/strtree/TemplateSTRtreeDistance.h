@@ -31,28 +31,28 @@ class TemplateSTRtreeDistance {
     using ItemPair = std::pair<ItemType, ItemType>;
 
     struct PairQueueCompare {
-        bool operator()(const NodePair &a, const NodePair &b) {
+        bool operator()(const NodePair& a, const NodePair& b) {
             return a.getDistance() > b.getDistance();
         }
     };
 
-    using PairQueue = std::priority_queue <NodePair, std::vector<NodePair>, PairQueueCompare>;
+    using PairQueue = std::priority_queue<NodePair, std::vector<NodePair>, PairQueueCompare>;
 
 public:
-    explicit TemplateSTRtreeDistance(ItemDistance & id) : m_id(id) {}
+    explicit TemplateSTRtreeDistance(ItemDistance& id) : m_id(id) {}
 
-    ItemPair nearestNeighbour(const Node &root1, const Node &root2) {
+    ItemPair nearestNeighbour(const Node& root1, const Node& root2) {
         NodePair initPair(root1, root2, m_id);
         return nearestNeighbour(initPair);
     }
 
-    ItemPair nearestNeighbour(NodePair &initPair) {
+    ItemPair nearestNeighbour(NodePair& initPair) {
         return nearestNeighbour(initPair, std::numeric_limits<double>::infinity());
     }
 
 private:
 
-    ItemPair nearestNeighbour(NodePair &initPair, double maxDistance) {
+    ItemPair nearestNeighbour(NodePair& initPair, double maxDistance) {
         double distanceLowerBound = maxDistance;
         std::unique_ptr<NodePair> minPair;
 
@@ -106,9 +106,9 @@ private:
         return minPair->getItems();
     }
 
-    void expandToQueue(const NodePair &pair, PairQueue &priQ, double minDistance) {
-        const Node &node1 = pair.getFirst();
-        const Node &node2 = pair.getSecond();
+    void expandToQueue(const NodePair& pair, PairQueue& priQ, double minDistance) {
+        const Node& node1 = pair.getFirst();
+        const Node& node2 = pair.getSecond();
 
         bool isComp1 = node1.isComposite();
         bool isComp2 = node2.isComposite();
@@ -138,7 +138,7 @@ private:
 
     }
 
-    void expand(const Node &nodeComposite, const Node &nodeOther, bool isFlipped, PairQueue &priQ,
+    void expand(const Node &nodeComposite, const Node &nodeOther, bool isFlipped, PairQueue& priQ,
                 double minDistance) {
         for (const auto *child = nodeComposite.beginChildren();
              child < nodeComposite.endChildren(); ++child) {

@@ -24,7 +24,6 @@ template<typename ItemType, typename BoundsTraits, typename ItemDistance>
 class TemplateSTRNodePair {
 public:
     using Node = TemplateSTRNode<ItemType, BoundsTraits>;
-    using BoundsType = typename BoundsTraits::BoundsType;
 
     TemplateSTRNodePair(const Node &node1, const Node &node2, ItemDistance& id)
             : m_node1(&node1), m_node2(&node2), m_distance(distance(id)) {}
