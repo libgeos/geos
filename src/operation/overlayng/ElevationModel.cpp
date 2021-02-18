@@ -112,12 +112,10 @@ ElevationModel::add(const Geometry& geom)
 
         void filter_ro(const geom::CoordinateSequence& seq, std::size_t i) override
         {
-#if 0
             if (! seq.hasZ()) {
                 hasZ = false;;
                 return;
             }
-#endif
             const Coordinate& c = seq.getAt(i);
 #if GEOS_DEBUG
             std::cout << "Coordinate " << i << " of added geom is: "
