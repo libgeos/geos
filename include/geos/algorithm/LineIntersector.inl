@@ -21,7 +21,9 @@
 #define GEOS_ALGORITHM_LINEINTERSECTOR_INL
 
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/Intersection.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
 
 namespace geos {
 namespace algorithm {
@@ -62,6 +64,27 @@ LineIntersector::isIntersection(const geom::Coordinate& pt) const
         }
     }
     return false;
+}
+
+/*private*/
+INLINE bool
+LineIntersector::isInSegmentEnvelopes(const geom::Coordinate& pt) const
+{
+    geom::Envelope env0(*inputLines[0][0], *inputLines[0][1]);
+    geom::Envelope env1(*inputLines[1][0], *inputLines[1][1]);
+    return env0.contains(pt) && env1.contains(pt);
+}
+
+/*private*/
+INLINE geom::Coordinate
+LineIntersector::intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                  const geom::Coordinate& q1, const geom::Coordinate& q2) const
+{
+    geom::Coordinate ptInt = Intersection::intersection(p1, p2, q1, q2);
+    if (ptInt.isNull()) {
+        ptInt = nearestEndpoint(p1, p2, q1, q2);
+    }
+    return ptInt;
 }
 
 /* private static */

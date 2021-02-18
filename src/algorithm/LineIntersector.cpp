@@ -564,27 +564,6 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
     return intPtOut;
 }
 
-/*private*/
-bool
-LineIntersector::isInSegmentEnvelopes(const Coordinate& pt) const
-{
-    Envelope env0(*inputLines[0][0], *inputLines[0][1]);
-    Envelope env1(*inputLines[1][0], *inputLines[1][1]);
-    return env0.contains(pt) && env1.contains(pt);
-}
-
-/*private*/
-Coordinate
-LineIntersector::intersectionSafe(const Coordinate& p1, const Coordinate& p2,
-                                  const Coordinate& q1, const Coordinate& q2) const
-{
-    Coordinate ptInt = Intersection::intersection(p1, p2, q1, q2);
-    if (ptInt.isNull()) {
-        ptInt = nearestEndpoint(p1, p2, q1, q2);
-    }
-    return ptInt;
-}
-
 /* private static */
 double
 LineIntersector::zInterpolate(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
