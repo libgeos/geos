@@ -87,7 +87,7 @@ public:
 
     private:
         void skipDeleted() {
-            while(m_iter->isDeleted() && m_iter != m_end) {
+            while(m_iter != m_end && m_iter->isDeleted()) {
                 m_iter++;
             }
         }
