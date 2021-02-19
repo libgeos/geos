@@ -136,7 +136,7 @@ public:
      * the searchEnvelope, and process them
      */
     void select(const geom::Envelope& searchEnv,
-                MonotoneChainSelectAction& mcs);
+                MonotoneChainSelectAction& mcs) const;
 
     void computeOverlaps(const MonotoneChain* mc,
                          MonotoneChainOverlapAction* mco) const;
@@ -155,7 +155,7 @@ private:
     void computeSelect(const geom::Envelope& searchEnv,
                        std::size_t start0,
                        std::size_t end0,
-                       MonotoneChainSelectAction& mcs);
+                       MonotoneChainSelectAction& mcs) const;
 
     void computeOverlaps(std::size_t start0, std::size_t end0, const MonotoneChain& mc,
                          std::size_t start1, std::size_t end1,
@@ -172,9 +172,9 @@ private:
                                           mc.pts.getAt(start1), mc.pts.getAt(end1));
     }
 
-    bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
+    static bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
                   const geom::Coordinate& q1, const geom::Coordinate& q2,
-                  double overlapTolerance) const;
+                  double overlapTolerance);
 
     /// Externally owned
     const geom::CoordinateSequence& pts;

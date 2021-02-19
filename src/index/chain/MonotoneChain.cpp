@@ -65,7 +65,7 @@ MonotoneChain::getCoordinates() const
 }
 
 void
-MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
+MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs) const
 {
     computeSelect(searchEnv, start, end, mcs);
 }
@@ -73,7 +73,7 @@ MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 void
 MonotoneChain::computeSelect(const Envelope& searchEnv,
                              std::size_t start0, std::size_t end0,
-                             MonotoneChainSelectAction& mcs)
+                             MonotoneChainSelectAction& mcs) const
 {
     const Coordinate& p0 = pts[start0];
     const Coordinate& p1 = pts[end0];
@@ -166,7 +166,7 @@ MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
 bool
 MonotoneChain::overlaps(const Coordinate& p1, const Coordinate& p2,
                         const Coordinate& q1, const Coordinate& q2,
-                        double overlapTolerance) const
+                        double overlapTolerance)
 {
     double maxq = std::max(q1.x, q2.x);
     double minp = std::min(p1.x, p2.x);

@@ -72,7 +72,7 @@ public:
      * would cause every vertex to be noded).
      */
     void
-    select(chain::MonotoneChain& mc, std::size_t startIndex) override
+    select(const chain::MonotoneChain& mc, std::size_t startIndex) override
     {
         // This is casting away 'constness'!
         NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));

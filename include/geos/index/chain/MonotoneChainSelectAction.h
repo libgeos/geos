@@ -56,7 +56,7 @@ public:
     ~MonotoneChainSelectAction() {}
 
     /// This function can be overridden if the original chain is needed
-    virtual void select(MonotoneChain& mc, std::size_t start);
+    virtual void select(const MonotoneChain& mc, std::size_t start);
 
     /**
      * This is a convenience function which can be overridden
