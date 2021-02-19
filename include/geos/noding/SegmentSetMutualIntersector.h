@@ -46,7 +46,7 @@ public:
 
     /**
      * Sets the SegmentIntersector to use with this intersector.
-     * The SegmentIntersector will either rocord or add intersection nodes
+     * The SegmentIntersector will either record or add intersection nodes
      * for the input segment strings.
      *
      * @param si the segment intersector to use

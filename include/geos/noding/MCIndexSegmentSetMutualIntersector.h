@@ -91,8 +91,8 @@ public:
             index::chain::MonotoneChainOverlapAction(), si(p_si)
         {}
 
-        void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
-                     index::chain::MonotoneChain& mc2, std::size_t start2) override;
+        void overlap(const index::chain::MonotoneChain& mc1, std::size_t start1,
+                     const index::chain::MonotoneChain& mc2, std::size_t start2) override;
     };
 
     /**
@@ -112,7 +112,7 @@ private:
      * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
      * or index::strtree::STRtree).
      */
-    index::strtree::TemplateSTRtree<index::chain::MonotoneChain*> index;
+    index::strtree::TemplateSTRtree<const index::chain::MonotoneChain*> index;
     int indexCounter;
     int processCounter;
     // statistics

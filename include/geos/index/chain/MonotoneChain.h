@@ -102,8 +102,8 @@ public:
     ~MonotoneChain() = default;
 
     /// Returned envelope is owned by this class
-    const geom::Envelope& getEnvelope();
-    const geom::Envelope& getEnvelope(double expansionDistance);
+    const geom::Envelope& getEnvelope() const;
+    const geom::Envelope& getEnvelope(double expansionDistance) const;
 
     size_t
     getStartIndex() const
@@ -122,8 +122,8 @@ public:
      *  at the given index.
      */
     void getLineSegment(std::size_t index, geom::LineSegment& ls) const {
-        ls.p0 = pts[index];
-        ls.p1 = pts[index + 1];
+        pts->getAt(index, ls.p0);
+        pts->getAt(index + 1, ls.p1);
     }
 
     /**
@@ -138,16 +138,16 @@ public:
      * the searchEnvelope, and process them
      */
     void select(const geom::Envelope& searchEnv,
-                MonotoneChainSelectAction& mcs);
+                MonotoneChainSelectAction& mcs) const;
 
-    void computeOverlaps(MonotoneChain* mc,
-                         MonotoneChainOverlapAction* mco);
+    void computeOverlaps(const MonotoneChain* mc,
+                         MonotoneChainOverlapAction* mco) const;
 
-    void computeOverlaps(MonotoneChain* mc, double overlapTolerance,
-                         MonotoneChainOverlapAction* mco);
+    void computeOverlaps(const MonotoneChain* mc, double overlapTolerance,
+                         MonotoneChainOverlapAction* mco) const;
 
     void*
-    getContext()
+    getContext() const
     {
         return context;
     }
@@ -157,29 +157,30 @@ private:
     void computeSelect(const geom::Envelope& searchEnv,
                        std::size_t start0,
                        std::size_t end0,
-                       MonotoneChainSelectAction& mcs);
+                       MonotoneChainSelectAction& mcs) const;
 
-    void computeOverlaps(std::size_t start0, std::size_t end0, MonotoneChain& mc,
+    void computeOverlaps(std::size_t start0, std::size_t end0, const MonotoneChain& mc,
                          std::size_t start1, std::size_t end1,
                          double overlapTolerance,
-                         MonotoneChainOverlapAction& mco);
+                         MonotoneChainOverlapAction& mco) const;
 
     bool overlaps(std::size_t start0, std::size_t end0,
                   const MonotoneChain& mc, std::size_t start1, std::size_t end1,
                   double overlapTolerance) const {
         if (overlapTolerance > 0.0) {
-            return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);
+            return overlaps(pts->getAt(start0), pts->getAt(end0),
+                            mc.pts->getAt(start1), mc.pts->getAt(end1), overlapTolerance);
         }
-        return geom::Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
-                                          mc.pts.getAt(start1), mc.pts.getAt(end1));
+        return geom::Envelope::intersects(pts->getAt(start0), pts->getAt(end0),
+                                          mc.pts->getAt(start1), mc.pts->getAt(end1));
     }
 
-    bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
+    static bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
                   const geom::Coordinate& q1, const geom::Coordinate& q2,
-                  double overlapTolerance) const;
+                  double overlapTolerance);
 
     /// Externally owned
-    const geom::CoordinateSequence& pts;
+    const geom::CoordinateSequence* pts;
 
     /// user-defined information
     void* context;
@@ -191,12 +192,7 @@ private:
     std::size_t end;
 
     /// Owned by this class
-    geom::Envelope env;
-
-    // Declare type as noncopyable
-    // XXXXXX uncomment for MSVC support
-    // MonotoneChain(const MonotoneChain& other) = delete;
-    // MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
+    mutable geom::Envelope env;
 };
 
 } // namespace geos::index::chain

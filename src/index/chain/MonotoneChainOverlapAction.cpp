@@ -29,8 +29,8 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 void
-MonotoneChainOverlapAction::overlap(MonotoneChain& mc1, std::size_t start1,
-                                    MonotoneChain& mc2, std::size_t start2)
+MonotoneChainOverlapAction::overlap(const MonotoneChain& mc1, std::size_t start1,
+                                    const MonotoneChain& mc2, std::size_t start2)
 {
     mc1.getLineSegment(start1, overlapSeg1);
     mc2.getLineSegment(start2, overlapSeg2);

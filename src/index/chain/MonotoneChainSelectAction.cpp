@@ -28,7 +28,7 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 void
-MonotoneChainSelectAction::select(MonotoneChain& mc, std::size_t start)
+MonotoneChainSelectAction::select(const MonotoneChain& mc, std::size_t start)
 {
     mc.getLineSegment(start, selectedSegment);
 

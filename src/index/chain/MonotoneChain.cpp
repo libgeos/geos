@@ -33,7 +33,7 @@ namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              std::size_t nstart, std::size_t nend, void* nContext)
-    : pts(newPts)
+    : pts(&newPts)
     , context(nContext)
     , start(nstart)
     , end(nend)
@@ -41,16 +41,16 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
 {}
 
 const Envelope&
-MonotoneChain::getEnvelope()
+MonotoneChain::getEnvelope() const
 {
     return getEnvelope(0.0);
 }
 
 const Envelope&
-MonotoneChain::getEnvelope(double expansionDistance)
+MonotoneChain::getEnvelope(double expansionDistance) const
 {
     if (env.isNull()) {
-        env.init(pts[start], pts[end]);
+        env.init(pts->getAt(start), pts->getAt(end));
         if (expansionDistance > 0.0) {
             env.expandBy(expansionDistance);
         }
@@ -61,11 +61,11 @@ MonotoneChain::getEnvelope(double expansionDistance)
 std::unique_ptr<CoordinateSequence>
 MonotoneChain::getCoordinates() const
 {
-    return std::unique_ptr<CoordinateSequence>(pts.clone());
+    return pts->clone();
 }
 
 void
-MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
+MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs) const
 {
     computeSelect(searchEnv, start, end, mcs);
 }
@@ -73,10 +73,10 @@ MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 void
 MonotoneChain::computeSelect(const Envelope& searchEnv,
                              std::size_t start0, std::size_t end0,
-                             MonotoneChainSelectAction& mcs)
+                             MonotoneChainSelectAction& mcs) const
 {
-    const Coordinate& p0 = pts[start0];
-    const Coordinate& p1 = pts[end0];
+    const Coordinate& p0 = pts->getAt(start0);
+    const Coordinate& p1 = pts->getAt(end0);
 
     // terminating condition for the recursion
     if(end0 - start0 == 1) {
@@ -103,16 +103,16 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
 
 /* public */
 void
-MonotoneChain::computeOverlaps(MonotoneChain* mc,
-                               MonotoneChainOverlapAction* mco)
+MonotoneChain::computeOverlaps(const MonotoneChain* mc,
+                               MonotoneChainOverlapAction* mco) const
 {
     computeOverlaps(start, end, *mc, mc->start, mc->end, 0.0, *mco);
 }
 
 /* public */
 void
-MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
-                               MonotoneChainOverlapAction* mco)
+MonotoneChain::computeOverlaps(const MonotoneChain* mc, double overlapTolerance,
+                               MonotoneChainOverlapAction* mco) const
 {
     computeOverlaps(start, end, *mc, mc->start, mc->end, overlapTolerance, *mco);
 }
@@ -120,10 +120,10 @@ MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
 /*private*/
 void
 MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
-                               MonotoneChain& mc,
+                               const MonotoneChain& mc,
                                std::size_t start1, std::size_t end1,
                                double overlapTolerance,
-                               MonotoneChainOverlapAction& mco)
+                               MonotoneChainOverlapAction& mco) const
 {
     // terminating condition for the recursion
     if(end0 - start0 == 1 && end1 - start1 == 1) {
@@ -166,7 +166,7 @@ MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
 bool
 MonotoneChain::overlaps(const Coordinate& p1, const Coordinate& p2,
                         const Coordinate& q1, const Coordinate& q2,
-                        double overlapTolerance) const
+                        double overlapTolerance)
 {
     double maxq = std::max(q1.x, q2.x);
     double minp = std::min(p1.x, p2.x);

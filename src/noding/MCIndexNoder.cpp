@@ -54,8 +54,8 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
     }
 
     if (!indexBuilt) {
-        for(auto& mc : monoChains) {
-            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+        for(const auto& mc : monoChains) {
+            index.insert(mc.getEnvelope(overlapTolerance), &mc);
         }
         indexBuilt = true;
     }
@@ -72,17 +72,11 @@ MCIndexNoder::intersectChains()
 
     SegmentOverlapAction overlapAction(*segInt);
 
-    std::vector<void*> overlapChains;
-    for(MonotoneChain& queryChain : monoChains) {
+    for(const MonotoneChain& queryChain : monoChains) {
         GEOS_CHECK_FOR_INTERRUPTS();
 
-        overlapChains.clear();
         const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);
-        index.query(&queryEnv, overlapChains);
-        for(void* hit : overlapChains) {
-            MonotoneChain* testChain = static_cast<MonotoneChain*>(hit);
-            assert(testChain);
-
+        index.query(queryEnv, [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
             /*
              * following test makes sure we only compare each
              * pair of chains once and that we don't compare a
@@ -93,12 +87,8 @@ MCIndexNoder::intersectChains()
                 nOverlaps++;
             }
 
-            // short-circuit if possible
-            if(segInt->isDone()) {
-                return;
-            }
-
-        }
+            return !segInt->isDone(); // abort early if segInt->isDone()
+        });
     }
 }
 
@@ -116,8 +106,8 @@ MCIndexNoder::add(SegmentString* segStr)
 
 
 void
-MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, std::size_t start1,
-        MonotoneChain& mc2, std::size_t start2)
+MCIndexNoder::SegmentOverlapAction::overlap(const MonotoneChain& mc1, std::size_t start1,
+        const MonotoneChain& mc2, std::size_t start2)
 {
     SegmentString* ss1 = const_cast<SegmentString*>(
                              static_cast<const SegmentString*>(mc1.getContext())
