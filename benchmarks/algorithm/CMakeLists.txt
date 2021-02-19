@@ -37,3 +37,5 @@ if (benchmark_FOUND)
     target_link_libraries(perf_line_intersector PRIVATE
             benchmark::benchmark geos)
 endif()
+
+add_subdirectory(locate)
