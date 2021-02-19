@@ -43,7 +43,7 @@ private:
 
     class FacetSequenceTree : public geos::index::strtree::TemplateSTRtree<const FacetSequence*> {
     public:
-        // TODO support TemplateSTRtree<std::unique_ptr<FacetSequence>> and dispence with holding vector.
+        // TODO support TemplateSTRtree<std::unique_ptr<FacetSequence>> and dispense with holding vector.
         FacetSequenceTree(std::vector<FacetSequence> &&seq) :
             TemplateSTRtree(STR_TREE_NODE_CAPACITY, seq.size()), sequences(seq) {
             for (auto& fs : sequences) {

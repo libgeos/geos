@@ -39,7 +39,6 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/Densifier.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
-#include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
