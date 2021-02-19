@@ -99,8 +99,6 @@ public:
     MonotoneChain(const geom::CoordinateSequence& pts,
                   std::size_t start, std::size_t end, void* context);
 
-    ~MonotoneChain() = default;
-
     /// Returned envelope is owned by this class
     const geom::Envelope& getEnvelope();
     const geom::Envelope& getEnvelope(double expansionDistance);

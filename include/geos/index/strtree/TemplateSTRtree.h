@@ -60,8 +60,14 @@ public:
     using NodeListIterator = typename NodeList::iterator;
     using BoundsType = typename BoundsTraits::BoundsType;
 
-    class Iterator : public std::iterator<std::forward_iterator_tag, ItemType> {
+    class Iterator {
     public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = ItemType;
+        using difference_type = typename NodeList::const_iterator::difference_type;
+        using pointer = ItemType*;
+        using reference = ItemType&;
+
         Iterator(typename NodeList::const_iterator&& iter,
                  typename NodeList::const_iterator&& end) : m_iter(iter), m_end(end) {
             skipDeleted();
@@ -142,8 +148,6 @@ public:
     /// @}
     /// \defgroup insert Insertion
     /// @{
-
-    // FIXME remove hardcoded ->getEnvelopeInternal
 
     /** Move the given item into the tree */
     void insert(ItemType&& item) {
