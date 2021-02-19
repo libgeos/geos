@@ -140,14 +140,14 @@ public:
     void select(const geom::Envelope& searchEnv,
                 MonotoneChainSelectAction& mcs);
 
-    void computeOverlaps(MonotoneChain* mc,
-                         MonotoneChainOverlapAction* mco);
+    void computeOverlaps(const MonotoneChain* mc,
+                         MonotoneChainOverlapAction* mco) const;
 
-    void computeOverlaps(MonotoneChain* mc, double overlapTolerance,
-                         MonotoneChainOverlapAction* mco);
+    void computeOverlaps(const MonotoneChain* mc, double overlapTolerance,
+                         MonotoneChainOverlapAction* mco) const;
 
     void*
-    getContext()
+    getContext() const
     {
         return context;
     }
@@ -159,10 +159,10 @@ private:
                        std::size_t end0,
                        MonotoneChainSelectAction& mcs);
 
-    void computeOverlaps(std::size_t start0, std::size_t end0, MonotoneChain& mc,
+    void computeOverlaps(std::size_t start0, std::size_t end0, const MonotoneChain& mc,
                          std::size_t start1, std::size_t end1,
                          double overlapTolerance,
-                         MonotoneChainOverlapAction& mco);
+                         MonotoneChainOverlapAction& mco) const;
 
     bool overlaps(std::size_t start0, std::size_t end0,
                   const MonotoneChain& mc, std::size_t start1, std::size_t end1,

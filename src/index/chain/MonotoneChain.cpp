@@ -103,16 +103,16 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
 
 /* public */
 void
-MonotoneChain::computeOverlaps(MonotoneChain* mc,
-                               MonotoneChainOverlapAction* mco)
+MonotoneChain::computeOverlaps(const MonotoneChain* mc,
+                               MonotoneChainOverlapAction* mco) const
 {
     computeOverlaps(start, end, *mc, mc->start, mc->end, 0.0, *mco);
 }
 
 /* public */
 void
-MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
-                               MonotoneChainOverlapAction* mco)
+MonotoneChain::computeOverlaps(const MonotoneChain* mc, double overlapTolerance,
+                               MonotoneChainOverlapAction* mco) const
 {
     computeOverlaps(start, end, *mc, mc->start, mc->end, overlapTolerance, *mco);
 }
@@ -120,10 +120,10 @@ MonotoneChain::computeOverlaps(MonotoneChain* mc, double overlapTolerance,
 /*private*/
 void
 MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
-                               MonotoneChain& mc,
+                               const MonotoneChain& mc,
                                std::size_t start1, std::size_t end1,
                                double overlapTolerance,
-                               MonotoneChainOverlapAction& mco)
+                               MonotoneChainOverlapAction& mco) const
 {
     // terminating condition for the recursion
     if(end0 - start0 == 1 && end1 - start1 == 1) {
