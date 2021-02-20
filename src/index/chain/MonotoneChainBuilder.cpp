@@ -19,7 +19,9 @@
 #include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Quadrant.h>
+
 
 #include <cassert>
 #include <cstdio>
@@ -53,6 +55,53 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
         chainStart = chainEnd;
     }
     while (chainStart < (pts->size() - 1));
+}
+
+static std::vector<size_t> getChainEnds(const CoordinateSequence& pts) {
+    struct ChainBuilder : public CoordinateFilter {
+        ChainBuilder() : m_i(0), m_quadrant(-1) {}
+
+        const Coordinate* prev;
+
+        void filter_ro(const Coordinate* c) override final {
+            process(m_i++, c);
+        }
+
+        std::vector<std::size_t> getEnds() {
+            m_ends.push_back(m_i); // close last chain
+            return std::move(m_ends);
+        }
+
+        void process(std::size_t i, const Coordinate* curr) {
+            if (prev == nullptr || curr->equals2D(*prev)) {
+                prev = curr;
+                return;
+            }
+
+            int chainQuad = Quadrant::quadrant(*prev, *curr);
+
+            if (m_quadrant < 0) {
+                m_quadrant = chainQuad;
+            }
+
+            if (chainQuad != m_quadrant) {
+                m_ends.push_back(i);
+                m_quadrant = chainQuad;
+            }
+
+            prev = curr;
+        }
+
+        std::size_t m_i;
+        int m_quadrant;
+        std::vector<std::size_t> m_ends;
+    };
+
+    ChainBuilder builder;
+
+    pts.apply_ro(&builder);
+
+    return builder.getEnds();
 }
 
 
