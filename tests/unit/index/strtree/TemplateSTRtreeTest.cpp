@@ -327,5 +327,54 @@ void object::test<7>() {
     ensure_equals(hits.size(), 4u);
 }
 
+// Test visitor short-circuiting
+template<>
+template<>
+void object::test<8>() {
+    Grid grid;
+    grid.x0 = grid.y0 = 0;
+    grid.dx = grid.dy = 1;
+    grid.nx = grid.ny = 10;
+
+    auto geoms = pointGrid(grid);
+    auto tree = makeTree<const geom::Point*>(geoms);
+
+    std::vector<const geom::Point*> matches;
+    auto visitor = [&matches](const geom::Point* pt) {
+        matches.push_back(pt);
+        return matches.size() < 2; // stop the query after we've found two items.
+    };
+
+    // Query by collecting items into a vector
+    geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
+    tree.query(qe, visitor);
+    ensure(matches.size() == 2);
+}
+
+// Test bounds-and-item visitor
+template<>
+template<>
+void object::test<9>() {
+    Grid grid;
+    grid.x0 = grid.y0 = 0;
+    grid.dx = grid.dy = 1;
+    grid.nx = grid.ny = 10;
+
+    auto geoms = pointGrid(grid);
+    auto tree = makeTree<const geom::Point*>(geoms);
+
+    // Collect the envelopes instead of the items
+    std::vector<geom::Envelope> matches;
+    auto visitor = [&matches](const geom::Envelope& e, const geom::Point* pt) {
+        (void) pt;
+        matches.push_back(e);
+    };
+
+    geom::Envelope qe(-0.5, 1.5, -0.5, 1.5);
+    tree.query(qe, visitor);
+    ensure(matches.size() == 4);
+}
+
+
 } // namespace tut
 

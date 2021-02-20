@@ -234,7 +234,9 @@ public:
     /// \defgroup query Query
     /// @{
 
-    // Query the tree using the specified visitor.
+    // Query the tree using the specified visitor. The visitor must be callable
+    // either with a single argument of `const ItemType&` or with the
+    // arguments `(const BoundsType&, const ItemType&).
     // The visitor need not return a value, but if it does return a value,
     // false values will be taken as a signal to stop the query.
     template<typename Visitor>
@@ -245,7 +247,7 @@ public:
 
         if (root && root->boundsIntersect(queryEnv)) {
             if (root->isLeaf()) {
-                visitor(root->getItem());
+                visitLeaf(visitor, *root);
             } else {
                 query(queryEnv, *root, visitor);
             }
@@ -471,20 +473,35 @@ protected:
     // In this case, we will always return true, indicating that querying should
     // continue.
     template<typename Visitor,
-             typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
-    bool visitItem(Visitor&& visitor, const ItemType& item)
+             typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<BoundsType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
+    bool visitLeaf(Visitor&& visitor, const Node& node)
     {
-        visitor(item);
+        visitor(node.getBounds(), node.getItem());
+        return true;
+    }
+
+    template<typename Visitor,
+             typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
+    bool visitLeaf(Visitor&& visitor, const Node& node)
+    {
+        visitor(node.getItem());
         return true;
     }
 
     // If the visitor function does return a value, we will use this to indicate
     // that querying should continue.
     template<typename Visitor,
-            typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
-    bool visitItem(Visitor&& visitor, const ItemType& item)
+             typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
+    bool visitLeaf(Visitor&& visitor, const Node& node)
     {
-        return visitor(item);
+        return visitor(node.getItem());
+    }
+
+    template<typename Visitor,
+             typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<BoundsType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
+    bool visitLeaf(Visitor&& visitor, const Node& node)
+    {
+        return visitor(node.getBounds(), node.getItem());
     }
 
     template<typename Visitor>
@@ -497,7 +514,7 @@ protected:
         for (auto *child = node.beginChildren(); child < node.endChildren(); ++child) {
             if (child->boundsIntersect(queryEnv)) {
                 if (child->isLeaf() && !child->isDeleted()) {
-                    if (!visitItem(visitor, child->getItem())) {
+                    if (!visitLeaf(visitor, *child)) {
                         return;
                     }
                 } else {
