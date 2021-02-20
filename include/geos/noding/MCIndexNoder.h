@@ -113,7 +113,7 @@ public:
         {}
 
         void overlap(const index::chain::MonotoneChain& mc1, std::size_t start1,
-                     const index::chain::MonotoneChain& mc2, std::size_t start2) override;
+                     const index::chain::MonotoneChain& mc2, std::size_t start2) override final;
     private:
         SegmentIntersector& si;
 

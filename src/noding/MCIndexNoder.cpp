@@ -25,8 +25,6 @@
 #include <geos/util/Interrupt.h>
 
 #include <cassert>
-#include <functional>
-#include <algorithm>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -77,6 +75,14 @@ MCIndexNoder::intersectChains()
 
         const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);
         index.query(queryEnv, [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
+            // TODO might be more efficient to have a query variant that where the callback
+            // can signal the query to be canceled by return value.
+
+            // short-circuit if possible
+            if(segInt->isDone()) {
+                return;
+            }
+
             /*
              * following test makes sure we only compare each
              * pair of chains once and that we don't compare a
@@ -86,11 +92,6 @@ MCIndexNoder::intersectChains()
                 queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
                 nOverlaps++;
             }
-
-            // short-circuit if possible
-            if(segInt->isDone()) {
-                return;
-            }
         });
     }
 }
@@ -99,12 +100,8 @@ MCIndexNoder::intersectChains()
 void
 MCIndexNoder::add(SegmentString* segStr)
 {
-    // std::vector<std::unique_ptr<MonotoneChain>> segChains;
-
-    // segChains will contain newly allocated MonotoneChain objects
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
                                     segStr, monoChains);
-
 }
 
 
