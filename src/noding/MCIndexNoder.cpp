@@ -75,14 +75,6 @@ MCIndexNoder::intersectChains()
 
         const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);
         index.query(queryEnv, [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
-            // TODO might be more efficient to have a query variant that where the callback
-            // can signal the query to be canceled by return value.
-
-            // short-circuit if possible
-            if(segInt->isDone()) {
-                return;
-            }
-
             /*
              * following test makes sure we only compare each
              * pair of chains once and that we don't compare a
@@ -92,6 +84,10 @@ MCIndexNoder::intersectChains()
                 queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
                 nOverlaps++;
             }
+
+            // short-circuit if possible
+            // returning false ends the query
+            return !segInt->isDone();
         });
     }
 }

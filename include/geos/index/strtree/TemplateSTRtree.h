@@ -234,6 +234,9 @@ public:
     /// \defgroup query Query
     /// @{
 
+    // Query the tree using the specified visitor.
+    // The visitor need not return a value, but if it does return a value,
+    // false values will be taken as a signal to stop the query.
     template<typename Visitor>
     void query(const BoundsType& queryEnv, Visitor &&visitor) {
         if (!built()) {
@@ -249,6 +252,7 @@ public:
         }
     }
 
+    // Query the tree and collect items in the provided vector.
     void query(const BoundsType& queryEnv, std::vector<ItemType>& results) {
         query(queryEnv, [&results](const ItemType& x) {
             results.push_back(x);
@@ -463,6 +467,26 @@ protected:
         });
     }
 
+    // Helper function to visit an item using a visitor that has no return value.
+    // In this case, we will always return true, indicating that querying should
+    // continue.
+    template<typename Visitor,
+             typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
+    bool visitItem(Visitor&& visitor, const ItemType& item)
+    {
+        visitor(item);
+        return true;
+    }
+
+    // If the visitor function does return a value, we will use this to indicate
+    // that querying should continue.
+    template<typename Visitor,
+            typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
+    bool visitItem(Visitor&& visitor, const ItemType& item)
+    {
+        return visitor(item);
+    }
+
     template<typename Visitor>
     void query(const BoundsType& queryEnv,
                const Node& node,
@@ -473,7 +497,9 @@ protected:
         for (auto *child = node.beginChildren(); child < node.endChildren(); ++child) {
             if (child->boundsIntersect(queryEnv)) {
                 if (child->isLeaf() && !child->isDeleted()) {
-                    visitor(child->getItem());
+                    if (!visitItem(visitor, child->getItem())) {
+                        return;
+                    }
                 } else {
                     query(queryEnv, *child, visitor);
                 }
