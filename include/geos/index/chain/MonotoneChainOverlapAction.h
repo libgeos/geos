@@ -77,8 +77,7 @@ public:
      */
     virtual void
     overlap(const geom::LineSegment& /*seg1*/,
-            const geom::LineSegment& /*seg2*/)
-    {}
+            const geom::LineSegment& /*seg2*/) {}
 
 };
 

@@ -100,8 +100,8 @@ public:
                   std::size_t start, std::size_t end, void* context);
 
     /// Returned envelope is owned by this class
-    const geom::Envelope& getEnvelope();
-    const geom::Envelope& getEnvelope(double expansionDistance);
+    const geom::Envelope& getEnvelope() const;
+    const geom::Envelope& getEnvelope(double expansionDistance) const;
 
     size_t
     getStartIndex() const
@@ -120,8 +120,8 @@ public:
      *  at the given index.
      */
     void getLineSegment(std::size_t index, geom::LineSegment& ls) const {
-        ls.p0 = pts[index];
-        ls.p1 = pts[index + 1];
+        pts->getAt(index, ls.p0);
+        pts->getAt(index + 1, ls.p1);
     }
 
     /**
@@ -166,10 +166,11 @@ private:
                   const MonotoneChain& mc, std::size_t start1, std::size_t end1,
                   double overlapTolerance) const {
         if (overlapTolerance > 0.0) {
-            return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);
+            return overlaps(pts->getAt(start0), pts->getAt(end0),
+                            mc.pts->getAt(start1), mc.pts->getAt(end1), overlapTolerance);
         }
-        return geom::Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
-                                          mc.pts.getAt(start1), mc.pts.getAt(end1));
+        return geom::Envelope::intersects(pts->getAt(start0), pts->getAt(end0),
+                                          mc.pts->getAt(start1), mc.pts->getAt(end1));
     }
 
     static bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
@@ -177,7 +178,7 @@ private:
                   double overlapTolerance);
 
     /// Externally owned
-    const geom::CoordinateSequence& pts;
+    const geom::CoordinateSequence* pts;
 
     /// user-defined information
     void* context;
@@ -189,12 +190,7 @@ private:
     std::size_t end;
 
     /// Owned by this class
-    geom::Envelope env;
-
-    // Declare type as noncopyable
-    // XXXXXX uncomment for MSVC support
-    // MonotoneChain(const MonotoneChain& other) = delete;
-    // MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
+    mutable geom::Envelope env;
 };
 
 } // namespace geos::index::chain

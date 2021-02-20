@@ -54,8 +54,8 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
     }
 
     if (!indexBuilt) {
-        for(auto& mc : monoChains) {
-            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+        for(const auto& mc : monoChains) {
+            index.insert(mc.getEnvelope(overlapTolerance), &mc);
         }
         indexBuilt = true;
     }
@@ -72,7 +72,7 @@ MCIndexNoder::intersectChains()
 
     SegmentOverlapAction overlapAction(*segInt);
 
-    for(MonotoneChain& queryChain : monoChains) {
+    for(const MonotoneChain& queryChain : monoChains) {
         GEOS_CHECK_FOR_INTERRUPTS();
 
         const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);

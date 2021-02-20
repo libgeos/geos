@@ -33,7 +33,7 @@ namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              std::size_t nstart, std::size_t nend, void* nContext)
-    : pts(newPts)
+    : pts(&newPts)
     , context(nContext)
     , start(nstart)
     , end(nend)
@@ -41,16 +41,16 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
 {}
 
 const Envelope&
-MonotoneChain::getEnvelope()
+MonotoneChain::getEnvelope() const
 {
     return getEnvelope(0.0);
 }
 
 const Envelope&
-MonotoneChain::getEnvelope(double expansionDistance)
+MonotoneChain::getEnvelope(double expansionDistance) const
 {
     if (env.isNull()) {
-        env.init(pts[start], pts[end]);
+        env.init(pts->getAt(start), pts->getAt(end));
         if (expansionDistance > 0.0) {
             env.expandBy(expansionDistance);
         }
@@ -61,7 +61,7 @@ MonotoneChain::getEnvelope(double expansionDistance)
 std::unique_ptr<CoordinateSequence>
 MonotoneChain::getCoordinates() const
 {
-    return std::unique_ptr<CoordinateSequence>(pts.clone());
+    return pts->clone();
 }
 
 void
@@ -75,8 +75,8 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
                              std::size_t start0, std::size_t end0,
                              MonotoneChainSelectAction& mcs) const
 {
-    const Coordinate& p0 = pts[start0];
-    const Coordinate& p1 = pts[end0];
+    const Coordinate& p0 = pts->getAt(start0);
+    const Coordinate& p1 = pts->getAt(end0);
 
     // terminating condition for the recursion
     if(end0 - start0 == 1) {
