@@ -28,18 +28,21 @@ using geos::index::chain::MonotoneChain;
 using geos::index::chain::MonotoneChainBuilder;
 
 static void BM_MonotoneChainBuilder(benchmark::State& state) {
-    MonotoneChainBuilder mcb;
-
     std::default_random_engine e(12345);
 
+    // distribution of offsets from previous vertex
     std::uniform_real_distribution<> dist(0, 1);
+
+    // determine chain lengths using a geometric distribution with a 30% probability of
+    // a vertex ending a chain.
     std::geometric_distribution<> chain_length_dist(0.3);
+
+    // distribution for determining quadrant of the next chain
     std::uniform_real_distribution<> sign_dist(-1, 1);
 
     std::size_t num_points = 1000;
 
     CoordinateArraySequence cs;
-
     Coordinate prev(0, 0);
     while(cs.size() <= num_points) {
         size_t chain_length = 1 + static_cast<size_t>(chain_length_dist(e));
