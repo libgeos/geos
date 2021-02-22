@@ -15,18 +15,18 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/operation/overlayng/OverlayEdge.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/CoordinateSequence.h>
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <deque>
 
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
 }
 namespace operation {
 namespace overlayng {
@@ -56,7 +56,7 @@ class GEOS_DLL OverlayGraph {
 private:
 
     // Members
-    std::map<Coordinate, OverlayEdge*> nodeMap;
+    std::unordered_map<Coordinate, OverlayEdge*, geom::Coordinate::HashCode> nodeMap;
     std::vector<OverlayEdge*> edges;
 
     // Locally store the OverlayEdge and OverlayLabel

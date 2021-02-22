@@ -6,8 +6,11 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
+#include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+
+#include <utility.h>
 // std
 #include <cmath>
 #include <string>
@@ -115,6 +118,30 @@ void object::test<3>()
     auto result = mv.build(mp.get());
 
     ensure(result->isValid());
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    geos::io::WKBReader reader;
+    std::stringstream input;
+    // From PostGIS test: https://github.com/postgis/postgis/blob/5e310cf6ad646702e5574eb3aa2391021dcdd8c5/liblwgeom/cunit/cu_geos.c#L147
+    input << "0103000000010000000900000062105839207df640378941e09d491c41ced67431387df640c667e7d398491"
+             "c4179e92631387df640d9cef7d398491c41fa7e6abcf87df640cdcccc4c70491c41e3a59bc4527df64052b8"
+             "1e053f491c41cdcccccc5a7ef640e3a59bc407491c4104560e2da27df640aaf1d24dd3481c41e9263108c67"
+             "bf64048e17a1437491c4162105839207df640378941e09d491c41";
+
+    auto g = reader.readHEX(input);
+
+    geos::operation::valid::MakeValid mv;
+
+    auto result = mv.build(g.get());
+
+    ensure_equals_geometry(result.get(),
+                           "POLYGON((92127.546 463452.075,92117.173 463439.755,92133.675 463425.942,"
+                           "92122.136 463412.826,92092.377 463437.77,92114.014 463463.469,92115.512 463462.207,"
+                           "92115.51207431706 463462.2069374289,92127.546 463452.075))");
 }
 
 

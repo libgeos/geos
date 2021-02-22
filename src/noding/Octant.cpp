@@ -88,12 +88,6 @@ Octant::octant(const Coordinate& p0, const Coordinate& p1)
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
 
-    if(dx == 0.0 && dy == 0.0) {
-        std::ostringstream s;
-        s << "Cannot compute the octant for " << "two identical points " << p0.toString();
-        throw util::IllegalArgumentException(s.str());
-    }
-
     return octant(dx, dy);
 }
 

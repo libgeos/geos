@@ -175,7 +175,8 @@ void object::test<8>
 
     geom3_ = GEOSIntersectionPrec(geom1_, geom2_, 2);
     ensure(nullptr != geom3_);
-    ensure_equals(toWKT(geom3_), std::string("GEOMETRYCOLLECTION (LINESTRING (2 0, 4 0), POINT (0 0), POINT (10 0))"));
+
+    ensure_geometry_equals(geom3_, "GEOMETRYCOLLECTION (LINESTRING (2 0, 4 0), POINT (0 0), POINT (10 0))");
 }
 
 } // namespace tut
