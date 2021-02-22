@@ -2,7 +2,7 @@ Changes in 3.9.2
 2021-xx-xx
 
 - Bug fixes / improvements:
-  - 
+  - Add in interrupt points in OverlayNG (#4857, Paul Ramsey) 
 
 
 Changes in 3.9.1
