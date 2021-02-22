@@ -35,6 +35,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
+#include <geos/util/Interrupt.h>
 
 #include <algorithm>
 
@@ -211,6 +212,8 @@ OverlayNG::computeEdgeOverlay()
      */
     EdgeNodingBuilder nodingBuilder(pm, noder);
 
+    GEOS_CHECK_FOR_INTERRUPTS();
+
     if (isOptimized) {
         Envelope clipEnv;
         bool gotClipEnv = OverlayUtil::clippingEnvelope(opCode, &inputGeom, pm, clipEnv);
@@ -222,6 +225,8 @@ OverlayNG::computeEdgeOverlay()
     std::vector<Edge*> edges = nodingBuilder.build(
         inputGeom.getGeometry(0),
         inputGeom.getGeometry(1));
+
+    GEOS_CHECK_FOR_INTERRUPTS();
 
     /**
      * Record if an input geometry has collapsed.
@@ -249,6 +254,7 @@ OverlayNG::computeEdgeOverlay()
         return OverlayUtil::toLines(&graph, isOutputEdges, geomFact);
     }
 
+    GEOS_CHECK_FOR_INTERRUPTS();
     labelGraph(&graph);
 
     // std::cout << std::endl << graph << std::endl;
@@ -257,6 +263,7 @@ OverlayNG::computeEdgeOverlay()
         return OverlayUtil::toLines(&graph, isOutputEdges, geomFact);
     }
 
+    GEOS_CHECK_FOR_INTERRUPTS();
     return extractResult(opCode, &graph);
 }
 
@@ -291,6 +298,7 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     std::vector<std::unique_ptr<LineString>> resultLineList;
     std::vector<std::unique_ptr<Point>> resultPointList;
 
+    GEOS_CHECK_FOR_INTERRUPTS();
     if (!isAreaResultOnly) {
         //--- Build lines
         bool allowResultLines = !hasResultAreaComponents ||
