@@ -36,20 +36,6 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::io;
 
-std::string const GeosOp::opNames[] = {
-    "area",
-    "boundary",
-    "buffer D",
-    "centroid",
-    "convexHull",
-    "envelope",
-    "interiorPoint",
-    "isValid",
-    "length",
-    "makeValid",
-    "union",
-};
-
 
 void showHelp() {
     std::cout << "geosop executes GEOS geometry operations on inputs." << std::endl;
