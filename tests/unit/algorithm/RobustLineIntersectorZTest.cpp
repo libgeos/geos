@@ -68,20 +68,20 @@ struct test_robustlineintersectorz_data {
     void checkIntersection(
             const LineSegment& line1,
             const LineSegment& line2,
-            const Coordinate& pt)
+            const Coordinate& p_pt)
     {
-        checkIntersectionDir(line1, line2, pt);
-        checkIntersectionDir(line2, line1, pt);
+        checkIntersectionDir(line1, line2, p_pt);
+        checkIntersectionDir(line2, line1, p_pt);
         LineSegment line1Rev(line1.p1, line1.p0);
         LineSegment line2Rev(line2.p1, line2.p0);
-        checkIntersectionDir(line1Rev, line2Rev, pt);
-        checkIntersectionDir(line2Rev, line1Rev, pt);
+        checkIntersectionDir(line1Rev, line2Rev, p_pt);
+        checkIntersectionDir(line2Rev, line1Rev, p_pt);
     }
 
     void checkIntersectionDir(
             const LineSegment& line1,
             const LineSegment& line2,
-            const Coordinate& pt)
+            const Coordinate& p_pt)
     {
         RobustLineIntersector li;
         li.computeIntersection(
@@ -89,7 +89,7 @@ struct test_robustlineintersectorz_data {
             line2.p0, line2.p1);
         ensure_equals(li.getIntersectionNum(), 1u);
         Coordinate actual = li.getIntersection(0);
-        ensure_equals_xyz( actual, pt );
+        ensure_equals_xyz( actual, p_pt );
     }
 
     static Coordinate pt(double x, double y, double z) {
