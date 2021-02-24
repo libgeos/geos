@@ -24,8 +24,8 @@
 
 using namespace geos::geom;
 
-WKTStreamReader::WKTStreamReader(std::istream& instr)
-    : instr(instr)
+WKTStreamReader::WKTStreamReader(std::istream& p_instr)
+    : instr(p_instr)
 {
 }
 
@@ -44,8 +44,8 @@ WKTStreamReader::next()
 {
     std::string wkt = "";
 
-    int lParen = 0;
-    int rParen = 0;
+    std::string::difference_type lParen = 0;
+    std::string::difference_type rParen = 0;
     do {
         std::string line;
         std::getline(instr, line);

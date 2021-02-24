@@ -277,7 +277,7 @@ std::string summaryStats(std::vector<std::unique_ptr<Geometry>>& geoms) {
     int geomPts = 0;
     for (const  auto& geom : geoms) {
         geomCount++;
-        geomPts += geom->getNumPoints();
+        geomPts += static_cast<int>(geom->getNumPoints());
     }
     return geomStats(geomCount, geomPts);
 }
@@ -388,7 +388,7 @@ Result* GeosOp::executeOpRepeat(GeomFunction * fun,
     unsigned int indexB,
     const std::unique_ptr<Geometry>& gB)
 {
-    Result * res;
+    Result* res = nullptr;
     for (int i = 0; i < args.repeatNum; i++) {
         res = executeOp(fun, indexA, gA, indexB, gB);
     }

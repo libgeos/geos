@@ -24,8 +24,8 @@
 
 using namespace geos::geom;
 
-WKBStreamReader::WKBStreamReader(std::istream& instr)
-    : instr(instr)
+WKBStreamReader::WKBStreamReader(std::istream& p_instr)
+    : instr(p_instr)
 {
 }
 
