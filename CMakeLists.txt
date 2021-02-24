@@ -164,7 +164,7 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 #-----------------------------------------------------------------------------
 
 target_compile_options(geos_cxx_flags INTERFACE
-	"$<$<CXX_COMPILER_ID:Clang>:-ffp-contract=off>"
+	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
@@ -240,7 +240,7 @@ target_compile_definitions(geos_developer_cxx_flags
 target_compile_options(geos_developer_cxx_flags
   INTERFACE
     $<$<CXX_COMPILER_ID:MSVC>:-W4>
-    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates>)
 
 #-----------------------------------------------------------------------------
