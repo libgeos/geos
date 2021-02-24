@@ -9,7 +9,9 @@
 # See the COPYING file for more information.
 ################################################################################
 file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.c  CONFIGURE_DEPEND)
-target_sources(geos PRIVATE ${_sources})
+add_library(ryu OBJECT ${_sources})
+target_include_directories(ryu PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+set_target_properties(ryu PROPERTIES POSITION_INDEPENDENT_CODE ON)
 unset(_sources)
 
 target_include_directories(geos

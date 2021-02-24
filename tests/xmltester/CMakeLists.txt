@@ -13,16 +13,24 @@
 add_executable(test_simplewkttester SimpleWKTTester.cpp)
 target_link_libraries(test_simplewkttester PRIVATE geos)
 
+# Setup tinyxml as a separate library so we can avoid picking up GEOS compile flags
+add_library(tinyxml2 OBJECT
+        tinyxml2/tinyxml2.h
+        tinyxml2/tinyxml2.cpp)
+target_compile_options(
+        tinyxml2 PRIVATE
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-conversion>
+        $<$<CXX_COMPILER_ID:Clang>:-Wno-conversion>
+)
+
 add_executable(test_xmltester
     XMLTester.cpp
     BufferResultMatcher.cpp
-    SingleSidedBufferResultMatcher.cpp
-    tinyxml2/tinyxml2.h
-    tinyxml2/tinyxml2.cpp)
-target_link_libraries(test_xmltester PRIVATE geos)
+    SingleSidedBufferResultMatcher.cpp)
+target_link_libraries(test_xmltester PRIVATE geos tinyxml2)
 target_include_directories(test_xmltester
-  PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml)
+  SYSTEM PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml2)
 
 # Scan the directories of XML tests and create a test for each.
 foreach(_testdir general issue misc robust validate)

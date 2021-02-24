@@ -252,7 +252,9 @@ set(CMAKE_CXX_FLAGS_COVERAGE "-fprofile-arcs -ftest-coverage")
 # Target geos: C++ API library
 #-----------------------------------------------------------------------------
 add_library(geos "")
-target_link_libraries(geos PUBLIC geos_cxx_flags)
+target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
+# ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
+# switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
 add_subdirectory(include)
 add_subdirectory(src)
 
