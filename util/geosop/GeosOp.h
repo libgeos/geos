@@ -75,11 +75,11 @@ private:
     void executeUnary(GeomFunction * fun);
     void executeBinary(GeomFunction * fun);
     Result* executeOpRepeat(GeomFunction * fun,
-        int indexA, const  std::unique_ptr<Geometry>& geomA,
-        int indexB, const  std::unique_ptr<Geometry>& geomB);
+        unsigned int indexA, const  std::unique_ptr<Geometry>& geomA,
+        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB);
     Result* executeOp(GeomFunction * fun,
-        int indexA, const  std::unique_ptr<Geometry>& geomA,
-        int indexB, const  std::unique_ptr<Geometry>& geomB);
+        unsigned int indexA, const  std::unique_ptr<Geometry>& geomA,
+        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB);
     void output(Result* result);
     void outputExplode(std::unique_ptr<Geometry>& geom);
     void outputGeometry( const Geometry* geom);

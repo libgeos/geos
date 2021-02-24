@@ -143,10 +143,10 @@ GeosOp::GeosOp(GeosOpArgs& arg)
 GeosOp::~GeosOp() {
 }
 
-std::string formatNum(int n)
+std::string formatNum(long n)
 {
     auto fmt = std::to_string(n);
-    int insertPosition = static_cast<int>(fmt.length()) - 3;
+    size_t insertPosition = fmt.length() - 3;
     while (insertPosition > 0) {
         fmt.insert(insertPosition, ",");
         insertPosition-=3;
@@ -167,7 +167,7 @@ bool isWKTLiteral(std::string s) {
     if (endsWith(s, " EMPTY")) return true;
 
     // assume if string contains a ( it is WKT
-    int numLParen = std::count(s.begin(), s.end(), '(');
+    long numLParen = std::count(s.begin(), s.end(), '(');
     return numLParen > 0;
 }
 
@@ -293,7 +293,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
     auto geoms = readInput( name, src, limit );
     sw.stop();
     auto stats = summaryStats(geoms);
-    log("Read " + stats  + "  -- " + formatNum( sw.getTot() ) + " usec");
+    log("Read " + stats  + "  -- " + formatNum( (long) sw.getTot() ) + " usec");
     return geoms;
 }
 
@@ -321,7 +321,7 @@ void GeosOp::run() {
         std::cout
             << "Ran " <<  formatNum( opCount ) << " " << args.opName << " ops ( "
             << formatNum( vertexCount ) << " vertices)"
-            << "  -- " << formatNum( totalTime ) <<  " usec"
+            << "  -- " << formatNum( (long) totalTime ) <<  " usec"
             << "    (GEOS " << geosversion() << ")"
             << std::endl;
     }
@@ -372,7 +372,7 @@ void GeosOp::executeBinary(GeomFunction * fun) {
     }
 }
 
-std::string inputDesc(std::string name, int index, const std::unique_ptr<Geometry>& geom)
+std::string inputDesc(std::string name, unsigned int index, const std::unique_ptr<Geometry>& geom)
 {
     if (geom == nullptr) {
         return "";
@@ -383,29 +383,29 @@ std::string inputDesc(std::string name, int index, const std::unique_ptr<Geometr
 }
 
 Result* GeosOp::executeOpRepeat(GeomFunction * fun,
-    int indexA,
-    const std::unique_ptr<Geometry>& geomA,
-    int indexB,
-    const std::unique_ptr<Geometry>& geomB)
+    unsigned int indexA,
+    const std::unique_ptr<Geometry>& gA,
+    unsigned int indexB,
+    const std::unique_ptr<Geometry>& gB)
 {
     Result * res;
     for (int i = 0; i < args.repeatNum; i++) {
-        res = executeOp(fun, indexA, geomA, indexB, geomB);
+        res = executeOp(fun, indexA, gA, indexB, gB);
     }
     return res;
 }
 
 Result* GeosOp::executeOp(GeomFunction * fun,
-    int indexA,
-    const std::unique_ptr<Geometry>& geomA,
-    int indexB,
-    const std::unique_ptr<Geometry>& geomB) {
+    unsigned int indexA,
+    const std::unique_ptr<Geometry>& gA,
+    unsigned int indexB,
+    const std::unique_ptr<Geometry>& gB) {
 
     opCount++;
     geos::util::Profile sw( "op" );
     sw.start();
 
-    Result* result = fun->execute( geomA, geomB, args.opArg1  );
+    Result* result = fun->execute( gA, gB, args.opArg1  );
     sw.stop();
     double time = sw.getTot();
     totalTime += time;
@@ -414,10 +414,10 @@ Result* GeosOp::executeOp(GeomFunction * fun,
     if (args.isVerbose) {
         log(
             "[ " + std::to_string(opCount) + "] " + fun->name() + ": "
-            + inputDesc("A", indexA, geomA) + " "
-            + inputDesc("B", indexB, geomB)
+            + inputDesc("A", indexA, gA) + " "
+            + inputDesc("B", indexB, gB)
             + " -> " + result->metadata()
-            + "  --  " + formatNum( time ) + " usec"
+            + "  --  " + formatNum( (int) time ) + " usec"
         );
     }
 
