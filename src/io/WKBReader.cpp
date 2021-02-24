@@ -173,7 +173,7 @@ WKBReader::readHEX(std::istream& is)
 void
 WKBReader::minMemSize(int geomType, uint64_t size)
 {
-    uint64_t minMemSize = 0;
+    uint64_t minSize = 0;
     constexpr uint64_t minCoordSize = 2 * sizeof(double);
     constexpr uint64_t minPtSize = (1+4) + minCoordSize;
     constexpr uint64_t minLineSize = (1+4+4); // empty line
@@ -184,26 +184,26 @@ WKBReader::minMemSize(int geomType, uint64_t size)
     switch(geomType) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
-            minMemSize = size * minCoordSize;
+            minSize = size * minCoordSize;
             break;
         case GEOS_POLYGON:
-            minMemSize = size * minRingSize;
+            minSize = size * minRingSize;
             break;
         case GEOS_MULTIPOINT:
-            minMemSize = size * minPtSize;
+            minSize = size * minPtSize;
             break;
         case GEOS_MULTILINESTRING:
-            minMemSize = size * minLineSize;
+            minSize = size * minLineSize;
             break;
         case GEOS_MULTIPOLYGON:
-            minMemSize = size * minPolySize;
+            minSize = size * minPolySize;
             break;
         case GEOS_GEOMETRYCOLLECTION:
-            minMemSize = size * minGeomSize;
+            minSize = size * minGeomSize;
             break;
     }
 
-    if (dis.size() < minMemSize) {
+    if (dis.size() < minSize) {
         throw ParseException("Input buffer is smaller than requested object size");
     }
 }
