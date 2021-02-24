@@ -165,7 +165,7 @@ public:
         , opCode(p_opCode)
         , geometryFactory(geomFact)
         , hasResultArea(p_hasResultArea)
-        , inputAreaIndex(inputGeom->getAreaIndex())
+        , inputAreaIndex((int8_t)inputGeom->getAreaIndex())
         , isAllowMixedResult(! OverlayNG::STRICT_MODE_DEFAULT)
         , isAllowCollapseLines(! OverlayNG::STRICT_MODE_DEFAULT)
         {}
@@ -187,4 +187,3 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-
