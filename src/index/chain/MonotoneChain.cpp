@@ -58,13 +58,6 @@ MonotoneChain::getEnvelope(double expansionDistance)
     return env;
 }
 
-void
-MonotoneChain::getLineSegment(std::size_t index, LineSegment& ls) const
-{
-    ls.p0 = pts[index];
-    ls.p1 = pts[index + 1];
-}
-
 std::unique_ptr<CoordinateSequence>
 MonotoneChain::getCoordinates() const
 {
@@ -167,18 +160,6 @@ MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
             computeOverlaps(mid0, end0, mc, mid1, end1, overlapTolerance, mco);
         }
     }
-}
-
-/*private*/
-bool
-MonotoneChain::overlaps(std::size_t start0, std::size_t end0, const MonotoneChain& mc,
-                        std::size_t start1, std::size_t end1, double overlapTolerance) const
-{
-    if (overlapTolerance > 0.0) {
-        return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);
-    }
-    return Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
-                                mc.pts.getAt(start1), mc.pts.getAt(end1));
 }
 
 /*private*/

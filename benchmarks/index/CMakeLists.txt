@@ -8,12 +8,5 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_executable(perf_class_sizes ClassSizes.cpp)
-target_link_libraries(perf_class_sizes PRIVATE geos)
 
-add_subdirectory(capi)
-
-add_subdirectory(algorithm)
-add_subdirectory(geom)
-add_subdirectory(index)
-add_subdirectory(operation)
+add_subdirectory(chain)

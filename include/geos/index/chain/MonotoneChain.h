@@ -20,7 +20,9 @@
 #define GEOS_IDX_CHAIN_MONOTONECHAIN_H
 
 #include <geos/export.h>
+#include <geos/geom/CoordinateSequence.h> // for inline
 #include <geos/geom/Envelope.h> // for inline
+#include <geos/geom/LineSegment.h> // for inline
 
 #include <memory> // for unique_ptr
 
@@ -119,7 +121,10 @@ public:
      *  Set given LineSegment with points of the segment starting
      *  at the given index.
      */
-    void getLineSegment(std::size_t index, geom::LineSegment& ls) const;
+    void getLineSegment(std::size_t index, geom::LineSegment& ls) const {
+        ls.p0 = pts[index];
+        ls.p1 = pts[index + 1];
+    }
 
     /**
      * Return the subsequence of coordinates forming this chain.
@@ -161,7 +166,13 @@ private:
 
     bool overlaps(std::size_t start0, std::size_t end0,
                   const MonotoneChain& mc, std::size_t start1, std::size_t end1,
-                  double overlapTolerance) const;
+                  double overlapTolerance) const {
+        if (overlapTolerance > 0.0) {
+            return overlaps(pts[start0], pts[end0], mc.pts[start1], mc.pts[end1], overlapTolerance);
+        }
+        return geom::Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
+                                          mc.pts.getAt(start1), mc.pts.getAt(end1));
+    }
 
     bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
                   const geom::Coordinate& q1, const geom::Coordinate& q2,

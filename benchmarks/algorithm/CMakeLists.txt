@@ -18,3 +18,24 @@ target_link_libraries(perf_voronoi geos)
 
 add_executable(perf_unaryunion_segments UnaryUnionSegmentsPerfTest.cpp)
 target_link_libraries(perf_unaryunion_segments geos)
+
+find_package(benchmark)
+if (benchmark_FOUND)
+    add_executable(perf_orientation OrientationIndexPerfTest.cpp
+            ${CMAKE_SOURCE_DIR}/src/algorithm/CGAlgorithmsDD.cpp
+            ${CMAKE_SOURCE_DIR}/src/math/DD.cpp)
+    target_include_directories(perf_orientation PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+    target_link_libraries(perf_orientation PRIVATE
+            benchmark::benchmark geos_cxx_flags)
+
+    add_executable(perf_line_intersector LineIntersectorPerfTest.cpp)
+    target_include_directories(perf_line_intersector PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+    target_link_libraries(perf_line_intersector PRIVATE
+            benchmark::benchmark geos)
+endif()
+
+add_subdirectory(locate)
