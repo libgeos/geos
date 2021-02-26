@@ -146,9 +146,10 @@ GeosOp::~GeosOp() {
 std::string formatNum(long n)
 {
     auto fmt = std::to_string(n);
-    size_t insertPosition = fmt.length() - 3;
+    // use signed num to allow negative to indicate done
+    int insertPosition = ((int) fmt.length()) - 3;
     while (insertPosition > 0) {
-        fmt.insert(insertPosition, ",");
+        fmt.insert( (size_t) insertPosition, ",");
         insertPosition-=3;
     }
     return fmt ;
