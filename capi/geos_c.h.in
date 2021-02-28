@@ -3429,12 +3429,10 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
 * of geometries, so that geometries that represent the same
 * object can be easily compared. Starts rings from the same
 * location, orients them in the same way, sorts geometry
-* sub-comonents in the same way. Use before calling
+* sub-components in the same way. Use before calling
 * GEOSEqualsExact() to avoid false "not equal" results.
 * \param g Input geometry
-* \return A normalized geometry.
-* Caller must free with GEOSGeometry_destroy()
-* -1 on exception.
+* \return 0 on success or -1 on exception
 */
 extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 
