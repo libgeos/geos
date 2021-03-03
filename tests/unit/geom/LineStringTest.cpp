@@ -15,6 +15,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/constants.h>
 // std
 #include <string>
 #include <cmath>
@@ -538,6 +539,38 @@ void object::test<30>()
 
     auto cs = ls->releaseCoordinates();
     ensure_equals(cs->getSize(), 2u);
+}
+
+// Test of LinearRing constructor with a NaN coordinate
+template<>
+template<>
+void object::test<31>
+()
+{
+    using geos::geom::Coordinate;
+
+    // Non-empty sequence of coordinates
+    const std::size_t size3 = 3;
+
+    CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
+    ensure("sequence is null pointer.", pseq != nullptr);
+
+    pseq->add(Coordinate(0, geos::DoubleNotANumber));
+    pseq->add(Coordinate(5, 5));
+    pseq->add(Coordinate(0, geos::DoubleNotANumber));
+    ensure_equals(pseq->size(), size3);
+
+    try {
+        // Create non-empty LineString instance
+        auto lr(factory_->createLinearRing(pseq));
+        fail("IllegalArgumentException expected.");
+        ensure(!lr->isEmpty());
+    }
+    catch(geos::util::IllegalArgumentException const& e) {
+        const char* msg = e.what(); // OK
+        ensure(msg != nullptr);
+    }
+
 }
 
 
