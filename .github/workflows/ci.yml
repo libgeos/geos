@@ -27,7 +27,7 @@ jobs:
           cxxstd: 11,
           arch: 32,
           packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
-          cmake: 3.12.*,
+          cmake: 3.13.*,
           os: ubuntu-18.04
         }
         - {
@@ -78,6 +78,7 @@ jobs:
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip ${{ matrix.ci.packages }}
         python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
+        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
       uses: actions/checkout@v2
@@ -92,7 +93,7 @@ jobs:
         cd build.cmake
         cmake --version
         cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
-        cmake --build . -j 2
+        make -j 2
         cmake --build . --target docs
         ctest --output-on-failure .
 
