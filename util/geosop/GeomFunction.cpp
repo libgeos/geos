@@ -19,6 +19,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/Envelope.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
@@ -28,6 +29,8 @@
 #include <geos/geom/util/Densifier.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
+#include <geos/operation/intersection/RectangleIntersection.h>
+#include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/overlayng/OverlayNG.h>
@@ -378,6 +381,16 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
+        });
+
+    add("clipRect", "clips geometry A to envelope of B", 2, 0,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            using geos::operation::intersection::Rectangle;
+            using geos::operation::intersection::RectangleIntersection;
+            const Envelope* env = geomB->getEnvelopeInternal();
+            Rectangle rect(env->getMinX(), env->getMinY(), env->getMaxX(), env->getMaxY());
+            return new Result( RectangleIntersection::clip( *geom, rect) );
         });
 
 }
