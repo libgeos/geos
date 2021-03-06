@@ -287,6 +287,11 @@ void object::test<7>() {
         using BoundsType = FloatBox;
         using TwoDimensional = std::true_type;
 
+        // Quiet incorrect gcc warning about unused local typedef
+        TwoDimensional doNothing() {
+            return {};
+        }
+
         static bool intersects(const BoundsType & a, const BoundsType & b) {
             return a.intersects(b);
         }
