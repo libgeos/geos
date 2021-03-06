@@ -108,12 +108,12 @@ public:
 
         Iterator begin() {
             return Iterator(m_tree.nodes.cbegin(),
-                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+                            std::next(m_tree.nodes.cbegin(), static_cast<long>(m_tree.numItems)));
         }
 
         Iterator end() {
-            return Iterator(std::next(m_tree.nodes.cbegin(), m_tree.numItems),
-                            std::next(m_tree.nodes.cbegin(), m_tree.numItems));
+            return Iterator(std::next(m_tree.nodes.cbegin(), static_cast<long>(m_tree.numItems)),
+                            std::next(m_tree.nodes.cbegin(), static_cast<long>(m_tree.numItems)));
         }
     private:
         TemplateSTRtreeImpl& m_tree;
@@ -402,9 +402,9 @@ protected:
         // Arrange child nodes in two dimensions.
         // First, divide them into vertical slices of a given size (left-to-right)
         // Then create nodes within those slices (bottom-to-top)
-        auto numChildren = std::distance(begin, end);
+        auto numChildren = static_cast<std::size_t>(std::distance(begin, end));
         auto numSlices = sliceCount(numChildren);
-        auto nodesPerSlice = sliceCapacity(numChildren, numSlices);
+        std::size_t nodesPerSlice = sliceCapacity(numChildren, numSlices);
 
         // We could sort all of the nodes here, but we don't actually need them to be
         // completely sorted. They need to be sorted enough for each node to end up
@@ -413,10 +413,10 @@ protected:
         sortNodesX(begin, end);
 
         auto startOfSlice = begin;
-        for (size_t j = 0; j < numSlices; j++) {
+        for (decltype(numSlices) j = 0; j < numSlices; j++) {
             auto nodesRemaining = static_cast<size_t>(std::distance(startOfSlice, end));
             auto nodesInSlice = std::min(nodesRemaining, nodesPerSlice);
-            auto endOfSlice = std::next(startOfSlice, nodesInSlice);
+            auto endOfSlice = std::next(startOfSlice, static_cast<long>(nodesInSlice));
 
             // Make sure that every node that should be in this slice ends up somewhere
             // between startOfSlice and endOfSlice. We don't require any ordering among
@@ -441,7 +441,7 @@ protected:
         while (firstChild != end) {
             auto childrenRemaining = static_cast<size_t>(std::distance(firstChild, end));
             auto childrenForNode = std::min(nodeCapacity, childrenRemaining);
-            auto lastChild = std::next(firstChild, childrenForNode);
+            auto lastChild = std::next(firstChild, static_cast<long>(childrenForNode));
 
             //partialSortNodes(firstChild, lastChild, end);
 
