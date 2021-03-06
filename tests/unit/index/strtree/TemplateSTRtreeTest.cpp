@@ -351,7 +351,9 @@ void object::test<8>() {
     ensure(matches.size() == 2);
 }
 
-// Test bounds-and-item visitor
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1910
+// Test bounds-and-item visitor. Method not defined in MSVC 2015.
 template<>
 template<>
 void object::test<9>() {
@@ -374,6 +376,7 @@ void object::test<9>() {
     tree.query(qe, visitor);
     ensure(matches.size() == 4);
 }
+#endif
 
 
 } // namespace tut

@@ -473,20 +473,24 @@ protected:
     // In this case, we will always return true, indicating that querying should
     // continue.
     template<typename Visitor,
+            typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
+    bool visitLeaf(Visitor&& visitor, const Node& node)
+    {
+        visitor(node.getItem());
+        return true;
+    }
+
+    // MSVC 2015 does not implement C++11 expression SFINAE and considers this a
+    // redefinition of a previous method
+#if !defined(_MSC_VER) || _MSC_VER >= 1910
+    template<typename Visitor,
              typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<BoundsType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
     bool visitLeaf(Visitor&& visitor, const Node& node)
     {
         visitor(node.getBounds(), node.getItem());
         return true;
     }
-
-    template<typename Visitor,
-             typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
-    bool visitLeaf(Visitor&& visitor, const Node& node)
-    {
-        visitor(node.getItem());
-        return true;
-    }
+#endif
 
     // If the visitor function does return a value, we will use this to indicate
     // that querying should continue.
@@ -497,12 +501,16 @@ protected:
         return visitor(node.getItem());
     }
 
+    // MSVC 2015 does not implement C++11 expression SFINAE and considers this a
+    // redefinition of a previous method
+#if !defined(_MSC_VER) || _MSC_VER >= 1910
     template<typename Visitor,
              typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<BoundsType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr>
     bool visitLeaf(Visitor&& visitor, const Node& node)
     {
         return visitor(node.getBounds(), node.getItem());
     }
+#endif
 
     template<typename Visitor>
     void query(const BoundsType& queryEnv,
