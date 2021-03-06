@@ -21,81 +21,167 @@ namespace io { // geos.io
 
 // GeoJSONValue
 
-GeoJSONValue GeoJSONValue::createStringValue(std::string s) {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::STRING;
-    value.stringValue = s;
-    return value;
+GeoJSONValue::GeoJSONValue(double value) {
+    type = Type::NUMBER;
+    d = value;
 }
 
-GeoJSONValue GeoJSONValue::createNumberValue(double n) {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::NUMBER;
-    value.numberValue = n;
-    return value;
+GeoJSONValue::GeoJSONValue(const std::string& value)  {
+    type = Type::STRING;
+    new(&s) std::string{value};
 }
 
-GeoJSONValue GeoJSONValue::createNullValue() {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::NULLTYPE;
-    value.nullValue = nullptr;
-    return value;
+GeoJSONValue::GeoJSONValue()  {
+    type = Type::NULLTYPE;
+    n = nullptr;
 }
 
-GeoJSONValue GeoJSONValue::createBooleanValue(bool b) {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::BOOLEAN;
-    value.booleanValue = b;
-    return value;
-}   
-
-GeoJSONValue GeoJSONValue::createObjectValue() {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::OBJECT;
-    return value;
+GeoJSONValue::GeoJSONValue(bool value)  {
+    type = Type::BOOLEAN;
+    b = value;
 }
 
-GeoJSONValue GeoJSONValue::createArrayValue() {
-    GeoJSONValue value{};
-    value.type = GeoJSONValueType::ARRAY;
-    return value;
+GeoJSONValue::GeoJSONValue(const std::map<std::string, GeoJSONValue>& value)  {
+    type = Type::OBJECT;
+    new(&o) std::map<std::string, GeoJSONValue>{value};
 }
 
-std::string GeoJSONValue::toString() const {
-    std::stringstream os;
-    if (type == GeoJSONValueType::STRING) {
-        os << stringValue;
-    } else if (type == GeoJSONValueType::NUMBER) {
-        os << numberValue;
-    } else if (type == GeoJSONValueType::BOOLEAN) {
-        os << booleanValue;
-    } else if (type == GeoJSONValueType::NULLTYPE) {
-        os << "null";
-    } else if (type == GeoJSONValueType::ARRAY) {
-        bool first = true;
-        for(auto item : arrayValue) {
-            if (!first) {
-                os << ", ";
-            }
-            os << item.toString();
-            first = false;
-        }
-    } else if (type == GeoJSONValueType::OBJECT) {
-        bool first = true;
-        for(auto item : objectValue) {
-            if (!first) {
-                os << ", ";
-            }
-            os << item.first << " = " << item.second.toString();
-            first = false;
-        }
+GeoJSONValue::GeoJSONValue(const std::vector<GeoJSONValue>& value)  {
+    type = Type::ARRAY;
+    new(&a) std::vector<GeoJSONValue>{value};
+}
+
+void GeoJSONValue::cleanup() {
+    using std::string;
+    using object = std::map<std::string, GeoJSONValue>;
+    using array = std::vector<GeoJSONValue>;
+    if (type == Type::STRING) {
+         s.~string();
+    } else if (type == Type::OBJECT) {
+        o.~object();
+    } else if (type == Type::ARRAY) { 
+        a.~array();
     }
-    return os.str();
 }
 
-std::ostream& operator << (std::ostream& os, const GeoJSONValue& val) {
-    os << val.toString();
-    return os;
+GeoJSONValue::~GeoJSONValue() {
+    cleanup();
+}
+
+GeoJSONValue::GeoJSONValue(const GeoJSONValue& v) {
+    switch(v.type) {
+        case Type::NUMBER:
+            d = v.d;
+            break;
+        case Type::BOOLEAN:
+            b = v.b;
+            break;
+        case Type::STRING:
+            new(&s) std::string{v.s};
+            break;
+        case Type::NULLTYPE:
+            n = v.n;
+            break;
+        case Type::OBJECT:
+            new(&o) std::map<std::string, GeoJSONValue>{v.o};
+            break;
+        case Type::ARRAY:
+            new(&a) std::vector<GeoJSONValue>{v.a};
+            break;                
+    }
+    type = v.type;
+}
+
+GeoJSONValue& GeoJSONValue::operator=(const GeoJSONValue& v) {
+    if (type == Type::STRING && v.type == Type::STRING) {
+        s = v.s;
+        return *this;
+    } else if (type == Type::OBJECT && v.type == Type::OBJECT) {
+        o = v.o;
+        return *this;
+    } else if (type == Type::ARRAY && v.type == Type::ARRAY) {
+        a = v.a;
+        return *this;
+    } 
+
+    cleanup();
+
+    switch(v.type) {
+        case Type::NUMBER:
+            d = v.d;
+            break;
+        case Type::BOOLEAN:
+            b = v.b;
+            break;
+        case Type::STRING:
+            new(&s) std::string{v.s};
+            break;
+        case Type::NULLTYPE:
+            n = v.n;
+            break;
+        case Type::OBJECT:
+            new(&o) std::map<std::string, GeoJSONValue>{v.o};
+            break;
+        case Type::ARRAY:
+            new(&a) std::vector<GeoJSONValue>{v.a};
+            break;                
+    }
+    type = v.type;
+    return *this;
+}
+
+double GeoJSONValue::getNumber() const {
+    if (type != Type::NUMBER) throw GeoJSONTypeError{};
+    return d;
+
+}
+std::string GeoJSONValue::getString() const {
+    if (type != Type::STRING) throw GeoJSONTypeError{};
+    return s;
+}
+
+std::nullptr_t GeoJSONValue::getNull() const {
+    if (type != Type::NULLTYPE) throw GeoJSONTypeError{};
+    return n;
+}
+
+bool GeoJSONValue::getBoolean() const {
+    if (type != Type::BOOLEAN) throw GeoJSONTypeError{};
+    return b;
+}
+
+std::map<std::string,GeoJSONValue> GeoJSONValue::getObject() const {
+    if (type != Type::OBJECT) throw GeoJSONTypeError{};
+    return o;
+}
+
+std::vector<GeoJSONValue> GeoJSONValue::getArray() const {
+    if (type != Type::ARRAY) throw GeoJSONTypeError{};
+    return a;
+}
+
+bool GeoJSONValue::isNumber() const {
+    return type == Type::NUMBER;
+}
+
+bool GeoJSONValue::isString() const {
+    return type == Type::STRING;
+}
+
+bool GeoJSONValue::isNull() const {
+    return type == Type::NULLTYPE;
+}
+
+bool GeoJSONValue::isBoolean() const {
+    return type == Type::BOOLEAN;
+}
+
+bool GeoJSONValue::isObject() const {
+    return type == Type::OBJECT;
+}
+
+bool GeoJSONValue::isArray() const {
+    return type == Type::ARRAY;
 }
 
 // GeoJSONFeature

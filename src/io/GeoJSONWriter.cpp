@@ -63,38 +63,38 @@ std::string GeoJSONWriter::write(const GeoJSONFeature feature) {
 }
 
 void GeoJSONWriter::encodeGeoJSONValue(std::string key, GeoJSONValue value, nlohmann::ordered_json& j) {
-    if (value.type == GeoJSONValueType::NUMBER) {
+    if (value.isNumber()) {
         if (j.is_object()) {
-            j[key] = value.numberValue;
+            j[key] = value.getNumber();
         } else {
-            j.push_back(value.numberValue);
+            j.push_back(value.getNumber());
         }
-    } else if (value.type == GeoJSONValueType::STRING) {
+    } else if (value.isString()) {
         if (j.is_object()) {
-            j[key] = value.stringValue;
+            j[key] = value.getString();
         } else {
-            j.push_back(value.stringValue);
+            j.push_back(value.getString());
         }
-    } else if (value.type == GeoJSONValueType::BOOLEAN) {
+    } else if (value.isBoolean()) {
         if (j.is_object()) {
-            j[key] = value.booleanValue;
+            j[key] = value.getBoolean();
         } else {
-            j.push_back(value.booleanValue);
+            j.push_back(value.getBoolean());
         }
-    } else if (value.type == GeoJSONValueType::NULLTYPE) {
+    } else if (value.isNull()) {
         if (j.is_object()) {
             j[key] = nullptr;
         } else {
             j.push_back(nullptr);
         }
-    } else if (value.type == GeoJSONValueType::ARRAY) {
+    } else if (value.isArray()) {
         j[key] = json::array();
-        for (GeoJSONValue v : value.arrayValue) {
+        for (GeoJSONValue v : value.getArray()) {
             encodeGeoJSONValue("", v, j[key]);
         }
-    } else if (value.type == GeoJSONValueType::OBJECT) {
+    } else if (value.isObject()) {
         j[key] = json::object();
-        for (auto entry : value.objectValue) {
+        for (auto entry : value.getObject()) {
             encodeGeoJSONValue(entry.first, entry.second, j[key]);
         }
     }

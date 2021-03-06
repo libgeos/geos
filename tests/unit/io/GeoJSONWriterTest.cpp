@@ -46,6 +46,7 @@ typedef group::object object;
 
 group test_geojsonwriter_group("geos::io::GeoJSONWriter");
 
+// Write a Point to GeoJSON 
 template<>
 template<>
 void object::test<1>
@@ -56,6 +57,7 @@ void object::test<1>
     ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
 }
 
+// Write a LineString to GeoJSON
 template<>
 template<>
 void object::test<2>
@@ -66,6 +68,7 @@ void object::test<2>
     ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0],[103.0,1.0],[104.0,0.0],[105.0,1.0]]}");
 }
 
+// Write a Polygon with just an outer ring to GeoJSON
 template<>
 template<>
 void object::test<3>
@@ -76,6 +79,7 @@ void object::test<3>
     ensure_equals(result, "{\"type\":\"Polygon\",\"coordinates\":[[[30.0,10.0],[40.0,40.0],[20.0,40.0],[10.0,20.0],[30.0,10.0]]]}");
 }
 
+// Write a Polygon with outer ring and one inner ring to GeoJSON
 template<>
 template<>
 void object::test<4>
@@ -86,6 +90,7 @@ void object::test<4>
     ensure_equals(result, "{\"type\":\"Polygon\",\"coordinates\":[[[35.0,10.0],[45.0,45.0],[15.0,40.0],[10.0,20.0],[35.0,10.0]],[[20.0,30.0],[35.0,35.0],[30.0,20.0],[20.0,30.0]]]}");
 }
 
+// Write a MultiPoint to GeoJSON
 template<>
 template<>
 void object::test<5>
@@ -96,6 +101,7 @@ void object::test<5>
     ensure_equals(result, "{\"type\":\"MultiPoint\",\"coordinates\":[[10.0,40.0],[40.0,30.0],[20.0,20.0],[30.0,10.0]]}");
 }
 
+// Write a MultiLineString to GeoJSON
 template<>
 template<>
 void object::test<6>
@@ -106,6 +112,7 @@ void object::test<6>
     ensure_equals(result, "{\"type\":\"MultiLineString\",\"coordinates\":[[[10.0,10.0],[20.0,20.0],[10.0,40.0]],[[40.0,40.0],[30.0,30.0],[40.0,20.0],[30.0,10.0]]]}");
 }
 
+// Write a MultiPolygon with two simple Polygons to GeoJSON
 template<>
 template<>
 void object::test<7>
@@ -116,6 +123,7 @@ void object::test<7>
     ensure_equals(result, "{\"type\":\"MultiPolygon\",\"coordinates\":[[[[30.0,20.0],[45.0,40.0],[10.0,40.0],[30.0,20.0]]],[[[15.0,5.0],[40.0,10.0],[10.0,20.0],[5.0,10.0],[15.0,5.0]]]]}");
 }
 
+// Write a GeometryCollection to GeoJSON
 template<>
 template<>
 void object::test<8>
@@ -126,6 +134,7 @@ void object::test<8>
     ensure_equals(result, "{\"type\":\"GeometryCollection\",\"geometries\":[{\"type\":\"Point\",\"coordinates\":[1.0,1.0]},{\"type\":\"Point\",\"coordinates\":[2.0,2.0]}]}");
 }
 
+// Write a Point to GeoJSON Feature
 template<>
 template<>
 void object::test<9>
@@ -136,6 +145,7 @@ void object::test<9>
     ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}}");
 }
 
+// Write a Point to GeoJSON FeatureCollection
 template<>
 template<>
 void object::test<10>
@@ -146,6 +156,7 @@ void object::test<10>
     ensure_equals(result, "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}}]}");
 }
 
+// Write a LineString to formatted GeoJSON
 template<>
 template<>
 void object::test<11>
@@ -176,6 +187,7 @@ void object::test<11>
         "}");
 }
 
+// Write a LineString to formatted GeoJSON with custom indentation
 template<>
 template<>
 void object::test<12>
@@ -213,8 +225,8 @@ void object::test<13>
 ()
 {
     geos::io::GeoJSONFeature feature { wktreader.read("POINT(-117 33)"), std::map<std::string, geos::io::GeoJSONValue> {
-        {"id",   geos::io::GeoJSONValue::createNumberValue(1)     },
-        {"name", geos::io::GeoJSONValue::createStringValue("One") },
+        {"id",   geos::io::GeoJSONValue(1.0)     },
+        {"name", geos::io::GeoJSONValue(std::string{"One"}) },
     }};
     std::string result = geojsonwriter.write(feature);
     ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]},\"properties\":{\"id\":1.0,\"name\":\"One\"}}");
@@ -228,12 +240,12 @@ void object::test<14>
 {
     geos::io::GeoJSONFeatureCollection features {{
         geos::io::GeoJSONFeature { wktreader.read("POINT(-117 33)"), std::map<std::string, geos::io::GeoJSONValue> {
-            {"id",   geos::io::GeoJSONValue::createNumberValue(1)     },
-            {"name", geos::io::GeoJSONValue::createStringValue("One") },
+            {"id",   geos::io::GeoJSONValue(1.0)     },
+            {"name", geos::io::GeoJSONValue(std::string{"One"}) },
         }},
         geos::io::GeoJSONFeature { wktreader.read("POINT(-127 53)"), std::map<std::string, geos::io::GeoJSONValue> {
-            {"id",   geos::io::GeoJSONValue::createNumberValue(2)     },
-            {"name", geos::io::GeoJSONValue::createStringValue("Two") },
+            {"id",   geos::io::GeoJSONValue(2.0)     },
+            {"name", geos::io::GeoJSONValue(std::string{"Two"}) },
         }}
     }};
     std::string result = geojsonwriter.write(features);

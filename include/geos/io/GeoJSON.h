@@ -24,6 +24,7 @@
 #include <string>
 #include <sstream>
 #include <cctype>
+#include <cstddef>
 #include <geos/geom/Geometry.h>
 
 #ifdef _MSC_VER
@@ -40,28 +41,53 @@ class Geometry;
 namespace geos {
 namespace io {
 
-enum class GeoJSONValueType {
-    STRING, NUMBER, BOOLEAN, NULLTYPE, OBJECT, ARRAY
-};
+class GEOS_DLL GeoJSONValue {
 
-struct GeoJSONValue {
+    private:
 
-    GeoJSONValueType type;
-    std::string stringValue;
-    double numberValue;
-    std::string nullValue;
-    bool booleanValue;
-    std::map<std::string, GeoJSONValue> objectValue;
-    std::vector<GeoJSONValue> arrayValue;
+        enum class Type { NUMBER, STRING, NULLTYPE, BOOLEAN, OBJECT, ARRAY };
+        
+        Type type;
 
-    std::string toString() const;
+        union {
+            double d;
+            std::string s;
+            std::nullptr_t n;
+            bool b;
+            std::map<std::string, GeoJSONValue> o;
+            std::vector<GeoJSONValue> a;
+        };
 
-    static GeoJSONValue createStringValue(std::string s);
-    static GeoJSONValue createNumberValue(double n);
-    static GeoJSONValue createNullValue();
-    static GeoJSONValue createBooleanValue(bool b);
-    static GeoJSONValue createObjectValue();
-    static GeoJSONValue createArrayValue();
+        void cleanup();
+
+    public:
+
+        struct GeoJSONTypeError {};
+
+        GeoJSONValue(double);
+        GeoJSONValue(const std::string&);
+        GeoJSONValue();
+        GeoJSONValue(bool);
+        GeoJSONValue(const std::map<std::string, GeoJSONValue>&);
+        GeoJSONValue(const std::vector<GeoJSONValue>&);
+
+        ~GeoJSONValue();
+        GeoJSONValue(const GeoJSONValue&);
+        GeoJSONValue& operator=(const GeoJSONValue&);
+
+        double getNumber() const;
+        std::string getString() const;
+        std::nullptr_t getNull() const;
+        bool getBoolean() const;
+        std::map<std::string,GeoJSONValue> getObject() const;
+        std::vector<GeoJSONValue> getArray() const;
+
+        bool isNumber() const;
+        bool isString() const;
+        bool isNull() const;
+        bool isBoolean() const;
+        bool isObject() const;
+        bool isArray() const;
 
 };
 

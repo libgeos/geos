@@ -44,6 +44,7 @@ typedef group::object object;
 
 group test_geojsonreader_group("geos::io::GeoJSONReader");
 
+// Read a GeoJSON Point
 template<>
 template<>
 void object::test<1>
@@ -54,6 +55,7 @@ void object::test<1>
     ensure_equals("POINT (-117.000 33.000)", geom->toText());
 }
 
+// Read a GeoJSON LineString
 template<>
 template<>
 void object::test<2>
@@ -64,6 +66,7 @@ void object::test<2>
     ensure_equals("LINESTRING (102.000 0.000, 103.000 1.000, 104.000 0.000, 105.000 1.000)", geom->toText());
 }
 
+// Read a GeoJSON Polygon with only an outer ring
 template<>
 template<>
 void object::test<3>
@@ -74,6 +77,7 @@ void object::test<3>
     ensure_equals("POLYGON ((30.000 10.000, 40.000 40.000, 20.000 40.000, 10.000 20.000, 30.000 10.000))", geom->toText());
 }
 
+// Read a GeoJSON Point with an outer ring and an inner ring
 template<>
 template<>
 void object::test<4>
@@ -84,6 +88,7 @@ void object::test<4>
     ensure_equals("POLYGON ((35.000 10.000, 45.000 45.000, 15.000 40.000, 10.000 20.000, 35.000 10.000), (20.000 30.000, 35.000 35.000, 30.000 20.000, 20.000 30.000))", geom->toText());
 }
 
+// Read a GeoJSON MultiPoint
 template<>
 template<>
 void object::test<5>
@@ -94,6 +99,7 @@ void object::test<5>
     ensure_equals("MULTIPOINT (10.000 40.000, 40.000 30.000, 20.000 20.000, 30.000 10.000)", geom->toText());
 }
 
+// Read a GeoJSON MultiLineString
 template<>
 template<>
 void object::test<6>
@@ -104,6 +110,7 @@ void object::test<6>
     ensure_equals("MULTILINESTRING ((10.000 10.000, 20.000 20.000, 10.000 40.000), (40.000 40.000, 30.000 30.000, 40.000 20.000, 30.000 10.000))", geom->toText());
 }
 
+// Read a GeoJSON MultiPolygon
 template<>
 template<>
 void object::test<7>
@@ -114,6 +121,7 @@ void object::test<7>
     ensure_equals("MULTIPOLYGON (((40.000 40.000, 20.000 45.000, 45.000 30.000, 40.000 40.000)), ((20.000 35.000, 10.000 30.000, 10.000 10.000, 30.000 5.000, 45.000 20.000, 20.000 35.000), (30.000 20.000, 20.000 15.000, 20.000 25.000, 30.000 20.000)))", geom->toText());
 }
 
+// Read a GeoJSON GeometryCollection
 template<>
 template<>
 void object::test<8>
@@ -124,6 +132,7 @@ void object::test<8>
     ensure_equals("GEOMETRYCOLLECTION (POINT (40.000 10.000), LINESTRING (10.000 10.000, 20.000 20.000, 10.000 40.000), POLYGON ((40.000 40.000, 20.000 45.000, 45.000 30.000, 40.000 40.000)))", geom->toText());
 }
 
+// Read a GeoJSON Feature with a Point and no properties
 template<>
 template<>
 void object::test<9>
@@ -135,6 +144,7 @@ void object::test<9>
 
 }
 
+// Read a GeoJSON FeatureCollection with two Feature with Points and no properties
 template<>
 template<>
 void object::test<10>
@@ -146,6 +156,7 @@ void object::test<10>
 
 }
 
+// Read a GeoJSON empty Point
 template<>
 template<>
 void object::test<11>
@@ -156,6 +167,7 @@ void object::test<11>
     ensure_equals("POINT EMPTY", geom->toText());
 }
 
+// Read a GeoJSON empty LineString
 template<>
 template<>
 void object::test<12>
@@ -166,6 +178,7 @@ void object::test<12>
     ensure_equals("LINESTRING EMPTY", geom->toText());
 }
 
+// Read a GeoJSON empty Polygon
 template<>
 template<>
 void object::test<13>
@@ -176,6 +189,7 @@ void object::test<13>
     ensure_equals("POLYGON EMPTY", geom->toText());
 }
 
+// Read a GeoJSON empty MultiPoint
 template<>
 template<>
 void object::test<14>
@@ -186,6 +200,7 @@ void object::test<14>
     ensure_equals("MULTIPOINT EMPTY", geom->toText());
 }
 
+// Read a GeoJSON empty MultiLineString
 template<>
 template<>
 void object::test<15>
@@ -196,6 +211,7 @@ void object::test<15>
     ensure_equals("MULTILINESTRING EMPTY", geom->toText());
 }
 
+// Read a GeoJSON empty MultiPolygon
 template<>
 template<>
 void object::test<16>
@@ -217,30 +233,45 @@ void object::test<17>
     ensure_equals("GEOMETRYCOLLECTION EMPTY", geom->toText());
 }
 
-// Read a Feature
+// Read a Simple Feature
 template<>
 template<>
 void object::test<18>
 ()
 {
-    std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4]}}" };
+    std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"required\": true} }" };
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(static_cast<size_t>(1), features.getFeatures().size());
     ensure_equals("POINT (-117.000 33.000)", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].numberValue);
-    ensure_equals("one", features.getFeatures()[0].getProperties()["name"].stringValue);
-    std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties()["items"].arrayValue;
+    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
+    ensure_equals("one", features.getFeatures()[0].getProperties()["name"].getString());
+    ensure_equals(true, features.getFeatures()[0].getProperties()["required"].getBoolean());
+}
+
+// Read a Complicated Feature
+template<>
+template<>
+void object::test<19>
+()
+{
+    std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4], \"nested\": {\"id\":2, \"name\":\"two\"}}}" };
+    geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
+    ensure_equals(static_cast<size_t>(1), features.getFeatures().size());
+    ensure_equals("POINT (-117.000 33.000)", features.getFeatures()[0].getGeometry()->toText());
+    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
+    ensure_equals("one", features.getFeatures()[0].getProperties()["name"].getString());
+    std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties()["items"].getArray();
     ensure_equals(static_cast<size_t>(4), values.size());
-    ensure_equals(1.0, values[0].numberValue);
-    ensure_equals(2.0, values[1].numberValue);
-    ensure_equals(3.0, values[2].numberValue);
-    ensure_equals(4.0, values[3].numberValue);
+    ensure_equals(1.0, values[0].getNumber());
+    ensure_equals(2.0, values[1].getNumber());
+    ensure_equals(3.0, values[2].getNumber());
+    ensure_equals(4.0, values[3].getNumber());
 }
 
 // Read a FeatureCollection
 template<>
 template<>
-void object::test<19>
+void object::test<20>
 ()
 {
     std::string geojson { "{\"type\":\"FeatureCollection\",\"features\":["
@@ -251,12 +282,11 @@ void object::test<19>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(static_cast<size_t>(3), features.getFeatures().size());
     ensure_equals("POLYGON ((87.890 64.923, 76.992 55.178, 102.656 46.558, 115.312 60.413, 94.570 58.447, 87.890 64.923))", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].numberValue);
+    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
     ensure_equals("LINESTRING (1.406 48.690, 41.835 34.016, 22.500 13.923)", features.getFeatures()[1].getGeometry()->toText());
-    ensure_equals(2.0, features.getFeatures()[1].getProperties()["id"].numberValue);
+    ensure_equals(2.0, features.getFeatures()[1].getProperties()["id"].getNumber());
     ensure_equals("POINT (-28.125 39.095)", features.getFeatures()[2].getGeometry()->toText());
-    ensure_equals(3.0, features.getFeatures()[2].getProperties()["id"].numberValue);
-
+    ensure_equals(3.0, features.getFeatures()[2].getProperties()["id"].getNumber());
 }
 
 

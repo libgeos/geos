@@ -62,7 +62,7 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatures(const std::string& geoJsonT
     std::string type = j["type"];
     if (type == "Feature") {
         auto feature = readFeature(j);    
-        return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{feature}};
+        return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{feature} };
     } else if (type == "FeatureCollection") {
         return readFeatureCollection(j);    
     } else {
@@ -82,40 +82,40 @@ GeoJSONFeature GeoJSONReader::readFeature(nlohmann::json& j) {
     auto geometry = readGeometry(geometryJson);
     auto properties = j["properties"];
     std::map<std::string,GeoJSONValue> map = readProperties(properties);    
-    return GeoJSONFeature{ std::move(geometry), map };
+    GeoJSONFeature f = GeoJSONFeature{ std::move(geometry), std::move(map) };
+    return f;
 }
 
 std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(nlohmann::json& p) {
     std::map<std::string,GeoJSONValue> map;
     for(auto prop : p.items()) {
-        map[prop.key()] = readProperty(prop.value());
+        map[prop.key()] = std::move(readProperty(prop.value()));
     }
     return map;
 }
 
 GeoJSONValue GeoJSONReader::readProperty(nlohmann::json& value) {
     if (value.is_string()) {
-        return GeoJSONValue::createStringValue(value.get<std::string>());
+        return GeoJSONValue { value.get<std::string>() };
     } else if (value.is_number()) {
-        return GeoJSONValue::createNumberValue(value.get<double>());
+        return GeoJSONValue { value.get<double>() };
     } else if (value.is_boolean()) {
-        return GeoJSONValue::createBooleanValue(value.get<bool>());
-    } else if (value.is_number()) {
-        return GeoJSONValue::createNumberValue(value.get<double>());
+        return GeoJSONValue { value.get<bool>() };
     } else if (value.is_array()) {
-        GeoJSONValue v = GeoJSONValue::createArrayValue();
+        std::vector<GeoJSONValue> v {};
         for (auto& el : value.items()) {
-            v.arrayValue.push_back(readProperty(el.value()));
+            const GeoJSONValue item = readProperty(el.value());
+            v.push_back(item);
         }
-        return v;
+        return GeoJSONValue{ v };
     } else if (value.is_object()) {
-        GeoJSONValue v = GeoJSONValue::createObjectValue();
+        std::map<std::string, GeoJSONValue> v {};
         for (auto& el : value.items()) {
-            v.objectValue[el.key()] = readProperty(el.value());
+            v[el.key()] = readProperty(el.value());
         }
-        return v;
+        return GeoJSONValue{ v };
     } else {
-        return GeoJSONValue::createNullValue();
+        return GeoJSONValue{};
     }
 }
 
