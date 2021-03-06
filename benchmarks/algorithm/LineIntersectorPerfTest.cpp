@@ -44,7 +44,7 @@ static void BM_Collinear(benchmark::State& state) {
 }
 
 BENCHMARK(BM_PointIntersection);
-//BENCHMARK(BM_Collinear);
+BENCHMARK(BM_Collinear);
 
 BENCHMARK_MAIN();
 
