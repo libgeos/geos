@@ -16,6 +16,8 @@
 #define GEOS_INDEX_STRTREE_INTERVAL_H
 
 #include <geos/export.h>
+#include <algorithm>
+#include <cassert>
 
 namespace geos {
 namespace index { // geos::index
@@ -27,11 +29,25 @@ namespace strtree { // geos::index::strtree
 ///
 class GEOS_DLL Interval {
 public:
-    Interval(double newMin, double newMax);
-    double getCentre();
-    Interval* expandToInclude(const Interval* other);
-    bool intersects(const Interval* other) const;
-    bool equals(const Interval* o) const;
+    Interval(double newMin, double newMax) : imin(newMin), imax(newMax) {
+        assert(imin <= imax);
+    }
+
+    double getMin() const { return imin; }
+    double getMax() const { return imax; }
+    double getWidth() const { return imax - imin; }
+    double getCentre() const { return (imin + imax) / 2; }
+    Interval* expandToInclude(const Interval* other) {
+        imax = std::max(imax, other->imax);
+        imin = std::min(imin, other->imin);
+        return this;
+    }
+    bool intersects(const Interval* other) const {
+        return !(other->imin > imax || other->imax < imin);
+    }
+    bool equals(const Interval* other) const {
+        return imin == other->imin && imax == other->imax;
+    }
 private:
     double imin;
     double imax;
