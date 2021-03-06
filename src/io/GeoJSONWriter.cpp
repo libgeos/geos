@@ -104,7 +104,7 @@ std::string GeoJSONWriter::write(const GeoJSONFeatureCollection features) {
     json j;
     j["type"] = "FeatureCollection";
     json featuresJson = json::array();
-    for(auto const feature : features.getFeatures()) {
+    for(auto const& feature : features.getFeatures()) {
         json featureJson;
         encodeFeature(feature, featureJson);
         featuresJson.push_back(featureJson);
