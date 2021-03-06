@@ -95,7 +95,7 @@ private:
     * @param ei1 the end node of the split edge
     * @return the points for the split edge
     */
-    void createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& pts) const;
+    std::unique_ptr<geom::CoordinateSequence> createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1) const;
 
     /**
      * Adds nodes for any collapsed edge pairs.

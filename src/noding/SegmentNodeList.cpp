@@ -30,6 +30,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h> // FIXME: should we really be using this ?
+#include <geos/geom/FixedSizeCoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -241,24 +242,23 @@ SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& s
 std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
-    std::vector<Coordinate> pts;
-    createSplitEdgePts(ei0, ei1, pts);
-    return detail::make_unique<NodedSegmentString>(new CoordinateArraySequence(std::move(pts)), edge.getData());
+    auto pts = createSplitEdgePts(ei0, ei1);
+    return detail::make_unique<NodedSegmentString>(pts.release(), edge.getData());
 }
 
 
 /*private*/
-void
-SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<Coordinate>& pts) const
+std::unique_ptr<CoordinateSequence>
+SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
-    //int npts = ei1->segmentIndex - (ei0->segmentIndex + 2);
     bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
 
     // if only two points in split edge they must be the node points
     if (twoPoints) {
-        pts.emplace_back(ei0->coord);
-        pts.emplace_back(ei1->coord);
-        return;
+        auto pts = detail::make_unique<FixedSizeCoordinateSequence<2>>();
+        pts->setAt(ei0->coord, 0);
+        pts->setAt(ei1->coord, 1);
+        return RETURN_UNIQUE_PTR(pts);
     }
 
     const Coordinate& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);
@@ -270,9 +270,9 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     * The check for point equality is 2D only - Z values are ignored
     */
     bool useIntPt1 = ei1->isInterior() || ! ei1->coord.equals2D(lastSegStartPt);
-    //if (!useIntPt1) {
-    //    npts--;
-    //}
+
+    std::vector<Coordinate> pts;
+    pts.reserve(1 + (ei1->segmentIndex - ei0->segmentIndex) + useIntPt1);
 
     pts.emplace_back(ei0->coord);
     for (std::size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
@@ -281,6 +281,8 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     if (useIntPt1) {
         pts.emplace_back(ei1->coord);
     }
+
+    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(pts)));
 }
 
 
@@ -306,10 +308,9 @@ SegmentNodeList::getSplitCoordinates()
 /*private*/
 void
 SegmentNodeList::addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<Coordinate>& coordList) const {
-    std::vector<Coordinate> pts;
-    createSplitEdgePts(ei0, ei1, pts);
+    auto pts = createSplitEdgePts(ei0, ei1);
     // Append pts to coordList
-    coordList.insert(coordList.end(), pts.begin(), pts.end());
+    pts->toVector(coordList);
     // Remove duplicate Coordinates from coordList
     coordList.erase(std::unique(coordList.begin(), coordList.end()), coordList.end());
 }
