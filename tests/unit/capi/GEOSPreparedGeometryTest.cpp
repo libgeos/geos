@@ -370,5 +370,40 @@ void object::test<11>
         ensure_equals(ret, 0);
     }
 }
+
+// Test PreparedIntersects with Point EMPTY
+template<>
+template<>
+void object::test<12>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))");
+    geom2_ = GEOSGeomFromWKT("POINT EMPTY");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(nullptr != prepGeom1_);
+    ensure(nullptr != geom2_);
+
+    int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
+    ensure_equals(ret, 0);
+}
+
+// Test PreparedCovers with Point EMPTY
+template<>
+template<>
+void object::test<13>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))");
+    geom2_ = GEOSGeomFromWKT("POINT EMPTY");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(nullptr != prepGeom1_);
+    ensure(nullptr != geom2_);
+
+    int ret = GEOSPreparedCovers(prepGeom1_, geom2_);
+    ensure_equals(ret, 0);
+}
+
 } // namespace tut
 
