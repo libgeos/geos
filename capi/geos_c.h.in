@@ -353,6 +353,36 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create_r(
     unsigned int size,
     unsigned int dims);
 
+/** \see GEOSCoordSeq_copyFromBuffer */
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer_r(
+        GEOSContextHandle_t handle,
+        const double* buf,
+        unsigned int size,
+        unsigned int dims);
+
+/** \see GEOSCoordSeq_copyFromArrays */
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays_r(
+        GEOSContextHandle_t handle,
+        const double* x,
+        const double* y,
+        const double* z,
+        unsigned int size);
+
+/** \see GEOSCoordSeq_copyToBuffer */
+extern int GEOS_DLL GEOSCoordSeq_copyToBuffer_r(
+        GEOSContextHandle_t handle,
+        const GEOSCoordSequence* s,
+        double* buf,
+        unsigned int dims);
+
+/** \see GEOSCoordSeq_copyToArrays */
+extern int GEOS_DLL GEOSCoordSeq_copyToArrays_r(
+        GEOSContextHandle_t handle,
+        const GEOSCoordSequence* s,
+        double* x,
+        double* y,
+        double* z);
+
 /** \see GEOSCoordSeq_clone */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_clone_r(
     GEOSContextHandle_t handle,
@@ -1692,6 +1722,44 @@ extern const char GEOS_DLL *GEOSversion(void);
 * \return the sequence or NULL on exception
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsigned int dims);
+
+/**
+* Create a coordinate sequence by copying from a buffer of doubles (XYXY or XYZXYZ)
+* \param buf pointer to buffer
+* \param size number of coordinates in the sequence
+* \param dims dimensionality of the coordinates (2 or 3)
+* \return the sequence or NULL on exception
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, unsigned int dims);
+
+/**
+* Create a coordinate sequence by copying from arrays of doubles
+* \param x array of x coordinates
+* \param y array of y coordinates
+* \param z array of z coordinates, or NULL
+* \param size length of each array
+* \return the sequence or NULL on exception
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, unsigned int size);
+
+/**
+* Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ)
+* \param s sequence to copy
+* \param buf buffer to which coordinates should be copied
+* \param dims dimensionality of the coordinates to be constructed in the buffer (2 or 3)
+* \return 1 on success, 0 on error
+*/
+extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, unsigned int dims);
+
+/**
+* Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ)
+* \param s sequence to copy
+* \param x array to which x values should be copied
+* \param y array to which y values should be copied
+* \param z array to which z values should be copied, or NULL
+* \return 1 on success, 0 on error
+*/
+extern int GEOS_DLL GEOSCoordSeq_copyToArrays(const GEOSCoordSequence* s, double* x, double* y, double* z);
 
 /**
 * Clone a coordinate sequence.

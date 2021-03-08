@@ -8,6 +8,9 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
+
+find_package(benchmark QUIET)
+
 add_executable(perf_class_sizes ClassSizes.cpp)
 target_link_libraries(perf_class_sizes PRIVATE geos)
 

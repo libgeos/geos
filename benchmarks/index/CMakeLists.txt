@@ -11,8 +11,6 @@
 
 add_subdirectory(chain)
 
-find_package(benchmark QUIET)
-
 IF(benchmark_FOUND)
     add_executable(perf_spatial_index SpatialIndexPerfTest.cpp)
     target_include_directories(perf_spatial_index PUBLIC

@@ -25,3 +25,13 @@ target_link_libraries(perf_intersection PRIVATE geos geos_c)
 
 add_executable(perf_unary UnaryOpPerfTest.cpp)
 target_link_libraries(perf_unary PRIVATE geos geos_c)
+
+if(benchmark_FOUND)
+    add_executable(perf_capi_coordseq GEOSCoordSeqPerfTest.cpp)
+    target_include_directories(perf_capi_coordseq PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+    target_link_libraries(perf_capi_coordseq PRIVATE
+            benchmark::benchmark geos_c)
+endif()
+

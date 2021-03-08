@@ -9,8 +9,6 @@
 # See the COPYING file for more information.
 ################################################################################
 
-find_package(benchmark QUIET)
-
 IF(benchmark_FOUND)
     add_executable(perf_envelope
             EnvelopePerfTest.cpp
