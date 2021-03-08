@@ -41,7 +41,11 @@ bool
 BasicPreparedGeometry::envelopesIntersect(const geom::Geometry* g) const
 {
     if (g->getGeometryTypeId() == GEOS_POINT) {
-        return baseGeom->getEnvelopeInternal()->intersects(*(g->getCoordinate()));
+        auto pt = g->getCoordinate();
+        if (pt == nullptr) {
+            return false;
+        }
+        return baseGeom->getEnvelopeInternal()->intersects(*pt);
     }
 
     return baseGeom->getEnvelopeInternal()->intersects(g->getEnvelopeInternal());
@@ -51,7 +55,11 @@ bool
 BasicPreparedGeometry::envelopeCovers(const geom::Geometry* g) const
 {
     if (g->getGeometryTypeId() == GEOS_POINT) {
-        return baseGeom->getEnvelopeInternal()->covers(g->getCoordinate());
+        auto pt = g->getCoordinate();
+        if (pt == nullptr) {
+            return false;
+        }
+        return baseGeom->getEnvelopeInternal()->covers(pt);
     }
 
     return baseGeom->getEnvelopeInternal()->covers(g->getEnvelopeInternal());
