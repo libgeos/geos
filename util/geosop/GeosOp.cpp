@@ -143,7 +143,8 @@ GeosOp::GeosOp(GeosOpArgs& arg)
 GeosOp::~GeosOp() {
 }
 
-std::string formatNum(long n)
+template<typename T>
+std::string formatNum(T n)
 {
     auto fmt = std::to_string(n);
     // use signed num to allow negative to indicate done
@@ -168,7 +169,7 @@ bool isWKTLiteral(std::string s) {
     if (endsWith(s, " EMPTY")) return true;
 
     // assume if string contains a ( it is WKT
-    long numLParen = std::count(s.begin(), s.end(), '(');
+    auto numLParen = std::count(s.begin(), s.end(), '(');
     return numLParen > 0;
 }
 

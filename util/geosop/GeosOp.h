@@ -62,7 +62,7 @@ private:
     GeosOpArgs& args;
 
     long opCount = 0;
-    long vertexCount = 0;
+    std::size_t vertexCount = 0;
     double totalTime = 0;
 
     std::vector<std::unique_ptr<Geometry>> geomA;
