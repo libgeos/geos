@@ -2,7 +2,9 @@ Changes in 3.9.2
 2021-xx-xx
 
 - Bug fixes / improvements:
-  - Add in interrupt points in OverlayNG (#4857, Paul Ramsey) 
+  - Add in interrupt points in OverlayNG (#4857, Paul Ramsey)
+  - Fix crash in GEOSPreparedIntersects and GEOSPreparedContains for
+    POINT EMPTY input (Even Rouault)
 
 
 Changes in 3.9.1
