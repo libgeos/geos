@@ -56,7 +56,7 @@ void GeoJSONValue::cleanup() {
     using object = std::map<std::string, GeoJSONValue>;
     using array = std::vector<GeoJSONValue>;
     if (type == Type::STRING) {
-         s.~string();
+        s.~string();
     } else if (type == Type::OBJECT) {
         o.~object();
     } else if (type == Type::ARRAY) { 

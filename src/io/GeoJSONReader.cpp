@@ -14,6 +14,7 @@
 
 #include <geos/io/GeoJSONReader.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/io/ParseException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -46,38 +47,46 @@ GeoJSONReader::GeoJSONReader(): GeoJSONReader(*(GeometryFactory::getDefaultInsta
 GeoJSONReader::GeoJSONReader(const geom::GeometryFactory& gf) : geometryFactory(gf) {}
 
 std::unique_ptr<geom::Geometry> GeoJSONReader::read(const std::string& geoJsonText) {
-    json j = json::parse(geoJsonText);
-    std::string type = j["type"];
-    if (type == "Feature") {
-        return readFeatureForGeometry(j);    
-    } else if (type == "FeatureCollection") {
-        return readFeatureCollectionForGeometry(j);    
-    } else {
-        return readGeometry(j);
-    }
+    try {
+        json j = json::parse(geoJsonText);
+        std::string type = j["type"];
+        if (type == "Feature") {
+            return readFeatureForGeometry(j);    
+        } else if (type == "FeatureCollection") {
+            return readFeatureCollectionForGeometry(j);    
+        } else {
+            return readGeometry(j);
+        }
+    } catch (json::exception ex) {
+        throw ParseException("Error parsing JSON");
+    }   
 }
 
 GeoJSONFeatureCollection GeoJSONReader::readFeatures(const std::string& geoJsonText) {
-    json j = json::parse(geoJsonText);
-    std::string type = j["type"];
-    if (type == "Feature") {
-        auto feature = readFeature(j);    
-        return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{feature} };
-    } else if (type == "FeatureCollection") {
-        return readFeatureCollection(j);    
-    } else {
-        auto g = readGeometry(j);
-        return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{GeoJSONFeature{std::move(g), std::map<std::string, GeoJSONValue>{} }}};
+    try {
+        json j = json::parse(geoJsonText);
+        std::string type = j["type"];
+        if (type == "Feature") {
+            auto feature = readFeature(j);    
+            return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{feature} };
+        } else if (type == "FeatureCollection") {
+            return readFeatureCollection(j);    
+        } else {
+            auto g = readGeometry(j);
+            return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{GeoJSONFeature{std::move(g), std::map<std::string, GeoJSONValue>{} }}};
+        }
+    } catch (json::exception ex) {
+        throw ParseException("Error parsing JSON");
     }
 }
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureForGeometry(nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureForGeometry(const nlohmann::json& j) {
     auto geometryJson = j["geometry"];
     auto geometry = readGeometry(geometryJson);
     return geometry;
 }
 
-GeoJSONFeature GeoJSONReader::readFeature(nlohmann::json& j) {
+GeoJSONFeature GeoJSONReader::readFeature(const nlohmann::json& j) {
     auto geometryJson = j["geometry"];
     auto geometry = readGeometry(geometryJson);
     auto properties = j["properties"];
@@ -86,7 +95,7 @@ GeoJSONFeature GeoJSONReader::readFeature(nlohmann::json& j) {
     return f;
 }
 
-std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(nlohmann::json& p) {
+std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(const nlohmann::json& p) {
     std::map<std::string,GeoJSONValue> map;
     for(auto prop : p.items()) {
         map[prop.key()] = std::move(readProperty(prop.value()));
@@ -94,7 +103,7 @@ std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(nlohmann::json&
     return map;
 }
 
-GeoJSONValue GeoJSONReader::readProperty(nlohmann::json& value) {
+GeoJSONValue GeoJSONReader::readProperty(const nlohmann::json& value) {
     if (value.is_string()) {
         return GeoJSONValue { value.get<std::string>() };
     } else if (value.is_number()) {
@@ -119,7 +128,7 @@ GeoJSONValue GeoJSONReader::readProperty(nlohmann::json& value) {
     }
 }
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(const nlohmann::json& j) {
     auto featuresJson = j["features"];
     std::vector<geom::Geometry *>* geometries = new std::vector<geom::Geometry *>();
     for(auto featureJson : featuresJson) {
@@ -129,7 +138,7 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(
     return std::unique_ptr<geom::GeometryCollection>(geometryFactory.createGeometryCollection(geometries));
 }
 
-GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(nlohmann::json& j) {
+GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(const nlohmann::json& j) {
     auto featuresJson = j["features"];
     std::vector<GeoJSONFeature> features;
     for(auto featureJson : featuresJson) {
@@ -140,7 +149,7 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(nlohmann::json& j)
 }
 
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(const nlohmann::json& j) {
     std::string type = j["type"];
     if (type == "Point") {
         return readPoint(j);
@@ -156,13 +165,16 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(nlohmann::json& j) {
         return readMultiPolygon(j);
     } else if (type == "GeometryCollection") {
         return readGeometryCollection(j);
+    } else {
+        throw ParseException{"Unknown geometry type!"};
     }
-    return std::unique_ptr<geom::Geometry>(geometryFactory.createEmptyGeometry());
 }
 
-std::unique_ptr<geom::Point> GeoJSONReader::readPoint(nlohmann::json& j) {
-    std::vector<double> coords = j["coordinates"].get<std::vector<double>>();
-    if (coords.size() == 0) {
+std::unique_ptr<geom::Point> GeoJSONReader::readPoint(const nlohmann::json& j) {
+    auto coords = j["coordinates"].get<std::vector<double>>();
+    if (coords.size() == 1) {
+        throw  ParseException("Expected two coordinates found one");
+    } else if (coords.size() < 2) {
         return std::unique_ptr<geom::Point>(geometryFactory.createPoint(2));
     } else {
         geom::Coordinate coord = {coords[0], coords[1]};
@@ -170,23 +182,23 @@ std::unique_ptr<geom::Point> GeoJSONReader::readPoint(nlohmann::json& j) {
     }
 }
 
-std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(nlohmann::json& j) {
-    std::vector<std::pair<double,double>> coords = j["coordinates"].get<std::vector<std::pair<double,double>>>();
+std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(const nlohmann::json& j) {
+    auto coords = j["coordinates"].get<std::vector<std::pair<double,double>>>();
     std::vector<geom::Coordinate> coordinates;
-    for(std::vector<int>::size_type i = 0; i < coords.size(); i++) {
-        coordinates.push_back(geom::Coordinate{coords[i].first, coords[i].second});
+    for(const auto& coord : coords) {
+        coordinates.push_back(geom::Coordinate{coord.first, coord.second});
     }
     geom::CoordinateArraySequence coordinateSequence { std::move(coordinates) };
     return std::unique_ptr<geom::LineString>(geometryFactory.createLineString(coordinateSequence));
 }
 
-std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(nlohmann::json& json) {
-    std::vector<std::vector<std::pair<double,double>>> polygonCoords = json["coordinates"].get<std::vector<std::vector<std::pair<double,double>>>>();
+std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(const nlohmann::json& json) {
+    auto polygonCoords = json["coordinates"].get<std::vector<std::vector<std::pair<double,double>>>>();
     std::vector<geom::LinearRing *> rings;
-    for(std::vector<int>::size_type i = 0; i < polygonCoords.size(); i++) {
+    for(const auto& ring : polygonCoords) {
         std::vector<geom::Coordinate> coordinates;
-        for (std::vector<int>::size_type j = 0; j < polygonCoords[i].size(); j++) {
-            coordinates.push_back(geom::Coordinate{polygonCoords[i][j].first, polygonCoords[i][j].second});
+        for (const auto& coord : ring) {
+            coordinates.push_back(geom::Coordinate{coord.first, coord.second});
         }
         geom::CoordinateArraySequence coordinateSequence { std::move(coordinates) };
         rings.push_back(geometryFactory.createLinearRing(std::move(coordinateSequence)));
@@ -204,23 +216,23 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(nlohmann::json& json) 
     }
 }
 
-std::unique_ptr<geom::MultiPoint> GeoJSONReader::readMultiPoint(nlohmann::json& j) {
-    std::vector<std::pair<double,double>> coords = j["coordinates"].get<std::vector<std::pair<double,double>>>();
+std::unique_ptr<geom::MultiPoint> GeoJSONReader::readMultiPoint(const nlohmann::json& j) {
+    auto coords = j["coordinates"].get<std::vector<std::pair<double,double>>>();
     std::vector<geom::Coordinate> coordinates;
-    for(std::vector<int>::size_type i = 0; i < coords.size(); i++) {
-        coordinates.push_back(geom::Coordinate{coords[i].first, coords[i].second});
+    for(const auto& coord : coords) {
+        coordinates.push_back(geom::Coordinate{coord.first, coord.second});
     }
     geom::CoordinateArraySequence coordinateSequence { std::move(coordinates) };
     return std::unique_ptr<geom::MultiPoint>(geometryFactory.createMultiPoint(coordinateSequence));
 }
 
-std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(nlohmann::json& json) {
-    std::vector<std::vector<std::pair<double,double>>> coords = json["coordinates"].get<std::vector<std::vector<std::pair<double,double>>>>();
-    std::vector<geom::Geometry *>* lines = new std::vector<geom::Geometry *>{};
-    for(std::vector<int>::size_type i = 0; i < coords.size(); i++) {
+std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(const nlohmann::json& json) {
+    auto listOfCoords = json["coordinates"].get<std::vector<std::vector<std::pair<double,double>>>>();
+    auto lines = new std::vector<geom::Geometry *>{};
+    for(const auto& coords :  listOfCoords) {    
         std::vector<geom::Coordinate> coordinates;
-        for (std::vector<int>::size_type j = 0; j < coords[i].size(); j++) {
-            coordinates.push_back(geom::Coordinate{coords[i][j].first, coords[i][j].second});
+        for (const auto& coord : coords) {
+            coordinates.push_back(geom::Coordinate{coord.first, coord.second});
         }
         geom::CoordinateArraySequence coordinateSequence { std::move(coordinates) };
         lines->push_back(geometryFactory.createLineString(std::move(coordinateSequence)));
@@ -228,16 +240,15 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(nlohma
     return std::unique_ptr<geom::MultiLineString>(geometryFactory.createMultiLineString(lines));
 }
 
-std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(nlohmann::json& json) {
-    std::vector<std::vector<std::vector<std::pair<double,double>>>> multiPolygonCoords = json["coordinates"].get<std::vector<std::vector<std::vector<std::pair<double,double>>>>>();
-    std::vector<geom::Geometry *>* polygons = new std::vector<geom::Geometry *>();
-    for(std::vector<int>::size_type i = 0; i < multiPolygonCoords.size(); i++) {
-        std::vector<std::vector<std::pair<double,double>>> polygonCoords = multiPolygonCoords[i];
+std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(const nlohmann::json& json) {
+    auto multiPolygonCoords = json["coordinates"].get<std::vector<std::vector<std::vector<std::pair<double,double>>>>>();
+    auto polygons = new std::vector<geom::Geometry *>();
+    for(const auto& polygonCoords : multiPolygonCoords) {    
         std::vector<geom::LinearRing *> rings;
-        for(std::vector<int>::size_type j = 0; j < polygonCoords.size(); j++) {
+        for(const auto& ring : polygonCoords) {    
             std::vector<geom::Coordinate> coordinates;
-            for (std::vector<int>::size_type k = 0; k < polygonCoords[j].size(); k++) {
-                coordinates.push_back(geom::Coordinate{polygonCoords[j][k].first, polygonCoords[j][k].second});
+            for(const auto& coord : ring) {    
+                coordinates.push_back(geom::Coordinate{coord.first, coord.second});
             }
             geom::CoordinateArraySequence coordinateSequence { std::move(coordinates) };
             rings.push_back(geometryFactory.createLinearRing(std::move(coordinateSequence)));
@@ -255,10 +266,10 @@ std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(nlohmann::js
     return std::unique_ptr<geom::MultiPolygon>(geometryFactory.createMultiPolygon(polygons));
 }
 
-std::unique_ptr<geom::GeometryCollection> GeoJSONReader::readGeometryCollection(nlohmann::json& j) {
+std::unique_ptr<geom::GeometryCollection> GeoJSONReader::readGeometryCollection(const nlohmann::json& j) {
     std::vector<geom::Geometry *>* geometries = new std::vector<geom::Geometry *>();
     auto jsonGeometries = j["geometries"];
-    for (auto jsonGeometry : jsonGeometries) {
+    for (const auto& jsonGeometry : jsonGeometries) {
         auto g = readGeometry(jsonGeometry);
         geometries->push_back(g.release());
     }

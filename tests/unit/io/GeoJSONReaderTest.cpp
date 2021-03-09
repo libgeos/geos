@@ -4,6 +4,7 @@
 // tut
 #include <tut/tut.hpp>
 // geos
+#include <geos/io/ParseException.h>
 #include <geos/io/GeoJSONReader.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -289,6 +290,92 @@ void object::test<20>
     ensure_equals(3.0, features.getFeatures()[2].getProperties()["id"].getNumber());
 }
 
+// Read a GeoJSON Polygon with an empty ring
+template<>
+template<>
+void object::test<21>
+()
+{
+    std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("POLYGON EMPTY", geom->toText());
+}
+
+// Read a GeoJSON Point with only one coordinate
+template<>
+template<>
+void object::test<22>
+()
+{
+    std::string errorMessage;    
+    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[-117.0]}" };
+    bool error = false;
+    try {
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Expected two coordinates found one", errorMessage);
+}
+
+// Throw ParseException for bad GeoJSON
+template<>
+template<>
+void object::test<23>
+()
+{
+    std::string errorMessage;
+    std::string geojson { "<gml>NOT_GEO_JSON</gml>" };
+    bool error = false;
+    try {
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Error parsing JSON", errorMessage);
+}
+
+// Throw error when LINESTRING has only one coordinate
+template<>
+template<>
+void object::test<24>
+()
+{
+    std::string errorMessage;
+    bool error = false;
+    try {    
+        std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2]]}" };
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Error parsing JSON", errorMessage);
+}
+
+// Throw error when geometry type is unsupported
+template<>
+template<>
+void object::test<25>
+()
+{
+    std::string errorMessage;
+    bool error = false;
+    try {    
+        std::string geojson { "{\"type\":\"Line\",\"coordinates\":[[1,2],[2,3]]}" };
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Unknown geometry type!", errorMessage);
+}
 
 }
 
