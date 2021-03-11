@@ -312,7 +312,7 @@ void object::test<22>
     bool error = false;
     try {
         GeomPtr geom(geojsonreader.read(geojson));
-    } catch (geos::io::ParseException e) {
+    } catch (geos::io::ParseException& e) {
         error = true;
         errorMessage = e.what();
     }
@@ -331,7 +331,7 @@ void object::test<23>
     bool error = false;
     try {
         GeomPtr geom(geojsonreader.read(geojson));
-    } catch (geos::io::ParseException e) {
+    } catch (geos::io::ParseException& e) {
         error = true;
         errorMessage = e.what();
     }
@@ -350,7 +350,7 @@ void object::test<24>
     try {    
         std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2]]}" };
         GeomPtr geom(geojsonreader.read(geojson));
-    } catch (geos::io::ParseException e) {
+    } catch (geos::io::ParseException& e) {
         error = true;
         errorMessage = e.what();
     }
@@ -369,7 +369,7 @@ void object::test<25>
     try {    
         std::string geojson { "{\"type\":\"Line\",\"coordinates\":[[1,2],[2,3]]}" };
         GeomPtr geom(geojsonreader.read(geojson));
-    } catch (geos::io::ParseException e) {
+    } catch (geos::io::ParseException& e) {
         error = true;
         errorMessage = e.what();
     }

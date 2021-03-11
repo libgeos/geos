@@ -14,8 +14,6 @@
 
 #include <geos/io/GeoJSON.h>
 
-#undef DEBUG_GEOJSON
-
 namespace geos {
 namespace io { // geos.io
 

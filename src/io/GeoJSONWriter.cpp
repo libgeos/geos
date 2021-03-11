@@ -33,8 +33,6 @@
 
 #include <json.hpp>
 
-#undef DEBUG_GEOJSON_WRITER
-
 using namespace geos::geom;
 using json = nlohmann::ordered_json;
 
@@ -120,7 +118,7 @@ void GeoJSONWriter::encodeFeature(const GeoJSONFeature feature, nlohmann::ordere
     encodeGeometry(feature.getGeometry(), geometryJson);
     j["geometry"] = geometryJson;
     json propertiesJson = json::object();
-    for(auto property : feature.getProperties()) {
+    for(auto const& property : feature.getProperties()) {
         std::string key = property.first;
         GeoJSONValue value = property.second;
         encodeGeoJSONValue(key, value, propertiesJson);
