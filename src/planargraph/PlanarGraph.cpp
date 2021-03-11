@@ -61,7 +61,7 @@ PlanarGraph::remove(Edge* edge)
     remove(edge->getDirEdge(1));
     for(unsigned int i = 0; i < edges.size(); ++i) {
         if(edges[i] == edge) {
-            edges.erase(edges.begin() + i);
+            edges.erase(std::next(edges.begin(), static_cast<int>(i)));
             --i;
         }
     }
@@ -83,7 +83,7 @@ PlanarGraph::remove(DirectedEdge* de)
     de->getFromNode()->getOutEdges()->remove(de);
     for(unsigned int i = 0; i < dirEdges.size(); ++i) {
         if(dirEdges[i] == de) {
-            dirEdges.erase(dirEdges.begin() + i);
+            dirEdges.erase(std::next(dirEdges.begin(), static_cast<int>(i)));
             --i;
         }
     }
@@ -108,7 +108,7 @@ PlanarGraph::remove(Node* node)
         // remove this diredge from the graph collection
         for(unsigned int j = 0; j < dirEdges.size(); ++j) {
             if(dirEdges[j] == de) {
-                dirEdges.erase(dirEdges.begin() + j);
+                dirEdges.erase(std::next(dirEdges.begin(), static_cast<int>(j)));
                 --j;
             }
         }
@@ -116,7 +116,7 @@ PlanarGraph::remove(Node* node)
         if(edge != nullptr) {
             for(unsigned int k = 0; k < edges.size(); ++k) {
                 if(edges[k] == edge) {
-                    edges.erase(edges.begin() + k);
+                    edges.erase(std::next(edges.begin(), static_cast<int>(k)));
                     --k;
                 }
             }
