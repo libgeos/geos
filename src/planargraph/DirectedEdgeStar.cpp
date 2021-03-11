@@ -44,7 +44,7 @@ DirectedEdgeStar::remove(DirectedEdge* de)
 {
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
         if(outEdges[i] == de) {
-            outEdges.erase(outEdges.begin() + i);
+            outEdges.erase(std::next(outEdges.begin(), static_cast<int>(i)));
             --i;
         }
     }
