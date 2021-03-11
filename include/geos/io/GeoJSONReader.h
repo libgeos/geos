@@ -94,9 +94,13 @@ private:
 
     std::unique_ptr<geom::Point> readPoint(const nlohmann::json& j);
 
+    geom::Coordinate readCoordinate(const std::vector<double>& coords);
+
     std::unique_ptr<geom::LineString> readLineString(const nlohmann::json& j);
 
     std::unique_ptr<geom::Polygon> readPolygon(const nlohmann::json& j);
+
+    std::unique_ptr<geom::Polygon> readPolygon(const std::vector<std::vector<std::vector<double>>>& c);
 
     std::unique_ptr<geom::MultiPoint> readMultiPoint(const nlohmann::json& j);
 

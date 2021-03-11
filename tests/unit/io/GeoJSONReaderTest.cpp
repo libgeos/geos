@@ -355,7 +355,7 @@ void object::test<24>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals("ParseException: Error parsing JSON", errorMessage);
+    ensure_equals("ParseException: Expected two coordinates found one", errorMessage);
 }
 
 // Throw error when geometry type is unsupported
