@@ -46,7 +46,10 @@ GeoJSONValue::GeoJSONValue(const std::map<std::string, GeoJSONValue>& value)  {
 
 GeoJSONValue::GeoJSONValue(const std::vector<GeoJSONValue>& value)  {
     type = Type::ARRAY;
-    new(&a) std::vector<GeoJSONValue>{value};
+    new(&a) std::vector<GeoJSONValue>{};
+    for(const auto& v : value) {
+        a.push_back(v);
+    }
 }
 
 void GeoJSONValue::cleanup() {
@@ -84,7 +87,10 @@ GeoJSONValue::GeoJSONValue(const GeoJSONValue& v) {
             new(&o) std::map<std::string, GeoJSONValue>{v.o};
             break;
         case Type::ARRAY:
-            new(&a) std::vector<GeoJSONValue>{v.a};
+            new(&a) std::vector<GeoJSONValue>{};
+            for(const auto& i : v.a) {
+                a.push_back(i);
+            }
             break;                
     }
     type = v.type;
@@ -121,7 +127,10 @@ GeoJSONValue& GeoJSONValue::operator=(const GeoJSONValue& v) {
             new(&o) std::map<std::string, GeoJSONValue>{v.o};
             break;
         case Type::ARRAY:
-            new(&a) std::vector<GeoJSONValue>{v.a};
+            new(&a) std::vector<GeoJSONValue>{};
+            for(const auto& i : v.a) {
+                a.push_back(i);
+            }
             break;                
     }
     type = v.type;
