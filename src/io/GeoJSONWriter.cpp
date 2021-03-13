@@ -146,8 +146,10 @@ void GeoJSONWriter::encodeFeature(const geom::Geometry* g, nlohmann::ordered_jso
 void GeoJSONWriter::encodeFeatureCollection(const geom::Geometry* g, nlohmann::ordered_json& j) {
     json featureJson;
     encodeFeature(g, featureJson);
+    std::vector<json> features;
+    features.push_back(featureJson);
     j["type"] = "FeatureCollection";
-    j["features"] = std::vector<json>{featureJson};
+    j["features"] = features;
 }
 
 void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, nlohmann::ordered_json& j) {

@@ -336,7 +336,7 @@ void object::test<23>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals("ParseException: Error parsing JSON", errorMessage);
+    ensure(errorMessage.find("ParseException: Error parsing JSON") != std::string::npos);
 }
 
 // Throw error when LINESTRING has only one coordinate

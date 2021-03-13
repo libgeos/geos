@@ -57,7 +57,7 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::read(const std::string& geoJsonTe
             return readGeometry(j);
         }
     } catch (json::exception& ex) {
-        throw ParseException("Error parsing JSON");
+        throw ParseException("Error parsing JSON", ex.what());
     }   
 }
 
@@ -75,7 +75,7 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatures(const std::string& geoJsonT
             return GeoJSONFeatureCollection { std::vector<GeoJSONFeature>{GeoJSONFeature{std::move(g), std::map<std::string, GeoJSONValue>{} }}};
         }
     } catch (json::exception& ex) {
-        throw ParseException("Error parsing JSON");
+        throw ParseException("Error parsing JSON", ex.what());
     }
 }
 
