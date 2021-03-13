@@ -377,5 +377,65 @@ void object::test<25>
     ensure_equals("ParseException: Unknown geometry type!", errorMessage);
 }
 
+// Throw error when LINESTRING has only one coordinate
+template<>
+template<>
+void object::test<26>
+()
+{
+    std::string errorMessage;
+    bool error = false;
+    try {    
+        std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[1]]}" };
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException& e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Expected two coordinates found one", errorMessage);
+}
+
+// Read a GeoJSON empty Polygon with empty shell and empty inner rings
+template<>
+template<>
+void object::test<27>
+()
+{
+    std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[],[]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("POLYGON EMPTY", geom->toText());
+}
+
+// Read a GeoJSON empty MultiLineString with empty LineStrings
+template<>
+template<>
+void object::test<28>
+()
+{
+    std::string geojson { "{\"type\":\"MultiLineString\",\"coordinates\":[[],[],[]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("MULTILINESTRING EMPTY", geom->toText());
+}
+
+// Read a GeoJSON Point with too many coordinates
+template<>
+template<>
+void object::test<29>
+()
+{
+    std::string errorMessage;    
+    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[1,2,3,4,5,6]}" };
+    bool error = false;
+    try {
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException& e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals("ParseException: Expected two coordinates found more than two", errorMessage);
+}
+
 }
 

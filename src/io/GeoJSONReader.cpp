@@ -172,6 +172,8 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(const nlohmann::json
 geom::Coordinate GeoJSONReader::readCoordinate(const std::vector<double>& coords) {
     if (coords.size() == 1) {
         throw  ParseException("Expected two coordinates found one");
+    } else if (coords.size() > 2) {
+        throw  ParseException("Expected two coordinates found more than two");
     } else {
         return geom::Coordinate {coords[0], coords[1]};
     }
