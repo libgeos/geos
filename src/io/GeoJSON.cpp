@@ -197,6 +197,15 @@ GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::
 
 GeoJSONFeature::GeoJSONFeature(GeoJSONFeature const &other) : geometry(other.geometry->clone()), properties(other.properties) {}
 
+GeoJSONFeature& GeoJSONFeature::operator=(const GeoJSONFeature& other) {
+    if (this == &other) {
+        return *this;
+    }
+    geometry = other.geometry->clone();
+    properties = other.properties;
+    return *this;
+}
+
 geom::Geometry* GeoJSONFeature::getGeometry() const {
     return geometry.get();
 }

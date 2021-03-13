@@ -97,6 +97,8 @@ class GEOS_DLL GeoJSONFeature {
 
         GeoJSONFeature(GeoJSONFeature const &other);
 
+        GeoJSONFeature& operator=(const GeoJSONFeature&);
+
         geom::Geometry* getGeometry() const;
 
         std::map<std::string, GeoJSONValue> getProperties() const;

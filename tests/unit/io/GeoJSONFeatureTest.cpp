@@ -55,6 +55,11 @@ void object::test<1>
     ensure_equals("POINT (-117.000 33.000)", feature.getGeometry()->toText());
     ensure_equals(1.0, feature.getProperties()["id"].getNumber());
     ensure_equals("One", feature.getProperties()["name"].getString());
+
+    geos::io::GeoJSONFeature feature2 = feature;
+    ensure_equals("POINT (-117.000 33.000)", feature2.getGeometry()->toText());
+    ensure_equals(1.0, feature2.getProperties()["id"].getNumber());
+    ensure_equals("One", feature2.getProperties()["name"].getString());
 }
 
 // Write a GeoJSON FeatureCollection
