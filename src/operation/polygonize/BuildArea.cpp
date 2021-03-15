@@ -116,7 +116,7 @@ static void findFaceHoles(std::vector<std::unique_ptr<Face>>& faces) {
 }
 
 static std::unique_ptr<geom::MultiPolygon> collectFacesWithEvenAncestors(
-    std::vector<std::unique_ptr<Face>>& faces) {
+    const std::vector<std::unique_ptr<Face>>& faces) {
     std::vector<std::unique_ptr<geom::Geometry>> geoms;
     for( auto& face: faces ) {
         if( face->countParents() % 2 ) {
