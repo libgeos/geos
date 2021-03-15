@@ -280,7 +280,7 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
     catch (const util::TopologyException &ex) {
         // union-by-buffer only works for polygons
         if (g0->getDimension() != 2 || g1->getDimension() != 2)
-          throw ex;
+          throw;
         return unionPolygonsByBuffer(g0, g1);
     }
 }

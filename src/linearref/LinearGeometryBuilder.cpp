@@ -122,7 +122,7 @@ LinearGeometryBuilder::endLine()
         // exception is due to too few points in line.
         // only propagate if not ignoring short lines
         if(! ignoreInvalidLines) {
-            throw ex;
+            throw;
         }
     }
 

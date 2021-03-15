@@ -827,7 +827,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
         // takes over edgeList ownership in the success case.
         edgeList.clearList();
 
-        throw ex;
+        throw;
     }
 
 #endif // ENABLE_EDGE_NODING_VALIDATOR }

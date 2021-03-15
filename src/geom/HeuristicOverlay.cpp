@@ -635,7 +635,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
                           << ex.what() << std::endl;
 #endif
                 if(scale == 1) {
-                    throw ex;
+                    throw;
                 }
             }
 
@@ -747,7 +747,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
             }
             catch(const geos::util::TopologyException& ex) {
                 if(tol >= maxTolerance) {
-                    throw ex;
+                    throw;
                 }
 #if GEOS_DEBUG_HEURISTICOVERLAY
                 std::cerr << "Simplified with tolerance (" << tol << "): "
