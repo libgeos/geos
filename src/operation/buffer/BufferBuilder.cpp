@@ -292,7 +292,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
                 // Stop looping if there are no more points, or if the segment
                 // length is larger than the buffer width.
-                if(sz <= 1 || segLength > segLengthAllowance) {
+                if(segLength > segLengthAllowance) {
                     break;
                 }
 
@@ -303,7 +303,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             }
             while(sz > 1 && coords->getAt(front).distance(endPoint) < ptDistAllowance) {
                 double segLength = coords->getAt(front).distance(coords->getAt(front + 1));
-                if(sz <= 1 || segLength > segLengthAllowance) {
+                if(segLength > segLengthAllowance) {
                     break;
                 }
                 front++;
@@ -313,7 +313,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             while(sz > 1 && coords->getAt(back).distance(startPoint) < ptDistAllowance) {
                 double segLength = coords->getAt(back).distance(coords->getAt(back - 1));
 
-                if(sz <= 1 || segLength > segLengthAllowance) {
+                if(segLength > segLengthAllowance) {
                     break;
                 }
                 back--;
@@ -322,7 +322,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             while(sz > 1 && coords->getAt(back).distance(endPoint) < ptDistAllowance) {
                 double segLength = coords->getAt(back).distance(coords->getAt(back - 1));
 
-                if(sz <= 1 || segLength > segLengthAllowance) {
+                if(segLength > segLengthAllowance) {
                     break;
                 }
                 back--;
