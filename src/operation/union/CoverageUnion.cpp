@@ -80,14 +80,13 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
 
     // Create a vector to manage the lifecycle of a geometry corresponding to each line segment.
     // Polygonizer needs these to stay alive until it does its work.
-    std::unique_ptr<std::vector<std::unique_ptr<Geometry>>> segment_geoms;
-    segment_geoms.reset(new std::vector<std::unique_ptr<Geometry>>());
-    segment_geoms->reserve(segments.size());
+    std::vector<std::unique_ptr<Geometry>> segment_geoms;
+    segment_geoms.reserve(segments.size());
 
     for (const LineSegment& segment : segments) {
         auto seg_geom = segment.toGeometry(*gf);
         p.add(static_cast<Geometry*>(seg_geom.get()));
-        segment_geoms->emplace_back(std::move(seg_geom));
+        segment_geoms.emplace_back(std::move(seg_geom));
     }
 
     if (!p.allInputsFormPolygons()) {
@@ -95,7 +94,7 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
     }
 
     auto polygons = p.getPolygons();
-    segment_geoms.reset();
+    segment_geoms.clear();
 
     if (polygons.size() == 1) {
         return std::move(polygons[0]);
