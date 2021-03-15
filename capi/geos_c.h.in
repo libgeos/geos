@@ -366,6 +366,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays_r(
         const double* x,
         const double* y,
         const double* z,
+        const double* m,
         unsigned int size);
 
 /** \see GEOSCoordSeq_copyToBuffer */
@@ -381,7 +382,8 @@ extern int GEOS_DLL GEOSCoordSeq_copyToArrays_r(
         const GEOSCoordSequence* s,
         double* x,
         double* y,
-        double* z);
+        double* z,
+        double* m);
 
 /** \see GEOSCoordSeq_clone */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_clone_r(
@@ -1737,13 +1739,14 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf
 * \param x array of x coordinates
 * \param y array of y coordinates
 * \param z array of z coordinates, or NULL
+* \param m array of m coordinates, (must be NULL)
 * \param size length of each array
 * \return the sequence or NULL on exception
 */
-extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, unsigned int size);
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, const double* m, unsigned int size);
 
 /**
-* Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ)
+* Copy the contents of a coordinate sequence to a buffer of doubles (XYXY or XYZXYZ)
 * \param s sequence to copy
 * \param buf buffer to which coordinates should be copied
 * \param dims dimensionality of the coordinates to be constructed in the buffer (2 or 3)
@@ -1757,9 +1760,10 @@ extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double
 * \param x array to which x values should be copied
 * \param y array to which y values should be copied
 * \param z array to which z values should be copied, or NULL
+* \param m array to which m values should be copied (will all be NAN)
 * \return 1 on success, 0 on error
 */
-extern int GEOS_DLL GEOSCoordSeq_copyToArrays(const GEOSCoordSequence* s, double* x, double* y, double* z);
+extern int GEOS_DLL GEOSCoordSeq_copyToArrays(const GEOSCoordSequence* s, double* x, double* y, double* z, double* m);
 
 /**
 * Clone a coordinate sequence.

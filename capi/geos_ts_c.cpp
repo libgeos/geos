@@ -2200,8 +2200,10 @@ extern "C" {
     }
 
     CoordinateSequence*
-    GEOSCoordSeq_copyFromArrays_r(GEOSContextHandle_t extHandle, const double* x, const double* y, const double* z, unsigned int size)
+    GEOSCoordSeq_copyFromArrays_r(GEOSContextHandle_t extHandle, const double* x, const double* y, const double* z, const double* m, unsigned int size)
     {
+        (void) m;
+
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
             const GeometryFactory *gf = handle->geomFactory;
@@ -2221,7 +2223,7 @@ extern "C" {
 
     int
     GEOSCoordSeq_copyToArrays_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
-                                double* x, double* y, double* z)
+                                double* x, double* y, double* z, double* m)
     {
         return execute(extHandle, 0, [&]() {
 
@@ -2247,6 +2249,10 @@ extern "C" {
 
             CoordinateArrayCopier cop(x, y, z);
             cs->apply_ro(&cop);
+
+            if (m) {
+                std::fill(m, m + cs->getSize(), std::numeric_limits<double>::quiet_NaN());
+            }
 
             return 1;
         });

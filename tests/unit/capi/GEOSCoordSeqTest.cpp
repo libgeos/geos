@@ -471,7 +471,7 @@ void object::test<14>()
         y[i] = static_cast<double>(2 * i);
     }
 
-    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), nullptr, N);
+    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), nullptr, nullptr, N);
     unsigned int dim_out;
     ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
     ensure_equals(dim_out, dim);
@@ -490,12 +490,12 @@ void object::test<14>()
     ensure_equals(cy, 4.0);
 
     std::vector<double> xout(N), yout(N), zout(N);
-    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr));
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr, nullptr));
     ensure(x == xout);
     ensure(y == yout);
 
     // providing z vector to 2D coordinate sequence populates it with NaN
-    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data()));
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data(), nullptr));
     ensure(std::all_of(zout.begin(), zout.end(), [](double z) {
         return std::isnan(z);
     }));
@@ -517,7 +517,7 @@ void object::test<15>()
         z[i] = static_cast<double>(3 * i);
     }
 
-    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), z.data(), N);
+    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), z.data(), nullptr, N);
     unsigned int dim_out;
     ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
     ensure_equals(dim_out, dim);
@@ -538,15 +538,16 @@ void object::test<15>()
     ensure_equals(cy, 4.0);
     ensure_equals(cz, 6.0);
 
-    std::vector<double> xout(N), yout(N), zout(N);
-    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr));
+    std::vector<double> xout(N), yout(N), zout(N), mout(N);
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr, nullptr));
     ensure(x == xout);
     ensure(y == yout);
 
-    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data()));
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data(), mout.data()));
     ensure(x == xout);
     ensure(y == yout);
     ensure(z == zout);
+    ensure(std::all_of(mout.begin(), mout.end(), [](double mval) { return std::isnan(mval); }));
 }
 
 } // namespace tut

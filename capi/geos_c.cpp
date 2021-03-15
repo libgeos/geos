@@ -880,15 +880,15 @@ extern "C" {
     }
 
     CoordinateSequence*
-    GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, unsigned int size)
+    GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, const double* m, unsigned int size)
     {
-        return GEOSCoordSeq_copyFromArrays_r(handle, x, y, z, size);
+        return GEOSCoordSeq_copyFromArrays_r(handle, x, y, z, m, size);
     }
 
     int
-    GEOSCoordSeq_copyToArrays(const CoordinateSequence* s, double* x, double* y, double* z)
+    GEOSCoordSeq_copyToArrays(const CoordinateSequence* s, double* x, double* y, double* z, double* m)
     {
-        return GEOSCoordSeq_copyToArrays_r(handle, s, x, y, z);
+        return GEOSCoordSeq_copyToArrays_r(handle, s, x, y, z, m);
     }
 
     int
