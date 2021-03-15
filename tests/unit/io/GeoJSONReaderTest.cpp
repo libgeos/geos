@@ -244,9 +244,9 @@ void object::test<18>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(static_cast<size_t>(1), features.getFeatures().size());
     ensure_equals("POINT (-117.000 33.000)", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
-    ensure_equals("one", features.getFeatures()[0].getProperties()["name"].getString());
-    ensure_equals(true, features.getFeatures()[0].getProperties()["required"].getBoolean());
+    ensure_equals(1.0, features.getFeatures()[0].getProperties().at("id").getNumber());
+    ensure_equals("one", features.getFeatures()[0].getProperties().at("name").getString());
+    ensure_equals(true, features.getFeatures()[0].getProperties().at("required").getBoolean());
 }
 
 // Read a Complicated Feature
@@ -259,9 +259,9 @@ void object::test<19>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(static_cast<size_t>(1), features.getFeatures().size());
     ensure_equals("POINT (-117.000 33.000)", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
-    ensure_equals("one", features.getFeatures()[0].getProperties()["name"].getString());
-    std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties()["items"].getArray();
+    ensure_equals(1.0, features.getFeatures()[0].getProperties().at("id").getNumber());
+    ensure_equals("one", features.getFeatures()[0].getProperties().at("name").getString());
+    std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties().at("items").getArray();
     ensure_equals(static_cast<size_t>(4), values.size());
     ensure_equals(1.0, values[0].getNumber());
     ensure_equals(2.0, values[1].getNumber());
@@ -283,11 +283,11 @@ void object::test<20>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(static_cast<size_t>(3), features.getFeatures().size());
     ensure_equals("POLYGON ((87.890 64.923, 76.992 55.178, 102.656 46.558, 115.312 60.413, 94.570 58.447, 87.890 64.923))", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
+    ensure_equals(1.0, features.getFeatures()[0].getProperties().at("id").getNumber());
     ensure_equals("LINESTRING (1.406 48.690, 41.835 34.016, 22.500 13.923)", features.getFeatures()[1].getGeometry()->toText());
-    ensure_equals(2.0, features.getFeatures()[1].getProperties()["id"].getNumber());
+    ensure_equals(2.0, features.getFeatures()[1].getProperties().at("id").getNumber());
     ensure_equals("POINT (-28.125 39.095)", features.getFeatures()[2].getGeometry()->toText());
-    ensure_equals(3.0, features.getFeatures()[2].getProperties()["id"].getNumber());
+    ensure_equals(3.0, features.getFeatures()[2].getProperties().at("id").getNumber());
 }
 
 // Read a GeoJSON Polygon with an empty ring

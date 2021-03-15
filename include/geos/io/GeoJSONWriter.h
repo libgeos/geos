@@ -72,9 +72,9 @@ public:
 
     std::string writeFormatted(const geom::Geometry* geometry, GeoJSONType type = GeoJSONType::GEOMETRY, int indent = 4);
 
-    std::string write(const GeoJSONFeature feature);
+    std::string write(const GeoJSONFeature& feature);
 
-    std::string write(const GeoJSONFeatureCollection features);
+    std::string write(const GeoJSONFeatureCollection& features);
 
 private:
 
@@ -104,9 +104,9 @@ private:
 
     void encodeFeatureCollection(const geom::Geometry* g, nlohmann::ordered_json& j);
 
-    void encodeFeature(const GeoJSONFeature feature, nlohmann::ordered_json& j);
+    void encodeFeature(const GeoJSONFeature& feature, nlohmann::ordered_json& j);
 
-    void encodeGeoJSONValue(std::string key, GeoJSONValue value, nlohmann::ordered_json& j);
+    void encodeGeoJSONValue(const std::string& key, const GeoJSONValue& value, nlohmann::ordered_json& j);
 
 };
 

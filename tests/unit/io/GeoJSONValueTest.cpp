@@ -78,7 +78,7 @@ void object::test<5>
     };
     geos::io::GeoJSONValue value {values};
     ensure(value.isObject());
-    ensure_equals(1, value.getObject()["id"].getNumber());
+    ensure_equals(1, value.getObject().at("id").getNumber());
 }
 
 // Array

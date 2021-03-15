@@ -53,13 +53,13 @@ void object::test<1>
         {"name", geos::io::GeoJSONValue(std::string{"One"}) },
     }};
     ensure_equals("POINT (-117.000 33.000)", feature.getGeometry()->toText());
-    ensure_equals(1.0, feature.getProperties()["id"].getNumber());
-    ensure_equals("One", feature.getProperties()["name"].getString());
+    ensure_equals(1.0, feature.getProperties().at("id").getNumber());
+    ensure_equals("One", feature.getProperties().at("name").getString());
 
-    geos::io::GeoJSONFeature feature2 = feature;
+    const geos::io::GeoJSONFeature feature2 = feature;
     ensure_equals("POINT (-117.000 33.000)", feature2.getGeometry()->toText());
-    ensure_equals(1.0, feature2.getProperties()["id"].getNumber());
-    ensure_equals("One", feature2.getProperties()["name"].getString());
+    ensure_equals(1.0, feature2.getProperties().at("id").getNumber());
+    ensure_equals("One", feature2.getProperties().at("name").getString());
 }
 
 // Write a GeoJSON FeatureCollection
@@ -80,11 +80,11 @@ void object::test<2>
     }};
     ensure_equals(static_cast<size_t>(2), features.getFeatures().size());
     ensure_equals("POINT (-117.000 33.000)", features.getFeatures()[0].getGeometry()->toText());
-    ensure_equals(1.0, features.getFeatures()[0].getProperties()["id"].getNumber());
-    ensure_equals("One", features.getFeatures()[0].getProperties()["name"].getString());
+    ensure_equals(1.0, features.getFeatures()[0].getProperties().at("id").getNumber());
+    ensure_equals("One", features.getFeatures()[0].getProperties().at("name").getString());
     ensure_equals("POINT (-127.000 53.000)", features.getFeatures()[1].getGeometry()->toText());
-    ensure_equals(2.0, features.getFeatures()[1].getProperties()["id"].getNumber());
-    ensure_equals("Two", features.getFeatures()[1].getProperties()["name"].getString());
+    ensure_equals(2.0, features.getFeatures()[1].getProperties().at("id").getNumber());
+    ensure_equals("Two", features.getFeatures()[1].getProperties().at("name").getString());
 }
 
 }

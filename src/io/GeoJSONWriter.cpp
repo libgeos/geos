@@ -53,14 +53,14 @@ std::string GeoJSONWriter::writeFormatted(const geom::Geometry* geometry, GeoJSO
     return geojson;
 }
 
-std::string GeoJSONWriter::write(const GeoJSONFeature feature) {
+std::string GeoJSONWriter::write(const GeoJSONFeature& feature) {
     json j;
     encodeFeature(feature, j);
     std::string geojson = j.dump();
     return geojson;
 }
 
-void GeoJSONWriter::encodeGeoJSONValue(std::string key, GeoJSONValue value, nlohmann::ordered_json& j) {
+void GeoJSONWriter::encodeGeoJSONValue(const std::string& key, const GeoJSONValue& value, nlohmann::ordered_json& j) {
     if (value.isNumber()) {
         if (j.is_object()) {
             j[key] = value.getNumber();
@@ -98,7 +98,7 @@ void GeoJSONWriter::encodeGeoJSONValue(std::string key, GeoJSONValue value, nloh
     }
 }
 
-std::string GeoJSONWriter::write(const GeoJSONFeatureCollection features) {
+std::string GeoJSONWriter::write(const GeoJSONFeatureCollection& features) {
     json j;
     j["type"] = "FeatureCollection";
     json featuresJson = json::array();
@@ -112,7 +112,7 @@ std::string GeoJSONWriter::write(const GeoJSONFeatureCollection features) {
     return geojson;
 }
 
-void GeoJSONWriter::encodeFeature(const GeoJSONFeature feature, nlohmann::ordered_json& j) {
+void GeoJSONWriter::encodeFeature(const GeoJSONFeature& feature, nlohmann::ordered_json& j) {
     j["type"] = "Feature";
     json geometryJson;
     encodeGeometry(feature.getGeometry(), geometryJson);

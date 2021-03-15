@@ -142,7 +142,8 @@ double GeoJSONValue::getNumber() const {
     return d;
 
 }
-std::string GeoJSONValue::getString() const {
+
+const std::string& GeoJSONValue::getString() const {
     if (type != Type::STRING) throw GeoJSONTypeError{};
     return s;
 }
@@ -157,12 +158,12 @@ bool GeoJSONValue::getBoolean() const {
     return b;
 }
 
-std::map<std::string,GeoJSONValue> GeoJSONValue::getObject() const {
+const std::map<std::string,GeoJSONValue>& GeoJSONValue::getObject() const {
     if (type != Type::OBJECT) throw GeoJSONTypeError{};
     return o;
 }
 
-std::vector<GeoJSONValue> GeoJSONValue::getArray() const {
+const std::vector<GeoJSONValue>& GeoJSONValue::getArray() const {
     if (type != Type::ARRAY) throw GeoJSONTypeError{};
     return a;
 }
@@ -206,11 +207,11 @@ GeoJSONFeature& GeoJSONFeature::operator=(const GeoJSONFeature& other) {
     return *this;
 }
 
-geom::Geometry* GeoJSONFeature::getGeometry() const {
+const geom::Geometry* GeoJSONFeature::getGeometry() const {
     return geometry.get();
 }
 
-std::map<std::string, GeoJSONValue> GeoJSONFeature::getProperties() const {
+const std::map<std::string, GeoJSONValue>& GeoJSONFeature::getProperties() const {
     return properties;
 }
 
@@ -218,7 +219,7 @@ std::map<std::string, GeoJSONValue> GeoJSONFeature::getProperties() const {
 
 GeoJSONFeatureCollection::GeoJSONFeatureCollection(std::vector<GeoJSONFeature> f) : features(f) {}
 
-std::vector<GeoJSONFeature> GeoJSONFeatureCollection::getFeatures() const {
+const std::vector<GeoJSONFeature>& GeoJSONFeatureCollection::getFeatures() const {
     return features;
 }
 
