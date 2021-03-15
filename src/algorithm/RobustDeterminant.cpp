@@ -55,7 +55,6 @@ RobustDeterminant::signOfDet2x2(double x1, double y1, double x2, double y2)
     // retunrs  0 if the determinant is null.
     int sign = 1;
     double swap;
-    double k;
 
     // Protect against non-finite numbers
     if(!std::isfinite(x1) || !std::isfinite(y1) || !std::isfinite(x2) || !std::isfinite(y2)) {
@@ -214,7 +213,7 @@ RobustDeterminant::signOfDet2x2(double x1, double y1, double x2, double y2)
     *  all entries strictly positive   x1 <= x2 and y1 <= y2
     */
     while(true) {
-        k = std::floor(x2 / x1);
+        double k = std::floor(x2 / x1);
         x2 = x2 - k * x1;
         y2 = y2 - k * y1;
 

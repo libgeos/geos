@@ -160,10 +160,10 @@ TaggedLineString::extractCoordinates(
     std::cerr << __FUNCTION__ << " segs.size: " << segs.size() << std::endl;
 #endif
 
-    std::size_t i = 0, size = segs.size();
+    const std::size_t size = segs.size();
 
     if(size) {
-        for(; i < size; i++) {
+        for(std::size_t i = 0; i < size; i++) {
             TaggedLineSegment* seg = segs[i];
             assert(seg);
             pts->push_back(seg->p0);

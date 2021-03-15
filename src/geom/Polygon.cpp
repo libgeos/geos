@@ -357,10 +357,9 @@ Polygon::compareToSameClass(const Geometry* g) const
         return 1;
     }
 
-    int holeComp = 0;
     for (size_t i=0; i < nHole1; i++) {
         const LinearRing *lr = p->getInteriorRingN(i);
-        holeComp = getInteriorRingN(i)->compareToSameClass(lr);
+        const int holeComp = getInteriorRingN(i)->compareToSameClass(lr);
         if (holeComp != 0) {
             return holeComp;
         }
