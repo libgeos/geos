@@ -94,8 +94,6 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
     }
 
     auto polygons = p.getPolygons();
-    segment_geoms.clear();
-
     if (polygons.size() == 1) {
         return std::move(polygons[0]);
     }
