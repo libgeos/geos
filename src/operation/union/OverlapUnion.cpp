@@ -239,7 +239,7 @@ OverlapUnion::extractBorderSegments(const Geometry* geom, const Envelope& penv, 
         void
         filter_ro(const CoordinateSequence& seq, std::size_t i) override
         {
-            if (i <= 0) return;
+            if (i == 0) return;
 
             // extract LineSegment
             const Coordinate& p0 = seq.getAt(i-1);
