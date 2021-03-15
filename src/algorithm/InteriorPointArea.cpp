@@ -117,7 +117,7 @@ private:
                 loY = y;
             }
         }
-        else if (y > centreY) {
+        else {
             if (y < hiY) {
                 hiY = y;
             }

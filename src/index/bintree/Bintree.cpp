@@ -38,10 +38,8 @@ Bintree::ensureExtent(const Interval* itemInterval, double minExtent)
     }
 
     // pad extent
-    if(min == max) {
-        min = min - minExtent / 2.0;
-        max = min + minExtent / 2.0;
-    }
+    min = min - minExtent / 2.0;
+    max = min + minExtent / 2.0;
 
     return new Interval(min, max);
 }
