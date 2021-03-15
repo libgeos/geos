@@ -21,6 +21,7 @@
 #include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
+#include <algorithm>
 #include <vector>
 #include <sstream>
 #include <iostream>
@@ -47,8 +48,9 @@ TopologyLocation::merge(const TopologyLocation& gl)
         location[Position::LEFT] = Location::NONE;
         location[Position::RIGHT] = Location::NONE;
     }
-    for(std::size_t i = 0; i < locationSize; ++i) {
-        if(location[i] == Location::NONE && i < glsz) {
+    const std::size_t maxIndex = std::min(static_cast<std::size_t>(locationSize), glsz);
+    for(std::size_t i = 0; i < maxIndex; ++i) {
+        if(location[i] == Location::NONE) {
             location[i] = gl.location[i];
         }
     }
