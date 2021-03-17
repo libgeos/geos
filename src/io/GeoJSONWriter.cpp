@@ -31,7 +31,7 @@
 #include <sstream>
 #include <cassert>
 
-#include <json.hpp>
+#define GEOS_COMPILATION
 
 using namespace geos::geom;
 using json = nlohmann::ordered_json;

@@ -33,7 +33,7 @@
 #include <sstream>
 #include <cassert>
 
-#include <json.hpp>
+#define PROJ_COMPILATION
 
 using namespace geos::geom;
 using json = nlohmann::json;

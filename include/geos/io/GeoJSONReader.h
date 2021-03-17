@@ -22,7 +22,12 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <string>
-#include <json.hpp>
+
+#ifdef GEOS_COMPILATION
+#include "include_nlohmann_json.hpp"
+#else
+#include "nlohmann/json.hpp"
+#endif
 
 // Forward declarations
 namespace geos {

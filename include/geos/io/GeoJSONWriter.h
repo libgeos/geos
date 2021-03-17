@@ -20,7 +20,13 @@
 #include "GeoJSON.h"
 #include <string>
 #include <cctype>
-#include <json.hpp>
+
+#ifdef GEOS_COMPILATION
+#include "include_nlohmann_json.hpp"
+#else
+#include "nlohmann/json.hpp"
+#endif
+
 
 #ifdef _MSC_VER
 #pragma warning(push)
