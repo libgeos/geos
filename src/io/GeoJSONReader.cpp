@@ -36,7 +36,7 @@
 #define PROJ_COMPILATION
 
 using namespace geos::geom;
-using json = nlohmann::json;
+using json = geos_nlohmann::json;
 
 namespace geos {
 namespace io { // geos.io
@@ -79,13 +79,13 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatures(const std::string& geoJsonT
     }
 }
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureForGeometry(const nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureForGeometry(const geos_nlohmann::json& j) {
     auto geometryJson = j["geometry"];
     auto geometry = readGeometry(geometryJson);
     return geometry;
 }
 
-GeoJSONFeature GeoJSONReader::readFeature(const nlohmann::json& j) {
+GeoJSONFeature GeoJSONReader::readFeature(const geos_nlohmann::json& j) {
     auto geometryJson = j["geometry"];
     auto geometry = readGeometry(geometryJson);
     auto properties = j["properties"];
@@ -94,7 +94,7 @@ GeoJSONFeature GeoJSONReader::readFeature(const nlohmann::json& j) {
     return f;
 }
 
-std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(const nlohmann::json& p) {
+std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(const geos_nlohmann::json& p) {
     std::map<std::string,GeoJSONValue> map;
     for(const auto& prop : p.items()) {
         map[prop.key()] = std::move(readProperty(prop.value()));
@@ -102,7 +102,7 @@ std::map<std::string,GeoJSONValue> GeoJSONReader::readProperties(const nlohmann:
     return map;
 }
 
-GeoJSONValue GeoJSONReader::readProperty(const nlohmann::json& value) {
+GeoJSONValue GeoJSONReader::readProperty(const geos_nlohmann::json& value) {
     if (value.is_string()) {
         return GeoJSONValue { value.get<std::string>() };
     } else if (value.is_number()) {
@@ -127,7 +127,7 @@ GeoJSONValue GeoJSONReader::readProperty(const nlohmann::json& value) {
     }
 }
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(const nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(const geos_nlohmann::json& j) {
     auto featuresJson = j["features"];
     std::vector<std::unique_ptr<geom::Geometry>> geometries;
     for(const auto& featureJson : featuresJson) {
@@ -137,7 +137,7 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::readFeatureCollectionForGeometry(
     return geometryFactory.createGeometryCollection(std::move(geometries));
 }
 
-GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(const nlohmann::json& j) {
+GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(const geos_nlohmann::json& j) {
     auto featuresJson = j["features"];
     std::vector<GeoJSONFeature> features;
     for(const auto& featureJson : featuresJson) {
@@ -148,7 +148,7 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(const nlohmann::js
 }
 
 
-std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(const nlohmann::json& j) {
+std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(const geos_nlohmann::json& j) {
     std::string type = j["type"];
     if (type == "Point") {
         return readPoint(j);
@@ -179,7 +179,7 @@ geom::Coordinate GeoJSONReader::readCoordinate(const std::vector<double>& coords
     }
 }
 
-std::unique_ptr<geom::Point> GeoJSONReader::readPoint(const nlohmann::json& j) {
+std::unique_ptr<geom::Point> GeoJSONReader::readPoint(const geos_nlohmann::json& j) {
     auto coords = j["coordinates"].get<std::vector<double>>();
     if (coords.size() == 1) {
         throw  ParseException("Expected two coordinates found one");
@@ -191,7 +191,7 @@ std::unique_ptr<geom::Point> GeoJSONReader::readPoint(const nlohmann::json& j) {
     }
 }
 
-std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(const nlohmann::json& j) {
+std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(const geos_nlohmann::json& j) {
     auto coords = j["coordinates"].get<std::vector<std::vector<double>>>();
     std::vector<geom::Coordinate> coordinates;
     for(const auto& coord : coords) {
@@ -202,7 +202,7 @@ std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(const nlohmann::
     return geometryFactory.createLineString(std::move(coordinateSequence));
 }
 
-std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(const nlohmann::json& json) {
+std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(const geos_nlohmann::json& json) {
     auto polygonCoords = json["coordinates"].get<std::vector<std::vector<std::vector<double>>>>();
     return readPolygon(polygonCoords);
 }
@@ -232,7 +232,7 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(const std::vector<std:
     }
 }
 
-std::unique_ptr<geom::MultiPoint> GeoJSONReader::readMultiPoint(const nlohmann::json& j) {
+std::unique_ptr<geom::MultiPoint> GeoJSONReader::readMultiPoint(const geos_nlohmann::json& j) {
     auto coords = j["coordinates"].get<std::vector<std::vector<double>>>();
     std::vector<std::unique_ptr<geom::Point>> points;
     for(const auto& coord : coords) {
@@ -242,7 +242,7 @@ std::unique_ptr<geom::MultiPoint> GeoJSONReader::readMultiPoint(const nlohmann::
     return geometryFactory.createMultiPoint(std::move(points));
 }
 
-std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(const nlohmann::json& json) {
+std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(const geos_nlohmann::json& json) {
     auto listOfCoords = json["coordinates"].get<std::vector<std::vector<std::vector<double>>>>();
     std::vector<std::unique_ptr<geom::LineString>> lines;
     for(const auto& coords :  listOfCoords) {    
@@ -257,7 +257,7 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(const 
     return geometryFactory.createMultiLineString(std::move(lines));
 }
 
-std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(const nlohmann::json& json) {
+std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(const geos_nlohmann::json& json) {
     auto multiPolygonCoords = json["coordinates"].get<std::vector<std::vector<std::vector<std::vector<double>>>>>();
     std::vector<std::unique_ptr<geom::Polygon>> polygons;
     for(const auto& polygonCoords : multiPolygonCoords) {    
@@ -266,7 +266,7 @@ std::unique_ptr<geom::MultiPolygon> GeoJSONReader::readMultiPolygon(const nlohma
     return geometryFactory.createMultiPolygon(std::move(polygons));
 }
 
-std::unique_ptr<geom::GeometryCollection> GeoJSONReader::readGeometryCollection(const nlohmann::json& j) {
+std::unique_ptr<geom::GeometryCollection> GeoJSONReader::readGeometryCollection(const geos_nlohmann::json& j) {
     std::vector<std::unique_ptr<geom::Geometry>> geometries;
     auto jsonGeometries = j["geometries"];
     for (const auto& jsonGeometry : jsonGeometries) {

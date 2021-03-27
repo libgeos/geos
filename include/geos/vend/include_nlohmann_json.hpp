@@ -11,11 +11,14 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
+#ifndef GEOS_VEND_JSON
+#define GEOS_VEND_JSON
 
-#if defined(__GNUC__)
-#pragma GCC system_header
-#endif
-
-// to avoid any clash if GEOS users have another version of nlohmann/json.hpp
+#ifdef nlohmann
+    #error "GEOS modifies the nlohmann define "
+#endif    
 #define nlohmann geos_nlohmann
-#include "nlohmann/json.hpp"
+#include "geos/vend/json.hpp"
+#undef nlohmann
+
+#endif

@@ -22,12 +22,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <string>
-
-#ifdef GEOS_COMPILATION
-#include "include_nlohmann_json.hpp"
-#else
-#include "nlohmann/json.hpp"
-#endif
+#include "geos/vend/include_nlohmann_json.hpp"
 
 // Forward declarations
 namespace geos {
@@ -82,37 +77,37 @@ private:
 
     const geom::GeometryFactory& geometryFactory;
 
-    std::unique_ptr<geom::Geometry> readFeatureForGeometry(const nlohmann::json& j);
+    std::unique_ptr<geom::Geometry> readFeatureForGeometry(const geos_nlohmann::json& j);
 
-    GeoJSONFeature readFeature(const nlohmann::json& j);
+    GeoJSONFeature readFeature(const geos_nlohmann::json& j);
 
-    std::map<std::string,GeoJSONValue> readProperties(const nlohmann::json& p);
+    std::map<std::string,GeoJSONValue> readProperties(const geos_nlohmann::json& p);
 
-    GeoJSONValue readProperty(const nlohmann::json& p);
+    GeoJSONValue readProperty(const geos_nlohmann::json& p);
 
-    std::unique_ptr<geom::Geometry> readFeatureCollectionForGeometry(const nlohmann::json& j);
+    std::unique_ptr<geom::Geometry> readFeatureCollectionForGeometry(const geos_nlohmann::json& j);
 
-    GeoJSONFeatureCollection readFeatureCollection(const nlohmann::json& j);
+    GeoJSONFeatureCollection readFeatureCollection(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::Geometry> readGeometry(const nlohmann::json& j);
+    std::unique_ptr<geom::Geometry> readGeometry(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::Point> readPoint(const nlohmann::json& j);
+    std::unique_ptr<geom::Point> readPoint(const geos_nlohmann::json& j);
 
     geom::Coordinate readCoordinate(const std::vector<double>& coords);
 
-    std::unique_ptr<geom::LineString> readLineString(const nlohmann::json& j);
+    std::unique_ptr<geom::LineString> readLineString(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::Polygon> readPolygon(const nlohmann::json& j);
+    std::unique_ptr<geom::Polygon> readPolygon(const geos_nlohmann::json& j);
 
     std::unique_ptr<geom::Polygon> readPolygon(const std::vector<std::vector<std::vector<double>>>& c);
 
-    std::unique_ptr<geom::MultiPoint> readMultiPoint(const nlohmann::json& j);
+    std::unique_ptr<geom::MultiPoint> readMultiPoint(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::MultiLineString> readMultiLineString(const nlohmann::json& j);
+    std::unique_ptr<geom::MultiLineString> readMultiLineString(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::MultiPolygon> readMultiPolygon(const nlohmann::json& j);
+    std::unique_ptr<geom::MultiPolygon> readMultiPolygon(const geos_nlohmann::json& j);
 
-    std::unique_ptr<geom::GeometryCollection> readGeometryCollection(const nlohmann::json& j);
+    std::unique_ptr<geom::GeometryCollection> readGeometryCollection(const geos_nlohmann::json& j);
 
 };
 
