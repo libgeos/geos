@@ -264,7 +264,11 @@ Polygon::computeEnvelopeInternal() const
 bool
 Polygon::equalsExact(const Geometry* other, double tolerance) const
 {
-    const Polygon* otherPolygon = dynamic_cast<const Polygon*>(other);
+    if(!isEquivalentClass(other)) {
+        return false;
+    }
+
+    const Polygon* otherPolygon = detail::down_cast<const Polygon*>(other);
     if(! otherPolygon) {
         return false;
     }
@@ -342,7 +346,7 @@ Polygon::normalize()
 int
 Polygon::compareToSameClass(const Geometry* g) const
 {
-    const Polygon* p = dynamic_cast<const Polygon*>(g);
+    const Polygon* p = detail::down_cast<const Polygon*>(g);
     int shellComp = shell->compareToSameClass(p->shell.get());
     if (shellComp != 0) {
         return shellComp;

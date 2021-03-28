@@ -84,7 +84,7 @@ MultiLineString::isClosed() const
         return false;
     }
     for(const auto& g : geometries) {
-        LineString* ls = dynamic_cast<LineString*>(g.get());
+        const LineString* ls = detail::down_cast<const LineString*>(g.get());
         if(! ls->isClosed()) {
             return false;
         }

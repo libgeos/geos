@@ -70,8 +70,7 @@ AbstractPreparedPolygonContains::isSingleShell(const geom::Geometry& geom)
     }
 
     const geom::Geometry* g = geom.getGeometryN(0);
-    const geom::Polygon* poly = dynamic_cast<const Polygon*>(g);
-    assert(poly);
+    const geom::Polygon* poly = detail::down_cast<const Polygon*>(g);
 
     std::size_t numHoles = poly->getNumInteriorRing();
     return (0 == numHoles);

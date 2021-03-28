@@ -281,7 +281,7 @@ Point::equalsExact(const Geometry* other, double tolerance) const
 int
 Point::compareToSameClass(const Geometry* g) const
 {
-    const Point* p = dynamic_cast<const Point*>(g);
+    const Point* p = detail::down_cast<const Point*>(g);
     return getCoordinate()->compareTo(*(p->getCoordinate()));
 }
 
