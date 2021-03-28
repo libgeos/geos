@@ -228,9 +228,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
         return nullptr;
     }
     else {
-        Geometry::NonConstVect* l = lines.get();
-        lines.release();
-        return factory->buildGeometry(l);
+        return factory->buildGeometry(lines.release());
     }
 }
 
