@@ -255,8 +255,7 @@ OverlayMixedPoints::extractPolygons(const Geometry* geom) const
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         const Polygon* poly = static_cast<const Polygon*>(geom->getGeometryN(i));
         if(!poly->isEmpty()) {
-            Polygon* p = static_cast<Polygon*>(poly->clone().release());
-            list.emplace_back(p);
+            list.emplace_back(poly->clone());
         }
     }
     return list;
@@ -270,8 +269,7 @@ OverlayMixedPoints::extractLines(const Geometry* geom) const
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         const LineString* line = static_cast<const LineString*>(geom->getGeometryN(i));
         if (! line->isEmpty()) {
-            LineString* l = static_cast<LineString*>(line->clone().release());
-            list.emplace_back(l);
+            list.emplace_back(line->clone());
         }
     }
     return list;

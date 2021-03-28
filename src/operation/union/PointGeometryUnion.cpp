@@ -57,7 +57,7 @@ PointGeometryUnion::Union() const
 
     // if no points are in exterior, return the other geom
     if(exteriorCoords.empty()) {
-        return std::unique_ptr<Geometry>(otherGeom.clone());
+        return otherGeom.clone();
     }
 
     // make a puntal geometry of appropriate size
