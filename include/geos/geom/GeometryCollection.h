@@ -177,7 +177,7 @@ public:
      *
      * @return a GeometryCollection in the reverse order
      */
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<GeometryCollection> reverse() const { return std::unique_ptr<GeometryCollection>(reverseImpl()); }
 
 protected:
 
@@ -217,6 +217,8 @@ protected:
         GeometryCollection(toGeometryArray(std::move(newGeoms)), newFactory) {}
 
     GeometryCollection* cloneImpl() const override { return new GeometryCollection(*this); }
+
+    GeometryCollection* reverseImpl() const override;
 
     int
     getSortIndex() const override

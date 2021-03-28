@@ -193,7 +193,7 @@ public:
      *
      * @return a LineString with coordinates in the reverse order
      */
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<LineString> reverse() const { return std::unique_ptr<LineString>(reverseImpl()); }
 
 protected:
 
@@ -209,6 +209,8 @@ protected:
                const GeometryFactory& newFactory);
 
     LineString* cloneImpl() const override { return new LineString(*this); }
+
+    LineString* reverseImpl() const override;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

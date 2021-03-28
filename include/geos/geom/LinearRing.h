@@ -105,7 +105,7 @@ public:
 
     void setPoints(const CoordinateSequence* cl);
 
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<LinearRing> reverse() const { return std::unique_ptr<LinearRing>(reverseImpl()); }
 
 protected:
 
@@ -116,6 +116,8 @@ protected:
     };
 
     LinearRing* cloneImpl() const override { return new LinearRing(*this); }
+
+    LinearRing* reverseImpl() const override;
 
 private:
 

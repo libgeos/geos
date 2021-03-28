@@ -108,18 +108,18 @@ LinearRing::getGeometryTypeId() const
     return GEOS_LINEARRING;
 }
 
-std::unique_ptr<Geometry>
-LinearRing::reverse() const
+LinearRing*
+LinearRing::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     assert(points.get());
     auto seq = points->clone();
     CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLinearRing(std::move(seq));
+    return getFactory()->createLinearRing(std::move(seq)).release();
 }
 
 } // namespace geos::geom

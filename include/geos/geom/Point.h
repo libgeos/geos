@@ -135,10 +135,9 @@ public:
         // a Point is always in normalized form
     }
 
-    std::unique_ptr<Geometry>
-    reverse() const override
+    std::unique_ptr<Point> reverse() const
     {
-        return clone();
+        return std::unique_ptr<Point>(reverseImpl());
     }
 
 protected:
@@ -162,6 +161,8 @@ protected:
     Point(const Point& p);
 
     Point* cloneImpl() const override { return new Point(*this); }
+
+    Point* reverseImpl() const override { return new Point(*this); }
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

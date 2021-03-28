@@ -92,7 +92,7 @@ public:
      *
      * @return a MultiLineString in the reverse order
      */
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<MultiLineString> reverse() const { return std::unique_ptr<MultiLineString>(reverseImpl()); }
 
 protected:
 
@@ -125,6 +125,8 @@ protected:
     MultiLineString(const MultiLineString& mp);
 
     MultiLineString* cloneImpl() const override { return new MultiLineString(*this); }
+
+    MultiLineString* reverseImpl() const override;
 
     int
     getSortIndex() const override

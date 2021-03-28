@@ -110,11 +110,11 @@ MultiLineString::getGeometryTypeId() const
     return GEOS_MULTILINESTRING;
 }
 
-std::unique_ptr<Geometry>
-MultiLineString::reverse() const
+MultiLineString*
+MultiLineString::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
@@ -126,7 +126,7 @@ MultiLineString::reverse() const
                        return g->reverse();
                    });
 
-    return getFactory()->createMultiLineString(std::move(reversed));
+    return getFactory()->createMultiLineString(std::move(reversed)).release();
 }
 
 const LineString*

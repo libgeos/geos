@@ -654,7 +654,7 @@ public:
      *
      * @return a reversed geometry
      */
-    virtual std::unique_ptr<Geometry> reverse() const = 0;
+    std::unique_ptr<Geometry> reverse() const { return std::unique_ptr<Geometry>(reverseImpl()); }
 
     /** \brief
      * Returns a Geometry representing the points shared by
@@ -858,6 +858,9 @@ protected:
 
     /// Make a deep-copy of this Geometry
     virtual Geometry* cloneImpl() const = 0;
+
+    /// Make a geometry with coordinates in reverse order
+    virtual Geometry* reverseImpl() const = 0;
 
     /// Returns true if the array contains any non-empty Geometrys.
     template<typename T>

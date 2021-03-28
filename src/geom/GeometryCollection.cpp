@@ -382,11 +382,11 @@ GeometryCollection::getGeometryTypeId() const
     return GEOS_GEOMETRYCOLLECTION;
 }
 
-std::unique_ptr<Geometry>
-GeometryCollection::reverse() const
+GeometryCollection*
+GeometryCollection::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
@@ -398,7 +398,7 @@ GeometryCollection::reverse() const
         return g->reverse();
     });
 
-    return getFactory()->createGeometryCollection(std::move(reversed));
+    return getFactory()->createGeometryCollection(std::move(reversed)).release();
 }
 
 } // namespace geos::geom

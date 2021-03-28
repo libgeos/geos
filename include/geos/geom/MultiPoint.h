@@ -91,10 +91,9 @@ public:
         return std::unique_ptr<MultiPoint>(cloneImpl());
     }
 
-    std::unique_ptr<Geometry>
-    reverse() const override
+    std::unique_ptr<MultiPoint> reverse() const
     {
-        return clone();
+        return std::unique_ptr<MultiPoint>(reverseImpl());
     }
 
 protected:
@@ -126,6 +125,8 @@ protected:
     MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
     MultiPoint* cloneImpl() const override { return new MultiPoint(*this); }
+
+    MultiPoint* reverseImpl() const override { return new MultiPoint(*this); }
 
     const Coordinate* getCoordinateN(std::size_t n) const;
 

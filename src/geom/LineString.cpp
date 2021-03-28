@@ -57,18 +57,18 @@ LineString::LineString(const LineString& ls)
     //points=ls.points->clone();
 }
 
-std::unique_ptr<Geometry>
-LineString::reverse() const
+LineString*
+LineString::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     assert(points.get());
     auto seq = points->clone();
     CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return std::unique_ptr<Geometry>(getFactory()->createLineString(seq.release()));
+    return getFactory()->createLineString(seq.release());
 }
 
 
