@@ -20,24 +20,19 @@ template<>
 template<>
 void object::test<1>()
 {
-    GEOSGeometry* a = GEOSGeomFromWKT("LINESTRING (-122.440803 47.25315, -122.4401056 47.25322)");
-    GEOSGeometry* b = GEOSGeomFromWKT("LINESTRING (-122.4401056 47.25322, -122.439993 47.25271)");
-    GEOSGeometry* c = GEOSGeomFromWKT("LINESTRING (-122.4394243 47.25331, -122.4392044 47.25241)");
+    geom1_ = fromWKT("LINESTRING (1 1, 10 1)");
+    ensure(nullptr != geom1_);
+    geom2_ = fromWKT("LINESTRING (5 1, 5 10)");
+    ensure(nullptr != geom2_);
+    geom3_ = fromWKT("LINESTRING (20 20, 30 30)");
+    ensure(nullptr != geom3_);
 
-    ensure(a);
-    ensure(b);
-    ensure(c);
-
-    ensure_equals(1, GEOSTouches(a, b));
-    ensure_equals(1, GEOSTouches(b, a));
-    ensure_equals(0, GEOSTouches(a, c));
-    ensure_equals(0, GEOSTouches(c, a));
-    ensure_equals(0, GEOSTouches(b, c));
-    ensure_equals(0, GEOSTouches(c, b));
-
-    GEOSGeom_destroy(a);
-    GEOSGeom_destroy(b);
-    GEOSGeom_destroy(c);
+    ensure_equals(1, GEOSTouches(geom1_, geom2_));
+    ensure_equals(1, GEOSTouches(geom2_, geom1_));
+    ensure_equals(0, GEOSTouches(geom1_, geom3_));
+    ensure_equals(0, GEOSTouches(geom3_, geom1_));
+    ensure_equals(0, GEOSTouches(geom2_, geom3_));
+    ensure_equals(0, GEOSTouches(geom3_, geom2_));
 }
 
 } // namespace tut
