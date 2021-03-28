@@ -94,14 +94,6 @@ MultiPolygon::getBoundary() const
     return getFactory()->createMultiLineString(std::move(allRings));
 }
 
-bool
-MultiPolygon::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-    return GeometryCollection::equalsExact(other, tolerance);
-}
 GeometryTypeId
 MultiPolygon::getGeometryTypeId() const
 {

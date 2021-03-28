@@ -86,8 +86,6 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
-
     std::unique_ptr<MultiPoint> clone() const
     {
         return std::unique_ptr<MultiPoint>(cloneImpl());

@@ -73,15 +73,6 @@ MultiPoint::getBoundary() const
     return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
 }
 
-bool
-MultiPoint::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-    return GeometryCollection::equalsExact(other, tolerance);
-}
-
 const Coordinate*
 MultiPoint::getCoordinateN(std::size_t n) const
 {

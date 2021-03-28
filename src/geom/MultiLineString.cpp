@@ -104,14 +104,6 @@ MultiLineString::getBoundary() const
     return std::unique_ptr<Geometry>(getFactory()->createMultiPoint(*pts));
 }
 
-bool
-MultiLineString::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-    return GeometryCollection::equalsExact(other, tolerance);
-}
 GeometryTypeId
 MultiLineString::getGeometryTypeId() const
 {

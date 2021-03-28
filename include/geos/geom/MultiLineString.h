@@ -81,8 +81,6 @@ public:
 
     bool isClosed() const;
 
-    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
-
     std::unique_ptr<MultiLineString> clone() const;
 
     /**
