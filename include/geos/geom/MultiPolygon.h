@@ -89,7 +89,7 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    std::unique_ptr<Geometry> clone() const override;
+    std::unique_ptr<MultiPolygon> clone() const;
 
     std::unique_ptr<Geometry> reverse() const override;
 
@@ -125,6 +125,8 @@ protected:
                  const GeometryFactory& newFactory);
 
     MultiPolygon(const MultiPolygon& mp);
+
+    MultiPolygon* cloneImpl() const override { return new MultiPolygon(*this); }
 
     int
     getSortIndex() const override

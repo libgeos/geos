@@ -82,10 +82,9 @@ public:
     LinearRing(CoordinateSequence::Ptr && points,
             const GeometryFactory& newFactory);
 
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<LinearRing> clone() const
     {
-        return std::unique_ptr<Geometry>(new LinearRing(*this));
+        return std::unique_ptr<LinearRing>(cloneImpl());
     }
 
     ~LinearRing() override = default;
@@ -116,6 +115,7 @@ protected:
         return SORTINDEX_LINEARRING;
     };
 
+    LinearRing* cloneImpl() const override { return new LinearRing(*this); }
 
 private:
 

@@ -78,10 +78,9 @@ public:
      *
      * @return a clone of this instance
      */
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<Polygon> clone() const
     {
-        return std::unique_ptr<Geometry>(new Polygon(*this));
+        return std::unique_ptr<Polygon>(cloneImpl());
     }
 
     std::unique_ptr<CoordinateSequence> getCoordinates() const override;
@@ -197,6 +196,8 @@ protected:
     Polygon(std::unique_ptr<LinearRing> && newShell,
             std::vector<std::unique_ptr<LinearRing>> && newHoles,
             const GeometryFactory& newFactory);
+
+    Polygon* cloneImpl() const override { return new Polygon(*this); }
 
     std::unique_ptr<LinearRing> shell;
 

@@ -80,10 +80,9 @@ public:
      *
      * @return a clone of this instance
      */
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<Point> clone() const
     {
-        return std::unique_ptr<Geometry>(new Point(*this));
+        return std::unique_ptr<Point>(cloneImpl());
     }
 
     std::unique_ptr<CoordinateSequence> getCoordinates(void) const override;
@@ -161,6 +160,8 @@ protected:
     Point(const Coordinate& c, const GeometryFactory* newFactory);
 
     Point(const Point& p);
+
+    Point* cloneImpl() const override { return new Point(*this); }
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

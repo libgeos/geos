@@ -88,10 +88,9 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<MultiPoint> clone() const
     {
-        return std::unique_ptr<Geometry>(new MultiPoint(*this));
+        return std::unique_ptr<MultiPoint>(cloneImpl());
     }
 
     std::unique_ptr<Geometry>
@@ -127,6 +126,8 @@ protected:
     MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, const GeometryFactory& newFactory);
 
     MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
+
+    MultiPoint* cloneImpl() const override { return new MultiPoint(*this); }
 
     const Coordinate* getCoordinateN(std::size_t n) const;
 

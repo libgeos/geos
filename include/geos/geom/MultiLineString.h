@@ -83,7 +83,7 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    std::unique_ptr<Geometry> clone() const override;
+    std::unique_ptr<MultiLineString> clone() const;
 
     /**
      * Creates a MultiLineString in the reverse
@@ -125,6 +125,8 @@ protected:
                     const GeometryFactory& newFactory);
 
     MultiLineString(const MultiLineString& mp);
+
+    MultiLineString* cloneImpl() const override { return new MultiLineString(*this); }
 
     int
     getSortIndex() const override
