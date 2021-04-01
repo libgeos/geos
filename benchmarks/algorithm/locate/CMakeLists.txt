@@ -11,7 +11,6 @@
 #
 #################################################################################
 
-find_package(benchmark QUIET)
 if (benchmark_FOUND)
     add_executable(perf_indexed_point_in_area_locator IndexedPointInAreaLocatorPerfTest.cpp)
     target_include_directories(perf_indexed_point_in_area_locator PUBLIC

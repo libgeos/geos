@@ -19,7 +19,6 @@ target_link_libraries(perf_voronoi geos)
 add_executable(perf_unaryunion_segments UnaryUnionSegmentsPerfTest.cpp)
 target_link_libraries(perf_unaryunion_segments geos)
 
-find_package(benchmark QUIET)
 if (benchmark_FOUND)
     add_executable(perf_orientation OrientationIndexPerfTest.cpp
             ${CMAKE_SOURCE_DIR}/src/algorithm/CGAlgorithmsDD.cpp

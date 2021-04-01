@@ -377,5 +377,178 @@ void object::test<11>
     ensure_equals(zcheck, z);
 }
 
+// test 2D from/to buffer
+template<>
+template<>
+void object::test<12>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 2;
+    std::vector<double> values(N * dim);
+    for (size_t i = 0; i < values.size(); i++) {
+        values[i] = static_cast<double>(i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, dim);
+
+    double x, y;
+    ensure(GEOSCoordSeq_getXY(cs_, 0, &x, &y));
+    ensure_equals(x, 0.0);
+    ensure_equals(y, 1.0);
+
+    ensure(GEOSCoordSeq_getXY(cs_, N - 1, &x, &y));
+    ensure_equals(x, static_cast<double>(N-1)*2);
+    ensure_equals(y, static_cast<double>(N-1)*2 + 1);
+
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, dim);
+
+    std::vector<double> out3(N * 3);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), 3));
+    ensure_equals(out3[0], values[0]); // X1
+    ensure_equals(out3[1], values[1]); // Y1
+    ensure(std::isnan(out3[2])); // Z1
+    ensure_equals(out3[3], values[2]); // X2
+
+    std::vector<double> out2(N * 2);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), 2));
+    ensure(out2 == values);
+}
+
+// test 3D from/to buffer
+template<>
+template<>
+void object::test<13>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 3;
+    std::vector<double> values(N * dim);
+    for (size_t i = 0; i < values.size(); i++) {
+        values[i] = static_cast<double>(i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, dim);
+
+    double x, y, z;
+    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
+    ensure_equals(x, 0.0);
+    ensure_equals(y, 1.0);
+    ensure_equals(z, 2.0);
+
+    ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
+    ensure_equals(x, static_cast<double>(N-1)*3);
+    ensure_equals(y, static_cast<double>(N-1)*3 + 1);
+    ensure_equals(z, static_cast<double>(N-1)*3 + 2);
+
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, dim);
+
+    std::vector<double> out3(N * 3);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), 3));
+    ensure(out3 == values);
+
+    std::vector<double> out2(N * 2);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), 2));
+    ensure_equals(out2[0], values[0]); // X1
+    ensure_equals(out2[1], values[1]); // Y1
+    ensure_equals(out2[2], values[3]); // X2
+    ensure_equals(out2[3], values[4]); // Y2
+}
+
+// test 2D from/to arrays
+template<>
+template<>
+void object::test<14>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 2;
+    std::vector<double> x(N);
+    std::vector<double> y(N);
+    for (size_t i = 0; i < N; i++) {
+        x[i] = static_cast<double>(i);
+        y[i] = static_cast<double>(2 * i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), nullptr, nullptr, N);
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, dim);
+
+    double cx, cy;
+    ensure(GEOSCoordSeq_getXY(cs_, 0, &cx, &cy));
+    ensure_equals(cx, 0.0);
+    ensure_equals(cy, 0.0);
+
+    ensure(GEOSCoordSeq_getXY(cs_, 1, &cx, &cy));
+    ensure_equals(cx, 1.0);
+    ensure_equals(cy, 2.0);
+
+    ensure(GEOSCoordSeq_getXY(cs_, 2, &cx, &cy));
+    ensure_equals(cx, 2.0);
+    ensure_equals(cy, 4.0);
+
+    std::vector<double> xout(N), yout(N), zout(N);
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr, nullptr));
+    ensure(x == xout);
+    ensure(y == yout);
+
+    // providing z vector to 2D coordinate sequence populates it with NaN
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data(), nullptr));
+    ensure(std::all_of(zout.begin(), zout.end(), [](double z) {
+        return std::isnan(z);
+    }));
+}
+
+// test 3D from/to arrays
+template<>
+template<>
+void object::test<15>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 3;
+    std::vector<double> x(N);
+    std::vector<double> y(N);
+    std::vector<double> z(N);
+    for (size_t i = 0; i < N; i++) {
+        x[i] = static_cast<double>(i);
+        y[i] = static_cast<double>(2 * i);
+        z[i] = static_cast<double>(3 * i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromArrays(x.data(), y.data(), z.data(), nullptr, N);
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, dim);
+
+    double cx, cy, cz;
+    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &cx, &cy, &cz));
+    ensure_equals(cx, 0.0);
+    ensure_equals(cy, 0.0);
+    ensure_equals(cz, 0.0);
+
+    ensure(GEOSCoordSeq_getXYZ(cs_, 1, &cx, &cy, &cz));
+    ensure_equals(cx, 1.0);
+    ensure_equals(cy, 2.0);
+    ensure_equals(cz, 3.0);
+
+    ensure(GEOSCoordSeq_getXYZ(cs_, 2, &cx, &cy, &cz));
+    ensure_equals(cx, 2.0);
+    ensure_equals(cy, 4.0);
+    ensure_equals(cz, 6.0);
+
+    std::vector<double> xout(N), yout(N), zout(N), mout(N);
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), nullptr, nullptr));
+    ensure(x == xout);
+    ensure(y == yout);
+
+    ensure(GEOSCoordSeq_copyToArrays(cs_, xout.data(), yout.data(), zout.data(), mout.data()));
+    ensure(x == xout);
+    ensure(y == yout);
+    ensure(z == zout);
+    ensure(std::all_of(mout.begin(), mout.end(), [](double mval) { return std::isnan(mval); }));
+}
+
 } // namespace tut
 

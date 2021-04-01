@@ -861,11 +861,34 @@ extern "C" {
         return GEOS_setWKBByteOrder_r(handle, byteOrder);
     }
 
-
     CoordinateSequence*
     GEOSCoordSeq_create(unsigned int size, unsigned int dims)
     {
         return GEOSCoordSeq_create_r(handle, size, dims);
+    }
+
+    CoordinateSequence*
+    GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, unsigned int dims)
+    {
+        return GEOSCoordSeq_copyFromBuffer_r(handle, buf, size, dims);
+    }
+
+    int
+    GEOSCoordSeq_copyToBuffer(const CoordinateSequence* s, double* buf, unsigned int dims)
+    {
+        return GEOSCoordSeq_copyToBuffer_r(handle, s, buf, dims);
+    }
+
+    CoordinateSequence*
+    GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, const double* m, unsigned int size)
+    {
+        return GEOSCoordSeq_copyFromArrays_r(handle, x, y, z, m, size);
+    }
+
+    int
+    GEOSCoordSeq_copyToArrays(const CoordinateSequence* s, double* x, double* y, double* z, double* m)
+    {
+        return GEOSCoordSeq_copyToArrays_r(handle, s, x, y, z, m);
     }
 
     int

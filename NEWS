@@ -7,6 +7,8 @@ Changes in 3.10.0
   - geosop CLI for GEOS (Martin Davis)
   - Full doxygen of the C-API (Paul Ramsey)
   - CAPI: GEOSDensify (Brendan Ward)
+  - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,
+          GEOSCoordSeq_copyToArrays, GEOSCoordSeq_copyToBuffer (Daniel Baston)
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)

@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2010-2012 Sandro Santilli <strk@kbt.io>
- * Copyright (C) 2016-2019 Daniel Baston <dbaston@gmail.com>
+ * Copyright (C) 2016-2021 Daniel Baston <dbaston@gmail.com>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -2172,6 +2172,125 @@ extern "C" {
                     return gf->getCoordinateSequenceFactory()->create(size, dims).release();
                 }
             }
+        });
+    }
+
+    CoordinateSequence*
+    GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, unsigned int dims)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
+            const GeometryFactory *gf = handle->geomFactory;
+
+            std::vector<geos::geom::Coordinate> coords(size);
+            if (dims == 2) {
+                for (std::size_t i = 0; i < size; i++) {
+                    coords[i] = { *buf, *(buf + 1) };
+                    buf += 2;
+                }
+            } else if (dims == 3) {
+                static_assert(sizeof(geos::geom::Coordinate) == 3 * sizeof(double), "Coordinate is 3D");
+                std::memcpy((double*) coords.data(), buf, size * sizeof(geos::geom::Coordinate));
+            } else {
+                throw geos::util::IllegalArgumentException("Unsupported CoordinateSequence dimension.");
+            }
+
+            return gf->getCoordinateSequenceFactory()->create(std::move(coords)).release();
+        });
+    }
+
+    CoordinateSequence*
+    GEOSCoordSeq_copyFromArrays_r(GEOSContextHandle_t extHandle, const double* x, const double* y, const double* z, const double* m, unsigned int size)
+    {
+        (void) m;
+
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
+            const GeometryFactory *gf = handle->geomFactory;
+
+            std::vector<geos::geom::Coordinate> coords(size);
+            for (std::size_t i = 0; i < size; i++) {
+                if (z) {
+                    coords[i] = { x[i], y[i], z[i] };
+                } else {
+                    coords[i] = { x[i], y[i] };
+                }
+            }
+
+            return gf->getCoordinateSequenceFactory()->create(std::move(coords)).release();
+        });
+    }
+
+    int
+    GEOSCoordSeq_copyToArrays_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
+                                double* x, double* y, double* z, double* m)
+    {
+        return execute(extHandle, 0, [&]() {
+
+            class CoordinateArrayCopier : public geos::geom::CoordinateFilter {
+            public:
+                CoordinateArrayCopier(double* p_x, double* p_y, double* p_z) : i(0), x(p_x), y(p_y), z(p_z) {}
+
+                void filter_ro(const geos::geom::Coordinate* c) override {
+                    x[i] = c->x;
+                    y[i] = c->y;
+                    if (z) {
+                        z[i] = c->z;
+                    }
+                    i++;
+                }
+
+            private:
+                size_t i;
+                double* x;
+                double* y;
+                double* z;
+            };
+
+            CoordinateArrayCopier cop(x, y, z);
+            cs->apply_ro(&cop);
+
+            if (m) {
+                std::fill(m, m + cs->getSize(), std::numeric_limits<double>::quiet_NaN());
+            }
+
+            return 1;
+        });
+    }
+
+    int
+    GEOSCoordSeq_copyToBuffer_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
+                                double* buf, unsigned int dim)
+    {
+        return execute(extHandle, 0, [&]() {
+
+            class CoordinateBufferCopier : public geos::geom::CoordinateFilter {
+            public:
+                CoordinateBufferCopier(double* p_buf, bool hasZ) : buf(p_buf), dim(hasZ ? 3 : 2) {}
+
+                void filter_ro(const geos::geom::Coordinate* c) override {
+                    std::memcpy(buf, c, dim * sizeof(double));
+                    buf += dim;
+                }
+
+            private:
+                double* buf;
+                size_t dim;
+            };
+
+            bool hasZ;
+            if (dim == 2) {
+                hasZ = false;
+            } else if (dim == 3) {
+                hasZ = true;
+            } else {
+                throw geos::util::IllegalArgumentException("Invalid dimension.");
+            }
+
+            CoordinateBufferCopier cop(buf, hasZ);
+            cs->apply_ro(&cop);
+
+            return 1;
         });
     }
 
