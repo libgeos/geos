@@ -82,10 +82,9 @@ public:
     LinearRing(CoordinateSequence::Ptr && points,
             const GeometryFactory& newFactory);
 
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<LinearRing> clone() const
     {
-        return std::unique_ptr<Geometry>(new LinearRing(*this));
+        return std::unique_ptr<LinearRing>(cloneImpl());
     }
 
     ~LinearRing() override = default;
@@ -106,7 +105,7 @@ public:
 
     void setPoints(const CoordinateSequence* cl);
 
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<LinearRing> reverse() const { return std::unique_ptr<LinearRing>(reverseImpl()); }
 
 protected:
 
@@ -116,6 +115,9 @@ protected:
         return SORTINDEX_LINEARRING;
     };
 
+    LinearRing* cloneImpl() const override { return new LinearRing(*this); }
+
+    LinearRing* reverseImpl() const override;
 
 private:
 

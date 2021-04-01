@@ -94,25 +94,17 @@ MultiPolygon::getBoundary() const
     return getFactory()->createMultiLineString(std::move(allRings));
 }
 
-bool
-MultiPolygon::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-    return GeometryCollection::equalsExact(other, tolerance);
-}
 GeometryTypeId
 MultiPolygon::getGeometryTypeId() const
 {
     return GEOS_MULTIPOLYGON;
 }
 
-std::unique_ptr<Geometry>
-MultiPolygon::reverse() const
+MultiPolygon*
+MultiPolygon::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
@@ -124,7 +116,7 @@ MultiPolygon::reverse() const
         return g->reverse();
     });
 
-    return getFactory()->createMultiPolygon(std::move(reversed));
+    return getFactory()->createMultiPolygon(std::move(reversed)).release();
 }
 
 const Polygon*

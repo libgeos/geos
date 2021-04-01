@@ -264,7 +264,11 @@ Polygon::computeEnvelopeInternal() const
 bool
 Polygon::equalsExact(const Geometry* other, double tolerance) const
 {
-    const Polygon* otherPolygon = dynamic_cast<const Polygon*>(other);
+    if(!isEquivalentClass(other)) {
+        return false;
+    }
+
+    const Polygon* otherPolygon = detail::down_cast<const Polygon*>(other);
     if(! otherPolygon) {
         return false;
     }
@@ -342,7 +346,7 @@ Polygon::normalize()
 int
 Polygon::compareToSameClass(const Geometry* g) const
 {
-    const Polygon* p = dynamic_cast<const Polygon*>(g);
+    const Polygon* p = detail::down_cast<const Polygon*>(g);
     int shellComp = shell->compareToSameClass(p->shell.get());
     if (shellComp != 0) {
         return shellComp;
@@ -537,24 +541,23 @@ Polygon::isRectangle() const
     return true;
 }
 
-std::unique_ptr<Geometry>
-Polygon::reverse() const
+Polygon*
+Polygon::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
-    std::unique_ptr<LinearRing> exteriorRingReversed(static_cast<LinearRing*>(shell->reverse().release()));
     std::vector<std::unique_ptr<LinearRing>> interiorRingsReversed(holes.size());
 
     std::transform(holes.begin(),
                    holes.end(),
                    interiorRingsReversed.begin(),
     [](const std::unique_ptr<LinearRing> & g) {
-        return std::unique_ptr<LinearRing>(static_cast<LinearRing*>(g->reverse().release()));
+        return g->reverse();
     });
 
-    return getFactory()->createPolygon(std::move(exteriorRingReversed), std::move(interiorRingsReversed));
+    return getFactory()->createPolygon(shell->reverse(), std::move(interiorRingsReversed)).release();
 }
 
 } // namespace geos::geom

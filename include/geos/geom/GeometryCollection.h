@@ -71,10 +71,9 @@ public:
      *
      * @return a clone of this instance
      */
-    std::unique_ptr<Geometry>
-    clone() const override
+    std::unique_ptr<GeometryCollection> clone() const
     {
-        return std::unique_ptr<Geometry>(new GeometryCollection(*this));
+        return std::unique_ptr<GeometryCollection>(cloneImpl());
     }
 
     ~GeometryCollection() override = default;
@@ -178,7 +177,7 @@ public:
      *
      * @return a GeometryCollection in the reverse order
      */
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<GeometryCollection> reverse() const { return std::unique_ptr<GeometryCollection>(reverseImpl()); }
 
 protected:
 
@@ -216,6 +215,10 @@ protected:
     template<typename T>
     GeometryCollection(std::vector<std::unique_ptr<T>> && newGeoms, const GeometryFactory& newFactory) :
         GeometryCollection(toGeometryArray(std::move(newGeoms)), newFactory) {}
+
+    GeometryCollection* cloneImpl() const override { return new GeometryCollection(*this); }
+
+    GeometryCollection* reverseImpl() const override;
 
     int
     getSortIndex() const override

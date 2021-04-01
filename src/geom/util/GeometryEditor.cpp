@@ -104,7 +104,7 @@ GeometryEditor::edit(const Geometry* geometry, GeometryEditorOperation* operatio
 std::unique_ptr<Polygon>
 GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* operation)
 {
-    std::unique_ptr<Polygon> newPolygon(dynamic_cast<Polygon*>(
+    std::unique_ptr<Polygon> newPolygon(detail::down_cast<Polygon*>(
                                                 operation->edit(polygon, factory).release()
                                         ));
     if(newPolygon->isEmpty()) {
@@ -118,7 +118,7 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
         }
     }
 
-    std::unique_ptr<LinearRing> shell(dynamic_cast<LinearRing*>(
+    std::unique_ptr<LinearRing> shell(detail::down_cast<LinearRing*>(
             edit(newPolygon->getExteriorRing(), operation).release()));
 
     if(shell->isEmpty()) {
@@ -129,10 +129,8 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
     auto holes = detail::make_unique<std::vector<LinearRing*>>();
     for(std::size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
 
-        std::unique_ptr<LinearRing> hole(dynamic_cast<LinearRing*>(
+        std::unique_ptr<LinearRing> hole(detail::down_cast<LinearRing*>(
                 edit(newPolygon->getInteriorRingN(i), operation).release()));
-
-        assert(hole);
 
         if(hole->isEmpty()) {
             continue;

@@ -521,7 +521,7 @@ RectangleIntersectionBuilder::reverseLines()
     std::list<geom::LineString*> new_lines;
     for(std::list<geom::LineString*>::reverse_iterator i = lines.rbegin(), e = lines.rend(); i != e; ++i) {
         LineString* ol = *i;
-        new_lines.push_back(dynamic_cast<LineString*>(ol->reverse().release()));
+        new_lines.push_back(detail::down_cast<LineString*>(ol->reverse().release()));
         delete ol;
     }
     lines = new_lines;

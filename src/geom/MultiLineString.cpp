@@ -84,7 +84,7 @@ MultiLineString::isClosed() const
         return false;
     }
     for(const auto& g : geometries) {
-        LineString* ls = dynamic_cast<LineString*>(g.get());
+        const LineString* ls = detail::down_cast<const LineString*>(g.get());
         if(! ls->isClosed()) {
             return false;
         }
@@ -104,25 +104,17 @@ MultiLineString::getBoundary() const
     return std::unique_ptr<Geometry>(getFactory()->createMultiPoint(*pts));
 }
 
-bool
-MultiLineString::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-    return GeometryCollection::equalsExact(other, tolerance);
-}
 GeometryTypeId
 MultiLineString::getGeometryTypeId() const
 {
     return GEOS_MULTILINESTRING;
 }
 
-std::unique_ptr<Geometry>
-MultiLineString::reverse() const
+MultiLineString*
+MultiLineString::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
@@ -134,7 +126,7 @@ MultiLineString::reverse() const
                        return g->reverse();
                    });
 
-    return getFactory()->createMultiLineString(std::move(reversed));
+    return getFactory()->createMultiLineString(std::move(reversed)).release();
 }
 
 const LineString*

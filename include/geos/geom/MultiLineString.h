@@ -81,9 +81,7 @@ public:
 
     bool isClosed() const;
 
-    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
-
-    std::unique_ptr<Geometry> clone() const override;
+    std::unique_ptr<MultiLineString> clone() const;
 
     /**
      * Creates a MultiLineString in the reverse
@@ -94,7 +92,7 @@ public:
      *
      * @return a MultiLineString in the reverse order
      */
-    std::unique_ptr<Geometry> reverse() const override;
+    std::unique_ptr<MultiLineString> reverse() const { return std::unique_ptr<MultiLineString>(reverseImpl()); }
 
 protected:
 
@@ -125,6 +123,10 @@ protected:
                     const GeometryFactory& newFactory);
 
     MultiLineString(const MultiLineString& mp);
+
+    MultiLineString* cloneImpl() const override { return new MultiLineString(*this); }
+
+    MultiLineString* reverseImpl() const override;
 
     int
     getSortIndex() const override

@@ -214,11 +214,10 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
             LineString* lineToAdd;
 
             if(! de->getEdgeDirection() && ! line->isClosed()) {
-                lineToAdd = reverse(line);
+                lineToAdd = line->reverse().release();
             }
             else {
-                Geometry* lineClone = line->clone().release();
-                lineToAdd = detail::down_cast<LineString*>(lineClone);
+                lineToAdd = line->clone().release();
             }
 
             lines->push_back(lineToAdd);
@@ -229,19 +228,8 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
         return nullptr;
     }
     else {
-        Geometry::NonConstVect* l = lines.get();
-        lines.release();
-        return factory->buildGeometry(l);
+        return factory->buildGeometry(lines.release());
     }
-}
-
-/*static private*/
-LineString*
-LineSequencer::reverse(const LineString* line)
-{
-    auto cs = line->getCoordinates();
-    CoordinateSequence::reverse(cs.get());
-    return line->getFactory()->createLineString(cs.release());
 }
 
 /*private static*/

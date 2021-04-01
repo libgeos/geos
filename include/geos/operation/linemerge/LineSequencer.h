@@ -110,9 +110,6 @@ private:
 
     void delAll(Sequences&);
 
-    /// return a newly allocated LineString
-    static geom::LineString* reverse(const geom::LineString* line);
-
     /**
      * Builds a geometry ({@link LineString} or {@link MultiLineString} )
      * representing the sequence.

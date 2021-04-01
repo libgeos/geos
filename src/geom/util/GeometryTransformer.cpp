@@ -272,8 +272,7 @@ GeometryTransformer::transformPolygon(
 
     bool isAllValidLinearRings = true;
 
-    const LinearRing* lr = dynamic_cast<const LinearRing*>(
-                               geom->getExteriorRing());
+    const LinearRing* lr = geom->getExteriorRing();
     assert(lr);
 
     Geometry::Ptr shell = transformLinearRing(lr, geom);

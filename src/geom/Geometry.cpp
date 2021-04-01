@@ -321,11 +321,11 @@ Geometry::intersects(const Geometry* g) const
 
     // optimization for rectangle arguments
     if(isRectangle()) {
-        const Polygon* p = dynamic_cast<const Polygon*>(this);
+        const Polygon* p = detail::down_cast<const Polygon*>(this);
         return predicate::RectangleIntersects::intersects(*p, *g);
     }
     if(g->isRectangle()) {
-        const Polygon* p = dynamic_cast<const Polygon*>(g);
+        const Polygon* p = detail::down_cast<const Polygon*>(g);
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
@@ -412,7 +412,7 @@ Geometry::contains(const Geometry* g) const
 
     // optimization for rectangle arguments
     if(isRectangle()) {
-        const Polygon* p = dynamic_cast<const Polygon*>(this);
+        const Polygon* p = detail::down_cast<const Polygon*>(this);
         return predicate::RectangleContains::contains(*p, *g);
     }
     // Incorrect: contains is not commutative

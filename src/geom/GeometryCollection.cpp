@@ -212,11 +212,7 @@ GeometryCollection::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
 
-    const GeometryCollection* otherCollection = dynamic_cast<const GeometryCollection*>(other);
-    if(! otherCollection) {
-        return false;
-    }
-
+    const GeometryCollection* otherCollection = detail::down_cast<const GeometryCollection*>(other);
     if(geometries.size() != otherCollection->geometries.size()) {
         return false;
     }
@@ -287,7 +283,7 @@ GeometryCollection::computeEnvelopeInternal() const
 int
 GeometryCollection::compareToSameClass(const Geometry* g) const
 {
-    const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
+    const GeometryCollection* gc = detail::down_cast<const GeometryCollection*>(g);
     return compare(geometries, gc->geometries);
 }
 
@@ -386,11 +382,11 @@ GeometryCollection::getGeometryTypeId() const
     return GEOS_GEOMETRYCOLLECTION;
 }
 
-std::unique_ptr<Geometry>
-GeometryCollection::reverse() const
+GeometryCollection*
+GeometryCollection::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     std::vector<std::unique_ptr<Geometry>> reversed(geometries.size());
@@ -402,7 +398,7 @@ GeometryCollection::reverse() const
         return g->reverse();
     });
 
-    return getFactory()->createGeometryCollection(std::move(reversed));
+    return getFactory()->createGeometryCollection(std::move(reversed)).release();
 }
 
 } // namespace geos::geom

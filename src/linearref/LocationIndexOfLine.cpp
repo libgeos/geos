@@ -22,6 +22,7 @@
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfLine.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
+#include <geos/util/IllegalArgumentException.h>
 
 
 
@@ -46,8 +47,12 @@ LocationIndexOfLine::LocationIndexOfLine(const Geometry* p_linearGeom) :
 LinearLocation*
 LocationIndexOfLine::indicesOf(const Geometry* subLine) const
 {
-    Coordinate startPt = dynamic_cast<const LineString*>(subLine->getGeometryN(0))->getCoordinateN(0);
+    const LineString* firstLine = dynamic_cast<const LineString*>(subLine->getGeometryN(0));
     const LineString* lastLine = dynamic_cast<const LineString*>(subLine->getGeometryN(subLine->getNumGeometries() - 1));
+    if(! firstLine || !lastLine) {
+        throw util::IllegalArgumentException("LocationIndexOfLine::indicesOf only works with geometry collections of LineString");
+    }
+    Coordinate startPt = firstLine->getCoordinateN(0);
     Coordinate endPt = lastLine->getCoordinateN(lastLine->getNumPoints() - 1);
 
     LocationIndexOfPoint locPt(linearGeom);

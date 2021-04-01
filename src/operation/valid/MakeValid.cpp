@@ -96,12 +96,10 @@ nodeLineWithFirstCoordinate(const geom::Geometry* geom)
 
   std::unique_ptr<geom::Geometry> point;
   if( geomType == GEOS_LINESTRING ) {
-      auto line = dynamic_cast<const geom::LineString*>(geom);
-      assert(line);
+      auto line = detail::down_cast<const geom::LineString*>(geom);
       point = line->getPointN(0);
   } else {
-      auto mls = dynamic_cast<const geom::MultiLineString*>(geom);
-      assert(mls);
+      auto mls = detail::down_cast<const geom::MultiLineString*>(geom);
       auto line = mls->getGeometryN(0);
       assert(line);
       point = line->getPointN(0);
@@ -122,8 +120,7 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
     std::vector<std::unique_ptr<geom::Geometry>> lines;
 
     for(const auto& subgeom: *mls) {
-        auto line = dynamic_cast<const geom::LineString*>(subgeom.get());
-        assert(line);
+        auto line = detail::down_cast<const geom::LineString*>(subgeom.get());
         auto validSubGeom = MakeValidLine(line);
         if( !validSubGeom || validSubGeom->isEmpty() ) {
             continue;
@@ -135,7 +132,7 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
         else if( validLineType == GEOS_LINESTRING ) {
             lines.emplace_back(std::move(validSubGeom));
         } else if( validLineType == GEOS_MULTILINESTRING ) {
-            auto mlsValid = dynamic_cast<const geom::MultiLineString*>(validSubGeom.get());
+            auto mlsValid = detail::down_cast<const geom::MultiLineString*>(validSubGeom.get());
             for(const auto& subgeomMlsValid: *mlsValid) {
                 lines.emplace_back(subgeomMlsValid->clone());
             }
@@ -316,11 +313,11 @@ std::unique_ptr<geom::Geometry> MakeValid::build(const geom::Geometry* geom)
 
     auto typeId = geom->getGeometryTypeId();
     if( typeId == GEOS_LINESTRING ) {
-        auto lineString = dynamic_cast<const LineString*>(geom);
+        auto lineString = detail::down_cast<const LineString*>(geom);
         return MakeValidLine(lineString);
     }
     if( typeId == GEOS_MULTILINESTRING ) {
-        auto mls = dynamic_cast<const MultiLineString*>(geom);
+        auto mls = detail::down_cast<const MultiLineString*>(geom);
         return MakeValidMultiLine(mls);
     }
     if( typeId == GEOS_POLYGON ||
@@ -328,7 +325,7 @@ std::unique_ptr<geom::Geometry> MakeValid::build(const geom::Geometry* geom)
         return MakeValidPoly(geom);
     }
     if( typeId == GEOS_GEOMETRYCOLLECTION ) {
-        auto coll = dynamic_cast<const GeometryCollection*>(geom);
+        auto coll = detail::down_cast<const GeometryCollection*>(geom);
         return MakeValidCollection(coll);
     }
 

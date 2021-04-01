@@ -87,7 +87,7 @@ contains(const geom::Geometry* g) const
     // optimization for rectangles
     if(isRectangle) {
         geom::Geometry const& geom = getGeometry();
-        geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
+        geom::Polygon const& poly = *detail::down_cast<geom::Polygon const*>(&geom);
 
         return operation::predicate::RectangleContains::contains(poly, *g);
     }

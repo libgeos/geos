@@ -57,18 +57,18 @@ LineString::LineString(const LineString& ls)
     //points=ls.points->clone();
 }
 
-std::unique_ptr<Geometry>
-LineString::reverse() const
+LineString*
+LineString::reverseImpl() const
 {
     if(isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     assert(points.get());
     auto seq = points->clone();
     CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return std::unique_ptr<Geometry>(getFactory()->createLineString(seq.release()));
+    return getFactory()->createLineString(seq.release());
 }
 
 
@@ -274,8 +274,7 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
 
-    const LineString* otherLineString = dynamic_cast<const LineString*>(other);
-    assert(otherLineString);
+    const LineString* otherLineString = detail::down_cast<const LineString*>(other);
     std::size_t npts = points->getSize();
     if(npts != otherLineString->points->getSize()) {
         return false;
@@ -364,8 +363,8 @@ LineString::normalize()
 int
 LineString::compareToSameClass(const Geometry* ls) const
 {
-    const LineString* line = dynamic_cast<const LineString*>(ls);
-    assert(line);
+    const LineString* line = detail::down_cast<const LineString*>(ls);
+
     // MD - optimized implementation
     std::size_t mynpts = points->getSize();
     std::size_t othnpts = line->points->getSize();
