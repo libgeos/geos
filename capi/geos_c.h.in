@@ -1679,6 +1679,14 @@ extern void GEOS_DLL GEOSFree_r(
     GEOSContextHandle_t handle,
     void *buffer);
 
+/**
+* Returns the current GEOS version string. eg: "3.10.0"
+* This function does not have a reentrant variant and is
+* available if `GEOS_USE_ONLY_R_API` is defined.
+* \return version string
+*/
+extern const char GEOS_DLL *GEOSversion(void);
+
 /*
 * External code to GEOS can define GEOS_USE_ONLY_R_API
 * to strip the non-reentrant API functions from this header,
@@ -1708,12 +1716,6 @@ extern void GEOS_DLL initGEOS(
 * cleans up global resources.
 */
 extern void GEOS_DLL finishGEOS(void);
-
-/**
-* Returns the current GEOS version string. eg: "3.10.0"
-* \return version string
-*/
-extern const char GEOS_DLL *GEOSversion(void);
 
 /* ========= Coordinate Sequence functions ========= */
 
