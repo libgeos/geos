@@ -91,11 +91,18 @@ jobs:
         set -e
         mkdir build.cmake
         cd build.cmake
+        GEOS_INSTALL=/tmp/geos.cmake
         cmake --version
-        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
+        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} -DCMAKE_INSTALL_PREFIX=${GEOS_INSTALL} ..
         make -j 2
         cmake --build . --target docs
         ctest --output-on-failure .
+        make install
+        ../tests/postinstall/test_cmake.sh ${GEOS_INSTALL}
+        ../tests/postinstall/test_pkg-config.sh ${GEOS_INSTALL}
+        if [ ${{ matrix.ci.arch }} != "32" ]; then
+          ../tests/postinstall/test_geos-config.sh ${GEOS_INSTALL}
+        fi
 
     - name: Upload coverage to Codecov
       if: matrix.ci.build_type == 'Coverage'
@@ -111,6 +118,8 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
+    env:
+      CMAKE_GENERATOR: "MSYS Makefiles"
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v2
@@ -118,14 +127,24 @@ jobs:
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
       with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
+        install: >-
+          autoconf
+          automake-wrapper
+          libtool
+          make
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
 
     - name: 'Build'
       run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
-       cmake --build . -j 2
-       ctest --output-on-failure .
-
+        GEOS_INSTALL=$(pwd)/inst
+        mkdir build
+        cd build
+        cmake --version
+        cmake -G"MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${GEOS_INSTALL} ..
+        make -j 2
+        ctest --output-on-failure
+        make install
+        export PATH=${GEOS_INSTALL}/bin:${PATH}
+        ../tests/postinstall/test_cmake.sh ${GEOS_INSTALL}
+        ../tests/postinstall/test_pkg-config.sh ${GEOS_INSTALL}

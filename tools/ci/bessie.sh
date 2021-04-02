@@ -9,11 +9,16 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 
+set -e
+
 rm -rf build
 mkdir -p build
 cd build
-cmake ../
+GEOS_INSTALL=/tmp/geos_cmake
+cmake -DCMAKE_INSTALL_PREFIX=${GEOS_INSTALL} ..
 make
-[ -f CMakeCache.txt ] && \
-ctest --output-on-failure . || \
-make check
+ctest --output-on-failure
+make install
+../tests/postinstall/test_cmake.sh ${GEOS_INSTALL}
+../tests/postinstall/test_pkg-config.sh ${GEOS_INSTALL}
+../tests/postinstall/test_geos-config.sh ${GEOS_INSTALL}

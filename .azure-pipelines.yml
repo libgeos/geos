@@ -116,40 +116,60 @@ stages:
         set -e
         mkdir build.cxx11
         cd build.cxx11
+        GEOS_INSTALL=/tmp/geos_cmake.cxx11
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_pkg-config.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++11'
       condition: contains(variables['CXXSTD'], '11')
     - script: |
         set -e
         mkdir build.cxx14
         cd build.cxx14
+        GEOS_INSTALL=/tmp/geos_cmake.cxx14
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_pkg-config.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++14'
       condition: contains(variables['CXXSTD'], '14')
     - script: |
         set -e
         mkdir build.cxx17
         cd build.cxx17
+        GEOS_INSTALL=/tmp/geos_cmake.cxx17
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_pkg-config.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++17'
       condition: contains(variables['CXXSTD'], '17')
     - script: |
         set -e
         mkdir build.cxx20
         cd build.cxx20
+        GEOS_INSTALL=/tmp/geos_cmake.cxx20
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_pkg-config.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++20'
       condition: contains(variables['CXXSTD'], '20')
 
@@ -179,12 +199,14 @@ stages:
         Expand-Archive C:\cmake-3.14.4-win64-x64.zip -DestinationPath C:\
         Rename-Item -Path C:\cmake-3.14.4-win64-x64 -NewName C:\cmake
         Write-Host "##vso[task.prependpath]C:\cmake\bin"
+        New-Item -Path "c:\" -Name "inst" -ItemType "directory"
       displayName: 'Install'
     - script: |
         mkdir build.cxx%CXXSTD%
         cd build.cxx%CXXSTD%
+        set GEOS_INSTALL=C:\inst\geos.cxx%CXXSTD%
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=%CXXSTD% -DBUILD_SHARED_LIBS=ON ..
+        cmake -DCMAKE_CXX_STANDARD=%CXXSTD% -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=%GEOS_INSTALL% ..
       displayName: 'CMake'
     - script: |
         cd build.cxx%CXXSTD%
@@ -194,6 +216,13 @@ stages:
         cd build.cxx%CXXSTD%
         ctest -V --output-on-failure -C %BUILD_TYPE%
       displayName: 'Test'
+    - script: |
+        cd build.cxx%CXXSTD%
+        cmake --build . --config %BUILD_TYPE% --target install
+        set GEOS_INSTALL=C:\inst\geos.cxx%CXXSTD%
+        cd ..
+        call test\postinstall\test_cmake.bat %GEOS_INSTALL%
+      displayName: 'Install and post-install test'
 
   - job: 'macOS'
     pool:
@@ -222,40 +251,56 @@ stages:
         set -e
         mkdir build.cxx11
         cd build.cxx11
+        GEOS_INSTALL=/tmp/geos_cmake.cxx11
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=11 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++11'
       condition: contains(variables['CXXSTD'], '11')
     - script: |
         set -e
         mkdir build.cxx14
         cd build.cxx14
+        GEOS_INSTALL=/tmp/geos_cmake.cxx14
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++14'
       condition: contains(variables['CXXSTD'], '14')
     - script: |
         set -e
         mkdir build.cxx17
         cd build.cxx17
+        GEOS_INSTALL=/tmp/geos_cmake.cxx17
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++17'
       condition: contains(variables['CXXSTD'], '17')
     - script: |
         set -e
         mkdir build.cxx20
         cd build.cxx20
+        GEOS_INSTALL=/tmp/geos_cmake.cxx20
         cmake --version
-        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$GEOS_INSTALL ..
         cmake --build . --config $BUILD_TYPE
         ctest -V --output-on-failure -C $BUILD_TYPE
+        make install
+        ../tests/postinstall/test_cmake.sh $GEOS_INSTALL
+        ../tests/postinstall/test_geos-config.sh $GEOS_INSTALL
       displayName: 'Build C++20'
       condition: contains(variables['CXXSTD'], '20')
 

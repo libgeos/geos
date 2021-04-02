@@ -15,35 +15,27 @@ matrix:
 environment:
   matrix:
     - PLATFORM: x64
-      BUILDER: CMake
       GENERATOR: "Visual Studio 15 2017 Win64"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 #    - PLATFORM: x86
-#      BUILDER: CMake
 #      GENERATOR: "Visual Studio 15 2017"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 #    - PLATFORM: x64
-#      BUILDER: CMake
 #      GENERATOR: "NMake Makefiles"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 #    - PLATFORM: x86
-#      BUILDER: CMake
 #      GENERATOR: "NMake Makefiles"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 #    - PLATFORM: x64
-#      BUILDER: CMake
 #      GENERATOR: "Visual Studio 14 2015 Win64"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 #    - PLATFORM: x86
-#      BUILDER: CMake
 #      GENERATOR: "Visual Studio 14 2015"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 #    - PLATFORM: x64
-#      BUILDER: CMake
 #      GENERATOR: "NMake Makefiles"
 #      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - PLATFORM: x86
-      BUILDER: CMake
       GENERATOR: "NMake Makefiles"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
@@ -59,17 +51,20 @@ init:
   - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
 before_build:
-  - ps: 'Write-Host "Running $env:BUILDER with $env:GENERATOR" -ForegroundColor Magenta'
+  - ps: 'Write-Host "Running CMake with $env:GENERATOR" -ForegroundColor Magenta'
   - cmake --version
-  - cmake -G "%GENERATOR%" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
+  - cmake -G "%GENERATOR%" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\inst %APPVEYOR_BUILD_FOLDER%
 
 build_script:
-  - ps: 'Write-Host "Running $env:BUILDER:" -ForegroundColor Magenta'
+  - ps: 'Write-Host "Running CMake:" -ForegroundColor Magenta'
   - cmake --build . --config %CONFIGURATION%
+  - cmake --build . --config %CONFIGURATION% --target install
 
 test_script:
   - ps: 'Write-Host "Running tests:" -ForegroundColor Magenta'
   - ctest --output-on-failure -C %CONFIGURATION%
+  - set PATH=%APPVEYOR_BUILD_FOLDER%\inst\bin;%PATH%
+  - call %APPVEYOR_BUILD_FOLDER%\tests\postinstall\test_cmake.bat %APPVEYOR_BUILD_FOLDER%\inst
 
 # If you need to debug AppVeyor session (https://www.appveyor.com/docs/how-to/rdp-to-build-worker), then:
 # 1. Uncomment the on_finish section below:
