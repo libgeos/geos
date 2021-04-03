@@ -389,7 +389,7 @@ void object::test<12>()
         values[i] = static_cast<double>(i);
     }
 
-    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, dim);
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, false, false);
 
     double x, y;
     ensure(GEOSCoordSeq_getXY(cs_, 0, &x, &y));
@@ -405,57 +405,57 @@ void object::test<12>()
     ensure_equals(dim_out, dim);
 
     std::vector<double> out3(N * 3);
-    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), 3));
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), true, false));
     ensure_equals(out3[0], values[0]); // X1
     ensure_equals(out3[1], values[1]); // Y1
     ensure(std::isnan(out3[2])); // Z1
     ensure_equals(out3[3], values[2]); // X2
 
     std::vector<double> out2(N * 2);
-    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), 2));
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), false, false));
     ensure(out2 == values);
 }
 
 // test 3D from/to buffer
-template<>
-template<>
-void object::test<13>()
-{
-    unsigned int N = 10;
-    unsigned int dim = 3;
-    std::vector<double> values(N * dim);
-    for (size_t i = 0; i < values.size(); i++) {
-        values[i] = static_cast<double>(i);
+    template<>
+    template<>
+    void object::test<13>()
+    {
+        unsigned int N = 10;
+        unsigned int dim = 3;
+        std::vector<double> values(N * dim);
+        for (size_t i = 0; i < values.size(); i++) {
+            values[i] = static_cast<double>(i);
+        }
+
+        cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, true, false);
+
+        double x, y, z;
+        ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
+        ensure_equals(x, 0.0);
+        ensure_equals(y, 1.0);
+        ensure_equals(z, 2.0);
+
+        ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
+        ensure_equals(x, static_cast<double>(N-1)*3);
+        ensure_equals(y, static_cast<double>(N-1)*3 + 1);
+        ensure_equals(z, static_cast<double>(N-1)*3 + 2);
+
+        unsigned int dim_out;
+        ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+        ensure_equals(dim_out, dim);
+
+        std::vector<double> out3(N * 3);
+        ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), true, false));
+        ensure(out3 == values);
+
+        std::vector<double> out2(N * 2);
+        ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), false, false));
+        ensure_equals(out2[0], values[0]); // X1
+        ensure_equals(out2[1], values[1]); // Y1
+        ensure_equals(out2[2], values[3]); // X2
+        ensure_equals(out2[3], values[4]); // Y2
     }
-
-    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, dim);
-
-    double x, y, z;
-    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
-    ensure_equals(x, 0.0);
-    ensure_equals(y, 1.0);
-    ensure_equals(z, 2.0);
-
-    ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
-    ensure_equals(x, static_cast<double>(N-1)*3);
-    ensure_equals(y, static_cast<double>(N-1)*3 + 1);
-    ensure_equals(z, static_cast<double>(N-1)*3 + 2);
-
-    unsigned int dim_out;
-    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
-    ensure_equals(dim_out, dim);
-
-    std::vector<double> out3(N * 3);
-    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), 3));
-    ensure(out3 == values);
-
-    std::vector<double> out2(N * 2);
-    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), 2));
-    ensure_equals(out2[0], values[0]); // X1
-    ensure_equals(out2[1], values[1]); // Y1
-    ensure_equals(out2[2], values[3]); // X2
-    ensure_equals(out2[3], values[4]); // Y2
-}
 
 // test 2D from/to arrays
 template<>
@@ -548,6 +548,91 @@ void object::test<15>()
     ensure(y == yout);
     ensure(z == zout);
     ensure(std::all_of(mout.begin(), mout.end(), [](double mval) { return std::isnan(mval); }));
+}
+
+// test 3DM from/to buffer
+template<>
+template<>
+void object::test<16>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 3;
+    std::vector<double> values(N * dim);
+    for (size_t i = 0; i < values.size(); i++) {
+        values[i] = static_cast<double>(i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, false, true);
+
+    // XYM buffer produces 2D coordinate sequence
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, 2u);
+
+    // Check first coordinate
+    double x, y, z;
+    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
+    ensure_equals(x, 0.0);
+    ensure_equals(y, 1.0);
+    ensure(std::isnan(z));
+
+    // Check last coordinate
+    ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
+    ensure_equals(x, static_cast<double>(N-1)*3);
+    ensure_equals(y, static_cast<double>(N-1)*3 + 1);
+    ensure(std::isnan(z));
+
+    // Copy to 2D buffer
+    std::vector<double> out2(N * 2);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), false, false));
+    ensure_equals(out2[0], values[0]); // X1
+    ensure_equals(out2[1], values[1]); // Y1
+    ensure_equals(out2[2], values[3]); // X2
+    ensure_equals(out2[3], values[4]); // Y2
+}
+
+// test 3DZM from/to buffer
+template<>
+template<>
+void object::test<17>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 4;
+    std::vector<double> values(N * dim);
+    for (size_t i = 0; i < values.size(); i++) {
+        values[i] = static_cast<double>(i);
+    }
+
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, true, true);
+
+    // XYZM buffer creates a 3D coordinate sequence
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, 3u);
+
+    // Check first coordinate
+    double x, y, z;
+    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
+    ensure_equals(x, 0.0);
+    ensure_equals(y, 1.0);
+    ensure_equals(z, 2.0);
+
+    // Check last coordinate
+    ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
+    ensure_equals(x, static_cast<double>(N-1)*4);
+    ensure_equals(y, static_cast<double>(N-1)*4 + 1);
+    ensure_equals(z, static_cast<double>(N-1)*4 + 2);
+
+    // Copy to 4D buffer
+    std::vector<double> out2(N * 4);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), true, true));
+    ensure_equals(out2[0], values[0]); // X1
+    ensure_equals(out2[1], values[1]); // Y1
+    ensure_equals(out2[2], values[2]); // Z1
+    ensure(std::isnan(out2[3]));
+    ensure_equals(out2[4], values[4]); // X2
+    ensure_equals(out2[5], values[5]); // Y2
+    ensure_equals(out2[6], values[6]); // Z2
 }
 
 } // namespace tut

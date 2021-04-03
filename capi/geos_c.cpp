@@ -868,15 +868,15 @@ extern "C" {
     }
 
     CoordinateSequence*
-    GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, unsigned int dims)
+    GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM)
     {
-        return GEOSCoordSeq_copyFromBuffer_r(handle, buf, size, dims);
+        return GEOSCoordSeq_copyFromBuffer_r(handle, buf, size, hasZ, hasM);
     }
 
     int
-    GEOSCoordSeq_copyToBuffer(const CoordinateSequence* s, double* buf, unsigned int dims)
+    GEOSCoordSeq_copyToBuffer(const CoordinateSequence* s, double* buf, int hasZ, int hasM)
     {
-        return GEOSCoordSeq_copyToBuffer_r(handle, s, buf, dims);
+        return GEOSCoordSeq_copyToBuffer_r(handle, s, buf, hasZ, hasM);
     }
 
     CoordinateSequence*

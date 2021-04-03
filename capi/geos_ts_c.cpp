@@ -2176,23 +2176,31 @@ extern "C" {
     }
 
     CoordinateSequence*
-    GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, unsigned int dims)
+    GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, int hasZ, int hasM)
     {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
             const GeometryFactory *gf = handle->geomFactory;
 
             std::vector<geos::geom::Coordinate> coords(size);
-            if (dims == 2) {
+            std::ptrdiff_t stride = 2 + hasZ + hasM;
+
+            if (hasZ) {
+                if (stride == 3) {
+                    // special case, just memcpy the whole block
+                    static_assert(sizeof(geos::geom::Coordinate) == 3 * sizeof(double), "Coordinate is 3D");
+                    std::memcpy((double*) coords.data(), buf, size * sizeof(geos::geom::Coordinate));
+                } else {
+                    for (std::size_t i = 0; i < size; i++) {
+                        coords[i] = { *buf, *(buf + 1), *(buf + 2) };
+                        buf += stride;
+                    }
+                }
+            }  else {
                 for (std::size_t i = 0; i < size; i++) {
                     coords[i] = { *buf, *(buf + 1) };
-                    buf += 2;
+                    buf += stride;
                 }
-            } else if (dims == 3) {
-                static_assert(sizeof(geos::geom::Coordinate) == 3 * sizeof(double), "Coordinate is 3D");
-                std::memcpy((double*) coords.data(), buf, size * sizeof(geos::geom::Coordinate));
-            } else {
-                throw geos::util::IllegalArgumentException("Unsupported CoordinateSequence dimension.");
             }
 
             return gf->getCoordinateSequenceFactory()->create(std::move(coords)).release();
@@ -2260,34 +2268,31 @@ extern "C" {
 
     int
     GEOSCoordSeq_copyToBuffer_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
-                                double* buf, unsigned int dim)
+                                double* buf, int hasZ, int hasM)
     {
         return execute(extHandle, 0, [&]() {
 
             class CoordinateBufferCopier : public geos::geom::CoordinateFilter {
             public:
-                CoordinateBufferCopier(double* p_buf, bool hasZ) : buf(p_buf), dim(hasZ ? 3 : 2) {}
+                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), dim(2 + p_hasZ) {}
 
                 void filter_ro(const geos::geom::Coordinate* c) override {
                     std::memcpy(buf, c, dim * sizeof(double));
                     buf += dim;
+
+                    if (m) {
+                        *buf = std::numeric_limits<double>::quiet_NaN();
+                        buf++;
+                    }
                 }
 
             private:
                 double* buf;
+                bool m;
                 size_t dim;
             };
 
-            bool hasZ;
-            if (dim == 2) {
-                hasZ = false;
-            } else if (dim == 3) {
-                hasZ = true;
-            } else {
-                throw geos::util::IllegalArgumentException("Invalid dimension.");
-            }
-
-            CoordinateBufferCopier cop(buf, hasZ);
+            CoordinateBufferCopier cop(buf, hasZ, hasM);
             cs->apply_ro(&cop);
 
             return 1;

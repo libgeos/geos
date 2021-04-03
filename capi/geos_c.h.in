@@ -358,7 +358,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer_r(
         GEOSContextHandle_t handle,
         const double* buf,
         unsigned int size,
-        unsigned int dims);
+        int hasZ,
+        int hasM);
 
 /** \see GEOSCoordSeq_copyFromArrays */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays_r(
@@ -374,7 +375,8 @@ extern int GEOS_DLL GEOSCoordSeq_copyToBuffer_r(
         GEOSContextHandle_t handle,
         const GEOSCoordSequence* s,
         double* buf,
-        unsigned int dims);
+        int hasZ,
+        int hasM);
 
 /** \see GEOSCoordSeq_copyToArrays */
 extern int GEOS_DLL GEOSCoordSeq_copyToArrays_r(
@@ -1731,10 +1733,11 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsign
 * Create a coordinate sequence by copying from a buffer of doubles (XYXY or XYZXYZ)
 * \param buf pointer to buffer
 * \param size number of coordinates in the sequence
-* \param dims dimensionality of the coordinates (2 or 3)
+* \param hasZ does buffer have Z values?
+* \param hasM does buffer have M values? (they will be ignored)
 * \return the sequence or NULL on exception
 */
-extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, unsigned int dims);
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM);
 
 /**
 * Create a coordinate sequence by copying from arrays of doubles
@@ -1751,10 +1754,11 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, 
 * Copy the contents of a coordinate sequence to a buffer of doubles (XYXY or XYZXYZ)
 * \param s sequence to copy
 * \param buf buffer to which coordinates should be copied
-* \param dims dimensionality of the coordinates to be constructed in the buffer (2 or 3)
+* \param hasZ copy Z values to buffer?
+* \param hasM copy M values to buffer? (will be NaN)
 * \return 1 on success, 0 on error
 */
-extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, unsigned int dims);
+extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, int hasZ, int hasM);
 
 /**
 * Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ)
