@@ -16,13 +16,12 @@
  *
  **********************************************************************/
 
-#include "IndexedNestedRingTester.h"
-
 #include <geos/geom/LinearRing.h> // for use
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/valid/IsValidOp.h> // for use (findPtNotNode)
 #include <geos/index/strtree/STRtree.h> // for use
 #include <geos/geom/Location.h>
+#include <geos/operation/valid/IndexedNestedRingTester.h>
 
 // Forward declarations
 namespace geos {

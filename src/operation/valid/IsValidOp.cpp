@@ -19,8 +19,6 @@
  *
  **********************************************************************/
 
-#include "IndexedNestedRingTester.h"
-
 #include <geos/export.h>
 #include <geos/constants.h>
 #include <geos/algorithm/LineIntersector.h>
@@ -41,6 +39,7 @@
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/valid/IndexedNestedRingTester.h>
 #include <geos/operation/valid/IndexedNestedShellTester.h>
 #include <geos/util/UnsupportedOperationException.h>
 
@@ -594,4 +593,3 @@ IsValidOp::checkClosedRing(const LinearRing* ring)
 } // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
-

@@ -16,6 +16,7 @@
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/Polygon.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/operation/valid/IndexedNestedRingTester.h>
 #include <geos/operation/valid/IndexedNestedShellTester.h>
 #include <geos/operation/valid/IsValidOp.h>
 
