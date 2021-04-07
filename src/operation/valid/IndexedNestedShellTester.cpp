@@ -134,17 +134,19 @@ IndexedNestedShellTester::checkShellNotNested(const geom::LinearRing* shell, Pol
     const geom::LinearRing* polyShell = locs.getPolygon()->getExteriorRing();
     const geom::Coordinate* shellPt = IsValidOp::findPtNotNode(shellPts, polyShell, &graph);
 
-    // if no point could be found, we can assume that the shell
-    // is outside the polygon
+    // if no non-node point is found, we can assume that the shell
+    // is outside the polygon ==> Valid
     if(shellPt == nullptr) {
         return;
     }
 
+    // check if shell is outside the test polygon shell ==> Valid
     bool insidePolyShell = locs.getShellLocator().locate(shellPt) != geom::Location::EXTERIOR;
     if(!insidePolyShell) {
         return;
     }
 
+    // if no holes then the shell is inside the test polygon ==> INVALID
     auto nholes = locs.getPolygon()->getNumInteriorRing();
     if (nholes == 0) {
         nestedPt = shellPt;
@@ -154,22 +156,21 @@ IndexedNestedShellTester::checkShellNotNested(const geom::LinearRing* shell, Pol
     // Check if the shell is inside one of the holes.
     // This is the case if one of the calls to checkShellInsideHole
     // returns a null coordinate.
-    // Otherwise, the shell is not properly contained in a hole, which is
-    // an error.
     const geom::Coordinate* badNestedPt = nullptr;
     for (std::size_t i = 0; i < nholes; i++) {
         const geom::LinearRing* hole = locs.getPolygon()->getInteriorRingN(i);
 
         if (hole->getEnvelopeInternal()->covers(shell->getEnvelopeInternal())) {
             badNestedPt = checkShellInsideHole(shell, locs.getHoleLocator(i));
+            // if no bad point found then shell is inside hole ==> Valid
             if(badNestedPt == nullptr) {
                 return;
             }
 
         }
     }
-
-    nestedPt = badNestedPt;
+    // The shell pt is inside polygon but not inside any hole ==> INVALID
+    nestedPt = shellPt;
 }
 
 
@@ -208,4 +209,3 @@ IndexedNestedShellTester::checkShellInsideHole(const geom::LinearRing* shell,
 }
 }
 }
-
