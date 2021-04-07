@@ -14,6 +14,7 @@ Changes in 3.10.0
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier and DPSimplifier (Martin Davis)
   - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
+  - Fix IsValidOp to correctly report invalid nested MultiPolygons (#1112, Martin Davis)
 
 - Changes:
   - #1094, #1090: Drop inlines.cpp to address duplicate symbols on many platforms
