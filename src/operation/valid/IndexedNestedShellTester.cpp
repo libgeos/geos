@@ -171,7 +171,7 @@ IndexedNestedShellTester::checkShellNotNested(const geom::LinearRing* shell, Pol
         }
     }
 
-    nestedPt = badNestedPt;
+    nestedPt = shellPt;
 }
 
 
@@ -210,4 +210,3 @@ IndexedNestedShellTester::checkShellInsideHole(const geom::LinearRing* shell,
 }
 }
 }
-

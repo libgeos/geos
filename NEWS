@@ -5,6 +5,7 @@ Changes in 3.9.2
   - Add in interrupt points in OverlayNG (#4857, Paul Ramsey)
   - Fix crash in GEOSPreparedIntersects and GEOSPreparedContains for
     POINT EMPTY input (Even Rouault)
+  - Fix IsValidOp to correctly report invalid nested MultiPolygons (#1112, Martin Davis)
 
 
 Changes in 3.9.1
@@ -736,4 +737,3 @@ Changes in 2.0.0
   been dropped. You have to use GeometryFactory instead.
 - WKTWriter default constructor has been dropped. You need
   to initialize it with an explicit GeometryFactory
-
