@@ -1,5 +1,5 @@
-Changes in 3.8.2dev
-2020-xx-xx
+Changes in 3.8.2
+2021-04-10
 
 - Bug fixes / improvements
 
@@ -8,6 +8,7 @@ Changes in 3.8.2dev
     MultiPolygon to Polygon (#1047, Oliver Tan)
   - DistanceOp against geometry with empty components
     crashes (#1026, Paul Ramsey)
+  - Fix buffer fillet (JTS-526, #743, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
   - WKT writing of MULTIPOINT with EMPTY component crash (#1027, Paul Ramsey)
   - Fix buffering problem (#1022, JTS-525, Paul Ramsey)
