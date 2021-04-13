@@ -11,6 +11,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Polygon.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
@@ -464,6 +465,71 @@ void object::test<15>
     ensure_equals_geometry(gresult.get(), gexpected.get());
 }
 
+// Test for #1101 - Non-empty negative buffer of 4-pt convex polygon
+template<>
+template<>
+void object::test<16>
+()
+{
+    std::string wkt0("POLYGON ((666360.09 429614.71, 666344.4 429597.12, 666358.47 429584.52, 666374.5 429602.33, 666360.09 429614.71))");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    ensure_not( g0->buffer( -9 )->isEmpty() );
+    ensure( g0->buffer( -10 )->isEmpty() );
+    ensure( g0->buffer( -15 )->isEmpty() );
+    ensure( g0->buffer( -18 )->isEmpty() );
+}
+
+// Test for #1101 - Non-empty negative buffer of 5-pt convex polygon
+template<>
+template<>
+void object::test<17>
+()
+{
+    std::string wkt0("POLYGON ((6 20, 16 20, 21 9, 9 0, 0 10, 6 20))");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    ensure_not( g0->buffer( -8 )->isEmpty() );
+    ensure( g0->buffer( -8.6 )->isEmpty() );
+    ensure( g0->buffer( -9.6 )->isEmpty() );
+    ensure( g0->buffer( -11 )->isEmpty() );
+}
+
+// Test for #1101 - Buffer of Polygon with hole with hole eroded
+template<>
+template<>
+void object::test<18>
+()
+{
+    std::string wkt0("POLYGON ((-6 26, 29 26, 29 -5, -6 -5, -6 26), (6 20, 16 20, 21 9, 9 0, 0 10, 6 20))");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    GeomPtr result1 = g0->buffer( -8 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
+
+    GeomPtr result2 = g0->buffer( -8.6 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+
+    GeomPtr result3 = g0->buffer( -9.6 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+
+    GeomPtr result4 = g0->buffer( -11 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+}
+
+// Test for #1101 - Non-empty negative buffer of 5-pt convex polygon
+template<>
+template<>
+void object::test<19>
+()
+{
+    std::string wkt0("MULTIPOLYGON (((30 18, 14 0, 0 13, 16 30, 30 18)), ((180 210, 60 50, 154 6, 270 40, 290 130, 250 190, 180 210)))");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    ensure( 2 == g0->buffer( -9 )->getNumGeometries() );
+    ensure( 1 == g0->buffer( -10 )->getNumGeometries() );
+    ensure( 1 == g0->buffer( -15 )->getNumGeometries() );
+    ensure( 1 == g0->buffer( -18 )->getNumGeometries() );
+}
 
 } // namespace tut
-
