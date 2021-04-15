@@ -147,7 +147,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
     if (ptsFixSz <= 3)
         return std::unique_ptr<Geometry>(nullptr);
 
-    std::unique_ptr<LinearRing> ring = factory->createLinearRing(std::move(ptsFix));
+    std::unique_ptr<Geometry> ring = factory->createLinearRing(std::move(ptsFix));
     //--- convert invalid ring to LineString
     if (! ring->isValid())
         return factory->createLineString(std::move(ptsFix));
@@ -177,7 +177,7 @@ GeometryFixer::fixLineStringElement(const LineString* p_geom)
     auto ptsFixSz = ptsFix->size();
     if (isKeepCollapsed && ptsFixSz == 1) {
         const Coordinate& c = ptsFix->getAt(0);
-        std::unique_ptr<Point> pt(factory->createPoint(c));
+        std::unique_ptr<Geometry> pt(factory->createPoint(c));
         return pt;
     }
     if (ptsFixSz <= 1)
