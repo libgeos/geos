@@ -3389,10 +3389,10 @@ extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g);
 
 /**
 * Return the human readable reason a geometry is invalid,
-* empty string otherwise, or NULL on exception.
+* "Valid Geometry" string otherwise, or NULL on exception.
 * \param g The geometry to test
 * \return A string with the reason, NULL on exception.
-          Caller must GEOSFree() ther result.
+          Caller must GEOSFree() their result.
 */
 extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 
