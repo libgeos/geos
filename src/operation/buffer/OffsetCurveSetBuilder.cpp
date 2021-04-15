@@ -67,7 +67,8 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
     inputGeom(newInputGeom),
     distance(newDistance),
     curveBuilder(newCurveBuilder),
-    curveList()
+    curveList(),
+    isInvertOrientation(false)
 {
 }
 
@@ -189,6 +190,9 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
         return;
     }
     const CoordinateSequence* coord = p->getCoordinatesRO();
+    if (coord->size() >= 1 && ! coord->getAt(0).isValid()) {
+        return;
+    }
     std::vector<CoordinateSequence*> lineList;
     curveBuilder.getLineCurve(coord, distance, lineList);
 
@@ -203,7 +207,7 @@ OffsetCurveSetBuilder::addLineString(const LineString* line)
         return;
     }
 
-    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
+    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(line->getCoordinatesRO());
 
     /**
      * Rings (closed lines) are generated with a continuous curve,
@@ -249,7 +253,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
     }
 
     auto shellCoord =
-            operation::valid::RepeatedPointRemover::removeRepeatedPoints(shell->getCoordinatesRO());
+            operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(shell->getCoordinatesRO());
 
     // don't attempt to buffer a polygon
     // with too few distinct vertices
@@ -274,7 +278,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
             continue;
         }
 
-        auto holeCoord = valid::RepeatedPointRemover::removeRepeatedPoints(hole->getCoordinatesRO());
+        auto holeCoord = valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(hole->getCoordinatesRO());
 
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
@@ -320,8 +324,8 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
 #if GEOS_DEBUG
     std::cerr << "OffsetCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
 #endif
-    if(coord->size() >= LinearRing::MINIMUM_VALID_SIZE &&
-        Orientation::isCCWArea(coord))
+    bool isCCW = isRingCCW(coord);
+    if (coord->size() >= LinearRing::MINIMUM_VALID_SIZE && isCCW)
     {
         leftLoc = cwRightLoc;
         rightLoc = cwLeftLoc;
@@ -397,6 +401,16 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
     return ret;
 }
 
+
+/*private*/
+bool
+OffsetCurveSetBuilder::isRingCCW(const CoordinateSequence* coords) const
+{
+    bool isCCW = algorithm::Orientation::isCCWArea(coords);
+    //--- invert orientation if required
+    if (isInvertOrientation) return ! isCCW;
+    return isCCW;
+}
 
 } // namespace geos.operation.buffer
 } // namespace geos.operation

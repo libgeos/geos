@@ -92,6 +92,7 @@ CoordinateSequence::hasRepeatedPoints(const CoordinateSequence* cl)
     return false;
 }
 
+
 const Coordinate*
 CoordinateSequence::minCoordinate() const
 {

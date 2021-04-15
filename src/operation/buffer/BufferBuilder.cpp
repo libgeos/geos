@@ -396,6 +396,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 
         OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
         OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
+        curveSetBuilder.setInvertOrientation(isInvertOrientation);
 
         GEOS_CHECK_FOR_INTERRUPTS();
 

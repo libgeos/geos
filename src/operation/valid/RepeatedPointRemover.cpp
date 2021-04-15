@@ -48,6 +48,39 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
     return detail::make_unique<geom::CoordinateArraySequence>(pts.release(), seq->getDimension());
 }
 
+std::unique_ptr<geom::CoordinateArraySequence>
+RepeatedPointRemover::removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq) {
+    using geom::Coordinate;
+    std::size_t start = 0;
+
+    if (seq->isEmpty()) {
+        return detail::make_unique<geom::CoordinateArraySequence>(0u, seq->getDimension());
+    }
+
+    auto pts = detail::make_unique<std::vector<Coordinate>>();
+    auto sz = seq->getSize();
+    pts->reserve(sz); // assume not many points are repeated
+
+    // Find first valid poit
+    while(!seq->getAt(start).isValid()) {
+        start++;
+    }
+
+    const Coordinate* prevPt = &(seq->getAt(start));
+    pts->push_back(*prevPt);
+
+    for (std::size_t i = start+1; i < sz; i++) {
+        const Coordinate* nextPt = &(seq->getAt(i));
+        if (*nextPt != *prevPt && nextPt->isValid()) {
+            pts->push_back(*nextPt);
+        }
+        prevPt = nextPt;
+    }
+
+    return detail::make_unique<geom::CoordinateArraySequence>(pts.release(), seq->getDimension());
+}
+
+
 }
 }
 }
