@@ -147,7 +147,7 @@ public:
     * This allows generating a buffer(0) polygon from the smaller lobes
     * of self-crossing rings.
     *
-    * @param isInvertOrientation true if input ring orientation should be inverted
+    * @param p_isInvertOrientation true if input ring orientation should be inverted
     */
     void
     setInvertOrientation(bool p_isInvertOrientation)

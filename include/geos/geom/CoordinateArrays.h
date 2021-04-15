@@ -29,7 +29,7 @@ class GEOS_DLL CoordinateArrays {
 public:
 
     /**
-    * Returns whether #equals returns true for any two consecutive Coordinates
+    * Returns whether equals returns true for any two consecutive Coordinates
     * in the given array.
     */
     static bool hasRepeatedPoints(const std::vector<Coordinate>& coords);
@@ -49,7 +49,7 @@ public:
     * If the coordinate array argument has repeated or invalid points,
     * constructs a new array containing no repeated points.
     * Otherwise, returns the argument.
-    * @param coord an array of coordinates
+    * @param coords an array of coordinates
     * @return the array with repeated and invalid coordinates removed
     */
     static void removeRepeatedOrInvalidPoints(std::vector<Coordinate>& coords);

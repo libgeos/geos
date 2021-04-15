@@ -49,7 +49,7 @@ namespace util { // geos.geom.util
  *
  * <h2>Semantic Rules</h2>
  *
- * * Vertices with non-finite X or Y ordinates are removed (as per {@link Coordinate#isValid()}.
+ * * Vertices with non-finite X or Y ordinates are removed (as per Coordinate::isValid() ).
  *  * Repeated points are reduced to a single point
  *  * Empty atomic geometries are valid and are returned unchanged
  *  * Empty elements are removed from collections
@@ -92,7 +92,7 @@ public:
     * or to a valid geom::Geometry of lower dimension.
     * The default is to convert collapses to empty geometries.
     *
-    * @param isKeepCollapsed whether collapses should be converted to a lower dimension geometry
+    * @param p_isKeepCollapsed whether collapses should be converted to a lower dimension geometry
     */
     void setKeepCollapsed(bool p_isKeepCollapsed);
 
