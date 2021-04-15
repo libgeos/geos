@@ -136,7 +136,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
     if (isKeepCollapsed) {
         if (ptsFixSz == 1) {
             const Coordinate& c = ptsFix->getAt(0);
-            std::unique_ptr<Point> pt(factory->createPoint(c));
+            std::unique_ptr<Geometry> pt(factory->createPoint(c));
             return pt;
         }
         if (ptsFixSz > 1 && ptsFixSz <= 3) {
