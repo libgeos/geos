@@ -83,7 +83,7 @@ private:
     /// This class holds ownership of std::vector elements.
     ///
     std::vector<noding::SegmentString*> curveList;
-    bool isInvertOrientation;
+    bool isInvertOrientation = false;
 
     /**
      * Creates a noding::SegmentString for a coordinate list which is a raw
@@ -180,7 +180,7 @@ private:
     * is taken to be the interior of the ring.
     * This produces a more sensible result when
     * used for repairing polygonal geometry via buffer-by-zero.
-    * For buffer  use the lower robustness of orientation-by-area
+    * For buffer, using the lower robustness of orientation-by-area
     * doesn't matter, since narrow or flat rings
     * produce an acceptable offset curve for either orientation.
     *

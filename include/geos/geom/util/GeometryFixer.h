@@ -129,10 +129,6 @@ private:
     std::unique_ptr<geom::Geometry> fixMultiPolygon(const geom::MultiPolygon* geom);
     std::unique_ptr<geom::Geometry> fixCollection(const geom::GeometryCollection* geom);
 
-
-    // Declare type as noncopyable
-    // GeometryFixer(const GeometryFixer& other) = delete;
-    // GeometryFixer& operator=(const GeometryFixer& rhs) = delete;
 };
 
 } // namespace geos.geom.util

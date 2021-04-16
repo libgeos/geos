@@ -122,7 +122,7 @@ private:
 
     geom::Geometry* resultGeometry;
 
-    bool isInvertOrientation;
+    bool isInvertOrientation = false;
 
     void computeGeometry();
 

@@ -38,10 +38,10 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
     pts->push_back(*prevPt) ;
 
     for (std::size_t i = 1; i < sz; i++) {
-        const Coordinate* nextPt = &(seq->getAt(i));
-        if (*nextPt != *prevPt) {
-            pts->push_back(*nextPt);
-            prevPt = nextPt;
+        const Coordinate* curPt = &(seq->getAt(i));
+        if (*curPt != *prevPt) {
+            pts->push_back(*curPt);
+            prevPt = curPt;
         }
     }
 
@@ -70,10 +70,10 @@ RepeatedPointRemover::removeRepeatedAndInvalidPoints(const geom::CoordinateSeque
     pts->push_back(*prevPt);
 
     for (std::size_t i = start+1; i < sz; i++) {
-        const Coordinate* nextPt = &(seq->getAt(i));
-        if (*nextPt != *prevPt && nextPt->isValid()) {
-            pts->push_back(*nextPt);
-            prevPt = nextPt;
+        const Coordinate* curPt = &(seq->getAt(i));
+        if (*curPt != *prevPt && curPt->isValid()) {
+            pts->push_back(*curPt);
+            prevPt = curPt;
         }
     }
 

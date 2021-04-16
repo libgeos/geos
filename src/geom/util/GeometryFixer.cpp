@@ -54,18 +54,27 @@ GeometryFixer::getResult()
         return geom->clone();
     }
 
-    GeometryTypeId typeId = geom->getGeometryTypeId();
-
-    if (typeId == GEOS_POINT)              return fixPoint(static_cast<const Point*>(geom));
-    //  LinearRing must come before LineString
-    if (typeId == GEOS_LINEARRING)         return fixLinearRing(static_cast<const LinearRing*>(geom));
-    if (typeId == GEOS_LINESTRING)         return fixLineString(static_cast<const LineString*>(geom));
-    if (typeId == GEOS_POLYGON)            return fixPolygon(static_cast<const Polygon*>(geom));
-    if (typeId == GEOS_MULTIPOINT)         return fixMultiPoint(static_cast<const MultiPoint*>(geom));
-    if (typeId == GEOS_MULTILINESTRING)    return fixMultiLineString(static_cast<const MultiLineString*>(geom));
-    if (typeId == GEOS_MULTIPOLYGON)       return fixMultiPolygon(static_cast<const MultiPolygon*>(geom));
-    if (typeId == GEOS_GEOMETRYCOLLECTION) return fixCollection(static_cast<const GeometryCollection*>(geom));
-    throw geos::util::UnsupportedOperationException("GeometryFixer::getResult called on unknown geometry type");
+    switch(geom->getGeometryTypeId()) {
+        case GEOS_POINT:
+            return fixPoint(static_cast<const Point*>(geom));
+        //  LinearRing must come before LineString
+        case GEOS_LINEARRING:
+            return fixLinearRing(static_cast<const LinearRing*>(geom));
+        case GEOS_LINESTRING:
+            return fixLineString(static_cast<const LineString*>(geom));
+        case GEOS_POLYGON:
+            return fixPolygon(static_cast<const Polygon*>(geom));
+        case GEOS_MULTIPOINT:
+            return fixMultiPoint(static_cast<const MultiPoint*>(geom));
+        case GEOS_MULTILINESTRING:
+            return fixMultiLineString(static_cast<const MultiLineString*>(geom));
+        case GEOS_MULTIPOLYGON:
+            return fixMultiPolygon(static_cast<const MultiPolygon*>(geom));
+        case GEOS_GEOMETRYCOLLECTION:
+            return fixCollection(static_cast<const GeometryCollection*>(geom));
+        default:
+            throw geos::util::UnsupportedOperationException("GeometryFixer::getResult called on unknown geometry type");
+    }
 }
 
 /* private */
@@ -84,7 +93,7 @@ std::unique_ptr<Point>
 GeometryFixer::fixPointElement(const Point* p_geom)
 {
     if (p_geom->isEmpty() || ! isValidPoint(p_geom)) {
-        return std::unique_ptr<Point>(nullptr);
+        return nullptr;
     }
     return p_geom->clone();
 }
@@ -129,7 +138,7 @@ std::unique_ptr<Geometry>
 GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
 {
     if (p_geom->isEmpty())
-        return std::unique_ptr<Geometry>(nullptr);
+        return nullptr;
 
     auto ptsFix = RepeatedPointRemover::removeRepeatedAndInvalidPoints(p_geom->getCoordinatesRO());
     auto ptsFixSz = ptsFix->size();
@@ -145,7 +154,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
     }
     //--- too short to be a valid ring
     if (ptsFixSz <= 3)
-        return std::unique_ptr<Geometry>(nullptr);
+        return nullptr;
 
     std::unique_ptr<Geometry> ring = factory->createLinearRing(std::move(ptsFix));
     //--- convert invalid ring to LineString
@@ -171,7 +180,7 @@ std::unique_ptr<Geometry>
 GeometryFixer::fixLineStringElement(const LineString* p_geom)
 {
     if (p_geom->isEmpty())
-        return std::unique_ptr<Geometry>(nullptr);
+        return nullptr;
 
     auto ptsFix = RepeatedPointRemover::removeRepeatedAndInvalidPoints(p_geom->getCoordinatesRO());
     auto ptsFixSz = ptsFix->size();
@@ -181,7 +190,7 @@ GeometryFixer::fixLineStringElement(const LineString* p_geom)
         return pt;
     }
     if (ptsFixSz <= 1)
-        return std::unique_ptr<Geometry>(nullptr);
+        return nullptr;
     else
         return factory->createLineString(std::move(ptsFix));
 }
@@ -202,7 +211,7 @@ GeometryFixer::fixMultiLineString(const MultiLineString* p_geom)
         if (fix == nullptr)
             continue;
 
-        if (! (fix->getGeometryTypeId() == GEOS_LINESTRING)) {
+        if (fix->getGeometryTypeId() != GEOS_LINESTRING) {
             isMixed = true;
         }
         fixed.emplace_back(fix.release());
@@ -241,7 +250,7 @@ GeometryFixer::fixPolygonElement(const Polygon* p_geom)
             return fixLineString(line.get());
         }
         //-- if not allowing collapses then return empty polygon
-        return std::unique_ptr<Geometry>(nullptr);
+        return nullptr;
     }
     // if no holes then done
     if (p_geom->getNumInteriorRing() == 0) {
@@ -261,12 +270,12 @@ GeometryFixer::fixHoles(const Polygon* p_geom)
     for (std::size_t i = 0; i < p_geom->getNumInteriorRing(); i++) {
         std::unique_ptr<Geometry> holeRep = fixRing(p_geom->getInteriorRingN(i));
         // Do not preserve null/empty holes
-        if (!(holeRep == nullptr || holeRep->isEmpty())) {
+        if (holeRep != nullptr && !holeRep->isEmpty()) {
             holes.emplace_back(holeRep.release());
         }
     }
-    if (holes.size() == 0)
-        return std::unique_ptr<Geometry>(nullptr);
+    if (holes.empty())
+        return nullptr;
 
     if (holes.size() == 1) {
         std::unique_ptr<Geometry> h(holes.at(0).release());
@@ -310,7 +319,7 @@ GeometryFixer::fixMultiPolygon(const MultiPolygon* p_geom)
             polys.emplace_back(polyFix.release());
         }
     }
-    if (polys.size() == 0) {
+    if (polys.empty()) {
         return factory->createMultiPolygon();
     }
     std::unique_ptr<GeometryCollection> polysGeom = (factory->createGeometryCollection(std::move(polys)));
