@@ -3431,6 +3431,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
 * Repair an invalid geometry, returning a valid output, merging
 * holes and optionally retaining collapsed components.
 * \param g The geometry to test
+* \param keepCollapsed Remove collapsed components (flattened rings, pointilist lines, etc) from the output.
 * \return The repaired geometry. Caller must free with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSFixGeometry(const GEOSGeometry* g, int keepCollapsed);
