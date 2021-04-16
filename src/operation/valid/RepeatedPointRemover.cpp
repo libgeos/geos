@@ -41,8 +41,8 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
         const Coordinate* nextPt = &(seq->getAt(i));
         if (*nextPt != *prevPt) {
             pts->push_back(*nextPt);
+            prevPt = nextPt;
         }
-        prevPt = nextPt;
     }
 
     return detail::make_unique<geom::CoordinateArraySequence>(pts.release(), seq->getDimension());
@@ -73,8 +73,8 @@ RepeatedPointRemover::removeRepeatedAndInvalidPoints(const geom::CoordinateSeque
         const Coordinate* nextPt = &(seq->getAt(i));
         if (*nextPt != *prevPt && nextPt->isValid()) {
             pts->push_back(*nextPt);
+            prevPt = nextPt;
         }
-        prevPt = nextPt;
     }
 
     return detail::make_unique<geom::CoordinateArraySequence>(pts.release(), seq->getDimension());

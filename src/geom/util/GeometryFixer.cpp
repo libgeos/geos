@@ -150,7 +150,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
     std::unique_ptr<Geometry> ring = factory->createLinearRing(std::move(ptsFix));
     //--- convert invalid ring to LineString
     if (! ring->isValid())
-        return factory->createLineString(std::move(ptsFix));
+        return factory->createLineString(ring->getCoordinates());
     else
         return ring;
 }
