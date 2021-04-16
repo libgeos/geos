@@ -796,6 +796,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSFixGeometry(const Geometry* g, int keepCollapsed)
+    {
+        return GEOSFixGeometry_r(handle, g, keepCollapsed);
+    }
+
+    Geometry*
     GEOSLineMerge(const Geometry* g)
     {
         return GEOSLineMerge_r(handle, g);

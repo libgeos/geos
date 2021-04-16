@@ -1249,6 +1249,12 @@ extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSFixGeometry */
+extern GEOSGeometry GEOS_DLL *GEOSFixGeometry_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    int keepCollapsed);
+
 /* ========== Geometry info ========== */
 
 /** \see GEOSGeomType */
@@ -3420,6 +3426,14 @@ extern char GEOS_DLL GEOSisValidDetail(
 * \return The repaired geometry. Caller must free with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
+
+/**
+* Repair an invalid geometry, returning a valid output, merging
+* holes and optionally retaining collapsed components.
+* \param g The geometry to test
+* \return The repaired geometry. Caller must free with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSFixGeometry(const GEOSGeometry* g, int keepCollapsed);
 
 /* ========== Geometry info ========== */
 

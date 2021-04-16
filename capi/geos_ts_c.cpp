@@ -38,6 +38,7 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/Densifier.h>
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
@@ -1936,6 +1937,20 @@ extern "C" {
         return execute(extHandle, [&]() {
             MakeValid makeValid;
             auto out = makeValid.build(g);
+            out->setSRID(g->getSRID());
+            return out.release();
+        });
+    }
+
+    Geometry*
+    GEOSFixGeometry_r(GEOSContextHandle_t extHandle, const Geometry* g, int keepCollapsed)
+    {
+        using geos::geom::util::GeometryFixer;
+
+        return execute(extHandle, [&]() {
+            GeometryFixer fixer(g);
+            fixer.setKeepCollapsed(keepCollapsed);
+            auto out = fixer.getResult();
             out->setSRID(g->getSRID());
             return out.release();
         });
