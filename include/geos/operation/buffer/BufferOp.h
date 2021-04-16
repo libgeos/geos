@@ -21,6 +21,9 @@
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
+#include <memory> // for unique_ptr
+#include <vector> // for vector
+
 #include <geos/export.h>
 #include <geos/operation/buffer/BufferParameters.h> // for enum values
 
