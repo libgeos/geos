@@ -313,7 +313,29 @@ void object::test<9>
     GEOSSTRtree_destroy(tree);
 }
 
+// Test that envelopes of inserted objects are owned by the tree.
+template<>
+template<>
+void object::test<10>()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(10);
 
+    std::vector<size_t> ids(10);
+    for (size_t i = 0; i < 10; i++) {
+        ids[i] = i;
+        GEOSGeometry* point = GEOSGeom_createPointFromXY((double) i, (double) i);
+        GEOSSTRtree_insert(tree, point, &ids[i]);
+        GEOSGeom_destroy(point);
+    }
+
+    GEOSGeometry* queryPoint = GEOSGeom_createPointFromXY(3.0, 3.0);
+    size_t hitVal = 0;
+    GEOSSTRtree_query(tree, queryPoint, [](void* item, void* data) {
+        *((size_t*) data) = *((size_t*) item);
+    }, &hitVal);
+
+    ensure_equals(hitVal, 3u);
+}
 
 
 } // namespace tut
