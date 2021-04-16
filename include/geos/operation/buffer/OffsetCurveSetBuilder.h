@@ -140,6 +140,42 @@ private:
                      geom::Location cwRightLoc);
 
     /**
+     * Tests whether the offset curve for a ring is fully inverted.
+     * An inverted ("inside-out") curve occurs in some specific situations
+     * involving a buffer distance which should result in a fully-eroded (empty) buffer.
+     * It can happen that the sides of a small, convex polygon
+     * produce offset segments which all cross one another to form
+     * a curve with inverted orientation.
+     * This happens at buffer distances slightly greater than the distance at
+     * which the buffer should disappear.
+     * The inverted curve will produce an incorrect non-empty buffer (for a shell)
+     * or an incorrect hole (for a hole).
+     * It must be discarded from the set of offset curves used in the buffer.
+     * Heuristics are used to reduce the number of cases which area checked,
+     * for efficiency and correctness.
+     * <p>
+     * See https://github.com/locationtech/jts/issues/472
+     *
+     * @param inputPts the input ring
+     * @param distance the buffer distance
+     * @param curvePts the generated offset curve
+     * @return true if the offset curve is inverted
+     */
+    static bool isRingCurveInverted(
+        const geom::CoordinateSequence* inputPts, double dist,
+        const geom::CoordinateSequence* curvePts);
+
+    /**
+     * Computes the maximum distance out of a set of points to a linestring.
+     *
+     * @param pts the points
+     * @param line the linestring vertices
+     * @return the maximum distance
+     */
+    static double maxDistance(
+        const geom::CoordinateSequence*  pts, const geom::CoordinateSequence*  line);
+
+    /**
      * The ringCoord is assumed to contain no repeated points.
      * It may be degenerate (i.e. contain only 1, 2, or 3 points).
      * In this case it has no area, and hence has a minimum diameter of 0.
@@ -216,4 +252,3 @@ public:
 #endif
 
 #endif // ndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
-

@@ -332,7 +332,76 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
     }
     std::vector<CoordinateSequence*> lineList;
     curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
+    // ASSERT: lineList contains exactly 1 curve (this is teh JTS semantics)
+    if (lineList.size() > 0) {
+        const CoordinateSequence* curve = lineList[0];
+        /**
+         * If the offset curve has inverted completely it will produce
+         * an unwanted artifact in the result, so skip it.
+         */
+        if (isRingCurveInverted(coord, offsetDistance, curve)) {
+            return;
+        }
+    }
     addCurves(lineList, leftLoc, rightLoc);
+}
+
+static const int MAX_INVERTED_RING_SIZE = 9;
+static const double NEARNESS_FACTOR = 0.99;
+
+/* private static*/
+bool
+OffsetCurveSetBuilder::isRingCurveInverted(
+    const CoordinateSequence* inputPts, double dist,
+    const CoordinateSequence* curvePts)
+{
+    if (dist == 0.0) return false;
+    /**
+     * Only proper rings can invert.
+     */
+    if (inputPts->size() <= 3) return false;
+    /**
+     * Heuristic based on low chance that a ring with many vertices will invert.
+     * This low limit ensures this test is fairly efficient.
+     */
+    if (inputPts->size() >= MAX_INVERTED_RING_SIZE) return false;
+
+    /**
+     * An inverted curve has no more points than the input ring.
+     * This also eliminates concave inputs (which will produce fillet arcs)
+     */
+    if (curvePts->size() > inputPts->size()) return false;
+
+    /**
+     * Check if the curve vertices are all closer to the input ring
+     * than the buffer distance.
+     * If so, the curve is NOT a valid buffer curve.
+     */
+    double distTol = NEARNESS_FACTOR * fabs(dist);
+    double maxDist = maxDistance(curvePts, inputPts);
+    bool isCurveTooClose = maxDist < distTol;
+    return isCurveTooClose;
+}
+
+/**
+ * Computes the maximum distance out of a set of points to a linestring.
+ *
+ * @param pts the points
+ * @param line the linestring vertices
+ * @return the maximum distance
+ */
+/* private static */
+double
+OffsetCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const CoordinateSequence*  line) {
+    double maxDistance = 0;
+    for (size_t i = 0; i < pts->size(); i++) {
+        Coordinate p = pts->getAt(i);
+        double dist = Distance::pointToSegmentString(p, line);
+        if (dist > maxDistance) {
+        maxDistance = dist;
+        }
+    }
+    return maxDistance;
 }
 
 /*private*/
@@ -358,28 +427,6 @@ OffsetCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
     if(bufferDistance < 0.0 && 2 * std::abs(bufferDistance) > envMinDimension) {
         return true;
     }
-
-    /*
-     * The following is a heuristic test to determine whether an
-     * inside buffer will be eroded completely->
-     * It is based on the fact that the minimum diameter of the ring
-     * pointset
-     * provides an upper bound on the buffer distance which would erode the
-     * ring->
-     * If the buffer distance is less than the minimum diameter, the ring
-     * may still be eroded, but this will be determined by
-     * a full topological computation->
-     *
-     */
-
-    /* MD  7 Feb 2005 - there's an unknown bug in the MD code,
-     so disable this for now */
-#if 0
-    MinimumDiameter md(ring); //=new MinimumDiameter(ring);
-    double minDiam = md.getLength();
-    return minDiam < (2 * std::fabs(bufferDistance));
-#endif
-
     return false;
 }
 
