@@ -101,18 +101,18 @@ public:
     *
     * @return the fixed geometry
     */
-    std::unique_ptr<geom::Geometry> getResult();
+    std::unique_ptr<geom::Geometry> getResult() const;
 
 private:
 
-    std::unique_ptr<geom::Point> fixPoint(const geom::Point* geom);
-    std::unique_ptr<geom::Point> fixPointElement(const geom::Point* geom);
-    bool isValidPoint(const geom::Point* pt);
-    std::unique_ptr<geom::Geometry> fixMultiPoint(const geom::MultiPoint* geom);
-    std::unique_ptr<geom::Geometry> fixLinearRing(const geom::LinearRing* geom);
-    std::unique_ptr<geom::Geometry> fixLinearRingElement(const geom::LinearRing* geom);
-    std::unique_ptr<geom::Geometry> fixLineString(const geom::LineString* geom);
-    std::unique_ptr<geom::Geometry> fixLineStringElement(const geom::LineString* geom);
+    std::unique_ptr<geom::Point> fixPoint(const geom::Point* geom) const;
+    std::unique_ptr<geom::Point> fixPointElement(const geom::Point* geom) const;
+    bool isValidPoint(const geom::Point* pt) const;
+    std::unique_ptr<geom::Geometry> fixMultiPoint(const geom::MultiPoint* geom) const;
+    std::unique_ptr<geom::Geometry> fixLinearRing(const geom::LinearRing* geom) const;
+    std::unique_ptr<geom::Geometry> fixLinearRingElement(const geom::LinearRing* geom) const;
+    std::unique_ptr<geom::Geometry> fixLineString(const geom::LineString* geom) const;
+    std::unique_ptr<geom::Geometry> fixLineStringElement(const geom::LineString* geom) const;
 
     /**
     * Returns a clean copy of the input coordinate array.
@@ -120,14 +120,14 @@ private:
     * @param pts coordinates to clean
     * @return an array of clean coordinates
     */
-    std::unique_ptr<geom::Geometry> fixMultiLineString(const MultiLineString* geom);
-    std::unique_ptr<geom::Geometry> fixPolygon(const geom::Polygon* geom);
-    std::unique_ptr<geom::Geometry> fixPolygonElement(const geom::Polygon* geom);
-    std::unique_ptr<geom::Geometry> fixHoles(const geom::Polygon* geom);
-    std::unique_ptr<geom::Geometry> removeHoles(const geom::Geometry* shell, const geom::Geometry* holes);
-    std::unique_ptr<geom::Geometry> fixRing(const geom::LinearRing* ring);
-    std::unique_ptr<geom::Geometry> fixMultiPolygon(const geom::MultiPolygon* geom);
-    std::unique_ptr<geom::Geometry> fixCollection(const geom::GeometryCollection* geom);
+    std::unique_ptr<geom::Geometry> fixMultiLineString(const MultiLineString* geom) const;
+    std::unique_ptr<geom::Geometry> fixPolygon(const geom::Polygon* geom) const;
+    std::unique_ptr<geom::Geometry> fixPolygonElement(const geom::Polygon* geom) const;
+    std::unique_ptr<geom::Geometry> fixHoles(const geom::Polygon* geom) const;
+    std::unique_ptr<geom::Geometry> removeHoles(const geom::Geometry* shell, const geom::Geometry* holes) const;
+    std::unique_ptr<geom::Geometry> fixRing(const geom::LinearRing* ring) const;
+    std::unique_ptr<geom::Geometry> fixMultiPolygon(const geom::MultiPolygon* geom) const;
+    std::unique_ptr<geom::Geometry> fixCollection(const geom::GeometryCollection* geom) const;
 
 };
 

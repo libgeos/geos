@@ -44,7 +44,7 @@ GeometryFixer::setKeepCollapsed(bool p_isKeepCollapsed)
 
 /* public */
 std::unique_ptr<Geometry>
-GeometryFixer::getResult()
+GeometryFixer::getResult() const
 {
     /**
      *  Truly empty geometries are simply copied.
@@ -57,7 +57,6 @@ GeometryFixer::getResult()
     switch(geom->getGeometryTypeId()) {
         case GEOS_POINT:
             return fixPoint(static_cast<const Point*>(geom));
-        //  LinearRing must come before LineString
         case GEOS_LINEARRING:
             return fixLinearRing(static_cast<const LinearRing*>(geom));
         case GEOS_LINESTRING:
@@ -79,7 +78,7 @@ GeometryFixer::getResult()
 
 /* private */
 std::unique_ptr<Point>
-GeometryFixer::fixPoint(const Point* p_geom)
+GeometryFixer::fixPoint(const Point* p_geom) const
 {
     std::unique_ptr<Point> pt = fixPointElement(p_geom);
     if (pt == nullptr)
@@ -90,7 +89,7 @@ GeometryFixer::fixPoint(const Point* p_geom)
 
 /* private */
 std::unique_ptr<Point>
-GeometryFixer::fixPointElement(const Point* p_geom)
+GeometryFixer::fixPointElement(const Point* p_geom) const
 {
     if (p_geom->isEmpty() || ! isValidPoint(p_geom)) {
         return nullptr;
@@ -100,7 +99,7 @@ GeometryFixer::fixPointElement(const Point* p_geom)
 
 /* private static */
 bool
-GeometryFixer::isValidPoint(const Point* pt)
+GeometryFixer::isValidPoint(const Point* pt) const
 {
     const Coordinate* p = pt->getCoordinate();
     return p->isValid();
@@ -108,7 +107,7 @@ GeometryFixer::isValidPoint(const Point* pt)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixMultiPoint(const MultiPoint* p_geom)
+GeometryFixer::fixMultiPoint(const MultiPoint* p_geom) const
 {
     std::vector<std::unique_ptr<Point>> pts;
     for (std::size_t i = 0; i < p_geom->getNumGeometries(); i++) {
@@ -124,7 +123,7 @@ GeometryFixer::fixMultiPoint(const MultiPoint* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixLinearRing(const LinearRing* p_geom)
+GeometryFixer::fixLinearRing(const LinearRing* p_geom) const
 {
     std::unique_ptr<Geometry> fix = fixLinearRingElement(p_geom);
     if (fix == nullptr)
@@ -135,7 +134,7 @@ GeometryFixer::fixLinearRing(const LinearRing* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
+GeometryFixer::fixLinearRingElement(const LinearRing* p_geom) const
 {
     if (p_geom->isEmpty())
         return nullptr;
@@ -153,7 +152,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
         }
     }
     //--- too short to be a valid ring
-    if (ptsFixSz <= 3)
+    if (ptsFixSz <= LinearRing::MINIMUM_VALID_SIZE)
         return nullptr;
 
     std::unique_ptr<Geometry> ring = factory->createLinearRing(std::move(ptsFix));
@@ -166,7 +165,7 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixLineString(const LineString* p_geom)
+GeometryFixer::fixLineString(const LineString* p_geom) const
 {
     std::unique_ptr<Geometry> fix = fixLineStringElement(p_geom);
     if (fix == nullptr)
@@ -177,7 +176,7 @@ GeometryFixer::fixLineString(const LineString* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixLineStringElement(const LineString* p_geom)
+GeometryFixer::fixLineStringElement(const LineString* p_geom) const
 {
     if (p_geom->isEmpty())
         return nullptr;
@@ -198,7 +197,7 @@ GeometryFixer::fixLineStringElement(const LineString* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixMultiLineString(const MultiLineString* p_geom)
+GeometryFixer::fixMultiLineString(const MultiLineString* p_geom) const
 {
     std::vector<std::unique_ptr<Geometry>> fixed;
     bool isMixed = false;
@@ -228,7 +227,7 @@ GeometryFixer::fixMultiLineString(const MultiLineString* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixPolygon(const Polygon* p_geom)
+GeometryFixer::fixPolygon(const Polygon* p_geom) const
 {
     std::unique_ptr<Geometry> fix = fixPolygonElement(p_geom);
     if (fix == nullptr)
@@ -239,7 +238,7 @@ GeometryFixer::fixPolygon(const Polygon* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixPolygonElement(const Polygon* p_geom)
+GeometryFixer::fixPolygonElement(const Polygon* p_geom) const
 {
     const LinearRing* shell = p_geom->getExteriorRing();
     std::unique_ptr<Geometry> fixShell = fixRing(shell);
@@ -263,7 +262,7 @@ GeometryFixer::fixPolygonElement(const Polygon* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixHoles(const Polygon* p_geom)
+GeometryFixer::fixHoles(const Polygon* p_geom) const
 {
     std::vector<std::unique_ptr<Geometry>> holes;
 
@@ -287,7 +286,7 @@ GeometryFixer::fixHoles(const Polygon* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::removeHoles(const Geometry* shell, const Geometry* holes)
+GeometryFixer::removeHoles(const Geometry* shell, const Geometry* holes) const
 {
     if (holes == nullptr || holes->isEmpty())
         return shell->clone();
@@ -297,7 +296,7 @@ GeometryFixer::removeHoles(const Geometry* shell, const Geometry* holes)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixRing(const LinearRing* ring)
+GeometryFixer::fixRing(const LinearRing* ring) const
 {
     //-- always execute fix, since it may remove repeated coords etc
     std::unique_ptr<LinearRing> lr = ring->clone();
@@ -308,7 +307,7 @@ GeometryFixer::fixRing(const LinearRing* ring)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixMultiPolygon(const MultiPolygon* p_geom)
+GeometryFixer::fixMultiPolygon(const MultiPolygon* p_geom) const
 {
     std::vector<std::unique_ptr<Geometry>> polys;
 
@@ -328,7 +327,7 @@ GeometryFixer::fixMultiPolygon(const MultiPolygon* p_geom)
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryFixer::fixCollection(const GeometryCollection* p_geom)
+GeometryFixer::fixCollection(const GeometryCollection* p_geom) const
 {
     std::vector<std::unique_ptr<Geometry>> geoms;
     for (std::size_t i = 0; i < p_geom->getNumGeometries(); i++) {
