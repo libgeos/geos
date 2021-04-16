@@ -9,6 +9,8 @@ Changes in 3.10.0
   - CAPI: GEOSDensify (Brendan Ward)
   - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,
           GEOSCoordSeq_copyToArrays, GEOSCoordSeq_copyToBuffer (Daniel Baston)
+  - CAPI: GEOSFixGeometry new validity enforcement approach from
+          https://github.com/locationtech/jts/pull/704 (Paul Ramsey, Martin Davis) 
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
