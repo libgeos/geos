@@ -346,9 +346,6 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
     addCurves(lineList, leftLoc, rightLoc);
 }
 
-static const int MAX_INVERTED_RING_SIZE = 9;
-static const double NEARNESS_FACTOR = 0.99;
-
 /* private static*/
 bool
 OffsetCurveSetBuilder::isRingCurveInverted(
@@ -394,11 +391,11 @@ OffsetCurveSetBuilder::isRingCurveInverted(
 double
 OffsetCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const CoordinateSequence*  line) {
     double maxDistance = 0;
-    for (size_t i = 0; i < pts->size(); i++) {
-        Coordinate p = pts->getAt(i);
+    for (std::size_t i = 0; i < pts->size(); i++) {
+        const Coordinate& p = pts->getAt(i);
         double dist = Distance::pointToSegmentString(p, line);
         if (dist > maxDistance) {
-        maxDistance = dist;
+            maxDistance = dist;
         }
     }
     return maxDistance;
