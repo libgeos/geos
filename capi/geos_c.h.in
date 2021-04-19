@@ -3176,7 +3176,9 @@ extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 * Insert an item into an \ref GEOSSTRtree
 *
 * \param tree the \ref GEOSSTRtree in which the item should be inserted
-* \param g a GEOSGeometry whose envelope corresponds to the extent of 'item'
+* \param g a GEOSGeometry whose envelope corresponds to the extent of 'item'. As of GEOS 3.9, this envelope will be
+ *       copied into the tree and the caller may destroy `g` while the tree is still in use. Before GEOS 3.9, `g`
+ *       must be retained until the tree is destroyed.
 * \param item the item to insert into the tree
 * \note The tree does **not** take ownership of the geometry or the item.
 */
@@ -3395,10 +3397,10 @@ extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g);
 
 /**
 * Return the human readable reason a geometry is invalid,
-* empty string otherwise, or NULL on exception.
+* "Valid Geometry" string otherwise, or NULL on exception.
 * \param g The geometry to test
 * \return A string with the reason, NULL on exception.
-          Caller must GEOSFree() ther result.
+          Caller must GEOSFree() their result.
 */
 extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 
