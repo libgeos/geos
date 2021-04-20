@@ -796,9 +796,12 @@ extern "C" {
     }
 
     Geometry*
-    GEOSFixGeometry(const Geometry* g, int keepCollapsed)
+    GEOSMakeValidWithOptions(const Geometry* g,
+        GEOSMakeValidMethods makeValidMethod,
+        void* makeValidOptions)
     {
-        return GEOSFixGeometry_r(handle, g, keepCollapsed);
+        return GEOSMakeValidWithOptions_r(handle, g,
+            makeValidMethod, makeValidOptions);
     }
 
     Geometry*

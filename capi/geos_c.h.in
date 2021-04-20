@@ -1244,16 +1244,48 @@ extern char GEOS_DLL GEOSisValidDetail_r(
     char** reason,
     GEOSGeometry** location);
 
+/* ========== Make Valid ========== */
+
+/**
+* Algorithm to use when repairing invalid geometries.
+*
+* \see GEOSMakeValidWithOptions
+*/
+enum GEOSMakeValidMethods {
+    /** Original method, combines all rings into
+        a set of noded lines and then extracts valid
+        polygons from that linework. */
+    GEOS_MAKE_VALID_ORIGINAL,
+    /** Buffered method, first makes all rings valid
+        then merges shells and subtracts holes from
+        shells to generate valid result. Similar to
+        using buffer(0) but with common failure
+        cases handled correctly. */
+    GEOS_MAKE_VALID_BUFFERED
+};
+
+/**
+* Options structure to fill out when passing options
+* to GEOSMakeValidWithOptions.
+*/
+typedef struct {
+    /** Down-cast collapsed components (eg LINESTRING(0 0, 0 0))
+        to the next dimension (POINT(0 0)) instead of just removing
+        them from the output. */
+    int keepCollapsed;
+} GEOSMakeValidBufferedOptions;
+
 /** \see GEOSMakeValid */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
-/** \see GEOSFixGeometry */
-extern GEOSGeometry GEOS_DLL *GEOSFixGeometry_r(
+/** \see GEOSMakeValidWithOptions */
+extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithOptions_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
-    int keepCollapsed);
+    enum GEOSMakeValidMethods makeValidMethod,
+    void* makeValidOptions);
 
 /* ========== Geometry info ========== */
 
@@ -3424,19 +3456,24 @@ extern char GEOS_DLL GEOSisValidDetail(
 
 /**
 * Repair an invalid geometry, returning a valid output.
-* \param g The geometry to test
+* \param g The geometry to repair
 * \return The repaired geometry. Caller must free with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
 
 /**
-* Repair an invalid geometry, returning a valid output, merging
-* holes and optionally retaining collapsed components.
-* \param g The geometry to test
-* \param keepCollapsed Remove collapsed components (flattened rings, pointilist lines, etc) from the output.
-* \return The repaired geometry. Caller must free with GEOSGeom_destroy().
+* Repair an invalid geometry, returning a valid output, using the
+* indicated GEOSMakeValidMethods algorithm and options.
+* \param g is the geometry to test.
+* \param makeValidMethod indicates what repair algorithm to use.
+* \param makeValidOptions to control the behaviour or the repair method.
+* \return A repaired geometry. Caller must free with GEOSGeom_destroy().
 */
-extern GEOSGeometry GEOS_DLL *GEOSFixGeometry(const GEOSGeometry* g, int keepCollapsed);
+extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithOptions(
+    const GEOSGeometry* g,
+    enum GEOSMakeValidMethods makeValidMethod,
+    void* makeValidOptions);
+
 
 /* ========== Geometry info ========== */
 

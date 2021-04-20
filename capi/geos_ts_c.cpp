@@ -1932,29 +1932,54 @@ extern "C" {
     Geometry*
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        using geos::operation::valid::MakeValid;
+        // using geos::operation::valid::MakeValid;
+        // return execute(extHandle, [&]() {
+        //     MakeValid makeValid;
+        //     auto out = makeValid.build(g);
+        //     out->setSRID(g->getSRID());
+        //     return GEOSMakeValidWithOptions_rout.release();
+        // });
 
-        return execute(extHandle, [&]() {
-            MakeValid makeValid;
-            auto out = makeValid.build(g);
-            out->setSRID(g->getSRID());
-            return out.release();
-        });
+        return GEOSMakeValidWithOptions_r(extHandle, g, GEOS_MAKE_VALID_ORIGINAL, NULL);
     }
 
     Geometry*
-    GEOSFixGeometry_r(GEOSContextHandle_t extHandle, const Geometry* g, int keepCollapsed)
+    GEOSMakeValidWithOptions_r(
+        GEOSContextHandle_t extHandle,
+        const Geometry* g,
+        GEOSMakeValidMethods makeValidMethod,
+        void* makeValidOptions)
     {
         using geos::geom::util::GeometryFixer;
+        using geos::operation::valid::MakeValid;
 
-        return execute(extHandle, [&]() {
-            GeometryFixer fixer(g);
-            fixer.setKeepCollapsed(keepCollapsed);
-            auto out = fixer.getResult();
-            out->setSRID(g->getSRID());
-            return out.release();
-        });
+        if (makeValidMethod == GEOS_MAKE_VALID_ORIGINAL) {
+            return execute(extHandle, [&]() {
+                MakeValid makeValid;
+                auto out = makeValid.build(g);
+                out->setSRID(g->getSRID());
+                return out.release();
+            });
+        }
+        else if (makeValidMethod == GEOS_MAKE_VALID_BUFFERED) {
+            return execute(extHandle, [&]() {
+                GEOSMakeValidBufferedOptions options;
+                memset(&options, 0, sizeof(options));
+                if (makeValidOptions) {
+                    options = *((GEOSMakeValidBufferedOptions*)makeValidOptions);
+                }
+                GeometryFixer fixer(g);
+                fixer.setKeepCollapsed(options.keepCollapsed);
+                auto out = fixer.getResult();
+                out->setSRID(g->getSRID());
+                return out.release();
+            });
+        }
+        else {
+            throw IllegalArgumentException("Unknown makeValidMethod");
+        }
     }
+
 
     Geometry*
     GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
