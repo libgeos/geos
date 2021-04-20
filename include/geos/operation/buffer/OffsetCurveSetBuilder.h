@@ -72,6 +72,9 @@ class GEOS_DLL OffsetCurveSetBuilder {
 
 private:
 
+    static constexpr int MAX_INVERTED_RING_SIZE = 9;
+    static constexpr double NEARNESS_FACTOR = 0.99;
+
     // To keep track of newly-created Labels.
     // Labels will be released by object dtor
     std::vector<geomgraph::Label*> newLabels;
