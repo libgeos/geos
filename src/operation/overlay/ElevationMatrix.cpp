@@ -138,7 +138,7 @@ ElevationMatrix::add(const CoordinateSequence* cs)
 void
 ElevationMatrix::add(const Coordinate& c)
 {
-    if(std::isnan(c.z)) {
+    if(std::isnan(c.z) || std::isnan(c.y)) {
         return;
     }
     try {
