@@ -8,8 +8,8 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_subdirectory(unit)
-add_subdirectory(xmltester)
-add_subdirectory(bigtest)
-add_subdirectory(fuzz)
-
+if(DEFINED ENV{LIB_FUZZING_ENGINE})
+  add_executable(fuzz_geo2 fuzz_geo2.c)
+  target_include_directories(fuzz_geo2 PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
+  target_link_libraries(fuzz_geo2 geos_c $ENV{LIB_FUZZING_ENGINE})
+endif()
