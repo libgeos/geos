@@ -69,14 +69,12 @@ void object::test<3>
 ()
 {
     const char* wkt = "LINESTRING(0 0, 0 0)";
+    GEOSMakeValidParams *params = GEOSMakeValidParams_create();
+    GEOSMakeValidParams_setKeepCollapsed(params, 1);
     geom1_ = GEOSGeomFromWKT(wkt);
-    GEOSMakeValidBufferedOptions options;
-    options.keepCollapsed = 1;
-    geom2_ = GEOSMakeValidWithOptions(geom1_, GEOS_MAKE_VALID_BUFFERED, &options);
+    geom2_ = GEOSMakeValidWithParams(geom1_, params);
     // std::cout << toWKT(geom2_) << std::endl;
     expected_ = GEOSGeomFromWKT("POINT(0 0)");
-    // GEOSNormalize(geom2_);
-    // GEOSNormalize(expected_);
     ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
 }
 
@@ -86,14 +84,12 @@ void object::test<4>
 ()
 {
     const char* wkt = "LINESTRING(0 0, 0 0)";
+    GEOSMakeValidParams *params = GEOSMakeValidParams_create();
+    GEOSMakeValidParams_setKeepCollapsed(params, 0);
     geom1_ = GEOSGeomFromWKT(wkt);
-    GEOSMakeValidBufferedOptions options;
-    options.keepCollapsed = 0;
-    geom2_ = GEOSMakeValidWithOptions(geom1_, GEOS_MAKE_VALID_BUFFERED, &options);
+    geom2_ = GEOSMakeValidWithParams(geom1_, params);
     // std::cout << toWKT(geom2_) << std::endl;
-    expected_ = GEOSGeomFromWKT("LINESTRING EMPTY");
-    // GEOSNormalize(geom2_);
-    // GEOSNormalize(expected_);
+    expected_ = GEOSGeomFromWKT("POINT(0 0)");
     ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
 }
 

@@ -119,6 +119,12 @@
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
 
+// Implementation struct for the GEOSMakeValidParams object
+typedef struct {
+    int method;
+    int keepCollapsed;
+} GEOSMakeValidParams;
+
 #include "geos_c.h"
 
 // Intentional, to allow non-standard C elements like C99 functions to be
@@ -1932,28 +1938,60 @@ extern "C" {
     Geometry*
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        // using geos::operation::valid::MakeValid;
-        // return execute(extHandle, [&]() {
-        //     MakeValid makeValid;
-        //     auto out = makeValid.build(g);
-        //     out->setSRID(g->getSRID());
-        //     return GEOSMakeValidWithOptions_rout.release();
-        // });
+        GEOSMakeValidParams params;
+        params.method = GEOS_MAKE_VALID_ORIGINAL;
+        params.keepCollapsed = 1;
+        return GEOSMakeValidWithParams_r(extHandle, g, &params);
+    }
 
-        return GEOSMakeValidWithOptions_r(extHandle, g, GEOS_MAKE_VALID_ORIGINAL, NULL);
+    GEOSMakeValidParams*
+    GEOSMakeValidParams_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSMakeValidParams* p = new GEOSMakeValidParams();
+            p->method = GEOS_MAKE_VALID_ORIGINAL;
+            p->keepCollapsed = 0;
+            return p;
+        });
+    }
+
+    void
+    GEOSMakeValidParams_destroy_r(GEOSContextHandle_t extHandle, GEOSMakeValidParams* parms)
+    {
+        (void)extHandle;
+        delete parms;
+    }
+
+    int
+    GEOSMakeValidParams_setKeepCollapsed_r(GEOSContextHandle_t extHandle,
+        GEOSMakeValidParams* p, int keepCollapsed)
+    {
+        return execute(extHandle, 0, [&]() {
+            p->keepCollapsed = keepCollapsed;
+            return 1;
+        });
+    }
+
+    int
+    GEOSMakeValidParams_setMethod_r(GEOSContextHandle_t extHandle,
+        GEOSMakeValidParams* p, GEOSMakeValidMethods method)
+    {
+        return execute(extHandle, 0, [&]() {
+            p->method = method;
+            return 1;
+        });
     }
 
     Geometry*
-    GEOSMakeValidWithOptions_r(
+    GEOSMakeValidWithParams_r(
         GEOSContextHandle_t extHandle,
         const Geometry* g,
-        GEOSMakeValidMethods makeValidMethod,
-        void* makeValidOptions)
+        const GEOSMakeValidParams* params)
     {
         using geos::geom::util::GeometryFixer;
         using geos::operation::valid::MakeValid;
 
-        if (makeValidMethod == GEOS_MAKE_VALID_ORIGINAL) {
+        if (params && params->method == GEOS_MAKE_VALID_ORIGINAL) {
             return execute(extHandle, [&]() {
                 MakeValid makeValid;
                 auto out = makeValid.build(g);
@@ -1961,25 +1999,19 @@ extern "C" {
                 return out.release();
             });
         }
-        else if (makeValidMethod == GEOS_MAKE_VALID_BUFFERED) {
+        else if (params && params->method == GEOS_MAKE_VALID_BUFFERED) {
             return execute(extHandle, [&]() {
-                GEOSMakeValidBufferedOptions options;
-                memset(&options, 0, sizeof(options));
-                if (makeValidOptions) {
-                    options = *((GEOSMakeValidBufferedOptions*)makeValidOptions);
-                }
                 GeometryFixer fixer(g);
-                fixer.setKeepCollapsed(options.keepCollapsed);
+                fixer.setKeepCollapsed(params->keepCollapsed == 0 ? false : true);
                 auto out = fixer.getResult();
                 out->setSRID(g->getSRID());
                 return out.release();
             });
         }
         else {
-            throw IllegalArgumentException("Unknown makeValidMethod");
+            throw IllegalArgumentException("Unknown method in GEOSMakeValidParams");
         }
     }
-
 
     Geometry*
     GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
