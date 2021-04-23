@@ -1939,7 +1939,7 @@ extern "C" {
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         GEOSMakeValidParams params;
-        params.method = GEOS_MAKE_VALID_ORIGINAL;
+        params.method = GEOS_MAKE_VALID_LINEWORK;
         params.keepCollapsed = 1;
         return GEOSMakeValidWithParams_r(extHandle, g, &params);
     }
@@ -1949,7 +1949,7 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             GEOSMakeValidParams* p = new GEOSMakeValidParams();
-            p->method = GEOS_MAKE_VALID_ORIGINAL;
+            p->method = GEOS_MAKE_VALID_LINEWORK;
             p->keepCollapsed = 0;
             return p;
         });
@@ -1991,7 +1991,7 @@ extern "C" {
         using geos::geom::util::GeometryFixer;
         using geos::operation::valid::MakeValid;
 
-        if (params && params->method == GEOS_MAKE_VALID_ORIGINAL) {
+        if (params && params->method == GEOS_MAKE_VALID_LINEWORK) {
             return execute(extHandle, [&]() {
                 MakeValid makeValid;
                 auto out = makeValid.build(g);
@@ -1999,7 +1999,7 @@ extern "C" {
                 return out.release();
             });
         }
-        else if (params && params->method == GEOS_MAKE_VALID_BUFFERED) {
+        else if (params && params->method == GEOS_MAKE_VALID_STRUCTURE) {
             return execute(extHandle, [&]() {
                 GeometryFixer fixer(g);
                 fixer.setKeepCollapsed(params->keepCollapsed == 0 ? false : true);

@@ -1262,13 +1262,12 @@ enum GEOSMakeValidMethods {
     /** Original method, combines all rings into
         a set of noded lines and then extracts valid
         polygons from that linework. */
-    GEOS_MAKE_VALID_ORIGINAL = 0,
-    /** Buffered method, first makes all rings valid
+    GEOS_MAKE_VALID_LINEWORK = 0,
+    /** Structured method, first makes all rings valid
         then merges shells and subtracts holes from
-        shells to generate valid result. Similar to
-        using buffer(0) but with common failure
-        cases handled correctly. */
-    GEOS_MAKE_VALID_BUFFERED = 1
+        shells to generate valid result. Assumes that
+        holes and shells are correctly categorized. */
+    GEOS_MAKE_VALID_STRUCTURE = 1
 };
 
 /** \see GEOSMakeValidParams_create */
@@ -3520,7 +3519,7 @@ extern int GEOS_DLL GEOSMakeValidParams_setMethod(
     enum GEOSMakeValidMethods method);
 
 /**
-* When this parameter is not set to 0, the GEOS_MAKE_VALID_BUFFERED method will drop
+* When this parameter is not set to 0, the GEOS_MAKE_VALID_STRUCTURE method will drop
 * any component that has collapsed into a lower dimensionality.
 * For example, a ring collapsing to a line, or a line collapsing
 * to a point.
