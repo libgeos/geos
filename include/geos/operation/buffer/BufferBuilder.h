@@ -105,7 +105,8 @@ public:
         intersectionAdder(nullptr),
         workingNoder(nullptr),
         geomFact(nullptr),
-        edgeList()
+        edgeList(),
+        isInvertOrientation(false)
     {}
 
     ~BufferBuilder();
@@ -139,6 +140,21 @@ public:
     {
         workingNoder = newNoder;
     }
+
+    /**
+    * Sets whether the offset curve is generated
+    * using the inverted orientation of input rings.
+    * This allows generating a buffer(0) polygon from the smaller lobes
+    * of self-crossing rings.
+    *
+    * @param p_isInvertOrientation true if input ring orientation should be inverted
+    */
+    void
+    setInvertOrientation(bool p_isInvertOrientation)
+    {
+        isInvertOrientation = p_isInvertOrientation;
+    }
+
 
     geom::Geometry* buffer(const geom::Geometry* g, double distance);
     // throw (GEOSException);
@@ -187,6 +203,8 @@ private:
     geomgraph::EdgeList edgeList;
 
     std::vector<geomgraph::Label*> newLabels;
+
+    bool isInvertOrientation;
 
     void computeNodedEdges(std::vector<noding::SegmentString*>& bufSegStr,
                            const geom::PrecisionModel* precisionModel);

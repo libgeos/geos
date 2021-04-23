@@ -406,6 +406,8 @@ void object::test<28>
     }
 }
 
+
+
 // Test of exception thrown when constructing a self-intersecting LinearRing
 template<>
 template<>
@@ -473,4 +475,35 @@ void object::test<33>
     ensure(ring_->isDimensionStrict(geos::geom::Dimension::L));
     ensure(!ring_->isDimensionStrict(geos::geom::Dimension::A));
 }
+
+
+// Test of allowing 3-point collapsed rings to be constructed
+template<>
+template<>
+void object::test<34>
+()
+{
+    auto geo = reader_.read("LINEARRING(0 0, 5 5, 0 0)");
+    ensure(geo != nullptr);
+}
+
+// Test of exception on 2-point rings
+template<>
+template<>
+void object::test<35>
+()
+{
+    try {
+        auto geo = reader_.read("LINEARRING(0 0, 0 0)");
+        ensure(geo != nullptr);
+        fail("IllegalArgumentException expected.");
+    }
+    catch(geos::util::IllegalArgumentException const& e) {
+        const char* msg = e.what(); // ok
+        ensure(msg != nullptr);
+    }
+}
+
+
+
 } // namespace tut

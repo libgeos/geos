@@ -188,6 +188,7 @@ void
 BufferOp::bufferOriginalPrecision()
 {
     BufferBuilder bufBuilder(bufParams);
+    bufBuilder.setInvertOrientation(isInvertOrientation);
 
     //std::cerr<<"computing with original precision"<<std::endl;
     try {
@@ -242,6 +243,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
     BufferBuilder bufBuilder(bufParams);
     bufBuilder.setWorkingPrecisionModel(&fixedPM);
     bufBuilder.setNoder(&noder);
+    bufBuilder.setInvertOrientation(isInvertOrientation);
     resultGeometry = bufBuilder.buffer(argGeom, distance);
 
 #else
@@ -252,6 +254,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
     BufferBuilder bufBuilder(bufParams);
     bufBuilder.setWorkingPrecisionModel(&fixedPM);
     bufBuilder.setNoder(&noder);
+    bufBuilder.setInvertOrientation(isInvertOrientation);
 
     // Snap by reducing the precision of the input geometry
     //
@@ -280,6 +283,61 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
     resultGeometry = bufBuilder.buffer(workGeom, distance);
 #endif
 }
+
+/* public static */
+std::unique_ptr<Geometry>
+BufferOp::bufferByZero(const Geometry* geom, bool isBothOrientations)
+{
+    //--- compute buffer using maximum signed-area orientation
+    std::unique_ptr<Geometry> buf0(geom->buffer(0));
+    if (!isBothOrientations)
+        return buf0;
+
+    //-- compute buffer using minimum signed-area orientation
+    BufferOp op(geom);
+    op.isInvertOrientation = true;
+    std::unique_ptr<Geometry> buf0Inv(op.getResultGeometry(0));
+
+    //-- the buffer results should be non-adjacent, so combining is safe
+    if (buf0->isEmpty()) return buf0Inv;
+    if (buf0Inv->isEmpty()) return buf0;
+
+    std::vector<std::unique_ptr<Geometry>> polys;
+    extractPolygons(buf0.release(), polys);
+    extractPolygons(buf0Inv.release(), polys);
+    if (polys.size() == 1) {
+        std::unique_ptr<Geometry> poly(polys.at(0).release());
+        return poly;
+    }
+    if (polys.size() == 0) {
+        return geom->getFactory()->createMultiPolygon();
+    }
+    return geom->getFactory()->createMultiPolygon(std::move(polys));
+}
+
+/* private static */
+void
+BufferOp::extractPolygons(Geometry* geom, std::vector<std::unique_ptr<geom::Geometry>>& polys)
+{
+    Polygon* p = dynamic_cast<Polygon*>(geom);
+    if (p) {
+        polys.emplace_back(p);
+        return;
+    }
+    MultiPolygon* mp = dynamic_cast<MultiPolygon*>(geom);
+    if (mp) {
+        std::vector<std::unique_ptr<Geometry>> subPolys = mp->releaseGeometries();
+        for (auto& subPoly : subPolys) {
+            polys.emplace_back(subPoly.release());
+        }
+        delete mp;
+        return;
+    }
+    return;
+}
+
+
+
 
 } // namespace geos.operation.buffer
 } // namespace geos.operation

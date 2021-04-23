@@ -160,11 +160,18 @@ typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 typedef struct GEOSSTRtree_t GEOSSTRtree;
 
 /**
-* Paramter object for buffering.
+* Parameter object for buffering.
 * \see GEOSBufferParams_create()
 * \see GEOSBufferParams_destroy()
 */
 typedef struct GEOSBufParams_t GEOSBufferParams;
+
+/**
+* Parameter object for validity enforcement.
+* \see GEOSMakeValidParams_create()
+* \see GEOSMakeValidParams_destroy()
+*/
+typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
 #endif
 
@@ -1244,10 +1251,57 @@ extern char GEOS_DLL GEOSisValidDetail_r(
     char** reason,
     GEOSGeometry** location);
 
+/* ========== Make Valid ========== */
+
+/**
+* Algorithm to use when repairing invalid geometries.
+*
+* \see GEOSMakeValidWithParams
+*/
+enum GEOSMakeValidMethods {
+    /** Original method, combines all rings into
+        a set of noded lines and then extracts valid
+        polygons from that linework. */
+    GEOS_MAKE_VALID_LINEWORK = 0,
+    /** Structured method, first makes all rings valid
+        then merges shells and subtracts holes from
+        shells to generate valid result. Assumes that
+        holes and shells are correctly categorized. */
+    GEOS_MAKE_VALID_STRUCTURE = 1
+};
+
+/** \see GEOSMakeValidParams_create */
+extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create_r(
+    GEOSContextHandle_t extHandle);
+
+/** \see GEOSMakeValidParams_destroy */
+extern void GEOS_DLL GEOSMakeValidParams_destroy_r(
+    GEOSContextHandle_t handle,
+    GEOSMakeValidParams* parms);
+
+/** \see GEOSMakeValidParams_setKeepCollapsed */
+extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed_r(
+    GEOSContextHandle_t handle,
+    GEOSMakeValidParams* p,
+    int style);
+
+/** \see GEOSMakeValidParams_setMethod */
+extern int GEOS_DLL GEOSMakeValidParams_setMethod_r(
+    GEOSContextHandle_t handle,
+    GEOSMakeValidParams* p,
+    enum GEOSMakeValidMethods method);
+
 /** \see GEOSMakeValid */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
+
+/** \see GEOSMakeValidWithParams */
+extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    const GEOSMakeValidParams* makeValidParams);
+
 
 /* ========== Geometry info ========== */
 
@@ -3418,10 +3472,64 @@ extern char GEOS_DLL GEOSisValidDetail(
 
 /**
 * Repair an invalid geometry, returning a valid output.
-* \param g The geometry to test
+* \param g The geometry to repair
 * \return The repaired geometry. Caller must free with GEOSGeom_destroy().
 */
-extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid(
+    const GEOSGeometry* g);
+
+/**
+* Repair an invalid geometry, returning a valid output, using the
+* indicated GEOSMakeValidMethods algorithm and options.
+* \param g is the geometry to test.
+* \param makeValidParams is a GEOSMakeValidParams with the desired parameters set on it.
+* \return A repaired geometry. Caller must free with GEOSGeom_destroy().
+* \see GEOSMakeValidParams_create
+* \see GEOSMakeValidParams_destroy
+* \see GEOSMakeValidParams_setMethod
+* \see GEOSMakeValidParams_setKeepCollapsed
+*/
+extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams(
+    const GEOSGeometry* g,
+    const GEOSMakeValidParams *makeValidParams);
+
+/**
+* Create a GEOSMakeValidParams to hold the desired parameters
+* to control the algorithm and behavior of the validation process.
+* \return a parameter object
+* \see GEOSMakeValidWithParams
+*/
+extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create();
+
+/**
+* Destroy a GEOSMakeValidParams.
+* \param parms the object to destroy
+* \see GEOSMakeValidWithParams
+*/
+extern void GEOS_DLL GEOSMakeValidParams_destroy(GEOSMakeValidParams* parms);
+
+/**
+* Set the GEOSMakeValidMethods to use in making the geometry
+* valid.
+* \return 0 on exception, 1 on success.
+* \see GEOSMakeValidWithParams
+*/
+extern int GEOS_DLL GEOSMakeValidParams_setMethod(
+    GEOSMakeValidParams* p,
+    enum GEOSMakeValidMethods method);
+
+/**
+* When this parameter is not set to 0, the GEOS_MAKE_VALID_STRUCTURE method will drop
+* any component that has collapsed into a lower dimensionality.
+* For example, a ring collapsing to a line, or a line collapsing
+* to a point.
+* \return 0 on exception, 1 on success.
+* \see GEOSMakeValidWithParams
+*/
+extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
+    GEOSMakeValidParams* p,
+    int keepCollapsed);
+
 
 /* ========== Geometry info ========== */
 

@@ -91,6 +91,8 @@ public:
 
     bool isNull() const;
 
+    bool isValid() const;
+
     Coordinate();
 
     Coordinate(double xNew, double yNew, double zNew = DoubleNotANumber);

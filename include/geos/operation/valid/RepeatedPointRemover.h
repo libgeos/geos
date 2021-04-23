@@ -35,6 +35,7 @@ namespace valid {
     /// \return
     public:
         static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq);
+        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq);
     };
 }
 }

@@ -21,6 +21,9 @@
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
+#include <memory> // for unique_ptr
+#include <vector> // for vector
+
 #include <geos/export.h>
 #include <geos/operation/buffer/BufferParameters.h> // for enum values
 
@@ -119,6 +122,8 @@ private:
 
     geom::Geometry* resultGeometry;
 
+    bool isInvertOrientation = false;
+
     void computeGeometry();
 
     void bufferOriginalPrecision();
@@ -128,6 +133,23 @@ private:
     void bufferReducedPrecision();
 
     void bufferFixedPrecision(const geom::PrecisionModel& fixedPM);
+
+    /**
+    * Combines the elements of two polygonal geometries together.
+    * The input geometries must be non-adjacent, to avoid
+    * creating an invalid result.
+    *
+    * @param poly0 a polygonal geometry (which may be empty)
+    * @param poly1 a polygonal geometry (which may be empty)
+    * @return a combined polygonal geometry
+    */
+    static geom::Geometry* combine(
+        const geom::Geometry* poly0,
+        const geom::Geometry* poly1);
+
+    static void extractPolygons(
+        geom::Geometry* poly0,
+        std::vector<std::unique_ptr<geom::Geometry>>& polys) ;
 
 public:
 
@@ -172,7 +194,8 @@ public:
         :
         argGeom(g),
         bufParams(),
-        resultGeometry(nullptr)
+        resultGeometry(nullptr),
+        isInvertOrientation(false)
     {
     }
 
@@ -188,7 +211,8 @@ public:
         :
         argGeom(g),
         bufParams(params),
-        resultGeometry(nullptr)
+        resultGeometry(nullptr),
+        isInvertOrientation(false)
     {
     }
 
@@ -239,6 +263,27 @@ public:
      * @return the buffer of the input geometry
      */
     geom::Geometry* getResultGeometry(double nDistance);
+
+    /**
+    * Buffers a geometry with distance zero.
+    * The result can be computed using the maximum-signed-area orientation,
+    * or by combining both orientations.
+    *
+    * This can be used to fix an invalid polygonal geometry to be valid
+    * (i.e. with no self-intersections).
+    * For some uses (e.g. fixing the result of a simplification)
+    * a better result is produced by using only the max-area orientation.
+    * Other uses (e.g. fixing geometry) require both orientations to be used.
+    *
+    * This function is for INTERNAL use only.
+    *
+    * @param geom the polygonal geometry to buffer by zero
+    * @param isBothOrientations true if both orientations of input rings should be used
+    * @return the buffered polygonal geometry
+    */
+    static std::unique_ptr<geom::Geometry> bufferByZero(
+        const geom::Geometry* geom,
+        bool isBothOrientations);
 
 };
 

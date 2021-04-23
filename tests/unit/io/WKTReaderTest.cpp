@@ -284,4 +284,24 @@ void object::test<11>
 
 }
 
+// Collection of empty
+template<>
+template<>
+void object::test<12>
+()
+{
+    auto geom1(wktreader.read("MULTIPOINT(EMPTY,  EMPTY)"));
+    ensure("MULTIPOINT(EMPTY,  EMPTY)", geom1->getNumGeometries() == 2);
+    ensure("MULTIPOINT(EMPTY,  EMPTY)", geom1->getGeometryN(1)->isEmpty());
+
+    auto geom2(wktreader.read("MULTIPOINT((1 1), EMPTY)"));
+    ensure("MULTIPOINT((1 1), EMPTY)", geom2->getNumGeometries() == 2);
+    ensure("MULTIPOINT((1 1), EMPTY)", geom2->getGeometryN(1)->isEmpty());
+
+    auto geom3(wktreader.read("MULTIPOINT(EMPTY, (1 1))"));
+    ensure("MULTIPOINT( EMPTY, (1 1))", geom3->getNumGeometries() == 2);
+    ensure("MULTIPOINT( EMPTY, (1 1))", geom3->getGeometryN(0)->isEmpty());
+}
+
+
 } // namespace tut

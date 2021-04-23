@@ -78,17 +78,15 @@ private:
     // To keep track of newly-created Labels.
     // Labels will be released by object dtor
     std::vector<geomgraph::Label*> newLabels;
-
     const geom::Geometry& inputGeom;
-
     double distance;
-
     OffsetCurveBuilder& curveBuilder;
 
     /// The raw offset curves computed.
     /// This class holds ownership of std::vector elements.
     ///
     std::vector<noding::SegmentString*> curveList;
+    bool isInvertOrientation = false;
 
     /**
      * Creates a noding::SegmentString for a coordinate list which is a raw
@@ -215,6 +213,21 @@ private:
     OffsetCurveSetBuilder(const OffsetCurveSetBuilder& other) = delete;
     OffsetCurveSetBuilder& operator=(const OffsetCurveSetBuilder& rhs) = delete;
 
+    /**
+    * Computes orientation of a ring using a signed-area orientation test.
+    * For invalid (self-crossing) rings this ensures the largest enclosed area
+    * is taken to be the interior of the ring.
+    * This produces a more sensible result when
+    * used for repairing polygonal geometry via buffer-by-zero.
+    * For buffer, using the lower robustness of orientation-by-area
+    * doesn't matter, since narrow or flat rings
+    * produce an acceptable offset curve for either orientation.
+    *
+    * @param coord the ring coordinates
+    * @return true if the ring is CCW
+    */
+    bool isRingCCW(const geom::CoordinateSequence* coords) const;
+
 public:
 
     /// Constructor
@@ -243,6 +256,18 @@ public:
     ///
     void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
                    geom::Location leftLoc, geom::Location rightLoc);
+
+    /**
+    * Sets whether the offset curve is generated
+    * using the inverted orientation of input rings.
+    * This allows generating a buffer(0) polygon from the smaller lobes
+    * of self-crossing rings.
+    *
+    * @param p_isInvertOrientation true if input ring orientation should be inverted
+    */
+    void setInvertOrientation(bool p_isInvertOrientation) {
+        isInvertOrientation = p_isInvertOrientation;
+    }
 
 };
 

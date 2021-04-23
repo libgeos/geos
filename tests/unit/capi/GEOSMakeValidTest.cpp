@@ -63,7 +63,35 @@ void object::test<2>
 }
 
 
+template<>
+template<>
+void object::test<3>
+()
+{
+    const char* wkt = "LINESTRING(0 0, 0 0)";
+    GEOSMakeValidParams *params = GEOSMakeValidParams_create();
+    GEOSMakeValidParams_setKeepCollapsed(params, 1);
+    geom1_ = GEOSGeomFromWKT(wkt);
+    geom2_ = GEOSMakeValidWithParams(geom1_, params);
+    // std::cout << toWKT(geom2_) << std::endl;
+    expected_ = GEOSGeomFromWKT("POINT(0 0)");
+    ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
+}
 
+template<>
+template<>
+void object::test<4>
+()
+{
+    const char* wkt = "LINESTRING(0 0, 0 0)";
+    GEOSMakeValidParams *params = GEOSMakeValidParams_create();
+    GEOSMakeValidParams_setKeepCollapsed(params, 0);
+    geom1_ = GEOSGeomFromWKT(wkt);
+    geom2_ = GEOSMakeValidWithParams(geom1_, params);
+    // std::cout << toWKT(geom2_) << std::endl;
+    expected_ = GEOSGeomFromWKT("POINT(0 0)");
+    ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
+}
 
 
 } // namespace tut

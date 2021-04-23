@@ -38,6 +38,7 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/Densifier.h>
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
@@ -117,6 +118,12 @@
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
+
+// Implementation struct for the GEOSMakeValidParams object
+typedef struct {
+    int method;
+    int keepCollapsed;
+} GEOSMakeValidParams;
 
 #include "geos_c.h"
 
@@ -1931,14 +1938,79 @@ extern "C" {
     Geometry*
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
+        GEOSMakeValidParams params;
+        params.method = GEOS_MAKE_VALID_LINEWORK;
+        params.keepCollapsed = 1;
+        return GEOSMakeValidWithParams_r(extHandle, g, &params);
+    }
+
+    GEOSMakeValidParams*
+    GEOSMakeValidParams_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSMakeValidParams* p = new GEOSMakeValidParams();
+            p->method = GEOS_MAKE_VALID_LINEWORK;
+            p->keepCollapsed = 0;
+            return p;
+        });
+    }
+
+    void
+    GEOSMakeValidParams_destroy_r(GEOSContextHandle_t extHandle, GEOSMakeValidParams* parms)
+    {
+        (void)extHandle;
+        delete parms;
+    }
+
+    int
+    GEOSMakeValidParams_setKeepCollapsed_r(GEOSContextHandle_t extHandle,
+        GEOSMakeValidParams* p, int keepCollapsed)
+    {
+        return execute(extHandle, 0, [&]() {
+            p->keepCollapsed = keepCollapsed;
+            return 1;
+        });
+    }
+
+    int
+    GEOSMakeValidParams_setMethod_r(GEOSContextHandle_t extHandle,
+        GEOSMakeValidParams* p, GEOSMakeValidMethods method)
+    {
+        return execute(extHandle, 0, [&]() {
+            p->method = method;
+            return 1;
+        });
+    }
+
+    Geometry*
+    GEOSMakeValidWithParams_r(
+        GEOSContextHandle_t extHandle,
+        const Geometry* g,
+        const GEOSMakeValidParams* params)
+    {
+        using geos::geom::util::GeometryFixer;
         using geos::operation::valid::MakeValid;
 
-        return execute(extHandle, [&]() {
-            MakeValid makeValid;
-            auto out = makeValid.build(g);
-            out->setSRID(g->getSRID());
-            return out.release();
-        });
+        if (params && params->method == GEOS_MAKE_VALID_LINEWORK) {
+            return execute(extHandle, [&]() {
+                MakeValid makeValid;
+                auto out = makeValid.build(g);
+                out->setSRID(g->getSRID());
+                return out.release();
+            });
+        }
+        else if (params && params->method == GEOS_MAKE_VALID_STRUCTURE) {
+            return execute(extHandle, [&]() {
+                GeometryFixer fixer(g);
+                fixer.setKeepCollapsed(params->keepCollapsed == 0 ? false : true);
+                auto out = fixer.getResult();
+                out->setSRID(g->getSRID());
+                return out.release();
+            });
+        }
+        else {
+            throw IllegalArgumentException("Unknown method in GEOSMakeValidParams");
+        }
     }
 
     Geometry*

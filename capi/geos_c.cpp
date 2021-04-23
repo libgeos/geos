@@ -40,6 +40,7 @@
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
 typedef struct GEOSBufParams_t GEOSBufferParams;
+typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
 #include "geos_c.h"
 
@@ -793,6 +794,42 @@ extern "C" {
     GEOSMakeValid(const Geometry* g)
     {
         return GEOSMakeValid_r(handle, g);
+    }
+
+    GEOSMakeValidParams*
+    GEOSMakeValidParams_create()
+    {
+        return GEOSMakeValidParams_create_r(handle);
+    }
+
+    void
+    GEOSMakeValidParams_destroy(GEOSMakeValidParams* parms)
+    {
+        return GEOSMakeValidParams_destroy_r(handle, parms);
+    }
+
+    int
+    GEOSMakeValidParams_setMethod(
+        GEOSMakeValidParams* p,
+        GEOSMakeValidMethods method)
+    {
+        return GEOSMakeValidParams_setMethod_r(handle, p, method);
+    }
+
+    int
+    GEOSMakeValidParams_setKeepCollapsed(
+        GEOSMakeValidParams* p,
+        int keepCollapsed)
+    {
+        return GEOSMakeValidParams_setKeepCollapsed_r(handle, p, keepCollapsed);
+    }
+
+    Geometry*
+    GEOSMakeValidWithParams(
+        const Geometry* g,
+        const GEOSMakeValidParams* params)
+    {
+        return GEOSMakeValidWithParams_r(handle, g, params);
     }
 
     Geometry*

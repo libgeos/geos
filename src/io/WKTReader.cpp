@@ -307,8 +307,9 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
         return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint(*coords));
     }
 
-    else if(tok == '(') {
-        // Try to parse correct form "MULTIPOINT((0 0), (1 1))"
+    else if(tok == '(' ||  // Try to parse correct form "MULTIPOINT((0 0), (1 1))"
+            tok == StringTokenizer::TT_WORD)  // EMPTY?
+    {
         std::vector<std::unique_ptr<Point>> points;
 
         do {
