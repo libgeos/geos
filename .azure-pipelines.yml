@@ -15,7 +15,7 @@
 pr:
   branches:
     include:
-    - master
+    - main
 
 variables:
   - name: BUILD_TYPE
