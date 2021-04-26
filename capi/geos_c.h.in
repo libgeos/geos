@@ -267,7 +267,7 @@ typedef int (*GEOSDistanceCallback)(
 * \see GEOS_interruptRequest
 * \see GEOS_interruptCancel
 */
-typedef void (GEOSInterruptCallback)();
+typedef void (GEOSInterruptCallback)(void);
 
 /**
 * Register a function to be called when processing is interrupted.
@@ -281,12 +281,12 @@ extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(
 /**
 * Request safe interruption of operations
 */
-extern void GEOS_DLL GEOS_interruptRequest();
+extern void GEOS_DLL GEOS_interruptRequest(void);
 
 /**
 * Cancel a pending interruption request
 */
-extern void GEOS_DLL GEOS_interruptCancel();
+extern void GEOS_DLL GEOS_interruptCancel(void);
 
 /* ========== Initialization and Cleanup ========== */
 
@@ -295,7 +295,7 @@ extern void GEOS_DLL GEOS_interruptCancel();
 * your other calls of `*_r` functions.
 * \return a GEOS context for this thread
 */
-extern GEOSContextHandle_t GEOS_DLL GEOS_init_r();
+extern GEOSContextHandle_t GEOS_DLL GEOS_init_r(void);
 
 /**
 * Free the memory associated with a \ref GEOSContextHandle_t
@@ -2054,7 +2054,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g,
 * \return A newly allocated GEOSBufferParams. NULL on exception.
 * Caller is responsible for freeing with GEOSBufferParams_destroy().
 */
-extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create();
+extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create(void);
 
 /**
 * Destroy a GEOSBufferParams and free all associated memory.
@@ -2205,7 +2205,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
 * \return A newly allocated empty point geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint(void);
 
 /**
 * Creates a linear ring geometry, for use in a polygon.
@@ -2228,14 +2228,14 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
 * \return A newly allocated linestring geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
 
 /**
 * Creates an empty polygon geometry.
 * \return A newly allocated empty polygon geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
 
 /**
 * Creates a polygon geometry from line ring geometries.
@@ -3499,7 +3499,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams(
 * \return a parameter object
 * \see GEOSMakeValidWithParams
 */
-extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create();
+extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create(void);
 
 /**
 * Destroy a GEOSMakeValidParams.
@@ -4001,7 +4001,7 @@ extern int GEOS_DLL GEOSOrientationIndex(
 * Allocate a new \ref GEOSWKTReader.
 * \returns a new reader. Caller must free with GEOSWKTReader_destroy()
 */
-extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create();
+extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSWKTReader.
@@ -4026,7 +4026,7 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(
 * Allocate a new \ref GEOSWKTWriter.
 * \returns a new writer. Caller must free with GEOSWKTWriter_destroy()
 */
-extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create();
+extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSWKTWriter.
@@ -4103,7 +4103,7 @@ extern void GEOS_DLL GEOSWKTWriter_setOld3D(
 * Allocate a new \ref GEOSWKBReader.
 * \returns a new reader. Caller must free with GEOSWKBReader_destroy()
 */
-extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create();
+extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSWKBReader.
@@ -4142,7 +4142,7 @@ extern GEOSGeometry GEOS_DLL *GEOSWKBReader_readHEX(
 * Allocate a new \ref GEOSWKBWriter.
 * \returns a new writer. Caller must free with GEOSWKBWriter_destroy()
 */
-extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create();
+extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSWKBWriter.
@@ -4365,7 +4365,7 @@ extern char GEOS_DLL *GEOSGeomToWKT(const GEOSGeometry* g);
 /**
 * \deprecated use \ref GEOSWKBWriter and GEOS_getWKBOutputDims()
 */
-extern int GEOS_DLL GEOS_getWKBOutputDims();
+extern int GEOS_DLL GEOS_getWKBOutputDims(void);
 
 /**
 * \deprecated use \ref GEOSWKBWriter and GEOS_setWKBOutputDims()
@@ -4375,7 +4375,7 @@ extern int GEOS_DLL GEOS_setWKBOutputDims(int newDims);
 /**
 * \deprecated use \ref GEOSWKBWriter and GEOSWKBWriter_getByteOrder()
 */
-extern int GEOS_DLL GEOS_getWKBByteOrder();
+extern int GEOS_DLL GEOS_getWKBByteOrder(void);
 
 /**
 * \deprecated use \ref GEOSWKBWriter and GEOSWKBWriter_setByteOrder()
