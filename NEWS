@@ -7,6 +7,7 @@ Changes in 3.9.2
     POINT EMPTY input (Even Rouault)
   - Fix IsValidOp to correctly report invalid nested MultiPolygons (#1112, Martin Davis)
   - Fix BufferOp to avoid artifacts in certain polygon buffers (#1101, Martin Davis)
+  - Declare parameterless functions in geos_c.h as func(void) (Paul Ramsey)
 
 
 Changes in 3.9.1

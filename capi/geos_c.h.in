@@ -157,12 +157,12 @@ typedef int (*GEOSDistanceCallback)(const void *item1, const void* item2, double
  * The callback will be invoked _before_ checking for
  * interruption, so can be used to request it.
  */
-typedef void (GEOSInterruptCallback)();
+typedef void (GEOSInterruptCallback)(void);
 extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(GEOSInterruptCallback* cb);
 /* Request safe interruption of operations */
-extern void GEOS_DLL GEOS_interruptRequest();
+extern void GEOS_DLL GEOS_interruptRequest(void);
 /* Cancel a pending interruption request */
-extern void GEOS_DLL GEOS_interruptCancel();
+extern void GEOS_DLL GEOS_interruptCancel(void);
 
 /*
  * @deprecated in 3.5.0
@@ -177,7 +177,7 @@ extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
  */
 extern void GEOS_DLL finishGEOS_r(GEOSContextHandle_t handle);
 
-extern GEOSContextHandle_t GEOS_DLL GEOS_init_r();
+extern GEOSContextHandle_t GEOS_DLL GEOS_init_r(void);
 extern void GEOS_DLL GEOS_finish_r(GEOSContextHandle_t handle);
 
 
@@ -212,7 +212,7 @@ extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorMessageHandler_r(GEOSCo
                                                                           GEOSMessageHandler_r ef,
                                                                           void *userData);
 
-extern const char GEOS_DLL *GEOSversion();
+extern const char GEOS_DLL *GEOSversion(void);
 
 
 /************************************************************************
@@ -1396,14 +1396,14 @@ extern char GEOS_DLL *GEOSGeomToWKT(const GEOSGeometry* g);
  * Specify whether output WKB should be 2d or 3d.
  * Return previously set number of dimensions.
  */
-extern int GEOS_DLL GEOS_getWKBOutputDims();
+extern int GEOS_DLL GEOS_getWKBOutputDims(void);
 extern int GEOS_DLL GEOS_setWKBOutputDims(int newDims);
 
 /*
  * Specify whether the WKB byte order is big or little endian.
  * The return value is the previous byte order.
  */
-extern int GEOS_DLL GEOS_getWKBByteOrder();
+extern int GEOS_DLL GEOS_getWKBByteOrder(void);
 extern int GEOS_DLL GEOS_setWKBByteOrder(int byteOrder);
 
 extern GEOSGeometry GEOS_DLL *GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size);
@@ -1526,7 +1526,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g,
     double width, int quadsegs);
 
 /* @return 0 on exception */
-extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create();
+extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create(void);
 extern void GEOS_DLL GEOSBufferParams_destroy(GEOSBufferParams* parms);
 
 /* @return 0 on exception */
@@ -1592,17 +1592,17 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint(void);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing(GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
 
 /*
  * Second argument is an array of GEOSGeometry* objects.
  * The caller remains owner of the array, but pointed-to
  * objects become ownership of the returned GEOSGeometry.
  */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(GEOSGeometry* shell,
     GEOSGeometry** holes, unsigned int nholes);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(int type,
@@ -2207,12 +2207,12 @@ extern int GEOS_DLL GEOSOrientationIndex(double Ax, double Ay, double Bx, double
  ***********************************************************************/
 
 /* WKT Reader */
-extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create();
+extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create(void);
 extern void GEOS_DLL GEOSWKTReader_destroy(GEOSWKTReader* reader);
 extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(GEOSWKTReader* reader, const char *wkt);
 
 /* WKT Writer */
-extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create();
+extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create(void);
 extern void GEOS_DLL GEOSWKTWriter_destroy(GEOSWKTWriter* writer);
 extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* writer, const GEOSGeometry* g);
 extern void GEOS_DLL GEOSWKTWriter_setTrim(GEOSWKTWriter *writer, char trim);
@@ -2222,13 +2222,13 @@ extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension(GEOSWKTWriter *writer);
 extern void GEOS_DLL GEOSWKTWriter_setOld3D(GEOSWKTWriter *writer, int useOld3D);
 
 /* WKB Reader */
-extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create();
+extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create(void);
 extern void GEOS_DLL GEOSWKBReader_destroy(GEOSWKBReader* reader);
 extern GEOSGeometry GEOS_DLL *GEOSWKBReader_read(GEOSWKBReader* reader, const unsigned char *wkb, size_t size);
 extern GEOSGeometry GEOS_DLL *GEOSWKBReader_readHEX(GEOSWKBReader* reader, const unsigned char *hex, size_t size);
 
 /* WKB Writer */
-extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create();
+extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create(void);
 extern void GEOS_DLL GEOSWKBWriter_destroy(GEOSWKBWriter* writer);
 
 /* The caller owns the results for these two methods! */
