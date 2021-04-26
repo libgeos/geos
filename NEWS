@@ -3,6 +3,7 @@ Changes in 3.8.3
 2021-xx-xx
 
 - Bug fixes / improvements
+  -  Add void to no-argument prototypes. References libgeos#437 (Paul Ramsey)
 
 
 Changes in 3.8.2
