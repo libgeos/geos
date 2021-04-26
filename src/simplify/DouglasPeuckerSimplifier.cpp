@@ -19,6 +19,7 @@
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/DouglasPeuckerLineSimplifier.h>
 #include <geos/geom/Geometry.h> // for Ptr typedefs
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h> // for Ptr typedefs
 #include <geos/geom/GeometryFactory.h>
@@ -53,6 +54,10 @@ protected:
 
     CoordinateSequence::Ptr transformCoordinates(
         const CoordinateSequence* coords,
+        const Geometry* parent) override;
+
+    Geometry::Ptr transformLinearRing(
+        const LinearRing* geom,
         const Geometry* parent) override;
 
     Geometry::Ptr transformPolygon(
@@ -118,6 +123,23 @@ DPTransformer::transformCoordinates(
                factory->getCoordinateSequenceFactory()->create(
                    newPts.release()
                ));
+}
+
+Geometry::Ptr
+DPTransformer::transformLinearRing(
+    const LinearRing* geom,
+    const Geometry* parent)
+{
+
+#if GEOS_DEBUG
+    std::cerr << "DPTransformer::transformLinearRing(LinearRing " << geom << ", Geometry " << parent << ");" << std::endl;
+#endif
+
+  	bool removeDegenerateRings = dynamic_cast<const Polygon*>(parent);
+  	Geometry::Ptr simpResult( GeometryTransformer::transformLinearRing(geom, parent));
+  	if (removeDegenerateRings && ! dynamic_cast<const LinearRing*>(simpResult.get()))
+  		return nullptr;
+  	return simpResult;
 }
 
 Geometry::Ptr
