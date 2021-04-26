@@ -5,6 +5,9 @@ Changes in 3.8.3
 - Bug fixes / improvements
   -  Add void to no-argument prototypes. References libgeos#437 (Paul Ramsey)
 
+  - Fix BufferOp to avoid artifacts in certain polygon buffers (#1101, Martin Davis)
+
+
 
 Changes in 3.8.2
 2021-04-10
@@ -733,4 +736,3 @@ Changes in 2.0.0
   been dropped. You have to use GeometryFactory instead.
 - WKTWriter default constructor has been dropped. You need
   to initialize it with an explicit GeometryFactory
-
