@@ -168,5 +168,22 @@ template<> template<> void object::test<13>
     isEqual(geom2_, "POLYGON ((5 5, 5 15, 10 15, 10 10, 15 10, 15 5, 5 5))");
 }
 
+/// Clipping invalid polygon
+template<> template<> void object::test<14>
+()
+{
+    const char* wkt = "POLYGON((1410 2055, 1410 2056, 1410 2057, 1410 2055))";
+    geom1_ = GEOSGeomFromWKT(wkt);
+    geom2_ = GEOSClipByRect(geom1_, -8, -8, 2056, 2056);
+    if (geom2_ != nullptr) {
+        char* obt_wkt = GEOSWKTWriter_write(wktw_, geom2_);
+        std::printf("OBT: %s\n", obt_wkt);
+    }
+    ensure(nullptr == geom2_);
+}
+
+
+
+
 } // namespace tut
 

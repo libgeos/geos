@@ -452,6 +452,17 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
                 close_ring(rect, ring);
                 normalize_ring(*ring);
                 auto shell_cs = _csf.create(ring);
+                // This apes the behaviour that existed back when
+                // it was impossible to create a LinearRing with < 4
+                // points. In order to maintain compatibility
+                // with prior behaviour for rectangle intersection
+                // we are pulling that check back here.
+                if (shell_cs->size() < 4) {
+                    std::ostringstream os;
+                    os << "Invalid number of points in LinearRing found "
+                       << shell_cs->size() << " - must be 0 or >= 4";
+                    throw util::IllegalArgumentException(os.str());
+                }
                 geom::LinearRing* shell = _gf.createLinearRing(shell_cs.release());
                 exterior.push_back(make_pair(shell, new LinearRingVect()));
                 ring = nullptr;
