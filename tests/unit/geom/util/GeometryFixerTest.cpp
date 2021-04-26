@@ -33,6 +33,12 @@ struct test_geometryfixer_data {
     geos::io::WKTReader wktreader_;
     geos::io::WKTWriter wktwriter_;
 
+    test_geometryfixer_data()
+    {
+        wktwriter_.setTrim(true);
+        wktwriter_.setOutputDimension(3);
+    }
+
     void checkFix(const std::string& wkt, const std::string& wktExpected) {
         std::unique_ptr<Geometry> geom = wktreader_.read(wkt);
         checkFix(geom.get(), false, wktExpected);
@@ -69,6 +75,44 @@ struct test_geometryfixer_data {
 
         ensure("Result is invalid", actual->isValid());
         ensure_equals_geometry(expected.get(), actual.get());
+    }
+
+
+    void checkFixZ(const std::string& wkt, const std::string& wktExpected) {
+        std::unique_ptr<Geometry> geom = wktreader_.read(wkt);
+        checkFixZ(geom.get(), false, wktExpected);
+    }
+
+    void checkFixZKeepCollapse(const std::string& wkt, const std::string& wktExpected) {
+        std::unique_ptr<Geometry> geom = wktreader_.read(wkt);
+        checkFixZ(geom.get(), true, wktExpected);
+    }
+
+    void checkFixZ(const Geometry* input, bool keepCollapse, const std::string& wktExpected) {
+        std::unique_ptr<Geometry> actual;
+        if (keepCollapse) {
+            GeometryFixer fixer(input);
+            fixer.setKeepCollapsed(true);
+            actual = fixer.getResult();
+        }
+        else {
+            actual = GeometryFixer::fix(input);
+        }
+
+        std::unique_ptr<Geometry> expected = wktreader_.read(wktExpected);
+
+        actual->normalize();
+        expected->normalize();
+
+        ensure("Result is invalid", actual->isValid());
+        ensure_equals_geometry(expected.get(), actual.get());
+
+        std::string actualWKT = wktwriter_.write(actual.get());
+        std::string expectedWKT = wktwriter_.write(expected.get());
+        ensure_equals(actualWKT, expectedWKT);
+
+
+        // checkEqualXYZ(expected, actual);
     }
 
     std::unique_ptr<Point> createPoint(double x, double y) {
@@ -550,6 +594,37 @@ void object::test<48>()
         "GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING EMPTY, POLYGON EMPTY)",
         "GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING EMPTY, POLYGON EMPTY)");
 }
+
+
+   //----------------------------------------
+
+template<>
+template<>
+void object::test<49>()
+{
+    checkFixZ(
+        "POLYGON Z ((10 90 1, 90 10 9, 90 90 9, 10 10 1, 10 90 1))",
+        "MULTIPOLYGON Z(((10 10 1, 10 90 1, 50 50 5, 10 10 1)), ((50 50 5, 90 90 9, 90 10 9, 50 50 5)))");
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    checkFixZ(
+        "POLYGON Z ((10 90 1, 60 90 6, 60 10 6, 10 10 1, 10 90 1), (20 80 2, 90 80 9, 90 20 9, 20 20 2, 20 80 2))",
+        "POLYGON Z((10 10 1, 10 90 1, 60 90 6, 60 80 6, 20 80 2, 20 20 2, 60 20 6, 60 10 6, 10 10 1))");
+}
+
+template<>
+template<>
+void object::test<52>()
+{
+    checkFixZKeepCollapse(
+        "MULTILINESTRING Z ((10 10 1, 90 90 9), (10 10 1, 10 10 2, 10 10 3))",
+        "GEOMETRYCOLLECTION Z (POINT (10 10 1), LINESTRING (10 10 1, 90 90 9))");
+}
+
 
 
 
