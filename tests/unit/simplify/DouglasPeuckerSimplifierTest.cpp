@@ -190,10 +190,29 @@ void object::test<6>
 
 }
 
-// 7 - TinyLineString
+// TinyHole
 template<>
 template<>
 void object::test<7>
+()
+{
+    std::string wkt_in("POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10), (160 190, 180 190, 180 170, 160 190))");
+    std::string wkt_ex("POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10))");
+
+    GeomPtr g(wktreader.read(wkt_in));
+    GeomPtr expected(wktreader.read(wkt_ex));
+
+    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
+                             g.get(), 30.0);
+
+    ensure(simplified->isValid());
+    ensure(simplified->equalsExact(expected.get()));
+}
+
+// 7 - TinyLineString
+template<>
+template<>
+void object::test<8>
 ()
 {
     std::string wkt_in("LINESTRING (0 5, 1 5, 2 5, 5 5)");
@@ -215,7 +234,7 @@ void object::test<7>
 // 8 - MultiPoint
 template<>
 template<>
-void object::test<8>
+void object::test<9>
 ()
 {
     std::string wkt_in("MULTIPOINT(80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120)");
@@ -232,7 +251,7 @@ void object::test<8>
 // 9 - MultiLineString
 template<>
 template<>
-void object::test<9>
+void object::test<10>
 ()
 {
     std::string wkt_in("MULTILINESTRING( (0 0, 50 0, 70 0, 80 0, 100 0), \
@@ -255,7 +274,7 @@ void object::test<9>
 // 10 - GeometryCollection
 template<>
 template<>
-void object::test<10>
+void object::test<11>
 ()
 {
     std::string wkt_in("GEOMETRYCOLLECTION ( \
@@ -281,7 +300,7 @@ void object::test<10>
 // 11 - A kind of reversed simplification
 template<>
 template<>
-void object::test<11>
+void object::test<12>
 ()
 {
     using namespace geos::geom;
@@ -354,7 +373,7 @@ void object::test<11>
 // 13 - Polygon with inner ring whose extent is less than the simplify distance (#741)
 template<>
 template<>
-void object::test<12>
+void object::test<13>
 ()
 {
     std::string wkt_in("POLYGON ((0 0,0 1,1 1,0 0),(0.1 0.1,0.2 0.1,0.2 0.2,0.1 0.1))");
@@ -381,7 +400,7 @@ void object::test<12>
 */
 template<>
 template<>
-void object::test<13>
+void object::test<14>
 ()
 {
     std::string wkt_in("POLYGON ((21.32686 47.78723, 21.32386 47.79023, 21.32186 47.80223, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.33886 47.81123, 21.32686 47.82023, 21.32586 47.82723, 21.32786 47.82323, 21.33886 47.82623, 21.34186 47.82123, 21.36386 47.82223, 21.40686 47.81723, 21.32686 47.78723))");
@@ -393,6 +412,25 @@ void object::test<13>
     ensure_equals_geometry(simplified.get(), expected.get());
 }
 
+  /**
+   * Test that a collapsed polygon is removed.
+   * Tests regression caused by unported JTS code.
+   *
+   * See https://trac.osgeo.org/geos/ticket/1115
+   */
+template<>
+template<>
+void object::test<15>
+()
+{
+    std::string wkt_in("MULTIPOLYGON (((-76.02716827 36.55671692, -75.99866486 36.55665207, -75.91191864 36.54253006, -75.92480469 36.47397614, -75.97727966 36.4780159, -75.97628784 36.51792526, -76.02716827 36.55671692)), ((-75.90198517 36.55619812, -75.8781662 36.55587387, -75.77315521 36.22925568, -75.78317261 36.22519302, -75.90198517 36.55619812)))");
+    std::string wkt_ex("POLYGON ((-76.02716827 36.55671692, -75.91191864 36.54253006, -75.92480469 36.47397614, -76.02716827 36.55671692))");
+    GeomPtr g(wktreader.read(wkt_in));
+    GeomPtr expected(wktreader.read(wkt_ex));
+    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0.05);
+    ensure(simplified->isValid());
+    ensure_equals_geometry(simplified.get(), expected.get());
+}
 
 
 } // namespace tut
