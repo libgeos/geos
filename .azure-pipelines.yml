@@ -142,16 +142,16 @@ stages:
         ctest -V --output-on-failure -C $BUILD_TYPE
       displayName: 'Build C++17'
       condition: contains(variables['CXXSTD'], '17')
-    - script: |
-        set -e
-        mkdir build.cxx20
-        cd build.cxx20
-        cmake --version
-        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
-        cmake --build . --config $BUILD_TYPE
-        ctest -V --output-on-failure -C $BUILD_TYPE
-      displayName: 'Build C++20'
-      condition: contains(variables['CXXSTD'], '20')
+    # - script: |
+    #     set -e
+    #     mkdir build.cxx20
+    #     cd build.cxx20
+    #     cmake --version
+    #     cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+    #     cmake --build . --config $BUILD_TYPE
+    #     ctest -V --output-on-failure -C $BUILD_TYPE
+    #   displayName: 'Build C++20'
+    #   condition: contains(variables['CXXSTD'], '20')
 
   - job: 'Windows'
     strategy:

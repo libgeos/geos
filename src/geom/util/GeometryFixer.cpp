@@ -125,11 +125,11 @@ GeometryFixer::fixMultiPoint(const MultiPoint* p_geom) const
 std::unique_ptr<Geometry>
 GeometryFixer::fixLinearRing(const LinearRing* p_geom) const
 {
-    std::unique_ptr<Geometry> fix = fixLinearRingElement(p_geom);
-    if (fix == nullptr)
+    std::unique_ptr<Geometry> fixedRing = fixLinearRingElement(p_geom);
+    if (fixedRing == nullptr)
         return factory->createLinearRing();
     else
-        return fix;
+        return fixedRing;
 }
 
 /* private */
@@ -167,11 +167,11 @@ GeometryFixer::fixLinearRingElement(const LinearRing* p_geom) const
 std::unique_ptr<Geometry>
 GeometryFixer::fixLineString(const LineString* p_geom) const
 {
-    std::unique_ptr<Geometry> fix = fixLineStringElement(p_geom);
-    if (fix == nullptr)
+    std::unique_ptr<Geometry> fixedLine = fixLineStringElement(p_geom);
+    if (fixedLine == nullptr)
         return factory->createLineString();
     else
-        return fix;
+        return fixedLine;
 }
 
 /* private */
@@ -206,14 +206,14 @@ GeometryFixer::fixMultiLineString(const MultiLineString* p_geom) const
         if (line->isEmpty())
             continue;
 
-        std::unique_ptr<Geometry> fix = fixLineStringElement(line);
-        if (fix == nullptr)
+        std::unique_ptr<Geometry> fixedMLine = fixLineStringElement(line);
+        if (fixedMLine == nullptr)
             continue;
 
-        if (fix->getGeometryTypeId() != GEOS_LINESTRING) {
+        if (fixedMLine->getGeometryTypeId() != GEOS_LINESTRING) {
             isMixed = true;
         }
-        fixed.emplace_back(fix.release());
+        fixed.emplace_back(fixedMLine.release());
     }
     if (fixed.size() == 1) {
         std::unique_ptr<Geometry> g(fixed.at(0).release());
@@ -229,11 +229,11 @@ GeometryFixer::fixMultiLineString(const MultiLineString* p_geom) const
 std::unique_ptr<Geometry>
 GeometryFixer::fixPolygon(const Polygon* p_geom) const
 {
-    std::unique_ptr<Geometry> fix = fixPolygonElement(p_geom);
-    if (fix == nullptr)
+    std::unique_ptr<Geometry> fixedPoly = fixPolygonElement(p_geom);
+    if (fixedPoly == nullptr)
         return factory->createPolygon();
     else
-        return fix;
+        return fixedPoly;
 }
 
 /* private */
