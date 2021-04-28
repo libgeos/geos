@@ -119,7 +119,7 @@ GeomFunction::init()
     add("densify", "densifies geometry A to a distance ", 1, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  // prevent unused variable warning
-            geom::util::Densifier densifier( geom.get() );
+            geos::geom::util::Densifier densifier( geom.get() );
             densifier.setDistanceTolerance( d );
             return new Result( densifier.getResultGeometry() );
         });
@@ -364,22 +364,22 @@ GeomFunction::init()
 
     add("differenceSR", "computes difference of geometry A from B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            geom::PrecisionModel pm(d);
+            geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::DIFFERENCE, &pm) );
         });
     add("intersectionSR", "computes intersection of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            geom::PrecisionModel pm(d);
+            geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::INTERSECTION, &pm) );
         });
     add("symDifferenceSR", "computes symmetric difference of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            geom::PrecisionModel pm(d);
+            geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::SYMDIFFERENCE, &pm) );
         });
     add("unionSR", "computes union of geometry A and B, snap-rounding to a precision scale factor", 2, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            geom::PrecisionModel pm(d);
+            geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
         });
 

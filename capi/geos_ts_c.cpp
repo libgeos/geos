@@ -2009,7 +2009,8 @@ extern "C" {
             });
         }
         else {
-            throw IllegalArgumentException("Unknown method in GEOSMakeValidParams");
+            extHandle->ERROR_MESSAGE("Unknown method in GEOSMakeValidParams");
+            return nullptr;
         }
     }
 
