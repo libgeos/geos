@@ -192,6 +192,8 @@ public:
     {
     }
 
+    ~BufferOp();
+
     /** \brief
      * Specifies the end cap style of the generated buffer.
      *

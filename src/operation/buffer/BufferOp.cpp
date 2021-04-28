@@ -78,6 +78,13 @@ OLDprecisionScaleFactor(const Geometry* g,
 }
 #endif
 
+BufferOp::~BufferOp(void)
+{
+    if (resultGeometry != nullptr) {
+        argGeom->getFactory()->destroyGeometry(resultGeometry);
+    }
+}
+
 /*private*/
 double
 BufferOp::precisionScaleFactor(const Geometry* g,
