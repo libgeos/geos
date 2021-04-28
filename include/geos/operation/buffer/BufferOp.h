@@ -236,7 +236,8 @@ public:
      * distance.
      *
      * @param nDistance the buffer distance
-     * @return the buffer of the input geometry
+     * @return the buffer of the input geometry.
+     *         Ownership of the returned object is transferred to caller.
      */
     geom::Geometry* getResultGeometry(double nDistance);
 
