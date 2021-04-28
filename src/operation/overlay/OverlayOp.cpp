@@ -819,7 +819,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 #ifdef GEOS_DEBUG_VALIDATION
         std::size_t << "EdgeNodingValidator found noding invalid: " << ex.what() << std::endl;
 #endif
-
+        ::geos::ignore_unused_variable_warning(ex);
         // In the error scenario, the edgeList is not properly
         // deleted. Cannot add to the destructor of EdgeList
         // (as it should) because

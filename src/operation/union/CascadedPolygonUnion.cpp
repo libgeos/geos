@@ -278,6 +278,7 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
         return geom::HeuristicOverlay(g0, g1, overlay::OverlayOp::opUNION);
     }
     catch (const util::TopologyException &ex) {
+        ::geos::ignore_unused_variable_warning(ex);
         // union-by-buffer only works for polygons
         if (g0->getDimension() != 2 || g1->getDimension() != 2)
           throw;
