@@ -24,6 +24,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/geom/util/Densifier.h>
@@ -166,6 +167,14 @@ GeomFunction::init()
             return new Result( geom->isValid() );
         });
 
+    add("largestEmptyCircle", "computes radius of largest empty circle of Geometry A up to a distance tolerance", 1, 1,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), d );
+            std::unique_ptr<Geometry> res = lec.getRadiusLine();
+            return new Result( std::move(res) );
+        });
+
     add("length",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
@@ -178,7 +187,7 @@ GeomFunction::init()
             return new Result( geos::operation::valid::MakeValid().build( geom.get() ) );
         });
 
-    add("maxInscribedCircle", "computes maximum inscribed circle radius of Polygon A up to a distance tolerance", 2, 0,
+    add("maxInscribedCircle", "computes maximum inscribed circle radius of Polygon A up to a distance tolerance", 1, 1,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::algorithm::construct::MaximumInscribedCircle mc( geom.get(), d );
