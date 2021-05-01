@@ -59,6 +59,7 @@ geom::Coordinate
 DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, std::size_t index)
 {
     if(densifyFrac > 0.0) {
+        // Validity of the cast to size_t has been verified in setDensifyFraction()
         std::size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
         std::size_t i = index / numSubSegs;
         std::size_t j = index % numSubSegs;

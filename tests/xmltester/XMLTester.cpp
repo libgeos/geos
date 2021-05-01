@@ -1290,15 +1290,14 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "densify") {
             geom::Geometry* p_gT = gA;
 
-            GeomPtr gRes(parseGeometry(opRes, "expected"));
-            gRes->normalize();
-
             geom::util::Densifier den(p_gT);
             double distanceTolerance = std::atof(opArg2.c_str());
             den.setDistanceTolerance(distanceTolerance);
             GeomPtr gRealRes = den.getResultGeometry();
             gRealRes->normalize();
 
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
             if(gRes->compareTo(gRealRes.get()) == 0) {
                 success = 1;
             }
@@ -2216,10 +2215,16 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
     }
     catch(const std::exception& e) {
-        std::cerr << "EXCEPTION on case " << caseCount
-                  << " test " << testCount << ": " << e.what()
-                  << std::endl;
-        actual_result = e.what();
+        if (expected_result == "exception") {
+            success = true;
+            actual_result = "exception";
+        }
+        else {
+            std::cerr << "EXCEPTION on case " << caseCount
+                      << " test " << testCount << ": " << e.what()
+                      << std::endl;
+            actual_result = e.what();
+        }
     }
     catch(...) {
         std::cerr << "Unknown EXEPTION on case "

@@ -313,4 +313,24 @@ MULTIPOLYGON (
     </test>
   </case>
 
+  <case>
+    <desc>L - zero tolerance: exception</desc>
+    <a>
+LINESTRING(10 10, 20 10)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='0'>exception</op>
+    </test>
+  </case>
+
+  <case>
+    <desc>L - too small positive tolerance: exception</desc>
+    <a>
+LINESTRING(10 10, 20 10)
+    </a>
+    <test>
+      <op name="densify" arg1='A' arg2='0.0000000000000001'>exception</op>
+    </test>
+  </case>
+
 </run>

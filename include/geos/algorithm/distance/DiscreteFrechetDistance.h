@@ -32,6 +32,7 @@
 #include <geos/geom/CoordinateSequence.h> // for inheritance
 
 #include <cstddef>
+#include <limits>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -132,7 +133,12 @@ public:
     void
     setDensifyFraction(double dFrac)
     {
-        if(dFrac > 1.0 || dFrac <= 0.0) {
+        // !(dFrac > 0) written that way to catch NaN
+        // and test on 1.0/dFrac to avoid a potential later undefined behaviour
+        // when casting to std::size_t
+        if(dFrac > 1.0 || !(dFrac > 0.0) ||
+           util::round(1.0 / dFrac) >
+               static_cast<double>(std::numeric_limits<std::size_t>::max())) {
             throw util::IllegalArgumentException(
                 "Fraction is not in range (0.0 - 1.0]");
         }
