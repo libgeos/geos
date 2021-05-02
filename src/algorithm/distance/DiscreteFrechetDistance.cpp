@@ -26,6 +26,7 @@
 #include <cassert>
 #include <vector>
 #include <algorithm>
+#include <limits>
 #include <iostream>
 using namespace geos::geom;
 
@@ -53,12 +54,29 @@ DiscreteFrechetDistance::distance(const geom::Geometry& g0,
     return dist.distance();
 }
 
+/* public */
+void DiscreteFrechetDistance::setDensifyFraction(double dFrac)
+{
+    // !(dFrac > 0) written that way to catch NaN
+    // and test on 1.0/dFrac to avoid a potential later undefined behaviour
+    // when casting to std::size_t
+    if(dFrac > 1.0 || !(dFrac > 0.0) ||
+       util::round(1.0 / dFrac) >
+           static_cast<double>(std::numeric_limits<std::size_t>::max())) {
+        throw util::IllegalArgumentException(
+            "Fraction is not in range (0.0 - 1.0]");
+    }
+
+    densifyFrac = dFrac;
+}
+
 /* private */
 
 geom::Coordinate
 DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, std::size_t index)
 {
     if(densifyFrac > 0.0) {
+        // Validity of the cast to size_t has been verified in setDensifyFraction()
         std::size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
         std::size_t i = index / numSubSegs;
         std::size_t j = index % numSubSegs;

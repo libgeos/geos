@@ -39,6 +39,7 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <limits>
 #include <vector>
 
 using namespace geos::geom;
@@ -114,9 +115,14 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
         seg.p0 = *it;
         seg.p1 = *(it + 1);
         coordList.insert(coordList.end(), seg.p0, false);
-        double len = seg.getLength();
+        const double len = seg.getLength();
+        const double densifiedSegCountDbl = ceil(len / distanceTolerance);
+        if(densifiedSegCountDbl > std::numeric_limits<int>::max()) {
+            throw geos::util::GEOSException(
+                "Tolerance is too small compared to geometry length");
+        }
 
-        int densifiedSegCount = (int)(ceil(len / distanceTolerance));
+        const int densifiedSegCount = static_cast<int>(densifiedSegCountDbl);
         if(densifiedSegCount > 1) {
             double densifiedSegLen = len / densifiedSegCount;
             for(int j = 1; j < densifiedSegCount; j++) {
@@ -155,7 +161,8 @@ Densifier::densify(const Geometry* geom, double distTol)
 void
 Densifier::setDistanceTolerance(double tol)
 {
-    if(tol <= 0.0) {
+    // Test written to catch NaN as well
+    if(!(tol > 0.0)) {
         throw geos::util::IllegalArgumentException("Tolerance must be positive");
     }
     distanceTolerance = tol;

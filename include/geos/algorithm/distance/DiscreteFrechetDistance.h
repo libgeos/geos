@@ -129,16 +129,7 @@ public:
      *
      * @param dFrac
      */
-    void
-    setDensifyFraction(double dFrac)
-    {
-        if(dFrac > 1.0 || dFrac <= 0.0) {
-            throw util::IllegalArgumentException(
-                "Fraction is not in range (0.0 - 1.0]");
-        }
-
-        densifyFrac = dFrac;
-    }
+    void setDensifyFraction(double dFrac);
 
     double
     distance()
