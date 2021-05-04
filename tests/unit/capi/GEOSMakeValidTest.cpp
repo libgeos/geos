@@ -73,6 +73,7 @@ void object::test<3>
     GEOSMakeValidParams_setKeepCollapsed(params, 1);
     geom1_ = GEOSGeomFromWKT(wkt);
     geom2_ = GEOSMakeValidWithParams(geom1_, params);
+    GEOSMakeValidParams_destroy(params);
     // std::cout << toWKT(geom2_) << std::endl;
     expected_ = GEOSGeomFromWKT("POINT(0 0)");
     ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
@@ -88,6 +89,7 @@ void object::test<4>
     GEOSMakeValidParams_setKeepCollapsed(params, 0);
     geom1_ = GEOSGeomFromWKT(wkt);
     geom2_ = GEOSMakeValidWithParams(geom1_, params);
+    GEOSMakeValidParams_destroy(params);
     // std::cout << toWKT(geom2_) << std::endl;
     expected_ = GEOSGeomFromWKT("POINT(0 0)");
     ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
