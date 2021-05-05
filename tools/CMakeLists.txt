@@ -11,12 +11,19 @@
 #
 #################################################################################
 
+#
+# Configure geos-config
+#
+function(configure_install_geos_config)
+  string(REPLACE " " "\\ " prefix ${CMAKE_INSTALL_PREFIX})
+  set(exec_prefix "$\{prefix\}")
+  set(includedir "$\{prefix\}/${CMAKE_INSTALL_INCLUDEDIR}")
+  set(libdir "$\{exec_prefix\}/${CMAKE_INSTALL_LIBDIR}")
+  set(VERSION_RELEASE ${GEOS_VERSION_MAJOR})
+  set(VERSION ${GEOS_VERSION})
 
-if(NOT MSVC)
-  # Consider CMAKE_INSTALL_PREFIX with spaces
-  string(REPLACE " " "\\ " ESCAPED_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/geos-config.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
     ${CMAKE_CURRENT_BINARY_DIR}/geos-config
     @ONLY NEWLINE_STYLE UNIX)
 
@@ -27,17 +34,31 @@ if(NOT MSVC)
       OWNER_READ OWNER_EXECUTE
       GROUP_READ GROUP_EXECUTE
       WORLD_READ WORLD_EXECUTE)
+endfunction()
 
-  # pkg-config support
+#
+# Configure pkg-config file geos.pc
+#
+function(configure_install_geos_pc)
+  string(REPLACE " " "\\ " prefix ${CMAKE_INSTALL_PREFIX})
+  set(exec_prefix "$\{prefix\}")
+  set(includedir "$\{prefix\}/${CMAKE_INSTALL_INCLUDEDIR}")
+  set(libdir "$\{exec_prefix\}/${CMAKE_INSTALL_LIBDIR}")
+  set(VERSION ${GEOS_VERSION})
+
   configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/geos.pc.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/geos.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/geos.pc
     @ONLY)
 
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/geos.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endfunction()
 
+if(NOT MSVC)
+  configure_install_geos_config()
+  configure_install_geos_pc()
 endif()
 
 add_subdirectory(astyle)
