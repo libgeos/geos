@@ -474,10 +474,10 @@ void object::test<16>
     std::string wkt0("POLYGON ((666360.09 429614.71, 666344.4 429597.12, 666358.47 429584.52, 666374.5 429602.33, 666360.09 429614.71))");
     GeomPtr g0(wktreader.read(wkt0));
 
-    ensure_not( g0->buffer( -9 )->isEmpty() );
-    ensure( g0->buffer( -10 )->isEmpty() );
-    ensure( g0->buffer( -15 )->isEmpty() );
-    ensure( g0->buffer( -18 )->isEmpty() );
+    ensure_not( GeomPtr(g0->buffer( -9 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -10 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -15 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -18 ))->isEmpty() );
 }
 
 // Test for #1101 - Non-empty negative buffer of 5-pt convex polygon
@@ -489,10 +489,10 @@ void object::test<17>
     std::string wkt0("POLYGON ((6 20, 16 20, 21 9, 9 0, 0 10, 6 20))");
     GeomPtr g0(wktreader.read(wkt0));
 
-    ensure_not( g0->buffer( -8 )->isEmpty() );
-    ensure( g0->buffer( -8.6 )->isEmpty() );
-    ensure( g0->buffer( -9.6 )->isEmpty() );
-    ensure( g0->buffer( -11 )->isEmpty() );
+    ensure_not( GeomPtr(g0->buffer( -8 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -8.6 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -9.6 ))->isEmpty() );
+    ensure( GeomPtr(g0->buffer( -11 ))->isEmpty() );
 }
 
 // Test for #1101 - Buffer of Polygon with hole with hole eroded
@@ -526,10 +526,10 @@ void object::test<19>
     std::string wkt0("MULTIPOLYGON (((30 18, 14 0, 0 13, 16 30, 30 18)), ((180 210, 60 50, 154 6, 270 40, 290 130, 250 190, 180 210)))");
     GeomPtr g0(wktreader.read(wkt0));
 
-    ensure( 2 == g0->buffer( -9 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -10 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -15 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -18 )->getNumGeometries() );
+    ensure( 2 == GeomPtr(g0->buffer( -9 ))->getNumGeometries() );
+    ensure( 1 == GeomPtr(g0->buffer( -10 ))->getNumGeometries() );
+    ensure( 1 == GeomPtr(g0->buffer( -15 ))->getNumGeometries() );
+    ensure( 1 == GeomPtr(g0->buffer( -18 ))->getNumGeometries() );
 }
 
 } // namespace tut

@@ -333,6 +333,8 @@ void object::test<10>()
     GEOSSTRtree_query(tree, queryPoint, [](void* item, void* data) {
         *((size_t*) data) = *((size_t*) item);
     }, &hitVal);
+    GEOSGeom_destroy(queryPoint);
+    GEOSSTRtree_destroy(tree);
 
     ensure_equals(hitVal, 3u);
 }
