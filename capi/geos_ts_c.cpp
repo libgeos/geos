@@ -120,6 +120,7 @@
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
+#define GEOSGeoJSONReader geos::io::GeoJSONReader
 
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
@@ -159,6 +160,7 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
+using geos::io::GeoJSONReader;
 
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
@@ -3057,7 +3059,7 @@ extern "C" {
     }
 
     void
-    GeoJSONReader_destroy_r(GEOSContextHandle_t extHandle, GeoJSONReader* reader)
+    GEOSGeoJSONReader_destroy_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader)
     {
         return execute(extHandle, [&]() {
             delete reader;
@@ -3065,11 +3067,11 @@ extern "C" {
     }
 
     Geometry*
-    GeoJSONReader_read_r(GEOSContextHandle_t extHandle, GeoJSONReader* reader, const char* geojson)
+    GEOSGeoJSONReader_read_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader, const char* geojson)
     {
         return execute(extHandle, [&]() {
-            auto geojson_obj = geos_nlohmann::json::parse(geojson);
-            return reader->readFeatureCollectionForGeometry(geojson_obj).release();
+            const std::string geojsonstring(geojson);
+            return reader->read(geojsonstring).release();
         });
     }
 

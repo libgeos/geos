@@ -21,6 +21,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/GeoJSONReader.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
