@@ -1585,6 +1585,13 @@ typedef struct GEOSWKBReader_t GEOSWKBReader;
 */
 typedef struct GEOSWKBWriter_t GEOSWKBWriter;
 
+/**
+* Reader object to read GeoJSON format and construct a GeometryCollection.
+* \see GEOSGeoJSONReader_create
+* \see GEOSGeoJSONReader_create_r
+*/
+typedef struct GEOSGeoJSONReader_t GEOSGeoJSONReader;
+
 #endif
 
 /* ========== WKT Reader ========== */
@@ -1729,6 +1736,22 @@ extern char GEOS_DLL GEOSWKBWriter_getIncludeSRID_r(
 extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID_r(
     GEOSContextHandle_t handle,
     GEOSWKBWriter* writer, const char writeSRID);
+
+/* ========== GeoJSON Reader ========== */
+
+/** \see GEOSGeoJSONReader_create */
+extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeoJSONReader_destroy */
+extern void GEOS_DLL GEOSGeoJSONReader_destroy_r(GEOSContextHandle_t handle,
+    GEOSGeoJSONReader* reader);
+
+/** \see GEOSWKTReader_read */
+extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_read_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONReader* reader,
+    const char *geojson);
 
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
@@ -4241,6 +4264,31 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
 * \param buffer The memory to free
 */
 extern void GEOS_DLL GEOSFree(void *buffer);
+
+/* ========= GeoJSON Reader ========= */
+
+/**
+* Allocate a new \ref GEOSGeoJSONReader.
+* \returns a new reader. Caller must free with GEOSGeoJSONReader_destroy()
+*/
+extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create(void);
+
+/**
+* Free the memory associated with a \ref GEOSGeoJSONReader.
+* \param reader The reader to destroy.
+*/
+extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
+
+/**
+* Use a reader to parse a GeoJSON containing a featurecollection,
+* and return geometrycollection. Feature properties are not read.
+* \param reader A GeoJSON reader object, caller retains ownership
+* \param geojson The json string to parse, caller retains ownership
+* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_read(
+    GEOSGeoJSONReader* reader,
+    const char *geojson);
 
 #endif /* #ifndef GEOS_USE_ONLY_R_API */
 
