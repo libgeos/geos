@@ -45,6 +45,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/GeoJSONReader.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
@@ -88,6 +89,7 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
+#include "geos/vend/include_nlohmann_json.hpp"
 #include <geos/version.h>
 
 // This should go away
@@ -3041,6 +3043,36 @@ extern "C" {
             writer->setIncludeSRID(newIncludeSRID);
         });
     }
+
+    /* GeoJSON Reader */
+    GeoJSONReader*
+    GEOSGeoJSONReader_create_r(GEOSContextHandle_t extHandle)
+    {
+        using geos::io::GeoJSONReader;
+
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
+            return new GeoJSONReader((GeometryFactory *) handle->geomFactory);
+        });
+    }
+
+    void
+    GeoJSONReader_destroy_r(GEOSContextHandle_t extHandle, GeoJSONReader* reader)
+    {
+        return execute(extHandle, [&]() {
+            delete reader;
+        });
+    }
+
+    Geometry*
+    GeoJSONReader_read_r(GEOSContextHandle_t extHandle, GeoJSONReader* reader, const char* geojson)
+    {
+        return execute(extHandle, [&]() {
+            auto geojson_obj = geos_nlohmann::json::parse(geojson);
+            return reader->readFeatureCollectionForGeometry(geojson_obj).release();
+        });
+    }
+
 
 
 //-----------------------------------------------------------------

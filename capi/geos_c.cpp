@@ -39,6 +39,7 @@
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
+#define GEOSGeoJSONReader geos::io::GeoJSONReader
 typedef struct GEOSBufParams_t GEOSBufferParams;
 typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
@@ -70,6 +71,7 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
+using geos::io::GeoJSONReader;
 
 
 
@@ -1286,6 +1288,25 @@ extern "C" {
     GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
     {
         GEOSWKBWriter_setIncludeSRID_r(handle, writer, newIncludeSRID);
+    }
+
+    /* GeoJSON Reader */
+    GeoJSONReader*
+    GEOSGeoJSONReader_create()
+    {
+        return GEOSGeoJSONReader_create_r(handle);
+    }
+
+    void
+    GEOSGeoJSONReader_destroy(GeoJSONReader* reader)
+    {
+        GEOSGeoJSONReader_destroy_r(handle, reader);
+    }
+
+    Geometry*
+    GEOSGeoJSONReader_read(GeoJSONReader* reader, const char* geojson)
+    {
+        return GEOSGeoJSONReader_read_r(handle, reader, geojson);
     }
 
 
