@@ -3054,7 +3054,7 @@ extern "C" {
 
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
-            return new GeoJSONReader((GeometryFactory *) handle->geomFactory);
+            return new GeoJSONReader(*(GeometryFactory *) handle->geomFactory);
         });
     }
 
