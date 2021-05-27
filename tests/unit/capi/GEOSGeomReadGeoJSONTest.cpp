@@ -1,8 +1,7 @@
 //
-// Test Suite for C-API GEOSGeomFromWKB
+// Test Suite for C-API GEOSGeoJSONReader_read
 
 #include <tut/tut.hpp>
-#include <utility.h> // wkb_hex_decoder
 
 #include "capi_test_utils.h"
 
