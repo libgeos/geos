@@ -182,6 +182,26 @@ template<> template<> void object::test<14>
     ensure(nullptr == geom2_);
 }
 
+// Polygon fully covering rectangle
+// https://trac.osgeo.org/postgis/ticket/4904
+template<> template<> void object::test<15>
+()
+{
+    //  POLYGON((0 0,10 0,10 10,0 10))
+    //  Clip by ST_MakeEnvelope(2,2,5,5)
+    GEOSCoordSequence *cs = GEOSCoordSeq_create(5, 2);
+    GEOSCoordSeq_setXY(cs, 0,  0,  0);
+    GEOSCoordSeq_setXY(cs, 1, 10,  0);
+    GEOSCoordSeq_setXY(cs, 2, 10, 10);
+    GEOSCoordSeq_setXY(cs, 3,  0, 10);
+    GEOSCoordSeq_setXY(cs, 4,  0,  0);
+    GEOSGeometry *shell = GEOSGeom_createLinearRing(cs);
+    geom1_ = GEOSGeom_createPolygon(shell, NULL, 0);
+
+
+    geom2_ = GEOSClipByRect(geom1_, 2, 2, 5, 5);
+    isEqual(geom2_, "POLYGON ((2 2, 2 5, 5 5, 5 2, 2 2))");
+}
 
 
 
