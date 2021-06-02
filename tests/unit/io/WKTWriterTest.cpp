@@ -229,9 +229,9 @@ void object::test<8>
     const char* gctxt = "GEOMETRYCOLLECTION (LINESTRING EMPTY, POLYGON EMPTY)";
     PrecisionModel gcpm;
     GeometryFactory::Ptr gcgf(GeometryFactory::create(&gcpm));
-    WKTReader wktreader(gcgf.get());
+    WKTReader gcwktreader(gcgf.get());
     GeomPtr gcgeom(wktreader.read(gctxt));
-    std::string result = wktwriter.write(gcgeom.get());
+    std::string result = gcwktwriter.write(gcgeom.get());
     ensure_equals(result, std::string(gctxt));
 }
 
