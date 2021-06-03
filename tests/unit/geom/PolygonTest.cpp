@@ -508,7 +508,8 @@ void object::test<34>
 ()
 {
     auto point = empty_poly_->getCentroid();
-    ensure(point == nullptr);
+    ensure("getCentroid returned nullptr", point != nullptr);
+    ensure("getCentroid(POLYGON EMPTY) did not return POINT EMPTY)", point->isEmpty());
 }
 
 // Test of Geometry::getCentroid(Coordinate& ret) const for empty Polygon

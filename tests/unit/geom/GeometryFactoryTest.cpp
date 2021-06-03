@@ -237,7 +237,7 @@ void object::test<8>
     ensure("createPoint() returned non-empty point.", pt->isEmpty());
     ensure(pt->isSimple());
     ensure(pt->isValid());
-    ensure(pt->getCentroid() == nullptr);
+    ensure(pt->getCentroid()->isEmpty());
     ensure(pt->getCoordinate() == nullptr);
 
     std::unique_ptr<geos::geom::Geometry> geo;
@@ -520,7 +520,7 @@ void object::test<15>
     ensure("createLineString() returned non-empty point.", line->isEmpty());
     ensure(line->isSimple());
     ensure(line->isValid());
-    ensure(line->getCentroid() == nullptr);
+    ensure(line->getCentroid()->isEmpty());
 
     // TODO - mloskot - waiting for some decision
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
@@ -616,7 +616,7 @@ void object::test<18>
     ensure("createPolygon() returned non-empty point.", poly->isEmpty());
     ensure(poly->isSimple());
     ensure(poly->isValid());
-    ensure(poly->getCentroid() == nullptr);
+    ensure(poly->getCentroid()->isEmpty());
 
     // TODO - mloskot - waiting for some decision
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
@@ -778,7 +778,7 @@ void object::test<21>
     ensure("createGeometryCollection() returned null pointer.", col != nullptr);
     ensure(col->isEmpty());
     ensure(col->isValid());
-    ensure(col->getCentroid() == nullptr);
+    ensure(col->getCentroid()->isEmpty());
     ensure_equals(col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
     ensure_equals(col->getDimension(), geos::geom::Dimension::False);
     ensure_equals(col->getBoundaryDimension(), geos::geom::Dimension::False);
@@ -876,7 +876,7 @@ void object::test<24>
     ensure("createMultiPoint() returned non-empty point.", mp->isEmpty());
     ensure(mp->isSimple());
     ensure(mp->isValid());
-    ensure(mp->getCentroid() == nullptr);
+    ensure(mp->getCentroid()->isEmpty());
 
     std::unique_ptr<geos::geom::Geometry> geo;
 
@@ -1026,7 +1026,7 @@ void object::test<28>
     ensure("createMultiLineString() returned non-empty point.", mls->isEmpty());
     ensure(mls->isSimple());
     ensure(mls->isValid());
-    ensure(mls->getCentroid() == nullptr);
+    ensure(mls->getCentroid()->isEmpty());
 
     std::unique_ptr<geos::geom::Geometry> geo;
 

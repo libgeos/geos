@@ -172,7 +172,7 @@ Geometry::getCentroid() const
 {
     Coordinate centPt;
     if(! getCentroid(centPt)) {
-        return nullptr;
+        return getFactory()->createPoint(getCoordinateDimension());
     }
 
     // We don't use createPointFromInternalCoord here
@@ -202,19 +202,19 @@ Geometry::getInteriorPoint() const
     if(dim == 0) {
         InteriorPointPoint intPt(this);
         if(! intPt.getInteriorPoint(interiorPt)) {
-            return nullptr;
+            return getFactory()->createPoint(getCoordinateDimension()); // POINT EMPTY
         }
     }
     else if(dim == 1) {
         InteriorPointLine intPt(this);
         if(! intPt.getInteriorPoint(interiorPt)) {
-            return nullptr;
+            return getFactory()->createPoint(getCoordinateDimension()); // POINT EMPTY
         }
     }
     else {
         InteriorPointArea intPt(this);
         if(! intPt.getInteriorPoint(interiorPt)) {
-            return nullptr;
+            return getFactory()->createPoint(getCoordinateDimension()); // POINT EMPTY
         }
     }
     std::unique_ptr<Point> p(getFactory()->createPointFromInternalCoord(&interiorPt, this));

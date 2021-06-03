@@ -76,7 +76,7 @@ void object::test<1>
     ensure(mp->isEmpty());
     ensure(mp->isSimple());
     ensure(mp->isValid());
-    ensure(mp->getCentroid() == nullptr);
+    ensure(mp->getCentroid()->isEmpty());
     ensure_equals(mp->getNumPoints(), size0);
     ensure_equals(mp->getNumGeometries(), size0);
 }
@@ -94,7 +94,7 @@ void object::test<2>
     ensure(copy->isEmpty());
     ensure(copy->isSimple());
     ensure(copy->isValid());
-    ensure(copy->getCentroid() == nullptr);
+    ensure(copy->getCentroid()->isEmpty());
     ensure_equals(copy->getNumPoints(), size0);
     ensure_equals(copy->getNumGeometries(), size0);
 }
@@ -112,7 +112,7 @@ void object::test<3>
     ensure(mp->isEmpty());
     ensure(mp->isSimple());
     ensure(mp->isValid());
-    ensure(mp->getCentroid() == nullptr);
+    ensure(mp->getCentroid()->isEmpty());
     ensure_equals(mp->getNumPoints(), size0);
     ensure_equals(mp->getNumGeometries(), size0);
 }

@@ -1629,13 +1629,6 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             gRes->normalize();
 
             GeomPtr gRealRes(p_gT->getCentroid());
-
-            if(gRealRes.get()) {
-                gRealRes->normalize();
-            }
-            else {
-                gRealRes = factory->createPoint();
-            }
             gRealRes->normalize();
 
             if(gRes->compareTo(gRealRes.get()) == 0) {
