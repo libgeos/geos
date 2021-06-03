@@ -514,10 +514,7 @@ WKTWriter::appendGeometryCollectionText(
     int p_level,
     Writer* writer)
 {
-    if(geometryCollection->isEmpty()) {
-        writer->write("EMPTY");
-    }
-    else {
+    if(geometryCollection->getNumGeometries() > 0) {
         int level2 = p_level;
         writer->write("(");
         for(std::size_t i = 0, n = geometryCollection->getNumGeometries();
@@ -529,6 +526,9 @@ WKTWriter::appendGeometryCollectionText(
             appendGeometryTaggedText(geometryCollection->getGeometryN(i), level2, writer);
         }
         writer->write(")");
+    }
+    else {
+        writer->write("EMPTY");
     }
 }
 

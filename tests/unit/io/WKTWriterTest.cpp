@@ -220,5 +220,23 @@ void object::test<7>
 }
 
 
+// 5 - Test negative number of digits in precision model
+template<>
+template<>
+void object::test<8>
+()
+{
+    const char* gctxt = "GEOMETRYCOLLECTION (LINESTRING EMPTY, POLYGON EMPTY)";
+    PrecisionModel gcpm;
+    GeometryFactory::Ptr gcgf(GeometryFactory::create(&gcpm));
+    WKTReader gcwktreader(gcgf.get());
+    GeomPtr gcgeom(gcwktreader.read(gctxt));
+    std::string result = wktwriter.write(gcgeom.get());
+    ensure_equals(result, std::string(gctxt));
+}
+
+
+
+
 } // namespace tut
 
