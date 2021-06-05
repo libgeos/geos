@@ -10,7 +10,7 @@ Changes in 3.10.0
   - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,
           GEOSCoordSeq_copyToArrays, GEOSCoordSeq_copyToBuffer (Daniel Baston)
   - CAPI: GEOSMakeValidWithParams new validity enforcement approach from
-          https://github.com/locationtech/jts/pull/704 (Paul Ramsey, Martin Davis) 
+          https://github.com/locationtech/jts/pull/704 (Paul Ramsey, Martin Davis)
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
@@ -18,6 +18,7 @@ Changes in 3.10.0
   - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
   - Fix IsValidOp to correctly report invalid nested MultiPolygons (#1112, Martin Davis)
   - Fix BufferOp to avoid artifacts in certain polygon buffers (#1101, Martin Davis)
+  - Fix IsValidOp to correctly report certain kinds of invalid LinearRings (Martin Davis)
 
 - Changes:
   - #1094, #1090: Drop inlines.cpp to address duplicate symbols on many platforms
