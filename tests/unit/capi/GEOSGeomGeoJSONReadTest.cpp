@@ -28,8 +28,8 @@ struct test_capigeosgeomreadgeojson_data : public capitest::utility {
     void
     test_geojson(std::string const& geojson, std::string const& wkt)
     {
-        geom1_ = GEOSGeoJSONReader_read(reader_, &geojson[0]);
-        ensure("GEOSGeoJSONReader_read failed to create geometry", nullptr != geom1_);
+        geom1_ = GEOSGeoJSONReader_readGeometry(reader_, &geojson[0]);
+        ensure("GEOSGeoJSONReader_readGeometry failed to create geometry", nullptr != geom1_);
         ensure_geometry_equals(geom1_, fromWKT(&wkt[0]));
     }
 };
@@ -37,7 +37,7 @@ struct test_capigeosgeomreadgeojson_data : public capitest::utility {
 typedef test_group<test_capigeosgeomreadgeojson_data> group;
 typedef group::object object;
 
-group test_capigeosgeomreadgeojson_group("capi::GEOSGeomReadGeoJSON");
+group test_capigeosgeomreadgeojson_group("capi::GEOSGeomGeoJSONRead");
 
 //
 // Test Cases
@@ -69,7 +69,7 @@ void object::test<3>
 ()
 {
     std::string geojson("<gml>NOT_GEO_JSON</gml>");
-    geom1_ = GEOSGeoJSONReader_read(reader_, &geojson[0]);
+    geom1_ = GEOSGeoJSONReader_readGeometry(reader_, &geojson[0]);
     ensure(geom1_ == nullptr);
 }
 }

@@ -46,6 +46,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/GeoJSONReader.h>
+#include <geos/io/GeoJSONWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
@@ -121,6 +122,7 @@
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
+#define GEOSGeoJSONWriter geos::io::GeoJSONWriter
 
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
@@ -161,6 +163,7 @@ using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
 using geos::io::GeoJSONReader;
+using geos::io::GeoJSONWriter;
 
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
@@ -3067,7 +3070,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSGeoJSONReader_read_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader, const char* geojson)
+    GEOSGeoJSONReader_readGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader, const char* geojson)
     {
         return execute(extHandle, [&]() {
             const std::string geojsonstring(geojson);
@@ -3075,6 +3078,39 @@ extern "C" {
         });
     }
 
+    /* GeoJSON Writer */
+    GeoJSONWriter*
+    GEOSGeoJSONWriter_create_r(GEOSContextHandle_t extHandle)
+    {
+        using geos::io::GeoJSONWriter;
+
+        return execute(extHandle, [&]() {
+            return new GeoJSONWriter();
+        });
+    }
+
+    void
+    GEOSGeoJSONWriter_destroy_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer)
+    {
+        return execute(extHandle, [&]() {
+            delete writer;
+        });
+    }
+
+    char*
+    GEOSGeoJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int type, int indent)
+    {
+        return execute(extHandle, [&]() {
+            std::string geojson;
+            if (indent >= 0) {
+                geojson = writer->writeFormatted(g, static_cast<geos::io::GeoJSONType>(type), indent);
+            } else {
+                geojson = writer->write(g, static_cast<geos::io::GeoJSONType>(type));
+            }
+            char* result = gstrdup(geojson);
+            return result;
+        });
+    }
 
 
 //-----------------------------------------------------------------
