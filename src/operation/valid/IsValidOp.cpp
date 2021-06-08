@@ -402,14 +402,18 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph* graph)
 }
 
 /*private*/
+bool
+IsValidOp::isStartNode(const EdgeIntersection& ei) {
+    return ei.getSegmentIndex() == 0 && ei.getDistance() == 0.0;
+}
+
+/*private*/
 void
 IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList& eiList)
 {
     std::set<const Coordinate*, CoordinateLessThen>nodeSet;
-    bool isFirst = true;
     for(const EdgeIntersection& ei : eiList) {
-        if(isFirst) {
-            isFirst = false;
+        if(isStartNode(ei)) {
             continue;
         }
         if(nodeSet.find(&ei.coord) != nodeSet.end()) {

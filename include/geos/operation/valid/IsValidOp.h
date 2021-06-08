@@ -45,6 +45,7 @@ class MultiLineString;
 namespace geomgraph {
 class DirectedEdge;
 class EdgeIntersectionList;
+class EdgeIntersection;
 class PlanarGraph;
 class GeometryGraph;
 }
@@ -100,6 +101,8 @@ private:
      */
     void checkNoSelfIntersectingRing(
         geomgraph::EdgeIntersectionList& eiList);
+
+    bool isStartNode(const geomgraph::EdgeIntersection& ei);
 
     void checkTooFewPoints(geomgraph::GeometryGraph* graph);
 

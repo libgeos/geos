@@ -118,4 +118,17 @@ void object::test<3>
     ensure(g_rev->isValid());
 }
 
+template<>
+template<>
+void object::test<4>
+()
+{
+    // https://github.com/locationtech/jts/pull/737
+
+    std::string wkt("LINEARRING (150 100, 300 300, 100 300, 350 100, 150 100)");
+    auto g = wktreader.read(wkt);
+
+    ensure(! g->isValid());
+}
+
 } // namespace tut
