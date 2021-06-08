@@ -157,6 +157,20 @@ public:
         return result != NO_INTERSECTION;
     }
 
+
+    /**
+    * Gets an endpoint of an input segment.
+    *
+    * @param segmentIndex the index of the input segment (0 or 1)
+    * @param ptIndex the index of the endpoint (0 or 1)
+    * @return the specified endpoint
+    */
+    const geom::Coordinate*
+    getEndpoint(std::size_t segmentIndex, std::size_t ptIndex) const
+    {
+        return inputLines[segmentIndex][ptIndex];
+    }
+
     /// Returns the number of intersection points found.
     ///
     /// This will be either 0, 1 or 2.

@@ -3,37 +3,31 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2009      Sandro Santilli <strk@kbt.io>
- * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2009 Sandro Santilli <strk@kbt.io>
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2021 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/IsSimpleOp.java rev. 1.22 (JTS-1.10)
- *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_ISSIMPLEOP_H
-#define GEOS_OPERATION_ISSIMPLEOP_H
+#pragma once
 
-#include <geos/export.h>
-#include <geos/geom/Coordinate.h> // for dtor visibility by unique_ptr (compos)
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/noding/SegmentIntersector.h>
 
-#include <map>
-#include <memory> // for unique_ptr
-
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
-#endif
 
 // Forward declarations
 namespace geos {
+namespace noding {
+class SegmentString;
+class BasicSegmentString;
+}
 namespace algorithm {
 class BoundaryNodeRule;
 }
@@ -45,13 +39,6 @@ class MultiPoint;
 class Geometry;
 class Polygon;
 class GeometryCollection;
-struct CoordinateLessThen;
-}
-namespace geomgraph {
-class GeometryGraph;
-}
-namespace operation {
-class EndpointInfo;
 }
 }
 
@@ -59,168 +46,206 @@ class EndpointInfo;
 namespace geos {
 namespace operation { // geos.operation
 
-/** \brief
- * Tests whether a Geometry is simple.
- *
- * In general, the SFS specification of simplicity follows the rule:
- *
- *  - A Geometry is simple if and only if the only self-intersections
- *    are at boundary points.
- *
- * This definition relies on the definition of boundary points.
- * The SFS uses the Mod-2 rule to determine which points are on the boundary of
- * lineal geometries, but this class supports using other
- * [BoundaryNodeRules](@ref algorithm::BoundaryNodeRule) as well.
- *
- * Simplicity is defined for each [Geometry](@ref geom::Geometry) subclass as follows:
- *
- *  - Valid polygonal geometries are simple by definition, so
- *    `isSimple` trivially returns true.
- *    (Hint: in order to check if a polygonal geometry has self-intersections,
- *    use geom::Geometry::isValid()).
- *
- *  - Linear geometries are simple iff they do not self-intersect at points
- *    other than boundary points.
- *    (Using the Mod-2 rule, this means that closed linestrings
- *    cannot be touched at their endpoints, since these are
- *    interior points, not boundary points).
- *
- *  - Zero-dimensional geometries (points) are simple iff they have no
- *    repeated points.
- *
- *  - Empty `Geometry`s are always simple
- *
- * @see algorithm::BoundaryNodeRule
- *
- */
+
 class GEOS_DLL IsSimpleOp {
-
-public:
-
-    /** \brief
-     * Creates a simplicity checker using the default
-     * SFS Mod-2 Boundary Node Rule
-     *
-     * @deprecated use IsSimpleOp(Geometry)
-     */
-    IsSimpleOp();
-
-    /** \brief
-     * Creates a simplicity checker using the default
-     * SFS Mod-2 Boundary Node Rule
-     *
-     * @param geom The geometry to test.
-     *             Will store a reference: keep it alive.
-     */
-    IsSimpleOp(const geom::Geometry& geom);
-
-    /** \brief
-     * Creates a simplicity checker using a given
-     * algorithm::BoundaryNodeRule
-     *
-     * @param geom the geometry to test
-     * @param boundaryNodeRule the rule to use.
-     */
-    IsSimpleOp(const geom::Geometry& geom,
-               const algorithm::BoundaryNodeRule& boundaryNodeRule);
-
-    /** \brief
-     * Tests whether the geometry is simple.
-     *
-     * @return true if the geometry is simple
-     */
-    bool isSimple();
-
-    /** \brief
-     * Gets a coordinate for the location where the geometry
-     * fails to be simple (i.e. where it has a non-boundary self-intersection).
-     *
-     * {@link #isSimple} must be called before this method is called.
-     *
-     * @return a coordinate for the location of the non-boundary
-     *         self-intersection. Ownership retained.
-     * @return the null coordinate if the geometry is simple
-     */
-    const geom::Coordinate*
-    getNonSimpleLocation() const
-    {
-        return nonSimpleLocation.get();
-    }
-
-    /** \brief
-     * Reports whether a geom::LineString is simple.
-     *
-     * @param geom the lineal geometry to test
-     * @return true if the geometry is simple
-     *
-     * @deprecated use isSimple()
-     */
-    bool isSimple(const geom::LineString* geom);
-
-    /** \brief
-     * Reports whether a geom::MultiLineString is simple.
-     *
-     * @param geom the lineal geometry to test
-     * @return true if the geometry is simple
-     *
-     * @deprecated use isSimple()
-     */
-    bool isSimple(const geom::MultiLineString* geom);
-
-    /** \brief
-     * A MultiPoint is simple iff it has no repeated points
-     *
-     * @deprecated use isSimple()
-     */
-    bool isSimple(const geom::MultiPoint* mp);
-
-    bool isSimpleLinearGeometry(const geom::Geometry* geom);
 
 private:
 
-    /**
-     * For all edges, check if there are any intersections which are
-     * NOT at an endpoint.
-     * The Geometry is not simple if there are intersections not at
-     * endpoints.
-     */
-    bool hasNonEndpointIntersection(geomgraph::GeometryGraph& graph);
+    const geom::Geometry& inputGeom;
+    bool isClosedEndpointsInInterior = true;
+    bool isFindAllLocations;
+    bool isSimpleResult = false;
+    std::vector<geom::Coordinate> nonSimplePts;
+    bool computed = false;
 
-    /**
-     * Tests that no edge intersection is the endpoint of a closed line.
-     * This ensures that closed lines are not touched at their endpoint,
-     * which is an interior point according to the Mod-2 rule
-     * To check this we compute the degree of each endpoint.
-     * The degree of endpoints of closed lines
-     * must be exactly 2.
-     */
-    bool hasClosedEndpointIntersection(geomgraph::GeometryGraph& graph);
+    void compute();
 
-    bool computeSimple(const geom::Geometry* geom);
-    bool isSimplePolygonal(const geom::Geometry* geom);
-    bool isSimpleGeometryCollection(const geom::GeometryCollection* col);
-
-    /**
-     * Add an endpoint to the map, creating an entry for it if none exists
-     */
-    void addEndpoint(std::map<const geom::Coordinate*, EndpointInfo*,
-                     geom::CoordinateLessThen>& endPoints,
-                     const geom::Coordinate* p, bool isClosed);
-
-    bool isClosedEndpointsInInterior;
+    bool computeSimple(const geom::Geometry& geom);
 
     bool isSimpleMultiPoint(const geom::MultiPoint& mp);
 
-    const geom::Geometry* geom;
+    /**
+    * Computes simplicity for polygonal geometries.
+    * Polygonal geometries are simple if and only if
+    * all of their component rings are simple.
+    *
+    * @param geom a Polygonal geometry
+    * @return true if the geometry is simple
+    */
+    bool isSimplePolygonal(const geom::Geometry& geom);
 
-    std::unique_ptr<geom::Coordinate> nonSimpleLocation;
-};
+    /**
+    * Semantics for GeometryCollection is
+    * simple iff all components are simple.
+    *
+    * @param geom
+    * @return true if the geometry is simple
+    */
+    bool isSimpleGeometryCollection(const geom::Geometry& geom);
+
+    bool isSimpleLinearGeometry(const geom::Geometry& geom);
+
+    static std::vector<std::unique_ptr<noding::SegmentString>>
+        extractSegmentStrings(const geom::Geometry& geom);
+
+
+    class NonSimpleIntersectionFinder : public noding::SegmentIntersector
+    {
+
+    private:
+
+        bool isClosedEndpointsInInterior;
+        bool isFindAll = false;
+
+        algorithm::LineIntersector li;
+        std::vector<geom::Coordinate>& intersectionPts;
+
+        bool hasInteriorInt;
+        bool hasInteriorVertexInt;
+        bool hasEqualSegments;
+        bool hasInteriorEndpointInt;
+
+        bool findIntersection(
+            noding::SegmentString* ss0, std::size_t segIndex0,
+            noding::SegmentString* ss1, std::size_t segIndex1,
+            const geom::Coordinate& p00, const geom::Coordinate& p01,
+            const geom::Coordinate& p10, const geom::Coordinate& p11);
+
+        /**
+        * Tests whether an intersection vertex is an endpoint of a segment string.
+        *
+        * @param ss the segmentString
+        * @param ssIndex index of segment in segmentString
+        * @param li the line intersector
+        * @param liSegmentIndex index of segment in intersector
+        * @return true if the intersection vertex is an endpoint
+        */
+        bool isIntersectionEndpoint(
+            const noding::SegmentString* ss, std::size_t ssIndex,
+            const algorithm::LineIntersector& li, std::size_t liSegmentIndex) const;
+
+        /**
+        * Finds the vertex index in a segment of an intersection
+        * which is known to be a vertex.
+        *
+        * @param li the line intersector
+        * @param segmentIndex the intersection segment index
+        * @return the vertex index (0 or 1) in the segment vertex of the intersection point
+        */
+        std::size_t intersectionVertexIndex(
+            const algorithm::LineIntersector& li, std::size_t segmentIndex) const;
+
+    public:
+
+        NonSimpleIntersectionFinder(
+            bool p_isClosedEndpointsInInterior,
+            bool p_isFindAll,
+            std::vector<geom::Coordinate>& p_intersectionPts)
+        : isClosedEndpointsInInterior(p_isClosedEndpointsInInterior)
+        , isFindAll(p_isFindAll)
+        , intersectionPts(p_intersectionPts)
+        {};
+
+        /**
+        * Tests whether an intersection was found.
+        *
+        * @return true if an intersection was found
+        */
+        bool hasIntersection() const;
+
+        void processIntersections(
+            noding::SegmentString* ss0, std::size_t segIndex0,
+            noding::SegmentString* ss1, std::size_t segIndex1) override;
+
+        bool isDone() const override;
+
+    }; // NonSimpleIntersectionFinder
+
+
+public:
+
+    IsSimpleOp(const geom::Geometry* geom)
+        : IsSimpleOp(*geom)
+        {};
+
+    /**
+    * Creates a simplicity checker using the default SFS Mod-2 Boundary Node Rule
+    *
+    * @param geom the geometry to test
+    */
+    IsSimpleOp(const geom::Geometry& geom)
+        : IsSimpleOp(geom, algorithm::BoundaryNodeRule::getBoundaryRuleMod2())
+        {};
+
+    /**
+    * Creates a simplicity checker using a given {@link BoundaryNodeRule}
+    *
+    * @param geom the geometry to test
+    * @param boundaryNodeRule the boundary node rule to use.
+    */
+    IsSimpleOp(const geom::Geometry& geom, const algorithm::BoundaryNodeRule& p_boundaryNodeRule)
+        : inputGeom(geom)
+        , isClosedEndpointsInInterior(! p_boundaryNodeRule.isInBoundary(2))
+        , computed(false)
+        {};
+
+    /**
+    * Tests whether a geometry is simple.
+    *
+    * @param geom the geometry to test
+    * @return true if the geometry is simple
+    */
+    static bool isSimple(const geom::Geometry& geom);
+
+    static bool isSimple(const geom::Geometry* geom) {
+        if (!geom) return false;
+        return isSimple(*geom);
+    }
+
+    /**
+    * Gets a non-simple location in a geometry, if any.
+    *
+    * @param geom the input geometry
+    * @return a non-simple location, or null if the geometry is simple
+    */
+    geom::Coordinate getNonSimpleLocation(const geom::Geometry& geom);
+
+    /**
+    * Sets whether all non-simple intersection points
+    * will be found.
+    *
+    * @param isFindAll whether to find all non-simple points
+    */
+    void setFindAllLocations(bool isFindAll);
+
+    /**
+    * Tests whether the geometry is simple.
+    *
+    * @return true if the geometry is simple
+    */
+    bool isSimple();
+
+    /**
+    * Gets the coordinate for an location where the geometry
+    * fails to be simple.
+    * (i.e. where it has a non-boundary self-intersection).
+    *
+    * @return a coordinate for the location of the non-boundary self-intersection
+    * or null if the geometry is simple
+    */
+    geom::Coordinate getNonSimpleLocation();
+
+    /**
+    * Gets all non-simple intersection locations.
+    *
+    * @return a list of the coordinates of non-simple locations
+    */
+    const std::vector<geom::Coordinate>& getNonSimpleLocations();
+
+
+
+}; // IsSimpleOp
+
 
 } // namespace geos.operation
 } // namespace geos
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif

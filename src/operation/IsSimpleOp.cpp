@@ -3,348 +3,357 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2009      Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2009 Sandro Santilli <strk@kbt.io>
+ * Copyright (C) 2021 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/IsSimpleOp.java rev. 1.22 (JTS-1.10)
- *
  **********************************************************************/
 
 #include <geos/operation/IsSimpleOp.h>
-//#include <geos/operation/EndpointInfo.h>
+
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/geomgraph/GeometryGraph.h>
-#include <geos/geomgraph/Edge.h>
-#include <geos/geomgraph/EdgeIntersection.h>
-#include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/LinearRing.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/GeometryCollection.h>
-#include <geos/geom/Coordinate.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
+#include <geos/noding/BasicSegmentString.h>
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/SegmentIntersector.h>
+#include <geos/noding/SegmentString.h>
 
-#include <set>
-#include <cassert>
-
+#include <unordered_set>
 
 using namespace geos::algorithm;
-using namespace geos::geomgraph;
-using namespace geos::geomgraph::index;
+using namespace geos::noding;
 using namespace geos::geom;
 using namespace geos::geom::util;
 
+
 namespace geos {
-namespace operation { // geos.operation
+namespace operation {
 
-// This is supposedly a private of IsSimpleOp...
-class EndpointInfo {
-public:
 
-    Coordinate pt;
-
-    bool isClosed;
-
-    int degree;
-
-    EndpointInfo(const geom::Coordinate& newPt);
-
-    const Coordinate&
-    getCoordinate() const
-    {
-        return pt;
-    }
-
-    void
-    addEndpoint(bool newIsClosed)
-    {
-        degree++;
-        isClosed |= newIsClosed;
-    }
-};
-
-EndpointInfo::EndpointInfo(const Coordinate& newPt)
+/* public static */
+bool
+IsSimpleOp::isSimple(const Geometry& geom)
 {
-    pt = newPt;
-    isClosed = false;
-    degree = 0;
+    IsSimpleOp op(geom);
+    return op.isSimple();
 }
 
-// -----------------------------------------------------
+/* public static */
+Coordinate
+IsSimpleOp::getNonSimpleLocation(const Geometry& geom)
+{
+    IsSimpleOp op(geom);
+    return op.getNonSimpleLocation();
+}
 
+/* public */
+void
+IsSimpleOp::setFindAllLocations(bool isFindAll)
+{
+    isFindAllLocations = isFindAll;
+}
 
-
-/*public*/
-IsSimpleOp::IsSimpleOp()
-    :
-    isClosedEndpointsInInterior(true),
-    geom(nullptr),
-    nonSimpleLocation()
-{}
-
-/*public*/
-IsSimpleOp::IsSimpleOp(const Geometry& g)
-    :
-    isClosedEndpointsInInterior(true),
-    geom(&g),
-    nonSimpleLocation()
-{}
-
-/*public*/
-IsSimpleOp::IsSimpleOp(const Geometry& g,
-                       const BoundaryNodeRule& boundaryNodeRule)
-    :
-    isClosedEndpointsInInterior(! boundaryNodeRule.isInBoundary(2)),
-    geom(&g),
-    nonSimpleLocation()
-{}
-
-/*public*/
+/* public */
 bool
 IsSimpleOp::isSimple()
 {
-    nonSimpleLocation.reset();
-    return computeSimple(geom);
+    compute();
+    return isSimpleResult;
+}
+
+/* public */
+Coordinate
+IsSimpleOp::getNonSimpleLocation()
+{
+    compute();
+    if (nonSimplePts.size() == 0) {
+        Coordinate c;
+        c.setNull();
+        return c;
+    }
+    return nonSimplePts.at(0);
 }
 
 
-/*public*/
-bool
-IsSimpleOp::isSimple(const LineString* p_geom)
+/* public */
+const std::vector<Coordinate>&
+IsSimpleOp::getNonSimpleLocations()
 {
-    return isSimpleLinearGeometry(p_geom);
+    compute();
+    return nonSimplePts;
 }
 
-/*public*/
-bool
-IsSimpleOp::isSimple(const MultiLineString* p_geom)
+/* private */
+void
+IsSimpleOp::compute()
 {
-    return isSimpleLinearGeometry(p_geom);
+    if (computed || nonSimplePts.size() > 0)
+        return;
+    isSimpleResult = computeSimple(inputGeom);
+    computed = true;
 }
 
-/*public*/
+/* private */
 bool
-IsSimpleOp::isSimple(const MultiPoint* mp)
+IsSimpleOp::computeSimple(const Geometry& geom)
 {
-    return isSimpleMultiPoint(*mp);
-}
-
-/*private*/
-bool
-IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
-{
-    if(mp.isEmpty()) {
-        return true;
-    }
-    std::set<const Coordinate*, CoordinateLessThen> points;
-
-    for(std::size_t i = 0, n = mp.getNumGeometries(); i < n; ++i) {
-        const Point* pt = mp.getGeometryN(i);
-        assert(pt);
-        const Coordinate* p = pt->getCoordinate();
-        if(points.find(p) != points.end()) {
-            nonSimpleLocation.reset(new Coordinate(*p));
-            return false;
-        }
-        points.insert(p);
-    }
-    return true;
-}
-
-bool
-IsSimpleOp::isSimpleLinearGeometry(const Geometry* p_geom)
-{
-    if(p_geom->isEmpty()) {
-        return true;
-    }
-    GeometryGraph graph(0, p_geom);
-    LineIntersector li;
-    std::unique_ptr<SegmentIntersector> si(graph.computeSelfNodes(&li, true));
-
-    // if no self-intersection, must be simple
-    if(!si->hasIntersection()) {
-        return true;
-    }
-
-    if(si->hasProperIntersection()) {
-        nonSimpleLocation.reset(
-            new Coordinate(si->getProperIntersectionPoint())
-        );
-        return false;
-    }
-
-    if(hasNonEndpointIntersection(graph)) {
-        return false;
-    }
-
-    if(isClosedEndpointsInInterior) {
-        if(hasClosedEndpointIntersection(graph)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/*private*/
-bool
-IsSimpleOp::hasNonEndpointIntersection(GeometryGraph& graph)
-{
-    std::vector<Edge*>* edges = graph.getEdges();
-    for(Edge* e: *edges) {
-        auto maxSegmentIndex = e->getMaximumSegmentIndex();
-        EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
-        for(const EdgeIntersection& ei : eiL) {
-            if(!ei.isEndPoint(maxSegmentIndex)) {
-                nonSimpleLocation.reset(
-                    new Coordinate(ei.getCoordinate())
-                );
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-/*private*/
-bool
-IsSimpleOp::computeSimple(const geom::Geometry* g)
-{
-    nonSimpleLocation.reset();
-
-    if(dynamic_cast<const LineString*>(g)) {
-        return isSimpleLinearGeometry(g);
-    }
-
-    if(dynamic_cast<const LinearRing*>(g)) {
-        return isSimpleLinearGeometry(g);
-    }
-
-    if(dynamic_cast<const MultiLineString*>(g)) {
-        return isSimpleLinearGeometry(g);
-    }
-
-    if(dynamic_cast<const Polygon*>(g)) {
-        return isSimplePolygonal(g);
-    }
-
-    const MultiPoint* mp = dynamic_cast<const MultiPoint*>(g);
-    if(mp) {
-        return isSimpleMultiPoint(*mp);
-    }
-
-    // This must be after MultiPoint test, as MultiPoint can
-    // cast cleanly into GeometryCollection
-    const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
-    if(gc) {
-        return isSimpleGeometryCollection(gc);
-    }
-
+    if (geom.isEmpty()) return true;
+    if (geom.getGeometryTypeId() == GEOS_POINT) return true;
+    if (geom.getGeometryTypeId() == GEOS_MULTIPOINT) return isSimpleMultiPoint(dynamic_cast<const MultiPoint&>(geom));
+    if (geom.getGeometryTypeId() == GEOS_LINESTRING) return isSimpleLinearGeometry(geom);
+    if (geom.getGeometryTypeId() == GEOS_MULTILINESTRING) return isSimpleLinearGeometry(geom);
+    if (geom.getGeometryTypeId() == GEOS_LINEARRING) return isSimplePolygonal(geom);
+    if (geom.getGeometryTypeId() == GEOS_POLYGON) return isSimplePolygonal(geom);
+    if (geom.getGeometryTypeId() == GEOS_MULTIPOLYGON) return isSimplePolygonal(geom);
+    if (geom.getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION) return isSimpleGeometryCollection(geom);
     // all other geometry types are simple by definition
     return true;
 }
 
-/*private*/
+/* private */
 bool
-IsSimpleOp::isSimpleGeometryCollection(const geom::GeometryCollection* col)
+IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 {
-    for(const auto& g : *col) {
-        if(!computeSimple(g.get())) {
+    if (mp.isEmpty()) return true;
+    std::unordered_set<Coordinate, Coordinate::HashCode> points;
+
+    for (std::size_t i = 0; i < mp.getNumGeometries(); i++) {
+        const Point* pt = mp.getGeometryN(i);
+        const Coordinate* p = pt->getCoordinate();
+        if (points.find(*p) != points.end()) {
+            nonSimplePts.push_back(*p);
             return false;
         }
+        points.emplace(*p);
     }
     return true;
 }
 
-/*private*/
+
+/* private */
 bool
-IsSimpleOp::isSimplePolygonal(const geom::Geometry* g)
+IsSimpleOp::isSimplePolygonal(const Geometry& geom)
 {
 
-    LineString::ConstVect rings;
-    LinearComponentExtracter::getLines(*g, rings);
-    for(const geom::LineString* ring : rings) {
-        if(!isSimpleLinearGeometry(ring)) {
+    std::vector<const LineString*> rings;
+    LinearComponentExtracter::getLines(geom, rings);
+
+    for (const LineString* ring : rings) {
+        if (! isSimpleLinearGeometry(*ring))
             return false;
-        }
     }
     return true;
 }
 
-/*private*/
+
+/* private */
 bool
-IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph& graph)
+IsSimpleOp::isSimpleGeometryCollection(const Geometry& geom)
 {
-    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen> endPoints;
-    std::vector<Edge*>* edges = graph.getEdges();
-    for(Edge* e: *edges) {
-        //int maxSegmentIndex=e->getMaximumSegmentIndex();
-        bool isClosed = e->isClosed();
-        const Coordinate* p0 = &e->getCoordinate(0);
-        addEndpoint(endPoints, p0, isClosed);
-        const Coordinate* p1 = &e->getCoordinate(e->getNumPoints() - 1);
-        addEndpoint(endPoints, p1, isClosed);
+    for (std::size_t i = 0; i < geom.getNumGeometries(); i++) {
+        const Geometry* comp = geom.getGeometryN(i);
+        if (! computeSimple(*comp))
+            return false;
     }
+    return true;
+}
 
-    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.begin();
-    for(; it != endPoints.end(); ++it) {
-        EndpointInfo* eiInfo = it->second;
-        if(eiInfo->isClosed && eiInfo->degree != 2) {
+/* private */
+bool
+IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
+{
+    if (geom.isEmpty())
+        return true;
 
-            nonSimpleLocation.reset(
-                new Coordinate(eiInfo->getCoordinate())
-            );
+    std::vector<SegmentString*> segStringsBare;
+    auto segStrings = extractSegmentStrings(geom);
+    for (auto& ss: segStrings) {
+        segStringsBare.push_back(ss.get());
+    }
+    NonSimpleIntersectionFinder segInt(isClosedEndpointsInInterior, isFindAllLocations, nonSimplePts);
+    MCIndexNoder noder;
+    noder.setSegmentIntersector(&segInt);
+    noder.computeNodes(&segStringsBare);
+    if (segInt.hasIntersection()) {
+        return false;
+    }
+    return true;
+}
 
-            it = endPoints.begin();
-            for(; it != endPoints.end(); ++it) {
-                EndpointInfo* ep = it->second;
-                delete ep;
-            }
-            return true;
+/* private static */
+std::vector<std::unique_ptr<SegmentString>>
+IsSimpleOp::extractSegmentStrings(const Geometry& geom)
+{
+    std::vector<std::unique_ptr<SegmentString>> segStrings;
+    for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
+        const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
+        if (line) {
+            BasicSegmentString* bss = new BasicSegmentString(
+                const_cast<CoordinateSequence*>(line->getCoordinatesRO()),
+                nullptr);
+            segStrings.emplace_back(static_cast<SegmentString*>(bss));
         }
     }
+    return segStrings;
+}
 
-    it = endPoints.begin();
-    for(; it != endPoints.end(); ++it) {
-        EndpointInfo* ep = it->second;
-        delete ep;
+
+// --------------------------------------------------------------------------------
+
+/* public */
+bool
+IsSimpleOp::NonSimpleIntersectionFinder::hasIntersection() const
+{
+    return intersectionPts.size() > 0;
+}
+
+/* public */
+void
+IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
+    SegmentString* ss0, std::size_t segIndex0,
+    SegmentString* ss1, std::size_t segIndex1)
+{
+
+    // don't test a segment with itself
+    bool isSameSegString = ss0 == ss1;
+    bool isSameSegment = isSameSegString && segIndex0 == segIndex1;
+    if (isSameSegment)
+        return;
+
+    const Coordinate& p00 = ss0->getCoordinate(segIndex0);
+    const Coordinate& p01 = ss0->getCoordinate(segIndex0 + 1);
+    const Coordinate& p10 = ss1->getCoordinate(segIndex1);
+    const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
+
+    bool hasInt = findIntersection(
+        ss0, segIndex0, ss1, segIndex1,
+        p00, p01, p10, p11);
+
+    if (hasInt) {
+        // found an intersection!
+        intersectionPts.emplace_back(li.getIntersection(0));
+    }
+}
+
+/* private */
+bool
+IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
+    SegmentString* ss0, std::size_t segIndex0,
+    SegmentString* ss1, std::size_t segIndex1,
+    const Coordinate& p00, const Coordinate& p01,
+    const Coordinate& p10, const Coordinate& p11)
+{
+
+    li.computeIntersection(p00, p01, p10, p11);
+    if (! li.hasIntersection()) return false;
+
+    /**
+    * Check for an intersection in the interior of a segment.
+    */
+    hasInteriorInt = li.isInteriorIntersection();
+    if (hasInteriorInt) return true;
+
+    /**
+    * Check for equal segments (which will produce two intersection points).
+    * These also intersect in interior points, so are non-simple.
+    * (This is not triggered by zero-length segments, since they
+    * are filtered out by the MC index).
+    */
+    hasEqualSegments = li.getIntersectionNum() >= 2;
+    if (hasEqualSegments) return true;
+
+    /**
+    * Following tests assume non-adjacent segments.
+    */
+    std::size_t segIndexDiff = segIndex1 > segIndex0
+            ? segIndex1 - segIndex0
+            : segIndex0 - segIndex1;
+    bool isSameSegString = ss0 == ss1;
+    bool isAdjacentSegment = isSameSegString && segIndexDiff <= 1;
+    if (isAdjacentSegment)
+        return false;
+
+    /**
+    * At this point there is a single intersection point
+    * which is a vertex in each segString.
+    * Classify them as endpoints or interior
+    */
+    bool isIntersectionEndpt0 = isIntersectionEndpoint(ss0, segIndex0, li, 0);
+    bool isIntersectionEndpt1 = isIntersectionEndpoint(ss1, segIndex1, li, 1);
+
+    hasInteriorVertexInt = ! (isIntersectionEndpt0 && isIntersectionEndpt1);
+    if (hasInteriorVertexInt) return true;
+
+    /**
+    * Both intersection vertices must be endpoints.
+    * Final check is if one or both of them is interior due
+    * to being endpoint of a closed ring.
+    * This only applies to different lines
+    * (which avoids reporting ring endpoints).
+    */
+    if (isClosedEndpointsInInterior && !isSameSegString) {
+        hasInteriorEndpointInt = ss0->isClosed() || ss1->isClosed();
+        if (hasInteriorEndpointInt) return true;
     }
     return false;
 }
 
-/*private*/
-void
-IsSimpleOp::addEndpoint(
-    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>& endPoints,
-    const Coordinate* p, bool isClosed)
+/* private */
+bool
+IsSimpleOp::NonSimpleIntersectionFinder::isIntersectionEndpoint(
+    const SegmentString* ss, std::size_t ssIndex,
+    const LineIntersector& lineInter, std::size_t liSegmentIndex) const
 {
-    std::map<const Coordinate*, EndpointInfo*, CoordinateLessThen>::iterator it = endPoints.find(p);
-    EndpointInfo* eiInfo;
-    if(it == endPoints.end()) {
-        eiInfo = nullptr;
+    std::size_t vertexIndex = intersectionVertexIndex(lineInter, liSegmentIndex);
+    /**
+    * If the vertex is the first one of the segment, check if it is the start endpoint.
+    * Otherwise check if it is the end endpoint.
+    */
+    if (vertexIndex == 0) {
+        return ssIndex == 0;
     }
     else {
-        eiInfo = it->second;
+        return ssIndex + 2 == ss->size();
     }
-    if(eiInfo == nullptr) {
-        eiInfo = new EndpointInfo(*p);
-        endPoints[p] = eiInfo;
-    }
-    eiInfo->addEndpoint(isClosed);
 }
 
-} // namespace geos::operation
-} // namespace geos
+/* private */
+std::size_t
+IsSimpleOp::NonSimpleIntersectionFinder::intersectionVertexIndex(
+    const LineIntersector& lineInter,
+    std::size_t segmentIndex) const
+{
+    const Coordinate& intPt = lineInter.getIntersection(0);
+    const Coordinate* endPt0 = lineInter.getEndpoint(segmentIndex, 0);
+    return intPt.equals2D(*endPt0) ? 0 : 1;
+}
 
+/* public */
+bool
+IsSimpleOp::NonSimpleIntersectionFinder::isDone() const
+{
+    if (isFindAll)
+        return false;
+    return intersectionPts.size() > 0;
+}
+
+// --------------------------------------------------------------------------------
+
+
+} // geos.operation
+} // geos

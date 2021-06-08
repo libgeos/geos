@@ -3,6 +3,8 @@
 // Ported from JTS junit/operation/IsSimpleTest.java
 
 #include <tut/tut.hpp>
+#include <utility.h>
+
 // geos
 #include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/Coordinate.h>
@@ -62,8 +64,8 @@ void object::test<1>
 
     // TODO - mloskot: What about support of new features of BoundaryNodeRule, in JTS
 
-    IsSimpleOp op;
-    bool simple = op.isSimpleLinearGeometry(geom.get());
+    IsSimpleOp op(*geom);
+    bool simple = op.isSimple();
 
     ensure(false == simple);
 
@@ -85,8 +87,8 @@ void object::test<2>
     const std::string wkt("MULTILINESTRING ((100 100, 20 20, 200 20, 100 100), (100 200, 100 100))");
     const Geometry::Ptr geom(reader_.read(wkt));
 
-    IsSimpleOp op;
-    bool simple = op.isSimpleLinearGeometry(geom.get());
+    IsSimpleOp op(*geom);
+    bool simple = op.isSimple();
 
     ensure(false == simple);
 }
@@ -100,8 +102,8 @@ void object::test<3>
     const std::string wkt("LINESTRING (100 100, 20 20, 200 20, 100 100)");
     const Geometry::Ptr geom(reader_.read(wkt));
 
-    IsSimpleOp op;
-    bool simple = op.isSimpleLinearGeometry(geom.get());
+    IsSimpleOp op(*geom);
+    bool simple = op.isSimple();
 
     ensure(true == simple);
 }
@@ -140,5 +142,47 @@ void object::test<4>
         // no memory leaks or invalid reads on exception
     }
 }
+
+ // public void testLinesAll() {
+ //    checkIsSimpleAll("MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10))",
+ //        BoundaryNodeRule.MOD2_BOUNDARY_RULE,
+ //        "");
+ //  }
+
+ // private void checkIsSimpleAll(String wkt, BoundaryNodeRule bnRule,
+ //      String wktExpectedPts)
+ //  {
+ //    Geometry g = read(wkt);
+ //    IsSimpleOp op = new IsSimpleOp(g, bnRule);
+ //    op.setFindAllLocations(true);
+ //    op.isSimple();
+ //    List<Coordinate> nonSimpleCoords = op.getNonSimpleLocations();
+ //    Geometry nsPts = g.getFactory().createMultiPointFromCoords(CoordinateArrays.toCoordinateArray(nonSimpleCoords));
+
+ //    Geometry expectedPts = read(wktExpectedPts);
+ //    checkEqual(expectedPts, nsPts);
+ //  }
+
+template<>
+template<>
+void object::test<5>
+()
+{
+    const std::string wkt("MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10))");
+    const Geometry::Ptr geom(reader_.read(wkt));
+
+    const std::string wktNonSimple("MULTIPOINT((50 20), (50 30))");
+    const Geometry::Ptr geomExpectedNonSimple(reader_.read(wktNonSimple));
+
+    IsSimpleOp op(*geom);
+    op.setFindAllLocations(true);
+    bool simple = op.isSimple();
+    const std::vector<Coordinate>& nonSimpleCoords = op.getNonSimpleLocations();
+    Geometry::Ptr nsPts(geom->getFactory()->createMultiPoint(nonSimpleCoords));
+
+    ensure(false == simple);
+    ensure_equals_geometry(nsPts.get(), geomExpectedNonSimple.get());
+}
+
 
 } // namespace tut
