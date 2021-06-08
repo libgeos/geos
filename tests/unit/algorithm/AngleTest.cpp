@@ -125,6 +125,42 @@ void object::test<4>
     ensure_equals("15", Angle::normalize(4 * PI), 0.0, TOL);
 }
 
+// testInteriorAngle()
+template<>
+template<>
+void object::test<5>
+()
+{
+    Coordinate p1(1, 2);
+    Coordinate p2(3, 2);
+    Coordinate p3(2, 1);
+    // Tests all interior angles of a triangle "POLYGON ((1 2, 3 2, 2 1, 1 2))"
+    ensure_equals("45",
+        45.0,
+        Angle::toDegrees(Angle::interiorAngle(p1, p2, p3)),
+        TOL);
+    ensure_equals("90",
+        90.0,
+        Angle::toDegrees(Angle::interiorAngle(p2, p3, p1)),
+        TOL);
+    ensure_equals("45",
+        45.0,
+        Angle::toDegrees(Angle::interiorAngle(p3, p1, p2)),
+        TOL);
+    // Tests interior angles greater than 180 degrees
+    ensure_equals("315",
+        315.0,
+        Angle::toDegrees(Angle::interiorAngle(p3, p2, p1)),
+        TOL);
+    ensure_equals("270",
+        270.0,
+        Angle::toDegrees(Angle::interiorAngle(p1, p3, p2)),
+        TOL);
+    ensure_equals("315",
+        315.0,
+        Angle::toDegrees(Angle::interiorAngle(p2, p1, p3)),
+        TOL);
+}
 
 
 } // namespace tut

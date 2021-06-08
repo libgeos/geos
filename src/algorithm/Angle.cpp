@@ -132,7 +132,7 @@ Angle::interiorAngle(const geom::Coordinate& p0, const geom::Coordinate& p1,
 {
     double anglePrev = angle(p1, p0);
     double angleNext = angle(p1, p2);
-    return fabs(angleNext - anglePrev);
+    return normalizePositive(angleNext - anglePrev);
 }
 
 /* public static */
