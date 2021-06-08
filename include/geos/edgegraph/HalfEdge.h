@@ -133,8 +133,7 @@ public:
     virtual ~HalfEdge() {};
 
     /**
-    * Creates a HalfEdge pair representing an edge
-    * between two vertices located at coordinates p0 and p1.
+    * Creates a HalfEge pair, using the HalfEdge type of the graph subclass.
     *
     * @param p0 a vertex coordinate
     * @param p1 a vertex coordinate
@@ -199,13 +198,20 @@ public:
     * Gets the edge previous to this one
     * (with dest being the same as this orig).
     *
+    * It is always true that e.next().prev() == e
+    *
+    * Note that this requires a scan of the origin edges,
+    * so may not be efficient for some uses.
+    *
     * @return the previous edge to this one
     */
-    HalfEdge* prev() const { return m_sym->next()->m_sym; };
+    HalfEdge* prev() const;
 
     /**
     * Gets the next edge CCW around the origin of this edge,
     * with the same origin.
+    *
+    * e.oNext() is equal to e.sym().next()
     *
     * @return the next edge around the origin
     */
@@ -294,6 +300,7 @@ public:
 
     /**
     * Finds the first node previous to this edge, if any.
+    * A node has degree <> 2.
     * If no such node exists (i.e. the edge is part of a ring)
     * then null is returned.
     *

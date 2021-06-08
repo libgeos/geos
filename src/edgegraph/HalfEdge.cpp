@@ -220,6 +220,19 @@ HalfEdge::degree()
     return deg;
 }
 
+/* public */
+HalfEdge*
+HalfEdge::prev() const
+{
+    const HalfEdge* curr = this;
+    const HalfEdge* prev = this;
+    do {
+        prev = curr;
+        curr = curr->oNext();
+    } while (curr != this);
+    return prev->m_sym;
+}
+
 /*public*/
 HalfEdge*
 HalfEdge::prevNode()
