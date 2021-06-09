@@ -77,13 +77,6 @@ class PrecisionReducerFilter : public CoordinateFilter {
 
 
 /* public static */
-// std::unique_ptr<Geometry>
-// PrecisionReducerTransformer::reduce(const Geometry& geom, const PrecisionModel& targetPM)
-// {
-//      return reduce(geom, targetPM, false);
-// }
-
-/* public static */
 std::unique_ptr<Geometry>
 PrecisionReducerTransformer::reduce(
     const Geometry& geom,
