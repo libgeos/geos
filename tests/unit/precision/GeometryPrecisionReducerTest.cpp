@@ -16,6 +16,9 @@
 #include <vector>
 #include <iostream>
 
+using namespace geos::geom;
+using namespace geos::precision;
+
 namespace tut {
 //
 // Test Group
@@ -23,17 +26,15 @@ namespace tut {
 
 // Common data used by tests
 struct test_gpr_data {
-    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
-    typedef geos::geom::GeometryFactory GeometryFactory;
 
-    geos::geom::PrecisionModel pm_float_;
-    geos::geom::PrecisionModel pm_fixed_;
+    PrecisionModel pm_float_;
+    PrecisionModel pm_fixed_;
     GeometryFactory::Ptr factory_;
     GeometryFactory::Ptr factory_fixed_;
     geos::io::WKTReader reader_;
-    geos::precision::GeometryPrecisionReducer reducer_;
-    geos::precision::GeometryPrecisionReducer reducerKeepCollapse_; // keep collapse
-    geos::precision::GeometryPrecisionReducer reducerChangePM_; // change precision model
+    GeometryPrecisionReducer reducer_;
+    GeometryPrecisionReducer reducerKeepCollapse_; // keep collapse
+    GeometryPrecisionReducer reducerChangePM_; // change precision model
 
     test_gpr_data() :
         pm_float_(),
@@ -47,7 +48,58 @@ struct test_gpr_data {
     {
         reducerKeepCollapse_.setRemoveCollapsedComponents(false);
         reducerChangePM_.setChangePrecisionModel(true);
+        reducer_.setRemoveCollapsedComponents(true);
+        reducer_.setChangePrecisionModel(false);
     }
+
+    void checkReducePointwise(
+        const char* wkt,
+        const char* wktExpected)
+    {
+        std::unique_ptr<Geometry> g = reader_.read(wkt);
+        std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
+        std::unique_ptr<Geometry> actual = GeometryPrecisionReducer::reducePointwise(*g, pm_fixed_);
+        ensure_equals_geometry(expected.get(), actual.get());
+        ensure("Factories are not the same", expected->getFactory() == actual->getFactory());
+    }
+
+    void checkReduceKeepCollapse(
+        const char* wkt,
+        const char* wktExpected)
+    {
+        checkReduceAny(wkt, wktExpected, reducerKeepCollapse_);
+    }
+
+    void checkReduceNewPM(
+        const char* wkt,
+        const char* wktExpected)
+    {
+        checkReduceAny(wkt, wktExpected, reducerChangePM_, false);
+    }
+
+    void checkReduce(
+        const char* wkt,
+        const char* wktExpected)
+    {
+        checkReduceAny(wkt, wktExpected, reducer_);
+    }
+
+    void checkReduceAny(
+        const char* wkt,
+        const char* wktExpected,
+        GeometryPrecisionReducer& reducerAny,
+        bool samePM = true)
+    {
+        std::unique_ptr<Geometry> g = reader_.read(wkt);
+        std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
+        std::unique_ptr<Geometry> actual = reducerAny.reduce(*g);
+        ensure_equals_geometry(expected.get(), actual.get());
+        if (samePM)
+            ensure("Factories are not the same", actual->getFactory() == g->getFactory());
+        else
+            ensure("Factories are the same", actual->getFactory() != g->getFactory());
+    }
+
 };
 
 typedef test_group<test_gpr_data> group;
@@ -62,141 +114,221 @@ group test_gpr_group("geos::precision::GeometryPrecisionReducer");
 // Test square
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1> ()
 {
-    GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 1.4, 1.4 1.4, 1.4 0, 0 0 ))"));
-    GeometryPtr g2(reader_.read("POLYGON (( 0 0, 0 1, 1 1, 1 0, 0 0 ))"));
-
-    GeometryPtr result(reducer_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduce(
+        "POLYGON (( 0 0, 0 1.4, 1.4 1.4, 1.4 0, 0 0 ))",
+        "POLYGON (( 0 0, 0 1, 1 1, 1 0, 0 0 ))"
+        );
 }
 
 // Test tiny square collapse
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2> ()
 {
-    GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 .4, .4 .4, .4 0, 0 0 ))"));
-    GeometryPtr g2(reader_.read("POLYGON EMPTY"));
-
-    GeometryPtr result(reducer_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduce(
+        "POLYGON (( 0 0, 0 .4, .4 .4, .4 0, 0 0 ))",
+        "POLYGON EMPTY"
+        );
 }
 
 // Test square collapse
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3> ()
 {
-    GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 1.4, .4 .4, .4 0, 0 0 ))"));
-    GeometryPtr g2(reader_.read("POLYGON EMPTY"));
-
-    GeometryPtr result(reducer_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduce(
+        "POLYGON (( 0 0, 0 1.4, .4 .4, .4 0, 0 0 ))",
+        "POLYGON EMPTY"
+        );
 }
 
 // Test square keep collapse
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4> ()
 {
-    GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 1.4, .4 .4, .4 0, 0 0 ))"));
-    /*
-     * For polygonal geometries, collapses are always removed, in order
-     * to produce correct topology
-     */
-    GeometryPtr g2(reader_.read("POLYGON EMPTY"));
-
-    GeometryPtr result(reducerKeepCollapse_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduceKeepCollapse(
+        "POLYGON (( 0 0, 0 1.4, .4 .4, .4 0, 0 0 ))",
+        "POLYGON EMPTY"
+        );
 }
 
 // Test line
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5> ()
 {
-    GeometryPtr g1(reader_.read("LINESTRING ( 0 0, 0 1.4 )"));
-    GeometryPtr g2(reader_.read("LINESTRING (0 0, 0 1)"));
-
-    GeometryPtr result(reducer_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduce(
+        "LINESTRING ( 0 0, 0 1.4 )",
+        "LINESTRING (0 0, 0 1)"
+        );
 }
+
+// testLineNotNoded
+template<>
+template<>
+void object::test<6> ()
+{
+    checkReduce(
+        "LINESTRING(1 1, 3 3, 9 9, 5.1 5, 2.1 2)",
+        "LINESTRING(1 1, 3 3, 9 9, 5 5, 2 2)"
+        );
+}
+
 
 // Test line remove collapse
 template<>
 template<>
-void object::test<6>
-()
+void object::test<7> ()
 {
-    GeometryPtr g1(reader_.read("LINESTRING ( 0 0, 0 .4 )"));
-    GeometryPtr g2(reader_.read("LINESTRING EMPTY"));
-
-    GeometryPtr result(reducer_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
+    checkReduce(
+        "LINESTRING ( 0 0, 0 .4 )",
+        "LINESTRING EMPTY"
+        );
 }
 
-// Test line keep collapse
-template<>
-template<>
-void object::test<7>
-()
-{
-    GeometryPtr g1(reader_.read("LINESTRING ( 0 0, 0 .4 )"));
-    GeometryPtr g2(reader_.read("LINESTRING ( 0 0, 0 0 )"));
-
-    GeometryPtr result(reducerKeepCollapse_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() == g2->getFactory());
-}
-
-// Test square with changed PM
+// /* Test line keep collapse */
 template<>
 template<>
 void object::test<8>
 ()
 {
-    GeometryPtr g1(reader_.read("POLYGON (( 0 0, 0 1.4, 1.4 1.4, 1.4 0, 0 0 ))"));
-    GeometryPtr g2(reader_.read("POLYGON (( 0 0, 0 1, 1 1, 1 0, 0 0 ))"));
+    checkReduceKeepCollapse(
+        "LINESTRING (0 0, 0 .4)",
+        "LINESTRING (0 0, 0 0)"
+        );
+}
 
-    GeometryPtr result(reducerChangePM_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() != g2->getFactory());
+// Test square with changed PM
+template<>
+template<>
+void object::test<9> ()
+{
+    checkReduceNewPM(
+        "POLYGON (( 0 0, 0 1.4, 1.4 1.4, 1.4 0, 0 0 ))",
+        "POLYGON (( 0 0, 0 1, 1 1, 1 0, 0 0 ))"
+        );
 }
 
 // Test points with changed PM
 template<>
 template<>
-void object::test<9>
-()
+void object::test<10> ()
 {
-    GeometryPtr g1(reader_.read("MULTIPOINT ((0 0), (0 1.4), (1.4 1.4), (1.4 0), (0.9 0) ))"));
-    GeometryPtr g2(reader_.read("MULTIPOINT ((0 0), (0 1), (1 1), (1 0), (1 0) ))"));
-
-    GeometryPtr result(reducerChangePM_.reduce(*g1));
-
-    ensure_equals_geometry(g2.get(), result.get());
-    ensure(result->getFactory() != g2->getFactory());
+    checkReduceNewPM(
+        "MULTIPOINT ((0 0), (0 1.4), (1.4 1.4), (1.4 0), (0.9 0) ))",
+        "MULTIPOINT ((0 0), (0 1), (1 1), (1 0), (1 0) ))"
+    );
 }
+
+// testPoint
+template<>
+template<>
+void object::test<11> ()
+{
+    checkReduce(
+        "POINT(1.1 4.9)",
+        "POINT(1 5)");
+}
+
+// testMultiPoint
+template<>
+template<>
+void object::test<12> ()
+{
+    checkReduce(
+        "MULTIPOINT( (1.1 4.9),(1.2 4.8), (3.3 6.6))",
+        "MULTIPOINT((1 5), (1 5), (3 7))");
+}
+
+// testPolgonWithCollapsedLine
+template<>
+template<>
+void object::test<13> ()
+{
+    checkReduce(
+        "POLYGON ((10 10, 100 100, 200 10.1, 300 10, 10 10))",
+        "POLYGON ((10 10, 100 100, 200 10, 10 10))");
+}
+
+// testPolgonWithCollapsedPoint
+template<>
+template<>
+void object::test<14> ()
+{
+    checkReduce(
+        "POLYGON ((10 10, 100 100, 200 10.1, 300 100, 400 10, 10 10))",
+        "MULTIPOLYGON (((10 10, 100 100, 200 10, 10 10)), ((200 10, 300 100, 400 10, 200 10)))"
+        );
+}
+
+// testMultiPolgonCollapse
+template<>
+template<>
+void object::test<15> ()
+{
+    checkReduce(
+        "MULTIPOLYGON (((1 9, 5 9, 5 1, 1 1, 1 9)), ((5.2 8.7, 9 8.7, 9 1, 5.2 1, 5.2 8.7)))",
+        "POLYGON ((1 1, 1 9, 5 9, 9 9, 9 1, 5 1, 1 1))");
+}
+
+// testGC
+template<>
+template<>
+void object::test<16> ()
+{
+    checkReduce(
+        "GEOMETRYCOLLECTION (POINT (1.1 2.2), MULTIPOINT ((1.1 2), (3.1 3.9)), LINESTRING (1 2.1, 3 3.9), MULTILINESTRING ((1 2, 3 4), (5 6, 7 8)), POLYGON ((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), ((7 2, 3 2, 3 -2, 7 -2, 7 2))))",
+        "GEOMETRYCOLLECTION (POINT (1 2),     MULTIPOINT ((1 2), (3 4)),       LINESTRING (1 2, 3 4),     MULTILINESTRING ((1 2, 3 4), (5 6, 7 8)), POLYGON ((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), ((7 2, 3 2, 3 -2, 7 -2, 7 2))))"
+    );
+}
+
+// testGCPolygonCollapse
+template<>
+template<>
+void object::test<17> ()
+{
+    checkReduce(
+        "GEOMETRYCOLLECTION (POINT (1.1 2.2), POLYGON ((10 10, 100 100, 200 10.1, 300 100, 400 10, 10 10)) )",
+        "GEOMETRYCOLLECTION (POINT (1 2),     MULTIPOLYGON (((10 10, 100 100, 200 10, 10 10)), ((200 10, 300 100, 400 10, 200 10))) )"
+    );
+}
+
+// testGCNested
+template<>
+template<>
+void object::test<18> ()
+{
+    checkReduce(
+        "GEOMETRYCOLLECTION (POINT (1.1 2.2), GEOMETRYCOLLECTION( POINT (1.1 2.2), LINESTRING (1 2.1, 3 3.9) ) )",
+        "GEOMETRYCOLLECTION (POINT (1 2),     GEOMETRYCOLLECTION( POINT (1 2),     LINESTRING (1 2, 3 4) ) )"
+    );
+}
+
+// testPolgonWithCollapsedLinePointwise
+template<>
+template<>
+void object::test<19> ()
+{
+    checkReducePointwise(
+        "POLYGON ((10 10, 100 100, 200 10.1, 300 10, 10 10))",
+        "POLYGON ((10 10, 100 100, 200 10,   300 10, 10 10))"
+        );
+}
+
+// testPolgonWithCollapsedPointPointwise
+template<>
+template<>
+void object::test<20> ()
+{
+    checkReducePointwise(
+        "POLYGON ((10 10, 100 100, 200 10.1, 300 100, 400 10, 10 10))",
+        "POLYGON ((10 10, 100 100, 200 10,   300 100, 400 10, 10 10))"
+        );
+}
+
 
 
 } // namespace tut

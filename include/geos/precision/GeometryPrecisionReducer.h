@@ -69,12 +69,22 @@ private:
     bool useAreaReducer;
     bool isPointwise;
 
-    std::unique_ptr<geom::Geometry> reducePointwise(const geom::Geometry& geom);
-
     std::unique_ptr<geom::Geometry> fixPolygonalTopology(const geom::Geometry& geom);
 
     geom::GeometryFactory::Ptr createFactory(
         const geom::GeometryFactory& oldGF,
+        const geom::PrecisionModel& newPM);
+
+    /**
+    * Duplicates a geometry to one that uses a different PrecisionModel,
+    * without changing any coordinate values.
+    *
+    * @param geom the geometry to duplicate
+    * @param newPM the precision model to use
+    * @return the geometry value with a new precision model
+    */
+    std::unique_ptr<geom::Geometry> changePM(
+        const geom::Geometry* geom,
         const geom::PrecisionModel& newPM);
 
     GeometryPrecisionReducer(GeometryPrecisionReducer const&); /*= delete*/
@@ -94,34 +104,10 @@ public:
      * @return the reduced geometry
      */
     static std::unique_ptr<geom::Geometry>
-    reduce(
-        const geom::Geometry& g,
-        const geom::PrecisionModel& precModel)
-    {
-        GeometryPrecisionReducer reducer(precModel);
-        return reducer.reduce(g);
-    }
+    reduce(const geom::Geometry& g, const geom::PrecisionModel& precModel);
 
-    /**
-     * Convenience method for doing precision reduction
-     * on a single geometry,
-     * with collapses removed
-     * and keeping the geometry precision model the same,
-     * but NOT preserving valid polygonal topology.
-     *
-     * @param g the geometry to reduce
-     * @param precModel the precision model to use
-     * @return the reduced geometry
-     */
     static std::unique_ptr<geom::Geometry>
-    reducePointwise(
-        const geom::Geometry& g,
-        const geom::PrecisionModel& precModel)
-    {
-        GeometryPrecisionReducer reducer(precModel);
-        reducer.setPointwise(true);
-        return reducer.reduce(g);
-    }
+    reducePointwise(const geom::Geometry& g, const geom::PrecisionModel& precModel);
 
     GeometryPrecisionReducer(const geom::PrecisionModel& pm)
         : newFactory(nullptr)

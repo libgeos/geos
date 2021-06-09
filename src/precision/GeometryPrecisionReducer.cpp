@@ -20,7 +20,7 @@
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/precision/PrecisionReducerCoordinateOperation.h>
 #include <geos/geom/util/GeometryEditor.h>
-#include <geos/geom/util/CoordinateOperation.h>
+#include <geos/geom/util/NoOpGeometryOperation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -29,6 +29,8 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/overlayng/PrecisionReducer.h>
+#include <geos/precision/PrecisionReducerTransformer.h>
+#include <geos/precision/PointwisePrecisionReducerTransformer.h>
 
 #include <vector>
 #include <typeinfo>
@@ -44,66 +46,55 @@ namespace precision { // geos.precision
 std::unique_ptr<Geometry>
 GeometryPrecisionReducer::reduce(const Geometry& geom)
 {
-    if (useAreaReducer && geom.isPolygonal()) {
-        std::unique_ptr<Geometry> reduced =
-            operation::overlayng::PrecisionReducer::reducePrecision(
-                &geom, &targetPM, changePrecisionModel);
-        // GEOS overlayng::PrecisionReducer::reducePrecision
-        // takes changePrecisionModel directly to avoid extra steps in JTS
-        // if (changePrecisionModel) {
-        //     return changePM(reduced, targetPM);
-        // }
-        return reduced;
+    std::unique_ptr<Geometry> reduced;
+    if (isPointwise) {
+        reduced = PointwisePrecisionReducerTransformer::reduce(geom, targetPM);
+    }
+    else {
+        reduced = PrecisionReducerTransformer::reduce(geom, targetPM, removeCollapsed);
     }
 
-    /**
-     * Process pointwise reduction
-     * (which is only strategy used for linear and point geoms)
-     */
-    std::unique_ptr<Geometry> reducePW = reducePointwise(geom);
-
-    if (isPointwise)
-        return reducePW;
-
-    if(!reducePW->isPolygonal()) {
-        return reducePW;
+    // TODO: incorporate this in the Transformer above
+    if (changePrecisionModel &&
+        (&targetPM != geom.getFactory()->getPrecisionModel()))
+    {
+         return changePM(reduced.get(), targetPM);
     }
 
-    // Geometry is polygonal - test if topology needs to be fixed
-    if(reducePW->isValid()) {
-        return reducePW;
-    }
-
-    // hack to fix topology.
-    return fixPolygonalTopology(*reducePW);
+    return reduced;
 }
 
 
 /* private */
 std::unique_ptr<Geometry>
-GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
+GeometryPrecisionReducer::changePM(const Geometry* geom, const geom::PrecisionModel& newPM)
 {
-    std::unique_ptr<GeometryEditor> geomEdit;
+    const GeometryFactory* previousFactory = geom->getFactory();
+    GeometryFactory::Ptr changedFactory = createFactory(*previousFactory, newPM);
+    GeometryEditor geomEdit(changedFactory.get());
 
-    if (changePrecisionModel) {
-        geomEdit.reset(new GeometryEditor(newFactory));
-    }
-    else {
-        geomEdit.reset(new GeometryEditor());
-    }
+    // this operation changes the PM for the entire geometry tree
+    NoOpGeometryOperation noop;
+    return geomEdit.edit(geom, &noop);
+}
 
-    /*
-     * For polygonal geometries, collapses are always removed, in order
-     * to produce correct topology
-     */
-    bool finalRemoveCollapsed = removeCollapsed;
-    if(geom.getDimension() >= 2) {
-        finalRemoveCollapsed = true;
-    }
 
-    PrecisionReducerCoordinateOperation prco(targetPM, finalRemoveCollapsed);
-    std::unique_ptr<Geometry> g(geomEdit->edit(&geom, &prco));
-    return g;
+/* public static */
+std::unique_ptr<Geometry>
+GeometryPrecisionReducer::reducePointwise(const Geometry& g, const geom::PrecisionModel& precModel)
+{
+    GeometryPrecisionReducer reducer(precModel);
+    reducer.setPointwise(true);
+    return reducer.reduce(g);
+}
+
+
+/* public static */
+std::unique_ptr<geom::Geometry>
+GeometryPrecisionReducer::reduce(const geom::Geometry& g, const geom::PrecisionModel& precModel)
+{
+    GeometryPrecisionReducer reducer(precModel);
+    return reducer.reduce(g);
 }
 
 

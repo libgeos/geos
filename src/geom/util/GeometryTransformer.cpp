@@ -179,6 +179,10 @@ GeometryTransformer::transformMultiPoint(
         transGeomList.push_back(std::move(transformGeom));
     }
 
+    if (transGeomList.empty()) {
+        return factory->createMultiPoint();
+    }
+
     return factory->buildGeometry(std::move(transGeomList));
 
 }
@@ -253,6 +257,10 @@ GeometryTransformer::transformMultiLineString(
         }
 
         transGeomList.push_back(std::move(transformGeom));
+    }
+
+    if (transGeomList.empty()) {
+        return factory->createMultiLineString();
     }
 
     return factory->buildGeometry(std::move(transGeomList));
@@ -350,6 +358,10 @@ GeometryTransformer::transformMultiPolygon(
         }
 
         transGeomList.push_back(std::move(transformGeom));
+    }
+
+    if (transGeomList.empty()) {
+        return factory->createMultiPolygon();
     }
 
     return factory->buildGeometry(std::move(transGeomList));
