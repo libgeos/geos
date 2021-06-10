@@ -224,13 +224,13 @@ HalfEdge::degree()
 HalfEdge*
 HalfEdge::prev() const
 {
-    const HalfEdge* curr = this;
-    const HalfEdge* prev = this;
+    const HalfEdge* currEdge = this;
+    const HalfEdge* prevEdge = this;
     do {
-        prev = curr;
-        curr = curr->oNext();
-    } while (curr != this);
-    return prev->m_sym;
+        prevEdge = currEdge;
+        currEdge = currEdge->oNext();
+    } while (currEdge != this);
+    return prevEdge->m_sym;
 }
 
 /*public*/
