@@ -369,6 +369,10 @@ public:
             return h ^ (std::hash<double>{}(s.p1.y) << 1);
         }
     };
+
+private:
+    void project(double factor, Coordinate& ret) const;
+
 };
 
 std::ostream& operator<< (std::ostream& o, const LineSegment& l);
