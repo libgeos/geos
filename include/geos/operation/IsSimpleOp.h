@@ -53,7 +53,7 @@ private:
 
     const geom::Geometry& inputGeom;
     bool isClosedEndpointsInInterior = true;
-    bool isFindAllLocations;
+    bool isFindAllLocations = false;
     bool isSimpleResult = false;
     std::vector<geom::Coordinate> nonSimplePts;
     bool computed = false;
@@ -97,8 +97,8 @@ private:
         bool isClosedEndpointsInInterior;
         bool isFindAll = false;
 
-        algorithm::LineIntersector li;
         std::vector<geom::Coordinate>& intersectionPts;
+        algorithm::LineIntersector li;
 
         bool hasInteriorInt;
         bool hasInteriorVertexInt;
@@ -186,6 +186,7 @@ public:
     IsSimpleOp(const geom::Geometry& geom, const algorithm::BoundaryNodeRule& p_boundaryNodeRule)
         : inputGeom(geom)
         , isClosedEndpointsInInterior(! p_boundaryNodeRule.isInBoundary(2))
+        , isFindAllLocations(false)
         , computed(false)
         {};
 
