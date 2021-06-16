@@ -340,6 +340,9 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
          * an unwanted artifact in the result, so skip it.
          */
         if (isRingCurveInverted(coord, offsetDistance, curve)) {
+            for (auto* line: lineList) {
+                delete line;
+            }
             return;
         }
     }
