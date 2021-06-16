@@ -301,6 +301,8 @@ SegmentNodeList::getSplitCoordinates()
         addEdgeCoordinates(eiPrev, ei, coordList);
         eiPrev = ei;
     }
+    // Remove duplicate Coordinates from coordList
+    coordList.erase(std::unique(coordList.begin(), coordList.end()), coordList.end());
     return coordList;
 }
 
@@ -311,8 +313,6 @@ SegmentNodeList::addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* e
     auto pts = createSplitEdgePts(ei0, ei1);
     // Append pts to coordList
     pts->toVector(coordList);
-    // Remove duplicate Coordinates from coordList
-    coordList.erase(std::unique(coordList.begin(), coordList.end()), coordList.end());
 }
 
 
