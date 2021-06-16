@@ -33,7 +33,7 @@
 
 9. Create and push a release branch if this was a PATCH=0 release,
    update the versions for next release in Version.txt (both in
-   master and release branch if this was a PATCH=0 release).
+   main and release branch if this was a PATCH=0 release).
 
 10. Update wiki page https://trac.osgeo.org/geos/ at Download section
 
