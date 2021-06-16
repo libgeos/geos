@@ -5,6 +5,8 @@ before_script:
     - uname -a
 
 test:
+  except:
+    - master
   script:
     - mkdir build
     - cd build
