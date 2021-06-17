@@ -29,6 +29,21 @@ foreach(_testfile ${_testfiles})
     endif()
     add_test(NAME unit-${_cmake_testname} COMMAND test_geos_unit ${_testname})
 endforeach()
+
+# Run all the unit tests in one go, for faster memory checking
+# under valgrind. Restrict to one configuration so it is only
+# run with 'ctest -C Valgrind'
+# Exemplar commandline:
+#
+# ctest --output-on-failure \
+#   --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
+#   -R all-unit-tests -C Valgrind -T memcheck
+#
+add_test(NAME all-unit-tests
+    COMMAND test_geos_unit
+    CONFIGURATIONS Valgrind
+    )
+
 unset(_cmake_testname)
 unset(_testfile)
 unset(_testfiles)

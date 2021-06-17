@@ -50,6 +50,15 @@ jobs:
         }
         - {
           compiler: clang++,
+          build_type: Debug,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang',
+          cmake: 3.17.*,
+          os: ubuntu-20.04,
+        }
+        - {
+          compiler: clang++,
           build_type: Release,
           cxxstd: 11,
           arch: 64,
@@ -76,7 +85,7 @@ jobs:
         set -e
         uname -a
         sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip ${{ matrix.ci.packages }}
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip valgrind ${{ matrix.ci.packages }}
         python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
@@ -95,7 +104,24 @@ jobs:
         cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
         make -j 2
         cmake --build . --target docs
+
+    - name: Test
+      run: |
+        set -e
+        cd build.cmake
         ctest --output-on-failure .
+
+    # Run the all-unit-tests under
+    # the memory checker when we have Debug symbols
+    # available. Change to ^all to also check all-xml-tests
+    - name: Valgrind
+      if: matrix.ci.build_type == 'Debug'
+      run: |
+        set -e
+        cd build.cmake
+        ctest --output-on-failure \
+          --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
+          -R ^all-unit -C Valgrind -T memcheck
 
     - name: Upload coverage to Codecov
       if: matrix.ci.build_type == 'Coverage'
