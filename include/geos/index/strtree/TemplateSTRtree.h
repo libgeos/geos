@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <queue>
+#include <mutex>
 
 namespace geos {
 namespace index {
@@ -143,6 +144,25 @@ public:
         numItems(0) {
         auto finalSize = treeSize(itemCapacity);
         nodes.reserve(finalSize);
+    }
+
+    /**
+     * Copy constructor, needed because mutex is not copyable
+     */
+    TemplateSTRtreeImpl(const TemplateSTRtreeImpl& other) :
+        root(other.root),
+        nodeCapacity(other.nodeCapacity),
+        numItems(other.numItems) {
+        nodes = other.nodes;
+    }
+
+    TemplateSTRtreeImpl& operator=(TemplateSTRtreeImpl other)
+    {
+        root = other.root;
+        nodeCapacity = other.nodeCapacity;
+        numItems = other.numItems;
+        nodes = other.nodes;
+        return *this;
     }
 
     /// @}
@@ -320,6 +340,8 @@ public:
 
     /** Build the tree if it has not already been built. */
     void build() {
+        std::lock_guard<std::mutex> lock(lock_);
+
         if (built()) {
             return;
         }
@@ -351,13 +373,14 @@ public:
     }
 
 protected:
+    std::mutex lock_;
     NodeList nodes;      //**< a list of all leaf and branch nodes in the tree. */
     Node* root;          //**< a pointer to the root node, if the tree has been built. */
     size_t nodeCapacity; //*< maximum number of children of each node */
     size_t numItems;     //*< total number of items in the tree, if it has been built. */
 
     // Prevent instantiation of base class.
-    ~TemplateSTRtreeImpl() = default;
+    // ~TemplateSTRtreeImpl() = default;
 
     void createLeafNode(ItemType&& item, const BoundsType& env) {
         nodes.emplace_back(std::forward<ItemType>(item), env);
