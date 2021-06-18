@@ -26,10 +26,10 @@ struct test_capigeosgeomwritegeojson_data : public capitest::utility {
     }
 
     void
-    test_geojson(std::string const& wkt, std::string const& expected, int type, int indent)
+    test_geojson(std::string const& wkt, std::string const& expected, int indent)
     {
         geom1_ = fromWKT(&wkt[0]);
-        char* geojson_c = GEOSGeoJSONWriter_writeGeometry(writer_, geom1_, type, indent);
+        char* geojson_c = GEOSGeoJSONWriter_writeGeometry(writer_, geom1_, indent);
         ensure("GEOSGeoJSONWriter_writeGeometry failed to create GeoJSON", nullptr != geojson_c);
 
         std::string actual(geojson_c);
@@ -47,6 +47,7 @@ group test_capigeosgeomwritegeojson_group("capi::GEOSGeomGeoJSONWrite");
 // Test Cases
 //
 
+// Write a Point to GeoJSON
 template<>
 template<>
 void object::test<1>
@@ -54,26 +55,49 @@ void object::test<1>
 {
     std::string wkt("POINT(-117.0 33.0)");
     std::string expected("{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
-    test_geojson(wkt, expected, GEOSGEOJSON_GEOMETRY, -1);
+    test_geojson(wkt, expected, -1);
 }
 
+// Write a GeometryCollection to GeoJSON
 template<>
 template<>
 void object::test<2>
 ()
 {
-    std::string wkt("POINT(-117.0 33.0)");
-    std::string expected("{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}}");
-    test_geojson(wkt, expected, GEOSGEOJSON_FEATURE, -1);
+    std::string wkt("GEOMETRYCOLLECTION(POINT(1 1),POINT(2 2))");
+    std::string expected("{\"type\":\"GeometryCollection\",\"geometries\":[{\"type\":\"Point\",\"coordinates\":[1.0,1.0]},{\"type\":\"Point\",\"coordinates\":[2.0,2.0]}]}");
+    test_geojson(wkt, expected, -1);
 }
 
+
+// Write a LineString to formatted GeoJSON
 template<>
 template<>
 void object::test<3>
 ()
 {
-    std::string wkt("GEOMETRYCOLLECTION (POINT (-117.000 33.000), POINT (-122.000 45.000))");
-    std::string expected("{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}},{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-122.0,45.0]}}]}");
-    test_geojson(wkt, expected, GEOSGEOJSON_FEATURE_COLLECTION, -1);
+    std::string wkt("LINESTRING(102.0 0.0, 103.0 1.0, 104.0 0.0, 105.0 1.0)");
+    std::string expected(std::string{"{\n"} +
+        "    \"type\": \"LineString\",\n" +
+        "    \"coordinates\": [\n" +
+        "        [\n" + 
+        "            102.0,\n" + 
+        "            0.0\n" + 
+        "        ],\n" + 
+        "        [\n" + 
+        "            103.0,\n" + 
+        "            1.0\n" + 
+        "        ],\n" + 
+        "        [\n" + 
+        "            104.0,\n" + 
+        "            0.0\n" + 
+        "        ],\n" + 
+        "        [\n" + 
+        "            105.0,\n" + 
+        "            1.0\n" +
+        "        ]\n" + 
+        "    ]\n" +
+        "}");
+    test_geojson(wkt, expected, 4);
 }
 }

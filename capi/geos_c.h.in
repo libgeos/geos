@@ -570,26 +570,6 @@ enum GEOSBufJoinStyles {
 	GEOSBUF_JOIN_BEVEL = 3
 };
 
-/**
-* Output options for the GeoJSON writer.
-* \see GEOSGeoJSONWriter_create
-*/
-enum GEOSGeoJSONType {
-    /**
-    * Output only contains a geometry.
-    */
-	GEOSGEOJSON_GEOMETRY,
-    /**
-    * Output is a feature that contains the geometry.
-    */
-	GEOSGEOJSON_FEATURE,
-    /**
-    * Output contains multiple features in a FeatureCollection.
-    * Input must be a collection.
-    */
-	GEOSGEOJSON_FEATURE_COLLECTION
-};
-
 /** \see GEOSBufferParams_create */
 extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create_r(
     GEOSContextHandle_t handle);
@@ -1795,7 +1775,6 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry_r(
     GEOSContextHandle_t handle,
     GEOSGeoJSONWriter* writer,
     const GEOSGeometry* g,
-    int type,
     int indent);
 
 /** \see GEOSFree */
@@ -4325,7 +4304,7 @@ extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create(void);
 extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
 
 /**
-* Use a reader to parse a GeoJSON. A single geometry or feature is,
+* Use a reader to parse a GeoJSON. A single geometry or feature is
 * converted into a geometry. A featurecollection is converted into a
 * geometrycollection. Feature properties are not read.
 * \param reader A GeoJSON reader object, caller retains ownership
@@ -4351,17 +4330,16 @@ extern GEOSGeoJSONWriter GEOS_DLL *GEOSGeoJSONWriter_create(void);
 extern void GEOS_DLL GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer);
 
 /**
-* Write out the GeoJSON representation of a geometry.
+* Write out the GeoJSON representation of a geometry. Note that writing a GeoJSON
+* Feature or FeatureCollection is unsupported through the GEOS C API.
 * \param writer A GeoJSON reader object, caller retains ownership.
 * \param geojson The json string to parse, caller retains ownership.
-* \param type The GeoJSON object type. See \ref GEOSGeoJSONType.
 * \param indent The indentation used. Use -1 for no formatting.
 * \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
 */
 extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
     const GEOSGeometry* g,
-    int type,
     int indent);
 
 #endif /* #ifndef GEOS_USE_ONLY_R_API */

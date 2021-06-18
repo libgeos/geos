@@ -3098,14 +3098,14 @@ extern "C" {
     }
 
     char*
-    GEOSGeoJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int type, int indent)
+    GEOSGeoJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int indent)
     {
         return execute(extHandle, [&]() {
             std::string geojson;
             if (indent >= 0) {
-                geojson = writer->writeFormatted(g, static_cast<geos::io::GeoJSONType>(type), indent);
+                geojson = writer->writeFormatted(g, geos::io::GeoJSONType::GEOMETRY, indent);
             } else {
-                geojson = writer->write(g, static_cast<geos::io::GeoJSONType>(type));
+                geojson = writer->write(g, geos::io::GeoJSONType::GEOMETRY);
             }
             char* result = gstrdup(geojson);
             return result;

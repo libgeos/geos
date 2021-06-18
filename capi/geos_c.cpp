@@ -1326,9 +1326,9 @@ extern "C" {
     }
 
     char*
-    GEOSGeoJSONWriter_writeGeometry(GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int type, int indent)
+    GEOSGeoJSONWriter_writeGeometry(GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int indent)
     {
-        return GEOSGeoJSONWriter_writeGeometry_r(handle, writer, g, type, indent);
+        return GEOSGeoJSONWriter_writeGeometry_r(handle, writer, g, indent);
     }
 
 
