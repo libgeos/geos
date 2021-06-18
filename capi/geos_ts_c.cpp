@@ -90,7 +90,6 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
-#include "geos/vend/include_nlohmann_json.hpp"
 #include <geos/version.h>
 
 // This should go away
