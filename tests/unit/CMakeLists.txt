@@ -13,7 +13,9 @@ file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp CONFIGURE_DEPEND)
 add_executable(test_geos_unit ${_sources})
 unset(_sources)
 
-target_link_libraries(test_geos_unit PRIVATE geos geos_c)
+find_package(Threads)
+
+target_link_libraries(test_geos_unit PRIVATE geos geos_c Threads::Threads)
 target_include_directories(test_geos_unit
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
