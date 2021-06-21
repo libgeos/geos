@@ -1,0 +1,44 @@
+/**********************************************************************
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.osgeo.org
+ *
+ * Copyright (C) 2021 Paul Ramsey <pramsey@cleverelephant.ca>
+ * Copyright (C) 2021 Martin Davis
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#include <geos/geom/Coordinate.h>
+#include <geos/operation/valid/PolygonNode.h>
+#include <geos/operation/valid/PolygonRingSelfNode.h>
+
+
+namespace geos {      // geos
+namespace operation { // geos.operation
+namespace valid {     // geos.operation.valid
+
+using namespace geos::geom;
+
+
+/* public */
+bool
+PolygonRingSelfNode::isExterior(bool isInteriorOnRight) const
+{
+    /**
+     * Note that either corner and either of the other edges could be used to test.
+     * The situation is fully symmetrical.
+     */
+    bool isInteriorSeg = PolygonNode::isInteriorSegment(nodePt, e00, e01, e10);
+    bool isExterior = isInteriorOnRight ? ! isInteriorSeg : isInteriorSeg;
+    return isExterior;
+}
+
+
+} // namespace geos.operation.valid
+} // namespace geos.operation
+} // namespace geos
