@@ -31,6 +31,7 @@ class Coordinate;
 }
 
 using namespace geos::geom;
+using geos::noding::BasicSegmentString;
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
@@ -41,8 +42,8 @@ class GEOS_DLL PolygonTopologyAnalyzer {
 
 private:
 
-    const Geometry* inputGeom;
-    bool isInvertedRingValid;
+    // const Geometry* inputGeom;
+    // bool isInvertedRingValid;
 
     PolygonIntersectionAnalyzer intFinder;
     std::vector<PolygonRing*> polyRings;
@@ -67,9 +68,9 @@ private:
      * @param pt the intersection point
      * @return the intersection segment index, or -1 if no intersection is found
      */
-    int intersectingSegIndex(const CoordinateSequence* ringPts, const Coordinate& pt) const;
+    static std::size_t intersectingSegIndex(const CoordinateSequence* ringPts, const Coordinate* pt);
 
-    int ringIndexPrev(const CoordinateSequence* ringPts, int index) const;
+    static std::size_t ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index);
 
     std::vector<SegmentString*> createSegmentStrings(const Geometry* geom, bool isInvertedRingValid);
 
@@ -107,7 +108,7 @@ public:
      */
     static bool
     isSegmentInRing(const Coordinate* p0, const Coordinate* p1,
-        const LinearRing* ring) const;
+        const LinearRing* ring);
 
     /**
      * Tests whether a touching segment is interior to a ring.
@@ -127,7 +128,7 @@ public:
      * @return true if the segment is inside the ring.
      */
     static bool isIncidentSegmentInRing(const Coordinate* p0, const Coordinate* p1,
-        const CoordinateSequence* ringPts) const;
+        const CoordinateSequence* ringPts);
 
     bool hasIntersection() const
     {
@@ -158,9 +159,9 @@ public:
      *
      * @return true if a polygon has a disconnected interior.
      */
-    bool isInteriorDisconnectedByRingCycle() const;
+    bool isInteriorDisconnectedByRingCycle();
 
-    const Coordinate* getDisconnectionLocation() const;
+    const Coordinate* getDisconnectionLocation() const
     {
         return disconnectionPt;
     };
@@ -173,8 +174,9 @@ public:
      *
      * @return true if an area interior is disconnected by a self-touch
      */
-    bool isInteriorDisconnectedBySelfTouch() const;
+    bool isInteriorDisconnectedBySelfTouch();
 
+};
 
 
 } // namespace geos.operation.valid

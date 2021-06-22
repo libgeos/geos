@@ -53,16 +53,16 @@ PolygonNode::isInteriorSegment(const Coordinate* nodePt, const Coordinate* a0, c
 {
     const Coordinate* aLo = a0;
     const Coordinate* aHi = a1;
-    bool isInteriorBetween = true;
+    bool bIsInteriorBetween = true;
     if (isAngleGreater(nodePt, aLo, aHi)) {
         aLo = a1;
         aHi = a0;
-        isInteriorBetween = false;
+        bIsInteriorBetween = false;
     }
-    bool isBetween = isBetween(nodePt, b, aLo, aHi);
-    bool isInterior = (isBetween && isInteriorBetween)
-        || (! isBetween && ! isInteriorBetween);
-    return isInterior;
+    bool bIsBetween = isBetween(nodePt, b, aLo, aHi);
+    bool bIsInterior = (bIsBetween && bIsInteriorBetween)
+        || (! bIsBetween && ! bIsInteriorBetween);
+    return bIsInterior;
 }
 
 
@@ -94,8 +94,8 @@ PolygonNode::isAngleGreater(const Coordinate* origin, const Coordinate* p, const
     //--- vectors are in the same quadrant
     // Check relative orientation of vectors
     // P > Q if it is CCW of Q
-    int orient = Orientation::index(origin, q, p);
-    return orient == Orientation::COUNTERCLOCKWISE;
+    int orient = algorithm::Orientation::index(*origin, *q, *p);
+    return orient == algorithm::Orientation::COUNTERCLOCKWISE;
 }
 
 
@@ -103,8 +103,8 @@ PolygonNode::isAngleGreater(const Coordinate* origin, const Coordinate* p, const
 int
 PolygonNode::quadrant(const Coordinate* origin, const Coordinate* p)
 {
-    double dx = p.x - origin.x;
-    double dy = p.y - origin.y;
+    double dx = p->x - origin->x;
+    double dy = p->y - origin->y;
     return Quadrant::quadrant(dx, dy);
 }
 

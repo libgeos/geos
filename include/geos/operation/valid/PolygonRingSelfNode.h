@@ -41,19 +41,21 @@ private:
     const Coordinate* e00;
     const Coordinate* e01;
     const Coordinate* e10;
-    // const Coordinate& e11;
+    const Coordinate* e11;
 
 
 public:
 
     PolygonRingSelfNode(const Coordinate* p_nodePt,
-        const Coordinate* p_e00, const Coordinate* p_e01,
-        const Coordinate* p_e10, const Coordinate* p_e11)
+        const Coordinate* p_e00,
+        const Coordinate* p_e01,
+        const Coordinate* p_e10,
+        const Coordinate* p_e11)
         : nodePt(p_nodePt)
         , e00(p_e00)
         , e01(p_e01)
         , e10(p_e10)
-        // , e11(p_e11)
+        , e11(p_e11)
         {}
 
     /**
@@ -78,6 +80,7 @@ public:
     */
     bool isExterior(bool isInteriorOnRight) const;
 
+};
 
 } // namespace geos.operation.valid
 } // namespace geos.operation

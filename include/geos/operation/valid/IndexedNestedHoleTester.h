@@ -25,6 +25,7 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class Polygon;
+class LinearRing;
 }
 }
 
@@ -41,11 +42,11 @@ private:
 
     const Polygon* polygon;
     index::strtree::TemplateSTRtree<const LinearRing*> index;
-    const Coordinate* nestedPt;
+    const Coordinate* nestedPt = nullptr;
 
     void loadIndex();
 
-    bool isHoleInsideHole(const LinearRing* hole, const LinearRing* testHole) const;
+    bool isHoleInsideHole(const LinearRing* hole, const LinearRing* testHole);
 
 
 public:
@@ -58,7 +59,7 @@ public:
 
     const Coordinate* getNestedPoint() { return nestedPt; }
 
-    bool isNested() const;
+    bool isNested();
 
 };
 

@@ -16,6 +16,7 @@
 #pragma once
 
 #include <geos/noding/SegmentIntersector.h>
+#include <geos/algorithm/LineIntersector.h>
 
 
 #include <geos/export.h>
@@ -28,37 +29,41 @@ namespace geom {
 class Geometry;
 class Coordinate;
 }
+namespace noding {
+class SegmentString;
+}
 }
 
 using namespace geos::geom;
+using geos::noding::SegmentString;
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
 
-class GEOS_DLL PolygonIntersectionAnalyzer : public SegmentIntersector {
+class GEOS_DLL PolygonIntersectionAnalyzer : public noding::SegmentIntersector {
 
 private:
 
-    LineIntersector li;
+    algorithm::LineIntersector li;
     std::vector<Coordinate> intersectionPts;
     bool hasProperInt = false;
-    bool hasIntersection = false;
-    bool hasCrossing= false;
-    bool hasDoubleTouch = false;
+    bool m_hasIntersection = false;
+    bool m_hasDoubleTouch = false;
     bool isInvertedRingValid;
 
     bool findInvalidIntersection(
         SegmentString* ss0, std::size_t segIndex0,
         SegmentString* ss1, std::size_t segIndex1);
 
-    bool addDoubleTouch(SegmentString* ss0, SegmentString* ss1, const Coordinate& intPt);
+    bool addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
+        const Coordinate* intPt);
 
     void addSelfTouch(
-        SegmentString* ss, const Coordinate& intPt,
-        const Coordinate& e00, const Coordinate& e01,
-        const Coordinate& e10, const Coordinate& e11);
+        SegmentString* ss, const Coordinate* intPt,
+        const Coordinate* e00, const Coordinate* e01,
+        const Coordinate* e10, const Coordinate* e11);
 
     /**
     * For a segment string for a ring, gets the coordinate
@@ -68,7 +73,7 @@ private:
     * @param segIndex the segment index
     * @return the coordinate previous to the given segment
     */
-    const Coordinate& prevCoordinateInRing(SegmentString* ringSS, std::size_t segIndex) const;
+    const Coordinate& prevCoordinateInRing(const SegmentString* ringSS, std::size_t segIndex) const;
 
     /**
     * Tests if two segments in a closed {@link SegmentString} are adjacent.
@@ -91,7 +96,7 @@ public:
 
     bool isDone() const override
     {
-        return hasIntersection || hasDoubleTouch;
+        return m_hasIntersection || m_hasDoubleTouch;
     }
 
     const Coordinate* getIntersectionLocation() const
@@ -102,7 +107,7 @@ public:
 
     bool hasDoubleTouch() const
     {
-        return hasDoubleTouch;
+        return m_hasDoubleTouch;
     }
 
     bool hasIntersection() const
@@ -117,7 +122,8 @@ public:
     */
     void processIntersections(
         SegmentString* ss0, std::size_t segIndex0,
-        SegmentString* ss1, std::size_t segIndex1);
+        SegmentString* ss1, std::size_t segIndex1) override;
+};
 
 
 } // namespace geos.operation.valid

@@ -60,6 +60,7 @@ public:
 
     bool isAtLocation(const Coordinate* pt) const;
 
+};
 
 } // namespace geos.operation.valid
 } // namespace geos.operation

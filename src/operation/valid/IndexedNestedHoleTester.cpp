@@ -13,12 +13,13 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/IndexedNestedHoleTester.h>
+#include <geos/operation/valid/IndexedNestedHoleTester.h>
 #include <geos/algorithm/PointLocation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Location.h>
+#include <geos/geom/Polygon.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 
 namespace geos {      // geos
@@ -33,25 +34,24 @@ void
 IndexedNestedHoleTester::loadIndex()
 {
     for (std::size_t i = 0; i < polygon->getNumInteriorRing(); i++) {
-        const LinearRing* hole = static_cast<LinearRing*>(polygon->getInteriorRingN(i));
+        const LinearRing* hole = static_cast<const LinearRing*>(polygon->getInteriorRingN(i));
         const Envelope* env = hole->getEnvelopeInternal();
-        index.insert(env, hole);
+        index.insert(*env, hole);
     }
 }
 
 
 /* public */
 bool
-IndexedNestedHoleTester::isNested() const
+IndexedNestedHoleTester::isNested()
 {
     for (std::size_t i = 0; i < polygon->getNumInteriorRing(); i++) {
-        const LinearRing* hole = static_cast<LinearRing*>(polygon->getInteriorRingN(i));
+        const LinearRing* hole = static_cast<const LinearRing*>(polygon->getInteriorRingN(i));
 
-        std::vector<void*> results;
-        index.query(hole->getEnvelopeInternal(), results);
+        std::vector<const LinearRing*> results;
+        index.query(*(hole->getEnvelopeInternal()), results);
 
-        for (std::size_t j = 0; j < results.size(); j++) {
-            const LinearRing* testHole = static_cast<LinearRing*>(results[j]);
+        for (const auto* testHole: results) {
             if (hole == testHole)
                 continue;
 
@@ -73,17 +73,17 @@ IndexedNestedHoleTester::isNested() const
 /* private */
 bool
 IndexedNestedHoleTester::isHoleInsideHole(
-    const LinearRing* hole, const LinearRing* testHole) const
+    const LinearRing* hole, const LinearRing* testHole)
 {
     const CoordinateSequence* testPts = testHole->getCoordinatesRO();
     for (std::size_t i = 0; i < hole->getNumPoints(); i++) {
         const Coordinate& holePt = hole->getCoordinateN(i);
-        Location loc = PointLocation::locateInRing(holePt, *testPts);
+        Location loc = algorithm::PointLocation::locateInRing(holePt, *testPts);
         switch (loc) {
             case Location::EXTERIOR:
                 return false;
             case Location::INTERIOR:
-                nestedPt = holePt;
+                nestedPt = &holePt;
                 return true;
             default:
                 // Location::BOUNDARY, so keep trying points

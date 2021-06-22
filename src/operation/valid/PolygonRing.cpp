@@ -15,6 +15,7 @@
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/PolygonRing.h>
 
 using namespace geos::geom;
@@ -23,78 +24,24 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-/* public static */
-bool
-PolygonRing::isShell(const PolygonRing* polyRing)
-{
-    if (polyRing == nullptr) return true;
-    return polyRing.isShell();
-}
-
-/* public static */
-bool
-PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate* pt)
-{
-    //--- skip if either polygon does not have holes
-    if (ring0 == nullptr || ring1 == nullptr)
-        return false;
-
-    //--- only record touches within a polygon
-    if (! ring0.isSamePolygon(ring1)) return false;
-
-    if (! ring0.isOnlyTouch(ring1, pt)) return true;
-    if (! ring1.isOnlyTouch(ring0, pt)) return true;
-
-    ring0.addTouch(ring1, pt);
-    ring1.addTouch(ring0, pt);
-    return false;
-}
-
-/* public static */
-const Coordinate*
-PolygonRing::findTouchCycleLocation(std::vector<PolygonRing*>& polyRings)
-{
-    for (const PolygonRing* polyRing : polyRings)
-    {
-        if (! polyRing->isInTouchSet()) {
-            const Coordinate* touchCycleLoc = polyRing->findTouchCycleLocation();
-            if (touchCycleLoc != nullptr)
-                return touchCycleLoc;
-        }
-    }
-    return nullptr;
-}
-
-/* public static */
-const Coordinate*
-PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*>& polyRings)
-{
-    for (const PolygonRing* polyRing : polyRings) {
-        const Coordinate* interiorSelfNode = polyRing->findInteriorSelfNode();
-        if (interiorSelfNode != nullptr) {
-            return interiorSelfNode;
-        }
-    }
-    return nullptr;
-}
 
 /* public */
 bool
-PolygonRing::isSamePolygon(const PolygonRing* polyRing)
+PolygonRing::isSamePolygon(const PolygonRing* polyRing) const
 {
     return shell == polyRing->shell;
 }
 
 /* public */
 bool
-PolygonRing::isShell()
+PolygonRing::isShell() const
 {
     return shell == this;
 }
 
 /* private */
 bool
-PolygonRing::isInTouchSet()
+PolygonRing::isInTouchSet() const
 {
     return touchSetRoot != nullptr;
 }
@@ -108,7 +55,7 @@ PolygonRing::setTouchSetRoot(const PolygonRing* polyRing)
 
 /* private */
 const PolygonRing*
-PolygonRing::getTouchSetRoot()
+PolygonRing::getTouchSetRoot() const
 {
     return touchSetRoot;
 }
@@ -122,7 +69,7 @@ PolygonRing::setParent(const PolygonRing* polyRing)
 
 /* private */
 bool
-PolygonRing::isChildOf(const PolygonRing* polyRing)
+PolygonRing::isChildOf(const PolygonRing* polyRing) const
 {
     return touchTreeParent == polyRing;
 }
@@ -130,16 +77,9 @@ PolygonRing::isChildOf(const PolygonRing* polyRing)
 
 /* private */
 bool
-PolygonRing::hasTouches()
+PolygonRing::hasTouches() const
 {
-    return touches != nullptr && ! touches->isEmpty();
-}
-
-/* private */
-const std::vector<PolygonRingTouch>&
-PolygonRing::getTouches()
-{
-    return touches;
+    return ! touches.empty();
 }
 
 
@@ -216,16 +156,20 @@ PolygonRing::findTouchCycleLocation()
 
 /* private */
 const Coordinate*
-PolygonRing::scanForTouchCycle(const PolygonRing* root,
-    const PolygonRing* polyRing,
-    std::dequeue<PolygonRing*>& ringStack)
+PolygonRing::scanForTouchCycle(PolygonRing* root,
+    PolygonRing* polyRing,
+    std::deque<PolygonRing*>& ringStack)
 {
     if (! polyRing->hasTouches())
         return nullptr;
 
     //-- check the touched rings
     //--- either they form a touch cycle, or they are pushed on stack for processing
-    for (const PolygonRingTouch& touch : polyRing->getTouches()) {
+    // for (const PolygonRingTouch& touch : polyRing->getTouches()) {
+
+    for (const auto& mapEntry: touches) {
+
+        const PolygonRingTouch& touch = mapEntry.second;
         PolygonRing* touchRing = touch.getRing();
         /**
         * There is always a link back to the touch-tree parent of the ring,
@@ -265,7 +209,7 @@ PolygonRing::findInteriorSelfNode() const
      * This is the case if the ring is a shell and is CW,
      * or is a hole and is CCW.
      */
-    bool isCCW = Orientation::isCCW(ring->getCoordinatesRO());
+    bool isCCW = algorithm::Orientation::isCCW(ring->getCoordinatesRO());
     bool isInteriorOnRight = isShell() ^ isCCW;
 
     for (const PolygonRingSelfNode& selfNode : selfNodes) {
@@ -277,12 +221,67 @@ PolygonRing::findInteriorSelfNode() const
 }
 
 
-/* public */
-String
-PolygonRing::toString()
+/* public static */
+const Coordinate*
+PolygonRing::findTouchCycleLocation(std::vector<PolygonRing*>& polyRings)
 {
-    return ring->toString();
+    for (PolygonRing* polyRing : polyRings)
+    {
+        if (! polyRing->isInTouchSet()) {
+            const Coordinate* touchCycleLoc = polyRing->findTouchCycleLocation();
+            if (touchCycleLoc != nullptr)
+                return touchCycleLoc;
+        }
+    }
+    return nullptr;
 }
+
+/* public static */
+bool
+PolygonRing::isShell(const PolygonRing* polyRing)
+{
+    if (polyRing == nullptr) return true;
+    return polyRing->isShell();
+}
+
+/* public static */
+bool
+PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate* pt)
+{
+    //--- skip if either polygon does not have holes
+    if (ring0 == nullptr || ring1 == nullptr)
+        return false;
+
+    //--- only record touches within a polygon
+    if (! ring0->isSamePolygon(ring1)) return false;
+
+    if (! ring0->isOnlyTouch(ring1, pt)) return true;
+    if (! ring1->isOnlyTouch(ring0, pt)) return true;
+
+    ring0->addTouch(ring1, pt);
+    ring1->addTouch(ring0, pt);
+    return false;
+}
+
+/* public static */
+const Coordinate*
+PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*>& polyRings)
+{
+    for (const PolygonRing* polyRing : polyRings) {
+        const Coordinate* interiorSelfNode = polyRing->findInteriorSelfNode();
+        if (interiorSelfNode != nullptr) {
+            return interiorSelfNode;
+        }
+    }
+    return nullptr;
+}
+
+/* public */
+// std::string
+// PolygonRing::toString()
+// {
+//     return ring->toString();
+// }
 
 
 } // namespace geos.operation.valid

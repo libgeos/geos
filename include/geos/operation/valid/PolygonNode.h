@@ -27,6 +27,8 @@ class Coordinate;
 }
 }
 
+using namespace geos::geom;
+
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
@@ -83,7 +85,7 @@ public:
     * @param b1 the next edge endpoint in the other ring
     * @return true if the edges cross at the node
     */
-    bool isCrossing(const Coordinate* nodePt,
+    static bool isCrossing(const Coordinate* nodePt,
         const Coordinate* a0, const Coordinate* a1,
         const Coordinate* b0, const Coordinate* b1);
 
@@ -99,7 +101,7 @@ public:
     * @param b the destination vertex of the edge
     * @return true if the edge is interior to the ring corner
     */
-    bool isInteriorSegment(const Coordinate* nodePt,
+    static bool isInteriorSegment(const Coordinate* nodePt,
         const Coordinate* a0, const Coordinate* a1,
         const Coordinate* b);
 

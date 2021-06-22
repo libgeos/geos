@@ -14,9 +14,11 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/noding/SegmentString.h>
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
 #include <geos/operation/valid/PolygonNode.h>
 #include <geos/operation/valid/PolygonRing.h>
+#include <geos/util/IllegalStateException.h>
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -36,9 +38,9 @@ PolygonIntersectionAnalyzer::processIntersections(
     bool isSameSegment = isSameSegString && segIndex0 == segIndex1;
     if (isSameSegment) return;
 
-    hasIntersection = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
+    m_hasIntersection = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
 
-    if (hasIntersection) {
+    if (m_hasIntersection) {
         // found an intersection!
         intersectionPts.push_back(li.getIntersection(0));
     }
@@ -47,7 +49,7 @@ PolygonIntersectionAnalyzer::processIntersections(
 
 /* private */
 bool
-PolygonIntersectionAnalyzerfindInvalidIntersection(
+PolygonIntersectionAnalyzer::findInvalidIntersection(
     SegmentString* ss0, std::size_t segIndex0,
     SegmentString* ss1, std::size_t segIndex1)
 {
@@ -114,19 +116,19 @@ PolygonIntersectionAnalyzerfindInvalidIntersection(
      * Check topology of a vertex intersection.
      * The ring(s) must not cross.
      */
-    const Coordinate& e00 = p00;
-    const Coordinate e01& = p01;
+    const Coordinate* e00 = &p00;
+    const Coordinate* e01 = &p01;
     if (intPt.equals2D(p00)) {
-        e00 = prevCoordinateInRing(ss0, segIndex0);
-        e01 = p01;
+        e00 = &(prevCoordinateInRing(ss0, segIndex0));
+        e01 = &p01;
     }
-    const Coordinate& e10 = p10;
-    const Coordinate& e11 = p11;
+    const Coordinate* e10 = &p10;
+    const Coordinate* e11 = &p11;
     if (intPt.equals2D(p10)) {
-        e10 = prevCoordinateInRing(ss1, segIndex1);
-        e11 = p11;
+        e10 = &(prevCoordinateInRing(ss1, segIndex1));
+        e11 = &p11;
     }
-    hasCrossing = PolygonNode::isCrossing(intPt, e00, e01, e10, e11);
+    bool hasCrossing = PolygonNode::isCrossing(&intPt, e00, e01, e10, e11);
     if (hasCrossing)
         return true;
 
@@ -135,7 +137,7 @@ PolygonIntersectionAnalyzerfindInvalidIntersection(
      * that it does not disconnect the interior.
      */
     if (isSameSegString && isInvertedRingValid) {
-        addSelfTouch(ss0, intPt, e00, e01, e10, e11);
+        addSelfTouch(ss0, &intPt, e00, e01, e10, e11);
     }
 
     /**
@@ -145,9 +147,9 @@ PolygonIntersectionAnalyzerfindInvalidIntersection(
      * Also check for an invalid double-touch situation,
      * if the rings are different.
      */
-    bool isDoubleTouch = addDoubleTouch(ss0, ss1, intPt);
+    bool isDoubleTouch = addDoubleTouch(ss0, ss1, &intPt);
     if (isDoubleTouch && ! isSameSegString) {
-        hasDoubleTouch = true;
+        m_hasDoubleTouch = true;
         return true;
     }
 
@@ -157,11 +159,12 @@ PolygonIntersectionAnalyzerfindInvalidIntersection(
 
 /* private */
 bool
-PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* ss1, const Coordinate& intPt)
+PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
+    const Coordinate* intPt)
 {
     return PolygonRing::addTouch(
-        static_cast<PolygonRing>(ss0->getData()),
-        static_cast<PolygonRing>(ss1.getData()),
+        const_cast<PolygonRing*>(static_cast<const PolygonRing*>(ss0->getData())),
+        const_cast<PolygonRing*>(static_cast<const PolygonRing*>(ss1->getData())),
         intPt);
 }
 
@@ -169,13 +172,14 @@ PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* s
 /* private */
 void
 PolygonIntersectionAnalyzer::addSelfTouch(
-    SegmentString* ss, const Coordinate& intPt,
-    const Coordinate& e00, const Coordinate& e01,
-    const Coordinate& e10, const Coordinate& e11)
+    SegmentString* ss, const Coordinate* intPt,
+    const Coordinate* e00, const Coordinate* e01,
+    const Coordinate* e10, const Coordinate* e11)
 {
-    PolygonRing* polyRing = static_cast<PolygonRing>(ss->getData());
+    const PolygonRing* constPolyRing = static_cast<const PolygonRing*>(ss->getData());
+    PolygonRing* polyRing = const_cast<PolygonRing*>(constPolyRing);
     if (polyRing == nullptr) {
-        throw IllegalStateException("SegmentString missing PolygonRing data when checking self-touches");
+        throw util::IllegalStateException("SegmentString missing PolygonRing data when checking self-touches");
     }
     polyRing->addSelfTouch(intPt, e00, e01, e10, e11);
 }
@@ -183,7 +187,7 @@ PolygonIntersectionAnalyzer::addSelfTouch(
 
 /* private */
 const Coordinate&
-PolygonIntersectionAnalyzer::prevCoordinateInRing(SegmentString* ringSS, std::size_t segIndex) const
+PolygonIntersectionAnalyzer::prevCoordinateInRing(const SegmentString* ringSS, std::size_t segIndex) const
 {
     std::size_t prevIndex;
     if (segIndex == 0) {

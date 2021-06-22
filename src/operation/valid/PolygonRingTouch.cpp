@@ -32,7 +32,7 @@ PolygonRingTouch::getCoordinate() const
 }
 
 /* public */
-const PolygonRing*
+PolygonRing*
 PolygonRingTouch::getRing() const
 {
     return ring;
@@ -42,7 +42,7 @@ PolygonRingTouch::getRing() const
 bool
 PolygonRingTouch::isAtLocation(const Coordinate* pt) const
 {
-    return touchPt->equals2D(pt);
+    return touchPt->equals2D(*pt);
 }
 
 

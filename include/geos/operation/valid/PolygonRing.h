@@ -22,6 +22,7 @@
 
 
 #include <memory>
+#include <map>
 
 // Forward declarations
 namespace geos {
@@ -78,19 +79,17 @@ private:
     */
     std::vector<PolygonRingSelfNode> selfNodes;
 
-    bool isInTouchSet();
+    bool isInTouchSet() const;
 
     void setTouchSetRoot(const PolygonRing* ring);
 
-    const PolygonRing* getTouchSetRoot();
+    const PolygonRing* getTouchSetRoot() const;
 
     void setParent(const PolygonRing* ring);
 
-    bool isChildOf(const PolygonRing* ring);
+    bool isChildOf(const PolygonRing* ring) const;
 
-    bool hasTouches();
-
-    const std::vector<PolygonRingTouch>& getTouches();
+    bool hasTouches() const;
 
     void addTouch(PolygonRing* ring, const Coordinate* pt);
 
@@ -127,8 +126,8 @@ private:
     * @return a vertex in a ring cycle if found, or null
     */
     const Coordinate* scanForTouchCycle(
-        const PolygonRing* root,
-        const PolygonRing* ring,
+        PolygonRing* root,
+        PolygonRing* ring,
         std::deque<PolygonRing*>& ringStack);
 
 
@@ -154,14 +153,24 @@ public:
         : PolygonRing(p_ring, -1, this)
         {};
 
-    bool isSamePolygon(const PolygonRing* ring);
+    static bool isShell(const PolygonRing* polyRing);
 
-    bool isShell();
+    static bool addTouch(PolygonRing* ring0, PolygonRing* ring1,
+        const Coordinate* pt);
+
+    static const Coordinate* findTouchCycleLocation(
+        std::vector<PolygonRing*>& polyRings);
+
+    static const Coordinate* findInteriorSelfNode(
+        std::vector<PolygonRing*>& polyRings);
 
     void addSelfTouch(const Coordinate* origin,
         const Coordinate* e00, const Coordinate* e01,
         const Coordinate* e10, const Coordinate* e11);
 
+    bool isSamePolygon(const PolygonRing* ring) const;
+
+    bool isShell() const;
     /**
     * Finds the location of an invalid interior self-touch in this ring,
     * if one exists.
@@ -170,7 +179,8 @@ public:
     */
     const Coordinate* findInteriorSelfNode() const;
 
-    String toString();
+
+    // std::string toString();
 
 
 };

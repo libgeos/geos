@@ -29,6 +29,7 @@ using namespace geos::geom;
 bool
 PolygonRingSelfNode::isExterior(bool isInteriorOnRight) const
 {
+    (void)e11; // unused variable
     /**
      * Note that either corner and either of the other edges could be used to test.
      * The situation is fully symmetrical.
