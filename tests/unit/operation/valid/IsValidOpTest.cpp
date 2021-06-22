@@ -65,7 +65,7 @@ void object::test<1>
     IsValidOp isValidOp(line.get());
     bool valid = isValidOp.isValid();
 
-    TopologyValidationError* err = isValidOp.getValidationError();
+    const TopologyValidationError* err = isValidOp.getValidationError();
     ensure(nullptr != err);
     const Coordinate& errCoord = err->getCoordinate();
 
@@ -87,7 +87,7 @@ void object::test<2>
     IsValidOp isValidOp(g0.get());
     bool valid = isValidOp.isValid();
 
-    TopologyValidationError* err = isValidOp.getValidationError();
+    const TopologyValidationError* err = isValidOp.getValidationError();
     ensure(nullptr != err);
     const Coordinate& errCoord = err->getCoordinate();
 
