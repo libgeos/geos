@@ -26,7 +26,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Geometry;
 class Coordinate;
 }
 namespace noding {
@@ -34,13 +33,12 @@ class SegmentString;
 }
 }
 
-using namespace geos::geom;
-using geos::noding::SegmentString;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
+using geos::geom::Coordinate;
+using geos::noding::SegmentString;
 
 class GEOS_DLL PolygonIntersectionAnalyzer : public noding::SegmentIntersector {
 

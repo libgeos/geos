@@ -32,12 +32,12 @@ class LinearRing;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::LinearRing;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
+
+using geos::geom::Coordinate;
+using geos::geom::LinearRing;
 
 
 class GEOS_DLL PolygonRing {

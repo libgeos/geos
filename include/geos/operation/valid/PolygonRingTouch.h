@@ -32,12 +32,11 @@ class PolygonRing;
 }
 }
 
-using geos::geom::Coordinate;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
+using geos::geom::Coordinate;
 
 class GEOS_DLL PolygonRingTouch {
 

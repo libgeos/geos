@@ -26,13 +26,11 @@ namespace geom {
 class Coordinate;
 }
 }
-
-using namespace geos::geom;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
+using geos::geom::Coordinate;
 
 class GEOS_DLL PolygonNode {
 

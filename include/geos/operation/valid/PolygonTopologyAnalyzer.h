@@ -19,6 +19,7 @@
 
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
 #include <geos/operation/valid/PolygonRing.h>
+#include <geos/noding/BasicSegmentString.h>
 
 #include <memory>
 
@@ -30,13 +31,14 @@ class Coordinate;
 }
 }
 
-using namespace geos::geom;
-using geos::noding::BasicSegmentString;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
+using geos::geom::Geometry;
+using geos::geom::LinearRing;
 
 class GEOS_DLL PolygonTopologyAnalyzer {
 
@@ -47,12 +49,12 @@ private:
 
     PolygonIntersectionAnalyzer intFinder;
     std::vector<PolygonRing*> polyRings;
-    const Coordinate* disconnectionPt;
+    const geom::Coordinate* disconnectionPt;
 
     // holding area for PolygonRings and SegmentStrings so we
     // can pass around pointers with abandon
     std::deque<PolygonRing> polyRingStore;
-    std::deque<BasicSegmentString> segStringStore;
+    std::deque<noding::BasicSegmentString> segStringStore;
     // when building SegmentStrings we sometimes want
     // to use deduped CoordinateSequences so we will
     // keep the deduped ones here so they get cleaned

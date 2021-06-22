@@ -29,11 +29,14 @@ class LinearRing;
 }
 }
 
-using namespace geos::geom;
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
+
+using geos::geom::Polygon;
+using geos::geom::LinearRing;
+using geos::geom::Coordinate;
 
 
 class GEOS_DLL IndexedNestedHoleTester {

@@ -201,7 +201,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow = false, b
         operation::valid::IsValidOp ivo(&g);
         if(! ivo.isValid()) {
             using operation::valid::TopologyValidationError;
-            TopologyValidationError* err = ivo.getValidationError();
+            const TopologyValidationError* err = ivo.getValidationError();
 #ifdef GEOS_DEBUG_HEURISTICOVERLAY
             std::cerr << label << " is INVALID: "
                       << err->toString()
@@ -258,7 +258,7 @@ fix_self_intersections(std::unique_ptr<Geometry> g, const std::string& label)
     // Not all invalidities can be fixed by this code
 
     using operation::valid::TopologyValidationError;
-    TopologyValidationError* err = ivo.getValidationError();
+    const TopologyValidationError* err = ivo.getValidationError();
     switch(err->getErrorType()) {
     case TopologyValidationError::eRingSelfIntersection:
     case TopologyValidationError::eTooFewPoints: // collapsed lines

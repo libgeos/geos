@@ -168,6 +168,7 @@ using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGRobust;
+using geos::operation::valid::TopologyValidationError;
 
 using geos::precision::GeometryPrecisionReducer;
 
@@ -691,10 +692,9 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
 
             using geos::operation::valid::IsValidOp;
-            using geos::operation::valid::TopologyValidationError;
 
             IsValidOp ivo(g1);
-            TopologyValidationError* err = ivo.getValidationError();
+            const TopologyValidationError* err = ivo.getValidationError();
 
             if(err) {
                 handle->NOTICE_MESSAGE("%s", err->toString().c_str());
@@ -711,13 +711,12 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             using geos::operation::valid::IsValidOp;
-            using geos::operation::valid::TopologyValidationError;
 
             char* result = nullptr;
             char const* const validstr = "Valid Geometry";
 
             IsValidOp ivo(g1);
-            TopologyValidationError* err = ivo.getValidationError();
+            const TopologyValidationError* err = ivo.getValidationError();
 
             if(err) {
                 std::ostringstream ss;
@@ -741,14 +740,13 @@ extern "C" {
                         int flags, char** reason, Geometry** location)
     {
         using geos::operation::valid::IsValidOp;
-        using geos::operation::valid::TopologyValidationError;
 
         return execute(extHandle, 2, [&]() {
             IsValidOp ivo(g);
             if(flags & GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE) {
                 ivo.setSelfTouchingRingFormingHoleValid(true);
             }
-            TopologyValidationError* err = ivo.getValidationError();
+            const TopologyValidationError* err = ivo.getValidationError();
             if(err != nullptr) {
                 if(location) {
                     *location = g->getFactory()->createPoint(err->getCoordinate());

@@ -113,14 +113,24 @@ bool
 IsSimpleOp::computeSimple(const Geometry& geom)
 {
     if (geom.isEmpty()) return true;
-    if (geom.getGeometryTypeId() == GEOS_POINT) return true;
-    if (geom.getGeometryTypeId() == GEOS_MULTIPOINT) return isSimpleMultiPoint(dynamic_cast<const MultiPoint&>(geom));
-    if (geom.getGeometryTypeId() == GEOS_LINESTRING) return isSimpleLinearGeometry(geom);
-    if (geom.getGeometryTypeId() == GEOS_MULTILINESTRING) return isSimpleLinearGeometry(geom);
-    if (geom.getGeometryTypeId() == GEOS_LINEARRING) return isSimplePolygonal(geom);
-    if (geom.getGeometryTypeId() == GEOS_POLYGON) return isSimplePolygonal(geom);
-    if (geom.getGeometryTypeId() == GEOS_MULTIPOLYGON) return isSimplePolygonal(geom);
-    if (geom.getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION) return isSimpleGeometryCollection(geom);
+    switch(geom.getGeometryTypeId()) {
+        case GEOS_MULTIPOINT:
+            return isSimpleMultiPoint(dynamic_cast<const MultiPoint&>(geom));
+        case GEOS_LINESTRING:
+            return isSimpleLinearGeometry(geom);
+        case GEOS_MULTILINESTRING:
+            return isSimpleLinearGeometry(geom);
+        case GEOS_LINEARRING:
+            return isSimplePolygonal(geom);
+        case GEOS_POLYGON:
+            return isSimplePolygonal(geom);
+        case GEOS_MULTIPOLYGON:
+            return isSimplePolygonal(geom);
+        case GEOS_GEOMETRYCOLLECTION:
+            return isSimpleGeometryCollection(geom);
+        default:
+            return true;
+    }
     // all other geometry types are simple by definition
     return true;
 }

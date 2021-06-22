@@ -57,16 +57,16 @@ public:
 
     TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);
     TopologyValidationError(int newErrorType);
-    geom::Coordinate& getCoordinate();
-    std::string getMessage();
-    int getErrorType();
-    std::string toString();
+    const geom::Coordinate& getCoordinate() const;
+    std::string getMessage() const;
+    int getErrorType() const;
+    std::string toString() const;
 
 private:
     // Used const char* to reduce dynamic allocations
     static const char* errMsg[];
     int errorType;
-    geom::Coordinate pt;
+    const geom::Coordinate pt;
 };
 
 

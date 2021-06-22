@@ -60,25 +60,25 @@ TopologyValidationError::TopologyValidationError(int newErrorType)
 }
 
 int
-TopologyValidationError::getErrorType()
+TopologyValidationError::getErrorType() const
 {
     return errorType;
 }
 
-Coordinate&
-TopologyValidationError::getCoordinate()
+const Coordinate&
+TopologyValidationError::getCoordinate() const
 {
     return pt;
 }
 
 std::string
-TopologyValidationError::getMessage()
+TopologyValidationError::getMessage() const
 {
     return std::string(errMsg[errorType]);
 }
 
 std::string
-TopologyValidationError::toString()
+TopologyValidationError::toString() const
 {
     return getMessage().append(" at or near point ").append(pt.toString());
 }
