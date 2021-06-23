@@ -131,4 +131,17 @@ void object::test<4>
     ensure(! g->isValid());
 }
 
+template<>
+template<>
+void object::test<5>
+()
+{
+    std::string wkt("MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2)),((60 60, 60 50, 70 40, 60 60)))");
+    auto g = wktreader.read(wkt);
+    ensure(g->isValid());
+}
+
+
+
+
 } // namespace tut

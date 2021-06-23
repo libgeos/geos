@@ -28,6 +28,7 @@
 #include <geos/operation/valid/IndexedNestedHoleTester.h>
 #include <geos/util/UnsupportedOperationException.h>
 
+#include <cmath>
 
 using namespace geos::geom;
 using geos::algorithm::locate::IndexedPointInAreaLocator;
@@ -48,11 +49,12 @@ IsValidOp::isValid()
 bool
 IsValidOp::isValid(const Coordinate* coord)
 {
-    if (std::isnan(coord->x)) return false;
-    if (std::isfinite(coord->x)) return false;
-    if (std::isnan(coord->y)) return false;
-    if (std::isfinite(coord->y)) return false;
-    return true;
+    if (std::isfinite(coord->x) && std::isfinite(coord->y)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 

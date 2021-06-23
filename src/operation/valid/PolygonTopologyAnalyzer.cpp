@@ -173,14 +173,17 @@ std::vector<SegmentString*>
 PolygonTopologyAnalyzer::createSegmentStrings(const Geometry* geom, bool bIsInvertedRingValid)
 {
     std::vector<SegmentString*> segStrings;
-    if (geom->getGeometryTypeId() == GEOS_LINEARRING) {
+    int typeId = geom->getGeometryTypeId();
+    if (typeId == GEOS_LINEARRING) {
         const LinearRing* ring = static_cast<const LinearRing*>(geom);
         segStrings.push_back(createSegString(ring, nullptr));
         return segStrings;
     }
+    if (! (typeId == GEOS_POLYGON || typeId == GEOS_MULTIPOLYGON)) {
+        throw util::IllegalArgumentException("Cannot process non-polygonal input");
+    }
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        assert(geom->getGeometryTypeId() == GEOS_POLYGON);
-        const Polygon* poly = static_cast<const Polygon*>(geom);
+        const Polygon* poly = static_cast<const Polygon*>(geom->getGeometryN(i));
         if (poly->isEmpty()) continue;
         bool hasHoles = poly->getNumInteriorRing() > 0;
 
