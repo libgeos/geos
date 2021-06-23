@@ -196,6 +196,16 @@ void object::test<7>
     checkIsValidDefault(wkt, false);
 }
 
+/// Basic one-ring self-touch polygon
+template<>
+template<>
+void object::test<8>
+()
+{
+    string wkt = "POLYGON ((100 0, 100 100, 200 100, 200 0, 150 0, 170 40, 130 40, 150 0, 100 0))";
+    checkIsValidSTR(wkt, true);
+    checkIsValidDefault(wkt, false);
+}
 
 
 } // namespace tut

@@ -48,7 +48,7 @@ namespace valid {     // geos.operation.valid
 
 /**
  * Implements the algorithms required to compute the <code>isValid()</code> method
- * for {@link Geometry}s.
+ * for Geometry.
  * See the documentation for the various geometry types for a specification of validity.
  *
  * @version 1.7
@@ -208,7 +208,7 @@ private:
      *  * shells do not touch along an edge
      *  * no duplicate rings exist
      *
-     * These have been confirmed by the {@link PolygonTopologyAnalyzer}.
+     * These have been confirmed by the PolygonTopologyAnalyzer.
      */
     void checkShellsNotNested(const geom::MultiPolygon* mp);
 
@@ -233,7 +233,7 @@ public:
     /**
      * Creates a new validator for a geometry.
      *
-     * @param inputGeometry the geometry to validate
+     * @param p_inputGeometry the geometry to validate
      */
     IsValidOp(const geom::Geometry* p_inputGeometry)
         : inputGeometry(p_inputGeometry)
@@ -273,7 +273,7 @@ public:
     };
 
     /**
-     * Tests whether a {@link Geometry} is valid.
+     * Tests whether a Geometry is valid.
      * @param geom the Geometry to test
      * @return true if the geometry is valid
      */

@@ -138,13 +138,13 @@ IsValidOp::isValid(const MultiPoint* g)
 bool
 IsValidOp::isValid(const LineString* g)
 {
-  checkCoordinateInvalid(g->getCoordinatesRO());
-  if (hasInvalidError()) return false;
+    checkCoordinateInvalid(g->getCoordinatesRO());
+    if (hasInvalidError()) return false;
 
-  checkTooFewPoints(g, MIN_SIZE_LINESTRING);
-  if (hasInvalidError()) return false;
+    checkTooFewPoints(g, MIN_SIZE_LINESTRING);
+    if (hasInvalidError()) return false;
 
-  return true;
+    return true;
 }
 
 
@@ -152,19 +152,19 @@ IsValidOp::isValid(const LineString* g)
 bool
 IsValidOp::isValid(const LinearRing* g)
 {
-  checkCoordinateInvalid(g->getCoordinatesRO());
-  if (hasInvalidError()) return false;
+    checkCoordinateInvalid(g->getCoordinatesRO());
+    if (hasInvalidError()) return false;
 
-  checkRingNotClosed(g);
-  if (hasInvalidError()) return false;
+    checkRingNotClosed(g);
+    if (hasInvalidError()) return false;
 
-  checkRingTooFewPoints(g);
-  if (hasInvalidError()) return false;
+    checkRingTooFewPoints(g);
+    if (hasInvalidError()) return false;
 
-  checkSelfIntersectingRing(g);
-  if (hasInvalidError()) return false;
+    checkSelfIntersectingRing(g);
+    if (hasInvalidError()) return false;
 
-  return true;
+    return true;
 }
 
 
@@ -172,30 +172,30 @@ IsValidOp::isValid(const LinearRing* g)
 bool
 IsValidOp::isValid(const Polygon* g)
 {
-  checkCoordinateInvalid(g);
-  if (hasInvalidError()) return false;
+    checkCoordinateInvalid(g);
+    if (hasInvalidError()) return false;
 
-  checkRingsNotClosed(g);
-  if (hasInvalidError()) return false;
+    checkRingsNotClosed(g);
+    if (hasInvalidError()) return false;
 
-  checkRingsTooFewPoints(g);
-  if (hasInvalidError()) return false;
+    checkRingsTooFewPoints(g);
+    if (hasInvalidError()) return false;
 
-  PolygonTopologyAnalyzer areaAnalyzer(g, isInvertedRingValid);
+    PolygonTopologyAnalyzer areaAnalyzer(g, isInvertedRingValid);
 
-  checkAreaIntersections(areaAnalyzer);
-  if (hasInvalidError()) return false;
+    checkAreaIntersections(areaAnalyzer);
+    if (hasInvalidError()) return false;
 
-  checkHolesOutsideShell(g);
-  if (hasInvalidError()) return false;
+    checkHolesOutsideShell(g);
+    if (hasInvalidError()) return false;
 
-  checkHolesNotNested(g);
-  if (hasInvalidError()) return false;
+    checkHolesNotNested(g);
+    if (hasInvalidError()) return false;
 
-  checkInteriorDisconnected(areaAnalyzer);
-  if (hasInvalidError()) return false;
+    checkInteriorDisconnected(areaAnalyzer);
+    if (hasInvalidError()) return false;
 
-  return true;
+    return true;
 }
 
 

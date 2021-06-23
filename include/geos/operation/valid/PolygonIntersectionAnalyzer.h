@@ -87,6 +87,11 @@ private:
 
 public:
 
+    /**
+    * Creates a new finder, allowing for the mode where inverted rings are valid.
+    *
+    * @param p_isInvertedRingValid true if inverted rings are valid.
+    */
     PolygonIntersectionAnalyzer(bool p_isInvertedRingValid)
         : isInvertedRingValid(p_isInvertedRingValid)
         {};
@@ -113,11 +118,6 @@ public:
         return ! intersectionPts.empty();
     }
 
-    /**
-    * Creates a new finder, allowing for the mode where inverted rings are valid.
-    *
-    * @param isInvertedRingValid true if inverted rings are valid.
-    */
     void processIntersections(
         SegmentString* ss0, std::size_t segIndex0,
         SegmentString* ss1, std::size_t segIndex1) override;
