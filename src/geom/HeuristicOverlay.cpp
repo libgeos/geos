@@ -74,7 +74,7 @@
 #define GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID 0
 
 
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
 # include <iostream>
 # include <iomanip>
 # include <sstream>
@@ -202,13 +202,13 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow = false, b
         if(! ivo.isValid()) {
             using operation::valid::TopologyValidationError;
             TopologyValidationError* err = ivo.getValidationError();
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
             std::cerr << label << " is INVALID: "
                       << err->toString()
                       << " (" << std::setprecision(20)
                       << err->getCoordinate() << ")"
                       << std::endl
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID
+#if GEOS_DEBUG_HEURISTICOVERLAY_PRINT_INVALID
                       << "<A>" << std::endl
                       << g.toString()
                       << std::endl
@@ -237,7 +237,7 @@ inline std::unique_ptr<Geometry>
 fix_self_intersections(std::unique_ptr<Geometry> g, const std::string& label)
 {
     ::geos::ignore_unused_variable_warning(label);
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
     std::cerr << label << " fix_self_intersection (UnaryUnion)" << std::endl;
 #endif
 
@@ -262,18 +262,18 @@ fix_self_intersections(std::unique_ptr<Geometry> g, const std::string& label)
     switch(err->getErrorType()) {
     case TopologyValidationError::eRingSelfIntersection:
     case TopologyValidationError::eTooFewPoints: // collapsed lines
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
         std::cerr << label << " ATTEMPT_TO_FIX: " << err->getErrorType() << ": " << *g << std::endl;
 #endif
         g = g->Union();
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
         std::cerr << label << " ATTEMPT_TO_FIX succeeded.. " << std::endl;
 #endif
         return g;
     case TopologyValidationError::eSelfIntersection:
     // this one is within a single component, won't be fixed
     default:
-#ifdef GEOS_DEBUG_HEURISTICOVERLAY
+#if GEOS_DEBUG_HEURISTICOVERLAY
         std::cerr << label << " invalidity is: " << err->getErrorType() << std::endl;
 #endif
         return g;
