@@ -28,7 +28,7 @@ using namespace geos::geom;
 const Coordinate*
 PolygonRingTouch::getCoordinate() const
 {
-    return touchPt;
+    return &touchPt;
 }
 
 /* public */
@@ -40,9 +40,9 @@ PolygonRingTouch::getRing() const
 
 /* public */
 bool
-PolygonRingTouch::isAtLocation(const Coordinate* pt) const
+PolygonRingTouch::isAtLocation(const Coordinate& pt) const
 {
-    return touchPt->equals2D(*pt);
+    return touchPt.equals2D(pt);
 }
 
 

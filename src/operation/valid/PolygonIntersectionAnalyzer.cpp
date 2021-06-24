@@ -137,7 +137,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * that it does not disconnect the interior.
      */
     if (isSameSegString && isInvertedRingValid) {
-        addSelfTouch(ss0, &intPt, e00, e01, e10, e11);
+        addSelfTouch(ss0, intPt, e00, e01, e10, e11);
     }
 
     /**
@@ -147,7 +147,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * Also check for an invalid double-touch situation,
      * if the rings are different.
      */
-    bool isDoubleTouch = addDoubleTouch(ss0, ss1, &intPt);
+    bool isDoubleTouch = addDoubleTouch(ss0, ss1, intPt);
     if (isDoubleTouch && ! isSameSegString) {
         m_hasDoubleTouch = true;
         return true;
@@ -160,7 +160,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
 /* private */
 bool
 PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
-    const Coordinate* intPt)
+    const Coordinate& intPt)
 {
     return PolygonRing::addTouch(
         const_cast<PolygonRing*>(static_cast<const PolygonRing*>(ss0->getData())),
@@ -172,7 +172,7 @@ PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* s
 /* private */
 void
 PolygonIntersectionAnalyzer::addSelfTouch(
-    SegmentString* ss, const Coordinate* intPt,
+    SegmentString* ss, const Coordinate& intPt,
     const Coordinate* e00, const Coordinate* e01,
     const Coordinate* e10, const Coordinate* e11)
 {

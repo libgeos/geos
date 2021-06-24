@@ -37,7 +37,7 @@ class GEOS_DLL PolygonRingSelfNode {
 
 private:
 
-    const Coordinate* nodePt;
+    Coordinate nodePt;
     const Coordinate* e00;
     const Coordinate* e01;
     const Coordinate* e10;
@@ -46,7 +46,8 @@ private:
 
 public:
 
-    PolygonRingSelfNode(const Coordinate* p_nodePt,
+    PolygonRingSelfNode(
+        const Coordinate& p_nodePt,
         const Coordinate* p_e00,
         const Coordinate* p_e01,
         const Coordinate* p_e10,
@@ -63,7 +64,7 @@ public:
     *
     * @return
     */
-    const Coordinate* getCoordinate() const {
+    const Coordinate& getCoordinate() const {
         return nodePt;
     }
 

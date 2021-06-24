@@ -43,12 +43,12 @@ class GEOS_DLL PolygonRingTouch {
 private:
 
     PolygonRing* ring;
-    const Coordinate* touchPt;
+    Coordinate touchPt;
 
 
 public:
 
-    PolygonRingTouch(PolygonRing* p_ring, const Coordinate* p_pt)
+    PolygonRingTouch(PolygonRing* p_ring, const Coordinate& p_pt)
         : ring(p_ring)
         , touchPt(p_pt)
         {};
@@ -57,7 +57,7 @@ public:
 
     PolygonRing* getRing() const;
 
-    bool isAtLocation(const Coordinate* pt) const;
+    bool isAtLocation(const Coordinate& pt) const;
 
 };
 

@@ -44,20 +44,20 @@ class GEOS_DLL PolygonRing {
 
 private:
 
-    const LinearRing* ring;
-    int id;
-    const PolygonRing* shell;
+    const LinearRing* ring = nullptr;
+    int id = -1;
+    const PolygonRing* shell = nullptr;
 
     /**
     * The root of the touch graph tree containing this ring.
     * Serves as the id for the graph partition induced by the touch relation.
     */
-    const PolygonRing* touchSetRoot;
+    const PolygonRing* touchSetRoot = nullptr;
 
     /**
     * The parent of this ring in the touch tree graph.
     */
-    const PolygonRing* touchTreeParent;
+    const PolygonRing* touchTreeParent = nullptr;
 
     /**
     * The set of PolygonRingTouch links
@@ -91,7 +91,7 @@ private:
 
     bool hasTouches() const;
 
-    void addTouch(PolygonRing* ring, const Coordinate* pt);
+    void addTouch(PolygonRing* ring, const Coordinate& pt);
 
     /**
     * Tests if this ring touches a given ring at
@@ -101,7 +101,7 @@ private:
     * @param pt the touch point
     * @return true if the rings touch only at the given point
     */
-    bool isOnlyTouch(const PolygonRing* ring, const Coordinate* pt) const;
+    bool isOnlyTouch(const PolygonRing* ring, const Coordinate& pt) const;
 
     /**
     * Detects whether the subgraph of rings linked by touch to this ring
@@ -156,7 +156,7 @@ public:
     static bool isShell(const PolygonRing* polyRing);
 
     static bool addTouch(PolygonRing* ring0, PolygonRing* ring1,
-        const Coordinate* pt);
+        const Coordinate& pt);
 
     static const Coordinate* findTouchCycleLocation(
         std::vector<PolygonRing*>& polyRings);
@@ -164,7 +164,7 @@ public:
     static const Coordinate* findInteriorSelfNode(
         std::vector<PolygonRing*>& polyRings);
 
-    void addSelfTouch(const Coordinate* origin,
+    void addSelfTouch(const Coordinate& origin,
         const Coordinate* e00, const Coordinate* e01,
         const Coordinate* e10, const Coordinate* e11);
 

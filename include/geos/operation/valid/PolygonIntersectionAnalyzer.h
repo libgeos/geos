@@ -56,10 +56,10 @@ private:
         SegmentString* ss1, std::size_t segIndex1);
 
     bool addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
-        const Coordinate* intPt);
+        const Coordinate& intPt);
 
     void addSelfTouch(
-        SegmentString* ss, const Coordinate* intPt,
+        SegmentString* ss, const Coordinate& intPt,
         const Coordinate* e00, const Coordinate* e01,
         const Coordinate* e10, const Coordinate* e11);
 

@@ -260,7 +260,7 @@ PolygonTopologyAnalyzer::createSegString(const LinearRing* ring, const PolygonRi
     // Allocate the BasicSegmentString in the store and return a
     // pointer into the store. This way we don't have to track the
     // individual SegmentStrings, they just go away when the
-    // PolygonTopologyAnalyzer deallocated.
+    // PolygonTopologyAnalyzer deallocates.
     segStringStore.emplace_back(pts, polyRing);
     SegmentString* ss = static_cast<SegmentString*>(&(segStringStore.back()));
     return ss;
