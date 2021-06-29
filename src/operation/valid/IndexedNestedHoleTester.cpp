@@ -13,21 +13,20 @@
  *
  **********************************************************************/
 
-#include <geos/operation/valid/IndexedNestedHoleTester.h>
 #include <geos/algorithm/PointLocation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/LinearRing.h>
-#include <geos/geom/Location.h>
 #include <geos/geom/Polygon.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/operation/valid/IndexedNestedHoleTester.h>
+#include <geos/operation/valid/PolygonTopologyAnalyzer.h>
 
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
 using namespace geos::geom;
-
 
 /* private */
 void
@@ -40,7 +39,6 @@ IndexedNestedHoleTester::loadIndex()
     }
 }
 
-
 /* public */
 bool
 IndexedNestedHoleTester::isNested()
@@ -51,47 +49,32 @@ IndexedNestedHoleTester::isNested()
         std::vector<const LinearRing*> results;
         index.query(*(hole->getEnvelopeInternal()), results);
 
-        for (const auto* testHole: results) {
+        for (const LinearRing* testHole: results) {
             if (hole == testHole)
                 continue;
 
             /**
-            * Hole is not covered by in test hole,
-            * so cannot be inside
-            */
+             * Hole is not fully covered by test hole, so cannot be nested
+             */
             if (! testHole->getEnvelopeInternal()->covers(hole->getEnvelopeInternal()))
                 continue;
 
-            if (isHoleInsideHole(hole, testHole))
+            /**
+             * Checks nesting via a point-in-polygon test,
+             * or if the point lies on the boundary via
+             * the topology of the incident edges.
+             */
+            const Coordinate& holePt0 = hole->getCoordinateN(0);
+            const Coordinate& holePt1 = hole->getCoordinateN(1);
+            if (PolygonTopologyAnalyzer::isSegmentInRing(&holePt0, &holePt1, testHole)) {
+                nestedPt = holePt0;
                 return true;
+            }
         }
     }
     return false;
 }
 
-
-/* private */
-bool
-IndexedNestedHoleTester::isHoleInsideHole(
-    const LinearRing* hole, const LinearRing* testHole)
-{
-    const CoordinateSequence* testPts = testHole->getCoordinatesRO();
-    for (std::size_t i = 0; i < hole->getNumPoints(); i++) {
-        const Coordinate& holePt = hole->getCoordinateN(i);
-        Location loc = algorithm::PointLocation::locateInRing(holePt, *testPts);
-        switch (loc) {
-            case Location::EXTERIOR:
-                return false;
-            case Location::INTERIOR:
-                nestedPt = &holePt;
-                return true;
-            default:
-                // Location::BOUNDARY, so keep trying points
-                continue;
-        }
-    }
-    return false;
-}
 
 
 } // namespace geos.operation.valid

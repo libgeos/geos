@@ -173,34 +173,30 @@ private:
 
     /**
      * Checks if a polygon hole lies inside its shell
-     * and if not returns the point indicating this.
+     * and if not returns a point indicating this.
      * The hole is known to be wholly inside or outside the shell,
-     * so it suffices to find a single point which is interior or exterior.
-     * A valid hole may only have a single point touching the shell
-     * (since otherwise it creates a disconnected interior).
-     * So there should be at least one point which is interior or exterior,
-     * and this should be the first or second point tested.
+     * so it suffices to find a single point which is interior or exterior,
+     * or check the edge topology at a point on the boundary of the shell.
      *
-     * @param shellLocator
-     * @param hole
-     * @return a hole point outside the shell, or null if valid
+     * @param hole the hole to test
+     * @param shell the polygon shell to test against
+     * @return a hole point outside the shell, or null if it is inside
      */
-    /* private */
     const Coordinate * findHoleOutsideShellPoint(
-        algorithm::locate::IndexedPointInAreaLocator& shellLocator,
-        const geom::LinearRing* hole);
+        const geom::LinearRing* hole,
+        const geom::LinearRing* shell);
 
     /**
-     * Tests if any polygon hole is nested inside another.
+     * Checks if any polygon hole is nested inside another.
      * Assumes that holes do not cross (overlap),
      * This is checked earlier.
      *
      * @param poly the polygon with holes to test
      */
-    void checkHolesNotNested(const geom::Polygon* poly);
+    void checkHolesNested(const geom::Polygon* poly);
 
     /**
-     * Tests that no element polygon is in the interior of another element polygon.
+     * Checks that no element polygon is in the interior of another element polygon.
      *
      * Preconditions:
      *
@@ -210,7 +206,7 @@ private:
      *
      * These have been confirmed by the PolygonTopologyAnalyzer.
      */
-    void checkShellsNotNested(const geom::MultiPolygon* mp);
+    void checkShellsNested(const geom::MultiPolygon* mp);
 
     /**
      * Finds a point of a shell segment which lies inside a polygon, if any.

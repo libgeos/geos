@@ -45,11 +45,9 @@ private:
 
     const Polygon* polygon;
     index::strtree::TemplateSTRtree<const LinearRing*> index;
-    const Coordinate* nestedPt = nullptr;
+    Coordinate nestedPt;
 
     void loadIndex();
-
-    bool isHoleInsideHole(const LinearRing* hole, const LinearRing* testHole);
 
 
 public:
@@ -60,8 +58,19 @@ public:
         loadIndex();
     }
 
-    const Coordinate* getNestedPoint() { return nestedPt; }
+    /**
+    * Gets a point on a nested hole, if one exists.
+    *
+    * @return a point on a nested hole, or null if none are nested
+    */
+    const Coordinate& getNestedPoint() { return nestedPt; }
 
+    /**
+    * Tests if any hole is nested (contained) within another hole.
+    * This is invalid.
+    * The nested point will be set to reflect this.
+    * @return true if some hole is nested
+    */
     bool isNested();
 
 };

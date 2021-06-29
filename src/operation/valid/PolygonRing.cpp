@@ -18,6 +18,8 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/PolygonRing.h>
 
+#include <stack>
+
 using namespace geos::geom;
 
 namespace geos {      // geos
@@ -25,61 +27,73 @@ namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
 
-/* public */
+/* public static */
 bool
-PolygonRing::isSamePolygon(const PolygonRing* polyRing) const
+PolygonRing::isShell(const PolygonRing* polyRing)
 {
-    return shell == polyRing->shell;
+    if (polyRing == nullptr) return true;
+    return polyRing->isShell();
 }
 
-/* public */
+
+/* public static */
 bool
-PolygonRing::isShell() const
+PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& pt)
 {
-    return shell == this;
-}
+    //--- skip if either polygon does not have holes
+    if (ring0 == nullptr || ring1 == nullptr)
+      return false;
 
-/* private */
-bool
-PolygonRing::isInTouchSet() const
-{
-    return touchSetRoot != nullptr;
-}
+    //--- only record touches within a polygon
+    if (! ring0->isSamePolygon(ring1)) return false;
 
-/* private */
-void
-PolygonRing::setTouchSetRoot(const PolygonRing* polyRing)
-{
-    touchSetRoot = polyRing;
-}
+    if (! ring0->isOnlyTouch(ring1, pt)) return true;
+    if (! ring1->isOnlyTouch(ring0, pt)) return true;
 
-/* private */
-const PolygonRing*
-PolygonRing::getTouchSetRoot() const
-{
-    return touchSetRoot;
-}
-
-/* private */
-void
-PolygonRing::setParent(const PolygonRing* polyRing)
-{
-    touchTreeParent = polyRing;
-}
-
-/* private */
-bool
-PolygonRing::isChildOf(const PolygonRing* polyRing) const
-{
-    return touchTreeParent == polyRing;
+    ring0->addTouch(ring1, pt);
+    ring1->addTouch(ring0, pt);
+    return false;
 }
 
 
-/* private */
-bool
-PolygonRing::hasTouches() const
+/* public static */
+const Coordinate*
+PolygonRing::findHoleCycleLocation(std::vector<PolygonRing*> polyRings)
 {
-    return ! touches.empty();
+    for (PolygonRing* polyRing : polyRings) {
+        if (! polyRing->isInTouchSet()) {
+            const Coordinate* holeCycleLoc = polyRing->findHoleCycleLocation();
+            if (holeCycleLoc != nullptr) return holeCycleLoc;
+        }
+    }
+    return nullptr;
+}
+
+
+/* public static */
+const Coordinate*
+PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*> polyRings)
+{
+    for (PolygonRing* polyRing : polyRings) {
+        const Coordinate* interiorSelfNode = polyRing->findInteriorSelfNode();
+        if (interiorSelfNode != nullptr) {
+            return interiorSelfNode;
+        }
+    }
+    return nullptr;
+}
+
+
+/* private */
+std::vector<PolygonRingTouch*>
+PolygonRing::getTouches() const
+{
+    std::vector<PolygonRingTouch*> touchesVect;
+    for (auto& mapEntry: touches) {
+        PolygonRingTouch* touch = const_cast<PolygonRingTouch*>(&mapEntry.second);
+        touchesVect.push_back(touch);
+    }
+    return touchesVect;
 }
 
 
@@ -129,7 +143,7 @@ PolygonRing::isOnlyTouch(const PolygonRing* polyRing, const Coordinate& pt) cons
 
 /* private */
 const Coordinate*
-PolygonRing::findTouchCycleLocation()
+PolygonRing::findHoleCycleLocation()
 {
     //--- the touch set including this ring is already processed
     if (isInTouchSet()) return nullptr;
@@ -137,62 +151,76 @@ PolygonRing::findTouchCycleLocation()
     //--- scan the touch set tree rooted at this ring
     // Assert: this.touchSetRoot is null
     PolygonRing* root = this;
-    root->setParent(root);
     root->setTouchSetRoot(root);
 
-    std::deque<PolygonRing*> ringStack;
-    ringStack.push_back(root);
+    if (! hasTouches())
+        return nullptr;
 
-    while (! ringStack.empty()) {
-        PolygonRing* polyRing = ringStack.front();
-        ringStack.pop_front();
-        const Coordinate* touchCyclePt = scanForTouchCycle(root, polyRing, ringStack);
-        if (touchCyclePt != nullptr)
-            return touchCyclePt;
+    std::stack<PolygonRingTouch*> touchStack;
+    init(root, touchStack);
+
+    while (! touchStack.empty()) {
+        PolygonRingTouch* touch = touchStack.top();
+        touchStack.pop();
+        const Coordinate* holeCyclePt = scanForHoleCycle(touch, root, touchStack);
+        if (holeCyclePt != nullptr) {
+            return holeCyclePt;
+        }
     }
     return nullptr;
 }
 
 
+/* private static */
+void
+PolygonRing::init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack)
+{
+    for (PolygonRingTouch* touch : root->getTouches()) {
+        touch->getRing()->setTouchSetRoot(root);
+        touchStack.push(touch);
+    }
+}
+
+
 /* private */
 const Coordinate*
-PolygonRing::scanForTouchCycle(PolygonRing* root,
-    PolygonRing* polyRing,
-    std::deque<PolygonRing*>& ringStack)
+PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
+    PolygonRing* root,
+    std::stack<PolygonRingTouch*> touchStack)
 {
-    if (! polyRing->hasTouches())
-        return nullptr;
+    PolygonRing* polyRing = currentTouch->getRing();
+    const Coordinate* currentPt = currentTouch->getCoordinate();
 
-    //-- check the touched rings
-    //--- either they form a touch cycle, or they are pushed on stack for processing
-    // for (const PolygonRingTouch& touch : polyRing->getTouches()) {
-
-    for (const auto& mapEntry: touches) {
-
-        const PolygonRingTouch& touch = mapEntry.second;
-        PolygonRing* touchRing = touch.getRing();
+    /**
+     * Scan the touched rings
+     * Either they form a hole cycle, or they are added to the touch set
+     * and pushed on the stack for scanning
+     */
+    for (PolygonRingTouch* touch : polyRing->getTouches()) {
         /**
-        * There is always a link back to the touch-tree parent of the ring,
-        * so don't include it.
-        * (I.e. the ring touches the parent ring which originally
-        * added this ring to the stack)
+        * Don't check touches at the entry point
+        * to avoid trivial cycles.
+        * They will already be processed or on the stack
+        * from the previous ring (which touched
+        * all the rings at that point as well)
         */
-        if (polyRing->isChildOf(touchRing))
+        if (currentPt->equals2D(*touch->getCoordinate()))
             continue;
 
         /**
         * Test if the touched ring has already been
-        * reached via a different path in the tree.
-        * This indicates a touching ring cycle has been found.
-        * This is invalid.
+        * reached via a different touch path.
+        * This is indicated by it already being marked as
+        * part of the touch set.
+        * This indicates a hole cycle has been found.
         */
-        if (touchRing->getTouchSetRoot() == root) {
-            return touch.getCoordinate();
-        }
+        PolygonRing* touchRing = touch->getRing();
+        if (touchRing->getTouchSetRoot() == root)
+            return touch->getCoordinate();
 
-        touchRing->setParent(polyRing);
         touchRing->setTouchSetRoot(root);
-        ringStack.push_back(touchRing);
+
+        touchStack.push(touch);
     }
     return nullptr;
 }
@@ -200,7 +228,7 @@ PolygonRing::scanForTouchCycle(PolygonRing* root,
 
 /* public */
 const Coordinate*
-PolygonRing::findInteriorSelfNode() const
+PolygonRing::findInteriorSelfNode()
 {
     if (selfNodes.empty()) return nullptr;
 
@@ -220,68 +248,6 @@ PolygonRing::findInteriorSelfNode() const
     return nullptr;
 }
 
-
-/* public static */
-const Coordinate*
-PolygonRing::findTouchCycleLocation(std::vector<PolygonRing*>& polyRings)
-{
-    for (PolygonRing* polyRing : polyRings)
-    {
-        if (! polyRing->isInTouchSet()) {
-            const Coordinate* touchCycleLoc = polyRing->findTouchCycleLocation();
-            if (touchCycleLoc != nullptr)
-                return touchCycleLoc;
-        }
-    }
-    return nullptr;
-}
-
-/* public static */
-bool
-PolygonRing::isShell(const PolygonRing* polyRing)
-{
-    if (polyRing == nullptr) return true;
-    return polyRing->isShell();
-}
-
-/* public static */
-bool
-PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& pt)
-{
-    //--- skip if either polygon does not have holes
-    if (ring0 == nullptr || ring1 == nullptr)
-        return false;
-
-    //--- only record touches within a polygon
-    if (! ring0->isSamePolygon(ring1)) return false;
-
-    if (! ring0->isOnlyTouch(ring1, pt)) return true;
-    if (! ring1->isOnlyTouch(ring0, pt)) return true;
-
-    ring0->addTouch(ring1, pt);
-    ring1->addTouch(ring0, pt);
-    return false;
-}
-
-/* public static */
-const Coordinate*
-PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*>& polyRings)
-{
-    for (const PolygonRing* polyRing : polyRings) {
-        const Coordinate* interiorSelfNode = polyRing->findInteriorSelfNode();
-        if (interiorSelfNode != nullptr) {
-            return interiorSelfNode;
-        }
-    }
-    return nullptr;
-}
-
-/* public */
-// std::string
-// PolygonRing::toString()
-// {
-//     return ring->toString();
-// }
 
 
 } // namespace geos.operation.valid

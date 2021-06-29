@@ -52,7 +52,8 @@ public:
         eDuplicatedRings,
         eTooFewPoints,
         eInvalidCoordinate,
-        eRingNotClosed
+        eRingNotClosed,
+        oNoInvalidIntersection = -1
     };
 
     TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);

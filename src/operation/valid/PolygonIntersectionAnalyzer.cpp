@@ -18,6 +18,7 @@
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
 #include <geos/operation/valid/PolygonNode.h>
 #include <geos/operation/valid/PolygonRing.h>
+#include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/IllegalStateException.h>
 
 namespace geos {      // geos
@@ -38,20 +39,23 @@ PolygonIntersectionAnalyzer::processIntersections(
     bool isSameSegment = isSameSegString && segIndex0 == segIndex1;
     if (isSameSegment) return;
 
-    m_hasIntersection = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
-
-    if (m_hasIntersection) {
-        // found an intersection!
-        intersectionPts.push_back(li.getIntersection(0));
+    int code = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
+    /**
+     * Ensure that invalidCode is only set once,
+     * since the short-circuiting in {@link SegmentIntersector} is not guaranteed
+     * to happen immediately.
+     */
+    if (code != TopologyValidationError::oNoInvalidIntersection) {
+        invalidCode = code;
+        invalidLocation = li.getIntersection(0);
     }
 }
 
-
 /* private */
-bool
+int
 PolygonIntersectionAnalyzer::findInvalidIntersection(
-    SegmentString* ss0, std::size_t segIndex0,
-    SegmentString* ss1, std::size_t segIndex1)
+    const SegmentString* ss0, std::size_t segIndex0,
+    const SegmentString* ss1, std::size_t segIndex1)
 {
     const Coordinate& p00 = ss0->getCoordinate(segIndex0);
     const Coordinate& p01 = ss0->getCoordinate(segIndex0 + 1);
@@ -60,28 +64,25 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
 
     li.computeIntersection(p00, p01, p10, p11);
 
-    if (! li.hasIntersection()) return false;
+    if (! li.hasIntersection()) {
+        return TopologyValidationError::oNoInvalidIntersection;
+    }
 
     /**
      * Check for an intersection in the interior of both segments.
-     */
-    hasProperInt = li.isProper();
-    if (hasProperInt)
-        return true;
-
-    /**
-     * Check for collinear segments (which produces two intersection points).
-     * This is invalid - either a zero-width spike or gore,
+     * Collinear intersections by definition contain an interior intersection.
+     * They occur in either a zero-width spike or gore,
      * or adjacent rings.
      */
-    hasProperInt = li.getIntersectionNum() >= 2;
-    if (hasProperInt) return true;
+    if (li.isProper() || li.getIntersectionNum() >= 2) {
+        return TopologyValidationError::eSelfIntersection;
+    }
 
     /**
      * Now know there is exactly one intersection,
      * at a vertex of at least one segment.
      */
-    const Coordinate& intPt = li.getIntersection(0);
+    Coordinate intPt = li.getIntersection(0);
 
     /**
      * If segments are adjacent the intersection must be their common endpoint.
@@ -89,19 +90,17 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * This is valid.
      */
     bool isSameSegString = ss0 == ss1;
-    bool isAdjacentSegments = isSameSegString
-        && isAdjacentInRing(ss0, segIndex0, segIndex1);
+    bool isAdjacentSegments = isSameSegString && isAdjacentInRing(ss0, segIndex0, segIndex1);
     // Assert: intersection is an endpoint of both segs
-    if (isAdjacentSegments) return false;
-
-    // TODO: allow ring self-intersection - if NOT using OGC semantics
+    if (isAdjacentSegments) return TopologyValidationError::oNoInvalidIntersection;
 
     /**
      * Under OGC semantics, rings cannot self-intersect.
      * So the intersection is invalid.
      */
-    if (isSameSegString && ! isInvertedRingValid)
-        return true;
+    if (isSameSegString && ! isInvertedRingValid) {
+        return TopologyValidationError::eSelfIntersection;
+    }
 
     /**
      * Optimization: don't analyze intPts at the endpoint of a segment.
@@ -110,7 +109,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * This simplifies following logic, by removing the segment endpoint case.
      */
     if (intPt.equals2D(p01) || intPt.equals2D(p11))
-        return false;
+        return TopologyValidationError::oNoInvalidIntersection;
 
     /**
      * Check topology of a vertex intersection.
@@ -129,8 +128,9 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
         e11 = &p11;
     }
     bool hasCrossing = PolygonNode::isCrossing(&intPt, e00, e01, e10, e11);
-    if (hasCrossing)
-        return true;
+    if (hasCrossing) {
+        return TopologyValidationError::eSelfIntersection;
+    }
 
     /**
      * If allowing inverted rings, record a self-touch to support later checking
@@ -150,16 +150,18 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
     bool isDoubleTouch = addDoubleTouch(ss0, ss1, intPt);
     if (isDoubleTouch && ! isSameSegString) {
         m_hasDoubleTouch = true;
-        return true;
+        doubleTouchLocation = intPt;
+        // TODO: for poly-hole or hole-hole touch, check if it has bad topology.  If so return invalid code
     }
 
-    return false;
+    return TopologyValidationError::oNoInvalidIntersection;
 }
 
 
 /* private */
 bool
-PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
+PolygonIntersectionAnalyzer::addDoubleTouch(
+    const SegmentString* ss0, const SegmentString* ss1,
     const Coordinate& intPt)
 {
     return PolygonRing::addTouch(
@@ -168,11 +170,10 @@ PolygonIntersectionAnalyzer::addDoubleTouch(SegmentString* ss0, SegmentString* s
         intPt);
 }
 
-
 /* private */
 void
 PolygonIntersectionAnalyzer::addSelfTouch(
-    SegmentString* ss, const Coordinate& intPt,
+    const SegmentString* ss, const Coordinate& intPt,
     const Coordinate* e00, const Coordinate* e01,
     const Coordinate* e10, const Coordinate* e11)
 {
@@ -184,10 +185,10 @@ PolygonIntersectionAnalyzer::addSelfTouch(
     polyRing->addSelfTouch(intPt, e00, e01, e10, e11);
 }
 
-
 /* private */
 const Coordinate&
-PolygonIntersectionAnalyzer::prevCoordinateInRing(const SegmentString* ringSS, std::size_t segIndex) const
+PolygonIntersectionAnalyzer::prevCoordinateInRing(
+    const SegmentString* ringSS, std::size_t segIndex) const
 {
     std::size_t prevIndex;
     if (segIndex == 0) {
@@ -199,10 +200,10 @@ PolygonIntersectionAnalyzer::prevCoordinateInRing(const SegmentString* ringSS, s
     return ringSS->getCoordinate(prevIndex);
 }
 
-
 /* private */
 bool
-PolygonIntersectionAnalyzer::isAdjacentInRing(SegmentString* ringSS, std::size_t segIndex0, std::size_t segIndex1) const
+PolygonIntersectionAnalyzer::isAdjacentInRing(const SegmentString* ringSS,
+    std::size_t segIndex0, std::size_t segIndex1) const
 {
     std::size_t delta = segIndex0 > segIndex1
                         ? segIndex0 - segIndex1

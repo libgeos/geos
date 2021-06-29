@@ -41,30 +41,34 @@ namespace valid {     // geos.operation.valid
 
 /* public */
 PolygonTopologyAnalyzer::PolygonTopologyAnalyzer(const Geometry* geom, bool p_isInvertedRingValid)
-    : // inputGeom(geom)
-      // isInvertedRingValid(p_isInvertedRingValid),
-    intFinder(p_isInvertedRingValid),
-    disconnectionPt(nullptr)
+    : isInvertedRingValid(p_isInvertedRingValid)
+    , segInt(p_isInvertedRingValid)
+    , disconnectionPt(Coordinate::getNull())
 {
-    if (! geom->isEmpty()) {
-        std::vector<SegmentString*> segStrings = createSegmentStrings(geom, p_isInvertedRingValid);
-        polyRings = getPolygonRings(segStrings);
-        // Code copied in from analyzeIntersections()
-        noding::MCIndexNoder noder;
-        noder.setSegmentIntersector(&intFinder);
-        noder.computeNodes(&segStrings);
+    if (geom->isEmpty()){
+        return;
+    }
+    // Code copied in from analyze()
+    std::vector<SegmentString*> segStrings = createSegmentStrings(geom, p_isInvertedRingValid);
+    polyRings = getPolygonRings(segStrings);
+    // Code copied in from analyzeIntersections()
+    noding::MCIndexNoder noder;
+    noder.setSegmentIntersector(&segInt);
+    noder.computeNodes(&segStrings);
+    if (segInt.hasDoubleTouch()) {
+        disconnectionPt = segInt.getDoubleTouchLocation();
     }
 }
 
 
 /* public static */
-const Coordinate*
+Coordinate
 PolygonTopologyAnalyzer::findSelfIntersection(const LinearRing* ring)
 {
     PolygonTopologyAnalyzer ata(ring, false);
-    if (ata.hasIntersection())
-        return ata.getIntersectionLocation();
-    return nullptr;
+    if (ata.hasInvalidIntersection())
+        return ata.getInvalidLocation();
+    return Coordinate::getNull();
 }
 
 
@@ -145,26 +149,52 @@ PolygonTopologyAnalyzer::ringIndexPrev(const CoordinateSequence* ringPts, std::s
 
 /* public */
 bool
-PolygonTopologyAnalyzer::isInteriorDisconnectedByRingCycle()
+PolygonTopologyAnalyzer::isInteriorDisconnected()
 {
-  /**
-   * PolyRings will be null for empty, no hole or LinearRing inputs
-   */
-    if (polyRings.size() > 0) {
-        disconnectionPt = PolygonRing::findTouchCycleLocation(polyRings);
+    /**
+     * May already be set by a double-touching hole
+     */
+    if (!disconnectionPt.isNull()) {
+        return true;
     }
-    return disconnectionPt != nullptr;
+    if (isInvertedRingValid) {
+        checkInteriorDisconnectedBySelfTouch();
+        if (!disconnectionPt.isNull()) {
+            return true;
+        }
+    }
+    checkInteriorDisconnectedByHoleCycle();
+    if (!disconnectionPt.isNull()) {
+        return true;
+    }
+    return false;
 }
 
 
 /* public */
-bool
-PolygonTopologyAnalyzer::isInteriorDisconnectedBySelfTouch()
+void
+PolygonTopologyAnalyzer::checkInteriorDisconnectedBySelfTouch()
 {
-    if (polyRings.size() > 0) {
-        disconnectionPt = PolygonRing::findInteriorSelfNode(polyRings);
+    if (! polyRings.empty()) {
+        const Coordinate* dPt = PolygonRing::findInteriorSelfNode(polyRings);
+        if (dPt)
+            disconnectionPt = *dPt;
     }
-    return disconnectionPt != nullptr;
+}
+
+
+/* public */
+void
+PolygonTopologyAnalyzer::checkInteriorDisconnectedByHoleCycle()
+{
+    /**
+    * PolyRings will be null for empty, no hole or LinearRing inputs
+    */
+    if (! polyRings.empty()) {
+        const Coordinate* dPt = PolygonRing::findHoleCycleLocation(polyRings);
+        if (dPt)
+            disconnectionPt = *dPt;
+    }
 }
 
 
@@ -216,7 +246,7 @@ PolygonTopologyAnalyzer::createPolygonRing(const LinearRing* p_ring)
 
 /* private */
 PolygonRing*
-PolygonTopologyAnalyzer::createPolygonRing(const LinearRing* p_ring, int p_index, const PolygonRing* p_shell)
+PolygonTopologyAnalyzer::createPolygonRing(const LinearRing* p_ring, int p_index, PolygonRing* p_shell)
 {
     polyRingStore.emplace_back(p_ring, p_index, p_shell);
     return &(polyRingStore.back());
@@ -265,7 +295,6 @@ PolygonTopologyAnalyzer::createSegString(const LinearRing* ring, const PolygonRi
     SegmentString* ss = static_cast<SegmentString*>(&(segStringStore.back()));
     return ss;
 }
-
 
 
 } // namespace geos.operation.valid

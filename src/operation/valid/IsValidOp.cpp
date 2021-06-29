@@ -189,7 +189,7 @@ IsValidOp::isValid(const Polygon* g)
     checkHolesOutsideShell(g);
     if (hasInvalidError()) return false;
 
-    checkHolesNotNested(g);
+    checkHolesNested(g);
     if (hasInvalidError()) return false;
 
     checkInteriorDisconnected(areaAnalyzer);
@@ -225,12 +225,14 @@ IsValidOp::isValid(const MultiPolygon* g)
         checkHolesOutsideShell(p);
         if (hasInvalidError()) return false;
     }
+
     for (std::size_t i = 0; i < g->getNumGeometries(); i++) {
         const Polygon* p = g->getGeometryN(i);
-        checkHolesNotNested(p);
+        checkHolesNested(p);
         if (hasInvalidError()) return false;
     }
-    checkShellsNotNested(g);
+
+    checkShellsNested(g);
     if (hasInvalidError()) return false;
 
     checkInteriorDisconnected(areaAnalyzer);
@@ -363,20 +365,9 @@ IsValidOp::isNonRepeatedSizeAtLeast(const LineString* line, std::size_t minSize)
 void
 IsValidOp::checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer)
 {
-    if (areaAnalyzer.hasIntersection()) {
-         logInvalid(TopologyValidationError::eSelfIntersection,
-                   areaAnalyzer.getIntersectionLocation());
-        return;
-    }
-    if (areaAnalyzer.hasDoubleTouch()) {
-        logInvalid(TopologyValidationError::eDisconnectedInterior,
-                   areaAnalyzer.getIntersectionLocation());
-        return;
-    }
-    if (areaAnalyzer.isInteriorDisconnectedBySelfTouch()) {
-        logInvalid(TopologyValidationError::eDisconnectedInterior,
-                   areaAnalyzer.getDisconnectionLocation());
-        return;
+    if (areaAnalyzer.hasInvalidIntersection()) {
+        logInvalid(areaAnalyzer.getInvalidCode(),
+                   &areaAnalyzer.getInvalidLocation());
     }
 }
 
@@ -385,10 +376,10 @@ IsValidOp::checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer)
 void
 IsValidOp::checkSelfIntersectingRing(const LinearRing* ring)
 {
-    const Coordinate* intPt = PolygonTopologyAnalyzer::findSelfIntersection(ring);
-    if (intPt != nullptr) {
+    Coordinate intPt = PolygonTopologyAnalyzer::findSelfIntersection(ring);
+    if (! intPt.isNull()) {
         logInvalid(TopologyValidationError::eRingSelfIntersection,
-            intPt);
+            &intPt);
     }
 }
 
@@ -402,7 +393,6 @@ IsValidOp::checkHolesOutsideShell(const Polygon* poly)
 
     const LinearRing* shell = poly->getExteriorRing();
     bool isShellEmpty = shell->isEmpty();
-    IndexedPointInAreaLocator pir(*shell);
 
     for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
         const LinearRing* hole = poly->getInteriorRingN(i);
@@ -413,7 +403,7 @@ IsValidOp::checkHolesOutsideShell(const Polygon* poly)
             invalidPt = hole->getCoordinate();
         }
         else {
-            invalidPt = findHoleOutsideShellPoint(pir, hole);
+            invalidPt = findHoleOutsideShellPoint(hole, shell);
         }
         if (invalidPt != nullptr) {
             logInvalid(
@@ -427,29 +417,26 @@ IsValidOp::checkHolesOutsideShell(const Polygon* poly)
 
 /* private */
 const Coordinate *
-IsValidOp::findHoleOutsideShellPoint(
-    IndexedPointInAreaLocator& shellLocator,
-    const LinearRing* hole)
+IsValidOp::findHoleOutsideShellPoint(const LinearRing* hole, const LinearRing* shell)
 {
-    for (std::size_t i = 0; i < hole->getNumPoints() - 1; i++) {
-        const Coordinate& holePt = hole->getCoordinateN(i);
-        Location loc = shellLocator.locate(&holePt);
-        if (loc == Location::BOUNDARY)
-            continue;
-        if (loc == Location::INTERIOR)
-            return nullptr;
-        /**
-         * Location is EXTERIOR, so hole is outside shell
-         */
-        return &holePt;
-    }
-    return nullptr;
+
+    const Coordinate& holePt0 = hole->getCoordinateN(0);
+    const Coordinate& holePt1 = hole->getCoordinateN(1);
+    /**
+     * If hole envelope is not covered by shell, it must be outside
+     */
+    if (! shell->getEnvelopeInternal()->covers(hole->getEnvelopeInternal()))
+        return &holePt0;
+
+    if (PolygonTopologyAnalyzer::isSegmentInRing(&holePt0, &holePt1, shell))
+        return nullptr;
+    return &holePt0;
 }
 
 
 /* private */
 void
-IsValidOp::checkHolesNotNested(const Polygon* poly)
+IsValidOp::checkHolesNested(const Polygon* poly)
 {
     // skip test if no holes are present
     if (poly->getNumInteriorRing() <= 0) return;
@@ -457,14 +444,14 @@ IsValidOp::checkHolesNotNested(const Polygon* poly)
     IndexedNestedHoleTester nestedTester(poly);
     if (nestedTester.isNested()) {
         logInvalid(TopologyValidationError::eNestedShells,
-                   nestedTester.getNestedPoint());
+                   &nestedTester.getNestedPoint());
     }
 }
 
 
 /* private */
 void
-IsValidOp::checkShellsNotNested(const MultiPolygon* mp)
+IsValidOp::checkShellsNested(const MultiPolygon* mp)
 {
     for (std::size_t i = 0; i < mp->getNumGeometries(); i++) {
         const Polygon* p = mp->getGeometryN(i);
@@ -472,13 +459,14 @@ IsValidOp::checkShellsNotNested(const MultiPolygon* mp)
             continue;
         const LinearRing* shell = p->getExteriorRing();
         for (std::size_t j = 0; j < mp->getNumGeometries(); j++) {
-            if (i == j) continue;
+            if (i == j)
+                continue;
             const Polygon* p2 = mp->getGeometryN(j);
             const Coordinate* invalidPt = findShellSegmentInPolygon(shell, p2);
             if (invalidPt != nullptr) {
-            logInvalid(TopologyValidationError::eNestedShells,
-                invalidPt);
-            return;
+                logInvalid(TopologyValidationError::eNestedShells,
+                           invalidPt);
+                return;
             }
         }
     }
@@ -524,11 +512,11 @@ IsValidOp::findShellSegmentInPolygon(const LinearRing* shell, const Polygon* pol
 
 /* private */
 void
-IsValidOp::checkInteriorDisconnected(PolygonTopologyAnalyzer& areaAnalyzer)
+IsValidOp::checkInteriorDisconnected(PolygonTopologyAnalyzer& analyzer)
 {
-    if (areaAnalyzer.isInteriorDisconnectedByRingCycle())
+    if (analyzer.isInteriorDisconnected())
         logInvalid(TopologyValidationError::eDisconnectedInterior,
-                   areaAnalyzer.getDisconnectionLocation());
+                   &analyzer.getDisconnectionLocation());
 }
 
 

@@ -17,6 +17,7 @@
 
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/operation/valid/TopologyValidationError.h>
 
 
 #include <geos/export.h>
@@ -45,44 +46,30 @@ class GEOS_DLL PolygonIntersectionAnalyzer : public noding::SegmentIntersector {
 private:
 
     algorithm::LineIntersector li;
-    std::vector<Coordinate> intersectionPts;
-    bool hasProperInt = false;
-    bool m_hasIntersection = false;
     bool m_hasDoubleTouch = false;
-    bool isInvertedRingValid;
+    bool isInvertedRingValid = false;
+    int invalidCode = TopologyValidationError::oNoInvalidIntersection;
+    Coordinate invalidLocation;
+    Coordinate doubleTouchLocation;
 
-    bool findInvalidIntersection(
-        SegmentString* ss0, std::size_t segIndex0,
-        SegmentString* ss1, std::size_t segIndex1);
+    int findInvalidIntersection(
+        const SegmentString* ss0, std::size_t segIndex0,
+        const SegmentString* ss1, std::size_t segIndex1);
 
-    bool addDoubleTouch(SegmentString* ss0, SegmentString* ss1,
+    bool addDoubleTouch(
+        const SegmentString* ss0, const SegmentString* ss1,
         const Coordinate& intPt);
 
     void addSelfTouch(
-        SegmentString* ss, const Coordinate& intPt,
+        const SegmentString* ss, const Coordinate& intPt,
         const Coordinate* e00, const Coordinate* e01,
         const Coordinate* e10, const Coordinate* e11);
 
-    /**
-    * For a segment string for a ring, gets the coordinate
-    * previous to the given index (wrapping if the index is 0)
-    *
-    * @param ringSS the ring segment string
-    * @param segIndex the segment index
-    * @return the coordinate previous to the given segment
-    */
-    const Coordinate& prevCoordinateInRing(const SegmentString* ringSS, std::size_t segIndex) const;
+    const Coordinate& prevCoordinateInRing(
+        const SegmentString* ringSS, std::size_t segIndex) const;
 
-    /**
-    * Tests if two segments in a closed {@link SegmentString} are adjacent.
-    * This handles determining adjacency across the start/end of the ring.
-    *
-    * @param ringSS the segment string
-    * @param segIndex0 a segment index
-    * @param segIndex1 a segment index
-    * @return true if the segments are adjacent
-    */
-    bool isAdjacentInRing(SegmentString* ringSS, std::size_t segIndex0, std::size_t segIndex1) const;
+    bool isAdjacentInRing(const SegmentString* ringSS,
+        std::size_t segIndex0, std::size_t segIndex1) const;
 
 
 public:
@@ -90,37 +77,47 @@ public:
     /**
     * Creates a new finder, allowing for the mode where inverted rings are valid.
     *
-    * @param p_isInvertedRingValid true if inverted rings are valid.
+    * @param isInvertedRingValid true if inverted rings are valid.
     */
     PolygonIntersectionAnalyzer(bool p_isInvertedRingValid)
         : isInvertedRingValid(p_isInvertedRingValid)
-        {};
-
-
-    bool isDone() const override
-    {
-        return m_hasIntersection || m_hasDoubleTouch;
-    }
-
-    const Coordinate* getIntersectionLocation() const
-    {
-        if (intersectionPts.size() == 0) return nullptr;
-        return &(intersectionPts[0]);
-    }
-
-    bool hasDoubleTouch() const
-    {
-        return m_hasDoubleTouch;
-    }
-
-    bool hasIntersection() const
-    {
-        return ! intersectionPts.empty();
-    }
+        , invalidLocation(Coordinate::getNull())
+        , doubleTouchLocation(Coordinate::getNull())
+        {}
 
     void processIntersections(
         SegmentString* ss0, std::size_t segIndex0,
         SegmentString* ss1, std::size_t segIndex1) override;
+
+    bool isDone() const override {
+        return isInvalid() || m_hasDoubleTouch;
+    };
+
+    bool isInvalid() const
+    {
+        return invalidCode >= 0;
+    };
+
+    int getInvalidCode() const
+    {
+        return invalidCode;
+    };
+
+    const Coordinate& getInvalidLocation() const
+    {
+        return invalidLocation;
+    };
+
+    bool hasDoubleTouch() const
+    {
+        return m_hasDoubleTouch;
+    };
+
+    const Coordinate& getDoubleTouchLocation() const
+    {
+        return doubleTouchLocation;
+    };
+
 };
 
 

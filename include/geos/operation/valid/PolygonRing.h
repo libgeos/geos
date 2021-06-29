@@ -44,20 +44,15 @@ class GEOS_DLL PolygonRing {
 
 private:
 
-    const LinearRing* ring = nullptr;
     int id = -1;
-    const PolygonRing* shell = nullptr;
+    PolygonRing* shell = nullptr;
+    const LinearRing* ring = nullptr;
 
     /**
     * The root of the touch graph tree containing this ring.
     * Serves as the id for the graph partition induced by the touch relation.
     */
-    const PolygonRing* touchSetRoot = nullptr;
-
-    /**
-    * The parent of this ring in the touch tree graph.
-    */
-    const PolygonRing* touchTreeParent = nullptr;
+    PolygonRing* touchSetRoot = nullptr;
 
     /**
     * The set of PolygonRingTouch links
@@ -79,19 +74,7 @@ private:
     */
     std::vector<PolygonRingSelfNode> selfNodes;
 
-    bool isInTouchSet() const;
-
-    void setTouchSetRoot(const PolygonRing* ring);
-
-    const PolygonRing* getTouchSetRoot() const;
-
-    void setParent(const PolygonRing* ring);
-
-    bool isChildOf(const PolygonRing* ring) const;
-
-    bool hasTouches() const;
-
-    void addTouch(PolygonRing* ring, const Coordinate& pt);
+    /* METHODS */
 
     /**
     * Tests if this ring touches a given ring at
@@ -101,34 +84,56 @@ private:
     * @param pt the touch point
     * @return true if the rings touch only at the given point
     */
-    bool isOnlyTouch(const PolygonRing* ring, const Coordinate& pt) const;
+    bool isOnlyTouch(const PolygonRing* polyRing, const Coordinate& pt) const;
 
     /**
-    * Detects whether the subgraph of rings linked by touch to this ring
-    * contains a touch cycle.
-    * If no cycles are detected, the subgraph of touching rings is a tree.
-    * The subgraph is marked using this ring as the root.
+    * Detects whether the subgraph of holes linked by touch to this ring
+    * contains a hole cycle.
+    * If no cycles are detected, the set of touching rings is a tree.
+    * The set is marked using this ring as the root.
     *
-    * @return a vertex in a ring cycle, or null if no cycle found
+    * @return a vertex in a hole cycle, or null if no cycle found
     */
-    const Coordinate* findTouchCycleLocation();
+    const Coordinate* findHoleCycleLocation();
+
+    void init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack);
 
     /**
-    * Scans the rings touching a given ring,
-    * and checks if they are already part of its ring subgraph set.
-    * If so, a ring cycle has been detected.
-    * Otherwise, each touched ring is added to the current subgraph set,
-    * and queued to be scanned in turn.
+    * Scans for a hole cycle starting at a given touch.
     *
+    * @param currentTouch the touch to investigate
     * @param root the root of the touch subgraph
-    * @param ring the ring being processed
-    * @param ringStack the stack of rings to scan
-    * @return a vertex in a ring cycle if found, or null
+    * @param touchStack the stack of touches to scan
+    * @return a vertex in a hole cycle if found, or null
     */
-    const Coordinate* scanForTouchCycle(
+    const Coordinate* scanForHoleCycle(PolygonRingTouch* currentTouch,
         PolygonRing* root,
-        PolygonRing* ring,
-        std::deque<PolygonRing*>& ringStack);
+        std::stack<PolygonRingTouch*> touchStack);
+
+
+    bool isInTouchSet() const
+    {
+        return touchSetRoot != nullptr;
+    };
+
+    void setTouchSetRoot(PolygonRing* polyRing)
+    {
+        touchSetRoot = polyRing;
+    };
+
+    PolygonRing* getTouchSetRoot() const
+    {
+        return touchSetRoot;
+    };
+
+    bool hasTouches() const
+    {
+        return ! touches.empty();
+    };
+
+    std::vector<PolygonRingTouch*> getTouches() const;
+
+    void addTouch(PolygonRing* polyRing, const Coordinate& pt);
 
 
 public:
@@ -139,10 +144,10 @@ public:
     * @param p_index the index of the hole
     * @param p_shell the parent polygon shell
     */
-    PolygonRing(const LinearRing* p_ring, int p_index, const PolygonRing* p_shell)
-        : ring(p_ring)
-        , id(p_index)
+    PolygonRing(const LinearRing* p_ring, int p_index, PolygonRing* p_shell)
+        : id(p_index)
         , shell(p_shell)
+        , ring(p_ring)
         {};
 
     /**
@@ -153,34 +158,68 @@ public:
         : PolygonRing(p_ring, -1, this)
         {};
 
+    /**
+    * Tests if a polygon ring represents a shell.
+    *
+    * @param polyRing the ring to test (may be null)
+    * @return true if the ring represents a shell
+    */
     static bool isShell(const PolygonRing* polyRing);
 
-    static bool addTouch(PolygonRing* ring0, PolygonRing* ring1,
-        const Coordinate& pt);
+    /**
+    * Records a touch location between two rings,
+    * and checks if the rings already touch in a different location.
+    *
+    * @param ring0 a polygon ring
+    * @param ring1 a polygon ring
+    * @param pt the location where they touch
+    * @return true if the polygons already touch
+    */
+    static bool addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& pt);
 
-    static const Coordinate* findTouchCycleLocation(
-        std::vector<PolygonRing*>& polyRings);
+    /**
+    * Finds a location (if any) where a chain of holes forms a cycle
+    * in the ring touch graph.
+    * The shell may form part of the chain as well.
+    * This indicates that a set of holes disconnects the interior of a polygon.
+    *
+    * @param polyRings the list of rings to check
+    * @return a vertex contained in a ring cycle, or null if none is found
+    */
+    static const Coordinate* findHoleCycleLocation(std::vector<PolygonRing*> polyRings);
 
-    static const Coordinate* findInteriorSelfNode(
-        std::vector<PolygonRing*>& polyRings);
+    /**
+    * Finds a location of an interior self-touch in a list of rings,
+    * if one exists.
+    * This indicates that a self-touch disconnects the interior of a polygon,
+    * which is invalid.
+    *
+    * @param polyRings the list of rings to check
+    * @return the location of an interior self-touch node, or null if there are none
+    */
+    static const Coordinate* findInteriorSelfNode(std::vector<PolygonRing*> polyRings);
+
+    bool isSamePolygon(const PolygonRing* polyRing) const
+    {
+        return shell == polyRing->shell;
+    };
+
+    bool isShell() const
+    {
+        return shell == this;
+    };
 
     void addSelfTouch(const Coordinate& origin,
         const Coordinate* e00, const Coordinate* e01,
         const Coordinate* e10, const Coordinate* e11);
 
-    bool isSamePolygon(const PolygonRing* ring) const;
-
-    bool isShell() const;
     /**
     * Finds the location of an invalid interior self-touch in this ring,
     * if one exists.
     *
     * @return the location of an interior self-touch node, or null if there are none
     */
-    const Coordinate* findInteriorSelfNode() const;
-
-
-    // std::string toString();
+    const Coordinate* findInteriorSelfNode();
 
 
 };
