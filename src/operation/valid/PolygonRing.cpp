@@ -242,7 +242,7 @@ PolygonRing::findInteriorSelfNode()
 
     for (const PolygonRingSelfNode& selfNode : selfNodes) {
         if (!selfNode.isExterior(isInteriorOnRight)) {
-            return &selfNode.getCoordinate();
+            return selfNode.getCoordinate();
         }
     }
     return nullptr;

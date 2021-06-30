@@ -261,11 +261,11 @@ public:
      *  * inverted shells or exverted holes which form part of a chain of touching rings
      *    (which disconnect the interior)
      *
-     * @param isValid states whether geometry with this condition is valid
+     * @param p_isValid states whether geometry with this condition is valid
      */
-    void setSelfTouchingRingFormingHoleValid(bool isValid)
+    void setSelfTouchingRingFormingHoleValid(bool p_isValid)
     {
-        isInvertedRingValid = isValid;
+        isInvertedRingValid = p_isValid;
     };
 
     /**

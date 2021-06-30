@@ -80,6 +80,9 @@ private:
 
     SegmentString* createSegString(const LinearRing* ring, const PolygonRing* polyRing);
 
+    // Declare type as noncopyable
+    PolygonTopologyAnalyzer(const PolygonTopologyAnalyzer& other) = delete;
+    PolygonTopologyAnalyzer& operator=(const PolygonTopologyAnalyzer& rhs) = delete;
 
 public:
 

@@ -128,11 +128,10 @@ IsSimpleOp::computeSimple(const Geometry& geom)
             return isSimplePolygonal(geom);
         case GEOS_GEOMETRYCOLLECTION:
             return isSimpleGeometryCollection(geom);
+        // all other geometry types are simple by definition
         default:
             return true;
     }
-    // all other geometry types are simple by definition
-    return true;
 }
 
 /* private */

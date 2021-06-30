@@ -64,8 +64,8 @@ public:
     *
     * @return
     */
-    const Coordinate& getCoordinate() const {
-        return nodePt;
+    const Coordinate* getCoordinate() const {
+        return &nodePt;
     }
 
     /**
