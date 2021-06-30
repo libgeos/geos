@@ -34,9 +34,9 @@ PolygonRingSelfNode::isExterior(bool isInteriorOnRight) const
      * Note that either corner and either of the other edges could be used to test.
      * The situation is fully symmetrical.
      */
-    bool isInteriorSeg = PolygonNode::isInteriorSegment(&nodePt, e00, e01, e10);
-    bool isExterior = isInteriorOnRight ? ! isInteriorSeg : isInteriorSeg;
-    return isExterior;
+    bool bIsInteriorSeg = PolygonNode::isInteriorSegment(&nodePt, e00, e01, e10);
+    bool bIsExterior = isInteriorOnRight ? ! bIsInteriorSeg : bIsInteriorSeg;
+    return bIsExterior;
 }
 
 
