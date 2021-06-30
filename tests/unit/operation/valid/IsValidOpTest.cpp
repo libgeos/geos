@@ -39,6 +39,20 @@ struct test_isvalidop_data {
     test_isvalidop_data()
         : pm_(1), factory_(GeometryFactory::create(&pm_, 0))
     {}
+
+    void checkValid(const char* wkt)
+    {
+        std::string wktstr(wkt);
+        auto g = wktreader.read(wktstr);
+        ensure(g->isValid());
+    }
+
+    void checkInvalid(const char* wkt)
+    {
+        std::string wktstr(wkt);
+        auto g = wktreader.read(wktstr);
+        ensure(!g->isValid());
+    }
 };
 
 typedef test_group<test_isvalidop_data> group;
@@ -53,8 +67,7 @@ group test_isvalidop_group("geos::operation::valid::IsValidOp");
 // 1 - testInvalidCoordinate
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1> ()
 {
     CoordinateArraySequence* cs = new CoordinateArraySequence();
     cs->add(Coordinate(0.0, 0.0));
@@ -78,8 +91,7 @@ void object::test<1>
 
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2> ()
 {
     std::string wkt0("POLYGON((25495445.625 6671632.625,25495445.625 6671711.375,25495555.375 6671711.375,25495555.375 6671632.625,25495445.625 6671632.625),(25495368.0441 6671726.9312,25495368.3959388 6671726.93601515,25495368.7478 6671726.9333,25495368.0441 6671726.9312))");
     GeomPtr g0(wktreader.read(wkt0));
@@ -103,8 +115,7 @@ void object::test<2>
 
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3> ()
 {
     // https://trac.osgeo.org/geos/ticket/588
 
@@ -120,8 +131,7 @@ void object::test<3>
 
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4> ()
 {
     // https://github.com/locationtech/jts/pull/737
 
@@ -133,8 +143,7 @@ void object::test<4>
 
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5> ()
 {
     std::string wkt("MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2)),((60 60, 60 50, 70 40, 60 60)))");
     auto g = wktreader.read(wkt);
@@ -143,12 +152,101 @@ void object::test<5>
 
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6> ()
 {
     std::string wkt("POLYGON((40 320,340 320,340 20,40 20,40 320),(100 120,40 20,180 100,100 120),(200 200,180 100,240 160,200 200),(260 260,240 160,300 200,260 260),(300 300,300 200,340 260,300 300))");
     auto g = wktreader.read(wkt);
     ensure(!g->isValid());
+}
+
+// testValidSimplePolygon
+template<>
+template<>
+void object::test<7> ()
+{
+    checkValid(
+        "POLYGON ((10 89, 90 89, 90 10, 10 10, 10 89))");
+}
+
+// testInvalidSimplePolygonRingSelfIntersection
+template<>
+template<>
+void object::test<8> ()
+{
+    checkInvalid(
+        "POLYGON ((10 90, 90 10, 90 90, 10 10, 10 90))");
+}
+
+// testSimplePolygonHole
+template<>
+template<>
+void object::test<9> ()
+{
+    checkValid(
+        "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (60 20, 20 70, 90 90, 60 20))");
+}
+
+// testPolygonTouchingHoleAtVertex
+template<>
+template<>
+void object::test<10> ()
+{
+    checkValid(
+        "POLYGON ((240 260, 40 260, 40 80, 240 80, 240 260), (140 180, 40 260, 140 240, 140 180))");
+}
+
+// testInvalidPolygonHoleProperIntersection
+template<>
+template<>
+void object::test<11> ()
+{
+    checkInvalid(
+        "POLYGON ((10 90, 50 50, 10 10, 10 90), (20 50, 60 70, 60 30, 20 50))");
+}
+
+// testInvalidPolygonDisconnectedInterior
+template<>
+template<>
+void object::test<12> ()
+{
+    checkInvalid(
+        "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 30 80, 20 20, 20 80), (80 30, 20 20, 80 20, 80 30), (80 80, 30 80, 80 30, 80 80))");
+}
+
+// testValidMultiPolygonTouchAtVertices
+template<>
+template<>
+void object::test<13> ()
+{
+    checkValid(
+        "MULTIPOLYGON (((10 10, 10 90, 90 90, 90 10, 80 80, 50 20, 20 80, 10 10)), ((90 10, 10 10, 50 20, 90 10)))");
+}
+
+// testValidMultiPolygonTouchAtVerticesSegments
+template<>
+template<>
+void object::test<14> ()
+{
+    checkValid(
+        "MULTIPOLYGON (((60 40, 90 10, 90 90, 10 90, 10 10, 40 40, 60 40)), ((50 40, 20 20, 80 20, 50 40)))");
+}
+
+// testInvalidMultiPolygonTouchVertices
+template<>
+template<>
+void object::test<15> ()
+{
+    checkInvalid(
+        "MULTIPOLYGON (((10 10, 20 30, 10 90, 90 90, 80 30, 90 10, 50 20, 10 10)), ((80 30, 20 30, 50 20, 80 30)))");
+}
+
+// testValidMultiPolygonHoleTouchVertices
+template<>
+template<>
+void object::test<16> ()
+{
+    checkValid(
+        "MULTIPOLYGON (((20 380, 420 380, 420 20, 20 20, 20 380), (220 340, 80 320, 60 200, 140 100, 340 60, 300 240, 220 340)), ((60 200, 340 60, 220 340, 60 200)))");
 }
 
 
