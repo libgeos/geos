@@ -161,9 +161,9 @@ jobs:
   msvc:
     name: 'Windows (Visual Studio)'
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
+    # defaults:
+    #   run:
+    #     shell: msys2 {0}
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v2
