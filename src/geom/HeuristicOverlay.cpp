@@ -634,6 +634,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
                 std::cerr << "Reduced with scale (" << scale << "): "
                           << ex.what() << std::endl;
 #endif
+                (void)ex; // quiet compiler warning about unused variable
                 if(scale == 1) {
                     throw;
                 }
