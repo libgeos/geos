@@ -11,133 +11,156 @@ on:
   pull_request: ~
 
 jobs:
-  linux:
-    name: 'Linux'
-    strategy:
-      matrix:
-        ci:
-        - {
-          compiler: g++,
-          build_type: Coverage,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.15.*,
-          os: ubuntu-18.04
-        }
-        - {
-          compiler: g++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 32,
-          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
-          cmake: 3.13.*,
-          os: ubuntu-18.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.10.*,
-          os: ubuntu-18.04
-        }
-        - {
-          compiler: g++,
-          build_type: Debug,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.15.*,
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Debug,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04,
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.8.*,
-          os: ubuntu-16.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 14,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04
-        }
+  # linux:
+  #   name: 'Linux'
+  #   strategy:
+  #     matrix:
+  #       ci:
+  #       - {
+  #         compiler: g++,
+  #         build_type: Coverage,
+  #         cxxstd: 11,
+  #         arch: 64,
+  #         packages: 'g++',
+  #         cmake: 3.15.*,
+  #         os: ubuntu-18.04
+  #       }
+  #       - {
+  #         compiler: g++,
+  #         build_type: Release,
+  #         cxxstd: 11,
+  #         arch: 32,
+  #         packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
+  #         cmake: 3.13.*,
+  #         os: ubuntu-18.04
+  #       }
+  #       - {
+  #         compiler: clang++,
+  #         build_type: Release,
+  #         cxxstd: 11,
+  #         arch: 64,
+  #         packages: 'clang',
+  #         cmake: 3.10.*,
+  #         os: ubuntu-18.04
+  #       }
+  #       - {
+  #         compiler: g++,
+  #         build_type: Debug,
+  #         cxxstd: 11,
+  #         arch: 64,
+  #         packages: 'g++',
+  #         cmake: 3.15.*,
+  #         os: ubuntu-20.04
+  #       }
+  #       - {
+  #         compiler: clang++,
+  #         build_type: Debug,
+  #         cxxstd: 11,
+  #         arch: 64,
+  #         packages: 'clang',
+  #         cmake: 3.17.*,
+  #         os: ubuntu-20.04,
+  #       }
+  #       - {
+  #         compiler: clang++,
+  #         build_type: Release,
+  #         cxxstd: 11,
+  #         arch: 64,
+  #         packages: 'clang',
+  #         cmake: 3.8.*,
+  #         os: ubuntu-16.04
+  #       }
+  #       - {
+  #         compiler: clang++,
+  #         build_type: Release,
+  #         cxxstd: 14,
+  #         arch: 64,
+  #         packages: 'clang',
+  #         cmake: 3.17.*,
+  #         os: ubuntu-20.04
+  #       }
+
+  #   runs-on: ${{ matrix.ci.os }}
+  #   steps:
+
+  #   - name: 'Install'
+  #     run: |
+  #       set -e
+  #       uname -a
+  #       sudo -E apt-get update
+  #       sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip valgrind ${{ matrix.ci.packages }}
+  #       python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
+  #       echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v2
+
+  #   - name: 'Build'
+  #     env:
+  #       CFLAGS: "-m${{ matrix.ci.arch }}"
+  #       CXXFLAGS: "-m${{ matrix.ci.arch }}"
+  #     run: |
+  #       set -e
+  #       mkdir build.cmake
+  #       cd build.cmake
+  #       cmake --version
+  #       cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
+  #       make -j 2
+  #       cmake --build . --target docs
+
+  #   - name: Test
+  #     run: |
+  #       set -e
+  #       cd build.cmake
+  #       ctest --output-on-failure .
+
+  #   # Run the all-unit-tests under
+  #   # the memory checker when we have Debug symbols
+  #   # available. Change to ^all to also check all-xml-tests
+  #   - name: Valgrind
+  #     if: matrix.ci.build_type == 'Debug'
+  #     run: |
+  #       set -e
+  #       cd build.cmake
+  #       ctest --output-on-failure \
+  #         --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
+  #         -R ^all-unit -C Valgrind -T memcheck
+
+  #   - name: Upload coverage to Codecov
+  #     if: matrix.ci.build_type == 'Coverage'
+  #     run: |
+  #       curl -o codecov.sh https://codecov.io/bash
+  #       bash codecov.sh
+  #     shell: bash
 
 
-    runs-on: ${{ matrix.ci.os }}
-    steps:
+  # windows:
+  #   name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
+  #   runs-on: windows-2019
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v2
 
-    - name: 'Install'
-      run: |
-        set -e
-        uname -a
-        sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip valgrind ${{ matrix.ci.packages }}
-        python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+  #   - name: 'Setup'
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
 
-    - name: 'Check Out'
-      uses: actions/checkout@v2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
+  #      cmake --build . -j 2
+  #      ctest --output-on-failure .
 
-    - name: 'Build'
-      env:
-        CFLAGS: "-m${{ matrix.ci.arch }}"
-        CXXFLAGS: "-m${{ matrix.ci.arch }}"
-      run: |
-        set -e
-        mkdir build.cmake
-        cd build.cmake
-        cmake --version
-        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
-        make -j 2
-        cmake --build . --target docs
-
-    - name: Test
-      run: |
-        set -e
-        cd build.cmake
-        ctest --output-on-failure .
-
-    # Run the all-unit-tests under
-    # the memory checker when we have Debug symbols
-    # available. Change to ^all to also check all-xml-tests
-    - name: Valgrind
-      if: matrix.ci.build_type == 'Debug'
-      run: |
-        set -e
-        cd build.cmake
-        ctest --output-on-failure \
-          --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
-          -R ^all-unit -C Valgrind -T memcheck
-
-    - name: Upload coverage to Codecov
-      if: matrix.ci.build_type == 'Coverage'
-      run: |
-        curl -o codecov.sh https://codecov.io/bash
-        bash codecov.sh
-      shell: bash
-
-
-  windows:
-    name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
-    runs-on: windows-2019
+  msvc:
+    name: 'Windows (Visual Studio)'
+    runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
@@ -145,17 +168,18 @@ jobs:
     - name: 'Check Out'
       uses: actions/checkout@v2
 
-    - name: 'Setup'
-      uses: msys2/setup-msys2@v2
-      with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
-
     - name: 'Build'
       run: |
        mkdir build
        cd build
        cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
-       cmake --build . -j 2
-       ctest --output-on-failure .
+       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+       cmake --build . --config Release
+
+    - name: 'Test'
+      run: |
+       cd build
+       ctest -V --output-on-failure -C Release
+
+
 
