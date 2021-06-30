@@ -28,7 +28,7 @@ stages:
 
   - job: 'Linux'
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-16.04'
     strategy:
       matrix:
         GCC 8:
@@ -59,27 +59,27 @@ stages:
           CXXSTD: 11, 14, 17, 20
           CXX: clang++-8
           PACKAGES: clang-8
-          LLVM_REPO: llvm-toolchain-bionic-8
+          LLVM_REPO: llvm-toolchain-xenial-8
         Clang 7:
           CXXSTD: 14, 17, 20
           CXX: clang++-7
           PACKAGES: clang-7
-          LLVM_REPO: llvm-toolchain-bionic-7
+          LLVM_REPO: llvm-toolchain-xenial-7
         Clang 6:
           CXXSTD: 14, 17, 20
           CXX: clang++-6.0
           PACKAGES: clang-6.0
-          LLVM_REPO: llvm-toolchain-bionic-6.0
+          LLVM_REPO: llvm-toolchain-xenial-6.0
         Clang 5:
           CXXSTD: 11, 14, 17
           PACKAGES: clang-5.0
           CXX: clang++-5.0
-          LLVM_REPO: llvm-toolchain-bionic-5.0
+          LLVM_REPO: llvm-toolchain-xenial-5.0
         Clang 4:
           CXXSTD: 11, 14
           CXX: clang++-4.0
           PACKAGES: clang-4.0
-          LLVM_REPO: llvm-toolchain-bionic-4.0
+          LLVM_REPO: llvm-toolchain-xenial-4.0
         Clang 3.9:
           CXXSTD: 11, 14
           CXX: clang++-3.9

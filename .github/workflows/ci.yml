@@ -80,6 +80,7 @@ jobs:
           os: ubuntu-20.04
         }
 
+
     runs-on: ${{ matrix.ci.os }}
     steps:
 
@@ -133,7 +134,8 @@ jobs:
         bash codecov.sh
       shell: bash
 
-  windows-mingw:
+
+  windows:
     name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
     runs-on: windows-2019
     defaults:
@@ -156,26 +158,4 @@ jobs:
        cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
        cmake --build . -j 2
        ctest --output-on-failure .
-
-  windows-msvc:
-    name: 'Windows (Visual Studio, Release, windows-latest)'
-    runs-on: windows-latest
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v2
-
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release
-
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure -C Release
-
-
 
