@@ -443,7 +443,7 @@ IsValidOp::checkHolesNested(const Polygon* poly)
 
     IndexedNestedHoleTester nestedTester(poly);
     if (nestedTester.isNested()) {
-        logInvalid(TopologyValidationError::eNestedShells,
+        logInvalid(TopologyValidationError::eNestedHoles,
                    &nestedTester.getNestedPoint());
     }
 }

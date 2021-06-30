@@ -5,7 +5,6 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/constants.h> // for std::isnan
-#include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Dimension.h>
@@ -14,6 +13,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/TopologyValidationError.h>
 // std
 #include <cmath>
@@ -53,6 +53,16 @@ struct test_isvalidop_data {
         auto g = wktreader.read(wktstr);
         ensure(!g->isValid());
     }
+
+    void checkInvalid(int errExpected, const char* wkt)
+    {
+        std::string wktstr(wkt);
+        auto geom = wktreader.read(wktstr);
+        IsValidOp validOp(geom.get());
+        int err = validOp.getValidationError()->getErrorType();
+        ensure_equals("error codes do not match", err, errExpected);
+    }
+
 };
 
 typedef test_group<test_isvalidop_data> group;
@@ -174,6 +184,7 @@ template<>
 void object::test<8> ()
 {
     checkInvalid(
+        TopologyValidationError::eSelfIntersection,
         "POLYGON ((10 90, 90 10, 90 90, 10 10, 10 90))");
 }
 
@@ -201,6 +212,7 @@ template<>
 void object::test<11> ()
 {
     checkInvalid(
+        TopologyValidationError::eSelfIntersection,
         "POLYGON ((10 90, 50 50, 10 10, 10 90), (20 50, 60 70, 60 30, 20 50))");
 }
 
@@ -210,6 +222,7 @@ template<>
 void object::test<12> ()
 {
     checkInvalid(
+        TopologyValidationError::eDisconnectedInterior,
         "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 30 80, 20 20, 20 80), (80 30, 20 20, 80 20, 80 30), (80 80, 30 80, 80 30, 80 80))");
 }
 
@@ -231,12 +244,13 @@ void object::test<14> ()
         "MULTIPOLYGON (((60 40, 90 10, 90 90, 10 90, 10 10, 40 40, 60 40)), ((50 40, 20 20, 80 20, 50 40)))");
 }
 
-// testInvalidMultiPolygonTouchVertices
+// testInvalidMultiPolygonNestedAllTouchAtVertices
 template<>
 template<>
 void object::test<15> ()
 {
     checkInvalid(
+        TopologyValidationError::eNestedShells,
         "MULTIPOLYGON (((10 10, 20 30, 10 90, 90 90, 80 30, 90 10, 50 20, 10 10)), ((80 30, 20 30, 50 20, 80 30)))");
 }
 
@@ -247,6 +261,52 @@ void object::test<16> ()
 {
     checkValid(
         "MULTIPOLYGON (((20 380, 420 380, 420 20, 20 20, 20 380), (220 340, 80 320, 60 200, 140 100, 340 60, 300 240, 220 340)), ((60 200, 340 60, 220 340, 60 200)))");
+}
+
+// testPolygonMultipleHolesTouchAtSamePoint
+template<>
+template<>
+void object::test<17> ()
+{
+    checkValid(
+        "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (40 80, 60 80, 50 50, 40 80), (20 60, 20 40, 50 50, 20 60), (40 20, 60 20, 50 50, 40 20))");
+}
+
+// testPolygonHoleOutsideShellAllTouch
+template<>
+template<>
+void object::test<18> ()
+{
+    checkInvalid(TopologyValidationError::eHoleOutsideShell,
+        "POLYGON ((10 10, 30 10, 30 50, 70 50, 70 10, 90 10, 90 90, 10 90, 10 10), (50 50, 30 10, 70 10, 50 50))");
+}
+
+// testPolygonHoleOutsideShellDoubleTouch
+template<>
+template<>
+void object::test<19> ()
+{
+    checkInvalid(TopologyValidationError::eHoleOutsideShell,
+        "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 80 80, 80 20, 20 20, 20 80), (90 70, 150 50, 90 20, 110 40, 90 70))");
+}
+
+// testPolygonNestedHolesAllTouch
+template<>
+template<>
+void object::test<20> ()
+{
+    checkInvalid(TopologyValidationError::eNestedHoles,
+        "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 80 80, 80 20, 20 20, 20 80), (50 80, 80 50, 50 20, 20 50, 50 80))");
+}
+
+// testInvalidMultiPolygonHoleOverlapCrossing
+template<>
+template<>
+void object::test<21> ()
+{
+    checkInvalid(
+        TopologyValidationError::eSelfIntersection,
+        "MULTIPOLYGON (((20 380, 420 380, 420 20, 20 20, 20 380), (220 340, 180 240, 60 200, 140 100, 340 60, 300 240, 220 340)), ((60 200, 340 60, 220 340, 60 200)))");
 }
 
 
