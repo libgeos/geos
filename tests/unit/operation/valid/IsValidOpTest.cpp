@@ -141,6 +141,15 @@ void object::test<5>
     ensure(g->isValid());
 }
 
+template<>
+template<>
+void object::test<6>
+()
+{
+    std::string wkt("POLYGON((40 320,340 320,340 20,40 20,40 320),(100 120,40 20,180 100,100 120),(200 200,180 100,240 160,200 200),(260 260,240 160,300 200,260 260),(300 300,300 200,340 260,300 300))");
+    auto g = wktreader.read(wkt);
+    ensure(!g->isValid());
+}
 
 
 

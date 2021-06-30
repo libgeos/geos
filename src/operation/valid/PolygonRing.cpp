@@ -186,7 +186,7 @@ PolygonRing::init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack)
 const Coordinate*
 PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
     PolygonRing* root,
-    std::stack<PolygonRingTouch*> touchStack)
+    std::stack<PolygonRingTouch*>& touchStack)
 {
     PolygonRing* polyRing = currentTouch->getRing();
     const Coordinate* currentPt = currentTouch->getCoordinate();

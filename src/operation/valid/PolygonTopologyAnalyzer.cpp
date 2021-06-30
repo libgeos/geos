@@ -283,8 +283,8 @@ PolygonTopologyAnalyzer::createSegString(const LinearRing* ring, const PolygonRi
     // and manage the lifecycle locally. This we pass on to the SegmentString
     if (pts->hasRepeatedPoints()) {
         std::unique_ptr<CoordinateSequence> newPts = RepeatedPointRemover::removeRepeatedPoints(pts);
-        coordSeqStore.emplace_back(newPts.release());
         pts = newPts.get();
+        coordSeqStore.emplace_back(newPts.release());
     }
 
     // Allocate the BasicSegmentString in the store and return a

@@ -108,7 +108,7 @@ private:
     */
     const Coordinate* scanForHoleCycle(PolygonRingTouch* currentTouch,
         PolygonRing* root,
-        std::stack<PolygonRingTouch*> touchStack);
+        std::stack<PolygonRingTouch*>& touchStack);
 
 
     bool isInTouchSet() const
