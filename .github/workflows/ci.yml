@@ -179,7 +179,7 @@ jobs:
 
   windows-msvc-17:
     name: 'Windows (Visual Studio 2017, Release, windows-latest)'
-    runs-on: windows-2017
+    runs-on: windows-2016
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v2
