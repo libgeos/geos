@@ -40,7 +40,12 @@ if(NOT MSVC)
 
 endif()
 
-add_subdirectory(astyle)
+option(BUILD_ASTYLE "Build astyle (Artistic Style) tool" ON)
+
+message(STATUS "GEOS: Build astyle ${BUILD_ASTYLE}")
+if(BUILD_ASTYLE)
+  add_subdirectory(astyle)
+endif()
 
 # if(UNIX OR MINGW)
 
