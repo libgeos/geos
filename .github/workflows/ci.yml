@@ -157,9 +157,9 @@ jobs:
        cmake --build . -j 2
        ctest --output-on-failure .
 
-  windows-msvc:
-    name: 'Windows (Visual Studio, Release, windows-latest)'
-    runs-on: windows-latest
+  windows-msvc-19:
+    name: 'Windows (Visual Studio 2019, Release, windows-latest)'
+    runs-on: windows-2019
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v2
@@ -177,5 +177,23 @@ jobs:
        cd build
        ctest --output-on-failure -C Release
 
+  windows-msvc-17:
+    name: 'Windows (Visual Studio 2017, Release, windows-latest)'
+    runs-on: windows-2017
+    steps:
+    - name: 'Check Out'
+      uses: actions/checkout@v2
 
+    - name: 'Build'
+      run: |
+       mkdir build
+       cd build
+       cmake --version
+       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
+       cmake --build . --config Release
+
+    - name: 'Test'
+      run: |
+       cd build
+       ctest --output-on-failure -C Release
 
