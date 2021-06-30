@@ -41,8 +41,7 @@ const char* TopologyValidationError::errMsg[] = {
     "Duplicate Rings",
     "Too few points in geometry component",
     "Invalid Coordinate",
-    "Ring is not closed",
-    ""
+    "Ring is not closed"
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,
