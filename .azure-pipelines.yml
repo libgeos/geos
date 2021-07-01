@@ -55,51 +55,36 @@ stages:
           CXXSTD: 11
           CXX: g++-4.8
           PACKAGES: g++-4.8
-        Clang 8:
+        Clang 10:
           CXXSTD: 11, 14, 17, 20
+          CXX: clang++-10
+          PACKAGES: clang-10
+          LLVM_REPO: llvm-toolchain-bionic-10
+        Clang 9:
+          CXXSTD: 11, 14, 17, 20
+          CXX: clang++-9
+          PACKAGES: clang-9
+          LLVM_REPO: llvm-toolchain-bionic-9
+        Clang 8:
+          CXXSTD: 11, 14, 17
           CXX: clang++-8
           PACKAGES: clang-8
           LLVM_REPO: llvm-toolchain-bionic-8
         Clang 7:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 11, 14
           CXX: clang++-7
           PACKAGES: clang-7
           LLVM_REPO: llvm-toolchain-bionic-7
         Clang 6:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 11, 14
           CXX: clang++-6.0
           PACKAGES: clang-6.0
           LLVM_REPO: llvm-toolchain-bionic-6.0
         Clang 5:
-          CXXSTD: 11, 14, 17
+          CXXSTD: 11, 14
           PACKAGES: clang-5.0
           CXX: clang++-5.0
           LLVM_REPO: llvm-toolchain-bionic-5.0
-        Clang 4:
-          CXXSTD: 11, 14
-          CXX: clang++-4.0
-          PACKAGES: clang-4.0
-          LLVM_REPO: llvm-toolchain-bionic-4.0
-        Clang 3.9:
-          CXXSTD: 11, 14
-          CXX: clang++-3.9
-          PACKAGES: llvm-toolchain-bionic-3.9
-        Clang 3.8:
-          CXX: clang++-3.8
-          CXXSTD: 11, 14
-          PACKAGES: clang-3.8
-        Clang 3.7:
-          CXXSTD: 11
-          CXX: clang++-3.7
-          PACKAGES: clang-3.7
-        Clang 3.6:
-          CXXSTD: 11
-          CXX: clang++-3.6
-          PACKAGES: clang-3.6
-        Clang 3.5:
-          CXXSTD: 11
-          CXX: clang++-3.5
-          PACKAGES: clang-3.5
     steps:
     - script: |
         set -e
