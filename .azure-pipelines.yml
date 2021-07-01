@@ -246,7 +246,7 @@ stages:
 
   - job: Code_quality_checks
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
     - script: |
         set -e
