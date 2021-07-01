@@ -107,7 +107,7 @@ stages:
         sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         if test -n "${LLVM_REPO}" ; then
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo -E apt-add-repository "deb http://apt.llvm.org/xenial/ ${LLVM_REPO} main"
+          sudo -E apt-add-repository "deb http://apt.llvm.org/bionic/ ${LLVM_REPO} main"
         fi
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cmake ${PACKAGES}
