@@ -31,7 +31,6 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
-#include <geos/index/strtree/STRtree.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/Location.h>
 

@@ -21,9 +21,11 @@
 #include <sstream>
 #include <memory>
 
-using namespace geos::geom;
-using namespace geos::operation;
-using namespace geos::operation::valid;
+using geos::operation::valid::IsSimpleOp;
+using geos::geom::Coordinate;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::algorithm::BoundaryNodeRule;
 
 namespace tut {
 //
@@ -31,7 +33,7 @@ namespace tut {
 //
 
 struct test_issimpleop_data {
-    typedef geos::geom::GeometryFactory GeometryFactory;
+
     geos::geom::PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
@@ -43,6 +45,50 @@ struct test_issimpleop_data {
         , reader_(factory_.get())
         , tolerance_(0.00005)
     {}
+
+    void checkIsSimple(
+        std::string& wkt,
+        const BoundaryNodeRule& bnRule,
+        bool expectedResult)
+    {
+        checkIsSimple(wkt, bnRule, expectedResult, Coordinate::getNull());
+    }
+
+    void checkIsSimple(
+        std::string& wkt,
+        const BoundaryNodeRule& bnRule,
+        bool expectedResult,
+        Coordinate expectedLocation)
+    {
+        auto g = reader_.read(wkt);
+        IsSimpleOp op(*g, bnRule);
+        bool isSimple = op.isSimple();
+        Coordinate nonSimpleLoc = op.getNonSimpleLocation();
+        // if geom is not simple, should have a valid location
+        ensure("unexpected result", expectedResult == isSimple);
+        ensure("not simple implies a non-simple location", isSimple || ! nonSimpleLoc.isNull());
+        if (!isSimple && !nonSimpleLoc.isNull() && !expectedLocation.isNull()) {
+            ensure(expectedLocation.distance(nonSimpleLoc) < tolerance_);
+        }
+    }
+
+    void checkIsSimpleAll(
+        std::string& wkt,
+        const BoundaryNodeRule& bnRule,
+        std::string& wktExpectedPts)
+    {
+        auto g = reader_.read(wkt);
+        IsSimpleOp op(*g, bnRule);
+        op.setFindAllLocations(true);
+        op.isSimple();
+
+        auto nonSimpleCoords = op.getNonSimpleLocations();
+        std::unique_ptr<Geometry> nsPts(g->getFactory()->createMultiPoint(nonSimpleCoords));
+        auto expectedPts = reader_.read(wktExpectedPts);
+        ensure_equals_geometry(expectedPts.get(), nsPts.get());
+    }
+
+
 };
 
 typedef test_group<test_issimpleop_data> group;
@@ -54,65 +100,10 @@ group test_issimpleop_group("geos::operation::valid::IsSimpleOp");
 // Test Cases
 //
 
-// 1 - Test cross
+
 template<>
 template<>
 void object::test<1>
-()
-{
-    const std::string wkt("MULTILINESTRING ((20 120, 120 20), (20 20, 120 120))");
-    const Geometry::Ptr geom(reader_.read(wkt));
-
-    // TODO - mloskot: What about support of new features of BoundaryNodeRule, in JTS
-
-    IsSimpleOp op(*geom);
-    bool simple = op.isSimple();
-
-    ensure(false == simple);
-
-    // TODO - mloskot:
-    // There are missing features not (re)implemented in IsSimpleOp, in GEOS.
-    // So, all tests in this suite have been simplified in comparison to original JTS tests.
-    //
-    //Coordinate loc(70, 70);
-    //Coordinate nonSimpleLoc = op.getNonSimpleLocation();
-    //loc.distance(nonSimpleLoc) < TOLERANCE
-}
-
-// 2 - Test MultiLineString with ring touching at the end point
-template<>
-template<>
-void object::test<2>
-()
-{
-    const std::string wkt("MULTILINESTRING ((100 100, 20 20, 200 20, 100 100), (100 200, 100 100))");
-    const Geometry::Ptr geom(reader_.read(wkt));
-
-    IsSimpleOp op(*geom);
-    bool simple = op.isSimple();
-
-    ensure(false == simple);
-}
-
-// 3 - Test simple LineString
-template<>
-template<>
-void object::test<3>
-()
-{
-    const std::string wkt("LINESTRING (100 100, 20 20, 200 20, 100 100)");
-    const Geometry::Ptr geom(reader_.read(wkt));
-
-    IsSimpleOp op(*geom);
-    bool simple = op.isSimple();
-
-    ensure(true == simple);
-}
-
-
-template<>
-template<>
-void object::test<4>
 ()
 {
     // Adapted from https://trac.osgeo.org/geos/ticket/858
@@ -144,46 +135,74 @@ void object::test<4>
     }
 }
 
- // public void testLinesAll() {
- //    checkIsSimpleAll("MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10))",
- //        BoundaryNodeRule.MOD2_BOUNDARY_RULE,
- //        "");
- //  }
 
- // private void checkIsSimpleAll(String wkt, BoundaryNodeRule bnRule,
- //      String wktExpectedPts)
- //  {
- //    Geometry g = read(wkt);
- //    IsSimpleOp op = new IsSimpleOp(g, bnRule);
- //    op.setFindAllLocations(true);
- //    op.isSimple();
- //    List<Coordinate> nonSimpleCoords = op.getNonSimpleLocations();
- //    Geometry nsPts = g.getFactory().createMultiPointFromCoords(CoordinateArrays.toCoordinateArray(nonSimpleCoords));
-
- //    Geometry expectedPts = read(wktExpectedPts);
- //    checkEqual(expectedPts, nsPts);
- //  }
-
+// test2TouchAtEndpoint
 template<>
 template<>
-void object::test<5>
-()
+void object::test<2> ()
 {
-    const std::string wkt("MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10))");
-    const Geometry::Ptr geom(reader_.read(wkt));
-
-    const std::string wktNonSimple("MULTIPOINT((50 20), (50 30))");
-    const Geometry::Ptr geomExpectedNonSimple(reader_.read(wktNonSimple));
-
-    IsSimpleOp op(*geom);
-    op.setFindAllLocations(true);
-    bool simple = op.isSimple();
-    const std::vector<Coordinate>& nonSimpleCoords = op.getNonSimpleLocations();
-    Geometry::Ptr nsPts(geom->getFactory()->createMultiPoint(nonSimpleCoords));
-
-    ensure(false == simple);
-    ensure_equals_geometry(nsPts.get(), geomExpectedNonSimple.get());
+    std::string a("MULTILINESTRING((0 1, 1 1, 2 1), (0 0, 1 0, 2 1))");
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryRuleMod2(), true, Coordinate(2, 1));
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryEndPoint(), true, Coordinate(2, 1));
 }
+
+// test3TouchAtEndpoint
+template<>
+template<>
+void object::test<3> ()
+{
+    // rings are simple under all rules
+    std::string a("MULTILINESTRING ((0 1, 1 1, 2 1),   (0 0, 1 0, 2 1),  (0 2, 1 2, 2 1))");
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryRuleMod2(), true, Coordinate(2, 1));
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryEndPoint(), true, Coordinate(2, 1));
+}
+
+// testCross
+template<>
+template<>
+void object::test<4> ()
+{
+    std::string a("MULTILINESTRING ((20 120, 120 20), (20 20, 120 120))");
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryRuleMod2(), false, Coordinate(70, 70));
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryEndPoint(), false, Coordinate(70, 70));
+}
+
+// testMultiLineStringWithRingTouchAtEndpoint
+template<>
+template<>
+void object::test<5> ()
+{
+    std::string a("MULTILINESTRING ((100 100, 20 20, 200 20, 100 100), (100 200, 100 100))");
+    // under Mod-2, the ring has no boundary, so the line intersects the interior ==> not simple
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryRuleMod2(), false, Coordinate(100, 100));
+    // under Endpoint, the ring has a boundary point, so the line does NOT intersect the interior ==> simple
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryEndPoint(), true);
+}
+
+// testRing
+template<>
+template<>
+void object::test<6> ()
+{
+    // rings are simple under all rules
+    std::string a("LINESTRING (100 100, 20 20, 200 20, 100 100)");
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryRuleMod2(), true);
+    checkIsSimple(a, BoundaryNodeRule::getBoundaryEndPoint(), true);
+}
+
+
+// testLinesAll
+template<>
+template<>
+void object::test<7> ()
+{
+    // rings are simple under all rules
+    std::string a("MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10))");
+    std::string b("MULTIPOINT((50 20), (50 30))");
+    checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
+}
+
+
 
 
 } // namespace tut
