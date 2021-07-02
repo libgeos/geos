@@ -51,7 +51,7 @@
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
-#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/TopologyException.h>
@@ -187,7 +187,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow = false, b
 {
     if(g.isLineal()) {
         if(! validOnly) {
-            operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
+            operation::valid::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
             if(! sop.isSimple()) {
                 if(doThrow) {
                     throw geos::util::TopologyException(

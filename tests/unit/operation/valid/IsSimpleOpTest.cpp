@@ -1,12 +1,12 @@
 //
-// Test Suite for geos::operation::IsSimpleOp class
-// Ported from JTS junit/operation/IsSimpleTest.java
+// Test Suite for geos::operation::valid::IsSimpleOp class
+
 
 #include <tut/tut.hpp>
 #include <utility.h>
 
 // geos
-#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
@@ -23,6 +23,7 @@
 
 using namespace geos::geom;
 using namespace geos::operation;
+using namespace geos::operation::valid;
 
 namespace tut {
 //
@@ -47,7 +48,7 @@ struct test_issimpleop_data {
 typedef test_group<test_issimpleop_data> group;
 typedef group::object object;
 
-group test_issimpleop_group("geos::operation::IsSimpleOp");
+group test_issimpleop_group("geos::operation::valid::IsSimpleOp");
 
 //
 // Test Cases

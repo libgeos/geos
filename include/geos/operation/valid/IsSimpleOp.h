@@ -43,8 +43,9 @@ class GeometryCollection;
 }
 
 
-namespace geos {
+namespace geos {      // geos
 namespace operation { // geos.operation
+namespace valid {     // geos.operation.valid
 
 
 class GEOS_DLL IsSimpleOp {
@@ -248,5 +249,6 @@ public:
 }; // IsSimpleOp
 
 
+} // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos

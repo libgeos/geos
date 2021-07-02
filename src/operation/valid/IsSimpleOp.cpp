@@ -15,7 +15,7 @@
  *
  **********************************************************************/
 
-#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
@@ -43,6 +43,7 @@ using namespace geos::geom::util;
 
 namespace geos {
 namespace operation {
+namespace valid {
 
 
 /* public static */
@@ -364,5 +365,6 @@ IsSimpleOp::NonSimpleIntersectionFinder::isDone() const
 // --------------------------------------------------------------------------------
 
 
+} // geos.operation.valid
 } // geos.operation
 } // geos

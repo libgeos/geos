@@ -45,7 +45,7 @@ namespace algorithm { // geos::algorithm
  * @version 1.7
  *
  * @see operation::relate::RelateOp
- * @see operation::IsSimpleOp
+ * @see operation::valid::IsSimpleOp
  * @see algorithm::PointLocator
  */
 class GEOS_DLL BoundaryNodeRule {
