@@ -3,11 +3,12 @@
 # Paul Ramsey <pramsey at cleverelephant dot ca>
 # Based on AZP configuration by Mateusz Loskot <mateusz at loskot dot net>
 
-name: CI
+name: 'CI'
+
 on:
   push:
     branches-ignore:
-      - 'master'
+      - 'main'
   pull_request: ~
 
 jobs:
