@@ -47,10 +47,10 @@ stages:
           CXXSTD: 11
           CXX: g++-5
           PACKAGES: g++-5
-        GCC 4.9:
-          CXXSTD: 11
-          CXX: g++-4.9
-          PACKAGES: g++-4.9
+        # GCC 4.9:
+        #   CXXSTD: 11
+        #   CXX: g++-4.9
+        #   PACKAGES: g++-4.9
         GCC 4.8:
           CXXSTD: 11
           CXX: g++-4.8
