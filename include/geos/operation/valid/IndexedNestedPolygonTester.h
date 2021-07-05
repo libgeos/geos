@@ -77,6 +77,9 @@ private:
         const Polygon* poly,
         Coordinate& coordNested);
 
+    // Declare type as noncopyable
+    IndexedNestedPolygonTester(const IndexedPointInAreaLocator& other) = delete;
+    IndexedNestedPolygonTester& operator=(const IndexedPointInAreaLocator& rhs) = delete;
 
 public:
 
