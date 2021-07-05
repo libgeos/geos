@@ -50,14 +50,7 @@ for category in "style" "performance" "portability"; do
     fi
 done
 
-# unusedPrivateFunction not reliable enough in cppcheck 1.72 of Ubuntu 16.04
-if test "$(cppcheck --version)" = "Cppcheck 1.72"; then
-    UNUSED_PRIVATE_FUNCTION=""
-else
-    UNUSED_PRIVATE_FUNCTION="unusedPrivateFunction"
-fi
-
-for category in "error" "warning" "clarifyCalculation" "duplicateExpressionTernary" "redundantCondition" "postfixOperator" "${UNUSED_PRIVATE_FUNCTION}"; do
+for category in "error" "warning" "clarifyCalculation" "duplicateExpressionTernary" "redundantCondition" "postfixOperator" "unusedPrivateFunction"; do
     if test "${category}" != ""; then
         if grep "${category}," ${LOG_FILE}  >/dev/null; then
             echo "ERROR: Issues in '${category}' category found:"
