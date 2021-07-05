@@ -26,6 +26,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/IndexedNestedHoleTester.h>
+#include <geos/operation/valid/IndexedNestedPolygonTester.h>
 #include <geos/util/UnsupportedOperationException.h>
 
 #include <cmath>
@@ -453,60 +454,15 @@ IsValidOp::checkHolesNested(const Polygon* poly)
 void
 IsValidOp::checkShellsNested(const MultiPolygon* mp)
 {
-    for (std::size_t i = 0; i < mp->getNumGeometries(); i++) {
-        const Polygon* p = mp->getGeometryN(i);
-        if (p->isEmpty())
-            continue;
-        const LinearRing* shell = p->getExteriorRing();
-        for (std::size_t j = 0; j < mp->getNumGeometries(); j++) {
-            if (i == j)
-                continue;
-            const Polygon* p2 = mp->getGeometryN(j);
-            const Coordinate* invalidPt = findShellSegmentInPolygon(shell, p2);
-            if (invalidPt != nullptr) {
-                logInvalid(TopologyValidationError::eNestedShells,
-                           invalidPt);
-                return;
-            }
-        }
+    // skip test if only one shell present
+    if (mp->getNumGeometries() <= 1)
+        return;
+
+    IndexedNestedPolygonTester nestedTester(mp);
+    if (nestedTester.isNested()) {
+        logInvalid(TopologyValidationError::eNestedShells,
+                   &nestedTester.getNestedPoint());
     }
-}
-
-
-/* private */
-const Coordinate *
-IsValidOp::findShellSegmentInPolygon(const LinearRing* shell, const Polygon* poly)
-{
-    const LinearRing* polyShell = poly->getExteriorRing();
-    if (polyShell->isEmpty()) return nullptr;
-
-    //--- if envelope is not covered --> not nested
-    if (! poly->getEnvelopeInternal()->covers(shell->getEnvelopeInternal()))
-        return nullptr;
-
-    const Coordinate& shell0 = shell->getCoordinateN(0);
-    const Coordinate& shell1 = shell->getCoordinateN(1);
-
-    if (! PolygonTopologyAnalyzer::isSegmentInRing(&shell0, &shell1, polyShell))
-        return nullptr;
-
-    /**
-    * Check if the shell is inside a hole (if there are any).
-    * If so this is valid.
-    */
-    for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        const LinearRing* hole = poly->getInteriorRingN(i);
-        if (hole->getEnvelopeInternal()->covers(shell->getEnvelopeInternal())
-            && PolygonTopologyAnalyzer::isSegmentInRing(&shell0, &shell1, hole)) {
-            return nullptr;
-        }
-    }
-
-    /**
-    * The shell is contained in the polygon, but is not contained in a hole.
-    * This is invalid.
-    */
-    return &shell0;
 }
 
 

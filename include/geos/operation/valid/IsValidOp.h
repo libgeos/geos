@@ -208,19 +208,6 @@ private:
      */
     void checkShellsNested(const geom::MultiPolygon* mp);
 
-    /**
-     * Finds a point of a shell segment which lies inside a polygon, if any.
-     * The shell is assume to touch the polyon only at shell vertices,
-     * and does not cross the polygon.
-     *
-     * @param the shell to test
-     * @param the polygon to test against
-     * @return an interior segment point, or null if the shell is nested correctly
-     */
-    const geom::Coordinate * findShellSegmentInPolygon(
-        const geom::LinearRing* shell,
-        const geom::Polygon* poly);
-
     void checkInteriorDisconnected(PolygonTopologyAnalyzer& areaAnalyzer);
 
 
