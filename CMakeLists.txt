@@ -72,6 +72,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
 #-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
@@ -314,8 +317,6 @@ add_subdirectory(doc)
 #-----------------------------------------------------------------------------
 # Install and export targets - support 'make install' or equivalent
 #-----------------------------------------------------------------------------
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config-version.cmake"
