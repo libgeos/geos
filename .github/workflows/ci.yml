@@ -50,24 +50,12 @@ jobs:
     - name: 'Build'
       run: |
         set -e
-        if [ ${{ matrix.ci.build }} == 'cmake' ];
-        then
-          mkdir build.cmake
-          cd build.cmake
-          cmake --version
-          cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
-          make
-          cmake --build . --target docs
-          ctest --output-on-failure .
-        else
-          set -e
-          ./autogen.sh
-          mkdir build.autotools
-          cd build.autotools
-          CFLAGS="-std=c++${{ matrix.ci.cxxstd }} -m${{ matrix.ci.arch }}"
-          ../configure CC=${{ matrix.ci.compiler }} CXX=${{ matrix.ci.compiler }} CXXFLAGS="$CFLAGS" CFLAGS="$CFLAGS"
-          make && make check && make distcheck
-        fi
+        ./autogen.sh
+        mkdir build.autotools
+        cd build.autotools
+        export CFLAGS="-std=c++${{ matrix.ci.cxxstd }} -m${{ matrix.ci.arch }}"
+        ../configure CC=${{ matrix.ci.compiler }} CXX=${{ matrix.ci.compiler }} CXXFLAGS="$CFLAGS" CFLAGS="$CFLAGS"
+        make && make check && make distcheck
 
 
 
