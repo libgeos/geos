@@ -50,16 +50,16 @@ private:
     const MultiPolygon* multiPoly;
     TemplateSTRtree<const Polygon*> index;
     // std::vector<IndexedPointInAreaLocator> locators;
-    std::map<const Polygon*, std::unique_ptr<IndexedPointInAreaLocator>> locators;
+    std::map<const Polygon*, IndexedPointInAreaLocator> locators;
     Coordinate nestedPt;
 
     void loadIndex();
 
-    IndexedPointInAreaLocator* getLocator(const Polygon* poly);
+    IndexedPointInAreaLocator& getLocator(const Polygon* poly);
 
     bool findNestedPoint(const LinearRing* shell,
         const Polygon* possibleOuterPoly,
-        IndexedPointInAreaLocator* locator,
+        IndexedPointInAreaLocator& locator,
         Coordinate& coordNested);
 
     /**

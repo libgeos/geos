@@ -56,7 +56,7 @@ IndexedNestedPolygonTester::loadIndex()
 
 
 /* private */
-IndexedPointInAreaLocator*
+IndexedPointInAreaLocator&
 IndexedNestedPolygonTester::getLocator(const Polygon* poly)
 {
     auto search = locators.find(poly);
@@ -68,12 +68,12 @@ IndexedNestedPolygonTester::getLocator(const Polygon* poly)
         // std::map<const Polygon*, IndexedPointInAreaLocator> locators;
         locators.emplace(std::piecewise_construct,
             std::forward_as_tuple(poly),
-            std::forward_as_tuple(new IndexedPointInAreaLocator(*poly)));
+            std::forward_as_tuple(*poly));
         auto search2 = locators.find(poly);
-        return search2->second.get();
+        return search2->second;
     }
 
-    IndexedPointInAreaLocator* locator = search->second.get();
+    IndexedPointInAreaLocator& locator = search->second;
     return locator;
 }
 
@@ -113,14 +113,14 @@ bool
 IndexedNestedPolygonTester::findNestedPoint(
     const LinearRing* shell,
     const Polygon* possibleOuterPoly,
-    IndexedPointInAreaLocator* locator,
+    IndexedPointInAreaLocator& locator,
     Coordinate& coordNested)
 {
     /**
      * Try checking two points, since checking point location is fast.
      */
     const Coordinate& shellPt0 = shell->getCoordinateN(0);
-    Location loc0 = locator->locate(&shellPt0);
+    Location loc0 = locator.locate(&shellPt0);
     if (loc0 == Location::EXTERIOR) return false;
     if (loc0 == Location::INTERIOR) {
         coordNested = shellPt0;
@@ -128,7 +128,7 @@ IndexedNestedPolygonTester::findNestedPoint(
     }
 
     const Coordinate& shellPt1 = shell->getCoordinateN(0);
-    Location loc1 = locator->locate(&shellPt1);
+    Location loc1 = locator.locate(&shellPt1);
     if (loc1 == Location::EXTERIOR) return false;
     if (loc1 == Location::INTERIOR) {
         coordNested = shellPt1;
