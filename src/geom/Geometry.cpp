@@ -50,7 +50,7 @@
 #include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
-#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
@@ -905,7 +905,7 @@ Geometry::apply_rw(GeometryComponentFilter* filter)
 bool
 Geometry::isSimple() const
 {
-    operation::IsSimpleOp op(*this);
+    operation::valid::IsSimpleOp op(*this);
     return op.isSimple();
 }
 

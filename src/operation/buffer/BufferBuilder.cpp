@@ -158,16 +158,14 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     BufferParameters modParams = bufParams;
     modParams.setEndCapStyle(BufferParameters::CAP_FLAT);
     modParams.setSingleSided(false); // ignore parameter for areal-only geometries
-    std::unique_ptr<Geometry> buf;
+
 
     // This is a (temp?) hack to workaround the fact that
     // BufferBuilder BufferParameters are immutable after
     // construction, while we want to force the end cap
     // style to FLAT for single-sided buffering
-    {
-        BufferBuilder tmp(modParams);
-        buf.reset(tmp.buffer(l, distance));
-    }
+    BufferBuilder tmpBB(modParams);
+    std::unique_ptr<Geometry> buf(tmpBB.buffer(l, distance));
 
     // Create MultiLineStrings from this polygon.
     std::unique_ptr<Geometry> bufLineString(buf->getBoundary());

@@ -121,7 +121,10 @@ void object::test<2>
 ()
 {
     string wkt =
-        "POLYGON ((0 0, 0 340, 320 340, 320 0, 120 0, 0 0),   (120 0, 180 100, 60 100, 120 0),   (80 300, 80 180, 200 180, 200 240, 200 300, 80 300),  (200 240, 280 200, 280 280, 200 240))";
+        "POLYGON ((0 0, 0 340, 320 340, 320 0, 120 0, 0 0), "
+        "(120 0, 180 100, 60 100, 120 0), "
+        "(80 300, 80 180, 200 180, 200 240, 200 300, 80 300), "
+        "(200 240, 280 200, 280 280, 200 240))";
     checkIsValidSTR(wkt, true);
     checkIsValidDefault(wkt, true);
 }
@@ -188,11 +191,41 @@ void object::test<6>
 /// 7 - testShellCrossAndSTR
 template<>
 template<>
-void object::test<7>
-()
+void object::test<7> ()
 {
     string wkt = "POLYGON ((20 20, 120 20, 120 220, 180 220, 140 160, 200 160, 180 220, 240 220, 240 120, 20 120,  20 20))";
     checkIsValidSTR(wkt, false);
+    checkIsValidDefault(wkt, false);
+}
+
+/// Basic one-ring self-touch polygon
+template<>
+template<>
+void object::test<8> ()
+{
+    string wkt = "POLYGON ((100 0, 100 100, 200 100, 200 0, 150 0, 170 40, 130 40, 150 0, 100 0))";
+    checkIsValidSTR(wkt, true);
+    checkIsValidDefault(wkt, false);
+}
+
+
+/// testExvertedHoleStarTouchHoleCycle
+template<>
+template<>
+void object::test<9> ()
+{
+    string wkt = "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 50 30, 80 80, 80 30, 20 30, 20 80), (40 70, 50 70, 50 30, 40 70), (40 20, 60 20, 50 30, 40 20), (40 80, 20 80, 40 70, 40 80))";
+    checkIsValidSTR(wkt, false);
+}
+
+
+/// testExvertedHoleStarTouchHoleCycle
+template<>
+template<>
+void object::test<10> ()
+{
+    string wkt = "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 50 30, 80 80, 80 30, 20 30, 20 80), (40 70, 50 70, 50 30, 40 70), (40 20, 60 20, 50 30, 40 20))";
+    checkIsValidSTR(wkt, true);
     checkIsValidDefault(wkt, false);
 }
 

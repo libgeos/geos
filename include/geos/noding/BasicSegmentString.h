@@ -92,6 +92,10 @@ private:
 
     geom::CoordinateSequence* pts;
 
+    // Declare type as noncopyable
+    BasicSegmentString(const BasicSegmentString& other) = delete;
+    BasicSegmentString& operator=(const BasicSegmentString& rhs) = delete;
+
 };
 
 } // namespace geos.noding

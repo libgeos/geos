@@ -116,7 +116,7 @@ void object::test<4>
     geom1_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
     int r = GEOSisValidDetail(geom1_, 0, &reason_, &loc_);
     ensure_equals(r, 0); // invalid
-    ensure_equals(std::string(reason_), std::string("Ring Self-intersection"));
+    ensure_equals(std::string(reason_), std::string("Self-intersection"));
     ensure_equals(toWKT(loc_), "POINT (0 1)");
 }
 

@@ -67,8 +67,8 @@ CommonBitsOp::intersection(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    std::unique_ptr<Geometry> rgeom0;
-    std::unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0 = geom0->clone();
+    std::unique_ptr<Geometry> rgeom1 = geom1->clone();
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->intersection(rgeom1.get()));
 }
@@ -79,8 +79,8 @@ CommonBitsOp::Union(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    std::unique_ptr<Geometry> rgeom0;
-    std::unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0 = geom0->clone();
+    std::unique_ptr<Geometry> rgeom1 = geom1->clone();
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->Union(rgeom1.get()));
 }
@@ -91,8 +91,8 @@ CommonBitsOp::difference(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    std::unique_ptr<Geometry> rgeom0;
-    std::unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0 = geom0->clone();
+    std::unique_ptr<Geometry> rgeom1 = geom1->clone();
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->difference(rgeom1.get()));
 }
@@ -103,8 +103,8 @@ CommonBitsOp::symDifference(
     const Geometry* geom0,
     const Geometry* geom1)
 {
-    std::unique_ptr<Geometry> rgeom0;
-    std::unique_ptr<Geometry> rgeom1;
+    std::unique_ptr<Geometry> rgeom0 = geom0->clone();
+    std::unique_ptr<Geometry> rgeom1 = geom1->clone();
     removeCommonBits(geom0, geom1, rgeom0, rgeom1);
     return computeResultPrecision(rgeom0->symDifference(rgeom1.get()));
 }
@@ -165,10 +165,7 @@ CommonBitsOp::removeCommonBits(
     std::cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << std::endl;
 #endif
 
-    rgeom0 = geom0->clone();
     cbr->removeCommonBits(rgeom0.get());
-
-    rgeom1 = geom1->clone();
     cbr->removeCommonBits(rgeom1.get());
 }
 

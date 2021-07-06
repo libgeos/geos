@@ -39,7 +39,7 @@
 #include <sstream>
 
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/util/TopologyException.h>
 #include <string>
@@ -58,7 +58,7 @@ check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThro
 
     if(g.isLineal()) {
         if(! validOnly) {
-            operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
+            operation::valid::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
             if(! sop.isSimple()) {
                 if(doThrow) {
                     throw geos::util::TopologyException(

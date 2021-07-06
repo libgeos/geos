@@ -47,59 +47,44 @@ stages:
           CXXSTD: 11
           CXX: g++-5
           PACKAGES: g++-5
-        GCC 4.9:
-          CXXSTD: 11
-          CXX: g++-4.9
-          PACKAGES: g++-4.9
+        # GCC 4.9:
+        #   CXXSTD: 11
+        #   CXX: g++-4.9
+        #   PACKAGES: g++-4.9
         GCC 4.8:
           CXXSTD: 11
           CXX: g++-4.8
           PACKAGES: g++-4.8
-        Clang 8:
+        Clang 10:
           CXXSTD: 11, 14, 17, 20
+          CXX: clang++-10
+          PACKAGES: clang-10
+          LLVM_REPO: llvm-toolchain-bionic-10
+        Clang 9:
+          CXXSTD: 11, 14, 17, 20
+          CXX: clang++-9
+          PACKAGES: clang-9
+          LLVM_REPO: llvm-toolchain-bionic-9
+        Clang 8:
+          CXXSTD: 11, 14, 17
           CXX: clang++-8
           PACKAGES: clang-8
           LLVM_REPO: llvm-toolchain-bionic-8
         Clang 7:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 11, 14
           CXX: clang++-7
           PACKAGES: clang-7
           LLVM_REPO: llvm-toolchain-bionic-7
         Clang 6:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 11, 14
           CXX: clang++-6.0
           PACKAGES: clang-6.0
           LLVM_REPO: llvm-toolchain-bionic-6.0
         Clang 5:
-          CXXSTD: 11, 14, 17
+          CXXSTD: 11, 14
           PACKAGES: clang-5.0
           CXX: clang++-5.0
           LLVM_REPO: llvm-toolchain-bionic-5.0
-        Clang 4:
-          CXXSTD: 11, 14
-          CXX: clang++-4.0
-          PACKAGES: clang-4.0
-          LLVM_REPO: llvm-toolchain-bionic-4.0
-        Clang 3.9:
-          CXXSTD: 11, 14
-          CXX: clang++-3.9
-          PACKAGES: clang-3.9
-        Clang 3.8:
-          CXX: clang++-3.8
-          CXXSTD: 11, 14
-          PACKAGES: clang-3.8
-        Clang 3.7:
-          CXXSTD: 11
-          CXX: clang++-3.7
-          PACKAGES: clang-3.7
-        Clang 3.6:
-          CXXSTD: 11
-          CXX: clang++-3.6
-          PACKAGES: clang-3.6
-        Clang 3.5:
-          CXXSTD: 11
-          CXX: clang++-3.5
-          PACKAGES: clang-3.5
     steps:
     - script: |
         set -e
@@ -107,7 +92,7 @@ stages:
         sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         if test -n "${LLVM_REPO}" ; then
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo -E apt-add-repository "deb http://apt.llvm.org/xenial/ ${LLVM_REPO} main"
+          sudo -E apt-add-repository "deb http://apt.llvm.org/bionic/ ${LLVM_REPO} main"
         fi
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cmake ${PACKAGES}
@@ -174,10 +159,10 @@ stages:
       vmImage: $(VM_IMAGE)
     steps:
     - powershell: |
-        Write-Host "Installing CMake 3.14.4"
-        Invoke-WebRequest https://cmake.org/files/v3.14/cmake-3.14.4-win64-x64.zip -OutFile C:\cmake-3.14.4-win64-x64.zip
-        Expand-Archive C:\cmake-3.14.4-win64-x64.zip -DestinationPath C:\
-        Rename-Item -Path C:\cmake-3.14.4-win64-x64 -NewName C:\cmake
+        Write-Host "Installing CMake 3.14.7"
+        Invoke-WebRequest https://cmake.org/files/v3.14/cmake-3.14.7-win64-x64.zip -OutFile C:\cmake-3.14.7-win64-x64.zip
+        Expand-Archive C:\cmake-3.14.7-win64-x64.zip -DestinationPath C:\
+        Rename-Item -Path C:\cmake-3.14.7-win64-x64 -NewName C:\cmake
         Write-Host "##vso[task.prependpath]C:\cmake\bin"
       displayName: 'Install'
     - script: |
@@ -261,7 +246,7 @@ stages:
 
   - job: Code_quality_checks
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     steps:
     - script: |
         set -e

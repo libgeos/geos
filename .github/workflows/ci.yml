@@ -157,7 +157,7 @@ jobs:
        ctest --output-on-failure .
 
   windows-msvc-19:
-    name: 'Windows (Visual Studio 2019, Release, windows-latest)'
+    name: 'Windows (Visual Studio 2019, Release, windows-2019)'
     runs-on: windows-2019
     steps:
     - name: 'Check Out'
@@ -177,7 +177,7 @@ jobs:
        ctest --output-on-failure -C Release
 
   windows-msvc-17:
-    name: 'Windows (Visual Studio 2017, Release, windows-latest)'
+    name: 'Windows (Visual Studio 2017, Release, windows-2016)'
     runs-on: windows-2016
     steps:
     - name: 'Check Out'

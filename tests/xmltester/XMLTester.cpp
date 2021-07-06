@@ -93,6 +93,7 @@ using std::runtime_error;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGRobust;
+using operation::valid::TopologyValidationError;
 
 namespace {
 
@@ -571,7 +572,7 @@ XMLTester::testValid(const geom::Geometry* g, const std::string& label)
     operation::valid::IsValidOp ivo(g);
     bool valid = ivo.isValid();
     if(! valid) {
-        operation::valid::TopologyValidationError* err = ivo.getValidationError();
+        const TopologyValidationError* err = ivo.getValidationError();
         std::cerr << *curr_file << ":"
                   << " case" << caseCount << ":"
                   << " test" << testCount << ": "
