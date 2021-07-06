@@ -20,6 +20,8 @@ pr:
 variables:
   - name: BUILD_TYPE
     value: Release
+  - name: MAKEFLAGS
+    value: -j2
 
 stages:
 
