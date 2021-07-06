@@ -78,8 +78,8 @@ private:
         Coordinate& coordNested);
 
     // Declare type as noncopyable
-    IndexedNestedPolygonTester(const IndexedPointInAreaLocator& other) = delete;
-    IndexedNestedPolygonTester& operator=(const IndexedPointInAreaLocator& rhs) = delete;
+    IndexedNestedPolygonTester(const IndexedNestedPolygonTester& other) = delete;
+    IndexedNestedPolygonTester& operator=(const IndexedNestedPolygonTester& rhs) = delete;
 
 public:
 
