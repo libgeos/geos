@@ -84,6 +84,7 @@ struct test_issimpleop_data {
 
         auto nonSimpleCoords = op.getNonSimpleLocations();
         std::unique_ptr<Geometry> nsPts(g->getFactory()->createMultiPoint(nonSimpleCoords));
+        // std::cout << *nsPts << std::endl;
         auto expectedPts = reader_.read(wktExpectedPts);
         ensure_equals_geometry(expectedPts.get(), nsPts.get());
     }
@@ -202,7 +203,35 @@ void object::test<7> ()
     checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
 }
 
+// testPolygonAll
+template<>
+template<>
+void object::test<8> ()
+{
+    std::string a("POLYGON ((0 0, 7 0, 6 -1, 6 -0.1, 6 0.1, 3 5.9, 3 6.1, 3.1 6, 2.9 6, 0 0))");
+    std::string b("MULTIPOINT((6 0), (3 6))");
+    checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
+}
 
+// testMultiPointAll
+template<>
+template<>
+void object::test<9> ()
+{
+    std::string a("MULTIPOINT((1 1), (1 2), (1 2), (1 3), (1 4), (1 4), (1 5), (1 5))");
+    std::string b("MULTIPOINT((1 2), (1 4), (1 5))");
+    checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
+}
+
+// testGeometryCollectionAll
+template<>
+template<>
+void object::test<10> ()
+{
+    std::string a("GEOMETRYCOLLECTION(MULTILINESTRING ((10 20, 90 20), (10 30, 90 30), (50 40, 50 10)), MULTIPOINT((1 1), (1 2), (1 2), (1 3), (1 4), (1 4), (1 5), (1 5)))");
+    std::string b("MULTIPOINT((50 20), (50 30), (1 2), (1 4), (1 5))");
+    checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
+}
 
 
 } // namespace tut

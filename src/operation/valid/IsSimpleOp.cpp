@@ -140,6 +140,7 @@ bool
 IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 {
     if (mp.isEmpty()) return true;
+    bool bIsSimple = true;
     std::unordered_set<Coordinate, Coordinate::HashCode> points;
 
     for (std::size_t i = 0; i < mp.getNumGeometries(); i++) {
@@ -147,11 +148,15 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
         const Coordinate* p = pt->getCoordinate();
         if (points.find(*p) != points.end()) {
             nonSimplePts.push_back(*p);
-            return false;
+            bIsSimple = false;
+            if (!isFindAllLocations)
+                break;
         }
-        points.emplace(*p);
+        else {
+            points.emplace(*p);
+        }
     }
-    return true;
+    return bIsSimple;
 }
 
 
@@ -159,15 +164,18 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 bool
 IsSimpleOp::isSimplePolygonal(const Geometry& geom)
 {
-
+    bool bIsSimple = true;
     std::vector<const LineString*> rings;
     LinearComponentExtracter::getLines(geom, rings);
 
     for (const LineString* ring : rings) {
-        if (! isSimpleLinearGeometry(*ring))
-            return false;
+        if (! isSimpleLinearGeometry(*ring)) {
+            bIsSimple = false;
+            if (!isFindAllLocations)
+                break;
+        }
     }
-    return true;
+    return bIsSimple;
 }
 
 
@@ -175,12 +183,16 @@ IsSimpleOp::isSimplePolygonal(const Geometry& geom)
 bool
 IsSimpleOp::isSimpleGeometryCollection(const Geometry& geom)
 {
+    bool bIsSimple = true;
     for (std::size_t i = 0; i < geom.getNumGeometries(); i++) {
         const Geometry* comp = geom.getGeometryN(i);
-        if (! computeSimple(*comp))
-            return false;
+        if (! computeSimple(*comp)) {
+            bIsSimple = false;
+            if (!isFindAllLocations)
+                break;
+        }
     }
-    return true;
+    return bIsSimple;
 }
 
 /* private */
@@ -254,9 +266,16 @@ IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
         ss0, segIndex0, ss1, segIndex1,
         p00, p01, p10, p11);
 
+    // found an intersection!
     if (hasInt) {
-        // found an intersection!
-        intersectionPts.emplace_back(li.getIntersection(0));
+        const Coordinate& intPt = li.getIntersection(0);
+        // don't save dupes
+        for (auto& pt: intersectionPts) {
+            if (intPt.equals2D(pt))
+                return;
+        }
+        // do save new ones!
+        intersectionPts.emplace_back(intPt);
     }
 }
 
@@ -275,7 +294,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     /**
     * Check for an intersection in the interior of a segment.
     */
-    hasInteriorInt = li.isInteriorIntersection();
+    bool hasInteriorInt = li.isInteriorIntersection();
     if (hasInteriorInt) return true;
 
     /**
@@ -284,7 +303,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     * (This is not triggered by zero-length segments, since they
     * are filtered out by the MC index).
     */
-    hasEqualSegments = li.getIntersectionNum() >= 2;
+    bool hasEqualSegments = li.getIntersectionNum() >= 2;
     if (hasEqualSegments) return true;
 
     /**
@@ -306,7 +325,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     bool isIntersectionEndpt0 = isIntersectionEndpoint(ss0, segIndex0, li, 0);
     bool isIntersectionEndpt1 = isIntersectionEndpoint(ss1, segIndex1, li, 1);
 
-    hasInteriorVertexInt = ! (isIntersectionEndpt0 && isIntersectionEndpt1);
+    bool hasInteriorVertexInt = ! (isIntersectionEndpt0 && isIntersectionEndpt1);
     if (hasInteriorVertexInt) return true;
 
     /**
@@ -317,7 +336,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     * (which avoids reporting ring endpoints).
     */
     if (isClosedEndpointsInInterior && !isSameSegString) {
-        hasInteriorEndpointInt = ss0->isClosed() || ss1->isClosed();
+        bool hasInteriorEndpointInt = ss0->isClosed() || ss1->isClosed();
         if (hasInteriorEndpointInt) return true;
     }
     return false;
