@@ -41,87 +41,95 @@ namespace io {
 
 class GEOS_DLL GeoJSONValue {
 
-    private:
+private:
 
-        enum class Type { NUMBER, STRING, NULLTYPE, BOOLEAN, OBJECT, ARRAY };
-        
-        Type type;
+    enum class Type { NUMBER, STRING, NULLTYPE, BOOLEAN, OBJECT, ARRAY };
 
-        union {
-            double d;
-            std::string s;
-            std::nullptr_t n;
-            bool b;
-            std::map<std::string, GeoJSONValue> o;
-            std::vector<GeoJSONValue> a;
-        };
+    Type type;
 
-        void cleanup();
+    union {
+        double d;
+        std::string s;
+        std::nullptr_t n;
+        bool b;
+        std::map<std::string, GeoJSONValue> o;
+        std::vector<GeoJSONValue> a;
+    };
 
-    public:
+    void cleanup();
 
-        struct GeoJSONTypeError {};
+public:
 
-        GeoJSONValue(double);
-        GeoJSONValue(const std::string&);
-        GeoJSONValue();
-        GeoJSONValue(bool);
-        GeoJSONValue(const std::map<std::string, GeoJSONValue>&);
-        GeoJSONValue(const std::vector<GeoJSONValue>&);
+    struct GeoJSONTypeError {};
 
-        ~GeoJSONValue();
-        GeoJSONValue(const GeoJSONValue&);
-        GeoJSONValue& operator=(const GeoJSONValue&);
+    GeoJSONValue(double);
+    GeoJSONValue(const std::string&);
+    GeoJSONValue();
+    GeoJSONValue(bool);
+    GeoJSONValue(const std::map<std::string, GeoJSONValue>&);
+    GeoJSONValue(const std::vector<GeoJSONValue>&);
 
-        double getNumber() const;
-        const std::string& getString() const;
-        std::nullptr_t getNull() const;
-        bool getBoolean() const;
-        const std::map<std::string,GeoJSONValue>& getObject() const;
-        const std::vector<GeoJSONValue>& getArray() const;
+    ~GeoJSONValue();
+    GeoJSONValue(const GeoJSONValue&);
+    GeoJSONValue& operator=(const GeoJSONValue&);
 
-        bool isNumber() const;
-        bool isString() const;
-        bool isNull() const;
-        bool isBoolean() const;
-        bool isObject() const;
-        bool isArray() const;
+    double getNumber() const;
+    const std::string& getString() const;
+    std::nullptr_t getNull() const;
+    bool getBoolean() const;
+    const std::map<std::string,GeoJSONValue>& getObject() const;
+    const std::vector<GeoJSONValue>& getArray() const;
+
+    bool isNumber() const;
+    bool isString() const;
+    bool isNull() const;
+    bool isBoolean() const;
+    bool isObject() const;
+    bool isArray() const;
 
 };
 
 class GEOS_DLL GeoJSONFeature {
 
-    public:
+public:
 
-        GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::string, GeoJSONValue> p);
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g, const std::map<std::string, GeoJSONValue> &p);
 
-        GeoJSONFeature(GeoJSONFeature const &other);
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::string, GeoJSONValue>&& p);
 
-        GeoJSONFeature& operator=(const GeoJSONFeature&);
+    GeoJSONFeature(GeoJSONFeature const &other);
 
-        const geom::Geometry* getGeometry() const;
+    GeoJSONFeature(GeoJSONFeature && other);
 
-        const std::map<std::string, GeoJSONValue>& getProperties() const;
+    GeoJSONFeature& operator=(const GeoJSONFeature&);
 
-    private:
+    GeoJSONFeature& operator=(GeoJSONFeature &&);
 
-        std::unique_ptr<geom::Geometry> geometry;
+    const geom::Geometry* getGeometry() const;
 
-        std::map<std::string, GeoJSONValue> properties;
+    const std::map<std::string, GeoJSONValue>& getProperties() const;
+
+private:
+
+    std::unique_ptr<geom::Geometry> geometry;
+
+    std::map<std::string, GeoJSONValue> properties;
 
 };
 
 class GEOS_DLL GeoJSONFeatureCollection {
 
-    public:
+public:
 
-        GeoJSONFeatureCollection(std::vector<GeoJSONFeature> f);
+    GeoJSONFeatureCollection(const std::vector<GeoJSONFeature> &f);
 
-        const std::vector<GeoJSONFeature>& getFeatures() const; 
+    GeoJSONFeatureCollection(std::vector<GeoJSONFeature>&& f);
 
-    private:
+    const std::vector<GeoJSONFeature>& getFeatures() const;
 
-        std::vector<GeoJSONFeature> features;
+private:
+
+    std::vector<GeoJSONFeature> features;
 
 };
 

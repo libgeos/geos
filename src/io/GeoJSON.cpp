@@ -41,12 +41,13 @@ GeoJSONValue::GeoJSONValue(bool value)  {
 
 GeoJSONValue::GeoJSONValue(const std::map<std::string, GeoJSONValue>& value)  {
     type = Type::OBJECT;
-    new(&o) std::map<std::string, GeoJSONValue>{value};
+    new(&o) std::map<std::string, GeoJSONValue> {value};
 }
 
 GeoJSONValue::GeoJSONValue(const std::vector<GeoJSONValue>& value)  {
     type = Type::ARRAY;
-    new(&a) std::vector<GeoJSONValue>{};
+    new(&a) std::vector<GeoJSONValue> {};
+    a.reserve(value.size());
     for(const auto& v : value) {
         a.push_back(v);
     }
@@ -60,7 +61,7 @@ void GeoJSONValue::cleanup() {
         s.~string();
     } else if (type == Type::OBJECT) {
         o.~object();
-    } else if (type == Type::ARRAY) { 
+    } else if (type == Type::ARRAY) {
         a.~array();
     }
 }
@@ -71,27 +72,28 @@ GeoJSONValue::~GeoJSONValue() {
 
 GeoJSONValue::GeoJSONValue(const GeoJSONValue& v) {
     switch(v.type) {
-        case Type::NUMBER:
-            d = v.d;
-            break;
-        case Type::BOOLEAN:
-            b = v.b;
-            break;
-        case Type::STRING:
-            new(&s) std::string{v.s};
-            break;
-        case Type::NULLTYPE:
-            n = v.n;
-            break;
-        case Type::OBJECT:
-            new(&o) std::map<std::string, GeoJSONValue>{v.o};
-            break;
-        case Type::ARRAY:
-            new(&a) std::vector<GeoJSONValue>{};
-            for(const auto& i : v.a) {
-                a.push_back(i);
-            }
-            break;                
+    case Type::NUMBER:
+        d = v.d;
+        break;
+    case Type::BOOLEAN:
+        b = v.b;
+        break;
+    case Type::STRING:
+        new(&s) std::string{v.s};
+        break;
+    case Type::NULLTYPE:
+        n = v.n;
+        break;
+    case Type::OBJECT:
+        new(&o) std::map<std::string, GeoJSONValue> {v.o};
+        break;
+    case Type::ARRAY:
+        new(&a) std::vector<GeoJSONValue> {};
+        a.reserve(v.a.size());
+        for(const auto& i : v.a) {
+            a.push_back(i);
+        }
+        break;
     }
     type = v.type;
 }
@@ -106,32 +108,33 @@ GeoJSONValue& GeoJSONValue::operator=(const GeoJSONValue& v) {
     } else if (type == Type::ARRAY && v.type == Type::ARRAY) {
         a = v.a;
         return *this;
-    } 
+    }
 
     cleanup();
 
     switch(v.type) {
-        case Type::NUMBER:
-            d = v.d;
-            break;
-        case Type::BOOLEAN:
-            b = v.b;
-            break;
-        case Type::STRING:
-            new(&s) std::string{v.s};
-            break;
-        case Type::NULLTYPE:
-            n = v.n;
-            break;
-        case Type::OBJECT:
-            new(&o) std::map<std::string, GeoJSONValue>{v.o};
-            break;
-        case Type::ARRAY:
-            new(&a) std::vector<GeoJSONValue>{};
-            for(const auto& i : v.a) {
-                a.push_back(i);
-            }
-            break;                
+    case Type::NUMBER:
+        d = v.d;
+        break;
+    case Type::BOOLEAN:
+        b = v.b;
+        break;
+    case Type::STRING:
+        new(&s) std::string{v.s};
+        break;
+    case Type::NULLTYPE:
+        n = v.n;
+        break;
+    case Type::OBJECT:
+        new(&o) std::map<std::string, GeoJSONValue> {v.o};
+        break;
+    case Type::ARRAY:
+        new(&a) std::vector<GeoJSONValue> {};
+        a.reserve(v.a.size());
+        for(const auto& i : v.a) {
+            a.push_back(i);
+        }
+        break;
     }
     type = v.type;
     return *this;
@@ -194,9 +197,13 @@ bool GeoJSONValue::isArray() const {
 
 // GeoJSONFeature
 
-GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::string, GeoJSONValue> p) : geometry(std::move(g)), properties(p) {}
+GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g, const std::map<std::string, GeoJSONValue>& p) : geometry(std::move(g)), properties(p) {}
+
+GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::string, GeoJSONValue>&& p) : geometry(std::move(g)), properties(std::move(p)) {}
 
 GeoJSONFeature::GeoJSONFeature(GeoJSONFeature const &other) : geometry(other.geometry->clone()), properties(other.properties) {}
+
+GeoJSONFeature::GeoJSONFeature(GeoJSONFeature && other) : geometry(std::move(other.geometry)), properties(std::move(other.properties)) {}
 
 GeoJSONFeature& GeoJSONFeature::operator=(const GeoJSONFeature& other) {
     if (this == &other) {
@@ -204,6 +211,12 @@ GeoJSONFeature& GeoJSONFeature::operator=(const GeoJSONFeature& other) {
     }
     geometry = other.geometry->clone();
     properties = other.properties;
+    return *this;
+}
+
+GeoJSONFeature& GeoJSONFeature::operator=(GeoJSONFeature&& other) {
+    geometry = std::move(other.geometry);
+    properties = std::move(other.properties);
     return *this;
 }
 
@@ -217,7 +230,9 @@ const std::map<std::string, GeoJSONValue>& GeoJSONFeature::getProperties() const
 
 // GeoJSONFeatureCollection
 
-GeoJSONFeatureCollection::GeoJSONFeatureCollection(std::vector<GeoJSONFeature> f) : features(f) {}
+GeoJSONFeatureCollection::GeoJSONFeatureCollection(const std::vector<GeoJSONFeature> &f) : features(f) {}
+
+GeoJSONFeatureCollection::GeoJSONFeatureCollection(std::vector<GeoJSONFeature>&& f) : features(std::move(f)) {}
 
 const std::vector<GeoJSONFeature>& GeoJSONFeatureCollection::getFeatures() const {
     return features;

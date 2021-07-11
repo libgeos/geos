@@ -65,7 +65,6 @@ enum class GeoJSONType {
  */
 class GEOS_DLL GeoJSONWriter {
 public:
-    
     ~GeoJSONWriter() = default;
 
     std::string write(const geom::Geometry* geometry, GeoJSONType type = GeoJSONType::GEOMETRY);
