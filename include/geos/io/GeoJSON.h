@@ -77,7 +77,7 @@ public:
     const std::string& getString() const;
     std::nullptr_t getNull() const;
     bool getBoolean() const;
-    const std::map<std::string,GeoJSONValue>& getObject() const;
+    const std::map<std::string, GeoJSONValue>& getObject() const;
     const std::vector<GeoJSONValue>& getArray() const;
 
     bool isNumber() const;
@@ -93,17 +93,19 @@ class GEOS_DLL GeoJSONFeature {
 
 public:
 
-    GeoJSONFeature(std::unique_ptr<geom::Geometry> g, const std::map<std::string, GeoJSONValue> &p);
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                   const std::map<std::string, GeoJSONValue>& p);
 
-    GeoJSONFeature(std::unique_ptr<geom::Geometry> g, std::map<std::string, GeoJSONValue>&& p);
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                   std::map<std::string, GeoJSONValue>&& p);
 
-    GeoJSONFeature(GeoJSONFeature const &other);
+    GeoJSONFeature(GeoJSONFeature const& other);
 
-    GeoJSONFeature(GeoJSONFeature && other);
+    GeoJSONFeature(GeoJSONFeature&& other);
 
     GeoJSONFeature& operator=(const GeoJSONFeature&);
 
-    GeoJSONFeature& operator=(GeoJSONFeature &&);
+    GeoJSONFeature& operator=(GeoJSONFeature&&);
 
     const geom::Geometry* getGeometry() const;
 
@@ -121,7 +123,7 @@ class GEOS_DLL GeoJSONFeatureCollection {
 
 public:
 
-    GeoJSONFeatureCollection(const std::vector<GeoJSONFeature> &f);
+    GeoJSONFeatureCollection(const std::vector<GeoJSONFeature>& f);
 
     GeoJSONFeatureCollection(std::vector<GeoJSONFeature>&& f);
 
