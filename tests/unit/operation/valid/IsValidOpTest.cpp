@@ -188,6 +188,16 @@ void object::test<8> ()
         "POLYGON ((10 90, 90 10, 90 90, 10 10, 10 90))");
 }
 
+// testInvalidPolygonInverted
+template<>
+template<>
+void object::test<22> ()
+{
+    checkInvalid(
+        TopologyValidationError::eRingSelfIntersection,
+        "POLYGON ((70 250, 40 500, 100 400, 70 250, 80 350, 60 350, 70 250))");
+}
+
 // testSimplePolygonHole
 template<>
 template<>
@@ -309,6 +319,58 @@ void object::test<21> ()
         "MULTIPOLYGON (((20 380, 420 380, 420 20, 20 20, 20 380), (220 340, 180 240, 60 200, 140 100, 340 60, 300 240, 220 340)), ((60 200, 340 60, 220 340, 60 200)))");
 }
 
+// testLineString
+template<>
+template<>
+void object::test<23> ()
+{
+    checkInvalid(
+        "LINESTRING(0 0, 0 0)");
+}
+
+// testLinearRingTriangle
+template<>
+template<>
+void object::test<24> ()
+{
+    checkValid(
+        "LINEARRING (100 100, 150 200, 200 100, 100 100)");
+}
+
+// testLinearRingSelfCrossing
+template<>
+template<>
+void object::test<25> ()
+{
+    checkInvalid(TopologyValidationError::eRingSelfIntersection,
+        "LINEARRING (150 100, 300 300, 100 300, 350 100, 150 100)");
+}
+
+// testLinearRingSelfCrossing2
+template<>
+template<>
+void object::test<26> ()
+{
+    checkInvalid(TopologyValidationError::eRingSelfIntersection,
+        "LINEARRING (0 0, 100 100, 100 0, 0 100, 0 0)");
+}
+
+//
+template<>
+template<>
+void object::test<27> ()
+{
+    checkInvalid(TopologyValidationError::eRingSelfIntersection,
+        "POLYGON ((70 250, 40 500, 100 400, 70 250, 80 350, 60 350, 70 250))");
+}
+
+template<>
+template<>
+void object::test<28> ()
+{
+    checkInvalid(TopologyValidationError::eSelfIntersection,
+        "POLYGON ((70 250, 70 500, 80 400, 40 400, 70 250))");
+}
 
 
 } // namespace tut

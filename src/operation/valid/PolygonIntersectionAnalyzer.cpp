@@ -68,6 +68,8 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
         return TopologyValidationError::oNoInvalidIntersection;
     }
 
+    bool isSameSegString = (ss0 == ss1);
+
     /**
      * Check for an intersection in the interior of both segments.
      * Collinear intersections by definition contain an interior intersection.
@@ -89,7 +91,6 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * (since they are not collinear).
      * This is valid.
      */
-    bool isSameSegString = ss0 == ss1;
     bool isAdjacentSegments = isSameSegString && isAdjacentInRing(ss0, segIndex0, segIndex1);
     // Assert: intersection is an endpoint of both segs
     if (isAdjacentSegments) return TopologyValidationError::oNoInvalidIntersection;
@@ -99,7 +100,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * So the intersection is invalid.
      */
     if (isSameSegString && ! isInvertedRingValid) {
-        return TopologyValidationError::eSelfIntersection;
+        return TopologyValidationError::eRingSelfIntersection;
     }
 
     /**
