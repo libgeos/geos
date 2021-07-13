@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cmath>
+#include <thread>
 
 #include "capi_test_utils.h"
 
@@ -337,6 +338,47 @@ void object::test<10>()
     GEOSSTRtree_destroy(tree);
 
     ensure_equals(hitVal, 3u);
+}
+
+// queries are thread-safe
+template<>
+template<>
+void object::test<11>()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(10);
+
+    std::vector<GEOSGeometry*> geoms;
+    for (size_t i = 0; i < 100; i++) {
+        geoms.push_back(GEOSGeom_createPointFromXY((double) i, (double) i));
+    }
+    for (const auto& geom : geoms) {
+        GEOSSTRtree_insert(tree, geom, geom);
+    }
+
+    auto query = [tree](const GEOSGeometry* env) {
+        GEOSSTRtree_query(tree, env, [](void* g, void* userdata) {
+            (void) g;
+            (void) userdata;
+        }, nullptr);
+    };
+
+    GEOSGeometry* q1 = GEOSBuffer(geoms[10], 10, 48);
+    GEOSGeometry* q2 = GEOSBuffer(geoms[40], 10, 48);
+
+    std::thread t1(query, q1);
+    std::thread t2(query, q1);
+
+    t1.join();
+    t2.join();
+
+    GEOSGeom_destroy(q1);
+    GEOSGeom_destroy(q2);
+
+    for (auto& geom : geoms) {
+        GEOSGeom_destroy(geom);
+    }
+
+    GEOSSTRtree_destroy(tree);
 }
 
 
