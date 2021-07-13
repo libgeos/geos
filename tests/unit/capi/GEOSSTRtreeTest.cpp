@@ -366,7 +366,7 @@ void object::test<11>()
     GEOSGeometry* q2 = GEOSBuffer(geoms[40], 10, 48);
 
     std::thread t1(query, q1);
-    std::thread t2(query, q1);
+    std::thread t2(query, q2);
 
     t1.join();
     t2.join();
