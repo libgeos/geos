@@ -274,7 +274,6 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
     // TODO make an rvalue overload for this that can consume its inputs.
     // At a minimum, a copy in the buffer fallback can be eliminated.
     try {
-        // return SnapIfNeededOverlayOp.union(g0, g1);
         return geom::HeuristicOverlay(g0, g1, overlay::OverlayOp::opUNION);
     }
     catch (const util::TopologyException &ex) {

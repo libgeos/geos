@@ -47,7 +47,6 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/UnaryUnionOp.h>
-#include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/valid/IsSimpleOp.h>
@@ -77,7 +76,6 @@ using namespace geos::operation::valid;
 using namespace geos::operation::relate;
 using namespace geos::operation::buffer;
 using namespace geos::operation::overlay;
-using namespace geos::operation::overlay::snap;
 using namespace geos::operation::distance;
 using namespace geos::operation;
 
