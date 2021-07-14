@@ -1978,12 +1978,16 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions(
     unsigned int *dims);
 
 /**
-* Check orientation of a coordinate sequence.
+* Check orientation of a coordinate sequence. Closure of the sequence is
+* assumed. Invalid (collapsed) sequences will return false. Short (less
+* than 4 points) sequences will return exception.
 * \param s the coordinate sequence
 * \param is_ccw pointer for ccw value, 1 if counter-clockwise orientation, 0 otherwise
 * \return 0 on exception, 1 on success
 */
-extern int GEOS_DLL GEOSCoordSeq_isCCW(const GEOSCoordSequence* s, char* is_ccw);
+extern int GEOS_DLL GEOSCoordSeq_isCCW(
+    const GEOSCoordSequence* s,
+    char* is_ccw);
 
 /* ========== Linear referencing functions */
 
