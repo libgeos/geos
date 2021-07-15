@@ -18,16 +18,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
-#define GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
+#pragma once
 
 #include <geos/export.h>
 
-#include <vector>
-#include <algorithm>
-#include <memory>
-
-#include <geos/operation/union/GeometryListHolder.h>
 #include <geos/operation/union/UnionStrategy.h>
 
 // Forward declarations
@@ -38,11 +32,6 @@ class Geometry;
 class Polygon;
 class MultiPolygon;
 class Envelope;
-}
-namespace index {
-namespace strtree {
-class ItemsList;
-}
 }
 }
 
@@ -255,4 +244,3 @@ private:
 } // namespace geos::operation
 } // namespace geos
 
-#endif
