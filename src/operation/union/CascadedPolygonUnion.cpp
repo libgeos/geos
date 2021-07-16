@@ -97,8 +97,11 @@ CascadedPolygonUnion::Union()
     // TODO avoid creating this vector and run binaryUnion off the iterators directly
     std::vector<const geom::Geometry*> geoms(index.items().begin(), index.items().end());
 
-    // return binaryUnion(geoms, 0, geoms.size());
+#ifdef GEOS_OPENMP
     return pairUnion(geoms);
+#else
+    return binaryUnion(geoms, 0, geoms.size());
+#endif
 }
 
 #ifdef GEOS_OPENMP
@@ -110,30 +113,30 @@ std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::pairUnion(
     std::vector<const geom::Geometry*>& inply) const
 {
-    std::size_t sz = inply.size();
-    std::size_t nsz = (sz / 2) + (sz % 2);
-    std::vector<std::unique_ptr<geom::Geometry>> outply(nsz);
+    int sz = static_cast<int>(inply.size());
+    int nsz = (sz / 2) + (sz % 2);
+    std::vector<std::unique_ptr<geom::Geometry>> outply(static_cast<std::size_t>(nsz));
 
 #pragma omp parallel for
-    for (std::size_t i = 0; i < sz; i += 2) {
+    for (int i = 0; i < sz; i += 2) {
         /* Work backwards to preserve an old regression result */
-        const geom::Geometry* g0 = inply[sz - i - 1];
-        const geom::Geometry* g1 = i+1 < sz ? inply[sz - i - 2] : nullptr;
-        outply[i/2] = unionSafe(g0, g1);
+        const geom::Geometry* g0 = inply[static_cast<std::size_t>(sz - i - 1)];
+        const geom::Geometry* g1 = i+1 < sz ? inply[static_cast<std::size_t>(sz - i - 2)] : nullptr;
+        outply[static_cast<std::size_t>(i/2)] = unionSafe(g0, g1);
     }
 
-    std::size_t step = 1;
+    int step = 1;
     while(step < nsz) {
 
 #pragma omp parallel for
         /* Place resultant output into position 1 of the inputs */
         /* This keeps threads from stomping on each other as they */
         /* work through different parts of the processing */
-        for (std::size_t i0 = 0; i0 < sz; i0 += 2*step) {
-            std::size_t i1 = i0 + step;
-            const geom::Geometry* g0 = outply[i0].release();
-            const geom::Geometry* g1 = i1 < sz ? outply[i1].release() : nullptr;
-            outply[i0] = unionSafe(g0, g1);
+        for (int i0 = 0; i0 < sz; i0 += 2*step) {
+            int i1 = i0 + step;
+            const geom::Geometry* g0 = outply[static_cast<std::size_t>(i0)].release();
+            const geom::Geometry* g1 = i1 < sz ? outply[static_cast<std::size_t>(i1)].release() : nullptr;
+            outply[static_cast<std::size_t>(i0)] = unionSafe(g0, g1);
         }
         step *= 2;
     }
