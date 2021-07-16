@@ -1424,19 +1424,14 @@ extern "C" {
     Geometry*
     GEOSUnionCascaded_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        using geos::operation::geounion::CascadedPolygonUnion;
-
-        return execute(extHandle, [&]() {
-            const geos::geom::MultiPolygon *p = dynamic_cast<const geos::geom::MultiPolygon *>(g1);
-
-            if (!p) {
-                throw IllegalArgumentException("Invalid argument (must be a MultiPolygon)");
-            }
-
-            auto g3 = CascadedPolygonUnion::Union(p);
-            g3->setSRID(g1->getSRID());
-            return g3.release();
-        });
+        // CascadedUnion is the same as UnaryUnion, except that
+        // CascadedUnion only works on MultiPolygon, so we just delegate
+        // now and retain a check on MultiPolygon type.
+        const geos::geom::MultiPolygon *p = dynamic_cast<const geos::geom::MultiPolygon *>(g1);
+        if (!p) {
+            throw IllegalArgumentException("Invalid argument (must be a MultiPolygon)");
+        }
+        return GEOSUnaryUnion_r(extHandle, g1);
     }
 
     Geometry*
