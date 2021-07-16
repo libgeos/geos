@@ -174,6 +174,7 @@ target_compile_options(geos_cxx_flags INTERFACE
   $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
 )
 
+
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
@@ -259,6 +260,28 @@ target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
 add_subdirectory(include)
 add_subdirectory(src)
+
+#-----------------------------------------------------------------------------
+# OpenMP
+#-----------------------------------------------------------------------------
+
+option(GEOS_ENABLE_OPENMP "Enable OpenMP" ON)
+if (GEOS_ENABLE_OPENMP)
+  find_package(OpenMP)
+  if(OpenMP_CXX_FOUND)
+    message(STATUS "GEOS: OpenMP_C_INCLUDE_DIRS ${OpenMP_C_INCLUDE_DIRS}")
+    message(STATUS "GEOS: OpenMP_CXX_INCLUDE_DIRS ${OpenMP_CXX_INCLUDE_DIRS}")
+    message(STATUS "GEOS: OpenMP_CXX_LIBRARY ${OpenMP_CXX_LIBRARY}")
+    message(STATUS "GEOS: OpenMP_CXX_LIB_NAMES ${OpenMP_CXX_LIB_NAMES}")
+    message(STATUS "GEOS: OpenMP_CXX_FLAGS ${OpenMP_CXX_FLAGS}")
+    target_compile_options(geos_cxx_flags INTERFACE "${OpenMP_CXX_FLAGS}")
+    target_include_directories(geos INTERFACE ${OpenMP_CXX_INCLUDE_DIRS})
+    # target_link_options(geos PUBLIC "LINKER:-L${OpenMP_CXX_LIBRARY},-l${OpenMP_CXX_LIB_NAMES}")
+    target_compile_definitions(geos_cxx_flags INTERFACE GEOS_OPENMP)
+  endif()
+endif()
+
+#-----------------------------------------------------------------------------
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos

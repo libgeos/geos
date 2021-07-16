@@ -99,9 +99,20 @@ private:
  * between the input geometries. However, this case is likely rare in practice.
  */
 class GEOS_DLL CascadedPolygonUnion {
+
 private:
+
     std::vector<geom::Polygon*>* inputPolys;
     geom::GeometryFactory const* geomFactory;
+
+    /* Default when not called from SR or NG modules */
+    UnionStrategy* unionFunction;
+    ClassicUnionStrategy defaultUnionFunction;
+
+    /* private */
+    std::unique_ptr<geom::Geometry>
+
+    pairUnion(std::vector<const geom::Geometry*>& polys) const;
 
     /**
      * The effectiveness of the index is somewhat sensitive
@@ -126,10 +137,50 @@ private:
      * @param g the geometry to filter
      * @return a Polygonal geometry
      */
-    static std::unique_ptr<geom::Geometry> restrictToPolygons(std::unique_ptr<geom::Geometry> g);
+    static std::unique_ptr<geom::Geometry> restrictToPolygons(
+        std::unique_ptr<geom::Geometry> g);
+
+    /**
+     * Unions a section of a list using a recursive binary union on each half
+     * of the section.
+     *
+     * @param geoms the list of geometries containing the section to union
+     * @param start the start index of the section
+     * @param end the index after the end of the section
+     * @return the union of the list section
+     */
+    std::unique_ptr<geom::Geometry> binaryUnion(
+        const std::vector<const geom::Geometry*> & geoms,
+        std::size_t start, std::size_t end) const;
+
+    /**
+     * Computes the union of two geometries,
+     * either of both of which may be null.
+     *
+     * @param g0 a geom::Geometry
+     * @param g1 a geom::Geometry
+     * @return the union of the input(s) or null if both inputs are null
+     */
+    std::unique_ptr<geom::Geometry> unionSafe(
+        const geom::Geometry* g0, const geom::Geometry* g1) const;
+
+    std::unique_ptr<geom::Geometry> unionSafe(
+        std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&) const;
+
+    /**
+     * Encapsulates the actual unioning of two polygonal geometries.
+     *
+     * @param g0 a geom::Geometry
+     * @param g1 a geom::Geometry
+     * @return The union of the inputs
+     */
+    std::unique_ptr<geom::Geometry> unionActual(
+        const geom::Geometry* g0, const geom::Geometry* g1) const;
+
+    std::unique_ptr<geom::Geometry> unionActual(
+        std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&) const;
 
 public:
-    CascadedPolygonUnion();
 
     /** \brief
      * Computes the union of a collection of polygonal [Geometrys](@ref geom::Geometry).
@@ -172,68 +223,29 @@ public:
      * Creates a new instance to union the given collection of
      * [Geometrys](@ref geom::Geometry).
      *
-     * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
-     *              Ownership of elements *and* vector are left to caller.
+     * @param polys A collection of polygonal [Geometrys](@ref geom::Geometry).
+     *        Ownership of elements *and* vector are left to caller.
+     * @param unionFun Function to call for pairwise unions. Might implement
+     *        an alternate strategy (snap rounding vs snapping vs full precision)
      */
-    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
-        : inputPolys(polys)
-        , geomFactory(nullptr)
-        , unionFunction(&defaultUnionFunction)
-    {}
-
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
         : inputPolys(polys)
         , geomFactory(nullptr)
         , unionFunction(unionFun)
     {}
 
+    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
+        : CascadedPolygonUnion(polys, &defaultUnionFunction)
+    {}
+
     /** \brief
      * Computes the union of the input geometries.
      *
-     * @return the union of the input geometries
-     * @return `null` if no input geometries were provided
+     * @return the union of the input geometries or `nullptr` if no input geometries were provided
+     *
      */
     std::unique_ptr<geom::Geometry> Union();
 
-private:
-
-    UnionStrategy* unionFunction;
-    ClassicUnionStrategy defaultUnionFunction;
-
-    /**
-     * Unions a section of a list using a recursive binary union on each half
-     * of the section.
-     *
-     * @param geoms the list of geometries containing the section to union
-     * @param start the start index of the section
-     * @param end the index after the end of the section
-     * @return the union of the list section
-     */
-    std::unique_ptr<geom::Geometry> binaryUnion(const std::vector<const geom::Geometry*> & geoms, std::size_t start, std::size_t end);
-
-    /**
-     * Computes the union of two geometries,
-     * either of both of which may be null.
-     *
-     * @param g0 a Geometry
-     * @param g1 a Geometry
-     * @return the union of the input(s)
-     * @return null if both inputs are null
-     */
-    std::unique_ptr<geom::Geometry> unionSafe(const geom::Geometry* g0, const geom::Geometry* g1) const;
-
-    std::unique_ptr<geom::Geometry> unionSafe(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&);
-
-    /**
-     * Encapsulates the actual unioning of two polygonal geometries.
-     *
-     * @param g0
-     * @param g1
-     * @return
-     */
-    std::unique_ptr<geom::Geometry> unionActual(const geom::Geometry* g0, const geom::Geometry* g1) const;
-
-    std::unique_ptr<geom::Geometry> unionActual(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&) const;
 };
 
 
