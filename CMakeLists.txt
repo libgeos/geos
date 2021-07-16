@@ -279,6 +279,8 @@ if(GEOS_ENABLE_OPENMP)
     target_compile_definitions(geos_cxx_flags INTERFACE GEOS_OPENMP)
     target_include_directories(geos INTERFACE ${OpenMP_CXX_INCLUDE_DIRS})
     target_link_libraries(geos PRIVATE ${OpenMP_CXX_LIBRARIES})
+  else()
+    message(STATUS "GEOS: OpenMP not found")
   endif()
 endif()
 
