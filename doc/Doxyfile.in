@@ -853,8 +853,6 @@ EXCLUDE_PATTERNS       = */examples/* \
                          */test/* \
                          */bigtest/* \
                          */io/markup/* \
-                         config.h \
-                         acconfig.h \
                          CoordinateList.cpp \
                          NonRobustLineIntersector.cpp \
                          RobustLineIntersector.cpp
