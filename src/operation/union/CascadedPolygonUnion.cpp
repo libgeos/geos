@@ -113,6 +113,9 @@ std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::pairUnion(
     std::vector<const geom::Geometry*>& inply) const
 {
+    /* Windows OpenMP requires loop iterators to be int */
+    /* so we do a lot of dumb casting up here to allow ints */
+    /* in the loops further down */
     int sz = (int)(inply.size());
     int nsz = (sz / 2) + (sz % 2);
     std::vector<std::unique_ptr<geom::Geometry>> outply((std::size_t)nsz);
