@@ -2,7 +2,7 @@ Changes in 3.9.3
 2022-xx-xx
 
 - Bug fixes / improvements:
-  -
+  - Improve BuildArea performance (#1122, Sandro Santilli)
 
 
 Changes in 3.9.2
