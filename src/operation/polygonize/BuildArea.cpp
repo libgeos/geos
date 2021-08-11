@@ -66,6 +66,74 @@ struct Face {
     }
 };
 
+static bool ringsEqualAnyDirection(const LinearRing* r1, const LinearRing* r2)
+{
+
+    const CoordinateSequence *cs1 = r1->getCoordinatesRO();
+    const CoordinateSequence *cs2 = r2->getCoordinatesRO();
+
+    /* Check same number of points */
+    size_t npoints = cs1->size();
+    if ( npoints != cs2->size() )
+    {
+        return false;
+    }
+
+    if ( npoints == 0 ) return true; /* if empty, they are equal */
+
+    /* Check same envelope (probably better avoid, as it'd need to
+     * compute the envelope doing an additional scan for each) */
+    if ( ! r1->getEnvelopeInternal()->equals(r2->getEnvelopeInternal()) )
+    {
+        return false;
+    }
+
+    /* Pretend the rings had one less point, as the last one will be
+     * equal to the first one anyway */
+    --npoints;
+
+    const Coordinate& firstPoint = cs1->getAt(0);
+    size_t offset = CoordinateSequence::indexOf(&firstPoint, cs2);
+    if ( offset == std::numeric_limits<std::size_t>::max() ) return false;
+
+    bool equal = true;
+
+    /* Check equals forward (skip first point, we checked it alread) */
+    for (size_t i=1; i<npoints; ++i)
+    {
+        size_t j = ( i + offset ) % npoints;
+        const Coordinate& c1 = cs1->getAt(i);
+        const Coordinate& c2 = cs2->getAt(j);
+        if ( ! c1.equals(c2) ) {
+            equal = false;
+            break;
+        }
+    }
+
+    if ( equal ) return true;
+
+    /* Check equals backward (skip first point, we checked it already) */
+    equal = true;
+    for (size_t i=1; i<npoints; ++i)
+    {
+        size_t j;
+        if ( i <= offset ) {
+            j = offset - i;
+        } else {
+            j = npoints - ( i - offset );
+        }
+
+        const Coordinate& c1 = cs1->getAt(i);
+        const Coordinate& c2 = cs2->getAt(j);
+        if ( ! c1.equals(c2) ) {
+            equal = false;
+            break;
+        }
+    }
+
+    return equal;
+}
+
 static std::unique_ptr<Face> newFace(const geom::Polygon* p) {
     auto f = std::unique_ptr<Face>(new Face());
     f->poly = p;
@@ -100,13 +168,8 @@ static void findFaceHoles(std::vector<std::unique_ptr<Face>>& faces) {
                 if( f2->parent ) {
                     continue; /* hole already assigned */
                 }
-                const auto f2er = f2->poly->getExteriorRing();
-                /* TODO: can be optimized as the ring would have the
-                *       same vertices, possibly in different order.
-                *       maybe comparing number of points could already be
-                *       useful.
-                */
-                if( f2er->equals(hole) ) {
+                const auto shell = f2->poly->getExteriorRing();
+                if( ringsEqualAnyDirection(shell, hole) ) {
                     f2->parent = f.get();
                     break;
                 }
