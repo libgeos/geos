@@ -383,10 +383,7 @@ WKBReader::readPolygon()
         return factory.createPolygon(hasZ ? 3 : 2);
     }
 
-    std::unique_ptr<LinearRing> shell;
-    if(numRings > 0) {
-        shell = readLinearRing();
-    }
+    std::unique_ptr<LinearRing> shell(readLinearRing());
 
     if(numRings > 1) {
         std::vector<std::unique_ptr<LinearRing>> holes(numRings - 1);
