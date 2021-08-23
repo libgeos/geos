@@ -3332,8 +3332,14 @@ extern "C" {
         if(GEOSLength_r(extHandle, g, &length) != 1) {
             return -1.0;
         };
+
         distance = GEOSProject_r(extHandle, g, p);
-        if (distance == -1.0) {
+
+        if (distance == 0.0 && length == 0.0)
+            return 0.0;
+
+        /* Meaningless projection? error */
+        if (distance < 0.0 || ! std::isfinite(distance) || length == 0.0) {
             return -1.0;
         } else {
             return distance / length;

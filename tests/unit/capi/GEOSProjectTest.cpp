@@ -78,4 +78,21 @@ void object::test<3>
     ensure_equals(dist_norm, -1.0);
 }
 
+// Test
+// https://github.com/libgeos/geos/issues/475
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 0)");
+    geom2_ = GEOSGeomFromWKT("POINT (0 0)");
+
+    double dist = GEOSProject(geom1_, geom2_);
+    ensure_equals(dist, 0.0);
+
+    double dist_norm = GEOSProjectNormalized(geom1_, geom2_);
+    ensure_equals(dist_norm, 0.0);
+}
+
 } // namespace tut

@@ -24,6 +24,7 @@ Changes in 3.10.0
 - Changes:
   - #1094, #1090: Drop inlines.cpp to address duplicate symbols on many platforms
     (Regina Obe)
+  - GH475: Do not return NaN from GEOSProjectNormalized_r (Paul Ramsey)
 
 Changes in 3.9.0
 2020-12-09
