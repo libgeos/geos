@@ -45,6 +45,8 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/GeoJSONReader.h>
+#include <geos/io/GeoJSONWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
@@ -118,6 +120,8 @@
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
+#define GEOSGeoJSONReader geos::io::GeoJSONReader
+#define GEOSGeoJSONWriter geos::io::GeoJSONWriter
 
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
@@ -157,6 +161,8 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
+using geos::io::GeoJSONReader;
+using geos::io::GeoJSONWriter;
 
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
@@ -3032,6 +3038,69 @@ extern "C" {
     {
         execute(extHandle, [&]{
             writer->setIncludeSRID(newIncludeSRID);
+        });
+    }
+
+    /* GeoJSON Reader */
+    GeoJSONReader*
+    GEOSGeoJSONReader_create_r(GEOSContextHandle_t extHandle)
+    {
+        using geos::io::GeoJSONReader;
+
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
+            return new GeoJSONReader(*(GeometryFactory*)handle->geomFactory);
+        });
+    }
+
+    void
+    GEOSGeoJSONReader_destroy_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader)
+    {
+        return execute(extHandle, [&]() {
+            delete reader;
+        });
+    }
+
+    Geometry*
+    GEOSGeoJSONReader_readGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONReader* reader, const char* geojson)
+    {
+        return execute(extHandle, [&]() {
+            const std::string geojsonstring(geojson);
+            return reader->read(geojsonstring).release();
+        });
+    }
+
+    /* GeoJSON Writer */
+    GeoJSONWriter*
+    GEOSGeoJSONWriter_create_r(GEOSContextHandle_t extHandle)
+    {
+        using geos::io::GeoJSONWriter;
+
+        return execute(extHandle, [&]() {
+            return new GeoJSONWriter();
+        });
+    }
+
+    void
+    GEOSGeoJSONWriter_destroy_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer)
+    {
+        return execute(extHandle, [&]() {
+            delete writer;
+        });
+    }
+
+    char*
+    GEOSGeoJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int indent)
+    {
+        return execute(extHandle, [&]() {
+            std::string geojson;
+            if (indent >= 0) {
+                geojson = writer->writeFormatted(g, geos::io::GeoJSONType::GEOMETRY, indent);
+            } else {
+                geojson = writer->write(g, geos::io::GeoJSONType::GEOMETRY);
+            }
+            char* result = gstrdup(geojson);
+            return result;
         });
     }
 

@@ -1585,6 +1585,20 @@ typedef struct GEOSWKBReader_t GEOSWKBReader;
 */
 typedef struct GEOSWKBWriter_t GEOSWKBWriter;
 
+/**
+* Reader object to read GeoJSON format and construct a Geometry.
+* \see GEOSGeoJSONReader_create
+* \see GEOSGeoJSONReader_create_r
+*/
+typedef struct GEOSGeoJSONReader_t GEOSGeoJSONReader;
+
+/**
+* Writer object to turn a Geometry into GeoJSON.
+* \see GEOSGeoJSONReader_create
+* \see GEOSGeoJSONReader_create_r
+*/
+typedef struct GEOSGeoJSONWriter_t GEOSGeoJSONWriter;
+
 #endif
 
 /* ========== WKT Reader ========== */
@@ -1729,6 +1743,39 @@ extern char GEOS_DLL GEOSWKBWriter_getIncludeSRID_r(
 extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID_r(
     GEOSContextHandle_t handle,
     GEOSWKBWriter* writer, const char writeSRID);
+
+/* ========== GeoJSON Reader ========== */
+
+/** \see GEOSGeoJSONReader_create */
+extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeoJSONReader_destroy */
+extern void GEOS_DLL GEOSGeoJSONReader_destroy_r(GEOSContextHandle_t handle,
+    GEOSGeoJSONReader* reader);
+
+/** \see GEOSWKTReader_read */
+extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONReader* reader,
+    const char *geojson);
+
+/* ========== GeoJSON Writer ========== */
+
+/** \see GEOSGeoJSONWriter_create */
+extern GEOSGeoJSONWriter GEOS_DLL *GEOSGeoJSONWriter_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeoJSONWriter_destroy */
+extern void GEOS_DLL GEOSGeoJSONWriter_destroy_r(GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter* reader);
+
+/** \see GEOSWKTWriter_write */
+extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter* writer,
+    const GEOSGeometry* g,
+    int indent);
 
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
@@ -4245,6 +4292,59 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
 * \param buffer The memory to free
 */
 extern void GEOS_DLL GEOSFree(void *buffer);
+
+/* ========= GeoJSON Reader ========= */
+
+/**
+* Allocate a new \ref GEOSGeoJSONReader.
+* \returns a new reader. Caller must free with GEOSGeoJSONReader_destroy()
+*/
+extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create(void);
+
+/**
+* Free the memory associated with a \ref GEOSGeoJSONReader.
+* \param reader The reader to destroy.
+*/
+extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
+
+/**
+* Use a reader to parse a GeoJSON. A single geometry or feature is
+* converted into a geometry. A featurecollection is converted into a
+* geometrycollection. Feature properties are not read.
+* \param reader A GeoJSON reader object, caller retains ownership
+* \param geojson The json string to parse, caller retains ownership
+* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry(
+    GEOSGeoJSONReader* reader,
+    const char *geojson);
+
+/* ========= GeoJSON Writer ========= */
+
+/**
+* Allocate a new \ref GEOSGeoJSONWriter.
+* \returns a new writer. Caller must free with GEOSGeoJSONWriter_destroy()
+*/
+extern GEOSGeoJSONWriter GEOS_DLL *GEOSGeoJSONWriter_create(void);
+
+/**
+* Free the memory associated with a \ref GEOSGeoJSONWriter.
+* \param writer The writer to destroy.
+*/
+extern void GEOS_DLL GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer);
+
+/**
+* Write out the GeoJSON representation of a geometry. Note that writing a GeoJSON
+* Feature or FeatureCollection is unsupported through the GEOS C API.
+* \param writer A GeoJSON reader object, caller retains ownership.
+* \param geojson The json string to parse, caller retains ownership.
+* \param indent The indentation used. Use -1 for no formatting.
+* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+*/
+extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
+    GEOSGeoJSONWriter* writer,
+    const GEOSGeometry* g,
+    int indent);
 
 #endif /* #ifndef GEOS_USE_ONLY_R_API */
 

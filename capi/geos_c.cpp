@@ -21,6 +21,8 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/GeoJSONReader.h>
+#include <geos/io/GeoJSONWriter.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
@@ -39,6 +41,8 @@
 #define GEOSWKTWriter geos::io::WKTWriter
 #define GEOSWKBReader geos::io::WKBReader
 #define GEOSWKBWriter geos::io::WKBWriter
+#define GEOSGeoJSONReader geos::io::GeoJSONReader
+#define GEOSGeoJSONWriter geos::io::GeoJSONWriter
 typedef struct GEOSBufParams_t GEOSBufferParams;
 typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
@@ -70,7 +74,8 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
-
+using geos::io::GeoJSONReader;
+using geos::io::GeoJSONWriter;
 
 
 typedef std::unique_ptr<Geometry> GeomPtr;
@@ -1286,6 +1291,44 @@ extern "C" {
     GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
     {
         GEOSWKBWriter_setIncludeSRID_r(handle, writer, newIncludeSRID);
+    }
+
+    /* GeoJSON Reader */
+    GeoJSONReader*
+    GEOSGeoJSONReader_create()
+    {
+        return GEOSGeoJSONReader_create_r(handle);
+    }
+
+    void
+    GEOSGeoJSONReader_destroy(GeoJSONReader* reader)
+    {
+        GEOSGeoJSONReader_destroy_r(handle, reader);
+    }
+
+    Geometry*
+    GEOSGeoJSONReader_readGeometry(GeoJSONReader* reader, const char* geojson)
+    {
+        return GEOSGeoJSONReader_readGeometry_r(handle, reader, geojson);
+    }
+
+    /* GeoJSON Writer */
+    GeoJSONWriter*
+    GEOSGeoJSONWriter_create()
+    {
+        return GEOSGeoJSONWriter_create_r(handle);
+    }
+
+    void
+    GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer)
+    {
+        GEOSGeoJSONWriter_destroy_r(handle, writer);
+    }
+
+    char*
+    GEOSGeoJSONWriter_writeGeometry(GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int indent)
+    {
+        return GEOSGeoJSONWriter_writeGeometry_r(handle, writer, g, indent);
     }
 
 
