@@ -211,11 +211,13 @@ OverlayNG::computeEdgeOverlay()
      * Formerly in nodeEdges())
      */
     EdgeNodingBuilder nodingBuilder(pm, noder);
+    // clipEnv not always used, but needs to remain in scope
+    // as long as nodingBuilder when it is.
+    Envelope clipEnv;
 
     GEOS_CHECK_FOR_INTERRUPTS();
 
     if (isOptimized) {
-        Envelope clipEnv;
         bool gotClipEnv = OverlayUtil::clippingEnvelope(opCode, &inputGeom, pm, clipEnv);
         if (gotClipEnv) {
             nodingBuilder.setClipEnvelope(&clipEnv);
