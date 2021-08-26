@@ -1120,9 +1120,9 @@ extern "C" {
             );
             bp.setMitreLimit(mitreLimit);
             BufferOp op(g1, bp);
-            Geometry* g3 = op.getResultGeometry(width);
+            std::unique_ptr<Geometry> g3 = op.getResultGeometry(width);
             g3->setSRID(g1->getSRID());
-            return g3;
+            return g3.release();
         });
     }
 
@@ -1163,9 +1163,9 @@ extern "C" {
                 width = -width;
             }
             BufferBuilder bufBuilder(bp);
-            Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
+            std::unique_ptr<Geometry> g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
             g3->setSRID(g1->getSRID());
-            return g3;
+            return g3.release();
         });
     }
 
@@ -1189,9 +1189,9 @@ extern "C" {
 
             bool isLeftSide = leftSide == 0 ? false : true;
             BufferBuilder bufBuilder(bp);
-            Geometry* g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
+            std::unique_ptr<Geometry> g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
             g3->setSRID(g1->getSRID());
-            return g3;
+            return g3.release();
         });
     }
 
@@ -3642,9 +3642,9 @@ extern "C" {
 
         return execute(extHandle, [&]() {
             BufferOp op(g1, *bp);
-            Geometry* g3 = op.getResultGeometry(width);
+            std::unique_ptr<Geometry> g3 = op.getResultGeometry(width);
             g3->setSRID(g1->getSRID());
-            return g3;
+            return g3.release();
         });
     }
 

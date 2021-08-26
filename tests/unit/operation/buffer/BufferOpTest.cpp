@@ -69,7 +69,7 @@ void object::test<1>
 
     double const distance = 0.0;
     BufferOp op(g0.get());
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     ensure(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -90,7 +90,7 @@ void object::test<2>
     // Buffer point with default buffering parameters
     double const distance = 1.0;
     BufferOp op(g0.get());
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -116,7 +116,7 @@ void object::test<3>
     BufferOp op(g0.get(), params);
 
     double const distance = 1.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -143,7 +143,7 @@ void object::test<4>
         BufferParameters params(segments);
         BufferOp op(g0.get(), params);
         double const distance = 0.0001;
-        GeomPtr gBuffer(op.getResultGeometry(distance));
+        GeomPtr gBuffer = op.getResultGeometry(distance);
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -156,7 +156,7 @@ void object::test<4>
         BufferParameters params(segments);
         BufferOp op(g0.get(), params);
         double const distance = 0.0001;
-        GeomPtr gBuffer(op.getResultGeometry(distance));
+        GeomPtr gBuffer = op.getResultGeometry(distance);
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -181,7 +181,7 @@ void object::test<5>
     BufferParameters params(default_quadrant_segments * 4);
     BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -206,7 +206,7 @@ void object::test<6>
     BufferParameters params(segments);
     BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -231,7 +231,7 @@ void object::test<7>
     BufferParameters params(segments);
     BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -256,7 +256,7 @@ void object::test<8>
     BufferParameters params(segments);
     BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -281,7 +281,7 @@ void object::test<9>
     BufferParameters params(segments);
     BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -310,7 +310,7 @@ void object::test<10>
 
     BufferParameters params1(segments, BufferParameters::CAP_ROUND);
     BufferOp op1(g0.get(), params1);
-    GeomPtr gBuffer1(op1.getResultGeometry(distance));
+    GeomPtr gBuffer1 = op1.getResultGeometry(distance);
     ensure_not(gBuffer1->isEmpty());
     ensure(gBuffer1->isValid());
     ensure_equals(gBuffer1->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
@@ -363,7 +363,7 @@ MULTILINESTRING(  \
                             1.0);
     const double distance = 5.0;
     BufferOp op(g0.get(), params);
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     // We're basically only interested an rough sense of a
     // meaningful result.
@@ -390,7 +390,7 @@ void object::test<12>
     BufferOp op(g0.get(), params);
 
     double const distance = 80.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -418,7 +418,7 @@ void object::test<13>
     BufferOp op(g0.get(), param);
 
     double const distance = 40.0;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -440,7 +440,7 @@ void object::test<14>
     BufferOp op(g0.get());
 
     double const distance = 0.5;
-    GeomPtr gBuffer(op.getResultGeometry(distance));
+    GeomPtr gBuffer = op.getResultGeometry(distance);
 
     // std::cout << wktwriter.write(gBuffer.get()) << std::endl;
 

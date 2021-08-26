@@ -24,7 +24,6 @@
 #include <geos/algorithm/Angle.h>
 #include <geos/operation/buffer/OffsetSegmentGenerator.h>
 #include <geos/operation/buffer/OffsetSegmentString.h>
-#include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geom/Position.h>

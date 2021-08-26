@@ -89,7 +89,19 @@ private:
      *
      *  This value should be less than the decimal precision of double-precision values (16).
      */
-    static const int MAX_PRECISION_DIGITS = 12;
+    static constexpr int MAX_PRECISION_DIGITS = 12;
+
+    const geom::Geometry* argGeom;
+
+    util::TopologyException saveException;
+
+    double distance;
+
+    BufferParameters bufParams;
+
+    std::unique_ptr<geom::Geometry> resultGeometry;
+
+    bool isInvertOrientation = false;
 
     /**
      * Compute a reasonable scale factor to limit the precision of
@@ -110,19 +122,6 @@ private:
     static double precisionScaleFactor(const geom::Geometry* g,
                                        double distance, int maxPrecisionDigits);
 
-    const geom::Geometry* argGeom;
-
-    util::TopologyException saveException;
-
-    double distance;
-
-    //int quadrantSegments;
-    //int endCapStyle;
-    BufferParameters bufParams;
-
-    geom::Geometry* resultGeometry;
-
-    bool isInvertOrientation = false;
 
     void computeGeometry();
 
@@ -134,22 +133,9 @@ private:
 
     void bufferFixedPrecision(const geom::PrecisionModel& fixedPM);
 
-    /**
-    * Combines the elements of two polygonal geometries together.
-    * The input geometries must be non-adjacent, to avoid
-    * creating an invalid result.
-    *
-    * @param poly0 a polygonal geometry (which may be empty)
-    * @param poly1 a polygonal geometry (which may be empty)
-    * @return a combined polygonal geometry
-    */
-    static geom::Geometry* combine(
-        const geom::Geometry* poly0,
-        const geom::Geometry* poly1);
-
     static void extractPolygons(
         geom::Geometry* poly0,
-        std::vector<std::unique_ptr<geom::Geometry>>& polys) ;
+        std::vector<std::unique_ptr<geom::Geometry>>& polys);
 
 public:
 
@@ -179,11 +165,11 @@ public:
      * @return the buffer of the input geometry
      *
      */
-    static geom::Geometry* bufferOp(const geom::Geometry* g,
-                                    double distance,
-                                    int quadrantSegments =
-                                        BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
-                                    int endCapStyle = BufferParameters::CAP_ROUND);
+    static std::unique_ptr<geom::Geometry> bufferOp(
+        const geom::Geometry* g,
+        double distance,
+        int quadrantSegments = BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
+        int endCapStyle = BufferParameters::CAP_ROUND);
 
     /** \brief
      * Initializes a buffer computation for the given geometry.
@@ -262,7 +248,7 @@ public:
      * @param nDistance the buffer distance
      * @return the buffer of the input geometry
      */
-    geom::Geometry* getResultGeometry(double nDistance);
+    std::unique_ptr<geom::Geometry> getResultGeometry(double nDistance);
 
     /**
     * Buffers a geometry with distance zero.

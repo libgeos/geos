@@ -127,7 +127,7 @@ BufferBuilder::~BufferBuilder()
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
                                      bool leftSide)
 {
@@ -140,7 +140,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Nothing to do for a distance of zero
     if(distance == 0) {
-        return g->clone().release();
+        return g->clone();
     }
 
     // Get geometry factory and precision model.
@@ -260,7 +260,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         // Remove end points if they are a part of the original line to be
         // buffered.
         CoordinateSequence::Ptr coords(mergedLines.back()->getCoordinates());
-        if(nullptr != coords.get()) {
+        if(nullptr != coords) {
             // Use 98% of the buffer width as the point-distance requirement - this
             // is to ensure that the point that is "distance" +/- epsilon is not
             // included.
@@ -358,22 +358,22 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     intersectedLines.reset();
 
     if(mergedLinesGeom->size() > 1) {
-        return geomFact->createMultiLineString(mergedLinesGeom);
+        return std::unique_ptr<Geometry>(geomFact->createMultiLineString(mergedLinesGeom));
     }
     else if(mergedLinesGeom->size() == 1) {
 
-        Geometry* single = (*mergedLinesGeom)[0];
+        std::unique_ptr<Geometry> single((*mergedLinesGeom)[0]);
         delete mergedLinesGeom;
         return single;
     }
     else {
         delete mergedLinesGeom;
-        return geomFact->createLineString().release();
+        return geomFact->createLineString();
     }
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 BufferBuilder::buffer(const Geometry* g, double distance)
 // throw(GEOSException *)
 {
@@ -423,7 +423,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
     std::cerr << std::endl << edgeList << std::endl;
 #endif
 
-    Geometry* resultGeom = nullptr;
+    std::unique_ptr<Geometry> resultGeom(nullptr);
     std::unique_ptr< std::vector<Geometry*> > resultPolyList;
     std::vector<BufferSubgraph*> subgraphList;
 
@@ -476,7 +476,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         }
 
         // resultPolyList ownership transferred here
-        resultGeom = geomFact->buildGeometry(resultPolyList.release());
+        resultGeom.reset(geomFact->buildGeometry(resultPolyList.release()));
 
     }
     catch(const util::GEOSException& /* exc */) {
@@ -714,11 +714,10 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 }
 
 /*private*/
-geom::Geometry*
+std::unique_ptr<geom::Geometry>
 BufferBuilder::createEmptyResultGeometry() const
 {
-    geom::Geometry* emptyGeom = geomFact->createPolygon().release();
-    return emptyGeom;
+    return geomFact->createPolygon();
 }
 
 } // namespace geos.operation.buffer

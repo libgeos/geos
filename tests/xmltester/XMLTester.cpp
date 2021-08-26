@@ -1710,7 +1710,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
 
             BufferOp op(p_gT, params);
-            gRealRes.reset(op.getResultGeometry(dist));
+            gRealRes = op.getResultGeometry(dist);
 
             profile.stop();
             gRealRes->normalize();
@@ -1754,8 +1754,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             BufferBuilder bufBuilder(params) ;
-            gRealRes.reset(bufBuilder.bufferLineSingleSided(
-                               p_gT, dist, leftSide)) ;
+            gRealRes = bufBuilder.bufferLineSingleSided(p_gT, dist, leftSide);
 
             profile.stop();
             gRealRes->normalize();
@@ -1796,7 +1795,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
 
             BufferOp op(p_gT, params);
-            gRealRes.reset(op.getResultGeometry(dist));
+            gRealRes = op.getResultGeometry(dist);
 
             profile.stop();
             gRealRes->normalize();

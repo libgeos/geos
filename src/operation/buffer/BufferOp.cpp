@@ -61,24 +61,6 @@ namespace buffer { // geos.operation.buffer
 static Profiler* profiler = Profiler::instance();
 #endif
 
-#if 0
-double
-OLDprecisionScaleFactor(const Geometry* g,
-                        double distance, int maxPrecisionDigits)
-{
-    const Envelope* env = g->getEnvelopeInternal();
-    double envSize = std::max(env->getHeight(), env->getWidth());
-    double expandByDistance = distance > 0.0 ? distance : 0.0;
-    double bufEnvSize = envSize + 2 * expandByDistance;
-    // the smallest power of 10 greater than the buffer envelope
-    int bufEnvLog10 = (int)(std::log(bufEnvSize) / std::log(10.0) + 1.0);
-    int minUnitLog10 = bufEnvLog10 - maxPrecisionDigits;
-    // scale factor is inverse of min Unit size, so flip sign of exponent
-    double scaleFactor = std::pow(10.0, -minUnitLog10);
-    return scaleFactor;
-}
-#endif
-
 /*private*/
 double
 BufferOp::precisionScaleFactor(const Geometry* g,
@@ -104,7 +86,7 @@ BufferOp::precisionScaleFactor(const Geometry* g,
 }
 
 /*public static*/
-Geometry*
+std::unique_ptr<Geometry>
 BufferOp::bufferOp(const Geometry* g, double distance,
                    int quadrantSegments,
                    int nEndCapStyle)
@@ -116,12 +98,12 @@ BufferOp::bufferOp(const Geometry* g, double distance,
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 BufferOp::getResultGeometry(double nDistance)
 {
     distance = nDistance;
     computeGeometry();
-    return resultGeometry;
+    return std::unique_ptr<Geometry>(resultGeometry.release());
 }
 
 /*private*/
@@ -174,8 +156,6 @@ BufferOp::bufferReducedPrecision()
         }
 
         if(resultGeometry != nullptr) {
-            // debug
-            //if ( saveException ) std::cerr<<saveException->toString()<<std::endl;
             return;
         }
     }
@@ -190,7 +170,6 @@ BufferOp::bufferOriginalPrecision()
     BufferBuilder bufBuilder(bufParams);
     bufBuilder.setInvertOrientation(isInvertOrientation);
 
-    //std::cerr<<"computing with original precision"<<std::endl;
     try {
         resultGeometry = bufBuilder.buffer(argGeom, distance);
     }
@@ -198,10 +177,7 @@ BufferOp::bufferOriginalPrecision()
         // don't propagate the exception - it will be detected by
         // fact that resultGeometry is null
         saveException = ex;
-
-        //std::cerr<<ex->toString()<<std::endl;
     }
-    //std::cerr<<"done"<<std::endl;
 }
 
 void

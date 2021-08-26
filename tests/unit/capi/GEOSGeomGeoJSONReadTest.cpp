@@ -30,7 +30,8 @@ struct test_capigeosgeomreadgeojson_data : public capitest::utility {
     {
         geom1_ = GEOSGeoJSONReader_readGeometry(reader_, &geojson[0]);
         ensure("GEOSGeoJSONReader_readGeometry failed to create geometry", nullptr != geom1_);
-        ensure_geometry_equals(geom1_, fromWKT(&wkt[0]));
+        geom2_ = fromWKT(wkt.c_str());
+        ensure_geometry_equals(geom1_, geom2_);
     }
 };
 

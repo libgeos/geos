@@ -156,8 +156,7 @@ public:
     }
 
 
-    geom::Geometry* buffer(const geom::Geometry* g, double distance);
-    // throw (GEOSException);
+    std::unique_ptr<geom::Geometry> buffer(const geom::Geometry* g, double distance);
 
     /**
      * Generates offset curve for linear geometry.
@@ -177,9 +176,9 @@ public:
      *
      * @note Not in JTS: this is a GEOS extension
      */
-    geom::Geometry* bufferLineSingleSided(const geom::Geometry* g,
-                                          double distance, bool leftSide) ;
-    // throw (GEOSException);
+    std::unique_ptr<geom::Geometry> bufferLineSingleSided(
+        const geom::Geometry* g,
+        double distance, bool leftSide);
 
 private:
 
@@ -255,7 +254,7 @@ private:
      *
      * @return the empty result geometry, transferring ownership to caller.
      */
-    geom::Geometry* createEmptyResultGeometry() const;
+    std::unique_ptr<geom::Geometry> createEmptyResultGeometry() const;
 
     // Declare type as noncopyable
     BufferBuilder(const BufferBuilder& other) = delete;

@@ -125,7 +125,15 @@ jobs:
           --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
           -R ^all-unit -C Valgrind -T memcheck
 
-    - name: Upload coverage to Codecov
+    - name: 'Upload Valgrind Log'
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: valgrind-log
+        path: build.cmake/Testing/Temporary/MemoryChecker.**.log
+        retention-days: 1
+
+    - name: Upload Coverage to Codecov
       if: matrix.ci.build_type == 'Coverage'
       run: |
         curl -o codecov.sh https://codecov.io/bash
