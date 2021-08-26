@@ -4337,9 +4337,9 @@ extern void GEOS_DLL GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer);
 * Write out the GeoJSON representation of a geometry. Note that writing a GeoJSON
 * Feature or FeatureCollection is unsupported through the GEOS C API.
 * \param writer A GeoJSON reader object, caller retains ownership.
-* \param geojson The json string to parse, caller retains ownership.
+* \param g The geometry to convert, caller retains ownership.
 * \param indent The indentation used. Use -1 for no formatting.
-* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+* \return A char pointer, caller to free with GEOSFree())
 */
 extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
