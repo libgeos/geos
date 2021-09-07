@@ -54,17 +54,20 @@ namespace util { // geos.geom.util
  *  * Empty atomic geometries are valid and are returned unchanged
  *  * Empty elements are removed from collections
  *  * <code>Point</code>: keep valid coordinate, or EMPTY
- *  * <code>LineString</code>: fix coordinate list
- *  * <code>LinearRing</code>: fix coordinate list, return as valid ring or else <code>LineString</code>
- *  * <code>Polygon</code>: transform into a valid polygon, preserving as much of the extent and vertices as possible
- *  * <code>MultiPolygon</code>: fix each polygon, then ensure result is non-overlapping (via union)
- *  * <code>GeometryCollection</code>: fix each element
+ *  * <code>LineString</code>: coordinates are fixed
+ *  * <code>LinearRing</code>: coordinates are fixed, Keep valid ring or else convert into <code>LineString</code>
+ *  * <code>Polygon</code>: transform into a valid polygon,
+ *  * preserving as much of the extent and vertices as possible.
+ *    * Rings are fixed to ensure they are valid</li>
+ *    * Holes intersecting the shell are subtracted from the shell</li>
+ *    * Holes outside the shell are converted into polygons</li>
+ *  * <code>MultiPolygon</code>: each polygon is fixed,
+ *    then result made non-overlapping (via union)</li>
+ *  * <code>GeometryCollection</code>: each element is fixed</li>
  *  * Collapsed lines and polygons are handled as follows,
- *
- * depending on the <code>keepCollapsed</code> setting:
- *
- *  * <code>false</code>: (default) collapses are converted to empty geometries
- *  * <code>true</code>: collapses are converted to a valid geometry of lower dimension
+ *    depending on the <code>keepCollapsed</code> setting:
+ *    * <code>false</code>: (default) collapses are converted to empty geometries
+ *    * <code>true</code>: collapses are converted to a valid geometry of lower dimension
  *
  * @author Martin Davis
 */
@@ -123,11 +126,39 @@ private:
     std::unique_ptr<geom::Geometry> fixMultiLineString(const MultiLineString* geom) const;
     std::unique_ptr<geom::Geometry> fixPolygon(const geom::Polygon* geom) const;
     std::unique_ptr<geom::Geometry> fixPolygonElement(const geom::Polygon* geom) const;
-    std::unique_ptr<geom::Geometry> fixHoles(const geom::Polygon* geom) const;
+    std::vector<std::unique_ptr<Geometry>> fixHoles(const geom::Polygon* geom) const;
     std::unique_ptr<geom::Geometry> removeHoles(const geom::Geometry* shell, const geom::Geometry* holes) const;
     std::unique_ptr<geom::Geometry> fixRing(const geom::LinearRing* ring) const;
     std::unique_ptr<geom::Geometry> fixMultiPolygon(const geom::MultiPolygon* geom) const;
     std::unique_ptr<geom::Geometry> fixCollection(const geom::GeometryCollection* geom) const;
+
+    void classifyHoles(
+        const Geometry* shell,
+        std::vector<std::unique_ptr<Geometry>>& holesFixed,
+        std::vector<const Geometry*>& holes,
+        std::vector<const Geometry*>& shells) const;
+
+    /**
+    * Subtracts a list of polygonal geometries from a polygonal geometry.
+    *
+    * @param shell polygonal geometry for shell
+    * @param holes polygonal geometries to subtract
+    * @return the result geometry
+    */
+    std::unique_ptr<Geometry> difference(
+        const Geometry* shell,
+        std::vector<const Geometry*>& holes) const;
+
+    /**
+    * Unions a list of polygonal geometries.
+    * Optimizes case of zero or one input geometries.
+    * Requires that the inputs are net new objects.
+    *
+    * @param polys the polygonal geometries to union
+    * @return the union of the inputs
+    */
+    std::unique_ptr<Geometry> unionGeometry(
+        std::vector<const Geometry*>& polys) const;
 
 };
 

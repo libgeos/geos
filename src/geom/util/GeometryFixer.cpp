@@ -15,13 +15,18 @@
 #include <geos/geom/util/GeometryFixer.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/prep/PreparedGeometry.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 
 using geos::operation::valid::RepeatedPointRemover;
+using geos::operation::overlayng::OverlayNGRobust;
+using geos::operation::geounion::UnaryUnionOp;
 
 namespace geos {
 namespace geom { // geos.geom
@@ -248,51 +253,98 @@ GeometryFixer::fixPolygonElement(const Polygon* p_geom) const
             std::unique_ptr<LineString> line(factory->createLineString(*cs));
             return fixLineString(line.get());
         }
-        //-- if not allowing collapses then return empty polygon
+        //--- if not allowing collapses then return empty polygon
         return nullptr;
     }
-    // if no holes then done
+    //--- if no holes then done
     if (p_geom->getNumInteriorRing() == 0) {
         return fixShell;
     }
-    std::unique_ptr<Geometry> fixedHoles = fixHoles(p_geom);
-    std::unique_ptr<Geometry> result = removeHoles(fixShell.get(), fixedHoles.get());
-    return result;
+
+    //--- fix holes, classify, and construct shell-true holes
+    std::vector<std::unique_ptr<Geometry>> holesFixed = fixHoles(p_geom);
+    std::vector<const Geometry*> holes;
+    std::vector<const Geometry*> shells;
+
+    classifyHoles(fixShell.get(), holesFixed, holes, shells);
+    std::unique_ptr<Geometry> polyWithHoles = difference(fixShell.get(), holes);
+    if (shells.empty()) {
+        return polyWithHoles;
+    }
+
+    //--- if some holes converted to shells, union all shells
+    shells.push_back(polyWithHoles.get());
+    return unionGeometry(shells);
 }
 
 /* private */
-std::unique_ptr<Geometry>
-GeometryFixer::fixHoles(const Polygon* p_geom) const
+std::vector<std::unique_ptr<Geometry>>
+GeometryFixer::fixHoles(const Polygon* poly) const
 {
     std::vector<std::unique_ptr<Geometry>> holes;
-
-    for (std::size_t i = 0; i < p_geom->getNumInteriorRing(); i++) {
-        std::unique_ptr<Geometry> holeRep = fixRing(p_geom->getInteriorRingN(i));
-        // Do not preserve null/empty holes
-        if (holeRep != nullptr && !holeRep->isEmpty()) {
+    for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
+        std::unique_ptr<Geometry> holeRep = fixRing(poly->getInteriorRingN(i));
+        if (holeRep != nullptr) {
             holes.emplace_back(holeRep.release());
         }
     }
-    if (holes.empty())
-        return nullptr;
-
-    if (holes.size() == 1) {
-        std::unique_ptr<Geometry> h(holes.at(0).release());
-        return h;
-    }
-    std::unique_ptr<GeometryCollection> holesGeom = (factory->createGeometryCollection(std::move(holes)));
-    return operation::overlayng::OverlayNGRobust::Union(holesGeom.get());
+    return holes;
 }
 
 /* private */
-std::unique_ptr<Geometry>
-GeometryFixer::removeHoles(const Geometry* shell, const Geometry* holes) const
+void
+GeometryFixer::classifyHoles(
+    const Geometry* shell,
+    std::vector<std::unique_ptr<Geometry>>& holesFixed,
+    std::vector<const Geometry*>& holes,
+    std::vector<const Geometry*>& shells) const
 {
-    if (holes == nullptr || holes->isEmpty())
-        return shell->clone();
-    return operation::overlayng::OverlayNGRobust::Overlay(shell, holes,
-        operation::overlayng::OverlayNG::DIFFERENCE);
+    std::unique_ptr<prep::PreparedGeometry> shellPrep =
+        prep::PreparedGeometryFactory::prepare(shell);
+
+    for (auto& hole : holesFixed) {
+        const Geometry* cptrHole = hole.get();
+        if (shellPrep->intersects(cptrHole)) {
+            holes.push_back(cptrHole);
+        }
+        else {
+            shells.push_back(cptrHole);
+        }
+    }
 }
+
+
+/* private */
+std::unique_ptr<Geometry>
+GeometryFixer::difference(
+    const Geometry* shell,
+    std::vector<const Geometry*>& holes) const
+{
+    if (holes.empty())
+        return shell->clone();
+    if (holes.size() == 1)
+        return OverlayNGRobust::Difference(shell, holes[0]);
+    std::unique_ptr<Geometry> holesUnion = unionGeometry(holes);
+    return OverlayNGRobust::Difference(shell, holesUnion.get());
+}
+
+
+/* private */
+std::unique_ptr<Geometry>
+GeometryFixer::unionGeometry(std::vector<const Geometry*>& polys) const
+{
+    if (polys.empty()) {
+        return factory->createPolygon(geom->getCoordinateDimension());
+    }
+    if (polys.size() == 1) {
+        return (polys[0])->clone();
+    }
+
+    UnaryUnionOp op(polys);
+    return op.Union();
+    // return OverlayNGRobust::Union(polys);
+}
+
 
 /* private */
 std::unique_ptr<Geometry>
@@ -322,7 +374,7 @@ GeometryFixer::fixMultiPolygon(const MultiPolygon* p_geom) const
         return factory->createMultiPolygon();
     }
     std::unique_ptr<GeometryCollection> polysGeom = (factory->createGeometryCollection(std::move(polys)));
-    return operation::overlayng::OverlayNGRobust::Union(polysGeom.get());
+    return OverlayNGRobust::Union(polysGeom.get());
 }
 
 /* private */
