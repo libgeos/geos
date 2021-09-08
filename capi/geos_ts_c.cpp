@@ -2622,7 +2622,7 @@ extern "C" {
 
             // Validate input before taking ownership
             for (std::size_t i = 0; i < nholes; i++) {
-                if (!dynamic_cast<LinearRing*>(holes[i])) {
+                if ((!holes) || (!dynamic_cast<LinearRing*>(holes[i]))) {
                     good_holes = false;
                     break;
                 }
@@ -2635,9 +2635,10 @@ extern "C" {
             // which implies freeing them on exception,
             // see https://trac.osgeo.org/geos/ticket/1111
             if (!(good_holes && good_shell)) {
-                delete shell;
+                if (shell) delete shell;
                 for (std::size_t i = 0; i < nholes; i++) {
-                    delete holes[i];
+                    if (holes && holes[i])
+                        delete holes[i];
                 }
                 if (!good_shell)
                     throw IllegalArgumentException("Shell is not a LinearRing");

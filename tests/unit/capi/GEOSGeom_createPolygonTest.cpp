@@ -75,6 +75,27 @@ void object::test<2>
         GEOSGeom_destroy(polygon);
 }
 
+template<>
+template<>
+void object::test<3>
+()
+{
+    GEOSGeometry* shell = nullptr;
+    GEOSGeometry** holes = nullptr;
+    unsigned int nholes = 0;
+
+    // Returns null on exception, wrong input type for shell
+    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, 0);
+    ensure(polygon == nullptr);
+
+    // Returns null on exception, wrong input type for shell
+    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, 1);
+    ensure(polygon == nullptr);
+
+    // Shouldn't need this
+    if (polygon)
+        GEOSGeom_destroy(polygon);
+}
 
 } // namespace tut
 
