@@ -2408,31 +2408,46 @@ extern "C" {
         //assert(0 != holes);
 
         return execute(extHandle, [&]() {
-
-            std::vector<LinearRing*> tmpholes(nholes);
-            for (size_t i = 0; i < nholes; i++) {
-                LinearRing* lr = dynamic_cast<LinearRing*>(holes[i]);
-                if (! lr) {
-                    throw IllegalArgumentException("Hole is not a LinearRing");
-                }
-                tmpholes[i] = lr;
-            }
-            LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
-            if(! nshell) {
-                throw IllegalArgumentException("Shell is not a LinearRing");
-            }
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
+            bool good_holes = true, good_shell = true;
 
-            /* Create unique_ptr version for constructor */
-            std::vector<std::unique_ptr<LinearRing>> vholes;
-            vholes.reserve(nholes);
-            for (LinearRing* lr: tmpholes) {
-                vholes.emplace_back(lr);
+            // Validate input before taking ownership
+            for (std::size_t i = 0; i < nholes; i++) {
+                if ((!holes) || (!dynamic_cast<LinearRing*>(holes[i]))) {
+                    good_holes = false;
+                    break;
+                }
             }
-            std::unique_ptr<LinearRing> shell(nshell);
+            if (!dynamic_cast<LinearRing*>(shell)) {
+                good_shell = false;
+            }
 
-            return gf->createPolygon(std::move(shell), std::move(vholes)).release();
+            // Contract for GEOSGeom_createPolygon is to take ownership of arguments
+            // which implies freeing them on exception,
+            // see https://trac.osgeo.org/geos/ticket/1111
+            if (!(good_holes && good_shell)) {
+                if (shell) delete shell;
+                for (std::size_t i = 0; i < nholes; i++) {
+                    if (holes && holes[i])
+                        delete holes[i];
+                }
+                if (!good_shell)
+                    throw IllegalArgumentException("Shell is not a LinearRing");
+                else
+                    throw IllegalArgumentException("Hole is not a LinearRing");
+            }
+
+            std::unique_ptr<LinearRing> tmpshell(static_cast<LinearRing*>(shell));
+            if (nholes) {
+                std::vector<std::unique_ptr<LinearRing>> tmpholes(nholes);
+                for (size_t i = 0; i < nholes; i++) {
+                    tmpholes[i].reset(static_cast<LinearRing*>(holes[i]));
+                }
+                return gf->createPolygon(std::move(tmpshell), std::move(tmpholes)).release();
+            }
+            return gf->createPolygon(std::move(tmpshell)).release();
+
         });
     }
 
