@@ -58,6 +58,7 @@ struct test_geometryfixer_data {
     }
 
     void checkFix(const Geometry* input, bool keepCollapse, const std::string& wktExpected) {
+
         std::unique_ptr<Geometry> actual;
         if (keepCollapse) {
             GeometryFixer fixer(input);
@@ -110,9 +111,6 @@ struct test_geometryfixer_data {
         std::string actualWKT = wktwriter_.write(actual.get());
         std::string expectedWKT = wktwriter_.write(expected.get());
         ensure_equals(actualWKT, expectedWKT);
-
-
-        // checkEqualXYZ(expected, actual);
     }
 
     std::unique_ptr<Point> createPoint(double x, double y) {
@@ -123,11 +121,10 @@ struct test_geometryfixer_data {
     }
 };
 
-typedef test_group<test_geometryfixer_data> group;
+typedef test_group<test_geometryfixer_data, 255> group;
 typedef group::object object;
 
 group test_geometryfixer_group("geos::geom::util::GeometryFixer");
-
 
 template<>
 template<>
@@ -170,7 +167,7 @@ void object::test<5>()
     checkFix(pt.get() , "POINT EMPTY");
 }
 
-  //----------------------------------------
+//----------------------------------------
 
 // testMultiPointNaN
 template<>
@@ -208,7 +205,7 @@ void object::test<9>()
         "MULTIPOINT EMPTY");
 }
 
-  //----------------------------------------
+//----------------------------------------
 
 // testLineStringEmpty
 template<>
@@ -585,6 +582,7 @@ void object::test<47>()
         "GEOMETRYCOLLECTION EMPTY");
 }
 
+
 // testGCWithAllEmpty
 template<>
 template<>
@@ -595,9 +593,6 @@ void object::test<48>()
         "GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING EMPTY, POLYGON EMPTY)");
 }
 
-
-   //----------------------------------------
-
 template<>
 template<>
 void object::test<49>()
@@ -607,9 +602,19 @@ void object::test<49>()
         "MULTIPOLYGON Z(((10 10 1, 10 90 1, 50 50 5, 10 10 1)), ((50 50 5, 90 90 9, 90 10 9, 50 50 5)))");
 }
 
+// testPolygonHoleOverlapAndOutsideOverlap
 template<>
 template<>
 void object::test<50>()
+{
+    checkFix(
+        "POLYGON ((50 90, 80 90, 80 10, 50 10, 50 90), (70 80, 90 80, 90 20, 70 20, 70 80), (40 80, 40 50, 0 50, 0 80, 40 80), (30 40, 10 40, 10 60, 30 60, 30 40), (60 70, 80 70, 80 30, 60 30, 60 70))",
+        "MULTIPOLYGON (((10 40, 10 50, 0 50, 0 80, 40 80, 40 50, 30 50, 30 40, 10 40)), ((70 80, 70 70, 60 70, 60 30, 70 30, 70 20, 80 20, 80 10, 50 10, 50 90, 80 90, 80 80, 70 80)))");
+}
+
+template<>
+template<>
+void object::test<51>()
 {
     checkFixZ(
         "POLYGON Z ((10 90 1, 60 90 6, 60 10 6, 10 10 1, 10 90 1), (20 80 2, 90 80 9, 90 20 9, 20 20 2, 20 80 2))",
@@ -624,7 +629,6 @@ void object::test<52>()
         "MULTILINESTRING Z ((10 10 1, 90 90 9), (10 10 1, 10 10 2, 10 10 3))",
         "GEOMETRYCOLLECTION Z (POINT (10 10 1), LINESTRING (10 10 1, 90 90 9))");
 }
-
 
 
 
