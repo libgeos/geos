@@ -82,14 +82,13 @@ void object::test<3>
 {
     GEOSGeometry* shell = nullptr;
     GEOSGeometry** holes = nullptr;
-    unsigned int nholes = 0;
 
     // Returns null on exception, wrong input type for shell
     GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, 0);
     ensure(polygon == nullptr);
 
     // Returns null on exception, wrong input type for shell
-    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, 1);
+    polygon = GEOSGeom_createPolygon(shell, holes, 1);
     ensure(polygon == nullptr);
 
     // Shouldn't need this
