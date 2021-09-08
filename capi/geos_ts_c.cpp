@@ -2618,15 +2618,31 @@ extern "C" {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
+            bool good_holes = true, good_shell = true;
 
             // Validate input before taking ownership
-            for (size_t i = 0; i < nholes; i++) {
+            for (std::size_t i = 0; i < nholes; i++) {
                 if (!dynamic_cast<LinearRing*>(holes[i])) {
-                    throw IllegalArgumentException("Hole is not a LinearRing");
+                    good_holes = false;
+                    break;
                 }
             }
             if (!dynamic_cast<LinearRing*>(shell)) {
-                throw IllegalArgumentException("Shell is not a LinearRing");
+                good_shell = false;
+            }
+
+            // Contract for GEOSGeom_createPolygon is to take ownership of arguments
+            // which implies freeing them on exception,
+            // see https://trac.osgeo.org/geos/ticket/1111
+            if (!(good_holes && good_shell)) {
+                delete shell;
+                for (std::size_t i = 0; i < nholes; i++) {
+                    delete holes[i];
+                }
+                if (!good_shell)
+                    throw IllegalArgumentException("Shell is not a LinearRing");
+                else
+                    throw IllegalArgumentException("Hole is not a LinearRing");
             }
 
             std::unique_ptr<LinearRing> tmpshell(static_cast<LinearRing*>(shell));
