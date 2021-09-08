@@ -58,12 +58,12 @@ namespace util { // geos.geom.util
  *  * <code>LinearRing</code>: coordinates are fixed, Keep valid ring or else convert into <code>LineString</code>
  *  * <code>Polygon</code>: transform into a valid polygon,
  *  * preserving as much of the extent and vertices as possible.
- *    * Rings are fixed to ensure they are valid</li>
- *    * Holes intersecting the shell are subtracted from the shell</li>
- *    * Holes outside the shell are converted into polygons</li>
+ *    * Rings are fixed to ensure they are valid<
+ *    * Holes intersecting the shell are subtracted from the shell
+ *    * Holes outside the shell are converted into polygons
  *  * <code>MultiPolygon</code>: each polygon is fixed,
- *    then result made non-overlapping (via union)</li>
- *  * <code>GeometryCollection</code>: each element is fixed</li>
+ *    then result made non-overlapping (via union)
+ *  * <code>GeometryCollection</code>: each element is fixed
  *  * Collapsed lines and polygons are handled as follows,
  *    depending on the <code>keepCollapsed</code> setting:
  *    * <code>false</code>: (default) collapses are converted to empty geometries
