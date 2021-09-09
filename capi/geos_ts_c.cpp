@@ -3058,6 +3058,22 @@ extern "C" {
         });
     }
 
+    int
+    GEOSWKBWriter_getFlavor_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter* writer)
+    {
+        return execute(extHandle, -1, [&]{
+            return writer->getFlavor();
+        });
+    }
+
+    void
+    GEOSWKBWriter_setFlavor_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* writer, int flavor)
+    {
+        execute(extHandle, [&]{
+            writer->setFlavor(flavor);
+        });
+    }
+
     /* GeoJSON Reader */
     GeoJSONReader*
     GEOSGeoJSONReader_create_r(GEOSContextHandle_t extHandle)

@@ -218,11 +218,27 @@ enum GEOSGeomTypes {
 *
 * \see GEOSWKBWriter_setByteOrder
 */
-enum GEOSByteOrders {
+enum GEOSWKBByteOrders {
     /** Big Endian */
     GEOS_WKB_XDR = 0,
     /** Little Endian */
     GEOS_WKB_NDR = 1
+};
+
+/**
+* Well-known binary flavors to use
+* when writing to WKB. ISO flavour is
+* more standard. Extended flavour supports
+* 3D and SRID embedding. GEOS reads both
+* transparently.
+*
+* \see GEOSWKBWriter_setFlavor
+*/
+enum GEOSWKBFlavors {
+    /** Extended */
+    GEOS_WKB_EXTENDED = 1,
+    /** ISO */
+    GEOS_WKB_ISO = 2
 };
 
 /**
@@ -1733,6 +1749,17 @@ extern void GEOS_DLL GEOSWKBWriter_setByteOrder_r(
     GEOSContextHandle_t handle,
     GEOSWKBWriter* writer,
     int byteOrder);
+
+/** \see GEOSWKBWriter_getFlavor */
+extern int GEOS_DLL GEOSWKBWriter_getFlavor_r(
+    GEOSContextHandle_t handle,
+    const GEOSWKBWriter* writer);
+
+/** \see GEOSWKBWriter_setFlavor */
+extern void GEOS_DLL GEOSWKBWriter_setFlavor_r(
+    GEOSContextHandle_t handle,
+    GEOSWKBWriter* writer,
+    int flavor);
 
 /** \see GEOSWKBWriter_getIncludeSRID */
 extern char GEOS_DLL GEOSWKBWriter_getIncludeSRID_r(
@@ -4251,7 +4278,7 @@ extern void GEOS_DLL GEOSWKBWriter_setOutputDimension(
 * Find whether the writer will use WKB
 * [byte order](https://en.wikipedia.org/wiki/Endianness)
 * that is big or little endian.
-* The return value is a member of \ref GEOSByteOrders.
+* The return value is a member of \ref GEOSWKBByteOrders.
 * \param writer The writer to read byte order from
 * \return The current byte order
 */
@@ -4260,13 +4287,38 @@ extern int GEOS_DLL GEOSWKBWriter_getByteOrder(
 
 /**
 * Set the output byte order of the writer, using
-* a value from \ref GEOSByteOrders enum.
+* a value from \ref GEOSWKBByteOrders enum.
 * \param writer The writer to set byte order on
 * \param byteOrder Desired byte order
 */
 extern void GEOS_DLL GEOSWKBWriter_setByteOrder(
     GEOSWKBWriter* writer,
     int byteOrder);
+
+/**
+* Find whether the writer will use
+* [WKB](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary)
+* that is ISO flavor or "extended" flavor. The flavor
+* determines how extra dimensionality is encoded with the
+* type number, and whether SRID can be included in the WKB.
+* ISO flavor does not support SRID embedding. ISO flavor
+* is "more standard" for 3D output. GEOS can read both flavors.
+* The return value is a member of \ref GEOSWKBFlavors.
+* \param writer The writer to read flavor from
+* \return The current flavor
+*/
+extern int GEOS_DLL GEOSWKBWriter_getFlavor(
+    const GEOSWKBWriter* writer);
+
+/**
+* Set the output flavor of the writer, using
+* a value from \ref GEOSWKBFlavors enum.
+* \param writer The writer to set flavor on
+* \param flavor Desired flavor
+*/
+extern void GEOS_DLL GEOSWKBWriter_setFlavor(
+    GEOSWKBWriter* writer,
+    int flavor);
 
 /**
 * Read the current SRID embedding value from the writer.

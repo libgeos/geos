@@ -23,6 +23,7 @@
 #include <geos/export.h>
 
 #include <geos/util/Machine.h> // for getMachineByteOrder
+#include <geos/io/WKBConstants.h>
 #include <iosfwd>
 #include <cstdint>
 #include <cstddef>
@@ -86,20 +87,24 @@ public:
      * @param incudeSRID true if SRID should be included in WKB (an
      * extension).
      */
-    WKBWriter(uint8_t dims = 2, int bo = getMachineByteOrder(), bool includeSRID = false);
+    WKBWriter(
+        uint8_t dims = 2,
+        int bo = getMachineByteOrder(),
+        bool includeSRID = false,
+        int flv = WKBConstants::wkbExtended);
 
     /*
      * \brief
      * Destructor.
      */
-    virtual ~WKBWriter() = default;
+    ~WKBWriter() = default;
 
     /*
      * \brief
      * Returns the output dimension used by the
      * <code>WKBWriter</code>.
      */
-    virtual uint8_t
+    uint8_t
     getOutputDimension() const
     {
         return defaultOutputDimension;
@@ -112,14 +117,14 @@ public:
      * Note that 3 indicates up to 3 dimensions will be written but
      * 2D WKB is still produced for 2D geometries.
      */
-    virtual void setOutputDimension(uint8_t newOutputDimension);
+    void setOutputDimension(uint8_t newOutputDimension);
 
     /*
      * \brief
      * Returns the byte order used by the
      * <code>WKBWriter</code>.
      */
-    virtual int
+    int
     getByteOrder() const
     {
         return byteOrder;
@@ -129,14 +134,14 @@ public:
      * Sets the byte order used by the
      * <code>WKBWriter</code>.
      */
-    virtual void setByteOrder(int newByteOrder);
+    void setByteOrder(int newByteOrder);
 
     /*
      * \brief
      * Returns whether SRID values are output by the
      * <code>WKBWriter</code>.
      */
-    virtual bool
+    bool
     getIncludeSRID() const
     {
         return includeSRID;
@@ -146,11 +151,27 @@ public:
      * Sets whether SRID values should be output by the
      * <code>WKBWriter</code>.
      */
-    virtual void
+    void
     setIncludeSRID(bool newIncludeSRID)
     {
         includeSRID = newIncludeSRID;
     }
+
+    /*
+     * \brief
+     * Returns the WKB flavor the writer will emit.
+     */
+    int
+    getFlavor() const
+    {
+        return flavor;
+    }
+
+    /*
+     * \brief
+     * Set the WKB flavor the writer will emit.
+     */
+    void setFlavor(int newFlavor);
 
     /**
      * \brief Write a Geometry to an ostream.
@@ -174,10 +195,14 @@ public:
 
 private:
 
+    // 2 or 3
     uint8_t defaultOutputDimension;
     uint8_t outputDimension;
 
+    // WKBConstants::wkbwkbXDR | WKBConstants::wkbNDR
     int byteOrder;
+    // WKBConstants::wkbIso | WKBConstants::wkbExtended
+    int flavor;
 
     bool includeSRID;
 

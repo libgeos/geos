@@ -13,6 +13,8 @@ Changes in 3.10.0
   - CAPI: GEOSMakeValidWithParams new validity enforcement approach from
           https://github.com/locationtech/jts/pull/704, uses GeometryFixer
           (Paul Ramsey, Martin Davis)
+  - CAPI: GEOSWKBWriter_getFlavor, GEOSWKBWriter_setFlavor support
+          outputting ISO or Extended WKB flavors (#466, Paul Ramsey)
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
