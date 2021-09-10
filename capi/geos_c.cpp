@@ -1281,6 +1281,18 @@ extern "C" {
         GEOSWKBWriter_setByteOrder_r(handle, writer, newByteOrder);
     }
 
+    int
+    GEOSWKBWriter_getFlavor(const GEOSWKBWriter* writer)
+    {
+        return GEOSWKBWriter_getFlavor_r(handle, writer);
+    }
+
+    void
+    GEOSWKBWriter_setFlavor(GEOSWKBWriter* writer, int newFlavor)
+    {
+        GEOSWKBWriter_setFlavor_r(handle, writer, newFlavor);
+    }
+
     char
     GEOSWKBWriter_getIncludeSRID(const GEOSWKBWriter* writer)
     {

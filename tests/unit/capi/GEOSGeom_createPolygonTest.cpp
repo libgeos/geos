@@ -50,5 +50,51 @@ void object::test<1>
     free(holes);
 }
 
+template<>
+template<>
+void object::test<2>
+()
+{
+    GEOSCoordSequence* shell_seq = GEOSCoordSeq_create(5, 2);
+
+    double shell_coords[] = {0,0, 0,10, 10,10, 10,0, 0,0};
+    for (unsigned int i = 0; i < 5; i++) {
+        GEOSCoordSeq_setXY(shell_seq, i, shell_coords[2*i], shell_coords[2*i+1]);
+    }
+
+    GEOSGeometry* shell = GEOSGeom_createLineString(shell_seq);
+    GEOSGeometry** holes = nullptr;
+    unsigned int nholes = 0;
+
+    // Returns null on exception, wrong input type for shell
+    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, nholes);
+    ensure(polygon == nullptr);
+
+    // Shouldn't need this
+    if (polygon)
+        GEOSGeom_destroy(polygon);
+}
+
+template<>
+template<>
+void object::test<3>
+()
+{
+    GEOSGeometry* shell = nullptr;
+    GEOSGeometry** holes = nullptr;
+
+    // Returns null on exception, wrong input type for shell
+    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, holes, 0);
+    ensure(polygon == nullptr);
+
+    // Returns null on exception, wrong input type for shell
+    polygon = GEOSGeom_createPolygon(shell, holes, 1);
+    ensure(polygon == nullptr);
+
+    // Shouldn't need this
+    if (polygon)
+        GEOSGeom_destroy(polygon);
+}
+
 } // namespace tut
 

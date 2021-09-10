@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_WKBCONSTANTS_H
-#define GEOS_IO_WKBCONSTANTS_H
+#pragma once
 
 namespace geos {
 namespace io {
@@ -26,22 +25,28 @@ namespace io {
 /// Constant values used by the WKB format
 namespace WKBConstants {
 
-/// Big Endian
-const int wkbXDR = 0;
+    enum byteOrder {
+        wkbXDR = 0,
+        wkbNDR = 1
+    };
 
-/// Little Endian
-const int wkbNDR = 1;
+    enum wkbType {
+        wkbPoint = 1,
+        wkbLineString = 2,
+        wkbPolygon = 3,
+        wkbMultiPoint = 4,
+        wkbMultiLineString = 5,
+        wkbMultiPolygon = 6,
+        wkbGeometryCollection = 7
+    };
 
-const int wkbPoint = 1;
-const int wkbLineString = 2;
-const int wkbPolygon = 3;
-const int wkbMultiPoint = 4;
-const int wkbMultiLineString = 5;
-const int wkbMultiPolygon = 6;
-const int wkbGeometryCollection = 7;
+    enum wkbFlavour {
+        wkbIso = 1,
+        wkbExtended = 2
+    };
+
 }
 
 } // namespace geos::io
 } // namespace geos
 
-#endif // #ifndef GEOS_IO_WKBCONSTANTS_H

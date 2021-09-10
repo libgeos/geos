@@ -18,7 +18,6 @@
 
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKBReader.h>
-#include <geos/io/WKBConstants.h>
 #include <geos/io/ByteOrderValues.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
@@ -45,8 +44,12 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
-WKBWriter::WKBWriter(uint8_t dims, int bo, bool srid):
-    defaultOutputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(nullptr)
+WKBWriter::WKBWriter(uint8_t dims, int bo, bool srid, int flv)
+    : defaultOutputDimension(dims)
+    , byteOrder(bo)
+    , flavor(flv)
+    , includeSRID(srid)
+    , outStream(nullptr)
 {
     if(dims < 2 || dims > 3) {
         throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
@@ -62,9 +65,21 @@ WKBWriter::setOutputDimension(uint8_t dims)
     if(dims < 2 || dims > 3) {
         throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
     }
-
     defaultOutputDimension = dims;
 }
+
+
+/* public */
+void
+WKBWriter::setFlavor(int newFlavor)
+{
+    if (newFlavor != WKBConstants::wkbIso &&
+        newFlavor != WKBConstants::wkbExtended) {
+        throw util::IllegalArgumentException("Invalid WKB output flavour");
+    }
+    flavor = newFlavor;
+}
+
 
 void
 WKBWriter::writeHEX(const Geometry& g, std::ostream& os)
@@ -83,37 +98,37 @@ void
 WKBWriter::write(const Geometry& g, std::ostream& os)
 {
     outputDimension = defaultOutputDimension;
-    if(outputDimension > g.getCoordinateDimension()) {
+    if (outputDimension > g.getCoordinateDimension()) {
         outputDimension = g.getCoordinateDimension();
     }
 
     outStream = &os;
 
-    if(const Point* x = dynamic_cast<const Point*>(&g)) {
+    if (const Point* x = dynamic_cast<const Point*>(&g)) {
         return writePoint(*x);
     }
 
-    if(const LineString* x = dynamic_cast<const LineString*>(&g)) {
+    if (const LineString* x = dynamic_cast<const LineString*>(&g)) {
         return writeLineString(*x);
     }
 
-    if(const Polygon* x = dynamic_cast<const Polygon*>(&g)) {
+    if (const Polygon* x = dynamic_cast<const Polygon*>(&g)) {
         return writePolygon(*x);
     }
 
-    if(const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g)) {
+    if (const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g)) {
         return writeGeometryCollection(*x, WKBConstants::wkbMultiPoint);
     }
 
-    if(const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g)) {
+    if (const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g)) {
         return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
     }
 
-    if(const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g)) {
+    if (const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g)) {
         return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
     }
 
-    if(const GeometryCollection* x =
+    if (const GeometryCollection* x =
                 dynamic_cast<const GeometryCollection*>(&g)) {
         return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
     }
@@ -138,7 +153,7 @@ WKBWriter::writePointEmpty(const Point& g)
 void
 WKBWriter::writePoint(const Point& g)
 {
-    if(g.isEmpty()) {
+    if (g.isEmpty()) {
         return writePointEmpty(g);
     }
 
@@ -173,7 +188,7 @@ WKBWriter::writePolygon(const Polygon& g)
     writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
     writeSRID(g.getSRID());
 
-    if(g.isEmpty()) {
+    if (g.isEmpty()) {
         writeInt(0);
         return;
     }
@@ -256,20 +271,35 @@ WKBWriter::setByteOrder(int bo)
 void
 WKBWriter::writeGeometryType(int typeId, int SRID)
 {
-    int flag3D = (outputDimension == 3) ? int(0x80000000) : 0;
-    int typeInt = typeId | flag3D;
-
-    if(includeSRID && SRID != 0) {
-        typeInt = typeInt | 0x20000000;
+    if (flavor == WKBConstants::wkbExtended) {
+        int flag3D = (outputDimension == 3) ? int(0x80000000) : 0;
+        typeId |= flag3D;
+        if(includeSRID && SRID != 0) {
+            typeId |= 0x20000000;
+        }
     }
-
-    writeInt(typeInt);
+    else if (flavor == WKBConstants::wkbIso) {
+        if (outputDimension == 3) {
+            typeId += 1000;
+        }
+    }
+    else {
+        throw util::IllegalArgumentException("Unknown WKB flavor");
+    }
+    writeInt(typeId);
 }
 
 void
 WKBWriter::writeSRID(int SRID)
 {
-    if(includeSRID && SRID != 0) {
+    // Only write the SRID in if
+    // it is requested and
+    // it is non zero and
+    // the format is extended (ISO doesn't support SRID embedding)
+    if (includeSRID &&
+        SRID != 0 &&
+        flavor == WKBConstants::wkbExtended)
+    {
         writeInt(SRID);
     }
 }

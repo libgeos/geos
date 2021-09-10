@@ -8,6 +8,7 @@
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/io/WKBConstants.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -263,7 +264,43 @@ void object::test<9>
     assert(geom->equals(geom2.get()));
 }
 
+// Test writing a 3D geometry with the WKBWriter in ISO flavor
+template<>
+template<>
+void object::test<10>
+()
+{
+    auto geom = wktreader.read("POINT(-117 33 11)");
+    std::stringstream result_stream;
 
+    wkbwriter.setOutputDimension(3);
+    wkbwriter.setFlavor(geos::io::WKBConstants::wkbIso);
+    wkbwriter.write(*geom, result_stream);
+    wkbwriter.setByteOrder(0);
+
+    ensure(result_stream.str().length() == 29);
+
+    result_stream.seekg(0);
+    geom = wkbreader.read(result_stream);
+
+    ensure(geom->getCoordinateDimension() == 3);
+    ensure(geom->getCoordinate()->x == -117.0);
+    ensure(geom->getCoordinate()->y == 33.0);
+    ensure(geom->getCoordinate()->z == 11.0);
+
+    result_stream.str("");
+    wkbwriter.writeHEX(*geom, result_stream);
+    std::string actual = result_stream.str();
+    // std::cout << std::endl << actual << std::endl;
+
+    // 00 == big endian
+    // 000003E9 == 1001
+    // C05D400000000000 == -117
+    // 4040800000000000 == 33
+    // 4026000000000000 == 11
+    ensure_equals(actual,
+                  "00000003E9C05D40000000000040408000000000004026000000000000");
+}
 
 
 } // namespace tut
