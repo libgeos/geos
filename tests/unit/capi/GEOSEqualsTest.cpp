@@ -142,12 +142,10 @@ template<>
 void object::test<6>
 ()
 {
-    const char* wkt1 = "GEOMETRYCOLLECTION(POLYGON ("
-                       "(0 0, 0 4, 4 4, 4 0, 0 0)"
-                       "),"
-                       "POLYGON ("
-                       "(3 3, 3 4, 4 4, 4 3, 3 3)"
-                       "))";
+    const char* wkt1 = "GEOMETRYCOLLECTION("
+                       "POLYGON ((0 0, 0 4, 4 4, 4 0, 0 0)),"
+                       "POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"
+                       ")";
 
     geom1_ = GEOSGeomFromWKT(wkt1);
 

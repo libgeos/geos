@@ -169,7 +169,8 @@ Node::testInvariant() const
         }
     }
 
-#if 0 // We can't rely on numerical stability with FP computations
+#if 0
+    // We can't rely on numerical stability with FP computations
     // ztot is the sum of doubnle sin zvals vector
     double ztot_check = 0.0;
     for(std::vector<double>::const_iterator

@@ -381,7 +381,6 @@ void object::test<6>
         0);
 }
 
-#if 0 // fails: finds an intersection (we don't have DD)
 /**
  * Test from Tomas Fa - JTS list 6/13/2012
  *
@@ -399,9 +398,7 @@ void object::test<7>
         "LINESTRING (-5.9 163.1, 76.1 250.7)",
         "LINESTRING (14.6 185.0, 96.6 272.6)");
 }
-#endif // fails
 
-#if 0 // fails: finds an intersection (we don't have DD)
 /**
  * Test from Tomas Fa - JTS list 6/13/2012
  *
@@ -419,7 +416,7 @@ void object::test<8>
         "LINESTRING (-42.0 163.2, 21.2 265.2)",
         "LINESTRING (-26.2 188.7, 37.0 290.7)");
 }
-#endif // fails
+
 
 /**
  * Following cases were failures when using the CentralEndpointIntersector heuristic.

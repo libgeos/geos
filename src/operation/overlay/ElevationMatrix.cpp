@@ -124,16 +124,6 @@ ElevationMatrix::add(const Geometry* geom)
 
 }
 
-#if 0
-void
-ElevationMatrix::add(const CoordinateSequence* cs)
-{
-    unsigned int ncoords = cs->getSize();
-    for(unsigned int i = 0; i < ncoords; i++) {
-        add(cs->getAt(i));
-    }
-}
-#endif
 
 void
 ElevationMatrix::add(const Coordinate& c)

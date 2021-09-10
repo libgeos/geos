@@ -103,19 +103,6 @@ Envelope::Envelope(const std::string& str)
          strtod(values[3].c_str(), nullptr));
 }
 
-#if 0
-/**
- *  Initialize an <code>Envelope</code> from an existing Envelope.
- *
- *@param  env  the Envelope to initialize from
- */
-void
-Envelope::init(Envelope env)
-{
-    init(env.minx, env.maxx, env.miny, env.maxy);
-}
-#endif // 0
-
 
 /*public*/
 bool

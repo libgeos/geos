@@ -55,23 +55,6 @@ DirectedEdge::depthFactor(Location currLocation, Location nextLocation)
     return 0;
 }
 
-#if 0
-DirectedEdge::DirectedEdge():
-    EdgeEnd(),
-    isInResultVar(false),
-    isVisitedVar(false),
-    sym(NULL),
-    next(NULL),
-    nextMin(NULL),
-    edgeRing(NULL),
-    minEdgeRing(NULL)
-{
-    depth[0] = 0;
-    depth[1] = -999;
-    depth[2] = -999;
-
-}
-#endif
 
 DirectedEdge::DirectedEdge(Edge* newEdge, bool newIsForward):
     EdgeEnd(newEdge),

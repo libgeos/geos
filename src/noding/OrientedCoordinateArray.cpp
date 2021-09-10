@@ -44,19 +44,6 @@ OrientedCoordinateArray::compareTo(const OrientedCoordinateArray& oca) const
 {
     int comp = compareOriented(*pts, orientationVar,
                                *oca.pts, oca.orientationVar);
-#if 0 // MD - testing only
-    int oldComp = SegmentStringDissolver.ptsComp.compare(pts, oca.pts);
-    if((oldComp == 0 || comp == 0) && oldComp != comp) {
-        System.out.println("bidir mismatch");
-
-        boolean orient1 = orientation(pts);
-        boolean orient2 = orientation(oca.pts);
-        int comp2 = compareOriented(pts, orientation,
-                                    oca.pts, oca.orientation);
-        int oldComp2 = SegmentStringDissolver.ptsComp.compare(pts, oca.pts);
-    }
-#endif
-
     return comp;
 }
 

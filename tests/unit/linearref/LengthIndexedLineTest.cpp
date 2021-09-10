@@ -488,20 +488,14 @@ void object::test<27>
         10, -10, "LINESTRING (10 0, 10 0)");
 }
 
-
-
-
-
 #if 0
 template<>
 template<>
-void object::test<28>
-()
+void object::test<28>()
 {
-
     GeomPtr linearGeom(reader.read(
-                           "MULTILINESTRING ((0 -2, 0 2),(-2 0, 2 0))"
-                       ));
+        "MULTILINESTRING ((0 -2, 0 2),(-2 0, 2 0))"
+        ));
     LengthIndexedLine indexedLine(linearGeom.get());
 
     double projIndex = indexedLine.project(Coordinate(2, 1.9));
@@ -518,8 +512,7 @@ void object::test<28>
 
 template<>
 template<>
-void object::test<29>
-()
+void object::test<29>()
 {
     GeomPtr linearGeom(reader.read("LINESTRING EMPTY"));
     LengthIndexedLine indexedLine(linearGeom.get());

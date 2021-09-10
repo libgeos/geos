@@ -162,25 +162,12 @@ GeometryNoder::getNoder()
 {
     if(! noder.get()) {
         const geom::PrecisionModel* pm = argGeom.getFactory()->getPrecisionModel();
-#if 0
-        using algorithm::LineIntersector;
-        LineIntersector li;
-        IntersectionAdder intersectionAdder(li);
-        noder.reset(new MCIndexNoder(&intersectionAdder));
-#else
-
         IteratedNoder* in = new IteratedNoder(pm);
-        //in->setMaximumIterations(0);
         noder.reset(in);
-
-        //using snapround::MCIndexSnapRounder;
-        //noder.reset( new MCIndexSnapRounder(*pm) );
-#endif
     }
     return *noder;
-
-
 }
+
 
 } // namespace geos.noding
 } // namespace geos
