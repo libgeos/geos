@@ -44,12 +44,13 @@ public:
     Result(Geometry * val);
     ~Result();
 
+    static std::string code(int typeCode);
+
     bool isGeometry();
     bool isGeometryList();
     std::string metadata();
     std::string toString();
 
-private:
     enum {
         typeBool = 1, typeInt, typeDouble, typeString, typeGeometry, typeGeomList
     } typeCode;
@@ -73,11 +74,12 @@ public:
         const std::unique_ptr<Geometry>& geomB, double d );
 
 private:
-    static void add(std::string name, geomFunSig geomfun);
+    static void add(std::string name, int resultType, geomFunSig geomfun);
     static void add(std::string name,
-                    std::string desc,
                     int nGeom,
                     int nParam,
+                    int resultType,
+                    std::string desc,
                     geomFunSig geomfun);
 
     static std::map<std::string, GeomFunction*> registry;
@@ -93,6 +95,7 @@ private:
     int numGeomParam;  // number of *required* geometry parameters (0,1,2)
     int numParam;  // number of none-geometry parameters (0 or 1 currently)
     //TODO: add result type?
+    int resultType;
 
     geomFunSig geomfun;
 
