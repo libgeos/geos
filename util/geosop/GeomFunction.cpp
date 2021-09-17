@@ -27,6 +27,8 @@
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
+#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/geom/util/Densifier.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -135,6 +137,13 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geom->distance( geomB.get() ) );
         });
+    add("frechetDistance", 2, 0, Result::typeDouble,
+        "computes discrete Frechet distance between geometry A and B",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(*geom, *geomB ) );
+        });
+
 
      add("envelope", Result::typeGeometry,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
