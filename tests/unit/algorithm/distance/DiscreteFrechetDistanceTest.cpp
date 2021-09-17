@@ -132,4 +132,13 @@ void object::test<4>
     runTest("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 0.5, 50.0);
 }
 
+// 5 - test Line Segments revealing distance intialization bug
+template<>
+template<>
+void object::test<5>
+()
+{
+    runTest("LINESTRING (1 1, 2 2)", "LINESTRING (1 4, 2 3)", 3);
+}
+
 } // namespace tut

@@ -10,7 +10,7 @@ Changes in 3.9.2
   - Declare parameterless functions in geos_c.h as func(void) (Paul Ramsey)
   - Performance improvement in SegmentNodeList (Even Rouault)
   - Catch memory leaks on createPolygon failure (#1111, Paul Ramsey)
-
+  - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
 
 Changes in 3.9.1
 2021-02-10
