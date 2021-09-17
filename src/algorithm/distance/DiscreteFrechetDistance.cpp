@@ -91,7 +91,7 @@ DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDis
     }
     p_ptDist.initialize(getSegementAt(p, i), getSegementAt(q, j));
     if(i == 0 && j == 0) {
-        ca[i][j] = ptDist;
+        ca[i][j] = p_ptDist;
     }
     else if(i > 0 && j == 0) {
         PointPairDistance nextDist = getFrecheDistance(ca, i - 1, 0, p, q);
