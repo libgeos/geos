@@ -19,6 +19,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 
+#include <vector>
 #include <map>
 #include <functional>
 
@@ -66,6 +67,26 @@ public:
     static GeomFunction* find(std::string name);
     static std::vector<std::string> list();
 
+    GeomFunction(std::string name,
+                    int nGeom,
+                    int nParam,
+                    int resType,
+                    std::string cat,
+                    std::string desc,
+                    geomFunSig fun)
+        :
+        funName(name),
+        numGeomParam(nGeom),
+        numParam(nParam),
+        resultType(resType),
+        category(cat),
+        description(desc),
+        geomfun(fun)
+    {}
+
+    ~GeomFunction()
+    {}
+
     std::string name();
     bool isBinary();
     std::string signature();
@@ -74,28 +95,29 @@ public:
         const std::unique_ptr<Geometry>& geomB, double d );
 
 private:
-    static void add(std::string name, int resultType, geomFunSig geomfun);
+    static void add(std::string name, int resultType, std::string category, geomFunSig geomfun);
     static void add(std::string name,
                     int nGeom,
                     int nParam,
                     int resultType,
+                    std::string category,
                     std::string desc,
                     geomFunSig geomfun);
 
     static std::map<std::string, GeomFunction*> registry;
-
-    //static geos::geom::prep::PreparedGeometry *prepGeomCache;
-    //static Geometry *cacheKey;
+    static std::vector<GeomFunction*> functionList;
 
     //---------------------------
 
     std::string funName;
-    std::string description;
 
     int numGeomParam;  // number of *required* geometry parameters (0,1,2)
     int numParam;  // number of none-geometry parameters (0 or 1 currently)
     //TODO: add result type?
     int resultType;
+
+    std::string category;
+    std::string description;
 
     geomFunSig geomfun;
 
