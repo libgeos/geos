@@ -563,8 +563,8 @@ void object::test<31>
     try {
         // Create non-empty LineString instance
         auto lr(factory_->createLinearRing(pseq));
-        fail("IllegalArgumentException expected.");
         ensure(!lr->isEmpty());
+        fail("IllegalArgumentException expected.");
     }
     catch(geos::util::IllegalArgumentException const& e) {
         const char* msg = e.what(); // OK
