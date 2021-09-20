@@ -76,7 +76,13 @@ int main(int argc, char** argv) {
     ;
 
     options.parse_positional({"opName", "opArgs"});
-    auto result = options.parse(argc, argv);
+    cxxopts::ParseResult result;
+    try {
+        result = options.parse(argc, argv);
+    } catch ( cxxopts::option_not_exists_exception& ex ) {
+        std::cerr << ex.what() << std::endl;
+        exit(1);
+    }
 
     if (argc <= 1 || result.count("help")) {
         std::cout << "geosop - GEOS " << geosversion() << std::endl;
