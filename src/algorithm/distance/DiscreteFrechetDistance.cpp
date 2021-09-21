@@ -73,7 +73,7 @@ void DiscreteFrechetDistance::setDensifyFraction(double dFrac)
 /* private */
 
 geom::Coordinate
-DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, std::size_t index)
+DiscreteFrechetDistance::getSegmentAt(const CoordinateSequence& seq, std::size_t index)
 {
     if(densifyFrac > 0.0) {
         // Validity of the cast to size_t has been verified in setDensifyFraction()
@@ -107,7 +107,7 @@ DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDis
     if(! ca[i][j].getIsNull()) {
         return ca[i][j];
     }
-    p_ptDist.initialize(getSegementAt(p, i), getSegementAt(q, j));
+    p_ptDist.initialize(getSegmentAt(p, i), getSegmentAt(q, j));
     if(i == 0 && j == 0) {
         ca[i][j] = p_ptDist;
     }

@@ -145,7 +145,7 @@ public:
     }
 
 private:
-    geom::Coordinate getSegementAt(const geom::CoordinateSequence& seq, std::size_t index);
+    geom::Coordinate getSegmentAt(const geom::CoordinateSequence& seq, std::size_t index);
 
     PointPairDistance& getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, std::size_t i, std::size_t j,
                                          const geom::CoordinateSequence& p, const geom::CoordinateSequence& q);
