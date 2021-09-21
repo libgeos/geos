@@ -49,6 +49,7 @@
 #include <sstream>
 
 using geos::operation::overlayng::OverlayNG;
+using geos::algorithm::distance::DiscreteFrechetDistance;
 
 /* static private */
 std::map<std::string, GeomFunction*> GeomFunction::registry;
@@ -373,6 +374,29 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(*geom, *geomB ) );
         });
+        /*
+        // MD - can't get this to work for now
+     add("frechetDistanceLine", 2, 0, Result::typeGeometry, catDist,
+        "computes a line indicating the discrete Frechet distance between geometry A and B",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            DiscreteFrechetDistance dist(*geom, *geomB);
+            //--- not supported for now
+            //dist.setDensifyFraction(d);
+            const std::array<geom::Coordinate, 2> ptArray = dist.getCoordinates();
+
+            std::unique_ptr<std::vector<Coordinate>> pts(new std::vector<Coordinate>(2));
+            (*pts)[0] = ptArray[0];
+            (*pts)[1] = ptArray[1];
+            //std::cout << ptArray[0] << std::endl;
+            //std::cout << ptArray[1] << std::endl;
+            auto cs = std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(pts.release()));
+
+            auto factory = geom->getFactory();
+            auto res = factory->createLineString( std::move(cs) );
+            return new Result( std::move(res) );
+        });
+        */
     add("distancePrep", 2, 0, Result::typeDouble, catDist,
         "computes distance between geometry A and B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
