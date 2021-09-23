@@ -15,6 +15,11 @@
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/CGAlgorithmsDD.h>
+#include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/Angle.h>
+
+using geos::algorithm::Angle;
+using geos::algorithm::Orientation;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -88,6 +93,45 @@ Triangle::det(double m00, double m01, double m10, double m11) const
 {
     return m00 * m11 - m01 * m10;
 }
+
+
+/* public static */
+bool
+Triangle::isAcute(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    if (!Angle::isAcute(a, b, c))
+        return false;
+    if (!Angle::isAcute(b, c, a))
+        return false;
+    if (!Angle::isAcute(c, a, b))
+        return false;
+    return true;
+}
+
+
+/* public static */
+bool
+Triangle::isCCW(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    return Orientation::COUNTERCLOCKWISE == Orientation::index(a, b, c);
+}
+
+
+/* public static */
+bool
+Triangle::intersects(const Coordinate& a, const Coordinate& b, const Coordinate& c, const Coordinate& p)
+{
+    int exteriorIndex = isCCW(a, b, c) ?
+        Orientation::CLOCKWISE : Orientation::COUNTERCLOCKWISE;
+    if (exteriorIndex == Orientation::index(a, b, p))
+        return false;
+    if (exteriorIndex == Orientation::index(b, c, p))
+        return false;
+    if (exteriorIndex == Orientation::index(c, a, p))
+        return false;
+    return true;
+}
+
 
 
 } // namespace geos::geom

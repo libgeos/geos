@@ -123,6 +123,8 @@ public:
 
     void expandEnvelope(Envelope& env) const override;
 
+    void closeRing();
+
     std::size_t getDimension() const override;
 
     void apply_rw(const CoordinateFilter* filter) override;

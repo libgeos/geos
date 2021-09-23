@@ -522,6 +522,11 @@ GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
 
 GEOS_DLL bool operator!=(const Envelope& a, const Envelope& b);
 
+/// Strict weak ordering operator for Envelope
+/// This is the C++ equivalent of JTS's compareTo
+GEOS_DLL bool operator< (const Envelope& a, const Envelope& b);
+
+
 } // namespace geos::geom
 } // namespace geos
 

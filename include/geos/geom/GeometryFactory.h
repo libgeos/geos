@@ -280,6 +280,9 @@ public:
     std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell,
                                            std::vector<std::unique_ptr<LinearRing>> && holes) const;
 
+    /// Construct a Polygon from a Coordinate vector, taking ownership of the vector
+    std::unique_ptr<Polygon> createPolygon(std::vector<Coordinate> && coords) const;
+
     /// Construct a Polygon with a deep-copy of given arguments
     Polygon* createPolygon(const LinearRing& shell,
                            const std::vector<LinearRing*>& holes) const;

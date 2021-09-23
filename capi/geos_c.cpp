@@ -1625,6 +1625,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSConstrainedDelaunayTriangulation(const Geometry* g)
+    {
+        return GEOSConstrainedDelaunayTriangulation_r(handle, g);
+    }
+
+    Geometry*
     GEOSVoronoiDiagram(const Geometry* g, const Geometry* env, double tolerance, int onlyEdges)
     {
         return GEOSVoronoiDiagram_r(handle, g, env, tolerance, onlyEdges);

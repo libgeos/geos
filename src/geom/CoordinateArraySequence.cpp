@@ -236,6 +236,14 @@ CoordinateArraySequence::setOrdinate(std::size_t index, std::size_t ordinateInde
 }
 
 void
+CoordinateArraySequence::closeRing()
+{
+    if(!isEmpty() && front() != back()) {
+        add(front());
+    }
+}
+
+void
 CoordinateArraySequence::apply_rw(const CoordinateFilter* filter)
 {
     for(auto& coord : vect) {

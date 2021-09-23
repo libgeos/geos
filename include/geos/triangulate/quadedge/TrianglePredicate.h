@@ -16,15 +16,21 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
-#define GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
+#pragma once
 
 #include <geos/export.h>
 
 namespace geos {
-namespace geom { // geos.geom
-
+namespace geom {
 class Coordinate;
+}
+}
+
+using geos::geom::Coordinate;
+
+namespace geos {
+namespace triangulate {
+namespace quadedge {
 
 /** \brief
  * Algorithms for computing values and predicates
@@ -109,8 +115,9 @@ public:
         const Coordinate& p);
 } ;
 
-} // namespace geos.geom
+
+} // namespace geos.triangulate.quadedge
+} // namespace geos.triangulate
 } // namespace geos
 
-#endif //GEOS_TRIANGULATE_QUADEDGE_TRIANGLEPREDICATE_H
 

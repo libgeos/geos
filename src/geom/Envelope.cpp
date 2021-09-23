@@ -165,6 +165,40 @@ operator==(const Envelope& a, const Envelope& b)
     return a.equals(&b);
 }
 
+bool
+operator< (const Envelope& a, const Envelope& b)
+{
+    /*
+    * Compares two envelopes using lexicographic ordering.
+    * The ordering comparison is based on the usual numerical
+    * comparison between the sequence of ordinates.
+    * Null envelopes are less than all non-null envelopes.
+    */
+    if (a.isNull()) {
+        // null == null
+        if (b.isNull())
+            return false;
+        // null < notnull
+        else
+            return true;
+    }
+    // notnull > null
+    if (b.isNull())
+        return false;
+
+    // compare based on numerical ordering of ordinates
+    if (a.getMinX() < b.getMinX()) return true;
+    if (a.getMinX() > b.getMinX()) return false;
+    if (a.getMinY() < b.getMinY()) return true;
+    if (a.getMinY() > b.getMinY()) return false;
+    if (a.getMaxX() < b.getMaxX()) return true;
+    if (a.getMaxX() > b.getMaxX()) return false;
+    if (a.getMaxY() < b.getMaxY()) return true;
+    if (a.getMaxY() > b.getMaxY()) return false;
+    return false; // == is not strictly <
+}
+
+
 /*public*/
 size_t
 Envelope::hashCode() const

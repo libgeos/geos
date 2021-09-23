@@ -85,6 +85,7 @@
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
+#include <geos/triangulate/polygon/ConstrainedDelaunayTriangulator.h>
 #include <geos/util.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
@@ -3703,6 +3704,16 @@ extern "C" {
                 out->setSRID(g1->getSRID());
                 return out;
             }
+        });
+    }
+
+    Geometry*
+    GEOSConstrainedDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry* g1)
+    {
+        using geos::triangulate::polygon::ConstrainedDelaunayTriangulator;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            return ConstrainedDelaunayTriangulator::triangulate(g1).release();
         });
     }
 

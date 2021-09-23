@@ -571,6 +571,19 @@ const
     return std::unique_ptr<Polygon>(new Polygon(std::move(shell), *this));
 }
 
+/*public*/
+std::unique_ptr<Polygon>
+GeometryFactory::createPolygon(std::vector<Coordinate> && coords)
+const
+{
+    const geom::CoordinateSequenceFactory* csf = getCoordinateSequenceFactory();
+    std::unique_ptr<geom::CoordinateSequence> cs = csf->create(std::move(coords));
+    std::unique_ptr<geom::LinearRing> lr = createLinearRing(std::move(cs));
+    std::unique_ptr<geom::Polygon> ply = createPolygon(std::move(lr));
+    return ply;
+}
+
+
 std::unique_ptr<Polygon>
 GeometryFactory::createPolygon(std::unique_ptr<LinearRing> && shell, std::vector<std::unique_ptr<LinearRing>> && holes)
 const

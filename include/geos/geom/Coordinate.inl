@@ -69,6 +69,18 @@ Coordinate::equals2D(const Coordinate& other) const
 }
 
 INLINE bool
+Coordinate::equals2D(const Coordinate& other, double tolerance) const
+{
+    if (std::abs(x - other.x) > tolerance) {
+        return false;
+    }
+    if (std::abs(y - other.y) > tolerance) {
+        return false;
+    }
+    return true;
+}
+
+INLINE bool
 Coordinate::equals(const Coordinate& other) const
 {
     return equals2D(other);

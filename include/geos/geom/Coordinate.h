@@ -99,6 +99,8 @@ public:
 
     bool equals2D(const Coordinate& other) const;
 
+    bool equals2D(const Coordinate& other, double tolerance) const;
+
     /// 2D only
     bool equals(const Coordinate& other) const;
 

@@ -941,6 +941,11 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
     double tolerance,
     int onlyEdges);
 
+/** \see GEOSConstrainedDelaunayTriangulation */
+extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g);
+
 /** \see GEOSVoronoiDiagram */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
     GEOSContextHandle_t extHandle,
@@ -2947,6 +2952,18 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
     const GEOSGeometry *g,
     double tolerance,
     int onlyEdges);
+
+/**
+* Return a constrained Delaunay triangulation of the vertices of the
+* given polygon(s).
+* For non-polygonal inputs, returns an empty geometry collection.
+*
+* \param g the input geometry whose rings will be used as input
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
+    const GEOSGeometry *g);
 
 /**
 * Returns the Voronoi polygons of the vertices of the given geometry.

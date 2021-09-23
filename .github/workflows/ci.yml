@@ -63,15 +63,6 @@ jobs:
         - {
           compiler: clang++,
           build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.8.*,
-          os: ubuntu-16.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
           cxxstd: 14,
           arch: 64,
           packages: 'clang',

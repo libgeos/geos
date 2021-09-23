@@ -20,8 +20,11 @@
 
 #include <geos/geom/Coordinate.h>
 
+using geos::geom::Coordinate;
+
 namespace geos {
-namespace geom { // geos.geom
+namespace triangulate {
+namespace quadedge {
 
 bool
 TrianglePredicate::isInCircleNonRobust(
@@ -85,5 +88,6 @@ TrianglePredicate::isInCircleRobust(
     return isInCircleNormalized(a, b, c, p);
 }
 
-} // namespace geos.geom
+} // namespace geos.triangulate.quadedge
+} // namespace geos.triangulate
 } // namespace geos
