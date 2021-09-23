@@ -67,7 +67,7 @@ public:
     static GeomFunction* find(std::string name);
     static std::vector<std::string> list();
 
-    GeomFunction(std::string name,
+    GeomFunction(std::string strName,
                     int nGeom,
                     int nParam,
                     int resType,
@@ -75,7 +75,7 @@ public:
                     std::string desc,
                     geomFunSig fun)
         :
-        funName(name),
+        funName(strName),
         numGeomParam(nGeom),
         numParam(nParam),
         resultType(resType),
