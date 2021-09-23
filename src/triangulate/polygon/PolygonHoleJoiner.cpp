@@ -242,7 +242,7 @@ PolygonHoleJoiner::isJoinable(const Coordinate& holeCoord, const Coordinate& she
      * Since the line runs between a hole and the shell,
      * it is inside the polygon if it does not cross the polygon boundary.
      */
-    bool isJoinable = ! crossesPolygon(holeCoord, shellCoord);
+    bool bIsJoinable = ! crossesPolygon(holeCoord, shellCoord);
     /*
     //--- slow code for testing only
     LineString join = geomFact.createLineString(new Coordinate[] { holeCoord, shellCoord });
@@ -252,7 +252,7 @@ PolygonHoleJoiner::isJoinable(const Coordinate& holeCoord, const Coordinate& she
     }
     //Assert.isTrue(isJoinableSlow == isJoinable);
     */
-    return isJoinable;
+    return bIsJoinable;
 }
 
 
