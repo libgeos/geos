@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <stack>
 
 using namespace geos::geom;
 
@@ -152,34 +153,76 @@ KdTree::insertExact(const geom::Coordinate& p, void* data)
 void
 KdTree::queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd, KdNodeVisitor& visitor)
 {
-    if (currentNode == nullptr)
-        return;
+    // Non recursive formulation of in-order traversal from
+    // http://web.cs.wpi.edu/~cs2005/common/iterative.inorder
+    // Otherwise we may blow up the stack
+    // See https://github.com/qgis/QGIS/issues/45226
+    typedef std::pair<KdNode*, bool> Pair;
+    std::stack<Pair> activeNodes;
+    while(true)
+    {
+        if( currentNode != nullptr )
+        {
+            double min;
+            double discriminant;
 
-    double min;
-    double max;
-    double discriminant;
+            if (odd) {
+                min = queryEnv.getMinX();
+                discriminant = currentNode->getX();
+            } else {
+                min = queryEnv.getMinY();
+                discriminant = currentNode->getY();
+            }
+            bool searchLeft = min < discriminant;
 
-    if (odd) {
-        min = queryEnv.getMinX();
-        max = queryEnv.getMaxX();
-        discriminant = currentNode->getX();
-    } else {
-        min = queryEnv.getMinY();
-        max = queryEnv.getMaxY();
-        discriminant = currentNode->getY();
-    }
-    bool searchLeft = min < discriminant;
-    bool searchRight = discriminant <= max;
+            activeNodes.emplace(Pair(currentNode, odd));
 
-    // search is computed via in-order traversal
-    if (searchLeft) {
-        queryNode(currentNode->getLeft(), queryEnv, !odd, visitor);
-    }
-    if (queryEnv.contains(currentNode->getCoordinate())) {
-        visitor.visit(currentNode);
-    }
-    if (searchRight) {
-        queryNode(currentNode->getRight(), queryEnv, !odd, visitor);
+            // search is computed via in-order traversal
+            KdNode* leftNode = nullptr;
+            if (searchLeft ) {
+                leftNode = currentNode->getLeft();
+            }
+            if( leftNode ) {
+                currentNode = leftNode;
+                odd = !odd;
+            } else {
+                currentNode = nullptr;
+            }
+        }
+        else if( !activeNodes.empty() )
+        {
+            currentNode = activeNodes.top().first;
+            odd = activeNodes.top().second;
+            activeNodes.pop();
+
+            if (queryEnv.contains(currentNode->getCoordinate())) {
+                visitor.visit(currentNode);
+            }
+
+            double max;
+            double discriminant;
+
+            if (odd) {
+                max = queryEnv.getMaxX();
+                discriminant = currentNode->getX();
+            } else {
+                max = queryEnv.getMaxY();
+                discriminant = currentNode->getY();
+            }
+            bool searchRight = discriminant <= max;
+
+            if (searchRight) {
+                currentNode = currentNode->getRight();
+                if( currentNode )
+                    odd = !odd;
+            } else {
+                currentNode = nullptr;
+            }
+        }
+        else
+        {
+            break;
+        }
     }
 }
 
@@ -187,29 +230,32 @@ KdTree::queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd,
 KdNode*
 KdTree::queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd)
 {
-    if (currentNode == nullptr)
-        return nullptr;
-    if (currentNode->getCoordinate().equals2D(queryPt))
-        return currentNode;
+    while (currentNode != nullptr)
+    {
+        if (currentNode->getCoordinate().equals2D(queryPt))
+            return currentNode;
 
-    double ord;
-    double discriminant;
-    if (odd) {
-        ord = queryPt.x;
-        discriminant = currentNode->getX();
-    }
-    else {
-        ord = queryPt.y;
-        discriminant = currentNode->getY();
-    }
+        double ord;
+        double discriminant;
+        if (odd) {
+            ord = queryPt.x;
+            discriminant = currentNode->getX();
+        }
+        else {
+            ord = queryPt.y;
+            discriminant = currentNode->getY();
+        }
 
-    bool searchLeft = (ord < discriminant);
-    if (searchLeft) {
-        return queryNodePoint(currentNode->getLeft(), queryPt, !odd);
+        bool searchLeft = (ord < discriminant);
+        odd = !odd;
+        if (searchLeft) {
+            currentNode = currentNode->getLeft();
+        }
+        else {
+            currentNode = currentNode->getRight();
+        }
     }
-    else {
-        return queryNodePoint(currentNode->getRight(), queryPt, !odd);
-    }
+    return nullptr;
 }
 
 
