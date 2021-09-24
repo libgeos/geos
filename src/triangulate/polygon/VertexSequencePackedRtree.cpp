@@ -75,13 +75,13 @@ VertexSequencePackedRtree::computeLevelOffsets()
 {
     std::vector<std::size_t> offsets;
     offsets.push_back(0u);
-    std::size_t levelSize = items.size();
+    std::size_t szLevel = items.size();
     std::size_t currOffset = 0;
     do {
-        levelSize = levelNodeCount(levelSize);
-        currOffset += levelSize;
+        szLevel = levelNodeCount(szLevel);
+        currOffset += szLevel;
         offsets.push_back(currOffset);
-    } while (levelSize > 1);
+    } while (szLevel > 1);
     return offsets;
 }
 
