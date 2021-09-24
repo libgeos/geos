@@ -11,6 +11,8 @@ Changes in 3.9.2
   - Performance improvement in SegmentNodeList (Even Rouault)
   - Catch memory leaks on createPolygon failure (#1111, Paul Ramsey)
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
+  - Avoid stack overflow in KdTree::queryNode (Even Roualt)
+
 
 Changes in 3.9.1
 2021-02-10
