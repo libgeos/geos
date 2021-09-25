@@ -43,6 +43,7 @@
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
+#include <geos/triangulate/polygon/ConstrainedDelaunayTriangulator.h>
 
 #include "GeomFunction.h"
 
@@ -255,6 +256,12 @@ GeomFunction::init()
             }
             return new Result( std::move(geoms) ) ;
         });
+    add("constrainedDelaunay", 1, 1, Result::typeGeometry, catConst,
+        "constrained Delauanay triangulation of polygonal geometries",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB;  (void)d; // prevent unused variable warning
+            return new Result( geos::triangulate::polygon::ConstrainedDelaunayTriangulator::triangulate(geom.get()) );
+         });
 
     add("voronoi", 1, 0, Result::typeGeometry, catConst,
         "computes the Voronoi Diagram of geometry vertices",
