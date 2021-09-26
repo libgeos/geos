@@ -256,7 +256,7 @@ GeomFunction::init()
             }
             return new Result( std::move(geoms) ) ;
         });
-    add("constrainedDelaunay", 1, 1, Result::typeGeometry, catConst,
+    add("constrainedDelaunay", 1, 0, Result::typeGeometry, catConst,
         "constrained Delauanay triangulation of polygonal geometries",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  (void)d; // prevent unused variable warning
