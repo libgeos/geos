@@ -30,6 +30,9 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/geom/util/Densifier.h>
+#include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -98,13 +101,13 @@ GeomFunction::init()
             return new Result( geom->getCentroid() );
         });
     add("isEmpty", 1, 0, Result::typeBool, catGeom,
-        "tests if geometry is empty",
+        "test if geometry is empty",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->isEmpty() );
         });
     add("normalize", 1, 0, Result::typeGeometry, catGeom,
-        "normalizes geometry",
+        "normalize geometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             auto res = geom->clone();
@@ -113,7 +116,7 @@ GeomFunction::init()
         });
 
     add("lineMerge", 1, 0, Result::typeGeometry, catGeom,
-        "merges the lines of geometry",
+        "merge the lines of geometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::operation::linemerge::LineMerger lmrgr;
@@ -129,14 +132,14 @@ GeomFunction::init()
         });
 
     add("reducePrecision", 1, 1, Result::typeGeometry, catGeom,
-        "reduces precision of geometry to a precision scale factor",
+        "reduce precision of geometry to a precision scale factor",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  // prevent unused variable warning
             PrecisionModel pm(d);
             return new Result( geos::precision::GeometryPrecisionReducer::reduce( *geom, pm ) );
         });
     add("reverse", 1, 0, Result::typeGeometry, catGeom,
-        "reverses geometry",
+        "reverse geometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->reverse() );
@@ -156,14 +159,14 @@ GeomFunction::init()
         });
 //-------------------------------------
     add("isSimple", 1, 0, Result::typeBool, catValid,
-        "tests if geometry is simple",
+        "test if geometry is simple",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->isSimple() );
         });
 
     add("isValid", 1, 0, Result::typeBool, catValid,
-        "tests if geometry is valid",
+        "test if geometry is valid",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->isValid() );
@@ -181,10 +184,24 @@ GeomFunction::init()
             return new Result( geom->getBoundary() );
         });
     add("buffer", 1, 1, Result::typeGeometry,
-        catConst, "computes the buffer of geometry by a distance",
+        catConst, "compute the buffer of geometry by a distance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB;  // prevent unused variable warning
             return new Result( geom->buffer( d ) );
+        });
+    add("offsetCurve", 1, 1, Result::typeGeometry,
+        catConst, "compute the offset curve of geometry by a distance",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB;  // prevent unused variable warning
+            geos::operation::buffer::BufferParameters bp;
+
+            bool isLeftSide = true;
+            if(d < 0) {
+                isLeftSide = false;
+                d = -d;
+            }
+            geos::operation::buffer::BufferBuilder bufBuilder(bp);
+            return new Result( bufBuilder.bufferLineSingleSided(geom.get(), d, isLeftSide) );
         });
     add("centroid", Result::typeGeometry, catConst,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
@@ -198,7 +215,7 @@ GeomFunction::init()
         });
 
     add("densify", 1, 1, Result::typeGeometry, catConst,
-        "densifies geometry to a distance ",
+        "densify geometry to a distance ",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  // prevent unused variable warning
             geos::geom::util::Densifier densifier( geom.get() );
@@ -215,7 +232,7 @@ GeomFunction::init()
         });
 
     add("largestEmptyCircle", 1, 1, Result::typeGeometry, catConst,
-        "computes radius line of largest empty circle of geometry up to a distance tolerance",
+        "compute radius line of largest empty circle of geometry up to a distance tolerance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), d );
@@ -224,7 +241,7 @@ GeomFunction::init()
         });
 
     add("maxInscribedCircle", 1, 1, Result::typeGeometry, catConst,
-        "computes maximum inscribed circle radius of Polygon up to a distance tolerance",
+        "compute maximum inscribed circle radius of Polygon up to a distance tolerance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::algorithm::construct::MaximumInscribedCircle mc( geom.get(), d );
@@ -241,7 +258,7 @@ GeomFunction::init()
 
 
     add("delaunay", 1, 0, Result::typeGeometry, catConst,
-        "computes the Delaunay Triangulation of geometry vertices",
+        "compute the Delaunay Triangulation of geometry vertices",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::triangulate::DelaunayTriangulationBuilder builder;
@@ -264,7 +281,7 @@ GeomFunction::init()
          });
 
     add("voronoi", 1, 0, Result::typeGeometry, catConst,
-        "computes the Voronoi Diagram of geometry vertices",
+        "Voronoi Diagram of geometry vertices",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::triangulate::VoronoiDiagramBuilder builder;
@@ -294,13 +311,13 @@ GeomFunction::init()
             return new Result( std::move(geoms) ) ;
         });
     add("simplifyDP", 1, 1, Result::typeGeometry, catConst,
-        "simplifies geometry using Douglas-Peucker with a distance tolerance",
+        "simplify geometry using Douglas-Peucker with a distance tolerance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  // prevent unused variable warning
             return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(geom.get(), d) );
          });
     add("simplifyTP", 1, 1, Result::typeGeometry, catConst,
-        "simplifies geometry using Douglas-Peucker with a distance tolerance, preserving topology",
+        "simplify geometry using Douglas-Peucker with a distance tolerance, preserving topology",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB;  // prevent unused variable warning
             return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(geom.get(), d) );
@@ -308,25 +325,25 @@ GeomFunction::init()
 
 //--------------------------------
     add("contains", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A contains geometry B",
+        "test if geometry A contains geometry B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->contains( geomB.get() ) );
         });
     add("covers", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A covers geometry B",
+        "test if geometry A covers geometry B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->covers( geomB.get() ) );
         });
     add("intersects", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A and B intersect",
+        "test if geometry A and B intersect",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->intersects( geomB.get() ) );
         });
     add("relate", 2, 0, Result::typeString, catRel,
-        "computes DE-9IM matrix for geometry A and B",
+        "compute DE-9IM matrix for geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
@@ -334,25 +351,25 @@ GeomFunction::init()
         });
 
     add("containsPrep", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A contains geometry B, using PreparedGeometry",
+        "test if geometry A contains geometry B, using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( prepGeomCache.get(geom.get())->contains( geomB.get() ) );
         });
     add("containsProperlyPrep", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A properly contains geometry B using PreparedGeometry",
+        "test if geometry A properly contains geometry B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( prepGeomCache.get(geom.get())->containsProperly( geomB.get() ) );
         });
     add("coversPrep", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A covers geometry B using PreparedGeometry",
+        "test if geometry A covers geometry B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( prepGeomCache.get(geom.get())->covers( geomB.get() ) );
         });
     add("intersectsPrep", 2, 0, Result::typeBool, catRel,
-        "tests if geometry A intersects B using PreparedGeometry",
+        "test if geometry A intersects B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( prepGeomCache.get(geom.get())->intersects( geomB.get() ) );
@@ -361,13 +378,13 @@ GeomFunction::init()
 //----------------------------------------
 
     add("distance", 2, 0, Result::typeDouble, catDist,
-        "computes distance between geometry A and B",
+        "compute distance between geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->distance( geomB.get() ) );
         });
     add("nearestPoints", 2, 0, Result::typeGeometry, catDist,
-        "computes a line containing the nearest points of geometry A and B",
+        "compute a line containing the nearest points of geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             std::unique_ptr<CoordinateSequence> cs = geos::operation::distance::DistanceOp::nearestPoints(geom.get(), geomB.get());
@@ -376,7 +393,7 @@ GeomFunction::init()
             return new Result( std::move(res) );
         });
     add("frechetDistance", 2, 0, Result::typeDouble, catDist,
-        "computes discrete Frechet distance between geometry A and B",
+        "compute discrete Frechet distance between geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(*geom, *geomB ) );
@@ -405,13 +422,13 @@ GeomFunction::init()
         });
         */
     add("distancePrep", 2, 0, Result::typeDouble, catDist,
-        "computes distance between geometry A and B using PreparedGeometry",
+        "compute distance between geometry A and B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( prepGeomCache.get(geom.get())->distance( geomB.get() ) );
         });
     add("nearestPointsPrep", 2, 0, Result::typeGeometry, catDist,
-        "computes a line containing the nearest points of geometry A and B using PreparedGeometry",
+        "compute a line containing the nearest points of geometry A and B using PreparedGeometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             auto cs = prepGeomCache.get(geom.get())->nearestPoints( geomB.get() );
@@ -423,19 +440,19 @@ GeomFunction::init()
 //----------------------------------------
 
     add("difference", 2, 0, Result::typeGeometry, catOverlay,
-        "computes difference of geometry A from B",
+        "compute difference of geometry A from B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->difference( geomB.get() ) );
         });
     add("intersection", 2, 0, Result::typeGeometry, catOverlay,
-        "computes intersection of geometry A and B",
+        "compute intersection of geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->intersection( geomB.get() ) );
         });
     add("symDifference", 2, 0, Result::typeGeometry, catOverlay,
-        "computes symmetric difference of geometry A and B",
+        "compute symmetric difference of geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->symDifference( geomB.get() ) );
@@ -446,39 +463,39 @@ GeomFunction::init()
             return new Result( geom->Union() );
         });
     add("union", 2, 0, Result::typeGeometry, catOverlay,
-        "computes union of geometry A and B",
+        "compute union of geometry A and B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             return new Result( geom->Union( geomB.get() ) );
         });
 
     add("differenceSR", 2, 1, Result::typeGeometry, catOverlay,
-        "computes difference of geometry A from B, snap-rounding to a precision scale factor",
+        "compute difference of geometry A from B, snap-rounding to a precision scale factor",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::DIFFERENCE, &pm) );
         });
     add("intersectionSR", 2, 1, Result::typeGeometry, catOverlay,
-        "computes intersection of geometry A and B, snap-rounding to a precision scale factor",
+        "compute intersection of geometry A and B, snap-rounding to a precision scale factor",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::INTERSECTION, &pm) );
         });
     add("symDifferenceSR", 2, 1, Result::typeGeometry, catOverlay,
-        "computes symmetric difference of geometry A and B, snap-rounding to a precision scale factor",
+        "compute symmetric difference of geometry A and B, snap-rounding to a precision scale factor",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::SYMDIFFERENCE, &pm) );
         });
     add("unionSR", 2, 1, Result::typeGeometry, catOverlay,
-        "computes union of geometry A and B, snap-rounding to a precision scale factor",
+        "compute union of geometry A and B, snap-rounding to a precision scale factor",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             geos::geom::PrecisionModel pm(d);
             return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
         });
 
     add("clipRect", 2, 0, Result::typeGeometry, catOverlay,
-        "clips geometry A to envelope of B",
+        "clip geometry A to envelope of B",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             using geos::operation::intersection::Rectangle;
@@ -504,7 +521,7 @@ void
 GeomFunction::add(std::string name, int resultType, std::string category, geomFunSig geomfun)
 {
     add(name, 1, 0, resultType, category,
-        "computes " + name + " of geometry",
+        "compute " + name + " of geometry",
         geomfun);
 }
 
