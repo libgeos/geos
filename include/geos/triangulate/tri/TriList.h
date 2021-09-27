@@ -38,13 +38,12 @@ namespace tri {         // geos.triangulate.tri
 
 
 /**
- * Represents an edge in a {@link Tri},
- * to be used as a key for looking up Tris
- * while building a triangulation.
- * The edge value is normalized to allow lookup
- * of adjacent triangles.
+ * A utility class that holds the ownership of
+ * the Tris being passed between different processing
+ * operations, and also provides access to those
+ * Tris as a vector of pointers, to match up
+ * to the JTS API.
  *
- * @author mdavis
  */
 class GEOS_DLL TriList {
 
