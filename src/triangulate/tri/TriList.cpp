@@ -55,6 +55,21 @@ TriList::toGeometry(const geom::GeometryFactory* geomFact) const
     return geomFact->createGeometryCollection(std::move(geoms));
 }
 
+/* public static */
+std::unique_ptr<Geometry>
+TriList::toGeometry(
+    const geom::GeometryFactory* geomFact,
+    const std::vector<std::unique_ptr<TriList>>& allTriLists)
+{
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    for (const std::unique_ptr<TriList>& triList: allTriLists) {
+        for (const Tri* tri: *triList) {
+            std::unique_ptr<Geometry> geom = tri->toPolygon(geomFact);
+            geoms.emplace_back(geom.release());
+        }
+    }
+    return geomFact->createGeometryCollection(std::move(geoms));
+}
 
 std::ostream&
 operator<<(std::ostream& os, TriList& triList)

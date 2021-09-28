@@ -68,7 +68,12 @@ public:
         add(corner[0], corner[1], corner[2]);
     }
 
-    std::unique_ptr<Geometry> toGeometry(const GeometryFactory* geomFact) const;
+    std::unique_ptr<Geometry> toGeometry(
+        const GeometryFactory* geomFact) const;
+
+    static std::unique_ptr<Geometry> toGeometry(
+        const geom::GeometryFactory* geomFact,
+        const std::vector<std::unique_ptr<TriList>>& allTriLists);
 
     friend std::ostream& operator << (std::ostream& os, TriList& te);
 

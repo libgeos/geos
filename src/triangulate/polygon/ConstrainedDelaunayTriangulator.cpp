@@ -50,14 +50,16 @@ ConstrainedDelaunayTriangulator::compute()
     std::vector<const Polygon*> polys;
     geom::util::PolygonExtracter::getPolygons(*inputGeom, polys);
 
-    TriList triList;
+    std::vector<std::unique_ptr<TriList>> allTriLists;
     for (const Polygon* poly : polys) {
+        std::unique_ptr<TriList> triList(new TriList());
         // Skip empty component polygons
         if (poly->isEmpty())
             continue;
-        triangulatePolygon(poly, triList);
+        triangulatePolygon(poly, *triList);
+        allTriLists.emplace_back(triList.release());
     }
-    return triList.toGeometry(geomFact);
+    return TriList::toGeometry(geomFact, allTriLists);
 }
 
 
