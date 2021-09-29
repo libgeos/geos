@@ -808,9 +808,8 @@ extern "C" {
     char
     GEOSDistanceWithin_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double dist)
     {
-        // TODO: optimize this
         return execute(extHandle, 2, [&]() {
-            return g1->distance(g2) <= dist;
+            return g1->isWithinDistance(g2, dist);
         });
     }
 
@@ -3287,7 +3286,7 @@ extern "C" {
                          const geos::geom::prep::PreparedGeometry* pg,
                          const Geometry* g, double dist)
     {
-        // TODO: optimize this
+        // TODO: further optimize this ?
         return execute(extHandle, 2, [&]() {
             return pg->distance(g) <= dist;
         });
