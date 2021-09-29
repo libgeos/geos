@@ -222,11 +222,12 @@ public:
      * distance from the given geometry.
      *
      * @param geom the Geometry to test the distance to
+     * @param dist the distance value to compare
      * @return true if this Geometry is within the given distance from
      * the given Geometry.
      *
      */
-    virtual bool isDistanceWithin(const geom::Geometry* geom, double dist) const = 0;
+    virtual bool isWithinDistance(const geom::Geometry* geom, double dist) const = 0;
 };
 
 

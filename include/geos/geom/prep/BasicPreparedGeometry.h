@@ -184,7 +184,7 @@ public:
     /**
      * Default implementation.
      */
-    bool isDistanceWithin(const geom::Geometry* geom, double dist) const override;
+    bool isWithinDistance(const geom::Geometry* geom, double dist) const override;
 
     std::string toString();
 

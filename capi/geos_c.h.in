@@ -3321,9 +3321,9 @@ extern int GEOS_DLL GEOSPreparedDistance(
 * Useful for situations where
 * one geometry is large and static and needs to be tested
 * against a large number of other geometries.
-* \param[in] pg1 The prepared geometry
-* \param[in] g2 The geometry to test
-* \param[in] dist The max distance
+* \param pg1 The prepared geometry
+* \param g2 The geometry to test
+* \param dist The max distance
 * \return 1 on success
 */
 extern char GEOS_DLL GEOSPreparedDistanceWithin(
@@ -3989,9 +3989,9 @@ extern int GEOS_DLL GEOSDistance(
 /**
 * Test whether the distance between two geometries is
 * within the given dist.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[in] dist max distance
+* \param g1 Input geometry
+* \param g2 Input geometry
+* \param dist The max distance
 * \returns 1 on true, 0 on false, 2 on exception
 */
 extern char GEOS_DLL GEOSDistanceWithin(

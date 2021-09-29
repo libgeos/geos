@@ -172,7 +172,7 @@ BasicPreparedGeometry::distance(const geom::Geometry* g) const
 }
 
 bool
-BasicPreparedGeometry::isDistanceWithin(const geom::Geometry* g, double dist) const
+BasicPreparedGeometry::isWithinDistance(const geom::Geometry* g, double dist) const
 {
     return baseGeom->isWithinDistance(g, dist);
 }

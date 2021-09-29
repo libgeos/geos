@@ -3287,7 +3287,7 @@ extern "C" {
                          const Geometry* g, double dist)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->isDistanceWithin(g, dist);
+            return pg->isWithinDistance(g, dist);
         });
     }
 
