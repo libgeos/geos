@@ -149,19 +149,7 @@ Geometry::hasNullElements(const CoordinateSequence* list)
 bool
 Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
 {
-    const Envelope* env0 = getEnvelopeInternal();
-    const Envelope* env1 = geom->getEnvelopeInternal();
-    double envDist = env0->distance(*env1);
-
-    if(envDist > cDistance) {
-        return false;
-    }
-    // NOTE: this could be implemented more efficiently
-    double geomDist = distance(geom);
-    if(geomDist > cDistance) {
-        return false;
-    }
-    return true;
+    return DistanceOp::isWithinDistance(*this, *geom, cDistance);
 }
 
 /*public*/
