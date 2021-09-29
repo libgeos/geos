@@ -805,6 +805,15 @@ extern "C" {
         });
     }
 
+    char
+    GEOSDistanceWithin_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double dist)
+    {
+        // TODO: optimize this
+        return execute(extHandle, 2, [&]() {
+            return g1->distance(g2) <= dist;
+        });
+    }
+
     int
     GEOSDistanceIndexed_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
     {
@@ -3270,6 +3279,17 @@ extern "C" {
         return execute(extHandle, 0, [&]() {
             *dist = pg->distance(g);
             return 1;
+        });
+    }
+
+    char
+    GEOSPreparedDistanceWithin_r(GEOSContextHandle_t extHandle,
+                         const geos::geom::prep::PreparedGeometry* pg,
+                         const Geometry* g, double dist)
+    {
+        // TODO: optimize this
+        return execute(extHandle, 2, [&]() {
+            return pg->distance(g) <= dist;
         });
     }
 

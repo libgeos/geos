@@ -273,6 +273,12 @@ extern "C" {
         return GEOSDistance_r(handle, g1, g2, dist);
     }
 
+    char
+    GEOSDistanceWithin(const Geometry* g1, const Geometry* g2, double dist)
+    {
+        return GEOSDistanceWithin_r(handle, g1, g2, dist);
+    }
+
     int
     GEOSDistanceIndexed(const Geometry* g1, const Geometry* g2, double* dist)
     {
@@ -1430,6 +1436,12 @@ extern "C" {
     GEOSPreparedDistance(const geos::geom::prep::PreparedGeometry* g1, const Geometry* g2, double *dist)
     {
         return GEOSPreparedDistance_r(handle, g1, g2, dist);
+    }
+
+    char
+    GEOSPreparedDistanceWithin(const geos::geom::prep::PreparedGeometry* g1, const Geometry* g2, double dist)
+    {
+        return GEOSPreparedDistanceWithin_r(handle, g1, g2, dist);
     }
 
     GEOSSTRtree*
