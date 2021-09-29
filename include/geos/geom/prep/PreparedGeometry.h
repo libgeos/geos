@@ -216,6 +216,17 @@ public:
      *
      */
     virtual double distance(const geom::Geometry* geom) const = 0;
+
+    /** \brief
+     * Tests whether the base {@link Geometry} is within a given
+     * distance from the given geometry.
+     *
+     * @param geom the Geometry to test the distance to
+     * @return true if this Geometry is within the given distance from
+     * the given Geometry.
+     *
+     */
+    virtual bool isDistanceWithin(const geom::Geometry* geom, double dist) const = 0;
 };
 
 

@@ -3286,9 +3286,8 @@ extern "C" {
                          const geos::geom::prep::PreparedGeometry* pg,
                          const Geometry* g, double dist)
     {
-        // TODO: further optimize this ?
         return execute(extHandle, 2, [&]() {
-            return pg->distance(g) <= dist;
+            return pg->isDistanceWithin(g, dist);
         });
     }
 
