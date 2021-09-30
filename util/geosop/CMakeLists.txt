@@ -16,3 +16,7 @@ add_executable(geosop
   WKTStreamReader.cpp )
 
 target_link_libraries(geosop PRIVATE geos geos_c)
+
+install(TARGETS geosop
+  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

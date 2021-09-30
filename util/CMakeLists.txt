@@ -9,4 +9,9 @@
 # See the COPYING file for more information.
 ################################################################################
 
-add_subdirectory(geosop)
+option(BUILD_GEOSOP "Build geosop command-line interface" ON)
+
+message(STATUS "GEOS: Build geosop ${BUILD_GEOSOP}")
+if(BUILD_GEOSOP)
+  add_subdirectory(geosop)
+endif()
