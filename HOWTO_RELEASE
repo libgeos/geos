@@ -1,5 +1,5 @@
 1. Verify that the versions currently set in Version.txt
-   make sense for this release.
+   make sense for this release. See file for instructions.
 
     - GEOS_VERSION_PATCH
     - GEOS_VERSION_MINOR
@@ -9,38 +9,46 @@
     - CAPI_INTERFACE_REVISION
     - CAPI_INTERFACE_AGE
 
-2. Run 'make distcheck', fix any problem with it.
+2. Prepare the build directory.
 
-3. Update the NEWS file (extract most important things from the
+   $ mkdir _build && cd _build && cmake ..
+
+3. Run the distcheck target, fix any problem with it.
+
+   $ cmake --build . --target distcheck
+
+4. Update the NEWS file (extract most important things from the
    repository log). Make sure to update the release date.
 
-4. Commit the changes in the NEWS file.
+5. Commit the changes in the NEWS file.
 
-5. Run 'make dist-bzip2'.
+6. Build the distribution package.
 
-   $ mkdir build && cd build && cmake .. && cmake --build . --target dist
+   $ cmake --build . --target dist
 
-6. Verify that you can un-pack and build the tarball.
+7. Verify that you can un-pack and build the tarball.
 
-   - mkdir build && cd build && cmake .. && make && make check
+   $ tar xvfz geos-VERSION.tar.bz2
+   $ cd geos-VERSION
+   $ mkdir _build && cd _build && cmake .. && make && make check
 
-7. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
-8. Tag the release:
+9. Tag the release:
 
    $ git tag MAJOR.MINOR.PATCH
    $ git push origin MAJOR.MINOR.PATCH
 
-9. Create and push a release branch if this was a PATCH=0 release,
-   update the versions for next release in Version.txt (both in
-   main and release branch if this was a PATCH=0 release).
+10. Create and push a release branch if this was a PATCH=0 release,
+    update the versions for next release in Version.txt (both in
+    main and release branch if this was a PATCH=0 release).
 
-10. Update wiki page https://trac.osgeo.org/geos/ at Download section
+11. Update wiki page https://trac.osgeo.org/geos/ at Download section
 
     - Add latest release
     - Remove previous patch level release (if any)
 
-11. Close current trac milestone and add new one for next release,
+12. Close current trac milestone and add new one for next release,
     add new trac version for this release.
 
 12. Announce on geos-devel
