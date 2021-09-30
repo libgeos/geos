@@ -1116,6 +1116,12 @@ extern int GEOS_DLL GEOSPreparedDistance_r(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2, double *dist);
 
+/** \see GEOSPreparedDistanceWithin */
+extern char GEOS_DLL GEOSPreparedDistanceWithin_r(
+    GEOSContextHandle_t handle,
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2, double dist);
+
 /* ========== STRtree ========== */
 
 /** \see GEOSSTRtree_create */
@@ -1514,6 +1520,13 @@ extern int GEOS_DLL GEOSDistance_r(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
     double *dist);
+
+/** \see GEOSDistanceWithin */
+extern char GEOS_DLL GEOSDistanceWithin_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2,
+    double dist);
 
 /** \see GEOSDistanceIndexed */
 extern int GEOS_DLL GEOSDistanceIndexed_r(
@@ -3286,7 +3299,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Using a \ref GEOSPreparedDistance do a high performance
 * calculation to find the distance points between the
 * prepared and provided geometry. Useful for situations where
 * one geometry is large and static and needs to be tested
@@ -3300,6 +3313,23 @@ extern int GEOS_DLL GEOSPreparedDistance(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2,
     double *dist);
+
+/**
+* Using a \ref GEOSPreparedDistanceWithin do a high performance
+* calculation to find whether the prepared and provided geometry
+* are within the given max distance.
+* Useful for situations where
+* one geometry is large and static and needs to be tested
+* against a large number of other geometries.
+* \param pg1 The prepared geometry
+* \param g2 The geometry to test
+* \param dist The max distance
+* \return 1 on success
+*/
+extern char GEOS_DLL GEOSPreparedDistanceWithin(
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2,
+    double dist);
 
 /* ========== STRtree functions ========== */
 
@@ -3955,6 +3985,19 @@ extern int GEOS_DLL GEOSDistance(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
     double *dist);
+
+/**
+* Test whether the distance between two geometries is
+* within the given dist.
+* \param g1 Input geometry
+* \param g2 Input geometry
+* \param dist The max distance
+* \returns 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSDistanceWithin(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2,
+    double dist);
 
 /**
 * Calculate the distance between two geometries, using the

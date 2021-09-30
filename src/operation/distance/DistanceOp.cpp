@@ -527,6 +527,16 @@ DistanceOp::isWithinDistance(const geom::Geometry& g0,
                              const geom::Geometry& g1,
                              double distance)
 {
+    // check envelope distance for a short-circuit negative result
+    const Envelope* env0 = g0.getEnvelopeInternal();
+    const Envelope* env1 = g1.getEnvelopeInternal();
+    double envDist = env0->distance(*env1);
+    if (envDist > distance)
+      return false;
+
+    // MD - could improve this further with a positive short-circuit based
+    // on envelope MinMaxDist
+
     DistanceOp distOp(g0, g1, distance);
     return distOp.distance() <= distance;
 }

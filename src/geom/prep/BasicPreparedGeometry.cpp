@@ -171,6 +171,12 @@ BasicPreparedGeometry::distance(const geom::Geometry* g) const
     return coords->getAt(0).distance( coords->getAt(1) );
 }
 
+bool
+BasicPreparedGeometry::isWithinDistance(const geom::Geometry* g, double dist) const
+{
+    return baseGeom->isWithinDistance(g, dist);
+}
+
 std::string
 BasicPreparedGeometry::toString()
 {

@@ -2,6 +2,9 @@ Changes in 3.10.0
 2020-xx-xx
 
 - New things:
+
+  - CAPI: GEOSDistanceWithin, GEOSPreparedDistanceWithin
+          (#1124, Sandro Santilli)
   - Output WKT using positional precision with the ryu
     library (#868, Paul Ramsey)
   - geosop CLI for GEOS (Martin Davis)
