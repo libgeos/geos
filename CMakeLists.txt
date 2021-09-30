@@ -72,9 +72,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
-
 #-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
@@ -143,6 +140,13 @@ unset(_version_patch_word)
 message(STATUS "GEOS: Version ${GEOS_VERSION}")
 message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
+
+#-----------------------------------------------------------------------------
+# Install directories
+#-----------------------------------------------------------------------------
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 #-----------------------------------------------------------------------------
 # C++ language version and compilation flags
