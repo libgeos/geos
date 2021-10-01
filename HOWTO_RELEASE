@@ -13,10 +13,12 @@
 
    $ mkdir _build && cd _build && cmake -DBUILD_DOCUMENTATION=YES ..
 
-3. Run the distcheck target and docs targets, fix any problem with them.
+3. Run the build, distcheck, docs targets, fix any problems with them.
 
+   $ cmake --build .
+   $ cmake --build . --target docs
+   $ ctest --output-on-failure .
    $ cmake --build . --target distcheck
-   # cmake --build . --target docs
 
 4. Update the NEWS file (extract most important things from the
    repository log). Make sure to update the release date.
@@ -31,7 +33,9 @@
 
    $ tar xvfz geos-VERSION.tar.bz2
    $ cd geos-VERSION
-   $ mkdir _build && cd _build && cmake .. && make && make check
+   $ mkdir _build && cd _build && cmake ..
+   $ cmake --build .
+   $ ctest --output-on-failure .
 
 8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
