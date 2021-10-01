@@ -131,6 +131,7 @@ if(NOT "${_version_patch_word}" STREQUAL "")
   set(GEOS_VERSION "${GEOS_VERSION}${_version_patch_word}")
   set(GEOS_VERSION_PATCH "${_version_patch}${_version_patch_word}")
 endif()
+set(GEOS_VERSION_NOPATCH "${_version_major}.${_version_minor}.${_version_patch}")
 
 unset(_version_major)
 unset(_version_minor)
@@ -271,8 +272,8 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
     PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
-  set_target_properties(geos PROPERTIES VERSION ${CMAKE_PROJECT_VERSION})
-  set_target_properties(geos PROPERTIES SOVERSION ${CMAKE_PROJECT_VERSION})
+  set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION_NOPATCH})
+  set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_NOPATCH})
 endif()
 
 #-----------------------------------------------------------------------------
