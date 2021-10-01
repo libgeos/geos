@@ -271,8 +271,8 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
     PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
-  set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
-  set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION})
+  set_target_properties(geos PROPERTIES VERSION ${CMAKE_PROJECT_VERSION})
+  set_target_properties(geos PROPERTIES SOVERSION ${CMAKE_PROJECT_VERSION})
 endif()
 
 #-----------------------------------------------------------------------------

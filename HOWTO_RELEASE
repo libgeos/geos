@@ -11,11 +11,12 @@
 
 2. Prepare the build directory.
 
-   $ mkdir _build && cd _build && cmake ..
+   $ mkdir _build && cd _build && cmake -DBUILD_DOCUMENTATION=YES ..
 
-3. Run the distcheck target, fix any problem with it.
+3. Run the distcheck target and docs targets, fix any problem with them.
 
    $ cmake --build . --target distcheck
+   # cmake --build . --target docs
 
 4. Update the NEWS file (extract most important things from the
    repository log). Make sure to update the release date.

@@ -30,7 +30,7 @@ It can be used to:
 
   -a arg               source for A geometries (WKT, WKB, file, stdin, stdin.wkb)
   -b arg               source for B geometries (WKT, WKB, file, stdin, stdin.wkb)
-      --alimit arg     Limit nunber of A geometries read
+      --alimit arg     Limit number of A geometries read
   -c, --collect        Collect input into single geometry
   -e, --explode        Explode results into conponent geometris
   -f, --format arg     Output format (wkt, wkb or txt)

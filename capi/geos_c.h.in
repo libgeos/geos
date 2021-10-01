@@ -259,7 +259,7 @@ typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 *
 * \param item1 first of the pair of items to calculate distance between
 * \param item2 second of the pair of items to calculate distance between
-* \param return distance the distance between the items here
+* \param distance the distance between the items here
 * \param userdata extra data for the calculation
 *
 * \return zero if distance calculation succeeded, non-zero otherwise
