@@ -6,6 +6,7 @@
 #include <geos/constants.h>
 #include <geos_c.h>
 // std
+#include <limits>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -360,7 +361,7 @@ void object::test<26>() {
 }
 
 
-// empty geometries should always return true (distance 1)
+// empty geometries should return false (distance 1)
 template <>
 template <>
 void object::test<27>() {
@@ -368,11 +369,11 @@ void object::test<27>() {
       "POINT EMPTY",
       "LINESTRING EMPTY",
       1.0,
-      1
+      0
     );
 }
 
-// empty geometries should always return true (distance 0)
+// empty geometries should return false (distance 0)
 template <>
 template <>
 void object::test<28>() {
@@ -380,7 +381,43 @@ void object::test<28>() {
       "POINT EMPTY",
       "LINESTRING EMPTY",
       0.0,
-      1
+      0
+    );
+}
+
+// empty geometries should return false (distance Infinity)
+template <>
+template <>
+void object::test<29>() {
+  testGEOSDistanceWithin(
+      "POINT EMPTY",
+      "LINESTRING EMPTY",
+      std::numeric_limits<double>::infinity(),
+      0
+    );
+}
+
+// empty geometry is never within any distance
+template <>
+template <>
+void object::test<30>() {
+  testGEOSDistanceWithin(
+      "POINT EMPTY",
+      "LINESTRING(0 0, 20 0)",
+      std::numeric_limits<double>::infinity(),
+      0
+    );
+}
+
+// empty geometry is never within any distance
+template <>
+template <>
+void object::test<31>() {
+  testGEOSDistanceWithin(
+      "LINESTRING(0 0, 20 0)",
+      "POINT EMPTY",
+      std::numeric_limits<double>::infinity(),
+      0
     );
 }
 

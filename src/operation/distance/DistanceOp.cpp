@@ -528,6 +528,7 @@ DistanceOp::isWithinDistance(const geom::Geometry& g0,
                              double distance)
 {
     // check envelope distance for a short-circuit negative result
+    if ( g0.isEmpty() || g1.isEmpty() ) return false;
     const Envelope* env0 = g0.getEnvelopeInternal();
     const Envelope* env1 = g1.getEnvelopeInternal();
     double envDist = env0->distance(*env1);

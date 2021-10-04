@@ -66,7 +66,7 @@ void object::test<1>
         "POLYGON EMPTY",
         "POLYGON EMPTY",
         std::numeric_limits<double>::infinity(),
-        1
+        0
     );
 }
 
@@ -145,7 +145,7 @@ void object::test<7>
         "LINESTRING EMPTY",
         "POINT EMPTY",
         std::numeric_limits<double>::infinity(),
-        1
+        0
     );
 }
 
@@ -158,7 +158,33 @@ void object::test<8>
         "POINT EMPTY",
         "LINESTRING EMPTY",
         std::numeric_limits<double>::infinity(),
-        1
+        0
+    );
+}
+
+template<>
+template<>
+void object::test<9>
+()
+{
+    checkDistanceWithin(
+        "POINT EMPTY",
+        "POINT(0 0)",
+        std::numeric_limits<double>::infinity(),
+        0
+    );
+}
+
+template<>
+template<>
+void object::test<10>
+()
+{
+    checkDistanceWithin(
+        "LINESTRING(0 0, 10 0)",
+        "POLYGON EMPTY",
+        std::numeric_limits<double>::infinity(),
+        0
     );
 }
 
