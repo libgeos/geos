@@ -38,6 +38,24 @@ void object::test<2>()
     GEOSGeom_destroy(input);
 }
 
+// Unclosed polygon
+template<>
+template<>
+void object::test<3>()
+{
+    GEOSCoordSequence* shell_seq = GEOSCoordSeq_create(4, 2);
+    double shell_coords[] = {0,0, 0,10, 10,10, 10,0};
+    for (unsigned int i = 0; i < 4; i++) {
+        GEOSCoordSeq_setXY(shell_seq, i, shell_coords[2*i], shell_coords[2*i+1]);
+    }
+
+    GEOSGeometry* shell = GEOSGeom_createLinearRing(shell_seq);
+    ensure(shell == nullptr);
+    GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, nullptr, 0);
+    ensure(polygon == nullptr);
+    char isvalid = GEOSisValid(polygon);
+    ensure_equals(2, isvalid);
+}
 
 } // namespace tut
 

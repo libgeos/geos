@@ -12,6 +12,7 @@ Changes in 3.9.2
   - Catch memory leaks on createPolygon failure (#1111, Paul Ramsey)
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
   - Avoid stack overflow in KdTree::queryNode (Even Roualt)
+  - Return exception on null input to GEOSIsValid (Paul Ramsey)
 
 
 Changes in 3.9.1

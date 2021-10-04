@@ -43,6 +43,7 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/IndexedNestedShellTester.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/util/IllegalArgumentException.h>
 
 
 #include <cassert>
@@ -136,7 +137,7 @@ IsValidOp::checkValid(const Geometry* g)
     assert(validErr == nullptr);
 
     if(nullptr == g) {
-        return;
+        throw util::IllegalArgumentException("Null geometry argument to IsValidOp");
     }
 
     // empty geometries are always valid!
