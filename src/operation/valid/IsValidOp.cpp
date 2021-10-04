@@ -80,6 +80,7 @@ IsValidOp::logInvalid(int code, const Coordinate* pt)
 bool
 IsValidOp::isValidGeometry(const Geometry* g)
 {
+    assert(g);
     validErr.reset(nullptr);
 
     // empty geometries are always valid
