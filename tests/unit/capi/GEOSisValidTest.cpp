@@ -50,13 +50,18 @@ void object::test<3>()
         GEOSCoordSeq_setXY(shell_seq, i, shell_coords[2*i], shell_coords[2*i+1]);
     }
 
+    // Unclosed ring fails in construction
+    // Linear ring takes ownership of coordinate sequence and
+    // frees it when construction fails
     GEOSGeometry* shell = GEOSGeom_createLinearRing(shell_seq);
     ensure(shell == nullptr);
+    // So we end up handing nullptr into create polygon
     GEOSGeometry* polygon = GEOSGeom_createPolygon(shell, nullptr, 0);
     ensure(polygon == nullptr);
-    // char isvalid = GEOSisValid(polygon);
-    // ensure_equals(0, isvalid);
-    // GEOSGeom_destroy(polygon);
+    // Which also returns nullptr and that goes into isvalid
+    char isvalid = GEOSisValid(polygon);
+    // Which causes an exception that we catch
+    ensure_equals(2, isvalid);
 }
 
 } // namespace tut

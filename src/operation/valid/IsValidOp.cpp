@@ -28,6 +28,7 @@
 #include <geos/operation/valid/IndexedNestedHoleTester.h>
 #include <geos/operation/valid/IndexedNestedPolygonTester.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cmath>
 
@@ -80,8 +81,10 @@ IsValidOp::logInvalid(int code, const Coordinate* pt)
 bool
 IsValidOp::isValidGeometry(const Geometry* g)
 {
-    assert(g);
     validErr.reset(nullptr);
+
+    if (!g)
+        throw util::IllegalArgumentException("Null geometry argument to IsValidOp");
 
     // empty geometries are always valid
     if (g->isEmpty()) return true;
