@@ -49,7 +49,6 @@ namespace buffer { // geos.operation.buffer
 
 /*private data*/
 const double OffsetSegmentGenerator::CURVE_VERTEX_SNAP_DISTANCE_FACTOR = 1.0E-6;
-const double OffsetSegmentGenerator::PI = 3.14159265358979;
 const double OffsetSegmentGenerator::OFFSET_SEGMENT_SEPARATION_FACTOR = 1.0E-3;
 const double OffsetSegmentGenerator::INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR = 1.0E-3;
 const double OffsetSegmentGenerator::SIMPLIFY_FACTOR = 100.0;
@@ -80,7 +79,7 @@ OffsetSegmentGenerator::OffsetSegmentGenerator(
 {
     // compute intersections in full precision, to provide accuracy
     // the points are rounded as they are inserted into the curve line
-    filletAngleQuantum = PI / 2.0 / bufParams.getQuadrantSegments();
+    filletAngleQuantum = MATH_PI / 2.0 / bufParams.getQuadrantSegments();
 
     /*
      * Non-round joins cause issues with short closing segments,
@@ -205,7 +204,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
     case BufferParameters::CAP_ROUND:
         // add offset seg points with a fillet between them
         segList.addPt(offsetL.p1);
-        addDirectedFillet(p1, angle + PI / 2.0, angle - PI / 2.0,
+        addDirectedFillet(p1, angle + MATH_PI / 2.0, angle - MATH_PI / 2.0,
                   Orientation::CLOCKWISE, distance);
         segList.addPt(offsetR.p1);
         break;
@@ -247,12 +246,12 @@ OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, const Coordinate&
 
     if(direction == Orientation::CLOCKWISE) {
         if(startAngle <= endAngle) {
-            startAngle += 2.0 * PI;
+            startAngle += 2.0 * MATH_PI;
         }
     }
     else {    // direction==COUNTERCLOCKWISE
         if(startAngle >= endAngle) {
-            startAngle -= 2.0 * PI;
+            startAngle -= 2.0 * MATH_PI;
         }
     }
 
@@ -292,7 +291,7 @@ OffsetSegmentGenerator::createCircle(const Coordinate& p, double p_distance)
     // add start point
     Coordinate pt(p.x + p_distance, p.y);
     segList.addPt(pt);
-    addDirectedFillet(p, 0.0, 2.0 * PI, -1, p_distance);
+    addDirectedFillet(p, 0.0, 2.0 * MATH_PI, -1, p_distance);
     segList.closeRing();
 }
 
@@ -511,7 +510,7 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
     // angle for bisector of the interior angle between the segments
     double midAng = Angle::normalize(ang0 + angDiffHalf);
     // rotating this by PI gives the bisector of the reflex angle
-    double mitreMidAng = Angle::normalize(midAng + PI);
+    double mitreMidAng = Angle::normalize(midAng + MATH_PI);
 
     // the miterLimit determines the distance to the mitre bevel
     double mitreDist = p_mitreLimit * p_distance;

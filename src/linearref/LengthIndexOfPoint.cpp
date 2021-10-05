@@ -84,7 +84,7 @@ LengthIndexOfPoint::indexOfAfter(const Coordinate& inputPt, double minIndex) con
 double
 LengthIndexOfPoint::indexOfFromStart(const Coordinate& inputPt, double minIndex) const
 {
-    double minDistance = std::numeric_limits<double>::max();
+    double minDistance = DoubleInfinity;
 
     double ptMeasure = minIndex;
     double segmentStartMeasure = 0.0;

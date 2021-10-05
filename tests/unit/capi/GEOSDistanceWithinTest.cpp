@@ -392,7 +392,7 @@ void object::test<29>() {
   testGEOSDistanceWithin(
       "POINT EMPTY",
       "LINESTRING EMPTY",
-      std::numeric_limits<double>::infinity(),
+      geos::DoubleInfinity,
       0
     );
 }
@@ -404,7 +404,7 @@ void object::test<30>() {
   testGEOSDistanceWithin(
       "POINT EMPTY",
       "LINESTRING(0 0, 20 0)",
-      std::numeric_limits<double>::infinity(),
+      geos::DoubleInfinity,
       0
     );
 }
@@ -416,7 +416,7 @@ void object::test<31>() {
   testGEOSDistanceWithin(
       "LINESTRING(0 0, 20 0)",
       "POINT EMPTY",
-      std::numeric_limits<double>::infinity(),
+      geos::DoubleInfinity,
       0
     );
 }

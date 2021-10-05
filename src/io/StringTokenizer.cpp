@@ -58,15 +58,15 @@ strtod_with_vc_fix(const char* str, char** str_end)
 
         if(stricmp(pos, "inf") == 0) {
             if(!sign || sign == '+') {
-                dbl = std::numeric_limits<double>::infinity();
+                dbl = DoubleInfinity;
             }
             else {
-                dbl = -(std::numeric_limits<double>::infinity)();
+                dbl = DoubleNegInfinity;
             }
             *str_end[0] = '\0';
         }
         else if(stricmp(pos, "nan") == 0) {
-            dbl = std::numeric_limits<double>::quiet_NaN();
+            dbl = DoubleNotANumber;
             *str_end[0] = '\0';
         }
     }

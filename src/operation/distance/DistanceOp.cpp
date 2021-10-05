@@ -82,20 +82,20 @@ DistanceOp::nearestPoints(const Geometry* g0, const Geometry* g1)
 DistanceOp::DistanceOp(const Geometry* g0, const Geometry* g1):
     geom{{g0, g1}},
     terminateDistance(0.0),
-    minDistance(DoubleMax)
+    minDistance(DoubleInfinity)
 {}
 
 DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1):
     geom{{&g0, &g1}},
     terminateDistance(0.0),
-    minDistance(DoubleMax)
+    minDistance(DoubleInfinity)
 {}
 
 DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
     :
     geom{{&g0, &g1}},
     terminateDistance(tdist),
-    minDistance(DoubleMax)
+    minDistance(DoubleInfinity)
 {}
 
 /**

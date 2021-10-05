@@ -29,7 +29,7 @@ PreparedLineStringDistance::distance(const geom::Geometry* g) const
 {
     if ( prepLine.getGeometry().isEmpty() || g->isEmpty() )
     {
-        return std::numeric_limits<double>::infinity();
+        return DoubleInfinity;
     }
 
     // TODO: test if this shortcut be any useful

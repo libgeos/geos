@@ -4,6 +4,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cstdarg>
 #include <cstdio>
@@ -65,7 +66,7 @@ void object::test<1>
     checkDistanceWithin(
         "POLYGON EMPTY",
         "POLYGON EMPTY",
-        std::numeric_limits<double>::infinity(),
+        geos::DoubleInfinity,
         0
     );
 }
@@ -144,7 +145,7 @@ void object::test<7>
     checkDistanceWithin(
         "LINESTRING EMPTY",
         "POINT EMPTY",
-        std::numeric_limits<double>::infinity(),
+        geos::DoubleInfinity,
         0
     );
 }
@@ -157,7 +158,7 @@ void object::test<8>
     checkDistanceWithin(
         "POINT EMPTY",
         "LINESTRING EMPTY",
-        std::numeric_limits<double>::infinity(),
+        geos::DoubleInfinity,
         0
     );
 }
@@ -170,7 +171,7 @@ void object::test<9>
     checkDistanceWithin(
         "POINT EMPTY",
         "POINT(0 0)",
-        std::numeric_limits<double>::infinity(),
+        geos::DoubleInfinity,
         0
     );
 }
@@ -183,7 +184,7 @@ void object::test<10>
     checkDistanceWithin(
         "LINESTRING(0 0, 10 0)",
         "POLYGON EMPTY",
-        std::numeric_limits<double>::infinity(),
+        geos::DoubleInfinity,
         0
     );
 }

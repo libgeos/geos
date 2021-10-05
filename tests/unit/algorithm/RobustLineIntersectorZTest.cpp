@@ -19,8 +19,6 @@ using namespace geos::geom;
 
 typedef geos::algorithm::LineIntersector RobustLineIntersector;
 
-#define DoubleNaN  std::numeric_limits<double>::quiet_NaN()
-
 namespace tut {
 //
 // Test Group
@@ -185,7 +183,7 @@ void object::test<5>
 {
     checkIntersection(
         line(1, 1, 1, 3, 3, 3),
-        line(1, 3, 10, 3, 1, DoubleNaN),
+        line(1, 3, 10, 3, 1, geos::DoubleNotANumber),
         pt(2, 2, 6));
 }
 
@@ -206,7 +204,7 @@ void object::test<7>
 ()
 {
     checkIntersection( line(1, 1, 3, 3), line(3, 3, 3, 1),
-        pt(3, 3, DoubleNaN));
+        pt(3, 3, geos::DoubleNotANumber));
 }
 
 // testEndpoint2D3D

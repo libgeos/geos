@@ -122,7 +122,7 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
                                         const FacetSequence& facetSeq,
                                         std::vector<GeometryLocation> *locs) const
 {
-    double minDistance = std::numeric_limits<double>::infinity();
+    double minDistance = DoubleInfinity;
 
     for(std::size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
         const Coordinate& q0 = facetSeq.pts->getAt(i);
@@ -160,7 +160,7 @@ FacetSequence::updateNearestLocationsPointLine(const Coordinate& pt,
 double
 FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vector<GeometryLocation> *locs) const
 {
-    double minDistance = std::numeric_limits<double>::infinity();
+    double minDistance = DoubleInfinity;
 
     for(std::size_t i = start; i < end - 1; i++) {
         const Coordinate& p0 = pts->getAt(i);

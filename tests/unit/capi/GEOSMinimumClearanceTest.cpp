@@ -3,6 +3,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cstdarg>
 #include <cstdio>
@@ -43,7 +44,7 @@ struct test_capigeosminimumclearance_data : public capitest::utility {
         int error = GEOSMinimumClearance(input, &d);
 
         ensure(!error);
-        if(clearance == std::numeric_limits<double>::infinity()) {
+        if(clearance == geos::DoubleInfinity) {
             ensure(d == clearance);
         }
         else {
@@ -76,7 +77,7 @@ void object::test<1>
 {
     testClearance("MULTIPOINT ((100 100), (100 100))",
                   "LINESTRING EMPTY",
-                  std::numeric_limits<double>::infinity());
+                  geos::DoubleInfinity);
 }
 
 template<>
@@ -116,7 +117,7 @@ void object::test<5>
 {
     testClearance("POLYGON EMPTY",
                   "LINESTRING EMPTY",
-                  std::numeric_limits<double>::infinity());
+                  geos::DoubleInfinity);
 }
 
 } // namespace tut

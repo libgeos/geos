@@ -133,7 +133,7 @@ PolygonHoleJoiner::joinHole(const LinearRing* hole)
     std::size_t shortestHoleVertexIndex = 0;
     //--- pick the shell-hole vertex pair that gives the shortest distance
     if (std::abs(shellCoord.x - holeCoord.x) < EPS) {
-        double shortest = std::numeric_limits<double>::max();
+        double shortest = DoubleInfinity;
         for (std::size_t i = 0; i < holeLeftVerticesIndex.size(); i++) {
             for (std::size_t j = 0; j < shellCoordsList.size(); j++) {
                 double shellCoordY = shellCoordsList[j].y;

@@ -136,7 +136,7 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
             bp.reset(new BoundablePair(child, bndOther, itemDistance));
         }
 
-        if (minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
+        if (minDistance == DoubleInfinity || bp->getDistance() < minDistance) {
             priQ.push(bp.release());
         }
 

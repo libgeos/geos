@@ -35,10 +35,10 @@ namespace geom { // geos::geom
 /*public*/
 INLINE
 Envelope::Envelope() :
-    minx(std::numeric_limits<double>::quiet_NaN()),
-    maxx(std::numeric_limits<double>::quiet_NaN()),
-    miny(std::numeric_limits<double>::quiet_NaN()),
-    maxy(std::numeric_limits<double>::quiet_NaN())
+    minx(DoubleNotANumber),
+    maxx(DoubleNotANumber),
+    miny(DoubleNotANumber),
+    maxy(DoubleNotANumber)
 {}
 
 /*public*/
@@ -298,7 +298,7 @@ Envelope::covers(const Coordinate* p) const
 INLINE void
 Envelope::setToNull()
 {
-    minx = maxx = miny = maxy = std::numeric_limits<double>::quiet_NaN();
+    minx = maxx = miny = maxy = DoubleNotANumber;
 }
 
 INLINE double

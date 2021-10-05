@@ -215,7 +215,7 @@ MinimumDiameter::computeWidthConvex(const Geometry* geom)
 void
 MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 {
-    minWidth = DoubleMax;
+    minWidth = DoubleInfinity;
     unsigned int currMaxIndex = 1;
     LineSegment seg;
 
@@ -285,10 +285,10 @@ MinimumDiameter::getMinimumRectangle()
     double dx = minBaseSeg.p1.x - minBaseSeg.p0.x;
     double dy = minBaseSeg.p1.y - minBaseSeg.p0.y;
 
-    double minPara = DoubleMax;
-    double maxPara = -DoubleMax;
-    double minPerp = DoubleMax;
-    double maxPerp = -DoubleMax;
+    double minPara = DoubleInfinity;
+    double maxPara = DoubleNegInfinity;
+    double minPerp = DoubleInfinity;
+    double maxPerp = DoubleNegInfinity;
 
     // compute maxima and minima of lines parallel and perpendicular to base segment
     std::size_t const n = convexHullPts->getSize();

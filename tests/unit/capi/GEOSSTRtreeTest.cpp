@@ -4,6 +4,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cstdarg>
 #include <cstdio>
@@ -115,7 +116,7 @@ void object::test<2>
     for(std::size_t i = 0; i < ngeoms; i++) {
         const GEOSGeometry* nearest = GEOSSTRtree_nearest(tree, queryPoints[i]);
         const GEOSGeometry* nearestBruteForce = nullptr;
-        double nearestBruteForceDistance = std::numeric_limits<double>::max();
+        double nearestBruteForceDistance = geos::DoubleInfinity;
         for(std::size_t j = 0; j < ngeoms; j++) {
             double distance;
             GEOSDistance(queryPoints[i], geoms[j], &distance);

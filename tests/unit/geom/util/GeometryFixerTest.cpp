@@ -10,6 +10,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
+#include <geos/constants.h>
 
 #include <utility.h>
 
@@ -154,7 +155,7 @@ template<>
 template<>
 void object::test<4>()
 {
-    std::unique_ptr<Point> pt = createPoint(0, std::numeric_limits<double>::infinity());
+    std::unique_ptr<Point> pt = createPoint(0, geos::DoubleInfinity);
     checkFix(pt.get() , "POINT EMPTY");
 }
 
@@ -163,7 +164,7 @@ template<>
 template<>
 void object::test<5>()
 {
-    std::unique_ptr<Point> pt = createPoint(0, std::numeric_limits<double>::infinity());
+    std::unique_ptr<Point> pt = createPoint(0, geos::DoubleInfinity);
     checkFix(pt.get() , "POINT EMPTY");
 }
 

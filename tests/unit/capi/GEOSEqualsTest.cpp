@@ -3,6 +3,7 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/constants.h>
 #include <geos_c.h>
 // std
 #include <cstdarg>
@@ -97,12 +98,11 @@ void object::test<4>
 {
     GEOSCoordSequence* cs = GEOSCoordSeq_create(5, 2);
 
-    constexpr double nan = std::numeric_limits<double>::quiet_NaN();
     GEOSCoordSeq_setX(cs, 0, 1);
     GEOSCoordSeq_setY(cs, 0, 1);
     for(unsigned int i = 1; i < 4; ++i) {
-        GEOSCoordSeq_setX(cs, i, nan);
-        GEOSCoordSeq_setY(cs, i, nan);
+        GEOSCoordSeq_setX(cs, i, geos::DoubleNotANumber);
+        GEOSCoordSeq_setY(cs, i, geos::DoubleNotANumber);
     }
     GEOSCoordSeq_setX(cs, 4, 1);
     GEOSCoordSeq_setY(cs, 4, 1);

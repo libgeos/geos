@@ -33,7 +33,7 @@ PreparedPolygonDistance::distance(const geom::Geometry* g) const
 {
     if ( prepPoly.getGeometry().isEmpty() || g->isEmpty() )
     {
-        return std::numeric_limits<double>::infinity();
+        return DoubleInfinity;
     }
 
     if ( prepPoly.intersects(g) ) return 0.0;

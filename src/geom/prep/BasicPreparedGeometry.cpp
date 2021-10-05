@@ -167,7 +167,7 @@ double
 BasicPreparedGeometry::distance(const geom::Geometry* g) const
 {
     std::unique_ptr<geom::CoordinateSequence> coords = nearestPoints(g);
-    if ( ! coords ) return std::numeric_limits<double>::infinity();
+    if ( ! coords ) return DoubleInfinity;
     return coords->getAt(0).distance( coords->getAt(1) );
 }
 

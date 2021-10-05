@@ -46,7 +46,7 @@ MinimumClearance::getLine()
     compute();
 
     // return empty line string if no min pts were found
-    if(minClearance == std::numeric_limits<double>::infinity()) {
+    if (minClearance == DoubleInfinity) {
         return inputGeom->getFactory()->createLineString();
     }
 
@@ -72,7 +72,7 @@ MinimumClearance::compute()
 
     public:
         MinClearanceDistance() :
-            minDist(std::numeric_limits<double>::infinity()),
+            minDist(DoubleInfinity),
             minPts(std::vector<Coordinate>(2))
         {}
 
@@ -84,7 +84,7 @@ MinimumClearance::compute()
 
         double operator()(const FacetSequence* fs1, const FacetSequence* fs2)
         {
-            minDist = std::numeric_limits<double>::infinity();
+            minDist = DoubleInfinity;
             return distance(fs1, fs2);
         }
 
@@ -167,7 +167,7 @@ MinimumClearance::compute()
     // initialize to "No Distance Exists" state
     minClearancePts = std::unique_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2,
                       2));
-    minClearance = std::numeric_limits<double>::infinity();
+    minClearance = DoubleInfinity;
 
     // handle empty geometries
     if(inputGeom->isEmpty()) {

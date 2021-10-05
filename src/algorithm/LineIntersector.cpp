@@ -347,7 +347,7 @@ LineIntersector::computeIntersect(const Coordinate& p1, const Coordinate& p2,
      *  intersect.
      */
     Coordinate p;
-    double z = std::numeric_limits<double>::quiet_NaN();
+    double z = DoubleNotANumber;
 
     if(Pq1 == 0 || Pq2 == 0 || Qp1 == 0 || Qp2 == 0) {
 

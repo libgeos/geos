@@ -59,7 +59,7 @@ SimpleSTRdistance::nearestNeighbour()
 std::pair<const void*, const void*>
 SimpleSTRdistance::nearestNeighbour(SimpleSTRpair* p_initPair)
 {
-    return nearestNeighbour(p_initPair, std::numeric_limits<double>::infinity());
+    return nearestNeighbour(p_initPair, DoubleInfinity);
 }
 
 
@@ -199,7 +199,7 @@ SimpleSTRdistance::isWithinDistance(double maxDistance)
 bool
 SimpleSTRdistance::isWithinDistance(SimpleSTRpair* p_initPair, double maxDistance)
 {
-    double distanceUpperBound = std::numeric_limits<double>::infinity();
+    double distanceUpperBound = DoubleInfinity;
 
     // initialize search queue
     STRpairQueue priQ;

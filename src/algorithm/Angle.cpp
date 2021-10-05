@@ -24,26 +24,19 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-namespace {
-const double PI = 3.14159265358979323846;
-}
-
-const double Angle::PI_TIMES_2 = 2.0 * PI;
-const double Angle::PI_OVER_2 = PI / 2.0;
-const double Angle::PI_OVER_4 = PI / 4.0;
 
 /* public static */
 double
 Angle::toDegrees(double radians)
 {
-    return (radians * 180) / (PI);
+    return (radians * 180) / (MATH_PI);
 }
 
 /* public static */
 double
 Angle::toRadians(double angleDegrees)
 {
-    return (angleDegrees * PI) / 180.0;
+    return (angleDegrees * MATH_PI) / 180.0;
 }
 
 /* public static */
@@ -116,10 +109,10 @@ Angle::angleBetweenOriented(const geom::Coordinate& tip1,
     double angDel = a2 - a1;
 
     // normalize, maintaining orientation
-    if(angDel <= -PI) {
+    if(angDel <= -MATH_PI) {
         return angDel + PI_TIMES_2;
     }
-    if(angDel > PI) {
+    if(angDel > MATH_PI) {
         return angDel - PI_TIMES_2;
     }
     return angDel;
@@ -154,10 +147,10 @@ Angle::getTurn(double ang1, double ang2)
 double
 Angle::normalize(double angle)
 {
-    while(angle > PI) {
+    while(angle > MATH_PI) {
         angle -= PI_TIMES_2;
     }
-    while(angle <= -PI) {
+    while(angle <= -MATH_PI) {
         angle += PI_TIMES_2;
     }
     return angle;
@@ -201,8 +194,8 @@ Angle::diff(double ang1, double ang2)
         delAngle = ang1 - ang2;
     }
 
-    if(delAngle > PI) {
-        delAngle = (2 * PI) - delAngle;
+    if(delAngle > MATH_PI) {
+        delAngle = (2 * MATH_PI) - delAngle;
     }
 
     return delAngle;

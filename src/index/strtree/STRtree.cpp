@@ -156,7 +156,7 @@ STRtree::nearestNeighbour(STRtree* tree, ItemDistance* itemDist)
 std::pair<const void*, const void*>
 STRtree::nearestNeighbour(BoundablePair* initBndPair)
 {
-    return nearestNeighbour(initBndPair, std::numeric_limits<double>::infinity());
+    return nearestNeighbour(initBndPair, DoubleInfinity);
 }
 
 /*public*/
@@ -244,7 +244,7 @@ STRtree::isWithinDistance(STRtree* tree, ItemDistance* itemDist, double maxDista
 /*private*/
 bool STRtree::isWithinDistance(BoundablePair* initBndPair, double maxDistance)
 {
-    double distanceUpperBound = std::numeric_limits<double>::infinity();
+    double distanceUpperBound = DoubleInfinity;
 
     // initialize search queue
     BoundablePair::BoundablePairQueue priQ;

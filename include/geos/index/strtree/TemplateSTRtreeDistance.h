@@ -47,7 +47,7 @@ public:
     }
 
     ItemPair nearestNeighbour(NodePair& initPair) {
-        return nearestNeighbour(initPair, std::numeric_limits<double>::infinity());
+        return nearestNeighbour(initPair, DoubleInfinity);
     }
 
 private:
@@ -145,7 +145,7 @@ private:
             NodePair sp = isFlipped ? NodePair(nodeOther, *child, m_id) : NodePair(*child, nodeOther, m_id);
 
             // only add to queue if this pair might contain the closest points
-            if (minDistance == std::numeric_limits<double>::infinity() || sp.getDistance() < minDistance) {
+            if (minDistance == DoubleInfinity || sp.getDistance() < minDistance) {
                 priQ.push(sp);
             }
         }

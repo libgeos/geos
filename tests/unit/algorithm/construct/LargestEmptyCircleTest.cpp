@@ -15,6 +15,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/constants.h>
 // std
 #include <sstream>
 #include <string>

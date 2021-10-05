@@ -39,7 +39,7 @@ LinearLocation
 LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
                                        const LinearLocation* minIndex) const
 {
-    double minDistance = std::numeric_limits<double>::max();
+    double minDistance = DoubleInfinity;
     std::size_t minComponentIndex = 0;
     std::size_t minSegmentIndex = 0;
     double minFrac = -1.0;

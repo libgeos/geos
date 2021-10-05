@@ -39,9 +39,9 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL Angle {
 public:
 
-    static const double PI_TIMES_2; // 2.0 * PI;
-    static const double PI_OVER_2; // PI / 2.0;
-    static const double PI_OVER_4; // PI / 4.0;
+    static constexpr double PI_TIMES_2 = 2.0 * MATH_PI;
+    static constexpr double PI_OVER_2 = MATH_PI / 2.0;
+    static constexpr double PI_OVER_4 = MATH_PI / 4.0;
 
     /// Constant representing counterclockwise orientation
     static const int COUNTERCLOCKWISE = Orientation::COUNTERCLOCKWISE;
