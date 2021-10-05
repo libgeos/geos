@@ -9,6 +9,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <fenv.h>
 #include <memory>
 #include <math.h>
 
@@ -112,6 +113,58 @@ void object::test<3>
     int status = GEOSDistance(g1, g2, &d);
 
     ensure_equals(status, 1);
+
+    GEOSGeom_destroy(g1);
+    GEOSGeom_destroy(g2);
+}
+
+// point distance does not raise floating point exception
+template<>
+template<>
+void object::test<4>
+()
+{
+    GEOSGeometry* g1 = GEOSGeomFromWKT("POINT (0 0)");
+    GEOSGeometry* g2 = GEOSGeomFromWKT("POINT (1 1)");
+
+    // clear all floating point exceptions
+    feclearexcept (FE_ALL_EXCEPT);
+
+    double d;
+    int status = GEOSDistance(g1, g2, &d);
+
+    ensure_equals(status, 1);
+    ensure_equals(d, sqrt(2));
+
+    // check for floating point overflow exceptions
+    int raised = fetestexcept(FE_OVERFLOW);
+    ensure_equals(raised & FE_OVERFLOW, 0);
+
+    GEOSGeom_destroy(g1);
+    GEOSGeom_destroy(g2);
+}
+
+// same distance between boundables should not raise floating point exception
+template<>
+template<>
+void object::test<5>
+()
+{
+    GEOSGeometry* g1 = GEOSGeomFromWKT("LINESTRING (0 0, 1 1)");
+    GEOSGeometry* g2 = GEOSGeomFromWKT("LINESTRING (2 2, 3 3)");
+
+    // clear all floating point exceptions
+    feclearexcept (FE_ALL_EXCEPT);
+
+    double d;
+    int status = GEOSDistance(g1, g2, &d);
+
+    ensure_equals(status, 1);
+    ensure_equals(d, sqrt(2));
+
+    // check for floating point overflow exceptions
+    int raised = fetestexcept(FE_OVERFLOW);
+    ensure_equals(raised & FE_OVERFLOW, 0);
 
     GEOSGeom_destroy(g1);
     GEOSGeom_destroy(g2);
