@@ -209,7 +209,7 @@ LineSegment::closestPoints(const LineSegment& line)
      */
     std::array<Coordinate, 2> closestPt;
 
-    double minDistance = DoubleMax;
+    double minDistance = DoubleInfinity;
     double dist;
 
     Coordinate close00;

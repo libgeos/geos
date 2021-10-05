@@ -33,7 +33,7 @@ namespace algorithm { // geos.algorithm
 /*public*/
 InteriorPointPoint::InteriorPointPoint(const Geometry* g)
 {
-    minDistance = DoubleMax;
+    minDistance = DoubleInfinity;
     if (! g->getCentroid(centroid)) {
         hasInterior = false;
     }
