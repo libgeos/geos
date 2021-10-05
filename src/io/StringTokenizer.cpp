@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <geos/io/StringTokenizer.h>
+#include <geos/constants.h>
 
 #include <string>
 #include <cstdlib>
