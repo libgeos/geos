@@ -19,11 +19,17 @@ from that location:
 Setting `CMAKE_BUILD_TYPE` to `Release` is necessary to enable compiler
 optimizations.
 
-Once the `cmake` tool has run, GEOS can be built by running `make` and
-installed by running `make install`.
+Once the `cmake` tool has run, GEOS can be built by 
 
-The entire test suite can be run using `make check`.
-Alternatively, the `ctest` command can be used, which provides more control over test execution.
+* running `make` and installed by running `make install`, or
+* running `cmake --build .` and `cmake --build . --target install`
+
+The entire test suite can be run by
+
+* using `make check`, or
+* using `ctest --output-on-failure .`
+
+The `ctest` command can be used to control which tests are run.
 For example, `ctest -R unit-capi -j2` uses a regular expression to run all tests
 associated with the C API, using two processes in parallel.
 A list of available tests can be obtained using `ctest -N`.
@@ -60,16 +66,5 @@ cmake --build _build_vs2019x64 --config Release -j 16 --verbose
 ```
 cmake -S . -B _build_vs2019x32 -G "Visual Studio 16 2019" -A x32 -DCMAKE_GENERATOR_TOOLSET=host=x64
 cmake --build _build_vs2019x32 --config Release -j 16 --verbose
-```
-
-#### Test using CMake
-
-```
-cd <build directory>
-ctest --show-only
-ctest
-ctest --output-on-failure
-ctest -V
-ctest -VV
 ```
 

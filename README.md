@@ -114,7 +114,7 @@ API documentation can be generated using Doxygen. Documentation is not included
 in the default build. To build the documentation, run:
 
     cmake -DBUILD_DOCUMENTATION=YES
-    make docs
+    cmake --build . --target docs
 
 ## Style
 
