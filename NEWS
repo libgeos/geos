@@ -33,6 +33,10 @@ Changes in 3.10.0
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
 
 - Changes:
+  - Autoconf build system is dropped in favour of CMake
+    See README.md and INSTALL.md for examples of usage
+  - Libtool is no longer used for in favour of CMake
+    Therefor libgeos.la is no longer built/installed
   - #1094, #1090: Drop inlines.cpp to address duplicate symbols on many platforms
     (Regina Obe)
   - GH475: Do not return NaN from GEOSProjectNormalized_r (Paul Ramsey)
