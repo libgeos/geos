@@ -141,7 +141,7 @@ EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
 bool
 EdgeNodingBuilder::hasEdgesFor(int geomIndex) const
 {
-    assert(geomIndex >= 0 && geomIndex < 2);
+    assert(geomIndex < 2);
     return hasEdges[geomIndex];
 }
 
