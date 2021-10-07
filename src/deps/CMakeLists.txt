@@ -11,7 +11,10 @@
 file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.c  CONFIGURE_DEPEND)
 add_library(ryu STATIC ${_sources})
 target_include_directories(ryu PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-set_target_properties(ryu PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(ryu PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  C_STANDARD 99
+)
 unset(_sources)
 
 target_include_directories(geos
