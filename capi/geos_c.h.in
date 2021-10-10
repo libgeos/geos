@@ -1380,7 +1380,7 @@ extern int GEOS_DLL GEOSNormalize_r(
     GEOSGeometry* g);
 
 /**
-* Controls the behavior of GEOSGeometry_setPrecision()
+* Controls the behavior of GEOSGeom_setPrecision()
 * when altering the precision of a geometry.
 */
 enum GEOSPrecisionRules {
