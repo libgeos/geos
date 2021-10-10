@@ -3764,7 +3764,7 @@ extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 *        or 0 for FLOATING precision
 * \param flags The bitwise OR of members of the \ref GEOSPrecisionRules enum
 * \return The precision reduced result.
-*         Caller must free with GEOSGeometry_destroy()
+*         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
@@ -3929,7 +3929,7 @@ extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
 * \param g Input geometry, must be a LineString
 * \param n Index of desired point (zero based)
 * \return A Point geometry.
-*         Caller must free with GEOSGeometry_destroy()
+*         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
@@ -3938,7 +3938,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
 * Return the first point of a LineString
 * \param g Input geometry, must be a LineString
 * \return A Point geometry.
-*         Caller must free with GEOSGeometry_destroy()
+*         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
@@ -3947,7 +3947,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
 * Return the last point of a LineString
 * \param g Input geometry, must be a LineString
 * \return A Point geometry.
-*         Caller must free with GEOSGeometry_destroy()
+*         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
@@ -4152,7 +4152,7 @@ extern void GEOS_DLL GEOSWKTReader_destroy(GEOSWKTReader* reader);
 * a geometry, and return an allocated geometry.
 * \param reader A WKT reader object, caller retains ownership
 * \param wkt The WKT string to parse, caller retains ownership
-* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+* \return A \ref GEOSGeometry, caller to free with GEOSGeom_destroy())
 */
 extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(
     GEOSWKTReader* reader,
@@ -4425,7 +4425,7 @@ extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
 * geometrycollection. Feature properties are not read.
 * \param reader A GeoJSON reader object, caller retains ownership
 * \param geojson The json string to parse, caller retains ownership
-* \return A \ref GEOSGeometry, caller to free with GEOSGeometry_destroy())
+* \return A \ref GEOSGeometry, caller to free with GEOSGeom_destroy())
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry(
     GEOSGeoJSONReader* reader,
