@@ -1813,9 +1813,9 @@ extern GEOSGeoJSONWriter GEOS_DLL *GEOSGeoJSONWriter_create_r(
 
 /** \see GEOSGeoJSONWriter_destroy */
 extern void GEOS_DLL GEOSGeoJSONWriter_destroy_r(GEOSContextHandle_t handle,
-    GEOSGeoJSONWriter* reader);
+    GEOSGeoJSONWriter* writer);
 
-/** \see GEOSWKTWriter_write */
+/** \see GEOSGeoJSONWriter_writeGeometry */
 extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry_r(
     GEOSContextHandle_t handle,
     GEOSGeoJSONWriter* writer,
