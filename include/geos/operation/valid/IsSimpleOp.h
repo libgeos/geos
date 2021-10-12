@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/noding/SegmentIntersector.h>

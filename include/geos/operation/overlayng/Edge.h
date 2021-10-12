@@ -17,6 +17,7 @@
 #include <geos/inline.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/export.h>
 
 #include <memory>
@@ -25,7 +26,6 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateSequence;
 }
 namespace operation {
 namespace overlayng {

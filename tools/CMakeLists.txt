@@ -61,7 +61,7 @@ if(NOT MSVC)
   configure_install_geos_pc()
 endif()
 
-option(BUILD_ASTYLE "Build astyle (Artistic Style) tool" ON)
+option(BUILD_ASTYLE "Build astyle (Artistic Style) tool" OFF)
 
 message(STATUS "GEOS: Build astyle ${BUILD_ASTYLE}")
 if(BUILD_ASTYLE)

@@ -16,7 +16,7 @@
 
 #include <geos/geom/Dimension.h>
 #include <geos/export.h>
-
+#include <cstdint>
 
 namespace geos {      // geos.
 namespace operation { // geos.operation

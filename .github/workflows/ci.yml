@@ -43,12 +43,22 @@ jobs:
           os: ubuntu-18.04
         }
         - {
-          compiler: g++,
-          build_type: Debug,
+          compiler: clang++,
+          build_type: Release,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang',
+          cmake: 3.10.*,
+          os: ubuntu-18.04
+        }
+        - {
+          compiler: clang++,
+          build_type: Release,
           cxxstd: 11,
           arch: 64,
           packages: 'g++',
           cmake: 3.15.*,
+          cmake_extra: '-DDISABLE_GEOS_INLINE=ON',
           os: ubuntu-20.04
         }
         - {
@@ -94,7 +104,7 @@ jobs:
         mkdir build.cmake
         cd build.cmake
         cmake --version
-        cmake -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
+        cmake ${{ matrix.ci.cmake_extra }} -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
         make -j 2
         cmake --build . --target docs
 
