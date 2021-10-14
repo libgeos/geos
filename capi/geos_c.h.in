@@ -1384,9 +1384,9 @@ extern int GEOS_DLL GEOSNormalize_r(
 * when altering the precision of a geometry.
 */
 enum GEOSPrecisionRules {
-    /** This option causes GEOSGeom_setPrecision_r() to not attempt at preserving the topology */
+    /** This option causes GEOSGeom_setPrecision() to not attempt at preserving the topology */
     GEOS_PREC_NO_TOPO = 1,
-    /** This option causes GEOSGeom_setPrecision_r() to retain collapsed elements */
+    /** This option causes GEOSGeom_setPrecision() to retain collapsed elements */
     GEOS_PREC_KEEP_COLLAPSED = 2
 };
 
