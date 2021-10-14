@@ -18,6 +18,10 @@ Makefile
 *.swp
 *.trs
 *.exe
+*.cmake
+CMakeFiles
+CMakeCache.txt
+DartConfiguration.tcl
 .DS_Store
 macros/libtool.m4
 macros/ltoptions.m4
