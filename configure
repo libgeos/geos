@@ -1,0 +1,54 @@
+#!/bin/sh
+
+which cmake > /dev/null 2>&1 || {
+  echo "You need cmake to build this package" >&2
+  exit 1
+}
+
+srcdir=$(dirname $0)
+
+usage() {
+  echo "$0 [--prefix=<prefix>] [--help]"
+}
+
+cmd=cmake
+
+options=$(getopt -l "help,prefix:" "" "$@")
+#echo XXXX ${options}
+eval set -- "$options"
+
+while true; do
+  case $1 in
+    --prefix)
+      shift
+      cmd="${cmd} -DCMAKE_INSTALL_PREFIX:PATH=$1"
+      ;;
+    --help)
+      usage
+      exit
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "Unrecognized switch $1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+cmd="${cmd} ${srcdir}"
+
+echo
+echo "WARNING: this script is a wrapper for cmake"
+echo
+echo "INFO: Invoking ${cmd}"
+echo
+$cmd
+
+echo
+echo "HINT: for interactive configuration use ccmake ${srcdir}"
+echo
