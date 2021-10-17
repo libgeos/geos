@@ -45,6 +45,11 @@ function(configure_install_geos_pc)
   set(includedir "$\{prefix\}/${CMAKE_INSTALL_INCLUDEDIR}")
   set(libdir "$\{exec_prefix\}/${CMAKE_INSTALL_LIBDIR}")
   set(VERSION ${GEOS_VERSION})
+  set(EXTRA_LIBS "-lstdc++")
+  if(HAVE_LIBM)
+    list(APPEND EXTRA_LIBS "-lm")
+  endif()
+  list(JOIN EXTRA_LIBS " " EXTRA_LIBS)
 
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/geos.pc.in
