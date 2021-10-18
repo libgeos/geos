@@ -9,3 +9,4 @@ Requires:
 Version: @VERSION@
 Cflags: -I${includedir}
 Libs: -L${libdir} -lgeos_c
+Libs.private: -lgeos @EXTRA_LIBS@
