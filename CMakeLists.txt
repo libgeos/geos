@@ -259,6 +259,12 @@ target_compile_options(geos_developer_cxx_flags
 set(CMAKE_CXX_FLAGS_COVERAGE "-fprofile-arcs -ftest-coverage")
 
 #-----------------------------------------------------------------------------
+# Extra libraries
+#-----------------------------------------------------------------------------
+include(CheckLibraryExists)
+check_library_exists(m pow "" HAVE_LIBM)
+
+#-----------------------------------------------------------------------------
 # Target geos: C++ API library
 #-----------------------------------------------------------------------------
 add_library(geos "")

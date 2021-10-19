@@ -125,6 +125,10 @@ int main(int argc, char** argv) {
     {
         auto& v = result["opArgs"].as<std::vector<std::string>>();
         if (v.size() >= 1) {
+            if ( v.size() > 1 )
+            {
+                std::cerr << "positional arguments after the second one are discarded" << std::endl;
+            }
             auto val = v[0];
             /**
              * To get around cmdline parset limitation for parsing neg numbers,
@@ -133,7 +137,15 @@ int main(int argc, char** argv) {
             if (startsWith(val, "N")) {
                 val = val.substr(1, val.size()-1);
             }
-            cmdArgs.opArg1 = std::stod(val);
+            try {
+                cmdArgs.opArg1 = std::stod(val);
+            } catch (const std::invalid_argument&) {
+                std::cerr << "Invalid positional argument '" << val << "' (expected number)" << std::endl;
+                exit(1);
+            } catch (const std::out_of_range&) {
+                std::cerr << "Out of range positional argument '" << val << "' (expected double)" << std::endl;
+                exit(1);
+            }
         }
     }
 
