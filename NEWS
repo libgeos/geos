@@ -13,6 +13,7 @@ Changes in 3.9.2
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
   - Avoid stack overflow in KdTree::queryNode (Even Roualt)
   - Avoid raising double overflow signals in distance calcs (Paul Ramsey)
+  - Fix performance issue in buffer building (Paul Ramsey)
 
 
 Changes in 3.9.1
