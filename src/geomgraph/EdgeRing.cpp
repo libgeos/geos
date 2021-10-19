@@ -316,7 +316,6 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
     assert(edgePts);
     size_t numEdgePts = edgePts->getSize();
 
-    pts.reserve(pts.size() + numEdgePts);
     if(isForward) {
         if(isFirstEdge) {
             edgePts->toVector(pts);
