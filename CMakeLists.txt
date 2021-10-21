@@ -280,6 +280,9 @@ if(BUILD_SHARED_LIBS)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION_NOPATCH})
   set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_NOPATCH})
+ if(MINGW)
+   set_target_properties(geos PROPERTIES SUFFIX "-${GEOS_VERSION_NOPATCH}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+ endif(MINGW)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -293,9 +296,12 @@ if(BUILD_SHARED_LIBS)
     PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
 
   set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
-  if(NOT WIN32)
+  if(NOT WIN32 OR MINGW)
     set_target_properties(geos_c PROPERTIES SOVERSION ${CAPI_VERSION_MAJOR})
   endif()
+  if(MINGW)
+    set_target_properties(geos_c PROPERTIES SUFFIX "-${CAPI_VERSION_MAJOR}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  endif(MINGW)
 endif()
 
 add_subdirectory(capi)
