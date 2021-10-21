@@ -1,0 +1,58 @@
+#
+# GitHub Actions for GEOS Web Pages
+# Paul Ramsey <pramsey@cleverelephant.ca>
+#
+
+name: 'Web'
+
+on:
+  push:
+    branches:
+      - web
+
+jobs:
+  linux:
+    name: 'Build Web'
+    runs-on: ubuntu-latest
+
+    # Only run docbuild on central repo
+    if: github.repository == 'libgeos/geos'
+    steps:
+
+    - name: 'Install'
+      run: |
+        set -e
+        uname -a
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
+
+    - name: 'Check Out 📗'
+      uses: actions/checkout@v2
+
+    - name: 'Hugo Build 🛠'
+      # ...or replace 'master' with a full version tag, such as: v0.64.1
+      uses: jakejarvis/hugo-build-action@v0.88.1
+      with:
+        args: --source web --destination public --verbose
+
+    - name: 'Doxygen Build 🛠'
+      run: |
+        set -e
+        mkdir build.cmake
+        cd build.cmake
+        cmake --version
+        cmake -DBUILD_DOCUMENTATION=YES ..
+        cmake --build . --target docs
+
+    - name: 'Bundle 🛠'
+      run: |
+        mkdir -p public_html/doxygen
+        cp -ra web/public/* public_html
+        cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen
+
+    - name: 'Deploy 🚀'
+      uses: JamesIves/github-pages-deploy-action@4.1.5
+      with:
+        branch: gh-pages           # The branch the action should deploy to.
+        folder: public_html    # The folder the action should depl y.
+
+
