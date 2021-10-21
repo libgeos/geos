@@ -8,7 +8,7 @@ name: 'Web'
 on:
   push:
     branches:
-      - web
+      - main
 
 jobs:
   linux:
