@@ -8,9 +8,11 @@ disablePathToLower = true
 enableGitInfo = true
 
 [params]
-  current_release = "3.9.1"
+  current_release = "3.10.0"
   geekdocLogo = "web-logo.png"
-  # turn these on when we move to the main branch
+
+  # turn these on when we move to the gh/main branch
   #geekdocRepo = "https://github.com/libgeos/geos"
-  #geekdocEditPath = "web"
+  #geekdocEditPath = "edit/main/web/content"
+
   geekdocBackToTop = true

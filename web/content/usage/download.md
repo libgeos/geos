@@ -6,7 +6,8 @@ draft: false
 
 | Release Date | Release | Download Link |
 | ------- | ------ | ------ |
-|  2020/12/10 | **{{<current_release>}}** | [geos-{{<current_release>}}.tar.bz2](http://download.osgeo.org/geos/geos-{{<current_release>}}.tar.bz2) |
+|  2021/10/21 | **{{<current_release>}}** | [geos-{{<current_release>}}.tar.bz2](http://download.osgeo.org/geos/geos-{{<current_release>}}.tar.bz2) |
+|  2020/12/10 | **3.9.1** |  [geos-3.9.1.tar.bz2](http://download.osgeo.org/geos/geos-3.9.1.tar.bz2) |
 |  2020/03/10 | **3.8.1** |  [geos-3.8.1.tar.bz2](http://download.osgeo.org/geos/geos-3.8.1.tar.bz2) |
 |  2019/10/04 | **3.7.3** |  [geos-3.7.3.tar.bz2](http://download.osgeo.org/geos/geos-3.7.3.tar.bz2) |
 |  2020/12/11 | **3.6.5** |  [geos-3.6.5.tar.bz2](http://download.osgeo.org/geos/geos-3.6.5.tar.bz2) |
@@ -17,7 +18,7 @@ draft: false
 
 ### Build Requirements
 
-* [CMake](https://cmake.org/download/) 3.8 or later.
+* [CMake](https://cmake.org/download/) 3.13 or later.
 * C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.
 * [Doxygen](https://www.doxygen.nl/) to build the API documentation.
 
@@ -33,7 +34,7 @@ mkdir _build
 cd _build
 # Set up the build
 cmake \
-    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr/local \
     ..
 # Run the build, test, install steps
@@ -48,7 +49,7 @@ The GEOS build can be customized using build options.
 
 | Option               | Default    | Note  |
 | :------------------: | :--------: | :---: |
-| CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and working installs. |
+| CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. |
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Librarys end up in `./libs` headers in `./include` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
