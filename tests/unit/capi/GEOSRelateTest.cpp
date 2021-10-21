@@ -25,8 +25,9 @@ void object::test<1>()
     geom2_ = fromWKT("LINESTRING(5 6, 7 8)");
     ensure(nullptr != geom2_);
 
-
-    ensure_equals(std::string{"FF1FF0102"}, GEOSRelate(geom1_, geom2_));
+    char* pattern = GEOSRelate(geom1_, geom2_);
+    ensure_equals(std::string{"FF1FF0102"}, pattern);
+    GEOSFree(pattern);
 }
 
 } // namespace tut
