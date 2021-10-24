@@ -41,8 +41,8 @@ namespace WKBConstants {
     };
 
     enum wkbFlavour {
-        wkbIso = 1,
-        wkbExtended = 2
+        wkbExtended = 1,
+        wkbIso = 2
     };
 
 }
