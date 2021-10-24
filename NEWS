@@ -2,6 +2,7 @@ Changes in 3.10.1
 2021-xx-xx
 
 - Fixes/Improvements:
+  - Fix mistake in constants used to select WKB flavor in C API (GH489, Paul Ramsey)
 
 
 Changes in 3.10.0
