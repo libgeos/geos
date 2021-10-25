@@ -5,7 +5,7 @@ theme = "hugo-geekdoc"
 pygmentsUseClasses = true
 pygmentsCodeFences = true
 disablePathToLower = true
-enableGitInfo = true
+enableGitInfo = false
 
 [params]
   current_release = "3.10.0"

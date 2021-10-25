@@ -1,7 +1,7 @@
 ---
 title: "Version 3.10.0"
-date: 2021-10-21
-draft: false
+type: posts
+date: 2021-10-21T00:00:00
 ---
 
 The 3.10 release of GEOS is now available [to download]({{< ref "/usage/download" >}}).
