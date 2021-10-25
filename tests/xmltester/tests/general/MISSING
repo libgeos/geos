@@ -1,6 +1,0 @@
-Tests found in JTS/testxml/general and not ported as of rev 3991 (Jun 30 2014)
-----------------------------------------------------------------------------
-
-TestDensify.xml
- - requires densify::Densifier still unported
-
