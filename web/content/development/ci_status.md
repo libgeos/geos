@@ -18,7 +18,7 @@ draft: false
 * **Debbie** - Debian 8.2, GNU/Linux 64bit, GCC Debian 8.2.0-3, automake
 * **Winnie** - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake
 * **Dronie** - Alpine Linux 3.4, 64bit, GCC 5.3.0, automake
-* **gitlab-ci** - Debian 8.2, GNU/Linux 64bit, gcc, automake
+* **GitLab** - Debian 8.2, GNU/Linux 64bit, gcc, automake
 * **Bessie** - FreeBSD 12.2, 64-bit clang 6.0, 64bit gcc, CMake (3.11) >=3.8, autotools < 3.8
 * **Bessie32** - FreeBSD 12.2, 32-bit clang 6.0, 64bit gcc, CMake (3.11) >=3.8, autotools < 3.8
 * **GitHub** - Ubuntu various versions, Windows various, CMake
