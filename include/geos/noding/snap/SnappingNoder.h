@@ -73,6 +73,9 @@ private:
     std::vector<SegmentString*>* nodedResult;
 
     // Methods
+
+    void seedSnapIndex(std::vector<SegmentString*>& segStrings);
+
     void snapVertices(std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings);
 
     SegmentString* snapVertices(SegmentString* ss);
@@ -115,6 +118,3 @@ public:
 } // namespace geos::noding::snap
 } // namespace geos::noding
 } // namespace geos
-
-
-
