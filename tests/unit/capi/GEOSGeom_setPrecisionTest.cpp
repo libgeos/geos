@@ -158,5 +158,16 @@ void object::test<9> ()
     ensure_geometry_equals(geom2_, "LINESTRING (0 0, 0 0)");
 }
 
+
+// Collapse a linearRing / Trac #1135
+template<>
+template<>
+void object::test<10> ()
+{
+    geom1_ = fromWKT("LINEARRING (0 0, 0.1 0, 0.1 0.1, 0 0.1, 0 0)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, 1.0, 0);
+    ensure_geometry_equals(geom2_, "LINEARRING EMPTY");
+}
+
 } // namespace tut
 
