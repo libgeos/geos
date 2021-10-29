@@ -86,7 +86,7 @@ SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
             rand = rand + PHI_INV;
             if (rand > 1) rand = rand - floor(rand);
 
-            int index = (int) (numPts * rand);
+            unsigned int index = (unsigned int) (numPts * rand);
             snapIndex.snap(cs->getAt(index));
         }
     }
