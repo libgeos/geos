@@ -157,6 +157,7 @@ jobs:
       uses: msys2/setup-msys2@v2
       with:
         install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
+        update: true
 
     - name: 'Build'
       run: |
@@ -164,6 +165,31 @@ jobs:
        cd build
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
+       cmake --build . -j 2
+       ctest --output-on-failure .
+
+  windows-mingw-release:
+    name: 'Windows (mingw-w64, Release, 11, x86_64, windows-2019)'
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+
+    - name: 'Setup'
+      uses: msys2/setup-msys2@v2
+      with:
+        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
+        update: true
+
+    - name: 'Build'
+      run: |
+       mkdir build
+       cd build
+       cmake --version
+       cmake -DCMAKE_BUILD_TYPE=Release -G"MSYS Makefiles" ..
        cmake --build . -j 2
        ctest --output-on-failure .
 
