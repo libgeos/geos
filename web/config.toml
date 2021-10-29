@@ -5,6 +5,7 @@ theme = "hugo-geekdoc"
 pygmentsUseClasses = true
 pygmentsCodeFences = true
 disablePathToLower = true
+
 enableGitInfo = false
 
 [params]
