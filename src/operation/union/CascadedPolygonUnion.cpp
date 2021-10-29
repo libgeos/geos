@@ -120,18 +120,17 @@ CascadedPolygonUnion::binaryUnion(const std::vector<const geom::Geometry*> & geo
 std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::unionSafe(const geom::Geometry* g0, const geom::Geometry* g1) const
 {
-    if(g0 == nullptr && g1 == nullptr) {
-        return nullptr;
+    if(g0 != nullptr && g1 != nullptr) {
+        return unionActual(g0, g1);
     }
 
-    if(g0 == nullptr) {
+    if(g1 != nullptr) {
         return g1->clone();
     }
-    if(g1 == nullptr) {
+    if(g0 != nullptr) {
         return g0->clone();
     }
-
-    return unionActual(g0, g1);
+    return nullptr;
 }
 
 std::unique_ptr<geom::Geometry>
