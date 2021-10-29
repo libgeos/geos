@@ -14,6 +14,7 @@ Changes in 3.9.2
   - Avoid stack overflow in KdTree::queryNode (Even Roualt)
   - Avoid raising double overflow signals in distance calcs (Paul Ramsey)
   - Fix performance issue in buffer building (Paul Ramsey)
+  - Fix crash when precision reducing LinearRing (#1135, Paul Ramsey)
 
 
 Changes in 3.9.1
