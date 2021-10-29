@@ -3,6 +3,7 @@ Changes in 3.10.1
 
 - Fixes/Improvements:
   - Fix mistake in constants used to select WKB flavor in C API (GH489, Paul Ramsey)
+  - Fix crash when reducing precision on a LinearRing (#1135, Paul Ramsey)
 
 
 Changes in 3.10.0
