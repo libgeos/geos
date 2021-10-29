@@ -176,16 +176,6 @@ void object::test<6> ()
 // Retain (or not) collapsed elements
 template<>
 template<>
-void object::test<7> ()
-{
-    geom1_ = fromWKT("LINESTRING (0 0, 0.1 0.1)");
-    geom2_ = GEOSGeom_setPrecision(geom1_, 1.0, GEOS_PREC_NO_TOPO);
-    ensure_geometry_equals(geom2_, "LINESTRING (0 0, 0 0)");
-}
-
-// Retain (or not) collapsed elements
-template<>
-template<>
 void object::test<8> ()
 {
     geom1_ = fromWKT("LINESTRING (0 0, 0.1 0.1)");
