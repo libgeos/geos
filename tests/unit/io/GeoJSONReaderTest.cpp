@@ -437,5 +437,22 @@ void object::test<29>
     ensure_equals("ParseException: Expected two coordinates found more than two", errorMessage);
 }
 
+// Throw ParseException for bad GeoJSON
+template<>
+template<>
+void object::test<30>
+()
+{
+    std::string errorMessage;
+    std::string geojson { "{ \"missing\": \"type\" }" };
+    bool error = false;
+    try {
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException& e) {
+        error = true;
+    }
+    ensure(error == true);
+}
+
 }
 
