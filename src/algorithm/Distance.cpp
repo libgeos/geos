@@ -75,7 +75,7 @@ Distance::pointToSegment(const geom::Coordinate& p,
     double s = ((A.y - p.y) * (B.x - A.x) - (A.x - p.x) * (B.y - A.y)) /
                ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
 
-    return fabs(s) * sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
+    return std::fabs(s) * std::sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
 }
 
 /*public static*/
@@ -97,7 +97,7 @@ Distance::pointToLinePerpendicular(const geom::Coordinate& p,
     double s = ((A.y - p.y) * (B.x - A.x) - (A.x - p.x) * (B.y - A.y))
                /
                ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
-    return fabs(s) * sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
+    return std::fabs(s) * std::sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
 }
 
 /*public static*/

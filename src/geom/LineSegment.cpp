@@ -279,7 +279,7 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
-    double len = sqrt(dx * dx + dy * dy);
+    double len = std::sqrt(dx * dx + dy * dy);
 
     double ux = 0.0;
     double uy = 0.0;

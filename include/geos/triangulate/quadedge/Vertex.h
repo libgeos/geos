@@ -19,7 +19,7 @@
 #ifndef GEOS_TRIANGULATE_QUADEDGE_VERTEX_H
 #define GEOS_TRIANGULATE_QUADEDGE_VERTEX_H
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 #include <cstring>
 
@@ -234,8 +234,8 @@ private:
     inline double
     distance(const Vertex& v1, const Vertex& v2)
     {
-        return sqrt(pow(v2.getX() - v1.getX(), 2.0)
-                    + pow(v2.getY() - v1.getY(), 2.0));
+        return std::sqrt(pow(v2.getX() - v1.getX(), 2.0) +
+                         pow(v2.getY() - v1.getY(), 2.0));
     }
 
     /**

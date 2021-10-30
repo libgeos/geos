@@ -18,7 +18,7 @@
  *
  **********************************************************************/
 
-#include <math.h>
+#include <cmath>
 
 #include <geos/geom/util/Densifier.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
