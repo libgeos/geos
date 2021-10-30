@@ -21,15 +21,10 @@
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
-//#include <geos/util/AssertionFailedException.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/TopologyException.h>
-//#include <geos/util/UnsupportedOperationException.h>
-//#include <geos/util/CoordinateArrayFilter.h>
-//#include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/GeometricShapeFactory.h>
-//#include <geos/util/math.h>
 
 #include <memory>
 #include <type_traits>

@@ -9,7 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
-#include <math.h>
+#include <cmath>
 
 #include "capi_test_utils.h"
 

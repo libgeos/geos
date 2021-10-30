@@ -19,7 +19,7 @@
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
 
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <iostream>
 
