@@ -31,7 +31,7 @@
 #include <geos/geom/Triangle.h>
 #include <geos/util/GEOSException.h>
 
-#include <math.h> // sqrt
+#include <cmath>  // sqrt
 #include <memory> // for unique_ptr
 #include <typeinfo>
 #include <vector>
@@ -316,7 +316,7 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
         if(dy < 0) {
             dy = -dy;
         }
-        double len = sqrt(dx * dx + dy * dy);
+        double len = std::sqrt(dx * dx + dy * dy);
         double sin = dy / len;
 
         if(sin < minSin) {

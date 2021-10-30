@@ -229,7 +229,7 @@ LineIntersector::interpolateZ(const Coordinate& p,
     xoff = (p.x - p1.x);
     yoff = (p.y - p1.y);
     double pdist = (xoff * xoff + yoff * yoff);
-    double fract = sqrt(pdist / seglen);
+    double fract = std::sqrt(pdist / seglen);
     double zoff = zgap * fract;
     //double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
     double interpolated = p1.z + zoff;
@@ -600,7 +600,7 @@ LineIntersector::zInterpolate(const Coordinate& p, const Coordinate& p1, const C
     double xoff = (p.x - p1.x);
     double yoff = (p.y - p1.y);
     double plen = (xoff * xoff + yoff * yoff);
-    double frac = sqrt(plen / seglen);
+    double frac = std::sqrt(plen / seglen);
     double zoff = dz * frac;
     double zInterpolated = p1z + zoff;
 #if GEOS_DEBUG

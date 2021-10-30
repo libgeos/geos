@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <fenv.h>
 #include <memory>
-#include <math.h>
+#include <cmath>
 
 #include "capi_test_utils.h"
 
@@ -134,7 +134,7 @@ void object::test<4>
     int status = GEOSDistance(g1, g2, &d);
 
     ensure_equals(status, 1);
-    ensure_equals(d, sqrt(2));
+    ensure_equals(d, std::sqrt(2));
 
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
@@ -160,7 +160,7 @@ void object::test<5>
     int status = GEOSDistance(g1, g2, &d);
 
     ensure_equals(status, 1);
-    // ensure_equals(d, sqrt(2));
+    // ensure_equals(d, std::sqrt(2));
 
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
