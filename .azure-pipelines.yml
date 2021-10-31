@@ -175,19 +175,18 @@ stages:
       vmImage: 'macOS-10.15'
     strategy:
       matrix:
-        Xcode 10.1:
+        Xcode 11.7:
           TOOLSET: clang
           CXXSTD: 14, 17
-          XCODE_APP: /Applications/Xcode_10.1.app
-        Xcode 10.0:
+          XCODE_APP: /Applications/Xcode_11.7.app
+        Xcode 12.4:
+          TOOLSET: clang
           CXXSTD: 14, 17
-          XCODE_APP: /Applications/Xcode_10.app
-        Xcode 9.4.1:
+          XCODE_APP: /Applications/Xcode_12.4.app
+        Xcode 10.3:
+          TOOLSET: clang
           CXXSTD: 11, 14, 17
-          XCODE_APP: /Applications/Xcode_9.4.1.app
-        Xcode 9.4:
-          CXXSTD: 11, 14, 17
-          XCODE_APP: /Applications/Xcode_9.4.app
+          XCODE_APP: /Applications/Xcode_10.3.app
     steps:
     - script: |
         set -e
