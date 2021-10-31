@@ -41,18 +41,18 @@ stages:
           CXXSTD: 11, 17
           CXX: g++-10
           PACKAGES: g++-10
-        # GCC 9:
-        #   CXXSTD: 11, 14
-        #   CXX: g++-9
-        #   PACKAGES: g++-9
+        GCC 9:
+          CXXSTD: 11, 14
+          CXX: g++-9
+          PACKAGES: g++-9
         GCC 8:
           CXXSTD: 11
           CXX: g++-8
           PACKAGES: g++-8
-        # GCC 7:
-        #   CXXSTD: 11
-        #   CXX: g++-7
-        #   PACKAGES: g++-7
+        GCC 7:
+          CXXSTD: 11
+          CXX: g++-7
+          PACKAGES: g++-7
         # GCC 6:
         #   CXXSTD: 11
         #   CXX: g++-6
@@ -85,11 +85,11 @@ stages:
           CXX: clang++-9
           PACKAGES: clang-9
           LLVM_REPO: llvm-toolchain-focal-9
-        # Clang 8:
-        #   CXXSTD: 11
-        #   CXX: clang++-8
-        #   PACKAGES: clang-8
-        #   LLVM_REPO: llvm-toolchain-focal-8
+        Clang 8:
+          CXXSTD: 11
+          CXX: clang++-8
+          PACKAGES: clang-8
+          LLVM_REPO: llvm-toolchain-focal-8
         # Clang 7:
         #   CXXSTD: 11
         #   CXX: clang++-7
@@ -147,24 +147,24 @@ stages:
         ctest -V --output-on-failure -C $BUILD_TYPE
       displayName: 'Build C++17'
       condition: contains(variables['CXXSTD'], '17')
-    # - script: |
-    #     set -e
-    #     mkdir build.cxx20
-    #     cd build.cxx20
-    #     cmake --version
-    #     cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
-    #     cmake --build . --config $BUILD_TYPE
-    #     ctest -V --output-on-failure -C $BUILD_TYPE
-    #   displayName: 'Build C++20'
-    #   condition: contains(variables['CXXSTD'], '20')
+    - script: |
+        set -e
+        mkdir build.cxx20
+        cd build.cxx20
+        cmake --version
+        cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+        cmake --build . --config $BUILD_TYPE
+        ctest -V --output-on-failure -C $BUILD_TYPE
+      displayName: 'Build C++20'
+      condition: contains(variables['CXXSTD'], '20')
 
   - job: 'Windows'
     strategy:
       matrix:
-        VS 2022 C++20:
-          TOOLSET: msvc-14.2
-          CXXSTD: 20
-          VM_IMAGE: 'windows-2022'
+        # VS 2022 C++20:
+        #   TOOLSET: msvc-14.3
+        #   CXXSTD: 20
+        #   VM_IMAGE: 'windows-2022'
         VS 2019 C++20:
           TOOLSET: msvc-14.2
           CXXSTD: 20
