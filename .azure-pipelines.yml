@@ -145,10 +145,6 @@ stages:
           TOOLSET: msvc-14.1
           CXXSTD: 14 # default
           VM_IMAGE: 'vs2017-win2016'
-        VS 2015 C++14:
-          TOOLSET: msvc-14.0
-          CXXSTD: 14 # default
-          VM_IMAGE: 'vs2015-win2012r2'
     pool:
       vmImage: $(VM_IMAGE)
     steps:
