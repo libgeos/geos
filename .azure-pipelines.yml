@@ -85,11 +85,11 @@ stages:
           CXX: clang++-9
           PACKAGES: clang-9
           LLVM_REPO: llvm-toolchain-focal-9
-        Clang 8:
-          CXXSTD: 11
-          CXX: clang++-8
-          PACKAGES: clang-8
-          LLVM_REPO: llvm-toolchain-focal-8
+        # Clang 8:
+        #   CXXSTD: 11
+        #   CXX: clang++-8
+        #   PACKAGES: clang-8
+        #   LLVM_REPO: llvm-toolchain-focal-8
         # Clang 7:
         #   CXXSTD: 11
         #   CXX: clang++-7
