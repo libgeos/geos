@@ -47,14 +47,6 @@ stages:
           CXXSTD: 11
           CXX: g++-5
           PACKAGES: g++-5
-        GCC 4.9:
-          CXXSTD: 11
-          CXX: g++-4.9
-          PACKAGES: g++-4.9
-        GCC 4.8:
-          CXXSTD: 11
-          CXX: g++-4.8
-          PACKAGES: g++-4.8
         Clang 8:
           CXXSTD: 11, 14, 17, 20
           CXX: clang++-8
@@ -84,22 +76,6 @@ stages:
           CXXSTD: 11, 14
           CXX: clang++-3.9
           PACKAGES: clang-3.9
-        Clang 3.8:
-          CXX: clang++-3.8
-          CXXSTD: 11, 14
-          PACKAGES: clang-3.8
-        Clang 3.7:
-          CXXSTD: 11
-          CXX: clang++-3.7
-          PACKAGES: clang-3.7
-        Clang 3.6:
-          CXXSTD: 11
-          CXX: clang++-3.6
-          PACKAGES: clang-3.6
-        Clang 3.5:
-          CXXSTD: 11
-          CXX: clang++-3.5
-          PACKAGES: clang-3.5
     steps:
     - script: |
         set -e
