@@ -36,89 +36,105 @@ stages:
           CXX: g++-11
           PACKAGES: g++-11
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         GCC 10:
           CXXSTD: 11, 17
           CXX: g++-10
           PACKAGES: g++-10
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         GCC 9:
           CXXSTD: 11, 14
           CXX: g++-9
           PACKAGES: g++-9
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         GCC 8:
           CXXSTD: 11
           CXX: g++-8
           PACKAGES: g++-8
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         GCC 7:
           CXXSTD: 11
           CXX: g++-7
           PACKAGES: g++-7
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         GCC 6:
           CXXSTD: 11
           CXX: g++-6
           PACKAGES: g++-6
           VM_IMAGE: ubuntu-18.04
+          VM_NAME: focal
         GCC 5:
           CXXSTD: 11
           CXX: g++-5
           PACKAGES: g++-5
           VM_IMAGE: ubuntu-18.04
+          VM_NAME: focal
         GCC 4.8:
           CXXSTD: 11
           CXX: g++-4.8
           PACKAGES: g++-4.8
           VM_IMAGE: ubuntu-18.04
+          VM_NAME: focal
         Clang 12:
           CXXSTD: 11, 20
           CXX: clang++-12
           PACKAGES: clang-12
           LLVM_REPO: llvm-toolchain-focal-12
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         Clang 11:
           CXXSTD: 11, 17
           CXX: clang++-11
           PACKAGES: clang-11
           LLVM_REPO: llvm-toolchain-focal-11
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         Clang 10:
           CXXSTD: 11, 14
           CXX: clang++-10
           PACKAGES: clang-10
           LLVM_REPO: llvm-toolchain-focal-10
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         Clang 9:
           CXXSTD: 11
           CXX: clang++-9
           PACKAGES: clang-9
           LLVM_REPO: llvm-toolchain-focal-9
           VM_IMAGE: ubuntu-20.04
+          VM_NAME: focal
         Clang 8:
           CXXSTD: 11
           CXX: clang++-8
           PACKAGES: clang-8
           LLVM_REPO: llvm-toolchain-bionic-8
           VM_IMAGE: ubuntu-18.04
+          VM_NAME: bionic
         Clang 7:
           CXXSTD: 11
           CXX: clang++-7
           PACKAGES: clang-7
           LLVM_REPO: llvm-toolchain-bionic-7
           VM_IMAGE: ubuntu-18.04
+          VM_NAME: bionic
         # Clang 6:
         #   CXXSTD: 11
         #   CXX: clang++-6.0
         #   PACKAGES: clang-6.0
         #   LLVM_REPO: llvm-toolchain-bionic-6.0
         #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: bionic
         # Clang 5:
         #   CXXSTD: 11
         #   PACKAGES: clang-5.0
         #   CXX: clang++-5.0
         #   LLVM_REPO: llvm-toolchain-bionic-5.0
         #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: bionic
     pool:
       vmImage: $(VM_IMAGE)
     steps:
@@ -128,7 +144,7 @@ stages:
         sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         if test -n "${LLVM_REPO}" ; then
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo -E apt-add-repository "deb http://apt.llvm.org/focal/ ${LLVM_REPO} main"
+          sudo -E apt-add-repository "deb http://apt.llvm.org/${VM_NAME}/ ${LLVM_REPO} main"
         fi
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cmake ${PACKAGES}
