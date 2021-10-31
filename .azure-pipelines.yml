@@ -112,7 +112,7 @@ stages:
         sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         if test -n "${LLVM_REPO}" ; then
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo -E apt-add-repository "deb http://apt.llvm.org/bionic/ ${LLVM_REPO} main"
+          sudo -E apt-add-repository "deb http://apt.llvm.org/focal/ ${LLVM_REPO} main"
         fi
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cmake ${PACKAGES}
@@ -162,7 +162,7 @@ stages:
     strategy:
       matrix:
         VS 2022 C++20:
-          TOOLSET: msvc-14.3
+          TOOLSET: msvc-14.2
           CXXSTD: 20
           VM_IMAGE: 'windows-2022'
         VS 2019 C++20:
@@ -196,7 +196,7 @@ stages:
 
   - job: 'macOS'
     pool:
-      vmImage: 'macOS-latest'
+      vmImage: 'macOS-10.15'
     strategy:
       matrix:
         # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
