@@ -30,63 +30,81 @@ stages:
 
   - job: 'Linux'
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
     strategy:
       matrix:
+        GCC 11:
+          CXXSTD: 11, 20
+          CXX: g++-11
+          PACKAGES: g++-11
+        GCC 10:
+          CXXSTD: 11, 17
+          CXX: g++-10
+          PACKAGES: g++-10
+        # GCC 9:
+        #   CXXSTD: 11, 14
+        #   CXX: g++-9
+        #   PACKAGES: g++-9
         GCC 8:
-          CXXSTD: 11, 14, 17, 20
+          CXXSTD: 11
           CXX: g++-8
           PACKAGES: g++-8
-        GCC 7:
-          CXXSTD: 11, 14, 17
-          CXX: g++-7
-          PACKAGES: g++-7
+        # GCC 7:
+        #   CXXSTD: 11
+        #   CXX: g++-7
+        #   PACKAGES: g++-7
         GCC 6:
-          CXXSTD: 11, 14
+          CXXSTD: 11
           CXX: g++-6
           PACKAGES: g++-6
-        GCC 5:
-          CXXSTD: 11
-          CXX: g++-5
-          PACKAGES: g++-5
-        # GCC 4.9:
+        # GCC 5:
         #   CXXSTD: 11
-        #   CXX: g++-4.9
-        #   PACKAGES: g++-4.9
+        #   CXX: g++-5
+        #   PACKAGES: g++-5
         GCC 4.8:
           CXXSTD: 11
           CXX: g++-4.8
           PACKAGES: g++-4.8
+        Clang 12:
+          CXXSTD: 11, 20
+          CXX: clang++-12
+          PACKAGES: clang-12
+          LLVM_REPO: llvm-toolchain-focal-12
+        Clang 11:
+          CXXSTD: 11, 17
+          CXX: clang++-11
+          PACKAGES: clang-11
+          LLVM_REPO: llvm-toolchain-focal-11
         Clang 10:
-          CXXSTD: 11, 14, 17, 20
+          CXXSTD: 11, 14
           CXX: clang++-10
           PACKAGES: clang-10
-          LLVM_REPO: llvm-toolchain-bionic-10
+          LLVM_REPO: llvm-toolchain-focal-10
         Clang 9:
-          CXXSTD: 11, 14, 17, 20
+          CXXSTD: 11
           CXX: clang++-9
           PACKAGES: clang-9
-          LLVM_REPO: llvm-toolchain-bionic-9
+          LLVM_REPO: llvm-toolchain-focal-9
         Clang 8:
-          CXXSTD: 11, 14, 17
+          CXXSTD: 11
           CXX: clang++-8
           PACKAGES: clang-8
-          LLVM_REPO: llvm-toolchain-bionic-8
+          LLVM_REPO: llvm-toolchain-focal-8
         Clang 7:
-          CXXSTD: 11, 14
+          CXXSTD: 11
           CXX: clang++-7
           PACKAGES: clang-7
-          LLVM_REPO: llvm-toolchain-bionic-7
-        Clang 6:
-          CXXSTD: 11, 14
-          CXX: clang++-6.0
-          PACKAGES: clang-6.0
-          LLVM_REPO: llvm-toolchain-bionic-6.0
-        Clang 5:
-          CXXSTD: 11, 14
-          PACKAGES: clang-5.0
-          CXX: clang++-5.0
-          LLVM_REPO: llvm-toolchain-bionic-5.0
+          LLVM_REPO: llvm-toolchain-focal-7
+        # Clang 6:
+        #   CXXSTD: 11
+        #   CXX: clang++-6.0
+        #   PACKAGES: clang-6.0
+        #   LLVM_REPO: llvm-toolchain-focal-6.0
+        # Clang 5:
+        #   CXXSTD: 11
+        #   PACKAGES: clang-5.0
+        #   CXX: clang++-5.0
+        #   LLVM_REPO: llvm-toolchain-focal-5.0
     steps:
     - script: |
         set -e
@@ -143,20 +161,14 @@ stages:
   - job: 'Windows'
     strategy:
       matrix:
-        #Disabled until MSVC 16.4 is released
-        #(see https://developercommunity.visualstudio.com/content/problem/726778/this-snippet-compiles-totally-fine-on-godbolt-msvc.html?childToView=744771#comment-744771)
-        VS 2019 C++20 Strict:
+        VS 2022 C++20:
+          TOOLSET: msvc-14.3
+          CXXSTD: 20
+          VM_IMAGE: 'windows-2022'
+        VS 2019 C++20:
           TOOLSET: msvc-14.2
           CXXSTD: 20
           VM_IMAGE: 'windows-2019'
-        VS 2017 C++17:
-          TOOLSET: msvc-14.1
-          CXXSTD: 17
-          VM_IMAGE: 'vs2017-win2016'
-        VS 2017 C++14:
-          TOOLSET: msvc-14.1
-          CXXSTD: 14 # default
-          VM_IMAGE: 'vs2017-win2016'
     pool:
       vmImage: $(VM_IMAGE)
     steps:
@@ -184,19 +196,21 @@ stages:
 
   - job: 'macOS'
     pool:
-      vmImage: 'macOS-10.14'
+      vmImage: 'macOS-latest'
     strategy:
       matrix:
-        Xcode 10.1:
+        Xcode 11.7:
           TOOLSET: clang
-          CXXSTD: 14, 17
-          XCODE_APP: /Applications/Xcode_10.1.app
-        Xcode 10.0:
-          CXXSTD: 14, 17
-          XCODE_APP: /Applications/Xcode_10.app
-        Xcode 9.4.1:
-          CXXSTD: 11, 14, 17
-          XCODE_APP: /Applications/Xcode_9.4.1.app
+          CXXSTD: 11, 17
+          XCODE_APP: /Applications/Xcode_11.7.app
+        Xcode 12.4:
+          TOOLSET: clang
+          CXXSTD: 11, 14
+          XCODE_APP: /Applications/Xcode_12.4.app
+        Xcode 10.3:
+          TOOLSET: clang
+          CXXSTD: 11
+          XCODE_APP: /Applications/Xcode_10.3.app
     steps:
     - script: |
         set -e
