@@ -184,6 +184,26 @@ jobs:
        cmake --build . -j 2
        ctest --output-on-failure .
 
+  windows-msvc-22:
+    name: 'Windows (Visual Studio 2022, Release, windows-2022)'
+    runs-on: windows-2022
+    steps:
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+
+    - name: 'Build'
+      run: |
+       mkdir build
+       cd build
+       cmake --version
+       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+       cmake --build . --config Release -j 2
+
+    - name: 'Test'
+      run: |
+       cd build
+       ctest --output-on-failure -C Release
+
   windows-msvc-19:
     name: 'Windows (Visual Studio 2019, Release, windows-2019)'
     runs-on: windows-2019
@@ -197,7 +217,7 @@ jobs:
        cd build
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release
+       cmake --build . --config Release -j 2
 
     - name: 'Test'
       run: |
@@ -217,7 +237,7 @@ jobs:
        cd build
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release
+       cmake --build . --config Release -j 2
 
     - name: 'Test'
       run: |
