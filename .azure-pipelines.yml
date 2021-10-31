@@ -48,17 +48,17 @@ stages:
           CXX: g++-5
           PACKAGES: g++-5
         Clang 8:
-          CXXSTD: 11, 14, 17, 20
+          CXXSTD: 11, 14, 17
           CXX: clang++-8
           PACKAGES: clang-8
           LLVM_REPO: llvm-toolchain-xenial-8
         Clang 7:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 14, 17
           CXX: clang++-7
           PACKAGES: clang-7
           LLVM_REPO: llvm-toolchain-xenial-7
         Clang 6:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 14, 17
           CXX: clang++-6.0
           PACKAGES: clang-6.0
           LLVM_REPO: llvm-toolchain-xenial-6.0
