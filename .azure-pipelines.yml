@@ -199,18 +199,18 @@ stages:
       vmImage: 'macOS-latest'
     strategy:
       matrix:
+        Xcode 12.4:
+          TOOLSET: clang
+          CXXSTD: 11, 14, 20
+          XCODE_APP: /Applications/Xcode_12.4.app
         Xcode 11.7:
           TOOLSET: clang
           CXXSTD: 11, 17
           XCODE_APP: /Applications/Xcode_11.7.app
-        Xcode 12.4:
-          TOOLSET: clang
-          CXXSTD: 11, 14
-          XCODE_APP: /Applications/Xcode_12.4.app
-        Xcode 10.3:
+        Xcode 10.2.1:
           TOOLSET: clang
           CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_10.3.app
+          XCODE_APP: /Applications/Xcode_10.2.1.app
     steps:
     - script: |
         set -e
