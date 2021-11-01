@@ -163,6 +163,10 @@ jobs:
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
        cmake --build . -j 2
+
+    - name: 'Test'
+      run: |
+       cd build
        ctest --output-on-failure .
 
   windows-mingw-release:
@@ -188,6 +192,10 @@ jobs:
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=Release -G"MSYS Makefiles" ..
        cmake --build . -j 2
+
+    - name: 'Test'
+      run: |
+       cd build
        ctest --output-on-failure .
 
   windows-msvc-22:
