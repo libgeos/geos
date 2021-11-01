@@ -17,9 +17,9 @@ More information is available the [project homepage](https://trac.osgeo.org/geos
 | GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch=3.8)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:3.8) |
 | Azure | [![Build Status](https://dev.azure.com/libgeos/geos/_apis/build/status/libgeos.geos?branchName=3.8)](https://dev.azure.com/libgeos/geos/_build/latest?definitionId=2&branchName=3.8) |
 | GitLab | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.8/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/3.8) |
-| Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3./) |
-| Winnie | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3./badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3./) |
-| Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.)](https://dronie.osgeo.org/geos/geos?branch=3.) |
+| Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.8)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.8/) |
+| Winnie | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.8/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.8/) |
+| Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.8)](https://dronie.osgeo.org/geos/geos?branch=3.8) |
 
 
 ## Build/install
