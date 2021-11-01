@@ -3,16 +3,20 @@ GEOS -- Geometry Engine, Open Source
 
 Project homepage: http://geos.osgeo.org/
 
-## Build status
+## Build Status
 
-| branch / CI | Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor | Bessie | Bessie32 |
-|:---         |:---    |:---    |:---    |:---       |:---       |:---      |:---    |:---    |
-| 3.7      | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_3.7/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_3.7/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?ref=refs/heads/3.7)](https://drone.osgeo.org/geos/geos?branch=3.7) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.7)](https://travis-ci.com/libgeos/geos?branch=3.7) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.7/build.svg)](https://gitlab.com/geos/libgeos/commits/3.7) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/3.7?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/3.7) | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&BRANCH=3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&BRANCH=3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) ||
-| 3.7     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.7/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?ref=refs/heads/3.7)](https://dronie.osgeo.org/geos/geos?branch=3.7) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.7)](https://travis-ci.com/libgeos/geos?branch=3.7) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.7/build.svg)](https://gitlab.com/geos/libgeos/commits/3.7) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/3.7?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/3.7) |
+| CI  | Status |
+|:--- |:------ |
+| GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch=3.7)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:3.7) |
+| Azure | [![Build Status](https://dev.azure.com/libgeos/geos/_apis/build/status/libgeos.geos?branchName=3.7)](https://dev.azure.com/libgeos/geos/_build/latest?definitionId=2&branchName=3.7) |
+| GitLab | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.7/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/3.7) |
+| Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.7/) |
+| Winnie | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) |
+| Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.7)](https://dronie.osgeo.org/geos/geos?branch=3.7) |
 
-More on: https://trac.osgeo.org/geos#BuildandInstall
+More on: https://libgeos.org/usage
 
-## Building, testing, installing
+## Building, Testing, Installing
 
 ### Prerequisites
 
