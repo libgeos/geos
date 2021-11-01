@@ -2,6 +2,7 @@
 #
 # Paul Ramsey <pramsey at cleverelephant dot ca>
 # Based on AZP configuration by Mateusz Loskot <mateusz at loskot dot net>
+#
 
 name: CI
 on: [push, pull_request]
@@ -24,14 +25,14 @@ jobs:
           packages: 'g++ automake doxygen git2cl',
           os: ubuntu-18.04
         }
-        - {
-          compiler: g++,
-          build: autotools,
-          cxxstd: 11,
-          arch: 32,
-          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib doxygen automake git2cl',
-          os: ubuntu-18.04
-        }
+#        - {
+#          compiler: g++,
+#          build: autotools,
+#          cxxstd: 11,
+#          arch: 32,
+#          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib doxygen automake git2cl',
+#          os: ubuntu-18.04
+#        }
 
 
     runs-on: ${{ matrix.ci.os }}

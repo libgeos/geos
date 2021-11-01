@@ -136,7 +136,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1,
                                  GEOSGeom_getCoordSeq_r(handle, gtmp));
 			shell = GEOSGeom_createLinearRing_r(handle, cs);
 			ngeoms = GEOSGetNumInteriorRings_r(handle, g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN_r(handle, g1, i);
@@ -155,7 +155,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1,
 		case GEOS_MULTIPOLYGON:
 		case GEOS_GEOMETRYCOLLECTION:
 			ngeoms = GEOSGetNumGeometries_r(handle, g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetGeometryN_r(handle, g1, i);
@@ -411,7 +411,7 @@ void *threadfunc1( void *arg )
     GEOSContextHandle_t handle = NULL;
 
     handle = initGEOS_r( notice1, log_and_exit1 );
-    printf("GEOS version %s\n", GEOSversion(handle));
+    printf("GEOS version %s\n", GEOSversion());
     putc('.', stderr); fflush(stderr);
     do_all((char*)arg, handle);
     putc('+', stderr); fflush(stderr);
@@ -425,7 +425,7 @@ void *threadfunc2( void *arg )
     GEOSContextHandle_t handle = NULL;
 
     handle = initGEOS_r( notice2, log_and_exit2 );
-    printf("GEOS version %s\n", GEOSversion(handle));
+    printf("GEOS version %s\n", GEOSversion());
     putc('.', stderr); fflush(stderr);
     do_all((char *)arg, handle);
     putc('+', stderr); fflush(stderr);

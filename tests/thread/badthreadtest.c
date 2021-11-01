@@ -143,7 +143,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1)
 			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(gtmp));
 			shell = GEOSGeom_createLinearRing(cs);
 			ngeoms = GEOSGetNumInteriorRings(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN(g1, i);
@@ -159,7 +159,7 @@ fineGrainedReconstructionTest(const GEOSGeometry* g1)
 		case GEOS_MULTIPOLYGON:
 		case GEOS_GEOMETRYCOLLECTION:
 			ngeoms = GEOSGetNumGeometries(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
+			geoms = (GEOSGeometry**)malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetGeometryN(g1, i);
