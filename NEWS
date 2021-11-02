@@ -1,11 +1,12 @@
 Changes in 3.10.1
-2021-xx-xx
+2021-11-2
 
 - Fixes/Improvements:
   - Fix mistake in constants used to select WKB flavor in C API (GH489, Paul Ramsey)
   - Fix crash when reducing precision on a LinearRing (#1135, Paul Ramsey)
   - Fix GeoJSON crash on invalid input (GH498, Even Rouault)
   - Use std::sqrt exclusively for Solaris build (Paul Ramsey)
+  - Fix mistaken version numbers in some parts of 3.10.0 (Paul Ramsey)
 
 
 Changes in 3.10.0
