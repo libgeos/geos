@@ -27,6 +27,12 @@
 
 6. Build the distribution package.
 
+   $ BRANCH_NAME=main
+   $ git clone --depth 1 --branch $BRANCH_NAME \
+         https://git.osgeo.org/gitea/geos/geos.git geos-$BRANCH_NAME
+   $ cd geos-$BRANCH_NAME
+   $ mkdir _build && cd _build
+   $ cmake ..
    $ cmake --build . --target dist
 
 7. Verify that you can un-pack and build the tarball.
