@@ -416,6 +416,10 @@ if(NOT _is_multi_config_generator)
     "/debian/"
     "/php/"
     "/.*build-.*/"
+    "cmake_install\\\\.cmake"
+    "/include/geos/version\\\\.h"
+    "/tools/geos-config"
+    "/bin/"
     ${PROJECT_BINARY_DIR}
     )
 
