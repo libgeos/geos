@@ -417,9 +417,9 @@ if(NOT _is_multi_config_generator)
     "/php/"
     "/.*build-.*/"
     "cmake_install\\\\.cmake"
-    "/include/geos/version\\\\.h"
-    "/tools/geos-config"
-    "/bin/"
+    "/include/geos/version\\\\.h\$"
+    "/tools/geos-config\$"
+    "/tools/geos\\\\.pc\$"
     ${PROJECT_BINARY_DIR}
     )
 
