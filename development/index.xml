@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Development on GEOS</title>
+    <link>http://libgeos.org/development/</link>
+    <description>Recent content in Development on GEOS</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="http://libgeos.org/development/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Project Steering Committee</title>
+      <link>http://libgeos.org/development/psc/</link>
+      <pubDate>Wed, 27 Oct 2021 00:00:00 -0700</pubDate>
+      
+      <guid>http://libgeos.org/development/psc/</guid>
+      <description>The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of OSGeo. Major project decisions are made via a Request for Comments (RFC) process, where proposals are first documented and then voted on by the steering committee.
+The current PSC will refresh itself using the mechanisms in RFC-1.
+This PSC list is valid as of Oct 23, 2019.</description>
+    </item>
+    
+    <item>
+      <title>CI Status</title>
+      <link>http://libgeos.org/development/ci_status/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
+      
+      <guid>http://libgeos.org/development/ci_status/</guid>
+      <description>Branch Debbie Winnie Dronie GitLab Bessie Bessie32 GitHub     main          3.10          3.9          3.8          3.7           Runners  Debbie - Debian 8.</description>
+    </item>
+    
+  </channel>
+</rss>

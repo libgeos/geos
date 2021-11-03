@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Usage on GEOS</title>
+    <link>http://libgeos.org/usage/</link>
+    <description>Recent content in Usage on GEOS</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="http://libgeos.org/usage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reference Docs</title>
+      <link>http://libgeos.org/usage/doxygen/</link>
+      <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
+      
+      <guid>http://libgeos.org/usage/doxygen/</guid>
+      <description>The Doxygen documentation is the most up-to-date reference for the C and C++ API of GEOS.
+ C API C++ API  </description>
+    </item>
+    
+    <item>
+      <title>C API Programming</title>
+      <link>http://libgeos.org/usage/c_api/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
+      
+      <guid>http://libgeos.org/usage/c_api/</guid>
+      <description>Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers the a number of benefits:
+ Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; API Programming</title>
+      <link>http://libgeos.org/usage/cpp_api/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
+      
+      <guid>http://libgeos.org/usage/cpp_api/</guid>
+      <description>The GEOS C++ API is included in the collection of header files installed in include/geos which is a very large collection. Effectively it includes both &amp;ldquo;public&amp;rdquo; headers that a user might be expected to make use of and &amp;ldquo;private&amp;rdquo; headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.
+Using the C++ API means giving up:</description>
+    </item>
+    
+    <item>
+      <title>Download Source</title>
+      <link>http://libgeos.org/usage/download/</link>
+      <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
+      
+      <guid>http://libgeos.org/usage/download/</guid>
+      <description>Release Date Release Download Link     2021/10/21 3.10.0 geos-3.10.0.tar.bz2   2020/12/10 3.9.1 geos-3.9.1.tar.bz2   2020/03/10 3.8.1 geos-3.8.1.tar.bz2   2019/10/04 3.7.3 geos-3.7.3.tar.bz2   2020/12/11 3.6.5 geos-3.6.5.tar.bz2   2019/10/04 3.5.2 geos-3.5.2.tar.bz2    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++. Doxygen to build the API documentation.  Build Builds with CMake are done &amp;ldquo;outside the tree&amp;rdquo; either in a build directory in the source tree or next to the tree.</description>
+    </item>
+    
+    <item>
+      <title>Install Packages</title>
+      <link>http://libgeos.org/usage/install/</link>
+      <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
+      
+      <guid>http://libgeos.org/usage/install/</guid>
+      <description>Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.
+# Add the Ubuntu GIS PPA sudo apt-get install python-software-properties sudo add-apt-repository ppa:ubuntugis/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian respositories.</description>
+    </item>
+    
+  </channel>
+</rss>

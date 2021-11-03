@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geometry Formats on GEOS</title>
+    <link>http://libgeos.org/specifications/</link>
+    <description>Recent content in Geometry Formats on GEOS</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="http://libgeos.org/specifications/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GeoJSON</title>
+      <link>http://libgeos.org/specifications/geojson/</link>
+      <pubDate>Mon, 04 Oct 2021 14:18:42 -0700</pubDate>
+      
+      <guid>http://libgeos.org/specifications/geojson/</guid>
+      <description>content</description>
+    </item>
+    
+    <item>
+      <title>Well-Known Binary (WKB)</title>
+      <link>http://libgeos.org/specifications/wkb/</link>
+      <pubDate>Mon, 04 Oct 2021 14:18:42 -0700</pubDate>
+      
+      <guid>http://libgeos.org/specifications/wkb/</guid>
+      <description>content</description>
+    </item>
+    
+    <item>
+      <title>Well-Known Text (WKT)</title>
+      <link>http://libgeos.org/specifications/wkt/</link>
+      <pubDate>Mon, 04 Oct 2021 14:18:42 -0700</pubDate>
+      
+      <guid>http://libgeos.org/specifications/wkt/</guid>
+      <description>content</description>
+    </item>
+    
+  </channel>
+</rss>

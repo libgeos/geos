@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>News on GEOS</title>
+    <link>http://libgeos.org/posts/</link>
+    <description>Recent content in News on GEOS</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.10.0</title>
+      <link>http://libgeos.org/posts/2021-10-01-geos-3-10-released/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://libgeos.org/posts/2021-10-01-geos-3-10-released/</guid>
+      <description>The 3.10 release of GEOS is now available to download.
+  This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):
+ CAPI additions for testing whether geometries are within a distance of each other, GEOSDistanceWithin and GEOSPreparedDistanceWithin CAPI addition for adding extra vertices to a geometry, GEOSDensify CAPI additions for high-performance construction/reading of coordinate sequences from/to memory buffers, GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer, GEOSCoordSeq_copyToArrays, and GEOSCoordSeq_copyToBuffer CAPI addition for new validity enforement algorithm, GEOSMakeValidWithParams CAPI addition for ISO WKB output, GEOSWKBWriter_getFlavor and GEOSWKBWriter_setFlavor CAPI addition to create a constrained delaunay of polygonal input, GEOSConstrainedDelaunayTriangulation    There is a new utility for running arbitrary GEOS commands against input files, geosop.</description>
+    </item>
+    
+  </channel>
+</rss>
