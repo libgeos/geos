@@ -12,7 +12,7 @@ weight: 10
 | RFC 10  | Move Project to GitHub          |
 | Author  | Paul Ramsey                     |
 | Contact | pramsey@cleverelephant.ca       |
-| Status  | Proposed                        |
+| Status  | Approved (2021-11-02)           |
 
 GitHub has been the largest source of 3rd party code contribution via pull-requests for some time now.
 
