@@ -3,7 +3,7 @@ Changes in 3.10.2
 2021-xx-xx
 
 - Fixes/Improvements:
-
+  - Fix crash in GeoJSONWriter in case of empty points (#1139, Paul Ramsey)
 
 
 Changes in 3.10.1
