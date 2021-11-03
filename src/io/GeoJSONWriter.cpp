@@ -205,7 +205,12 @@ void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, geos_nlohmann
 void GeoJSONWriter::encodePoint(const geom::Point* point, geos_nlohmann::ordered_json& j)
 {
     j["type"] = "Point";
-    j["coordinates"] = convertCoordinate(point->getCoordinate());
+    if (!point->isEmpty()) {
+        j["coordinates"] = convertCoordinate(point->getCoordinate());
+    }
+    else {
+        j["coordinates"] = j.array();
+    }
 }
 
 void GeoJSONWriter::encodeLineString(const geom::LineString* line, geos_nlohmann::ordered_json& j)
