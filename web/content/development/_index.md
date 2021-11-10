@@ -4,11 +4,21 @@ date: 2021-10-04T14:21:00-07:00
 draft: false
 ---
 
+## Developer Resources
+
+* Code repository: https://github.com/libgeos/geos
+* Developer mailing list: https://lists.osgeo.org/mailman/listinfo/geos-devel
+* Developer chat channel:
+  * Matrix: https://matrix.to/#/#geos:osgeo.org
+  * Slack: https://osgeo.slack.com/messages/C07RKJ06B/
+
+
 ## Relationship to JTS
 
 GEOS started as a direct port to C++ of the [JTS Topology Suite](http://tsusiatsoftware.net/jts/main.html) (JTS), and remains tightly bound to that project. Most core algorithms have been prototyped in JTS and ported to GEOS when complete.
 
 The projects attempt to share testing data, and to ascertain when failures are caused by differences in implementation (GEOS fails and JTS does not) and when they are caused by algorithm (both libraries fail).
+
 
 ## Governance
 
