@@ -21,4 +21,4 @@ GitLab-CI:
 This file is here to play nicely with modern code repositories.
 Actual readme is [here](README).
 
-Project homepage: http://geos.osgeo.org/
+Project homepage: https://libgeos.org/

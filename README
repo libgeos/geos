@@ -101,5 +101,5 @@ DOCUMENTATION
 
   cd doc; make doxygen-html
 
-  http://trac.osgeo.org/geos
+  https://libgeos.org/doxygen
 
