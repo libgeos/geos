@@ -1,7 +1,7 @@
 GEOS -- Geometry Engine, Open Source
 ====================================
 
-Project homepage: http://geos.osgeo.org/
+Project homepage: https://libgeos.org/
 
 ## Build Status
 
@@ -14,7 +14,6 @@ Project homepage: http://geos.osgeo.org/
 | Winnie | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) |
 | Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.7)](https://dronie.osgeo.org/geos/geos?branch=3.7) |
 
-More on: https://libgeos.org/usage
 
 ## Building, Testing, Installing
 
