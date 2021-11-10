@@ -13,7 +13,7 @@ enableGitInfo = false
   geekdocLogo = "web-logo.png"
 
   # turn these on when we move to the gh/main branch
-  #geekdocRepo = "https://github.com/libgeos/geos"
-  #geekdocEditPath = "edit/main/web/content"
+  geekdocRepo = "https://github.com/libgeos/geos"
+  geekdocEditPath = "edit/main/web/content"
 
   geekdocBackToTop = true
