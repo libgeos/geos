@@ -1,16 +1,16 @@
 GEOS -- Geometry Engine, Open Source
 ====================================
 
-GEOS is a C++11 library for performing operations on two-dimensional vector
+GEOS is a C++ library for performing operations on two-dimensional vector
 geometries. It is primarily a port of the [JTS Topology
 Suite](https://github.com/locationtech/jts) Java library.  It provides many of
 the algorithms used by [PostGIS](http://www.postgis.net/), the
 [Shapely](https://pypi.org/project/Shapely/) package for Python, the
 [sf](https://github.com/r-spatial/sf) package for R, and others.
 
-More information is available the [project homepage](https://trac.osgeo.org/geos).
+More information is available the [project homepage](https://libgeos.org).
 
-The official Git repository is at [OSGEO Gitea](https://git.osgeo.org/gitea/geos).
+The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 
 ## Build status
 
