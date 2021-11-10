@@ -209,7 +209,7 @@ The GEOS library has never promised any stability of the C++ API and this fact h
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>http://libgeos.org/usage/download/</guid>
-      <description>Release Date Release Download Link     2021/10/21 3.10.0 geos-3.10.0.tar.bz2   2020/12/10 3.9.1 geos-3.9.1.tar.bz2   2020/03/10 3.8.1 geos-3.8.1.tar.bz2   2019/10/04 3.7.3 geos-3.7.3.tar.bz2   2020/12/11 3.6.5 geos-3.6.5.tar.bz2   2019/10/04 3.5.2 geos-3.5.2.tar.bz2    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++. Doxygen to build the API documentation.  Build Builds with CMake are done &amp;ldquo;outside the tree&amp;rdquo; either in a build directory in the source tree or next to the tree.</description>
+      <description>Release Date Release Download Link     2021/11/02 3.10.1 geos-3.10.1.tar.bz2   2021/11/01 3.9.2 geos-3.9.2.tar.bz2   2021/04/10 3.8.2 geos-3.8.2.tar.bz2   2019/10/04 3.7.3 geos-3.7.3.tar.bz2   2020/12/11 3.6.5 geos-3.6.5.tar.bz2   2019/10/04 3.5.2 geos-3.5.2.tar.bz2    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++. Doxygen to build the API documentation.  Build Builds with CMake are done &amp;ldquo;outside the tree&amp;rdquo; either in a build directory in the source tree or next to the tree.</description>
     </item>
     
     <item>
