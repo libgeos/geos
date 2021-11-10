@@ -8,7 +8,7 @@ the algorithms used by [PostGIS](http://www.postgis.net/), the
 [Shapely](https://pypi.org/project/Shapely/) package for Python, the
 [sf](https://github.com/r-spatial/sf) package for R, and others.
 
-More information is available the [project homepage](https://trac.osgeo.org/geos).
+More information is available the [project homepage](https://libgeos.org/).
 
 ## Build status
 
@@ -79,7 +79,7 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
     #include <geos.h>
 
-Documentation for the C++ API is available at https://geos.osgeo.org/doxygen/,
+Documentation for the C++ API is available at https://libgeos.org/doxygen/,
 and basic C++ usage examples can be found in `doc/example.cpp`.
 
 
