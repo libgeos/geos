@@ -10,3 +10,4 @@ The [Doxygen](../../doxygen/) documentation is the most up-to-date reference for
 * [C API](../../doxygen/geos__c_8h.html)
 * [C++ API](../../doxygen/cpp_iface.html)
 
+For a quick start, see the [C API tutorial]({{< ref "c_api" >}}) or the [C++ API tutorial]({{< ref "cpp_api" >}}). There are also [working examples](https://github.com/libgeos/geos/tree/main/examples) available in the code repository.
