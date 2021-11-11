@@ -14,8 +14,8 @@
       
       <guid>http://libgeos.org/development/psc/</guid>
       <description>The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of OSGeo. Major project decisions are made via a Request for Comments (RFC) process, where proposals are first documented and then voted on by the steering committee.
-The current PSC will refresh itself using the mechanisms in RFC-1.
-This PSC list is valid as of Oct 23, 2019.</description>
+This PSC list is valid as of November 10, 2021.
+ Sandro Santilli (chair) Martin Davis Howard Butler Regina Obe Dale Lutz Paul Ramsey Dan Baston  The PSC approves major changes and RFC documents.</description>
     </item>
     
     <item>
@@ -24,7 +24,7 @@ This PSC list is valid as of Oct 23, 2019.</description>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>http://libgeos.org/development/ci_status/</guid>
-      <description>Branch GitHub Debbie Winnie Dronie GitLab Bessie Bessie32     main          3.10          3.9          3.8          3.7           Runners  Debbie - Debian 8.</description>
+      <description>CI main 3.10 3.9 3.8 3.7     GitHub        GitLab        Azure        Debbie        Winnie        Dronie        Bessie        Bessie32         Runners  GitHub - Ubuntu various, Windows various, CMake GitLab - Debian 8.</description>
     </item>
     
   </channel>
