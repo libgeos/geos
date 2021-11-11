@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Development on GEOS</title>
-    <link>http://libgeos.org/development/</link>
+    <link>https://libgeos.org/development/</link>
     <description>Recent content in Development on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="http://libgeos.org/development/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="https://libgeos.org/development/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Project Steering Committee</title>
-      <link>http://libgeos.org/development/psc/</link>
+      <link>https://libgeos.org/development/psc/</link>
       <pubDate>Wed, 27 Oct 2021 00:00:00 -0700</pubDate>
       
-      <guid>http://libgeos.org/development/psc/</guid>
+      <guid>https://libgeos.org/development/psc/</guid>
       <description>The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of OSGeo. Major project decisions are made via a Request for Comments (RFC) process, where proposals are first documented and then voted on by the steering committee.
 This PSC list is valid as of November 10, 2021.
  Sandro Santilli (chair) Martin Davis Howard Butler Regina Obe Dale Lutz Paul Ramsey Dan Baston  The PSC approves major changes and RFC documents.</description>
@@ -20,10 +20,10 @@ This PSC list is valid as of November 10, 2021.
     
     <item>
       <title>CI Status</title>
-      <link>http://libgeos.org/development/ci_status/</link>
+      <link>https://libgeos.org/development/ci_status/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>http://libgeos.org/development/ci_status/</guid>
+      <guid>https://libgeos.org/development/ci_status/</guid>
       <description>CI main 3.10 3.9 3.8 3.7     GitHub        GitLab        Azure        Debbie        Winnie        Dronie        Bessie        Bessie32         Runners  GitHub - Ubuntu various, Windows various, CMake GitLab - Debian 8.</description>
     </item>
     

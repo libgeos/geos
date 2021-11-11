@@ -48,7 +48,7 @@
             <svg class="icon arrow-back"><use xlink:href="#arrow_back"></use></svg>
         </label>
         
-        <a class="gdoc-header__link" href="http://libgeos.org/">
+        <a class="gdoc-header__link" href="https://libgeos.org/">
             <span class="gdoc-brand flex align-center">
                 <img class="gdoc-brand__img" src="/web-logo.png" alt="" width=38 height=38>
                 GEOS
@@ -640,7 +640,7 @@
 <p>This document proposes to modify the Coordinate Sequence API to improve performance and adaptiveness.</p>
 <p>These improvements are (likely to be) breaking changes to the C++ API.</p>
 <p>These may require extensions to the C API to be externally available, but should not result in breaking the current C API.</p>
-<div class="gdoc-page__anchorwrap"><h2 id="background">Background<a data-clipboard-text="http://libgeos.org/development/rfcs/rfc08/#background" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Background" href="#background"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h2 id="background">Background<a data-clipboard-text="https://libgeos.org/development/rfcs/rfc08/#background" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Background" href="#background"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The Coordinate Sequence API as it stands imposes a large cost on clients.</p>
 <ul>
 <li>It requires copying coordinate list structures one or more times</li>
@@ -658,7 +658,7 @@
 <li>Shapely - there are several allocations required to marshall from NumPY to GEOS</li>
 <li>PostGIS - hopefully this will allow calling GEOS without copying out of LWGEOM structure</li>
 </ul>
-<div class="gdoc-page__anchorwrap"><h2 id="goals">Goals<a data-clipboard-text="http://libgeos.org/development/rfcs/rfc08/#goals" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Goals" href="#goals"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h2 id="goals">Goals<a data-clipboard-text="https://libgeos.org/development/rfcs/rfc08/#goals" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Goals" href="#goals"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <ul>
 <li>
 <p>Allow using external coordinate list structures with no copying (except as needed by GEOS algorithms, e.g. removing repeated points)</p>
@@ -679,7 +679,7 @@
 <p>Optimized storage of Point and Multi Point data</p>
 </li>
 </ul>
-<div class="gdoc-page__anchorwrap"><h2 id="ideas">Ideas<a data-clipboard-text="http://libgeos.org/development/rfcs/rfc08/#ideas" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ideas" href="#ideas"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h2 id="ideas">Ideas<a data-clipboard-text="https://libgeos.org/development/rfcs/rfc08/#ideas" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ideas" href="#ideas"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p><strong>Memory-based Coordinate Sequence implementation</strong></p>
 <ul>
 <li>Class which contains pointer to memory block of coordinates, length, dimension</li>
@@ -701,7 +701,7 @@
 <ul>
 <li>C++ <a href="https://www.modernescpp.com/index.php/c-17-avoid-copying-with-std-string-view">string_view</a></li>
 </ul>
-<div class="gdoc-page__anchorwrap"><h2 id="tasks">Tasks<a data-clipboard-text="http://libgeos.org/development/rfcs/rfc08/#tasks" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Tasks" href="#tasks"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h2 id="tasks">Tasks<a data-clipboard-text="https://libgeos.org/development/rfcs/rfc08/#tasks" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Tasks" href="#tasks"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <ol>
 <li>Remove extraneous operations from CoordinateSequence (e.g. removeRepeatedPoints)</li>
 <li>Create a MemoryBasedCoordinateSequence (better name?) which allows access to external blocks of memory</li>

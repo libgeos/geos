@@ -48,7 +48,7 @@
             <svg class="icon arrow-back"><use xlink:href="#arrow_back"></use></svg>
         </label>
         
-        <a class="gdoc-header__link" href="http://libgeos.org/">
+        <a class="gdoc-header__link" href="https://libgeos.org/">
             <span class="gdoc-brand flex align-center">
                 <img class="gdoc-brand__img" src="/web-logo.png" alt="" width=38 height=38>
                 GEOS
@@ -604,7 +604,7 @@
     
 
 
-<div class="gdoc-page__anchorwrap"><h3 id="red-hat">Red Hat<a data-clipboard-text="http://libgeos.org/usage/install/#red-hat" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Red Hat" href="#red-hat"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<div class="gdoc-page__anchorwrap"><h3 id="red-hat">Red Hat<a data-clipboard-text="https://libgeos.org/usage/install/#red-hat" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Red Hat" href="#red-hat"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Add the EPEL repository</span>
 yum -y install epel-release
@@ -612,7 +612,7 @@ yum -y install epel-release
 <span class="c1"># Install the GEOS runtime and development packages</span>
 rpm -Uvh geos geos-devel
 
-</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="ubuntu">Ubuntu<a data-clipboard-text="http://libgeos.org/usage/install/#ubuntu" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ubuntu" href="#ubuntu"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="ubuntu">Ubuntu<a data-clipboard-text="https://libgeos.org/usage/install/#ubuntu" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ubuntu" href="#ubuntu"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>The <a href="https://wiki.ubuntu.com/UbuntuGIS">Ubuntu GIS</a> project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Add the Ubuntu GIS PPA</span>
 sudo apt-get install python-software-properties
@@ -620,20 +620,20 @@ sudo add-apt-repository ppa:ubuntugis/ppa
 
 <span class="c1"># Install the packages</span>
 sudo apt-get install geos
-</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="debian">Debian<a data-clipboard-text="http://libgeos.org/usage/install/#debian" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Debian" href="#debian"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="debian">Debian<a data-clipboard-text="https://libgeos.org/usage/install/#debian" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Debian" href="#debian"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>The <a href="https://wiki.debian.org/DebianGis">Debian GIS</a> project maintains <a href="https://tracker.debian.org/pkg/geos">GEOS packages</a> and pushes them into the appropriate Debian respositories.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt-get install geos
-</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="amazon-linux">Amazon Linux<a data-clipboard-text="http://libgeos.org/usage/install/#amazon-linux" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Amazon Linux" href="#amazon-linux"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="amazon-linux">Amazon Linux<a data-clipboard-text="https://libgeos.org/usage/install/#amazon-linux" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Amazon Linux" href="#amazon-linux"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>Amazon Linux is based on RH7, and can read from the EPEL repository. To enable using Amazon tools, use the <code>amazon-linux-extras</code> utility.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo yum install -y amazon-linux-extras
 sudo amazon-linux-extras <span class="nb">enable</span> epel
 sudo yum search geos
 sudo yum install geos geos-devel
-</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="homebrew">Homebrew<a data-clipboard-text="http://libgeos.org/usage/install/#homebrew" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Homebrew" href="#homebrew"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="homebrew">Homebrew<a data-clipboard-text="https://libgeos.org/usage/install/#homebrew" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Homebrew" href="#homebrew"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>For MacOS, GEOS can be installed using the <a href="https://brew.sh/">Homebrew</a> package repository, which downloads source packages and builds them in place using a recipe to ensure all packages integrate with each other nicely.</p>
 <p>First <a href="https://brew.sh/">install Homebrew</a>. Then:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">brew install geos
-</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="macports">Macports<a data-clipboard-text="http://libgeos.org/usage/install/#macports" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Macports" href="#macports"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="macports">Macports<a data-clipboard-text="https://libgeos.org/usage/install/#macports" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Macports" href="#macports"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>For MacOS, GEOS can be installed using the <a href="https://www.macports.org/">MacPorts</a> package repository, which downloads source packages and builds them in place using a recipe to ensure all packages integrate with each other nicely.</p>
 <p>First <a href="https://www.macports.org/install.php">install MacPorts</a>. Then:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">port install geos
