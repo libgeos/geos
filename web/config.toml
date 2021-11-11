@@ -1,4 +1,4 @@
-baseURL = "http://libgeos.org/"
+baseURL = "https://libgeos.org/"
 languageCode = "en-us"
 title = "GEOS"
 theme = "hugo-geekdoc"
