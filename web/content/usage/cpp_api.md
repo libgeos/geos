@@ -7,6 +7,8 @@ weight: 40
 
 The GEOS C++ API is included in the collection of header files installed in `include/geos` which is a **very large collection**. Effectively it includes both "public" headers that a user might be expected to make use of and "private" headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.
 
+You can explore the C++ model via the [Doxygen reference](../../doxygen/cpp_iface.html).
+
 Using the C++ API means giving up:
 
 * Stable API, since headers can be moved, re-named or deleted according to the implementation needs of the library.

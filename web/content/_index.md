@@ -20,9 +20,9 @@ Spatial Model and Functions
 
 ## API Features
 
-* [C API](http://libgeos.github.io/geos/doxygen/geos__c_8h.html) (provides long-term API and ABI stability)
-* [C++ API](doxygen/cpp_iface.html) (will likely change across versions)
-* Thread safety (using the reentrant API)
+* [C API]({{< ref "usage/c_api" >}}) (provides long-term API and ABI stability)
+* [C++ API]({{< ref "usage/cpp_api" >}}) (will likely change across versions)
+* Thread safety (using the [reentrant API]({{<ref "usage/c_api/#reentrantthreadsafe-api" >}}))
 
 ## License
 
