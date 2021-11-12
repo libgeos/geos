@@ -9,7 +9,7 @@ The GEOS project is run by a Project Steering Committee made up of developers an
 
 This PSC list is valid as of November 10, 2021.
 
-* [Sandro Santilli](https://gitlab.com/strk) (chair)
+* [Sandro Santilli](https://strk.kbt.io) (chair)
 * [Martin Davis](https://github.com/drjts)
 * [Howard Butler](https://github.com/hobu)
 * [Regina Obe](https://github.com/robe2)
