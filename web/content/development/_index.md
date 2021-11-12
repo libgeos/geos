@@ -17,7 +17,7 @@ draft: false
 
 Defects should be reported using [GitHub Issues](https://github.com/libgeos/geos/issues).
 
-When submitting bugs caused by particular geometries, you must submit the geometries that cause the failure, preferably in hex-encoded [WKB]({{< ref "../specifications/wkb" >}}), so that we can re-produce the failure cases.
+When submitting bugs caused by particular geometries, you must **submit the geometries that cause the failure**, preferably in hex-encoded [WKB]({{< ref "../specifications/wkb" >}}), so that we can re-produce the failure cases.
 
 
 ## Contributing
@@ -29,7 +29,7 @@ If you have any doubts as to whether your work, or planned work, is not a "small
 
 ## Relationship to JTS
 
-GEOS started as a direct port to C++ of the [JTS Topology Suite](http://tsusiatsoftware.net/jts/main.html) (JTS), and remains tightly bound to that project. Most core algorithms have been prototyped in JTS and ported to GEOS when complete.
+GEOS started as a direct port to C++ of the [JTS Topology Suite](https://github.com/locationtech/jts/) (JTS), and remains tightly bound to that project. Most core algorithms have been prototyped in JTS and ported to GEOS when complete.
 
 The projects attempt to share testing data, and to ascertain when failures are caused by differences in implementation (GEOS fails and JTS does not) and when they are caused by algorithm (both libraries fail).
 
