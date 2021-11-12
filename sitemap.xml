@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://libgeos.org/posts/</loc>
+    <lastmod>2021-11-02T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://libgeos.org/development/rfcs/rfc10/</loc>
     <lastmod>2021-10-29T00:00:00-07:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/posts/</loc>
-    <lastmod>2021-10-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/development/psc/</loc>
     <lastmod>2021-10-27T00:00:00-07:00</lastmod>
@@ -22,6 +22,9 @@
   </url><url>
     <loc>https://libgeos.org/usage/cpp_api/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
+  </url><url>
+    <loc>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</loc>
+    <lastmod>2021-11-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/posts/2021-10-01-geos-3-10-released/</loc>
     <lastmod>2021-10-21T00:00:00+00:00</lastmod>

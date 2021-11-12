@@ -60,6 +60,17 @@ You can explore the C++ model via the Doxygen reference.</description>
     </item>
     
     <item>
+      <title>Version 3.10.1</title>
+      <link>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</link>
+      <pubDate>Tue, 02 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</guid>
+      <description>The 3.10.1 release of GEOS is now available to download.
+  This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.
+ Fixes a mistake in constants used to select WKB flavor in C API Fixes a crash when reducing precision on a LinearRing Fixes GeoJSON crash on invalid input Uses std::sqrt exclusively, to support the Solaris build Fixes mistaken version numbers in some parts of 3.</description>
+    </item>
+    
+    <item>
       <title>Version 3.10.0</title>
       <link>https://libgeos.org/posts/2021-10-01-geos-3-10-released/</link>
       <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
