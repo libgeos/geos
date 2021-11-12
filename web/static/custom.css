@@ -1,0 +1,7 @@
+/* Override defaults */
+
+header.gdoc-header {
+	background-color: #559;
+	color: white;
+        font-weight: bold;
+}
