@@ -34,7 +34,7 @@
       
       <guid>https://libgeos.org/usage/cpp_api/</guid>
       <description>The GEOS C++ API is included in the collection of header files installed in include/geos which is a very large collection. Effectively it includes both &amp;ldquo;public&amp;rdquo; headers that a user might be expected to make use of and &amp;ldquo;private&amp;rdquo; headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.
-Using the C++ API means giving up:</description>
+You can explore the C++ model via the Doxygen reference.</description>
     </item>
     
     <item>
@@ -43,7 +43,7 @@ Using the C++ API means giving up:</description>
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Release Date Release Download Link     2021/11/02 3.10.1 geos-3.10.1.tar.bz2   2021/11/01 3.9.2 geos-3.9.2.tar.bz2   2021/04/10 3.8.2 geos-3.8.2.tar.bz2   2019/10/04 3.7.3 geos-3.7.3.tar.bz2   2020/12/11 3.6.5 geos-3.6.5.tar.bz2   2019/10/04 3.5.2 geos-3.5.2.tar.bz2    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++. Doxygen to build the API documentation.  Build Builds with CMake are done &amp;ldquo;outside the tree&amp;rdquo; either in a build directory in the source tree or next to the tree.</description>
+      <description>Release Date Release Download Link Changes     2021/11/02 3.10.1 geos-3.10.1.tar.bz2 Changes   2021/11/01 3.9.2 geos-3.9.2.tar.bz2 Changes   2021/04/10 3.8.2 geos-3.8.2.tar.bz2 Changes   2019/10/04 3.7.3 geos-3.7.3.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 geos-3.5.2.tar.bz2 Changes    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.</description>
     </item>
     
     <item>
