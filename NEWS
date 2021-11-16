@@ -5,6 +5,7 @@ Changes in 3.10.2
 - Fixes/Improvements:
   - Fix crash in GeoJSONWriter in case of empty points (#1139, Paul Ramsey)
   - Improve BuildArea performance (#1122, Sandro Santilli)
+  - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
 
 
 Changes in 3.10.1
