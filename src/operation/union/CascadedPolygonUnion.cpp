@@ -102,7 +102,10 @@ std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::binaryUnion(const std::vector<const geom::Geometry*> & geoms,
                                   std::size_t start, std::size_t end)
 {
-    if(end - start <= 1) {
+    if(end - start == 0) {
+        return nullptr;
+    }
+    else if(end - start == 1) {
         return unionSafe(geoms[start], nullptr);
     }
     else if(end - start == 2) {

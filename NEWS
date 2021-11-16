@@ -4,6 +4,8 @@ Changes in 3.11.0
 - New things:
 
 - Fixes/Improvements:
+  - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
+
 - Changes:
 
 
