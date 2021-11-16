@@ -156,6 +156,68 @@
   </test>
 </case>
 
+<case>
+  <desc>P - empty point</desc>
+  <a>POINT EMPTY</a>
+  <test>
+    <op name="union" arg1="A">POINT EMPTY</op>
+  </test>
+</case>
 
+<case>
+  <desc>mP - empty multi point</desc>
+  <a>MULTIPOINT EMPTY</a>
+  <test>
+    <op name="union" arg1="A">MULTIPOINT EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>L - empty line</desc>
+  <a>LINESTRING EMPTY</a>
+  <test>
+    <op name="union" arg1="A">LINESTRING EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>mL - empty multi line</desc>
+  <a>MULTILINESTRING EMPTY</a>
+  <test>
+    <op name="union" arg1="A">MULTILINESTRING EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>L - empty linear ring</desc>
+  <a>LINEARRING EMPTY</a>
+  <test>
+    <op name="union" arg1="A">LINEARRING EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>P - empty polygon</desc>
+  <a>POLYGON EMPTY</a>
+  <test>
+    <op name="union" arg1="A">POLYGON EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>mP - empty multi polygon</desc>
+  <a>MULTIPOLYGON EMPTY</a>
+  <test>
+    <op name="union" arg1="A">MULTIPOLYGON EMPTY</op>
+  </test>
+</case>
+
+<case>
+  <desc>GC - empty geometry collection</desc>
+  <a>GEOMETRYCOLLECTION EMPTY</a>
+  <test>
+    <op name="union" arg1="A">GEOMETRYCOLLECTION EMPTY</op>
+  </test>
+</case>
 
 </run>
