@@ -77,8 +77,9 @@ SnapRoundingNoder::snapRound(std::vector<SegmentString*>& inputSegStrings, std::
 void
 SnapRoundingNoder::addIntersectionPixels(std::vector<SegmentString*>& segStrings)
 {
-    SnapRoundingIntersectionAdder intAdder(pm);
-    MCIndexNoder noder;
+    double tolerance = 1.0 / pm->getScale() / INTERSECTION_NEARNESS_FACTOR;
+    SnapRoundingIntersectionAdder intAdder(tolerance);
+    MCIndexNoder noder(nullptr, tolerance);
     noder.setSegmentIntersector(&intAdder);
     noder.computeNodes(&segStrings);
     std::unique_ptr<std::vector<Coordinate>> intPts = intAdder.getIntersections();

@@ -38,15 +38,6 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 
-SnapRoundingIntersectionAdder::SnapRoundingIntersectionAdder(const geom::PrecisionModel* newPm)
-    : SegmentIntersector()
-    , intersections(new std::vector<geom::Coordinate>)
-    // , pm(newPm)
-{
-    double snapGridSize = 1.0 / newPm->getScale();
-    nearnessTol = snapGridSize / NEARNESS_FACTOR;
-}
-
 /*public*/
 void
 SnapRoundingIntersectionAdder::processIntersections(
