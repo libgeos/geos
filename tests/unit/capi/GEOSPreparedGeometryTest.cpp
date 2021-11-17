@@ -405,5 +405,24 @@ void object::test<13>
     ensure_equals(ret, 0);
 }
 
+// Test PreparedTouches with Nan coordinates fails with exception but has a
+// memory leak
+template<>
+template<>
+void object::test<14>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 1 NaN)");
+    geom2_ = GEOSGeomFromWKT("POINT(0 0)");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(nullptr != prepGeom1_);
+    ensure(nullptr != geom2_);
+
+    int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
+    ensure_equals(ret, 1);
+}
+
+
 } // namespace tut
 
