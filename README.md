@@ -24,7 +24,7 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 
 ## Build/Install
 
-See [INSTALL](INSTALL.md) file
+See the [INSTALL](INSTALL.md) file.
 
 ## Client Applications
 
