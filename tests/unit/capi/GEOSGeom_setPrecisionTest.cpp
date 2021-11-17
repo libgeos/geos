@@ -169,5 +169,27 @@ void object::test<10> ()
     ensure_geometry_equals(geom2_, "LINEARRING EMPTY");
 }
 
+// Reduce polygon precision, corner case / Trac #1127
+template<>
+template<>
+void object::test<11> ()
+{
+    // POLYGON((
+    //   100 49.5, (1)
+    //   100 300,  (2)
+    //   320 60,   (3)
+    //   340 49.9, (4)
+    //   360 50.1, (5)
+    //   380 49.5, (6)
+    //   100 49.5  (7)
+    // ))
+    // * points 4 and 5 are close (less than 100.0/100) to segment (6, 7);
+    // * Y coordinates of points 4 and 5 are rounded to different values, 0 and 100 respectively;
+    // * point 4 belongs to monotone chain of size > 1 -- segments (2, 3) and (3, 4)
+    geom1_ = fromWKT("POLYGON((100 49.5, 100 300, 320 60, 340 49.9, 360 50.1, 380 49.5, 100 49.5))");
+    geom2_ = GEOSGeom_setPrecision(geom1_, 100.0, 0);
+    ensure(geom2_ != nullptr); // just check that valid geometry is constructed
+}
+
 } // namespace tut
 
