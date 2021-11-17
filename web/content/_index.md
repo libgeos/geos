@@ -28,3 +28,20 @@ Spatial Model and Functions
 
 GEOS is [open source software](https://opensource.com/resources/what-open-source) available under the terms of [GNU Lesser General Public License](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) (LGPL).
 
+## Citation
+
+To cite GEOS in publications use:
+
+> GEOS contributors (2021). GEOS computational geometry library. Open Source Geospatial Foundation. URL https://libgeos.org/.
+
+A BibTeX entry for LaTeX users is
+```
+@Manual{,
+  title = {{GEOS} coordinate transformation software library},
+  author = {{GEOS contributors}},
+  organization = {Open Source Geospatial Foundation},
+  year = {2021},
+  url = {https://libgeos.org/},
+}
+```
+
