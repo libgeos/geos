@@ -9,22 +9,22 @@ compiler.
 
 GEOS can be built on Unix systems using the CMake build system.
 
-#### Using CMake:
-
 To build `GEOS` using CMake, create a build directory and run the `cmake` command
 from that location:
 
-    mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+```
+mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+```
 
 Setting `CMAKE_BUILD_TYPE` to `Release` is necessary to enable compiler
 optimizations.
 
-Once the `cmake` tool has run, GEOS can be built by 
+Once the `cmake` tool has run, GEOS can be built by:
 
 * running `make` and installed by running `make install`, or
 * running `cmake --build .` and `cmake --build . --target install`
 
-The entire test suite can be run by
+The entire test suite can be run by:
 
 * using `make check`, or
 * using `ctest --output-on-failure .`
@@ -39,11 +39,9 @@ A list of available tests can be obtained using `ctest -N`.
 GEOS can be built with Microsoft Visual C++ by opening the `CMakeLists.txt` in
 the project root using `File > Open > CMake`.
 
-If you prefer the command-line
-
 #### Build with CMake generator for Ninja (fast)
 
-In the Visual Studio 2019 command prompt, `x64 Native Tools Command Prompt for VS 2019` or `x64_x86 Cross Tools Command Prompt for VS 2019`:
+If you prefer the command-line, in the Visual Studio 2019 command prompt, `x64 Native Tools Command Prompt for VS 2019` or `x64_x86 Cross Tools Command Prompt for VS 2019` run:
 
 ```
 cmake -S . -B _build_vs2019_ninja -G Ninja -DCMAKE_BUILD_TYPE=Release
