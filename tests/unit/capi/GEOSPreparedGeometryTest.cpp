@@ -419,8 +419,8 @@ void object::test<14>
     ensure(nullptr != prepGeom1_);
     ensure(nullptr != geom2_);
 
-    int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
-    ensure_equals(ret, 1);
+    int ret = GEOSPreparedTouches(prepGeom1_, geom2_);
+    ensure_equals(ret, 2);
 }
 
 
