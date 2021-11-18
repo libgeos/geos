@@ -405,8 +405,7 @@ void object::test<13>
     ensure_equals(ret, 0);
 }
 
-// Test PreparedTouches with Nan coordinates fails with exception but has a
-// memory leak
+// Verify no memory leak on exception (https://github.com/libgeos/geos/issues/505)
 template<>
 template<>
 void object::test<14>
