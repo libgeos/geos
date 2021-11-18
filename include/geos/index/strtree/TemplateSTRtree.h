@@ -363,7 +363,7 @@ public:
 
         while (number > 1) {
             createParentNodes(begin, number);
-            std::advance(begin, static_cast<NodeListIterator::difference_type>(number)); // parents just added become children in the next round
+            std::advance(begin, static_cast<long>(number)); // parents just added become children in the next round
             number = static_cast<size_t>(std::distance(begin, nodes.end()));
         }
 
@@ -432,13 +432,13 @@ protected:
         // completely sorted. They need to be sorted enough for each node to end up
         // in the right vertical slice, but their relative position within the slice
         // doesn't matter. So we do a partial sort for each slice below instead.
-        auto end = begin + static_cast<NodeListIterator::difference_type>(number);
+        auto end = begin + static_cast<long>(number);
         sortNodesX(begin, end);
 
         auto startOfSlice = begin;
         for (decltype(numSlices) j = 0; j < numSlices; j++) {
             // end iterator is being invalidated at each iteration
-            end = begin + static_cast<NodeListIterator::difference_type>(number);
+            end = begin + static_cast<long>(number);
             auto nodesRemaining = static_cast<size_t>(std::distance(startOfSlice, end));
             auto nodesInSlice = std::min(nodesRemaining, nodesPerSlice);
             auto endOfSlice = std::next(startOfSlice, static_cast<long>(nodesInSlice));
