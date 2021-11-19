@@ -27,7 +27,7 @@ draft: false
 * **Debbie** - Debian sid (bullseye), GNU/Linux 64bit, GCC Debian 10.2.1, cmake (3.18.4) >= 3.9, autotools < 3.8
 * **Winnie** - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake (3.21.3)
 * **Dronie** - Alpine Linux 3.14 (alpine.latest), 64bit, GCC 10.3.1, CMake (3.20.3) ,  automake < 3.10
-* **Bessie** - FreeBSD 12.2, 64-bit clang 6.0, 64bit gcc, CMake (3.11) >=3.8, autotools < 3.8
-* **Bessie32** - FreeBSD 12.2, 32-bit clang 6.0, 64bit gcc, CMake (3.11) >=3.8, autotools < 3.8
+* **Bessie** - FreeBSD 12.2, 64-bit clang 10.0.1, 64bit gcc 10.3.0, CMake (3.21.3) >=3.8, autotools < 3.8
+* **Bessie32** - FreeBSD 12.2, 32-bit clang 10.0.1, 64bit gcc 10.3.0, CMake (3.21.3) >=3.8, autotools < 3.8
 * **Berrie** - Raspberry Pi (debian bullseye), 32-bit gcc 10.2.1,  CMake (3.18.4)
 * **Berrie64** - Raspberry Pi (debian buster), 64-bit gcc 8.3.0-6,  CMake (3.16.3)
