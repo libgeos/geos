@@ -71,6 +71,11 @@ namespace snapround { // geos::noding::snapround
 class GEOS_DLL SnapRoundingNoder : public Noder {
 
 private:
+    /**
+    * The division factor used to determine
+    * nearness distance tolerance for interior intersection detection.
+    */
+    static constexpr int INTERSECTION_NEARNESS_FACTOR = 100;
 
     // Members
     const geom::PrecisionModel* pm;
