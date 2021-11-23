@@ -29,6 +29,7 @@
 #include <geos/util.h>
 
 #include <cmath>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -132,8 +133,9 @@ Node::isIncidentEdgeInResult() const
 }
 
 void
-Node::add(EdgeEnd* e)
+Node::add(EdgeEnd* p_e)
 {
+    std::unique_ptr<EdgeEnd> e(p_e);
     assert(e);
 #if GEOS_DEBUG
     std::cerr << "[" << this << "] Node::add(" << e->print() << ")" << std::endl;
@@ -152,10 +154,10 @@ Node::add(EdgeEnd* e)
     assert(edges);
     //if (edges==NULL) return;
 
-    edges->insert(e);
-    e->setNode(this);
+    edges->insert(e.release());
+    p_e->setNode(this);
 #if COMPUTE_Z
-    addZ(e->getCoordinate().z);
+    addZ(p_e->getCoordinate().z);
 #endif
     testInvariant();
 }
