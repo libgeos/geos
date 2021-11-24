@@ -7,6 +7,7 @@ Changes in 3.10.2
   - Improve BuildArea performance (#1122, Sandro Santilli)
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
   - Fix memory leak on exception in prepared geometry (GH-506, Dan Baston)
+  - Iterator invalidation in rare cases (GH-508, Momtchil Momtchev)
 
 
 Changes in 3.10.1
