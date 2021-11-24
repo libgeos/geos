@@ -1,4 +1,4 @@
-Changes in 3.11.0
+## Changes in 3.11.0
 2022-xx-xx
 
 - New things:
@@ -10,7 +10,7 @@ Changes in 3.11.0
 - Changes:
 
 
-Changes in 3.10.0
+## Changes in 3.10.0
 2021-10-20
 
 - New things:
@@ -55,7 +55,7 @@ Changes in 3.10.0
   - GH475: Do not return NaN from GEOSProjectNormalized_r (Paul Ramsey)
   - GH442: BufferOp now returns unique_ptr<Geometry> result (Paul Ramsey)
 
-Changes in 3.9.0
+## Changes in 3.9.0
 2020-12-09
 
 - New things:
@@ -84,7 +84,7 @@ Changes in 3.9.0
 - Changes:
   - Drop SWIG bindings, including for Ruby and Python (#1076, Mike Taves)
 
-Changes in 3.8.0
+## Changes in 3.8.0
 2019-10-10
 
 - New things:
@@ -124,7 +124,7 @@ Changes in 3.8.0
     of input arguments in output (#896)
 
 
-Changes in 3.7.2
+## Changes in 3.7.2
 2019-05-02
 
 - Bug fixes / improvements
@@ -134,7 +134,7 @@ Changes in 3.7.2
   - Invalid union result from valid polygon inputs (#838)
 
 
-Changes in 3.7.1
+## Changes in 3.7.1
 2018-11-29
 
 - Bug fixes / improvements
@@ -151,7 +151,7 @@ Changes in 3.7.1
     GEOSisValidDetail (#941, Dan Baston)
 
 
-Changes in 3.7.0
+## Changes in 3.7.0
 2018-09-10
 
 - New things:
@@ -180,14 +180,14 @@ Changes in 3.7.0
   - Fix CommonBits::getBit to correctly handle i >= 32
     (#834, Kurt Schwehr)
 
-Changes in 3.7.0rc1
+## Changes in 3.7.0rc1
 2018-08-19
 Fixes / enhancements since 3.7.0beta2
   - Avoid segfault when querying empty tree (#730, framm)
   - Collection with Empty components crashes overlay (#782, Dan Baston)
   - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
 
-Changes in 3.7.0beta2
+## Changes in 3.7.0beta2
 2018-08-06
 Fixes since 3.7.0beta1
   - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
@@ -196,15 +196,15 @@ Fixes since 3.7.0beta1
   - Add missing CMake files to tarball (#895, Regina Obe)
 
 
-Changes in 3.7.0beta1
+## Changes in 3.7.0beta1
 2018-06-25
 See 3.7.0 latest notes
 
-Changes in 3.7.0alpha
+## Changes in 3.7.0alpha
 2018-06-14
 See 3.7.0 notes
 
-Changes in 3.6.1
+## Changes in 3.6.1
 2016-12-24
 
 - Bug fixes / improvements
@@ -213,7 +213,7 @@ Changes in 3.6.1
   - Fix WKB representation of empty polygon (#680).
   - Fix empty GEOSSimplify return on inner ring collapse (#741)
 
-Changes in 3.6.0
+## Changes in 3.6.0
 2016-10-25
 
 - Important / Breaking Changes:
@@ -231,7 +231,7 @@ Changes in 3.6.0
   - Automatic memory management for GeometryFactory objects
 
 
-Changes in 3.5.0
+## Changes in 3.5.0
 2015-08-16
 
 - New things:
@@ -248,7 +248,7 @@ Changes in 3.5.0
 - C++ API changes:
   - Added no-parameter CoordinateSequenceFactory::create method (Sandro Mani)
 
-Changes in 3.4.2
+## Changes in 3.4.2
 2013-08-25
 
 - Bug fixes / improvements
@@ -261,7 +261,7 @@ Changes in 3.4.2
   - accept multiple Nan representations (#656)
 
 
-Changes in 3.4.1
+## Changes in 3.4.1
 2013-08-17
 
 - Bug fixes / improvements
@@ -269,7 +269,7 @@ Changes in 3.4.1
     smaller than tolerance (#649)
   - Can't build using cmake with tar ball (#644)
 
-Changes in 3.4.0
+## Changes in 3.4.0
 2013-08-11
 
 - New things:
@@ -316,7 +316,7 @@ Changes in 3.4.0
 	  geos_svn_revision.h generator to CMake config (#643)
 	- Makefile.vc 'clean' step leaks obj files (#607)
 
-Changes in 3.3.9
+## Changes in 3.3.9
 2013-09-04
 
 - Bug fixes / improvements
@@ -332,7 +332,7 @@ Changes in 3.3.9
     - Fix install location of linearref headers (#624)
     - Fix multi-geometry constructor to drop SRID from components (#583)
 
-Changes in 3.3.8
+## Changes in 3.3.8
 2013-02-28
 
 - Bug fixes / improvements
@@ -341,7 +341,7 @@ Changes in 3.3.8
     - WKTWriter::appendCoordinate optimisation
     - Fix centroid computation for collections with empty components (#582)
 
-Changes in 3.3.7
+## Changes in 3.3.7
 2013-01-22
 
 - Bug fixes / improvements
@@ -352,14 +352,14 @@ Changes in 3.3.7
     - Fix EMPTY return from zero-area polygon (#613)
     - Segfault from symdifference (#615)
 
-Changes in 3.3.6
+## Changes in 3.3.6
 2012-11-15 -- that's Post-GIS day !
 
 - Bug fixes / improvements
     - Add support for testing with phpunit 3.6 (not loosing support for 3.4)
     - Segfault from intersection (#586, #598, #599)
 
-Changes in 3.3.5
+## Changes in 3.3.5
 2012-06-25
 
 - Bug fixes / improvements
@@ -368,7 +368,7 @@ Changes in 3.3.5
     - Always return POINT from GEOSGetCentroid, even for EMPTY (#560)
     - Always return POINT from GEOSPointOnSurface, even for EMPTY (#561)
 
-Changes in 3.3.4
+## Changes in 3.3.4
 2012-05-31
 
 - Bug fixes / improvements
@@ -381,7 +381,7 @@ Changes in 3.3.4
     - Fix TopologyPreservingSimplifier invalid output on closed line (#508)
     - Reduce calls to ptNotInList, greatly speeding up Polygonizer (#545)
 
-Changes in 3.3.3
+## Changes in 3.3.3
 2012-04-01
 
 - Bug fixes / improvements
@@ -389,7 +389,7 @@ Changes in 3.3.3
     - Fix MSVC compilation of ambiguous log() call (#506)
     - Fix CMake issues with std:: namespace detection (#493)
 
-Changes in 3.3.2
+## Changes in 3.3.2
 2012-01-05
 
 - Bug fixes / improvements
@@ -408,7 +408,7 @@ Changes in 3.3.2
     - Fix default initialization issue for clang (#500)
     - Improve overlay robustness by fixing areal validity on snapping (#488)
 
-Changes in 3.3.1
+## Changes in 3.3.1
 2011-09-27
 
 - Bug fixes / improvements
@@ -423,7 +423,7 @@ Changes in 3.3.1
   - Fix out-of-place builds for python binding (#332) and regress testing
   - Fix OS X framework cmake build (#385)
 
-Changes in 3.3.0
+## Changes in 3.3.0
 2011-05-30
 
 - New things:
@@ -473,7 +473,7 @@ Changes in 3.3.0
   - Reduce memory use in PreparedGeometry predicates (#342)
   - Fix infinite loop in RobustDeterminant with nan/inf input (#357)
 
-Changes in 3.2.0
+## Changes in 3.2.0
 2009-12-14
 
 - Add Single-sided buffer operation
@@ -491,7 +491,7 @@ Changes in 3.2.0
 - Various bug and leak fixes, optimizations
 - Replace MarkupSTL with tinyXML
 
-Changes in 3.1.0
+## Changes in 3.1.0
 
 - PreparedGeometry operations for very fast predicate testing.
   - Intersects()
@@ -506,7 +506,7 @@ Changes in 3.1.0
 - Numerous bug fixes.
   http://trac.osgeo.org/geos/query?status=closed&milestone=3.1.0&order=priority
 
-Changes in 3.0.0
+## Changes in 3.0.0
 
    These are mostly ABI breaking changes.
    In few cases the API also changed, but the most external one
@@ -658,17 +658,17 @@ Changes in 3.0.0
 	  const CoordinateFilter (apply_rw).
 
 
-Changes in 2.2.4
+## Changes in 2.2.4
 
 	- Added version.in.vc to distribution
 
-Changes in 2.2.1
+## Changes in 2.2.1
 
 - Support for MingW builds
 - Bugfix in Polygonizer chocking on invalid LineString inputs
 - CAPI: small leak removed in GEOSHasZ()
 
-Changes in 2.2.0
+## Changes in 2.2.0
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
 - CoordinateSequence copy removal in EdgeRing
@@ -678,12 +678,12 @@ Changes in 2.2.0
 - NEW WKB IO
 - NEW Simplified and stabler C API
 
-Changes in 2.1.4
+## Changes in 2.1.4
 
 - Severe BUGFIX in BufferSubgraphGT and other functions used
   as StrictWeakOrdering predicates for sort()
 
-Changes in 2.1.3
+## Changes in 2.1.3
 
 - win32/mingw build support
 - Segfault fix in LinearRing and LineString constructors
@@ -701,7 +701,7 @@ Changes in 2.1.3
 - Optimizations in Buffer operation
 - Sever BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
 
-Changes in 2.1.2
+## Changes in 2.1.2
 
 - Segfault fix in Point::isEmpty
 - Mem Leak fix in OffsetCurveBuilder::getRingCurve
@@ -724,7 +724,7 @@ Changes in 2.1.2
 - Segfault fix in GeometryEditor::editPolygon()
 
 
-Changes in 2.1.1
+## Changes in 2.1.1
 
 - Fixed uninitialized Coordinate in TopologyException
 - Added install of version.h, platform.h and timeval.h
@@ -736,7 +736,7 @@ Changes in 2.1.1
 - Debian package build scripts
 
 
-Changes in 2.1.0
+## Changes in 2.1.0
 
 - Added Polygonizer and LineMerger classes.
 - python wrapper examples
@@ -748,7 +748,7 @@ Changes in 2.1.0
 - Z support in overlay operations.
 
 
-Changes in 2.0.0
+## Changes in 2.0.0
 
 - CoordinateList renamed to CoordinateSequence, BasicCoordinateList
   renamed to DefaultCoordinateSequence to reflect JTS changes.
