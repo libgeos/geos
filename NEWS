@@ -4,6 +4,7 @@ Changes in 3.9.3
 - Bug fixes / improvements:
   - Improve BuildArea performance (#1122, Sandro Santilli)
   - Memory leak on exception in prepared geometry (GH-506, Dan Baston)
+  - Infinite loop on collapsed input in MaximumInscribedCircle (Paul Ramsey)
 
 
 Changes in 3.9.2
