@@ -9,10 +9,14 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
+# read version from Version.txt file
+. Version.txt
+export REL_PATH=~/workspace/geos/rel-${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}
+echo $REL_PATH
 # auto tools
 if true; then
     sh autogen.sh
-    ./configure
+    ./configure --prefix=${REL_PATH}
     make
     make check
 fi
@@ -23,7 +27,7 @@ if false; then
     rm -rf build
     mkdir -p build
     cd build
-    cmake ../
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=${REL_PATH} ../
     make
     [ -f CMakeCache.txt ] && \
         ctest --output-on-failure . || \
