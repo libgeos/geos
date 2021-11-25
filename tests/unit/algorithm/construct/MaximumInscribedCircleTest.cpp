@@ -174,6 +174,18 @@ void object::test<6>
 }
 
 
+// //
+// // Invalid polygon collapsed to a line
+// //
+template<>
+template<>
+void object::test<7>
+()
+{
+     checkCircle("POLYGON((1 2, 1 2, 1 2, 1 2, 3 2, 1 2))",
+       0.01, 2, 2, 0 );
+}
+
 
 
 } // namespace tut
