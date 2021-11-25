@@ -8,6 +8,7 @@ Changes in 3.10.2
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
   - Fix memory leak on exception in prepared geometry (GH-506, Dan Baston)
   - Iterator invalidation in rare cases (GH-508, Momtchil Momtchev)
+  - Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey)
 
 
 Changes in 3.10.1
