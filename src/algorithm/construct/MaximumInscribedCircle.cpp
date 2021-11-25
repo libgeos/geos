@@ -121,6 +121,10 @@ MaximumInscribedCircle::createInitialGrid(const Envelope* env, std::priority_que
     double cellSize = std::min(width, height);
     double hSize = cellSize / 2.0;
 
+    // Collapsed geometries just end up using the centroid
+    // as the answer and skip all the other machinery
+    if (cellSize == 0) return;
+
     // compute initial grid of cells to cover area
     for (double x = minX; x < maxX; x += cellSize) {
         for (double y = minY; y < maxY; y += cellSize) {
