@@ -103,6 +103,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>makePrecise</b> (<a c
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">getScale</a> () const</td></tr>
 <tr class="memdesc:a78f9501b307abf44085b9d60a99e352f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the multiplying factor used to obtain a precise coordinate. <br /></td></tr>
 <tr class="separator:a78f9501b307abf44085b9d60a99e352f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0357f01d06a727dd44ade8ca808847b3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">getGridSize</a> () const</td></tr>
+<tr class="separator:a0357f01d06a727dd44ade8ca808847b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0e0af0b2097cb72082c7d10abf368a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">getOffsetX</a> () const</td></tr>
 <tr class="separator:a7a0e0af0b2097cb72082c7d10abf368a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a349d9bf69485902cb0fa88eee9132abc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">getOffsetY</a> () const</td></tr>
@@ -127,10 +129,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>io::Unload</b></td><
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Specifies the precision model of the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in a <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. </p>
-<p>In other words, specifies the grid of allowable points for all <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>s.</p>
-<p>The makePrecise method allows rounding a coordinate to a "precise" value; that is, one whose precision is known exactly.</p>
-<p>Coordinates are assumed to be precise in geometries. That is, the coordinates are assumed to be rounded to the precision model given for the geometry. JTS input routines automatically round coordinates to the precision model before creating Geometries. All internal operations assume that coordinates are rounded to the precision model. Constructive methods (such as boolean operations) always round computed coordinates to the appropriate precision model.</p>
-<p>Currently three types of precision model are supported:</p><ul>
+<p>In other words, specifies the grid of allowable points for a <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>. A precision model may be <b>floating</b> (PrecisionModel::Type::FLOATING or PrecisionModel::Type::FLOATING_SINGLE), in which case normal floating-point value semantics apply.</p>
+<p>For a PrecisionModel::Type::FIXED precision model the makePrecise(geom::Coordinate) method allows rounding a coordinate to a "precise" value; that is, one whose precision is known exactly.</p>
+<p>Coordinates are assumed to be precise in geometries. That is, the coordinates are assumed to be rounded to the precision model given for the geometry. All internal operations assume that coordinates are rounded to the precision model. Constructive methods (such as boolean operations) always round computed coordinates to the appropriate precision model.</p>
+<p>Three types of precision model are supported:</p><ul>
 <li>FLOATING - represents full double precision floating point. This is the default precision model used in JTS</li>
 <li>FLOATING_SINGLE - represents single precision floating point.</li>
 <li>FIXED - represents a model with a fixed number of decimal places. A Fixed Precision Model is specified by a scale factor. The scale factor specifies the grid which numbers are rounded to. Input coordinates are mapped to fixed coordinates according to the following equations:<ul>
@@ -140,8 +142,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>io::Unload</b></td><
 </li>
 </ul>
 <p>For example, to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.</p>
-<p>Coordinates are represented internally as Java double-precision values. Since Java uses the IEEE-394 floating point standard, this provides 53 bits of precision. (Thus the maximum precisely representable integer is 9,007,199,254,740,992).</p>
-<p>JTS methods currently do not handle inputs with different precision models. </p>
+<p>It is also supported to specify a precise grid size by providing it as a negative scale factor. This allows setting a precise grid size rather than using a fractional scale, which provides more accurate and robust rounding. For example, to specify rounding to the nearest 1000 use a scale factor of -1000.</p>
+<p>Coordinates are represented internally as Java double-precision values. Java uses the IEEE-394 floating point standard, which provides 53 bits of precision. (Thus the maximum precisely representable integer is 9,007,199,254,740,992). </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="aa32be4a02d1faf45306fee75d68a2e12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa32be4a02d1faf45306fee75d68a2e12">&#9670;&nbsp;</a></span>Type</h2>
@@ -257,10 +259,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>io::Unload</b></td><
 </div><div class="memdoc">
 
 <p>Creates a <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html" title="Specifies the precision model of the Coordinate in a Geometry.">PrecisionModel</a> with Fixed precision. </p>
-<p>Fixed-precision coordinates are represented as precise internal coordinates which are rounded to the grid defined by the scale factor.</p>
+<p>Fixed-precision coordinates are represented as precise internal coordinates which are rounded to the grid defined by the scale factor. The provided scale may be negative, to specify an exact grid size. The scale is then computed as the reciprocal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">newScale</td><td>amount by which to multiply a coordinate after subtracting the offset, to obtain a precise coordinate </td></tr>
+    <tr><td class="paramname">newScale</td><td>amount by which to multiply a coordinate after subtracting the offset, to obtain a precise coordinate. Must be non-zero. </td></tr>
   </table>
   </dd>
 </dl>
@@ -293,6 +295,25 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>io::Unload</b></td><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a negative integer, zero, or a positive integer as this <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html" title="Specifies the precision model of the Coordinate in a Geometry.">PrecisionModel</a> is less than, equal to, or greater than the specified <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html" title="Specifies the precision model of the Coordinate in a Geometry.">PrecisionModel</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a0357f01d06a727dd44ade8ca808847b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0357f01d06a727dd44ade8ca808847b3">&#9670;&nbsp;</a></span>getGridSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double geos::geom::PrecisionModel::getGridSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the grid size for a fixed precision model. This is equal to the reciprocal of the scale factor. If the grid size has been set explicity (via a negative scale factor) it will be returned.</p>
+<dl class="section return"><dt>Returns</dt><dd>the grid size at a fixed precision scale. </dd></dl>
 
 </div>
 </div>
