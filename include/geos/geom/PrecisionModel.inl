@@ -63,6 +63,19 @@ PrecisionModel::getScale() const
     return scale;
 }
 
+/*public*/
+INLINE double
+PrecisionModel::getGridSize() const
+{
+    if (isFloating())
+       return DoubleNotANumber;
+
+    if (gridSize != 0)
+        return gridSize;
+
+    return 1.0 / scale;
+}
+
 
 } // namespace geos::geom
 } // namespace geos

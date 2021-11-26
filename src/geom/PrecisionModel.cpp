@@ -39,6 +39,11 @@
 namespace geos {
 namespace geom { // geos::geom
 
+/**
+*  The maximum precise value representable in a double. Since IEE754
+*  double-precision numbers allow 53 bits of mantissa, the value is equal to
+*  2^53 - 1.  This provides <i>almost</i> 16 decimal digits of precision.
+*/
 const double PrecisionModel::maximumPreciseValue = 9007199254740992.0;
 
 /*public*/
@@ -54,9 +59,12 @@ PrecisionModel::makePrecise(double val) const
         return static_cast<double>(floatSingleVal);
     }
     if(modelType == FIXED) {
-        // Use whatever happens to be the default rounding method
-        const double ret = util::round(val * scale) / scale;
-        return ret;
+        if (gridSize > 0) {
+            return util::round(val / gridSize) * gridSize;
+        }
+        else {
+            return util::round(val * scale) / scale;
+        }
     }
     // modelType == FLOATING - no rounding necessary
     return val;
@@ -66,7 +74,8 @@ PrecisionModel::makePrecise(double val) const
 PrecisionModel::PrecisionModel()
     :
     modelType(FLOATING),
-    scale(0.0)
+    scale(0.0),
+    gridSize(0.0)
 {
 #if GEOS_DEBUG
     std::cerr << "PrecisionModel[" << this << "] ctor()" << std::endl;
@@ -79,7 +88,8 @@ PrecisionModel::PrecisionModel()
 PrecisionModel::PrecisionModel(Type nModelType)
     :
     modelType(nModelType),
-    scale(1.0)
+    scale(1.0),
+    gridSize(0.0)
 {
 #if GEOS_DEBUG
     std::cerr << "PrecisionModel[" << this << "] ctor(Type)" << std::endl;
@@ -92,7 +102,6 @@ PrecisionModel::PrecisionModel(Type nModelType)
 
 /*public (deprecated) */
 PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
-//throw(IllegalArgumentException *)
     :
     modelType(FIXED)
 {
@@ -109,7 +118,6 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
 
 /*public*/
 PrecisionModel::PrecisionModel(double newScale)
-//throw (IllegalArgumentException *)
     :
     modelType(FIXED)
 {
@@ -149,16 +157,25 @@ PrecisionModel::getMaximumSignificantDigits() const
     return maxSigDigits;
 }
 
-
 /*private*/
 void
 PrecisionModel::setScale(double newScale)
-// throw IllegalArgumentException
 {
-    if(newScale <= 0) {
-        throw util::IllegalArgumentException("PrecisionModel scale cannot be 0");
+    /**
+    * A negative scale indicates the grid size is being set.
+    * The scale is set as well, as the reciprocal.
+    */
+    if (newScale < 0) {
+        gridSize = std::fabs(newScale);
+        scale = 1.0 / gridSize;
     }
-    scale = std::fabs(newScale);
+    else {
+        scale = std::fabs(newScale);
+        /**
+        * Leave gridSize as 0, to ensure it is computed using scale
+        */
+        gridSize = 0.0;
+    }
 }
 
 /*public*/

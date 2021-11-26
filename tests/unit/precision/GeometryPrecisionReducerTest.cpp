@@ -78,6 +78,18 @@ struct test_gpr_data {
     }
 
     void checkReduce(
+        double scaleFactor,
+        const char* wkt,
+        const char* wktExpected)
+    {
+        PrecisionModel pm(scaleFactor);
+        GeometryPrecisionReducer reducer(pm);
+        reducer.setRemoveCollapsedComponents(true);
+        reducer.setChangePrecisionModel(false);
+        checkReduceAny(wkt, wktExpected, reducer);
+    }
+
+    void checkReduce(
         const char* wkt,
         const char* wktExpected)
     {
@@ -327,6 +339,30 @@ void object::test<20> ()
         "POLYGON ((10 10, 100 100, 200 10.1, 300 100, 400 10, 10 10))",
         "POLYGON ((10 10, 100 100, 200 10,   300 100, 400 10, 10 10))"
         );
+}
+
+// testGridsize
+template<>
+template<>
+void object::test<21> ()
+{
+    checkReduce(-100,
+        "POLYGON ((100 120, 190 400, 485 398, 250 380, 400 100, 100 120))",
+        "POLYGON ((200 400, 300 400, 400 100, 100 100, 200 400))");
+}
+
+/**
+* Test issue showing bug in SnapRoundingNoder not passing tolerance to MCIndexNoder.
+*
+* See https://trac.osgeo.org/geos/ticket/1127
+*/
+template<>
+template<>
+void object::test<22> ()
+{
+    checkReduce(-612,
+        "POLYGON((3670939.6336634574 3396937.3777869204, 3670995.4715200397 3396926.0316904164, 3671077.280213823 3396905.4302639295, 3671203.8838707027 3396908.120176068, 3671334.962571111 3396904.8310892633, 3670037.299066126 3396904.8310892633, 3670037.299066126 3398075.9808747065, 3670939.6336634574 3396937.3777869204))",
+        "POLYGON ((3670164 3396600, 3670164 3397824, 3670776 3397212, 3670776 3396600, 3670164 3396600))");
 }
 
 

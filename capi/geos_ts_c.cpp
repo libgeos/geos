@@ -2686,15 +2686,18 @@ extern "C" {
         using namespace geos::geom;
 
         return execute(extHandle, [&]() {
-            const PrecisionModel* pm = g->getPrecisionModel();
-            double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             std::unique_ptr<PrecisionModel> newpm;
             if(gridSize != 0) {
-                newpm.reset(new PrecisionModel(1.0 / std::abs(gridSize)));
+                // Use negative scale to indicate you actually want a gridSize
+                double scale = -1.0 * std::abs(gridSize);
+                newpm.reset(new PrecisionModel(scale));
             }
             else {
                 newpm.reset(new PrecisionModel());
             }
+
+            const PrecisionModel* pm = g->getPrecisionModel();
+            double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             Geometry* ret;
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(newpm.get(), g->getSRID());
