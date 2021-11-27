@@ -17,7 +17,7 @@
 #include <benchmark/benchmark.h>
 
 static std::vector<double> create_buffer(std::size_t N, unsigned int dim) {
-    std::vector<double> buf(2 * N);
+    std::vector<double> buf(dim * N);
     double d = 0.0;
     for(auto& di : buf) {
         di = d;
@@ -85,7 +85,7 @@ static void BM_CoordSeq_CopyFromBuffer(benchmark::State& state) {
     auto buf = create_buffer(N, dim);
 
     for (auto _ : state) {
-        auto seq = GEOSCoordSeq_copyFromBuffer(buf.data(), N, dim);
+        auto seq = GEOSCoordSeq_copyFromBuffer(buf.data(), N, dim == 3, false);
         GEOSCoordSeq_destroy(seq);
     }
 
