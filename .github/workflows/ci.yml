@@ -24,7 +24,7 @@ jobs:
           arch: 64,
           packages: 'g++',
           cmake: 3.15.*,
-          cmake_extra: '-DBUILD_BENCHMARKS=ON'
+          cmake_extra: '-DBUILD_BENCHMARKS=ON',
           os: ubuntu-18.04
         }
         - {
