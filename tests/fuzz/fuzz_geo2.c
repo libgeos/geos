@@ -47,7 +47,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
     GEOSGeometry *g1 = GEOSGeomFromWKT(Data);
 
     if (g1 != NULL) {
-        GEOSGeometry *g2 = GEOSGeomFromWKB_buf(Data+sep, Size-sep);
+        char * r = malloc(Size-sep);
+        memcpy(r, Data+sep, Size-sep);
+        GEOSGeometry *g2 = GEOSGeomFromWKT(r);
         if (g2 != NULL) {
             size_t usize;
             GEOSGeometry *g3 = GEOSIntersection(g1, g2);
@@ -60,7 +62,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
             free(uptr);
             GEOSGeom_destroy(g2);
         }
-        char * r = GEOSGeomToWKT(g1);
         free(r);
         GEOSGeom_destroy(g1);
     }
