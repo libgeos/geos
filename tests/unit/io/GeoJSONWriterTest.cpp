@@ -295,4 +295,17 @@ void object::test<18>
     std::string result = geojsonwriter.write(geom.get());
     ensure_equals(result, "{\"type\":\"GeometryCollection\",\"geometries\":[]}");
 }
+
+// Write a linear ring (as a linestring)
+template<>
+template<>
+void object::test<19>
+()
+{
+    GeomPtr geom(wktreader.read("LINEARRING (0 0, 1 1, 1 0, 0 0)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[0.0,0.0],[1.0,1.0],[1.0,0.0],[0.0,0.0]]}");
+}
+
+
 }
