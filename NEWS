@@ -3,12 +3,13 @@ Changes in 3.10.2
 2021-xx-xx
 
 - Fixes/Improvements:
-  - Fix crash in GeoJSONWriter in case of empty points (#1139, Paul Ramsey)
-  - Improve BuildArea performance (#1122, Sandro Santilli)
+  - Fix crash in GeoJSONWriter in case of empty points (TRAC-1139, Paul Ramsey)
+  - Improve BuildArea performance (TRAC-1122, Sandro Santilli)
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
   - Fix memory leak on exception in prepared geometry (GH-506, Dan Baston)
   - Iterator invalidation in rare cases (GH-508, Momtchil Momtchev)
   - Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey)
+  - Write LinearRing to GeoJSON as LineString (TRAC-1140, Paul Ramsey)
 
 
 Changes in 3.10.1
