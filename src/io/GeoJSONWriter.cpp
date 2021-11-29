@@ -180,6 +180,10 @@ void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, geos_nlohmann
         auto line = static_cast<const geom::LineString*>(geometry);
         encodeLineString(line, j);
     }
+    else if (type == GEOS_LINEARRING) {
+        auto line = static_cast<const geom::LineString*>(geometry);
+        encodeLineString(line, j);
+    }
     else if (type == GEOS_POLYGON) {
         auto poly = static_cast<const geom::Polygon*>(geometry);
         encodePolygon(poly, j);
