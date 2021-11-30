@@ -205,13 +205,13 @@ jobs:
        mkdir build
        cd build
        cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release -j 2
+       cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+       cmake --build . --config Debug -j 2
 
     - name: 'Test'
       run: |
        cd build
-       ctest --output-on-failure -C Release
+       ctest --output-on-failure -C Debug
 
   windows-msvc-19:
     name: 'Windows (Visual Studio 2019, Release, windows-2019)'
