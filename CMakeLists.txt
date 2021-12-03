@@ -83,6 +83,14 @@ message(STATUS "GEOS: Version ${GEOS_VERSION}")
 message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
 
+if(CMAKE_VERSION VERSION_LESS 3.21)
+  if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL ON)
+  else()
+    set(PROJECT_IS_TOP_LEVEL OFF)
+  endif()
+endif()
+
 #-----------------------------------------------------------------------------
 # Setup
 #-----------------------------------------------------------------------------
@@ -125,7 +133,7 @@ set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 
 option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
 cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "Build with compilation flags useful for development" ON
-  "GEOS_BUILD_FROM_GIT" OFF)
+  "GEOS_BUILD_FROM_GIT;PROJECT_IS_TOP_LEVEL" OFF)
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
 
 if (POLICY CMP0092)
@@ -313,32 +321,40 @@ add_subdirectory(capi)
 #-----------------------------------------------------------------------------
 # Tests
 #-----------------------------------------------------------------------------
-include(CTest)
-if(BUILD_TESTING)
-  add_subdirectory(tests)
+if(PROJECT_IS_TOP_LEVEL)
+  include(CTest)
+  if(BUILD_TESTING)
+    add_subdirectory(tests)
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------
 # Benchmarks
 #-----------------------------------------------------------------------------
-if(BUILD_BENCHMARKS)
+if(PROJECT_IS_TOP_LEVEL AND BUILD_BENCHMARKS)
   add_subdirectory(benchmarks)
 endif()
 
 #-----------------------------------------------------------------------------
 # Utils
 #-----------------------------------------------------------------------------
-add_subdirectory(util)
+if(PROJECT_IS_TOP_LEVEL)
+  add_subdirectory(util)
+endif()
 
 #-----------------------------------------------------------------------------
 # Documentation/Examples
 #-----------------------------------------------------------------------------
-add_subdirectory(doxygen)
+if(PROJECT_IS_TOP_LEVEL)
+  add_subdirectory(doxygen)
+endif()
 
 #-----------------------------------------------------------------------------
 # Web Site
 #-----------------------------------------------------------------------------
-add_subdirectory(web)
+if(PROJECT_IS_TOP_LEVEL)
+  add_subdirectory(web)
+endif()
 
 #-----------------------------------------------------------------------------
 # Install and export targets - support 'make install' or equivalent
@@ -403,69 +419,76 @@ add_subdirectory(tools)
 #-----------------------------------------------------------------------------
 # Uninstall
 #-----------------------------------------------------------------------------
+if(PROJECT_IS_TOP_LEVEL)
+  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
-  IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
+  add_custom_target(uninstall
+    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
+endif()  # PROJECT_IS_TOP_LEVEL
 
 #-----------------------------------------------------------------------------
 # "make dist" workalike
 #-----------------------------------------------------------------------------
-get_property(_is_multi_config_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT _is_multi_config_generator)
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
-  set(CPACK_PACKAGE_VENDOR "OSGeo")
-  set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-  set(CPACK_SOURCE_GENERATOR "TBZ2")
-  set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
-  set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
-  set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION}")
+if(PROJECT_IS_TOP_LEVEL)
+  get_property(_is_multi_config_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+  if(NOT _is_multi_config_generator)
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
+    set(CPACK_PACKAGE_VENDOR "OSGeo")
+    set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+    set(CPACK_SOURCE_GENERATOR "TBZ2")
+    set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION}")
 
-  set(CPACK_SOURCE_IGNORE_FILES
-    "/\\\\.git"
-    "/autogen\\\\.sh"
-    "/tools/ci"
-    "/HOWTO_RELEASE"
-    "/autom4te\\\\.cache"
-    "\\\\.yml\$"
-    "\\\\.deps"
-    "/debian/"
-    "/php/"
-    "/.*build-.*/"
-    "cmake_install\\\\.cmake\$"
-    "/include/geos/version\\\\.h\$"
-    "/tools/geos-config\$"
-    "/tools/geos\\\\.pc\$"
-    "/bin/"
-    ${CMAKE_CURRENT_BINARY_DIR}
-    )
+    set(CPACK_SOURCE_IGNORE_FILES
+      "/\\\\.git"
+      "/autogen\\\\.sh"
+      "/tools/ci"
+      "/HOWTO_RELEASE"
+      "/autom4te\\\\.cache"
+      "\\\\.yml\$"
+      "\\\\.deps"
+      "/debian/"
+      "/php/"
+      "/.*build-.*/"
+      "cmake_install\\\\.cmake\$"
+      "/include/geos/version\\\\.h\$"
+      "/tools/geos-config\$"
+      "/tools/geos\\\\.pc\$"
+      "/bin/"
+      ${CMAKE_CURRENT_BINARY_DIR}
+      )
 
-  # message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
-  # message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
-  # message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
-  include(CPack)
-  add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+    # message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+    # message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
+    # message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+    include(CPack)
+    add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
-  message(STATUS "GEOS: Configured 'dist' target")
-endif()
+    message(STATUS "GEOS: Configured 'dist' target")
+  endif()
+endif()  # PROJECT_IS_TOP_LEVEL
 
 #-----------------------------------------------------------------------------
 # "make check" workalike
 #-----------------------------------------------------------------------------
 
-add_custom_target(check COMMAND ${CMAKE_BUILD_TOOL} test)
+if(PROJECT_IS_TOP_LEVEL)
+  add_custom_target(check COMMAND ${CMAKE_BUILD_TOOL} test)
+endif()
 
 #-----------------------------------------------------------------------------
 # "make distcheck" workalike
 #-----------------------------------------------------------------------------
-if(NOT _is_multi_config_generator)
-  find_package(MakeDistCheck)
-  AddMakeDistCheck()
-  message(STATUS "GEOS: Configured 'distcheck' target")
-endif()
+if(PROJECT_IS_TOP_LEVEL)
+  if(NOT _is_multi_config_generator)
+    find_package(MakeDistCheck)
+    AddMakeDistCheck()
+    message(STATUS "GEOS: Configured 'distcheck' target")
+  endif()
 
-unset(_is_multi_config_generator)
+  unset(_is_multi_config_generator)
+endif()  # PROJECT_IS_TOP_LEVEL
