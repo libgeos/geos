@@ -280,6 +280,7 @@ check_library_exists(m pow "" HAVE_LIBM)
 # Target geos: C++ API library
 #-----------------------------------------------------------------------------
 add_library(geos "")
+add_library(GEOS::geos ALIAS geos)
 target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 # ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
@@ -301,6 +302,7 @@ endif()
 # Target geos_c: C API library
 #-----------------------------------------------------------------------------
 add_library(geos_c "")
+add_library(GEOS::geos_c ALIAS geos_c)
 target_link_libraries(geos_c PRIVATE geos)
 
 if(BUILD_SHARED_LIBS)
