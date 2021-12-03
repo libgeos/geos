@@ -13,65 +13,6 @@
 # modes for specific C/C++ language standard levels, and object libraries.
 cmake_minimum_required(VERSION 3.13)
 
-# Default to release build so packagers don't release debug builds
-set(DEFAULT_BUILD_TYPE Release)
-
-# Require CMake 3.13+ with VS generator for complete support of VS versions
-# and support by AppVeyor.
-if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-  cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
-endif()
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-# TODO: Follow CMake detection of git and version tagging
-#       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
-  set(GEOS_BUILD_FROM_GIT ON)
-endif()
-
-# Make sure we know our build type
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
-  message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
-else()
-  message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
-endif()
-
-#-----------------------------------------------------------------------------
-# Options
-#-----------------------------------------------------------------------------
-include(CMakeDependentOption)
-
-## CMake global variables
-option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
-set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
-
-## GEOS custom variables
-option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
-cmake_dependent_option(GEOS_BUILD_DEVELOPER
-  "Build with compilation flags useful for development" ON
-  "GEOS_BUILD_FROM_GIT" OFF)
-mark_as_advanced(GEOS_BUILD_DEVELOPER)
-
-if (POLICY CMP0092)
-  # dont set /W3 warning flags by default, we already
-  # set /W4 anyway
-  cmake_policy(SET CMP0092 NEW)
-endif()
-
-#-----------------------------------------------------------------------------
-# Setup build directories
-#-----------------------------------------------------------------------------
-# Place executables and shared libraries in the same location for
-# convenience of direct execution from common spot and for
-# convenience in environments without RPATH support.
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-
 #-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
@@ -141,6 +82,69 @@ unset(_version_patch_word)
 message(STATUS "GEOS: Version ${GEOS_VERSION}")
 message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
+
+#-----------------------------------------------------------------------------
+# Setup
+#-----------------------------------------------------------------------------
+
+# Default to release build so packagers don't release debug builds
+set(DEFAULT_BUILD_TYPE Release)
+
+# Require CMake 3.13+ with VS generator for complete support of VS versions
+# and support by AppVeyor.
+if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+  cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+endif()
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# TODO: Follow CMake detection of git and version tagging
+#       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+  set(GEOS_BUILD_FROM_GIT ON)
+endif()
+
+# Make sure we know our build type
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
+  message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
+else()
+  message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+#-----------------------------------------------------------------------------
+# Options
+#-----------------------------------------------------------------------------
+include(CMakeDependentOption)
+
+## CMake global variables
+option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
+
+## GEOS custom variables
+option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
+cmake_dependent_option(GEOS_BUILD_DEVELOPER
+  "Build with compilation flags useful for development" ON
+  "GEOS_BUILD_FROM_GIT" OFF)
+mark_as_advanced(GEOS_BUILD_DEVELOPER)
+
+if (POLICY CMP0092)
+  # dont set /W3 warning flags by default, we already
+  # set /W4 anyway
+  cmake_policy(SET CMP0092 NEW)
+endif()
+
+#-----------------------------------------------------------------------------
+# Setup build directories
+#-----------------------------------------------------------------------------
+# Place executables and shared libraries in the same location for
+# convenience of direct execution from common spot and for
+# convenience in environments without RPATH support.
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 #-----------------------------------------------------------------------------
 # Install directories
