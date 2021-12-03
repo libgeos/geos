@@ -13,8 +13,8 @@ add_executable(perf_memleak_mp_prep memleak_mp_prep.c)
 # but geos_c only, so need explicit include directories.
 target_include_directories(perf_memleak_mp_prep
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
 target_link_libraries(perf_memleak_mp_prep PRIVATE geos_c)
 
 add_executable(perf_geospreparedcontains GEOSPreparedContainsPerfTest.cpp)
@@ -29,8 +29,8 @@ target_link_libraries(perf_unary PRIVATE geos geos_c)
 if(benchmark_FOUND)
     add_executable(perf_capi_coordseq GEOSCoordSeqPerfTest.cpp)
     target_include_directories(perf_capi_coordseq PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
     target_link_libraries(perf_capi_coordseq PRIVATE
             benchmark::benchmark geos_c)
 endif()

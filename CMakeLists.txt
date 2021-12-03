@@ -22,11 +22,11 @@ if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
   cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # TODO: Follow CMake detection of git and version tagging
 #       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
-if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
@@ -66,9 +66,9 @@ endif()
 # Place executables and shared libraries in the same location for
 # convenience of direct execution from common spot and for
 # convenience in environments without RPATH support.
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
@@ -400,12 +400,12 @@ add_subdirectory(tools)
 # Uninstall
 #-----------------------------------------------------------------------------
 
-configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-  "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
 add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
 
 #-----------------------------------------------------------------------------
 # "make dist" workalike
@@ -437,7 +437,7 @@ if(NOT _is_multi_config_generator)
     "/tools/geos-config\$"
     "/tools/geos\\\\.pc\$"
     "/bin/"
-    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     )
 
   # message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
