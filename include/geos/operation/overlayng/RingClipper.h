@@ -81,17 +81,64 @@ private:
     /**
     * Clips line to the axis-parallel line defined by a single box edge.
     */
-    std::unique_ptr<CoordinateArraySequence> clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const;
+    std::vector<Coordinate> clipToBoxEdge(const std::vector<Coordinate> & pts, int edgeIndex, bool closeRing) const;
 
     /**
     * Computes the intersection point of a segment
     * with an edge of the clip box.
     * The segment must be known to intersect the edge.
     */
-    void intersection(const Coordinate& a, const Coordinate& b, int edgeIndex, Coordinate& rsltPt) const;
-    double intersectionLineY(const Coordinate& a, const Coordinate& b, double y) const;
-    double intersectionLineX(const Coordinate& a, const Coordinate& b, double x) const;
-    bool isInsideEdge(const Coordinate& p, int edgeIndex) const;
+    void intersection(const Coordinate& a, const Coordinate& b, int edgeIndex, Coordinate& rsltPt) const {
+        switch (edgeIndex) {
+            case BOX_BOTTOM:
+                rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMinY()), clipEnv.getMinY());
+                break;
+            case BOX_RIGHT:
+                rsltPt = Coordinate(clipEnv.getMaxX(), intersectionLineX(a, b, clipEnv.getMaxX()));
+                break;
+            case BOX_TOP:
+                rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMaxY()), clipEnv.getMaxY());
+                break;
+            case BOX_LEFT:
+            default:
+                rsltPt = Coordinate(clipEnv.getMinX(), intersectionLineX(a, b, clipEnv.getMinX()));
+        }
+    }
+
+    static double intersectionLineY(const Coordinate& a, const Coordinate& b, double y) {
+        double m = (b.x - a.x) / (b.y - a.y);
+        double intercept = (y - a.y) * m;
+        return a.x + intercept;
+    }
+
+    static double intersectionLineX(const Coordinate& a, const Coordinate& b, double x) {
+        double m = (b.y - a.y) / (b.x - a.x);
+        double intercept = (x - a.x) * m;
+        return a.y + intercept;
+    }
+
+    bool isInsideEdge(const Coordinate& p, int edgeIndex) const {
+        if (clipEnv.isNull()) {
+            return false;
+        }
+
+        bool isInside = false;
+        switch (edgeIndex) {
+            case BOX_BOTTOM: // bottom
+                isInside = p.y > clipEnv.getMinY();
+                break;
+            case BOX_RIGHT: // right
+                isInside = p.x < clipEnv.getMaxX();
+                break;
+            case BOX_TOP: // top
+                isInside = p.y < clipEnv.getMaxY();
+                break;
+            case BOX_LEFT:
+            default: // left
+                isInside = p.x > clipEnv.getMinX();
+        }
+        return isInside;
+    }
 
 
 public:
@@ -111,4 +158,3 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-

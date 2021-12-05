@@ -13,6 +13,8 @@
  **********************************************************************/
 
 #include <geos/operation/overlayng/RingClipper.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
 
 
 namespace geos {      // geos
@@ -24,43 +26,46 @@ namespace overlayng { // geos.operation.overlayng
 std::unique_ptr<CoordinateArraySequence>
 RingClipper::clip(const CoordinateSequence* cs) const
 {
-    std::unique_ptr<CoordinateArraySequence> pts;
+    std::vector<Coordinate> pts;
+    pts.reserve(cs->size());
+    cs->toVector(pts);
     for (int edgeIndex = 0; edgeIndex < 4; edgeIndex++) {
         bool closeRing = (edgeIndex == 3);
-        pts = clipToBoxEdge(cs, edgeIndex, closeRing);
-        if (pts->size() == 0)
-            return pts;
-        cs = pts.get();
+        if (!pts.empty()) {
+            pts = clipToBoxEdge(pts, edgeIndex, closeRing);
+        }
     }
-    return pts;
+
+    auto ret = detail::make_unique<CoordinateArraySequence>(std::move(pts));
+    if (ret->hasRepeatedPoints()) {
+        return operation::valid::RepeatedPointRemover::removeRepeatedPoints(ret.get());
+    } else {
+        return ret;
+    }
 }
 
 /*private*/
-std::unique_ptr<CoordinateArraySequence>
-RingClipper::clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const
+std::vector<Coordinate>
+RingClipper::clipToBoxEdge(const std::vector<Coordinate> & pts, int edgeIndex, bool closeRing) const
 {
     // TODO: is it possible to avoid copying array 4 times?
-    std::unique_ptr<CoordinateArraySequence> ptsClip(new CoordinateArraySequence());
+    std::vector<Coordinate> ptsClip;
+    ptsClip.reserve(pts.size());
 
-    Coordinate p0;
-    pts->getAt(pts->size() - 1, p0);
-    for (std::size_t i = 0; i < pts->size(); i++) {
-        Coordinate p1;
-        pts->getAt(i, p1);
-        if (isInsideEdge(p1, edgeIndex)) {
-            if (!isInsideEdge(p0, edgeIndex)) {
-                Coordinate intPt;
-                intersection(p0, p1, edgeIndex, intPt);
-                ptsClip->add(intPt, false);
+    const Coordinate* p0 = &pts.back();
+    for (std::size_t i = 0; i < pts.size(); i++) {
+        const Coordinate* p1 = &pts[i];
+        if (isInsideEdge(*p1, edgeIndex)) {
+            if (!isInsideEdge(*p0, edgeIndex)) {
+                ptsClip.emplace_back();
+                intersection(*p0, *p1, edgeIndex, ptsClip.back());
             }
             // TODO: avoid copying so much?
-            ptsClip->add(p1, false);
-
+            ptsClip.push_back(*p1);
         }
-        else if (isInsideEdge(p0, edgeIndex)) {
-            Coordinate intPt;
-            intersection(p0, p1, edgeIndex, intPt);
-            ptsClip->add(intPt, false);
+        else if (isInsideEdge(*p0, edgeIndex)) {
+            ptsClip.emplace_back();
+            intersection(*p0, *p1, edgeIndex, ptsClip.back());
         }
 
         // else p0-p1 is outside box, so it is dropped
@@ -68,78 +73,12 @@ RingClipper::clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool cl
     }
 
     // add closing point if required
-    if (closeRing && ptsClip->size() > 0) {
-        const Coordinate& start = ptsClip->getAt(0);
-        if (!start.equals2D(ptsClip->getAt(ptsClip->size() - 1))) {
-            ptsClip->add(start);
+    if (closeRing && ptsClip.size() > 0) {
+        if (!ptsClip.front().equals2D(ptsClip.back())) {
+            ptsClip.push_back(ptsClip.front());
         }
     }
     return ptsClip;
-}
-
-/*private*/
-void
-RingClipper::intersection(const Coordinate& a, const Coordinate& b, int edgeIndex, Coordinate& rsltPt) const
-{
-    switch (edgeIndex) {
-    case BOX_BOTTOM:
-        rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMinY()), clipEnv.getMinY());
-        break;
-    case BOX_RIGHT:
-        rsltPt = Coordinate(clipEnv.getMaxX(), intersectionLineX(a, b, clipEnv.getMaxX()));
-        break;
-    case BOX_TOP:
-        rsltPt = Coordinate(intersectionLineY(a, b, clipEnv.getMaxY()), clipEnv.getMaxY());
-        break;
-    case BOX_LEFT:
-    default:
-        rsltPt = Coordinate(clipEnv.getMinX(), intersectionLineX(a, b, clipEnv.getMinX()));
-    }
-    return;
-}
-
-/*private*/
-double
-RingClipper::intersectionLineY(const Coordinate& a, const Coordinate& b, double y) const
-{
-    double m = (b.x - a.x) / (b.y - a.y);
-    double intercept = (y - a.y) * m;
-    return a.x + intercept;
-}
-
-/*private*/
-double
-RingClipper::intersectionLineX(const Coordinate& a, const Coordinate& b, double x) const
-{
-    double m = (b.y - a.y) / (b.x - a.x);
-    double intercept = (x - a.x) * m;
-    return a.y + intercept;
-}
-
-/*private*/
-bool
-RingClipper::isInsideEdge(const Coordinate& p, int edgeIndex) const
-{
-    if (clipEnv.isNull()) {
-        return false;
-    }
-
-    bool isInside = false;
-    switch (edgeIndex) {
-    case BOX_BOTTOM: // bottom
-        isInside = p.y > clipEnv.getMinY();
-        break;
-    case BOX_RIGHT: // right
-        isInside = p.x < clipEnv.getMaxX();
-        break;
-    case BOX_TOP: // top
-        isInside = p.y < clipEnv.getMaxY();
-        break;
-    case BOX_LEFT:
-    default: // left
-        isInside = p.x > clipEnv.getMinX();
-    }
-    return isInside;
 }
 
 
