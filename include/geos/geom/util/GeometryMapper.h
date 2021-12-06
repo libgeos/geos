@@ -60,8 +60,8 @@ public:
     /**
     * Maps the members of a {@link Geometry}
     * (which may be atomic or composite)
-    * into another <tt>Geometry</tt> of most specific type.
-    * <tt>null</tt> results are skipped.
+    * into another Geometry of most specific type.
+    * null results are skipped.
     * In the case of hierarchical {@link GeometryCollection}s,
     * only the first level of members are mapped.
     *
@@ -76,10 +76,10 @@ public:
     /**
     * Maps the atomic elements of a {@link Geometry}
     * (which may be atomic or composite)
-    * using a {@link MapOp} mapping operation
-    * into an atomic <tt>Geometry</tt> or a flat collection
+    * using a mapOp mapping operation
+    * into an atomic Geometry or a flat collection
     * of the most specific type.
-    * <tt>null</tt> and empty values returned from the mapping operation
+    * null and empty values returned from the mapping operation
     * are discarded.
     *
     * @param geom the geometry to map
