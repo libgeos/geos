@@ -28,7 +28,7 @@ Builds with CMake are done "outside the tree" either in a build directory in the
 
 ```bash
 # Unpack and setup build directory
-tar xvfz geos-{{<current_release>}}.tar.bz2
+tar xvfj geos-{{<current_release>}}.tar.bz2
 cd geos-{{<current_release>}}
 mkdir _build
 cd _build
