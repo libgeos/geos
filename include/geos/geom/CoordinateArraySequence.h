@@ -131,6 +131,8 @@ public:
 
     void apply_ro(CoordinateFilter* filter) const override;
 
+    void apply_ro(SegmentInspector* inspector) const override;
+
 private:
     std::vector<Coordinate> vect;
     mutable std::size_t dimension;

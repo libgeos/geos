@@ -17,6 +17,7 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
+#include <geos/geom/SegmentInspector.h>
 #include <geos/util.h>
 
 #include <sstream>
@@ -257,6 +258,14 @@ CoordinateArraySequence::apply_ro(CoordinateFilter* filter) const
 {
     for(const auto& coord : vect) {
         filter->filter_ro(&coord);
+    }
+}
+
+void
+CoordinateArraySequence::apply_ro(SegmentInspector* inspector) const
+{
+    for (size_t i = 1; i < vect.size(); i++) {
+        inspector->inspect(vect[i-1], vect[i]);
     }
 }
 

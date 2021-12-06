@@ -18,6 +18,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/SegmentInspector.h>
 #include <geos/util.h>
 
 #include <algorithm>
@@ -117,6 +118,12 @@ namespace geom {
             std::for_each(m_data.begin(), m_data.end(),
                     [&filter](Coordinate &c) { filter->filter_rw(&c); });
             dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
+        }
+
+        void apply_ro(SegmentInspector* inspector) const final override {
+            for (std::size_t i = 1; i < m_data.size(); i++) {
+                inspector->inspect(m_data[i-1], m_data[i]);
+            }
         }
 
     private:

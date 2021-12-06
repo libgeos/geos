@@ -18,4 +18,16 @@ IF(benchmark_FOUND)
             $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
     target_link_libraries(perf_envelope PRIVATE
             benchmark::benchmark geos_cxx_flags)
+
+    add_executable(perf_coordseq
+            CoordinateSequencePerfTest.cpp
+            ${CMAKE_SOURCE_DIR}/src/geom/Coordinate.cpp
+            ${CMAKE_SOURCE_DIR}/src/geom/CoordinateArraySequence.cpp
+            ${CMAKE_SOURCE_DIR}/src/geom/CoordinateArraySequenceFactory.cpp
+            ${CMAKE_SOURCE_DIR}/src/geom/CoordinateSequence.cpp)
+    target_include_directories(perf_coordseq PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
+    target_link_libraries(perf_coordseq PRIVATE
+            benchmark::benchmark geos_cxx_flags)
 endif()

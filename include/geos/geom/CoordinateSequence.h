@@ -19,6 +19,8 @@
 #include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for applyCoordinateFilter
+#include <geos/geom/CoordinateFilter.h>
+#include <geos/geom/SegmentInspector.h>
 
 #include <vector>
 #include <iosfwd> // ostream
@@ -28,8 +30,8 @@
 namespace geos {
 namespace geom {
 class Envelope;
-class CoordinateFilter;
 class Coordinate;
+class SegmentInspector;
 }
 }
 
@@ -283,6 +285,40 @@ public:
 
     virtual void apply_rw(const CoordinateFilter* filter) = 0; //Abstract
     virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract
+
+    virtual void apply_ro(SegmentInspector* inspector) const = 0;
+
+    template<typename F>
+    void forEachSegment(F&& fn) {
+        struct Inspector : public SegmentInspector {
+            explicit Inspector(F&& p_fn) : m_fn(std::forward<F>(p_fn)) {}
+
+            void inspect(const Coordinate& p0, const Coordinate& p1) final {
+                m_fn(p0, p1);
+            }
+
+            const F& m_fn;
+        };
+
+        Inspector inspector(std::forward<F>(fn));
+        apply_ro(&inspector);
+    }
+
+    template<typename F>
+    void forEach(F&& fn) {
+        struct Filter : public CoordinateFilter {
+            explicit Filter(F&& p_fn) : m_fn(std::forward<F>(p_fn)) {}
+
+            void filter_ro(const Coordinate* p) final {
+                m_fn(p);
+            }
+
+            const F& m_fn;
+        };
+
+        Filter filter(std::forward<F>(fn));
+        apply_ro(&filter);
+    }
 
     /** \brief
      * Apply a filter to each Coordinate of this sequence.
