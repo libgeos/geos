@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java r378 (JTS-1.12)
+ * Last port: operation/buffer/BufferCurveSetBuilder.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -23,7 +23,7 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/UnsupportedOperationException.h>
-#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
+#include <geos/operation/buffer/BufferCurveSetBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -62,7 +62,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
+BufferCurveSetBuilder::BufferCurveSetBuilder(const Geometry& newInputGeom,
         double newDistance, OffsetCurveBuilder& newCurveBuilder):
     inputGeom(newInputGeom),
     distance(newDistance),
@@ -72,7 +72,7 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
 {
 }
 
-OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
+BufferCurveSetBuilder::~BufferCurveSetBuilder()
 {
     for(std::size_t i = 0, n = curveList.size(); i < n; ++i) {
         SegmentString* ss = curveList[i];
@@ -85,7 +85,7 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 
 /* public */
 std::vector<SegmentString*>&
-OffsetCurveSetBuilder::getCurves()
+BufferCurveSetBuilder::getCurves()
 {
     add(inputGeom);
     return curveList;
@@ -93,7 +93,7 @@ OffsetCurveSetBuilder::getCurves()
 
 /*public*/
 void
-OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
+BufferCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
                                  geom::Location leftLoc, geom::Location rightLoc)
 {
     for(std::size_t i = 0, n = lineList.size(); i < n; ++i) {
@@ -104,7 +104,7 @@ OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineLis
 
 /*private*/
 void
-OffsetCurveSetBuilder::addCurve(CoordinateSequence* coord,
+BufferCurveSetBuilder::addCurve(CoordinateSequence* coord,
                                 geom::Location leftLoc, geom::Location rightLoc)
 {
 #if GEOS_DEBUG
@@ -134,7 +134,7 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence* coord,
 
 /*private*/
 void
-OffsetCurveSetBuilder::add(const Geometry& g)
+BufferCurveSetBuilder::add(const Geometry& g)
 {
     if(g.isEmpty()) {
 #if GEOS_DEBUG
@@ -173,7 +173,7 @@ OffsetCurveSetBuilder::add(const Geometry& g)
 
 /*private*/
 void
-OffsetCurveSetBuilder::addCollection(const GeometryCollection* gc)
+BufferCurveSetBuilder::addCollection(const GeometryCollection* gc)
 {
     for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
         const Geometry* g = gc->getGeometryN(i);
@@ -183,7 +183,7 @@ OffsetCurveSetBuilder::addCollection(const GeometryCollection* gc)
 
 /*private*/
 void
-OffsetCurveSetBuilder::addPoint(const Point* p)
+BufferCurveSetBuilder::addPoint(const Point* p)
 {
     // a zero or negative width buffer of a point is empty
     if(distance <= 0.0) {
@@ -201,7 +201,7 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
 
 /*private*/
 void
-OffsetCurveSetBuilder::addLineString(const LineString* line)
+BufferCurveSetBuilder::addLineString(const LineString* line)
 {
     if (curveBuilder.isLineOffsetEmpty(distance)) {
         return;
@@ -231,7 +231,7 @@ OffsetCurveSetBuilder::addLineString(const LineString* line)
 
 /*private*/
 void
-OffsetCurveSetBuilder::addPolygon(const Polygon* p)
+BufferCurveSetBuilder::addPolygon(const Polygon* p)
 {
     double offsetDistance = distance;
 
@@ -294,7 +294,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 
 /* private */
 void
-OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
+BufferCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
 {
     addRingSide(coord, p_distance,
                 Position::LEFT,
@@ -309,7 +309,7 @@ OffsetCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double 
 
 /* private */
 void
-OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
+BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
                                       double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
@@ -322,7 +322,7 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
     Location leftLoc = cwLeftLoc;
     Location rightLoc = cwRightLoc;
 #if GEOS_DEBUG
-    std::cerr << "OffsetCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
+    std::cerr << "BufferCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
 #endif
     bool isCCW = isRingCCW(coord);
     if (coord->size() >= LinearRing::MINIMUM_VALID_SIZE && isCCW)
@@ -355,7 +355,7 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
 
 /* private static*/
 bool
-OffsetCurveSetBuilder::isRingCurveInverted(
+BufferCurveSetBuilder::isRingCurveInverted(
     const CoordinateSequence* inputPts, double dist,
     const CoordinateSequence* curvePts)
 {
@@ -396,7 +396,7 @@ OffsetCurveSetBuilder::isRingCurveInverted(
  */
 /* private static */
 double
-OffsetCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const CoordinateSequence*  line) {
+BufferCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const CoordinateSequence*  line) {
     double maxDistance = 0;
     for (std::size_t i = 0; i < pts->size(); i++) {
         const Coordinate& p = pts->getAt(i);
@@ -410,7 +410,7 @@ OffsetCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const Coordin
 
 /*private*/
 bool
-OffsetCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
+BufferCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
         double bufferDistance)
 {
     const CoordinateSequence* ringCoord = ring->getCoordinatesRO();
@@ -436,7 +436,7 @@ OffsetCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
 
 /*private*/
 bool
-OffsetCurveSetBuilder::isTriangleErodedCompletely(
+BufferCurveSetBuilder::isTriangleErodedCompletely(
     const CoordinateSequence* triangleCoord, double bufferDistance)
 {
     Triangle tri(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
@@ -451,7 +451,7 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /*private*/
 bool
-OffsetCurveSetBuilder::isRingCCW(const CoordinateSequence* coords) const
+BufferCurveSetBuilder::isRingCCW(const CoordinateSequence* coords) const
 {
     bool isCCW = algorithm::Orientation::isCCWArea(coords);
     //--- invert orientation if required

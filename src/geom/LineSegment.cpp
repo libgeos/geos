@@ -303,6 +303,18 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 }
 
 /* public */
+LineSegment
+LineSegment::offset(double offsetDistance)
+{
+    Coordinate offset0, offset1;
+    pointAlongOffset(0, offsetDistance, offset0);
+    pointAlongOffset(1, offsetDistance, offset0);
+    LineSegment ls(offset0, offset1);
+    return ls;
+}
+
+
+/* public */
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
