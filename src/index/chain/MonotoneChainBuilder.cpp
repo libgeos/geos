@@ -48,7 +48,14 @@ namespace chain { // geos.index.chain
  */
 class ChainBuilder : public CoordinateFilter {
 public:
-    ChainBuilder() : m_prev(nullptr), m_i(0), m_quadrant(-1) {}
+    ChainBuilder(const CoordinateSequence* pts, void* context, std::vector<MonotoneChain> & list) :
+     m_prev(nullptr),
+     m_i(0),
+     m_quadrant(-1),
+     m_start(0),
+     m_seq(pts),
+     m_context(context),
+     m_list(list) {}
 
     void filter_ro(const Coordinate* c) override final {
         process(c);
@@ -57,14 +64,15 @@ public:
         m_i++;
     }
 
-    std::vector<std::size_t> getEnds() {
+    void finish() {
         finishChain();
-        return std::move(m_ends);
     }
 
 private:
     void finishChain() {
-        m_ends.push_back(m_i - 1);
+        std::size_t chainEnd = m_i - 1;
+        m_list.emplace_back(*m_seq, m_start, chainEnd, m_context);
+        m_start = chainEnd;
     }
 
     void process(const Coordinate* curr) {
@@ -84,10 +92,13 @@ private:
         }
     }
 
-    std::vector<std::size_t> m_ends;
     const Coordinate* m_prev;
     std::size_t m_i;
     int m_quadrant;
+    std::size_t m_start;
+    const CoordinateSequence* m_seq;
+    void* m_context;
+    std::vector<MonotoneChain>& m_list;
 };
 
 
@@ -95,14 +106,9 @@ private:
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
                                 std::vector<MonotoneChain>& mcList) {
-    ChainBuilder builder;
+    ChainBuilder builder(pts, context, mcList);
     pts->apply_ro(&builder);
-
-    size_t chainStart = 0;
-    for (size_t chainEnd : builder.getEnds()) {
-        mcList.emplace_back(*pts, chainStart, chainEnd, context);
-        chainStart = chainEnd;
-    }
+    builder.finish();
 }
 
 } // namespace geos.index.chain
