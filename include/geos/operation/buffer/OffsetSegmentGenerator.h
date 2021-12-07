@@ -147,6 +147,22 @@ public:
         segList.addPts(pts, isForward);
     }
 
+    /** \brief
+     * Compute an offset segment for an input segment on a given
+     * side and at a given distance.
+     *
+     * The offset points are computed in full double precision,
+     * for accuracy.
+     *
+     * @param seg the segment to offset
+     * @param side the side of the segment the offset lies on
+     * @param distance the offset distance
+     * @param offset the points computed for the offset segment
+     */
+    static void computeOffsetSegment(const geom::LineSegment& seg,
+                              int side, double distance,
+                              geom::LineSegment& offset);
+
 private:
 
     /**
@@ -301,22 +317,6 @@ private:
     /// @param addStartPoint
     ///
     void addInsideTurn(int orientation, bool addStartPoint);
-
-    /** \brief
-     * Compute an offset segment for an input segment on a given
-     * side and at a given distance.
-     *
-     * The offset points are computed in full double precision,
-     * for accuracy.
-     *
-     * @param seg the segment to offset
-     * @param side the side of the segment the offset lies on
-     * @param distance the offset distance
-     * @param offset the points computed for the offset segment
-     */
-    void computeOffsetSegment(const geom::LineSegment& seg,
-                              int side, double distance,
-                              geom::LineSegment& offset);
 
     /**
      * Adds points for a circular fillet around a reflex corner.
