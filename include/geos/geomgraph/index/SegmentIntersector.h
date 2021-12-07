@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 
+#include <geos/inline.h>
 #include <geos/export.h>
 #include <array>
 #include <vector>

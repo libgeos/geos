@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/inline.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/export.h>
 

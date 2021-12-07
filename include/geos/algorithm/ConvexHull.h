@@ -21,6 +21,7 @@
 #ifndef GEOS_ALGORITHM_CONVEXHULL_H
 #define GEOS_ALGORITHM_CONVEXHULL_H
 
+#include <geos/inline.h>
 #include <geos/export.h>
 #include <memory>
 #include <vector>
