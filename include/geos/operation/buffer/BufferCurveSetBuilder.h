@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Location.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
 
 #include <vector>
 
@@ -34,6 +35,7 @@ namespace geos {
 namespace geom {
 class Geometry;
 class CoordinateSequence;
+class PrecisionModel;
 class GeometryCollection;
 class Point;
 class LineString;
@@ -49,6 +51,7 @@ class SegmentString;
 namespace operation {
 namespace buffer {
 class OffsetCurveBuilder;
+class BufferParameters;
 }
 }
 }
@@ -79,7 +82,7 @@ private:
     std::vector<geomgraph::Label*> newLabels;
     const geom::Geometry& inputGeom;
     double distance;
-    OffsetCurveBuilder& curveBuilder;
+    OffsetCurveBuilder curveBuilder;
 
     /// The raw offset curves computed.
     /// This class holds ownership of std::vector elements.
@@ -230,8 +233,17 @@ private:
 public:
 
     /// Constructor
-    BufferCurveSetBuilder(const geom::Geometry& newInputGeom,
-                          double newDistance, OffsetCurveBuilder& newCurveBuilder);
+    BufferCurveSetBuilder(
+        const geom::Geometry& newInputGeom,
+        double newDistance,
+        const geom::PrecisionModel* newPm,
+        const BufferParameters& newBufParams)
+        : inputGeom(newInputGeom)
+        , distance(newDistance)
+        , curveBuilder(newPm, newBufParams)
+        , curveList()
+        , isInvertOrientation(false)
+        {};
 
     /// Destructor
     ~BufferCurveSetBuilder();

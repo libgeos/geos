@@ -391,9 +391,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
     {
         // This scope is here to force release of resources owned by
         // BufferCurveSetBuilder when we're doing with it
-
-        OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
-        BufferCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
+        BufferCurveSetBuilder curveSetBuilder(*g, distance, precisionModel, bufParams);
         curveSetBuilder.setInvertOrientation(isInvertOrientation);
 
         GEOS_CHECK_FOR_INTERRUPTS();

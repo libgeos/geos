@@ -62,15 +62,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-BufferCurveSetBuilder::BufferCurveSetBuilder(const Geometry& newInputGeom,
-        double newDistance, OffsetCurveBuilder& newCurveBuilder):
-    inputGeom(newInputGeom),
-    distance(newDistance),
-    curveBuilder(newCurveBuilder),
-    curveList(),
-    isInvertOrientation(false)
-{
-}
+
 
 BufferCurveSetBuilder::~BufferCurveSetBuilder()
 {
