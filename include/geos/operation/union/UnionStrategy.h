@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://trac.osgeo.org/geos
+ * http://geos.osgeo.org
  *
  * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  *

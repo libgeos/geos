@@ -154,6 +154,10 @@ public:
                       double distance,
                       std::vector<geom::CoordinateSequence*>& lineList);
 
+    void getOffsetCurve(const geom::CoordinateSequence* inputPts,
+                        double p_distance,
+                        std::vector<geom::CoordinateSequence*>& lineList);
+
 private:
 
     double distance;
@@ -194,6 +198,7 @@ private:
 
     void computePointCurve(const geom::Coordinate& pt,
                            OffsetSegmentGenerator& segGen);
+
 
 
     // Declare type as noncopyable

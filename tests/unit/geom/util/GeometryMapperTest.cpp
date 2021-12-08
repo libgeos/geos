@@ -22,7 +22,7 @@ struct test_geometrymapper_data {
 
     geos::io::WKTReader wktreader_;
 
-    GeometryMapper::mapOp KEEP_LINE = [](const Geometry& geom)->std::unique_ptr<Geometry> {
+     GeometryMapper::mapOp KEEP_LINE = [](const Geometry& geom)->std::unique_ptr<Geometry> {
         if (geom.getGeometryTypeId() == GEOS_POINT) {
             return geom.getFactory()->createEmpty(1);
         }

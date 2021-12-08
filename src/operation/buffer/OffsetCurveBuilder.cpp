@@ -81,6 +81,40 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence* inputPts,
     segGen->getCoordinates(lineList);
 }
 
+/* public */
+void
+OffsetCurveBuilder::getOffsetCurve(
+    const CoordinateSequence* inputPts,
+    double p_distance,
+    std::vector<CoordinateSequence*>& lineList)
+{
+    distance = p_distance;
+
+    // a zero width offset curve is empty
+    if (p_distance == 0.0) return;
+
+    double posDistance = std::abs(p_distance);
+    std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(posDistance);
+    if (inputPts->size() <= 1) {
+        computePointCurve(inputPts[0], *segGen);
+    }
+    else {
+        computeSingleSidedBufferCurve(*inputPts, isRightSide, *segGen);
+    }
+
+    segGen->getCoordinates(lineList);
+
+    // for right side line is traversed in reverse direction, so have to reverse generated line
+    bool isRightSide = p_distance < 0.0;
+    if (isRightSide) {
+        for (auto cs*: lineList) {
+            CoordinateSequence::reverse(cs);
+        }
+    }
+    return;
+}
+
+
 /* private */
 void
 OffsetCurveBuilder::computePointCurve(const Coordinate& pt,

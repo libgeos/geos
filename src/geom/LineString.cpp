@@ -106,6 +106,15 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
     validateConstruction();
 }
 
+/*public*/
+LineString::LineString(std::vector<Coordinate> && newCoords,
+                       const GeometryFactory& factory)
+    :
+    Geometry(&factory),
+    points(new CoordinateArraySequence(std::move(newCoords)))
+{
+    validateConstruction();
+}
 
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
