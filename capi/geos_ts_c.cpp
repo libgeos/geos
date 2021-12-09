@@ -1166,11 +1166,9 @@ extern "C" {
             );
             bp.setMitreLimit(mitreLimit);
 
-            bool isLeftSide = true;
-            if(width < 0) {
-                isLeftSide = false;
-                width = -width;
-            }
+            bool isLeftSide = width > 0;
+            width = std::abs(width);
+
             BufferBuilder bufBuilder(bp);
             std::unique_ptr<Geometry> g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
             g3->setSRID(g1->getSRID());
