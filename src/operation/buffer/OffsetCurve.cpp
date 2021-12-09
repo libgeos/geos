@@ -124,6 +124,9 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
     auto longestHole = extractLongestHole(*bufferPoly);
     const CoordinateSequence* holePts = longestHole ? longestHole->getCoordinatesRO() : nullptr;
     offsetCurve = computeCurve(holePts, rawOffsetLines);
+    for (auto* cs: rawOffsetLines) {
+        delete cs;
+    }
     return offsetCurve;
 }
 
