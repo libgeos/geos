@@ -101,6 +101,8 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
     std::vector<CoordinateSequence*> rawOffsetLines;
     rawOffset(lineGeom, p_distance, rawOffsetLines);
     if (rawOffsetLines.empty() || rawOffsetLines[0]->size() == 0) {
+        for (auto* cs: rawOffsetLines)
+            delete cs;
         return geomFactory->createLineString();
     }
     /**
@@ -116,17 +118,18 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
     //-- first try matching shell to raw curve
     const CoordinateSequence* shell = bufferPoly->getExteriorRing()->getCoordinatesRO();
     std::unique_ptr<LineString> offsetCurve = computeCurve(shell, rawOffsetLines);
-    if (! offsetCurve->isEmpty()
-        || bufferPoly->getNumInteriorRing() == 0)
+    if (! offsetCurve->isEmpty() || bufferPoly->getNumInteriorRing() == 0) {
+        for (auto* cs: rawOffsetLines)
+            delete cs;
         return offsetCurve;
+    }
 
     //-- if shell didn't work, try matching to largest hole
     auto longestHole = extractLongestHole(*bufferPoly);
     const CoordinateSequence* holePts = longestHole ? longestHole->getCoordinatesRO() : nullptr;
     offsetCurve = computeCurve(holePts, rawOffsetLines);
-    for (auto* cs: rawOffsetLines) {
+    for (auto* cs: rawOffsetLines)
         delete cs;
-    }
     return offsetCurve;
 }
 
