@@ -117,7 +117,7 @@ private:
         SegmentMCIndex& segIndex, const CoordinateSequence* bufferPts,
         std::vector<bool>& isInCurve);
 
-    double subsegmentMatchFrac(const Coordinate& p0, const Coordinate& p1,
+    static double subsegmentMatchFrac(const Coordinate& p0, const Coordinate& p1,
         const Coordinate& seg0, const Coordinate& seg1, double matchDistance);
 
     /**
@@ -132,7 +132,7 @@ private:
     static void extractSection(const CoordinateSequence* ring, int iStartIndex,
             std::vector<bool>& isExtracted, std::vector<Coordinate>& extractedPoints);
 
-    static int next(std::size_t i, std::size_t size);
+    static std::size_t next(std::size_t i, std::size_t size);
 
 
     /* private */
@@ -164,7 +164,9 @@ private:
             , minCurveIndex(-1)
             {};
 
-        void select(const index::chain::MonotoneChain& mc, std::size_t segIndex);
+        void select(const index::chain::MonotoneChain& mc, std::size_t segIndex) override;
+        void select(const geom::LineSegment& seg) override { (void)seg; return; };
+
         int getMinCurveIndex() { return minCurveIndex; }
     };
 

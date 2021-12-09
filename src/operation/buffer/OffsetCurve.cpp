@@ -15,6 +15,7 @@
 #include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/buffer/SegmentMCIndex.h>
 
 #include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
@@ -161,7 +162,7 @@ OffsetCurve::extractMaxAreaPolygon(const Geometry& geom)
 
     double maxArea = 0;
     const Polygon* maxPoly = nullptr;
-    for (std::size_it i = 0; i < geom.getNumGeometries(); i++) {
+    for (std::size_t i = 0; i < geom.getNumGeometries(); i++) {
         const Polygon* poly = static_cast<const Polygon*>(geom.getGeometryN(i));
         double area = poly->getArea();
         if (maxPoly == nullptr || area > maxArea) {
@@ -180,13 +181,13 @@ OffsetCurve::extractLongestHole(const Polygon& poly)
     double maxLen = -1;
     for (std::size_t i = 0; i < poly.getNumInteriorRing(); i++) {
         const LinearRing* hole = poly.getInteriorRingN(i);
-        double len = hole.getLength();
+        double len = hole->getLength();
         if (len > maxLen) {
             largestHole = hole;
             maxLen = len;
         }
     }
-    return largestHole ? largestHole->clone : nullptr;
+    return largestHole ? largestHole->clone() : nullptr;
 }
 
 /* private */
@@ -194,12 +195,11 @@ std::unique_ptr<LineString>
 OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<CoordinateSequence*>& rawOffsetList)
 {
     std::vector<bool> isInCurve;
-    isInCurve.resize(bufferPts.size() - 1, false);
+    isInCurve.resize(bufferPts->size() - 1, false);
 
     SegmentMCIndex segIndex(bufferPts);
 
     int curveStart = -1;
-    bool foundCurveStart = false;
     CoordinateSequence* rawOffset = rawOffsetList[0];
     for (std::size_t i = 0; i < rawOffsetList.size() - 1; i++) {
         int index = markMatchingSegments(
@@ -214,6 +214,29 @@ OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<Coord
     return geomFactory->createLineString(std::move(curvePts));
 }
 
+void
+OffsetCurve::MatchCurveSegmentAction::select(const MonotoneChain& mc, std::size_t segIndex)
+{
+    (void)mc; // Quiet unused variable warning
+
+    /**
+    * A curveRingPt segment may match all or only a portion of a single raw segment.
+    * There may be multiple curve ring segs that match along the raw segment.
+    * The one closest to the segment start is recorded as the offset curve start.
+    */
+    double frac = subsegmentMatchFrac(bufferPts->getAt(segIndex), bufferPts->getAt(segIndex+1), p0, p1, matchDistance);
+    //-- no match
+    if (frac < 0) return;
+
+    isInCurve[segIndex] = true;
+
+    //-- record lowest index
+    if (minFrac < 0 || frac < minFrac) {
+        minFrac = frac;
+        minCurveIndex = static_cast<int>(segIndex);
+    }
+}
+
 /* private */
 int
 OffsetCurve::markMatchingSegments(
@@ -224,7 +247,7 @@ OffsetCurve::markMatchingSegments(
     Envelope matchEnv(p0, p1);
     matchEnv.expandBy(matchDistance);
     MatchCurveSegmentAction action(p0, p1, bufferPts, matchDistance, isInCurve);
-    segIndex.query(matchEnv, action);
+    segIndex.query(&matchEnv, action);
     return action.getMinCurveIndex();
 }
 
@@ -234,9 +257,9 @@ double
 OffsetCurve::subsegmentMatchFrac(const Coordinate& p0, const Coordinate& p1,
       const Coordinate& seg0, const Coordinate& seg1, double matchDistance)
 {
-    if (matchDistance < Distance::pointToSegment(p0, seg0, seg1))
+    if (matchDistance < algorithm::Distance::pointToSegment(p0, seg0, seg1))
         return -1;
-    if (matchDistance < Distance::pointToSegment(p1, seg0, seg1))
+    if (matchDistance < algorithm::Distance::pointToSegment(p1, seg0, seg1))
         return -1;
     //-- matched - determine position as fraction
     LineSegment seg(seg0, seg1);
@@ -256,15 +279,15 @@ OffsetCurve::extractSection(const CoordinateSequence* ring, int iStartIndex,
     std::size_t startIndex = static_cast<std::size_t>(iStartIndex);
     std::size_t i = startIndex;
     do {
-        coordList.insert(coordList.end(), ring[i], false);
+        coordList.insert(coordList.end(), ring->getAt(i), false);
         if (! isExtracted[i]) {
             break;
         }
-        i = next(i, ring.size() - 1);
+        i = next(i, ring->size() - 1);
     } while (i != startIndex);
     //-- handle case where every segment is extracted
     if (isExtracted[i]) {
-        coordList.insert(coordList.end(), ring[i], false);
+        coordList.insert(coordList.end(), ring->getAt(i), false);
     }
 
     //-- if only one point found return empty LineString
@@ -278,34 +301,13 @@ OffsetCurve::extractSection(const CoordinateSequence* ring, int iStartIndex,
 }
 
 /* private static */
-int
+std::size_t
 OffsetCurve::next(std::size_t i, std::size_t size) {
     i += 1;
     return (i < size) ? i : 0;
 }
 
 
-
-void
-OffsetCurve::MatchCurveSegmentAction::select(const MonotoneChain& mc, std::size_t segIndex);
-{
-    /**
-    * A curveRingPt segment may match all or only a portion of a single raw segment.
-    * There may be multiple curve ring segs that match along the raw segment.
-    * The one closest to the segment start is recorded as the offset curve start.
-    */
-    double frac = subsegmentMatchFrac(bufferPts[segIndex], bufferPts[segIndex+1], p0, p1, matchDistance);
-    //-- no match
-    if (frac < 0) return;
-
-    isInCurve[segIndex] = true;
-
-    //-- record lowest index
-    if (minFrac < 0 || frac < minFrac) {
-        minFrac = frac;
-        minCurveIndex = segIndex;
-    }
-}
 
 
 } // namespace geos.operation.buffer
