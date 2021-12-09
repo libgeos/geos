@@ -24,11 +24,9 @@ namespace tut {
 struct test_offsetcurve_data {
 
     geos::io::WKTReader wktreader;
-    geos::io::WKTWriter wktwriter;
 
-    test_offsetcurve_data() {
-        wktwriter.setRoundingPrecision(2);
-    };
+
+    test_offsetcurve_data() {};
 
     void checkOffsetCurve(const char* wkt, double distance, const char* wktExpected)
     {
@@ -47,9 +45,11 @@ struct test_offsetcurve_data {
 
         std::unique_ptr<geos::geom::Geometry> expected = wktreader.read(wktExpected);
 
-        std::cout << std::endl;
-        std::cout << "Expected: " << wktwriter.write(expected.get()) << std::endl;
-        std::cout << "  Result: " << wktwriter.write(result.get()) << std::endl;
+        // geos::io::WKTWriter wktwriter;
+        // wktwriter.setRoundingPrecision(2);
+        // std::cout << std::endl;
+        // std::cout << "Expected: " << wktwriter.write(expected.get()) << std::endl;
+        // std::cout << "  Result: " << wktwriter.write(result.get()) << std::endl;
 
         ensure_equals_geometry(result.get(), expected.get(), tolerance);
     }
