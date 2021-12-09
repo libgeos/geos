@@ -201,9 +201,9 @@ OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<Coord
 
     int curveStart = -1;
     CoordinateSequence* rawOffset = rawOffsetList[0];
-    for (std::size_t i = 0; i < rawOffsetList.size() - 1; i++) {
+    for (std::size_t i = 0; i < rawOffset->size() - 1; i++) {
         int index = markMatchingSegments(
-                        rawOffset->getAt(i), rawOffset->getAt(i),
+                        rawOffset->getAt(i), rawOffset->getAt(i+1),
                         segIndex, bufferPts, isInCurve);
         if (curveStart < 0) {
             curveStart = index;
