@@ -53,15 +53,15 @@ namespace buffer {
 
 /**
  * Computes an offset curve from a geometry.
- * The offset curve of a line is a {@link LineString} which
+ * The offset curve of a line is a LineString which
  * lies at a given distance from the input line.
  * If the offset distance is positive the curve lies on the left side of the input;
  * if it is negative the curve is on the right side.
  *
  * The offset curve of a Point is an empty LineString.
  * The offset curve of a Polygon is the boundary of the polygon buffer (which
- * may be a {@link MultiLineString}.
- * For a collection the output is a {@link MultiLineString} of the element offset curves.
+ * may be a MultiLineString.
+ * For a collection the output is a MultiLineString of the element offset curves.
  *
  * The offset curve is computed as a single contiguous section of the geometry buffer boundary.
  * In some geometric situations this definition is ill-defined.
