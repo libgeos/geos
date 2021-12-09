@@ -28,21 +28,15 @@ struct test_offsetcurve_data {
 
     test_offsetcurve_data() {};
 
-    void checkOffsetCurve(const char* wkt, double distance, const char* wktExpected)
+    void checkOffsetCurve(const std::string& wkt, double distance, const std::string& wktExpected)
     {
         checkOffsetCurve(wkt, distance, wktExpected, 0.05);
     }
 
-    void checkOffsetCurve(const char* wkt, double distance, const char* wktExpected, double tolerance)
+    void checkOffsetCurve(const std::string& wkt, double distance, const std::string& wktExpected, double tolerance)
     {
-        std::string wktString(wkt);
-        std::string wktExpect(wktExpected);
-        std::unique_ptr<geos::geom::Geometry> geom = wktreader.read(wktString);
+        std::unique_ptr<geos::geom::Geometry> geom = wktreader.read(wkt);
         std::unique_ptr<geos::geom::Geometry> result = geos::operation::buffer::OffsetCurve::getCurve(*geom, distance);
-
-        if (wktExpected == nullptr)
-            return;
-
         std::unique_ptr<geos::geom::Geometry> expected = wktreader.read(wktExpected);
 
         // geos::io::WKTWriter wktwriter;

@@ -36,10 +36,8 @@ struct test_geometrymapper_data {
         return geom.getBoundary();
     };
 
-    void checkFlatMap(const char* wktStr, int dim, GeometryMapper::mapOp op, const char* wktExpectedStr)
+    void checkFlatMap(const std::string& wkt, int dim, GeometryMapper::mapOp op, const std::string& wktExpected)
     {
-        std::string wkt(wktStr);
-        std::string wktExpected(wktExpectedStr);
         auto geom = wktreader_.read(wkt);
         auto actual = GeometryMapper::flatMap(*geom, dim, op);
         auto expected = wktreader_.read(wktExpected);
