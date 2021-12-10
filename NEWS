@@ -10,6 +10,7 @@ Changes in 3.10.2
   - Iterator invalidation in rare cases (GH-508, Momtchil Momtchev)
   - Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey)
   - Write LinearRing to GeoJSON as LineString (TRAC-1140, Paul Ramsey)
+  - Fix PolygonEarClipper to handle collapsed corners (GH-526, Martin Davis)
 
 
 Changes in 3.10.1
