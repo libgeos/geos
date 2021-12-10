@@ -17,6 +17,7 @@
 #include <geos/export.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/operation/buffer/BufferParameters.h>
 
 
 #ifdef _MSC_VER
@@ -53,11 +54,12 @@ namespace buffer {
 
 /**
  * Computes an offset curve from a geometry.
- * The offset curve of a line is a LineString which
- * lies at a given distance from the input line.
+ * The offset curve is a linear geometry which is offset a specified distance
+ * from the input.
  * If the offset distance is positive the curve lies on the left side of the input;
  * if it is negative the curve is on the right side.
  *
+ * The offset curve of a line is a LineString which
  * The offset curve of a Point is an empty LineString.
  * The offset curve of a Polygon is the boundary of the polygon buffer (which
  * may be a MultiLineString.
@@ -73,8 +75,11 @@ namespace buffer {
  *    Only a single contiguous portion on the specified side is returned.
  *  * If the offset corresponds to buffer holes, only the largest hole is used.
  *
- * @author Martin Davis
+ * Offset curves support setting the number of quadrant segments,
+ * the join style, and the mitre limit (if applicable) via
+ * the BufferParameters.
  *
+ * @author Martin Davis
  */
 class GEOS_DLL OffsetCurve {
 
@@ -87,6 +92,7 @@ private:
     // Members
     const Geometry& inputGeom;
     double distance;
+    BufferParameters bufferParams;
     double matchDistance;
     const GeometryFactory* geomFactory;
 
@@ -96,7 +102,7 @@ private:
 
     std::unique_ptr<LineString> offsetSegment(const CoordinateSequence* pts, double distance);
 
-    static std::unique_ptr<Polygon> getBufferOriented(const LineString& geom, double distance);
+    static std::unique_ptr<Polygon> getBufferOriented(const LineString& geom, double distance, BufferParameters& bufParms);
 
     /**
     * Extracts the largest polygon by area from a geometry.
@@ -173,7 +179,16 @@ private:
 
 public:
 
-    // Constructor
+    /**
+    * Creates a new instance for computing an offset curve for a geometryat a given distance.
+    * with default quadrant segments BufferParameters::DEFAULT_QUADRANT_SEGMENTS
+    * and join style BufferParameters::JOIN_STYLE.
+    *
+    * @param geom the geometry to offset
+    * @param distance the offset distance (positive = left, negative = right)
+    *
+    * \see BufferParameters
+    */
     OffsetCurve(const Geometry& geom, double dist)
         : inputGeom(geom)
         , distance(dist)
@@ -181,21 +196,58 @@ public:
         , geomFactory(geom.getFactory())
         {};
 
+    /**
+    * Creates a new instance for computing an offset curve for a geometry at a given distance.
+    * allowing the quadrant segments and join style and mitre limit to be set
+    * via BufferParameters.
+    *
+    * @param geom
+    * @param distance
+    * @param bp
+    */
+    OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
+        : inputGeom(geom)
+        , distance(dist)
+        , bufferParams(bp)
+        , matchDistance(std::abs(dist)/NEARNESS_FACTOR)
+        , geomFactory(geom.getFactory())
+        {};
+
+    /**
+    * Computes the offset curve of a geometry at a given distance,
+    * and for a specified quadrant segments, join style and mitre limit.
+    *
+    * @param geom a geometry
+    * @param distance the offset distance (positive = left, negative = right)
+    * @param quadSegs the quadrant segments (-1 for default)
+    * @param joinStyle the join style (-1 for default)
+    * @param mitreLimit the mitre limit (-1 for default)
+    * @return the offset curve
+    */
+    static std::unique_ptr<Geometry> getCurve(
+        const Geometry& geom,
+        double distance, int quadSegs, BufferParameters::JoinStyle joinStyle, double mitreLimit);
+
     static std::unique_ptr<Geometry> getCurve(const Geometry& geom, double distance);
     std::unique_ptr<Geometry> getCurve();
 
     /**
     * Gets the raw offset line.
-    * This may contain loops and other artifacts which are
-    * not present in the actual offset curve.
-    * The raw offset line is used to extract the offset curve
-    * by matching it to a buffer ring (which is clean).
+    * The quadrant segments and join style and mitre limit to be set
+    * via BufferParameters.
+    *
+    * The raw offset line may contain loops and other artifacts which are
+    * not present in the true offset curve.
+    * The raw offset line is matched to the buffer ring (which is clean)
+    * to extract the offset curve.
     *
     * @param geom the linestring to offset
     * @param distance the offset distance
+    * @param bufParams the buffer parameters to use
     * @param lineList the vector to populate with the return value
     * @return the raw offset line
     */
+    static void rawOffset(const LineString& geom, double distance, BufferParameters& bufParams, std::vector<CoordinateSequence*>& lineList);
     static void rawOffset(const LineString& geom, double distance, std::vector<CoordinateSequence*>& lineList);
 
 };

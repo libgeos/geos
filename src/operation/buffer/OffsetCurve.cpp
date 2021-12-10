@@ -16,6 +16,7 @@
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/SegmentMCIndex.h>
+#include <geos/operation/buffer/BufferOp.h>
 
 #include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
@@ -49,6 +50,23 @@ OffsetCurve::getCurve(const Geometry& geom, double distance)
 }
 
 
+/* public static */
+std::unique_ptr<Geometry>
+OffsetCurve::getCurve(const Geometry& geom,
+    double dist,
+    int quadSegs,
+    BufferParameters::JoinStyle joinStyle,
+    double mitreLimit)
+{
+    BufferParameters bufParms;
+    if (quadSegs >= 0) bufParms.setQuadrantSegments(quadSegs);
+    if (joinStyle >= 0) bufParms.setJoinStyle(joinStyle);
+    if (mitreLimit >= 0) bufParms.setMitreLimit(mitreLimit);
+    OffsetCurve oc(geom, dist, bufParms);
+    return oc.getCurve();
+}
+
+
 /* public */
 std::unique_ptr<Geometry>
 OffsetCurve::getCurve()
@@ -76,10 +94,20 @@ OffsetCurve::getCurve()
 
 /* public static */
 void
-OffsetCurve::rawOffset(const LineString& geom, double distance,
+OffsetCurve::rawOffset(const LineString& geom, double dist,
     std::vector<CoordinateSequence*>& lineList)
 {
-    BufferParameters bufParams;
+    BufferParameters bp;
+    rawOffset(geom, dist, bp, lineList);
+    return;
+}
+
+
+/* public static */
+void
+OffsetCurve::rawOffset(const LineString& geom, double distance, BufferParameters& bufParams,
+    std::vector<CoordinateSequence*>& lineList)
+{
     OffsetCurveBuilder ocb(geom.getFactory()->getPrecisionModel(), bufParams);
     ocb.getOffsetCurve(geom.getCoordinatesRO(), distance, lineList);
     return;
@@ -99,7 +127,7 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
     }
 
     std::vector<CoordinateSequence*> rawOffsetLines;
-    rawOffset(lineGeom, p_distance, rawOffsetLines);
+    rawOffset(lineGeom, p_distance, bufferParams, rawOffsetLines);
     if (rawOffsetLines.empty() || rawOffsetLines[0]->size() == 0) {
         for (auto* cs: rawOffsetLines)
             delete cs;
@@ -113,7 +141,7 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
      * so not doing this.
      */
 
-    std::unique_ptr<Polygon> bufferPoly = getBufferOriented(lineGeom, p_distance);
+    std::unique_ptr<Polygon> bufferPoly = getBufferOriented(lineGeom, p_distance, bufferParams);
 
     //-- first try matching shell to raw curve
     const CoordinateSequence* shell = bufferPoly->getExteriorRing()->getCoordinatesRO();
@@ -145,9 +173,9 @@ OffsetCurve::offsetSegment(const CoordinateSequence* pts, double p_distance)
 
 /* private static */
 std::unique_ptr<Polygon>
-OffsetCurve::getBufferOriented(const LineString& geom, double p_distance)
+OffsetCurve::getBufferOriented(const LineString& geom, double p_distance, BufferParameters& bufParms)
 {
-    std::unique_ptr<Geometry> buffer = geom.buffer(std::abs(p_distance));
+    std::unique_ptr<Geometry> buffer = BufferOp::bufferOp(&geom, std::abs(p_distance), bufParms);
     std::unique_ptr<Polygon> bufferPoly = extractMaxAreaPolygon(*buffer);
     //-- for negative distances (Right of input) reverse buffer direction to match offset curve
     if (p_distance < 0) {

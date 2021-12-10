@@ -7,6 +7,7 @@
 
 // geos
 #include <geos/operation/buffer/OffsetCurve.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKTReader.h>
 // #include <geos/io/WKTWriter.h>
@@ -19,14 +20,32 @@ namespace tut {
 //
 // Test Group
 //
+using geos::operation::buffer::OffsetCurve;
+using geos::operation::buffer::BufferParameters;
 
 // Common data used by tests
 struct test_offsetcurve_data {
-
     geos::io::WKTReader wktreader;
 
-
     test_offsetcurve_data() {};
+
+    void checkOffsetCurve(const std::string& wkt, double distance,
+        int quadSegs, int joinStyle, double mitreLimit,
+        const std::string& wktExpected)
+    {
+        checkOffsetCurve(wkt, distance, quadSegs, joinStyle, mitreLimit, wktExpected, 0.05);
+    }
+
+    void checkOffsetCurve(const std::string& wkt, double distance,
+        int quadSegs, int joinStyle, double mitreLimit,
+        const std::string& wktExpected, double tolerance)
+    {
+        BufferParameters::JoinStyle js = static_cast<BufferParameters::JoinStyle>(joinStyle);
+        std::unique_ptr<geos::geom::Geometry> geom = wktreader.read(wkt);
+        std::unique_ptr<geos::geom::Geometry> result = OffsetCurve::getCurve(*geom, distance, quadSegs, js, mitreLimit);
+        std::unique_ptr<geos::geom::Geometry> expected = wktreader.read(wktExpected);
+        ensure_equals_geometry(result.get(), expected.get(), tolerance);
+    }
 
     void checkOffsetCurve(const std::string& wkt, double distance, const std::string& wktExpected)
     {
@@ -36,7 +55,7 @@ struct test_offsetcurve_data {
     void checkOffsetCurve(const std::string& wkt, double distance, const std::string& wktExpected, double tolerance)
     {
         std::unique_ptr<geos::geom::Geometry> geom = wktreader.read(wkt);
-        std::unique_ptr<geos::geom::Geometry> result = geos::operation::buffer::OffsetCurve::getCurve(*geom, distance);
+        std::unique_ptr<geos::geom::Geometry> result = OffsetCurve::getCurve(*geom, distance);
         std::unique_ptr<geos::geom::Geometry> expected = wktreader.read(wktExpected);
 
         // geos::io::WKTWriter wktwriter;
@@ -241,7 +260,43 @@ void object::test<17> ()
     );
 }
 
+  //---------------------------------------
 
+// testQuadSegs
+template<>
+template<>
+void object::test<18> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (20 20, 50 50, 80 20)",
+        10, 2, -1, -1,
+        "LINESTRING (12.93 27.07, 42.93 57.07, 50 60, 57.07 57.07, 87.07 27.07)"
+        );
+}
+
+// testJoinBevel
+template<>
+template<>
+void object::test<19> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (20 20, 50 50, 80 20)",
+        10, -1, BufferParameters::JOIN_BEVEL, -1,
+        "LINESTRING (12.93 27.07, 42.93 57.07, 57.07 57.07, 87.07 27.07)"
+        );
+}
+
+// testJoinMitre
+template<>
+template<>
+void object::test<20> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (20 20, 50 50, 80 20)",
+        10, -1, BufferParameters::JOIN_MITRE, -1,
+        "LINESTRING (12.93 27.07, 50 64.14, 87.07 27.07)"
+        );
+}
 
 
 

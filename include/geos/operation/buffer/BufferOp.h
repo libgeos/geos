@@ -171,6 +171,11 @@ public:
         int quadrantSegments = BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
         int endCapStyle = BufferParameters::CAP_ROUND);
 
+    static std::unique_ptr<geom::Geometry> bufferOp(
+        const geom::Geometry* g,
+        double distance,
+        BufferParameters& bufParms);
+
     /** \brief
      * Initializes a buffer computation for the given geometry.
      *
