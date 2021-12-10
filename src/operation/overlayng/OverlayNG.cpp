@@ -36,6 +36,7 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
 #include <geos/util/Interrupt.h>
+#include <geos/util/TopologyException.h>
 
 #include <algorithm>
 
@@ -266,7 +267,22 @@ OverlayNG::computeEdgeOverlay()
     }
 
     GEOS_CHECK_FOR_INTERRUPTS();
-    return extractResult(opCode, &graph);
+    std::unique_ptr<Geometry> result = extractResult(opCode, &graph);
+
+    /**
+     * Heuristic check on result area.
+     * Catches cases where noding causes vertex to move
+     * and make topology graph area "invert".
+     */
+    if (OverlayUtil::isFloating(pm)) {
+        bool isAreaConsistent = OverlayUtil::isResultAreaConsistent(
+            inputGeom.getGeometry(0),
+            inputGeom.getGeometry(1),
+            opCode, result.get());
+        if (! isAreaConsistent)
+            throw util::TopologyException("Result area inconsistent with overlay operation");
+    }
+    return result;
 }
 
 /*private*/

@@ -224,6 +224,41 @@ OverlayUtil::resultDimension(int opCode, int dim0, int dim1)
     return resultDimension;
 }
 
+/* public static */
+bool
+OverlayUtil::isResultAreaConsistent(
+    const Geometry* geom0, const Geometry* geom1,
+    int opCode, const Geometry* result)
+{
+    if (geom0 == nullptr || geom1 == nullptr)
+        return true;
+
+    double areaResult = result->getArea();
+    double areaA = geom0->getArea();
+    double areaB = geom1->getArea();
+    bool isConsistent = true;
+
+    switch (opCode) {
+    case OverlayNG::INTERSECTION:
+        isConsistent = isLess(areaResult, areaA, AREA_HEURISTIC_TOLERANCE)
+                    && isLess(areaResult, areaB, AREA_HEURISTIC_TOLERANCE);
+        break;
+    case OverlayNG::DIFFERENCE:
+        isConsistent = isLess(areaResult, areaA, AREA_HEURISTIC_TOLERANCE)
+                    && isGreater(areaResult, areaA - areaB, AREA_HEURISTIC_TOLERANCE);
+        break;
+    case OverlayNG::SYMDIFFERENCE:
+        isConsistent = isLess(areaResult, areaA + areaB, AREA_HEURISTIC_TOLERANCE);
+        break;
+    case OverlayNG::UNION:
+        isConsistent = isLess(areaA, areaResult, AREA_HEURISTIC_TOLERANCE)
+                    && isLess(areaB, areaResult, AREA_HEURISTIC_TOLERANCE)
+                    && isGreater(areaResult, areaA - areaB, AREA_HEURISTIC_TOLERANCE);
+        break;
+    }
+    return isConsistent;
+}
+
 
 /*public static*/
 std::unique_ptr<Geometry>

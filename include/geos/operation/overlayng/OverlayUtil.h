@@ -60,6 +60,7 @@ private:
 
     static constexpr double SAFE_ENV_BUFFER_FACTOR = 0.1;
     static constexpr int SAFE_ENV_GRID_FACTOR = 3;
+    static constexpr double AREA_HEURISTIC_TOLERANCE = 0.1;
 
     /**
     * Computes an envelope which covers the extent of the result of
@@ -84,6 +85,14 @@ private:
     * Assumes envelopes are non-empty.
     */
     static bool isDisjoint(const Envelope* envA, const Envelope* envB, const PrecisionModel* pm);
+
+    static bool isLess(double v1, double v2, double tol) {
+        return v1 <= v2 * (1 + tol);
+    };
+
+    static bool isGreater(double v1, double v2, double tol) {
+        return v1 >= v2 * (1 - tol);
+    }
 
 
 public:
@@ -157,6 +166,25 @@ public:
 
     static std::unique_ptr<Geometry> toLines(OverlayGraph* graph, bool isOutputEdges, const GeometryFactory* geomFact);
 
+    /**
+    * A heuristic check for overlay result correctness
+    * comparing the areas of the input and result.
+    * The heuristic is necessarily coarse, but it detects some obvious issues.
+    * (e.g. https://github.com/locationtech/jts/issues/798)
+    * <p>
+    * <b>Note:</b> - this check is only safe if the precision model is floating.
+    * It should also be safe for snapping noding if the distance tolerance is reasonably small.
+    * (Fixed precision models can lead to collapse causing result area to expand.)
+    *
+    * @param geom0 input geometry 0
+    * @param geom1 input geometry 1
+    * @param opCode the overlay opcode
+    * @param result the overlay result
+    * @return true if the result area is consistent
+    */
+    static bool isResultAreaConsistent(
+        const Geometry* geom0, const Geometry* geom1,
+        int opCode, const Geometry* result);
 
     /**
     * Round the key point if precision model is fixed.
