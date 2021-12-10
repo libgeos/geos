@@ -73,6 +73,8 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFloating</b>
 <tr class="memitem:af7edfa7322c78c06af3fd6ac98f19789"><td class="memItemLeft" align="right" valign="top"><a id="af7edfa7322c78c06af3fd6ac98f19789"></a>
 static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toLines</b> (<a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayGraph.html">OverlayGraph</a> *graph, bool isOutputEdges, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *geomFact)</td></tr>
 <tr class="separator:af7edfa7322c78c06af3fd6ac98f19789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b2da0dfd67d12df63ebec8088c6579"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayUtil.html#ab6b2da0dfd67d12df63ebec8088c6579">isResultAreaConsistent</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom1, int opCode, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *result)</td></tr>
+<tr class="separator:ab6b2da0dfd67d12df63ebec8088c6579"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c5339aa0a9db6635e956c5502c2c5ca"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayUtil.html#a1c5339aa0a9db6635e956c5502c2c5ca">round</a> (const <a class="el" href="classgeos_1_1geom_1_1Point.html">Point</a> *pt, const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> *pm, <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;rsltCoord)</td></tr>
 <tr class="separator:a1c5339aa0a9db6635e956c5502c2c5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa9884e4ac7847c6e0916d2631581d02"><td class="memTemplParams" colspan="2"><a id="afa9884e4ac7847c6e0916d2631581d02"></a>
@@ -309,6 +311,66 @@ template&lt;typename T &gt; </td></tr>
 </table>
 </div><div class="memdoc">
 <p>Tests if the geometry envelopes are disjoint, or empty. The disjoint test must take into account the precision model being used, since geometry coordinates may shift under rounding. </p>
+
+</div>
+</div>
+<a id="ab6b2da0dfd67d12df63ebec8088c6579"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b2da0dfd67d12df63ebec8088c6579">&#9670;&nbsp;</a></span>isResultAreaConsistent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool geos::operation::overlayng::OverlayUtil::isResultAreaConsistent </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>opCode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A heuristic check for overlay result correctness comparing the areas of the input and result. The heuristic is necessarily coarse, but it detects some obvious issues. (e.g. <a href="https://github.com/locationtech/jts/issues/798">https://github.com/locationtech/jts/issues/798</a>) </p>
+<p><b>Note:</b> - this check is only safe if the precision model is floating. It should also be safe for snapping noding if the distance tolerance is reasonably small. (Fixed precision models can lead to collapse causing result area to expand.)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom0</td><td>input geometry 0 </td></tr>
+    <tr><td class="paramname">geom1</td><td>input geometry 1 </td></tr>
+    <tr><td class="paramname">opCode</td><td>the overlay opcode </td></tr>
+    <tr><td class="paramname">result</td><td>the overlay result </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the result area is consistent </dd></dl>
 
 </div>
 </div>
