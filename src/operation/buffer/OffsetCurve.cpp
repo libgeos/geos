@@ -206,10 +206,10 @@ OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<Coord
     SegmentMCIndex segIndex(bufferPts);
 
     int curveStart = -1;
-    CoordinateSequence* rawOffset = rawOffsetList[0];
-    for (std::size_t i = 0; i < rawOffset->size() - 1; i++) {
+    CoordinateSequence* cs = rawOffsetList[0];
+    for (std::size_t i = 0; i < cs->size() - 1; i++) {
         int index = markMatchingSegments(
-                        rawOffset->getAt(i), rawOffset->getAt(i+1),
+                        cs->getAt(i), cs->getAt(i+1),
                         segIndex, bufferPts, isInCurve);
         if (curveStart < 0) {
             curveStart = index;
