@@ -30,7 +30,7 @@
 *   GEOSGeom objects to avoid memory leaks, and GEOSFree()
 *   all returned char * (unless const).
 * - Functions ending with _r are thread safe (reentrant);
-*   see details in http://trac.osgeo.org/geos/wiki/RFC3.
+*   see details in https://libgeos.org/development/rfcs/rfc03.
 *   To avoid accidental use of non-reentrant functions,
 *   define GEOS_USE_ONLY_R_API before including geos_c.h.
 *

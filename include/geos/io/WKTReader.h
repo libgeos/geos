@@ -20,6 +20,7 @@
 #ifndef GEOS_IO_WKTREADER_H
 #define GEOS_IO_WKTREADER_H
 
+#include <geos/inline.h>
 #include <geos/export.h>
 
 #include <geos/geom/GeometryFactory.h>
