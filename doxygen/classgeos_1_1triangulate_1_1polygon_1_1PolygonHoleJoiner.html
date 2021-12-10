@@ -72,7 +72,8 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html
 <tr class="separator:a15ebcf0b29a3416ded1401baddff4147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Transforms a polygon with holes into a single self-touching ring by connecting holes to the exterior shell or to another hole. The holes are added from the lowest upwards. As the resulting shell develops, a hole might be added to what was originally another hole. </p>
+<div class="textblock"><p>Transforms a polygon with holes into a single self-touching (invalid) ring by connecting holes to the exterior shell or to another hole. The holes are added from the lowest upwards. As the resulting shell develops, a hole might be added to what was originally another hole.</p>
+<p>There is no attempt to optimize the quality of the join lines. In particular, a hole which already touches at a vertex may be joined at a different vertex. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a259d28f102768adb54a36e4d81ac8690"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a259d28f102768adb54a36e4d81ac8690">&#9670;&nbsp;</a></span>compute()</h2>
