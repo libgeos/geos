@@ -181,6 +181,19 @@ void object::test<11>()
         );
 }
 
+
+// testCollapsedCorner
+template<>
+template<>
+void object::test<12>()
+{
+    checkTri(
+        "POLYGON ((186 90, 71 17, 74 10, 65 0, 0 121, 186 90), (73 34, 67 41, 71 17, 73 34))"
+        );
+}
+
+
+
 } // namespace tut
 
 

@@ -164,7 +164,12 @@ private:
 
     bool isFlat(const std::array<Coordinate, 3>& pts) const;
 
-    bool hasRepeatedPoint(const std::array<Coordinate, 3>& pts) const;
+    /**
+    * Detects if a corner has repeated points (AAB or ABB), or is collapsed (ABA).
+    * @param pts the corner points
+    * @return true if the corner is flat or collapsed
+    */
+    bool isCornerInvalid(const std::array<Coordinate, 3>& pts) const;
 
 
 public:
