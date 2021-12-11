@@ -33,6 +33,7 @@ class LineString;
 class LinearRing;
 class Polygon;
 class CoordinateSequence;
+class Coordinate;
 }
 namespace operation {
 namespace buffer {
@@ -46,7 +47,13 @@ class MonotoneChain;
 }
 }
 
-using namespace geos::geom;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::Polygon;
+using geos::geom::CoordinateSequence;
+using geos::geom::Coordinate;
 
 namespace geos {
 namespace operation {

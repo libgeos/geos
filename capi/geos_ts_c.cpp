@@ -62,6 +62,7 @@
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -170,6 +171,7 @@ using geos::algorithm::distance::DiscreteHausdorffDistance;
 
 using geos::operation::buffer::BufferBuilder;
 using geos::operation::buffer::BufferParameters;
+using geos::operation::buffer::OffsetCurve;
 using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
@@ -1166,11 +1168,8 @@ extern "C" {
             );
             bp.setMitreLimit(mitreLimit);
 
-            bool isLeftSide = width > 0;
-            width = std::abs(width);
-
-            BufferBuilder bufBuilder(bp);
-            std::unique_ptr<Geometry> g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
+            OffsetCurve oc(*g1, width, bp);
+            std::unique_ptr<Geometry> g3 = oc.getCurve();
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
