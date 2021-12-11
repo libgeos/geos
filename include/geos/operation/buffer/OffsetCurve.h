@@ -192,7 +192,7 @@ public:
     * and join style BufferParameters::JOIN_STYLE.
     *
     * @param geom the geometry to offset
-    * @param distance the offset distance (positive = left, negative = right)
+    * @param dist the offset distance (positive = left, negative = right)
     *
     * \see BufferParameters
     */
@@ -209,7 +209,7 @@ public:
     * via BufferParameters.
     *
     * @param geom
-    * @param distance
+    * @param dist
     * @param bp
     */
     OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
@@ -225,7 +225,7 @@ public:
     * and for a specified quadrant segments, join style and mitre limit.
     *
     * @param geom a geometry
-    * @param distance the offset distance (positive = left, negative = right)
+    * @param dist the offset distance (positive = left, negative = right)
     * @param quadSegs the quadrant segments (-1 for default)
     * @param joinStyle the join style (-1 for default)
     * @param mitreLimit the mitre limit (-1 for default)
@@ -233,9 +233,9 @@ public:
     */
     static std::unique_ptr<Geometry> getCurve(
         const Geometry& geom,
-        double distance, int quadSegs, BufferParameters::JoinStyle joinStyle, double mitreLimit);
+        double dist, int quadSegs, BufferParameters::JoinStyle joinStyle, double mitreLimit);
 
-    static std::unique_ptr<Geometry> getCurve(const Geometry& geom, double distance);
+    static std::unique_ptr<Geometry> getCurve(const Geometry& geom, double dist);
     std::unique_ptr<Geometry> getCurve();
 
     /**
@@ -249,13 +249,13 @@ public:
     * to extract the offset curve.
     *
     * @param geom the linestring to offset
-    * @param distance the offset distance
+    * @param dist the offset distance
     * @param bufParams the buffer parameters to use
     * @param lineList the vector to populate with the return value
     * @return the raw offset line
     */
-    static void rawOffset(const LineString& geom, double distance, BufferParameters& bufParams, std::vector<CoordinateSequence*>& lineList);
-    static void rawOffset(const LineString& geom, double distance, std::vector<CoordinateSequence*>& lineList);
+    static void rawOffset(const LineString& geom, double dist, BufferParameters& bufParams, std::vector<CoordinateSequence*>& lineList);
+    static void rawOffset(const LineString& geom, double dist, std::vector<CoordinateSequence*>& lineList);
 
 };
 
