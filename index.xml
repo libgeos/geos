@@ -202,7 +202,9 @@ The GEOS library has never promised any stability of the C++ API and this fact h
       <pubDate>Mon, 04 Oct 2021 14:18:42 -0700</pubDate>
       
       <guid>https://libgeos.org/specifications/wkb/</guid>
-      <description>content</description>
+      <description>&amp;ldquo;Well-known binary&amp;rdquo; is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.
+GEOS can read and write three &amp;ldquo;flavours&amp;rdquo; of WKB:
+ Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.</description>
     </item>
     
     <item>
