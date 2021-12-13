@@ -53,7 +53,7 @@ In practice this means that almost all WKB is encoded little endian, since most 
 
 ### Coordinates
 
-The double precision numbers in the coordinates are also subject to the byte order rules. To encode geometries with more than 2 dimensions, see the "Extended WKB" format below.
+The double precision numbers in the coordinates are also subject to the byte order rules. To encode geometries with more than 2 dimensions, see the [Extended WKB]({{< ref "#extended-wkb" >}}) format below.
 
 ```
 Point {
