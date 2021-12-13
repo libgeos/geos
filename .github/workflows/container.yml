@@ -45,7 +45,7 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-            ghcr.io/pramsey/geosop:latest
+            ghcr.io/libgeos/geosop:latest
 
     # - name: 'Build'
     #   run: |
