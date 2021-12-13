@@ -656,7 +656,7 @@
 00 00 00 01
 </code></pre><p>In practice this means that almost all WKB is encoded little endian, since most modern processors are little endian, but the existence of the <code>wkbByteOrder</code> allows WKB to transport geometry easily between systems of different endianness.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="coordinates">Coordinates<a data-clipboard-text="https://libgeos.org/specifications/wkb/#coordinates" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Coordinates" href="#coordinates"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>The double precision numbers in the coordinates are also subject to the byte order rules. To encode geometries with more than 2 dimensions, see the &ldquo;Extended WKB&rdquo; format below.</p>
+<p>The double precision numbers in the coordinates are also subject to the byte order rules. To encode geometries with more than 2 dimensions, see the <a href="#extended-wkb">Extended WKB</a> format below.</p>
 <pre tabindex="0"><code>Point {
     double x;
     double y;
