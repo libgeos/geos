@@ -47,10 +47,5 @@ jobs:
         tags: |
             ghcr.io/libgeos/geosop:latest
 
-    # - name: 'Build'
-    #   run: |
-    #     cp tools/ci/geosop/Dockerfile .
-    #     docker build -t geosop .
-
 
 
