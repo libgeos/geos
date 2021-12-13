@@ -159,8 +159,8 @@ WKBGeometryCollection {
 The following bytes (in hex) make up the WKB for a `LINESTRING(0 0, 1 1, 2 1)`:
 
 ```
-01                - byteOrder
-02000000          - wkbType(2)
+01                - byteOrder(wkbNDR)
+02000000          - wkbType(LineString)
 03000000          - numPoints(3)
 0000000000000000  - x(0.0)
 0000000000000000  - y(0.0)
