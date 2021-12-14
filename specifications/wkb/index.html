@@ -843,7 +843,7 @@ WKBPointZ {
 <div class="gdoc-page__anchorwrap"><h3 id="writing-iso-wkb">Writing ISO WKB<a data-clipboard-text="https://libgeos.org/specifications/wkb/#writing-iso-wkb" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Writing ISO WKB" href="#writing-iso-wkb"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Read a linestring */</span>
 <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
-<span class="n">GEOSWKBReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKBReader_create</span><span class="p">();</span>
+<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
 <span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
 
 <span class="cm">/* Write it out as ISO WKB */</span>
@@ -860,6 +860,8 @@ WKBPointZ {
 <span class="cm">/* Free the WKB */</span>
 <span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkb</span><span class="p">);</span>
 <span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+<span class="n">GEOSWKBWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
 </code></pre></div>
 
     </article>
