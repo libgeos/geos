@@ -12,7 +12,7 @@ You can explore the C++ model via the [Doxygen reference](../../doxygen/cpp_ifac
 Using the C++ API means giving up:
 
 * Stable API, since headers can be moved, re-named or deleted according to the implementation needs of the library.
-* Stable ABI, since the complexity of the GEOS symbol space means that binary symbols are known change between versions, even relatively small releases.
+* Stable ABI, since the complexity of the GEOS symbol space means that binary symbols are known to change between versions, even relatively small releases.
 
 However, if you are careful in restricting your usage you can build applications against the C++ API that avoid most issues:
 
