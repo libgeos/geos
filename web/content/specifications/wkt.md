@@ -47,19 +47,19 @@ draft: false
 
 <multipoint text> ::=
     <empty set> |
-    <left paren> <point>{ <comma> <point> } ... <right paren>
+    <left paren> <point> {<comma> <point>} ... <right paren>
 
 <multilinestring text> ::=
     <empty set> |
-    <left paren> <linestring text> { <comma> <linestring text> } ... <right paren>
+    <left paren> <linestring text> {<comma> <linestring text>} ... <right paren>
 
 <multipolygon text> ::=
     <empty set> |
-    <left paren> <polygon text>{ <comma> <polygon text> } ... <right paren>
+    <left paren> <polygon text> {<comma> <polygon text>} ... <right paren>
 
 <geometrycollection text> ::=
     <empty set> |
-    <left paren> <wkt representation>{ <comma> <wkt representation> } ... <right paren>
+    <left paren> <wkt representation> {<comma> <wkt representation>} ... <right paren>
 
 <point text representation> ::=
     POINT [ <zm> ] <point text>
