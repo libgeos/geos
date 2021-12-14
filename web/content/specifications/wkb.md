@@ -290,7 +290,7 @@ As with [extended WKB]({{< ref "#extended-wkb" >}}), ISO WKB supports higher dim
 ```c
 /* Read a linestring */
 const char* linestring = "LINESTRING(0 0 1, 1 1 1, 2 1 2)";
-GEOSWKBReader* reader = GEOSWKBReader_create();
+GEOSWKTReader* reader = GEOSWKTReader_create();
 GEOSGeom* geom = GEOSWKTReader_read(reader, linestring);
 
 /* Write it out as ISO WKB */
@@ -307,5 +307,7 @@ unsigned char* wkb = GEOSWKBWriter_write(writer, geom, &wkb_size);
 /* Free the WKB */
 GEOSFree(wkb);
 GEOSGeom_destroy(geom);
+GEOSWKBWriter_destroy(writer);
+GEOSWKTReader_destroy(reader);
 ```
 
