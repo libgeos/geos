@@ -299,6 +299,9 @@ public:
     std::unique_ptr<LineString> createLineString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
 
+    std::unique_ptr<LineString> createLineString(
+        std::vector<Coordinate> && coordinates) const;
+
     /// Construct a LineString with a deep-copy of given argument
     LineString* createLineString(
         const CoordinateSequence& coordinates) const;

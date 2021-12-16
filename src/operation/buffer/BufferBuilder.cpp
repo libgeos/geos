@@ -29,7 +29,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
-#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
+#include <geos/operation/buffer/BufferCurveSetBuilder.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
 #include <geos/operation/overlay/OverlayOp.h>
@@ -390,10 +390,8 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 
     {
         // This scope is here to force release of resources owned by
-        // OffsetCurveSetBuilder when we're doing with it
-
-        OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
-        OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
+        // BufferCurveSetBuilder when we're doing with it
+        BufferCurveSetBuilder curveSetBuilder(*g, distance, precisionModel, bufParams);
         curveSetBuilder.setInvertOrientation(isInvertOrientation);
 
         GEOS_CHECK_FOR_INTERRUPTS();
@@ -401,7 +399,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         std::vector<SegmentString*>& bufferSegStrList = curveSetBuilder.getCurves();
 
 #if GEOS_DEBUG
-        std::cerr << "OffsetCurveSetBuilder got " << bufferSegStrList.size()
+        std::cerr << "BufferCurveSetBuilder got " << bufferSegStrList.size()
                   << " curves" << std::endl;
 #endif
         // short-circuit test

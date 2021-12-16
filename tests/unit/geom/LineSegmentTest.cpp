@@ -2,9 +2,12 @@
 // Test Suite for geos::geom::LineSegment class.
 
 #include <tut/tut.hpp>
+#include <utility.h>
+
 // geos
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Coordinate.h>
+
 // std
 #include <iostream>
 
@@ -37,6 +40,36 @@ struct test_lineseg_data {
         double dist = actual.distance(expected);
         // std::cout << "Expected: " << expected << "  Actual: " << actual << "  Dist = " << dist << std::endl;
         ensure("checkLineIntersection", dist <= MAX_ABS_ERROR_INTERSECTION);
+    }
+
+    void checkOffsetPoint(
+        double x0, double y0,
+        double x1, double y1,
+        double segFrac, double offset,
+        double expectedX, double expectedY)
+    {
+        LineSegment seg(x0, y0, x1, y1);
+        Coordinate actual;
+        seg.pointAlongOffset(segFrac, offset, actual);
+        Coordinate expected(expectedX, expectedY);
+        ensure_equals(actual.x, expected.x);
+        ensure_equals(actual.y, expected.y);
+    }
+
+    void checkOffsetLine(
+        double x0, double y0,
+        double x1, double y1,
+        double offset,
+        double expectedX0, double expectedY0,
+        double expectedX1, double expectedY1)
+    {
+        LineSegment seg(x0, y0, x1, y1);
+        LineSegment actual = seg.offset(offset);
+
+        Coordinate expected0(expectedX0, expectedY0);
+        Coordinate expected1(expectedX1, expectedY1);
+        ensure_equals_xyz(actual.p0, expected0);
+        ensure_equals_xyz(actual.p1, expected1);
     }
 
     test_lineseg_data()
@@ -152,6 +185,40 @@ void object::test<7>
         35613477.77505724, 4257160.539653536, 35613479.85607389, 4257165.92369170,
         35613477.772841461, 4257160.5339209242 );
 }
+
+// testOffsetLine
+template<>
+template<>
+void object::test<8>()
+{
+    const double ROOT2 = std::sqrt(2.0);
+    checkOffsetLine(0, 0, 10, 10, 0, 0, 0, 10, 10 );
+    checkOffsetLine(0, 0, 10, 10, ROOT2, -1, 1,  9, 11 );
+    checkOffsetLine(0, 0, 10, 10, -ROOT2, 1, -1, 11, 9);
+}
+
+// testOffsetPoint
+template<>
+template<>
+void object::test<9>()
+{
+    double ROOT2 = std::sqrt(2.0);
+    checkOffsetPoint(0, 0, 10, 10, 0.0, ROOT2, -1, 1);
+    checkOffsetPoint(0, 0, 10, 10, 0.0, -ROOT2, 1, -1);
+
+    checkOffsetPoint(0, 0, 10, 10, 1.0, ROOT2, 9, 11);
+    checkOffsetPoint(0, 0, 10, 10, 0.5, ROOT2, 4, 6);
+
+    checkOffsetPoint(0, 0, 10, 10, 0.5, -ROOT2, 6, 4);
+    checkOffsetPoint(0, 0, 10, 10, 0.5, -ROOT2, 6, 4);
+
+    checkOffsetPoint(0, 0, 10, 10, 2.0, ROOT2, 19, 21);
+    checkOffsetPoint(0, 0, 10, 10, 2.0, -ROOT2, 21, 19);
+
+    checkOffsetPoint(0, 0, 10, 10, 2.0, 5 * ROOT2, 15, 25);
+    checkOffsetPoint(0, 0, 10, 10, -2.0, 5 * ROOT2, -25, -15);
+}
+
 
 } // namespace tut
 

@@ -644,6 +644,15 @@ const
 }
 
 /*public*/
+std::unique_ptr<LineString>
+GeometryFactory::createLineString(std::vector<Coordinate> && newCoords)
+const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
+}
+
+/*public*/
 LineString*
 GeometryFactory::createLineString(const CoordinateSequence& fromCoords)
 const

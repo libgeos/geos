@@ -216,6 +216,22 @@ public:
                           double offsetDistance,
                           Coordinate& ret) const;
 
+
+    /**
+    * Computes the {@link LineSegment} that is offset from
+    * the segment by a given distance.
+    * The computed segment is offset to the left of the line if the offset distance is
+    * positive, to the right if negative.
+    *
+    * @param offsetDistance the distance the point is offset from the segment
+    *    (positive is to the left, negative is to the right)
+    * @return a line segment offset by the specified distance
+    *
+    * @throws IllegalStateException if the segment has zero length
+    */
+    LineSegment offset(double offsetDistance);
+
+
     /** \brief
      * Compute the projection factor for the projection of the point p
      * onto this LineSegment.

@@ -13,15 +13,15 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java r378 (JTS-1.12)
+ * Last port: operation/buffer/BufferCurveSetBuilder.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
-#define GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Location.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
 
 #include <vector>
 
@@ -35,6 +35,7 @@ namespace geos {
 namespace geom {
 class Geometry;
 class CoordinateSequence;
+class PrecisionModel;
 class GeometryCollection;
 class Point;
 class LineString;
@@ -50,6 +51,7 @@ class SegmentString;
 namespace operation {
 namespace buffer {
 class OffsetCurveBuilder;
+class BufferParameters;
 }
 }
 }
@@ -59,7 +61,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \class OffsetCurveSetBuilder
+ * \class BufferCurveSetBuilder
  *
  * \brief
  * Creates all the raw offset curves for a buffer of a Geometry.
@@ -68,7 +70,7 @@ namespace buffer { // geos.operation.buffer
  * final buffer area.
  *
  */
-class GEOS_DLL OffsetCurveSetBuilder {
+class GEOS_DLL BufferCurveSetBuilder {
 
 private:
 
@@ -80,7 +82,7 @@ private:
     std::vector<geomgraph::Label*> newLabels;
     const geom::Geometry& inputGeom;
     double distance;
-    OffsetCurveBuilder& curveBuilder;
+    OffsetCurveBuilder curveBuilder;
 
     /// The raw offset curves computed.
     /// This class holds ownership of std::vector elements.
@@ -210,8 +212,8 @@ private:
                                     double bufferDistance);
 
     // Declare type as noncopyable
-    OffsetCurveSetBuilder(const OffsetCurveSetBuilder& other) = delete;
-    OffsetCurveSetBuilder& operator=(const OffsetCurveSetBuilder& rhs) = delete;
+    BufferCurveSetBuilder(const BufferCurveSetBuilder& other) = delete;
+    BufferCurveSetBuilder& operator=(const BufferCurveSetBuilder& rhs) = delete;
 
     /**
     * Computes orientation of a ring using a signed-area orientation test.
@@ -231,11 +233,20 @@ private:
 public:
 
     /// Constructor
-    OffsetCurveSetBuilder(const geom::Geometry& newInputGeom,
-                          double newDistance, OffsetCurveBuilder& newCurveBuilder);
+    BufferCurveSetBuilder(
+        const geom::Geometry& newInputGeom,
+        double newDistance,
+        const geom::PrecisionModel* newPm,
+        const BufferParameters& newBufParams)
+        : inputGeom(newInputGeom)
+        , distance(newDistance)
+        , curveBuilder(newPm, newBufParams)
+        , curveList()
+        , isInvertOrientation(false)
+        {};
 
     /// Destructor
-    ~OffsetCurveSetBuilder();
+    ~BufferCurveSetBuilder();
 
     /** \brief
      * Computes the set of raw offset curves for the buffer.
@@ -279,4 +290,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
