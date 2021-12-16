@@ -116,7 +116,7 @@ main(int argc, char **argv)
         // Calculate the name and location of this Person
         unsigned int x = std::rand() % 100;
         unsigned int y = std::rand() % 100;
-        std::string name = number_to_word(i);
+        std::string name = number_to_name(i);
 
         // Create the object, store it, and add to the index
         Person *person = new Person(name, x, y, factory.get());
@@ -124,7 +124,7 @@ main(int argc, char **argv)
         index.insert(person);
 
         // Log what we did
-        std::cerr << "  LOG: Inserted " << number_to_word(i) << " at " << x << "," << y << std::endl;
+        std::cerr << "  LOG: Inserted " << person->getName() << " at " << x << "," << y << std::endl;
     }
 
     // Query shape
