@@ -5,6 +5,7 @@
 * `capi_prepared` uses the standard C API to read one WKT geometry, and fill it with a point grid, applying a high performance "prepared" geometry to speed up intersection testing
 * `capi_strtree` uses the standard C API to build a random collection of points, and then search that collection quickly to find the nearest to a query point
 * `cpp_read` uses the C++ API to read two WKT geometries, calculate the intersection and print the result
+* `cpp_strtree` uses the C++ API to build an STRtree index on a custom class, and then query that index
 
 
 ## Build
