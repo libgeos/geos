@@ -86,15 +86,15 @@ private:
 
 };
 
-// For fun we build up the Person name from the words for numbers.
+// For fun we build up the Person name automatically.
 static std::string
-number_to_word(unsigned int num)
+number_to_name(unsigned int num)
 {
-    std::vector<std::string> ones = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    std::vector<std::string> tens = {"zen", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+    std::vector<std::string> first = {"John", "Paul", "Peter", "Matthew", "James", "Mary", "Ruth", "Eliza", "Margaret", "Enid"};
+    std::vector<std::string> last = {"Smith", "John", "Ng", "Wong", "Kim", "Singh", "Ono", "Woo", "Cage", "Chandra"};
     unsigned int onenum = num % 10;
     unsigned int tennum = num / 10;
-    std::string word = tens[tennum] + ones[onenum];
+    std::string word = first[tennum] + " " + last[onenum];
     return word;
 }
 
