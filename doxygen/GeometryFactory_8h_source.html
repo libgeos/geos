@@ -247,129 +247,132 @@ $(function() {
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    std::unique_ptr&lt;LineString&gt; createLineString(</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        std::unique_ptr&lt;CoordinateSequence&gt; &amp;&amp; coordinates) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* createLineString(</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; coordinates) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    std::unique_ptr&lt;Geometry&gt; createEmpty(<span class="keywordtype">int</span> dimension) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* buildGeometry(std::vector&lt;Geometry*&gt;* geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Point&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;LineString&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Polygon&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="comment"></span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    std::unique_ptr&lt;Geometry&gt;</div>
-<div class="line"><a name="l00365"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">  365</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">buildGeometry</a>(T from, T toofar)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keywordtype">bool</span> isHeterogeneous = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        std::size_t count = 0;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <span class="keywordtype">int</span> geomClass = -1;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <span class="keywordflow">for</span>(T i = from; i != toofar; ++i) {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            ++count;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g = *i;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            <span class="keywordflow">if</span>(geomClass &lt; 0) {</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                geomClass = g-&gt;getSortIndex();</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            }</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span>(geomClass != g-&gt;getSortIndex()) {</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                isHeterogeneous = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    std::unique_ptr&lt;LineString&gt; createLineString(</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        std::vector&lt;Coordinate&gt; &amp;&amp; coordinates) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* createLineString(</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; coordinates) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    std::unique_ptr&lt;Geometry&gt; createEmpty(<span class="keywordtype">int</span> dimension) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* buildGeometry(std::vector&lt;Geometry*&gt;* geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Point&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;LineString&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    std::unique_ptr&lt;Geometry&gt; buildGeometry(std::vector&lt;std::unique_ptr&lt;Polygon&gt;&gt; &amp;&amp; geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="comment"></span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    std::unique_ptr&lt;Geometry&gt;</div>
+<div class="line"><a name="l00368"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">  368</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">buildGeometry</a>(T from, T toofar)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <span class="keywordtype">bool</span> isHeterogeneous = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        std::size_t count = 0;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordtype">int</span> geomClass = -1;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <span class="keywordflow">for</span>(T i = from; i != toofar; ++i) {</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            ++count;</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g = *i;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <span class="keywordflow">if</span>(geomClass &lt; 0) {</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                geomClass = g-&gt;getSortIndex();</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="comment">// for the empty geometry, return an empty GeometryCollection</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keywordflow">if</span>(count == 0) {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <span class="keywordflow">return</span> std::unique_ptr&lt;Geometry&gt;(createGeometryCollection());</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="comment">// for the single geometry, return a clone</span></div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keywordflow">if</span>(count == 1) {</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            <span class="keywordflow">return</span> (*from)-&gt;clone();</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        }</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="comment">// Now we know it is a collection</span></div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160; </div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        <span class="comment">// FIXME:</span></div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        <span class="comment">// Until we tweak all the createMulti* interfaces</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="comment">// to support taking iterators we&#39;ll have to build</span></div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <span class="comment">// a custom vector here.</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; fromGeoms;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keywordflow">for</span>(T i = from; i != toofar; ++i) {</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            fromGeoms.push_back((*i)-&gt;clone());</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        }</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="comment">// for an heterogeneous ...</span></div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="keywordflow">if</span>(isHeterogeneous) {</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;            <span class="keywordflow">return</span> createGeometryCollection(std::move(fromGeoms));</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        }</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <span class="comment">// At this point we know the collection is not hetereogenous.</span></div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordflow">switch</span>((*from)-&gt;getDimension()) {</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2">Dimension::A</a>: <span class="keywordflow">return</span> createMultiPolygon(std::move(fromGeoms));</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">Dimension::L</a>: <span class="keywordflow">return</span> createMultiLineString(std::move(fromGeoms));</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa8baa9b556734c7439b778dd77175d68a">Dimension::P</a>: <span class="keywordflow">return</span> createMultiPoint(std::move(fromGeoms));</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1IllegalArgumentException.html">geos::util::IllegalArgumentException</a>(std::string(<span class="stringliteral">&quot;Invalid geometry type.&quot;</span>));</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        }</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    }</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* buildGeometry(<span class="keyword">const</span> std::vector&lt;const Geometry*&gt;&amp; geoms) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordtype">int</span> getSRID() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* getCoordinateSequenceFactory() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* createGeometry(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span>(geomClass != g-&gt;getSortIndex()) {</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                isHeterogeneous = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        }</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="comment">// for the empty geometry, return an empty GeometryCollection</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keywordflow">if</span>(count == 0) {</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            <span class="keywordflow">return</span> std::unique_ptr&lt;Geometry&gt;(createGeometryCollection());</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <span class="comment">// for the single geometry, return a clone</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordflow">if</span>(count == 1) {</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            <span class="keywordflow">return</span> (*from)-&gt;clone();</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        <span class="comment">// Now we know it is a collection</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <span class="comment">// FIXME:</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        <span class="comment">// Until we tweak all the createMulti* interfaces</span></div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="comment">// to support taking iterators we&#39;ll have to build</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="comment">// a custom vector here.</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; fromGeoms;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordflow">for</span>(T i = from; i != toofar; ++i) {</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            fromGeoms.push_back((*i)-&gt;clone());</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        }</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="comment">// for an heterogeneous ...</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordflow">if</span>(isHeterogeneous) {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">return</span> createGeometryCollection(std::move(fromGeoms));</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="comment">// At this point we know the collection is not hetereogenous.</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        <span class="keywordflow">switch</span>((*from)-&gt;getDimension()) {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2">Dimension::A</a>: <span class="keywordflow">return</span> createMultiPolygon(std::move(fromGeoms));</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">Dimension::L</a>: <span class="keywordflow">return</span> createMultiLineString(std::move(fromGeoms));</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa8baa9b556734c7439b778dd77175d68a">Dimension::P</a>: <span class="keywordflow">return</span> createMultiPoint(std::move(fromGeoms));</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1IllegalArgumentException.html">geos::util::IllegalArgumentException</a>(std::string(<span class="stringliteral">&quot;Invalid geometry type.&quot;</span>));</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        }</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    }</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* buildGeometry(<span class="keyword">const</span> std::vector&lt;const Geometry*&gt;&amp; geoms) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordtype">int</span> getSRID() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160; </div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* getCoordinateSequenceFactory() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <span class="keywordtype">void</span> destroyGeometry(<a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* createGeometry(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <span class="keywordtype">void</span> destroy();</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160; </div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>();</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160; </div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm, <span class="keywordtype">int</span> newSRID,</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;                    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* nCoordinateSequenceFactory);</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160; </div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* nCoordinateSequenceFactory);</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160; </div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160; </div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm, <span class="keywordtype">int</span> newSRID);</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160; </div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>&amp; gf);</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>();</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keywordtype">void</span> destroyGeometry(<a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="keywordtype">void</span> destroy();</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>();</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160; </div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm, <span class="keywordtype">int</span> newSRID,</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;                    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* nCoordinateSequenceFactory);</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* nCoordinateSequenceFactory);</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160; </div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm, <span class="keywordtype">int</span> newSRID);</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>&amp; gf);</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> precisionModel;</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="keywordtype">int</span> SRID;</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* coordinateListFactory;</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160; </div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">int</span> _refCount;</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keywordtype">bool</span> _autoDestroy;</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>();</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> precisionModel;</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    <span class="keywordtype">int</span> SRID;</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">CoordinateSequenceFactory</a>* coordinateListFactory;</div>
 <div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160; </div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>;</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160; </div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    <span class="keywordtype">void</span> addRef() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;    <span class="keywordtype">void</span> dropRef() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">int</span> _refCount;</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    <span class="keywordtype">bool</span> _autoDestroy;</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160; </div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>;</div>
 <div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160; </div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;};</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <span class="keywordtype">void</span> addRef() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    <span class="keywordtype">void</span> dropRef() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160; </div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;};</div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160; </div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="preprocessor">#ifdef GEOS_INLINE</span></div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="preprocessor"># include &quot;geos/geom/GeometryFactory.inl&quot;</span></div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160; </div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="preprocessor">#endif // ndef GEOS_GEOM_GEOMETRYFACTORY_H</span></div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160; </div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;<span class="preprocessor">#ifdef GEOS_INLINE</span></div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="preprocessor"># include &quot;geos/geom/GeometryFactory.inl&quot;</span></div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160; </div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="preprocessor">#endif // ndef GEOS_GEOM_GEOMETRYFACTORY_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1MultiPoint_html"><div class="ttname"><a href="classgeos_1_1geom_1_1MultiPoint.html">geos::geom::MultiPoint</a></div><div class="ttdef"><b>Definition:</b> MultiPoint.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2">geos::geom::Dimension::A</a></div><div class="ttdeci">@ A</div><div class="ttdoc">Dimension value of a surface (2).</div><div class="ttdef"><b>Definition:</b> Dimension.h:96</div></div>
@@ -388,7 +391,7 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html_af3c3d09a806e71d3e6d6e7ff8d8c9e31"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html#af3c3d09a806e71d3e6d6e7ff8d8c9e31">geos::geom::GeometryFactory::destroy</a></div><div class="ttdeci">void destroy()</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa8baa9b556734c7439b778dd77175d68a"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa8baa9b556734c7439b778dd77175d68a">geos::geom::Dimension::P</a></div><div class="ttdeci">@ P</div><div class="ttdoc">Dimension value of a point (0).</div><div class="ttdef"><b>Definition:</b> Dimension.h:90</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:90</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html_a8aeb9421d3da95c30068cf584e7e0dcc"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">geos::geom::GeometryFactory::buildGeometry</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; buildGeometry(T from, T toofar) const</div><div class="ttdoc">See buildGeometry(std::vector&lt;Geometry *&gt;&amp;) for semantics.</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:365</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html_a8aeb9421d3da95c30068cf584e7e0dcc"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html#a8aeb9421d3da95c30068cf584e7e0dcc">geos::geom::GeometryFactory::buildGeometry</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; buildGeometry(T from, T toofar) const</div><div class="ttdoc">See buildGeometry(std::vector&lt;Geometry *&gt;&amp;) for semantics.</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:368</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:68</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1MultiPolygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1MultiPolygon.html">geos::geom::MultiPolygon</a></div><div class="ttdef"><b>Definition:</b> MultiPolygon.h:59</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LineString_html"><div class="ttname"><a href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a></div><div class="ttdef"><b>Definition:</b> LineString.h:68</div></div>

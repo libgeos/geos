@@ -135,6 +135,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memitem:a2e034b06a6db9b99c2ecd3c75de53037"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a2e034b06a6db9b99c2ecd3c75de53037">pointAlongOffset</a> (double segmentLengthFraction, double offsetDistance, <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;ret) const</td></tr>
 <tr class="memdesc:a2e034b06a6db9b99c2ecd3c75de53037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> that lies a given fraction along the line defined by this segment and offset from the segment by a given distance.  <a href="classgeos_1_1geom_1_1LineSegment.html#a2e034b06a6db9b99c2ecd3c75de53037">More...</a><br /></td></tr>
 <tr class="separator:a2e034b06a6db9b99c2ecd3c75de53037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2abcb65f48409c11691cbcc79d912f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#aa2abcb65f48409c11691cbcc79d912f0">offset</a> (double offsetDistance)</td></tr>
+<tr class="separator:aa2abcb65f48409c11691cbcc79d912f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f247580deb1624b5624639f4cce0777"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a3f247580deb1624b5624639f4cce0777">projectionFactor</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;p) const</td></tr>
 <tr class="memdesc:a3f247580deb1624b5624639f4cce0777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the projection factor for the projection of the point p onto this <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a>.  <a href="classgeos_1_1geom_1_1LineSegment.html#a3f247580deb1624b5624639f4cce0777">More...</a><br /></td></tr>
 <tr class="separator:a3f247580deb1624b5624639f4cce0777"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -460,6 +462,38 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <p>Puts the line segment into a normalized form. </p>
 <p>This is useful for using line segments in maps and indexes when topological equality rather than exact equality is desired. </p>
+
+</div>
+</div>
+<a id="aa2abcb65f48409c11691cbcc79d912f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2abcb65f48409c11691cbcc79d912f0">&#9670;&nbsp;</a></span>offset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> geos::geom::LineSegment::offset </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>offsetDistance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> that is offset from the segment by a given distance. The computed segment is offset to the left of the line if the offset distance is positive, to the right if negative.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offsetDistance</td><td>the distance the point is offset from the segment (positive is to the left, negative is to the right) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a line segment offset by the specified distance</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IllegalStateException</td><td>if the segment has zero length </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

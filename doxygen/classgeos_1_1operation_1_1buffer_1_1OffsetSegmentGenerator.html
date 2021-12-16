@@ -45,6 +45,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::operation::buffer::OffsetSegmentGenerator Class Reference</div>  </div>
@@ -94,11 +95,77 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:abf8dec51d9b77e04103bce7859717461"><td class="memItemLeft" align="right" valign="top"><a id="abf8dec51d9b77e04103bce7859717461"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addSegments</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;pts, bool isForward)</td></tr>
 <tr class="separator:abf8dec51d9b77e04103bce7859717461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a5553b8151f5b3c0a91040069d7158d3a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">computeOffsetSegment</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> &amp;seg, int side, double distance, <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> &amp;offset)</td></tr>
+<tr class="memdesc:a5553b8151f5b3c0a91040069d7158d3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute an offset segment for an input segment on a given side and at a given distance.  <a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">More...</a><br /></td></tr>
+<tr class="separator:a5553b8151f5b3c0a91040069d7158d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generates segments which form an offset curve. Supports all end cap and join options provided for buffering. Implements various heuristics to produce smoother, simpler curves which are still within a reasonable tolerance of the true curve.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5553b8151f5b3c0a91040069d7158d3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5553b8151f5b3c0a91040069d7158d3a">&#9670;&nbsp;</a></span>computeOffsetSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void geos::operation::buffer::OffsetSegmentGenerator::computeOffsetSegment </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> &amp;&#160;</td>
+          <td class="paramname"><em>seg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>side</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>distance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute an offset segment for an input segment on a given side and at a given distance. </p>
+<p>The offset points are computed in full double precision, for accuracy.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seg</td><td>the segment to offset </td></tr>
+    <tr><td class="paramname">side</td><td>the side of the segment the offset lies on </td></tr>
+    <tr><td class="paramname">distance</td><td>the offset distance </td></tr>
+    <tr><td class="paramname">offset</td><td>the points computed for the offset segment </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="adcb706e7c4790b73bb68557e314a38ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adcb706e7c4790b73bb68557e314a38ca">&#9670;&nbsp;</a></span>getCoordinates()</h2>
 
