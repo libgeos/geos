@@ -193,7 +193,9 @@ The GEOS library has never promised any stability of the C++ API and this fact h
       <pubDate>Mon, 04 Oct 2021 14:18:42 -0700</pubDate>
       
       <guid>https://libgeos.org/specifications/geojson/</guid>
-      <description>content</description>
+      <description>&amp;ldquo;GeoJSON&amp;rdquo; is a standard for structuring JSON when encoding geometry and features. By using GeoJSON, rather than some other arbitrary scheme for structuring JSON, you maximize the interoperability of your JSON output. There are dozens of tools and websites that happily consume and emit GeoJSON.
+The GeoJSON standard is formally maintained by the IETF as &amp;ldquo;RFC 7946&amp;rdquo;.
+Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representation. It also standardizes the transport of attribution.</description>
     </item>
     
     <item>
