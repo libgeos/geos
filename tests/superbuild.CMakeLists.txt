@@ -1,0 +1,11 @@
+# This is used in CI as a simple test of GEOS building as a subproject
+# within a CMake super-build context.
+
+cmake_minimum_required(VERSION 3.13)
+
+project(superbuild_example)
+
+add_subdirectory("geos")
+
+add_executable(capi_read capi_read.c)
+target_link_libraries(capi_read PRIVATE GEOS::geos_c)
