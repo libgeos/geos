@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/triangulate/tri/TriEdge.h>
+#include <geos/triangulate/tri/TriList.h>
 
 #include <memory>
 #include <unordered_map>
@@ -27,7 +28,6 @@ class Coordinate;
 namespace triangulate {
 namespace tri {
 class Tri;
-class TriList;
 }
 }
 }
@@ -62,14 +62,14 @@ private:
 
 public:
 
-    TriangulationBuilder(TriList& triList);
+    TriangulationBuilder(TriList<Tri>& triList);
 
     /**
     * Builds the triangulation of a set of {@link Tri}s.
     *
     * @param triList the list of Tris
     */
-    static void build(TriList& triList);
+    static void build(TriList<Tri>& triList);
 
 
 };

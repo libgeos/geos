@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <geos/triangulate/tri/Tri.h>
+//#include <geos/triangulate/tri/Tri.h>
 
 #include <geos/export.h>
 #include <iostream>
@@ -45,48 +45,115 @@ namespace tri {         // geos.triangulate.tri
  * to the JTS API.
  *
  */
-class GEOS_DLL TriList {
+template<typename TriType>
+class TriList {
 
 private:
 
     // Members
-    std::deque<Tri> triStore;
-    std::vector<Tri*> tris;
+    std::deque<TriType> triStore;
+    std::vector<TriType*> tris;
 
     // Methods
-    Tri* create(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2);
+    TriType* create(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2)
+    {
+        triStore.emplace_back(c0, c1, c2);
+        TryType* newTri = &triStore.back();
+        return newTri;
+    }
 
 
 public:
 
     TriList() {};
 
-    void add(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2);
+    void remove(TriType* tri)
+    {
+        // We can leave triStore untouched, just remove
+        // the pointer from tris.
+        for (auto it = tris.begin(); it != tris.end(); ++it;) {
+            if (*it == tri) {
+                tris.erase(it);
+                return;
+            }
+        }
+    }
+
+    void add(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2)
+    {
+        auto* newTri = create(c0, c1, c2);
+        tris.push_back(newTri);
+    };
 
     void add(std::array<Coordinate, 3>& corner)
     {
         add(corner[0], corner[1], corner[2]);
-    }
+    };
+
+    double area()
+    {
+        double area = 0;
+        for (const auto* tri : tris) {
+          area += tri->getArea();
+        }
+        return area;
+    };
+
+    double length()
+    {
+        double length = 0;
+        for (const auto* tri : tris) {
+          length += tri->getLength();
+        }
+        return length;
+    };
 
     std::unique_ptr<Geometry> toGeometry(
-        const GeometryFactory* geomFact) const;
+        const GeometryFactory* geomFact) const
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        for (auto* tri: tris) {
+            std::unique_ptr<Geometry> geom = tri->toPolygon(geomFact);
+            geoms.emplace_back(geom.release());
+        }
+        return geomFact->createGeometryCollection(std::move(geoms));
+    }
 
     static std::unique_ptr<Geometry> toGeometry(
         const geom::GeometryFactory* geomFact,
-        const std::vector<std::unique_ptr<TriList>>& allTriLists);
+        const std::vector<std::unique_ptr<TriList>>& allTriLists)
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        for (const std::unique_ptr<TriList>& triList: allTriLists) {
+            for (const auto* tri: *triList) {
+                std::unique_ptr<Geometry> geom = tri->toPolygon(geomFact);
+                geoms.emplace_back(geom.release());
+            }
+        }
+        return geomFact->createGeometryCollection(std::move(geoms));
+    }
 
-    friend std::ostream& operator << (std::ostream& os, TriList& te);
+    friend std::ostream& operator << (std::ostream& os, TriList& triList)
+    {
+        os << "TRILIST ";
+        os << "[" << triList.size() << "] (";
+        for (auto* tri: triList) {
+            os << "  " << *tri << "," << std::endl;
+        }
+        os << ")";
+        return os;
+    }
 
     // Support for iterating on TriList
-    typedef std::vector<Tri*>::iterator iterator;
-    typedef std::vector<Tri*>::const_iterator const_iterator;
+    typedef std::vector<TriType*>::iterator iterator;
+    typedef std::vector<TriType*>::const_iterator const_iterator;
     size_t size() const { return tris.size(); }
     bool empty() const { return tris.empty(); }
     iterator begin() { return tris.begin(); }
     iterator end() { return tris.end(); }
     const_iterator begin() const { return tris.begin(); }
     const_iterator end() const { return tris.end(); }
-    Tri* operator [] (std::size_t index) { return tris[index]; }
+    TriType* operator [] (std::size_t index) { return tris[index]; }
 
 };
 

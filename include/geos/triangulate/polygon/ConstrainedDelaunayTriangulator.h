@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/triangulate/tri/TriList.h>
 
 // Forward declarations
 namespace geos {
@@ -21,11 +22,6 @@ namespace geom {
 class Geometry;
 class GeometryFactory;
 class Polygon;
-}
-namespace triangulate {
-namespace tri {
-class TriList;
-}
 }
 }
 
@@ -64,7 +60,7 @@ private:
     * @param poly the input polygon
     * @return list of Tris forming the triangulation
     */
-    void triangulatePolygon(const Polygon* poly, TriList& triList);
+    void triangulatePolygon(const Polygon* poly, TriList<Tri>& triList);
 
     std::unique_ptr<Geometry> compute();
 

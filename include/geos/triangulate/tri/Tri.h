@@ -71,6 +71,8 @@ private:
     * @param triNew
     */
     void replace(Tri* triOld, Tri* triNew);
+    void remove(TriIndex index);
+
 
     /**
     *
@@ -116,6 +118,13 @@ public:
     */
     void flip(TriIndex index);
 
+    /**
+    * Removes this triangle from a triangulation.
+    * All adjacent references and the references to this
+    * Tri in the adjacent Tris are set to nullptr.
+    */
+    void remove();
+
     void validate();
     void validateAdjacent(TriIndex index);
 
@@ -140,6 +149,9 @@ public:
     static TriIndex oppVertex(TriIndex edgeIndex);
     static TriIndex oppEdge(TriIndex vertexIndex);
     Coordinate midpoint(TriIndex edgeIndex) const;
+
+    double getArea() const;
+    double getLength() const;
 
     std::unique_ptr<Polygon> toPolygon(const GeometryFactory* gf) const;
 

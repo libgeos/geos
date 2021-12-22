@@ -94,6 +94,26 @@ Tri::replace(Tri* triOld, Tri* triNew)
 
 /* public */
 void
+Tri::remove()
+{
+    remove(0);
+    remove(1);
+    remove(2);
+}
+
+/* private */
+void
+Tri::remove(TriIndex index)
+{
+    Tri* adj = getAdjacent(index);
+    if (adj == nullptr) return;
+    adj->setTri(adj->getIndex(this), nullptr);
+    setTri(index, nullptr);
+}
+
+
+/* public */
+void
 Tri::flip(TriIndex index)
 {
     Tri* tri = getAdjacent(index);
@@ -386,6 +406,20 @@ Tri::toPolygon(const geom::GeometryFactory* gf) const
     coords[2] = p2; coords[3] = p0;
 
     return gf->createPolygon(std::move(coords));
+}
+
+/* public */
+double
+Tri::getArea() const
+{
+    return Triangle::area(p0, p1, p2);
+}
+
+/* public */
+double
+Tri::getLength()
+{
+    return Triangle::length(p0, p1, p2);
 }
 
 std::ostream&

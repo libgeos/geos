@@ -179,6 +179,14 @@ public:
         }
     }
 
+    static void
+    closeRing(std::vector<Coordinate>& coords)
+    {
+        if(!coords.empty() && !(*(coords.begin())).equals(*(coords.rbegin()))) {
+            const Coordinate& c = *(coords.begin());
+            coords.insert(coords.end(), c);
+        }
+    }
 
 private:
 

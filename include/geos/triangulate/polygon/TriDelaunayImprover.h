@@ -16,17 +16,13 @@
 
 #include <geos/triangulate/tri/TriEdge.h>
 #include <geos/triangulate/tri/Tri.h>
+#include <geos/triangulate/tri/TriList.h>
 
 
 // Forward declarations
 namespace geos {
 namespace geom {
 class Coordinate;
-}
-namespace triangulate {
-namespace tri {
-class TriList;
-}
 }
 }
 
@@ -55,7 +51,7 @@ private:
 
     // Members
     static constexpr std::size_t MAX_ITERATION = 200;
-    TriList& triList;
+    TriList<Tri>& triList;
 
     /**
     * Improves a triangulation by examining pairs of adjacent triangles
@@ -65,7 +61,7 @@ private:
     *
     * @return the number of flips that were made
     */
-    std::size_t improveScan(TriList& triList);
+    std::size_t improveScan(TriList<Tri>& triList);
 
     /**
     * Does a flip of the common edge of two Tris if the Delaunay condition is not met.
@@ -126,7 +122,7 @@ private:
 
 public:
 
-    TriDelaunayImprover(TriList& p_triList)
+    TriDelaunayImprover(TriList<Tri>& p_triList)
         : triList(p_triList)
         {};
 
@@ -138,7 +134,7 @@ public:
     *
     * @param triList the list of Tris to flip.
     */
-    static void improve(TriList& triList);
+    static void improve(TriList<Tri>& triList);
 
 
 };
