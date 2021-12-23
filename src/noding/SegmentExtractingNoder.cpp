@@ -17,8 +17,11 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/BasicSegmentString.h>
+#include <geos/noding/SegmentExtractingNoder.h>
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
+using geos::geom::CoordinateArraySequence;
 using geos::noding::SegmentString;
 
 namespace geos {
@@ -48,7 +51,7 @@ SegmentExtractingNoder::extractSegments(std::vector<SegmentString*>* segStrings)
 void
 SegmentExtractingNoder::extractSegments(SegmentString* ss, std::vector<SegmentString*>* segList)
 {
-    for (std::size i = 0; i < ss->size() - 1; i++) {
+    for (std::size_t i = 0; i < ss->size() - 1; i++) {
         std::vector<Coordinate> coords(2);
         coords[0] = ss->getCoordinate(i);
         coords[1] = ss->getCoordinate(i + 1);

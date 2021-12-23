@@ -132,25 +132,18 @@ public:
     */
     bool isAcute() { return isAcute(p0, p1, p2); };
 
-
-
-private:
-
     /**
-     * Computes the determinant of a 2x2 matrix. Uses standard double-precision
-     * arithmetic, so is susceptible to round-off error.
-     *
-     * @param m00
-     *          the [0,0] entry of the matrix
-     * @param m01
-     *          the [0,1] entry of the matrix
-     * @param m10
-     *          the [1,0] entry of the matrix
-     * @param m11
-     *          the [1,1] entry of the matrix
-     * @return the determinant
-     */
-    double det(double m00, double m01, double m10, double m11) const;
+    * Computes the length of the longest side of a triangle
+    *
+    * @param a  a vertex of the triangle
+    * @param b  a vertex of the triangle
+    * @param c  a vertex of the triangle
+    * @return the length of the longest side of the triangle
+    */
+    static double longestSideLength(
+        const Coordinate& a,
+        const Coordinate& b,
+        const Coordinate& c);
 
     /**
     * Compute the length of the perimeter of a triangle
@@ -181,6 +174,24 @@ private:
     static double area(const Coordinate& a, const Coordinate& b, const Coordinate& c);
 
     double area() const;
+
+private:
+
+    /**
+     * Computes the determinant of a 2x2 matrix. Uses standard double-precision
+     * arithmetic, so is susceptible to round-off error.
+     *
+     * @param m00
+     *          the [0,0] entry of the matrix
+     * @param m01
+     *          the [0,1] entry of the matrix
+     * @param m10
+     *          the [1,0] entry of the matrix
+     * @param m11
+     *          the [1,1] entry of the matrix
+     * @return the determinant
+     */
+    double det(double m00, double m01, double m10, double m11) const;
 
 };
 

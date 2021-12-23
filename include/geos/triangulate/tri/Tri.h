@@ -49,7 +49,7 @@ namespace tri {         // geos.triangulate.tri
  */
 class GEOS_DLL Tri {
 
-private:
+protected:
 
     // Members
     Coordinate p0;
@@ -64,6 +64,8 @@ private:
     Tri* tri1;
     Tri* tri2;
 
+private:
+
     /**
     * Replace triOld with triNew
     *
@@ -72,7 +74,6 @@ private:
     */
     void replace(Tri* triOld, Tri* triNew);
     void remove(TriIndex index);
-
 
     /**
     *
@@ -105,8 +106,8 @@ public:
         {};
 
     void setAdjacent(Tri* p_tri0, Tri* p_tri1, Tri* p_tri2);
-    void setTri(TriIndex edgeIndex, Tri* tri);
     void setAdjacent(const Coordinate& pt, Tri* tri);
+    void setTri(TriIndex edgeIndex, Tri* tri);
 
     /**
     * Interchanges the vertices of this triangle and a neighbor
@@ -137,7 +138,7 @@ public:
     const Coordinate& getCoordinate(TriIndex i) const;
 
     TriIndex getIndex(const Coordinate& p) const;
-    TriIndex getIndex(Tri* tri) const;
+    TriIndex getIndex(const Tri* tri) const;
 
     Tri* getAdjacent(TriIndex i) const;
     bool hasAdjacent(TriIndex i) const;

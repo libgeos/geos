@@ -15,14 +15,16 @@
 #pragma once
 
 #include <geos/export.h>
-
+#include <memory>
 
 // Forward declarations
 namespace geos {
 namespace geom {
-class Geometry
+class Geometry;
 }
-};
+}
+
+using geos::geom::Geometry;
 
 namespace geos {      // geos.
 namespace operation { // geos.operation

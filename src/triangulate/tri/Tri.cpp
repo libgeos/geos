@@ -20,12 +20,14 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/Triangle.h>
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/util/IllegalArgumentException.h>
 
 
 using geos::util::IllegalArgumentException;
 using geos::algorithm::Orientation;
+using geos::geom::Triangle;
 
 namespace geos {        // geos
 namespace triangulate { // geos.triangulate
@@ -296,7 +298,7 @@ Tri::getIndex(const Coordinate& p) const
 
 /* public */
 TriIndex
-Tri::getIndex(Tri* tri) const
+Tri::getIndex(const Tri* tri) const
 {
     if ( tri0 == tri )
         return 0;
@@ -417,7 +419,7 @@ Tri::getArea() const
 
 /* public */
 double
-Tri::getLength()
+Tri::getLength() const
 {
     return Triangle::length(p0, p1, p2);
 }

@@ -14,10 +14,13 @@
 
 #pragma once
 
+#include <geos/geom/Triangle.h>
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/triangulate/tri/TriList.h>
 #include <geos/triangulate/quadedge/TriangleVisitor.h>
 
+#include <queue>
+#include <deque>
 
 namespace geos {
 namespace geom {
@@ -28,6 +31,7 @@ class GeometryFactory;
 namespace triangulate {
 namespace quadedge {
 class Quadedge;
+class QuadEdgeSubdivision;
 }
 }
 }
@@ -35,7 +39,9 @@ class Quadedge;
 using geos::geom::Coordinate;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
+using geos::geom::Triangle;
 using geos::triangulate::quadedge::QuadEdge;
+using geos::triangulate::quadedge::QuadEdgeSubdivision;
 using geos::triangulate::quadedge::TriangleVisitor;
 using geos::triangulate::tri::Tri;
 using geos::triangulate::tri::TriList;
@@ -43,6 +49,87 @@ using geos::triangulate::tri::TriList;
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
+
+
+
+class HullTri : public Tri
+{
+    private:
+
+        double m_size;
+        bool m_isMarked = false;
+
+    public:
+
+        HullTri(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
+            : Tri(p0, p1, p2)
+            , m_size(Triangle::longestSideLength(p0, p1, p2))
+            {};
+
+        double getSize() const;
+        bool isMarked() const;
+        void setSizeToBorder();
+        void setMarked(bool marked);
+        bool isBorder() const;
+        bool isBorder(TriIndex index) const;
+        TriIndex borderIndex() const;
+        double lengthOfLongestEdge() const;
+        double lengthOfBorder() const;
+        HullTri* nextBorderTri() ;
+        int compareTo(const HullTri* o) const;
+        static bool isConnected(TriList<HullTri>& triList, HullTri* exceptTri);
+        static void clearMarks(TriList<HullTri>& triList);
+        static HullTri* findTri(TriList<HullTri>& triList, Tri* exceptTri);
+        static bool isAllMarked(TriList<HullTri>& triList);
+        static void markConnected(HullTri* triStart, HullTri* exceptTri);
+
+        /**
+        * Gets the most CCW border edge index.
+        * This assumes there is at least one non-border edge.
+        *
+        * @return the CCW border edge index
+        */
+        TriIndex borderIndexCCW() const;
+
+        /**
+        * Gets the most CW border edge index.
+        * This assumes there is at least one non-border edge.
+        *
+        * @return the CW border edge index
+        */
+        TriIndex borderIndexCW() const;
+
+}; // HullTri
+
+
+class HullTriVisitor : public TriangleVisitor
+{
+
+    private:
+
+        TriList<HullTri>& triList;
+
+    public:
+
+        HullTriVisitor(TriList<HullTri>& p_triList)
+            : triList(p_triList)
+            {};
+
+        void visit(std::array<QuadEdge*, 3>& triEdges);
+
+}; // HullTriVisitor
+
+
+// Sort in inverse order (largest to smallest) in
+// the std::priority_queue
+struct HullTriCompare {
+    bool operator()(const HullTri* a, const HullTri* b)
+    {
+        return a->getSize() < b->getSize();
+    }
+};
+
+typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTriCompare> HullTriQueue;
 
 
 /**
@@ -168,11 +255,6 @@ private:
     bool isHolesAllowed;
     const GeometryFactory* geomFactory;
 
-    // Sort in inverse order (largest to smallest) in
-    // the std::priority_queue
-    auto hullTriCmp = [](HullTri* left, HullTri* right) { return left->getSize() < right->getSize(); };
-    typedef std::priority_queue<HullTri*, std::vector<HullTri*>, decltype(hullTriCmp)> HullTriQueue;
-
     void computeHull(TriList<HullTri>& triList);
     void initQueue(HullTriQueue& queue, TriList<HullTri>& triList);
 
@@ -241,21 +323,21 @@ private:
     static void createDelaunayTriangulation(
         const Geometry* geom, TriList<HullTri>& triList);
 
-    void toTris(
+    static void toTris(
         QuadEdgeSubdivision& subdiv,
         TriList<HullTri>& triList);
 
     std::unique_ptr<Geometry> toPolygon(
         TriList<HullTri>& triList,
-        const GeometryFactory* geomFactory);
+        const GeometryFactory* factory);
 
     std::unique_ptr<Geometry> extractPolygon(
         TriList<HullTri>& triList,
-        const GeometryFactory* geomFactory);
+        const GeometryFactory* factory);
 
     static std::unique_ptr<Geometry> geomunion(
         TriList<HullTri>& triList,
-        const GeometryFactory* geomFactory);
+        const GeometryFactory* factory);
 
     /**
     * Extracts the coordinates along the border of a triangulation,
@@ -269,78 +351,6 @@ private:
     */
     static std::vector<Coordinate> traceBorder(
         TriList<HullTri>& triList);
-
-
-
-    class HullTri : public Tri
-    {
-        private:
-
-            double size;
-            bool isMarked = false;
-
-            double lengthOfBorder() const
-
-        public:
-
-            HullTri(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
-                : Tri(p0, p1, p2)
-                , size(Triangle::longestSideLength(p0, p1, p2))
-                {};
-
-            double getSize() const;
-            bool isMarked() const;
-            void setSizeToBorder();
-            void setMarked(bool p_isMarked);
-            bool isBorder() const;
-            bool isBorder(TriIndex index) const;
-            TriIndex borderIndex() const;
-            double lengthOfLongestEdge() const;
-            HullTri* nextBorderTri() const;
-            int compareTo(const HullTri* o) const;
-            static bool isConnected(TriList<HullTri>& triList, HullTri* exceptTri);
-            static void clearMarks(TriList<HullTri>& triList);
-            static HullTri* findTri(TriList<HullTri>& triList, Tri* exceptTri);
-            static bool isAllMarked(TriList<HullTri>& triList);
-            static void markConnected(HullTri* triStart, Tri* exceptTri);
-
-            /**
-            * Gets the most CCW border edge index.
-            * This assumes there is at least one non-border edge.
-            *
-            * @return the CCW border edge index
-            */
-            TriIndex borderIndexCCW() const;
-
-            /**
-            * Gets the most CW border edge index.
-            * This assumes there is at least one non-border edge.
-            *
-            * @return the CW border edge index
-            */
-            TriIndex borderIndexCW() const;
-
-    }; // HullTri
-
-
-    class HullTriVisitor : public TriangleVisitor
-    {
-
-        private:
-
-            TriList<HullTri>& triList;
-
-        public:
-
-            HullTriVisitor(TriList<HullTri>& p_triList)
-                : triList(p_triList)
-                {};
-
-            void visit(std::array<QuadEdge*, 3>& triEdges);
-
-    }; // HullTriVisitor
-
-
 
 };
 

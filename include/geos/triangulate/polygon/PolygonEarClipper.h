@@ -16,6 +16,7 @@
 
 #include <geos/triangulate/polygon/VertexSequencePackedRtree.h>
 #include <geos/triangulate/tri/TriList.h>
+#include <geos/triangulate/tri/Tri.h>
 
 #include <array>
 #include <memory>
@@ -33,6 +34,7 @@ class Envelope;
 using geos::geom::Coordinate;
 using geos::geom::Polygon;
 using geos::geom::Envelope;
+using geos::triangulate::tri::Tri;
 using geos::triangulate::tri::TriList;
 
 

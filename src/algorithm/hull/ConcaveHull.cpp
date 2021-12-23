@@ -56,7 +56,7 @@ double
 ConcaveHull::uniformEdgeLength(const Geometry* geom)
 {
     double areaCH = geom->convexHull()->getArea();
-    int numPts = geom->getNumPoints();
+    std::size_t numPts = geom->getNumPoints();
     return std::sqrt(areaCH / numPts);
 }
 
@@ -155,9 +155,9 @@ ConcaveHull::computeHull(TriList<HullTri>& triList)
 
         if (isRemovable(tri, triList)) {
             //-- the non-null adjacents are now on the border
-            HullTri* adj0 = tri->getAdjacent(0);
-            HullTri* adj1 = tri->getAdjacent(1);
-            HullTri* adj2 = tri->getAdjacent(2);
+            HullTri* adj0 = static_cast<HullTri*>(tri->getAdjacent(0));
+            HullTri* adj1 = static_cast<HullTri*>(tri->getAdjacent(1));
+            HullTri* adj2 = static_cast<HullTri*>(tri->getAdjacent(2));
 
             //-- remove tri
             tri->remove();
@@ -300,10 +300,10 @@ ConcaveHull::isInteriorVertex(const HullTri* triStart, TriIndex index)
     const HullTri* curr = triStart;
     TriIndex currIndex = index;
     do {
-        const HullTri* adj = curr->getAdjacent(currIndex);
+        Tri* adj = curr->getAdjacent(currIndex);
         if (adj == nullptr) return false;
         TriIndex adjIndex = adj->getIndex(curr);
-        curr = adj;
+        curr = static_cast<HullTri*>(adj);
         currIndex = Tri::next(adjIndex);
     }
     while (curr != triStart);
@@ -328,48 +328,64 @@ ConcaveHull::createDelaunayTriangulation(const Geometry* geom, TriList<HullTri>&
 {
     //TODO: implement a DT on Tris directly?
     DelaunayTriangulationBuilder dt;
-    dt.setSites(geom);
-    QuadEdgeSubdivision subdiv(dt.getSubdivision());
-    return toTris(subdiv, triList);
+    dt.setSites(*geom);
+    QuadEdgeSubdivision& subdiv = dt.getSubdivision();
+    toTris(subdiv, triList);
+    return;
+}
+
+
+/* private static */
+void
+ConcaveHull::toTris(QuadEdgeSubdivision& subdiv, TriList<HullTri>& triList)
+{
+    HullTriVisitor visitor(triList);
+    subdiv.visitTriangles(&visitor, false);
+    TriangulationBuilder tb;
+    for (auto* tri : triList) {
+        tb.add(static_cast<Tri*>(tri));
+    }
+    return;
 }
 
 
 /* private */
 std::unique_ptr<Geometry>
-ConcaveHull::toPolygon(TriList<HullTri>& triList, const GeometryFactory* geomFactory)
+ConcaveHull::toPolygon(TriList<HullTri>& triList, const GeometryFactory* factory)
 {
     if (! isHolesAllowed) {
-        return extractPolygon(triList, geomFactory);
+        return extractPolygon(triList, factory);
     }
     //-- in case holes are present use union (slower but handles holes)
-    return geomunion(triList, geomFactory);
+    return geomunion(triList, factory);
 }
 
 
 /* private */
 std::unique_ptr<Geometry>
-ConcaveHull::extractPolygon(TriList<HullTri>& triList, const GeometryFactory* geomFactory)
+ConcaveHull::extractPolygon(TriList<HullTri>& triList, const GeometryFactory* factory)
 {
     if (triList.size() == 1) {
         HullTri* tri = triList[0];
-        return tri->toPolygon(geomFactory);
+        return tri->toPolygon(factory);
     }
     std::vector<Coordinate> pts = traceBorder(triList);
-    return geomFactory->createPolygon(std::move(pts));
+    return factory->createPolygon(std::move(pts));
 }
 
 
 /* private static */
 std::unique_ptr<Geometry>
-ConcaveHull::geomunion(TriList<HullTri>& triList, const GeometryFactory* geomFactory)
+ConcaveHull::geomunion(TriList<HullTri>& triList, const GeometryFactory* factory)
 {
     std::vector<std::unique_ptr<Polygon>> polys;
     // List<Polygon> polys = new ArrayList<Polygon>();
     for (auto* tri : triList) {
-        std::unique_ptr<Polygon> poly = tri->toPolygon(geomFactory);
+        std::unique_ptr<Polygon> poly = tri->toPolygon(factory);
         polys.emplace_back(poly.release());
     }
-    return CoverageUnion::geomunion(geomFactory->buildGeometry(std::move(polys)));
+    std::unique_ptr<Geometry> geom = factory->buildGeometry(std::move(polys));
+    return CoverageUnion::geomunion(geom.release());
 }
 
 
@@ -378,23 +394,24 @@ std::vector<Coordinate>
 ConcaveHull::traceBorder(TriList<HullTri>& triList)
 {
     HullTri* triStart = findBorderTri(triList);
-    std::vector<Coordinate> coordList;
+    // std::vector<Coordinate> coordList;
+    CoordinateList coordList;
     HullTri* tri = triStart;
     do {
         TriIndex borderIndex = tri->borderIndexCCW();
         //-- add border vertex
-        coordList.push_back(tri->getCoordinate(borderIndex), false);
+        coordList.add(tri->getCoordinate(borderIndex), false);
         TriIndex nextIndex = Tri::next(borderIndex);
         //-- if next edge is also border, add it and move to next
         if (tri->isBorder(nextIndex)) {
-            coordList.push_back(tri->getCoordinate(nextIndex), false);
+            coordList.add(tri->getCoordinate(nextIndex), false);
             borderIndex = nextIndex;
         }
         //-- find next border tri CCW around non-border edge
         tri = tri->nextBorderTri();
     } while (tri != triStart);
-    CoordinateList::closeRing(coordList);
-    return coordList;
+    coordList.closeRing();
+    return *(coordList.toCoordinateArray());
 }
 
 
@@ -410,64 +427,55 @@ ConcaveHull::findBorderTri(TriList<HullTri>& triList)
 }
 
 
-/* private static */
-void
-ConcaveHull::toTris(QuadEdgeSubdivision& subdiv, TriList<HullTri>& triList)
-{
-    HullTriVisitor visitor(triList);
-    subdiv.visitTriangles(&visitor, false);
-    TriangulationBuilder::build(triList);
-    return;
-}
 
 
 /* HullTri ------------------------------------------------------------ */
 
 /* public */
 double
-ConcaveHull::HullTri::getSize() const
+HullTri::getSize() const
 {
-    return size;
+    return m_size;
 }
 
 /* public */
 void
-ConcaveHull::HullTri::setSizeToBorder()
+HullTri::setSizeToBorder()
 {
-    size = lengthOfBorder();
+    m_size = lengthOfBorder();
 }
 
 /* public */
 bool
-ConcaveHull::HullTri::isMarked() const
+HullTri::isMarked() const
 {
-    return isMarked;
+    return m_isMarked;
 }
 
 /* public */
 void
-ConcaveHull::HullTri::setMarked(bool p_isMarked)
+HullTri::setMarked(bool marked)
 {
-    isMarked = p_isMarked;
+    m_isMarked = marked;
 }
 
 /* public */
 bool
-ConcaveHull::HullTri::isBorder() const
+HullTri::isBorder() const
 {
     return isBorder(0) || isBorder(1) || isBorder(2);
 }
 
 /* public */
 bool
-ConcaveHull::HullTri::isBorder(TriIndex index) const
+HullTri::isBorder(TriIndex index) const
 {
     return ! hasAdjacent(index);
 }
 
 /* public */
 TriIndex
-ConcaveHull::HullTri::borderIndex() const
+HullTri::borderIndex() const
 {
     if (isBorder(0)) return 0;
     if (isBorder(1)) return 1;
@@ -483,7 +491,7 @@ ConcaveHull::HullTri::borderIndex() const
 */
 /* public */
 TriIndex
-ConcaveHull::HullTri::borderIndexCCW() const
+HullTri::borderIndexCCW() const
 {
     TriIndex index = borderIndex();
     TriIndex prevIndex = prev(index);
@@ -501,7 +509,7 @@ ConcaveHull::HullTri::borderIndexCCW() const
 */
 /* public */
 TriIndex
-ConcaveHull::HullTri::borderIndexCW() const
+HullTri::borderIndexCW() const
 {
     TriIndex index = borderIndex();
     TriIndex nextIndex = next(index);
@@ -514,7 +522,7 @@ ConcaveHull::HullTri::borderIndexCW() const
 
 /* public */
 double
-ConcaveHull::HullTri::lengthOfLongestEdge() const
+HullTri::lengthOfLongestEdge() const
 {
     return Triangle::longestSideLength(p0, p1, p2);
 }
@@ -522,14 +530,14 @@ ConcaveHull::HullTri::lengthOfLongestEdge() const
 
 /* public */
 HullTri*
-ConcaveHull::HullTri::nextBorderTri() const
+HullTri::nextBorderTri()
 {
     HullTri* tri = this;
     // start at first non-border edge CW
     TriIndex index = next(borderIndexCW());
     // scan CCW around vertex for next border tri
     do {
-        HullTri* adjTri = tri->getAdjacent(index);
+        HullTri* adjTri = static_cast<HullTri*>(tri->getAdjacent(index));
         if (adjTri == this) {
             throw util::IllegalStateException("No outgoing border edge found");
         }
@@ -541,9 +549,9 @@ ConcaveHull::HullTri::nextBorderTri() const
 }
 
 
-/* private */
+/* public */
 double
-ConcaveHull::HullTri::lengthOfBorder() const
+HullTri::lengthOfBorder() const
 {
     double len = 0.0;
     for (TriIndex i = 0; i < 3; i++) {
@@ -556,7 +564,7 @@ ConcaveHull::HullTri::lengthOfBorder() const
 
 /* public static */
 bool
-ConcaveHull::HullTri::isConnected(TriList<HullTri>& triList, HullTri* exceptTri)
+HullTri::isConnected(TriList<HullTri>& triList, HullTri* exceptTri)
 {
       if (triList.size() == 0) return false;
       clearMarks(triList);
@@ -569,7 +577,7 @@ ConcaveHull::HullTri::isConnected(TriList<HullTri>& triList, HullTri* exceptTri)
 
 /* public static */
 void
-ConcaveHull::HullTri::clearMarks(TriList<HullTri>& triList)
+HullTri::clearMarks(TriList<HullTri>& triList)
 {
     for (auto* tri : triList) {
         tri->setMarked(false);
@@ -578,7 +586,7 @@ ConcaveHull::HullTri::clearMarks(TriList<HullTri>& triList)
 
 /* public static */
 HullTri*
-ConcaveHull::HullTri::findTri(const TriList<HullTri>& triList, const Tri* exceptTri)
+HullTri::findTri(TriList<HullTri>& triList, Tri* exceptTri)
 {
     for (auto* tri : triList) {
         if (tri != exceptTri) return tri;
@@ -588,7 +596,7 @@ ConcaveHull::HullTri::findTri(const TriList<HullTri>& triList, const Tri* except
 
 /* public static */
 bool
-ConcaveHull::HullTri::isAllMarked(const TriList<HullTri>& triList)
+HullTri::isAllMarked(TriList<HullTri>& triList)
 {
     for (auto* tri : triList) {
         if (! tri->isMarked())
@@ -597,9 +605,10 @@ ConcaveHull::HullTri::isAllMarked(const TriList<HullTri>& triList)
     return true;
 }
 
+
 /* public static */
 void
-ConcaveHull::HullTri::markConnected(HullTri* triStart, HullTri* exceptTri)
+HullTri::markConnected(HullTri* triStart, HullTri* exceptTri)
 {
     std::deque<HullTri*> queue;
     queue.push_back(triStart);
@@ -608,7 +617,7 @@ ConcaveHull::HullTri::markConnected(HullTri* triStart, HullTri* exceptTri)
         queue.pop_front();
         tri->setMarked(true);
         for (TriIndex i = 0; i < 3; i++) {
-            HullTri* adj = tri->getAdjacent(i);
+            HullTri* adj = static_cast<HullTri*>(tri->getAdjacent(i));
             //-- don't connect thru this tri
             if (adj == exceptTri) {
                 continue;
@@ -624,7 +633,7 @@ ConcaveHull::HullTri::markConnected(HullTri* triStart, HullTri* exceptTri)
 /* HullTriVisitor ------------------------------------------------------------ */
 
 void
-ConcaveHull::HullTriVisitor::visit(std::array<QuadEdge*, 3>& triEdges)
+HullTriVisitor::visit(std::array<QuadEdge*, 3>& triEdges)
 {
     const Coordinate& p0 = triEdges[0]->orig().getCoordinate();
     const Coordinate& p1 = triEdges[1]->orig().getCoordinate();

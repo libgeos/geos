@@ -161,6 +161,20 @@ Triangle::area() const
     return area(p0, p1, p2);
 }
 
+/* public static */
+double
+Triangle::longestSideLength(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    double lenAB = a.distance(b);
+    double lenBC = b.distance(c);
+    double lenCA = c.distance(a);
+    double maxLen = lenAB;
+    if (lenBC > maxLen)
+        maxLen = lenBC;
+    if (lenCA > maxLen)
+        maxLen = lenCA;
+    return maxLen;
+}
 
 
 

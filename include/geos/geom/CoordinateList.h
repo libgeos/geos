@@ -146,6 +146,12 @@ public:
     }
 
     iterator
+    add(const Coordinate& c, bool allowRepeated)
+    {
+        return insert(coords.end(), c, allowRepeated);
+    }
+
+    iterator
     insert(iterator pos, const Coordinate& c)
     {
         return coords.insert(pos, c);

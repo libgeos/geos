@@ -14,12 +14,14 @@
 
 #pragma once
 
-//#include <geos/triangulate/tri/Tri.h>
+#include <geos/geom/GeometryFactory.h>
 
 #include <geos/export.h>
 #include <iostream>
+#include <iterator>
 #include <deque>
 #include <array>
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -31,6 +33,7 @@ class Geometry;
 
 using geos::geom::Coordinate;
 using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
 
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate
@@ -58,7 +61,7 @@ private:
     TriType* create(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2)
     {
         triStore.emplace_back(c0, c1, c2);
-        TryType* newTri = &triStore.back();
+        TriType* newTri = &triStore.back();
         return newTri;
     }
 
@@ -67,11 +70,16 @@ public:
 
     TriList() {};
 
+    std::vector<TriType*>& getTris()
+    {
+        return tris;
+    }
+
     void remove(TriType* tri)
     {
         // We can leave triStore untouched, just remove
         // the pointer from tris.
-        for (auto it = tris.begin(); it != tris.end(); ++it;) {
+        for (auto it = tris.begin(); it != tris.end(); ++it) {
             if (*it == tri) {
                 tris.erase(it);
                 return;
@@ -119,20 +127,6 @@ public:
         return geomFact->createGeometryCollection(std::move(geoms));
     }
 
-    static std::unique_ptr<Geometry> toGeometry(
-        const geom::GeometryFactory* geomFact,
-        const std::vector<std::unique_ptr<TriList>>& allTriLists)
-    {
-        std::vector<std::unique_ptr<Geometry>> geoms;
-        for (const std::unique_ptr<TriList>& triList: allTriLists) {
-            for (const auto* tri: *triList) {
-                std::unique_ptr<Geometry> geom = tri->toPolygon(geomFact);
-                geoms.emplace_back(geom.release());
-            }
-        }
-        return geomFact->createGeometryCollection(std::move(geoms));
-    }
-
     friend std::ostream& operator << (std::ostream& os, TriList& triList)
     {
         os << "TRILIST ";
@@ -145,8 +139,8 @@ public:
     }
 
     // Support for iterating on TriList
-    typedef std::vector<TriType*>::iterator iterator;
-    typedef std::vector<TriType*>::const_iterator const_iterator;
+    typedef typename std::vector<TriType*>::iterator iterator;
+    typedef typename std::vector<TriType*>::const_iterator const_iterator;
     size_t size() const { return tris.size(); }
     bool empty() const { return tris.empty(); }
     iterator begin() { return tris.begin(); }

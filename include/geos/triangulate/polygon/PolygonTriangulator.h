@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/triangulate/tri/TriList.h>
+#include <geos/triangulate/tri/Tri.h>
 
 // Forward declarations
 namespace geos {
@@ -29,6 +30,7 @@ using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::Polygon;
 using geos::triangulate::tri::TriList;
+using geos::triangulate::tri::Tri;
 
 
 namespace geos {

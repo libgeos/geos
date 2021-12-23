@@ -53,14 +53,14 @@ class GEOS_DLL SegmentExtractingNoder : public Noder {
 
 private:
 
-    std::vector<SegmentString*> segList;
+    std::vector<SegmentString*>* segList;
 
     static std::vector<SegmentString*>* extractSegments(
         std::vector<SegmentString*>* segStrings);
 
     static void extractSegments(
         SegmentString* ss,
-        std::vector<SegmentString*>* segList)
+        std::vector<SegmentString*>* segList);
 
 
 public:

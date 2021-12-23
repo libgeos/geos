@@ -29,7 +29,7 @@ namespace polygon {
 
 /* public static */
 void
-TriDelaunayImprover::improve(TriList& triList)
+TriDelaunayImprover::improve(TriList<Tri>& triList)
 {
     TriDelaunayImprover improver(triList);
     improver.improve();
@@ -50,7 +50,7 @@ TriDelaunayImprover::improve()
 
 /* private */
 std::size_t
-TriDelaunayImprover::improveScan(TriList& tris)
+TriDelaunayImprover::improveScan(TriList<Tri>& tris)
 {
     std::size_t improveCount = 0;
     if (tris.size() == 0) return 0; // Fend off infinite loop
