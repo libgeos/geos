@@ -61,9 +61,9 @@ class HullTri : public Tri
 
     public:
 
-        HullTri(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
-            : Tri(p0, p1, p2)
-            , m_size(Triangle::longestSideLength(p0, p1, p2))
+        HullTri(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2)
+            : Tri(c0, c1, c2)
+            , m_size(Triangle::longestSideLength(c0, c1, c2))
             {};
 
         double getSize() const;

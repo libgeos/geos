@@ -56,7 +56,7 @@ double
 ConcaveHull::uniformEdgeLength(const Geometry* geom)
 {
     double areaCH = geom->convexHull()->getArea();
-    std::size_t numPts = geom->getNumPoints();
+    double numPts = static_cast<double>(geom->getNumPoints());
     return std::sqrt(areaCH / numPts);
 }
 
