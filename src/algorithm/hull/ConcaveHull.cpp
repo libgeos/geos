@@ -644,7 +644,7 @@ HullTriVisitor::visit(std::array<QuadEdge*, 3>& triEdges)
     else {
         triList.add(p0, p1, p2);
     }
-};
+}
 
 
 
