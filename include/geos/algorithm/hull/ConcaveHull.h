@@ -232,9 +232,9 @@ public:
     /**
     * Sets whether holes are allowed in the concave hull polygon.
     *
-    * @param isHolesAllowed true if holes are allowed in the result
+    * @param holesAllowed true if holes are allowed in the result
     */
-    void setHolesAllowed(bool p_isHolesAllowed);
+    void setHolesAllowed(bool holesAllowed);
 
     /**
     * Gets the computed concave hull.
