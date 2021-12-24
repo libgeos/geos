@@ -71,11 +71,26 @@ ConcaveHull::concaveHullByLength(const Geometry* geom, double maxLength)
 
 /* public static */
 std::unique_ptr<Geometry>
-ConcaveHull::concaveHullByLength(const Geometry* geom, double maxLength, bool isHolesAllowed)
+ConcaveHull::concaveHullByLength(
+    const Geometry* geom,
+    double maxLength,
+    bool isHolesAllowed)
 {
     ConcaveHull hull(geom);
     hull.setMaximumEdgeLength(maxLength);
     hull.setHolesAllowed(isHolesAllowed);
+    return hull.getHull();
+}
+
+
+/* public static */
+std::unique_ptr<Geometry>
+ConcaveHull::concaveHullByLengthFactor(
+    const Geometry* geom,
+    double lengthFactor)
+{
+    ConcaveHull hull(geom);
+    hull.setMaximumEdgeLengthFactor(lengthFactor);
     return hull.getHull();
 }
 
@@ -97,6 +112,17 @@ ConcaveHull::setMaximumEdgeLength(double edgeLength)
     if (edgeLength < 0)
         throw util::IllegalArgumentException("Edge length must be non-negative");
     maxEdgeLength = edgeLength;
+    maxEdgeLengthFactor = -1.0;
+}
+
+
+/* public */
+void
+ConcaveHull::setMaximumEdgeLengthFactor(double edgeLengthFactor)
+{
+    if (edgeLengthFactor < 0 || edgeLengthFactor > 1)
+        throw util::IllegalArgumentException("Edge length ratio must be in range [0,1]e");
+    maxEdgeLengthFactor = edgeLengthFactor;
 }
 
 
@@ -122,13 +148,45 @@ ConcaveHull::setHolesAllowed(bool p_isHolesAllowed)
 std::unique_ptr<Geometry>
 ConcaveHull::getHull()
 {
+    if (inputGeometry->isEmpty()) {
+        return geomFactory->createPolygon();
+    }
     TriList<HullTri> triList;
     createDelaunayTriangulation(inputGeometry, triList);
+    if (maxEdgeLengthFactor >= 0) {
+        maxEdgeLength = computeTargetEdgeLength(triList, maxEdgeLengthFactor);
+    }
+    if (triList.empty()) {
+        return inputGeometry->convexHull();
+    }
     computeHull(triList);
     std::unique_ptr<Geometry> hull = toPolygon(triList, geomFactory);
     return hull;
 }
 
+
+/* private static */
+double
+ConcaveHull::computeTargetEdgeLength(
+    TriList<HullTri>& triList,
+    double edgeLengthFactor)
+{
+    if (edgeLengthFactor == 0) return 0;
+    double maxEdgeLen = -1;
+    double minEdgeLen = -1;
+    for (auto* tri : triList) {
+        for (TriIndex i = 0; i < 3; i++) {
+            double len = tri->getCoordinate(i).distance(tri->getCoordinate(Tri::next(i)));
+            if (len > maxEdgeLen)
+                maxEdgeLen = len;
+            if (minEdgeLen < 0 || len < minEdgeLen)
+                minEdgeLen = len;
+        }
+    }
+    //-- ensure all edges are included
+    if (edgeLengthFactor == 1) return 2 * maxEdgeLen;
+    return edgeLengthFactor * (maxEdgeLen - minEdgeLen) + minEdgeLen;
+}
 
 /* private */
 void

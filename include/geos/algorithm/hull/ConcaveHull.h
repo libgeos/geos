@@ -161,6 +161,7 @@ public:
     ConcaveHull(const Geometry* geom)
         : inputGeometry(geom)
         , maxEdgeLength(0.0)
+        , maxEdgeLengthFactor(-1.0)
         , maxAreaRatio(0.0)
         , isHolesAllowed(false)
         , geomFactory(geom->getFactory())
@@ -196,6 +197,20 @@ public:
 
     /**
     * Computes the concave hull of the vertices in a geometry
+    * using the target criteria of maximum edge length factor.
+    * The edge length factor is a fraction of the length delta
+    * between the longest and shortest edges
+    * in the Delaunay Triangulation of the input points.
+    *
+    * @param geom the input geometry
+    * @param lengthFactor the target edge length factor
+    * @return the concave hull
+    */
+    static std::unique_ptr<Geometry> concaveHullByLengthFactor(
+        const Geometry* geom, double lengthFactor);
+
+    /**
+    * Computes the concave hull of the vertices in a geometry
     * using the target criteria of maximum area ratio.
     *
     * @param geom the input geometry
@@ -217,6 +232,19 @@ public:
     * @see uniformEdgeLength()
     */
     void setMaximumEdgeLength(double edgeLength);
+
+    /**
+    * Sets the target maximum edge length factor for the concave hull.
+    * The edge length factor is a fraction of the length delta
+    * between the longest and shortest edges
+    * in the Delaunay Triangulation of the input points.
+    * A value of 1.0 produces the convex hull.
+    * A value of 0.0 produces a concave hull of minimum area
+    * that is still connected.
+    *
+    * @param edgeLengthFactor a length factor value between 0 and 1
+    */
+    void setMaximumEdgeLengthFactor(double edgeLengthFactor);
 
     /**
     * Sets the target maximum concave hull area as a ratio of the convex hull area.
@@ -251,12 +279,17 @@ private:
     // Members
     const Geometry* inputGeometry;
     double maxEdgeLength;
+    double maxEdgeLengthFactor;
     double maxAreaRatio;
     bool isHolesAllowed;
     const GeometryFactory* geomFactory;
 
     void computeHull(TriList<HullTri>& triList);
     void initQueue(HullTriQueue& queue, TriList<HullTri>& triList);
+
+    static double computeTargetEdgeLength(
+        TriList<HullTri>& triList,
+        double edgeLengthFactor);
 
     /**
     * Adds a Tri to the queue.
