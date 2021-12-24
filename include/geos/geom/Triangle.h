@@ -165,9 +165,9 @@ public:
     /**
     * Computes the 2D area of a triangle. The area value is always non-negative.
     *
-    * @param a, a vertex of the triangle
-    * @param b, a vertex of the triangle
-    * @param c, a vertex of the triangle
+    * @param a vertex of the triangle
+    * @param b vertex of the triangle
+    * @param c vertex of the triangle
     * @return the area of the triangle
     *
     */
