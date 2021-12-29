@@ -49,7 +49,7 @@
 #include <iostream>
 #endif
 
-#ifndef GEOS_INLINE
+#ifdef GEOS_INLINE
 #include <geos/io/WKTReader.inl>
 #endif
 
