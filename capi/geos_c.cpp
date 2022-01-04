@@ -470,7 +470,7 @@ extern "C" {
 
     Geometry*
     GEOSConcaveHull(const Geometry* g,
-                    double ratio, GEOSDimensionality ratioMode,
+                    double ratio, unsigned int ratioMode,
                     unsigned int allowHoles)
 
     {

@@ -761,7 +761,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     double ratio,
-    GEOSDimensionality ratioMode,
+    unsigned int ratioMode,
     unsigned int allowHoles);
 
 /** \see GEOSMinimumRotatedRectangle */
@@ -2622,7 +2622,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
     double ratio,
-    GEOSDimensionality ratioMode,
+    unsigned int ratioMode,
     unsigned int allowHoles);
 
 /**

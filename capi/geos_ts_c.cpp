@@ -1216,7 +1216,7 @@ extern "C" {
     Geometry*
     GEOSConcaveHull_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
-        double ratio, GEOSDimensionality ratioMode,
+        double ratio, unsigned int ratioMode,
         unsigned int allowHoles)
     {
         return execute(extHandle, [&]() {
