@@ -66,6 +66,15 @@ struct test_concavehull_data {
         ensure_equals_geometry(expected.get(), actual.get());
     }
 
+    void
+    checkHullByLengthFactorXYZ(const std::string& wkt, double threshold, const std::string& wktExpected)
+    {
+        std::unique_ptr<Geometry> geom = reader_.read(wkt);
+        std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLengthFactor(geom.get(), threshold);
+        std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
+        ensure_equals_geometry(expected.get(), actual.get());
+    }
+
 };
 
 typedef test_group<test_concavehull_data> group;
@@ -261,6 +270,17 @@ void object::test<17>()
 {
     checkHullByArea("MULTIPOINT ((10 10), (90 10), (70 70), (50 60), (50 90), (40 70), (30 30))",
         1, "POLYGON ((10 10, 40 70, 50 90, 70 70, 90 10, 10 10))" );
+}
+
+//
+// testLengthFactorXYZChevronP5
+//
+template<>
+template<>
+void object::test<18>()
+{
+    checkHullByLengthFactorXYZ("MULTIPOINT Z ((10 10 1), (90 10 2), (30 70 3), (70 70 4), (50 60 5))",
+        0.5, "POLYGON Z ((30 70 3, 70 70 4, 90 10 2, 50 60 5, 10 10 1, 30 70 3))" );
 }
 
 
