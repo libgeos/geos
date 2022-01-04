@@ -55,12 +55,13 @@ private:
 
     std::vector<SegmentString*>* segList;
 
-    static std::vector<SegmentString*>* extractSegments(
-        std::vector<SegmentString*>* segStrings);
+    void extractSegments(
+        const std::vector<SegmentString*>& inputSegs,
+        std::vector<SegmentString*>& outputSegs);
 
-    static void extractSegments(
-        SegmentString* ss,
-        std::vector<SegmentString*>* segList);
+    void extractSegments(
+        const SegmentString* ss,
+        std::vector<SegmentString*>& outputSegs);
 
 
 public:
@@ -69,7 +70,7 @@ public:
     * Creates a new segment-extracting noder.
     */
     SegmentExtractingNoder()
-        : segList(nullptr)
+        : segList(new std::vector<SegmentString*>)
         {};
 
     void computeNodes(std::vector<SegmentString*>* segStrings) override;

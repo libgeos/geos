@@ -31,6 +31,7 @@ std::unique_ptr<Geometry>
 CoverageUnion::geomunion(const Geometry* coverage)
 {
     SegmentExtractingNoder sen;
+
     // a precision model is not needed since no noding is done
     return OverlayNG::geomunion(coverage, nullptr, &sen);
 }

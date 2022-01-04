@@ -99,6 +99,8 @@ class HullTri : public Tri
         */
         TriIndex borderIndexCW() const;
 
+        friend std::ostream& operator<<(std::ostream& os, const HullTri& ht);
+
 }; // HullTri
 
 
@@ -125,7 +127,10 @@ class HullTriVisitor : public TriangleVisitor
 struct HullTriCompare {
     bool operator()(const HullTri* a, const HullTri* b)
     {
-        return a->getSize() < b->getSize();
+        if (a->getSize() == b->getSize())
+            return a->getArea() < b->getArea();
+        else
+            return a->getSize() < b->getSize();
     }
 };
 

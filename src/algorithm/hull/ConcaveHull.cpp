@@ -74,11 +74,11 @@ std::unique_ptr<Geometry>
 ConcaveHull::concaveHullByLength(
     const Geometry* geom,
     double maxLength,
-    bool isHolesAllowed)
+    bool holesAllowed)
 {
     ConcaveHull hull(geom);
     hull.setMaximumEdgeLength(maxLength);
-    hull.setHolesAllowed(isHolesAllowed);
+    hull.setHolesAllowed(holesAllowed);
     return hull.getHull();
 }
 
@@ -138,9 +138,9 @@ ConcaveHull::setMaximumAreaRatio(double areaRatio)
 
 /* public */
 void
-ConcaveHull::setHolesAllowed(bool p_isHolesAllowed)
+ConcaveHull::setHolesAllowed(bool holesAllowed)
 {
-    isHolesAllowed = p_isHolesAllowed;
+    isHolesAllowed = holesAllowed;
 }
 
 
@@ -218,9 +218,9 @@ ConcaveHull::computeHull(TriList<HullTri>& triList)
             HullTri* adj2 = static_cast<HullTri*>(tri->getAdjacent(2));
 
             //-- remove tri
+            areaConcave -= tri->getArea();
             tri->remove();
             triList.remove(tri);
-            areaConcave -= tri->getArea();
 
             //-- if holes not allowed, add new border adjacents to queue
             if (! isHolesAllowed) {
@@ -258,6 +258,7 @@ ConcaveHull::addBorderTri(HullTri* tri, HullTriQueue& queue)
     if (tri == nullptr) return;
     if (tri->numAdjacent() != 2) return;
     tri->setSizeToBorder();
+
     queue.push(tri);
 }
 
@@ -437,13 +438,13 @@ std::unique_ptr<Geometry>
 ConcaveHull::geomunion(TriList<HullTri>& triList, const GeometryFactory* factory)
 {
     std::vector<std::unique_ptr<Polygon>> polys;
-    // List<Polygon> polys = new ArrayList<Polygon>();
+
     for (auto* tri : triList) {
         std::unique_ptr<Polygon> poly = tri->toPolygon(factory);
         polys.emplace_back(poly.release());
     }
     std::unique_ptr<Geometry> geom = factory->buildGeometry(std::move(polys));
-    return CoverageUnion::geomunion(geom.release());
+    return CoverageUnion::geomunion(geom.get());
 }
 
 
@@ -452,7 +453,7 @@ std::vector<Coordinate>
 ConcaveHull::traceBorder(TriList<HullTri>& triList)
 {
     HullTri* triStart = findBorderTri(triList);
-    // std::vector<Coordinate> coordList;
+
     CoordinateList coordList;
     HullTri* tri = triStart;
     do {
@@ -687,6 +688,19 @@ HullTri::markConnected(HullTri* triStart, HullTri* exceptTri)
     }
 }
 
+/*public friend*/
+std::ostream&
+operator<<(std::ostream& os, const HullTri& ht)
+{
+    os << "(" << ht.p0 << ",";
+    os << ht.p1 << ",";
+    os << ht.p2 << ") ";
+    os << ht.tri0 << " ";
+    os << ht.tri1 << " ";
+    os << ht.tri2 << " ";
+    os << ht.m_size;
+    return os;
+}
 
 /* HullTriVisitor ------------------------------------------------------------ */
 
