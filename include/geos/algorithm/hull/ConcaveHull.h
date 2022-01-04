@@ -143,19 +143,28 @@ typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTriCompare> Hul
 * until specified target criteria are reached.
 * The target criteria are:
 *
-*  * Maximum Edge Length - the length of the longest edge of the hull will be
-*    no larger than this value
+*  * Maximum Edge Length Ratio - determine the Maximum Edge Length
+*    as a fraction of the difference between the longest and shortest edge lengths
+*    in the Delaunay Triangulation. This normalizes the Maximum Edge Length to be scale-independent.
 *  * Maximum Area Ratio - the ratio of the concave hull area to the convex
 *    hull area will be no larger than this value
 *
-* Usually only a single criteria is specified, but both may be provided.
+* The preferred criterium is the Maximum Edge Length Ratio, since it is
+* scale-free and local (so that no assumption needs to be made about the
+* total amount of concavity present.
 *
-* The computed hull is always a single connected Polygon.
-* This constraint may cause the concave hull to not fully meet the target criteria.
+* Other length criteria can be used by setting the Maximum Edge Length.
+* For example, use a length relative  to the longest edge length
+* in the Minimum Spanning Tree of the point set.
+* Or, use a length derived from the uniformGridEdgeLength() value.
+*
+* The computed hull is always a single connected geom::Polygon
+* (unless it is degenerate, in which case it will be a geom::Point or a geom::LineString).
+* This constraint may cause the concave hull to fail to meet the target criteria.
 *
 * Optionally the concave hull can be allowed to contain holes.
 * Note that this may be substantially slower than not permitting holes,
-* and it can produce results of low quality.
+* and it can produce results of lower quality.
 *
 * @author mdavis
 */
@@ -166,7 +175,7 @@ public:
     ConcaveHull(const Geometry* geom)
         : inputGeometry(geom)
         , maxEdgeLength(0.0)
-        , maxEdgeLengthFactor(-1.0)
+        , maxEdgeLengthRatio(-1.0)
         , maxAreaRatio(0.0)
         , isHolesAllowed(false)
         , geomFactory(geom->getFactory())
@@ -202,17 +211,17 @@ public:
 
     /**
     * Computes the concave hull of the vertices in a geometry
-    * using the target criteria of maximum edge length factor.
-    * The edge length factor is a fraction of the length delta
+    * using the target criteria of maximum edge length ratio.
+    * The edge length ratio is a fraction of the length difference
     * between the longest and shortest edges
     * in the Delaunay Triangulation of the input points.
     *
     * @param geom the input geometry
-    * @param lengthFactor the target edge length factor
+    * @param lengthRatio the target edge length factor
     * @return the concave hull
     */
-    static std::unique_ptr<Geometry> concaveHullByLengthFactor(
-        const Geometry* geom, double lengthFactor);
+    static std::unique_ptr<Geometry> concaveHullByLengthRatio(
+        const Geometry* geom, double lengthRatio);
 
     /**
     * Computes the concave hull of the vertices in a geometry
@@ -239,17 +248,17 @@ public:
     void setMaximumEdgeLength(double edgeLength);
 
     /**
-    * Sets the target maximum edge length factor for the concave hull.
-    * The edge length factor is a fraction of the length delta
+    * Sets the target maximum edge length ratio for the concave hull.
+    * The edge length ratio is a fraction of the length delta
     * between the longest and shortest edges
     * in the Delaunay Triangulation of the input points.
     * A value of 1.0 produces the convex hull.
     * A value of 0.0 produces a concave hull of minimum area
     * that is still connected.
     *
-    * @param edgeLengthFactor a length factor value between 0 and 1
+    * @param edgeLengthRatio a length ratio value between 0 and 1
     */
-    void setMaximumEdgeLengthFactor(double edgeLengthFactor);
+    void setMaximumEdgeLengthRatio(double edgeLengthRatio);
 
     /**
     * Sets the target maximum concave hull area as a ratio of the convex hull area.
@@ -284,7 +293,7 @@ private:
     // Members
     const Geometry* inputGeometry;
     double maxEdgeLength;
-    double maxEdgeLengthFactor;
+    double maxEdgeLengthRatio;
     double maxAreaRatio;
     bool isHolesAllowed;
     const GeometryFactory* geomFactory;

@@ -23,8 +23,6 @@
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
-// #include <geos/triangulate/quadedge/TriangleVisitor.h>
-// #include <geos/triangulate/tri/Tri.h>
 #include <geos/triangulate/tri/TriangulationBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/IllegalStateException.h>
@@ -85,12 +83,12 @@ ConcaveHull::concaveHullByLength(
 
 /* public static */
 std::unique_ptr<Geometry>
-ConcaveHull::concaveHullByLengthFactor(
+ConcaveHull::concaveHullByLengthRatio(
     const Geometry* geom,
     double lengthFactor)
 {
     ConcaveHull hull(geom);
-    hull.setMaximumEdgeLengthFactor(lengthFactor);
+    hull.setMaximumEdgeLengthRatio(lengthFactor);
     return hull.getHull();
 }
 
@@ -112,17 +110,17 @@ ConcaveHull::setMaximumEdgeLength(double edgeLength)
     if (edgeLength < 0)
         throw util::IllegalArgumentException("Edge length must be non-negative");
     maxEdgeLength = edgeLength;
-    maxEdgeLengthFactor = -1.0;
+    maxEdgeLengthRatio = -1.0;
 }
 
 
 /* public */
 void
-ConcaveHull::setMaximumEdgeLengthFactor(double edgeLengthFactor)
+ConcaveHull::setMaximumEdgeLengthRatio(double edgeLengthRatio)
 {
-    if (edgeLengthFactor < 0 || edgeLengthFactor > 1)
+    if (edgeLengthRatio < 0 || edgeLengthRatio > 1)
         throw util::IllegalArgumentException("Edge length ratio must be in range [0,1]e");
-    maxEdgeLengthFactor = edgeLengthFactor;
+    maxEdgeLengthRatio = edgeLengthRatio;
 }
 
 
@@ -153,8 +151,8 @@ ConcaveHull::getHull()
     }
     TriList<HullTri> triList;
     createDelaunayTriangulation(inputGeometry, triList);
-    if (maxEdgeLengthFactor >= 0) {
-        maxEdgeLength = computeTargetEdgeLength(triList, maxEdgeLengthFactor);
+    if (maxEdgeLengthRatio >= 0) {
+        maxEdgeLength = computeTargetEdgeLength(triList, maxEdgeLengthRatio);
     }
     if (triList.empty()) {
         return inputGeometry->convexHull();
@@ -169,9 +167,9 @@ ConcaveHull::getHull()
 double
 ConcaveHull::computeTargetEdgeLength(
     TriList<HullTri>& triList,
-    double edgeLengthFactor)
+    double edgeLengthRatio)
 {
-    if (edgeLengthFactor == 0) return 0;
+    if (edgeLengthRatio == 0) return 0;
     double maxEdgeLen = -1;
     double minEdgeLen = -1;
     for (auto* tri : triList) {
@@ -183,9 +181,11 @@ ConcaveHull::computeTargetEdgeLength(
                 minEdgeLen = len;
         }
     }
-    //-- ensure all edges are included
-    if (edgeLengthFactor == 1) return 2 * maxEdgeLen;
-    return edgeLengthFactor * (maxEdgeLen - minEdgeLen) + minEdgeLen;
+    //-- if ratio = 1 ensure all edges are included
+    if (edgeLengthRatio == 1)
+        return 2 * maxEdgeLen;
+
+    return edgeLengthRatio * (maxEdgeLen - minEdgeLen) + minEdgeLen;
 }
 
 /* private */

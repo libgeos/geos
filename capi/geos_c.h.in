@@ -242,6 +242,21 @@ enum GEOSWKBFlavors {
 };
 
 /**
+* Enumeration to use when specifying a
+* dimensional output or methodology to a function.
+*
+* \see GEOSConcaveHull
+*/
+enum GEOSDimensionality {
+    /** Point */
+    GEOS_DIM_POINT = 0,
+    /** Line */
+    GEOS_DIM_LINE = 1,
+    /** Polygon */
+    GEOS_DIM_AREA = 2
+};
+
+/**
 * Callback function for use in spatial index search calls. Pass into
 * the query function and handle query results as the index
 * returns them.
@@ -740,6 +755,14 @@ extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec_r(
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
+
+/** \see GEOSConcaveHull */
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double ratio,
+    GEOSDimensionality ratioMode,
+    unsigned int allowHoles);
 
 /** \see GEOSMinimumRotatedRectangle */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(
@@ -2574,6 +2597,32 @@ extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 * \see geos::operation::overlayng::OverlayNG
 */
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
+
+/**
+* Returns "concave hull" of a geometry. The concave hull is fully
+* contained within the convex hull and also contains all the
+* points of the input, but in a smaller area.
+* The area ratio is the ratio
+* of the area of the convex hull and the concave hull. Frequently
+* used to convert a multi-point into a polygonal area.
+* that contains all the points in the input Geometry
+* \param g The input geometry
+* \param ratioMode Either GEOS_DIM_LINE for linear ratio mode or GEOS_DIM_AREA for area ratio mode.
+* \param ratio The ratio value, between 0 and 1.
+* \return A newly allocated geometry of the concave hull. NULL on exception.
+* The area ratio is the ratio of the concave hull area to the convex hull area.
+* 1 produces the convex hull; 0 produces maximum concaveness.
+* The Length Ratio is a fraction determining the length of the longest
+* edge in the computed hull.  1 produces the convex hull;
+* 0 produces a hull with maximum concaveness
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::algorithm::hull::ConcaveHull
+*/
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
+    const GEOSGeometry* g,
+    double ratio,
+    GEOSDimensionality ratioMode,
+    unsigned int allowHoles);
 
 /**
 * Returns the minimum rotated rectangular POLYGON which encloses

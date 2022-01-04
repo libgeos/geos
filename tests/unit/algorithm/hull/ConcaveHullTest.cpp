@@ -31,10 +31,10 @@ struct test_concavehull_data {
     test_concavehull_data() {};
 
     void
-    checkHullByLengthFactor(const std::string& wkt, double threshold, const std::string& wktExpected)
+    checkHullByLengthRatio(const std::string& wkt, double threshold, const std::string& wktExpected)
     {
         std::unique_ptr<Geometry> geom = reader_.read(wkt);
-        std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLengthFactor(geom.get(), threshold);
+        std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLengthRatio(geom.get(), threshold);
         std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
         ensure_equals_geometry(expected.get(), actual.get());
     }
@@ -67,10 +67,10 @@ struct test_concavehull_data {
     }
 
     void
-    checkHullByLengthFactorXYZ(const std::string& wkt, double threshold, const std::string& wktExpected)
+    checkHullByLengthRatioXYZ(const std::string& wkt, double threshold, const std::string& wktExpected)
     {
         std::unique_ptr<Geometry> geom = reader_.read(wkt);
-        std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLengthFactor(geom.get(), threshold);
+        std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLengthRatio(geom.get(), threshold);
         std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
         ensure_equals_geometry(expected.get(), actual.get());
     }
@@ -189,7 +189,7 @@ template<>
 template<>
 void object::test<10>()
 {
-    checkHullByLengthFactor("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
+    checkHullByLengthRatio("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
         0, "POLYGON ((30 70, 10 90, 60 72, 90 90, 90 60, 90 10, 60 30, 10 10, 40 40, 60 50, 47 66, 40 60, 30 70))" );
 }
 
@@ -200,7 +200,7 @@ template<>
 template<>
 void object::test<11>()
 {
-    checkHullByLengthFactor("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
+    checkHullByLengthRatio("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
         0.5, "POLYGON ((30 70, 10 90, 60 72, 90 90, 90 60, 90 10, 60 30, 10 10, 40 40, 30 70))" );
 }
 
@@ -211,7 +211,7 @@ template<>
 template<>
 void object::test<12>()
 {
-    checkHullByLengthFactor("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
+    checkHullByLengthRatio("MULTIPOINT ((10 90), (10 10), (90 10), (90 90), (40 40), (60 30), (30 70), (40 60), (60 50), (60 72), (47 66), (90 60))",
         1, "POLYGON ((10 10, 10 90, 90 90, 90 60, 90 10, 10 10))" );
 }
 
@@ -279,7 +279,7 @@ template<>
 template<>
 void object::test<18>()
 {
-    checkHullByLengthFactorXYZ("MULTIPOINT Z ((10 10 1), (90 10 2), (30 70 3), (70 70 4), (50 60 5))",
+    checkHullByLengthRatioXYZ("MULTIPOINT Z ((10 10 1), (90 10 2), (30 70 3), (70 70 4), (50 60 5))",
         0.5, "POLYGON Z ((30 70 3, 70 70 4, 90 10 2, 50 60 5, 10 10 1, 30 70 3))" );
 }
 
