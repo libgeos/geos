@@ -33,6 +33,7 @@
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -205,6 +206,16 @@ GeomFunction::init()
             return new Result( geom->buffer( d ) );
         });
     add("offsetCurve", 1, 1, Result::typeGeometry,
+        catConst, "compute the offset curve of geometry by a distance",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB;  // prevent unused variable warning
+            geos::operation::buffer::BufferParameters bp;
+
+            geos::operation::buffer::OffsetCurve oc(*geom, d, bp);
+            std::unique_ptr<Geometry> g3 = oc.getCurve();
+            return new Result( g3.release() );
+        });
+    add("OLDoffsetCurve", 1, 1, Result::typeGeometry,
         catConst, "compute the offset curve of geometry by a distance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB;  // prevent unused variable warning
