@@ -258,25 +258,48 @@ private:
     /// @param offset1 the second offset segment
     /// @param distance the offset distance
     ///
-    void addMitreJoin(const geom::Coordinate& p,
+    void addMitreJoin(const geom::Coordinate& cornerPt,
                       const geom::LineSegment& offset0,
                       const geom::LineSegment& offset1,
                       double distance);
 
-    /// Adds a limited mitre join connecting the two reflex offset segments.
-    ///
-    /// A limited mitre is a mitre which is beveled at the distance
-    /// determined by the mitre ratio limit.
+
+    /// Adds a limited mitre join connecting two convex offset segments.
+    /// A limited mitre join is beveled at the distance
+    /// determined by the mitre limit factor,
+    /// or as a standard bevel join, whichever is further.
     ///
     /// @param offset0 the first offset segment
     /// @param offset1 the second offset segment
     /// @param distance the offset distance
-    /// @param mitreLimit the mitre limit ratio
+    /// @param mitreLimitDistance the mitre limit ratio
     ///
     void addLimitedMitreJoin(
         const geom::LineSegment& offset0,
         const geom::LineSegment& offset1,
-        double distance, double mitreLimit);
+        double distance,
+        double mitreLimitDistance);
+
+    /**
+    * Extends a line segment forwards or backwards a given distance.
+    *
+    * @param seg the base line segment
+    * @param dist the distance to extend by
+    * @return the extended segment
+    */
+    static geom::LineSegment extend(const geom::LineSegment& seg, double dist);
+
+    /**
+    * Adds a bevel join connecting the two offset segments
+    * around a reflex corner.
+    * Projects a point to a given distance in a given direction angle.
+    *
+    * @param pt the point to project
+    * @param d the projection distance
+    * @param dir the direction angle (in radians)
+    * @return the projected point
+    */
+    static geom::Coordinate project(const geom::Coordinate& pt, double d, double dir);
 
     /// \brief
     /// Adds a bevel join connecting the two offset segments

@@ -40,7 +40,7 @@ struct test_capioffsetcurve_data : public capitest::utility {
         double width, int quadSegs, int joinStyle, double mitreLimit,
         double checkTolerance)
     {
-        static int debug = 0;
+        static int debug = 1;
         // input
         geom1_ = GEOSGeomFromWKT(wkt);
         ensure(nullptr != geom1_);
@@ -132,7 +132,7 @@ void object::test<5>()
         "LINESTRING(33282908 6005055,33282900 6005050,33282892 6005042,33282876 6005007,33282863 6004982,33282866 6004971,33282876 6004975,33282967 6005018,33282999 6005031)",
         // Old algorithm
         // "LINESTRING EMPTY",
-        "LINESTRING (33282915.828957077 6005042.473668674, 33282949.298243735 6005058.282106612, 33282949.3293186 6005058.295747999, 33282982.439409934 6005071.764529393)",
+        "LINESTRING (33282915.823395286 6005042.482567544, 33282948.754269265 6005058.043310193, 33282949.87329309 6005058.534544426, 33282982.439409934 6005071.764529393)",
         44, 1, GEOSBUF_JOIN_MITRE, 1,
         0.000001
         );

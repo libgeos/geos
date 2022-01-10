@@ -20,8 +20,9 @@
 #include <cmath>
 #include <vector>
 
-#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/Angle.h>
+#include <geos/algorithm/Distance.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/operation/buffer/OffsetSegmentGenerator.h>
 #include <geos/operation/buffer/OffsetSegmentString.h>
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
@@ -464,87 +465,123 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
 
 /* private */
 void
-OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
+OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& cornerPt,
                                      const geom::LineSegment& p_offset0,
                                      const geom::LineSegment& p_offset1,
                                      double p_distance)
 {
-    /*
-     * This computation is unstable if the offset segments are nearly collinear.
+    double mitreLimitDistance = bufParams.getMitreLimit() * p_distance;
+    /**
+     * First try a non-beveled join.
+     * Compute the intersection point of the lines determined by the offsets.
+     * Parallel or collinear lines will return a null point ==> need to be beveled
+     *
+     * Note: This computation is unstable if the offset segments are nearly collinear.
      * However, this situation should have been eliminated earlier by the check
      * for whether the offset segment endpoints are almost coincident
      */
-    Coordinate intPt = algorithm::Intersection::intersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
-    if (!intPt.isNull()) {
-        double mitreRatio = p_distance <= 0.0 ? 1.0 : intPt.distance(p) / fabs(p_distance);
-        if (mitreRatio <= bufParams.getMitreLimit()) {
-            segList.addPt(intPt);
-            return;
-        }
+    Coordinate intPt = algorithm::Intersection::intersection(p_offset0.p0, p_offset0.p1, p_offset1.p0, p_offset1.p1);
+
+    if (!intPt.isNull() && intPt.distance(cornerPt) <= mitreLimitDistance) {
+        segList.addPt(intPt);
+        return;
     }
-    // at this point either intersection failed or mitre limit was exceeded
-    addLimitedMitreJoin(p_offset0, p_offset1, p_distance,
-                        bufParams.getMitreLimit());
+    /**
+     * In case the mitre limit is very small, try a plain bevel.
+     * Use it if it's further than the limit.
+     */
+    double bevelDist = algorithm::Distance::pointToSegment(cornerPt, p_offset0.p1, p_offset1.p0);
+    if (bevelDist >= mitreLimitDistance) {
+        addBevelJoin(p_offset0, p_offset1);
+        return;
+    }
+    /**
+     * Have to construct a limited mitre bevel.
+     */
+    addLimitedMitreJoin(p_offset0, p_offset1, p_distance, mitreLimitDistance);
 }
+
 
 /* private */
 void
 OffsetSegmentGenerator::addLimitedMitreJoin(
     const geom::LineSegment& p_offset0,
     const geom::LineSegment& p_offset1,
-    double p_distance, double p_mitreLimit)
+    double p_distance,
+    double p_mitreLimitDistance)
 {
-    ::geos::ignore_unused_variable_warning(p_offset0);
-    ::geos::ignore_unused_variable_warning(p_offset1);
+    const Coordinate& cornerPt = seg0.p1;
 
-    const Coordinate& basePt = seg0.p1;
-
-    double ang0 = Angle::angle(basePt, seg0.p0);
-    //double ang1 = Angle::angle(basePt, seg1.p1); // unused in JTS, bug ?
-
-    // oriented angle between segments
-    double angDiff = Angle::angleBetweenOriented(seg0.p0, basePt, seg1.p1);
+     // oriented angle of the corner formed by segments
+    double angInterior = Angle::angleBetweenOriented(seg0.p0, cornerPt, seg1.p1);
     // half of the interior angle
-    double angDiffHalf = angDiff / 2;
+    double angInterior2 = angInterior/2.0;
 
-    // angle for bisector of the interior angle between the segments
-    double midAng = Angle::normalize(ang0 + angDiffHalf);
-    // rotating this by PI gives the bisector of the reflex angle
-    double mitreMidAng = Angle::normalize(midAng + MATH_PI);
-
-    // the miterLimit determines the distance to the mitre bevel
-    double mitreDist = p_mitreLimit * p_distance;
-    // the bevel delta is the difference between the buffer distance
-    // and half of the length of the bevel segment
-    double bevelDelta = mitreDist * fabs(sin(angDiffHalf));
-    double bevelHalfLen = p_distance - bevelDelta;
+    // direction of bisector of the interior angle between the segments
+    double dir0 = Angle::angle(cornerPt, seg0.p0);
+    double dirBisector = Angle::normalize(dir0 + angInterior2);
+    // rotating by PI gives the bisector of the outside angle,
+    // which is the direction of the bevel midpoint from the corner apex
+    double dirBisectorOut = Angle::normalize(dirBisector + MATH_PI);
 
     // compute the midpoint of the bevel segment
-    double bevelMidX = basePt.x + mitreDist * cos(mitreMidAng);
-    double bevelMidY = basePt.y + mitreDist * sin(mitreMidAng);
-    Coordinate bevelMidPt(bevelMidX, bevelMidY);
+    Coordinate bevelMidPt = project(cornerPt, p_mitreLimitDistance, dirBisectorOut);
 
-    // compute the mitre midline segment from the corner point to
-    // the bevel segment midpoint
-    LineSegment mitreMidLine(basePt, bevelMidPt);
+    // slope angle of bevel segment
+    double dirBevel = Angle::normalize(dirBisectorOut + MATH_PI/2.0);
 
-    // finally the bevel segment endpoints are computed as offsets from
-    // the mitre midline
-    Coordinate bevelEndLeft;
-    mitreMidLine.pointAlongOffset(1.0, bevelHalfLen, bevelEndLeft);
-    Coordinate bevelEndRight;
-    mitreMidLine.pointAlongOffset(1.0, -bevelHalfLen, bevelEndRight);
+    // compute the candidate bevel segment by projecting both sides of the midpoint
+    Coordinate bevel0 = project(bevelMidPt, p_distance, dirBevel);
+    Coordinate bevel1 = project(bevelMidPt, p_distance, dirBevel + MATH_PI);
+    LineSegment bevel(bevel0, bevel1);
 
-    if(side == Position::LEFT) {
-        segList.addPt(bevelEndLeft);
-        segList.addPt(bevelEndRight);
+    //-- compute intersections with extended offset segments
+    double extendLen = p_mitreLimitDistance < p_distance ? p_distance : p_mitreLimitDistance;
+
+    LineSegment extend0 = extend(p_offset0, 2 * extendLen);
+    LineSegment extend1 = extend(p_offset1, -2 * extendLen);
+    Coordinate bevelInt0 = bevel.intersection(extend0);
+    Coordinate bevelInt1 = bevel.intersection(extend1);
+
+    //-- add the limited bevel, if it intersects the offsets
+    if (!bevelInt0.isNull() && !bevelInt1.isNull()) {
+        segList.addPt(bevelInt0);
+        segList.addPt(bevelInt1);
+        return;
     }
-    else {
-        segList.addPt(bevelEndRight);
-        segList.addPt(bevelEndLeft);
-    }
-
+    /**
+     * If the corner is very flat or the mitre limit is very small
+     * the limited bevel segment may not intersect the offsets.
+     * In this case just bevel the join.
+     */
+    addBevelJoin(p_offset0, p_offset1);
 }
+
+
+/* private static */
+LineSegment
+OffsetSegmentGenerator::extend(const LineSegment& seg, double dist)
+{
+    double distFrac = std::abs(dist) / seg.getLength();
+    double segFrac = dist >= 0 ? 1 + distFrac : 0 - distFrac;
+    Coordinate extendPt;
+    seg.pointAlong(segFrac, extendPt);
+    if (dist > 0)
+        return LineSegment(seg.p0, extendPt);
+    else
+        return LineSegment(extendPt, seg.p1);
+}
+
+
+/* private static */
+Coordinate
+OffsetSegmentGenerator::project(const Coordinate& pt, double d, double dir)
+{
+    double x = pt.x + d * std::cos(dir);
+    double y = pt.y + d * std::sin(dir);
+    return Coordinate(x, y);
+}
+
 
 /* private */
 void

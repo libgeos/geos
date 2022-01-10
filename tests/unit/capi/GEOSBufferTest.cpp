@@ -386,8 +386,10 @@ void object::test<14>
 
     ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
+    printf("%s\n", wkt_);
+
     ensure(0 != GEOSArea(geom2_, &area_));
-    ensure_area(area_, 127.452, 0.001);
+    ensure_area(area_, 132.289, 0.001);
 
 }
 
@@ -411,7 +413,7 @@ void object::test<15>
     ensure_equals(GEOSGetNumCoordinates(geom2_), 6);
 
     ensure(0 != GEOSArea(geom2_, &area_));
-    ensure_area(area_, 139.043, 0.001);
+    ensure_area(area_, 140.352, 0.001);
 
 }
 
