@@ -194,7 +194,7 @@ jobs:
        ctest --output-on-failure .
 
   windows-msvc-22:
-    name: 'Windows (Visual Studio 2022, Release, windows-2022)'
+    name: 'Windows (Visual Studio 2022, Debug, windows-2022)'
     runs-on: windows-2022
     steps:
     - name: 'Check Out'
