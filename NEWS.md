@@ -23,6 +23,7 @@
   - geosop CLI for GEOS (Martin Davis)
   - Full doxygen of the C-API (Paul Ramsey)
   - GeometryFixer class for validity enforcement (Martin Davis, Paul Ramsey)
+  - GeoJSON reader/writer implementation (Jared Erickson, WhuAegeanSea)
   - CAPI: GEOSDensify (Brendan Ward)
   - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,
           GEOSCoordSeq_copyToArrays, GEOSCoordSeq_copyToBuffer (Daniel Baston)
@@ -34,6 +35,10 @@
   - CAPI: GEOSConstrainedDelaunayTriangulation, builds a constrained
           triangulation of an input Polygon or MultiPolygon,
           returning a GeometryCollection(Polygon) of the triangles.
+  - CAPI: GEOSGeoJSONReader_create, GEOSGeoJSONReader_destroy,
+          GEOSGeoJSONReader_readGeometry, GEOSGeoJSONWriter_create,
+          GEOSGeoJSONWriter_destroy, GEOSGeoJSONWriter_writeGeometry
+          (Casper van der Wel)
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)
