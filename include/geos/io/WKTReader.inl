@@ -16,15 +16,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_WKTREADER_INL
-#define GEOS_IO_WKTREADER_INL
+#pragma once
 
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryFactory.h>
-
-#if GEOS_DEBUG
-# include <iostream>
-#endif
 
 namespace geos {
 namespace io {
@@ -34,43 +29,26 @@ WKTReader::WKTReader(const geom::GeometryFactory* gf)
     :
     geometryFactory(gf),
     precisionModel(gf->getPrecisionModel())
-{
-#if GEOS_DEBUG
-    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory *gf)\n";
-#endif
-}
+{}
 
 INLINE
 WKTReader::WKTReader(const geom::GeometryFactory& gf)
     :
     geometryFactory(&gf),
     precisionModel(gf.getPrecisionModel())
-{
-#if GEOS_DEBUG
-    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory &gf)\n";
-#endif
-}
+{}
 
 INLINE
 WKTReader::WKTReader()
     :
     geometryFactory(geom::GeometryFactory::getDefaultInstance()),
     precisionModel(geometryFactory->getPrecisionModel())
-{
-#if GEOS_DEBUG
-    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader()\n";
-#endif
-}
+{}
 
 INLINE
 WKTReader::~WKTReader()
-{
-#if GEOS_DEBUG
-    std::cerr << "\nGEOS_DEBUG: WKTReader::~WKTReader()\n";
-#endif
-}
+{}
 
 } // namespace io
 } // namespace geos
 
-#endif // #ifndef GEOS_IO_WKTREADER_INL

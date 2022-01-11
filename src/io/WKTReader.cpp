@@ -41,13 +41,6 @@
 #include <string>
 #include <cassert>
 
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
-#ifdef GEOS_DEBUG
-#include <iostream>
-#endif
 
 #ifndef GEOS_INLINE
 #include <geos/io/WKTReader.inl>

@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_WKTREADER_H
-#define GEOS_IO_WKTREADER_H
+#pragma once
 
 #include <geos/inline.h>
 #include <geos/export.h>
@@ -59,7 +58,6 @@ namespace io {
  */
 class GEOS_DLL WKTReader {
 public:
-    //WKTReader();
 
     /**
      * \brief Initialize parser with given GeometryFactory.
@@ -96,8 +94,6 @@ public:
 
     std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
 
-//	Geometry* read(Reader& reader);	//Not implemented yet
-
 protected:
     std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer) const;
     static double getNextNumber(io::StringTokenizer* tokenizer);
@@ -127,7 +123,6 @@ private:
 } // namespace geos
 
 #ifdef GEOS_INLINE
-# include <geos/io/WKTReader.inl>
+# include "geos/io/WKTReader.inl"
 #endif
 
-#endif // #ifndef GEOS_IO_WKTREADER_H

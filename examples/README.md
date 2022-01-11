@@ -35,7 +35,8 @@ cc -I/usr/local/include \
 To build a C++ API program, you must pass a define indicating you're OK with the fact that the API will change over time.
 
 ```
-cc -I/usr/local/include \
+c++ -I/usr/local/include -v \
+    -std=c++11 \
     -D USE_UNSTABLE_GEOS_CPP_API \
     cpp_read.cpp \
     -o cpp_read \

@@ -12,14 +12,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INLINE_H
-#define GEOS_INLINE_H
+#pragma once
 
 #ifdef GEOS_INLINE
 # define INLINE inline
 #else
 # define INLINE
 #endif
-
-
-#endif // ndef GEOS_INLINE_H
