@@ -141,6 +141,7 @@ geos_unit_SOURCES = \
 	geom/Geometry/equalsTest.cpp \
 	geom/GeometryFactoryTest.cpp \
 	geom/GeometryFilterTest.cpp \
+	geom/Geometry/differenceTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	geom/Geometry/normalizeTest.cpp \
 	geom/Geometry/touchesTest.cpp \
@@ -159,6 +160,7 @@ geos_unit_SOURCES = \
 	geom/prep/PreparedGeometry/touchesTest.cpp \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \
+	index/chain/MonotoneChainBuilderTest.cpp \
 	index/strtree/SIRtreeTest.cpp \
 	index/strtree/SimpleSTRtreeTest.cpp \
 	index/kdtree/KdTreeTest.cpp \
