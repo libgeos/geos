@@ -64,6 +64,7 @@ public:
 
 private:
     void finishChain() {
+        if ( m_i == 0 ) return;
         m_ends.push_back(m_i - 1);
     }
 
