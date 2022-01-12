@@ -55,6 +55,7 @@ void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
                                 std::vector<std::unique_ptr<MonotoneChain>>& mcList)
 {
+    if ( pts->isEmpty() ) return;
     std::size_t chainStart = 0;
     do {
         std::size_t chainEnd = findChainEnd(*pts, chainStart);

@@ -2,6 +2,7 @@ Changes in 3.9.3
 2022-xx-xx
 
 - Bug fixes / improvements:
+  - Fix crash in MonotoneChain with empty CoordinateSequence (GH-539, Sandro Santilli)
   - Improve BuildArea performance (#1122, Sandro Santilli)
   - Memory leak on exception in prepared geometry (GH-506, Dan Baston)
   - Infinite loop on collapsed input in MaximumInscribedCircle (Paul Ramsey)
