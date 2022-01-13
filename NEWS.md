@@ -2,6 +2,7 @@
 2022-xx-xx
 
 - New things:
+  - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
 
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
