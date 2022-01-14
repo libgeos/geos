@@ -75,7 +75,6 @@ public:
      *
      * @param geom the Geometry from which to remove the common
      *             coordinate bits
-     * @return the shifted Geometry
      */
     void removeCommonBits(geom::Geometry* geom);
 
