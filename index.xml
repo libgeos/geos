@@ -60,6 +60,17 @@ You can explore the C++ model via the Doxygen reference.</description>
     </item>
     
     <item>
+      <title>Version 3.10.2</title>
+      <link>https://libgeos.org/posts/2021-11-02-geos-3-10-2-released/</link>
+      <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2021-11-02-geos-3-10-2-released/</guid>
+      <description>The 3.10.2 release of GEOS is now available to download.
+This release is a bug fix release.
+ Fix crash in MonotoneChain with empty CoordinateSequence (GH-539, Sandro Santilli) Fix crash in GeoJSONWriter in case of empty points (TRAC-1139, Paul Ramsey) Improve BuildArea performance (TRAC-1122, Sandro Santilli) Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves) Fix memory leak on exception in prepared geometry (GH-506, Dan Baston) Iterator invalidation in rare cases (GH-508, Momtchil Momtchev) Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey) Write LinearRing to GeoJSON as LineString (TRAC-1140, Paul Ramsey) Fix PolygonEarClipper to handle collapsed corners (GH-526, Martin Davis) Fix GEOSSTRtree_remove for empty tree (GH-544, Dan Baston) Fix crash on query of STRtree with removed items (GH-545, Dan Baston)q  </description>
+    </item>
+    
+    <item>
       <title>Version 3.10.1</title>
       <link>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</link>
       <pubDate>Tue, 02 Nov 2021 00:00:00 +0000</pubDate>
@@ -225,7 +236,7 @@ Examples  POINT(0 0) POINT EMPTY LINESTRING(0 0, 0 1, 1 2) LINESTRING EMPTY POLY
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Release Date Release Download Link Changes     2021/11/02 3.10.1 geos-3.10.1.tar.bz2 Changes   2021/11/01 3.9.2 geos-3.9.2.tar.bz2 Changes   2021/04/10 3.8.2 geos-3.8.2.tar.bz2 Changes   2019/10/04 3.7.3 geos-3.7.3.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 geos-3.5.2.tar.bz2 Changes    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.</description>
+      <description>Release Date Release Download Link Changes     2022/01/15 3.10.2 geos-3.10.2.tar.bz2 Changes   2021/11/01 3.9.2 geos-3.9.2.tar.bz2 Changes   2021/04/10 3.8.2 geos-3.8.2.tar.bz2 Changes   2019/10/04 3.7.3 geos-3.7.3.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 geos-3.5.2.tar.bz2 Changes    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.</description>
     </item>
     
     <item>

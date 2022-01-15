@@ -6,7 +6,18 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 15 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.10.2</title>
+      <link>https://libgeos.org/posts/2021-11-02-geos-3-10-2-released/</link>
+      <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2021-11-02-geos-3-10-2-released/</guid>
+      <description>The 3.10.2 release of GEOS is now available to download.
+This release is a bug fix release.
+ Fix crash in MonotoneChain with empty CoordinateSequence (GH-539, Sandro Santilli) Fix crash in GeoJSONWriter in case of empty points (TRAC-1139, Paul Ramsey) Improve BuildArea performance (TRAC-1122, Sandro Santilli) Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves) Fix memory leak on exception in prepared geometry (GH-506, Dan Baston) Iterator invalidation in rare cases (GH-508, Momtchil Momtchev) Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey) Write LinearRing to GeoJSON as LineString (TRAC-1140, Paul Ramsey) Fix PolygonEarClipper to handle collapsed corners (GH-526, Martin Davis) Fix GEOSSTRtree_remove for empty tree (GH-544, Dan Baston) Fix crash on query of STRtree with removed items (GH-545, Dan Baston)q  </description>
+    </item>
+    
     <item>
       <title>Version 3.10.1</title>
       <link>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</link>
