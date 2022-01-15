@@ -1,6 +1,6 @@
 
 Changes in 3.10.2
-2021-xx-xx
+2022-01-15
 
 - Fixes/Improvements:
   - Fix crash in MonotoneChain with empty CoordinateSequence (GH-539, Sandro Santilli)

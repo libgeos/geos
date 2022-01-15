@@ -29,7 +29,7 @@
 
    $ BRANCH_NAME=3.10
    $ git clone --depth 1 --branch $BRANCH_NAME \
-         https://git.osgeo.org/gitea/geos/geos.git geos-$BRANCH_NAME
+         https://github.com/libgeos/geos.git geos-$BRANCH_NAME
    $ cd geos-$BRANCH_NAME
    $ mkdir _build && cd _build
    $ cmake ..
