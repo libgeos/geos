@@ -54,13 +54,12 @@
     update the versions for next release in Version.txt (both in
     main and release branch if this was a PATCH=0 release).
 
-11. Update wiki page https://trac.osgeo.org/geos/ at Download section
+11. Update web page Download section
 
     - Add latest release
     - Remove previous patch level release (if any)
 
-12. Close current trac milestone and add new one for next release,
-    add new trac version for this release.
+12. Close current github milestone and add new one for next release
 
 12. Announce on geos-devel
 
