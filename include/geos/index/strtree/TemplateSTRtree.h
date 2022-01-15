@@ -306,6 +306,8 @@ public:
     /// @{
 
     bool remove(const BoundsType& itemEnv, const ItemType& item) {
+        build();
+
         if (root == nullptr) {
             return false;
         }
