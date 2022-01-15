@@ -12,6 +12,8 @@ Changes in 3.10.2
   - Infinite loop on collapsed input to MaximumInscribedCircle (Paul Ramsey)
   - Write LinearRing to GeoJSON as LineString (TRAC-1140, Paul Ramsey)
   - Fix PolygonEarClipper to handle collapsed corners (GH-526, Martin Davis)
+  - Fix GEOSSTRtree_remove for empty tree (GH-544, Dan Baston)
+  - Fix crash on query of STRtree with removed items (GH-545, Dan Baston)
 
 
 Changes in 3.10.1
