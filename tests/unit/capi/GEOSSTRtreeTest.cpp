@@ -382,6 +382,40 @@ void object::test<11>()
     GEOSSTRtree_destroy(tree);
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(10);
+
+    GEOSGeometry* g1 = GEOSGeomFromWKT("LINESTRING (0 0, 10 10)");
+    GEOSGeometry* g2 = GEOSGeomFromWKT("LINESTRING (20 20, 30 30)");
+    GEOSGeometry* g3 = GEOSGeomFromWKT("LINESTRING (20 20, 30 30)");
+
+    GEOSSTRtree_insert(tree, g1, g1);
+    GEOSSTRtree_insert(tree, g2, g2);
+    GEOSSTRtree_insert(tree, g3, g3);
+
+    GEOSGeometry* p = GEOSGeomFromWKT("POINT (5 5)");
+
+    ensure(GEOSSTRtree_remove(tree, p, g1));
+
+    std::vector<GEOSGeometry*> hits;
+    GEOSSTRtree_query(tree, p, [](void* item, void* userdata) {
+        auto h = static_cast<decltype(&hits)>(userdata);
+        h->push_back(static_cast<GEOSGeometry*>(item));
+    }, &hits);
+
+    ensure(hits.empty());
+
+    GEOSGeom_destroy(g1);
+    GEOSGeom_destroy(g2);
+    GEOSGeom_destroy(g3);
+    GEOSGeom_destroy(p);
+
+    GEOSSTRtree_destroy(tree);
+}
+
 
 } // namespace tut
 
