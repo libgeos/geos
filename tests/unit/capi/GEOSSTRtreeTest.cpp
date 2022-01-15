@@ -398,11 +398,11 @@ void object::test<12>()
 
     GEOSGeometry* p = GEOSGeomFromWKT("POINT (5 5)");
 
-    ensure(GEOSSTRtree_remove(tree, p, g1));
+    ensure_equals(GEOSSTRtree_remove(tree, p, g1), 1);
 
     std::vector<GEOSGeometry*> hits;
     GEOSSTRtree_query(tree, p, [](void* item, void* userdata) {
-        auto h = static_cast<decltype(&hits)>(userdata);
+        auto h = static_cast<std::vector<GEOSGeometry*>*>(userdata);
         h->push_back(static_cast<GEOSGeometry*>(item));
     }, &hits);
 
