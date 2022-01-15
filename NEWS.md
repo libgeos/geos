@@ -7,6 +7,7 @@
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
   - Fix SnapRoundingNoder to use tolerance in noding; also fixes GeometryPrecisionReducer (#504, Sergei)
+  - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
   - Allow direct setting of grid size (GH-804, Martin Davis)
 
 - Changes:
