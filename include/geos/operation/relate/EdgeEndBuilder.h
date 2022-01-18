@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_EDGEENDBUILDER_H
-#define GEOS_OP_RELATE_EDGEENDBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -68,5 +67,3 @@ protected:
 } // namespace geos:operation:relate
 } // namespace geos:operation
 } // namespace geos
-
-#endif // GEOS_OP_RELATE_EDGEENDBUILDER_H

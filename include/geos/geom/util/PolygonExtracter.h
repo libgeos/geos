@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_POLYGONEXTRACTER_H
-#define GEOS_GEOM_UTIL_POLYGONEXTRACTER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
@@ -65,4 +64,3 @@ private:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

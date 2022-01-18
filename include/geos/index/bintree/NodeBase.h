@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_BINTREE_NODEBASE_H
-#define GEOS_IDX_BINTREE_NODEBASE_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -81,6 +80,4 @@ private:
 } // namespace geos::index::bintree
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_BINTREE_NODEBASE_H
 

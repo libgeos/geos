@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_DELAUNAYTRIANGULATIONBUILDER_H
-#define GEOS_TRIANGULATE_DELAUNAYTRIANGULATIONBUILDER_H
+#pragma once
 
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -164,6 +163,4 @@ public:
 
 } //namespace geos.triangulate
 } //namespace goes
-
-#endif //GEOS_TRIANGULATE_QUADEDGE_DELAUNAYTRIANGULATIONBUILDER_H
 

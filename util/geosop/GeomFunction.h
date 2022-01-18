@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMFUNCTION_H
-#define GEOS_GEOMFUNCTION_H
+#pragma once
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -123,4 +122,3 @@ private:
 
 };
 
-#endif // GEOS_GEOMFUNCTION_H

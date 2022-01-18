@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_BYTEORDERVALUES_H
-#define GEOS_IO_BYTEORDERVALUES_H
+#pragma once
 
 #include <geos/export.h>
 #include <cstdint>
@@ -60,4 +59,3 @@ public:
 } // namespace io
 } // namespace geos
 
-#endif // #ifndef GEOS_IO_BYTEORDERVALUES_H

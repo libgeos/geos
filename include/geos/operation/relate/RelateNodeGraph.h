@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_RELATENODEGRAPH_H
-#define GEOS_OP_RELATE_RELATENODEGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geomgraph/NodeMap.h>
@@ -97,5 +96,3 @@ private:
 } // namespace geos:operation:relate
 } // namespace geos:operation
 } // namespace geos
-
-#endif // GEOS_OP_RELATE_RELATENODEGRAPH_H

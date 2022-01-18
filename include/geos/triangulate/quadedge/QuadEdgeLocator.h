@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_QUADEDGELOCATOR_H
-#define GEOS_TRIANGULATE_QUADEDGE_QUADEDGELOCATOR_H
+#pragma once
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -47,4 +46,3 @@ public:
 } //namespace geos.triangulate
 } //namespace goes
 
-#endif //GEOS_TRIANGULATE_QUADEDGE_QUADEDGELOCATOR_H

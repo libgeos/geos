@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_QUADEDGE_H
-#define GEOS_TRIANGULATE_QUADEDGE_QUADEDGE_H
+#pragma once
 
 #include <memory>
 
@@ -442,4 +441,3 @@ GEOS_DLL std::ostream& operator<< (std::ostream& os, const QuadEdge* e);
 } //namespace geos.triangulate
 } //namespace geos
 
-#endif //GEOS_TRIANGULATE_QUADEDGE_QUADEDGE_H

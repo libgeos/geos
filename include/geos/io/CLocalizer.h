@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_CLOCALIZER_H
-#define GEOS_IO_CLOCALIZER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -52,4 +51,3 @@ private:
 } // namespace io
 } // namespace geos
 
-#endif // GEOS_IO_CLOCALIZER_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_ROOT_H
-#define GEOS_IDX_QUADTREE_ROOT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/index/quadtree/NodeBase.h> // for inheritance
@@ -86,4 +85,3 @@ protected:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_IDX_QUADTREE_ROOT_H

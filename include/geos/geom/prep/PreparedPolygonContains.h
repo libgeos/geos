@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINS_H
-#define GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINS_H
+#pragma once
 
 #include <geos/geom/prep/AbstractPreparedPolygonContains.h> // inherited
 
@@ -104,4 +103,3 @@ protected:
 } // geos::geom
 } // geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINS_H

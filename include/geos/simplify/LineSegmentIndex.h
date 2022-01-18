@@ -20,8 +20,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_SIMPLIFY_LINESEGMENTINDEX_H
-#define GEOS_SIMPLIFY_LINESEGMENTINDEX_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Envelope.h>
@@ -86,4 +85,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_SIMPLIFY_LINESEGMENTINDEX_H

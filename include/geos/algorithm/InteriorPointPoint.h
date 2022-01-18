@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_INTERIORPOINTPOINT_H
-#define GEOS_ALGORITHM_INTERIORPOINTPOINT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -71,6 +70,4 @@ public:
 } // namespace geos::algorithm
 } // namespace geos
 
-
-#endif // GEOS_ALGORITHM_INTERIORPOINTPOINT_H
 

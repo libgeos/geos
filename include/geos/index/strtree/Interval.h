@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_INTERVAL_H
-#define GEOS_INDEX_STRTREE_INTERVAL_H
+#pragma once
 
 #include <geos/export.h>
 #include <algorithm>
@@ -58,4 +57,3 @@ private:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_INDEX_STRTREE_INTERVAL_H

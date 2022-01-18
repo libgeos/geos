@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_DISTANCE_FACETSEQUENCE_H
-#define GEOS_OPERATION_DISTANCE_FACETSEQUENCE_H
+#pragma once
 
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -83,4 +82,3 @@ public:
 }
 }
 
-#endif //GEOS_OPERATION_DISTANCE_FACETSEQUENCE_H

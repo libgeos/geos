@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
-#define GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
+#pragma once
 
 #include <vector>
 #include <geos/export.h>
@@ -86,4 +85,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H

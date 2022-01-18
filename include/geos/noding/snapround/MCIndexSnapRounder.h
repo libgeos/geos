@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
-#define GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -156,4 +155,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
-#define GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
+#pragma once
 
 #include <geos/geom/CoordinateSequence.h> // complete type required
 
@@ -178,7 +177,4 @@ private:
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
-
-#endif // ndef GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
 

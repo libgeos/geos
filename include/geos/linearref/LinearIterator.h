@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LINEARITERATOR_H
-#define GEOS_LINEARREF_LINEARITERATOR_H
+#pragma once
 
 #include <string>
 
@@ -155,4 +154,3 @@ private:
 }
 } // namespace geos::linearref
 
-#endif // GEOS_LINEARREF_LINEARITERATOR_H

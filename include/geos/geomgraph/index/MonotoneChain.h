@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAIN_H
-#define GEOS_GEOMGRAPH_INDEX_MONOTONECHAIN_H
+#pragma once
 
 
 #include <geos/export.h>
@@ -70,6 +69,4 @@ public:
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif
 

@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
-#define GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/prep/PreparedGeometry.h>
@@ -92,4 +91,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H

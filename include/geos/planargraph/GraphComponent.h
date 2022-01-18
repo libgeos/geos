@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_GRAPHCOMPONENT_H
-#define GEOS_PLANARGRAPH_GRAPHCOMPONENT_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -178,10 +177,6 @@ public:
 
 };
 
-// For backward compatibility
-//typedef GraphComponent planarGraphComponent;
-
 } // namespace geos::planargraph
 } // namespace geos
 
-#endif // GEOS_PLANARGRAPH_GRAPHCOMPONENT_H

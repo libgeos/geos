@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
-#define GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -235,5 +234,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-
-#endif // ndef GEOS_GEOM_PREP_PREPAREDGEOMETRY_H

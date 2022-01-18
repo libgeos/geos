@@ -16,8 +16,8 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_UNION_POINTGEOMETRYUNION_H
-#define GEOS_OP_UNION_POINTGEOMETRYUNION_H
+#pragma once
+
 #include <geos/export.h>
 
 #include <vector>
@@ -70,4 +70,3 @@ private:
 } // namespace geos::operation
 } // namespace geos
 
-#endif

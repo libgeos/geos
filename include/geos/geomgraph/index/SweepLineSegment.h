@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
-#define GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
+#pragma once
 
 #include <cstddef>
 #include <geos/export.h>
@@ -55,6 +54,4 @@ protected:
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif
 

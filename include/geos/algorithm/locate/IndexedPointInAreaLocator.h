@@ -14,8 +14,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_LOCATE_INDEXEDPOINTINAREALOCATOR_H
-#define GEOS_ALGORITHM_LOCATE_INDEXEDPOINTINAREALOCATOR_H
+#pragma once
 
 #include <geos/geom/LineSegment.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
@@ -128,4 +127,3 @@ public:
 } // geos::algorithm
 } // geos
 
-#endif // GEOS_ALGORITHM_LOCATE_INDEXEDPOINTINAREALOCATOR_H

@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_LINEMERGE_LINEMERGEEDGE_H
-#define GEOS_OP_LINEMERGE_LINEMERGEEDGE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -61,4 +60,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // GEOS_OP_LINEMERGE_LINEMERGEEDGE_H

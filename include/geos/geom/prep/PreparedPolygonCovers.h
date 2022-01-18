@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONCOVERS_H
-#define GEOS_GEOM_PREP_PREPAREDPOLYGONCOVERS_H
+#pragma once
 
 #include <geos/geom/prep/AbstractPreparedPolygonContains.h> // inherited
 
@@ -107,4 +106,3 @@ public:
 } // geos::geom
 } // geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOLYGONCOVERS_H

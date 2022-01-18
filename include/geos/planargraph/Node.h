@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_NODE_H
-#define GEOS_PLANARGRAPH_NODE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -154,10 +153,6 @@ private:
 std::ostream& operator<<(std::ostream& os, const Node& n);
 
 
-/// For backward compatibility
-//typedef Node planarNode;
-
 } // namespace geos::planargraph
 } // namespace geos
 
-#endif // GEOS_PLANARGRAPH_NODE_H

@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_COMMONBITSOP_H
-#define GEOS_PRECISION_COMMONBITSOP_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/precision/CommonBitsRemover.h> // for unique_ptr composition
@@ -171,4 +170,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_PRECISION_COMMONBITSOP_H

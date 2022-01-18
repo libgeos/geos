@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_UNION_COVERAGEUNION_H
-#define GEOS_OP_UNION_COVERAGEUNION_H
+#pragma once
 
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Geometry.h>
@@ -52,5 +51,3 @@ namespace geounion {
 }
 }
 }
-
-#endif

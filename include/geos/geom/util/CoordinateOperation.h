@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_COORDINATEOPERATION_H
-#define GEOS_GEOM_UTIL_COORDINATEOPERATION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/util/GeometryEditorOperation.h> // for inheritance
@@ -69,4 +68,3 @@ public:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

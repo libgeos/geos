@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_POLYGONIZE_HOLEASSIGNER_H
-#define GEOS_OP_POLYGONIZE_HOLEASSIGNER_H
+#pragma once
 
 #include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
@@ -64,4 +63,3 @@ private:
 }
 }
 
-#endif

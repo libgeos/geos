@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_NODEBASE_H
-#define GEOS_IDX_QUADTREE_NODEBASE_H
+#pragma once
 
 #include <geos/export.h>
 #include <array>
@@ -160,4 +159,3 @@ NodeBase::hasItems() const
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_IDX_QUADTREE_NODEBASE_H

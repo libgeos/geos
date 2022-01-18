@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
-#define GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -117,6 +116,4 @@ public:
 } // namespace geos::operation::distance
 } // namespace geos::operation
 } // namespace geos
-
-#endif // GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
 

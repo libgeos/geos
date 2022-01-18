@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
-#define GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
@@ -132,4 +131,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H

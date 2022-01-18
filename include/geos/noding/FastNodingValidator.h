@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_FASTNODINGVALIDATOR_H
-#define GEOS_NODING_FASTNODINGVALIDATOR_H
+#pragma once
 
 #include <geos/noding/NodingIntersectionFinder.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
@@ -128,4 +127,3 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_FASTNODINGVALIDATOR_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_MINIMUMCLEARANCE_H
-#define GEOS_PRECISION_MINIMUMCLEARANCE_H
+#pragma once
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
@@ -56,7 +55,3 @@ public:
 };
 }
 }
-
-#endif
-
-

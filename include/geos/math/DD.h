@@ -90,8 +90,7 @@
  *
  */
 
-#ifndef GEOS_MATH_DD_H
-#define GEOS_MATH_DD_H
+#pragma once
 
 #include <cmath>
 
@@ -198,5 +197,3 @@ class GEOS_DLL DD {
 } // namespace geos::math
 } // namespace geos
 
-
-#endif // GEOS_MATH_DD_H

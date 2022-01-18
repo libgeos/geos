@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINSPROPERLY_H
-#define GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINSPROPERLY_H
+#pragma once
 
 #include <geos/geom/prep/PreparedPolygonPredicate.h> // inherited
 
@@ -100,4 +99,3 @@ public:
 } // geos::geom
 } // geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINSPROPERLY_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_STRTREE_H
-#define GEOS_INDEX_STRTREE_STRTREE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/index/strtree/ItemDistance.h>
@@ -176,4 +175,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_INDEX_STRTREE_STRTREE_H

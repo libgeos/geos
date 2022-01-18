@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
-#define GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 
@@ -153,6 +152,4 @@ private:
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
-
-#endif // GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
 

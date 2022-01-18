@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_INTERVALSIZE_H
-#define GEOS_IDX_QUADTREE_INTERVALSIZE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -61,4 +60,3 @@ public:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_IDX_QUADTREE_INTERVALSIZE_H

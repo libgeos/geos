@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_RELATECOMPUTER_H
-#define GEOS_OP_RELATE_RELATECOMPUTER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -165,5 +164,3 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_OP_RELATE_RELATECOMPUTER_H

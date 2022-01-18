@@ -17,9 +17,7 @@
  *
  **********************************************************************/
 
-
-#ifndef GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H
-#define GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -127,4 +125,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H

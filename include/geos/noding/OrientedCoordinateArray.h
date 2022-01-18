@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_ORIENTEDCOORDINATEARRAY_H
-#define GEOS_NODING_ORIENTEDCOORDINATEARRAY_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -111,7 +110,4 @@ operator< (const OrientedCoordinateArray& oca1,
 
 } // namespace geos.noding
 } // namespace geos
-
-
-#endif // GEOS_NODING_ORIENTEDCOORDINATEARRAY_H
 

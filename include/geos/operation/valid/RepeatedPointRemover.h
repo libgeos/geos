@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_VALID_REPEATEDPOINTREMOVER_H
-#define GEOS_OP_VALID_REPEATEDPOINTREMOVER_H
+#pragma once
 
 #include <geos/geom/CoordinateArraySequence.h>
 
@@ -41,4 +40,3 @@ namespace valid {
 }
 }
 
-#endif

@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_DENSIFIER_H
-#define GEOS_DENSIFIER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h>
@@ -89,4 +88,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_DENSIFIER_H

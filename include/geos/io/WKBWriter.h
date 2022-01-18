@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_WKBWRITER_H
-#define GEOS_IO_WKBWRITER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -246,4 +245,3 @@ private:
 } // namespace io
 } // namespace geos
 
-#endif // #ifndef GEOS_IO_WKBWRITER_H

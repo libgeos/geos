@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_LINEMERGE_LINEMERGER_H
-#define GEOS_OP_LINEMERGE_LINEMERGER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/LineString.h>
@@ -146,4 +145,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_OP_LINEMERGE_LINEMERGER_H

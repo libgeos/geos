@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_DISTANCE_FACETSEQUENCETREEBUILDER_H
-#define GEOS_OPERATION_DISTANCE_FACETSEQUENCETREEBUILDER_H
+#pragma once
 
 #include <geos/index/ItemVisitor.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
@@ -68,4 +67,3 @@ public:
 }
 }
 
-#endif //GEOS_FACETSEQUENCETREEBUILDER_H

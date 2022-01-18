@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
-#define GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
+#pragma once
 
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 
@@ -112,4 +111,3 @@ private:
 } // geos
 
 
-#endif // GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H

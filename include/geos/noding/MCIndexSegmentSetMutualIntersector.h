@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_MCINDEXSEGMENTSETMUTUALINTERSECTOR_H
-#define GEOS_NODING_MCINDEXSEGMENTSETMUTUALINTERSECTOR_H
+#pragma once
 
 #include <geos/noding/SegmentSetMutualIntersector.h> // inherited
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // inherited
@@ -135,4 +134,3 @@ private:
 } // namespace geos::noding
 } // namespace geos
 
-#endif // GEOS_NODING_MCINDEXSEGMENTSETMUTUALINTERSECTOR_H

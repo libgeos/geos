@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_GEOMETRYEXTRACTER_H
-#define GEOS_GEOM_UTIL_GEOMETRYEXTRACTER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
@@ -94,4 +93,3 @@ private:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

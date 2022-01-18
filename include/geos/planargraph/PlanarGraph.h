@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_PLANARGRAPH_H
-#define GEOS_PLANARGRAPH_PLANARGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/planargraph/NodeMap.h> // for composition
@@ -280,4 +279,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_PLANARGRAPH_PLANARGRAPH_H

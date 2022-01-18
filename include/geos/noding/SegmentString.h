@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SEGMENTSTRING_H
-#define GEOS_NODING_SEGMENTSTRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/noding/SegmentNodeList.h>
@@ -115,6 +114,4 @@ std::ostream& operator<< (std::ostream& os, const SegmentString& ss);
 
 } // namespace geos.noding
 } // namespace geos
-
-#endif
 

@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_PREDICATE_RECTANGLEINTERSECTS_H
-#define GEOS_OP_PREDICATE_RECTANGLEINTERSECTS_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -97,5 +96,3 @@ public:
 } // namespace geos::operation::predicate
 } // namespace geos::operation
 } // namespace geos
-
-#endif // ifndef GEOS_OP_PREDICATE_RECTANGLEINTERSECTS_H

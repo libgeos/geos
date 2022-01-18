@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDLINESTRINGINTERSECTS_H
-#define GEOS_GEOM_PREP_PREPAREDLINESTRINGINTERSECTS_H
+#pragma once
 
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/algorithm/PointLocator.h>
@@ -95,6 +94,4 @@ protected:
 } // namespace geos::geom::prep
 } // namespace geos::geom
 } // namespace geos
-
-#endif // GEOS_GEOM_PREP_PREPAREDLINESTRINGINTERSECTS_H
 

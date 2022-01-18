@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_H
-#define GEOS_H
+#pragma once
 
 /*
  * \file geos.h
@@ -39,5 +38,3 @@
 /// Basic namespace for all GEOS functionalities.
 namespace geos {
 }
-
-#endif

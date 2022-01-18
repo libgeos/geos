@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_SIMPLEEDGESETINTERSECTOR_H
-#define GEOS_GEOMGRAPH_INDEX_SIMPLEEDGESETINTERSECTOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -62,6 +61,4 @@ private:
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif // GEOS_GEOMGRAPH_INDEX_SIMPLEEDGESETINTERSECTOR_H
 

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_CENTROID_H
-#define GEOS_ALGORITHM_CENTROID_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for composition
@@ -156,4 +155,3 @@ private:
 } // namespace geos::algorithm
 } // namespace geos
 
-#endif // GEOS_ALGORITHM_CENTROID_H

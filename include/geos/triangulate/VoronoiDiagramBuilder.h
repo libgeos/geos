@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_VORONOIDIAGRAMBUILDER_H
-#define GEOS_TRIANGULATE_VORONOIDIAGRAMBUILDER_H
+#pragma once
 
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/geom/Envelope.h> // for composition
@@ -134,4 +133,3 @@ private:
 } //namespace geos.triangulate
 } //namespace geos
 
-#endif //GEOS_TRIANGULATE_VORONOIDIAGRAMBUILDER_H

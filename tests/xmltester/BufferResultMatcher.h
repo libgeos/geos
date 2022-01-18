@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef XMLTESTER_BUFFERRESULTMATCHER_H
-#define XMLTESTER_BUFFERRESULTMATCHER_H
+#pragma once
 
 // Forward declarations
 namespace geos {
@@ -60,4 +59,3 @@ private:
 } // namespace geos::xmltester
 } // namespace geos
 
-#endif // XMLTESTER_BUFFERRESULTMATCHER_H

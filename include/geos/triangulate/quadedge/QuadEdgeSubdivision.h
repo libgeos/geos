@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_QUADEDGESUBDIVISION_H
-#define GEOS_TRIANGULATE_QUADEDGE_QUADEDGESUBDIVISION_H
+#pragma once
 
 #include <memory>
 #include <list>
@@ -516,4 +515,3 @@ public:
 } //namespace geos.triangulate
 } //namespace goes
 
-#endif //GEOS_TRIANGULATE_QUADEDGE_QUADEDGESUBDIVISION_H

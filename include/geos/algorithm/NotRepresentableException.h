@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_NOTREPRESENTABLEEXCEPTION_H
-#define GEOS_ALGORITHM_NOTREPRESENTABLEEXCEPTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -41,6 +40,4 @@ public:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-#endif
 

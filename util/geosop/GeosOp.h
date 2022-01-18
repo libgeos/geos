@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOSOP_H
-#define GEOS_GEOSOP_H
+#pragma once
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -87,4 +86,3 @@ private:
     void log(std::string s);
 };
 
-#endif // GEOS_GEOSOP_H

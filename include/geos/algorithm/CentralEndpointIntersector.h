@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H
-#define GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -160,4 +159,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H

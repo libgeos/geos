@@ -13,9 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENT_H
-#define GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENT_H
-
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -132,10 +130,7 @@ public:
 };
 
 
-
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif
 

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_ENHANCEDPRECISIONOP_H
-#define GEOS_PRECISION_ENHANCEDPRECISIONOP_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/constants.h> // for int64
@@ -104,4 +103,3 @@ public:
 } // namespace geos.precision
 } // namespace geos
 
-#endif // GEOS_PRECISION_ENHANCEDPRECISIONOP_H

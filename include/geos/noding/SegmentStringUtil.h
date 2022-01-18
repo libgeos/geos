@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SEGMENTSTRINGUTIL_H
-#define GEOS_NODING_SEGMENTSTRINGUTIL_H
+#pragma once
 
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/LineString.h>
@@ -71,4 +70,3 @@ public:
 } // geos::noding
 } // geos
 
-#endif // GEOS_NODING_SEGMENTSTRINGUTIL_H

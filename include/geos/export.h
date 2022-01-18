@@ -11,8 +11,7 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-#ifndef GEOS_EXPORT_H
-#define GEOS_EXPORT_H
+#pragma once
 
 #if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || \
     defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
@@ -28,7 +27,6 @@
 #  define GEOS_DLL
 #endif
 
-#endif
 
 #if defined(_MSC_VER)
 #  pragma warning(disable: 4251) // identifier : class type needs to have dll-interface to be used by clients of class type2

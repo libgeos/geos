@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_POLYGONBUILDER_H
-#define GEOS_OP_OVERLAY_POLYGONBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
@@ -209,4 +208,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_OVERLAY_POLYGONBUILDER_H
