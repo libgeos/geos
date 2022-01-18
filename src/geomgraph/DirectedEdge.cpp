@@ -18,26 +18,23 @@
  *
  **********************************************************************/
 
-#include <geos/util/TopologyException.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeRing.h> // for printing
 #include <geos/geomgraph/DirectedEdge.h>
-#include <geos/geom/Location.h>
 #include <geos/geomgraph/Label.h>
+#include <geos/geom/Location.h>
 #include <geos/geom/Position.h>
-
-#include <geos/inline.h>
+#include <geos/util/TopologyException.h>
 
 #include <cmath>
 #include <cassert>
 #include <string>
 #include <sstream>
 
-using namespace geos::geom;
 
-#ifndef GEOS_INLINE
-# include "geos/geomgraph/DirectedEdge.inl"
-#endif
+using geos::geom::Location;
+using geos::geom::Position;
+
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph

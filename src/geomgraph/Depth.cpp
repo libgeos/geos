@@ -22,14 +22,9 @@
 
 #include <geos/geomgraph/Depth.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/geom/Position.h>
 #include <geos/geom/Location.h>
 
-#ifndef GEOS_INLINE
-# include <geos/geomgraph/Depth.inl>
-#endif
-
-using namespace geos::geom;
+using geos::geom::Location;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph

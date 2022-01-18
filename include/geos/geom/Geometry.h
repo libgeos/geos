@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_GEOMETRY_H
-#define GEOS_GEOM_GEOMETRY_H
+#pragma once
 
 #ifndef USE_UNSTABLE_GEOS_CPP_API
 #ifndef _MSC_VER
@@ -32,7 +31,6 @@
 #endif
 
 #include <geos/export.h>
-#include <geos/inline.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
@@ -992,4 +990,3 @@ struct GeomPtrPair {
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_GEOM_GEOMETRY_H

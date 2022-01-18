@@ -17,15 +17,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_GEOMETRYCOLLECTION_H
-#define GEOS_GEOS_GEOMETRYCOLLECTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
-
-#include <geos/inline.h>
 
 #include <string>
 #include <vector>
@@ -61,9 +58,15 @@ public:
 
     typedef std::vector<std::unique_ptr<Geometry>>::iterator iterator;
 
-    const_iterator begin() const;
+    const_iterator begin() const
+    {
+        return geometries.begin();
+    };
 
-    const_iterator end() const;
+    const_iterator end() const
+    {
+        return geometries.end();
+    };
 
     /**
      * Creates and returns a full copy of this GeometryCollection object.
@@ -237,8 +240,3 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geom/GeometryCollection.inl"
-#endif
-
-#endif // ndef GEOS_GEOS_GEOMETRYCOLLECTION_H

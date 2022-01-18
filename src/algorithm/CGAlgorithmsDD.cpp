@@ -191,7 +191,3 @@ CGAlgorithmsDD::detDD(const DD& x1, const DD& y1, const DD& x2, const DD& y2)
 } // namespace geos::algorithm
 } // namespace geos
 
-#ifndef GEOS_INLINE
-# include "geos/algorithm/CGAlgorithmsDD.inl"
-#endif
-

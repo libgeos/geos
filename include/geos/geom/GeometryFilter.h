@@ -13,11 +13,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_GEOMETRYFILTER_H
-#define GEOS_GEOM_GEOMETRYFILTER_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <string>
 #include <vector>
@@ -74,4 +72,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_GEOMETRYFILTER_H

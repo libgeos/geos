@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_LINESTRING_H
-#define GEOS_GEOS_LINESTRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
@@ -31,7 +30,6 @@
 #include <vector>
 #include <memory> // for unique_ptr
 
-#include <geos/inline.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -248,4 +246,3 @@ struct GEOS_DLL  LineStringLT {
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_GEOS_LINESTRING_H

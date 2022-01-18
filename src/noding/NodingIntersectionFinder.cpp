@@ -101,7 +101,3 @@ NodingIntersectionFinder::processIntersections(
 } // namespace geos.noding
 } // namespace geos
 
-#ifndef GEOS_INLINE
-# include "geos/noding/NodingIntersectionFinder.inl"
-#endif
-

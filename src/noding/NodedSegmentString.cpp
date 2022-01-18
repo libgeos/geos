@@ -116,6 +116,3 @@ NodedSegmentString::print(std::ostream& os) const
 } // geos::noding
 } // geos
 
-#ifndef GEOS_INLINE
-#include "geos/noding/NodedSegmentString.inl"
-#endif

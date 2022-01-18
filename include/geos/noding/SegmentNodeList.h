@@ -20,8 +20,6 @@
 
 #include <geos/export.h>
 
-#include <geos/inline.h>
-
 #include <cassert>
 #include <iostream>
 #include <vector>

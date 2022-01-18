@@ -21,24 +21,17 @@
 #include <geos/constants.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h> // for toGeometry
-#include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Intersection.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/profiler.h>
-#include <geos/inline.h>
 
 #include <algorithm> // for max
 #include <sstream>
 #include <cmath>
-
-#ifndef GEOS_INLINE
-# include <geos/geom/LineSegment.inl>
-#endif
 
 
 namespace geos {
@@ -325,5 +318,13 @@ LineSegment::toGeometry(const GeometryFactory& gf) const
     return gf.createLineString(std::move(cl));
 }
 
+std::ostream&
+operator<< (std::ostream& o, const LineSegment& l)
+{
+    return o << "LINESEGMENT(" << l.p0.x << " " << l.p0.y << "," << l.p1.x << " " << l.p1.y << ")";
+}
+
 } // namespace geos::geom
 } // namespace geos
+
+

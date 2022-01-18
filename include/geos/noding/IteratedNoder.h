@@ -16,15 +16,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_ITERATEDNODER_H
-#define GEOS_NODING_ITERATEDNODER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
 #include <iostream>
-
-#include <geos/inline.h>
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h> // due to inlines
@@ -121,5 +118,3 @@ public:
 } // namespace geos::noding
 } // namespace geos
 
-
-#endif // GEOS_NODING_ITERATEDNODER_H

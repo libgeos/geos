@@ -18,11 +18,9 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_NODEFACTORY_H
-#define GEOS_GEOMGRAPH_NODEFACTORY_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -51,4 +49,3 @@ protected:
 } // namespace geos.geomgraph
 } // namespace geos
 
-#endif // ifndef GEOS_GEOMGRAPH_NODEFACTORY_H

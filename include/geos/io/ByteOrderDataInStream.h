@@ -17,16 +17,14 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H
-#define GEOS_IO_BYTEORDERDATAINSTREAM_H
+#pragma once
 
 #include <geos/export.h>
+#include <geos/io/ParseException.h>
+#include <geos/io/ByteOrderValues.h>
+#include <geos/util/Machine.h> // for getMachineByteOrder
+
 #include <cstdint>
-
-//#include <geos/io/ParseException.h>
-//#include <geos/io/ByteOrderValues.h>
-#include <geos/inline.h>
-
 #include <iosfwd> // ostream, istream (if we remove inlines)
 
 namespace geos {
@@ -43,35 +41,85 @@ class GEOS_DLL ByteOrderDataInStream {
 
 public:
 
-    ByteOrderDataInStream(const unsigned char* buff = nullptr, size_t buff_sz = 0);
+    ByteOrderDataInStream()
+        : ByteOrderDataInStream(nullptr, 0) {};
 
-    ~ByteOrderDataInStream();
+    ByteOrderDataInStream(const unsigned char* buff, size_t buffsz)
+        : byteOrder(getMachineByteOrder())
+        , buf(buff)
+        , end(buff + buffsz)
+        {};
 
-    void setOrder(int order);
+    ~ByteOrderDataInStream() {};
 
-    unsigned char readByte(); // throws ParseException
+    void setOrder(int order)
+    {
+        byteOrder = order;
+    };
 
-    int32_t readInt(); // throws ParseException
+    unsigned char readByte() // throws ParseException
+    {
+        if(size() < 1) {
+            throw  ParseException("Unexpected EOF parsing WKB");
+        }
+        auto ret = buf[0];
+        buf++;
+        return ret;
+    };
 
-    uint32_t readUnsigned(); // throws ParseException
+    int32_t readInt()
+    {
+        if(size() < 4) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        auto ret =  ByteOrderValues::getInt(buf , byteOrder);
+        buf += 4;
+        return ret;
+    };
 
-    int64_t readLong(); // throws ParseException
+    uint32_t readUnsigned()
+    {
+        if(size() < 4) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        auto ret =  ByteOrderValues::getUnsigned(buf , byteOrder);
+        buf += 4;
+        return ret;
+    };
 
-    double readDouble(); // throws ParseException
+    int64_t readLong()
+    {
+        if(size() < 8) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
 
-    size_t size() const;
+        auto ret = ByteOrderValues::getLong(buf, byteOrder);
+        buf += 8;
+        return ret;
+    };
+
+    double readDouble()
+    {
+        if(size() < 8) {
+            throw  ParseException("Unexpected EOF parsing WKB");
+        }
+        auto ret = ByteOrderValues::getDouble(buf, byteOrder);
+        buf += 8;
+        return ret;
+    };
+
+    size_t size() const
+    {
+        return static_cast<size_t>(end - buf);
+    };
+
 
 private:
     int byteOrder;
     const unsigned char* buf;
     const unsigned char* end;
+
 };
 
 } // namespace io
 } // namespace geos
-
-#ifdef GEOS_INLINE
-#include <geos/io/ByteOrderDataInStream.inl>
-#endif
-
-#endif // #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H

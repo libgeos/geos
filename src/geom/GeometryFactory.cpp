@@ -50,10 +50,6 @@
 #include <iostream>
 #endif
 
-#ifndef GEOS_INLINE
-# include <geos/geom/GeometryFactory.inl>
-#endif
-
 namespace geos {
 namespace geom { // geos::geom
 

@@ -16,17 +16,16 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_MCINDEXNODER_H
-#define GEOS_NODING_MCINDEXNODER_H
+#pragma once
 
 #include <geos/export.h>
 
-#include <geos/inline.h>
-
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // for inheritance
 #include <geos/index/chain/MonotoneChain.h>
-#include <geos/noding/SinglePassNoder.h> // for inheritance
 #include <geos/index/strtree/TemplateSTRtree.h> // for composition
+#include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/SinglePassNoder.h> // for inheritance
 #include <geos/util.h>
 
 #include <vector>
@@ -98,9 +97,16 @@ public:
         return monoChains;
     }
 
-    index::SpatialIndex& getIndex();
+    index::SpatialIndex& getIndex()
+    {
+        return index;
+    }
 
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*>* getNodedSubstrings() const override
+    {
+        assert(nodedSegStrings); // must have called computeNodes before!
+        return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
+    }
 
     void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
@@ -131,8 +137,5 @@ public:
 #pragma warning(pop)
 #endif
 
-#ifdef GEOS_INLINE
-# include <geos/noding/MCIndexNoder.inl>
-#endif
 
-#endif // GEOS_NODING_MCINDEXNODER_H
+

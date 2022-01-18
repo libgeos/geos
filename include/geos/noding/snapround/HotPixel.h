@@ -20,12 +20,10 @@
 
 #include <geos/export.h>
 
-#include <geos/inline.h>
-
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for unique_ptr
 #include <geos/io/WKTWriter.h>
-
+#include <geos/util/math.h>
 
 #include <array>
 
@@ -81,9 +79,16 @@ private:
     double hpx;
     double hpy;
 
-    double scaleRound(double val) const;
+    double scaleRound(double val) const
+    {
+        // Use Java-compatible round implementation
+        return util::round(val * scaleFactor);
+    };
 
-    double scale(double val) const;
+    double scale(double val) const
+    {
+        return val * scaleFactor;
+    };
 
     bool intersectsPixelClosure(const geom::Coordinate& p0,
                                 const geom::Coordinate& p1) const;
@@ -148,9 +153,5 @@ public:
 
 #ifdef _MSC_VER
 #pragma warning(pop)
-#endif
-
-#ifdef GEOS_INLINE
-# include "geos/noding/snapround/HotPixel.inl"
 #endif
 

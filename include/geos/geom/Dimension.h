@@ -16,7 +16,6 @@
 #define GEOS_GEOM_DIMENSION_H
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -63,8 +62,5 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geom/Envelope.inl"
-#endif
 
 #endif // ndef GEOS_GEOM_DIMENSION_H

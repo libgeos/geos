@@ -19,8 +19,6 @@
 #include <vector>
 #include <memory>
 
-#include <geos/inline.h>
-
 #include <geos/noding/Noder.h> // for inheritance
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
@@ -120,8 +118,4 @@ public:
 } // namespace geos::noding::snapround
 } // namespace geos::noding
 } // namespace geos
-
-
-
-
 

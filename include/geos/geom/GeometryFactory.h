@@ -17,17 +17,16 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_GEOMETRYFACTORY_H
-#define GEOS_GEOM_GEOMETRYFACTORY_H
+#pragma once
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/export.h>
-#include <geos/inline.h>
 #include <geos/util.h>
 
 #include <vector>
@@ -161,7 +160,10 @@ public:
     /// \brief
     /// Returns the PrecisionModel that Geometries created by this
     /// factory will be associated with.
-    const PrecisionModel* getPrecisionModel() const;
+    const PrecisionModel* getPrecisionModel() const
+    {
+        return &precisionModel;
+    };
 
     /// Creates an EMPTY Point
     std::unique_ptr<Point> createPoint(std::size_t coordinateDimension = 2) const;
@@ -426,12 +428,18 @@ public:
      */
     Geometry* buildGeometry(const std::vector<const Geometry*>& geoms) const;
 
-    int getSRID() const;
+    int getSRID() const
+    {
+        return SRID;
+    };
 
     /// \brief
     /// Returns the CoordinateSequenceFactory associated
     /// with this GeometryFactory
-    const CoordinateSequenceFactory* getCoordinateSequenceFactory() const;
+    const CoordinateSequenceFactory* getCoordinateSequenceFactory() const
+    {
+        return coordinateListFactory;
+    };
 
     /// Returns a clone of given Geometry.
     Geometry* createGeometry(const Geometry* g) const;
@@ -529,8 +537,8 @@ private:
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geom/GeometryFactory.inl"
-#endif
 
-#endif // ndef GEOS_GEOM_GEOMETRYFACTORY_H
+
+
+
+

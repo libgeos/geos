@@ -34,17 +34,11 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
-#include <geos/inline.h>
 #include <geos/util.h>
 
 #include <sstream>
 #include <string>
 #include <cassert>
-
-
-#ifndef GEOS_INLINE
-#include <geos/io/WKTReader.inl>
-#endif
 
 
 using namespace geos::geom;

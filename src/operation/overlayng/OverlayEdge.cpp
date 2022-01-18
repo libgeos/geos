@@ -20,11 +20,16 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
 
+
+using geos::geom::CoordinateSequence;
+using geos::geom::Coordinate;
+using geos::geom::CoordinateArraySequence;
+using geos::geom::Location;
+
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
-
-using namespace geos::geom;
 
 /*public*/
 std::unique_ptr<CoordinateSequence>
@@ -103,6 +108,4 @@ OverlayEdge::resultSymbol() const
 } // namespace geos.operation
 } // namespace geos
 
-#ifndef GEOS_INLINE
-#include "geos/operation/overlayng/OverlayEdge.inl"
-#endif
+

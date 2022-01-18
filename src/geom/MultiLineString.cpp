@@ -19,21 +19,15 @@
  **********************************************************************/
 
 #include <geos/geomgraph/GeometryGraph.h>
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Dimension.h>
+#include <geos/geom/MultiLineString.h>
 
 #include <vector>
 #include <cassert>
 
-#ifndef GEOS_INLINE
-# include "geos/geom/MultiLineString.inl"
-#endif
-
-using namespace geos::algorithm;
-//using namespace geos::operation;
-using namespace geos::geomgraph;
+using geos::geom::GeometryFactory;
+using geos::geom::MultiLineString;
+using geos::geomgraph::GeometryGraph;
 
 namespace geos {
 namespace geom { // geos::geom

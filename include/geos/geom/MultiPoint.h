@@ -18,15 +18,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_MULTIPOINT_H
-#define GEOS_GEOS_MULTIPOINT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/Point.h> // for covariant return type
-
-#include <geos/inline.h>
 
 #include <string>
 #include <vector>
@@ -145,4 +142,3 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOS_MULTIPOINT_H

@@ -17,7 +17,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <geos/geom/GeometryFactory.inl>
 
 namespace tut {
 //

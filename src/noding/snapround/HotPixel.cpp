@@ -16,17 +16,12 @@
  *
  **********************************************************************/
 
-#include <geos/noding/snapround/HotPixel.h>
-
 #include <geos/algorithm/CGAlgorithmsDD.h>
-#include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
-
-#ifndef GEOS_INLINE
-# include "geos/noding/snapround/HotPixel.inl"
-#endif
+#include <geos/noding/snapround/HotPixel.h>
 
 #include <algorithm> // for std::min and std::max
 #include <cassert>
