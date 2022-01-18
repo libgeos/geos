@@ -349,10 +349,13 @@ public:
     * @param isForward the direction for a boundary label
     * @return the location for the specified position
     */
-    Location getLocationBoundaryOrLine(uint8_t index, int pos, bool isForward) const
+    Location getLocationBoundaryOrLine(
+        uint8_t index,
+        int position,
+        bool isForward) const
     {
         if (isBoundary(index)) {
-            return getLocation(index, pos, isForward);
+            return getLocation(index, position, isForward);
         }
         return getLineLocation(index);
     };

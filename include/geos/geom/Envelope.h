@@ -559,7 +559,7 @@ public:
     * is disjoint from the region of this Envelope
     *
     * @param other  the Envelope being checked for disjointness
-    * @return  true if the Envelopes are disjoint
+    * @return true if the Envelopes are disjoint
     */
     bool disjoint(const Envelope& other) const
     {
@@ -663,9 +663,9 @@ public:
      * @param p2 second coordinate defining an envelope.
      */
     static double distanceToCoordinate(
-        const Coordinate & c,
-        const Coordinate & p0,
-        const Coordinate & p1)
+        const Coordinate& c,
+        const Coordinate& p0,
+        const Coordinate& p1)
     {
         return std::sqrt(distanceSquaredToCoordinate(c, p0, p1));
     };
@@ -680,9 +680,9 @@ public:
      * @param p2 second coordinate defining an envelope.
      */
     static double distanceSquaredToCoordinate(
-        const Coordinate & c,
-        const Coordinate & p0,
-        const Coordinate & p1)
+        const Coordinate& c,
+        const Coordinate& p0,
+        const Coordinate& p1)
     {
         double xa = c.x - p0.x;
         double xb = c.x - p1.x;
