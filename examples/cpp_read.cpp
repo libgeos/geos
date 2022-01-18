@@ -11,9 +11,6 @@
 
 #include <iostream>
 
-/* Hopefully this matches the underlying library */
-#define GEOS_INLINE
-
 /* For geometry operations */
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
