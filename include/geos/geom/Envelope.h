@@ -660,8 +660,8 @@ public:
      * used to define the envelope is not significant.
      *
      * @param c the coordinate to from which distance should be found
-     * @param p1 first coordinate defining an envelope
-     * @param p2 second coordinate defining an envelope.
+     * @param p0 first coordinate defining an envelope
+     * @param p1 second coordinate defining an envelope.
      */
     static double distanceToCoordinate(
         const Coordinate& c,
