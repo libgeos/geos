@@ -26,6 +26,7 @@
 #include <vector>
 #include <ostream> // for operator<<
 #include <memory>
+#include <cassert>
 
 namespace geos {
 namespace geom { // geos::geom
