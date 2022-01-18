@@ -19,15 +19,12 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGEENDSTAR_H
-#define GEOS_GEOMGRAPH_EDGEENDSTAR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geomgraph/EdgeEnd.h>  // for EdgeEndLT
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
-
-#include <geos/inline.h>
 
 #include <array>
 #include <set>
@@ -213,13 +210,7 @@ std::ostream& operator<< (std::ostream&, const EdgeEndStar&);
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeEndStar.inl"
-//#endif
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGEENDSTAR_H
 

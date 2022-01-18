@@ -16,11 +16,7 @@
  *
  **********************************************************************/
 
-#include <geos/inline.h>
-
-#ifndef GEOS_INLINE
-#include <geos/io/ByteOrderDataInStream.inl>
-#endif
+#include <geos/io/ByteOrderDataInStream.h>
 
 namespace geos {
 namespace io { // geos::io

@@ -17,10 +17,6 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -30,39 +26,31 @@
 #include <geos/geom/Coordinate.h>
 
 
-using namespace geos::geom;
+using geos::geom::Coordinate;
 
 namespace geos {
 namespace noding { // geos.noding
 
 /*public*/
-SegmentNode::SegmentNode(const NodedSegmentString& ss, const geom::Coordinate& nCoord,
-                         std::size_t nSegmentIndex, int nSegmentOctant)
-        :
-        // segString(&ss),
-        segmentOctant(nSegmentOctant),
-        coord(nCoord),
-        segmentIndex(nSegmentIndex)
+SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
+    std::size_t nSegmentIndex, int nSegmentOctant)
+    : segmentOctant(nSegmentOctant)
+    , coord(nCoord)
+    , segmentIndex(nSegmentIndex)
 {
     // Number of points in NodedSegmentString is one-more number of segments
     assert(segmentIndex < ss.size());
-
-    isInteriorVar = \
-            !coord.equals2D(ss.getCoordinate(segmentIndex));
-
+    isInteriorVar = !coord.equals2D(ss.getCoordinate(segmentIndex));
 }
 
 
-    std::ostream&
+std::ostream&
 operator<< (std::ostream& os, const SegmentNode& n)
 {
     return os << n.coord << " seg#=" << n.segmentIndex << " octant#=" << n.segmentOctant << std::endl;
 }
 
+
 } // namespace geos.noding
 } // namespace geos
-
-#ifndef GEOS_INLINE
-# include "geos/noding/SegmentNode.inl"
-#endif
 

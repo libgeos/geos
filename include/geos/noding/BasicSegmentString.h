@@ -16,14 +16,14 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_BASICSEGMENTSTRING_H
-#define GEOS_NODING_BASICSEGMENTSTRING_H
+#pragma once
 
 #include <geos/export.h>
+#include <geos/noding/BasicSegmentString.h>
+#include <geos/noding/Octant.h>
 #include <geos/noding/SegmentString.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for inlines (size())
 
-#include <geos/inline.h>
 
 #include <vector>
 
@@ -68,13 +68,22 @@ public:
     }
 
     // see dox in SegmentString.h
-    const geom::Coordinate& getCoordinate(std::size_t i) const override;
+    const geom::Coordinate& getCoordinate(std::size_t i) const override
+    {
+        return pts->getAt(i);
+    };
 
     /// @see SegmentString::getCoordinates() const
-    geom::CoordinateSequence* getCoordinates() const override;
+    geom::CoordinateSequence* getCoordinates() const override
+    {
+        return pts;
+    };
 
     // see dox in SegmentString.h
-    bool isClosed() const override;
+    bool isClosed() const override
+    {
+        return pts->getAt(0) == pts->getAt(size() - 1);
+    };
 
     // see dox in SegmentString.h
     std::ostream& print(std::ostream& os) const override;
@@ -86,7 +95,13 @@ public:
      *        Must not be the last index in the vertex list
      * @return the octant of the segment at the vertex
      */
-    int getSegmentOctant(std::size_t index) const;
+    int getSegmentOctant(std::size_t index) const
+    {
+        if(index >= size() - 1) {
+            return -1;
+        }
+        return Octant::octant(getCoordinate(index), getCoordinate(index + 1));
+    };
 
 private:
 
@@ -100,9 +115,3 @@ private:
 
 } // namespace geos.noding
 } // namespace geos
-
-#ifdef GEOS_INLINE
-#include <geos/noding/BasicSegmentString.inl>
-#endif
-
-#endif // ndef GEOS_NODING_BASICSEGMENTSTRING_H

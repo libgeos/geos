@@ -12,15 +12,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_NODINGVALIDATOR_H
-#define GEOS_NODING_NODINGVALIDATOR_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
 #include <iostream>
-
-#include <geos/inline.h>
 
 #include <geos/algorithm/LineIntersector.h>
 //#include <geos/geom/Coordinate.h>
@@ -110,4 +107,3 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_NODINGVALIDATOR_H

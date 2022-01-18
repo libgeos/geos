@@ -16,16 +16,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATESEQUENCEFACTORY_H
-#define GEOS_GEOM_COORDINATESEQUENCEFACTORY_H
+#pragma once
 
 
 #include <geos/export.h>
 #include <memory>
 #include <vector>
-
-//#include <geos/geom/Coordinate.h>
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -111,8 +107,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/CoordinateSequenceFactory.inl"
-//#endif
-
-#endif // ndef GEOS_GEOM_COORDINATESEQUENCEFACTORY_H

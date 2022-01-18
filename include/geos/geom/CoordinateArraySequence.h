@@ -12,15 +12,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATEARRAYSEQUENCE_H
-#define GEOS_GEOM_COORDINATEARRAYSEQUENCE_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/CoordinateSequence.h>
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -142,4 +139,3 @@ typedef CoordinateArraySequence DefaultCoordinateSequence;
 } // namespace geos.geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_COORDINATEARRAYSEQUENCE_H

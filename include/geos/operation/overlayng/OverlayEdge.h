@@ -15,10 +15,11 @@
 #pragma once
 
 #include <geos/edgegraph/HalfEdge.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
-
+#include <geos/operation/overlayng/OverlayEdge.h>
+#include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <memory>
 
@@ -26,23 +27,24 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateSequence;
 class CoordinateArraySequence;
 }
 namespace operation {
 namespace overlayng {
 class OverlayEdgeRing;
 class MaximalEdgeRing;
-class OverlayLabel;
 }
 }
 }
+
+using geos::geom::Coordinate;
+using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
+using geos::geom::Location;
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
-
-using namespace geos::geom;
 
 /**
 * Creates a single OverlayEdge.
@@ -69,7 +71,10 @@ private:
     const MaximalEdgeRing* maxEdgeRing;
     OverlayEdge* nextResultMaxEdge;
 
-    void markVisited();
+    void markVisited()
+    {
+        m_isVisited = true;
+    };
 
 
 public:
@@ -92,20 +97,43 @@ public:
         , nextResultMaxEdge(nullptr)
      {}
 
-    bool isForward() const;
-
-    const Coordinate& directionPt() const override;
     ~OverlayEdge() override {};
 
-    OverlayLabel* getLabel() const;
+    bool isForward() const
+    {
+        return direction;
+    };
 
-    Location getLocation(uint8_t index, int position) const;
+    const Coordinate& directionPt() const override
+    {
+        return dirPt;
+    };
 
-    const Coordinate& getCoordinate() const;
+    OverlayLabel* getLabel() const
+    {
+        return label;
+    };
 
-    const CoordinateSequence* getCoordinatesRO() const;
+    Location getLocation(uint8_t index, int position) const
+    {
+        return label->getLocation(index, position, direction);
+    };
 
-    std::unique_ptr<CoordinateSequence> getCoordinates();
+    const Coordinate& getCoordinate() const
+    {
+        return orig();
+    };
+
+    const CoordinateSequence* getCoordinatesRO() const
+    {
+        return pts;
+    };
+
+    std::unique_ptr<CoordinateSequence> getCoordinates()
+    {
+        // return a copy of pts
+        return pts->clone();
+    };
 
     std::unique_ptr<CoordinateSequence> getCoordinatesOriented();
 
@@ -120,47 +148,126 @@ public:
     */
     void addCoordinates(CoordinateArraySequence* coords) const;
 
-    OverlayEdge* symOE() const;
-    OverlayEdge* oNextOE() const;
+    OverlayEdge* symOE() const
+    {
+        return static_cast<OverlayEdge*>(sym());
+    };
 
-    bool isInResultArea() const;
+    OverlayEdge* oNextOE() const
+    {
+        return static_cast<OverlayEdge*>(oNext());
+    };
 
-    bool isInResultAreaBoth() const;
+    bool isInResultArea() const
+    {
+        return m_isInResultArea;
+    };
 
-    void unmarkFromResultAreaBoth();
+    bool isInResultAreaBoth() const
+    {
+        return m_isInResultArea && symOE()->m_isInResultArea;
+    };
 
-    void markInResultArea();
+    bool isInResultEither() const
+    {
+        return isInResult() || symOE()->isInResult();
+    };
 
-    void markInResultAreaBoth();
+    void unmarkFromResultAreaBoth()
+    {
+        m_isInResultArea = false;
+        symOE()->m_isInResultArea = false;
+    };
 
-    bool isInResultLine() const;
+    void markInResultArea()
+    {
+        m_isInResultArea  = true;
+    };
 
-    void markInResultLine();
+    void markInResultAreaBoth()
+    {
+        m_isInResultArea  = true;
+        symOE()->m_isInResultArea = true;
+    };
 
-    bool isInResult() const;
+    bool isInResultLine() const
+    {
+        return m_isInResultLine;
+    };
 
-    bool isInResultEither() const;
+    void markInResultLine()
+    {
+        m_isInResultLine  = true;
+        symOE()->m_isInResultLine = true;
+    };
 
-    void setNextResult(OverlayEdge* e);
+    bool isInResult() const
+    {
+        return m_isInResultArea || m_isInResultLine;
+    };
 
-    OverlayEdge* nextResult() const;
+    void setNextResult(OverlayEdge* e)
+    {
+        // Assert: e.orig() == this.dest();
+        nextResultEdge = e;
+    };
 
-    bool isResultLinked() const;
+    OverlayEdge* nextResult() const
+    {
+        return nextResultEdge;
+    };
 
-    void setNextResultMax(OverlayEdge* e);
+    bool isResultLinked() const
+    {
+        return nextResultEdge != nullptr;
+    };
 
-    OverlayEdge* nextResultMax() const;
+    void setNextResultMax(OverlayEdge* e)
+    {
+        // Assert: e.orig() == this.dest();
+        nextResultMaxEdge = e;
+    };
 
-    bool isResultMaxLinked() const;
+    OverlayEdge* nextResultMax() const
+    {
+        return nextResultMaxEdge;
+    };
 
-    bool isVisited() const;
-    void markVisitedBoth();
+    bool isResultMaxLinked() const
+    {
+        return nextResultMaxEdge != nullptr;
+    };
 
-    const OverlayEdgeRing* getEdgeRing() const;
-    void setEdgeRing(const OverlayEdgeRing* p_edgeRing);
+    bool isVisited() const
+    {
+        return m_isVisited;
+    };
 
-    const MaximalEdgeRing* getEdgeRingMax() const;
-    void setEdgeRingMax(const MaximalEdgeRing* maximalEdgeRing);
+    void markVisitedBoth()
+    {
+        markVisited();
+        symOE()->markVisited();
+    };
+
+    void setEdgeRing(const OverlayEdgeRing* p_edgeRing)
+    {
+        edgeRing = p_edgeRing;
+    };
+
+    const OverlayEdgeRing* getEdgeRing() const
+    {
+        return edgeRing;
+    };
+
+    const MaximalEdgeRing* getEdgeRingMax() const
+    {
+        return maxEdgeRing;
+    };
+
+    void setEdgeRingMax(const MaximalEdgeRing* p_maximalEdgeRing)
+    {
+        maxEdgeRing = p_maximalEdgeRing;
+    };
 
     friend std::ostream& operator<<(std::ostream& os, const OverlayEdge& oe);
     std::string resultSymbol() const;
@@ -171,7 +278,3 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-
-#ifdef GEOS_INLINE
-#include "geos/operation/overlayng/OverlayEdge.inl"
-#endif

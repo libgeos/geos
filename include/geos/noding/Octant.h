@@ -12,12 +12,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_OCTANT_H
-#define GEOS_NODING_OCTANT_H
+#pragma once
 
 #include <geos/export.h>
 
-#include <geos/inline.h>
 #include <geos/util.h>
 
 // Forward declarations
@@ -73,5 +71,3 @@ public:
 
 } // namespace geos.noding
 } // namespace geos
-
-#endif

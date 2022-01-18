@@ -16,11 +16,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATESEQUENCEFILTER_H
-#define GEOS_GEOM_COORDINATESEQUENCEFILTER_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <cassert>
 
@@ -115,6 +113,4 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-
-#endif // ndef GEOS_GEOM_COORDINATESEQUENCEFILTER_H
 

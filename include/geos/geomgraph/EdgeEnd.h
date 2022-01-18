@@ -19,13 +19,11 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGEEND_H
-#define GEOS_GEOMGRAPH_EDGEEND_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
 #include <geos/geomgraph/Label.h>  // for composition
-#include <geos/inline.h>
 
 #include <string>
 
@@ -187,8 +185,3 @@ struct GEOS_DLL  EdgeEndLT {
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeEnd.inl"
-//#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGEEND_H

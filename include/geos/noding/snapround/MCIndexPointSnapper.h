@@ -16,13 +16,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
-#define GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
+#pragma once
 
 #include <cstddef>
 #include <geos/export.h>
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -99,4 +96,3 @@ private:
 } // namespace geos::noding
 } // namespace geos
 
-#endif // GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H

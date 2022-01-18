@@ -16,16 +16,13 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_INTERSECTIONMATRIX_H
-#define GEOS_GEOM_INTERSECTIONMATRIX_H
+#pragma once
 
 #include <geos/geom/Location.h>
 
 #include <geos/export.h>
 #include <array>
 #include <string>
-
-#include <geos/inline.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -383,4 +380,3 @@ GEOS_DLL std::ostream& operator<< (std::ostream& os, const IntersectionMatrix& i
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_INTERSECTIONMATRIX_H

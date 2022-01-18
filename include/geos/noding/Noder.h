@@ -12,15 +12,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_NODER_H
-#define GEOS_NODING_NODER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
 #include <iostream>
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -79,10 +76,4 @@ protected:
 
 } // namespace geos.noding
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/noding/Noder.inl"
-//#endif
-
-#endif // GEOS_NODING_NODER_H
 

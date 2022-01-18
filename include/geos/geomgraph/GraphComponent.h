@@ -19,11 +19,9 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_GRAPHCOMPONENT_H
-#define GEOS_GEOMGRAPH_GRAPHCOMPONENT_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <geos/geomgraph/Label.h>
 
@@ -117,4 +115,3 @@ private:
 } // namespace geos.geomgraph
 } // namespace geos
 
-#endif // ifndef GEOS_GEOMGRAPH_GRAPHCOMPONENT_H

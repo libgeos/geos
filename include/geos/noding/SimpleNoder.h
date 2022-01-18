@@ -16,14 +16,11 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SIMPLENODER_H
-#define GEOS_NODING_SIMPLENODER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
-
-#include <geos/inline.h>
 
 #include <geos/noding/SinglePassNoder.h>
 #include <geos/noding/NodedSegmentString.h> // for inlined (FIXME)
@@ -71,4 +68,3 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_SIMPLENODER_H

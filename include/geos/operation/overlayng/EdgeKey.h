@@ -14,29 +14,20 @@
 
 #pragma once
 
-#include <geos/inline.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
+#include <geos/operation/overlayng/EdgeKey.h>
+#include <geos/operation/overlayng/Edge.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/export.h>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-namespace operation {
-namespace overlayng {
-class Edge;
-}
-}
-}
+
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 
-// using geos::geom::Location;
-// using geos::geom::Position;
+using geos::geom::Coordinate;
 
 /**
  * A key for sorting and comparing edges in a noded arrangement.
@@ -47,7 +38,6 @@ namespace overlayng { // geos.operation.overlayng
  * @author mdavis
  *
  */
-
 class GEOS_DLL EdgeKey {
 
 private:
@@ -59,20 +49,67 @@ private:
     double p1y;
 
     // Methods
-    void initPoints(const Edge* edge);
-    void init(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    void initPoints(const Edge* edge)
+    {
+        bool direction = edge->direction();
+        if (direction) {
+            init(edge->getCoordinate(0),
+                 edge->getCoordinate(1));
+        }
+        else {
+            std::size_t len = edge->size();
+            init(edge->getCoordinate(len - 1),
+                 edge->getCoordinate(len - 2));
+        }
+    }
+
+    void init(const geom::Coordinate& p0, const geom::Coordinate& p1)
+    {
+        p0x = p0.x;
+        p0y = p0.y;
+        p1x = p1.x;
+        p1y = p1.y;
+    }
 
 
 public:
 
-    EdgeKey(const Edge* edge);
+    EdgeKey(const Edge* edge)
+    {
+        initPoints(edge);
+    }
 
-    int compareTo(const EdgeKey* ek) const;
-    bool equals(const EdgeKey* ek) const;
+    int compareTo(const EdgeKey* ek) const
+    {
+        if (p0x < ek->p0x) return -1;
+        if (p0x > ek->p0x) return 1;
+        if (p0y < ek->p0y) return -1;
+        if (p0y > ek->p0y) return 1;
+        // first points are equal, compare second
+        if (p1x < ek->p1x) return -1;
+        if (p1x > ek->p1x) return 1;
+        if (p1y < ek->p1y) return -1;
+        if (p1y > ek->p1y) return 1;
+        return 0;
+    }
 
-    friend bool operator< (const EdgeKey& ek1, const EdgeKey& ek2);
-    friend bool operator== (const EdgeKey& ek1, const EdgeKey& ek2);
+    bool equals(const EdgeKey* ek) const
+    {
+        return p0x == ek->p0x
+               && p0y == ek->p0y
+               && p1x == ek->p1x
+               && p1y == ek->p1y;
+    }
 
+    friend bool operator<(const EdgeKey& ek1, const EdgeKey& ek2)
+    {
+        return ek1.compareTo(&ek2) < 0;
+    };
+
+    friend bool operator==(const EdgeKey& ek1, const EdgeKey& ek2)
+    {
+        return ek1.equals(&ek2);
+    };
 
 };
 
@@ -80,8 +117,4 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-
-#ifdef GEOS_INLINE
-#include "geos/operation/overlayng/EdgeKey.inl"
-#endif
 

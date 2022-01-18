@@ -16,8 +16,8 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_MINIMALEDGERING_H
-#define GEOS_OP_OVERLAY_MINIMALEDGERING_H
+#pragma once
+
 
 #include <geos/export.h>
 
@@ -25,8 +25,6 @@
 #include <geos/geomgraph/DirectedEdge.h> // for inlines
 
 #include <vector>
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -60,12 +58,19 @@ public:
     MinimalEdgeRing(geomgraph::DirectedEdge* start,
                     const geom::GeometryFactory* geometryFactory);
 
-    ~MinimalEdgeRing() override;
+    ~MinimalEdgeRing() override {};
 
-    geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge* de) override;
+    geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge* de) override
+    {
+        return de->getNextMin();
+    };
 
     void setEdgeRing(geomgraph::DirectedEdge* de,
-                     geomgraph::EdgeRing* er) override;
+                     geomgraph::EdgeRing* er) override
+    {
+        de->setMinEdgeRing(er);
+    };
+
 };
 
 
@@ -73,8 +78,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#ifdef GEOS_INLINE
-#include <geos/operation/overlay/MinimalEdgeRing.inl>
-#endif
-
-#endif // ndef GEOS_OP_OVERLAY_MINIMALEDGERING_H

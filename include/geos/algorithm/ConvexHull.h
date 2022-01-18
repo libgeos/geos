@@ -18,17 +18,19 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_CONVEXHULL_H
-#define GEOS_ALGORITHM_CONVEXHULL_H
+#pragma once
 
-#include <geos/inline.h>
 #include <geos/export.h>
 #include <memory>
 #include <vector>
+#include <cassert>
 
 // FIXME: avoid using Cordinate:: typedefs to avoid full include
+#include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/util/UniqueCoordinateArrayFilter.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -38,7 +40,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Geometry;
 class GeometryFactory;
 }
 }
@@ -62,7 +63,12 @@ private:
     const geom::GeometryFactory* geomFactory;
     geom::Coordinate::ConstVect inputPts;
 
-    void extractCoordinates(const geom::Geometry* geom);
+    void
+    extractCoordinates(const geom::Geometry* geom)
+    {
+        util::UniqueCoordinateArrayFilter filter(inputPts);
+        geom->apply_ro(&filter);
+    }
 
     /// Create a CoordinateSequence from the Coordinate::ConstVect
     /// This is needed to construct the geometries.
@@ -160,10 +166,13 @@ public:
     /**
      * Create a new convex hull construction for the input Geometry.
      */
-    ConvexHull(const geom::Geometry* newGeometry);
+    ConvexHull(const geom::Geometry* newGeometry)
+        : geomFactory(newGeometry->getFactory())
+    {
+        extractCoordinates(newGeometry);
+    };
 
-
-    ~ConvexHull();
+    ~ConvexHull() {};
 
     /**
      * Returns a Geometry that represents the convex hull of
@@ -187,8 +196,4 @@ public:
 #pragma warning(pop)
 #endif
 
-#ifdef GEOS_INLINE
-# include "geos/algorithm/ConvexHull.inl"
-#endif
 
-#endif // GEOS_ALGORITHM_CONVEXHULL_H

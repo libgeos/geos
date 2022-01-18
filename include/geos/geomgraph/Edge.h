@@ -19,8 +19,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGE_H
-#define GEOS_GEOMGRAPH_EDGE_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -31,8 +30,6 @@
 #include <geos/geomgraph/EdgeIntersectionList.h> // for composition
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/geom/Envelope.h>
-
-#include <geos/inline.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -278,10 +275,4 @@ std::ostream& operator<< (std::ostream& os, const Edge& el);
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/Edge.inl"
-//#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGE_H
 

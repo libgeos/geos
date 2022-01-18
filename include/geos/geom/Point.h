@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_POINT_H
-#define GEOS_GEOS_POINT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
@@ -27,8 +26,6 @@
 #include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
-
-#include <geos/inline.h>
 
 #include <string>
 #include <vector>
@@ -188,13 +185,8 @@ private:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/Point.inl"
-//#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ndef GEOS_GEOS_POINT_H
 

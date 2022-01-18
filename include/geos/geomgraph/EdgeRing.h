@@ -19,15 +19,12 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGERING_H
-#define GEOS_GEOMGRAPH_EDGERING_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LinearRing.h>
-
-#include <geos/inline.h>
 
 #include <cassert> // for testInvariant
 #include <iosfwd> // for operator<<
@@ -201,6 +198,4 @@ std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGERING_H
 

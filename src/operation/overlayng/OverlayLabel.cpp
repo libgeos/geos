@@ -14,9 +14,6 @@
 
 #include <geos/operation/overlayng/OverlayLabel.h>
 
-#ifndef GEOS_INLINE
-# include "geos/operation/overlayng/OverlayLabel.inl"
-#endif
 
 namespace geos {      // geos
 namespace operation { // geos.operation

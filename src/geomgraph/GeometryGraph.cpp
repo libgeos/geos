@@ -50,8 +50,6 @@
 
 #include <geos/operation/valid/RepeatedPointRemover.h>
 
-#include <geos/inline.h>
-
 #include <vector>
 #include <memory> // std::unique_ptr
 #include <cassert>
@@ -61,9 +59,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifndef GEOS_INLINE
-# include "geos/geomgraph/GeometryGraph.inl"
-#endif
 
 using namespace geos::geomgraph::index;
 using namespace geos::algorithm;

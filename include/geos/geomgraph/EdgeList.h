@@ -18,8 +18,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGELIST_H
-#define GEOS_GEOMGRAPH_EDGELIST_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -28,8 +27,6 @@
 #include <iostream>
 
 #include <geos/noding/OrientedCoordinateArray.h> // for map comparator
-
-#include <geos/inline.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -121,12 +118,7 @@ std::ostream& operator<< (std::ostream& os, const EdgeList& el);
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeList.inl"
-//#endif
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif // ifndef GEOS_GEOMGRAPH_EDGELIST_H

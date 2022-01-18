@@ -32,12 +32,8 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifndef GEOS_INLINE
-# include <geos/noding/MCIndexNoder.inl>
-#endif
-
-
-using namespace geos::index::chain;
+using geos::index::chain::MonotoneChain;
+using geos::index::chain::MonotoneChainBuilder;
 
 namespace geos {
 namespace noding { // geos.noding

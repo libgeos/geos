@@ -12,16 +12,15 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
-#define GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
+#pragma once
 
 
 #include <geos/export.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h> // for inheritance
 #include <vector>
 
-#include <geos/geom/CoordinateSequenceFactory.h> // for inheritance
 
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -45,14 +44,33 @@ class GEOS_DLL CoordinateArraySequenceFactory: public CoordinateSequenceFactory 
 public:
     std::unique_ptr<CoordinateSequence> create() const override;
 
-    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate>* coords, std::size_t dims = 0) const override;
+    std::unique_ptr<CoordinateSequence> create(
+        std::vector<Coordinate>* coords,
+        size_t dimension) const override
+    {
+        return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(coords, dimension));
+    };
 
-    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> && coords, std::size_t dims = 0) const override;
+    std::unique_ptr<CoordinateSequence> create(
+        std::vector<Coordinate> && coords,
+        size_t dimension) const override
+    {
+        return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(coords), dimension));
+    };
 
     /** @see CoordinateSequenceFactory::create(std::size_t, int) */
-    std::unique_ptr<CoordinateSequence> create(std::size_t size, std::size_t dimension = 0) const override;
+    std::unique_ptr<CoordinateSequence> create(std::size_t size, std::size_t dimension) const override
+    {
+        return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(size, dimension));
+    };
 
-    std::unique_ptr<CoordinateSequence> create(const CoordinateSequence& coordSeq) const override;
+    std::unique_ptr<CoordinateSequence> create(const CoordinateSequence& seq) const override
+    {
+        return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(seq));
+    };
 
     /** \brief
      * Returns the singleton instance of CoordinateArraySequenceFactory
@@ -66,8 +84,12 @@ typedef CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory;
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geom/CoordinateArraySequenceFactory.inl"
-#endif
 
-#endif // ndef GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
+
+
+
+
+
+
+
+

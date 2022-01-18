@@ -20,9 +20,6 @@
 #include <iomanip>
 #include <cmath>
 
-#ifndef GEOS_INLINE
-# include <geos/geom/Coordinate.inl>
-#endif
 
 namespace geos {
 namespace geom { // geos::geom

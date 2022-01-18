@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <geos/inline.h>
 #include <geos/export.h>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/ParseException.h>
+
 #include <string>
 
 // Forward declarations
@@ -67,18 +67,27 @@ public:
      * so be sure you'll keep the factory alive for the
      * whole WKTReader and created Geometry life.
      */
-    explicit WKTReader(const geom::GeometryFactory& gf);
+    explicit WKTReader(const geom::GeometryFactory& gf)
+        : geometryFactory(&gf)
+        , precisionModel(gf.getPrecisionModel())
+        {};
 
-    /** @deprecated in 3.4.0 */
-    explicit WKTReader(const geom::GeometryFactory* gf);
+        /** @deprecated in 3.4.0 */
+    explicit WKTReader(const geom::GeometryFactory* gf)
+        : geometryFactory(gf)
+        , precisionModel(gf->getPrecisionModel())
+        {};
 
     /**
      * \brief Initialize parser with default GeometryFactory.
      *
      */
-    WKTReader();
+    WKTReader()
+        : geometryFactory(geom::GeometryFactory::getDefaultInstance())
+        , precisionModel(geometryFactory->getPrecisionModel())
+        {};
 
-    ~WKTReader();
+    ~WKTReader() {};
 
     /// Parse a WKT string returning a Geometry
     template<typename T>
@@ -122,7 +131,5 @@ private:
 } // namespace io
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/io/WKTReader.inl"
-#endif
+
 

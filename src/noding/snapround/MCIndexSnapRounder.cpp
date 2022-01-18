@@ -24,8 +24,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
-#include <geos/inline.h>
-
 #include <vector>
 
 

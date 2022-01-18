@@ -13,12 +13,8 @@
  *
  **********************************************************************/
 
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 
-#ifndef GEOS_INLINE
-# include "geos/geom/CoordinateArraySequenceFactory.inl"
-#endif
 
 namespace geos {
 namespace geom { // geos::geom

@@ -30,9 +30,6 @@
 #include <vector>
 #include <algorithm>
 
-#ifndef GEOS_INLINE
-# include "geos/geom/MultiPolygon.inl"
-#endif
 
 namespace geos {
 namespace geom { // geos::geom
