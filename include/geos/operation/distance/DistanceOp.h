@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_DISTANCE_DISTANCEOP_H
-#define GEOS_OP_DISTANCE_DISTANCEOP_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -226,6 +225,4 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_OP_DISTANCE_DISTANCEOP_H
 

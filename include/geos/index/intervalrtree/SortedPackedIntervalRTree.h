@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_INTERVALRTREE_SORTEDPACKEDINTERVALRTREE_H
-#define GEOS_INDEX_INTERVALRTREE_SORTEDPACKEDINTERVALRTREE_H
+#pragma once
 
 #include <geos/index/intervalrtree/IntervalRTreeNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeBranchNode.h>
@@ -108,6 +107,4 @@ public:
 } // geos::intervalrtree
 } // geos::index
 } // geos
-
-#endif // GEOS_INDEX_INTERVALRTREE_SORTEDPACKEDINTERVALRTREE_H
 

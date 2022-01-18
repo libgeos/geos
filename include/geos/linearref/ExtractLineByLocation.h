@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_EXTRACTLINEBYLOCATION_H
-#define GEOS_LINEARREF_EXTRACTLINEBYLOCATION_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -84,6 +83,6 @@ public:
     std::unique_ptr<geom::Geometry> extract(const LinearLocation& start, const LinearLocation& end);
 
 };
+
 }
 }
-#endif

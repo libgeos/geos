@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IO_GEOJSONWRITER_H
-#define GEOS_IO_GEOJSONWRITER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -116,4 +115,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // #ifndef GEOS_IO_GEOJSONWRITER_H

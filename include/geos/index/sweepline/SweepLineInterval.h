@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
-#define GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -36,4 +35,3 @@ private:
 } // namespace geos:index
 } // namespace geos
 
-#endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H

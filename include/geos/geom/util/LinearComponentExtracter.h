@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_LINEARCOMPONENTEXTRACTER_H
-#define GEOS_GEOM_UTIL_LINEARCOMPONENTEXTRACTER_H
+#pragma once
 
 
 #include <geos/export.h>
@@ -66,4 +65,3 @@ public:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

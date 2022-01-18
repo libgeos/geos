@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_ILLEGALSTATEEXCEPTION_H
-#define GEOS_UTIL_ILLEGALSTATEEXCEPTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -41,6 +40,3 @@ public:
 
 } // namespace geos::util
 } // namespace geos
-
-
-#endif // GEOS_UTIL_ILLEGALSTATEEXCEPTION_H

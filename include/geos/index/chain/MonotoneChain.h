@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_CHAIN_MONOTONECHAIN_H
-#define GEOS_IDX_CHAIN_MONOTONECHAIN_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/CoordinateSequence.h> // for inline
@@ -198,6 +197,4 @@ private:
 } // namespace geos::index::chain
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_CHAIN_MONOTONECHAIN_H
 

@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
-#define GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -92,6 +91,4 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
 

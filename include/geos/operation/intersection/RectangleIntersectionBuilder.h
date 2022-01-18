@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_INTERSECTION_RECTANGLEINTERSECTIONBUILDER_H
-#define GEOS_OP_INTERSECTION_RECTANGLEINTERSECTIONBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -157,4 +156,3 @@ private:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // GEOS_OP_INTERSECTION_RECTANGLEINTERSECTIONBUILDER_H

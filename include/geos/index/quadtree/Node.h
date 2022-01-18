@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_NODE_H
-#define GEOS_IDX_QUADTREE_NODE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/index/quadtree/NodeBase.h> // for inheritance
@@ -140,4 +139,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_IDX_QUADTREE_NODE_H

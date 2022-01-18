@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_POLYGONIZE_POLYGONIZER_H
-#define GEOS_OP_POLYGONIZE_POLYGONIZER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Polygon.h>
@@ -244,5 +243,3 @@ public:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_OP_POLYGONIZE_POLYGONIZER_H

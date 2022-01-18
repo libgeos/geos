@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_NODEMAP_H
-#define GEOS_PLANARGRAPH_NODEMAP_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for use in container
@@ -134,4 +133,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_PLANARGRAPH_NODEMAP_H

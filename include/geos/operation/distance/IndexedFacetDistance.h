@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEXEDFACETDISTANCE_H
-#define GEOS_INDEXEDFACETDISTANCE_H
+#pragma once
 
 #include <geos/operation/distance/FacetSequenceTreeBuilder.h>
 
@@ -106,4 +105,3 @@ private:
 }
 }
 
-#endif //GEOS_INDEXEDFACETDISTANCE_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_UNION_OVERLAPUNION_H
-#define GEOS_OP_UNION_OVERLAPUNION_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -138,5 +137,3 @@ private:
 } // namespace geos::operation::union
 } // namespace geos::operation
 } // namespace geos
-
-#endif

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_SINESTARFACTORY_H
-#define GEOS_UTIL_SINESTARFACTORY_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -121,4 +120,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_UTIL_SINESTARFACTORY_H

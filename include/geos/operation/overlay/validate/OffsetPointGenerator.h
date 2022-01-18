@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H
-#define GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/PointLocator.h> // for composition
@@ -86,4 +85,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H

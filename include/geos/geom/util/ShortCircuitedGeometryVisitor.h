@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_SHORTCIRCUITEDGEOMETRYVISITOR_H
-#define GEOS_GEOM_UTIL_SHORTCIRCUITEDGEOMETRYVISITOR_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -65,4 +64,3 @@ public:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

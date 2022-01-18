@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOSOP_WKTSTREAMREADER_H
-#define GEOSOP_WKTSTREAMREADER_H
+#pragma once
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
@@ -41,4 +40,3 @@ private:
     geos::io::WKTReader rdr;
 };
 
-#endif // GEOSOP_WKTSTREAMREADER_H

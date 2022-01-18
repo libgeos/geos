@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_ALGO_CONNECTEDSUBGRAPHFINDER_H
-#define GEOS_PLANARGRAPH_ALGO_CONNECTEDSUBGRAPHFINDER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/planargraph/PlanarGraph.h> // for inlines
@@ -90,6 +89,4 @@ private:
 } // namespace geos::planargraph::algorithm
 } // namespace geos::planargraph
 } // namespace geos
-
-#endif // GEOS_PLANARGRAPH_ALGO_CONNECTEDSUBGRAPHFINDER_H
 

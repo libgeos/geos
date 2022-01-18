@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LENGTHINDEXEDLINE_H
-#define GEOS_LINEARREF_LENGTHINDEXEDLINE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -207,6 +206,6 @@ public:
      */
     double clampIndex(double index) const;
 };
+
 }
 }
-#endif

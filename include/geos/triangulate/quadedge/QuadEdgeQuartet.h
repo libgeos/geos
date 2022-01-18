@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_QUADEDGEQUARTET_H
-#define GEOS_TRIANGULATE_QUADEDGE_QUADEDGEQUARTET_H
+#pragma once
 
 #include <geos/triangulate/quadedge/QuadEdge.h>
 
@@ -63,5 +62,3 @@ private:
 }
 }
 
-
-#endif

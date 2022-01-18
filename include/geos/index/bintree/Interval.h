@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_BINTREE_INTERVAL_H
-#define GEOS_IDX_BINTREE_INTERVAL_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -59,6 +58,4 @@ public:
 } // namespace geos::index::bintree
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_BINTREE_INTERVAL_H
 

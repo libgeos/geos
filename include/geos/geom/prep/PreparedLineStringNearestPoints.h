@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDLINESTRINGNEARESTPOINTS_H
-#define GEOS_GEOM_PREP_PREPAREDLINESTRINGNEARESTPOINTS_H
+#pragma once
 
 namespace geos {
 namespace geom { // geos::geom
@@ -53,4 +52,3 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDLINESTRINGNEARESTPOINTS_H

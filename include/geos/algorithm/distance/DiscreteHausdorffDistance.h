@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
-#define GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/distance/PointPairDistance.h> // for composition
@@ -258,6 +257,4 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
 

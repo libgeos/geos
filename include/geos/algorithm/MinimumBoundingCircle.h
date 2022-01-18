@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_MINIMUMBOUNDINGCIRCLE_H
-#define GEOS_ALGORITHM_MINIMUMBOUNDINGCIRCLE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -135,6 +134,4 @@ public:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-#endif // GEOS_ALGORITHM_MINIMUMBOUNDINGCIRCLE_H
 

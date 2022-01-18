@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_ITEMDISTANCE_H
-#define GEOS_INDEX_STRTREE_ITEMDISTANCE_H
+#pragma once
 
 #include <geos/index/strtree/ItemBoundable.h>
 
@@ -48,4 +47,3 @@ public:
 }
 }
 
-#endif //GEOS_ITEMDISTANCE_H

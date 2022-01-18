@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_SIMPLEPOINTINRING_H
-#define GEOS_ALGORITHM_SIMPLEPOINTINRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/PointInRing.h> // for inheritance
@@ -42,7 +41,4 @@ private:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-
-#endif // GEOS_ALGORITHM_SIMPLEPOINTINRING_H
 

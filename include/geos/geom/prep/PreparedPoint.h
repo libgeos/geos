@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOINT_H
-#define GEOS_GEOM_PREP_PREPAREDPOINT_H
+#pragma once
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 
@@ -55,4 +54,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOINT_H

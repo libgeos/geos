@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_ABSTRACTNODE_H
-#define GEOS_INDEX_STRTREE_ABSTRACTNODE_H
+#pragma once
 
 #include <cassert>
 #include <cstddef>
@@ -130,4 +129,3 @@ protected:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_INDEX_STRTREE_ABSTRACTNODE_H

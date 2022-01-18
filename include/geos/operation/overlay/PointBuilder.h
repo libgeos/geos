@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_POINTBUILDER_H
-#define GEOS_OP_OVERLAY_POINTBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -106,4 +105,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // ndef GEOS_OP_OVERLAY_POINTBUILDER_H

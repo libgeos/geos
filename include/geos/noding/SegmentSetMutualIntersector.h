@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SEGMENTSETMUTUALINTERSECTOR_H
-#define GEOS_NODING_SEGMENTSETMUTUALINTERSECTOR_H
+#pragma once
 
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/SegmentIntersector.h>
@@ -79,4 +78,3 @@ protected:
 } // geos::noding
 } // geos
 
-#endif // GEOS_NODING_SEGMENTSETMUTUALINTERSECTOR_H

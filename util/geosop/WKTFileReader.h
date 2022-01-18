@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOSOP_WKTFILEREADER_H
-#define GEOSOP_WKTFILEREADER_H
+#pragma once
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
@@ -39,4 +38,3 @@ private:
     geos::geom::Geometry* readGeom(std::ifstream& f, geos::io::WKTReader& rdr);
 };
 
-#endif // GEOSOP_WKTFILEREADER_H

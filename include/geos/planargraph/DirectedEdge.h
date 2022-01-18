@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_DIRECTEDEDGE_H
-#define GEOS_PLANARGRAPH_DIRECTEDEDGE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/planargraph/GraphComponent.h> // for inheritance
@@ -236,4 +235,3 @@ std::ostream& operator << (std::ostream&, const DirectedEdge&);
 } // namespace geos::planargraph
 } // namespace geos
 
-#endif // GEOS_PLANARGRAPH_DIRECTEDEDGE_H

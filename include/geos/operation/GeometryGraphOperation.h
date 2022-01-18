@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
-#define GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/LineIntersector.h> // for composition
@@ -87,4 +86,3 @@ protected:
 #pragma warning(pop)
 #endif
 
-#endif

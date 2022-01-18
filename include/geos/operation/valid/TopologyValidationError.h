@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_TOPOLOGYVALIDATIONERROR_H
-#define GEOS_OP_TOPOLOGYVALIDATIONERROR_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -75,4 +74,3 @@ private:
 } // namespace geos.operation
 } // namespace geos
 
-#endif // GEOS_OP_TOPOLOGYVALIDATIONERROR_H

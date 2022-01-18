@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_DIMENSION_H
-#define GEOS_GEOM_DIMENSION_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -63,4 +62,3 @@ public:
 } // namespace geos
 
 
-#endif // ndef GEOS_GEOM_DIMENSION_H

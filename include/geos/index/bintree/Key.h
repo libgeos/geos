@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_BINTREE_KEY_H
-#define GEOS_IDX_BINTREE_KEY_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -69,6 +68,4 @@ private:
 } // namespace geos::index::bintree
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_BINTREE_KEY_H
 

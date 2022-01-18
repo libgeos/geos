@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
-#define GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
+#pragma once
 
 #include <geos/geom/Coordinate.h> // for inlines
 #include <geos/geom/CoordinateSequence.h> // for inlines
@@ -214,7 +213,4 @@ operator<< (std::ostream& os,
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
-
-#endif // ndef GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
 

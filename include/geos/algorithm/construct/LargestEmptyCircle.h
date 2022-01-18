@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H
-#define GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -220,4 +219,3 @@ private:
 } // geos::algorithm
 } // geos
 
-#endif // GEOS_ALGORITHM_CONSTRUCT_LARGESTCIRCLE_H

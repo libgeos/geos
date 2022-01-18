@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LINEARLOCATION_H
-#define GEOS_LINEARREF_LINEARLOCATION_H
+#pragma once
 
 #include <string>
 #include <memory> // for std::unique_ptr
@@ -247,4 +246,3 @@ public:
 } // namespace geos.linearref
 } // namespace geos
 
-#endif

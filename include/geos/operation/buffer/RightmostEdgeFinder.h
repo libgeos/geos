@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
-#define GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -100,11 +99,7 @@ RightmostEdgeFinder::getCoordinate()
 }
 
 
-
-
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
-
-#endif // ndef GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 

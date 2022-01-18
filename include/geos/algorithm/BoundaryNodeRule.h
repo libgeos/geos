@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_BOUNDARYNODERULE_H
-#define GEOS_ALGORITHM_BOUNDARYNODERULE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -140,6 +139,4 @@ public:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-#endif // GEOS_ALGORITHM_BOUNDARYNODERULE_H
 

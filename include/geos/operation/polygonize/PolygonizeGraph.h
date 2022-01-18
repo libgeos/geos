@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
-#define GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -213,4 +212,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H

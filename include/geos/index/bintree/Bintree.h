@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_BINTREE_BINTREE_H
-#define GEOS_IDX_BINTREE_BINTREE_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -127,6 +126,4 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_IDX_BINTREE_BINTREE_H
 

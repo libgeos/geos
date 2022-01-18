@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LOCATIONINDEXOFLINE_H
-#define GEOS_LINEARREF_LOCATIONINDEXOFLINE_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -71,4 +70,3 @@ public:
 }
 }
 
-#endif

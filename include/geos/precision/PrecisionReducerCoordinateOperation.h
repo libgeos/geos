@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_PRECISIONREDUCERCOORDINATEOPERATION_H
-#define GEOS_PRECISION_PRECISIONREDUCERCOORDINATEOPERATION_H
+#pragma once
 
 #include <geos/geom/util/CoordinateOperation.h>
 
@@ -63,6 +62,4 @@ public:
 
 } // namespace geos.precision
 } // namespace geos
-
-#endif // GEOS_PRECISION_PRECISIONREDUCERCOORDINATEOPERATION_H
 

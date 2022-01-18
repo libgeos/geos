@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_CONSISTENTAREATESTER_H
-#define GEOS_OP_CONSISTENTAREATESTER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -136,4 +135,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // GEOS_OP_CONSISTENTAREATESTER_H

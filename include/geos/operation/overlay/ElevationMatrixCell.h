@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
-#define GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -62,4 +61,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H

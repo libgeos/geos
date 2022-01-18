@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_H
-#define GEOS_GEOM_H
+#pragma once
 
 /** \mainpage GEOS - Geometry Engine Open Source
  *
@@ -147,7 +146,4 @@ namespace geom { // geos::geom
 
 using namespace geos::geom;
 
-
-
-#endif // ndef GEOS_GEOM_H
 

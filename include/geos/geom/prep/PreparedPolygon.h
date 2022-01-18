@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGON_H
-#define GEOS_GEOM_PREP_PREPAREDPOLYGON_H
+#pragma once
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
 #include <geos/noding/SegmentString.h>
@@ -78,4 +77,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOLYGON_H

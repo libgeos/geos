@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_EDGESETNODER_H
-#define GEOS_OP_OVERLAY_EDGESETNODER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -73,4 +72,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // ndef GEOS_OP_OVERLAY_EDGESETNODER_H

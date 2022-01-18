@@ -21,8 +21,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
-#define GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
+#pragma once
 
 #include <geos/export.h>
 #include <cstddef>
@@ -165,6 +164,3 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
-

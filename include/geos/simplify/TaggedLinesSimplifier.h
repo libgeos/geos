@@ -23,8 +23,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H
-#define GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -116,4 +115,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H

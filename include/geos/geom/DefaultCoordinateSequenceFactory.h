@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_DEFAULTCOORDINATESEQUENCEFACTORY_H
-#define GEOS_GEOM_DEFAULTCOORDINATESEQUENCEFACTORY_H
+#pragma once
 
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -63,4 +62,3 @@ public:
 }
 }
 
-#endif //GEOS_DEFAULTCOORDINATESEQUENCEFACTORY_H

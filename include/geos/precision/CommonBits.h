@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_COMMONBITS_H
-#define GEOS_PRECISION_COMMONBITS_H
+#pragma once
 
 #include <geos/export.h>
 #include <cstdint>
@@ -96,4 +95,3 @@ public:
 } // namespace geos.precision
 } // namespace geos
 
-#endif // GEOS_PRECISION_COMMONBITS_H

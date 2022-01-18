@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
-#define GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
+#pragma once
 
 #include <geos/operation/overlay/OverlayOp.h> // for enums
 #include <geos/precision/CommonBitsRemover.h> // for dtor visibility by unique_ptr
@@ -137,4 +136,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H

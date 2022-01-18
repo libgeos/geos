@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_FIXEDSIZECOORDINATESEQUENCE_H
-#define GEOS_GEOM_FIXEDSIZECOORDINATESEQUENCE_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -127,4 +126,3 @@ namespace geom {
 }
 }
 
-#endif

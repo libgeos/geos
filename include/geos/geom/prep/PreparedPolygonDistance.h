@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H
-#define GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H
+#pragma once
 
 // Forward declarations
 namespace geos {
@@ -64,4 +63,3 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_PREPAREDPOLYGONDISTANCE_H

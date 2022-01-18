@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_GEOMETRYTRANSFORMER_H
-#define GEOS_GEOM_UTIL_GEOMETRYTRANSFORMER_H
+#pragma once
 
 
 #include <geos/export.h>
@@ -192,4 +191,3 @@ private:
 } // namespace geos.geom
 } // namespace geos
 
-#endif // GEOS_GEOM_UTIL_GEOMETRYTRANSFORMER_H

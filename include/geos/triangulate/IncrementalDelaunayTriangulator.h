@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_INCREMENTALDELAUNAYTRIANGULATOR_H
-#define GEOS_TRIANGULATE_INCREMENTALDELAUNAYTRIANGULATOR_H
+#pragma once
 
 #include <list>
 
@@ -82,6 +81,4 @@ public:
 
 } //namespace geos.triangulate
 } //namespace goes
-
-#endif //GEOS_TRIANGULATE_QUADEDGE_INCREMENTALDELAUNAYTRIANGULATOR_H
 

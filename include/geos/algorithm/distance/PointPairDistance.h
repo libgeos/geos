@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
-#define GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
+#pragma once
 
 #include <geos/constants.h> // for DoubleNotANumber
 #include <geos/geom/Coordinate.h> // for inlines
@@ -149,6 +148,4 @@ private:
 } // geos::algorithm::distance
 } // geos::algorithm
 } // geos
-
-#endif // GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
 

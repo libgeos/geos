@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_ANGLE_H
-#define GEOS_ALGORITHM_ANGLE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/Orientation.h> // for constants
@@ -224,4 +223,3 @@ public:
 } // namespace geos
 
 
-#endif // GEOS_ALGORITHM_ANGLE_H

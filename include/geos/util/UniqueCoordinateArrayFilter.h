@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_UNIQUECOORDINATEARRAYFILTER_H
-#define GEOS_UTIL_UNIQUECOORDINATEARRAYFILTER_H
+#pragma once
 
 #include <geos/export.h>
 #include <cassert>
@@ -87,4 +86,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_UTIL_UNIQUECOORDINATEARRAYFILTER_H

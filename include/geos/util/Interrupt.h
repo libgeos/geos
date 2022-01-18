@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_INTERRUPT_H
-#define GEOS_UTIL_INTERRUPT_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -70,5 +69,3 @@ public:
 } // namespace geos::util
 } // namespace geos
 
-
-#endif // GEOS_UTIL_INTERRUPT_H

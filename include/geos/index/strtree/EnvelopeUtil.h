@@ -11,8 +11,7 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-#ifndef GEOS_INDEX_STRTREE_ENVELOPEUTIL_H
-#define GEOS_INDEX_STRTREE_ENVELOPEUTIL_H
+#pragma once
 
 #include <geos/geom/Envelope.h>
 
@@ -32,5 +31,3 @@ public:
 } // namespace geos::index::strtree
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_INDEX_STRTREE_ENVELOPEUTIL_H

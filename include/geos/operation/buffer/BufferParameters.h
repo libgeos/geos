@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_BUFFERPARAMETERS_H
-#define GEOS_OP_BUFFER_BUFFERPARAMETERS_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -317,6 +316,4 @@ private:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ndef GEOS_OP_BUFFER_BUFFERPARAMETERS_H
 

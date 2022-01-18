@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_RELATENODE_H
-#define GEOS_OP_RELATE_RELATENODE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -66,4 +65,3 @@ protected:
 } // namespace geos:operation
 } // namespace geos
 
-#endif // GEOS_OP_RELATE_RELATENODE_H

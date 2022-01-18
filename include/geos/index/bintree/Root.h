@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_BINTREE_ROOT_H
-#define GEOS_IDX_BINTREE_ROOT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/index/bintree/NodeBase.h> // for inheritance
@@ -75,6 +74,4 @@ protected:
 } // namespace geos::index::bintree
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_BINTREE_ROOT_H
 

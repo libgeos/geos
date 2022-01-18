@@ -19,8 +19,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_DISTANCE_DISCRETEFRECHETDISTANCE_H
-#define GEOS_ALGORITHM_DISTANCE_DISCRETEFRECHETDISTANCE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/algorithm/distance/PointPairDistance.h> // for composition
@@ -174,4 +173,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_ALGORITHM_DISTANCE_DISCRETEFRECHETDISTANCE_H

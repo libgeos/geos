@@ -11,8 +11,8 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-#ifndef GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
-#define GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
+
+#pragma once
 
 #include <geos/export.h>
 
@@ -57,4 +57,3 @@ private:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
