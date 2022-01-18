@@ -62,34 +62,31 @@ $(function() {
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> **********************************************************************/</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#ifndef GEOS_UTIL_MATH_H</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#define GEOS_UTIL_MATH_H</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>util {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#af43205472f6826cf9883c4229086c924">sym_round</a>(<span class="keywordtype">double</span> val);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#a7d1e45aeb83f6b273baead6b768f129e">java_math_round</a>(<span class="keywordtype">double</span> val);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#a0d1659eb4a266692ce5a82733e2d6244">rint_vc</a>(<span class="keywordtype">double</span> val);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">double</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<a class="code" href="namespacegeos_1_1util.html#a1256b1acb67c87ad2062787e617e25b0">round</a>(<span class="keywordtype">double</span> val)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1util.html#a7d1e45aeb83f6b273baead6b768f129e">java_math_round</a>(val);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;} <span class="comment">// namespace geos::util</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif // GEOS_UTIL_MATH_H</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>util {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#af43205472f6826cf9883c4229086c924">sym_round</a>(<span class="keywordtype">double</span> val);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#a7d1e45aeb83f6b273baead6b768f129e">java_math_round</a>(<span class="keywordtype">double</span> val);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">double</span> <a class="code" href="namespacegeos_1_1util.html#a0d1659eb4a266692ce5a82733e2d6244">rint_vc</a>(<span class="keywordtype">double</span> val);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">double</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<a class="code" href="namespacegeos_1_1util.html#a1256b1acb67c87ad2062787e617e25b0">round</a>(<span class="keywordtype">double</span> val)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1util.html#a7d1e45aeb83f6b273baead6b768f129e">java_math_round</a>(val);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">// namespace geos::util</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_1_1util_html_a0d1659eb4a266692ce5a82733e2d6244"><div class="ttname"><a href="namespacegeos_1_1util.html#a0d1659eb4a266692ce5a82733e2d6244">geos::util::rint_vc</a></div><div class="ttdeci">double rint_vc(double val)</div><div class="ttdoc">Equivalent to Java Math.rint()</div></div>
-<div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:26</div></div>
+<div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="anamespacegeos_1_1util_html_a7d1e45aeb83f6b273baead6b768f129e"><div class="ttname"><a href="namespacegeos_1_1util.html#a7d1e45aeb83f6b273baead6b768f129e">geos::util::java_math_round</a></div><div class="ttdeci">double java_math_round(double val)</div><div class="ttdoc">Asymmetric Rounding Algorithm.</div></div>
 <div class="ttc" id="anamespacegeos_1_1util_html_af43205472f6826cf9883c4229086c924"><div class="ttname"><a href="namespacegeos_1_1util.html#af43205472f6826cf9883c4229086c924">geos::util::sym_round</a></div><div class="ttdeci">double sym_round(double val)</div><div class="ttdoc">Symmetric Rounding Algorithm.</div></div>
-<div class="ttc" id="anamespacegeos_1_1util_html_a1256b1acb67c87ad2062787e617e25b0"><div class="ttname"><a href="namespacegeos_1_1util.html#a1256b1acb67c87ad2062787e617e25b0">geos::util::round</a></div><div class="ttdeci">double round(double val)</div><div class="ttdef"><b>Definition:</b> math.h:62</div></div>
+<div class="ttc" id="anamespacegeos_1_1util_html_a1256b1acb67c87ad2062787e617e25b0"><div class="ttname"><a href="namespacegeos_1_1util.html#a1256b1acb67c87ad2062787e617e25b0">geos::util::round</a></div><div class="ttdeci">double round(double val)</div><div class="ttdef"><b>Definition:</b> math.h:61</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
