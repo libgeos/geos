@@ -118,6 +118,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void geos::operation::overlayng::Edge::merge </td>
@@ -127,8 +130,14 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Merges an edge into this edge, updating the topology info accordingly. </p>
+<p>Marks this as a shell edge if any contributing edge is a shell. Update hole status first, since it depends on edge dim</p>
 
 </div>
 </div>
@@ -137,6 +146,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::Edge::relativeDirection </td>
@@ -146,8 +158,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Compares two coincident edges to determine whether they have the same or opposite direction. </p>
+
+<p class="reference">References <a class="el" href="classgeos_1_1geom_1_1Coordinate.html#ad98d685a0b7ecebf47e95742b96b7f42">geos::geom::Coordinate::compareTo()</a>.</p>
 
 </div>
 </div>

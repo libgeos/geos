@@ -84,12 +84,12 @@ $(function() {
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        DD(<span class="keywordtype">double</span> x) : hi(x), lo(0.0) {};</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        DD() : hi(0.0), lo(0.0) {};</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacegeos_1_1geom.html#aa3ab17cfa95af46ea53ac92482041d76">operator==</a>(<span class="keyword">const</span> DD &amp;rhs)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> DD &amp;rhs)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="keywordflow">return</span> hi == rhs.hi &amp;&amp; lo == rhs.lo;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        }</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacegeos_1_1geom.html#a9f7a30fa79d09664d0d305fb875c019d">operator!=</a>(<span class="keyword">const</span> DD &amp;rhs)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> DD &amp;rhs)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <span class="keywordflow">return</span> hi != rhs.hi || lo != rhs.lo;</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        }</div>
@@ -165,9 +165,7 @@ $(function() {
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="preprocessor">#endif // GEOS_MATH_DD_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="anamespacegeos_1_1geom_html_a9f7a30fa79d09664d0d305fb875c019d"><div class="ttname"><a href="namespacegeos_1_1geom.html#a9f7a30fa79d09664d0d305fb875c019d">geos::geom::operator!=</a></div><div class="ttdeci">bool operator!=(const Coordinate &amp;a, const Coordinate &amp;b)</div><div class="ttdoc">Inequality operator for Coordinate. 2D only.</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:26</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html_aa3ab17cfa95af46ea53ac92482041d76"><div class="ttname"><a href="namespacegeos_1_1geom.html#aa3ab17cfa95af46ea53ac92482041d76">geos::geom::operator==</a></div><div class="ttdeci">bool operator==(const Coordinate &amp;a, const Coordinate &amp;b)</div><div class="ttdoc">Equality operator for Coordinate. 2D only.</div></div>
 <div class="ttc" id="aclassgeos_1_1math_1_1DD_html"><div class="ttname"><a href="classgeos_1_1math_1_1DD.html">geos::math::DD</a></div><div class="ttdoc">Wrapper for DoubleDouble higher precision mathematics operations.</div><div class="ttdef"><b>Definition:</b> DD.h:132</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

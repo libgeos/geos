@@ -72,17 +72,24 @@ Public Member Functions</h2></td></tr>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a2e41ad97ba46dbc98881539e9f72f998">create</a> () const override</td></tr>
 <tr class="memdesc:a2e41ad97ba46dbc98881539e9f72f998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an empty <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>, the dimensions will be autodetected when it is populated. <br /></td></tr>
 <tr class="separator:a2e41ad97ba46dbc98881539e9f72f998"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4cdcd8209961d4a7176b72ca80fa83a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#ac4cdcd8209961d4a7176b72ca80fa83a">create</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; *coords, std::size_t dims=0) const override</td></tr>
-<tr class="memdesc:ac4cdcd8209961d4a7176b72ca80fa83a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array.  <a href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#ac4cdcd8209961d4a7176b72ca80fa83a">More...</a><br /></td></tr>
-<tr class="separator:ac4cdcd8209961d4a7176b72ca80fa83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd6b3a18250fdd19034dfb13fc8aa488"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#afd6b3a18250fdd19034dfb13fc8aa488">create</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&amp;coords, std::size_t dims=0) const override</td></tr>
-<tr class="memdesc:afd6b3a18250fdd19034dfb13fc8aa488"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array.  <a href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#afd6b3a18250fdd19034dfb13fc8aa488">More...</a><br /></td></tr>
-<tr class="separator:afd6b3a18250fdd19034dfb13fc8aa488"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48729892ad9c537810d12213159661b7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a48729892ad9c537810d12213159661b7">create</a> (std::size_t size, std::size_t dimension=0) const override</td></tr>
-<tr class="separator:a48729892ad9c537810d12213159661b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1549f62cfef7288faab4191a8debaba"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#ab1549f62cfef7288faab4191a8debaba">create</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;coordSeq) const override</td></tr>
-<tr class="memdesc:ab1549f62cfef7288faab4191a8debaba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> which is a copy of the given one.  <a href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#ab1549f62cfef7288faab4191a8debaba">More...</a><br /></td></tr>
-<tr class="separator:ab1549f62cfef7288faab4191a8debaba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafe1d0caa716459f921e212fe6c852e3"><td class="memItemLeft" align="right" valign="top"><a id="aafe1d0caa716459f921e212fe6c852e3"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; *coords, size_t dimension) const override</td></tr>
+<tr class="separator:aafe1d0caa716459f921e212fe6c852e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb18556c7efb745f8c9b8a1c5c7964a"><td class="memItemLeft" align="right" valign="top"><a id="abcb18556c7efb745f8c9b8a1c5c7964a"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&amp;coords, size_t dimension) const override</td></tr>
+<tr class="separator:abcb18556c7efb745f8c9b8a1c5c7964a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae95795c083f1fa4bae2c3973d356d4e"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#aae95795c083f1fa4bae2c3973d356d4e">create</a> (std::size_t size, std::size_t dimension) const override</td></tr>
+<tr class="separator:aae95795c083f1fa4bae2c3973d356d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86298ffb9df7f1aeb9855a1ea4f74782"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a86298ffb9df7f1aeb9855a1ea4f74782">create</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;seq) const override</td></tr>
+<tr class="memdesc:a86298ffb9df7f1aeb9855a1ea4f74782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> which is a copy of the given one.  <a href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a86298ffb9df7f1aeb9855a1ea4f74782">More...</a><br /></td></tr>
+<tr class="separator:a86298ffb9df7f1aeb9855a1ea4f74782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html">geos::geom::CoordinateSequenceFactory</a></td></tr>
+<tr class="memitem:a54dbbc526aa53d716a7bdc443e40efaa inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a54dbbc526aa53d716a7bdc443e40efaa">create</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; *coordinates, std::size_t dimension=0) const =0</td></tr>
+<tr class="memdesc:a54dbbc526aa53d716a7bdc443e40efaa inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array.  <a href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a54dbbc526aa53d716a7bdc443e40efaa">More...</a><br /></td></tr>
+<tr class="separator:a54dbbc526aa53d716a7bdc443e40efaa inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c94ff71a513acf9d6c92063f7682a64 inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a8c94ff71a513acf9d6c92063f7682a64">create</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&amp;coordinates, std::size_t dimension=0) const =0</td></tr>
+<tr class="memdesc:a8c94ff71a513acf9d6c92063f7682a64 inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array.  <a href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a8c94ff71a513acf9d6c92063f7682a64">More...</a><br /></td></tr>
+<tr class="separator:a8c94ff71a513acf9d6c92063f7682a64 inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequenceFactory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -94,8 +101,8 @@ static const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Creates CoordinateSequences internally represented as an array of Coordinates. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab1549f62cfef7288faab4191a8debaba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1549f62cfef7288faab4191a8debaba">&#9670;&nbsp;</a></span>create() <span class="overload">[1/4]</span></h2>
+<a id="a86298ffb9df7f1aeb9855a1ea4f74782"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86298ffb9df7f1aeb9855a1ea4f74782">&#9670;&nbsp;</a></span>create() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,7 +120,7 @@ static const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -131,8 +138,8 @@ static const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.
 
 </div>
 </div>
-<a id="a48729892ad9c537810d12213159661b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48729892ad9c537810d12213159661b7">&#9670;&nbsp;</a></span>create() <span class="overload">[2/4]</span></h2>
+<a id="aae95795c083f1fa4bae2c3973d356d4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae95795c083f1fa4bae2c3973d356d4e">&#9670;&nbsp;</a></span>create() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +157,7 @@ static const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>dimension</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>dimension</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -160,109 +167,13 @@ static const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd>CoordinateSequenceFactory::create(std::size_t, int) </dd></dl>
 
 <p>Implements <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a3f8f0a94a5159eca2a2869978abeaeee">geos::geom::CoordinateSequenceFactory</a>.</p>
-
-</div>
-</div>
-<a id="afd6b3a18250fdd19034dfb13fc8aa488"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd6b3a18250fdd19034dfb13fc8aa488">&#9670;&nbsp;</a></span>create() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::geom::CoordinateArraySequenceFactory::create </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>coordinates</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>dimension</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">coordinates</td><td>the coordinates </td></tr>
-    <tr><td class="paramname">dimension</td><td>0, 2 or 3 with 0 indicating unknown at this time. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a8c94ff71a513acf9d6c92063f7682a64">geos::geom::CoordinateSequenceFactory</a>.</p>
-
-</div>
-</div>
-<a id="ac4cdcd8209961d4a7176b72ca80fa83a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4cdcd8209961d4a7176b72ca80fa83a">&#9670;&nbsp;</a></span>create() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::geom::CoordinateArraySequenceFactory::create </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; *&#160;</td>
-          <td class="paramname"><em>coordinates</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>dimension</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> based on the given array. </p>
-<p>Whether the array is copied or simply referenced is implementation-dependent. For this reason caller does give up ownership of it. Implementations that will not copy it will need take care of deleting it.</p>
-<p>This method must handle null arguments by creating an empty sequence.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">coordinates</td><td>the coordinates </td></tr>
-    <tr><td class="paramname">dimension</td><td>0, 2 or 3 with 0 indicating unknown at this time. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a54dbbc526aa53d716a7bdc443e40efaa">geos::geom::CoordinateSequenceFactory</a>.</p>
 
 </div>
 </div>

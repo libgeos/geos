@@ -68,13 +68,13 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/inline.h&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;geos/geom/GeometryFactory.h&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;geos/io/ParseException.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;geos/geom/GeometryFactory.h&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;geos/io/ParseException.h&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// Forward declarations</span></div>
@@ -104,67 +104,77 @@ $(function() {
 <div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html">   59</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a> {</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>&amp; gf);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* gf);</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html#abfd9090201e1d7283ad937abef91d8e7">   70</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1io_1_1WKTReader.html#abfd9090201e1d7283ad937abef91d8e7">WKTReader</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>&amp; gf)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        : geometryFactory(&amp;gf)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        , precisionModel(gf.getPrecisionModel())</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        {};</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html#aad70c3967e936a2becd6b7feafd53df0">   76</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1io_1_1WKTReader.html#aad70c3967e936a2becd6b7feafd53df0">WKTReader</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* gf)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        : geometryFactory(gf)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        , precisionModel(gf-&gt;getPrecisionModel())</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        {};</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    ~<a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a>();</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">   85</a></span>&#160;    std::unique_ptr&lt;T&gt; <a class="code" href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">read</a>(<span class="keyword">const</span> std::string&amp; wkt)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">auto</span> g = read(wkt);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">auto</span> gt = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(g.get());</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">if</span> (!gt) {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="comment">// Can improve this message once there&#39;s a good way to get a string repr of T</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1io_1_1ParseException.html">io::ParseException</a>(<span class="stringliteral">&quot;Unexpected WKT type&quot;</span>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">return</span> std::unique_ptr&lt;T&gt;(<span class="keyword">static_cast&lt;</span>T*<span class="keyword">&gt;</span>(g.release()));</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; read(<span class="keyword">const</span> std::string&amp; wellKnownText) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; getCoordinates(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> getNextNumber(io::StringTokenizer* tokenizer);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">static</span> std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t&amp; dim);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">static</span> std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> std::string getNextCloser(io::StringTokenizer* tokenizer);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">static</span> std::string getNextWord(io::StringTokenizer* tokenizer);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; readGeometryTaggedText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    std::unique_ptr&lt;geom::Point&gt; readPointText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    std::unique_ptr&lt;geom::LineString&gt; readLineStringText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::unique_ptr&lt;geom::LinearRing&gt; readLinearRingText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::unique_ptr&lt;geom::MultiPoint&gt; readMultiPointText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    std::unique_ptr&lt;geom::Polygon&gt; readPolygonText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::unique_ptr&lt;geom::MultiLineString&gt; readMultiLineStringText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    std::unique_ptr&lt;geom::MultiPolygon&gt; readMultiPolygonText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    std::unique_ptr&lt;geom::GeometryCollection&gt; readGeometryCollectionText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geometryFactory;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>* precisionModel;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> getPreciseCoordinate(io::StringTokenizer* tokenizer, <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp;, std::size_t&amp; dim) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isNumberNext(io::StringTokenizer* tokenizer);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;} <span class="comment">// namespace io</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#ifdef GEOS_INLINE</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor"># include &quot;geos/io/WKTReader.inl&quot;</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html#ab04a3aaa3cb4f30ad0d570bfb61a30fc">   85</a></span>&#160;    <a class="code" href="classgeos_1_1io_1_1WKTReader.html#ab04a3aaa3cb4f30ad0d570bfb61a30fc">WKTReader</a>()</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        : geometryFactory(geom::GeometryFactory::getDefaultInstance())</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        , precisionModel(geometryFactory-&gt;getPrecisionModel())</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        {};</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    ~<a class="code" href="classgeos_1_1io_1_1WKTReader.html">WKTReader</a>() {};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">   94</a></span>&#160;    std::unique_ptr&lt;T&gt; <a class="code" href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">read</a>(<span class="keyword">const</span> std::string&amp; wkt)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">auto</span> g = read(wkt);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">auto</span> gt = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(g.get());</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">if</span> (!gt) {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="comment">// Can improve this message once there&#39;s a good way to get a string repr of T</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1io_1_1ParseException.html">io::ParseException</a>(<span class="stringliteral">&quot;Unexpected WKT type&quot;</span>);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> std::unique_ptr&lt;T&gt;(<span class="keyword">static_cast&lt;</span>T*<span class="keyword">&gt;</span>(g.release()));</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; read(<span class="keyword">const</span> std::string&amp; wellKnownText) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; getCoordinates(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> getNextNumber(io::StringTokenizer* tokenizer);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">static</span> std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, std::size_t&amp; dim);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keyword">static</span> std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keyword">static</span> std::string getNextCloser(io::StringTokenizer* tokenizer);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">static</span> std::string getNextWord(io::StringTokenizer* tokenizer);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; readGeometryTaggedText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    std::unique_ptr&lt;geom::Point&gt; readPointText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    std::unique_ptr&lt;geom::LineString&gt; readLineStringText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    std::unique_ptr&lt;geom::LinearRing&gt; readLinearRingText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    std::unique_ptr&lt;geom::MultiPoint&gt; readMultiPointText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    std::unique_ptr&lt;geom::Polygon&gt; readPolygonText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    std::unique_ptr&lt;geom::MultiLineString&gt; readMultiLineStringText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    std::unique_ptr&lt;geom::MultiPolygon&gt; readMultiPolygonText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    std::unique_ptr&lt;geom::GeometryCollection&gt; readGeometryCollectionText(io::StringTokenizer* tokenizer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geometryFactory;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>* precisionModel;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">void</span> getPreciseCoordinate(io::StringTokenizer* tokenizer, <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp;, std::size_t&amp; dim) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isNumberNext(io::StringTokenizer* tokenizer);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;};</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace io</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition:</b> PrecisionModel.h:91</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:26</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:84</div></div>
+<div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html_abfd9090201e1d7283ad937abef91d8e7"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html#abfd9090201e1d7283ad937abef91d8e7">geos::io::WKTReader::WKTReader</a></div><div class="ttdeci">WKTReader(const geom::GeometryFactory &amp;gf)</div><div class="ttdoc">Initialize parser with given GeometryFactory.</div><div class="ttdef"><b>Definition:</b> WKTReader.h:70</div></div>
+<div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html_ab04a3aaa3cb4f30ad0d570bfb61a30fc"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html#ab04a3aaa3cb4f30ad0d570bfb61a30fc">geos::io::WKTReader::WKTReader</a></div><div class="ttdeci">WKTReader()</div><div class="ttdoc">Initialize parser with default GeometryFactory.</div><div class="ttdef"><b>Definition:</b> WKTReader.h:85</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html">geos::io::WKTReader</a></div><div class="ttdoc">WKT parser class; see also WKTWriter.</div><div class="ttdef"><b>Definition:</b> WKTReader.h:59</div></div>
 <div class="ttc" id="aclassgeos_1_1io_1_1ParseException_html"><div class="ttname"><a href="classgeos_1_1io_1_1ParseException.html">geos::io::ParseException</a></div><div class="ttdoc">Notifies a parsing error.</div><div class="ttdef"><b>Definition:</b> ParseException.h:68</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:68</div></div>
-<div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html_a69b83fcb8e923c9d025798f81961de5e"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">geos::io::WKTReader::read</a></div><div class="ttdeci">std::unique_ptr&lt; T &gt; read(const std::string &amp;wkt) const</div><div class="ttdoc">Parse a WKT string returning a Geometry.</div><div class="ttdef"><b>Definition:</b> WKTReader.h:85</div></div>
+<div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html_aad70c3967e936a2becd6b7feafd53df0"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html#aad70c3967e936a2becd6b7feafd53df0">geos::io::WKTReader::WKTReader</a></div><div class="ttdeci">WKTReader(const geom::GeometryFactory *gf)</div><div class="ttdef"><b>Definition:</b> WKTReader.h:76</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:67</div></div>
+<div class="ttc" id="aclassgeos_1_1io_1_1WKTReader_html_a69b83fcb8e923c9d025798f81961de5e"><div class="ttname"><a href="classgeos_1_1io_1_1WKTReader.html#a69b83fcb8e923c9d025798f81961de5e">geos::io::WKTReader::read</a></div><div class="ttdeci">std::unique_ptr&lt; T &gt; read(const std::string &amp;wkt) const</div><div class="ttdoc">Parse a WKT string returning a Geometry.</div><div class="ttdef"><b>Definition:</b> WKTReader.h:94</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

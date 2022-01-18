@@ -105,6 +105,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInResultArea</b> ()
 <tr class="memitem:a791459d6b0815e2f093b80341a0b7999"><td class="memItemLeft" align="right" valign="top"><a id="a791459d6b0815e2f093b80341a0b7999"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInResultAreaBoth</b> () const</td></tr>
 <tr class="separator:a791459d6b0815e2f093b80341a0b7999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abec203ea2877de80623bad26b5650c43"><td class="memItemLeft" align="right" valign="top"><a id="abec203ea2877de80623bad26b5650c43"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInResultEither</b> () const</td></tr>
+<tr class="separator:abec203ea2877de80623bad26b5650c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fcd30521083e5cb2bd97fee2b91dc3d"><td class="memItemLeft" align="right" valign="top"><a id="a5fcd30521083e5cb2bd97fee2b91dc3d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>unmarkFromResultAreaBoth</b> ()</td></tr>
 <tr class="separator:a5fcd30521083e5cb2bd97fee2b91dc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,9 +126,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>markInResultLine</b> 
 <tr class="memitem:acf65eeeb92c82a9870de9e169557cdfb"><td class="memItemLeft" align="right" valign="top"><a id="acf65eeeb92c82a9870de9e169557cdfb"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInResult</b> () const</td></tr>
 <tr class="separator:acf65eeeb92c82a9870de9e169557cdfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abec203ea2877de80623bad26b5650c43"><td class="memItemLeft" align="right" valign="top"><a id="abec203ea2877de80623bad26b5650c43"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInResultEither</b> () const</td></tr>
-<tr class="separator:abec203ea2877de80623bad26b5650c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab26c10cc4b4ea5fab10e9acdfe2d0695"><td class="memItemLeft" align="right" valign="top"><a id="ab26c10cc4b4ea5fab10e9acdfe2d0695"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setNextResult</b> (<a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a> *e)</td></tr>
 <tr class="separator:ab26c10cc4b4ea5fab10e9acdfe2d0695"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,18 +150,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isVisited</b> () cons
 <tr class="memitem:a06cc25760587517c3c2939e1b97d4170"><td class="memItemLeft" align="right" valign="top"><a id="a06cc25760587517c3c2939e1b97d4170"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>markVisitedBoth</b> ()</td></tr>
 <tr class="separator:a06cc25760587517c3c2939e1b97d4170"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a721272e85d336f9f805a61bc1e22676f"><td class="memItemLeft" align="right" valign="top"><a id="a721272e85d336f9f805a61bc1e22676f"></a>
-const OverlayEdgeRing *&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgeRing</b> () const</td></tr>
-<tr class="separator:a721272e85d336f9f805a61bc1e22676f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24d578e8a405f394122e2e9c7de3148d"><td class="memItemLeft" align="right" valign="top"><a id="a24d578e8a405f394122e2e9c7de3148d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setEdgeRing</b> (const OverlayEdgeRing *p_edgeRing)</td></tr>
 <tr class="separator:a24d578e8a405f394122e2e9c7de3148d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a721272e85d336f9f805a61bc1e22676f"><td class="memItemLeft" align="right" valign="top"><a id="a721272e85d336f9f805a61bc1e22676f"></a>
+const OverlayEdgeRing *&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgeRing</b> () const</td></tr>
+<tr class="separator:a721272e85d336f9f805a61bc1e22676f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d2c975814c42d8f37b9244e97a8e69c"><td class="memItemLeft" align="right" valign="top"><a id="a5d2c975814c42d8f37b9244e97a8e69c"></a>
 const MaximalEdgeRing *&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgeRingMax</b> () const</td></tr>
 <tr class="separator:a5d2c975814c42d8f37b9244e97a8e69c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa459f0cd251321c8955d210acce9f428"><td class="memItemLeft" align="right" valign="top"><a id="aa459f0cd251321c8955d210acce9f428"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setEdgeRingMax</b> (const MaximalEdgeRing *maximalEdgeRing)</td></tr>
-<tr class="separator:aa459f0cd251321c8955d210acce9f428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9af38aee1c73ea98a4c591f084c5a9"><td class="memItemLeft" align="right" valign="top"><a id="a7a9af38aee1c73ea98a4c591f084c5a9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEdgeRingMax</b> (const MaximalEdgeRing *p_maximalEdgeRing)</td></tr>
+<tr class="separator:a7a9af38aee1c73ea98a4c591f084c5a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a559172126aa5080b26ead2f30520088b"><td class="memItemLeft" align="right" valign="top"><a id="a559172126aa5080b26ead2f30520088b"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>resultSymbol</b> () const</td></tr>
 <tr class="separator:a559172126aa5080b26ead2f30520088b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,7 +267,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>toStringNode</
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

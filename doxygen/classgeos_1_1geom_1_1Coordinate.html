@@ -48,6 +48,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1geom_1_1Coordinate-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::geom::Coordinate Class Reference</div>  </div>
@@ -80,6 +81,9 @@ typedef std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memItemLeft" align="right" valign="top"><a id="a5962f9f08a8c0e3ce9d6b4a1dbf53765"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Coordinate</b> (double xNew, double yNew, double zNew=DoubleNotANumber)</td></tr>
+<tr class="separator:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97bb820b994c6a77cbe50db79f80a2c2"><td class="memItemLeft" align="right" valign="top"><a id="a97bb820b994c6a77cbe50db79f80a2c2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setNull</b> ()</td></tr>
 <tr class="separator:a97bb820b994c6a77cbe50db79f80a2c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -89,9 +93,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isNull</b> () const</
 <tr class="memitem:a78cd2ab9cf4a32d59c44ad1866306599"><td class="memItemLeft" align="right" valign="top"><a id="a78cd2ab9cf4a32d59c44ad1866306599"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> () const</td></tr>
 <tr class="separator:a78cd2ab9cf4a32d59c44ad1866306599"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memItemLeft" align="right" valign="top"><a id="a5962f9f08a8c0e3ce9d6b4a1dbf53765"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Coordinate</b> (double xNew, double yNew, double zNew=DoubleNotANumber)</td></tr>
-<tr class="separator:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13f850167c130391c7b2bd7a6023393f"><td class="memItemLeft" align="right" valign="top"><a id="a13f850167c130391c7b2bd7a6023393f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals2D</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;other) const</td></tr>
 <tr class="separator:a13f850167c130391c7b2bd7a6023393f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,6 +141,21 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#af0c1b234c851ae467c371dea8861612f">z</a></td></tr>
 <tr class="memdesc:af0c1b234c851ae467c371dea8861612f"><td class="mdescLeft">&#160;</td><td class="mdescRight">z-coordinate <br /></td></tr>
 <tr class="separator:af0c1b234c851ae467c371dea8861612f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="memItemLeft" align="right" valign="top"><a id="a004f9fac1c6f3f968cc2d93d92aa741b"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a004f9fac1c6f3f968cc2d93d92aa741b">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c)</td></tr>
+<tr class="memdesc:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output function. <br /></td></tr>
+<tr class="separator:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e86dc3be8d723fd81b4a57b953fa2fc"><td class="memItemLeft" align="right" valign="top"><a id="a0e86dc3be8d723fd81b4a57b953fa2fc"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a0e86dc3be8d723fd81b4a57b953fa2fc">operator==</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b)</td></tr>
+<tr class="memdesc:a0e86dc3be8d723fd81b4a57b953fa2fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality operator for <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. 2D only. <br /></td></tr>
+<tr class="separator:a0e86dc3be8d723fd81b4a57b953fa2fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35fbef891cade207b4ff5d0c8886fa66"><td class="memItemLeft" align="right" valign="top"><a id="a35fbef891cade207b4ff5d0c8886fa66"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a35fbef891cade207b4ff5d0c8886fa66">operator!=</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b)</td></tr>
+<tr class="memdesc:a35fbef891cade207b4ff5d0c8886fa66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inequality operator for <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. 2D only. <br /></td></tr>
+<tr class="separator:a35fbef891cade207b4ff5d0c8886fa66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> is the lightweight class used to store coordinates. </p>
@@ -152,6 +168,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double geos::geom::Coordinate::distance </td>
@@ -161,10 +180,15 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>TODO: obsoleted this, can use PrecisionModel::makePrecise(Coordinate*) instead </p>
 
-<p class="reference">Referenced by <a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html#aa0fd023cfeded813e34cf626067be8fe">geos::triangulate::quadedge::QuadEdge::rPrev()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a9270006ee6ceaa455cca385a32fb2c45">geos::geom::LineSegment::getLength()</a>, and <a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html#aa0fd023cfeded813e34cf626067be8fe">geos::triangulate::quadedge::QuadEdge::rPrev()</a>.</p>
 
 </div>
 </div>

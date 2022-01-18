@@ -58,7 +58,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a3da9c52f2e423d3527fcbc2b8ae7b615"><td class="memItemLeft" align="right" valign="top"><a id="a3da9c52f2e423d3527fcbc2b8ae7b615"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <br />
+<tr class="memitem:a48b140d902d7e633124ae008d361edd9"><td class="memItemLeft" align="right" valign="top"><a id="a48b140d902d7e633124ae008d361edd9"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <br />
 &#160;&#160;<b>DIM_UNKNOWN</b> = -1, 
 <b>DIM_NOT_PART</b> = -1, 
 <b>DIM_LINE</b> = 1, 
@@ -67,7 +67,7 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>DIM_COLLAPSE</b> = 3
 <br />
  }</td></tr>
-<tr class="separator:a3da9c52f2e423d3527fcbc2b8ae7b615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a48b140d902d7e633124ae008d361edd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -218,6 +218,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> geos::operation::overlayng::OverlayLabel::getLocation </td>
@@ -227,6 +230,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Gets the linear location for the given source.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -244,6 +252,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> geos::operation::overlayng::OverlayLabel::getLocationBoundaryOrLine </td>
@@ -269,6 +280,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td></td><td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Gets the location for this label for either a Boundary or a Line edge. This supports a simple determination of whether the edge should be included as a result edge.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -288,6 +304,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isBoundaryCollapse </td>
@@ -296,6 +315,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests if the label is for a collapsed edge of an area which is coincident with the boundary of the other area.</p>
 <dl class="section return"><dt>Returns</dt><dd>true if the label is for a collapse coincident with a boundary </dd></dl>
@@ -307,6 +331,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isBoundarySingleton </td>
@@ -315,6 +342,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests whether a label is for an edge which is a boundary of one geometry and not part of the other. </p>
 
@@ -325,6 +357,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isBoundaryTouch </td>
@@ -333,8 +368,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests if a label is for an edge where two area touch along their boundary. </p>
+
+<p class="reference">References <a class="el" href="classgeos_1_1geom_1_1Position.html#a228200f353bf941a0610507c2bbe43eeaf82adfdb4551c2ff226177fc201a39aa">geos::geom::Position::RIGHT</a>.</p>
 
 </div>
 </div>
@@ -361,6 +403,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isInteriorCollapse </td>
@@ -369,6 +414,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests if a label is a Collapse has location INTERIOR, to at least one source geometry. </p>
 
@@ -379,6 +429,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isLineInArea </td>
@@ -388,6 +441,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests if a line edge is inside </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -404,6 +462,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool geos::operation::overlayng::OverlayLabel::isLineInterior </td>
@@ -413,6 +474,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Tests if a line is in the interior of a source geometry.</p>
 <dl class="params"><dt>Parameters</dt><dd>
