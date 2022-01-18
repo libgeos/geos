@@ -30,6 +30,7 @@
 #include <iostream> // for ostream
 #include <functional> // for std::hash
 #include <memory> // for unique_ptr
+#include <cassert>
 
 // Forward declarations
 namespace geos {
