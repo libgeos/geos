@@ -198,13 +198,17 @@ target_compile_options(geos_cxx_flags INTERFACE
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
 option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
-if(NOT DISABLE_GEOS_INLINE)
-  target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
-  message(STATUS
-    "GEOS: Function inlining ENABLED")
-else()
+if(DISABLE_GEOS_INLINE)
+  target_compile_options(geos_cxx_flags INTERFACE
+  "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-fno-inline-functions>"
+  "$<$<CXX_COMPILER_ID:GNU>:-fno-inline>"
+  "$<$<CXX_COMPILER_ID:MSVC>:/Ob0>"
+  )
   message(STATUS
     "GEOS: Function inlining DISABLED")
+else()
+  message(STATUS
+    "GEOS: Function inlining ENABLED")
 endif()
 
 # Make sure NDEBUG is defined so that assert() is disabled for
