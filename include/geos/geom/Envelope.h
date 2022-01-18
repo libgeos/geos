@@ -514,7 +514,7 @@ public:
     /** \brief
      * Check if the point p intersects (lies inside) the region of this Envelope.
      *
-     * @param  p the Coordinate to be tested
+     * @param other the Coordinate to be tested
      * @return true if the point intersects this Envelope
      */
     bool intersects(const Coordinate& other) const
@@ -676,8 +676,8 @@ public:
      * used to define the envelope is not significant.
      *
      * @param c the coordinate to from which distance should be found
-     * @param p1 first coordinate defining an envelope
-     * @param p2 second coordinate defining an envelope.
+     * @param p0 first coordinate defining an envelope
+     * @param p1 second coordinate defining an envelope.
      */
     static double distanceSquaredToCoordinate(
         const Coordinate& c,
