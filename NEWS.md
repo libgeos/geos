@@ -9,6 +9,7 @@
   - Fix SnapRoundingNoder to use tolerance in noding; also fixes GeometryPrecisionReducer (#504, Sergei)
   - Allow direct setting of grid size (GH-513, Martin Davis)
   - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
+  - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
 
 - Changes:
 
