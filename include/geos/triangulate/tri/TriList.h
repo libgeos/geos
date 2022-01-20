@@ -116,6 +116,28 @@ public:
         return length;
     };
 
+    /* public */
+    std::size_t
+    degree(const TriType* tri, TriIndex index)
+    {
+        Coordinate& v = tri->getCoordinate(index);
+        int degree = 0;
+        for (auto* tri : *this) {
+            for (TriIndex i = 0; i < 3; i++) {
+                if (v.equals2D(tri->getCoordinate(i)))
+                    degree++;
+            }
+        }
+        return degree;
+    }
+
+    void validate()
+    {
+        for (auto* tri : *this) {
+            tri->validate();
+        }
+    }
+
     std::unique_ptr<Geometry> toGeometry(
         const GeometryFactory* geomFact) const
     {

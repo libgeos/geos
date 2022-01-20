@@ -44,7 +44,7 @@ namespace tri {         // geos.triangulate.tri
  * Tris are constructed independently, and if needed linked
  * into a triangulation using {@link TriangulationBuilder}.
  *
- * @author mdavis
+ * @author Martin Davis
  *
  */
 class GEOS_DLL Tri {
@@ -125,6 +125,7 @@ public:
     * Tri in the adjacent Tris are set to nullptr.
     */
     void remove();
+    void remove(TriList<Tri>& triList);
 
     void validate();
     void validateAdjacent(TriIndex index);
@@ -142,17 +143,40 @@ public:
 
     Tri* getAdjacent(TriIndex i) const;
     bool hasAdjacent(TriIndex i) const;
+    bool hasAdjacent() const;
     bool isAdjacent(Tri* tri) const;
+
     int numAdjacent() const;
 
     static TriIndex next(TriIndex i);
     static TriIndex prev(TriIndex i);
     static TriIndex oppVertex(TriIndex edgeIndex);
     static TriIndex oppEdge(TriIndex vertexIndex);
+
+    /**
+    * Tests if a tri vertex is interior.
+    * A vertex of a triangle is interior if it
+    * is fully surrounded by other triangles.
+    *
+    * @param index the vertex index
+    * @return true if the vertex is interior
+    */
+    bool isInteriorVertex(TriIndex index) const;
+
+    bool isBorder() const;
+    bool isBoundary(TriIndex index) const;
     Coordinate midpoint(TriIndex edgeIndex) const;
 
     double getArea() const;
     double getLength() const;
+
+
+
+
+
+
+
+
 
     std::unique_ptr<Polygon> toPolygon(const GeometryFactory* gf) const;
 

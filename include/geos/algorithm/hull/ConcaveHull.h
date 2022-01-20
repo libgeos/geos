@@ -51,89 +51,6 @@ namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
 
 
-
-class HullTri : public Tri
-{
-    private:
-
-        double m_size;
-        bool m_isMarked = false;
-
-    public:
-
-        HullTri(const Coordinate& c0, const Coordinate& c1, const Coordinate& c2)
-            : Tri(c0, c1, c2)
-            , m_size(Triangle::longestSideLength(c0, c1, c2))
-            {};
-
-        double getSize() const;
-        bool isMarked() const;
-        void setSizeToBorder();
-        void setMarked(bool marked);
-        bool isBorder() const;
-        bool isBorder(TriIndex index) const;
-        TriIndex borderIndex() const;
-        double lengthOfLongestEdge() const;
-        double lengthOfBorder() const;
-        HullTri* nextBorderTri() ;
-        int compareTo(const HullTri* o) const;
-        static bool isConnected(TriList<HullTri>& triList, HullTri* exceptTri);
-        static void clearMarks(TriList<HullTri>& triList);
-        static HullTri* findTri(TriList<HullTri>& triList, Tri* exceptTri);
-        static bool isAllMarked(TriList<HullTri>& triList);
-        static void markConnected(HullTri* triStart, HullTri* exceptTri);
-
-        /**
-        * Gets the most CCW border edge index.
-        * This assumes there is at least one non-border edge.
-        *
-        * @return the CCW border edge index
-        */
-        TriIndex borderIndexCCW() const;
-
-        /**
-        * Gets the most CW border edge index.
-        * This assumes there is at least one non-border edge.
-        *
-        * @return the CW border edge index
-        */
-        TriIndex borderIndexCW() const;
-
-        friend std::ostream& operator<<(std::ostream& os, const HullTri& ht);
-
-}; // HullTri
-
-
-class HullTriVisitor : public TriangleVisitor
-{
-
-    private:
-
-        TriList<HullTri>& triList;
-
-    public:
-
-        HullTriVisitor(TriList<HullTri>& p_triList)
-            : triList(p_triList)
-            {};
-
-        void visit(std::array<QuadEdge*, 3>& triEdges);
-
-}; // HullTriVisitor
-
-
-// Sort in inverse order (largest to smallest) in
-// the std::priority_queue
-struct HullTriCompare {
-    bool operator()(const HullTri* a, const HullTri* b)
-    {
-        if (a->getSize() == b->getSize())
-            return a->getArea() < b->getArea();
-        else
-            return a->getSize() < b->getSize();
-    }
-};
-
 typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTriCompare> HullTriQueue;
 
 
@@ -176,7 +93,6 @@ public:
         : inputGeometry(geom)
         , maxEdgeLength(0.0)
         , maxEdgeLengthRatio(-1.0)
-        , maxAreaRatio(0.0)
         , isHolesAllowed(false)
         , geomFactory(geom->getFactory())
         {};
@@ -225,25 +141,34 @@ public:
 
     /**
     * Computes the concave hull of the vertices in a geometry
-    * using the target criteria of maximum area ratio.
+    * using the target criterion of maximum edge length factor,
+    * and optionally allowing holes.
+    * The edge length factor is a fraction of the length difference
+    * between the longest and shortest edges
+    * in the Delaunay Triangulation of the input points.
     *
     * @param geom the input geometry
-    * @param areaRatio the target maximum area ratio
+    * @param lengthRatio the target maximum edge length
+    * @param isHolesAllowed whether holes are allowed in the result
     * @return the concave hull
     */
-    static std::unique_ptr<Geometry> concaveHullByArea(
-        const Geometry* geom, double areaRatio);
+    static std::unique_ptr<Geometry> concaveHullByLengthRatio(
+        const Geometry* geom, double lengthRatio, bool isHolesAllowed);
 
     /**
     * Sets the target maximum edge length for the concave hull.
-    * A value of 0.0 produces a concave hull of minimum area
-    * that is still connected.
-    * The uniformEdgeLength() may be used as
+    * The length value must be zero or greater.
+    *
+    *  * The value 0.0 produces the concave hull of smallest area
+    *    that is still connected.
+    *  * Larger values produce less concave results.
+    *    A value equal or greater than the longest Delaunay Triangulation edge length
+    *    produces the convex hull.
+    *
+    * The uniformGridEdgeLength value may be used as
     * the basis for estimating an appropriate target maximum edge length.
     *
     * @param edgeLength a non-negative length
-    *
-    * @see uniformEdgeLength()
     */
     void setMaximumEdgeLength(double edgeLength);
 
@@ -261,17 +186,6 @@ public:
     void setMaximumEdgeLengthRatio(double edgeLengthRatio);
 
     /**
-    * Sets the target maximum concave hull area as a ratio of the convex hull area.
-    * A value of 1.0 produces the convex hull
-    * (unless a maximum edge length is also specified).
-    * A value of 0.0 produces a concave hull with the smallest area
-    * that is still connected.
-    *
-    * @param areaRatio a ratio value between 0 and 1
-    */
-    void setMaximumAreaRatio(double areaRatio);
-
-    /**
     * Sets whether holes are allowed in the concave hull polygon.
     *
     * @param holesAllowed true if holes are allowed in the result
@@ -285,8 +199,6 @@ public:
     */
     std::unique_ptr<Geometry> getHull();
 
-    static HullTri* findBorderTri(TriList<HullTri>& triList);
-
 
 private:
 
@@ -294,16 +206,16 @@ private:
     const Geometry* inputGeometry;
     double maxEdgeLength;
     double maxEdgeLengthRatio;
-    double maxAreaRatio;
     bool isHolesAllowed;
     const GeometryFactory* geomFactory;
-
-    void computeHull(TriList<HullTri>& triList);
-    void initQueue(HullTriQueue& queue, TriList<HullTri>& triList);
 
     static double computeTargetEdgeLength(
         TriList<HullTri>& triList,
         double edgeLengthFactor);
+
+    void computeHull(TriList<HullTri>& triList);
+    void computeHullBorder(TriList<HullTri>& triList);
+    void createBorderQueue(HullTriQueue& queue, TriList<HullTri>& triList);
 
     /**
     * Adds a Tri to the queue.
@@ -314,90 +226,21 @@ private:
     * @param queue the priority queue
     */
     void addBorderTri(HullTri* tri, HullTriQueue& queue);
-    bool isBelowAreaThreshold(double areaConcave, double areaConvex) const;
     bool isBelowLengthThreshold(const HullTri* tri) const;
+    void computeHullHoles(TriList<HullTri>& triList);
 
-    /**
-    * Tests whether a Tri can be removed while preserving
-    * the connectivity of the hull.
-    *
-    * @param tri the Tri to test
-    * @param triList
-    * @return true if the Tri can be removed
-    */
-    bool isRemovable(HullTri* tri, TriList<HullTri>& triList);
+    static std::vector<HullTri*> findCandidateHoles(
+        TriList<HullTri>& triList, double minEdgeLen);
 
-    static bool hasVertexSingleAdjacent(
-        const HullTri* tri,
-        const TriList<HullTri>& triList);
+    void removeHole(TriList<HullTri>& triList, HullTri* triHole);
 
-    /**
-    * The degree of a Tri vertex is the number of tris containing it.
-    * This must be done by searching the entire triangulation,
-    * since the containing tris may not be adjacent or edge-connected.
-    *
-    * @param v a vertex coordinate
-    * @param triList the triangulation
-    * @return the degree of the vertex
-    */
-    static std::size_t degree(
-        const Coordinate& v,
-        const TriList<HullTri>& triList);
+    bool isRemovableBorder(const HullTri* tri) const;
+    bool isRemovableHole(const HullTri* tri) const;
 
-    /**
-    * Tests if a tri is the only one connecting its 2 adjacents.
-    * Assumes that the tri is on the border of the triangulation
-    * and that the triangulation does not contain holes
-    *
-    * @param tri the tri to test
-    * @return true if the tri is the only connection
-    */
-    static bool isConnecting(const HullTri* tri);
-
-    /**
-    * A vertex of a triangle is interior if it
-    * is fully surrounded by triangles.
-    *
-    * @param tri a tri containing the vertex
-    * @param index the vertex index
-    * @return true if the vertex is interior
-    */
-    static bool isInteriorVertex(
-        const HullTri* triStart, TriIndex index);
-
-    static TriIndex adjacent2VertexIndex(const HullTri* tri);
-
-    static void createDelaunayTriangulation(
-        const Geometry* geom, TriList<HullTri>& triList);
-
-    static void toTris(
-        QuadEdgeSubdivision& subdiv,
-        TriList<HullTri>& triList);
-
-    std::unique_ptr<Geometry> toPolygon(
+    static std::unique_ptr<Geometry> toGeometry(
         TriList<HullTri>& triList,
         const GeometryFactory* factory);
 
-    std::unique_ptr<Geometry> extractPolygon(
-        TriList<HullTri>& triList,
-        const GeometryFactory* factory);
-
-    static std::unique_ptr<Geometry> geomunion(
-        TriList<HullTri>& triList,
-        const GeometryFactory* factory);
-
-    /**
-    * Extracts the coordinates along the border of a triangulation,
-    * by tracing CW around the border triangles.
-    * Assumption: there are at least 2 tris, they are connected,
-    * and there are no holes.
-    * So each tri has at least one non-border edge, and there is only one border.
-    *
-    * @param triList the triangulation
-    * @return the border of the triangulation
-    */
-    static std::vector<Coordinate> traceBorder(
-        TriList<HullTri>& triList);
 
 };
 
