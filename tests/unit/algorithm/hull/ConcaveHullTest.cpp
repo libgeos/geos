@@ -63,6 +63,8 @@ struct test_concavehull_data {
         std::unique_ptr<Geometry> geom = reader_.read(wkt);
         std::unique_ptr<Geometry> actual = ConcaveHull::concaveHullByLength(geom.get(), threshold, true);
         std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
+        // std::cout << "ACTUAL" << std::endl << actual->toText() << std::endl;
+        // std::cout << "EXPECT" << std::endl << expected->toText() << std::endl;
         ensure_equals_geometry(expected.get(), actual.get());
     }
 
@@ -238,7 +240,7 @@ template<>
 void object::test<15>()
 {
     checkHullWithHolesByLength("MULTIPOINT ((90 20), (80 10), (45 5), (10 20), (20 10), (21 30), (40 20), (11 60), (20 70), (20 90), (40 80), (70 80), (80 60), (90 70), (80 90), (56 95), (95 45), (80 40), (70 20), (15 45), (5 40), (40 96), (60 15))",
-        0, "POLYGON ((20 90, 40 96, 56 95, 80 90, 90 70, 95 45, 90 20, 80 10, 60 15, 45 5, 20 10, 10 20, 5 40, 11 60, 15 45, 21 30, 40 20, 70 20, 80 40, 80 60, 70 80, 40 80, 20 70, 20 90))" );
+       0, "POLYGON ((20 90, 40 96, 56 95, 70 80, 80 90, 90 70, 80 60, 95 45, 80 40, 70 20, 90 20, 80 10, 60 15, 45 5, 40 20, 40 80, 15 45, 21 30, 20 10, 10 20, 5 40, 11 60, 20 70, 20 90))" );
 }
 
 

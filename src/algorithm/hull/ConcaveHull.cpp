@@ -248,7 +248,6 @@ ConcaveHull::addBorderTri(HullTri* tri, HullTriQueue& queue)
     if (tri == nullptr) return;
     if (tri->numAdjacent() != 2) return;
     tri->setSizeToBoundary();
-
     queue.push(tri);
 }
 
@@ -304,7 +303,7 @@ void
 ConcaveHull::removeHole(TriList<HullTri>& triList, HullTri* triHole)
 {
     HullTriQueue queue;
-    createBorderQueue(queue, triList);
+    queue.push(triHole);
 
     while (! queue.empty()) {
 
