@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_NODABLESEGMENTSTRING_H
-#define GEOS_NODING_NODABLESEGMENTSTRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/noding/SegmentString.h> // for inheritance
@@ -55,4 +54,3 @@ public:
 } // namespace geos::noding
 } // namespace geos
 
-#endif // GEOS_NODING_NODABLESEGMENTSTRING_H

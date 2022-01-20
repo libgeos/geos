@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_COMPONENTCOORDINATEEXTRACTER_H
-#define GEOS_GEOM_UTIL_COMPONENTCOORDINATEEXTRACTER_H
+#pragma once
 
 #include <vector>
 
@@ -68,4 +67,3 @@ private:
 } // namespace geos.geom
 } // namespace geos
 
-#endif //GEOS_GEOM_UTIL_COMPONENTCOORDINATEEXTRACTER_H

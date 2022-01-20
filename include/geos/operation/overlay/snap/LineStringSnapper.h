@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_SNAP_LINESTRINGSNAPPER_H
-#define GEOS_OP_OVERLAY_SNAP_LINESTRINGSNAPPER_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -163,6 +162,4 @@ private:
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
-
-#endif // GEOS_OP_OVERLAY_SNAP_LINESTRINGSNAPPER_H
 

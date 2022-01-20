@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_BOUNDABLEPAIR_H
-#define GEOS_INDEX_STRTREE_BOUNDABLEPAIR_H
+#pragma once
 
 #include <geos/index/strtree/Boundable.h>
 #include <geos/index/strtree/ItemDistance.h>
@@ -117,9 +116,7 @@ public:
     void expand(const Boundable* bndComposite, const Boundable* bndOther, bool isFlipped, BoundablePairQueue& priQ,
                 double minDistance);
 };
-}
-}
-}
 
-#endif
-
+}
+}
+}

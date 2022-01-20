@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_MINIMUMDIAMETER_H
-#define GEOS_ALGORITHM_MINIMUMDIAMETER_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LineSegment.h>
@@ -175,6 +174,4 @@ public:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-#endif // GEOS_ALGORITHM_MINIMUMDIAMETER_H
 

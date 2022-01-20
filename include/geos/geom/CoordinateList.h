@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATELIST_H
-#define GEOS_GEOM_COORDINATELIST_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -226,4 +225,3 @@ operator<< (std::ostream& os, const CoordinateList& cl)
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_GEOM_COORDINATELIST_H

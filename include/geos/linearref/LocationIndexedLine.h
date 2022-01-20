@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LOCATIONINDEXEDLINE_H
-#define GEOS_LINEARREF_LOCATIONINDEXEDLINE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -275,4 +274,3 @@ public:
 
 } // geos::linearref
 } // geos
-#endif

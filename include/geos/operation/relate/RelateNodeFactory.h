@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_RELATENODEFACTORY_H
-#define GEOS_OP_RELATE_RELATENODEFACTORY_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -54,4 +53,3 @@ private:
 } // namespace geos:operation
 } // namespace geos
 
-#endif // GEOS_OP_RELATE_RELATENODEFACTORY_H

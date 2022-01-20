@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LOCATIONINDEXOFPOINT_H
-#define GEOS_LINEARREF_LOCATIONINDEXOFPOINT_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -76,4 +75,3 @@ public:
 };
 }
 }
-#endif

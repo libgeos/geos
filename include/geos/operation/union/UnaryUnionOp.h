@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_UNION_UNARYUNION_H
-#define GEOS_OP_UNION_UNARYUNION_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -241,4 +240,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_TRIANGLEVISITOR_H
-#define GEOS_TRIANGULATE_QUADEDGE_TRIANGLEVISITOR_H
+#pragma once
 
 #include <geos/triangulate/quadedge/QuadEdge.h>
 
@@ -47,4 +46,3 @@ private:
 } //namespace geos.triangulate
 } //namespace goes
 
-#endif // GEOS_TRIANGULATE_QUADEDGE_TRIANGLEVISITOR_H

@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_GEOMETRYNODER_H
-#define GEOS_NODING_GEOMETRYNODER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/noding/SegmentString.h> // for NonConstVect
@@ -68,4 +67,3 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_NODER_H

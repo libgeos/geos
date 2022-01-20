@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_POLYGON_H
-#define GEOS_GEOM_POLYGON_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -28,8 +27,6 @@
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
-
-#include <geos/inline.h>
 
 #include <memory> // for unique_ptr
 
@@ -217,9 +214,9 @@ protected:
 private:
 
     void normalize(LinearRing* ring, bool clockwise);
+
 };
 
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_POLYGON_H

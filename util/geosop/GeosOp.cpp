@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
         //showHelp();
         if (result.count("help")) {
             std::cout << "Notes:" << std::endl;
+            std::cout << "- to use negative numeric op arguments use '--' before the op name" << std::endl;
             std::cout << "- Negative numeric op arguments can be specified with leading N:  e.g. N-0.1" << std::endl;
             std::cout << std::endl;
             std::cout << "Operations:" << std::endl;

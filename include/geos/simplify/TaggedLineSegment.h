@@ -26,8 +26,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_SIMPLIFY_TAGGEDLINESEGMENT_H
-#define GEOS_SIMPLIFY_TAGGEDLINESEGMENT_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/LineSegment.h> // for inheritance
@@ -82,4 +81,3 @@ private:
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // GEOS_SIMPLIFY_TAGGEDLINESEGMENT_H

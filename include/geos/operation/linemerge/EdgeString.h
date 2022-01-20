@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_LINEMERGE_EDGESTRING_H
-#define GEOS_OP_LINEMERGE_EDGESTRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
@@ -88,4 +87,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_OP_LINEMERGE_EDGESTRING_H

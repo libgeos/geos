@@ -12,13 +12,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_TRIANGLE_H
-#define GEOS_GEOM_TRIANGLE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
-
-#include <geos/inline.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -200,8 +197,3 @@ private:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/Triangle.inl"
-//#endif
-
-#endif // ndef GEOS_GEOM_TRIANGLE_H

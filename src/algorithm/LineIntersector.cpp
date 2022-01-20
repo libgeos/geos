@@ -671,6 +671,3 @@ LineIntersector::nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
 } // namespace geos.algorithm
 } // namespace geos
 
-#ifndef GEOS_INLINE
-# include "geos/algorithm/LineIntersector.inl"
-#endif

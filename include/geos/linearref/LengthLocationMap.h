@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LENGTHLOCATIONMAP_H
-#define GEOS_LINEARREF_LENGTHLOCATIONMAP_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -133,4 +132,3 @@ public:
 } // geos.linearref
 } // geos
 
-#endif

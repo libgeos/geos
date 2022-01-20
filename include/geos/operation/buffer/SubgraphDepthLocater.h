@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
-#define GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -118,6 +117,4 @@ private:
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
-
-#endif // ndef GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
 

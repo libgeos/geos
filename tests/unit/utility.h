@@ -1,8 +1,8 @@
 //
 // GEOS Unit Test utilities, extension of TUT Framework namespace
 //
-#ifndef GEOS_TUT_UTILITY_H_INCLUDED
-#define GEOS_TUT_UTILITY_H_INCLUDED
+#pragma once
+
 
 // tut
 #include <tut/tut.hpp>
@@ -410,4 +410,3 @@ struct wkb_hex_decoder {
 
 } // namespace tut
 
-#endif // #ifndef GEOS_TUT_UTILITY_H_INCLUDED

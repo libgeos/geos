@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PROFILER_H
-#define GEOS_PROFILER_H
+#pragma once
 
 #include <geos/export.h>
 #include <chrono>
@@ -184,4 +183,3 @@ GEOS_DLL std::ostream& operator<< (std::ostream& os, const Profiler&);
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_PROFILER_H

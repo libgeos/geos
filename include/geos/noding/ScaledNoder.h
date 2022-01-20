@@ -16,17 +16,14 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SCALEDNODER_H
-#define GEOS_NODING_SCALEDNODER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <cassert>
 #include <vector>
 
-#include <geos/inline.h>
 #include <geos/noding/Noder.h> // for inheritance
-//#include <geos/geom/CoordinateFilter.h> // for inheritance
 #include <geos/util.h>
 
 #ifdef _MSC_VER
@@ -133,4 +130,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_NODING_SCALEDNODER_H

@@ -18,10 +18,6 @@
 
 #include <geos/geom/Quadrant.h>
 
-#ifndef GEOS_INLINE
-# include <geos/geom/Quadrant.inl>
-#endif
-
 using namespace geos::geom;
 
 namespace geos {

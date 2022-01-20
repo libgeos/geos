@@ -23,8 +23,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_SHAREDPATHSOP_H
-#define GEOS_OPERATION_SHAREDPATHSOP_H
+#pragma once
 
 #include <geos/export.h> // for GEOS_DLL
 
@@ -160,6 +159,3 @@ private:
 } // namespace geos.operation.sharedpaths
 } // namespace geos.operation
 } // namespace geos
-
-#endif
-

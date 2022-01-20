@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_POINTLOCATOR_H
-#define GEOS_ALGORITHM_POINTLOCATOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Location.h> // for inlines
@@ -106,6 +105,4 @@ private:
 } // namespace geos::algorithm
 } // namespace geos
 
-
-#endif // GEOS_ALGORITHM_POINTLOCATOR_H
 

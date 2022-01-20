@@ -12,10 +12,10 @@
  *
  **********************************************************************/
 
+#pragma once
+
 #include <geos/export.h>
 
-#ifndef GEOS_UNLOAD_H
-#define GEOS_UNLOAD_H
 //xie add for realse static memory 2003,10,06
 namespace geos {
 namespace io {
@@ -30,4 +30,4 @@ public:
 
 }
 }
-#endif
+

@@ -22,16 +22,11 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
-#include <geos/geom/Dimension.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
-#include <geos/geom/Envelope.h>
 #include <geos/util.h>
 
-#ifndef GEOS_INLINE
-# include <geos/geom/GeometryCollection.inl>
-#endif
 
 #include <algorithm>
 #include <vector>

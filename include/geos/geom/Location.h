@@ -12,13 +12,11 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_LOCATION_H
-#define GEOS_GEOM_LOCATION_H
+#pragma once
 
 #include <geos/export.h>
 #include <iostream> // for ostream
 
-#include <geos/inline.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -63,6 +61,4 @@ GEOS_DLL std::ostream& operator<<(std::ostream& os, const Location& loc);
 
 } // namespace geos::geom
 } // namespace geos
-
-#endif // ndef GEOS_GEOM_LOCATION_H
 

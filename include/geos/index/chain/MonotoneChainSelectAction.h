@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
-#define GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/LineSegment.h> // composition
@@ -72,6 +71,4 @@ public:
 } // namespace geos::index::chain
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
 

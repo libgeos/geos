@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_XMLTESTER_H
-#define GEOS_XMLTESTER_H
+#pragma once
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -129,4 +128,3 @@ public:
 
 };
 
-#endif // GEOS_XMLTESTER_H

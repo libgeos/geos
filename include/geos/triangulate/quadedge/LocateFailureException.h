@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_LOCATEFAILUREEXCEPTION_H
-#define GEOS_TRIANGULATE_QUADEDGE_LOCATEFAILUREEXCEPTION_H
+#pragma once
 
 #include <string>
 
@@ -35,6 +34,4 @@ public:
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace goes
-
-#endif //GEOS_TRIANGULATE_QUADEDGE_LOCATEFAILUREEXCEPTION_H
 

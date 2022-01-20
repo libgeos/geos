@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_FASTSEGMENTSETINTERSECTIONFINDER_H
-#define GEOS_NODING_FASTSEGMENTSETINTERSECTIONFINDER_H
+#pragma once
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h>
@@ -78,6 +77,4 @@ public:
 
 } // geos::noding
 } // geos
-
-#endif // GEOS_NODING_FASTSEGMENTSETINTERSECTIONFINDER_H
 

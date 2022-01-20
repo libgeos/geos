@@ -119,6 +119,4 @@ bool EdgeComparator(const Edge* a, const Edge* b)
 } // namespace geos.operation
 } // namespace geos
 
-#ifndef GEOS_INLINE
-#include "geos/operation/overlayng/Edge.inl"
-#endif
+

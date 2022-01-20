@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_LENGTH_H
-#define GEOS_ALGORITHM_LENGTH_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -49,4 +48,3 @@ public:
 } // namespace geos
 
 
-#endif // GEOS_ALGORITHM_LENGTH_H

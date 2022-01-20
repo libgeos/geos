@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_LINEMERGE_LINEMERGEGRAPH_H
-#define GEOS_OP_LINEMERGE_LINEMERGEGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/planargraph/PlanarGraph.h> // for inheritance
@@ -90,4 +89,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_OP_LINEMERGE_LINEMERGEGRAPH_H

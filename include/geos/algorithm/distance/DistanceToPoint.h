@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
-#define GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
+#pragma once
 
 #include <geos/geom/LineSegment.h> // for composition
 
@@ -70,6 +69,4 @@ public:
 } // geos::algorithm::distance
 } // geos::algorithm
 } // geos
-
-#endif // GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
 

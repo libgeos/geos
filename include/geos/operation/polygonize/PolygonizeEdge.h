@@ -17,9 +17,7 @@
  *
  **********************************************************************/
 
-
-#ifndef GEOS_OP_POLYGONIZE_POLYGONIZEEDGE_H
-#define GEOS_OP_POLYGONIZE_POLYGONIZEEDGE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -58,4 +56,3 @@ public:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // GEOS_OP_POLYGONIZE_POLYGONIZEEDGE_H

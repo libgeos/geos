@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_HCOORDINATE_H
-#define GEOS_ALGORITHM_HCOORDINATE_H
+#pragma once
 
 #include <geos/export.h>
 #include <iosfwd>
@@ -98,6 +97,4 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 
 } // namespace geos::algorithm
 } // namespace geos
-
-#endif // GEOS_ALGORITHM_HCOORDINATE_H
 

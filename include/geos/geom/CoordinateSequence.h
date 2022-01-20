@@ -12,11 +12,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATESEQUENCE_H
-#define GEOS_GEOM_COORDINATESEQUENCE_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for applyCoordinateFilter
 
@@ -315,8 +313,3 @@ GEOS_DLL bool operator!= (const CoordinateSequence& s1, const CoordinateSequence
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/CoordinateSequence.inl"
-//#endif
-
-#endif // ndef GEOS_GEOM_COORDINATESEQUENCE_H

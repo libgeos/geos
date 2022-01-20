@@ -18,8 +18,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_PLANARGRAPH_H
-#define GEOS_GEOMGRAPH_PLANARGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 #include <map>
@@ -30,8 +29,6 @@
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/NodeMap.h> // for typedefs
 #include <geos/geomgraph/DirectedEdgeStar.h> // for inlines
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -203,10 +200,4 @@ private:
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/PlanarGraph.inl"
-//#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_PLANARGRAPH_H
 

@@ -306,6 +306,8 @@ public:
     /// @{
 
     bool remove(const BoundsType& itemEnv, const ItemType& item) {
+        build();
+
         if (root == nullptr) {
             return false;
         }
@@ -546,9 +548,11 @@ protected:
 
         for (auto *child = node.beginChildren(); child < node.endChildren(); ++child) {
             if (child->boundsIntersect(queryEnv)) {
-                if (child->isLeaf() && !child->isDeleted()) {
-                    if (!visitLeaf(visitor, *child)) {
-                        return;
+                if (child->isLeaf()) {
+                    if (!child->isDeleted()) {
+                        if (!visitLeaf(visitor, *child)) {
+                            return;
+                        }
                     }
                 } else {
                     query(queryEnv, *child, visitor);

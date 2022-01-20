@@ -12,14 +12,11 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SINGLEPASSNODER_H
-#define GEOS_NODING_SINGLEPASSNODER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
-
-#include <geos/inline.h>
 
 #include <geos/noding/Noder.h>
 
@@ -97,5 +94,3 @@ public:
 
 } // namespace geos.noding
 } // namespace geos
-
-#endif // GEOS_NODING_SINGLEPASSNODER_H

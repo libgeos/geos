@@ -33,11 +33,17 @@
 #include <typeinfo>
 #include <algorithm>
 
-#ifndef GEOS_INLINE
-# include "geos/algorithm/ConvexHull.inl"
-#endif
 
-using namespace geos::geom;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::geom::Coordinate;
+using geos::geom::Point;
+using geos::geom::Polygon;
+using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::CoordinateSequence;
+using geos::geom::CoordinateSequenceFactory;
+
 
 namespace geos {
 namespace algorithm { // geos.algorithm

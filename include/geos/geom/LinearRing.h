@@ -17,15 +17,13 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_LINEARRING_H
-#define GEOS_GEOS_LINEARRING_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
 #include <vector>
 #include <geos/geom/LineString.h>
 
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -131,4 +129,3 @@ private:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOS_LINEARRING_H

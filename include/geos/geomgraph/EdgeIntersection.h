@@ -19,14 +19,11 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGEINTERSECTION_H
-#define GEOS_GEOMGRAPH_EDGEINTERSECTION_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <geos/geom/Coordinate.h> // for composition and inlines
-
-#include <geos/inline.h>
 
 #include <ostream>
 
@@ -149,7 +146,4 @@ operator<< (std::ostream& os, const EdgeIntersection& e)
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGEINTERSECTION_H
-
 

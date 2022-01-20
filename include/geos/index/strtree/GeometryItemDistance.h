@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_GEOMETRYITEMDISTANCE_H
-#define GEOS_INDEX_STRTREE_GEOMETRYITEMDISTANCE_H
+#pragma once
 
 #include <geos/geom/Geometry.h>
 #include <geos/index/strtree/ItemDistance.h>
@@ -38,8 +37,8 @@ public:
      */
     double distance(const ItemBoundable* item1, const ItemBoundable* item2) override;
 };
+
 }
 }
 }
 
-#endif //GEOS_GEOMETRYITEMDISTANCE_H

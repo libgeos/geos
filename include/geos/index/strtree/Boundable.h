@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_BOUNDABLE_H
-#define GEOS_INDEX_STRTREE_BOUNDABLE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -48,4 +47,3 @@ public:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_INDEX_STRTREE_BOUNDABLE_H

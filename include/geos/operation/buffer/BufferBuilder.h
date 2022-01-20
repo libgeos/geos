@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_BUFFERBUILDER_H
-#define GEOS_OP_BUFFER_BUFFERBUILDER_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -269,4 +268,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ndef GEOS_OP_BUFFER_BUFFERBUILDER_H

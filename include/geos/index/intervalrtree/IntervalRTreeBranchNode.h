@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_INTERVALRTREE_INTERVALRTREEBRANCHNODE_H
-#define GEOS_INDEX_INTERVALRTREE_INTERVALRTREEBRANCHNODE_H
+#pragma once
 
 #include <geos/index/intervalrtree/IntervalRTreeNode.h> // inherited
 
@@ -51,6 +50,4 @@ public:
 } // geos::intervalrtree
 } // geos::index
 } // geos
-
-#endif // GEOS_INDEX_INTERVALRTREE_INTERVALRTREEBRANCHNODE_H
 

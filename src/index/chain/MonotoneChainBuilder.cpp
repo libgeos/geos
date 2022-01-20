@@ -70,6 +70,7 @@ public:
 
 private:
     void finishChain() {
+        if ( m_i == 0 ) return;
         std::size_t chainEnd = m_i - 1;
         m_list.emplace_back(*m_seq, m_start, chainEnd, m_context);
         m_start = chainEnd;

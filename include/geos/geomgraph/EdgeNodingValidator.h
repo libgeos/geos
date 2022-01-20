@@ -18,15 +18,12 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_EDGENODINGVALIDATOR_H
-#define GEOS_GEOMGRAPH_EDGENODINGVALIDATOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <vector>
 
 #include <geos/noding/FastNodingValidator.h> // for composition
-
-#include <geos/inline.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -114,9 +111,3 @@ public:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeNodingValidator.inl"
-//#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_EDGENODINGVALIDATOR_H

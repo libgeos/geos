@@ -194,7 +194,7 @@ jobs:
        ctest --output-on-failure .
 
   windows-msvc-22:
-    name: 'Windows (Visual Studio 2022, Release, windows-2022)'
+    name: 'Windows (Visual Studio 2022, Debug, windows-2022)'
     runs-on: windows-2022
     steps:
     - name: 'Check Out'
@@ -253,3 +253,31 @@ jobs:
        cd build
        ctest --output-on-failure -C Release
 
+  cmake-subproject:
+    name: 'CMake Subproject'
+    runs-on: ubuntu-18.04
+    steps:
+    - name: 'Install'
+      run: |
+        set -e
+        uname -a
+        sudo -E apt-get update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
+        python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
+        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+      with:
+        path: geos
+
+    - name: 'CMake Superbuild'
+      run: |
+        set -e
+        cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
+        cp geos/examples/capi_read.c .
+        cmake --version
+        cmake -S . -B build
+        cmake --build build -j 2
+        build/capi_read
+        test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }

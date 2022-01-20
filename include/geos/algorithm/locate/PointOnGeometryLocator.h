@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_LOCATE_POINTONGEOMETRYLOCATOR_H
-#define GEOS_ALGORITHM_LOCATE_POINTONGEOMETRYLOCATOR_H
+#pragma once
 
 #include <geos/geom/Location.h>
 
@@ -55,4 +54,3 @@ public:
 } // geos::algorithm
 } // geos
 
-#endif // GEOS_ALGORITHM_LOCATE_POINTONGEOMETRYLOCATOR_H

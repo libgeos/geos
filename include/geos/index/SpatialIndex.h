@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_SPATIALINDEX_H
-#define GEOS_INDEX_SPATIALINDEX_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -102,6 +101,4 @@ public:
 
 } // namespace geos.index
 } // namespace geos
-
-#endif // GEOS_INDEX_SPATIALINDEX_H
 

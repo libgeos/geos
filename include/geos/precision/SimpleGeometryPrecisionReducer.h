@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
-#define GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
+#pragma once
 
 #include <geos/export.h>
 #include <memory>
@@ -87,4 +86,3 @@ public:
 } // namespace geos.precision
 } // namespace geos
 
-#endif // GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H

@@ -28,10 +28,6 @@
 #include <cmath>
 #include <iostream>
 
-#ifndef GEOS_INLINE
-# include <geos/geom/PrecisionModel.inl>
-#endif
-
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif

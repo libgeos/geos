@@ -12,11 +12,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_COORDINATEFILTER_H
-#define GEOS_GEOM_COORDINATEFILTER_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 #include <cassert>
 
@@ -71,4 +69,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_COORDINATEFILTER_H

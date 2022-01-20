@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_GEOSEXCEPTION_H
-#define GEOS_UTIL_GEOSEXCEPTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <stdexcept>
@@ -63,4 +62,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_UTIL_GEOSEXCEPTION_H

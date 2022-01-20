@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LENGTHINDEXOFPOINT_H
-#define GEOS_LINEARREF_LENGTHINDEXOFPOINT_H
+#pragma once
 
 #include <string>
 
@@ -83,6 +82,6 @@ public:
     double indexOfAfter(const geom::Coordinate& inputPt, double minIndex) const;
 
 };
+
 }
 }
-#endif

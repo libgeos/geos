@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_EDGEENDBUNDLESTAR_H
-#define GEOS_OP_RELATE_EDGEENDBUNDLESTAR_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -64,5 +63,3 @@ public:
 } // namespace geos:operation:relate
 } // namespace geos:operation
 } // namespace geos
-
-#endif // GEOS_OP_RELATE_EDGEENDBUNDLESTAR_H

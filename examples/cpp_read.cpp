@@ -20,10 +20,12 @@
 #include <geos/io/WKTWriter.h>
 
 /* Geometry/GeometryFactory */
-using namespace geos::geom;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
 
 /* WKTReader/WKTWriter */
-using namespace geos::io;
+using geos::io::WKTReader;
+using geos::io::WKTWriter;
 
 int main()
 {

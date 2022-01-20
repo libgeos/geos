@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_SEGMENTPOINTCOMPARATOR_H
-#define GEOS_NODING_SEGMENTPOINTCOMPARATOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
@@ -119,4 +118,3 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_SEGMENTPOINTCOMPARATOR_H

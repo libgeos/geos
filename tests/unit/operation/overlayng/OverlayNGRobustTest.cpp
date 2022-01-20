@@ -18,7 +18,9 @@
 // std
 #include <memory>
 
-using namespace geos::geom;
+using geos::geom::Coordinate;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::operation::overlayng::OverlayNGRobust;
@@ -34,6 +36,9 @@ struct test_overlayngrobust_data {
 
     WKTReader r;
     WKTWriter w;
+    GeometryFactory::Ptr factory;
+
+    test_overlayngrobust_data() : factory(GeometryFactory::create()) {};
 
     void
     testOverlay(const std::string& a, const std::string& b, const std::string& expected, int opCode)
@@ -53,6 +58,16 @@ struct test_overlayngrobust_data {
         std::unique_ptr<Geometry> geom_a = r.read(a);
         std::unique_ptr<Geometry> geom_b = r.read(b);
         ensure_NO_THROW( OverlayNGRobust::Overlay(geom_a.get(), geom_b.get(), opCode) );
+    }
+
+    std::unique_ptr<Geometry>
+    double2geom(const std::vector<double>& x, const std::vector<double>& y)
+    {
+        std::vector<geos::geom::Coordinate> coords;
+        for (std::size_t i = 0; i < x.size(); i++)
+            coords.emplace_back(x[i], y[i]);
+        std::unique_ptr<Geometry> geom = factory->createPolygon(std::move(coords));
+        return geom;
     }
 
 };
@@ -94,5 +109,49 @@ void object::test<2> ()
 }
 
 
+
+#if 0
+/**
+ * https://github.com/locationtech/jts/pull/821
+ * https://github.com/locationtech/jts/issues/820
+ *
+ * ENABLE WHEN FIXES ARE IN
+ */
+template<>
+template<>
+void object::test<3> ()
+{
+    std::vector<double> x3 = {-13.621824029083443, -16.14144162383529, -16.15907384118054, -13.639456293556348, -13.621824029083443};
+    std::vector<double> y3 = {0.15008489786842003, 0.10149068267229658, 1.0157206673651493, 1.0643148816523527, 0.15008489786842003};
+
+    std::vector<double> x5 = {-12.707594043193543, -13.621824029083443, -13.639456293556348, -12.725226307666448, -12.707594043193543};
+    std::vector<double> y5 = {0.1677170531469111, 0.15008489786842005, 1.0643148816523527, 1.0819470369308437, 0.1677170531469111};
+
+    std::unique_ptr<Geometry> p3 = double2geom(x3, y3);
+    std::unique_ptr<Geometry> p5 = double2geom(x5, y5);
+
+    std::cout << *p3 << std::endl;
+
+    std::cout << *p5 << std::endl;
+
+    std::unique_ptr<Geometry> pUnion = OverlayNGRobust::Overlay(p3.get(), p5.get(), OverlayNG::UNION);
+
+    std::cout << *pUnion << std::endl;
+
+    std::cout << "p3->getArea(): " << p3->getArea() << std::endl;
+    std::cout << "p5->getArea(): " << p5->getArea() << std::endl;
+    double areaSum = p3->getArea() + p5->getArea();
+    std::cout << "areaSum: " << areaSum << std::endl;
+    double areaUnion = pUnion->getArea();
+    std::cout << "areaUnion: " << areaUnion << std::endl;
+
+    double areaDelta = std::fabs(areaUnion - areaSum);
+    std::cout << "areaDelta: " << areaDelta << std::endl;
+    double deltaFrac = areaDelta / std::max(areaUnion, areaSum);
+    std::cout << "deltaFrac: " << deltaFrac << std::endl;
+    ensure(deltaFrac < 0.1);
+}
+
+#endif
 
 } // namespace tut

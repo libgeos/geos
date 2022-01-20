@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_MATH_H
-#define GEOS_UTIL_MATH_H
+#pragma once
 
 namespace geos {
 namespace util {
@@ -40,5 +39,3 @@ round(double val)
 
 }
 } // namespace geos::util
-
-#endif // GEOS_UTIL_MATH_H

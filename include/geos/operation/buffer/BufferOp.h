@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_BUFFEROP_H
-#define GEOS_OP_BUFFER_BUFFEROP_H
+#pragma once
 
 #include <memory> // for unique_ptr
 #include <vector> // for vector
@@ -304,6 +303,4 @@ BufferOp::setSingleSided(bool isSingleSided)
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ndef GEOS_OP_BUFFER_BUFFEROP_H
 

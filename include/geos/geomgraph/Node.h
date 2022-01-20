@@ -19,8 +19,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_NODE_H
-#define GEOS_GEOMGRAPH_NODE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geomgraph/GraphComponent.h> // for inheritance
@@ -30,8 +29,6 @@
 #include <geos/geomgraph/EdgeEndStar.h> // for testInvariant
 #include <geos/geomgraph/EdgeEnd.h> // for testInvariant
 #endif // ndef NDEBUG
-
-#include <geos/inline.h>
 
 #include <cassert>
 #include <string>
@@ -189,12 +186,7 @@ Node::testInvariant() const
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/Node.inl"
-//#endif
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif // ifndef GEOS_GEOMGRAPH_NODE_H

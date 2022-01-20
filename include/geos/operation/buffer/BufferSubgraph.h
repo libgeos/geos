@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
-#define GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -200,6 +199,4 @@ bool BufferSubgraphGT(BufferSubgraph* first, BufferSubgraph* second);
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ndef GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
 

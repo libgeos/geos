@@ -17,13 +17,13 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PRECISIONMODEL_H
-#define GEOS_GEOM_PRECISIONMODEL_H
+#pragma once
 
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/export.h>
-#include <geos/inline.h>
 
-
+#include <cassert>
 #include <string>
 
 // Forward declarations
@@ -184,9 +184,22 @@ public:
     double makePrecise(double val) const;
 
     /// Rounds the given Coordinate to the PrecisionModel grid.
-    void makePrecise(Coordinate& coord) const;
+    void makePrecise(Coordinate& coord) const
+    {
+        // optimization for full precision
+        if(modelType == FLOATING) {
+            return;
+        }
 
-    void makePrecise(Coordinate* coord) const;
+        coord.x = makePrecise(coord.x);
+        coord.y = makePrecise(coord.y);
+    };
+
+    void makePrecise(Coordinate* coord) const
+    {
+        assert(coord);
+        return makePrecise(*coord);
+    };
 
     /// Tests whether the precision model supports floating point
     ///
@@ -211,10 +224,17 @@ public:
     ///
     /// @return the type of this PrecisionModel
     ///
-    Type getType() const;
+    Type getType() const
+    {
+        return modelType;
+    };
 
     /// Returns the multiplying factor used to obtain a precise coordinate.
-    double getScale() const;
+    double getScale() const
+    {
+        assert(!(scale < 0));
+        return scale;
+    };
 
     /**
     * Computes the grid size for a fixed precision model.
@@ -224,7 +244,16 @@ public:
     *
     * @return the grid size at a fixed precision scale.
     */
-    double getGridSize() const;
+    double getGridSize() const
+    {
+        if (isFloating())
+           return DoubleNotANumber;
+
+        if (gridSize != 0)
+            return gridSize;
+
+        return 1.0 / scale;
+    };
 
     /// Returns the x-offset used to obtain a precise coordinate.
     ///
@@ -341,9 +370,3 @@ private:
 
 } // namespace geos::geom
 } // namespace geos
-
-#ifdef GEOS_INLINE
-# include "geos/geom/PrecisionModel.inl"
-#endif
-
-#endif // ndef GEOS_GEOM_PRECISIONMODEL_H

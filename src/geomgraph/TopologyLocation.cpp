@@ -27,11 +27,9 @@
 #include <iostream>
 #include <cassert>
 
-#ifndef GEOS_INLINE
-# include <geos/geomgraph/TopologyLocation.inl>
-#endif
 
-using namespace geos::geom;
+using geos::geom::Location;
+using geos::geom::Position;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph

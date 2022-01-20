@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
-#define GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
+#pragma once
 
 #include <cstddef>
 #include <geos/export.h>
@@ -94,4 +93,3 @@ struct GEOS_DLL  SweepLineEventLessThen {
 } // namespace geos:index
 } // namespace geos
 
-#endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H

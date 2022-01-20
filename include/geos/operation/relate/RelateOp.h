@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_RELATE_RELATEOP_H
-#define GEOS_OP_RELATE_RELATEOP_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -133,5 +132,3 @@ private:
 } // namespace geos:operation:relate
 } // namespace geos:operation
 } // namespace geos
-
-#endif // GEOS_OP_RELATE_RELATEOP_H

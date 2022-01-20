@@ -19,16 +19,13 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_DIRECTEDEDGE_H
-#define GEOS_GEOMGRAPH_DIRECTEDEDGE_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
 
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/EdgeEnd.h> // for inheritance
-
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -62,23 +59,51 @@ public:
     // this is no different from Base class, no need to override
     //Edge* getEdge();
 
-    void setInResult(bool newIsInResult);
+    void setInResult(bool v)
+    {
+        isInResultVar = v;
+    };
 
-    bool isInResult();
+    bool isInResult() const
+    {
+        return isInResultVar;
+    };
 
-    bool isVisited();
+    bool isVisited() const
+    {
+        return isVisitedVar;
+    };
 
-    void setVisited(bool newIsVisited);
 
-    void setEdgeRing(EdgeRing* newEdgeRing);
+    void setVisited(bool v)
+    {
+        isVisitedVar = v;
+    };
 
-    EdgeRing* getEdgeRing();
+    void setEdgeRing(EdgeRing* er)
+    {
+        edgeRing = er;
+    };
 
-    void setMinEdgeRing(EdgeRing* newMinEdgeRing);
+    EdgeRing* getEdgeRing() const
+    {
+        return edgeRing;
+    };
 
-    EdgeRing* getMinEdgeRing();
+    void setMinEdgeRing(EdgeRing* mer)
+    {
+        minEdgeRing = mer;
+    };
 
-    int getDepth(int position);
+    EdgeRing* getMinEdgeRing() const
+    {
+        return minEdgeRing;
+    };
+
+    int getDepth(int position) const
+    {
+        return depth[position];
+    };
 
     void setDepth(int position, int newDepth);
 
@@ -91,7 +116,6 @@ public:
     ///
     void setVisitedEdge(bool newIsVisited);
 
-
     /** \brief
      * Each Edge gives rise to a pair of symmetric DirectedEdges,
      * in opposite directions.
@@ -99,19 +123,40 @@ public:
      * @return the DirectedEdge for the same Edge but in the
      *         opposite direction
      */
-    DirectedEdge* getSym();
+    DirectedEdge* getSym() const
+    {
+        return sym;
+    };
 
-    bool isForward();
+    bool isForward() const
+    {
+        return isForwardVar;
+    };
 
-    void setSym(DirectedEdge* de);
+    void setSym(DirectedEdge* de)
+    {
+        sym = de;
+    };
 
-    DirectedEdge* getNext();
+    DirectedEdge* getNext() const
+    {
+        return next;
+    };
 
-    void setNext(DirectedEdge* newNext);
+    void setNext(DirectedEdge* newNext)
+    {
+        next = newNext;
+    };
 
-    DirectedEdge* getNextMin();
+    DirectedEdge* getNextMin() const
+    {
+        return nextMin;
+    };
 
-    void setNextMin(DirectedEdge* newNextMin);
+    void setNextMin(DirectedEdge* nm)
+    {
+        nextMin = nm;
+    };
 
     /** \brief
      * Tells wheter this edge is a Line
@@ -147,9 +192,11 @@ public:
 
     std::string printEdge();
 
+
 protected:
 
     bool isForwardVar;
+
 
 private:
 
@@ -180,13 +227,10 @@ private:
 
     /// Compute the label in the appropriate orientation for this DirEdge
     void computeDirectedLabel();
+
+
 };
 
 } // namespace geos.geomgraph
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geomgraph/DirectedEdge.inl"
-#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_DIRECTEDEDGE_H

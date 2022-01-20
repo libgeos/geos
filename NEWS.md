@@ -2,11 +2,14 @@
 2022-xx-xx
 
 - New things:
+  - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
 
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
   - Fix SnapRoundingNoder to use tolerance in noding; also fixes GeometryPrecisionReducer (#504, Sergei)
-  - Allow direct setting of grid size (GH-804, Martin Davis)
+  - Allow direct setting of grid size (GH-513, Martin Davis)
+  - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
+  - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
 
 - Changes:
 
@@ -23,6 +26,7 @@
   - geosop CLI for GEOS (Martin Davis)
   - Full doxygen of the C-API (Paul Ramsey)
   - GeometryFixer class for validity enforcement (Martin Davis, Paul Ramsey)
+  - GeoJSON reader/writer implementation (Jared Erickson, WhuAegeanSea)
   - CAPI: GEOSDensify (Brendan Ward)
   - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,
           GEOSCoordSeq_copyToArrays, GEOSCoordSeq_copyToBuffer (Daniel Baston)
@@ -34,6 +38,10 @@
   - CAPI: GEOSConstrainedDelaunayTriangulation, builds a constrained
           triangulation of an input Polygon or MultiPolygon,
           returning a GeometryCollection(Polygon) of the triangles.
+  - CAPI: GEOSGeoJSONReader_create, GEOSGeoJSONReader_destroy,
+          GEOSGeoJSONReader_readGeometry, GEOSGeoJSONWriter_create,
+          GEOSGeoJSONWriter_destroy, GEOSGeoJSONWriter_writeGeometry
+          (Casper van der Wel)
 
 - Fixes/Improvements:
   - Preserve ordering of lines in overlay results (Martin Davis)

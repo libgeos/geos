@@ -14,8 +14,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NAMESPACES_H
-#define GEOS_NAMESPACES_H
+#pragma once
 
 namespace geos {
 
@@ -316,4 +315,3 @@ namespace util {}
 
 } // namespace geos
 
-#endif // GEOS_NAMESPACES_H

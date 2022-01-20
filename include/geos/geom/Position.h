@@ -18,15 +18,13 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOM_POSITION_H
-#define GEOS_GEOM_POSITION_H
+#pragma once
 
 #include <geos/export.h>
 #include <map>
 #include <vector>
 #include <string>
 
-#include <geos/inline.h>
 
 
 namespace geos {
@@ -67,6 +65,4 @@ public:
 
 } // namespace geos.geom
 } // namespace geos
-
-#endif // ifndef GEOS_GEOM_POSITION_H
 

@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_COORDINATEARRAYFILTER_H
-#define GEOS_UTIL_COORDINATEARRAYFILTER_H
+#pragma once
 
 #include <geos/export.h>
 #include <cassert>
@@ -61,4 +60,3 @@ public:
 } // namespace geos.util
 } // namespace geos
 
-#endif // GEOS_UTIL_COORDINATEARRAYFILTER_H

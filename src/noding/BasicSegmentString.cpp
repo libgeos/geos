@@ -19,19 +19,8 @@
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/geom/CoordinateSequence.h>
 
-#ifndef GEOS_INLINE
-# include <geos/noding/BasicSegmentString.inl>
-#endif
-
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
 #include <iostream>
 #include <sstream>
-
-using namespace geos::algorithm;
-using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding

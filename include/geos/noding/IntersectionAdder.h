@@ -16,16 +16,13 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_INTERSECTIONADDER_H
-#define GEOS_NODING_INTERSECTIONADDER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
 #include <iostream>
 #include <cstdlib> // for abs()
-
-#include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h>
 #include <geos/noding/SegmentIntersector.h> // for inheritance
@@ -203,4 +200,3 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_INTERSECTIONADDER_H

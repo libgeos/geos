@@ -16,15 +16,12 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_NODING_INTERSECTIONFINDERADDER_H
-#define GEOS_NODING_INTERSECTIONFINDERADDER_H
+#pragma once
 
 #include <geos/export.h>
 
 #include <vector>
 #include <iostream>
-
-#include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for use in vector
 #include <geos/noding/SegmentIntersector.h> // for inheritance
@@ -111,4 +108,3 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-#endif // GEOS_NODING_INTERSECTIONFINDERADDER_H

@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_PREP_SEGMENTINTERSECTIONDETECTOR_H
-#define GEOS_GEOM_PREP_SEGMENTINTERSECTIONDETECTOR_H
+#pragma once
 
 #include <cstddef>
 #include <geos/noding/SegmentIntersector.h>
@@ -176,4 +175,3 @@ public:
 } // namespace geos::noding
 } // namespace geos
 
-#endif // GEOS_GEOM_PREP_SEGMENTINTERSECTIONDETECTOR_H

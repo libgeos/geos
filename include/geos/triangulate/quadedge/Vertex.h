@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_TRIANGULATE_QUADEDGE_VERTEX_H
-#define GEOS_TRIANGULATE_QUADEDGE_VERTEX_H
+#pragma once
 
 #include <cmath>
 #include <memory>
@@ -310,6 +309,4 @@ operator<(const Vertex& v1, const Vertex& v2)
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace geos
-
-#endif //GEOS_TRIANGULATE_QUADEDGE_VERTEX_H
 

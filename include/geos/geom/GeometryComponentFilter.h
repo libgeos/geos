@@ -12,11 +12,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_GEOMETRYCOMPONENTFILTER_H
-#define GEOS_GEOM_GEOMETRYCOMPONENTFILTER_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -61,4 +59,3 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-#endif // ndef GEOS_GEOM_GEOMETRYCOMPONENTFILTER_H

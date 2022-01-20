@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_GEOMETRYEDITOR_H
-#define GEOS_GEOM_UTIL_GEOMETRYEDITOR_H
+#pragma once
 
 #include <geos/export.h>
 #include <memory>
@@ -126,4 +125,3 @@ public:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

@@ -16,8 +16,8 @@
  *
  **********************************************************************/
 
-#ifndef XMLTESTER_SINGLESIDEDBUFFERRESULTMATCHER_H
-#define XMLTESTER_SINGLESIDEDBUFFERRESULTMATCHER_H
+#pragma once
+
 
 // Forward declarations
 namespace geos {
@@ -55,4 +55,3 @@ private:
 } // namespace geos::xmltester
 } // namespace geos
 
-#endif // XMLTESTER_SINGLESIDEDBUFFERRESULTMATCHER_H

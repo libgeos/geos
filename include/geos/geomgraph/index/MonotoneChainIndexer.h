@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
-#define GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
+#pragma once
 
 #include <vector>
 #include <geos/export.h>
@@ -69,6 +68,4 @@ private:
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
-
-#endif // GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 

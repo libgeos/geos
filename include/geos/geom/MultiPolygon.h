@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOS_MULTIPOLYGON_H
-#define GEOS_GEOS_MULTIPOLYGON_H
+#pragma once
 
 #include <geos/export.h>
 #include <string>
@@ -27,8 +26,9 @@
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Polygon.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryCollection.h>
 
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -87,7 +87,10 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    std::unique_ptr<MultiPolygon> clone() const;
+    std::unique_ptr<MultiPolygon> clone() const
+    {
+        return std::unique_ptr<MultiPolygon>(cloneImpl());
+    };
 
     std::unique_ptr<MultiPolygon> reverse() const { return std::unique_ptr<MultiPolygon>(reverseImpl()); }
 
@@ -122,7 +125,9 @@ protected:
     MultiPolygon(std::vector<std::unique_ptr<Geometry>> && newPolys,
                  const GeometryFactory& newFactory);
 
-    MultiPolygon(const MultiPolygon& mp);
+    MultiPolygon(const MultiPolygon& mp)
+        : GeometryCollection(mp)
+        {};
 
     MultiPolygon* cloneImpl() const override { return new MultiPolygon(*this); }
 
@@ -142,9 +147,3 @@ protected:
 
 } // namespace geos::geom
 } // namespace geos
-
-#ifdef GEOS_INLINE
-# include "geos/geom/MultiPolygon.inl"
-#endif
-
-#endif // ndef GEOS_GEOS_MULTIPOLYGON_H

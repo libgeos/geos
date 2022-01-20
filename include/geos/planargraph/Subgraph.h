@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_SUBGRAPH_H
-#define GEOS_PLANARGRAPH_SUBGRAPH_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/planargraph/NodeMap.h> // for composition
@@ -180,4 +179,3 @@ protected:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_PLANARGRAPH_SUBGRAPH_H

@@ -18,8 +18,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_NODEMAP_H
-#define GEOS_GEOMGRAPH_NODEMAP_H
+#pragma once
 
 #include <geos/export.h>
 #include <map>
@@ -29,7 +28,6 @@
 #include <geos/geom/Coordinate.h> // for CoordinateLessThen
 #include <geos/geomgraph/Node.h> // for testInvariant
 
-#include <geos/inline.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -137,4 +135,3 @@ private:
 #pragma warning(pop)
 #endif
 
-#endif // ifndef GEOS_GEOMGRAPH_NODEMAP_H

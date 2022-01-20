@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PLANARGRAPH_DIRECTEDEDGESTAR_H
-#define GEOS_PLANARGRAPH_DIRECTEDEDGESTAR_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -148,4 +147,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_PLANARGRAPH_DIRECTEDEDGESTAR_H

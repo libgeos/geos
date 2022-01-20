@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_GEOMETRICSHAPEFACTORY_H
-#define GEOS_UTIL_GEOMETRICSHAPEFACTORY_H
+#pragma once
 
 #include <geos/export.h>
 #include <cassert>
@@ -197,4 +196,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_UTIL_GEOMETRICSHAPEFACTORY_H

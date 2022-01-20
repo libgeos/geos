@@ -18,8 +18,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_KEY_H
-#define GEOS_IDX_QUADTREE_KEY_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for composition
@@ -86,4 +85,3 @@ private:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_IDX_QUADTREE_KEY_H

@@ -11,8 +11,8 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-#ifndef GEOS_UTIL_MACHINE_H_INCLUDED
-#define GEOS_UTIL_MACHINE_H_INCLUDED
+
+#pragma once
 
 /**
  * Check endianness of current machine.
@@ -24,5 +24,3 @@ getMachineByteOrder()
     static int endian_check = 1; // don't modify !!
     return *((char*)&endian_check);
 }
-
-#endif

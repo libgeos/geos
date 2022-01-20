@@ -23,7 +23,4 @@ namespace overlayng { // geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
 
-#ifndef GEOS_INLINE
-#include "geos/operation/overlayng/EdgeKey.inl"
-#endif
 

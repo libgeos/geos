@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
-#define GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -150,4 +149,3 @@ public:
 } // namespace geos.geom
 } // namespace geos
 
-#endif

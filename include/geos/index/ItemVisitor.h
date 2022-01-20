@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_ITEMVISITOR_H
-#define GEOS_INDEX_ITEMVISITOR_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -36,6 +35,4 @@ public:
 
 } // namespace geos.index
 } // namespace geos
-
-#endif // GEOS_INDEX_ITEMVISITOR_H
 

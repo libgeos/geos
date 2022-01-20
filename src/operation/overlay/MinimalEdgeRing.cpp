@@ -20,21 +20,11 @@
 #include <geos/operation/overlay/MinimalEdgeRing.h>
 #include <geos/geomgraph/EdgeRing.h>
 
-#ifndef GEOS_INLINE
-#include <geos/operation/overlay/MinimalEdgeRing.inl>
-#endif
-
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
-#if GEOS_DEBUG
-#include <iostream>
-#endif
 
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
+
 
 MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge* start,
                                  const geom::GeometryFactory* p_geometryFactory)
@@ -43,10 +33,8 @@ MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge* start,
 {
     computePoints(start);
     computeRing();
-#if GEOS_DEBUG
-    std::cerr << "MinimalEdgeRing[" << this << "] ctor" << std::endl;
-#endif
 }
+
 
 } // namespace geos.operation.overlay
 } // namespace geos.operation

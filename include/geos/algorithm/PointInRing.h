@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_POINTINRING_H
-#define GEOS_ALGORITHM_POINTINRING_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -38,6 +37,4 @@ public:
 } // namespace geos::algorithm
 } // namespace geos
 
-
-#endif
 

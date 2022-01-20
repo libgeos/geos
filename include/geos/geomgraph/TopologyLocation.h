@@ -17,22 +17,24 @@
  *
  **********************************************************************/
 
-
-#ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
-#define GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
+#pragma once
 
 #include <geos/export.h>
-#include <geos/inline.h>
 #include <geos/geom/Location.h>
+#include <geos/geom/Position.h>
 
 #include <vector>
 #include <array>
 #include <string>
+#include <cassert>
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
+
+using geos::geom::Position;
+using geos::geom::Location;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -76,48 +78,138 @@ public:
      *
      * @see Location
      */
-    TopologyLocation(geom::Location on, geom::Location left, geom::Location right);
+    TopologyLocation(Location on, Location left, Location right)
+        : locationSize(3)
+    {
+        location[Position::ON] = on;
+        location[Position::LEFT] = left;
+        location[Position::RIGHT] = right;
+    }
 
-    TopologyLocation(geom::Location on);
+    TopologyLocation(Location on)
+        : locationSize(1)
+    {
+        location.fill(Location::NONE);
+        location[Position::ON] = on;
+    };
 
-    TopologyLocation(const TopologyLocation& gl);
+    TopologyLocation(const TopologyLocation& gl)
+        : location(gl.location)
+        , locationSize(gl.locationSize)
+        {};
 
-    TopologyLocation& operator= (const TopologyLocation& gl);
+    TopologyLocation& operator= (const TopologyLocation& gl)
+    {
+        location = gl.location;
+        locationSize = gl.locationSize;
+        return *this;
+    };
 
-    geom::Location get(std::size_t posIndex) const;
+    Location get(std::size_t posIndex) const
+    {
+        // should be an assert() instead ?
+        if(posIndex < locationSize) {
+            return location[posIndex];
+        }
+        return Location::NONE;
+    };
 
     /**
      * @return true if all locations are Location::NONE
      */
-    bool isNull() const;
+    bool isNull() const
+    {
+        for(std::size_t i = 0; i < locationSize; ++i) {
+            if(location[i] != Location::NONE) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     /**
      * @return true if any locations is Location::NONE
      */
-    bool isAnyNull() const;
+    bool isAnyNull() const
+    {
+        for(std::size_t i = 0; i < locationSize; ++i) {
+            if(location[i] == Location::NONE) {
+                return true;
+            }
+        }
+        return false;
+    };
 
-    bool isEqualOnSide(const TopologyLocation& le, uint32_t locIndex) const;
+    bool isEqualOnSide(const TopologyLocation& le, uint32_t locIndex) const
+    {
+        return location[locIndex] == le.location[locIndex];
+    };
 
-    bool isArea() const;
+    bool isArea() const
+    {
+        return locationSize > 1;
+    };
 
-    bool isLine() const;
+    bool isLine() const
+    {
+        return locationSize == 1;
+    };
 
-    void flip();
+    void flip()
+    {
+        if(locationSize <= 1) {
+            return;
+        }
+        std::swap(location[Position::LEFT], location[Position::RIGHT]);
+    };
 
-    void setAllLocations(geom::Location locValue);
+    void setAllLocations(Location locValue)
+    {
+        location.fill(locValue);
+    };
 
-    void setAllLocationsIfNull(geom::Location locValue);
 
-    void setLocation(std::size_t locIndex, geom::Location locValue);
+    void setAllLocationsIfNull(Location locValue)
+    {
+        for(std::size_t i = 0; i < locationSize; ++i) {
+            if(location[i] == Location::NONE) {
+                location[i] = locValue;
+            }
+        }
+    };
 
-    void setLocation(geom::Location locValue);
+    void setLocation(std::size_t locIndex, Location locValue)
+    {
+        location[locIndex] = locValue;
+    };
 
-    /// Warning: returns reference to owned memory
-    const std::array<geom::Location, 3>& getLocations() const;
+    void setLocation(Location locValue)
+    {
+        setLocation(Position::ON, locValue);
+    };
 
-    void setLocations(geom::Location on, geom::Location left, geom::Location right);
+    const std::array<Location, 3>& getLocations() const
+    {
+        return location;
+    };
 
-    bool allPositionsEqual(geom::Location loc) const;
+    void setLocations(Location on, Location left, Location right)
+    {
+        assert(locationSize >= 3);
+        location[Position::ON] = on;
+        location[Position::LEFT] = left;
+        location[Position::RIGHT] = right;
+    };
+
+    bool allPositionsEqual(Location loc) const
+    {
+        for(std::size_t i = 0; i < locationSize; ++i) {
+            if(location[i] != loc) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     /** \brief
      * merge updates only the UNDEF attributes of this object
@@ -127,10 +219,12 @@ public:
 
     std::string toString() const;
 
+
 private:
 
     std::array<geom::Location, 3> location;
     std::uint8_t locationSize;
+
 };
 
 std::ostream& operator<< (std::ostream&, const TopologyLocation&);
@@ -138,13 +232,6 @@ std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 } // namespace geos.geomgraph
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/geomgraph/TopologyLocation.inl"
-#endif
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif // ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
-

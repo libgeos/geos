@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H
-#define GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H
+#pragma once
 
 #include <geos/export.h>
 
@@ -323,4 +322,3 @@ public:
 } // namespace geos::index
 } // namespace geos
 
-#endif // GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H

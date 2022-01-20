@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
-#define GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
+#pragma once
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
@@ -105,4 +104,3 @@ public:
 } // namespace geos.linearref
 } // namespace geos
 
-#endif

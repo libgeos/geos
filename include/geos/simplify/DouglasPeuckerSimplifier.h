@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H
-#define GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H
+#pragma once
 
 #include <geos/export.h>
 #include <memory> // for unique_ptr
@@ -83,4 +82,3 @@ private:
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H

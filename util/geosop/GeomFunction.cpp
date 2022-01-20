@@ -33,6 +33,7 @@
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -138,6 +139,21 @@ GeomFunction::init()
             PrecisionModel pm(d);
             return new Result( geos::precision::GeometryPrecisionReducer::reduce( *geom, pm ) );
         });
+    add("reducePrecisionKeepCollapsed", 1, 1, Result::typeGeometry, catGeom,
+        "reduce precision of geometry to a precision scale factor",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB;  // prevent unused variable warning
+            PrecisionModel pm(d);
+            return new Result( geos::precision::GeometryPrecisionReducer::reduceKeepCollapsed( *geom, pm ) );
+        });
+    add("reducePrecisionPointwise", 1, 1, Result::typeGeometry, catGeom,
+        "reduce precision of geometry to a precision scale factor",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB;  // prevent unused variable warning
+            PrecisionModel pm(d);
+            return new Result( geos::precision::GeometryPrecisionReducer::reducePointwise( *geom, pm ) );
+        });
+
     add("reverse", 1, 0, Result::typeGeometry, catGeom,
         "reverse geometry",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
@@ -190,6 +206,16 @@ GeomFunction::init()
             return new Result( geom->buffer( d ) );
         });
     add("offsetCurve", 1, 1, Result::typeGeometry,
+        catConst, "compute the offset curve of geometry by a distance",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB;  // prevent unused variable warning
+            geos::operation::buffer::BufferParameters bp;
+
+            geos::operation::buffer::OffsetCurve oc(*geom, d, bp);
+            std::unique_ptr<Geometry> g3 = oc.getCurve();
+            return new Result( g3.release() );
+        });
+    add("OLDoffsetCurve", 1, 1, Result::typeGeometry,
         catConst, "compute the offset curve of geometry by a distance",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB;  // prevent unused variable warning

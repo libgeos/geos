@@ -14,8 +14,8 @@
  **********************************************************************/
 
 
-#ifndef GEOS_BIGTEST_H
-#define GEOS_BIGTEST_H
+#pragma once
+
 
 #include <memory>
 
@@ -43,4 +43,3 @@ public:
                                          double armLen, int nArms, int nPts);
 };
 
-#endif

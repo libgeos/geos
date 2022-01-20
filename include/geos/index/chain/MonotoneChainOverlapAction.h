@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
-#define GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/LineSegment.h>
@@ -84,6 +83,4 @@ public:
 } // namespace geos::index::chain
 } // namespace geos::index
 } // namespace geos
-
-#endif // GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 

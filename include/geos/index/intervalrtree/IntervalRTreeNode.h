@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
-#define GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
+#pragma once
 
 #include <geos/constants.h>
 #include <vector>
@@ -103,6 +102,4 @@ public:
 } // geos::index::intervalrtree
 } // geos::index
 } // geos
-
-#endif // GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 

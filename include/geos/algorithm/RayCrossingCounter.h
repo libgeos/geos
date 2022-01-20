@@ -17,8 +17,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
-#define GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Location.h>
@@ -149,5 +148,3 @@ public:
 
 } // geos::algorithm
 } // geos
-
-#endif // GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H

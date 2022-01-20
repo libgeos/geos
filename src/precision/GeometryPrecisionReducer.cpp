@@ -88,6 +88,15 @@ GeometryPrecisionReducer::reducePointwise(const Geometry& g, const geom::Precisi
     return reducer.reduce(g);
 }
 
+/* public static */
+std::unique_ptr<Geometry>
+GeometryPrecisionReducer::reduceKeepCollapsed(const Geometry& g, const geom::PrecisionModel& precModel)
+{
+    GeometryPrecisionReducer reducer(precModel);
+    reducer.setRemoveCollapsedComponents(false);
+    return reducer.reduce(g);
+}
+
 
 /* public static */
 std::unique_ptr<geom::Geometry>
@@ -144,4 +153,3 @@ GeometryPrecisionReducer::createFactory(const GeometryFactory& oldGF,
 
 } // namespace geos.precision
 } // namespace geos
-

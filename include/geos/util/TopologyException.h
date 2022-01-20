@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_UTIL_TOPOLOGYEXCEPTION_H
-#define GEOS_UTIL_TOPOLOGYEXCEPTION_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/util/GEOSException.h>
@@ -63,5 +62,3 @@ private:
 } // namespace geos::util
 } // namespace geos
 
-
-#endif // GEOS_UTIL_TOPOLOGYEXCEPTION_H

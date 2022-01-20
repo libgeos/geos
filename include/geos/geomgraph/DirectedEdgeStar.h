@@ -19,8 +19,7 @@
  **********************************************************************/
 
 
-#ifndef GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
-#define GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
+#pragma once
 
 #include <geos/export.h>
 #include <set>
@@ -31,7 +30,6 @@
 #include <geos/geomgraph/Label.h>  // for private member
 #include <geos/geom/Coordinate.h>  // for p0,p1
 
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -162,10 +160,4 @@ private:
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/DirectedEdgeEndStar.inl"
-//#endif
-
-#endif // ifndef GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
 

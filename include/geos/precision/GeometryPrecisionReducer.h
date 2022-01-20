@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_PRECISION_GEOMETRYPRECISIONREDUCER_H
-#define GEOS_PRECISION_GEOMETRYPRECISIONREDUCER_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/GeometryFactory.h> // for GeometryFactory::Ptr
@@ -109,6 +108,9 @@ public:
     static std::unique_ptr<geom::Geometry>
     reducePointwise(const geom::Geometry& g, const geom::PrecisionModel& precModel);
 
+    static std::unique_ptr<geom::Geometry>
+    reduceKeepCollapsed(const geom::Geometry& g, const geom::PrecisionModel& precModel);
+
     GeometryPrecisionReducer(const geom::PrecisionModel& pm)
         : newFactory(nullptr)
         , targetPM(pm)
@@ -196,4 +198,3 @@ public:
 } // namespace geos.precision
 } // namespace geos
 
-#endif // GEOS_PRECISION_GEOMETRYPRECISIONREDUCER_H

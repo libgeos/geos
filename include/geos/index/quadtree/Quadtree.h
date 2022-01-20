@@ -16,8 +16,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_IDX_QUADTREE_QUADTREE_H
-#define GEOS_IDX_QUADTREE_QUADTREE_H
+#pragma once
 
 #include <geos/export.h>
 #include <geos/geom/Envelope.h>
@@ -199,4 +198,3 @@ public:
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_IDX_QUADTREE_QUADTREE_H
