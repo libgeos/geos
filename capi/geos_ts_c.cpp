@@ -1216,26 +1216,14 @@ extern "C" {
     Geometry*
     GEOSConcaveHull_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
-        double ratio, unsigned int ratioMode,
+        double ratio,
         unsigned int allowHoles)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3;
-            if (ratioMode == GEOS_DIM_LINE) {
-                ConcaveHull hull(g1);
-                hull.setMaximumEdgeLengthRatio(ratio);
-                hull.setHolesAllowed(allowHoles);
-                g3 = hull.getHull();
-            }
-            else if (ratioMode == GEOS_DIM_AREA) {
-                ConcaveHull hull(g1);
-                hull.setMaximumAreaRatio(ratio);
-                hull.setHolesAllowed(allowHoles);
-                g3 = hull.getHull();
-            }
-            else {
-                throw IllegalArgumentException("Invalid ratioMode (must be a GEOS_DIM_LINE or GEOS_DIM_AREA)");
-            }
+            ConcaveHull hull(g1);
+            hull.setMaximumEdgeLengthRatio(ratio);
+            hull.setHolesAllowed(allowHoles);
+            std::unique_ptr<Geometry> g3 = hull.getHull();
             g3->setSRID(g1->getSRID());
             return g3.release();
         });

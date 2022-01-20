@@ -18,6 +18,7 @@
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/triangulate/tri/TriList.h>
 #include <geos/triangulate/quadedge/TriangleVisitor.h>
+#include <geos/algorithm/hull/HullTri.h>
 
 #include <queue>
 #include <deque>
@@ -51,7 +52,7 @@ namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
 
 
-typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTriCompare> HullTriQueue;
+typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTri::HullTriCompare> HullTriQueue;
 
 
 /**
@@ -237,7 +238,7 @@ private:
     bool isRemovableBorder(const HullTri* tri) const;
     bool isRemovableHole(const HullTri* tri) const;
 
-    static std::unique_ptr<Geometry> toGeometry(
+    std::unique_ptr<Geometry> toGeometry(
         TriList<HullTri>& triList,
         const GeometryFactory* factory);
 

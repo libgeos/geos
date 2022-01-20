@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/Coordinate.h>
+#include <geos/triangulate/tri/TriList.h>
 
 #include <memory>
 
@@ -30,8 +31,6 @@ class Polygon;
 using geos::geom::Coordinate;
 using geos::geom::Polygon;
 using geos::geom::GeometryFactory;
-
-typedef int TriIndex;
 
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate

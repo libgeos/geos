@@ -39,7 +39,7 @@ void object::test<1>()
     expected_ = GEOSGeomFromWKT("POLYGON ((30 70, 10 90, 60 72, 90 90, 90 60, 90 10, 60 30, 10 10, 40 40, 60 50, 47 66, 40 60, 30 70))");
     ensure(nullptr != expected_);
 
-    GEOSGeometry* output = GEOSConcaveHull(input_, 0, GEOS_DIM_LINE, 0);
+    GEOSGeometry* output = GEOSConcaveHull(input_, 0, 0);
     ensure(nullptr != output);
     ensure(0 == GEOSisEmpty(output));
     ensure_geometry_equals(output, expected_);

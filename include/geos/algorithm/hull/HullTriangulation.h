@@ -28,9 +28,9 @@ class Coordinate;
 }
 namespace triangulate {
 namespace quadedge {
-}
 class QuadEdge;
 class QuadEdgeSubdivision;
+}
 }
 }
 
@@ -57,18 +57,6 @@ private:
     static void toTris(
         QuadEdgeSubdivision& subdiv,
         TriList<HullTri>& triList);
-
-    /**
-    * Creates a polygonal geometry representing the area of a triangulation
-    * which may be disconnected or contain holes.
-    *
-    * @param triList the triangulation
-    * @param geomFactory the geometry factory to use
-    * @return the area polygonal geometry
-    */
-    static std::unique_ptr<Geometry> geomunion(
-        TriList<HullTri>& triList,
-        const GeometryFactory* factory);
 
     /**
     * Extracts the coordinates of the edges along the boundary of a triangulation,
@@ -108,7 +96,19 @@ public:
         TriList<HullTri>& triList,
         const GeometryFactory* factory);
 
-    static HullTri* nextBorderTri(const HullTri* triStart);
+    static HullTri* nextBorderTri(HullTri* triStart);
+
+    /**
+    * Creates a polygonal geometry representing the area of a triangulation
+    * which may be disconnected or contain holes.
+    *
+    * @param triList the triangulation
+    * @param geomFactory the geometry factory to use
+    * @return the area polygonal geometry
+    */
+    static std::unique_ptr<Geometry> geomunion(
+        TriList<HullTri>& triList,
+        const GeometryFactory* factory);
 
 
     class HullTriVisitor : public TriangleVisitor

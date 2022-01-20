@@ -36,6 +36,7 @@ namespace quadedge {
 using geos::geom::Coordinate;
 using geos::geom::Triangle;
 using geos::triangulate::tri::Tri;
+using geos::triangulate::tri::TriList;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -59,6 +60,19 @@ class HullTri : public Tri
             : Tri(c0, c1, c2)
             , m_size(Triangle::longestSideLength(c0, c1, c2))
             {};
+
+        class HullTriCompare {
+            public:
+                HullTriCompare() {};
+                bool operator()(const HullTri* a, const HullTri* b)
+                {
+                    if (a->getSize() == b->getSize())
+                        return a->getArea() < b->getArea();
+                    else
+                        return a->getSize() < b->getSize();
+                }
+        };
+
 
         double getSize() const;
 
@@ -120,31 +134,15 @@ class HullTri : public Tri
 
         friend std::ostream& operator<<(std::ostream& os, const HullTri& ht);
 
+        double lengthOfBoundary() const;
 
-
-
-
-
-
-        double lengthOfBorder() const;
-        HullTri* nextBorderTri() ;
+        void remove(TriList<HullTri>& triList);
 
 
 }; // HullTri
 
 
 
-// Sort in inverse order (largest to smallest) in
-// the std::priority_queue
-struct HullTriCompare {
-    bool operator()(const HullTri* a, const HullTri* b)
-    {
-        if (a->getSize() == b->getSize())
-            return a->getArea() < b->getArea();
-        else
-            return a->getSize() < b->getSize();
-    }
-};
 
 
 

@@ -35,6 +35,8 @@ using geos::geom::Coordinate;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 
+typedef int TriIndex;
+
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate
 namespace tri {         // geos.triangulate.tri
@@ -120,11 +122,11 @@ public:
     std::size_t
     degree(const TriType* tri, TriIndex index)
     {
-        Coordinate& v = tri->getCoordinate(index);
-        int degree = 0;
-        for (auto* tri : *this) {
+        const Coordinate& v = tri->getCoordinate(index);
+        std::size_t degree = 0;
+        for (auto* t : *this) {
             for (TriIndex i = 0; i < 3; i++) {
-                if (v.equals2D(tri->getCoordinate(i)))
+                if (v.equals2D(t->getCoordinate(i)))
                     degree++;
             }
         }

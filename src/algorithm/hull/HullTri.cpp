@@ -35,7 +35,7 @@ HullTri::getSize() const
 void
 HullTri::setSizeToBoundary()
 {
-    m_size = lengthOfBorder();
+    m_size = lengthOfBoundary();
 }
 
 /* public */
@@ -134,7 +134,7 @@ HullTri::lengthOfLongestEdge() const
 
 /* public */
 double
-HullTri::lengthOfBoundary()
+HullTri::lengthOfBoundary() const
 {
     double len = 0.0;
     for (TriIndex i = 0; i < 3; i++) {
@@ -247,6 +247,13 @@ operator<<(std::ostream& os, const HullTri& ht)
     return os;
 }
 
+/* public */
+void
+HullTri::remove(TriList<HullTri>& triList)
+{
+    Tri::remove();
+    triList.remove(this);
+}
 
 
 

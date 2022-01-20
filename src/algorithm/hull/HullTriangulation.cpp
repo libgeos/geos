@@ -13,15 +13,13 @@
  **********************************************************************/
 
 #include <geos/algorithm/hull/HullTriangulation.h>
-#include <geos/algorithm/hull/TriList.h>
 #include <geos/algorithm/hull/HullTri.h>
-#include <geos/algorithm/hull/Tri.h>
 
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/tri/TriangulationBuilder.h>
-
+#include <geos/operation/overlayng/CoverageUnion.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/Geometry.h>
@@ -38,9 +36,8 @@ using geos::geom::GeometryFactory;
 using geos::geom::Polygon;
 using geos::geom::Triangle;
 using geos::triangulate::DelaunayTriangulationBuilder;
-using geos::triangulate::quadedge::QuadEdgeSubdivision;
-using geos::triangulate::quadedge::QuadEdge;
 using geos::triangulate::tri::TriangulationBuilder;
+using geos::operation::overlayng::CoverageUnion;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -55,7 +52,7 @@ HullTriangulation::createDelaunayTriangulation(
 {
     //TODO: implement a DT on Tris directly?
     DelaunayTriangulationBuilder dt;
-    dt.setSites(geom);
+    dt.setSites(*geom);
     QuadEdgeSubdivision& subdiv = dt.getSubdivision();
     toTris(subdiv, triList);
     return;
@@ -70,7 +67,6 @@ HullTriangulation::toTris(
 {
     HullTriVisitor visitor(triList);
     subdiv.visitTriangles(&visitor, false);
-    visitor.getTriangles();
     TriangulationBuilder tb;
     for (auto* tri : triList) {
         tb.add(static_cast<Tri*>(tri));
@@ -106,7 +102,7 @@ HullTriangulation::traceBoundaryPolygon(
         HullTri* tri = triList[0];
         return tri->toPolygon(factory);
     }
-    std::vector<Coordinate> pts = traceBorder(triList);
+    std::vector<Coordinate> pts = traceBoundary(triList);
     return factory->createPolygon(std::move(pts));
 }
 
@@ -151,15 +147,15 @@ HullTriangulation::findBorderTri(TriList<HullTri>& triList)
 
 /* public static */
 HullTri*
-HullTriangulation::nextBorderTri(const HullTri* triStart)
+HullTriangulation::nextBorderTri(HullTri* triStart)
 {
     HullTri* tri = triStart;
     // start at first non-border edge CW
-    TriIndex index = Tri::next(tri->borderIndexCW());
+    TriIndex index = Tri::next(tri->boundaryIndexCW());
     // scan CCW around vertex for next border tri
     do {
         HullTri* adjTri = static_cast<HullTri*>(tri->getAdjacent(index));
-        if (adjTri == this) {
+        if (adjTri == tri) {
             throw util::IllegalStateException("No outgoing border edge found");
         }
         index = Tri::next(adjTri->getIndex(tri));

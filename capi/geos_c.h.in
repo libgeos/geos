@@ -242,21 +242,6 @@ enum GEOSWKBFlavors {
 };
 
 /**
-* Enumeration to use when specifying a
-* dimensional output or methodology to a function.
-*
-* \see GEOSConcaveHull
-*/
-enum GEOSDimensionality {
-    /** Point */
-    GEOS_DIM_POINT = 0,
-    /** Line */
-    GEOS_DIM_LINE = 1,
-    /** Polygon */
-    GEOS_DIM_AREA = 2
-};
-
-/**
 * Callback function for use in spatial index search calls. Pass into
 * the query function and handle query results as the index
 * returns them.
@@ -761,7 +746,6 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     double ratio,
-    unsigned int ratioMode,
     unsigned int allowHoles);
 
 /** \see GEOSMinimumRotatedRectangle */
@@ -2608,7 +2592,6 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 * that contains all the points in the input Geometry
 * \param g The input geometry
 * \param ratio The ratio value, between 0 and 1.
-* \param ratioMode Either GEOS_DIM_LINE for linear ratio mode or GEOS_DIM_AREA for area ratio mode.
 * \param allowHoles When non-zero, the polygonal output may contain holes.
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 * The area ratio is the ratio of the concave hull area to the convex hull area.
@@ -2622,7 +2605,6 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
     double ratio,
-    unsigned int ratioMode,
     unsigned int allowHoles);
 
 /**

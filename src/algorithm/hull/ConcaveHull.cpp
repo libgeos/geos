@@ -276,8 +276,8 @@ ConcaveHull::computeHullHoles(TriList<HullTri>& triList)
     }
 }
 
-/* private */
-static std::vector<HullTri*>
+/* private static */
+std::vector<HullTri*>
 ConcaveHull::findCandidateHoles(TriList<HullTri>& triList, double minEdgeLen)
 {
     std::vector<HullTri*> candidates;
@@ -289,7 +289,7 @@ ConcaveHull::findCandidateHoles(TriList<HullTri>& triList, double minEdgeLen)
         }
     }
     // sort by HullTri comparator - longest edge length first
-    std::sort(candidates.begin(), candidates.end(), HullTriCompare);
+    std::sort(candidates.begin(), candidates.end(), HullTri::HullTriCompare());
     return candidates;
 }
 
@@ -368,15 +368,15 @@ ConcaveHull::isRemovableHole(const HullTri* tri) const
     return ! tri->hasBoundaryTouch();
 }
 
-/* private static */
+/* private */
 std::unique_ptr<Geometry>
 ConcaveHull::toGeometry(TriList<HullTri>& triList, const GeometryFactory* factory)
 {
     if (! isHolesAllowed) {
-        return HullTriangulation::traceBoundaryPolygon(triList, geomFactory);
+        return HullTriangulation::traceBoundaryPolygon(triList, factory);
     }
     //-- in case holes are present use union (slower but handles holes)
-    return HullTriangulation::geomunion(triList, geomFactory);
+    return HullTriangulation::geomunion(triList, factory);
 }
 
 
