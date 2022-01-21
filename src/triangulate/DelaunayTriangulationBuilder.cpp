@@ -45,7 +45,8 @@ DelaunayTriangulationBuilder::extractUniqueCoordinates(
 }
 
 std::unique_ptr<CoordinateSequence>
-DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
+DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq)
+{
     auto seqFactory = CoordinateArraySequenceFactory::instance();
     auto dim = seq->getDimension();
 
@@ -91,7 +92,7 @@ void
 DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 {
     // remove any duplicate points (they will cause the triangulation to fail)
-    siteCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(&coords);
+    siteCoords = unique(&coords);
 }
 
 void
