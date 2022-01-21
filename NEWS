@@ -6,6 +6,7 @@ Changes in 3.9.3
   - Improve BuildArea performance (#1122, Sandro Santilli)
   - Memory leak on exception in prepared geometry (GH-506, Dan Baston)
   - Infinite loop on collapsed input in MaximumInscribedCircle (Paul Ramsey)
+  - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
 
 
 Changes in 3.9.2
