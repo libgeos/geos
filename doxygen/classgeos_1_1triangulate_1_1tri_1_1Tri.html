@@ -46,6 +46,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1triangulate_1_1tri_1_1Tri-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -54,6 +55,8 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="Tri_8h_source.html">Tri.h</a>&gt;</code></p>
+
+<p>Inherited by geos::algorithm::hull::HullTri.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -63,14 +66,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a216a22b99e3520d0abfc83714365caf8"><td class="memItemLeft" align="right" valign="top"><a id="a216a22b99e3520d0abfc83714365caf8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAdjacent</b> (<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *p_tri0, <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *p_tri1, <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *p_tri2)</td></tr>
 <tr class="separator:a216a22b99e3520d0abfc83714365caf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe2b19fab3c81d4244ddff1adacc73a5"><td class="memItemLeft" align="right" valign="top"><a id="abe2b19fab3c81d4244ddff1adacc73a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTri</b> (TriIndex edgeIndex, <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri)</td></tr>
-<tr class="separator:abe2b19fab3c81d4244ddff1adacc73a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab02dd97618abd4d1f1937abb52b6438b"><td class="memItemLeft" align="right" valign="top"><a id="ab02dd97618abd4d1f1937abb52b6438b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAdjacent</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;pt, <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri)</td></tr>
 <tr class="separator:ab02dd97618abd4d1f1937abb52b6438b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe2b19fab3c81d4244ddff1adacc73a5"><td class="memItemLeft" align="right" valign="top"><a id="abe2b19fab3c81d4244ddff1adacc73a5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTri</b> (TriIndex edgeIndex, <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri)</td></tr>
+<tr class="separator:abe2b19fab3c81d4244ddff1adacc73a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b9d5c5b05c6a5d0298ab1e19043d230"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html#a6b9d5c5b05c6a5d0298ab1e19043d230">flip</a> (TriIndex index)</td></tr>
 <tr class="separator:a6b9d5c5b05c6a5d0298ab1e19043d230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c3e6fef13577744a6b22d453795bb5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html#a4c3e6fef13577744a6b22d453795bb5b">remove</a> ()</td></tr>
+<tr class="separator:a4c3e6fef13577744a6b22d453795bb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad43532cf5b516ba6ddbf55a1de254354"><td class="memItemLeft" align="right" valign="top"><a id="ad43532cf5b516ba6ddbf55a1de254354"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList</a>&lt; <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> &gt; &amp;triList)</td></tr>
+<tr class="separator:ad43532cf5b516ba6ddbf55a1de254354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0f0cfa8c453ae936590975db3e5ba45"><td class="memItemLeft" align="right" valign="top"><a id="ad0f0cfa8c453ae936590975db3e5ba45"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td></tr>
 <tr class="separator:ad0f0cfa8c453ae936590975db3e5ba45"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -95,24 +103,41 @@ const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &
 <tr class="memitem:a25200742966c4cb227275f19c5b544ed"><td class="memItemLeft" align="right" valign="top"><a id="a25200742966c4cb227275f19c5b544ed"></a>
 TriIndex&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;p) const</td></tr>
 <tr class="separator:a25200742966c4cb227275f19c5b544ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24d7ade1a0d53ee6f81678ade4fdb54d"><td class="memItemLeft" align="right" valign="top"><a id="a24d7ade1a0d53ee6f81678ade4fdb54d"></a>
-TriIndex&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> (<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri) const</td></tr>
-<tr class="separator:a24d7ade1a0d53ee6f81678ade4fdb54d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af622e65d97a5b8b723e07e8ed1b321f2"><td class="memItemLeft" align="right" valign="top"><a id="af622e65d97a5b8b723e07e8ed1b321f2"></a>
+TriIndex&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> (const <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri) const</td></tr>
+<tr class="separator:af622e65d97a5b8b723e07e8ed1b321f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70f2faab9cec1a7c8d83722bdc17cd4d"><td class="memItemLeft" align="right" valign="top"><a id="a70f2faab9cec1a7c8d83722bdc17cd4d"></a>
 <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getAdjacent</b> (TriIndex i) const</td></tr>
 <tr class="separator:a70f2faab9cec1a7c8d83722bdc17cd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28edaf71d2ac6374c8acb3936f571564"><td class="memItemLeft" align="right" valign="top"><a id="a28edaf71d2ac6374c8acb3936f571564"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasAdjacent</b> (TriIndex i) const</td></tr>
 <tr class="separator:a28edaf71d2ac6374c8acb3936f571564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8783cc01ab2c75963b29145d11056f8"><td class="memItemLeft" align="right" valign="top"><a id="aa8783cc01ab2c75963b29145d11056f8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasAdjacent</b> () const</td></tr>
+<tr class="separator:aa8783cc01ab2c75963b29145d11056f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10cc1ab182227935bee81da838772a3b"><td class="memItemLeft" align="right" valign="top"><a id="a10cc1ab182227935bee81da838772a3b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAdjacent</b> (<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *tri) const</td></tr>
 <tr class="separator:a10cc1ab182227935bee81da838772a3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90403f7d2ecef124d04fbcba035b9c46"><td class="memItemLeft" align="right" valign="top"><a id="a90403f7d2ecef124d04fbcba035b9c46"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>numAdjacent</b> () const</td></tr>
 <tr class="separator:a90403f7d2ecef124d04fbcba035b9c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6adf947fd3214090aa7923d5e9915b4e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html#a6adf947fd3214090aa7923d5e9915b4e">isInteriorVertex</a> (TriIndex index) const</td></tr>
+<tr class="separator:a6adf947fd3214090aa7923d5e9915b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf8e3b3f1824c1847a4ef441ee26777"><td class="memItemLeft" align="right" valign="top"><a id="a5bf8e3b3f1824c1847a4ef441ee26777"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBorder</b> () const</td></tr>
+<tr class="separator:a5bf8e3b3f1824c1847a4ef441ee26777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41b885c6938ee60d24123c784788edf"><td class="memItemLeft" align="right" valign="top"><a id="ad41b885c6938ee60d24123c784788edf"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBoundary</b> (TriIndex index) const</td></tr>
+<tr class="separator:ad41b885c6938ee60d24123c784788edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade2c72aeb801d6353764145503c5e698"><td class="memItemLeft" align="right" valign="top"><a id="ade2c72aeb801d6353764145503c5e698"></a>
 <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>midpoint</b> (TriIndex edgeIndex) const</td></tr>
 <tr class="separator:ade2c72aeb801d6353764145503c5e698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f7c53cbef43431dca9004c24ff50270"><td class="memItemLeft" align="right" valign="top"><a id="a3f7c53cbef43431dca9004c24ff50270"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getArea</b> () const</td></tr>
+<tr class="separator:a3f7c53cbef43431dca9004c24ff50270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3722fd1d9158b0f525278dc4a005414"><td class="memItemLeft" align="right" valign="top"><a id="ae3722fd1d9158b0f525278dc4a005414"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getLength</b> () const</td></tr>
+<tr class="separator:ae3722fd1d9158b0f525278dc4a005414"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a642e87151c15ddeee162464644e48000"><td class="memItemLeft" align="right" valign="top"><a id="a642e87151c15ddeee162464644e48000"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toPolygon</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *gf) const</td></tr>
 <tr class="separator:a642e87151c15ddeee162464644e48000"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,6 +157,26 @@ static TriIndex&#160;</td><td class="memItemRight" valign="bottom"><b>oppVertex<
 static TriIndex&#160;</td><td class="memItemRight" valign="bottom"><b>oppEdge</b> (TriIndex vertexIndex)</td></tr>
 <tr class="separator:adfb4087223d1221910e1735d08162210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a205ef82d6be9de47600e79920d383aa9"><td class="memItemLeft" align="right" valign="top"><a id="a205ef82d6be9de47600e79920d383aa9"></a>
+<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p0</b></td></tr>
+<tr class="separator:a205ef82d6be9de47600e79920d383aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d22d5a42e2c9230346e2d8137ec0f60"><td class="memItemLeft" align="right" valign="top"><a id="a4d22d5a42e2c9230346e2d8137ec0f60"></a>
+<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p1</b></td></tr>
+<tr class="separator:a4d22d5a42e2c9230346e2d8137ec0f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3f2daca4b99235a0bb442a433a2a8d"><td class="memItemLeft" align="right" valign="top"><a id="a5e3f2daca4b99235a0bb442a433a2a8d"></a>
+<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></tr>
+<tr class="separator:a5e3f2daca4b99235a0bb442a433a2a8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe67b14734cb6c06663ced3c8e896a6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html#abe67b14734cb6c06663ced3c8e896a6f">tri0</a></td></tr>
+<tr class="separator:abe67b14734cb6c06663ced3c8e896a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca542e33bed8d31b69ca068f4eba7885"><td class="memItemLeft" align="right" valign="top"><a id="aca542e33bed8d31b69ca068f4eba7885"></a>
+<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tri1</b></td></tr>
+<tr class="separator:aca542e33bed8d31b69ca068f4eba7885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6412663a5cbb5c3f8f698723cbf77ede"><td class="memItemLeft" align="right" valign="top"><a id="a6412663a5cbb5c3f8f698723cbf77ede"></a>
+<a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tri2</b></td></tr>
+<tr class="separator:a6412663a5cbb5c3f8f698723cbf77ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a313aa9e2f0e274d40c36d6079ce02e6f"><td class="memItemLeft" align="right" valign="top"><a id="a313aa9e2f0e274d40c36d6079ce02e6f"></a>
@@ -140,7 +185,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A memory-efficient representation of a triangle in a triangulation. Contains three vertices, and links to adjacent Tris for each edge. Tris are constructed independently, and if needed linked into a triangulation using <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1TriangulationBuilder.html">TriangulationBuilder</a>.</p>
-<dl class="section author"><dt>Author</dt><dd>mdavis </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6b9d5c5b05c6a5d0298ab1e19043d230"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b9d5c5b05c6a5d0298ab1e19043d230">&#9670;&nbsp;</a></span>flip()</h2>
@@ -164,6 +209,74 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a6adf947fd3214090aa7923d5e9915b4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6adf947fd3214090aa7923d5e9915b4e">&#9670;&nbsp;</a></span>isInteriorVertex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::triangulate::tri::Tri::isInteriorVertex </td>
+          <td>(</td>
+          <td class="paramtype">TriIndex&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tests if a tri vertex is interior. A vertex of a triangle is interior if it is fully surrounded by other triangles.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>the vertex index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the vertex is interior </dd></dl>
+
+</div>
+</div>
+<a id="a4c3e6fef13577744a6b22d453795bb5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c3e6fef13577744a6b22d453795bb5b">&#9670;&nbsp;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::triangulate::tri::Tri::remove </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Removes this triangle from a triangulation. All adjacent references and the references to this <a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> in the adjacent Tris are set to nullptr. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="abe67b14734cb6c06663ced3c8e896a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe67b14734cb6c06663ced3c8e896a6f">&#9670;&nbsp;</a></span>tri0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a>* geos::triangulate::tri::Tri::tri0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>triN is the adjacent triangle across the edge pN - pNN. pNN is the next vertex CW from pN. </p>
 
 </div>
 </div>

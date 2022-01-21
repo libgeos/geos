@@ -81,6 +81,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isIsoceles</b> ()</td
 <tr class="separator:a16a1eaf84a24dd478be19e4a3dfaabcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a210feca714c9cb363d8ffb32117b1c6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a210feca714c9cb363d8ffb32117b1c6c">isAcute</a> ()</td></tr>
 <tr class="separator:a210feca714c9cb363d8ffb32117b1c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b607196253420d3057a3803d3d8f294"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a2b607196253420d3057a3803d3d8f294">length</a> () const</td></tr>
+<tr class="separator:a2b607196253420d3057a3803d3d8f294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05064034c810f9c074f56799b0b1f0b9"><td class="memItemLeft" align="right" valign="top"><a id="a05064034c810f9c074f56799b0b1f0b9"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>area</b> () const</td></tr>
+<tr class="separator:a05064034c810f9c074f56799b0b1f0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -92,6 +97,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a480b3159680b9170a6bbe521aa2ca01b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecdd2b53ada731c8f109f96d7d1490f6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#aecdd2b53ada731c8f109f96d7d1490f6">intersects</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;p)</td></tr>
 <tr class="separator:aecdd2b53ada731c8f109f96d7d1490f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5668d02893004f8cd08bc137a0dc7ba2"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a5668d02893004f8cd08bc137a0dc7ba2">longestSideLength</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c)</td></tr>
+<tr class="separator:a5668d02893004f8cd08bc137a0dc7ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6363fc73e1c74bb10592eb8a1e2aa358"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a6363fc73e1c74bb10592eb8a1e2aa358">length</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c)</td></tr>
+<tr class="separator:a6363fc73e1c74bb10592eb8a1e2aa358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5572bae66e41051803579bd5e986bd"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a2a5572bae66e41051803579bd5e986bd">area</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c)</td></tr>
+<tr class="separator:a2a5572bae66e41051803579bd5e986bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -108,6 +119,58 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a planar triangle, and provides methods for calculating various properties of triangles. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2a5572bae66e41051803579bd5e986bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a5572bae66e41051803579bd5e986bd">&#9670;&nbsp;</a></span>area()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::geom::Triangle::area </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the 2D area of a triangle. The area value is always non-negative.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>vertex of the triangle </td></tr>
+    <tr><td class="paramname">b</td><td>vertex of the triangle </td></tr>
+    <tr><td class="paramname">c</td><td>vertex of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the area of the triangle </dd></dl>
+
+</div>
+</div>
 <a id="aa5cf3994bd12f3001b34354995602ff1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa5cf3994bd12f3001b34354995602ff1">&#9670;&nbsp;</a></span>circumcentre() <span class="overload">[1/2]</span></h2>
 
@@ -453,6 +516,129 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the triangle orientation is counter-clockwise </dd></dl>
+
+</div>
+</div>
+<a id="a2b607196253420d3057a3803d3d8f294"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b607196253420d3057a3803d3d8f294">&#9670;&nbsp;</a></span>length() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double geos::geom::Triangle::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the length of the perimeter of this triangle.</p>
+<dl class="section return"><dt>Returns</dt><dd>the length of the perimeter </dd></dl>
+
+</div>
+</div>
+<a id="a6363fc73e1c74bb10592eb8a1e2aa358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6363fc73e1c74bb10592eb8a1e2aa358">&#9670;&nbsp;</a></span>length() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::geom::Triangle::length </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compute the length of the perimeter of a triangle</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">b</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">c</td><td>a vertex of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the length of the triangle perimeter </dd></dl>
+
+</div>
+</div>
+<a id="a5668d02893004f8cd08bc137a0dc7ba2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5668d02893004f8cd08bc137a0dc7ba2">&#9670;&nbsp;</a></span>longestSideLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::geom::Triangle::longestSideLength </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the length of the longest side of a triangle</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">b</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">c</td><td>a vertex of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the length of the longest side of the triangle </dd></dl>
 
 </div>
 </div>

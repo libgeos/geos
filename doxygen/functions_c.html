@@ -215,6 +215,7 @@ $(function() {
 , <a class="el" href="classgeos_1_1noding_1_1MCIndexNoder.html#a20ff60a181902d70e0a55ec140507f93">geos::noding::MCIndexNoder</a>
 , <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>
 , <a class="el" href="classgeos_1_1noding_1_1ScaledNoder.html#a3775c9107da90d1eece071514ffb2346">geos::noding::ScaledNoder</a>
+, <a class="el" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1cf0f79c5c763371559a83b8e269d23a">geos::noding::SegmentExtractingNoder</a>
 , <a class="el" href="classgeos_1_1noding_1_1SimpleNoder.html#accc5199584fd3097fc1ed71c450c29a9">geos::noding::SimpleNoder</a>
 , <a class="el" href="classgeos_1_1noding_1_1SinglePassNoder.html#a4c945f02ead1a39d5653e23d893cbee6">geos::noding::SinglePassNoder</a>
 , <a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#af1cfc5fae753fc583151d47464000297">geos::noding::snap::SnappingNoder</a>
@@ -242,6 +243,12 @@ $(function() {
 </li>
 <li>computeVertexSnaps()
 : <a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#a52a1791b34c8072a0bf699aa6d254257">geos::noding::snapround::MCIndexSnapRounder</a>
+</li>
+<li>concaveHullByLength()
+: <a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ada45f68340212afa6984e310f7a560a9">geos::algorithm::hull::ConcaveHull</a>
+</li>
+<li>concaveHullByLengthRatio()
+: <a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">geos::algorithm::hull::ConcaveHull</a>
 </li>
 <li>connect()
 : <a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html#acd2ad1a434717b083c1427dbada569e0">geos::triangulate::quadedge::QuadEdge</a>
@@ -274,7 +281,7 @@ $(function() {
 , <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a7417fc2dae1879bcc49a1f69468aedbb">geos::geom::prep::BasicPreparedGeometry</a>
 , <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a18be2527cd5f01479f658ad27d7b89e9">geos::geom::prep::PreparedGeometry</a>
 , <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedPolygon.html#a8ae78c4dfd3bb73f609dec54410369b9">geos::geom::prep::PreparedPolygon</a>
-, <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedPolygonContains.html#a517a41317f9c2994a60aef07ba32af2a">geos::geom::prep::PreparedPolygonContains</a>
+, <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedPolygonContains.html#ad5103efd7f545208b3bddd7fdcaf1586">geos::geom::prep::PreparedPolygonContains</a>
 , <a class="el" href="classgeos_1_1planargraph_1_1Subgraph.html#a210b99e0f607b610a08df16ea83523a0">geos::planargraph::Subgraph</a>
 </li>
 <li>containsPoint()
@@ -330,9 +337,9 @@ $(function() {
 </li>
 <li>create()
 : <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html#afad539ff22ad23fa3db091c499bee1bf">geos::edgegraph::HalfEdge</a>
-, <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a86298ffb9df7f1aeb9855a1ea4f74782">geos::geom::CoordinateArraySequenceFactory</a>
+, <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequenceFactory.html#a2e41ad97ba46dbc98881539e9f72f998">geos::geom::CoordinateArraySequenceFactory</a>
 , <a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFactory.html#a54dbbc526aa53d716a7bdc443e40efaa">geos::geom::CoordinateSequenceFactory</a>
-, <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a068b0af7eef2c6c3285c86b472bbae80">geos::geom::GeometryFactory</a>
+, <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#af63bd74b37105d415ef831e0375e188e">geos::geom::GeometryFactory</a>
 , <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometryFactory.html#abc598fbdd44996848b1e726f2d15c6c3">geos::geom::prep::PreparedGeometryFactory</a>
 , <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferSubgraph.html#a8dc803819dd05363f4f07568f32d926b">geos::operation::buffer::BufferSubgraph</a>
 </li>
@@ -369,13 +376,13 @@ $(function() {
 : <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a44f5ffef5fc3d7776907683849b9d9f6">geos::geom::GeometryFactory</a>
 </li>
 <li>createGeometryCollection()
-: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a51e9476491885335f83aa86b20002169">geos::geom::GeometryFactory</a>
+: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#ab4f211b0d79804b3663e80cfdd7ac2e0">geos::geom::GeometryFactory</a>
 </li>
 <li>createLinearRing()
 : <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a174ff40724d177c2ecdd32b5caadd85f">geos::geom::GeometryFactory</a>
 </li>
 <li>createLineString()
-: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a31517e866b7a6523b905f8e3a1cac7af">geos::geom::GeometryFactory</a>
+: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a00b3ce3dad055141790e3adf846c40d1">geos::geom::GeometryFactory</a>
 </li>
 <li>createMultiLineString()
 : <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a62bb8d2c42aefc86293e204f0044ea86">geos::geom::GeometryFactory</a>
@@ -384,7 +391,7 @@ $(function() {
 : <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a93723b78eaa38a90c45e3a11b5a733e7">geos::geom::GeometryFactory</a>
 </li>
 <li>createMultiPolygon()
-: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a09bf361019ab3788ef9ca20c5c398bf1">geos::geom::GeometryFactory</a>
+: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a407625b948f47f7dafa8c5b8bf90a0cf">geos::geom::GeometryFactory</a>
 </li>
 <li>createOverlayLabel()
 : <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayGraph.html#abffdf53d72bf3b2faaba878d2b90e60f">geos::operation::overlayng::OverlayGraph</a>
@@ -394,7 +401,7 @@ $(function() {
 , <a class="el" href="classgeos_1_1index_1_1strtree_1_1SIRtree.html#ad5c7310e6d8e4d9bd2fb4c37a3755ba7">geos::index::strtree::SIRtree</a>
 </li>
 <li>createPoint()
-: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#ae6735fc5a275357af4df39e8ffa12d46">geos::geom::GeometryFactory</a>
+: <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#acb309f86d542ecdfd95a9d7f9d003a9d">geos::geom::GeometryFactory</a>
 </li>
 <li>createPolygon()
 : <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a360feab5c54d4aff47ac4968e66b286d">geos::geom::GeometryFactory</a>
