@@ -102,20 +102,20 @@ public:
 
     double area()
     {
-        double area = 0;
+        double dArea = 0.0;
         for (const auto* tri : tris) {
-          area += tri->getArea();
+          dArea += tri->getArea();
         }
-        return area;
+        return dArea;
     };
 
     double length()
     {
-        double length = 0;
+        double dLength = 0.0;
         for (const auto* tri : tris) {
-          length += tri->getLength();
+          dLength += tri->getLength();
         }
-        return length;
+        return dLength;
     };
 
     /* public */
@@ -123,14 +123,14 @@ public:
     degree(const TriType* tri, TriIndex index)
     {
         const Coordinate& v = tri->getCoordinate(index);
-        std::size_t degree = 0;
+        std::size_t szDegree = 0;
         for (auto* t : *this) {
             for (TriIndex i = 0; i < 3; i++) {
                 if (v.equals2D(t->getCoordinate(i)))
-                    degree++;
+                    szDegree++;
             }
         }
-        return degree;
+        return szDegree;
     }
 
     void validate()
