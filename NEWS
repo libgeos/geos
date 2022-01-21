@@ -3,7 +3,7 @@ Changes in 3.10.3
 2022-xx-xx
 
 - Fixes/Improvements:
-  - 
+  - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
 
 
 Changes in 3.10.2
