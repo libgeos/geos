@@ -34,17 +34,16 @@ template<>
 void object::test<1>
 ()
 {
-    input_ = GEOSGeomFromWKT("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)");
+    input_ = GEOSGeomFromWKT("MULTIPOINT (130 240, 130 240, 570 240, 570 290, 650 240)");
     ensure(nullptr != input_);
 
-    expected_ = GEOSGeomFromWKT("LINESTRING (130 240, 650 240, 130 240)");
+    expected_ = GEOSGeomFromWKT("POLYGON ((130 240, 570 290, 650 240, 130 240))");
     ensure(nullptr != expected_);
 
     GEOSGeometry* output = GEOSConvexHull(input_);
     ensure(nullptr != output);
     ensure(0 == GEOSisEmpty(output));
-    // TODO
-    //ensure( 0 != GEOSEquals(output, expected_));
+    ensure_geometry_equals(output, expected_);
     GEOSGeom_destroy(output);
 }
 

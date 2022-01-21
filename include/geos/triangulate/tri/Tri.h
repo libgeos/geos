@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/Coordinate.h>
+#include <geos/triangulate/tri/TriList.h>
 
 #include <memory>
 
@@ -31,8 +32,6 @@ using geos::geom::Coordinate;
 using geos::geom::Polygon;
 using geos::geom::GeometryFactory;
 
-typedef int TriIndex;
-
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate
 namespace tri {         // geos.triangulate.tri
@@ -44,12 +43,12 @@ namespace tri {         // geos.triangulate.tri
  * Tris are constructed independently, and if needed linked
  * into a triangulation using {@link TriangulationBuilder}.
  *
- * @author mdavis
+ * @author Martin Davis
  *
  */
 class GEOS_DLL Tri {
 
-private:
+protected:
 
     // Members
     Coordinate p0;
@@ -64,6 +63,8 @@ private:
     Tri* tri1;
     Tri* tri2;
 
+private:
+
     /**
     * Replace triOld with triNew
     *
@@ -71,6 +72,7 @@ private:
     * @param triNew
     */
     void replace(Tri* triOld, Tri* triNew);
+    void remove(TriIndex index);
 
     /**
     *
@@ -103,8 +105,8 @@ public:
         {};
 
     void setAdjacent(Tri* p_tri0, Tri* p_tri1, Tri* p_tri2);
-    void setTri(TriIndex edgeIndex, Tri* tri);
     void setAdjacent(const Coordinate& pt, Tri* tri);
+    void setTri(TriIndex edgeIndex, Tri* tri);
 
     /**
     * Interchanges the vertices of this triangle and a neighbor
@@ -115,6 +117,14 @@ public:
     * @param index the index of the adjacent tri to flip with
     */
     void flip(TriIndex index);
+
+    /**
+    * Removes this triangle from a triangulation.
+    * All adjacent references and the references to this
+    * Tri in the adjacent Tris are set to nullptr.
+    */
+    void remove();
+    void remove(TriList<Tri>& triList);
 
     void validate();
     void validateAdjacent(TriIndex index);
@@ -128,18 +138,44 @@ public:
     const Coordinate& getCoordinate(TriIndex i) const;
 
     TriIndex getIndex(const Coordinate& p) const;
-    TriIndex getIndex(Tri* tri) const;
+    TriIndex getIndex(const Tri* tri) const;
 
     Tri* getAdjacent(TriIndex i) const;
     bool hasAdjacent(TriIndex i) const;
+    bool hasAdjacent() const;
     bool isAdjacent(Tri* tri) const;
+
     int numAdjacent() const;
 
     static TriIndex next(TriIndex i);
     static TriIndex prev(TriIndex i);
     static TriIndex oppVertex(TriIndex edgeIndex);
     static TriIndex oppEdge(TriIndex vertexIndex);
+
+    /**
+    * Tests if a tri vertex is interior.
+    * A vertex of a triangle is interior if it
+    * is fully surrounded by other triangles.
+    *
+    * @param index the vertex index
+    * @return true if the vertex is interior
+    */
+    bool isInteriorVertex(TriIndex index) const;
+
+    bool isBorder() const;
+    bool isBoundary(TriIndex index) const;
     Coordinate midpoint(TriIndex edgeIndex) const;
+
+    double getArea() const;
+    double getLength() const;
+
+
+
+
+
+
+
+
 
     std::unique_ptr<Polygon> toPolygon(const GeometryFactory* gf) const;
 

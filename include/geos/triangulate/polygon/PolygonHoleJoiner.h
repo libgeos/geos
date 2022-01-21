@@ -28,11 +28,6 @@ class Geometry;
 class CoordinateSequence;
 class LinearRing;
 }
-namespace triangulate {
-namespace tri {
-class TriList;
-}
-}
 namespace noding {
 class SegmentString;
 }

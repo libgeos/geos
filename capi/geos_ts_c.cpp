@@ -55,6 +55,7 @@
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
+#include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
@@ -168,6 +169,7 @@ using geos::io::GeoJSONWriter;
 
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
+using geos::algorithm::hull::ConcaveHull;
 
 using geos::operation::buffer::BufferBuilder;
 using geos::operation::buffer::BufferParameters;
@@ -1211,6 +1213,21 @@ extern "C" {
         });
     }
 
+    Geometry*
+    GEOSConcaveHull_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1,
+        double ratio,
+        unsigned int allowHoles)
+    {
+        return execute(extHandle, [&]() {
+            ConcaveHull hull(g1);
+            hull.setMaximumEdgeLengthRatio(ratio);
+            hull.setHolesAllowed(allowHoles);
+            std::unique_ptr<Geometry> g3 = hull.getHull();
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
 
     Geometry*
     GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry* g)

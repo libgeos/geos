@@ -15,6 +15,8 @@
 #pragma once
 
 #include <geos/triangulate/polygon/VertexSequencePackedRtree.h>
+#include <geos/triangulate/tri/TriList.h>
+#include <geos/triangulate/tri/Tri.h>
 
 #include <array>
 #include <memory>
@@ -27,16 +29,12 @@ class Coordinate;
 class Polygon;
 class Envelope;
 }
-namespace triangulate {
-namespace tri {
-class TriList;
-}
-}
 }
 
 using geos::geom::Coordinate;
 using geos::geom::Polygon;
 using geos::geom::Envelope;
+using geos::triangulate::tri::Tri;
 using geos::triangulate::tri::TriList;
 
 
@@ -188,7 +186,7 @@ public:
     * @param triListResult vector to fill in with the resultant Tri s
     * @return a list of the Tris
     */
-    static void triangulate(std::vector<Coordinate>& polyShell, TriList& triListResult);
+    static void triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult);
 
     /**
     * Sets whether flat corners formed by collinear adjacent line segments
@@ -208,7 +206,7 @@ public:
     */
     void setSkipFlatCorners(bool p_isFlatCornersSkipped);
 
-    void compute(TriList& triList);
+    void compute(TriList<Tri>& triList);
 
     std::unique_ptr<Polygon> toGeometry() const;
 

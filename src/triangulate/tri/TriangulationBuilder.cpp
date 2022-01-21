@@ -26,16 +26,15 @@ namespace tri {         // geos.triangulate.tri
 
 /* public static */
 void
-TriangulationBuilder::build(TriList& triList)
+TriangulationBuilder::build(TriList<Tri>& triList)
 {
     TriangulationBuilder tb(triList);
 }
 
-
 /* private */
-TriangulationBuilder::TriangulationBuilder(TriList& triList)
+TriangulationBuilder::TriangulationBuilder(TriList<Tri>& triList)
 {
-    for (Tri* tri : triList) {
+    for (auto* tri : triList) {
         add(tri);
     }
 }

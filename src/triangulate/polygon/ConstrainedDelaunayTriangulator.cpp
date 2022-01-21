@@ -50,18 +50,33 @@ ConstrainedDelaunayTriangulator::compute()
     std::vector<const Polygon*> polys;
     geom::util::PolygonExtracter::getPolygons(*inputGeom, polys);
 
-    std::vector<std::unique_ptr<TriList>> allTriLists;
+    std::vector<std::unique_ptr<TriList<Tri>>> allTriLists;
     for (const Polygon* poly : polys) {
-        std::unique_ptr<TriList> triList(new TriList());
+        std::unique_ptr<TriList<Tri>> triList(new TriList<Tri>());
         // Skip empty component polygons
         if (poly->isEmpty())
             continue;
         triangulatePolygon(poly, *triList);
         allTriLists.emplace_back(triList.release());
     }
-    return TriList::toGeometry(geomFact, allTriLists);
+    return toGeometry(geomFact, allTriLists);
 }
 
+/* private static */
+std::unique_ptr<Geometry>
+ConstrainedDelaunayTriangulator::toGeometry(
+    const geom::GeometryFactory* geomFact,
+    const std::vector<std::unique_ptr<TriList<Tri>>>& allTriLists)
+{
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    for (const std::unique_ptr<TriList<Tri>>& triList: allTriLists) {
+        for (const auto* tri: *triList) {
+            std::unique_ptr<Geometry> geom = tri->toPolygon(geomFact);
+            geoms.emplace_back(geom.release());
+        }
+    }
+    return geomFact->createGeometryCollection(std::move(geoms));
+}
 
 /**
 * Computes the triangulation of a single polygon
@@ -71,7 +86,7 @@ ConstrainedDelaunayTriangulator::compute()
 * @return list of Tris forming the triangulation
 */
 void
-ConstrainedDelaunayTriangulator::triangulatePolygon(const Polygon* poly, TriList& triList)
+ConstrainedDelaunayTriangulator::triangulatePolygon(const Polygon* poly, TriList<Tri>& triList)
 {
     /**
      * Normalize to ensure that shell and holes have canonical orientation.

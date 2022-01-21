@@ -469,6 +469,15 @@ extern "C" {
     }
 
     Geometry*
+    GEOSConcaveHull(const Geometry* g,
+                    double ratio,
+                    unsigned int allowHoles)
+
+    {
+        return GEOSConcaveHull_r(handle, g, ratio, allowHoles);
+    }
+
+    Geometry*
     GEOSMinimumRotatedRectangle(const Geometry* g)
     {
         return GEOSMinimumRotatedRectangle_r(handle, g);

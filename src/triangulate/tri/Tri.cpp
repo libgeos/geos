@@ -20,12 +20,14 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/Triangle.h>
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/util/IllegalArgumentException.h>
 
 
 using geos::util::IllegalArgumentException;
 using geos::algorithm::Orientation;
+using geos::geom::Triangle;
 
 namespace geos {        // geos
 namespace triangulate { // geos.triangulate
@@ -39,6 +41,15 @@ Tri::setAdjacent(Tri* p_tri0, Tri* p_tri1, Tri* p_tri2)
     tri0 = p_tri0;
     tri1 = p_tri1;
     tri2 = p_tri2;
+}
+
+/* public */
+void
+Tri::setAdjacent(const Coordinate& pt, Tri* tri)
+{
+    TriIndex index = getIndex(pt);
+    setTri(index, tri);
+    // TODO: validate that tri is adjacent at the edge specified
 }
 
 /* public */
@@ -60,36 +71,6 @@ Tri::setCoordinates(const Coordinate& np0, const Coordinate& np1, const Coordina
     p0 = np0;
     p1 = np1;
     p2 = np2;
-}
-
-/* public */
-void
-Tri::setAdjacent(const Coordinate& pt, Tri* tri)
-{
-    TriIndex index = getIndex(pt);
-    setTri(index, tri);
-    // TODO: validate that tri is adjacent at the edge specified
-}
-
-/**
-* Replace triOld with triNew
-*
-* @param triOld
-* @param triNew
-*/
-/* private */
-void
-Tri::replace(Tri* triOld, Tri* triNew)
-{
-    if ( tri0 != nullptr && tri0 == triOld ) {
-        tri0 = triNew;
-    }
-    else if ( tri1 != nullptr && tri1 == triOld ) {
-        tri1 = triNew;
-    }
-    else if ( tri2 != nullptr && tri2 == triOld ) {
-        tri2 = triNew;
-    }
 }
 
 /* public */
@@ -137,6 +118,56 @@ Tri::flip(Tri* tri, TriIndex index0, TriIndex index1,
     //validate();
     //tri.validate();
 }
+
+/**
+* Replace triOld with triNew
+*
+* @param triOld
+* @param triNew
+*/
+/* private */
+void
+Tri::replace(Tri* triOld, Tri* triNew)
+{
+    if ( tri0 != nullptr && tri0 == triOld ) {
+        tri0 = triNew;
+    }
+    else if ( tri1 != nullptr && tri1 == triOld ) {
+        tri1 = triNew;
+    }
+    else if ( tri2 != nullptr && tri2 == triOld ) {
+        tri2 = triNew;
+    }
+}
+
+
+/* public */
+void
+Tri::remove(TriList<Tri>& triList)
+{
+    remove();
+    triList.remove(this);
+}
+
+/* public */
+void
+Tri::remove()
+{
+    remove(0);
+    remove(1);
+    remove(2);
+}
+
+/* private */
+void
+Tri::remove(TriIndex index)
+{
+    Tri* adj = getAdjacent(index);
+    if (adj == nullptr) return;
+    adj->setTri(adj->getIndex(this), nullptr);
+    setTri(index, nullptr);
+}
+
 
 /**
 *
@@ -276,7 +307,7 @@ Tri::getIndex(const Coordinate& p) const
 
 /* public */
 TriIndex
-Tri::getIndex(Tri* tri) const
+Tri::getIndex(const Tri* tri) const
 {
     if ( tri0 == tri )
         return 0;
@@ -302,10 +333,18 @@ Tri::getAdjacent(TriIndex i) const
 
 /* public */
 bool
+Tri::hasAdjacent() const
+{
+    return hasAdjacent(0) || hasAdjacent(1) || hasAdjacent(2);
+}
+
+/* public */
+bool
 Tri::hasAdjacent(TriIndex i) const
 {
     return nullptr != getAdjacent(i);
 }
+
 
 /* public */
 bool
@@ -326,6 +365,37 @@ Tri::numAdjacent() const
     if ( tri2 != nullptr )
       num++;
     return num;
+}
+
+/* public */
+bool
+Tri::isInteriorVertex(TriIndex index) const
+{
+    const Tri* curr = this;
+    TriIndex currIndex = index;
+    do {
+        const Tri* adj = curr->getAdjacent(currIndex);
+        if (adj == nullptr) return false;
+        TriIndex adjIndex = adj->getIndex(curr);
+        curr = adj;
+        currIndex = Tri::next(adjIndex);
+    }
+    while (curr != this);
+    return true;
+}
+
+/* public */
+bool
+Tri::isBorder() const
+{
+    return isBoundary(0) || isBoundary(1) || isBoundary(2);
+}
+
+/* public */
+bool
+Tri::isBoundary(TriIndex index) const
+{
+    return ! hasAdjacent(index);
 }
 
 /* public static */
@@ -366,6 +436,7 @@ Tri::oppEdge(TriIndex vertexIndex)
     return next(vertexIndex);
 }
 
+
 /* public */
 Coordinate
 Tri::midpoint(TriIndex edgeIndex) const
@@ -375,6 +446,20 @@ Tri::midpoint(TriIndex edgeIndex) const
     double midX = (np0.x + np1.x) / 2;
     double midY = (np0.y + np1.y) / 2;
     return Coordinate(midX, midY);
+}
+
+/* public */
+double
+Tri::getArea() const
+{
+    return Triangle::area(p0, p1, p2);
+}
+
+/* public */
+double
+Tri::getLength() const
+{
+    return Triangle::length(p0, p1, p2);
 }
 
 /* public */

@@ -133,6 +133,50 @@ Triangle::intersects(const Coordinate& a, const Coordinate& b, const Coordinate&
 }
 
 
+/* public static */
+double
+Triangle::length(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    return a.distance(b) + b.distance(c) + c.distance(a);
+}
+
+/* public */
+double
+Triangle::length() const
+{
+    return length(p0, p1, p2);
+}
+
+/* public static */
+double
+Triangle::area(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    return std::abs(((c.x - a.x) * (b.y - a.y) - (b.x - a.x) * (c.y - a.y)) / 2);
+}
+
+/* public */
+double
+Triangle::area() const
+{
+    return area(p0, p1, p2);
+}
+
+/* public static */
+double
+Triangle::longestSideLength(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+{
+    double lenAB = a.distance(b);
+    double lenBC = b.distance(c);
+    double lenCA = c.distance(a);
+    double maxLen = lenAB;
+    if (lenBC > maxLen)
+        maxLen = lenBC;
+    if (lenCA > maxLen)
+        maxLen = lenCA;
+    return maxLen;
+}
+
+
 
 } // namespace geos::geom
 } // namespace geos
