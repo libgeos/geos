@@ -29,6 +29,7 @@
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
+#include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/geom/util/Densifier.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
@@ -238,6 +239,21 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->convexHull() );
+        });
+    add("concaveHull", Result::typeGeometry, catConst,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::hull::ConcaveHull hull(geom.get());
+            hull.setMaximumEdgeLengthRatio( d );
+            return new Result( hull.getHull() );
+        });
+    add("concaveHullHoles", Result::typeGeometry, catConst,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::hull::ConcaveHull hull(geom.get());
+            hull.setMaximumEdgeLengthRatio( d );
+            hull.setHolesAllowed(true);
+            return new Result( hull.getHull() );
         });
 
     add("densify", 1, 1, Result::typeGeometry, catConst,
