@@ -414,6 +414,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSExtent(Geometry** geoms, unsigned int ngeoms)
+    {
+        return GEOSExtent_r(handle, geoms, ngeoms);
+    }
+
+    Geometry*
     GEOSIntersection(const Geometry* g1, const Geometry* g2)
     {
         return GEOSIntersection_r(handle, g1, g2);

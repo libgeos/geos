@@ -723,6 +723,12 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSExtent */
+extern GEOSGeometry GEOS_DLL *GEOSExtent_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry** geoms,
+    unsigned int ngeoms);
+
 /** \see GEOSIntersection */
 extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(
     GEOSContextHandle_t handle,
@@ -2409,6 +2415,9 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
+
+/** \see GEOSExtent */
+extern GEOSGeometry GEOS_DLL *GEOSExtent(GEOSGeometry** geoms,unsigned int ngeoms);
 
 /**
 * Returns the intersection of two geometries: the set of points

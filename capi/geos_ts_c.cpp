@@ -159,6 +159,7 @@ using geos::geom::PrecisionModel;
 using geos::geom::CoordinateSequence;
 using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
+using geos::geom::Envelope;
 
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
@@ -1061,6 +1062,32 @@ extern "C" {
             Geometry* g3 = g1->getEnvelope().release();
             g3->setSRID(g1->getSRID());
             return g3;
+        });
+    }
+
+    Geometry*
+    GEOSExtent_r(GEOSContextHandle_t extHandle, Geometry** geoms, unsigned int ngeoms)
+    {
+        return execute(extHandle, [&]() {
+            Envelope extent;
+            const Geometry* geom;
+            for (std::size_t i = 0; i < ngeoms; i++) {
+                geom = geoms[i];
+                if (extent.isNull()) {
+                    extent = *(geom->getEnvelopeInternal());
+                } else {
+                    extent.expandToInclude(*(geom->getEnvelopeInternal()));
+                }
+            }
+            // if (extent.isNull()) {
+            //     return;
+            // }
+
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            std::unique_ptr<Geometry> g;
+            g = gf->toGeometry(&extent);
+            return g.release();
         });
     }
 
