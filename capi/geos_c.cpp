@@ -1136,6 +1136,11 @@ extern "C" {
         return GEOSGeom_getYMax_r(handle, g, value);
     }
 
+    int GEOS_DLL GEOSGeom_getExtent(const GEOSGeometry* g, double* xmin, double* ymin, double* xmax, double* ymax)
+    {
+        return GEOSGeom_getExtent_r(handle, g, xmin, ymin, xmax, ymax);
+    }
+
     Geometry*
     GEOSSimplify(const Geometry* g, double tolerance)
     {

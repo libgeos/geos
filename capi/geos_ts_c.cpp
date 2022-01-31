@@ -159,6 +159,7 @@ using geos::geom::PrecisionModel;
 using geos::geom::CoordinateSequence;
 using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
+using geos::geom::Envelope;
 
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
@@ -2807,6 +2808,22 @@ extern "C" {
             }
 
             *value = g->getEnvelopeInternal()->getMaxY();
+            return 1;
+        });
+    }
+
+    int
+    GEOSGeom_getExtent_r(GEOSContextHandle_t extHandle, const Geometry* g, double* xmin, double* ymin, double* xmax, double* ymax)
+    {
+        return execute(extHandle, 0, [&]() {
+            if(g->isEmpty()) {
+                return 0;
+            }
+            const Envelope* extent = g->getEnvelopeInternal();
+            *xmin = extent->getMinX();
+            *ymin = extent->getMinY();
+            *xmax = extent->getMaxX();
+            *ymax = extent->getMaxY();
             return 1;
         });
     }
