@@ -768,10 +768,10 @@ extern "C" {
     }
 
     int
-    GEOSHilbert(const GEOSGeometry *geom, const GEOSGeometry* extent,
+    GEOSHilbertCode(const GEOSGeometry *geom, const GEOSGeometry* extent,
                 unsigned int level, unsigned int *code)
     {
-        return GEOSHilbert_r(handle, geom, extent, level, code);
+        return GEOSHilbertCode_r(handle, geom, extent, level, code);
     }
 
     Geometry*

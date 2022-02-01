@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSHilbert
+// Test Suite for C-API GEOSHilbertCode
 
 #include <tut/tut.hpp>
 // geos
@@ -12,12 +12,12 @@
 #include "capi_test_utils.h"
 
 namespace tut {
-struct test_capigeoshilbert : public capitest::utility {};
+struct test_capi_geoshilbertcode : public capitest::utility {};
 
-typedef test_group<test_capigeoshilbert> group;
+typedef test_group<test_capi_geoshilbertcode> group;
 typedef group::object object;
 
-group test_capigeoshilbert_group("capi::GEOSHilbert");
+group test_capi_geoshilbertcode_group("capi::GEOSHilbertCode");
 
 
 // Test various points on the Hilbert curve
@@ -33,23 +33,23 @@ void object::test<1>
     unsigned int code;
     int ret;
 
-    ret = GEOSHilbert(geom1, extent, 1, &code);
+    ret = GEOSHilbertCode(geom1, extent, 1, &code);
     ensure_equals(ret, 1);
     ensure_equals(code, 0u);
 
-    ret = GEOSHilbert(geom1, extent, 16, &code);
+    ret = GEOSHilbertCode(geom1, extent, 16, &code);
     ensure_equals(ret, 1);
     ensure_equals(code, 0u);
 
-    ret = GEOSHilbert(geom2, extent, 2, &code);
+    ret = GEOSHilbertCode(geom2, extent, 2, &code);
     ensure_equals(ret, 1);
     ensure_equals(code, 10u);
 
-    ret = GEOSHilbert(geom2, extent, 8, &code);
+    ret = GEOSHilbertCode(geom2, extent, 8, &code);
     ensure_equals(ret, 1);
     ensure_equals(code, 43690u);
 
-    ret = GEOSHilbert(geom2, extent, 16, &code);
+    ret = GEOSHilbertCode(geom2, extent, 16, &code);
     ensure_equals(ret, 1);
     ensure_equals(code, 2863311530u);
 
@@ -58,11 +58,28 @@ void object::test<1>
     GEOSGeom_destroy(extent);
 }
 
+// Test that midpoint is calculated
+template<>
+template<>
+void object::test<2>
+()
+{
+    GEOSGeometry* extent = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
+
+    unsigned int code;
+    int ret;
+
+    ret = GEOSHilbertCode(extent, extent, 2, &code);
+    ensure_equals(ret, 1);
+    ensure_equals(code, 2u);
+
+    GEOSGeom_destroy(extent);
+}
 
 // Test level out of bounds
 template<>
 template<>
-void object::test<2>
+void object::test<3>
 ()
 {
     GEOSGeometry* geom = GEOSGeomFromWKT("POINT (0 0)");
@@ -71,7 +88,7 @@ void object::test<2>
     unsigned int code;
     int ret;
 
-    ret = GEOSHilbert(geom, extent, 17, &code);
+    ret = GEOSHilbertCode(geom, extent, 17, &code);
     ensure_equals(ret, 0);
 
     GEOSGeom_destroy(geom);

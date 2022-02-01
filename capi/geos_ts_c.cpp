@@ -1811,7 +1811,7 @@ extern "C" {
     }
 
     int
-    GEOSHilbert_r(GEOSContextHandle_t extHandle, const GEOSGeometry *geom,
+    GEOSHilbertCode_r(GEOSContextHandle_t extHandle, const GEOSGeometry *geom,
                 const GEOSGeometry* extent, unsigned int level,
                 unsigned int *code)
     {

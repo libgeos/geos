@@ -1574,8 +1574,8 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify_r(
     double *dist);
 
 
-/** \see GEOSHilbert */
-extern int GEOS_DLL GEOSHilbert_r(
+/** \see GEOSHilbertCode */
+extern int GEOS_DLL GEOSHilbertCode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry *geom,
     const GEOSGeometry* extent,
@@ -4147,13 +4147,13 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify(
 * sorting geometries in a deterministic way, such that similar Hilbert codes are
 * likely to be near each other in two-dimensional space.  It is the caller's
 * responsibility to ensure that the geometry is contained within the extent.
-* \param[in] geom Input geometry
+* \param[in] geom Input geometry, must be non-empty
 * \param[in] extent Extent within which to calculate the Hilbert code for geom
 * \param[in] level The level of precision of the Hilbert curve, up to 16
 * \param[out] code Pointer to be filled in with Hilbert code result
 * \return 1 on success, 0 on exception.
 */
-extern int GEOS_DLL GEOSHilbert(
+extern int GEOS_DLL GEOSHilbertCode(
     const GEOSGeometry *geom,
     const GEOSGeometry* extent,
     unsigned int level,
