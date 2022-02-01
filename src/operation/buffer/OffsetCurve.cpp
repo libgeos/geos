@@ -32,6 +32,7 @@
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
 
+#include <cassert>
 
 using namespace geos::index::chain;
 using namespace geos::geom;
@@ -189,17 +190,19 @@ OffsetCurve::getBufferOriented(const LineString& geom, double p_distance, Buffer
 std::unique_ptr<Polygon>
 OffsetCurve::extractMaxAreaPolygon(const Geometry& geom)
 {
-    if (geom.getNumGeometries() == 1) {
+    const std::size_t numGeometries = geom.getNumGeometries();
+    if (numGeometries == 1) {
         const Polygon& poly = static_cast<const Polygon&>(geom);
-        poly.clone();
+        return poly.clone();
     }
 
-    double maxArea = 0;
-    const Polygon* maxPoly = nullptr;
-    for (std::size_t i = 0; i < geom.getNumGeometries(); i++) {
+    assert(numGeometries > 1);
+    const Polygon* maxPoly = static_cast<const Polygon*>(geom.getGeometryN(0));
+    double maxArea = maxPoly->getArea();
+    for (std::size_t i = 1; i < numGeometries; i++) {
         const Polygon* poly = static_cast<const Polygon*>(geom.getGeometryN(i));
         double area = poly->getArea();
-        if (maxPoly == nullptr || area > maxArea) {
+        if (area > maxArea) {
             maxPoly = poly;
             maxArea = area;
         }
