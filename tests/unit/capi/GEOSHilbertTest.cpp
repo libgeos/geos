@@ -35,23 +35,23 @@ void object::test<1>
 
     ret = GEOSHilbert(geom1, extent, 1, &code);
     ensure_equals(ret, 1);
-    ensure_equals(code, (unsigned int)0);
+    ensure_equals(code, 0u);
 
     ret = GEOSHilbert(geom1, extent, 16, &code);
     ensure_equals(ret, 1);
-    ensure_equals(code, (unsigned int)0);
+    ensure_equals(code, 0u);
 
     ret = GEOSHilbert(geom2, extent, 2, &code);
     ensure_equals(ret, 1);
-    ensure_equals(code, (unsigned int)10);
+    ensure_equals(code, 10u);
 
     ret = GEOSHilbert(geom2, extent, 8, &code);
     ensure_equals(ret, 1);
-    ensure_equals(code, (unsigned int)43690);
+    ensure_equals(code, 43690u);
 
     ret = GEOSHilbert(geom2, extent, 16, &code);
     ensure_equals(ret, 1);
-    ensure_equals(code, (unsigned int)2863311530);
+    ensure_equals(code, 2863311530u);
 
     GEOSGeom_destroy(geom1);
     GEOSGeom_destroy(geom2);
