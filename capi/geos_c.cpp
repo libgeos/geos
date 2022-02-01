@@ -767,6 +767,13 @@ extern "C" {
         return GEOSGetCentroid_r(handle, g);
     }
 
+    int
+    GEOSHilbert(const GEOSGeometry *geom, const GEOSGeometry* extent,
+                unsigned int level, unsigned int *code)
+    {
+        return GEOSHilbert_r(handle, geom, extent, level, code);
+    }
+
     Geometry*
     GEOSMinimumBoundingCircle(const Geometry* g, double* radius, Geometry** center)
     {

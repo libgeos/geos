@@ -1573,6 +1573,16 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify_r(
     double densifyFrac,
     double *dist);
 
+
+/** \see GEOSHilbert */
+extern int GEOS_DLL GEOSHilbert_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *geom,
+    const GEOSGeometry* extent,
+    unsigned int level,
+    unsigned int *code
+);
+
 /** \see GEOSGeomGetLength */
 extern int GEOS_DLL GEOSGeomGetLength_r(
     GEOSContextHandle_t handle,
@@ -4129,6 +4139,26 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify(
     const GEOSGeometry *g2,
     double densifyFrac,
     double *dist);
+
+/**
+* Calculate the
+* [Hilbert code](https://en.wikipedia.org/wiki/Hilbert_curve)
+* of the centroid of a geometry relative to the extent, which can be used for
+* sorting geometries in a deterministic way, such that similar Hilbert codes are
+* likely to be near each other in two-dimensional space.  It is the caller's
+* responsibility to ensure that the geometry is contained within the extent.
+* \param[in] geom Input geometry
+* \param[in] extent Extent within which to calculate the Hilbert code for geom
+* \param[in] level The level of precision of the Hilbert curve, up to 16
+* \param[out] code Pointer to be filled in with Hilbert code result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSHilbert(
+    const GEOSGeometry *geom,
+    const GEOSGeometry* extent,
+    unsigned int level,
+    unsigned int *code
+);
 
 /**
 * Calculate the length of a LineString.
