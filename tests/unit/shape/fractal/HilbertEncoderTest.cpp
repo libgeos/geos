@@ -88,6 +88,9 @@ void object::test<3>() {
     uint32_t expected[3] = {10, 2, 0};
     for (size_t i = 0; i < 3; i++) {
         ensure_equals(encoder.encode(geoms[i]->getEnvelopeInternal()), expected[i]);
+
+        // cleanup geom
+        factory_->destroyGeometry(geoms[i]);
     }
 }
 
