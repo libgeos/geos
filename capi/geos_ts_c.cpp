@@ -2691,14 +2691,6 @@ extern "C" {
                             double xmax, double ymax)
     {
         return execute(extHandle, [&]() {
-            if (xmax <= xmin) {
-                throw IllegalArgumentException("xmax must be greater than xmin");
-            }
-
-            if (ymax <= ymin) {
-                throw IllegalArgumentException("ymax must be greater than ymin");
-            }
-
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
             geos::geom::Envelope env(xmin, xmax, ymin, ymax);

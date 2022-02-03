@@ -2392,7 +2392,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 
 /**
 * Create a rectangular polygon from bounding coordinates.
-* Returns NULL on error.
+* Will return a point geometry if width and height are 0.
 * \param xmin Left bound of envelope
 * \param ymin Lower bound of envelope
 * \param xmax Right bound of envelope
