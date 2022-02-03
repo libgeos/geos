@@ -704,8 +704,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection_r(
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection_r(
     GEOSContextHandle_t handle, int type);
 
-/** \see GEOSGeom_createEnvelope */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEnvelope_r(
+/** \see GEOSGeom_createRectangle */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle_r(
     GEOSContextHandle_t handle,
     double xmin, double ymin,
     double xmax, double ymax);
@@ -2391,13 +2391,14 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 
 /**
-* Create an envelope polygon from bounding coordinates.
+* Create a rectangular polygon from bounding coordinates.
+* Returns NULL on error.
 * \param xmin Left bound of envelope
 * \param ymin Lower bound of envelope
 * \param xmax Right bound of envelope
 * \param ymax Upper bound of envelope
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEnvelope(
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
     double xmin, double ymin,
     double xmax, double ymax);
 

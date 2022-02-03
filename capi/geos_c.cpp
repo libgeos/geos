@@ -1573,10 +1573,10 @@ extern "C" {
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEnvelope(double xmin, double ymin, double xmax,
+    GEOSGeom_createRectangle(double xmin, double ymin, double xmax,
                             double ymax)
     {
-        return GEOSGeom_createEnvelope_r(handle, xmin, ymin, xmax, ymax);
+        return GEOSGeom_createRectangle_r(handle, xmin, ymin, xmax, ymax);
     }
 
     int
