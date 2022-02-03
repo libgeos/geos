@@ -704,6 +704,12 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection_r(
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection_r(
     GEOSContextHandle_t handle, int type);
 
+/** \see GEOSGeom_createEnvelope */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEnvelope_r(
+    GEOSContextHandle_t handle,
+    double xmin, double ymin,
+    double xmax, double ymax);
+
 /** \see GEOSGeom_clone */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_clone_r(
     GEOSContextHandle_t handle,
@@ -2383,6 +2389,17 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
+
+/**
+* Create an envelope polygon from bounding coordinates.
+* \param xmin Left bound of envelope
+* \param ymin Lower bound of envelope
+* \param xmax Right bound of envelope
+* \param ymax Upper bound of envelope
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEnvelope(
+    double xmin, double ymin,
+    double xmax, double ymax);
 
 /**
 * Create a new copy of the input geometry.

@@ -2686,6 +2686,23 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_createEnvelope_r(GEOSContextHandle_t extHandle,
+                            double xmin, double ymin,
+                            double xmax, double ymax)
+    {
+        using geos::geom::Polygon;
+        using geos::operation::intersection::Rectangle;
+
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            Rectangle rect(xmin, ymin, xmax, ymax);
+            std::unique_ptr<Polygon> poly(rect.toPolygon(*gf));
+            return poly.release();
+        });
+    }
+
+    Geometry*
     GEOSGeom_clone_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
