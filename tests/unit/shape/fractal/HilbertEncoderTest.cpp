@@ -66,7 +66,7 @@ void object::test<2>() {
     ensure_equals(encoder.encode(point2->getEnvelopeInternal()), 0u);
 }
 
-// test that geometries are sorted
+// test that geometries are sorted in ascending Hilbert order
 template <>
 template <>
 void object::test<3>() {
@@ -85,7 +85,7 @@ void object::test<3>() {
     encoder.sort(geoms);
 
     // geometries will be sorted in descending Hilbert order
-    uint32_t expected[3] = {10, 2, 0};
+    uint32_t expected[3] = {0, 2, 10};
     for (size_t i = 0; i < 3; i++) {
         ensure_equals(encoder.encode(geoms[i]->getEnvelopeInternal()), expected[i]);
 

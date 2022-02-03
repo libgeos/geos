@@ -65,7 +65,7 @@ HilbertEncoder::sort(std::vector<geom::Geometry*>& geoms)
         bool
         operator()(const geom::Geometry* a, const geom::Geometry* b)
         {
-            return enc.encode(a->getEnvelopeInternal()) > enc.encode(b->getEnvelopeInternal());
+            return enc.encode(a->getEnvelopeInternal()) < enc.encode(b->getEnvelopeInternal());
         }
     };
 
