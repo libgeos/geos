@@ -4,6 +4,7 @@
 - New things:
   - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
   - ConcaveHull (GH-549, Paul Ramsey/Martin Davis)
+  - CAPI: GEOSGeom_createRectangle (GH-558, Brendan Ward)
 
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
