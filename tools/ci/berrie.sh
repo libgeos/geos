@@ -14,21 +14,21 @@
 export REL_PATH=~/workspace/geos/rel-${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}
 echo $REL_PATH
 # auto tools
-if true; then
+if false; then
     sh autogen.sh
     ./configure --prefix=${REL_PATH}
-    make
+    make && make install
     make check
 fi
 
 
 # cmake
-if false; then
+if true; then
     rm -rf build
     mkdir -p build
     cd build
     cmake -DCMAKE_INSTALL_PREFIX:PATH=${REL_PATH} ../
-    make
+    make && make install
     [ -f CMakeCache.txt ] && \
         ctest --output-on-failure . || \
         make check
