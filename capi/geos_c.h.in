@@ -1499,6 +1499,15 @@ extern int GEOS_DLL GEOSGeom_getYMax_r(
     const GEOSGeometry* g,
     double* value);
 
+/** \see GEOSGeom_getExtent */
+extern int GEOS_DLL GEOSGeom_getExtent_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double* xmin,
+    double* ymin,
+    double* xmax,
+    double* ymax);
+
 /** \see GEOSGeomGetPointN */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN_r(
     GEOSContextHandle_t handle,
@@ -3986,6 +3995,24 @@ extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
 * \return 0 on exception
 */
 extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
+
+/**
+* Finds the extent (minimum and maximum X and Y value) of the geometry.
+* Raises an exception for empty geometry input.
+*
+* \param[in] g Input geometry
+* \param[out] xmin Pointer to place result for minimum X value
+* \param[out] ymin Pointer to place result for minimum Y value
+* \param[out] xmax Pointer to place result for maximum X value
+* \param[out] ymax Pointer to place result for maximum Y value
+* \return 1 on success, 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getExtent(
+    const GEOSGeometry* g,
+    double* xmin,
+    double* ymin,
+    double* xmax,
+    double* ymax);
 
 /**
 * Return the N'th point of a LineString

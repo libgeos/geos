@@ -38,6 +38,13 @@ void object::test<1>
     ensure_equals(ymin, -4);
     ensure_equals(ymax, 8);
 
+    ensure(GEOSGeom_getExtent(g, &xmin, &ymin, &xmax, &ymax) != 0);
+
+    ensure_equals(xmin, -12);
+    ensure_equals(xmax, 3);
+    ensure_equals(ymin, -4);
+    ensure_equals(ymax, 8);
+
     GEOSGeom_destroy(g);
 }
 
@@ -54,6 +61,8 @@ void object::test<2>
     ensure_equals(GEOSGeom_getYMax(g, &d), 0);
     ensure_equals(GEOSGeom_getXMin(g, &d), 0);
     ensure_equals(GEOSGeom_getYMin(g, &d), 0);
+
+    ensure_equals(GEOSGeom_getExtent(g, &d, &d, &d, &d), 0);
 
     GEOSGeom_destroy(g);
 }
