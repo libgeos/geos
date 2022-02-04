@@ -543,5 +543,25 @@ void object::test<20>
 
 }
 
+// Invalid result polygon with full precision, fall back on lower precision
+// https://trac.osgeo.org/geos/ticket/1131
+template<>
+template<>
+void object::test<21>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((-6503873.862740669 -3656747.43316935, -6481859.9985945 -3656747.43316935, -6481859.9985945 -3688545.2369360398, -6506319.8476458 -3688545.2369360398, -6506319.8476458 -3664085.38788474, -6501427.87783554 -3664085.38788474, -6501427.87783554 -3661639.40297961, -6498981.89293041 -3661639.40297961, -6498981.89293041 -3659193.41807448, -6503873.862740669 -3659193.41807448, -6503873.862740669 -3656747.43316935))");
+
+    ensure(nullptr != geom1_);
+
+    bp_ = GEOSBufferParams_create();
+
+    GEOSBufferParams_setQuadrantSegments(bp_, 0);
+    geom2_ = GEOSBufferWithParams(geom1_, bp_, 2445.98490513);
+
+    ensure(nullptr != geom2_);
+    ensure("Buffer result polygon is not valid", GEOSisValid(geom2_));
+}
+
 } // namespace tut
 

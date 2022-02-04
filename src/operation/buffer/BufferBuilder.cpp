@@ -36,6 +36,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
@@ -49,6 +50,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/GEOSException.h>
+#include <geos/util/TopologyException.h>
 #include <geos/io/WKTWriter.h> // for debugging
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/profiler.h>
@@ -476,6 +478,11 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         // resultPolyList ownership transferred here
         resultGeom.reset(geomFact->buildGeometry(resultPolyList.release()));
 
+        // Validate result
+        valid::IsValidOp validator(resultGeom.get());
+        if (!validator.isValid()) {
+            throw util::TopologyException(validator.getValidationError()->toString());
+        }
     }
     catch(const util::GEOSException& /* exc */) {
 
