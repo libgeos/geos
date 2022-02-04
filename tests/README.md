@@ -14,19 +14,19 @@ Note some executables have different names.
 
 ## Unit tests
 
-    geos_unit [class] [test number]
+    bin/test_geos_unit [class] [test number]
 
 Run all unit tests
 
-    geos_unit
+    bin/test_geos_unit
 
 Run single unit test class
 
-    geos_unit capi::GEOSNode
+    bin/test_geos_unit capi::GEOSNode
 
 Run single test within unit test class
 
-    geos_unit capi::GEOSNode 1
+    bin/test_geos_unit capi::GEOSNode 1
 
 ## XML Tests
 
