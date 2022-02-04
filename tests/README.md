@@ -14,7 +14,7 @@ Note some executables have different names.
 
 ## Unit tests
 
-    bin/test_geos_unit [class] [test number]
+    bin/test_geos_unit [name] [test number]
 
 Run all unit tests
 
