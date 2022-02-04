@@ -2686,6 +2686,19 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_createRectangle_r(GEOSContextHandle_t extHandle,
+                            double xmin, double ymin,
+                            double xmax, double ymax)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            geos::geom::Envelope env(xmin, xmax, ymin, ymax);
+            return (gf->toGeometry(&env)).release();
+        });
+    }
+
+    Geometry*
     GEOSGeom_clone_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {

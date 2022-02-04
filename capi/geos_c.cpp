@@ -1572,6 +1572,13 @@ extern "C" {
         return GEOSGeom_createEmptyPolygon_r(handle);
     }
 
+    geos::geom::Geometry*
+    GEOSGeom_createRectangle(double xmin, double ymin, double xmax,
+                            double ymax)
+    {
+        return GEOSGeom_createRectangle_r(handle, xmin, ymin, xmax, ymax);
+    }
+
     int
     GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
                          double Px, double Py)
