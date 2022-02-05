@@ -56,6 +56,7 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
+#include <geos/shape/fractal/HilbertEncoder.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
@@ -1807,6 +1808,21 @@ extern "C" {
             }
             ret->setSRID(g->getSRID());
             return ret.release();
+        });
+    }
+
+    int
+    GEOSHilbertCode_r(GEOSContextHandle_t extHandle, const GEOSGeometry *geom,
+                const GEOSGeometry* extent, unsigned int level,
+                unsigned int *code)
+    {
+        using geos::shape::fractal::HilbertEncoder;
+
+        return execute(extHandle, 0, [&]() {
+            geos::geom::Envelope e = *extent->getEnvelopeInternal();
+            HilbertEncoder encoder(level, e);
+            *code = encoder.encode(geom->getEnvelopeInternal());
+            return 1;
         });
     }
 
