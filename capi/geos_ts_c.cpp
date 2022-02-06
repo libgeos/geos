@@ -18,6 +18,7 @@
  ***********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
@@ -2414,7 +2415,13 @@ extern "C" {
             };
 
             CoordinateBufferCopier cop(buf, hasZ, hasM);
-            cs->apply_ro(&cop);
+            // Speculatively check to see if our input is a CoordinateArraySequence.
+            // If so, gcc can inline the filter.
+            if (auto cas = dynamic_cast<const geos::geom::CoordinateArraySequence*>(cs)) {
+                cas->apply_ro(&cop);
+            } else {
+                cs->apply_ro(&cop);
+            }
 
             return 1;
         });

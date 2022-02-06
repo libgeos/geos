@@ -17,6 +17,7 @@
 #include <geos/export.h>
 #include <vector>
 
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
 
 // Forward declarations
@@ -126,7 +127,11 @@ public:
 
     void apply_rw(const CoordinateFilter* filter) override;
 
-    void apply_ro(CoordinateFilter* filter) const override;
+    void apply_ro(CoordinateFilter* filter) const override {
+        for(const auto& coord : vect) {
+            filter->filter_ro(&coord);
+        }
+    }
 
 private:
     std::vector<Coordinate> vect;
