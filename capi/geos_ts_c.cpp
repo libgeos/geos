@@ -2388,11 +2388,18 @@ extern "C" {
 
             class CoordinateBufferCopier : public geos::geom::CoordinateFilter {
             public:
-                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), dim(2 + p_hasZ) {}
+                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), z(p_hasZ) {}
 
                 void filter_ro(const geos::geom::Coordinate* c) override {
-                    std::memcpy(buf, c, dim * sizeof(double));
-                    buf += dim;
+                    *buf = c->x;
+                    buf++;
+                    *buf = c->y;
+                    buf++;
+
+                    if (z) {
+                        *buf = c->z;
+                        buf++;
+                    }
 
                     if (m) {
                         *buf = std::numeric_limits<double>::quiet_NaN();
@@ -2402,8 +2409,8 @@ extern "C" {
 
             private:
                 double* buf;
-                bool m;
-                size_t dim;
+                const bool m;
+                const bool z;
             };
 
             CoordinateBufferCopier cop(buf, hasZ, hasM);
