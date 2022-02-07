@@ -18,6 +18,7 @@
  ***********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
@@ -2388,11 +2389,18 @@ extern "C" {
 
             class CoordinateBufferCopier : public geos::geom::CoordinateFilter {
             public:
-                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), dim(2 + p_hasZ) {}
+                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), z(p_hasZ) {}
 
                 void filter_ro(const geos::geom::Coordinate* c) override {
-                    std::memcpy(buf, c, dim * sizeof(double));
-                    buf += dim;
+                    *buf = c->x;
+                    buf++;
+                    *buf = c->y;
+                    buf++;
+
+                    if (z) {
+                        *buf = c->z;
+                        buf++;
+                    }
 
                     if (m) {
                         *buf = std::numeric_limits<double>::quiet_NaN();
@@ -2402,12 +2410,18 @@ extern "C" {
 
             private:
                 double* buf;
-                bool m;
-                size_t dim;
+                const bool m;
+                const bool z;
             };
 
             CoordinateBufferCopier cop(buf, hasZ, hasM);
-            cs->apply_ro(&cop);
+            // Speculatively check to see if our input is a CoordinateArraySequence.
+            // If so, gcc can inline the filter.
+            if (auto cas = dynamic_cast<const geos::geom::CoordinateArraySequence*>(cs)) {
+                cas->apply_ro(&cop);
+            } else {
+                cs->apply_ro(&cop);
+            }
 
             return 1;
         });

@@ -252,13 +252,5 @@ CoordinateArraySequence::apply_rw(const CoordinateFilter* filter)
     dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
 }
 
-void
-CoordinateArraySequence::apply_ro(CoordinateFilter* filter) const
-{
-    for(const auto& coord : vect) {
-        filter->filter_ro(&coord);
-    }
-}
-
 } // namespace geos::geom
 } //namespace geos
