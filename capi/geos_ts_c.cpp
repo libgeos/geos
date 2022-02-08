@@ -1496,6 +1496,35 @@ extern "C" {
         });
     }
 
+    Geometry*
+    GEOSGeom_transformXY_r(GEOSContextHandle_t handle, const GEOSGeometry* g, GEOSTransformXYCallback callback, void* userdata) {
+
+        struct TransformFilter : public geos::geom::CoordinateFilter {
+            TransformFilter(GEOSTransformXYCallback p_callback,
+                            void* p_userdata) :
+                            m_callback(p_callback),
+                            m_userdata(p_userdata) {}
+
+            void filter_rw(geos::geom::Coordinate* c) const final {
+                if (!m_callback(&(c->x), &(c->y), m_userdata)) {
+                    throw std::runtime_error(std::string("Failed to transform coordinates."));
+                }
+            }
+
+            GEOSTransformXYCallback m_callback;
+            void* m_userdata;
+        };
+
+        return execute(handle, [&]() {
+            TransformFilter filter(callback, userdata);
+            auto ret = g->clone();
+            ret->apply_rw(&filter);
+            ret->geometryChanged();
+            return ret.release();
+        });
+    }
+
+
 //-------------------------------------------------------------------
 // memory management functions
 //------------------------------------------------------------------

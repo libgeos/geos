@@ -599,6 +599,11 @@ extern "C" {
     }
 
 
+    Geometry*
+    GEOSGeom_transformXY(const GEOSGeometry* g, GEOSTransformXYCallback callback, void* userdata) {
+        return GEOSGeom_transformXY_r(handle, g, callback, userdata);
+    }
+
 
 //-------------------------------------------------------------------
 // memory management functions

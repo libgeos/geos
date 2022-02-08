@@ -273,6 +273,25 @@ typedef int (*GEOSDistanceCallback)(
     double* distance,
     void* userdata);
 
+
+/**
+* Callback function for use in GEOSGeom_transformXY.
+* Allows custom function to be applied to x and y values for each coordinate
+* in a geometry.
+* Extra data for the calculation can be passed via the userdata.
+*
+* \param x coordinate value to be updated
+* \param y coordinate value to be updated
+* \param userdata extra data for the calculation
+*
+* \return 1 if calculation succeeded, 0 on failure
+*/
+typedef int (*GEOSTransformXYCallback)(
+    double* x,
+    double* y,
+    void* userdata);
+
+
 /* ========== Interruption ========== */
 
 /**
@@ -1610,6 +1629,12 @@ extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints_r(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2);
 
+/** \see GEOSGeom_transformXY */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    GEOSTransformXYCallback callback,
+    void* userdata);
 
 /* ========= Algorithms ========= */
 
@@ -4230,6 +4255,21 @@ extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2);
 
+/**
+* Apply XY coordinate transform callback to all coordinates in geometry.
+* If the callback returns an error, returned geometry will be NULL;
+* \param[in] g Input geometry
+* \param[in] callback a function to be executed for each coordinate in the
+                geometry.  The callback takes 3 parameters: x and y coordinate
+                values to be updated and a void userdata pointer.
+* \param userdata an optional pointer to pe passed to 'callback' as an argument
+* \return The geometry with transformed coordinates.
+* Caller must free with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
+    const GEOSGeometry* g,
+    GEOSTransformXYCallback callback,
+    void* userdata);
 
 /* ========== Algorithms ========== */
 
