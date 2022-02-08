@@ -6,6 +6,7 @@
   - ConcaveHull (GH-549, Paul Ramsey/Martin Davis)
   - CAPI: GEOSHilbertCode (GH-556, Brendan Ward)
   - CAPI: GEOSGeom_createRectangle (GH-558, Brendan Ward)
+  - CAPI: GEOSGeom_transformXY (GH-563, Dan Baston/Brendan Ward)
 
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)

@@ -277,7 +277,7 @@ typedef int (*GEOSDistanceCallback)(
 /**
 * Callback function for use in GEOSGeom_transformXY.
 * Allows custom function to be applied to x and y values for each coordinate
-* in a geometry.
+* in a geometry.  Z values are unchanged by this function.
 * Extra data for the calculation can be passed via the userdata.
 *
 * \param x coordinate value to be updated
@@ -4257,7 +4257,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
 
 /**
 * Apply XY coordinate transform callback to all coordinates in geometry.
-* If the callback returns an error, returned geometry will be NULL;
+* If the callback returns an error, returned geometry will be NULL.  Z values,
+* if present, are not modified by this function.
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
                 geometry.  The callback takes 3 parameters: x and y coordinate

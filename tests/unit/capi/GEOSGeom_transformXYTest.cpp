@@ -279,4 +279,19 @@ void object::test<12>() {
     GEOSGeom_destroy(out);
 }
 
+// transform should preserve existing Z coordinate values
+template <>
+template <>
+void object::test<13>() {
+    GEOSGeometry* geom = GEOSGeomFromWKT("POINT Z (1 1 4)");
+
+    GEOSGeometry* out = GEOSGeom_transformXY(geom, SCALE_2_3, nullptr);
+
+    ensure(out != nullptr);
+    ensure_geometry_equals(out, "POINT Z (2 3 4)");
+
+    GEOSGeom_destroy(geom);
+    GEOSGeom_destroy(out);
+}
+
 }  // namespace tut
