@@ -266,8 +266,8 @@ void object::test<12>() {
         geom,
         [](double* x, double* y, void* userdata) {
             double scale = *(double *)(userdata);
-            *x = (*x) * scale;
-            *y = (*y) * scale;
+            (*x) *= scale;
+            (*y) *= scale;
             return 1;
         },
         (void *)(&userdata_scale));
