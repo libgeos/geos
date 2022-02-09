@@ -4256,15 +4256,15 @@ extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
     const GEOSGeometry* g2);
 
 /**
-* Apply XY coordinate transform callback to all coordinates in geometry.
-* If the callback returns an error, returned geometry will be NULL.  Z values,
-* if present, are not modified by this function.
+* Apply XY coordinate transform callback to all coordinates in a copy of
+* input geometry.  If the callback returns an error, returned geometry will be
+* NULL.  Z values, if present, are not modified by this function.
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
                 geometry.  The callback takes 3 parameters: x and y coordinate
                 values to be updated and a void userdata pointer.
 * \param userdata an optional pointer to pe passed to 'callback' as an argument
-* \return The geometry with transformed coordinates.
+* \return a copy of the input geometry with transformed coordinates.
 * Caller must free with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
