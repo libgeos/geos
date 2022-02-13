@@ -83,6 +83,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:a2ab5a825d72dc424872fdc8549ace85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a131618ec3c617e1ac7467864f6f261"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a1a131618ec3c617e1ac7467864f6f261">GEOSDistanceCallback</a>) (const void *item1, const void *item2, double *distance, void *userdata)</td></tr>
 <tr class="separator:a1a131618ec3c617e1ac7467864f6f261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabcad4655fd427d3d9ed6882d2a026f"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aaabcad4655fd427d3d9ed6882d2a026f">GEOSTransformXYCallback</a>) (double *x, double *y, void *userdata)</td></tr>
+<tr class="separator:aaabcad4655fd427d3d9ed6882d2a026f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec502e984cff878b9a7d7416c03315a0"><td class="memItemLeft" align="right" valign="top">typedef void()&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a>(void)</td></tr>
 <tr class="separator:aec502e984cff878b9a7d7416c03315a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a794f6ee9f228cd05dcb9e8b57c61ff56"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSWKTReader_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a></td></tr>
@@ -548,6 +550,8 @@ Functions</h2></td></tr>
 <tr class="separator:af63ac624585c07e8552484d3fff05447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bbe2ba198e5284b488b4c3ad1929113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8bbe2ba198e5284b488b4c3ad1929113">GEOSNearestPoints_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g1, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g2)</td></tr>
 <tr class="separator:a8bbe2ba198e5284b488b4c3ad1929113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34519bad3ff6efd142bc4748a9785d7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a34519bad3ff6efd142bc4748a9785d7d">GEOSGeom_transformXY_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, <a class="el" href="geos__c_8h.html#aaabcad4655fd427d3d9ed6882d2a026f">GEOSTransformXYCallback</a> callback, void *userdata)</td></tr>
+<tr class="separator:a34519bad3ff6efd142bc4748a9785d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac558f0f96c637ddf9fa1f130bed247f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac558f0f96c637ddf9fa1f130bed247f6">GEOSOrientationIndex_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, double Ax, double Ay, double Bx, double By, double Px, double Py)</td></tr>
 <tr class="separator:ac558f0f96c637ddf9fa1f130bed247f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08872bf0d3010c7c248f860e4051bcb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a08872bf0d3010c7c248f860e4051bcb5">GEOSWKTReader_create_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle)</td></tr>
@@ -998,6 +1002,8 @@ Functions</h2></td></tr>
 <tr class="separator:a9609542aa3ec7846ccf73b2e9e6c9c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3373e33a46de28ecd54d6cecd3227702"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a3373e33a46de28ecd54d6cecd3227702">GEOSNearestPoints</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g1, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g2)</td></tr>
 <tr class="separator:a3373e33a46de28ecd54d6cecd3227702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a863ff11b0f9bb8265e43a226786ba370"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a863ff11b0f9bb8265e43a226786ba370">GEOSGeom_transformXY</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, <a class="el" href="geos__c_8h.html#aaabcad4655fd427d3d9ed6882d2a026f">GEOSTransformXYCallback</a> callback, void *userdata)</td></tr>
+<tr class="separator:a863ff11b0f9bb8265e43a226786ba370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a6a59466f0b50f2f5f9d5ebb699cad4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8a6a59466f0b50f2f5f9d5ebb699cad4">GEOSOrientationIndex</a> (double Ax, double Ay, double Bx, double By, double Px, double Py)</td></tr>
 <tr class="separator:a8a6a59466f0b50f2f5f9d5ebb699cad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84d8fd4c78746d91fe0d6cffe3287ea8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a84d8fd4c78746d91fe0d6cffe3287ea8">GEOSWKTReader_create</a> (void)</td></tr>
@@ -1397,6 +1403,30 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>STRTree index. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a6eee53ef5e21d24d224391d0858e176f">GEOSSTRtree_create()</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#a2084ebaaa12d750b29d4a8cecec7921b">GEOSSTRtree_destroy()</a> </dd></dl>
+
+</div>
+</div>
+<a id="aaabcad4655fd427d3d9ed6882d2a026f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabcad4655fd427d3d9ed6882d2a026f">&#9670;&nbsp;</a></span>GEOSTransformXYCallback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* GEOSTransformXYCallback) (double *x, double *y, void *userdata)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Callback function for use in GEOSGeom_transformXY. Allows custom function to be applied to x and y values for each coordinate in a geometry. Z values are unchanged by this function. Extra data for the calculation can be passed via the userdata.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>coordinate value to be updated </td></tr>
+    <tr><td class="paramname">y</td><td>coordinate value to be updated </td></tr>
+    <tr><td class="paramname">userdata</td><td>extra data for the calculation</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if calculation succeeded, 0 on failure </dd></dl>
 
 </div>
 </div>
@@ -8719,6 +8749,90 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aba81052c4f5fe5dafee6b9d428da3a20">GEOSGeom_setUserData</a> </dd></dl>
+
+</div>
+</div>
+<a id="a863ff11b0f9bb8265e43a226786ba370"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a863ff11b0f9bb8265e43a226786ba370">&#9670;&nbsp;</a></span>GEOSGeom_transformXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* GEOSGeom_transformXY </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#aaabcad4655fd427d3d9ed6882d2a026f">GEOSTransformXYCallback</a>&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userdata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Apply XY coordinate transform callback to all coordinates in a copy of input geometry. If the callback returns an error, returned geometry will be NULL. Z values, if present, are not modified by this function. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>a function to be executed for each coordinate in the geometry. The callback takes 3 parameters: x and y coordinate values to be updated and a void userdata pointer. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">userdata</td><td>an optional pointer to pe passed to 'callback' as an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a copy of the input geometry with transformed coordinates. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a34519bad3ff6efd142bc4748a9785d7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34519bad3ff6efd142bc4748a9785d7d">&#9670;&nbsp;</a></span>GEOSGeom_transformXY_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* GEOSGeom_transformXY_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#aaabcad4655fd427d3d9ed6882d2a026f">GEOSTransformXYCallback</a>&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userdata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a863ff11b0f9bb8265e43a226786ba370">GEOSGeom_transformXY</a> </dd></dl>
 
 </div>
 </div>
