@@ -35,3 +35,10 @@ if(benchmark_FOUND)
             benchmark::benchmark geos_c)
 endif()
 
+if(benchmark_FOUND)
+    add_executable(perf_capi_transformxy GEOSGeom_transformXYPerfTest.cpp)
+    target_include_directories(perf_capi_transformxy PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+    target_link_libraries(perf_capi_transformxy PRIVATE benchmark::benchmark geos_c)
+endif()
