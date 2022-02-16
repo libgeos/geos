@@ -1,8 +1,11 @@
 ---
-title: "Download Source"
+title: "Download and Build"
 date: 2021-10-04T13:44:59-07:00
 draft: false
 ---
+
+
+## Download Project
 
 | Release Date | Release | Download Link | Changes |
 | ------------ | ------- | ------------- | ------- |
@@ -55,9 +58,9 @@ The GEOS build can be customized using build options.
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
 | DISABLE_GEOS_INLINE  | OFF        | Turn off inlining. This is bad for performance, only do this if you cannot build to pass tests on your platform with inlining on. |
 
-### Test Options
+## Testing
 
-It is possible to run ctest directly. This gives access to ctest command line options (see ctest --help for a listing).
+It is possible to run `ctest` directly. This gives access to ctest command line options (see `ctest --help` for a listing).
 
 ```bash
 ctest
@@ -81,5 +84,3 @@ A subset of test suites can be run using a regular expression (and in this case,
 ```bash
 $ ctest --tests-regex test_ --parallel 4
 ```
-
-
