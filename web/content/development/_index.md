@@ -55,5 +55,5 @@ and when they are caused by algorithm (both libraries fail).
 The GEOS project is run by a
 [Project Steering Committee]({{< ref "psc" >}}) made up of developers
 and contributors to the project and is a project of
-[OSGeo](https://www.osgeo.org/projects/geos/).
+[OSGeo](https://www.osgeo.org/projects/geos/). We strive to keep our day-to-day interactions collegial and welcoming within a basic [Code of Conduct]({{< ref "coc" >}}).
 
