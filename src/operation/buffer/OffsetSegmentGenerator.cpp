@@ -82,6 +82,10 @@ OffsetSegmentGenerator::OffsetSegmentGenerator(
     // the points are rounded as they are inserted into the curve line
     filletAngleQuantum = MATH_PI / 2.0 / bufParams.getQuadrantSegments();
 
+    int quadSegs = bufParams.getQuadrantSegments();
+    if (quadSegs < 1) quadSegs = 1;
+    filletAngleQuantum = MATH_PI / 2.0 / quadSegs;
+
     /*
      * Non-round joins cause issues with short closing segments,
      * so don't use them.  In any case, non-round joins
@@ -595,4 +599,3 @@ OffsetSegmentGenerator::addBevelJoin(const geom::LineSegment& p_offset0,
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-

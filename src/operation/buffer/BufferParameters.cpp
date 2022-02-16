@@ -89,36 +89,6 @@ void
 BufferParameters::setQuadrantSegments(int quadSegs)
 {
     quadrantSegments = quadSegs;
-
-    /*
-     * Indicates how to construct fillets.
-     * If qs >= 1, fillet is round, and qs indicates number of
-     * segments to use to approximate a quarter-circle.
-     * If qs = 0, fillet is bevelled flat (i.e. no filleting is performed)
-     * If qs < 0, fillet is mitred, and absolute value of qs
-     * indicates maximum length of mitre according to
-     *
-     * mitreLimit = |qs|
-     */
-    if(quadrantSegments == 0) {
-        joinStyle = JOIN_BEVEL;
-    }
-    if(quadrantSegments < 0) {
-        joinStyle = JOIN_MITRE;
-        mitreLimit = std::abs(quadrantSegments);
-    }
-
-    if(quadSegs <= 0) {
-        quadrantSegments = 1;
-    }
-
-    /*
-     * If join style was set by the quadSegs value,
-     * use the default for the actual quadrantSegments value.
-     */
-    if(joinStyle != JOIN_ROUND) {
-        quadrantSegments = DEFAULT_QUADRANT_SEGMENTS;
-    }
 }
 
 // public static
@@ -132,4 +102,3 @@ BufferParameters::bufferDistanceError(int quadSegs)
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
