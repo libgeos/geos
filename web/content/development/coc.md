@@ -5,7 +5,6 @@ draft: false
 weight: 30
 ---
 
-This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS Foundation.
 
 ## Introduction
 
