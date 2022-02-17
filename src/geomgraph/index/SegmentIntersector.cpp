@@ -118,7 +118,9 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
             std::cerr << "SegmentIntersector::addIntersections(): has !TrivialIntersection" << std::endl;
 #endif
             hasIntersectionVar = true;
-            if(includeProper || !li->isProper()) {
+            bool isBdyPt = isBoundaryPoint(li, bdyNodes);
+            bool isNonProper = isBdyPt || !li->isProper();
+            if(includeProper || isNonProper) {
                 //Debug.println(li);
                 e0->addIntersections(li, segIndex0, 0);
                 e1->addIntersections(li, segIndex1, 1);
@@ -136,7 +138,7 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
                 if(isDoneWhenProperInt) {
                     isDone = true;
                 }
-                if(!isBoundaryPoint(li, bdyNodes)) {
+                if (! isBdyPt) {
                     hasProperInterior = true;
                 }
             }
