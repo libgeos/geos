@@ -7,7 +7,7 @@ weight: 10
 GEOS can be accessed from a variety of other languages via bindings to the library.
 
 ## Go
-* [gogeos](https://github.com/paulsmith/gogeos)
+* [gogeos](https://github.com/twpayne/go-geos)
 
 ## Haskell
 * [geos](http://hackage.haskell.org/package/geos)
