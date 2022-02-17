@@ -10,7 +10,7 @@ Testing executables are in `bin`
 
 ### Unit testing
 
-Individual test classes within the ''test_geos_unit'' suite can be run by calling the ''test_geos_unit'' executable directly.
+Individual test classes within the `test_geos_unit` suite can be run by calling the `test_geos_unit` executable.
 The test group name is found in the cpp file in the `group` declaration.
 
 ```
@@ -25,7 +25,9 @@ $ bin/test_geos_unit capi::GEOSNode 1
 
 ### XML Tests
 
-XML tests can be run using `''`test_xmltester`''`:
+The XML test suite is a portable set of unit tests which can be run in both GEOS and JTS.
+They are located in `../geos/tests/xmltester/tests`.
+XML tests can be run using `test_xmltester`:
 
 ```
 bin/test_xmltester ../geos/tests/xmltester/tests/robust/overlay/TestOverlay-geos-837.xml
@@ -70,22 +72,22 @@ For more information see the [README](https://github.com/libgeos/geos/tree/main/
 The `geosop` executable is in `bin`.
 *
 Print usage instructions
-    ```
-geosop
+  ```
+  bin/geosop
   ```
 * Print usage instructions and list of available operations
   ```
-  geosop --help
+  bin/geosop --help
   ```
 * Read a file of geometries in WKT and output them as WKB
   ```
-  geosop -a geoms.wkt -f wkb
+  bin/geosop -a geoms.wkt -f wkb
   ```
 * Compute the area of geometries in a WKT file and output them as text
   ```
-  geosop -a geoms.wkt --format=txt area
+  bin/geosop -a geoms.wkt --format=txt area
   ```
 * Compute the centroids of geometries in a WKT file and output them as WKT
   ```
-  geosop -a geoms.wkt -f wkt centroid
+  bin/geosop -a geoms.wkt -f wkt centroid
   ```
