@@ -57,10 +57,6 @@ private:
 
     bool hasProperInterior;
 
-    bool isDone;
-
-    bool isDoneWhenProperInt;
-
     /// the proper intersection point found
     geom::Coordinate properIntersectionPoint;
 
@@ -107,8 +103,6 @@ public:
         hasIntersectionVar(false),
         hasProper(false),
         hasProperInterior(false),
-        isDone(false),
-        isDoneWhenProperInt(false),
         li(newLi),
         includeProper(newIncludeProper),
         recordIsolated(newRecordIsolated),
@@ -164,14 +158,9 @@ public:
 
     void addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, std::size_t segIndex1);
 
-    void setIsDoneIfProperInt(bool idwpi)
-    {
-        isDoneWhenProperInt = idwpi;
-    };
-
     bool getIsDone() const
     {
-        return isDone;
+        return false;
     };
 
 

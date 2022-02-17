@@ -218,25 +218,11 @@ public:
         return computeSelfNodes(*li, computeRingSelfNodes, env);
     }
 
-    std::unique_ptr<index::SegmentIntersector>
-    computeSelfNodes(
-        algorithm::LineIntersector* li,
-        bool computeRingSelfNodes,
-        bool isDoneIfProperInt,
-        const geom::Envelope* env = nullptr)
-    {
-        return computeSelfNodes(*li, computeRingSelfNodes, isDoneIfProperInt, env);
-    }
-
     // Quick inline calling the function above, the above should probably
     // be deprecated.
     std::unique_ptr<index::SegmentIntersector> computeSelfNodes(
         algorithm::LineIntersector& li,
         bool computeRingSelfNodes, const geom::Envelope* env = nullptr);
-
-    std::unique_ptr<index::SegmentIntersector> computeSelfNodes(
-        algorithm::LineIntersector& li,
-        bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope* env = nullptr);
 
     std::unique_ptr<index::SegmentIntersector> computeEdgeIntersections(GeometryGraph* g,
             algorithm::LineIntersector* li, bool includeProper,
@@ -263,4 +249,3 @@ public:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-

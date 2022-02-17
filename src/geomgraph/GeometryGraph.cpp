@@ -350,15 +350,7 @@ std::unique_ptr<SegmentIntersector>
 GeometryGraph::computeSelfNodes(LineIntersector& li,
                                 bool computeRingSelfNodes, const Envelope* env)
 {
-    return computeSelfNodes(li, computeRingSelfNodes, false, env);
-}
-
-std::unique_ptr<SegmentIntersector>
-GeometryGraph::computeSelfNodes(LineIntersector& li,
-                                bool computeRingSelfNodes, bool isDoneIfProperInt, const Envelope* env)
-{
     auto si = detail::make_unique<SegmentIntersector>(&li, true, false);
-    si->setIsDoneIfProperInt(isDoneIfProperInt);
     std::unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
     typedef std::vector<Edge*> EC;
@@ -560,4 +552,3 @@ GeometryGraph::determineBoundary(
 
 } // namespace geos.geomgraph
 } // namespace geos
-
