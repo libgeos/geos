@@ -38,12 +38,10 @@ struct test_relateop_data {
     test_relateop_data()
     {}
 
-    void checkRelate(const char* wkta, const char* wktb, const char* imExpected)
+    void checkRelate(const std::string& wkta, const std::string& wktb, const std::string& imExpected)
     {
-        std::string wktstra(wkta);
-        std::string wktstrb(wktb);
-        auto ga = wktreader.read(wktstra);
-        auto gb = wktreader.read(wktstrb);
+        auto ga = wktreader.read(wkta);
+        auto gb = wktreader.read(wktb);
 
         std::unique_ptr<IntersectionMatrix> im(ga->relate( gb.get() ));
         auto imActual = im->toString();
