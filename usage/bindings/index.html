@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Well-Known Text (WKT)">
+<meta name="description" content="Bindings">
 
-<title>Well-Known Text (WKT) | GEOS</title>
+<title>Bindings | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -325,7 +325,7 @@
             
             
                 <span class="flex">
-                    <a href="/usage/bindings/" class="gdoc-nav__entry ">
+                    <a href="/usage/bindings/" class="gdoc-nav__entry is-active">
                         Bindings
                     </a>
                 </span>
@@ -527,7 +527,7 @@
             
             
                 <span class="flex">
-                    <a href="/specifications/wkt/" class="gdoc-nav__entry is-active">
+                    <a href="/specifications/wkt/" class="gdoc-nav__entry ">
                         Well-Known Text (WKT)
                     </a>
                 </span>
@@ -693,7 +693,7 @@
         
     
     
-        <a href='/'>GEOS</a> / <a href='/specifications/'>Geometry Formats</a> / Well-Known Text (WKT)
+        <a href='/'>GEOS</a> / <a href='/usage/'>Usage</a> / Bindings
     
 
     
@@ -707,7 +707,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/specifications/wkt.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/usage/bindings.md">
                 Edit this page
             </a>
         </span>
@@ -717,7 +717,7 @@
 
 
     <article class="gdoc-markdown">
-        <h1>Well-Known Text (WKT)</h1>
+        <h1>Bindings</h1>
         
 
 
@@ -725,126 +725,52 @@
     
 
 
-<p>&ldquo;Well-known text&rdquo; is a scheme for writing a <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features</a> geometry into a standard text string.</p>
-<div class="gdoc-page__anchorwrap"><h2 id="examples">Examples<a data-clipboard-text="https://libgeos.org/specifications/wkt/#examples" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Examples" href="#examples"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>GEOS can be accessed from a variety of other languages via bindings to the library.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="go">Go<a data-clipboard-text="https://libgeos.org/usage/bindings/#go" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Go" href="#go"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <ul>
-<li>POINT(0 0)</li>
-<li>POINT EMPTY</li>
-<li>LINESTRING(0 0, 0 1, 1 2)</li>
-<li>LINESTRING EMPTY</li>
-<li>POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))</li>
-<li>POLYGON((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))</li>
-<li>POLYGON EMPTY</li>
-<li>MULTIPOINT(0 0, 1 1)</li>
-<li>GEOMETRYCOLLECTION(MULTIPOINT(0 0, 1 1), POINT(3 4), LINESTRING(2 3, 3 4))</li>
+<li><a href="https://github.com/paulsmith/gogeos">gogeos</a></li>
 </ul>
-<div class="gdoc-page__anchorwrap"><h2 id="wkt-bnf">WKT BNF<a data-clipboard-text="https://libgeos.org/specifications/wkt/#wkt-bnf" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor WKT BNF" href="#wkt-bnf"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<pre tabindex="0"><code>&lt;x&gt; ::= &lt;number&gt;
-&lt;y&gt; ::= &lt;number&gt;
-&lt;z&gt; ::= &lt;number&gt;
-&lt;m&gt; ::= &lt;number&gt;
-&lt;empty set&gt; ::= EMPTY
-&lt;zm&gt; ::= ZM | Z | M
-&lt;comma&gt; ::= ,
-&lt;left paren&gt; ::= (
-&lt;right paren&gt; ::= )
+<div class="gdoc-page__anchorwrap"><h2 id="haskell">Haskell<a data-clipboard-text="https://libgeos.org/usage/bindings/#haskell" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Haskell" href="#haskell"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="http://hackage.haskell.org/package/geos">geos</a></li>
+<li><a href="http://hackage.haskell.org/package/hgeos">hgeos</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="javascript">Javascript<a data-clipboard-text="https://libgeos.org/usage/bindings/#javascript" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Javascript" href="#javascript"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://github.com/kashif/node-geos">node-geos</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="julia">Julia<a data-clipboard-text="https://libgeos.org/usage/bindings/#julia" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Julia" href="#julia"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://github.com/JuliaGeo/LibGEOS.jl">LibGEOS.jl</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="php">PHP<a data-clipboard-text="https://libgeos.org/usage/bindings/#php" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor PHP" href="#php"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://git.osgeo.org/gitea/geos/php-geos">php-geos</a>.</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="python">Python<a data-clipboard-text="https://libgeos.org/usage/bindings/#python" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Python" href="#python"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>Python bindings are available via:</p>
+<ul>
+<li><a href="http://pypi.python.org/pypi/Shapely">Shapely</a></li>
+<li><a href="https://github.com/pygeos/pygeos">PyGEOS</a></li>
+<li>Calling functions from libgeos_c via Python ctypes</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="r">R<a data-clipboard-text="https://libgeos.org/usage/bindings/#r" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor R" href="#r"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://CRAN.R-project.org/package=sf">sf</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="ruby">Ruby<a data-clipboard-text="https://libgeos.org/usage/bindings/#ruby" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ruby" href="#ruby"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://github.com/rgeo/rgeo">RGeo</a>.</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="rust">Rust<a data-clipboard-text="https://libgeos.org/usage/bindings/#rust" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Rust" href="#rust"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://crates.io/crates/geos">geos crate</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="swift">Swift<a data-clipboard-text="https://libgeos.org/usage/bindings/#swift" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Swift" href="#swift"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li><a href="https://github.com/GEOSwift/GEOSwift">GeoSwift</a></li>
+</ul>
 
-&lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ]
-
-&lt;point text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt;
-
-&lt;linestring text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ... &lt;right paren&gt;
-
-&lt;polygon text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;linestring text&gt; {&lt;comma&gt; &lt;linestring text&gt;} ... &lt;right paren&gt;
-
-&lt;multipoint text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ... &lt;right paren&gt;
-
-&lt;multilinestring text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;linestring text&gt; {&lt;comma&gt; &lt;linestring text&gt;} ... &lt;right paren&gt;
-
-&lt;multipolygon text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;polygon text&gt; {&lt;comma&gt; &lt;polygon text&gt;} ... &lt;right paren&gt;
-
-&lt;geometrycollection text&gt; ::=
-    &lt;empty set&gt; |
-    &lt;left paren&gt; &lt;wkt representation&gt; {&lt;comma&gt; &lt;wkt representation&gt;} ... &lt;right paren&gt;
-
-&lt;point text representation&gt; ::=
-    POINT [ &lt;zm&gt; ] &lt;point text&gt;
-
-&lt;linestring text representation&gt; ::=
-    LINESTRING [ &lt;zm&gt; ] &lt;linestring text body&gt;
-
-&lt;polygon text representation&gt; ::=
-    POLYGON [ &lt;zm&gt; ] &lt;polygon text body&gt;
-
-&lt;multipoint text representation&gt; ::=
-    MULTIPOINT [ &lt;zm&gt; ] &lt;multipoint text&gt;
-
-&lt;multilinestring text representation&gt; ::=
-    MULTILINESTRING [ &lt;zm&gt; ] &lt;multilinestring text&gt;
-
-&lt;multipolygon text representation&gt; ::=
-    MULTIPOLYGON [ &lt;zm&gt; ] &lt;multipolygon text&gt;
-
-&lt;geometrycollection text representation&gt; ::=
-    GEOMETRYCOLLECTION [ &lt;zm&gt; ] &lt;geometrycollection text&gt;
-
-&lt;wkt representation&gt; ::=
-    &lt;point text representation&gt; |
-    &lt;linestring text representation&gt; |
-    &lt;polygon text representation&gt; |
-    &lt;collection text representation&gt; |
-    &lt;multipoint text representation&gt; |
-    &lt;multilinestring text representation&gt; |
-    &lt;multipolygon text representation&gt; |
-    &lt;geometrycollection text representation&gt;
-</code></pre><div class="gdoc-page__anchorwrap"><h3 id="writing-wkt">Writing WKT<a data-clipboard-text="https://libgeos.org/specifications/wkt/#writing-wkt" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Writing WKT" href="#writing-wkt"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>Because WKT is a decimal text output, it will never be able to exactly represent the underlying machine representation of the coordinates. In general, WKT is used for display to humans, or for transport when exact coordinate representation is not required (some web applications).</p>
-<p>Accordingly, the GEOS well-known text writer allows you to customize the coordinate precision and rounding behaviour, as well as the dimensionality of outputs.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Read a linestring */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
-<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
-
-<span class="cm">/* Get a WKT  writer*/</span>
-<span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create</span><span class="p">();</span>
-
-<span class="cm">/* Preserve the Z dimension. */</span>
-<span class="n">GEOSWKTWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-
-<span class="cm">/* Sets the number places after the decimal to output in WKT. Default 16. */</span>
-<span class="n">GEOSWKTWriter_setRoundingPrecision</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
-
-<span class="cm">/*
-</span><span class="cm"> * Sets the number trimming option on a \ref GEOSWKTWriter.
-</span><span class="cm"> * With trim set to 1, the writer will strip trailing 0&#39;s from
-</span><span class="cm"> * the output coordinates. With 0, all coordinates will be
-</span><span class="cm"> * padded with 0&#39;s out to the rounding precision.
-</span><span class="cm"> */</span>
-<span class="n">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-<span class="cm">/* Generate the WKT , and store the output length */</span>
-<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
-
-<span class="cm">/* do something ... */</span>
-
-<span class="cm">/* Free the WKB */</span>
-<span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-<span class="n">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
-<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-</code></pre></div>
 
     </article>
 
