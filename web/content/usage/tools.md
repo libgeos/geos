@@ -91,3 +91,9 @@ Print usage instructions
   ```
   bin/geosop -a geoms.wkt -f wkt centroid
   ```
+
+## JTS TestBuilder
+
+The **JTS TestBuilder** can be useful for creating, visualizing and processing GEOS geometry.
+Because GEOS and JTS are so closely related it can also be used as a way of verifying GEOS behaviour.
+For more information see the [JTS doc](https://github.com/locationtech/jts/blob/master/doc/JTSTestBuilder.md).
