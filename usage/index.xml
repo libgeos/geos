@@ -38,6 +38,19 @@ You can explore the C++ model via the Doxygen reference.</description>
     </item>
     
     <item>
+      <title>Tools</title>
+      <link>https://libgeos.org/usage/tools/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/usage/tools/</guid>
+      <description>Testing Tools Testing executables are in bin
+Unit testing Individual test classes within the &amp;lsquo;&amp;lsquo;test_geos_unit&amp;rsquo;&amp;rsquo; suite can be run by calling the &amp;lsquo;&amp;lsquo;test_geos_unit&amp;rsquo;&amp;rsquo; executable directly. The test group name is found in the cpp file in the group declaration.
+$ bin/test_geos_unit capi::GEOSNode Individual tests within a test class can be run by specifying the test number:
+$ bin/test_geos_unit capi::GEOSNode 1 XML Tests XML tests can be run using &#39;&#39;test_xmltester&#39;&#39;:
+bin/test_xmltester .</description>
+    </item>
+    
+    <item>
       <title>Download and Build</title>
       <link>https://libgeos.org/usage/download/</link>
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
