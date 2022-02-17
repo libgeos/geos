@@ -8,7 +8,7 @@ weight: 30
 
 ## Introduction
 
-This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS Foundation.
+This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS project.
 
 It applies to in-person events (such as conferences and related social events), IRC, public and private mailing lists, the issue tracker, the wiki, blogs, Twitter, and any other forums which the community uses for communication and interactions.
 
