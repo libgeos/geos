@@ -703,13 +703,15 @@
 <div class="gdoc-page__anchorwrap"><h2 id="testing-tools">Testing Tools<a data-clipboard-text="https://libgeos.org/usage/tools/#testing-tools" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Testing Tools" href="#testing-tools"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>Testing executables are in <code>bin</code></p>
 <div class="gdoc-page__anchorwrap"><h3 id="unit-testing">Unit testing<a data-clipboard-text="https://libgeos.org/usage/tools/#unit-testing" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Unit testing" href="#unit-testing"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>Individual test classes within the &lsquo;&lsquo;test_geos_unit&rsquo;&rsquo; suite can be run by calling the &lsquo;&lsquo;test_geos_unit&rsquo;&rsquo; executable directly.
+<p>Individual test classes within the <code>test_geos_unit</code> suite can be run by calling the <code>test_geos_unit</code> executable.
 The test group name is found in the cpp file in the <code>group</code> declaration.</p>
 <pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode
 </code></pre><p>Individual tests within a test class can be run by specifying the test number:</p>
 <pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode 1
 </code></pre><div class="gdoc-page__anchorwrap"><h3 id="xml-tests">XML Tests<a data-clipboard-text="https://libgeos.org/usage/tools/#xml-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor XML Tests" href="#xml-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>XML tests can be run using <code>''</code>test_xmltester<code>''</code>:</p>
+<p>The XML test suite is a portable set of unit tests which can be run in both GEOS and JTS.
+They are located in <code>../geos/tests/xmltester/tests</code>.
+XML tests can be run using <code>test_xmltester</code>:</p>
 <pre tabindex="0"><code>bin/test_xmltester ../geos/tests/xmltester/tests/robust/overlay/TestOverlay-geos-837.xml
 </code></pre><p>The XML Tester supports the following options:</p>
 <pre tabindex="0"><code>Usage: bin/test_xmltester [options] &lt;test&gt; [&lt;test&gt; ...]
@@ -737,18 +739,23 @@ These can be run from the command line:</p>
 <div class="gdoc-page__anchorwrap"><h3 id="usage">Usage<a data-clipboard-text="https://libgeos.org/usage/tools/#usage" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Usage" href="#usage"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>The <code>geosop</code> executable is in <code>bin</code>.
 *
-Print usage instructions
-```
-geosop</p>
-<pre tabindex="0"><code>* Print usage instructions and list of available operations
-</code></pre><p>geosop &ndash;help</p>
-<pre tabindex="0"><code>* Read a file of geometries in WKT and output them as WKB
-</code></pre><p>geosop -a geoms.wkt -f wkb</p>
-<pre tabindex="0"><code>* Compute the area of geometries in a WKT file and output them as text
-</code></pre><p>geosop -a geoms.wkt &ndash;format=txt area</p>
-<pre tabindex="0"><code>* Compute the centroids of geometries in a WKT file and output them as WKT
-</code></pre><p>geosop -a geoms.wkt -f wkt centroid</p>
-<pre tabindex="0"><code></code></pre>
+Print usage instructions</p>
+<pre tabindex="0"><code>bin/geosop
+</code></pre><ul>
+<li>Print usage instructions and list of available operations
+<pre tabindex="0"><code>bin/geosop --help
+</code></pre></li>
+<li>Read a file of geometries in WKT and output them as WKB
+<pre tabindex="0"><code>bin/geosop -a geoms.wkt -f wkb
+</code></pre></li>
+<li>Compute the area of geometries in a WKT file and output them as text
+<pre tabindex="0"><code>bin/geosop -a geoms.wkt --format=txt area
+</code></pre></li>
+<li>Compute the centroids of geometries in a WKT file and output them as WKT
+<pre tabindex="0"><code>bin/geosop -a geoms.wkt -f wkt centroid
+</code></pre></li>
+</ul>
+
 
     </article>
 
