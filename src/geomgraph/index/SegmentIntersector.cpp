@@ -126,7 +126,9 @@ SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_
             cerr << "SegmentIntersector::addIntersections(): has !TrivialIntersection" << endl;
 #endif // DEBUG_INTERSECT
             hasIntersectionVar = true;
-            if(includeProper || !li->isProper()) {
+            bool isBdyPt = isBoundaryPoint(li, bdyNodes);
+            bool isNonProper = isBdyPt || !li->isProper();
+            if(includeProper || isNonProper) {
                 //Debug.println(li);
                 e0->addIntersections(li, segIndex0, 0);
                 e1->addIntersections(li, segIndex1, 1);
@@ -144,12 +146,10 @@ SegmentIntersector::addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_
                 if(isDoneWhenProperInt) {
                     isDone = true;
                 }
-                if(!isBoundaryPoint(li, bdyNodes)) {
+                if(! isBdyPt) {
                     hasProperInterior = true;
                 }
             }
-            //if (li.isCollinear())
-            //hasCollinear = true;
         }
     }
 }

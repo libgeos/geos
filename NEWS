@@ -7,7 +7,7 @@ Changes in 3.9.3
   - Memory leak on exception in prepared geometry (GH-506, Dan Baston)
   - Infinite loop on collapsed input in MaximumInscribedCircle (Paul Ramsey)
   - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
-
+  - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
 
 Changes in 3.9.2
 2021-11-01
