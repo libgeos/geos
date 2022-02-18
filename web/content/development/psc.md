@@ -13,7 +13,6 @@ This PSC list is valid as of November 10, 2021.
 * [Martin Davis](https://github.com/drjts)
 * [Howard Butler](https://github.com/hobu)
 * [Regina Obe](https://www.paragoncorporation.com)
-* [Dale Lutz](https://safe.com)
 * [Paul Ramsey](https://github.com/pramsey)
 * [Dan Baston](https://github.com/dbaston)
 
