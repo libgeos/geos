@@ -26,6 +26,15 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 
 See the [INSTALL](INSTALL.md) file.
 
+## Reference Docs
+
+* [C API](https://libgeos.org/doxygen/geos__c_8h.html)
+* [C++ API](https://libgeos.org/doxygen/cpp_iface.html)
+
+See also the [C API tutorial](https://libgeos.org/usage/c_api/)
+and the [C++ API tutorial](https://libgeos.org/usage/cpp_api/).
+There are code [examples](https://github.com/libgeos/geos/tree/main/examples) in the code repository.
+
 ## Client Applications
 
 ### Using the C interface
@@ -78,8 +87,7 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
     #include <geos.h>
 
-Documentation for the C++ API is available at https://geos.osgeo.org/doxygen/,
-and basic C++ usage examples can be found in `doc/example.cpp`.
+C++ usage examples can be found in `doc/example.cpp`.
 
 
 ### Scripting Language Bindings
@@ -124,5 +132,3 @@ See documentation [here](tests/README.md).
 ## Tools
 
 * `geosop` - a CLI for GEOS.  Documentation is [here](util/geosop/README.md).
-
-
