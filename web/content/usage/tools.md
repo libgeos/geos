@@ -11,10 +11,12 @@ Testing executables are in `bin`
 ### Unit testing
 
 Individual test classes within the `test_geos_unit` suite can be run by calling the `test_geos_unit` executable.
-The test group name is found in the cpp file in the `group` declaration.
+The test source files are under the `test/unit` directory.
+The test group names are in the `group` declaration in each `XXXTest.cpp` file .
 
 ```
-$ bin/test_geos_unit capi::GEOSNode
+$ bin/test_geos_unit                  # Run all tests
+$ bin/test_geos_unit capi::GEOSNode   # Run a single group of tests
 ```
 
 Individual tests within a test class can be run by specifying the test number:
