@@ -50,6 +50,8 @@
           (Casper van der Wel)
 
 - Fixes/Improvements:
+  - Improved IsValidOp (Paul Ramsey, Martin Davis)
+  - Improved IsSimpleOp (Paul Ramsey, Martin Davis)
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier
     and DPSimplifier (Martin Davis)
