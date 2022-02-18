@@ -4,6 +4,7 @@ Changes in 3.10.3
 
 - Fixes/Improvements:
   - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
+  - Add SnappingNoder seeding (Martin Davis)
 
 
 Changes in 3.10.2
