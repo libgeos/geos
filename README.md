@@ -21,6 +21,14 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 | GitLab CI | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/main/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/main) | Berrie | [![berrie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie) | Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=main)](https://dronie.osgeo.org/geos/geos?branch=master) |
 | AppVeyor | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/main?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/main) | Berrie64 | [![berrie64](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie64&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie64) |
 
+## Community Resources
+
+* **git** repository: https://github.com/libgeos/geos
+* [**geos-devel** mailing list](https://lists.osgeo.org/mailman/listinfo/geos-devel) and [archive](https://lists.osgeo.org/pipermail/geos-devel/)
+* **#geos** chat channel (all bridged):
+  * Matrix: https://matrix.to/#/#geos:osgeo.org
+  * IRC: irc://irc.libera.chat/#osgeo-geos (https://kiwiirc.com/nextclient/irc.libera.chat/#osgeo-geos)
+  * Slack: https://osgeo.slack.com/messages/C07RKJ06B/
 
 ## Build/Install
 
