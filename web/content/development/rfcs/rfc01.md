@@ -96,7 +96,7 @@ PSC members are expected to be active on both the [geos-devel](http://lists.osge
 
 ## Bootstrapping
 
-**Note:** The following is for historical interest only, the [current PSC]({{< ref "../community/psc" >}}) is available [here]({{< ref "../community/psc" >}}).
+**Note:** The following is for historical interest only, the [current PSC]({{< ref "/community/psc" >}}) is available [here]({{< ref "/community/psc" >}}).
 
 Prior to annointing itself the PSC must distribute this RFC to the GEOS community via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel) for comment. Any and all substantive comments must be discussed (and hopefully, but not necessarily, addressed via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel).
 
