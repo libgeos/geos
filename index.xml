@@ -31,20 +31,20 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
     
     <item>
       <title>Code of Conduct</title>
-      <link>https://libgeos.org/development/coc/</link>
+      <link>https://libgeos.org/community/coc/</link>
       <pubDate>Wed, 16 Feb 2022 00:00:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/coc/</guid>
+      <guid>https://libgeos.org/community/coc/</guid>
       <description>Introduction This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS project.
 It applies to in-person events (such as conferences and related social events), IRC, public and private mailing lists, the issue tracker, the wiki, blogs, Twitter, and any other forums which the community uses for communication and interactions.</description>
     </item>
     
     <item>
       <title>Project Steering Committee</title>
-      <link>https://libgeos.org/development/psc/</link>
+      <link>https://libgeos.org/community/psc/</link>
       <pubDate>Wed, 27 Oct 2021 00:00:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/psc/</guid>
+      <guid>https://libgeos.org/community/psc/</guid>
       <description>The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of OSGeo. Major project decisions are made via a Request for Comments (RFC) process, where proposals are first documented and then voted on by the steering committee.
 This PSC list is valid as of February 18th, 2022.
  Sandro Santilli (chair) Martin Davis Howard Butler Regina Obe Paul Ramsey Dan Baston  The PSC approves major changes and RFC documents.</description>
@@ -228,6 +228,17 @@ These may require extensions to the C API to be externally available, but should
       <description>RFC 9 Restore the C++ API   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status [https://lists.osgeo.org/pipermail/geos-devel/2019-May/008972.html Proposed]    The GEOS library is a C++ library offering two kinds of public API: C++ API and C API.
 The GEOS library started as a C++ library. The C API was introduced in version 2.2.
 The GEOS library has never promised any stability of the C++ API and this fact has always been documented and clearly stated:</description>
+    </item>
+    
+    <item>
+      <title>Support</title>
+      <link>https://libgeos.org/community/support/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
+      
+      <guid>https://libgeos.org/community/support/</guid>
+      <description>Resources  git repository: https://github.com/libgeos/geos geos-devel mailing list and archive #geos chat channel (all bridged):  Matrix: https://matrix.to/#/#geos:osgeo.org IRC: irc://irc.libera.chat/#osgeo-geos (https://kiwiirc.com/nextclient/irc.libera.chat/#osgeo-geos) Slack: https://osgeo.slack.com/messages/C07RKJ06B/    Bug Reporting Defects should be reported using GitHub Issues.
+When submitting bugs caused by particular geometries, you must submit the geometries that cause the failure, preferably in hex-encoded WKB, so that we can re-produce the failure cases.
+Contributing To contribute fixes to outstanding issues, enhancements, and other smaller changes, open a pull request with your change and a fullsome description of what you are trying to achieve.</description>
     </item>
     
     <item>
