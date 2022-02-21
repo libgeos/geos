@@ -2,7 +2,6 @@
     {{ partial "search" . }}
 
     <section class="gdoc-nav--main">
-        <h2>Navigation</h2>
         {{ if .Site.Params.GeekdocMenuBundle }}
             {{ partial "menu-bundle" (dict "current" . "source" .Site.Data.menu.main.main) }}
         {{ else }}

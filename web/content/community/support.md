@@ -1,10 +1,10 @@
 ---
-title: "Development"
+title: "Support"
 date: 2021-10-04T14:21:00-07:00
 draft: false
 ---
 
-## Developer Resources
+## Resources
 
 * **git** repository: https://github.com/libgeos/geos
 * [**geos-devel** mailing list](https://lists.osgeo.org/mailman/listinfo/geos-devel) and [archive](https://lists.osgeo.org/pipermail/geos-devel/)

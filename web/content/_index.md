@@ -7,6 +7,8 @@ geekdocNav: true
 
 GEOS is a C/C++ library for spatial computational geometry of the sort generally used by "geographic information systems" software. GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), and [Shapely](https://shapely.readthedocs.io/en/stable/project.html).
 
+If you need support using the GEOS library or would like to get involved in the community check out our [Community and Support]({{< ref "community" >}}) page.
+
 ## Capabilities
 
 Spatial Model and Functions
