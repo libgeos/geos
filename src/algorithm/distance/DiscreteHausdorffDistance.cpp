@@ -89,6 +89,9 @@ DiscreteHausdorffDistance::computeOrientedDistance(
 		const geom::Geometry& geom,
 		PointPairDistance& ptDist)
 {
+
+	if (discreteGeom.isEmpty() || geom.isEmpty()) return;
+
 	MaxPointDistanceFilter distFilter(geom);
 	discreteGeom.apply_ro(&distFilter);
 	ptDist.setMaximum(distFilter.getMaxPointDistance());

@@ -2,7 +2,8 @@ Changes in 3.6.6dev
 YYYY-MM-DD
 
 - Bug fixes / improvements
-  - ...
+  - Fix segfault in Hausdorff distance with empty geometries (GH-569)
+
 
 Changes in 3.6.5
 2020-12-11
