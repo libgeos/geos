@@ -122,12 +122,12 @@ GEOSWKTWriter_setRoundingPrecision(writer, 4);
  */
 GEOSWKTWriter_setTrim(writer, 1);
 
-/* Generate the WKT , and store the output length */
+/* Generate the WKT */
 unsigned char* wkt = GEOSWKTWriter_write(writer, geom);
 
 /* do something ... */
 
-/* Free the WKB */
+/* Free the WKT */
 GEOSFree(wkt);
 GEOSGeom_destroy(geom);
 GEOSWKTWriter_destroy(writer);
