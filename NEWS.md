@@ -14,6 +14,8 @@
   - Allow direct setting of grid size (GH-513, Martin Davis)
   - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
   - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
+  - Add SnappingNoder seeding (Martin Davis)
+  - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
 
 - Changes:
 
@@ -48,6 +50,8 @@
           (Casper van der Wel)
 
 - Fixes/Improvements:
+  - Improved IsValidOp (Paul Ramsey, Martin Davis)
+  - Improved IsSimpleOp (Paul Ramsey, Martin Davis)
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier
     and DPSimplifier (Martin Davis)

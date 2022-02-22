@@ -135,9 +135,6 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
                      std::endl;
 #endif
                 hasProper = true;
-                if(isDoneWhenProperInt) {
-                    isDone = true;
-                }
                 if (! isBdyPt) {
                     hasProperInterior = true;
                 }

@@ -374,23 +374,17 @@ void object::test<14>
 ()
 {
     geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
-
     ensure(nullptr != geom1_);
 
     geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
                                  GEOSBUF_JOIN_MITRE, 1);
-
     ensure(nullptr != geom2_);
 
     wkt_ = GEOSGeomToWKT(geom2_);
 
     ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
-
-    printf("%s\n", wkt_);
-
     ensure(0 != GEOSArea(geom2_, &area_));
     ensure_area(area_, 132.289, 0.001);
-
 }
 
 // Buffer with limited mitre  (2)
@@ -543,5 +537,27 @@ void object::test<20>
 
 }
 
-} // namespace tut
+/*
+// Invalid result polygon with full precision, fall back on lower precision
+// https://trac.osgeo.org/geos/ticket/1131
+template<>
+template<>
+void object::test<21>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((-6503873.862740669 -3656747.43316935, -6481859.9985945 -3656747.43316935, -6481859.9985945 -3688545.2369360398, -6506319.8476458 -3688545.2369360398, -6506319.8476458 -3664085.38788474, -6501427.87783554 -3664085.38788474, -6501427.87783554 -3661639.40297961, -6498981.89293041 -3661639.40297961, -6498981.89293041 -3659193.41807448, -6503873.862740669 -3659193.41807448, -6503873.862740669 -3656747.43316935))");
+    ensure(nullptr != geom1_);
 
+    bp_ = GEOSBufferParams_create();
+    GEOSBufferParams_setQuadrantSegments(bp_, 1);
+    geom2_ = GEOSBufferWithParams(geom1_, bp_, 2445.98490513);
+
+    wkt_ = GEOSGeomToWKT(geom2_);
+    std::cout << wkt_ << "\n";
+
+    ensure(nullptr != geom2_);
+    ensure("Buffer result polygon is not valid", GEOSisValid(geom2_));
+}
+*/
+
+} // namespace tut

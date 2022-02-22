@@ -7,7 +7,7 @@ weight: 30
 
 The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of [OSGeo](https://www.osgeo.org/projects/geos/). Major project decisions are made via a [Request for Comments]({{< ref "rfcs" >}}) (RFC) process, where proposals are first documented and then voted on by the steering committee.
 
-This PSC list is valid as of November 10, 2021.
+This PSC list is valid as of February 18th, 2022.
 
 * [Sandro Santilli](https://strk.kbt.io) (chair)
 * [Martin Davis](https://github.com/drjts)
