@@ -100,32 +100,6 @@ void object::test<1>
     runTest("LINESTRING (0 0, 2 1)",
             "LINESTRING (0 0, 2 0)", 1.0);
 
-    // zero densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)",
-                "LINESTRING EMPTY", 0.0, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& ) {
-        // We do expect an exception
-    }
-
-    // too big densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)",
-                "LINESTRING EMPTY", 1 + 1e-10, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& ) {
-        // We do expect an exception
-    }
-
-    // too small positive densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)",
-                "LINESTRING EMPTY", 1e-30, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& ) {
-        // We do expect an exception
-    }
 }
 
 // 2 - testLineSegments2
