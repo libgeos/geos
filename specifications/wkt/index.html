@@ -881,12 +881,12 @@
 </span><span class="cm"> */</span>
 <span class="n">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
-<span class="cm">/* Generate the WKT , and store the output length */</span>
+<span class="cm">/* Generate the WKT */</span>
 <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
 
 <span class="cm">/* do something ... */</span>
 
-<span class="cm">/* Free the WKB */</span>
+<span class="cm">/* Free the WKT */</span>
 <span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
 <span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
 <span class="n">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
