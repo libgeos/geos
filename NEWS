@@ -4,6 +4,8 @@ Changes in 3.10.3
 
 - Fixes/Improvements:
   - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
+  - Add SnappingNoder seeding (Martin Davis)
+  - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
 
 
@@ -60,13 +62,15 @@ Changes in 3.10.0
           returning a GeometryCollection(Polygon) of the triangles.
 
 - Fixes/Improvements:
+  - Improved IsValidOp (Paul Ramsey, Martin Davis)
+  - Improved IsSimpleOp (Paul Ramsey, Martin Davis)
   - Preserve ordering of lines in overlay results (Martin Davis)
   - Check for invalid geometry before fixing polygonal result in Densifier
     and DPSimplifier (Martin Davis)
   - Fix overlay handling of flat interior lines (JTS-685, Martin Davis)
   - Fix IsValidOp to correctly report invalid nested MultiPolygons (#1112, Martin Davis)
-  - Fix BufferOp to avoid artifacts in certain polygon buffers (#1101, Martin Davis)
   - Fix IsValidOp to correctly report certain kinds of invalid LinearRings (Martin Davis)
+  - Fix BufferOp to avoid artifacts in certain polygon buffers (#1101, Martin Davis)
   - Improve STRtree performance through TemplateSTRtree implementation (Daniel Baston)
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
 
