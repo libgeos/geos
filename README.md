@@ -23,6 +23,7 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 
 ## Community Resources
 
+* Website: https://libgeos.org
 * **git** repository: https://github.com/libgeos/geos
 * [**geos-devel** mailing list](https://lists.osgeo.org/mailman/listinfo/geos-devel) and [archive](https://lists.osgeo.org/pipermail/geos-devel/)
 * **#geos** chat channel (all bridged):
