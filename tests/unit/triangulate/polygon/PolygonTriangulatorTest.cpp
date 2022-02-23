@@ -182,16 +182,42 @@ void object::test<11>()
 }
 
 
-// testCollapsedCorner
+//
 template<>
 template<>
 void object::test<12>()
 {
-    checkTri(
-        "POLYGON ((186 90, 71 17, 74 10, 65 0, 0 121, 186 90), (73 34, 67 41, 71 17, 73 34))"
-        );
-}
+    std::vector<geos::geom::Coordinate> shell_points{{0, 0}, {0, 10}, {3, 10}, {3, 0}, {0, 0}};
+    std::vector<geos::geom::Coordinate> hole_1_points{{1, 1}, {2, 1}, {2, 2}, {1, 2}, {1, 1}};
+    std::vector<geos::geom::Coordinate> hole_2_points{{1, 8}, {1, 9}, {2, 9}, {2, 8}, {1, 8}};
 
+    auto* geom_factory      = geos::geom::GeometryFactory::getDefaultInstance();
+    auto* coord_seq_factory = geom_factory->getCoordinateSequenceFactory();
+
+    auto shell_seq  = coord_seq_factory->create(std::move(shell_points));
+    auto hole_1_seq = coord_seq_factory->create(std::move(hole_1_points));
+    auto hole_2_seq = coord_seq_factory->create(std::move(hole_2_points));
+
+    auto shell_ring  = geom_factory->createLinearRing(std::move(shell_seq));
+    auto hole_1_ring = geom_factory->createLinearRing(std::move(hole_1_seq));
+    auto hole_2_ring = geom_factory->createLinearRing(std::move(hole_2_seq));
+
+    std::vector<std::unique_ptr<geos::geom::LinearRing>> holes;
+    holes.emplace_back(std::move(hole_1_ring));
+    holes.emplace_back(std::move(hole_2_ring));
+
+    auto polygon = geom_factory->createPolygon(std::move(shell_ring), std::move(holes));
+
+    // std::cout << "Before triangulate()" << std::endl;
+
+    auto triangles = geos::triangulate::polygon::PolygonTriangulator::triangulate(polygon.get());
+
+    // std::cout << "After triangulate()" << std::endl;
+    // geos::io::WKTWriter writer;
+    // std::cout << writer.write(triangles.get()) << std::endl;
+
+    ensure(true);
+}
 
 
 } // namespace tut
