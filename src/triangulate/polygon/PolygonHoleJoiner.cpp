@@ -194,7 +194,6 @@ PolygonHoleJoiner::getShellCoordIndexSkip(const Coordinate& coord, std::size_t n
     throw util::IllegalStateException("Vertex is not in shellcoords");
 }
 
-
 /* private */
 std::vector<Coordinate>
 PolygonHoleJoiner::getLeftShellVertex(const Coordinate& holeCoord)
@@ -205,34 +204,27 @@ PolygonHoleJoiner::getLeftShellVertex(const Coordinate& holeCoord)
     while ((*it).x == holeCoord.x) {
         it++;
     }
-    it = orderedCoords.lower_bound(*it);
     do {
         it--;
     } while (!isJoinable(holeCoord, *it) && it != orderedCoords.begin());
-    const Coordinate& closest = *it;
-    list.emplace_back(closest);
-    if ( closest.x != holeCoord.x )
+    // we now have the closest coordinate
+    list.emplace_back(*it);
+    if ( it->x != holeCoord.x )
         return list;
 
-    double chosenX = closest.x;
-    double closestX = closest.x;
+    const double chosenX = it->x;
     list.clear();
-    while (chosenX == closestX) {
-        list.emplace_back(closest);
-        it = orderedCoords.lower_bound(closest);
+    while (chosenX == it->x) {
+        list.emplace_back(*it);
         // reached the start of the list
         if (it == orderedCoords.begin())
             return list;
         // paper over difference between Java TreeSet.lower()
         // and std::set::lower_bound()
         it--;
-        if (it == orderedCoords.begin())
-            return list;
-        closestX = (*it).x;
     }
     return list;
 }
-
 
 /* private */
 bool
