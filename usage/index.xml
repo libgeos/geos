@@ -15,7 +15,7 @@
       <guid>https://libgeos.org/usage/bindings/</guid>
       <description>GEOS can be accessed from a variety of other languages via bindings to the library.
 Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos.  Python Python bindings are available via:
- Shapely PyGEOS Calling functions from libgeos_c via Python ctypes  R  sf  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  </description>
+ Shapely PyGEOS Calling functions from libgeos_c via Python ctypes  R  sf geos  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  </description>
     </item>
     
     <item>
