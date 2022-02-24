@@ -178,10 +178,10 @@ template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decl
 template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; BoundsType &gt;(), std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaf</b> (Visitor &amp;&amp;visitor, const Node &amp;node)</td></tr>
 <tr class="separator:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74a3ff2a843661ac9985273336b97f2e"><td class="memTemplParams" colspan="2"><a id="a74a3ff2a843661ac9985273336b97f2e"></a>
+<tr class="memitem:a4450e0995b414e8acd5b96c04dfca104"><td class="memTemplParams" colspan="2"><a id="a4450e0995b414e8acd5b96c04dfca104"></a>
 template&lt;typename Visitor &gt; </td></tr>
-<tr class="memitem:a74a3ff2a843661ac9985273336b97f2e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>query</b> (const BoundsType &amp;queryEnv, const Node &amp;node, Visitor &amp;&amp;visitor)</td></tr>
-<tr class="separator:a74a3ff2a843661ac9985273336b97f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4450e0995b414e8acd5b96c04dfca104"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>query</b> (const BoundsType &amp;queryEnv, const Node &amp;node, Visitor &amp;&amp;visitor)</td></tr>
+<tr class="separator:a4450e0995b414e8acd5b96c04dfca104"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ac8e1816c4d52c98d3eaf357bdf7b0"><td class="memItemLeft" align="right" valign="top"><a id="a13ac8e1816c4d52c98d3eaf357bdf7b0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (const BoundsType &amp;queryEnv, const Node &amp;node, const ItemType &amp;item)</td></tr>
 <tr class="separator:a13ac8e1816c4d52c98d3eaf357bdf7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
