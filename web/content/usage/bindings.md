@@ -31,6 +31,7 @@ Python bindings are available via:
 
 ## R
 * [sf](https://CRAN.R-project.org/package=sf)
+* [geos](https://cran.r-project.org/web/packages/geos/index.html)
 
 ## Ruby
 * [RGeo](https://github.com/rgeo/rgeo).
