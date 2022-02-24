@@ -8,6 +8,7 @@ Changes in 3.10.3
   - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
   - Fix inf loop in PolygonTriangulator (GH-574, Andrew Stelter)
+  - Fix short circuit from TemplateSTRtree query (GH-577, Andrew Stelter)
 
 
 Changes in 3.10.2
