@@ -540,7 +540,7 @@ protected:
 #endif
 
     template<typename Visitor>
-    void query(const BoundsType& queryEnv,
+    bool query(const BoundsType& queryEnv,
                const Node& node,
                Visitor&& visitor) {
 
@@ -551,14 +551,17 @@ protected:
                 if (child->isLeaf()) {
                     if (!child->isDeleted()) {
                         if (!visitLeaf(visitor, *child)) {
-                            return;
+                            return false; // abort query
                         }
                     }
                 } else {
-                    query(queryEnv, *child, visitor);
+                    if (!query(queryEnv, *child, visitor)) {
+                        return false; // abort query
+                    }
                 }
             }
         }
+        return true; // continue searching
     }
 
     bool remove(const BoundsType& queryEnv,

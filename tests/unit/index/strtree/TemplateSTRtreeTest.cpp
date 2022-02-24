@@ -383,6 +383,33 @@ void object::test<9>() {
 }
 #endif
 
+// Test short-circuiting by returning false from query callback
+// https://github.com/libgeos/geos/issues/577
+template<>
+template<>
+void object::test<10>() {
+    TemplateSTRtree<void*> tree;
+
+    for (int i = 0; i < 10; i++)
+    {
+        tree.insert(geos::geom::Envelope(i * 10, i * 10 + 10, i * 10, i * 10 + 10), nullptr);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        tree.insert(geos::geom::Envelope(i * 10, i * 10 + 10, -(i * 10), -(i * 10 + 10)), nullptr);
+    }
+
+    std::vector<const void*> hits;
+    tree.query(geos::geom::Envelope(0, 1000, 0, 1000), [&hits](const void* ptr) {
+        hits.push_back(ptr);
+        return false;
+    });
+
+    ensure_equals(hits.size(), 1u);
+}
+
+
 
 } // namespace tut
 
