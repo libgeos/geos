@@ -5,10 +5,16 @@
     <loc>https://libgeos.org/community/</loc>
     <lastmod>2022-02-16T00:00:00-07:00</lastmod>
   </url><url>
+    <loc>https://libgeos.org/development/</loc>
+    <lastmod>2021-10-29T00:00:00-07:00</lastmod>
+  </url><url>
     <loc>https://libgeos.org/development/rfcs/rfc10/</loc>
     <lastmod>2021-10-29T00:00:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/usage/bindings/</loc>
+  </url><url>
+    <loc>https://libgeos.org/usage/</loc>
+    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/community/coc/</loc>
     <lastmod>2022-02-16T00:00:00-07:00</lastmod>
@@ -41,9 +47,6 @@
   </url><url>
     <loc>https://libgeos.org/posts/2021-11-02-geos-3-10-1-released/</loc>
     <lastmod>2021-11-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/development/</loc>
-    <lastmod>2021-10-29T00:00:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/posts/2021-10-01-geos-3-10-released/</loc>
     <lastmod>2021-10-21T00:00:00+00:00</lastmod>
@@ -79,9 +82,6 @@
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/community/support/</loc>
-    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/usage/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/specifications/geojson/</loc>
