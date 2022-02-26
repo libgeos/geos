@@ -1,0 +1,5 @@
+# see https://www.gitpod.io/docs/config-gitpod-file
+# for more info
+
+tasks:
+  - init: mkdir _build && cd _build && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
