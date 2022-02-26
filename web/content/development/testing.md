@@ -6,6 +6,8 @@ weight: 100
 
 Testing executables are in `bin`
 
+* See also the [`ctest`](/usage/download/#testing) test facility documentation.
+
 ## Unit Tests
 
 The GEOS unit tests are written using the [TUT](http://mrzechonek.github.io/tut-framework/) framework.
