@@ -86,9 +86,10 @@ You can explore the C++ model via the Doxygen reference.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/development/testing/</guid>
-      <description>Testing Tools Testing executables are in bin
-Unit testing Individual test classes within the test_geos_unit suite can be run by calling the test_geos_unit executable. The test source files are under the test/unit directory. The test group names are in the group declaration in each XXXTest.cpp file .
-$ bin/test_geos_unit # Run all tests $ bin/test_geos_unit capi::GEOSNode # Run a single group of tests Individual tests within a test class can be run by specifying the test number:</description>
+      <description>Testing executables are in bin
+Unit Tests The GEOS unit tests are written using the TUT framework. The test source files are under the test/unit directory. The test group names are in the group declaration in each XXXTest.cpp file .
+The entire set of unit tests is run by calling the test_geos_unit executable:
+$ bin/test_geos_unit # Run all tests Individual unit test classes can be run by calling test_geos_unit with a test group name:</description>
     </item>
     
     <item>
