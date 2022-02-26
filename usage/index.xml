@@ -54,9 +54,9 @@ You can explore the C++ model via the Doxygen reference.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/tools/</guid>
-      <description>Testing Tools Testing executables are in bin
-Unit testing Individual test classes within the test_geos_unit suite can be run by calling the test_geos_unit executable. The test source files are under the test/unit directory. The test group names are in the group declaration in each XXXTest.cpp file .
-$ bin/test_geos_unit # Run all tests $ bin/test_geos_unit capi::GEOSNode # Run a single group of tests Individual tests within a test class can be run by specifying the test number:</description>
+      <description>GeosOp geosop is a CLI (command-line interface) for GEOS. It can be used to:
+ Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.
+Usage The geosop executable is in bin. * Print usage instructions</description>
     </item>
     
     <item>
