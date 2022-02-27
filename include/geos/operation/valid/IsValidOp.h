@@ -124,12 +124,12 @@ private:
      */
     bool isValid(const geom::GeometryCollection* gc);
 
-    void checkCoordinateInvalid(const geom::CoordinateSequence* coords);
-    void checkCoordinateInvalid(const geom::Polygon* poly);
-    void checkRingNotClosed(const geom::LinearRing* ring);
-    void checkRingsNotClosed(const geom::Polygon* poly);
-    void checkRingsTooFewPoints(const geom::Polygon* poly);
-    void checkRingTooFewPoints(const geom::LinearRing* ring);
+    void checkCoordinatesValid(const geom::CoordinateSequence* coords);
+    void checkCoordinatesValid(const geom::Polygon* poly);
+    void checkRingClosed(const geom::LinearRing* ring);
+    void checkRingsClosed(const geom::Polygon* poly);
+    void checkRingsPointSize(const geom::Polygon* poly);
+    void checkRingPointSize(const geom::LinearRing* ring);
 
     /**
      * Check the number of non-repeated points is at least a given size.
@@ -156,7 +156,7 @@ private:
      *
      * @param ring the linear ring to check
      */
-    void checkSelfIntersectingRing(const geom::LinearRing* ring);
+    void checkRingSimple(const geom::LinearRing* ring);
 
 
     /**
@@ -169,7 +169,7 @@ private:
      *
      * @param poly the polygon to be tested for hole inclusion
      */
-    void checkHolesOutsideShell(const geom::Polygon* poly);
+    void checkHolesInShell(const geom::Polygon* poly);
 
     /**
      * Checks if a polygon hole lies inside its shell
@@ -193,7 +193,7 @@ private:
      *
      * @param poly the polygon with holes to test
      */
-    void checkHolesNested(const geom::Polygon* poly);
+    void checkHolesNotNested(const geom::Polygon* poly);
 
     /**
      * Checks that no element polygon is in the interior of another element polygon.
@@ -206,9 +206,9 @@ private:
      *
      * These have been confirmed by the PolygonTopologyAnalyzer.
      */
-    void checkShellsNested(const geom::MultiPolygon* mp);
+    void checkShellsNotNested(const geom::MultiPolygon* mp);
 
-    void checkInteriorDisconnected(PolygonTopologyAnalyzer& areaAnalyzer);
+    void checkInteriorConnected(PolygonTopologyAnalyzer& areaAnalyzer);
 
 
 public:
@@ -305,4 +305,3 @@ public:
 } // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
-
