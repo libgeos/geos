@@ -788,24 +788,27 @@
     
 
 
-<p>GEOS is a C/C++ library for spatial computational geometry of the sort generally used by &ldquo;geographic information systems&rdquo; software. GEOS is a core dependency of <a href="https://postgis.net">PostGIS</a>, <a href="https://qgis.org">QGIS</a>, <a href="https://gdal.org">GDAL</a>, and <a href="https://shapely.readthedocs.io/en/stable/project.html">Shapely</a>.</p>
+<p>GEOS is a C/C++ library for spatial computational geometry of the sort generally used by &ldquo;geographic information systems&rdquo; software.
+It implements the <a href="https://www.ogc.org/standards/sfa">OGC</a>
+<a href="https://en.wikipedia.org/wiki/Simple_Features"><em>Simple Features</em></a> specification geometry model and provides all the standard spatial functions as well as many others.
+GEOS is a core dependency of <a href="https://postgis.net">PostGIS</a>, <a href="https://qgis.org">QGIS</a>, <a href="https://gdal.org">GDAL</a>, and <a href="https://shapely.readthedocs.io/en/stable/project.html">Shapely</a>.</p>
 <p>If you need support using the GEOS library or would like to get involved in the community
 check out our <a href="https://libgeos.org/community/support/">Community Support</a> page.</p>
 <div class="gdoc-page__anchorwrap"><h2 id="capabilities">Capabilities<a data-clipboard-text="https://libgeos.org/#capabilities" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Capabilities" href="#capabilities"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>Spatial Model and Functions</p>
 <ul>
-<li><strong>Geometries</strong>: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, GeometryCollection</li>
+<li><strong>Geometry Model</strong>: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, GeometryCollection</li>
 <li><strong>Predicates</strong>: Intersects, Touches, Disjoint, Crosses, Within, Contains, Overlaps, Equals, Covers</li>
 <li><strong>Operations</strong>: Union, Distance, Intersection, Symmetric Difference, Convex Hull, Envelope, Buffer, Simplify, Polygon Assembly, Valid, Area, Length,</li>
-<li>Prepared geometries (pre-spatially indexed)</li>
-<li>STR spatial index</li>
-<li>OGC Well Known Text (WKT) and Well Known Binary (WKB) encoders and decoders.</li>
+<li><strong>Prepared geometry</strong> (using internal spatial indexes)</li>
+<li><strong>Spatial Indexes</strong>: STR (Sort-Tile-Recursive) packed R-tree spatial index</li>
+<li><strong>Input/Output</strong>: OGC Well Known Text (WKT) and Well Known Binary (WKB) readers and writers.</li>
 </ul>
 <div class="gdoc-page__anchorwrap"><h2 id="api-features">API Features<a data-clipboard-text="https://libgeos.org/#api-features" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor API Features" href="#api-features"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <ul>
 <li><a href="https://libgeos.org/usage/c_api/">C API</a> (provides long-term API and ABI stability)</li>
 <li><a href="https://libgeos.org/usage/cpp_api/">C++ API</a> (will likely change across versions)</li>
-<li>Thread safety (using the <a href="https://libgeos.org/usage/c_api/#reentrantthreadsafe-api">reentrant API</a>)</li>
+<li>Thread safety (using the <a href="https://libgeos.org/usage/c_api/#reentrantthreadsafe-api">reentrant C API</a>)</li>
 </ul>
 <div class="gdoc-page__anchorwrap"><h2 id="license">License<a data-clipboard-text="https://libgeos.org/#license" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor License" href="#license"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>GEOS is <a href="https://opensource.com/resources/what-open-source">open source software</a> available under the terms of <a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Lesser General Public License</a> (LGPL).</p>
