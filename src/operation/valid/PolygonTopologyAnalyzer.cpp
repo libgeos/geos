@@ -71,38 +71,48 @@ PolygonTopologyAnalyzer::findSelfIntersection(const LinearRing* ring)
     return Coordinate::getNull();
 }
 
-
 /* public static */
 bool
-PolygonTopologyAnalyzer::isSegmentInRing(const Coordinate* p0, const Coordinate* p1,
-    const LinearRing* ring)
+PolygonTopologyAnalyzer::isRingNested(const LinearRing* test,
+    const LinearRing* target)
 {
-    const CoordinateSequence* ringPts = ring->getCoordinatesRO();
-    Location loc = algorithm::PointLocation::locateInRing(*p0, *ringPts);
+    const Coordinate& p0 = test->getCoordinateN(0);
+    const CoordinateSequence* targetPts = target->getCoordinatesRO();
+    Location loc = algorithm::PointLocation::locateInRing(p0, *targetPts);
     if (loc == Location::EXTERIOR) return false;
     if (loc == Location::INTERIOR) return true;
 
     /**
-    * The segment point is on the boundary of the ring.
-    * Use the topology at the node to check if the segment
-    * is inside or outside the ring.
-    */
-    return isIncidentSegmentInRing(p0, p1, ringPts);
+     * The start point is on the boundary of the ring.
+     * Use the topology at the node to check if the segment
+     * is inside or outside the ring.
+     */
+    Coordinate p1 = findNonEqualVertex(test, p0);
+    return isIncidentSegmentInRing(&p0, &p1, targetPts);
 }
 
+/* private static */
+const Coordinate&
+PolygonTopologyAnalyzer::findNonEqualVertex(const LinearRing* ring, const Coordinate& p)
+{
+    std::size_t i = 1;
+    const Coordinate* next = &(ring->getCoordinateN(i));
+    while (next->equals2D(p) && i < ring->getNumPoints() - 1) {
+        i += 1;
+        next = &(ring->getCoordinateN(i));
+    }
+    return ring->getCoordinateN(i);
+}
 
-/* public static */
+/* private static */
 bool
 PolygonTopologyAnalyzer::isIncidentSegmentInRing(
     const Coordinate* p0, const Coordinate* p1,
     const CoordinateSequence* ringPts)
 {
     std::size_t index = intersectingSegIndex(ringPts, p0);
-    const Coordinate* rPrev = &(ringPts->getAt(index));
-    const Coordinate* rNext = &(ringPts->getAt(index + 1));
-    if (p0->equals2D(ringPts->getAt(index))) {
-        rPrev = &(ringPts->getAt(ringIndexPrev(ringPts, index)));
-    }
+    const Coordinate* rPrev = &findRingVertexPrev(ringPts, index, *p0);
+    const Coordinate* rNext = &findRingVertexNext(ringPts, index, *p0);
     /**
     * If ring orientation is not normalized, flip the corner orientation
     */
@@ -115,6 +125,52 @@ PolygonTopologyAnalyzer::isIncidentSegmentInRing(
     return PolygonNode::isInteriorSegment(p0, rPrev, rNext, p1);
 }
 
+/* private static */
+const Coordinate&
+PolygonTopologyAnalyzer::findRingVertexPrev(const CoordinateSequence* ringPts, std::size_t index, const Coordinate& node)
+{
+    std::size_t iPrev = index;
+    const Coordinate* prev = &(ringPts->getAt(iPrev));
+    while (prev->equals2D(node)) {
+      iPrev = ringIndexPrev(ringPts, iPrev);
+      prev = &(ringPts->getAt(iPrev));
+    }
+    return ringPts->getAt(iPrev);
+}
+
+/* private static */
+const Coordinate&
+PolygonTopologyAnalyzer::findRingVertexNext(const CoordinateSequence* ringPts, std::size_t index, const Coordinate& node)
+{
+    //-- safe, since index is always the start of a ring segment
+    std::size_t iNext = index + 1;
+    const Coordinate* next = &(ringPts->getAt(iNext));
+    while (next->equals2D(node)) {
+      iNext = ringIndexNext(ringPts, iNext);
+      next = &(ringPts->getAt(iNext));
+    }
+    return ringPts->getAt(iNext);
+}
+
+/* private static */
+std::size_t
+PolygonTopologyAnalyzer::ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index)
+{
+    if (index == 0) {
+        return ringPts->getSize() - 2;
+    }
+    return index - 1;
+}
+
+/* private static */
+std::size_t
+PolygonTopologyAnalyzer::ringIndexNext(const CoordinateSequence* ringPts, std::size_t index)
+{
+    if (index >= ringPts->getSize() - 2) {
+        return 0;
+    }
+    return index + 1;
+}
 
 /* private static */
 std::size_t
@@ -134,18 +190,6 @@ PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
     }
     throw util::IllegalArgumentException("Segment vertex does not intersect ring");
 }
-
-
-/* private static */
-std::size_t
-PolygonTopologyAnalyzer::ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index)
-{
-    if (index == 0)
-        return ringPts->size() - 2;
-    else
-        return index - 1;
-}
-
 
 /* public */
 bool

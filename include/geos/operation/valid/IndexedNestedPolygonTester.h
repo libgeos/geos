@@ -72,7 +72,7 @@ private:
     * @param coordNested return parametr for found coordinate
     * @return an interior segment point, or null if the shell is nested correctly
     */
-    static bool findSegmentInPolygon(
+    static bool findIncidentSegmentNestedPoint(
         const LinearRing* shell,
         const Polygon* poly,
         Coordinate& coordNested);
@@ -108,4 +108,3 @@ public:
 } // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
-

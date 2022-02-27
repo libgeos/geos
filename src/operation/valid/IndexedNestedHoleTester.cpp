@@ -64,10 +64,8 @@ IndexedNestedHoleTester::isNested()
              * or if the point lies on the boundary via
              * the topology of the incident edges.
              */
-            const Coordinate& holePt0 = hole->getCoordinateN(0);
-            const Coordinate& holePt1 = hole->getCoordinateN(1);
-            if (PolygonTopologyAnalyzer::isSegmentInRing(&holePt0, &holePt1, testHole)) {
-                nestedPt = holePt0;
+            if (PolygonTopologyAnalyzer::isRingNested(hole, testHole)) {
+                nestedPt = hole->getCoordinateN(0);
                 return true;
             }
         }

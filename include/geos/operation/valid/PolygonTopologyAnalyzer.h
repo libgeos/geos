@@ -64,6 +64,39 @@ private:
     PolygonRing* createPolygonRing(const LinearRing* p_ring);
     PolygonRing* createPolygonRing(const LinearRing* p_ring, int p_index, PolygonRing* p_shell);
 
+    static const Coordinate&
+    findNonEqualVertex(const LinearRing* ring, const Coordinate& p);
+
+    /**
+     * Tests whether a touching segment is interior to a ring.
+     *
+     * Preconditions:
+     *
+     *  * The segment does not cross the ring
+     *  * The segment vertex p0 lies on the ring
+     *  * The ring is valid
+     *
+     * This works for both shells and holes, but the caller must know
+     * the ring role.
+     *
+     * @param p0 the first vertex of the segment
+     * @param p1 the second vertex of the segment
+     * @param ringPts the points of the ring
+     * @return true if the segment is inside the ring.
+     */
+    static bool isIncidentSegmentInRing(const Coordinate* p0, const Coordinate* p1,
+        const CoordinateSequence* ringPts);
+
+    static const Coordinate& findRingVertexPrev(const CoordinateSequence* ringPts,
+        std::size_t index, const Coordinate& node);
+
+    static const Coordinate& findRingVertexNext(const CoordinateSequence* ringPts,
+        std::size_t index, const Coordinate& node);
+
+    static std::size_t ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index);
+
+    static std::size_t ringIndexNext(const CoordinateSequence* ringPts, std::size_t index);
+
     /**
      * Computes the index of the segment which intersects a given point.
      * @param ringPts the ring points
@@ -71,8 +104,6 @@ private:
      * @return the intersection segment index, or -1 if no intersection is found
      */
     static std::size_t intersectingSegIndex(const CoordinateSequence* ringPts, const Coordinate* pt);
-
-    static std::size_t ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index);
 
     std::vector<SegmentString*> createSegmentStrings(const Geometry* geom, bool isInvertedRingValid);
 
@@ -98,43 +129,26 @@ public:
     static Coordinate findSelfIntersection(const LinearRing* ring);
 
     /**
-     * Tests whether a segment p0-p1 is inside or outside a ring.
+     * Tests whether a ring is nested inside another ring.
      *
      * Preconditions:
      *
-     *  * The segment does not cross the ring
-     *  * One or both of the segment endpoints may lie on the ring
-     *  * The ring is valid
+     * * The rings do not cross (i.e. the test is wholly inside or outside the target)
+     * * The rings may touch at discrete points only
+     * * The target ring does not self-cross, but it may self-touch
      *
-     * @param p0 a segment vertex
-     * @param p1 a segment vertex
-     * @param ring the ring to test
-     * @return true if the segment lies inside the ring
+     * If the test ring start point is properly inside or outside, that provides the result.
+     * Otherwise the start point is on the target ring,
+     * and the incident start segment (accounting for repeated points) is
+     * tested for its topology relative to the target ring.
+     *
+     * @param test the ring to test
+     * @param target the ring to test against
+     * @return true if the test ring lies inside the target ring
      */
     static bool
-    isSegmentInRing(const Coordinate* p0, const Coordinate* p1,
-        const LinearRing* ring);
-
-    /**
-     * Tests whether a touching segment is interior to a ring.
-     *
-     * Preconditions:
-     *
-     *  * The segment does not cross the ring
-     *  * The segment vertex p0 lies on the ring
-     *  * The ring is valid
-     *
-     * This works for both shells and holes, but the caller must know
-     * the ring role.
-     *
-     * @param p0 the first vertex of the segment
-     * @param p1 the second vertex of the segment
-     * @param ringPts the points of the ring
-     * @return true if the segment is inside the ring.
-     */
-    static bool isIncidentSegmentInRing(const Coordinate* p0, const Coordinate* p1,
-        const CoordinateSequence* ringPts);
-
+    isRingNested(const LinearRing* test,
+        const LinearRing* target);
 
     bool hasInvalidIntersection() {
         return segInt.isInvalid();
@@ -195,4 +209,3 @@ public:
 } // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
-

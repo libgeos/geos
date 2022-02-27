@@ -16,6 +16,7 @@
   - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
   - Add SnappingNoder seeding (Martin Davis)
   - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
+  - Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis)
 
 - Changes:
 
