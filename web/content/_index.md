@@ -5,7 +5,10 @@ draft: false
 geekdocNav: true
 ---
 
-GEOS is a C/C++ library for spatial computational geometry of the sort generally used by "geographic information systems" software. GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), and [Shapely](https://shapely.readthedocs.io/en/stable/project.html).
+GEOS is a C/C++ library for spatial computational geometry of the sort generally used by "geographic information systems" software.
+It implements the [OGC](https://www.ogc.org/standards/sfa)
+[*Simple Features*](https://en.wikipedia.org/wiki/Simple_Features) specification geometry model and provides all the standard spatial functions as well as many others.
+GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), and [Shapely](https://shapely.readthedocs.io/en/stable/project.html).
 
 If you need support using the GEOS library or would like to get involved in the community
 check out our [Community Support]({{< ref "community/support" >}}) page.
@@ -14,18 +17,18 @@ check out our [Community Support]({{< ref "community/support" >}}) page.
 
 Spatial Model and Functions
 
-* **Geometries**: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, GeometryCollection
+* **Geometry Model**: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, GeometryCollection
 * **Predicates**: Intersects, Touches, Disjoint, Crosses, Within, Contains, Overlaps, Equals, Covers
 * **Operations**: Union, Distance, Intersection, Symmetric Difference, Convex Hull, Envelope, Buffer, Simplify, Polygon Assembly, Valid, Area, Length,
-* Prepared geometries (pre-spatially indexed)
-* STR spatial index
-* OGC Well Known Text (WKT) and Well Known Binary (WKB) encoders and decoders.
+* **Prepared geometry** (using internal spatial indexes)
+* **Spatial Indexes**: STR (Sort-Tile-Recursive) packed R-tree spatial index
+* **Input/Output**: OGC Well Known Text (WKT) and Well Known Binary (WKB) readers and writers.
 
 ## API Features
 
 * [C API]({{< ref "usage/c_api" >}}) (provides long-term API and ABI stability)
 * [C++ API]({{< ref "usage/cpp_api" >}}) (will likely change across versions)
-* Thread safety (using the [reentrant API]({{<ref "usage/c_api/#reentrantthreadsafe-api" >}}))
+* Thread safety (using the [reentrant C API]({{<ref "usage/c_api/#reentrantthreadsafe-api" >}}))
 
 ## License
 
