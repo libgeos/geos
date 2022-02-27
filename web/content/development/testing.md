@@ -6,25 +6,26 @@ weight: 100
 
 Testing executables are in `bin`
 
-* See also the [`ctest`](/usage/download/#testing) test facility documentation.
+* See also the `ctest` [documentation](/usage/download/#testing).
 
 ## Unit Tests
 
 The GEOS unit tests are written using the [TUT](http://mrzechonek.github.io/tut-framework/) framework.
-The test source files are under the `test/unit` directory.
-The test group names are in the `group` declaration in each `XXXTest.cpp` file .
+There are tests for both the C++ code and the C API.
+The test source files are in the `test/unit` directory.
+The test **group names** are in the `group` declaration in each `XXXTest.cpp` file.
 
 The entire set of unit tests is run by calling the `test_geos_unit` executable:
 ```
 $ bin/test_geos_unit                  # Run all tests
 ```
 
-Individual unit test classes can be run by calling `test_geos_unit` with a test group name:
+Individual unit test groups can be run by calling `test_geos_unit` with the test group name:
 ```
 $ bin/test_geos_unit capi::GEOSNode   # Run a single group of tests
 ```
 
-Individual tests within a test class can be run by specifying the test number:
+Individual tests within a test group can be run by specifying the group name and test number:
 ```
 $ bin/test_geos_unit capi::GEOSNode 1
 ```
