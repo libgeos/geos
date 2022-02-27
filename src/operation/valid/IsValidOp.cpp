@@ -424,16 +424,14 @@ IsValidOp::checkHolesOutsideShell(const Polygon* poly)
 const Coordinate *
 IsValidOp::findHoleOutsideShellPoint(const LinearRing* hole, const LinearRing* shell)
 {
-
     const Coordinate& holePt0 = hole->getCoordinateN(0);
-    const Coordinate& holePt1 = hole->getCoordinateN(1);
     /**
      * If hole envelope is not covered by shell, it must be outside
      */
     if (! shell->getEnvelopeInternal()->covers(hole->getEnvelopeInternal()))
         return &holePt0;
 
-    if (PolygonTopologyAnalyzer::isSegmentInRing(&holePt0, &holePt1, shell))
+    if (PolygonTopologyAnalyzer::isRingNested(hole, shell))
         return nullptr;
     return &holePt0;
 }
