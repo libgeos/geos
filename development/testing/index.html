@@ -803,17 +803,18 @@
 
 <p>Testing executables are in <code>bin</code></p>
 <ul>
-<li>See also the <a href="/usage/download/#testing"><code>ctest</code></a> test facility documentation.</li>
+<li>See also the <code>ctest</code> <a href="/usage/download/#testing">documentation</a>.</li>
 </ul>
 <div class="gdoc-page__anchorwrap"><h2 id="unit-tests">Unit Tests<a data-clipboard-text="https://libgeos.org/development/testing/#unit-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Unit Tests" href="#unit-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The GEOS unit tests are written using the <a href="http://mrzechonek.github.io/tut-framework/">TUT</a> framework.
-The test source files are under the <code>test/unit</code> directory.
-The test group names are in the <code>group</code> declaration in each <code>XXXTest.cpp</code> file .</p>
+There are tests for both the C++ code and the C API.
+The test source files are in the <code>test/unit</code> directory.
+The test <strong>group names</strong> are in the <code>group</code> declaration in each <code>XXXTest.cpp</code> file.</p>
 <p>The entire set of unit tests is run by calling the <code>test_geos_unit</code> executable:</p>
 <pre tabindex="0"><code>$ bin/test_geos_unit                  # Run all tests
-</code></pre><p>Individual unit test classes can be run by calling <code>test_geos_unit</code> with a test group name:</p>
+</code></pre><p>Individual unit test groups can be run by calling <code>test_geos_unit</code> with the test group name:</p>
 <pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode   # Run a single group of tests
-</code></pre><p>Individual tests within a test class can be run by specifying the test number:</p>
+</code></pre><p>Individual tests within a test group can be run by specifying the group name and test number:</p>
 <pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode 1
 </code></pre><div class="gdoc-page__anchorwrap"><h2 id="xml-tests">XML Tests<a data-clipboard-text="https://libgeos.org/development/testing/#xml-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor XML Tests" href="#xml-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The XML test suite is a set of portable, declarative tests which can be run in both GEOS and JTS.
