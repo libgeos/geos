@@ -35,6 +35,25 @@ Spatial Model and Functions
 
 GEOS is [open source software](https://opensource.com/resources/what-open-source) available under the terms of [GNU Lesser General Public License](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) (LGPL).
 
+
+## Governance
+
+The GEOS project is run by a
+[Project Steering Committee]({{< ref "psc" >}}) made up of developers
+and contributors to the project and is a project of
+[OSGeo](https://www.osgeo.org/projects/geos/). We strive to keep our day-to-day interactions collegial and welcoming within a basic [Code of Conduct]({{< ref "coc" >}}).
+
+## Relationship to JTS
+
+GEOS started as a direct port to C++ of the
+[JTS Topology Suite](https://github.com/locationtech/jts/) (JTS),
+and remains tightly bound to that project. Most core algorithms have
+been developed in JTS and ported to GEOS when complete.
+
+The projects share testing data.  This helps to ascertain when failures
+are caused by differences in implementation (GEOS fails and JTS does not)
+and when they are caused by algorithm (both libraries fail).
+
 ## Citation
 
 To cite GEOS in publications use:
@@ -51,21 +70,3 @@ A BibTeX entry for LaTeX users is
   url = {https://libgeos.org/},
 }
 ```
-## Relationship to JTS
-
-GEOS started as a direct port to C++ of the
-[JTS Topology Suite](https://github.com/locationtech/jts/) (JTS),
-and remains tightly bound to that project. Most core algorithms have
-been developed in JTS and ported to GEOS when complete.
-
-The projects share testing data.  This helps to ascertain when failures
-are caused by differences in implementation (GEOS fails and JTS does not)
-and when they are caused by algorithm (both libraries fail).
-
-
-## Governance
-
-The GEOS project is run by a
-[Project Steering Committee]({{< ref "psc" >}}) made up of developers
-and contributors to the project and is a project of
-[OSGeo](https://www.osgeo.org/projects/geos/). We strive to keep our day-to-day interactions collegial and welcoming within a basic [Code of Conduct]({{< ref "coc" >}}).
