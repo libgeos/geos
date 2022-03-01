@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://libgeos.org/community/</loc>
+    <loc>https://libgeos.org/project/</loc>
     <lastmod>2022-02-16T00:00:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/development/</loc>
@@ -16,10 +16,10 @@
     <loc>https://libgeos.org/usage/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/community/coc/</loc>
+    <loc>https://libgeos.org/project/coc/</loc>
     <lastmod>2022-02-16T00:00:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/community/psc/</loc>
+    <loc>https://libgeos.org/project/psc/</loc>
     <lastmod>2021-10-27T00:00:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/development/rfcs/</loc>
@@ -83,7 +83,7 @@
     <loc>https://libgeos.org/development/rfcs/rfc09/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/community/support/</loc>
+    <loc>https://libgeos.org/project/support/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/specifications/geojson/</loc>
