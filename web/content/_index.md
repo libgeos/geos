@@ -5,7 +5,7 @@ draft: false
 geekdocNav: true
 ---
 
-GEOS is a C/C++ library for [computational geometry[(https://en.wikipedia.org/wiki/Computational_geometry)] with a focus on algorithms used in
+GEOS is a C/C++ library for [computational geometry](https://en.wikipedia.org/wiki/Computational_geometry)] with a focus on algorithms used in
 [geographic information systems](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) software.
 It implements the [OGC](https://www.ogc.org/standards/sfa)
 [*Simple Features*](https://en.wikipedia.org/wiki/Simple_Features) geometry model and provides all the spatial functions in that standard as well as many others.
