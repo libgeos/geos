@@ -24,7 +24,7 @@ while true; do
       cmd="${cmd} -DCMAKE_INSTALL_PREFIX:PATH=$1"
       ;;
     --enable-debug)
-      cmd="${cmd} -DCMAKE_BUILD_TYPE=Debug"
+      cmd="${cmd} -DCMAKE_BUILD_TYPE=RelWithDebInfo"
       ;;
     --help)
       usage
