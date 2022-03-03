@@ -52,9 +52,7 @@ The GEOS build can be customized using build options.
 Options are specified via [`cmake` variables](https://cmake.org/cmake/help/v2.8.8/cmake.html#section_Variables).
 They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 
-{{% note %}}
-NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to defaults the build directory can be cleared using `rm -rf *`.
-{{% /note %}}
+*NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to defaults the build directory can be cleared using `rm -rf *`.*
 
 | Option               | Default    | Note  |
 | :------------------: | :--------: | :---: |
