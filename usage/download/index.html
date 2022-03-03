@@ -858,7 +858,7 @@
 <li><a href="https://www.doxygen.nl/">Doxygen</a> to build the API documentation.</li>
 </ul>
 <div class="gdoc-page__anchorwrap"><h3 id="build">Build<a data-clipboard-text="https://libgeos.org/usage/download/#build" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Build" href="#build"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>Builds with CMake are done &ldquo;outside the tree&rdquo; either in a build directory in the source tree or next to the tree.</p>
+<p>Builds with CMake are done &ldquo;outside the tree&rdquo; in a build directory either <em>in</em> the source tree or <em>next</em> to it.  The following shows building into a directory in the source tree.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Unpack and setup build directory</span>
 tar xvfj geos-3.10.2.tar.bz2
 <span class="nb">cd</span> geos-3.10.2
@@ -869,12 +869,15 @@ cmake <span class="se">\
 </span><span class="se"></span>    -DCMAKE_BUILD_TYPE<span class="o">=</span>Release <span class="se">\
 </span><span class="se"></span>    -DCMAKE_INSTALL_PREFIX<span class="o">=</span>/usr/local <span class="se">\
 </span><span class="se"></span>    ..
-<span class="c1"># Run the build, test, install steps</span>
+<span class="c1"># Run the build, test, install</span>
 make
 ctest
 make install
 </code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="build-options">Build Options<a data-clipboard-text="https://libgeos.org/usage/download/#build-options" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Build Options" href="#build-options"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>The GEOS build can be customized using build options.</p>
+<p>The GEOS build can be customized using build options.
+Options are specified via <a href="https://cmake.org/cmake/help/v2.8.8/cmake.html#section_Variables"><code>cmake</code> variables</a>.
+They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>.</p>
+<p><em>NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using <code>ccmake ..</code>. To revert to defaults the build directory can be cleared using <code>rm -rf *</code>.</em></p>
 <table>
 <thead>
 <tr>
