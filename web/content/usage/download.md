@@ -27,7 +27,7 @@ draft: false
 
 ### Build
 
-Builds with CMake are done "outside the tree" either in a build directory in the source tree or next to the tree.
+Builds with CMake are done "outside the tree" in a build directory either *in* the source tree or *next* to it.  The following shows building into a directory in the source tree.
 
 ```bash
 # Unpack and setup build directory
@@ -40,7 +40,7 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr/local \
     ..
-# Run the build, test, install steps
+# Run the build, test, install
 make
 ctest
 make install
@@ -49,6 +49,12 @@ make install
 ### Build Options
 
 The GEOS build can be customized using build options.
+Options are specified via [`cmake` variables](https://cmake.org/cmake/help/v2.8.8/cmake.html#section_Variables).
+They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
+
+{{% note %}}
+NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to defaults the build directory can be cleared using `rm -rf *`.
+{{% /note %}}
 
 | Option               | Default    | Note  |
 | :------------------: | :--------: | :---: |
