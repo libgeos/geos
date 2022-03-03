@@ -43,6 +43,7 @@
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/polygonize/BuildArea.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
@@ -351,6 +352,13 @@ GeomFunction::init()
                 geoms.push_back( std::move(polys[i]) );
             }
             return new Result( std::move(geoms) ) ;
+        });
+    add("buildArea", Result::typeGeometry, catConst,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::operation::polygonize::BuildArea builder;
+            auto result = builder.build(geom.get());
+            return new Result( std::move(result) ) ;
         });
     add("simplifyDP", 1, 1, Result::typeGeometry, catConst,
         "simplify geometry using Douglas-Peucker with a distance tolerance",
