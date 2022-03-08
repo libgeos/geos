@@ -299,9 +299,8 @@ Examples  POINT(0 0) POINT EMPTY LINESTRING(0 0, 0 1, 1 2) LINESTRING EMPTY POLY
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/install/</guid>
-      <description>Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
-# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.
-# Add the Ubuntu GIS PPA sudo apt-get install python-software-properties sudo add-apt-repository ppa:ubuntugis/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian respositories.</description>
+      <description>Red Hat Ubuntu Debian Amazon Linux Homebrew Macports     Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</description>
     </item>
     
   </channel>
