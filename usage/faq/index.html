@@ -833,15 +833,22 @@
   <ul>
     <li><a href="#robustness">Robustness</a>
       <ul>
+        <li><a href="#why-is-geosintersectsgeosintersectiona-b-a--false">Why is <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?</a></li>
         <li><a href="#why-doesnt-a-computed-point-lie-exactly-on-a-line">Why doesn&rsquo;t a computed point lie exactly on a line?</a></li>
       </ul></nav><hr></div>
 
 
 <div class="gdoc-page__anchorwrap"><h2 id="robustness">Robustness<a data-clipboard-text="https://libgeos.org/usage/faq/#robustness" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Robustness" href="#robustness"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<div class="gdoc-page__anchorwrap"><h3 id="why-doesnt-a-computed-point-lie-exactly-on-a-line">Why doesn&rsquo;t a computed point lie exactly on a line?<a data-clipboard-text="https://libgeos.org/usage/faq/#why-doesnt-a-computed-point-lie-exactly-on-a-line" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Why doesn&rsquo;t a computed point lie exactly on a line?" href="#why-doesnt-a-computed-point-lie-exactly-on-a-line"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<div class="gdoc-page__anchorwrap"><h3 id="why-is-geosintersectsgeosintersectiona-b-a--false">Why is <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?<a data-clipboard-text="https://libgeos.org/usage/faq/#why-is-geosintersectsgeosintersectiona-b-a--false" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Why is <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?" href="#why-is-geosintersectsgeosintersectiona-b-a--false"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>GEOS represents geometry coordinates using IEEE-754 double-precision floating point numbers.
-This is a finite representation, whereas the implicit line connecting two points has infinite precision.  In general it is highly unlikely that a coordinate computed via an arithmetic operation
-(such as a point interpolated at a distance along the line) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) line.</p>
+This is a finite representation, whereas the implicit lines between vertices have infinite precision.  In general it is highly unlikely that a coordinate computed via an arithmetic operation
+(such as a line intersection) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) lines.</p>
+<p>For example, the diagram below shows how the computed intersection point of two lines in general does not lie exactly on either line (scale exaggerrated for clarity):</p>
+<p><img src="/geos-line-intersect-precision.png" alt="GEOS computed intersection point for two lines"></p>
+<div class="gdoc-page__anchorwrap"><h3 id="why-doesnt-a-computed-point-lie-exactly-on-a-line">Why doesn&rsquo;t a computed point lie exactly on a line?<a data-clipboard-text="https://libgeos.org/usage/faq/#why-doesnt-a-computed-point-lie-exactly-on-a-line" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Why doesn&rsquo;t a computed point lie exactly on a line?" href="#why-doesnt-a-computed-point-lie-exactly-on-a-line"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>As explained in the previous question, GEOS uses finite-precision floating point arithmetic.  In general coordinates computed via arithmetic operations
+(such as interpolation along a line) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) line.</p>
+<p><img src="/geos-line-interpolated-precision.png" alt="GEOS computed points interpolated along line"></p>
 
 
     </article>
