@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Testing">
+<meta name="description" content="FAQ">
 
-<title>Testing | GEOS</title>
+<title>FAQ | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -299,7 +299,7 @@
             
             
                 <span class="flex">
-                    <a href="/development/testing/" class="gdoc-nav__entry is-active">
+                    <a href="/development/testing/" class="gdoc-nav__entry ">
                         Testing
                     </a>
                 </span>
@@ -524,7 +524,7 @@
             
             
                 <span class="flex">
-                    <a href="/usage/faq/" class="gdoc-nav__entry ">
+                    <a href="/usage/faq/" class="gdoc-nav__entry is-active">
                         FAQ
                     </a>
                 </span>
@@ -794,7 +794,7 @@
         
     
     
-        <a href='/'>GEOS</a> / <a href='/development/'>Development</a> / Testing
+        <a href='/'>GEOS</a> / <a href='/usage/'>Usage</a> / FAQ
     
 
     
@@ -808,7 +808,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/development/testing.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/usage/faq.md">
                 Edit this page
             </a>
         </span>
@@ -818,7 +818,7 @@
 
 
     <article class="gdoc-markdown">
-        <h1>Testing</h1>
+        <h1>FAQ</h1>
         
 
 
@@ -826,39 +826,23 @@
     
 
 
-<p>Testing executables are in <code>bin</code></p>
-<ul>
-<li>See also the <code>ctest</code> <a href="/usage/download/#testing">documentation</a>.</li>
-</ul>
-<div class="gdoc-page__anchorwrap"><h2 id="unit-tests">Unit Tests<a data-clipboard-text="https://libgeos.org/development/testing/#unit-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Unit Tests" href="#unit-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<p>The GEOS unit tests are written using the <a href="http://mrzechonek.github.io/tut-framework/">TUT</a> framework.
-There are tests for both the C++ code and the C API.
-The test source files are in the <code>test/unit</code> directory.
-The test <strong>group names</strong> are in the <code>group</code> declaration in each <code>XXXTest.cpp</code> file.</p>
-<p>The entire set of unit tests is run by calling the <code>test_geos_unit</code> executable:</p>
-<pre tabindex="0"><code>$ bin/test_geos_unit                  # Run all tests
-</code></pre><p>Individual unit test groups can be run by calling <code>test_geos_unit</code> with the test group name:</p>
-<pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode   # Run a single group of tests
-</code></pre><p>Individual tests within a test group can be run by specifying the group name and test number:</p>
-<pre tabindex="0"><code>$ bin/test_geos_unit capi::GEOSNode 1
-</code></pre><div class="gdoc-page__anchorwrap"><h2 id="xml-tests">XML Tests<a data-clipboard-text="https://libgeos.org/development/testing/#xml-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor XML Tests" href="#xml-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<p>The XML test suite is a set of portable, declarative tests which can be run in both GEOS and JTS.
-They are located in <code>../geos/tests/xmltester/tests</code>.
-XML tests can be run using <code>test_xmltester</code>:</p>
-<pre tabindex="0"><code>bin/test_xmltester ../geos/tests/xmltester/tests/robust/overlay/TestOverlay-geos-837.xml
-</code></pre><p>The XML Tester provides the following options:</p>
-<pre tabindex="0"><code>Usage: bin/test_xmltester [options] &lt;test&gt; [&lt;test&gt; ...]
-Options:
- -v                  Verbose mode (multiple -v increment verbosity)
---test-valid-output  Test output validity
---test-valid-input   Test input validity
---sql-output         Produce SQL output
---wkb-output         Print Geometries as HEXWKB
-</code></pre><div class="gdoc-page__anchorwrap"><h2 id="performance-tests">Performance Tests<a data-clipboard-text="https://libgeos.org/development/testing/#performance-tests" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Performance Tests" href="#performance-tests"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<p>There are performance tests which are built, but not run as part of the standard test suite.
-These can be run from the command line:</p>
-<pre tabindex="0"><code>$ bin/perf_iterated_buffer
-</code></pre>
+
+
+
+  <div class="gdoc-toc gdoc-toc__level--6"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#robustness">Robustness</a>
+      <ul>
+        <li><a href="#why-doesnt-a-computed-point-lie-exactly-on-a-line">Why doesn&rsquo;t a computed point lie exactly on a line?</a></li>
+      </ul></nav><hr></div>
+
+
+<div class="gdoc-page__anchorwrap"><h2 id="robustness">Robustness<a data-clipboard-text="https://libgeos.org/usage/faq/#robustness" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Robustness" href="#robustness"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h3 id="why-doesnt-a-computed-point-lie-exactly-on-a-line">Why doesn&rsquo;t a computed point lie exactly on a line?<a data-clipboard-text="https://libgeos.org/usage/faq/#why-doesnt-a-computed-point-lie-exactly-on-a-line" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Why doesn&rsquo;t a computed point lie exactly on a line?" href="#why-doesnt-a-computed-point-lie-exactly-on-a-line"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>GEOS represents geometry coordinates using IEEE-754 double-precision floating point numbers.
+This is a finite representation, whereas the implicit line connecting two points has infinite precision.  In general it is highly unlikely that a coordinate computed via an arithmetic operation
+(such as a point interpolated at a distance along the line) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) line.</p>
+
 
     </article>
 
