@@ -53,7 +53,7 @@ Options are specified via [`cmake` variables](https://cmake.org/cmake/help/v2.8.
 They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 
 {{< hint warning >}}
-*NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to defaults the build directory can be cleared using `rm -rf *`.*
+*NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to the defaults, clear the build directory contents using `rm -rf *`.*
 {{< /hint >}}
 
 | Option               | Default    | Note  |
