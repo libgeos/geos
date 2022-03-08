@@ -4,6 +4,8 @@ date: 2021-10-04T13:44:59-07:00
 draft: false
 ---
 
+{{< toc >}}
+
 ### Red Hat
 
 There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
@@ -68,4 +70,3 @@ First [install MacPorts](https://www.macports.org/install.php). Then:
 ```bash
 port install geos
 ```
-
