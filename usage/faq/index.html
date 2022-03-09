@@ -837,6 +837,12 @@
         <li><a href="#why-does-geos-follow-jts-design">Why does GEOS follow JTS design?</a></li>
       </ul>
     </li>
+    <li><a href="#spatial-model">Spatial Model</a>
+      <ul>
+        <li><a href="#does-geos-support-computation-on-the-geodetic-ellipsoid">Does GEOS support computation on the geodetic ellipsoid?</a></li>
+        <li><a href="#does-geos-support-coordinates-with-measures-m">Does GEOS support coordinates with measures (M)?</a></li>
+      </ul>
+    </li>
     <li><a href="#robustness">Robustness</a>
       <ul>
         <li><a href="#why-does-geosintersectsgeosintersectiona-b-a--false">Why does <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?</a></li>
@@ -860,6 +866,15 @@ However, there have been additions to GEOS which were not orginally in JTS
 (although in some cases those were superseded by later JTS development).
 Also, GEOS is intended to provide high-performance spatial algorithms,
 which sometimes requires using different code patterns than in Java.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="spatial-model">Spatial Model<a data-clipboard-text="https://libgeos.org/usage/faq/#spatial-model" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Spatial Model" href="#spatial-model"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<div class="gdoc-page__anchorwrap"><h3 id="does-geos-support-computation-on-the-geodetic-ellipsoid">Does GEOS support computation on the geodetic ellipsoid?<a data-clipboard-text="https://libgeos.org/usage/faq/#does-geos-support-computation-on-the-geodetic-ellipsoid" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Does GEOS support computation on the geodetic ellipsoid?" href="#does-geos-support-computation-on-the-geodetic-ellipsoid"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>No. GEOS assumes that geometries are defined in a Cartesian, planar, 2-dimensional space. Thus it cannot be used to compute accurate metrics, predicates or constructions on the geodetic ellipsoid which is usually used to model the surface of the Earth.</p>
+<p>One way to perform geodetic computations is to project data to an appropriate planar projection
+using a transformation library such as <a href="https://proj.org/">PROJ</a>.
+The desired geometric operations can be computed in planar space, and reprojected back to geodetic.</p>
+<div class="gdoc-page__anchorwrap"><h3 id="does-geos-support-coordinates-with-measures-m">Does GEOS support coordinates with measures (M)?<a data-clipboard-text="https://libgeos.org/usage/faq/#does-geos-support-coordinates-with-measures-m" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Does GEOS support coordinates with measures (M)?" href="#does-geos-support-coordinates-with-measures-m"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>No, the GEOS coordinate model only supports X,Y and Z ordinates.
+We hope to add support for M, and also a more efficient XY coordinate storage representation.</p>
 <div class="gdoc-page__anchorwrap"><h2 id="robustness">Robustness<a data-clipboard-text="https://libgeos.org/usage/faq/#robustness" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Robustness" href="#robustness"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <div class="gdoc-page__anchorwrap"><h3 id="why-does-geosintersectsgeosintersectiona-b-a--false">Why does <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?<a data-clipboard-text="https://libgeos.org/usage/faq/#why-does-geosintersectsgeosintersectiona-b-a--false" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Why does <code>GEOSIntersects(GEOSIntersection(A, B), A) == false</code>?" href="#why-does-geosintersectsgeosintersectiona-b-a--false"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p>GEOS represents geometry coordinates using IEEE-754 double-precision floating point numbers.
