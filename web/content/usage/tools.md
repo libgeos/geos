@@ -4,6 +4,8 @@ draft: false
 weight: 100
 ---
 
+{{< toc >}}
+
 ## GeosOp
 
 `geosop` is a CLI (command-line interface) for GEOS. It can be used to:
@@ -20,8 +22,8 @@ For more information see the [README](https://github.com/libgeos/geos/tree/main/
 ### Usage
 
 The `geosop` executable is in `bin`.
-*
-Print usage instructions
+
+* Print usage instructions
   ```
   bin/geosop
   ```
