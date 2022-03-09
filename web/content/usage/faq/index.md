@@ -27,6 +27,21 @@ However, there have been additions to GEOS which were not orginally in JTS
 Also, GEOS is intended to provide high-performance spatial algorithms,
 which sometimes requires using different code patterns than in Java.
 
+## Spatial Model
+
+### Does GEOS support computation on the geodetic ellipsoid?
+
+No. GEOS assumes that geometries are defined in a Cartesian, planar, 2-dimensional space. Thus it cannot be used to compute accurate metrics, predicates or constructions on the geodetic ellipsoid which is usually used to model the surface of the Earth.
+
+One way to perform geodetic computations is to project data to an appropriate planar projection
+using a transformation library such as [PROJ](https://proj.org/).
+The desired geometric operations can be computed in planar space, and reprojected back to geodetic.
+
+### Does GEOS support coordinates with measures (M)?
+
+No, the GEOS coordinate model only supports X,Y and Z ordinates.
+We hope to add support for M, and also a more efficient XY coordinate storage representation.
+
 ## Robustness
 
 ### Why does `GEOSIntersects(GEOSIntersection(A, B), A) == false`?
