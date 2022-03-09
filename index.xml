@@ -97,9 +97,8 @@ The entire set of unit tests is run by calling the test_geos_unit executable:</d
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/tools/</guid>
-      <description>GeosOp geosop is a CLI (command-line interface) for GEOS. It can be used to:
- Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.
-Usage The geosop executable is in bin. * Print usage instructions</description>
+      <description>GeosOp  Usage   JTS TestBuilder   GeosOp geosop is a CLI (command-line interface) for GEOS. It can be used to:
+ Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.</description>
     </item>
     
     <item>
