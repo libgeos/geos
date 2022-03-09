@@ -65,7 +65,7 @@ Usage The geosop executable is in bin. * Print usage instructions</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/faq/</guid>
-      <description>Robustness  Why is GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line?     Robustness Why is GEOSIntersects(GEOSIntersection(A, B), A) == false? GEOS represents geometry coordinates using IEEE-754 double-precision floating point numbers. This is a finite representation, whereas the implicit lines between vertices have infinite precision. In general it is highly unlikely that a coordinate computed via an arithmetic operation (such as a line intersection) is reported by an intersects test as lying exactly on the (theoretical) lines.</description>
+      <description>Design and Architecture  Why is the C++ API not kept stable? Why does GEOS follow JTS design?   Robustness  Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line?     Design and Architecture Why is the C++ API not kept stable? The C++ API is very large, and may have changes in every release. It is evolving to adopt modern C++ coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced.</description>
     </item>
     
     <item>
