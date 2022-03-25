@@ -450,8 +450,10 @@ void object::test<30>
         GeomPtr geom(geojsonreader.read(geojson));
     } catch (geos::io::ParseException& e) {
         error = true;
+        errorMessage = e.what();
     }
     ensure(error == true);
+    ensure(errorMessage.find("ParseException: Error parsing JSON") != std::string::npos);
 }
 
 }
