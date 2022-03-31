@@ -21,8 +21,8 @@
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/noding/SegmentIntersector.h>
-
 
 // Forward declarations
 namespace geos {
@@ -130,9 +130,11 @@ private:
 
     bool isSimpleLinearGeometry(const geom::Geometry& geom);
 
-    static std::vector<std::unique_ptr<noding::SegmentString>>
-        extractSegmentStrings(const geom::Geometry& geom);
+    static std::vector<std::unique_ptr<geos::geom::CoordinateArraySequence>>
+        removeRepeatedPts(const geom::Geometry& geom);
 
+    static std::vector<std::unique_ptr<noding::SegmentString>>
+        createSegmentStrings(std::vector<std::unique_ptr<geos::geom::CoordinateArraySequence>>& seqs);
 
     class NonSimpleIntersectionFinder : public noding::SegmentIntersector
     {
