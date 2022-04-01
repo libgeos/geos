@@ -41,8 +41,6 @@ using namespace geos::noding;
 using namespace geos::geom;
 using namespace geos::geom::util;
 
-//using geos::operation::valid::RepeatedPointRemover;
-
 namespace geos {
 namespace operation {
 namespace valid {
