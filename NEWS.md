@@ -15,6 +15,7 @@
   - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
   - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
   - Add SnappingNoder seeding (Martin Davis)
+  - Add OverlayNG area check heuristic (JTS-812, Paul Ramsey)
   - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
   - Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis)
   - Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis)
