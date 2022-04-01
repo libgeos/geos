@@ -14,20 +14,26 @@ The GEOS unit tests are written using the [TUT](http://mrzechonek.github.io/tut-
 There are tests for both the C++ code and the C API.
 The test source files are in the `test/unit` directory.
 The test **group names** are in the `group` declaration in each `XXXTest.cpp` file.
+By convention the test group name is based on the test file path and name.
 
 The entire set of unit tests is run by calling the `test_geos_unit` executable:
 ```
 $ bin/test_geos_unit                  # Run all tests
 ```
 
+The unit tests groups can be listed:
+```
+$ bin/test_geos_unit --list           # List all test groups
+```
+
 Individual unit test groups can be run by calling `test_geos_unit` with the test group name:
 ```
-$ bin/test_geos_unit capi::GEOSNode   # Run a single group of tests
+$ bin/test_geos_unit capi::GEOSBuffer   # Run a single group of tests
 ```
 
 Individual tests within a test group can be run by specifying the group name and test number:
 ```
-$ bin/test_geos_unit capi::GEOSNode 1
+$ bin/test_geos_unit capi::GEOSBuffer 1
 ```
 
 ## XML Tests
