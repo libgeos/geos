@@ -32,6 +32,7 @@
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
 #include <unordered_set>
 
@@ -202,8 +203,9 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
     if (geom.isEmpty())
         return true;
 
+    auto noRepeatedPtSeqs = removeRepeatedPts(geom);
+    auto segStrings = createSegmentStrings(noRepeatedPtSeqs);
     std::vector<SegmentString*> segStringsBare;
-    auto segStrings = extractSegmentStrings(geom);
     for (auto& ss: segStrings) {
         segStringsBare.push_back(ss.get());
     }
@@ -218,22 +220,33 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
 }
 
 /* private static */
-std::vector<std::unique_ptr<SegmentString>>
-IsSimpleOp::extractSegmentStrings(const Geometry& geom)
+std::vector<std::unique_ptr<CoordinateArraySequence>>
+IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 {
-    std::vector<std::unique_ptr<SegmentString>> segStrings;
+    std::vector<std::unique_ptr<CoordinateArraySequence>> coordseqs;
     for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
         const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
         if (line) {
-            BasicSegmentString* bss = new BasicSegmentString(
-                const_cast<CoordinateSequence*>(line->getCoordinatesRO()),
-                nullptr);
-            segStrings.emplace_back(static_cast<SegmentString*>(bss));
+            auto ptsNoRepeat = RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
+            coordseqs.emplace_back(ptsNoRepeat.release());
         }
+    }
+    return coordseqs;
+}
+
+/* private static */
+std::vector<std::unique_ptr<SegmentString>>
+IsSimpleOp::createSegmentStrings(std::vector<std::unique_ptr<CoordinateArraySequence>>& seqs)
+{
+    std::vector<std::unique_ptr<SegmentString>> segStrings;
+    for (auto& seq : seqs) {
+        BasicSegmentString* bss = new BasicSegmentString(
+            seq.get(),
+            nullptr);
+        segStrings.emplace_back(static_cast<SegmentString*>(bss));
     }
     return segStrings;
 }
-
 
 // --------------------------------------------------------------------------------
 

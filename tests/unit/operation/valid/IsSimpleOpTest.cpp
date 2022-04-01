@@ -40,7 +40,7 @@ struct test_issimpleop_data {
     double tolerance_;
 
     test_issimpleop_data()
-        : pm_(1)
+        : pm_()
         , factory_(GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
         , tolerance_(0.00005)
