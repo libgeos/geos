@@ -11,6 +11,7 @@ Changes in 3.10.3
   - Fix short circuit from TemplateSTRtree query (GH-577, Andrew Stelter)
   - Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis)
   - Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis)
+  - Add OverlayNG area check heuristic (JTS-812, Paul Ramsey)
 
 Changes in 3.10.2
 2022-01-15
