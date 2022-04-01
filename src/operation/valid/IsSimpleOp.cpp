@@ -249,26 +249,6 @@ IsSimpleOp::createSegmentStrings(std::vector<std::unique_ptr<CoordinateArraySequ
     return segStrings;
 }
 
-/* private static */
-/*
-std::vector<std::unique_ptr<SegmentString>>
-IsSimpleOp::createSegmentStrings(const Geometry& geom)
-{
-    std::vector<std::unique_ptr<SegmentString>> segStrings;
-    for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
-        const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
-        if (line) {
-            auto ptsNoRepeat = RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
-            BasicSegmentString* bss = new BasicSegmentString(
-                const_cast<CoordinateSequence*>(ptsNoRepeat.get()),
-                nullptr);
-            segStrings.emplace_back(static_cast<SegmentString*>(bss));
-        }
-    }
-    return segStrings;
-}
-*/
-
 // --------------------------------------------------------------------------------
 
 /* public */
