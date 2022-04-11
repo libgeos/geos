@@ -13,6 +13,8 @@ Changes in 3.10.3
   - Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis)
   - Add OverlayNG area check heuristic (JTS-812, Paul Ramsey)
   - Improve test_geos_unit application error checking and reporting (Martin Davis)
+  - Fix LengthIndexedLine (via LengthLocationMap fix) (JTS-859, Martin Davis)
+
 
 Changes in 3.10.2
 2022-01-15

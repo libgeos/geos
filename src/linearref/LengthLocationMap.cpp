@@ -162,6 +162,12 @@ LengthLocationMap::getLength(const LinearLocation& loc) const
             }
             totalLength += segLen;
         }
+        else {
+            // At the end of the component
+            if (loc.getComponentIndex() == it.getComponentIndex()) {
+                return totalLength;
+            }
+        }
         it.next();
     }
     return totalLength;

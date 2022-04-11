@@ -520,5 +520,14 @@ void object::test<29>()
     ensure(pt.isNull());
 }
 
-} // namespace tut
+// testExtractLineIndexAtEndpointOfTouchingLines()
+template<>
+template<>
+void object::test<30>
+()
+{
+    runIndicesOfThenExtract("MULTILINESTRING((0 0, 0 50), (0 50, 0 100))",
+                            "LINESTRING (0 50, 0 60)");
+}
 
+} // namespace tut
