@@ -12,6 +12,7 @@ Changes in 3.10.3
   - Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis)
   - Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis)
   - Add OverlayNG area check heuristic (JTS-812, Paul Ramsey)
+  - Improve test_geos_unit application error checking and reporting
 
 Changes in 3.10.2
 2022-01-15

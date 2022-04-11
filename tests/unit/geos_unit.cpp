@@ -34,17 +34,17 @@ usage()
          << endl
          << "Targets:\n"
          << "  <none>                          run all tests in all groups\n"
-         << "  <group name>                    run all tests from given group\n"
-         << "  <group name> <test nr>          run single test with given number from given group\n"
+         << "  <group name>                    run all tests in group\n"
+         << "  <group name> <test num>         run single group test <num>\n"
          << endl
          << "Options:\n"
          << "  --list                          list all registered test groups\n"
-         << "  --verbose                       run unit tests verbosely; displays non-error information\n"
-         << "  --version                       print version information and exit\n"
+//         << "  --verbose                       run unit tests verbosely; displays non-error information\n"
+//         << "  --version                       print version information and exit\n"
          << "  --help                          print this message and exit\n"
          << endl
          << "Examples:\n"
-         << "  " << module << " -v\n"
+//         << "  " << module << " -v\n"
          << "  " << module << " list\n"
          << "  " << module << " geos::geom::Envelope\n"
          << "  " << module << " geos::geom::Envelope 2\n"
@@ -61,18 +61,26 @@ main(int argc, const char* argv[])
         usage();
         return 0;
     }
+    //-- check options valid
+    if (argc >= 2 && argv[1][0] == '-') {
+        bool isValidOpt = std::string(argv[1]) == "--list";
+        if (! isValidOpt) {
+            std::cerr << "Invalid option: " << argv[1] << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
 
     std::cout << "===============================\n"
-              << "  GEOS Test Suite Application\n"
+              << "  GEOS Unit Test Suite\n"
               << "===============================\n";
 
     tut::runner.get().set_callback(&visi);
 
     try {
-        if(argc == 1) {
+        if (argc == 1) {
             tut::runner.get().run_tests();
         }
-        else if(argc == 2 && std::string(argv[1]) == "--list") {
+        else if (argc == 2 && std::string(argv[1]) == "--list") {
             tut::groupnames gl = tut::runner.get().list_groups();
             tut::groupnames::const_iterator b = gl.begin();
             tut::groupnames::const_iterator e = gl.end();
@@ -85,8 +93,9 @@ main(int argc, const char* argv[])
                 std::cout << "  " << *b << std::endl;
                 ++b;
             }
+            return EXIT_SUCCESS;
         }
-        else if(argc == 2 && std::string(argv[1]) != "--list") {
+        else if (argc == 2) {
             tut::runner.get().run_tests(argv[1]);
         }
         else if(argc == 3) {
@@ -100,6 +109,10 @@ main(int argc, const char* argv[])
             tut::test_result result;
             tut::runner.get().run_test(grpname, std::atoi(argv[2]), result);
         }
+    }
+    catch(const tut::no_such_group& ex) {
+        std::cerr << "!!! GEOS Test Suite - unknown test group " << ex.what() << std::endl;
+        return EXIT_FAILURE;
     }
     catch(const std::exception& ex) {
         std::cerr << "!!! GEOS Test Suite raised exception: " << ex.what() << std::endl;
