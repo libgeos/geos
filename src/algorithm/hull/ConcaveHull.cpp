@@ -120,7 +120,7 @@ void
 ConcaveHull::setMaximumEdgeLengthRatio(double edgeLengthRatio)
 {
     if (edgeLengthRatio < 0 || edgeLengthRatio > 1)
-        throw util::IllegalArgumentException("Edge length ratio must be in range [0,1]e");
+        throw util::IllegalArgumentException("Edge length ratio must be in range [0,1]");
     maxEdgeLengthRatio = edgeLengthRatio;
 }
 
