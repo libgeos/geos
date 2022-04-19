@@ -40,6 +40,10 @@ using namespace geos::geom;
 #define GEOS_DEBUG 0
 #endif
 
+#if GEOS_DEBUG
+#include <iostream>
+#endif
+
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
