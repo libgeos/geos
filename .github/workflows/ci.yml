@@ -233,25 +233,25 @@ jobs:
        cd build
        ctest --output-on-failure -C Release
 
-  windows-msvc-17:
-    name: 'Windows (Visual Studio 2017, Release, windows-2016)'
-    runs-on: windows-2016
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v2
+  # windows-msvc-17:
+  #   name: 'Windows (Visual Studio 2017, Release, windows-2016)'
+  #   runs-on: windows-2016
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v2
 
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release -j 2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
+  #      cmake --build . --config Release -j 2
 
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure -C Release
+  #   - name: 'Test'
+  #     run: |
+  #      cd build
+  #      ctest --output-on-failure -C Release
 
   cmake-subproject:
     name: 'CMake Subproject'
