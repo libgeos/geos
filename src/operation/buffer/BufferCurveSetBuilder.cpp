@@ -22,6 +22,7 @@
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/operation/buffer/BufferCurveSetBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
@@ -314,7 +315,14 @@ BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
     Location leftLoc = cwLeftLoc;
     Location rightLoc = cwRightLoc;
 #if GEOS_DEBUG
-    std::cerr << "BufferCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
+    std::cerr << "BufferCurveSetBuilder::addPolygonRing: ";
+    try {
+        bool isCcw = Orientation::isCCW(coord);
+        std::cerr << (isCcw ? "CCW" : "CW");
+    } catch (const util::IllegalArgumentException& ex) {
+        std::cerr << "failed to determine orientation: " << ex.what();
+    }
+    std::cerr << std::endl;
 #endif
     bool isCCW = isRingCCW(coord);
     if (coord->size() >= LinearRing::MINIMUM_VALID_SIZE && isCCW)
