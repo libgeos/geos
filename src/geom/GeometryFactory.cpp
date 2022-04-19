@@ -83,7 +83,7 @@ GeometryFactory::GeometryFactory()
 {
 #if GEOS_DEBUG
     std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory()" << std::endl;
-    std::cerr << "\tcreate PrecisionModel[" << precisionModel << "]" << std::endl;
+    std::cerr << "\tcreate PrecisionModel[" << &precisionModel << "]" << std::endl;
 #endif
 }
 

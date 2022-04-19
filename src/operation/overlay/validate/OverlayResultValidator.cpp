@@ -36,6 +36,7 @@
 #endif
 
 #if GEOS_DEBUG
+#include <iostream>
 #include <iomanip> // for setprecision
 #endif
 
@@ -180,7 +181,7 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
     location[2] = fplres.getLocation(pt);
 
 #if GEOS_DEBUG
-    std::cerr << setprecision(10) << "Point " << pt << std::endl
+    std::cerr << std::setprecision(10) << "Point " << pt << std::endl
          << "Loc0: " << location[0] << std::endl
          << "Loc1: " << location[1] << std::endl
          << "Locr: " << location[2] << std::endl;

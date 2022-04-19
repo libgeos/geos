@@ -147,9 +147,6 @@ DistanceOp::updateMinDistance(std::array<std::unique_ptr<GeometryLocation>, 2> &
 {
     // if not set then don't update
     if(locGeom[0] == nullptr) {
-#if GEOS_DEBUG
-        std::cerr << "updateMinDistance called with loc[0] == null and loc[1] == " << locGeom[1] << std::endl;
-#endif
         assert(locGeom[1] == nullptr);
         return;
     }

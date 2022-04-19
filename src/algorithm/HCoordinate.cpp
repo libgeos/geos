@@ -45,7 +45,7 @@ HCoordinate::intersection(const Coordinate& p1, const Coordinate& p2,
 
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ":" << std::endl
-         << setprecision(20)
+         << std::setprecision(20)
          << " p1: " << p1 << std::endl
          << " p2: " << p2 << std::endl
          << " q1: " << q1 << std::endl

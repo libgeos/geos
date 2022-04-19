@@ -100,10 +100,13 @@ LineIntersector::computeIntersection(const Coordinate& p1, const Coordinate& p2,
 std::string
 LineIntersector::toString() const
 {
-    std::string str = inputLines[0][0]->toString() + "_"
-                 + inputLines[0][1]->toString() + " "
-                 + inputLines[1][0]->toString() + "_"
-                 + inputLines[1][1]->toString() + " : ";
+    auto getCoordString = [](const Coordinate* coord) -> std::string {
+        return coord ? coord->toString() : "<none>";
+    };
+    std::string str = getCoordString(inputLines[0][0]) + "_"
+        + getCoordString(inputLines[0][1]) + " "
+        + getCoordString(inputLines[1][0]) + "_"
+        + getCoordString(inputLines[1][1]) + " : ";
     if(isEndPoint()) {
         str += " endpoint";
     }
