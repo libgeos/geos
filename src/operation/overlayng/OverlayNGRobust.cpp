@@ -92,7 +92,7 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
     */
     if (!geom0->getPrecisionModel()->isFloating()) {
 #if GEOS_DEBUG
-        std::cout << "Using fixed precision overlay." << std::endl;
+        std::cerr << "Using fixed precision overlay." << std::endl;
 #endif
         return OverlayNG::overlay(geom0, geom1, opCode, geom0->getPrecisionModel());
     }
@@ -106,14 +106,14 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
      */
     try {
         geom::PrecisionModel PM_FLOAT;
-        // std::cout << "Using floating point overlay." << std::endl;
+        // std::cerr << "Using floating point overlay." << std::endl;
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
 
         // Simple noding with no validation
         // There are cases where this succeeds with invalid noding (e.g. STMLF 1608).
         // So currently it is NOT safe to run overlay without noding validation
         //result = OverlayNG.overlay(geom0, geom1, opCode, createFloatingNoValidNoder());
-        // std::cout << "Floating point overlay success." << std::endl;
+        // std::cerr << "Floating point overlay success." << std::endl;
         return result;
     }
     catch (const std::runtime_error &ex) {
@@ -123,7 +123,7 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
         */
         exOriginal = ex;
 #if GEOS_DEBUG
-        std::cout << "Floating point overlay FAILURE: " << ex.what() << std::endl;
+        std::cerr << "Floating point overlay FAILURE: " << ex.what() << std::endl;
 #endif
     }
 
@@ -160,7 +160,7 @@ OverlayNGRobust::overlaySnapTries(const Geometry* geom0, const Geometry* geom1, 
     for (std::size_t i = 0; i < NUM_SNAP_TRIES; i++) {
 
 #if GEOS_DEBUG
-        std::cout << "Trying overlaySnapping(tol " << snapTol << ")." << std::endl;
+        std::cerr << "Trying overlaySnapping(tol " << snapTol << ")." << std::endl;
 #endif
 
         result = overlaySnapping(geom0, geom1, opCode, snapTol);
@@ -192,7 +192,7 @@ OverlayNGRobust::overlaySnapping(const Geometry* geom0, const Geometry* geom1, i
         ::geos::ignore_unused_variable_warning(ex);
         //---- ignore exception, return null result to indicate failure
 #if GEOS_DEBUG
-        std::cout << "overlaySnapping(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+        std::cerr << "overlaySnapping(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
 #endif
     }
     return nullptr;
@@ -212,7 +212,7 @@ OverlayNGRobust::overlaySnapBoth(const Geometry* geom0, const Geometry* geom1, i
         ::geos::ignore_unused_variable_warning(ex);
         //---- ignore this exception, just return a nullptr result to indicate failure
 #if GEOS_DEBUG
-        std::cout << "overlaySnapBoth(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
+        std::cerr << "overlaySnapBoth(tol " << snapTol << ") FAILURE: " << ex.what() << std::endl;
 #endif
     }
     return nullptr;
@@ -295,7 +295,7 @@ OverlayNGRobust::overlaySR(const Geometry* geom0, const Geometry* geom1, int opC
         ::geos::ignore_unused_variable_warning(ex);
         // ignore this exception, since the operation will be rerun
 #if GEOS_DEBUG
-        std::cout << "OverlayNGRobust::overlaySR FAILURE: " << ex.what() << std::endl;
+        std::cerr << "OverlayNGRobust::overlaySR FAILURE: " << ex.what() << std::endl;
 #endif
     }
     return nullptr;

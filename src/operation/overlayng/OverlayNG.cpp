@@ -186,7 +186,7 @@ OverlayNG::getResult()
     w.setOutputDimension(3);
     w.setTrim(true);
 
-    std::cout << "Before populatingZ: " << w.write(result.get()) << std::endl;
+    std::cerr << "Before populatingZ: " << w.write(result.get()) << std::endl;
 #endif
 
     /**
@@ -196,7 +196,7 @@ OverlayNG::getResult()
     elevModel->populateZ(*result);
 
 #if GEOS_DEBUG
-    std::cout << " After populatingZ: " << w.write(result.get()) << std::endl;
+    std::cerr << " After populatingZ: " << w.write(result.get()) << std::endl;
 #endif
 
     return result;
