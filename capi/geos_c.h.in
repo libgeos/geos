@@ -2156,6 +2156,8 @@ extern double GEOS_DLL GEOSProject(const GEOSGeometry* line,
 /**
 * Measuring from start of line, return point that is distance
 * the start. Line parameter must be a LineString.
+* The returned point is not guaranteed to intersect the line due to limitations
+* of floating point calculations.
 * \param line linear target of projection
 * \param d distance from start of line to created point
 * \return The point \ref GEOSGeometry that is distance from the start of line.
