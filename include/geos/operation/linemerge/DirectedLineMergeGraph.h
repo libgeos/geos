@@ -15,8 +15,9 @@ class LineString;
 class Coordinate;
 }
 namespace planargraph {
+class DirectedEdge;
+class Edge;
 class Node;
-class NodeMap;
 }
 }
 
@@ -29,7 +30,7 @@ private:
     planargraph::Node* getNode(const geom::Coordinate& coordinate);
 
     std::vector<planargraph::Node*> newNodes;
-
+    std::vector<planargraph::Edge*> newEdges;
     std::vector<planargraph::DirectedEdge*> newDirEdges;
 
 public:

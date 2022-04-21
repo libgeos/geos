@@ -59,7 +59,9 @@ DirectedLineMergeGraph::addEdge(const LineString* lineString)
         startNode, endNode, coordinates->getAt(1), true);
     newDirEdges.push_back(directedEdge);
 
-    directedEdge->setEdge(new LineMergeEdge(lineString));
+    Edge* edge = new LineMergeEdge(lineString);
+    newEdges.push_back(edge);
+    directedEdge->setEdge(edge);
 
     add(directedEdge);
 
@@ -84,6 +86,9 @@ DirectedLineMergeGraph::~DirectedLineMergeGraph()
     unsigned int i;
     for(i = 0; i < newNodes.size(); i++) {
         delete newNodes[i];
+    }
+    for(i = 0; i < newEdges.size(); i++) {
+        delete newEdges[i];
     }
     for(i = 0; i < newDirEdges.size(); i++) {
         delete newDirEdges[i];
