@@ -297,7 +297,8 @@ Examples  POINT(0 0) POINT EMPTY LINESTRING(0 0, 0 1, 1 2) LINESTRING EMPTY POLY
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project    Release Date Release Download Link Changes     2022/01/15 3.10.2 geos-3.10.2.tar.bz2 Changes   2021/11/01 3.9.2 geos-3.9.2.tar.bz2 Changes   2021/04/10 3.8.2 geos-3.8.2.tar.bz2 Changes   2019/10/04 3.7.3 geos-3.7.3.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 geos-3.5.2.tar.bz2 Changes    Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.</description>
+      <description>Download Project    Release Date Release Download Link Changes     2022/01/15 3.10.2 geos-3.10.2.tar.bz2 Changes   2021/11/01 3.9.2 geos-3.9.2.tar.bz2 Changes   2021/04/10 3.8.2 geos-3.8.2.tar.bz2 Changes   2019/10/04 3.7.3 geos-3.7.3.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 geos-3.5.2.tar.bz2 Changes    Old releases can be downloaded from http://download.osgeo.org/geos/
+Build From Source Build Requirements  CMake 3.13 or later. C++11 compiler.</description>
     </item>
     
     <item>
