@@ -34,7 +34,14 @@
 #include <memory> // for unique_ptr
 #include <unordered_map>
 #include <cassert>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG
 #include <iostream>
+#endif
 
 using namespace geos::geom;
 
@@ -137,7 +144,7 @@ LineStringTransformer::transformCoordinates(
     const CoordinateSequence* coords,
     const Geometry* parent)
 {
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ": parent: " << parent
               << std::endl;
 #endif
@@ -146,7 +153,7 @@ LineStringTransformer::transformCoordinates(
         assert(it != linestringMap.end());
 
         TaggedLineString* taggedLine = it->second;
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
         std::cerr << "LineStringTransformer[" << this << "] "
                   << " getting result Coordinates from "
                   << " TaggedLineString[" << taggedLine << "]"
@@ -292,7 +299,7 @@ TopologyPreservingSimplifier::getResultGeometry()
         LineStringMapBuilderFilter lsmbf(linestringMap);
         inputGeom->apply_ro(&lsmbf);
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
         std::cerr << "LineStringMapBuilderFilter applied, "
                   << " lineStringMap contains "
                   << linestringMap.size() << " elements\n";
@@ -303,14 +310,14 @@ TopologyPreservingSimplifier::getResultGeometry()
         lineSimplifier->simplify(begin, end);
 
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
         std::cerr << "all TaggedLineString simplified\n";
 #endif
 
         LineStringTransformer trans(linestringMap);
         result = trans.transform(inputGeom);
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
         std::cerr << "inputGeom transformed\n";
 #endif
 
@@ -335,7 +342,7 @@ TopologyPreservingSimplifier::getResultGeometry()
         delete it->second;
     }
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
     std::cerr << "returning result\n";
 #endif
 

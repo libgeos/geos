@@ -36,7 +36,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 #include <iostream>
 #endif
 
@@ -199,7 +199,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
         std::unique_ptr<SegmentString> newEdge = createSplitEdge(eiPrev, ei);
         edgeList.push_back(newEdge.release());
 #if GEOS_DEBUG
-        testingSplitEdges.push_back(newEdge);
+        testingSplitEdges.push_back(edgeList.back());
 #endif
         eiPrev = ei;
     }
@@ -213,6 +213,9 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 void
 SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& splitEdges) const
 {
+    if (splitEdges.empty())
+        return;
+
     const CoordinateSequence* edgePts = edge.getCoordinates();
     assert(edgePts);
 

@@ -42,6 +42,9 @@
 #define GEOS_DEBUG 0
 #endif
 
+#if GEOS_DEBUG
+#include <iostream>
+#endif
 
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
@@ -290,22 +293,19 @@ PolygonBuilder::placeFreeHoles(std::vector<FastPIPRing>& newShellList,
             EdgeRing* shell = findEdgeRingContaining(hole, newShellList);
             if(shell == nullptr) {
 #if GEOS_DEBUG
-                Geometry* geom;
                 std::cerr << "CREATE TABLE shells (g geometry);" << std::endl;
                 std::cerr << "CREATE TABLE hole (g geometry);" << std::endl;
-                for(std::vector<EdgeRing*>::iterator rIt = newShellList.begin(),
+                for(std::vector<FastPIPRing>::iterator rIt = newShellList.begin(),
                         rEnd = newShellList.end(); rIt != rEnd; rIt++) {
-                    geom = (*rIt)->toPolygon(geometryFactory);
+                    std::unique_ptr<Geometry> geom = (*rIt).edgeRing->toPolygon(geometryFactory);
                     std::cerr << "INSERT INTO shells VALUES ('"
                               << *geom
                               << "');" << std::endl;
-                    delete geom;
                 }
-                geom = hole->toPolygon(geometryFactory);
+                std::unique_ptr<Geometry> geom = hole->toPolygon(geometryFactory);
                 std::cerr << "INSERT INTO hole VALUES ('"
                           << *geom
                           << "');" << std::endl;
-                delete geom;
 #endif
                 //assert(shell!=NULL); // unable to assign hole to a shell
                 throw util::TopologyException("unable to assign hole to a shell");

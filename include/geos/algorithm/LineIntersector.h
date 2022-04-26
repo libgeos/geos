@@ -20,14 +20,11 @@
 #pragma once
 
 #include <geos/export.h>
-#include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Intersection.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 
 #include <string>
-
-#include <geos/geom/Coordinate.h>
 
 // Forward declarations
 namespace geos {
@@ -86,6 +83,7 @@ public:
         :
         precisionModel(initialPrecisionModel),
         result(0),
+        inputLines(),
         isProperVar(false)
     {}
 

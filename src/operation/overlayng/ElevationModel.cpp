@@ -118,7 +118,7 @@ ElevationModel::add(const Geometry& geom)
             }
             const Coordinate& c = seq.getAt(i);
 #if GEOS_DEBUG
-            std::cout << "Coordinate " << i << " of added geom is: "
+            std::cerr << "Coordinate " << i << " of added geom is: "
 << c << std::endl;
 #endif
             model.add(c.x, c.y, c.z);
@@ -167,7 +167,7 @@ ElevationModel::init()
         if (!cell.isNull()) {
           cell.compute();
 #if GEOS_DEBUG
-          std::cout << "init: cell" << offset
+          std::cerr << "init: cell" << offset
                     << " getZ: " << cell.getZ()
                     << std::endl;
 #endif
@@ -183,7 +183,7 @@ ElevationModel::init()
       averageZ = sumZ / numCells;
     }
 #if GEOS_DEBUG
-    std::cout << "init: numCells: " << numCells
+    std::cerr << "init: numCells: " << numCells
               << " averageZ: " << averageZ << std::endl;
 #endif
 }
@@ -223,12 +223,12 @@ ElevationModel::populateZ(Geometry& geom)
         void filter_rw(geom::Coordinate* c) const override
         {
 #if GEOS_DEBUG
-            std::cout << "Input coord:  " << *c << std::endl;
+            std::cerr << "Input coord:  " << *c << std::endl;
 #endif
             if (std::isnan( c->z )) {
                 c->z = model.getZ(c->x, c->y);
 #if GEOS_DEBUG
-                std::cout << "New coord: " << *c << std::endl;
+                std::cerr << "New coord: " << *c << std::endl;
 #endif
             }
         }
@@ -237,7 +237,7 @@ ElevationModel::populateZ(Geometry& geom)
 
     Filter filter(*this);
 #if GEOS_DEBUG
-    std::cout << "ElevationModel::poplateZ calling apply_rw(CoordinateSequenceFilter&) against" <<
+    std::cerr << "ElevationModel::poplateZ calling apply_rw(CoordinateSequenceFilter&) against" <<
               //std::type_name<decltype(ci)>()
               typeid(geom).name()
               << std::endl;
@@ -261,7 +261,7 @@ ElevationModel::getCell(double x, double y) //, bool isCreateIfMissing
     }
     int cellOffset = getCellOffset(ix, iy);
 #if GEOS_DEBUG
-    std::cout << "Cell of coordinate " << x << "," << y
+    std::cerr << "Cell of coordinate " << x << "," << y
               << " is " << ix << "," << iy
               << " offset " << cellOffset << std::endl;
 #endif
