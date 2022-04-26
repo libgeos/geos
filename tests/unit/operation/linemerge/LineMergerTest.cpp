@@ -66,9 +66,10 @@ struct test_linemerger_data {
     void
     doTest(const char* const* inputWKT,
            const char* const* expectedWKT,
+           bool directed = false,
            bool compareDirections = true)
     {
-        LineMerger lineMerger;
+        LineMerger lineMerger(directed);
 
         readWKT(inputWKT, inpGeoms);
         readWKT(expectedWKT, expGeoms);
@@ -261,6 +262,214 @@ void object::test<7>
     doTest(inpWKT, expWKT);
 }
 
+// Requested for PostGIS https://trac.osgeo.org/postgis/ticket/4939
+template<> template<>
+void object::test<8>()
+{
+    const char* inpWKT[] = {
+        "MULTILINESTRING ((-29 -27, 1 2), (-29 -27, -45 -33, -46 -32))",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (-29 -27, 1 2)",
+        "LINESTRING (-29 -27, -45 -33, -46 -32)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Basic functionality
+template<> template<>
+void object::test<9>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (1 1, 2 2)",
+        "LINESTRING (2 2, 3 3)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 1 1, 2 2, 3 3)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Multiple outgoing edges
+template<> template<>
+void object::test<10>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (1 1, 2 2)",
+        "LINESTRING (2 2, 3 3)",
+        "LINESTRING (2 2, 3 2)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 1 1, 2 2)",
+        "LINESTRING (2 2, 3 3)",
+        "LINESTRING (2 2, 3 2)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Multiple incoming edges
+template<> template<>
+void object::test<11>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (0 1, 1 1)",
+        "LINESTRING (1 1, 2 2)",
+        "LINESTRING (2 2, 3 3)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (0 1, 1 1)",
+        "LINESTRING (1 1, 2 2, 3 3)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Check:
+// - line strings no not cross points with multiple outgoing or
+//   incoming edges: (1, 1), (3, 2);
+// - both paths from (1, 1) to (3, 2) are merged into line strings
+// - all edges are present in result
+template<> template<>
+void object::test<12>()
+{
+    //             4, 3
+    //              /
+    //   2, 2 *----* 3, 2
+    //       /    /
+    // 1, 1 *----* 2, 1
+    //     /
+    //   0, 0
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (1 1, 2 2)",
+        "LINESTRING (1 1, 2 1)",
+        "LINESTRING (2 2, 3 2)",
+        "LINESTRING (2 1, 3 2)",
+        "LINESTRING (3 2, 4 3)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "LINESTRING (1 1, 2 2, 3 2)",
+        "LINESTRING (1 1, 2 1, 3 2)",
+        "LINESTRING (3 2, 4 3)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Lines with opposide directions are not merged
+template<> template<>
+void object::test<13>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 2, 2 1)",
+        "LINESTRING (4 2, 3 2, 2 1)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 1 2, 2 1)",
+        "LINESTRING (4 2, 3 2, 2 1)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Two intersecting/crossing segments must not merge
+template<> template<>
+void object::test<14>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 100 100)", "LINESTRING (0 100, 100 0)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING (0 0, 100 100)", "LINESTRING (0 100, 100 0)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+template<> template<>
+void object::test<15>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING EMPTY",
+        "LINESTRING EMPTY",
+        nullptr
+    };
+    const char* expWKT[] = {
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+template<> template<>
+void object::test<16>()
+{
+    const char* inpWKT[] = {
+        nullptr
+    };
+    const char* expWKT[] = {
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// testSingleUniquePoint()
+template<> template<>
+void object::test<17>()
+{
+    const char* inpWKT[] = {
+        "LINESTRING (10642 31441, 10642 31441)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
+
+// Loop
+template<> template<>
+void object::test<18>
+()
+{
+    const char* inpWKT[] = {
+        "LINESTRING(0 0, 0 5)",
+        "LINESTRING(0 5, 5 5)",
+        "LINESTRING(5 5, 5 0)",
+        "LINESTRING(5 0, 0 0)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "LINESTRING(0 0, 0 5, 5 5, 5 0, 0 0)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT, true);
+}
 
 } // namespace tut
 
