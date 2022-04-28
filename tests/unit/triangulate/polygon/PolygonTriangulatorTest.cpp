@@ -101,7 +101,7 @@ void object::test<4>()
 {
     checkTri(
         "POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 50 70, 30 30, 20 80), (70 20, 50 70, 80 80, 70 20))",
-        "GEOMETRYCOLLECTION (POLYGON ((10 10, 10 90, 20 80, 10 10)), POLYGON ((50 70, 20 80, 10 90, 50 70)), POLYGON ((10 10, 20 80, 30 30, 10 10)), POLYGON ((30 30, 50 70, 70 20, 30 30)), POLYGON ((80 80, 50 70, 10 90, 80 80)), POLYGON ((90 10, 10 10, 30 30, 90 10)), POLYGON ((80 80, 10 90, 90 90, 80 80)), POLYGON ((90 10, 30 30, 70 20, 90 10)), POLYGON ((70 20, 80 80, 90 90, 70 20)), POLYGON ((90 90, 90 10, 70 20, 90 90)))"
+        "GEOMETRYCOLLECTION (POLYGON ((10 10, 10 90, 20 80, 10 10)), POLYGON ((30 30, 50 70, 70 20, 30 30)), POLYGON ((80 80, 50 70, 20 80, 80 80)), POLYGON ((20 80, 10 90, 90 90, 20 80)), POLYGON ((10 10, 20 80, 30 30, 10 10)), POLYGON ((80 80, 20 80, 90 90, 80 80)), POLYGON ((90 10, 10 10, 30 30, 90 10)), POLYGON ((70 20, 80 80, 90 90, 70 20)), POLYGON ((90 10, 30 30, 70 20, 90 10)), POLYGON ((70 20, 90 90, 90 10, 70 20)))"
         );
 }
 
@@ -181,7 +181,6 @@ void object::test<11>()
         );
 }
 
-
 //
 template<>
 template<>
@@ -220,6 +219,17 @@ void object::test<12>()
 }
 
 
+/**
+ * A failing case revealing that joining holes by a zero-length cut
+ * was introducing duplicate vertices.
+ */
+template<>
+template<>
+void object::test<13>()
+{
+    checkTri(
+    "POLYGON ((71 12, 0 0, 7 47, 16 94, 71 52, 71 12), (7 38, 25 48, 7 47, 7 38), (13 59, 13 54, 26 53, 13 59))"
+        );
+}
+
 } // namespace tut
-
-
