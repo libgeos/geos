@@ -105,7 +105,7 @@ $(function() {
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::vector&lt;Coordinate&gt; shellCoords;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// orderedCoords is a copy of shellCoords for sort purposes</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::set&lt;Coordinate&gt; orderedCoords;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::set&lt;Coordinate&gt; shellCoordsSorted;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="comment">// Key: starting end of the cut; Value: list of the other end of the cut</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::unordered_map&lt;Coordinate, std::vector&lt;Coordinate&gt;, Coordinate::HashCode&gt; cutMap;</div>
@@ -129,7 +129,7 @@ $(function() {
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    std::size_t getShellCoordIndexSkip(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; coord, std::size_t numSkip);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    std::vector&lt;Coordinate&gt; getLeftShellVertex(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; holeCoord);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    std::vector&lt;Coordinate&gt; findLeftShellVertices(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; holeCoord);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">bool</span> isJoinable(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; holeCoord, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; shellCoord) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
@@ -137,9 +137,9 @@ $(function() {
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordtype">void</span> addHoleToShell(std::size_t shellVertexIndex, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* holeCoords, std::size_t holeVertexIndex);</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    std::vector&lt;const LinearRing*&gt; sortHoles(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* poly);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">static</span> std::vector&lt;const LinearRing*&gt; sortHoles(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* poly);</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    std::vector&lt;std::size_t&gt; getLeftMostVertex(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::size_t&gt; findLeftVertices(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring);</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    std::unique_ptr&lt;noding::SegmentSetMutualIntersector&gt; createPolygonIntersector(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* polygon);</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
@@ -161,7 +161,6 @@ $(function() {
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;} <span class="comment">// namespace geos.triangulate.polygon</span></div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;} <span class="comment">// namespace geos.triangulate</span></div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html">geos::geom::LinearRing</a></div><div class="ttdoc">Models an OGC SFS LinearRing. A LinearRing is a LineString which is both closed and simple.</div><div class="ttdef"><b>Definition:</b> LinearRing.h:55</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
