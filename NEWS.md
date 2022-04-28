@@ -20,6 +20,7 @@
   - Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis)
   - Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis)
   - Fix LengthIndexedLine (via LengthLocationMap fix) (JTS-859, Martin Davis)
+  - Fix PolygonHoleJoiner (JTS-862, Martin Davis)
   - Improve `test_geos_unit` application error checking and reporting
 
 - Changes:
@@ -37,6 +38,7 @@
   - geosop CLI for GEOS (Martin Davis)
   - Full doxygen of the C-API (Paul Ramsey)
   - GeometryFixer class for validity enforcement (Martin Davis, Paul Ramsey)
+  - PolygonTriangulator, ConstrainedDelaunayTriangulator (Martin Davis, Paul Ramsey)
   - GeoJSON reader/writer implementation (Jared Erickson, WhuAegeanSea)
   - CAPI: GEOSDensify (Brendan Ward)
   - CAPI: GEOSCoordSeq_copyFromArrays, GEOSCoordSeq_copyFromBuffer,

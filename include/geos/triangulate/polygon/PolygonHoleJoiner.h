@@ -67,7 +67,7 @@ private:
     std::vector<Coordinate> shellCoords;
 
     // orderedCoords is a copy of shellCoords for sort purposes
-    std::set<Coordinate> orderedCoords;
+    std::set<Coordinate> shellCoordsSorted;
 
     // Key: starting end of the cut; Value: list of the other end of the cut
     std::unordered_map<Coordinate, std::vector<Coordinate>, Coordinate::HashCode> cutMap;
@@ -118,7 +118,7 @@ private:
     * @param holeCoord the hole coordinates
     * @return a list of candidate join vertices
     */
-    std::vector<Coordinate> getLeftShellVertex(const Coordinate& holeCoord);
+    std::vector<Coordinate> findLeftShellVertices(const Coordinate& holeCoord);
 
     /**
     * Determine if a line segment between a hole vertex
@@ -155,7 +155,7 @@ private:
     * @param poly polygon that contains the holes
     * @return a list of ordered hole geometry
     */
-    std::vector<const LinearRing*> sortHoles(const Polygon* poly);
+    static std::vector<const LinearRing*> sortHoles(const Polygon* poly);
 
     /**
     * Gets a list of indices of the leftmost vertices in a ring.
@@ -163,7 +163,7 @@ private:
     * @param geom the hole ring
     * @return index of the left most vertex
     */
-    std::vector<std::size_t> getLeftMostVertex(const LinearRing* ring);
+    static std::vector<std::size_t> findLeftVertices(const LinearRing* ring);
 
     std::unique_ptr<noding::SegmentSetMutualIntersector> createPolygonIntersector(const Polygon* polygon);
 
@@ -190,4 +190,3 @@ public:
 } // namespace geos.triangulate.polygon
 } // namespace geos.triangulate
 } // namespace geos
-
