@@ -386,6 +386,12 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geom->covers( geomB.get() ) );
         });
+    add("equals", 2, 0, Result::typeBool, catRel,
+        "test if geometry A equals geometry B",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            return new Result( geom->equals( geomB.get() ) );
+        });
     add("intersects", 2, 0, Result::typeBool, catRel,
         "test if geometry A and B intersect",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
