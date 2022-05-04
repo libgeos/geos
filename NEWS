@@ -15,6 +15,8 @@ Changes in 3.10.3
   - Improve test_geos_unit application error checking and reporting (Martin Davis)
   - Fix LengthIndexedLine (via LengthLocationMap fix) (JTS-859, Martin Davis)
   - Fix PolygonHoleJoiner (JTS-862, Martin Davis)
+  - Fix crash in GeometryNoder on empty intpu (GH-601, Paul Ramsey)
+
 
 Changes in 3.10.2
 2022-01-15
