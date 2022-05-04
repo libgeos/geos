@@ -8,6 +8,7 @@ Changes in 3.8.3
   - Fix DiscreteFrechetDistance to use initial points of input lines (#1128, Martin Davis)
   - VoronoiDiagramBuilder::setSites(const CoordinateSequence&) return sorted (GH-551)
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
+  - Fix segfault with GeometryNoder on empty intput (GH-601, Paul Ramsey)
 
 
 Changes in 3.8.2

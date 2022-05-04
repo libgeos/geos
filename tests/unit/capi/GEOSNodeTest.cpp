@@ -123,6 +123,16 @@ void object::test<3>
                  );
 }
 
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+    geom2_ = GEOSNode(geom1_);
+    ensure(nullptr != geom2_);
+}
+
 
 } // namespace tut
 
