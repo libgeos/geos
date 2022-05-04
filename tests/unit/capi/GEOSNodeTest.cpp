@@ -74,13 +74,12 @@ void object::test<1>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-    std::string out(wkt_c);
-    free(wkt_c);
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    std::string out(wkt_);
 
     ensure_equals(out,
-                  "MULTILINESTRING ((5 5, 10 10, 10 0, 5 5), (0 10, 5 5), (0 0, 5 5))"
-                 );
+        "MULTILINESTRING ((5 5, 10 10, 10 0, 5 5), (0 10, 5 5), (0 0, 5 5))"
+        );
 }
 
 /// Overlapping lines
@@ -94,13 +93,12 @@ void object::test<2>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-    std::string out(wkt_c);
-    free(wkt_c);
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    std::string out(wkt_);
 
     ensure_equals(out,
-                  "MULTILINESTRING ((4 0, 5 0), (3 0, 4 0), (2 0, 3 0), (1 0, 2 0), (0 0, 1 0))"
-                 );
+        "MULTILINESTRING ((4 0, 5 0), (3 0, 4 0), (2 0, 3 0), (1 0, 2 0), (0 0, 1 0))"
+        );
 }
 
 /// Equal lines
@@ -114,13 +112,10 @@ void object::test<3>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-    std::string out(wkt_c);
-    free(wkt_c);
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    std::string out(wkt_);
 
-    ensure_equals(out,
-                  "MULTILINESTRING ((2 0, 4 0), (0 0, 2 0))"
-                 );
+    ensure_equals(out, "MULTILINESTRING ((2 0, 4 0), (0 0, 2 0))");
 }
 
 // https://gis.stackexchange.com/questions/345341/get-location-of-postgis-geos-topology-exception/345482#345482
@@ -141,6 +136,22 @@ void object::test<4>
     // ensure(geom2_);
 }
 
+
+// https://github.com/libgeos/geos/issues/601
+template<>
+template<>
+void object::test<5>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+    geom2_ = GEOSNode(geom1_);
+    ensure(nullptr != geom2_);
+
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    std::string out(wkt_);
+
+    ensure_equals(out, "LINESTRING EMPTY");
+}
 
 } // namespace tut
 
