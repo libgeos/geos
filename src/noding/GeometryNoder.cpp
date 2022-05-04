@@ -120,8 +120,11 @@ std::unique_ptr<geom::Geometry>
 GeometryNoder::getNoded()
 {
   SegmentString::NonConstVect lineList;
-  if (argGeom.isEmpty())
-	return argGeom.clone();
+  if (argGeom.isEmpty()) {
+  	std::unique_ptr<geom::Geometry> g(argGeom.clone());
+  	return g;
+  }
+
   extractSegmentStrings(argGeom, lineList);
 
   Noder& noder = getNoder();
