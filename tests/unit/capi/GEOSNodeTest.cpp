@@ -17,9 +17,10 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosnode_data {
-    GEOSGeometry* geom1_;
-    GEOSGeometry* geom2_;
-    GEOSWKTWriter* w_;
+    GEOSGeometry* geom1_ = nullptr;
+    GEOSGeometry* geom2_ = nullptr;
+    GEOSWKTWriter* w_ = nullptr;
+    char* wkt_ = nullptr;
 
     static void
     notice(const char* fmt, ...)
@@ -44,11 +45,10 @@ struct test_capigeosnode_data {
 
     ~test_capigeosnode_data()
     {
-        GEOSGeom_destroy(geom1_);
-        GEOSGeom_destroy(geom2_);
-        GEOSWKTWriter_destroy(w_);
-        geom1_ = nullptr;
-        geom2_ = nullptr;
+        if (geom1_) GEOSGeom_destroy(geom1_);
+        if (geom1_) GEOSGeom_destroy(geom2_);
+        if (w_) GEOSWKTWriter_destroy(w_);
+        if (wkt_) GEOSFree(wkt_);
         finishGEOS();
     }
 
@@ -74,7 +74,7 @@ void object::test<1>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    wkt_ = GEOSWKTWriter_write(w_, geom2_);
     std::string out(wkt_);
 
     ensure_equals(out,
@@ -93,7 +93,7 @@ void object::test<2>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    wkt_ = GEOSWKTWriter_write(w_, geom2_);
     std::string out(wkt_);
 
     ensure_equals(out,
@@ -112,7 +112,7 @@ void object::test<3>
     ensure(nullptr != geom2_);
 
     GEOSNormalize(geom2_);
-    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    wkt_ = GEOSWKTWriter_write(w_, geom2_);
     std::string out(wkt_);
 
     ensure_equals(out, "MULTILINESTRING ((2 0, 4 0), (0 0, 2 0))");
@@ -147,7 +147,7 @@ void object::test<5>
     geom2_ = GEOSNode(geom1_);
     ensure(nullptr != geom2_);
 
-    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    wkt_ = GEOSWKTWriter_write(w_, geom2_);
     std::string out(wkt_);
 
     ensure_equals(out, "LINESTRING EMPTY");
