@@ -50,17 +50,17 @@ namespace {
 class SegmentStringExtractor: public geom::GeometryComponentFilter {
 public:
   SegmentStringExtractor(SegmentString::NonConstVect& to)
-    : _to(to)
+	: _to(to)
   {}
 
   void filter_ro(const geom::Geometry * g) override {
-    const geom::LineString *ls = dynamic_cast<const geom::LineString *>(g);
-    if ( ls ) {
-      geom::CoordinateSequence* coord = ls->getCoordinates();
-      // coord ownership transferred to SegmentString
-      SegmentString *ss = new NodedSegmentString(coord, nullptr);
-      _to.push_back(ss);
-    }
+	const geom::LineString *ls = dynamic_cast<const geom::LineString *>(g);
+	if ( ls ) {
+	  geom::CoordinateSequence* coord = ls->getCoordinates();
+	  // coord ownership transferred to SegmentString
+	  SegmentString *ss = new NodedSegmentString(coord, nullptr);
+	  _to.push_back(ss);
+	}
   }
 private:
   SegmentString::NonConstVect& _to;
@@ -100,14 +100,14 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
   lines->reserve(nodedEdges.size());
   for (auto &ss :  nodedEdges)
   {
-    const geom::CoordinateSequence* coords = ss->getCoordinates();
+	const geom::CoordinateSequence* coords = ss->getCoordinates();
 
-    // Check if an equivalent edge is known
-    OrientedCoordinateArray oca1( *coords );
-    if ( ocas.insert(oca1).second ) {
-      geom::Geometry* tmp = geomFact->createLineString( coords->clone() );
-      lines->push_back( tmp );
-    }
+	// Check if an equivalent edge is known
+	OrientedCoordinateArray oca1( *coords );
+	if ( ocas.insert(oca1).second ) {
+	  geom::Geometry* tmp = geomFact->createLineString( coords->clone() );
+	  lines->push_back( tmp );
+	}
   }
 
   std::unique_ptr<geom::Geometry> noded ( geomFact->createMultiLineString( lines ) );
@@ -120,30 +120,32 @@ std::unique_ptr<geom::Geometry>
 GeometryNoder::getNoded()
 {
   SegmentString::NonConstVect lineList;
+  if (argGeom.isEmpty())
+	return argGeom.clone();
   extractSegmentStrings(argGeom, lineList);
 
   Noder& noder = getNoder();
   SegmentString::NonConstVect* nodedEdges = nullptr;
 
   try {
-    noder.computeNodes( &lineList );
-    nodedEdges = noder.getNodedSubstrings();
+	noder.computeNodes( &lineList );
+	nodedEdges = noder.getNodedSubstrings();
   }
   catch (const std::exception& ex)
   {
-    for (size_t i=0, n=lineList.size(); i<n; ++i)
-      delete lineList[i];
-    throw;
+	for (size_t i=0, n=lineList.size(); i<n; ++i)
+	  delete lineList[i];
+	throw;
   }
 
   std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
 
   for (auto &elem : (*nodedEdges))
-    delete elem;
+	delete elem;
   delete nodedEdges;
 
   for (auto &elem : lineList)
-    delete elem;
+	delete elem;
 
   return noded;
 }
@@ -151,7 +153,7 @@ GeometryNoder::getNoded()
 /* private static */
 void
 GeometryNoder::extractSegmentStrings(const geom::Geometry& g,
-                                     SegmentString::NonConstVect& to)
+									 SegmentString::NonConstVect& to)
 {
   SegmentStringExtractor ex(to);
 	g.apply_ro(&ex);
@@ -163,23 +165,23 @@ GeometryNoder::getNoder()
 {
   if ( ! noder.get() )
   {
-    const geom::PrecisionModel *pm = argGeom.getFactory()->getPrecisionModel();
+	const geom::PrecisionModel *pm = argGeom.getFactory()->getPrecisionModel();
 #if 0
-    using algorithm::LineIntersector;
+	using algorithm::LineIntersector;
 		LineIntersector li;
 		IntersectionAdder intersectionAdder(li);
-    noder.reset( new MCIndexNoder(&intersectionAdder) );
+	noder.reset( new MCIndexNoder(&intersectionAdder) );
 #else
 
-    IteratedNoder* in = new IteratedNoder(pm);
-    //in->setMaximumIterations(0);
-    noder.reset( in );
+	IteratedNoder* in = new IteratedNoder(pm);
+	//in->setMaximumIterations(0);
+	noder.reset( in );
 
-    //using snapround::SimpleSnapRounder;
-    //noder.reset( new SimpleSnapRounder(*pm) );
+	//using snapround::SimpleSnapRounder;
+	//noder.reset( new SimpleSnapRounder(*pm) );
 
-    //using snapround::MCIndexSnapRounder;
-    //noder.reset( new MCIndexSnapRounder(*pm) );
+	//using snapround::MCIndexSnapRounder;
+	//noder.reset( new MCIndexSnapRounder(*pm) );
 #endif
   }
   return *noder;

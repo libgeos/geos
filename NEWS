@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - Bug fixes / improvements
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
+  - Fix segfault in GeometryNoder for empty input (GH-601)
 
 
 Changes in 3.7.3
