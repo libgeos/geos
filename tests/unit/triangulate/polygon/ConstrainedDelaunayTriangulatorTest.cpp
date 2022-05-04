@@ -118,9 +118,15 @@ void object::test<5>()
         );
 }
 
-
+// testTouchingHoles
+template<>
+template<>
+void object::test<6>()
+{
+    checkTri("POLYGON ((10 90, 90 90, 90 10, 10 10, 10 90), (20 80, 50 70, 30 30, 20 80), (70 20, 50 70, 80 80, 70 20))"
+        ,"GEOMETRYCOLLECTION (POLYGON ((10 10, 10 90, 20 80, 10 10)), POLYGON ((30 30, 50 70, 70 20, 30 30)), POLYGON ((80 80, 50 70, 20 80, 80 80)), POLYGON ((20 80, 10 90, 90 90, 20 80)), POLYGON ((10 10, 20 80, 30 30, 10 10)), POLYGON ((80 80, 20 80, 90 90, 80 80)), POLYGON ((70 20, 10 10, 30 30, 70 20)), POLYGON ((90 10, 80 80, 90 90, 90 10)), POLYGON ((10 10, 70 20, 90 10, 10 10)), POLYGON ((80 80, 90 10, 70 20, 80 80)))"
+        );
+}
 
 
 } // namespace tut
-
-

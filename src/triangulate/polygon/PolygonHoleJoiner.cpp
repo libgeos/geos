@@ -105,7 +105,7 @@ PolygonHoleJoiner::ringCoordinates(const LinearRing* ring)
 void
 PolygonHoleJoiner::joinHoles()
 {
-    orderedCoords.insert(shellCoords.begin(), shellCoords.end());
+    shellCoordsSorted.insert(shellCoords.begin(), shellCoords.end());
     std::vector<const LinearRing*> orderedHoles = sortHoles(inputPolygon);
     for (std::size_t i = 0; i < orderedHoles.size(); i++) {
         joinHole(orderedHoles.at(i));
@@ -126,9 +126,9 @@ PolygonHoleJoiner::joinHole(const LinearRing* hole)
      * shellCoords[], so find the proper one and add the hole after it.
      */
     const CoordinateSequence* holeCoordSeq = hole->getCoordinatesRO();
-    std::vector<std::size_t> holeLeftVerticesIndex = getLeftMostVertex(hole);
+    std::vector<std::size_t> holeLeftVerticesIndex = findLeftVertices(hole);
     const Coordinate& holeCoord = holeCoordSeq->getAt(holeLeftVerticesIndex[0]);
-    std::vector<Coordinate> shellCoordsList = getLeftShellVertex(holeCoord);
+    std::vector<Coordinate> shellCoordsList = findLeftShellVertices(holeCoord);
     Coordinate shellCoord = shellCoordsList.at(0);
     std::size_t shortestHoleVertexIndex = 0;
     //--- pick the shell-hole vertex pair that gives the shortest distance
@@ -196,17 +196,17 @@ PolygonHoleJoiner::getShellCoordIndexSkip(const Coordinate& coord, std::size_t n
 
 /* private */
 std::vector<Coordinate>
-PolygonHoleJoiner::getLeftShellVertex(const Coordinate& holeCoord)
+PolygonHoleJoiner::findLeftShellVertices(const Coordinate& holeCoord)
 {
     std::vector<Coordinate> list;
-    auto it = orderedCoords.upper_bound(holeCoord);
+    auto it = shellCoordsSorted.upper_bound(holeCoord);
     // scroll forward until x changes
     while ((*it).x == holeCoord.x) {
         it++;
     }
     do {
         it--;
-    } while (!isJoinable(holeCoord, *it) && it != orderedCoords.begin());
+    } while (!isJoinable(holeCoord, *it) && it != shellCoordsSorted.begin());
     // we now have the closest coordinate
     list.emplace_back(*it);
     if ( it->x != holeCoord.x )
@@ -217,7 +217,7 @@ PolygonHoleJoiner::getLeftShellVertex(const Coordinate& holeCoord)
     while (chosenX == it->x) {
         list.emplace_back(*it);
         // reached the start of the list
-        if (it == orderedCoords.begin())
+        if (it == shellCoordsSorted.begin())
             return list;
         // paper over difference between Java TreeSet.lower()
         // and std::set::lower_bound()
@@ -275,31 +275,41 @@ PolygonHoleJoiner::crossesPolygon(const Coordinate& p0, const Coordinate& p1) co
 
 /* private */
 void
-PolygonHoleJoiner::addHoleToShell(std::size_t shellVertexIndex,
-    const CoordinateSequence* holeCoords, std::size_t holeVertexIndex)
+PolygonHoleJoiner::addHoleToShell(std::size_t shellJoinIndex,
+    const CoordinateSequence* holeCoords, std::size_t holeJoinIndex)
 {
-    std::vector<Coordinate> newCoords;
-    newCoords.emplace_back(shellCoords[shellVertexIndex]);
+    Coordinate shellJoinPt = shellCoords[shellJoinIndex];
+    Coordinate holeJoinPt = holeCoords->getAt(holeJoinIndex);
+    //-- check for touching (zero-length) join to avoid inserting duplicate vertices
+    bool isJoinTouching = shellJoinPt.equals2D(holeJoinPt);
+
+    //-- create new section of vertices to insert in shell
+    std::vector<Coordinate> newSection;
+    if (! isJoinTouching) {
+        newSection.emplace_back(shellJoinPt);
+    }
 
     std::size_t nPts = holeCoords->size() - 1;
-    std::size_t i = holeVertexIndex;
+    std::size_t i = holeJoinIndex;
     do {
-        newCoords.emplace_back(holeCoords->getAt(i));
+        newSection.emplace_back(holeCoords->getAt(i));
         i = (i + 1) % nPts;
-    } while (i != holeVertexIndex);
-    newCoords.emplace_back(holeCoords->getAt(holeVertexIndex));
+    } while (i != holeJoinIndex);
+    if (! isJoinTouching) {
+        newSection.emplace_back(holeCoords->getAt(holeJoinIndex));
+    }
 
     // Insert newCoords into shellCoords, starting at shellVertextIndex
     shellCoords.insert(
-        shellCoords.begin() + static_cast<long>(shellVertexIndex),
-        newCoords.begin(),
-        newCoords.end());
+        shellCoords.begin() + static_cast<long>(shellJoinIndex),
+        newSection.begin(),
+        newSection.end());
     // Insert all newCoords into orderedCoords
-    orderedCoords.insert(newCoords.begin(), newCoords.end());
+    shellCoordsSorted.insert(newSection.begin(), newSection.end());
 }
 
 
-/* private */
+/* private static */
 std::vector<const LinearRing*>
 PolygonHoleJoiner::sortHoles(const Polygon* poly)
 {
@@ -316,19 +326,19 @@ PolygonHoleJoiner::sortHoles(const Polygon* poly)
 }
 
 
-/* private */
+/* private static */
 std::vector<std::size_t>
-PolygonHoleJoiner::getLeftMostVertex(const LinearRing* ring)
+PolygonHoleJoiner::findLeftVertices(const LinearRing* ring)
 {
     const CoordinateSequence* cs = ring->getCoordinatesRO();
-    std::vector<std::size_t> list;
-    double minX = ring->getEnvelopeInternal()->getMinX();
+    std::vector<std::size_t> leftmostIndex;
+    double leftX = ring->getEnvelopeInternal()->getMinX();
     for (std::size_t i = 0; i < cs->size(); i++) {
-        if (std::abs(cs->getAt(i).x - minX) < EPS) {
-            list.push_back(i);
+        if (std::abs(cs->getAt(i).x - leftX) < EPS) {
+            leftmostIndex.push_back(i);
         }
     }
-    return list;
+    return leftmostIndex;
 }
 
 /* private */
@@ -354,4 +364,3 @@ PolygonHoleJoiner::createPolygonIntersector(const Polygon* polygon)
 } // namespace geos.triangulate.polygon
 } // namespace geos.triangulate
 } // namespace geos
-
