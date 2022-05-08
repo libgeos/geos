@@ -130,8 +130,8 @@ PolygonHull::computeMultiPolygonAll(const MultiPolygon* multiPoly)
     std::vector<std::unique_ptr<Polygon>> polys;
     for (std::size_t i = 0; i < nPoly; i++) {
         const Polygon* poly = multiPoly->getGeometryN(i);
-        std::unique_ptr<Polygon> hull = polygonHull(poly, polyHulls[i], hullIndex);
-        polys.emplace_back(hull.release());
+        std::unique_ptr<Polygon> polyHull = polygonHull(poly, polyHulls[i], hullIndex);
+        polys.emplace_back(polyHull.release());
     }
     return geomFactory->createMultiPolygon(std::move(polys));
 }
@@ -144,8 +144,8 @@ PolygonHull::computeMultiPolygonEach(const MultiPolygon* multiPoly)
     std::vector<std::unique_ptr<Polygon>> polys;
     for (std::size_t i = 0 ; i < multiPoly->getNumGeometries(); i++) {
         const Polygon* poly = multiPoly->getGeometryN(i);
-        std::unique_ptr<Polygon> hull = computePolygon(poly);
-        polys.emplace_back(hull.release());
+        std::unique_ptr<Polygon> polyHull = computePolygon(poly);
+        polys.emplace_back(polyHull.release());
     }
     return geomFactory->createMultiPolygon(std::move(polys));
 }
@@ -163,9 +163,9 @@ PolygonHull::computePolygon(const Polygon* poly)
     bool isOverlapPossible = ! isOuter && (poly->getNumInteriorRing() > 0);
     hullIndex.enabled(isOverlapPossible);
 
-    std::vector<RingHull*> hulls = initPolygon(poly, hullIndex);
-    std::unique_ptr<Polygon> hull = polygonHull(poly, hulls, hullIndex);
-    return hull;
+    std::vector<RingHull*> inHulls = initPolygon(poly, hullIndex);
+    std::unique_ptr<Polygon> polyHull = polygonHull(poly, inHulls, hullIndex);
+    return polyHull;
 }
 
 
@@ -221,9 +221,9 @@ PolygonHull::createRingHull(const LinearRing* ring, bool p_isOuter, double areaT
         ringHull->setMinVertexNum(targetVertexCount);
     }
     else if (areaDeltaRatio >= 0) {
-        double ringArea = Area::ofRing(ring->getCoordinatesRO());
-        double ringWeight = ringArea / areaTotal;
-        double maxAreaDelta = ringWeight * areaDeltaRatio * ringArea;
+        double linearRingArea = Area::ofRing(ring->getCoordinatesRO());
+        double linearRingWeight = linearRingArea / areaTotal;
+        double maxAreaDelta = linearRingWeight * areaDeltaRatio * linearRingArea;
         ringHull->setMaxAreaDelta(maxAreaDelta);
     }
     if (hullIndex.enabled()) {
@@ -244,9 +244,9 @@ PolygonHull::polygonHull(const Polygon* poly, std::vector<RingHull*>& ringHulls,
     std::unique_ptr<LinearRing> shellHull = ringHulls[ringIndex++]->getHull(hullIndex);
     std::vector<std::unique_ptr<LinearRing>> holeHulls;
     for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        std::unique_ptr<LinearRing> hull = ringHulls[ringIndex++]->getHull(hullIndex);
+        std::unique_ptr<LinearRing> polyHull = ringHulls[ringIndex++]->getHull(hullIndex);
         //TODO: handle empty
-        holeHulls.emplace_back(hull.release());
+        holeHulls.emplace_back(polyHull.release());
     }
     return geomFactory->createPolygon(
         std::move(shellHull),
