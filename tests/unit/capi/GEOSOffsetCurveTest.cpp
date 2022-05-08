@@ -40,7 +40,7 @@ struct test_capioffsetcurve_data : public capitest::utility {
         double width, int quadSegs, int joinStyle, double mitreLimit,
         double checkTolerance)
     {
-        static int debug = 1;
+        static int debug = 0;
         // input
         geom1_ = GEOSGeomFromWKT(wkt);
         ensure(nullptr != geom1_);
