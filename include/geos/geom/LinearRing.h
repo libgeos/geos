@@ -83,6 +83,9 @@ public:
     LinearRing(CoordinateSequence::Ptr && points,
             const GeometryFactory& newFactory);
 
+    LinearRing(std::vector<Coordinate> && pts,
+               const GeometryFactory& newFactory);
+
     std::unique_ptr<LinearRing> clone() const
     {
         return std::unique_ptr<LinearRing>(cloneImpl());

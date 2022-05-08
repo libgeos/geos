@@ -27,8 +27,7 @@ using geos::geom::Envelope;
 
 
 namespace geos {
-namespace triangulate {
-namespace polygon {
+namespace index {
 
 
 /**
@@ -145,7 +144,6 @@ public:
 
 
 
-} // namespace geos.triangulate.polygon
-} // namespace geos.triangulate
+} // namespace geos.index
 } // namespace geos
 

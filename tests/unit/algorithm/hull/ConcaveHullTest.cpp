@@ -1,5 +1,5 @@
 //
-// Test Suite for geos::algorithm::construct::hull::ConcaveHull
+// Test Suite for geos::algorithm::hull::ConcaveHull
 
 #include <tut/tut.hpp>
 // geos

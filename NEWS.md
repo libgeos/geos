@@ -4,6 +4,7 @@
 - New things:
   - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
   - ConcaveHull (GH-549, Paul Ramsey/Martin Davis)
+  - PolygonHull (GH-603, Paul Ramsey/Martin Davis)
   - CAPI: GEOSHilbertCode (GH-556, Brendan Ward)
   - CAPI: GEOSGeom_createRectangle (GH-558, Brendan Ward)
   - CAPI: GEOSGeom_transformXY (GH-563, Dan Baston/Brendan Ward)

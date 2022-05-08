@@ -466,6 +466,15 @@ GeometryFactory::createLinearRing(CoordinateSequence::Ptr && newCoords) const
 }
 
 /*public*/
+std::unique_ptr<LinearRing>
+GeometryFactory::createLinearRing(std::vector<Coordinate> && newCoords)
+const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LinearRing>(new LinearRing(std::move(newCoords), *this));
+}
+
+/*public*/
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {

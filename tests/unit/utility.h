@@ -319,7 +319,7 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 3, tolerance);
     }
     else if (dynamic_cast<const Polygon *>(lhs_in)) {
-      assert("Not implemented yet" == 0);
+      ensure("Not implemented yet", 0);
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
       const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
@@ -375,7 +375,7 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
     }
     else if (dynamic_cast<const Polygon *>(lhs_in)) {
-      assert("Not implemented yet" == 0);
+      ensure("Not implemented yet", 0);
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
       const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);

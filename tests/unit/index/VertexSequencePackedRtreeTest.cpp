@@ -10,14 +10,13 @@
 #include <geos/geom/Point.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
-#include <geos/triangulate/polygon/VertexSequencePackedRtree.h>
+#include <geos/index/VertexSequencePackedRtree.h>
 
 // std
 #include <stdio.h>
 
-using geos::triangulate::polygon::VertexSequencePackedRtree;
+using geos::index::VertexSequencePackedRtree;
 using geos::geom::Point;
-// using geos::geom::Envelope;
 
 namespace tut {
 //
@@ -81,7 +80,7 @@ struct test_packedrtree_data {
 typedef test_group<test_packedrtree_data> group;
 typedef group::object object;
 
-group test_packedrtree_group("geos::triangulate::polygon::VertexSequencePackedRtree");
+group test_packedrtree_group("geos::index::VertexSequencePackedRtree");
 
 
 // test1

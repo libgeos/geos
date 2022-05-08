@@ -16,13 +16,12 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
-#include <geos/triangulate/polygon/VertexSequencePackedRtree.h>
+#include <geos/index/VertexSequencePackedRtree.h>
 
 #include <algorithm>
 
 namespace geos {
-namespace triangulate {
-namespace polygon {
+namespace index {
 
 
 /**
@@ -321,7 +320,6 @@ VertexSequencePackedRtree::clampMax(std::size_t x, std::size_t max)
 }
 
 
-} // namespace geos.triangulate.polygon
-} // namespace geos.triangulate
+} // namespace geos.index
 } // namespace geos
 

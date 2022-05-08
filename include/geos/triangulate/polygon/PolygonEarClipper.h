@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <geos/triangulate/polygon/VertexSequencePackedRtree.h>
+#include <geos/index/VertexSequencePackedRtree.h>
 #include <geos/triangulate/tri/TriList.h>
 #include <geos/triangulate/tri/Tri.h>
 
@@ -36,7 +36,7 @@ using geos::geom::Polygon;
 using geos::geom::Envelope;
 using geos::triangulate::tri::Tri;
 using geos::triangulate::tri::TriList;
-
+using geos::index::VertexSequencePackedRtree;
 
 namespace geos {
 namespace triangulate {

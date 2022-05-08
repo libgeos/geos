@@ -27,6 +27,7 @@ double java_math_round(double val);
 /// Equivalent to Java Math.rint()
 double rint_vc(double val);
 
+
 /// Default rounding method for GEOS
 ///
 /// @note Always use this rounding method, to easy easy switching
@@ -36,6 +37,9 @@ round(double val)
 {
     return java_math_round(val);
 }
+
+/// Equivalent to std::clamp() in C++17
+double clamp(double x, double min, double max);
 
 }
 } // namespace geos::util

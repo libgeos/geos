@@ -240,6 +240,9 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
+    std::unique_ptr<LinearRing> createLinearRing(
+        std::vector<Coordinate> && coordinates) const;
+
     /// Construct a LinearRing with a deep-copy of given arguments
     LinearRing* createLinearRing(
         const CoordinateSequence& coordinates) const;
