@@ -461,6 +461,12 @@ Geometry::relate(const Geometry* other) const
     return RelateOp::relate(this, other);
 }
 
+std::unique_ptr<IntersectionMatrix>
+Geometry::relate(const Geometry& other) const
+{
+    return relate(&other);
+}
+
 std::string
 Geometry::toString() const
 {

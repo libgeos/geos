@@ -34,7 +34,6 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
-#include <geos/geom/IntersectionMatrix.h>
 
 #include <algorithm>
 #include <string>
@@ -60,6 +59,7 @@ class GeometryFactory;
 class GeometryFilter;
 class PrecisionModel;
 class Point;
+class IntersectionMatrix;
 }
 namespace io { // geos.io
 class Unload;
@@ -493,10 +493,7 @@ public:
     /// Returns the DE-9IM intersection matrix for the two Geometrys.
     std::unique_ptr<IntersectionMatrix> relate(const Geometry* g) const;
 
-    std::unique_ptr<IntersectionMatrix> relate(const Geometry& g) const
-    {
-        return relate(&g);
-    }
+    std::unique_ptr<IntersectionMatrix> relate(const Geometry& g) const;
 
     /**
      * \brief

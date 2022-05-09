@@ -22,7 +22,6 @@
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/GeometryLocation.h>
 #include <geos/operation/distance/ConnectedElementLocationFilter.h>
-#include <geos/algorithm/PointLocator.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -46,14 +45,11 @@
 
 
 using namespace geos::geom;
-//using namespace geos::algorithm;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
-using namespace geom;
-//using namespace geom::util;
 
 /*public static (deprecated)*/
 double

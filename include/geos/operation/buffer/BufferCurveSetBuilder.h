@@ -50,7 +50,6 @@ class SegmentString;
 }
 namespace operation {
 namespace buffer {
-class OffsetCurveBuilder;
 class BufferParameters;
 }
 }

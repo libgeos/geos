@@ -24,9 +24,7 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/Location.h>
 #include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
