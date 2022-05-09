@@ -20,7 +20,7 @@
 
 #include <string>
 
-#include <geos/util.h>
+#include <geos/util/GEOSException.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate

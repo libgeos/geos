@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/export.h>
 

@@ -22,7 +22,6 @@
 
 #include <geos/geom/GeometryFactory.h> // for inlines
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
-#include <geos/util.h>
 
 #include <vector>
 

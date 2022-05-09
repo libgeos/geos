@@ -33,7 +33,6 @@
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/util.h>
 
 #include <cstddef>
 

@@ -17,6 +17,7 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
 #include <sstream>

@@ -28,7 +28,6 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/export.h>
-#include <geos/util.h>
 
 #include <vector>
 #include <memory>

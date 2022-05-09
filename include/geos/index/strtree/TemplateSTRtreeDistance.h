@@ -16,6 +16,7 @@
 
 #include <geos/index/strtree/TemplateSTRNode.h>
 #include <geos/index/strtree/TemplateSTRNodePair.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <queue>
 #include <vector>
