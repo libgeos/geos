@@ -33,8 +33,8 @@ namespace valid {
     /// \param seq
     /// \return
     public:
-        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq);
-        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq);
+        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq, double tolerance = 0.0);
+        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq, double tolerance = 0.0);
     };
 }
 }

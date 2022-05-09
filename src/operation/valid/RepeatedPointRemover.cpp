@@ -30,12 +30,21 @@ namespace valid {
 class RepeatedPointFilter : public CoordinateFilter {
     public:
 
-        RepeatedPointFilter() : m_prev(nullptr) {}
+        RepeatedPointFilter()
+            : m_prev(nullptr)
+            , sqTolerance(0.0) {}
+
+        RepeatedPointFilter(double tolerance)
+            : m_prev(nullptr)
+            , sqTolerance(tolerance*tolerance) {}
 
         void filter_ro(const Coordinate* curr) override final {
 
-            // skip duplicate point
-            if (m_prev != nullptr && curr->equals2D(*m_prev)) {
+            // skip duplicate point or too-close poinnt
+            if (m_prev != nullptr && (
+                curr->equals2D(*m_prev) ||
+                curr->distanceSquared(*m_prev) <= sqTolerance))
+            {
                 return;
             }
 
@@ -51,24 +60,33 @@ class RepeatedPointFilter : public CoordinateFilter {
 
         std::vector<Coordinate> m_coords;
         const Coordinate* m_prev;
+        double sqTolerance;
 };
 
+
 std::unique_ptr<CoordinateArraySequence>
-RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) {
+RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
         return detail::make_unique<CoordinateArraySequence>(0u, seq->getDimension());
     }
 
-    RepeatedPointFilter filter;
+    RepeatedPointFilter filter(tolerance);
     seq->apply_ro(&filter);
     return detail::make_unique<CoordinateArraySequence>(filter.getCoords());
 }
 
+
 class RepeatedInvalidPointFilter : public CoordinateFilter {
     public:
 
-        RepeatedInvalidPointFilter() : m_prev(nullptr) {}
+        RepeatedInvalidPointFilter()
+            : m_prev(nullptr)
+            , sqTolerance(0.0) {}
+
+        RepeatedInvalidPointFilter(double tolerance)
+            : m_prev(nullptr)
+            , sqTolerance(tolerance*tolerance) {}
 
         void filter_ro(const Coordinate* curr) override final {
 
@@ -78,8 +96,11 @@ class RepeatedInvalidPointFilter : public CoordinateFilter {
                 return;
 
             // skip duplicate/invalid points
-            if (m_prev != nullptr &&
-                (invalid || curr->equals2D(*m_prev)) ) {
+            if (m_prev != nullptr && (
+                invalid ||
+                curr->equals2D(*m_prev) ||
+                curr->distanceSquared(*m_prev) <= sqTolerance))
+            {
                 return;
             }
 
@@ -95,24 +116,23 @@ class RepeatedInvalidPointFilter : public CoordinateFilter {
 
         std::vector<Coordinate> m_coords;
         const Coordinate* m_prev;
+        double sqTolerance;
 };
 
 
-
-
 std::unique_ptr<geom::CoordinateArraySequence>
-RepeatedPointRemover::removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq) {
+RepeatedPointRemover::removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
         return detail::make_unique<CoordinateArraySequence>(0u, seq->getDimension());
     }
 
-    RepeatedInvalidPointFilter filter;
+    RepeatedInvalidPointFilter filter(tolerance);
     seq->apply_ro(&filter);
     return detail::make_unique<CoordinateArraySequence>(filter.getCoords());
 }
 
 
-}
-}
-}
+} // valid
+} // operation
+} // geos
