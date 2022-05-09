@@ -31,6 +31,7 @@ namespace valid {
     ///
     /// Ownership of returned object goes to the caller.
     /// \param seq
+    /// \param tolerance
     /// \return
     public:
         static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq, double tolerance = 0.0);
