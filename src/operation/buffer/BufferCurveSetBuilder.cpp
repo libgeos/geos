@@ -21,15 +21,12 @@
 #include <geos/constants.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
-#include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/operation/buffer/BufferCurveSetBuilder.h>
-#include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -53,16 +50,16 @@
 #define GEOS_DEBUG 0
 #endif
 
-//using namespace geos::operation::overlay;
 using namespace geos::geom;
-using namespace geos::noding; // SegmentString
-using namespace geos::geomgraph; // Label, Position
-using namespace geos::algorithm; // Orientation
+using geos::noding::NodedSegmentString;
+using geos::noding::SegmentString;
+using geos::geomgraph::Label;
+using geos::algorithm::Distance;
+using geos::algorithm::Orientation;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
-
 
 
 BufferCurveSetBuilder::~BufferCurveSetBuilder()
