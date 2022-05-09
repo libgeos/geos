@@ -6,6 +6,7 @@
 
 // geos
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/util/TopologyException.h>
 
 // std
 #include <memory>

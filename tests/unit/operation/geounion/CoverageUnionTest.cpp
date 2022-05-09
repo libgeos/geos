@@ -12,6 +12,7 @@
 #include <geos/geom/Point.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/util/TopologyException.h>
 // std
 #include <memory>
 #include <string>
