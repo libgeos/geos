@@ -31,6 +31,7 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/geom/util/Densifier.h>
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -189,11 +190,18 @@ GeomFunction::init()
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->isValid() );
         });
-    add("makeValid", Result::typeGeometry, catValid,
+    add("fixInvalid", 1, 0, Result::typeGeometry, catValid,
+        "fix invalid geometry to be valid",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            return new Result( geos::geom::util::GeometryFixer::fix( geom.get() ) );
+       });
+    add("makeValid", 1, 0, Result::typeGeometry, catValid,
+        "make geometry valid (original algorithm)",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geos::operation::valid::MakeValid().build( geom.get() ) );
-        });
+       });
 //-------------------------------------
 
     add("boundary", Result::typeGeometry, catConst,
