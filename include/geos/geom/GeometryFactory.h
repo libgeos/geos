@@ -26,13 +26,13 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/export.h>
 #include <geos/util.h>
 
 #include <vector>
 #include <memory>
 #include <cassert>
-#include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
 namespace geom {

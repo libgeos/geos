@@ -22,7 +22,6 @@
 #include <geos/export.h>
 
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/ParseException.h>
 
@@ -34,8 +33,8 @@ namespace io {
 class StringTokenizer;
 }
 namespace geom {
-
 class Coordinate;
+class CoordinateSequence;
 class GeometryCollection;
 class Point;
 class LineString;
