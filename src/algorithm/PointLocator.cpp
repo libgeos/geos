@@ -28,6 +28,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/GeometryGraph.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 #include <cassert>
 #include <typeinfo>
@@ -41,28 +42,29 @@ namespace algorithm { // geos.algorithm
 Location
 PointLocator::locate(const Coordinate& p, const Geometry* geom)
 {
-    if(geom->isEmpty()) {
+    if (geom->isEmpty()) {
         return Location::EXTERIOR;
     }
 
-    const LineString* ls_geom = dynamic_cast<const LineString*>(geom);
-    if(ls_geom) {
+    GeometryTypeId geomTypeId = geom->getGeometryTypeId();
+
+    if (geomTypeId == GEOS_LINESTRING) {
+        const LineString* ls_geom = static_cast<const LineString*>(geom);
         return locate(p, ls_geom);
     }
 
-    const Polygon* poly_geom = dynamic_cast<const Polygon*>(geom);
-    if(poly_geom) {
+    if (geomTypeId == GEOS_POLYGON) {
+        const Polygon* poly_geom = static_cast<const Polygon*>(geom);
         return locate(p, poly_geom);
     }
-
 
     isIn = false;
     numBoundaries = 0;
     computeLocation(p, geom);
-    if(geomgraph::GeometryGraph::isInBoundary(numBoundaries)) {
+    if (geomgraph::GeometryGraph::isInBoundary(numBoundaries)) {
         return Location::BOUNDARY;
     }
-    if(numBoundaries > 0 || isIn) {
+    if (numBoundaries > 0 || isIn) {
         return Location::INTERIOR;
     }
     return Location::EXTERIOR;
@@ -72,31 +74,63 @@ PointLocator::locate(const Coordinate& p, const Geometry* geom)
 void
 PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
 {
-    if(const Point* pt = dynamic_cast<const Point*>(geom)) {
-        updateLocationInfo(locate(p, pt));
-    }
-    else if(const LineString* ls = dynamic_cast<const LineString*>(geom)) {
-        updateLocationInfo(locate(p, ls));
-    }
-    else if(const Polygon* po = dynamic_cast<const Polygon*>(geom)) {
-        updateLocationInfo(locate(p, po));
-    }
-    else if(const MultiLineString* mls = dynamic_cast<const MultiLineString*>(geom)) {
-        for(std::size_t i = 0, n = mls->getNumGeometries(); i < n; ++i) {
-            const LineString* l = mls->getGeometryN(i);
-            updateLocationInfo(locate(p, l));
+
+    GeometryTypeId geomTypeId = geom->getGeometryTypeId();
+    switch (geomTypeId)
+    {
+        case GEOS_POINT: {
+            const Point* pt = static_cast<const Point*>(geom);
+            updateLocationInfo(locate(p, pt));
+            break;
         }
-    }
-    else if(const MultiPolygon* mpo = dynamic_cast<const MultiPolygon*>(geom)) {
-        for(std::size_t i = 0, n = mpo->getNumGeometries(); i < n; ++i) {
-            const Polygon* p_po = mpo->getGeometryN(i);
-            updateLocationInfo(locate(p, p_po));
+        case GEOS_LINESTRING: {
+            const LineString* ls = static_cast<const LineString*>(geom);
+            updateLocationInfo(locate(p, ls));
+            break;
         }
-    }
-    else if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
-        for(const auto & g2 : *col) {
-            assert(g2.get() != geom); // is this check really needed ?
-            computeLocation(p, g2.get());
+        case GEOS_LINEARRING: {
+            const LineString* ls = static_cast<const LineString*>(geom);
+            updateLocationInfo(locate(p, ls));
+            break;
+        }
+        case GEOS_POLYGON: {
+            const Polygon* po = static_cast<const Polygon*>(geom);
+            updateLocationInfo(locate(p, po));
+            break;
+        }
+        case GEOS_MULTIPOINT: {
+            const GeometryCollection* col = static_cast<const GeometryCollection*>(geom);
+            for(const auto & g2 : *col) {
+                computeLocation(p, g2.get());
+            }
+            break;
+        }
+        case GEOS_MULTILINESTRING: {
+            const MultiLineString* mls = static_cast<const MultiLineString*>(geom);
+            for(std::size_t i = 0, sz = mls->getNumGeometries(); i < sz; ++i) {
+                const LineString* l = mls->getGeometryN(i);
+                updateLocationInfo(locate(p, l));
+            }
+            break;
+        }
+        case GEOS_MULTIPOLYGON: {
+            const MultiPolygon* mpo = static_cast<const MultiPolygon*>(geom);
+            for(std::size_t i = 0, sz = mpo->getNumGeometries(); i < sz; ++i) {
+                const Polygon* p_po = mpo->getGeometryN(i);
+                updateLocationInfo(locate(p, p_po));
+            }
+            break;
+        }
+        case GEOS_GEOMETRYCOLLECTION: {
+            const GeometryCollection* col = static_cast<const GeometryCollection*>(geom);
+            for(const auto & g2 : *col) {
+                computeLocation(p, g2.get());
+            }
+            break;
+        }
+        default: {
+            throw util::UnsupportedOperationException("unknown GeometryTypeId");
+            break;
         }
     }
 

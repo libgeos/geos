@@ -40,13 +40,16 @@ DistanceToPoint::computeDistance(const geom::Geometry& geom,
                                  const geom::Coordinate& pt,
                                  PointPairDistance& ptDist)
 {
-    if(const LineString* ls = dynamic_cast<const LineString*>(&geom)) {
+    if(geom.getGeometryTypeId() == GEOS_LINESTRING) {
+        const LineString* ls = static_cast<const LineString*>(&geom);
         computeDistance(*ls, pt, ptDist);
     }
-    else if(const Polygon* pl = dynamic_cast<const Polygon*>(&geom)) {
+    else if(geom.getGeometryTypeId() == GEOS_POLYGON) {
+        const Polygon* pl = static_cast<const Polygon*>(&geom);
         computeDistance(*pl, pt, ptDist);
     }
-    else if(const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(&geom)) {
+    else if(geom.isCollection()) {
+        const GeometryCollection* gc = static_cast<const GeometryCollection*>(&geom);
         for(std::size_t i = 0; i < gc->getNumGeometries(); i++) {
             const Geometry* g = gc->getGeometryN(i);
             computeDistance(*g, pt, ptDist);
