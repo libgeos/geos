@@ -17,37 +17,6 @@
  *
  ***********************************************************************/
 
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/Geometry.h>
-#include <geos/geom/prep/PreparedGeometry.h>
-#include <geos/geom/prep/PreparedGeometryFactory.h>
-#include <geos/geom/GeometryCollection.h>
-#include <geos/geom/Polygon.h>
-#include <geos/geom/Point.h>
-#include <geos/geom/MultiPoint.h>
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/MultiPolygon.h>
-#include <geos/geom/LinearRing.h>
-#include <geos/geom/LineSegment.h>
-#include <geos/geom/LineString.h>
-#include <geos/geom/PrecisionModel.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/FixedSizeCoordinateSequence.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/IntersectionMatrix.h>
-#include <geos/geom/Envelope.h>
-#include <geos/geom/util/Densifier.h>
-#include <geos/geom/util/GeometryFixer.h>
-#include <geos/index/strtree/TemplateSTRtree.h>
-#include <geos/index/ItemVisitor.h>
-#include <geos/io/WKTReader.h>
-#include <geos/io/WKBReader.h>
-#include <geos/io/WKTWriter.h>
-#include <geos/io/WKBWriter.h>
-#include <geos/io/GeoJSONReader.h>
-#include <geos/io/GeoJSONWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
@@ -57,9 +26,37 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
-#include <geos/shape/fractal/HilbertEncoder.h>
-#include <geos/simplify/DouglasPeuckerSimplifier.h>
-#include <geos/simplify/TopologyPreservingSimplifier.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/FixedSizeCoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/prep/PreparedGeometry.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/geom/util/Densifier.h>
+#include <geos/geom/util/GeometryFixer.h>
+#include <geos/index/ItemVisitor.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/io/GeoJSONReader.h>
+#include <geos/io/GeoJSONWriter.h>
+#include <geos/linearref/LengthIndexedLine.h>
 #include <geos/noding/GeometryNoder.h>
 #include <geos/noding/Noder.h>
 #include <geos/operation/buffer/BufferBuilder.h>
@@ -69,14 +66,14 @@
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/intersection/Rectangle.h>
+#include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/PrecisionReducer.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/overlayng/UnaryUnionNG.h>
-#include <geos/operation/intersection/Rectangle.h>
-#include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/relate/RelateOp.h>
@@ -85,8 +82,11 @@
 #include <geos/operation/union/CoverageUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
-#include <geos/linearref/LengthIndexedLine.h>
+#include <geos/shape/fractal/HilbertEncoder.h>
+#include <geos/simplify/DouglasPeuckerSimplifier.h>
+#include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
 #include <geos/triangulate/polygon/ConstrainedDelaunayTriangulator.h>
@@ -2083,6 +2083,21 @@ extern "C" {
             extHandle->ERROR_MESSAGE("Unknown method in GEOSMakeValidParams");
             return nullptr;
         }
+    }
+
+    Geometry*
+    GEOSRemoveRepeatedPoints_r(
+        GEOSContextHandle_t extHandle,
+        const Geometry* g,
+        double tolerance)
+    {
+        using geos::operation::valid::RepeatedPointRemover;
+
+        return execute(extHandle, [&]() {
+            auto out = RepeatedPointRemover::removeRepeatedPoints(g, tolerance);
+            out->setSRID(g->getSRID());
+            return out.release();
+        });
     }
 
     Geometry*
