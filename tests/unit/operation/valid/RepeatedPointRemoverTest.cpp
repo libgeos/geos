@@ -4,12 +4,16 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <utility.h>
+
 // geos
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
+
 // std
 #include <memory>
 #include <string>
@@ -26,37 +30,115 @@ namespace tut {
 //
 
 // Common data used by tests
-    struct test_repeated_point_remover_test_data {
-        geos::io::WKTReader wktreader;
+struct test_repeated_point_remover_test_data
+{
+    geos::io::WKTReader reader;
+    geos::io::WKTWriter writer;
 
-        test_repeated_point_remover_test_data()
-                : wktreader()
-        {}
+    test_repeated_point_remover_test_data()
+        : reader() {};
 
-        std::unique_ptr<Geometry> readWKT(const std::string & wkt) {
-            return std::unique_ptr<Geometry>(wktreader.read(wkt));
-        }
-    };
-
-    typedef test_group<test_repeated_point_remover_test_data> group;
-    typedef group::object object;
-
-    group test_repeated_point_remover_group("geos::operation::valid::RepeatedPointRemover");
-
-    template<>
-    template<>
-    void object::test<1>()
+    std::string
+    wkt(const Geometry& geom)
     {
-        auto input = readWKT("LINESTRING (3 7, 8 8, 8 8, 8 8, 10 9)");
-        auto expected = readWKT("LINESTRING (3 7, 8 8, 10 9)");
-
-        std::unique_ptr<CoordinateSequence> coords(input->getCoordinates());
-        auto resultCoords = RepeatedPointRemover::removeRepeatedPoints(coords.get());
-
-        std::unique_ptr<LineString> result(input->getFactory()->createLineString(resultCoords.release()));
-
-        ensure(expected->equalsExact(result.get()));
+        writer.setTrim(true);
+        return writer.write(&geom);
     }
+
+    void
+    checkSequence(const std::string& input, const std::string& expected, double tolerance = 0.0)
+    {
+        std::unique_ptr<Geometry> inGeom = reader.read(input);
+        std::unique_ptr<Geometry> exGeom = reader.read(expected);
+
+        const CoordinateSequence* inCoords = static_cast<LineString*>(inGeom.get())->getCoordinatesRO();
+        auto outCoords = RepeatedPointRemover::removeRepeatedPoints(inCoords, tolerance);
+        std::unique_ptr<Geometry> outGeom = inGeom->getFactory()->createLineString(std::move(outCoords));
+        // std::cout << std::endl << wkt(*outGeom) << std::endl;
+        // std::cout << wkt(*exGeom) << std::endl;
+        ensure_equals_geometry(outGeom.get(), exGeom.get());
+    }
+
+    void
+    checkGeometry(const std::string& input, const std::string& expected, double tolerance = 0.0)
+    {
+        std::unique_ptr<Geometry> inGeom = reader.read(input);
+        std::unique_ptr<Geometry> outGeom = RepeatedPointRemover::removeRepeatedPoints(inGeom.get(), tolerance);
+        ensure(outGeom.get());
+
+        std::unique_ptr<Geometry> exGeom = reader.read(expected);
+
+        std::cout << std::endl << wkt(*outGeom) << std::endl;
+        std::cout << wkt(*exGeom) << std::endl;
+        ensure_equals_geometry(outGeom.get(), exGeom.get());
+    }
+
+
+};
+
+typedef test_group<test_repeated_point_remover_test_data> group;
+typedef group::object object;
+
+group test_repeated_point_remover_group("geos::operation::valid::RepeatedPointRemover");
+
+template<>
+template<>
+void object::test<1>()
+{
+    checkSequence(
+        "LINESTRING (3 7, 8 8, 8 8, 8 8, 10 9)",
+        "LINESTRING (3 7, 8 8, 10 9)",
+        0.0
+        );
+}
+
+template<>
+template<>
+void object::test<2>()
+{
+    checkSequence(
+        "LINESTRING (3 7, 8 8, 8 8, 8 8)",
+        "LINESTRING (3 7, 8 8)",
+        0.0
+        );
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    checkSequence(
+        "LINESTRING (0 0, 1 0, 4 0, 5 0)",
+        "LINESTRING (0 0, 4 0)",
+        3.0
+        );
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    checkGeometry(
+        "LINESTRING (0 0, 1 0, 4 0, 5 0)",
+        "LINESTRING (0 0, 5 0)",
+        3.0
+        );
+}
+
+
+template<>
+template<>
+void object::test<5>()
+{
+    checkGeometry(
+        "MULTIPOLYGON (((0 0, 9 0, 10 0, 10 10, 0 10, 0 1, 0 0)))",
+        "MULTIPOLYGON (((0 0, 9 0, 10 10, 0 10, 0 0)))",
+        3.0
+        );
+}
+
+
+
 } // namespace tut
 
 
