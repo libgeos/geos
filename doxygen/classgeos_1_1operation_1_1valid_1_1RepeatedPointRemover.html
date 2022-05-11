@@ -51,25 +51,24 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Removes repeated, consecutive equal, coordinates from a CoordinateSequence.  
- <a href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="RepeatedPointRemover_8h_source.html">RepeatedPointRemover.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a0a4e66a2b8589a860b9527d35ca8e6bc"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">geom::CoordinateArraySequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#a0a4e66a2b8589a860b9527d35ca8e6bc">removeRepeatedPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *seq)</td></tr>
-<tr class="memdesc:a0a4e66a2b8589a860b9527d35ca8e6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a new CoordinateSequence being a copy of the input with any consecutive equal Coordinate removed.  <a href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#a0a4e66a2b8589a860b9527d35ca8e6bc">More...</a><br /></td></tr>
-<tr class="separator:a0a4e66a2b8589a860b9527d35ca8e6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addc2cf8edd3d45e77af28445c611f32a"><td class="memItemLeft" align="right" valign="top"><a id="addc2cf8edd3d45e77af28445c611f32a"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">geom::CoordinateArraySequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>removeRepeatedAndInvalidPoints</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *seq)</td></tr>
-<tr class="separator:addc2cf8edd3d45e77af28445c611f32a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5c3f304a27071965dc69a19529b4b49"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">geom::CoordinateArraySequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#af5c3f304a27071965dc69a19529b4b49">removeRepeatedPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *seq, double tolerance=0.0)</td></tr>
+<tr class="separator:af5c3f304a27071965dc69a19529b4b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15a507a420fbbbbaf6401d19c75b1d5a"><td class="memItemLeft" align="right" valign="top"><a id="a15a507a420fbbbbaf6401d19c75b1d5a"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">geom::CoordinateArraySequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>removeRepeatedAndInvalidPoints</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *seq, double tolerance=0.0)</td></tr>
+<tr class="separator:a15a507a420fbbbbaf6401d19c75b1d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e027edf06bd5f25a695a525f83a35ee"><td class="memItemLeft" align="right" valign="top"><a id="a4e027edf06bd5f25a695a525f83a35ee"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>removeRepeatedPoints</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, double tolerance=0.0)</td></tr>
+<tr class="separator:a4e027edf06bd5f25a695a525f83a35ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Removes repeated, consecutive equal, coordinates from a CoordinateSequence. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a0a4e66a2b8589a860b9527d35ca8e6bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a4e66a2b8589a860b9527d35ca8e6bc">&#9670;&nbsp;</a></span>removeRepeatedPoints()</h2>
+<a id="af5c3f304a27071965dc69a19529b4b49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5c3f304a27071965dc69a19529b4b49">&#9670;&nbsp;</a></span>removeRepeatedPoints()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -81,8 +80,18 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateAr
           <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">geom::CoordinateArraySequence</a>&gt; geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td>
-          <td class="paramname"><em>seq</em></td><td>)</td>
+          <td class="paramname"><em>seq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em> = <code>0.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -91,16 +100,15 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateAr
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Returns a new CoordinateSequence being a copy of the input with any consecutive equal Coordinate removed. </p>
-<p>Equality test is 2D based</p>
-<p>Ownership of returned object goes to the caller. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a new CoordinateSequence being a copy of the input with any consecutive equal Coordinate removed. Equality test is 2D based.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">seq</td><td></td></tr>
+    <tr><td class="paramname">seq</td><td>to filter </td></tr>
+    <tr><td class="paramname">tolerance</td><td>to apply </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Geometr, ownership of returned object goes to the caller. </dd></dl>
 
 </div>
 </div>
