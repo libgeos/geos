@@ -865,6 +865,14 @@ extern "C" {
     }
 
     Geometry*
+    GEOSRemoveRepeatedPoints(
+        const Geometry* g,
+        double tolerance)
+    {
+        return GEOSRemoveRepeatedPoints_r(handle, g, tolerance);
+    }
+
+    Geometry*
     GEOSLineMerge(const Geometry* g)
     {
         return GEOSLineMerge_r(handle, g);

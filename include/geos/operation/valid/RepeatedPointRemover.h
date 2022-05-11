@@ -15,27 +15,45 @@
 #pragma once
 
 #include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/Geometry.h>
+
 
 namespace geos {
 namespace operation {
 namespace valid {
 
-    /// Removes repeated, consecutive equal, coordinates from a CoordinateSequence.
+    /**
+     *  Removes repeated, consecutive equal, coordinates from a CoordinateSequence.
+     */
     class GEOS_DLL RepeatedPointRemover {
 
-    /// \brief
-    /// Returns a new CoordinateSequence being a copy of the input
-    /// with any consecutive equal Coordinate removed.
-    ///
-    /// Equality test is 2D based
-    ///
-    /// Ownership of returned object goes to the caller.
-    /// \param seq
-    /// \return
     public:
-        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq);
-        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedAndInvalidPoints(const geom::CoordinateSequence* seq);
+
+        /**
+         *  Returns a new CoordinateSequence being a copy of the input
+         *  with any consecutive equal Coordinate removed.
+         *  Equality test is 2D based.
+         *
+         *  \param seq to filter
+         *  \param tolerance to apply
+         *  \return Geometr, ownership of returned object goes to the caller.
+         */
+        static std::unique_ptr<geom::CoordinateArraySequence>
+            removeRepeatedPoints(
+                const geom::CoordinateSequence* seq,
+                double tolerance = 0.0);
+
+        static std::unique_ptr<geom::CoordinateArraySequence>
+            removeRepeatedAndInvalidPoints(
+                const geom::CoordinateSequence* seq,
+                double tolerance = 0.0);
+
+        static std::unique_ptr<geom::Geometry>
+            removeRepeatedPoints(
+                const geom::Geometry* geom,
+                double tolerance = 0.0);
     };
+
 }
 }
 }

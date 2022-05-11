@@ -1361,6 +1361,11 @@ extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams_r(
     const GEOSGeometry* g,
     const GEOSMakeValidParams* makeValidParams);
 
+/** \see GEOSRemoveRepeatedPoints */
+extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double tolerance);
 
 /* ========== Geometry info ========== */
 
@@ -3754,6 +3759,25 @@ extern int GEOS_DLL GEOSMakeValidParams_setMethod(
 extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
     GEOSMakeValidParams* p,
     int keepCollapsed);
+
+/**
+* Works from start of each coordinate sequence in the
+* geometry, retaining points that are further away from the
+* previous retained point than the tolerance value.
+*
+* Removing repeated points with a non-zero tolerance may
+* result in an invalid geometry being returned. Be sure
+* to check and repair validity.
+*
+* \return A geometry with all points within the tolerance of each other removed.
+* \param g The geometry to filter
+* \param tolerance Remove all points within this distance of each other. Use 0.0 to remove only exactly repeated points.
+*
+* \see GEOSMakeValidWithParams
+*/
+extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
+    const GEOSGeometry* g,
+    double tolerance);
 
 
 /* ========== Geometry info ========== */
