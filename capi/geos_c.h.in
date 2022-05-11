@@ -2327,8 +2327,13 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
     double tolerance);
 
 /**
-* Generates offset curve for linear geometry.
-* Only LineStrings accepted as input.
+* Generates offset curve line(s) for a geometry.
+* Handles all geometry types as input.
+* For a LineString the offset curve is a LineString.
+* For a Point the result is an empty LineString.
+* For a Polygon the result is the boundary of the polygon buffer
+* (which may be a MultiLineString).
+* For a collection the result is a MultiLineString.
 * \param g The linear geometry to offset from
 * \param width Distance to offset from the curve.
 *        Negative for a right-side offset.
