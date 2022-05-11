@@ -142,9 +142,9 @@ The `GEOSCoordSequence` and `GEOSGeometry` objects are at the heart of the GEOS 
 
 ### GEOSCoordSequence
 
-`GEOSCoordSequence` is an ordered list of coordinates (2 or 3 dimensional). There are a number of ways to make a `GEOSCoordSequence`.
+`GEOSCoordSequence` is an ordered list of coordinates (2=XY or 3=XYZ dimensional).
 
-You can create a `GEOSCoordSequence` by creating a blank one and then setting the coordinate values.
+There are a number of ways to make a `GEOSCoordSequence`.  You can create a `GEOSCoordSequence` by creating a blank one and then setting the coordinate values.
 
 ```c
 double xList[] = {1.0, 2.0, 3.0};
@@ -198,31 +198,37 @@ Note that while you can reclaim the memory for a `GEOSCoordSequence` directly us
 
 When writing data back from GEOS to whatever application you are using, you have the option of using a standard serialization format like WKB (see below) or by writing back to arrays or buffers.
 
-* GEOSCoordSeq_copyToArrays()
-* GEOSCoordSeq_copyToBuffer()
+* `GEOSCoordSeq_copyToArrays()`
+* `GEOSCoordSeq_copyToBuffer()`
 
 Using the array or buffer methods can often be **faster** than using direct coordinate reading or serialization formats, if the target structures use coordinate arrays or XY binary buffers.
 
 ### GEOSGeometry
 
-The workhorse of the GEOS C API is the `GEOSGeometry`.  `GEOSGeometry` can be a point, linestring, polygon, multipoint, multilinestring, multipolygon, or geometrycollection. Most functions in the GEOS C API have a `GEOSGeometry` as a parameter or return type. Clean up `GEOSGeometry` using `GEOSGeom_destroy()`.
+The fundamental structure of the GEOS C API is `GEOSGeometry`.
+`GEOSGeometry` is a generic type that can be a Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, or GeometryCollection.
+Most functions in the GEOS C API have a `GEOSGeometry` as a parameter or return type.
+When `GEOSGeometry` values have been created they must be deallocated using `GEOSGeom_destroy()`.
 
 There are many constructors for `GEOSGeometry`:
 
-* GEOSGeom_createPoint()
-* GEOSGeom_createPointFromXY()
-* GEOSGeom_createLinearRing()
-* GEOSGeom_createLineString()
-* GEOSGeom_createPolygon()
-* GEOSGeom_createCollection()
-* GEOSGeom_createEmptyPoint()
-* GEOSGeom_createEmptyLineString()
-* GEOSGeom_createEmptyPolygon()
-* GEOSGeom_createEmptyCollection()
+* `GEOSGeom_createPoint()`
+* `GEOSGeom_createPointFromXY()`
+* `GEOSGeom_createLinearRing()`
+* `GEOSGeom_createLineString()`
+* `GEOSGeom_createPolygon()`
+* `GEOSGeom_createCollection()`
+* `GEOSGeom_createEmptyPoint()`
+* `GEOSGeom_createEmptyLineString()`
+* `GEOSGeom_createEmptyPolygon()`
+* `GEOSGeom_createEmptyCollection()`
 
-The "createEmpty" functions take no arguments are return geometries that are "empty", that is they represent an empty set of space. The intersection of two **disjoint polygons** is a "empty polygon", for example.
+The `createEmpty` functions take no arguments and return geometries that are "empty".
+Empty geometries represent a (typed) empty set of space.
+For example, the intersection of two **disjoint polygons** is a "empty polygon".
 
-The `GEOSGeom_createPoint()`, `GEOSGeom_createLinearRing()` and `GEOSGeom_createLinearRing()` all take in a single `GEOSCoordSequence` and take ownership of that sequence, so freeing the geometry with `GEOSGeom_destroy()` frees all memory.
+The `GEOSGeom_createPoint()`, `GEOSGeom_createLinearRing()` and `GEOSGeom_createLinearRing()` functions accept a single `GEOSCoordSequence` and take ownership of that sequence,
+so freeing the geometry with `GEOSGeom_destroy()` frees all the allocated memory.
 
 ```c
 double coordBuf[] = {1.0,3.0, 2.0,2.0, 3.0,1.0};
@@ -267,7 +273,7 @@ free(points);
 
 ### Readers and Writers
 
-The examples above build `GEOSCoordSequence` from arrays of double, and `GEOSGeometry` from coordinate sequences, but it is also possible to directly read from and write to standard geometry formats:
+The examples above build `GEOSCoordSequence`s from arrays of double, and `GEOSGeometry` from coordinate sequences, but it is also possible to directly read from and write to standard geometry formats:
 
 * Well-Known Text ([WKT]({{< ref "/specifications/wkt" >}}))
 * Well-Known Binary ([WKB]({{< ref "/specifications/wkb" >}}))
@@ -299,15 +305,15 @@ Note that the output WKT string is freed using `GEOSFree()`, not the system `fre
 
 For more information about the specific options available for each format, see the documentation for the various readers and writers.
 
-* GEOSWKTReader / GEOSWKTWriter
-* GEOSWKBReader / GEOSWKBWriter
-* GEOSGeoJSONReader / GEOSGeoJSONWriter
+* `GEOSWKTReader` / `GEOSWKTWriter`
+* `GEOSWKBReader` / `GEOSWKBWriter`
+* `GEOSGeoJSONReader` / `GEOSGeoJSONWriter`
 
 For a complete example using a reader and writer, see [capi_read.c](https://github.com/libgeos/geos/blob/main/examples/capi_read.c).
 
 ### Prepared Geometry
 
-The GEOS "prepared geometry" is conceptually similar to a database "prepared statement": by doing a little up-front work to set-up a handler, you can reap a performance benefit when you execute repeated function calls on that object.
+The GEOS "prepared geometry" is conceptually similar to a database "prepared statement": by doing up-front work to create an optimized object, you reap a performance benefit when executing repeated function calls on that object.
 
 Prepared geometries contain internal indexes that make calls to the "spatial predicate" functions like `GEOSPreparedIntersects()` and `GEOSPreparedContains()` much much faster. These are functions that take in two geometries and return true or false.
 
@@ -344,5 +350,4 @@ For a complete example of using prepared geometry to accelerate multiple predica
 
 ### STRTree Index
 
-* GEOSSTRtree
-
+* `GEOSSTRtree`
