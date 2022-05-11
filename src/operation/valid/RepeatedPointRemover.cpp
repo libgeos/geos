@@ -200,6 +200,8 @@ public:
         coordinates->apply_ro(&filter);
         std::vector<Coordinate> filtCoords = filter.getCoords();
 
+        if (filtCoords.size() == 0) return nullptr;
+
         // End points for comparison and sequence repair
         const Coordinate& origEndCoord = coordinates->back();
         const Coordinate& filtEndCoord = filtCoords.back();
