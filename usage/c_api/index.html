@@ -942,8 +942,8 @@
 <div class="gdoc-page__anchorwrap"><h2 id="object-model">Object Model<a data-clipboard-text="https://libgeos.org/usage/c_api/#object-model" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Object Model" href="#object-model"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The <code>GEOSCoordSequence</code> and <code>GEOSGeometry</code> objects are at the heart of the GEOS object model.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="geoscoordsequence">GEOSCoordSequence<a data-clipboard-text="https://libgeos.org/usage/c_api/#geoscoordsequence" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor GEOSCoordSequence" href="#geoscoordsequence"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p><code>GEOSCoordSequence</code> is an ordered list of coordinates (2 or 3 dimensional). There are a number of ways to make a <code>GEOSCoordSequence</code>.</p>
-<p>You can create a <code>GEOSCoordSequence</code> by creating a blank one and then setting the coordinate values.</p>
+<p><code>GEOSCoordSequence</code> is an ordered list of coordinates (2=XY or 3=XYZ dimensional).</p>
+<p>There are a number of ways to make a <code>GEOSCoordSequence</code>.  You can create a <code>GEOSCoordSequence</code> by creating a blank one and then setting the coordinate values.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
 <span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -984,27 +984,33 @@
 </code></pre></div><p>Note that while you can reclaim the memory for a <code>GEOSCoordSequence</code> directly using <code>GEOSCoordSeq_destroy()</code>, you usually <strong>will not have to</strong> since creating a <code>GEOSGeometry</code> with a <code>GEOSCoordSequence</code> hands ownership of the sequence to the new geometry.</p>
 <p>When writing data back from GEOS to whatever application you are using, you have the option of using a standard serialization format like WKB (see below) or by writing back to arrays or buffers.</p>
 <ul>
-<li>GEOSCoordSeq_copyToArrays()</li>
-<li>GEOSCoordSeq_copyToBuffer()</li>
+<li><code>GEOSCoordSeq_copyToArrays()</code></li>
+<li><code>GEOSCoordSeq_copyToBuffer()</code></li>
 </ul>
 <p>Using the array or buffer methods can often be <strong>faster</strong> than using direct coordinate reading or serialization formats, if the target structures use coordinate arrays or XY binary buffers.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="geosgeometry">GEOSGeometry<a data-clipboard-text="https://libgeos.org/usage/c_api/#geosgeometry" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor GEOSGeometry" href="#geosgeometry"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>The workhorse of the GEOS C API is the <code>GEOSGeometry</code>.  <code>GEOSGeometry</code> can be a point, linestring, polygon, multipoint, multilinestring, multipolygon, or geometrycollection. Most functions in the GEOS C API have a <code>GEOSGeometry</code> as a parameter or return type. Clean up <code>GEOSGeometry</code> using <code>GEOSGeom_destroy()</code>.</p>
+<p>The fundamental structure of the GEOS C API is <code>GEOSGeometry</code>.
+<code>GEOSGeometry</code> is a generic type that can be a Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, or GeometryCollection.
+Most functions in the GEOS C API have a <code>GEOSGeometry</code> as a parameter or return type.
+When <code>GEOSGeometry</code> values have been created they must be deallocated using <code>GEOSGeom_destroy()</code>.</p>
 <p>There are many constructors for <code>GEOSGeometry</code>:</p>
 <ul>
-<li>GEOSGeom_createPoint()</li>
-<li>GEOSGeom_createPointFromXY()</li>
-<li>GEOSGeom_createLinearRing()</li>
-<li>GEOSGeom_createLineString()</li>
-<li>GEOSGeom_createPolygon()</li>
-<li>GEOSGeom_createCollection()</li>
-<li>GEOSGeom_createEmptyPoint()</li>
-<li>GEOSGeom_createEmptyLineString()</li>
-<li>GEOSGeom_createEmptyPolygon()</li>
-<li>GEOSGeom_createEmptyCollection()</li>
+<li><code>GEOSGeom_createPoint()</code></li>
+<li><code>GEOSGeom_createPointFromXY()</code></li>
+<li><code>GEOSGeom_createLinearRing()</code></li>
+<li><code>GEOSGeom_createLineString()</code></li>
+<li><code>GEOSGeom_createPolygon()</code></li>
+<li><code>GEOSGeom_createCollection()</code></li>
+<li><code>GEOSGeom_createEmptyPoint()</code></li>
+<li><code>GEOSGeom_createEmptyLineString()</code></li>
+<li><code>GEOSGeom_createEmptyPolygon()</code></li>
+<li><code>GEOSGeom_createEmptyCollection()</code></li>
 </ul>
-<p>The &ldquo;createEmpty&rdquo; functions take no arguments are return geometries that are &ldquo;empty&rdquo;, that is they represent an empty set of space. The intersection of two <strong>disjoint polygons</strong> is a &ldquo;empty polygon&rdquo;, for example.</p>
-<p>The <code>GEOSGeom_createPoint()</code>, <code>GEOSGeom_createLinearRing()</code> and <code>GEOSGeom_createLinearRing()</code> all take in a single <code>GEOSCoordSequence</code> and take ownership of that sequence, so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all memory.</p>
+<p>The <code>createEmpty</code> functions take no arguments and return geometries that are &ldquo;empty&rdquo;.
+Empty geometries represent a (typed) empty set of space.
+For example, the intersection of two <strong>disjoint polygons</strong> is a &ldquo;empty polygon&rdquo;.</p>
+<p>The <code>GEOSGeom_createPoint()</code>, <code>GEOSGeom_createLinearRing()</code> and <code>GEOSGeom_createLinearRing()</code> functions accept a single <code>GEOSCoordSequence</code> and take ownership of that sequence,
+so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the allocated memory.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="n">GEOSCoordSeq_copyFromBuffer</span><span class="p">(</span>
@@ -1040,7 +1046,7 @@
 <span class="cm">/* frees the containing array */</span>
 <span class="n">free</span><span class="p">(</span><span class="n">points</span><span class="p">);</span>
 </code></pre></div><div class="gdoc-page__anchorwrap"><h3 id="readers-and-writers">Readers and Writers<a data-clipboard-text="https://libgeos.org/usage/c_api/#readers-and-writers" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Readers and Writers" href="#readers-and-writers"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>The examples above build <code>GEOSCoordSequence</code> from arrays of double, and <code>GEOSGeometry</code> from coordinate sequences, but it is also possible to directly read from and write to standard geometry formats:</p>
+<p>The examples above build <code>GEOSCoordSequence</code>s from arrays of double, and <code>GEOSGeometry</code> from coordinate sequences, but it is also possible to directly read from and write to standard geometry formats:</p>
 <ul>
 <li>Well-Known Text (<a href="https://libgeos.org/specifications/wkt/">WKT</a>)</li>
 <li>Well-Known Binary (<a href="https://libgeos.org/specifications/wkb/">WKB</a>)</li>
@@ -1067,13 +1073,13 @@
 </code></pre></div><p>Note that the output WKT string is freed using <code>GEOSFree()</code>, not the system <code>free()</code>. This ensures that the same library that allocates the memory also frees it, which is important for some platforms (Windows primarily).</p>
 <p>For more information about the specific options available for each format, see the documentation for the various readers and writers.</p>
 <ul>
-<li>GEOSWKTReader / GEOSWKTWriter</li>
-<li>GEOSWKBReader / GEOSWKBWriter</li>
-<li>GEOSGeoJSONReader / GEOSGeoJSONWriter</li>
+<li><code>GEOSWKTReader</code> / <code>GEOSWKTWriter</code></li>
+<li><code>GEOSWKBReader</code> / <code>GEOSWKBWriter</code></li>
+<li><code>GEOSGeoJSONReader</code> / <code>GEOSGeoJSONWriter</code></li>
 </ul>
 <p>For a complete example using a reader and writer, see <a href="https://github.com/libgeos/geos/blob/main/examples/capi_read.c">capi_read.c</a>.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="prepared-geometry">Prepared Geometry<a data-clipboard-text="https://libgeos.org/usage/c_api/#prepared-geometry" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Prepared Geometry" href="#prepared-geometry"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p>The GEOS &ldquo;prepared geometry&rdquo; is conceptually similar to a database &ldquo;prepared statement&rdquo;: by doing a little up-front work to set-up a handler, you can reap a performance benefit when you execute repeated function calls on that object.</p>
+<p>The GEOS &ldquo;prepared geometry&rdquo; is conceptually similar to a database &ldquo;prepared statement&rdquo;: by doing up-front work to create an optimized object, you reap a performance benefit when executing repeated function calls on that object.</p>
 <p>Prepared geometries contain internal indexes that make calls to the &ldquo;spatial predicate&rdquo; functions like <code>GEOSPreparedIntersects()</code> and <code>GEOSPreparedContains()</code> much much faster. These are functions that take in two geometries and return true or false.</p>
 <p>If you are going to be making repeated calls to predicates on the same geometry, using a prepared geometry could be a big performance boost, at the cost of a little extra complexity.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* One concave polygon */</span>
@@ -1102,7 +1108,7 @@
 </code></pre></div><p>For a complete example of using prepared geometry to accelerate multiple predicate tests, see the <a href="https://github.com/libgeos/geos/blob/main/examples/capi_prepared.c">capi_prepared.c</a> example.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="strtree-index">STRTree Index<a data-clipboard-text="https://libgeos.org/usage/c_api/#strtree-index" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor STRTree Index" href="#strtree-index"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <ul>
-<li>GEOSSTRtree</li>
+<li><code>GEOSSTRtree</code></li>
 </ul>
 
 
