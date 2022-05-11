@@ -104,8 +104,6 @@ private:
      */
     void reconnect();
 
-    void reverseLines();
-
     /**
      * Export parts to another container
      */
@@ -124,26 +122,6 @@ private:
     std::list<geom::Polygon*> polygons;
     std::list<geom::LineString*> lines;
     std::list<geom::Point*> points;
-
-    /**
-     * \brief Close a ring clockwise along rectangle edges
-     *
-     * Only the 4 corners and x1,y1 need to be considered. The possible
-     * cases are:
-     *
-     *    x1,y1
-     *    corner1 x1,y1
-     *    corner1 corner2 x1,y1
-     *    corner1 corner2 corner3 x1,y1
-     *    corner1 corner2 corner3 corner4 x1,y1
-     */
-    void close_boundary(
-        const Rectangle& rect,
-        std::vector<geom::Coordinate>* ring,
-        double x1, double y1,
-        double x2, double y2);
-
-    void close_ring(const Rectangle& rect, std::vector<geom::Coordinate>* ring);
 
     RectangleIntersectionBuilder(const geom::GeometryFactory& f)
         : _gf(f) {}

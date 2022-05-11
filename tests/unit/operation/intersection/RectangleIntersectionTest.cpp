@@ -1048,7 +1048,7 @@ template<> template<> void object::test<89>
 {
     doClipTest(
         "POLYGON ((15 15,15 16,16 16,16 15,15 15))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1092,7 +1092,7 @@ template<> template<> void object::test<93>
 {
     doClipTest(
         "POLYGON ((-2 -2,-2 5,5 5,5 -2,-2 -2), (-1 -1,3 1,3 3,-1 -1))",
-        "POLYGON ((0 0,0 5,5 5,5 0,1 0,3 1,3 3,0 0))",
+        "POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0), (0 0, 1 0, 3 1, 3 3, 0 0))",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1307,7 +1307,7 @@ template<> template<> void object::test<114>
 {
     doClipTest(
         "POLYGON ((-5 10,0 15,0 10,-5 10))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1317,7 +1317,7 @@ template<> template<> void object::test<115>
 {
     doClipTest(
         "POLYGON ((-5 10,0 5,-5 0,-5 10))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1328,7 +1328,7 @@ template<> template<> void object::test<116>
 {
     doClipTest(
         "POLYGON ((-5 5,0 10,0 0,-5 5))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1338,7 +1338,7 @@ template<> template<> void object::test<117>
 {
     doClipTest(
         "POLYGON ((-5 5,0 10,0 5,-5 5))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1348,7 +1348,7 @@ template<> template<> void object::test<118>
 {
     doClipTest(
         "POLYGON ((-5 5,0 7,0 3,-5 5))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON EMPTY",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1521,7 +1521,7 @@ template<> template<> void object::test<135>
 {
     doClipTest(
         "POLYGON ((-2 -2,-2 12,12 12,12 -2,-2 -2),(-1 -1,11 -1,11 11,-1 11,-1 -1))",
-        "GEOMETRYCOLLECTION EMPTY",
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (0 0, 10 0, 10 10, 0 10, 0 0))",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1543,7 +1543,7 @@ template<> template<> void object::test<137>
 {
     doClipTest(
         "POLYGON ((5 5,15 5,15 -5,5 -5,5 5),(8 1,8 -1,9 -1,9 1,8 1))",
-        "POLYGON ((5 0,5 5,10 5,10 0,9 0,9 1,8 1,8 0,5 0))",
+        "POLYGON ((5 0, 5 5, 10 5, 10 0, 5 0), (8 0, 9 0, 9 1, 8 1, 8 0))",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1565,7 +1565,7 @@ template<> template<> void object::test<139>
 {
     doClipTest(
         "POLYGON ((-15 -15,-15 15,15 15,15 -15,-15 -15),(-5 5,-5 -5,5 -5,5 5,-5 5))",
-        "POLYGON ((0 5,0 10,10 10,10 0,5 0,5 5,0 5))",
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (0 0, 5 0, 5 5, 0 5, 0 0))",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1576,7 +1576,7 @@ template<> template<> void object::test<140>
 {
     doClipTest(
         "POLYGON ((-15 -15,-15 15,15 15,15 -15,-15 -15),(-6 5,5 -6,5 5,-6 5))",
-        "POLYGON ((0 5,0 10,10 10,10 0,5 0,5 5,0 5))",
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (0 0, 5 0, 5 5, 0 5, 0 0))",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1587,7 +1587,7 @@ template<> template<> void object::test<141>
 {
     doClipTest(
         "POLYGON ((-15 -15,-15 15,15 15,15 -15,-15 -15),(-5 5,-6 5,-6 6,-5 6,-5 5))",
-        "POLYGON ((0 0,0 10,10 10,10 0,0 0))",
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), EMPTY)",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1598,7 +1598,7 @@ template<> template<> void object::test<142>
 {
     doClipTest(
         "POLYGON ((-15 -15,-15 15,15 15,15 -15,-15 -15),(0 5,-1 5,-1 6,0 6,0 5))",
-        "POLYGON ((0 0,0 10,10 10,10 0,0 0))",
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), EMPTY)",
         Rectangle(0, 0, 10, 10)
     );
 }
@@ -1630,7 +1630,7 @@ template<> template<> void object::test<205>
         "(-5 6,5 6,5 4,-5 4,-5 6)"     // CW
         ")";
     const char* exp =
-        "POLYGON((0 8,8 8, 8 2, 0 2, 0 4, 5 4, 5 6, 0 6, 0 8))";
+        "POLYGON ((0 2, 0 8, 8 8, 8 2, 0 2), (0 4, 5 4, 5 6, 0 6, 0 4))";
     doClipTest(inp, exp, r);
 }
 
@@ -1645,7 +1645,7 @@ template<> template<> void object::test<206>
         "(-5 6,5 6,5 4,-5 4,-5 6)"     // CW
         ")";
     const char* exp =
-        "POLYGON((0 8,8 8, 8 2, 0 2, 0 4, 5 4, 5 6, 0 6, 0 8))";
+        "POLYGON ((0 2, 0 8, 8 8, 8 2, 0 2), (0 4, 5 4, 5 6, 0 6, 0 4))";
     doClipTest(inp, exp, r);
 }
 
@@ -1660,7 +1660,7 @@ template<> template<> void object::test<207>
         "(-5 -5,0 -5,0 0,-5 0,-5 -5)"     // CCW
         ")";
     const char* exp =
-        "POLYGON((0 0,0 10,10 10,10 0,0 0))";
+        "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), EMPTY)";
     doClipTest(inp, exp, r);
 }
 

@@ -18,6 +18,7 @@
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersectionBuilder.h>
 #include <geos/operation/predicate/RectangleIntersects.h>
+#include <geos/operation/overlayng/RingClipper.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -437,7 +438,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon* g,
 }
 
 /**
- * \brief Clip polygon, close clipped ones
+ * \brief Clip polygon
  */
 
 void
@@ -445,87 +446,21 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon* g,
         RectangleIntersectionBuilder& toParts,
         const Rectangle& rect)
 {
-    if(g == nullptr || g->isEmpty()) {
-        return;
+    Envelope envelope(rect.xmin(), rect.xmax(), rect.ymin(), rect.ymax());
+    geos::operation::overlayng::RingClipper clipper(&envelope);
+
+    const CoordinateSequence *shellCS = g->getExteriorRing()->getCoordinatesRO();
+    std::unique_ptr<LinearRing> clippedShell = _gf->createLinearRing(clipper.clip(shellCS));
+
+    std::vector<std::unique_ptr<LinearRing>> holes;
+    for (std::size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
+        const CoordinateSequence *holeCS = g->getInteriorRingN(i)->getCoordinatesRO();
+        std::unique_ptr<LinearRing> clippedHole = _gf->createLinearRing(clipper.clip(holeCS));
+        holes.push_back(std::move(clippedHole));
     }
 
-    // Clip the exterior first to see what's going on
-
-    RectangleIntersectionBuilder parts(*_gf);
-
-    // If everything was in, just clone the original
-
-    const LineString* shell = g->getExteriorRing();
-    if(clip_linestring_parts(shell, parts, rect)) {
-        toParts.add(g->clone().release());
-        return;
-    }
-
-    // If there were no intersections, the outer ring might be
-    // completely outside.
-
-    using geos::algorithm::Orientation;
-    if(parts.empty()) {
-        Coordinate rectCenter(rect.xmin(), rect.ymin());
-        rectCenter.x += (rect.xmax() - rect.xmin()) / 2;
-        rectCenter.y += (rect.ymax() - rect.ymin()) / 2;
-        if(PointLocation::locateInRing(rectCenter,
-                                       *g->getExteriorRing()->getCoordinatesRO())
-                != Location::INTERIOR) {
-            return;
-        }
-    }
-    else {
-        // TODO: make CCW checking part of clip_linestring_parts ?
-        if(Orientation::isCCW(shell->getCoordinatesRO())) {
-            parts.reverseLines();
-        }
-    }
-
-    // Must do this to make sure all end points are on the edges
-
-    parts.reconnect();
-
-    // Handle the holes now:
-    // - Clipped ones become part of the exterior
-    // - Intact ones become holes in new polygons formed by exterior parts
-
-
-    for(std::size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
-        RectangleIntersectionBuilder holeparts(*_gf);
-        const LinearRing* hole = g->getInteriorRingN(i);
-        if(clip_linestring_parts(hole, holeparts, rect)) {
-            // becomes exterior
-            LinearRing* cloned = new LinearRing(*hole);
-            Polygon* poly = _gf->createPolygon(cloned, nullptr);
-            parts.add(poly);
-        }
-        else {
-            if(!holeparts.empty()) {
-                // TODO: make CCW checking part of clip_linestring_parts ?
-                if(! Orientation::isCCW(hole->getCoordinatesRO())) {
-                    holeparts.reverseLines();
-                }
-                holeparts.reconnect();
-                holeparts.release(parts);
-            }
-            else {
-
-                Coordinate rectCenter(rect.xmin(), rect.ymin());
-                rectCenter.x += (rect.xmax() - rect.xmin()) / 2;
-                rectCenter.y += (rect.ymax() - rect.ymin()) / 2;
-                if(PointLocation::isInRing(rectCenter,
-                                           g->getInteriorRingN(i)->getCoordinatesRO())) {
-                    // Completely inside the hole
-                    return;
-                }
-            }
-        }
-    }
-
-    parts.reconnectPolygons(rect);
-    parts.release(toParts);
-
+    std::unique_ptr<Polygon> clippedPoly = _gf->createPolygon(std::move(clippedShell), std::move(holes));
+    toParts.add(clippedPoly.release());
 }
 
 /**
