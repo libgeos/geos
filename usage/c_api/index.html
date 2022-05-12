@@ -942,7 +942,8 @@
 </code></pre></div><div class="gdoc-page__anchorwrap"><h2 id="object-model">Object Model<a data-clipboard-text="https://libgeos.org/usage/c_api/#object-model" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Object Model" href="#object-model"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The <code>GEOSCoordSequence</code> and <code>GEOSGeometry</code> objects are at the heart of the GEOS object model.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="geoscoordsequence">GEOSCoordSequence<a data-clipboard-text="https://libgeos.org/usage/c_api/#geoscoordsequence" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor GEOSCoordSequence" href="#geoscoordsequence"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
-<p><code>GEOSCoordSequence</code> is an ordered list of coordinates (2=XY or 3=XYZ dimensional).</p>
+<p><code>GEOSCoordSequence</code> is an ordered list of coordinates.
+Coordinates are 2 (XY) or 3 (XYZ) dimensional.</p>
 <p>There are a number of ways to make a <code>GEOSCoordSequence</code>.  You can create a <code>GEOSCoordSequence</code> by creating a blank one and then setting the coordinate values.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
 <span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
@@ -955,7 +956,7 @@
     <span class="n">seq</span><span class="o">-&gt;</span><span class="n">setXY</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">xList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">yList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="p">}</span>
 <span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>You can also create a <code>GEOSCoordSequence</code> and populate it simultaneously from coordinate arrays.</p>
+</code></pre></div><p>You can also create a <code>GEOSCoordSequence</code> and initialize it from coordinate arrays.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
 <span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -968,7 +969,7 @@
     <span class="n">seqSize</span><span class="p">);</span>
 
 <span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and populate it simultaneously directly from a single coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXYX</code>).</p>
+</code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and initialize it from a coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXYX</code>).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Coordinates in a buffer (X,Y, X,Y, X,Y) */</span>
 <span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
