@@ -142,7 +142,8 @@ The `GEOSCoordSequence` and `GEOSGeometry` objects are at the heart of the GEOS 
 
 ### GEOSCoordSequence
 
-`GEOSCoordSequence` is an ordered list of coordinates (2=XY or 3=XYZ dimensional).
+`GEOSCoordSequence` is an ordered list of coordinates.
+Coordinates are 2 (XY) or 3 (XYZ) dimensional.
 
 There are a number of ways to make a `GEOSCoordSequence`.  You can create a `GEOSCoordSequence` by creating a blank one and then setting the coordinate values.
 
@@ -160,7 +161,7 @@ for (size_t i = 0; i < seqSize; i++) {
 GEOSCoordSeq_destroy(seq);
 ```
 
-You can also create a `GEOSCoordSequence` and populate it simultaneously from coordinate arrays.
+You can also create a `GEOSCoordSequence` and initialize it from coordinate arrays.
 
 ```c
 double xList[] = {1.0, 2.0, 3.0};
@@ -177,7 +178,7 @@ GEOSCoordSequence* seq = GEOSCoordSeq_copyFromArrays(
 GEOSCoordSeq_destroy(seq);
 ```
 
-Finally, you can create a `GEOSCoordSequence` and populate it simultaneously directly from a single coordinate buffer (an array of double in coordinate order, eg: `XYXYXYX`).
+Finally, you can create a `GEOSCoordSequence` and initialize it from a coordinate buffer (an array of double in coordinate order, eg: `XYXYXYX`).
 
 ```c
 /* Coordinates in a buffer (X,Y, X,Y, X,Y) */
