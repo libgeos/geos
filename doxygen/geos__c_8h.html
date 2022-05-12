@@ -8629,7 +8629,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Change the rounding precision on a geometry. This will affect the precision of the existing geometry as well as any geometries derived from this geometry using overlay functions. The output will be a valid <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>.</p>
+<p>Change the coordinate precision of a geometry. This will affect the precision of the existing geometry as well as any geometries derived from this geometry using overlay functions. The output will be a valid <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>.</p>
 <p>Note that operations will always be performed in the precision of the geometry with higher precision (smaller "gridSize"). That same precision will be attached to the operation outputs.</p>
 <p>In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input may cause an error to occur, unless the invalidity is below the scale of the requested precision</p>
 <p>There are only 3 modes. The GEOS_PREC_NO_TOPO mode takes precedence over GEOS_PREC_KEEP_COLLAPSED. So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED has the same semantics as GEOS_PREC_NO_TOPO</p>
@@ -12530,7 +12530,14 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Organize the sub-geometries, rings, and coordinate order of geometries, so that geometries that represent the same object can be easily compared. Starts rings from the same location, orients them in the same way, sorts geometry sub-components in the same way. Use before calling <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a> to avoid false "not equal" results. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Organize the elements, rings, and coordinate order of geometries in a consistent way, so that geometries that represent the same object can be easily compared.</p>
+<p>Normalization ensures the following:</p><ul>
+<li>Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)</li>
+<li>Rings start with their smallest coordinate (using XY ordering)</li>
+<li>Polygon shell rings are oriented CW, and holes CCW</li>
+<li>Collection elements are sorted by their first coordinate</li>
+</ul>
+<p>Use before calling <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact</a> to avoid false "not equal" results. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
   </table>
