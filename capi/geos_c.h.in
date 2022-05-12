@@ -3231,11 +3231,13 @@ extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* Determine pointwise equivalence of two geometries, by checking if each vertex of g2 is
-* within tolerance of the corresponding vertex in g1.
+* Determine pointwise equivalence of two geometries, by
+* checking that they have identical structure
+* and that each vertex of g2 is
+* within the distance tolerance of the corresponding vertex in g1.
 * Unlike GEOSEquals(), geometries that are topologically equivalent but have different
 * representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not
-* considered equivalent by GEOSEqualsExact().
+* considered equal by GEOSEqualsExact().
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \param tolerance Tolerance to determine vertex equality
