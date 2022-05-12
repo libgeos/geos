@@ -3250,10 +3250,14 @@ extern char GEOS_DLL GEOSEqualsExact(
 
 /* ========== Prepared Geometry Binary predicates ========== */
 
+/** @name prep_geom
+ *  Prepared Geometry and binary predicates.
+ */
+///@{
 /**
 * A \ref GEOSPreparedGeometry is a wrapper around \ref GEOSGeometry
-* that adds in a spatial index on the edges of the geometry. This
-* internal index allows spatial predicates to evaluate much faster,
+* that includes spatial indexing on the edges of the geometry. This
+* allows spatial predicates to evaluate much faster,
 * so for cases in which the same base geometry will be used over and
 * over again for predicate tests, wrapping it in a \ref GEOSPreparedGeometry
 * is a best practice.
@@ -3443,6 +3447,8 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2,
     double dist);
+
+///@}
 
 /* ========== STRtree functions ========== */
 
