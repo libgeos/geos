@@ -40,18 +40,6 @@ namespace geom { // geos::geom
  * \brief
  * The internal representation of a list of coordinates inside a Geometry.
  *
- * There are some cases in which you might want Geometries to store their
- * points using something other than the GEOS Coordinate class. For example, you
- * may want to experiment with another implementation, such as an array of Xs
- * and an array of Ys. or you might want to use your own coordinate class, one
- * that supports extra attributes like M-values.
- *
- * You can do this by implementing the CoordinateSequence and
- * CoordinateSequenceFactory interfaces. You would then create a
- * GeometryFactory parameterized by your CoordinateSequenceFactory, and use
- * this GeometryFactory to create new Geometries. All of these new Geometries
- * will use your CoordinateSequence implementation.
- *
  */
 class GEOS_DLL CoordinateSequence {
 
