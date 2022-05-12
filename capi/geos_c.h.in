@@ -14,6 +14,7 @@
 /**
 * \file geos_c.h
 * \brief C API for the GEOS geometry algorithms library.
+* \tableofcontents
 *
 * The C API is the preferred API to use when integration GEOS into
 * you program/language/etc. While the C++ API is available, the ABI
@@ -3250,11 +3251,7 @@ extern char GEOS_DLL GEOSEqualsExact(
 
 /* ========== Prepared Geometry Binary predicates ========== */
 
-/** @name prep_geom
- *  Prepared Geometry and binary predicates.
- */
-///@{
-/**
+/** @name Prepared Geometry
 * A \ref GEOSPreparedGeometry is a wrapper around \ref GEOSGeometry
 * that includes spatial indexing on the edges of the geometry. This
 * allows spatial predicates to evaluate much faster,
@@ -3262,8 +3259,14 @@ extern char GEOS_DLL GEOSEqualsExact(
 * over again for predicate tests, wrapping it in a \ref GEOSPreparedGeometry
 * is a best practice.
 *
+* Prepared Geometry supports some binary spatial predicates and distance calculations.
+*/
+///@{
+
+/**
+* Create a Prepared Geometry.
 * The caller retains ownership of the base geometry, and after
-* processing is complete, must destroy **both** the prepared and the
+* processing is complete, must free **both** the prepared and the
 * base geometry. (Ideally, destroy the prepared geometry first, as
 * it has an internal reference to the base geometry.)
 *
