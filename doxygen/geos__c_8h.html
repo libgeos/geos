@@ -6467,7 +6467,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Determine pointwise equivalence of two geometries, by checking if each vertex of g2 is within tolerance of the corresponding vertex in g1. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equivalent by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Determine pointwise equivalence of two geometries, by checking that they have identical structure and that each vertex of g2 is within the distance tolerance of the corresponding vertex in g1. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equal by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
