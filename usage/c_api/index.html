@@ -826,7 +826,7 @@
     
 
 
-<p>Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers the a number of benefits:</p>
+<p>Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers several benefits:</p>
 <ul>
 <li>Stable API, that preserves behaviour and function naming over multiple releases.</li>
 <li>Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications.</li>
@@ -834,9 +834,9 @@
 </ul>
 <p>In exchange for this simplicity and stability, the C API has a few requirements from application authors:</p>
 <ul>
-<li>Explicit memory management. If you create a GEOS object with a GEOS function, you have to remember to free it using the appropriate GEOS destructor.</li>
+<li>Explicit memory management. If you create a GEOS object with a GEOS function, you must free it using the appropriate GEOS destructor.</li>
 </ul>
-<p>The C API is entirely contained in the <a href="../../doxygen/geos__c_8h.html">geos_c.h</a> header file.</p>
+<p>The C API is contained in the <a href="../../doxygen/geos__c_8h.html">geos_c.h</a> header file.</p>
 <div class="gdoc-page__anchorwrap"><h2 id="building-a-program">Building a Program<a data-clipboard-text="https://libgeos.org/usage/c_api/#building-a-program" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Building a Program" href="#building-a-program"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The simplest GEOS C API application needs to include the API header, declare a message handler, initialize the GEOS globals, and link to the GEOS C library when built.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* geos_hello_world.c */</span>
@@ -892,9 +892,10 @@
 </code></pre></div><p>When compiling the program, remember to link in the GEOS C library.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cc geos_hello_world.c -o geos_hello_world -l geos_c
 </code></pre></div><div class="gdoc-page__anchorwrap"><h2 id="reentrantthreadsafe-api">Reentrant/Threadsafe API<a data-clipboard-text="https://libgeos.org/usage/c_api/#reentrantthreadsafe-api" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Reentrant/Threadsafe API" href="#reentrantthreadsafe-api"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
-<p>Every function in the examples above and below is shadowed by a reentrant function carrying a <code>_r</code> suffix. The reentrant functions work the same as their simple counterparts, but they all have one extra parameter, a <code>GEOSContextHandle_t</code>.</p>
+<p>GEOS functions provide reentrant variants, indicated by an <code>_r</code> suffix. The reentrant functions work the same as their regular counterparts, but they have an extra parameter, a <code>GEOSContextHandle_t</code>.</p>
 <p>The <code>GEOSContextHandle_t</code> carries a thread-local state that is equivalent to the state initialized by the <code>initGEOS()</code> call in the simple example above.</p>
-<p>To use the reentrant API, you skip calling <code>initGEOS()</code> and instead call <code>GEOS_init_r()</code> to create a context local to your thread. Each thread that will be running GEOS operations should create its own context prior to working with the GEOS API.</p>
+<p>To use the reentrant API, call <code>GEOS_init_r()</code> instead of <code>initGEOS()</code> to create a context local to your thread. Each thread that will be running GEOS operations should create its own context prior to working with the GEOS API.</p>
+<p>In this example the overall structure of the code is identical, but the reentrant variants are used, and the preamble and cleanup are slightly different.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* geos_hello_world.c */</span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;  /* for printf */</span><span class="cp">
@@ -938,8 +939,7 @@
     <span class="n">GEOS_finish_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div><p>Note that the overall structure of the code is identical, but the reentrant variants are used, and the preamble and cleanup are slightly different.</p>
-<div class="gdoc-page__anchorwrap"><h2 id="object-model">Object Model<a data-clipboard-text="https://libgeos.org/usage/c_api/#object-model" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Object Model" href="#object-model"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h2 id="object-model">Object Model<a data-clipboard-text="https://libgeos.org/usage/c_api/#object-model" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Object Model" href="#object-model"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
 <p>The <code>GEOSCoordSequence</code> and <code>GEOSGeometry</code> objects are at the heart of the GEOS object model.</p>
 <div class="gdoc-page__anchorwrap"><h3 id="geoscoordsequence">GEOSCoordSequence<a data-clipboard-text="https://libgeos.org/usage/c_api/#geoscoordsequence" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor GEOSCoordSequence" href="#geoscoordsequence"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
 <p><code>GEOSCoordSequence</code> is an ordered list of coordinates (2=XY or 3=XYZ dimensional).</p>

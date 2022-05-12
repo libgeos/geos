@@ -66,7 +66,7 @@ This PSC list is valid as of February 18th, 2022.
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/c_api/</guid>
-      <description>Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers the a number of benefits:
+      <description>Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers several benefits:
  Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:</description>
     </item>
     
