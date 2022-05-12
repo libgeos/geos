@@ -12619,7 +12619,12 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generates offset curve line(s) for a geometry. Handles all geometry types as input. For a LineString the offset curve is a LineString. For a Point the result is an empty LineString. For a Polygon the result is the boundary lines(s) of the polygon buffered to the offset distance (which may be a MultiLineString). For a collection the result is a collection of the element offset curves. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Generates offset curve line(s) for a geometry. Handles all geometry types as input.</p>
+<ul>
+<li>For a LineString the result is a LineString.</li>
+<li>For a Point the result is an empty LineString.</li>
+<li>For a Polygon the result is the boundary lines(s) of the polygon buffered to the offset distance (which may be a MultiLineString).</li>
+<li>For a collection the result is a collection of the element offset curves. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The linear geometry to offset from </td></tr>
     <tr><td class="paramname">width</td><td>Distance to offset from the curve. Negative for a right-side offset. Positive for a left-side offset. </td></tr>
@@ -12631,6 +12636,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The offset geometry. Returns NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferBuilder.html#a88b4d50f6e84e9c428ccec41fbedf4d4">geos::operation::buffer::BufferBuilder::bufferLineSingleSided</a> </dd></dl>
+</li>
+</ul>
 
 </div>
 </div>
