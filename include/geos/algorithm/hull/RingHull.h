@@ -158,7 +158,7 @@ private:
 
     void init(std::vector<Coordinate>& ring, bool isOuter);
     void addCorner(std::size_t i, std::priority_queue<Corner>& cornerQueue);
-    bool isAtTarget();
+    bool isAtTarget(const Corner& corner);
 
     /**
     * Removes a corner by removing the apex vertex from the ring.
@@ -203,4 +203,3 @@ private:
 } // geos::algorithm::hull
 } // geos::algorithm
 } // geos
-

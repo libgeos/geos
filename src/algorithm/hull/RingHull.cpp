@@ -157,7 +157,6 @@ void
 RingHull::compute(RingHullIndex& hullIndex)
 {
     while (! cornerQueue.empty()
-        && ! isAtTarget()
         && vertexRing->size() > 3)
     {
         Corner corner = cornerQueue.top();
@@ -165,6 +164,9 @@ RingHull::compute(RingHullIndex& hullIndex)
         //-- a corner may no longer be valid due to removal of adjacent corners
         if (corner.isRemoved(*vertexRing))
             continue;
+        if (isAtTarget(corner)) {
+            return;
+        }
         //System.out.println(corner.toLineString(vertexList));
         /**
         * Corner is concave or flat - remove it if possible.
@@ -177,14 +179,16 @@ RingHull::compute(RingHullIndex& hullIndex)
 
 /* private */
 bool
-RingHull::isAtTarget()
+RingHull::isAtTarget(const Corner& corner)
 {
     if (targetVertexNum >= 0) {
         double dVertexRingSize = static_cast<double>(vertexRing->size());
         return dVertexRingSize < targetVertexNum;
     }
     if (targetAreaDelta >= 0) {
-        return areaDelta > targetAreaDelta;
+        //-- include candidate corder to avoid overshooting target
+        // (important for very small target area deltas)
+        return areaDelta + corner.getArea() > targetAreaDelta;
     }
     //-- no target set
     return true;
@@ -388,4 +392,3 @@ RingHull::Corner::toLineString(const LinkedRing& ring)
 } // namespace geos.algorithm.hull
 } // namespace geos.algorithm
 } // namespace geos
-
