@@ -3134,6 +3134,11 @@ extern int GEOS_DLL GEOSSegmentIntersection(
        double* cx, double* cy);
 
 /* ========= Binary Predicates ========= */
+/** @name Binary Predicates
+* Functions which compute binary spatial predicates.
+* Includes functions based on the DE-9IM topology model.
+*/
+///@{
 
 /**
 * True if no point of either geometry touchess or is within the other.
@@ -3243,11 +3248,14 @@ extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g
 * \param g2 Input geometry
 * \param tolerance Tolerance to determine vertex equality
 * \returns 1 on true, 0 on false, 2 on exception
+* \see GEOSNormalize()
 */
 extern char GEOS_DLL GEOSEqualsExact(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
     double tolerance);
+
+///@}
 
 /* ========== Prepared Geometry Binary predicates ========== */
 
