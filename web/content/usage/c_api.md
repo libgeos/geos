@@ -5,7 +5,7 @@ draft: false
 weight: 40
 ---
 
-Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers the a number of benefits:
+Most programs using GEOS use the C API, rather than building against the C++ headers. The C API offers several benefits:
 
 * Stable API, that preserves behaviour and function naming over multiple releases.
 * Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications.
@@ -13,9 +13,9 @@ Most programs using GEOS use the C API, rather than building against the C++ hea
 
 In exchange for this simplicity and stability, the C API has a few requirements from application authors:
 
-* Explicit memory management. If you create a GEOS object with a GEOS function, you have to remember to free it using the appropriate GEOS destructor.
+* Explicit memory management. If you create a GEOS object with a GEOS function, you must free it using the appropriate GEOS destructor.
 
-The C API is entirely contained in the [geos_c.h](../../doxygen/geos__c_8h.html) header file.
+The C API is contained in the [geos_c.h](../../doxygen/geos__c_8h.html) header file.
 
 ## Building a Program
 
@@ -82,11 +82,13 @@ cc geos_hello_world.c -o geos_hello_world -l geos_c
 
 ## Reentrant/Threadsafe API
 
-Every function in the examples above and below is shadowed by a reentrant function carrying a `_r` suffix. The reentrant functions work the same as their simple counterparts, but they all have one extra parameter, a `GEOSContextHandle_t`.
+GEOS functions provide reentrant variants, indicated by an `_r` suffix. The reentrant functions work the same as their regular counterparts, but they have an extra parameter, a `GEOSContextHandle_t`.
 
 The `GEOSContextHandle_t` carries a thread-local state that is equivalent to the state initialized by the `initGEOS()` call in the simple example above.
 
-To use the reentrant API, you skip calling `initGEOS()` and instead call `GEOS_init_r()` to create a context local to your thread. Each thread that will be running GEOS operations should create its own context prior to working with the GEOS API.
+To use the reentrant API, call `GEOS_init_r()` instead of `initGEOS()` to create a context local to your thread. Each thread that will be running GEOS operations should create its own context prior to working with the GEOS API.
+
+In this example the overall structure of the code is identical, but the reentrant variants are used, and the preamble and cleanup are slightly different.
 
 ```c
 /* geos_hello_world.c */
@@ -133,8 +135,6 @@ int main()
     return 0;
 }
 ```
-
-Note that the overall structure of the code is identical, but the reentrant variants are used, and the preamble and cleanup are slightly different.
 
 ## Object Model
 
