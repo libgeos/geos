@@ -3867,19 +3867,26 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
     int n);
 
 /**
-* Organize the sub-geometries, rings, and coordinate order
-* of geometries, so that geometries that represent the same
-* object can be easily compared. Starts rings from the same
-* location, orients them in the same way, sorts geometry
-* sub-components in the same way. Use before calling
-* GEOSEqualsExact() to avoid false "not equal" results.
+* Organize the elements, rings, and coordinate order
+* of geometries in a consistent way,
+* so that geometries that represent the same
+* object can be easily compared.
+*
+* Normalization ensures the following:
+* - Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)
+* - Rings start with their smallest coordinate
+*   (using XY ordering)
+* - Polygon shell rings are oriented CW, and holes CCW
+* - Collection elements are sorted by their first coordinate
+*
+* Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
 * \param g Input geometry
 * \return 0 on success or -1 on exception
 */
 extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 
 /**
-* Change the rounding precision on a geometry. This will
+* Change the coordinate precision of a geometry. This will
 * affect the precision of the existing geometry as well as
 * any geometries derived from this geometry using overlay
 * functions. The output will be a valid \ref GEOSGeometry.
