@@ -1100,8 +1100,9 @@ Functions</h2></td></tr>
 <tr class="separator:a451c32d3b9e6d6f2ecb9ff8e42b2d814"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a513990e399f641d2e10b736c73aba314"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a513990e399f641d2e10b736c73aba314">GEOSUnionCascaded_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:a513990e399f641d2e10b736c73aba314"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">prep_geom</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>Prepared Geometry and binary predicates. </p>
+<tr><td colspan="2"><div class="groupHeader">Prepared Geometry</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>A <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> is a wrapper around <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> that includes spatial indexing on the edges of the geometry. This allows spatial predicates to evaluate much faster, so for cases in which the same base geometry will be used over and over again for predicate tests, wrapping it in a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> is a best practice.</p>
+<p>Prepared Geometry supports some binary spatial predicates and distance calculations. </p>
 </div></td></tr>
 <tr class="memitem:a06557cad6153f56703b6875d4f21dc18"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a06557cad6153f56703b6875d4f21dc18">GEOSPrepare</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:a06557cad6153f56703b6875d4f21dc18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -13290,8 +13291,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>A <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> is a wrapper around <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> that includes spatial indexing on the edges of the geometry. This allows spatial predicates to evaluate much faster, so for cases in which the same base geometry will be used over and over again for predicate tests, wrapping it in a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> is a best practice.</p>
-<p>The caller retains ownership of the base geometry, and after processing is complete, must destroy <b>both</b> the prepared and the base geometry. (Ideally, destroy the prepared geometry first, as it has an internal reference to the base geometry.)</p>
+<p>Create a Prepared Geometry. The caller retains ownership of the base geometry, and after processing is complete, must free <b>both</b> the prepared and the base geometry. (Ideally, destroy the prepared geometry first, as it has an internal reference to the base geometry.)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The base geometry to wrap in a prepared geometry. </td></tr>
