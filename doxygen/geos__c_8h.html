@@ -12612,7 +12612,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generates offset curve line(s) for a geometry. Handles all geometry types as input. For a LineString the offset curve is a LineString. For a Point the result is an empty LineString. For a Polygon the result is the boundary of the polygon buffer (which may be a MultiLineString). For a collection the result is a MultiLineString. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Generates offset curve line(s) for a geometry. Handles all geometry types as input. For a LineString the offset curve is a LineString. For a Point the result is an empty LineString. For a Polygon the result is the boundary lines(s) of the polygon buffered to the offset distance (which may be a MultiLineString). For a collection the result is a collection of the element offset curves. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The linear geometry to offset from </td></tr>
     <tr><td class="paramname">width</td><td>Distance to offset from the curve. Negative for a right-side offset. Positive for a left-side offset. </td></tr>
