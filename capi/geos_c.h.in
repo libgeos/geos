@@ -2196,6 +2196,173 @@ extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(
     const GEOSGeometry *line,
     double proportion);
 
+/* ========== Overlay functions ========== */
+/** @name Overlay
+* Functions for computing boolean set-theoretic
+* values from overlay pairs of geometries.
+*/
+///@{
+
+/**
+* Returns the intersection of two geometries: the set of points
+* that fall within **both** geometries.
+* \param g1 one of the geometries
+* \param g2 the other geometry
+* \return A newly allocated geometry of the intersection. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
+
+/**
+* Returns the intersection of two geometries: the set of points
+* that fall within **both** geometries. All the vertices of the output
+* geometry must fall on the grid defined by the gridSize, and the
+* output will be a valid geometry.
+* \param g1 one of the geometries
+* \param g2 the other geometry
+* \param gridSize the cell size of the precision grid
+* \return A newly allocated geometry of the intersection. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
+
+/**
+* Returns the difference of two geometries A and B: the set of points
+* that fall within A but **not** within B.
+* \param ga the base geometry
+* \param gb the geometry to subtract from it
+* \return A newly allocated geometry of the difference. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDifference(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb);
+
+/**
+* Returns the difference of two geometries A and B: the set of points
+* that fall within A but **not** within B.
+* All the vertices of the output
+* geometry must fall on the grid defined by the gridSize, and the
+* output will be a valid geometry.
+* \param ga one of the geometries
+* \param gb the other geometry
+* \param gridSize the cell size of the precision grid
+* \return A newly allocated geometry of the difference. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDifferencePrec(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb,
+    double gridSize);
+
+/**
+* Returns the symmetric difference of two geometries A and B: the set of points
+* that fall in A but **not** within B and the set of points that fall in B but
+* **not** in A.
+* \param ga geometry A
+* \param gb geometry B
+* \return A newly allocated geometry of the symmetric difference. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSSymDifference(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb);
+
+/**
+* Returns the symmetric difference of two geometries A and B: the set of points
+* that fall in A but **not** within B and the set of points that fall in B but
+* **not** in A.
+* All the vertices of the output
+* geometry must fall on the grid defined by the gridSize, and the
+* output will be a valid geometry.
+* \param ga one of the geometries
+* \param gb the other geometry
+* \param gridSize the cell size of the precision grid
+* \return A newly allocated geometry of the symmetric difference. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSSymDifferencePrec(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb,
+    double gridSize);
+
+/**
+* Returns the union of two geometries A and B: the set of points
+* that fall in A **or** within B.
+* \param ga geometry A
+* \param gb geometry B
+* \return A newly allocated geometry of the union. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSUnion(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb);
+
+/**
+* Returns the union of two geometries A and B: the set of points
+* that fall in A **or** within B.
+* All the vertices of the output
+* geometry must fall on the grid defined by the gridSize, and the
+* output will be a valid geometry.
+* \param ga one of the geometries
+* \param gb the other geometry
+* \param gridSize the cell size of the precision grid
+* \return A newly allocated geometry of the union. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSUnionPrec(
+    const GEOSGeometry* ga,
+    const GEOSGeometry* gb,
+    double gridSize);
+
+/**
+* Returns the union of all components of a single geometry. Usually
+* used to convert a collection into the smallest set of polygons
+* that cover the same area.
+* \param g The input geometry
+* \return A newly allocated geometry of the union. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
+
+/**
+* Returns the union of all components of a single geometry. Usually
+* used to convert a collection into the smallest set of polygons
+* that cover the same area.
+* All the vertices of the output
+* geometry must fall on the grid defined by the gridSize, and the
+* output will be a valid geometry.
+* \param g input geometry
+* \param gridSize the cell size of the precision grid
+* \return A newly allocated geometry of the union. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::overlayng::OverlayNG
+*/
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
+    const GEOSGeometry* g,
+    double gridSize);
+
+/**
+* Optimized union algorithm for polygonal inputs that are correctly
+* noded and do not overlap. It will generate an error (return NULL)
+* for inputs that do not satisfy this constraint.
+* \param g The input geometry
+* \return A geometry that covers all the points of the input geometry.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
+
+///@}
+
 /* ========== Buffer related functions ========== */
 /** @name Buffer and Offset Curves
 * Functions for creating distance-based buffers and offset curves.
@@ -2494,154 +2661,6 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 
 /**
-* Returns the intersection of two geometries: the set of points
-* that fall within **both** geometries.
-* \param g1 one of the geometries
-* \param g2 the other geometry
-* \return A newly allocated geometry of the intersection. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
-
-/**
-* Returns the intersection of two geometries: the set of points
-* that fall within **both** geometries. All the vertices of the output
-* geometry must fall on the grid defined by the gridSize, and the
-* output will be a valid geometry.
-* \param g1 one of the geometries
-* \param g2 the other geometry
-* \param gridSize the cell size of the precision grid
-* \return A newly allocated geometry of the intersection. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
-
-/**
-* Returns the difference of two geometries A and B: the set of points
-* that fall within A but **not** within B.
-* \param ga the base geometry
-* \param gb the geometry to subtract from it
-* \return A newly allocated geometry of the difference. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSDifference(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb);
-
-/**
-* Returns the difference of two geometries A and B: the set of points
-* that fall within A but **not** within B.
-* All the vertices of the output
-* geometry must fall on the grid defined by the gridSize, and the
-* output will be a valid geometry.
-* \param ga one of the geometries
-* \param gb the other geometry
-* \param gridSize the cell size of the precision grid
-* \return A newly allocated geometry of the difference. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSDifferencePrec(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb,
-    double gridSize);
-
-/**
-* Returns the symmetric difference of two geometries A and B: the set of points
-* that fall in A but **not** within B and the set of points that fall in B but
-* **not** in A.
-* \param ga geometry A
-* \param gb geometry B
-* \return A newly allocated geometry of the symmetric difference. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSSymDifference(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb);
-
-/**
-* Returns the symmetric difference of two geometries A and B: the set of points
-* that fall in A but **not** within B and the set of points that fall in B but
-* **not** in A.
-* All the vertices of the output
-* geometry must fall on the grid defined by the gridSize, and the
-* output will be a valid geometry.
-* \param ga one of the geometries
-* \param gb the other geometry
-* \param gridSize the cell size of the precision grid
-* \return A newly allocated geometry of the symmetric difference. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSSymDifferencePrec(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb,
-    double gridSize);
-
-/**
-* Returns the union of two geometries A and B: the set of points
-* that fall in A **or** within B.
-* \param ga geometry A
-* \param gb geometry B
-* \return A newly allocated geometry of the union. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSUnion(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb);
-
-/**
-* Returns the union of two geometries A and B: the set of points
-* that fall in A **or** within B.
-* All the vertices of the output
-* geometry must fall on the grid defined by the gridSize, and the
-* output will be a valid geometry.
-* \param ga one of the geometries
-* \param gb the other geometry
-* \param gridSize the cell size of the precision grid
-* \return A newly allocated geometry of the union. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSUnionPrec(
-    const GEOSGeometry* ga,
-    const GEOSGeometry* gb,
-    double gridSize);
-
-/**
-* Returns the union of all components of a single geometry. Usually
-* used to convert a collection into the smallest set of polygons
-* that cover the same area.
-* \param g The input geometry
-* \return A newly allocated geometry of the union. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
-
-/**
-* Returns the union of all components of a single geometry. Usually
-* used to convert a collection into the smallest set of polygons
-* that cover the same area.
-* All the vertices of the output
-* geometry must fall on the grid defined by the gridSize, and the
-* output will be a valid geometry.
-* \param g input geometry
-* \param gridSize the cell size of the precision grid
-* \return A newly allocated geometry of the union. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::overlayng::OverlayNG
-*/
-extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
-    const GEOSGeometry* g,
-    double gridSize);
-
-/**
 * Returns the "boundary" of a geometry, as defined by the DE9IM:
 *
 * - the boundary of a polygon is the linear rings dividing the exterior
@@ -2798,17 +2817,6 @@ extern int GEOS_DLL GEOSMinimumClearance(const GEOSGeometry* g, double* d);
 * \see geos::precision::MinimumClearance
 */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
-
-
-/**
-* Optimized union algorithm for polygonal inputs that are correctly
-* noded and do not overlap. It will generate an error (return NULL)
-* for inputs that do not satisfy this constraint.
-* \param g The input geometry
-* \return A geometry that covers all the points of the input geometry.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
 /**
 * Returns a point that is inside the boundary of a polygonal geometry.
@@ -4688,6 +4696,12 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
 /* DEPRECATIONS */
 /* ====================================================================== */
 
+/** @name DEPRECATED
+* Deprecated Functions.
+* See description for replacement.
+*/
+///@{
+
 /**
 * \deprecated in 3.3.0, use GEOSOffsetCurve() instead
 */
@@ -4854,6 +4868,7 @@ extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+///@}
 /* ====================================================================== */
 /* END DEPRECATIONS */
 /* ====================================================================== */
