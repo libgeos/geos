@@ -2197,7 +2197,7 @@ extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(
     double proportion);
 
 /* ========== Buffer related functions ========== */
-/** @name Buffering Functions
+/** @name Buffer and Offset Curves
 * Functions for creating distance-based buffers and offset curves.
 */
 ///@{
