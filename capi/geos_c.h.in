@@ -2197,6 +2197,10 @@ extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(
     double proportion);
 
 /* ========== Buffer related functions ========== */
+/** @name Buffering Functions
+* Functions for creating distance-based buffers and offset curves.
+*/
+///@{
 
 /**
 * Buffer a geometry.
@@ -2313,21 +2317,6 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
     double mitreLimit);
 
 /**
-* Densifies a geometry using a given distance tolerance.
-* Additional vertices will be added to every line segment
-* that is greater this tolerance; these vertices will
-* evenly subdivide that segment.
-* Only linear components of input geometry are densified.
-* \param g The geometry to densify
-* \param tolerance the distance tolerance to densify
-* \return The densified geometry, or NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSDensify(
-    const GEOSGeometry* g,
-    double tolerance);
-
-/**
 * Generates offset curve line(s) for a geometry.
 * Handles all geometry types as input.
 *
@@ -2349,6 +2338,24 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 */
 extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
     double width, int quadsegs, int joinStyle, double mitreLimit);
+
+///@}
+
+
+/**
+* Densifies a geometry using a given distance tolerance.
+* Additional vertices will be added to every line segment
+* that is greater this tolerance; these vertices will
+* evenly subdivide that segment.
+* Only linear components of input geometry are densified.
+* \param g The geometry to densify
+* \param tolerance the distance tolerance to densify
+* \return The densified geometry, or NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDensify(
+    const GEOSGeometry* g,
+    double tolerance);
 
 /* ========= Geometry Constructors ========= */
 
