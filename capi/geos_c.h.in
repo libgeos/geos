@@ -3134,9 +3134,8 @@ extern int GEOS_DLL GEOSSegmentIntersection(
        double* cx, double* cy);
 
 /* ========= Binary Predicates ========= */
-/** @name Binary Predicates
-* Functions computing binary spatial predicates.
-* Includes functions using the DE-9IM topology model.
+/** @name Spatial Predicates
+* Functions computing binary spatial predicates using the DE-9IM topology model.
 */
 ///@{
 
