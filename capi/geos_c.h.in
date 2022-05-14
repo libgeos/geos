@@ -1908,6 +1908,10 @@ extern const char GEOS_DLL *GEOSversion(void);
 #ifndef GEOS_USE_ONLY_R_API
 
 /* ========== Initialization, cleanup, version ========== */
+/** @name Library Managemet
+* Functions to initialize, clean up, and report on the library.
+*/
+///@{
 
 /**
 * For non-reentrant code, set up an execution contact, and associate
@@ -1929,6 +1933,8 @@ extern void GEOS_DLL initGEOS(
 * cleans up global resources.
 */
 extern void GEOS_DLL finishGEOS(void);
+
+///@}
 
 /* ========= Coordinate Sequence functions ========= */
 /** @name Coordinate Sequences
@@ -2539,6 +2545,11 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
     double tolerance);
 
 /* ========= Geometry Constructors ========= */
+/** @name Geometry Constructors
+* Functions for creating and destroying geometries.
+* Created geometries must be freed with GEOSdestroy().
+*/
+///@{
 
 /**
 * Creates a point geometry from a coordinate sequence.
@@ -2656,13 +2667,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_clone(const GEOSGeometry* g);
 
-/* ========== Memory management ========== */
-
 /**
 * Release the memory associated with a geometry.
 * \param g The geometry to be destroyed.
 */
 extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
+
+///@}
 
 /* ========== Construction Operations ========== */
 /** @name Constructions
