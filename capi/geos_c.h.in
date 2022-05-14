@@ -3534,6 +3534,13 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin(
 ///@}
 
 /* ========== STRtree functions ========== */
+/** @name STRtree
+* A \ref GEOSSTRtree is a R-tree spatial index structure
+for two dimensional date.
+* It uses the
+([Sort-Tile-Recursive](https://en.wikipedia.org/wiki/R-tree)) packing algorithm.
+*/
+///@{
 
 /**
 * Create a new \ref GEOSSTRtree using the Sort-Tile-Recursive algorithm
@@ -3650,6 +3657,7 @@ extern char GEOS_DLL GEOSSTRtree_remove(
 */
 extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
 
+///@}
 
 /* ========= Unary predicates ========= */
 
