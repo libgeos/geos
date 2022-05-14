@@ -1931,6 +1931,11 @@ extern void GEOS_DLL initGEOS(
 extern void GEOS_DLL finishGEOS(void);
 
 /* ========= Coordinate Sequence functions ========= */
+/** @name Coordinate Sequences
+* A GEOSCoordSequence is an ordered list of coordinates.
+* Coordinates are 2 (XY) or 3 (XYZ) dimensional.
+*/
+///@{
 
 /**
 * Create a coordinate sequence.
@@ -2146,7 +2151,14 @@ extern int GEOS_DLL GEOSCoordSeq_isCCW(
     const GEOSCoordSequence* s,
     char* is_ccw);
 
+///@}
+
 /* ========== Linear referencing functions */
+/** @name Linear Referencing
+* Functions which operate on LineStrings using locations
+* specified by distance along the line.
+*/
+///@{
 
 /**
 * Distance of point projected onto line from the start of the line.
@@ -2195,6 +2207,8 @@ extern double GEOS_DLL GEOSProjectNormalized(const GEOSGeometry* line,
 extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(
     const GEOSGeometry *line,
     double proportion);
+
+///@}
 
 /* ========== Overlay functions ========== */
 /** @name Overlay
@@ -3535,10 +3549,8 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin(
 
 /* ========== STRtree functions ========== */
 /** @name STRtree
-* A \ref GEOSSTRtree is a R-tree spatial index structure
-for two dimensional date.
-* It uses the
-([Sort-Tile-Recursive](https://en.wikipedia.org/wiki/R-tree)) packing algorithm.
+* A \ref GEOSSTRtree is a R-tree spatial index structure for two dimensional date.
+* It uses the ([Sort-Tile-Recursive](https://en.wikipedia.org/wiki/R-tree)) packing algorithm.
 */
 ///@{
 
