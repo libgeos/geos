@@ -2585,7 +2585,7 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 /* ========= Geometry Constructors ========= */
 /** @name Geometry Constructors
 * Functions for creating and destroying geometries.
-* Created geometries must be freed with GEOSdestroy().
+* Created geometries must be freed with GEOSGeom_destroy().
 */
 ///@{
 
@@ -2717,6 +2717,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 /** @name Constructions
 * Functions for computing geometric constructions.
 */
+///@{
 
 /**
 * Returns minimum rectangular polygon that contains the geometry.
@@ -3662,16 +3663,11 @@ extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
 
 ///@}
 
-/* ========= Unary predicates ========= */
-
-/**
-* Tests whether the input geometry is empty. If the geometry or any
-* component is non-empty, the geometry is non-empty. An empty geometry
-* has no boundary or interior.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
+/* ========== Validity checking ========== */
+/** @name Validation
+* Functions to check and enforce topological validity and simplicity.
 */
-extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
+///@{
 
 /**
 * Tests whether the input geometry is "simple". Mostly relevant for
@@ -3680,37 +3676,6 @@ extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
 * \return 1 on true, 0 on false, 2 on exception
 */
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry is a ring. Rings are
-* linestrings, without self-intersections,
-* with start and end point being identical.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry has z coordinates.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry is closed.
-* A closed geometry is a linestring or multilinestring
-* with the start and end points being the same.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
-
-/* ========== Validity checking ========== */
-/** @name Validation
-* Functions to check and enforce topological validity.
-*/
-///@{
 
 /**
 * Check the validity of the provided geometry.
@@ -4167,6 +4132,41 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
 *         NULL on exception.
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
+
+
+/**
+* Tests whether the input geometry is empty. If the geometry or any
+* component is non-empty, the geometry is non-empty. An empty geometry
+* has no boundary or interior.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry is a ring. Rings are
+* linestrings, without self-intersections,
+* with start and end point being identical.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry has z coordinates.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry is closed.
+* A closed geometry is a linestring or multilinestring
+* with the start and end points being the same.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
 
 ///@}
 
