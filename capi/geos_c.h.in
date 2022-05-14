@@ -2161,7 +2161,7 @@ extern int GEOS_DLL GEOSCoordSeq_isCCW(
 
 /* ========== Linear referencing functions */
 /** @name Linear Referencing
-* Functions which operate on LineStrings using locations
+* Functions to operate on LineStrings using locations
 * specified by distance along the line.
 */
 ///@{
@@ -3859,7 +3859,7 @@ extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
 
 /* ========== Geometry info ========== */
 /** @name Accessor functions
-* Functions which return various kinds of information about geometries.
+* Functions to provide information about geometries.
 */
 ///@{
 
@@ -4195,7 +4195,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
 
 /* ========= Metric functions ================================================== */
 /** @name Metric functions
-* Functions which compute geometry metrics.
+* Functions to compute geometry metrics.
 */
 ///@{
 
@@ -4235,7 +4235,7 @@ extern int GEOS_DLL GEOSGeomGetLength(
 
 /* ========== Distance functions ================================================ */
 /** @name Distance functions
-* Functions which compute distances between geometries
+* Functions to compute distances between geometries
 * using various distance metrics.
 */
 ///@{
