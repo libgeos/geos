@@ -1907,9 +1907,9 @@ extern const char GEOS_DLL *GEOSversion(void);
 */
 #ifndef GEOS_USE_ONLY_R_API
 
-/* ========== Initialization, cleanup, version ========== */
-/** @name Library Managemet
-* Functions to initialize, clean up, and report on the library.
+/* ========== Initialization, cleanup ================================= */
+/** @name Library Management
+* Functions to initialize and tear down the library.
 */
 ///@{
 
@@ -3299,8 +3299,6 @@ extern char GEOS_DLL GEOSEqualsExact(
     const GEOSGeometry* g2,
     double tolerance);
 
-/* ========= Dimensionally Extended 9 Intersection Model ========= */
-
 /**
 * Calculate the DE9IM pattern for this geometry pair
 * and compare against the provided pattern to check for
@@ -3732,6 +3730,10 @@ extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
 extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
 
 /* ========== Validity checking ========== */
+/** @name Validation
+* Functions to check and enforce topological validity.
+*/
+///@{
 
 /**
 * Check the validity of the provided geometry.
@@ -3853,8 +3855,13 @@ extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
     const GEOSGeometry* g,
     double tolerance);
 
+///@}
 
 /* ========== Geometry info ========== */
+/** @name Accessor functions
+* Functions which return various kinds of information about geometries.
+*/
+///@{
 
 /**
 * Returns the geometry type string for this geometry.
@@ -4184,6 +4191,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
 
+///@}
+
 /* ========= Metric functions ================================================== */
 /** @name Metric functions
 * Functions which compute geometry metrics.
@@ -4208,6 +4217,18 @@ extern int GEOS_DLL GEOSArea(
 */
 extern int GEOS_DLL GEOSLength(
     const GEOSGeometry* g,
+    double *length);
+
+/**
+* Calculate the length of a LineString.
+* Only works for LineString inputs, returns exception otherwise.
+*
+* \param[in] g Input geometry
+* \param[out] length Pointer to be filled in with length result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSGeomGetLength(
+    const GEOSGeometry *g,
     double *length);
 
 ///@}
@@ -4259,6 +4280,19 @@ extern int GEOS_DLL GEOSDistanceIndexed(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
     double *dist);
+
+/**
+* The closest points of the two geometries.
+* The first point comes from g1 geometry and the second point comes from g2.
+*
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \return A coordinate sequence with the two points, or NULL on exception.
+* Caller must free with GEOSCoordSeq_destroy().
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2);
 
 /**
 * Calculate the Hausdorff distance between two geometries.
@@ -4351,31 +4385,6 @@ extern int GEOS_DLL GEOSHilbertCode(
     unsigned int level,
     unsigned int *code
 );
-
-/**
-* Calculate the length of a LineString.
-* Only works for LineString inputs, returns exception otherwise.
-*
-* \param[in] g Input geometry
-* \param[out] length Pointer to be filled in with length result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSGeomGetLength(
-    const GEOSGeometry *g,
-    double *length);
-
-/**
-* The closest points of the two geometries.
-* The first point comes from g1 geometry and the second point comes from g2.
-*
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \return A coordinate sequence with the two points, or NULL on exception.
-* Caller must free with GEOSCoordSeq_destroy().
-*/
-extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2);
 
 /**
 * Apply XY coordinate transform callback to all coordinates in a copy of
