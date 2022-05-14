@@ -2664,7 +2664,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_clone(const GEOSGeometry* g);
 */
 extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 
-/* ========== Topology Operations ========== */
+/* ========== Construction Operations ========== */
+/** @name Constructions
+* Functions for computing geometric constructions.
+*/
 
 /**
 * Returns minimum rectangular polygon that contains the geometry.
@@ -2864,6 +2867,8 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumBoundingCircle(
     const GEOSGeometry* g,
     double* radius,
     GEOSGeometry** center);
+
+///@}
 
 /**
 * For linear inputs, returns a new geometry in which no lines cross
@@ -3549,8 +3554,8 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin(
 
 /* ========== STRtree functions ========== */
 /** @name STRtree
-* A \ref GEOSSTRtree is a R-tree spatial index structure for two dimensional date.
-* It uses the ([Sort-Tile-Recursive](https://en.wikipedia.org/wiki/R-tree)) packing algorithm.
+* A \ref GEOSSTRtree is a R-tree spatial index structure for two dimensional data.
+* It uses the [Sort-Tile-Recursive](https://en.wikipedia.org/wiki/R-tree) packing algorithm.
 */
 ///@{
 
