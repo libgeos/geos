@@ -2399,6 +2399,26 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
     double xmin, double ymin,
     double xmax, double ymax);
 
+/**
+* Find paths shared between the two given lineal geometries.
+*
+* Returns a GeometryCollection having two elements:
+*
+* - first element is a MultiLineString containing shared paths
+*   having the _same_ direction on both inputs
+* - second element is a MultiLineString containing shared paths
+*   having the _opposite_ direction on the two inputs
+*
+* \param g1 An input geometry
+* \param g2 An input geometry
+* \return The shared paths
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::sharedpaths::SharedPathsOp
+*/
+extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2);
+
 ///@}
 
 /* ========== Buffer related functions ========== */
@@ -3075,26 +3095,6 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints(
     const GEOSGeometry* g);
 
 /**
-* Find paths shared between the two given lineal geometries.
-*
-* Returns a GeometryCollection having two elements:
-*
-* - first element is a MultiLineString containing shared paths
-*   having the _same_ direction on both inputs
-* - second element is a MultiLineString containing shared paths
-*   having the _opposite_ direction on the two inputs
-*
-* \param g1 An input geometry
-* \param g2 An input geometry
-* \return The shared paths
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::sharedpaths::SharedPathsOp
-*/
-extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2);
-
-/**
 * Snap first geometry onto second within the given tolerance.
 * \param input An input geometry
 * \param snap_target A geometry to snap the input to
@@ -3154,29 +3154,6 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
     const GEOSGeometry *env,
     double tolerance,
     int onlyEdges);
-
-/**
-* Computes the coordinate where two line segments intersect, if any
-*
-* \param[in] ax0 x-coordinate of 1st point in 1st segment
-* \param[in] ay0 y-coordinate of 1st point in 1st segment
-* \param[in] ax1 x-coordinate of 2nd point in 1st segment
-* \param[in] ay1 y-coordinate of 2nd point in 1st segment
-* \param[in] bx0 x-coordinate of 1st point in 2nd segment
-* \param[in] by0 y-coordinate of 1st point in 2nd segment
-* \param[in] bx1 x-coordinate of 2nd point in 2nd segment
-* \param[in] by1 y-coordinate of 2nd point in 2nd segment
-* \param[out] cx x-coordinate of intersection point
-* \param[out] cy y-coordinate of intersection point
-*
-* \return 0 on error, 1 on success, -1 if segments do not intersect
-*/
-extern int GEOS_DLL GEOSSegmentIntersection(
-       double ax0, double ay0,
-       double ax1, double ay1,
-       double bx0, double by0,
-       double bx1, double by1,
-       double* cx, double* cy);
 
 /* ========= Binary Predicates ========= */
 /** @name Spatial Predicates
@@ -4404,6 +4381,33 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
     void* userdata);
 
 /* ========== Algorithms ========== */
+/** @name Geometric Algorithms
+* Functions to compute basic geometric algorithms.
+*/
+///@{
+
+/**
+* Computes the coordinate where two line segments intersect, if any
+*
+* \param[in] ax0 x-coordinate of 1st point in 1st segment
+* \param[in] ay0 y-coordinate of 1st point in 1st segment
+* \param[in] ax1 x-coordinate of 2nd point in 1st segment
+* \param[in] ay1 y-coordinate of 2nd point in 1st segment
+* \param[in] bx0 x-coordinate of 1st point in 2nd segment
+* \param[in] by0 y-coordinate of 1st point in 2nd segment
+* \param[in] bx1 x-coordinate of 2nd point in 2nd segment
+* \param[in] by1 y-coordinate of 2nd point in 2nd segment
+* \param[out] cx x-coordinate of intersection point
+* \param[out] cy y-coordinate of intersection point
+*
+* \return 0 on error, 1 on success, -1 if segments do not intersect
+*/
+extern int GEOS_DLL GEOSSegmentIntersection(
+       double ax0, double ay0,
+       double ax1, double ay1,
+       double bx0, double by0,
+       double bx1, double by1,
+       double* cx, double* cy);
 
 /**
 * For the points formed by the six input ordinates,
@@ -4422,6 +4426,8 @@ extern int GEOS_DLL GEOSOrientationIndex(
     double Ax, double Ay,
     double Bx, double By,
     double Px, double Py);
+
+///@}
 
 /* ========= Reader and Writer APIs ========= */
 
