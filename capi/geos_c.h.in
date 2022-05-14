@@ -2381,6 +2381,24 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
 */
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
+/**
+* Intersection optimized for a rectangular clipping polygon.
+* Supposed to be faster than using GEOSIntersection(). Not
+* guaranteed to return valid results.
+* \param g The input geometry to be clipped
+* \param xmin Left bound of clipping rectangle
+* \param ymin Lower bound of clipping rectangle
+* \param xmax Right bound of clipping rectangle
+* \param ymax Upper bound of clipping rectangle
+* \return The clipped geometry or NULL on exception
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::intersection::RectangleIntersection
+*/
+extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax);
+
 ///@}
 
 /* ========== Buffer related functions ========== */
@@ -2890,24 +2908,6 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumBoundingCircle(
 * \see geos::noding::GeometryNoder::node
 */
 extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
-
-/**
-* Intersection optimized for a rectangular clipping polygon.
-* Supposed to be faster than using GEOSIntersection(). Not
-* guaranteed to return valid results.
-* \param g The input geometry to be clipped
-* \param xmin Left bound of clipping rectangle
-* \param ymin Lower bound of clipping rectangle
-* \param xmax Right bound of clipping rectangle
-* \param ymax Upper bound of clipping rectangle
-* \return The clipped geometry or NULL on exception
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::intersection::RectangleIntersection
-*/
-extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
-    const GEOSGeometry* g,
-    double xmin, double ymin,
-    double xmax, double ymax);
 
 /**
 * Polygonizes a set of Geometries which contain linework that
@@ -4184,7 +4184,11 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
 
-/* ========= Misc functions ========= */
+/* ========= Metric functions ================================================== */
+/** @name Metric functions
+* Functions which compute geometry metrics.
+*/
+///@{
 
 /**
 * Calculate the area of a geometry.
@@ -4205,6 +4209,15 @@ extern int GEOS_DLL GEOSArea(
 extern int GEOS_DLL GEOSLength(
     const GEOSGeometry* g,
     double *length);
+
+///@}
+
+/* ========== Distance functions ================================================ */
+/** @name Distance functions
+* Functions which compute distances between geometries
+* using various distance metrics.
+*/
+///@{
 
 /**
 * Calculate the distance between two geometries.
@@ -4316,6 +4329,8 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify(
     const GEOSGeometry *g2,
     double densifyFrac,
     double *dist);
+
+///@}
 
 /**
 * Calculate the
