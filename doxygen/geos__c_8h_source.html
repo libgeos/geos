@@ -2104,231 +2104,234 @@ $(function() {
 <div class="line"><a name="l04455"></a><span class="lineno"> 4455</span>&#160; </div>
 <div class="line"><a name="l04456"></a><span class="lineno"> 4456</span>&#160;<span class="comment">/* ========= Reader and Writer APIs ========= */</span></div>
 <div class="line"><a name="l04457"></a><span class="lineno"> 4457</span>&#160; </div>
-<div class="line"><a name="l04458"></a><span class="lineno"> 4458</span>&#160;<span class="comment">/* ========= WKT Reader ========= */</span></div>
-<div class="line"><a name="l04459"></a><span class="lineno"> 4459</span>&#160; </div>
-<div class="line"><a name="l04464"></a><span class="lineno"> 4464</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a84d8fd4c78746d91fe0d6cffe3287ea8">GEOSWKTReader_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04465"></a><span class="lineno"> 4465</span>&#160; </div>
-<div class="line"><a name="l04470"></a><span class="lineno"> 4470</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a29dd14560ca1d7dadd8fec74595654e0">GEOSWKTReader_destroy</a>(<a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a>* reader);</div>
-<div class="line"><a name="l04471"></a><span class="lineno"> 4471</span>&#160; </div>
-<div class="line"><a name="l04479"></a><span class="lineno"> 4479</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a7accc7094835cbfbc0b75c55dc1ad588">GEOSWKTReader_read</a>(</div>
-<div class="line"><a name="l04480"></a><span class="lineno"> 4480</span>&#160;    <a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a>* reader,</div>
-<div class="line"><a name="l04481"></a><span class="lineno"> 4481</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
-<div class="line"><a name="l04482"></a><span class="lineno"> 4482</span>&#160; </div>
-<div class="line"><a name="l04483"></a><span class="lineno"> 4483</span>&#160;<span class="comment">/* ========= WKT Writer ========= */</span></div>
-<div class="line"><a name="l04484"></a><span class="lineno"> 4484</span>&#160; </div>
-<div class="line"><a name="l04489"></a><span class="lineno"> 4489</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8492132c544e5ed1096eef742c956726">GEOSWKTWriter_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04490"></a><span class="lineno"> 4490</span>&#160; </div>
-<div class="line"><a name="l04495"></a><span class="lineno"> 4495</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a36f7cc8ba37287c0905cd9705859828f">GEOSWKTWriter_destroy</a>(</div>
-<div class="line"><a name="l04496"></a><span class="lineno"> 4496</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>* writer);</div>
-<div class="line"><a name="l04497"></a><span class="lineno"> 4497</span>&#160; </div>
-<div class="line"><a name="l04506"></a><span class="lineno"> 4506</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a146a442754fc86e2ece9b11c9aa1c165">GEOSWKTWriter_write</a>(</div>
-<div class="line"><a name="l04507"></a><span class="lineno"> 4507</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>* writer,</div>
-<div class="line"><a name="l04508"></a><span class="lineno"> 4508</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
-<div class="line"><a name="l04509"></a><span class="lineno"> 4509</span>&#160; </div>
-<div class="line"><a name="l04518"></a><span class="lineno"> 4518</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a7654acd76f8b7f67692365686800ea4c">GEOSWKTWriter_setTrim</a>(</div>
-<div class="line"><a name="l04519"></a><span class="lineno"> 4519</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
-<div class="line"><a name="l04520"></a><span class="lineno"> 4520</span>&#160;    <span class="keywordtype">char</span> trim);</div>
-<div class="line"><a name="l04521"></a><span class="lineno"> 4521</span>&#160; </div>
-<div class="line"><a name="l04528"></a><span class="lineno"> 4528</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#addb95c263e47e86c733e3278df67612e">GEOSWKTWriter_setRoundingPrecision</a>(</div>
-<div class="line"><a name="l04529"></a><span class="lineno"> 4529</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
-<div class="line"><a name="l04530"></a><span class="lineno"> 4530</span>&#160;    <span class="keywordtype">int</span> precision);</div>
-<div class="line"><a name="l04531"></a><span class="lineno"> 4531</span>&#160; </div>
-<div class="line"><a name="l04538"></a><span class="lineno"> 4538</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aa799b5335443044f29c308df672f9f18">GEOSWKTWriter_setOutputDimension</a>(</div>
-<div class="line"><a name="l04539"></a><span class="lineno"> 4539</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
-<div class="line"><a name="l04540"></a><span class="lineno"> 4540</span>&#160;    <span class="keywordtype">int</span> dim);</div>
-<div class="line"><a name="l04541"></a><span class="lineno"> 4541</span>&#160; </div>
-<div class="line"><a name="l04547"></a><span class="lineno"> 4547</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span>  GEOS_DLL <a class="code" href="geos__c_8h.html#aa2585210857589399c6be2ffe672c9bf">GEOSWKTWriter_getOutputDimension</a>(<a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer);</div>
-<div class="line"><a name="l04548"></a><span class="lineno"> 4548</span>&#160; </div>
-<div class="line"><a name="l04556"></a><span class="lineno"> 4556</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aac43932e7e53351bdc3713be72d0f7de">GEOSWKTWriter_setOld3D</a>(</div>
-<div class="line"><a name="l04557"></a><span class="lineno"> 4557</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
-<div class="line"><a name="l04558"></a><span class="lineno"> 4558</span>&#160;    <span class="keywordtype">int</span> useOld3D);</div>
-<div class="line"><a name="l04559"></a><span class="lineno"> 4559</span>&#160; </div>
-<div class="line"><a name="l04560"></a><span class="lineno"> 4560</span>&#160;<span class="comment">/* ========== WKB Reader ========== */</span></div>
-<div class="line"><a name="l04561"></a><span class="lineno"> 4561</span>&#160; </div>
-<div class="line"><a name="l04566"></a><span class="lineno"> 4566</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a6b2004ca68b5a6778657fed53cca2e5b">GEOSWKBReader_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04567"></a><span class="lineno"> 4567</span>&#160; </div>
-<div class="line"><a name="l04572"></a><span class="lineno"> 4572</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a11519c830c62e0123fa7985dbbb15d12">GEOSWKBReader_destroy</a>(</div>
-<div class="line"><a name="l04573"></a><span class="lineno"> 4573</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader);</div>
-<div class="line"><a name="l04574"></a><span class="lineno"> 4574</span>&#160; </div>
-<div class="line"><a name="l04582"></a><span class="lineno"> 4582</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae766d66fcca122e117bf8250969abf15">GEOSWKBReader_read</a>(</div>
-<div class="line"><a name="l04583"></a><span class="lineno"> 4583</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader,</div>
-<div class="line"><a name="l04584"></a><span class="lineno"> 4584</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb,</div>
-<div class="line"><a name="l04585"></a><span class="lineno"> 4585</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04586"></a><span class="lineno"> 4586</span>&#160; </div>
-<div class="line"><a name="l04594"></a><span class="lineno"> 4594</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a71c5eea0f7606181e26efa57180f5343">GEOSWKBReader_readHEX</a>(</div>
-<div class="line"><a name="l04595"></a><span class="lineno"> 4595</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader,</div>
-<div class="line"><a name="l04596"></a><span class="lineno"> 4596</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex,</div>
-<div class="line"><a name="l04597"></a><span class="lineno"> 4597</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04598"></a><span class="lineno"> 4598</span>&#160; </div>
-<div class="line"><a name="l04599"></a><span class="lineno"> 4599</span>&#160;<span class="comment">/* ========== WKB Writer ========== */</span></div>
-<div class="line"><a name="l04600"></a><span class="lineno"> 4600</span>&#160; </div>
-<div class="line"><a name="l04605"></a><span class="lineno"> 4605</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae0cc9b86b0424f135c7fed6d3b736626">GEOSWKBWriter_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04606"></a><span class="lineno"> 4606</span>&#160; </div>
-<div class="line"><a name="l04611"></a><span class="lineno"> 4611</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a94d40ff344a35ccfd52d1cdd54bc7c7e">GEOSWKBWriter_destroy</a>(<a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
-<div class="line"><a name="l04612"></a><span class="lineno"> 4612</span>&#160; </div>
-<div class="line"><a name="l04621"></a><span class="lineno"> 4621</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae44097c01738103bb8447385d92381f7">GEOSWKBWriter_write</a>(</div>
-<div class="line"><a name="l04622"></a><span class="lineno"> 4622</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04623"></a><span class="lineno"> 4623</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04624"></a><span class="lineno"> 4624</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04625"></a><span class="lineno"> 4625</span>&#160; </div>
-<div class="line"><a name="l04634"></a><span class="lineno"> 4634</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#acca3e02392629aacea5c05ed055a1695">GEOSWKBWriter_writeHEX</a>(</div>
-<div class="line"><a name="l04635"></a><span class="lineno"> 4635</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04636"></a><span class="lineno"> 4636</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04637"></a><span class="lineno"> 4637</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04638"></a><span class="lineno"> 4638</span>&#160; </div>
-<div class="line"><a name="l04646"></a><span class="lineno"> 4646</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a3c2f5e1efa8e2374b65e29e64a421d02">GEOSWKBWriter_getOutputDimension</a>(</div>
-<div class="line"><a name="l04647"></a><span class="lineno"> 4647</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
+<div class="line"><a name="l04461"></a><span class="lineno"> 4461</span>&#160;<span class="comment">/* ========= WKT Reader ========= */</span></div>
+<div class="line"><a name="l04463"></a><span class="lineno"> 4463</span>&#160; </div>
+<div class="line"><a name="l04468"></a><span class="lineno"> 4468</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a84d8fd4c78746d91fe0d6cffe3287ea8">GEOSWKTReader_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04469"></a><span class="lineno"> 4469</span>&#160; </div>
+<div class="line"><a name="l04474"></a><span class="lineno"> 4474</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a29dd14560ca1d7dadd8fec74595654e0">GEOSWKTReader_destroy</a>(<a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a>* reader);</div>
+<div class="line"><a name="l04475"></a><span class="lineno"> 4475</span>&#160; </div>
+<div class="line"><a name="l04483"></a><span class="lineno"> 4483</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a7accc7094835cbfbc0b75c55dc1ad588">GEOSWKTReader_read</a>(</div>
+<div class="line"><a name="l04484"></a><span class="lineno"> 4484</span>&#160;    <a class="code" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a>* reader,</div>
+<div class="line"><a name="l04485"></a><span class="lineno"> 4485</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
+<div class="line"><a name="l04486"></a><span class="lineno"> 4486</span>&#160; </div>
+<div class="line"><a name="l04487"></a><span class="lineno"> 4487</span>&#160;<span class="comment">/* ========= WKT Writer ========= */</span></div>
+<div class="line"><a name="l04488"></a><span class="lineno"> 4488</span>&#160; </div>
+<div class="line"><a name="l04493"></a><span class="lineno"> 4493</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8492132c544e5ed1096eef742c956726">GEOSWKTWriter_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04494"></a><span class="lineno"> 4494</span>&#160; </div>
+<div class="line"><a name="l04499"></a><span class="lineno"> 4499</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a36f7cc8ba37287c0905cd9705859828f">GEOSWKTWriter_destroy</a>(</div>
+<div class="line"><a name="l04500"></a><span class="lineno"> 4500</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>* writer);</div>
+<div class="line"><a name="l04501"></a><span class="lineno"> 4501</span>&#160; </div>
+<div class="line"><a name="l04510"></a><span class="lineno"> 4510</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a146a442754fc86e2ece9b11c9aa1c165">GEOSWKTWriter_write</a>(</div>
+<div class="line"><a name="l04511"></a><span class="lineno"> 4511</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>* writer,</div>
+<div class="line"><a name="l04512"></a><span class="lineno"> 4512</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
+<div class="line"><a name="l04513"></a><span class="lineno"> 4513</span>&#160; </div>
+<div class="line"><a name="l04522"></a><span class="lineno"> 4522</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a7654acd76f8b7f67692365686800ea4c">GEOSWKTWriter_setTrim</a>(</div>
+<div class="line"><a name="l04523"></a><span class="lineno"> 4523</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
+<div class="line"><a name="l04524"></a><span class="lineno"> 4524</span>&#160;    <span class="keywordtype">char</span> trim);</div>
+<div class="line"><a name="l04525"></a><span class="lineno"> 4525</span>&#160; </div>
+<div class="line"><a name="l04532"></a><span class="lineno"> 4532</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#addb95c263e47e86c733e3278df67612e">GEOSWKTWriter_setRoundingPrecision</a>(</div>
+<div class="line"><a name="l04533"></a><span class="lineno"> 4533</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
+<div class="line"><a name="l04534"></a><span class="lineno"> 4534</span>&#160;    <span class="keywordtype">int</span> precision);</div>
+<div class="line"><a name="l04535"></a><span class="lineno"> 4535</span>&#160; </div>
+<div class="line"><a name="l04542"></a><span class="lineno"> 4542</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aa799b5335443044f29c308df672f9f18">GEOSWKTWriter_setOutputDimension</a>(</div>
+<div class="line"><a name="l04543"></a><span class="lineno"> 4543</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
+<div class="line"><a name="l04544"></a><span class="lineno"> 4544</span>&#160;    <span class="keywordtype">int</span> dim);</div>
+<div class="line"><a name="l04545"></a><span class="lineno"> 4545</span>&#160; </div>
+<div class="line"><a name="l04551"></a><span class="lineno"> 4551</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span>  GEOS_DLL <a class="code" href="geos__c_8h.html#aa2585210857589399c6be2ffe672c9bf">GEOSWKTWriter_getOutputDimension</a>(<a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer);</div>
+<div class="line"><a name="l04552"></a><span class="lineno"> 4552</span>&#160; </div>
+<div class="line"><a name="l04560"></a><span class="lineno"> 4560</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aac43932e7e53351bdc3713be72d0f7de">GEOSWKTWriter_setOld3D</a>(</div>
+<div class="line"><a name="l04561"></a><span class="lineno"> 4561</span>&#160;    <a class="code" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer,</div>
+<div class="line"><a name="l04562"></a><span class="lineno"> 4562</span>&#160;    <span class="keywordtype">int</span> useOld3D);</div>
+<div class="line"><a name="l04564"></a><span class="lineno"> 4564</span>&#160; </div>
+<div class="line"><a name="l04565"></a><span class="lineno"> 4565</span>&#160;<span class="comment">/* ============================================================================== */</span></div>
+<div class="line"><a name="l04569"></a><span class="lineno"> 4569</span>&#160; </div>
+<div class="line"><a name="l04571"></a><span class="lineno"> 4571</span>&#160;<span class="comment">/* ========== WKB Reader ========== */</span></div>
+<div class="line"><a name="l04576"></a><span class="lineno"> 4576</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a6b2004ca68b5a6778657fed53cca2e5b">GEOSWKBReader_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04577"></a><span class="lineno"> 4577</span>&#160; </div>
+<div class="line"><a name="l04582"></a><span class="lineno"> 4582</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a11519c830c62e0123fa7985dbbb15d12">GEOSWKBReader_destroy</a>(</div>
+<div class="line"><a name="l04583"></a><span class="lineno"> 4583</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader);</div>
+<div class="line"><a name="l04584"></a><span class="lineno"> 4584</span>&#160; </div>
+<div class="line"><a name="l04592"></a><span class="lineno"> 4592</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae766d66fcca122e117bf8250969abf15">GEOSWKBReader_read</a>(</div>
+<div class="line"><a name="l04593"></a><span class="lineno"> 4593</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader,</div>
+<div class="line"><a name="l04594"></a><span class="lineno"> 4594</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb,</div>
+<div class="line"><a name="l04595"></a><span class="lineno"> 4595</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l04596"></a><span class="lineno"> 4596</span>&#160; </div>
+<div class="line"><a name="l04604"></a><span class="lineno"> 4604</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a71c5eea0f7606181e26efa57180f5343">GEOSWKBReader_readHEX</a>(</div>
+<div class="line"><a name="l04605"></a><span class="lineno"> 4605</span>&#160;    <a class="code" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>* reader,</div>
+<div class="line"><a name="l04606"></a><span class="lineno"> 4606</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex,</div>
+<div class="line"><a name="l04607"></a><span class="lineno"> 4607</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l04608"></a><span class="lineno"> 4608</span>&#160; </div>
+<div class="line"><a name="l04609"></a><span class="lineno"> 4609</span>&#160;<span class="comment">/* ========== WKB Writer ========== */</span></div>
+<div class="line"><a name="l04610"></a><span class="lineno"> 4610</span>&#160; </div>
+<div class="line"><a name="l04615"></a><span class="lineno"> 4615</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae0cc9b86b0424f135c7fed6d3b736626">GEOSWKBWriter_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04616"></a><span class="lineno"> 4616</span>&#160; </div>
+<div class="line"><a name="l04621"></a><span class="lineno"> 4621</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a94d40ff344a35ccfd52d1cdd54bc7c7e">GEOSWKBWriter_destroy</a>(<a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
+<div class="line"><a name="l04622"></a><span class="lineno"> 4622</span>&#160; </div>
+<div class="line"><a name="l04631"></a><span class="lineno"> 4631</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae44097c01738103bb8447385d92381f7">GEOSWKBWriter_write</a>(</div>
+<div class="line"><a name="l04632"></a><span class="lineno"> 4632</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04633"></a><span class="lineno"> 4633</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04634"></a><span class="lineno"> 4634</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
+<div class="line"><a name="l04635"></a><span class="lineno"> 4635</span>&#160; </div>
+<div class="line"><a name="l04644"></a><span class="lineno"> 4644</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#acca3e02392629aacea5c05ed055a1695">GEOSWKBWriter_writeHEX</a>(</div>
+<div class="line"><a name="l04645"></a><span class="lineno"> 4645</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04646"></a><span class="lineno"> 4646</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04647"></a><span class="lineno"> 4647</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
 <div class="line"><a name="l04648"></a><span class="lineno"> 4648</span>&#160; </div>
-<div class="line"><a name="l04655"></a><span class="lineno"> 4655</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a37b4d882c7649b8f56a8e19d556d7471">GEOSWKBWriter_setOutputDimension</a>(</div>
-<div class="line"><a name="l04656"></a><span class="lineno"> 4656</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04657"></a><span class="lineno"> 4657</span>&#160;    <span class="keywordtype">int</span> newDimension);</div>
+<div class="line"><a name="l04656"></a><span class="lineno"> 4656</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a3c2f5e1efa8e2374b65e29e64a421d02">GEOSWKBWriter_getOutputDimension</a>(</div>
+<div class="line"><a name="l04657"></a><span class="lineno"> 4657</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
 <div class="line"><a name="l04658"></a><span class="lineno"> 4658</span>&#160; </div>
-<div class="line"><a name="l04667"></a><span class="lineno"> 4667</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ad1cdf88e8c77bb51558c14fe8515656a">GEOSWKBWriter_getByteOrder</a>(</div>
-<div class="line"><a name="l04668"></a><span class="lineno"> 4668</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
-<div class="line"><a name="l04669"></a><span class="lineno"> 4669</span>&#160; </div>
-<div class="line"><a name="l04676"></a><span class="lineno"> 4676</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a0291ec3caebdbe1d1f0600deb7baf2db">GEOSWKBWriter_setByteOrder</a>(</div>
-<div class="line"><a name="l04677"></a><span class="lineno"> 4677</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04678"></a><span class="lineno"> 4678</span>&#160;    <span class="keywordtype">int</span> byteOrder);</div>
+<div class="line"><a name="l04665"></a><span class="lineno"> 4665</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a37b4d882c7649b8f56a8e19d556d7471">GEOSWKBWriter_setOutputDimension</a>(</div>
+<div class="line"><a name="l04666"></a><span class="lineno"> 4666</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04667"></a><span class="lineno"> 4667</span>&#160;    <span class="keywordtype">int</span> newDimension);</div>
+<div class="line"><a name="l04668"></a><span class="lineno"> 4668</span>&#160; </div>
+<div class="line"><a name="l04677"></a><span class="lineno"> 4677</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ad1cdf88e8c77bb51558c14fe8515656a">GEOSWKBWriter_getByteOrder</a>(</div>
+<div class="line"><a name="l04678"></a><span class="lineno"> 4678</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
 <div class="line"><a name="l04679"></a><span class="lineno"> 4679</span>&#160; </div>
-<div class="line"><a name="l04692"></a><span class="lineno"> 4692</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a87fbf3649e668f01e5de10412c615fa0">GEOSWKBWriter_getFlavor</a>(</div>
-<div class="line"><a name="l04693"></a><span class="lineno"> 4693</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
-<div class="line"><a name="l04694"></a><span class="lineno"> 4694</span>&#160; </div>
-<div class="line"><a name="l04701"></a><span class="lineno"> 4701</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a58fe7e66fa792517c77701d4987f980f">GEOSWKBWriter_setFlavor</a>(</div>
-<div class="line"><a name="l04702"></a><span class="lineno"> 4702</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04703"></a><span class="lineno"> 4703</span>&#160;    <span class="keywordtype">int</span> flavor);</div>
+<div class="line"><a name="l04686"></a><span class="lineno"> 4686</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a0291ec3caebdbe1d1f0600deb7baf2db">GEOSWKBWriter_setByteOrder</a>(</div>
+<div class="line"><a name="l04687"></a><span class="lineno"> 4687</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04688"></a><span class="lineno"> 4688</span>&#160;    <span class="keywordtype">int</span> byteOrder);</div>
+<div class="line"><a name="l04689"></a><span class="lineno"> 4689</span>&#160; </div>
+<div class="line"><a name="l04702"></a><span class="lineno"> 4702</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a87fbf3649e668f01e5de10412c615fa0">GEOSWKBWriter_getFlavor</a>(</div>
+<div class="line"><a name="l04703"></a><span class="lineno"> 4703</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
 <div class="line"><a name="l04704"></a><span class="lineno"> 4704</span>&#160; </div>
-<div class="line"><a name="l04709"></a><span class="lineno"> 4709</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aed1f0c22380e52a1f42ec6314cb74e83">GEOSWKBWriter_getIncludeSRID</a>(</div>
-<div class="line"><a name="l04710"></a><span class="lineno"> 4710</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
-<div class="line"><a name="l04711"></a><span class="lineno"> 4711</span>&#160; </div>
-<div class="line"><a name="l04718"></a><span class="lineno"> 4718</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ae88fcc52f37e4549ce9a847dcdd50366">GEOSWKBWriter_setIncludeSRID</a>(</div>
-<div class="line"><a name="l04719"></a><span class="lineno"> 4719</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
-<div class="line"><a name="l04720"></a><span class="lineno"> 4720</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> writeSRID);</div>
+<div class="line"><a name="l04711"></a><span class="lineno"> 4711</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a58fe7e66fa792517c77701d4987f980f">GEOSWKBWriter_setFlavor</a>(</div>
+<div class="line"><a name="l04712"></a><span class="lineno"> 4712</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04713"></a><span class="lineno"> 4713</span>&#160;    <span class="keywordtype">int</span> flavor);</div>
+<div class="line"><a name="l04714"></a><span class="lineno"> 4714</span>&#160; </div>
+<div class="line"><a name="l04719"></a><span class="lineno"> 4719</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aed1f0c22380e52a1f42ec6314cb74e83">GEOSWKBWriter_getIncludeSRID</a>(</div>
+<div class="line"><a name="l04720"></a><span class="lineno"> 4720</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer);</div>
 <div class="line"><a name="l04721"></a><span class="lineno"> 4721</span>&#160; </div>
-<div class="line"><a name="l04722"></a><span class="lineno"> 4722</span>&#160;<span class="comment">/* ========= GeoJSON Reader ========= */</span></div>
-<div class="line"><a name="l04723"></a><span class="lineno"> 4723</span>&#160; </div>
-<div class="line"><a name="l04728"></a><span class="lineno"> 4728</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a4285795ffe771383285ebe583431463e">GEOSGeoJSONReader_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04729"></a><span class="lineno"> 4729</span>&#160; </div>
-<div class="line"><a name="l04734"></a><span class="lineno"> 4734</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#abadce2b64aed195e0050b46c8b61c39a">GEOSGeoJSONReader_destroy</a>(<a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a>* reader);</div>
-<div class="line"><a name="l04735"></a><span class="lineno"> 4735</span>&#160; </div>
-<div class="line"><a name="l04744"></a><span class="lineno"> 4744</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a72f0ed092abe8473539ec12d03d6a85c">GEOSGeoJSONReader_readGeometry</a>(</div>
-<div class="line"><a name="l04745"></a><span class="lineno"> 4745</span>&#160;    <a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a>* reader,</div>
-<div class="line"><a name="l04746"></a><span class="lineno"> 4746</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *geojson);</div>
-<div class="line"><a name="l04747"></a><span class="lineno"> 4747</span>&#160; </div>
-<div class="line"><a name="l04748"></a><span class="lineno"> 4748</span>&#160;<span class="comment">/* ========= GeoJSON Writer ========= */</span></div>
-<div class="line"><a name="l04749"></a><span class="lineno"> 4749</span>&#160; </div>
-<div class="line"><a name="l04754"></a><span class="lineno"> 4754</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a18b727c3aba916a84b5c4aaaef646935">GEOSGeoJSONWriter_create</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04755"></a><span class="lineno"> 4755</span>&#160; </div>
-<div class="line"><a name="l04760"></a><span class="lineno"> 4760</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#abcd97f9110c8dbd2de5c117e718a3938">GEOSGeoJSONWriter_destroy</a>(<a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a>* writer);</div>
-<div class="line"><a name="l04761"></a><span class="lineno"> 4761</span>&#160; </div>
-<div class="line"><a name="l04770"></a><span class="lineno"> 4770</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a2311db5bf4cd146726b8f156a3e9e82d">GEOSGeoJSONWriter_writeGeometry</a>(</div>
-<div class="line"><a name="l04771"></a><span class="lineno"> 4771</span>&#160;    <a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a>* writer,</div>
-<div class="line"><a name="l04772"></a><span class="lineno"> 4772</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04773"></a><span class="lineno"> 4773</span>&#160;    <span class="keywordtype">int</span> indent);</div>
-<div class="line"><a name="l04774"></a><span class="lineno"> 4774</span>&#160; </div>
-<div class="line"><a name="l04775"></a><span class="lineno"> 4775</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* #ifndef GEOS_USE_ONLY_R_API */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l04728"></a><span class="lineno"> 4728</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ae88fcc52f37e4549ce9a847dcdd50366">GEOSWKBWriter_setIncludeSRID</a>(</div>
+<div class="line"><a name="l04729"></a><span class="lineno"> 4729</span>&#160;    <a class="code" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>* writer,</div>
+<div class="line"><a name="l04730"></a><span class="lineno"> 4730</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> writeSRID);</div>
+<div class="line"><a name="l04731"></a><span class="lineno"> 4731</span>&#160; </div>
+<div class="line"><a name="l04732"></a><span class="lineno"> 4732</span>&#160;<span class="comment">/* ============================================================================= */</span></div>
+<div class="line"><a name="l04736"></a><span class="lineno"> 4736</span>&#160;<span class="comment">/* ========= GeoJSON Reader ========= */</span></div>
+<div class="line"><a name="l04738"></a><span class="lineno"> 4738</span>&#160; </div>
+<div class="line"><a name="l04743"></a><span class="lineno"> 4743</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a4285795ffe771383285ebe583431463e">GEOSGeoJSONReader_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04744"></a><span class="lineno"> 4744</span>&#160; </div>
+<div class="line"><a name="l04749"></a><span class="lineno"> 4749</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#abadce2b64aed195e0050b46c8b61c39a">GEOSGeoJSONReader_destroy</a>(<a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a>* reader);</div>
+<div class="line"><a name="l04750"></a><span class="lineno"> 4750</span>&#160; </div>
+<div class="line"><a name="l04759"></a><span class="lineno"> 4759</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a72f0ed092abe8473539ec12d03d6a85c">GEOSGeoJSONReader_readGeometry</a>(</div>
+<div class="line"><a name="l04760"></a><span class="lineno"> 4760</span>&#160;    <a class="code" href="geos__c_8h.html#a0e44c9853addb952c199c8a3f032fbef">GEOSGeoJSONReader</a>* reader,</div>
+<div class="line"><a name="l04761"></a><span class="lineno"> 4761</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *geojson);</div>
+<div class="line"><a name="l04762"></a><span class="lineno"> 4762</span>&#160; </div>
+<div class="line"><a name="l04763"></a><span class="lineno"> 4763</span>&#160;<span class="comment">/* ========= GeoJSON Writer ========= */</span></div>
+<div class="line"><a name="l04764"></a><span class="lineno"> 4764</span>&#160; </div>
+<div class="line"><a name="l04769"></a><span class="lineno"> 4769</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a18b727c3aba916a84b5c4aaaef646935">GEOSGeoJSONWriter_create</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04770"></a><span class="lineno"> 4770</span>&#160; </div>
+<div class="line"><a name="l04775"></a><span class="lineno"> 4775</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#abcd97f9110c8dbd2de5c117e718a3938">GEOSGeoJSONWriter_destroy</a>(<a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a>* writer);</div>
 <div class="line"><a name="l04776"></a><span class="lineno"> 4776</span>&#160; </div>
-<div class="line"><a name="l04777"></a><span class="lineno"> 4777</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
-<div class="line"><a name="l04778"></a><span class="lineno"> 4778</span>&#160;<span class="comment">/* DEPRECATIONS */</span></div>
-<div class="line"><a name="l04779"></a><span class="lineno"> 4779</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
-<div class="line"><a name="l04780"></a><span class="lineno"> 4780</span>&#160; </div>
-<div class="line"><a name="l04785"></a><span class="lineno"> 4785</span>&#160; </div>
-<div class="line"><a name="l04790"></a><span class="lineno"> 4790</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#adbe3cd8cefb5083563f4d9073b3e1137">GEOSSingleSidedBuffer</a>(</div>
-<div class="line"><a name="l04791"></a><span class="lineno"> 4791</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04792"></a><span class="lineno"> 4792</span>&#160;    <span class="keywordtype">double</span> width, <span class="keywordtype">int</span> quadsegs,</div>
-<div class="line"><a name="l04793"></a><span class="lineno"> 4793</span>&#160;    <span class="keywordtype">int</span> joinStyle, <span class="keywordtype">double</span> mitreLimit,</div>
-<div class="line"><a name="l04794"></a><span class="lineno"> 4794</span>&#160;    <span class="keywordtype">int</span> leftSide);</div>
-<div class="line"><a name="l04795"></a><span class="lineno"> 4795</span>&#160; </div>
-<div class="line"><a name="l04799"></a><span class="lineno"> 4799</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a517e7ee856540e31df202b3a25cef9bf">GEOSSingleSidedBuffer_r</a>(</div>
-<div class="line"><a name="l04800"></a><span class="lineno"> 4800</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04801"></a><span class="lineno"> 4801</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04802"></a><span class="lineno"> 4802</span>&#160;    <span class="keywordtype">double</span> width, <span class="keywordtype">int</span> quadsegs,</div>
-<div class="line"><a name="l04803"></a><span class="lineno"> 4803</span>&#160;    <span class="keywordtype">int</span> joinStyle, <span class="keywordtype">double</span> mitreLimit,</div>
-<div class="line"><a name="l04804"></a><span class="lineno"> 4804</span>&#160;    <span class="keywordtype">int</span> leftSide);</div>
-<div class="line"><a name="l04805"></a><span class="lineno"> 4805</span>&#160; </div>
-<div class="line"><a name="l04810"></a><span class="lineno"> 4810</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> GEOS_DLL <a class="code" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a>(</div>
-<div class="line"><a name="l04811"></a><span class="lineno"> 4811</span>&#160;    <a class="code" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> notice_function,</div>
-<div class="line"><a name="l04812"></a><span class="lineno"> 4812</span>&#160;    <a class="code" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> error_function);</div>
-<div class="line"><a name="l04813"></a><span class="lineno"> 4813</span>&#160; </div>
-<div class="line"><a name="l04817"></a><span class="lineno"> 4817</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ab28e31ca1d697748a447e60d66ec55b0">finishGEOS_r</a>(<a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
-<div class="line"><a name="l04818"></a><span class="lineno"> 4818</span>&#160; </div>
-<div class="line"><a name="l04822"></a><span class="lineno"> 4822</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ad42d8a5c4e52a577f451f0b340ae9168">GEOSGeomFromWKT_r</a>(</div>
-<div class="line"><a name="l04823"></a><span class="lineno"> 4823</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04824"></a><span class="lineno"> 4824</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
-<div class="line"><a name="l04825"></a><span class="lineno"> 4825</span>&#160; </div>
-<div class="line"><a name="l04829"></a><span class="lineno"> 4829</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8f3e6d7734ed770ff1d5af84eef79b4f">GEOSGeomToWKT_r</a>(</div>
-<div class="line"><a name="l04830"></a><span class="lineno"> 4830</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04831"></a><span class="lineno"> 4831</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
-<div class="line"><a name="l04832"></a><span class="lineno"> 4832</span>&#160; </div>
-<div class="line"><a name="l04836"></a><span class="lineno"> 4836</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a04942fa92ee7ef382a17e391a049973d">GEOS_getWKBOutputDims_r</a>(</div>
-<div class="line"><a name="l04837"></a><span class="lineno"> 4837</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
-<div class="line"><a name="l04838"></a><span class="lineno"> 4838</span>&#160; </div>
-<div class="line"><a name="l04842"></a><span class="lineno"> 4842</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a01135041f683c9d4d5e18404c3cdb416">GEOS_setWKBOutputDims_r</a>(</div>
-<div class="line"><a name="l04843"></a><span class="lineno"> 4843</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04844"></a><span class="lineno"> 4844</span>&#160;    <span class="keywordtype">int</span> newDims);</div>
-<div class="line"><a name="l04845"></a><span class="lineno"> 4845</span>&#160; </div>
-<div class="line"><a name="l04849"></a><span class="lineno"> 4849</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aec7c2ac3151af971884cc19cae83b343">GEOS_getWKBByteOrder_r</a>(</div>
-<div class="line"><a name="l04850"></a><span class="lineno"> 4850</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
-<div class="line"><a name="l04851"></a><span class="lineno"> 4851</span>&#160; </div>
-<div class="line"><a name="l04855"></a><span class="lineno"> 4855</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a1ce1cc1120ff21cc2326238fd4cd81b1">GEOS_setWKBByteOrder_r</a>(</div>
-<div class="line"><a name="l04856"></a><span class="lineno"> 4856</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04857"></a><span class="lineno"> 4857</span>&#160;    <span class="keywordtype">int</span> byteOrder);</div>
-<div class="line"><a name="l04858"></a><span class="lineno"> 4858</span>&#160; </div>
-<div class="line"><a name="l04862"></a><span class="lineno"> 4862</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a505c86d6de23aad307b6fbe853a995e9">GEOSGeomFromWKB_buf_r</a>(</div>
-<div class="line"><a name="l04863"></a><span class="lineno"> 4863</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04864"></a><span class="lineno"> 4864</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb,</div>
-<div class="line"><a name="l04865"></a><span class="lineno"> 4865</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04866"></a><span class="lineno"> 4866</span>&#160; </div>
-<div class="line"><a name="l04870"></a><span class="lineno"> 4870</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a99fa623e0e5a806b806a15ae194cedf4">GEOSGeomToWKB_buf_r</a>(</div>
-<div class="line"><a name="l04871"></a><span class="lineno"> 4871</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04872"></a><span class="lineno"> 4872</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04873"></a><span class="lineno"> 4873</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04874"></a><span class="lineno"> 4874</span>&#160; </div>
-<div class="line"><a name="l04878"></a><span class="lineno"> 4878</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ab4c80cf19b9e743a3e99b0d71a5bf6ef">GEOSGeomFromHEX_buf_r</a>(</div>
-<div class="line"><a name="l04879"></a><span class="lineno"> 4879</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04880"></a><span class="lineno"> 4880</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex,</div>
-<div class="line"><a name="l04881"></a><span class="lineno"> 4881</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04882"></a><span class="lineno"> 4882</span>&#160; </div>
-<div class="line"><a name="l04886"></a><span class="lineno"> 4886</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a1c1f61a9766f2b8ac62e5d8fd0c9f9db">GEOSGeomToHEX_buf_r</a>(</div>
-<div class="line"><a name="l04887"></a><span class="lineno"> 4887</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04888"></a><span class="lineno"> 4888</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
-<div class="line"><a name="l04889"></a><span class="lineno"> 4889</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04890"></a><span class="lineno"> 4890</span>&#160; </div>
-<div class="line"><a name="l04894"></a><span class="lineno"> 4894</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a00bf287e340c18ebebd251912fa9e906">GEOSGeomFromWKT</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
-<div class="line"><a name="l04895"></a><span class="lineno"> 4895</span>&#160; </div>
-<div class="line"><a name="l04899"></a><span class="lineno"> 4899</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8ea41f776dc5dcdabeac9683111e5263">GEOSGeomToWKT</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
-<div class="line"><a name="l04900"></a><span class="lineno"> 4900</span>&#160; </div>
-<div class="line"><a name="l04904"></a><span class="lineno"> 4904</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a3cf4556228cd7b63a9eb8f4e2ea7c7f4">GEOS_getWKBOutputDims</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04905"></a><span class="lineno"> 4905</span>&#160; </div>
-<div class="line"><a name="l04909"></a><span class="lineno"> 4909</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ac232a28381e2ba8f768df04fc2f1d51f">GEOS_setWKBOutputDims</a>(<span class="keywordtype">int</span> newDims);</div>
-<div class="line"><a name="l04910"></a><span class="lineno"> 4910</span>&#160; </div>
-<div class="line"><a name="l04914"></a><span class="lineno"> 4914</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a107c965eb4a69c255195a3115c545e8c">GEOS_getWKBByteOrder</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l04915"></a><span class="lineno"> 4915</span>&#160; </div>
-<div class="line"><a name="l04919"></a><span class="lineno"> 4919</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a6c5258c096615bfaa81536ddca250c08">GEOS_setWKBByteOrder</a>(<span class="keywordtype">int</span> byteOrder);</div>
-<div class="line"><a name="l04920"></a><span class="lineno"> 4920</span>&#160; </div>
-<div class="line"><a name="l04924"></a><span class="lineno"> 4924</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#aad2dd82bc2eec23806f9cfb401f2d14b">GEOSGeomFromWKB_buf</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb, <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04925"></a><span class="lineno"> 4925</span>&#160; </div>
-<div class="line"><a name="l04929"></a><span class="lineno"> 4929</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a096bd35bd7967a3c06fb44526250fb97">GEOSGeomToWKB_buf</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g, <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04930"></a><span class="lineno"> 4930</span>&#160; </div>
-<div class="line"><a name="l04934"></a><span class="lineno"> 4934</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae8f36214d2e129fb45435d26507ae696">GEOSGeomFromHEX_buf</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex, <span class="keywordtype">size_t</span> size);</div>
-<div class="line"><a name="l04935"></a><span class="lineno"> 4935</span>&#160; </div>
-<div class="line"><a name="l04939"></a><span class="lineno"> 4939</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a777fe263c24a3d3eef09ee2e6c0ac23b">GEOSGeomToHEX_buf</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g, <span class="keywordtype">size_t</span> *size);</div>
-<div class="line"><a name="l04940"></a><span class="lineno"> 4940</span>&#160; </div>
-<div class="line"><a name="l04944"></a><span class="lineno"> 4944</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a451c32d3b9e6d6f2ecb9ff8e42b2d814">GEOSUnionCascaded</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
-<div class="line"><a name="l04945"></a><span class="lineno"> 4945</span>&#160; </div>
-<div class="line"><a name="l04949"></a><span class="lineno"> 4949</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a513990e399f641d2e10b736c73aba314">GEOSUnionCascaded_r</a>(</div>
-<div class="line"><a name="l04950"></a><span class="lineno"> 4950</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
-<div class="line"><a name="l04951"></a><span class="lineno"> 4951</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
+<div class="line"><a name="l04785"></a><span class="lineno"> 4785</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a2311db5bf4cd146726b8f156a3e9e82d">GEOSGeoJSONWriter_writeGeometry</a>(</div>
+<div class="line"><a name="l04786"></a><span class="lineno"> 4786</span>&#160;    <a class="code" href="geos__c_8h.html#ab60c7f271b955a9d0aa78e117d8cc132">GEOSGeoJSONWriter</a>* writer,</div>
+<div class="line"><a name="l04787"></a><span class="lineno"> 4787</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04788"></a><span class="lineno"> 4788</span>&#160;    <span class="keywordtype">int</span> indent);</div>
+<div class="line"><a name="l04789"></a><span class="lineno"> 4789</span>&#160; </div>
+<div class="line"><a name="l04791"></a><span class="lineno"> 4791</span>&#160; </div>
+<div class="line"><a name="l04792"></a><span class="lineno"> 4792</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* #ifndef GEOS_USE_ONLY_R_API */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l04793"></a><span class="lineno"> 4793</span>&#160; </div>
+<div class="line"><a name="l04794"></a><span class="lineno"> 4794</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
+<div class="line"><a name="l04795"></a><span class="lineno"> 4795</span>&#160;<span class="comment">/* DEPRECATIONS */</span></div>
+<div class="line"><a name="l04796"></a><span class="lineno"> 4796</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
+<div class="line"><a name="l04797"></a><span class="lineno"> 4797</span>&#160; </div>
+<div class="line"><a name="l04802"></a><span class="lineno"> 4802</span>&#160; </div>
+<div class="line"><a name="l04807"></a><span class="lineno"> 4807</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#adbe3cd8cefb5083563f4d9073b3e1137">GEOSSingleSidedBuffer</a>(</div>
+<div class="line"><a name="l04808"></a><span class="lineno"> 4808</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04809"></a><span class="lineno"> 4809</span>&#160;    <span class="keywordtype">double</span> width, <span class="keywordtype">int</span> quadsegs,</div>
+<div class="line"><a name="l04810"></a><span class="lineno"> 4810</span>&#160;    <span class="keywordtype">int</span> joinStyle, <span class="keywordtype">double</span> mitreLimit,</div>
+<div class="line"><a name="l04811"></a><span class="lineno"> 4811</span>&#160;    <span class="keywordtype">int</span> leftSide);</div>
+<div class="line"><a name="l04812"></a><span class="lineno"> 4812</span>&#160; </div>
+<div class="line"><a name="l04816"></a><span class="lineno"> 4816</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a517e7ee856540e31df202b3a25cef9bf">GEOSSingleSidedBuffer_r</a>(</div>
+<div class="line"><a name="l04817"></a><span class="lineno"> 4817</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04818"></a><span class="lineno"> 4818</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04819"></a><span class="lineno"> 4819</span>&#160;    <span class="keywordtype">double</span> width, <span class="keywordtype">int</span> quadsegs,</div>
+<div class="line"><a name="l04820"></a><span class="lineno"> 4820</span>&#160;    <span class="keywordtype">int</span> joinStyle, <span class="keywordtype">double</span> mitreLimit,</div>
+<div class="line"><a name="l04821"></a><span class="lineno"> 4821</span>&#160;    <span class="keywordtype">int</span> leftSide);</div>
+<div class="line"><a name="l04822"></a><span class="lineno"> 4822</span>&#160; </div>
+<div class="line"><a name="l04827"></a><span class="lineno"> 4827</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> GEOS_DLL <a class="code" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a>(</div>
+<div class="line"><a name="l04828"></a><span class="lineno"> 4828</span>&#160;    <a class="code" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> notice_function,</div>
+<div class="line"><a name="l04829"></a><span class="lineno"> 4829</span>&#160;    <a class="code" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> error_function);</div>
+<div class="line"><a name="l04830"></a><span class="lineno"> 4830</span>&#160; </div>
+<div class="line"><a name="l04834"></a><span class="lineno"> 4834</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ab28e31ca1d697748a447e60d66ec55b0">finishGEOS_r</a>(<a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
+<div class="line"><a name="l04835"></a><span class="lineno"> 4835</span>&#160; </div>
+<div class="line"><a name="l04839"></a><span class="lineno"> 4839</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ad42d8a5c4e52a577f451f0b340ae9168">GEOSGeomFromWKT_r</a>(</div>
+<div class="line"><a name="l04840"></a><span class="lineno"> 4840</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04841"></a><span class="lineno"> 4841</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
+<div class="line"><a name="l04842"></a><span class="lineno"> 4842</span>&#160; </div>
+<div class="line"><a name="l04846"></a><span class="lineno"> 4846</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8f3e6d7734ed770ff1d5af84eef79b4f">GEOSGeomToWKT_r</a>(</div>
+<div class="line"><a name="l04847"></a><span class="lineno"> 4847</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04848"></a><span class="lineno"> 4848</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
+<div class="line"><a name="l04849"></a><span class="lineno"> 4849</span>&#160; </div>
+<div class="line"><a name="l04853"></a><span class="lineno"> 4853</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a04942fa92ee7ef382a17e391a049973d">GEOS_getWKBOutputDims_r</a>(</div>
+<div class="line"><a name="l04854"></a><span class="lineno"> 4854</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
+<div class="line"><a name="l04855"></a><span class="lineno"> 4855</span>&#160; </div>
+<div class="line"><a name="l04859"></a><span class="lineno"> 4859</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a01135041f683c9d4d5e18404c3cdb416">GEOS_setWKBOutputDims_r</a>(</div>
+<div class="line"><a name="l04860"></a><span class="lineno"> 4860</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04861"></a><span class="lineno"> 4861</span>&#160;    <span class="keywordtype">int</span> newDims);</div>
+<div class="line"><a name="l04862"></a><span class="lineno"> 4862</span>&#160; </div>
+<div class="line"><a name="l04866"></a><span class="lineno"> 4866</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#aec7c2ac3151af971884cc19cae83b343">GEOS_getWKBByteOrder_r</a>(</div>
+<div class="line"><a name="l04867"></a><span class="lineno"> 4867</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle);</div>
+<div class="line"><a name="l04868"></a><span class="lineno"> 4868</span>&#160; </div>
+<div class="line"><a name="l04872"></a><span class="lineno"> 4872</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a1ce1cc1120ff21cc2326238fd4cd81b1">GEOS_setWKBByteOrder_r</a>(</div>
+<div class="line"><a name="l04873"></a><span class="lineno"> 4873</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04874"></a><span class="lineno"> 4874</span>&#160;    <span class="keywordtype">int</span> byteOrder);</div>
+<div class="line"><a name="l04875"></a><span class="lineno"> 4875</span>&#160; </div>
+<div class="line"><a name="l04879"></a><span class="lineno"> 4879</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a505c86d6de23aad307b6fbe853a995e9">GEOSGeomFromWKB_buf_r</a>(</div>
+<div class="line"><a name="l04880"></a><span class="lineno"> 4880</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04881"></a><span class="lineno"> 4881</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb,</div>
+<div class="line"><a name="l04882"></a><span class="lineno"> 4882</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l04883"></a><span class="lineno"> 4883</span>&#160; </div>
+<div class="line"><a name="l04887"></a><span class="lineno"> 4887</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a99fa623e0e5a806b806a15ae194cedf4">GEOSGeomToWKB_buf_r</a>(</div>
+<div class="line"><a name="l04888"></a><span class="lineno"> 4888</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04889"></a><span class="lineno"> 4889</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04890"></a><span class="lineno"> 4890</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
+<div class="line"><a name="l04891"></a><span class="lineno"> 4891</span>&#160; </div>
+<div class="line"><a name="l04895"></a><span class="lineno"> 4895</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ab4c80cf19b9e743a3e99b0d71a5bf6ef">GEOSGeomFromHEX_buf_r</a>(</div>
+<div class="line"><a name="l04896"></a><span class="lineno"> 4896</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04897"></a><span class="lineno"> 4897</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex,</div>
+<div class="line"><a name="l04898"></a><span class="lineno"> 4898</span>&#160;    <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l04899"></a><span class="lineno"> 4899</span>&#160; </div>
+<div class="line"><a name="l04903"></a><span class="lineno"> 4903</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a1c1f61a9766f2b8ac62e5d8fd0c9f9db">GEOSGeomToHEX_buf_r</a>(</div>
+<div class="line"><a name="l04904"></a><span class="lineno"> 4904</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04905"></a><span class="lineno"> 4905</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g,</div>
+<div class="line"><a name="l04906"></a><span class="lineno"> 4906</span>&#160;    <span class="keywordtype">size_t</span> *size);</div>
+<div class="line"><a name="l04907"></a><span class="lineno"> 4907</span>&#160; </div>
+<div class="line"><a name="l04911"></a><span class="lineno"> 4911</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a00bf287e340c18ebebd251912fa9e906">GEOSGeomFromWKT</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *wkt);</div>
+<div class="line"><a name="l04912"></a><span class="lineno"> 4912</span>&#160; </div>
+<div class="line"><a name="l04916"></a><span class="lineno"> 4916</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a8ea41f776dc5dcdabeac9683111e5263">GEOSGeomToWKT</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
+<div class="line"><a name="l04917"></a><span class="lineno"> 4917</span>&#160; </div>
+<div class="line"><a name="l04921"></a><span class="lineno"> 4921</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a3cf4556228cd7b63a9eb8f4e2ea7c7f4">GEOS_getWKBOutputDims</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04922"></a><span class="lineno"> 4922</span>&#160; </div>
+<div class="line"><a name="l04926"></a><span class="lineno"> 4926</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#ac232a28381e2ba8f768df04fc2f1d51f">GEOS_setWKBOutputDims</a>(<span class="keywordtype">int</span> newDims);</div>
+<div class="line"><a name="l04927"></a><span class="lineno"> 4927</span>&#160; </div>
+<div class="line"><a name="l04931"></a><span class="lineno"> 4931</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a107c965eb4a69c255195a3115c545e8c">GEOS_getWKBByteOrder</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l04932"></a><span class="lineno"> 4932</span>&#160; </div>
+<div class="line"><a name="l04936"></a><span class="lineno"> 4936</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span> GEOS_DLL <a class="code" href="geos__c_8h.html#a6c5258c096615bfaa81536ddca250c08">GEOS_setWKBByteOrder</a>(<span class="keywordtype">int</span> byteOrder);</div>
+<div class="line"><a name="l04937"></a><span class="lineno"> 4937</span>&#160; </div>
+<div class="line"><a name="l04941"></a><span class="lineno"> 4941</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#aad2dd82bc2eec23806f9cfb401f2d14b">GEOSGeomFromWKB_buf</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *wkb, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l04942"></a><span class="lineno"> 4942</span>&#160; </div>
+<div class="line"><a name="l04946"></a><span class="lineno"> 4946</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a096bd35bd7967a3c06fb44526250fb97">GEOSGeomToWKB_buf</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g, <span class="keywordtype">size_t</span> *size);</div>
+<div class="line"><a name="l04947"></a><span class="lineno"> 4947</span>&#160; </div>
+<div class="line"><a name="l04951"></a><span class="lineno"> 4951</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#ae8f36214d2e129fb45435d26507ae696">GEOSGeomFromHEX_buf</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *hex, <span class="keywordtype">size_t</span> size);</div>
 <div class="line"><a name="l04952"></a><span class="lineno"> 4952</span>&#160; </div>
-<div class="line"><a name="l04954"></a><span class="lineno"> 4954</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
-<div class="line"><a name="l04955"></a><span class="lineno"> 4955</span>&#160;<span class="comment">/* END DEPRECATIONS */</span></div>
-<div class="line"><a name="l04956"></a><span class="lineno"> 4956</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
+<div class="line"><a name="l04956"></a><span class="lineno"> 4956</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> GEOS_DLL *<a class="code" href="geos__c_8h.html#a777fe263c24a3d3eef09ee2e6c0ac23b">GEOSGeomToHEX_buf</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g, <span class="keywordtype">size_t</span> *size);</div>
 <div class="line"><a name="l04957"></a><span class="lineno"> 4957</span>&#160; </div>
-<div class="line"><a name="l04958"></a><span class="lineno"> 4958</span>&#160; </div>
-<div class="line"><a name="l04959"></a><span class="lineno"> 4959</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l04960"></a><span class="lineno"> 4960</span>&#160;} <span class="comment">// extern &quot;C&quot;</span></div>
-<div class="line"><a name="l04961"></a><span class="lineno"> 4961</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l04961"></a><span class="lineno"> 4961</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a451c32d3b9e6d6f2ecb9ff8e42b2d814">GEOSUnionCascaded</a>(<span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
 <div class="line"><a name="l04962"></a><span class="lineno"> 4962</span>&#160; </div>
-<div class="line"><a name="l04963"></a><span class="lineno"> 4963</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* #ifndef GEOS_C_H_INCLUDED */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l04966"></a><span class="lineno"> 4966</span>&#160;<span class="keyword">extern</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> GEOS_DLL *<a class="code" href="geos__c_8h.html#a513990e399f641d2e10b736c73aba314">GEOSUnionCascaded_r</a>(</div>
+<div class="line"><a name="l04967"></a><span class="lineno"> 4967</span>&#160;    <a class="code" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle,</div>
+<div class="line"><a name="l04968"></a><span class="lineno"> 4968</span>&#160;    <span class="keyword">const</span> <a class="code" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* g);</div>
+<div class="line"><a name="l04969"></a><span class="lineno"> 4969</span>&#160; </div>
+<div class="line"><a name="l04971"></a><span class="lineno"> 4971</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
+<div class="line"><a name="l04972"></a><span class="lineno"> 4972</span>&#160;<span class="comment">/* END DEPRECATIONS */</span></div>
+<div class="line"><a name="l04973"></a><span class="lineno"> 4973</span>&#160;<span class="comment">/* ====================================================================== */</span></div>
+<div class="line"><a name="l04974"></a><span class="lineno"> 4974</span>&#160; </div>
+<div class="line"><a name="l04975"></a><span class="lineno"> 4975</span>&#160; </div>
+<div class="line"><a name="l04976"></a><span class="lineno"> 4976</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l04977"></a><span class="lineno"> 4977</span>&#160;} <span class="comment">// extern &quot;C&quot;</span></div>
+<div class="line"><a name="l04978"></a><span class="lineno"> 4978</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l04979"></a><span class="lineno"> 4979</span>&#160; </div>
+<div class="line"><a name="l04980"></a><span class="lineno"> 4980</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* #ifndef GEOS_C_H_INCLUDED */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="ageos__c_8h_html_aec7c2ac3151af971884cc19cae83b343"><div class="ttname"><a href="geos__c_8h.html#aec7c2ac3151af971884cc19cae83b343">GEOS_getWKBByteOrder_r</a></div><div class="ttdeci">int GEOS_getWKBByteOrder_r(GEOSContextHandle_t handle)</div></div>
 <div class="ttc" id="ageos__c_8h_html_a8fdb3fd2a22e297130530a6d428f2bd3"><div class="ttname"><a href="geos__c_8h.html#a8fdb3fd2a22e297130530a6d428f2bd3">GEOSCoordSeq_copyToBuffer_r</a></div><div class="ttdeci">int GEOSCoordSeq_copyToBuffer_r(GEOSContextHandle_t handle, const GEOSCoordSequence *s, double *buf, int hasZ, int hasM)</div></div>
