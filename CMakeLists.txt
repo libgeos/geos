@@ -420,6 +420,8 @@ if(NOT DISABLE_GEOS_INLINE)
 endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES "${CMAKE_CURRENT_LIST_DIR}/include/geos.h"
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 add_subdirectory(tools)
 
