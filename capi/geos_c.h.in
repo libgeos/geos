@@ -3168,10 +3168,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints(
 /**
 * Calculate the
 * [Hilbert code](https://en.wikipedia.org/wiki/Hilbert_curve)
-* of the centroid of a geometry relative to the extent, which can be used for
-* sorting geometries in a deterministic way, such that similar Hilbert codes are
-* likely to be near each other in two-dimensional space.  It is the caller's
-* responsibility to ensure that the geometry is contained within the extent.
+* of the centroid of a geometry relative to an extent.
+* This allows sorting geometries in a deterministic way, such that similar Hilbert codes are
+* likely to be near each other in two-dimensional space.
+* The caller must ensure that the geometry is contained within the extent.
 * \param[in] geom Input geometry, must be non-empty
 * \param[in] extent Extent within which to calculate the Hilbert code for geom
 * \param[in] level The level of precision of the Hilbert curve, up to 16
@@ -4455,6 +4455,10 @@ extern int GEOS_DLL GEOSOrientationIndex(
 
 /* ========= Reader and Writer APIs ========= */
 
+/** @name WKT Reader and Writer
+* Functions for doing WKT I/O.
+*/
+///@{
 /* ========= WKT Reader ========= */
 
 /**
@@ -4556,9 +4560,15 @@ extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension(GEOSWKTWriter *writer);
 extern void GEOS_DLL GEOSWKTWriter_setOld3D(
     GEOSWKTWriter *writer,
     int useOld3D);
+///@}
+
+/* ============================================================================== */
+/** @name WKB Reader and Writer
+* Functions for doing WKB I/O.
+*/
+///@{
 
 /* ========== WKB Reader ========== */
-
 /**
 * Allocate a new \ref GEOSWKBReader.
 * \returns a new reader. Caller must free with GEOSWKBReader_destroy()
@@ -4719,6 +4729,11 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
     GEOSWKBWriter* writer,
     const char writeSRID);
 
+/* ============================================================================= */
+/** @name GeoJSON Reader and Writer
+* Functions for doing GeoJSON I/O.
+*/
+///@{
 /* ========= GeoJSON Reader ========= */
 
 /**
@@ -4771,6 +4786,8 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
     const GEOSGeometry* g,
     int indent);
+
+///@}
 
 #endif /* #ifndef GEOS_USE_ONLY_R_API */
 
