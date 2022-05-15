@@ -1908,8 +1908,9 @@ extern const char GEOS_DLL *GEOSversion(void);
 #ifndef GEOS_USE_ONLY_R_API
 
 /* ========== Initialization, cleanup ================================= */
-/** @name Library Management
-* Functions to initialize and tear down the library.
+/** @name Library and Memory Management
+* Functions to initialize and tear down the library,
+* and deallocate memory.
 */
 ///@{
 
@@ -1933,6 +1934,14 @@ extern void GEOS_DLL initGEOS(
 * cleans up global resources.
 */
 extern void GEOS_DLL finishGEOS(void);
+
+/**
+* Free strings and byte buffers returned by functions such
+* as GEOSWKBWriter_write(),
+* GEOSWKBWriter_writeHEX() and GEOSWKTWriter_write(), etc.
+* \param buffer The memory to free
+*/
+extern void GEOS_DLL GEOSFree(void *buffer);
 
 ///@}
 
@@ -2714,7 +2723,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 ///@}
 
 /* ========== Construction Operations ========== */
-/** @name Constructions
+/** @name Geometric Constructions
 * Functions for computing geometric constructions.
 */
 ///@{
@@ -2918,7 +2927,61 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumBoundingCircle(
     double* radius,
     GEOSGeometry** center);
 
+/**
+* Return a Delaunay triangulation of the vertices of the given geometry.
+*
+* \param g the input geometry whose vertices will be used as "sites"
+* \param tolerance optional snapping tolerance to use for improved robustness
+* \param onlyEdges if non-zero will return a MultiLineString, otherwise it will
+*                  return a GeometryCollection containing triangular Polygons.
+*
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
+    const GEOSGeometry *g,
+    double tolerance,
+    int onlyEdges);
+
+/**
+* Return a constrained Delaunay triangulation of the vertices of the
+* given polygon(s).
+* For non-polygonal inputs, returns an empty geometry collection.
+*
+* \param g the input geometry whose rings will be used as input
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
+    const GEOSGeometry *g);
+
+/**
+* Returns the Voronoi polygons of the vertices of the given geometry.
+*
+* \param g the input geometry whose vertices will be used as sites.
+* \param tolerance snapping tolerance to use for improved robustness
+* \param onlyEdges whether to return only edges of the voronoi cells
+* \param env clipping envelope for the returned diagram, automatically
+*            determined if env is NULL.
+*            The diagram will be clipped to the larger
+*            of this envelope or an envelope surrounding the sites.
+*
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
+    const GEOSGeometry *g,
+    const GEOSGeometry *env,
+    double tolerance,
+    int onlyEdges);
+
 ///@}
+
+/* ============================================================== */
+/** @name Noding and Polygonization
+* Functions computing noding of lines, and forming noded lines into polygons.
+*/
+///@{
 
 /**
 * For linear inputs, returns a new geometry in which no lines cross
@@ -3030,6 +3093,14 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(
 */
 extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 
+///@}
+
+/* ============================================================== */
+/** @name Processing functions
+* Functions performing various geometric processes.
+*/
+///@{
+
 /**
 * Sews together a set of fully noded LineStrings
 * removing any cardinality 2 nodes in the linework.
@@ -3108,55 +3179,9 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(
     const GEOSGeometry* snap_target,
     double tolerance);
 
-/**
-* Return a Delaunay triangulation of the vertices of the given geometry.
-*
-* \param g the input geometry whose vertices will be used as "sites"
-* \param tolerance optional snapping tolerance to use for improved robustness
-* \param onlyEdges if non-zero will return a MultiLineString, otherwise it will
-*                  return a GeometryCollection containing triangular Polygons.
-*
-* \return A newly allocated geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
-    const GEOSGeometry *g,
-    double tolerance,
-    int onlyEdges);
+///@}
 
-/**
-* Return a constrained Delaunay triangulation of the vertices of the
-* given polygon(s).
-* For non-polygonal inputs, returns an empty geometry collection.
-*
-* \param g the input geometry whose rings will be used as input
-* \return A newly allocated geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
-    const GEOSGeometry *g);
-
-/**
-* Returns the Voronoi polygons of the vertices of the given geometry.
-*
-* \param g the input geometry whose vertices will be used as sites.
-* \param tolerance snapping tolerance to use for improved robustness
-* \param onlyEdges whether to return only edges of the voronoi cells
-* \param env clipping envelope for the returned diagram, automatically
-*            determined if env is NULL.
-*            The diagram will be clipped to the larger
-*            of this envelope or an envelope surrounding the sites.
-*
-* \return A newly allocated geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
-    const GEOSGeometry *g,
-    const GEOSGeometry *env,
-    double tolerance,
-    int onlyEdges);
-
-/* ========= Binary Predicates ========= */
+/* ============================================================== */
 /** @name Spatial Predicates
 * Functions computing binary spatial predicates using the DE-9IM topology model.
 */
@@ -4694,14 +4719,6 @@ extern char GEOS_DLL GEOSWKBWriter_getIncludeSRID(
 extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
     GEOSWKBWriter* writer,
     const char writeSRID);
-
-/**
-* Free strings and byte buffers returned by functions such
-* as GEOSWKBWriter_write(),
-* GEOSWKBWriter_writeHEX() and GEOSWKTWriter_write(), etc.
-* \param buffer The memory to free
-*/
-extern void GEOS_DLL GEOSFree(void *buffer);
 
 /* ========= GeoJSON Reader ========= */
 
