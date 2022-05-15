@@ -4729,6 +4729,8 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
     GEOSWKBWriter* writer,
     const char writeSRID);
 
+///@}
+
 /* ============================================================================= */
 /** @name GeoJSON Reader and Writer
 * Functions for doing GeoJSON I/O.
