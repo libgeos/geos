@@ -2575,22 +2575,6 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
 
 ///@}
 
-
-/**
-* Densifies a geometry using a given distance tolerance.
-* Additional vertices will be added to every line segment
-* that is greater this tolerance; these vertices will
-* evenly subdivide that segment.
-* Only linear components of input geometry are densified.
-* \param g The geometry to densify
-* \param tolerance the distance tolerance to densify
-* \return The densified geometry, or NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSDensify(
-    const GEOSGeometry* g,
-    double tolerance);
-
 /* ========= Geometry Constructors ========= */
 /** @name Geometry Constructors
 * Functions for creating and destroying geometries.
@@ -3102,6 +3086,21 @@ extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 ///@{
 
 /**
+* Densifies a geometry using a given distance tolerance.
+* Additional vertices will be added to every line segment
+* that is greater this tolerance; these vertices will
+* evenly subdivide that segment.
+* Only linear components of input geometry are densified.
+* \param g The geometry to densify
+* \param tolerance the distance tolerance to densify
+* \return The densified geometry, or NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDensify(
+    const GEOSGeometry* g,
+    double tolerance);
+
+/**
 * Sews together a set of fully noded LineStrings
 * removing any cardinality 2 nodes in the linework.
 * \param g The input linework
@@ -3165,6 +3164,43 @@ extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints(
     const GEOSGeometry* g);
+
+/**
+* Calculate the
+* [Hilbert code](https://en.wikipedia.org/wiki/Hilbert_curve)
+* of the centroid of a geometry relative to the extent, which can be used for
+* sorting geometries in a deterministic way, such that similar Hilbert codes are
+* likely to be near each other in two-dimensional space.  It is the caller's
+* responsibility to ensure that the geometry is contained within the extent.
+* \param[in] geom Input geometry, must be non-empty
+* \param[in] extent Extent within which to calculate the Hilbert code for geom
+* \param[in] level The level of precision of the Hilbert curve, up to 16
+* \param[out] code Pointer to be filled in with Hilbert code result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSHilbertCode(
+    const GEOSGeometry *geom,
+    const GEOSGeometry* extent,
+    unsigned int level,
+    unsigned int *code
+);
+
+/**
+* Apply XY coordinate transform callback to all coordinates in a copy of
+* input geometry.  If the callback returns an error, returned geometry will be
+* NULL.  Z values, if present, are not modified by this function.
+* \param[in] g Input geometry
+* \param[in] callback a function to be executed for each coordinate in the
+                geometry.  The callback takes 3 parameters: x and y coordinate
+                values to be updated and a void userdata pointer.
+* \param userdata an optional pointer to pe passed to 'callback' as an argument
+* \return a copy of the input geometry with transformed coordinates.
+* Caller must free with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
+    const GEOSGeometry* g,
+    GEOSTransformXYCallback callback,
+    void* userdata);
 
 /**
 * Snap first geometry onto second within the given tolerance.
@@ -4368,44 +4404,7 @@ extern int GEOS_DLL GEOSFrechetDistanceDensify(
 
 ///@}
 
-/**
-* Calculate the
-* [Hilbert code](https://en.wikipedia.org/wiki/Hilbert_curve)
-* of the centroid of a geometry relative to the extent, which can be used for
-* sorting geometries in a deterministic way, such that similar Hilbert codes are
-* likely to be near each other in two-dimensional space.  It is the caller's
-* responsibility to ensure that the geometry is contained within the extent.
-* \param[in] geom Input geometry, must be non-empty
-* \param[in] extent Extent within which to calculate the Hilbert code for geom
-* \param[in] level The level of precision of the Hilbert curve, up to 16
-* \param[out] code Pointer to be filled in with Hilbert code result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSHilbertCode(
-    const GEOSGeometry *geom,
-    const GEOSGeometry* extent,
-    unsigned int level,
-    unsigned int *code
-);
-
-/**
-* Apply XY coordinate transform callback to all coordinates in a copy of
-* input geometry.  If the callback returns an error, returned geometry will be
-* NULL.  Z values, if present, are not modified by this function.
-* \param[in] g Input geometry
-* \param[in] callback a function to be executed for each coordinate in the
-                geometry.  The callback takes 3 parameters: x and y coordinate
-                values to be updated and a void userdata pointer.
-* \param userdata an optional pointer to pe passed to 'callback' as an argument
-* \return a copy of the input geometry with transformed coordinates.
-* Caller must free with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
-    const GEOSGeometry* g,
-    GEOSTransformXYCallback callback,
-    void* userdata);
-
-/* ========== Algorithms ========== */
+/* ========== Algorithms ====================================================== */
 /** @name Geometric Algorithms
 * Functions to compute basic geometric algorithms.
 */
