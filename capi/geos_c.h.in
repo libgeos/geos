@@ -2300,7 +2300,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 ///@}
 
 /* ========== Geometry info ========== */
-/** @name Geometry Accessor functions
+/** @name Geometry Accessors
 * Functions to provide information about geometries.
 */
 ///@{
@@ -2330,13 +2330,6 @@ extern int GEOS_DLL GEOSGeomTypeId(const GEOSGeometry* g);
 extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 
 /**
-* Set the "spatial reference id" (SRID) for this geometry.
-* \param g Input geometry
-* \param SRID SRID number or 0 for unknown SRID.
-*/
-extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
-
-/**
 * Return the anonymous "user data" for this geometry.
 * User data must be managed by the caller, and freed before
 * the geometry is freed.
@@ -2345,15 +2338,6 @@ extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 *         casting to the appropriate type and freeing.
 */
 extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
-
-/**
-* Set the anonymous "user data" for this geometry.
-* Don't forget to free the user data before freeing the geometry.
-* \param g Input geometry
-* \param userData Void pointer to user data
-*/
-extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
-
 
 /**
 * Returns the number of sub-geometries immediately under a
@@ -2383,57 +2367,6 @@ extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
 extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
     const GEOSGeometry* g,
     int n);
-
-/**
-* Organize the elements, rings, and coordinate order
-* of geometries in a consistent way,
-* so that geometries that represent the same
-* object can be easily compared.
-*
-* Normalization ensures the following:
-* - Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)
-* - Rings start with their smallest coordinate
-*   (using XY ordering)
-* - Polygon shell rings are oriented CW, and holes CCW
-* - Collection elements are sorted by their first coordinate
-*
-* Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
-* \param g Input geometry
-* \return 0 on success or -1 on exception
-*/
-extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
-
-/**
-* Change the coordinate precision of a geometry. This will
-* affect the precision of the existing geometry as well as
-* any geometries derived from this geometry using overlay
-* functions. The output will be a valid \ref GEOSGeometry.
-*
-* Note that operations will always be performed in the precision
-* of the geometry with higher precision (smaller "gridSize").
-* That same precision will be attached to the operation outputs.
-*
-* In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input
-* may cause an error to occur, unless the invalidity is below
-* the scale of the requested precision
-*
-* There are only 3 modes. The GEOS_PREC_NO_TOPO mode
-* takes precedence over GEOS_PREC_KEEP_COLLAPSED.
-* So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED
-* has the same semantics as GEOS_PREC_NO_TOPO
-*
-* \param g Input geometry
-* \param gridSize cell size of grid to round coordinates to,
-*        or 0 for FLOATING precision
-* \param flags The bitwise OR of members of the \ref GEOSPrecisionRules enum
-* \return The precision reduced result.
-*         Caller must free with GEOSGeom_destroy()
-*         NULL on exception.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
-	const GEOSGeometry *g,
-    double gridSize,
-    int flags);
 
 /**
 * Read the currently set precision value from the
@@ -2667,6 +2600,49 @@ extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
 * \return 1 on true, 0 on false, 2 on exception
 */
 extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
+
+///@}
+
+/* ================================================== */
+/** @name Geometry Mutators
+* Functions to change geometry information or content.
+*/
+///@{
+
+/**
+* Set the "spatial reference id" (SRID) for this geometry.
+* \param g Input geometry
+* \param SRID SRID number or 0 for unknown SRID.
+*/
+extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+
+/**
+* Set the anonymous "user data" for this geometry.
+* Don't forget to free the user data before freeing the geometry.
+* \param g Input geometry
+* \param userData Void pointer to user data
+*/
+extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
+
+/**
+* Organize the elements, rings, and coordinate order
+* of geometries in a consistent way,
+* so that geometries that represent the same
+* object can be easily compared.
+* Modifies the geometry in-place.
+*
+* Normalization ensures the following:
+* - Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)
+* - Rings start with their smallest coordinate
+*   (using XY ordering)
+* - Polygon shell rings are oriented CW, and holes CCW
+* - Collection elements are sorted by their first coordinate
+*
+* Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
+* \param g Input geometry
+* \return 0 on success or -1 on exception
+*/
+extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 
 ///@}
 
@@ -3758,6 +3734,38 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(
     const GEOSGeometry* input,
     const GEOSGeometry* snap_target,
     double tolerance);
+
+/**
+* Change the coordinate precision of a geometry. This will
+* affect the precision of the existing geometry as well as
+* any geometries derived from this geometry using overlay
+* functions. The output will be a valid \ref GEOSGeometry.
+*
+* Note that operations will always be performed in the precision
+* of the geometry with higher precision (smaller "gridSize").
+* That same precision will be attached to the operation outputs.
+*
+* In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input
+* may cause an error to occur, unless the invalidity is below
+* the scale of the requested precision
+*
+* There are only 3 modes. The GEOS_PREC_NO_TOPO mode
+* takes precedence over GEOS_PREC_KEEP_COLLAPSED.
+* So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED
+* has the same semantics as GEOS_PREC_NO_TOPO
+*
+* \param g Input geometry
+* \param gridSize cell size of grid to round coordinates to,
+*        or 0 for FLOATING precision
+* \param flags The bitwise OR of members of the \ref GEOSPrecisionRules enum
+* \return The precision reduced result.
+*         Caller must free with GEOSGeom_destroy()
+*         NULL on exception.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
+	const GEOSGeometry *g,
+    double gridSize,
+    int flags);
 
 ///@}
 
