@@ -2603,7 +2603,7 @@ extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
 
 ///@}
 
-/* ================================================== */
+/* ==================================================================================== */
 /** @name Geometry Mutators
 * Functions to change geometry information or content.
 */
@@ -2643,6 +2643,142 @@ extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 * \return 0 on success or -1 on exception
 */
 extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
+
+///@}
+
+/* ========== Validity checking ============================================================ */
+/** @name Validation
+* Functions to check and enforce topological validity and simplicity.
+*/
+///@{
+
+/**
+* Tests whether the input geometry is "simple". Mostly relevant for
+* linestrings. A "simple" linestring has no self-intersections.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
+
+/**
+* Check the validity of the provided geometry.
+* - All points are valid.
+* - All non-zero-length linestrings are valid.
+* - Polygon rings must be non-self-intersecting, and interior rings
+*   contained within exterior rings.
+* - Multi-polygon components may not touch or overlap.
+*
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+* \see geos::operation::valid::isValidOp
+*/
+extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g);
+
+/**
+* Return the human readable reason a geometry is invalid,
+* "Valid Geometry" string otherwise, or NULL on exception.
+* \param g The geometry to test
+* \return A string with the reason, NULL on exception.
+          Caller must GEOSFree() their result.
+*/
+extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
+
+/**
+* In one step, calculate and return the validity, the
+* human readable validity reason and a point at which validity
+* rules are broken.
+* Caller has the responsibility to destroy 'reason' with GEOSFree()
+* and 'location' with GEOSGeom_destroy()
+* \param g The geometry to test
+* \param flags A value from the \ref GEOSValidFlags enum
+* \param reason A pointer in which the reason string will be places
+* \param location A pointer in which the location GEOSGeometry will be placed
+* \return 1 when valid, 0 when invalid, 2 on exception
+*/
+extern char GEOS_DLL GEOSisValidDetail(
+    const GEOSGeometry* g,
+    int flags,
+    char** reason,
+    GEOSGeometry** location);
+
+/**
+* Repair an invalid geometry, returning a valid output.
+* \param g The geometry to repair
+* \return The repaired geometry. Caller must free with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid(
+    const GEOSGeometry* g);
+
+/**
+* Repair an invalid geometry, returning a valid output, using the
+* indicated GEOSMakeValidMethods algorithm and options.
+* \param g is the geometry to test.
+* \param makeValidParams is a GEOSMakeValidParams with the desired parameters set on it.
+* \return A repaired geometry. Caller must free with GEOSGeom_destroy().
+* \see GEOSMakeValidParams_create
+* \see GEOSMakeValidParams_destroy
+* \see GEOSMakeValidParams_setMethod
+* \see GEOSMakeValidParams_setKeepCollapsed
+*/
+extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams(
+    const GEOSGeometry* g,
+    const GEOSMakeValidParams *makeValidParams);
+
+/**
+* Create a GEOSMakeValidParams to hold the desired parameters
+* to control the algorithm and behavior of the validation process.
+* \return a parameter object
+* \see GEOSMakeValidWithParams
+*/
+extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create(void);
+
+/**
+* Destroy a GEOSMakeValidParams.
+* \param parms the object to destroy
+* \see GEOSMakeValidWithParams
+*/
+extern void GEOS_DLL GEOSMakeValidParams_destroy(GEOSMakeValidParams* parms);
+
+/**
+* Set the GEOSMakeValidMethods to use in making the geometry
+* valid.
+* \return 0 on exception, 1 on success.
+* \see GEOSMakeValidWithParams
+*/
+extern int GEOS_DLL GEOSMakeValidParams_setMethod(
+    GEOSMakeValidParams* p,
+    enum GEOSMakeValidMethods method);
+
+/**
+* When this parameter is not set to 0, the GEOS_MAKE_VALID_STRUCTURE method will drop
+* any component that has collapsed into a lower dimensionality.
+* For example, a ring collapsing to a line, or a line collapsing
+* to a point.
+* \return 0 on exception, 1 on success.
+* \see GEOSMakeValidWithParams
+*/
+extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
+    GEOSMakeValidParams* p,
+    int keepCollapsed);
+
+/**
+* Works from start of each coordinate sequence in the
+* geometry, retaining points that are further away from the
+* previous retained point than the tolerance value.
+*
+* Removing repeated points with a non-zero tolerance may
+* result in an invalid geometry being returned. Be sure
+* to check and repair validity.
+*
+* \return A geometry with all points within the tolerance of each other removed.
+* \param g The geometry to filter
+* \param tolerance Remove all points within this distance of each other. Use 0.0 to remove only exactly repeated points.
+*
+* \see GEOSMakeValidWithParams
+*/
+extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
+    const GEOSGeometry* g,
+    double tolerance);
 
 ///@}
 
@@ -4273,142 +4409,6 @@ extern char GEOS_DLL GEOSSTRtree_remove(
 * still left to the caller to manage.
 */
 extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
-
-///@}
-
-/* ========== Validity checking ========== */
-/** @name Validation
-* Functions to check and enforce topological validity and simplicity.
-*/
-///@{
-
-/**
-* Tests whether the input geometry is "simple". Mostly relevant for
-* linestrings. A "simple" linestring has no self-intersections.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
-
-/**
-* Check the validity of the provided geometry.
-* - All points are valid.
-* - All non-zero-length linestrings are valid.
-* - Polygon rings must be non-self-intersecting, and interior rings
-*   contained within exterior rings.
-* - Multi-polygon components may not touch or overlap.
-*
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-* \see geos::operation::valid::isValidOp
-*/
-extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g);
-
-/**
-* Return the human readable reason a geometry is invalid,
-* "Valid Geometry" string otherwise, or NULL on exception.
-* \param g The geometry to test
-* \return A string with the reason, NULL on exception.
-          Caller must GEOSFree() their result.
-*/
-extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
-
-/**
-* In one step, calculate and return the validity, the
-* human readable validity reason and a point at which validity
-* rules are broken.
-* Caller has the responsibility to destroy 'reason' with GEOSFree()
-* and 'location' with GEOSGeom_destroy()
-* \param g The geometry to test
-* \param flags A value from the \ref GEOSValidFlags enum
-* \param reason A pointer in which the reason string will be places
-* \param location A pointer in which the location GEOSGeometry will be placed
-* \return 1 when valid, 0 when invalid, 2 on exception
-*/
-extern char GEOS_DLL GEOSisValidDetail(
-    const GEOSGeometry* g,
-    int flags,
-    char** reason,
-    GEOSGeometry** location);
-
-/**
-* Repair an invalid geometry, returning a valid output.
-* \param g The geometry to repair
-* \return The repaired geometry. Caller must free with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSMakeValid(
-    const GEOSGeometry* g);
-
-/**
-* Repair an invalid geometry, returning a valid output, using the
-* indicated GEOSMakeValidMethods algorithm and options.
-* \param g is the geometry to test.
-* \param makeValidParams is a GEOSMakeValidParams with the desired parameters set on it.
-* \return A repaired geometry. Caller must free with GEOSGeom_destroy().
-* \see GEOSMakeValidParams_create
-* \see GEOSMakeValidParams_destroy
-* \see GEOSMakeValidParams_setMethod
-* \see GEOSMakeValidParams_setKeepCollapsed
-*/
-extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams(
-    const GEOSGeometry* g,
-    const GEOSMakeValidParams *makeValidParams);
-
-/**
-* Create a GEOSMakeValidParams to hold the desired parameters
-* to control the algorithm and behavior of the validation process.
-* \return a parameter object
-* \see GEOSMakeValidWithParams
-*/
-extern GEOSMakeValidParams GEOS_DLL *GEOSMakeValidParams_create(void);
-
-/**
-* Destroy a GEOSMakeValidParams.
-* \param parms the object to destroy
-* \see GEOSMakeValidWithParams
-*/
-extern void GEOS_DLL GEOSMakeValidParams_destroy(GEOSMakeValidParams* parms);
-
-/**
-* Set the GEOSMakeValidMethods to use in making the geometry
-* valid.
-* \return 0 on exception, 1 on success.
-* \see GEOSMakeValidWithParams
-*/
-extern int GEOS_DLL GEOSMakeValidParams_setMethod(
-    GEOSMakeValidParams* p,
-    enum GEOSMakeValidMethods method);
-
-/**
-* When this parameter is not set to 0, the GEOS_MAKE_VALID_STRUCTURE method will drop
-* any component that has collapsed into a lower dimensionality.
-* For example, a ring collapsing to a line, or a line collapsing
-* to a point.
-* \return 0 on exception, 1 on success.
-* \see GEOSMakeValidWithParams
-*/
-extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
-    GEOSMakeValidParams* p,
-    int keepCollapsed);
-
-/**
-* Works from start of each coordinate sequence in the
-* geometry, retaining points that are further away from the
-* previous retained point than the tolerance value.
-*
-* Removing repeated points with a non-zero tolerance may
-* result in an invalid geometry being returned. Be sure
-* to check and repair validity.
-*
-* \return A geometry with all points within the tolerance of each other removed.
-* \param g The geometry to filter
-* \param tolerance Remove all points within this distance of each other. Use 0.0 to remove only exactly repeated points.
-*
-* \see GEOSMakeValidWithParams
-*/
-extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
-    const GEOSGeometry* g,
-    double tolerance);
 
 ///@}
 
