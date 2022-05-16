@@ -2168,6 +2168,681 @@ extern int GEOS_DLL GEOSCoordSeq_isCCW(
 
 ///@}
 
+/* ========= Geometry Constructors ========= */
+/** @name Geometry Constructors
+* Functions for creating and destroying geometries.
+* Created geometries must be freed with GEOSGeom_destroy().
+*/
+///@{
+
+/**
+* Creates a point geometry from a coordinate sequence.
+* \param s Input coordinate sequence, ownership passes to the geometry
+* \return A newly allocated point geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
+
+/**
+* Creates a point geometry from a pair of coordinates.
+* \param x The X coordinate
+* \param y The Y coordinate
+* \return A newly allocated point geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
+
+/**
+* Creates an empty point.
+* \return A newly allocated empty point geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint(void);
+
+/**
+* Creates a linear ring geometry, for use in a polygon.
+* \param s Input coordinate sequence, ownership passes to the geometry
+* \return A newly allocated linear ring geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing(GEOSCoordSequence* s);
+
+/**
+* Creates a linestring geometry.
+* \param s Input coordinate sequence, ownership passes to the geometry
+* \return A newly allocated linestring geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
+
+/**
+* Creates an emptylinestring geometry.
+* \return A newly allocated linestring geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
+
+/**
+* Creates an empty polygon geometry.
+* \return A newly allocated empty polygon geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
+
+/**
+* Creates a polygon geometry from line ring geometries.
+* \param shell A linear ring that is the exterior ring of the polygon.
+* \param holes An array of linear rings that are the holes.
+* \param nholes The number of rings in the holes array.
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \note The holes argument is an array of GEOSGeometry* objects.
+*       The caller **retains ownership** of the containing array,
+*       but the ownership of the pointed-to objects is transferred
+*       to the returned \ref GEOSGeometry.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(
+    GEOSGeometry* shell,
+    GEOSGeometry** holes,
+    unsigned int nholes);
+
+/**
+* Create a geometry collection.
+* \param type The geometry type, enumerated by \ref GEOSGeomTypes
+* \param geoms A list of geometries that will form the collection
+* \param ngeoms The number of geometries in the geoms list
+* \return A newly allocated geometry collection. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \note The holes argument is an array of GEOSGeometry* objects.
+*       The caller **retains ownership** of the containing array,
+*       but the ownership of the pointed-to objects is transferred
+*       to the returned \ref GEOSGeometry.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
+    int type,
+    GEOSGeometry** geoms,
+    unsigned int ngeoms);
+
+/**
+* Create an empty geometry collection.
+* \param type The geometry type, enumerated by \ref GEOSGeomTypes
+* \return A newly allocated empty geometry collection. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
+
+/**
+* Create a rectangular polygon from bounding coordinates.
+* Will return a point geometry if width and height are 0.
+* \param xmin Left bound of envelope
+* \param ymin Lower bound of envelope
+* \param xmax Right bound of envelope
+* \param ymax Upper bound of envelope
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
+    double xmin, double ymin,
+    double xmax, double ymax);
+
+/**
+* Create a new copy of the input geometry.
+* \param g The geometry to copy
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_clone(const GEOSGeometry* g);
+
+/**
+* Release the memory associated with a geometry.
+* \param g The geometry to be destroyed.
+*/
+extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
+
+///@}
+
+/* ========== Geometry info ========== */
+/** @name Geometry Accessor functions
+* Functions to provide information about geometries.
+*/
+///@{
+
+/**
+* Returns the geometry type string for this geometry.
+* eg: "GeometryCollection", "LineString"
+* \param g Input geometry
+* \return A string with the geometry type.
+* Caller must free with GEOSFree().
+* NULL on exception.
+*/
+extern char GEOS_DLL *GEOSGeomType(const GEOSGeometry* g);
+
+/**
+* Returns the \ref GEOSGeomTypeId number for this geometry.
+* \param g Input geometry
+* \return The geometry type number, or -1 on exception.
+*/
+extern int GEOS_DLL GEOSGeomTypeId(const GEOSGeometry* g);
+
+/**
+* Returns the "spatial reference id" (SRID) for this geometry.
+* \param g Input geometry
+* \return SRID number or 0 if unknown / not set.
+*/
+extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
+
+/**
+* Set the "spatial reference id" (SRID) for this geometry.
+* \param g Input geometry
+* \param SRID SRID number or 0 for unknown SRID.
+*/
+extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+
+/**
+* Return the anonymous "user data" for this geometry.
+* User data must be managed by the caller, and freed before
+* the geometry is freed.
+* \param g Input geometry
+* \return A void* to the user data, caller is responsible for
+*         casting to the appropriate type and freeing.
+*/
+extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
+
+/**
+* Set the anonymous "user data" for this geometry.
+* Don't forget to free the user data before freeing the geometry.
+* \param g Input geometry
+* \param userData Void pointer to user data
+*/
+extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
+
+
+/**
+* Returns the number of sub-geometries immediately under a
+* multi-geometry or collection or 1 for a simple geometry.
+* For nested collections, remember to check if returned
+* sub-geometries are **themselves** also collections.
+* \param g Input geometry
+* \return Number of direct children in this collection
+* \warning For GEOS < 3.2 this function may crash when fed simple geometries
+*/
+extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
+
+/**
+* Returns the specified sub-geometry of a collection. For
+* a simple geometry, returns a pointer to the input.
+* Returned object is a pointer to internal storage:
+* it must NOT be destroyed directly.
+* \param g Input geometry
+* \param n Sub-geometry index, zero-base
+* \return A const \ref GEOSGeometry, do not free!
+          It will be freed when the parent is freed.
+          Returns NULL on exception.
+* \note Up to GEOS 3.2.0 the input geometry must be a Collection, in
+*       later versions it doesn't matter (getGeometryN(0) for a single will
+*       return the input).
+*/
+extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
+    const GEOSGeometry* g,
+    int n);
+
+/**
+* Organize the elements, rings, and coordinate order
+* of geometries in a consistent way,
+* so that geometries that represent the same
+* object can be easily compared.
+*
+* Normalization ensures the following:
+* - Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)
+* - Rings start with their smallest coordinate
+*   (using XY ordering)
+* - Polygon shell rings are oriented CW, and holes CCW
+* - Collection elements are sorted by their first coordinate
+*
+* Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
+* \param g Input geometry
+* \return 0 on success or -1 on exception
+*/
+extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
+
+/**
+* Change the coordinate precision of a geometry. This will
+* affect the precision of the existing geometry as well as
+* any geometries derived from this geometry using overlay
+* functions. The output will be a valid \ref GEOSGeometry.
+*
+* Note that operations will always be performed in the precision
+* of the geometry with higher precision (smaller "gridSize").
+* That same precision will be attached to the operation outputs.
+*
+* In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input
+* may cause an error to occur, unless the invalidity is below
+* the scale of the requested precision
+*
+* There are only 3 modes. The GEOS_PREC_NO_TOPO mode
+* takes precedence over GEOS_PREC_KEEP_COLLAPSED.
+* So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED
+* has the same semantics as GEOS_PREC_NO_TOPO
+*
+* \param g Input geometry
+* \param gridSize cell size of grid to round coordinates to,
+*        or 0 for FLOATING precision
+* \param flags The bitwise OR of members of the \ref GEOSPrecisionRules enum
+* \return The precision reduced result.
+*         Caller must free with GEOSGeom_destroy()
+*         NULL on exception.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
+	const GEOSGeometry *g,
+    double gridSize,
+    int flags);
+
+/**
+* Read the currently set precision value from the
+* geometry and returns the grid size if it is a fixed
+* precision or 0.0 if it is full floating point precision.
+* \param g Input geometry
+* \return The grid size, or -1 on exception
+*/
+extern double GEOS_DLL GEOSGeom_getPrecision(const GEOSGeometry *g);
+
+/**
+* Returns the number of interior rings, for a Polygon input, or
+* an exception otherwise.
+* \param g Input Polygon geometry
+* \return Number of interior rings, -1 on exception
+*/
+extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
+
+/**
+* Returns the number of points, for a LineString input, or
+* an exception otherwise.
+* \param g Input LineString geometry
+* \return Number of points, -1 on exception
+*/
+extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g);
+
+/**
+* Returns the X coordinate, for a Point input, or an
+* exception otherwise.
+* \param[in] g Input Point geometry
+* \param[out] x Pointer to hold return value
+* \returns 1 on success, 0 on exception
+*/
+extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g, double *x);
+
+/**
+* Returns the Y coordinate, for a Point input, or an
+* exception otherwise.
+* \param[in] g Input Point geometry
+* \param[out] y Pointer to hold return value
+* \returns 1 on success, 0 on exception
+*/
+extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
+
+/**
+* Returns the Z coordinate, for a Point input, or an
+* exception otherwise.
+* \param[in] g Input Point geometry
+* \param[out] z Pointer to hold return value
+* \returns 1 on success, 0 on exception
+*/
+extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
+
+/**
+* Returns the N'th ring for a Polygon input.
+* \note Returned object is a pointer to internal storage:
+*       it must NOT be destroyed directly.
+* \param g Input Polygon geometry
+* \param n Index of the desired ring
+* \return LinearRing geometry. Owned by parent geometry, do not free. NULL on exception.
+*/
+extern const GEOSGeometry GEOS_DLL *GEOSGetInteriorRingN(
+    const GEOSGeometry* g,
+    int n);
+
+/**
+* Get the external ring of a Polygon.
+* \note Returned object is a pointer to internal storage:
+*       it must NOT be destroyed directly.
+* \param g Input Polygon geometry
+* \return LinearRing geometry. Owned by parent geometry, do not free. NULL on exception.
+*/
+extern const GEOSGeometry GEOS_DLL *GEOSGetExteriorRing(
+    const GEOSGeometry* g);
+
+/**
+* Get the total number of points in a geometry,
+* of any type.
+* \param g Input geometry
+* \return Number of points in the geometry. -1 on exception.
+*/
+extern int GEOS_DLL GEOSGetNumCoordinates(
+    const GEOSGeometry* g);
+
+/**
+* Return the coordinate sequence underlying the
+* given geometry (Must be a LineString, LinearRing or Point).
+* Do not directly free the coordinate sequence, it is owned by
+* the parent geometry.
+* \param g Input geometry
+* \return Coordinate sequence or NULL on exception.
+*/
+extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq(
+    const GEOSGeometry* g);
+
+/**
+* Return the planar dimensionality of the geometry.
+*
+* - 0 for point, multipoint
+* - 1 for linestring, multilinestring
+* - 2 for polygon, multipolygon
+*
+* \see geos::geom::Dimension::DimensionType
+* \param g Input geometry
+* \return The dimensionality
+*/
+extern int GEOS_DLL GEOSGeom_getDimensions(
+    const GEOSGeometry* g);
+
+/**
+* Return the cartesian dimension of the geometry.
+*
+* - 2 for XY data
+* - 3 for XYZ data
+*
+* \param g Input geometry
+* \return The dimension
+*/
+extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
+    const GEOSGeometry* g);
+
+/**
+* Finds the minimum X value in the geometry.
+* \param[in] g Input geometry
+* \param[out] value Pointer to place result
+* \return 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
+
+/**
+* Finds the minimum Y value in the geometry.
+* \param[in] g Input geometry
+* \param[out] value Pointer to place result
+* \return 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
+
+/**
+* Finds the maximum X value in the geometry.
+* \param[in] g Input geometry
+* \param[out] value Pointer to place result
+* \return 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
+
+/**
+* Finds the maximum Y value in the geometry.
+* \param[in] g Input geometry
+* \param[out] value Pointer to place result
+* \return 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
+
+/**
+* Finds the extent (minimum and maximum X and Y value) of the geometry.
+* Raises an exception for empty geometry input.
+*
+* \param[in] g Input geometry
+* \param[out] xmin Pointer to place result for minimum X value
+* \param[out] ymin Pointer to place result for minimum Y value
+* \param[out] xmax Pointer to place result for maximum X value
+* \param[out] ymax Pointer to place result for maximum Y value
+* \return 1 on success, 0 on exception
+*/
+extern int GEOS_DLL GEOSGeom_getExtent(
+    const GEOSGeometry* g,
+    double* xmin,
+    double* ymin,
+    double* xmax,
+    double* ymax);
+
+/**
+* Return the N'th point of a LineString
+* \param g Input geometry, must be a LineString
+* \param n Index of desired point (zero based)
+* \return A Point geometry.
+*         Caller must free with GEOSGeom_destroy()
+*         NULL on exception.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
+
+/**
+* Return the first point of a LineString
+* \param g Input geometry, must be a LineString
+* \return A Point geometry.
+*         Caller must free with GEOSGeom_destroy()
+*         NULL on exception.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
+
+/**
+* Return the last point of a LineString
+* \param g Input geometry, must be a LineString
+* \return A Point geometry.
+*         Caller must free with GEOSGeom_destroy()
+*         NULL on exception.
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
+
+
+/**
+* Tests whether the input geometry is empty. If the geometry or any
+* component is non-empty, the geometry is non-empty. An empty geometry
+* has no boundary or interior.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry is a ring. Rings are
+* linestrings, without self-intersections,
+* with start and end point being identical.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry has z coordinates.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry is closed.
+* A closed geometry is a linestring or multilinestring
+* with the start and end points being the same.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
+
+///@}
+
+/* ========= Metric functions ================================================== */
+/** @name Metric functions
+* Functions to compute geometry metrics.
+*/
+///@{
+
+/**
+* Calculate the area of a geometry.
+* \param[in] g Input geometry
+* \param[out] area Pointer to be filled in with area result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSArea(
+    const GEOSGeometry* g,
+    double *area);
+
+/**
+* Calculate the length of a geometry.
+* \param[in] g Input geometry
+* \param[out] length Pointer to be filled in with length result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSLength(
+    const GEOSGeometry* g,
+    double *length);
+
+/**
+* Calculate the length of a LineString.
+* Only works for LineString inputs, returns exception otherwise.
+*
+* \param[in] g Input geometry
+* \param[out] length Pointer to be filled in with length result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSGeomGetLength(
+    const GEOSGeometry *g,
+    double *length);
+
+///@}
+
+/* ========== Distance functions ================================================ */
+/** @name Distance functions
+* Functions to compute distances between geometries
+* using various distance metrics.
+*/
+///@{
+
+/**
+* Calculate the distance between two geometries.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+*/
+extern int GEOS_DLL GEOSDistance(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2,
+    double *dist);
+
+/**
+* Test whether the distance between two geometries is
+* within the given dist.
+* \param g1 Input geometry
+* \param g2 Input geometry
+* \param dist The max distance
+* \returns 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSDistanceWithin(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2,
+    double dist);
+
+/**
+* Calculate the distance between two geometries, using the
+* indexed facet distance, which first indexes the geometries
+* internally, then calculates the distance. Useful when one
+* or both geometries is very large.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::operation::distance:;IndexedFacetDistance
+*/
+extern int GEOS_DLL GEOSDistanceIndexed(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2,
+    double *dist);
+
+/**
+* The closest points of the two geometries.
+* The first point comes from g1 geometry and the second point comes from g2.
+*
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \return A coordinate sequence with the two points, or NULL on exception.
+* Caller must free with GEOSCoordSeq_destroy().
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2);
+
+/**
+* Calculate the Hausdorff distance between two geometries.
+* [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance)
+* is the largest distance between two geometries.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DiscreteHausdorffDistance
+*/
+extern int GEOS_DLL GEOSHausdorffDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/**
+* Calculate a more precise Hausdorff distance between two geometries,
+* by densifying the inputs before computation.
+* [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance)
+* is the largest distance between two geometries.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[in] densifyFrac The largest % of the overall line length that
+*            any given two-point segment should be
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DiscreteHausdorffDistance
+*/
+extern int GEOS_DLL GEOSHausdorffDistanceDensify(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double densifyFrac,
+    double *dist);
+
+/**
+* Calculate the
+* [Frechet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)
+* between two geometries,
+* a similarity measure for linear features.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DiscreteFrechetDistance
+*/
+extern int GEOS_DLL GEOSFrechetDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/**
+* Calculate the
+* [Frechet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)
+* between two geometries,
+* a similarity measure for linear features. For more precision, first
+* densify the inputs.
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[in] densifyFrac The largest % of the overall line length that
+*            any given two-point segment should be
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DiscreteFrechetDistance
+*/
+extern int GEOS_DLL GEOSFrechetDistanceDensify(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double densifyFrac,
+    double *dist);
+
+///@}
+
 /* ========== Linear referencing functions */
 /** @name Linear Referencing
 * Functions to operate on LineStrings using locations
@@ -2572,137 +3247,6 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
 */
 extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
     double width, int quadsegs, int joinStyle, double mitreLimit);
-
-///@}
-
-/* ========= Geometry Constructors ========= */
-/** @name Geometry Constructors
-* Functions for creating and destroying geometries.
-* Created geometries must be freed with GEOSGeom_destroy().
-*/
-///@{
-
-/**
-* Creates a point geometry from a coordinate sequence.
-* \param s Input coordinate sequence, ownership passes to the geometry
-* \return A newly allocated point geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
-
-/**
-* Creates a point geometry from a pair of coordinates.
-* \param x The X coordinate
-* \param y The Y coordinate
-* \return A newly allocated point geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
-
-/**
-* Creates an empty point.
-* \return A newly allocated empty point geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint(void);
-
-/**
-* Creates a linear ring geometry, for use in a polygon.
-* \param s Input coordinate sequence, ownership passes to the geometry
-* \return A newly allocated linear ring geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing(GEOSCoordSequence* s);
-
-/**
-* Creates a linestring geometry.
-* \param s Input coordinate sequence, ownership passes to the geometry
-* \return A newly allocated linestring geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
-
-/**
-* Creates an emptylinestring geometry.
-* \return A newly allocated linestring geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
-
-/**
-* Creates an empty polygon geometry.
-* \return A newly allocated empty polygon geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
-
-/**
-* Creates a polygon geometry from line ring geometries.
-* \param shell A linear ring that is the exterior ring of the polygon.
-* \param holes An array of linear rings that are the holes.
-* \param nholes The number of rings in the holes array.
-* \return A newly allocated geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \note The holes argument is an array of GEOSGeometry* objects.
-*       The caller **retains ownership** of the containing array,
-*       but the ownership of the pointed-to objects is transferred
-*       to the returned \ref GEOSGeometry.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(
-    GEOSGeometry* shell,
-    GEOSGeometry** holes,
-    unsigned int nholes);
-
-/**
-* Create a geometry collection.
-* \param type The geometry type, enumerated by \ref GEOSGeomTypes
-* \param geoms A list of geometries that will form the collection
-* \param ngeoms The number of geometries in the geoms list
-* \return A newly allocated geometry collection. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \note The holes argument is an array of GEOSGeometry* objects.
-*       The caller **retains ownership** of the containing array,
-*       but the ownership of the pointed-to objects is transferred
-*       to the returned \ref GEOSGeometry.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
-    int type,
-    GEOSGeometry** geoms,
-    unsigned int ngeoms);
-
-/**
-* Create an empty geometry collection.
-* \param type The geometry type, enumerated by \ref GEOSGeomTypes
-* \return A newly allocated empty geometry collection. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
-
-/**
-* Create a rectangular polygon from bounding coordinates.
-* Will return a point geometry if width and height are 0.
-* \param xmin Left bound of envelope
-* \param ymin Lower bound of envelope
-* \param xmax Right bound of envelope
-* \param ymax Upper bound of envelope
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
-    double xmin, double ymin,
-    double xmax, double ymax);
-
-/**
-* Create a new copy of the input geometry.
-* \param g The geometry to copy
-* \return A newly allocated geometry. NULL on exception.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_clone(const GEOSGeometry* g);
-
-/**
-* Release the memory associated with a geometry.
-* \param g The geometry to be destroyed.
-*/
-extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 
 ///@}
 
@@ -3857,550 +4401,6 @@ extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
 extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
     const GEOSGeometry* g,
     double tolerance);
-
-///@}
-
-/* ========== Geometry info ========== */
-/** @name Accessor functions
-* Functions to provide information about geometries.
-*/
-///@{
-
-/**
-* Returns the geometry type string for this geometry.
-* eg: "GeometryCollection", "LineString"
-* \param g Input geometry
-* \return A string with the geometry type.
-* Caller must free with GEOSFree().
-* NULL on exception.
-*/
-extern char GEOS_DLL *GEOSGeomType(const GEOSGeometry* g);
-
-/**
-* Returns the \ref GEOSGeomTypeId number for this geometry.
-* \param g Input geometry
-* \return The geometry type number, or -1 on exception.
-*/
-extern int GEOS_DLL GEOSGeomTypeId(const GEOSGeometry* g);
-
-/**
-* Returns the "spatial reference id" (SRID) for this geometry.
-* \param g Input geometry
-* \return SRID number or 0 if unknown / not set.
-*/
-extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
-
-/**
-* Set the "spatial reference id" (SRID) for this geometry.
-* \param g Input geometry
-* \param SRID SRID number or 0 for unknown SRID.
-*/
-extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
-
-/**
-* Return the anonymous "user data" for this geometry.
-* User data must be managed by the caller, and freed before
-* the geometry is freed.
-* \param g Input geometry
-* \return A void* to the user data, caller is responsible for
-*         casting to the appropriate type and freeing.
-*/
-extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
-
-/**
-* Set the anonymous "user data" for this geometry.
-* Don't forget to free the user data before freeing the geometry.
-* \param g Input geometry
-* \param userData Void pointer to user data
-*/
-extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
-
-
-/**
-* Returns the number of sub-geometries immediately under a
-* multi-geometry or collection or 1 for a simple geometry.
-* For nested collections, remember to check if returned
-* sub-geometries are **themselves** also collections.
-* \param g Input geometry
-* \return Number of direct children in this collection
-* \warning For GEOS < 3.2 this function may crash when fed simple geometries
-*/
-extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
-
-/**
-* Returns the specified sub-geometry of a collection. For
-* a simple geometry, returns a pointer to the input.
-* Returned object is a pointer to internal storage:
-* it must NOT be destroyed directly.
-* \param g Input geometry
-* \param n Sub-geometry index, zero-base
-* \return A const \ref GEOSGeometry, do not free!
-          It will be freed when the parent is freed.
-          Returns NULL on exception.
-* \note Up to GEOS 3.2.0 the input geometry must be a Collection, in
-*       later versions it doesn't matter (getGeometryN(0) for a single will
-*       return the input).
-*/
-extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
-    const GEOSGeometry* g,
-    int n);
-
-/**
-* Organize the elements, rings, and coordinate order
-* of geometries in a consistent way,
-* so that geometries that represent the same
-* object can be easily compared.
-*
-* Normalization ensures the following:
-* - Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)
-* - Rings start with their smallest coordinate
-*   (using XY ordering)
-* - Polygon shell rings are oriented CW, and holes CCW
-* - Collection elements are sorted by their first coordinate
-*
-* Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
-* \param g Input geometry
-* \return 0 on success or -1 on exception
-*/
-extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
-
-/**
-* Change the coordinate precision of a geometry. This will
-* affect the precision of the existing geometry as well as
-* any geometries derived from this geometry using overlay
-* functions. The output will be a valid \ref GEOSGeometry.
-*
-* Note that operations will always be performed in the precision
-* of the geometry with higher precision (smaller "gridSize").
-* That same precision will be attached to the operation outputs.
-*
-* In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input
-* may cause an error to occur, unless the invalidity is below
-* the scale of the requested precision
-*
-* There are only 3 modes. The GEOS_PREC_NO_TOPO mode
-* takes precedence over GEOS_PREC_KEEP_COLLAPSED.
-* So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED
-* has the same semantics as GEOS_PREC_NO_TOPO
-*
-* \param g Input geometry
-* \param gridSize cell size of grid to round coordinates to,
-*        or 0 for FLOATING precision
-* \param flags The bitwise OR of members of the \ref GEOSPrecisionRules enum
-* \return The precision reduced result.
-*         Caller must free with GEOSGeom_destroy()
-*         NULL on exception.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
-	const GEOSGeometry *g,
-    double gridSize,
-    int flags);
-
-/**
-* Read the currently set precision value from the
-* geometry and returns the grid size if it is a fixed
-* precision or 0.0 if it is full floating point precision.
-* \param g Input geometry
-* \return The grid size, or -1 on exception
-*/
-extern double GEOS_DLL GEOSGeom_getPrecision(const GEOSGeometry *g);
-
-/**
-* Returns the number of interior rings, for a Polygon input, or
-* an exception otherwise.
-* \param g Input Polygon geometry
-* \return Number of interior rings, -1 on exception
-*/
-extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
-
-/**
-* Returns the number of points, for a LineString input, or
-* an exception otherwise.
-* \param g Input LineString geometry
-* \return Number of points, -1 on exception
-*/
-extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g);
-
-/**
-* Returns the X coordinate, for a Point input, or an
-* exception otherwise.
-* \param[in] g Input Point geometry
-* \param[out] x Pointer to hold return value
-* \returns 1 on success, 0 on exception
-*/
-extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g, double *x);
-
-/**
-* Returns the Y coordinate, for a Point input, or an
-* exception otherwise.
-* \param[in] g Input Point geometry
-* \param[out] y Pointer to hold return value
-* \returns 1 on success, 0 on exception
-*/
-extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
-
-/**
-* Returns the Z coordinate, for a Point input, or an
-* exception otherwise.
-* \param[in] g Input Point geometry
-* \param[out] z Pointer to hold return value
-* \returns 1 on success, 0 on exception
-*/
-extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
-
-/**
-* Returns the N'th ring for a Polygon input.
-* \note Returned object is a pointer to internal storage:
-*       it must NOT be destroyed directly.
-* \param g Input Polygon geometry
-* \param n Index of the desired ring
-* \return LinearRing geometry. Owned by parent geometry, do not free. NULL on exception.
-*/
-extern const GEOSGeometry GEOS_DLL *GEOSGetInteriorRingN(
-    const GEOSGeometry* g,
-    int n);
-
-/**
-* Get the external ring of a Polygon.
-* \note Returned object is a pointer to internal storage:
-*       it must NOT be destroyed directly.
-* \param g Input Polygon geometry
-* \return LinearRing geometry. Owned by parent geometry, do not free. NULL on exception.
-*/
-extern const GEOSGeometry GEOS_DLL *GEOSGetExteriorRing(
-    const GEOSGeometry* g);
-
-/**
-* Get the total number of points in a geometry,
-* of any type.
-* \param g Input geometry
-* \return Number of points in the geometry. -1 on exception.
-*/
-extern int GEOS_DLL GEOSGetNumCoordinates(
-    const GEOSGeometry* g);
-
-/**
-* Return the coordinate sequence underlying the
-* given geometry (Must be a LineString, LinearRing or Point).
-* Do not directly free the coordinate sequence, it is owned by
-* the parent geometry.
-* \param g Input geometry
-* \return Coordinate sequence or NULL on exception.
-*/
-extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq(
-    const GEOSGeometry* g);
-
-/**
-* Return the planar dimensionality of the geometry.
-*
-* - 0 for point, multipoint
-* - 1 for linestring, multilinestring
-* - 2 for polygon, multipolygon
-*
-* \see geos::geom::Dimension::DimensionType
-* \param g Input geometry
-* \return The dimensionality
-*/
-extern int GEOS_DLL GEOSGeom_getDimensions(
-    const GEOSGeometry* g);
-
-/**
-* Return the cartesian dimension of the geometry.
-*
-* - 2 for XY data
-* - 3 for XYZ data
-*
-* \param g Input geometry
-* \return The dimension
-*/
-extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
-    const GEOSGeometry* g);
-
-/**
-* Finds the minimum X value in the geometry.
-* \param[in] g Input geometry
-* \param[out] value Pointer to place result
-* \return 0 on exception
-*/
-extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
-
-/**
-* Finds the minimum Y value in the geometry.
-* \param[in] g Input geometry
-* \param[out] value Pointer to place result
-* \return 0 on exception
-*/
-extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
-
-/**
-* Finds the maximum X value in the geometry.
-* \param[in] g Input geometry
-* \param[out] value Pointer to place result
-* \return 0 on exception
-*/
-extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
-
-/**
-* Finds the maximum Y value in the geometry.
-* \param[in] g Input geometry
-* \param[out] value Pointer to place result
-* \return 0 on exception
-*/
-extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
-
-/**
-* Finds the extent (minimum and maximum X and Y value) of the geometry.
-* Raises an exception for empty geometry input.
-*
-* \param[in] g Input geometry
-* \param[out] xmin Pointer to place result for minimum X value
-* \param[out] ymin Pointer to place result for minimum Y value
-* \param[out] xmax Pointer to place result for maximum X value
-* \param[out] ymax Pointer to place result for maximum Y value
-* \return 1 on success, 0 on exception
-*/
-extern int GEOS_DLL GEOSGeom_getExtent(
-    const GEOSGeometry* g,
-    double* xmin,
-    double* ymin,
-    double* xmax,
-    double* ymax);
-
-/**
-* Return the N'th point of a LineString
-* \param g Input geometry, must be a LineString
-* \param n Index of desired point (zero based)
-* \return A Point geometry.
-*         Caller must free with GEOSGeom_destroy()
-*         NULL on exception.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
-
-/**
-* Return the first point of a LineString
-* \param g Input geometry, must be a LineString
-* \return A Point geometry.
-*         Caller must free with GEOSGeom_destroy()
-*         NULL on exception.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
-
-/**
-* Return the last point of a LineString
-* \param g Input geometry, must be a LineString
-* \return A Point geometry.
-*         Caller must free with GEOSGeom_destroy()
-*         NULL on exception.
-*/
-extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
-
-
-/**
-* Tests whether the input geometry is empty. If the geometry or any
-* component is non-empty, the geometry is non-empty. An empty geometry
-* has no boundary or interior.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry is a ring. Rings are
-* linestrings, without self-intersections,
-* with start and end point being identical.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry has z coordinates.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
-
-/**
-* Tests whether the input geometry is closed.
-* A closed geometry is a linestring or multilinestring
-* with the start and end points being the same.
-* \param g The geometry to test
-* \return 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
-
-///@}
-
-/* ========= Metric functions ================================================== */
-/** @name Metric functions
-* Functions to compute geometry metrics.
-*/
-///@{
-
-/**
-* Calculate the area of a geometry.
-* \param[in] g Input geometry
-* \param[out] area Pointer to be filled in with area result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSArea(
-    const GEOSGeometry* g,
-    double *area);
-
-/**
-* Calculate the length of a geometry.
-* \param[in] g Input geometry
-* \param[out] length Pointer to be filled in with length result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSLength(
-    const GEOSGeometry* g,
-    double *length);
-
-/**
-* Calculate the length of a LineString.
-* Only works for LineString inputs, returns exception otherwise.
-*
-* \param[in] g Input geometry
-* \param[out] length Pointer to be filled in with length result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSGeomGetLength(
-    const GEOSGeometry *g,
-    double *length);
-
-///@}
-
-/* ========== Distance functions ================================================ */
-/** @name Distance functions
-* Functions to compute distances between geometries
-* using various distance metrics.
-*/
-///@{
-
-/**
-* Calculate the distance between two geometries.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-*/
-extern int GEOS_DLL GEOSDistance(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2,
-    double *dist);
-
-/**
-* Test whether the distance between two geometries is
-* within the given dist.
-* \param g1 Input geometry
-* \param g2 Input geometry
-* \param dist The max distance
-* \returns 1 on true, 0 on false, 2 on exception
-*/
-extern char GEOS_DLL GEOSDistanceWithin(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2,
-    double dist);
-
-/**
-* Calculate the distance between two geometries, using the
-* indexed facet distance, which first indexes the geometries
-* internally, then calculates the distance. Useful when one
-* or both geometries is very large.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-* \see geos::operation::distance:;IndexedFacetDistance
-*/
-extern int GEOS_DLL GEOSDistanceIndexed(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2,
-    double *dist);
-
-/**
-* The closest points of the two geometries.
-* The first point comes from g1 geometry and the second point comes from g2.
-*
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \return A coordinate sequence with the two points, or NULL on exception.
-* Caller must free with GEOSCoordSeq_destroy().
-*/
-extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
-    const GEOSGeometry* g1,
-    const GEOSGeometry* g2);
-
-/**
-* Calculate the Hausdorff distance between two geometries.
-* [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance)
-* is the largest distance between two geometries.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-* \see geos::algorithm::distance::DiscreteHausdorffDistance
-*/
-extern int GEOS_DLL GEOSHausdorffDistance(
-    const GEOSGeometry *g1,
-    const GEOSGeometry *g2,
-    double *dist);
-
-/**
-* Calculate a more precise Hausdorff distance between two geometries,
-* by densifying the inputs before computation.
-* [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance)
-* is the largest distance between two geometries.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[in] densifyFrac The largest % of the overall line length that
-*            any given two-point segment should be
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-* \see geos::algorithm::distance::DiscreteHausdorffDistance
-*/
-extern int GEOS_DLL GEOSHausdorffDistanceDensify(
-    const GEOSGeometry *g1,
-    const GEOSGeometry *g2,
-    double densifyFrac,
-    double *dist);
-
-/**
-* Calculate the
-* [Frechet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)
-* between two geometries,
-* a similarity measure for linear features.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-* \see geos::algorithm::distance::DiscreteFrechetDistance
-*/
-extern int GEOS_DLL GEOSFrechetDistance(
-    const GEOSGeometry *g1,
-    const GEOSGeometry *g2,
-    double *dist);
-
-/**
-* Calculate the
-* [Frechet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)
-* between two geometries,
-* a similarity measure for linear features. For more precision, first
-* densify the inputs.
-* \param[in] g1 Input geometry
-* \param[in] g2 Input geometry
-* \param[in] densifyFrac The largest % of the overall line length that
-*            any given two-point segment should be
-* \param[out] dist Pointer to be filled in with distance result
-* \return 1 on success, 0 on exception.
-* \see geos::algorithm::distance::DiscreteFrechetDistance
-*/
-extern int GEOS_DLL GEOSFrechetDistanceDensify(
-    const GEOSGeometry *g1,
-    const GEOSGeometry *g2,
-    double densifyFrac,
-    double *dist);
 
 ///@}
 
