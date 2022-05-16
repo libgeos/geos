@@ -2783,7 +2783,7 @@ extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
 ///@}
 
 /* ========= Metric functions ================================================== */
-/** @name Metric functions
+/** @name Geometry Metrics
 * Functions to compute geometry metrics.
 */
 ///@{
@@ -2823,7 +2823,7 @@ extern int GEOS_DLL GEOSGeomGetLength(
 ///@}
 
 /* ========== Distance functions ================================================ */
-/** @name Distance functions
+/** @name Distance
 * Functions to compute distances between geometries
 * using various distance metrics.
 */
@@ -3736,7 +3736,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 ///@}
 
 /* ============================================================== */
-/** @name Processing functions
+/** @name Processing
 * Functions performing various geometric processes.
 */
 ///@{
