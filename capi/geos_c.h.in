@@ -2615,23 +2615,9 @@ extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g);
 ///@{
 
 /**
-* Sews together a set of fully noded LineStrings
-* removing any cardinality 2 nodes in the linework
-* only if possible without changing order of points.
-* \param g The input linework
-* \return The merged linework
-* Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::operation::linemerge::LineMerger
-*/
-extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
-
-/**
-* For geometries with coordinate sequences, reverses the order
-* of the sequences. Converts CCW rings to CW. Reverses direction
-* of LineStrings.
-* \param g The input geometry
-* \return The reversed geometry
-* Caller is responsible for freeing with GEOSGeom_destroy().
+* Set the "spatial reference id" (SRID) for this geometry.
+* \param g Input geometry
+* \param SRID SRID number or 0 for unknown SRID.
 */
 extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 
@@ -3786,6 +3772,17 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 * \see geos::operation::linemerge::LineMerger
 */
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
+
+/**
+* Sews together a set of fully noded LineStrings
+* removing any cardinality 2 nodes in the linework
+* only if possible without changing order of points.
+* \param g The input linework
+* \return The merged linework
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::linemerge::LineMerger
+*/
+extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
 
 /**
 * For geometries with coordinate sequences, reverses the order
