@@ -56,7 +56,8 @@ LineMerger::add(std::vector<const Geometry*>* geometries)
     }
 }
 
-LineMerger::LineMerger():
+LineMerger::LineMerger(bool directed):
+    isDirected(directed),
     factory(nullptr)
 {
 }
@@ -206,6 +207,9 @@ LineMerger::buildEdgeStringsStartingAt(Node* node)
     for(std::size_t i = 0; i < size; i++) {
         LineMergeDirectedEdge* directedEdge =
                             detail::down_cast<LineMergeDirectedEdge*>(edges[i]);
+        if(isDirected && !directedEdge->getEdgeDirection()) {
+            continue;
+        }
         if(directedEdge->getEdge()->isMarked()) {
             continue;
         }
@@ -221,7 +225,7 @@ LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge* start)
     do {
         edgeString->add(current);
         current->getEdge()->setMarked(true);
-        current = current->getNext();
+        current = current->getNext(isDirected);
     }
     while(current != nullptr && current != start);
     return edgeString;
