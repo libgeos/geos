@@ -79,7 +79,7 @@ jobs:
           cxxstd: 11,
           arch: 64,
           packages: 'g++',
-          cmake: 3.23.*,
+          cmake: 3.22.*,
           os: ubuntu-22.04
         }
 
