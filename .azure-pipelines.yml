@@ -31,6 +31,12 @@ stages:
   - job: 'Linux'
     strategy:
       matrix:
+        GCC 12:
+          CXXSTD: 11, 20
+          CXX: g++-12
+          PACKAGES: g++-12
+          VM_IMAGE: ubuntu-22.04
+          VM_NAME: jammy
         GCC 11:
           CXXSTD: 11, 20
           CXX: g++-11
