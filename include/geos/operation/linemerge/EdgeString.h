@@ -32,7 +32,6 @@
 namespace geos {
 namespace geom {
 class GeometryFactory;
-class CoordinateArraySequence;
 class CoordinateSequence;
 class LineString;
 }
@@ -56,7 +55,6 @@ class GEOS_DLL EdgeString {
 private:
     const geom::GeometryFactory* factory;
     std::vector<LineMergeDirectedEdge*> directedEdges;
-    geom::CoordinateArraySequence* coordinates;
     geom::CoordinateSequence* getCoordinates();
 public:
     /**

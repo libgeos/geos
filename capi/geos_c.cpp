@@ -879,6 +879,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSLineMergeDirected(const Geometry* g)
+    {
+        return GEOSLineMergeDirected_r(handle, g);
+    }
+
+    Geometry*
     GEOSReverse(const Geometry* g)
     {
         return GEOSReverse_r(handle, g);

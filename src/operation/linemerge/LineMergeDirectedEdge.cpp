@@ -43,23 +43,25 @@ LineMergeDirectedEdge::LineMergeDirectedEdge(
 /**
  * Returns the directed edge that starts at this directed edge's end point,
  * or null if there are zero or multiple directed edges starting there.
+ * @param checkDirection
  * @return
  */
 LineMergeDirectedEdge*
-LineMergeDirectedEdge::getNext()
+LineMergeDirectedEdge::getNext(bool checkDirection)
 {
     if(getToNode()->getDegree() != 2) {
         return nullptr;
     }
     if(getToNode()->getOutEdges()->getEdges()[0] == getSym()) {
-        return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[1];
+        auto nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[1]);
+        return (!checkDirection || nextedge->getEdgeDirection()) ? nextedge : nullptr;
     }
     assert(getToNode()->getOutEdges()->getEdges()[1] == getSym());
 
-    LineMergeDirectedEdge* nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[0]);
+    auto nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[0]);
     assert(nextedge);
 
-    return nextedge;
+    return (!checkDirection || nextedge->getEdgeDirection()) ? nextedge : nullptr;
 }
 
 } // namespace geos.operation.linemerge

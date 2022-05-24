@@ -2216,6 +2216,26 @@ extern "C" {
     }
 
     Geometry*
+    GEOSLineMergeDirected_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        using geos::operation::linemerge::LineMerger;
+
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            LineMerger lmrgr(true);
+            lmrgr.add(g);
+
+            auto lines = lmrgr.getMergedLineStrings();
+
+            auto out = gf->buildGeometry(std::move(lines));
+            out->setSRID(g->getSRID());
+
+            return out.release();
+        });
+    }
+
+    Geometry*
     GEOSReverse_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {

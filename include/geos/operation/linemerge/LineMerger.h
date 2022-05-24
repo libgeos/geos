@@ -78,6 +78,8 @@ private:
 
     LineMergeGraph graph;
 
+    bool isDirected;
+
     std::vector<std::unique_ptr<geom::LineString>> mergedLineStrings;
 
     std::vector<EdgeString*> edgeStrings;
@@ -99,7 +101,7 @@ private:
     EdgeString* buildEdgeStringStartingWith(LineMergeDirectedEdge* start);
 
 public:
-    LineMerger();
+    LineMerger(bool directed = false);
     ~LineMerger();
 
     /**
