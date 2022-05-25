@@ -88,7 +88,7 @@ std::string
 GeometryLocation::toString()
 {
     geos::io::WKTWriter writer;
-    std::stringstream ss;
+    std::ostringstream ss;
     ss << component->getGeometryType();
     ss << "[";
     ss << std::to_string(segIndex);
