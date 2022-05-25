@@ -192,7 +192,8 @@ Node::toString() const
 {
     std::ostringstream os;
     os << "L" << level << " " << env->toString() << " Ctr[" << centre.toString() << "]";
-    os << " " + NodeBase::toString();
+    //-- disable because produces unbounded string
+    //os << " " + NodeBase::toString();
     return os.str();
 }
 
