@@ -68,8 +68,8 @@ struct test_repeated_point_remover_test_data
 
         std::unique_ptr<Geometry> exGeom = reader.read(expected);
 
-        std::cout << std::endl << wkt(*outGeom) << std::endl;
-        std::cout << wkt(*exGeom) << std::endl;
+        // std::cout << std::endl << wkt(*outGeom) << std::endl;
+        // std::cout << wkt(*exGeom) << std::endl;
         ensure_equals_geometry(outGeom.get(), exGeom.get());
     }
 
