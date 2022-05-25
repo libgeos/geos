@@ -87,7 +87,7 @@ public:
     * and returns it as a list of {@link Tri}s.
     *
     * @param poly the input polygon
-    * @return list of Tris forming the triangulation
+    * @param triList the list to store the triangulation in
     */
     static void triangulatePolygon(const Polygon* poly, TriList<Tri>& triList);
 

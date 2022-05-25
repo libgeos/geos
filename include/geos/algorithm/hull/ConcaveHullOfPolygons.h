@@ -301,7 +301,7 @@ public:
     *
     * @param geom the input geometry
     */
-    ConcaveHullOfPolygons(const Geometry* polygons);
+    ConcaveHullOfPolygons(const Geometry* geom);
 
     /**
     * Sets the target maximum edge length for the concave hull.

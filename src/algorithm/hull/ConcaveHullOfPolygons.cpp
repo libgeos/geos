@@ -103,7 +103,7 @@ ConcaveHullOfPolygons::concaveFillByLengthRatio(const Geometry* polygons, double
 }
 
 /* public */
-ConcaveHullOfPolygons::ConcaveHullOfPolygons(const Geometry* polygons)
+ConcaveHullOfPolygons::ConcaveHullOfPolygons(const Geometry* geom)
     : inputPolygons(polygons)
     , geomFactory(polygons->getFactory())
     , maxEdgeLength(-1.0)
