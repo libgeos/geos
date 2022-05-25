@@ -188,6 +188,18 @@ public:
         return dirEdges.begin();
     }
 
+    std::vector<DirectedEdge*>::iterator
+    dirEdgeBegin()
+    {
+        return dirEdges.begin();
+    }
+
+    std::vector<DirectedEdge*>::iterator
+    dirEdgeEnd()
+    {
+        return dirEdges.end();
+    }
+
     /// Alias for edgeBegin()
     std::vector<Edge*>::iterator
     edgeIterator()

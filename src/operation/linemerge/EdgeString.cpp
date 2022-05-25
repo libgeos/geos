@@ -44,8 +44,7 @@ namespace linemerge { // geos.operation.linemerge
  */
 EdgeString::EdgeString(const GeometryFactory* newFactory):
     factory(newFactory),
-    directedEdges(),
-    coordinates(nullptr)
+    directedEdges()
 {
 }
 
@@ -61,30 +60,28 @@ EdgeString::add(LineMergeDirectedEdge* directedEdge)
 CoordinateSequence*
 EdgeString::getCoordinates()
 {
-    if(coordinates == nullptr) {
-        int forwardDirectedEdges = 0;
-        int reverseDirectedEdges = 0;
-        coordinates = new CoordinateArraySequence();
-        for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
-            LineMergeDirectedEdge* directedEdge = directedEdges[i];
-            if(directedEdge->getEdgeDirection()) {
-                forwardDirectedEdges++;
-            }
-            else {
-                reverseDirectedEdges++;
-            }
-
-            LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
-
-            coordinates->add(lme->getLine()->getCoordinatesRO(),
-                             false,
-                             directedEdge->getEdgeDirection());
+    int forwardDirectedEdges = 0;
+    int reverseDirectedEdges = 0;
+    auto coordinates = detail::make_unique<CoordinateArraySequence>();
+    for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
+        LineMergeDirectedEdge* directedEdge = directedEdges[i];
+        if(directedEdge->getEdgeDirection()) {
+            forwardDirectedEdges++;
         }
-        if(reverseDirectedEdges > forwardDirectedEdges) {
-            CoordinateSequence::reverse(coordinates);
+        else {
+            reverseDirectedEdges++;
         }
+
+        LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
+
+        coordinates->add(lme->getLine()->getCoordinatesRO(),
+                         false,
+                         directedEdge->getEdgeDirection());
     }
-    return coordinates;
+    if(reverseDirectedEdges > forwardDirectedEdges) {
+        CoordinateSequence::reverse(coordinates.get());
+    }
+    return coordinates.release();
 }
 
 /*

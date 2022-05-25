@@ -73,6 +73,15 @@ jobs:
           cmake: 3.17.*,
           os: ubuntu-20.04
         }
+        - {
+          compiler: g++,
+          build_type: Release,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'g++',
+          cmake: 3.22.*,
+          os: ubuntu-22.04
+        }
 
     runs-on: ${{ matrix.ci.os }}
     steps:
