@@ -29,6 +29,7 @@
 
 #include <algorithm> // for max()
 #include <string>
+#include <sstream>
 #include <cmath> // for fabs()
 #include <cassert>
 
@@ -103,20 +104,21 @@ LineIntersector::toString() const
     auto getCoordString = [](const Coordinate* coord) -> std::string {
         return coord ? coord->toString() : "<none>";
     };
-    std::string str = getCoordString(inputLines[0][0]) + "_"
-        + getCoordString(inputLines[0][1]) + " "
-        + getCoordString(inputLines[1][0]) + "_"
-        + getCoordString(inputLines[1][1]) + " : ";
+    std::ostringstream ss;
+    ss << getCoordString(inputLines[0][0]) << "_"
+       << getCoordString(inputLines[0][1]) << " "
+       << getCoordString(inputLines[1][0]) << "_"
+       << getCoordString(inputLines[1][1]) << " : ";
     if(isEndPoint()) {
-        str += " endpoint";
+        ss << " endpoint";
     }
     if(isProperVar) {
-        str += " proper";
+        ss << " proper";
     }
     if(isCollinear()) {
-        str += " collinear";
+        ss << " collinear";
     }
-    return str;
+    return ss.str();
 }
 
 /*public static*/

@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2022 Paul Ramsey <pramsey@cleverelephant.ca>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -11,17 +12,16 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/distance/GeometryLocation.java rev. 1.7 (JTS-1.10)
- *
  **********************************************************************/
 
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/operation/distance/GeometryLocation.h>
 
-using namespace geos::geom;
+#include <sstream>
+
+using geos::geom::Geometry;
+using geos::geom::Coordinate;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -88,11 +88,13 @@ std::string
 GeometryLocation::toString()
 {
     geos::io::WKTWriter writer;
-    std::string str(component->getGeometryType());
-    str += "[" + std::to_string(segIndex) + "]";
-    str += "-";
-    str += writer.toPoint(pt);
-    return str;
+    std::ostringstream ss;
+    ss << component->getGeometryType();
+    ss << "[";
+    ss << std::to_string(segIndex);
+    ss << "]-";
+    ss << writer.toPoint(pt);
+    return ss.str();
 }
 
 } // namespace geos.operation.distance

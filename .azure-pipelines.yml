@@ -32,7 +32,7 @@ stages:
     strategy:
       matrix:
         GCC 12:
-          CXXSTD: 11, 17
+          CXXSTD: 11, 20
           CXX: g++-12
           PACKAGES: g++-12
           VM_IMAGE: ubuntu-22.04
