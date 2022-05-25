@@ -84,7 +84,7 @@ public:
 
     /**
     * Computes the triangulation of a single polygon
-    * and returns it as a list of {@link Tri}s.
+    * and returns it as a list of {@link geos::triangulate::tri::Tri}s.
     *
     * @param poly the input polygon
     * @param triList the list to store the triangulation in
