@@ -55,15 +55,6 @@ private:
     const Geometry* inputGeom;
     const GeometryFactory* geomFact;
 
-    /**
-    * Computes the triangulation of a single polygon
-    * and returns it as a list of {@link Tri}s.
-    *
-    * @param poly the input polygon
-    * @return list of Tris forming the triangulation
-    */
-    void triangulatePolygon(const Polygon* poly, TriList<Tri>& triList);
-
     std::unique_ptr<Geometry> compute();
 
     static std::unique_ptr<Geometry> toGeometry(
@@ -91,8 +82,14 @@ public:
     */
     static std::unique_ptr<Geometry> triangulate(const Geometry* geom);
 
-
-
+    /**
+    * Computes the triangulation of a single polygon
+    * and returns it as a list of {@link Tri}s.
+    *
+    * @param poly the input polygon
+    * @return list of Tris forming the triangulation
+    */
+    static void triangulatePolygon(const Polygon* poly, TriList<Tri>& triList);
 
 };
 
