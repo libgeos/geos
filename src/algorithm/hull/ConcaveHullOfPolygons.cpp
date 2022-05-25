@@ -104,14 +104,14 @@ ConcaveHullOfPolygons::concaveFillByLengthRatio(const Geometry* polygons, double
 
 /* public */
 ConcaveHullOfPolygons::ConcaveHullOfPolygons(const Geometry* geom)
-    : inputPolygons(polygons)
-    , geomFactory(polygons->getFactory())
+    : inputPolygons(geom)
+    , geomFactory(geom->getFactory())
     , maxEdgeLength(-1.0)
     , maxEdgeLengthRatio(-1.0)
     , isHolesAllowed(false)
     , isTight(false)
 {
-    if (! polygons->isPolygonal()) {
+    if (! geom->isPolygonal()) {
         throw util::IllegalArgumentException("Input must be polygonal");
     }
 }
