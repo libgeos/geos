@@ -189,7 +189,17 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #if GEOS_DEBUG
         std::cerr << "Node " << i << ": " << *node << std::endl;
 #endif
-        if(node->getDegree() != 2) {
+        bool isStartNode = (node->getDegree() != 2);
+
+        // For directed merge a node also has to be processed
+        // if both edges are incoming or outgoing
+        if (!isStartNode && isDirected) {
+            const auto& edges = node->getOutEdges()->getEdges();
+            assert(edges.size() == 2);
+            isStartNode = (edges[0]->getEdgeDirection() == edges[1]->getEdgeDirection());
+        }
+
+        if (isStartNode) {
             buildEdgeStringsStartingAt(node);
             node->setMarked(true);
 #if GEOS_DEBUG
