@@ -187,8 +187,8 @@ ConcaveHullOfPolygons::extractShellRings(const Geometry* polygons, std::vector<c
     for (std::size_t i = 0; i < polygons->getNumGeometries(); i++) {
         const Geometry* consGeom = polygons->getGeometryN(i);
         const Polygon* consPoly = static_cast<const Polygon*>(consGeom);
-        std::unique_ptr<LinearRing> lr = consPoly->getExteriorRing()->clone();
-        rings.emplace_back(lr.release());
+        const LinearRing* lr = consPoly->getExteriorRing();
+        rings.push_back(lr);
     }
     return;
 }
