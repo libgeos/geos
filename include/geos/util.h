@@ -21,7 +21,7 @@
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
-
+#include <cassert>
 #include <memory>
 #include <type_traits>
 
