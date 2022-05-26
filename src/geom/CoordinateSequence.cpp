@@ -242,7 +242,7 @@ operator<< (std::ostream& os, const CoordinateSequence& cs)
 std::string
 CoordinateSequence::toString() const
 {
-    std::stringstream ss;
+    std::ostringstream ss;
     ss << *this;
     return ss.str();
 }

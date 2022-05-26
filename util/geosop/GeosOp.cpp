@@ -165,14 +165,10 @@ GeosOp::~GeosOp() {
 template<typename T>
 std::string formatNum(T n)
 {
-    auto fmt = std::to_string(n);
-    // use signed num to allow negative to indicate done
-    int insertPosition = ((int) fmt.length()) - 3;
-    while (insertPosition > 0) {
-        fmt.insert( (size_t) insertPosition, ",");
-        insertPosition-=3;
-    }
-    return fmt ;
+    std::stringstream ss;
+    ss.imbue(std::locale(""));
+    ss << std::fixed << n;
+    return ss.str();
 }
 
 std::vector<std::unique_ptr<Geometry>> collect( std::vector<std::unique_ptr<Geometry>>& geoms ) {
