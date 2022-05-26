@@ -200,16 +200,15 @@ ConcaveHullOfPolygons::buildHullTris()
 {
     extractShellRings(inputPolygons, polygonRings);
     std::unique_ptr<Polygon> frame = createFrame(inputPolygons->getEnvelopeInternal());
-    TriList<Tri> tris;
-    ConstrainedDelaunayTriangulator::triangulatePolygon(frame.get(), tris);
+    ConstrainedDelaunayTriangulator::triangulatePolygon(frame.get(), triList);
     //System.out.println(tris);
 
     const CoordinateSequence* framePts = frame->getExteriorRing()->getCoordinatesRO();
     if (maxEdgeLengthRatio >= 0) {
-        maxEdgeLength = computeTargetEdgeLength(tris, framePts, maxEdgeLengthRatio);
+        maxEdgeLength = computeTargetEdgeLength(triList, framePts, maxEdgeLengthRatio);
     }
 
-    removeFrameCornerTris(tris, framePts);
+    removeFrameCornerTris(triList, framePts);
     removeBorderTris();
     if (isHolesAllowed) removeHoleTris();
 }
@@ -237,14 +236,14 @@ ConcaveHullOfPolygons::createFrame(const Envelope* polygonsEnv)
 /* private static */
 double
 ConcaveHullOfPolygons::computeTargetEdgeLength(
-    TriList<Tri>& triList,
+    TriList<Tri>& tris,
     const CoordinateSequence* frameCorners,
     double edgeLengthRatio) const
 {
     if (edgeLengthRatio == 0) return 0.0;
     double maxEdgeLen = -1;
     double minEdgeLen = -1;
-    for (Tri* tri : triList.getTris()) {
+    for (Tri* tri : tris.getTris()) {
         //-- don't include frame triangles
         if (isFrameTri(tri, frameCorners))
             continue;

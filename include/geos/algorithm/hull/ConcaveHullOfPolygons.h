@@ -112,6 +112,7 @@ private:
     std::set<Tri*> hullTris;
     std::deque<Tri*> borderTriQue;
     std::vector<const LinearRing*> polygonRings;
+    TriList<Tri> triList;
 
     /**
     * Records the edge index of the longest border edge for border tris,
