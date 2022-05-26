@@ -274,8 +274,8 @@ ConcaveHullOfPolygons::isFrameTri(
     const CoordinateSequence* frameCorners) const
 {
     TriIndex index = vertexIndex(tri, frameCorners);
-    bool isFrameTri = (index >= 0);
-    return isFrameTri;
+    bool bIsFrameTri = (index >= 0);
+    return bIsFrameTri;
 }
 
 /* private */
@@ -288,8 +288,8 @@ ConcaveHullOfPolygons::removeFrameCornerTris(
     borderTriQue.clear();
     for (Tri* tri : tris.getTris()) {
         TriIndex index = vertexIndex(tri, frameCorners);
-        bool isFrameTri = (index >= 0);
-        if (isFrameTri) {
+        bool bIsFrameTri = (index >= 0);
+        if (bIsFrameTri) {
             /**
              * Frame tris are adjacent to at most one border tri,
              * which is opposite the frame corner vertex.
