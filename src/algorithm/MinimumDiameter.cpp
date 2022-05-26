@@ -353,7 +353,7 @@ MinimumDiameter::computeMaximumLine(const geom::CoordinateSequence* pts,
 
     std::size_t const n = pts->getSize();
     for(std::size_t i = 1; i < n; ++i) {
-      Coordinate p = pts->getAt(i);
+      const Coordinate& p = pts->getAt(i);
       if (p.x < ptMinX.x) ptMinX = p;
       if (p.x > ptMaxX.x) ptMaxX = p;
       if (p.y < ptMinY.y) ptMinY = p;
