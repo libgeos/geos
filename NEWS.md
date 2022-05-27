@@ -26,6 +26,7 @@
   - Fix LengthIndexedLine (via LengthLocationMap fix) (JTS-859, Martin Davis)
   - Fix PolygonHoleJoiner (JTS-862, Martin Davis)
   - Improve `test_geos_unit` application error checking and reporting
+  - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
 
 - Changes:
 
