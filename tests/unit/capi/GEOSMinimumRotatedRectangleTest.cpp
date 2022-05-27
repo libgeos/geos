@@ -1,0 +1,120 @@
+//
+// Test Suite for C-API GEOSMinimumRotatedRectangle
+
+#include <tut/tut.hpp>
+// geos
+#include <geos_c.h>
+// std
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
+
+#include "capi_test_utils.h"
+
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used in test cases.
+struct test_minimumrotatedrectangle_data : public capitest::utility {
+    test_minimumrotatedrectangle_data() {
+        GEOSWKTWriter_setTrim(wktw_, 1);
+        GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
+    }
+
+    void checkMinRectangle(const char* wkt, const char* expected)
+    {
+        // input
+        geom1_ = GEOSGeomFromWKT(wkt);
+        ensure(nullptr != geom1_);
+
+        // result
+        geom2_ = GEOSMinimumRotatedRectangle(geom1_);
+        ensure(nullptr != geom2_);
+
+        // expected
+        if (expected) {
+            geom3_ = GEOSGeomFromWKT(expected);
+            ensure(nullptr != geom3_);
+            ensure_geometry_equals(geom2_, geom3_, 0.0001);
+        }
+    }
+};
+
+typedef test_group<test_minimumrotatedrectangle_data> group;
+typedef group::object object;
+
+group test_capigeosminimumrotatedrectangle_group("capi::GEOSMinimumRotatedRectangle");
+
+//
+// Test Cases
+//
+
+template<>
+template<>
+void object::test<1>
+()
+{
+    input_ = GEOSGeomFromWKT("POLYGON ((1 6, 6 11, 11 6, 6 1, 1 6))");
+    ensure(nullptr != input_);
+
+    GEOSGeometry* output = GEOSMinimumRotatedRectangle(input_);
+    ensure(nullptr != output);
+    ensure(0 == GEOSisEmpty(output));
+
+    wkt_ = GEOSWKTWriter_write(wktw_, output);
+    ensure_equals(std::string(wkt_), std::string("POLYGON ((6 1, 11 6, 6 11, 1 6, 6 1))"));
+
+    GEOSGeom_destroy(output);
+}
+
+// zero-length
+template<>
+template<>
+void object::test<2>
+()
+{
+    checkMinRectangle("LINESTRING (1 1, 1 1)", "POINT (1 1)");
+}
+
+// Horizontal
+template<>
+template<>
+void object::test<3>
+()
+{
+    checkMinRectangle("LINESTRING (1 1, 3 1, 5 1, 7 1)", "LINESTRING (1 1, 7 1)");
+}
+
+// Vertical
+template<>
+template<>
+void object::test<4>
+()
+{
+    checkMinRectangle("LINESTRING (1 1, 1 4, 1 7, 1 9)", "LINESTRING (1 1, 1 9)");
+}
+
+// Bent Line
+template<>
+template<>
+void object::test<5>
+()
+{
+    checkMinRectangle("LINESTRING (1 2, 3 8, 9 6)", "POLYGON ((9 6, 7 10, -1 6, 1 2, 9 6))");
+}
+
+// Failure case from https://trac.osgeo.org/postgis/ticket/5163
+template<>
+template<>
+void object::test<6>
+()
+{
+    checkMinRectangle(
+        "LINESTRING(-99.48710639268086 34.79029839231914,-99.48370699999998 34.78689899963806,-99.48152167568102 34.784713675318976)",
+        "LINESTRING (-99.48710639268086 34.79029839231914, -99.48152167568102 34.784713675318976)"
+        );
+}
+
+} // namespace tut
