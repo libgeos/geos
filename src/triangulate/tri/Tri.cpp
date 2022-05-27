@@ -463,6 +463,13 @@ Tri::getLength() const
 }
 
 /* public */
+double
+Tri::getLength(TriIndex i) const
+{
+    return getCoordinate(i).distance(getCoordinate(next(i)));
+}
+
+/* public */
 std::unique_ptr<geom::Polygon>
 Tri::toPolygon(const geom::GeometryFactory* gf) const
 {
@@ -472,6 +479,19 @@ Tri::toPolygon(const geom::GeometryFactory* gf) const
 
     return gf->createPolygon(std::move(coords));
 }
+
+/* public static */
+std::unique_ptr<geom::Geometry>
+Tri::toGeometry(std::set<Tri*>& tris, const geom::GeometryFactory* gf)
+{
+    std::vector<std::unique_ptr<geom::Polygon>> polys;
+    for (Tri* tri: tris) {
+        std::unique_ptr<geom::Polygon> poly = tri->toPolygon(gf);
+        polys.emplace_back(poly.release());
+    }
+    return gf->createGeometryCollection(std::move(polys));
+}
+
 
 std::ostream&
 operator<<(std::ostream& os, const Tri& tri)

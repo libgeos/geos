@@ -33,6 +33,7 @@ void
 SegmentExtractingNoder::computeNodes(
     std::vector<SegmentString*>* segStrings)
 {
+    segList = new std::vector<SegmentString*>;
     extractSegments(*segStrings, *segList);
 }
 

@@ -328,6 +328,21 @@ public:
         return minx;
     };
 
+    /**
+     * Gets the length of the diameter (diagonal) of the envelope.
+     *
+     * @return the diameter length
+     */
+    double getDiameter() const
+    {
+        if (isNull()) {
+            return 0.0;
+        }
+        double w = getWidth();
+        double h = getHeight();
+        return std::sqrt(w*w + h*h);
+    }
+
     /** \brief
      * Computes the coordinate of the centre of this envelope
      * (as long as it is non-null).

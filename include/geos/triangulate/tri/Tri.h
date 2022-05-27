@@ -168,16 +168,10 @@ public:
 
     double getArea() const;
     double getLength() const;
-
-
-
-
-
-
-
-
+    double getLength(TriIndex i) const;
 
     std::unique_ptr<Polygon> toPolygon(const GeometryFactory* gf) const;
+    static std::unique_ptr<Geometry> toGeometry(std::set<Tri*>& tris, const GeometryFactory* gf);
 
     friend std::ostream& operator << (std::ostream& os, const Tri&);
 
