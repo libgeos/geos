@@ -56,17 +56,8 @@ template<>
 void object::test<1>
 ()
 {
-    input_ = GEOSGeomFromWKT("POLYGON ((1 6, 6 11, 11 6, 6 1, 1 6))");
-    ensure(nullptr != input_);
-
-    GEOSGeometry* output = GEOSMinimumRotatedRectangle(input_);
-    ensure(nullptr != output);
-    ensure(0 == GEOSisEmpty(output));
-
-    wkt_ = GEOSWKTWriter_write(wktw_, output);
-    ensure_equals(std::string(wkt_), std::string("POLYGON ((6 1, 11 6, 6 11, 1 6, 6 1))"));
-
-    GEOSGeom_destroy(output);
+    checkMinRectangle(  "POLYGON ((1 6, 6 11, 11 6, 6 1, 1 6))",
+                        "POLYGON ((1 6, 6 11, 11 6, 6 1, 1 6))");
 }
 
 // zero-length
