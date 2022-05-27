@@ -93,6 +93,10 @@ private:
 
     static geom::LineSegment computeSegmentForLine(double a, double b, double c);
 
+    static std::unique_ptr<geom::Geometry> computeMaximumLine(
+                        const geom::CoordinateSequence* pts,
+                        const geom::GeometryFactory* factory);
+
 public:
     ~MinimumDiameter() = default;
 
@@ -177,4 +181,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_ALGORITHM_MINIMUMDIAMETER_H
-
