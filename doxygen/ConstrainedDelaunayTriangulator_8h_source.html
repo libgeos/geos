@@ -95,37 +95,34 @@ $(function() {
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* inputGeom;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* geomFact;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> triangulatePolygon(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* poly, <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;Tri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::unique_ptr&lt;Geometry&gt; compute();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; toGeometry(</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geomFact,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;Tri&gt;</a>&gt;&gt;&amp; allTriLists);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::unique_ptr&lt;Geometry&gt; compute();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; toGeometry(</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geomFact,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;Tri&gt;</a>&gt;&gt;&amp; allTriLists);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">   81</a></span>&#160;    <a class="code" href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">ConstrainedDelaunayTriangulator</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_inputGeom)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        : inputGeom(p_inputGeom)</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        , geomFact(p_inputGeom-&gt;getFactory())</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    {}</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; triangulate(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">   72</a></span>&#160;    <a class="code" href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">ConstrainedDelaunayTriangulator</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_inputGeom)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        : inputGeom(p_inputGeom)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        , geomFact(p_inputGeom-&gt;getFactory())</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    {}</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; triangulate(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> triangulatePolygon(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* poly, <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;Tri&gt;</a>&amp; triList);</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;};</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;};</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;} <span class="comment">// namespace geos.triangulate.polygon</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;} <span class="comment">// namespace geos.triangulate</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <span class="comment">// namespace geos.triangulate.polygon</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;} <span class="comment">// namespace geos.triangulate</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator_html_a3fd26a368a40e4cb5532864c4e440350"><div class="ttname"><a href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">geos::triangulate::polygon::ConstrainedDelaunayTriangulator::ConstrainedDelaunayTriangulator</a></div><div class="ttdeci">ConstrainedDelaunayTriangulator(const Geometry *p_inputGeom)</div><div class="ttdef"><b>Definition:</b> ConstrainedDelaunayTriangulator.h:81</div></div>
+<div class="ttc" id="aclassgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator_html_a3fd26a368a40e4cb5532864c4e440350"><div class="ttname"><a href="classgeos_1_1triangulate_1_1polygon_1_1ConstrainedDelaunayTriangulator.html#a3fd26a368a40e4cb5532864c4e440350">geos::triangulate::polygon::ConstrainedDelaunayTriangulator::ConstrainedDelaunayTriangulator</a></div><div class="ttdeci">ConstrainedDelaunayTriangulator(const Geometry *p_inputGeom)</div><div class="ttdef"><b>Definition:</b> ConstrainedDelaunayTriangulator.h:72</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1triangulate_1_1tri_1_1Tri_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">geos::triangulate::tri::Tri</a></div><div class="ttdef"><b>Definition:</b> Tri.h:49</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Polygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a></div><div class="ttdoc">Represents a linear polygon, which may include holes.</div><div class="ttdef"><b>Definition:</b> Polygon.h:61</div></div>

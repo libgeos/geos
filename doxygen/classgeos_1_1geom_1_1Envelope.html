@@ -132,6 +132,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a019e9b699d8a4259bc99e58c5b70e1ad">getMinX</a> () const</td></tr>
 <tr class="memdesc:a019e9b699d8a4259bc99e58c5b70e1ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> minimum x-value. <code>min x &gt; max x</code> indicates that this is a null <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>. <br /></td></tr>
 <tr class="separator:a019e9b699d8a4259bc99e58c5b70e1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f6b4be5dec7528e490d0e29b9b25f4d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a1f6b4be5dec7528e490d0e29b9b25f4d">getDiameter</a> () const</td></tr>
+<tr class="separator:a1f6b4be5dec7528e490d0e29b9b25f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a374daebf0bd4700cc9ddfa1485e3a0dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a374daebf0bd4700cc9ddfa1485e3a0dc">centre</a> (<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;centre) const</td></tr>
 <tr class="memdesc:a374daebf0bd4700cc9ddfa1485e3a0dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the coordinate of the centre of this envelope (as long as it is non-null).  <a href="classgeos_1_1geom_1_1Envelope.html#a374daebf0bd4700cc9ddfa1485e3a0dc">More...</a><br /></td></tr>
 <tr class="separator:a374daebf0bd4700cc9ddfa1485e3a0dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1076,6 +1078,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <dl class="section return"><dt>Returns</dt><dd>the area of the envelope </dd>
 <dd>
 0.0 if the envelope is null </dd></dl>
+
+</div>
+</div>
+<a id="a1f6b4be5dec7528e490d0e29b9b25f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f6b4be5dec7528e490d0e29b9b25f4d">&#9670;&nbsp;</a></span>getDiameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double geos::geom::Envelope::getDiameter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the length of the diameter (diagonal) of the envelope.</p>
+<dl class="section return"><dt>Returns</dt><dd>the diameter length </dd></dl>
 
 </div>
 </div>
