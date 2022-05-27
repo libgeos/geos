@@ -100,7 +100,7 @@ geos_unit_SOURCES = \
 	capi/GEOSMaximumInscribedCircleTest.cpp \
 	capi/GEOSMinimumBoundingCircleTest.cpp \
 	capi/GEOSMinimumClearanceTest.cpp \
-	capi/GEOSMinimumRectangleTest.cpp \
+	capi/GEOSMinimumRotatedRectangleTest.cpp \
 	capi/GEOSMinimumWidthTest.cpp \
 	capi/GEOSNearestPointsTest.cpp \
 	capi/GEOSNodeTest.cpp \
