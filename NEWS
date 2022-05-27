@@ -10,6 +10,7 @@ Changes in 3.9.3
   - Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis)
   - Fix segfault in Hausdorff distance with empty geometries (GH-569, Paul Ramsey)
   - Fix segfault in GeometryNoder for empty input (GH-601, Paul Ramsey)
+  - Handle zero-area envelope in Hilbert Encoder (GH-579, Paul Ramsey)
 
 
 Changes in 3.9.2
