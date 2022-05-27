@@ -42,10 +42,14 @@ uint32_t
 HilbertEncoder::encode(const geom::Envelope* env)
 {
     double midx = env->getWidth()/2 + env->getMinX();
-    uint32_t x = (uint32_t) ((midx - minx) / strideX);
+    uint32_t x = 0;
+    if (midx > minx && strideX != 0)
+        x = (uint32_t) ((midx - minx) / strideX);
 
     double midy = env->getHeight()/2 + env->getMinY();
-    uint32_t y = (uint32_t) ((midy - miny) / strideY);
+    uint32_t y = 0;
+    if (midy > miny && strideY != 0)
+        y = (uint32_t) ((midy - miny) / strideY);
 
     return HilbertCode::encode(level, x, y);
 }
