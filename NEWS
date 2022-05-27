@@ -18,6 +18,8 @@ Changes in 3.10.3
   - Fix crash in GeometryNoder on empty intpu (GH-601, Paul Ramsey)
   - Handle case where user sets explicit absolute lib and include dirs (GH-608, Paul Ramsey)
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
+  - Fix HilbertEncoder difference in ARM vs x64 (GH-579, Paul Ramsey)
+
 
 Changes in 3.10.2
 2022-01-15
