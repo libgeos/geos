@@ -267,7 +267,7 @@ template<> template<>
 void object::test<8>()
 {
     const char* inpWKT[] = {
-        "MULTILINESTRING ((-29 -27, 1 2), (-29 -27, -45 -33, -46 -32))",
+        "MULTILINESTRING((-29 -27,1 2),(-29 -27,-45 -33),(-45 -33,-46 -32))",
         nullptr
     };
     const char* expWKT[] = {
