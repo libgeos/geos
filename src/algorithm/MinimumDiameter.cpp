@@ -240,6 +240,8 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateSequence* pts,
         maxPerpDistance = nextPerpDistance;
         maxIndex = nextIndex;
         nextIndex = getNextIndex(pts, maxIndex);
+        if (nextIndex == startIndex)
+            break;
         nextPerpDistance = seg->distancePerpendicular(pts->getAt(nextIndex));
     }
 
@@ -278,7 +280,8 @@ MinimumDiameter::getMinimumRectangle()
         if(minBaseSeg.p0.equals2D(minBaseSeg.p1)) {
             return std::unique_ptr<Geometry>(inputGeom->getFactory()->createPoint(minBaseSeg.p0));
         }
-        return minBaseSeg.toGeometry(*inputGeom->getFactory());
+      //-- Min rectangle is a line. Use the diagonal of the extent
+      return computeMaximumLine(convexHullPts.get(), inputGeom->getFactory());
     }
 
     // deltas for the base segment of the minimum diameter
@@ -337,6 +340,42 @@ MinimumDiameter::getMinimumRectangle()
     return inputGeom->getFactory()->createPolygon(std::move(shell));
 }
 
+// private static
+std::unique_ptr<Geometry>
+MinimumDiameter::computeMaximumLine(const geom::CoordinateSequence* pts,
+        const GeometryFactory* factory)
+{
+    //-- find max and min pts for X and Y
+    Coordinate ptMinX = pts->getAt(0);
+    Coordinate ptMaxX = pts->getAt(0);
+    Coordinate ptMinY = pts->getAt(0);
+    Coordinate ptMaxY = pts->getAt(0);
+
+    std::size_t const n = pts->getSize();
+    for(std::size_t i = 1; i < n; ++i) {
+      const Coordinate& p = pts->getAt(i);
+      if (p.x < ptMinX.x) ptMinX = p;
+      if (p.x > ptMaxX.x) ptMaxX = p;
+      if (p.y < ptMinY.y) ptMinY = p;
+      if (p.y > ptMaxY.y) ptMaxY = p;
+    }
+    Coordinate p0 = ptMinX;
+    Coordinate p1 = ptMaxX;
+    //-- line is vertical - use Y pts
+    if (p0.x == p1.x) {
+      p0 = ptMinY;
+      p1 = ptMaxY;
+    }
+
+    const CoordinateSequenceFactory* csf =
+        factory->getCoordinateSequenceFactory();
+    auto seq = csf->create(2, 2);
+    seq->setAt(p0, 0);
+    seq->setAt(p1, 1);
+
+    return factory->createLineString(std::move(seq));
+}
+
 double
 MinimumDiameter::computeC(double a, double b, const Coordinate& p)
 {
@@ -381,4 +420,3 @@ MinimumDiameter::getMinimumDiameter(Geometry* geom)
 
 } // namespace geos.algorithm
 } // namespace geos
-

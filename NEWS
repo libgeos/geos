@@ -17,7 +17,7 @@ Changes in 3.10.3
   - Fix PolygonHoleJoiner (JTS-862, Martin Davis)
   - Fix crash in GeometryNoder on empty intpu (GH-601, Paul Ramsey)
   - Handle case where user sets explicit absolute lib and include dirs (GH-608, Paul Ramsey)
-
+  - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
 
 Changes in 3.10.2
 2022-01-15
