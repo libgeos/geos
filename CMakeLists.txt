@@ -320,6 +320,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION include)
 
 add_subdirectory(tools)
+add_subdirectory(util)
 
 #-----------------------------------------------------------------------------
 # Uninstall
