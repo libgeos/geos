@@ -51,13 +51,14 @@ This PSC list is valid as of February 18th, 2022.
     </item>
     
     <item>
-      <title>Reference Docs</title>
+      <title>API Docs</title>
       <link>https://libgeos.org/usage/doxygen/</link>
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/doxygen/</guid>
       <description>The Doxygen documentation is the most up-to-date reference for the C and C++ API of GEOS.
- C API C++ API  For a quick start, see the C API tutorial or the C++ API tutorial. There are also working examples available in the code repository.</description>
+ C API C++ API  See also:
+ C API tutorial C++ API tutorial.  Code examples are available in the code repository.</description>
     </item>
     
     <item>
