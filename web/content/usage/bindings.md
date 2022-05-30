@@ -1,7 +1,7 @@
 ---
 title: "Bindings"
 draft: false
-weight: 10
+weight: 110
 ---
 
 GEOS can be accessed from a variety of other languages via bindings to the library.
@@ -28,6 +28,7 @@ Python bindings are available via:
 * [Shapely](http://pypi.python.org/pypi/Shapely)
 * [PyGEOS](https://github.com/pygeos/pygeos)
 * Calling functions from libgeos_c via Python ctypes
+* [GeoPandas](https://github.com/geopandas/geopandas)
 
 ## R
 * [sf](https://CRAN.R-project.org/package=sf)
@@ -41,3 +42,23 @@ Python bindings are available via:
 
 ## Swift
 * [GeoSwift](https://github.com/GEOSwift/GEOSwift)
+
+Geospatial applications using GEOS include:
+
+## Databases
+
+ * [PostGIS](http://www.postgis.org)
+ * [INGRES](http://www.ingres.com/)
+ * [MonetDB](http://monetdb.cwi.nl/)
+ * [SpatiaLite](http://www.gaia-gis.it/spatialite/)
+ * [CockroachDB](https://github.com/cockroachdb/cockroach)
+
+## Applications
+
+ * [GDAL/OGR](https://gdal.org/)
+ * [GRASS GIS](https://grass.osgeo.org/)
+ * [MapServer](https://mapserver.org/)
+ * [MapGuide Open Source](https://www.osgeo.org/projects/mapguide-open-source/)
+ * [MapWindow GIS](https://www.mapwindow.org/)
+ * [osgEarth](http://osgearth.org)
+ * [QGIS](https://qgis.org/)
