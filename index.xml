@@ -19,17 +19,6 @@ Moving to Github has the following components:
     </item>
     
     <item>
-      <title>Bindings</title>
-      <link>https://libgeos.org/usage/bindings/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://libgeos.org/usage/bindings/</guid>
-      <description>GEOS can be accessed from a variety of other languages via bindings to the library.
-Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos.  Python Python bindings are available via:
- Shapely PyGEOS Calling functions from libgeos_c via Python ctypes  R  sf geos  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  </description>
-    </item>
-    
-    <item>
       <title>Code of Conduct</title>
       <link>https://libgeos.org/project/coc/</link>
       <pubDate>Wed, 16 Feb 2022 00:00:00 -0700</pubDate>
@@ -99,6 +88,17 @@ You can explore the C++ model via the Doxygen reference.</description>
       <guid>https://libgeos.org/usage/tools/</guid>
       <description>GeosOp  Usage   JTS TestBuilder   GeosOp geosop is a CLI (command-line interface) for GEOS. It can be used to:
  Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.</description>
+    </item>
+    
+    <item>
+      <title>Bindings</title>
+      <link>https://libgeos.org/usage/bindings/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/usage/bindings/</guid>
+      <description>GEOS can be accessed from a variety of other languages via bindings to the library.
+Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos.  Python Python bindings are available via:
+ Shapely PyGEOS Calling functions from libgeos_c via Python ctypes GeoPandas  R  sf geos  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  Geospatial applications using GEOS include:</description>
     </item>
     
     <item>

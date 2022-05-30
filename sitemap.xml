@@ -11,8 +11,6 @@
     <loc>https://libgeos.org/development/rfcs/rfc10/</loc>
     <lastmod>2021-10-29T00:00:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/usage/bindings/</loc>
-  </url><url>
     <loc>https://libgeos.org/usage/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
@@ -43,6 +41,8 @@
     <loc>https://libgeos.org/development/testing/</loc>
   </url><url>
     <loc>https://libgeos.org/usage/tools/</loc>
+  </url><url>
+    <loc>https://libgeos.org/usage/bindings/</loc>
   </url><url>
     <loc>https://libgeos.org/usage/faq/</loc>
   </url><url>
