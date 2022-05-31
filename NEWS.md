@@ -27,6 +27,7 @@
   - Fix PolygonHoleJoiner (JTS-862, Martin Davis)
   - Improve `test_geos_unit` application error checking and reporting
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
+  - Fix buffer inverted ring check (JTS-878, Martin Davis)
 
 - Changes:
 
