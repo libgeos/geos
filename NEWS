@@ -19,7 +19,7 @@ Changes in 3.10.3
   - Handle case where user sets explicit absolute lib and include dirs (GH-608, Paul Ramsey)
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
   - Fix HilbertEncoder difference in ARM vs x64 (GH-579, Paul Ramsey)
-  - Fix buffer inverted ring check (JTS-878, Martin Davis)
+  - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
 
 Changes in 3.10.2
 2022-01-15
