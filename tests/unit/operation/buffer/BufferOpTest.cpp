@@ -461,5 +461,21 @@ void object::test<19>
     ensure( 1 == g0->buffer( -18 )->getNumGeometries() );
 }
 
+// Test for buffer inverted ring check optimization
+// See https://github.com/locationtech/jts/issues/876
+template<>
+template<>
+void object::test<20>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt0("LINESTRING (-20 0, 0 20, 20 0, 0 -20, -20 0)");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    GeomPtr result1 = g0->buffer( 70 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
+}
 
 } // namespace tut
