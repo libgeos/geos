@@ -12,6 +12,7 @@ Changes in 3.9.3
   - Fix segfault in GeometryNoder for empty input (GH-601, Paul Ramsey)
   - Handle zero-area envelope in Hilbert Encoder (GH-579, Paul Ramsey)
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
+  - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
 
 Changes in 3.9.2
 2021-11-01

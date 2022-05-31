@@ -350,6 +350,7 @@ OffsetCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
 }
 
 static const int MAX_INVERTED_RING_SIZE = 9;
+static const double INVERTED_CURVE_VERTEX_FACTOR = 4;
 static const double NEARNESS_FACTOR = 0.99;
 
 /* private static*/
@@ -373,7 +374,7 @@ OffsetCurveSetBuilder::isRingCurveInverted(
      * An inverted curve has no more points than the input ring.
      * This also eliminates concave inputs (which will produce fillet arcs)
      */
-    if (curvePts->size() > inputPts->size()) return false;
+    if (curvePts->size() > INVERTED_CURVE_VERTEX_FACTOR * inputPts->size()) return false;
 
     /**
      * Check if the curve vertices are all closer to the input ring
