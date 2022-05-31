@@ -532,4 +532,29 @@ void object::test<19>
     ensure( 1 == GeomPtr(g0->buffer( -18 ))->getNumGeometries() );
 }
 
+// Test for buffer inverted ring check optimization
+// See https://github.com/locationtech/jts/issues/876
+template<>
+template<>
+void object::test<20>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt0("LINESTRING (-20 0, 0 20, 20 0, 0 -20, -20 0)");
+
+    GeomPtr g0(wktreader.read(wkt0));
+    BufferOp op(g0.get());
+
+    double const distance = 70;
+    GeomPtr gBuffer = op.getResultGeometry(distance);
+
+    // std::cout << wktwriter.write(gBuffer.get()) << std::endl;
+
+    ensure_not(gBuffer->isEmpty());
+    ensure(gBuffer->isValid());
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(gBuffer.get())->getNumInteriorRing() );
+}
+
 } // namespace tut

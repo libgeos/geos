@@ -74,6 +74,7 @@ class GEOS_DLL BufferCurveSetBuilder {
 private:
 
     static constexpr int MAX_INVERTED_RING_SIZE = 9;
+    static constexpr int INVERTED_CURVE_VERTEX_FACTOR = 4;
     static constexpr double NEARNESS_FACTOR = 0.99;
 
     // To keep track of newly-created Labels.
@@ -288,4 +289,3 @@ public:
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
