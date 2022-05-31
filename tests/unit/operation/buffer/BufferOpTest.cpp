@@ -543,18 +543,10 @@ void object::test<20>
     using geos::operation::buffer::BufferParameters;
 
     std::string wkt0("LINESTRING (-20 0, 0 20, 20 0, 0 -20, -20 0)");
-
     GeomPtr g0(wktreader.read(wkt0));
-    BufferOp op(g0.get());
 
-    double const distance = 70;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
-
-    // std::cout << wktwriter.write(gBuffer.get()) << std::endl;
-
-    ensure_not(gBuffer->isEmpty());
-    ensure(gBuffer->isValid());
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(gBuffer.get())->getNumInteriorRing() );
+    GeomPtr result1 = g0->buffer( 70 );
+    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
 }
 
 } // namespace tut
