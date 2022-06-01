@@ -3479,7 +3479,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * Computes a boundary-respecting hull of a polygonal geometry,
 * with hull shape determined by a target parameter
 * specifying the fraction of the input vertices retained in the result.
-* Larger values compute less concave results.
+* Larger values produce less concave results.
 * A value of 1 produces the convex hull; a value of 0 produces the original geometry.
 * An outer hull is computed if the parameter is positive,
 * an inner hull is computed if it is negative.
