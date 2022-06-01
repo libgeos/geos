@@ -3518,7 +3518,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
 *        This normalizes the Maximum Edge Length to be scale-free.
 *        A value of 1 produces the convex hull; a value of 0 produces
 *        the original polygons.
-* \param isHolesAllowed is the concave hull can be allowed to contain holes?
+* \param isHolesAllowed is the concave hull allowed to contain holes?
 * \param isTight does the hull follow the outer boundaries of the input polygons.
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
