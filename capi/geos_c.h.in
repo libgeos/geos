@@ -3509,7 +3509,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
 * of the Delaunay Triangulation of the space between the polygons,
 * until the target criterion parameter is reached.
 *
-* "Maximum Edge Length" is the length of the longest edge between the polygons is no larger than this value.
+* "Maximum Edge Length" constrains the length of the longest edge between the polygons to be no larger than this value.
 *
 * \param g the valid multi-polygonal geometry to process
 * \param lengthRatio determine the Maximum Edge Length as a
