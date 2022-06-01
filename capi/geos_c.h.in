@@ -774,6 +774,20 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
     double ratio,
     unsigned int allowHoles);
 
+/** \see GEOSPolygonHull */
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHull_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double ratio);
+
+/** \see GEOSConcaveHullOfPolygons */
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double lengthRatio,
+    bool isTight,
+    bool isHolesAllowed);
+
 /** \see GEOSMinimumRotatedRectangle */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(
     GEOSContextHandle_t handle,
@@ -3460,6 +3474,66 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
     double ratio,
     unsigned int allowHoles);
+
+/**
+* Computes a boundary-respecting hull of a polygonal geometry,
+* with hull shape determined by a target parameter
+* specifying the fraction of the input vertices retained in the result.
+* Larger values compute less concave results.
+* A value of 1 produces the convex hull; a value of 0 produces the original geometry.
+* An outer hull is computed if the parameter is positive,
+* an inner hull is computed if it is negative.
+*
+* \param g the polygonal geometry to process
+* \param vertexNumFraction the target fraction of number of input vertices in result
+* \return A newly allocated geometry of the concave hull. NULL on exception.
+*
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::algorithm::hull::PolygonHull
+*/
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
+    const GEOSGeometry* g,
+    double vertexNumFraction);
+
+
+/**
+* Constructs a concave hull of a set of polygons, respecting
+* the polygons as constraints.
+*
+* A concave hull is a possibly non-convex polygon containing all the input polygons.
+* A given set of polygons has a sequence of hulls of increasing concaveness,
+* determined by a numeric target parameter.
+* The computed hull "fills the gap" between the polygons,
+* and does not intersect their interior.
+*
+* The concave hull is constructed by removing the longest outer edges
+* of the Delaunay Triangulation of the space between the polygons,
+* until the target criterion parameter is reached.
+*
+* "Maximum Edge Length" is the length of the longest edge between the polygons is no larger than this value.
+*
+* \param g the valid multi-polygonal geometry to process
+* \param lengthRatio determine the Maximum Edge Length as a
+*        fraction of the difference between the longest and
+*        shortest edge lengths between the polygons.
+*        This normalizes the Maximum Edge Length to be scale-free.
+*        A value of 1 produces the convex hull; a value of 0 produces
+*        the original polygons.
+* \param isHollesAllowed is the concave hull can be allowed to contain holes?
+* \param isTight does the hull follow the outer boundaries of the input polygons.
+* \return A newly allocated geometry of the concave hull. NULL on exception.
+*
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::algorithm::hull::ConcaveHullOfPolygons
+*
+* The input polygons *must* form a *valid* MultiPolygon
+* (i.e. they must be non-overlapping).
+*/
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons(
+    const GEOSGeometry* g,
+    double lengthRatio,
+    bool isTight,
+    bool isHolesAllowed);
 
 /**
 * Returns the minimum rotated rectangular POLYGON which encloses

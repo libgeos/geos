@@ -26,6 +26,8 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
+#include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
+#include <geos/algorithm/hull/PolygonHull.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -173,6 +175,8 @@ using geos::io::GeoJSONWriter;
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 using geos::algorithm::hull::ConcaveHull;
+using geos::algorithm::hull::ConcaveHullOfPolygons;
+using geos::algorithm::hull::PolygonHull;
 
 using geos::operation::buffer::BufferBuilder;
 using geos::operation::buffer::BufferParameters;
@@ -1227,6 +1231,36 @@ extern "C" {
             hull.setMaximumEdgeLengthRatio(ratio);
             hull.setHolesAllowed(allowHoles);
             std::unique_ptr<Geometry> g3 = hull.getHull();
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSPolygonHull_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1,
+        double vertexNumFraction)
+    {
+        return execute(extHandle, [&]() {
+            std::unique_ptr<Geometry> g3 = PolygonHull::hull(g1, vertexNumFraction);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSConcaveHullOfPolygons_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1,
+        double lengthRatio,
+        bool isTight,
+        bool isHolesAllowed)
+    {
+        return execute(extHandle, [&]() {
+            std::unique_ptr<Geometry> g3 =
+                ConcaveHullOfPolygons::concaveHullByLengthRatio(
+                    g1, lengthRatio,
+                    isTight,
+                    isHolesAllowed);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
