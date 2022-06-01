@@ -3511,7 +3511,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
 *
 * "Maximum Edge Length" constrains the length of the longest edge between the polygons to be no larger than this value.
 *
-* \param g the valid multi-polygonal geometry to process
+* \param g the valid MultiPolygon geometry to process
 * \param lengthRatio determine the Maximum Edge Length as a
 *        fraction of the difference between the longest and
 *        shortest edge lengths between the polygons.
