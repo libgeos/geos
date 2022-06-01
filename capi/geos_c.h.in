@@ -785,8 +785,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     double lengthRatio,
-    bool isTight,
-    bool isHolesAllowed);
+    unsigned int isTight,
+    unsigned int isHolesAllowed);
 
 /** \see GEOSMinimumRotatedRectangle */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(
@@ -3531,8 +3531,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons(
     const GEOSGeometry* g,
     double lengthRatio,
-    bool isTight,
-    bool isHolesAllowed);
+    unsigned int isTight,
+    unsigned int isHolesAllowed);
 
 /**
 * Returns the minimum rotated rectangular POLYGON which encloses

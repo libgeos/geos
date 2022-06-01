@@ -488,8 +488,8 @@ extern "C" {
     Geometry*
     GEOSConcaveHullOfPolygons(const Geometry* g,
         double lengthRatio,
-        bool isTight,
-        bool isHolesAllowed)
+        unsigned int isTight,
+        unsigned int isHolesAllowed)
     {
         return GEOSConcaveHullOfPolygons_r(handle,
             g, lengthRatio, isTight, isHolesAllowed);

@@ -1252,15 +1252,15 @@ extern "C" {
     GEOSConcaveHullOfPolygons_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
         double lengthRatio,
-        bool isTight,
-        bool isHolesAllowed)
+        unsigned int isTight,
+        unsigned int isHolesAllowed)
     {
         return execute(extHandle, [&]() {
             std::unique_ptr<Geometry> g3 =
                 ConcaveHullOfPolygons::concaveHullByLengthRatio(
                     g1, lengthRatio,
-                    isTight,
-                    isHolesAllowed);
+                    isTight > 0,
+                    isHolesAllowed > 0);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
