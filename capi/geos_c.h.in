@@ -3485,7 +3485,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * an inner hull is computed if it is negative.
 *
 * \param g the polygonal geometry to process
-* \param vertexNumFraction the target fraction of number of input vertices in result
+* \param vertexNumFraction the target fraction of the count of input vertices to retain in result
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
