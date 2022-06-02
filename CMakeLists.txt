@@ -23,7 +23,7 @@ endif()
 #################################################################################
 # Set GEOS project
 #################################################################################
-project(GEOS VERSION 3.7.4 LANGUAGES C CXX)
+project(GEOS VERSION 3.7.5 LANGUAGES C CXX)
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -58,7 +58,7 @@ message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
 # GEOS C API version
 set(CAPI_INTERFACE_CURRENT 12)
-set(CAPI_INTERFACE_REVISION 4)
+set(CAPI_INTERFACE_REVISION 5)
 set(CAPI_INTERFACE_AGE 11)
 
 math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
