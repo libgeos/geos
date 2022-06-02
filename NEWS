@@ -1,5 +1,5 @@
-Changes in 3.7.4dev
-YYYY-MM-DD
+Changes in 3.7.4
+2022-06-02
 
 - Bug fixes / improvements
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
