@@ -32,7 +32,7 @@ It can be used to:
   -b arg               source for B geometries (WKT, WKB, file, stdin, stdin.wkb)
       --alimit arg     Limit nunber of A geometries read
   -c, --collect        Collect input into single geometry
-  -e, --explode        Explode results into conponent geometris
+  -e, --explode        Explode results into component geometries
   -f, --format arg     Output format (wkt, wkb or txt)
   -h, --help           Print help
   -p, --precision arg  Sets number of decimal places in output coordinates
