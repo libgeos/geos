@@ -6,7 +6,19 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 15 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.10.3</title>
+      <link>https://libgeos.org/posts/2022-06-03-geos-3-10-3-released/</link>
+      <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2022-06-03-geos-3-10-3-released/</guid>
+      <description>As part of a batch release of patches for all stable branches, the 3.10.3 release of GEOS is now available to download.
+Release notes for the various branches are available: 3.7.4, 3.8.3, 3.9.3 and 3.10.3.
+The 3.10.3 release is a bug fix release.
+ VoronoiDiagramBuilder::setSites(const CoordinateSequence&amp;amp;) return sorted (GH-551) Add SnappingNoder seeding (Martin Davis) Fix RelateOp (and intersects predicate) for lines with intersections very near boundary (GH-570, Martin Davis) Fix segfault in Hausdorff distance with empty geometries (GH-569) Fix inf loop in PolygonTriangulator (GH-574, Andrew Stelter) Fix short circuit from TemplateSTRtree query (GH-577, Andrew Stelter) Fix IsValidOp to handle repeated node points (JTS-845, Martin Davis) Fix IsSimpleOp to handle closed LineStrings with repeated endpoints (JTS-851, Martin Davis) Add OverlayNG area check heuristic (JTS-812, Paul Ramsey) Improve test_geos_unit application error checking and reporting (Martin Davis) Fix LengthIndexedLine (via LengthLocationMap fix) (JTS-859, Martin Davis) Fix PolygonHoleJoiner (JTS-862, Martin Davis) Fix crash in GeometryNoder on empty intpu (GH-601, Paul Ramsey) Handle case where user sets explicit absolute lib and include dirs (GH-608, Paul Ramsey) Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis) Fix HilbertEncoder difference in ARM vs x64 (GH-579, Paul Ramsey) Fix BufferOp inverted ring check (JTS-878, Martin Davis)  </description>
+    </item>
+    
     <item>
       <title>Version 3.10.2</title>
       <link>https://libgeos.org/posts/2021-11-02-geos-3-10-2-released/</link>
