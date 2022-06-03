@@ -5,10 +5,10 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
-noinst_PROGRAMS = \
-	GeosOp
+noinst_PROGRAMS = geosop
 
-GeosOp_SOURCES = \
+geosop_SOURCES = \
+	cxxopts.hpp \
 	GeosOp.cpp \
 	GeosOp.h \
 	GeomFunction.cpp \
@@ -18,7 +18,8 @@ GeosOp_SOURCES = \
 	WKTStreamReader.cpp \
 	WKTStreamReader.h
 
-GeosOp_LDADD = $(top_builddir)/src/libgeos.la
+geosop_LDADD = $(top_builddir)/src/libgeos.la \
+	$(top_builddir)/capi/libgeos_c.la 
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 

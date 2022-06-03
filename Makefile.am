@@ -20,6 +20,7 @@ SUBDIRS = \
 	macros  \
 	swig    \
 	tests   \
+	util    \
 	benchmarks \
 	tools
 
