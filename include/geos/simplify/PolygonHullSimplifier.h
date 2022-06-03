@@ -91,7 +91,7 @@ public:
     * Creates a new instance
     * to compute a simplified hull of a polygonal geometry.
     * An outer or inner hull is computed
-    * depending on the value of <code>isOuter</code>.
+    * depending on the value of "isOuter".
     *
     * @param geom the polygonal geometry to process
     * @param bOuter indicates whether to compute an outer or inner hull
@@ -117,6 +117,7 @@ public:
     * Either outer or inner hulls can be computed.
     *
     * @param geom the polygonal geometry to process
+    * @param isOuter indicates whether to compute an outer or inner hull
     * @param vertexNumFraction the target fraction of number of input vertices in result
     * @return the hull geometry
     */
@@ -134,6 +135,7 @@ public:
     * Either outer or inner hulls can be computed..
     *
     * @param geom the polygonal geometry to process
+    * @param isOuter indicates whether to compute an outer or inner hull
     * @param areaDeltaRatio the target ratio of area difference to original area
     * @return the hull geometry
     */
