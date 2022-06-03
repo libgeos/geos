@@ -15,7 +15,7 @@
 #pragma once
 
 #include <geos/geom/Coordinate.h>
-#include <geos/algorithm/hull/LinkedRing.h>
+#include <geos/simplify/LinkedRing.h>
 #include <geos/index/VertexSequencePackedRtree.h>
 
 #include <queue>
@@ -27,12 +27,11 @@ class LinearRing;
 class LineString;
 class Polygon;
 }
-namespace algorithm {
-namespace hull {
+namespace simplify {
 class RingHullIndex;
 }
 }
-}
+
 
 using geos::geom::Coordinate;
 using geos::geom::Envelope;
@@ -43,8 +42,7 @@ using geos::index::VertexSequencePackedRtree;
 
 
 namespace geos {
-namespace algorithm { // geos::algorithm
-namespace hull {      // geos::algorithm::hull
+namespace simplify { // geos::simplify
 
 
 class RingHull
@@ -200,6 +198,5 @@ private:
 }; // RingHull
 
 
-} // geos::algorithm::hull
-} // geos::algorithm
+} // geos::simplify
 } // geos

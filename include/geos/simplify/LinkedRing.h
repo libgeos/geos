@@ -33,8 +33,7 @@ using geos::geom::Coordinate;
 using geos::geom::CoordinateArraySequence;
 
 namespace geos {
-namespace algorithm { // geos::algorithm
-namespace hull {      // geos::algorithm::hull
+namespace simplify { // geos::simplify
 
 
 
@@ -77,7 +76,6 @@ class LinkedRing
 }; // LinkedRing
 
 
-} // geos::algorithm::hull
-} // geos::algorithm
+} // geos::simplify
 } // geos
 
