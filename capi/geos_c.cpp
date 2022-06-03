@@ -478,11 +478,11 @@ extern "C" {
     }
 
     Geometry*
-    GEOSPolygonHull(const Geometry* g,
-                    double vertexNumFraction)
-
+    GEOSPolygonHullSimplify(const Geometry* g,
+                            unsigned int isOuter,
+                            double vertexNumFraction)
     {
-        return GEOSPolygonHull_r(handle, g, vertexNumFraction);
+        return GEOSPolygonHullSimplify_r(handle, g, isOuter, vertexNumFraction);
     }
 
     Geometry*

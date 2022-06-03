@@ -774,10 +774,11 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
     double ratio,
     unsigned int allowHoles);
 
-/** \see GEOSPolygonHull */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHull_r(
+/** \see GEOSPolygonHullSimplify */
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
+    unsigned int isOuter,
     double ratio);
 
 /** \see GEOSConcaveHullOfPolygons */
@@ -3485,14 +3486,16 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * an inner hull is computed if it is negative.
 *
 * \param g the polygonal geometry to process
+* \param isOuter indicates whether to compute an outer or inner hull (1 for outer hull, 0 for inner)
 * \param vertexNumFraction the target fraction of the count of input vertices to retain in result
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::algorithm::hull::PolygonHull
+* \see geos::simplify::PolygonHullSimplifier
 */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHull(
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
     const GEOSGeometry* g,
+    unsigned int isOuter,
     double vertexNumFraction);
 
 /**

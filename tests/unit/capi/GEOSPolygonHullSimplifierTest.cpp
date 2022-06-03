@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSConcaveHull
+// Test Suite for C-API GEOSPolygonHullSimplify
 
 #include <tut/tut.hpp>
 // geos
@@ -23,7 +23,7 @@ struct test_capigeospolygonhull_data : public capitest::utility {
 typedef test_group<test_capigeospolygonhull_data> group;
 typedef group::object object;
 
-group test_capigeospolygonhull_group("capi::GEOSPolygonHull");
+group test_capigeospolygonhull_group("capi::GEOSPolygonHullSimplify");
 
 //
 // Test Cases
@@ -35,7 +35,7 @@ void object::test<1>()
 {
     input_ = GEOSGeomFromWKT("POLYGON ((10 90, 40 60, 20 40, 40 20, 70 50, 40 30, 30 40, 60 70, 50 90, 90 90, 90 10, 10 10, 10 90))");
     ensure(nullptr != input_);
-    geom1_ = GEOSPolygonHull(input_, 0.5);
+    geom1_ = GEOSPolygonHullSimplify(input_, 1, 0.5);
     ensure(nullptr != geom1_);
     expected_ = GEOSGeomFromWKT("POLYGON ((10 90, 50 90, 90 90, 90 10, 10 10, 10 90))");
     ensure_geometry_equals(geom1_, expected_);
@@ -48,7 +48,7 @@ void object::test<2>()
 {
     input_ = GEOSGeomFromWKT("POLYGON ((10 90, 40 60, 20 40, 40 20, 70 50, 40 30, 30 40, 60 70, 50 90, 90 90, 90 10, 10 10, 10 90))");
     ensure(nullptr != input_);
-    geom1_ = GEOSPolygonHull(input_, 0.7);
+    geom1_ = GEOSPolygonHullSimplify(input_, 1, 0.7);
     ensure(nullptr != geom1_);
     expected_ = GEOSGeomFromWKT("POLYGON ((10 90, 40 60, 30 40, 60 70, 50 90, 90 90, 90 10, 10 10, 10 90))");
     ensure_geometry_equals(geom1_, expected_);
@@ -61,7 +61,7 @@ void object::test<3>()
 {
     input_ = GEOSGeomFromWKT("POLYGON EMPTY");
     ensure(nullptr != input_);
-    geom1_ = GEOSPolygonHull(input_, 0.7);
+    geom1_ = GEOSPolygonHullSimplify(input_, 1, 0.7);
     ensure(nullptr != geom1_);
     expected_ = GEOSGeomFromWKT("POLYGON EMPTY");
     ensure_geometry_equals(geom1_, expected_);
@@ -73,7 +73,7 @@ void object::test<4>()
 {
     input_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
     ensure(nullptr != input_);
-    geom1_ = GEOSPolygonHull(input_, 0.7);
+    geom1_ = GEOSPolygonHullSimplify(input_, 1, 0.7);
     ensure(nullptr != geom1_);
     expected_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
     ensure_geometry_equals(geom1_, expected_);

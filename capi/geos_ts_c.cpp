@@ -27,7 +27,6 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
-#include <geos/algorithm/hull/PolygonHull.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -88,6 +87,7 @@
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/shape/fractal/HilbertEncoder.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
+#include <geos/simplify/PolygonHullSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
@@ -176,7 +176,6 @@ using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 using geos::algorithm::hull::ConcaveHull;
 using geos::algorithm::hull::ConcaveHullOfPolygons;
-using geos::algorithm::hull::PolygonHull;
 
 using geos::operation::buffer::BufferBuilder;
 using geos::operation::buffer::BufferParameters;
@@ -189,6 +188,8 @@ using geos::operation::overlayng::OverlayNGRobust;
 using geos::operation::valid::TopologyValidationError;
 
 using geos::precision::GeometryPrecisionReducer;
+
+using geos::simplify::PolygonHullSimplifier;
 
 using geos::util::IllegalArgumentException;
 
@@ -1237,12 +1238,13 @@ extern "C" {
     }
 
     Geometry*
-    GEOSPolygonHull_r(GEOSContextHandle_t extHandle,
+    GEOSPolygonHullSimplify_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
+        unsigned int isOuter,
         double vertexNumFraction)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3 = PolygonHull::hull(g1, vertexNumFraction);
+            std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hull(g1, isOuter, vertexNumFraction);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
