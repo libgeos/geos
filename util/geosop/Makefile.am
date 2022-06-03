@@ -22,5 +22,6 @@ geosop_LDADD = $(top_builddir)/src/libgeos.la \
 	$(top_builddir)/capi/libgeos_c.la 
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
+	-I$(top_builddir)/capi
 
 EXTRA_DIST = CMakeLists.txt
