@@ -20,6 +20,7 @@ geosop_SOURCES = \
 
 geosop_LDADD = $(top_builddir)/src/libgeos.la
 
+
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
 EXTRA_DIST = CMakeLists.txt

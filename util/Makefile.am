@@ -2,7 +2,7 @@
 # This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 SUBDIRS = \
-	geosop \
+	geosop 
 
 
 LIBS = $(top_builddir)/src/libgeos.la

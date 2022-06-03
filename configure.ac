@@ -422,6 +422,8 @@ AC_OUTPUT([
 	tools/Makefile
 	tools/geos-config
 	tools/astyle/Makefile
+	util/Makefile
+	util/geosop/Makefile
 	])
 
 dnl AC_MSG_RESULT([ ------------ GEOS Build ------------ ])
