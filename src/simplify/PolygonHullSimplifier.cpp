@@ -12,9 +12,9 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/hull/PolygonHull.h>
-#include <geos/algorithm/hull/RingHull.h>
-#include <geos/algorithm/hull/RingHullIndex.h>
+#include <geos/simplify/PolygonHullSimplifier.h>
+#include <geos/simplify/RingHull.h>
+#include <geos/simplify/RingHullIndex.h>
 
 #include <geos/algorithm/Area.h>
 #include <geos/geom/Geometry.h>
@@ -35,16 +35,14 @@ using geos::geom::MultiPolygon;
 
 
 namespace geos {
-namespace algorithm { // geos.algorithm
-namespace hull {      // geos.algorithm.hulll
+namespace simplify { // geos.simplify
 
 
 /* public static */
 std::unique_ptr<Geometry>
-PolygonHull::hull(const Geometry* geom, double vertexNumFraction)
+PolygonHullSimplifier::hull(const Geometry* geom, bool bOuter, double vertexNumFraction)
 {
-    bool bOuter = vertexNumFraction >= 0;
-    PolygonHull hull(geom, bOuter);
+    PolygonHullSimplifier hull(geom, bOuter);
     hull.setVertexNumFraction(std::abs(vertexNumFraction));
     return hull.getResult();
 }
@@ -52,10 +50,9 @@ PolygonHull::hull(const Geometry* geom, double vertexNumFraction)
 
 /* public static */
 std::unique_ptr<Geometry>
-PolygonHull::hullByAreaDelta(const Geometry* geom, double areaDeltaRatio)
+PolygonHullSimplifier::hullByAreaDelta(const Geometry* geom, bool bOuter, double areaDeltaRatio)
 {
-    bool bOuter = areaDeltaRatio >= 0;
-    PolygonHull hull(geom, bOuter);
+    PolygonHullSimplifier hull(geom, bOuter);
     hull.setAreaDeltaRatio(std::abs(areaDeltaRatio));
     return hull.getResult();
 }
@@ -63,7 +60,7 @@ PolygonHull::hullByAreaDelta(const Geometry* geom, double areaDeltaRatio)
 
 /* public */
 void
-PolygonHull::setVertexNumFraction(double p_vertexNumFraction)
+PolygonHullSimplifier::setVertexNumFraction(double p_vertexNumFraction)
 {
     vertexNumFraction = util::clamp(p_vertexNumFraction, 0.0, 1.0);
 }
@@ -71,7 +68,7 @@ PolygonHull::setVertexNumFraction(double p_vertexNumFraction)
 
 /* public */
 void
-PolygonHull::setAreaDeltaRatio(double p_areaDeltaRatio)
+PolygonHullSimplifier::setAreaDeltaRatio(double p_areaDeltaRatio)
 {
     areaDeltaRatio = p_areaDeltaRatio;
 }
@@ -79,7 +76,7 @@ PolygonHull::setAreaDeltaRatio(double p_areaDeltaRatio)
 
 /* public */
 std::unique_ptr<Geometry>
-PolygonHull::getResult()
+PolygonHullSimplifier::getResult()
 {
     //-- handle trivial parameter values
     if (vertexNumFraction == 1 || areaDeltaRatio == 0) {
@@ -111,7 +108,7 @@ PolygonHull::getResult()
 
 /* private */
 std::unique_ptr<Geometry>
-PolygonHull::computeMultiPolygonAll(const MultiPolygon* multiPoly)
+PolygonHullSimplifier::computeMultiPolygonAll(const MultiPolygon* multiPoly)
 {
     RingHullIndex hullIndex;
     std::size_t nPoly = multiPoly->getNumGeometries();
@@ -139,7 +136,7 @@ PolygonHull::computeMultiPolygonAll(const MultiPolygon* multiPoly)
 
 /* private */
 std::unique_ptr<Geometry>
-PolygonHull::computeMultiPolygonEach(const MultiPolygon* multiPoly)
+PolygonHullSimplifier::computeMultiPolygonEach(const MultiPolygon* multiPoly)
 {
     std::vector<std::unique_ptr<Polygon>> polys;
     for (std::size_t i = 0 ; i < multiPoly->getNumGeometries(); i++) {
@@ -153,7 +150,7 @@ PolygonHull::computeMultiPolygonEach(const MultiPolygon* multiPoly)
 
 /* private */
 std::unique_ptr<Polygon>
-PolygonHull::computePolygon(const Polygon* poly)
+PolygonHullSimplifier::computePolygon(const Polygon* poly)
 {
     RingHullIndex hullIndex;
     /**
@@ -171,7 +168,7 @@ PolygonHull::computePolygon(const Polygon* poly)
 
 /* private */
 std::vector<RingHull*>
-PolygonHull::initPolygon(const Polygon* poly, RingHullIndex& hullIndex)
+PolygonHullSimplifier::initPolygon(const Polygon* poly, RingHullIndex& hullIndex)
 {
     std::vector<RingHull*> hulls;
     if (poly->isEmpty())
@@ -193,7 +190,7 @@ PolygonHull::initPolygon(const Polygon* poly, RingHullIndex& hullIndex)
 
 /* private */
 double
-PolygonHull::ringArea(const Polygon* poly) const
+PolygonHullSimplifier::ringArea(const Polygon* poly) const
 {
     double area = Area::ofRing(poly->getExteriorRing()->getCoordinatesRO());
     for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
@@ -205,7 +202,7 @@ PolygonHull::ringArea(const Polygon* poly) const
 
 /* private */
 RingHull*
-PolygonHull::createRingHull(const LinearRing* ring, bool p_isOuter, double areaTotal, RingHullIndex& hullIndex)
+PolygonHullSimplifier::createRingHull(const LinearRing* ring, bool p_isOuter, double areaTotal, RingHullIndex& hullIndex)
 {
     // Create the RingHull in our memory store and
     // then grab back the raw pointer.
@@ -235,7 +232,7 @@ PolygonHull::createRingHull(const LinearRing* ring, bool p_isOuter, double areaT
 
 /* private */
 std::unique_ptr<Polygon>
-PolygonHull::polygonHull(const Polygon* poly, std::vector<RingHull*>& ringHulls, RingHullIndex& hullIndex) const
+PolygonHullSimplifier::polygonHull(const Polygon* poly, std::vector<RingHull*>& ringHulls, RingHullIndex& hullIndex) const
 {
     if (poly->isEmpty())
         return poly->clone();
@@ -254,7 +251,6 @@ PolygonHull::polygonHull(const Polygon* poly, std::vector<RingHull*>& ringHulls,
 }
 
 
-} // namespace geos.algorithm.hull
-} // namespace geos.algorithm
+} // namespace geos.simplify
 } // namespace geos
 

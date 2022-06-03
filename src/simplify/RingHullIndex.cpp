@@ -12,8 +12,8 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/hull/RingHullIndex.h>
-#include <geos/algorithm/hull/RingHull.h>
+#include <geos/simplify/RingHullIndex.h>
+#include <geos/simplify/RingHull.h>
 #include <geos/geom/Envelope.h>
 
 
@@ -21,8 +21,7 @@ using geos::geom::Envelope;
 
 
 namespace geos {
-namespace algorithm { // geos.algorithm
-namespace hull {      // geos.algorithm.hulll
+namespace simplify { // geos.simplify
 
 
 /* public */
@@ -53,7 +52,6 @@ RingHullIndex::query(const Envelope& queryEnv) const
 }
 
 
-} // namespace geos.algorithm.hull
-} // namespace geos.algorithm
+} // namespace geos.simplify
 } // namespace geos
 

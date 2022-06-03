@@ -16,7 +16,7 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/algorithm/hull/RingHull.h>
+#include <geos/simplify/RingHull.h>
 
 
 namespace geos {
@@ -43,59 +43,105 @@ using geos::geom::Polygon;
 
 
 namespace geos {
-namespace algorithm { // geos::algorithm
-namespace hull {      // geos::algorithm::hull
+namespace simplify { // geos::simplify
 
-
-class GEOS_DLL PolygonHull
+/**
+ * Computes topology-preserving simplified hulls of polygonal geometry.
+ * Both outer and inner hulls can be computed.
+ * Outer hulls contain the input geometry and are larger in area.
+ * Inner hulls are contained by the input geometry and are smaller in area.
+ * In both the hull vertices are a subset of the input vertices.
+ * The hull construction attempts to minimize the area difference
+ * with the input geometry.
+ * Hulls are generally concave if the input is.
+ * Computed hulls are topology-preserving:
+ * they do not contain any self-intersections or overlaps,
+ * so the result polygonal geometry is valid.
+ *
+ * Polygons with holes and MultiPolygons are supported.
+ * The result has the same geometric type and structure as the input.
+ *
+ * The number of vertices in the computed hull is determined by a target parameter.
+ * Two parameters are supported:
+ *
+ *  * Vertex Number fraction: the fraction of the input vertices retained in the result.
+ *    Value 1 produces the original geometry.
+ *    Smaller values produce less concave results.
+ *    For outer hulls, value 0 produces the convex hull (with triangles for any holes).
+ *    For inner hulls, value 0 produces a triangle (if no holes are present).
+ *
+ *  * Area Delta ratio: the ratio of the change in area to the input area.
+ *    Value 0 produces the original geometry.
+ *    Larger values produce less concave results.
+ *
+ * The algorithm ensures that the result does not cause the target parameter
+ * to be exceeded.  This allows computing outer or inner hulls
+ * with a small area delta ratio as an effective way of removing
+ * narrow gores and spikes.
+ *
+ * @author Martin Davis
+ *
+ */
+class GEOS_DLL PolygonHullSimplifier
 {
 
 public:
 
-    PolygonHull(const Geometry* p_inputGeom, bool p_isOuter)
-        : inputGeom(p_inputGeom)
-        , geomFactory(p_inputGeom->getFactory())
-        , isOuter(p_isOuter)
+    /**
+    * Creates a new instance
+    * to compute a simplified hull of a polygonal geometry.
+    * An outer or inner hull is computed
+    * depending on the value of "isOuter".
+    *
+    * @param geom the polygonal geometry to process
+    * @param bOuter indicates whether to compute an outer or inner hull
+    */
+    PolygonHullSimplifier(const Geometry* geom, bool bOuter)
+        : inputGeom(geom)
+        , geomFactory(geom->getFactory())
+        , isOuter(bOuter)
         , vertexNumFraction(-1.0)
         , areaDeltaRatio(-1.0)
     {
-        if (!inputGeom->isPolygonal()) {
+        if (!geom->isPolygonal()) {
             throw util::IllegalArgumentException("Input geometry must be  polygonal");
         }
     };
 
     /**
-    * Computes a boundary-respecting hull of a polygonal geometry,
+    * Computes a topology-preserving simplified hull of a polygonal geometry,
     * with hull shape determined by a target parameter
     * specifying the fraction of the input vertices retained in the result.
     * Larger values compute less concave results.
     * A value of 1 produces the convex hull; a value of 0 produces the original geometry.
-    * An outer hull is computed if the parameter is positive,
-    * an inner hull is computed if it is negative.
+    * Either outer or inner hulls can be computed.
     *
     * @param geom the polygonal geometry to process
+    * @param isOuter indicates whether to compute an outer or inner hull
     * @param vertexNumFraction the target fraction of number of input vertices in result
     * @return the hull geometry
     */
     static std::unique_ptr<Geometry> hull(
         const Geometry* geom,
+        bool isOuter,
         double vertexNumFraction);
 
     /**
-    * Computes a boundary-respecting hull of a polygonal geometry,
+    * Computes a topology-preserving simplified hull of a polygonal geometry,
     * with hull shape determined by a target parameter
     * specifying the ratio of maximum difference in area to original area.
     * Larger values compute less concave results.
     * A value of 0 produces the original geometry.
-    * An outer hull is computed if the parameter is positive,
-    * an inner hull is computed if it is negative.
+    * Either outer or inner hulls can be computed..
     *
     * @param geom the polygonal geometry to process
+    * @param isOuter indicates whether to compute an outer or inner hull
     * @param areaDeltaRatio the target ratio of area difference to original area
     * @return the hull geometry
     */
     static std::unique_ptr<Geometry> hullByAreaDelta(
         const Geometry* geom,
+        bool isOuter,
         double areaDeltaRatio);
 
 
@@ -133,7 +179,7 @@ private:
     double vertexNumFraction;
     double areaDeltaRatio;
     // Allocate the RingHull* in here so they are cleaned
-    // up with PolygonHull
+    // up with PolygonHullSimplifier
     std::vector<std::unique_ptr<RingHull>> ringStore;
 
     /**
@@ -175,13 +221,12 @@ private:
      * Disable copy construction and assignment. Needed to make this
      * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
      */
-    PolygonHull(const PolygonHull&) = delete;
-    PolygonHull& operator=(const PolygonHull&) = delete;
+    PolygonHullSimplifier(const PolygonHullSimplifier&) = delete;
+    PolygonHullSimplifier& operator=(const PolygonHullSimplifier&) = delete;
 
-}; // PolygonHull
+}; // PolygonHullSimplifier
 
 
-} // geos::algorithm::hull
-} // geos::algorithm
+} // geos::simplify
 } // geos
 
