@@ -12,7 +12,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/hull/LinkedRing.h>
+#include <geos/simplify/LinkedRing.h>
 
 #include <geos/geom/CoordinateArraySequence.h>
 
@@ -21,8 +21,7 @@ using geos::geom::Coordinate;
 
 
 namespace geos {
-namespace algorithm { // geos.algorithm
-namespace hull {      // geos.algorithm.hulll
+namespace simplify { // geos.simplify
 
 
 /* private static */
@@ -128,7 +127,6 @@ LinkedRing::getCoordinates() const
 }
 
 
-} // namespace geos.algorithm.hull
-} // namespace geos.algorithm
+} // namespace geos.simplify
 } // namespace geos
 

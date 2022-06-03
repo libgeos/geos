@@ -12,9 +12,9 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/hull/RingHull.h>
-#include <geos/algorithm/hull/LinkedRing.h>
-#include <geos/algorithm/hull/RingHullIndex.h>
+#include <geos/simplify/RingHull.h>
+#include <geos/simplify/LinkedRing.h>
+#include <geos/simplify/RingHullIndex.h>
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Envelope.h>
@@ -40,8 +40,7 @@ using geos::geom::Triangle;
 using geos::index::VertexSequencePackedRtree;
 
 namespace geos {
-namespace algorithm { // geos.algorithm
-namespace hull {      // geos.algorithm.hulll
+namespace simplify { // geos.simplify
 
 
 
@@ -389,6 +388,5 @@ RingHull::Corner::toLineString(const LinkedRing& ring)
 }
 
 
-} // namespace geos.algorithm.hull
-} // namespace geos.algorithm
+} // namespace geos.simplify
 } // namespace geos

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <geos/algorithm/hull/RingHull.h>
+#include <geos/simplify/RingHull.h>
 
 
 namespace geos {
@@ -24,8 +24,7 @@ class Envelope;
 }
 
 namespace geos {
-namespace algorithm { // geos::algorithm
-namespace hull {      // geos::algorithm::hull
+namespace simplify { // geos::simplify
 
 
 class RingHullIndex
@@ -51,7 +50,6 @@ class RingHullIndex
 }; // RingHullIndex
 
 
-} // geos::algorithm::hull
-} // geos::algorithm
+} // geos::simplify
 } // geos
 
