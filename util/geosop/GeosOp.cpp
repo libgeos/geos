@@ -13,7 +13,7 @@
  **********************************************************************/
 
 #include <geos/profiler.h>
-#include <geos_c.h>
+//#include <geos_c.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
@@ -146,9 +146,9 @@ std::string timeFormatted(int n)
     return fmt + " usec";
 }
 
-static bool startsWith(const std::string& s, const std::string& prefix) {
-    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
-}
+//static bool startsWith(const std::string& s, const std::string& prefix) {
+//    return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
+//}
 
 static bool endsWith(const std::string& str, const std::string& suffix)
 {
@@ -300,7 +300,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
 
 void GeosOp::run() {
 
-    initGEOS(nullptr, nullptr);
+    //initGEOS(nullptr, nullptr);
 
     auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
 
