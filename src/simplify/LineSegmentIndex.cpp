@@ -92,7 +92,7 @@ public:
     void
     visitItem(void* item) override
     {
-        LineSegment* seg = (LineSegment*) item;
+        LineSegment* seg = static_cast<LineSegment*>(item);
         if(Envelope::intersects(seg->p0, seg->p1,
                                 querySeg->p0, querySeg->p1)) {
             items->push_back(seg);

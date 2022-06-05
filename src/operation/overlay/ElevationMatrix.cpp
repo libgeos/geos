@@ -184,8 +184,8 @@ ElevationMatrix::getCell(const Coordinate& c)
 const ElevationMatrixCell&
 ElevationMatrix::getCell(const Coordinate& c) const
 {
-    return (const ElevationMatrixCell&)
-           ((ElevationMatrix*)this)->getCell(c);
+    return const_cast<const ElevationMatrixCell&>(
+        const_cast<ElevationMatrix*>(this)->getCell(c));
 }
 
 double

@@ -27,6 +27,7 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geom/Location.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <map>
@@ -96,7 +97,7 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
         Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         for(const EdgeIntersection& ei : eiL) {
-            RelateNode* n = (RelateNode*) nodes->addNode(ei.coord);
+            RelateNode* n = detail::down_cast<RelateNode*>(nodes->addNode(ei.coord));
             if(eLoc == Location::BOUNDARY) {
                 n->setLabelBoundary(argIndex);
             }

@@ -365,7 +365,7 @@ RelateComputer::labelIntersectionNodes(uint8_t argIndex)
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
 
         for(const EdgeIntersection& ei : eiL) {
-            RelateNode* n = (RelateNode*) nodes.find(ei.coord);
+            RelateNode* n = static_cast<RelateNode*>(nodes.find(ei.coord));
             if(n->getLabel().isNull(argIndex)) {
                 if(eLoc == Location::BOUNDARY) {
                     n->setLabelBoundary(argIndex);
@@ -423,7 +423,7 @@ RelateComputer::updateIM(IntersectionMatrix& imX)
     }
     auto& nMap = nodes.nodeMap;
     for(auto& entry : nMap) {
-        RelateNode* node = (RelateNode*) entry.second;
+        RelateNode* node = detail::down_cast<RelateNode*>(entry.second);
         node->updateIM(imX);
         node->updateIMFromEdges(imX);
     }
