@@ -36,7 +36,6 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::io;
 
-
 void showHelp() {
     std::cout << "geosop executes GEOS geometry operations on inputs." << std::endl;
     std::cout << std::endl;
@@ -162,11 +161,28 @@ GeosOp::GeosOp(GeosOpArgs& arg)
 GeosOp::~GeosOp() {
 }
 
+//-- Format numbers with comma separators
+//   see https://stackoverflow.com/a/30857592/2308716
+class comma_numpunct : public std::numpunct<char>
+{
+public:
+   comma_numpunct(char thousands_sep, const char* grouping)
+      :m_thousands_sep(thousands_sep),
+       m_grouping(grouping){}
+protected:
+   char do_thousands_sep() const{return m_thousands_sep;}
+   std::string do_grouping() const {return m_grouping;}
+private:
+   char m_thousands_sep;
+   std::string m_grouping;
+};
+
 template<typename T>
 std::string formatNum(T n)
 {
     std::stringstream ss;
-    ss.imbue(std::locale(""));
+    std::locale comma_locale(std::locale(), new comma_numpunct(',', "\03"));
+    ss.imbue(comma_locale);
     ss << std::fixed << n;
     return ss.str();
 }
