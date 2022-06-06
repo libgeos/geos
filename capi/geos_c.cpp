@@ -478,6 +478,24 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonHullSimplify(const Geometry* g,
+                            unsigned int isOuter,
+                            double vertexNumFraction)
+    {
+        return GEOSPolygonHullSimplify_r(handle, g, isOuter, vertexNumFraction);
+    }
+
+    Geometry*
+    GEOSConcaveHullOfPolygons(const Geometry* g,
+        double lengthRatio,
+        unsigned int isTight,
+        unsigned int isHolesAllowed)
+    {
+        return GEOSConcaveHullOfPolygons_r(handle,
+            g, lengthRatio, isTight, isHolesAllowed);
+    }
+
+    Geometry*
     GEOSMinimumRotatedRectangle(const Geometry* g)
     {
         return GEOSMinimumRotatedRectangle_r(handle, g);
