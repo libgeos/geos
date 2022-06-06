@@ -26,7 +26,7 @@ using namespace geos::index::strtree;
 double
 GeometryItemDistance::distance(const ItemBoundable* item1, const ItemBoundable* item2)
 {
-    const Geometry* g1 = (Geometry*) item1->getItem();
-    const Geometry* g2 = (Geometry*) item2->getItem();
+    const Geometry* g1 = static_cast<const Geometry*>(item1->getItem());
+    const Geometry* g2 = static_cast<const Geometry*>(item2->getItem());
     return g1->distance(g2);
 }

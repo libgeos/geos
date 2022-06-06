@@ -349,7 +349,7 @@ SimpleSTRtree::nearestNeighbour(const geom::Envelope* p_env, const void* p_item,
     if (!this->getRoot()) {
         return nullptr;
     }
-    std::unique_ptr<SimpleSTRnode> ssn(new SimpleSTRnode(0, p_env, (void*)p_item));
+    std::unique_ptr<SimpleSTRnode> ssn(new SimpleSTRnode(0, p_env, const_cast<void*>(p_item)));
     SimpleSTRdistance strDist(getRoot(), ssn.get(), itemDist);
     std::pair<const void*, const void*> result = strDist.nearestNeighbour();
     return result.first;

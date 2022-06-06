@@ -21,6 +21,7 @@
 #include <geos/geomgraph/index/SweepLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/util.h>
 
 
 using namespace geos::geom;
@@ -130,7 +131,7 @@ SimpleSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end, 
         SegmentIntersector* si)
 {
 
-    SweepLineSegment* ss0 = (SweepLineSegment*) ev0->getObject();
+    SweepLineSegment* ss0 = detail::down_cast<SweepLineSegment*>(ev0->getObject());
 
     /*
      * Since we might need to test for self-intersections,
@@ -140,7 +141,7 @@ SimpleSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end, 
     for(auto i = start; i < end; ++i) {
         SweepLineEvent* ev1 = events[i];
         if(ev1->isInsert()) {
-            SweepLineSegment* ss1 = (SweepLineSegment*) ev1->getObject();
+            SweepLineSegment* ss1 = detail::down_cast<SweepLineSegment*>(ev1->getObject());
             if(ev0->edgeSet == nullptr || (ev0->edgeSet != ev1->edgeSet)) {
                 ss0->computeIntersections(ss1, si);
                 nOverlaps++;

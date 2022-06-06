@@ -269,7 +269,7 @@ WKTWriter::appendLinearRingTaggedText(const LinearRing* linearRing, int p_level,
     if(outputDimension == 3 && !old3D && !linearRing->isEmpty()) {
         writer->write("Z ");
     }
-    appendLineStringText((LineString*)linearRing, p_level, false, writer);
+    appendLineStringText(linearRing, p_level, false, writer);
 }
 
 void

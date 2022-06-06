@@ -45,7 +45,7 @@ STRtree::STRtree(std::size_t p_nodeCapacity): AbstractSTRtree(p_nodeCapacity)
 bool
 STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 {
-    return ((Envelope*)aBounds)->intersects((Envelope*)bBounds);
+    return static_cast<const Envelope*>(aBounds)->intersects(static_cast<const Envelope*>(bBounds));
 }
 
 /*private*/
@@ -138,7 +138,7 @@ STRtree::nearestNeighbour(const Envelope* env, const void* item, ItemDistance* i
 {
     build();
 
-    ItemBoundable bnd = ItemBoundable(env, (void*) item);
+    ItemBoundable bnd = ItemBoundable(env, const_cast<void*>(item));
     BoundablePair bp(getRoot(), &bnd, itemDist);
 
     return nearestNeighbour(&bp).first;
@@ -311,7 +311,7 @@ public:
 
     ~STRAbstractNode() override
     {
-        delete(Envelope*)bounds;
+        delete static_cast<Envelope*>(bounds);
     }
 
 protected:
@@ -332,7 +332,7 @@ protected:
         p_bounds = new Envelope(* static_cast<const Envelope*>((*i)->getBounds()));
         for(; i != e; ++i) {
             const Boundable* childBoundable = *i;
-            p_bounds->expandToInclude((Envelope*)childBoundable->getBounds());
+            p_bounds->expandToInclude(static_cast<const Envelope*>(childBoundable->getBounds()));
         }
         return p_bounds;
     }

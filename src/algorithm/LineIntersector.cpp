@@ -76,7 +76,7 @@ LineIntersector::computeEdgeDistance(const Coordinate& p, const Coordinate& p0, 
         }
         // <FIX>
         // hack to ensure that non-endpoints always have a non-zero distance
-        if(dist == 0.0 && !(p == p0)) {
+        if(dist == 0.0) {
             dist = std::max(pdx, pdy);
         }
     }

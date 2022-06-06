@@ -15,7 +15,7 @@
 
 #include <geos/index/strtree/SIRtree.h>
 #include <geos/index/strtree/AbstractNode.h>
-//#include <geos/util.h>
+#include <geos/util.h>
 
 #include <memory>
 #include <vector>
@@ -29,10 +29,10 @@ namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
 static bool
-compareSIRBoundables(Boundable* a, Boundable* b)
+compareSIRBoundables(const Boundable* a, const Boundable* b)
 {
-    return ((Interval*)a->getBounds())->getCentre() <
-           ((Interval*)b->getBounds())->getCentre() ? true : false;
+    return static_cast<const Interval*>(a->getBounds())->getCentre() <
+           static_cast<const Interval*>(b->getBounds())->getCentre();
 }
 
 /*protected*/
@@ -63,7 +63,7 @@ SIRtree::createParentBoundables(BoundableList* childBoundables, int newLevel)
 bool
 SIRtree::SIRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 {
-    return ((Interval*)aBounds)->intersects((Interval*)bBounds);
+    return static_cast<const Interval*>(aBounds)->intersects(static_cast<const Interval*>(bBounds));
 }
 
 /*public*/
@@ -95,7 +95,7 @@ public:
 
     ~SIRAbstractNode() override
     {
-        delete(Interval*)bounds;
+        delete static_cast<Interval*>(bounds);
     }
 
 protected:
@@ -108,10 +108,10 @@ protected:
         for(unsigned int i = 0; i < b.size(); ++i) {
             const Boundable* childBoundable = b[i];
             if(p_bounds == nullptr) {
-                p_bounds = new Interval(*((Interval*)childBoundable->getBounds()));
+                p_bounds = new Interval(*static_cast<const Interval*>(childBoundable->getBounds()));
             }
             else {
-                p_bounds->expandToInclude((Interval*)childBoundable->getBounds());
+                p_bounds->expandToInclude(static_cast<const Interval*>(childBoundable->getBounds()));
             }
         }
         return p_bounds;

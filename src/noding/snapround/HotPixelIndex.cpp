@@ -73,7 +73,7 @@ HotPixelIndex::add(const Coordinate& p)
     // HotPixel.
     hp = &(hotPixelQue.back());
 
-    index->insert(hp->getCoordinate(), (void*)hp);
+    index->insert(hp->getCoordinate(), hp);
     return hp;
 }
 

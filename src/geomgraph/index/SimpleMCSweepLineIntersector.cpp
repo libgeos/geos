@@ -22,6 +22,7 @@
 #include <geos/geomgraph/index/SweepLineEvent.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/Interrupt.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -132,7 +133,7 @@ void
 SimpleMCSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end,
         SweepLineEvent* ev0, SegmentIntersector* si)
 {
-    MonotoneChain* mc0 = (MonotoneChain*) ev0->getObject();
+    MonotoneChain* mc0 = detail::down_cast<MonotoneChain*>(ev0->getObject());
 
     /*
      * Since we might need to test for self-intersections,
@@ -142,7 +143,7 @@ SimpleMCSweepLineIntersector::processOverlaps(std::size_t start, std::size_t end
     for(auto i = start; i < end; ++i) {
         auto& ev1 = events[i];
         if(ev1->isInsert()) {
-            MonotoneChain* mc1 = (MonotoneChain*) ev1->getObject();
+            MonotoneChain* mc1 = detail::down_cast<MonotoneChain*>(ev1->getObject());
 
             if (mc1 == mc0) {
                 // Don't try to compute intersections between a MonotoneChain

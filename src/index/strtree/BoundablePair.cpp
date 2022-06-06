@@ -21,6 +21,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/index/strtree/AbstractNode.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace index {
@@ -49,12 +50,13 @@ BoundablePair::distance() const
 {
     // if items, compute exact distance
     if (isLeaves()) {
-        return itemDistance->distance((ItemBoundable*) boundable1, (ItemBoundable*) boundable2);
+        return itemDistance->distance(detail::down_cast<const ItemBoundable*>(boundable1),
+                                      detail::down_cast<const ItemBoundable*>(boundable2));
     }
 
     // otherwise compute distance between bounds of boundables
-    const geom::Envelope* e1 = (const geom::Envelope*) boundable1->getBounds();
-    const geom::Envelope* e2 = (const geom::Envelope*) boundable2->getBounds();
+    const geom::Envelope* e1 = static_cast<const geom::Envelope*>(boundable1->getBounds());
+    const geom::Envelope* e2 = static_cast<const geom::Envelope*>(boundable2->getBounds());
 
     if (!e1 || !e2) {
         throw util::GEOSException("Can't compute envelope of item in BoundablePair");
@@ -125,7 +127,7 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
                       bool isFlipped, BoundablePairQueue& priQ,
                       double minDistance)
 {
-    std::vector<Boundable*>* children = ((AbstractNode*) bndComposite)->getChildBoundables();
+    const std::vector<Boundable*>* children = detail::down_cast<const AbstractNode*>(bndComposite)->getChildBoundables();
     for (auto& child : *children) {
 
         std::unique_ptr<BoundablePair> bp;
@@ -147,8 +149,8 @@ double
 BoundablePair::maximumDistance()
 {
     return EnvelopeUtil::maximumDistance(
-        (const geom::Envelope*) boundable1->getBounds(),
-        (const geom::Envelope*) boundable2->getBounds());
+        static_cast<const geom::Envelope*>(boundable1->getBounds()),
+        static_cast<const geom::Envelope*>(boundable2->getBounds()));
 }
 
 
