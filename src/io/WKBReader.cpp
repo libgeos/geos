@@ -217,7 +217,7 @@ WKBReader::read(std::istream& is)
     is.seekg(0, std::ios::beg);
 
     std::vector<unsigned char> buf(static_cast<size_t>(size));
-    is.read((char*) buf.data(), static_cast<std::streamsize>(size));
+    is.read(reinterpret_cast<char*>(buf.data()), static_cast<std::streamsize>(size));
 
     return read(buf.data(), buf.size());
 }

@@ -158,11 +158,8 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
         Label& label = e->getLabel();
         for(uint32_t geomi = 0; geomi < 2; ++geomi) {
             if(label.isAnyNull(geomi)) {
-                Location loc = Location::NONE;
-                if(hasDimensionalCollapseEdge[geomi]) {
-                    loc = Location::EXTERIOR;
-                }
-                else {
+                Location loc = Location::EXTERIOR;
+                if(!hasDimensionalCollapseEdge[geomi]) {
                     Coordinate& p = e->getCoordinate();
                     loc = getLocation(geomi, p, geomGraph);
                 }
