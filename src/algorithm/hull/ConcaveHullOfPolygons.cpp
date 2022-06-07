@@ -293,12 +293,15 @@ ConcaveHullOfPolygons::removeFrameCornerTris(
             /**
              * Frame tris are adjacent to at most one border tri,
              * which is opposite the frame corner vertex.
-             * The opposite tri may be another frame tri.
-             * This is detected when it is processed,
-             * since it is not in the hullTri set.
+             * Or, the opposite tri may be another frame tri,
+             * which is not added as a border tri.
              */
             TriIndex oppIndex = Tri::oppEdge(index);
-            addBorderTri(tri, oppIndex);
+            Tri* oppTri = tri->getAdjacent(oppIndex);
+            bool isBorderTri = oppTri != nullptr && ! isFrameTri(oppTri, frameCorners);
+            if (isBorderTri) {
+                addBorderTri(tri, oppIndex);
+            }
             tri->remove();
         }
         else {
@@ -346,7 +349,7 @@ void
 ConcaveHullOfPolygons::removeHoleTris()
 {
     while (true) {
-        Tri* holeTri = findHoleTri();
+        Tri* holeTri = findHoleSeedTri();
         if (holeTri == nullptr)
             return;
         addBorderTris(holeTri);
@@ -357,10 +360,10 @@ ConcaveHullOfPolygons::removeHoleTris()
 
 /* private */
 Tri*
-ConcaveHullOfPolygons::findHoleTri() const
+ConcaveHullOfPolygons::findHoleSeedTri() const
 {
     for (Tri* tri : hullTris) {
-        if (isHoleTri(tri))
+        if (isHoleSeedTri(tri))
             return tri;
     }
     return nullptr;
@@ -368,11 +371,24 @@ ConcaveHullOfPolygons::findHoleTri() const
 
 /* private */
 bool
-ConcaveHullOfPolygons::isHoleTri(const Tri* tri) const
+ConcaveHullOfPolygons::isHoleSeedTri(const Tri* tri) const
 {
+    if (isBorderTri(tri))
+      return false;
     for (TriIndex i = 0; i < 3; i++) {
         if (tri->hasAdjacent(i)
             && tri->getLength(i) > maxEdgeLength)
+            return true;
+    }
+    return false;
+}
+
+/* private */
+bool
+ConcaveHullOfPolygons::isBorderTri(const Tri* tri) const
+{
+    for (TriIndex i = 0; i < 3; i++) {
+        if (! tri->hasAdjacent(i))
             return true;
     }
     return false;
@@ -510,4 +526,3 @@ ConcaveHullOfPolygons::createHullGeometry(bool isIncludeInput)
 } // namespace geos.algorithm.hull
 } // namespace geos.algorithm
 } // namespace geos
-
