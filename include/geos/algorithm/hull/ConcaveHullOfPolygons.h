@@ -173,9 +173,11 @@ private:
 
     void removeHoleTris();
 
-    Tri* findHoleTri() const;
+    Tri* findHoleSeedTri() const;
 
-    bool isHoleTri(const Tri* tri) const;
+    bool isHoleSeedTri(const Tri* tri) const;
+
+    bool isBorderTri(const Tri* tri) const;
 
     bool isRemovable(const Tri* tri) const;
 
@@ -373,10 +375,3 @@ public:
 } // geos::algorithm::hull
 } // geos::algorithm
 } // geos
-
-
-
-
-
-
-

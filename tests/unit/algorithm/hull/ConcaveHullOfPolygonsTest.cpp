@@ -173,13 +173,16 @@ void object::test<6>()
 }
 
 //
-// testPoly3WithHole-a
+// testPoly3WithHole
 //
 template<>
 template<>
 void object::test<7>()
 {
     const std::string wkt = "MULTIPOLYGON (((1 9, 5 9, 5 7, 3 7, 3 5, 1 5, 1 9)), ((1 4, 3 4, 3 2, 5 2, 5 0, 1 0, 1 4)), ((6 9, 8 9, 9 5, 8 0, 6 0, 6 2, 8 5, 6 7, 6 9)))";
+    checkHullWithHoles( wkt, 0.99, wkt);
+    checkHullWithHoles( wkt, 1,
+        "POLYGON ((1 5, 1 9, 5 9, 6 9, 8 9, 9 5, 8 0, 6 0, 5 0, 1 0, 1 4, 1 5), (3 4, 3 2, 5 2, 6 2, 8 5, 6 7, 5 7, 3 7, 3 5, 3 4))");
     checkHullWithHoles( wkt, 2.5,
         "POLYGON ((1 5, 1 9, 5 9, 6 9, 8 9, 9 5, 8 0, 6 0, 5 0, 1 0, 1 4, 1 5), (3 4, 3 2, 5 2, 6 2, 8 5, 6 7, 5 7, 3 7, 3 5, 3 4))");
     checkHullWithHoles( wkt, 4,
@@ -189,18 +192,4 @@ void object::test<7>()
 }
 
 
-//
-// testPoly3WithHole-b
-//
-template<>
-template<>
-void object::test<8>()
-{
-    const std::string wkt = "MULTIPOLYGON (((1 9, 5 9, 5 7, 3 7, 3 5, 1 5, 1 9)), ((1 4, 3 4, 3 2, 5 2, 5 0, 1 0, 1 4)), ((6 9, 8 9, 9 5, 8 0, 6 0, 6 2, 8 5, 6 7, 6 9)))";
-    checkHullWithHoles( wkt, 0.99, wkt);
-}
-
-
 } // namespace tut
-
-
