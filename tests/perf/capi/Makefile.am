@@ -11,7 +11,7 @@ noinst_PROGRAMS = \
 	memleak_mp_prep \
 	perf_intersection
 
-LIBS = $(top_builddir)/capi/libgeos_c.la
+LIBS = $(top_builddir)/capi/libgeos_c.la $(top_builddir)/src/libgeos.la
 AM_CPPFLAGS = -I$(top_builddir)/capi -I$(top_srcdir)/include
 
 memleak_mp_prep_SOURCES = memleak_mp_prep.c
