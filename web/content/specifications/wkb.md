@@ -95,7 +95,6 @@ Other systems (eg PostGIS) support a wider range of types (for example, Circular
 WKBPoint {
     byte    byteOrder;
     uint32  wkbType; // 1
-    [uint32 srid];
     Point   point;
 };
 
