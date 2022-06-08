@@ -28,6 +28,7 @@
   - Improve `test_geos_unit` application error checking and reporting
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
   - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
+  - Fix OverlayNG geomunion to avoid lines in result (Martin Davis)
 
 - Changes:
 
