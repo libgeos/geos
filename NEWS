@@ -1,3 +1,10 @@
+Changes in 3.7.5
+2022-06-08
+
+- Bug fixes / improvements
+  - Fix compilation under cmake
+
+
 Changes in 3.7.4
 2022-06-02
 
