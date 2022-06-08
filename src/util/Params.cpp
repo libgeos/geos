@@ -11,247 +11,184 @@
  * See the COPYING file for more information.
  **********************************************************************/
 
-#include <vector>
-#include <memory>
-#include <map>
+#include <geos/util/Params.h>
+
+#include <sstream>
 
 namespace geos {
 namespace util { // geos.util
 
-Params::Params()
-    :
-    geomFact(factory),
-    precModel(factory->getPrecisionModel()),
-    nPts(100)
+Params::ParamValue::ParamValue(double d)
+    : m_d(d)
+    , m_type(ParamType::Double) {}
+
+Params::ParamValue::ParamValue(int i)
+    : m_i(i)
+    , m_type(ParamType::Integer) {}
+
+Params::ParamValue::ParamValue(std::string& s)
+    : m_s(s)
+    , m_type(ParamType::String) {}
+
+Params::ParamValue::ParamValue(const char* cstr)
+    : m_s(cstr)
+    , m_type(ParamType::String) {}
+
+
+void
+Params::ParamValue::setDouble(double d)
 {
+    m_d = d;
+    m_type = ParamType::Double;
 }
 
 void
-GeometricShapeFactory::setBase(const Coordinate& base)
+Params::ParamValue::setInteger(int i)
 {
-    dim.setBase(base);
+    m_i = i;
+    m_type = ParamType::Integer;
 }
 
 void
-GeometricShapeFactory::setCentre(const Coordinate& centre)
+Params::ParamValue::setString(std::string& s)
 {
-    dim.setCentre(centre);
+    m_s = s;
+    m_type = ParamType::String;
 }
 
 void
-GeometricShapeFactory::setNumPoints(uint32_t nNPts)
+Params::ParamValue::setCString(const char* cstr)
 {
-    nPts = nNPts;
+    std::string s(cstr);
+    m_s = s;
+    m_type = ParamType::String;
+}
+
+bool
+Params::ParamValue::getDouble(double* d) const
+{
+    if (!d || m_type != ParamType::Double)
+        return false;
+    *d = m_d;
+    return true;
+}
+
+bool
+Params::ParamValue::getInteger(int* i) const
+{
+    if (!i || m_type != ParamType::Integer)
+        return false;
+    *i = m_i;
+    return true;
+}
+
+bool
+Params::ParamValue::getCString(char** str) const
+{
+    if (!str || m_type != ParamType::String)
+        return false;
+    *str = strdup(m_s.c_str());
+    return true;
 }
 
 void
-GeometricShapeFactory::setSize(double size)
+Params::normalizeKey(std::string& str)
 {
-    dim.setSize(size);
+    std::stringstream ss;
+    // lowercase and only alphanumeric
+    for (char const &c: str) {
+        if (std::isalnum(c)) {
+            ss << std::tolower(c);
+        }
+    }
+    str = ss.str();
+}
+
+bool
+Params::haveKey(std::string& str) const
+{
+    if(m_params.find(str) == m_params.end())
+        return false;
+    else
+        return true;
 }
 
 void
-GeometricShapeFactory::setWidth(double width)
+Params::clearEntry(std::string& key)
 {
-    dim.setWidth(width);
+    auto search = m_params.find(key);
+    if(search != m_params.end()) {
+        m_params.erase(search);
+    }
+}
+
+const Params::ParamValue*
+Params::getValue(std::string& key) const
+{
+    auto search = m_params.find(key);
+    if(search == m_params.end()) {
+        return nullptr;
+    }
+    return &(search->second);
 }
 
 void
-GeometricShapeFactory::setHeight(double height)
+Params::setParam(const char* key, double d)
 {
-    dim.setHeight(height);
-}
-
-std::unique_ptr<Polygon>
-GeometricShapeFactory::createRectangle()
-{
-    uint32_t i;
-    uint32_t ipt = 0;
-    uint32_t nSide = nPts / 4;
-    if(nSide < 1) {
-        nSide = 1;
-    }
-    std::unique_ptr<Envelope> env(dim.getEnvelope());
-    double XsegLen = env->getWidth() / nSide;
-    double YsegLen = env->getHeight() / nSide;
-
-    std::vector<Coordinate> vc(4 * nSide + 1);
-
-    for(i = 0; i < nSide; i++) {
-        double x = env->getMinX() + i * XsegLen;
-        double y = env->getMinY();
-        vc[ipt++] = coord(x, y);
-    }
-    for(i = 0; i < nSide; i++) {
-        double x = env->getMaxX();
-        double y = env->getMinY() + i * YsegLen;
-        vc[ipt++] = coord(x, y);
-    }
-    for(i = 0; i < nSide; i++) {
-        double x = env->getMaxX() - i * XsegLen;
-        double y = env->getMaxY();
-        vc[ipt++] = coord(x, y);
-    }
-    for(i = 0; i < nSide; i++) {
-        double x = env->getMinX();
-        double y = env->getMaxY() - i * YsegLen;
-        vc[ipt++] = coord(x, y);
-    }
-    vc[ipt++] = vc[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(vc));
-    auto ring = geomFact->createLinearRing(std::move(cs));
-    auto poly = geomFact->createPolygon(std::move(ring));
-    return poly;
-}
-
-std::unique_ptr<Polygon>
-GeometricShapeFactory::createCircle()
-{
-    std::unique_ptr<Envelope> env(dim.getEnvelope());
-    double xRadius = env->getWidth() / 2.0;
-    double yRadius = env->getHeight() / 2.0;
-
-    double centreX = env->getMinX() + xRadius;
-    double centreY = env->getMinY() + yRadius;
-    env.reset();
-
-    std::vector<Coordinate> pts(nPts + 1);
-    uint32_t iPt = 0;
-    for(uint32_t i = 0; i < nPts; i++) {
-        double ang = i * (2 * 3.14159265358979 / nPts);
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
-    }
-    pts[iPt++] = pts[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto ring = geomFact->createLinearRing(std::move(cs));
-    auto poly = geomFact->createPolygon(std::move(ring));
-    return poly;
-}
-
-std::unique_ptr<LineString>
-GeometricShapeFactory::createArc(double startAng, double angExtent)
-{
-    std::unique_ptr<Envelope> env(dim.getEnvelope());
-    double xRadius = env->getWidth() / 2.0;
-    double yRadius = env->getHeight() / 2.0;
-
-    double centreX = env->getMinX() + xRadius;
-    double centreY = env->getMinY() + yRadius;
-    env.reset();
-
-    double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
-        angSize = 2 * MATH_PI;
-    }
-    double angInc = angSize / (nPts - 1);
-
-    std::vector<Coordinate> pts(nPts);
-    uint32_t iPt = 0;
-    for(uint32_t i = 0; i < nPts; i++) {
-        double ang = startAng + i * angInc;
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
-    }
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto line = geomFact->createLineString(std::move(cs));
-    return line;
-}
-
-std::unique_ptr<Polygon>
-GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
-{
-    std::unique_ptr<Envelope> env(dim.getEnvelope());
-    double xRadius = env->getWidth() / 2.0;
-    double yRadius = env->getHeight() / 2.0;
-
-    double centreX = env->getMinX() + xRadius;
-    double centreY = env->getMinY() + yRadius;
-    env.reset();
-
-    double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
-        angSize = 2 * MATH_PI;
-    }
-    double angInc = angSize / (nPts - 1);
-
-    std::vector<Coordinate> pts(nPts + 2);
-    uint32_t iPt = 0;
-    pts[iPt++] = coord(centreX, centreY);
-    for(uint32_t i = 0; i < nPts; i++) {
-        double ang = startAng + i * angInc;
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
-    }
-    pts[iPt++] = coord(centreX, centreY);
-
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto ring = geomFact->createLinearRing(std::move(cs));
-
-    return geomFact->createPolygon(std::move(ring));
-}
-
-GeometricShapeFactory::Dimensions::Dimensions()
-    :
-    base(Coordinate::getNull()),
-    centre(Coordinate::getNull())
-{
+    std::string k(key);
+    normalizeKey(k);
+    clearEntry(k);
+    m_params.emplace(k, d);
 }
 
 void
-GeometricShapeFactory::Dimensions::setBase(const Coordinate& newBase)
+Params::setParam(const char* key, int i)
 {
-    base = newBase;
+    std::string k(key);
+    normalizeKey(k);
+    clearEntry(k);
+    m_params.emplace(k, i);
 }
 
 void
-GeometricShapeFactory::Dimensions::setCentre(const Coordinate& newCentre)
+Params::setParam(const char* key, const char* s)
 {
-    centre = newCentre;
+    std::string k(key);
+    normalizeKey(k);
+    clearEntry(k);
+    m_params.emplace(k, s);
 }
 
-void
-GeometricShapeFactory::Dimensions::setSize(double size)
+bool
+Params::getParamDouble(const char* key, double* d) const
 {
-    height = size;
-    width = size;
+    std::string k(key);
+    normalizeKey(k);
+    const ParamValue* val = getValue(k);
+    if (!val) return false;
+    return val->getDouble(d);
 }
 
-void
-GeometricShapeFactory::Dimensions::setWidth(double nWidth)
+bool
+Params::getParamInteger(const char* key, int* i) const
 {
-    width = nWidth;
+    std::string k(key);
+    normalizeKey(k);
+    const ParamValue* val = getValue(k);
+    if (!val) return false;
+    return val->getInteger(i);
 }
 
-void
-GeometricShapeFactory::Dimensions::setHeight(double nHeight)
+bool
+Params::getParamString(const char* key, char** str) const
 {
-    height = nHeight;
+    std::string k(key);
+    normalizeKey(k);
+    const ParamValue* val = getValue(k);
+    if (!val) return false;
+    return val->getCString(str);
 }
 
-std::unique_ptr<Envelope>
-GeometricShapeFactory::Dimensions::getEnvelope() const
-{
-    if(!base.isNull()) {
-        return detail::make_unique<Envelope>(base.x, base.x + width, base.y, base.y + height);
-    }
-    if(!centre.isNull()) {
-        return detail::make_unique<Envelope>(centre.x - width / 2, centre.x + width / 2, centre.y - height / 2, centre.y + height / 2);
-    }
-    return detail::make_unique<Envelope>(0, width, 0, height);
-}
-
-/*protected*/
-Coordinate
-GeometricShapeFactory::coord(double x, double y) const
-{
-    Coordinate ret(x, y);
-    precModel->makePrecise(&ret);
-    return ret;
-}
 
 } // namespace geos.util
 } // namespace geos

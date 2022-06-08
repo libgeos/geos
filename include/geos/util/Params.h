@@ -10,13 +10,13 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
  **********************************************************************/
 
 #pragma once
 
 #include <geos/export.h>
 #include <map>
+#include <string>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -45,45 +45,46 @@ private:
 
     private:
 
-        union {
-            double d;
-            int i;
-            std::string s;
-        } m_val;
-
-        ParamType m_type;
+        double m_d = 0.0;
+        int m_i = 0;
+        std::string m_s;
+        ParamType m_type = ParamType::Double;
 
     public:
 
-        void setDouble(double d) {
-            m_val.d = d;
-            m_type = ParamType::Double;
-        };
+        ParamValue() {};
+        ParamValue(double d);
+        ParamValue(int i);
+        ParamValue(std::string& s);
+        ParamValue(const char* cstr);
 
-        void setInteger(int i) {
-            m_val.i = i;
-            m_type = ParamType::Integer;
-        };
-
-        void setString(std::string& s) {
-            m_val.s = s;
-            m_type = ParamType::String;
-        };
-
-        void setString(const char* cstr) {
-            std::string s(cstr);
-            m_val.s = s;
-            m_type = ParamType::String;
-        };
-
+        void setDouble(double d);
+        void setInteger(int i);
+        void setString(std::string& s);
+        void setCString(const char* cstr);
+        bool getDouble(double* d) const;
+        bool getInteger(int* i) const;
+        bool getCString(char** str) const;
 
     };
 
+    // where we actually store the parameters
+    std::map<std::string, ParamValue> m_params;
+
+    static void normalizeKey(std::string& str);
+    bool haveKey(std::string& str) const;
+    void clearEntry(std::string& key);
+    const ParamValue* getValue(std::string& key) const;
 
 
 public:
 
-    int get
+    void setParam(const char* key, double d);
+    void setParam(const char* key, int i);
+    void setParam(const char* key, const char* s);
+    bool getParamDouble(const char* key, double* d) const;
+    bool getParamInteger(const char* key, int* i) const;
+    bool getParamString(const char* key, char** str) const;
 
 };
 
