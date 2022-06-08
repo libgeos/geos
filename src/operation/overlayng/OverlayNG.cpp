@@ -142,6 +142,7 @@ OverlayNG::geomunion(const Geometry* geom, const PrecisionModel* pm, noding::Nod
 {
     OverlayNG ov(geom, pm);
     ov.setNoder(noder);
+    ov.setStrictMode(true);
     return ov.getResult();
 }
 
