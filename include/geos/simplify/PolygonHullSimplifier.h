@@ -104,7 +104,7 @@ public:
         , areaDeltaRatio(-1.0)
     {
         if (!geom->isPolygonal()) {
-            throw util::IllegalArgumentException("Input geometry must be  polygonal");
+            throw util::IllegalArgumentException("Input geometry must be polygonal");
         }
     };
 
