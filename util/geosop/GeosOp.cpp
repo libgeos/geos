@@ -166,11 +166,11 @@ GeosOp::~GeosOp() {
 class comma_numpunct : public std::numpunct<char>
 {
 public:
-   comma_numpunct(char thousands_sep, const char* grouping)
-      :m_thousands_sep(thousands_sep),
-       m_grouping(grouping){}
+   comma_numpunct(char p_thousands_sep, const char* p_grouping)
+      :m_thousands_sep(p_thousands_sep),
+       m_grouping(p_grouping){}
 protected:
-   char do_thousands_sep() const{return m_thousands_sep;}
+   char do_thousands_sep() const {return m_thousands_sep;}
    std::string do_grouping() const {return m_grouping;}
 private:
    char m_thousands_sep;
