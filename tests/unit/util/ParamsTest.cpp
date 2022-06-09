@@ -38,7 +38,7 @@ void object::test<1> ()
 {
     Params prm;
     double d1 = 3.4, d2;
-    prm.setParam("test_double", 3.4);
+    prm.setParam("test_double", d1);
     bool rv = prm.getParamDouble("test_double", &d2);
     ensure_equals(rv, true);
     ensure_equals(d1, d2);
@@ -84,8 +84,8 @@ void object::test<3> ()
     prm.setParam("test_str", s1);
     bool rv = prm.getParamString("test_str", &s2);
     ensure_equals(rv, true);
-    ensure_equals(strlen(s1), strlen(s2));
-    ensure_equals(strcmp(s1, s2), 0);
+    ensure_equals(std::strlen(s1), std::strlen(s2));
+    ensure_equals(std::strcmp(s1, s2), 0);
     // Wrong key should fail
     rv = prm.getParamString("test_wrong", &s2);
     ensure_equals(rv, false);
@@ -94,8 +94,29 @@ void object::test<3> ()
     prm.setParam("test_str", s3);
     rv = prm.getParamString("test_str", &s2);
     ensure_equals(rv, true);
-    ensure_equals(strlen(s3), strlen(s2));
-    ensure_equals(strcmp(s3, s2), 0);
+    ensure_equals(std::strlen(s3), std::strlen(s2));
+    ensure_equals(std::strcmp(s3, s2), 0);
+}
+
+template<>
+template<>
+void object::test<4> ()
+{
+    Params prm;
+    double d1 = 11.1, d2;
+    prm.setParam("test_double", 3.4);
+    bool rv = prm.getParamDouble("test_double", &d2);
+    ensure_equals(rv, true);
+    ensure_equals(d1, d2);
+    // Wrong key should fail
+    rv = prm.getParamDouble("test_wrong", &d2);
+    ensure_equals(rv, false);
+    // Overwrite existing value
+    d1 = 5;
+    prm.setParam("test_double", d1);
+    rv = prm.getParamDouble("test_double", &d2);
+    ensure_equals(rv, true);
+    ensure_equals(d1, d2);
 }
 
 

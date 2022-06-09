@@ -95,8 +95,9 @@
 #include <geos/util.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
-#include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
+#include <geos/util/Params.h>
+#include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/version.h>
 
 // This should go away
@@ -129,6 +130,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSParams geos::util::Params
 
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
@@ -192,6 +194,7 @@ using geos::precision::GeometryPrecisionReducer;
 using geos::simplify::PolygonHullSimplifier;
 
 using geos::util::IllegalArgumentException;
+using geos::util::Params;
 
 typedef std::unique_ptr<Geometry> GeomPtr;
 
@@ -2041,6 +2044,80 @@ extern "C" {
             return out.release();
         });
     }
+
+/* ========== GEOS parameter functions ========== */
+
+    Params*
+    GEOSParams_create_r(GEOSContextHandle_t handle)
+    {
+        return execute(handle, [&]() {
+            return new Params();
+        });
+    }
+
+    void
+    GEOSParams_destroy_r(GEOSContextHandle_t handle, Params* params)
+    {
+        return execute(handle, [&]() {
+            delete params;
+        });
+    }
+
+    void
+    GEOSParams_setParamDouble_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, double d)
+    {
+        return execute(handle, [&]() {
+            return p->setParam(key, d);
+        });
+    }
+
+    void
+    GEOSParams_setParamInteger_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, int i)
+    {
+        return execute(handle, [&]() {
+            return p->setParam(key, i);
+        });
+    }
+
+    void
+    GEOSParams_setParamString_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, const char* str)
+    {
+        return execute(handle, [&]() {
+            return p->setParam(key, str);
+        });
+    }
+
+    int
+    GEOSParams_getParamDouble_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, double *d)
+    {
+        return execute(handle, 0, [&]() {
+            return p->getParamDouble(key, d);
+        });
+    }
+
+    int
+    GEOSParams_getParamInteger_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, int *i)
+    {
+        return execute(handle, 0, [&]() {
+            return p->getParamInteger(key, i);
+        });
+    }
+
+    int
+    GEOSParams_getParamString_r(GEOSContextHandle_t handle,
+        Params* p, const char* key, const char** str)
+    {
+        return execute(handle, 0, [&]() {
+            return p->getParamString(key, str);
+        });
+    }
+
+/* ========== Make Valid ========== */
 
     Geometry*
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)

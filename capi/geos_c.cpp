@@ -24,6 +24,7 @@
 #include <geos/io/GeoJSONReader.h>
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/util/Interrupt.h>
+#include <geos/util/Params.h>
 
 #include <stdexcept>
 #include <new>
@@ -43,6 +44,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSParams geos::util::Params
 typedef struct GEOSBufParams_t GEOSBufferParams;
 typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
@@ -77,6 +79,7 @@ using geos::io::WKBWriter;
 using geos::io::GeoJSONReader;
 using geos::io::GeoJSONWriter;
 
+using geos::util::Params;
 
 typedef std::unique_ptr<Geometry> GeomPtr;
 
@@ -838,6 +841,54 @@ extern "C" {
     GEOSBuildArea(const Geometry* g)
     {
         return GEOSBuildArea_r(handle, g);
+    }
+
+    GEOSParams*
+    GEOSParams_create()
+    {
+        return GEOSParams_create_r(handle);
+    }
+
+    void
+    GEOSParams_destroy(Params* p)
+    {
+        return GEOSParams_destroy_r(handle, p);
+    }
+
+    void
+    GEOSParams_setParamDouble(Params* p, const char* key, double d)
+    {
+        return GEOSParams_setParamDouble_r(handle, p, key, d);
+    }
+
+    void
+    GEOSParams_setParamInteger(Params* p, const char* key, int i)
+    {
+        return GEOSParams_setParamInteger_r(handle, p, key, i);
+    }
+
+    void
+    GEOSParams_setParamString(Params* p, const char* key, const char* str)
+    {
+        return GEOSParams_setParamString_r(handle, p, key, str);
+    }
+
+    int
+    GEOSParams_getParamDouble(Params* p, const char* key, double *d)
+    {
+        return GEOSParams_getParamDouble_r(handle, p, key, d);
+    }
+
+    int
+    GEOSParams_getParamInteger(Params* p, const char* key, int *i)
+    {
+        return GEOSParams_getParamInteger_r(handle, p, key, i);
+    }
+
+    int
+    GEOSParams_getParamString(Params* p, const char* key, const char** str)
+    {
+        return GEOSParams_getParamString_r(handle, p, key, str);
     }
 
     Geometry*

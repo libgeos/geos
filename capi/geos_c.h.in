@@ -174,6 +174,14 @@ typedef struct GEOSBufParams_t GEOSBufferParams;
 */
 typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
+/**
+* Generic parameter object for functions with complex parameterizations.
+* \see GEOSParams_create()
+* \see GEOSParams_destroy()
+*/
+typedef struct GEOSParams_t GEOSParams;
+
+
 #endif
 
 /** \cond */
@@ -387,6 +395,60 @@ extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorMessageHandler_r(
     GEOSContextHandle_t extHandle,
     GEOSMessageHandler_r ef,
     void *userData);
+
+
+/* ========== GEOS parameter functions ========== */
+
+/** \see GEOSParams_create */
+extern GEOSParams GEOS_DLL *GEOSParams_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSParams_destroy */
+extern void GEOS_DLL GEOSParams_destroy_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* params);
+
+/** \see GEOSParams_setParamDouble */
+extern void GEOS_DLL GEOSParams_setParamDouble_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    double d);
+
+/** \see GEOSParams_setParamInteger */
+extern void GEOS_DLL GEOSParams_setParamInteger_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    int i);
+
+/** \see GEOSParams_setParamString */
+extern void GEOS_DLL GEOSParams_setParamString_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    const char* str);
+
+/** \see GEOSParams_getParamDouble */
+extern int GEOS_DLL GEOSParams_getParamDouble_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    double *d);
+
+/** \see GEOSParams_getParamInteger */
+extern int GEOS_DLL GEOSParams_getParamInteger_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    int *i);
+
+/** \see GEOSParams_getParamString */
+extern int GEOS_DLL GEOSParams_getParamString_r(
+    GEOSContextHandle_t handle,
+    GEOSParams* p,
+    const char* key,
+    const char** str);
 
 /* ========== Coordinate Sequence functions ========== */
 
@@ -1962,6 +2024,58 @@ extern void GEOS_DLL finishGEOS(void);
 * \param buffer The memory to free
 */
 extern void GEOS_DLL GEOSFree(void *buffer);
+
+///@}
+
+/* ========== GEOS parameter functions ========== */
+/** @name Function Parameters
+* A GEOSParams is a map of string keys and
+* double, integer or string values.
+*/
+///@{
+
+/**  GEOSParams_create */
+extern GEOSParams GEOS_DLL *GEOSParams_create();
+
+/**  GEOSParams_destroy */
+extern void GEOS_DLL GEOSParams_destroy(
+    GEOSParams* params);
+
+/**  GEOSParams_setParamDouble */
+extern void GEOS_DLL GEOSParams_setParamDouble(
+    GEOSParams* p,
+    const char* key,
+    double d);
+
+/** GEOSParams_setParamInteger */
+extern void GEOS_DLL GEOSParams_setParamInteger(
+    GEOSParams* p,
+    const char* key,
+    int i);
+
+/** GEOSParams_setParamString */
+extern void GEOS_DLL GEOSParams_setParamString(
+    GEOSParams* p,
+    const char* key,
+    const char* str);
+
+/** GEOSParams_getParamDouble */
+extern int GEOS_DLL GEOSParams_getParamDouble(
+    GEOSParams* p,
+    const char* key,
+    double *d);
+
+/** GEOSParams_getParamInteger */
+extern int GEOS_DLL GEOSParams_getParamInteger(
+    GEOSParams* p,
+    const char* key,
+    int *i);
+
+/** GEOSParams_getParamString */
+extern int GEOS_DLL GEOSParams_getParamString(
+    GEOSParams* p,
+    const char* key,
+    const char** str);
 
 ///@}
 
