@@ -9,6 +9,7 @@
 
 // std
 #include <string>
+#include <cstring>
 
 namespace tut {
 //
