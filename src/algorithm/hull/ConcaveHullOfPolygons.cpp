@@ -298,8 +298,8 @@ ConcaveHullOfPolygons::removeFrameCornerTris(
              */
             TriIndex oppIndex = Tri::oppEdge(index);
             Tri* oppTri = tri->getAdjacent(oppIndex);
-            bool isBorderTri = oppTri != nullptr && ! isFrameTri(oppTri, frameCorners);
-            if (isBorderTri) {
+            bool bBorderTri = oppTri != nullptr && ! isFrameTri(oppTri, frameCorners);
+            if (bBorderTri) {
                 addBorderTri(tri, oppIndex);
             }
             tri->remove();
