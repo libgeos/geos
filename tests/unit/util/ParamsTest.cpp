@@ -89,9 +89,14 @@ void object::test<3> ()
     // Wrong key should fail
     rv = prm.getParamString("test_wrong", &s2);
     ensure_equals(rv, false);
+    // Overwrite existing value
+    const char *s3 = "foobar";
+    prm.setParam("test_str", s3);
+    rv = prm.getParamString("test_str", &s2);
+    ensure_equals(rv, true);
+    ensure_equals(strlen(s3), strlen(s2));
+    ensure_equals(strcmp(s3, s2), 0);
 }
-
-
 
 
 } // namespace tut
