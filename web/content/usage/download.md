@@ -48,6 +48,7 @@ ctest
 make install
 ```
 
+
 ### Build Options
 
 The GEOS build can be customized using build options.
@@ -64,7 +65,7 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Librarys end up in `./libs` headers in `./include` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
-| DISABLE_GEOS_INLINE  | OFF        | Turn off inlining. This is bad for performance, only do this if you cannot build to pass tests on your platform with inlining on. |
+
 
 ## Testing
 

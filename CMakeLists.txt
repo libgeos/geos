@@ -195,23 +195,6 @@ target_compile_options(geos_cxx_flags INTERFACE
   $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
 )
 
-#-----------------------------------------------------------------------------
-# Target geos_cxx_flags: common compilation flags
-#-----------------------------------------------------------------------------
-option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
-if(DISABLE_GEOS_INLINE)
-  target_compile_options(geos_cxx_flags INTERFACE
-  "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-fno-inline-functions>"
-  "$<$<CXX_COMPILER_ID:GNU>:-fno-inline>"
-  "$<$<CXX_COMPILER_ID:MSVC>:/Ob0>"
-  )
-  message(STATUS
-    "GEOS: Function inlining DISABLED")
-else()
-  message(STATUS
-    "GEOS: Function inlining ENABLED")
-endif()
-
 # Make sure NDEBUG is defined so that assert() is disabled for
 # any non-debug build. Use a generator expression so that this
 # works with multi-configuration generators.
@@ -411,13 +394,6 @@ install(DIRECTORY
   "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING PATTERN "*.hpp")
-if(NOT DISABLE_GEOS_INLINE)
-  install(DIRECTORY
-    "${CMAKE_CURRENT_LIST_DIR}/include/geos"
-    "${CMAKE_CURRENT_BINARY_DIR}/include/geos"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.inl")
-endif()
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/include/geos.h"
