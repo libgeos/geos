@@ -64,7 +64,7 @@ private:
         void setCString(const char* cstr);
         bool getDouble(double* d) const;
         bool getInteger(int* i) const;
-        bool getCString(char** str) const;
+        bool getCString(const char** str) const;
 
     };
 
@@ -79,12 +79,13 @@ private:
 
 public:
 
+    Params() {};
     void setParam(const char* key, double d);
     void setParam(const char* key, int i);
     void setParam(const char* key, const char* s);
     bool getParamDouble(const char* key, double* d) const;
     bool getParamInteger(const char* key, int* i) const;
-    bool getParamString(const char* key, char** str) const;
+    bool getParamString(const char* key, const char** str) const;
 
 };
 

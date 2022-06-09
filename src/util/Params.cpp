@@ -59,8 +59,7 @@ Params::ParamValue::setString(std::string& s)
 void
 Params::ParamValue::setCString(const char* cstr)
 {
-    std::string s(cstr);
-    m_s = s;
+    m_s.assign(cstr);
     m_type = ParamType::String;
 }
 
@@ -83,11 +82,11 @@ Params::ParamValue::getInteger(int* i) const
 }
 
 bool
-Params::ParamValue::getCString(char** str) const
+Params::ParamValue::getCString(const char** str) const
 {
     if (!str || m_type != ParamType::String)
         return false;
-    *str = strdup(m_s.c_str());
+    *str = m_s.c_str();
     return true;
 }
 
@@ -180,7 +179,7 @@ Params::getParamInteger(const char* key, int* i) const
 }
 
 bool
-Params::getParamString(const char* key, char** str) const
+Params::getParamString(const char* key, const char** str) const
 {
     std::string k(key);
     normalizeKey(k);
