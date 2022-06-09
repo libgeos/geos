@@ -47,16 +47,6 @@ jobs:
         }
         - {
           compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.15.*,
-          cmake_extra: '-DDISABLE_GEOS_INLINE=ON',
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: clang++,
           build_type: Debug,
           cxxstd: 11,
           arch: 64,
