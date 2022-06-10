@@ -99,26 +99,7 @@ void object::test<3> ()
     ensure_equals(std::strcmp(s3, s2), 0);
 }
 
-template<>
-template<>
-void object::test<4> ()
-{
-    Params prm;
-    double d1 = 11.1, d2;
-    prm.setParam("test_double", 3.4);
-    bool rv = prm.getParamDouble("test_double", &d2);
-    ensure_equals(rv, true);
-    ensure_equals(d1, d2);
-    // Wrong key should fail
-    rv = prm.getParamDouble("test_wrong", &d2);
-    ensure_equals(rv, false);
-    // Overwrite existing value
-    d1 = 5;
-    prm.setParam("test_double", d1);
-    rv = prm.getParamDouble("test_double", &d2);
-    ensure_equals(rv, true);
-    ensure_equals(d1, d2);
-}
+
 
 
 } // namespace tut
