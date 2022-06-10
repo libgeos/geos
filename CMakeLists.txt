@@ -60,7 +60,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
   list(APPEND _project_info DESCRIPTION "GEOS - C++ port of the Java Topology Suite (JTS)")
 endif()
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
-  list(APPEND _project_info HOMEPAGE_URL "http://geos.osgeo.org")
+  list(APPEND _project_info HOMEPAGE_URL "https://libgeos.org/")
 endif()
 
 project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
