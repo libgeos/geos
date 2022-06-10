@@ -1247,22 +1247,26 @@ extern "C" {
         const Params* params)
     {
         return execute(extHandle, [&]() {
+            // Read the optional parameter for inside/outside if it is there
             int isOuterParam;
             bool isOuter = true;
-            if (params->getParamInteger("hull_location", &isOuterParam) &&
+            if (params &&
+                params->getParamInteger("hull_location", &isOuterParam) &&
                 isOuterParam == GEOS_POLYHULL_INSIDE)
             {
                     isOuter = false;
             }
             std::unique_ptr<Geometry> g3;
+            // Read the optional parameter for area/vertex method, if it is there
             int methodParam = GEOS_POLYHULL_VERTEX_RATIO;
-            if (params->getParamInteger("hull_ratio", &methodParam) &&
+            if (params &&
+                params->getParamInteger("hull_ratio", &methodParam) &&
                 methodParam == GEOS_POLYHULL_AREA_RATIO)
             {
-                g3 = PolygonHullSimplifier::hull(g1, isOuter, ratio);
+                g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, ratio);
             }
             else {
-                g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, ratio);
+                g3 = PolygonHullSimplifier::hull(g1, isOuter, ratio);
             }
             g3->setSRID(g1->getSRID());
             return g3.release();
