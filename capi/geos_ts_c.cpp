@@ -1243,11 +1243,27 @@ extern "C" {
     Geometry*
     GEOSPolygonHullSimplify_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
-        unsigned int isOuter,
-        double vertexNumFraction)
+        double ratio,
+        const Params* params)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hull(g1, isOuter, vertexNumFraction);
+            int isOuterParam;
+            bool isOuter = true;
+            if (params->getParamInteger("hull_location", &isOuterParam) &&
+                isOuterParam == GEOS_POLYHULL_INSIDE)
+            {
+                    isOuter = false;
+            }
+            std::unique_ptr<Geometry> g3;
+            int methodParam = GEOS_POLYHULL_VERTEX_RATIO;
+            if (params->getParamInteger("hull_ratio", &methodParam) &&
+                methodParam == GEOS_POLYHULL_AREA_RATIO)
+            {
+                g3 = PolygonHullSimplifier::hull(g1, isOuter, ratio);
+            }
+            else {
+                g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, ratio);
+            }
             g3->setSRID(g1->getSRID());
             return g3.release();
         });

@@ -482,10 +482,10 @@ extern "C" {
 
     Geometry*
     GEOSPolygonHullSimplify(const Geometry* g,
-                            unsigned int isOuter,
-                            double vertexNumFraction)
+                            double ratio,
+                            const GEOSParams* params)
     {
-        return GEOSPolygonHullSimplify_r(handle, g, isOuter, vertexNumFraction);
+        return GEOSPolygonHullSimplify_r(handle, g, ratio, params);
     }
 
     Geometry*

@@ -222,6 +222,23 @@ enum GEOSGeomTypes {
 };
 
 /**
+* Algorithm behaviour codes for polygonal hull simplification.
+* consuming geometry types.
+*
+* \see GEOSPolygonHullSimplify
+*/
+enum GEOSPolygonHullSimplifyCodes {
+    /** Hull completely contained by input */
+    GEOS_POLYHULL_INSIDE,
+    /** Hull completely contains input */
+    GEOS_POLYHULL_OUTSIDE,
+    /** Ratio is relative to total area */
+    GEOS_POLYHULL_AREA_RATIO,
+    /** Ratio is relative to total vertices */
+    GEOS_POLYHULL_VERTEX_RATIO
+};
+
+/**
 * Well-known binary byte orders used when
 * writing to WKB.
 *
@@ -840,8 +857,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
-    unsigned int isOuter,
-    double ratio);
+    double ratio,
+    const GEOSParams* params);
 
 /** \see GEOSConcaveHullOfPolygons */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons_r(
@@ -2034,44 +2051,92 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 */
 ///@{
 
-/**  GEOSParams_create */
+/**
+* Create a a new GEOSParams object for holding algorithm
+* configuration parameters. User is responsible for freeing
+* with GEOSParams_destroy()
+* \see GEOSParams_setParamDouble(), GEOSParams_setParamInteger(), GEOSParams_setParamString()
+*/
 extern GEOSParams GEOS_DLL *GEOSParams_create();
 
-/**  GEOSParams_destroy */
+/**
+* Free a GEOSParams object.
+* \param p The object to free.
+* \see GEOSParams_create()
+*/
 extern void GEOS_DLL GEOSParams_destroy(
-    GEOSParams* params);
+    GEOSParams* p);
 
-/**  GEOSParams_setParamDouble */
+/**
+* Store a double value with a key name.
+* \param p The object to set the value in.
+* \param key The name to store the value under.
+* \param d The double value.
+* \see GEOSParams_create(), GEOSParams_setParamInteger(), GEOSParams_setParamString()
+*/
 extern void GEOS_DLL GEOSParams_setParamDouble(
     GEOSParams* p,
     const char* key,
     double d);
 
-/** GEOSParams_setParamInteger */
+/**
+* Store a integer value with a key name.
+* \param p The object to set the value in.
+* \param key The name to store the value under.
+* \param i The integer value.
+* \see GEOSParams_create(), GEOSParams_setParamDouble(), GEOSParams_setParamString()
+*/
 extern void GEOS_DLL GEOSParams_setParamInteger(
     GEOSParams* p,
     const char* key,
     int i);
 
-/** GEOSParams_setParamString */
+/**
+* Store a string value with a key name.
+* \param p The object to set the value in.
+* \param key The name to store the value under.
+* \param str The string value.
+* \see GEOSParams_create(), GEOSParams_setParamDouble(), GEOSParams_setParamInteger()
+*/
 extern void GEOS_DLL GEOSParams_setParamString(
     GEOSParams* p,
     const char* key,
     const char* str);
 
-/** GEOSParams_getParamDouble */
+/**
+* Read a double value stored under a key name.
+* \param p The object to read the value from.
+* \param key The name to read from .
+* \param d A pointer to fill in with the value
+* \return 1 on success, 0 on error.
+* \see GEOSParams_setParamDouble()
+*/
 extern int GEOS_DLL GEOSParams_getParamDouble(
     GEOSParams* p,
     const char* key,
     double *d);
 
-/** GEOSParams_getParamInteger */
+/**
+* Read an integer value stored under a key name.
+* \param p The object to read the value from.
+* \param key The name to read from .
+* \param i A pointer to fill in with the value
+* \return 1 on success, 0 on error.
+* \see GEOSParams_setParamInteger()
+*/
 extern int GEOS_DLL GEOSParams_getParamInteger(
     GEOSParams* p,
     const char* key,
     int *i);
 
-/** GEOSParams_getParamString */
+/**
+* Read a string value stored under a key name.
+* \param p The object to read the value from.
+* \param key The name to read from .
+* \param str A pointer to fill in with the value
+* \return 1 on success, 0 on error.
+* \see GEOSParams_setParamString()
+*/
 extern int GEOS_DLL GEOSParams_getParamString(
     GEOSParams* p,
     const char* key,
@@ -3600,17 +3665,19 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * an inner hull is computed if it is negative.
 *
 * \param g the polygonal geometry to process
-* \param isOuter indicates whether to compute an outer or inner hull (1 for outer hull, 0 for inner)
-* \param vertexNumFraction the target fraction of the count of input vertices to retain in result
-* \return A newly allocated geometry of the concave hull. NULL on exception.
+* \param ratio the target fraction of the input to retail (1.0 to retain all, 0.0 to retain the minimum)
+* \param params parameters to control the algorithm. Null to use the defaults (vertex ratio, hull outside).
+*        Use "hull_location" and GEOS_POLYHULL_INSIDE, GEOS_POLYHULL_OUTSIDE.
+*        Use "hull_ratio" and GEOS_POLYHULL_AREA_RATIO, GEOS_POLYHULL_VERTEX_RATIO.
+* \return A newly allocated geometry of the concave hull. NULL on exception. Caller is responsible for freeing with GEOSGeom_destroy().
 *
-* Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::PolygonHullSimplifier
+* \see GEOSParams_create()
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
     const GEOSGeometry* g,
-    unsigned int isOuter,
-    double vertexNumFraction);
+    double ratio,
+    const GEOSParams* params);
 
 /**
 * Constructs a concave hull of a set of polygons, respecting
