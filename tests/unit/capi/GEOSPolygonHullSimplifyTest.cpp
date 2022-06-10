@@ -17,8 +17,8 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeospolygonhull_data : public capitest::utility {
-};
+struct test_capigeospolygonhull_data : public capitest::utility {};
+
 
 typedef test_group<test_capigeospolygonhull_data> group;
 typedef group::object object;
@@ -78,6 +78,21 @@ void object::test<4>()
     expected_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
     ensure_geometry_equals(geom1_, expected_);
 }
+
+template<>
+template<>
+void object::test<5>()
+{
+    input_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
+    ensure(nullptr != input_);
+    geom1_ = GEOSPolygonHullSimplifyByArea(input_, 1, 0.7);
+    ensure(nullptr != geom1_);
+    // char *wkt = GEOSWKTWriter_write(wktw_, geom1_);
+    // printf("%s\n", wkt);
+    expected_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
+    ensure_geometry_equals(geom1_, expected_);
+}
+
 
 
 } // namespace tut

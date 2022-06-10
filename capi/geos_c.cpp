@@ -486,6 +486,14 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonHullSimplifyByArea(const Geometry* g,
+                            unsigned int isOuter,
+                            double areaDeltaRatio)
+    {
+        return GEOSPolygonHullSimplifyByArea_r(handle, g, isOuter, areaDeltaRatio);
+    }
+
+    Geometry*
     GEOSConcaveHullOfPolygons(const Geometry* g,
         double lengthRatio,
         unsigned int isTight,

@@ -1251,6 +1251,19 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonHullSimplifyByArea_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1,
+        unsigned int isOuter,
+        double areaDeltaRatio)
+    {
+        return execute(extHandle, [&]() {
+            std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, areaDeltaRatio);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSConcaveHullOfPolygons_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
         double lengthRatio,
