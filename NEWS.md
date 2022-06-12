@@ -1,5 +1,5 @@
-## Changes in 3.11.0
-2022-xx-xx
+## Changes in 3.11.0beta1
+2022-06-12
 
 - New things:
   - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
@@ -29,8 +29,6 @@
   - Fix MinimumDiameter getMinimumRectangle for flat input (JTS-875, Martin Davis)
   - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
   - Fix OverlayNG geomunion to avoid lines in result (Martin Davis)
-
-- Changes:
 
 
 ## Changes in 3.10.0
