@@ -3520,15 +3520,16 @@ enum GEOSPolygonHullParameterModes {
 
 /**
 * Computes a topology-preserving simplified hull of a polygonal geometry,
-* with hull shape determined by the areaDeltaRatio,
-* specifying the ratio of maximum difference in area to original area.
-* Larger values compute less concave results.
-* A value of 0 produces the original geometry.
-* Either outer or inner hulls can be computed..
+* with hull shape determined by the parameter, controlled by a parameter
+* mode, which is one defined in GEOSPolygonHullParameterModes. In general,
+* larger values compute less concave results and value of 0
+* produces the original geometry.
+* Either outer or inner hulls can be computed.
 *
 * \param g the polygonal geometry to process
 * \param isOuter indicates whether to compute an outer or inner hull (1 for outer hull, 0 for inner)
-* \param areaDeltaRatio the target ratio of area difference to original area
+* \param parameterMode the interpretation to apply to the parameter argument
+* \param parameter the target ratio of area difference to original area
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
