@@ -782,11 +782,12 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     double vertexNumFraction);
 
 /** \see GEOSPolygonHullSimplifyByArea */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyByArea_r(
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     unsigned int isOuter,
-    double areaDeltaRatio);
+    unsigned int parameterMode,
+    double parameter);
 
 /** \see GEOSConcaveHullOfPolygons */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons_r(
@@ -3483,6 +3484,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     double ratio,
     unsigned int allowHoles);
 
+
 /**
 * Computes a boundary-respecting hull of a polygonal geometry,
 * with hull shape determined by a target parameter
@@ -3505,6 +3507,17 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
     unsigned int isOuter,
     double vertexNumFraction);
 
+
+/**
+* Controls the behavior of the GEOSPolygonHullSimplify parameter.
+*/
+enum GEOSPolygonHullParameterModes {
+    /** See geos::simplify::PolygonHullSimplifier::hull() */
+    GEOSHULL_PARAM_VERTEX_RATIO = 1,
+    /** See geos::simplify::PolygonHullSimplifier::hullByAreaDelta() */
+    GEOSHULL_PARAM_AREA_RATIO = 2
+};
+
 /**
 * Computes a topology-preserving simplified hull of a polygonal geometry,
 * with hull shape determined by the areaDeltaRatio,
@@ -3521,10 +3534,11 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::PolygonHullSimplifier
 */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyByArea(
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
     const GEOSGeometry* g,
     unsigned int isOuter,
-    double areaDeltaRatio);
+    unsigned int parameterMode,
+    double parameter);
 
 /**
 * Constructs a concave hull of a set of polygons, respecting

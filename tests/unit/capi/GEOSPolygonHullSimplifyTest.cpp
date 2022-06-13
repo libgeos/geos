@@ -85,7 +85,7 @@ void object::test<5>()
 {
     input_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
     ensure(nullptr != input_);
-    geom1_ = GEOSPolygonHullSimplifyByArea(input_, 1, 0.7);
+    geom1_ = GEOSPolygonHullSimplifyMode(input_, 1, GEOSHULL_PARAM_AREA_RATIO, 0.7);
     ensure(nullptr != geom1_);
     // char *wkt = GEOSWKTWriter_write(wktw_, geom1_);
     // printf("%s\n", wkt);
