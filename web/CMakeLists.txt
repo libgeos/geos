@@ -9,7 +9,6 @@
 # See the COPYING file for more information.
 ################################################################################
 
-option(BUILD_WEBSITE "Build website" OFF)
 
 if(BUILD_WEBSITE)
 

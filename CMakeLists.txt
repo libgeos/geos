@@ -342,7 +342,9 @@ endif()
 #-----------------------------------------------------------------------------
 # Web Site
 #-----------------------------------------------------------------------------
-if(PROJECT_IS_TOP_LEVEL)
+option(BUILD_WEBSITE "Build website" OFF)
+
+if(PROJECT_IS_TOP_LEVEL AND BUILD_WEBSITE)
   add_subdirectory(web)
 endif()
 
@@ -444,6 +446,7 @@ if(PROJECT_IS_TOP_LEVEL)
       "/tools/geos-config\$"
       "/tools/geos\\\\.pc\$"
       "/bin/"
+      "/web/"
       ${CMAKE_CURRENT_BINARY_DIR}
       )
 
