@@ -133,4 +133,5 @@ var menudata={children:[
 {text:"i",url:"globals_func_i.html#index_i"}]},
 {text:"Typedefs",url:"globals_type.html"},
 {text:"Enumerations",url:"globals_enum.html"},
-{text:"Enumerator",url:"globals_eval.html"}]}]}]}
+{text:"Enumerator",url:"globals_eval.html",children:[
+{text:"g",url:"globals_eval.html#index_g"}]}]}]}]}
