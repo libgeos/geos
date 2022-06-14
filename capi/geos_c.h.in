@@ -782,11 +782,12 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     double vertexNumFraction);
 
 /** \see GEOSPolygonHullSimplifyByArea */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyByArea_r(
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     unsigned int isOuter,
-    double areaDeltaRatio);
+    unsigned int parameterMode,
+    double parameter);
 
 /** \see GEOSConcaveHullOfPolygons */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons_r(
@@ -3483,6 +3484,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     double ratio,
     unsigned int allowHoles);
 
+
 /**
 * Computes a boundary-respecting hull of a polygonal geometry,
 * with hull shape determined by a target parameter
@@ -3505,26 +3507,39 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
     unsigned int isOuter,
     double vertexNumFraction);
 
+
+/**
+* Controls the behavior of the GEOSPolygonHullSimplify parameter.
+*/
+enum GEOSPolygonHullParameterModes {
+    /** See geos::simplify::PolygonHullSimplifier::hull() */
+    GEOSHULL_PARAM_VERTEX_RATIO = 1,
+    /** See geos::simplify::PolygonHullSimplifier::hullByAreaDelta() */
+    GEOSHULL_PARAM_AREA_RATIO = 2
+};
+
 /**
 * Computes a topology-preserving simplified hull of a polygonal geometry,
-* with hull shape determined by the areaDeltaRatio,
-* specifying the ratio of maximum difference in area to original area.
-* Larger values compute less concave results.
-* A value of 0 produces the original geometry.
-* Either outer or inner hulls can be computed..
+* with hull shape determined by the parameter, controlled by a parameter
+* mode, which is one defined in GEOSPolygonHullParameterModes. In general,
+* larger values compute less concave results and value of 0
+* produces the original geometry.
+* Either outer or inner hulls can be computed.
 *
 * \param g the polygonal geometry to process
 * \param isOuter indicates whether to compute an outer or inner hull (1 for outer hull, 0 for inner)
-* \param areaDeltaRatio the target ratio of area difference to original area
+* \param parameterMode the interpretation to apply to the parameter argument
+* \param parameter the target ratio of area difference to original area
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::PolygonHullSimplifier
 */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyByArea(
+extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
     const GEOSGeometry* g,
     unsigned int isOuter,
-    double areaDeltaRatio);
+    unsigned int parameterMode,
+    double parameter);
 
 /**
 * Constructs a concave hull of a set of polygons, respecting

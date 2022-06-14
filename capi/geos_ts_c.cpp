@@ -1251,15 +1251,26 @@ extern "C" {
     }
 
     Geometry*
-    GEOSPolygonHullSimplifyByArea_r(GEOSContextHandle_t extHandle,
+    GEOSPolygonHullSimplifyMode_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
         unsigned int isOuter,
-        double areaDeltaRatio)
+        unsigned int parameterMode,
+        double parameter)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, areaDeltaRatio);
-            g3->setSRID(g1->getSRID());
-            return g3.release();
+            if (parameterMode == GEOSHULL_PARAM_AREA_RATIO) {
+                std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, parameter);
+                g3->setSRID(g1->getSRID());
+                return g3.release();
+            }
+            else if (parameterMode == GEOSHULL_PARAM_VERTEX_RATIO) {
+                std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hull(g1, isOuter, parameter);
+                g3->setSRID(g1->getSRID());
+                return g3.release();
+            }
+            else {
+                throw IllegalArgumentException("GEOSPolygonHullSimplifyMode_r: Unknown parameterMode");
+            }
         });
     }
 

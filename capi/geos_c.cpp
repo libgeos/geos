@@ -486,11 +486,12 @@ extern "C" {
     }
 
     Geometry*
-    GEOSPolygonHullSimplifyByArea(const Geometry* g,
+    GEOSPolygonHullSimplifyMode(const Geometry* g,
                             unsigned int isOuter,
-                            double areaDeltaRatio)
+                            unsigned int parameterMode,
+                            double parameter)
     {
-        return GEOSPolygonHullSimplifyByArea_r(handle, g, isOuter, areaDeltaRatio);
+        return GEOSPolygonHullSimplifyMode_r(handle, g, isOuter, parameterMode, parameter);
     }
 
     Geometry*
