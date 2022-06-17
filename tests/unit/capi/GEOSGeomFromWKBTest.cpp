@@ -27,7 +27,7 @@ struct test_capigeosgeomfromwkb_data : public capitest::utility {
     }
 
     void
-    test_wkb(std::string const& wkbhex, std::string const& wkt)
+    test_wkb(const std::string& wkbhex, const std::string& wkt)
     {
         wkb_hex_decoder::binary_type wkb;
         wkb_hex_decoder::decode(wkbhex, wkb);
@@ -35,13 +35,9 @@ struct test_capigeosgeomfromwkb_data : public capitest::utility {
         geom1_ = GEOSGeomFromWKB_buf(&wkb[0], wkb.size());
         ensure("GEOSGeomFromWKB_buf failed to create geometry", nullptr != geom1_);
 
-        // TODO: Update test to compare with WKT-based geometry
-        (void)wkt;
-        //       ATM, some XYZ and XYZM geometries fail
-        //geom2_ = GEOSWKTReader_read(reader_, wkt.c_str());
-        //ensure ( 0 != geom2_ );
-        //char result = GEOSEquals(geom1_, geom2_);
-        //ensure_equals(result, char(1));
+        geom2_ = GEOSWKTReader_read(reader_, wkt.c_str());
+        ensure ("GEOSWKTReader_read failed to create geometry", nullptr != geom2_ );
+        ensure_geometry_equals(geom1_, geom2_);
     }
 };
 
@@ -109,17 +105,30 @@ void object::test<5>
     test_wkb(ewkb, wkt);
 }
 
-// TODO: Does GEOSGeomFromWKB_buf accept EWKB or WKB only?
-//       The cases below test EWKB input and they are failing.
-//template<>
-//template<>
-//void object::test<6>()
-//{
-//    // SELECT st_geomfromewkt('MULTIPOINT((0 0 1 1), (3 2 2 1))') ;
-//    std::string wkt("MULTIPOINT((0 0 1 1), (3 2 2 1))");
-//    std::string ewkb("01040000C00200000001010000C000000000000000000000000000000000000000000000F03F000000000000F03F01010000C0000000000000084000000000000000400000000000000040000000000000F03F");
-//    test_wkb(ewkb, wkt);
-//}
+// Check force close on unclosed rings
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom1_ = GEOSWKTReader_read(reader_, "POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))");
+    ensure("geom1_ not null", geom1_ != nullptr);
+    GEOSWKTReader_setFixStructure(reader_, 1);
+    geom2_ = GEOSWKTReader_read(reader_, "POLYGON((0 0, 0 1, 1 1, 1 0))");
+    ensure("geom2_ not null", geom2_ != nullptr);
+    ensure_geometry_equals(geom1_, geom2_);
+}
+
+// Supply EWKB input
+template<>
+template<>
+void object::test<7>()
+{
+    test_wkb(
+        "01040000C00200000001010000C000000000000000000000000000000000000000000000F03F000000000000F03F01010000C0000000000000084000000000000000400000000000000040000000000000F03F",
+        "MULTIPOINT((0 0 1 1), (3 2 2 1))"
+    );
+}
 
 } // namespace tut
 
