@@ -264,6 +264,11 @@ std::unique_ptr<LinearRing>
 WKTReader::readLinearRingText(StringTokenizer* tokenizer) const
 {
     auto&& coords = getCoordinates(tokenizer);
+    if (fixStructure && !coords->isRing()) {
+        std::unique_ptr<CoordinateArraySequence> cas(new CoordinateArraySequence(*coords));
+        cas->closeRing();
+        coords.reset(cas.release());
+    }
     return geometryFactory->createLinearRing(std::move(coords));
 }
 

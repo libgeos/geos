@@ -69,12 +69,14 @@ public:
     explicit WKTReader(const geom::GeometryFactory& gf)
         : geometryFactory(&gf)
         , precisionModel(gf.getPrecisionModel())
+        , fixStructure(false)
         {};
 
         /** @deprecated in 3.4.0 */
     explicit WKTReader(const geom::GeometryFactory* gf)
         : geometryFactory(gf)
         , precisionModel(gf->getPrecisionModel())
+        , fixStructure(false)
         {};
 
     /**
@@ -87,6 +89,11 @@ public:
         {};
 
     ~WKTReader() {};
+
+    void
+    setFixStructure(bool doFixStructure) {
+        fixStructure = doFixStructure;
+    }
 
     /// Parse a WKT string returning a Geometry
     template<typename T>
@@ -121,6 +128,7 @@ protected:
 private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;
+    bool fixStructure;
 
     void getPreciseCoordinate(io::StringTokenizer* tokenizer, geom::Coordinate&, std::size_t& dim) const;
 

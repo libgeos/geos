@@ -10,6 +10,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/util/GEOSException.h>
@@ -302,6 +303,18 @@ void object::test<12>
     ensure("MULTIPOINT( EMPTY, (1 1))", geom3->getNumGeometries() == 2);
     ensure("MULTIPOINT( EMPTY, (1 1))", geom3->getGeometryN(0)->isEmpty());
 }
+
+template<>
+template<>
+void object::test<13>
+()
+{
+    wktreader.setFixStructure(true);
+    auto geom = wktreader.read("POLYGON((0 0, 0 1, 1 1, 1 0))");
+    std::unique_ptr<geos::geom::Polygon> p(static_cast<geos::geom::Polygon*>(geom.release()));
+    ensure("setFixStructure", p->getExteriorRing()->getNumPoints() == 5);
+}
+
 
 
 } // namespace tut

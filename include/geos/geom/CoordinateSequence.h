@@ -191,7 +191,7 @@ public:
     * @param pts an array of Coordinates
     * @return true if the coordinate form a ring.
     */
-    static bool isRing(const CoordinateSequence *pts);
+    bool isRing() const;
 
     /// Reverse Coordinate order in given CoordinateSequence
     static void reverse(CoordinateSequence* cl);

@@ -207,7 +207,7 @@ BufferCurveSetBuilder::addLineString(const LineString* line)
      *
      * Singled-sided buffers currently treat rings as if they are lines.
      */
-    if (CoordinateSequence::isRing(coord.get()) && ! curveBuilder.getBufferParameters().isSingleSided()) {
+    if (coord->isRing() && ! curveBuilder.getBufferParameters().isSingleSided()) {
         addRingBothSides(coord.get(), distance);
     }
     else {

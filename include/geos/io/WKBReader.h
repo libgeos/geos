@@ -85,6 +85,8 @@ public:
     /// Inizialize parser with default GeometryFactory.
     WKBReader();
 
+    void setFixStructure(bool doFixStructure);
+
     /**
      * \brief Reads a Geometry from an istream.
      *
@@ -132,6 +134,7 @@ private:
     unsigned int inputDimension;
     bool hasZ;
     bool hasM;
+    bool fixStructure;
 
     ByteOrderDataInStream dis;
 
