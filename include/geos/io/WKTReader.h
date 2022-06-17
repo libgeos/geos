@@ -86,6 +86,7 @@ public:
     WKTReader()
         : geometryFactory(geom::GeometryFactory::getDefaultInstance())
         , precisionModel(geometryFactory->getPrecisionModel())
+        , fixStructure(false)
         {};
 
     ~WKTReader() {};
