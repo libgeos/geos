@@ -3040,6 +3040,14 @@ extern "C" {
         });
     }
 
+    void
+    GEOSWKTReader_setFixStructure_r(GEOSContextHandle_t extHandle, WKTReader* reader, char doFix)
+    {
+        return execute(extHandle, [&]() {
+            return reader->setFixStructure(doFix);
+        });
+    }
+
     Geometry*
     GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader* reader, const char* wkt)
     {
@@ -3136,6 +3144,14 @@ extern "C" {
     {
         execute(extHandle, [&]() {
             delete reader;
+        });
+    }
+
+    void
+    GEOSWKBReader_setFixStructure_r(GEOSContextHandle_t extHandle, WKBReader* reader, char doFix)
+    {
+        return execute(extHandle, [&]() {
+            return reader->setFixStructure(doFix);
         });
     }
 

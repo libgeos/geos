@@ -157,15 +157,15 @@ CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
     return 1;
 }
 
-/* public static */
+/* public */
 bool
-CoordinateSequence::isRing(const CoordinateSequence *pts)
+CoordinateSequence::isRing() const
 {
-    if (pts->size() < 4) return false;
-
-    if (pts->getAt(0) != pts->getAt(pts->size()-1)) {
+    if (size() < 4)
         return false;
-    }
+
+    if (getAt(0) != getAt(size()-1))
+        return false;
 
     return true;
 }

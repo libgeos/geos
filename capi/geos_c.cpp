@@ -1220,6 +1220,11 @@ extern "C" {
         GEOSWKTReader_destroy_r(handle, reader);
     }
 
+    void
+    GEOSWKTReader_setFixStructure(WKTReader* reader, char doFix)
+    {
+        GEOSWKTReader_setFixStructure_r(handle, reader, doFix);
+    }
 
     Geometry*
     GEOSWKTReader_read(WKTReader* reader, const char* wkt)
@@ -1289,6 +1294,11 @@ extern "C" {
         GEOSWKBReader_destroy_r(handle, reader);
     }
 
+    void
+    GEOSWKBReader_setFixStructure(WKBReader* reader, char doFix)
+    {
+        GEOSWKBReader_setFixStructure_r(handle, reader, doFix);
+    }
 
     Geometry*
     GEOSWKBReader_read(WKBReader* reader, const unsigned char* wkb, std::size_t size)

@@ -1744,6 +1744,12 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read_r(
     GEOSWKTReader* reader,
     const char *wkt);
 
+/** \see GEOSWKTReader_setFixStructure */
+extern void GEOS_DLL GEOSWKTReader_setFixStructure_r(
+    GEOSContextHandle_t handle,
+    GEOSWKTReader *reader,
+    char doFix);
+
 /* ========== WKT Writer ========== */
 
 /** \see GEOSWKTReader_create */
@@ -1801,6 +1807,12 @@ extern void GEOS_DLL GEOSWKBReader_destroy_r(
     GEOSContextHandle_t handle,
     GEOSWKBReader* reader);
 
+/** \see GEOSWKBReader_setFixStructure */
+extern void GEOS_DLL GEOSWKBReader_setFixStructure_r(
+    GEOSContextHandle_t handle,
+    GEOSWKBReader *reader,
+    char doFix);
+
 /** \see GEOSWKBReader_read */
 extern GEOSGeometry GEOS_DLL *GEOSWKBReader_read_r(
     GEOSContextHandle_t handle,
@@ -1814,6 +1826,7 @@ extern GEOSGeometry GEOS_DLL *GEOSWKBReader_readHEX_r(
     GEOSWKBReader* reader,
     const unsigned char *hex,
     size_t size);
+
 
 /* ========== WKB Writer ========== */
 
@@ -1892,7 +1905,7 @@ extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create_r(
 extern void GEOS_DLL GEOSGeoJSONReader_destroy_r(GEOSContextHandle_t handle,
     GEOSGeoJSONReader* reader);
 
-/** \see GEOSWKTReader_read */
+/** \see GEOSGeoJSONReader_read */
 extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry_r(
     GEOSContextHandle_t handle,
     GEOSGeoJSONReader* reader,
@@ -4629,6 +4642,16 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(
     GEOSWKTReader* reader,
     const char *wkt);
 
+/**
+* Set the reader to automatically repair structural errors
+* in the input (currently just unclosed rings) while reading.
+* \param reader A WKT reader object, caller retains ownership
+* \param doFix Set to 1 to repair, 0 for no repair (default).
+*/
+extern void GEOS_DLL GEOSWKTReader_setFixStructure(
+    GEOSWKTReader *reader,
+    char doFix);
+
 /* ========= WKT Writer ========= */
 
 /**
@@ -4726,6 +4749,16 @@ extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create(void);
 */
 extern void GEOS_DLL GEOSWKBReader_destroy(
     GEOSWKBReader* reader);
+
+/**
+* Set the reader to automatically repair structural errors
+* in the input (currently just unclosed rings) while reading.
+* \param reader A WKB reader object, caller retains ownership
+* \param doFix Set to 1 to repair, 0 for no repair (default).
+*/
+extern void GEOS_DLL GEOSWKBReader_setFixStructure(
+    GEOSWKBReader *reader,
+    char doFix);
 
 /**
 * Read a geometry from a well-known binary buffer.
