@@ -163,71 +163,71 @@ $(function() {
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> increasingDirection(<span class="keyword">const</span> CoordinateSequence&amp; pts);</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isRing(<span class="keyword">const</span> CoordinateSequence *pts);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> reverse(CoordinateSequence* cl);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">enum</span> { X, Y, Z, M };</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keyword">virtual</span> std::size_t getDimension() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordtype">bool</span> hasZ()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordflow">return</span> getDimension() &gt; 2;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getOrdinate(std::size_t index, std::size_t ordinateIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">  233</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">getX</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">return</span> getOrdinate(index, X);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">  245</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">getY</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">return</span> getOrdinate(index, Y);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    }</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setOrdinate(std::size_t index, std::size_t ordinateIndex, <span class="keywordtype">double</span> value) = 0;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> expandEnvelope(<a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; env) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> apply_rw(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a>* filter) = 0; <span class="comment">//Abstract</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> apply_ro(<a class="code" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a>* filter) <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">  283</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">applyCoordinateFilter</a>(T&amp; f)</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> c;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">for</span>(std::size_t i = 0, n = size(); i &lt; n; ++i) {</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            getAt(i, c);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            f.filter(c);</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            setAt(c, i);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordtype">bool</span> isRing() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> reverse(CoordinateSequence* cl);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keyword">enum</span> { X, Y, Z, M };</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keyword">virtual</span> std::size_t getDimension() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">bool</span> hasZ()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordflow">return</span> getDimension() &gt; 2;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getOrdinate(std::size_t index, std::size_t ordinateIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">  231</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">getX</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span> getOrdinate(index, X);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">  243</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">getY</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">return</span> getOrdinate(index, Y);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    }</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setOrdinate(std::size_t index, std::size_t ordinateIndex, <span class="keywordtype">double</span> value) = 0;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> expandEnvelope(<a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; env) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> apply_rw(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a>* filter) = 0; <span class="comment">//Abstract</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> apply_ro(<a class="code" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a>* filter) <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">  281</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">applyCoordinateFilter</a>(T&amp; f)</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    {</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> c;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">for</span>(std::size_t i = 0, n = size(); i &lt; n; ++i) {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            getAt(i, c);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            f.filter(c);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            setAt(c, i);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;};</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;};</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a6ba2cfd860eef2342b1306e855b58b0c"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">geos::geom::CoordinateSequence::applyCoordinateFilter</a></div><div class="ttdeci">void applyCoordinateFilter(T &amp;f)</div><div class="ttdoc">Apply a filter to each Coordinate of this sequence. The filter is expected to provide a ....</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:283</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a6ba2cfd860eef2342b1306e855b58b0c"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">geos::geom::CoordinateSequence::applyCoordinateFilter</a></div><div class="ttdeci">void applyCoordinateFilter(T &amp;f)</div><div class="ttdoc">Apply a filter to each Coordinate of this sequence. The filter is expected to provide a ....</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:281</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a77d66e2b59ca9f3a68b831ac6362f58e"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a77d66e2b59ca9f3a68b831ac6362f58e">geos::geom::CoordinateSequence::front</a></div><div class="ttdeci">const Coordinate &amp; front() const</div><div class="ttdoc">Return first Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:81</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a43ca13136249873fd913ba95e6187c31"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">geos::geom::CoordinateSequence::getX</a></div><div class="ttdeci">virtual double getX(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:233</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a43ca13136249873fd913ba95e6187c31"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">geos::geom::CoordinateSequence::getX</a></div><div class="ttdeci">virtual double getX(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:231</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:44</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a43dde96d4f32a0b527abc25bd98bb365"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">geos::geom::CoordinateSequence::getY</a></div><div class="ttdeci">virtual double getY(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:245</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a43dde96d4f32a0b527abc25bd98bb365"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">geos::geom::CoordinateSequence::getY</a></div><div class="ttdeci">virtual double getY(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:243</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a1d60116646a50b0eba152bca475f59eb"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a1d60116646a50b0eba152bca475f59eb">geos::geom::CoordinateSequence::back</a></div><div class="ttdeci">const Coordinate &amp; back() const</div><div class="ttdoc">Return last Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:74</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:90</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateFilter_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateFilter.html">geos::geom::CoordinateFilter</a></div><div class="ttdoc">Geometry classes support the concept of applying a coordinate filter to every coordinate in the Geome...</div><div class="ttdef"><b>Definition:</b> CoordinateFilter.h:65</div></div>
