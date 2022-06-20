@@ -18,6 +18,7 @@ jobs:
 
     name: 'Linux'
     runs-on: ubuntu-latest
+
     steps:
 
     - name: 'Check Out'
@@ -38,6 +39,7 @@ jobs:
         cp tools/ci/geosop/Dockerfile .
 
     - name: Build and Push
+      if: ${{ github.repository == 'libgeos/geos' }} }}
       uses: docker/build-push-action@v2
       with:
         context: .
