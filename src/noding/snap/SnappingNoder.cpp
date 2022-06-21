@@ -28,6 +28,7 @@
 
 #include <algorithm> // for std::min and std::max
 #include <memory>
+#include <cmath>
 
 using namespace geos::geom;
 using namespace geos::index::kdtree;
@@ -73,7 +74,7 @@ SnappingNoder::snapVertices(std::vector<SegmentString*>& segStrings, std::vector
 void
 SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
 {
-    double PHI_INV = (sqrt(5) - 1.0) / 2.0;
+    double PHI_INV = (std::sqrt(5.0) - 1.0) / 2.0;
 
     for (SegmentString* ss: segStrings) {
         CoordinateSequence* cs = ss->getCoordinates();
