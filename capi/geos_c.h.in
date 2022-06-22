@@ -2792,8 +2792,8 @@ extern int GEOS_DLL GEOSMakeValidParams_setMethod(
     enum GEOSMakeValidMethods method);
 
 /**
-* When this parameter is not set to 0, the GEOS_MAKE_VALID_STRUCTURE method will drop
-* any component that has collapsed into a lower dimensionality.
+* When this parameter is nn-zero, the GEOS_MAKE_VALID_STRUCTURE method will keep
+* components that have collapsed into a lower dimensionality.
 * For example, a ring collapsing to a line, or a line collapsing
 * to a point.
 * \return 0 on exception, 1 on success.
