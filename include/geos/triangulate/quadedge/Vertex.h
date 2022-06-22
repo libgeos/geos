@@ -180,7 +180,7 @@ public:
     inline double
     magn() const
     {
-        return (sqrt(p.x * p.x + p.y * p.y));
+        return (std::sqrt(p.x * p.x + p.y * p.y));
     }
 
     /* returns k X v (cross product). this is a vector perpendicular to v */

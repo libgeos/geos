@@ -90,7 +90,7 @@ OffsetPointGenerator::computeOffsets(const Coordinate& p0,
 {
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
-    double len = sqrt(dx * dx + dy * dy);
+    double len = std::sqrt(dx * dx + dy * dy);
 
     // u is the vector that is the length of the offset,
     // in the direction of the segment
