@@ -13433,7 +13433,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Polygonizes a set of Geometries which contain linework that represents the edges of a planar graph.</p>
 <p>All types of Geometry are accepted as input; the constituent linework is extracted as the edges to be polygonized.</p>
-<p>The edges must be correctly noded; that is, they must only meet at their endpoints. Polygonization will accept incorrectly noded input but will not form polygons from non-noded edges, and reports them as errors.</p>
+<p>The edges must be correctly noded; that is, they must only meet at their endpoints and not overlap anywhere. If your edges are not already noded, run them through <a class="el" href="geos__c_8h.html#ada5b7b39a81b722b97371736ff0b8d29">GEOSUnaryUnion()</a> first. Polygonization will accept incorrectly noded input but will not form polygons from non-noded edges, and reports them as errors.</p>
 <p>The Polygonizer reports the following kinds of errors:</p>
 <ul>
 <li>Dangles - edges which have one or both ends which are not incident on another edge endpoint</li>
