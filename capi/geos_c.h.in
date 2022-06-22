@@ -3780,7 +3780,9 @@ extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
 * linework is extracted as the edges to be polygonized.
 *
 * The edges must be correctly noded; that is, they must only meet
-* at their endpoints. Polygonization will accept incorrectly noded
+* at their endpoints and not overlap anywhere. If your edges are not
+* already noded, run them through GEOSUnaryUnion() first.
+* Polygonization will accept incorrectly noded
 * input but will not form polygons from non-noded edges, and reports
 * them as errors.
 *
