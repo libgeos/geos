@@ -179,7 +179,7 @@ OffsetSegmentGenerator::computeOffsetSegment(const LineSegment& seg, int p_side,
     int sideSign = p_side == Position::LEFT ? 1 : -1;
     double dx = seg.p1.x - seg.p0.x;
     double dy = seg.p1.y - seg.p0.y;
-    double len = sqrt(dx * dx + dy * dy);
+    double len = std::sqrt(dx * dx + dy * dy);
     // u is the vector that is the length of the offset,
     // in the direction of the segment
     double ux = sideSign * p_distance * dx / len;

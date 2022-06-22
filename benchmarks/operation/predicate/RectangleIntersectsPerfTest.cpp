@@ -111,7 +111,7 @@ private:
     createRectangles(const Envelope& env, int nRect, double,
                      std::vector<const Geometry*>& rectList)
     {
-        int nSide =  1 + (int)sqrt((double) nRect);
+        int nSide =  1 + (int)std::sqrt((double) nRect);
         double dx = env.getWidth() / nSide;
         double dy = env.getHeight() / nSide;
 
