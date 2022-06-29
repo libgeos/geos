@@ -1,5 +1,5 @@
-## Changes in 3.11.0beta2
-2022-06-20
+## Changes in 3.11.0rc0
+2022-06-29
 
 - New things:
   - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
