@@ -11,6 +11,8 @@
   - CAPI: GEOSGeom_transformXY (GH-563, Dan Baston/Brendan Ward)
   - CAPI: GEOSRemoveRepeatedPoints (GH-599, Paul Ramsey)
   - CAPI: GEOSLineMergeDirected (GH-597, Sergei Sh)
+  - CAPI: setFixStructure for WKB/WKT readers to automatically repair
+    structural errors in the input (GH-639, Paul Ramsey)
 
 - Fixes/Improvements:
   - Fix unaryUnion to avoid segfault with empty polygon (GH-501, Mike Taves)
