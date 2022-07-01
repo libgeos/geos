@@ -1,3 +1,13 @@
+## Changes in 3.12.0
+xxxx-xx-xx
+
+- New things:
+  -
+
+- Fixes/Improvements:
+  -
+
+
 ## Changes in 3.11.0
 2022-07-01
 
