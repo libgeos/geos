@@ -6,7 +6,19 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.11.0</title>
+      <link>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</link>
+      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</guid>
+      <description>The 3.11.0 release of GEOS is now available to download.
+This release includes new features for building &amp;ldquo;concave hulls&amp;rdquo; for both point and polygon input. For polygon input, the hull will be guaranteed to not cross into the interiors of the input polygons.
+The line merger has been enhanced to support a mode that only merges lines which share orientation.
+The offset curve algorithm has been updated to be more reliable for different kinds of semi-degenerate inputs, and may output different curves than the previous implementation, for those kinds of inputs.</description>
+    </item>
+    
     <item>
       <title>Version 3.10.3</title>
       <link>https://libgeos.org/posts/2022-06-03-geos-3-10-3-released/</link>
