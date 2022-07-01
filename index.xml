@@ -111,18 +111,6 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
     </item>
     
     <item>
-      <title>Version 3.11.0</title>
-      <link>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</link>
-      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</guid>
-      <description>The 3.11.0 release of GEOS is now available to download.
-This release includes new features for building &amp;ldquo;concave hulls&amp;rdquo; for both point and polygon input. For polygon input, the hull will be guaranteed to not cross into the interiors of the input polygons.
-The line merger has been enhanced to support a mode that only merges lines which share orientation.
-The offset curve algorithm has been updated to be more reliable for different kinds of semi-degenerate inputs, and may output different curves than the previous implementation, for those kinds of inputs.</description>
-    </item>
-    
-    <item>
       <title>Version 3.10.3</title>
       <link>https://libgeos.org/posts/2022-06-03-geos-3-10-3-released/</link>
       <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
@@ -334,6 +322,18 @@ Build From Source Build Requirements  CMake 3.</description>
       <guid>https://libgeos.org/usage/install/</guid>
       <description>Red Hat Ubuntu Debian Amazon Linux Homebrew Macports     Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
 # Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</description>
+    </item>
+    
+    <item>
+      <title>Version 3.11.0</title>
+      <link>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</guid>
+      <description>The 3.11.0 release of GEOS is now available to download.
+This release includes new features for building &amp;ldquo;concave hulls&amp;rdquo; for both point and polygon input. For polygon input, the hull will be guaranteed to not cross into the interiors of the input polygons.
+The line merger has been enhanced to support a mode that only merges lines which share orientation.
+The offset curve algorithm has been updated to be more reliable for different kinds of semi-degenerate inputs, and may output different curves than the previous implementation, for those kinds of inputs.</description>
     </item>
     
   </channel>
