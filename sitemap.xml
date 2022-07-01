@@ -36,7 +36,7 @@
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/posts/</loc>
-    <lastmod>2022-06-03T00:00:00+00:00</lastmod>
+    <lastmod>2022-07-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/development/testing/</loc>
   </url><url>
@@ -45,6 +45,9 @@
     <loc>https://libgeos.org/usage/bindings/</loc>
   </url><url>
     <loc>https://libgeos.org/usage/faq/</loc>
+  </url><url>
+    <loc>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</loc>
+    <lastmod>2022-07-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/posts/2022-06-03-geos-3-10-3-released/</loc>
     <lastmod>2022-06-03T00:00:00+00:00</lastmod>
@@ -111,7 +114,5 @@
     <loc>https://libgeos.org/usage/download/</loc>
   </url><url>
     <loc>https://libgeos.org/tags/</loc>
-  </url><url>
-    <loc>https://libgeos.org/posts/2022-07-01-geos-3-11-0-released/</loc>
   </url>
 </urlset>
