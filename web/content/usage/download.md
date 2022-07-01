@@ -9,8 +9,8 @@ draft: false
 
 | Release Date | Release | Download Link | Changes |
 | ------------ | ------- | ------------- | ------- |
-|  2022/06/29 | **3.11.0rc0** |  [geos-3.11.0rc0.tar.bz2](https://download.osgeo.org/geos/geos-3.11.0rc0.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.11.0rc0/NEWS.md) |
-|  2022/06/03 | **{{<current_release>}}** | [geos-{{<current_release>}}.tar.bz2](https://download.osgeo.org/geos/geos-{{<current_release>}}.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/{{<current_release>}}/NEWS)
+|  2022/07/01 | **3.11.0** |  [geos-3.11.0.tar.bz2](https://download.osgeo.org/geos/geos-3.11.0.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.11.0/NEWS.md) |
+|  2022/06/03 | **3.10.3** | [geos-3.10.3.tar.bz2](https://download.osgeo.org/geos/geos-3.10.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.10.3/NEWS)
 |  2022/06/02 | **3.9.3** |  [geos-3.9.3.tar.bz2](https://download.osgeo.org/geos/geos-3.9.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.9.3/NEWS) |
 |  2022/06/02 | **3.8.3** |  [geos-3.8.3.tar.bz2](https://download.osgeo.org/geos/geos-3.8.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.8.3/NEWS) |
 |  2022/06/08 | **3.7.5** |  [geos-3.7.5.tar.bz2](https://download.osgeo.org/geos/geos-3.7.5.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.7.5/NEWS) |
