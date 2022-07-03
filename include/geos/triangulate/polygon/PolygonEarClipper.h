@@ -184,7 +184,6 @@ public:
     *
     * @param polyShell the vertices of the polygon
     * @param triListResult vector to fill in with the resultant Tri s
-    * @return a list of the Tris
     */
     static void triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult);
 
