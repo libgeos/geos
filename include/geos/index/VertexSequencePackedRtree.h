@@ -136,7 +136,6 @@ public:
     *
     * @param queryEnv the query extent
     * @param result vector to fill with results
-    * @return
     */
     void query(const Envelope& queryEnv, std::vector<std::size_t>& result) const;
 

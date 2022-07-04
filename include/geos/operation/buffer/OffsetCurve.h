@@ -252,7 +252,6 @@ public:
     * @param dist the offset distance
     * @param bufParams the buffer parameters to use
     * @param lineList the vector to populate with the return value
-    * @return the raw offset line
     */
     static void rawOffset(const LineString& geom, double dist, BufferParameters& bufParams, std::vector<CoordinateSequence*>& lineList);
     static void rawOffset(const LineString& geom, double dist, std::vector<CoordinateSequence*>& lineList);
