@@ -42,9 +42,7 @@ while test $# -gt 0; do
       echo @VERSION@
       ;;
     --libs)
-      # TODO: make an alias for --clibs
-      # see http://trac.osgeo.org/geos/ticket/497
-      echo -L${libdir} -lgeos-@VERSION_RELEASE@
+      echo -L${libdir} -lgeos
       ;;
     --clibs)
       echo -L${libdir} -lgeos_c

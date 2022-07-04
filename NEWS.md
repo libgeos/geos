@@ -2,7 +2,7 @@
 2022-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Remove spurious version from --libs geos-config options
 
 
 
