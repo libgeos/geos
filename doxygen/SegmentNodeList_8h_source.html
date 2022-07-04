@@ -153,70 +153,70 @@ $(function() {
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">return</span> edge;</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; intPt, std::size_t segmentIndex);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* intPt, std::size_t segmentIndex)</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        add(*intPt, segmentIndex);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    }</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">size_t</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">  174</a></span>&#160;    <a class="code" href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">size</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        prepare();</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">return</span> nodeMap.size();</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    }</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    iterator begin() {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        prepare();</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">return</span> nodeMap.begin();</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    const_iterator begin()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        prepare();</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">return</span> nodeMap.begin();</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    }</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    iterator end() {</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        prepare();</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">return</span> nodeMap.end();</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    const_iterator end()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        prepare();</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">return</span> nodeMap.end();</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keywordtype">void</span> addEndpoints();</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keywordtype">void</span> addSplitEdges(std::vector&lt;SegmentString*&gt;&amp; edgeList);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    addSplitEdges(std::vector&lt;SegmentString*&gt;* edgeList)</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        assert(edgeList);</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        addSplitEdges(*edgeList);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    std::vector&lt;geom::Coordinate&gt; getSplitCoordinates();</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; intPt, std::size_t segmentIndex);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* intPt, std::size_t segmentIndex)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    {</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        add(*intPt, segmentIndex);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    }</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordtype">size_t</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">  171</a></span>&#160;    <a class="code" href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">size</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        prepare();</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">return</span> nodeMap.size();</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    iterator begin() {</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        prepare();</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">return</span> nodeMap.begin();</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    const_iterator begin()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        prepare();</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordflow">return</span> nodeMap.begin();</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    }</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    iterator end() {</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        prepare();</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordflow">return</span> nodeMap.end();</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    const_iterator end()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        prepare();</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">return</span> nodeMap.end();</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    }</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keywordtype">void</span> addEndpoints();</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">void</span> addSplitEdges(std::vector&lt;SegmentString*&gt;&amp; edgeList);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    addSplitEdges(std::vector&lt;SegmentString*&gt;* edgeList)</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        assert(edgeList);</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        addSplitEdges(*edgeList);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    }</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    std::vector&lt;geom::Coordinate&gt; getSplitCoordinates();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;};</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;};</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> SegmentNodeList&amp; l);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> SegmentNodeList&amp; l);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;} <span class="comment">// namespace geos::noding</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;} <span class="comment">// namespace geos::noding</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentNodeList_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentNodeList.html">geos::noding::SegmentNodeList</a></div><div class="ttdoc">A list of the SegmentNode present along a NodedSegmentString.</div><div class="ttdef"><b>Definition:</b> SegmentNodeList.h:54</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentNodeList_html_ad9347e9f1c9f68a5ac1c65a3f911c90f"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">geos::noding::SegmentNodeList::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdoc">Return the number of nodes in this list.</div><div class="ttdef"><b>Definition:</b> SegmentNodeList.h:174</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentNodeList_html_ad9347e9f1c9f68a5ac1c65a3f911c90f"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">geos::noding::SegmentNodeList::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdoc">Return the number of nodes in this list.</div><div class="ttdef"><b>Definition:</b> SegmentNodeList.h:171</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentNode_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentNode.html">geos::noding::SegmentNode</a></div><div class="ttdoc">Represents an intersection point between two NodedSegmentString.</div><div class="ttdef"><b>Definition:</b> SegmentNode.h:45</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1NodedSegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1NodedSegmentString.html">geos::noding::NodedSegmentString</a></div><div class="ttdoc">Represents a list of contiguous line segments, and supports noding the segments.</div><div class="ttdef"><b>Definition:</b> NodedSegmentString.h:99</div></div>
