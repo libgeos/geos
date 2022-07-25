@@ -11,13 +11,18 @@
 
 - New things:
   - OffsetCurve (GH-530, Paul Ramsey/Martin Davis)
-  - ConcaveHull (GH-549, Paul Ramsey/Martin Davis)
+  - ConcaveHull (GH-550, Paul Ramsey/Martin Davis)
+  - ConcaveHullOfPolygons (GH-617, Paul Ramsey/Martin Davis)
   - PolygonHull (GH-603, Paul Ramsey/Martin Davis)
   - LineMerger directed option (GH-597, Sergei Sh)
   - CAPI: GEOSHilbertCode (GH-556, Brendan Ward)
   - CAPI: GEOSGeom_createRectangle (GH-558, Brendan Ward)
   - CAPI: GEOSGeom_transformXY (GH-563, Dan Baston/Brendan Ward)
   - CAPI: GEOSRemoveRepeatedPoints (GH-599, Paul Ramsey)
+  - CAPI: GEOSConcaveHull (GH-550, Paul Ramsey)
+  - CAPI: GEOSConcaveHullOfPolygons (GH-603, Paul Ramsey)
+  - CAPI: GEOSPolygonHullSimplify (GH-603, Paul Ramsey)
+  - CAPI: GEOSPolygonHullSimplifyByArea (GH-633, Paul Ramsey)
   - CAPI: GEOSLineMergeDirected (GH-597, Sergei Sh)
   - CAPI: setFixStructure for WKB/WKT readers to automatically repair
     structural errors in the input (GH-639, Paul Ramsey)
@@ -27,6 +32,7 @@
   - Fix SnapRoundingNoder to use tolerance in noding; also fixes GeometryPrecisionReducer (#504, Sergei)
   - Allow direct setting of grid size (GH-513, Martin Davis)
   - Allow GEOS to be used as a CMake subproject (GH-518, Robert Coup)
+  - CAPI GEOSOffsetCurve uses new OffsetCurve implementation (GH-530, Paul Ramsey)
   - Remove .inl inline files in favour of header declaration (GH-543, Paul Ramsey)
   - Add SnappingNoder seeding (Martin Davis)
   - Add OverlayNG area check heuristic (JTS-812, Paul Ramsey)
