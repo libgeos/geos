@@ -72,7 +72,7 @@ private:
 
         private:
 
-            BoundarySegmentMap segMap;
+            BoundarySegmentMap& segMap;
             std::size_t index;
 
         public:
@@ -86,25 +86,26 @@ private:
                 normalize();
             };
 
-            void markInBoundary() {
+            void markInBoundary() const {
                 segMap.setBoundarySegment(index);
             };
 
-            struct HashCode {
-                std::size_t operator()(const Segment& s) const {
-                    std::size_t h = std::hash<double>{}(s.p0.x);
-                    h ^= (std::hash<double>{}(s.p0.y) << 1);
-                    h ^= (std::hash<double>{}(s.p1.x) << 1);
-                    h ^= (std::hash<double>{}(s.p1.y) << 1);
-                    return h ^ (std::hash<std::size_t>{}(s.index) << 1);
-                }
-            };
+            // struct HashCode {
+            //     std::size_t operator()(const Segment& s) const {
+            //         std::size_t h = std::hash<double>{}(s.p0.x);
+            //         h ^= (std::hash<double>{}(s.p0.y) << 1);
+            //         h ^= (std::hash<double>{}(s.p1.x) << 1);
+            //         h ^= (std::hash<double>{}(s.p1.y) << 1);
+            //         return h ^ (std::hash<std::size_t>{}(s.index) << 1);
+            //     }
+            // };
     };
 
 
 public:
 
-    typedef std::unordered_set<Segment, Segment::HashCode> SegmentSet;
+    // typedef std::unordered_set<Segment, Segment::HashCode> SegmentSet;
+    typedef std::unordered_set<Segment, geos::geom::LineSegment::HashCode> SegmentSet;
 
     BoundaryChainNoder() : chainList(nullptr) {};
 
@@ -127,7 +128,7 @@ private:
         BoundarySegmentMap& segInclude,
         SegmentSet& segSet);
 
-    // static void markBoundarySegments(SegmentSet& segSet);
+    static void markBoundarySegments(SegmentSet& segSet);
 
     static std::vector<SegmentString*>* extractChains(std::vector<BoundarySegmentMap>& sections);
 

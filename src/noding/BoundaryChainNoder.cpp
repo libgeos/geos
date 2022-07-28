@@ -35,7 +35,7 @@ BoundaryChainNoder::computeNodes(std::vector<SegmentString*>* segStrings)
     std::vector<BoundarySegmentMap> bdySections;
     bdySections.reserve(segStrings->size());
     addSegments(segStrings, segSet, bdySections);
-    // markBoundarySegments(segSet);
+    markBoundarySegments(segSet);
     chainList = extractChains(bdySections);
 }
 
@@ -77,18 +77,17 @@ BoundaryChainNoder::segSetContains(SegmentSet& segSet, Segment& seg)
 void
 BoundaryChainNoder::addSegments(
     SegmentString* segString,
-    BoundarySegmentMap& segInclude,
+    BoundarySegmentMap& segMap,
     SegmentSet& segSet)
 {
     for (std::size_t i = 0; i < segString->size() - 1; i++) {
         const Coordinate& p0 = segString->getCoordinate(i);
         const Coordinate& p1 = segString->getCoordinate(i + 1);
-        Segment seg(p0, p1, segInclude, i);
+        Segment seg(p0, p1, segMap, i);
         if (segSetContains(segSet, seg)) {
             segSet.erase(seg);
         }
         else {
-            seg.markInBoundary();
             segSet.insert(seg);
         }
     }
@@ -96,13 +95,13 @@ BoundaryChainNoder::addSegments(
 
 
 /* private static */
-// void
-// BoundaryChainNoder::markBoundarySegments(SegmentSet& segSet)
-// {
-//     for (const Segment& seg : segSet) {
-//         // seg.markInBoundary();
-//     }
-// }
+void
+BoundaryChainNoder::markBoundarySegments(SegmentSet& segSet)
+{
+    for (const Segment& seg : segSet) {
+        seg.markInBoundary();
+    }
+}
 
 /* private static */
 std::vector<SegmentString*>*
@@ -150,7 +149,7 @@ BoundaryChainNoder::BoundarySegmentMap::createChain(
     std::size_t startIndex,
     std::size_t endIndex)
 {
-    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence(endIndex - startIndex + 1));
+    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
     // Coordinate[] pts = new Coordinate[endIndex - startIndex + 1];
     for (std::size_t i = startIndex; i < endIndex + 1; i++) {
         pts->add(segString->getCoordinate(i));
