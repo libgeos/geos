@@ -271,27 +271,27 @@ $(function() {
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            h ^= (std::hash&lt;double&gt;{}(s.p1.x) &lt;&lt; 1);</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            <span class="keywordflow">return</span> h ^ (std::hash&lt;double&gt;{}(s.p1.y) &lt;&lt; 1);</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        }</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    };</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160; </div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <span class="keywordtype">void</span> project(<span class="keywordtype">double</span> factor, Coordinate&amp; ret) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160; </div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;};</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;<span class="comment">// std::ostream&amp; operator&lt;&lt; (std::ostream&amp; o, const LineSegment&amp; l);</span></div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160; </div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160; </div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        std::size_t operator()(<span class="keyword">const</span> LineSegment * s)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            std::size_t h = std::hash&lt;double&gt;{}(s-&gt;p0.x);</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;            h ^= (std::hash&lt;double&gt;{}(s-&gt;p0.y) &lt;&lt; 1);</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            h ^= (std::hash&lt;double&gt;{}(s-&gt;p1.x) &lt;&lt; 1);</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            <span class="keywordflow">return</span> h ^ (std::hash&lt;double&gt;{}(s-&gt;p1.y) &lt;&lt; 1);</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        }</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    };</div>
 <div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160; </div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160; </div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160; </div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;    <span class="keywordtype">void</span> project(<span class="keywordtype">double</span> factor, Coordinate&amp; ret) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;};</div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160; </div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="comment">// std::ostream&amp; operator&lt;&lt; (std::ostream&amp; o, const LineSegment&amp; l);</span></div>
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160; </div>
 <div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
 <div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160; </div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160; </div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
 <div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
@@ -307,6 +307,14 @@ $(function() {
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160; </div>
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160; </div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160; </div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160; </div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; </div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_ad98d685a0b7ecebf47e95742b96b7f42"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#ad98d685a0b7ecebf47e95742b96b7f42">geos::geom::Coordinate::compareTo</a></div><div class="ttdeci">int compareTo(const Coordinate &amp;other) const</div><div class="ttdoc">TODO: deprecate this, move logic to CoordinateLessThen instead.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:185</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LineSegment_html_a9382e49d86a10de5d5be69560824d900"><div class="ttname"><a href="classgeos_1_1geom_1_1LineSegment.html#a9382e49d86a10de5d5be69560824d900">geos::geom::LineSegment::p1</a></div><div class="ttdeci">Coordinate p1</div><div class="ttdoc">Segment start.</div><div class="ttdef"><b>Definition:</b> LineSegment.h:64</div></div>
