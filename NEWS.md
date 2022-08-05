@@ -2,7 +2,8 @@
 xxxx-xx-xx
 
 - New things:
-  -
+  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator, 
+    CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
 
 - Fixes/Improvements:
   -
