@@ -467,6 +467,14 @@ public:
             h ^= (std::hash<double>{}(s.p1.x) << 1);
             return h ^ (std::hash<double>{}(s.p1.y) << 1);
         }
+
+        std::size_t operator()(const LineSegment * s) const {
+            std::size_t h = std::hash<double>{}(s->p0.x);
+            h ^= (std::hash<double>{}(s->p0.y) << 1);
+            h ^= (std::hash<double>{}(s->p1.x) << 1);
+            return h ^ (std::hash<double>{}(s->p1.y) << 1);
+        }
+
     };
 
 private:

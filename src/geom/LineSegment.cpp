@@ -125,8 +125,13 @@ LineSegment::project(const LineSegment& seg, LineSegment& ret) const
 
     Coordinate newp0;
     project(pf0, newp0);
+    if (pf0 < 0.0) newp0 = p0;
+    if (pf0 > 1.0) newp0 = p1;
+
     Coordinate newp1;
     project(pf1, newp1);
+    if (pf1 < 0.0) newp1 = p0;
+    if (pf1 > 1.0) newp1 = p1;
 
     ret.setCoordinates(newp0, newp1);
 

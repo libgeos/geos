@@ -13,8 +13,7 @@
  *
  **********************************************************************/
 
-#include <geos/geom/Coordinate.h>
-#include <geos/operation/valid/PolygonNode.h>
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/operation/valid/PolygonRingSelfNode.h>
 
 
@@ -22,8 +21,7 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using namespace geos::geom;
-
+using geos::algorithm::PolygonNodeTopology;
 
 /* public */
 bool
@@ -34,7 +32,7 @@ PolygonRingSelfNode::isExterior(bool isInteriorOnRight) const
      * Note that either corner and either of the other edges could be used to test.
      * The situation is fully symmetrical.
      */
-    bool bIsInteriorSeg = PolygonNode::isInteriorSegment(&nodePt, e00, e01, e10);
+    bool bIsInteriorSeg = PolygonNodeTopology::isInteriorSegment(&nodePt, e00, e01, e10);
     bool bIsExterior = isInteriorOnRight ? ! bIsInteriorSeg : bIsInteriorSeg;
     return bIsExterior;
 }

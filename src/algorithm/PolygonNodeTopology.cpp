@@ -1,10 +1,10 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://libgeos.org
  *
- * Copyright (C) 2021 Paul Ramsey <pramsey@cleverelephant.ca>
- * Copyright (C) 2021 Martin Davis
+ * Copyright (c) 2021 Martin Davis
+ * Copyright (C) 2022 Paul Ramsey <pramsey@cleverlephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,22 +13,22 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Quadrant.h>
-#include <geos/operation/valid/PolygonNode.h>
 
+using geos::geom::Coordinate;
+using geos::geom::Quadrant;
 
-namespace geos {      // geos
-namespace operation { // geos.operation
-namespace valid {     // geos.operation.valid
-
-using namespace geos::geom;
-
+namespace geos {
+namespace algorithm { // geos.algorithm
 
 /* public static */
 bool
-PolygonNode::isCrossing(const Coordinate* nodePt, const Coordinate* a0, const Coordinate* a1, const Coordinate* b0, const Coordinate* b1)
+PolygonNodeTopology::isCrossing(const Coordinate* nodePt,
+    const Coordinate* a0, const Coordinate* a1,
+    const Coordinate* b0, const Coordinate* b1)
 {
     const Coordinate* aLo = a0;
     const Coordinate* aHi = a1;
@@ -40,35 +40,36 @@ PolygonNode::isCrossing(const Coordinate* nodePt, const Coordinate* a0, const Co
      * Find positions of b0 and b1.
      * If they are the same they do not cross the other edge
      */
-    bool isBetween0 = isBetween(nodePt, b0, aLo, aHi);
-    bool isBetween1 = isBetween(nodePt, b1, aLo, aHi);
+    bool bBetween0 = isBetween(nodePt, b0, aLo, aHi);
+    bool bBetween1 = isBetween(nodePt, b1, aLo, aHi);
 
-    return isBetween0 != isBetween1;
+    return bBetween0 != bBetween1;
 }
-
 
 /* public static */
 bool
-PolygonNode::isInteriorSegment(const Coordinate* nodePt, const Coordinate* a0, const Coordinate* a1, const Coordinate* b)
+PolygonNodeTopology::isInteriorSegment(const Coordinate* nodePt,
+    const Coordinate* a0, const Coordinate* a1, const Coordinate* b)
 {
     const Coordinate* aLo = a0;
     const Coordinate* aHi = a1;
-    bool bIsInteriorBetween = true;
+    bool isInteriorBetween = true;
     if (isAngleGreater(nodePt, aLo, aHi)) {
         aLo = a1;
         aHi = a0;
-        bIsInteriorBetween = false;
+        isInteriorBetween = false;
     }
-    bool bIsBetween = isBetween(nodePt, b, aLo, aHi);
-    bool bIsInterior = (bIsBetween && bIsInteriorBetween)
-        || (! bIsBetween && ! bIsInteriorBetween);
-    return bIsInterior;
+    bool bBetween = isBetween(nodePt, b, aLo, aHi);
+    bool isInterior = (bBetween && isInteriorBetween)
+        || (! bBetween && ! isInteriorBetween);
+    return isInterior;
 }
-
 
 /* private static */
 bool
-PolygonNode::isBetween(const Coordinate* origin, const Coordinate* p, const Coordinate* e0, const Coordinate* e1)
+PolygonNodeTopology::isBetween(const Coordinate* origin,
+    const Coordinate* p,
+    const Coordinate* e0, const Coordinate* e1)
 {
     bool isGreater0 = isAngleGreater(origin, p, e0);
     if (! isGreater0) return false;
@@ -79,7 +80,8 @@ PolygonNode::isBetween(const Coordinate* origin, const Coordinate* p, const Coor
 
 /* private static */
 bool
-PolygonNode::isAngleGreater(const Coordinate* origin, const Coordinate* p, const Coordinate* q)
+PolygonNodeTopology::isAngleGreater(const Coordinate* origin,
+    const Coordinate* p, const Coordinate* q)
 {
     int quadrantP = quadrant(origin, p);
     int quadrantQ = quadrant(origin, q);
@@ -94,21 +96,22 @@ PolygonNode::isAngleGreater(const Coordinate* origin, const Coordinate* p, const
     //--- vectors are in the same quadrant
     // Check relative orientation of vectors
     // P > Q if it is CCW of Q
-    int orient = algorithm::Orientation::index(*origin, *q, *p);
-    return orient == algorithm::Orientation::COUNTERCLOCKWISE;
+    int orient = Orientation::index(*origin, *q, *p);
+    return orient == Orientation::COUNTERCLOCKWISE;
 }
 
 
 /* private static */
 int
-PolygonNode::quadrant(const Coordinate* origin, const Coordinate* p)
+PolygonNodeTopology::quadrant(const Coordinate* origin, const Coordinate* p)
 {
     double dx = p->x - origin->x;
     double dy = p->y - origin->y;
-    return Quadrant::quadrant(dx, dy);
+    return Quadrant::quadrant(dx,  dy);
 }
 
 
-} // namespace geos.operation.valid
-} // namespace geos.operation
-} // namespace geos
+
+} // namespace geos.algorithm
+} //namespace geos
+

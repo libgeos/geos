@@ -108,8 +108,8 @@ OverlayMixedPoints::createLocator(const Geometry* p_geomNonPoint)
         return ipoll;
     }
     // never get here
-    std::unique_ptr<PointOnGeometryLocator> n(nullptr);
-    return n;
+    // std::unique_ptr<PointOnGeometryLocator> n(nullptr);
+    // return n;
 }
 
 

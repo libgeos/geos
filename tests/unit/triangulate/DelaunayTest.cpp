@@ -222,7 +222,8 @@ void object::test<10>
         "GEOMETRYCOLLECTION (POLYGON ((63.5475586241869692 70.9047190236165648, 128.4775906502257214 177.6536686473018278, 77.8829187074971543 74.8708899773318137, 63.5475586241869692 70.9047190236165648)), POLYGON ((63.5475586241869692 70.9047190236165648, 77.8829187074971543 74.8708899773318137, 66.1036483843714109 68.5886124716647601, 63.5475586241869692 70.9047190236165648)), POLYGON ((63.5475586241869124 70.9047190236165221, 128.4775906502257214 177.6536686473018278, 63.5475586241869692 70.9047190236165648, 63.5475586241869124 70.9047190236165221)), POLYGON ((63.5475586241869124 70.9047190236165221, 63.5475586241869692 70.9047190236165648, 66.1036483843714109 68.5886124716647601, 63.5475586241869124 70.9047190236165221)))";
 
     // inCircle predicate can't handle it on machines with 64-bit long double
-    if(sizeof(long double) > sizeof(double)) {
+    bool realLongDouble = sizeof(long double) > sizeof(double);
+    if(realLongDouble) {
         runDelaunay(wkt, true, expectedEdges, 0.0);
     }
 }
@@ -237,7 +238,8 @@ void object::test<11>
 "MULTIPOINT ((-10 40), (5 40), (20 40), (-10 55), (5 55), (20 55), (-10 70), (5 70), (20 70))";
     const char* expectedEdges =
         "GEOMETRYCOLLECTION (POLYGON ((5 70, 20 70, 20 55, 5 70)), POLYGON ((5 55, 20 55, 20 40, 5 55)), POLYGON ((5 55, 5 70, 20 55, 5 55)), POLYGON ((5 40, 5 55, 20 40, 5 40)), POLYGON ((-10 70, 5 70, 5 55, -10 70)), POLYGON ((-10 55, 5 55, 5 40, -10 55)), POLYGON ((-10 55, -10 70, 5 55, -10 55)), POLYGON ((-10 40, -10 55, 5 40, -10 40)))";
-    if(sizeof(long double) > sizeof(double)) {
+    bool realLongDouble = sizeof(long double) > sizeof(double);
+    if(realLongDouble) {
         runDelaunay(wkt, true, expectedEdges, 0.0);
     }
 }
@@ -252,7 +254,8 @@ void object::test<12>
 "MULTIPOINT ((-10 40), (5 40), (20 40), (-10 55), (5 55), (20 55), (-10 70), (5 70), (20 70))";
     const char* expectedEdges =
         "GEOMETRYCOLLECTION (POLYGON ((5 70, 20 70, 20 55, 5 70)), POLYGON ((5 55, 20 55, 20 40, 5 55)), POLYGON ((5 55, 5 70, 20 55, 5 55)), POLYGON ((5 40, 5 55, 20 40, 5 40)), POLYGON ((-10 70, 5 70, 5 55, -10 70)), POLYGON ((-10 55, 5 55, 5 40, -10 55)), POLYGON ((-10 55, -10 70, 5 55, -10 55)), POLYGON ((-10 40, -10 55, 5 40, -10 40)))";
-    if(sizeof(long double) > sizeof(double)) {
+    bool realLongDouble = sizeof(long double) > sizeof(double);
+    if(realLongDouble) {
         runDelaunay(wkt, true, expectedEdges, 0.01);
     }
 }

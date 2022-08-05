@@ -10,10 +10,6 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: noding/MCIndexSegmentSetMutualIntersector.java r388 (JTS-1.12)
- *
  **********************************************************************/
 
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
@@ -25,6 +21,7 @@
 #include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChainOverlapAction.h>
 #include <geos/index/strtree/SimpleSTRtree.h>
+
 // std
 #include <cstddef>
 
@@ -61,8 +58,8 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
     for(auto& queryChain : monoChains) {
-        index.query(queryChain.getEnvelope(), [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
-            queryChain.computeOverlaps(testChain, &overlapAction);
+        index.query(queryChain.getEnvelope(overlapTolerance), [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
+            queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
             nOverlaps++;
 
             return !segInt->isDone(); // abort early if segInt->isDone()
@@ -89,7 +86,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings
 {
     if (!indexBuilt) {
         for (auto& mc: indexChains) {
-            index.insert(&(mc.getEnvelope()), &mc);
+            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
         }
         indexBuilt = true;
     }

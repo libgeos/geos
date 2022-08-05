@@ -13,20 +13,21 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
-#include <geos/operation/valid/PolygonNode.h>
 #include <geos/operation/valid/PolygonRing.h>
 #include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/IllegalStateException.h>
 
+using geos::geom::Coordinate;
+using geos::noding::SegmentString;
+
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
-
-using namespace geos::geom;
-
 
 /* public */
 void
@@ -128,7 +129,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
         e10 = &(prevCoordinateInRing(ss1, segIndex1));
         e11 = &p11;
     }
-    bool hasCrossing = PolygonNode::isCrossing(&intPt, e00, e01, e10, e11);
+    bool hasCrossing = algorithm::PolygonNodeTopology::isCrossing(&intPt, e00, e01, e10, e11);
     if (hasCrossing) {
         return TopologyValidationError::eSelfIntersection;
     }

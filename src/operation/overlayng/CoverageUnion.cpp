@@ -15,11 +15,13 @@
 #include <geos/operation/overlayng/CoverageUnion.h>
 
 #include <geos/noding/SegmentExtractingNoder.h>
+#include <geos/noding/BoundaryChainNoder.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/geom/Geometry.h>
 
 using geos::geom::Geometry;
 using geos::noding::SegmentExtractingNoder;
+using geos::noding::BoundaryChainNoder;
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -30,10 +32,17 @@ namespace overlayng { // geos.operation.overlayng
 std::unique_ptr<Geometry>
 CoverageUnion::geomunion(const Geometry* coverage)
 {
-    SegmentExtractingNoder sen;
 
     // a precision model is not needed since no noding is done
-    return OverlayNG::geomunion(coverage, nullptr, &sen);
+    //-- linear networks require a segment-extracting noder
+    if (coverage->getDimension() < 2) {
+        SegmentExtractingNoder sen;
+        return OverlayNG::geomunion(coverage, nullptr, &sen);
+    }
+    else {
+        BoundaryChainNoder bcn;
+        return OverlayNG::geomunion(coverage, nullptr, &bcn);
+    }
 }
 
 

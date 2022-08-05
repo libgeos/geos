@@ -33,6 +33,17 @@
 #include <string>
 #include <vector>
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
+using geos::geom::CoordinateArraySequence;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::Polygon;
+using geos::io::WKTReader;
+using geos::io::WKTWriter;
+
 namespace tut {
 
 //

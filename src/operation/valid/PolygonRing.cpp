@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/PolygonRing.h>

@@ -17,15 +17,10 @@
 
 #include <geos/export.h>
 
+#include <geos/geom/Coordinate.h>
 
 #include <memory>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-}
 
 namespace geos {      // geos.
 namespace operation { // geos.operation

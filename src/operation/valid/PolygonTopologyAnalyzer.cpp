@@ -16,6 +16,7 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LinearRing.h>
@@ -25,7 +26,6 @@
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
-#include <geos/operation/valid/PolygonNode.h>
 #include <geos/operation/valid/PolygonRing.h>
 #include <geos/operation/valid/PolygonTopologyAnalyzer.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
@@ -122,7 +122,7 @@ PolygonTopologyAnalyzer::isIncidentSegmentInRing(
         rPrev = rNext;
         rNext = temp;
     }
-    return PolygonNode::isInteriorSegment(p0, rPrev, rNext, p1);
+    return algorithm::PolygonNodeTopology::isInteriorSegment(p0, rPrev, rNext, p1);
 }
 
 /* private static */

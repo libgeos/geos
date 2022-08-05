@@ -10,11 +10,6 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- *
- **********************************************************************
- *
- * Last port: noding/MCIndexSegmentSetMutualIntersector.java r388 (JTS-1.12)
- *
  **********************************************************************/
 
 #pragma once
@@ -27,12 +22,6 @@
 namespace geos {
 namespace index {
 class SpatialIndex;
-
-namespace chain {
-}
-namespace strtree {
-//class STRtree;
-}
 }
 namespace noding {
 class SegmentString;
@@ -55,12 +44,17 @@ namespace noding { // geos::noding
 class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
 public:
 
-    MCIndexSegmentSetMutualIntersector()
+    MCIndexSegmentSetMutualIntersector(double p_tolerance)
         : monoChains()
         , indexCounter(0)
         , processCounter(0)
         , nOverlaps(0)
+        , overlapTolerance(p_tolerance)
         , indexBuilt(false)
+    {}
+
+    MCIndexSegmentSetMutualIntersector()
+        : MCIndexSegmentSetMutualIntersector(0.0)
     {}
 
     ~MCIndexSegmentSetMutualIntersector() override
@@ -116,6 +110,7 @@ private:
     int processCounter;
     // statistics
     int nOverlaps;
+    double overlapTolerance;
 
     /* memory management helper, holds MonotoneChain objects used
      * in the SpatialIndex. It's cleared when the SpatialIndex is
