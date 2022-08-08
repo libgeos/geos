@@ -3441,9 +3441,10 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
 ///@{
 
 /**
-* Returns minimum rectangular polygon that contains the geometry.
+* Returns minimum rectangular polygon or point that contains the geometry,
+* or an empty point for empty inputs.
 * \param g The geometry to calculate an envelope for
-* \return A newly allocated polygonal envelope. NULL on exception.
+* \return A newly allocated polygonal envelope or point. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
