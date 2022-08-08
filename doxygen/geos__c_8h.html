@@ -6546,13 +6546,13 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns minimum rectangular polygon that contains the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns minimum rectangular polygon or point that contains the geometry, or an empty point for empty inputs. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to calculate an envelope for </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A newly allocated polygonal envelope. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A newly allocated polygonal envelope or point. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 
 </div>
 </div>
