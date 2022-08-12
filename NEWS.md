@@ -27,6 +27,7 @@ xxxx-xx-xx
   - CAPI: GEOSPolygonHullSimplify (GH-603, Paul Ramsey)
   - CAPI: GEOSPolygonHullSimplifyByArea (GH-633, Paul Ramsey)
   - CAPI: GEOSLineMergeDirected (GH-597, Sergei Sh)
+  - CAPI: GEOSGeom_getExtent (GH-555, Joris Van den Bossche)
   - CAPI: setFixStructure for WKB/WKT readers to automatically repair
     structural errors in the input (GH-639, Paul Ramsey)
 
@@ -128,6 +129,7 @@ xxxx-xx-xx
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
   - Fix buffering issue (#1022, JTS-525, Paul Ramsey)
   - MinimumBoundingCircle.getMaximumDiameter fix (JTS-533, Paul Ramsey)
+  - Output POINT EMPTY in WKB as POINT (NaN NaN) (#1005, Paul Ramsey)
 
 - Changes:
   - Drop SWIG bindings, including for Ruby and Python (#1076, Mike Taves)
