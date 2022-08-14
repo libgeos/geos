@@ -354,7 +354,8 @@ CoverageRing::extractSection(std::size_t startIndex, std::size_t endIndex)
     for (std::size_t i = startIndex; i <= endIndex; i++) {
         linePts->add(getCoordinate(i));
     }
-    return linePts;
+    std::unique_ptr<CoordinateSequence> cs(static_cast<CoordinateSequence*>(linePts.release()));
+    return cs;
 }
 
 
@@ -369,7 +370,8 @@ CoverageRing::extractSectionWrap(std::size_t startIndex, std::size_t endIndex)
         linePts->add(getCoordinate(index));
         index = nextMarkIndex(index);
     }
-    return linePts;
+    std::unique_ptr<CoordinateSequence> cs(static_cast<CoordinateSequence*>(linePts.release()));
+    return cs;
 }
 
 
