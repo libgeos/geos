@@ -303,7 +303,9 @@ CoveragePolygonValidator::getLocator(std::size_t index, const Polygon* poly)
     // construct new locator for this polygon
     else {
         IndexedPointInAreaLocator* ipia = new IndexedPointInAreaLocator(*poly);
-        adjPolygonLocators.emplace(index, ipia);
+        adjPolygonLocators.emplace(std::piecewise_construct,
+              std::forward_as_tuple(index),
+              std::forward_as_tuple(ipia));
         return ipia;
     }
 }
