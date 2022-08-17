@@ -96,7 +96,7 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
     #include <geos.h>
 
-C++ usage examples can be found in `doc/example.cpp`.
+C++ usage examples can be found in [examples](examples/).
 
 
 ### Scripting Language Bindings
@@ -136,8 +136,8 @@ version included in source tree:
 
 ## Testing
 
-See documentation [here](tests/README.md).
+See documentation in [tests/README.md](tests/README.md).
 
 ## Tools
 
-* `geosop` - a CLI for GEOS.  Documentation is [here](util/geosop/README.md).
+* `geosop` - a CLI for GEOS.  Documentation is in [util/geosop/README.md](util/geosop/README.md).
