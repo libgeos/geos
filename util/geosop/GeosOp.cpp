@@ -348,7 +348,13 @@ void GeosOp::run() {
 
     //------------------------
 
-    execute();
+    try {
+        execute();
+    }
+    catch (std::exception &e) {
+        std::cerr << "Run-time exception: " << e.what() << std::endl;
+        exit(1);
+    }
 
     if (args.isShowTime || args.isVerbose) {
         std::cout

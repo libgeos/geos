@@ -138,6 +138,10 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         throw util::IllegalArgumentException("BufferBuilder::bufferLineSingleSided only accept linestrings");
     }
 
+    // Thow error on nan/inf
+    if (!std::isfinite(distance))
+        throw util::IllegalArgumentException("BufferBuilder distance must be a finite value");
+
     // Nothing to do for a distance of zero
     if(distance == 0) {
         return g->clone();
@@ -377,6 +381,10 @@ std::unique_ptr<Geometry>
 BufferBuilder::buffer(const Geometry* g, double distance)
 // throw(GEOSException *)
 {
+    // Thow error on nan/inf
+    if (!std::isfinite(distance))
+        throw util::IllegalArgumentException("BufferBuilder distance must be a finite value");
+
     const PrecisionModel* precisionModel = workingPrecisionModel;
     if(precisionModel == nullptr) {
         precisionModel = g->getPrecisionModel();

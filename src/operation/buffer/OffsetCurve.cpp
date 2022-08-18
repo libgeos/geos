@@ -31,6 +31,7 @@
 #include <geos/geom/util/GeometryMapper.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cassert>
 
@@ -41,6 +42,28 @@ using geos::geom::util::GeometryMapper;
 namespace geos {
 namespace operation {
 namespace buffer {
+
+
+OffsetCurve::OffsetCurve(const Geometry& geom, double dist)
+    : inputGeom(geom)
+    , distance(dist)
+    , matchDistance(std::abs(dist)/NEARNESS_FACTOR)
+    , geomFactory(geom.getFactory())
+{
+    if (!std::isfinite(dist))
+        throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+};
+
+OffsetCurve::OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
+    : inputGeom(geom)
+    , distance(dist)
+    , bufferParams(bp)
+    , matchDistance(std::abs(dist)/NEARNESS_FACTOR)
+    , geomFactory(geom.getFactory())
+{
+    if (!std::isfinite(dist))
+        throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+};
 
 /* public static */
 std::unique_ptr<Geometry>

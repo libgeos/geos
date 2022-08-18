@@ -196,12 +196,7 @@ public:
     *
     * \see BufferParameters
     */
-    OffsetCurve(const Geometry& geom, double dist)
-        : inputGeom(geom)
-        , distance(dist)
-        , matchDistance(std::abs(dist)/NEARNESS_FACTOR)
-        , geomFactory(geom.getFactory())
-        {};
+    OffsetCurve(const Geometry& geom, double dist);
 
     /**
     * Creates a new instance for computing an offset curve for a geometry at a given distance.
@@ -212,13 +207,7 @@ public:
     * @param dist
     * @param bp
     */
-    OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
-        : inputGeom(geom)
-        , distance(dist)
-        , bufferParams(bp)
-        , matchDistance(std::abs(dist)/NEARNESS_FACTOR)
-        , geomFactory(geom.getFactory())
-        {};
+    OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp);
 
     /**
     * Computes the offset curve of a geometry at a given distance,

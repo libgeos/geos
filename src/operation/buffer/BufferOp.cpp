@@ -41,6 +41,7 @@
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/IntersectionAdder.h>
 
+#include <geos/util/IllegalArgumentException.h>
 
 
 
@@ -111,6 +112,9 @@ BufferOp::bufferOp(const geom::Geometry* g, double dist,
 std::unique_ptr<Geometry>
 BufferOp::getResultGeometry(double nDistance)
 {
+    if (!std::isfinite(nDistance))
+        throw util::IllegalArgumentException("BufferOp distance must be finite");
+
     distance = nDistance;
     computeGeometry();
     return std::unique_ptr<Geometry>(resultGeometry.release());

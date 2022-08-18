@@ -17,6 +17,7 @@
 
 #include <geos/export.h>
 #include <string>
+#include <cmath>
 
 #include <geos/util/GEOSException.h>
 
@@ -43,6 +44,7 @@ public:
     {}
 
     ~IllegalArgumentException() noexcept override {}
+
 };
 
 } // namespace geos::util
