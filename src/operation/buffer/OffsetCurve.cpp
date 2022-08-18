@@ -51,7 +51,7 @@ OffsetCurve::OffsetCurve(const Geometry& geom, double dist)
     , geomFactory(geom.getFactory())
 {
     if (!std::isfinite(dist))
-        throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+        throw util::IllegalArgumentException("OffsetCurve distance must be finite");
 }
 
 OffsetCurve::OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
@@ -62,7 +62,7 @@ OffsetCurve::OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp
     , geomFactory(geom.getFactory())
 {
     if (!std::isfinite(dist))
-        throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+        throw util::IllegalArgumentException("OffsetCurve distance must be finite");
 }
 
 /* public static */

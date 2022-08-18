@@ -140,7 +140,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Thow error on nan/inf
     if (!std::isfinite(distance))
-        throw util::IllegalArgumentException("BufferBuilder distance must be a finite value");
+        throw util::IllegalArgumentException("BufferBuilder distance must be finite");
 
     // Nothing to do for a distance of zero
     if(distance == 0) {
