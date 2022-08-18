@@ -52,7 +52,7 @@ OffsetCurve::OffsetCurve(const Geometry& geom, double dist)
 {
     if (!std::isfinite(dist))
         throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
-};
+}
 
 OffsetCurve::OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
     : inputGeom(geom)
@@ -63,7 +63,7 @@ OffsetCurve::OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp
 {
     if (!std::isfinite(dist))
         throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
-};
+}
 
 /* public static */
 std::unique_ptr<Geometry>
