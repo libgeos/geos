@@ -383,7 +383,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 {
     // Thow error on nan/inf
     if (!std::isfinite(distance))
-        throw util::IllegalArgumentException("BufferBuilder distance must be a finite value");
+        throw util::IllegalArgumentException("BufferBuilder distance must be finite");
 
     const PrecisionModel* precisionModel = workingPrecisionModel;
     if(precisionModel == nullptr) {
