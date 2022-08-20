@@ -95,7 +95,7 @@ MCIndexNoder::add(SegmentString* segStr)
     // std::vector<std::unique_ptr<MonotoneChain>> segChains;
 
     // segChains will contain newly allocated MonotoneChain objects
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
+    MonotoneChainBuilder::getChains(segStr->getCoordinatesRO(),
                                     segStr, monoChains);
 
 }

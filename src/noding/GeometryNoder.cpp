@@ -57,9 +57,8 @@ public:
     {
         const geom::LineString* ls = dynamic_cast<const geom::LineString*>(g);
         if(ls) {
-            auto coord = ls->getCoordinates();
             // coord ownership transferred to SegmentString
-            SegmentString* ss = new NodedSegmentString(coord.release(), nullptr);
+            SegmentString* ss = new NodedSegmentString(ls->getCoordinatesRO(), nullptr);
             _to.push_back(ss);
         }
     }
@@ -100,7 +99,7 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
     std::vector<std::unique_ptr<geom::Geometry>> lines;
     lines.reserve(nodedEdges.size());
     for(auto& ss :  nodedEdges) {
-        const geom::CoordinateSequence* coords = ss->getCoordinates();
+        const geom::CoordinateSequence* coords = ss->getCoordinatesRO();
 
         // Check if an equivalent edge is known
         OrientedCoordinateArray oca1(*coords);

@@ -21,7 +21,7 @@ namespace overlayng { // geos.operation.overlayng
 
 
 /*public*/
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 RingClipper::clip(const CoordinateSequence* cs) const
 {
     std::unique_ptr<CoordinateArraySequence> pts;
@@ -32,7 +32,7 @@ RingClipper::clip(const CoordinateSequence* cs) const
             return pts;
         cs = pts.get();
     }
-    return pts;
+    return std::unique_ptr<CoordinateSequence>(pts.release());
 }
 
 /*private*/

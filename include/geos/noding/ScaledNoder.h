@@ -75,7 +75,7 @@ public:
         isScaled(nScaleFactor != 1.0)
     {}
 
-    ~ScaledNoder() override;
+    // ~ScaledNoder() override;
 
     std::vector<SegmentString*>* getNodedSubstrings() const override;
 
@@ -116,7 +116,7 @@ private:
 
     friend class ScaledNoder::ReScaler;
 
-    mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
+    // mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
 
     // Declare type as noncopyable
     ScaledNoder(const ScaledNoder& other) = delete;

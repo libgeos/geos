@@ -18,11 +18,9 @@
 
 #pragma once
 
-#include <geos/export.h>
-#include <geos/noding/BasicSegmentString.h>
+#include <geos/geom/CoordinateSequence.h> // for inlines (size())
 #include <geos/noding/Octant.h>
 #include <geos/noding/SegmentString.h> // for inheritance
-#include <geos/geom/CoordinateSequence.h> // for inlines (size())
 
 
 #include <vector>
@@ -50,11 +48,12 @@ public:
     /// @param newPts CoordinateSequence representing the string, externally owned
     /// @param newContext the context associated to this SegmentString
     ///
-    BasicSegmentString(geom::CoordinateSequence* newPts,
+    BasicSegmentString(const geom::CoordinateSequence* newPts,
                        const void* newContext)
         :
         SegmentString(newContext),
-        pts(newPts)
+        pts_ro(newPts),
+        pts_rw(nullptr)
     {}
 
     ~BasicSegmentString() override
@@ -64,25 +63,44 @@ public:
     size_t
     size() const override
     {
-        return pts->size();
+        if (pts_rw)
+            return pts_rw->size();
+        else
+            return pts_ro->size();
     }
 
     // see dox in SegmentString.h
     const geom::Coordinate& getCoordinate(std::size_t i) const override
     {
-        return pts->getAt(i);
+        if (pts_rw)
+            return pts_rw->getAt(i);
+        else
+            return pts_ro->getAt(i);
     };
 
-    /// @see SegmentString::getCoordinates() const
-    geom::CoordinateSequence* getCoordinates() const override
+    /// @see SegmentString::getCoordinatesRO() const
+    const geom::CoordinateSequence* getCoordinatesRO() const override
     {
-        return pts;
+        if (pts_rw)
+            return pts_rw.get();
+        return pts_ro;
+    };
+
+    /// @see SegmentString::getCoordinatesRW() const
+    geom::CoordinateSequence* getCoordinatesRW() override
+    {
+        if (!pts_rw) {
+            pts_rw = pts_ro->clone();
+            pts_ro = nullptr;
+        }
+
+        return pts_rw.get();
     };
 
     // see dox in SegmentString.h
     bool isClosed() const override
     {
-        return pts->getAt(0) == pts->getAt(size() - 1);
+        return getCoordinate(0) == getCoordinate(size() - 1);
     };
 
     // see dox in SegmentString.h
@@ -105,7 +123,8 @@ public:
 
 private:
 
-    geom::CoordinateSequence* pts;
+    const geom::CoordinateSequence* pts_ro;
+    std::unique_ptr<geom::CoordinateSequence> pts_rw;
 
     // Declare type as noncopyable
     BasicSegmentString(const BasicSegmentString& other) = delete;

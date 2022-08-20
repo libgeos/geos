@@ -63,7 +63,7 @@ SegmentExtractingNoder::extractSegments(
         coords[0] = ss->getCoordinate(i);
         coords[1] = ss->getCoordinate(i + 1);
         std::unique_ptr<CoordinateSequence> cs(new CoordinateArraySequence(std::move(coords)));
-        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), ss->getData()));
+        std::unique_ptr<SegmentString> seg(new NodedSegmentString(std::move(cs), ss->getData()));
         outputSegs.push_back(seg.release());
     }
 }

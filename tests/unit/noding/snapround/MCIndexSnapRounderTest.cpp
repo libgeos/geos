@@ -65,7 +65,7 @@ struct test_mcidxsnprndr_data {
         GeomVct* lines = new GeomVct;
         for(SegStrVct::size_type i = 0, n = vct.size(); i < n; ++i) {
             SegmentString* ss = vct[i];
-            lines->push_back(gf_->createLineString(*(ss->getCoordinates())));
+            lines->push_back(gf_->createLineString(*(ss->getCoordinatesRO())));
         }
         return GeomPtr(gf_->createMultiLineString(lines));
     }
@@ -73,8 +73,8 @@ struct test_mcidxsnprndr_data {
     void
     getSegmentStrings(const Geometry& g, SegStrVct& vct)
     {
-        CoordSeqPtr s(g.getCoordinates());
-        vct.push_back(new NodedSegmentString(s.release(), nullptr));
+        auto cs = g.getCoordinates();
+        vct.push_back(new NodedSegmentString(std::move(cs), nullptr));
     }
 
     GeomPtr

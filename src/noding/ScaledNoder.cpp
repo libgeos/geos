@@ -47,32 +47,6 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-namespace {
-
-#if GEOS_DEBUG > 1
-void
-sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
-{
-    std::cerr << "CREATE TABLE \"" << table
-              << "\" (id integer, geom geometry);" << std::endl;
-
-    std::cerr << "COPY \"" << table
-              << "\" FROM stdin;" << std::endl;
-
-    for(std::size_t i = 0, n = ssv.size(); i < n; i++) {
-        SegmentString* ss = ssv[i];
-        geom::CoordinateSequence* cs = ss->getCoordinates();
-        assert(cs);
-
-        std::cerr << i << '\t' << "LINESTRING"
-                  << *cs
-                  << std::endl;
-    }
-    std::cerr << "\\." << std::endl;
-}
-#endif // GEOS_DEBUG > 1
-
-} // anonym namespace
 
 class ScaledNoder::Scaler : public geom::CoordinateFilter {
 public:
@@ -144,7 +118,7 @@ ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 
         SegmentString* ss = *i0;
 
-        ss->getCoordinates()->apply_rw(&rescaler);
+        ss->getCoordinatesRW()->apply_rw(&rescaler);
 
     }
 }
@@ -158,7 +132,7 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
     for(std::size_t i = 0; i < segStrings.size(); i++) {
         SegmentString* ss = segStrings[i];
 
-        CoordinateSequence* cs = ss->getCoordinates();
+        CoordinateSequence* cs = ss->getCoordinatesRW();
 
 #ifndef NDEBUG
         std::size_t npts = cs->size();
@@ -169,21 +143,21 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
         operation::valid::RepeatedPointTester rpt;
         if (rpt.hasRepeatedPoint(cs)) {
             auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
-            segStrings[i] = new NodedSegmentString(cs2.release(), ss->getData());
+            segStrings[i] = new NodedSegmentString(std::move(cs2), ss->getData());
             delete ss;
         }
     }
 }
 
-ScaledNoder::~ScaledNoder()
-{
-    for(std::vector<geom::CoordinateSequence*>::const_iterator
-            it = newCoordSeq.begin(), end = newCoordSeq.end();
-            it != end;
-            ++it) {
-        delete *it;
-    }
-}
+// ScaledNoder::~ScaledNoder()
+// {
+//     for(std::vector<geom::CoordinateSequence*>::const_iterator
+//             it = newCoordSeq.begin(), end = newCoordSeq.end();
+//             it != end;
+//             ++it) {
+//         delete *it;
+//     }
+// }
 
 
 /*public*/

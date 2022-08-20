@@ -82,7 +82,7 @@ void object::test<1>
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinatesRO(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -127,7 +127,7 @@ void object::test<2>
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinatesRO(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -167,7 +167,7 @@ void object::test<3>
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinatesRO(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 

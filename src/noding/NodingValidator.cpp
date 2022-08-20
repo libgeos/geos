@@ -60,9 +60,9 @@ NodingValidator::checkCollapses() const
 void
 NodingValidator::checkCollapses(const SegmentString& ss) const
 {
-    const CoordinateSequence& pts = *(ss.getCoordinates());
-    for(std::size_t i = 0, n = pts.size() - 2; i < n; ++i) {
-        checkCollapse(pts[i], pts[i + 1], pts[i + 2]);
+    const CoordinateSequence* pts = ss.getCoordinatesRO();
+    for(std::size_t i = 0, n = pts->size() - 2; i < n; ++i) {
+        checkCollapse(pts->getAt(i), pts->getAt(i + 1), pts->getAt(i + 2));
     }
 }
 
@@ -102,10 +102,10 @@ void
 NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
         const SegmentString& ss1)
 {
-    const CoordinateSequence& pts0 = *(ss0.getCoordinates());
-    const CoordinateSequence& pts1 = *(ss1.getCoordinates());
-    for(std::size_t i0 = 0, n0 = pts0.size(); i0 < n0 - 1; ++i0) {
-        for(std::size_t i1 = 0, n1 = pts1.size(); i1 < n1 - 1; ++i1) {
+    const CoordinateSequence* pts0 = ss0.getCoordinatesRO();
+    const CoordinateSequence* pts1 = ss1.getCoordinatesRO();
+    for(std::size_t i0 = 0, n0 = pts0->size(); i0 < n0 - 1; ++i0) {
+        for(std::size_t i1 = 0, n1 = pts1->size(); i1 < n1 - 1; ++i1) {
             checkInteriorIntersections(ss0, i0, ss1, i1);
         }
     }
@@ -121,10 +121,10 @@ NodingValidator::checkInteriorIntersections(
     if(&e0 == &e1 && segIndex0 == segIndex1) {
         return;
     }
-    const Coordinate& p00 = e0.getCoordinates()->getAt(segIndex0);
-    const Coordinate& p01 = e0.getCoordinates()->getAt(segIndex0 + 1);
-    const Coordinate& p10 = e1.getCoordinates()->getAt(segIndex1);
-    const Coordinate& p11 = e1.getCoordinates()->getAt(segIndex1 + 1);
+    const Coordinate& p00 = e0.getCoordinate(segIndex0);
+    const Coordinate& p01 = e0.getCoordinate(segIndex0 + 1);
+    const Coordinate& p10 = e1.getCoordinate(segIndex1);
+    const Coordinate& p11 = e1.getCoordinate(segIndex1 + 1);
 
     li.computeIntersection(p00, p01, p10, p11);
     if(li.hasIntersection()) {
@@ -149,9 +149,9 @@ NodingValidator::checkEndPtVertexIntersections() const
             it != itEnd;
             ++it) {
         const SegmentString* ss = *it;
-        const CoordinateSequence& pts = *(ss->getCoordinates());
-        checkEndPtVertexIntersections(pts[0], segStrings);
-        checkEndPtVertexIntersections(pts[pts.size() - 1], segStrings);
+        const CoordinateSequence* pts = ss->getCoordinatesRO();
+        checkEndPtVertexIntersections(pts->getAt(0), segStrings);
+        checkEndPtVertexIntersections(pts->getAt(pts->size() - 1), segStrings);
     }
 }
 
@@ -165,9 +165,9 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
             it != itEnd;
             ++it) {
         const SegmentString* ss0 = *it;
-        const CoordinateSequence& pts = *(ss0->getCoordinates());
-        for(std::size_t j = 1, n = pts.size() - 1; j < n; ++j) {
-            if(pts[j].equals(testPt)) {
+        const CoordinateSequence* pts = ss0->getCoordinatesRO();
+        for(std::size_t j = 1, n = pts->size() - 1; j < n; ++j) {
+            if(pts->getAt(j).equals(testPt)) {
                 std::stringstream s;
                 s << "found endpt/interior pt intersection ";
                 s << "at index " << j << " :pt " << testPt;

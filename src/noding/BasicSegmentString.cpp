@@ -30,7 +30,12 @@ std::ostream&
 BasicSegmentString::print(std::ostream& os) const
 {
     os << "BasicSegmentString: " << std::endl;
-    os << " LINESTRING" << *(pts) << ";" << std::endl;
+    if (pts_rw) {
+        os << " LINESTRING" << *(pts_rw) << ";" << std::endl;
+    }
+    else {
+        os << " LINESTRING" << *(pts_ro) << ";" << std::endl;
+    }
 
     return os;
 }

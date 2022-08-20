@@ -368,7 +368,7 @@ MULTILINESTRING(  \
     // We're basically only interested an rough sense of a
     // meaningful result.
     ensure_equals(gBuffer->getNumPoints(), std::size_t(46));
-    ensure_equals(int(gBuffer->getArea()), 3567);
+    ensure_equals(std::lround(gBuffer->getArea()), 3568);
 }
 
 template<>

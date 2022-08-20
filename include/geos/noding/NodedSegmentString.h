@@ -13,21 +13,13 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- *
- **********************************************************************
- *
- * Last port: noding/NodedSegmentString.java r320 (JTS-1.12)
- *
  **********************************************************************/
 
 #pragma once
 
-#include <geos/export.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h> // for inlines
-#include <geos/noding/NodedSegmentString.h>
-#include <geos/noding/NodableSegmentString.h> // for inheritance
 #include <geos/noding/Octant.h>
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentNodeList.h>
@@ -56,7 +48,7 @@ namespace noding { // geos::noding
  * All noded substrings are initialized with the same context object.
  *
  */
-class GEOS_DLL NodedSegmentString : public NodableSegmentString {
+class GEOS_DLL NodedSegmentString : public SegmentString {
 public:
 
     // TODO: provide a templated method using an output iterator
@@ -99,16 +91,25 @@ public:
      * @param newContext the user-defined data of this segment string
      *                   (may be null)
      */
-    NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)
-        : NodableSegmentString(newContext)
+    NodedSegmentString(const geom::CoordinateSequence* newPts, const void* newContext)
+        : SegmentString(newContext)
         , nodeList(this)
-        , pts(newPts)
+        , pts_rw(nullptr)
+        , pts_ro(newPts)
     {}
 
-    NodedSegmentString(SegmentString* ss)
-        : NodableSegmentString(ss->getData())
+    NodedSegmentString(const SegmentString* ss)
+        : SegmentString(ss->getData())
         , nodeList(this)
-        , pts(ss->getCoordinates()->clone())
+        , pts_rw(nullptr)
+        , pts_ro(ss->getCoordinatesRO())
+    {}
+
+    NodedSegmentString(std::unique_ptr<geom::CoordinateSequence>&& cs, const void* newContext)
+        : SegmentString(newContext)
+        , nodeList(this)
+        , pts_rw(std::move(cs))
+        , pts_ro(pts_rw.get())
     {}
 
     ~NodedSegmentString() override = default;
@@ -117,15 +118,19 @@ public:
 
     const SegmentNodeList& getNodeList() const;
 
-    size_t
-    size() const override
+
+    size_t size() const override
     {
-        return pts->size();
+        if (pts_rw)
+            return pts_rw->size();
+        else
+            return pts_ro->size();
     }
 
     const geom::Coordinate& getCoordinate(std::size_t i) const override;
 
-    geom::CoordinateSequence* getCoordinates() const override;
+    geom::CoordinateSequence* getCoordinatesRW() override;
+    const geom::CoordinateSequence* getCoordinatesRO() const override;
     geom::CoordinateSequence* releaseCoordinates();
 
     bool isClosed() const override;
@@ -198,7 +203,9 @@ public:
         // normalize the intersection point location
         auto nextSegIndex = normalizedSegmentIndex + 1;
         if (nextSegIndex < size()) {
-            const geom::Coordinate& nextPt = pts->getAt(nextSegIndex);
+            const geom::Coordinate& nextPt = pts_rw ?
+                pts_rw->getAt(nextSegIndex) :
+                pts_ro->getAt(nextSegIndex);
 
             // Normalize segment index if intPt falls on vertex
             // The check for point equality is 2D only -
@@ -219,7 +226,8 @@ private:
 
     SegmentNodeList nodeList;
 
-    std::unique_ptr<geom::CoordinateSequence> pts;
+    std::unique_ptr<geom::CoordinateSequence> pts_rw;
+    const geom::CoordinateSequence* pts_ro;
 
     static int safeOctant(const geom::Coordinate& p0, const geom::Coordinate& p1)
     {

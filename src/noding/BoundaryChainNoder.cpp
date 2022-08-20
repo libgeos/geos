@@ -154,7 +154,7 @@ BoundaryChainNoder::BoundarySegmentMap::createChain(
     for (std::size_t i = startIndex; i < endIndex + 1; i++) {
         pts->add(segString->getCoordinate(i));
     }
-    return new NodedSegmentString(pts.release(), segString->getData());
+    return new NodedSegmentString(std::move(pts), segString->getData());
 }
 
 /* private */

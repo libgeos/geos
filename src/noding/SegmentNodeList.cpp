@@ -216,7 +216,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& s
     if (splitEdges.empty())
         return;
 
-    const CoordinateSequence* edgePts = edge.getCoordinates();
+    const CoordinateSequence* edgePts = edge.getCoordinatesRO();
     assert(edgePts);
 
     // check that first and last points of split edges
@@ -232,7 +232,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& s
     SegmentString* splitn = splitEdges[splitEdges.size() - 1];
     assert(splitn);
 
-    const CoordinateSequence* splitnPts = splitn->getCoordinates();
+    const CoordinateSequence* splitnPts = splitn->getCoordinatesRO();
     assert(splitnPts);
 
     const Coordinate& ptn = splitnPts->getAt(splitnPts->getSize() - 1);

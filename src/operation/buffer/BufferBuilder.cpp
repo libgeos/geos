@@ -89,7 +89,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
     std::vector<Geometry*> lines;
     while(it != et) {
         const SegmentString* ss = *it;
-        LineString* line = fact->createLineString(ss->getCoordinates()->clone().release());
+        LineString* line = fact->createLineString(ss->getCoordinatesRO()->clone().release());
         lines.push_back(line);
         ++it;
     }
@@ -133,7 +133,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 {
     // Returns the line used to create a single-sided buffer.
     // Input requirement: Must be a LineString.
-    const LineString* l = dynamic_cast< const LineString* >(g);
+    const LineString* l = dynamic_cast<const LineString*>(g);
     if(!l) {
         throw util::IllegalArgumentException("BufferBuilder::bufferLineSingleSided only accept linestrings");
     }
@@ -180,7 +180,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     std::vector< CoordinateSequence* > lineList;
 
     {
-        std::unique_ptr< CoordinateSequence > coords(g->getCoordinates());
+        std::unique_ptr<CoordinateSequence> coords(g->getCoordinates());
         curveBuilder.getSingleSidedLineCurve(coords.get(), distance,
                                              lineList, leftSide, !leftSide);
         coords.reset();
@@ -189,10 +189,10 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     // Create a SegmentString from these coordinates.
     SegmentString::NonConstVect curveList;
     for(unsigned int i = 0; i < lineList.size(); ++i) {
-        CoordinateSequence* seq = lineList[i];
+        std::unique_ptr<CoordinateSequence> seq(lineList[i]);
 
         // SegmentString takes ownership of CoordinateSequence
-        SegmentString* ss = new NodedSegmentString(seq, nullptr);
+        SegmentString* ss = new NodedSegmentString(std::move(seq), nullptr);
         curveList.push_back(ss);
     }
     lineList.clear();
@@ -212,7 +212,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         SegmentString* ss = (*nodedEdges)[i];
 
         Geometry* tmp = geomFact->createLineString(
-                            ss->getCoordinates()->clone().release()
+                            ss->getCoordinatesRO()->clone().release()
                         );
         delete ss;
 
@@ -569,7 +569,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
         SegmentString* segStr = *i;
         const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
-        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates());
+        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinatesRO());
         delete segStr;
         if(cs->size() < 2) {
             // don't insert collapsed edges

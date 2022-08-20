@@ -68,8 +68,7 @@ SegmentString::NonConstVect*
 NodedSegmentString::getNodedSubstrings(
     const SegmentString::NonConstVect& segStrings)
 {
-    SegmentString::NonConstVect* resultEdgelist = \
-            new SegmentString::NonConstVect();
+    SegmentString::NonConstVect* resultEdgelist = new SegmentString::NonConstVect();
     getNodedSubstrings(segStrings, resultEdgelist);
     return resultEdgelist;
 }
@@ -78,27 +77,41 @@ NodedSegmentString::getNodedSubstrings(
 const geom::Coordinate&
 NodedSegmentString::getCoordinate(std::size_t i) const
 {
-    return pts->getAt(i);
+    if (pts_rw) return pts_rw->getAt(i);
+    else return pts_ro->getAt(i);
+}
+
+/* virtual public */
+const geom::CoordinateSequence*
+NodedSegmentString::getCoordinatesRO() const
+{
+    if (pts_rw) return pts_rw.get();
+    else return pts_ro;
 }
 
 /* virtual public */
 geom::CoordinateSequence*
-NodedSegmentString::getCoordinates() const
+NodedSegmentString::getCoordinatesRW()
 {
-    return pts.get();
+    if (!pts_rw)
+        pts_rw = pts_ro->clone();
+    return pts_rw.get();
 }
 
 geom::CoordinateSequence*
 NodedSegmentString::releaseCoordinates()
 {
-    return pts.release();
+    if (pts_rw)
+        return pts_rw.release();
+    else
+        return pts_ro->clone().release();
 }
 
 /* virtual public */
 bool
 NodedSegmentString::isClosed() const
 {
-    return pts->getAt(0) == pts->getAt(size() - 1);
+    return getCoordinate(0) == getCoordinate(size() - 1);
 }
 
 /* public virtual */
@@ -106,7 +119,12 @@ std::ostream&
 NodedSegmentString::print(std::ostream& os) const
 {
     os << "NodedSegmentString: " << std::endl;
-    os << " LINESTRING" << *(pts) << ";" << std::endl;
+    if (pts_rw) {
+        os << " LINESTRING" << *(pts_rw) << ";" << std::endl;
+    }
+    else {
+        os << " LINESTRING" << *(pts_ro) << ";" << std::endl;
+    }
     os << " Nodes: " << nodeList.size() << std::endl;
 
     return os;

@@ -80,7 +80,7 @@ private:
 
     SegmentString* snapVertices(SegmentString* ss);
 
-    std::unique_ptr<std::vector<geom::Coordinate>> snap(geom::CoordinateSequence* cs);
+    std::unique_ptr<std::vector<geom::Coordinate>> snap(const geom::CoordinateSequence* cs);
 
     /**
     * Computes all interior intersections in the collection of {@link SegmentString}s,

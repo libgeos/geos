@@ -103,7 +103,7 @@ public:
     /**
     * Clips a list of points to the clipping rectangle box.
     */
-    std::unique_ptr<CoordinateArraySequence> clip(const CoordinateSequence* cs) const;
+    std::unique_ptr<CoordinateSequence> clip(const CoordinateSequence* cs) const;
 
 };
 

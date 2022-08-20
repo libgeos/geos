@@ -59,9 +59,9 @@ private:
 
     // Members
     const Envelope* limitEnv;
-    std::unique_ptr<std::vector<Coordinate>> ptList;
+    std::vector<Coordinate> ptList;
     const Coordinate* lastOutside;
-    std::vector<std::unique_ptr<CoordinateArraySequence>> sections;
+    std::vector<std::unique_ptr<CoordinateSequence>> sections;
 
     // Methods
     void addPoint(const Coordinate* p);
@@ -76,11 +76,10 @@ public:
 
     LineLimiter(const Envelope* env)
         : limitEnv(env)
-        , ptList(nullptr)
         , lastOutside(nullptr)
         {};
 
-    std::vector<std::unique_ptr<CoordinateArraySequence>>& limit(const CoordinateSequence *pts);
+    std::vector<std::unique_ptr<CoordinateSequence>>& limit(const CoordinateSequence *pts);
 
 };
 

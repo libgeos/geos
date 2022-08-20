@@ -37,10 +37,10 @@ processIntersections(
         return;
     }
 
-    const geom::Coordinate& p00 = (*e0->getCoordinates())[ segIndex0 ];
-    const geom::Coordinate& p01 = (*e0->getCoordinates())[ segIndex0 + 1 ];
-    const geom::Coordinate& p10 = (*e1->getCoordinates())[ segIndex1 ];
-    const geom::Coordinate& p11 = (*e1->getCoordinates())[ segIndex1 + 1 ];
+    const geom::Coordinate& p00 = e0->getCoordinate(segIndex0);
+    const geom::Coordinate& p01 = e0->getCoordinate(segIndex0 + 1);
+    const geom::Coordinate& p10 = e1->getCoordinate(segIndex1);
+    const geom::Coordinate& p11 = e1->getCoordinate(segIndex1 + 1);
 
     li->computeIntersection(p00, p01, p10, p11);
 

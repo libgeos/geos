@@ -56,7 +56,7 @@ struct test_nodedsegmentstring_data {
         std::vector<Geometry *> *lines = new std::vector<Geometry *>();
         for (auto s: ss)
         {
-            std::unique_ptr<CoordinateSequence> cs = s->getCoordinates()->clone();
+            std::unique_ptr<CoordinateSequence> cs = s->getCoordinatesRO()->clone();
             lines->push_back(gf->createLineString(*cs));
         }
         return std::unique_ptr<Geometry>(gf->createMultiLineString(lines));

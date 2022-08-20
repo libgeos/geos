@@ -95,7 +95,8 @@ public:
     ///
     /// @note The CoordinateSequence is owned by this SegmentString!
     ///
-    virtual geom::CoordinateSequence* getCoordinates() const = 0;
+    virtual const geom::CoordinateSequence* getCoordinatesRO() const = 0;
+    virtual geom::CoordinateSequence* getCoordinatesRW() = 0;
 
     virtual bool isClosed() const = 0;
 

@@ -21,6 +21,8 @@
 #include <geos/util.h>
 
 using geos::operation::valid::RepeatedPointRemover;
+using geos::geom::CoordinateSequence;
+using geos::geom::CoordinateArraySequence;
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -119,7 +121,7 @@ EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
     std::vector<Edge*> createdEdges;
 
     for (SegmentString* ss : *segStrings) {
-        const CoordinateSequence* pts = ss->getCoordinates();
+        const CoordinateSequence* pts = ss->getCoordinatesRO();
 
         // don't create edges from collapsed lines
         if (Edge::isCollapsed(pts)) continue;
@@ -226,7 +228,7 @@ EdgeNodingBuilder::addPolygonRing(const LinearRing* ring, bool isHole, uint8_t g
     if (isClippedCompletely(ring->getEnvelopeInternal()))
       return;
 
-    std::unique_ptr<geom::CoordinateArraySequence> pts = clip(ring);
+    std::unique_ptr<CoordinateSequence> pts = clip(ring);
 
     /**
     * Don't add edges that collapse to a point
@@ -236,7 +238,7 @@ EdgeNodingBuilder::addPolygonRing(const LinearRing* ring, bool isHole, uint8_t g
     }
 
     int depthDelta = computeDepthDelta(ring, isHole);
-    addEdge(pts, createEdgeSourceInfo(geomIndex, depthDelta, isHole));
+    addEdge(std::move(pts), createEdgeSourceInfo(geomIndex, depthDelta, isHole));
 }
 
 /*private*/
@@ -261,21 +263,21 @@ EdgeNodingBuilder::createEdgeSourceInfo(uint8_t index, int depthDelta, bool isHo
 
 /*private*/
 void
-EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info)
+EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateSequence>&& cs, const EdgeSourceInfo* info)
 {
     // TODO: manage these internally to EdgeNodingBuilder in a std::deque,
     // since they do not have a life span longer than the EdgeNodingBuilder
     // in OverlayNG::buildGraph()
-    NodedSegmentString* ss = new NodedSegmentString(cas.release(), reinterpret_cast<const void*>(info));
+    NodedSegmentString* ss = new NodedSegmentString(std::move(cs), reinterpret_cast<const void*>(info));
     inputEdges->push_back(ss);
 }
 
 /*private*/
 void
-EdgeNodingBuilder::addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info)
+EdgeNodingBuilder::addEdge(std::vector<Coordinate>&& pts, const EdgeSourceInfo* info)
 {
-    CoordinateArraySequence* cas = new CoordinateArraySequence(pts.release());
-    NodedSegmentString* ss = new NodedSegmentString(cas, reinterpret_cast<const void*>(info));
+    std::unique_ptr<CoordinateSequence> cas(new CoordinateArraySequence(std::move(pts)));
+    NodedSegmentString* ss = new NodedSegmentString(std::move(cas), reinterpret_cast<const void*>(info));
     inputEdges->push_back(ss);
 }
 
@@ -288,7 +290,7 @@ EdgeNodingBuilder::isClippedCompletely(const Envelope* env)
 }
 
 /* private */
-std::unique_ptr<geom::CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 EdgeNodingBuilder::clip(const LinearRing* ring)
 {
     const Envelope* env = ring->getEnvelopeInternal();
@@ -305,11 +307,12 @@ EdgeNodingBuilder::clip(const LinearRing* ring)
 }
 
 /*private*/
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 EdgeNodingBuilder::removeRepeatedPoints(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();
-    return RepeatedPointRemover::removeRepeatedPoints(pts);
+    auto removedPts = RepeatedPointRemover::removeRepeatedPoints(pts);
+    return std::unique_ptr<CoordinateSequence>(removedPts.release());
 }
 
 /*private*/
@@ -358,20 +361,20 @@ EdgeNodingBuilder::addLine(const LineString* line, uint8_t geomIndex)
         return;
 
     if (isToBeLimited(line)) {
-        std::vector<std::unique_ptr<CoordinateArraySequence>>& sections = limit(line);
+        std::vector<std::unique_ptr<CoordinateSequence>>& sections = limit(line);
         for (auto& pts : sections) {
-            addLine(pts, geomIndex);
+            addLine(std::move(pts), geomIndex);
         }
     }
     else {
-        std::unique_ptr<CoordinateArraySequence> ptsNoRepeat = removeRepeatedPoints(line);
-        addLine(ptsNoRepeat, geomIndex);
+        auto ptsNoRepeat = removeRepeatedPoints(line);
+        addLine(std::move(ptsNoRepeat), geomIndex);
     }
 }
 
 /*private*/
 void
-EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, uint8_t geomIndex)
+EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateSequence>&& pts, uint8_t geomIndex)
 {
     /**
      * Don't add edges that collapse to a point
@@ -380,7 +383,7 @@ EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateArraySequence>& pts, uint8_
         return;
     }
 
-    addEdge(pts, createEdgeSourceInfo(geomIndex));
+    addEdge(std::move(pts), createEdgeSourceInfo(geomIndex));
 }
 
 /*private*/
@@ -402,7 +405,7 @@ EdgeNodingBuilder::isToBeLimited(const LineString* line) const
 }
 
 /*private*/
-std::vector<std::unique_ptr<CoordinateArraySequence>>&
+std::vector<std::unique_ptr<CoordinateSequence>>&
 EdgeNodingBuilder::limit(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();

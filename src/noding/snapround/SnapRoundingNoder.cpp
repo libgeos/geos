@@ -90,7 +90,7 @@ void
 SnapRoundingNoder::addVertexPixels(std::vector<SegmentString*>& segStrings)
 {
     for (SegmentString* nss : segStrings) {
-        const CoordinateSequence* pts = nss->getCoordinates();
+        const CoordinateSequence* pts = nss->getCoordinatesRO();
         pixelIndex.add(pts);
     }
 }
@@ -147,14 +147,14 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     */
     std::vector<Coordinate> pts = ss->getNodedCoordinates();
     std::vector<Coordinate> ptsRoundVec = round(pts);
-    std::unique_ptr<geom::CoordinateArraySequence> ptsRound(new CoordinateArraySequence(std::move(ptsRoundVec)));
+    std::unique_ptr<geom::CoordinateSequence> ptsRound(new CoordinateArraySequence(std::move(ptsRoundVec)));
 
     // if complete collapse this edge can be eliminated
     if (ptsRound->size() <= 1)
         return nullptr;
 
     // Create new nodedSS to allow adding any hot pixel nodes
-    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getData());
+    NodedSegmentString* snapSS = new NodedSegmentString(std::move(ptsRound), ss->getData());
 
     std::size_t snapSSindex = 0;
     for (std::size_t i = 0, sz = pts.size()-1; i < sz; i++ ) {
@@ -241,7 +241,7 @@ SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentStrin
 void
 SnapRoundingNoder::addVertexNodeSnaps(NodedSegmentString* ss)
 {
-    const CoordinateSequence* pts = ss->getCoordinates();
+    const CoordinateSequence* pts = ss->getCoordinatesRO();
     for (std::size_t i = 1; i < pts->size() - 1; i++) {
         const Coordinate& p0 = pts->getAt(i);
         snapVertexNode(p0, ss, i);

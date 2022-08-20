@@ -77,7 +77,7 @@ SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
     double PHI_INV = (std::sqrt(5.0) - 1.0) / 2.0;
 
     for (SegmentString* ss: segStrings) {
-        CoordinateSequence* cs = ss->getCoordinates();
+        const CoordinateSequence* cs = ss->getCoordinatesRO();
         int numPts = (int) cs->size();
         int numPtsToLoad = numPts / 100;
         double rand = 0.0;
@@ -97,15 +97,15 @@ SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
 SegmentString*
 SnappingNoder::snapVertices(SegmentString* ss)
 {
-    std::unique_ptr<std::vector<Coordinate>> snapCoords = snap(ss->getCoordinates());
-    std::unique_ptr<CoordinateArraySequence> cs(new CoordinateArraySequence(snapCoords.release()));
-    return new NodedSegmentString(cs.release(), ss->getData());
+    std::unique_ptr<std::vector<Coordinate>> snapCoords = snap(ss->getCoordinatesRO());
+    std::unique_ptr<CoordinateSequence> cs(new CoordinateArraySequence(snapCoords.release()));
+    return new NodedSegmentString(std::move(cs), ss->getData());
 }
 
 
 /*private*/
 std::unique_ptr<std::vector<Coordinate>>
-SnappingNoder::snap(CoordinateSequence* cs)
+SnappingNoder::snap(const CoordinateSequence* cs)
 {
     std::unique_ptr<std::vector<Coordinate>> snapCoords(new std::vector<Coordinate>);
     for (std::size_t i = 0, sz = cs->size(); i < sz; i++) {

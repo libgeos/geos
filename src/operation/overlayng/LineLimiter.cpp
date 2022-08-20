@@ -24,12 +24,12 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /*public*/
-std::vector<std::unique_ptr<CoordinateArraySequence>>&
+std::vector<std::unique_ptr<CoordinateSequence>>&
 LineLimiter::limit(const CoordinateSequence *pts)
 {
     // Reset for new limit run
     lastOutside = nullptr;
-    ptList.reset(nullptr);
+    ptList.clear();
     sections.clear();
 
     for (std::size_t i = 0; i < pts->size(); i++) {
@@ -51,7 +51,7 @@ void
 LineLimiter::addPoint(const Coordinate* p)
 {
     startSection();
-    ptList->emplace_back(*p);
+    ptList.emplace_back(*p);
 }
 
 /*private*/
@@ -88,7 +88,7 @@ LineLimiter::isLastSegmentIntersecting(const Coordinate* p)
 bool
 LineLimiter::isSectionOpen()
 {
-    return ptList != nullptr;
+    return ptList.size() != 0;
 }
 
 /*private*/
@@ -96,11 +96,11 @@ void
 LineLimiter::startSection()
 {
     if (!isSectionOpen()) {
-        ptList.reset(new std::vector<Coordinate>);
+        ptList.clear();
     }
 
     if (lastOutside != nullptr) {
-        ptList->emplace_back(*lastOutside);
+        ptList.emplace_back(*lastOutside);
     }
     lastOutside = nullptr;
 }
@@ -114,17 +114,16 @@ LineLimiter::finishSection()
 
     // finish off this section
     if (lastOutside != nullptr) {
-        ptList->emplace_back(*lastOutside);
+        ptList.emplace_back(*lastOutside);
         lastOutside = nullptr;
     }
 
     // remove repeated points from the section
-    ptList->erase(std::unique(ptList->begin(), ptList->end()), ptList->end());
+    ptList.erase(std::unique(ptList.begin(), ptList.end()), ptList.end());
 
     // std::unique_ptr<CoordinateArraySequence> cas();
-    CoordinateArraySequence* cas = new CoordinateArraySequence(ptList.release());
-    sections.emplace_back(cas);
-    ptList.reset(nullptr);
+    sections.emplace_back(new CoordinateArraySequence(std::move(ptList)));
+    ptList.clear();
 }
 
 
