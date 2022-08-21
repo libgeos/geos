@@ -107,7 +107,7 @@ public:
      */
     virtual geom::Location computeMergedLocation(const Label& label2, uint8_t eltIndex);
 
-    virtual std::string print();
+    virtual std::string print() const;
 
     virtual const std::vector<double>& getZ() const;
 

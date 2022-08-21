@@ -160,11 +160,9 @@ void
 PlanarGraph::getNodes(std::vector<Node*>& values)
 {
     assert(nodes);
-    NodeMap::iterator it = nodes->nodeMap.begin();
-    while(it != nodes->nodeMap.end()) {
-        assert(it->second);
-        values.push_back(it->second);
-        ++it;
+    for( const auto& elem: nodes->nodeMap ) {
+        assert(elem.second.get());
+        values.push_back(elem.second.get());
     }
 }
 
@@ -233,8 +231,8 @@ PlanarGraph::linkResultDirectedEdges()
 #if GEOS_DEBUG
     std::cerr << "PlanarGraph::linkResultDirectedEdges called" << std::endl;
 #endif
-    for(auto& nodeIt: nodes->nodeMap) {
-        Node* node = nodeIt.second;
+    for(const auto& nodeIt: nodes->nodeMap) {
+        Node* node = nodeIt.second.get();
         assert(node);
 
         EdgeEndStar* ees = node->getEdges();
@@ -257,8 +255,8 @@ PlanarGraph::linkAllDirectedEdges()
 #if GEOS_DEBUG
     std::cerr << "PlanarGraph::linkAllDirectedEdges called" << std::endl;
 #endif
-    for(auto& nodeIt: nodes->nodeMap) {
-        Node* node = nodeIt.second;
+    for(const auto& nodeIt: nodes->nodeMap) {
+        Node* node = nodeIt.second.get();
         assert(node);
 
         EdgeEndStar* ees = node->getEdges();

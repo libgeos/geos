@@ -46,12 +46,7 @@ NodeMap::NodeMap(const NodeFactory& newNodeFact)
 #endif
 }
 
-NodeMap::~NodeMap()
-{
-    for(auto& it: nodeMap) {
-        delete it.second;
-    }
-}
+NodeMap::~NodeMap() = default;
 
 Node*
 NodeMap::addNode(const Coordinate& coord)
@@ -67,8 +62,8 @@ NodeMap::addNode(const Coordinate& coord)
         node = nodeFact.createNode(coord);
         Coordinate* c = const_cast<Coordinate*>(
                             &(node->getCoordinate()));
-        nodeMap[c] = node;
-        //nodeMap[const_cast<Coordinate *>(&coord)]=node;
+        nodeMap[c] = std::unique_ptr<Node>(node);
+        node = nodeMap[c].get();
     }
     else {
 #if GEOS_DEBUG
@@ -95,8 +90,8 @@ NodeMap::addNode(Node* n)
 #if GEOS_DEBUG
         std::cerr << " is new" << std::endl;
 #endif
-        nodeMap[c] = n;
-        return n;
+        nodeMap[c] = std::unique_ptr<Node>(n);
+        return nodeMap[c].get();
     }
 #if GEOS_DEBUG
     else {
@@ -128,21 +123,21 @@ NodeMap::find(const Coordinate& coord) const
 {
     Coordinate* c = const_cast<Coordinate*>(&coord);
 
-    NodeMap::const_iterator found = nodeMap.find(c);
+    const auto& found = nodeMap.find(c);
 
     if(found == nodeMap.end()) {
         return nullptr;
     }
     else {
-        return found->second;
+        return found->second.get();
     }
 }
 
 void
 NodeMap::getBoundaryNodes(uint8_t geomIndex, std::vector<Node*>& bdyNodes) const
 {
-    for(auto& it: nodeMap) {
-        Node* node = it.second;
+    for(const auto& it: nodeMap) {
+        Node* node = it.second.get();
         if(node->getLabel().getLocation(geomIndex) == Location::BOUNDARY) {
             bdyNodes.push_back(node);
         }
@@ -153,8 +148,8 @@ std::string
 NodeMap::print() const
 {
     std::string out = "";
-    for(auto& it: nodeMap) {
-        Node* node = it.second;
+    for(const auto& it: nodeMap) {
+        const Node* node = it.second.get();
         out += node->print();
     }
     return out;

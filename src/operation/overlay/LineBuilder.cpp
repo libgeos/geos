@@ -83,8 +83,8 @@ LineBuilder::findCoveredLineEdges()
 {
     // first set covered for all L edges at nodes which have A edges too
     auto& nodeMap = op->getGraph().getNodeMap()->nodeMap;
-    for(auto& entry : nodeMap) {
-        Node* node = entry.second;
+    for(const auto& entry : nodeMap) {
+        Node* node = entry.second.get();
         //node.print(System.out);
         DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(node->getEdges());
         des->findCoveredLineEdges();

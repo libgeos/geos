@@ -138,12 +138,12 @@ GeometryNoder::getNoded()
 
     std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
 
-    for(auto& elem : (*nodedEdges)) {
+    for(auto* elem : (*nodedEdges)) {
         delete elem;
     }
     delete nodedEdges;
 
-    for(auto& elem : p_lineList) {
+    for(auto* elem : p_lineList) {
         delete elem;
     }
 

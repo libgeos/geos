@@ -241,7 +241,7 @@ Node::computeMergedLocation(const Label& label2, uint8_t eltIndex)
 
 /*public*/
 std::string
-Node::print()
+Node::print() const
 {
     testInvariant();
 

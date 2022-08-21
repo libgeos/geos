@@ -130,7 +130,6 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
         }
         default: {
             throw util::UnsupportedOperationException("unknown GeometryTypeId");
-            break;
         }
     }
 

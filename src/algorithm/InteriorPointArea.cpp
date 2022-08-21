@@ -140,7 +140,7 @@ public:
         return true;
     }
 
-    double getWidth()
+    double getWidth() const
     {
         return interiorSectionWidth;
     }

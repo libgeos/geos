@@ -245,10 +245,9 @@ OverlayOp::copyPoints(uint8_t argIndex, const Envelope* env)
 
     // TODO: set env to null if it covers arg geometry envelope
 
-    NodeMap::container& nodeMap = arg[argIndex]->getNodeMap()->nodeMap;
-    for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* graphNode = it->second;
+    const auto& nodeMap = arg[argIndex]->getNodeMap()->nodeMap;
+    for(const auto& nodeIt: nodeMap) {
+        Node* graphNode = nodeIt.second.get();
         assert(graphNode);
         const Coordinate& coord = graphNode->getCoordinate();
 
@@ -275,7 +274,7 @@ void
 OverlayOp::computeLabelling()
 //throw(TopologyException *) // and what else ?
 {
-    NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
+    const auto& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
     std::cerr << "OverlayOp::computeLabelling(): at call time: " << edgeList.print() << std::endl;
@@ -285,9 +284,8 @@ OverlayOp::computeLabelling()
     std::cerr << "OverlayOp::computeLabelling() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
-    for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* node = it->second;
+    for(const auto& nodeIt: nodeMap) {
+        Node* node = nodeIt.second.get();
 #if GEOS_DEBUG
         std::cerr << "     " << node->print() << " has " << node->getEdges()->getEdges().size() << " edgeEnds" << std::endl;
 #endif
@@ -310,15 +308,14 @@ OverlayOp::computeLabelling()
 void
 OverlayOp::mergeSymLabels()
 {
-    NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
+    const auto& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
     std::cerr << "OverlayOp::mergeSymLabels() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
-    for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* node = it->second;
+    for(const auto& nodeIt: nodeMap) {
+        Node* node = nodeIt.second.get();
         EdgeEndStar* ees = node->getEdges();
         detail::down_cast<DirectedEdgeStar*>(ees)->mergeSymLabels();
         //((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
@@ -338,16 +335,15 @@ OverlayOp::updateNodeLabelling()
     // (Note that a node may have already been labelled
     // because it is a point in one of the input geometries)
 
-    NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
+    const auto& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
     std::cerr << "OverlayOp::updateNodeLabelling() scanning "
          << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
-    for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* node = it->second;
+    for(const auto& nodeIt: nodeMap) {
+        Node* node = nodeIt.second.get();
         EdgeEndStar* ees = node->getEdges();
         DirectedEdgeStar* des = detail::down_cast<DirectedEdgeStar*>(ees);
         Label& lbl = des->getLabel();
@@ -362,15 +358,14 @@ OverlayOp::updateNodeLabelling()
 void
 OverlayOp::labelIncompleteNodes()
 {
-    NodeMap::container& nodeMap = graph.getNodeMap()->nodeMap;
+    const auto& nodeMap = graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
     std::cerr << "OverlayOp::labelIncompleteNodes() scanning " << nodeMap.size() << " nodes from map:" << std::endl;
 #endif
 
-    for(NodeMap::const_iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* n = it->second;
+    for(const auto& nodeIt: nodeMap) {
+        Node* n = nodeIt.second.get();
         const Label& label = n->getLabel();
         if(n->isIsolated()) {
             if(label.isNull(0)) {

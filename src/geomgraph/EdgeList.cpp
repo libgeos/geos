@@ -128,7 +128,7 @@ EdgeList::print()
 void
 EdgeList::clearList()
 {
-    for(auto & edge : edges) {
+    for(auto* edge : edges) {
         delete edge;
     }
 
