@@ -71,6 +71,9 @@ private:
     void startSection();
     void finishSection();
 
+    /* Turn off copy constructors for MSVC */
+    LineLimiter(const LineLimiter&) = delete;
+    LineLimiter& operator=(const LineLimiter&) = delete;
 
 public:
 
@@ -80,6 +83,8 @@ public:
         {};
 
     std::vector<std::unique_ptr<CoordinateArraySequence>>& limit(const CoordinateSequence *pts);
+
+
 
 };
 
