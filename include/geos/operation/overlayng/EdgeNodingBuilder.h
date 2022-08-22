@@ -147,7 +147,7 @@ private:
     * limit the line to the clip envelope.
     *
     */
-    std::vector<std::unique_ptr<CoordinateSequence>>& limit(const LineString* line);
+    std::vector<std::unique_ptr<CoordinateArraySequence>>& limit(const LineString* line);
 
     /**
     * If a clipper is present,

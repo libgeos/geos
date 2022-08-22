@@ -361,7 +361,7 @@ EdgeNodingBuilder::addLine(const LineString* line, uint8_t geomIndex)
         return;
 
     if (isToBeLimited(line)) {
-        std::vector<std::unique_ptr<CoordinateSequence>>& sections = limit(line);
+        std::vector<std::unique_ptr<CoordinateArraySequence>>& sections = limit(line);
         for (auto& pts : sections) {
             addLine(std::move(pts), geomIndex);
         }
@@ -405,7 +405,7 @@ EdgeNodingBuilder::isToBeLimited(const LineString* line) const
 }
 
 /*private*/
-std::vector<std::unique_ptr<CoordinateSequence>>&
+std::vector<std::unique_ptr<CoordinateArraySequence>>&
 EdgeNodingBuilder::limit(const LineString* line)
 {
     const CoordinateSequence* pts = line->getCoordinatesRO();

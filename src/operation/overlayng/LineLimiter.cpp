@@ -24,7 +24,7 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /*public*/
-std::vector<std::unique_ptr<CoordinateSequence>>&
+std::vector<std::unique_ptr<CoordinateArraySequence>>&
 LineLimiter::limit(const CoordinateSequence *pts)
 {
     // Reset for new limit run
