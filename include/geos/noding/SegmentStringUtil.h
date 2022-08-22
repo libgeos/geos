@@ -61,7 +61,7 @@ public:
             //       the internal CS.
             auto pts = line->getCoordinates();
 
-            segStr.push_back(new NodedSegmentString(pts.release(), g));
+            segStr.push_back(new NodedSegmentString(std::move(pts), g));
         }
     }
 

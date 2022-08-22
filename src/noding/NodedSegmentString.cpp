@@ -20,10 +20,9 @@
 
 
 #include <geos/noding/NodedSegmentString.h>
-#include <geos/algorithm/LineIntersector.h>
 
-using namespace geos::algorithm;
-using namespace geos::geom;
+using geos::geom::CoordinateSequence;
+using geos::geom::Coordinate;
 
 namespace geos {
 namespace noding { // geos::noding
@@ -43,14 +42,12 @@ NodedSegmentString::getNodeList()
 /* public static */
 void
 NodedSegmentString::getNodedSubstrings(
-    const SegmentString::NonConstVect& segStrings,
-    SegmentString::NonConstVect* resultEdgeList)
+    const std::vector<SegmentString*>& segStrings,
+    std::vector<SegmentString*>* resultEdgeList)
 {
     assert(resultEdgeList);
-    for(SegmentString::NonConstVect::const_iterator
-            i = segStrings.begin(), iEnd = segStrings.end();
-            i != iEnd; ++i) {
-        NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
+    for(auto* iss : segStrings) {
+        NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(iss);
         assert(ss);
         ss->getNodeList().addSplitEdges(resultEdgeList);
     }
@@ -66,15 +63,15 @@ NodedSegmentString::getNodedCoordinates() {
 /* public static */
 SegmentString::NonConstVect*
 NodedSegmentString::getNodedSubstrings(
-    const SegmentString::NonConstVect& segStrings)
+    const std::vector<SegmentString*>& segStrings)
 {
-    SegmentString::NonConstVect* resultEdgelist = new SegmentString::NonConstVect();
+    std::vector<SegmentString*>* resultEdgelist = new std::vector<SegmentString*>;
     getNodedSubstrings(segStrings, resultEdgelist);
     return resultEdgelist;
 }
 
 /* virtual public */
-const geom::Coordinate&
+const Coordinate&
 NodedSegmentString::getCoordinate(std::size_t i) const
 {
     if (pts_rw) return pts_rw->getAt(i);
@@ -82,7 +79,7 @@ NodedSegmentString::getCoordinate(std::size_t i) const
 }
 
 /* virtual public */
-const geom::CoordinateSequence*
+const CoordinateSequence*
 NodedSegmentString::getCoordinatesRO() const
 {
     if (pts_rw) return pts_rw.get();
@@ -90,7 +87,7 @@ NodedSegmentString::getCoordinatesRO() const
 }
 
 /* virtual public */
-geom::CoordinateSequence*
+CoordinateSequence*
 NodedSegmentString::getCoordinatesRW()
 {
     if (!pts_rw)
@@ -98,7 +95,7 @@ NodedSegmentString::getCoordinatesRW()
     return pts_rw.get();
 }
 
-geom::CoordinateSequence*
+CoordinateSequence*
 NodedSegmentString::releaseCoordinates()
 {
     if (pts_rw)

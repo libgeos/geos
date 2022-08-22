@@ -246,7 +246,7 @@ std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
     auto pts = createSplitEdgePts(ei0, ei1);
-    return detail::make_unique<NodedSegmentString>(pts.release(), edge.getData());
+    return detail::make_unique<NodedSegmentString>(std::move(pts), edge.getData());
 }
 
 

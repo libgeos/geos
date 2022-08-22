@@ -67,7 +67,7 @@ void object::test<1>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(std::move(cs), nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -116,7 +116,7 @@ void object::test<2>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(std::move(cs), nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -159,7 +159,7 @@ void object::test<3>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(std::move(cs), nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -183,13 +183,14 @@ template<>
 void object::test<4>
 ()
 {
+    using geos::geom::CoordinateArraySequence;
     using geos::geom::Coordinate;
     using geos::noding::NodedSegmentString;
     using geos::noding::SegmentNode;
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
+    auto cs = geos::detail::make_unique<CoordinateArraySequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -202,7 +203,7 @@ void object::test<4>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(std::move(cs), nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
