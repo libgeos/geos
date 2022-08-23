@@ -127,7 +127,7 @@ public:
     virtual void setPoints(const std::vector<Coordinate>& v) = 0;
 
     /// Returns true if contains any two consecutive points
-    bool hasRepeatedPoints() const;
+    bool hasRepeatedPoints(double tolerance = 0.0) const;
 
     /// Returns lower-left Coordinate in list
     const Coordinate* minCoordinate() const;
@@ -136,7 +136,7 @@ public:
      *  Returns true if given CoordinateSequence contains
      *  any two consecutive Coordinate
      */
-    static bool hasRepeatedPoints(const CoordinateSequence* cl);
+    static bool hasRepeatedPoints(const CoordinateSequence* cl, double tolerance = 0.0);
 
     /** \brief
      *  Returns either the given CoordinateSequence if its length

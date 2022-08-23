@@ -51,16 +51,28 @@ CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) co
 }
 
 bool
-CoordinateSequence::hasRepeatedPoints() const
+CoordinateSequence::hasRepeatedPoints(double tolerance) const
 {
     const std::size_t p_size = getSize();
-    for(std::size_t i = 1; i < p_size; i++) {
-        if(getAt(i - 1) == getAt(i)) {
-            return true;
+    if (tolerance > 0.0) {
+        double tolsq = tolerance * tolerance;
+        for(std::size_t i = 1; i < p_size; i++) {
+            if(getAt(i - 1).distanceSquared(getAt(i)) <= tolsq) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
+    else {
+        for(std::size_t i = 1; i < p_size; i++) {
+            if(getAt(i - 1) == getAt(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
 
 /*
  * Returns either the given coordinate array if its length is greater than the
@@ -81,15 +93,9 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(std::size_t n,
 
 
 bool
-CoordinateSequence::hasRepeatedPoints(const CoordinateSequence* cl)
+CoordinateSequence::hasRepeatedPoints(const CoordinateSequence* cl, double tolerance)
 {
-    const std::size_t size = cl->getSize();
-    for(std::size_t i = 1; i < size; i++) {
-        if(cl->getAt(i - 1) == cl->getAt(i)) {
-            return true;
-        }
-    }
-    return false;
+    return cl->hasRepeatedPoints(tolerance);
 }
 
 
