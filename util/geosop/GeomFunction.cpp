@@ -57,6 +57,7 @@
 #include "GeomFunction.h"
 
 #include <sstream>
+#include <iomanip>
 
 using geos::operation::overlayng::OverlayNG;
 using geos::algorithm::distance::DiscreteFrechetDistance;
@@ -735,7 +736,7 @@ Result::toString() {
         return converter.str();
 
     case typeDouble:
-        converter << valDouble;
+        converter << std::setprecision(17) << valDouble;
         return converter.str();
 
     case typeString:
