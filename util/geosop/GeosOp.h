@@ -26,10 +26,11 @@ class GeosOpArgs {
 public:
     enum {
         fmtNone, fmtText, fmtWKB
-    } format = fmtNone;
+    } format = fmtText;
 
     bool isShowTime = false;
     bool isVerbose = false;
+    bool isQuiet = false;
     int precision = -1;
     int repeatNum = 1;
 
@@ -85,4 +86,3 @@ private:
     void outputGeometryList(std::vector<std::unique_ptr<const Geometry>> & val);
     void log(std::string s);
 };
-

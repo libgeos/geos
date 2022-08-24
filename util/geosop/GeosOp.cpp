@@ -65,7 +65,8 @@ int main(int argc, char** argv) {
         ("e,explode", "Explode results into component geometries", cxxopts::value<bool>( cmdArgs.isExplode))
         ("f,format", "Output format (wkt, wkb or txt)", cxxopts::value<std::string>( ))
         ("h,help", "Print help")
-        ("p,precision", "Sets number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
+        ("p,precision", "Set number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
+        ("q,quiet", "Disable result output", cxxopts::value<bool>( cmdArgs.isQuiet ) )
         ("r,repeat", "Repeat operation N times", cxxopts::value<int>( cmdArgs.repeatNum ) )
         ("t,time", "Print execution time", cxxopts::value<bool>( cmdArgs.isShowTime ) )
         ("v,verbose", "Verbose output", cxxopts::value<bool>( cmdArgs.isVerbose )->default_value("false"))
@@ -459,7 +460,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
 
 void GeosOp::output(Result* result) {
     //---- print result if format specified
-    if (args.format == GeosOpArgs::fmtNone )
+    if (args.isQuiet)
         return;
 
     if (result->isGeometry() ) {
