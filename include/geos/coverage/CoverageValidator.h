@@ -95,6 +95,18 @@ public:
     };
 
     /**
+    * Validates the polygonal coverage.
+    * The result is an array of the same size as the input coverage.
+    * Each array entry is either null, or if the polygon does not form a valid coverage,
+    * a linear geometry containing the boundary segments
+    * which intersect polygon interiors, which are mismatched,
+    * or form gaps (if checked).
+    *
+    * @return an array of nulls or linear geometries
+    */
+    std::vector<std::unique_ptr<Geometry>> validate();
+
+    /**
     * Tests whether a polygonal coverage is valid.
     *
     * @param coverage an array of polygons forming a coverage
@@ -114,8 +126,11 @@ public:
         const std::vector<std::unique_ptr<Geometry>>& validateResult);
 
     /**
-    * Validates that a set of polygons forms a valid polygonal coverage,
-    * and returns linear geometries indicating the locations of invalidities, if any.
+    * Validates that a set of polygons forms a valid polygonal coverage.
+    * The result is a list of the same length as the input,
+    * containing for each input geometry either
+    * a linear geometry indicating the locations of invalidities,
+    * or a null if the geometry is coverage-valid.
     *
     * @param coverage an array of polygons forming a coverage
     * @return an array of linear geometries indicating coverage errors, or nulls
@@ -126,8 +141,10 @@ public:
     /**
     * Validates that a set of polygons forms a valid polygonal coverage
     * and contains no gaps narrower than a specified width.
-    * The result is an array of linear geometries indicating the locations of invalidities,
-    * or null if the polygon is coverage-valid.
+    * The result is a list of the same length as the input,
+    * containing for each input geometry either
+    * a linear geometry indicating the locations of invalidities,
+    * or a null if the geometry is coverage-valid.
     *
     * @param coverage an array of polygons forming a coverage
     * @param gapWidth the maximum width of invalid gaps
@@ -136,30 +153,7 @@ public:
     static std::vector<std::unique_ptr<Geometry>> validate(
         std::vector<const Geometry*>& coverage,
         double gapWidth);
-
-    /**
-    * Validates the polygonal coverage.
-    * The result is an array of the same size as the input coverage.
-    * Each array entry is either null, or if the polygon does not form a valid coverage,
-    * a linear geometry containing the boundary segments
-    * which intersect polygon interiors, which are mismatched,
-    * or form gaps (if checked).
-    *
-    * @return an array of nulls or linear geometries
-    */
-    std::vector<std::unique_ptr<Geometry>> validate();
-
 };
 
 } // namespace geos::coverage
 } // namespace geos
-
-
-
-
-
-
-
-
-
-
