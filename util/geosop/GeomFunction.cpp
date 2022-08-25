@@ -536,18 +536,19 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geom->Union( geomB.get() ) );
         });
-    add("unionCoverageNG", 1, 0, Result::typeGeometry, catOverlay,
-        "union a polygonal coverage",
+    addAgg("unionCoverageNG", 0, Result::typeGeometry,
+        catOverlay, "union a polygonal coverage",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB; (void)d;  // prevent unused variable warning
             return new Result( geos::operation::overlayng::CoverageUnion::geomunion(geom.get()) );
         });
-    add("unionCoverage", 1, 0, Result::typeGeometry, catOverlay,
-        "union a polygonal coverage",
+    addAgg("unionCoverage", 0, Result::typeGeometry,
+        catOverlay, "union a polygonal coverage",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB; (void)d;  // prevent unused variable warning
             return new Result( geos::operation::geounion::CoverageUnion::Union(geom.get()) );
         });
+
 
     add("differenceSR", 2, 1, Result::typeGeometry, catOverlay,
         "compute difference of geometry A from B, snap-rounding to a precision scale factor",
@@ -659,8 +660,8 @@ std::string GeomFunction::signature() {
     sig += "  ";
     sig += funName;
     if (numParam > 0) sig += " N";
-    sig += _isAggregate ? " (Agg)" : "";
-    sig += " >";
+    sig += _isAggregate ? " AGG" : "";
+    sig += " > ";
     sig += Result::code(resultType);
     return sig;
 }
