@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         ("a", "source for A geometries (WKT, WKB, file, stdin, stdin.wkb)", cxxopts::value<std::string>( cmdArgs.srcA ))
         ("b", "source for B geometries (WKT, WKB, file, stdin, stdin.wkb)", cxxopts::value<std::string>( cmdArgs.srcB ))
         ("alimit", "Limit number of A geometries read", cxxopts::value<int>( cmdArgs.limitA ))
-        ("c,collect", "Collect input into single geometry (default for AGG ops)", cxxopts::value<bool>( cmdArgs.isCollect ))
+        ("c,collect", "Collect input into single geometry (automatic for AGG ops)", cxxopts::value<bool>( cmdArgs.isCollect ))
         ("e,explode", "Explode results into component geometries", cxxopts::value<bool>( cmdArgs.isExplode))
         ("f,format", "Output format (wkt, wkb or txt)", cxxopts::value<std::string>( ))
         ("h,help", "Print help")
