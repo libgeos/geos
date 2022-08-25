@@ -228,7 +228,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Validates that a set of polygons forms a valid polygonal coverage, and returns linear geometries indicating the locations of invalidities, if any.</p>
+<p>Validates that a set of polygons forms a valid polygonal coverage. The result is a list of the same length as the input, containing for each input geometry either a linear geometry indicating the locations of invalidities, or a null if the geometry is coverage-valid.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">coverage</td><td>an array of polygons forming a coverage </td></tr>
@@ -272,7 +272,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Validates that a set of polygons forms a valid polygonal coverage and contains no gaps narrower than a specified width. The result is an array of linear geometries indicating the locations of invalidities, or null if the polygon is coverage-valid.</p>
+<p>Validates that a set of polygons forms a valid polygonal coverage and contains no gaps narrower than a specified width. The result is a list of the same length as the input, containing for each input geometry either a linear geometry indicating the locations of invalidities, or a null if the geometry is coverage-valid.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">coverage</td><td>an array of polygons forming a coverage </td></tr>

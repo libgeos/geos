@@ -107,35 +107,24 @@ $(function() {
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        m_gapWidth = gapWidth;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    };</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> hasInvalidResult(</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt;&amp; validateResult);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate(</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate(</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage,</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">double</span> gapWidth);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate();</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;};</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;} <span class="comment">// namespace geos::coverage</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> hasInvalidResult(</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt;&amp; validateResult);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate(</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; validate(</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        std::vector&lt;const Geometry*&gt;&amp; coverage,</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordtype">double</span> gapWidth);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;};</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;} <span class="comment">// namespace geos::coverage</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;} <span class="comment">// namespace geos</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageValidator_html_ae2d5f7422785bfb967b3dca5b3635cbd"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageValidator.html#ae2d5f7422785bfb967b3dca5b3635cbd">geos::coverage::CoverageValidator::setGapWidth</a></div><div class="ttdeci">void setGapWidth(double gapWidth)</div><div class="ttdef"><b>Definition:</b> CoverageValidator.h:93</div></div>
