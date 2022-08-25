@@ -71,8 +71,6 @@ CoverageValidator::validate(std::vector<const Geometry*>& coverage, double gapWi
 std::vector<std::unique_ptr<Geometry>>
 CoverageValidator::validate()
 {
-
-    // STRtree index using Person* as the indexed item
     TemplateSTRtree<const Geometry*> index;
     std::vector<std::unique_ptr<Geometry>> invalidLines;
     for (auto* geom : m_coverage) {
@@ -119,5 +117,3 @@ CoverageValidator::validate(const Geometry* targetGeom, TemplateSTRtree<const Ge
 
 } // namespace geos.coverage
 } // namespace geos
-
-
