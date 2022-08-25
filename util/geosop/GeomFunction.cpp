@@ -615,7 +615,7 @@ GeomFunction::add(std::string name,
                     std::string desc,
                     geomFunSig geomfun)
 {
-    GeomFunction *fun = new GeomFunction(name, nGeomParam, nParam, false, typeCode,
+    GeomFunction *fun = new GeomFunction(name, nGeomParam, nParam, typeCode, false,
         category, desc, geomfun );
 
     registry.insert( std::pair<std::string, GeomFunction *>(name, fun) );
@@ -631,7 +631,7 @@ GeomFunction::addAgg(std::string name,
                     std::string desc,
                     geomFunSig geomfun)
 {
-    GeomFunction *fun = new GeomFunction(name, 1, nParam, true, typeCode,
+    GeomFunction *fun = new GeomFunction(name, 1, nParam, typeCode, true,
         category, desc, geomfun );
 
     registry.insert( std::pair<std::string, GeomFunction *>(name, fun) );
@@ -659,6 +659,7 @@ std::string GeomFunction::signature() {
     sig += "  ";
     sig += funName;
     if (numParam > 0) sig += " N";
+    sig += _isAggregate ? " (Agg)" : "";
     sig += " >";
     sig += Result::code(resultType);
     return sig;

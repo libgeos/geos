@@ -121,7 +121,6 @@ private:
 
     int numGeomParam;  // number of *required* geometry parameters (0,1,2)
     int numParam;  // number of none-geometry parameters (0 or 1 currently)
-    //TODO: add result type?
     bool _isAggregate;
     int resultType;
 
