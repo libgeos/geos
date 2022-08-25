@@ -70,6 +70,7 @@ public:
                     int nGeom,
                     int nParam,
                     int resType,
+                    bool isAgg,
                     std::string cat,
                     std::string desc,
                     geomFunSig fun)
@@ -77,6 +78,7 @@ public:
         funName(strName),
         numGeomParam(nGeom),
         numParam(nParam),
+        _isAggregate(isAgg),
         resultType(resType),
         category(cat),
         description(desc),
@@ -88,6 +90,7 @@ public:
 
     std::string name();
     bool isBinary();
+    bool isAggregate();
     std::string signature();
 
     Result * execute( const std::unique_ptr<Geometry>& geomA,
@@ -97,6 +100,12 @@ private:
     static void add(std::string name, int resultType, std::string category, geomFunSig geomfun);
     static void add(std::string name,
                     int nGeom,
+                    int nParam,
+                    int resultType,
+                    std::string category,
+                    std::string desc,
+                    geomFunSig geomfun);
+    static void addAgg(std::string name,
                     int nParam,
                     int resultType,
                     std::string category,
@@ -113,6 +122,7 @@ private:
     int numGeomParam;  // number of *required* geometry parameters (0,1,2)
     int numParam;  // number of none-geometry parameters (0 or 1 currently)
     //TODO: add result type?
+    bool _isAggregate;
     int resultType;
 
     std::string category;
@@ -121,4 +131,3 @@ private:
     geomFunSig geomfun;
 
 };
-

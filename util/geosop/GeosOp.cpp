@@ -332,13 +332,16 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
 }
 
 void GeosOp::run() {
+    GeomFunction* fun = getFun();
+
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
     auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
 
-    //--- collect input into single geometry collection if specified
-    if (args.isCollect && geomsLoadA.size() > 1) {
+    //--- collect input into single geometry collection if required
+    bool doCollect = args.isCollect || fun->isAggregate();
+    if (doCollect && geomsLoadA.size() > 1) {
         geomA = collect( geomsLoadA );
     }
     else {
@@ -349,7 +352,7 @@ void GeosOp::run() {
 
     //------------------------
 
-    execute();
+    execute(fun);
 
     if (args.isShowTime || args.isVerbose) {
         std::cout
@@ -361,7 +364,7 @@ void GeosOp::run() {
     }
 }
 
-void GeosOp::execute() {
+GeomFunction* GeosOp::getFun() {
     std::string op = args.opName;
 
     GeomFunction * fun;
@@ -374,6 +377,10 @@ void GeosOp::execute() {
         std::cerr << "Unknown operation: " << op << std::endl;
         exit(1);
     }
+    return fun;
+}
+
+void GeosOp::execute(GeomFunction* fun) {
 
     if (fun->isBinary()) {
         executeBinary(fun);

@@ -71,7 +71,8 @@ private:
 
     std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit);
     std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit);
-    void execute();
+    GeomFunction* getFun();
+    void execute(GeomFunction * fun);
     void executeUnary(GeomFunction * fun);
     void executeBinary(GeomFunction * fun);
     Result* executeOpRepeat(GeomFunction * fun,

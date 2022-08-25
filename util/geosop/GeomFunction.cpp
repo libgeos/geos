@@ -524,7 +524,8 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geom->symDifference( geomB.get() ) );
         });
-    add("unaryUnion", Result::typeGeometry, catOverlay,
+    addAgg("unaryUnion", 0, Result::typeGeometry,
+        catOverlay, "compute aggregate union",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->Union() );
@@ -614,7 +615,23 @@ GeomFunction::add(std::string name,
                     std::string desc,
                     geomFunSig geomfun)
 {
-    GeomFunction *fun = new GeomFunction(name, nGeomParam, nParam, typeCode,
+    GeomFunction *fun = new GeomFunction(name, nGeomParam, nParam, false, typeCode,
+        category, desc, geomfun );
+
+    registry.insert( std::pair<std::string, GeomFunction *>(name, fun) );
+    functionList.push_back(fun);
+}
+
+/* static */
+void
+GeomFunction::addAgg(std::string name,
+                    int nParam,
+                    int typeCode,
+                    std::string category,
+                    std::string desc,
+                    geomFunSig geomfun)
+{
+    GeomFunction *fun = new GeomFunction(name, 1, nParam, true, typeCode,
         category, desc, geomfun );
 
     registry.insert( std::pair<std::string, GeomFunction *>(name, fun) );
@@ -629,6 +646,11 @@ std::string GeomFunction::name()
 bool GeomFunction::isBinary()
 {
     return numGeomParam == 2;
+}
+
+bool GeomFunction::isAggregate()
+{
+    return _isAggregate;
 }
 
 std::string GeomFunction::signature() {
