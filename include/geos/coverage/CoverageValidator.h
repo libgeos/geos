@@ -67,7 +67,7 @@ class GEOS_DLL CoverageValidator {
 private:
 
     std::vector<const Geometry*>& m_coverage;
-    double m_gapWidth;
+    double m_gapWidth = 0.0;
 
     std::unique_ptr<Geometry> validate(
         const Geometry* targetGeom,

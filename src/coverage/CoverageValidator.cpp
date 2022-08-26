@@ -80,7 +80,8 @@ CoverageValidator::validate()
 
     for (std::size_t i = 0; i < m_coverage.size(); i++) {
         const Geometry* geom = m_coverage[i];
-        invalidLines[i].reset(validate(geom, index).release());
+        std::unique_ptr<Geometry> result = validate(geom, index);
+        invalidLines[i].reset(result.release());
     }
     return invalidLines;
 }
@@ -98,12 +99,10 @@ CoverageValidator::validate(const Geometry* targetGeom, TemplateSTRtree<const Ge
         nearGeoms.push_back(geom);
     };
     index.query(queryEnv, visitor);
-
     //-- the target geometry is returned in the query, so must be removed from the set
-    for (auto it = nearGeoms.begin(); it != nearGeoms.end(); ) {
-        if (*it == targetGeom) {
-            it = nearGeoms.erase(it);
-        }
+    auto it = std::find(nearGeoms.begin(), nearGeoms.end(), targetGeom);
+    if (it != nearGeoms.end()) {
+        nearGeoms.erase(it);
     }
 
     // Geometry[] nearGeoms = GeometryFactory.toGeometryArray(nearGeoms);

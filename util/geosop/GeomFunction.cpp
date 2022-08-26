@@ -36,6 +36,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/OffsetCurve.h>
+#include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -85,10 +86,11 @@ private:
 
 PreparedGeometryCache prepGeomCache;
 
-const std::string catMetric = "Metric";
 const std::string catConst = "Construction";
+const std::string catCoverage = "Coverage";
 const std::string catDist = "Distance";
 const std::string catGeom = "Geometry";
+const std::string catMetric = "Metric";
 const std::string catOverlay = "Overlay";
 const std::string catRel = "Spatial Relationship";
 const std::string catValid = "Validity";
@@ -586,6 +588,30 @@ GeomFunction::init()
             return new Result( RectangleIntersection::clip( *geom, rect) );
         });
 
+    //-----------------------------------------------
+    addAgg("coverageValidate", 0, Result::typeGeometry,
+        catCoverage, "validate a polygonal coverage",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB; (void)d;  // prevent unused variable warning
+
+            //-- create list of input polygons
+            std::vector<const Geometry*> coverage;
+            for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+                coverage.emplace_back( geom->getGeometryN(i));
+            }
+
+            std::vector<std::unique_ptr<Geometry>> invalidList
+                = geos::coverage::CoverageValidator::validate(coverage);
+
+            //-- create GeometryCollection from result list
+            std::vector<std::unique_ptr<const Geometry>> resultList;
+            for (std::size_t i = 0; i < invalidList.size(); i++) {
+                if (invalidList[i] != nullptr) {
+                    resultList.emplace_back( std::move(invalidList[i]) );
+                }
+            }
+            return new Result( std::move(resultList) );
+        });
 }
 
 /* static */
