@@ -15,9 +15,12 @@ draft: false
 |  2022/06/02 | **3.8.3** |  [geos-3.8.3.tar.bz2](https://download.osgeo.org/geos/geos-3.8.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.8.3/NEWS) |
 |  2022/06/08 | **3.7.5** |  [geos-3.7.5.tar.bz2](https://download.osgeo.org/geos/geos-3.7.5.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.7.5/NEWS) |
 |  2020/12/11 | **3.6.5** |  [geos-3.6.5.tar.bz2](https://download.osgeo.org/geos/geos-3.6.5.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.6.5/NEWS) |
-|  2019/10/04 | **3.5.2** |  [geos-3.5.2.tar.bz2](https://download.osgeo.org/geos/geos-3.5.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.5.2/NEWS) |
+|  2019/10/04 | **3.5.2** EOL |  [geos-3.5.2.tar.bz2](https://download.osgeo.org/geos/geos-3.5.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.5.2/NEWS) |
 
-Old releases can be downloaded from https://download.osgeo.org/geos/
+If you see **EOL** next to a released verion, it means no security or patch updates will be added to that minor and you should upgrade to a higher.
+Older releases prior to the ones listed above, are all EOL'd.
+
+Old releases can be downloaded from https://download.osgeo.org/geos/.
 
 
 ## Build From Source
