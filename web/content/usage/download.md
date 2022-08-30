@@ -17,7 +17,7 @@ draft: false
 |  2020/12/11 | **3.6.5** |  [geos-3.6.5.tar.bz2](https://download.osgeo.org/geos/geos-3.6.5.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.6.5/NEWS) |
 |  2019/10/04 | **3.5.2** EOL |  [geos-3.5.2.tar.bz2](https://download.osgeo.org/geos/geos-3.5.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.5.2/NEWS) |
 
-If you see **EOL** next to a released verion, it means no security or patch updates will be added to that minor and you should upgrade to a higher.
+If you see **EOL** next to a released version, it means no security or patch updates will be added to that minor and you should upgrade to a higher.
 Older releases prior to the ones listed above, are all EOL'd.
 
 Old releases can be downloaded from https://download.osgeo.org/geos/.
