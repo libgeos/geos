@@ -538,19 +538,6 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geom->Union( geomB.get() ) );
         });
-    addAgg("unionCoverageNG", 0, Result::typeGeometry,
-        catOverlay, "union a polygonal coverage",
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            (void)geomB; (void)d;  // prevent unused variable warning
-            return new Result( geos::operation::overlayng::CoverageUnion::geomunion(geom.get()) );
-        });
-    addAgg("unionCoverage", 0, Result::typeGeometry,
-        catOverlay, "union a polygonal coverage",
-        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
-            (void)geomB; (void)d;  // prevent unused variable warning
-            return new Result( geos::operation::geounion::CoverageUnion::Union(geom.get()) );
-        });
-
 
     add("differenceSR", 2, 1, Result::typeGeometry, catOverlay,
         "compute difference of geometry A from B, snap-rounding to a precision scale factor",
@@ -589,6 +576,19 @@ GeomFunction::init()
         });
 
     //-----------------------------------------------
+    addAgg("coverageUnionNG", 0, Result::typeGeometry,
+        catCoverage, "union a polygonal coverage",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB; (void)d;  // prevent unused variable warning
+            return new Result( geos::operation::overlayng::CoverageUnion::geomunion(geom.get()) );
+        });
+    addAgg("coverageUnion", 0, Result::typeGeometry,
+        catCoverage, "union a polygonal coverage",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)geomB; (void)d;  // prevent unused variable warning
+            return new Result( geos::operation::geounion::CoverageUnion::Union(geom.get()) );
+        });
+
     addAgg("coverageValidate", 0, Result::typeGeometry,
         catCoverage, "validate a polygonal coverage",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
