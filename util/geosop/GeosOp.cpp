@@ -324,7 +324,15 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
     }
     geos::util::Profile sw( "Read" );
     sw.start();
-    auto geoms = readInput( name, src, limit );
+
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    try {
+      geoms = readInput( name, src, limit );
+    } catch (geos::util::GEOSException & e) {
+      std::cout << e.what() << std::endl;
+      exit(1);
+    }
+
     sw.stop();
     auto stats = summaryStats(geoms);
     log("Read " + stats  + "  -- " + formatNum( (long) sw.getTot() ) + " usec");
