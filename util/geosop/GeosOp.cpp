@@ -337,7 +337,13 @@ void GeosOp::run() {
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
-    auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
+   std::vector<std::unique_ptr<Geometry>> geomsLoadA;
+    try {
+      geomsLoadA = loadInput("A", args.srcA, args.limitA);
+    } catch (geos::util::GEOSException & e) {
+      std::cout << e.what() << std::endl;
+      exit(1);
+    }
 
     //--- collect input into single geometry collection if required
     bool doCollect = args.isCollect || fun->isAggregate();
@@ -348,7 +354,12 @@ void GeosOp::run() {
         geomA = std::move(geomsLoadA);
     }
 
-    geomB = loadInput("B", args.srcB, -1);
+    try {
+      geomB = loadInput("B", args.srcB, -1);
+    } catch (geos::util::GEOSException & e) {
+      std::cout << e.what() << std::endl;
+      exit(1);
+    }
 
     //------------------------
 
