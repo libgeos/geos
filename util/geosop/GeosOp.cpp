@@ -324,7 +324,15 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
     }
     geos::util::Profile sw( "Read" );
     sw.start();
-    auto geoms = readInput( name, src, limit );
+
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    try {
+      geoms = readInput( name, src, limit );
+    } catch (geos::util::GEOSException & e) {
+      std::cout << e.what() << std::endl;
+      exit(1);
+    }
+
     sw.stop();
     auto stats = summaryStats(geoms);
     log("Read " + stats  + "  -- " + formatNum( (long) sw.getTot() ) + " usec");
@@ -337,13 +345,7 @@ void GeosOp::run() {
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
-   std::vector<std::unique_ptr<Geometry>> geomsLoadA;
-    try {
-      geomsLoadA = loadInput("A", args.srcA, args.limitA);
-    } catch (geos::util::GEOSException & e) {
-      std::cout << e.what() << std::endl;
-      exit(1);
-    }
+    auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
 
     //--- collect input into single geometry collection if required
     bool doCollect = args.isCollect || fun->isAggregate();
@@ -354,12 +356,7 @@ void GeosOp::run() {
         geomA = std::move(geomsLoadA);
     }
 
-    try {
-      geomB = loadInput("B", args.srcB, -1);
-    } catch (geos::util::GEOSException & e) {
-      std::cout << e.what() << std::endl;
-      exit(1);
-    }
+    geomB = loadInput("B", args.srcB, -1);
 
     //------------------------
 
