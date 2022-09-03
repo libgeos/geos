@@ -74,11 +74,19 @@ template<>
 void object::test<2>
 ()
 {
-    GeomPtr geom(wktreader.read("POINT(-117 33 10)"));
-    auto coords = geom->getCoordinates();
+    std::vector<std::string> variants{
+        "POINT(-117 33 10)",
+        "POINTZ(-117 33 10)",
+        "POINT Z(-117 33 10)"
+    };
 
-    ensure(coords->getDimension() == 3);
-    ensure(coords->getOrdinate(0, geos::geom::CoordinateSequence::Z) == 10.0);
+    for (const auto& wkt : variants) {
+        GeomPtr geom(wktreader.read(wkt));
+        auto coords = geom->getCoordinates();
+
+        ensure(coords->getDimension() == 3);
+        ensure(coords->getOrdinate(0, geos::geom::CoordinateSequence::Z) == 10.0);
+    }
 }
 
 // 3 - Linestring dimension preserved.
@@ -319,7 +327,6 @@ void object::test<14>
 ()
 {
     auto geom = wktreader.read("POINT M(1 2 3)");
-
     auto coord = geom->getCoordinate();
 
     ensure(std::isnan(coord->z));
