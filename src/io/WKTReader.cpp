@@ -64,7 +64,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet ordinateFlags)
     }
 
     Coordinate coord;
-    getPreciseCoordinate(tokenizer, ordinateFlags, coord, false);
+    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
     // Check dim after reading first coord, because we may have picked up an implicit Z dimension
     std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
@@ -74,7 +74,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet ordinateFlags)
 
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {
-        getPreciseCoordinate(tokenizer, ordinateFlags, coord, false);
+        getPreciseCoordinate(tokenizer, ordinateFlags, coord);
         coordinates->add(coord);
         nextToken = getNextCloserOrComma(tokenizer);
     }
@@ -85,14 +85,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet ordinateFlags)
 void
 WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
                                 OrdinateSet& ordinateFlags,
-                                Coordinate& coord,
-                                bool tryParen) const {
-    bool opened = false;
-    if (tryParen && isOpenerNext(tokenizer)) {
-        tokenizer->nextToken();
-        opened = true;
-    }
-
+                                Coordinate& coord) const {
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
 
@@ -115,11 +108,6 @@ WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
     if (ordinateFlags.hasM() && isNumberNext(tokenizer)) {
         // discard M ordinate
         getNextNumber(tokenizer);
-    }
-
-    // read close token if it was opened here
-    if (opened) {
-        getNextCloser(tokenizer);
     }
 
     precisionModel->makePrecise(coord);
@@ -305,7 +293,7 @@ WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet ordinateFlags) 
     }
 
     Coordinate coord;
-    getPreciseCoordinate(tokenizer, ordinateFlags, coord, false);
+    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
     getNextCloser(tokenizer);
 
     return std::unique_ptr<Point>(geometryFactory->createPoint(coord));
@@ -347,7 +335,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet ordinateFl
 
         do {
             Coordinate coord;
-            getPreciseCoordinate(tokenizer, ordinateFlags, coord, false);
+            getPreciseCoordinate(tokenizer, ordinateFlags, coord);
             coords->add(coord);
             nextToken = getNextCloserOrComma(tokenizer);
         }
