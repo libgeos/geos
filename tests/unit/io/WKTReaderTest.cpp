@@ -315,6 +315,29 @@ void object::test<13>
     ensure("setFixStructure", p->getExteriorRing()->getNumPoints() == 5);
 }
 
+// https://trac.osgeo.org/geos/ticket/676
+template<>
+template<>
+void object::test<14>
+()
+{
+    auto geom = wktreader.read("POINT M(1 2 3)");
+
+    auto coord = geom->getCoordinate();
+
+    ensure(std::isnan(coord->z));
+}
+
+// https://github.com/libgeos/geos/issues/669
+template<>
+template<>
+void object::test<15>
+()
+{
+    auto geom = wktreader.read("LINESTRINGZ(0 0 1, 1 1 1)");
+
+    ensure_equals(geom->getCoordinateDimension(), 3);
+}
 
 
 } // namespace tut
