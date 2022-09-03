@@ -13,11 +13,10 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 // std
-#include <sstream>
-#include <string>
 #include <memory>
 
 namespace tut {
@@ -126,10 +125,8 @@ template<>
 void object::test<6>
 ()
 {
-    GeomPtr geom;
-
     try {
-        geom = wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))");
+        wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))");
         fail("Did not get expected exception");
     }
     catch(const geos::util::IllegalArgumentException& ex) {
@@ -181,14 +178,14 @@ void object::test<8>
 {
     // All of these strings cause an exception during read().
     std::vector<std::string> wkt;
-    wkt.push_back("MULTILINESTRING(");
-    wkt.push_back("MULTIPOLYGON(");
-    wkt.push_back("MULTIPOLYGON(EMPTY(");
-    wkt.push_back("GEOMETRYCOLLECTION(");
-    wkt.push_back("GEOMETRYCOLLECTION(LINEARRING(");
-    for(std::size_t i = 0; i < wkt.size(); i++) {
+    wkt.emplace_back("MULTILINESTRING(");
+    wkt.emplace_back("MULTIPOLYGON(");
+    wkt.emplace_back("MULTIPOLYGON(EMPTY(");
+    wkt.emplace_back("GEOMETRYCOLLECTION(");
+    wkt.emplace_back("GEOMETRYCOLLECTION(LINEARRING(");
+    for(const auto& i : wkt) {
         try {
-            wktreader.read(wkt[i]);
+            wktreader.read(i);
             fail("Didn't get expected exception");
         }
         catch(...) {
@@ -311,7 +308,7 @@ void object::test<13>
 {
     wktreader.setFixStructure(true);
     auto geom = wktreader.read("POLYGON((0 0, 0 1, 1 1, 1 0))");
-    std::unique_ptr<geos::geom::Polygon> p(static_cast<geos::geom::Polygon*>(geom.release()));
+    std::unique_ptr<geos::geom::Polygon> p(geos::detail::down_cast<geos::geom::Polygon*>(geom.release()));
     ensure("setFixStructure", p->getExteriorRing()->getNumPoints() == 5);
 }
 
