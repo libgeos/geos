@@ -96,8 +96,10 @@ WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
 
+    bool dimensionNotDeclared = ordinateFlags.size() == 2;
+
     // Check for undeclared Z dimension
-    if (ordinateFlags.size() == 2 && isNumberNext(tokenizer)) {
+    if (dimensionNotDeclared && isNumberNext(tokenizer)) {
         ordinateFlags.addZ();
     }
 
@@ -105,7 +107,12 @@ WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
         coord.z = getNextNumber(tokenizer);
     }
 
-    if (ordinateFlags.hasM()) {
+    // Check for undeclared M dimension
+    if (dimensionNotDeclared && isNumberNext(tokenizer)) {
+        ordinateFlags.addM();
+    }
+
+    if (ordinateFlags.hasM() && isNumberNext(tokenizer)) {
         // discard M ordinate
         getNextNumber(tokenizer);
     }

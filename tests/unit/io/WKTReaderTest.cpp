@@ -77,7 +77,8 @@ void object::test<2>
     std::vector<std::string> variants{
         "POINT(-117 33 10)",
         "POINTZ(-117 33 10)",
-        "POINT Z(-117 33 10)"
+        "POINT Z(-117 33 10)",
+        "POINT (-117 33 10 6)" // discard implicit M
     };
 
     for (const auto& wkt : variants) {
