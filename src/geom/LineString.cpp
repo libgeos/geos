@@ -23,7 +23,6 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -36,6 +35,7 @@
 #include <geos/geom/MultiPoint.h> // for getBoundary
 #include <geos/geom/Envelope.h>
 #include <geos/operation/BoundaryOp.h>
+#include <geos/util.h>
 
 #include <algorithm>
 #include <typeinfo>
@@ -112,7 +112,7 @@ LineString::LineString(std::vector<Coordinate> && newCoords,
                        const GeometryFactory& factory)
     :
     Geometry(&factory),
-    points(new CoordinateArraySequence(std::move(newCoords)))
+    points(new CoordinateSequence(std::move(newCoords)))
 {
     validateConstruction();
 }
@@ -323,7 +323,7 @@ LineString::normalizeClosed()
 
     coords->erase(coords->end() - 1); // remove last point (repeated)
 
-    auto uniqueCoordinates = detail::make_unique<CoordinateArraySequence>(coords.release());
+    auto uniqueCoordinates = detail::make_unique<CoordinateSequence>(std::move(coords));
 
     const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
 

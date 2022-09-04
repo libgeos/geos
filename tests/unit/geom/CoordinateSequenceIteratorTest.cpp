@@ -1,16 +1,16 @@
 #include <tut/tut.hpp>
 #include <geos/geom/LineSegment.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <numeric>
 
 namespace tut {
 
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 
 struct test_coordinatesequenceiterator_data {
 
-    CoordinateArraySequence seq_;
+    CoordinateSequence seq_;
 
     test_coordinatesequenceiterator_data() : seq_(10) {
         for (size_t i = 0; i < seq_.size(); i++) {
@@ -155,7 +155,7 @@ void object::test<7>()
     std::vector<Coordinate> coords{ Coordinate(8, 7), Coordinate(1, 1), Coordinate(1, 7) };
 
     auto coords2 = coords; // copy
-    CoordinateArraySequence seq(std::move(coords2));
+    CoordinateSequence seq(std::move(coords2));
 
     std::sort(coords.begin(), coords.end());
     std::sort(seq.begin(), seq.end());

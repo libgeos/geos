@@ -14,14 +14,12 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/SegmentExtractingNoder.h>
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateArraySequence;
 using geos::noding::SegmentString;
 
 namespace geos {
@@ -62,7 +60,7 @@ SegmentExtractingNoder::extractSegments(
         std::vector<Coordinate> coords(2);
         coords[0] = ss->getCoordinate(i);
         coords[1] = ss->getCoordinate(i + 1);
-        std::unique_ptr<CoordinateSequence> cs(new CoordinateArraySequence(std::move(coords)));
+        std::unique_ptr<CoordinateSequence> cs(new CoordinateSequence(std::move(coords)));
         std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), ss->getData()));
         outputSegs.push_back(seg.release());
     }

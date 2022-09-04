@@ -28,7 +28,6 @@ namespace geos {
 namespace geom {
 class Envelope;
 class CoordinateFilter;
-class Coordinate;
 }
 }
 
@@ -44,12 +43,6 @@ namespace geom { // geos::geom
  */
 class GEOS_DLL CoordinateSequence {
 
-protected:
-
-    CoordinateSequence() {}
-
-    CoordinateSequence(const CoordinateSequence&) {}
-
 public:
 
     using iterator = CoordinateSequenceIterator<CoordinateSequence, Coordinate>;
@@ -57,40 +50,49 @@ public:
 
     typedef std::unique_ptr<CoordinateSequence> Ptr;
 
-    virtual
-    ~CoordinateSequence() {}
+    CoordinateSequence() : dimension(0) {}
+
+    //CoordinateSequence(const std::vector<Coordinate>& coords, std::size_t dim);
+
+    CoordinateSequence(std::vector<Coordinate>&& coords, std::size_t dim = 0);
+
+    CoordinateSequence(std::vector<CoordinateXY>&& coords, std::size_t dim = 0);
+
+    CoordinateSequence(std::unique_ptr<std::vector<Coordinate>>&& coords, std::size_t dim = 0);
+
+    CoordinateSequence(std::size_t size, std::size_t dim = 0);
+
+    ~CoordinateSequence() = default;
 
     /** \brief
      * Returns a deep copy of this collection.
      */
-    virtual std::unique_ptr<CoordinateSequence> clone() const = 0;
+    std::unique_ptr<CoordinateSequence> clone() const;
 
     /** \brief
      * Returns a read-only reference to Coordinate at position i.
-     *
-     * Whether or not the Coordinate returned is the actual underlying
-     * Coordinate or merely a copy depends on the implementation.
      */
-    virtual const Coordinate& getAt(std::size_t i) const = 0;
+    const Coordinate& getAt(std::size_t i) const {
+        return vect[i];
+    }
 
-    virtual Coordinate& getAt(std::size_t i) = 0;
+    Coordinate& getAt(std::size_t i) {
+        return vect[i];
+    }
 
     /// Return last Coordinate in the sequence
-    const Coordinate&
-    back() const
+    const Coordinate& back() const
     {
         return getAt(size() - 1);
     }
 
     /// Return first Coordinate in the sequence
-    const Coordinate&
-    front() const
+    const Coordinate& front() const
     {
         return getAt(0);
     }
 
-    const Coordinate&
-    operator[](std::size_t i) const
+    const Coordinate& operator[](std::size_t i) const
     {
         return getAt(i);
     }
@@ -101,48 +103,83 @@ public:
         return getAt(i);
     }
 
-    virtual Envelope getEnvelope() const;
+    Envelope getEnvelope() const;
 
     /** \brief
      * Write Coordinate at position i to given Coordinate.
      */
-    virtual void getAt(std::size_t i, Coordinate& c) const = 0;
+    void getAt(std::size_t i, Coordinate& c) const {
+        c = getAt(i);
+    }
 
     /** \brief
      * Returns the number of Coordinates (actual or otherwise, as
      * this implementation may not store its data in Coordinate objects).
      */
-    virtual std::size_t getSize() const = 0;
+    std::size_t getSize() const {
+        return size();
+    }
 
-    size_t
-    size() const
+    size_t size() const
     {
-        return getSize();
+        return vect.size();
     }
 
     /// Pushes all Coordinates of this sequence into the provided vector.
     ///
     /// This method is a port of the toCoordinateArray() method of JTS.
     ///
-    virtual void toVector(std::vector<Coordinate>& coords) const = 0;
+    void toVector(std::vector<Coordinate>& coords) const;
 
-    virtual void toVector(std::vector<CoordinateXY>& coords) const = 0;
+    void toVector(std::vector<CoordinateXY>& coords) const;
 
-    /// Returns <code>true</code> it list contains no coordinates.
-    virtual bool isEmpty() const = 0;
+    /// Returns <code>true</code> if list contains no coordinates.
+    bool isEmpty() const {
+        return vect.empty();
+    }
+
+    /// Add a Coordinate to the list
+    void add(const Coordinate& c) {
+        vect.push_back(c);
+    }
+
+    /**
+     * \brief Add a coordinate
+     * @param c the coordinate to add
+     * @param allowRepeated if set to false, repeated coordinates
+     *                      are collapsed
+     */
+    void add(const Coordinate& c, bool allowRepeated);
+
+    /** \brief
+     * Inserts the specified coordinate at the specified position in
+     * this list.
+     *
+     * @param i the position at which to insert
+     * @param coord the coordinate to insert
+     * @param allowRepeated if set to false, repeated coordinates are
+     *                      collapsed
+     *
+     * @note this is a CoordinateList interface in JTS
+     */
+    void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
+
+    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
 
     /// Copy Coordinate c to position pos
-    virtual void setAt(const Coordinate& c, std::size_t pos) = 0;
+    void setAt(const Coordinate& c, std::size_t pos) {
+        vect[pos]= c;
+    }
 
-    virtual void setAt(const CoordinateXY& c, std::size_t pos) {
-            setAt(Coordinate(c), pos);
+    void setAt(const CoordinateXY& c, std::size_t pos) {
+        setAt(Coordinate(c), pos);
     }
 
     /// Get a string representation of CoordinateSequence
     std::string toString() const;
 
     /// Substitute Coordinate list with a copy of the given vector
-    virtual void setPoints(const std::vector<Coordinate>& v) = 0;
+    void setPoints(const std::vector<Coordinate>& v);
 
     /// Returns true if contains any two consecutive points
     bool hasRepeatedPoints() const;
@@ -168,7 +205,7 @@ public:
     /// or numeric_limits<std::size_t>::max() if not found
     ///
     static std::size_t indexOf(const Coordinate* coordinate,
-                          const CoordinateSequence* cl);
+                               const CoordinateSequence* cl);
 
     /**
      * \brief
@@ -221,7 +258,7 @@ public:
      *
      * @return the dimension of the sequence.
      */
-    virtual std::size_t getDimension() const = 0;
+    std::size_t getDimension() const;
 
     bool hasZ() const {
         return getDimension() > 2;
@@ -237,7 +274,7 @@ public:
      * @param ordinateIndex the ordinate index in the coordinate
      *                      (in range [0, dimension-1])
      */
-    virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const;
+    double getOrdinate(std::size_t index, std::size_t ordinateIndex) const;
 
     /**
      * Returns ordinate X (0) of the specified coordinate.
@@ -245,8 +282,7 @@ public:
      * @param index
      * @return the value of the X ordinate in the index'th coordinate
      */
-    virtual double
-    getX(std::size_t index) const
+    double getX(std::size_t index) const
     {
         return getOrdinate(index, X);
     }
@@ -257,8 +293,7 @@ public:
      * @param index
      * @return the value of the Y ordinate in the index'th coordinate
      */
-    virtual double
-    getY(std::size_t index) const
+    double getY(std::size_t index) const
     {
         return getOrdinate(index, Y);
     }
@@ -272,19 +307,21 @@ public:
      *                      (in range [0, dimension-1])
      * @param value  the new ordinate value
      */
-    virtual void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value) = 0;
+    void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value);
 
     /**
      * Expands the given Envelope to include the coordinates in the
      * sequence.
-     * Allows implementing classes to optimize access to coordinate values.
-     *
      * @param env the envelope to expand
      */
-    virtual void expandEnvelope(Envelope& env) const;
+    void expandEnvelope(Envelope& env) const;
 
-    virtual void apply_rw(const CoordinateFilter* filter) = 0; //Abstract
-    virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract
+    void apply_rw(const CoordinateFilter* filter);
+    void apply_ro(CoordinateFilter* filter) const;
+
+    void clear();
+
+    void closeRing();
 
     /** \brief
      * Apply a filter to each Coordinate of this sequence.
@@ -313,6 +350,9 @@ public:
     const_iterator cbegin() const;
 
     const_iterator cend() const;
+private:
+    std::vector<Coordinate> vect;
+    mutable std::size_t dimension;
 };
 
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);

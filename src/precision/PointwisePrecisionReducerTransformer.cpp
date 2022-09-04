@@ -19,12 +19,12 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/precision/PointwisePrecisionReducerTransformer.h>
+#include <geos/util.h>
 
 
 using namespace geos::geom;
@@ -49,13 +49,11 @@ PointwisePrecisionReducerTransformer::transformCoordinates(const CoordinateSeque
     (void)(parent); // ignore unused variable
 
     if (coords->isEmpty()) {
-        CoordinateArraySequence* cas = new CoordinateArraySequence(std::size_t(0u), coords->getDimension());
-        return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
     std::vector<Coordinate> coordsReduce = reducePointwise(coords);
-    CoordinateArraySequence* cas = new CoordinateArraySequence(std::move(coordsReduce));
-    return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+    return detail::make_unique<CoordinateSequence>(std::move(coordsReduce));
 }
 
 

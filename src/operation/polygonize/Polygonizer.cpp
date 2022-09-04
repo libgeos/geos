@@ -25,7 +25,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/util/Interrupt.h>
 // std
 #include <vector>

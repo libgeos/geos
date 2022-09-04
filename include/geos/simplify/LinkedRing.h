@@ -21,7 +21,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateArraySequence;
+class CoordinateSequence;
 }
 namespace triangulate {
 namespace quadedge {
@@ -30,7 +30,7 @@ namespace quadedge {
 }
 
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 
 namespace geos {
 namespace simplify { // geos::simplify
@@ -70,7 +70,7 @@ class LinkedRing
         const Coordinate& nextCoordinate(std::size_t index) const;
         bool hasCoordinate(std::size_t index) const;
         void remove(std::size_t index);
-        std::unique_ptr<CoordinateArraySequence> getCoordinates() const;
+        std::unique_ptr<CoordinateSequence> getCoordinates() const;
 
 
 }; // LinkedRing

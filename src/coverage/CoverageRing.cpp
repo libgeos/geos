@@ -16,7 +16,6 @@
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -27,7 +26,6 @@
 #include <geos/util/IllegalStateException.h>
 
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::CoordinateSequence;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
@@ -350,12 +348,12 @@ std::unique_ptr<CoordinateSequence>
 CoverageRing::extractSection(std::size_t startIndex, std::size_t endIndex)
 {
     // std::size_t sz = endIndex - startIndex + 1;
-    std::unique_ptr<CoordinateArraySequence> linePts(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> linePts(new CoordinateSequence());
     for (std::size_t i = startIndex; i <= endIndex; i++) {
         linePts->add(getCoordinate(i));
     }
-    std::unique_ptr<CoordinateSequence> cs(static_cast<CoordinateSequence*>(linePts.release()));
-    return cs;
+
+    return linePts;
 }
 
 
@@ -364,14 +362,14 @@ std::unique_ptr<CoordinateSequence>
 CoverageRing::extractSectionWrap(std::size_t startIndex, std::size_t endIndex)
 {
     std::size_t sz = endIndex + (size() - startIndex);
-    std::unique_ptr<CoordinateArraySequence> linePts(new CoordinateArraySequence);
+    std::unique_ptr<CoordinateSequence> linePts(new CoordinateSequence);
     std::size_t index = startIndex;
     for (std::size_t i = 0; i < sz; i++) {
         linePts->add(getCoordinate(index));
         index = nextMarkIndex(index);
     }
-    std::unique_ptr<CoordinateSequence> cs(static_cast<CoordinateSequence*>(linePts.release()));
-    return cs;
+
+    return linePts;
 }
 
 

@@ -177,6 +177,8 @@ public:
     /// Creates a Point with a deep-copy of the given CoordinateSequence.
     Point* createPoint(const CoordinateSequence& coordinates) const;
 
+    std::unique_ptr<Point> createPoint(std::unique_ptr<CoordinateSequence>&& coordinates) const;
+
     /// Construct an EMPTY GeometryCollection
     std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 

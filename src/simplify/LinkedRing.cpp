@@ -14,7 +14,8 @@
 
 #include <geos/simplify/LinkedRing.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <cassert>
 
 
 using geos::geom::Coordinate;
@@ -113,10 +114,10 @@ LinkedRing::remove(std::size_t index)
 }
 
 /* public */
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 LinkedRing::getCoordinates() const
 {
-    std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> coords(new CoordinateSequence());
     for (std::size_t i = 0; i < m_coord.size() - 1; i++) {
         if (m_prev[i] != NO_COORD_INDEX) {
             coords->add(m_coord[i], false);

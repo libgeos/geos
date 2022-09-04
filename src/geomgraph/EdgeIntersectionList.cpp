@@ -23,7 +23,6 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h> // shouldn't be using this
 #include <geos/geom/Coordinate.h>
 
 #include <sstream>
@@ -162,7 +161,7 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
         vc.push_back(ei1->coord);
     }
 
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateArraySequence(std::move(vc)));
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence(std::move(vc)));
 
     return new Edge(pts.release(), edge->getLabel());
 }

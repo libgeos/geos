@@ -18,7 +18,6 @@
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 
 
@@ -179,7 +178,7 @@ std::unique_ptr<LineString>
 LineBuilder::toLine(OverlayEdge* edge) const
 {
     // bool isForward = edge->isForward();
-    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
     pts->add(edge->orig(), false);
     edge->addCoordinates(pts.get());
     return geometryFactory->createLineString(std::move(pts));
@@ -241,7 +240,7 @@ LineBuilder::buildLine(OverlayEdge* node)
 {
     // assert: edgeStart degree = 1
     // assert: edgeStart direction = forward
-    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
     pts->add(node->orig(), false);
 
     bool isNodeForward = node->isForward();

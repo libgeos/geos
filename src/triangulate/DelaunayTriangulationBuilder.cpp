@@ -22,7 +22,6 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
@@ -47,14 +46,13 @@ DelaunayTriangulationBuilder::extractUniqueCoordinates(
 std::unique_ptr<CoordinateSequence>
 DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq)
 {
-    auto seqFactory = CoordinateArraySequenceFactory::instance();
     auto dim = seq->getDimension();
 
     std::vector<Coordinate> coords;
     seq->toVector(coords);
     std::sort(coords.begin(), coords.end(), geos::geom::CoordinateLessThen());
 
-    std::unique_ptr<CoordinateSequence> sortedSeq(seqFactory->create(std::move(coords), dim));
+    auto sortedSeq = detail::make_unique<CoordinateSequence>(std::move(coords), dim);
 
     operation::valid::RepeatedPointTester rpt;
     if (rpt.hasRepeatedPoint(sortedSeq.get())) {

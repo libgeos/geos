@@ -10,8 +10,6 @@
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util.h>
 // std
@@ -37,8 +35,6 @@ struct test_nodedsegmentstring_data {
 
     typedef std::unique_ptr<geos::noding::NodedSegmentString> \
     SegmentStringAutoPtr;
-
-    const geos::geom::CoordinateSequenceFactory* csFactory;
 
     WKTReader r;
 
@@ -89,8 +85,6 @@ struct test_nodedsegmentstring_data {
     }
 
     test_nodedsegmentstring_data()
-        :
-        csFactory(geos::geom::CoordinateArraySequenceFactory::instance())
     {
     }
 
@@ -115,7 +109,7 @@ template<>
 void object::test<1>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -151,7 +145,7 @@ template<>
 void object::test<2>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -187,7 +181,7 @@ template<>
 void object::test<3>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -260,7 +254,7 @@ void object::test<5>
     geos::geom::Coordinate p1(10, 0);
 
 
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, 2u);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
     cs->add(p0);
     cs->add(p1);
 

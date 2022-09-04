@@ -14,7 +14,7 @@
 
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/index/kdtree/KdTree.h>
 #include <geos/index/kdtree/KdNode.h>
@@ -147,7 +147,7 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     */
     std::vector<Coordinate> pts = ss->getNodedCoordinates();
     std::vector<Coordinate> ptsRoundVec = round(pts);
-    std::unique_ptr<geom::CoordinateArraySequence> ptsRound(new CoordinateArraySequence(std::move(ptsRoundVec)));
+    std::unique_ptr<geom::CoordinateSequence> ptsRound(new CoordinateSequence(std::move(ptsRoundVec)));
 
     // if complete collapse this edge can be eliminated
     if (ptsRound->size() <= 1)

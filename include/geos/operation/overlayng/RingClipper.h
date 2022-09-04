@@ -17,7 +17,6 @@
 #include <geos/export.h>
 
 #include <geos/geom/Envelope.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 
 // Forward declarations
@@ -25,7 +24,6 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class CoordinateSequence;
-class CoordinateArraySequence;
 }
 }
 
@@ -81,7 +79,7 @@ private:
     /**
     * Clips line to the axis-parallel line defined by a single box edge.
     */
-    std::unique_ptr<CoordinateArraySequence> clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const;
+    std::unique_ptr<CoordinateSequence> clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const;
 
     /**
     * Computes the intersection point of a segment
@@ -103,7 +101,7 @@ public:
     /**
     * Clips a list of points to the clipping rectangle box.
     */
-    std::unique_ptr<CoordinateArraySequence> clip(const CoordinateSequence* cs) const;
+    std::unique_ptr<CoordinateSequence> clip(const CoordinateSequence* cs) const;
 
 };
 

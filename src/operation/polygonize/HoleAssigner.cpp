@@ -16,7 +16,6 @@
  *
  **********************************************************************/
 
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/operation/polygonize/HoleAssigner.h>
 #include <geos/util/Interrupt.h>
 

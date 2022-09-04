@@ -29,10 +29,10 @@
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cmath> // for fabs
@@ -383,11 +383,11 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
         return;
     }
 
-    auto coords = detail::make_unique<std::vector<Coordinate>>();
-    ring->getCoordinatesRO()->toVector(*coords);
-    coords->erase(coords->end() - 1); // remove last point (repeated)
+    std::vector<Coordinate> coords;
+    ring->getCoordinatesRO()->toVector(coords);
+    coords.erase(coords.end() - 1); // remove last point (repeated)
 
-    auto uniqueCoordinates = detail::make_unique<CoordinateArraySequence>(coords.release());
+    auto uniqueCoordinates = detail::make_unique<CoordinateSequence>(std::move(coords));
 
     const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
 

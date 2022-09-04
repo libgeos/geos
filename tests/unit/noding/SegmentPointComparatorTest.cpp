@@ -14,7 +14,6 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 // std
 #include <memory>
 

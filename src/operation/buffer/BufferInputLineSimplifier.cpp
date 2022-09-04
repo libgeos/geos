@@ -18,7 +18,6 @@
 
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/geom/CoordinateSequence.h> // for inlines
-#include <geos/geom/CoordinateArraySequence.h> // for constructing the return
 #include <geos/algorithm/Distance.h> // for use
 #include <geos/algorithm/Orientation.h> // for use
 #include <geos/util.h>
@@ -128,7 +127,7 @@ BufferInputLineSimplifier::findNextNonDeletedIndex(std::size_t index) const
 std::unique_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::collapseLine() const
 {
-    auto coordList = new CoordinateArraySequence();
+    auto coordList = new CoordinateSequence();
 
     for(std::size_t i = 0, n = inputLine.size(); i < n; ++i) {
         if(isDeleted[i] != DELETE) {

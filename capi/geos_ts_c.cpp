@@ -28,10 +28,9 @@
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
@@ -2401,17 +2400,8 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-
-            switch (size) {
-                case 1:
-                    return static_cast<CoordinateSequence*>(new geos::geom::FixedSizeCoordinateSequence<1>(dims));
-                case 2:
-                    return static_cast<CoordinateSequence*>(new geos::geom::FixedSizeCoordinateSequence<2>(dims));
-                default: {
-                    const GeometryFactory *gf = handle->geomFactory;
-                    return gf->getCoordinateSequenceFactory()->create(size, dims).release();
-                }
-            }
+            const GeometryFactory *gf = handle->geomFactory;
+            return gf->getCoordinateSequenceFactory()->create(size, dims).release();
         });
     }
 
@@ -2540,13 +2530,7 @@ extern "C" {
             };
 
             CoordinateBufferCopier cop(buf, hasZ, hasM);
-            // Speculatively check to see if our input is a CoordinateArraySequence.
-            // If so, gcc can inline the filter.
-            if (auto cas = dynamic_cast<const geos::geom::CoordinateArraySequence*>(cs)) {
-                cas->apply_ro(&cop);
-            } else {
-                cs->apply_ro(&cop);
-            }
+            cs->apply_ro(&cop);
 
             return 1;
         });

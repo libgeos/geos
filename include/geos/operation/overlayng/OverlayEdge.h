@@ -27,7 +27,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateArraySequence;
+class CoordinateSequence;
 }
 namespace operation {
 namespace overlayng {
@@ -38,7 +38,7 @@ class MaximalEdgeRing;
 }
 
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateSequence;
 using geos::geom::Location;
 
@@ -146,7 +146,7 @@ public:
     *
     * @param coords the coordinate list to add to
     */
-    void addCoordinates(CoordinateArraySequence* coords) const;
+    void addCoordinates(CoordinateSequence* coords) const;
 
     OverlayEdge* symOE() const
     {

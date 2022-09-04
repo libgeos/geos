@@ -6,7 +6,6 @@
 // geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
-#include <geos/geom/CoordinateArraySequence.h>
 // std
 #include <memory>
 #include <string>

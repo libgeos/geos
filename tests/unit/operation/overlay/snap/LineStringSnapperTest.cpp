@@ -7,7 +7,6 @@
 #include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
-#include <geos/geom/CoordinateArraySequence.h>
 // std
 #include <string>
 #include <vector>

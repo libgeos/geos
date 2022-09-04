@@ -32,6 +32,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util.h>
 
 #include <string>
 #include <memory>
@@ -39,46 +40,31 @@
 namespace geos {
 namespace geom { // geos::geom
 
-const static FixedSizeCoordinateSequence<0> emptyCoords2d(2);
-const static FixedSizeCoordinateSequence<0> emptyCoords3d(3);
 
 
 /*protected*/
 Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     : Geometry(factory)
-    , empty2d(false)
-    , empty3d(false)
 {
-    std::unique_ptr<CoordinateSequence> coords(newCoords);
+    std::unique_ptr<CoordinateSequence> coords(newCoords); // Take ownership in case of exception
 
-    if(coords == nullptr) {
-        empty2d = true;
-        return;
-    }
-
-    if (coords->getSize() == 1) {
-        coordinates.setAt(coords->getAt(0), 0);
+    if (coords->getSize() <= 1) {
+        coordinates = *(coords.get());
     } else if (coords->getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
-    } else if (coords->getDimension() == 3) {
-        empty3d = true;
-    } else {
-        empty2d = true;
     }
 }
 
 Point::Point(const Coordinate & c, const GeometryFactory* factory)
-    : Geometry(factory)
-    , empty2d(false)
-    , empty3d(false)
+    : Geometry(factory),
+    coordinates(1)
 {
     coordinates.setAt(c, 0);
 }
 
 Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
-    : Geometry(factory)
-    , empty2d(false)
-    , empty3d(false)
+    : Geometry(factory),
+      coordinates(1)
 {
     coordinates.setAt(Coordinate(c), 0);
 }
@@ -87,8 +73,6 @@ Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
 Point::Point(const Point& p)
     : Geometry(p)
     , coordinates(p.coordinates)
-    , empty2d(p.empty2d)
-    , empty3d(p.empty3d)
 {}
 
 std::unique_ptr<CoordinateSequence>
@@ -100,18 +84,22 @@ Point::getCoordinates() const
 std::size_t
 Point::getNumPoints() const
 {
-    return isEmpty() ? 0 : 1;
+    return coordinates.size();
 }
 
 bool
 Point::isEmpty() const
 {
-    if (empty2d || empty3d) return true;
-    const Coordinate& c = coordinates.getAt(0);
-    if (std::isnan(c.x) && std::isnan(c.y))
+    if (coordinates.isEmpty()) {
         return true;
-    else
-        return false;
+    }
+
+    const Coordinate& c = coordinates.getAt(0);
+    if (std::isnan(c.x) && std::isnan(c.y)) {
+        return true;
+    }
+
+    return false;
 }
 
 bool
@@ -297,11 +285,6 @@ Point::getGeometryTypeId() const
 const CoordinateSequence*
 Point::getCoordinatesRO() const
 {
-    if (empty2d) {
-        return &emptyCoords2d;
-    } else if (empty3d) {
-        return &emptyCoords3d;
-    }
     return &coordinates;
 }
 

@@ -21,7 +21,6 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
@@ -105,7 +104,7 @@ GeometryCollection::getCoordinates() const
             k++;
         }
     }
-    return CoordinateArraySequenceFactory::instance()->create(std::move(coordinates));
+    return detail::make_unique<CoordinateSequence>(std::move(coordinates));
 }
 
 bool
