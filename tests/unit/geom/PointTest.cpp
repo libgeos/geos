@@ -5,7 +5,7 @@
 // geos
 #include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -13,6 +13,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/constants.h>
+#include <geos/util.h>
 // std
 #include <memory>
 #include <string>
@@ -84,19 +85,19 @@ void object::test<2>
 ()
 {
     using geos::geom::Coordinate;
-    using geos::geom::CoordinateArraySequence;
+    using geos::geom::CoordinateSequence;
 
-    CoordinateArraySequence* coords = new CoordinateArraySequence();
+    auto coords = geos::detail::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
     coords->add(Coordinate(1.234, 5.678));
 
-    PointAutoPtr point(factory_->createPoint(coords));
+    auto point = factory_->createPoint(std::move(coords));
     ensure(!point->isEmpty());
 
-    // currently the empty CoordinateArraySequence constructor
+    // currently the empty CoordinateSequence constructor
     // produces a dimension 0 sequence. The dimension is then
     // autodetected when the first point is inserted.
-    ensure(point->getCoordinateDimension() == 2);
+    ensure_equals(point->getCoordinateDimension(),  2);
 }
 
 // Test of user's constructor throwing IllegalArgumentException
@@ -106,17 +107,16 @@ void object::test<3>
 ()
 {
     using geos::geom::Coordinate;
-    using geos::geom::CoordinateArraySequence;
+    using geos::geom::CoordinateSequence;
 
     // TODO - mloskot - temporary solution of Bug #89
-    CoordinateArraySequence* coords = nullptr;
     try {
-        coords = new CoordinateArraySequence();
+        auto coords = geos::detail::make_unique<CoordinateSequence>();
         ensure(coords != nullptr);
         coords->add(Coordinate(1.234, 5.678));
         coords->add(Coordinate(4.321, 8.765));
 
-        PointAutoPtr point(factory_->createPoint(coords));
+        auto point = factory_->createPoint(std::move(coords));
 
         fail("IllegalArgumentException expected.");
     }
@@ -566,17 +566,17 @@ template<>
 void object::test<45>
 ()
 {
-    auto empty3d = factory_->createPoint();
-    ensure_equals(empty3d->getCoordinateDimension(), 2);
+    auto empty2d = factory_->createPoint();
+    ensure_equals(empty2d->getCoordinateDimension(), 2);
 
-    geos::geom::FixedSizeCoordinateSequence<0> seq2(2);
-    ensure_equals(seq2.getDimension(), 2u);
-    std::unique_ptr<geos::geom::Point> pt2(factory_->createPoint(seq2));
+    auto seq2 = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    ensure_equals(seq2->getDimension(), 2u);
+    auto pt2 = factory_->createPoint(std::move(seq2));
     ensure_equals(pt2->getCoordinateDimension(), 2);
 
-    geos::geom::FixedSizeCoordinateSequence<0> seq3(3);
-    ensure_equals(seq3.getDimension(), 3u);
-    std::unique_ptr<geos::geom::Point> pt3(factory_->createPoint(seq3));
+    auto seq3 = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 3u);
+    ensure_equals(seq3->getDimension(), 3u);
+    auto pt3 = factory_->createPoint(std::move(seq3));
     ensure_equals(pt3->getCoordinateDimension(), 3);
 }
 
@@ -589,13 +589,13 @@ void object::test<46>
 ()
 {
     using geos::geom::Coordinate;
-    using geos::geom::CoordinateArraySequence;
+    using geos::geom::CoordinateSequence;
 
-    CoordinateArraySequence* coords = new CoordinateArraySequence();
+    auto coords = geos::detail::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
     coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
 
-    PointAutoPtr point(factory_->createPoint(coords));
+    auto point = factory_->createPoint(std::move(coords));
     ensure("point->isEmpty()", point->isEmpty());
     ensure("point->getCoordinateDimension() == 2", point->getCoordinateDimension() == 2);
 }

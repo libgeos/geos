@@ -10,8 +10,6 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Point.h>
@@ -35,7 +33,6 @@
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::LineString;
@@ -54,9 +51,6 @@ typedef geos::geom::Coordinate const* CoordinateCPtr;
 
 typedef geos::geom::CoordinateSequence* CoordSeqPtr;
 typedef geos::geom::CoordinateSequence const* CoordSeqCPtr;
-
-typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
-typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
 
 typedef geos::geom::Geometry* GeometryPtr;
 typedef geos::geom::Geometry const* GeometryCPtr;

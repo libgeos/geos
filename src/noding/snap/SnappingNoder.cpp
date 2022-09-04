@@ -14,7 +14,7 @@
 
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/index/kdtree/KdTree.h>
 #include <geos/index/kdtree/KdNode.h>
@@ -98,7 +98,7 @@ SegmentString*
 SnappingNoder::snapVertices(SegmentString* ss)
 {
     std::unique_ptr<std::vector<Coordinate>> snapCoords = snap(ss->getCoordinates());
-    std::unique_ptr<CoordinateArraySequence> cs(new CoordinateArraySequence(snapCoords.release()));
+    std::unique_ptr<CoordinateSequence> cs(new CoordinateSequence(std::move(snapCoords)));
     return new NodedSegmentString(cs.release(), ss->getData());
 }
 

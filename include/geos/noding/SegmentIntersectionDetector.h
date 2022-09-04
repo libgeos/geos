@@ -19,7 +19,7 @@
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/SegmentString.h>
 
 namespace geos {
@@ -50,7 +50,7 @@ private:
     bool _hasNonProperIntersection;
 
     const geom::Coordinate* intPt;
-    geom::CoordinateArraySequence* intSegments;
+    geom::CoordinateSequence* intSegments;
 
 protected:
 public:

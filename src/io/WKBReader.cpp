@@ -31,7 +31,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
 
 #include <iomanip>
@@ -376,9 +375,7 @@ WKBReader::readLinearRing()
     auto pts = readCoordinateSequence(size);
     // Replace unclosed ring with closed
     if (fixStructure && !pts->isRing()) {
-        std::unique_ptr<CoordinateArraySequence> cas(new CoordinateArraySequence(*pts));
-        cas->closeRing();
-        pts.reset(cas.release());
+        pts->closeRing();
     }
     return factory.createLinearRing(std::move(pts));
 }

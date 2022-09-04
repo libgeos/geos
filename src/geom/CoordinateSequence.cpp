@@ -14,12 +14,12 @@
  **********************************************************************/
 
 #include <geos/profiler.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
-// FIXME: we should probably not be using CoordinateArraySequenceFactory
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <cstdio>
 #include <algorithm>
@@ -34,6 +34,137 @@ namespace geom { // geos::geom
 #if PROFILE
 static Profiler* profiler = Profiler::instance();
 #endif
+
+CoordinateSequence::CoordinateSequence(std::size_t size, std::size_t dim) :
+    vect(size),
+    dimension(dim)
+{}
+
+CoordinateSequence::CoordinateSequence(std::vector<Coordinate> && coords, std::size_t dim) :
+    vect(std::move(coords)),
+    dimension(dim)
+{}
+
+CoordinateSequence::CoordinateSequence(std::unique_ptr<std::vector<Coordinate>> && coords, std::size_t dim) :
+    vect(std::move(*coords)),
+    dimension(dim)
+{
+}
+
+void
+CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
+{
+    if(!allowRepeated && ! vect.empty()) {
+        const Coordinate& last = vect.back();
+        if(last.equals2D(c)) {
+            return;
+        }
+    }
+    vect.push_back(c);
+}
+
+void
+CoordinateSequence::add(const CoordinateSequence* cl, bool allowRepeated, bool direction)
+{
+    // FIXME:  don't rely on negative values for 'j' (the reverse case)
+
+    const auto npts = cl->size();
+    if(direction) {
+        for(std::size_t i = 0; i < npts; ++i) {
+            add(cl->getAt(i), allowRepeated);
+        }
+    }
+    else {
+        for(auto j = npts; j > 0; --j) {
+            add(cl->getAt(j - 1), allowRepeated);
+        }
+    }
+}
+
+/*public*/
+void
+CoordinateSequence::add(std::size_t i, const Coordinate& coord, bool allowRepeated)
+{
+    // don't add duplicate coordinates
+    if(! allowRepeated) {
+        std::size_t sz = size();
+        if(sz > 0) {
+            if(i > 0) {
+                const Coordinate& prev = getAt(i - 1);
+                if(prev.equals2D(coord)) {
+                    return;
+                }
+            }
+            if(i < sz) {
+                const Coordinate& next = getAt(i);
+                if(next.equals2D(coord)) {
+                    return;
+                }
+            }
+        }
+    }
+
+    vect.insert(std::next(vect.begin(), static_cast<std::ptrdiff_t>(i)), coord);
+}
+
+void
+CoordinateSequence::apply_rw(const CoordinateFilter* filter)
+{
+    for(auto& coord : vect) {
+        filter->filter_rw(&coord);
+    }
+    dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
+}
+
+void
+CoordinateSequence::apply_ro(CoordinateFilter* filter) const
+{
+    for(const auto& coord : vect) {
+        filter->filter_ro(&coord);
+    }
+}
+
+void
+CoordinateSequence::clear()
+{
+    vect.clear();
+}
+
+std::unique_ptr<CoordinateSequence>
+CoordinateSequence::clone() const
+{
+    return detail::make_unique<CoordinateSequence>(*this);
+}
+
+void
+CoordinateSequence::closeRing()
+{
+    if(!isEmpty() && front() != back()) {
+        add(front());
+    }
+}
+
+std::size_t
+CoordinateSequence::getDimension() const
+{
+    if(dimension != 0) {
+        return dimension;
+    }
+
+    if(vect.empty()) {
+        return 3;
+    }
+
+    if(std::isnan(vect[0].z)) {
+        dimension = 2;
+    }
+    else {
+        dimension = 3;
+    }
+
+    return dimension;
+}
+
 
 double
 CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) const
@@ -75,7 +206,7 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(std::size_t n,
     }
     else {
         // FIXME: return NULL rather then empty coordinate array
-        return CoordinateArraySequenceFactory::instance()->create().release();
+        return new CoordinateSequence(0, c->getDimension());
     }
 }
 
@@ -241,6 +372,40 @@ CoordinateSequence::cbegin() const {
 CoordinateSequence::const_iterator
 CoordinateSequence::cend() const {
     return {this, getSize()};
+}
+
+void
+CoordinateSequence::setOrdinate(std::size_t index, std::size_t ordinateIndex, double value)
+{
+    switch(ordinateIndex) {
+        case CoordinateSequence::X:
+        vect[index].x = value;
+        break;
+        case CoordinateSequence::Y:
+        vect[index].y = value;
+        break;
+        case CoordinateSequence::Z:
+        vect[index].z = value;
+        break;
+        default: {
+            std::stringstream ss;
+            ss << "Unknown ordinate index " << ordinateIndex;
+            throw util::IllegalArgumentException(ss.str());
+            break;
+        }
+    }
+}
+
+void
+CoordinateSequence::setPoints(const std::vector<Coordinate>& v)
+{
+    vect.assign(v.begin(), v.end());
+}
+
+void
+CoordinateSequence::toVector(std::vector<Coordinate>& out) const
+{
+    out.insert(out.end(), vect.begin(), vect.end());
 }
 
 std::ostream&

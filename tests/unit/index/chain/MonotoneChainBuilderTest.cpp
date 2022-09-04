@@ -5,7 +5,7 @@
 #include <utility.h>
 // geos
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainBuilder.h>
 
@@ -38,7 +38,7 @@ void object::test<1>
 ()
 {
     std::vector<geos::index::chain::MonotoneChain> chain;
-    geos::geom::CoordinateArraySequence pts;
+    geos::geom::CoordinateSequence pts;
 
     geos::index::chain::MonotoneChainBuilder::getChains(&pts, 0, chain);
 

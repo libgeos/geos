@@ -22,7 +22,6 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateArraySequence;
 class CoordinateSequence;
 class Geometry;
 class GeometryFactory;
@@ -34,7 +33,6 @@ class Polygon;
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::Polygon;

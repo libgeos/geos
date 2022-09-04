@@ -18,12 +18,11 @@
 #include <geos/operation/overlayng/OverlayEdgeRing.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 
 
 using geos::geom::CoordinateSequence;
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::Location;
 
 
@@ -54,7 +53,7 @@ OverlayEdge::getCoordinatesOriented()
 */
 /*public*/
 void
-OverlayEdge::addCoordinates(CoordinateArraySequence* coords) const
+OverlayEdge::addCoordinates(CoordinateSequence* coords) const
 {
     bool isFirstEdge = coords->size() > 0;
     if (direction) {

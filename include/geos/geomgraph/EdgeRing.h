@@ -23,7 +23,7 @@
 
 #include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LinearRing.h>
 
 #include <cassert> // for testInvariant

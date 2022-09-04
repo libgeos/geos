@@ -8,7 +8,6 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
@@ -68,7 +67,7 @@ void object::test<2>
     Coordinate c2(10.0, -7.004368924503866);
     Coordinate c3(1.0000000000005, -7.989685402102996);
 
-    CoordinateArraySequence pts;
+    CoordinateSequence pts;
     pts.add(c1);
     pts.add(c2);
     pts.add(c3);

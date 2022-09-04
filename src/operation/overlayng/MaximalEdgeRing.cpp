@@ -203,7 +203,7 @@ MaximalEdgeRing::linkMaxInEdge(OverlayEdge* currOut, OverlayEdge* currMaxRingOut
 std::ostream&
 operator<<(std::ostream& os, const MaximalEdgeRing& mer)
 {
-    CoordinateArraySequence coords;
+    CoordinateSequence coords;
     OverlayEdge* edge = mer.startEdge;
     do {
         coords.add(edge->orig());

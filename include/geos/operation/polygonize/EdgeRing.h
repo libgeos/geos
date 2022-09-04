@@ -65,7 +65,7 @@ private:
 
     // cache the following data for efficiency
     std::unique_ptr<geom::LinearRing> ring;
-    std::unique_ptr<geom::CoordinateArraySequence> ringPts;
+    std::unique_ptr<geom::CoordinateSequence> ringPts;
     std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
 
     std::unique_ptr<std::vector<std::unique_ptr<geom::LinearRing>>> holes;
@@ -87,7 +87,7 @@ private:
 
     static void addEdge(const geom::CoordinateSequence* coords,
                         bool isForward,
-                        geom::CoordinateArraySequence* coordList);
+                        geom::CoordinateSequence* coordList);
 
     algorithm::locate::PointOnGeometryLocator* getLocator() {
         if (ringLocator == nullptr) {

@@ -14,7 +14,7 @@
 
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/profiler.h>
 
@@ -36,7 +36,7 @@ public:
         std::vector<std::unique_ptr<LineString>> lines;
 
         for (std::size_t i = 0; i < num_lines; i++) {
-            CoordinateArraySequence cas(2, 2);
+            CoordinateSequence cas(2, 2);
             cas.setAt(Coordinate(dis(e), dis(e)), 0);
             cas.setAt(Coordinate(dis(e), dis(e)), 1);
 

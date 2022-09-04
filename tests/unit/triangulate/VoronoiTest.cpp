@@ -16,7 +16,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 //#include <stdio.h>
 #include <iostream>
 using namespace geos::triangulate;
@@ -101,13 +101,13 @@ void object::test<1>
     Coordinate d(244, 284);
 
     geos::triangulate::VoronoiDiagramBuilder builder;
-    std::unique_ptr< std::vector<Coordinate> > v(new std::vector<Coordinate>());
-    v->push_back(a);
-    v->push_back(b);
-    v->push_back(c);
-    v->push_back(d);
+    std::vector<Coordinate> v;
+    v.push_back(a);
+    v.push_back(b);
+    v.push_back(c);
+    v.push_back(d);
 
-    geos::geom::CoordinateArraySequence seq(v.release());
+    geos::geom::CoordinateSequence seq(std::move(v));
     builder.setSites(seq);
 
     //getting the subdiv()

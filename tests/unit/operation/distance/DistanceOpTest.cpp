@@ -16,7 +16,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/util.h>
 // std
 #include <memory>
 #include <string>
@@ -513,12 +513,12 @@ void object::test<20>()
     using geos::geom::Geometry;
     using geos::geom::LineString;
     using geos::geom::GeometryFactory;
-    using geos::geom::CoordinateArraySequence;
+    using geos::geom::CoordinateSequence;
 
     auto gfact = GeometryFactory::create();
 
-    CSPtr seq0(new CoordinateArraySequence(2));
-    CSPtr seq1(new CoordinateArraySequence(2));
+    auto seq0 = geos::detail::make_unique<CoordinateSequence>(2u);
+    auto seq1 = geos::detail::make_unique<CoordinateSequence>(2u);
 
     Coordinate a0{1, 5.0/3.0};
     Coordinate a1{2, 10.0/3.0};

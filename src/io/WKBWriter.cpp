@@ -29,7 +29,6 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
 
 #include <ostream>
@@ -144,7 +143,7 @@ WKBWriter::writePointEmpty(const Point& g)
     writeSRID(g.getSRID());
 
     Coordinate c(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
-    CoordinateArraySequence cas(std::size_t(1), std::size_t(g.getCoordinateDimension()));
+    CoordinateSequence cas(std::size_t(1), std::size_t(g.getCoordinateDimension()));
     cas.setAt(c, 0);
 
     writeCoordinateSequence(cas, false);

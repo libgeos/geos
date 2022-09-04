@@ -6,12 +6,13 @@
 // geos
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 // std
 #include <cmath>
 #include <memory>
@@ -31,9 +32,6 @@ struct test_linearring_data {
     typedef geos::geom::Coordinate* CoordinatePtr;
     typedef geos::geom::Coordinate const* CoordinateCPtr;
 
-    typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
-    typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
-
     typedef geos::geom::LinearRing* LinearRingPtr;
     typedef geos::geom::LinearRing const* LinearRingCPtr;
 
@@ -42,24 +40,19 @@ struct test_linearring_data {
     geos::io::WKTReader reader_;
 
     geos::geom::LinearRing empty_ring_;
-    LinearRingPtr ring_;
+    std::unique_ptr<geos::geom::LinearRing> ring_;
     const std::size_t ring_size_;
 
     test_linearring_data()
         : pm_(1000), factory_(geos::geom::GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
-        , empty_ring_(new geos::geom::CoordinateArraySequence(), factory_.get()),
-          ring_size_(7)
-    {
-        // Create non-empty LinearRing
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)").release();
-        ring_ = dynamic_cast<LinearRingPtr>(geo);
-    }
+        , empty_ring_(geos::detail::make_unique<geos::geom::CoordinateSequence>(), *factory_)
+        , ring_(reader_.read<geos::geom::LinearRing>("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)"))
+        , ring_size_(7)
+    {}
 
     ~test_linearring_data()
     {
-        factory_->destroyGeometry(ring_);
     }
 
 private:
@@ -87,7 +80,7 @@ void object::test<1>
 
     // Non-empty sequence of coordinates
     const std::size_t size7 = 7;
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
+    auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", coords != nullptr);
 
     coords->add(Coordinate(0, 10));
@@ -102,7 +95,7 @@ void object::test<1>
 
     try {
         // Create non-empty linearring instance
-        geos::geom::LinearRing ring(coords, factory_.get());
+        geos::geom::LinearRing ring(std::move(coords), *factory_);
         ensure(!ring.isEmpty());
         ensure(ring.isClosed());
         ensure(ring.isRing());

@@ -18,7 +18,7 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/LineString.h>
 #include <geos/linearref/ExtractLineByLocation.h>
@@ -84,7 +84,7 @@ std::unique_ptr<LineString>
 ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLocation& end)
 {
     auto coordinates = line->getCoordinates();
-    CoordinateArraySequence newCoordinateArray;
+    CoordinateSequence newCoordinateArray;
 
     const std::size_t indexStep = 1;
     auto startSegmentIndex = start.getSegmentIndex();

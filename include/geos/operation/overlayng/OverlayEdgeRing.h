@@ -15,7 +15,7 @@
 #pragma once
 
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/export.h>
 
@@ -62,17 +62,17 @@ private:
     std::vector<OverlayEdgeRing*> holes;
 
     // Methods
-    void computeRingPts(OverlayEdge* start, CoordinateArraySequence& pts);
-    void computeRing(std::unique_ptr<CoordinateArraySequence> && ringPts, const GeometryFactory* geometryFactory);
+    void computeRingPts(OverlayEdge* start, CoordinateSequence& pts);
+    void computeRing(std::unique_ptr<CoordinateSequence> && ringPts, const GeometryFactory* geometryFactory);
 
     /**
     * Computes the list of coordinates which are contained in this ring.
     * The coordinates are computed once only and cached.
     * @return an array of the {@link Coordinate}s in this ring
     */
-    const CoordinateArraySequence& getCoordinates();
+    const CoordinateSequence& getCoordinates();
     PointOnGeometryLocator* getLocator();
-    static void closeRing(CoordinateArraySequence& pts);
+    static void closeRing(CoordinateSequence& pts);
 
 
 public:

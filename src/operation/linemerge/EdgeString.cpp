@@ -24,7 +24,6 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/util.h>
 
@@ -62,7 +61,7 @@ EdgeString::getCoordinates()
 {
     int forwardDirectedEdges = 0;
     int reverseDirectedEdges = 0;
-    auto coordinates = detail::make_unique<CoordinateArraySequence>();
+    auto coordinates = detail::make_unique<CoordinateSequence>();
     for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
         LineMergeDirectedEdge* directedEdge = directedEdges[i];
         if(directedEdge->getEdgeDirection()) {

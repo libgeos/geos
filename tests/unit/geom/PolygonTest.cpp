@@ -7,7 +7,6 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -17,6 +16,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 // std
 #include <cmath>
 #include <memory>
@@ -82,7 +82,7 @@ void object::test<1>
 
     // Create non-empty Coordinate sequence for Exterior LinearRing
     const std::size_t size = 7;
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
+    auto coords = geos::detail::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", coords != nullptr);
 
     coords->add(Coordinate(0, 10));
@@ -97,19 +97,17 @@ void object::test<1>
 
     try {
         // Create non-empty LinearRing instance
-        geos::geom::LinearRing ring(coords, factory_.get());
+        geos::geom::LinearRing ring(std::move(coords), *factory_);
         ensure(!ring.isEmpty());
         ensure(ring.isClosed());
         ensure(ring.isRing());
         ensure(ring.isSimple());
 
         // Exterior (clone is required here because Polygon takes ownership)
-        geos::geom::Geometry* geo = ring.clone().release();
-        LinearRingPtr exterior = dynamic_cast<LinearRingPtr>(geo);
+        auto exterior = ring.clone();
 
         // Create non-empty Polygon
-        //geos::geom::Polygon poly(exterior, 0, &factory_);
-        PolygonAutoPtr poly(factory_->createPolygon(exterior, nullptr));
+        auto poly= factory_->createPolygon(std::move(exterior));
 
         ensure(!poly->isEmpty());
         ensure(poly->isSimple());

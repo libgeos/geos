@@ -24,7 +24,7 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /*public*/
-std::vector<std::unique_ptr<CoordinateArraySequence>>&
+std::vector<std::unique_ptr<CoordinateSequence>>&
 LineLimiter::limit(const CoordinateSequence *pts)
 {
     // Reset for new limit run
@@ -121,8 +121,8 @@ LineLimiter::finishSection()
     // remove repeated points from the section
     ptList->erase(std::unique(ptList->begin(), ptList->end()), ptList->end());
 
-    // std::unique_ptr<CoordinateArraySequence> cas();
-    CoordinateArraySequence* cas = new CoordinateArraySequence(ptList.release());
+    // std::unique_ptr<CoordinateSequence> cas();
+    CoordinateSequence* cas = new CoordinateSequence(std::move(ptList));
     sections.emplace_back(cas);
     ptList.reset(nullptr);
 }

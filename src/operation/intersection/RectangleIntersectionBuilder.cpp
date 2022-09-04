@@ -24,6 +24,8 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/algorithm/PointLocation.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
+#include <sstream>
 
 #include <cmath> // for fabs()
 

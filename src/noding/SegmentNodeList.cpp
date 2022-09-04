@@ -29,8 +29,6 @@
 #include <geos/noding/SegmentString.h> // for use
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h> // FIXME: should we really be using this ?
-#include <geos/geom/FixedSizeCoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -258,10 +256,10 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 
     // if only two points in split edge they must be the node points
     if (twoPoints) {
-        auto pts = detail::make_unique<FixedSizeCoordinateSequence<2>>();
+        auto pts = detail::make_unique<CoordinateSequence>(2u);
         pts->setAt(ei0->coord, 0);
         pts->setAt(ei1->coord, 1);
-        return RETURN_UNIQUE_PTR(pts);
+        return pts;
     }
 
     const Coordinate& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);
@@ -285,7 +283,7 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
         pts.emplace_back(ei1->coord);
     }
 
-    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(pts)));
+    return detail::make_unique<CoordinateSequence>(std::move(pts));
 }
 
 

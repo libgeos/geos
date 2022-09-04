@@ -18,8 +18,8 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -112,14 +112,13 @@ PrecisionReducerTransformer::transformCoordinates(
         return nullptr;
 
     if (coords->isEmpty()) {
-        return detail::make_unique<CoordinateArraySequence>(0u, coords->getDimension());
+        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
     const bool removeRepeated = true;
     PrecisionReducerFilter filter(removeRepeated, targetPM);
     coords->apply_ro(&filter);
     std::vector<Coordinate> coordsReduce = filter.getCoords();
-    // std::unique_ptr<CoordinateArraySequence> coordSeqReduced();
 
     /**
      * Check to see if the removal of repeated points collapsed the coordinate
@@ -146,8 +145,7 @@ PrecisionReducerTransformer::transformCoordinates(
         extend(coordsReduce, minLength);
     }
 
-    CoordinateArraySequence* cas = new CoordinateArraySequence(std::move(coordsReduce));
-    return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+    return detail::make_unique<CoordinateSequence>(std::move(coordsReduce));
 }
 
 

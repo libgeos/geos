@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 
 
@@ -38,12 +38,12 @@ namespace valid {
          *  \param tolerance to apply
          *  \return Geometr, ownership of returned object goes to the caller.
          */
-        static std::unique_ptr<geom::CoordinateArraySequence>
+        static std::unique_ptr<geom::CoordinateSequence>
             removeRepeatedPoints(
                 const geom::CoordinateSequence* seq,
                 double tolerance = 0.0);
 
-        static std::unique_ptr<geom::CoordinateArraySequence>
+        static std::unique_ptr<geom::CoordinateSequence>
             removeRepeatedAndInvalidPoints(
                 const geom::CoordinateSequence* seq,
                 double tolerance = 0.0);

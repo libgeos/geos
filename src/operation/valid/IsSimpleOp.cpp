@@ -219,10 +219,10 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
 }
 
 /* private static */
-std::vector<std::unique_ptr<CoordinateArraySequence>>
+std::vector<std::unique_ptr<CoordinateSequence>>
 IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 {
-    std::vector<std::unique_ptr<CoordinateArraySequence>> coordseqs;
+    std::vector<std::unique_ptr<CoordinateSequence>> coordseqs;
     for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
         const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
         if (line) {
@@ -235,7 +235,7 @@ IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 
 /* private static */
 std::vector<std::unique_ptr<SegmentString>>
-IsSimpleOp::createSegmentStrings(std::vector<std::unique_ptr<CoordinateArraySequence>>& seqs)
+IsSimpleOp::createSegmentStrings(std::vector<std::unique_ptr<CoordinateSequence>>& seqs)
 {
     std::vector<std::unique_ptr<SegmentString>> segStrings;
     for (auto& seq : seqs) {

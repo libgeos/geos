@@ -33,7 +33,6 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h> // FIXME: shouldn't use
 #include <geos/geom/Coordinate.h>
 #include <geos/util.h>
 
@@ -142,7 +141,7 @@ Edge*
 Edge::getCollapsedEdge()
 {
     testInvariant();
-    CoordinateSequence* newPts = new CoordinateArraySequence(2);
+    CoordinateSequence* newPts = new CoordinateSequence(2);
     newPts->setAt(pts->getAt(0), 0);
     newPts->setAt(pts->getAt(1), 1);
     return new Edge(newPts, Label::toLineLabel(label));

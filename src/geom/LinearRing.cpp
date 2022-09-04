@@ -20,7 +20,6 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
 

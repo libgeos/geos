@@ -22,6 +22,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/operation/BoundaryOp.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>

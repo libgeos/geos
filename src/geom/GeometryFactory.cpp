@@ -287,11 +287,15 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::size_t coordinateDimension) const
 {
-    if (coordinateDimension == 3) {
-        geos::geom::FixedSizeCoordinateSequence<0> seq(coordinateDimension);
-        return std::unique_ptr<Point>(createPoint(seq));
-    }
-    return std::unique_ptr<Point>(new Point(nullptr, this));
+    auto coords = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    return std::unique_ptr<Point>(new Point(coords.release(), this));
+}
+
+/*public*/
+std::unique_ptr<Point>
+GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
+{
+    return std::unique_ptr<Point>(new Point(coords.release(), this));
 }
 
 /*public*/

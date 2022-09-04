@@ -14,7 +14,7 @@
 
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/profiler.h>
 
@@ -32,11 +32,11 @@ public:
         std::default_random_engine e(12345);
         std::uniform_real_distribution<> dis(0, 100);
 
-        std::unique_ptr<std::vector<Coordinate>> coords(new std::vector<Coordinate>(num_points));
-        std::generate(coords->begin(), coords->end(), [&dis, &e]() {
+        std::vector<Coordinate> coords(num_points);
+        std::generate(coords.begin(), coords.end(), [&dis, &e]() {
             return Coordinate(dis(e), dis(e));
         });
-        CoordinateArraySequence seq(coords.release());
+        CoordinateSequence seq(std::move(coords));
         auto geom = gfact->createLineString(seq.clone());
 
         voronoi(seq);

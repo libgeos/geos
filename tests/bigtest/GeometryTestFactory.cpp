@@ -15,7 +15,7 @@
 #include <cmath>
 
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include "bigtest.h"
 
@@ -34,7 +34,7 @@ CoordinateSequence*
 GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLen)
 {
     int i;
-    CoordinateArraySequence* pts = new CoordinateArraySequence();
+    CoordinateSequence* pts = new CoordinateSequence();
     double maxx = minx + nSide * segLen;
     double maxy = miny + nSide * segLen;
 
@@ -72,7 +72,7 @@ GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLe
 CoordinateSequence*
 GeometryTestFactory::createCircle(double basex, double basey, double size, uint32_t nPts)
 {
-    CoordinateArraySequence* pts = new CoordinateArraySequence(nPts + 1);
+    CoordinateSequence* pts = new CoordinateSequence(nPts + 1);
     double len = size / 2.0;
 
     for(uint32_t i = 0; i < nPts; i++) {
@@ -116,7 +116,7 @@ GeometryTestFactory::createSineStar(double basex, double basey, double size, dou
     }
 
     //int nPts2=nArmPt*nArms;
-    CoordinateArraySequence* pts = new CoordinateArraySequence();
+    CoordinateSequence* pts = new CoordinateSequence();
 
     double starAng = 0.0;
 

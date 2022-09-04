@@ -12,7 +12,8 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/util.h>
 // std
 #include <sstream>
 #include <string>
@@ -204,16 +205,16 @@ void object::test<7>
 ()
 {
     using geos::geom::Coordinate;
-    using geos::geom::CoordinateArraySequence;
+    using geos::geom::CoordinateSequence;
     using geos::geom::Point;
 
     PrecisionModel pmLocal;
     auto factory_ = GeometryFactory::create(&pmLocal);
-    CoordinateArraySequence* coords = new CoordinateArraySequence();
+    auto coords = geos::detail::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
 
     coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
-    std::unique_ptr<Point> point(factory_->createPoint(coords));
+    auto point = factory_->createPoint(std::move(coords));
 
     std::string result = wktwriter.write(point.get());
     ensure_equals(result, std::string("POINT EMPTY"));

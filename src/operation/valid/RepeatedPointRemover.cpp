@@ -16,7 +16,6 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Geometry.h>
@@ -27,7 +26,6 @@
 #include <geos/util.h>
 
 using geos::geom::Coordinate;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::CoordinateFilter;
 using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateSequenceFactory;
@@ -78,16 +76,16 @@ class RepeatedPointFilter : public CoordinateFilter {
 
 
 /* public static */
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 RepeatedPointRemover::removeRepeatedPoints(const CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
-        return detail::make_unique<CoordinateArraySequence>(0u, seq->getDimension());
+        return detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
     }
 
     RepeatedPointFilter filter(tolerance);
     seq->apply_ro(&filter);
-    return detail::make_unique<CoordinateArraySequence>(filter.getCoords());
+    return detail::make_unique<CoordinateSequence>(filter.getCoords());
 }
 
 
@@ -135,16 +133,16 @@ class RepeatedInvalidPointFilter : public CoordinateFilter {
 
 
 /* public static */
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 RepeatedPointRemover::removeRepeatedAndInvalidPoints(const CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
-        return detail::make_unique<CoordinateArraySequence>(0u, seq->getDimension());
+        return detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
     }
 
     RepeatedInvalidPointFilter filter(tolerance);
     seq->apply_ro(&filter);
-    return detail::make_unique<CoordinateArraySequence>(filter.getCoords());
+    return detail::make_unique<CoordinateSequence>(filter.getCoords());
 }
 
 

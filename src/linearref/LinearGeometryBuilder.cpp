@@ -18,7 +18,6 @@
  **********************************************************************/
 
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/linearref/ExtractLineByLocation.h>
 #include <geos/linearref/LengthIndexedLine.h>
@@ -27,6 +26,7 @@
 #include <geos/linearref/LengthIndexOfPoint.h>
 #include <geos/linearref/LinearGeometryBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <cassert>
 
@@ -71,7 +71,7 @@ void
 LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
 {
     if(!coordList) {
-        coordList = new CoordinateArraySequence();
+        coordList = new CoordinateSequence();
     }
     coordList->add(pt, allowRepeatedPoints);
     lastPt = pt;

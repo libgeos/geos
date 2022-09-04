@@ -7,7 +7,6 @@
 #include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>

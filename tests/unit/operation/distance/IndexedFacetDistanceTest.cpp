@@ -16,7 +16,6 @@
 #include <geos/profiler.h>
 #include <geos/constants.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -91,16 +90,16 @@ struct test_facetdistanceop_data {
     std::unique_ptr<geos::geom::LineString>
     makeSinCircle(std::size_t nvertices, double radius, double amplitude)
     {
-        geos::geom::CoordinateArraySequence cs;
+        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>();
         std::vector<geos::geom::Coordinate> coords;
         for (std::size_t i = 0; i < nvertices; i++) {
             geos::geom::Coordinate c;
             double angle = (double)i*360.0/(double)nvertices;
             angle2sincircle(angle, radius, amplitude, &c.x, &c.y);
-            cs.add(c);
+            cs->add(c);
         }
 
-        std::unique_ptr<geos::geom::LineString> ls(_factory->createLineString(cs));
+        auto ls = _factory->createLineString(std::move(cs));
         return ls;
     }
 
