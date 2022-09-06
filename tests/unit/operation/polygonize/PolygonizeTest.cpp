@@ -232,7 +232,7 @@ void object::test<5>()
             "LINESTRING (30 20, 30 10, 10 10)",
             "LINESTRING (40 40, 40 20, 30 20)",
             "LINESTRING (30 20, 20 20, 20 30)",
-            "LINESTRING (20 30, 20 40, 40 40))"
+            "LINESTRING (20 30, 20 40, 40 40)"
     };
 
     std::vector<std::string> exp{

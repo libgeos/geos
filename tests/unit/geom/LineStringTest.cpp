@@ -508,7 +508,7 @@ template<>
 void object::test<28>
 ()
 {
-    std::unique_ptr<geos::geom::Geometry> geo(reader_.read("LINESTRING (0 0, 10 10, 20 0))"));
+    std::unique_ptr<geos::geom::Geometry> geo(reader_.read("LINESTRING (0 0, 10 10, 20 0)"));
 
     ensure(geo->isDimensionStrict(geos::geom::Dimension::L));
     ensure(!geo->isDimensionStrict(geos::geom::Dimension::A));

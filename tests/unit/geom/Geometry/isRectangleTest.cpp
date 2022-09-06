@@ -66,7 +66,7 @@ void object::test<3>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
-                              (10 10, 10 90, 90 90, 90 10, 10 10) ))");
+                              (10 10, 10 90, 90 90, 90 10, 10 10))");
     auto g = reader.read(wkt);
 
     geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());

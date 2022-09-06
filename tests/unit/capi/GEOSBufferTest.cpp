@@ -521,7 +521,7 @@ template<>
 void object::test<20>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)', -10)");
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)");
 
     ensure(nullptr != geom1_);
 

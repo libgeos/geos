@@ -104,7 +104,7 @@ template<>
 template<>
 void object::test<3>()
 {
-    checkHullByLength("LINESTRING (10 10, 20 20, 30 30))",
+    checkHullByLength("LINESTRING (10 10, 20 20, 30 30)",
         70, "LINESTRING (10 10, 30 30)" );
 }
 
