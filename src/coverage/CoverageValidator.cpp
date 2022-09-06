@@ -40,7 +40,7 @@ CoverageValidator::isValid(std::vector<const Geometry*>& coverage)
 bool
 CoverageValidator::hasInvalidResult(const std::vector<std::unique_ptr<Geometry>>& validateResult)
 {
-    for (auto& geom : validateResult) {
+    for (const auto& geom : validateResult) {
         if (geom != nullptr)
             return true;
     }

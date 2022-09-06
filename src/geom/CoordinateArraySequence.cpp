@@ -231,7 +231,6 @@ CoordinateArraySequence::setOrdinate(std::size_t index, std::size_t ordinateInde
         std::stringstream ss;
         ss << "Unknown ordinate index " << ordinateIndex;
         throw util::IllegalArgumentException(ss.str());
-        break;
     }
     }
 }

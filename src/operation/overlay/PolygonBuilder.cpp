@@ -88,12 +88,11 @@ PolygonBuilder::add(PlanarGraph* graph)
         dirEdges[i] = de;
     }
 
-    NodeMap::container& nodeMap = graph->getNodeMap()->nodeMap;
+    const auto& nodeMap = graph->getNodeMap()->nodeMap;
     std::vector<Node*> nodes;
     nodes.reserve(nodeMap.size());
-    for(NodeMap::iterator it = nodeMap.begin(), itEnd = nodeMap.end();
-            it != itEnd; ++it) {
-        Node* node = it->second;
+    for(const auto& nodeIt: nodeMap) {
+        Node* node = nodeIt.second.get();
         nodes.push_back(node);
     }
 

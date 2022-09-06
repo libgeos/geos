@@ -166,7 +166,7 @@ operator<<(std::ostream& os, const OverlayGraph& og)
 {
     os << "OGRPH " << std::endl << "NODEMAP [" << og.nodeMap.size() << "]";
     // pair<Coordinate, OverlayEdge&>
-    for (auto& pr: og.nodeMap) {
+    for (const auto& pr: og.nodeMap) {
         os << std::endl << " ";
         os << pr.first << " ";
         os << *(pr.second);
@@ -174,7 +174,7 @@ operator<<(std::ostream& os, const OverlayGraph& og)
     os << std::endl;
     os << "EDGES [" << og.edges.size() << "]";
     // pair<Coordinate, OverlayEdge&>
-    for (auto& e: og.edges) {
+    for (const auto& e: og.edges) {
         os << std::endl << " ";
         os << *e << " ";
     }

@@ -62,8 +62,8 @@ void
 PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
 {
     auto& nodeMap = op->getGraph().getNodeMap()->nodeMap;
-    for(auto& entry : nodeMap) {
-        Node* n = entry.second;
+    for(const auto& entry : nodeMap) {
+        Node* n = entry.second.get();
 
         // filter out nodes which are known to be in the result
         if(n->isInResult()) {
