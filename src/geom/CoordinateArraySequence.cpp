@@ -193,6 +193,12 @@ CoordinateArraySequence::getAt(std::size_t pos) const
     return vect[pos];
 }
 
+Coordinate&
+CoordinateArraySequence::getAt(std::size_t pos)
+{
+    return vect[pos];
+}
+
 void
 CoordinateArraySequence::getAt(std::size_t pos, Coordinate& c) const
 {

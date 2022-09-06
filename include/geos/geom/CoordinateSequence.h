@@ -17,6 +17,7 @@
 #include <geos/export.h>
 
 #include <geos/geom/Coordinate.h> // for applyCoordinateFilter
+#include <geos/geom/CoordinateSequenceIterator.h>
 
 #include <vector>
 #include <iosfwd> // ostream
@@ -51,6 +52,9 @@ protected:
 
 public:
 
+    using iterator = CoordinateSequenceIterator<CoordinateSequence, Coordinate>;
+    using const_iterator = CoordinateSequenceIterator<const CoordinateSequence, const Coordinate>;
+
     typedef std::unique_ptr<CoordinateSequence> Ptr;
 
     virtual
@@ -69,6 +73,8 @@ public:
      */
     virtual const Coordinate& getAt(std::size_t i) const = 0;
 
+    virtual Coordinate& getAt(std::size_t i) = 0;
+
     /// Return last Coordinate in the sequence
     const Coordinate&
     back() const
@@ -85,6 +91,12 @@ public:
 
     const Coordinate&
     operator[](std::size_t i) const
+    {
+        return getAt(i);
+    }
+
+    Coordinate&
+    operator[](std::size_t i)
     {
         return getAt(i);
     }
@@ -288,6 +300,13 @@ public:
         }
     }
 
+    iterator begin();
+
+    iterator end();
+
+    const_iterator cbegin() const;
+
+    const_iterator cend() const;
 };
 
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
