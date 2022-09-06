@@ -51,7 +51,14 @@ WKTReader::read(const std::string& wellKnownText) const
     CLocalizer clocale;
     StringTokenizer tokenizer(wellKnownText);
     OrdinateSet ordinateFlags = OrdinateSet::createXY();
-    return readGeometryTaggedText(&tokenizer, ordinateFlags);
+    auto ret = readGeometryTaggedText(&tokenizer, ordinateFlags);
+
+    if (tokenizer.peekNextToken() != StringTokenizer::TT_EOF) {
+        tokenizer.nextToken();
+        throw ParseException("Unexpected text after end of geometry");
+    }
+
+    return ret;
 }
 
 std::unique_ptr<CoordinateSequence>

@@ -395,5 +395,20 @@ void object::test<20>
     ensure_parseexception("LINESTRING Z (0 0 0 1, 0 1 0 1)");
 }
 
+// https://trac.osgeo.org/geos/ticket/1095
+template<>
+template<>
+void object::test<21>
+()
+{
+    try {
+        auto geom = wktreader.read("GEOMETRYCOLLECTION(POINT (0 1)), POINT (1 1)");
+        fail();
+    } catch (geos::io::ParseException &e) {
+        std::string msg(e.what());
+        ensure_equals(msg, "ParseException: Unexpected text after end of geometry");
+    }
+}
+
 
 } // namespace tut
