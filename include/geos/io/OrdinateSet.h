@@ -104,11 +104,11 @@ public:
         m_changesAllowed = allowed;
     }
 
-    bool operator==(const OrdinateSet& other) {
+    bool operator==(const OrdinateSet& other) const {
         return this->m_value == other.m_value;
     }
 
-    bool operator!=(const OrdinateSet& other) {
+    bool operator!=(const OrdinateSet& other) const {
         return !(*this == other);
     }
 
