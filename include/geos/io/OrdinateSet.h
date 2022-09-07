@@ -41,9 +41,10 @@ private:
         XYZM = Ordinate::X | Ordinate::Y | Ordinate::Z | Ordinate::M
     };
 
-    explicit OrdinateSet(Ordinates o) : value(o) {}
+    explicit OrdinateSet(Ordinates o) : m_value(o), m_changesAllowed(true) {}
 
-    Ordinates value;
+    Ordinates m_value;
+    bool m_changesAllowed;
 
 public:
 
@@ -63,24 +64,52 @@ public:
         return OrdinateSet(Ordinates::XYZM);
     }
 
-    void addZ() {
-        value = static_cast<Ordinates>(static_cast<unsigned char>(value) | Ordinate::Z);
+    void setZ(bool value) {
+        if (hasZ() != value) {
+            if (m_changesAllowed) {
+                m_value = static_cast<Ordinates>(static_cast<unsigned char>(m_value) ^ Ordinate::Z);
+            } else {
+                throw util::GEOSException("Cannot add additional ordinates.");
+            }
+        }
     }
 
-    void addM() {
-        value = static_cast<Ordinates>(static_cast<unsigned char>(value) | Ordinate::M);
+    void setM(bool value) {
+        if (hasM() != value) {
+            if (m_changesAllowed){
+                m_value = static_cast<Ordinates>(static_cast<unsigned char>(m_value) ^ Ordinate::M);
+            } else {
+                throw util::GEOSException("Cannot add additional ordinates.");
+            }
+        }
     }
 
     bool hasZ() const {
-        return static_cast<unsigned char>(value) & static_cast<unsigned char>(Ordinate::Z);
+        return static_cast<unsigned char>(m_value) & static_cast<unsigned char>(Ordinate::Z);
     }
 
     bool hasM() const {
-        return static_cast<unsigned char>(value) & static_cast<unsigned char>(Ordinate::M);
+        return static_cast<unsigned char>(m_value) & static_cast<unsigned char>(Ordinate::M);
     }
 
      int size() const {
         return 2 + hasZ() + hasM();
+    }
+
+    bool changesAllowed() const {
+        return m_changesAllowed;
+    }
+
+    void setChangesAllowed(bool allowed) {
+        m_changesAllowed = allowed;
+    }
+
+    bool operator==(const OrdinateSet& other) {
+        return this->m_value == other.m_value;
+    }
+
+    bool operator!=(const OrdinateSet& other) {
+        return !(*this == other);
     }
 
 };

@@ -112,32 +112,32 @@ public:
     std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
 
 protected:
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer, OrdinateSet ordinates) const;
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer, OrdinateSet& ordinates) const;
     static double getNextNumber(io::StringTokenizer* tokenizer);
     static std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, OrdinateSet& dim);
     static std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
     static std::string getNextCloser(io::StringTokenizer* tokenizer);
     static std::string getNextWord(io::StringTokenizer* tokenizer);
-    std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer) const;
-    std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::LinearRing> readLinearRingText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::MultiPoint> readMultiPointText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::Polygon> readPolygonText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::MultiLineString> readMultiLineStringText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
-    std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer, OrdinateSet ordinateFlags) const;
+    std::unique_ptr<geom::Geometry> readGeometryTaggedText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::Point> readPointText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::LineString> readLineStringText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::LinearRing> readLinearRingText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::MultiPoint> readMultiPointText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::Polygon> readPolygonText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::MultiLineString> readMultiLineStringText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
 private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;
     bool fixStructure;
 
-    void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinates, geom::Coordinate&) const;
+    void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, geom::Coordinate&) const;
 
     static bool isNumberNext(io::StringTokenizer* tokenizer);
     static bool isOpenerNext(io::StringTokenizer* tokenizer);
 
-    static OrdinateSet readOrdinateFlags(const std::string & s);
+    static void readOrdinateFlags(const std::string & s, OrdinateSet& ordinateFlags);
     static bool isTypeName(const std::string & type, const std::string & typeName);
 };
 

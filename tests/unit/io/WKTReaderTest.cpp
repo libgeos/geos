@@ -42,6 +42,18 @@ struct test_wktreader_data {
         wktwriter.setOutputDimension(3);
     }
 
+    void ensure_dimension(const std::string & wkt, std::size_t dim) const {
+        auto geom = wktreader.read(wkt);
+        ensure_equals(geom->getCoordinateDimension(), dim);
+    }
+
+    void ensure_parseexception(const std::string & wkt) const {
+        try {
+            auto geom = wktreader.read(wkt);
+            fail();
+        } catch (const geos::io::ParseException&) {}
+    }
+
 };
 
 typedef test_group<test_wktreader_data> group;
@@ -96,10 +108,7 @@ template<>
 void object::test<3>
 ()
 {
-    GeomPtr geom(wktreader.read("LINESTRING(-117 33, -116 34)"));
-    auto coords = geom->getCoordinates();
-
-    ensure(coords->getDimension() == 2);
+    ensure_dimension("LINESTRING(-117 33, -116 34)", 2);
 }
 
 // 4 - Ensure we can read ZM geometries, just discarding the M.
@@ -209,61 +218,49 @@ template<>
 void object::test<9>
 ()
 {
-    auto geom1(wktreader.read("POINT EMPTY"));
-    ensure("dimension(POINT EMPTY) == 2", geom1->getCoordinateDimension() == 2);
+    ensure_dimension("POINT EMPTY", 2);
+    ensure_dimension("POINTM EMPTY", 2);
+    ensure_dimension("POINT M EMPTY", 2);
+    ensure_dimension("POINTZ EMPTY", 3);
+    ensure_dimension("POINT Z EMPTY", 3);
+    ensure_dimension("POINTZM EMPTY", 3);
+    ensure_dimension("POINT ZM EMPTY", 3);
+    ensure_dimension("POINT Z M EMPTY", 3);
 
-    auto geom2(wktreader.read("POINT Z EMPTY"));
-    ensure("dimension(POINT Z EMPTY) == 3", geom2->getCoordinateDimension() == 3);
+    ensure_dimension("LINESTRING EMPTY", 2);
+    ensure_dimension("LINESTRINGM EMPTY", 2);
+    ensure_dimension("LINESTRING M EMPTY", 2);
+    ensure_dimension("LINESTRINGZ EMPTY", 3);
+    ensure_dimension("LINESTRING Z EMPTY", 3);
+    ensure_dimension("LINESTRINGZM EMPTY", 3);
+    ensure_dimension("LINESTRING ZM EMPTY", 3);
+    ensure_dimension("LINESTRING Z M EMPTY", 3);
 
-    auto geom3(wktreader.read("LINESTRING EMPTY"));
-    ensure("dimension(LINESTRING EMPTY) == 2", geom3->getCoordinateDimension() == 2);
-
-    auto geom4(wktreader.read("LINESTRING Z EMPTY"));
-    ensure("dimension(LINESTRING Z EMPTY) == 3", geom4->getCoordinateDimension() == 3);
-
-    auto geom5(wktreader.read("POLYGON EMPTY"));
-    ensure("dimension(POLYGON EMPTY) == 2", geom5->getCoordinateDimension() == 2);
-
-    auto geom6(wktreader.read("POLYGON Z EMPTY"));
-    ensure("dimension(POLYGON Z EMPTY) == 3", geom6->getCoordinateDimension() == 3);
+    ensure_dimension("POLYGON EMPTY", 2);
+    ensure_dimension("POLYGONM EMPTY", 2);
+    ensure_dimension("POLYGON M EMPTY", 2);
+    ensure_dimension("POLYGONZ EMPTY", 3);
+    ensure_dimension("POLYGON Z EMPTY", 3);
+    ensure_dimension("POLYGONZM EMPTY", 3);
+    ensure_dimension("POLYGON ZM EMPTY", 3);
+    ensure_dimension("POLYGON Z M EMPTY", 3);
 }
 
 
-// Handle WKT with mixed dimensionality in
-// coordinate sequence. This is the old behaviour, wherein
-// the first coordinate of a coordinate sequence dictates the
-// dimensionality of the following coordinates. This ignores
-// dimensionality tags (Z/M). It also has strange behaviour
-// in the multipoint case, but we leave this unchanged for now
-// as this test is being written just prior to 3.9 release.
+// Raise an exception on WKT with mixed dimensionality
 template<>
 template<>
 void object::test<10>
 ()
 {
-    GeomPtr geom;
-    geom = wktreader.read("MULTIPOINT (1 1, 2 2)");
-    ensure("dimension(MULTIPOINT (1 1, 2 2)) == 2", geom->getCoordinateDimension() == 2);
-
-    geom = wktreader.read("LINESTRING (1 1, 2 2)");
-    ensure("dimension(LINESTRING (1 1, 2 2)) == 2", geom->getCoordinateDimension() == 2);
-
-    geom = wktreader.read("MULTIPOINT (1 1 1, 2 2)");
-    ensure("dimension(MULTIPOINT (1 1 1, 2 2)) == 3", geom->getCoordinateDimension() == 3);
-
-    geom = wktreader.read("MULTIPOINT (1 1, 2 2 2)");
-    ensure("dimension(MULTIPOINT (1 1, 2 2 2)) == 3", geom->getCoordinateDimension() == 3);
-
-    geom = wktreader.read("LINESTRING (1 1 1, 2 2)");
-    ensure("dimension(LINESTRING (1 1 1, 2 2)) == 3", geom->getCoordinateDimension() == 3);
-
-    geom = wktreader.read("LINESTRING (1 1, 2 2 2)");
-    ensure("dimension(LINESTRING (1 1, 2 2 2)) == 2", geom->getCoordinateDimension() == 2);
-
-    geom = wktreader.read("POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0))");
-    ensure("dimension(POLYGON ((0 0, 1 0, 1 1 1, 0 1, 0 0)) == 2", geom->getCoordinateDimension() == 2);
+    ensure_parseexception("MULTIPOINT (1 1 1, 2 2)");
+    ensure_parseexception("MULTIPOINT ((1 1 1), 2 2)");
+    ensure_parseexception("MULTIPOINT (1 1, 2 2 2)");
+    ensure_parseexception("MULTIPOINT ((1 1), (2 2 2))");
+    ensure_parseexception("LINESTRING (1 1, 2 2 2)");
 }
 
+// Test typed variant of WKTReader::read
 template<>
 template<>
 void object::test<11>
@@ -328,9 +325,10 @@ void object::test<14>
 ()
 {
     auto geom = wktreader.read("POINT M(1 2 3)");
-    auto coord = geom->getCoordinate();
+    ensure_equals(geom->getCoordinateDimension(), 2u);
 
-    ensure(std::isnan(coord->z));
+    geom = wktreader.read("POINTM(1 2 3)");
+    ensure_equals(geom->getCoordinateDimension(), 2u);
 }
 
 // https://github.com/libgeos/geos/issues/669
@@ -342,6 +340,59 @@ void object::test<15>
     auto geom = wktreader.read("LINESTRINGZ(0 0 1, 1 1 1)");
 
     ensure_equals(geom->getCoordinateDimension(), 3);
+}
+
+// Raise exception on dimensionality inconsistent with declared
+template<>
+template<>
+void object::test<16>
+()
+{
+    ensure_parseexception("POINTM(1 1)");
+    ensure_parseexception("GEOMETRYCOLLECTION Z(POINT Z(0 0 0), LINESTRING M(1 1 1, 2 2 2))");
+    ensure_parseexception("GEOMETRYCOLLECTION (POINT (0, 0, 0), POINT (0, 0, 0, 0)");
+}
+
+// Consistent mix of implicit and explicit dimensionality
+template<>
+template<>
+void object::test<17>
+()
+{
+    auto geom = wktreader.read("GEOMETRYCOLLECTION (POINT (3 3 3), POINTZ (4 4 9), POINT Z (2 8 2), POINT EMPTY)");
+
+    ensure_equals(geom->getNumGeometries(), 4u);
+}
+
+// Inconsistent mix of implicit and explicit dimensionality
+template<>
+template<>
+void object::test<18>
+()
+{
+    // Implicit third dimension is always Z, so this geometry is inconsistent
+    ensure_parseexception("GEOMETRYCOLLECTION M (POINT (2 0 8), POINTM (1 1 1), POINT M (3 2 7), POINT EMPTY)");
+}
+
+// Incorrect number of coordinates
+template<>
+template<>
+void object::test<19>
+()
+{
+    ensure_parseexception("POINT (3 8, 2 7");
+}
+
+// Mixed dimensionality within single-part geometry
+template<>
+template<>
+void object::test<20>
+()
+{
+    ensure_parseexception("POLYGON Z ((0 0,0 10,10 10,10 0,0 0),(1 1 1,1 2 1,2 2 1,2 1 1,1 1 1))");
+    ensure_parseexception("POLYGON Z ((0 0,0 10,10 10,10 0,0 0),(1 1 1,1 2 1,2 2 1,2 1 1,1 1 1))");
+
+    ensure_parseexception("LINESTRING Z (0 0 0 1, 0 1 0 1)");
 }
 
 
