@@ -597,7 +597,12 @@ public:
      * @param y the y-coordinate of the point which this Envelope is being checked for containing
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
-    bool covers(double x, double y) const;
+    bool covers(double x, double y) const {
+        return x >= minx &&
+               x <= maxx &&
+               y >= miny &&
+               y <= maxy;
+    }
 
     /** \brief
      * Tests if the given point lies in or on the envelope.
