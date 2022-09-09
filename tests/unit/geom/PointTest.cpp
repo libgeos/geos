@@ -600,5 +600,27 @@ void object::test<46>
     ensure("point->getCoordinateDimension() == 2", point->getCoordinateDimension() == 2);
 }
 
+// test Point::setXY
+template<>
+template<>
+void object::test<47>
+()
+{
+    auto pt = factory_->createPoint();
+
+    pt->setXY(2, 3);
+
+    ensure("!pt->isEmpty()", !pt->isEmpty());
+
+    ensure_equals(pt->getX(), 2);
+    ensure_equals(pt->getY(), 3.0);
+    ensure(pt->getEnvelopeInternal()->contains(2, 3));
+
+    pt->setXY(7, 9);
+    ensure_equals(pt->getX(), 7);
+    ensure_equals(pt->getY(), 9);
+    ensure(pt->getEnvelopeInternal()->contains(7, 9));
+}
+
 } // namespace tut
 

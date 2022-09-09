@@ -109,6 +109,12 @@ public:
      */
     std::unique_ptr<Geometry> getBoundary() const override;
 
+    void setXY(double x, double y) {
+        empty3d = empty2d = false;
+        coordinates.setAt({x, y}, 0);
+        geometryChangedAction();
+    }
+
     double getX() const;
     double getY() const;
     double getZ() const;
