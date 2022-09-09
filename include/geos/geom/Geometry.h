@@ -844,7 +844,9 @@ public:
      * Notifies this Geometry that its Coordinates have been changed
      * by an external party.
      */
-    void geometryChangedAction();
+    void geometryChangedAction() {
+        envelope.reset();
+    }
 
 protected:
 
