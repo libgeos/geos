@@ -69,7 +69,7 @@ file. C API usage examples can be found in the GEOS unit tests and in the
 source code of software that uses GEOS, such as PostGIS and the sf package
 for R.
 
-### Using the C++ Interface
+### Using the C++ interface
 
 The C++ interface to GEOS provides a more natural API for C++ programs, as well
 as additional functionality that has not been exposed in the C API.  However,
@@ -98,26 +98,10 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
 C++ usage examples can be found in [examples](examples/).
 
+### Using other languages
 
-### Scripting Language Bindings
-
-#### Ruby
-
-Ruby bindings are available via [RGeo](https://github.com/rgeo/rgeo).
-
-#### PHP
-
-PHP bindings for GEOS are available separately from
-[php-geos](https://git.osgeo.org/gitea/geos/php-geos).
-
-#### Python
-
-Python bindings are available via:
-
- 1. [Shapely](http://pypi.python.org/pypi/Shapely)
- 2. [PyGEOS](https://github.com/pygeos/pygeos)
- 3. Calling functions from `libgeos_c` via Python ctypes
-
+GEOS has bindings in many languages, see the [bindings
+page](https://libgeos.org/usage/bindings/).
 
 ## Documentation
 
