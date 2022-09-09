@@ -99,7 +99,11 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 C++ usage examples can be found in [examples](examples/).
 
 
-### Scripting Language Bindings
+### Language Bindings
+
+#### Go
+
+Go bindings are available via [go-geos](https://github.com/twpayne/go-geos).
 
 #### Ruby
 
