@@ -2,8 +2,10 @@
 xxxx-xx-xx
 
 - New things:
-  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator, 
+  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator,
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
+  - CAPI: GEOSPreparedContainsXY, GEOSPreparedContainsProperlyXY,
+    GEOSPreparedIntersectsXY (GH-677, Dan Baston)
 
 - Fixes/Improvements:
   -

@@ -32,58 +32,73 @@
 class GEOSPreparedContainsPerfTest {
 
 public:
-    void test(const GEOSGeometry* g, std::size_t num_points) {
+    void test(const std::vector<GEOSGeometry*>& geoms, std::size_t num_points) {
         using namespace geos::geom;
 
-        double xmin, xmax, ymin, ymax;
-
-        GEOSGeom_getXMin(g, &xmin);
-        GEOSGeom_getXMax(g, &xmax);
-        GEOSGeom_getYMin(g, &ymin);
-        GEOSGeom_getYMax(g, &ymax);
-
-        std::default_random_engine e(12345);
-        std::uniform_real_distribution<> xdist(xmin, xmax);
-        std::uniform_real_distribution<> ydist(ymin, ymax);
-
-        std::vector<Coordinate> coords(num_points);
-        std::generate(coords.begin(), coords.end(), [&xdist, &ydist, &e]() {
-            return Coordinate(xdist(e), ydist(e));
-        });
-
         geos::util::Profile sw("GEOSPreparedContains");
-        sw.start();
+        geos::util::Profile sw_xy("GEOSPreparedContainsXY");
 
         std::size_t hits = 0;
-        auto prep = GEOSPrepare(g);
-        for (const auto& c : coords) {
-            auto pt = GEOSGeom_createPointFromXY(c.x, c.y);
+        std::size_t hits_xy = 0;
 
-            if (GEOSPreparedContains(prep, pt)) {
-                hits++;
+        for (const auto& g: geoms) {
+            double xmin, xmax, ymin, ymax;
+
+            GEOSGeom_getXMin(g, &xmin);
+            GEOSGeom_getXMax(g, &xmax);
+            GEOSGeom_getYMin(g, &ymin);
+            GEOSGeom_getYMax(g, &ymax);
+
+            std::default_random_engine e(12345);
+            std::uniform_real_distribution<> xdist(xmin, xmax);
+            std::uniform_real_distribution<> ydist(ymin, ymax);
+
+            std::vector<Coordinate> coords(num_points);
+            std::generate(coords.begin(), coords.end(), [&xdist, &ydist, &e]() {
+                return Coordinate(xdist(e), ydist(e));
+            });
+
+
+            sw.start();
+            auto prep = GEOSPrepare(g);
+            for (const auto& c : coords) {
+                auto pt = GEOSGeom_createPointFromXY(c.x, c.y);
+                if (GEOSPreparedContains(prep, pt)) {
+                    hits++;
+                }
+
+                GEOSGeom_destroy(pt);
             }
+            GEOSPreparedGeom_destroy(prep);
+            sw.stop();
 
-            GEOSGeom_destroy(pt);
+            sw_xy.start();
+            prep = GEOSPrepare(g);
+            for (const auto& c : coords) {
+                if (GEOSPreparedContainsXY(prep, c.x, c.y)) {
+                    hits_xy++;
+                }
+            }
+            GEOSPreparedGeom_destroy(prep);
+            sw_xy.stop();
         }
 
-        GEOSPreparedGeom_destroy(prep);
-
-        sw.stop();
-
         std::cout << sw.name << ": " << hits << " hits from " << num_points << " points in " <<  sw.getTotFormatted() << std::endl;
-
+        std::cout << sw_xy.name << ": " << hits_xy << " hits from " << num_points << " points in " <<  sw_xy.getTotFormatted() << std::endl;
     }
 };
 
 int main(int argc, char** argv) {
     if (argc != 3) {
-        std::cout << "perf_geospreparedcontins performs a specified number of point-in-polygon tests" << std::endl;
-        std::cout << "on randomly generated points from the bounding box of a single geometry provided" << std::endl;
+        std::cout << "perf_geospreparedcontains performs a specified number of point-in-polygon tests" << std::endl;
+        std::cout << "on randomly generated points from the bounding box of each geometry provided" << std::endl;
         std::cout << "in a file as WKT." << std::endl;
         std::cout << std::endl;
-        std::cout << "Usage: perf_geospreparedcontins [wktfile] [n]" << std::endl;
+        std::cout << "Usage: perf_geospreparedcontains [wktfile] [n]" << std::endl;
         return 0;
     }
+
+    initGEOS(nullptr, nullptr);
 
     GEOSPreparedContainsPerfTest tester;
 
@@ -91,21 +106,26 @@ int main(int argc, char** argv) {
     std::cout << "Performing " << n << " point-in-polygon tests." << std::endl;
 
     std::string fname{argv[1]};
-    std::cout << "Reading shape from " << fname << std::endl;
+    std::cout << "Reading shapes from " << fname << std::endl;
+
+    std::vector<GEOSGeometry*> geoms;
 
     std::ifstream f(fname);
-    std::stringstream buff;
-    buff << f.rdbuf();
+    std::string line;
+    long i = 0;
+    while(std::getline(f, line)) {
+        if (line != "") {
+            geoms.push_back(GEOSGeomFromWKT(line.c_str()));
+            i++;
+        }
+    }
     f.close();
 
-    std::string wkt = buff.str();
-    buff.clear();
+    std::cout << "Read " << geoms.size() << " geometries." << std::endl;
 
-    initGEOS(nullptr, nullptr);
-    GEOSGeometry* g = GEOSGeomFromWKT(wkt.c_str());
-    wkt.clear();
+    tester.test(geoms, n);
 
-    tester.test(g, n);
-
-    GEOSGeom_destroy(g);
+    for (auto& g : geoms) {
+        GEOSGeom_destroy(g);
+    }
 }
