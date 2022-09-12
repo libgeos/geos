@@ -41,6 +41,6 @@ Our policy for EOL'ing a particular minor version is as follows:
 
 * If the first micro of a minor was released more than 3-4 years ago, we may consider EOL'ing it.
 * We will likely EOL any minor version that has reached the 5 year mark.
-* Once a minor release has reached EOL, it will either no longer be listed on the [download] or will have a **EOL** marker next to it signaling this is the last micro that minor version.
+* Once a minor release has reached EOL, it will either no longer be listed on the [download](/usage/download/) or will have a **EOL** marker next to it signaling this is the last micro that minor version.
 
 
