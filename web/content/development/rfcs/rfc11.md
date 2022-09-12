@@ -1,0 +1,46 @@
+---
+title: "GEOS RFC 11 - GEOS Version and EOL Policy"
+date: 2022-09-12T00:00:00-04:00
+draft: false
+geekdocHidden: true
+geekdocHiddenTocTree: false
+weight: 10
+---
+
+|         |                                 |
+| :------ | ------------------------------- |
+| RFC 11  | End-of-Life (EOL) Policy        |
+| Author  | Regina Obe                      |
+| Contact | lr@pcorp.us                     |
+| Status  | Draft                           |
+
+This document describes the GEOS project's policy for Versiong and EOLing GEOS minor releases.
+
+# Versioning
+The GEOS project releases a new minor release every 1-2 years.
+Each minor release has a git repo dedicated branch for it named after the minor version.
+
+These minor releases contain new features and have version numbers starting with
+3.9, 3.10, 3.11, and so on with an associated git repo branch with the same name.
+The first release of a minor version will have a micro of .0 and be tagged.
+e.g. The first release of 3.11 was 3.11.0 and in git is tagged as 3.11.0.
+
+On an as needed basis, each supported minor version will have a new micro release that is then tagged and is considered to be a patched version for that minor.
+
+# Patch Policy
+These subsequent micro releases may have bug fixes, performance improvements, and security fixes in them
+but will never offer new features.
+
+* The newer the minor, the more likely performance improvements will be added. Performance improvements that could disstabilize a minor release (e.g. requiring too much code) or change behavior will generally not be applied.
+* Bug fixes not considered trivial changes of code or major security or crash issues, will likely not be applied to older releases.
+* The latest stable (meaning the minor with highest minor number) will have all bug fixes and enhancements deemed not new features.
+* Minor versions marked EOL will never have further micro or tagged releases. We may on occasion apply fixes to that minor git branch if an entity is willing to fund such an effort, but we will never tag such a change.
+
+# End-of-Life Policy
+Our policy for EOL'ing a particular minor version is as follows:
+
+* If the first micro of a minor was released more than 3-4 years ago, we may consider EOL'ing it.
+* We will likely EOL any minor version that has reached the 5 year mark.
+* Once a minor release has reached EOL, it will either no longer be listed on the [download] or will have a **EOL** marker next to it signaling this is the last micro that minor version.
+
+
