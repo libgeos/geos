@@ -45,9 +45,10 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 void
 MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
+    if (segStr->size() == 0)
+        return;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
                                     segStr, monoChains);
-
 }
 
 
@@ -75,6 +76,8 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
     // NOTE - mloskot: const qualifier is removed silently, dirty.
 
     for(const SegmentString* css: *segStrings) {
+        if (css->size() == 0)
+            continue;
         SegmentString* ss = const_cast<SegmentString*>(css);
         addToIndex(ss);
     }
@@ -117,4 +120,3 @@ MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
 
 } // geos::noding
 } // geos
-
