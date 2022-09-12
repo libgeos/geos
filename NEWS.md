@@ -3,7 +3,7 @@
 
 - Fixes/Improvements:
   - Remove spurious version from --libs geos-config options
-
+  - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
 
 
 ## Changes in 3.11.0
