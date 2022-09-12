@@ -153,7 +153,7 @@ PointLocator::locate(const Coordinate& p, const Point* pt)
 {
     // no point in doing envelope test, since equality test is just as fast
     const Coordinate* ptCoord = pt->getCoordinate();
-    if(ptCoord->equals2D(p)) {
+    if(ptCoord != nullptr && ptCoord->equals2D(p)) {
         return Location::INTERIOR;
     }
     return Location::EXTERIOR;
