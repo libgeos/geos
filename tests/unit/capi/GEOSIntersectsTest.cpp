@@ -171,5 +171,19 @@ namespace tut
         ensure_equals(r1, 1);
     }
 
+// Simplified test for https://trac.osgeo.org/geos/ticket/1110 (collection with empty points)
+template<>
+template<>
+void object::test<8>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 10)");
+    geom2_ = GEOSGeomFromWKT("MULTIPOINT ((5 5),EMPTY)");
+
+    char r1 = GEOSIntersects(geom1_, geom2_);
+
+    ensure_equals(r1, 1);
+}
+
 } // namespace tut
 
