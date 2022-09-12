@@ -438,7 +438,7 @@ void object::test<25>
 ()
 {
 
-    GeomPtr linearGeom(reader.read("LINESTRING (0 0, 10 10 10)"));
+    GeomPtr linearGeom(reader.read("LINESTRING (0 0, 10 10)"));
     LengthIndexedLine indexedLine(linearGeom.get());
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);

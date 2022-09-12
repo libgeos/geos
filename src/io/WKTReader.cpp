@@ -21,7 +21,6 @@
 #include <geos/io/StringTokenizer.h>
 #include <geos/io/ParseException.h>
 #include <geos/io/CLocalizer.h>
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -33,8 +32,8 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/PrecisionModel.h>
 #include <geos/util.h>
+#include <geos/util/string.h>
 
 #include <sstream>
 #include <string>
@@ -51,26 +50,37 @@ WKTReader::read(const std::string& wellKnownText) const
 {
     CLocalizer clocale;
     StringTokenizer tokenizer(wellKnownText);
-    return readGeometryTaggedText(&tokenizer);
+    OrdinateSet ordinateFlags = OrdinateSet::createXY();
+    auto ret = readGeometryTaggedText(&tokenizer, ordinateFlags);
+
+    if (tokenizer.peekNextToken() != StringTokenizer::TT_EOF) {
+        tokenizer.nextToken();
+        throw ParseException("Unexpected text after end of geometry");
+    }
+
+    return ret;
 }
 
 std::unique_ptr<CoordinateSequence>
-WKTReader::getCoordinates(StringTokenizer* tokenizer) const
+WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), dim);
+        return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), ordinateFlags.hasZ() ? 3 : 2);
     }
 
     Coordinate coord;
-    getPreciseCoordinate(tokenizer, coord, dim);
+    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
+
+    // Check dim after reading first coord, because we may have picked up an implicit Z dimension
+    std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
+
     auto coordinates = detail::make_unique<CoordinateArraySequence>(0u, dim);
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {
-        getPreciseCoordinate(tokenizer, coord, dim);
+        getPreciseCoordinate(tokenizer, ordinateFlags, coord);
         coordinates->add(coord);
         nextToken = getNextCloserOrComma(tokenizer);
     }
@@ -78,28 +88,34 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer) const
     return RETURN_UNIQUE_PTR(coordinates);
 }
 
-
 void
 WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
-                                Coordinate& coord,
-                                size_t& dim) const
-{
+                                OrdinateSet& ordinateFlags,
+                                Coordinate& coord) const {
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
-    if(isNumberNext(tokenizer)) {
+
+    // Check for undeclared Z dimension
+    if (ordinateFlags.changesAllowed() && isNumberNext(tokenizer)) {
+        ordinateFlags.setZ(true);
+    }
+
+    if (ordinateFlags.hasZ()) {
         coord.z = getNextNumber(tokenizer);
-        dim = 3;
-
-        // If there is a fourth value (M) read and discard it.
-        if(isNumberNext(tokenizer)) {
-            getNextNumber(tokenizer);
-        }
-
     }
-    else {
-        coord.z = DoubleNotANumber;
-        dim = 2;
+
+    // Check for undeclared M dimension
+    if (ordinateFlags.changesAllowed() && ordinateFlags.hasZ() && isNumberNext(tokenizer)) {
+        ordinateFlags.setM(true);
     }
+
+    if (ordinateFlags.hasM()) {
+        // discard M ordinate
+        getNextNumber(tokenizer);
+    }
+
+    ordinateFlags.setChangesAllowed(false); // First coordinate read; future coordinates must be consistent
+
     precisionModel->makePrecise(coord);
 }
 
@@ -107,6 +123,12 @@ bool
 WKTReader::isNumberNext(StringTokenizer* tokenizer)
 {
     return tokenizer->peekNextToken() == StringTokenizer::TT_NUMBER;
+}
+
+bool
+WKTReader::isOpenerNext(StringTokenizer* tokenizer)
+{
+    return tokenizer->peekNextToken() == '(';
 }
 
 double
@@ -133,25 +155,61 @@ WKTReader::getNextNumber(StringTokenizer* tokenizer)
     return 0;
 }
 
+bool
+WKTReader::isTypeName(const std::string & type, const std::string & typeName) {
+    return util::startsWith(type, typeName);
+}
+
+void
+WKTReader::readOrdinateFlags(const std::string & s, OrdinateSet& ordinateFlags) {
+    if (util::endsWith(s, "ZM")) {
+        ordinateFlags.setM(true);
+        ordinateFlags.setZ(true);
+        ordinateFlags.setChangesAllowed(false);
+    } else if (util::endsWith(s, 'M')) {
+        ordinateFlags.setM(true);
+        ordinateFlags.setChangesAllowed(false);
+    } else if (util::endsWith(s, 'Z')) {
+        ordinateFlags.setZ(true);
+        ordinateFlags.setChangesAllowed(false);
+    }
+}
+
 std::string
-WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer, std::size_t& dim)
+WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags)
 {
     std::string nextWord = getNextWord(tokenizer);
 
-    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
-    if(nextWord == "Z" || nextWord == "ZM") {
-        dim = 3;
-    }
+    bool flagsModified = false;
 
     // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
-    if(nextWord == "Z" || nextWord == "M" || nextWord == "ZM") {
+    if (nextWord == "ZM") {
+        ordinateFlags.setZ(true);
+        ordinateFlags.setM(true);
+        flagsModified = true;
         nextWord = getNextWord(tokenizer);
+    } else {
+        if (nextWord == "Z") {
+            ordinateFlags.setZ(true);
+            flagsModified = true;
+            nextWord = getNextWord(tokenizer);
+        }
+
+        if (nextWord == "M") {
+            ordinateFlags.setM(true);
+            flagsModified = true;
+            nextWord = getNextWord(tokenizer);
+        }
+    }
+
+    if (flagsModified) {
+        ordinateFlags.setChangesAllowed(false);
     }
 
     if(nextWord == "EMPTY" || nextWord == "(") {
         return nextWord;
     }
-    throw  ParseException("Expected 'Z', 'M', 'ZM', 'EMPTY' or '(' but encountered ", nextWord);
+    throw ParseException("Expected 'Z', 'M', 'ZM', 'EMPTY' or '(' but encountered ", nextWord);
 }
 
 std::string
@@ -207,63 +265,76 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Geometry>
-WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer) const
+WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
     std::string type = getNextWord(tokenizer);
-    if(type == "POINT") {
-        return readPointText(tokenizer);
+
+    std::unique_ptr<Geometry> geom;
+    OrdinateSet origFlags = ordinateFlags;
+    OrdinateSet newFlags = OrdinateSet::createXY();
+    readOrdinateFlags(type, newFlags);
+
+    if(isTypeName(type, "POINT")) {
+        geom = readPointText(tokenizer, newFlags);
     }
-    else if(type == "LINESTRING") {
-        return readLineStringText(tokenizer);
+    else if(isTypeName(type, "LINESTRING")) {
+        geom = readLineStringText(tokenizer, newFlags);
     }
-    else if(type == "LINEARRING") {
-        return readLinearRingText(tokenizer);
+    else if(isTypeName(type, "LINEARRING")) {
+        geom = readLinearRingText(tokenizer, newFlags);
     }
-    else if(type == "POLYGON") {
-        return readPolygonText(tokenizer);
+    else if(isTypeName(type, "POLYGON")) {
+        geom = readPolygonText(tokenizer, newFlags);
     }
-    else if(type == "MULTIPOINT") {
-        return readMultiPointText(tokenizer);
+    else if(isTypeName(type,  "MULTIPOINT")) {
+        geom = readMultiPointText(tokenizer, newFlags);
     }
-    else if(type == "MULTILINESTRING") {
-        return readMultiLineStringText(tokenizer);
+    else if(isTypeName(type, "MULTILINESTRING")) {
+        geom = readMultiLineStringText(tokenizer, newFlags);
     }
-    else if(type == "MULTIPOLYGON") {
-        return readMultiPolygonText(tokenizer);
+    else if(isTypeName(type, "MULTIPOLYGON")) {
+        geom = readMultiPolygonText(tokenizer, newFlags);
     }
-    else if(type == "GEOMETRYCOLLECTION") {
-        return readGeometryCollectionText(tokenizer);
+    else if(isTypeName(type, "GEOMETRYCOLLECTION")) {
+        geom = readGeometryCollectionText(tokenizer, newFlags);
+    } else {
+        throw ParseException("Unknown type", type);
     }
-    throw ParseException("Unknown type", type);
+
+    if (!origFlags.changesAllowed() && newFlags != origFlags) {
+        throw ParseException("Cannot mix dimensionality in a geometry.");
+    }
+
+    return geom;
+
 }
 
 std::unique_ptr<Point>
-WKTReader::readPointText(StringTokenizer* tokenizer) const
+WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPoint(dim);
+        return geometryFactory->createPoint(ordinateFlags.hasZ() ? 3 : 2);
     }
 
     Coordinate coord;
-    getPreciseCoordinate(tokenizer, coord, dim);
+    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
     getNextCloser(tokenizer);
 
     return std::unique_ptr<Point>(geometryFactory->createPoint(coord));
 }
 
 std::unique_ptr<LineString>
-WKTReader::readLineStringText(StringTokenizer* tokenizer) const
+WKTReader::readLineStringText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    auto&& coords = getCoordinates(tokenizer);
+    auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     return geometryFactory->createLineString(std::move(coords));
 }
 
 std::unique_ptr<LinearRing>
-WKTReader::readLinearRingText(StringTokenizer* tokenizer) const
+WKTReader::readLinearRingText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    auto&& coords = getCoordinates(tokenizer);
+    auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     if (fixStructure && !coords->isRing()) {
         std::unique_ptr<CoordinateArraySequence> cas(new CoordinateArraySequence(*coords));
         cas->closeRing();
@@ -273,10 +344,9 @@ WKTReader::readLinearRingText(StringTokenizer* tokenizer) const
 }
 
 std::unique_ptr<MultiPoint>
-WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
+WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiPoint();
     }
@@ -290,7 +360,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
 
         do {
             Coordinate coord;
-            getPreciseCoordinate(tokenizer, coord, dim);
+            getPreciseCoordinate(tokenizer, ordinateFlags, coord);
             coords->add(coord);
             nextToken = getNextCloserOrComma(tokenizer);
         }
@@ -305,7 +375,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
         std::vector<std::unique_ptr<Point>> points;
 
         do {
-            points.push_back(readPointText(tokenizer));
+            points.push_back(readPointText(tokenizer, ordinateFlags));
             nextToken = getNextCloserOrComma(tokenizer);
         } while(nextToken == ",");
 
@@ -345,19 +415,18 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer) const
 }
 
 std::unique_ptr<Polygon>
-WKTReader::readPolygonText(StringTokenizer* tokenizer) const
+WKTReader::readPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPolygon(dim);
+        return geometryFactory->createPolygon(ordinateFlags.hasZ() ? 3 : 2);
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;
-    auto shell = readLinearRingText(tokenizer);
+    auto shell = readLinearRingText(tokenizer, ordinateFlags);
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {
-        holes.push_back(readLinearRingText(tokenizer));
+        holes.push_back(readLinearRingText(tokenizer, ordinateFlags));
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
@@ -365,17 +434,16 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer) const
 }
 
 std::unique_ptr<MultiLineString>
-WKTReader::readMultiLineStringText(StringTokenizer* tokenizer) const
+WKTReader::readMultiLineStringText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiLineString();
     }
 
     std::vector<std::unique_ptr<LineString>> lineStrings;
     do {
-        lineStrings.push_back(readLineStringText(tokenizer));
+        lineStrings.push_back(readLineStringText(tokenizer, ordinateFlags));
         nextToken = getNextCloserOrComma(tokenizer);
     } while (nextToken == ",");
 
@@ -383,17 +451,16 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer) const
 }
 
 std::unique_ptr<MultiPolygon>
-WKTReader::readMultiPolygonText(StringTokenizer* tokenizer) const
+WKTReader::readMultiPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
         return geometryFactory->createMultiPolygon();
     }
 
     std::vector<std::unique_ptr<Polygon>> polygons;
     do {
-        polygons.push_back(readPolygonText(tokenizer));
+        polygons.push_back(readPolygonText(tokenizer, ordinateFlags));
         nextToken = getNextCloserOrComma(tokenizer);
     } while(nextToken == ",");
 
@@ -401,17 +468,16 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer) const
 }
 
 std::unique_ptr<GeometryCollection>
-WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer) const
+WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::size_t dim = 2;
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, dim);
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
         return geometryFactory->createGeometryCollection();
     }
 
     std::vector<std::unique_ptr<Geometry>> geoms;
     do {
-        geoms.push_back(readGeometryTaggedText(tokenizer));
+        geoms.push_back(readGeometryTaggedText(tokenizer, ordinateFlags));
         nextToken = getNextCloserOrComma(tokenizer);
     } while(nextToken == ",");
 

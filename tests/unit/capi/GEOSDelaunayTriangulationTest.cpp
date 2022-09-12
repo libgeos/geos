@@ -113,13 +113,13 @@ void object::test<4>
                       "MULTILINESTRING ((5 0, 10 10), (0 0, 10 10), (0 0, 5 0))");
 }
 
-// A polygon with an hole
+// A polygon with a hole
 template<>
 template<>
 void object::test<5>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 8.5 1, 10 10, 0.5 9, 0 0),(2 2, 3 8, 7 8, 8 2, 2 2)))");
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 8.5 1, 10 10, 0.5 9, 0 0),(2 2, 3 8, 7 8, 8 2, 2 2))");
 
     geom2_ = GEOSDelaunayTriangulation(geom1_, 0, 0);
     ensure(geom2_ != nullptr);

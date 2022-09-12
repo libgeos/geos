@@ -230,8 +230,8 @@ template<>
 void object::test<10> ()
 {
     checkReduceNewPM(
-        "MULTIPOINT ((0 0), (0 1.4), (1.4 1.4), (1.4 0), (0.9 0) ))",
-        "MULTIPOINT ((0 0), (0 1), (1 1), (1 0), (1 0) ))"
+        "MULTIPOINT ((0 0), (0 1.4), (1.4 1.4), (1.4 0), (0.9 0))",
+        "MULTIPOINT ((0 0), (0 1), (1 1), (1 0), (1 0))"
     );
 }
 

@@ -362,7 +362,7 @@ void object::test<25>()
 {
     checkFix(
         "MULTILINESTRING ((10 10, 90 90), (10 10, 10 10, 10 10))",
-        "LINESTRING (10 10, 90 90))");
+        "LINESTRING (10 10, 90 90)");
 }
 
 // testMultiLineStringKeepCollapse
@@ -382,7 +382,7 @@ void object::test<27>()
 {
     checkFix(
         "MULTILINESTRING ((10 10, 90 90), EMPTY)",
-        "LINESTRING (10 10, 90 90))");
+        "LINESTRING (10 10, 90 90)");
 }
 
 // testMultiLineStringWithMultiEmpty

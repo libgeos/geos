@@ -150,7 +150,7 @@ template<>
 void object::test<4> ()
 {
     checkElevation( "LINESTRING Z (0 0 0, 10 10 8)",
-                    "LINESTRING Z (1 2 2, 9 8 6))",
+                    "LINESTRING Z (1 2 2, 9 8 6)",
     {
      -1,11, 4,                            11,11,  7,
         0,10, 4,    5,10, 4,    10,10,  7,
