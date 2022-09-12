@@ -47,6 +47,8 @@ struct LocationMatchingFilter : public GeometryComponentFilter {
     bool found;
 
     void filter_ro(const Geometry* g) override {
+        if (g->isEmpty())
+            return;
         const Coordinate* pt = g->getCoordinate();
         const auto loc = pt_locator->locate(pt);
 
@@ -69,6 +71,8 @@ struct LocationNotMatchingFilter : public GeometryComponentFilter {
     bool found;
 
     void filter_ro(const Geometry* g) override {
+        if (g->isEmpty())
+            return;
         const Coordinate* pt = g->getCoordinate();
         const auto loc = pt_locator->locate(pt);
 
@@ -93,6 +97,8 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
     bool done;
 
     void filter_ro(const Geometry* g) override {
+        if (g->isEmpty())
+            return;
         const Coordinate* pt = g->getCoordinate();
         auto loc = pt_locator->locate(pt);
 
