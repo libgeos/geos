@@ -45,7 +45,7 @@ struct test_preparedgeometrytouches_data {
 typedef test_group<test_preparedgeometrytouches_data> group;
 typedef group::object object;
 
-group test_preparedgeometrytouches_data("geos::geom::prep::PreparedGeometry::touches");
+group test_preparedgeometrytouches_data("geos::geom::prep::PreparedGeometryTouches");
 
 //
 // Test Cases
