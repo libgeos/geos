@@ -28,6 +28,8 @@ ComponentCoordinateExtracter::ComponentCoordinateExtracter(std::vector<const Coo
 void
 ComponentCoordinateExtracter::filter_rw(Geometry* geom)
 {
+    if (geom->isEmpty())
+        return;
     if(geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING
             ||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
             ||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT) {
@@ -42,6 +44,8 @@ ComponentCoordinateExtracter::filter_rw(Geometry* geom)
 void
 ComponentCoordinateExtracter::filter_ro(const Geometry* geom)
 {
+    if (geom->isEmpty())
+        return;
     //if (	typeid( *geom ) == typeid( LineString )
     //	||	typeid( *geom ) == typeid( Point ) )
     if(geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING
@@ -64,4 +68,3 @@ ComponentCoordinateExtracter::getCoordinates(const Geometry& geom, std::vector<c
 } // namespace geos.geom.util
 } // namespace geos.geom
 } // namespace geos
-
