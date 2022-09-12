@@ -3,7 +3,7 @@ Changes in 3.10.4
 2022-xx-xx
 
 - Fixes/Improvements:
-  - 
+  - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
 
 
 Changes in 3.10.3
