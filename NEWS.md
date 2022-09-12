@@ -2,11 +2,13 @@
 xxxx-xx-xx
 
 - New things:
-  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator, 
+  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator,
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
 
 - Fixes/Improvements:
-  -
+  - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
+  - WKTReader: Throw exception on inconsistent geometry dimension (#1080, Dan Baston)
+  - WKTReader: Throw exception if WKT contains extra text after end of geometry (#1095, Dan Baston)
 
 
 ## Changes in 3.11.0
