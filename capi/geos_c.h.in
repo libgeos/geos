@@ -1111,11 +1111,25 @@ extern char GEOS_DLL GEOSPreparedContains_r(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
 
+/** \see GEOSPreparedContainsXY */
+extern char GEOS_DLL GEOSPreparedContainsXY_r(
+        GEOSContextHandle_t handle,
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
+
 /** \see GEOSPreparedContainsProperly */
 extern char GEOS_DLL GEOSPreparedContainsProperly_r(
     GEOSContextHandle_t handle,
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
+
+/** \see GEOSPreparedContainsProperlyXY */
+extern char GEOS_DLL GEOSPreparedContainsProperlyXY_r(
+        GEOSContextHandle_t handle,
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
 
 /** \see GEOSPreparedCoveredBy */
 extern char GEOS_DLL GEOSPreparedCoveredBy_r(
@@ -1146,6 +1160,13 @@ extern char GEOS_DLL GEOSPreparedIntersects_r(
     GEOSContextHandle_t handle,
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
+
+/** \see GEOSPreparedIntersectsXY */
+extern char GEOS_DLL GEOSPreparedIntersectsXY_r(
+        GEOSContextHandle_t handle,
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
 
 /** \see GEOSPreparedOverlaps */
 extern char GEOS_DLL GEOSPreparedOverlaps_r(
@@ -4156,7 +4177,7 @@ extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
-* \see geos::geom::Geometry::coveredby
+* \see geos::geom::Geometry::coveredBy
 */
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
@@ -4285,7 +4306,21 @@ extern char GEOS_DLL GEOSPreparedContains(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedGeometry do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of whether the provided point is contained.
+* \param pg1 The prepared geometry
+* \param x x coordinate of point to test
+* \param y y coordinate of point to test
+* \returns 1 on true, 0 on false, 2 on exception
+* \see GEOSContains
+*/
+extern char GEOS_DLL GEOSPreparedContainsXY(
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
+
+/**
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry is contained properly.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -4295,6 +4330,20 @@ extern char GEOS_DLL GEOSPreparedContains(
 extern char GEOS_DLL GEOSPreparedContainsProperly(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
+
+/**
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of whether the provided point is contained properly.
+* \param pg1 The prepared geometry
+* \param x x coordinate of point to test
+* \param y y coordinate of point to test
+* \returns 1 on true, 0 on false, 2 on exception
+* \see GEOSContainsProperly
+*/
+extern char GEOS_DLL GEOSPreparedContainsProperlyXY(
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
 
 /**
 * Using a \ref GEOSPreparedGeometry do a high performance
@@ -4333,31 +4382,45 @@ extern char GEOS_DLL GEOSPreparedCrosses(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry is disjoint.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
 * \returns 1 on true, 0 on false, 2 on exception
-* \see GEOSDisjoin
+* \see GEOSDisjoint
 */
 extern char GEOS_DLL GEOSPreparedDisjoint(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
-* calculation of whether the provided geometry is disjoint.
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of whether the provided geometry intersects.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
 * \returns 1 on true, 0 on false, 2 on exception
-* \see GEOSDisjoin
+* \see GEOSIntersects
 */
 extern char GEOS_DLL GEOSPreparedIntersects(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of whether the provided point intersects.
+* \param pg1 The prepared geometry
+* \param x x coordinate of point to test
+* \param y y coordinate of point to test
+* \returns 1 on true, 0 on false, 2 on exception
+* \see GEOSIntersects
+*/
+extern char GEOS_DLL GEOSPreparedIntersectsXY(
+        const GEOSPreparedGeometry* pg1,
+        double x,
+        double y);
+
+/**
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry overlaps.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -4369,7 +4432,7 @@ extern char GEOS_DLL GEOSPreparedOverlaps(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry touches.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -4381,7 +4444,7 @@ extern char GEOS_DLL GEOSPreparedTouches(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry is within.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -4393,7 +4456,7 @@ extern char GEOS_DLL GEOSPreparedWithin(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDisjoint do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation to find the nearest points between the
 * prepared and provided geometry.
 * \param pg1 The prepared geometry

@@ -422,6 +422,29 @@ void object::test<14>
     ensure_equals(ret, 2);
 }
 
+// Test XY variants
+template<>
+template<>
+void object::test<15>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))")    ;
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure_equals(GEOSPreparedContainsXY(prepGeom1_, 0.5, 0.5), 1);
+    ensure_equals(GEOSPreparedContainsXY(prepGeom1_, 1.5, 0.5), 0);
+    ensure_equals(GEOSPreparedContainsXY(prepGeom1_, 0.75, 0.5), 1);
+
+    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0.5, 0.5), 1);
+    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0, 0), 0);
+    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 1.5, 0.5), 0);
+    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0.75, 0.5), 1);
+
+    ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 0.5, 0.5), 1);
+    ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 1.5, 0.5), 0);
+    ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 0.75, 0.5), 1);
+}
+
 
 } // namespace tut
 

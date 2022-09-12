@@ -1450,9 +1450,21 @@ extern "C" {
     }
 
     char
+    GEOSPreparedContainsXY(const geos::geom::prep::PreparedGeometry* pg1, double x, double y)
+    {
+        return GEOSPreparedContainsXY_r(handle, pg1, x, y);
+    }
+
+    char
     GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2)
     {
         return GEOSPreparedContainsProperly_r(handle, pg1, g2);
+    }
+
+    char
+    GEOSPreparedContainsProperlyXY(const geos::geom::prep::PreparedGeometry* pg1, double x, double y)
+    {
+        return GEOSPreparedContainsProperlyXY_r(handle, pg1, x, y);
     }
 
     char
@@ -1483,6 +1495,12 @@ extern "C" {
     GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2)
     {
         return GEOSPreparedIntersects_r(handle, pg1, g2);
+    }
+
+    char
+    GEOSPreparedIntersectsXY(const geos::geom::prep::PreparedGeometry* pg1, double x, double y)
+    {
+        return GEOSPreparedIntersectsXY_r(handle, pg1, x, y);
     }
 
     char

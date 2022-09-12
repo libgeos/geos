@@ -218,18 +218,6 @@ Geometry::geometryChanged()
     apply_rw(&geometryChangedFilter);
 }
 
-/**
- * Notifies this Geometry that its Coordinates have been changed by an external
- * party. When geometryChanged is called, this method will be called for
- * this Geometry and its component Geometries.
- * @see apply(GeometryComponentFilter *)
- */
-void
-Geometry::geometryChangedAction()
-{
-    envelope.reset(nullptr);
-}
-
 bool
 Geometry::isValid() const
 {

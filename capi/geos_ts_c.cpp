@@ -207,6 +207,7 @@ typedef struct GEOSContextHandle_HS {
     uint8_t WKBOutputDims;
     int WKBByteOrder;
     int initialized;
+    std::unique_ptr<geos::geom::Point> point2d;
 
     GEOSContextHandle_HS()
         :
@@ -216,10 +217,12 @@ typedef struct GEOSContextHandle_HS {
         noticeData(nullptr),
         errorMessageOld(nullptr),
         errorMessageNew(nullptr),
-        errorData(nullptr)
+        errorData(nullptr),
+        point2d(nullptr)
     {
         memset(msgBuffer, 0, sizeof(msgBuffer));
         geomFactory = GeometryFactory::getDefaultInstance();
+        point2d.reset(geomFactory->createPoint({0, 0}));
         WKBOutputDims = 2;
         WKBByteOrder = getMachineByteOrder();
         setNoticeHandler(nullptr);
@@ -3396,12 +3399,30 @@ extern "C" {
     }
 
     char
+    GEOSPreparedContainsXY_r(GEOSContextHandle_t extHandle,
+                           const geos::geom::prep::PreparedGeometry* pg, double x, double y)
+    {
+        extHandle->point2d->setXY(x, y);
+
+        return GEOSPreparedContains_r(extHandle, pg, extHandle->point2d.get());
+    }
+
+    char
     GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle,
                                    const geos::geom::prep::PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
             return pg->containsProperly(g);
         });
+    }
+
+    char
+    GEOSPreparedContainsProperlyXY_r(GEOSContextHandle_t extHandle,
+                                   const geos::geom::prep::PreparedGeometry* pg, double x, double y)
+    {
+        extHandle->point2d->setXY(x, y);
+
+        return GEOSPreparedContainsProperly_r(extHandle, pg, extHandle->point2d.get());
     }
 
     char
@@ -3447,6 +3468,15 @@ extern "C" {
         return execute(extHandle, 2, [&]() {
             return pg->intersects(g);
         });
+    }
+
+    char
+    GEOSPreparedIntersectsXY_r(GEOSContextHandle_t extHandle,
+                             const geos::geom::prep::PreparedGeometry* pg, double x, double y)
+    {
+        extHandle->point2d->setXY(x, y);
+
+        return GEOSPreparedIntersects_r(extHandle, pg, extHandle->point2d.get());
     }
 
     char

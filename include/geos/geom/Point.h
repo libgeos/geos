@@ -109,10 +109,20 @@ public:
      */
     std::unique_ptr<Geometry> getBoundary() const override;
 
+    void setXY(double x, double y) {
+        empty3d = empty2d = false;
+        coordinates.setAt({x, y}, 0);
+        geometryChangedAction();
+    }
+
+    const Coordinate* getCoordinate() const override {
+        return isEmpty() ? nullptr : &coordinates[0];
+    }
+
     double getX() const;
     double getY() const;
     double getZ() const;
-    const Coordinate* getCoordinate() const override;
+
     std::string getGeometryType() const override;
     GeometryTypeId getGeometryTypeId() const override;
     void apply_ro(CoordinateFilter* filter) const override;

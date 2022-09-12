@@ -157,12 +157,6 @@ Point::getZ() const
     return getCoordinate()->z;
 }
 
-const Coordinate*
-Point::getCoordinate() const
-{
-    return isEmpty() ? nullptr : &coordinates[0];
-}
-
 std::string
 Point::getGeometryType() const
 {

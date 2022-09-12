@@ -4,6 +4,8 @@ xxxx-xx-xx
 - New things:
   - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator,
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
+  - CAPI: GEOSPreparedContainsXY, GEOSPreparedContainsProperlyXY,
+    GEOSPreparedIntersectsXY (GH-677, Dan Baston)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)

@@ -100,18 +100,6 @@ Envelope::Envelope(const std::string& str)
          strtod(values[3].c_str(), nullptr));
 }
 
-
-/*public*/
-bool
-Envelope::covers(double x, double y) const
-{
-    return x >= minx &&
-           x <= maxx &&
-           y >= miny &&
-           y <= maxy;
-}
-
-
 /*public*/
 bool
 Envelope::covers(const Envelope& other) const
