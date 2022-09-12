@@ -8,6 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 04 Oct 2021 14:21:00 -0700</lastBuildDate><atom:link href="https://libgeos.org/development/rfcs/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>GEOS RFC 11 - GEOS Version and EOL Policy</title>
+      <link>https://libgeos.org/development/rfcs/rfc11/</link>
+      <pubDate>Mon, 12 Sep 2022 00:00:00 -0400</pubDate>
+      
+      <guid>https://libgeos.org/development/rfcs/rfc11/</guid>
+      <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Draft    This document describes the GEOS project&amp;rsquo;s policy for Versiong and EOLing GEOS minor releases.
+Versioning The GEOS project releases a new minor release every 1-2 years. Each minor release has a git repo dedicated branch for it named after the minor version.</description>
+    </item>
+    
+    <item>
       <title>GEOS RFC 10 - Move Project to GitHub</title>
       <link>https://libgeos.org/development/rfcs/rfc10/</link>
       <pubDate>Fri, 29 Oct 2021 00:00:00 -0700</pubDate>
