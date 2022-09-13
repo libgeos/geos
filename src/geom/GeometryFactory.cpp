@@ -497,6 +497,17 @@ GeometryFactory::createMultiPoint(vector<Geometry*>* newPoints) const
 }
 
 std::unique_ptr<MultiPoint>
+GeometryFactory::createMultiPoint(std::vector<Coordinate> && newPoints) const {
+    std::vector<std::unique_ptr<Geometry>> pts(newPoints.size());
+
+    for(std::size_t i = 0; i < newPoints.size(); ++i) {
+        pts[i].reset(createPoint(newPoints[i]));
+    }
+
+    return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(pts), *this));
+}
+
+std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const
 {
     return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(newPoints), *this));

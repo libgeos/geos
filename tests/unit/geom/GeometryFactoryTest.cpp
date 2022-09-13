@@ -1234,4 +1234,21 @@ void object::test<36>
     }
 }
 
+// Test of
+// createMultiPoint(std::vector<Coordinate> &&)
+template<>
+template<>
+void object::test<37>
+()
+{
+    std::vector<geos::geom::Coordinate> coords;
+    coords.emplace_back(1, 1);
+    coords.emplace_back(2, 2);
+
+    auto mp = factory_->createMultiPoint(std::move(coords));
+
+    ensure_equals(mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
+    ensure_equals(mp->getNumGeometries(), 2u);
+}
+
 } // namespace tut
