@@ -26,6 +26,7 @@
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
@@ -309,6 +310,22 @@ GeomFunction::init()
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::algorithm::MinimumBoundingCircle mc( geom.get() );
             std::unique_ptr<Geometry> res = mc.getCircle();
+            return new Result( std::move(res) );
+        });
+    add("maxDiameter", 1, 0, Result::typeGeometry, catConst,
+        "compute maximum diameter of points in a geometry",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::MinimumBoundingCircle mc( geom.get() );
+            std::unique_ptr<Geometry> res = mc.getMaximumDiameter();
+            return new Result( std::move(res) );
+        });
+    add("minDiameter", 1, 0, Result::typeGeometry, catConst,
+        "compute minimum diameter of points in a geometry",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::MinimumDiameter md( geom.get() );
+            std::unique_ptr<Geometry> res = md.getDiameter();
             return new Result( std::move(res) );
         });
 
