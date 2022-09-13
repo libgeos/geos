@@ -920,9 +920,9 @@ e.g. The first release of 3.11 was 3.11.0 and in git is tagged as 3.11.0.</p>
 <p>These subsequent micro releases may have bug fixes, performance improvements, and security fixes in them
 but will never offer new features.</p>
 <ul>
-<li>The newer the minor, the more likely performance improvements will be added. Performance improvements that could disstabilize a minor release (e.g. requiring too much code) or change behavior will generally not be applied.</li>
-<li>Bug fixes not considered trivial changes of code or major security or crash issues, will likely not be applied to older releases.</li>
-<li>The latest stable (meaning the minor with highest minor number) will have all bug fixes and enhancements deemed not new features.</li>
+<li>The newer the minor, the more likely performance improvements will be added. Performance improvements that could destabilize a minor release (e.g. requiring too much code) or possibly change behavior will generally not be applied.</li>
+<li>Bug fixes that are not trivial changes of code or major security or major crash issues, will likely not be applied to older releases.</li>
+<li>The latest stable (meaning the minor with highest number that is not main branch) will have all bug fixes and enhancements deemed not new features.</li>
 <li>Minor versions marked EOL will never have further micro or tagged releases. We may on occasion apply fixes to that minor git branch if an entity is willing to fund such an effort, but we will never tag such a change.</li>
 </ul>
 <h1 id="end-of-life-policy">End-of-Life Policy</h1>
@@ -930,7 +930,7 @@ but will never offer new features.</p>
 <ul>
 <li>If the first micro of a minor was released more than 3-4 years ago, we may consider EOL&rsquo;ing it.</li>
 <li>We will likely EOL any minor version that has reached the 5 year mark.</li>
-<li>Once a minor release has reached EOL, it will either no longer be listed on the <a href="/usage/download/">download</a> or will have a <strong>EOL</strong> marker next to it signaling this is the last micro that minor version.</li>
+<li>Once a minor release has reached EOL, it will either no longer be listed on the <a href="/usage/download/">download</a> or will have an <strong>EOL</strong> marker next to it signaling this is the last micro for this minor version.</li>
 </ul>
 
 
