@@ -22,6 +22,7 @@
 #include <geos/operation/relate/RelateNodeFactory.h>
 #include <geos/operation/relate/RelateNode.h>
 #include <geos/operation/relate/EdgeEndBuilder.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/IntersectionMatrix.h>
@@ -35,6 +36,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/EdgeIntersectionList.h>
 #include <geos/geomgraph/EdgeIntersection.h>
+#include <geos/operation/BoundaryOp.h>
 
 #include <geos/util/Interrupt.h>
 #include <geos/util.h>
@@ -75,7 +77,7 @@ RelateComputer::computeIM()
     const Envelope* e1 = (*arg)[0]->getGeometry()->getEnvelopeInternal();
     const Envelope* e2 = (*arg)[1]->getGeometry()->getEnvelopeInternal();
     if(!e1->intersects(e2)) {
-        computeDisjointIM(im.get());
+        computeDisjointIM(im.get(), (*arg)[0]->getBoundaryNodeRule());
         return std::move(im);
     }
 
@@ -380,20 +382,38 @@ RelateComputer::labelIntersectionNodes(uint8_t argIndex)
 
 /* private */
 void
-RelateComputer::computeDisjointIM(IntersectionMatrix* imX)
+RelateComputer::computeDisjointIM(IntersectionMatrix* imX, const algorithm::BoundaryNodeRule& boundaryNodeRule)
 {
     const Geometry* ga = (*arg)[0]->getGeometry();
     if(!ga->isEmpty()) {
         imX->set(Location::INTERIOR, Location::EXTERIOR, ga->getDimension());
-        imX->set(Location::BOUNDARY, Location::EXTERIOR, ga->getBoundaryDimension());
+        imX->set(Location::BOUNDARY, Location::EXTERIOR, getBoundaryDim(*ga, boundaryNodeRule));
     }
     const Geometry* gb = (*arg)[1]->getGeometry();
     if(!gb->isEmpty()) {
         imX->set(Location::EXTERIOR, Location::INTERIOR, gb->getDimension());
-        imX->set(Location::EXTERIOR, Location::BOUNDARY, gb->getBoundaryDimension());
+        imX->set(Location::EXTERIOR, Location::BOUNDARY, getBoundaryDim(*gb, boundaryNodeRule));
     }
 }
 
+int
+RelateComputer::getBoundaryDim(const Geometry& geom, const algorithm::BoundaryNodeRule& boundaryNodeRule)
+{
+    // If the geometry has a non-empty boundary
+    // the intersection is the nominal dimension.
+    if (BoundaryOp::hasBoundary(geom, boundaryNodeRule)) {
+        /**
+      * special case for lines, since Geometry.getBoundaryDimension is not aware
+      * of Boundary Node Rule.
+      */
+        if (geom.getDimension() == 1)
+            return Dimension::P;
+        return geom.getBoundaryDimension();
+    }
+
+    // Otherwise intersection is F
+    return Dimension::False;
+}
 
 void
 RelateComputer::labelNodeEdges()
