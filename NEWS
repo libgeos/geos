@@ -3,7 +3,7 @@ Changes in 3.8.4
 20xx-xx-xx
 
 - Bug fixes / improvements
-  - 
+  - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
 
 
 Changes in 3.8.3
