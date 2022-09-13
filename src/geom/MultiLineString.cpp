@@ -23,6 +23,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
+#include <geos/operation/BoundaryOp.h>
 
 #include <vector>
 #include <cassert>
@@ -95,13 +96,8 @@ MultiLineString::isClosed() const
 std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
-    if(isEmpty()) {
-        return getFactory()->createGeometryCollection();
-    }
-
-    GeometryGraph gg(0, this);
-    CoordinateSequence* pts = gg.getBoundaryPoints();
-    return std::unique_ptr<Geometry>(getFactory()->createMultiPoint(*pts));
+    operation::BoundaryOp bop(*this);
+    return bop.getBoundary();
 }
 
 bool
