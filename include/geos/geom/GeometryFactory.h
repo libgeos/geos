@@ -252,6 +252,8 @@ public:
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
 
+    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<Coordinate> && newPoints) const;
+
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const;
 
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints) const;
