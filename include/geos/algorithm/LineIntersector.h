@@ -332,8 +332,6 @@ private:
      * Test whether a point lies in the envelopes of both input segments.
      * A correctly computed intersection point should return true
      * for this test.
-     * Since this test is for debugging purposes only, no attempt is
-     * made to optimize the envelope test.
      *
      * @return true if the input point lies within both
      *         input segment envelopes
