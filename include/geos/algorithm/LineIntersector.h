@@ -260,29 +260,6 @@ public:
     }
 
     /** \brief
-     * Computes the intIndex'th intersection point in the direction of
-     * a specified input line segment
-     *
-     * @param segmentIndex is 0 or 1
-     * @param intIndex is 0 or 1
-     *
-     * @return the intIndex'th intersection point in the direction of the
-     *         specified input line segment
-     */
-    const geom::Coordinate& getIntersectionAlongSegment(std::size_t segmentIndex, std::size_t intIndex);
-
-    /** \brief
-     * Computes the index of the intIndex'th intersection point in the direction of
-     * a specified input line segment
-     *
-     * @param segmentIndex is 0 or 1
-     * @param intIndex is 0 or 1
-     *
-     * @return the index of the intersection point along the segment (0 or 1)
-     */
-    std::size_t getIndexAlongSegment(std::size_t segmentIndex, std::size_t intIndex);
-
-    /** \brief
      * Computes the "edge distance" of an intersection point along the specified
      * input line segment.
      *
@@ -318,8 +295,6 @@ private:
     std::size_t intLineIndex[2][2];
 
     bool isProperVar;
-    //Coordinate &pa;
-    //Coordinate &pb;
 
     bool
     isCollinear() const
@@ -335,10 +310,6 @@ private:
     {
         return hasIntersection() && !isProperVar;
     }
-
-    void computeIntLineIndex();
-
-    void computeIntLineIndex(std::size_t segmentIndex);
 
     uint8_t computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
                                          const geom::Coordinate& q1, const geom::Coordinate& q2);

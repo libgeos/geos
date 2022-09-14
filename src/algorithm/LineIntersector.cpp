@@ -131,48 +131,6 @@ LineIntersector::isSameSignAndNonZero(double a, double b)
     return (a < 0 && b < 0) || (a > 0 && b > 0);
 }
 
-/*private*/
-void
-LineIntersector::computeIntLineIndex()
-{
-    computeIntLineIndex(0);
-    computeIntLineIndex(1);
-}
-
-
-/*public*/
-const Coordinate&
-LineIntersector::getIntersectionAlongSegment(std::size_t segmentIndex, std::size_t intIndex)
-{
-    // lazily compute int line array
-    computeIntLineIndex();
-    return intPt[intLineIndex[segmentIndex][intIndex]];
-}
-
-/*public*/
-size_t
-LineIntersector::getIndexAlongSegment(std::size_t segmentIndex, std::size_t intIndex)
-{
-    computeIntLineIndex();
-    return intLineIndex[segmentIndex][intIndex];
-}
-
-/*private*/
-void
-LineIntersector::computeIntLineIndex(std::size_t segmentIndex)
-{
-    double dist0 = getEdgeDistance(segmentIndex, 0);
-    double dist1 = getEdgeDistance(segmentIndex, 1);
-    if(dist0 > dist1) {
-        intLineIndex[segmentIndex][0] = 0;
-        intLineIndex[segmentIndex][1] = 1;
-    }
-    else {
-        intLineIndex[segmentIndex][0] = 1;
-        intLineIndex[segmentIndex][1] = 0;
-    }
-}
-
 /*public*/
 double
 LineIntersector::getEdgeDistance(std::size_t segmentIndex, std::size_t intIndex) const
