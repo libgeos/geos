@@ -17,7 +17,7 @@ weight: 10
 This document describes the GEOS project's policy for Versiong and EOLing GEOS minor releases.
 
 # Versioning
-The GEOS project releases a new minor release every 1-2 years.
+The GEOS project generally releases a new minor release every 1-2 years.
 Each minor release has a git repo dedicated branch for it named after the minor version.
 
 These minor releases contain new features and have version numbers starting with
