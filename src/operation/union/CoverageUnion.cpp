@@ -17,10 +17,12 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/TopologyException.h>
+#include <geos/shape/fractal/HilbertEncoder.h>
 
 namespace geos {
 namespace operation {
@@ -29,15 +31,16 @@ namespace geounion {
 using geos::geom::Geometry;
 using geos::geom::LineSegment;
 using geos::geom::LineString;
+using geos::geom::LinearRing;
 using geos::geom::Polygon;
 using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
 using geos::operation::polygonize::Polygonizer;
 
-void CoverageUnion::extractSegments(const Geometry* geom) {
+void CoverageUnion::extractRings(const Geometry* geom) {
     const Polygon* p = dynamic_cast<const Polygon*>(geom);
     if (p != nullptr) {
-        extractSegments(p);
+        extractRings(p);
     } else {
         auto gc = dynamic_cast<const GeometryCollection*>(geom);
         if (gc == nullptr) {
@@ -45,18 +48,22 @@ void CoverageUnion::extractSegments(const Geometry* geom) {
         }
 
         for (std::size_t i = 0; i < gc->getNumGeometries(); i++) {
-            extractSegments(gc->getGeometryN(i));
+            extractRings(gc->getGeometryN(i));
         }
     }
 }
 
-void CoverageUnion::extractSegments(const Polygon* p) {
-    const LineString* ring = p->getExteriorRing();
+void CoverageUnion::extractRings(const Polygon* p) {
+    const LinearRing* ring = p->getExteriorRing();
 
-    extractSegments(ring);
+    rings.push_back(ring);
     for (std::size_t i = 0; i < p->getNumInteriorRing(); i++) {
-        extractSegments(p->getInteriorRingN(i));
+        rings.push_back(p->getInteriorRingN(i));
     }
+}
+
+void CoverageUnion::sortRings() {
+    shape::fractal::HilbertEncoder::sort(rings.begin(), rings.end());
 }
 
 void CoverageUnion::extractSegments(const LineString* ls) {
@@ -103,7 +110,13 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
 
 std::unique_ptr<geom::Geometry> CoverageUnion::Union(const geom::Geometry* geom) {
     CoverageUnion cu;
-    cu.extractSegments(geom);
+
+    cu.extractRings(geom);
+    cu.sortRings();
+
+    for (const auto& lr : cu.rings) {
+        cu.extractSegments(lr);
+    }
 
     double area_in = geom->getArea();
 

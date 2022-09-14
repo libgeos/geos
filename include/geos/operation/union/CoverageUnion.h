@@ -24,6 +24,7 @@ namespace geos {
     namespace geom {
         class Polygon;
         class LineString;
+        class LinearRing;
         class GeometryFactory;
     }
 }
@@ -39,11 +40,14 @@ namespace geounion {
     private:
         CoverageUnion() = default;
 
-        void extractSegments(const geom::Polygon* geom);
-        void extractSegments(const geom::Geometry* geom);
+        void extractRings(const geom::Polygon* geom);
+        void extractRings(const geom::Geometry* geom);
         void extractSegments(const geom::LineString* geom);
+        void sortRings();
 
         std::unique_ptr<geom::Geometry> polygonize(const geom::GeometryFactory* gf);
+
+        std::vector<const geom::LinearRing*> rings;
         std::unordered_set<geos::geom::LineSegment, geos::geom::LineSegment::HashCode> segments;
         static constexpr double AREA_PCT_DIFF_TOL = 1e-6;
     };
