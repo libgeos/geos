@@ -14,7 +14,7 @@
       
       <guid>https://libgeos.org/development/rfcs/rfc11/</guid>
       <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Draft    This document describes the GEOS project&amp;rsquo;s policy for Versiong and EOLing GEOS minor releases.
-Versioning The GEOS project releases a new minor release every 1-2 years. Each minor release has a git repo dedicated branch for it named after the minor version.</description>
+Versioning The GEOS project generally releases a new minor release every 1-2 years. Each minor release has a git repo dedicated branch for it named after the minor version.</description>
     </item>
     
     <item>
