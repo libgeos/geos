@@ -16,6 +16,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Geometry.h>
 #include <string>
 #include <vector>
 
@@ -23,8 +24,6 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class Geometry;
-class Envelope;
 }
 }
 
@@ -41,6 +40,28 @@ public:
     uint32_t encode(const geom::Envelope* env);
     static void sort(std::vector<geom::Geometry*>& geoms);
 
+    template<typename T>
+    static geom::Envelope getEnvelope(T begin, T end) {
+        geom::Envelope extent;
+        for (auto it = begin; it != end; ++it) {
+            const auto* g = *it;
+            if (extent.isNull())
+                extent = *(g->getEnvelopeInternal());
+            else
+                extent.expandToInclude(*(g->getEnvelopeInternal()));
+        }
+
+        return extent;
+    }
+
+    template<typename T>
+    static void sort(T begin, T end) {
+        auto extent = getEnvelope(begin, end);
+        HilbertEncoder encoder(12, extent);
+        HilbertComparator hilbertCompare(encoder);
+        std::sort(begin, end, hilbertCompare);
+    }
+
 private:
 
     uint32_t level;
@@ -48,6 +69,20 @@ private:
     double miny;
     double strideX;
     double strideY;
+
+    struct HilbertComparator {
+
+        HilbertEncoder& enc;
+
+        HilbertComparator(HilbertEncoder& e)
+            : enc(e) {};
+
+        bool
+        operator()(const geom::Geometry* a, const geom::Geometry* b)
+        {
+            return enc.encode(a->getEnvelopeInternal()) > enc.encode(b->getEnvelopeInternal());
+        }
+    };
 
 };
 

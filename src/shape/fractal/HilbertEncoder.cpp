@@ -59,34 +59,7 @@ HilbertEncoder::encode(const geom::Envelope* env)
 void
 HilbertEncoder::sort(std::vector<geom::Geometry*>& geoms)
 {
-    struct HilbertComparator {
-
-        HilbertEncoder& enc;
-
-        HilbertComparator(HilbertEncoder& e)
-            : enc(e) {};
-
-        bool
-        operator()(const geom::Geometry* a, const geom::Geometry* b)
-        {
-            return enc.encode(a->getEnvelopeInternal()) > enc.encode(b->getEnvelopeInternal());
-        }
-    };
-
-    geom::Envelope extent;
-    for (const geom::Geometry* geom: geoms)
-    {
-        if (extent.isNull())
-            extent = *(geom->getEnvelopeInternal());
-        else
-            extent.expandToInclude(*(geom->getEnvelopeInternal()));
-    }
-    if (extent.isNull()) return;
-
-    HilbertEncoder encoder(12, extent);
-    HilbertComparator hilbertCompare(encoder);
-    std::sort(geoms.begin(), geoms.end(), hilbertCompare);
-    return;
+    sort(geoms.begin(), geoms.end());
 }
 
 
