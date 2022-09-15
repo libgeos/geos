@@ -71,11 +71,11 @@ NodingIntersectionFinder::processIntersections(
     bool isEnd10 = segIndex1 == 0;
     bool isEnd11 = segIndex1 + 2 == e1->size();
 
-    li.computeIntersection(p00, p01, p10, p11);
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
     /**
      * Check for an intersection in the interior of a segment
      */
-    bool isInteriorInt = li.hasIntersection() && li.isInteriorIntersection();
+    bool isInteriorInt = result.isInterior();
     /**
      * Check for an intersection between two vertices which are not both endpoints.
      */
@@ -91,7 +91,7 @@ NodingIntersectionFinder::processIntersections(
         intSegments.push_back(p10);
         intSegments.push_back(p11);
 
-        interiorIntersection = li.getIntersection(0);
+        interiorIntersection = result.getIntersection(0);
         // TODO: record endpoint intersection(s)
         // if (keepIntersections) intersections.add(interiorIntersection);
         intersectionCount++;

@@ -213,6 +213,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
     noder.setSegmentIntersector(&segInt);
     noder.computeNodes(&segStringsBare);
     if (segInt.hasIntersection()) {
+        std::cout << "hasint";
         return false;
     }
     return true;
@@ -274,13 +275,12 @@ IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
     const Coordinate& p10 = ss1->getCoordinate(segIndex1);
     const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
 
-    bool hasInt = findIntersection(
+    auto intPt = findIntersection(
         ss0, segIndex0, ss1, segIndex1,
         p00, p01, p10, p11);
 
     // found an intersection!
-    if (hasInt) {
-        const Coordinate& intPt = li.getIntersection(0);
+    if (!intPt.isNull()) {
         // don't save dupes
         for (auto& pt: intersectionPts) {
             if (intPt.equals2D(pt))
@@ -292,7 +292,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
 }
 
 /* private */
-bool
+Coordinate
 IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     SegmentString* ss0, std::size_t segIndex0,
     SegmentString* ss1, std::size_t segIndex1,
@@ -300,14 +300,13 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     const Coordinate& p10, const Coordinate& p11)
 {
 
-    li.computeIntersection(p00, p01, p10, p11);
-    if (! li.hasIntersection()) return false;
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
+    if (! result.hasIntersection()) return Coordinate::getNull();
 
     /**
     * Check for an intersection in the interior of a segment.
     */
-    bool hasInteriorInt = li.isInteriorIntersection();
-    if (hasInteriorInt) return true;
+    if (result.isInterior()) return result.getIntersection(0);
 
     /**
     * Check for equal segments (which will produce two intersection points).
@@ -315,8 +314,8 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     * (This is not triggered by zero-length segments, since they
     * are filtered out by the MC index).
     */
-    bool hasEqualSegments = li.getIntersectionNum() >= 2;
-    if (hasEqualSegments) return true;
+    bool hasEqualSegments = result.getIntersectionNum() >= 2;
+    if (hasEqualSegments) return result.getIntersection(0);
 
     /**
     * Following tests assume non-adjacent segments.
@@ -327,18 +326,18 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     bool isSameSegString = ss0 == ss1;
     bool isAdjacentSegment = isSameSegString && segIndexDiff <= 1;
     if (isAdjacentSegment)
-        return false;
+        return Coordinate::getNull();
 
     /**
     * At this point there is a single intersection point
     * which is a vertex in each segString.
     * Classify them as endpoints or interior
     */
-    bool isIntersectionEndpt0 = isIntersectionEndpoint(ss0, segIndex0, li, 0);
-    bool isIntersectionEndpt1 = isIntersectionEndpoint(ss1, segIndex1, li, 1);
+    bool isIntersectionEndpt0 = isIntersectionEndpoint(ss0, segIndex0, result, p00);
+    bool isIntersectionEndpt1 = isIntersectionEndpoint(ss1, segIndex1, result, p10);
 
     bool hasInteriorVertexInt = ! (isIntersectionEndpt0 && isIntersectionEndpt1);
-    if (hasInteriorVertexInt) return true;
+    if (hasInteriorVertexInt) return result.getIntersection(0);
 
     /**
     * Both intersection vertices must be endpoints.
@@ -349,18 +348,18 @@ IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     */
     if (isClosedEndpointsInInterior && !isSameSegString) {
         bool hasInteriorEndpointInt = ss0->isClosed() || ss1->isClosed();
-        if (hasInteriorEndpointInt) return true;
+        if (hasInteriorEndpointInt) return result.getIntersection(0);
     }
-    return false;
+    return Coordinate::getNull();
 }
 
 /* private */
 bool
 IsSimpleOp::NonSimpleIntersectionFinder::isIntersectionEndpoint(
     const SegmentString* ss, std::size_t ssIndex,
-    const LineIntersector& lineInter, std::size_t liSegmentIndex) const
+    const LineIntersector::IntersectionResult& result, const Coordinate& endPt0) const
 {
-    std::size_t vertexIndex = intersectionVertexIndex(lineInter, liSegmentIndex);
+    std::size_t vertexIndex = intersectionVertexIndex(result, endPt0);
     /**
     * If the vertex is the first one of the segment, check if it is the start endpoint.
     * Otherwise check if it is the end endpoint.
@@ -376,12 +375,11 @@ IsSimpleOp::NonSimpleIntersectionFinder::isIntersectionEndpoint(
 /* private */
 std::size_t
 IsSimpleOp::NonSimpleIntersectionFinder::intersectionVertexIndex(
-    const LineIntersector& lineInter,
-    std::size_t segmentIndex) const
+    const LineIntersector::IntersectionResult& lineInter,
+    const Coordinate& endPt0) const
 {
     const Coordinate& intPt = lineInter.getIntersection(0);
-    const Coordinate* endPt0 = lineInter.getEndpoint(segmentIndex, 0);
-    return intPt.equals2D(*endPt0) ? 0 : 1;
+    return intPt.equals2D(endPt0) ? 0 : 1;
 }
 
 /* public */

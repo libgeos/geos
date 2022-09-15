@@ -52,17 +52,15 @@ SnapRoundingIntersectionAdder::processIntersections(
     const Coordinate& p10 = e1->getCoordinate(segIndex1);
     const Coordinate& p11 = e1->getCoordinate(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
-    if (li.hasIntersection()) {
-        if (li.isInteriorIntersection()) {
-            for (std::size_t intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
-                // Take a copy of the intersection coordinate
-                intersections->emplace_back(li.getIntersection(intIndex));
-            }
-            static_cast<NodedSegmentString*>(e0)->addIntersections(&li, segIndex0, 0);
-            static_cast<NodedSegmentString*>(e1)->addIntersections(&li, segIndex1, 1);
-            return;
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
+    if (result.isInterior()) {
+        for (std::size_t intIndex = 0, intNum = result.getIntersectionNum(); intIndex < intNum; intIndex++) {
+            // Take a copy of the intersection coordinate
+            intersections->emplace_back(result.getIntersection(intIndex));
         }
+        static_cast<NodedSegmentString*>(e0)->addIntersections(result, segIndex0, 0);
+        static_cast<NodedSegmentString*>(e1)->addIntersections(result, segIndex1, 1);
+        return;
     }
 
     /**

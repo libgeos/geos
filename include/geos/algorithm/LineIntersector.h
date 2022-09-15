@@ -24,6 +24,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 
+#include <array>
 #include <string>
 
 // Forward declarations
@@ -49,6 +50,160 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL LineIntersector {
 public:
+    enum intersection_type : uint8_t {
+        /// Indicates that line segments do not intersect
+        NO_INTERSECTION = 0,
+
+        /// Indicates that line segments intersect in a single point
+        POINT_INTERSECTION = 1,
+
+        /// Indicates that line segments intersect in a line segment
+        COLLINEAR_INTERSECTION = 2
+    };
+
+    class IntersectionResult {
+    public:
+        IntersectionResult() : type(NO_INTERSECTION), m_isProper(false), m_isInterior(false) {}
+
+        IntersectionResult(intersection_type type_,
+                           bool isProper,
+                           bool isInterior,
+                           const geom::Coordinate& intPt0,
+                           const geom::Coordinate& intPt1) :
+            intPt{ intPt0, intPt1 },
+            type(type_),
+            m_isProper(isProper),
+            m_isInterior(isInterior)
+        {}
+
+        IntersectionResult(intersection_type type_,
+                           bool isProper,
+                           bool isInterior,
+                           const geom::Coordinate& intPt0) :
+            type(type_),
+            m_isProper(isProper),
+            m_isInterior(isInterior)
+        {
+            assert(type == POINT_INTERSECTION);
+            intPt[0] = intPt0;
+        }
+
+        IntersectionResult(intersection_type type_,
+                           bool isProper,
+                           bool isInterior) :
+            type(type_),
+            m_isProper(isProper),
+            m_isInterior(isInterior)
+        {}
+
+        /// Returns the intIndex'th intersection point
+        ///
+        /// @param intIndex is 0 or 1
+        ///
+        /// @return the intIndex'th intersection point
+        ///
+        const geom::Coordinate&
+        getIntersection(std::size_t intIndex) const
+        {
+            return intPt[intIndex];
+        }
+
+        /// Returns the number of intersection points found.
+        ///
+        /// This will be either 0, 1 or 2.
+        ///
+        size_t
+        getIntersectionNum() const
+        {
+            return type;
+        }
+
+        /**
+         * Tests whether the input geometries intersect.
+         *
+         * @return true if the input geometries intersect
+         */
+        bool
+        hasIntersection() const
+        {
+            return type != NO_INTERSECTION;
+        }
+
+        bool
+        isCollinear() const
+        {
+            return type == COLLINEAR_INTERSECTION;
+        }
+
+        bool
+        isEndPoint() const
+        {
+            return hasIntersection() && !m_isProper;
+        }
+
+        bool
+        isInterior() const
+        {
+            return hasIntersection() & m_isInterior;
+        }
+
+        /** \brief
+         * Test whether a point is a intersection point of two line segments.
+         *
+         * Note that if the intersection is a line segment, this method only tests for
+         * equality with the endpoints of the intersection segment.
+         * It does <b>not</b> return true if
+         * the input point is internal to the intersection segment.
+         *
+         * @return true if the input point is one of the intersection points.
+         */
+        bool isIntersection(const geom::Coordinate& pt) const
+        {
+            if (!hasIntersection()) {
+                return false;
+            }
+
+            for(std::size_t i = 0; i < type; ++i) {
+                if(intPt[i].equals2D(pt)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /** \brief
+         * Tests whether an intersection is proper.
+         *
+         * The intersection between two line segments is considered proper if
+         * they intersect in a single point in the interior of both segments
+         * (e.g. the intersection is a single point and is not equal to any of the
+         * endpoints).
+         *
+         * The intersection between a point and a line segment is considered proper
+         * if the point lies in the interior of the segment (e.g. is not equal to
+         * either of the endpoints).
+         *
+         * @return true if the intersection is proper
+         */
+        bool
+        isProper() const
+        {
+            return hasIntersection() && m_isProper;
+        }
+
+    private:
+        std::array<geom::Coordinate, 2> intPt;
+        intersection_type type;
+        bool m_isProper; // TODO pack into previous var?
+        bool m_isInterior; // TODO pack into previous var?
+    };
+
+    explicit LineIntersector(const geom::PrecisionModel* initialPrecisionModel = nullptr)
+        :
+        precisionModel(initialPrecisionModel)
+    {}
+
+    ~LineIntersector() = default;
 
     /// \brief
     /// Return a Z value being the interpolation of Z from p0 and p1 at
@@ -79,52 +234,6 @@ public:
     static double nonRobustComputeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p1,
             const geom::Coordinate& p2);
 
-    explicit LineIntersector(const geom::PrecisionModel* initialPrecisionModel = nullptr)
-        :
-        precisionModel(initialPrecisionModel),
-        result(0),
-        inputLines(),
-        isProperVar(false)
-    {}
-
-    ~LineIntersector() = default;
-
-    /** \brief
-     * Tests whether either intersection point is an interior point of
-     * one of the input segments.
-     *
-     * @return <code>true</code> if either intersection point is in
-     * the interior of one of the input segments
-     */
-    bool isInteriorIntersection()
-    {
-        if(isInteriorIntersection(0)) {
-            return true;
-        }
-        if(isInteriorIntersection(1)) {
-            return true;
-        }
-        return false;
-    };
-
-    /** \brief
-     * Tests whether either intersection point is an interior point
-     * of the specified input segment.
-     *
-     * @return <code>true</code> if either intersection point is in
-     * the interior of the input segment
-     */
-    bool isInteriorIntersection(std::size_t inputLineIndex)
-    {
-        for(std::size_t i = 0; i < result; ++i) {
-            if(!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
-                 || intPt[i].equals2D(*inputLines[inputLineIndex][1]))) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     /// Force computed intersection to be rounded to a given precision model.
     ///
     /// No getter is provided, because the precision model is not required
@@ -143,75 +252,14 @@ public:
     /// The actual value of the intersection (if there is one)
     /// is equal to the value of <code>p</code>.
     ///
-    void computeIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
+    IntersectionResult computeIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2) const;
 
     /// Same as above but doesn't compute intersection point. Faster.
     static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-    enum intersection_type : uint8_t {
-        /// Indicates that line segments do not intersect
-        NO_INTERSECTION = 0,
-
-        /// Indicates that line segments intersect in a single point
-        POINT_INTERSECTION = 1,
-
-        /// Indicates that line segments intersect in a line segment
-        COLLINEAR_INTERSECTION = 2
-    };
-
     /// Computes the intersection of the lines p1-p2 and p3-p4
-    void computeIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& p3, const geom::Coordinate& p4);
-
-    std::string toString() const;
-
-    /**
-     * Tests whether the input geometries intersect.
-     *
-     * @return true if the input geometries intersect
-     */
-    bool
-    hasIntersection() const
-    {
-        return result != NO_INTERSECTION;
-    }
-
-
-    /**
-    * Gets an endpoint of an input segment.
-    *
-    * @param segmentIndex the index of the input segment (0 or 1)
-    * @param ptIndex the index of the endpoint (0 or 1)
-    * @return the specified endpoint
-    */
-    const geom::Coordinate*
-    getEndpoint(std::size_t segmentIndex, std::size_t ptIndex) const
-    {
-        return inputLines[segmentIndex][ptIndex];
-    }
-
-    /// Returns the number of intersection points found.
-    ///
-    /// This will be either 0, 1 or 2.
-    ///
-    size_t
-    getIntersectionNum() const
-    {
-        return result;
-    }
-
-
-    /// Returns the intIndex'th intersection point
-    ///
-    /// @param intIndex is 0 or 1
-    ///
-    /// @return the intIndex'th intersection point
-    ///
-    const geom::Coordinate&
-    getIntersection(std::size_t intIndex) const
-    {
-        return intPt[intIndex];
-    }
+    IntersectionResult computeIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                           const geom::Coordinate& p3, const geom::Coordinate& p4) const;
 
     /// Returns false if both numbers are zero.
     ///
@@ -219,56 +267,6 @@ public:
     ///
     static bool isSameSignAndNonZero(double a, double b);
 
-    /** \brief
-     * Test whether a point is a intersection point of two line segments.
-     *
-     * Note that if the intersection is a line segment, this method only tests for
-     * equality with the endpoints of the intersection segment.
-     * It does <b>not</b> return true if
-     * the input point is internal to the intersection segment.
-     *
-     * @return true if the input point is one of the intersection points.
-     */
-    bool isIntersection(const geom::Coordinate& pt) const
-    {
-        for(std::size_t i = 0; i < result; ++i) {
-            if(intPt[i].equals2D(pt)) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    /** \brief
-     * Tests whether an intersection is proper.
-     *
-     * The intersection between two line segments is considered proper if
-     * they intersect in a single point in the interior of both segments
-     * (e.g. the intersection is a single point and is not equal to any of the
-     * endpoints).
-     *
-     * The intersection between a point and a line segment is considered proper
-     * if the point lies in the interior of the segment (e.g. is not equal to
-     * either of the endpoints).
-     *
-     * @return true if the intersection is proper
-     */
-    bool
-    isProper() const
-    {
-        return hasIntersection() && isProperVar;
-    }
-
-    /** \brief
-     * Computes the "edge distance" of an intersection point along the specified
-     * input line segment.
-     *
-     * @param geomIndex is 0 or 1
-     * @param intIndex is 0 or 1
-     *
-     * @return the edge distance of the intersection point
-     */
-    double getEdgeDistance(std::size_t geomIndex, std::size_t intIndex) const;
 
 private:
 
@@ -278,41 +276,12 @@ private:
      */
     const geom::PrecisionModel* precisionModel;
 
-    std::size_t result;
 
-    const geom::Coordinate* inputLines[2][2];
+    IntersectionResult computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                        const geom::Coordinate& q1, const geom::Coordinate& q2) const;
 
-    /**
-     * We store real Coordinates here because
-     * we must compute the Z of intersection point.
-     */
-    geom::Coordinate intPt[2];
-
-    /**
-     * The indexes of the endpoints of the intersection lines, in order along
-     * the corresponding line
-     */
-    std::size_t intLineIndex[2][2];
-
-    bool isProperVar;
-
-    bool
-    isCollinear() const
-    {
-        return result == COLLINEAR_INTERSECTION;
-    }
-
-    uint8_t computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& q1, const geom::Coordinate& q2);
-
-    bool
-    isEndPoint() const
-    {
-        return hasIntersection() && !isProperVar;
-    }
-
-    uint8_t computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                                         const geom::Coordinate& q1, const geom::Coordinate& q2);
+    static IntersectionResult computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                                           const geom::Coordinate& q1, const geom::Coordinate& q2);
 
     /** \brief
      * This method computes the actual value of the intersection point.
@@ -336,10 +305,12 @@ private:
      * @return true if the input point lies within both
      *         input segment envelopes
      */
-    bool isInSegmentEnvelopes(const geom::Coordinate& pt) const
+    bool isInSegmentEnvelopes(const geom::Coordinate& pt,
+                              const geom::Coordinate& p1, const geom::Coordinate& p2,
+                              const geom::Coordinate& q1, const geom::Coordinate& q2) const
     {
-        geom::Envelope env0(*inputLines[0][0], *inputLines[0][1]);
-        geom::Envelope env1(*inputLines[1][0], *inputLines[1][1]);
+        geom::Envelope env0(p1, p2);
+        geom::Envelope env1(q1, q2);
         return env0.contains(pt) && env1.contains(pt);
     };
 
@@ -355,8 +326,8 @@ private:
      * @param q2 a segment endpoint
      * @return the computed intersection point is stored there
      */
-    geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                                      const geom::Coordinate& q1, const geom::Coordinate& q2) const
+    static geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                                             const geom::Coordinate& q1, const geom::Coordinate& q2)
     {
         geom::Coordinate ptInt = Intersection::intersection(p1, p2, q1, q2);
         if (ptInt.isNull()) {
@@ -384,10 +355,10 @@ private:
      * @param q2 an endpoint of segment Q
      * @return the nearest endpoint to the other segment
      */
-    static geom::Coordinate nearestEndpoint(const geom::Coordinate& p1,
-                                            const geom::Coordinate& p2,
-                                            const geom::Coordinate& q1,
-                                            const geom::Coordinate& q2);
+    static const geom::Coordinate& nearestEndpoint(const geom::Coordinate& p1,
+                                                   const geom::Coordinate& p2,
+                                                   const geom::Coordinate& q1,
+                                                   const geom::Coordinate& q2);
 
     static double zGet(
         const geom::Coordinate& p,

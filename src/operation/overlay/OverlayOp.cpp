@@ -507,8 +507,8 @@ OverlayOp::mergeZ(Node* n, const LineString* line) const
     for(std::size_t i = 1, size = pts->size(); i < size; ++i) {
         const Coordinate& p0 = pts->getAt(i - 1);
         const Coordinate& p1 = pts->getAt(i);
-        p_li.computeIntersection(p, p0, p1);
-        if(p_li.hasIntersection()) {
+        const auto& result = p_li.computeIntersection(p, p0, p1);
+        if(result.hasIntersection()) {
             if(p == p0) {
                 n->addZ(p0.z);
             }

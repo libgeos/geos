@@ -48,13 +48,15 @@ using namespace geos::algorithm;
  * shared by the beginning and end segments.
  */
 bool
-SegmentIntersector::isTrivialIntersection(Edge* e0,
+SegmentIntersector::isTrivialIntersection(
+        const LineIntersector::IntersectionResult& result,
+        Edge* e0,
         std::size_t segIndex0, Edge* e1,
-        std::size_t segIndex1)
+        std::size_t segIndex1) const
 {
 //	if (e0->equals(e1))
     if(e0 == e1) {
-        if(li->getIntersectionNum() == 1) {
+        if(result.getIntersectionNum() == 1) {
             if(isAdjacentSegments(segIndex0, segIndex1)) {
                 return true;
             }
@@ -95,13 +97,12 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
     const CoordinateSequence* cl1 = e1->getCoordinates();
     const Coordinate& p10 = cl1->getAt(segIndex1);
     const Coordinate& p11 = cl1->getAt(segIndex1 + 1);
-    li->computeIntersection(p00, p01, p10, p11);
-
+    const auto& result = li->computeIntersection(p00, p01, p10, p11);
     /*
      * Always record any non-proper intersections.
      * If includeProper is true, record any proper intersections as well.
      */
-    if(li->hasIntersection()) {
+    if(result.hasIntersection()) {
         if(recordIsolated) {
             e0->setIsolated(false);
             e1->setIsolated(false);
@@ -113,23 +114,22 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
         // intersection, the shared endpoint.
         // Don't bother adding it if it is the
         // only intersection.
-        if(!isTrivialIntersection(e0, segIndex0, e1, segIndex1)) {
+        if(!isTrivialIntersection(result, e0, segIndex0, e1, segIndex1)) {
 #if GEOS_DEBUG
             std::cerr << "SegmentIntersector::addIntersections(): has !TrivialIntersection" << std::endl;
 #endif
             hasIntersectionVar = true;
-            bool isBdyPt = isBoundaryPoint(li, bdyNodes);
-            bool isNonProper = isBdyPt || !li->isProper();
+            bool isBdyPt = isBoundaryPoint(result, bdyNodes);
+            bool isNonProper = isBdyPt || !result.isProper();
             if(includeProper || isNonProper) {
-                //Debug.println(li);
-                e0->addIntersections(li, segIndex0, 0);
-                e1->addIntersections(li, segIndex1, 1);
+                e0->addIntersections(result, segIndex0, p00, p01);
+                e1->addIntersections(result, segIndex1, p10, p11);
 #if GEOS_DEBUG
                 std::cerr << "SegmentIntersector::addIntersections(): includeProper || !li->isProper()" << std::endl;
 #endif
             }
-            if(li->isProper()) {
-                properIntersectionPoint = li->getIntersection(0);
+            if(result.isProper()) {
+                properIntersectionPoint = result.getIntersection(0);
 #if GEOS_DEBUG
                 std::cerr << "SegmentIntersector::addIntersections(): properIntersectionPoint: " << properIntersectionPoint.toString() <<
                      std::endl;
@@ -147,7 +147,7 @@ SegmentIntersector::addIntersections(Edge* e0, std::size_t segIndex0, Edge* e1, 
 
 /*private*/
 bool
-SegmentIntersector::isBoundaryPoint(LineIntersector* p_li,
+SegmentIntersector::isBoundaryPoint(const LineIntersector::IntersectionResult& result,
                                     std::vector<Node*>* tstBdyNodes)
 {
     if(! tstBdyNodes) {
@@ -156,7 +156,7 @@ SegmentIntersector::isBoundaryPoint(LineIntersector* p_li,
 
     for(const Node* node: *tstBdyNodes) {
         const Coordinate& pt = node->getCoordinate();
-        if(p_li->isIntersection(pt)) {
+        if(result.isIntersection(pt)) {
             return true;
         }
     }

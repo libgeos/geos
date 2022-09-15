@@ -25,6 +25,7 @@
 #include <string>
 #include <cassert>
 
+#include <geos/algorithm/LineIntersector.h>
 #include <geos/geomgraph/GraphComponent.h> // for inheritance
 #include <geos/geomgraph/Depth.h> // for member
 #include <geos/geomgraph/EdgeIntersectionList.h> // for composition
@@ -43,7 +44,6 @@ class IntersectionMatrix;
 class Coordinate;
 }
 namespace algorithm {
-class LineIntersector;
 }
 namespace geomgraph {
 class Node;
@@ -209,16 +209,16 @@ public:
      * Adds EdgeIntersections for one or both
      * intersections found for a segment of an edge to the edge intersection list.
      */
-    virtual void addIntersections(algorithm::LineIntersector* li, std::size_t segmentIndex,
-                                  std::size_t geomIndex);
+    virtual void addIntersections(const algorithm::LineIntersector::IntersectionResult& result, std::size_t segmentIndex,
+                                  const geom::Coordinate& p0, const geom::Coordinate& p1);
 
     /// Add an EdgeIntersection for intersection intIndex.
     //
     /// An intersection that falls exactly on a vertex of the edge is normalized
     /// to use the higher of the two possible segmentIndexes
     ///
-    virtual void addIntersection(algorithm::LineIntersector* li, std::size_t segmentIndex,
-                                 std::size_t geomIndex, std::size_t intIndex);
+    virtual void addIntersection(const algorithm::LineIntersector::IntersectionResult& result, std::size_t segmentIndex,
+                                 const geom::Coordinate& p0, const geom::Coordinate& p1, std::size_t intIndex);
 
     /// Update the IM with the contribution for this component.
     //

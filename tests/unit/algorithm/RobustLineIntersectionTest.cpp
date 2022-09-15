@@ -62,9 +62,9 @@ struct test_robustlineintersection_data {
                       double distanceTolerance)
     {
         geos::algorithm::LineIntersector li;
-        li.computeIntersection(pt[0], pt[1], pt[2], pt[3]);
+        auto result = li.computeIntersection(pt[0], pt[1], pt[2], pt[3]);
 
-        auto intNum = li.getIntersectionNum();
+        auto intNum = result.getIntersectionNum();
         ensure_equals(intNum, expectedIntersectionNum);
 
         if(intPt.empty()) {
@@ -76,32 +76,32 @@ struct test_robustlineintersection_data {
         // test that both points are represented here
         //bool isIntPointsCorrect = true;
         if(intNum == 1) {
-            checkIntPoints(intPt[0], li.getIntersection(0),
+            checkIntPoints(intPt[0], result.getIntersection(0),
                            distanceTolerance);
         }
         else if(intNum == 2) {
-            checkIntPoints(intPt[0], li.getIntersection(0),
+            checkIntPoints(intPt[0], result.getIntersection(0),
                            distanceTolerance);
-            checkIntPoints(intPt[1], li.getIntersection(0),
+            checkIntPoints(intPt[1], result.getIntersection(0),
                            distanceTolerance);
 
             if(!(
-                        equals(intPt[0], li.getIntersection(0), distanceTolerance)
+                        equals(intPt[0], result.getIntersection(0), distanceTolerance)
                         ||
-                        equals(intPt[0], li.getIntersection(1), distanceTolerance))) {
-                checkIntPoints(intPt[0], li.getIntersection(0),
+                        equals(intPt[0], result.getIntersection(1), distanceTolerance))) {
+                checkIntPoints(intPt[0], result.getIntersection(0),
                                distanceTolerance);
-                checkIntPoints(intPt[0], li.getIntersection(1),
+                checkIntPoints(intPt[0], result.getIntersection(1),
                                distanceTolerance);
             }
 
             else if(!(
-                        equals(intPt[1], li.getIntersection(0), distanceTolerance)
+                        equals(intPt[1], result.getIntersection(0), distanceTolerance)
                         ||
-                        equals(intPt[1], li.getIntersection(1), distanceTolerance))) {
-                checkIntPoints(intPt[1], li.getIntersection(0),
+                        equals(intPt[1], result.getIntersection(1), distanceTolerance))) {
+                checkIntPoints(intPt[1], result.getIntersection(0),
                                distanceTolerance);
-                checkIntPoints(intPt[1], li.getIntersection(1),
+                checkIntPoints(intPt[1], result.getIntersection(1),
                                distanceTolerance);
             }
         }

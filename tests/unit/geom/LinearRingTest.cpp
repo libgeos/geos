@@ -103,11 +103,11 @@ void object::test<1>
     try {
         // Create non-empty linearring instance
         geos::geom::LinearRing ring(coords, factory_.get());
-        ensure(!ring.isEmpty());
-        ensure(ring.isClosed());
-        ensure(ring.isRing());
-        ensure(ring.isSimple());
-        ensure(ring.isValid());
+        ensure("!ring.isEmpty()", !ring.isEmpty());
+        ensure("ring.isClosed()", ring.isClosed());
+        ensure("ring.isSimple()", ring.isSimple());
+        ensure("ring.isRing()", ring.isRing());
+        ensure("ring.isValid()", ring.isValid());
         //ensure_equals( rint.getNumPoints(), 7u );
     }
     catch(geos::util::IllegalArgumentException const& e) {

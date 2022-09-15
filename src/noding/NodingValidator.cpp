@@ -126,11 +126,11 @@ NodingValidator::checkInteriorIntersections(
     const Coordinate& p10 = e1.getCoordinates()->getAt(segIndex1);
     const Coordinate& p11 = e1.getCoordinates()->getAt(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
-    if(li.hasIntersection()) {
-        if(li.isProper()
-                || hasInteriorIntersection(li, p00, p01)
-                || hasInteriorIntersection(li, p10, p11)) {
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
+    if(result.hasIntersection()) {
+        if(result.isProper()
+                || hasInteriorIntersection(result, p00, p01)
+                || hasInteriorIntersection(result, p10, p11)) {
             throw util::TopologyException(
                 "found non-noded intersection at "
                 + p00.toString() + "-" + p01.toString()
@@ -183,11 +183,11 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 
 /* private */
 bool
-NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
+NodingValidator::hasInteriorIntersection(const LineIntersector::IntersectionResult& result,
         const Coordinate& p0, const Coordinate& p1) const
 {
-    for(std::size_t i = 0, n = aLi.getIntersectionNum(); i < n; ++i) {
-        const Coordinate& intPt = aLi.getIntersection(i);
+    for(std::size_t i = 0, n = result.getIntersectionNum(); i < n; ++i) {
+        const Coordinate& intPt = result.getIntersection(i);
         if(!(intPt == p0 || intPt == p1)) {
             return true;
         }

@@ -154,11 +154,11 @@ public:
      * intersections found for a segment of an edge to the edge
      * intersection list.
      */
-    void addIntersections(algorithm::LineIntersector* li,
+    void addIntersections(const algorithm::LineIntersector::IntersectionResult& result,
         std::size_t segmentIndex, std::size_t geomIndex)
     {
-        for (std::size_t i = 0, n = li->getIntersectionNum(); i < n; ++i) {
-            addIntersection(li, segmentIndex, geomIndex, i);
+        for (std::size_t i = 0, n = result.getIntersectionNum(); i < n; ++i) {
+            addIntersection(result, segmentIndex, geomIndex, i);
         }
     };
 
@@ -169,13 +169,13 @@ public:
      * of the SegmentString is normalized
      * to use the higher of the two possible segmentIndexes
      */
-    void addIntersection(algorithm::LineIntersector* li,
+    void addIntersection(const algorithm::LineIntersector::IntersectionResult& result,
         std::size_t segmentIndex,
         std::size_t geomIndex, std::size_t intIndex)
     {
         ::geos::ignore_unused_variable_warning(geomIndex);
 
-        const geom::Coordinate& intPt = li->getIntersection(intIndex);
+        const geom::Coordinate& intPt = result.getIntersection(intIndex);
         addIntersection(intPt, segmentIndex);
     };
 

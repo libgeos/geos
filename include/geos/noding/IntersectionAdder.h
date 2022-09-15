@@ -25,6 +25,7 @@
 #include <cstdlib> // for abs()
 
 #include <geos/geom/Coordinate.h>
+#include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentIntersector.h> // for inheritance
 
 // Forward declarations
@@ -33,7 +34,6 @@ namespace noding {
 class SegmentString;
 }
 namespace algorithm {
-class LineIntersector;
 }
 }
 
@@ -77,7 +77,8 @@ private:
      * Note that closed edges require a special check for the point
      * shared by the beginning and end segments.
      */
-    bool isTrivialIntersection(const SegmentString* e0, std::size_t segIndex0,
+    bool isTrivialIntersection(const algorithm::LineIntersector::IntersectionResult& result,
+                               const SegmentString* e0, std::size_t segIndex0,
                                const SegmentString* e1, std::size_t segIndex1);
 
     // Declare type as noncopyable

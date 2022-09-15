@@ -249,9 +249,9 @@ Coordinate
 LineSegment::intersection(const LineSegment& line) const
 {
     algorithm::LineIntersector li;
-    li.computeIntersection(p0, p1, line.p0, line.p1);
-    if(li.hasIntersection()) {
-        return li.getIntersection(0);
+    auto result = li.computeIntersection(p0, p1, line.p0, line.p1);
+    if(result.hasIntersection()) {
+        return result.getIntersection(0);
     }
     Coordinate rv;
     rv.setNull();

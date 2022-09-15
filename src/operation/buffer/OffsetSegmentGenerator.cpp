@@ -320,8 +320,8 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
      * but the situation of exact collinearity should be fairly rare.
      */
 
-    li.computeIntersection(s0, s1, s1, s2);
-    auto numInt = li.getIntersectionNum();
+    const auto& result = li.computeIntersection(s0, s1, s1, s2);
+    auto numInt = result.getIntersectionNum();
 
     /*
      * if numInt is<2, the lines are parallel and in the same direction.
@@ -398,9 +398,9 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
     ::geos::ignore_unused_variable_warning(addStartPoint);
 
     // add intersection point of offset segments (if any)
-    li.computeIntersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
-    if(li.hasIntersection()) {
-        segList.addPt(li.getIntersection(0));
+    const auto& result = li.computeIntersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
+    if(result.hasIntersection()) {
+        segList.addPt(result.getIntersection(0));
         return;
     }
 

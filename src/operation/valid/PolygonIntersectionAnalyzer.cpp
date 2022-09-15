@@ -40,20 +40,20 @@ PolygonIntersectionAnalyzer::processIntersections(
     bool isSameSegment = isSameSegString && segIndex0 == segIndex1;
     if (isSameSegment) return;
 
-    int code = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
+    auto err = findInvalidIntersection(ss0, segIndex0, ss1, segIndex1);
     /**
      * Ensure that invalidCode is only set once,
      * since the short-circuiting in {@link SegmentIntersector} is not guaranteed
      * to happen immediately.
      */
-    if (code != TopologyValidationError::oNoInvalidIntersection) {
-        invalidCode = code;
-        invalidLocation = li.getIntersection(0);
+    if (err.getErrorType() != TopologyValidationError::oNoInvalidIntersection) {
+        invalidCode = err.getErrorType();
+        invalidLocation = err.getCoordinate();
     }
 }
 
 /* private */
-int
+TopologyValidationError
 PolygonIntersectionAnalyzer::findInvalidIntersection(
     const SegmentString* ss0, std::size_t segIndex0,
     const SegmentString* ss1, std::size_t segIndex1)
@@ -63,9 +63,9 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
     const Coordinate& p10 = ss1->getCoordinate(segIndex1);
     const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
 
-    if (! li.hasIntersection()) {
+    if (! result.hasIntersection()) {
         return TopologyValidationError::oNoInvalidIntersection;
     }
 
@@ -77,15 +77,15 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * They occur in either a zero-width spike or gore,
      * or adjacent rings.
      */
-    if (li.isProper() || li.getIntersectionNum() >= 2) {
-        return TopologyValidationError::eSelfIntersection;
+    if (result.isProper() || result.getIntersectionNum() >= 2) {
+        return { TopologyValidationError::eSelfIntersection, result.getIntersection(0) };
     }
 
     /**
      * Now know there is exactly one intersection,
      * at a vertex of at least one segment.
      */
-    Coordinate intPt = li.getIntersection(0);
+    const Coordinate& intPt = result.getIntersection(0);
 
     /**
      * If segments are adjacent the intersection must be their common endpoint.
@@ -101,7 +101,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * So the intersection is invalid.
      */
     if (isSameSegString && ! isInvertedRingValid) {
-        return TopologyValidationError::eRingSelfIntersection;
+        return { TopologyValidationError::eRingSelfIntersection, intPt };
     }
 
     /**
@@ -131,7 +131,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
     }
     bool hasCrossing = algorithm::PolygonNodeTopology::isCrossing(&intPt, e00, e01, e10, e11);
     if (hasCrossing) {
-        return TopologyValidationError::eSelfIntersection;
+        return { TopologyValidationError::eSelfIntersection, intPt };
     }
 
     /**

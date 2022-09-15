@@ -64,8 +64,8 @@ SegmentIntersectionTester::hasIntersection(
             const Coordinate& pt10 = seq1.getAt(j - 1);
             const Coordinate& pt11 = seq1.getAt(j);
 
-            li.computeIntersection(pt00, pt01, pt10, pt11);
-            if(li.hasIntersection()) {
+            const auto& result = li.computeIntersection(pt00, pt01, pt10, pt11);
+            if(result.hasIntersection()) {
                 hasIntersectionVar = true;
             }
         }
@@ -103,8 +103,8 @@ SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
             const Coordinate& pt00 = seq0.getAt(j - 1);
             const Coordinate& pt01 = seq0.getAt(j);
 
-            li.computeIntersection(pt00, pt01, pt10, pt11);
-            if(li.hasIntersection()) {
+            const auto& result = li.computeIntersection(pt00, pt01, pt10, pt11);
+            if(result.hasIntersection()) {
                 hasIntersectionVar = true;
             }
         }

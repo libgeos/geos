@@ -205,7 +205,6 @@ void object::test<8>
     GeomPtr exp(wktreader.read(wkt_exp));
 
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
-
     ensure("Simplified geometry is invalid!", simplified->isValid());
     ensure_equals_geometry(exp.get(), simplified.get());
 }

@@ -30,14 +30,15 @@ namespace noding { // geos.noding
 
 /*private*/
 bool
-IntersectionAdder::isTrivialIntersection(const SegmentString* e0,
-        std::size_t segIndex0, const SegmentString* e1, std::size_t segIndex1)
+IntersectionAdder::isTrivialIntersection(const algorithm::LineIntersector::IntersectionResult& result,
+                                         const SegmentString* e0, std::size_t segIndex0,
+                                         const SegmentString* e1, std::size_t segIndex1)
 {
     if(e0 != e1) {
         return false;
     }
 
-    if(li.getIntersectionNum() != 1) {
+    if(result.getIntersectionNum() != 1) {
         return false;
     }
 
@@ -77,18 +78,17 @@ IntersectionAdder::processIntersections(
     const Coordinate& p10 = e1->getCoordinate(segIndex1);
     const Coordinate& p11 = e1->getCoordinate(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
-//if (li.hasIntersection() && li.isProper()) Debug.println(li);
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
 
     // No intersection, nothing to do
-    if(! li.hasIntersection()) {
+    if(!result.hasIntersection()) {
         return;
     }
 
     //intersectionFound = true;
     numIntersections++;
 
-    if(li.isInteriorIntersection()) {
+    if(result.isInterior()) {
         numInteriorIntersections++;
         hasInterior = true;
     }
@@ -97,19 +97,19 @@ IntersectionAdder::processIntersections(
     // one trivial intersection,
     // the shared endpoint.  Don't bother adding it if it
     // is the only intersection.
-    if(! isTrivialIntersection(e0, segIndex0, e1, segIndex1)) {
+    if(! isTrivialIntersection(result, e0, segIndex0, e1, segIndex1)) {
         hasIntersectionVar = true;
 
         NodedSegmentString* ee0 = detail::down_cast<NodedSegmentString*>(e0);
         NodedSegmentString* ee1 = detail::down_cast<NodedSegmentString*>(e1);
-        ee0->addIntersections(&li, segIndex0, 0);
-        ee1->addIntersections(&li, segIndex1, 1);
+        ee0->addIntersections(result, segIndex0, 0);
+        ee1->addIntersections(result, segIndex1, 1);
 
-        if(li.isProper()) {
+        if(result.isProper()) {
             numProperIntersections++;
             //Debug.println(li.toString());
             //Debug.println(li.getIntersection(0));
-            properIntersectionPoint = li.getIntersection(0);
+            properIntersectionPoint = result.getIntersection(0);
             hasProper = true;
             hasProperInterior = true;
         }

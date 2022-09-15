@@ -20,6 +20,7 @@
 #include <vector>
 
 #include <geos/geom/Coordinate.h> // for composition
+#include <geos/algorithm/LineIntersector.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -29,7 +30,6 @@
 // Forward declarations
 namespace geos {
 namespace algorithm {
-class LineIntersector;
 }
 namespace geomgraph {
 class Node;
@@ -71,15 +71,15 @@ private:
     /// Elements are externally owned
     std::array<std::vector<Node*>*, 2> bdyNodes;
 
-    bool isTrivialIntersection(Edge* e0, std::size_t segIndex0, Edge* e1, std::size_t segIndex1);
+    bool isTrivialIntersection(const algorithm::LineIntersector::IntersectionResult& result, Edge* e0, std::size_t segIndex0, Edge* e1, std::size_t segIndex1) const;
 
-    bool isBoundaryPoint(algorithm::LineIntersector* p_li,
+    bool isBoundaryPoint(const algorithm::LineIntersector::IntersectionResult& result ,
                          std::array<std::vector<Node*>*, 2>& tstBdyNodes)
     {
-        return isBoundaryPoint(p_li, tstBdyNodes[0]) || isBoundaryPoint(p_li, tstBdyNodes[1]);
+        return isBoundaryPoint(result, tstBdyNodes[0]) || isBoundaryPoint(result, tstBdyNodes[1]);
     };
 
-    bool isBoundaryPoint(algorithm::LineIntersector* li,
+    bool isBoundaryPoint(const algorithm::LineIntersector::IntersectionResult& result,
                          std::vector<Node*>* tstBdyNodes);
 
 public:

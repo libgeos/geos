@@ -152,7 +152,7 @@ private:
         // bool hasEqualSegments;
         // bool hasInteriorEndpointInt;
 
-        bool findIntersection(
+        geom::Coordinate findIntersection(
             noding::SegmentString* ss0, std::size_t segIndex0,
             noding::SegmentString* ss1, std::size_t segIndex1,
             const geom::Coordinate& p00, const geom::Coordinate& p01,
@@ -169,7 +169,8 @@ private:
         */
         bool isIntersectionEndpoint(
             const noding::SegmentString* ss, std::size_t ssIndex,
-            const algorithm::LineIntersector& li, std::size_t liSegmentIndex) const;
+            const algorithm::LineIntersector::IntersectionResult& result,
+            const geom::Coordinate& endPt0) const;
 
         /**
         * Finds the vertex index in a segment of an intersection
@@ -180,7 +181,8 @@ private:
         * @return the vertex index (0 or 1) in the segment vertex of the intersection point
         */
         std::size_t intersectionVertexIndex(
-            const algorithm::LineIntersector& li, std::size_t segmentIndex) const;
+            const algorithm::LineIntersector::IntersectionResult& result,
+            const geom::Coordinate& endPt0) const;
 
     public:
 

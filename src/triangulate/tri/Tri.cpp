@@ -223,6 +223,7 @@ Tri::validateAdjacent(TriIndex index)
     // assert(e1.equals2D(n0)); // Edge coord not equal
 
     //--- check that no edges cross
+#ifndef NDEBUG
     algorithm::LineIntersector li;
     for (TriIndex i = 0; i < 3; i++) {
         for (TriIndex j = 0; j < 3; j++) {
@@ -230,10 +231,11 @@ Tri::validateAdjacent(TriIndex index)
             const Coordinate& p01 = getCoordinate(next(i));
             const Coordinate& p10 = tri->getCoordinate(j);
             const Coordinate& p11 = tri->getCoordinate(next(j));
-            li.computeIntersection(p00,  p01,  p10, p11);
-            assert(!li.isProper());
+            auto result = li.computeIntersection(p00,  p01,  p10, p11);
+            assert(!result.isProper());
         }
     }
+#endif
 }
 
 /* public */

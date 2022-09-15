@@ -58,14 +58,14 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, std::size_t
      * due to the shared vertex of adjacent segments.
      */
     if (!isAdjacent(seg0, segIndex0, seg1, segIndex1)) {
-        li.computeIntersection(p00, p01, p10, p11);
+        const auto& result = li.computeIntersection(p00, p01, p10, p11);
         /**
          * Process single point intersections only.
          * Two-point (collinear) ones are handled by the near-vertex code
          */
-        if (li.hasIntersection() && li.getIntersectionNum() == 1) {
+        if (result.hasIntersection() && result.getIntersectionNum() == 1) {
 
-            const Coordinate& intPt = li.getIntersection(0);
+            const Coordinate& intPt = result.getIntersection(0);
             const Coordinate& snapPt = snapPointIndex.snap(intPt);
 
             static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);

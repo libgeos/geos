@@ -179,8 +179,8 @@ PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
 {
     algorithm::LineIntersector li;
     for (std::size_t i = 0; i < ringPts->size() - 1; i++) {
-      li.computeIntersection(*pt, ringPts->getAt(i), ringPts->getAt(i+1));
-      if (li.hasIntersection()) {
+      const auto& result = li.computeIntersection(*pt, ringPts->getAt(i), ringPts->getAt(i+1));
+      if (result.hasIntersection()) {
         //-- check if pt is the start point of the next segment
         if (pt->equals2D(ringPts->getAt(i + 1))) {
           return i + 1;

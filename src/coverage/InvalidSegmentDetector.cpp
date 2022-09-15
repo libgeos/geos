@@ -89,20 +89,20 @@ InvalidSegmentDetector::isCollinearOrInterior(
     CoverageRing* adj, std::size_t indexAdj)
 {
     LineIntersector li;
-    li.computeIntersection(tgt0, tgt1, adj0, adj1);
+    auto result = li.computeIntersection(tgt0, tgt1, adj0, adj1);
 
     //-- segments do not interact
-    if (! li.hasIntersection())
+    if (!result.hasIntersection())
         return false;
 
     //-- If the segments are collinear, they do not match, so are invalid.
-    if (li.getIntersectionNum() == 2) {
+    if (result.getIntersectionNum() == 2) {
         //TODO: assert segments are not equal?
         return true;
     }
 
     //-- target segment crosses, or segments touch at non-endpoint
-    if (li.isProper() || li.isInteriorIntersection()) {
+    if (result.isProper() || result.isInterior()) {
         return true;
     }
 
@@ -112,7 +112,7 @@ InvalidSegmentDetector::isCollinearOrInterior(
      *
      * Check if the target segment lies in the interior of the adj ring.
      */
-    const Coordinate& intVertex = li.getIntersection(0);
+    const Coordinate& intVertex = result.getIntersection(0);
     bool isInterior = isInteriorSegment(intVertex, tgt0, tgt1, adj, indexAdj);
     return isInterior;
 }

@@ -84,7 +84,7 @@ private:
      * @return true if there is an intersection point which is not an
      *         endpoint of the segment p0-p1
      */
-    bool hasInteriorIntersection(const algorithm::LineIntersector& aLi,
+    bool hasInteriorIntersection(const algorithm::LineIntersector::IntersectionResult& result,
                                  const geom::Coordinate& p0, const geom::Coordinate& p1) const;
 
     // Declare type as noncopyable

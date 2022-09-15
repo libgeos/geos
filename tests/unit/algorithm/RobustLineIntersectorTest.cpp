@@ -65,13 +65,14 @@ void object::test<1>
     Coordinate q1(20, 10);
     Coordinate q2(10, 20);
     Coordinate x(15, 15);
-    i.computeIntersection(p1, p2, q1, q2);
+    auto result = i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (unsigned int)LineIntersector::POINT_INTERSECTION);
-    ensure_equals(i.getIntersectionNum(), 1UL);
-    ensure_equals(i.getIntersection(0), x);
-    ensure("isProper", i.isProper());
-    ensure("hasIntersection", i.hasIntersection());
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), (unsigned int)LineIntersector::POINT_INTERSECTION);
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure_equals(result.getIntersection(0), x);
+    ensure("isProper", result.isProper());
+    ensure("isInterior", result.isInterior());
 }
 
 // 2 - testCollinear1
@@ -84,15 +85,16 @@ void object::test<2>
     Coordinate p2(20, 10);
     Coordinate q1(22, 10);
     Coordinate q2(30, 10);
-    i.computeIntersection(p1, p2, q1, q2);
+    auto result = i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), LineIntersector::NO_INTERSECTION);
-    ensure_equals(i.getIntersectionNum(), 0UL);
-    ensure("!isProper", !i.isProper());
-    ensure("!hasIntersection", !i.hasIntersection());
+    ensure("!hasIntersection", !result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), LineIntersector::NO_INTERSECTION);
+    ensure_equals(result.getIntersectionNum(), 0UL);
+    ensure("!isProper", !result.isProper());
+    ensure("!isInterior", !result.isInterior());
 }
 
-// 3 - testCollinear2
+// 3 - testCollinear2 (endpoint intersection)
 template<>
 template<>
 void object::test<3>
@@ -102,12 +104,13 @@ void object::test<3>
     Coordinate p2(20, 10);
     Coordinate q1(20, 10);
     Coordinate q2(30, 10);
-    i.computeIntersection(p1, p2, q1, q2);
+    auto result = i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), LineIntersector::POINT_INTERSECTION);
-    ensure_equals(i.getIntersectionNum(), 1UL);
-    ensure("!isProper", !i.isProper());
-    ensure("hasIntersection", i.hasIntersection());
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), LineIntersector::POINT_INTERSECTION);
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure("!isProper", !result.isProper());
+    ensure("!isInterior", !result.isInterior());
 }
 
 // 4 - testCollinear3
@@ -120,12 +123,13 @@ void object::test<4>
     Coordinate p2(20, 10);
     Coordinate q1(15, 10);
     Coordinate q2(30, 10);
-    i.computeIntersection(p1, p2, q1, q2);
+    auto result = i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), LineIntersector::COLLINEAR_INTERSECTION);
-    ensure_equals(i.getIntersectionNum(), 2UL);
-    ensure("!isProper", !i.isProper());
-    ensure("hasIntersection", i.hasIntersection());
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), LineIntersector::COLLINEAR_INTERSECTION);
+    ensure_equals(result.getIntersectionNum(), 2UL);
+    ensure("!isProper", !result.isProper());
+    ensure("isInterior", result.isInterior());
 }
 
 // 5 - testCollinear4
@@ -138,12 +142,13 @@ void object::test<5>
     Coordinate p2(20, 10);
     Coordinate q1(10, 10);
     Coordinate q2(30, 10);
-    i.computeIntersection(p1, p2, q1, q2);
+    auto result = i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), LineIntersector::COLLINEAR_INTERSECTION);
-    ensure_equals(i.getIntersectionNum(), 2UL);
-    ensure("!isProper", !i.isProper());
-    ensure("hasIntersection", i.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), LineIntersector::COLLINEAR_INTERSECTION);
+    ensure_equals(result.getIntersectionNum(), 2UL);
+    ensure("!isProper", !result.isProper());
+    ensure("isInterior", result.isInterior());
+    ensure("hasIntersection", result.hasIntersection());
 }
 
 // 6 - testEndpointIntersection
@@ -152,10 +157,12 @@ template<>
 void object::test<6>
 ()
 {
-    i.computeIntersection(Coordinate(100, 100), Coordinate(10, 100),
-                          Coordinate(100, 10), Coordinate(100, 100));
-    ensure("hasIntersection", i.hasIntersection());
-    ensure_equals(i.getIntersectionNum(), 1UL);
+    auto result = i.computeIntersection(Coordinate(100, 100), Coordinate(10, 100),
+                                        Coordinate(100, 10), Coordinate(100, 100));
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure("!isProper", !result.isProper());
+    ensure("!isInterior", !result.isInterior());
 }
 
 // 7 - testEndpointIntersection2
@@ -164,11 +171,13 @@ template<>
 void object::test<7>
 ()
 {
-    i.computeIntersection(Coordinate(190, 50), Coordinate(120, 100),
-                          Coordinate(120, 100), Coordinate(50, 150));
-    ensure("hasIntersection", i.hasIntersection());
-    ensure_equals(i.getIntersectionNum(), 1UL);
-    ensure_equals(i.getIntersection(1), Coordinate(120, 100));
+    auto result = i.computeIntersection(Coordinate(190, 50), Coordinate(120, 100),
+                                        Coordinate(120, 100), Coordinate(50, 150));
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure_equals(result.getIntersection(1), Coordinate(120, 100));
+    ensure("!isProper", !result.isProper());
+    ensure("!isInterior", !result.isInterior());
 }
 
 // 8 - testOverlap
@@ -177,10 +186,12 @@ template<>
 void object::test<8>
 ()
 {
-    i.computeIntersection(Coordinate(180, 200), Coordinate(160, 180),
-                          Coordinate(220, 240), Coordinate(140, 160));
-    ensure("hasIntersection", i.hasIntersection());
-    ensure_equals(i.getIntersectionNum(), 2UL);
+    auto result = i.computeIntersection(Coordinate(180, 200), Coordinate(160, 180),
+                                        Coordinate(220, 240), Coordinate(140, 160));
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), 2UL);
+    ensure("!isProper", !result.isProper());
+    ensure("isInterior", result.isInterior());
 }
 
 // 9 - testIsProper1
@@ -189,11 +200,12 @@ template<>
 void object::test<9>
 ()
 {
-    i.computeIntersection(Coordinate(30, 10), Coordinate(30, 30),
-                          Coordinate(10, 10), Coordinate(90, 11));
-    ensure("hasIntersection", i.hasIntersection());
-    ensure_equals(i.getIntersectionNum(), 1UL);
-    ensure("isProper", i.isProper());
+    auto result = i.computeIntersection(Coordinate(30, 10), Coordinate(30, 30),
+                                        Coordinate(10, 10), Coordinate(90, 11));
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure("isProper", result.isProper());
+    ensure("isInterior", result.isInterior());
 }
 
 // 10 - testIsProper2
@@ -202,11 +214,12 @@ template<>
 void object::test<10>
 ()
 {
-    i.computeIntersection(Coordinate(10, 30), Coordinate(10, 0),
-                          Coordinate(11, 90), Coordinate(10, 10));
-    ensure("hasIntersection", i.hasIntersection());
-    ensure_equals(i.getIntersectionNum(), 1UL);
-    ensure("!isProper", !i.isProper());
+    auto result = i.computeIntersection(Coordinate(10, 30), Coordinate(10, 0),
+                                        Coordinate(11, 90), Coordinate(10, 10));
+    ensure("hasIntersection", result.hasIntersection());
+    ensure_equals(result.getIntersectionNum(), 1UL);
+    ensure("!isProper", !result.isProper());
+    ensure("isInterior", result.isInterior());
 }
 
 // 11 - testIsCCW

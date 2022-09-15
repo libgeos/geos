@@ -229,8 +229,8 @@ TaggedLineStringSimplifier::hasInteriorIntersection(
     const LineSegment& seg0,
     const LineSegment& seg1) const
 {
-    li->computeIntersection(seg0.p0, seg0.p1, seg1.p0, seg1.p1);
-    return li->isInteriorIntersection();
+    const auto& result = li->computeIntersection(seg0.p0, seg0.p1, seg1.p0, seg1.p1);
+    return result.isInterior();
 }
 
 /*private*/

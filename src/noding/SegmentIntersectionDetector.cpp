@@ -42,13 +42,13 @@ processIntersections(
     const geom::Coordinate& p10 = (*e1->getCoordinates())[ segIndex1 ];
     const geom::Coordinate& p11 = (*e1->getCoordinates())[ segIndex1 + 1 ];
 
-    li->computeIntersection(p00, p01, p10, p11);
+    const auto& result = li->computeIntersection(p00, p01, p10, p11);
 
-    if(li->hasIntersection()) {
+    if(result.hasIntersection()) {
         // record intersection info
         _hasIntersection = true;
 
-        bool isProper = li->isProper();
+        bool isProper = result.isProper();
 
         if(isProper) {
             _hasProperIntersection = true;
@@ -68,7 +68,7 @@ processIntersections(
 
         if(!intPt || saveLocation) {
             // record intersection location (approximate)
-            intPt = &li->getIntersection(0);
+            intPt = &result.getIntersection(0);
 
             delete intSegments;
 

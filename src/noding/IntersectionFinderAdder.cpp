@@ -45,20 +45,17 @@ IntersectionFinderAdder::processIntersections(
     const Coordinate& p10 = e1->getCoordinate(segIndex1);
     const Coordinate& p11 = e1->getCoordinate(segIndex1 + 1);
 
-    li.computeIntersection(p00, p01, p10, p11);
-//if (li.hasIntersection() && li.isProper()) Debug.println(li);
+    const auto& result = li.computeIntersection(p00, p01, p10, p11);
 
-    if(li.hasIntersection()) {
-        if(li.isInteriorIntersection()) {
-            for(std::size_t intIndex = 0, n = li.getIntersectionNum(); intIndex < n; ++intIndex) {
-                interiorIntersections.push_back(li.getIntersection(intIndex));
-            }
-
-            NodedSegmentString* ee0 = detail::down_cast<NodedSegmentString*>(e0);
-            NodedSegmentString* ee1 = detail::down_cast<NodedSegmentString*>(e1);
-            ee0->addIntersections(&li, segIndex0, 0);
-            ee1->addIntersections(&li, segIndex1, 1);
+    if(result.isInterior()) {
+        for(std::size_t intIndex = 0, n = result.getIntersectionNum(); intIndex < n; ++intIndex) {
+            interiorIntersections.push_back(result.getIntersection(intIndex));
         }
+
+        NodedSegmentString* ee0 = detail::down_cast<NodedSegmentString*>(e0);
+        NodedSegmentString* ee1 = detail::down_cast<NodedSegmentString*>(e1);
+        ee0->addIntersections(result, segIndex0, 0);
+        ee1->addIntersections(result, segIndex1, 1);
     }
 }
 

@@ -52,7 +52,7 @@ private:
     Coordinate invalidLocation;
     Coordinate doubleTouchLocation;
 
-    int findInvalidIntersection(
+    TopologyValidationError findInvalidIntersection(
         const SegmentString* ss0, std::size_t segIndex0,
         const SegmentString* ss1, std::size_t segIndex1);
 

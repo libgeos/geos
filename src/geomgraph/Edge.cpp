@@ -150,14 +150,10 @@ Edge::getCollapsedEdge()
 
 /*public*/
 void
-Edge::addIntersections(LineIntersector* li, std::size_t segmentIndex, std::size_t geomIndex)
+Edge::addIntersections(const LineIntersector::IntersectionResult& result, std::size_t segmentIndex, const Coordinate& p0, const Coordinate& p1)
 {
-#if GEOS_DEBUG
-    std::cerr << "[" << this << "] Edge::addIntersections(" << li->toString() << ", " << segmentIndex << ", " << geomIndex <<
-         ") called" << std::endl;
-#endif
-    for(std::size_t i = 0; i < li->getIntersectionNum(); ++i) {
-        addIntersection(li, segmentIndex, geomIndex, i);
+    for(std::size_t i = 0; i < result.getIntersectionNum(); ++i) {
+        addIntersection(result, segmentIndex, p0, p1, i);
     }
 
     testInvariant();
@@ -165,16 +161,18 @@ Edge::addIntersections(LineIntersector* li, std::size_t segmentIndex, std::size_
 
 /*public*/
 void
-Edge::addIntersection(LineIntersector* li,
-                      std::size_t segmentIndex, std::size_t geomIndex, std::size_t intIndex)
+Edge::addIntersection(const LineIntersector::IntersectionResult& result,
+                      std::size_t segmentIndex, const Coordinate& p0, const Coordinate& p1, std::size_t intIndex)
 {
 #if GEOS_DEBUG
     std::cerr << "[" << this << "] Edge::addIntersection(" << li->toString() << ", " << segmentIndex << ", " << geomIndex <<
               ", " << intIndex << ") called" << std::endl;
 #endif
-    const Coordinate& intPt = li->getIntersection(intIndex);
+    const Coordinate& intPt = result.getIntersection(intIndex);
     auto normalizedSegmentIndex = segmentIndex;
-    double dist = li->getEdgeDistance(geomIndex, intIndex);
+    //double dist = li->getEdgeDistance(geomIndex, intIndex);
+
+    double dist = LineIntersector::computeEdgeDistance(intPt, p0, p1);
 
     // normalize the intersection point location
     auto nextSegIndex = normalizedSegmentIndex + 1;

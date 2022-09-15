@@ -45,18 +45,18 @@ struct test_robustlineintersectorz_data {
                 const Coordinate& p2)
     {
         RobustLineIntersector li;
-        li.computeIntersection(
+        auto result = li.computeIntersection(
             line1.p0, line1.p1,
             line2.p0, line2.p1);
 
-        ensure_equals(li.getIntersectionNum(), 2u);
+        ensure_equals(result.getIntersectionNum(), 2u);
 
-        Coordinate actual1 = li.getIntersection(0);
-        Coordinate actual2 = li.getIntersection(1);
+        Coordinate actual1 = result.getIntersection(0);
+        Coordinate actual2 = result.getIntersection(1);
         // normalize actual results
         if (actual1.compareTo(actual2) > 0) {
-            actual1 = li.getIntersection(1);
-            actual2 = li.getIntersection(0);
+            actual1 = result.getIntersection(1);
+            actual2 = result.getIntersection(0);
         }
 
         ensure_equals_xyz( actual1, p1 );
@@ -82,11 +82,11 @@ struct test_robustlineintersectorz_data {
             const Coordinate& p_pt)
     {
         RobustLineIntersector li;
-        li.computeIntersection(
+        auto result = li.computeIntersection(
             line1.p0, line1.p1,
             line2.p0, line2.p1);
-        ensure_equals(li.getIntersectionNum(), 1u);
-        Coordinate actual = li.getIntersection(0);
+        ensure_equals(result.getIntersectionNum(), 1u);
+        Coordinate actual = result.getIntersection(0);
         ensure_equals_xyz( actual, p_pt );
     }
 
