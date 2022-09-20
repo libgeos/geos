@@ -110,7 +110,7 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
     if(newPolygon->isEmpty()) {
         //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
         if(newPolygon->getFactory() != factory) {
-            std::unique_ptr<Polygon> ret(factory->createPolygon(nullptr, nullptr));
+            std::unique_ptr<Polygon> ret(factory->createPolygon(polygon->getCoordinateDimension()));
             return ret;
         }
         else {
@@ -123,7 +123,7 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
 
     if(shell->isEmpty()) {
         //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
-        return std::unique_ptr<Polygon>(factory->createPolygon(nullptr, nullptr));
+        return std::unique_ptr<Polygon>(factory->createPolygon(polygon->getCoordinateDimension()));
     }
 
     auto holes = detail::make_unique<std::vector<LinearRing*>>();

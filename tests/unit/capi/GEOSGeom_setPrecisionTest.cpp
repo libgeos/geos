@@ -169,5 +169,15 @@ void object::test<10> ()
     ensure_geometry_equals(geom2_, "LINEARRING EMPTY");
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    geom1_ = fromWKT("POLYGON ((0 0, 0.1 0, 0.1 0.1, 0 0.1, 0 0))");
+    geom2_ = GEOSGeom_setPrecision(geom1_, 1.0, 0);
+
+    ensure_equals(GEOSGeom_getCoordinateDimension(geom2_), 2);
+}
+
 } // namespace tut
 
