@@ -21,4 +21,5 @@ geosdir = $(includedir)/geos/operation
 
 geos_HEADERS = \
     GeometryGraphOperation.h \
+    BoundaryOp.h \
     IsSimpleOp.h
