@@ -281,7 +281,7 @@ public:
     const PrecisionModel* getPrecisionModel() const;
 
     /// Returns a vertex of this Geometry, or NULL if this is the empty geometry.
-    virtual const Coordinate* getCoordinate() const = 0; //Abstract
+    virtual const CoordinateXY* getCoordinate() const = 0; //Abstract
 
     /**
      * \brief
@@ -902,7 +902,7 @@ protected:
 
     int compare(const std::vector<std::unique_ptr<Geometry>> & a, const std::vector<std::unique_ptr<Geometry>> & b) const;
 
-    bool equal(const Coordinate& a, const Coordinate& b,
+    bool equal(const CoordinateXY& a, const CoordinateXY& b,
                double tolerance) const;
     int SRID;
 

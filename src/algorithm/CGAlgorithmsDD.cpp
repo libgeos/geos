@@ -82,9 +82,9 @@ CGAlgorithmsDD::orientationIndex(double p1x, double p1y,
 
 // inlining this method worsened performance slighly
 int
-CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
-                                 const Coordinate& p2,
-                                 const Coordinate& q)
+CGAlgorithmsDD::orientationIndex(const CoordinateXY& p1,
+                                 const CoordinateXY& p2,
+                                 const CoordinateXY& q)
 {
 
     return orientationIndex(p1.x, p1.y, p2.x, p2.y, q.x, q.y);
@@ -113,9 +113,9 @@ CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
     return CGAlgorithmsDD::signOfDet2x2(x1, y1, x2, y2);
 }
 
-Coordinate
-CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
-                             const Coordinate& q1, const Coordinate& q2)
+CoordinateXY
+CGAlgorithmsDD::intersection(const CoordinateXY& p1, const CoordinateXY& p2,
+                             const CoordinateXY& q1, const CoordinateXY& q2)
 {
     DD q1x(q1.x);
     DD q1y(q1.y);
@@ -155,8 +155,8 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
 }
 
 /* public static */
-Coordinate
-CGAlgorithmsDD::circumcentreDD(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+CoordinateXY
+CGAlgorithmsDD::circumcentreDD(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     DD ax = DD(a.x) - DD(c.x);
     DD ay = DD(a.y) - DD(c.y);

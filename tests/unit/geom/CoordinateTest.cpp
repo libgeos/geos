@@ -13,6 +13,9 @@ namespace tut {
 // Test Group
 //
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+
 // Common data used by tests
 struct test_coordinate_data {
     const double x;
@@ -43,8 +46,10 @@ template<>
 void object::test<1>
 ()
 {
-    // TODO - mloskot - discuss about adding default constructor
-    ensure("NOTE: Coordinate has no default constructor.", true);
+    geos::geom::Coordinate coord;
+    ensure_equals(coord.x, 0.0);
+    ensure_equals(coord.y, 0.0);
+    ensure(std::isnan(coord.z));
 }
 
 // Test of overridden constructor
@@ -53,10 +58,10 @@ template<>
 void object::test<2>
 ()
 {
-    geos::geom::Coordinate coord;
-    ensure_equals(coord.x, 0.0);
-    ensure_equals(coord.y, 0.0);
-    ensure(0 != std::isnan(coord.z));
+    geos::geom::Coordinate coord(1, 2, 3);
+    ensure_equals(coord.x, 1);
+    ensure_equals(coord.y, 2);
+    ensure_equals(coord.z, 3);
 }
 
 // Test of copy constructor and assignment operator
@@ -202,8 +207,6 @@ template<>
 void object::test<10>
 ()
 {
-    using geos::geom::Coordinate;
-
     std::unordered_set<Coordinate, Coordinate::HashCode> coords;
 
     coords.emplace(1, 2);
@@ -216,6 +219,22 @@ void object::test<10>
     // and considers X and Y only
     coords.emplace(1, 2, 3);
     ensure_equals(coords.size(), 2ul);
+}
+
+// Test 2D -> 3D conversion
+template<>
+template<>
+void object::test<11>
+()
+{
+    CoordinateXY a(1, 2);
+    Coordinate b(a);
+
+    ensure_equals(b.x, a.x);
+    ensure_equals(b.y, a.y);
+    ensure(std::isnan(b.z));
+
+    ensure_equals(a, b);
 }
 
 } // namespace tut

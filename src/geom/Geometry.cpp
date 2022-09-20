@@ -848,7 +848,7 @@ GeometryGreaterThen::operator()(const Geometry* first, const Geometry* second)
 }
 
 bool
-Geometry::equal(const Coordinate& a, const Coordinate& b,
+Geometry::equal(const CoordinateXY& a, const CoordinateXY& b,
                 double tolerance) const
 {
     if(tolerance == 0) {

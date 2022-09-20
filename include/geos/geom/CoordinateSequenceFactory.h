@@ -28,6 +28,7 @@ namespace geos {
 namespace geom {
 class CoordinateSequence;
 class Coordinate;
+class CoordinateXY;
 }
 }
 
@@ -77,6 +78,10 @@ public:
      */
     virtual std::unique_ptr<CoordinateSequence> create(
             std::vector<Coordinate> && coordinates,
+            std::size_t dimension = 0) const = 0;
+
+    virtual std::unique_ptr<CoordinateSequence> create(
+            std::vector<CoordinateXY> && coordinates,
             std::size_t dimension = 0) const = 0;
 
     /** \brief

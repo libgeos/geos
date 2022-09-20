@@ -47,8 +47,8 @@ class GEOS_DLL SimplePointInAreaLocator : public PointOnGeometryLocator {
 
 public:
 
-    static geom::Location locate(const geom::Coordinate& p,
-                      const geom::Geometry* geom);
+    static geom::Location locate(const geom::CoordinateXY& p,
+                                 const geom::Geometry* geom);
 
     /** \brief
      * Determines the Location of a point in a [Polygon](@ref geom::Polygon).
@@ -69,8 +69,8 @@ public:
      * @param poly the geometry to test
      * @return the Location of the point in the polygon
      */
-    static geom::Location locatePointInPolygon(const geom::Coordinate& p,
-                                    const geom::Polygon* poly);
+    static geom::Location locatePointInPolygon(const geom::CoordinateXY& p,
+                                               const geom::Polygon* poly);
 
     /** \brief
      * Determines whether a point is contained in a [Geometry](@ref geom::Geometry),
@@ -84,7 +84,7 @@ public:
      * @param geom the geometry to test
      * @return true if the point lies in or on the geometry
      */
-    static bool isContained(const geom::Coordinate& p,
+    static bool isContained(const geom::CoordinateXY& p,
                             const geom::Geometry* geom);
 
     SimplePointInAreaLocator(const geom::Geometry* p_g)
@@ -92,15 +92,15 @@ public:
     { }
 
     geom::Location
-    locate(const geom::Coordinate* p) override
+    locate(const geom::CoordinateXY* p) override
     {
         return locate(*p, g);
     }
 
 private:
 
-    static geom::Location locateInGeometry(const geom::Coordinate& p,
-                                const geom::Geometry* geom);
+    static geom::Location locateInGeometry(const geom::CoordinateXY& p,
+                                           const geom::Geometry* geom);
 
     const geom::Geometry* g;
 

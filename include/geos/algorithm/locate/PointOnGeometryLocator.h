@@ -19,7 +19,7 @@
 
 namespace geos {
 namespace geom {
-class Coordinate;
+class CoordinateXY;
 }
 }
 
@@ -47,7 +47,7 @@ public:
      * @param p the point to test
      * @return the location of the point in the geometry
      */
-    virtual geom::Location locate(const geom::Coordinate* /*const*/ p) = 0;
+    virtual geom::Location locate(const geom::CoordinateXY* /*const*/ p) = 0;
 };
 
 } // geos::algorithm::locate

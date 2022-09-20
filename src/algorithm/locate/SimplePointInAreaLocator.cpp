@@ -38,19 +38,19 @@ namespace locate { // geos.algorithm
  * is more complex, since it has to take into account the boundaryDetermination rule
  */
 geom::Location
-SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry* geom)
+SimplePointInAreaLocator::locate(const CoordinateXY& p, const Geometry* geom)
 {
     return locateInGeometry(p, geom);
 }
 
 bool
-SimplePointInAreaLocator::isContained(const Coordinate& p, const Geometry* geom)
+SimplePointInAreaLocator::isContained(const CoordinateXY& p, const Geometry* geom)
 {
     return Location::EXTERIOR != locate(p, geom);
 }
 
 geom::Location
-SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* geom)
+SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry* geom)
 {
     /*
      * Do a fast check against the geometry envelope first
@@ -80,7 +80,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
 }
 
 geom::Location
-SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygon* poly)
+SimplePointInAreaLocator::locatePointInPolygon(const CoordinateXY& p, const Polygon* poly)
 {
     if(poly->isEmpty()) {
         return Location::EXTERIOR;

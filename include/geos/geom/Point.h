@@ -165,6 +165,8 @@ protected:
 
     Point(const Coordinate& c, const GeometryFactory* newFactory);
 
+    Point(const CoordinateXY& c, const GeometryFactory* newFactory);
+
     Point(const Point& p);
 
     Point* cloneImpl() const override { return new Point(*this); }

@@ -399,7 +399,7 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     ring->setPoints(uniqueCoordinates.get());
 }
 
-const Coordinate*
+const CoordinateXY*
 Polygon::getCoordinate() const
 {
     return shell->getCoordinate();

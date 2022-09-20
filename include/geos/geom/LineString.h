@@ -181,7 +181,7 @@ public:
     //was protected
     int compareToSameClass(const Geometry* ls) const override;
 
-    const Coordinate* getCoordinate() const override;
+    const CoordinateXY* getCoordinate() const override;
 
     double getLength() const override;
 

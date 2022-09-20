@@ -49,7 +49,7 @@ struct LocationMatchingFilter : public GeometryComponentFilter {
     void filter_ro(const Geometry* g) override {
         if (g->isEmpty())
             return;
-        const Coordinate* pt = g->getCoordinate();
+        const CoordinateXY* pt = g->getCoordinate();
         const auto loc = pt_locator->locate(pt);
 
         if (loc == test_loc) {
@@ -73,7 +73,7 @@ struct LocationNotMatchingFilter : public GeometryComponentFilter {
     void filter_ro(const Geometry* g) override {
         if (g->isEmpty())
             return;
-        const Coordinate* pt = g->getCoordinate();
+        const CoordinateXY* pt = g->getCoordinate();
         const auto loc = pt_locator->locate(pt);
 
         if (loc != test_loc) {
@@ -99,7 +99,7 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
     void filter_ro(const Geometry* g) override {
         if (g->isEmpty())
             return;
-        const Coordinate* pt = g->getCoordinate();
+        const CoordinateXY* pt = g->getCoordinate();
         auto loc = pt_locator->locate(pt);
 
         if (outermost_loc == Location::NONE || outermost_loc == Location::INTERIOR) {
@@ -161,12 +161,11 @@ PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
 bool
 PreparedPolygonPredicate::isAnyTargetComponentInAreaTest(
     const geom::Geometry* testGeom,
-    const geom::Coordinate::ConstVect* targetRepPts) const
+    const std::vector<const CoordinateXY*>* targetRepPts) const
 {
     algorithm::locate::SimplePointInAreaLocator piaLoc(testGeom);
 
-    for(std::size_t i = 0, ni = targetRepPts->size(); i < ni; i++) {
-        const geom::Coordinate* pt = (*targetRepPts)[i];
+    for(const auto& pt : *targetRepPts) {
         const Location loc = piaLoc.locate(pt);
         if(geom::Location::EXTERIOR != loc) {
             return true;

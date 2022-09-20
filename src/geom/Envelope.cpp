@@ -38,8 +38,8 @@ namespace geom { // geos::geom
 
 /*public*/
 bool
-Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
-                     const Coordinate& q)
+Envelope::intersects(const CoordinateXY& p1, const CoordinateXY& p2,
+                     const CoordinateXY& q)
 {
     //OptimizeIt shows that Math#min and Math#max here are a bottleneck.
     //Replace with direct comparisons. [Jon Aquino]
@@ -52,7 +52,7 @@ Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 
 /*public*/
 bool
-Envelope::intersects(const Coordinate& a, const Coordinate& b) const
+Envelope::intersects(const CoordinateXY& a, const CoordinateXY& b) const
 {
     // These comparisons look redundant, but an alternative using
     // std::minmax performs no better and compiles down to more
@@ -185,7 +185,7 @@ Envelope::split(const std::string& str, const std::string& delimiters)
 
 /*public*/
 bool
-Envelope::centre(Coordinate& p_centre) const
+Envelope::centre(CoordinateXY& p_centre) const
 {
     if(isNull()) {
         return false;

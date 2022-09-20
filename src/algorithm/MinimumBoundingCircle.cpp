@@ -78,7 +78,7 @@ MinimumBoundingCircle::getMaximumDiameter()
             return input->getFactory()->createLineString(std::move(cs));
         }
         default: {
-            std::vector<Coordinate> fp = farthestPoints(extremalPts);
+            const auto& fp = farthestPoints(extremalPts);
             auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
             cs->setAt(fp.front(), 0);
             cs->setAt(fp.back(), 1);
@@ -89,10 +89,10 @@ MinimumBoundingCircle::getMaximumDiameter()
 }
 
 /* private */
-std::vector<Coordinate>
-MinimumBoundingCircle::farthestPoints(std::vector<Coordinate>& pts)
+std::vector<CoordinateXY>
+MinimumBoundingCircle::farthestPoints(std::vector<CoordinateXY>& pts)
 {
-    std::vector<Coordinate> fp;
+    std::vector<CoordinateXY> fp;
     double dist01 = pts[0].distance(pts[1]);
     double dist12 = pts[1].distance(pts[2]);
     double dist20 = pts[2].distance(pts[0]);
@@ -134,7 +134,7 @@ MinimumBoundingCircle::getDiameter()
 
 
 /*public*/
-std::vector<Coordinate>
+std::vector<CoordinateXY>
 MinimumBoundingCircle::getExtremalPoints()
 {
     compute();
@@ -142,7 +142,7 @@ MinimumBoundingCircle::getExtremalPoints()
 }
 
 /*public*/
-Coordinate
+CoordinateXY
 MinimumBoundingCircle::getCentre()
 {
     compute();
@@ -222,7 +222,7 @@ MinimumBoundingCircle::computeCirclePoints()
     std::unique_ptr<Geometry> convexHull(input->convexHull());
 
     std::unique_ptr<CoordinateSequence> cs(convexHull->getCoordinates());
-    std::vector<Coordinate> pts;
+    std::vector<CoordinateXY> pts;
     cs->toVector(pts);
 
     // strip duplicate final point, if any
@@ -239,10 +239,10 @@ MinimumBoundingCircle::computeCirclePoints()
     }
 
     // find a point P with minimum Y ordinate
-    Coordinate P = lowestPoint(pts);
+    CoordinateXY P = lowestPoint(pts);
 
     // find a point Q such that the angle that PQ makes with the x-axis is minimal
-    Coordinate Q = pointWitMinAngleWithX(pts, P);
+    CoordinateXY Q = pointWitMinAngleWithX(pts, P);
 
     /*
      * Iterate over the remaining points to find
@@ -253,7 +253,7 @@ MinimumBoundingCircle::computeCirclePoints()
      */
     std::size_t i = 0, n = pts.size();
     while(i++ < n) {
-        Coordinate R = pointWithMinAngleWithSegment(pts, P, Q);
+        CoordinateXY R = pointWithMinAngleWithSegment(pts, P, Q);
 
         // if PRQ is obtuse, then MBC is determined by P and Q
         if(algorithm::Angle::isObtuse(P, R, Q)) {
@@ -282,10 +282,10 @@ MinimumBoundingCircle::computeCirclePoints()
 }
 
 /*private*/
-Coordinate
-MinimumBoundingCircle::lowestPoint(std::vector<Coordinate>& pts)
+CoordinateXY
+MinimumBoundingCircle::lowestPoint(std::vector<CoordinateXY>& pts)
 {
-    const Coordinate* min = &(pts[0]);
+    const CoordinateXY* min = &(pts[0]);
     for(const auto& pt : pts) {
         if(pt.y < min->y) {
             min = &pt;
@@ -296,11 +296,11 @@ MinimumBoundingCircle::lowestPoint(std::vector<Coordinate>& pts)
 
 
 /*private*/
-Coordinate
-MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coordinate& P)
+CoordinateXY
+MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<CoordinateXY>& pts, CoordinateXY& P)
 {
     double minSin = DoubleInfinity;
-    Coordinate minAngPt;
+    CoordinateXY minAngPt;
     minAngPt.setNull();
     for(const auto& p : pts) {
 
@@ -329,12 +329,12 @@ MinimumBoundingCircle::pointWitMinAngleWithX(std::vector<Coordinate>& pts, Coord
 
 
 /*private*/
-Coordinate
-MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<Coordinate>& pts, Coordinate& P, Coordinate& Q)
+CoordinateXY
+MinimumBoundingCircle::pointWithMinAngleWithSegment(std::vector<CoordinateXY>& pts, CoordinateXY& P, CoordinateXY& Q)
 {
     assert(!pts.empty());
     double minAng = DoubleInfinity;
-    const Coordinate* minAngPt = &pts[0];
+    const CoordinateXY* minAngPt = &pts[0];
 
     for(const auto& p : pts) {
         if(p == P) {

@@ -99,7 +99,7 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
 }
 
 geom::Location
-IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
+IndexedPointInAreaLocator::locate(const geom::CoordinateXY* /*const*/ p)
 {
     if (index == nullptr) {
         buildIndex(areaGeom);

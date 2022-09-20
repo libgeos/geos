@@ -40,7 +40,7 @@ namespace algorithm { // geos.algorithm
 
 
 Location
-PointLocator::locate(const Coordinate& p, const Geometry* geom)
+PointLocator::locate(const CoordinateXY& p, const Geometry* geom)
 {
     if (geom->isEmpty()) {
         return Location::EXTERIOR;
@@ -72,7 +72,7 @@ PointLocator::locate(const Coordinate& p, const Geometry* geom)
 
 /* private */
 void
-PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
+PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
 {
 
     GeometryTypeId geomTypeId = geom->getGeometryTypeId();
@@ -149,7 +149,7 @@ PointLocator::updateLocationInfo(geom::Location loc)
 
 /* private */
 Location
-PointLocator::locate(const Coordinate& p, const Point* pt)
+PointLocator::locate(const CoordinateXY& p, const Point* pt)
 {
     // no point in doing envelope test, since equality test is just as fast
     const Coordinate* ptCoord = pt->getCoordinate();
@@ -161,7 +161,7 @@ PointLocator::locate(const Coordinate& p, const Point* pt)
 
 /* private */
 Location
-PointLocator::locate(const Coordinate& p, const LineString* l)
+PointLocator::locate(const CoordinateXY& p, const LineString* l)
 {
     if(!l->getEnvelopeInternal()->intersects(p)) {
         return Location::EXTERIOR;
@@ -181,7 +181,7 @@ PointLocator::locate(const Coordinate& p, const LineString* l)
 
 /* private */
 Location
-PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing* ring)
+PointLocator::locateInPolygonRing(const CoordinateXY& p, const LinearRing* ring)
 {
     if(!ring->getEnvelopeInternal()->intersects(p)) {
         return Location::EXTERIOR;
@@ -200,7 +200,7 @@ PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing* ring)
 
 /* private */
 Location
-PointLocator::locate(const Coordinate& p, const Polygon* poly)
+PointLocator::locate(const CoordinateXY& p, const Polygon* poly)
 {
     if(poly->isEmpty()) {
         return Location::EXTERIOR;

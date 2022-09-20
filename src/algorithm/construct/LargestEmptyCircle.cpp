@@ -222,7 +222,7 @@ LargestEmptyCircle::compute()
 
     // if ptLocator is not present then result is degenerate (represented as zero-radius circle)
     if (!ptLocator) {
-        const Coordinate* pt = obstacles->getCoordinate();
+        const CoordinateXY* pt = obstacles->getCoordinate();
         centerPt = *pt;
         radiusPt = *pt;
         done = true;
@@ -274,7 +274,7 @@ LargestEmptyCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    std::vector<geom::Coordinate> nearestPts = obstacleDistance.nearestPoints(centerPoint.get());
+    const auto& nearestPts = obstacleDistance.nearestPoints(centerPoint.get());
     radiusPt = nearestPts[0];
 
     // flag computation

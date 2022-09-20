@@ -222,7 +222,7 @@ typedef struct GEOSContextHandle_HS {
     {
         memset(msgBuffer, 0, sizeof(msgBuffer));
         geomFactory = GeometryFactory::getDefaultInstance();
-        point2d.reset(geomFactory->createPoint({0, 0}));
+        point2d = geomFactory->createPoint(geos::geom::CoordinateXY{0, 0});
         WKBOutputDims = 2;
         WKBByteOrder = getMachineByteOrder();
         setNoticeHandler(nullptr);
@@ -1934,7 +1934,7 @@ extern "C" {
                 if (radius) *radius = 0.0;
                 return gf->createPolygon().release();
             }
-            if (center) *center = static_cast<Geometry*>(gf->createPoint(mc.getCentre()));
+            if (center) *center = gf->createPoint(mc.getCentre()).release();
             if (radius) *radius = mc.getRadius();
             ret->setSRID(g->getSRID());
             return ret.release();
@@ -2344,9 +2344,7 @@ extern "C" {
                 return false;
             }
 
-            double az = g->getCoordinate()->z;
-
-            return std::isfinite(az);
+            return g->getCoordinateDimension() == 3;
         });
     }
 
@@ -2586,7 +2584,7 @@ extern "C" {
     GEOSCoordSeq_setXY_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y)
     {
         return execute(extHandle, 0, [&]() {
-            cs->setAt({x, y}, idx);
+            cs->setAt(Coordinate{x, y}, idx);
             return 1;
         });
     }
@@ -3658,8 +3656,8 @@ extern "C" {
             if(!point) {
                 throw std::runtime_error("third argument of GEOSProject_r must be Point");
             }
-            const geos::geom::Coordinate* inputPt = p->getCoordinate();
-            return geos::linearref::LengthIndexedLine(g).project(*inputPt);
+            const geos::geom::Coordinate inputPt(*p->getCoordinate());
+            return geos::linearref::LengthIndexedLine(g).project(inputPt);
         });
     }
 

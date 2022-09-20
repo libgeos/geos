@@ -47,6 +47,16 @@ CoordinateArraySequence::CoordinateArraySequence(std::vector<Coordinate> && coor
 {
 }
 
+CoordinateArraySequence::CoordinateArraySequence(std::vector<CoordinateXY> && coords, std::size_t dimension_in):
+        vect(coords.size()),
+        dimension(dimension_in)
+{
+    // FIXME remove copy
+    for (size_t i = 0; i < coords.size(); i++) {
+        vect[i] = Coordinate(coords[i]);
+    }
+}
+
 CoordinateArraySequence::CoordinateArraySequence(
     std::vector<Coordinate>* coords, std::size_t dimension_in)
     : dimension(dimension_in)
@@ -116,6 +126,14 @@ void
 CoordinateArraySequence::toVector(std::vector<Coordinate>& out) const
 {
     out.insert(out.end(), vect.begin(), vect.end());
+}
+
+void
+CoordinateArraySequence::toVector(std::vector<CoordinateXY>& out) const
+{
+    for (const auto& pt : vect) {
+        out.push_back(pt);
+    }
 }
 
 void

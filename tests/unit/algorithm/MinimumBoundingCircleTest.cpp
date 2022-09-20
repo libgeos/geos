@@ -34,14 +34,16 @@ namespace tut {
 // Test Group
 //
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::geom::PrecisionModel;
+using geos::algorithm::MinimumBoundingCircle;
+
+
 // dummy data, not used
 struct test_minimumboundingcircle_data {
-    typedef geos::geom::Geometry Geometry;
-    typedef geos::geom::Coordinate Coordinate;
-    typedef geos::geom::PrecisionModel PrecisionModel;
-    typedef geos::geom::GeometryFactory GeometryFactory;
-    typedef geos::algorithm::MinimumBoundingCircle MinimumBoundingCircle;
-
     geos::io::WKTReader reader;
     std::unique_ptr<Geometry> geom;
     std::unique_ptr<Geometry> geomOut;
@@ -57,10 +59,10 @@ struct test_minimumboundingcircle_data {
 
         geom = reader.read(wktIn);
         MinimumBoundingCircle mbc(geom.get());
-        std::vector<Coordinate> exPts = mbc.getExtremalPoints();
-        std::unique_ptr<Geometry> actual(geomFact->createMultiPoint(exPts));
+        std::vector<CoordinateXY> exPts = mbc.getExtremalPoints();
+        const auto& actual = geomFact->createMultiPoint(std::move(exPts));
         double actualRadius = mbc.getRadius();
-        geos::geom::Coordinate actualCentre = mbc.getCentre();
+        geos::geom::CoordinateXY actualCentre = mbc.getCentre();
 
         geomOut = reader.read(wktOut);
         bool isEqual = actual->equals(geomOut.get());

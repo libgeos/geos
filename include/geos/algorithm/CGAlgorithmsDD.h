@@ -24,7 +24,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
+class CoordinateXY;
 class CoordinateSequence;
 }
 }
@@ -64,9 +64,9 @@ public:
      * @return -1 if q is clockwise (right) from p1-p2
      * @return 0 if q is collinear with p1-p2
      */
-    static int orientationIndex(const geom::Coordinate& p1,
-                                const geom::Coordinate& p2,
-                                const geom::Coordinate& q);
+    static int orientationIndex(const geom::CoordinateXY& p1,
+                                const geom::CoordinateXY& p2,
+                                const geom::CoordinateXY& q);
 
 
     static int orientationIndex(double p1x, double p1y,
@@ -151,8 +151,8 @@ public:
      * @param q2 an endpoint of line segment 2
      * @return an intersection point if one exists, or null if the lines are parallel
      */
-    static geom::Coordinate intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& q1, const geom::Coordinate& q2);
+    static geom::CoordinateXY intersection(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                                           const geom::CoordinateXY& q1, const geom::CoordinateXY& q2);
 
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 
@@ -172,7 +172,7 @@ public:
      *
      * This method uses @ref geos::math::DD extended-precision arithmetic to provide more accurate
      * results than [circumcentre(Coordinate, Coordinate, Coordinate)]
-     * (@ref geos::geom::Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)).
+     * (@ref geos::geom::Triangle::circumcentre(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)).
      *
      * @param a
      *          a vertex of the triangle
@@ -182,7 +182,7 @@ public:
      *          a vertex of the triangle
      * @return the circumcentre of the triangle
      */
-    static geom::Coordinate circumcentreDD(const geom::Coordinate& a, const geom::Coordinate& b, const geom::Coordinate& c);
+    static geom::CoordinateXY circumcentreDD(const geom::CoordinateXY& a, const geom::CoordinateXY& b, const geom::CoordinateXY& c);
 
 protected:
 

@@ -75,6 +75,14 @@ Point::Point(const Coordinate & c, const GeometryFactory* factory)
     coordinates.setAt(c, 0);
 }
 
+Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
+    : Geometry(factory)
+    , empty2d(false)
+    , empty3d(false)
+{
+    coordinates.setAt(Coordinate(c), 0);
+}
+
 /*protected*/
 Point::Point(const Point& p)
     : Geometry(p)
@@ -263,8 +271,8 @@ Point::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
 
-    const Coordinate* this_coord = getCoordinate();
-    const Coordinate* other_coord = other->getCoordinate();
+    const CoordinateXY* this_coord = getCoordinate();
+    const CoordinateXY* other_coord = other->getCoordinate();
 
     // assume the isEmpty checks above worked :)
     assert(this_coord && other_coord);

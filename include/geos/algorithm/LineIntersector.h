@@ -146,7 +146,7 @@ public:
     void computeIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
 
     /// Same as above but doesn't compute intersection point. Faster.
-    static bool hasIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
+    static bool hasIntersection(const geom::CoordinateXY& p, const geom::CoordinateXY& p1, const geom::CoordinateXY& p2);
 
     enum intersection_type : uint8_t {
         /// Indicates that line segments do not intersect

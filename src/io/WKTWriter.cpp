@@ -130,6 +130,15 @@ WKTWriter::toPoint(const Coordinate& p0)
     return ret.str();
 }
 
+std::string
+WKTWriter::toPoint(const CoordinateXY& p0)
+{
+    std::stringstream ret(std::ios_base::in | std::ios_base::out);
+    ret << "POINT (";
+    ret << p0.x << " " << p0.y  << " )";
+    return ret.str();
+}
+
 void
 WKTWriter::setRoundingPrecision(int p0)
 {

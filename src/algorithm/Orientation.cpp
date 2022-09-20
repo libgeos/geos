@@ -33,8 +33,8 @@ namespace algorithm { // geos.algorithm
 /* public static */
 // inlining this method worsened performance slightly
 int
-Orientation::index(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                   const geom::Coordinate& q)
+Orientation::index(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                   const geom::CoordinateXY& q)
 {
     return CGAlgorithmsDD::orientationIndex(p1, p2, q);
 }
