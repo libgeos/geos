@@ -638,6 +638,7 @@ void object::test<18>
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
 
+    ensure_equals(poly->getCoordinateDimension(), 2u);
     ensure_equals(poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(poly->getDimension(), geos::geom::Dimension::A);
     ensure_equals(poly->getBoundaryDimension(), geos::geom::Dimension::L);
