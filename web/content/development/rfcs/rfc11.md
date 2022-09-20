@@ -12,7 +12,7 @@ weight: 10
 | RFC 11  | End-of-Life (EOL) Policy        |
 | Author  | Regina Obe                      |
 | Contact | lr@pcorp.us                     |
-| Status  | Draft                           |
+| Status  |  [Accepted](https://lists.osgeo.org/pipermail/geos-devel/2022-September/010784.html), September 20, 2022       |
 
 This document describes the GEOS project's policy for Versiong and EOLing GEOS minor releases.
 
