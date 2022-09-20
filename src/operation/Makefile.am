@@ -21,6 +21,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 
 liboperation_la_SOURCES = \
 	GeometryGraphOperation.cpp \
+	BoundaryOp.cpp \
 	IsSimpleOp.cpp 
 
 liboperation_la_LIBADD = \

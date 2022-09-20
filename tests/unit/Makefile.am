@@ -191,6 +191,7 @@ geos_unit_SOURCES = \
 	operation/geounion/UnaryUnionOpTest.cpp \
 	operation/intersection/RectangleIntersectionTest.cpp \
 	operation/IsSimpleOpTest.cpp \
+	operation/BoundaryOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
 	operation/overlay/OverlayOpUnionTest.cpp \
@@ -216,6 +217,7 @@ geos_unit_SOURCES = \
 	operation/overlayng/PrecisionUtilTest.cpp \
 	operation/overlayng/UnaryUnionNGTest.cpp \
 	operation/polygonize/PolygonizeTest.cpp \
+	operation/relate/RelateBoundaryNodeRuleTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/valid/IsValidOpTest.cpp \
 	operation/valid/MakeValidTest.cpp \
