@@ -13,7 +13,7 @@
       <pubDate>Mon, 12 Sep 2022 00:00:00 -0400</pubDate>
       
       <guid>https://libgeos.org/development/rfcs/rfc11/</guid>
-      <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Draft    This document describes the GEOS project&amp;rsquo;s policy for Versiong and EOLing GEOS minor releases.
+      <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Accepted, September 20, 2022    This document describes the GEOS project&amp;rsquo;s policy for Versiong and EOLing GEOS minor releases.
 Versioning The GEOS project generally releases a new minor release every 1-2 years. Each minor release has a git repo dedicated branch for it named after the minor version.</description>
     </item>
     
@@ -342,7 +342,7 @@ Examples  POINT(0 0) POINT EMPTY LINESTRING(0 0, 0 1, 1 2) LINESTRING EMPTY POLY
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project    Release Date Release Download Link Changes     2022/07/01 3.11.0 geos-3.11.0.tar.bz2 Changes   2022/06/03 3.10.3 geos-3.10.3.tar.bz2 Changes   2022/06/02 3.9.3 geos-3.9.3.tar.bz2 Changes   2022/06/02 3.8.3 geos-3.8.3.tar.bz2 Changes   2022/06/08 3.7.5 geos-3.7.5.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 EOL geos-3.5.2.tar.bz2 Changes    If you see EOL next to a released version, it means no security or patch updates will be added to that minor and you should upgrade to a higher.</description>
+      <description>Download Project    Release Date Release Final Release Download Link Changes     2022/07/01 3.11.0 💚 2026/07/01 geos-3.11.0.tar.bz2 Changes   2022/06/03 3.10.3 😎 2025/10/20 geos-3.10.3.tar.bz2 Changes   2022/06/02 3.9.3 😎 2024/12/09 geos-3.9.3.tar.bz2 Changes   2022/06/02 3.8.3 😐 2023/10/10 geos-3.8.3.tar.bz2 Changes   2022/06/08 3.7.5 😟 2023/03/31 geos-3.7.5.tar.bz2 Changes   2020/12/11 3.6.5 😰 2022/10/25 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 EOL 🤬 2019/10/04 geos-3.</description>
     </item>
     
   </channel>

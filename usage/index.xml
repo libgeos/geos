@@ -84,7 +84,7 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project    Release Date Release Download Link Changes     2022/07/01 3.11.0 geos-3.11.0.tar.bz2 Changes   2022/06/03 3.10.3 geos-3.10.3.tar.bz2 Changes   2022/06/02 3.9.3 geos-3.9.3.tar.bz2 Changes   2022/06/02 3.8.3 geos-3.8.3.tar.bz2 Changes   2022/06/08 3.7.5 geos-3.7.5.tar.bz2 Changes   2020/12/11 3.6.5 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 EOL geos-3.5.2.tar.bz2 Changes    If you see EOL next to a released version, it means no security or patch updates will be added to that minor and you should upgrade to a higher.</description>
+      <description>Download Project    Release Date Release Final Release Download Link Changes     2022/07/01 3.11.0 💚 2026/07/01 geos-3.11.0.tar.bz2 Changes   2022/06/03 3.10.3 😎 2025/10/20 geos-3.10.3.tar.bz2 Changes   2022/06/02 3.9.3 😎 2024/12/09 geos-3.9.3.tar.bz2 Changes   2022/06/02 3.8.3 😐 2023/10/10 geos-3.8.3.tar.bz2 Changes   2022/06/08 3.7.5 😟 2023/03/31 geos-3.7.5.tar.bz2 Changes   2020/12/11 3.6.5 😰 2022/10/25 geos-3.6.5.tar.bz2 Changes   2019/10/04 3.5.2 EOL 🤬 2019/10/04 geos-3.</description>
     </item>
     
   </channel>
