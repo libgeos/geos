@@ -76,7 +76,7 @@ struct LMGeometryComponentFilter: public GeometryComponentFilter {
     LMGeometryComponentFilter(LineMerger* newLm): lm(newLm) {}
 
     void
-    filter(const Geometry* geom)
+    filter_ro(const Geometry* geom) override
     {
         const LineString* ls = dynamic_cast<const LineString*>(geom);
         if(ls) {
@@ -95,7 +95,7 @@ void
 LineMerger::add(const Geometry* geometry)
 {
     LMGeometryComponentFilter lmgcf(this);
-    geometry->applyComponentFilter(lmgcf);
+    geometry->apply_ro(&lmgcf);
 }
 
 void
