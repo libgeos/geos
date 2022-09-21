@@ -37,6 +37,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/OffsetCurve.h>
+#include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -250,6 +251,12 @@ GeomFunction::init()
             (void) geomB; (void)d;  // prevent unused variable warning
             return new Result( geom->getCentroid() );
         });
+    addAgg("clusterIntersecting", 0, Result::typeGeometry, catRel, "cluster geometries based on intersection",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::operation::cluster::GeometryIntersectsClusterFinder f;
+            return new Result(f.clusterToCollection(*geom));
+    });
     add("convexHull", Result::typeGeometry, catConst,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
