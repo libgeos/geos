@@ -90,7 +90,7 @@ void object::test<2>
     }};
     // takes ownership of individual geometries
     geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT,
-                                        geoms.data(), static_cast<int>(geoms.size()));
+                                        geoms.data(), static_cast<unsigned int>(geoms.size()));
     ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
 }
 #endif
