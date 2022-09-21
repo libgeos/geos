@@ -43,6 +43,8 @@ public:
 
     const Coordinate& getAt(std::size_t pos) const override;
 
+    Coordinate& getAt(std::size_t pos) override;
+
     /// Copy Coordinate at position i to Coordinate c
     void getAt(std::size_t i, Coordinate& c) const override;
 

@@ -223,6 +223,26 @@ CoordinateSequence::getEnvelope() const {
     return e;
 }
 
+CoordinateSequence::iterator
+CoordinateSequence::begin() {
+    return {this};
+}
+
+CoordinateSequence::iterator
+CoordinateSequence::end() {
+    return {this, getSize()};
+}
+
+CoordinateSequence::const_iterator
+CoordinateSequence::cbegin() const {
+    return {this};
+}
+
+CoordinateSequence::const_iterator
+CoordinateSequence::cend() const {
+    return {this, getSize()};
+}
+
 std::ostream&
 operator<< (std::ostream& os, const CoordinateSequence& cs)
 {

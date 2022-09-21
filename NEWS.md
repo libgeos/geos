@@ -6,6 +6,7 @@ xxxx-xx-xx
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
   - CAPI: GEOSPreparedContainsXY, GEOSPreparedContainsProperlyXY,
     GEOSPreparedIntersectsXY (GH-677, Dan Baston)
+  - Add CoordinateSequenceIterator (GH-685, Dan Baston)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)

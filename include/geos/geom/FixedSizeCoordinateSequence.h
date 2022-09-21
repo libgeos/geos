@@ -44,6 +44,10 @@ namespace geom {
             return m_data[i];
         }
 
+        Coordinate& getAt(std::size_t i) final override {
+            return m_data[i];
+        }
+
         void getAt(std::size_t i, Coordinate& c) const final override {
             c = m_data[i];
         }
