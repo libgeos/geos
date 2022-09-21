@@ -471,5 +471,27 @@ void object::test<18>
     doTest(inpWKT, expWKT, true);
 }
 
+// https://trac.osgeo.org/geos/ticket/401
+template<> template<>
+void object::test<19>
+()
+{
+    std::string wkt = "GEOMETRYCOLLECTION( "
+              "MULTILINESTRING( (1656318.45 4833344.45,1656321.79 4833339.62,1656312.54 4833333.49),"
+              "(1656312.54 4833333.49,1656309.68 4833337.07)),"
+              "LINESTRING(1656309.68 4833337.07,1656318.45 4833344.45))";
+
+    auto geom = wktreader.read(wkt);
+
+    LineMerger lineMerger;
+    lineMerger.add(geom.get());
+
+    auto merged = lineMerger.getMergedLineStrings();
+
+    ensure_equals(merged.size(), 1u);
+
+    ensure_equals(geom->getLength(), merged[0]->getLength());
+}
+
 } // namespace tut
 
