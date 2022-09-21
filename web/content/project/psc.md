@@ -9,12 +9,13 @@ The GEOS project is run by a Project Steering Committee made up of developers an
 
 This PSC list is valid as of February 18th, 2022.
 
-* [Sandro Santilli](https://strk.kbt.io) (chair)
-* [Martin Davis](https://github.com/drjts)
+* [Dan Baston](https://github.com/dbaston)
 * [Howard Butler](https://github.com/hobu)
+* [Martin Davis](https://github.com/drjts)
 * [Regina Obe](https://www.paragoncorporation.com)
 * [Paul Ramsey](https://github.com/pramsey)
-* [Dan Baston](https://github.com/dbaston)
+* [Sandro Santilli](https://strk.kbt.io) (chair)
+
 
 The PSC approves major changes and RFC documents. Other work is always ongoing, by the PSC and by the other committers, listed below:
 
