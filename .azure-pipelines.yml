@@ -242,10 +242,14 @@ stages:
 
   - job: 'macOS'
     pool:
-      vmImage: 'macOS-10.15'
+      vmImage: 'macOS-11'
     strategy:
       matrix:
-        # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
+        # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md#xcode
+        Xcode 13.2.1:
+          TOOLSET: clang
+          CXXSTD: 11, 14, 20
+          XCODE_APP: /Applications/Xcode_13.2.1.app
         Xcode 12.4:
           TOOLSET: clang
           CXXSTD: 11, 14, 20
@@ -254,10 +258,6 @@ stages:
           TOOLSET: clang
           CXXSTD: 11, 17
           XCODE_APP: /Applications/Xcode_11.7.app
-        Xcode 10.3:
-          TOOLSET: clang
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_10.3.app
     steps:
     - script: |
         set -e
