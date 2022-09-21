@@ -11,7 +11,7 @@ This PSC list is valid as of February 18th, 2022.
 
 * [Dan Baston](https://github.com/dbaston)
 * [Howard Butler](https://github.com/hobu)
-* [Martin Davis](https://github.com/drjts)
+* [Martin Davis](https://github.com/dr-jts)
 * [Regina Obe](https://www.paragoncorporation.com)
 * [Paul Ramsey](https://github.com/pramsey)
 * [Sandro Santilli](https://strk.kbt.io) (chair)
