@@ -607,6 +607,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDisjointSubsetUnion(const Geometry* g)
+    {
+        return GEOSDisjointSubsetUnion_r(handle, g);
+    }
+
+    Geometry*
     GEOSNode(const Geometry* g)
     {
         return GEOSNode_r(handle, g);

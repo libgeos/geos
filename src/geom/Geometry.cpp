@@ -557,11 +557,7 @@ Geometry::Ptr
 Geometry::Union() const
 {
     using geos::operation::geounion::UnaryUnionOp;
-#ifdef DISABLE_OVERLAYNG
     return UnaryUnionOp::Union(*this);
-#else
-    return operation::overlayng::OverlayNGRobust::Union(this);
-#endif
 }
 
 std::unique_ptr<Geometry>
