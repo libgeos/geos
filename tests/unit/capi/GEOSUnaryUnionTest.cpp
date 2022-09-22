@@ -128,9 +128,10 @@ void object::test<6>
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_), std::string(
-                      "GEOMETRYCOLLECTION (POINT (6 7), POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 6, 7 6, 7 8, 5 8, 5 6)))"
-                  ));
+    expected_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (6 7), POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 6, 7 6, 7 8, 5 8, 5 6)))");
+    ensure(nullptr != expected_);
+
+    ensure(GEOSEquals(geom2_, expected_));
 }
 
 // Self-union a collection of lineal and polygonal geometries
