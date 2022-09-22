@@ -40,16 +40,6 @@ namespace locate { // geos.algorithm
 geom::Location
 SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry* geom)
 {
-    if(geom->isEmpty()) {
-        return Location::EXTERIOR;
-    }
-
-    /*
-     * Do a fast check against the geometry envelope first
-     */
-    if (! geom->getEnvelopeInternal()->intersects(p))
-        return Location::EXTERIOR;
-
     return locateInGeometry(p, geom);
 }
 
@@ -62,16 +52,21 @@ SimplePointInAreaLocator::isContained(const Coordinate& p, const Geometry* geom)
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* geom)
 {
+    /*
+     * Do a fast check against the geometry envelope first
+     */
+    if (! geom->getEnvelopeInternal()->intersects(p))
+        return Location::EXTERIOR;
+
     if (geom->getDimension() < 2) {
         return Location::EXTERIOR;
     }
 
     if (geom->getNumGeometries() == 1) {
-        auto poly = dynamic_cast<const Polygon*>(geom->getGeometryN(0));
-        if (poly) {
+        if (geom->getGeometryTypeId() == GEOS_POLYGON) {
+            auto poly = static_cast<const Polygon*>(geom);
             return locatePointInPolygon(p, poly);
         }
-        // Else it is a collection with a single element. Will be handled below.
     }
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         const Geometry* gi = geom->getGeometryN(i);
