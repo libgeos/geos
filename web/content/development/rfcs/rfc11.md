@@ -42,7 +42,6 @@ Minor versions marked EOL will not have further micro or tagged releases. We may
 
 The policy for making a minor version EOL is:
 
-* If the first micro of a minor was released more than 3-4 years ago, it may become EOL.
-* A minor version that is 5 years old may become EOL.
+* If the first release of the minor version is more than 3-5 years old, it may become EOL.
 
 When a minor release is EOL, it will either be removed from [Downloads](/usage/download/) or will have an **EOL** marker showing it is the last release for the minor version.
