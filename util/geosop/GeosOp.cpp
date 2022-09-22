@@ -363,7 +363,7 @@ void GeosOp::run() {
     execute(fun);
 
     if (args.isShowTime || args.isVerbose) {
-        std::cout
+        std::cerr
             << "Ran " <<  formatNum( opCount ) << " " << args.opName << " ops ( "
             << formatNum( vertexCount ) << " vertices)"
             << "  -- " << formatNum( (long) totalTime ) <<  " usec"
