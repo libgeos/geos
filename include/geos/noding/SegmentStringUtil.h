@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -53,15 +54,9 @@ public:
         geom::LineString::ConstVect lines;
         geom::util::LinearComponentExtracter::getLines(*g, lines);
 
-        for(std::size_t i = 0, n = lines.size(); i < n; i++) {
-            geom::LineString* line = (geom::LineString*)(lines[i]);
-
-            // we take ownership of the coordinates here
-            // TODO: check if this can be optimized by getting
-            //       the internal CS.
-            auto pts = line->getCoordinates();
-
-            segStr.push_back(new NodedSegmentString(pts.release(), g));
+        for(const geom::LineString* line : lines) {
+            auto pts = line->getCoordinatesRO();
+            segStr.push_back(new BasicSegmentString(const_cast<geom::CoordinateSequence*>(pts), g));
         }
     }
 
