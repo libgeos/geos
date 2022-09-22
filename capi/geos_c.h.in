@@ -891,6 +891,11 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSDisjointSubsetUnion */
+extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g);
+
 /** \see GEOSPointOnSurface */
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(
     GEOSContextHandle_t handle,
@@ -3291,6 +3296,16 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
+
+/**
+* Optimized union algorithm for inputs that can be divided into subsets
+* that do not intersect. If there is only one such subset, performance
+* can be expected to be worse than GEOSUnionaryUnion.
+* \param g The input geometry
+* \return A newly allocated geometry of the union, or NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion(const GEOSGeometry *g);
 
 /**
 * Intersection optimized for a rectangular clipping polygon.
