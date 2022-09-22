@@ -47,7 +47,7 @@ Geospatial applications using GEOS include:
 
 ## Databases
 
- * [PostGIS](http://www.postgis.org)
+ * [PostGIS](https://postgis.net)
  * [INGRES](http://www.ingres.com/)
  * [MonetDB](http://monetdb.cwi.nl/)
  * [SpatiaLite](http://www.gaia-gis.it/spatialite/)
