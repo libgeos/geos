@@ -161,6 +161,12 @@ PreparedPolygon::distance(const geom::Geometry* g) const
     return PreparedPolygonDistance::distance(*this, g);
 }
 
+bool
+PreparedPolygon::isWithinDistance(const geom::Geometry* g, double d) const
+{
+    return PreparedPolygonDistance(*this).isWithinDistance(g, d);
+}
+
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos

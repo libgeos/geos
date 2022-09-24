@@ -40,6 +40,8 @@ public:
 
     double distance(const geom::Geometry* g) const;
 
+    bool isWithinDistance(const geom::Geometry* g, double d) const;
+
 protected:
 
     const PreparedLineString& prepLine;

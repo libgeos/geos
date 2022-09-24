@@ -43,6 +43,17 @@ PreparedPolygonDistance::distance(const geom::Geometry* g) const
     return idf->distance(g);
 }
 
+bool
+PreparedPolygonDistance::isWithinDistance(const geom::Geometry* g, double d) const
+{
+    if ( prepPoly.getGeometry().isEmpty() || g->isEmpty() )
+    {
+        return false;
+    }
+
+    return distance(g) <= d;
+}
+
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos

@@ -59,6 +59,7 @@ public:
     bool intersects(const geom::Geometry* g) const override;
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const override;
     double distance(const geom::Geometry* g) const override;
+    bool isWithinDistance(const geom::Geometry* g, double d) const override;
     operation::distance::IndexedFacetDistance* getIndexedFacetDistance() const;
 
 };

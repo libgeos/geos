@@ -70,6 +70,7 @@ public:
     bool covers(const geom::Geometry* g) const override;
     bool intersects(const geom::Geometry* g) const override;
     double distance(const geom::Geometry* g) const override;
+    bool isWithinDistance(const geom::Geometry* g, double d) const override;
 
 };
 

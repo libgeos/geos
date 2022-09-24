@@ -91,6 +91,12 @@ PreparedLineString::distance(const geom::Geometry* g) const
     return PreparedLineStringDistance::distance(*this, g);
 }
 
+bool
+PreparedLineString::isWithinDistance(const geom::Geometry* g, double d) const
+{
+    return PreparedLineStringDistance(*this).isWithinDistance(g, d);
+}
+
 
 } // namespace geos.geom.prep
 } // namespace geos.geom

@@ -40,6 +40,17 @@ PreparedLineStringDistance::distance(const geom::Geometry* g) const
     return idf->distance(g);
 }
 
+bool
+PreparedLineStringDistance::isWithinDistance(const geom::Geometry* g, double d) const
+{
+    if ( prepLine.getGeometry().isEmpty() || g->isEmpty() )
+    {
+        return false;
+    }
+
+    return distance(g) <= d;
+}
+
 
 } // namespace geos.geom.prep
 } // namespace geos.geom
