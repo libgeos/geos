@@ -58,7 +58,8 @@ public:
     ///
     /// \param g a Geometry, which may be of any type.
     IndexedFacetDistance(const geom::Geometry* g) :
-        cachedTree(FacetSequenceTreeBuilder::build(g))
+        cachedTree(FacetSequenceTreeBuilder::build(g)),
+        baseGeometry(*g)
     {}
 
     /// \brief Computes the distance between facets of two geometries.
@@ -85,6 +86,14 @@ public:
     /// \return the computed distance
     double distance(const geom::Geometry* g) const;
 
+    /// \brief Tests whether the base geometry lies within a specified distance of the given geometry.
+    ///
+    /// \param g the geometry to test
+    /// \param maxDistance the maximum distance to test
+    ///
+    /// \return true of the geometry lies within the specified distance
+    bool isWithinDistance(const geom::Geometry* g, double maxDistance) const;
+
     /// \brief Computes the nearest locations on the base geometry and the given geometry.
     ///
     /// \param g the geometry to compute the nearest location to
@@ -98,7 +107,15 @@ public:
     std::vector<geom::Coordinate> nearestPoints(const geom::Geometry* g) const;
 
 private:
+    struct FacetDistance {
+        double operator()(const FacetSequence* a, const FacetSequence* b) const
+        {
+            return a->distance(*b);
+        }
+    };
+
     std::unique_ptr<geos::index::strtree::TemplateSTRtree<const FacetSequence*>> cachedTree;
+    const geom::Geometry& baseGeometry;
 
 };
 }

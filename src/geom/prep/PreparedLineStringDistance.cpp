@@ -48,7 +48,8 @@ PreparedLineStringDistance::isWithinDistance(const geom::Geometry* g, double d) 
         return false;
     }
 
-    return distance(g) <= d;
+    operation::distance::IndexedFacetDistance *idf = prepLine.getIndexedFacetDistance();
+    return idf->isWithinDistance(g, d);
 }
 
 

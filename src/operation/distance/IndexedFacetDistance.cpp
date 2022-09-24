@@ -46,12 +46,6 @@ IndexedFacetDistance::nearestPoints(const geom::Geometry* g1, const geom::Geomet
 double
 IndexedFacetDistance::distance(const Geometry* g) const
 {
-    struct FacetDistance {
-        double operator()(const FacetSequence* a, const FacetSequence* b) {
-            return a->distance(*b);
-        }
-    };
-
     auto tree2 = FacetSequenceTreeBuilder::build(g);
     auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
 
@@ -62,15 +56,27 @@ IndexedFacetDistance::distance(const Geometry* g) const
     return nearest.first->distance(*nearest.second);
 }
 
+bool
+IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) const
+{
+    // short-circuit check
+    double envDist = baseGeometry.getEnvelopeInternal()->distance(*g->getEnvelopeInternal());
+    if (envDist > maxDistance) {
+        return false;
+    }
+
+    auto env2 = g->getEnvelope();
+    if (distance(env2.get()) > maxDistance) {
+        return false;
+    }
+
+    auto tree2 = FacetSequenceTreeBuilder::build(g);
+    return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
+}
+
 std::vector<GeometryLocation>
 IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
 {
-    struct FacetDistance {
-        double operator()(const FacetSequence* a, const FacetSequence* b) const
-        {
-            return a->distance(*b);
-        }
-    };
 
     auto tree2 = FacetSequenceTreeBuilder::build(g);
     auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);

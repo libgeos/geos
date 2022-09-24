@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/index/strtree/TemplateSTRNode.h>
+#include <utility>
 
 namespace geos {
 namespace index {
@@ -55,6 +56,10 @@ public:
         } else {
             return BoundsTraits::distance(getFirst().getBounds(), getSecond().getBounds());
         }
+    }
+
+    double maximumDistance() {
+        return BoundsTraits::maxDistance(getFirst().getBounds(), getSecond().getBounds());
     }
 
 private:

@@ -51,7 +51,10 @@ PreparedPolygonDistance::isWithinDistance(const geom::Geometry* g, double d) con
         return false;
     }
 
-    return distance(g) <= d;
+    if ( prepPoly.intersects(g) ) return true;
+
+    operation::distance::IndexedFacetDistance *idf = prepPoly.getIndexedFacetDistance();
+    return idf->isWithinDistance(g, d);
 }
 
 } // namespace geos.geom.prep

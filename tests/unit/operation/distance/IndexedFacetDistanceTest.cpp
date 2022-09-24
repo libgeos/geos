@@ -240,8 +240,13 @@ void object::test<8>
     GeomPtr g0(_wktreader.read(wkt0));
     GeomPtr g1(_wktreader.read(wkt1));
     IndexedFacetDistance ifd(g0.get());
-    double d = ifd.distance(g1.get());
-    ensure_equals(d, 50);
+    double expected_distance = 50;
+
+    double actual_distance = ifd.distance(g1.get());
+    ensure_equals(actual_distance, expected_distance);
+
+    ensure(ifd.isWithinDistance(g1.get(), expected_distance));
+    ensure(!ifd.isWithinDistance(g1.get(), expected_distance - 1e-6));
 }
 
 // Invalid polygon collapsed to a line

@@ -250,6 +250,18 @@ public:
         return nearestNeighbour(env, item, id);
     }
 
+    template<typename ItemDistance>
+    bool isWithinDistance(TemplateSTRtreeImpl<ItemType, BoundsTraits>& other, double maxDistance) {
+        ItemDistance itemDist;
+
+        if (!getRoot() || !other.getRoot()) {
+            return false;
+        }
+
+        TemplateSTRtreeDistance<ItemType, BoundsTraits, ItemDistance> td(itemDist);
+        return td.isWithinDistance(*root, *other.root, maxDistance);
+    }
+
     /// @}
     /// \defgroup query Query
     /// @{
@@ -617,6 +629,10 @@ struct EnvelopeTraits {
 
     static double distance(const BoundsType& a, const BoundsType& b) {
         return a.distance(b);
+    }
+
+    static double maxDistance(const BoundsType& a, const BoundsType& b) {
+        return a.maxDistance(b);
     }
 
     static BoundsType empty() {

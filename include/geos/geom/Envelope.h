@@ -657,6 +657,16 @@ public:
     }
 
     /** \brief
+     * Computes the maximum distance between points in this and another Envelope.
+     */
+    double maxDistance(const Envelope& other) const
+    {
+        Coordinate p(std::min(minx, other.minx), std::min(miny, other.miny));
+        Coordinate q(std::max(maxx, other.maxx), std::max(maxy, other.maxy));
+        return p.distance(q);
+    }
+
+    /** \brief
      * Computes the square of the distance between this and another Envelope.
      *
      * The distance between overlapping Envelopes is 0. Otherwise, the

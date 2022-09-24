@@ -14,11 +14,14 @@
 
 #pragma once
 
+#include <geos/constants.h>
 #include <geos/index/strtree/TemplateSTRNode.h>
 #include <geos/index/strtree/TemplateSTRNodePair.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <queue>
+#include <memory>
 #include <vector>
 
 namespace geos {
@@ -49,6 +52,11 @@ public:
 
     ItemPair nearestNeighbour(NodePair& initPair) {
         return nearestNeighbour(initPair, DoubleInfinity);
+    }
+
+    bool isWithinDistance(const Node& root1, const Node& root2, double maxDistance) {
+        NodePair initPair(root1, root2, m_id);
+        return isWithinDistance(initPair, maxDistance);
     }
 
 private:
@@ -151,6 +159,72 @@ private:
             }
         }
     }
+
+    bool isWithinDistance(const NodePair& initPair, double maxDistance) {
+        double distanceUpperBound = DoubleInfinity;
+
+        // initialize search queue
+        PairQueue priQ;
+        priQ.push(initPair);
+
+        while (! priQ.empty()) {
+            // pop head of queue and expand one side of pair
+            NodePair pair = priQ.top();
+            double pairDistance = pair.getDistance();
+
+            /**
+            * If the distance for the first pair in the queue
+            * is > maxDistance, all other pairs
+            * in the queue must have a greater distance as well.
+            * So can conclude no items are within the distance
+            * and terminate with result = false
+            */
+            if (pairDistance > maxDistance)
+                return false;
+
+            priQ.pop();
+
+            /**
+            * If the maximum distance between the nodes
+            * is less than the maxDistance,
+            * than all items in the nodes must be
+            * closer than the max distance.
+            * Then can terminate with result = true.
+            *
+            * NOTE: using Envelope MinMaxDistance
+            * would provide a tighter bound,
+            * but not much performance improvement has been observed
+            */
+            if (pair.maximumDistance() <= maxDistance)
+                return true;
+            /**
+            * If the pair items are leaves
+            * then their actual distance is an upper bound.
+            * Update the distanceUpperBound to reflect this
+            */
+            if (pair.isLeaves()) {
+                // assert: currentDistance < minimumDistanceFound
+                distanceUpperBound = pairDistance;
+                /**
+                * If the items are closer than maxDistance
+                * can terminate with result = true.
+                */
+                if (distanceUpperBound <= maxDistance)
+                return true;
+            }
+            else {
+                /**
+                * Otherwise, expand one side of the pair,
+                * and insert the expanded pairs into the queue.
+                * The choice of which side to expand is determined heuristically.
+                */
+                expandToQueue(pair, priQ, distanceUpperBound);
+            }
+        }
+        return false;
+
+    }
+
 
     ItemDistance& m_id;
 };
