@@ -1124,13 +1124,6 @@ extern char GEOS_DLL GEOSPreparedContainsProperly_r(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
 
-/** \see GEOSPreparedContainsProperlyXY */
-extern char GEOS_DLL GEOSPreparedContainsProperlyXY_r(
-        GEOSContextHandle_t handle,
-        const GEOSPreparedGeometry* pg1,
-        double x,
-        double y);
-
 /** \see GEOSPreparedCoveredBy */
 extern char GEOS_DLL GEOSPreparedCoveredBy_r(
     GEOSContextHandle_t handle,
@@ -4330,20 +4323,6 @@ extern char GEOS_DLL GEOSPreparedContainsXY(
 extern char GEOS_DLL GEOSPreparedContainsProperly(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
-
-/**
-* Use a \ref GEOSPreparedGeometry do a high performance
-* calculation of whether the provided point is contained properly.
-* \param pg1 The prepared geometry
-* \param x x coordinate of point to test
-* \param y y coordinate of point to test
-* \returns 1 on true, 0 on false, 2 on exception
-* \see GEOSContainsProperly
-*/
-extern char GEOS_DLL GEOSPreparedContainsProperlyXY(
-        const GEOSPreparedGeometry* pg1,
-        double x,
-        double y);
 
 /**
 * Using a \ref GEOSPreparedGeometry do a high performance

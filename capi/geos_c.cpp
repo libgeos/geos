@@ -1462,12 +1462,6 @@ extern "C" {
     }
 
     char
-    GEOSPreparedContainsProperlyXY(const geos::geom::prep::PreparedGeometry* pg1, double x, double y)
-    {
-        return GEOSPreparedContainsProperlyXY_r(handle, pg1, x, y);
-    }
-
-    char
     GEOSPreparedCoveredBy(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2)
     {
         return GEOSPreparedCoveredBy_r(handle, pg1, g2);

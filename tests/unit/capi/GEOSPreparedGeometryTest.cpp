@@ -435,11 +435,6 @@ void object::test<15>
     ensure_equals(GEOSPreparedContainsXY(prepGeom1_, 1.5, 0.5), 0);
     ensure_equals(GEOSPreparedContainsXY(prepGeom1_, 0.75, 0.5), 1);
 
-    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0.5, 0.5), 1);
-    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0, 0), 0);
-    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 1.5, 0.5), 0);
-    ensure_equals(GEOSPreparedContainsProperlyXY(prepGeom1_, 0.75, 0.5), 1);
-
     ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 0.5, 0.5), 1);
     ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 1.5, 0.5), 0);
     ensure_equals(GEOSPreparedIntersectsXY(prepGeom1_, 0.75, 0.5), 1);

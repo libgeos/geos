@@ -3414,15 +3414,6 @@ extern "C" {
     }
 
     char
-    GEOSPreparedContainsProperlyXY_r(GEOSContextHandle_t extHandle,
-                                   const geos::geom::prep::PreparedGeometry* pg, double x, double y)
-    {
-        extHandle->point2d->setXY(x, y);
-
-        return GEOSPreparedContainsProperly_r(extHandle, pg, extHandle->point2d.get());
-    }
-
-    char
     GEOSPreparedCoveredBy_r(GEOSContextHandle_t extHandle,
                             const geos::geom::prep::PreparedGeometry* pg, const Geometry* g)
     {
