@@ -6,11 +6,19 @@ xxxx-xx-xx
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
   - CAPI: GEOSPreparedContainsXY, GEOSPreparedIntersectsXY (GH-677, Dan Baston)
   - Add CoordinateSequenceIterator (GH-685, Dan Baston)
+  - Geometry clustering: DBSCAN, geometry intersection/distance, envelope
+    intersection/distance (GH-688, Dan Baston)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
   - WKTReader: Throw exception on inconsistent geometry dimension (#1080, Dan Baston)
   - WKTReader: Throw exception if WKT contains extra text after end of geometry (#1095, Dan Baston)
+  - GEOSIntersects: Fix crash with empty point inputs (#1110, Dan Baston)
+  - LineMerger: Recursively collect all components from GeometryCollections (#401, Dan Baston)
+  - GeometryPrecisionReducer: Return correct dimensionality for empty results (GH-684, Dan Baston)
+  - Improve performance of coverage union (GH-681, Dan Baston)
+  - Improve performance of prepared polygon intersection (GH-690, Dan Baston)
+  - Implement indexed calculations for prepared geometry distance (GH-691, Dan Baston)
 
 
 ## Changes in 3.11.0
