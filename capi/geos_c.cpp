@@ -343,6 +343,31 @@ extern "C" {
         return GEOSNearestPoints_r(handle, g1, g2);
     }
 
+    GEOSGeometry*
+    GEOSClusterDBSCAN(Geometry* g, double eps, unsigned minPoints) {
+        return GEOSClusterDBSCAN_r(handle, g, eps, minPoints);
+    }
+
+    GEOSGeometry*
+    GEOSClusterGeometryDistance(GEOSGeometry* g, double d) {
+        return GEOSClusterGeometryDistance_r(handle, g, d);
+    }
+
+    GEOSGeometry*
+    GEOSClusterGeometryIntersects(GEOSGeometry* g) {
+        return GEOSClusterGeometryIntersects_r(handle, g);
+    }
+
+    GEOSGeometry*
+    GEOSClusterEnvelopeDistance(GEOSGeometry* g, double d) {
+        return GEOSClusterEnvelopeDistance_r(handle, g, d);
+    }
+
+    GEOSGeometry*
+    GEOSClusterEnvelopeIntersects(GEOSGeometry* g) {
+        return GEOSClusterEnvelopeIntersects_r(handle, g);
+    }
+
     Geometry*
     GEOSGeomFromWKT(const char* wkt)
     {

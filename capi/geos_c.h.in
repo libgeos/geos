@@ -1848,6 +1848,36 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXYZ_r(
     GEOSTransformXYZCallback callback,
     void* userdata);
 
+/** \see GEOSClusterDBSCAN */
+extern GEOSGeometry GEOS_DLL *GEOSClusterDBSCAN_r(
+        GEOSContextHandle_t handle,
+        GEOSGeometry* g,
+        double eps,
+        unsigned minPoints);
+
+
+/** \see GEOSClusterGeometryDistance */
+extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryDistance_r(
+        GEOSContextHandle_t handle,
+        GEOSGeometry* g,
+        double d);
+
+/** \see GEOSClusterGeometryIntersects */
+extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryIntersects_r(
+        GEOSContextHandle_t handle,
+        GEOSGeometry* g);
+
+/** \see GEOSClusterEnvelopeDistance */
+extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeDistance_r(
+        GEOSContextHandle_t handle,
+        GEOSGeometry* g,
+        double d);
+
+/** \see GEOSClusterEnvelopeIntersects */
+extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeIntersects_r(
+        GEOSContextHandle_t handle,
+        GEOSGeometry* g);
+
 /* ========= Algorithms ========= */
 
 /** \see GEOSOrientationIndex */
@@ -3759,7 +3789,66 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
 extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2);
+///@}
 
+/* ========== Buffer related functions ========== */
+/** @name Clustering
+* Functions for clustering geometries
+*/
+///@{
+/**
+ * @brief GEOSClusterDBSCAN
+ *
+ * Cluster geometries using the DBSCAN algorithm
+ *
+ * @param g a collection of geometries to be clustered
+ * @param eps distance parameter for clustering
+ * @param minPoints density parameter for clustering
+ * @return GeometryCollection whose components represent individual clusters
+ */
+extern GEOSGeometry GEOS_DLL *GEOSClusterDBSCAN(GEOSGeometry* g, double eps, unsigned minPoints);
+
+/**
+ * @brief GEOSClusterGeometryDistance
+ *
+ * Cluster geometries according to a distance threshold
+ *
+ * @param g a collection of geometries to be clustered
+ * @param d minimim distance between geometries in the same cluster
+ * @return GeometryCollection whose components represent individual clusters
+ */
+extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryDistance(GEOSGeometry* g, double d);
+
+/**
+ * @brief GEOSClusterGeometryIntersects
+ *
+ * Cluster geometries that intersect
+ *
+ * @param g a collection of geometries to be clustered
+ * @return GeometryCollection whose components represent individual clusters
+ */
+extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryIntersects(GEOSGeometry* g);
+
+/**
+ * @brief GEOSClusterEnvelopeDistance
+ *
+ * Cluster geometries according to an envelope distance threshold
+ *
+ * @param g a collection of geometries to be clustered
+ * @param d minimim envelope distance between geometries in the same cluster
+ * @return GeometryCollection whose components represent individual clusters
+ */
+extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeDistance(GEOSGeometry* g, double d);
+
+/**
+ * @brief GEOSClusterEnvelopeIntersects
+ *
+ * Cluster geometries whose envelopes intersect
+ *
+ * @param g
+ * @return GeometryCollection whose components represent individual clusters
+ */
+extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeIntersects(GEOSGeometry* g);
 ///@}
 
 /* ========== Buffer related functions ========== */
