@@ -77,27 +77,38 @@ $(function() {
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    IndexedFacetDistance(<span class="keyword">const</span> geom::Geometry* g) :</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        cachedTree(FacetSequenceTreeBuilder::build(g))</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    {}</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> distance(<span class="keyword">const</span> geom::Geometry* g1, <span class="keyword">const</span> geom::Geometry* g2);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> std::vector&lt;geom::Coordinate&gt; nearestPoints(<span class="keyword">const</span> geom::Geometry* g1, <span class="keyword">const</span> geom::Geometry* g2);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">double</span> distance(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    std::vector&lt;GeometryLocation&gt; nearestLocations(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::vector&lt;geom::Coordinate&gt; nearestPoints(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::unique_ptr&lt;geos::index::strtree::TemplateSTRtree&lt;const FacetSequence*&gt;&gt; cachedTree;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        cachedTree(FacetSequenceTreeBuilder::build(g)),</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        baseGeometry(*g)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> distance(<span class="keyword">const</span> geom::Geometry* g1, <span class="keyword">const</span> geom::Geometry* g2);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">static</span> std::vector&lt;geom::Coordinate&gt; nearestPoints(<span class="keyword">const</span> geom::Geometry* g1, <span class="keyword">const</span> geom::Geometry* g2);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">double</span> distance(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">bool</span> isWithinDistance(<span class="keyword">const</span> geom::Geometry* g, <span class="keywordtype">double</span> maxDistance) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::vector&lt;GeometryLocation&gt; nearestLocations(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::vector&lt;geom::Coordinate&gt; nearestPoints(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keyword">struct </span>FacetDistance {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">double</span> operator()(<span class="keyword">const</span> FacetSequence* a, <span class="keyword">const</span> FacetSequence* b)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> a-&gt;distance(*b);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    };</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    std::unique_ptr&lt;geos::index::strtree::TemplateSTRtree&lt;const FacetSequence*&gt;&gt; cachedTree;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">const</span> geom::Geometry&amp; baseGeometry;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;}</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#af2d15f4683ac632a717743dca891ddca">  124</a></span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <!-- start footer part -->

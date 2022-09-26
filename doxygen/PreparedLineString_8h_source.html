@@ -101,19 +101,21 @@ $(function() {
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a3916569335b2783e40fb4e3037c04c05">intersects</a>(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; <a class="code" href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a023e1f1fb8bc1eaa1e69be4091344939">nearestPoints</a>(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#ac8798ad999e6e17d69da1c51e2902b7c">distance</a>(<span class="keyword">const</span> geom::Geometry* g) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace geos::geom::prep</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a5d50fe94252baf3449f3182e86d70c7b">isWithinDistance</a>(<span class="keyword">const</span> geom::Geometry* g, <span class="keywordtype">double</span> d) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    operation::distance::IndexedFacetDistance* getIndexedFacetDistance() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// namespace geos::geom::prep</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1prep_1_1PreparedLineString_html_ac8798ad999e6e17d69da1c51e2902b7c"><div class="ttname"><a href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#ac8798ad999e6e17d69da1c51e2902b7c">geos::geom::prep::PreparedLineString::distance</a></div><div class="ttdeci">double distance(const geom::Geometry *g) const override</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1prep_1_1PreparedLineString_html_a3916569335b2783e40fb4e3037c04c05"><div class="ttname"><a href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a3916569335b2783e40fb4e3037c04c05">geos::geom::prep::PreparedLineString::intersects</a></div><div class="ttdeci">bool intersects(const geom::Geometry *g) const override</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1prep_1_1PreparedLineString_html_a023e1f1fb8bc1eaa1e69be4091344939"><div class="ttname"><a href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a023e1f1fb8bc1eaa1e69be4091344939">geos::geom::prep::PreparedLineString::nearestPoints</a></div><div class="ttdeci">std::unique_ptr&lt; geom::CoordinateSequence &gt; nearestPoints(const geom::Geometry *g) const override</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1prep_1_1PreparedLineString_html_a5d50fe94252baf3449f3182e86d70c7b"><div class="ttname"><a href="classgeos_1_1geom_1_1prep_1_1PreparedLineString.html#a5d50fe94252baf3449f3182e86d70c7b">geos::geom::prep::PreparedLineString::isWithinDistance</a></div><div class="ttdeci">bool isWithinDistance(const geom::Geometry *g, double d) const override</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

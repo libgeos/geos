@@ -65,6 +65,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a47ca22947c9f65f064d0ab408782a579"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a47ca22947c9f65f064d0ab408782a579">distance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const</td></tr>
 <tr class="memdesc:a47ca22947c9f65f064d0ab408782a579"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance from the base geometry to the given geometry.  <a href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a47ca22947c9f65f064d0ab408782a579">More...</a><br /></td></tr>
 <tr class="separator:a47ca22947c9f65f064d0ab408782a579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8f572c168dbf4ea336181c76eed30b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#ad8f572c168dbf4ea336181c76eed30b1">isWithinDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g, double maxDistance) const</td></tr>
+<tr class="memdesc:ad8f572c168dbf4ea336181c76eed30b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether the base geometry lies within a specified distance of the given geometry.  <a href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#ad8f572c168dbf4ea336181c76eed30b1">More...</a><br /></td></tr>
+<tr class="separator:ad8f572c168dbf4ea336181c76eed30b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ec0566347add419b8fe0878d42b0bc8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a7ec0566347add419b8fe0878d42b0bc8">nearestLocations</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const</td></tr>
 <tr class="memdesc:a7ec0566347add419b8fe0878d42b0bc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the nearest locations on the base geometry and the given geometry.  <a href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a7ec0566347add419b8fe0878d42b0bc8">More...</a><br /></td></tr>
 <tr class="separator:a7ec0566347add419b8fe0878d42b0bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +202,44 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the distance between facets of the geometries </dd></dl>
+
+</div>
+</div>
+<a id="ad8f572c168dbf4ea336181c76eed30b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8f572c168dbf4ea336181c76eed30b1">&#9670;&nbsp;</a></span>isWithinDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::operation::distance::IndexedFacetDistance::isWithinDistance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxDistance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tests whether the base geometry lies within a specified distance of the given geometry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>the geometry to test </td></tr>
+    <tr><td class="paramname">maxDistance</td><td>the maximum distance to test</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true of the geometry lies within the specified distance </dd></dl>
 
 </div>
 </div>

@@ -90,6 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7a1e6c0d0de46a4a6bdb55e9c03ec579"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ae73533c60e4b4785b3378aca971dcb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedPolygon.html#a2ae73533c60e4b4785b3378aca971dcb">distance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
 <tr class="separator:a2ae73533c60e4b4785b3378aca971dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca78fe58f1fe0ba5a2d7ae14cf2019c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedPolygon.html#aca78fe58f1fe0ba5a2d7ae14cf2019c9">isWithinDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g, double d) const override</td></tr>
+<tr class="separator:aca78fe58f1fe0ba5a2d7ae14cf2019c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html">geos::geom::prep::BasicPreparedGeometry</a></td></tr>
 <tr class="memitem:a5765f9dfdf416e1e67c6558f87f5f5d3 inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memItemLeft" align="right" valign="top"><a id="a5765f9dfdf416e1e67c6558f87f5f5d3"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>BasicPreparedGeometry</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom)</td></tr>
@@ -115,8 +117,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae0622be9b88507d7f08757276490a632 inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab230303197319276462ae44dae7980ba inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ab230303197319276462ae44dae7980ba">nearestPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
 <tr class="separator:ab230303197319276462ae44dae7980ba inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51ddbf6591cc172961d2c6c661e5d05a inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a51ddbf6591cc172961d2c6c661e5d05a">isWithinDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, double dist) const override</td></tr>
-<tr class="separator:a51ddbf6591cc172961d2c6c661e5d05a inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01e9b112a04addee02b6884adc4c0f1e inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memItemLeft" align="right" valign="top"><a id="a01e9b112a04addee02b6884adc4c0f1e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td></tr>
 <tr class="separator:a01e9b112a04addee02b6884adc4c0f1e inherit pub_methods_classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,6 +277,45 @@ Additional Inherited Members</h2></td></tr>
 <p>Default implementation. </p>
 
 <p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a5e0570d2e70a0234c8fa20febdda33f7">geos::geom::prep::BasicPreparedGeometry</a>.</p>
+
+</div>
+</div>
+<a id="aca78fe58f1fe0ba5a2d7ae14cf2019c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca78fe58f1fe0ba5a2d7ae14cf2019c9">&#9670;&nbsp;</a></span>isWithinDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::geom::prep::PreparedPolygon::isWithinDistance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default implementation. </p>
+
+<p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a51ddbf6591cc172961d2c6c661e5d05a">geos::geom::prep::BasicPreparedGeometry</a>.</p>
 
 </div>
 </div>
