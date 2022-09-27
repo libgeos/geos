@@ -60,6 +60,7 @@ group test_capigeosprepareddistance_group("capi::GEOSPreparedDistance");
 // Test Cases
 //
 
+// Two empty inputs
 template<>
 template<>
 void object::test<1>
@@ -72,6 +73,7 @@ void object::test<1>
     );
 }
 
+// Disjoint polygons
 template<>
 template<>
 void object::test<2>
@@ -85,6 +87,7 @@ void object::test<2>
 
 }
 
+// Point contained in polygon
 template<>
 template<>
 void object::test<3>
@@ -97,6 +100,7 @@ void object::test<3>
     );
 }
 
+// Disjoint line and point
 template<>
 template<>
 void object::test<4>
@@ -109,6 +113,7 @@ void object::test<4>
     );
 }
 
+// Intersecting lines
 template<>
 template<>
 void object::test<5>
@@ -121,6 +126,7 @@ void object::test<5>
     );
 }
 
+// Intersecting polygon and line
 template<>
 template<>
 void object::test<6>
@@ -133,6 +139,7 @@ void object::test<6>
     );
 }
 
+// Empty geometries
 template<>
 template<>
 void object::test<7>
@@ -145,6 +152,7 @@ void object::test<7>
     );
 }
 
+// Empty geometries
 template<>
 template<>
 void object::test<8>
@@ -154,6 +162,19 @@ void object::test<8>
         "POINT EMPTY",
         "LINESTRING EMPTY",
         geos::DoubleInfinity
+    );
+}
+
+// Prepared geometry contained in test geometry
+template<>
+template<>
+void object::test<9>
+()
+{
+    checkDistance(
+        "POLYGON((1 1,1 5,5 5,5 1,1 1))",
+        "POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))",
+        0
     );
 }
 

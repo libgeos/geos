@@ -17,6 +17,7 @@
  **********************************************************************/
 
 #include <geos/geom/prep/PreparedPolygonDistance.h>
+#include <geos/geom/prep/PreparedPolygonIntersects.h>
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/geom/Geometry.h>
@@ -31,30 +32,53 @@ namespace prep { // geos.geom.prep
 double
 PreparedPolygonDistance::distance(const geom::Geometry* g) const
 {
-    if ( prepPoly.getGeometry().isEmpty() || g->isEmpty() )
+    if ( prepPoly->getGeometry().isEmpty() || g->isEmpty() )
     {
         return DoubleInfinity;
     }
 
-    if ( prepPoly.intersects(g) ) return 0.0;
+    // If any point from g is contained by prepPoly, the distance is zero
+    if ( isAnyTestComponentInTarget(g) ) {
+        return 0.0;
+    }
 
-    /* Not intersecting, compute distance from facets */
-    operation::distance::IndexedFacetDistance *idf = prepPoly.getIndexedFacetDistance();
-    return idf->distance(g);
+    // Perform an indexed distance calculation between the boundaries of prepPoly and g
+    operation::distance::IndexedFacetDistance *idf = prepPoly->getIndexedFacetDistance();
+    double dist = idf->distance(g);
+
+    // If any point from prepPoly is contained by g, the distance is zero
+    // Do this last because this PIP test is not indexed.
+    if ( g->getDimension() == 2 && dist > 0 && isAnyTargetComponentInAreaTest(g, prepPoly->getRepresentativePoints())) {
+        return 0.0;
+    }
+
+    return dist;
 }
 
 bool
 PreparedPolygonDistance::isWithinDistance(const geom::Geometry* g, double d) const
 {
-    if ( prepPoly.getGeometry().isEmpty() || g->isEmpty() )
+    if ( prepPoly->getGeometry().isEmpty() || g->isEmpty() )
     {
         return false;
     }
 
-    if ( prepPoly.intersects(g) ) return true;
+    // If any point from g is contained by prepPoly, the distance is zero
+    if ( isAnyTestComponentInTarget(g) ) {
+        return true;
+    }
 
-    operation::distance::IndexedFacetDistance *idf = prepPoly.getIndexedFacetDistance();
-    return idf->isWithinDistance(g, d);
+    // Perform an indexed distance calculation between the boundaries of prepPoly and g
+    operation::distance::IndexedFacetDistance *idf = prepPoly->getIndexedFacetDistance();
+    bool withinDistance = idf->isWithinDistance(g, d);
+
+    // If any point from prepPoly is contained by g, the distance is zero
+    // Do this last because this PIP test is not indexed.
+    if ( g->getDimension() == 2 && !withinDistance) {
+        return isAnyTargetComponentInAreaTest(g, prepPoly->getRepresentativePoints());
+    }
+
+    return withinDistance;
 }
 
 } // namespace geos.geom.prep

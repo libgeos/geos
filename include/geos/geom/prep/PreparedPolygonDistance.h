@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <geos/geom/prep/PreparedPolygonPredicate.h>
+
 // Forward declarations
 namespace geos {
     namespace geom {
@@ -35,7 +37,7 @@ namespace prep { // geos::geom::prep
 
 class PreparedPolygon;
 
-class PreparedPolygonDistance {
+class PreparedPolygonDistance : public PreparedPolygonPredicate {
 public:
 
     static double distance(const PreparedPolygon& prep, const geom::Geometry* geom)
@@ -45,7 +47,7 @@ public:
     }
 
     PreparedPolygonDistance(const PreparedPolygon& prep)
-        : prepPoly(prep)
+        : PreparedPolygonPredicate(&prep)
     { }
 
     double distance(const geom::Geometry* g) const;
@@ -53,8 +55,6 @@ public:
     bool isWithinDistance(const geom::Geometry* g, double d) const;
 
 protected:
-
-    const PreparedPolygon& prepPoly;
 
     // Declare type as noncopyable
     PreparedPolygonDistance(const PreparedPolygonDistance& other) = delete;
