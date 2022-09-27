@@ -37,6 +37,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/OffsetCurve.h>
+#include <geos/operation/cluster/GeometryDistanceClusterFinder.h>
 #include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -255,6 +256,12 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
             geos::operation::cluster::GeometryIntersectsClusterFinder f;
+            return new Result(f.clusterToCollection(*geom));
+    });
+    addAgg("clusterWithin", 0, Result::typeGeometry, catRel, "cluster geometries based on distance",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB;  // prevent unused variable warning
+            geos::operation::cluster::GeometryDistanceClusterFinder f(d);
             return new Result(f.clusterToCollection(*geom));
     });
     add("convexHull", Result::typeGeometry, catConst,
