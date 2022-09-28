@@ -26,6 +26,7 @@
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -50,6 +51,7 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/overlayng/CoverageUnion.h>
+#include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/union/CoverageUnion.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
@@ -65,6 +67,8 @@
 
 using geos::operation::overlayng::OverlayNG;
 using geos::algorithm::distance::DiscreteFrechetDistance;
+using geos::operation::relate::RelateOp;
+using geos::algorithm::BoundaryNodeRule;
 
 /* static private */
 std::map<std::string, GeomFunction*> GeomFunction::registry;
@@ -447,6 +451,35 @@ GeomFunction::init()
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void)d;  // prevent unused variable warning
             std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
+            return new Result( im->toString() );
+        });
+    add("relateBNR", 2, 0, Result::typeString, catRel,
+        "compute DE-9IM matrix for geometry A and B with a Boundary Node Rule (1=Mod2,2=Endpt,3=Multivalent,4=Monovalent)",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            int bnr = (int) d;
+            std::unique_ptr<IntersectionMatrix> im;
+            switch (bnr) {
+                case 1: /* same as OGC */
+                    im = RelateOp::relate(geom.get(), geomB.get(),
+                                          BoundaryNodeRule::getBoundaryRuleMod2());
+                    break;
+                case 2:
+                    im = RelateOp::relate(geom.get(), geomB.get(),
+                                          BoundaryNodeRule::getBoundaryEndPoint());
+                    break;
+                case 3:
+                    im = RelateOp::relate(geom.get(), geomB.get(),
+                                          BoundaryNodeRule::getBoundaryMultivalentEndPoint());
+                    break;
+                case 4:
+                    im = RelateOp::relate(geom.get(), geomB.get(),
+                                          BoundaryNodeRule::getBoundaryMonovalentEndPoint());
+                    break;
+                default:
+                    std::ostringstream ss;
+                    ss << "Invalid Boundary Node Rule " << bnr;
+                    throw std::runtime_error(ss.str());
+            }
             return new Result( im->toString() );
         });
 
