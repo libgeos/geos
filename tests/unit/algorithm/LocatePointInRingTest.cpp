@@ -7,7 +7,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/algorithm/PointLocation.h>
-#include <geos/algorithm/RayCrossingCounterDD.h>
+#include <geos/algorithm/RayCrossingCounter.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in unique_ptr
@@ -57,17 +57,6 @@ runPtLocator(Location expected, const Coordinate& pt,
     const Polygon* poly = dynamic_cast<Polygon*>(geom.get());
     const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
     Location loc = PointLocation::locateInRing(pt, *cs);
-    ensure_equals(loc, expected);
-}
-
-static void
-runPtLocatorDD(Location expected, const Coordinate& pt,
-               const std::string& wkt)
-{
-    std::unique_ptr<Geometry> geom(reader.read(wkt));
-    const Polygon* poly = dynamic_cast<Polygon*>(geom.get());
-    const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
-    Location loc = RayCrossingCounterDD::locatePointInRing(pt, *cs);
     ensure_equals(loc, expected);
 }
 
@@ -156,9 +145,9 @@ template<>
 void object::test<5>
 ()
 {
-    runPtLocatorDD(Location::EXTERIOR,
-                   Coordinate(25.374625374625374, 128.35564435564436),
-                   "POLYGON ((0.0 0.0, 0.0 172.0, 100.0 0.0, 0.0 0.0))");
+    runPtLocator(Location::EXTERIOR,
+                 Coordinate(25.374625374625374, 128.35564435564436),
+                 "POLYGON ((0.0 0.0, 0.0 172.0, 100.0 0.0, 0.0 0.0))");
 }
 
 // 6 - robustness
@@ -167,9 +156,9 @@ template<>
 void object::test<6>
 ()
 {
-    runPtLocatorDD(Location::INTERIOR,
-                   Coordinate(97.96039603960396, 782.0),
-                   "POLYGON ((642.0 815.0, 69.0 764.0, 394.0 966.0, 642.0 815.0))");
+    runPtLocator(Location::INTERIOR,
+                 Coordinate(97.96039603960396, 782.0),
+                 "POLYGON ((642.0 815.0, 69.0 764.0, 394.0 966.0, 642.0 815.0))");
 }
 
 // 7 - robustness
@@ -178,9 +167,9 @@ template<>
 void object::test<7>
 ()
 {
-    runPtLocatorDD(Location::EXTERIOR,
-                   Coordinate(3.166572116932842, 48.5390194687463),
-                   "POLYGON ((2.152214146946829 50.470470727186765, 18.381941666723034 19.567250592139274, 2.390837642830135 49.228045261718165, 2.152214146946829 50.470470727186765))");
+    runPtLocator(Location::EXTERIOR,
+                 Coordinate(3.166572116932842, 48.5390194687463),
+                 "POLYGON ((2.152214146946829 50.470470727186765, 18.381941666723034 19.567250592139274, 2.390837642830135 49.228045261718165, 2.152214146946829 50.470470727186765))");
 }
 
 
