@@ -35,7 +35,6 @@
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/util/Densifier.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
@@ -309,7 +308,7 @@ XMLTester::XMLTester()
     testValidOutput(false),
     testValidInput(false),
     sqlOutput(false),
-    HEXWKB_output(true)
+    HEXWKB_output(false)
 {
     setVerbosityLevel(0);
 }

@@ -31,7 +31,7 @@
 #include <geos/operation/buffer/BufferCurveSetBuilder.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
-#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
@@ -236,7 +236,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     //       intersections with caps and joins curves
     using geos::operation::overlay::snap::SnapOverlayOp;
     std::unique_ptr<Geometry> intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString,
-            OverlayOp::opINTERSECTION);
+            overlayng::OverlayNG::INTERSECTION);
 
 #ifdef GEOS_DEBUG_SSB
     std::cerr << "intersection" << "|" << *intersectedLines << std::endl;

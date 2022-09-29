@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <geos/operation/overlay/OverlayOp.h> // for enums
 #include <geos/precision/CommonBitsRemover.h> // for dtor visibility by unique_ptr
+#include <geos/operation/overlayng/OverlayNG.h>
 
 #include <memory> // for unique_ptr
 
@@ -57,8 +57,7 @@ class GEOS_DLL SnapOverlayOp {
 public:
 
     static std::unique_ptr<geom::Geometry>
-    overlayOp(const geom::Geometry& g0, const geom::Geometry& g1,
-              OverlayOp::OpCode opCode)
+    overlayOp(const geom::Geometry& g0, const geom::Geometry& g1, int opCode)
     {
         SnapOverlayOp op(g0, g1);
         return op.getResultGeometry(opCode);
@@ -67,25 +66,25 @@ public:
     static std::unique_ptr<geom::Geometry>
     intersection(const geom::Geometry& g0, const geom::Geometry& g1)
     {
-        return overlayOp(g0, g1, OverlayOp::opINTERSECTION);
+        return overlayOp(g0, g1, overlayng::OverlayNG::INTERSECTION);
     }
 
     static std::unique_ptr<geom::Geometry>
     Union(const geom::Geometry& g0, const geom::Geometry& g1)
     {
-        return overlayOp(g0, g1, OverlayOp::opUNION);
+        return overlayOp(g0, g1, overlayng::OverlayNG::UNION);
     }
 
     static std::unique_ptr<geom::Geometry>
     difference(const geom::Geometry& g0, const geom::Geometry& g1)
     {
-        return overlayOp(g0, g1, OverlayOp::opDIFFERENCE);
+        return overlayOp(g0, g1, overlayng::OverlayNG::DIFFERENCE);
     }
 
     static std::unique_ptr<geom::Geometry>
     symDifference(const geom::Geometry& g0, const geom::Geometry& g1)
     {
-        return overlayOp(g0, g1, OverlayOp::opSYMDIFFERENCE);
+        return overlayOp(g0, g1, overlayng::OverlayNG::SYMDIFFERENCE);
     }
 
     SnapOverlayOp(const geom::Geometry& g1, const geom::Geometry& g2)
@@ -96,10 +95,7 @@ public:
         computeSnapTolerance();
     }
 
-
-    typedef std::unique_ptr<geom::Geometry> GeomPtr;
-
-    GeomPtr getResultGeometry(OverlayOp::OpCode opCode);
+    std::unique_ptr<geom::Geometry> getResultGeometry(int opCode);
 
 private:
 

@@ -30,7 +30,6 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util/IllegalArgumentException.h>
 
 using namespace geos::geom;
@@ -104,13 +103,10 @@ SharedPathsOp::clearEdges(PathList& edges)
 void
 SharedPathsOp::findLinearIntersections(PathList& to)
 {
-    using geos::operation::overlay::OverlayOp;
-
     // TODO: optionally use the tolerance,
     //       snapping _g2 over _g1 ?
 
-    std::unique_ptr<Geometry> full(OverlayOp::overlayOp(
-                                       &_g1, &_g2, OverlayOp::opINTERSECTION));
+    auto full = _g1.intersection(&_g2);
 
     // NOTE: intersection of equal lines yields splitted lines,
     //       should we sew them back ?

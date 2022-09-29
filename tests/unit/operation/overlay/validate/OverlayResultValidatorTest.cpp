@@ -4,7 +4,7 @@
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlay/validate/OverlayResultValidator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -40,6 +40,8 @@ struct test_overlayresultvalidator_data {
 
 };
 
+using geos::operation::overlayng::OverlayNG;
+
 
 typedef test_group<test_overlayresultvalidator_data> group;
 typedef group::object object;
@@ -67,7 +69,7 @@ void object::test<1>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(validator.isValid(OverlayOp::opUNION));
+    ensure(validator.isValid(OverlayNG::UNION));
 }
 
 template<>
@@ -87,7 +89,7 @@ void object::test<2>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(! validator.isValid(OverlayOp::opUNION));
+    ensure(! validator.isValid(OverlayNG::UNION));
 }
 
 template<>
@@ -107,7 +109,7 @@ void object::test<3>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(! validator.isValid(OverlayOp::opUNION));
+    ensure(! validator.isValid(OverlayNG::UNION));
 }
 
 // Result of union has an hole not in input
@@ -128,7 +130,7 @@ void object::test<4>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(! validator.isValid(OverlayOp::opUNION));
+    ensure(! validator.isValid(OverlayNG::UNION));
 }
 
 
@@ -150,7 +152,7 @@ void object::test<5>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(! validator.isValid(OverlayOp::opUNION));
+    ensure(! validator.isValid(OverlayNG::UNION));
 }
 
 template<>
@@ -172,7 +174,7 @@ void object::test<6>
 
     OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
-    ensure(! validator.isValid(OverlayOp::opSYMDIFFERENCE));
+    ensure(! validator.isValid(OverlayNG::SYMDIFFERENCE));
 }
 
 

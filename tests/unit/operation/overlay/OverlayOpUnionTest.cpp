@@ -3,7 +3,6 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -15,7 +14,6 @@
 #include <memory>
 
 using namespace geos::geom;
-using namespace geos::operation;
 
 namespace tut {
 //

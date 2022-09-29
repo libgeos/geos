@@ -19,8 +19,6 @@
 #include "SingleSidedBufferResultMatcher.h"
 
 #include <geos/geom/Geometry.h>
-#include <geos/geom/HeuristicOverlay.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 
 #include <cmath>

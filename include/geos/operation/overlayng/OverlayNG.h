@@ -21,7 +21,6 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlayng/OverlayGraph.h>
 #include <geos/operation/overlayng/OverlayEdgeRing.h>
 #include <geos/operation/overlayng/InputGeometry.h>
@@ -170,10 +169,10 @@ public:
     */
     static constexpr bool STRICT_MODE_DEFAULT = false;
 
-    static constexpr int INTERSECTION   = overlay::OverlayOp::opINTERSECTION;
-    static constexpr int UNION          = overlay::OverlayOp::opUNION;
-    static constexpr int DIFFERENCE     = overlay::OverlayOp::opDIFFERENCE;
-    static constexpr int SYMDIFFERENCE  = overlay::OverlayOp::opSYMDIFFERENCE;
+    static constexpr int INTERSECTION   = 1;
+    static constexpr int UNION          = 2;
+    static constexpr int DIFFERENCE     = 3;
+    static constexpr int SYMDIFFERENCE  = 4;
 
     /**
     * Creates an overlay operation on the given geometries,

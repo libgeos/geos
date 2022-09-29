@@ -46,12 +46,12 @@
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
+#include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/version.h>
@@ -76,9 +76,10 @@ using namespace geos::algorithm;
 using namespace geos::operation::valid;
 using namespace geos::operation::relate;
 using namespace geos::operation::buffer;
-using namespace geos::operation::overlay;
 using namespace geos::operation::distance;
 using namespace geos::operation;
+using geos::operation::overlayng::OverlayNG;
+
 
 namespace geos {
 namespace geom { // geos::geom
@@ -504,11 +505,6 @@ Geometry::intersection(const Geometry* other) const
      * TODO: MD - add optimization for P-A case using Point-In-Polygon
      */
 
-    // special case: if one input is empty ==> empty
-    if(isEmpty() || other->isEmpty()) {
-        return OverlayOp::createEmptyResult(OverlayOp::opINTERSECTION, this, other, getFactory());
-    }
-
 #ifdef USE_RECTANGLE_INTERSECTION
     // optimization for rectangle arguments
     using operation::intersection::Rectangle;
@@ -527,22 +523,12 @@ Geometry::intersection(const Geometry* other) const
     }
 #endif
 
-    return HeuristicOverlay(this, other, OverlayOp::opINTERSECTION);
+    return HeuristicOverlay(this, other, OverlayNG::INTERSECTION);
 }
 
 std::unique_ptr<Geometry>
 Geometry::Union(const Geometry* other) const
 {
-    // handle empty geometry cases
-    if(isEmpty() || other->isEmpty() ) {
-      if(isEmpty() && other->isEmpty() ) {
-        return OverlayOp::createEmptyResult(OverlayOp::opUNION, this, other, getFactory());
-      }
-      // special case: if one input is empty ==> other input
-      if(isEmpty()) return other->clone();
-      if(other->isEmpty()) return clone();
-    }
-
 #ifdef SHORTCIRCUIT_PREDICATES
     // if envelopes are disjoint return a MULTI geom or
     // a geometrycollection
@@ -580,7 +566,7 @@ Geometry::Union(const Geometry* other) const
     }
 #endif
 
-    return HeuristicOverlay(this, other, OverlayOp::opUNION);
+    return HeuristicOverlay(this, other, OverlayNG::UNION);
 }
 
 /* public */
@@ -597,35 +583,16 @@ Geometry::Union() const
 
 std::unique_ptr<Geometry>
 Geometry::difference(const Geometry* other) const
-//throw(IllegalArgumentException *)
 {
-    // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
-    if(isEmpty()) {
-        return OverlayOp::createEmptyResult(OverlayOp::opDIFFERENCE, this, other, getFactory());
-    }
-    if(other->isEmpty()) {
-        return clone();
-    }
-
-    return HeuristicOverlay(this, other, OverlayOp::opDIFFERENCE);
+    return HeuristicOverlay(this, other, OverlayNG::DIFFERENCE);
 }
 
 std::unique_ptr<Geometry>
 Geometry::symDifference(const Geometry* other) const
 {
-    // handle empty geometry cases
-    if(isEmpty() || other->isEmpty() ) {
-      if(isEmpty() && other->isEmpty() ) {
-        return OverlayOp::createEmptyResult(OverlayOp::opSYMDIFFERENCE, this, other, getFactory());
-      }
-      // special case: if either input is empty ==> other input
-      if(isEmpty()) return other->clone();
-      if(other->isEmpty()) return clone();
-    }
-
     // if envelopes are disjoint return a MULTI geom or
     // a geometrycollection
-    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal())) {
+    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) && !(isEmpty() && other->isEmpty())) {
         const GeometryCollection* coll;
 
         std::size_t ngeomsThis = getNumGeometries();
@@ -657,8 +624,7 @@ Geometry::symDifference(const Geometry* other) const
         return _factory->buildGeometry(std::move(v));
     }
 
-    return HeuristicOverlay(this, other, OverlayOp::opSYMDIFFERENCE);
-
+    return HeuristicOverlay(this, other, OverlayNG::SYMDIFFERENCE);
 }
 
 int
