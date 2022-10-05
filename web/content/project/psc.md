@@ -13,8 +13,8 @@ This PSC list is valid as of February 18th, 2022.
 * [Howard Butler](https://github.com/hobu)
 * [Martin Davis](https://github.com/dr-jts)
 * [Regina Obe](https://www.paragoncorporation.com)
-* [Paul Ramsey](https://github.com/pramsey)
-* [Sandro Santilli](https://strk.kbt.io) (chair)
+* [Paul Ramsey](https://github.com/pramsey) (chair)
+* [Sandro Santilli](https://strk.kbt.io)
 
 
 The PSC approves major changes and RFC documents. Other work is always ongoing, by the PSC and by the other committers, listed below:
