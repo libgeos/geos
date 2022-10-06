@@ -59,13 +59,10 @@ private:
         using std::unique_ptr;
 
         assert(srcPts);
-        std::vector<Coordinate> coords;
-        srcPts->toVector(coords);
-        LineStringSnapper snapper(coords, snapTol);
-        std::unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
-
-        const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
-        return std::unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
+        auto coords = detail::make_unique<CoordinateSequence>();
+        coords->add(*srcPts);
+        LineStringSnapper snapper(*coords, snapTol);
+        return snapper.snapTo(snapPts);
     }
 
 public:

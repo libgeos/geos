@@ -322,11 +322,11 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
 
     if(isForward) {
         if(isFirstEdge) {
-            edgePts->toVector(pts);
+            pts = *edgePts;
             return;
         } else {
             for(std::size_t i = 1; i < numEdgePts; ++i) {
-                pts.push_back(edgePts->getAt(i));
+                pts.add(edgePts->getAt(i));
             }
         }
     }
@@ -337,7 +337,7 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
             startIndex = numEdgePts;
         }
         for(std::size_t i = startIndex; i > 0; --i) {
-            pts.push_back(edgePts->getAt(i - 1));
+            pts.add(edgePts->getAt(i - 1));
         }
     }
 

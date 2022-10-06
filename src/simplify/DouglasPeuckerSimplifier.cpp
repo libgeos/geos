@@ -113,16 +113,7 @@ DPTransformer::transformCoordinates(
 {
     ::geos::ignore_unused_variable_warning(parent);
 
-    Coordinate::Vect inputPts;
-    coords->toVector(inputPts);
-
-    std::unique_ptr<Coordinate::Vect> newPts =
-        DouglasPeuckerLineSimplifier::simplify(inputPts, distanceTolerance);
-
-    return CoordinateSequence::Ptr(
-               factory->getCoordinateSequenceFactory()->create(
-                   newPts.release()
-               ));
+    return DouglasPeuckerLineSimplifier::simplify(*coords, distanceTolerance);
 }
 
 Geometry::Ptr

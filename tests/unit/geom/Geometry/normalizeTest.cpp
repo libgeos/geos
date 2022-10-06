@@ -34,9 +34,9 @@ struct test_geometry_normalize_data {
     runTest(const char* from, const char* exp)
     {
         GeomPtr g1(reader.read(from));
-        ensure(g1.get() != 0);
+        ensure("g1 is parsed", g1.get() != 0);
         GeomPtr g2(g1->clone());
-        ensure(g2.get() != 0);
+        ensure("g2 is parsed", g2.get() != 0);
         g2->normalize();
 
         GeomPtr ge(reader.read(exp));
@@ -212,6 +212,19 @@ void object::test<7>
         "POINT(10 4)" // more on the right than the multipoint
         ")";
     runTest(inp, exp);
+}
+
+// closed LineString
+template<>
+template<>
+void object::test<8>
+()
+{
+    // This behavior differs from JTS but has existed in GEOS since at
+    // least version 3.8.
+
+    runTest("LINESTRING (8 15, 15 8, 22 15, 15 22, 8 15)",
+            "LINESTRING (8 15, 15 22, 22 15, 15 8, 8 15)");
 }
 
 

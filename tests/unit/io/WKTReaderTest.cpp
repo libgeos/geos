@@ -90,6 +90,7 @@ void object::test<2>
         "POINT(-117 33 10)",
         "POINTZ(-117 33 10)",
         "POINT Z(-117 33 10)",
+        "POINT Z (-117 33 10)",
         "POINT (-117 33 10 6)" // discard implicit M
     };
 
@@ -97,6 +98,8 @@ void object::test<2>
         GeomPtr geom(wktreader.read(wkt));
         auto coords = geom->getCoordinates();
 
+        ensure(coords->hasZ());
+        ensure(!coords->hasM());
         ensure(coords->getDimension() == 3);
         ensure(coords->getOrdinate(0, geos::geom::CoordinateSequence::Z) == 10.0);
     }

@@ -110,7 +110,7 @@ private:
 
   std::unique_ptr<geom::Geometry> boundaryMultiLineString(const geom::MultiLineString& mLine);
 
-  std::vector<geom::Coordinate> computeBoundaryCoordinates(const geom::MultiLineString& mLine);
+  std::unique_ptr<geom::CoordinateSequence> computeBoundaryCoordinates(const geom::MultiLineString& mLine);
 
   std::unique_ptr<geom::Geometry> boundaryLineString(const geom::LineString& line);
 };

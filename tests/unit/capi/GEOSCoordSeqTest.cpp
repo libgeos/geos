@@ -152,7 +152,7 @@ void object::test<3>
     ensure_equals(zcheck, z);
 
     // correct error on wrong ordinate index
-    ensure(0 == GEOSCoordSeq_setOrdinate(cs_, 0, 3, z));
+    ensure(0 == GEOSCoordSeq_setOrdinate(cs_, 0, 37, z));
 }
 
 // Test swapped setX calls (see bug #133, fixed)
@@ -345,10 +345,10 @@ void object::test<11>
     unsigned int dims;
 
     ensure(0 != GEOSCoordSeq_getSize(cs_, &size));
-    ensure_equals(size, 1u);
+    ensure_equals("Seq has expected size", size, 1u);
 
     ensure(0 != GEOSCoordSeq_getDimensions(cs_, &dims));
-    ensure_equals(dims, 2u);
+    ensure_equals("seq has expected dim", dims, 2u);
 
     double x = 10;
     double y = 11;
@@ -361,12 +361,14 @@ void object::test<11>
     ensure_equals(xcheck, x);
     ensure_equals(ycheck, y);
 
+    // Calling getXYZ on a 2D seq gets you NaN for Z
     ensure(0 != GEOSCoordSeq_getXYZ(cs_, 0, &xcheck, &ycheck, &zcheck));
 
     ensure_equals(xcheck, x);
     ensure_equals(ycheck, y);
-    ensure(std::isnan(zcheck));
+    ensure("z is NaN on 2D seq", std::isnan(zcheck));
 
+    // Calling setXYZ on a 2D seq coerces to 3D
     double z = 12;
     GEOSCoordSeq_setXYZ(cs_, 0, x, y, z);
 

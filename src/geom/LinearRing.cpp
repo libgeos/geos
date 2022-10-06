@@ -51,6 +51,7 @@ LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
     validateConstruction();
 }
 
+#if 0
 LinearRing::LinearRing(std::vector<Coordinate> && newCoords,
                        const GeometryFactory& factory)
     :
@@ -58,6 +59,7 @@ LinearRing::LinearRing(std::vector<Coordinate> && newCoords,
 {
     validateConstruction();
 }
+#endif
 
 
 void
@@ -125,7 +127,7 @@ LinearRing::reverseImpl() const
 
     assert(points.get());
     auto seq = points->clone();
-    CoordinateSequence::reverse(seq.get());
+    seq->reverse();
     assert(getFactory());
     return getFactory()->createLinearRing(std::move(seq)).release();
 }

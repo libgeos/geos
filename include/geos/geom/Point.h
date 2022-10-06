@@ -109,9 +109,11 @@ public:
 
     void setXY(double x, double y) {
         if (isEmpty()) {
-            coordinates.add({x, y});
+            coordinates.add(x, y);
         } else {
-            coordinates.setAt(Coordinate{x, y}, 0);
+            CoordinateXY& prev = coordinates.front<CoordinateXY>();
+            prev.x = x;
+            prev.y = y;
         }
         geometryChangedAction();
     }

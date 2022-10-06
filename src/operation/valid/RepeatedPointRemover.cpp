@@ -42,11 +42,13 @@ class RepeatedPointFilter : public CoordinateFilter {
     public:
 
         RepeatedPointFilter()
-            : m_prev(nullptr)
+            : m_coords(detail::make_unique<CoordinateSequence>())
+            , m_prev(nullptr)
             , sqTolerance(0.0) {}
 
         RepeatedPointFilter(double tolerance)
-            : m_prev(nullptr)
+            : m_coords(detail::make_unique<CoordinateSequence>())
+            , m_prev(nullptr)
             , sqTolerance(tolerance*tolerance) {}
 
         void filter_ro(const Coordinate* curr) override final {
@@ -59,17 +61,17 @@ class RepeatedPointFilter : public CoordinateFilter {
                 return;
             }
 
-            m_coords.push_back(*curr);
+            m_coords->add(*curr);
             m_prev = curr;
         }
 
-        std::vector<Coordinate> getCoords() {
+        std::unique_ptr<CoordinateSequence> getCoords() {
             return std::move(m_coords);
         }
 
     private:
 
-        std::vector<Coordinate> m_coords;
+        std::unique_ptr<CoordinateSequence> m_coords;
         const Coordinate* m_prev;
         double sqTolerance;
 };
@@ -83,9 +85,16 @@ RepeatedPointRemover::removeRepeatedPoints(const CoordinateSequence* seq, double
         return detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
     }
 
+    if (tolerance == 0.0) {
+        auto ret = detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
+        ret->reserve(seq->size());
+        ret->add(*seq, false);
+        return ret;
+    }
+
     RepeatedPointFilter filter(tolerance);
     seq->apply_ro(&filter);
-    return detail::make_unique<CoordinateSequence>(filter.getCoords());
+    return filter.getCoords();
 }
 
 
@@ -93,11 +102,13 @@ class RepeatedInvalidPointFilter : public CoordinateFilter {
     public:
 
         RepeatedInvalidPointFilter()
-            : m_prev(nullptr)
+            : m_coords(detail::make_unique<CoordinateSequence>())
+            , m_prev(nullptr)
             , sqTolerance(0.0) {}
 
         RepeatedInvalidPointFilter(double tolerance)
-            : m_prev(nullptr)
+            : m_coords(detail::make_unique<CoordinateSequence>())
+            , m_prev(nullptr)
             , sqTolerance(tolerance*tolerance) {}
 
         void filter_ro(const Coordinate* curr) override final {
@@ -116,17 +127,17 @@ class RepeatedInvalidPointFilter : public CoordinateFilter {
                 return;
             }
 
-            m_coords.push_back(*curr);
+            m_coords->add(*curr);
             m_prev = curr;
         }
 
-        std::vector<Coordinate> getCoords() {
+        std::unique_ptr<CoordinateSequence> getCoords() {
             return std::move(m_coords);
         }
 
     private:
 
-        std::vector<Coordinate> m_coords;
+        std::unique_ptr<CoordinateSequence> m_coords;
         const Coordinate* m_prev;
         double sqTolerance;
 };
@@ -142,7 +153,7 @@ RepeatedPointRemover::removeRepeatedAndInvalidPoints(const CoordinateSequence* s
 
     RepeatedInvalidPointFilter filter(tolerance);
     seq->apply_ro(&filter);
-    return detail::make_unique<CoordinateSequence>(filter.getCoords());
+    return filter.getCoords();
 }
 
 
@@ -196,17 +207,17 @@ public:
         // the tolerance.
         RepeatedInvalidPointFilter filter(tolerance);
         coordinates->apply_ro(&filter);
-        std::vector<Coordinate> filtCoords = filter.getCoords();
+        auto filtCoords = filter.getCoords();
 
-        if (filtCoords.size() == 0) return nullptr;
+        if (filtCoords->size() == 0) return nullptr;
 
         // End points for comparison and sequence repair
         const Coordinate& origEndCoord = coordinates->back();
-        const Coordinate& filtEndCoord = filtCoords.back();
+        const Coordinate& filtEndCoord = filtCoords->back();
 
         // Fluff up overly small filtered outputs
-        if(filtCoords.size() < minLength) {
-            filtCoords.push_back(origEndCoord);
+        if(filtCoords->size() < minLength) {
+            filtCoords->add(origEndCoord);
         }
 
         // We stripped the last point, let's put it back on
@@ -215,15 +226,13 @@ public:
             // tolerance of the original end, we drop the last filtered
             // coordinate so the output still follows the tolerance rule
             if(origEndCoord.distanceSquared(filtEndCoord) <= tolerance*tolerance) {
-                filtCoords.pop_back();
+                filtCoords->pop_back();
             }
             // Put the original end coordinate back on
-            filtCoords.push_back(origEndCoord);
+            filtCoords->add(origEndCoord);
         }
 
-        auto fact = geom->getFactory();
-        auto csfact = fact->getCoordinateSequenceFactory();
-        return csfact->create(std::move(filtCoords));
+        return filtCoords;
     };
 }; // RepeatedPointCoordinateOperation
 

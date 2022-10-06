@@ -68,13 +68,25 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
         return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), ordinateFlags.hasZ() ? 3 : 2);
     }
 
-    Coordinate coord;
+    CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
     // Check dim after reading first coord, because we may have picked up an implicit Z dimension
-    std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
+    //std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
 
-    auto coordinates = detail::make_unique<CoordinateSequence>(0u, dim);
+    // If true, size buffer according to the actual dimensions (2, 3, or 4)
+    // If false, size buffer for 3 dimensions regardless
+    bool packCoordinates = false;
+
+    std::unique_ptr<CoordinateSequence> coordinates;
+
+    if (packCoordinates) {
+        coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+    } else {
+        coordinates = detail::make_unique<CoordinateSequence>(0u);
+    }
+
+    //auto coordinates = detail::make_unique<CoordinateSequence>(0u, dim);
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
@@ -90,7 +102,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
 void
 WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
                                 OrdinateSet& ordinateFlags,
-                                Coordinate& coord) const {
+                                CoordinateXYZM& coord) const {
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
 
@@ -109,8 +121,7 @@ WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
     }
 
     if (ordinateFlags.hasM()) {
-        // discard M ordinate
-        getNextNumber(tokenizer);
+        coord.m = getNextNumber(tokenizer);
     }
 
     ordinateFlags.setChangesAllowed(false); // First coordinate read; future coordinates must be consistent
@@ -316,7 +327,7 @@ WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags)
         return geometryFactory->createPoint(ordinateFlags.hasZ() ? 3 : 2);
     }
 
-    Coordinate coord;
+    CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
     getNextCloser(tokenizer);
 
@@ -355,8 +366,8 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
         // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
         auto coords = detail::make_unique<CoordinateSequence>();
 
+        CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
         do {
-            Coordinate coord;
             getPreciseCoordinate(tokenizer, ordinateFlags, coord);
             coords->add(coord);
             nextToken = getNextCloserOrComma(tokenizer);

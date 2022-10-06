@@ -57,7 +57,7 @@ NodedSegmentString::getNodedSubstrings(
 }
 
 /* public */
-std::vector<Coordinate>
+std::unique_ptr<CoordinateSequence>
 NodedSegmentString::getNodedCoordinates() {
     return nodeList.getSplitCoordinates();
 }

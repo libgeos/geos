@@ -219,7 +219,7 @@ MaximumInscribedCircle::compute()
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
     const auto& nearestPts = indexedDistance.nearestPoints(centerPoint.get());
-    radiusPt = nearestPts[0];
+    radiusPt = nearestPts->getAt(0);
 
     // flag computation
     done = true;

@@ -21,6 +21,7 @@
 #include <geos/export.h>
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/noding/Noder.h>
 #include <geos/noding/snap/SnappingPointIndex.h>
@@ -80,7 +81,7 @@ private:
 
     SegmentString* snapVertices(SegmentString* ss);
 
-    std::unique_ptr<std::vector<geom::Coordinate>> snap(geom::CoordinateSequence* cs);
+    std::unique_ptr<geom::CoordinateSequence> snap(const geom::CoordinateSequence* cs);
 
     /**
     * Computes all interior intersections in the collection of {@link SegmentString}s,

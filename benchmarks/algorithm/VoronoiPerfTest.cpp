@@ -32,11 +32,10 @@ public:
         std::default_random_engine e(12345);
         std::uniform_real_distribution<> dis(0, 100);
 
-        std::vector<Coordinate> coords(num_points);
-        std::generate(coords.begin(), coords.end(), [&dis, &e]() {
+        CoordinateSequence seq(num_points);
+        std::generate(seq.items<Coordinate>().begin(), seq.items<Coordinate>().end(), [&dis, &e]() {
             return Coordinate(dis(e), dis(e));
         });
-        CoordinateSequence seq(std::move(coords));
         auto geom = gfact->createLineString(seq.clone());
 
         voronoi(seq);

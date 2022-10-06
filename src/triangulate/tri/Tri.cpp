@@ -23,6 +23,7 @@
 #include <geos/geom/Triangle.h>
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 
 using geos::util::IllegalArgumentException;
@@ -473,11 +474,13 @@ Tri::getLength(TriIndex i) const
 std::unique_ptr<geom::Polygon>
 Tri::toPolygon(const geom::GeometryFactory* gf) const
 {
-    std::vector<Coordinate> coords(4);
-    coords[0] = p0; coords[1] = p1;
-    coords[2] = p2; coords[3] = p0;
+    auto coords = detail::make_unique<geom::CoordinateSequence>(4u);
+    (*coords)[0] = p0;
+    (*coords)[1] = p1;
+    (*coords)[2] = p2;
+    (*coords)[3] = p0;
 
-    return gf->createPolygon(std::move(coords));
+    return gf->createPolygon(gf->createLinearRing(std::move(coords)));
 }
 
 /* public static */

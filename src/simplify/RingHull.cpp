@@ -26,6 +26,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Triangle.h>
 #include <geos/index/VertexSequencePackedRtree.h>
+#include <geos/util.h>
 
 using geos::algorithm::Orientation;
 using geos::geom::Envelope;
@@ -50,10 +51,10 @@ namespace simplify { // geos.simplify
 * @param isOuter whether the hull is outer or inner
 */
 RingHull::RingHull(const LinearRing* p_ring, bool p_isOuter)
+    : inputRing(p_ring)
+    , vertex(inputRing->getCoordinates())
 {
-    inputRing = p_ring;
-    inputRing->getCoordinatesRO()->toVector(vertex);
-    init(vertex, p_isOuter);
+    init(*vertex, p_isOuter);
 }
 
 /* public */
@@ -90,7 +91,7 @@ RingHull::getHull(RingHullIndex& hullIndex)
 
 /* private */
 void
-RingHull::init(std::vector<Coordinate>& ring, bool isOuter)
+RingHull::init(CoordinateSequence& ring, bool isOuter)
 {
     /**
      * Ensure ring is oriented according to outer/inner:
@@ -100,7 +101,7 @@ RingHull::init(std::vector<Coordinate>& ring, bool isOuter)
     bool orientCW = isOuter;
     if (orientCW == Orientation::isCCW(inputRing->getCoordinatesRO()))
     {
-        std::reverse(ring.begin(), ring.end());
+        ring.reverse();
     }
 
     vertexRing.reset(new LinkedRing(ring));
@@ -378,10 +379,10 @@ RingHull::Corner::isRemoved(const LinkedRing& ring) const
 std::unique_ptr<LineString>
 RingHull::Corner::toLineString(const LinkedRing& ring)
 {
-    std::vector<Coordinate> coords;
-    coords.push_back(ring.getCoordinate(prev));
-    coords.push_back(ring.getCoordinate(index));
-    coords.push_back(ring.getCoordinate(next));
+    auto coords = detail::make_unique<CoordinateSequence>();
+    coords->add(ring.getCoordinate(prev));
+    coords->add(ring.getCoordinate(index));
+    coords->add(ring.getCoordinate(next));
     auto gfact = GeometryFactory::create();
     return gfact->createLineString(std::move(coords));
 }

@@ -32,14 +32,27 @@ namespace geom { // geos.geom
 
 struct CoordinateLessThen;
 
+enum class CoordinateDimension : std::uint8_t {
+    XY,
+    XYZ,
+    XYZM,
+    XYM,
+};
+
+class CoordinateXYZM;
+class CoordinateXYM;
+class Coordinate;
+
 class GEOS_DLL CoordinateXY {
 
     static CoordinateXY _nullCoord;
 
 public:
+    static constexpr CoordinateDimension dim = CoordinateDimension::XY;
+
     CoordinateXY()
-        : x(0.0)
-        , y(0.0)
+        : x(DEFAULT_X)
+        , y(DEFAULT_Y)
     {}
 
     CoordinateXY(double xNew, double yNew)
@@ -52,6 +65,9 @@ public:
 
     /// y-coordinate
     double y;
+
+    static constexpr double DEFAULT_X = 0.0;
+    static constexpr double DEFAULT_Y = 0.0;
 
     /// Output function
     GEOS_DLL friend std::ostream& operator<< (std::ostream& os, const CoordinateXY& c);
@@ -191,6 +207,8 @@ private:
     static Coordinate _nullCoord;
 
 public:
+    static constexpr CoordinateDimension dim = CoordinateDimension::XYZ;
+
     /// A set of const Coordinate pointers
     typedef std::set<const Coordinate*, CoordinateLessThen> ConstSet;
 
@@ -246,7 +264,97 @@ public:
 
     ///  Returns a string of the form <I>(x,y,z)</I> .
     std::string toString() const;
+
+    Coordinate& operator=(const CoordinateXY& other){
+        x = other.x;
+        y = other.y;
+        z = DoubleNotANumber;
+
+        return *this;
+    }
 };
+
+
+class GEOS_DLL CoordinateXYM : public CoordinateXY {
+public:
+    static constexpr CoordinateDimension dim = CoordinateDimension::XYM;
+
+    CoordinateXYM() : CoordinateXYM(0.0, 0.0, 0.0) {}
+
+    CoordinateXYM(double x_, double y_, double m_)
+        : CoordinateXY(x_, y_)
+        , m(m_) {}
+
+    double m;
+
+    bool equals3D(const CoordinateXYM& other) const {
+        return x == other.x && y == other.y && m == other.m;
+    }
+
+    CoordinateXYM& operator=(const CoordinateXYZM& other);
+
+    CoordinateXYM& operator=(const CoordinateXY& other) {
+        x = other.x;
+        y = other.y;
+        m = DoubleNotANumber;
+
+        return *this;
+    }
+};
+
+
+class GEOS_DLL CoordinateXYZM : public Coordinate {
+public:
+    static constexpr CoordinateDimension dim = CoordinateDimension::XYZM;
+
+    CoordinateXYZM() : CoordinateXYZM(0.0, 0.0, 0.0, 0.0) {}
+
+    CoordinateXYZM(double x_, double y_, double z_, double m_)
+        : Coordinate(x_, y_, z_)
+        , m(m_) {}
+
+    double m;
+
+    bool equals4D(const CoordinateXYZM& other) const {
+        return x == other.x && y == other.y && z == other.z && m == other.m;
+    }
+
+    CoordinateXYZM& operator=(const CoordinateXY& other) {
+        x = other.x;
+        y = other.y;
+        z = DoubleNotANumber;
+        m = DoubleNotANumber;
+
+        return *this;
+    }
+
+    CoordinateXYZM& operator=(const Coordinate& other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        m = DoubleNotANumber;
+
+        return *this;
+    }
+
+    CoordinateXYZM& operator=(const CoordinateXYM& other) {
+        x = other.x;
+        y = other.y;
+        z = DoubleNotANumber;
+        m = other.m;
+
+        return *this;
+    }
+};
+
+inline CoordinateXYM&
+CoordinateXYM::operator=(const CoordinateXYZM& other) {
+    x = other.x;
+    y = other.y;
+    m = other.m;
+
+    return *this;
+}
 
 
 /// Strict weak ordering Functor for Coordinate

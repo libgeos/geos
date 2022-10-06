@@ -94,31 +94,30 @@ GeometricShapeFactory::createRectangle()
     double XsegLen = env->getWidth() / nSide;
     double YsegLen = env->getHeight() / nSide;
 
-    std::vector<CoordinateXY> vc(4 * nSide + 1);
+    auto vc = detail::make_unique<CoordinateSequence>(4 * nSide + 1);
 
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX() + i * XsegLen;
         double y = env->getMinY();
-        vc[ipt++] = coord(x, y);
+        (*vc)[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMaxX();
         double y = env->getMinY() + i * YsegLen;
-        vc[ipt++] = coord(x, y);
+        (*vc)[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMaxX() - i * XsegLen;
         double y = env->getMaxY();
-        vc[ipt++] = coord(x, y);
+        (*vc)[ipt++] = coord(x, y);
     }
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX();
         double y = env->getMaxY() - i * YsegLen;
-        vc[ipt++] = coord(x, y);
+        (*vc)[ipt++] = coord(x, y);
     }
-    vc[ipt++] = vc[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(vc));
-    auto ring = geomFact->createLinearRing(std::move(cs));
+    (*vc)[ipt++] = (*vc)[0];
+    auto ring = geomFact->createLinearRing(std::move(vc));
     auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }
@@ -134,17 +133,16 @@ GeometricShapeFactory::createCircle()
     double centreY = env->getMinY() + yRadius;
     env.reset();
 
-    std::vector<CoordinateXY> pts(nPts + 1);
+    auto pts = detail::make_unique<CoordinateSequence>(nPts + 1);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = i * (2 * 3.14159265358979 / nPts);
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
+        (*pts)[iPt++] = coord(x, y);
     }
-    pts[iPt++] = pts[0];
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto ring = geomFact->createLinearRing(std::move(cs));
+    (*pts)[iPt++] = (*pts)[0];
+    auto ring = geomFact->createLinearRing(std::move(pts));
     auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }
@@ -166,16 +164,15 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    std::vector<CoordinateXY> pts(nPts);
+    auto pts = detail::make_unique<CoordinateSequence>(nPts);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
+        (*pts)[iPt++] = coord(x, y);
     }
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto line = geomFact->createLineString(std::move(cs));
+    auto line = geomFact->createLineString(std::move(pts));
     return line;
 }
 
@@ -196,19 +193,18 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    std::vector<CoordinateXY> pts(nPts + 2);
+    auto pts = detail::make_unique<CoordinateSequence>(nPts + 2);
     uint32_t iPt = 0;
-    pts[iPt++] = coord(centreX, centreY);
+    (*pts)[iPt++] = coord(centreX, centreY);
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
         double x = xRadius * cos(ang) + centreX;
         double y = yRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
+        (*pts)[iPt++] = coord(x, y);
     }
-    pts[iPt++] = coord(centreX, centreY);
+    (*pts)[iPt++] = coord(centreX, centreY);
 
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto ring = geomFact->createLinearRing(std::move(cs));
+    auto ring = geomFact->createLinearRing(std::move(pts));
 
     return geomFact->createPolygon(std::move(ring));
 }

@@ -22,7 +22,7 @@
 #include <geos/index/quadtree/Quadtree.h>
 #include <geos/index/intervalrtree/SortedPackedIntervalRTree.h>
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
 using geos::index::intervalrtree::SortedPackedIntervalRTree;
 using geos::index::quadtree::Quadtree;
@@ -65,10 +65,10 @@ static std::vector<Envelope> generate_envelopes(std::default_random_engine & e,
     return envelopes;
 }
 
-std::vector<Coordinate> generate_uniform_points(std::default_random_engine& eng,
+std::vector<CoordinateXY> generate_uniform_points(std::default_random_engine& eng,
                                                 const Envelope& box,
                                                 std::size_t n) {
-    std::vector<Coordinate> pts(n);
+    std::vector<CoordinateXY> pts(n);
 
     std::uniform_real_distribution<> qx(box.getMinX(), box.getMaxX());
     std::uniform_real_distribution<> qy(box.getMinY(), box.getMaxY());

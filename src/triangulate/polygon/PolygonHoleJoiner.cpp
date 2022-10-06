@@ -60,52 +60,38 @@ PolygonHoleJoiner::PolygonHoleJoiner(const Polygon* p_inputPolygon)
 std::unique_ptr<Polygon>
 PolygonHoleJoiner::joinAsPolygon(const Polygon* inputPolygon)
 {
-    std::vector<Coordinate> coords = join(inputPolygon);
-    const geom::GeometryFactory* gf = inputPolygon->getFactory();
-    return gf->createPolygon(std::move(coords));
+    const auto& gf = inputPolygon->getFactory();
+    auto coords = join(inputPolygon);
+    return gf->createPolygon(gf->createLinearRing(std::move(coords)));
 }
 
 
 /* public static */
-std::vector<Coordinate>
+std::unique_ptr<CoordinateSequence>
 PolygonHoleJoiner::join(const Polygon* inputPolygon)
 {
     PolygonHoleJoiner joiner(inputPolygon);
-    return joiner.compute();
+    joiner.compute();
+    return std::move(joiner.shellCoords);
 }
 
 
 /* public */
-std::vector<Coordinate>
+void
 PolygonHoleJoiner::compute()
 {
     //--- copy the input polygon shell coords
-    shellCoords = ringCoordinates(inputPolygon->getExteriorRing());
+    shellCoords = inputPolygon->getExteriorRing()->getCoordinates();
     if (inputPolygon->getNumInteriorRing() != 0) {
         joinHoles();
     }
-    return shellCoords;
 }
-
-
-/* private static */
-std::vector<Coordinate>
-PolygonHoleJoiner::ringCoordinates(const LinearRing* ring)
-{
-    const CoordinateSequence* cs = ring->getCoordinatesRO();
-    std::vector<Coordinate> coords(cs->size());
-    for (std::size_t i = 0; i < cs->size(); i++) {
-        coords[i] = cs->getAt(i);
-    }
-    return coords;
-}
-
 
 /* private */
 void
 PolygonHoleJoiner::joinHoles()
 {
-    shellCoordsSorted.insert(shellCoords.begin(), shellCoords.end());
+    shellCoordsSorted.insert(shellCoords->items<Coordinate>().begin(), shellCoords->items<Coordinate>().end());
     std::vector<const LinearRing*> orderedHoles = sortHoles(inputPolygon);
     for (std::size_t i = 0; i < orderedHoles.size(); i++) {
         joinHole(orderedHoles.at(i));
@@ -184,8 +170,8 @@ PolygonHoleJoiner::getShellCoordIndex(const Coordinate& shellVertex, const Coord
 std::size_t
 PolygonHoleJoiner::getShellCoordIndexSkip(const Coordinate& coord, std::size_t numSkip)
 {
-    for (std::size_t i = 0; i < shellCoords.size(); i++) {
-        if (shellCoords[i].equals2D(coord, EPS)) {
+    for (std::size_t i = 0; i < shellCoords->size(); i++) {
+        if (shellCoords->getAt(i).equals2D(coord, EPS)) {
             if (numSkip == 0)
                 return i;
             numSkip--;
@@ -254,11 +240,9 @@ PolygonHoleJoiner::crossesPolygon(const Coordinate& p0, const Coordinate& p1) co
 {
     // Build up a two-point SegmentString to pass to
     // the SegmentIntersectionDetector
-    std::vector<Coordinate> coords;
-    coords.emplace_back(p0);
-    coords.emplace_back(p1);
-    auto* csf = inputPolygon->getFactory()->getCoordinateSequenceFactory();
-    auto cs = csf->create(std::move(coords));
+    auto cs = detail::make_unique<CoordinateSequence>(2u);
+    cs->setAt(p0, 0);
+    cs->setAt(p1, 1);
     noding::BasicSegmentString segString(cs.get(), nullptr);
 
     std::vector<const SegmentString*> segStrings;
@@ -278,7 +262,7 @@ void
 PolygonHoleJoiner::addHoleToShell(std::size_t shellJoinIndex,
     const CoordinateSequence* holeCoords, std::size_t holeJoinIndex)
 {
-    Coordinate shellJoinPt = shellCoords[shellJoinIndex];
+    Coordinate shellJoinPt = shellCoords->getAt(shellJoinIndex);
     Coordinate holeJoinPt = holeCoords->getAt(holeJoinIndex);
     //-- check for touching (zero-length) join to avoid inserting duplicate vertices
     bool isJoinTouching = shellJoinPt.equals2D(holeJoinPt);
@@ -300,10 +284,7 @@ PolygonHoleJoiner::addHoleToShell(std::size_t shellJoinIndex,
     }
 
     // Insert newCoords into shellCoords, starting at shellVertextIndex
-    shellCoords.insert(
-        shellCoords.begin() + static_cast<long>(shellJoinIndex),
-        newSection.begin(),
-        newSection.end());
+    shellCoords->add(shellJoinIndex, newSection.begin(), newSection.end());
     // Insert all newCoords into orderedCoords
     shellCoordsSorted.insert(newSection.begin(), newSection.end());
 }

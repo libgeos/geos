@@ -140,7 +140,7 @@ private:
     * Thus for convex interior angles
     * the vertices forming the angle are in CW orientation.
     */
-    std::vector<Coordinate> vertex;
+    std::unique_ptr<CoordinateSequence> vertex;
     std::unique_ptr<LinkedRing> vertexRing;
     double areaDelta = 0;
 
@@ -154,7 +154,7 @@ private:
     std::priority_queue<Corner> cornerQueue;
 
 
-    void init(std::vector<Coordinate>& ring, bool isOuter);
+    void init(CoordinateSequence& ring, bool isOuter);
     void addCorner(std::size_t i, std::priority_queue<Corner>& cornerQueue);
     bool isAtTarget(const Corner& corner);
 

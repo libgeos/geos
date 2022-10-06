@@ -152,6 +152,8 @@ using namespace std;
 
 
 // import the most frequently used definitions globally
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::Geometry;
 using geos::geom::LineString;
 using geos::geom::LinearRing;
@@ -2409,31 +2411,28 @@ extern "C" {
     GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, int hasZ, int hasM)
     {
         return execute(extHandle, [&]() {
-            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
-            const GeometryFactory *gf = handle->geomFactory;
-
-            std::vector<geos::geom::Coordinate> coords(size);
+            auto coords = geos::detail::make_unique<CoordinateSequence>(size);
             std::ptrdiff_t stride = 2 + hasZ + hasM;
 
             if (hasZ) {
                 if (stride == 3) {
                     // special case, just memcpy the whole block
                     static_assert(sizeof(geos::geom::Coordinate) == 3 * sizeof(double), "Coordinate is 3D");
-                    std::memcpy((double*) coords.data(), buf, size * sizeof(geos::geom::Coordinate));
+                    std::memcpy((double*) coords->data(), buf, size * sizeof(geos::geom::Coordinate));
                 } else {
                     for (std::size_t i = 0; i < size; i++) {
-                        coords[i] = { *buf, *(buf + 1), *(buf + 2) };
+                        coords->setAt(Coordinate{ *buf, *(buf + 1), *(buf + 2) }, i);
                         buf += stride;
                     }
                 }
             }  else {
                 for (std::size_t i = 0; i < size; i++) {
-                    coords[i] = { *buf, *(buf + 1) };
+                    coords->setAt(Coordinate{ *buf, *(buf + 1) }, i);
                     buf += stride;
                 }
             }
 
-            return gf->getCoordinateSequenceFactory()->create(std::move(coords)).release();
+            return coords.release();
         });
     }
 
@@ -2443,19 +2442,17 @@ extern "C" {
         (void) m;
 
         return execute(extHandle, [&]() {
-            GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
-            const GeometryFactory *gf = handle->geomFactory;
+            auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(size);
 
-            std::vector<geos::geom::Coordinate> coords(size);
             for (std::size_t i = 0; i < size; i++) {
                 if (z) {
-                    coords[i] = { x[i], y[i], z[i] };
+                    coords->setAt(Coordinate{ x[i], y[i], z[i] }, i);
                 } else {
-                    coords[i] = { x[i], y[i] };
+                    coords->setAt(CoordinateXY{ x[i], y[i] }, i);
                 }
             }
 
-            return gf->getCoordinateSequenceFactory()->create(std::move(coords)).release();
+            return coords.release();
         });
     }
 
@@ -2568,7 +2565,7 @@ extern "C" {
     GEOSCoordSeq_setXY_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y)
     {
         return execute(extHandle, 0, [&]() {
-            cs->setAt(Coordinate{x, y}, idx);
+            cs->setAt(CoordinateXY{x, y}, idx);
             return 1;
         });
     }
@@ -2577,7 +2574,7 @@ extern "C" {
     GEOSCoordSeq_setXYZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y, double z)
     {
         return execute(extHandle, 0, [&]() {
-            cs->setAt({x, y, z}, idx);
+            cs->setAt(Coordinate{x, y, z}, idx);
             return 1;
         });
     }

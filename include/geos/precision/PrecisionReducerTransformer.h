@@ -53,7 +53,7 @@ private:
     std::unique_ptr<geom::Geometry> reduceArea(const geom::Geometry* geom);
 
     void extend(
-        std::vector<geom::Coordinate>& coords,
+        geom::CoordinateSequence& coords,
         std::size_t minLength);
 
 

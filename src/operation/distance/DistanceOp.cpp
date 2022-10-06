@@ -131,11 +131,11 @@ DistanceOp::nearestPoints()
         return nullptr;
     }
 
-    std::vector<CoordinateXY> nearestPts(2);
-    nearestPts[0] = locs[0]->getCoordinate();
-    nearestPts[1] = locs[1]->getCoordinate();
+    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
+    nearestPts->setAt(locs[0]->getCoordinate(), 0);
+    nearestPts->setAt(locs[1]->getCoordinate(), 1);
 
-    return detail::make_unique<CoordinateSequence>(std::move(nearestPts));
+    return nearestPts;
 }
 
 void

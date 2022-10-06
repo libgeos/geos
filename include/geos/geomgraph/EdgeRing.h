@@ -173,7 +173,7 @@ private:
     /// the DirectedEdges making up this EdgeRing
     std::vector<DirectedEdge*> edges;
 
-    std::vector<geom::Coordinate> pts;
+    geom::CoordinateSequence pts;
 
     // label stores the locations of each geometry on the
     // face surrounded by this ring

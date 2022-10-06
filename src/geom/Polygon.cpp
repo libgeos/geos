@@ -125,20 +125,24 @@ Polygon::getCoordinates() const
         return getFactory()->getCoordinateSequenceFactory()->create();
     }
 
-    std::vector<Coordinate> cl;
-    cl.reserve(getNumPoints());
+    auto cl = getFactory()->getCoordinateSequenceFactory()->create();
+    cl->reserve(getNumPoints());
 
     // Add shell points
     const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
-    shellCoords->toVector(cl);
+    shellCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
+        cl->add(c);
+    });
 
     // Add holes points
     for(const auto& hole : holes) {
         const CoordinateSequence* childCoords = hole->getCoordinatesRO();
-        childCoords->toVector(cl);
+        childCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
+            cl->add(c);
+        });
     }
 
-    return getFactory()->getCoordinateSequenceFactory()->create(std::move(cl));
+    return cl;
 }
 
 size_t
@@ -383,20 +387,21 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
         return;
     }
 
-    std::vector<Coordinate> coords;
-    ring->getCoordinatesRO()->toVector(coords);
-    coords.erase(coords.end() - 1); // remove last point (repeated)
-
-    auto uniqueCoordinates = detail::make_unique<CoordinateSequence>(std::move(coords));
-
-    const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
-
-    CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
-    uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-    if(algorithm::Orientation::isCCW(uniqueCoordinates.get()) == clockwise) {
-        CoordinateSequence::reverse(uniqueCoordinates.get());
+    const auto& ringCoords = ring->getCoordinatesRO();
+    CoordinateSequence coords(ringCoords->getSize() - 1);
+    // exclude last point (repeated)
+    for (std::size_t i = 0; i < coords.getSize(); i++) {
+        coords.setAt(ringCoords->getAt(i), i);
     }
-    ring->setPoints(uniqueCoordinates.get());
+
+    const CoordinateXY* minCoordinate = coords.minCoordinate();
+
+    CoordinateSequence::scroll(&coords, minCoordinate);
+    coords.add(coords[0]); // close ring
+    if(algorithm::Orientation::isCCW(&coords) == clockwise) {
+        coords.reverse();
+    }
+    ring->setPoints(&coords);
 }
 
 const CoordinateXY*

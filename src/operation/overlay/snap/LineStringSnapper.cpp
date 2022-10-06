@@ -52,7 +52,7 @@ namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
 
 /*public*/
-std::unique_ptr<Coordinate::Vect>
+std::unique_ptr<geom::CoordinateSequence>
 LineStringSnapper::snapTo(const geom::Coordinate::ConstVect& snapPts)
 {
     geom::CoordinateList coordList(srcPts);
@@ -60,7 +60,7 @@ LineStringSnapper::snapTo(const geom::Coordinate::ConstVect& snapPts)
     snapVertices(coordList, snapPts);
     snapSegments(coordList, snapPts);
 
-    return coordList.toCoordinateArray();
+    return coordList.toCoordinateSequence();
 }
 
 /*private*/

@@ -15,6 +15,7 @@
 
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/index/VertexSequencePackedRtree.h>
 
@@ -31,7 +32,7 @@ namespace index {
 * @param pts a sequence of points
 */
 /* public */
-VertexSequencePackedRtree::VertexSequencePackedRtree(const std::vector<Coordinate>& pts)
+VertexSequencePackedRtree::VertexSequencePackedRtree(const CoordinateSequence& pts)
     : items(pts)
     , removedItems(pts.size(), false)
 {
@@ -160,7 +161,7 @@ VertexSequencePackedRtree::computeNodeEnvelope(const std::vector<Envelope>& bnds
 
 /* private static */
 Envelope
-VertexSequencePackedRtree::computeItemEnvelope(const std::vector<Coordinate>& items,
+VertexSequencePackedRtree::computeItemEnvelope(const geom::CoordinateSequence& items,
     std::size_t start, std::size_t end)
 {
     Envelope env;

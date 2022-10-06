@@ -30,6 +30,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
+class CoordinateSequence;
 class Geometry;
 class GeometryFactory;
 class Polygon;
@@ -139,11 +140,11 @@ private:
      */
     void close_boundary(
         const Rectangle& rect,
-        std::vector<geom::Coordinate>* ring,
+        geom::CoordinateSequence* ring,
         double x1, double y1,
         double x2, double y2);
 
-    void close_ring(const Rectangle& rect, std::vector<geom::Coordinate>* ring);
+    void close_ring(const Rectangle& rect, geom::CoordinateSequence* ring);
 
     RectangleIntersectionBuilder(const geom::GeometryFactory& f)
         : _gf(f) {}

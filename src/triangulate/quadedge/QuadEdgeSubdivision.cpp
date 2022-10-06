@@ -528,13 +528,13 @@ QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    std::vector<Coordinate> cellPts;
+    auto cellPts = detail::make_unique<CoordinateSequence>();
 
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts.empty() || cellPts.back() != cc) {  // no duplicates
-            cellPts.push_back(cc);
+        if(cellPts->isEmpty() || cellPts->back() != cc) {  // no duplicates
+            cellPts->add(cc);
         }
         qe = &qe->oPrev();
 
@@ -542,15 +542,14 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts.front() != cellPts.back()) {
-        cellPts.push_back(cellPts.front());
+    if (cellPts->front() != cellPts->back()) {
+        cellPts->closeRing();
     }
-    if (cellPts.size() < 4) {
-        cellPts.push_back(cellPts.back());
+    if (cellPts->size() < 4) {
+        cellPts->add(cellPts->back());
     }
 
-    auto seq = detail::make_unique<CoordinateSequence>(std::move(cellPts));
-    std::unique_ptr<Geometry> cellPoly = geomFact.createPolygon(geomFact.createLinearRing(std::move(seq)));
+    std::unique_ptr<Geometry> cellPoly = geomFact.createPolygon(geomFact.createLinearRing(std::move(cellPts)));
 
     /*
     //-- attach cell centroid coordinate
@@ -565,13 +564,13 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    std::vector<Coordinate> cellPts;
+    auto cellPts = detail::make_unique<CoordinateSequence>();
 
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts.empty() || cellPts.back() != cc) {  // no duplicates
-            cellPts.push_back(cc);
+        if(cellPts->isEmpty() || cellPts->back() != cc) {  // no duplicates
+            cellPts->add(cc);
         }
         qe = &qe->oPrev();
 
@@ -579,18 +578,18 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts.front() != cellPts.back()) {
-        cellPts.push_back(cellPts.front());
+    if (cellPts->front() != cellPts->back()) {
+        cellPts->closeRing();
     }
 
     std::unique_ptr<geom::Geometry> cellEdge(
-        geomFact.createLineString(new geom::CoordinateSequence(std::move(cellPts))));
+        geomFact.createLineString(std::move(cellPts)));
 
     // FIXME why is this returning a pointer to a local variable?
-    Vertex v = startQE->orig();
-    Coordinate c(0, 0);
-    c = v.getCoordinate();
-    cellEdge->setUserData(reinterpret_cast<void*>(&c));
+    //Vertex v = startQE->orig();
+    //Coordinate c(0, 0);
+    //c = v.getCoordinate();
+    //cellEdge->setUserData(reinterpret_cast<void*>(&c));
     return cellEdge;
 }
 

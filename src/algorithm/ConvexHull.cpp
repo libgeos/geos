@@ -119,13 +119,13 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
     const CoordinateSequenceFactory* csf =
         geomFactory->getCoordinateSequenceFactory();
 
-    std::vector<Coordinate> vect(cv.size());
+    auto cs = csf->create(cv.size());
 
     for(std::size_t i = 0; i < cv.size(); ++i) {
-        vect[i] = *(cv[i]); // Coordinate copy
+        cs->setAt(*(cv[i]), i); // Coordinate copy
     }
 
-    return csf->create(std::move(vect)); // takes ownership of the vector
+    return cs;
 }
 
 /* private */

@@ -101,13 +101,12 @@ void object::test<1>
     Coordinate d(244, 284);
 
     geos::triangulate::VoronoiDiagramBuilder builder;
-    std::vector<Coordinate> v;
-    v.push_back(a);
-    v.push_back(b);
-    v.push_back(c);
-    v.push_back(d);
+    CoordinateSequence seq;
+    seq.add(a);
+    seq.add(b);
+    seq.add(c);
+    seq.add(d);
 
-    geos::geom::CoordinateSequence seq(std::move(v));
     builder.setSites(seq);
 
     //getting the subdiv()

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <vector>
 #include <memory> // for unique_ptr
 
@@ -56,11 +57,11 @@ public:
      * Returns a newly allocated Coordinate vector, wrapped
      * into an unique_ptr
      */
-    static CoordsVectAutoPtr simplify(
-        const CoordsVect& nPts,
+    static std::unique_ptr<geom::CoordinateSequence> simplify(
+        const geom::CoordinateSequence& nPts,
         double distanceTolerance);
 
-    DouglasPeuckerLineSimplifier(const CoordsVect& nPts);
+    DouglasPeuckerLineSimplifier(const geom::CoordinateSequence& nPts);
 
     /** \brief
      * Sets the distance tolerance for the simplification.
@@ -76,11 +77,11 @@ public:
      * Returns a newly allocated Coordinate vector, wrapped
      * into an unique_ptr
      */
-    CoordsVectAutoPtr simplify();
+    std::unique_ptr<geom::CoordinateSequence> simplify();
 
 private:
 
-    const CoordsVect& pts;
+    const geom::CoordinateSequence& pts;
     BoolVectAutoPtr usePt;
     double distanceTolerance;
 

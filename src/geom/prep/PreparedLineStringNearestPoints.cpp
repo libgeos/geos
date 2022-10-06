@@ -30,10 +30,8 @@ namespace prep { // geos.geom.prep
 std::unique_ptr<geom::CoordinateSequence>
 PreparedLineStringNearestPoints::nearestPoints(const geom::Geometry* g) const
 {
-    const GeometryFactory *gf = prepLine.getGeometry().getFactory();
-    const CoordinateSequenceFactory *cf = gf->getCoordinateSequenceFactory();
     operation::distance::IndexedFacetDistance *idf = prepLine.getIndexedFacetDistance();
-    return cf->create(idf->nearestPoints(g));
+    return idf->nearestPoints(g);
 }
 
 } // namespace geos.geom.prep

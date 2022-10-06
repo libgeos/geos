@@ -38,7 +38,7 @@ OverlayEdge::getCoordinatesOriented()
         return pts->clone();
     }
     std::unique_ptr<CoordinateSequence> ptsCopy = pts->clone();
-    CoordinateSequence::reverse(ptsCopy.get());
+    ptsCopy->reverse();
     return ptsCopy;
 }
 
@@ -61,9 +61,7 @@ OverlayEdge::addCoordinates(CoordinateSequence* coords) const
         if (isFirstEdge) {
             startIndex = 0;
         }
-        for (std::size_t i = startIndex, sz = pts->size(); i < sz; i++) {
-            coords->add(pts->getAt(i), false);
-        }
+        coords->add(*pts, startIndex, pts->size() - 1, false);
     }
     else { // is backward
         int startIndex = (int)(pts->size()) - 2;

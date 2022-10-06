@@ -109,7 +109,7 @@ private:
 
     void init();
 
-    static CoordVectPtr extractCoordinates(
+    static std::unique_ptr<geom::CoordinateSequence> extractCoordinates(
         const std::vector<TaggedLineSegment*>& segs);
 
     // Copying is turned off

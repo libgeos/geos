@@ -107,7 +107,7 @@ OffsetCurveBuilder::getOffsetCurve(
     // for right side line is traversed in reverse direction, so have to reverse generated line
     if (isRightSide) {
         for (auto* cs: lineList) {
-            CoordinateSequence::reverse(cs);
+            cs->reverse();
         }
     }
     return;

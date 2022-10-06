@@ -36,7 +36,7 @@ IndexedFacetDistance::distance(const Geometry* g1, const Geometry* g2)
 }
 
 /*public static*/
-std::vector<geom::CoordinateXY>
+std::unique_ptr<CoordinateSequence>
 IndexedFacetDistance::nearestPoints(const geom::Geometry* g1, const geom::Geometry* g2)
 {
     IndexedFacetDistance dist(g1);
@@ -88,13 +88,13 @@ IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
     return nearest.first->nearestLocations(*nearest.second);
 }
 
-std::vector<CoordinateXY>
+std::unique_ptr<CoordinateSequence>
 IndexedFacetDistance::nearestPoints(const geom::Geometry* g) const
 {
     std::vector<GeometryLocation> minDistanceLocation = nearestLocations(g);
-    std::vector<CoordinateXY> nearestPts;
-    nearestPts.push_back(minDistanceLocation[0].getCoordinate());
-    nearestPts.push_back(minDistanceLocation[1].getCoordinate());
+    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
+    nearestPts->setAt(minDistanceLocation[0].getCoordinate(), 0);
+    nearestPts->setAt(minDistanceLocation[1].getCoordinate(), 1);
     return nearestPts;
 }
 

@@ -43,7 +43,7 @@ private:
 
     const geom::PrecisionModel& targetPM;
 
-    std::vector<geom::Coordinate> reducePointwise(
+    std::unique_ptr<geom::CoordinateSequence> reducePointwise(
         const geom::CoordinateSequence* coordinates);
 
 public:

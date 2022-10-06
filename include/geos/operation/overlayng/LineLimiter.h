@@ -59,7 +59,7 @@ private:
 
     // Members
     const Envelope* limitEnv;
-    std::unique_ptr<std::vector<Coordinate>> ptList;
+    std::unique_ptr<geom::CoordinateSequence> ptList;
     const Coordinate* lastOutside;
     std::vector<std::unique_ptr<CoordinateSequence>> sections;
 

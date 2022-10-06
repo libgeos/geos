@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2022 ISciences LLC
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -19,7 +20,9 @@
 #include <geos/geom/Coordinate.h> // for applyCoordinateFilter
 #include <geos/geom/CoordinateSequenceIterator.h>
 
+#include <cassert>
 #include <vector>
+#include <iostream>
 #include <iosfwd> // ostream
 #include <memory> // for unique_ptr typedef
 
@@ -40,203 +43,161 @@ namespace geom { // geos::geom
  * \brief
  * The internal representation of a list of coordinates inside a Geometry.
  *
+ * A CoordinateSequence is capable of storing XY, XYZ, XYM, or XYZM Coordinates. For efficient
+ * storage, the dimensionality of the CoordinateSequence should be specified at creation using
+ * the constructor with `hasz` and `hasm` arguments. Currently most of the GEOS code base
+ * stores 2D Coordinates and accesses using the Coordinate type. Sequences used by these parts
+ * of the code must be created with constructors without `hasz` and `hasm` arguments.
+ *
+ * If a high-dimension Coordinate coordinate is read from a low-dimension CoordinateSequence,
+ * the higher dimensions will be populated with incorrect values or a segfault may occur.
+ *
  */
 class GEOS_DLL CoordinateSequence {
 
 public:
+
+    /// Standard ordinate index values
+    enum { X, Y, Z, M };
 
     using iterator = CoordinateSequenceIterator<CoordinateSequence, Coordinate>;
     using const_iterator = CoordinateSequenceIterator<const CoordinateSequence, const Coordinate>;
 
     typedef std::unique_ptr<CoordinateSequence> Ptr;
 
-    CoordinateSequence() : dimension(0) {}
+    /// \defgroup construct Constructors
+    /// @{
 
-    //CoordinateSequence(const std::vector<Coordinate>& coords, std::size_t dim);
+    /**
+     *  Create an CoordinateSequence capable of storing XY or XYZ coordinates.
+     */
+    CoordinateSequence();
 
-    CoordinateSequence(std::vector<Coordinate>&& coords, std::size_t dim = 0);
-
-    CoordinateSequence(std::vector<CoordinateXY>&& coords, std::size_t dim = 0);
-
-    CoordinateSequence(std::unique_ptr<std::vector<Coordinate>>&& coords, std::size_t dim = 0);
-
+    /**
+     * Create a CoordinateSequence capable of storing XY or XYZ coordinates.
+     *
+     * @param size size of the sequence to create.
+     * @param dim 2 for 2D, 3 for XYZ, or 0 to determine this bassed on the
+     *            first coordinate in the sequence
+     */
     CoordinateSequence(std::size_t size, std::size_t dim = 0);
+
+    /**
+     * Create a CoordinateSequence that packs coordinates of any dimension.
+     * Code using a CoordinateSequence constructed in this way must not
+     * attempt to access references to coordinates with dimensions that
+     * are not actually stored in the sequence.
+     *
+     * @param size size of the sequence to create
+     * @param hasz true if the stored
+     * @param hasm
+     * @param initialize
+     */
+    CoordinateSequence(std::size_t size, bool hasz, bool hasm, bool initialize = true);
+
+    /**
+     * Create a CoordinateSequence from a list of XYZ coordinates.
+     * Code using the sequence may only access references to CoordinateXY
+     * or Coordinate objects.
+     */
+    CoordinateSequence(const std::initializer_list<Coordinate>&);
+
+    /**
+     * Create a CoordinateSequence from a list of XY coordinates.
+     * Code using the sequence may only access references to CoordinateXY objects.
+     */
+    CoordinateSequence(const std::initializer_list<CoordinateXY>&);
+
+    /**
+     * Create a CoordinateSequence from a list of XYM coordinates.
+     * Code using the sequence may only access references to CoordinateXY
+     * or CoordinateXYM objects.
+     */
+    CoordinateSequence(const std::initializer_list<CoordinateXYM>&);
+
+    /**
+     * Create a CoordinateSequence from a list of XYZM coordinates.
+     */
+    CoordinateSequence(const std::initializer_list<CoordinateXYZM>&);
 
     ~CoordinateSequence() = default;
 
+    /**
+     * Create a CoordinateSequence storing XY values only.
+     *
+     * @param size size of the sequence to create
+     */
+    static CoordinateSequence XY(std::size_t size)  {
+        return CoordinateSequence(size, false, false);
+    }
+
+    /**
+     * Create a CoordinateSequence storing XYZ values only.
+     *
+     * @param size size of the sequence to create
+     */
+    static CoordinateSequence XYZ(std::size_t size)  {
+        return CoordinateSequence(size, true, false);
+    }
+
+    /**
+     * Create a CoordinateSequence storing XYZM values only.
+     *
+     * @param size size of the sequence to create
+     */
+    static CoordinateSequence XYZM(std::size_t size)  {
+        return CoordinateSequence(size, true, true);
+    }
+
+    /**
+     * Create a CoordinateSequence storing XYM values only.
+     *
+     * @param size size of the sequence to create
+     */
+    static CoordinateSequence XYM(std::size_t size)  {
+        return CoordinateSequence(size, false, true);
+    }
+
     /** \brief
-     * Returns a deep copy of this collection.
+     * Returns a heap-allocated deep copy of this CoordinateSequence.
      */
     std::unique_ptr<CoordinateSequence> clone() const;
 
-    /** \brief
-     * Returns a read-only reference to Coordinate at position i.
+    /// @}
+    /// \defgroup prop Properties
+    /// @{
+
+    /**
+     * Return the Envelope containing all points in this sequence.
+     * The Envelope is not cached and is computed each time the
+     * method is called.
      */
-    const Coordinate& getAt(std::size_t i) const {
-        return vect[i];
-    }
-
-    Coordinate& getAt(std::size_t i) {
-        return vect[i];
-    }
-
-    /// Return last Coordinate in the sequence
-    const Coordinate& back() const
-    {
-        return getAt(size() - 1);
-    }
-
-    /// Return first Coordinate in the sequence
-    const Coordinate& front() const
-    {
-        return getAt(0);
-    }
-
-    const Coordinate& operator[](std::size_t i) const
-    {
-        return getAt(i);
-    }
-
-    Coordinate&
-    operator[](std::size_t i)
-    {
-        return getAt(i);
-    }
-
     Envelope getEnvelope() const;
 
     /** \brief
-     * Write Coordinate at position i to given Coordinate.
-     */
-    void getAt(std::size_t i, Coordinate& c) const {
-        c = getAt(i);
-    }
-
-    /** \brief
-     * Returns the number of Coordinates (actual or otherwise, as
-     * this implementation may not store its data in Coordinate objects).
+     * Returns the number of Coordinates
      */
     std::size_t getSize() const {
         return size();
     }
 
+    /** \brief
+     * Returns the number of Coordinates
+     */
     size_t size() const
     {
-        return vect.size();
+        assert(stride() == 2 || stride() == 3 || stride() == 4);
+        switch(stride()) {
+            case 2: return m_vect.size() / 2;
+            case 4: return m_vect.size() / 4;
+            default : return m_vect.size() / 3;
+        }
     }
-
-    /// Pushes all Coordinates of this sequence into the provided vector.
-    ///
-    /// This method is a port of the toCoordinateArray() method of JTS.
-    ///
-    void toVector(std::vector<Coordinate>& coords) const;
-
-    void toVector(std::vector<CoordinateXY>& coords) const;
 
     /// Returns <code>true</code> if list contains no coordinates.
     bool isEmpty() const {
-        return vect.empty();
+        return m_vect.empty();
     }
-
-    /// Add a Coordinate to the list
-    void add(const Coordinate& c) {
-        vect.push_back(c);
-    }
-
-    /**
-     * \brief Add a coordinate
-     * @param c the coordinate to add
-     * @param allowRepeated if set to false, repeated coordinates
-     *                      are collapsed
-     */
-    void add(const Coordinate& c, bool allowRepeated);
-
-    /** \brief
-     * Inserts the specified coordinate at the specified position in
-     * this list.
-     *
-     * @param i the position at which to insert
-     * @param coord the coordinate to insert
-     * @param allowRepeated if set to false, repeated coordinates are
-     *                      collapsed
-     *
-     * @note this is a CoordinateList interface in JTS
-     */
-    void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
-
-    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
-
-    /// Copy Coordinate c to position pos
-    void setAt(const Coordinate& c, std::size_t pos) {
-        vect[pos]= c;
-    }
-
-    void setAt(const CoordinateXY& c, std::size_t pos) {
-        setAt(Coordinate(c), pos);
-    }
-
-    /// Get a string representation of CoordinateSequence
-    std::string toString() const;
-
-    /// Substitute Coordinate list with a copy of the given vector
-    void setPoints(const std::vector<Coordinate>& v);
-
-    /// Returns true if contains any two consecutive points
-    bool hasRepeatedPoints() const;
-
-    /// Returns lower-left Coordinate in list
-    const Coordinate* minCoordinate() const;
-
-    /** \brief
-     *  Returns true if given CoordinateSequence contains
-     *  any two consecutive Coordinate
-     */
-    static bool hasRepeatedPoints(const CoordinateSequence* cl);
-
-    /** \brief
-     *  Returns either the given CoordinateSequence if its length
-     *  is greater than the given amount, or an empty CoordinateSequence.
-     */
-    static CoordinateSequence* atLeastNCoordinatesOrNothing(std::size_t n,
-            CoordinateSequence* c);
-
-    /// Return position of a Coordinate
-    //
-    /// or numeric_limits<std::size_t>::max() if not found
-    ///
-    static std::size_t indexOf(const Coordinate* coordinate,
-                               const CoordinateSequence* cl);
-
-    /**
-     * \brief
-     * Returns true if the two arrays are identical, both null,
-     * or pointwise equal
-     */
-    static bool equals(const CoordinateSequence* cl1,
-                       const CoordinateSequence* cl2);
-
-    /// Scroll given CoordinateSequence so to start with given Coordinate.
-    static void scroll(CoordinateSequence* cl, const Coordinate* firstCoordinate);
-
-    /** \brief
-     * Determines which orientation of the {@link Coordinate} array
-     * is (overall) increasing.
-     *
-     * In other words, determines which end of the array is "smaller"
-     * (using the standard ordering on {@link Coordinate}).
-     * Returns an integer indicating the increasing direction.
-     * If the sequence is a palindrome, it is defined to be
-     * oriented in a positive direction.
-     *
-     * @param pts the array of Coordinates to test
-     * @return <code>1</code> if the array is smaller at the start
-     * or is a palindrome,
-     * <code>-1</code> if smaller at the end
-     *
-     * NOTE: this method is found in CoordinateArrays class for JTS
-     */
-    static int increasingDirection(const CoordinateSequence& pts);
-
 
     /** \brief
     * Tests whether an a {@link CoordinateSequence} forms a ring,
@@ -245,12 +206,6 @@ public:
     * @return true if the coordinate form a ring.
     */
     bool isRing() const;
-
-    /// Reverse Coordinate order in given CoordinateSequence
-    static void reverse(CoordinateSequence* cl);
-
-    /// Standard ordinate index values
-    enum { X, Y, Z, M };
 
     /**
      * Returns the dimension (number of ordinates in each coordinate)
@@ -261,7 +216,93 @@ public:
     std::size_t getDimension() const;
 
     bool hasZ() const {
-        return getDimension() > 2;
+        return m_hasdim ? m_hasz : (m_vect.empty() || !std::isnan(m_vect[2]));
+    }
+
+    bool hasM() const {
+        return m_hasm;
+    }
+
+    /// Returns true if contains any two consecutive points
+    bool hasRepeatedPoints() const;
+
+    /// Get the backing type of this CoordinateSequence. This is not necessarily
+    /// consistent with the dimensionality of the stored Coordinates; 2D Coordinates
+    /// will be stored as a XYZ coordinates if the CoordinateSequence is not constructed
+    /// with a `hasz`, `hasm` constructor.
+    CoordinateDimension getCoordinateType() const {
+        switch((m_hasz << 2) | (m_hasm << 1) | static_cast<int>(m_hasdim)) {
+            case 7: return CoordinateDimension::XYZM;
+            case 5: return CoordinateDimension::XYZ;
+            case 3: return CoordinateDimension::XYM;
+            case 1: return CoordinateDimension::XY;
+            default: return CoordinateDimension::XYZ; // all sequences with implicit dimensionality use Coordinate as their type, even for 2D
+        }
+    }
+
+    /// @}
+    /// \defgroup access Accessors
+    /// @{
+
+    /** \brief
+     * Returns a read-only reference to Coordinate at position i.
+     */
+    template<typename T=Coordinate>
+    const T& getAt(std::size_t i) const {
+        static_assert(std::is_base_of<CoordinateXY, T>::value, "Must be a Coordinate class");
+        assert(sizeof(T) <= sizeof(double) * stride());
+        assert(i*stride() < m_vect.size());
+        const T* orig = reinterpret_cast<const T*>(&m_vect[i*stride()]);
+        return *orig;
+    }
+
+    /** \brief
+     * Returns a reference to Coordinate at position i.
+     */
+    template<typename T=Coordinate>
+    T& getAt(std::size_t i) {
+        static_assert(std::is_base_of<CoordinateXY, T>::value, "Must be a Coordinate class");
+        assert(sizeof(T) <= sizeof(double) * stride());
+        assert(i*stride() < m_vect.size());
+        T* orig = reinterpret_cast<T*>(&m_vect[i*stride()]);
+        return *orig;
+    }
+
+    /** \brief
+     * Write Coordinate at position i to given Coordinate.
+     */
+    template<typename T>
+    void getAt(std::size_t i, T& c) const {
+        switch(getCoordinateType()) {
+            case CoordinateDimension::XY: c = getAt<CoordinateXY>(i); break;
+            case CoordinateDimension::XYZ: c = getAt<Coordinate>(i); break;
+            case CoordinateDimension::XYZM: c = getAt<CoordinateXYZM>(i); break;
+            case CoordinateDimension::XYM: c = getAt<CoordinateXYM>(i); break;
+            default: getAt<Coordinate>(i);
+        }
+    }
+
+    void getAt(std::size_t i, CoordinateXY& c) const {
+        c = getAt<CoordinateXY>(i);
+    }
+
+    // TODO: change to return CoordinateXY
+    /**
+     * Returns a read-only reference to Coordinate at i
+     */
+    const Coordinate& operator[](std::size_t i) const
+    {
+        return getAt(i);
+    }
+
+    // TODO: change to return CoordinateXY
+    /**
+     * Returns a reference to Coordinate at i
+     */
+    Coordinate&
+    operator[](std::size_t i)
+    {
+        return getAt(i);
     }
 
     /**
@@ -284,7 +325,7 @@ public:
      */
     double getX(std::size_t index) const
     {
-        return getOrdinate(index, X);
+        return m_vect[index * stride()];
     }
 
     /**
@@ -295,9 +336,63 @@ public:
      */
     double getY(std::size_t index) const
     {
-        return getOrdinate(index, Y);
+        return m_vect[index * stride() + 1];
     }
 
+    /// Return last Coordinate in the sequence
+    template<typename T=Coordinate>
+    const T& back() const
+    {
+        return getAt<T>(size() - 1);
+    }
+
+    /// Return last Coordinate in the sequence
+    template<typename T=Coordinate>
+    T& back()
+    {
+        return getAt<T>(size() - 1);
+    }
+
+    /// Return first Coordinate in the sequence
+    template<typename T=Coordinate>
+    const T& front() const
+    {
+        return *(reinterpret_cast<const T*>(m_vect.data()));
+    }
+
+    /// Return first Coordinate in the sequence
+    template<typename T=Coordinate>
+    T& front()
+    {
+        return *(reinterpret_cast<T*>(m_vect.data()));
+    }
+
+    /// Pushes all Coordinates of this sequence into the provided vector.
+    void toVector(std::vector<Coordinate>& coords) const;
+
+    void toVector(std::vector<CoordinateXY>& coords) const;
+
+
+    /// @}
+    /// \defgroup mutate Mutators
+    /// @{
+
+    void setAt(const CoordinateXY& c, std::size_t pos) {
+        auto& orig = getAt<CoordinateXY>(pos);
+        orig = c;
+    }
+
+    /// Copy Coordinate c to position pos
+    template<typename T>
+    void setAt(const T& c, std::size_t pos) {
+        switch(getCoordinateType()) {
+            case CoordinateDimension::XY: stride() == 3 ? setAtImpl<Coordinate>(c, pos) : setAtImpl<CoordinateXY>(c, pos); break;
+            case CoordinateDimension::XYZ: setAtImpl<Coordinate>(c, pos); break;
+            case CoordinateDimension::XYZM: setAtImpl<CoordinateXYZM>(c, pos); break;
+            case CoordinateDimension::XYM: setAtImpl<CoordinateXYM>(c, pos); break;
+            default: setAtImpl<Coordinate>(c, pos);
+        }
+    }
 
     /**
      * Sets the value for a given ordinate of a coordinate in this sequence.
@@ -309,6 +404,212 @@ public:
      */
     void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value);
 
+    /// Substitute Coordinate list with a copy of the given vector
+    void setPoints(const std::vector<Coordinate>& v);
+
+    /// @}
+    /// \defgroup add Adding methods
+    /// @{
+
+    /// Adds the specified coordinate to the end of the sequence. Dimensions
+    /// present in the coordinate but not in the sequence will be ignored.
+    /// If multiple coordinates are to be added, a multiple-insert method should
+    /// be used for best performance.
+    template<typename T=Coordinate>
+    void add(const T& c) {
+        add(c, size());
+    }
+
+    /// Adds the specified coordinate to the end of the sequence. Dimensions
+    /// present in the coordinate but not in the sequence will be ignored. If
+    /// allowRepeated is false, the coordinate will not be added if it is the
+    /// same as the last coordinate in the sequence.
+    /// If multiple coordinates are to be added, a multiple-insert method should
+    /// be used for best performance.
+    template<typename T>
+    void add(const T& c, bool allowRepeated)
+    {
+        if(!allowRepeated && !isEmpty()) {
+            const CoordinateXY& last = back<CoordinateXY>();
+            if(last.equals2D(c)) {
+                return;
+            }
+        }
+
+        add(c);
+    }
+
+    /** \brief
+     * Inserts the specified coordinate at the specified position in
+     * this sequence. If multiple coordinates are to be added, a multiple-
+     * insert method should be used for best performance.
+     *
+     * @param c the coordinate to insert
+     * @param pos the position at which to insert
+     */
+    template<typename T>
+    void add(const T& c, std::size_t pos)
+    {
+        static_assert(std::is_base_of<CoordinateXY, T>::value, "Must be a Coordinate class");
+
+        // c may be a reference inside m_vect, so we make sure it will not
+        // grow before adding it
+        if (m_vect.size() + stride() <= m_vect.capacity()) {
+            make_space(pos, 1);
+            setAt(c, static_cast<std::size_t>(pos));
+        } else {
+            T tmp{c};
+            make_space(pos, 1);
+            setAt(tmp, static_cast<std::size_t>(pos));
+        }
+    }
+
+    /** \brief
+     * Inserts the specified coordinate at the specified position in
+     * this list.
+     *
+     * @param i the position at which to insert
+     * @param coord the coordinate to insert
+     * @param allowRepeated if set to false, repeated coordinates are
+     *                      collapsed
+     */
+    template<typename T>
+    void add(std::size_t i, const T& coord, bool allowRepeated)
+    {
+        // don't add duplicate coordinates
+        if(! allowRepeated) {
+            std::size_t sz = size();
+            if(sz > 0) {
+                if(i > 0) {
+                    const CoordinateXY& prev = getAt<CoordinateXY>(i - 1);
+                    if(prev.equals2D(coord)) {
+                        return;
+                    }
+                }
+                if(i < sz) {
+                    const CoordinateXY& next = getAt<CoordinateXY>(i);
+                    if(next.equals2D(coord)) {
+                        return;
+                    }
+                }
+            }
+        }
+
+        add(coord, i);
+    }
+
+    void add(double x, double y) {
+        CoordinateXY c(x, y);
+        add(c);
+    }
+
+    template<typename T, typename... Args>
+    void add(T begin, T end, Args... args) {
+        for (auto it = begin; it != end; ++it) {
+            add(*it, args...);
+        }
+    }
+
+    void add(const CoordinateSequence& cs);
+
+    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to);
+
+    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to, bool allowRepeated);
+
+    void add(const CoordinateSequence& cs, bool allowRepeated);
+
+    template<typename T>
+    void add(std::size_t i, T from, T to) {
+        auto npts = static_cast<std::size_t>(std::distance(from, to));
+
+        // Clear some space
+        // FIXME case when m_stride == 0
+        m_vect.insert(std::next(m_vect.begin(), static_cast<decltype(m_vect)::iterator::difference_type>(i * m_stride)),
+                      npts * m_stride,
+                      0.0);
+
+        for (auto it = from; it != to; ++it) {
+            setAt(*it, i);
+            i++;
+        }
+    }
+
+    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
+
+    /// @}
+    /// \defgroup util Utilities
+    /// @{
+
+    void clear() {
+        m_vect.clear();
+    }
+
+    void reserve(std::size_t capacity) {
+        m_vect.reserve(capacity * stride());
+    }
+
+    void resize(std::size_t capacity) {
+        m_vect.resize(capacity * stride());
+    }
+
+    void pop_back();
+
+    /// Get a string representation of CoordinateSequence
+    std::string toString() const;
+
+    /// Returns lower-left Coordinate in list
+    const CoordinateXY* minCoordinate() const;
+
+    /** \brief
+     *  Returns either the given CoordinateSequence if its length
+     *  is greater than the given amount, or an empty CoordinateSequence.
+     */
+    static CoordinateSequence* atLeastNCoordinatesOrNothing(std::size_t n,
+            CoordinateSequence* c);
+
+    /// Return position of a Coordinate
+    //
+    /// or numeric_limits<std::size_t>::max() if not found
+    ///
+    static std::size_t indexOf(const CoordinateXY* coordinate,
+                               const CoordinateSequence* cl);
+
+    /**
+     * \brief
+     * Returns true if the two arrays are identical, both null,
+     * or pointwise equal
+     */
+    static bool equals(const CoordinateSequence* cl1,
+                       const CoordinateSequence* cl2);
+
+    /// Scroll given CoordinateSequence so to start with given Coordinate.
+    static void scroll(CoordinateSequence* cl, const CoordinateXY* firstCoordinate);
+
+    /** \brief
+     * Determines which orientation of the {@link Coordinate} array
+     * is (overall) increasing.
+     *
+     * In other words, determines which end of the array is "smaller"
+     * (using the standard ordering on {@link Coordinate}).
+     * Returns an integer indicating the increasing direction.
+     * If the sequence is a palindrome, it is defined to be
+     * oriented in a positive direction.
+     *
+     * @param pts the array of Coordinates to test
+     * @return <code>1</code> if the array is smaller at the start
+     * or is a palindrome,
+     * <code>-1</code> if smaller at the end
+     *
+     * NOTE: this method is found in CoordinateArrays class for JTS
+     */
+    static int increasingDirection(const CoordinateSequence& pts);
+
+    /// Reverse Coordinate order in given CoordinateSequence
+    void reverse();
+
+    void sort();
+
+
     /**
      * Expands the given Envelope to include the coordinates in the
      * sequence.
@@ -316,43 +617,116 @@ public:
      */
     void expandEnvelope(Envelope& env) const;
 
+    void closeRing();
+
+    /// @}
+    /// \defgroup iterate Iteration
+    /// @{
+
     void apply_rw(const CoordinateFilter* filter);
     void apply_ro(CoordinateFilter* filter) const;
 
-    void clear();
-
-    void closeRing();
-
-    /** \brief
-     * Apply a filter to each Coordinate of this sequence.
-     * The filter is expected to provide a .filter(Coordinate&)
-     * method.
-     *
-     * TODO: accept a Functor instead, will be more flexible.
-     *       actually, define iterators on Geometry
-     */
-    template <class T>
-    void
-    applyCoordinateFilter(T& f)
+    template<typename T, typename F>
+    void forEach(F&& fun) const
     {
-        Coordinate c;
-        for(std::size_t i = 0, n = size(); i < n; ++i) {
-            getAt(i, c);
-            f.filter(c);
-            setAt(c, i);
+        for (std::size_t i = 0; i < size(); i++) {
+            fun(getAt<T>(i));
         }
     }
 
-    iterator begin();
+    template<typename T, typename F>
+    void forEach(std::size_t from, std::size_t to, F&& fun) const
+    {
+        for (std::size_t i = from; i <= to; i++) {
+            fun(getAt<T>(i));
+        }
+    }
 
-    iterator end();
+    template<typename T>
+    class Coordinates {
+    public:
+        using SequenceType = typename std::conditional<std::is_const<T>::value, const CoordinateSequence, CoordinateSequence>::type;
 
-    const_iterator cbegin() const;
+        explicit Coordinates(SequenceType* seq) : m_seq(seq) {}
 
-    const_iterator cend() const;
+        CoordinateSequenceIterator<SequenceType, T> begin() {
+            return {m_seq};
+        }
+
+        CoordinateSequenceIterator<SequenceType, T> end() {
+            return {m_seq, m_seq->getSize()};
+        }
+
+        CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>
+        begin() const {
+            return CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>{m_seq};
+        }
+
+        CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>
+        end() const {
+            return CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>{m_seq, m_seq->getSize()};
+        }
+
+        CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>
+        cbegin() const {
+            return CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>{m_seq};
+        }
+
+        CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>
+        cend() const {
+            return CoordinateSequenceIterator<const SequenceType, typename std::add_const<T>::type>{m_seq, m_seq->getSize()};
+        }
+
+    private:
+        SequenceType* m_seq;
+    };
+
+    template<typename T>
+    Coordinates<typename std::add_const<T>::type> items() const {
+        return Coordinates<typename std::add_const<T>::type>(this);
+    }
+
+    template<typename T>
+    Coordinates<T> items() {
+        return Coordinates<T>(this);
+    }
+
+
+    /// @}
+
+    double* data() {
+        return m_vect.data();
+    }
+
 private:
-    std::vector<Coordinate> vect;
-    mutable std::size_t dimension;
+    std::vector<double> m_vect;
+    uint8_t m_stride;
+    mutable bool m_hasdim;
+    mutable bool m_hasz;
+    bool m_hasm;
+
+    bool initialized() const {
+        return m_stride == 0;
+    }
+
+    void initialize();
+
+    template<typename T1, typename T2>
+    void setAtImpl(const T2& c, std::size_t pos) {
+        auto& orig = getAt<T1>(pos);
+        orig = c;
+    }
+
+    void make_space(std::size_t pos, std::size_t n) {
+        m_vect.insert(std::next(m_vect.begin(), static_cast<std::ptrdiff_t>(pos * stride())),
+                      m_stride * n,
+                      DoubleNotANumber);
+    }
+
+    std::uint8_t stride() const {
+        return m_stride;
+    }
+
 };
 
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);

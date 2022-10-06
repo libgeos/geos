@@ -24,6 +24,7 @@
 #include <geos/geom/Geometry.h> // for unique_ptr destructor
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <memory>
@@ -136,25 +137,22 @@ TaggedLineString::getResultCoordinates() const
          << resultSegs.size() << std::endl;
 #endif
 
-    CoordVectPtr pts = extractCoordinates(resultSegs);
+    auto pts = extractCoordinates(resultSegs);
 
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << " extracted Coords.size: "
          << pts->size() << std::endl;
 #endif
 
-
-    CoordVect* v = pts.release();
-    return CoordinateSequence::Ptr(parentLine->getFactory()->getCoordinateSequenceFactory()->create(v));
-
+    return pts;
 }
 
 /*private static*/
-TaggedLineString::CoordVectPtr
+std::unique_ptr<CoordinateSequence>
 TaggedLineString::extractCoordinates(
     const std::vector<TaggedLineSegment*>& segs)
 {
-    CoordVectPtr pts(new CoordVect());
+    auto pts = detail::make_unique<geom::CoordinateSequence>();
 
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << " segs.size: " << segs.size() << std::endl;
@@ -166,11 +164,11 @@ TaggedLineString::extractCoordinates(
         for(std::size_t i = 0; i < size; i++) {
             TaggedLineSegment* seg = segs[i];
             assert(seg);
-            pts->push_back(seg->p0);
+            pts->add(seg->p0);
         }
 
         // add last point
-        pts->push_back(segs[size - 1]->p1);
+        pts->add(segs[size - 1]->p1);
     }
 
     return pts;

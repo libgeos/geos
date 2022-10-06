@@ -28,19 +28,19 @@ public:
         return detail::make_unique<CoordinateSequence>();
     }
 
-    std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> *coords, std::size_t dims = 0) const final override {
-        auto ret = detail::make_unique<CoordinateSequence>(std::move(*coords), dims);
-        delete coords;
-        return ret;
-    }
+    //std::unique_ptr<CoordinateSequence> create(std::vector<Coordinate> *coords, std::size_t dims = 0) const final override {
+    //    auto ret = detail::make_unique<CoordinateSequence>(std::move(*coords), dims);
+    //    delete coords;
+    //    return ret;
+    //}
 
-    std::unique_ptr <CoordinateSequence> create(std::vector <Coordinate> &&coords, std::size_t dims = 0) const final override {
-        return detail::make_unique<CoordinateSequence>(std::move(coords), dims);
-    }
+    //std::unique_ptr <CoordinateSequence> create(std::vector <Coordinate> &&coords, std::size_t dims = 0) const final override {
+    //    return detail::make_unique<CoordinateSequence>(std::move(coords), dims);
+    //}
 
-    std::unique_ptr <CoordinateSequence> create(std::vector <CoordinateXY> &&coords, std::size_t dims = 0) const final override {
-        return detail::make_unique<CoordinateSequence>(std::move(coords), dims);
-    }
+    //std::unique_ptr <CoordinateSequence> create(std::vector <CoordinateXY> &&coords, std::size_t dims = 0) const final override {
+    //    return detail::make_unique<CoordinateSequence>(std::move(coords), dims);
+    //}
 
     std::unique_ptr <CoordinateSequence> create(std::size_t size, std::size_t dims = 0) const final override {
         return detail::make_unique<CoordinateSequence>(size, dims);
@@ -52,6 +52,10 @@ public:
             cs->setAt(coordSeq[i], i);
         }
         return cs;
+    }
+
+    std::unique_ptr<CoordinateSequence> create(const CoordinateSequence&& coordSeq) const final override {
+        return detail::make_unique<CoordinateSequence>(std::move(coordSeq));
     }
 
     static const CoordinateSequenceFactory *instance();

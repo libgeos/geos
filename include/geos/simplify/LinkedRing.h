@@ -17,17 +17,7 @@
 #include <memory>
 
 #include <geos/geom/Coordinate.h>
-
-namespace geos {
-namespace geom {
-class Coordinate;
-class CoordinateSequence;
-}
-namespace triangulate {
-namespace quadedge {
-}
-}
-}
+#include <geos/geom/CoordinateSequence.h>
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
@@ -44,7 +34,7 @@ class LinkedRing
         static constexpr std::size_t
             NO_COORD_INDEX = std::numeric_limits<std::size_t>::max();
 
-        const std::vector<Coordinate>& m_coord;
+        const CoordinateSequence& m_coord;
         std::size_t m_size;
         std::vector<std::size_t> m_next;
         std::vector<std::size_t> m_prev;
@@ -55,7 +45,7 @@ class LinkedRing
 
     public:
 
-        LinkedRing(const std::vector<Coordinate>& cs)
+        LinkedRing(const CoordinateSequence& cs)
             : m_coord(cs)
             , m_size(cs.size()-1)
             , m_next(createNextLinks(m_size))

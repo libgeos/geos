@@ -34,7 +34,7 @@ namespace polygon {
 
 
 /* public */
-PolygonEarClipper::PolygonEarClipper(std::vector<Coordinate>& polyShell)
+PolygonEarClipper::PolygonEarClipper(const geom::CoordinateSequence& polyShell)
     : vertex(polyShell)
     , vertexSize(polyShell.size()-1)
     , vertexFirst(0)
@@ -60,10 +60,10 @@ PolygonEarClipper::createNextLinks(std::size_t size) const
 
 /* public static */
 void
-PolygonEarClipper::triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult)
+PolygonEarClipper::triangulate(const geom::CoordinateSequence& polyShell, TriList<Tri>& triListResult)
 {
     PolygonEarClipper clipper(polyShell);
-    return clipper.compute(triListResult);
+    clipper.compute(triListResult);
 }
 
 

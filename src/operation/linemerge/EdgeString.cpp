@@ -78,7 +78,7 @@ EdgeString::getCoordinates()
                          directedEdge->getEdgeDirection());
     }
     if(reverseDirectedEdges > forwardDirectedEdges) {
-        CoordinateSequence::reverse(coordinates.get());
+        coordinates->reverse();
     }
     return coordinates.release();
 }

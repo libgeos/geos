@@ -51,6 +51,7 @@ public:
      */
     virtual std::unique_ptr<CoordinateSequence> create() const = 0;
 
+#if 0
     /** \brief
      * Returns a CoordinateSequence based on the given array.
      *
@@ -83,6 +84,7 @@ public:
     virtual std::unique_ptr<CoordinateSequence> create(
             std::vector<CoordinateXY> && coordinates,
             std::size_t dimension = 0) const = 0;
+#endif
 
     /** \brief
      * Creates a CoordinateSequence of the specified size and dimension.
@@ -105,6 +107,7 @@ public:
      * @param coordSeq the coordinate sequence to copy
      */
     virtual std::unique_ptr<CoordinateSequence> create(const CoordinateSequence& coordSeq) const = 0;
+    virtual std::unique_ptr<CoordinateSequence> create(const CoordinateSequence&& coordSeq) const = 0;
 
     virtual ~CoordinateSequenceFactory() = default;
 };

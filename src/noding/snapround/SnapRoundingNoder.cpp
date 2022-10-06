@@ -96,14 +96,16 @@ SnapRoundingNoder::addVertexPixels(std::vector<SegmentString*>& segStrings)
 }
 
 /*private*/
-std::vector<Coordinate>
-SnapRoundingNoder::round(const std::vector<Coordinate>& pts) const
+std::unique_ptr<CoordinateSequence>
+SnapRoundingNoder::round(const CoordinateSequence& pts) const
 {
-    std::vector<Coordinate> roundPts = pts;
-    for (auto& pt: roundPts) {
+    auto roundPts = detail::make_unique<CoordinateSequence>();
+    roundPts->reserve(pts.size());
+    pts.forEach<Coordinate>([this, &roundPts](const Coordinate& origPt) {
+        Coordinate pt = origPt;
         pm->makePrecise(pt);
-    }
-    roundPts.erase(std::unique(roundPts.begin(), roundPts.end()), roundPts.end());
+        roundPts->add(pt, false);
+    });
     return roundPts;
 }
 
@@ -145,9 +147,8 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     * The coordinates are now rounded to the grid,
     * in preparation for snapping to the Hot Pixels
     */
-    std::vector<Coordinate> pts = ss->getNodedCoordinates();
-    std::vector<Coordinate> ptsRoundVec = round(pts);
-    std::unique_ptr<geom::CoordinateSequence> ptsRound(new CoordinateSequence(std::move(ptsRoundVec)));
+    auto pts = ss->getNodedCoordinates();
+    auto ptsRound = round(*pts);
 
     // if complete collapse this edge can be eliminated
     if (ptsRound->size() <= 1)
@@ -157,20 +158,20 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
     NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getData());
 
     std::size_t snapSSindex = 0;
-    for (std::size_t i = 0, sz = pts.size()-1; i < sz; i++ ) {
+    for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
 
         const geom::Coordinate& currSnap = snapSS->getCoordinate(snapSSindex);
 
         /**
         * If the segment has collapsed completely, skip it
         */
-        Coordinate p1 = pts[i+1];
+        Coordinate p1 = pts->getAt(i+1);
         Coordinate p1Round = p1;
         pm->makePrecise(p1Round);
         if (p1Round.equals2D(currSnap))
             continue;
 
-        Coordinate p0 = pts[i];
+        Coordinate p0 = pts->getAt(i);
 
         /**
         * Add any Hot Pixel intersections with *original* segment to rounded segment.

@@ -168,7 +168,9 @@ OffsetCurve::offsetSegment(const CoordinateSequence* pts, double p_distance)
 {
     LineSegment ls(pts->getAt(0), pts->getAt(1));
     LineSegment offsetSeg = ls.offset(p_distance);
-    std::vector<Coordinate> coords = { offsetSeg.p0, offsetSeg.p1 };
+    auto coords = detail::make_unique<CoordinateSequence>(2u);
+    coords->setAt(offsetSeg.p0, 0);
+    coords->setAt(offsetSeg.p1, 1);
     return geomFactory->createLineString(std::move(coords));
 }
 
@@ -246,8 +248,8 @@ OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<Coord
             curveStart = index;
         }
     }
-    std::vector<Coordinate> curvePts;
-    extractSection(bufferPts, curveStart, isInCurve, curvePts);
+    auto curvePts = detail::make_unique<CoordinateSequence>();
+    extractSection(bufferPts, curveStart, isInCurve, *curvePts);
     return geomFactory->createLineString(std::move(curvePts));
 }
 
@@ -307,7 +309,7 @@ OffsetCurve::subsegmentMatchFrac(const Coordinate& p0, const Coordinate& p1,
 /* private static */
 void
 OffsetCurve::extractSection(const CoordinateSequence* ring, int iStartIndex,
-        std::vector<bool>& isExtracted, std::vector<Coordinate>& extractedPoints)
+        std::vector<bool>& isExtracted, CoordinateSequence& extractedPoints)
 {
     if (iStartIndex < 0)
         return;
@@ -331,8 +333,7 @@ OffsetCurve::extractSection(const CoordinateSequence* ring, int iStartIndex,
     if (coordList.size() == 1)
         return;
 
-    std::copy(coordList.begin(), coordList.end(),
-              std::back_inserter(extractedPoints));
+    extractedPoints.add(coordList.begin(), coordList.end());
 
     return;
 }

@@ -260,7 +260,7 @@ LineBuilder::buildLine(OverlayEdge* node)
     while (e != nullptr);
     // reverse coordinates before constructing
     if(!isNodeForward) {
-        CoordinateSequence::reverse(pts.get());
+        pts->reverse();
     }
 
     return geometryFactory->createLineString(std::move(pts));

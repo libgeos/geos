@@ -198,11 +198,10 @@ template<>
 void object::test<9>
 ()
 {
-    std::vector<Coordinate> v;
-    v.push_back(Coordinate(150, 200));
-    v.push_back(Coordinate(180, 270));
-    v.push_back(Coordinate(275, 163));
-    geos::geom::CoordinateSequence seq(std::move(v));
+    geos::geom::CoordinateSequence seq;
+    seq.add(Coordinate(150, 200));
+    seq.add(Coordinate(180, 270));
+    seq.add(Coordinate(275, 163));
 
     Envelope env = DelaunayTriangulationBuilder::envelope(seq);
 

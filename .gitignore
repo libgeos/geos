@@ -21,6 +21,7 @@ Makefile
 *.cmake
 CMakeFiles
 CMakeCache.txt
+CMakeLists.txt.user
 DartConfiguration.tcl
 .DS_Store
 macros/libtool.m4

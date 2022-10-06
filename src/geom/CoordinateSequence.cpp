@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2022 ISciences LLC
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -35,46 +36,168 @@ namespace geom { // geos::geom
 static Profiler* profiler = Profiler::instance();
 #endif
 
-CoordinateSequence::CoordinateSequence(std::size_t size, std::size_t dim) :
-    vect(size),
-    dimension(dim)
-{}
+CoordinateSequence::CoordinateSequence() :
+    CoordinateSequence(0, 0) {}
 
-CoordinateSequence::CoordinateSequence(std::vector<Coordinate> && coords, std::size_t dim) :
-    vect(std::move(coords)),
-    dimension(dim)
-{}
-
-CoordinateSequence::CoordinateSequence(std::vector<CoordinateXY> && coords, std::size_t dim) :
-    vect(coords.size()),
-    dimension(dim)
+CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, bool init) :
+    m_vect(sz * (2u + hasm + hasz)),
+    m_stride(static_cast<std::uint8_t>(2u + hasm + hasz)),
+    m_hasdim(true),
+    m_hasz(hasz),
+    m_hasm(hasm)
 {
-    for (std::size_t i = 0; i < coords.size(); i++) {
-        vect[i] = Coordinate(coords[i]);
+    if (init) {
+        initialize();
     }
 }
 
-CoordinateSequence::CoordinateSequence(std::unique_ptr<std::vector<Coordinate>> && coords, std::size_t dim) :
-    vect(std::move(*coords)),
-    dimension(dim)
+CoordinateSequence::CoordinateSequence(std::size_t sz, std::size_t dim) :
+    m_vect(sz * 3),
+    m_stride(3u),
+    m_hasdim(dim > 0),
+    m_hasz(dim == 3),
+    m_hasm(false)
 {
+    initialize();
 }
 
 void
-CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
+CoordinateSequence::initialize()
 {
-    if(!allowRepeated && ! vect.empty()) {
-        const Coordinate& last = vect.back();
-        if(last.equals2D(c)) {
-            return;
+    for (std::size_t i = 0; i < m_vect.size(); i++) {
+        double val;
+        switch(i % stride()) {
+            case 0: val = Coordinate::DEFAULT_X; break;
+            case 1: val = Coordinate::DEFAULT_Y; break;
+            default: val = DoubleNotANumber;
+        }
+        m_vect[i] = val;
+    }
+}
+
+
+CoordinateSequence::CoordinateSequence(const std::initializer_list<Coordinate>& list) :
+    m_stride(3),
+    m_hasdim(false),
+    m_hasz(false),
+    m_hasm(false)
+{
+    reserve(list.size());
+    add(list.begin(), list.end());
+}
+
+CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXY>& list) :
+    m_stride(2),
+    m_hasdim(true),
+    m_hasz(false),
+    m_hasm(false)
+{
+    reserve(list.size());
+    add(list.begin(), list.end());
+}
+
+CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXYM>& list) :
+    m_stride(3),
+    m_hasdim(true),
+    m_hasz(false),
+    m_hasm(true)
+{
+    reserve(list.size());
+    add(list.begin(), list.end());
+}
+
+CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXYZM>& list) :
+    m_stride(4),
+    m_hasdim(true),
+    m_hasz(true),
+    m_hasm(true)
+{
+    reserve(list.size());
+    add(list.begin(), list.end());
+}
+
+void
+CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::size_t to)
+{
+    if (cs.stride() == stride() && cs.hasM() == cs.hasM()) {
+        m_vect.insert(m_vect.end(),
+                      std::next(cs.m_vect.cbegin(), static_cast<std::ptrdiff_t>(from * stride())),
+                      std::next(cs.m_vect.cbegin(), static_cast<std::ptrdiff_t>((to + 1u)*stride())));
+    } else {
+        std::size_t pos = size();
+        make_space(pos, to - from + 1);
+
+        switch(cs.getCoordinateType()) {
+            case CoordinateDimension::XY:   cs.forEach<CoordinateXY>(from, to, [this, &pos](const CoordinateXY& c) { setAt(c, pos++); }); break;
+            case CoordinateDimension::XYZ:  cs.forEach<Coordinate>(from, to, [this, &pos](const Coordinate& c) { setAt(c, pos++); }); break;
+            case CoordinateDimension::XYZM: cs.forEach<CoordinateXYZM>(from, to, [this, &pos](const CoordinateXYZM& c) { setAt(c, pos++); }); break;
+            case CoordinateDimension::XYM:  cs.forEach<CoordinateXYM>(from, to, [this, &pos](const CoordinateXYM& c) { setAt(c, pos++); }); break;
         }
     }
-    vect.push_back(c);
+}
+
+void
+CoordinateSequence::add(const CoordinateSequence& cs)
+{
+    add(cs, 0, cs.size() - 1);
+}
+
+void
+CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::size_t to, bool allowRepeated)
+{
+    if (allowRepeated) {
+        add(cs, from, to);
+        return;
+    }
+
+    std::size_t first = from;
+
+    // Check for case where first point(s) of `cs` duplicate last points of `this`
+    if (!isEmpty()) {
+        while(first <= to && cs.getAt<CoordinateXY>(first).equals2D(back<CoordinateXY>())) {
+            first++;
+        }
+    }
+
+    std::size_t last = first + 1;
+    const CoordinateXY* last_unique = &cs.front<CoordinateXY>();
+    while(last <= to) {
+        const CoordinateXY* curr = &cs.getAt<CoordinateXY>(last);
+        if (curr->equals2D(*last_unique)) {
+            // End of block
+            add(cs, first, last - 1);
+            do {
+                last++;
+            } while (last <= to && cs.getAt<CoordinateXY>(last).equals2D(*last_unique));
+
+            if (last != (to + 1) ) {
+                first = last;
+                last_unique = &cs.getAt<CoordinateXY>(first);
+            }
+            last++;
+        } else {
+            last_unique = curr;
+            last++;
+        }
+    }
+
+    if (last == (to + 1)) {
+        add(cs, first, to);
+    }
+}
+
+void
+CoordinateSequence::add(const CoordinateSequence& cs, bool allowRepeated) {
+    if (!cs.isEmpty()) {
+        add(cs, 0, cs.size() - 1, allowRepeated);
+    }
 }
 
 void
 CoordinateSequence::add(const CoordinateSequence* cl, bool allowRepeated, bool direction)
 {
+    // FIXME dispatch on dim
+
     // FIXME:  don't rely on negative values for 'j' (the reverse case)
 
     const auto npts = cl->size();
@@ -91,52 +214,22 @@ CoordinateSequence::add(const CoordinateSequence* cl, bool allowRepeated, bool d
 }
 
 /*public*/
-void
-CoordinateSequence::add(std::size_t i, const Coordinate& coord, bool allowRepeated)
-{
-    // don't add duplicate coordinates
-    if(! allowRepeated) {
-        std::size_t sz = size();
-        if(sz > 0) {
-            if(i > 0) {
-                const Coordinate& prev = getAt(i - 1);
-                if(prev.equals2D(coord)) {
-                    return;
-                }
-            }
-            if(i < sz) {
-                const Coordinate& next = getAt(i);
-                if(next.equals2D(coord)) {
-                    return;
-                }
-            }
-        }
-    }
-
-    vect.insert(std::next(vect.begin(), static_cast<std::ptrdiff_t>(i)), coord);
-}
 
 void
 CoordinateSequence::apply_rw(const CoordinateFilter* filter)
 {
-    for(auto& coord : vect) {
-        filter->filter_rw(&coord);
+    for(auto& c : items<Coordinate>()) {
+        filter->filter_rw(&c);
     }
-    dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
+    m_hasdim = m_hasz = false; // re-check (see http://trac.osgeo.org/geos/ticket/435)
 }
 
 void
 CoordinateSequence::apply_ro(CoordinateFilter* filter) const
 {
-    for(const auto& coord : vect) {
-        filter->filter_ro(&coord);
-    }
-}
-
-void
-CoordinateSequence::clear()
-{
-    vect.clear();
+    for(const auto& c : items<Coordinate>()) {
+        filter->filter_ro(&c);
+    };
 }
 
 std::unique_ptr<CoordinateSequence>
@@ -148,30 +241,31 @@ CoordinateSequence::clone() const
 void
 CoordinateSequence::closeRing()
 {
-    if(!isEmpty() && front() != back()) {
-        add(front());
+    if(!isEmpty() && front<CoordinateXY>() != back<CoordinateXY>()) {
+        m_vect.insert(m_vect.end(),
+                      m_vect.begin(),
+                      std::next(m_vect.begin(), stride()));
     }
 }
 
 std::size_t
 CoordinateSequence::getDimension() const
 {
-    if(dimension != 0) {
-        return dimension;
+    if (m_hasdim) {
+        return static_cast<std::size_t>(2 + hasM() + hasZ());
     }
 
-    if(vect.empty()) {
+    if (m_vect.empty()) {
         return 3;
     }
 
-    if(std::isnan(vect[0].z)) {
-        dimension = 2;
-    }
-    else {
-        dimension = 3;
+    assert(stride() >= 3);
+    m_hasdim = true;
+    if (!std::isnan(getAt<Coordinate>(0).z)) {
+        m_hasz = true;
     }
 
-    return dimension;
+    return getDimension();
 }
 
 
@@ -180,11 +274,15 @@ CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) co
 {
     switch(ordinateIndex) {
         case CoordinateSequence::X:
-            return getAt(index).x;
+            return getAt<CoordinateXY>(index).x;
         case CoordinateSequence::Y:
-            return getAt(index).y;
+            return getAt<CoordinateXY>(index).y;
         case CoordinateSequence::Z:
-            return getAt(index).z;
+            assert(m_hasz);
+            return getAt<Coordinate>(index).z;
+        case CoordinateSequence::M:
+            assert(m_hasm);
+            return m_hasz ? getAt<CoordinateXYZM>(index).m : getAt<CoordinateXYM>(index).m;
         default:
             return DoubleNotANumber;
     }
@@ -195,7 +293,7 @@ CoordinateSequence::hasRepeatedPoints() const
 {
     const std::size_t p_size = getSize();
     for(std::size_t i = 1; i < p_size; i++) {
-        if(getAt(i - 1) == getAt(i)) {
+        if(getAt<CoordinateXY>(i - 1) == getAt<CoordinateXY>(i)) {
             return true;
         }
     }
@@ -219,27 +317,13 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(std::size_t n,
     }
 }
 
-
-bool
-CoordinateSequence::hasRepeatedPoints(const CoordinateSequence* cl)
-{
-    const std::size_t size = cl->getSize();
-    for(std::size_t i = 1; i < size; i++) {
-        if(cl->getAt(i - 1) == cl->getAt(i)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-const Coordinate*
+const CoordinateXY*
 CoordinateSequence::minCoordinate() const
 {
-    const Coordinate* minCoord = nullptr;
+    const CoordinateXY* minCoord = nullptr;
     const std::size_t p_size = getSize();
     for(std::size_t i = 0; i < p_size; i++) {
-        if(minCoord == nullptr || minCoord->compareTo(getAt(i)) > 0) {
+        if(minCoord == nullptr || minCoord->compareTo(getAt<CoordinateXY>(i)) > 0) {
             minCoord = &getAt(i);
         }
     }
@@ -247,12 +331,12 @@ CoordinateSequence::minCoordinate() const
 }
 
 size_t
-CoordinateSequence::indexOf(const Coordinate* coordinate,
+CoordinateSequence::indexOf(const CoordinateXY* coordinate,
                             const CoordinateSequence* cl)
 {
     std::size_t p_size = cl->size();
     for(std::size_t i = 0; i < p_size; ++i) {
-        if((*coordinate) == cl->getAt(i)) {
+        if((*coordinate) == cl->getAt<CoordinateXY>(i)) {
             return i;
         }
     }
@@ -261,24 +345,16 @@ CoordinateSequence::indexOf(const Coordinate* coordinate,
 
 void
 CoordinateSequence::scroll(CoordinateSequence* cl,
-                           const Coordinate* firstCoordinate)
+                           const CoordinateXY* firstCoordinate)
 {
-    // FIXME: use a standard algorithm instead
-    std::size_t i, j = 0;
     std::size_t ind = indexOf(firstCoordinate, cl);
-    if(ind < 1) {
+    if(ind == 0 || ind == std::numeric_limits<std::size_t>::max()) {
         return;    // not found or already first
     }
 
-    const std::size_t length = cl->getSize();
-    std::vector<Coordinate> v(length);
-    for(i = ind; i < length; i++) {
-        v[j++] = cl->getAt(i);
-    }
-    for(i = 0; i < ind; i++) {
-        v[j++] = cl->getAt(i);
-    }
-    cl->setPoints(v);
+    std::rotate(cl->m_vect.begin(),
+        std::next(cl->m_vect.begin(), static_cast<std::ptrdiff_t>(ind * cl->stride())),
+        cl->m_vect.end());
 }
 
 int
@@ -311,15 +387,29 @@ CoordinateSequence::isRing() const
 }
 
 void
-CoordinateSequence::reverse(CoordinateSequence* cl)
+CoordinateSequence::reverse()
 {
-    // FIXME: use a standard algorithm
-    auto last = cl->size() - 1;
-    auto mid = last / 2;
-    for(std::size_t i = 0; i <= mid; i++) {
-        const Coordinate tmp = cl->getAt(i);
-        cl->setAt(cl->getAt(last - i), i);
-        cl->setAt(tmp, last - i);
+    auto mid = m_vect.size() / 2;
+    auto last = m_vect.size() - stride();
+    for (std::size_t i = 0; i < mid; i += stride()) {
+        switch(stride()) {
+            case 4: std::swap(m_vect[i + 3], m_vect[last - i + 3]); // fall-through
+            case 3: std::swap(m_vect[i + 2], m_vect[last - i + 2]); // fall-through
+            case 2: std::swap(m_vect[i + 1], m_vect[last - i + 1]);
+                    std::swap(m_vect[i],     m_vect[last - i]);
+
+        }
+    }
+}
+
+void
+CoordinateSequence::sort()
+{
+    switch(getCoordinateType()) {
+        case CoordinateDimension::XY:   std::sort(items<CoordinateXY>().begin(), items<CoordinateXY>().end()); return;
+        case CoordinateDimension::XYZ:  std::sort(items<Coordinate>().begin(), items<Coordinate>().end()); return;
+        case CoordinateDimension::XYZM: std::sort(items<CoordinateXYZM>().begin(), items<CoordinateXYZM>().end()); return;
+        case CoordinateDimension::XYM:  std::sort(items<CoordinateXYM>().begin(), items<CoordinateXYM>().end()); return;
     }
 }
 
@@ -327,20 +417,20 @@ bool
 CoordinateSequence::equals(const CoordinateSequence* cl1,
                            const CoordinateSequence* cl2)
 {
-    // FIXME: use std::equals()
-
     if(cl1 == cl2) {
         return true;
     }
+
     if(cl1 == nullptr || cl2 == nullptr) {
         return false;
     }
+
     std::size_t npts1 = cl1->getSize();
     if(npts1 != cl2->getSize()) {
         return false;
     }
     for(std::size_t i = 0; i < npts1; i++) {
-        if(!(cl1->getAt(i) == cl2->getAt(i))) {
+        if(!(cl1->getAt<CoordinateXY>(i) == cl2->getAt<CoordinateXY>(i))) {
             return false;
         }
     }
@@ -352,50 +442,57 @@ CoordinateSequence::expandEnvelope(Envelope& env) const
 {
     const std::size_t p_size = getSize();
     for(std::size_t i = 0; i < p_size; i++) {
-        env.expandToInclude(getAt(i));
+        env.expandToInclude(getAt<CoordinateXY>(i));
     }
 }
 
 Envelope
 CoordinateSequence::getEnvelope() const {
+    if (isEmpty()) {
+        return {};
+    }
+
     Envelope e;
-    expandEnvelope(e);
+
+    double xmin = std::numeric_limits<double>::infinity();
+    double ymin = std::numeric_limits<double>::infinity();
+    double xmax = -std::numeric_limits<double>::infinity();
+    double ymax = -std::numeric_limits<double>::infinity();
+
+    for (std::size_t i = 0; i < m_vect.size(); i += stride()) {
+        xmin = std::min(xmin, m_vect[i]);
+        xmax = std::max(xmax, m_vect[i]);
+        ymin = std::min(ymin, m_vect[i+1]);
+        ymax = std::max(ymax, m_vect[i+1]);
+    }
+
+    e.init(xmin, xmax, ymin, ymax);
     return e;
 }
 
-CoordinateSequence::iterator
-CoordinateSequence::begin() {
-    return {this};
-}
-
-CoordinateSequence::iterator
-CoordinateSequence::end() {
-    return {this, getSize()};
-}
-
-CoordinateSequence::const_iterator
-CoordinateSequence::cbegin() const {
-    return {this};
-}
-
-CoordinateSequence::const_iterator
-CoordinateSequence::cend() const {
-    return {this, getSize()};
-}
 
 void
 CoordinateSequence::setOrdinate(std::size_t index, std::size_t ordinateIndex, double value)
 {
     switch(ordinateIndex) {
         case CoordinateSequence::X:
-        vect[index].x = value;
+        getAt<CoordinateXY>(index).x = value;
         break;
         case CoordinateSequence::Y:
-        vect[index].y = value;
+        getAt<CoordinateXY>(index).y = value;
         break;
         case CoordinateSequence::Z:
-        vect[index].z = value;
+        getAt<Coordinate>(index).z = value;
         break;
+        case CoordinateSequence::M:
+        {
+            if (hasZ()) {
+                getAt<CoordinateXYZM>(index).m = value;
+            } else {
+                getAt<CoordinateXYM>(index).m = value;
+            }
+            break;
+        }
         default: {
             std::stringstream ss;
             ss << "Unknown ordinate index " << ordinateIndex;
@@ -408,19 +505,58 @@ CoordinateSequence::setOrdinate(std::size_t index, std::size_t ordinateIndex, do
 void
 CoordinateSequence::setPoints(const std::vector<Coordinate>& v)
 {
-    vect.assign(v.begin(), v.end());
+    m_stride = 3;
+    m_hasdim = false;
+    m_hasz = false;
+    m_hasm = false;
+
+    m_vect.resize(3 * v.size());
+    const double* cbuf = reinterpret_cast<const double*>(v.data());
+    m_vect.assign(cbuf, cbuf + m_vect.size());
 }
 
 void
 CoordinateSequence::toVector(std::vector<Coordinate>& out) const
 {
-    out.insert(out.end(), vect.begin(), vect.end());
+    if (stride() == 3 && !hasM()) {
+        const Coordinate* cbuf = reinterpret_cast<const Coordinate*>(m_vect.data());
+        out.insert(out.end(), cbuf, cbuf + size());
+    } else if (hasZ()) {
+        for (const auto& c : items<Coordinate>()) {
+            out.emplace_back(c.x, c.y, c.z);
+        }
+    } else {
+        for (const auto& c : items<CoordinateXY>()) {
+            out.emplace_back(c.x, c.y);
+        }
+    }
 }
 
 void
 CoordinateSequence::toVector(std::vector<CoordinateXY>& out) const
 {
-    out.insert(out.end(), vect.begin(), vect.end());
+    if (stride() == 2) {
+        const CoordinateXY* cbuf = reinterpret_cast<const CoordinateXY*>(m_vect.data());
+        out.insert(out.end(), cbuf, cbuf + size());
+    } else {
+        for (const CoordinateXY& c : items<CoordinateXY>()) {
+            out.emplace_back(c.x, c.y);
+        }
+    }
+}
+
+void
+CoordinateSequence::pop_back()
+{
+    switch (stride()) {
+    case 4: m_vect.pop_back(); // fall through
+    case 3: m_vect.pop_back(); // fall through
+    case 2: m_vect.pop_back();
+            m_vect.pop_back();
+        break;
+    default:
+        assert(0);
+    }
 }
 
 std::ostream&
@@ -428,11 +564,14 @@ operator<< (std::ostream& os, const CoordinateSequence& cs)
 {
     os << "(";
     for(std::size_t i = 0, n = cs.size(); i < n; ++i) {
-        const Coordinate& c = cs[i];
         if(i) {
             os << ", ";
         }
-        os << c;
+        if (cs.hasZ()) {
+            os << cs.getAt(i);
+        } else {
+            os << cs.getAt<CoordinateXY>(i);
+        }
     }
     os << ")";
 
