@@ -2339,7 +2339,7 @@ extern "C" {
     char
     GEOSHasZ_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return execute(extHandle, -1, [&]() {
+        return execute(extHandle, 2, [&]() {
             if(g->isEmpty()) {
                 return false;
             }
@@ -3273,7 +3273,7 @@ extern "C" {
     char
     GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter* writer)
     {
-        return execute(extHandle, -1, [&]{
+        return execute(extHandle, 2, [&]{
             return writer->getIncludeSRID();
         });
     }
