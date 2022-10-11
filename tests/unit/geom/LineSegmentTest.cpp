@@ -72,6 +72,27 @@ struct test_lineseg_data {
         ensure_equals_xyz(actual.p1, expected1);
     }
 
+    void checkOrientationIndex(
+        LineSegment seg,
+        double x, double y,
+        int expectedOrient)
+    {
+        Coordinate p(x, y);
+  	    int orient = seg.orientationIndex(p);
+        ensure_equals(expectedOrient, orient);
+    }
+
+    void checkOrientationIndex(
+        LineSegment seg,
+        double x0, double y0,
+        double x1, double y1,
+        int expectedOrient)
+    {
+        LineSegment seg1(x0, y0, x1, y1);
+  	    int orient = seg.orientationIndex(seg1);
+        ensure_equals(expectedOrient, orient);
+    }
+
     test_lineseg_data()
         : ph1(0, 2), ph2(10, 2), pv1(0, 0), pv2(0, 10), h1(ph1, ph2), v1(pv1, pv2)
     {}
@@ -219,6 +240,39 @@ void object::test<9>()
     checkOffsetPoint(0, 0, 10, 10, -2.0, 5 * ROOT2, -25, -15);
 }
 
+// testOrientationIndexCoordinate
+template<>
+template<>
+void object::test<10>()
+{
+    LineSegment seg(0, 0, 10, 10);
+    checkOrientationIndex(seg, 10, 11, 1);
+  	checkOrientationIndex(seg, 10, 9, -1);
+
+  	checkOrientationIndex(seg, 11, 11, 0);
+
+  	checkOrientationIndex(seg, 11, 11.0000001, 1);
+  	checkOrientationIndex(seg, 11, 10.9999999, -1);
+
+  	checkOrientationIndex(seg, -2, -1.9999999, 1);
+  	checkOrientationIndex(seg, -2, -2.0000001, -1);
+}
+
+// testOrientationIndexSeg
+template<>
+template<>
+void object::test<11>()
+{
+    LineSegment seg(100, 100, 110, 110);
+    checkOrientationIndex(seg, 10, 11, 1);
+  	checkOrientationIndex(seg, 10, 9, -1);
+
+  	checkOrientationIndex(seg, 100, 101, 105, 106, 1);
+  	checkOrientationIndex(seg, 100, 99, 105, 96, -1);
+
+  	checkOrientationIndex(seg, 200, 200, 210, 210, 0);
+
+  	checkOrientationIndex(seg, 105, 105, 110, 100, -1);
+}
 
 } // namespace tut
-
