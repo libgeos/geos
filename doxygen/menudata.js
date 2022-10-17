@@ -114,8 +114,6 @@ var menudata={children:[
 {text:"r",url:"functions_vars.html#index_r"},
 {text:"s",url:"functions_vars.html#index_s"},
 {text:"t",url:"functions_vars.html#index_t"},
-{text:"x",url:"functions_vars.html#index_x"},
-{text:"y",url:"functions_vars.html#index_y"},
 {text:"z",url:"functions_vars.html#index_z"}]},
 {text:"Typedefs",url:"functions_type.html"},
 {text:"Enumerations",url:"functions_enum.html"},

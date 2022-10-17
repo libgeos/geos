@@ -98,31 +98,31 @@ $(function() {
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> toRadians(<span class="keywordtype">double</span> angleDegrees);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angle(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angle(<span class="keyword">const</span> geom::CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                        <span class="keyword">const</span> geom::CoordinateXY&amp; p1);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"></span>    <span class="keyword">static</span> <span class="keywordtype">double</span> angle(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"></span>    <span class="keyword">static</span> <span class="keywordtype">double</span> angle(<span class="keyword">const</span> geom::CoordinateXY&amp; p);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isAcute(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isAcute(<span class="keyword">const</span> geom::CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                        <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                        <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isObtuse(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isObtuse(<span class="keyword">const</span> geom::CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                         <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                         <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angleBetween(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tip1,</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                               <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tail,</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                               <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tip2);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angleBetween(<span class="keyword">const</span> geom::CoordinateXY&amp; tip1,</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                               <span class="keyword">const</span> geom::CoordinateXY&amp; tail,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                               <span class="keyword">const</span> geom::CoordinateXY&amp; tip2);</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angleBetweenOriented(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tip1,</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tail,</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; tip2);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> angleBetweenOriented(<span class="keyword">const</span> geom::CoordinateXY&amp; tip1,</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                                       <span class="keyword">const</span> geom::CoordinateXY&amp; tail,</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                                       <span class="keyword">const</span> geom::CoordinateXY&amp; tip2);</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> interiorAngle(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> interiorAngle(<span class="keyword">const</span> geom::CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                                <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                                <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> getTurn(<span class="keywordtype">double</span> ang1, <span class="keywordtype">double</span> ang2);</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
@@ -141,7 +141,6 @@ $(function() {
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html">geos::algorithm::Angle</a></div><div class="ttdoc">Utility functions for working with angles.</div><div class="ttdef"><b>Definition:</b> Angle.h:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

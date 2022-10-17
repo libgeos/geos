@@ -122,10 +122,10 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a441df8937efacdfd23ad4634fad492a2">getPrecisionModel</a> () const</td></tr>
 <tr class="memdesc:a441df8937efacdfd23ad4634fad492a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html" title="Specifies the precision model of the Coordinate in a Geometry.">PrecisionModel</a> used to create this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. <br /></td></tr>
 <tr class="separator:a441df8937efacdfd23ad4634fad492a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acefe992c172712a951a6055a1adf447a"><td class="memItemLeft" align="right" valign="top"><a id="acefe992c172712a951a6055a1adf447a"></a>
-virtual const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#acefe992c172712a951a6055a1adf447a">getCoordinate</a> () const =0</td></tr>
-<tr class="memdesc:acefe992c172712a951a6055a1adf447a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vertex of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or NULL if this is the empty geometry. <br /></td></tr>
-<tr class="separator:acefe992c172712a951a6055a1adf447a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70e879ac20ec06455cdee3c58bcef3a7"><td class="memItemLeft" align="right" valign="top"><a id="a70e879ac20ec06455cdee3c58bcef3a7"></a>
+virtual const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a70e879ac20ec06455cdee3c58bcef3a7">getCoordinate</a> () const =0</td></tr>
+<tr class="memdesc:a70e879ac20ec06455cdee3c58bcef3a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vertex of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or NULL if this is the empty geometry. <br /></td></tr>
+<tr class="separator:a70e879ac20ec06455cdee3c58bcef3a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ccf6aba0a66e052bf45478da6fa4ece"><td class="memItemLeft" align="right" valign="top"><a id="a6ccf6aba0a66e052bf45478da6fa4ece"></a>
 virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a6ccf6aba0a66e052bf45478da6fa4ece">getCoordinates</a> () const =0</td></tr>
 <tr class="memdesc:a6ccf6aba0a66e052bf45478da6fa4ece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> vertices. Caller takes ownership of the returned object. <br /></td></tr>
@@ -384,9 +384,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (std::vect
 <tr class="memitem:a6fe5125c761df16c097e6ab94de494a2"><td class="memItemLeft" align="right" valign="top"><a id="a6fe5125c761df16c097e6ab94de494a2"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;a, const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;b) const</td></tr>
 <tr class="separator:a6fe5125c761df16c097e6ab94de494a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ded7c67ed381bd7e2525024e16e7aa3"><td class="memItemLeft" align="right" valign="top"><a id="a8ded7c67ed381bd7e2525024e16e7aa3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, double tolerance) const</td></tr>
-<tr class="separator:a8ded7c67ed381bd7e2525024e16e7aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bb005d642dc273cb759a674c9ad8734"><td class="memItemLeft" align="right" valign="top"><a id="a6bb005d642dc273cb759a674c9ad8734"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, double tolerance) const</td></tr>
+<tr class="separator:a6bb005d642dc273cb759a674c9ad8734"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa036d162904c54d20f67a5343ff60a75"><td class="memItemLeft" align="right" valign="top"><a id="aa036d162904c54d20f67a5343ff60a75"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Geometry</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom)</td></tr>
 <tr class="separator:aa036d162904c54d20f67a5343ff60a75"><td class="memSeparator" colspan="2">&#160;</td></tr>

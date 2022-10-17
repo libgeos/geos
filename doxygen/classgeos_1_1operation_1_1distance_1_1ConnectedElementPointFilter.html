@@ -68,9 +68,9 @@ Inheritance diagram for geos::operation::distance::ConnectedElementPointFilter:<
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ace4f3b19c97fe624e03e593763e0e276"><td class="memItemLeft" align="right" valign="top"><a id="ace4f3b19c97fe624e03e593763e0e276"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ConnectedElementPointFilter</b> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> * &gt; *newPts)</td></tr>
-<tr class="separator:ace4f3b19c97fe624e03e593763e0e276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c2ba038d45cf7a5b757eb312b12e73"><td class="memItemLeft" align="right" valign="top"><a id="ad6c2ba038d45cf7a5b757eb312b12e73"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ConnectedElementPointFilter</b> (std::vector&lt; const geom::CoordinateXY * &gt; *newPts)</td></tr>
+<tr class="separator:ad6c2ba038d45cf7a5b757eb312b12e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70bf83100afd5693abc543a109a8bbfb"><td class="memItemLeft" align="right" valign="top"><a id="a70bf83100afd5693abc543a109a8bbfb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>filter_ro</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom) override</td></tr>
 <tr class="separator:a70bf83100afd5693abc543a109a8bbfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -81,14 +81,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>filter_rw</b>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:abc2612dc85364b19232c3f78bd21a1f5"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1ConnectedElementPointFilter.html#abc2612dc85364b19232c3f78bd21a1f5">getCoordinates</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom)</td></tr>
-<tr class="separator:abc2612dc85364b19232c3f78bd21a1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecc1a89091286bee746568d7cb0baaaf"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; const geom::CoordinateXY * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1ConnectedElementPointFilter.html#aecc1a89091286bee746568d7cb0baaaf">getCoordinates</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom)</td></tr>
+<tr class="separator:aecc1a89091286bee746568d7cb0baaaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Extracts a single point from each connected element in a Geometry (e.g. a polygon, linestring or point) and returns them in a list. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="abc2612dc85364b19232c3f78bd21a1f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc2612dc85364b19232c3f78bd21a1f5">&#9670;&nbsp;</a></span>getCoordinates()</h2>
+<a id="aecc1a89091286bee746568d7cb0baaaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecc1a89091286bee746568d7cb0baaaf">&#9670;&nbsp;</a></span>getCoordinates()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -97,7 +97,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::vector&lt;const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>*&gt;* geos::operation::distance::ConnectedElementPointFilter::getCoordinates </td>
+          <td class="memname">static std::vector&lt;const geom::CoordinateXY*&gt;* geos::operation::distance::ConnectedElementPointFilter::getCoordinates </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
           <td class="paramname"><em>geom</em></td><td>)</td>

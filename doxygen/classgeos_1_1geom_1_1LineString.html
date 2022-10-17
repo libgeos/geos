@@ -190,10 +190,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_ro</b> (<a clas
 <tr class="memitem:a375163a574141bafdd7b345431b4abef"><td class="memItemLeft" align="right" valign="top"><a id="a375163a574141bafdd7b345431b4abef"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>compareToSameClass</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *ls) const override</td></tr>
 <tr class="separator:a375163a574141bafdd7b345431b4abef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af16c5cc322a04b2818b23af2fb02a175"><td class="memItemLeft" align="right" valign="top"><a id="af16c5cc322a04b2818b23af2fb02a175"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#af16c5cc322a04b2818b23af2fb02a175">getCoordinate</a> () const override</td></tr>
-<tr class="memdesc:af16c5cc322a04b2818b23af2fb02a175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vertex of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or NULL if this is the empty geometry. <br /></td></tr>
-<tr class="separator:af16c5cc322a04b2818b23af2fb02a175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93cdfbf68f75fc49fa48deb90e2b8d0d"><td class="memItemLeft" align="right" valign="top"><a id="a93cdfbf68f75fc49fa48deb90e2b8d0d"></a>
+const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a93cdfbf68f75fc49fa48deb90e2b8d0d">getCoordinate</a> () const override</td></tr>
+<tr class="memdesc:a93cdfbf68f75fc49fa48deb90e2b8d0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vertex of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or NULL if this is the empty geometry. <br /></td></tr>
+<tr class="separator:a93cdfbf68f75fc49fa48deb90e2b8d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e836b36b7343b7fecb257b0b523dbe"><td class="memItemLeft" align="right" valign="top"><a id="aa0e836b36b7343b7fecb257b0b523dbe"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#aa0e836b36b7343b7fecb257b0b523dbe">getLength</a> () const override</td></tr>
 <tr class="memdesc:aa0e836b36b7343b7fecb257b0b523dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. <br /></td></tr>
@@ -435,9 +435,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (std::vect
 <tr class="memitem:a6fe5125c761df16c097e6ab94de494a2 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memItemLeft" align="right" valign="top"><a id="a6fe5125c761df16c097e6ab94de494a2"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;a, const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;b) const</td></tr>
 <tr class="separator:a6fe5125c761df16c097e6ab94de494a2 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ded7c67ed381bd7e2525024e16e7aa3 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memItemLeft" align="right" valign="top"><a id="a8ded7c67ed381bd7e2525024e16e7aa3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;b, double tolerance) const</td></tr>
-<tr class="separator:a8ded7c67ed381bd7e2525024e16e7aa3 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bb005d642dc273cb759a674c9ad8734 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memItemLeft" align="right" valign="top"><a id="a6bb005d642dc273cb759a674c9ad8734"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, double tolerance) const</td></tr>
+<tr class="separator:a6bb005d642dc273cb759a674c9ad8734 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa036d162904c54d20f67a5343ff60a75 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memItemLeft" align="right" valign="top"><a id="aa036d162904c54d20f67a5343ff60a75"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Geometry</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom)</td></tr>
 <tr class="separator:aa036d162904c54d20f67a5343ff60a75 inherit pro_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -89,21 +89,21 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* component;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    std::size_t segIndex;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">bool</span> inside_area;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> pt;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    geom::CoordinateXY pt;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html#ad32593dce7434a63b2ef69214c04a353">   63</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> INSIDE_AREA = -1;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* component,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                     std::size_t segIndex, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pt);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                     std::size_t segIndex, <span class="keyword">const</span> geom::CoordinateXY&amp; pt);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* component,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                     <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pt);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                     <span class="keyword">const</span> geom::CoordinateXY&amp; pt);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* getGeometryComponent();</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::size_t getSegmentIndex();</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; getCoordinate();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    geom::CoordinateXY&amp; getCoordinate();</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">bool</span> isInsideArea();</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
@@ -117,7 +117,6 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1operation_1_1distance_1_1GeometryLocation_html"><div class="ttname"><a href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">geos::operation::distance::GeometryLocation</a></div><div class="ttdoc">Represents the location of a point on a Geometry.</div><div class="ttdef"><b>Definition:</b> GeometryLocation.h:49</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

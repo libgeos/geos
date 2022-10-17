@@ -68,8 +68,8 @@ Inheritance diagram for geos::geom::util::ComponentCoordinateExtracter:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac901ef6a33e1016d1bbe128f70ec8838"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1ComponentCoordinateExtracter.html#ac901ef6a33e1016d1bbe128f70ec8838">ComponentCoordinateExtracter</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> * &gt; &amp;newComps)</td></tr>
-<tr class="separator:ac901ef6a33e1016d1bbe128f70ec8838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc8a14407c8e8a87311155102e1753f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1ComponentCoordinateExtracter.html#afdc8a14407c8e8a87311155102e1753f">ComponentCoordinateExtracter</a> (std::vector&lt; const CoordinateXY * &gt; &amp;newComps)</td></tr>
+<tr class="separator:afdc8a14407c8e8a87311155102e1753f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30afadbe59ef90ea4ea350ab2a58744a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1ComponentCoordinateExtracter.html#a30afadbe59ef90ea4ea350ab2a58744a">filter_rw</a> (<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom) override</td></tr>
 <tr class="separator:a30afadbe59ef90ea4ea350ab2a58744a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeb4da3159d45e0f4548dffb5c00a102"><td class="memItemLeft" align="right" valign="top"><a id="aaeb4da3159d45e0f4548dffb5c00a102"></a>
@@ -82,15 +82,15 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDone</b> ()
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a9679f5b4df0e96002184d895fe13fa1a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1ComponentCoordinateExtracter.html#a9679f5b4df0e96002184d895fe13fa1a">getCoordinates</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> * &gt; &amp;ret)</td></tr>
-<tr class="separator:a9679f5b4df0e96002184d895fe13fa1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b025e3dc402037999fde2e449198148"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1ComponentCoordinateExtracter.html#a2b025e3dc402037999fde2e449198148">getCoordinates</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, std::vector&lt; const CoordinateXY * &gt; &amp;ret)</td></tr>
+<tr class="separator:a2b025e3dc402037999fde2e449198148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Extracts a single representative <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> from each connected component of a <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>. </p>
 <dl class="section version"><dt>Version</dt><dd>1.9 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac901ef6a33e1016d1bbe128f70ec8838"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac901ef6a33e1016d1bbe128f70ec8838">&#9670;&nbsp;</a></span>ComponentCoordinateExtracter()</h2>
+<a id="afdc8a14407c8e8a87311155102e1753f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdc8a14407c8e8a87311155102e1753f">&#9670;&nbsp;</a></span>ComponentCoordinateExtracter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,7 +98,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">geos::geom::util::ComponentCoordinateExtracter::ComponentCoordinateExtracter </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; const CoordinateXY * &gt; &amp;&#160;</td>
           <td class="paramname"><em>newComps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -144,8 +144,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9679f5b4df0e96002184d895fe13fa1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9679f5b4df0e96002184d895fe13fa1a">&#9670;&nbsp;</a></span>getCoordinates()</h2>
+<a id="a2b025e3dc402037999fde2e449198148"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b025e3dc402037999fde2e449198148">&#9670;&nbsp;</a></span>getCoordinates()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +162,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; const CoordinateXY * &gt; &amp;&#160;</td>
           <td class="paramname"><em>ret</em>&#160;</td>
         </tr>
         <tr>

@@ -73,7 +73,7 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// Forward declarations</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>CoordinateXY;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span>CoordinateSequence;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
@@ -100,9 +100,9 @@ $(function() {
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        FAILURE = 2</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    };</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> orientationIndex(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2,</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; q);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> orientationIndex(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                <span class="keyword">const</span> geom::CoordinateXY&amp; q);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> orientationIndex(<span class="keywordtype">double</span> p1x, <span class="keywordtype">double</span> p1y,</div>
@@ -160,15 +160,15 @@ $(function() {
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordflow">return</span> CGAlgorithmsDD::STRAIGHT;</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    };</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keyword">static</span> geom::Coordinate intersection(<span class="keyword">const</span> geom::Coordinate&amp; p1, <span class="keyword">const</span> geom::Coordinate&amp; p2,</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                             <span class="keyword">const</span> geom::Coordinate&amp; q1, <span class="keyword">const</span> geom::Coordinate&amp; q2);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keyword">static</span> geom::CoordinateXY intersection(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                                           <span class="keyword">const</span> geom::CoordinateXY&amp; q1, <span class="keyword">const</span> geom::CoordinateXY&amp; q2);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> signOfDet2x2(<span class="keywordtype">double</span> dx1, <span class="keywordtype">double</span> dy1, <span class="keywordtype">double</span> dx2, <span class="keywordtype">double</span> dy2);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a> detDD(<span class="keywordtype">double</span> x1, <span class="keywordtype">double</span> y1, <span class="keywordtype">double</span> x2, <span class="keywordtype">double</span> y2);</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a> detDD(<span class="keyword">const</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a>&amp; x1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a>&amp; y1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a>&amp; x2, <span class="keyword">const</span> <a class="code" href="classgeos_1_1math_1_1DD.html">DD</a>&amp; y2);</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">static</span> geom::Coordinate circumcentreDD(<span class="keyword">const</span> geom::Coordinate&amp; a, <span class="keyword">const</span> geom::Coordinate&amp; b, <span class="keyword">const</span> geom::Coordinate&amp; c);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">static</span> geom::CoordinateXY circumcentreDD(<span class="keyword">const</span> geom::CoordinateXY&amp; a, <span class="keyword">const</span> geom::CoordinateXY&amp; b, <span class="keyword">const</span> geom::CoordinateXY&amp; c);</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
@@ -184,7 +184,6 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1math_1_1DD_html"><div class="ttname"><a href="classgeos_1_1math_1_1DD.html">geos::math::DD</a></div><div class="ttdoc">Wrapper for DoubleDouble higher precision mathematics operations.</div><div class="ttdef"><b>Definition:</b> DD.h:131</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1CGAlgorithmsDD_html_a080b0c94a160bab0484d55979fb95c49"><div class="ttname"><a href="classgeos_1_1algorithm_1_1CGAlgorithmsDD.html#a080b0c94a160bab0484d55979fb95c49">geos::algorithm::CGAlgorithmsDD::orientationIndexFilter</a></div><div class="ttdeci">static int orientationIndexFilter(double pax, double pay, double pbx, double pby, double pcx, double pcy)</div><div class="ttdef"><b>Definition:</b> CGAlgorithmsDD.h:90</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1CGAlgorithmsDD_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1CGAlgorithmsDD.html">geos::algorithm::CGAlgorithmsDD</a></div><div class="ttdoc">Implements basic computational geometry algorithms using extended precision float-point arithmetic.</div><div class="ttdef"><b>Definition:</b> CGAlgorithmsDD.h:38</div></div>
 <!-- start footer part -->

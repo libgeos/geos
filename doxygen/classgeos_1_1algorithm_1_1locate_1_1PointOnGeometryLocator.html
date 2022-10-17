@@ -69,15 +69,15 @@ Inheritance diagram for geos::algorithm::locate::PointOnGeometryLocator:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a087b89fa4cd7ece8b07c8a8915523ca9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator.html#a087b89fa4cd7ece8b07c8a8915523ca9">locate</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *p)=0</td></tr>
-<tr class="separator:a087b89fa4cd7ece8b07c8a8915523ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb6e718034d7761461a048c8d9583da9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator.html#aeb6e718034d7761461a048c8d9583da9">locate</a> (const geom::CoordinateXY *p)=0</td></tr>
+<tr class="separator:aeb6e718034d7761461a048c8d9583da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An interface for classes which determine the <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> of points in <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> or <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">MultiPolygon</a> geometries. </p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a087b89fa4cd7ece8b07c8a8915523ca9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a087b89fa4cd7ece8b07c8a8915523ca9">&#9670;&nbsp;</a></span>locate()</h2>
+<a id="aeb6e718034d7761461a048c8d9583da9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb6e718034d7761461a048c8d9583da9">&#9670;&nbsp;</a></span>locate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -88,7 +88,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> geos::algorithm::locate::PointOnGeometryLocator::locate </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY *&#160;</td>
           <td class="paramname"><em>p</em></td><td>)</td>
           <td></td>
         </tr>
@@ -108,7 +108,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the location of the point in the geometry </dd></dl>
 
-<p>Implemented in <a class="el" href="classgeos_1_1algorithm_1_1locate_1_1IndexedPointInAreaLocator.html#ade20d94a193f206a58efcf8ccea8ef9b">geos::algorithm::locate::IndexedPointInAreaLocator</a>, <a class="el" href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a1b80826dc303fd2e27db59339b25f11b">geos::algorithm::locate::SimplePointInAreaLocator</a>, and <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1IndexedPointOnLineLocator.html#ab2f7fa0338437d5c78c931ff34b1d5bb">geos::operation::overlayng::IndexedPointOnLineLocator</a>.</p>
+<p>Implemented in <a class="el" href="classgeos_1_1algorithm_1_1locate_1_1IndexedPointInAreaLocator.html#ac5d515358a77e64dc552e12401485132">geos::algorithm::locate::IndexedPointInAreaLocator</a>, <a class="el" href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a146a0fa7be91aae419eea1b4370425fc">geos::algorithm::locate::SimplePointInAreaLocator</a>, and <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1IndexedPointOnLineLocator.html#a91545869b437c0f90276199fce5ca86b">geos::operation::overlayng::IndexedPointOnLineLocator</a>.</p>
 
 </div>
 </div>

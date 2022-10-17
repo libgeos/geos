@@ -78,23 +78,23 @@ $(function() {
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// formerly distanceLineLine</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> segmentToSegment(<span class="keyword">const</span> geom::Coordinate&amp; A,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                   <span class="keyword">const</span> geom::Coordinate&amp; B,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                   <span class="keyword">const</span> geom::Coordinate&amp; C,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                   <span class="keyword">const</span> geom::Coordinate&amp; D);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> segmentToSegment(<span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; B,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; C,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; D);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html">   66</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToSegmentString(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p,</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html">   66</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToSegmentString(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// formerly distancePointLine</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToSegment(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                 <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; A,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                 <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; B);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToSegment(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                 <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                 <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">// formerly distancePointLinePerpendicular</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToLinePerpendicular(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                           <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; A,</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                           <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; B);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToLinePerpendicular(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                           <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                           <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
@@ -103,7 +103,6 @@ $(function() {
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:45</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

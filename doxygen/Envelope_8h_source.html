@@ -107,39 +107,39 @@ $(function() {
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        init(x1, x2, y1, y2);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    Envelope(<span class="keyword">const</span> Coordinate&amp; p1, <span class="keyword">const</span> Coordinate&amp; p2)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    Envelope(<span class="keyword">const</span> CoordinateXY&amp; p1, <span class="keyword">const</span> CoordinateXY&amp; p2)</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        init(p1, p2);</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">explicit</span> Envelope(<span class="keyword">const</span> Coordinate&amp; p)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">explicit</span> Envelope(<span class="keyword">const</span> CoordinateXY&amp; p)</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        init(p);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">explicit</span> Envelope(<span class="keyword">const</span> std::string&amp; str);</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> Coordinate&amp; p1, <span class="keyword">const</span> Coordinate&amp; p2,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                           <span class="keyword">const</span> Coordinate&amp; q);</div>
-<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a8a787551e5b2015efa4456408d24d7eb">  127</a></span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> CoordinateXY&amp; p1, <span class="keyword">const</span> CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                           <span class="keyword">const</span> CoordinateXY&amp; q);</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#ac9d1f24a2b0ead7ee533afe7fd67c999">  127</a></span>&#160; </div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> intersects(</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p2,</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; q1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; q2)</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; p1, <span class="keyword">const</span> CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; q1, <span class="keyword">const</span> CoordinateXY&amp; q2)</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    {</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">double</span> minq = std::min(q1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, q2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordtype">double</span> maxq = std::max(q1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, q2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">double</span> minp = std::min(p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">double</span> maxp = std::max(p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">double</span> minq = std::min(q1.x, q2.x);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordtype">double</span> maxq = std::max(q1.x, q2.x);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">double</span> minp = std::min(p1.x, p2.x);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">double</span> maxp = std::max(p1.x, p2.x);</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">if</span>(minp &gt; maxq) {</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordflow">if</span>(maxp &lt; minq) {</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        }</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        minq = std::min(q1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, q2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        maxq = std::max(q1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, q2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        minp = std::min(p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        maxp = std::max(p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        minq = std::min(q1.y, q2.y);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        maxq = std::max(q1.y, q2.y);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        minp = std::min(p1.y, p2.y);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        maxp = std::max(p1.y, p2.y);</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">if</span>(minp &gt; maxq) {</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        }</div>
@@ -149,7 +149,7 @@ $(function() {
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; b) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> CoordinateXY&amp; a, <span class="keyword">const</span> CoordinateXY&amp; b) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordtype">void</span> init()</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    {</div>
@@ -176,14 +176,14 @@ $(function() {
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        }</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    };</div>
 <div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#abb1ae74daf4b572d2a4b4d8f2f0fd7de">  211</a></span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p2)</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordtype">void</span> init(<span class="keyword">const</span> CoordinateXY&amp; p1, <span class="keyword">const</span> CoordinateXY&amp; p2)</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    {</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        init(p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, p2.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        init(p1.x, p2.x, p1.y, p2.y);</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    };</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p)</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordtype">void</span> init(<span class="keyword">const</span> CoordinateXY&amp; p)</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    {</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        init(p.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>, p.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        init(p.x, p.x, p.y, p.y);</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    };</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordtype">void</span> setToNull()</div>
@@ -193,12 +193,12 @@ $(function() {
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">bool</span> isNull(<span class="keywordtype">void</span>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a407cb13d0d860938e18ee546a5353171">  250</a></span>&#160;        <span class="keywordflow">return</span> std::isnan(maxx);</div>
+<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a5c33784d915e4fdff0991a132a8da223">  250</a></span>&#160;        <span class="keywordflow">return</span> std::isnan(maxx);</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    };</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">double</span> getWidth()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a777543b16acc0002b8901007b8c4b139">  260</a></span>&#160;        <span class="keywordflow">if</span>(isNull()) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a91ef0f11495148a64097effe7fdf1d22">  260</a></span>&#160;        <span class="keywordflow">if</span>(isNull()) {</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        }</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> maxx - minx;</div>
@@ -252,7 +252,7 @@ $(function() {
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">return</span> std::sqrt(w*w + h*h);</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    }</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordtype">bool</span> centre(<a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; centre) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordtype">bool</span> centre(CoordinateXY&amp; centre) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="keywordtype">bool</span> intersection(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; env, <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; result) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
@@ -266,7 +266,7 @@ $(function() {
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        expandBy(p_distance, p_distance);</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    };</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordtype">void</span> expandToInclude(<span class="keyword">const</span> Coordinate&amp; p)</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordtype">void</span> expandToInclude(<span class="keyword">const</span> CoordinateXY&amp; p)</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    {</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        expandToInclude(p.x, p.y);</div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    };</div>
@@ -288,7 +288,7 @@ $(function() {
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            }</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;            <span class="keywordflow">if</span>(y &lt; miny) {</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                miny = y;</div>
-<div class="line"><a name="l00434"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a5adcdd87795a0902140aeae6f23f8f9b">  434</a></span>&#160;            }</div>
+<div class="line"><a name="l00434"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a0457a671db728a797eba45d512e6aa86">  434</a></span>&#160;            }</div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            <span class="keywordflow">if</span>(y &gt; maxy) {</div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;                maxy = y;</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;            }</div>
@@ -337,7 +337,7 @@ $(function() {
 <div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;    }</div>
 <div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160; </div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <span class="keywordtype">bool</span></div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    contains(<span class="keyword">const</span> Coordinate&amp; p)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    contains(<span class="keyword">const</span> CoordinateXY&amp; p)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        <span class="keywordflow">return</span> covers(p.x, p.y);</div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    }</div>
@@ -348,12 +348,12 @@ $(function() {
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keywordflow">return</span> covers(x, y);</div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    }</div>
 <div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160; </div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> Coordinate&amp; other)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    <span class="keywordtype">bool</span> intersects(<span class="keyword">const</span> CoordinateXY&amp; other)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        <span class="keywordflow">return</span> (other.x &lt;= maxx &amp;&amp; other.x &gt;= minx &amp;&amp;</div>
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;                other.y &lt;= maxy &amp;&amp; other.y &gt;= miny);</div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;    }</div>
-<div class="line"><a name="l00541"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#aae0a40130b12db76e6a951606fadefa6">  541</a></span>&#160; </div>
+<div class="line"><a name="l00541"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a0738f6f12298cdbc81ed47d02713ee39">  541</a></span>&#160; </div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;    <span class="keywordtype">bool</span> intersects(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">return</span> (x &lt;= maxx &amp;&amp; x &gt;= minx &amp;&amp; y &lt;= maxy &amp;&amp; y &gt;= miny);</div>
@@ -367,7 +367,7 @@ $(function() {
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;               other-&gt;maxy &gt;= miny;</div>
 <div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;    }</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
-<div class="line"><a name="l00568"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a80bc700e0626dd147f08bcc45a0df8b6">  568</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html#a80bc700e0626dd147f08bcc45a0df8b6">intersects</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; other)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00568"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#ad31bc8823cf4c1afee5cb64797a7c8c4">  568</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html#ad31bc8823cf4c1afee5cb64797a7c8c4">intersects</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; other)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        <span class="keywordflow">return</span> intersects(&amp;other);</div>
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    }</div>
@@ -392,9 +392,9 @@ $(function() {
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;               y &lt;= maxy;</div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    }</div>
 <div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="keywordtype">bool</span> covers(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>* p)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="keywordtype">bool</span> covers(<span class="keyword">const</span> CoordinateXY* p)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;        <span class="keywordflow">return</span> covers(p-&gt;<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>, p-&gt;<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>);</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;        <span class="keywordflow">return</span> covers(p-&gt;x, p-&gt;y);</div>
 <div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;    }</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
 <div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keywordtype">bool</span> covers(<span class="keyword">const</span> Envelope&amp; other) <span class="keyword">const</span>;</div>
@@ -435,29 +435,29 @@ $(function() {
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;    };</div>
 <div class="line"><a name="l00686"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a3e85705c8877ac027cd92db3dc4fdfd6">  686</a></span>&#160; </div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> distanceToCoordinate(</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; c,</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p1)</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; c,</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; p1)</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    {</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;        <span class="keywordflow">return</span> std::sqrt(distanceSquaredToCoordinate(c, p0, p1));</div>
 <div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    };</div>
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160; </div>
 <div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> distanceSquaredToCoordinate(</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; c,</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p0,</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p1)</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; c,</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; p0,</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;        <span class="keyword">const</span> CoordinateXY&amp; p1)</div>
 <div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    {</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        <span class="keywordtype">double</span> xa = c.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a> - p0.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>;</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        <span class="keywordtype">double</span> xb = c.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a> - p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">x</a>;</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;        <span class="keywordtype">double</span> ya = c.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a> - p0.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>;</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <span class="keywordtype">double</span> yb = c.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a> - p1.<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">y</a>;</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        <span class="keywordtype">double</span> xa = c.x - p0.x;</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        <span class="keywordtype">double</span> xb = c.x - p1.x;</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;        <span class="keywordtype">double</span> ya = c.y - p0.y;</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <span class="keywordtype">double</span> yb = c.y - p1.y;</div>
 <div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
 <div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <span class="comment">// If sign of a and b are not the same, then Envelope spans c and distance is zero.</span></div>
 <div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        <span class="keywordtype">double</span> dx = (std::signbit(xa) == std::signbit(xb)) * std::min(std::abs(xa), std::abs(xb));</div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        <span class="keywordtype">double</span> dy = (std::signbit(ya) == std::signbit(yb)) * std::min(std::abs(ya), std::abs(yb));</div>
 <div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160; </div>
 <div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;        <span class="keywordflow">return</span> dx*dx + dy*dy;</div>
-<div class="line"><a name="l00728"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#abf56783e07a0f0d6b8f7738e572ad87f">  728</a></span>&#160;    }</div>
+<div class="line"><a name="l00728"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a41dd41a1d1e18ff27c825d970331befc">  728</a></span>&#160;    }</div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;    std::size_t hashCode() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160; </div>
@@ -473,10 +473,10 @@ $(function() {
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;    operator!=(<span class="keyword">const</span> Envelope&amp; a, <span class="keyword">const</span> Envelope&amp; b)</div>
 <div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    {</div>
 <div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        <span class="keywordflow">return</span> !(a == b);</div>
-<div class="line"><a name="l00745"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#a4c6444d1f7a4402469016d62bb339b88">  745</a></span>&#160;    }</div>
+<div class="line"><a name="l00745"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Envelope.html#ad98080d408cdfa14f7781d8c51fcaa1a">  745</a></span>&#160;    }</div>
 <div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
 <div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;    GEOS_DLL <span class="keyword">friend</span> <span class="keywordtype">bool</span></div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <a class="code" href="namespacegeos_1_1geom.html#a1880a864580a0ac43532608d6677fbda">operator&lt; </a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; b);</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <a class="code" href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">operator&lt; </a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; b);</div>
 <div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160; </div>
 <div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
@@ -506,13 +506,11 @@ $(function() {
 <div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;} <span class="comment">// namespace geos</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_acdeb58356624ebe25cbbf5b6021c3d9d"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#acdeb58356624ebe25cbbf5b6021c3d9d">geos::geom::Coordinate::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">y-coordinate</div><div class="ttdef"><b>Definition:</b> Coordinate.h:105</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:82</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html_a80bc700e0626dd147f08bcc45a0df8b6"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html#a80bc700e0626dd147f08bcc45a0df8b6">geos::geom::Envelope::intersects</a></div><div class="ttdeci">bool intersects(const Coordinate &amp;other) const</div><div class="ttdoc">Check if the point p intersects (lies inside) the region of this Envelope.</div><div class="ttdef"><b>Definition:</b> Envelope.h:568</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_ad809a77e5715e490a7e5f95c8611737e"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#ad809a77e5715e490a7e5f95c8611737e">geos::geom::Coordinate::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">x-coordinate</div><div class="ttdef"><b>Definition:</b> Coordinate.h:102</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:207</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html_a2c606cdee82842a2d8b3ced881a86c30"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html#a2c606cdee82842a2d8b3ced881a86c30">geos::geom::Envelope::equals</a></div><div class="ttdeci">bool equals(const Envelope *other) const</div><div class="ttdoc">Returns true if the Envelope other spatially equals this Envelope.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:90</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html_a1880a864580a0ac43532608d6677fbda"><div class="ttname"><a href="namespacegeos_1_1geom.html#a1880a864580a0ac43532608d6677fbda">geos::geom::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(const Coordinate &amp;a, const Coordinate &amp;b)</div><div class="ttdoc">Strict weak ordering operator for Coordinate.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:269</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html_ad31bc8823cf4c1afee5cb64797a7c8c4"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html#ad31bc8823cf4c1afee5cb64797a7c8c4">geos::geom::Envelope::intersects</a></div><div class="ttdeci">bool intersects(const CoordinateXY &amp;other) const</div><div class="ttdoc">Check if the point p intersects (lies inside) the region of this Envelope.</div><div class="ttdef"><b>Definition:</b> Envelope.h:568</div></div>
+<div class="ttc" id="anamespacegeos_1_1geom_html_a31a2ff1f54bc4fd6cde47bdda53fcb82"><div class="ttname"><a href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">geos::geom::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(const CoordinateXY &amp;a, const CoordinateXY &amp;b)</div><div class="ttdoc">Strict weak ordering operator for Coordinate.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:298</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

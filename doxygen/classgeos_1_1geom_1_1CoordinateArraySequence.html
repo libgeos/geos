@@ -93,6 +93,9 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <tr class="separator:a4e36327443648985e2eeb2b1b39fbafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a262658cb21b10905f31219eaebaf89b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#a262658cb21b10905f31219eaebaf89b0">toVector</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;) const override</td></tr>
 <tr class="separator:a262658cb21b10905f31219eaebaf89b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ea06af17b4330dda9c63f20906d0f6"><td class="memItemLeft" align="right" valign="top"><a id="ad2ea06af17b4330dda9c63f20906d0f6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>toVector</b> (std::vector&lt; CoordinateXY &gt; &amp;) const override</td></tr>
+<tr class="separator:ad2ea06af17b4330dda9c63f20906d0f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab11cf5baec1c4f7425b4f48787cd66a2"><td class="memItemLeft" align="right" valign="top"><a id="ab11cf5baec1c4f7425b4f48787cd66a2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#ab11cf5baec1c4f7425b4f48787cd66a2">CoordinateArraySequence</a> ()</td></tr>
 <tr class="memdesc:ab11cf5baec1c4f7425b4f48787cd66a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an empty sequence. <br /></td></tr>
@@ -101,6 +104,10 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#af0cabafa4fb42b70ad614d89a3b44aa0">CoordinateArraySequence</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&amp;coords, std::size_t dimension=0)</td></tr>
 <tr class="memdesc:af0cabafa4fb42b70ad614d89a3b44aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct sequence moving from given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> vector. <br /></td></tr>
 <tr class="separator:af0cabafa4fb42b70ad614d89a3b44aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaceca0ca417845b5c509129af8987107"><td class="memItemLeft" align="right" valign="top"><a id="aaceca0ca417845b5c509129af8987107"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#aaceca0ca417845b5c509129af8987107">CoordinateArraySequence</a> (std::vector&lt; CoordinateXY &gt; &amp;&amp;coords, std::size_t dimension=0)</td></tr>
+<tr class="memdesc:aaceca0ca417845b5c509129af8987107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct sequence moving from given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> vector. <br /></td></tr>
+<tr class="separator:aaceca0ca417845b5c509129af8987107"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e209e050fafd9e4722e445e513c7cc2"><td class="memItemLeft" align="right" valign="top"><a id="a6e209e050fafd9e4722e445e513c7cc2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#a6e209e050fafd9e4722e445e513c7cc2">CoordinateArraySequence</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; *coords, std::size_t dimension=0)</td></tr>
 <tr class="memdesc:a6e209e050fafd9e4722e445e513c7cc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct sequence taking ownership of given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> vector. <br /></td></tr>
@@ -177,6 +184,9 @@ virtual <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&#16
 <tr class="memitem:a885b821fe2928633cd6de16474dee54c inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="memItemLeft" align="right" valign="top"><a id="a885b821fe2928633cd6de16474dee54c"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
 <tr class="separator:a885b821fe2928633cd6de16474dee54c inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4784e0fa749f3aff959fa132059cd328 inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="memItemLeft" align="right" valign="top"><a id="a4784e0fa749f3aff959fa132059cd328"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setAt</b> (const CoordinateXY &amp;c, std::size_t pos)</td></tr>
+<tr class="separator:a4784e0fa749f3aff959fa132059cd328 inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca9592f066ecbc03dde2e827aa59b54f inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="memItemLeft" align="right" valign="top"><a id="aca9592f066ecbc03dde2e827aa59b54f"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#aca9592f066ecbc03dde2e827aa59b54f">toString</a> () const</td></tr>
 <tr class="memdesc:aca9592f066ecbc03dde2e827aa59b54f inherit pub_methods_classgeos_1_1geom_1_1CoordinateSequence"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a string representation of <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>

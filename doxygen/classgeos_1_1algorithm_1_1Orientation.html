@@ -73,9 +73,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a9ba62e9b01a7c97af6ba630910ffb3fe"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Orientation.html#a9ba62e9b01a7c97af6ba630910ffb3fe">index</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p2, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;q)</td></tr>
-<tr class="memdesc:a9ba62e9b01a7c97af6ba630910ffb3fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the orientation index of the direction of the point q relative to a directed infinite line specified by p1-p2.  <a href="classgeos_1_1algorithm_1_1Orientation.html#a9ba62e9b01a7c97af6ba630910ffb3fe">More...</a><br /></td></tr>
-<tr class="separator:a9ba62e9b01a7c97af6ba630910ffb3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a590fcb8f8c6dada4800c1985962d93"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Orientation.html#a1a590fcb8f8c6dada4800c1985962d93">index</a> (const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;q)</td></tr>
+<tr class="memdesc:a1a590fcb8f8c6dada4800c1985962d93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the orientation index of the direction of the point q relative to a directed infinite line specified by p1-p2.  <a href="classgeos_1_1algorithm_1_1Orientation.html#a1a590fcb8f8c6dada4800c1985962d93">More...</a><br /></td></tr>
+<tr class="separator:a1a590fcb8f8c6dada4800c1985962d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5af93795969b80f97d7997195974d7c8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Orientation.html#a5af93795969b80f97d7997195974d7c8">isCCW</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *ring)</td></tr>
 <tr class="separator:a5af93795969b80f97d7997195974d7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a378402b84ad037783dda97446465449d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Orientation.html#a378402b84ad037783dda97446465449d">isCCWArea</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *ring)</td></tr>
@@ -87,8 +87,8 @@ Static Public Member Functions</h2></td></tr>
 <p><a class="el" href="classgeos_1_1algorithm_1_1Orientation.html" title="Functions to compute the orientation of basic geometric structures including point triplets (triangle...">Orientation</a> is notoriously subject to numerical precision errors in the case of collinear or nearly collinear points. JTS uses extended-precision arithmetic to increase the robustness of the computation.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9ba62e9b01a7c97af6ba630910ffb3fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ba62e9b01a7c97af6ba630910ffb3fe">&#9670;&nbsp;</a></span>index()</h2>
+<a id="a1a590fcb8f8c6dada4800c1985962d93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a590fcb8f8c6dada4800c1985962d93">&#9670;&nbsp;</a></span>index()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -99,19 +99,19 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static int geos::algorithm::Orientation::index </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>q</em>&#160;</td>
         </tr>
         <tr>

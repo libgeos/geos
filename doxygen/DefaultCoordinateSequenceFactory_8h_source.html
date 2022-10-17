@@ -85,35 +85,39 @@ $(function() {
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">return</span> detail::make_unique&lt;CoordinateArraySequence&gt;(std::move(coords), dims);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::unique_ptr &lt;CoordinateSequence&gt; create(std::size_t size, std::size_t dims = 0) const final<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">switch</span>(size) {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">case</span> 5: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;5&gt;&gt;(dims);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">case</span> 4: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;4&gt;&gt;(dims);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">case</span> 3: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;3&gt;&gt;(dims);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">case</span> 2: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;2&gt;&gt;(dims);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;1&gt;&gt;(dims);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                <span class="keywordflow">return</span> detail::make_unique&lt;CoordinateArraySequence&gt;(size, dims);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::unique_ptr &lt;CoordinateSequence&gt; create(<span class="keyword">const</span> CoordinateSequence &amp;coordSeq) <span class="keyword">const</span> <span class="keyword">final</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">auto</span> cs = create(coordSeq.size(), coordSeq.getDimension());</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; cs-&gt;size(); i++) {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            cs-&gt;setAt(coordSeq[i], i);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">return</span> cs;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> CoordinateSequenceFactory *instance();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;};</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::unique_ptr &lt;CoordinateSequence&gt; create(std::vector &lt;CoordinateXY&gt; &amp;&amp;coords, std::size_t dims = 0) const final<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> detail::make_unique&lt;CoordinateArraySequence&gt;(std::move(coords), dims);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    std::unique_ptr &lt;CoordinateSequence&gt; create(std::size_t size, std::size_t dims = 0) const final<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">switch</span>(size) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">case</span> 5: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;5&gt;&gt;(dims);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">case</span> 4: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;4&gt;&gt;(dims);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">case</span> 3: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;3&gt;&gt;(dims);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">case</span> 2: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;2&gt;&gt;(dims);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> detail::make_unique&lt;FixedSizeCoordinateSequence&lt;1&gt;&gt;(dims);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keywordflow">return</span> detail::make_unique&lt;CoordinateArraySequence&gt;(size, dims);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::unique_ptr &lt;CoordinateSequence&gt; create(<span class="keyword">const</span> CoordinateSequence &amp;coordSeq) <span class="keyword">const</span> <span class="keyword">final</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">auto</span> cs = create(coordSeq.size(), coordSeq.getDimension());</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; cs-&gt;size(); i++) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            cs-&gt;setAt(coordSeq[i], i);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> cs;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> CoordinateSequenceFactory *instance();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html_a4bb87d86967598ca0de3238168ae85ba"><div class="ttname"><a href="namespacegeos_1_1geom.html#a4bb87d86967598ca0de3238168ae85ba">geos::geom::DefaultCoordinateSequenceFactory</a></div><div class="ttdeci">CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory</div><div class="ttdoc">This is for backward API compatibility.</div><div class="ttdef"><b>Definition:</b> CoordinateArraySequenceFactory.h:82</div></div>
+<div class="ttc" id="anamespacegeos_1_1geom_html_a4bb87d86967598ca0de3238168ae85ba"><div class="ttname"><a href="namespacegeos_1_1geom.html#a4bb87d86967598ca0de3238168ae85ba">geos::geom::DefaultCoordinateSequenceFactory</a></div><div class="ttdeci">CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory</div><div class="ttdoc">This is for backward API compatibility.</div><div class="ttdef"><b>Definition:</b> CoordinateArraySequenceFactory.h:89</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
