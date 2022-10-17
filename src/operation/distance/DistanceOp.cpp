@@ -131,11 +131,11 @@ DistanceOp::nearestPoints()
         return nullptr;
     }
 
-    std::unique_ptr<std::vector<Coordinate>> nearestPts(new std::vector<Coordinate>(2));
-    (*nearestPts)[0] = locs[0]->getCoordinate();
-    (*nearestPts)[1] = locs[1]->getCoordinate();
+    std::vector<Coordinate> nearestPts(2);
+    nearestPts[0] = Coordinate(locs[0]->getCoordinate());
+    nearestPts[1] = Coordinate(locs[1]->getCoordinate());
 
-    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(nearestPts.release()));
+    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(nearestPts)));
 }
 
 void
@@ -256,7 +256,7 @@ DistanceOp::computeInside(std::vector<std::unique_ptr<GeometryLocation>> & locs,
 {
     for(auto& loc : locs) {
         for(const auto& poly : polys) {
-			const Coordinate& pt = loc->getCoordinate();
+            const auto& pt = loc->getCoordinate();
 
 			if (Location::EXTERIOR != ptLocator.locate(pt, static_cast<const Geometry*>(poly))) {
 				minDistance = 0.0;

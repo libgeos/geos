@@ -83,8 +83,7 @@ std::unique_ptr<Point>
 MaximumInscribedCircle::getCenter()
 {
     compute();
-    auto pt = factory->createPoint(centerPt);
-    return std::unique_ptr<Point>(pt);
+    return factory->createPoint(centerPt);
 }
 
 /* public */
@@ -92,8 +91,7 @@ std::unique_ptr<Point>
 MaximumInscribedCircle::getRadiusPoint()
 {
     compute();
-    auto pt = factory->createPoint(radiusPt);
-    return std::unique_ptr<Point>(pt);
+    return factory->createPoint(radiusPt);
 }
 
 /* public */
@@ -220,7 +218,7 @@ MaximumInscribedCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    std::vector<geom::Coordinate> nearestPts = indexedDistance.nearestPoints(centerPoint.get());
+    const auto& nearestPts = indexedDistance.nearestPoints(centerPoint.get());
     radiusPt = nearestPts[0];
 
     // flag computation

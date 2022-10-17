@@ -64,8 +64,8 @@ public:
      * ( `Orientation::COUNTERCLOCKWISE`,
      * `Orientation::CLOCKWISE`, or `Orientation::STRAIGHT` )
      */
-    static int index(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                     const geom::Coordinate& q);
+    static int index(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                     const geom::CoordinateXY& q);
 
     /**
     * Computes whether a ring defined by a geom::CoordinateSequence is

@@ -73,7 +73,7 @@ MultiPoint::getBoundary() const
     return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
 }
 
-const Coordinate*
+const CoordinateXY*
 MultiPoint::getCoordinateN(std::size_t n) const
 {
     return geometries[n]->getCoordinate();

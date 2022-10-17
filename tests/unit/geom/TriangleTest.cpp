@@ -194,8 +194,8 @@ void object::test<7>
     Coordinate y2(193601.10666666666, 469345.0175);
     Coordinate y3(193601.10666666666, 469345.355);
 
-    Coordinate cc1 = CGAlgorithmsDD::circumcentreDD(x1, x2, x3);
-    Coordinate cc2 = CGAlgorithmsDD::circumcentreDD(y1, y2, y3);
+    auto cc1 = CGAlgorithmsDD::circumcentreDD(x1, x2, x3);
+    auto cc2 = CGAlgorithmsDD::circumcentreDD(y1, y2, y3);
 
     ensure(cc1 == cc2);
 }

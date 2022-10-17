@@ -382,7 +382,7 @@ LineString::compareToSameClass(const Geometry* ls) const
     return 0;
 }
 
-const Coordinate*
+const CoordinateXY*
 LineString::getCoordinate() const
 {
     if(isEmpty()) {

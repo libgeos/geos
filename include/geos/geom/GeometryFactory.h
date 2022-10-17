@@ -169,6 +169,7 @@ public:
 
     /// Creates a Point using the given Coordinate
     Point* createPoint(const Coordinate& coordinate) const;
+    std::unique_ptr<Point> createPoint(const CoordinateXY& coordinate) const;
 
     /// Creates a Point taking ownership of the given CoordinateSequence
     Point* createPoint(CoordinateSequence* coordinates) const;
@@ -253,6 +254,8 @@ public:
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
 
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<Coordinate> && newPoints) const;
+
+    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<CoordinateXY> && newPoints) const;
 
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const;
 

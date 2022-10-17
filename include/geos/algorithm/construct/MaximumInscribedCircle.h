@@ -117,8 +117,8 @@ private:
     IndexedPointInAreaLocator ptLocator;
     const geom::GeometryFactory* factory;
     bool done;
-    geom::Coordinate centerPt;
-    geom::Coordinate radiusPt;
+    geom::CoordinateXY centerPt;
+    geom::CoordinateXY radiusPt;
 
     /* private methods */
     double distanceToBoundary(const geom::Coordinate& c);

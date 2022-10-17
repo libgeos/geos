@@ -121,8 +121,8 @@ private:
     bool done;
     std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
     std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
-    geom::Coordinate centerPt;
-    geom::Coordinate radiusPt;
+    geom::CoordinateXY centerPt;
+    geom::CoordinateXY radiusPt;
 
     /* private methods */
     void setBoundary(const geom::Geometry* obstacles);

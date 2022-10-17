@@ -108,6 +108,12 @@ namespace geom {
             out.insert(out.end(), m_data.begin(), m_data.end());
         }
 
+        void toVector(std::vector<CoordinateXY> & out) const final override {
+            for (const auto& pt : m_data) {
+                out.push_back(pt);
+            }
+        }
+
         void setPoints(const std::vector<Coordinate> & v) final override {
             bool nonZero = N > 0;
             if (nonZero) {

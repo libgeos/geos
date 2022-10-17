@@ -53,11 +53,17 @@ public:
     // See dox in CoordinateSequence.h
     void toVector(std::vector<Coordinate>&) const override;
 
+    void toVector(std::vector<CoordinateXY>&) const override;
+
     /// Construct an empty sequence
     CoordinateArraySequence();
 
     /// Construct sequence moving from given Coordinate vector
     CoordinateArraySequence(std::vector<Coordinate> && coords,
+                            std::size_t dimension = 0);
+
+    /// Construct sequence moving from given Coordinate vector
+    CoordinateArraySequence(std::vector<CoordinateXY> && coords,
                             std::size_t dimension = 0);
 
     /// Construct sequence taking ownership of given Coordinate vector

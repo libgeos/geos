@@ -20,7 +20,7 @@ namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
-ComponentCoordinateExtracter::ComponentCoordinateExtracter(std::vector<const Coordinate*>& newComps)
+ComponentCoordinateExtracter::ComponentCoordinateExtracter(std::vector<const CoordinateXY*>& newComps)
     :
     comps(newComps)
 {}
@@ -59,7 +59,7 @@ ComponentCoordinateExtracter::filter_ro(const Geometry* geom)
 
 
 void
-ComponentCoordinateExtracter::getCoordinates(const Geometry& geom, std::vector<const Coordinate*>& ret)
+ComponentCoordinateExtracter::getCoordinates(const Geometry& geom, std::vector<const CoordinateXY*>& ret)
 {
     ComponentCoordinateExtracter cce(ret);
     geom.apply_ro(&cce);

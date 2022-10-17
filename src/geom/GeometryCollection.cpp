@@ -282,7 +282,7 @@ GeometryCollection::compareToSameClass(const Geometry* g) const
     return compare(geometries, gc->geometries);
 }
 
-const Coordinate*
+const CoordinateXY*
 GeometryCollection::getCoordinate() const
 {
     for(const auto& g : geometries) {

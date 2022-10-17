@@ -41,8 +41,8 @@ Angle::toRadians(double angleDegrees)
 
 /* public static */
 double
-Angle::angle(const geom::Coordinate& p0,
-             const geom::Coordinate& p1)
+Angle::angle(const geom::CoordinateXY& p0,
+             const geom::CoordinateXY& p1)
 {
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
@@ -51,16 +51,16 @@ Angle::angle(const geom::Coordinate& p0,
 
 /* public static */
 double
-Angle::angle(const geom::Coordinate& p)
+Angle::angle(const geom::CoordinateXY& p)
 {
     return atan2(p.y, p.x);
 }
 
 /* public static */
 bool
-Angle::isAcute(const geom::Coordinate& p0,
-               const geom::Coordinate& p1,
-               const geom::Coordinate& p2)
+Angle::isAcute(const geom::CoordinateXY& p0,
+               const geom::CoordinateXY& p1,
+               const geom::CoordinateXY& p2)
 {
     // relies on fact that A dot B is positive iff A ang B is acute
     double dx0 = p0.x - p1.x;
@@ -73,9 +73,9 @@ Angle::isAcute(const geom::Coordinate& p0,
 
 /* public static */
 bool
-Angle::isObtuse(const geom::Coordinate& p0,
-                const geom::Coordinate& p1,
-                const geom::Coordinate& p2)
+Angle::isObtuse(const geom::CoordinateXY& p0,
+                const geom::CoordinateXY& p1,
+                const geom::CoordinateXY& p2)
 {
     // relies on fact that A dot B is negative iff A ang B is obtuse
     double dx0 = p0.x - p1.x;
@@ -88,9 +88,9 @@ Angle::isObtuse(const geom::Coordinate& p0,
 
 /* public static */
 double
-Angle::angleBetween(const geom::Coordinate& tip1,
-                    const geom::Coordinate& tail,
-                    const geom::Coordinate& tip2)
+Angle::angleBetween(const geom::CoordinateXY& tip1,
+                    const geom::CoordinateXY& tail,
+                    const geom::CoordinateXY& tip2)
 {
     double a1 = angle(tail, tip1);
     double a2 = angle(tail, tip2);
@@ -100,9 +100,9 @@ Angle::angleBetween(const geom::Coordinate& tip1,
 
 /* public static */
 double
-Angle::angleBetweenOriented(const geom::Coordinate& tip1,
-                            const geom::Coordinate& tail,
-                            const geom::Coordinate& tip2)
+Angle::angleBetweenOriented(const geom::CoordinateXY& tip1,
+                            const geom::CoordinateXY& tail,
+                            const geom::CoordinateXY& tip2)
 {
     double a1 = angle(tail, tip1);
     double a2 = angle(tail, tip2);
@@ -120,8 +120,8 @@ Angle::angleBetweenOriented(const geom::Coordinate& tip1,
 
 /* public static */
 double
-Angle::interiorAngle(const geom::Coordinate& p0, const geom::Coordinate& p1,
-                     const geom::Coordinate& p2)
+Angle::interiorAngle(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
+                     const geom::CoordinateXY& p2)
 {
     double anglePrev = angle(p1, p0);
     double angleNext = angle(p1, p2);

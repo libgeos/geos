@@ -117,7 +117,7 @@ protected:
      * @return true if any component intersects the areal test geometry
      */
     bool isAnyTargetComponentInAreaTest(const geom::Geometry* testGeom,
-                                        const geom::Coordinate::ConstVect* targetRepPts) const;
+                                        const std::vector<const geom::CoordinateXY*>* targetRepPts) const;
 
 public:
     /** \brief

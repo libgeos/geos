@@ -71,9 +71,9 @@ IsValidOp::getValidationError()
 
 /* private */
 void
-IsValidOp::logInvalid(int code, const Coordinate* pt)
+IsValidOp::logInvalid(int code, const CoordinateXY* pt)
 {
-    validErr.reset(new TopologyValidationError(code, *pt));
+    validErr.reset(new TopologyValidationError(code, Coordinate(*pt)));
 }
 
 
@@ -403,7 +403,7 @@ IsValidOp::checkHolesInShell(const Polygon* poly)
         const LinearRing* hole = poly->getInteriorRingN(i);
         if (hole->isEmpty()) continue;
 
-        const Coordinate* invalidPt = nullptr;
+        const CoordinateXY* invalidPt = nullptr;
         if (isShellEmpty) {
             invalidPt = hole->getCoordinate();
         }

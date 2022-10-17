@@ -150,7 +150,7 @@ public:
 
     std::unique_ptr<Polygon> reverse() const { return std::unique_ptr<Polygon>(reverseImpl()); }
 
-    const Coordinate* getCoordinate() const override;
+    const CoordinateXY* getCoordinate() const override;
 
     double getArea() const override;
 

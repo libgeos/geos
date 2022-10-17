@@ -79,9 +79,8 @@ BasicPreparedGeometry::isAnyTargetComponentInTest(const geom::Geometry* testGeom
 {
     algorithm::PointLocator locator;
 
-    for(std::size_t i = 0, n = representativePts.size(); i < n; i++) {
-        const geom::Coordinate& c = *(representativePts[i]);
-        if(locator.intersects(c, testGeom)) {
+    for(const auto& c : representativePts) {
+        if(locator.intersects(*c, testGeom)) {
             return true;
         }
     }

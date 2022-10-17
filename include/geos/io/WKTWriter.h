@@ -34,6 +34,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
+class CoordinateXY;
 class CoordinateSequence;
 class Geometry;
 class GeometryCollection;
@@ -121,6 +122,7 @@ public:
      * @return the WKT
      */
     static std::string toPoint(const geom::Coordinate& p0);
+    static std::string toPoint(const geom::CoordinateXY& p0);
 
     /**
      * Sets the rounding precision when writing the WKT

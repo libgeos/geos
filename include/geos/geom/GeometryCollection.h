@@ -150,7 +150,7 @@ public:
 
     void normalize() override;
 
-    const Coordinate* getCoordinate() const override;
+    const CoordinateXY* getCoordinate() const override;
 
     /// Returns the total area of this collection
     double getArea() const override;

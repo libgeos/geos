@@ -38,7 +38,7 @@ Triangle::isIsoceles()
 }
 
 void
-Triangle::inCentre(Coordinate& result)
+Triangle::inCentre(CoordinateXY& result)
 {
     // the lengths of the sides, labelled by their opposite vertex
     double len0 = p1.distance(p2);
@@ -48,11 +48,11 @@ Triangle::inCentre(Coordinate& result)
     double inCentreX = (len0 * p0.x + len1 * p1.x + len2 * p2.x)  / circum;
     double inCentreY = (len0 * p0.y + len1 * p1.y + len2 * p2.y)  / circum;
 
-    result = Coordinate(inCentreX, inCentreY);
+    result = CoordinateXY(inCentreX, inCentreY);
 }
 
 void
-Triangle::circumcentre(Coordinate& result)
+Triangle::circumcentre(CoordinateXY& result)
 {
     double cx = p2.x;
     double cy = p2.y;
@@ -68,21 +68,21 @@ Triangle::circumcentre(Coordinate& result)
     double ccx = cx - numx / denom;
     double ccy = cy + numy / denom;
 
-    result = Coordinate(ccx, ccy);
+    result = CoordinateXY(ccx, ccy);
 }
 
 void
-Triangle::circumcentreDD(Coordinate& result)
+Triangle::circumcentreDD(CoordinateXY& result)
 {
     result = algorithm::CGAlgorithmsDD::circumcentreDD(p0, p1, p2);
 }
 
 /* public static */
-const Coordinate
-Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
+const CoordinateXY
+Triangle::circumcentre(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)
 {
     Triangle t(p0, p1, p2);
-    Coordinate c;
+    CoordinateXY c;
     t.circumcentre(c);
     return c;
 }
@@ -97,7 +97,7 @@ Triangle::det(double m00, double m01, double m10, double m11) const
 
 /* public static */
 bool
-Triangle::isAcute(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+Triangle::isAcute(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     if (!Angle::isAcute(a, b, c))
         return false;
@@ -111,7 +111,7 @@ Triangle::isAcute(const Coordinate& a, const Coordinate& b, const Coordinate& c)
 
 /* public static */
 bool
-Triangle::isCCW(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+Triangle::isCCW(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     return Orientation::COUNTERCLOCKWISE == Orientation::index(a, b, c);
 }
@@ -119,7 +119,7 @@ Triangle::isCCW(const Coordinate& a, const Coordinate& b, const Coordinate& c)
 
 /* public static */
 bool
-Triangle::intersects(const Coordinate& a, const Coordinate& b, const Coordinate& c, const Coordinate& p)
+Triangle::intersects(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c, const CoordinateXY& p)
 {
     int exteriorIndex = isCCW(a, b, c) ?
         Orientation::CLOCKWISE : Orientation::COUNTERCLOCKWISE;
@@ -135,7 +135,7 @@ Triangle::intersects(const Coordinate& a, const Coordinate& b, const Coordinate&
 
 /* public static */
 double
-Triangle::length(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+Triangle::length(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     return a.distance(b) + b.distance(c) + c.distance(a);
 }
@@ -149,7 +149,7 @@ Triangle::length() const
 
 /* public static */
 double
-Triangle::area(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+Triangle::area(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     return std::abs(((c.x - a.x) * (b.y - a.y) - (b.x - a.x) * (c.y - a.y)) / 2);
 }
@@ -163,7 +163,7 @@ Triangle::area() const
 
 /* public static */
 double
-Triangle::longestSideLength(const Coordinate& a, const Coordinate& b, const Coordinate& c)
+Triangle::longestSideLength(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
     double lenAB = a.distance(b);
     double lenBC = b.distance(c);

@@ -41,12 +41,11 @@ PreparedLineStringIntersects::isAnyTestPointInTarget(const geom::Geometry* testG
      */
     PointLocator  locator;
 
-    geom::Coordinate::ConstVect coords;
+    std::vector<const CoordinateXY*> coords;
     ComponentCoordinateExtracter::getCoordinates(*testGeom, coords);
 
-    for(std::size_t i = 0, n = coords.size(); i < n; i++) {
-        const geom::Coordinate& c = *(coords[i]);
-        if(locator.intersects(c, &(prepLine.getGeometry()))) {
+    for(const auto& c : coords) {
+        if(locator.intersects(*c, &(prepLine.getGeometry()))) {
             return true;
         }
     }

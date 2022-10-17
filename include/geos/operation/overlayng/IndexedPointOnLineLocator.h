@@ -53,7 +53,7 @@ public:
         : inputGeom(geomLinear)
         {}
 
-    geom::Location locate(const geom::Coordinate* p) override;
+    geom::Location locate(const geom::CoordinateXY* p) override;
 
 };
 

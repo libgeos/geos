@@ -36,6 +36,10 @@ public:
         return detail::make_unique<CoordinateArraySequence>(std::move(coords), dims);
     }
 
+    std::unique_ptr <CoordinateSequence> create(std::vector <CoordinateXY> &&coords, std::size_t dims = 0) const final override {
+        return detail::make_unique<CoordinateArraySequence>(std::move(coords), dims);
+    }
+
     std::unique_ptr <CoordinateSequence> create(std::size_t size, std::size_t dims = 0) const final override {
         switch(size) {
             case 5: return detail::make_unique<FixedSizeCoordinateSequence<5>>(dims);
