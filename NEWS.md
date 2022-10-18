@@ -8,6 +8,7 @@ xxxx-xx-xx
   - Add CoordinateSequenceIterator (GH-685, Dan Baston)
   - Geometry clustering: DBSCAN, geometry intersection/distance, envelope
     intersection/distance (GH-688, Dan Baston)
+  - CAPI: GEOSLineSubstring (GH-706, Dan Baston)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)

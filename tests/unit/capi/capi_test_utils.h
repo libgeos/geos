@@ -19,6 +19,7 @@ namespace capitest {
         GEOSGeometry* geom2_ = nullptr;
         GEOSGeometry* geom3_ = nullptr;
         GEOSGeometry* input_ = nullptr;
+        GEOSGeometry* result_ = nullptr;
         GEOSGeometry* expected_ = nullptr;
         char* wkt_ = nullptr;
 
@@ -45,6 +46,9 @@ namespace capitest {
             }
             if (input_) {
                 GEOSGeom_destroy(input_);
+            }
+            if (result_) {
+                GEOSGeom_destroy(result_);
             }
             if (expected_) {
                 GEOSGeom_destroy(expected_);

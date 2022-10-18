@@ -961,6 +961,13 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSLineSubstring */
+extern GEOSGeometry GEOS_DLL *GEOSLineSubstring_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double start_fraction,
+    double end_fdraction);
+
 /** \see GEOSReverse */
 extern GEOSGeometry GEOS_DLL *GEOSReverse_r(
     GEOSContextHandle_t handle,
@@ -3932,6 +3939,20 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 * \see geos::operation::linemerge::LineMerger
 */
 extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
+
+/**
+ *  Computes the line which is the section of the input LineString starting and
+ *  ending at the given length fractions.
+ *  \param g The input LineString
+ *  \param start_fraction start fraction (0-1) along the length of g
+ *  \param end_fraction end fraction (0-1) along the length of g
+ *  \return selected substring.
+ *  Caller is responsible for freeing with GEOSGeom_destroy()
+ */
+extern GEOSGeometry GEOS_DLL *GEOSLineSubstring(
+        const GEOSGeometry* g,
+        double start_fraction,
+        double end_fraction);
 
 /**
 * For geometries with coordinate sequences, reverses the order

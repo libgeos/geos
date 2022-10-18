@@ -2299,6 +2299,23 @@ extern "C" {
     }
 
     Geometry*
+    GEOSLineSubstring_r(GEOSContextHandle_t extHandle, const Geometry* g, double start_fraction, double end_fraction)
+    {
+        using geos::linearref::LengthIndexedLine;
+
+        return execute(extHandle, [&]() {
+            LengthIndexedLine lil(g);
+
+            auto length = g->getLength();
+
+            auto out = lil.extractLine(start_fraction * length, end_fraction * length);
+            out->setSRID(g->getSRID());
+
+            return out.release();
+        });
+    }
+
+    Geometry*
     GEOSReverse_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
