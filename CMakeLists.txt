@@ -144,18 +144,6 @@ if (POLICY CMP0092)
 endif()
 
 #-----------------------------------------------------------------------------
-# Setup build directories
-#-----------------------------------------------------------------------------
-# Place executables and shared libraries in the same location for
-# convenience of direct execution from common spot and for
-# convenience in environments without RPATH support.
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-
-#-----------------------------------------------------------------------------
 # Install directories
 #-----------------------------------------------------------------------------
 
@@ -299,6 +287,24 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 add_subdirectory(capi)
+
+#-----------------------------------------------------------------------------
+# Setup build directory for geos and geos_c: output directories of
+# library, archive and runtime.
+#
+# Place executables and shared libraries in the same location for
+# convenience of direct execution from common spot and for
+# convenience in environments without RPATH support.
+#-----------------------------------------------------------------------------
+set_target_properties(geos geos_c
+  PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib"
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib"
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+
+message(STATUS "GEOS: Run-time output: ${CMAKE_CURRENT_BINARY_DIR}/bin")
+message(STATUS "GEOS: Archives output: ${CMAKE_CURRENT_BINARY_DIR}/lib")
+message(STATUS "GEOS: Library output: ${CMAKE_CURRENT_BINARY_DIR}/lib")
 
 #-----------------------------------------------------------------------------
 # Tests
