@@ -55,28 +55,6 @@ class DepthSegment {
 private:
     geom::LineSegment upwardSeg;
 
-    /*
-     * Compare two collinear segments for left-most ordering.
-     * If segs are vertical, use vertical ordering for comparison.
-     * If segs are equal, return 0.
-     * Segments are assumed to be directed so that the second
-     * coordinate is >= to the first
-     * (e.g. up and to the right).
-     *
-     * @param seg0 a segment to compare
-     * @param seg1 a segment to compare
-     * @return
-     */
-    static int
-    compareX(const geom::LineSegment* seg0, const geom::LineSegment* seg1)
-    {
-        int compare0 = seg0->p0.compareTo(seg1->p0);
-        if(compare0 != 0) {
-            return compare0;
-        }
-        return seg0->p1.compareTo(seg1->p1);
-    }
-
 public:
 
     int leftDepth;
