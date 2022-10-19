@@ -134,7 +134,7 @@ public:
     }
 
     bool
-    getInteriorPoint(Coordinate& ret) const
+    getInteriorPoint(CoordinateXY& ret) const
     {
         ret = interiorPoint;
         return true;
@@ -172,7 +172,7 @@ private:
     const Polygon& polygon;
     double interiorPointY;
     double interiorSectionWidth = 0.0;
-    Coordinate interiorPoint;
+    CoordinateXY interiorPoint;
 
     void scanRing(const LinearRing& ring, std::vector<double>& crossings)
     {

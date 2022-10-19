@@ -28,6 +28,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
+class CoordinateXY;
 class CoordinateSequence;
 }
 }
@@ -63,7 +64,7 @@ namespace algorithm {
  */
 class GEOS_DLL RayCrossingCounter {
 private:
-    const geom::Coordinate& point;
+    const geom::CoordinateXY& point;
 
     int crossingCount;
 
@@ -84,14 +85,14 @@ public:
      * @param ring an array of Coordinates forming a ring
      * @return the location of the point in the ring
      */
-    static geom::Location locatePointInRing(const geom::Coordinate& p,
+    static geom::Location locatePointInRing(const geom::CoordinateXY& p,
                                  const geom::CoordinateSequence& ring);
 
     /// Semantically equal to the above, just different args encoding
-    static geom::Location locatePointInRing(const geom::Coordinate& p,
+    static geom::Location locatePointInRing(const geom::CoordinateXY& p,
                                  const std::vector<const geom::Coordinate*>& ring);
 
-    RayCrossingCounter(const geom::Coordinate& p_point)
+    RayCrossingCounter(const geom::CoordinateXY& p_point)
         : point(p_point),
           crossingCount(0),
           isPointOnSegment(false)
@@ -103,8 +104,8 @@ public:
      * @param p1 an endpoint of the segment
      * @param p2 another endpoint of the segment
      */
-    void countSegment(const geom::Coordinate& p1,
-                      const geom::Coordinate& p2);
+    void countSegment(const geom::CoordinateXY& p1,
+                      const geom::CoordinateXY& p2);
 
     /** \brief
      * Reports whether the point lies exactly on one of the supplied segments.

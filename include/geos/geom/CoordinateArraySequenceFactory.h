@@ -59,6 +59,13 @@ public:
         return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(coords), dimension));
     };
 
+    std::unique_ptr<CoordinateSequence> create(
+        std::vector<CoordinateXY> && coords,
+        size_t dimension) const override
+    {
+        return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(coords), dimension));
+    };
+
     /** @see CoordinateSequenceFactory::create(std::size_t, int) */
     std::unique_ptr<CoordinateSequence> create(std::size_t size, std::size_t dimension) const override
     {

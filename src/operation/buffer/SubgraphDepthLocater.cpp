@@ -53,30 +53,7 @@ namespace buffer { // geos.operation.buffer
 class DepthSegment {
 
 private:
-
     geom::LineSegment upwardSeg;
-
-    /*
-     * Compare two collinear segments for left-most ordering.
-     * If segs are vertical, use vertical ordering for comparison.
-     * If segs are equal, return 0.
-     * Segments are assumed to be directed so that the second
-     * coordinate is >= to the first
-     * (e.g. up and to the right).
-     *
-     * @param seg0 a segment to compare
-     * @param seg1 a segment to compare
-     * @return
-     */
-    static int
-    compareX(const geom::LineSegment* seg0, const geom::LineSegment* seg1)
-    {
-        int compare0 = seg0->p0.compareTo(seg1->p0);
-        if(compare0 != 0) {
-            return compare0;
-        }
-        return seg0->p1.compareTo(seg1->p1);
-    }
 
 public:
 
@@ -107,9 +84,21 @@ public:
     int
     compareTo(const DepthSegment& other) const
     {
-        /*
-         * try and compute a determinate orientation for the segments.
-         * Test returns 1 if other is left of this (i.e. this > other)
+        /**
+         * If segment envelopes do not overlap, then
+         * can use standard segment lexicographic ordering.
+         */
+        if (upwardSeg.minX() >= other.upwardSeg.maxX()
+            || upwardSeg.maxX() <= other.upwardSeg.minX()
+            || upwardSeg.minY() >= other.upwardSeg.maxX()
+            || upwardSeg.maxY() <= other.upwardSeg.minY()) {
+            return upwardSeg.compareTo(other.upwardSeg);
+        };
+
+        /**
+         * Otherwise if envelopes overlap, use relative segment orientation.
+         *
+         * Collinear segments should be evaluated by previous logic
          */
         int orientIndex = upwardSeg.orientationIndex(&(other.upwardSeg));
 
@@ -129,12 +118,16 @@ public:
             return orientIndex;
         }
 
-        // otherwise, segs must be collinear - sort based on minimum X value
-        return compareX(&upwardSeg, &(other.upwardSeg));
+        /**
+         * If segment envelopes overlap and they are collinear,
+         * since segments do not cross they must be equal.
+         */
+        // assert: segments are equal
+        return 0;
     }
 };
 
-struct DepthSegmentLessThen {
+struct DepthSegmentLessThan {
     bool
     operator()(const DepthSegment* first, const DepthSegment* second)
     {
@@ -149,8 +142,6 @@ struct DepthSegmentLessThen {
     }
 };
 
-
-
 /*public*/
 int
 SubgraphDepthLocater::getDepth(const Coordinate& p)
@@ -164,7 +155,7 @@ SubgraphDepthLocater::getDepth(const Coordinate& p)
     }
 
     DepthSegment *ds = *std::min_element(stabbedSegments.begin(),
-        stabbedSegments.end(), DepthSegmentLessThen());
+        stabbedSegments.end(), DepthSegmentLessThan());
     int ret = ds->leftDepth;
 
 #if GEOS_DEBUG

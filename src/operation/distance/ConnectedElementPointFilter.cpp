@@ -37,10 +37,10 @@ namespace distance { // geos.operation.distance
  * found inside the specified geometry. Thus, if the specified geometry is
  * not a GeometryCollection, an empty list will be returned.
  */
-std::vector<const Coordinate*>*
+std::vector<const CoordinateXY*>*
 ConnectedElementPointFilter::getCoordinates(const Geometry* geom)
 {
-    std::vector<const Coordinate*>* points = new std::vector<const Coordinate*>();
+    std::vector<const CoordinateXY*>* points = new std::vector<const CoordinateXY*>();
     ConnectedElementPointFilter c(points);
     geom->apply_ro(&c);
     return points;

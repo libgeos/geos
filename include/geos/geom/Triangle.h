@@ -27,9 +27,9 @@ namespace geom { // geos::geom
  */
 class GEOS_DLL Triangle {
 public:
-    Coordinate p0, p1, p2;
+    CoordinateXY p0, p1, p2;
 
-    Triangle(const Coordinate& nP0, const Coordinate& nP1, const Coordinate& nP2)
+    Triangle(const CoordinateXY& nP0, const CoordinateXY& nP1, const CoordinateXY& nP2)
         : p0(nP0)
         , p1(nP1)
         , p2(nP2) {}
@@ -43,7 +43,7 @@ public:
      *
      * @param resultPoint the point into which to write the inCentre of the triangle
      */
-    void inCentre(Coordinate& resultPoint);
+    void inCentre(CoordinateXY& resultPoint);
 
     /** \brief
      * Computes the circumcentre of a triangle.
@@ -62,12 +62,12 @@ public:
      *
      * @param resultPoint the point into which to write the inCentre of the triangle
      */
-    void circumcentre(Coordinate& resultPoint);
-    void circumcentreDD(Coordinate& resultPoint);
+    void circumcentre(CoordinateXY& resultPoint);
+    void circumcentreDD(CoordinateXY& resultPoint);
 
     /** Computes the circumcentre of a triangle. */
-    static const Coordinate circumcentre(
-        const Coordinate& p0, const Coordinate& p1, const Coordinate& p2);
+    static const CoordinateXY circumcentre(
+        const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2);
 
     bool isIsoceles();
 
@@ -84,7 +84,7 @@ public:
     * @param c a vertex of the triangle
     * @return true if the triangle is acute
     */
-    static bool isAcute(const Coordinate& a, const Coordinate& b, const Coordinate& c);
+    static bool isAcute(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c);
 
     /**
     * Tests whether a triangle is oriented counter-clockwise.
@@ -94,7 +94,7 @@ public:
     * @param c a vertex of the triangle
     * @return true if the triangle orientation is counter-clockwise
     */
-    static bool isCCW(const Coordinate& a, const Coordinate& b, const Coordinate& c);
+    static bool isCCW(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c);
 
 
     /**
@@ -106,8 +106,8 @@ public:
     * @param p the point to test
     * @return true if the triangle intersects the point
     */
-    static bool intersects(const Coordinate& a, const Coordinate& b, const Coordinate& c,
-        const Coordinate& p);
+    static bool intersects(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
+        const CoordinateXY& p);
 
 
     /**
@@ -115,7 +115,7 @@ public:
     * @param p the point to test
     * @return true if the triangle intersects the point
     */
-    bool intersects(const Coordinate& p) { return intersects(p0, p1, p2, p); };
+    bool intersects(const CoordinateXY& p) { return intersects(p0, p1, p2, p); };
 
     /**
     * Tests whether this triangle is oriented counter-clockwise.
@@ -138,9 +138,9 @@ public:
     * @return the length of the longest side of the triangle
     */
     static double longestSideLength(
-        const Coordinate& a,
-        const Coordinate& b,
-        const Coordinate& c);
+        const CoordinateXY& a,
+        const CoordinateXY& b,
+        const CoordinateXY& c);
 
     /**
     * Compute the length of the perimeter of a triangle
@@ -150,7 +150,7 @@ public:
     * @param c a vertex of the triangle
     * @return the length of the triangle perimeter
     */
-    static double length(const Coordinate& a, const Coordinate& b, const Coordinate& c);
+    static double length(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c);
 
     /**
     * Computes the length of the perimeter of this triangle.
@@ -168,7 +168,7 @@ public:
     * @return the area of the triangle
     *
     */
-    static double area(const Coordinate& a, const Coordinate& b, const Coordinate& c);
+    static double area(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c);
 
     double area() const;
 

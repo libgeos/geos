@@ -460,7 +460,7 @@ void object::test<31>
     ensure(poly_ != nullptr);
     // "POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))"
 
-    CoordinateCPtr coord = poly_->getCoordinate();
+    const auto* coord = poly_->getCoordinate();
     ensure(coord != nullptr);
     ensure_equals(coord->x, 0);
     ensure_equals(coord->y, 10);

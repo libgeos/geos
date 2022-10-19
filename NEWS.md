@@ -20,6 +20,8 @@ xxxx-xx-xx
   - Improve performance of prepared polygon intersection (GH-690, Dan Baston)
   - Improve performance of prepared polygon distance (GH-693, Dan Baston)
   - Implement indexed calculations for prepared geometry isWithinDistance (GH-691, Dan Baston)
+  - Fix LineSegment.orientationIndex(LineSegment) (GH-699, Martin Davis)
+  - Fix DepthSegment comparison operation (GH-707, Martin Davis)
 
 
 ## Changes in 3.11.0

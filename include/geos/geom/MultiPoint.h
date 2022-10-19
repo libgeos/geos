@@ -125,7 +125,7 @@ protected:
 
     MultiPoint* reverseImpl() const override { return new MultiPoint(*this); }
 
-    const Coordinate* getCoordinateN(std::size_t n) const;
+    const CoordinateXY* getCoordinateN(std::size_t n) const;
 
     int
     getSortIndex() const override

@@ -21,7 +21,7 @@
 #include <sstream>
 
 using geos::geom::Geometry;
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -31,7 +31,7 @@ namespace distance { // geos.operation.distance
  * Constructs a GeometryLocation specifying a point on a geometry, as well as the
  * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
  */
-GeometryLocation::GeometryLocation(const Geometry* newComponent, std::size_t newSegIndex, const Coordinate& newPt)
+GeometryLocation::GeometryLocation(const Geometry* newComponent, std::size_t newSegIndex, const CoordinateXY& newPt)
 {
     component = newComponent;
     segIndex = newSegIndex;
@@ -42,7 +42,7 @@ GeometryLocation::GeometryLocation(const Geometry* newComponent, std::size_t new
 /**
  * Constructs a GeometryLocation specifying a point inside an area geometry.
  */
-GeometryLocation::GeometryLocation(const Geometry* newComponent, const Coordinate& newPt)
+GeometryLocation::GeometryLocation(const Geometry* newComponent, const CoordinateXY& newPt)
 {
     component = newComponent;
     inside_area = true;
@@ -72,7 +72,7 @@ GeometryLocation::getSegmentIndex()
 /**
  * Returns the location.
  */
-Coordinate&
+CoordinateXY&
 GeometryLocation::getCoordinate()
 {
     return pt;

@@ -74,7 +74,9 @@ void object::test<1>
     ensure(geom->getCoordinateDimension() == 2);
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
-    ensure(std::isnan(geom->getCoordinate()->z) != 0);
+
+    auto coords = geom->getCoordinates();
+    ensure(std::isnan(coords->getAt(0).z));
 }
 
 // 2 - Test writing a 3D geometry with the WKBWriter in 3D output dimension.
@@ -94,10 +96,12 @@ void object::test<2>
     result_stream.seekg(0);
     geom = wkbreader.read(result_stream);
 
-    ensure(geom->getCoordinateDimension() == 3);
-    ensure(geom->getCoordinate()->x == -117.0);
-    ensure(geom->getCoordinate()->y == 33.0);
-    ensure(geom->getCoordinate()->z == 11.0);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
+    ensure_equals(geom->getCoordinate()->x, -117.0);
+    ensure_equals(geom->getCoordinate()->y, 33.0);
+
+    auto coords = geom->getCoordinates();
+    ensure_equals(coords->getAt(0).z, 11.0);
 }
 
 // 3 - Test writing a 3D geometry with the WKBWriter in 2D output dimension.
@@ -120,7 +124,9 @@ void object::test<3>
     ensure(geom->getCoordinateDimension() == 2);
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
-    ensure(std::isnan(geom->getCoordinate()->z) != 0);
+
+    auto coords = geom->getCoordinates();
+    ensure(std::isnan(coords->getAt(0).z));
 }
 
 // 4 - Test that SRID is output only once
@@ -286,7 +292,9 @@ void object::test<10>
     ensure(geom->getCoordinateDimension() == 3);
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
-    ensure(geom->getCoordinate()->z == 11.0);
+
+    auto coords = geom->getCoordinates();
+    ensure_equals(coords->getAt(0).z, 11.0);
 
     result_stream.str("");
     wkbwriter.writeHEX(*geom, result_stream);

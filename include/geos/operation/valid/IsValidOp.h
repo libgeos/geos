@@ -24,7 +24,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
+class CoordinateXY;
 class Geometry;
 class Point;
 class MultiPoint;
@@ -77,7 +77,7 @@ private:
     }
 
 
-    void logInvalid(int code, const geom::Coordinate* pt);
+    void logInvalid(int code, const geom::CoordinateXY* pt);
 
     bool isValidGeometry(const geom::Geometry* g);
 

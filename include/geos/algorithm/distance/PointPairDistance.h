@@ -49,7 +49,7 @@ public:
     }
 
     void
-    initialize(const geom::Coordinate& p0, const geom::Coordinate& p1)
+    initialize(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
     {
         pt[0] = p0;
         pt[1] = p1;
@@ -63,13 +63,13 @@ public:
         return std::sqrt(distanceSquared);
     }
 
-    const std::array<geom::Coordinate, 2>&
+    const std::array<geom::CoordinateXY, 2>&
     getCoordinates() const
     {
         return pt;
     }
 
-    const geom::Coordinate&
+    const geom::CoordinateXY&
     getCoordinate(std::size_t i) const
     {
         assert(i < pt.size());
@@ -83,7 +83,7 @@ public:
     }
 
     void
-    setMaximum(const geom::Coordinate& p0, const geom::Coordinate& p1)
+    setMaximum(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
     {
         if(isNull) {
             initialize(p0, p1);
@@ -102,7 +102,7 @@ public:
     }
 
     void
-    setMinimum(const geom::Coordinate& p0, const geom::Coordinate& p1)
+    setMinimum(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
     {
         if(isNull) {
             initialize(p0, p1);
@@ -129,7 +129,7 @@ private:
      * @param dist the distance between p0 and p1
      */
     void
-    initialize(const geom::Coordinate& p0, const geom::Coordinate& p1,
+    initialize(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                double distSquared)
     {
         pt[0] = p0;
@@ -138,7 +138,7 @@ private:
         isNull = false;
     }
 
-    std::array<geom::Coordinate, 2> pt;
+    std::array<geom::CoordinateXY, 2> pt;
 
     double distanceSquared;
 

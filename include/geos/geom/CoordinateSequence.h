@@ -126,11 +126,17 @@ public:
     ///
     virtual void toVector(std::vector<Coordinate>& coords) const = 0;
 
+    virtual void toVector(std::vector<CoordinateXY>& coords) const = 0;
+
     /// Returns <code>true</code> it list contains no coordinates.
     virtual bool isEmpty() const = 0;
 
     /// Copy Coordinate c to position pos
     virtual void setAt(const Coordinate& c, std::size_t pos) = 0;
+
+    virtual void setAt(const CoordinateXY& c, std::size_t pos) {
+            setAt(Coordinate(c), pos);
+    }
 
     /// Get a string representation of CoordinateSequence
     std::string toString() const;

@@ -116,6 +116,30 @@ public:
         return p1;
     };
 
+    /// gets the minimum X ordinate value
+    double minX() const
+    {
+        return std::min(p0.x, p1.x);
+    };
+
+    /// gets the maximum X ordinate value
+    double maxX() const
+    {
+        return std::min(p0.x, p1.x);
+    };
+
+    /// gets the minimum Y ordinate value
+    double minY() const
+    {
+        return std::min(p0.y, p1.y);
+    };
+
+    /// gets the maximum Y ordinate value
+    double maxY() const
+    {
+        return std::max(p0.y, p1.y);
+    };
+
     /// Computes the length of the line segment.
     double getLength() const
     {
@@ -488,26 +512,3 @@ private:
 
 } // namespace geos::geom
 } // namespace geos
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

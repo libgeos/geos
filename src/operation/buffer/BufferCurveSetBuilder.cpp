@@ -438,7 +438,7 @@ BufferCurveSetBuilder::isTriangleErodedCompletely(
 {
     Triangle tri(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 
-    Coordinate inCentre;
+    CoordinateXY inCentre;
     tri.inCentre(inCentre);
     double distToCentre = Distance::pointToSegment(inCentre, tri.p0, tri.p1);
     bool ret = distToCentre < std::fabs(bufferDistance);

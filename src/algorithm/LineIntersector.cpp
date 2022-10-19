@@ -270,7 +270,7 @@ LineIntersector::computeIntersection(const Coordinate& p, const Coordinate& p1, 
 
 /* public static */
 bool
-LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
+LineIntersector::hasIntersection(const CoordinateXY& p, const CoordinateXY& p1, const CoordinateXY& p2)
 {
     if(Envelope::intersects(p1, p2, p)) {
         if((Orientation::index(p1, p2, p) == 0) &&

@@ -300,6 +300,7 @@ void object::test<9>
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
 
+    ensure_equals(pt->getCoordinateDimension(), 3u);
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
     ensure_equals(pt->getBoundaryDimension(), geos::geom::Dimension::False);
@@ -1250,6 +1251,54 @@ void object::test<37>
 
     ensure_equals(mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
     ensure_equals(mp->getNumGeometries(), 2u);
+}
+
+// Test of createPoint(const Coordinate &coordinate) const
+template<>
+template<>
+void object::test<38>
+()
+{
+    geos::geom::CoordinateXY coord(x_, y_);
+
+    auto pt = factory_->createPoint(coord);
+
+    ensure("createPoint() returned null pointer.", pt != nullptr);
+    ensure("createPoint() returned empty point.", !pt->isEmpty());
+    ensure(pt->isSimple());
+    ensure(pt->isValid());
+    ensure(pt->getCoordinate() != nullptr);
+
+    CoordinateCPtr pcoord = pt->getCoordinate();
+    ensure(pcoord != nullptr);
+    ensure_equals(pcoord->x, x_);
+    ensure_equals(pcoord->y, y_);
+    ensure(std::isnan(pcoord->z));
+
+    std::unique_ptr<geos::geom::Geometry> geo;
+    geo = pt->getEnvelope();
+    ensure(geo != nullptr);
+    ensure(!geo->isEmpty());
+
+    geo = pt->getCentroid();
+    ensure(geo != nullptr);
+    ensure(!geo->isEmpty());
+
+    geo = pt->getBoundary();
+    ensure(geo != nullptr);
+    ensure(geo->isEmpty());
+
+    geo = pt->convexHull();
+    ensure(geo != nullptr);
+    ensure(!geo->isEmpty());
+
+    ensure_equals(pt->getCoordinateDimension(), 2u);
+    ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
+    ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
+    ensure_equals(pt->getBoundaryDimension(), geos::geom::Dimension::False);
+    ensure_equals(pt->getNumPoints(), 1u);
+    ensure_equals(pt->getLength(), 0.0);
+    ensure_equals(pt->getArea(), 0.0);
 }
 
 } // namespace tut

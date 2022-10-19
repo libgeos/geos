@@ -96,8 +96,8 @@ struct test_lengthindexedline_data {
     {
         GeomPtr input(reader.read(inputStr));
         GeomPtr testPoint(reader.read(testPtWKT));
-        const Coordinate* testPt = testPoint->getCoordinate();
-        bool resultOK = indexOfAfterCheck(input.get(), *testPt);
+        const Coordinate testPt(*testPoint->getCoordinate());
+        bool resultOK = indexOfAfterCheck(input.get(), testPt);
         ensure(resultOK);
     }
 
@@ -108,11 +108,11 @@ struct test_lengthindexedline_data {
         GeomPtr input(reader.read(inputWKT));
         GeomPtr testPoint(reader.read(testPtWKT));
         GeomPtr expectedPoint(reader.read(expectedPtWKT));
-        const Coordinate* testPt = testPoint->getCoordinate();
-        const Coordinate* expectedPt = expectedPoint->getCoordinate();
-        Coordinate offsetPt = extractOffsetAt(input.get(), *testPt, offsetDistance);
+        const Coordinate testPt(*testPoint->getCoordinate());
+        const Coordinate expectedPt(*expectedPoint->getCoordinate());
+        Coordinate offsetPt = extractOffsetAt(input.get(), testPt, offsetDistance);
 
-        bool isOk = offsetPt.distance(*expectedPt) < TOLERANCE_DIST;
+        bool isOk = offsetPt.distance(expectedPt) < TOLERANCE_DIST;
         if(! isOk) {
             cout << "Expected = " << *expectedPoint << "  Actual = " << offsetPt << endl;
         }

@@ -58,7 +58,7 @@ namespace prep { // geos::geom::prep
 class BasicPreparedGeometry: public PreparedGeometry {
 private:
     const geom::Geometry* baseGeom;
-    Coordinate::ConstVect representativePts;
+    std::vector<const CoordinateXY*> representativePts;
 
 protected:
     /**
@@ -103,7 +103,7 @@ public:
      *
      * @return a List of Coordinate
      */
-    const Coordinate::ConstVect*
+    const std::vector<const CoordinateXY*>*
     getRepresentativePoints()  const
     {
         return &representativePts;
