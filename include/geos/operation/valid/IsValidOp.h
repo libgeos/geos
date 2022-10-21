@@ -19,6 +19,7 @@
 
 #include <geos/operation/valid/PolygonTopologyAnalyzer.h>
 #include <geos/operation/valid/TopologyValidationError.h>
+#include <geos/util.h>
 
 
 // Forward declarations
@@ -76,8 +77,7 @@ private:
         return validErr != nullptr;
     }
 
-
-    void logInvalid(int code, const geom::CoordinateXY* pt);
+    void logInvalid(int code, const geom::CoordinateXY& pt);
 
     bool isValidGeometry(const geom::Geometry* g);
 

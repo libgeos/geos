@@ -90,7 +90,7 @@ void object::test<1> ()
 
     const TopologyValidationError* err = isValidOp.getValidationError();
     ensure(nullptr != err);
-    const Coordinate& errCoord = err->getCoordinate();
+    const auto& errCoord = err->getCoordinate();
 
     ensure_equals(err->getErrorType(),
                   TopologyValidationError::eInvalidCoordinate);
@@ -111,7 +111,7 @@ void object::test<2> ()
 
     const TopologyValidationError* err = isValidOp.getValidationError();
     ensure(nullptr != err);
-    const Coordinate& errCoord = err->getCoordinate();
+    const auto& errCoord = err->getCoordinate();
 
     ensure_equals(err->getErrorType(),
                   TopologyValidationError::eHoleOutsideShell);

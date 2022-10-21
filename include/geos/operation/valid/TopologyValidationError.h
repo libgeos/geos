@@ -55,9 +55,9 @@ public:
         oNoInvalidIntersection = -1
     };
 
-    TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);
+    TopologyValidationError(int newErrorType, const geom::CoordinateXY& newPt);
     TopologyValidationError(int newErrorType);
-    const geom::Coordinate& getCoordinate() const;
+    const geom::CoordinateXY& getCoordinate() const;
     std::string getMessage() const;
     int getErrorType() const;
     std::string toString() const;
@@ -66,7 +66,7 @@ private:
     // Used const char* to reduce dynamic allocations
     static const char* errMsg[];
     int errorType;
-    const geom::Coordinate pt;
+    const geom::CoordinateXY pt;
 };
 
 

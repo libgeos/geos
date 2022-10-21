@@ -771,7 +771,7 @@ extern "C" {
             const TopologyValidationError* err = ivo.getValidationError();
             if(err != nullptr) {
                 if(location) {
-                    *location = g->getFactory()->createPoint(err->getCoordinate());
+                    *location = g->getFactory()->createPoint(err->getCoordinate()).release();
                 }
                 if(reason) {
                     std::string errmsg(err->getMessage());
