@@ -45,7 +45,7 @@ const char* TopologyValidationError::errMsg[] = {
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,
-        const Coordinate& newPt)
+        const CoordinateXY& newPt)
     :
     errorType(newErrorType),
     pt(newPt)
@@ -65,7 +65,7 @@ TopologyValidationError::getErrorType() const
     return errorType;
 }
 
-const Coordinate&
+const CoordinateXY&
 TopologyValidationError::getCoordinate() const
 {
     return pt;

@@ -68,14 +68,11 @@ IsValidOp::getValidationError()
     return validErr.get();
 }
 
-
-/* private */
 void
-IsValidOp::logInvalid(int code, const CoordinateXY* pt)
+IsValidOp::logInvalid(int code, const CoordinateXY& pt)
 {
-    validErr.reset(new TopologyValidationError(code, Coordinate(*pt)));
+    validErr = detail::make_unique<TopologyValidationError>(code, pt);
 }
-
 
 /* private */
 bool
@@ -131,7 +128,7 @@ IsValidOp::isValid(const MultiPoint* g)
         if (p->isEmpty()) continue;
         if (!isValid(p->getCoordinate())) {
             logInvalid(TopologyValidationError::eInvalidCoordinate,
-                       p->getCoordinate());
+                       *(p->getCoordinate()));
             return false;;
         }
     }
@@ -266,7 +263,7 @@ IsValidOp::checkCoordinatesValid(const CoordinateSequence* coords)
     for (std::size_t i = 0; i < coords->size(); i++) {
         if (! isValid(coords->getAt(i))) {
             logInvalid(TopologyValidationError::eInvalidCoordinate,
-                       &coords->getAt(i));
+                       coords->getAt(i));
             return;
         }
     }
@@ -295,7 +292,7 @@ IsValidOp::checkRingClosed(const LinearRing* ring)
         Coordinate pt = ring->getNumPoints() >= 1
                         ? ring->getCoordinateN(0)
                         : Coordinate();
-        logInvalid(TopologyValidationError::eRingNotClosed, &pt);
+        logInvalid(TopologyValidationError::eRingNotClosed, pt);
         return;
     }
 }
@@ -344,7 +341,7 @@ IsValidOp::checkTooFewPoints(const LineString* line, std::size_t minSize)
         Coordinate pt = line->getNumPoints() >= 1
                         ? line->getCoordinateN(0)
                         : Coordinate();
-        logInvalid(TopologyValidationError::eTooFewPoints, &pt);
+        logInvalid(TopologyValidationError::eTooFewPoints, pt);
     }
 }
 
@@ -372,7 +369,7 @@ IsValidOp::checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer)
 {
     if (areaAnalyzer.hasInvalidIntersection()) {
         logInvalid(areaAnalyzer.getInvalidCode(),
-                   &areaAnalyzer.getInvalidLocation());
+                   areaAnalyzer.getInvalidLocation());
     }
 }
 
@@ -384,7 +381,7 @@ IsValidOp::checkRingSimple(const LinearRing* ring)
     Coordinate intPt = PolygonTopologyAnalyzer::findSelfIntersection(ring);
     if (! intPt.isNull()) {
         logInvalid(TopologyValidationError::eRingSelfIntersection,
-            &intPt);
+            intPt);
     }
 }
 
@@ -413,7 +410,7 @@ IsValidOp::checkHolesInShell(const Polygon* poly)
         if (invalidPt != nullptr) {
             logInvalid(
                 TopologyValidationError::eHoleOutsideShell,
-                invalidPt);
+                *invalidPt);
             return;
         }
     }
@@ -447,7 +444,7 @@ IsValidOp::checkHolesNotNested(const Polygon* poly)
     IndexedNestedHoleTester nestedTester(poly);
     if (nestedTester.isNested()) {
         logInvalid(TopologyValidationError::eNestedHoles,
-                   &nestedTester.getNestedPoint());
+                   nestedTester.getNestedPoint());
     }
 }
 
@@ -463,7 +460,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon* mp)
     IndexedNestedPolygonTester nestedTester(mp);
     if (nestedTester.isNested()) {
         logInvalid(TopologyValidationError::eNestedShells,
-                   &nestedTester.getNestedPoint());
+                   nestedTester.getNestedPoint());
     }
 }
 
@@ -474,7 +471,7 @@ IsValidOp::checkInteriorConnected(PolygonTopologyAnalyzer& analyzer)
 {
     if (analyzer.isInteriorDisconnected())
         logInvalid(TopologyValidationError::eDisconnectedInterior,
-                   &analyzer.getDisconnectionLocation());
+                   analyzer.getDisconnectionLocation());
 }
 
 

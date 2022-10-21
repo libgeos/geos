@@ -219,7 +219,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow = false, b
             if(doThrow) {
                 throw geos::util::TopologyException(
                     label + " is invalid: " + err->getMessage(),
-                    err->getCoordinate());
+                    Coordinate(err->getCoordinate()));
             }
             return false;
         }

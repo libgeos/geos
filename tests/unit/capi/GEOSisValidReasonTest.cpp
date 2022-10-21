@@ -44,6 +44,19 @@ void object::test<2>()
     GEOSFree(reason);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    std::string wkb = "01060000C00100000001030000C00100000003000000E3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFFE3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFFE3D9107E234F5041A3DB66BC97A30F4122ACEF440DAF9440FFFFFFFFFFFFEFFF";
+    input_ = GEOSGeomFromHEX_buf((unsigned char*) wkb.c_str(), wkb.size());
+
+    char* reason = GEOSisValidReason(input_);
+    ensure_equals(std::string(reason), "Too few points in geometry component[4275341.96977851 259186.966993061]");
+
+    GEOSFree(reason);
+}
+
 
 } // namespace tut
 
