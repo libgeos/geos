@@ -9,7 +9,9 @@ on:
   push:
     paths-ignore:
       - 'web/**'
-  pull_request: ~
+  pull_request:
+    paths-ignore:
+      - '**/.md'
 
 jobs:
   linux:
@@ -17,61 +19,142 @@ jobs:
     strategy:
       matrix:
         ci:
-        - {
-          compiler: g++,
-          build_type: Coverage,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.15.*,
-          cmake_extra: '-DBUILD_BENCHMARKS=ON',
+        - cxx_compiler: g++
+          c_compiler: gcc
+          build_type: Coverage
+          cxxstd: 11
+          arch: 64
+          packages: g++
+          cmake: 3.15.*
+          cmake_extra: '-DBUILD_BENCHMARKS=ON'
           os: ubuntu-18.04
-        }
-        - {
-          compiler: g++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 32,
-          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
-          cmake: 3.13.*,
+          
+        - cxx_compiler: g++-4.8
+          c_compiler: gcc-4.8
+          build_type: Release
+          cxxstd: 11
+          arch: 32
+          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib'
+          cmake: 3.13.*
           os: ubuntu-18.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.13.*,
+
+        - cxx_compiler: g++-5
+          c_compiler: gcc-5
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-5-multilib gcc-5-multilib'
+          cmake: 3.13.*
           os: ubuntu-18.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Debug,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04,
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 14,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: g++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.22.*,
+
+        - cxx_compiler: g++-6
+          c_compiler: gcc-6
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-6-multilib gcc-6-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
+        - cxx_compiler: g++-7
+          c_compiler: gcc-7
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-7-multilib gcc-7-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
+        - cxx_compiler: g++-8
+          c_compiler: gcc-8
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-8-multilib gcc-8-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
+        - cxx_compiler: g++-9
+          c_compiler: gcc-9
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-9-multilib gcc-9-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+        
+        - cxx_compiler: g++-10
+          c_compiler: gcc-10
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'g++-10-multilib gcc-10-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+        
+        - cxx_compiler: g++-11
+          c_compiler: gcc-11
+          build_type: Release
+          cxxstd: 17
+          arch: 64
+          packages: 'g++'
+          cmake: 3.22.*
           os: ubuntu-22.04
-        }
+        
+        - cxx_compiler: g++-11
+          c_compiler: gcc-11
+          build_type: Release
+          cxxstd: 20
+          arch: 64
+          packages: 'g++'
+          cmake: 3.22.*
+          os: ubuntu-22.04
+
+        - cxx_compiler: clang++-7
+          c_compiler: clang-7
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'clang-7'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
+        - cxx_compiler: clang++-8
+          c_compiler: clang-8
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'clang-8'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
+        - cxx_compiler: clang++-9
+          c_compiler: clang-9
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'clang-9'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+        
+        - cxx_compiler: clang++-10
+          c_compiler: clang
+          build_type: Debug
+          cxxstd: 11
+          arch: 64
+          packages: 'clang'
+          cmake: 3.17.*
+          os: ubuntu-20.04
+        
+        - cxx_compiler: clang++-10
+          c_compiler: clang
+          build_type: Release
+          cxxstd: 14
+          arch: 64
+          packages: 'clang'
+          cmake: 3.17.*
+          os: ubuntu-20.04
+
 
     runs-on: ${{ matrix.ci.os }}
     steps:
@@ -97,7 +180,7 @@ jobs:
         mkdir build.cmake
         cd build.cmake
         cmake --version
-        cmake ${{ matrix.ci.cmake_extra }} -DCMAKE_CXX_COMPILER=${{ matrix.ci.compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
+        cmake ${{ matrix.ci.cmake_extra }} -DCMAKE_C_COMPILER=${{ matrix.ci.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.ci.cxx_compiler }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_DOCUMENTATION=YES -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
         make -j 2
         cmake --build . --target docs
 
@@ -232,25 +315,75 @@ jobs:
        cd build
        ctest --output-on-failure -C Release
 
-  # windows-msvc-17:
-  #   name: 'Windows (Visual Studio 2017, Release, windows-2016)'
-  #   runs-on: windows-2016
-  #   steps:
-  #   - name: 'Check Out'
-  #     uses: actions/checkout@v2
+  macos:
+    name: 'macOS clang'
+    strategy:
+      matrix:
+        xcode: [11.7, 12.4, 13.2.1]
+        cxxstd: [11]
+        build_type: ['Debug']
+        include:
+          - xcode: 13.2.1
+            cxxstd: 14
+            build_type: Debug
+          - xcode: 13.2.1
+            cxxstd: 17
+            build_type: Debug
+          - xcode: 13.2.1
+            cxxstd: 20
+            build_type: Debug
+          
+    runs-on: macos-11
+    steps:
 
-  #   - name: 'Build'
-  #     run: |
-  #      mkdir build
-  #      cd build
-  #      cmake --version
-  #      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
-  #      cmake --build . --config Release -j 2
+    - name: 'Install'
+      env:
+        XCODE_APP: /Applications/XCode_${{ matrix.xcode }}.app
+      run: |
+        set -e
+        uname -a
+        sudo xcode-select -switch ${XCODE_APP}
+        which clang++
+        clang++ --version
 
-  #   - name: 'Test'
-  #     run: |
-  #      cd build
-  #      ctest --output-on-failure -C Release
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+
+    - name: 'Build'
+      env:
+        BUILD_TYPE: ${{ matrix.build_type }}
+        CXX_STANDARD: ${{ matrix.cxxstd }}
+      run: |
+        set -e
+        mkdir build
+        cd build
+        cmake --version
+        cmake -DCMAKE_CXX_STANDARD=${CXX_STANDARD} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+        cmake --build . --config ${BUILD_TYPE} -j 3
+
+    - name: 'Test'
+      run: |
+        cd build
+        ctest -V --output-on-failure -C ${BUILD_TYPE}
+
+
+  code-quality:
+    name: Code quality checks
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install
+      run: |
+        set -e
+        sudo -E apt-get update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
+        
+    - name: 'Check Out'
+      uses: actions/checkout@v2
+
+    - name: 'cppcheck'
+      run: |
+        ./tools/cppcheck.sh
+
 
   cmake-subproject:
     name: 'CMake Subproject'
