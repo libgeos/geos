@@ -608,9 +608,8 @@ QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
         QuadEdge* qe = &quartet.base();
         const Vertex& v = qe->orig();
 
-        if(visitedVertices.find(v) == visitedVertices.end()) {	//if v not found
-            visitedVertices.insert(v);
-
+        if(visitedVertices.insert(v).second) {
+            // v was not found and was newly inserted
             if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(v)) {
                 edges->push_back(qe);
             }
@@ -618,8 +617,8 @@ QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
         QuadEdge* qd = &(qe->sym());
         const Vertex& vd = qd->orig();
 
-        if(visitedVertices.find(vd) == visitedVertices.end()) {
-            visitedVertices.insert(vd);
+        if (visitedVertices.insert(vd).second) {
+            // vd was not found and was newly inserted
             if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(vd)) {
                 edges->push_back(qd);
             }
