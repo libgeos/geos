@@ -99,9 +99,9 @@ $(function() {
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        oNoInvalidIntersection = -1</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    TopologyValidationError(<span class="keywordtype">int</span> newErrorType, <span class="keyword">const</span> geom::Coordinate&amp; newPt);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    TopologyValidationError(<span class="keywordtype">int</span> newErrorType, <span class="keyword">const</span> geom::CoordinateXY&amp; newPt);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    TopologyValidationError(<span class="keywordtype">int</span> newErrorType);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">const</span> geom::Coordinate&amp; getCoordinate() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; getCoordinate() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::string getMessage() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">int</span> getErrorType() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::string toString() <span class="keyword">const</span>;</div>
@@ -110,7 +110,7 @@ $(function() {
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// Used const char* to reduce dynamic allocations</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* errMsg[];</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">int</span> errorType;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">const</span> geom::Coordinate pt;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY pt;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
