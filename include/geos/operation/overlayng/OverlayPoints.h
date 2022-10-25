@@ -82,10 +82,6 @@ private:
 
     std::map<Coordinate, std::unique_ptr<Point>> buildPointMap(const Geometry* geom);
 
-    Coordinate roundCoord(const Point* pt, const PrecisionModel* pm) const;
-
-
-
 public:
 
     /**
@@ -120,4 +116,3 @@ public:
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos
-
