@@ -29,14 +29,47 @@
 #include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/util/Assert.h>
 
-
-
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-
 using namespace geos::geom;
+
+/**
+ * @brief Extracts and rounds coordinates from a geometry
+ *
+ */
+class CoordinateExtractingFilter: public geom::CoordinateFilter {
+public:
+    CoordinateExtractingFilter(CoordinateArraySequence& p_pts, const PrecisionModel& p_pm)
+        : pts(p_pts), pm(p_pm)
+    {}
+
+    /**
+     * Destructor.
+     * Virtual dctor promises appropriate behaviour when someone will
+     * delete a derived-class object via a base-class pointer.
+     * http://www.parashift.com/c++-faq-lite/virtual-functions.html#faq-20.7
+     */
+    ~CoordinateExtractingFilter() override {}
+
+    /**
+     * Performs a filtering operation with or on coord in "read-only" mode.
+     * @param coord The "read-only" Coordinate to which
+     * 				the filter is applied.
+     */
+    void
+    filter_ro(const geom::Coordinate* coord) override
+    {
+        Coordinate p(*coord);
+        pm.makePrecise(p);
+        pts.add(p);
+    }
+
+private:
+    CoordinateArraySequence& pts;
+    const PrecisionModel& pm;
+};
 
 /*public*/
 OverlayMixedPoints::OverlayMixedPoints(int p_opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* p_pm)
@@ -234,16 +267,9 @@ std::unique_ptr<CoordinateArraySequence>
 OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
 {
     std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
-    std::size_t n = points->getNumGeometries();
-    for (std::size_t i = 0; i < n; i++) {
-        const Point* point = static_cast<const Point*>(points->getGeometryN(i));
-        if (point->isEmpty()) {
-            continue;
-        }
-        Coordinate coord;
-        OverlayUtil::round(point, p_pm, coord);
-        coords->add(coord, true);
-    }
+
+    CoordinateExtractingFilter filter(*coords, *p_pm);
+    points->apply_ro(&filter);
     return coords;
 }
 
@@ -274,12 +300,6 @@ OverlayMixedPoints::extractLines(const Geometry* geom) const
     }
     return list;
 }
-
-
-
-
-
-
 
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
