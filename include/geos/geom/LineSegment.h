@@ -125,7 +125,7 @@ public:
     /// gets the maximum X ordinate value
     double maxX() const
     {
-        return std::min(p0.x, p1.x);
+        return std::max(p0.x, p1.x);
     };
 
     /// gets the minimum Y ordinate value
