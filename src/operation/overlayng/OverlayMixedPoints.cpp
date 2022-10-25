@@ -41,7 +41,7 @@ using namespace geos::geom;
  */
 class CoordinateExtractingFilter: public geom::CoordinateFilter {
 public:
-    CoordinateExtractingFilter(std::unique_ptr<CoordinateArraySequence>& p_pts, const PrecisionModel* p_pm)
+    CoordinateExtractingFilter(CoordinateArraySequence& p_pts, const PrecisionModel& p_pm)
         : pts(p_pts), pm(p_pm)
     {}
 
@@ -62,13 +62,13 @@ public:
     filter_ro(const geom::Coordinate* coord) override
     {
         Coordinate p(*coord);
-        pm->makePrecise(p);
-        pts->add(p);
+        pm.makePrecise(p);
+        pts.add(p);
     }
 
 private:
-    std::unique_ptr<CoordinateArraySequence>& pts;
-    const PrecisionModel* pm;
+    CoordinateArraySequence& pts;
+    const PrecisionModel& pm;
 };
 
 /*public*/
@@ -268,20 +268,8 @@ OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionMo
 {
     std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
 
-    CoordinateExtractingFilter filter(coords, p_pm);
+    CoordinateExtractingFilter filter(*coords, *p_pm);
     points->apply_ro(&filter);
-    /*
-    std::size_t n = points->getNumGeometries();
-    for (std::size_t i = 0; i < n; i++) {
-        const Point* point = static_cast<const Point*>(points->getGeometryN(i));
-        if (point->isEmpty()) {
-            continue;
-        }
-        Coordinate coord;
-        OverlayUtil::round(point, p_pm, coord);
-        coords->add(coord, true);
-    }
-    */
     return coords;
 }
 

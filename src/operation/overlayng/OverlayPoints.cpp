@@ -36,9 +36,9 @@ struct PointExtractingFilter: public GeometryComponentFilter {
     void
     filter_ro(const Geometry* geom)
     {
-        const Point* pt = dynamic_cast<const Point*>(geom);
-        if (! pt) return;
+        if (geom->getGeometryTypeId() != GEOS_POINT) return;
 
+        const Point* pt = static_cast<const Point*>(geom);
         // don't add empty points
         if (pt->isEmpty()) return;
 
@@ -53,8 +53,8 @@ struct PointExtractingFilter: public GeometryComponentFilter {
         }
     }
 
-    Coordinate
-    roundCoord(const Point* pt, const PrecisionModel* p_pm) const
+    static Coordinate
+    roundCoord(const Point* pt, const PrecisionModel* p_pm)
     {
         const Coordinate* p = pt->getCoordinate();
         if (OverlayUtil::isFloating(p_pm))
