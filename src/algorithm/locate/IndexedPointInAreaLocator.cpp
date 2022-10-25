@@ -52,11 +52,19 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init(const geom::Geometry& g
     // pre-compute size of segment vector
     std::size_t nsegs = 0;
     for(const geom::LineString* line : lines) {
+        //-- only include rings of Polygons or LinearRings
+        if (! line->isClosed())
+          continue;
+
         nsegs += line->getCoordinatesRO()->size() - 1;
     }
     index = decltype(index)(10, nsegs);
 
     for(const geom::LineString* line : lines) {
+        //-- only include rings of Polygons or LinearRings
+        if (! line->isClosed())
+          continue;
+
         addLine(line->getCoordinatesRO());
     }
 }
@@ -90,12 +98,6 @@ IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
     :	areaGeom(g)
 {
-    const std::type_info& areaGeomId = typeid(areaGeom);
-    if(areaGeomId != typeid(geom::Polygon)
-            &&	areaGeomId != typeid(geom::MultiPolygon)
-            &&	areaGeomId != typeid(geom::LinearRing)) {
-        throw util::IllegalArgumentException("Argument must be Polygonal or LinearRing");
-    }
 }
 
 geom::Location
