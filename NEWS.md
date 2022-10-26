@@ -22,6 +22,7 @@ xxxx-xx-xx
   - Implement indexed calculations for prepared geometry isWithinDistance (GH-691, Dan Baston)
   - Fix LineSegment.orientationIndex(LineSegment) (GH-699, Martin Davis)
   - Fix DepthSegment comparison operation (GH-707, Martin Davis)
+  - Add OverlayNG support for simple GeometryCollection inputs (GH-716, Martin Davis)
 
 
 ## Changes in 3.11.0
