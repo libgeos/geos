@@ -6,6 +6,7 @@
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
   - Fix LineSegment.orientationIndex(LineSegment) (GH-699, Martin Davis)
   - Fix DepthSegment comparison operation (GH-707, Martin Davis)
+  - Add OverlayNG support for simple GeometryCollection inputs (GH-716, Martin Davis)
 
 
 ## Changes in 3.11.0
