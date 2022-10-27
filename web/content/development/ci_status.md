@@ -22,7 +22,6 @@ draft: false
 
 * **GitHub** - Ubuntu various, Windows various, CMake
 * **GitLab** - Debian 8.2, GNU/Linux 64bit, GCC, automake
-* **Azure** - Ubunbu 20.04, Windows, MacOS, GCC various, clang various, cmake
 * **Debbie** - Debian sid (bullseye), GNU/Linux 64bit, GCC Debian 10.2.1, cmake (3.18.4) >= 3.9, autotools < 3.8
 * **Winnie** - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake (3.21.3)
 * **Dronie** - Alpine Linux 3.14 (alpine.latest), 64bit, GCC 10.3.1, CMake (3.20.3) ,  automake < 3.10
