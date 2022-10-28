@@ -6,6 +6,7 @@ Changes in 3.10.4
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
   - Fix LineSegment.orientationIndex(LineSegment) (GH-699, Martin Davis)
   - Add OverlayNG support for simple GeometryCollection inputs (GH-716, Martin Davis)
+  - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718)
 
 Changes in 3.10.3
 2022-06-03
