@@ -8,6 +8,7 @@
   - Fix DepthSegment comparison operation (GH-707, Martin Davis)
   - Add OverlayNG support for simple GeometryCollection inputs (GH-716, Martin Davis)
   - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718)
+  - Fix WKB hex endian test (GH-720, Paul Ramsey)
 
 ## Changes in 3.11.0
 2022-07-01
