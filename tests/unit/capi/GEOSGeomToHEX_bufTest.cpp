@@ -1,6 +1,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/util/Machine.h> // for getMachineByteOrder
 
 #include "capi_test_utils.h"
 
@@ -27,7 +28,15 @@ void object::test<1>()
     std::size_t size{};
     unsigned char* hex = GEOSGeomToHEX_buf(geom1_, &size);
     std::string hexStr(reinterpret_cast<char*>(hex));
-    ensure_equals(std::string{"0101000000000000000000F03F0000000000000040"}, hexStr);
+
+
+    if(getMachineByteOrder() == GEOS_WKB_XDR) {
+        ensure_equals(hexStr,
+            std::string{"00000000013FF00000000000004000000000000000"});
+    } else {
+        ensure_equals(hexStr,
+            std::string{"0101000000000000000000F03F0000000000000040"});
+    }
 
     free(hex);
 }
