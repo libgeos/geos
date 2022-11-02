@@ -183,7 +183,7 @@ public:
     double makePrecise(double val) const;
 
     /// Rounds the given Coordinate to the PrecisionModel grid.
-    void makePrecise(Coordinate& coord) const
+    void makePrecise(CoordinateXY& coord) const
     {
         // optimization for full precision
         if(modelType == FLOATING) {
@@ -194,7 +194,7 @@ public:
         coord.y = makePrecise(coord.y);
     };
 
-    void makePrecise(Coordinate* coord) const
+    void makePrecise(CoordinateXY* coord) const
     {
         assert(coord);
         return makePrecise(*coord);

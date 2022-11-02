@@ -56,7 +56,7 @@ SineStarFactory::createSineStar() const
     double centreX = env->getMinX() + radius;
     double centreY = env->getMinY() + radius;
 
-    std::vector<Coordinate> pts(nPts + 1);
+    std::vector<CoordinateXY> pts(nPts + 1);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         // the fraction of the way thru the current arm - in [0,1]

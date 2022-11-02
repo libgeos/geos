@@ -46,13 +46,13 @@ GeometricShapeFactory::GeometricShapeFactory(const GeometryFactory* factory)
 }
 
 void
-GeometricShapeFactory::setBase(const Coordinate& base)
+GeometricShapeFactory::setBase(const CoordinateXY& base)
 {
     dim.setBase(base);
 }
 
 void
-GeometricShapeFactory::setCentre(const Coordinate& centre)
+GeometricShapeFactory::setCentre(const CoordinateXY& centre)
 {
     dim.setCentre(centre);
 }
@@ -94,7 +94,7 @@ GeometricShapeFactory::createRectangle()
     double XsegLen = env->getWidth() / nSide;
     double YsegLen = env->getHeight() / nSide;
 
-    std::vector<Coordinate> vc(4 * nSide + 1);
+    std::vector<CoordinateXY> vc(4 * nSide + 1);
 
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX() + i * XsegLen;
@@ -134,7 +134,7 @@ GeometricShapeFactory::createCircle()
     double centreY = env->getMinY() + yRadius;
     env.reset();
 
-    std::vector<Coordinate> pts(nPts + 1);
+    std::vector<CoordinateXY> pts(nPts + 1);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = i * (2 * 3.14159265358979 / nPts);
@@ -166,7 +166,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    std::vector<Coordinate> pts(nPts);
+    std::vector<CoordinateXY> pts(nPts);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
@@ -196,7 +196,7 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    std::vector<Coordinate> pts(nPts + 2);
+    std::vector<CoordinateXY> pts(nPts + 2);
     uint32_t iPt = 0;
     pts[iPt++] = coord(centreX, centreY);
     for(uint32_t i = 0; i < nPts; i++) {
@@ -215,19 +215,19 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 
 GeometricShapeFactory::Dimensions::Dimensions()
     :
-    base(Coordinate::getNull()),
-    centre(Coordinate::getNull())
+    base(CoordinateXY::getNull()),
+    centre(CoordinateXY::getNull())
 {
 }
 
 void
-GeometricShapeFactory::Dimensions::setBase(const Coordinate& newBase)
+GeometricShapeFactory::Dimensions::setBase(const CoordinateXY& newBase)
 {
     base = newBase;
 }
 
 void
-GeometricShapeFactory::Dimensions::setCentre(const Coordinate& newCentre)
+GeometricShapeFactory::Dimensions::setCentre(const CoordinateXY& newCentre)
 {
     centre = newCentre;
 }
@@ -264,10 +264,10 @@ GeometricShapeFactory::Dimensions::getEnvelope() const
 }
 
 /*protected*/
-Coordinate
+CoordinateXY
 GeometricShapeFactory::coord(double x, double y) const
 {
-    Coordinate ret(x, y);
+    CoordinateXY ret(x, y);
     precModel->makePrecise(&ret);
     return ret;
 }

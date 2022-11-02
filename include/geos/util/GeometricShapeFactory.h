@@ -68,12 +68,12 @@ protected:
     class Dimensions {
     public:
         Dimensions();
-        geom::Coordinate base;
-        geom::Coordinate centre;
+        geom::CoordinateXY base;
+        geom::CoordinateXY centre;
         double width;
         double height;
-        void setBase(const geom::Coordinate& newBase);
-        void setCentre(const geom::Coordinate& newCentre);
+        void setBase(const geom::CoordinateXY& newBase);
+        void setCentre(const geom::CoordinateXY& newCentre);
         void setSize(double size);
         void setWidth(double nWidth);
         void setHeight(double nHeight);
@@ -86,7 +86,7 @@ protected:
     Dimensions dim;
     uint32_t nPts;
 
-    geom::Coordinate coord(double x, double y) const;
+    geom::CoordinateXY coord(double x, double y) const;
 
 public:
 
@@ -149,7 +149,7 @@ public:
      *
      * @param base the base coordinate of the shape
      */
-    void setBase(const geom::Coordinate& base);
+    void setBase(const geom::CoordinateXY& base);
 
     /**
      * \brief
@@ -158,7 +158,7 @@ public:
      *
      * @param centre the centre coordinate of the shape
      */
-    void setCentre(const geom::Coordinate& centre);
+    void setCentre(const geom::CoordinateXY& centre);
 
     /**
      * \brief Sets the height of the shape.
