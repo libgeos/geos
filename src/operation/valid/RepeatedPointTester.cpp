@@ -37,7 +37,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-Coordinate&
+CoordinateXY&
 RepeatedPointTester::getCoordinate()
 {
     return repeatedCoord;
