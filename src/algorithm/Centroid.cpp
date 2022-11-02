@@ -35,7 +35,7 @@ namespace algorithm { // geos.algorithm
 
 /* static public */
 bool
-Centroid::getCentroid(const Geometry& geom, Coordinate& pt)
+Centroid::getCentroid(const Geometry& geom, CoordinateXY& pt)
 {
     Centroid cent(geom);
     return cent.getCentroid(pt);
@@ -43,7 +43,7 @@ Centroid::getCentroid(const Geometry& geom, Coordinate& pt)
 
 /* public */
 bool
-Centroid::getCentroid(Coordinate& cent) const
+Centroid::getCentroid(CoordinateXY& cent) const
 {
     if(std::abs(areasum2) > 0.0) {
         cent.x = cg3.x / 3 / areasum2;
@@ -90,9 +90,9 @@ Centroid::add(const Geometry& geom)
 
 /* private */
 void
-Centroid::setAreaBasePoint(const Coordinate& basePt)
+Centroid::setAreaBasePoint(const CoordinateXY& basePt)
 {
-    areaBasePt.reset(new Coordinate(basePt));
+    areaBasePt.reset(new CoordinateXY(basePt));
 }
 
 /* private */
@@ -133,7 +133,7 @@ Centroid::addHole(const CoordinateSequence& pts)
 
 /* private */
 void
-Centroid::addTriangle(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2, bool isPositiveArea)
+Centroid::addTriangle(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2, bool isPositiveArea)
 {
     double sign = (isPositiveArea) ? 1.0 : -1.0;
     centroid3(p0, p1, p2, triangleCent3);
@@ -145,7 +145,7 @@ Centroid::addTriangle(const Coordinate& p0, const Coordinate& p1, const Coordina
 
 /* static private */
 void
-Centroid::centroid3(const Coordinate& p1, const Coordinate& p2, const Coordinate& p3, Coordinate& c)
+Centroid::centroid3(const CoordinateXY& p1, const CoordinateXY& p2, const CoordinateXY& p3, CoordinateXY& c)
 {
     c.x = p1.x + p2.x + p3.x;
     c.y = p1.y + p2.y + p3.y;
@@ -154,7 +154,7 @@ Centroid::centroid3(const Coordinate& p1, const Coordinate& p2, const Coordinate
 
 /* static private */
 double
-Centroid::area2(const Coordinate& p1, const Coordinate& p2, const Coordinate& p3)
+Centroid::area2(const CoordinateXY& p1, const CoordinateXY& p2, const CoordinateXY& p3)
 {
     return
         (p2.x - p1.x) * (p3.y - p1.y) -
@@ -188,7 +188,7 @@ Centroid::addLineSegments(const CoordinateSequence& pts)
 
 /* private */
 void
-Centroid::addPoint(const Coordinate& pt)
+Centroid::addPoint(const CoordinateXY& pt)
 {
     ptCount += 1;
     ptCentSum.x += pt.x;
