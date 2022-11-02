@@ -24,7 +24,14 @@
 namespace geos {
 namespace geom { // geos::geom
 
+CoordinateXY CoordinateXY::_nullCoord = CoordinateXY(DoubleNotANumber, DoubleNotANumber);
 Coordinate Coordinate::_nullCoord = Coordinate(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
+
+CoordinateXY&
+CoordinateXY::getNull()
+{
+    return _nullCoord;
+}
 
 Coordinate&
 Coordinate::getNull()

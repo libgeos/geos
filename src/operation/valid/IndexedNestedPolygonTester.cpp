@@ -114,12 +114,14 @@ IndexedNestedPolygonTester::findNestedPoint(
     const LinearRing* shell,
     const Polygon* possibleOuterPoly,
     IndexedPointInAreaLocator& locator,
-    Coordinate& coordNested)
+    CoordinateXY& coordNested)
 {
     /**
      * Try checking two points, since checking point location is fast.
      */
-    const Coordinate& shellPt0 = shell->getCoordinateN(0);
+    const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
+
+    const CoordinateXY& shellPt0 = shellCoords->front();
     Location loc0 = locator.locate(&shellPt0);
     if (loc0 == Location::EXTERIOR) return false;
     if (loc0 == Location::INTERIOR) {
@@ -127,7 +129,7 @@ IndexedNestedPolygonTester::findNestedPoint(
         return true;
     }
 
-    const Coordinate& shellPt1 = shell->getCoordinateN(1);
+    const CoordinateXY& shellPt1 = shellCoords->getAt(1);
     Location loc1 = locator.locate(&shellPt1);
     if (loc1 == Location::EXTERIOR) return false;
     if (loc1 == Location::INTERIOR) {
@@ -158,7 +160,7 @@ bool
 IndexedNestedPolygonTester::findIncidentSegmentNestedPoint(
     const LinearRing* shell,
     const Polygon* poly,
-    Coordinate& coordNested)
+    CoordinateXY& coordNested)
 {
     const LinearRing* polyShell = poly->getExteriorRing();
     if (polyShell->isEmpty())
@@ -184,7 +186,7 @@ IndexedNestedPolygonTester::findIncidentSegmentNestedPoint(
      * The shell is contained in the polygon, but is not contained in a hole.
      * This is invalid.
      */
-    coordNested = shell->getCoordinateN(0);
+    coordNested = shell->getCoordinatesRO()->getAt(0);
     return true;
 }
 

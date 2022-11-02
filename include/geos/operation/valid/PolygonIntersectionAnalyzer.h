@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <geos/geom/Coordinate.h>
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/operation/valid/TopologyValidationError.h>
@@ -26,9 +27,6 @@
 
 // Forward declarations
 namespace geos {
-namespace geom {
-class Coordinate;
-}
 namespace noding {
 class SegmentString;
 }
@@ -38,7 +36,7 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::noding::SegmentString;
 
 class GEOS_DLL PolygonIntersectionAnalyzer : public noding::SegmentIntersector {
@@ -49,8 +47,8 @@ private:
     bool m_hasDoubleTouch = false;
     bool isInvertedRingValid = false;
     int invalidCode = TopologyValidationError::oNoInvalidIntersection;
-    Coordinate invalidLocation;
-    Coordinate doubleTouchLocation;
+    CoordinateXY invalidLocation;
+    CoordinateXY doubleTouchLocation;
 
     int findInvalidIntersection(
         const SegmentString* ss0, std::size_t segIndex0,
@@ -58,14 +56,14 @@ private:
 
     bool addDoubleTouch(
         const SegmentString* ss0, const SegmentString* ss1,
-        const Coordinate& intPt);
+        const CoordinateXY& intPt);
 
     void addSelfTouch(
-        const SegmentString* ss, const Coordinate& intPt,
-        const Coordinate* e00, const Coordinate* e01,
-        const Coordinate* e10, const Coordinate* e11);
+        const SegmentString* ss, const CoordinateXY& intPt,
+        const CoordinateXY* e00, const CoordinateXY* e01,
+        const CoordinateXY* e10, const CoordinateXY* e11);
 
-    const Coordinate& prevCoordinateInRing(
+    const CoordinateXY& prevCoordinateInRing(
         const SegmentString* ringSS, std::size_t segIndex) const;
 
     bool isAdjacentInRing(const SegmentString* ringSS,
@@ -81,8 +79,8 @@ public:
     */
     PolygonIntersectionAnalyzer(bool p_isInvertedRingValid)
         : isInvertedRingValid(p_isInvertedRingValid)
-        , invalidLocation(Coordinate::getNull())
-        , doubleTouchLocation(Coordinate::getNull())
+        , invalidLocation(CoordinateXY::getNull())
+        , doubleTouchLocation(CoordinateXY::getNull())
         {}
 
     void processIntersections(
@@ -103,7 +101,7 @@ public:
         return invalidCode;
     };
 
-    const Coordinate& getInvalidLocation() const
+    const CoordinateXY& getInvalidLocation() const
     {
         return invalidLocation;
     };
@@ -113,7 +111,7 @@ public:
         return m_hasDoubleTouch;
     };
 
-    const Coordinate& getDoubleTouchLocation() const
+    const CoordinateXY& getDoubleTouchLocation() const
     {
         return doubleTouchLocation;
     };

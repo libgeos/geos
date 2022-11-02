@@ -39,7 +39,7 @@ PolygonRing::isShell(const PolygonRing* polyRing)
 
 /* public static */
 bool
-PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& pt)
+PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const CoordinateXY& pt)
 {
     //--- skip if either polygon does not have holes
     if (ring0 == nullptr || ring1 == nullptr)
@@ -58,12 +58,12 @@ PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& 
 
 
 /* public static */
-const Coordinate*
+const CoordinateXY*
 PolygonRing::findHoleCycleLocation(std::vector<PolygonRing*> polyRings)
 {
     for (PolygonRing* polyRing : polyRings) {
         if (! polyRing->isInTouchSet()) {
-            const Coordinate* holeCycleLoc = polyRing->findHoleCycleLocation();
+            const CoordinateXY* holeCycleLoc = polyRing->findHoleCycleLocation();
             if (holeCycleLoc != nullptr) return holeCycleLoc;
         }
     }
@@ -72,11 +72,11 @@ PolygonRing::findHoleCycleLocation(std::vector<PolygonRing*> polyRings)
 
 
 /* public static */
-const Coordinate*
+const CoordinateXY*
 PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*> polyRings)
 {
     for (PolygonRing* polyRing : polyRings) {
-        const Coordinate* interiorSelfNode = polyRing->findInteriorSelfNode();
+        const CoordinateXY* interiorSelfNode = polyRing->findInteriorSelfNode();
         if (interiorSelfNode != nullptr) {
             return interiorSelfNode;
         }
@@ -100,7 +100,7 @@ PolygonRing::getTouches() const
 
 /* private */
 void
-PolygonRing::addTouch(PolygonRing* polyRing, const Coordinate& pt)
+PolygonRing::addTouch(PolygonRing* polyRing, const CoordinateXY& pt)
 {
     std::size_t nTouches = touches.count(polyRing->id);
     if (nTouches == 0) {
@@ -115,9 +115,9 @@ PolygonRing::addTouch(PolygonRing* polyRing, const Coordinate& pt)
 
 /* public */
 void
-PolygonRing::addSelfTouch(const Coordinate& origin,
-    const Coordinate* e00, const Coordinate* e01,
-    const Coordinate* e10, const Coordinate* e11)
+PolygonRing::addSelfTouch(const CoordinateXY& origin,
+    const CoordinateXY* e00, const CoordinateXY* e01,
+    const CoordinateXY* e10, const CoordinateXY* e11)
 {
     selfNodes.emplace_back(origin, e00, e01, e10, e11);
 }
@@ -125,7 +125,7 @@ PolygonRing::addSelfTouch(const Coordinate& origin,
 
 /* private */
 bool
-PolygonRing::isOnlyTouch(const PolygonRing* polyRing, const Coordinate& pt) const
+PolygonRing::isOnlyTouch(const PolygonRing* polyRing, const CoordinateXY& pt) const
 {
     //--- no touches for this ring
     if (touches.empty()) return true;
@@ -143,7 +143,7 @@ PolygonRing::isOnlyTouch(const PolygonRing* polyRing, const Coordinate& pt) cons
 
 
 /* private */
-const Coordinate*
+const CoordinateXY*
 PolygonRing::findHoleCycleLocation()
 {
     //--- the touch set including this ring is already processed
@@ -163,7 +163,7 @@ PolygonRing::findHoleCycleLocation()
     while (! touchStack.empty()) {
         PolygonRingTouch* touch = touchStack.top();
         touchStack.pop();
-        const Coordinate* holeCyclePt = scanForHoleCycle(touch, root, touchStack);
+        const CoordinateXY* holeCyclePt = scanForHoleCycle(touch, root, touchStack);
         if (holeCyclePt != nullptr) {
             return holeCyclePt;
         }
@@ -184,13 +184,13 @@ PolygonRing::init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack)
 
 
 /* private */
-const Coordinate*
+const CoordinateXY*
 PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
     PolygonRing* root,
     std::stack<PolygonRingTouch*>& touchStack)
 {
     PolygonRing* polyRing = currentTouch->getRing();
-    const Coordinate* currentPt = currentTouch->getCoordinate();
+    const CoordinateXY* currentPt = currentTouch->getCoordinate();
 
     /**
      * Scan the touched rings
@@ -228,7 +228,7 @@ PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
 
 
 /* public */
-const Coordinate*
+const CoordinateXY*
 PolygonRing::findInteriorSelfNode()
 {
     if (selfNodes.empty()) return nullptr;

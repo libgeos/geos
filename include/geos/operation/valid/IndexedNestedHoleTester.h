@@ -36,7 +36,7 @@ namespace valid {     // geos.operation.valid
 
 using geos::geom::Polygon;
 using geos::geom::LinearRing;
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 
 
 class GEOS_DLL IndexedNestedHoleTester {
@@ -45,7 +45,7 @@ private:
 
     const Polygon* polygon;
     index::strtree::TemplateSTRtree<const LinearRing*> index;
-    Coordinate nestedPt;
+    CoordinateXY nestedPt;
 
     void loadIndex();
 
@@ -63,7 +63,7 @@ public:
     *
     * @return a point on a nested hole, or null if none are nested
     */
-    const Coordinate& getNestedPoint() { return nestedPt; }
+    const CoordinateXY& getNestedPoint() { return nestedPt; }
 
     /**
     * Tests if any hole is nested (contained) within another hole.

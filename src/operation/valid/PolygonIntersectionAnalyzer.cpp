@@ -117,14 +117,14 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
      * Check topology of a vertex intersection.
      * The ring(s) must not cross.
      */
-    const Coordinate* e00 = &p00;
-    const Coordinate* e01 = &p01;
+    const CoordinateXY* e00 = &p00;
+    const CoordinateXY* e01 = &p01;
     if (intPt.equals2D(p00)) {
         e00 = &(prevCoordinateInRing(ss0, segIndex0));
         e01 = &p01;
     }
-    const Coordinate* e10 = &p10;
-    const Coordinate* e11 = &p11;
+    const CoordinateXY* e10 = &p10;
+    const CoordinateXY* e11 = &p11;
     if (intPt.equals2D(p10)) {
         e10 = &(prevCoordinateInRing(ss1, segIndex1));
         e11 = &p11;
@@ -164,7 +164,7 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
 bool
 PolygonIntersectionAnalyzer::addDoubleTouch(
     const SegmentString* ss0, const SegmentString* ss1,
-    const Coordinate& intPt)
+    const CoordinateXY& intPt)
 {
     return PolygonRing::addTouch(
         const_cast<PolygonRing*>(static_cast<const PolygonRing*>(ss0->getData())),
@@ -175,9 +175,9 @@ PolygonIntersectionAnalyzer::addDoubleTouch(
 /* private */
 void
 PolygonIntersectionAnalyzer::addSelfTouch(
-    const SegmentString* ss, const Coordinate& intPt,
-    const Coordinate* e00, const Coordinate* e01,
-    const Coordinate* e10, const Coordinate* e11)
+    const SegmentString* ss, const CoordinateXY& intPt,
+    const CoordinateXY* e00, const CoordinateXY* e01,
+    const CoordinateXY* e10, const CoordinateXY* e11)
 {
     const PolygonRing* constPolyRing = static_cast<const PolygonRing*>(ss->getData());
     PolygonRing* polyRing = const_cast<PolygonRing*>(constPolyRing);
@@ -188,7 +188,7 @@ PolygonIntersectionAnalyzer::addSelfTouch(
 }
 
 /* private */
-const Coordinate&
+const CoordinateXY&
 PolygonIntersectionAnalyzer::prevCoordinateInRing(
     const SegmentString* ringSS, std::size_t segIndex) const
 {

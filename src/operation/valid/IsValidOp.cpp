@@ -49,7 +49,7 @@ IsValidOp::isValid()
 
 /* public static */
 bool
-IsValidOp::isValid(const Coordinate* coord)
+IsValidOp::isValid(const CoordinateXY* coord)
 {
     if (std::isfinite(coord->x) && std::isfinite(coord->y)) {
         return true;
@@ -378,7 +378,7 @@ IsValidOp::checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer)
 void
 IsValidOp::checkRingSimple(const LinearRing* ring)
 {
-    Coordinate intPt = PolygonTopologyAnalyzer::findSelfIntersection(ring);
+    CoordinateXY intPt = PolygonTopologyAnalyzer::findSelfIntersection(ring);
     if (! intPt.isNull()) {
         logInvalid(TopologyValidationError::eRingSelfIntersection,
             intPt);
@@ -418,10 +418,10 @@ IsValidOp::checkHolesInShell(const Polygon* poly)
 
 
 /* private */
-const Coordinate *
+const CoordinateXY*
 IsValidOp::findHoleOutsideShellPoint(const LinearRing* hole, const LinearRing* shell)
 {
-    const Coordinate& holePt0 = hole->getCoordinateN(0);
+    const CoordinateXY& holePt0 = hole->getCoordinateN(0);
     /**
      * If hole envelope is not covered by shell, it must be outside
      */

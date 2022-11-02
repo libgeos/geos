@@ -17,6 +17,7 @@
 
 #include <geos/export.h>
 
+#include <geos/geom/Coordinate.h>
 #include <geos/operation/valid/PolygonIntersectionAnalyzer.h>
 #include <geos/operation/valid/PolygonRing.h>
 #include <geos/noding/BasicSegmentString.h>
@@ -27,7 +28,6 @@
 namespace geos {
 namespace geom {
 class Geometry;
-class Coordinate;
 }
 }
 
@@ -35,7 +35,7 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
 using geos::geom::Geometry;
 using geos::geom::LinearRing;
@@ -48,7 +48,7 @@ private:
     bool isInvertedRingValid = false;
     PolygonIntersectionAnalyzer segInt;
     std::vector<PolygonRing*> polyRings;
-    geom::Coordinate disconnectionPt;
+    geom::CoordinateXY disconnectionPt;
 
 
     // holding area for PolygonRings and SegmentStrings so we
@@ -64,8 +64,8 @@ private:
     PolygonRing* createPolygonRing(const LinearRing* p_ring);
     PolygonRing* createPolygonRing(const LinearRing* p_ring, int p_index, PolygonRing* p_shell);
 
-    static const Coordinate&
-    findNonEqualVertex(const LinearRing* ring, const Coordinate& p);
+    static const CoordinateXY&
+    findNonEqualVertex(const LinearRing* ring, const CoordinateXY& p);
 
     /**
      * Tests whether a touching segment is interior to a ring.
@@ -84,14 +84,14 @@ private:
      * @param ringPts the points of the ring
      * @return true if the segment is inside the ring.
      */
-    static bool isIncidentSegmentInRing(const Coordinate* p0, const Coordinate* p1,
+    static bool isIncidentSegmentInRing(const CoordinateXY* p0, const CoordinateXY* p1,
         const CoordinateSequence* ringPts);
 
-    static const Coordinate& findRingVertexPrev(const CoordinateSequence* ringPts,
-        std::size_t index, const Coordinate& node);
+    static const CoordinateXY& findRingVertexPrev(const CoordinateSequence* ringPts,
+        std::size_t index, const CoordinateXY& node);
 
-    static const Coordinate& findRingVertexNext(const CoordinateSequence* ringPts,
-        std::size_t index, const Coordinate& node);
+    static const CoordinateXY& findRingVertexNext(const CoordinateSequence* ringPts,
+        std::size_t index, const CoordinateXY& node);
 
     static std::size_t ringIndexPrev(const CoordinateSequence* ringPts, std::size_t index);
 
@@ -103,7 +103,7 @@ private:
      * @param pt the intersection point
      * @return the intersection segment index, or -1 if no intersection is found
      */
-    static std::size_t intersectingSegIndex(const CoordinateSequence* ringPts, const Coordinate* pt);
+    static std::size_t intersectingSegIndex(const CoordinateSequence* ringPts, const CoordinateXY* pt);
 
     std::vector<SegmentString*> createSegmentStrings(const Geometry* geom, bool isInvertedRingValid);
 
@@ -126,7 +126,7 @@ public:
      * @param ring the ring to analyze
      * @return a self-intersection point if one exists, or null
      */
-    static Coordinate findSelfIntersection(const LinearRing* ring);
+    static CoordinateXY findSelfIntersection(const LinearRing* ring);
 
     /**
      * Tests whether a ring is nested inside another ring.
@@ -158,7 +158,7 @@ public:
         return segInt.getInvalidCode();
     }
 
-    const Coordinate& getInvalidLocation() {
+    const CoordinateXY& getInvalidLocation() {
         return segInt.getInvalidLocation();
     }
 
@@ -172,7 +172,7 @@ public:
     */
     bool isInteriorDisconnected();
 
-    const Coordinate& getDisconnectionLocation() const
+    const CoordinateXY& getDisconnectionLocation() const
     {
         return disconnectionPt;
     };

@@ -26,27 +26,27 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 
 class GEOS_DLL PolygonRingSelfNode {
 
 private:
 
-    Coordinate nodePt;
-    const Coordinate* e00;
-    const Coordinate* e01;
-    const Coordinate* e10;
-    const Coordinate* e11;
+    CoordinateXY nodePt;
+    const CoordinateXY* e00;
+    const CoordinateXY* e01;
+    const CoordinateXY* e10;
+    const CoordinateXY* e11;
 
 
 public:
 
     PolygonRingSelfNode(
-        const Coordinate& p_nodePt,
-        const Coordinate* p_e00,
-        const Coordinate* p_e01,
-        const Coordinate* p_e10,
-        const Coordinate* p_e11)
+        const CoordinateXY& p_nodePt,
+        const CoordinateXY* p_e00,
+        const CoordinateXY* p_e01,
+        const CoordinateXY* p_e10,
+        const CoordinateXY* p_e11)
         : nodePt(p_nodePt)
         , e00(p_e00)
         , e01(p_e01)
@@ -59,7 +59,7 @@ public:
     *
     * @return
     */
-    const Coordinate* getCoordinate() const {
+    const CoordinateXY* getCoordinate() const {
         return &nodePt;
     }
 

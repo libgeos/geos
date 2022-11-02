@@ -143,7 +143,7 @@ public:
     /// The actual value of the intersection (if there is one)
     /// is equal to the value of <code>p</code>.
     ///
-    void computeIntersection(const geom::Coordinate& p, const geom::Coordinate& p1, const geom::Coordinate& p2);
+    void computeIntersection(const geom::CoordinateXY& p, const geom::CoordinateXY& p1, const geom::CoordinateXY& p2);
 
     /// Same as above but doesn't compute intersection point. Faster.
     static bool hasIntersection(const geom::CoordinateXY& p, const geom::CoordinateXY& p1, const geom::CoordinateXY& p2);

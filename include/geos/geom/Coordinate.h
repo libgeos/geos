@@ -34,6 +34,8 @@ struct CoordinateLessThen;
 
 class GEOS_DLL CoordinateXY {
 
+    static CoordinateXY _nullCoord;
+
 public:
     CoordinateXY()
         : x(0.0)
@@ -116,6 +118,8 @@ public:
         }
         return 0;
     };
+
+    static CoordinateXY& getNull();
 
     double distance(const CoordinateXY& p) const
     {

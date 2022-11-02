@@ -26,12 +26,12 @@ namespace algorithm { // geos.algorithm
 
 /* public static */
 bool
-PolygonNodeTopology::isCrossing(const Coordinate* nodePt,
-    const Coordinate* a0, const Coordinate* a1,
-    const Coordinate* b0, const Coordinate* b1)
+PolygonNodeTopology::isCrossing(const CoordinateXY* nodePt,
+    const CoordinateXY* a0, const CoordinateXY* a1,
+    const CoordinateXY* b0, const CoordinateXY* b1)
 {
-    const Coordinate* aLo = a0;
-    const Coordinate* aHi = a1;
+    const CoordinateXY* aLo = a0;
+    const CoordinateXY* aHi = a1;
     if (isAngleGreater(nodePt, aLo, aHi)) {
         aLo = a1;
         aHi = a0;
@@ -48,11 +48,11 @@ PolygonNodeTopology::isCrossing(const Coordinate* nodePt,
 
 /* public static */
 bool
-PolygonNodeTopology::isInteriorSegment(const Coordinate* nodePt,
-    const Coordinate* a0, const Coordinate* a1, const Coordinate* b)
+PolygonNodeTopology::isInteriorSegment(const CoordinateXY* nodePt,
+    const CoordinateXY* a0, const CoordinateXY* a1, const CoordinateXY* b)
 {
-    const Coordinate* aLo = a0;
-    const Coordinate* aHi = a1;
+    const CoordinateXY* aLo = a0;
+    const CoordinateXY* aHi = a1;
     bool isInteriorBetween = true;
     if (isAngleGreater(nodePt, aLo, aHi)) {
         aLo = a1;
@@ -67,9 +67,9 @@ PolygonNodeTopology::isInteriorSegment(const Coordinate* nodePt,
 
 /* private static */
 bool
-PolygonNodeTopology::isBetween(const Coordinate* origin,
-    const Coordinate* p,
-    const Coordinate* e0, const Coordinate* e1)
+PolygonNodeTopology::isBetween(const CoordinateXY* origin,
+    const CoordinateXY* p,
+    const CoordinateXY* e0, const CoordinateXY* e1)
 {
     bool isGreater0 = isAngleGreater(origin, p, e0);
     if (! isGreater0) return false;
@@ -80,8 +80,8 @@ PolygonNodeTopology::isBetween(const Coordinate* origin,
 
 /* private static */
 bool
-PolygonNodeTopology::isAngleGreater(const Coordinate* origin,
-    const Coordinate* p, const Coordinate* q)
+PolygonNodeTopology::isAngleGreater(const CoordinateXY* origin,
+    const CoordinateXY* p, const CoordinateXY* q)
 {
     int quadrantP = quadrant(origin, p);
     int quadrantQ = quadrant(origin, q);
@@ -103,7 +103,7 @@ PolygonNodeTopology::isAngleGreater(const Coordinate* origin,
 
 /* private static */
 int
-PolygonNodeTopology::quadrant(const Coordinate* origin, const Coordinate* p)
+PolygonNodeTopology::quadrant(const CoordinateXY* origin, const CoordinateXY* p)
 {
     double dx = p->x - origin->x;
     double dy = p->y - origin->y;

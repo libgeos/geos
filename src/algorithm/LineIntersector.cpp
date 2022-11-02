@@ -249,7 +249,7 @@ LineIntersector::interpolateZ(const Coordinate& p,
 
 /*public*/
 void
-LineIntersector::computeIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
+LineIntersector::computeIntersection(const CoordinateXY& p, const CoordinateXY& p1, const CoordinateXY& p2)
 {
     isProperVar = false;
 

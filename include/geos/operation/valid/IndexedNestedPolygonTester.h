@@ -28,6 +28,7 @@ namespace geom {
 class Coordinate;
 class Polygon;
 class LinearRing;
+class MultiPolygon;
 }
 }
 
@@ -39,7 +40,7 @@ namespace valid {     // geos.operation.valid
 using geos::geom::Polygon;
 using geos::geom::MultiPolygon;
 using geos::geom::LinearRing;
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using algorithm::locate::IndexedPointInAreaLocator;
 using index::strtree::TemplateSTRtree;
 
@@ -51,7 +52,7 @@ private:
     TemplateSTRtree<const Polygon*> index;
     // std::vector<IndexedPointInAreaLocator> locators;
     std::map<const Polygon*, IndexedPointInAreaLocator> locators;
-    Coordinate nestedPt;
+    CoordinateXY nestedPt;
 
     void loadIndex();
 
@@ -60,7 +61,7 @@ private:
     bool findNestedPoint(const LinearRing* shell,
         const Polygon* possibleOuterPoly,
         IndexedPointInAreaLocator& locator,
-        Coordinate& coordNested);
+        CoordinateXY& coordNested);
 
     /**
     * Finds a point of a shell segment which lies inside a polygon, if any.
@@ -75,7 +76,7 @@ private:
     static bool findIncidentSegmentNestedPoint(
         const LinearRing* shell,
         const Polygon* poly,
-        Coordinate& coordNested);
+        CoordinateXY& coordNested);
 
     // Declare type as noncopyable
     IndexedNestedPolygonTester(const IndexedNestedPolygonTester& other) = delete;
@@ -90,7 +91,7 @@ public:
     *
     * @return a point on a nested polygon, or null if none are nested
     */
-    const Coordinate& getNestedPoint() const { return nestedPt; }
+    const CoordinateXY& getNestedPoint() const { return nestedPt; }
 
     /**
     * Tests if any polygon is nested (contained) within another polygon.

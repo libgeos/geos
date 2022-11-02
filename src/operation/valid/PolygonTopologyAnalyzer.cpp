@@ -62,7 +62,7 @@ PolygonTopologyAnalyzer::PolygonTopologyAnalyzer(const Geometry* geom, bool p_is
 
 
 /* public static */
-Coordinate
+CoordinateXY
 PolygonTopologyAnalyzer::findSelfIntersection(const LinearRing* ring)
 {
     PolygonTopologyAnalyzer ata(ring, false);
@@ -76,7 +76,7 @@ bool
 PolygonTopologyAnalyzer::isRingNested(const LinearRing* test,
     const LinearRing* target)
 {
-    const Coordinate& p0 = test->getCoordinateN(0);
+    const CoordinateXY& p0 = test->getCoordinateN(0);
     const CoordinateSequence* targetPts = target->getCoordinatesRO();
     Location loc = algorithm::PointLocation::locateInRing(p0, *targetPts);
     if (loc == Location::EXTERIOR) return false;
@@ -87,13 +87,13 @@ PolygonTopologyAnalyzer::isRingNested(const LinearRing* test,
      * Use the topology at the node to check if the segment
      * is inside or outside the ring.
      */
-    Coordinate p1 = findNonEqualVertex(test, p0);
+    const CoordinateXY& p1 = findNonEqualVertex(test, p0);
     return isIncidentSegmentInRing(&p0, &p1, targetPts);
 }
 
 /* private static */
-const Coordinate&
-PolygonTopologyAnalyzer::findNonEqualVertex(const LinearRing* ring, const Coordinate& p)
+const CoordinateXY&
+PolygonTopologyAnalyzer::findNonEqualVertex(const LinearRing* ring, const CoordinateXY& p)
 {
     std::size_t i = 1;
     const Coordinate* next = &(ring->getCoordinateN(i));
@@ -107,18 +107,18 @@ PolygonTopologyAnalyzer::findNonEqualVertex(const LinearRing* ring, const Coordi
 /* private static */
 bool
 PolygonTopologyAnalyzer::isIncidentSegmentInRing(
-    const Coordinate* p0, const Coordinate* p1,
+    const CoordinateXY* p0, const CoordinateXY* p1,
     const CoordinateSequence* ringPts)
 {
     std::size_t index = intersectingSegIndex(ringPts, p0);
-    const Coordinate* rPrev = &findRingVertexPrev(ringPts, index, *p0);
-    const Coordinate* rNext = &findRingVertexNext(ringPts, index, *p0);
+    const CoordinateXY* rPrev = &findRingVertexPrev(ringPts, index, *p0);
+    const CoordinateXY* rNext = &findRingVertexNext(ringPts, index, *p0);
     /**
     * If ring orientation is not normalized, flip the corner orientation
     */
     bool isInteriorOnRight = ! algorithm::Orientation::isCCW(ringPts);
     if (! isInteriorOnRight) {
-        const Coordinate* temp = rPrev;
+        const CoordinateXY* temp = rPrev;
         rPrev = rNext;
         rNext = temp;
     }
@@ -126,11 +126,11 @@ PolygonTopologyAnalyzer::isIncidentSegmentInRing(
 }
 
 /* private static */
-const Coordinate&
-PolygonTopologyAnalyzer::findRingVertexPrev(const CoordinateSequence* ringPts, std::size_t index, const Coordinate& node)
+const CoordinateXY&
+PolygonTopologyAnalyzer::findRingVertexPrev(const CoordinateSequence* ringPts, std::size_t index, const CoordinateXY& node)
 {
     std::size_t iPrev = index;
-    const Coordinate* prev = &(ringPts->getAt(iPrev));
+    const CoordinateXY* prev = &(ringPts->getAt(iPrev));
     while (prev->equals2D(node)) {
       iPrev = ringIndexPrev(ringPts, iPrev);
       prev = &(ringPts->getAt(iPrev));
@@ -139,12 +139,12 @@ PolygonTopologyAnalyzer::findRingVertexPrev(const CoordinateSequence* ringPts, s
 }
 
 /* private static */
-const Coordinate&
-PolygonTopologyAnalyzer::findRingVertexNext(const CoordinateSequence* ringPts, std::size_t index, const Coordinate& node)
+const CoordinateXY&
+PolygonTopologyAnalyzer::findRingVertexNext(const CoordinateSequence* ringPts, std::size_t index, const CoordinateXY& node)
 {
     //-- safe, since index is always the start of a ring segment
     std::size_t iNext = index + 1;
-    const Coordinate* next = &(ringPts->getAt(iNext));
+    const CoordinateXY* next = &(ringPts->getAt(iNext));
     while (next->equals2D(node)) {
       iNext = ringIndexNext(ringPts, iNext);
       next = &(ringPts->getAt(iNext));
@@ -175,7 +175,7 @@ PolygonTopologyAnalyzer::ringIndexNext(const CoordinateSequence* ringPts, std::s
 /* private static */
 std::size_t
 PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
-    const Coordinate* pt)
+    const CoordinateXY* pt)
 {
     algorithm::LineIntersector li;
     for (std::size_t i = 0; i < ringPts->size() - 1; i++) {
@@ -220,7 +220,7 @@ void
 PolygonTopologyAnalyzer::checkInteriorDisconnectedBySelfTouch()
 {
     if (! polyRings.empty()) {
-        const Coordinate* dPt = PolygonRing::findInteriorSelfNode(polyRings);
+        const CoordinateXY* dPt = PolygonRing::findInteriorSelfNode(polyRings);
         if (dPt)
             disconnectionPt = *dPt;
     }
@@ -235,7 +235,7 @@ PolygonTopologyAnalyzer::checkInteriorDisconnectedByHoleCycle()
     * PolyRings will be null for empty, no hole or LinearRing inputs
     */
     if (! polyRings.empty()) {
-        const Coordinate* dPt = PolygonRing::findHoleCycleLocation(polyRings);
+        const CoordinateXY* dPt = PolygonRing::findHoleCycleLocation(polyRings);
         if (dPt)
             disconnectionPt = *dPt;
     }

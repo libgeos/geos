@@ -27,7 +27,6 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
 class LinearRing;
 }
 }
@@ -36,7 +35,7 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::LinearRing;
 
 
@@ -84,7 +83,7 @@ private:
     * @param pt the touch point
     * @return true if the rings touch only at the given point
     */
-    bool isOnlyTouch(const PolygonRing* polyRing, const Coordinate& pt) const;
+    bool isOnlyTouch(const PolygonRing* polyRing, const CoordinateXY& pt) const;
 
     /**
     * Detects whether the subgraph of holes linked by touch to this ring
@@ -94,7 +93,7 @@ private:
     *
     * @return a vertex in a hole cycle, or null if no cycle found
     */
-    const Coordinate* findHoleCycleLocation();
+    const CoordinateXY* findHoleCycleLocation();
 
     void init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack);
 
@@ -106,7 +105,7 @@ private:
     * @param touchStack the stack of touches to scan
     * @return a vertex in a hole cycle if found, or null
     */
-    const Coordinate* scanForHoleCycle(PolygonRingTouch* currentTouch,
+    const CoordinateXY* scanForHoleCycle(PolygonRingTouch* currentTouch,
         PolygonRing* root,
         std::stack<PolygonRingTouch*>& touchStack);
 
@@ -133,7 +132,7 @@ private:
 
     std::vector<PolygonRingTouch*> getTouches() const;
 
-    void addTouch(PolygonRing* polyRing, const Coordinate& pt);
+    void addTouch(PolygonRing* polyRing, const CoordinateXY& pt);
 
 
 public:
@@ -175,7 +174,7 @@ public:
     * @param pt the location where they touch
     * @return true if the polygons already touch
     */
-    static bool addTouch(PolygonRing* ring0, PolygonRing* ring1, const Coordinate& pt);
+    static bool addTouch(PolygonRing* ring0, PolygonRing* ring1, const CoordinateXY& pt);
 
     /**
     * Finds a location (if any) where a chain of holes forms a cycle
@@ -186,7 +185,7 @@ public:
     * @param polyRings the list of rings to check
     * @return a vertex contained in a ring cycle, or null if none is found
     */
-    static const Coordinate* findHoleCycleLocation(std::vector<PolygonRing*> polyRings);
+    static const CoordinateXY* findHoleCycleLocation(std::vector<PolygonRing*> polyRings);
 
     /**
     * Finds a location of an interior self-touch in a list of rings,
@@ -197,7 +196,7 @@ public:
     * @param polyRings the list of rings to check
     * @return the location of an interior self-touch node, or null if there are none
     */
-    static const Coordinate* findInteriorSelfNode(std::vector<PolygonRing*> polyRings);
+    static const CoordinateXY* findInteriorSelfNode(std::vector<PolygonRing*> polyRings);
 
     bool isSamePolygon(const PolygonRing* polyRing) const
     {
@@ -209,9 +208,9 @@ public:
         return shell == this;
     };
 
-    void addSelfTouch(const Coordinate& origin,
-        const Coordinate* e00, const Coordinate* e01,
-        const Coordinate* e10, const Coordinate* e11);
+    void addSelfTouch(const CoordinateXY& origin,
+        const CoordinateXY* e00, const CoordinateXY* e01,
+        const CoordinateXY* e10, const CoordinateXY* e11);
 
     /**
     * Finds the location of an invalid interior self-touch in this ring,
@@ -219,7 +218,7 @@ public:
     *
     * @return the location of an interior self-touch node, or null if there are none
     */
-    const Coordinate* findInteriorSelfNode();
+    const CoordinateXY* findInteriorSelfNode();
 
 
 };

@@ -16,15 +16,13 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Coordinate.h>
 
 
 #include <memory>
 
 // Forward declarations
 namespace geos {
-namespace geom {
-class Coordinate;
-}
 namespace operation {
 namespace valid {
 class PolygonRing;
@@ -36,28 +34,28 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 
 class GEOS_DLL PolygonRingTouch {
 
 private:
 
     PolygonRing* ring;
-    Coordinate touchPt;
+    CoordinateXY touchPt;
 
 
 public:
 
-    PolygonRingTouch(PolygonRing* p_ring, const Coordinate& p_pt)
+    PolygonRingTouch(PolygonRing* p_ring, const CoordinateXY& p_pt)
         : ring(p_ring)
         , touchPt(p_pt)
         {};
 
-    const Coordinate* getCoordinate() const;
+    const CoordinateXY* getCoordinate() const;
 
     PolygonRing* getRing() const;
 
-    bool isAtLocation(const Coordinate& pt) const;
+    bool isAtLocation(const CoordinateXY& pt) const;
 
 };
 

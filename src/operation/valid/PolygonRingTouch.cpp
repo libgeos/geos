@@ -25,7 +25,7 @@ namespace valid {     // geos.operation.valid
 using namespace geos::geom;
 
 /* public */
-const Coordinate*
+const CoordinateXY*
 PolygonRingTouch::getCoordinate() const
 {
     return &touchPt;
@@ -40,7 +40,7 @@ PolygonRingTouch::getRing() const
 
 /* public */
 bool
-PolygonRingTouch::isAtLocation(const Coordinate& pt) const
+PolygonRingTouch::isAtLocation(const CoordinateXY& pt) const
 {
     return touchPt.equals2D(pt);
 }
