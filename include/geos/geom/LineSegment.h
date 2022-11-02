@@ -404,7 +404,7 @@ public:
     /// @param ret the Coordinate to which the closest point on the line segment
     ///            to the point p will be written
     ///
-    void closestPoint(const Coordinate& p, Coordinate& ret) const;
+    void closestPoint(const CoordinateXY& p, CoordinateXY& ret) const;
 
     /** \brief
      * Compares this object with the specified object for order.
@@ -502,7 +502,7 @@ public:
     };
 
 private:
-    void project(double factor, Coordinate& ret) const;
+    void project(double factor, CoordinateXY& ret) const;
 
 };
 

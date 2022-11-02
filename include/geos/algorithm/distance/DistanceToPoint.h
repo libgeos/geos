@@ -49,19 +49,19 @@ public:
     DistanceToPoint() {}
 
     static void computeDistance(const geom::Geometry& geom,
-                                const geom::Coordinate& pt,
+                                const geom::CoordinateXY& pt,
                                 PointPairDistance& ptDist);
 
     static void computeDistance(const geom::LineString& geom,
-                                const geom::Coordinate& pt,
+                                const geom::CoordinateXY& pt,
                                 PointPairDistance& ptDist);
 
     static void computeDistance(const geom::LineSegment& geom,
-                                const geom::Coordinate& pt,
+                                const geom::CoordinateXY& pt,
                                 PointPairDistance& ptDist);
 
     static void computeDistance(const geom::Polygon& geom,
-                                const geom::Coordinate& pt,
+                                const geom::CoordinateXY& pt,
                                 PointPairDistance& ptDist);
 
 };

@@ -100,12 +100,12 @@ LineSegment::project(const Coordinate& p, Coordinate& ret) const
 
 /*private*/
 void
-LineSegment::project(double factor, Coordinate& ret) const
+LineSegment::project(double factor, CoordinateXY& ret) const
 {
     if( factor == 1.0 )
         ret = p1;
     else
-        ret = Coordinate(p0.x + factor * (p1.x - p0.x), p0.y + factor * (p1.y - p0.y));
+        ret = CoordinateXY(p0.x + factor * (p1.x - p0.x), p0.y + factor * (p1.y - p0.y));
 }
 
 bool
@@ -140,7 +140,7 @@ LineSegment::project(const LineSegment& seg, LineSegment& ret) const
 
 //Coordinate*
 void
-LineSegment::closestPoint(const Coordinate& p, Coordinate& ret) const
+LineSegment::closestPoint(const CoordinateXY& p, CoordinateXY& ret) const
 {
     double factor = projectionFactor(p);
     if(factor > 0 && factor < 1) {
