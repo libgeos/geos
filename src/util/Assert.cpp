@@ -38,8 +38,8 @@ Assert::isTrue(bool assertion, const std::string& message)
 }
 
 void
-Assert::equals(const Coordinate& expectedValue,
-               const Coordinate& actualValue, const std::string& message)
+Assert::equals(const CoordinateXY& expectedValue,
+               const CoordinateXY& actualValue, const std::string& message)
 {
     if(!(actualValue == expectedValue)) {
         throw  AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
