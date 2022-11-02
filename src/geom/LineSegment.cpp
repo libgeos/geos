@@ -47,7 +47,7 @@ LineSegment::reverse()
 
 /*public*/
 double
-LineSegment::projectionFactor(const Coordinate& p) const
+LineSegment::projectionFactor(const CoordinateXY& p) const
 {
     if(p == p0) {
         return 0.0;
@@ -75,7 +75,7 @@ LineSegment::projectionFactor(const Coordinate& p) const
 
 /*public*/
 double
-LineSegment::segmentFraction(const Coordinate& inputPt) const
+LineSegment::segmentFraction(const CoordinateXY& inputPt) const
 {
     double segFrac = projectionFactor(inputPt);
     if(segFrac < 0.0) {

@@ -256,7 +256,7 @@ public:
     };
 
     /// Computes the distance between this line segment and a point.
-    double distance(const Coordinate& p) const
+    double distance(const CoordinateXY& p) const
     {
         return algorithm::Distance::pointToSegment(p, p0, p1);
     };
@@ -265,7 +265,7 @@ public:
      * Computes the perpendicular distance between the (infinite)
      * line defined by this line segment and a point.
      */
-    double distancePerpendicular(const Coordinate& p) const
+    double distancePerpendicular(const CoordinateXY& p) const
     {
         return algorithm::Distance::pointToLinePerpendicular(p, p0, p1);
     };
@@ -352,7 +352,7 @@ public:
      * @return the projection factor for the point
      *
      */
-    double projectionFactor(const Coordinate& p) const;
+    double projectionFactor(const CoordinateXY& p) const;
 
     /** \brief
      * Computes the fraction of distance (in <tt>[0.0, 1.0]</tt>)
@@ -369,7 +369,7 @@ public:
      * @return the fraction along the line segment the projection
      *         of the point occurs
      */
-    double segmentFraction(const Coordinate& inputPt) const;
+    double segmentFraction(const CoordinateXY& inputPt) const;
 
     /** \brief
      * Compute the projection of a point onto the line determined

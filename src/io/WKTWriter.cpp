@@ -402,18 +402,20 @@ WKTWriter::appendLineStringText(const LineString* lineString, int p_level,
         writer->write("EMPTY");
     }
     else {
+        const CoordinateSequence* coords = lineString->getCoordinatesRO();
+
         if(doIndent) {
             indent(p_level, writer);
         }
         writer->write("(");
-        for(std::size_t i = 0, n = lineString->getNumPoints(); i < n; ++i) {
+        for(std::size_t i = 0, n = coords->size(); i < n; ++i) {
             if(i > 0) {
                 writer->write(", ");
                 if(i % 10 == 0) {
                     indent(p_level + 2, writer);
                 }
             }
-            appendCoordinate(&(lineString->getCoordinateN(i)), writer);
+            appendCoordinate(&coords->getAt(i), writer);
         }
         writer->write(")");
     }

@@ -36,7 +36,7 @@ namespace geos {
 namespace linearref { // geos.linearref
 
 LinearLocation
-LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
+LocationIndexOfPoint::indexOfFromStart(const CoordinateXY& inputPt,
                                        const LinearLocation* minIndex) const
 {
     double minDistance = DoubleInfinity;
@@ -74,14 +74,14 @@ LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
 
 
 LinearLocation
-LocationIndexOfPoint::indexOf(const Geometry* linearGeom, const Coordinate& inputPt)
+LocationIndexOfPoint::indexOf(const Geometry* linearGeom, const CoordinateXY& inputPt)
 {
     LocationIndexOfPoint locater(linearGeom);
     return locater.indexOf(inputPt);
 }
 
 LinearLocation
-LocationIndexOfPoint::indexOfAfter(const Geometry* linearGeom, const Coordinate& inputPt,
+LocationIndexOfPoint::indexOfAfter(const Geometry* linearGeom, const CoordinateXY& inputPt,
                                    const LinearLocation* minIndex)
 {
     LocationIndexOfPoint locater(linearGeom);
@@ -93,13 +93,13 @@ LocationIndexOfPoint::LocationIndexOfPoint(const Geometry* p_linearGeom) :
 {}
 
 LinearLocation
-LocationIndexOfPoint::indexOf(const Coordinate& inputPt) const
+LocationIndexOfPoint::indexOf(const CoordinateXY& inputPt) const
 {
     return indexOfFromStart(inputPt, nullptr);
 }
 
 LinearLocation
-LocationIndexOfPoint::indexOfAfter(const Coordinate& inputPt,
+LocationIndexOfPoint::indexOfAfter(const CoordinateXY& inputPt,
                                    const LinearLocation* minIndex) const
 {
     if(!minIndex) {

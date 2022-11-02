@@ -52,8 +52,8 @@ LocationIndexOfLine::indicesOf(const Geometry* subLine) const
     if(! firstLine || !lastLine) {
         throw util::IllegalArgumentException("LocationIndexOfLine::indicesOf only works with geometry collections of LineString");
     }
-    Coordinate startPt = firstLine->getCoordinateN(0);
-    Coordinate endPt = lastLine->getCoordinateN(lastLine->getNumPoints() - 1);
+    const CoordinateXY& startPt = firstLine->getCoordinateN(0);
+    const CoordinateXY& endPt = lastLine->getCoordinateN(lastLine->getNumPoints() - 1);
 
     LocationIndexOfPoint locPt(linearGeom);
     LinearLocation* subLineLoc = new LinearLocation[2];
