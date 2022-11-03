@@ -114,19 +114,28 @@ void object::test<3>
     ensure_dimension("LINESTRING(-117 33, -116 34)", 2);
 }
 
-// 4 - Ensure we can read ZM geometries, just discarding the M.
+// 4 - Ensure we can read ZM geometries
 template<>
 template<>
 void object::test<4>
 ()
 {
-    GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
-    auto coords = geom->getCoordinates();
+    auto geom = wktreader.read<geos::geom::LineString>("LINESTRING ZM (-117 33 2 3, -116 34 4 5)");
+    auto coords = geom->getCoordinatesRO();
 
-    ensure(coords->getDimension() == 3);
+    ensure_equals(coords->getDimension(), 4u);
 
-    ensure_equals(wktwriter.write(geom.get()),
-                  std::string("LINESTRING Z (-117 33 2, -116 34 4)"));
+    auto c0 = coords->getAt<geos::geom::CoordinateXYZM>(0);
+    ensure_equals(c0.x, -117);
+    ensure_equals(c0.y, 33);
+    ensure_equals(c0.z, 2);
+    ensure_equals(c0.m, 3);
+
+    auto c1 = coords->getAt<geos::geom::CoordinateXYZM>(1);
+    ensure_equals(c1.x, -116);
+    ensure_equals(c1.y, 34);
+    ensure_equals(c1.z, 4);
+    ensure_equals(c1.m, 5);
 }
 
 // 5 - Check support for mixed case keywords (and old style 3D)
@@ -412,6 +421,5 @@ void object::test<21>
         ensure_equals(msg, "ParseException: Unexpected text after end of geometry");
     }
 }
-
 
 } // namespace tut

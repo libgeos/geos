@@ -71,12 +71,11 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
-    // Check dim after reading first coord, because we may have picked up an implicit Z dimension
-    //std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
-
     // If true, size buffer according to the actual dimensions (2, 3, or 4)
-    // If false, size buffer for 3 dimensions regardless
-    bool packCoordinates = false;
+    // If false, size buffer for >= 3 dimensions regardless
+    // As long as GEOS calls CoordinateSequence::getAt<Coordinate> without
+    // checking dimensionality, we need to pad our Coordiantes with Z values.
+    bool packCoordinates = ordinateFlags.hasZ();
 
     std::unique_ptr<CoordinateSequence> coordinates;
 
@@ -86,7 +85,6 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
         coordinates = detail::make_unique<CoordinateSequence>(0u);
     }
 
-    //auto coordinates = detail::make_unique<CoordinateSequence>(0u, dim);
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);

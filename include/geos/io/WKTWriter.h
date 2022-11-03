@@ -21,6 +21,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/io/OrdinateSet.h>
 
 #include <string>
 #include <cctype>
@@ -35,6 +36,7 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class CoordinateXY;
+class CoordinateXYZM;
 class CoordinateSequence;
 class Geometry;
 class GeometryCollection;
@@ -87,6 +89,8 @@ public:
 
     /// Returns WKT string for the given Geometry
     std::string write(const geom::Geometry* geometry);
+
+    std::string write(const geom::Geometry& geometry);
 
     // Send Geometry's WKT to the given Writer
     void write(const geom::Geometry* geometry, Writer* writer);
@@ -181,71 +185,96 @@ protected:
 
     int decimalPlaces;
 
-    void appendGeometryTaggedText(const geom::Geometry* geometry, int level, Writer* writer);
+    void appendGeometryTaggedText(
+            const geom::Geometry& geometry,
+            OrdinateSet outputOrdinates,
+            int level,
+            Writer& writer) const;
 
     void appendPointTaggedText(
-        const geom::Coordinate* coordinate,
-        int level, Writer* writer);
+        const geom::Point& point,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendLineStringTaggedText(
-        const geom::LineString* lineString,
-        int level, Writer* writer);
+        const geom::LineString& lineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendLinearRingTaggedText(
-        const geom::LinearRing* lineString,
-        int level, Writer* writer);
+        const geom::LinearRing& lineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendPolygonTaggedText(
-        const geom::Polygon* polygon,
-        int level, Writer* writer);
+        const geom::Polygon& polygon,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendMultiPointTaggedText(
-        const geom::MultiPoint* multipoint,
-        int level, Writer* writer);
+        const geom::MultiPoint& multipoint,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendMultiLineStringTaggedText(
-        const geom::MultiLineString* multiLineString,
-        int level, Writer* writer);
+        const geom::MultiLineString& multiLineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendMultiPolygonTaggedText(
-        const geom::MultiPolygon* multiPolygon,
-        int level, Writer* writer);
+        const geom::MultiPolygon& multiPolygon,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendGeometryCollectionTaggedText(
-        const geom::GeometryCollection* geometryCollection,
-        int level, Writer* writer);
+        const geom::GeometryCollection& geometryCollection,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
-    void appendPointText(const geom::Coordinate* coordinate, int level,
-                         Writer* writer);
+    void appendOrdinateText(OrdinateSet outputOrdinates,
+                            Writer& writer) const;
 
-    void appendCoordinate(const geom::Coordinate* coordinate,
-                          Writer* writer);
+    void appendSequenceText(const geom::CoordinateSequence& seq,
+                            OrdinateSet outputOrdinates,
+                            int level,
+                            bool doIntent,
+                            Writer& writer) const;
+
+    void appendCoordinate(const geom::CoordinateXYZM& coordinate,
+                          OrdinateSet outputOrdinates,
+                          Writer& writer) const;
 
     std::string writeNumber(double d) const;
 
     void appendLineStringText(
-        const geom::LineString* lineString,
-        int level, bool doIndent, Writer* writer);
+        const geom::LineString& lineString,
+        OrdinateSet outputOrdinates,
+        int level, bool doIndent, Writer& writer) const;
 
     void appendPolygonText(
-        const geom::Polygon* polygon,
-        int level, bool indentFirst, Writer* writer);
+        const geom::Polygon& polygon,
+        OrdinateSet outputOrdinates,
+        int level, bool indentFirst, Writer& writer) const;
 
     void appendMultiPointText(
-        const geom::MultiPoint* multiPoint,
-        int level, Writer* writer);
+        const geom::MultiPoint& multiPoint,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendMultiLineStringText(
-        const geom::MultiLineString* multiLineString,
-        int level, bool indentFirst, Writer* writer);
+        const geom::MultiLineString& multiLineString,
+        OrdinateSet outputOrdinates,
+        int level, bool indentFirst, Writer& writer) const;
 
     void appendMultiPolygonText(
-        const geom::MultiPolygon* multiPolygon,
-        int level, Writer* writer);
+        const geom::MultiPolygon& multiPolygon,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendGeometryCollectionText(
-        const geom::GeometryCollection* geometryCollection,
-        int level, Writer* writer);
+        const geom::GeometryCollection& geometryCollection,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
 private:
 
@@ -263,8 +292,9 @@ private:
 
     int level;
 
+    static constexpr int coordsPerLine = 10;
+
     uint8_t defaultOutputDimension;
-    uint8_t outputDimension;
     bool old3D;
 
     void writeFormatted(

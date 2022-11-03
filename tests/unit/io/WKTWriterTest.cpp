@@ -24,6 +24,12 @@ namespace tut {
 // Test Group
 //
 
+using geos::geom::CoordinateSequence;
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::geom::CoordinateXYM;
+using geos::geom::CoordinateXYZM;
+
 // dummy data, not used
 struct test_wktwriter_data {
     typedef geos::geom::PrecisionModel PrecisionModel;
@@ -234,6 +240,68 @@ void object::test<8>
     GeomPtr gcgeom(gcwktreader.read(gctxt));
     std::string result = wktwriter.write(gcgeom.get());
     ensure_equals(result, std::string(gctxt));
+}
+
+// Test writing XYZM
+template<>
+template<>
+void object::test<9>
+()
+{
+    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, true, true);
+    coords->setAt(CoordinateXYZM(1, 2, 3, 4), 0);
+    coords->setAt(CoordinateXYZM(5, 6, 7, 8), 1);
+
+    auto ls = gf->createLineString(std::move(coords));
+
+    wktwriter.setTrim(true);
+    wktwriter.setOutputDimension(4);
+
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING ZM (1 2 3 4, 5 6 7 8)"));
+
+    // If only 3 dimensions are allowed we pick Z instead of M
+    wktwriter.setOutputDimension(3);
+
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING Z (1 2 3, 5 6 7)"));
+}
+
+// Test writing XYM
+template<>
+template<>
+void object::test<10>
+()
+{
+    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, false, true);
+    coords->setAt(CoordinateXYM(1, 2, 3), 0);
+    coords->setAt(CoordinateXYM(4, 5, 6), 1);
+
+    auto ls = gf->createLineString(std::move(coords));
+
+    wktwriter.setTrim(true);
+    wktwriter.setOutputDimension(3);
+
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING M (1 2 3, 4 5 6)"));
+}
+
+// Test writing XY
+template<>
+template<>
+void object::test<11>
+()
+{
+    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, false, false);
+    coords->setAt(CoordinateXY(1, 2), 0);
+    coords->setAt(CoordinateXY(3, 4), 1);
+
+    auto ls = gf->createLineString(std::move(coords));
+
+    wktwriter.setTrim(true);
+
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING (1 2, 3 4)"));
 }
 
 
