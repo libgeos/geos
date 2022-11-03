@@ -32,12 +32,14 @@ namespace geom { // geos.geom
 
 struct CoordinateLessThen;
 
-enum class CoordinateDimension : std::uint8_t {
+enum class CoordinateType : std::uint8_t {
     XY,
     XYZ,
     XYZM,
     XYM,
 };
+
+GEOS_DLL std::ostream& operator<< (std::ostream&, const CoordinateType);
 
 class CoordinateXYZM;
 class CoordinateXYM;
@@ -48,7 +50,7 @@ class GEOS_DLL CoordinateXY {
     static CoordinateXY _nullCoord;
 
 public:
-    static constexpr CoordinateDimension dim = CoordinateDimension::XY;
+    static constexpr CoordinateType dim = CoordinateType::XY;
 
     CoordinateXY()
         : x(DEFAULT_X)
@@ -207,7 +209,7 @@ private:
     static Coordinate _nullCoord;
 
 public:
-    static constexpr CoordinateDimension dim = CoordinateDimension::XYZ;
+    static constexpr CoordinateType dim = CoordinateType::XYZ;
 
     /// A set of const Coordinate pointers
     typedef std::set<const Coordinate*, CoordinateLessThen> ConstSet;
@@ -277,7 +279,7 @@ public:
 
 class GEOS_DLL CoordinateXYM : public CoordinateXY {
 public:
-    static constexpr CoordinateDimension dim = CoordinateDimension::XYM;
+    static constexpr CoordinateType dim = CoordinateType::XYM;
 
     CoordinateXYM() : CoordinateXYM(0.0, 0.0, 0.0) {}
 
@@ -305,7 +307,7 @@ public:
 
 class GEOS_DLL CoordinateXYZM : public Coordinate {
 public:
-    static constexpr CoordinateDimension dim = CoordinateDimension::XYZM;
+    static constexpr CoordinateType dim = CoordinateType::XYZM;
 
     CoordinateXYZM() : CoordinateXYZM(0.0, 0.0, 0.0, 0.0) {}
 

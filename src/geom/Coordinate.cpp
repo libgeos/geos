@@ -56,6 +56,19 @@ CoordinateXY::toString() const
 }
 
 std::ostream&
+operator<< (std::ostream& os, const CoordinateType typ)
+{
+    switch(typ) {
+        case CoordinateType::XY: os << "XY"; break;
+        case CoordinateType::XYZ: os << "XYZ"; break;
+        case CoordinateType::XYM: os << "XYM"; break;
+        case CoordinateType::XYZM: os << "XYZM"; break;
+    }
+
+    return os;
+}
+
+std::ostream&
 operator<< (std::ostream& os, const CoordinateXY& c)
 {
     os << c.x << " " << c.y;

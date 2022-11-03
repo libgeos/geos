@@ -673,7 +673,11 @@ void object::test<23>
     ensure_equals("XYM seq has size 2", seq.size(), 2u);
 
     ensure(seq.getAt<CoordinateXY>(0).equals2D(CoordinateXY(1, 2)));
-    ensure(seq.getAt<CoordinateXYM>(0).equals3D(CoordinateXYM(1, 2, 3)));
+    auto coord = seq.getAt<CoordinateXYZM>(1);
+    ensure_equals(coord.x, 4);
+    ensure_equals(coord.y, 5);
+    ensure_equals(coord.m, 6);
+    ensure(std::isnan(coord.z));
 }
 
 // Test construction and access from XY seq
@@ -1114,5 +1118,30 @@ void object::test<44>
     ensure_equals(seq1.size(), 1u);
 }
 
+// test Z-padded sequence
+template<>
+template<>
+void object::test<45>
+()
+{
+    CoordinateSequence xym_seq(0u, false, true);
+    xym_seq.add(CoordinateXYM(1, 2, 3));
+    xym_seq.add(CoordinateXYM(4, 5, 6));
+
+    ensure_equals("size", xym_seq.size(), 2u);
+    ensure_equals("type", xym_seq.getCoordinateType(), geos::geom::CoordinateType::XYZM);
+
+    // no crash when pulling CoordinateXYZM
+    auto c0 = xym_seq.getAt<CoordinateXYZM>(0);
+    ensure_equals(c0.x, 1);
+    ensure_equals(c0.y, 2);
+    ensure_equals(c0.m, 3);
+    ensure("z is NaN", std::isnan(c0.z));
+
+    auto c1 = xym_seq.getAt<Coordinate>(1);
+    ensure_equals(c1.x, 4);
+    ensure_equals(c1.y, 5);
+    ensure("z is NaN", std::isnan(c1.z));
+}
 
 } // namespace tut

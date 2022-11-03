@@ -93,7 +93,7 @@ public:
      * @param hasm
      * @param initialize
      */
-    CoordinateSequence(std::size_t size, bool hasz, bool hasm, bool initialize = true, bool padz = false);
+    CoordinateSequence(std::size_t size, bool hasz, bool hasm, bool initialize = true);
 
     /**
      * Create a CoordinateSequence from a list of XYZ coordinates.
@@ -228,15 +228,12 @@ public:
 
     /// Get the backing type of this CoordinateSequence. This is not necessarily
     /// consistent with the dimensionality of the stored Coordinates; 2D Coordinates
-    /// will be stored as a XYZ coordinates if the CoordinateSequence is not constructed
-    /// with a `hasz`, `hasm` constructor.
-    CoordinateDimension getCoordinateType() const {
-        switch((m_hasz << 2) | (m_hasm << 1) | static_cast<int>(m_hasdim)) {
-            case 7: return CoordinateDimension::XYZM;
-            case 5: return CoordinateDimension::XYZ;
-            case 3: return CoordinateDimension::XYM;
-            case 1: return CoordinateDimension::XY;
-            default: return CoordinateDimension::XYZ; // all sequences with implicit dimensionality use Coordinate as their type, even for 2D
+    /// may be stored as a XYZ coordinates.
+    CoordinateType getCoordinateType() const {
+        switch(stride()) {
+            case 4: return CoordinateType::XYZM;
+            case 2: return CoordinateType::XY;
+            default: return hasM() ? CoordinateType::XYM : CoordinateType::XYZ;
         }
     }
 
@@ -274,10 +271,10 @@ public:
     template<typename T>
     void getAt(std::size_t i, T& c) const {
         switch(getCoordinateType()) {
-            case CoordinateDimension::XY: c = getAt<CoordinateXY>(i); break;
-            case CoordinateDimension::XYZ: c = getAt<Coordinate>(i); break;
-            case CoordinateDimension::XYZM: c = getAt<CoordinateXYZM>(i); break;
-            case CoordinateDimension::XYM: c = getAt<CoordinateXYM>(i); break;
+            case CoordinateType::XY: c = getAt<CoordinateXY>(i); break;
+            case CoordinateType::XYZ: c = getAt<Coordinate>(i); break;
+            case CoordinateType::XYZM: c = getAt<CoordinateXYZM>(i); break;
+            case CoordinateType::XYM: c = getAt<CoordinateXYM>(i); break;
             default: getAt<Coordinate>(i);
         }
     }
@@ -386,10 +383,10 @@ public:
     template<typename T>
     void setAt(const T& c, std::size_t pos) {
         switch(getCoordinateType()) {
-            case CoordinateDimension::XY: stride() == 3 ? setAtImpl<Coordinate>(c, pos) : setAtImpl<CoordinateXY>(c, pos); break;
-            case CoordinateDimension::XYZ: setAtImpl<Coordinate>(c, pos); break;
-            case CoordinateDimension::XYZM: setAtImpl<CoordinateXYZM>(c, pos); break;
-            case CoordinateDimension::XYM: setAtImpl<CoordinateXYM>(c, pos); break;
+            case CoordinateType::XY: stride() == 3 ? setAtImpl<Coordinate>(c, pos) : setAtImpl<CoordinateXY>(c, pos); break;
+            case CoordinateType::XYZ: setAtImpl<Coordinate>(c, pos); break;
+            case CoordinateType::XYZM: setAtImpl<CoordinateXYZM>(c, pos); break;
+            case CoordinateType::XYM: setAtImpl<CoordinateXYM>(c, pos); break;
             default: setAtImpl<Coordinate>(c, pos);
         }
     }
@@ -523,7 +520,7 @@ public:
         auto npts = static_cast<std::size_t>(std::distance(from, to));
 
         // Clear some space
-        // FIXME case when m_stride == 0
+        // TODO use make_space
         m_vect.insert(std::next(m_vect.begin(), static_cast<decltype(m_vect)::iterator::difference_type>(i * m_stride)),
                       npts * m_stride,
                       0.0);

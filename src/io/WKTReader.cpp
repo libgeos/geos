@@ -71,12 +71,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
-    // As long as GEOS calls CoordinateSequence::getAt<Coordinate> without
-    // checking dimensionality, we need to pad our Coordinates with Z values.
-    // This means that XY is stored as XYZ and XYM is stored as XYZM.
-    constexpr bool padz = true;
-    auto coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM(), false, padz);
-
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);

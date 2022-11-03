@@ -36,12 +36,26 @@ namespace geom { // geos::geom
 static Profiler* profiler = Profiler::instance();
 #endif
 
+// If GEOS_COORDSEQ_PADZ is defined:
+// - XY sequences will be stored as XYZ
+// - XYM sequences will be stored as XYZM
+// This prevents incorrect results when an XYZ Coordinate is read from
+// a sequence storing XY or XYM. When GEOS is changed to check
+// coordinate types throughout the libary, this can be undefined to
+// store coordinates efficiently.
+#define GEOS_COORDSEQ_PADZ
+
 CoordinateSequence::CoordinateSequence() :
     CoordinateSequence(0, 0) {}
 
-CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, bool init, bool padz) :
-    m_vect(sz * (2u + hasm + (hasz || padz))),
-    m_stride(static_cast<std::uint8_t>(2u + hasm + (hasz || padz))),
+CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, bool init) :
+#ifdef GEOS_COORDSEQ_PADZ
+    m_vect(sz * (3u + hasm)),
+    m_stride(static_cast<std::uint8_t>(3u + hasm)),
+#else
+    m_vect(sz * (2u + hasm + hasz)),
+    m_stride(static_cast<std::uint8_t>(2u + hasm + hasz)),
+#endif
     m_hasdim(true),
     m_hasz(hasz),
     m_hasm(hasm)
@@ -87,7 +101,11 @@ CoordinateSequence::CoordinateSequence(const std::initializer_list<Coordinate>& 
 }
 
 CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXY>& list) :
+#ifdef GEOS_COORDSEQ_PADZ
+    m_stride(3),
+#else
     m_stride(2),
+#endif
     m_hasdim(true),
     m_hasz(false),
     m_hasm(false)
@@ -97,7 +115,11 @@ CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXY>
 }
 
 CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXYM>& list) :
+#ifdef GEOS_COORDSEQ_PADZ
+    m_stride(4),
+#else
     m_stride(3),
+#endif
     m_hasdim(true),
     m_hasz(false),
     m_hasm(true)
@@ -128,10 +150,10 @@ CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::siz
         make_space(pos, to - from + 1);
 
         switch(cs.getCoordinateType()) {
-            case CoordinateDimension::XY:   cs.forEach<CoordinateXY>(from, to, [this, &pos](const CoordinateXY& c) { setAt(c, pos++); }); break;
-            case CoordinateDimension::XYZ:  cs.forEach<Coordinate>(from, to, [this, &pos](const Coordinate& c) { setAt(c, pos++); }); break;
-            case CoordinateDimension::XYZM: cs.forEach<CoordinateXYZM>(from, to, [this, &pos](const CoordinateXYZM& c) { setAt(c, pos++); }); break;
-            case CoordinateDimension::XYM:  cs.forEach<CoordinateXYM>(from, to, [this, &pos](const CoordinateXYM& c) { setAt(c, pos++); }); break;
+            case CoordinateType::XY:   cs.forEach<CoordinateXY>(from, to, [this, &pos](const CoordinateXY& c) { setAt(c, pos++); }); break;
+            case CoordinateType::XYZ:  cs.forEach<Coordinate>(from, to, [this, &pos](const Coordinate& c) { setAt(c, pos++); }); break;
+            case CoordinateType::XYZM: cs.forEach<CoordinateXYZM>(from, to, [this, &pos](const CoordinateXYZM& c) { setAt(c, pos++); }); break;
+            case CoordinateType::XYM:  cs.forEach<CoordinateXYM>(from, to, [this, &pos](const CoordinateXYM& c) { setAt(c, pos++); }); break;
         }
     }
 }
@@ -406,10 +428,10 @@ void
 CoordinateSequence::sort()
 {
     switch(getCoordinateType()) {
-        case CoordinateDimension::XY:   std::sort(items<CoordinateXY>().begin(), items<CoordinateXY>().end()); return;
-        case CoordinateDimension::XYZ:  std::sort(items<Coordinate>().begin(), items<Coordinate>().end()); return;
-        case CoordinateDimension::XYZM: std::sort(items<CoordinateXYZM>().begin(), items<CoordinateXYZM>().end()); return;
-        case CoordinateDimension::XYM:  std::sort(items<CoordinateXYM>().begin(), items<CoordinateXYM>().end()); return;
+        case CoordinateType::XY:   std::sort(items<CoordinateXY>().begin(), items<CoordinateXY>().end()); return;
+        case CoordinateType::XYZ:  std::sort(items<Coordinate>().begin(), items<Coordinate>().end()); return;
+        case CoordinateType::XYZM: std::sort(items<CoordinateXYZM>().begin(), items<CoordinateXYZM>().end()); return;
+        case CoordinateType::XYM:  std::sort(items<CoordinateXYM>().begin(), items<CoordinateXYM>().end()); return;
     }
 }
 
