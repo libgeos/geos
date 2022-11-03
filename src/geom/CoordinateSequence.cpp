@@ -39,9 +39,9 @@ static Profiler* profiler = Profiler::instance();
 CoordinateSequence::CoordinateSequence() :
     CoordinateSequence(0, 0) {}
 
-CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, bool init) :
-    m_vect(sz * (2u + hasm + hasz)),
-    m_stride(static_cast<std::uint8_t>(2u + hasm + hasz)),
+CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, bool init, bool padz) :
+    m_vect(sz * (2u + hasm + (hasz || padz))),
+    m_stride(static_cast<std::uint8_t>(2u + hasm + (hasz || padz))),
     m_hasdim(true),
     m_hasz(hasz),
     m_hasm(hasm)

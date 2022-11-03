@@ -44,7 +44,9 @@ struct test_wktreader_data {
 
     void ensure_dimension(const std::string & wkt, std::size_t dim) const {
         auto geom = wktreader.read(wkt);
-        ensure_equals(geom->getCoordinateDimension(), dim);
+        ensure_equals(wkt,
+                      static_cast<std::size_t>(geom->getCoordinateDimension()),
+                      dim);
     }
 
     void ensure_parseexception(const std::string & wkt) const {
@@ -90,8 +92,7 @@ void object::test<2>
         "POINT(-117 33 10)",
         "POINTZ(-117 33 10)",
         "POINT Z(-117 33 10)",
-        "POINT Z (-117 33 10)",
-        "POINT (-117 33 10 6)" // discard implicit M
+        "POINT Z (-117 33 10)"
     };
 
     for (const auto& wkt : variants) {
@@ -231,31 +232,31 @@ void object::test<9>
 ()
 {
     ensure_dimension("POINT EMPTY", 2);
-    ensure_dimension("POINTM EMPTY", 2);
-    ensure_dimension("POINT M EMPTY", 2);
+    ensure_dimension("POINTM EMPTY", 3);
+    ensure_dimension("POINT M EMPTY", 3);
     ensure_dimension("POINTZ EMPTY", 3);
     ensure_dimension("POINT Z EMPTY", 3);
-    ensure_dimension("POINTZM EMPTY", 3);
-    ensure_dimension("POINT ZM EMPTY", 3);
-    ensure_dimension("POINT Z M EMPTY", 3);
+    ensure_dimension("POINTZM EMPTY", 4);
+    ensure_dimension("POINT ZM EMPTY", 4);
+    ensure_dimension("POINT Z M EMPTY", 4);
 
     ensure_dimension("LINESTRING EMPTY", 2);
-    ensure_dimension("LINESTRINGM EMPTY", 2);
-    ensure_dimension("LINESTRING M EMPTY", 2);
+    ensure_dimension("LINESTRINGM EMPTY", 3);
+    ensure_dimension("LINESTRING M EMPTY", 3);
     ensure_dimension("LINESTRINGZ EMPTY", 3);
     ensure_dimension("LINESTRING Z EMPTY", 3);
-    ensure_dimension("LINESTRINGZM EMPTY", 3);
-    ensure_dimension("LINESTRING ZM EMPTY", 3);
-    ensure_dimension("LINESTRING Z M EMPTY", 3);
+    ensure_dimension("LINESTRINGZM EMPTY", 4);
+    ensure_dimension("LINESTRING ZM EMPTY", 4);
+    ensure_dimension("LINESTRING Z M EMPTY", 4);
 
     ensure_dimension("POLYGON EMPTY", 2);
-    ensure_dimension("POLYGONM EMPTY", 2);
-    ensure_dimension("POLYGON M EMPTY", 2);
+    ensure_dimension("POLYGONM EMPTY", 3);
+    ensure_dimension("POLYGON M EMPTY", 3);
     ensure_dimension("POLYGONZ EMPTY", 3);
     ensure_dimension("POLYGON Z EMPTY", 3);
-    ensure_dimension("POLYGONZM EMPTY", 3);
-    ensure_dimension("POLYGON ZM EMPTY", 3);
-    ensure_dimension("POLYGON Z M EMPTY", 3);
+    ensure_dimension("POLYGONZM EMPTY", 4);
+    ensure_dimension("POLYGON ZM EMPTY", 4);
+    ensure_dimension("POLYGON Z M EMPTY", 4);
 }
 
 
@@ -337,10 +338,10 @@ void object::test<14>
 ()
 {
     auto geom = wktreader.read("POINT M(1 2 3)");
-    ensure_equals(geom->getCoordinateDimension(), 2u);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 
     geom = wktreader.read("POINTM(1 2 3)");
-    ensure_equals(geom->getCoordinateDimension(), 2u);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 }
 
 // https://github.com/libgeos/geos/issues/669
@@ -351,7 +352,7 @@ void object::test<15>
 {
     auto geom = wktreader.read("LINESTRINGZ(0 0 1, 1 1 1)");
 
-    ensure_equals(geom->getCoordinateDimension(), 3);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 }
 
 // Raise exception on dimensionality inconsistent with declared

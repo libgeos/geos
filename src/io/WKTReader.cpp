@@ -65,25 +65,17 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
 {
     std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), ordinateFlags.hasZ() ? 3 : 2);
+        return detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
     }
 
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
-    // If true, size buffer according to the actual dimensions (2, 3, or 4)
-    // If false, size buffer for >= 3 dimensions regardless
     // As long as GEOS calls CoordinateSequence::getAt<Coordinate> without
-    // checking dimensionality, we need to pad our Coordiantes with Z values.
-    bool packCoordinates = ordinateFlags.hasZ();
-
-    std::unique_ptr<CoordinateSequence> coordinates;
-
-    if (packCoordinates) {
-        coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
-    } else {
-        coordinates = detail::make_unique<CoordinateSequence>(0u);
-    }
+    // checking dimensionality, we need to pad our Coordinates with Z values.
+    // This means that XY is stored as XYZ and XYM is stored as XYZM.
+    constexpr bool padz = true;
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM(), false, padz);
 
     coordinates->add(coord);
 
@@ -320,16 +312,8 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
 std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
-    if(nextToken == "EMPTY") {
-        return geometryFactory->createPoint(ordinateFlags.hasZ() ? 3 : 2);
-    }
-
-    CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
-    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
-    getNextCloser(tokenizer);
-
-    return std::unique_ptr<Point>(geometryFactory->createPoint(coord));
+    auto coords = getCoordinates(tokenizer, ordinateFlags);
+    return geometryFactory->createPoint(std::move(coords));
 }
 
 std::unique_ptr<LineString>
@@ -425,7 +409,9 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlag
 {
     std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPolygon(ordinateFlags.hasZ() ? 3 : 2);
+        auto coords = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+        auto ring = geometryFactory->createLinearRing(std::move(coords));
+        return geometryFactory->createPolygon(std::move(ring));
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;

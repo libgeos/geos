@@ -93,7 +93,7 @@ public:
      * @param hasm
      * @param initialize
      */
-    CoordinateSequence(std::size_t size, bool hasz, bool hasm, bool initialize = true);
+    CoordinateSequence(std::size_t size, bool hasz, bool hasm, bool initialize = true, bool padz = false);
 
     /**
      * Create a CoordinateSequence from a list of XYZ coordinates.
