@@ -39,12 +39,24 @@ struct test_convexhull_data {
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
+    //-- WKT reader with Floating precision
+    geos::io::WKTReader rdr_F;
 
     test_convexhull_data()
         : geom_(nullptr), pm_(1), factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
     {
         assert(nullptr == geom_);
     }
+
+    void
+    checkHull(const std::string& wkt, const std::string& wktExpected)
+    {
+        std::unique_ptr<Geometry> geom = rdr_F.read(wkt);
+        std::unique_ptr<Geometry> actual = geom->convexHull();
+        std::unique_ptr<Geometry> expected = rdr_F.read(wktExpected);
+        ensure_equals_geometry(expected.get(), actual.get());
+    }
+
 };
 
 typedef test_group<test_convexhull_data> group;
@@ -218,5 +230,16 @@ void object::test<8>
     ensure(result != nullptr); // No crash!
 }
 
-} // namespace tut
+// Test convex hull failure from https://github.com/libgeos/geos/issues/722
+template<>
+template<>
+void object::test<9>
+()
+{
+    checkHull(
+        "MULTIPOINT ((-0.2 -0.1), (1.38777878e-17 -0.1), (0.2 -0.1), (-1.38777878e-17 -0.1), (-0.2 0.1), (1.38777878e-17 0.1), (0.2 0.1), (-1.38777878e-17 0.1))",
+        "POLYGON ((-0.2 -0.1, -0.2 0.1, 0.2 0.1, 0.2 -0.1, -0.2 -0.1))"
+    );
+}
 
+} // namespace tut

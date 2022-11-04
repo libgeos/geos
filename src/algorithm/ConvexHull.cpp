@@ -64,11 +64,6 @@ private:
     polarCompare(const Coordinate* o, const Coordinate* p,
                  const Coordinate* q)
     {
-        double dxp = p->x - o->x;
-        double dyp = p->y - o->y;
-        double dxq = q->x - o->x;
-        double dyq = q->y - o->y;
-
         int orient = Orientation::index(*o, *p, *q);
 
         if(orient == Orientation::COUNTERCLOCKWISE) {
@@ -78,15 +73,28 @@ private:
             return -1;
         }
 
-        // points are collinear - check distance
-        double op = dxp * dxp + dyp * dyp;
-        double oq = dxq * dxq + dyq * dyq;
-        if(op < oq) {
-            return -1;
-        }
-        if(op > oq) {
-            return 1;
-        }
+        /**
+         * The points are collinear,
+         * so compare based on distance from the origin.
+         * The points p and q are >= to the origin,
+         * so they lie in the closed half-plane above the origin.
+         * If they are not in a horizontal line,
+         * the Y ordinate can be tested to determine distance.
+         * This is more robust than computing the distance explicitly.
+         */
+        if (p->y > q->y) return 1;
+        if (p->y < q->y) return -1;
+
+        /**
+         * The points lie in a horizontal line, which should also contain the origin
+         * (since they are collinear).
+         * Also, they must be above the origin.
+         * Use the X ordinate to determine distance.
+         */
+        if (p->x > q->x) return 1;
+        if (p->x < q->x) return -1;
+
+      // Assert: p = q
         return 0;
     }
 
@@ -397,4 +405,3 @@ ConvexHull::cleanRing(const Coordinate::ConstVect& original,
 
 } // namespace geos.algorithm
 } // namespace geos
-
