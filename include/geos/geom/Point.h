@@ -94,6 +94,10 @@ public:
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
 
+    bool hasM() const override;
+
+    bool hasZ() const override;
+
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;
 

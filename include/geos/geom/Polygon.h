@@ -89,6 +89,10 @@ public:
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
 
+    bool hasM() const override;
+
+    bool hasZ() const override;
+
     /// Returns 1 (Polygon boundary is a MultiLineString)
     int getBoundaryDimension() const override;
 

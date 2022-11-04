@@ -120,6 +120,18 @@ Point::getCoordinateDimension() const
     return (uint8_t) getCoordinatesRO()->getDimension();
 }
 
+bool
+Point::hasM() const
+{
+    return getCoordinatesRO()->hasM();
+}
+
+bool
+Point::hasZ() const
+{
+    return getCoordinatesRO()->hasZ();
+}
+
 int
 Point::getBoundaryDimension() const
 {

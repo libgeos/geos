@@ -22,6 +22,7 @@
 #include <geos/export.h>
 
 #include <geos/util/Machine.h> // for getMachineByteOrder
+#include <geos/io/OrdinateSet.h>
 #include <geos/io/WKBConstants.h>
 #include <iosfwd>
 #include <cstdint>
@@ -194,9 +195,9 @@ public:
 
 private:
 
-    // 2 or 3
+    // 2, 3, or 4
     uint8_t defaultOutputDimension;
-    uint8_t outputDimension;
+    OrdinateSet outputOrdinates;
 
     // WKBConstants::wkbwkbXDR | WKBConstants::wkbNDR
     int byteOrder;
@@ -225,7 +226,7 @@ private:
     void writeCoordinateSequence(const geom::CoordinateSequence& cs, bool sized);
     // throws IOException
 
-    void writeCoordinate(const geom::CoordinateSequence& cs, std::size_t idx, bool is3d);
+    void writeCoordinate(const geom::CoordinateSequence& cs, std::size_t idx);
     // throws IOException
 
     void writeGeometryType(int geometryType, int SRID);
@@ -239,6 +240,8 @@ private:
 
     void writeInt(int intValue);
     // throws IOException
+
+    OrdinateSet getOutputOrdinates(OrdinateSet ordinates);
 
 };
 

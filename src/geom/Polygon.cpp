@@ -177,6 +177,36 @@ Polygon::getCoordinateDimension() const
     return dimension;
 }
 
+bool
+Polygon::hasM() const {
+    if (shell->getCoordinatesRO()->hasM()) {
+        return true;
+    }
+
+    for (const auto& hole : holes) {
+        if (hole->getCoordinatesRO()->hasM()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+Polygon::hasZ() const {
+    if (shell->getCoordinatesRO()->hasZ()) {
+        return true;
+    }
+
+    for (const auto& hole : holes) {
+        if (hole->getCoordinatesRO()->hasZ()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int
 Polygon::getBoundaryDimension() const
 {

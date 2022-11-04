@@ -21,6 +21,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/Writer.h>
 #include <geos/io/CLocalizer.h>
+#include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/Point.h>
@@ -203,48 +204,6 @@ WKTWriter::writeFormatted(const Geometry* geometry, bool p_isFormatted,
 
     appendGeometryTaggedText(*geometry, OrdinateSet::createXYZM(), 0, *writer);
 }
-
-class CheckOrdinatesFilter : public CoordinateSequenceFilter {
-public:
-    CheckOrdinatesFilter(OrdinateSet checkOrdinateFlags) :
-        m_checkFlags(checkOrdinateFlags),
-        m_foundFlags(OrdinateSet::createXY())
-    {}
-
-    void filter_ro(const CoordinateSequence& seq, std::size_t i) override {
-        bool checkZ = m_checkFlags.hasZ() && !m_foundFlags.hasZ();
-        bool checkM = m_checkFlags.hasM() && !m_foundFlags.hasM();
-
-        if (checkZ || checkM) {
-            seq.getAt(i, m_coord);
-
-            if (checkZ && !std::isnan(m_coord.z)) {
-                m_foundFlags.setZ(true);
-            }
-
-            if (checkM && !std::isnan(m_coord.m)) {
-                m_foundFlags.setM(true);
-            }
-        }
-    }
-
-    bool isGeometryChanged() const override {
-        return false;
-    }
-
-    bool isDone() const override {
-        return m_checkFlags == m_foundFlags;
-    }
-
-    OrdinateSet getFoundOrdinates() const {
-        return m_foundFlags;
-    }
-
-private:
-    OrdinateSet m_checkFlags;
-    OrdinateSet m_foundFlags;
-    CoordinateXYZM m_coord;
-};
 
 void
 WKTWriter::appendGeometryTaggedText(const Geometry& geometry,

@@ -113,6 +113,10 @@ public:
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
 
+    bool hasM() const override;
+
+    bool hasZ() const override;
+
     std::unique_ptr<Geometry> getBoundary() const override;
 
     /**

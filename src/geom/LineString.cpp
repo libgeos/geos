@@ -161,6 +161,18 @@ LineString::getCoordinateDimension() const
     return (uint8_t) points->getDimension();
 }
 
+bool
+LineString::hasM() const
+{
+    return points->hasM();
+}
+
+bool
+LineString::hasZ() const
+{
+    return points->hasZ();
+}
+
 int
 LineString::getBoundaryDimension() const
 {
