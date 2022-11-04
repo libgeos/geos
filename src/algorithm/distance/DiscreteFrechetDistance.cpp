@@ -100,7 +100,7 @@ DiscreteFrechetDistance::getSegmentAt(const CoordinateSequence& seq, std::size_t
 }
 
 PointPairDistance&
-DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, std::size_t i, std::size_t j,
+DiscreteFrechetDistance::getFrechetDistance(std::vector< std::vector<PointPairDistance> >& ca, std::size_t i, std::size_t j,
         const CoordinateSequence& p, const CoordinateSequence& q)
 {
     PointPairDistance p_ptDist;
@@ -112,17 +112,17 @@ DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDis
         ca[i][j] = p_ptDist;
     }
     else if(i > 0 && j == 0) {
-        PointPairDistance nextDist = getFrecheDistance(ca, i - 1, 0, p, q);
+        PointPairDistance nextDist = getFrechetDistance(ca, i - 1, 0, p, q);
         ca[i][j] = (nextDist.getDistance() > p_ptDist.getDistance()) ? nextDist : p_ptDist;
     }
     else if(i == 0 && j > 0) {
-        PointPairDistance nextDist = getFrecheDistance(ca, 0, j - 1, p, q);
+        PointPairDistance nextDist = getFrechetDistance(ca, 0, j - 1, p, q);
         ca[i][j] = (nextDist.getDistance() > p_ptDist.getDistance()) ? nextDist : p_ptDist;
     }
     else {
-        PointPairDistance d1 = getFrecheDistance(ca, i - 1, j, p, q),
-                          d2 = getFrecheDistance(ca, i - 1, j - 1, p, q),
-                          d3 = getFrecheDistance(ca, i, j - 1, p, q);
+        PointPairDistance d1 = getFrechetDistance(ca, i - 1, j, p, q),
+                          d2 = getFrechetDistance(ca, i - 1, j - 1, p, q),
+                          d3 = getFrechetDistance(ca, i, j - 1, p, q);
         PointPairDistance& minDist = (d1.getDistance() < d2.getDistance()) ? d1 : d2;
         if(d3.getDistance() < minDist.getDistance()) {
             minDist = d3;
@@ -156,7 +156,7 @@ DiscreteFrechetDistance::compute(
             ca[i][j].initialize();
         }
     }
-    ptDist = getFrecheDistance(ca, pSize - 1, qSize - 1, *lp, *lq);
+    ptDist = getFrechetDistance(ca, pSize - 1, qSize - 1, *lp, *lq);
 }
 
 } // namespace geos.algorithm.distance
