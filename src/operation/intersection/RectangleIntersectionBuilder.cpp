@@ -76,7 +76,7 @@ RectangleIntersectionBuilder::reconnect()
 
     // Merge the two linestrings
     auto ncs = valid::RepeatedPointRemover::removeRepeatedPoints(&cs2);
-    ncs->add(&cs1, false, true);
+    ncs->add(cs1, false, true);
 
     delete line1;
     delete line2;

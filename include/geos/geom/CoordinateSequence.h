@@ -500,6 +500,16 @@ public:
         add(c);
     }
 
+    void add(const CoordinateSequence& cs);
+
+    void add(const CoordinateSequence& cs, bool allowRepeated);
+
+    void add(const CoordinateSequence& cl, bool allowRepeated, bool forwardDirection);
+
+    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to);
+
+    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to, bool allowRepeated);
+
     template<typename T, typename... Args>
     void add(T begin, T end, Args... args) {
         for (auto it = begin; it != end; ++it) {
@@ -507,31 +517,16 @@ public:
         }
     }
 
-    void add(const CoordinateSequence& cs);
-
-    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to);
-
-    void add(const CoordinateSequence& cs, std::size_t from, std::size_t to, bool allowRepeated);
-
-    void add(const CoordinateSequence& cs, bool allowRepeated);
-
     template<typename T>
     void add(std::size_t i, T from, T to) {
         auto npts = static_cast<std::size_t>(std::distance(from, to));
-
-        // Clear some space
-        // TODO use make_space
-        m_vect.insert(std::next(m_vect.begin(), static_cast<decltype(m_vect)::iterator::difference_type>(i * m_stride)),
-                      npts * m_stride,
-                      0.0);
+        make_space(i, npts);
 
         for (auto it = from; it != to; ++it) {
             setAt(*it, i);
             i++;
         }
     }
-
-    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
 
     /// @}
     /// \defgroup util Utilities
@@ -695,16 +690,20 @@ public:
         return m_vect.data();
     }
 
+    const double* data() const {
+        return m_vect.data();
+    }
+
 private:
-    std::vector<double> m_vect;
-    uint8_t m_stride;
-    mutable bool m_hasdim;
+    std::vector<double> m_vect; // Vector to store values
+
+    uint8_t m_stride;           // Stride of stored values, corresponding to underlying type
+
+    mutable bool m_hasdim;      // Has the dimension of this sequence been determined? Or was it created with no
+                                // explicit dimensionality, and we're waiting for getDimension() to be called
+                                // after some coordinates have been added?
     mutable bool m_hasz;
     bool m_hasm;
-
-    bool initialized() const {
-        return m_stride == 0;
-    }
 
     void initialize();
 

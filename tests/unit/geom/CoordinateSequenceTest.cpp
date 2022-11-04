@@ -895,7 +895,7 @@ void object::test<34>
     ensure_equals(seq.size(), 150u);
 }
 
-// test closeRing
+// test isRing, closeRing
 template<>
 template<>
 void object::test<35>
@@ -1142,6 +1142,27 @@ void object::test<45>
     ensure_equals(c1.x, 4);
     ensure_equals(c1.y, 5);
     ensure("z is NaN", std::isnan(c1.z));
+}
+
+// Test default-initialized Coordinate values
+template<>
+template<>
+void object::test<46>
+()
+{
+    CoordinateSequence xySeq(1, false, false, true);
+    ensure_equals(xySeq.getAt<CoordinateXY>(0), CoordinateXY());
+
+    CoordinateSequence xyzSeq(1, true, false, true);
+    ensure(xyzSeq.getAt<Coordinate>(0).equals3D(Coordinate()));
+
+    CoordinateSequence xymSeq(1, false, true, true);
+    CoordinateXYM xym;
+    xymSeq.getAt(0, xym);
+    ensure(xym.equals3D(CoordinateXYM()));
+
+    CoordinateSequence xyzmSeq(1, true, true, true);
+    ensure(xyzmSeq.getAt<CoordinateXYZM>(0).equals4D(CoordinateXYZM()));
 }
 
 } // namespace tut

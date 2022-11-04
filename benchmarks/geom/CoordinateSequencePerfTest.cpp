@@ -16,6 +16,7 @@
 
 #include <geos/geom/CoordinateSequence.h>
 
+using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
 
 static void BM_Size(benchmark::State& state) {
@@ -27,7 +28,20 @@ static void BM_Size(benchmark::State& state) {
     }
 }
 
+static void BM_HasRepeatedPoints(benchmark::State & state) {
+    CoordinateSequence seq(12345, false, false);
+    for (std::size_t i = 0; i < seq.size(); ++i) {
+        double di = static_cast<double>(i);
+        seq.setAt(Coordinate(di, di + 0.1), i);
+    }
+
+    for (auto _ : state) {
+        benchmark::DoNotOptimize(seq.hasRepeatedPoints());
+    }
+}
+
 BENCHMARK(BM_Size);
+BENCHMARK(BM_HasRepeatedPoints);
 
 BENCHMARK_MAIN();
 

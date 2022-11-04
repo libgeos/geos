@@ -73,7 +73,7 @@ EdgeString::getCoordinates()
 
         LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
 
-        coordinates->add(lme->getLine()->getCoordinatesRO(),
+        coordinates->add(*lme->getLine()->getCoordinatesRO(),
                          false,
                          directedEdge->getEdgeDirection());
     }

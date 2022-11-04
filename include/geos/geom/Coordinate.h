@@ -30,7 +30,11 @@
 namespace geos {
 namespace geom { // geos.geom
 
+// Forward declarations
 struct CoordinateLessThen;
+class CoordinateXYZM;
+class CoordinateXYM;
+class Coordinate;
 
 enum class CoordinateType : std::uint8_t {
     XY,
@@ -39,18 +43,19 @@ enum class CoordinateType : std::uint8_t {
     XYM,
 };
 
-GEOS_DLL std::ostream& operator<< (std::ostream&, const CoordinateType);
 
-class CoordinateXYZM;
-class CoordinateXYM;
-class Coordinate;
+GEOS_DLL std::ostream& operator<< (std::ostream&, const CoordinateType);
 
 class GEOS_DLL CoordinateXY {
 
-    static CoordinateXY _nullCoord;
+    const static CoordinateXY _nullCoord;
 
 public:
-    static constexpr CoordinateType dim = CoordinateType::XY;
+    // Set default values for compatiblity with JTS
+    static const double DEFAULT_X;
+    static const double DEFAULT_Y;
+    static const double DEFAULT_Z;
+    static const double DEFAULT_M;
 
     CoordinateXY()
         : x(DEFAULT_X)
@@ -67,12 +72,6 @@ public:
 
     /// y-coordinate
     double y;
-
-    static constexpr double DEFAULT_X = 0.0;
-    static constexpr double DEFAULT_Y = 0.0;
-
-    /// Output function
-    GEOS_DLL friend std::ostream& operator<< (std::ostream& os, const CoordinateXY& c);
 
     /// Equality operator for Coordinate. 2D only.
     GEOS_DLL friend bool operator==(const CoordinateXY& a, const CoordinateXY& b)
@@ -137,7 +136,7 @@ public:
         return 0;
     };
 
-    static CoordinateXY& getNull();
+    static const CoordinateXY& getNull();
 
     double distance(const CoordinateXY& p) const
     {
@@ -206,11 +205,9 @@ class GEOS_DLL Coordinate : public CoordinateXY {
 
 private:
 
-    static Coordinate _nullCoord;
+    static const Coordinate _nullCoord;
 
 public:
-    static constexpr CoordinateType dim = CoordinateType::XYZ;
-
     /// A set of const Coordinate pointers
     typedef std::set<const Coordinate*, CoordinateLessThen> ConstSet;
 
@@ -226,22 +223,19 @@ public:
     /// z-coordinate
     double z;
 
-    /// Output function
-    GEOS_DLL friend std::ostream& operator<< (std::ostream& os, const Coordinate& c);
-
     Coordinate()
-        : CoordinateXY(0.0, 0.0)
-        , z(DoubleNotANumber)
+        : CoordinateXY()
+        , z(DEFAULT_Z)
         {};
 
-    Coordinate(double xNew, double yNew, double zNew = DoubleNotANumber)
+    Coordinate(double xNew, double yNew, double zNew = DEFAULT_Z)
         : CoordinateXY(xNew, yNew)
         , z(zNew)
         {};
 
     explicit Coordinate(const CoordinateXY& other)
         : CoordinateXY(other)
-        , z(DoubleNotANumber)
+        , z(DEFAULT_Z)
         {};
 
     void setNull()
@@ -250,7 +244,7 @@ public:
         z = DoubleNotANumber;
     };
 
-    static Coordinate& getNull();
+    static const Coordinate& getNull();
 
     bool isNull() const
     {
@@ -270,7 +264,7 @@ public:
     Coordinate& operator=(const CoordinateXY& other){
         x = other.x;
         y = other.y;
-        z = DoubleNotANumber;
+        z = DEFAULT_Z;
 
         return *this;
     }
@@ -278,10 +272,15 @@ public:
 
 
 class GEOS_DLL CoordinateXYM : public CoordinateXY {
-public:
-    static constexpr CoordinateType dim = CoordinateType::XYM;
+private:
+    static const CoordinateXYM _nullCoord;
 
-    CoordinateXYM() : CoordinateXYM(0.0, 0.0, 0.0) {}
+public:
+    CoordinateXYM() : CoordinateXYM(DEFAULT_X, DEFAULT_Y, DEFAULT_M) {}
+
+    explicit CoordinateXYM(const CoordinateXY& c)
+        : CoordinateXY(c)
+        , m(DEFAULT_M) {}
 
     CoordinateXYM(double x_, double y_, double m_)
         : CoordinateXY(x_, y_)
@@ -289,8 +288,21 @@ public:
 
     double m;
 
+    static const CoordinateXYM& getNull();
+
+    void setNull()
+    {
+        CoordinateXY::setNull();
+        m = DoubleNotANumber;
+    };
+
+
+    bool isNull() const
+    {
+        return (std::isnan(x) && std::isnan(y) && std::isnan(m));
+    }
     bool equals3D(const CoordinateXYM& other) const {
-        return x == other.x && y == other.y && m == other.m;
+        return x == other.x && y == other.y && (m == other.m || (std::isnan(m) && std::isnan(other.m)));
     }
 
     CoordinateXYM& operator=(const CoordinateXYZM& other);
@@ -298,18 +310,29 @@ public:
     CoordinateXYM& operator=(const CoordinateXY& other) {
         x = other.x;
         y = other.y;
-        m = DoubleNotANumber;
+        m = DEFAULT_M;
 
         return *this;
     }
+
+    std::string toString() const;
 };
 
 
 class GEOS_DLL CoordinateXYZM : public Coordinate {
-public:
-    static constexpr CoordinateType dim = CoordinateType::XYZM;
+private:
+    static const CoordinateXYZM _nullCoord;
 
-    CoordinateXYZM() : CoordinateXYZM(0.0, 0.0, 0.0, 0.0) {}
+public:
+    CoordinateXYZM() : CoordinateXYZM(DEFAULT_X, DEFAULT_Y, DEFAULT_Z, DEFAULT_M) {}
+
+    explicit CoordinateXYZM(const CoordinateXY& c)
+        : Coordinate(c)
+        , m(DEFAULT_M) {}
+
+    explicit CoordinateXYZM(const Coordinate& c)
+        : Coordinate(c)
+        , m(DEFAULT_M) {}
 
     CoordinateXYZM(double x_, double y_, double z_, double m_)
         : Coordinate(x_, y_, z_)
@@ -317,15 +340,31 @@ public:
 
     double m;
 
+    static const CoordinateXYZM& getNull();
+
+    void setNull()
+    {
+        Coordinate::setNull();
+        m = DoubleNotANumber;
+    };
+
+
+    bool isNull() const
+    {
+        return Coordinate::isNull() && std::isnan(m);
+    }
+
     bool equals4D(const CoordinateXYZM& other) const {
-        return x == other.x && y == other.y && z == other.z && m == other.m;
+        return x == other.x && y == other.y &&
+                (z == other.z || (std::isnan(z) && std::isnan(other.z))) &&
+                (m == other.m || (std::isnan(m) && std::isnan(other.m)));
     }
 
     CoordinateXYZM& operator=(const CoordinateXY& other) {
         x = other.x;
         y = other.y;
-        z = DoubleNotANumber;
-        m = DoubleNotANumber;
+        z = DEFAULT_Z;
+        m = DEFAULT_M;
 
         return *this;
     }
@@ -334,7 +373,7 @@ public:
         x = other.x;
         y = other.y;
         z = other.z;
-        m = DoubleNotANumber;
+        m = DEFAULT_M;
 
         return *this;
     }
@@ -342,11 +381,13 @@ public:
     CoordinateXYZM& operator=(const CoordinateXYM& other) {
         x = other.x;
         y = other.y;
-        z = DoubleNotANumber;
+        z = DEFAULT_Z;
         m = other.m;
 
         return *this;
     }
+
+    std::string toString() const;
 };
 
 inline CoordinateXYM&
@@ -389,6 +430,11 @@ inline bool operator<(const CoordinateXY& a, const CoordinateXY& b)
 {
     return CoordinateLessThen()(a, b);
 }
+
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXY& c);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXYM& c);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXYZM& c);
 
 } // namespace geos.geom
 } // namespace geos

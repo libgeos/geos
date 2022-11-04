@@ -110,7 +110,19 @@ ensure_equals_xyz(geos::geom::Coordinate const& actual,
     }
 }
 
+inline void ensure_same(const char* msg, double a, double b)
+{
+    if (std::isnan(a) && std::isnan(b)) {
+        return;
+    }
 
+    ensure_equals(msg, a, b);
+}
+
+inline void ensure_same(double a, double b)
+{
+    ensure_same("values are not equal", a, b);
+}
 
 //
 // Geometries structure comparators

@@ -85,7 +85,8 @@ Coordinate&
 DirectedEdgeStar::getCoordinate() const
 {
     if(outEdges.empty()) {
-        return Coordinate::getNull();
+        static Coordinate nullCoord = Coordinate::getNull();
+        return nullCoord;
     }
     DirectedEdge* e = outEdges[0];
     return e->getCoordinate();
