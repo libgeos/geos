@@ -86,7 +86,7 @@ $(function() {
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        std::unique_ptr&lt;CoordinateSequence&gt; clone() const final<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keyword">auto</span> seq = detail::make_unique&lt;FixedSizeCoordinateSequence&lt;N&gt;&gt;(dimension);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            seq-&gt;m_data = m_data;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span> RETURN_UNIQUE_PTR(seq);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span> seq;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">const</span> Coordinate&amp; getAt(std::size_t i) <span class="keyword">const</span> <span class="keyword">final</span> <span class="keyword">override</span> {</div>
