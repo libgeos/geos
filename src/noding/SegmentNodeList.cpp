@@ -261,7 +261,7 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
         auto pts = detail::make_unique<FixedSizeCoordinateSequence<2>>();
         pts->setAt(ei0->coord, 0);
         pts->setAt(ei1->coord, 1);
-        return RETURN_UNIQUE_PTR(pts);
+        return pts;
     }
 
     const Coordinate& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);

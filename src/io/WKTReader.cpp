@@ -85,7 +85,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
-    return RETURN_UNIQUE_PTR(coordinates);
+    return coordinates;
 }
 
 void

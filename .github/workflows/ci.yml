@@ -29,15 +29,6 @@ jobs:
           cmake_extra: '-DBUILD_BENCHMARKS=ON'
           os: ubuntu-18.04
           
-        - cxx_compiler: g++-4.8
-          c_compiler: gcc-4.8
-          build_type: Release
-          cxxstd: 11
-          arch: 32
-          packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
-
         - cxx_compiler: g++-5
           c_compiler: gcc-5
           build_type: Release
