@@ -508,7 +508,7 @@ CoordinateSequence::setOrdinate(std::size_t index, std::size_t ordinateIndex, do
         break;
         case CoordinateSequence::M:
         {
-            if (hasZ()) {
+            if (getCoordinateType() == CoordinateType::XYZM) {
                 getAt<CoordinateXYZM>(index).m = value;
             } else {
                 getAt<CoordinateXYM>(index).m = value;
