@@ -88,7 +88,7 @@ $(function() {
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> getCentroid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; geom, <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cent);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> getCentroid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; geom, geom::CoordinateXY&amp; cent);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Centroid.html#a004060aaa21454f3dfc50cd859e78b16">   78</a></span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1Centroid.html#a004060aaa21454f3dfc50cd859e78b16">Centroid</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; geom)</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        :</div>
@@ -99,22 +99,22 @@ $(function() {
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        add(geom);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">bool</span> getCentroid(<a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cent) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">bool</span> getCentroid(geom::CoordinateXY&amp; cent) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::unique_ptr&lt;geom::Coordinate&gt; areaBasePt;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> triangleCent3;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> cg3;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> lineCentSum;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> ptCentSum;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::unique_ptr&lt;geom::CoordinateXY&gt; areaBasePt;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    geom::CoordinateXY triangleCent3;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    geom::CoordinateXY cg3;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    geom::CoordinateXY lineCentSum;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    geom::CoordinateXY ptCentSum;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">double</span> areasum2;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">double</span> totalLength;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">int</span> ptCount;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; geom);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> setAreaBasePoint(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; basePt);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> setAreaBasePoint(<span class="keyword">const</span> geom::CoordinateXY&amp; basePt);</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>&amp; poly);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
@@ -122,17 +122,17 @@ $(function() {
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">void</span> addHole(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; pts);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordtype">void</span> addTriangle(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordtype">void</span> addTriangle(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                     <span class="keywordtype">bool</span> isPositiveArea);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> centroid3(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p3,</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                          <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; c);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> centroid3(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keyword">const</span> geom::CoordinateXY&amp; p3,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                          geom::CoordinateXY&amp; c);</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> area2(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p3);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> area2(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keyword">const</span> geom::CoordinateXY&amp; p3);</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordtype">void</span> addLineSegments(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; pts);</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">void</span> addPoint(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pt);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">void</span> addPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; pt);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;};</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
@@ -143,7 +143,6 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Centroid_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Centroid.html">geos::algorithm::Centroid</a></div><div class="ttdoc">Computes the centroid of a Geometry of any dimension.</div><div class="ttdef"><b>Definition:</b> Centroid.h:60</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Centroid_html_a004060aaa21454f3dfc50cd859e78b16"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Centroid.html#a004060aaa21454f3dfc50cd859e78b16">geos::algorithm::Centroid::Centroid</a></div><div class="ttdeci">Centroid(const geom::Geometry &amp;geom)</div><div class="ttdoc">Creates a new instance for computing the centroid of a geometry.</div><div class="ttdef"><b>Definition:</b> Centroid.h:78</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Polygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a></div><div class="ttdoc">Represents a linear polygon, which may include holes.</div><div class="ttdef"><b>Definition:</b> Polygon.h:61</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:207</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:45</div></div>
 <!-- start footer part -->

@@ -84,12 +84,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2bb7e3f1bd8566681229f42105d591a0"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#a2bb7e3f1bd8566681229f42105d591a0">createRectangle</a> ()</td></tr>
 <tr class="memdesc:a2bb7e3f1bd8566681229f42105d591a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a rectangular Polygon.  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#a2bb7e3f1bd8566681229f42105d591a0">More...</a><br /></td></tr>
 <tr class="separator:a2bb7e3f1bd8566681229f42105d591a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad95a032c50aec9b69745fa7c43fa159"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#aad95a032c50aec9b69745fa7c43fa159">setBase</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;base)</td></tr>
-<tr class="memdesc:aad95a032c50aec9b69745fa7c43fa159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the location of the shape by specifying the base coordinate (which in most cases is the * lower left point of the envelope containing the shape).  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#aad95a032c50aec9b69745fa7c43fa159">More...</a><br /></td></tr>
-<tr class="separator:aad95a032c50aec9b69745fa7c43fa159"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad929f4e8e67abb2eec93e74b75e28b4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#ad929f4e8e67abb2eec93e74b75e28b4f">setCentre</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;centre)</td></tr>
-<tr class="memdesc:ad929f4e8e67abb2eec93e74b75e28b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the location of the shape by specifying the centre of the shape's bounding box.  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#ad929f4e8e67abb2eec93e74b75e28b4f">More...</a><br /></td></tr>
-<tr class="separator:ad929f4e8e67abb2eec93e74b75e28b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae641033be0265bcda2e57698c4a4fd88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#ae641033be0265bcda2e57698c4a4fd88">setBase</a> (const geom::CoordinateXY &amp;base)</td></tr>
+<tr class="memdesc:ae641033be0265bcda2e57698c4a4fd88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the location of the shape by specifying the base coordinate (which in most cases is the * lower left point of the envelope containing the shape).  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#ae641033be0265bcda2e57698c4a4fd88">More...</a><br /></td></tr>
+<tr class="separator:ae641033be0265bcda2e57698c4a4fd88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5d659ebe3baacacde8537f47152e9d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#ab5d659ebe3baacacde8537f47152e9d5">setCentre</a> (const geom::CoordinateXY &amp;centre)</td></tr>
+<tr class="memdesc:ab5d659ebe3baacacde8537f47152e9d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the location of the shape by specifying the centre of the shape's bounding box.  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#ab5d659ebe3baacacde8537f47152e9d5">More...</a><br /></td></tr>
+<tr class="separator:ab5d659ebe3baacacde8537f47152e9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dc74ac42aa17c255f0bc16ab1c2c2bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1GeometricShapeFactory.html#a6dc74ac42aa17c255f0bc16ab1c2c2bf">setHeight</a> (double height)</td></tr>
 <tr class="memdesc:a6dc74ac42aa17c255f0bc16ab1c2c2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the height of the shape.  <a href="classgeos_1_1util_1_1GeometricShapeFactory.html#a6dc74ac42aa17c255f0bc16ab1c2c2bf">More...</a><br /></td></tr>
 <tr class="separator:a6dc74ac42aa17c255f0bc16ab1c2c2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,9 +106,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a9ace49149b3216ea1f9ad9ac1e506b97"><td class="memItemLeft" align="right" valign="top"><a id="a9ace49149b3216ea1f9ad9ac1e506b97"></a>
-<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>coord</b> (double x, double y) const</td></tr>
-<tr class="separator:a9ace49149b3216ea1f9ad9ac1e506b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f9ea549e240ca2e7e7c5f7caa68a688"><td class="memItemLeft" align="right" valign="top"><a id="a0f9ea549e240ca2e7e7c5f7caa68a688"></a>
+geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>coord</b> (double x, double y) const</td></tr>
+<tr class="separator:a0f9ea549e240ca2e7e7c5f7caa68a688"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -280,8 +280,8 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>nPts</b></td></tr
 
 </div>
 </div>
-<a id="aad95a032c50aec9b69745fa7c43fa159"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad95a032c50aec9b69745fa7c43fa159">&#9670;&nbsp;</a></span>setBase()</h2>
+<a id="ae641033be0265bcda2e57698c4a4fd88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae641033be0265bcda2e57698c4a4fd88">&#9670;&nbsp;</a></span>setBase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -289,7 +289,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>nPts</b></td></tr
         <tr>
           <td class="memname">void geos::util::GeometricShapeFactory::setBase </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>base</em></td><td>)</td>
           <td></td>
         </tr>
@@ -306,8 +306,8 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>nPts</b></td></tr
 
 </div>
 </div>
-<a id="ad929f4e8e67abb2eec93e74b75e28b4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad929f4e8e67abb2eec93e74b75e28b4f">&#9670;&nbsp;</a></span>setCentre()</h2>
+<a id="ab5d659ebe3baacacde8537f47152e9d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5d659ebe3baacacde8537f47152e9d5">&#9670;&nbsp;</a></span>setCentre()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -315,7 +315,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>nPts</b></td></tr
         <tr>
           <td class="memname">void geos::util::GeometricShapeFactory::setCentre </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>centre</em></td><td>)</td>
           <td></td>
         </tr>

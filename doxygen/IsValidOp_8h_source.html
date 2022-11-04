@@ -148,7 +148,7 @@ $(function() {
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordtype">void</span> checkHolesInShell(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>* poly);</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> * findHoleOutsideShellPoint(</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">const</span> CoordinateXY* findHoleOutsideShellPoint(</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">geom::LinearRing</a>* hole,</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">geom::LinearRing</a>* shell);</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
@@ -177,14 +177,14 @@ $(function() {
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">return</span> ivo.isValid();</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    };</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; coord)</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(<span class="keyword">const</span> geom::CoordinateXY&amp; coord)</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    {</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">return</span> isValid(&amp;coord);</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    }</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keywordtype">bool</span> isValid();</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* coord);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isValid(<span class="keyword">const</span> geom::CoordinateXY* coord);</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keyword">const</span> TopologyValidationError* getValidationError();</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
@@ -201,7 +201,6 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1operation_1_1valid_1_1IsValidOp_html"><div class="ttname"><a href="classgeos_1_1operation_1_1valid_1_1IsValidOp.html">geos::operation::valid::IsValidOp</a></div><div class="ttdef"><b>Definition:</b> IsValidOp.h:57</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Polygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a></div><div class="ttdoc">Represents a linear polygon, which may include holes.</div><div class="ttdef"><b>Definition:</b> Polygon.h:61</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:207</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryCollection_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryCollection.html">geos::geom::GeometryCollection</a></div><div class="ttdoc">Represents a collection of heterogeneous Geometry objects.</div><div class="ttdef"><b>Definition:</b> GeometryCollection.h:52</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1valid_1_1IsValidOp_html_ae558f9f7791a64b669e8d495e5ad38b6"><div class="ttname"><a href="classgeos_1_1operation_1_1valid_1_1IsValidOp.html#ae558f9f7791a64b669e8d495e5ad38b6">geos::operation::valid::IsValidOp::isValid</a></div><div class="ttdeci">static bool isValid(const geom::Geometry *geom)</div><div class="ttdef"><b>Definition:</b> IsValidOp.h:263</div></div>
