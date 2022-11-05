@@ -154,6 +154,8 @@ using namespace std;
 // import the most frequently used definitions globally
 using geos::geom::Coordinate;
 using geos::geom::CoordinateXY;
+using geos::geom::CoordinateXYM;
+using geos::geom::CoordinateXYZM;
 using geos::geom::Geometry;
 using geos::geom::LineString;
 using geos::geom::LinearRing;
@@ -2411,21 +2413,18 @@ extern "C" {
     GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, int hasZ, int hasM)
     {
         return execute(extHandle, [&]() {
-            auto coords = geos::detail::make_unique<CoordinateSequence>(size);
             std::ptrdiff_t stride = 2 + hasZ + hasM;
+            auto coords = geos::detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
 
             if (hasZ) {
-                if (stride == 3) {
-                    // special case, just memcpy the whole block
-                    static_assert(sizeof(geos::geom::Coordinate) == 3 * sizeof(double), "Coordinate is 3D");
-                    std::memcpy((double*) coords->data(), buf, size * sizeof(geos::geom::Coordinate));
+                if (hasM) {
+                    assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZM);
+                    std::memcpy(coords->data(), buf, size * sizeof(geos::geom::CoordinateXYZM));
                 } else {
-                    for (std::size_t i = 0; i < size; i++) {
-                        coords->setAt(Coordinate{ *buf, *(buf + 1), *(buf + 2) }, i);
-                        buf += stride;
-                    }
+                    assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZ);
+                    std::memcpy(coords->data(), buf, size * sizeof(geos::geom::Coordinate));
                 }
-            }  else {
+            } else {
                 for (std::size_t i = 0; i < size; i++) {
                     coords->setAt(Coordinate{ *buf, *(buf + 1) }, i);
                     buf += stride;
@@ -2439,17 +2438,24 @@ extern "C" {
     CoordinateSequence*
     GEOSCoordSeq_copyFromArrays_r(GEOSContextHandle_t extHandle, const double* x, const double* y, const double* z, const double* m, unsigned int size)
     {
-        (void) m;
-
         return execute(extHandle, [&]() {
-            auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(size);
+            bool hasZ = z != nullptr;
+            bool hasM = m != nullptr;
 
+            auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(size, hasZ, hasM, false);
+
+            geos::geom::CoordinateXYZM c;
             for (std::size_t i = 0; i < size; i++) {
+                c.x = x[i];
+                c.y = y[i];
                 if (z) {
-                    coords->setAt(Coordinate{ x[i], y[i], z[i] }, i);
-                } else {
-                    coords->setAt(CoordinateXY{ x[i], y[i] }, i);
+                    c.z = z[i];
                 }
+                if (m) {
+                    c.m = m[i];
+                }
+
+                coords->setAt(c, i);
             }
 
             return coords.release();
@@ -2461,32 +2467,17 @@ extern "C" {
                                 double* x, double* y, double* z, double* m)
     {
         return execute(extHandle, 0, [&]() {
-
-            class CoordinateArrayCopier : public geos::geom::CoordinateFilter {
-            public:
-                CoordinateArrayCopier(double* p_x, double* p_y, double* p_z) : i(0), x(p_x), y(p_y), z(p_z) {}
-
-                void filter_ro(const geos::geom::Coordinate* c) override {
-                    x[i] = c->x;
-                    y[i] = c->y;
-                    if (z) {
-                        z[i] = c->z;
-                    }
-                    i++;
+            geos::geom::CoordinateXYZM c;
+            for (std::size_t i = 0; i < cs->size(); i++) {
+                cs->getAt(i, c);
+                x[i] = c.x;
+                y[i] = c.y;
+                if (z) {
+                    z[i] = c.z;
                 }
-
-            private:
-                size_t i;
-                double* x;
-                double* y;
-                double* z;
-            };
-
-            CoordinateArrayCopier cop(x, y, z);
-            cs->apply_ro(&cop);
-
-            if (m) {
-                std::fill(m, m + cs->getSize(), std::numeric_limits<double>::quiet_NaN());
+                if (m) {
+                    m[i] = c.m;
+                }
             }
 
             return 1;
@@ -2497,37 +2488,64 @@ extern "C" {
     GEOSCoordSeq_copyToBuffer_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
                                 double* buf, int hasZ, int hasM)
     {
+        using geos::geom::CoordinateType;
+
         return execute(extHandle, 0, [&]() {
+            CoordinateType srcType = cs->getCoordinateType();
+            CoordinateType dstType;
+            std::size_t stride;
+            if (hasZ) {
+                if (hasM) {
+                    dstType = CoordinateType::XYZM;
+                    stride = 4;
+                } else {
+                    dstType = CoordinateType::XYZ;
+                    stride = 3;
+                }
+            } else {
+                if (hasM) {
+                    dstType = CoordinateType::XYM;
+                    stride = 3;
+                } else {
+                    dstType = CoordinateType::XY;
+                    stride = 2;
+                }
+            }
 
-            class CoordinateBufferCopier : public geos::geom::CoordinateFilter {
-            public:
-                CoordinateBufferCopier(double* p_buf, bool p_hasZ, bool p_hasM) : buf(p_buf), m(p_hasM), z(p_hasZ) {}
-
-                void filter_ro(const geos::geom::Coordinate* c) override {
-                    *buf = c->x;
-                    buf++;
-                    *buf = c->y;
-                    buf++;
-
-                    if (z) {
-                        *buf = c->z;
-                        buf++;
+            if (srcType == dstType) {
+                std::memcpy(buf, cs->data(), cs->size() * stride * sizeof(double));
+            } else {
+                switch(dstType) {
+                    case CoordinateType::XY: {
+                        for (std::size_t i = 0; i < cs->size(); i++) {
+                            CoordinateXY* c = reinterpret_cast<CoordinateXY*>(buf + i*stride);
+                            cs->getAt(i, *c);
+                        }
+                        break;
                     }
-
-                    if (m) {
-                        *buf = std::numeric_limits<double>::quiet_NaN();
-                        buf++;
+                    case CoordinateType::XYZ: {
+                        for (std::size_t i = 0; i < cs->size(); i++) {
+                            Coordinate* c = reinterpret_cast<Coordinate*>(buf + i*stride);
+                            cs->getAt(i, *c);
+                        }
+                        break;
+                    }
+                    case CoordinateType::XYM: {
+                        for (std::size_t i = 0; i < cs->size(); i++) {
+                            CoordinateXYM* c = reinterpret_cast<CoordinateXYM*>(buf + i*stride);
+                            cs->getAt(i, *c);
+                        }
+                        break;
+                    }
+                    case CoordinateType::XYZM: {
+                        for (std::size_t i = 0; i < cs->size(); i++) {
+                            CoordinateXYZM* c = reinterpret_cast<CoordinateXYZM*>(buf + i*stride);
+                            cs->getAt(i, *c);
+                        }
+                        break;
                     }
                 }
-
-            private:
-                double* buf;
-                const bool m;
-                const bool z;
-            };
-
-            CoordinateBufferCopier cop(buf, hasZ, hasM);
-            cs->apply_ro(&cop);
+            }
 
             return 1;
         });
