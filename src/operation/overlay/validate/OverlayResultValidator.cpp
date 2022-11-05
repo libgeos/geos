@@ -23,7 +23,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 
 #include <cassert>
 #include <functional>
@@ -53,27 +52,6 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 namespace validate { // geos.operation.overlay.validate
-
-namespace { // anonymous namespace
-
-#if GEOS_DEBUG
-std::unique_ptr<MultiPoint>
-toMultiPoint(std::vector<Coordinate>& coords)
-{
-    const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
-    const CoordinateSequenceFactory& csf =
-        *(gf.getCoordinateSequenceFactory());
-
-    std::unique_ptr< std::vector<Coordinate> > nc(new std::vector<Coordinate>(coords));
-    std::unique_ptr<CoordinateSequence> cs(csf.create(nc.release()));
-
-    std::unique_ptr<MultiPoint> mp(gf.createMultiPoint(*cs));
-
-    return mp;
-}
-#endif
-
-} // anonymous namespace
 
 
 /* static public */
@@ -115,15 +93,6 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
     addTestPts(gres);
 
     if(! testValid(overlayOp)) {
-#if GEOS_DEBUG
-        std::cerr << "OverlayResultValidator:" << std::endl
-             << "Points:" << *toMultiPoint(testCoords) << std::endl
-             << "Geom0: " << g0 << std::endl
-             << "Geom1: " << g1 << std::endl
-             << "Reslt: " << gres << std::endl
-             << "Locat: " << getInvalidLocation()
-             << std::endl;
-#endif
         return false;
     }
 

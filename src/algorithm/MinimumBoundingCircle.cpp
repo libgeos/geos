@@ -21,7 +21,6 @@
 #include <geos/algorithm/Angle.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -30,6 +29,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Triangle.h>
 #include <geos/util/GEOSException.h>
+#include <geos/util.h>
 
 #include <cmath>  // sqrt
 #include <memory> // for unique_ptr
@@ -64,7 +64,6 @@ std::unique_ptr<Geometry>
 MinimumBoundingCircle::getMaximumDiameter()
 {
     compute();
-    uint8_t dims = input->getCoordinateDimension();
     std::size_t len = 2;
     switch(extremalPts.size()) {
         case 0:
@@ -72,14 +71,14 @@ MinimumBoundingCircle::getMaximumDiameter()
         case 1:
             return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
         case 2: {
-            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
             cs->setAt(extremalPts.front(), 0);
             cs->setAt(extremalPts.back(), 1);
             return input->getFactory()->createLineString(std::move(cs));
         }
         default: {
             const auto& fp = farthestPoints(extremalPts);
-            auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+            auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
             cs->setAt(fp.front(), 0);
             cs->setAt(fp.back(), 1);
             return input->getFactory()->createLineString(std::move(cs));
@@ -122,9 +121,8 @@ MinimumBoundingCircle::getDiameter()
     case 1:
         return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
     }
-    uint8_t dims = input->getCoordinateDimension();
     std::size_t len = 2;
-    auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
+    auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
     // TODO: handle case of 3 extremal points, by computing a line from one of
     // them through the centre point with len = 2*radius
     cs->setAt(extremalPts[0], 0);

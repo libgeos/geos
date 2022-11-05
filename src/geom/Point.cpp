@@ -27,7 +27,6 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryCollection.h>

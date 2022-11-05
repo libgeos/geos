@@ -29,7 +29,6 @@
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -2403,9 +2402,7 @@ extern "C" {
     GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size, unsigned int dims)
     {
         return execute(extHandle, [&]() {
-            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-            const GeometryFactory *gf = handle->geomFactory;
-            return gf->getCoordinateSequenceFactory()->create(size, dims).release();
+            return new CoordinateSequence(size, dims);
         });
     }
 

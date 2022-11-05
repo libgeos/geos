@@ -19,7 +19,6 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
 #include <geos/noding/BasicSegmentString.h>
@@ -37,7 +36,6 @@
 
 using geos::geom::GeometryFactory;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFactory;
 using geos::noding::SegmentString;
 using geos::noding::SegmentSetMutualIntersector;
 

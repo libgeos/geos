@@ -23,7 +23,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h> // for Ptr typedefs
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/util/GeometryTransformer.h> // for DPTransformer inheritance
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>

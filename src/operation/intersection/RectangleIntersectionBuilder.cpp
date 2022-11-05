@@ -15,7 +15,6 @@
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersectionBuilder.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Polygon.h>

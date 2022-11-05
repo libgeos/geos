@@ -25,7 +25,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util.h>

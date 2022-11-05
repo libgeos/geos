@@ -9,8 +9,6 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/DefaultCoordinateSequenceFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
@@ -102,25 +100,19 @@ void object::test<2>
 {
     using geos::geom::GeometryFactory;
     using geos::geom::PrecisionModel;
-    using geos::geom::DefaultCoordinateSequenceFactory;
-
-    DefaultCoordinateSequenceFactory csf;
 
     {
         PrecisionModel pm(1.0);
-        GeometryFactory::Ptr gf = GeometryFactory::create(&pm, srid_, &csf);
+        GeometryFactory::Ptr gf = GeometryFactory::create(&pm, srid_);
 
         ensure_equals(gf->getSRID(), srid_);
         ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED);
-
-        ensure_equals(&csf, gf->getCoordinateSequenceFactory());
 
         auto geo = gf->createEmptyGeometry();
         ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED);
     }
-    // csf lifetime must exceed lifetime of the GeometryFactory instance
 
 } // test<2>
 
@@ -131,12 +123,9 @@ void object::test<3>
 ()
 {
     using geos::geom::GeometryFactory;
-    using geos::geom::DefaultCoordinateSequenceFactory;
-
-    DefaultCoordinateSequenceFactory csf;
 
     {
-        GeometryFactory::Ptr gf = GeometryFactory::create(&csf);
+        GeometryFactory::Ptr gf = GeometryFactory::create();
 
         ensure_equals(gf->getSRID(), 0);
         ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
@@ -146,7 +135,6 @@ void object::test<3>
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
     }
-    // csf lifetime must exceed lifetime of the GeometryFactory instance
 }
 
 // Test of user's constructor

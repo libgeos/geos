@@ -35,7 +35,6 @@
 
 namespace geos {
 namespace geom {
-class CoordinateSequenceFactory;
 class Coordinate;
 class CoordinateSequence;
 class Envelope;
@@ -84,29 +83,6 @@ public:
      * floating PrecisionModel and a spatial-reference ID of 0.
      */
     static GeometryFactory::Ptr create();
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having
-     * the given PrecisionModel, spatial-reference ID, and
-     * CoordinateSequence implementation.
-     *
-     * NOTES:
-     * (1) the given PrecisionModel is COPIED
-     * (2) the CoordinateSequenceFactory is NOT COPIED
-     *     and must be available for the whole lifetime
-     *     of the GeometryFactory
-     */
-    static GeometryFactory::Ptr create(const PrecisionModel* pm, int newSRID,
-                                       CoordinateSequenceFactory* nCoordinateSequenceFactory);
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having the
-     * given CoordinateSequence implementation, a double-precision floating
-     * PrecisionModel and a spatial-reference ID of 0.
-     */
-    static GeometryFactory::Ptr create(CoordinateSequenceFactory* nCoordinateSequenceFactory);
 
     /**
      * \brief
@@ -454,14 +430,6 @@ public:
         return SRID;
     };
 
-    /// \brief
-    /// Returns the CoordinateSequenceFactory associated
-    /// with this GeometryFactory
-    const CoordinateSequenceFactory* getCoordinateSequenceFactory() const
-    {
-        return coordinateListFactory;
-    };
-
     /// Returns a clone of given Geometry.
     Geometry* createGeometry(const Geometry* g) const;
 
@@ -484,29 +452,6 @@ protected:
      * floating PrecisionModel and a spatial-reference ID of 0.
      */
     GeometryFactory();
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having
-     * the given PrecisionModel, spatial-reference ID, and
-     * CoordinateSequence implementation.
-     *
-     * NOTES:
-     * (1) the given PrecisionModel is COPIED
-     * (2) the CoordinateSequenceFactory is NOT COPIED
-     *     and must be available for the whole lifetime
-     *     of the GeometryFactory
-     */
-    GeometryFactory(const PrecisionModel* pm, int newSRID,
-                    CoordinateSequenceFactory* nCoordinateSequenceFactory);
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having the
-     * given CoordinateSequence implementation, a double-precision floating
-     * PrecisionModel and a spatial-reference ID of 0.
-     */
-    GeometryFactory(CoordinateSequenceFactory* nCoordinateSequenceFactory);
 
     /**
      * \brief
@@ -543,7 +488,6 @@ private:
 
     PrecisionModel precisionModel;
     int SRID;
-    const CoordinateSequenceFactory* coordinateListFactory;
 
     mutable int _refCount;
     bool _autoDestroy;

@@ -374,16 +374,11 @@ public:
     /// \defgroup mutate Mutators
     /// @{
 
-    void setAt(const CoordinateXY& c, std::size_t pos) {
-        auto& orig = getAt<CoordinateXY>(pos);
-        orig = c;
-    }
-
     /// Copy Coordinate c to position pos
     template<typename T>
     void setAt(const T& c, std::size_t pos) {
         switch(getCoordinateType()) {
-            case CoordinateType::XY: stride() == 3 ? setAtImpl<Coordinate>(c, pos) : setAtImpl<CoordinateXY>(c, pos); break;
+            case CoordinateType::XY: setAtImpl<CoordinateXY>(c, pos); break;
             case CoordinateType::XYZ: setAtImpl<Coordinate>(c, pos); break;
             case CoordinateType::XYZM: setAtImpl<CoordinateXYZM>(c, pos); break;
             case CoordinateType::XYM: setAtImpl<CoordinateXYM>(c, pos); break;

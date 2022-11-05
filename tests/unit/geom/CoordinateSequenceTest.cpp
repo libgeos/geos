@@ -1107,11 +1107,11 @@ void object::test<44>
 ()
 {
     CoordinateSequence seq1(1);
-    seq1.setAt({2, 8}, 0);
+    seq1.setAt(CoordinateXY{2, 8}, 0);
 
     CoordinateSequence seq2(2);
-    seq2.setAt({2, 8}, 0);
-    seq2.setAt({2, 8}, 1);
+    seq2.setAt(CoordinateXY{2, 8}, 0);
+    seq2.setAt(CoordinateXY{2, 8}, 1);
 
     seq1.add(seq2, false);
 
@@ -1164,5 +1164,18 @@ void object::test<46>
     CoordinateSequence xyzmSeq(1, true, true, true);
     ensure(xyzmSeq.getAt<CoordinateXYZM>(0).equals4D(CoordinateXYZM()));
 }
+
+// Declared dimension overrides dimension inferred from Coordinates
+template<>
+template<>
+void object::test<47>
+()
+{
+    CoordinateSequence seq(1, false, false, false);
+    seq.setAt(Coordinate{1, 2, 3}, 0);
+
+    ensure_equals(seq.getDimension(), 2u);
+}
+
 
 } // namespace tut

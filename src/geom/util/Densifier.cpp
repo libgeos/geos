@@ -21,7 +21,6 @@
 #include <cmath>
 
 #include <geos/geom/util/Densifier.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>

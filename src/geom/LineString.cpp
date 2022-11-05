@@ -22,7 +22,6 @@
 #include <geos/algorithm/Length.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -78,7 +77,7 @@ void
 LineString::validateConstruction()
 {
     if(points.get() == nullptr) {
-        points = getFactory()->getCoordinateSequenceFactory()->create();
+        points = detail::make_unique<CoordinateSequence>();
         return;
     }
 

@@ -20,7 +20,6 @@
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -118,7 +117,7 @@ LargestEmptyCircle::getRadiusLine()
 {
     compute();
 
-    auto cl = factory->getCoordinateSequenceFactory()->create(2);
+    auto cl = detail::make_unique<CoordinateSequence>(2u);
     cl->setAt(centerPt, 0);
     cl->setAt(radiusPt, 1);
     return factory->createLineString(std::move(cl));

@@ -15,7 +15,6 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>

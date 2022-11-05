@@ -17,7 +17,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/util/GeometryEditor.h>
@@ -28,7 +27,6 @@
 using geos::geom::Coordinate;
 using geos::geom::CoordinateFilter;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFactory;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::util::CoordinateOperation;

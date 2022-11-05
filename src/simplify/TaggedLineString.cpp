@@ -23,7 +23,6 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Geometry.h> // for unique_ptr destructor
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/util.h>
 
 #include <cassert>

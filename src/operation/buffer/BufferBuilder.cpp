@@ -19,7 +19,6 @@
  *
  **********************************************************************/
 
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
@@ -330,9 +329,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
             if (sz > 1) {
                 if (sz < coords->size()) {
                     // Points were removed; make a new CoordinateSequence
-                    auto seqFactory = geomFact->getCoordinateSequenceFactory();
-
-                    auto newSeq = seqFactory->create(sz, coords->getDimension());
+                    auto newSeq = detail::make_unique<CoordinateSequence>(sz, coords->getDimension());
 
                     for (std::size_t i = 0; i < sz; i++) {
                         newSeq->setAt(coords->getAt(i + front), i);

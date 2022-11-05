@@ -22,7 +22,6 @@
 #include <geos/operation/linemerge/LineMergeEdge.h>
 #include <geos/operation/linemerge/LineMergeDirectedEdge.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/util.h>

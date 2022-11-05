@@ -25,7 +25,6 @@
 #include <geos/geom/LineString.h>
 //#include <geos/geom/Geometry.h> // for std::unique_ptr destructor
 //#include <geos/geom/GeometryFactory.h>
-//#include <geos/geom/CoordinateSequenceFactory.h>
 
 #include <algorithm>
 #include <cassert>

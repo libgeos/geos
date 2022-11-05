@@ -20,7 +20,6 @@
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/geom/prep/PreparedLineStringNearestPoints.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 
 namespace geos {

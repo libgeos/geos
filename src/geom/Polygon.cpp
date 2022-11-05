@@ -28,7 +28,6 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
@@ -122,10 +121,10 @@ std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
-        return getFactory()->getCoordinateSequenceFactory()->create();
+        return detail::make_unique<CoordinateSequence>();
     }
 
-    auto cl = getFactory()->getCoordinateSequenceFactory()->create();
+    auto cl = detail::make_unique<CoordinateSequence>();
     cl->reserve(getNumPoints());
 
     // Add shell points

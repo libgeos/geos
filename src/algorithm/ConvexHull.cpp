@@ -27,7 +27,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/util.h>
 #include <geos/util/Interrupt.h>
 
 #include <typeinfo>
@@ -42,7 +42,6 @@ using geos::geom::Polygon;
 using geos::geom::LineString;
 using geos::geom::LinearRing;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFactory;
 
 
 namespace geos {
@@ -116,10 +115,7 @@ public:
 std::unique_ptr<CoordinateSequence>
 ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
 {
-    const CoordinateSequenceFactory* csf =
-        geomFactory->getCoordinateSequenceFactory();
-
-    auto cs = csf->create(cv.size());
+    auto cs = detail::make_unique<CoordinateSequence>(cv.size());
 
     for(std::size_t i = 0; i < cv.size(); ++i) {
         cs->setAt(*(cv[i]), i); // Coordinate copy

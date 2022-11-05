@@ -19,7 +19,6 @@
 #include <geos/operation/intersection/RectangleIntersectionBuilder.h>
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
@@ -697,7 +696,6 @@ RectangleIntersection::RectangleIntersection(const geom::Geometry& geom, const R
     : _geom(geom), _rect(rect),
       _gf(geom.getFactory())
 {
-    _csf = _gf->getCoordinateSequenceFactory();
 }
 
 } // namespace geos::operation::intersection

@@ -22,12 +22,12 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h> // for toGeometry
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Intersection.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/profiler.h>
+#include <geos/util.h>
 
 #include <algorithm> // for max
 #include <sstream>
@@ -316,7 +316,7 @@ LineSegment::offset(double offsetDistance)
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    auto cl = gf.getCoordinateSequenceFactory()->create(2, 0);
+    auto cl = detail::make_unique<CoordinateSequence>(2u);
 
     cl->setAt(p0, 0);
     cl->setAt(p1, 1);
