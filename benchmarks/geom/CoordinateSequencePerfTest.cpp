@@ -20,11 +20,19 @@ using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
 
 static void BM_Size(benchmark::State& state) {
-
     CoordinateSequence z(1533);
 
     for (auto _ : state) {
         benchmark::DoNotOptimize(z.size());
+    }
+}
+
+static void BM_Initialize(benchmark::State& state) {
+    bool hasZ = false;
+    bool hasM = false;
+
+    for (auto _ : state) {
+        CoordinateSequence seq(1000, hasZ, hasM, true);
     }
 }
 
@@ -41,6 +49,7 @@ static void BM_HasRepeatedPoints(benchmark::State & state) {
 }
 
 BENCHMARK(BM_Size);
+BENCHMARK(BM_Initialize);
 BENCHMARK(BM_HasRepeatedPoints);
 
 BENCHMARK_MAIN();

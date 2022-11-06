@@ -123,58 +123,25 @@ CoordinateSequence::CoordinateSequence(const std::initializer_list<CoordinateXYZ
     add(list.begin(), list.end());
 }
 
-static void
-initializeXY(std::vector<double>& v)
+template<typename T>
+void fillVector(std::vector<double> & v)
 {
-    assert(Coordinate::DEFAULT_X == Coordinate::DEFAULT_Y);
-    std::fill(v.begin(), v.end(), Coordinate::DEFAULT_X);
-}
-
-static void
-initializeXYM(std::vector<double> & v)
-{
-    assert(Coordinate::DEFAULT_X == Coordinate::DEFAULT_Y && Coordinate::DEFAULT_X == Coordinate::DEFAULT_M);
-    std::fill(v.begin(), v.end(), Coordinate::DEFAULT_X);
-}
-
-static void
-initializeXYZ(std::vector<double> & v) {
-    for (std::size_t i = 0; i < v.size(); i++) {
-        double val;
-        switch(i % 3) {
-            case 0: val = Coordinate::DEFAULT_X; break;
-            case 1: val = Coordinate::DEFAULT_Y; break;
-            default: val = DoubleNotANumber;
-        }
-        v[i] = val;
-    }
-}
-
-static void
-initializeXYZM(std::vector<double> & v) {
-    for (std::size_t i = 0; i < v.size(); i++) {
-        double val;
-        switch(i % 4) {
-            case 0: val = Coordinate::DEFAULT_X; break;
-            case 1: val = Coordinate::DEFAULT_Y; break;
-            case 2: val = Coordinate::DEFAULT_Z; break;
-            default: val = Coordinate::DEFAULT_M;
-        }
-        v[i] = val;
-    }
+    const T c;
+    T* from = reinterpret_cast<T*>(v.data());
+    T* to = reinterpret_cast<T*>(v.data() + v.size());
+    std::fill(from, to, c);
 }
 
 void
 CoordinateSequence::initialize()
 {
     switch(getCoordinateType()) {
-        case CoordinateType::XYZ: initializeXYZ(m_vect); break;
-        case CoordinateType::XYZM: initializeXYZM(m_vect); break;
-        case CoordinateType::XY: initializeXY(m_vect); break;
-        case CoordinateType::XYM: initializeXYM(m_vect); break;
+        case CoordinateType::XYZ: fillVector<Coordinate>(m_vect); break;
+        case CoordinateType::XYZM: fillVector<CoordinateXYZM>(m_vect); break;
+        case CoordinateType::XY: fillVector<CoordinateXY>(m_vect); break;
+        case CoordinateType::XYM: fillVector<CoordinateXYM>(m_vect); break;
     }
 }
-
 
 void
 CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::size_t to)
