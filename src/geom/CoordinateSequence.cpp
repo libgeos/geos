@@ -301,11 +301,9 @@ CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) co
         case CoordinateSequence::Y:
             return getAt<CoordinateXY>(index).y;
         case CoordinateSequence::Z:
-            assert(m_hasz);
-            return getAt<Coordinate>(index).z;
+            return hasZ() ? getAt<Coordinate>(index).z : DoubleNotANumber;
         case CoordinateSequence::M:
-            assert(m_hasm);
-            return m_hasz ? getAt<CoordinateXYZM>(index).m : getAt<CoordinateXYM>(index).m;
+            return hasM() ? (hasZ() ? getAt<CoordinateXYZM>(index).m : getAt<CoordinateXYM>(index).m) : DoubleNotANumber;
         default:
             return DoubleNotANumber;
     }
@@ -539,7 +537,7 @@ CoordinateSequence::setPoints(const std::vector<Coordinate>& v)
 void
 CoordinateSequence::toVector(std::vector<Coordinate>& out) const
 {
-    if (stride() == 3 && !hasM()) {
+    if (getCoordinateType() == CoordinateType::XYZ) {
         const Coordinate* cbuf = reinterpret_cast<const Coordinate*>(m_vect.data());
         out.insert(out.end(), cbuf, cbuf + size());
     } else if (hasZ()) {

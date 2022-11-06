@@ -7,12 +7,14 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/util.h>
+#include <utility.h>
 // std
 #include <string>
 #include <vector>
 #include <iostream>
 #include <cmath>
 
+using geos::DoubleNotANumber;
 using geos::geom::Coordinate;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYM;
@@ -93,6 +95,45 @@ void object::test<2>
     ensure_equals("default/empty coordinates now 2D", sequence.getDimension(), 2u);
     ensure("no Z", !sequence.hasZ());
     ensure("no M", !sequence.hasM());
+}
+
+// Test toVector()
+template<>
+template<>
+void object::test<3>
+()
+{
+    CoordinateSequence seq{
+        CoordinateXYZM(1, 2, 3, 4),
+        CoordinateXYZM(5, 6, 7, 8)};
+
+    std::vector<Coordinate> vec_xyz;
+    seq.toVector(vec_xyz);
+
+    ensure_equals(vec_xyz.size(), seq.size());
+    ensure(vec_xyz[0].equals3D(seq.getAt<Coordinate>(0)));
+    ensure(vec_xyz[1].equals3D(seq.getAt<Coordinate>(1)));
+
+    // Coordinates are appended to existing contents of vector
+    std::vector<CoordinateXY> vec_xy{CoordinateXY(0, 3)};
+    seq.toVector(vec_xy);
+
+    ensure_equals(vec_xy.size(), seq.size() + 1);
+    ensure_equals(vec_xy[0], Coordinate(0, 3));
+    ensure_equals(vec_xy[1], seq.getAt<CoordinateXY>(0));
+    ensure_equals(vec_xy[2], seq.getAt<CoordinateXY>(1));
+
+    // Optimized copy for XYZ sequence -> XYZ vector
+    CoordinateSequence seq_xyz{Coordinate(1, 2, 3), Coordinate(4, 5, 6)};
+
+    std::vector<Coordinate> cvec{Coordinate(7, 8, 9)};
+    seq_xyz.toVector(cvec);
+
+    ensure_equals(cvec.size(), 3u);
+
+    ensure(cvec[0].equals3D(Coordinate(7, 8, 9)));
+    ensure(cvec[1].equals3D(Coordinate(1, 2, 3)));
+    ensure(cvec[2].equals3D(Coordinate(4, 5, 6)));
 }
 
 // Test of copy constructor
@@ -302,36 +343,46 @@ void object::test<8>
     ensure(!sequence.hasRepeatedPoints());
 }
 
+// Test of pop_back()
+template<>
+template<>
+void object::test<9>
+()
+{
+    CoordinateSequence seq{CoordinateXYZM(1, 2, 3, 4), CoordinateXYZM(5, 6, 7, 8)};
+    seq.pop_back();
+
+    ensure_equals(seq.size(), 1u);
+    ensure(seq.getAt<CoordinateXYZM>(0).equals4D(CoordinateXYZM(1, 2, 3, 4)));
+}
+
 // Test of setPoints()
 template<>
 template<>
 void object::test<10>
 ()
 {
-    using geos::geom::Coordinate;
-
-    // Create empty sequence
-    const std::size_t size = 0;
-    geos::geom::CoordinateSequence sequence;
+    // Create empty XYZM sequence
+    geos::geom::CoordinateSequence sequence(0u, true, true);
 
     ensure(sequence.isEmpty());
-    ensure_equals(sequence.size(), size);
+    ensure_equals(sequence.size(), 0u);
+    ensure_equals(sequence.getDimension(), 4u);
 
     // Create collection of points
-    const std::vector<Coordinate>::size_type sizeCol = 3;
     std::vector<Coordinate> col;
     col.push_back(Coordinate(1, 2, 3));
     col.push_back(Coordinate(5, 10, 15));
     col.push_back(Coordinate(9, 18, 27));
-
-    ensure("std::vector bug assumed!", !col.empty());
-    ensure_equals("std::vector bug assumed!", col.size(), sizeCol);
 
     // Use setPoints()
     sequence.setPoints(col);
 
     ensure(!sequence.isEmpty());
     ensure_equals("sequence has expected size", sequence.size(), col.size());
+    ensure_equals("sequence dimension", sequence.getDimension(), 3u);
+    ensure_equals("hasZ", sequence.hasZ(), true);
+    ensure_equals("hasM", sequence.hasM(), false);
     ensure(!sequence.hasRepeatedPoints());
 
     // Check inserted points
@@ -346,6 +397,28 @@ void object::test<10>
     ensure_equals(sequence.getAt(2).x, 9);
     ensure_equals(sequence.getAt(2).y, 18);
     ensure_equals(sequence.getAt(2).z, 27);
+}
+
+// Test of getEnvelope
+template<>
+template<>
+void object::test<11>
+()
+{
+    CoordinateSequence seq1;
+    const auto& env1 = seq1.getEnvelope();
+    ensure(env1.isNull());
+
+    CoordinateSequence seq2{CoordinateXYZM(1, 2, 3, 4),
+                            CoordinateXYZM(5, 6, 7, 8),
+                            CoordinateXYZM(9, 10, 11, 12)};
+
+    const auto& env2 = seq2.getEnvelope();
+
+    ensure_equals(env2.getMinX(), 1);
+    ensure_equals(env2.getMaxX(), 9);
+    ensure_equals(env2.getMinY(), 2);
+    ensure_equals(env2.getMaxY(), 10);
 }
 
 // Test of equality and inequality operators
@@ -1177,5 +1250,47 @@ void object::test<47>
     ensure_equals(seq.getDimension(), 2u);
 }
 
+// Test getOrinate
+template<>
+template<>
+void object::test<48>
+()
+{
+    CoordinateSequence seq{CoordinateXY(1, 2), CoordinateXY(3, 4)};
+
+    ensure_same(seq.getOrdinate(0, CoordinateSequence::Y), 2);
+    ensure_same(seq.getOrdinate(1, CoordinateSequence::X), 3);
+    ensure_same(seq.getOrdinate(1, CoordinateSequence::Z), DoubleNotANumber);
+    ensure_same(seq.getOrdinate(1, CoordinateSequence::M), DoubleNotANumber);
+
+    CoordinateSequence seq2{CoordinateXYZM(1, 2, 3, 4)};
+
+    ensure_same(seq2.getOrdinate(0, CoordinateSequence::X), 1);
+    ensure_same(seq2.getOrdinate(0, CoordinateSequence::Y), 2);
+    ensure_same(seq2.getOrdinate(0, CoordinateSequence::Z), 3);
+    ensure_same(seq2.getOrdinate(0, CoordinateSequence::M), 4);
+}
+
+// Test setOrdinate
+template<>
+template<>
+void object::test<49>
+()
+{
+    CoordinateSequence seq{Coordinate(1, 2, 3), Coordinate(4, 5, 6)};
+
+    seq.setOrdinate(0, CoordinateSequence::Y, 6);
+    seq.setOrdinate(1, CoordinateSequence::Z, 2);
+
+    const Coordinate& c0 = seq.getAt<Coordinate>(0);
+    ensure_same(c0.x, 1);
+    ensure_same(c0.y, 6);
+    ensure_same(c0.z, 3);
+
+    const Coordinate& c1 = seq.getAt<Coordinate>(1);
+    ensure_same(c1.x, 4);
+    ensure_same(c1.y, 5);
+    ensure_same(c1.z, 2);
+}
 
 } // namespace tut
