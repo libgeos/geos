@@ -50,12 +50,13 @@ class GEOS_DLL CoordinateXY {
 
     const static CoordinateXY _nullCoord;
 
+protected:
+    constexpr const static double DEFAULT_X = 0.0;
+    constexpr const static double DEFAULT_Y = 0.0;
+    constexpr const static double DEFAULT_Z = DoubleNotANumber;
+    constexpr const static double DEFAULT_M = DoubleNotANumber;
+
 public:
-    // Set default values for compatiblity with JTS
-    static const double DEFAULT_X;
-    static const double DEFAULT_Y;
-    static const double DEFAULT_Z;
-    static const double DEFAULT_M;
 
     CoordinateXY()
         : x(DEFAULT_X)

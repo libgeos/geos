@@ -53,24 +53,20 @@ void object::test<1>
 ()
 {
     CoordinateXY cxy;
-    ensure_same("XY x", cxy.x, Coordinate::DEFAULT_X);
-    ensure_same("XY y", cxy.y, Coordinate::DEFAULT_Y);
 
-    Coordinate coord;
-    ensure_same("XYZ x", coord.x, Coordinate::DEFAULT_X);
-    ensure_same("XYZ y", coord.y, Coordinate::DEFAULT_Y);
-    ensure_same("XYZ z", coord.z, Coordinate::DEFAULT_Z);
+    Coordinate cxyz;
+    ensure_same("XYZ x", cxyz.x, cxy.x);
+    ensure_same("XYZ y", cxyz.y, cxy.y);
 
     CoordinateXYM cxym;
-    ensure_same("XYM x", cxym.x, Coordinate::DEFAULT_X);
-    ensure_same("XYM y", cxym.y, Coordinate::DEFAULT_Y);
-    ensure_same("XYM m", cxym.m, Coordinate::DEFAULT_M);
+    ensure_same("XYM x", cxym.x, cxy.x);
+    ensure_same("XYM y", cxym.y, cxy.y);
 
     CoordinateXYZM cxyzm;
-    ensure_same("XYZM x", cxyzm.x, Coordinate::DEFAULT_X);
-    ensure_same("XYZM y", cxyzm.y, Coordinate::DEFAULT_Y);
-    ensure_same("XYZM z", cxyzm.z, Coordinate::DEFAULT_Z);
-    ensure_same("XYZM m", cxyzm.m, Coordinate::DEFAULT_M);
+    ensure_same("XYZM x", cxyzm.x, cxy.x);
+    ensure_same("XYZM y", cxyzm.y, cxy.y);
+    ensure_same("XYZM z", cxyzm.z, cxyz.z);
+    ensure_same("XYZM m", cxyzm.m, cxym.m);
 }
 
 // Test of overridden constructors
@@ -292,24 +288,27 @@ template<>
 void object::test<11>
 ()
 {
+    const double default_z = Coordinate().z;
+    const double default_m = CoordinateXYM().m;
+
     CoordinateXY xy(1, 2);
 
     Coordinate xyz(xy);
     ensure_same(xyz.x, xy.x);
     ensure_same(xyz.y, xy.y);
-    ensure_same(xyz.z, Coordinate::DEFAULT_Z);
+    ensure_same(xyz.z, default_z);
     ensure_equals(xy, xyz);
 
     CoordinateXYM xym(xy);
     ensure_same(xym.x, xy.x);
     ensure_same(xym.y, xy.y);
-    ensure_same(xym.m, Coordinate::DEFAULT_M);
+    ensure_same(xym.m, default_m);
 
     CoordinateXYZM xyzm(xy);
     ensure_same(xyzm.x, xy.x);
     ensure_same(xyzm.y, xy.y);
-    ensure_same(xyzm.z, Coordinate::DEFAULT_Z);
-    ensure_same(xyzm.m, Coordinate::DEFAULT_M);
+    ensure_same(xyzm.z, default_z);
+    ensure_same(xyzm.m, default_m);
 }
 
 // Test 3D, 4D assignment from 2D
@@ -362,6 +361,17 @@ void object::test<13>
     ensure_equals("XYZM", xyzm.toString(), std::string("(1 2 3)"));
 }
 
+// Test object sizes
+template<>
+template<>
+void object::test<14>
+()
+{
+    ensure_equals("XY", sizeof(CoordinateXY), 16u);
+    ensure_equals("XYZ", sizeof(Coordinate), 24u);
+    ensure_equals("XYM", sizeof(CoordinateXYM), 24u);
+    ensure_equals("XYZM", sizeof(CoordinateXYZM), 32u);
+}
 
 
 } // namespace tut

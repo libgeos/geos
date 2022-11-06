@@ -24,12 +24,6 @@
 namespace geos {
 namespace geom { // geos::geom
 
-const double CoordinateXY::DEFAULT_X = 0.0;
-const double CoordinateXY::DEFAULT_Y = 0.0;
-const double CoordinateXY::DEFAULT_Z = DoubleNotANumber;
-const double CoordinateXY::DEFAULT_M = DoubleNotANumber;
-
-
 const CoordinateXY CoordinateXY::_nullCoord = CoordinateXY(DoubleNotANumber, DoubleNotANumber);
 const Coordinate Coordinate::_nullCoord = Coordinate(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
 const CoordinateXYM CoordinateXYM::_nullCoord = CoordinateXYM(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);

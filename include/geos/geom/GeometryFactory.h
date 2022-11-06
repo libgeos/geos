@@ -218,9 +218,6 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
-    //std::unique_ptr<LinearRing> createLinearRing(
-    //    std::vector<Coordinate> && coordinates) const;
-
     /// Construct a LinearRing with a deep-copy of given arguments
     LinearRing* createLinearRing(
         const CoordinateSequence& coordinates) const;
@@ -230,8 +227,6 @@ public:
 
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
-
-    //std::unique_ptr<MultiPoint> createMultiPoint(std::vector<Coordinate> && newPoints) const;
 
     template<typename T>
     std::unique_ptr<MultiPoint> createMultiPoint(const T& fromCoords) const
@@ -260,12 +255,6 @@ public:
     /// for each Coordinate in the given list.
     MultiPoint* createMultiPoint(
         const CoordinateSequence& fromCoords) const;
-
-    /// \brief
-    /// Construct a MultiPoint containing a Point geometry
-    /// for each Coordinate in the given vector.
-    //MultiPoint* createMultiPoint(
-    //    const std::vector<Coordinate>& fromCoords) const;
 
     /// Construct an EMPTY Polygon
     std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
@@ -297,9 +286,6 @@ public:
 
     std::unique_ptr<LineString> createLineString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
-
-    //std::unique_ptr<LineString> createLineString(
-    //    std::vector<Coordinate> && coordinates) const;
 
     /// Construct a LineString with a deep-copy of given argument
     LineString* createLineString(
