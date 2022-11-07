@@ -120,8 +120,6 @@ public:
      */
     CoordinateSequence(const std::initializer_list<CoordinateXYZM>&);
 
-    ~CoordinateSequence() = default;
-
     /**
      * Create a CoordinateSequence storing XY values only.
      *

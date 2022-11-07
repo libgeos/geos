@@ -1293,4 +1293,20 @@ void object::test<49>
     ensure_same(c1.z, 2);
 }
 
+// Test move contructor
+template<>
+template<>
+void object::test<50>
+()
+{
+    CoordinateSequence seq{CoordinateXYM(1, 2, 3), CoordinateXYM(4, 5, 6)};
+    const double* data_ptr = seq.data();
+
+    CoordinateSequence seq2(std::move(seq));
+    ensure_equals(seq2.size(), 2u);
+    ensure(!seq2.hasZ());
+    ensure(seq2.hasM());
+    ensure_equals(data_ptr, seq2.data());
+}
+
 } // namespace tut
