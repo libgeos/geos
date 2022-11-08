@@ -76,21 +76,15 @@ QuadEdgeSubdivision::createFrame(const geom::Envelope& env)
 {
     double deltaX = env.getWidth();
     double deltaY = env.getHeight();
-    double offset = 0.0;
-    if(deltaX > deltaY) {
-        offset = deltaX * 10.0;
-    }
-    else {
-        offset = deltaY * 10.0;
-    }
+    double offset = std::max(deltaX, deltaY) * FRAME_SIZE_FACTOR;
 
-    frameVertex[0] = Vertex((env.getMaxX() + env.getMinX()) / 2.0, env
-                            .getMaxY() + offset);
+    frameVertex[0] = Vertex((env.getMaxX() + env.getMinX()) / 2.0,
+                            env.getMaxY() + offset);
     frameVertex[1] = Vertex(env.getMinX() - offset, env.getMinY() - offset);
     frameVertex[2] = Vertex(env.getMaxX() + offset, env.getMinY() - offset);
 
-    frameEnv = Envelope(frameVertex[0].getCoordinate(), frameVertex[1]
-                        .getCoordinate());
+    frameEnv = Envelope(frameVertex[0].getCoordinate(),
+                        frameVertex[1].getCoordinate());
     frameEnv.expandToInclude(frameVertex[2].getCoordinate());
 }
 void

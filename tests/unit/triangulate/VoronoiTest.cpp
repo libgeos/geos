@@ -115,7 +115,8 @@ void object::test<1>
     std::unique_ptr<QuadEdgeSubdivision> subdiv = builder.getSubdivision();
 
     ensure_equals(subdiv->getTolerance(), 0);
-    ensure_equals(subdiv->getEnvelope().toString(), "Env[-3540:4020,-3436:4050]");
+    //-- disable this test, since it depends on Subdiv frame size and so is brittle
+    //ensure_equals(subdiv->getEnvelope().toString(), "Env[-3540:4020,-3436:4050]");
 
 }
 // 1 - Case with a single point
