@@ -25,6 +25,7 @@ xxxx-xx-xx
   - Add OverlayNG support for simple GeometryCollection inputs (GH-716, Martin Davis)
   - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718, Martin Davis)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
+  - Use more robust Delaunay Triangulation frame size heuristic (GH-728, , Martin Davis)
 
 
 
