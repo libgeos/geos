@@ -52,6 +52,7 @@ class TriangleVisitor;
 
 const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
 
+//-- Frame size factor for initializing subdivision frame.  Larger is more robust
 const double FRAME_SIZE_FACTOR = 100;
 
 /** \brief
