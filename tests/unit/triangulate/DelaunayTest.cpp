@@ -187,7 +187,7 @@ void object::test<8>
 {
     const char* wkt = "MULTIPOINT(-118.3964065 56.0557,-118.396406 56.0475,-118.396407 56.04,-118.3968 56)";
     const char* expectedEdges =
-        "MULTILINESTRING ((-118.3964065 56.0557, -118.396406 56.0475), (-118.396407 56.04, -118.396406 56.0475), (-118.3968 56, -118.396407 56.04))";
+        "MULTILINESTRING ((-118.3968 56, -118.3964065 56.0557), (-118.3968 56, -118.396407 56.04), (-118.396407 56.04, -118.396406 56.0475), (-118.3964065 56.0557, -118.396406 56.0475), (-118.3968 56, -118.396406 56.0475))";
 
     runDelaunay(wkt, false, expectedEdges, 0.001);
 }
@@ -258,6 +258,20 @@ void object::test<12>
     if(realLongDouble) {
         runDelaunay(wkt, true, expectedEdges, 0.01);
     }
+}
+
+// failure case due to initial frame size too small
+// see https://github.com/libgeos/geos/issues/719, https://github.com/locationtech/jts/pull/931
+template<>
+template<>
+void object::test<13>
+()
+{
+    const char* wkt =
+"MULTIPOINT ((0 194), (66 151), (203 80), (273 43), (340 0))";
+    const char* expected =
+        "GEOMETRYCOLLECTION (POLYGON ((0 194, 66 151, 203 80, 0 194)), POLYGON ((0 194, 203 80, 273 43, 0 194)), POLYGON ((273 43, 203 80, 340 0, 273 43)), POLYGON ((340 0, 203 80, 66 151, 340 0)))";
+    runDelaunay(wkt, true, expected);
 }
 
 } // namespace tut
