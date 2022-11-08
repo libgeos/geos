@@ -10,7 +10,7 @@
   - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718)
   - Fix WKB hex endian test (GH-720, Paul Ramsey)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
-  - Use more robust Delaunay Triangulation frame size heuristic (GH-728, , Martin Davis)
+  - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
 
 ## Changes in 3.11.0
 2022-07-01
