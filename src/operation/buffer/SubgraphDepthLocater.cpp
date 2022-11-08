@@ -183,10 +183,9 @@ SubgraphDepthLocater::findStabbedSegments(const Coordinate& stabbingRayLeftPt,
 
         // optimization - don't bother checking subgraphs
         // which the ray does not intersect
-        Envelope* env = bsg->getEnvelope();
+        const Envelope* env = bsg->getEnvelope();
         if(stabbingRayLeftPt.y < env->getMinY()
                 || stabbingRayLeftPt.y > env->getMaxY()
-                || stabbingRayLeftPt.x < env->getMinX()
                 || stabbingRayLeftPt.x > env->getMaxX()) {
             continue;
         }
@@ -213,6 +212,14 @@ SubgraphDepthLocater::findStabbedSegments(
         if(!de->isForward()) {
             continue;
         }
+
+        const Envelope* env = de->getEdge()->getEnvelope();
+        if(stabbingRayLeftPt.y < env->getMinY()
+                || stabbingRayLeftPt.y > env->getMaxY()
+                || stabbingRayLeftPt.x > env->getMaxX()) {
+            continue;
+        }
+
         findStabbedSegments(stabbingRayLeftPt, de, stabbedSegments);
     }
 }
