@@ -115,6 +115,13 @@ NodeMap::add(EdgeEnd* e)
     n->add(e);
 }
 
+void
+NodeMap::add(std::unique_ptr<EdgeEnd>&& e)
+{
+    add(e.get());
+    e.release();
+}
+
 /*
  * @return the node if found; null otherwise
  */

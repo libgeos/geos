@@ -71,7 +71,16 @@ public:
 
     Node* addNode(Node* n);
 
+    /// \brief
+    /// Adds a node for the start point of this EdgeEnd
+    /// (if one does not already exist in this map).
+    /// Adds the EdgeEnd to the (possibly new) node.
+    ///
+    /// If ownership of the EdgeEnd should be transferred
+    /// to the Node, use the unique_ptr overload instead.
     void add(EdgeEnd* e);
+
+    void add(std::unique_ptr<EdgeEnd>&& e);
 
     Node* find(const geom::Coordinate& coord) const;
 

@@ -72,8 +72,8 @@ RelateNodeGraph::build(GeometryGraph* geomGraph)
      * Build EdgeEnds for all intersections.
      */
     EdgeEndBuilder eeBuilder;
-    std::vector<EdgeEnd*> eeList = eeBuilder.computeEdgeEnds(geomGraph->getEdges());
-    insertEdgeEnds(&eeList);
+    auto&& eeList = eeBuilder.computeEdgeEnds(geomGraph->getEdges());
+    insertEdgeEnds(eeList);
 }
 
 /**
@@ -131,10 +131,10 @@ RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph, uint8_t argIndex)
 }
 
 void
-RelateNodeGraph::insertEdgeEnds(std::vector<EdgeEnd*>* ee)
+RelateNodeGraph::insertEdgeEnds(std::vector<std::unique_ptr<EdgeEnd>>& ee)
 {
-    for(EdgeEnd* e: *ee) {
-        nodes->add(e);
+    for(auto& e : ee) {
+        nodes->add(std::move(e));
     }
 }
 

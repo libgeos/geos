@@ -81,7 +81,7 @@ public:
 
     void copyNodesAndLabels(geomgraph::GeometryGraph* geomGraph, uint8_t argIndex);
 
-    void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*>* ee);
+    void insertEdgeEnds(std::vector<std::unique_ptr<geomgraph::EdgeEnd>>& ee);
 
 private:
 
