@@ -59,21 +59,21 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7e0143cc637e684a633a2eeb199093b0"><td class="memItemLeft" align="right" valign="top"><a id="a7e0143cc637e684a633a2eeb199093b0"></a>
-std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>computeEdgeEnds</b> (std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> * &gt; *edges)</td></tr>
-<tr class="separator:a7e0143cc637e684a633a2eeb199093b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a137794beb34b7f4f22d72aa14bb7f4bc"><td class="memItemLeft" align="right" valign="top"><a id="a137794beb34b7f4f22d72aa14bb7f4bc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>computeEdgeEnds</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> * &gt; *l)</td></tr>
-<tr class="separator:a137794beb34b7f4f22d72aa14bb7f4bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff34268758adbd72b111d9908648f9da"><td class="memItemLeft" align="right" valign="top"><a id="aff34268758adbd72b111d9908648f9da"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>computeEdgeEnds</b> (std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> * &gt; *edges)</td></tr>
+<tr class="separator:aff34268758adbd72b111d9908648f9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7117f62b622f05f4b10efba41868b06"><td class="memItemLeft" align="right" valign="top"><a id="af7117f62b622f05f4b10efba41868b06"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>computeEdgeEnds</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> &gt;&gt; &amp;l)</td></tr>
+<tr class="separator:af7117f62b622f05f4b10efba41868b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a7e423de03d5332b9f384e12d3f0a4800"><td class="memItemLeft" align="right" valign="top"><a id="a7e423de03d5332b9f384e12d3f0a4800"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createEdgeEndForPrev</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> * &gt; *l, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiCurr, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiPrev)</td></tr>
-<tr class="separator:a7e423de03d5332b9f384e12d3f0a4800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25609e24f4a1e7d7a356e82c5e10ebd5"><td class="memItemLeft" align="right" valign="top"><a id="a25609e24f4a1e7d7a356e82c5e10ebd5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createEdgeEndForNext</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> * &gt; *l, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiCurr, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiNext)</td></tr>
-<tr class="separator:a25609e24f4a1e7d7a356e82c5e10ebd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2826d403fce073eeeb29c21adb74b5c3"><td class="memItemLeft" align="right" valign="top"><a id="a2826d403fce073eeeb29c21adb74b5c3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createEdgeEndForPrev</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> &gt;&gt; &amp;l, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiCurr, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiPrev)</td></tr>
+<tr class="separator:a2826d403fce073eeeb29c21adb74b5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60f90af10d028c279668e35d0b931ed6"><td class="memItemLeft" align="right" valign="top"><a id="a60f90af10d028c279668e35d0b931ed6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createEdgeEndForNext</b> (<a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a> *edge, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geomgraph::EdgeEnd</a> &gt;&gt; &amp;l, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiCurr, const <a class="el" href="classgeos_1_1geomgraph_1_1EdgeIntersection.html">geomgraph::EdgeIntersection</a> *eiNext)</td></tr>
+<tr class="separator:a60f90af10d028c279668e35d0b931ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Computes the <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html" title="Models the end of an edge incident on a node.">geomgraph::EdgeEnd</a> objects which arise from a noded <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">geomgraph::Edge</a>. </p>
