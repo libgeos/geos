@@ -43,5 +43,24 @@ void object::test<1>()
     GEOSGeom_destroy(expected);
 }
 
+// Verify that no crash occurs in overlay with NaN coordinates
+// https://github.com/libgeos/geos/issues/606
+template<>
+template<>
+void object::test<2>()
+{
+    std::string wkb1 = "010100000000000000000000000000000000000840";
+    std::string wkb2 = "01020000000300000049544C553736090000FFFF544E494F500000000000000000FFFFFF2B2B2B2B2BFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFF";
+
+    geom1_ = GEOSGeomFromHEX_buf((unsigned char*) wkb1.c_str(), wkb1.size());
+    geom2_ = GEOSGeomFromHEX_buf((unsigned char*) wkb2.c_str(), wkb2.size());
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    GEOSGeometry* result = GEOSUnion(geom1_, geom2_);
+    (void) result; // no crash
+}
+
 } // namespace tut
 

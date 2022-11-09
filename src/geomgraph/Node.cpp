@@ -133,9 +133,8 @@ Node::isIncidentEdgeInResult() const
 }
 
 void
-Node::add(EdgeEnd* p_e)
+Node::add(EdgeEnd* e)
 {
-    std::unique_ptr<EdgeEnd> e(p_e);
     assert(e);
 #if GEOS_DEBUG
     std::cerr << "[" << this << "] Node::add(" << e->print() << ")" << std::endl;
@@ -154,10 +153,10 @@ Node::add(EdgeEnd* p_e)
     assert(edges);
     //if (edges==NULL) return;
 
-    edges->insert(e.release());
-    p_e->setNode(this);
+    edges->insert(e);
+    e->setNode(this);
 #if COMPUTE_Z
-    addZ(p_e->getCoordinate().z);
+    addZ(e->getCoordinate().z);
 #endif
     testInvariant();
 }

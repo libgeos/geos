@@ -99,7 +99,7 @@ private:
     /// the intersection point found (if any)
     geom::Coordinate invalidPoint;
 
-    void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*>* ee);
+    void insertEdgeEnds(std::vector<std::unique_ptr<geomgraph::EdgeEnd>>& ee);
 
     void computeProperIntersectionIM(
         geomgraph::index::SegmentIntersector* intersector,
