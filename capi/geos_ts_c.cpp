@@ -2304,6 +2304,13 @@ extern "C" {
         using geos::linearref::LengthIndexedLine;
 
         return execute(extHandle, [&]() {
+            if (start_fraction < 0) {
+                throw IllegalArgumentException("start fraction must be >= 0");
+            }
+            if (end_fraction > 1) {
+                throw IllegalArgumentException("end fraction must be <= 1");
+            }
+
             LengthIndexedLine lil(g);
 
             auto length = g->getLength();

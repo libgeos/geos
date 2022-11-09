@@ -67,7 +67,7 @@ void object::test<3>
     ensure_geometry_equals(result_, expected_);
 }
 
-// fractions out of range are clamped
+// fractions out of range throw an error
 template<>
 template<>
 void object::test<4>
@@ -75,9 +75,8 @@ void object::test<4>
 {
     input_ = GEOSGeomFromWKT("LINESTRING (0 0, 2 2)");
     result_ = GEOSLineSubstring(input_, 0.5, 1.5);
-    expected_ = GEOSGeomFromWKT("LINESTRING (1 1, 2 2)");
 
-    ensure_geometry_equals(result_, expected_);
+    ensure(result_ == nullptr);
 }
 
 // Z dimension is interpolated
