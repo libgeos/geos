@@ -103,5 +103,19 @@ void object::test<5>
     ensure_equals(z1, 2.5);
 }
 
+// reversed fractions give a reversed substring
+template<>
+template<>
+void object::test<6>
+()
+{
+    input_ = GEOSGeomFromWKT("LINESTRING (0 0, 1 1)");
+    result_ = GEOSLineSubstring(input_, 0.5, 0);
+    expected_ = GEOSGeomFromWKT("LINESTRING(0.5 0.5, 0 0)");
+
+    ensure_geometry_equals(result_, expected_);
+}
+
+
 } // namespace tut
 
