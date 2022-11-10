@@ -123,22 +123,38 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
     return ret;
 }
 
-std::unique_ptr<geom::Geometry>
+std::unique_ptr<GeometryCollection>
 VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
 {
     create();
 
     if (!subdiv) {
-        return geomFact.createMultiLineString();
+        return geomFact.createGeometryCollection();
     }
 
     std::unique_ptr<geom::MultiLineString> edges = subdiv->getVoronoiDiagramEdges(geomFact);
     if(edges->isEmpty()) {
-        return std::unique_ptr<Geometry>(edges.release());
+        return geomFact.createGeometryCollection();
     }
     std::unique_ptr<geom::Geometry> clipPoly(geomFact.toGeometry(&diagramEnv));
     std::unique_ptr<Geometry> clipped(clipPoly->intersection(edges.get()));
-    return clipped;
+
+    switch (clipped->getGeometryTypeId()) {
+        case GEOS_LINESTRING: {
+            std::vector<std::unique_ptr<Geometry>> vec;
+            vec.reserve(1);
+            vec.emplace_back(clipped.release());
+            return geomFact.createGeometryCollection(std::move(vec));
+        }
+        case GEOS_MULTILINESTRING: {
+            return geomFact.createGeometryCollection(
+                static_cast<MultiLineString*>(clipped.get())->releaseGeometries()
+            );
+        }
+        default: {
+            throw util::GEOSException("Unknown state");
+        }
+    }
 }
 
 std::unique_ptr<geom::GeometryCollection>
