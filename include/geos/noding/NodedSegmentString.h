@@ -100,35 +100,24 @@ public:
      *                   (may be null)
      */
     NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)
-        : NodableSegmentString(newContext)
+        : NodableSegmentString(newContext, newPts)
         , nodeList(this)
-        , pts(newPts)
     {}
 
     NodedSegmentString(SegmentString* ss)
-        : NodableSegmentString(ss->getData())
+        : NodableSegmentString(ss->getData(), ss->getCoordinates()->clone().release())
         , nodeList(this)
-        , pts(ss->getCoordinates()->clone())
     {}
 
-    ~NodedSegmentString() override = default;
+    ~NodedSegmentString() override {
+        delete seq;
+    }
 
     SegmentNodeList& getNodeList();
 
     const SegmentNodeList& getNodeList() const;
 
-    size_t
-    size() const override
-    {
-        return pts->size();
-    }
-
-    const geom::Coordinate& getCoordinate(std::size_t i) const override;
-
-    geom::CoordinateSequence* getCoordinates() const override;
-    geom::CoordinateSequence* releaseCoordinates();
-
-    bool isClosed() const override;
+    std::unique_ptr<geom::CoordinateSequence> releaseCoordinates();
 
     std::ostream& print(std::ostream& os) const override;
 
@@ -198,7 +187,7 @@ public:
         // normalize the intersection point location
         auto nextSegIndex = normalizedSegmentIndex + 1;
         if (nextSegIndex < size()) {
-            const geom::Coordinate& nextPt = pts->getAt(nextSegIndex);
+            const geom::Coordinate& nextPt = getCoordinate(nextSegIndex);
 
             // Normalize segment index if intPt falls on vertex
             // The check for point equality is 2D only -
@@ -218,8 +207,6 @@ public:
 private:
 
     SegmentNodeList nodeList;
-
-    std::unique_ptr<geom::CoordinateSequence> pts;
 
     static int safeOctant(const geom::Coordinate& p0, const geom::Coordinate& p1)
     {

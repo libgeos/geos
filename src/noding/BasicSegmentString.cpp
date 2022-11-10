@@ -30,7 +30,7 @@ std::ostream&
 BasicSegmentString::print(std::ostream& os) const
 {
     os << "BasicSegmentString: " << std::endl;
-    os << " LINESTRING" << *(pts) << ";" << std::endl;
+    os << " LINESTRING" << *(getCoordinates()) << ";" << std::endl;
 
     return os;
 }
