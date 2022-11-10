@@ -107,13 +107,13 @@ public:
     std::unique_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
 
     /** \brief
-     * Gets the faces of the computed diagram as a {@link geom::GeometryCollection}
+     * Gets the faces of the computed diagram as a {@link geom::MultiLineString}
      * of {@link geom::LineString}s, clipped as specified.
      *
      * @param geomFact the geometry factory to use to create the output
      * @return the faces of the diagram
      */
-    std::unique_ptr<geom::GeometryCollection> getDiagramEdges(const geom::GeometryFactory& geomFact);
+    std::unique_ptr<geom::MultiLineString> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
 private:
 

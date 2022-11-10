@@ -237,25 +237,19 @@ void object::test<10>
     runVoronoi(wkt, expected, 0);
 }
 
-// Consistency in the return value.
+// Consistency in the return value for edges
 template<>
 template<>
 void object::test<11>
 ()
 {
-    const char* wkt0 = "MULTIPOINT ((150 200))";
-    const char* expected0 = "GEOMETRYCOLLECTION EMPTY";
     const char* wkt1 = "LINESTRING (10 10, 20 20)";
-    const char* expected1 = "GEOMETRYCOLLECTION (POLYGON ((0 30, 30 30, 30 0, 0 30)), POLYGON ((0 0, 0 30, 30 0, 0 0)))";
-    const char* expected2 = "GEOMETRYCOLLECTION (LINESTRING (0 30, 30 0))";
+    const char* expected1 = "MULTILINESTRING ((0 30, 30 0))";
     const char* wkt2 = "LINESTRING (10 10, 20 20, 30 30)";
-    const char* expected3 = "GEOMETRYCOLLECTION (LINESTRING (0 50, 50 0), LINESTRING (-10 40, 40 -10))";
+    const char* expected2 = "MULTILINESTRING ((0 50, 50 0), (-10 40, 40 -10))";
 
-    runVoronoi(wkt0, expected0, 0, false);
-    runVoronoi(wkt0, expected0, 0, true);
-    runVoronoi(wkt1, expected1, 0, false);
-    runVoronoi(wkt1, expected2, 0, true);
-    runVoronoi(wkt2, expected3, 0, true);
+    runVoronoi(wkt1, expected1, 0, true);
+    runVoronoi(wkt2, expected2, 0, true);
 }
 
 } // namespace tut
