@@ -1,5 +1,5 @@
 ## Changes in 3.11.1
-2022-xx-xx
+2022-11-13
 
 - Fixes/Improvements:
   - Remove spurious version from --libs geos-config options
@@ -11,6 +11,7 @@
   - Fix WKB hex endian test (GH-720, Paul Ramsey)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
+
 
 ## Changes in 3.11.0
 2022-07-01
