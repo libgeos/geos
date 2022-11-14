@@ -1,5 +1,4 @@
-1. Verify that the versions currently set in Version.txt
-   make sense for this release. See file for instructions.
+1. Verify that the versions currently set in Version.txt make sense for this release. See file for instructions.
 
     - GEOS_VERSION_PATCH
     - GEOS_VERSION_MINOR
@@ -24,43 +23,26 @@
 4. Update the NEWS file (extract most important things from the
    repository log). Make sure to update the release date.
 
-5. Commit the changes in the NEWS file.
+5. Commit and push the changes in the NEWS and Versions.txt files.
 
-6. Build the distribution package.
-
-   $ BRANCH_NAME=main
-   $ git clone --depth 1 --branch $BRANCH_NAME \
-         https://git.osgeo.org/gitea/geos/geos.git geos-$BRANCH_NAME
-   $ cd geos-$BRANCH_NAME
-   $ mkdir _build && cd _build
-   $ cmake ..
-   $ cmake --build . --target dist
-
-7. Verify that you can un-pack and build the tarball.
-
-   $ tar xvfz geos-VERSION.tar.bz2
-   $ cd geos-VERSION
-   $ mkdir _build && cd _build && cmake ..
-   $ cmake --build .
-   $ ctest --output-on-failure .
-
-8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
-
-9. Tag the release:
+6. Tag the release:
 
    $ git tag MAJOR.MINOR.PATCH
    $ git push origin MAJOR.MINOR.PATCH
 
-10. Create and push a release branch if this was a PATCH=0 release,
-    update the versions for next release in Version.txt (both in
-    main and release branch if this was a PATCH=0 release).
+7. Wait for the release build to complete on github,
+   then copy the tarball artifact from github to
+   upload.osgeo.org:/osgeo/download/geos
 
-11. Update download page: web/content/usage/download.md
+8. Update web page Download section
 
     - Add latest release
     - Remove previous patch level release (if any)
 
-12. Close current GitHub milestone and add a new one for next release.
+9. Close current github milestone and add new one for next release
 
-12. Announce on geos-devel
+10. Announce on geos-devel
+
+11. Bump the Versions.txt versions forward to the next dev
+    version, and add a new empty release section to NEWS.
 
