@@ -342,7 +342,7 @@ Examples  POINT(0 0) POINT EMPTY LINESTRING(0 0, 0 1, 1 2) LINESTRING EMPTY POLY
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project    Release Release Date First Release Final Release Download Link Changes     3.11.1 2022/11/14 2022/07/01 2026/07/01 geos-3.11.1.tar.bz2 Changes   3.10.3 2022/06/03 2021/10/20 2025/10/20 geos-3.10.3.tar.bz2 Changes   3.9.3 2022/06/02 2020/12/09 2024/12/09 geos-3.9.3.tar.bz2 Changes   3.8.3 2022/06/02 2019/10/10 2023/10/10 geos-3.8.3.tar.bz2 Changes   3.7.5 2022/06/08 2018/09/10 2023/03/31 geos-3.7.5.tar.bz2 Changes   3.6.5 2020/12/11 2016/10/25 2022/10/25 geos-3.6.5.tar.bz2 Changes   3.5.2 EOL 2019/10/04 2015/08/16 2019/10/04 geos-3.</description>
+      <description>Download Project    Release Release Date First Release Final Release Download Link Changes     3.11.1 2022/11/14 2022/07/01 2026/07/01 geos-3.11.1.tar.bz2 Changes   3.10.4 2022/11/14 2021/10/20 2025/10/20 geos-3.10.4.tar.bz2 Changes   3.9.4 2022/11/14 2020/12/09 2024/12/09 geos-3.9.4.tar.bz2 Changes   3.8.3 2022/06/02 2019/10/10 2023/10/10 geos-3.8.3.tar.bz2 Changes   3.7.5 2022/06/08 2018/09/10 2023/03/31 geos-3.7.5.tar.bz2 Changes   3.6.5 2020/12/11 2016/10/25 2022/10/25 geos-3.6.5.tar.bz2 Changes   3.5.2 EOL 2019/10/04 2015/08/16 2019/10/04 geos-3.</description>
     </item>
     
   </channel>
