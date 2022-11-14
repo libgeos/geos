@@ -63,11 +63,20 @@ public:
      * @param resultPoint the point into which to write the inCentre of the triangle
      */
     void circumcentre(CoordinateXY& resultPoint);
+
+    /** Calculates the circumcentre using double precision math
+     * @param resultPoint the point into which to write the inCentre of the triangle
+     */
     void circumcentreDD(CoordinateXY& resultPoint);
 
-    /** Computes the circumcentre of a triangle. */
-    static const CoordinateXY circumcentre(
-        const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2);
+    /** Computes the circumcentre of a triangle.
+     * @param p0 corner of the triangle
+     * @param p1  corner of the triangle
+     * @param p2 corner of the triangle
+     * @return the center of the the smallest circle that encloses the triangle
+     * @overload
+     */
+    static const CoordinateXY circumcentre(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2);
 
     bool isIsoceles();
 

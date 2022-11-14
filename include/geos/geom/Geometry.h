@@ -66,7 +66,7 @@ class Unload;
 } // namespace geos.io
 }
 
-namespace geos {
+namespace geos { // geos
 namespace geom { // geos::geom
 
 /// Geometry types
@@ -777,17 +777,19 @@ public:
     /// Comparator for sorting geometry
     virtual int compareTo(const Geometry* geom) const;
 
-    /** \brief
-     * Returns the minimum distance between this Geometry
-     * and the Geometry g
-     */
-    virtual double distance(const Geometry* g) const;
-
     /// Returns the area of this Geometry.
     virtual double getArea() const;
 
     /// Returns the length of this Geometry.
     virtual double getLength() const;
+
+    /** Returns the minimum distance between this Geometry and the Geometry g
+     *
+     * @param g the Geometry to calculate distance to
+     * @return the distance in cartesian units
+     */
+    virtual double distance(const Geometry* g) const;
+
 
     /** \brief
      * Tests whether the distance from this Geometry  to another
