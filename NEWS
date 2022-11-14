@@ -1,6 +1,6 @@
 
 Changes in 3.10.4
-2022-xx-xx
+2022-11-14
 
 - Fixes/Improvements:
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
@@ -9,6 +9,7 @@ Changes in 3.10.4
   - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
+
 
 Changes in 3.10.3
 2022-06-03
