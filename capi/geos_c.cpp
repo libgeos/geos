@@ -912,6 +912,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSLineSubstring(const Geometry* g, double start_fraction, double end_fraction)
+    {
+        return GEOSLineSubstring_r(handle, g, start_fraction, end_fraction);
+    }
+
+    Geometry*
     GEOSReverse(const Geometry* g)
     {
         return GEOSReverse_r(handle, g);
