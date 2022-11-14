@@ -71,9 +71,7 @@ public:
      * intersect the query envelope.
      *
      * @param searchEnv the envelope to query for
-     * @return a list of the items found by the query in a newly allocated vector
      */
-    //virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
     virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&) = 0;
 
     /** \brief

@@ -23,4 +23,5 @@ clean-local:
 	rm -Rf doxygen_docs
 
 EXTRA_DIST = Doxyfile \
-	CMakeLists.txt
+	CMakeLists.txt \
+	check_doxygen_errors.cmake
