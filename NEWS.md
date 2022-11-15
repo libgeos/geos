@@ -18,6 +18,9 @@
   - Fix WKB hex endian test (GH-720, Paul Ramsey)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
+  - Fix crash in GEOSIntersects with empty point inputs (#673, Dan Baston)
+  - Fix RelateOp for empty geometry and closed linear geometry (#1096, Dan Baston)
+  - Return 2D result on 2D input to GeometryPrecisionReducer (#1137, Dan Baston)
 
 
 ## Changes in 3.11.0
