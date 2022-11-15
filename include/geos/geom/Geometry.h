@@ -777,9 +777,10 @@ public:
     /// Comparator for sorting geometry
     virtual int compareTo(const Geometry* geom) const;
 
-    /** \brief
-     * Returns the minimum distance between this Geometry
-     * and the Geometry g
+    /** Returns the minimum distance between this Geometry and the Geometry g
+     *
+     * @param g the Geometry to calculate distance to
+     * @return the distance in cartesian units
      */
     virtual double distance(const Geometry* g) const;
 

@@ -60,14 +60,23 @@ public:
      * to the origin to improve the accuracy of computation. (See *Lecture Notes
      * on Geometric Robustness*, Jonathan Richard Shewchuk, 1999).
      *
-     * @param resultPoint the point into which to write the inCentre of the triangle
+     * @param resultPoint the point into which to write the center of the triangle
      */
     void circumcentre(Coordinate& resultPoint);
+
+    /** Calculates the circumcentre using double precision math
+     * @param resultPoint the point into which to write the center of the triangle
+     */
     void circumcentreDD(Coordinate& resultPoint);
 
-    /** Computes the circumcentre of a triangle. */
-    static const Coordinate circumcentre(
-        const Coordinate& p0, const Coordinate& p1, const Coordinate& p2);
+    /** Computes the circumcentre of a triangle.
+     * @param p0 corner of the triangle
+     * @param p1  corner of the triangle
+     * @param p2 corner of the triangle
+     * @return the center of the the smallest circle that encloses the triangle
+     * @overload
+     */
+    static const Coordinate circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2);
 
     bool isIsoceles();
 
