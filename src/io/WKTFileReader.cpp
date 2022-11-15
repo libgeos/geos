@@ -20,9 +20,12 @@
 #include <memory> // for unique_ptr
 #include <algorithm>
 
-#include "WKTFileReader.h"
+#include <geos/io/WKTFileReader.h>
 
 using namespace geos::geom;
+
+namespace geos {
+namespace io {
 
 WKTFileReader::WKTFileReader()
 {
@@ -34,11 +37,11 @@ WKTFileReader::~WKTFileReader() {
 }
 
 /*public*/
-std::vector<Geometry*>
+std::vector<std::unique_ptr<Geometry>>
 WKTFileReader::read(std::string fname)
 {
     std::ifstream f( fname );
-    std::vector<Geometry*> geoms;
+    std::vector<std::unique_ptr<Geometry>> geoms;
     geos::io::WKTReader rdr;
 
     while (true) {
@@ -46,7 +49,7 @@ WKTFileReader::read(std::string fname)
         if (g == nullptr) {
             break;
         }
-        geoms.push_back(g);
+        geoms.push_back(std::move(g));
     }
     f.close();
 
@@ -56,13 +59,13 @@ WKTFileReader::read(std::string fname)
 /*
 Return: nullptr if at EOF
 */
-Geometry*
+std::unique_ptr<Geometry>
 WKTFileReader::readGeom(std::ifstream& f, geos::io::WKTReader& rdr)
 {
     std::string wkt = "";
 
-    int lParen = 0;
-    int rParen = 0;
+    std::string::difference_type lParen = 0;
+    std::string::difference_type rParen = 0;
     do {
         std::string line;
         std::getline(f, line);
@@ -77,5 +80,8 @@ WKTFileReader::readGeom(std::ifstream& f, geos::io::WKTReader& rdr)
     } while (lParen == 0 || lParen != rParen);
 
     auto g = rdr.read( wkt.c_str() );
-    return g.release();
+    return g;
+}
+
+}
 }

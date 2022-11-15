@@ -20,9 +20,12 @@
 #include <memory> // for unique_ptr
 #include <algorithm>
 
-#include "WKTStreamReader.h"
+#include <geos/io/WKTStreamReader.h>
 
 using namespace geos::geom;
+
+namespace geos {
+namespace io {
 
 WKTStreamReader::WKTStreamReader(std::istream& p_instr)
     : instr(p_instr)
@@ -39,7 +42,7 @@ WKTStreamReader::~WKTStreamReader() {
 /*
 Return: nullptr if at EOF
 */
-Geometry*
+std::unique_ptr<Geometry>
 WKTStreamReader::next()
 {
     std::string wkt = "";
@@ -60,5 +63,9 @@ WKTStreamReader::next()
     } while (lParen == 0 || lParen != rParen);
 
     auto g = rdr.read( wkt.c_str() );
-    return g.release();
+    return g;
+}
+
+
+}
 }

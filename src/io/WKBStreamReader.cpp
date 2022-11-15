@@ -18,11 +18,13 @@
 #include <iostream>
 #include <sstream>
 #include <memory> // for unique_ptr
-//#include <algorithm>
 
-#include "WKBStreamReader.h"
+#include <geos/io/WKBStreamReader.h>
 
-using namespace geos::geom;
+using geos::geom::Geometry;
+
+namespace geos {
+namespace io {
 
 WKBStreamReader::WKBStreamReader(std::istream& p_instr)
     : instr(p_instr)
@@ -39,7 +41,7 @@ WKBStreamReader::~WKBStreamReader() {
 /*
 Return: nullptr if at EOF
 */
-Geometry*
+std::unique_ptr<Geometry>
 WKBStreamReader::next()
 {
     std::string line;
@@ -49,5 +51,8 @@ WKBStreamReader::next()
     }
     std::istringstream hex(line);
     auto g = rdr.readHEX( hex );
-    return g.release();
+    return g;
+}
+
+}
 }

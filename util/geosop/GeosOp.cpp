@@ -19,15 +19,15 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTStreamReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBReader.h>
+#include <geos/io/WKBStreamReader.h>
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-#include "WKTStreamReader.h"
-#include "WKBStreamReader.h"
 #include "GeomFunction.h"
 #include "GeosOp.h"
 #include "cxxopts.hpp"
@@ -221,7 +221,7 @@ readWKTFile(std::istream& in, int limit) {
         auto geom = rdr.next();
         if (geom == nullptr)
             break;
-        geoms.push_back( std::unique_ptr<Geometry>(geom) );
+        geoms.push_back(std::move(geom));
         count++;
     }
     return geoms;
@@ -247,7 +247,7 @@ readWKBFile(std::istream& in, int limit) {
         auto geom = rdr.next();
         if (geom == nullptr)
             break;
-        geoms.push_back( std::unique_ptr<Geometry>(geom) );
+        geoms.push_back(std::move(geom));
         count++;
     }
     return geoms;

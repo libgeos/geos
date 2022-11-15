@@ -16,6 +16,7 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -26,15 +27,22 @@ class PrecisionModel;
 }
 }
 
-class WKTFileReader {
+namespace geos {
+namespace io {
+
+class GEOS_DLL WKTStreamReader {
 
 public:
-    WKTFileReader();
-    ~WKTFileReader();
+    WKTStreamReader(std::istream& instr);
+    ~WKTStreamReader();
 
-    std::vector<geos::geom::Geometry*> read(std::string fname);
+    std::unique_ptr<geos::geom::Geometry> next();
 
 private:
-    geos::geom::Geometry* readGeom(std::ifstream& f, geos::io::WKTReader& rdr);
+
+    std::istream& instr;
+    WKTReader rdr;
 };
 
+}
+}
