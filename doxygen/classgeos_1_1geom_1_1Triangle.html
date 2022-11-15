@@ -69,8 +69,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5226faf6436ea3ad6a79809b2be8d806"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a5226faf6436ea3ad6a79809b2be8d806">circumcentre</a> (CoordinateXY &amp;resultPoint)</td></tr>
 <tr class="memdesc:a5226faf6436ea3ad6a79809b2be8d806"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the circumcentre of a triangle.  <a href="classgeos_1_1geom_1_1Triangle.html#a5226faf6436ea3ad6a79809b2be8d806">More...</a><br /></td></tr>
 <tr class="separator:a5226faf6436ea3ad6a79809b2be8d806"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab71d0dd48aa0d07ea6b661c2ae395d64"><td class="memItemLeft" align="right" valign="top"><a id="ab71d0dd48aa0d07ea6b661c2ae395d64"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>circumcentreDD</b> (CoordinateXY &amp;resultPoint)</td></tr>
+<tr class="memitem:ab71d0dd48aa0d07ea6b661c2ae395d64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#ab71d0dd48aa0d07ea6b661c2ae395d64">circumcentreDD</a> (CoordinateXY &amp;resultPoint)</td></tr>
 <tr class="separator:ab71d0dd48aa0d07ea6b661c2ae395d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8707e552329befd166b07789f8260ee6"><td class="memItemLeft" align="right" valign="top"><a id="a8707e552329befd166b07789f8260ee6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isIsoceles</b> ()</td></tr>
@@ -210,7 +209,15 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the circumcentre of a triangle. </p>
+<p>Computes the circumcentre of a triangle. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p0</td><td>corner of the triangle </td></tr>
+    <tr><td class="paramname">p1</td><td>corner of the triangle </td></tr>
+    <tr><td class="paramname">p2</td><td>corner of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the center of the the smallest circle that encloses the triangle This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </dd></dl>
 
 </div>
 </div>
@@ -235,6 +242,30 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></
 <p>The circumcentre does not necessarily lie within the triangle. For example, the circumcentre of an obtuse isoceles triangle lies outside the triangle.</p>
 <p>This method uses an algorithm due to J.R.Shewchuk which uses normalization to the origin to improve the accuracy of computation. (See <em>Lecture Notes on Geometric Robustness</em>, Jonathan Richard Shewchuk, 1999).</p>
 <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resultPoint</td><td>the point into which to write the inCentre of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab71d0dd48aa0d07ea6b661c2ae395d64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab71d0dd48aa0d07ea6b661c2ae395d64">&#9670;&nbsp;</a></span>circumcentreDD()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::geom::Triangle::circumcentreDD </td>
+          <td>(</td>
+          <td class="paramtype">CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>resultPoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculates the circumcentre using double precision math </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">resultPoint</td><td>the point into which to write the inCentre of the triangle </td></tr>
   </table>

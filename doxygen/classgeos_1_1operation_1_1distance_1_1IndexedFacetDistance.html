@@ -92,7 +92,7 @@ Static Public Member Functions</h2></td></tr>
 <li>Performance is dramatically improved due to the use of the R-tree index and the pruning due to the Branch-and-Bound approach</li>
 <li>The spatial index on the target geometry is cached which allow reuse in an repeated query situation.</li>
 </ul>
-<p>Using this technique is usually much more performant than using the brute-force <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a4dd42df4f1c05ae775ad38dbf4d42070">geom::Geometry::distance(const Geometry* g) const</a> when one or both input geometries are large, or when evaluating many distance computations against a single geometry.</p>
+<p>Using this technique is usually much more performant than using the brute-force <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a4dd42df4f1c05ae775ad38dbf4d42070">geom::Geometry::distance()</a> when one or both input geometries are large, or when evaluating many distance computations against a single geometry.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af2d15f4683ac632a717743dca891ddca"></a>

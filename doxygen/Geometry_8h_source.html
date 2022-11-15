@@ -115,7 +115,7 @@ $(function() {
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace geos.io</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> { <span class="comment">// geos</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">namespace </span>geom { <span class="comment">// geos::geom</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">   73</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">GeometryTypeId</a> {</div>
@@ -351,141 +351,142 @@ $(function() {
 <div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160; </div>
 <div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> compareTo(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160; </div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> distance(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getArea() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160; </div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getLength() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160; </div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getArea() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getLength() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160; </div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isWithinDistance(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;                                  <span class="keywordtype">double</span> cDistance) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160; </div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;    <span class="keyword">virtual</span> std::unique_ptr&lt;Point&gt; getCentroid() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160; </div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;<span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getCentroid(<a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; ret) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160; </div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;    std::unique_ptr&lt;Point&gt; getInteriorPoint() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160; </div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> geometryChanged();</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
-<div class="line"><a name="l00847"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">  847</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">geometryChangedAction</a>() {</div>
-<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        envelope.reset();</div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;    }</div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160; </div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> distance(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160; </div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160; </div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isWithinDistance(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;                                  <span class="keywordtype">double</span> cDistance) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160; </div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;    <span class="keyword">virtual</span> std::unique_ptr&lt;Point&gt; getCentroid() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160; </div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;<span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> getCentroid(<a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; ret) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;    std::unique_ptr&lt;Point&gt; getInteriorPoint() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160; </div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> geometryChanged();</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160; </div>
+<div class="line"><a name="l00849"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">  849</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">geometryChangedAction</a>() {</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;        envelope.reset();</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;    }</div>
 <div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160; </div>
-<div class="line"><a name="l00854"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">  854</a></span>&#160;    <span class="keyword">mutable</span> std::unique_ptr&lt;Envelope&gt; <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">envelope</a>;</div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160; </div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* cloneImpl() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160; </div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* reverseImpl() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160; </div>
-<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00864"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">  864</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">hasNonEmptyElements</a>(<span class="keyword">const</span> std::vector&lt;T&gt;* geometries) {</div>
-<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;        <span class="keywordflow">return</span> std::any_of(geometries-&gt;begin(), geometries-&gt;end(), [](<span class="keyword">const</span> T&amp; g) { return !g-&gt;isEmpty(); });</div>
-<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;    }</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160; </div>
-<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> hasNullElements(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* list);</div>
-<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160; </div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00873"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">  873</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">hasNullElements</a>(<span class="keyword">const</span> std::vector&lt;T&gt;* geometries) {</div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;        <span class="keywordflow">return</span> std::any_of(geometries-&gt;begin(), geometries-&gt;end(), [](<span class="keyword">const</span> T&amp; g) { return g == nullptr; });</div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;    }</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160; </div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;<span class="comment">//      static void reversePointOrder(CoordinateSequence* coordinates);</span></div>
-<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;<span class="comment">//      static Coordinate&amp; minCoordinate(CoordinateSequence* coordinates);</span></div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;<span class="comment">//      static void scroll(CoordinateSequence* coordinates,Coordinate* firstCoordinate);</span></div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;<span class="comment">//      static int indexOf(Coordinate* coordinate,CoordinateSequence* coordinates);</span></div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;<span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isEquivalentClass(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160; </div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> checkNotGeometryCollection(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g);</div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;    <span class="comment">// throw(IllegalArgumentException *);</span></div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160; </div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;    <span class="comment">//virtual void checkEqualSRID(Geometry *other);</span></div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160; </div>
+<div class="line"><a name="l00856"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">  856</a></span>&#160;    <span class="keyword">mutable</span> std::unique_ptr&lt;Envelope&gt; <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">envelope</a>;</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160; </div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* cloneImpl() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160; </div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* reverseImpl() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160; </div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00866"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">  866</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">hasNonEmptyElements</a>(<span class="keyword">const</span> std::vector&lt;T&gt;* geometries) {</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        <span class="keywordflow">return</span> std::any_of(geometries-&gt;begin(), geometries-&gt;end(), [](<span class="keyword">const</span> T&amp; g) { return !g-&gt;isEmpty(); });</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;    }</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160; </div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> hasNullElements(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* list);</div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160; </div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00875"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">  875</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">hasNullElements</a>(<span class="keyword">const</span> std::vector&lt;T&gt;* geometries) {</div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;        <span class="keywordflow">return</span> std::any_of(geometries-&gt;begin(), geometries-&gt;end(), [](<span class="keyword">const</span> T&amp; g) { return g == nullptr; });</div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;    }</div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160; </div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;<span class="comment">//      static void reversePointOrder(CoordinateSequence* coordinates);</span></div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;<span class="comment">//      static Coordinate&amp; minCoordinate(CoordinateSequence* coordinates);</span></div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;<span class="comment">//      static void scroll(CoordinateSequence* coordinates,Coordinate* firstCoordinate);</span></div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;<span class="comment">//      static int indexOf(Coordinate* coordinate,CoordinateSequence* coordinates);</span></div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;<span class="comment"></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isEquivalentClass(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160; </div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> checkNotGeometryCollection(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g);</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;    <span class="comment">// throw(IllegalArgumentException *);</span></div>
 <div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160; </div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;    <span class="comment">//virtual void checkEqualPrecisionModel(Geometry *other);</span></div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;    <span class="comment">//virtual void checkEqualSRID(Geometry *other);</span></div>
 <div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160; </div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;    <span class="keyword">virtual</span> Envelope::Ptr computeEnvelopeInternal() <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;    <span class="comment">//virtual void checkEqualPrecisionModel(Geometry *other);</span></div>
 <div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160; </div>
-<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> compareToSameClass(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom) <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;    <span class="keyword">virtual</span> Envelope::Ptr computeEnvelopeInternal() <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
 <div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160; </div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;    <span class="keywordtype">int</span> compare(std::vector&lt;Coordinate&gt; a, std::vector&lt;Coordinate&gt; b) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> compareToSameClass(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom) <span class="keyword">const</span> = 0; <span class="comment">//Abstract</span></div>
 <div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160; </div>
-<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;    <span class="keywordtype">int</span> compare(std::vector&lt;Geometry*&gt; a, std::vector&lt;Geometry*&gt; b) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;    <span class="keywordtype">int</span> compare(std::vector&lt;Coordinate&gt; a, std::vector&lt;Coordinate&gt; b) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160; </div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;    <span class="keywordtype">int</span> compare(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp; a, <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp; b) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;    <span class="keywordtype">int</span> compare(std::vector&lt;Geometry*&gt; a, std::vector&lt;Geometry*&gt; b) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160; </div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;    <span class="keywordtype">bool</span> equal(<span class="keyword">const</span> CoordinateXY&amp; a, <span class="keyword">const</span> CoordinateXY&amp; b,</div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;               <span class="keywordtype">double</span> tolerance) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;    <span class="keywordtype">int</span> SRID;</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160; </div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&amp; geom);</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;    <span class="keywordtype">int</span> compare(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp; a, <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; &amp; b) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160; </div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;    <span class="keywordtype">bool</span> equal(<span class="keyword">const</span> CoordinateXY&amp; a, <span class="keyword">const</span> CoordinateXY&amp; b,</div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;               <span class="keywordtype">double</span> tolerance) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;    <span class="keywordtype">int</span> SRID;</div>
 <div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160; </div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* factory);</div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160; </div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; toGeometryArray(std::vector&lt;std::unique_ptr&lt;T&gt;&gt; &amp;&amp; v) {</div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;        static_assert(std::is_base_of&lt;Geometry, T&gt;::value, <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;        std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; gv(v.size());</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; v.size(); i++) {</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;            gv[i] = std::move(v[i]);</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;        }</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;        <span class="keywordflow">return</span> gv;</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;    }</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160; </div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&amp; geom);</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160; </div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* factory);</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160; </div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; toGeometryArray(std::vector&lt;std::unique_ptr&lt;T&gt;&gt; &amp;&amp; v) {</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;        static_assert(std::is_base_of&lt;Geometry, T&gt;::value, <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;        std::vector&lt;std::unique_ptr&lt;Geometry&gt;&gt; gv(v.size());</div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; v.size(); i++) {</div>
+<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;            gv[i] = std::move(v[i]);</div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;        }</div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;        <span class="keywordflow">return</span> gv;</div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;    }</div>
 <div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160; </div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getSortIndex() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160; </div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160; </div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getSortIndex() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160; </div>
 <div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160; </div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;    <span class="keyword">class </span>GEOS_DLL GeometryChangedFilter : <span class="keyword">public</span> GeometryComponentFilter {</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;        <span class="keywordtype">void</span> filter_rw(Geometry* geom) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;    };</div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160; </div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;    <span class="keyword">static</span> GeometryChangedFilter geometryChangedFilter;</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160; </div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;    <span class="keyword">class </span>GEOS_DLL GeometryChangedFilter : <span class="keyword">public</span> GeometryComponentFilter {</div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;        <span class="keywordtype">void</span> filter_rw(Geometry* geom) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;    };</div>
 <div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160; </div>
-<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;    <span class="keyword">const</span> GeometryFactory* _factory;</div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160; </div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;    <span class="keywordtype">void</span>* _userData;</div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;};</div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160; </div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> Geometry&amp; geom);</div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160; </div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;<span class="keyword">struct </span>GEOS_DLL GeometryGreaterThen {</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;    <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> Geometry* first, <span class="keyword">const</span> Geometry* second);</div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;};</div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160; </div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160; </div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;GEOS_DLL std::string <a class="code" href="namespacegeos_1_1geom.html#acdb90e29e8ba4eeeb5860f2bb0bb9b0f">geosversion</a>();</div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160; </div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;GEOS_DLL std::string <a class="code" href="namespacegeos_1_1geom.html#ac0f658bdb01fb543cd247febca7ab10c">jtsport</a>();</div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160; </div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;<span class="comment">// We use this instead of std::pair&lt;unique_ptr&lt;Geometry&gt;&gt; because C++11</span></div>
-<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;<span class="comment">// forbids that construct:</span></div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;<span class="comment">// http://lwg.github.com/issues/lwg-closed.html#2068</span></div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;<span class="keyword">struct </span>GeomPtrPair {</div>
-<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;    <span class="keyword">typedef</span> std::unique_ptr&lt;Geometry&gt; GeomPtr;</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;    GeomPtr first;</div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;    GeomPtr second;</div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;};</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160; </div>
-<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160; </div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;    <span class="keyword">static</span> GeometryChangedFilter geometryChangedFilter;</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160; </div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;    <span class="keyword">const</span> GeometryFactory* _factory;</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160; </div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;    <span class="keywordtype">void</span>* _userData;</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;};</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; </div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> Geometry&amp; geom);</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160; </div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;<span class="keyword">struct </span>GEOS_DLL GeometryGreaterThen {</div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;    <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> Geometry* first, <span class="keyword">const</span> Geometry* second);</div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;};</div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160; </div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160; </div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;GEOS_DLL std::string <a class="code" href="namespacegeos_1_1geom.html#acdb90e29e8ba4eeeb5860f2bb0bb9b0f">geosversion</a>();</div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160; </div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;GEOS_DLL std::string <a class="code" href="namespacegeos_1_1geom.html#ac0f658bdb01fb543cd247febca7ab10c">jtsport</a>();</div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160; </div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;<span class="comment">// We use this instead of std::pair&lt;unique_ptr&lt;Geometry&gt;&gt; because C++11</span></div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;<span class="comment">// forbids that construct:</span></div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;<span class="comment">// http://lwg.github.com/issues/lwg-closed.html#2068</span></div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;<span class="keyword">struct </span>GeomPtrPair {</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;    <span class="keyword">typedef</span> std::unique_ptr&lt;Geometry&gt; GeomPtr;</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;    GeomPtr first;</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;    GeomPtr second;</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;};</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160; </div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160; </div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a83f0703f34370c8c1900f70478479ed2"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a83f0703f34370c8c1900f70478479ed2">geos::geom::Geometry::ConstVect</a></div><div class="ttdeci">std::vector&lt; const Geometry * &gt; ConstVect</div><div class="ttdoc">A vector of const Geometry pointers.</div><div class="ttdef"><b>Definition:</b> Geometry.h:193</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_aa31dca7728ca3e5c72ce5369ffeeeafe"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#aa31dca7728ca3e5c72ce5369ffeeeafe">geos::geom::Geometry::reverse</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; reverse() const</div><div class="ttdoc">Computes a new geometry which has all component coordinate sequences in reverse order (opposite orien...</div><div class="ttdef"><b>Definition:</b> Geometry.h:652</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a3078813471b2c70b04da6271a5da83eb"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">geos::geom::Geometry::envelope</a></div><div class="ttdeci">std::unique_ptr&lt; Envelope &gt; envelope</div><div class="ttdoc">The bounding box of this Geometry.</div><div class="ttdef"><b>Definition:</b> Geometry.h:854</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_af956233ea57ece02cc8a97338e8e91db"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">geos::geom::Geometry::hasNullElements</a></div><div class="ttdeci">static bool hasNullElements(const std::vector&lt; T &gt; *geometries)</div><div class="ttdoc">Returns true if the vector contains any null elements.</div><div class="ttdef"><b>Definition:</b> Geometry.h:873</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a3078813471b2c70b04da6271a5da83eb"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">geos::geom::Geometry::envelope</a></div><div class="ttdeci">std::unique_ptr&lt; Envelope &gt; envelope</div><div class="ttdoc">The bounding box of this Geometry.</div><div class="ttdef"><b>Definition:</b> Geometry.h:856</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_af956233ea57ece02cc8a97338e8e91db"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#af956233ea57ece02cc8a97338e8e91db">geos::geom::Geometry::hasNullElements</a></div><div class="ttdeci">static bool hasNullElements(const std::vector&lt; T &gt; *geometries)</div><div class="ttdoc">Returns true if the vector contains any null elements.</div><div class="ttdef"><b>Definition:</b> Geometry.h:875</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa35166f022d8564b72d7cb041c1a8d9a2">geos::geom::Dimension::A</a></div><div class="ttdeci">@ A</div><div class="ttdoc">Dimension value of a surface (2).</div><div class="ttdef"><b>Definition:</b> Dimension.h:94</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition:</b> PrecisionModel.h:90</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
@@ -502,11 +503,11 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_ada52633b579cd370c7978a5770e2a147"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#ada52633b579cd370c7978a5770e2a147">geos::geom::Geometry::isRectangle</a></div><div class="ttdeci">virtual bool isRectangle() const</div><div class="ttdoc">Polygon overrides to check for actual rectangle.</div><div class="ttdef"><b>Definition:</b> Geometry.h:337</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cf"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cf">geos::geom::Dimension::DimensionType</a></div><div class="ttdeci">DimensionType</div><div class="ttdef"><b>Definition:</b> Dimension.h:65</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_a98c5b0e81001a7c3fdc7a058960356d8ac376a9701abf81f81a64a270ad4eb5de"><div class="ttname"><a href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8ac376a9701abf81f81a64a270ad4eb5de">geos::geom::GEOS_POINT</a></div><div class="ttdeci">@ GEOS_POINT</div><div class="ttdoc">a point</div><div class="ttdef"><b>Definition:</b> Geometry.h:75</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a9fe7d434f5eeac333fca775a652f5d70"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">geos::geom::Geometry::hasNonEmptyElements</a></div><div class="ttdeci">static bool hasNonEmptyElements(const std::vector&lt; T &gt; *geometries)</div><div class="ttdoc">Returns true if the array contains any non-empty Geometrys.</div><div class="ttdef"><b>Definition:</b> Geometry.h:864</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a9fe7d434f5eeac333fca775a652f5d70"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a9fe7d434f5eeac333fca775a652f5d70">geos::geom::Geometry::hasNonEmptyElements</a></div><div class="ttdeci">static bool hasNonEmptyElements(const std::vector&lt; T &gt; *geometries)</div><div class="ttdoc">Returns true if the array contains any non-empty Geometrys.</div><div class="ttdef"><b>Definition:</b> Geometry.h:866</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:211</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a0cfb750dfa195e778066e276e8bbb1c9"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a0cfb750dfa195e778066e276e8bbb1c9">geos::geom::Geometry::applyComponentFilter</a></div><div class="ttdeci">void applyComponentFilter(T &amp;f) const</div><div class="ttdoc">Apply a filter to each component of this geometry. The filter is expected to provide a ....</div><div class="ttdef"><b>Definition:</b> Geometry.h:763</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a175a97030b47b67bce9d92123ba570e8"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">geos::geom::Geometry::geometryChangedAction</a></div><div class="ttdeci">void geometryChangedAction()</div><div class="ttdoc">Notifies this Geometry that its Coordinates have been changed by an external party.</div><div class="ttdef"><b>Definition:</b> Geometry.h:847</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_a175a97030b47b67bce9d92123ba570e8"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">geos::geom::Geometry::geometryChangedAction</a></div><div class="ttdeci">void geometryChangedAction()</div><div class="ttdoc">Notifies this Geometry that its Coordinates have been changed by an external party.</div><div class="ttdef"><b>Definition:</b> Geometry.h:849</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_ab9bea00cf73487c84ab305529d4b3ca2"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#ab9bea00cf73487c84ab305529d4b3ca2">geos::geom::Geometry::coveredBy</a></div><div class="ttdeci">bool coveredBy(const Geometry *g) const</div><div class="ttdoc">Tests whether this geometry is covered by the specified geometry.</div><div class="ttdef"><b>Definition:</b> Geometry.h:576</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">geos::geom::Dimension::L</a></div><div class="ttdeci">@ L</div><div class="ttdoc">Dimension value of a curve (1).</div><div class="ttdef"><b>Definition:</b> Dimension.h:91</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_a98c5b0e81001a7c3fdc7a058960356d8ab48fde06301f4394c46d0fd5305be70e"><div class="ttname"><a href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8ab48fde06301f4394c46d0fd5305be70e">geos::geom::GEOS_GEOMETRYCOLLECTION</a></div><div class="ttdeci">@ GEOS_GEOMETRYCOLLECTION</div><div class="ttdoc">a collection of heterogeneus geometries</div><div class="ttdef"><b>Definition:</b> Geometry.h:89</div></div>
