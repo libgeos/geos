@@ -286,6 +286,27 @@ public:
         }
     }
 
+    // Query the tree for all pairs whose bounds intersect. The visitor must
+    // be callable with arguments (const ItemType&, const ItemType&).
+    // The visitor will be called for each pair once, with first-inserted
+    // item used for the first argument.
+    // The visitor need not return a value, but if it does return a value,
+    // false values will be taken as a signal to stop the query.
+    template<typename Visitor>
+    void queryPairs(Visitor&& visitor) {
+        if (!built()) {
+            build();
+        }
+
+        if (numItems < 2) {
+            return;
+        }
+
+        for (std::size_t i = 0; i < numItems; i++) {
+            queryPairs(nodes[i], *root, visitor);
+        }
+    }
+
     // Query the tree and collect items in the provided vector.
     void query(const BoundsType& queryEnv, std::vector<ItemType>& results) {
         query(queryEnv, [&results](const ItemType& x) {
@@ -519,6 +540,14 @@ protected:
         return true;
     }
 
+    template<typename Visitor,
+            typename std::enable_if<std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
+    bool visitLeaves(Visitor&& visitor, const Node& node1, const Node& node2)
+    {
+        visitor(node1.getItem(), node2.getItem());
+        return true;
+    }
+
     // MSVC 2015 does not implement C++11 expression SFINAE and considers this a
     // redefinition of a previous method
 #if !defined(_MSC_VER) || _MSC_VER >= 1910
@@ -538,6 +567,13 @@ protected:
     bool visitLeaf(Visitor&& visitor, const Node& node)
     {
         return visitor(node.getItem());
+    }
+
+    template<typename Visitor,
+            typename std::enable_if<!std::is_void<decltype(std::declval<Visitor>()(std::declval<ItemType>(), std::declval<ItemType>()))>::value, std::nullptr_t>::type = nullptr >
+    bool visitLeaves(Visitor&& visitor, const Node& node1, const Node& node2)
+    {
+        return visitor(node1.getItem(), node2.getItem());
     }
 
     // MSVC 2015 does not implement C++11 expression SFINAE and considers this a
@@ -573,6 +609,34 @@ protected:
                 }
             }
         }
+        return true; // continue searching
+    }
+
+    template<typename Visitor>
+    bool queryPairs(const Node& queryNode,
+                    const Node& searchNode,
+                    Visitor&& visitor) {
+
+        assert(!searchNode.isLeaf());
+
+        for (auto* child = searchNode.beginChildren(); child < searchNode.endChildren(); ++child) {
+            if (child->isLeaf()) {
+                // Only visit leaf nodes if they have a higher address than the query node,
+                // to avoid processing the same pairs twice.
+                if (child > &queryNode && !child->isDeleted() && child->boundsIntersect(queryNode.getBounds())) {
+                    if (!visitLeaves(visitor, queryNode, *child)) {
+                        return false; // abort query
+                    }
+                }
+            } else {
+                if (child->boundsIntersect(queryNode.getBounds())) {
+                    if (!queryPairs(queryNode, *child, visitor)) {
+                        return false; // abort query
+                    }
+                }
+            }
+        }
+
         return true; // continue searching
     }
 

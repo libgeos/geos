@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <utility>
+
 namespace geos {
 namespace index {
 namespace strtree {

@@ -91,6 +91,22 @@ class CountingVisitor : public geos::index::ItemVisitor {
     }
 };
 
+template<typename T>
+struct Counter {
+    size_t hits = 0;
+
+    void operator()(const T& item) {
+        (void) item;
+        hits++;
+    }
+
+    void operator()(const T& item1, const T& item2) {
+        (void) item1;
+        (void) item2;
+        hits++;
+    }
+};
+
 struct EnvelopeDistance : public ItemDistance {
     double distance(const ItemBoundable* a, const ItemBoundable* b) override {
         Envelope* ea = static_cast<Envelope*>(a->getItem());
@@ -248,6 +264,46 @@ static void BM_STRtree2DQuery(benchmark::State& state) {
     }
 }
 
+static void BM_STRtree2DQueryPairs(benchmark::State& state) {
+    std::default_random_engine eng(12345);
+    Envelope extent(0, 1, 0, 1);
+    auto envelopes = generate_envelopes(eng, extent, 10000);
+    Envelope empty_env;
+
+    TemplateSTRtree<const Envelope*> tree;
+    for (auto& e : envelopes) {
+        tree.insert(&e, &e);
+    }
+    Counter<const Envelope*> q;
+    tree.query(empty_env, q); // query with empty envelope to force construction
+
+    for (auto _ : state) {
+        Counter<const Envelope*> c;
+        tree.queryPairs(c);
+    }
+}
+
+static void BM_STRtree2DQueryPairsNaive(benchmark::State& state) {
+    std::default_random_engine eng(12345);
+    Envelope extent(0, 1, 0, 1);
+    auto envelopes = generate_envelopes(eng, extent, 10000);
+    Envelope empty_env;
+
+    TemplateSTRtree<const Envelope*> tree;
+    for (auto& e : envelopes) {
+        tree.insert(&e, &e);
+    }
+    Counter<const Envelope*> q;
+    tree.query(empty_env, q); // query with empty envelope to force construction
+
+    for (auto _ : state) {
+        Counter<const Envelope*> c;
+        for (const auto& env : envelopes) {
+            tree.query(env, c);
+        }
+    }
+}
+
 template<class Tree>
 static void BM_STRtree2DNearest(benchmark::State& state) {
     std::default_random_engine eng(12345);
@@ -297,6 +353,9 @@ BENCHMARK_TEMPLATE(BM_STRtree2DQuery, Quadtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, STRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, SimpleSTRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*>);
+
+BENCHMARK(BM_STRtree2DQueryPairs);
+BENCHMARK(BM_STRtree2DQueryPairsNaive);
 
 BENCHMARK_MAIN();
 
