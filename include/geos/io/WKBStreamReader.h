@@ -15,28 +15,35 @@
 #pragma once
 
 #include <geos/geom/GeometryFactory.h>
-#include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
 namespace geom {
-
 class Geometry;
 class PrecisionModel;
 }
 }
 
-class WKTStreamReader {
+namespace geos {
+namespace io {
+
+class GEOS_DLL WKBStreamReader {
 
 public:
-    WKTStreamReader(std::istream& instr);
-    ~WKTStreamReader();
+    WKBStreamReader(std::istream& instr);
+    ~WKBStreamReader();
 
-    geos::geom::Geometry* next();
+    std::unique_ptr<geom::Geometry> next();
 
 private:
 
     std::istream& instr;
-    geos::io::WKTReader rdr;
+    WKBReader rdr;
 };
+
+}
+}
+
 
