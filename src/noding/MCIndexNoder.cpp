@@ -68,24 +68,12 @@ MCIndexNoder::intersectChains()
 
     SegmentOverlapAction overlapAction(*segInt);
 
-    for(const MonotoneChain& queryChain : monoChains) {
-        GEOS_CHECK_FOR_INTERRUPTS();
+    index.queryPairs([this, &overlapAction](const MonotoneChain* queryChain, const MonotoneChain* testChain) {
+        queryChain->computeOverlaps(testChain, overlapTolerance, &overlapAction);
+        nOverlaps++;
 
-        const geom::Envelope& queryEnv = queryChain.getEnvelope(overlapTolerance);
-        index.query(queryEnv, [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
-            /*
-             * following test makes sure we only compare each
-             * pair of chains once and that we don't compare a
-             * chain to itself
-             */
-            if(testChain > &queryChain) {
-                queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
-                nOverlaps++;
-            }
-
-            return !segInt->isDone(); // abort early if segInt->isDone()
-        });
-    }
+        return !segInt->isDone(); // abort early if segInt->isDone()
+    });
 }
 
 /*private*/

@@ -59,7 +59,7 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
     for(auto& queryChain : monoChains) {
-        index.query(queryChain.getEnvelope(overlapTolerance), [&queryChain, &overlapAction, this](const MonotoneChain* testChain) {
+        index.query(queryChain.getEnvelope(overlapTolerance), [&queryChain, &overlapAction, this](const MonotoneChain* testChain) -> bool {
             queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
             nOverlaps++;
 
