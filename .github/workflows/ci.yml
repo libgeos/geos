@@ -27,8 +27,8 @@ jobs:
           packages: g++
           cmake: 3.15.*
           cmake_extra: '-DBUILD_BENCHMARKS=ON'
-          os: ubuntu-18.04
-          
+          os: ubuntu-latest
+
         - cxx_compiler: g++-5
           c_compiler: gcc-5
           build_type: Release
@@ -54,7 +54,7 @@ jobs:
           arch: 64
           packages: 'g++-7-multilib gcc-7-multilib'
           cmake: 3.13.*
-          os: ubuntu-18.04
+          os: ubuntu-20.04
 
         - cxx_compiler: g++-8
           c_compiler: gcc-8
@@ -63,7 +63,7 @@ jobs:
           arch: 64
           packages: 'g++-8-multilib gcc-8-multilib'
           cmake: 3.13.*
-          os: ubuntu-18.04
+          os: ubuntu-20.04
 
         - cxx_compiler: g++-9
           c_compiler: gcc-9
@@ -72,8 +72,8 @@ jobs:
           arch: 64
           packages: 'g++-9-multilib gcc-9-multilib'
           cmake: 3.13.*
-          os: ubuntu-18.04
-        
+          os: ubuntu-20.04
+
         - cxx_compiler: g++-10
           c_compiler: gcc-10
           build_type: Release
@@ -81,8 +81,8 @@ jobs:
           arch: 64
           packages: 'g++-10-multilib gcc-10-multilib'
           cmake: 3.13.*
-          os: ubuntu-18.04
-        
+          os: ubuntu-20.04
+
         - cxx_compiler: g++-11
           c_compiler: gcc-11
           build_type: Release
@@ -91,7 +91,7 @@ jobs:
           packages: 'g++'
           cmake: 3.22.*
           os: ubuntu-22.04
-        
+
         - cxx_compiler: g++-11
           c_compiler: gcc-11
           build_type: Release
@@ -108,7 +108,7 @@ jobs:
           arch: 64
           packages: 'clang-7'
           cmake: 3.13.*
-          os: ubuntu-18.04
+          os: ubuntu-20.04
 
         - cxx_compiler: clang++-8
           c_compiler: clang-8
@@ -117,7 +117,7 @@ jobs:
           arch: 64
           packages: 'clang-8'
           cmake: 3.13.*
-          os: ubuntu-18.04
+          os: ubuntu-20.04
 
         - cxx_compiler: clang++-9
           c_compiler: clang-9
@@ -126,8 +126,8 @@ jobs:
           arch: 64
           packages: 'clang-9'
           cmake: 3.13.*
-          os: ubuntu-18.04
-        
+          os: ubuntu-20.04
+
         - cxx_compiler: clang++-10
           c_compiler: clang
           build_type: Debug
@@ -136,7 +136,7 @@ jobs:
           packages: 'clang'
           cmake: 3.17.*
           os: ubuntu-20.04
-        
+
         - cxx_compiler: clang++-10
           c_compiler: clang
           build_type: Release
@@ -323,7 +323,7 @@ jobs:
           - xcode: 13.2.1
             cxxstd: 20
             build_type: Debug
-          
+
     runs-on: macos-11
     steps:
 
@@ -367,7 +367,7 @@ jobs:
         set -e
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
-        
+
     - name: 'Check Out'
       uses: actions/checkout@v3
 
@@ -378,7 +378,7 @@ jobs:
 
   cmake-subproject:
     name: 'CMake Subproject'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: 'Install'
       run: |
