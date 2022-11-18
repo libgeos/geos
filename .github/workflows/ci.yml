@@ -338,7 +338,7 @@ jobs:
         clang++ --version
 
     - name: 'Check Out'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: 'Build'
       env:
@@ -369,7 +369,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
         
     - name: 'Check Out'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: 'cppcheck'
       run: |
