@@ -85,7 +85,7 @@ private:
     class IntervalIndexedGeometry {
     private:
 
-        index::strtree::TemplateSTRtree<SegmentView, index::strtree::IntervalTraits> index;
+        index::strtree::TemplateSTRtree<SegmentView, index::strtree::IntervalTraits<float>> index;
 
         void init(const geom::Geometry& g);
         void addLine(const geom::CoordinateSequence* pts);
@@ -95,7 +95,7 @@ private:
 
         template<typename Visitor>
         void query(double min, double max, Visitor&& f) {
-            index.query(index::strtree::Interval(min, max), f);
+            index.query(index::strtree::FloatInterval(min, max), f);
         }
     };
 

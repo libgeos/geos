@@ -679,8 +679,19 @@ protected:
     }
 };
 
+template<typename T>
+struct EnvelopeType {
+    using type = geom::EnvelopeBase<T>;
+};
+
+template<>
+struct EnvelopeType<double> {
+    using type = geom::Envelope;
+};
+
+template<typename T>
 struct EnvelopeTraits {
-    using BoundsType = geom::Envelope;
+    using BoundsType = typename EnvelopeType<T>::type;
     using TwoDimensional = std::true_type;
 
     static bool intersects(const BoundsType& a, const BoundsType& b) {
@@ -691,11 +702,11 @@ struct EnvelopeTraits {
         return a.getArea();
     }
 
-    static double distance(const BoundsType& a, const BoundsType& b) {
+    static T distance(const BoundsType& a, const BoundsType& b) {
         return a.distance(b);
     }
 
-    static double maxDistance(const BoundsType& a, const BoundsType& b) {
+    static T maxDistance(const BoundsType& a, const BoundsType& b) {
         return a.maxDistance(b);
     }
 
@@ -713,11 +724,11 @@ struct EnvelopeTraits {
         return *(i->getEnvelopeInternal());
     }
 
-    static double getX(const BoundsType& a) {
+    static T getX(const BoundsType& a) {
         return a.getMinX() + a.getMaxX();
     }
 
-    static double getY(const BoundsType& a) {
+    static T getY(const BoundsType& a) {
         return a.getMinY() + a.getMaxY();
     }
 
@@ -730,8 +741,9 @@ struct EnvelopeTraits {
     }
 };
 
+template<typename T>
 struct IntervalTraits {
-    using BoundsType = Interval;
+    using BoundsType = IntervalBase<T>;
     using TwoDimensional = std::false_type;
 
     static bool intersects(const BoundsType& a, const BoundsType& b) {
@@ -761,7 +773,7 @@ struct IntervalTraits {
 };
 
 
-template<typename ItemType, typename BoundsTraits = EnvelopeTraits>
+template<typename ItemType, typename BoundsTraits = EnvelopeTraits<double>>
 class TemplateSTRtree : public TemplateSTRtreeImpl<ItemType, BoundsTraits> {
 public:
     using TemplateSTRtreeImpl<ItemType, BoundsTraits>::TemplateSTRtreeImpl;
@@ -771,12 +783,12 @@ public:
 // the SpatialIndex interface which requires queries via an envelope
 // and items to be representable as void*.
 template<typename ItemType>
-class TemplateSTRtree<ItemType*, EnvelopeTraits> : public TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>, public SpatialIndex {
+class TemplateSTRtree<ItemType*, EnvelopeTraits<double>> : public TemplateSTRtreeImpl<ItemType*, EnvelopeTraits<double>>, public SpatialIndex {
 public:
-    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::TemplateSTRtreeImpl;
-    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::insert;
-    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::query;
-    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits>::remove;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits<double>>::TemplateSTRtreeImpl;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits<double>>::insert;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits<double>>::query;
+    using TemplateSTRtreeImpl<ItemType*, EnvelopeTraits<double>>::remove;
 
     // The SpatialIndex methods only work when we are storing a pointer type.
     void query(const geom::Envelope* queryEnv, std::vector<void*>& results) override {

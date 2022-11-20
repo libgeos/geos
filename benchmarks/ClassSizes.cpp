@@ -20,6 +20,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/index/strtree/Interval.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -50,7 +52,7 @@
 using namespace geos;
 
 #define check(x) \
-	{ std::cout << "Size of " << #x << " is " << sizeof(x) << std::endl; }
+    { std::cout << "Size of " << #x << " is " << sizeof(x) << std::endl; }
 
 int
 main()
@@ -82,5 +84,15 @@ main()
     check(operation::overlayng::EdgeSourceInfo);
     check(operation::overlayng::OverlayLabel);
     check(int64_t);
+
+    check(index::strtree::Interval);
+    check(index::strtree::FloatInterval);
+    using TreeNodePtrFloatInterval = index::strtree::TemplateSTRNode<void*,index::strtree::IntervalTraits<float>>;
+    using TreeNodePtrDoubleInterval = index::strtree::TemplateSTRNode<void*,index::strtree::IntervalTraits<double>>;
+    using TreeNodePtrDoubleEnvelope = index::strtree::TemplateSTRNode<void*,index::strtree::EnvelopeTraits<double>>;
+    check(TreeNodePtrFloatInterval);
+    check(TreeNodePtrDoubleInterval);
+    check(TreeNodePtrDoubleEnvelope);
+
 }
 

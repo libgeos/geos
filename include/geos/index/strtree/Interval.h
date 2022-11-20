@@ -16,6 +16,8 @@
 
 #include <geos/export.h>
 #include <algorithm>
+#include <limits>
+#include <cmath>
 #include <cassert>
 #include <cmath>
 
@@ -27,30 +29,49 @@ namespace strtree { // geos::index::strtree
 //
 /// @see SIRtree
 ///
-class GEOS_DLL Interval {
+template<typename T>
+class GEOS_DLL IntervalBase {
 public:
-    Interval(double newMin, double newMax) : imin(newMin), imax(newMax) {
+    IntervalBase(T newMin, T newMax) : imin(newMin), imax(newMax) {
         assert(std::isnan(newMin) || std::isnan(newMax) || imin <= imax);
     }
 
-    double getMin() const { return imin; }
-    double getMax() const { return imax; }
-    double getWidth() const { return imax - imin; }
-    double getCentre() const { return (imin + imax) / 2; }
-    Interval* expandToInclude(const Interval* other) {
+    T getMin() const { return imin; }
+    T getMax() const { return imax; }
+    T getWidth() const { return imax - imin; }
+    T getCentre() const { return (imin + imax) / 2; }
+    IntervalBase<T>* expandToInclude(const IntervalBase<T>* other) {
         imax = std::max(imax, other->imax);
         imin = std::min(imin, other->imin);
         return this;
     }
-    bool intersects(const Interval* other) const {
+    bool intersects(const IntervalBase<T>* other) const {
         return !(other->imin > imax || other->imax < imin);
     }
-    bool equals(const Interval* other) const {
+    bool equals(const IntervalBase<T>* other) const {
         return imin == other->imin && imax == other->imax;
     }
-private:
-    double imin;
-    double imax;
+protected:
+    T imin;
+    T imax;
+};
+
+class GEOS_DLL Interval : public IntervalBase<double> {
+    using IntervalBase<double>::IntervalBase;
+};
+
+class GEOS_DLL FloatInterval : public IntervalBase<float> {
+public:
+    FloatInterval(double min, double max) :
+        IntervalBase<float>(static_cast<float>(min), static_cast<float>(max)) {
+            //if (static_cast<double>(imax) < max) {
+            //    imax = std::nextafter(imax, std::numeric_limits<float>::infinity());
+            //}
+            //if (static_cast<double>(imin) > min) {
+            //    imin = std::nextafter(imin, -std::numeric_limits<float>::infinity());
+            //}
+    }
+
 };
 
 

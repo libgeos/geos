@@ -78,7 +78,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::Coordina
         SegmentView seg(&pts->getAt<CoordinateXY>(i-1), &pts->getAt<CoordinateXY>(i));
         auto r = std::minmax(seg.p0().y, seg.p1().y);
 
-        index.insert(index::strtree::Interval(r.first, r.second), seg);
+        index.insert(index::strtree::FloatInterval(r.first, r.second), seg);
     }
 }
 

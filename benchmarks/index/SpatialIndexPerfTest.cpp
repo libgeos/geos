@@ -33,7 +33,7 @@ using geos::index::strtree::Interval;
 using geos::index::strtree::ItemDistance;
 using geos::index::strtree::ItemBoundable;
 
-using TemplateIntervalTree = TemplateSTRtree<const Interval*, geos::index::strtree::IntervalTraits>;
+using TemplateIntervalTree = TemplateSTRtree<const Interval*, geos::index::strtree::IntervalTraits<double>>;
 
 //////////////////////////
 // Test Data Generation //
@@ -353,6 +353,7 @@ BENCHMARK_TEMPLATE(BM_STRtree2DQuery, Quadtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, STRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, SimpleSTRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*>);
+//BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*, geos::index::strtree::EnvelopeTraits<float>>);
 
 BENCHMARK(BM_STRtree2DQueryPairs);
 BENCHMARK(BM_STRtree2DQueryPairsNaive);

@@ -100,37 +100,6 @@ Envelope::Envelope(const std::string& str)
          strtod(values[3].c_str(), nullptr));
 }
 
-/*public*/
-bool
-Envelope::covers(const Envelope& other) const
-{
-    return
-        std::isgreaterequal(other.minx,  minx) &&
-        std::islessequal(other.maxx,  maxx) &&
-        std::isgreaterequal(other.miny, miny) &&
-        std::islessequal(other.maxy,  maxy);
-}
-
-/*public*/
-bool
-Envelope::equals(const Envelope* other) const
-{
-    if(isNull()) {
-        return other->isNull();
-    }
-    return  other->minx == minx &&
-            other->maxx == maxx &&
-            other->miny == miny &&
-            other->maxy == maxy;
-}
-
-bool
-Envelope::isfinite() const
-{
-    return std::isfinite(minx) && std::isfinite(maxx) &&
-           std::isfinite(miny) && std::isfinite(maxy);
-}
-
 /* public */
 std::ostream&
 operator<< (std::ostream& os, const Envelope& o)
@@ -173,97 +142,6 @@ Envelope::split(const std::string& str, const std::string& delimiters)
 
     return tokens;
 }
-
-/*public*/
-bool
-Envelope::centre(CoordinateXY& p_centre) const
-{
-    if(isNull()) {
-        return false;
-    }
-    p_centre.x = (getMinX() + getMaxX()) / 2.0;
-    p_centre.y = (getMinY() + getMaxY()) / 2.0;
-    return true;
-}
-
-/*public*/
-bool
-Envelope::intersection(const Envelope& env, Envelope& result) const
-{
-    if(isNull() || env.isNull() || ! intersects(env)) {
-        return false;
-    }
-
-    double intMinX = minx > env.minx ? minx : env.minx;
-    double intMinY = miny > env.miny ? miny : env.miny;
-    double intMaxX = maxx < env.maxx ? maxx : env.maxx;
-    double intMaxY = maxy < env.maxy ? maxy : env.maxy;
-    result.init(intMinX, intMaxX, intMinY, intMaxY);
-    return true;
-}
-
-/*public*/
-void
-Envelope::translate(double transX, double transY)
-{
-    if(isNull()) {
-        return;
-    }
-    init(getMinX() + transX, getMaxX() + transX,
-         getMinY() + transY, getMaxY() + transY);
-}
-
-
-/*public*/
-void
-Envelope::expandBy(double deltaX, double deltaY)
-{
-    minx -= deltaX;
-    maxx += deltaX;
-    miny -= deltaY;
-    maxy += deltaY;
-
-    // check for envelope disappearing
-    if(std::isgreater(minx, maxx) || std::isgreater(miny, maxy)) {
-        setToNull();
-    }
-}
-
-
-bool
-operator< (const Envelope& a, const Envelope& b)
-{
-    /*
-    * Compares two envelopes using lexicographic ordering.
-    * The ordering comparison is based on the usual numerical
-    * comparison between the sequence of ordinates.
-    * Null envelopes are less than all non-null envelopes.
-    */
-    if (a.isNull()) {
-        // null == null
-        if (b.isNull())
-            return false;
-        // null < notnull
-        else
-            return true;
-    }
-    // notnull > null
-    if (b.isNull())
-        return false;
-
-    // compare based on numerical ordering of ordinates
-    if (a.getMinX() < b.getMinX()) return true;
-    if (a.getMinX() > b.getMinX()) return false;
-    if (a.getMinY() < b.getMinY()) return true;
-    if (a.getMinY() > b.getMinY()) return false;
-    if (a.getMaxX() < b.getMaxX()) return true;
-    if (a.getMaxX() > b.getMaxX()) return false;
-    if (a.getMaxY() < b.getMaxY()) return true;
-    if (a.getMaxY() > b.getMaxY()) return false;
-    return false; // == is not strictly <
-}
-
-
 
 } // namespace geos::geom
 } // namespace geos

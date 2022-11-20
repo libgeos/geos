@@ -55,7 +55,8 @@ class Coordinate;
  * values are automatically sorted into the correct order.
  *
  */
-class GEOS_DLL Envelope {
+template<typename T>
+class GEOS_DLL EnvelopeBase {
 
 public:
 
@@ -66,11 +67,11 @@ public:
     /** \brief
      * Creates a null Envelope.
      */
-    Envelope()
-        : minx(DoubleNotANumber)
-        , maxx(DoubleNotANumber)
-        , miny(DoubleNotANumber)
-        , maxy(DoubleNotANumber)
+    EnvelopeBase<T>()
+        : minx(std::numeric_limits<T>::quiet_NaN())
+        , maxx(std::numeric_limits<T>::quiet_NaN())
+        , miny(std::numeric_limits<T>::quiet_NaN())
+        , maxy(std::numeric_limits<T>::quiet_NaN())
         {};
 
     /** \brief
@@ -81,97 +82,10 @@ public:
      * @param  y1  the first y-value
      * @param  y2  the second y-value
      */
-    Envelope(double x1, double x2, double y1, double y2)
+    EnvelopeBase<T>(T x1, T x2, T y1, T y2)
     {
         init(x1, x2, y1, y2);
     }
-
-    /** \brief
-     * Creates an Envelope for a region defined by two Coordinates.
-     *
-     * @param  p1  the first Coordinate
-     * @param  p2  the second Coordinate
-     */
-    Envelope(const CoordinateXY& p1, const CoordinateXY& p2)
-    {
-        init(p1, p2);
-    }
-
-    /** \brief
-     * Creates an Envelope for a region defined by a single Coordinate.
-     *
-     * @param  p  the Coordinate
-     */
-    explicit Envelope(const CoordinateXY& p)
-    {
-        init(p);
-    }
-
-    /** \brief
-     * Create an Envelope from an Envelope string representation produced
-     * by Envelope::toString()
-     */
-    explicit Envelope(const std::string& str);
-
-    /** \brief
-     * Test the point `q` to see whether it intersects the Envelope
-     * defined by `p1-p2`.
-     *
-     * @param p1 one extremal point of the envelope
-     * @param p2 another extremal point of the envelope
-     * @param q the point to test for intersection
-     * @return `true` if q intersects the envelope p1-p2
-     */
-    static bool intersects(const CoordinateXY& p1, const CoordinateXY& p2,
-                           const CoordinateXY& q);
-
-    /** \brief
-     * Test the envelope defined by `p1-p2` for intersection
-     * with the envelope defined by `q1-q2`.
-     *
-     * @param p1 one extremal point of the envelope P
-     * @param p2 another extremal point of the envelope P
-     * @param q1 one extremal point of the envelope Q
-     * @param q2 another extremal point of the envelope Q
-     *
-     * @return `true` if Q intersects P
-     */
-    static bool intersects(
-        const CoordinateXY& p1, const CoordinateXY& p2,
-        const CoordinateXY& q1, const CoordinateXY& q2)
-    {
-        double minq = std::min(q1.x, q2.x);
-        double maxq = std::max(q1.x, q2.x);
-        double minp = std::min(p1.x, p2.x);
-        double maxp = std::max(p1.x, p2.x);
-        if(minp > maxq) {
-            return false;
-        }
-        if(maxp < minq) {
-            return false;
-        }
-        minq = std::min(q1.y, q2.y);
-        maxq = std::max(q1.y, q2.y);
-        minp = std::min(p1.y, p2.y);
-        maxp = std::max(p1.y, p2.y);
-        if(minp > maxq) {
-            return false;
-        }
-        if(maxp < minq) {
-            return false;
-        }
-        return true;
-    }
-
-    /** \brief
-     * Check if the extent defined by two extremal points intersects
-     * the extent of this Envelope.
-     *
-     * @param a a point
-     * @param b another point
-     * @return `true` if the extents intersect
-     */
-    bool intersects(const CoordinateXY& a, const CoordinateXY& b) const;
 
     /** \brief
      *  Initialize to a null Envelope.
@@ -350,7 +264,14 @@ public:
      * @param centre The coordinate to write results into
      * @return `false` if the center could not be found (null envelope).
      */
-    bool centre(CoordinateXY& centre) const;
+    bool centre(CoordinateXY& centre) const {
+        if(isNull()) {
+            return false;
+        }
+        centre.x = (getMinX() + getMaxX()) / 2.0;
+        centre.y = (getMinY() + getMaxY()) / 2.0;
+        return true;
+    }
 
     /** \brief
      * Computes the intersection of two [Envelopes](@ref Envelope).
@@ -361,7 +282,19 @@ public:
      *               if either argument is null, or they do not intersect)
      * @return false if not intersection is found
      */
-    bool intersection(const Envelope& env, Envelope& result) const;
+    bool intersection(const EnvelopeBase<T>& env, EnvelopeBase<T>& result) const {
+        if(isNull() || env.isNull() || ! intersects(env)) {
+            return false;
+        }
+
+        T intMinX = minx > env.minx ? minx : env.minx;
+        T intMinY = miny > env.miny ? miny : env.miny;
+        T intMaxX = maxx < env.maxx ? maxx : env.maxx;
+        T intMaxY = maxy < env.maxy ? maxy : env.maxy;
+        result.init(intMinX, intMaxX, intMinY, intMaxY);
+
+        return true;
+    }
 
     /** \brief
      * Translates this envelope by given amounts in the X and Y direction.
@@ -369,7 +302,13 @@ public:
      * @param transX the amount to translate along the X axis
      * @param transY the amount to translate along the Y axis
      */
-    void translate(double transX, double transY);
+    void translate(double transX, double transY) {
+        if(isNull()) {
+            return;
+        }
+        init(getMinX() + transX, getMaxX() + transX,
+             getMinY() + transY, getMaxY() + transY);
+    }
 
     /** \brief
      * Expands this envelope by a given distance in all directions.
@@ -378,7 +317,17 @@ public:
      * @param deltaX the distance to expand the envelope along the X axis
      * @param deltaY the distance to expand the envelope along the Y axis
      */
-    void expandBy(double deltaX, double deltaY);
+    void expandBy(T deltaX, T deltaY) {
+        minx -= deltaX;
+        maxx += deltaX;
+        miny -= deltaY;
+        maxy += deltaY;
+
+        // check for envelope disappearing
+        if(std::isgreater(minx, maxx) || std::isgreater(miny, maxy)) {
+            setToNull();
+        }
+    }
 
     /** \brief
      * Expands this envelope by a given distance in all directions.
@@ -414,7 +363,7 @@ public:
      * @param  y  the value to lower the minimum y
      *            to or to raise the maximum y to
      */
-    void expandToInclude(double x, double y)
+    void expandToInclude(T x, T y)
     {
         if(isNull()) {
             minx = x;
@@ -445,7 +394,7 @@ public:
      *
      * @param other the Envelope to merge with
      */
-    void expandToInclude(const Envelope* other)
+    void expandToInclude(const EnvelopeBase<T>* other)
     {
         if(isNull()) {
             minx = other->minx;
@@ -469,7 +418,7 @@ public:
         }
     };
 
-    void expandToInclude(const Envelope& other)
+    void expandToInclude(const EnvelopeBase<T>& other)
     {
         return expandToInclude(&other);
     };
@@ -487,13 +436,13 @@ public:
      * @see covers(Envelope)
      */
     bool
-    contains(const Envelope& other) const
+    contains(const EnvelopeBase<T>& other) const
     {
         return covers(other);
     }
 
     bool
-    contains(const Envelope* other) const
+    contains(const EnvelopeBase<T>* other) const
     {
         return contains(*other);
     }
@@ -522,7 +471,7 @@ public:
      *         of this Envelope.
      */
     bool
-    contains(double x, double y) const
+    contains(T x, T y) const
     {
         return covers(x, y);
     }
@@ -535,8 +484,8 @@ public:
      */
     bool intersects(const CoordinateXY& other) const
     {
-        return (std::islessequal(other.x, maxx) && std::isgreaterequal(other.x, minx) &&
-                std::islessequal(other.y, maxy) && std::isgreaterequal(other.y,  miny));
+        return intersects(static_cast<T>(other.x),
+                          static_cast<T>(other.y));
     }
 
     /** \brief
@@ -546,7 +495,7 @@ public:
      * @param y the y-ordinate of the point
      * @return `true` if the point intersects this Envelope
      */
-    bool intersects(double x, double y) const
+    bool intersects(T x, T y) const
     {
         return std::islessequal(x, maxx) &&
                std::isgreaterequal(x, minx) &&
@@ -560,7 +509,7 @@ public:
      * @param other the Envelope which this Envelope is being checked for intersection
      * @return true if the Envelopes intersects
      */
-    bool intersects(const Envelope* other) const
+    bool intersects(const EnvelopeBase<T>* other) const
     {
         return std::islessequal(other->minx, maxx) &&
                std::isgreaterequal(other->maxx, minx) &&
@@ -568,7 +517,7 @@ public:
                std::isgreaterequal(other->maxy, miny);
     }
 
-    bool intersects(const Envelope& other) const
+    bool intersects(const EnvelopeBase<T>& other) const
     {
         return intersects(&other);
     }
@@ -580,12 +529,12 @@ public:
     * @param other  the Envelope being checked for disjointness
     * @return true if the Envelopes are disjoint
     */
-    bool disjoint(const Envelope& other) const
+    bool disjoint(const EnvelopeBase<T>& other) const
     {
         return !intersects(other);
     }
 
-    bool disjoint(const Envelope* other) const
+    bool disjoint(const EnvelopeBase<T>* other) const
     {
         return !intersects(other);
     }
@@ -597,7 +546,7 @@ public:
      * @param y the y-coordinate of the point which this Envelope is being checked for containing
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
-    bool covers(double x, double y) const {
+    bool covers(T x, T y) const {
         return std::isgreaterequal(x,  minx) &&
                std::islessequal(x, maxx) &&
                std::isgreaterequal(y, miny) &&
@@ -621,10 +570,15 @@ public:
      * @param other the Envelope to check
      * @return true if this Envelope covers the `other`
      */
-    bool covers(const Envelope& other) const;
+    bool covers(const EnvelopeBase<T>& other) const {
+        return std::isgreaterequal(other.minx,  minx) &&
+               std::islessequal(other.maxx,  maxx) &&
+               std::isgreaterequal(other.miny, miny) &&
+               std::islessequal(other.maxy,  maxy);
+    }
 
     bool
-    covers(const Envelope* other) const
+    covers(const EnvelopeBase<T>* other) const
     {
         return covers(*other);
     }
@@ -636,14 +590,26 @@ public:
      * @param  other the Envelope which this Envelope is being checked for equality
      * @return `true` if this and `other` Envelope objects are spatially equal
      */
-    bool equals(const Envelope* other) const;
+    bool equals(const EnvelopeBase<T>* other) const {
+        if(isNull()) {
+            return other->isNull();
+        }
+        return  other->minx == minx &&
+                other->maxx == maxx &&
+                other->miny == miny &&
+                other->maxy == maxy;
+    }
 
     /**
      * Returns `true` if all the extents of the Envelope are finite and defined (not NaN)
      *
      * @return `true` if envelope has only finite/valid extents, `false` otherwise
      */
-    bool isfinite() const;
+    bool isfinite() const
+    {
+        return std::isfinite(minx) && std::isfinite(maxx) &&
+               std::isfinite(miny) && std::isfinite(maxy);
+    }
 
     /** \brief
      * Returns a `string` of the form `Env[minx:maxx,miny:maxy]`.
@@ -658,19 +624,9 @@ public:
      * The distance between overlapping Envelopes is 0. Otherwise, the
      * distance is the Euclidean distance between the closest points.
      */
-    double distance(const Envelope& env) const
+    T distance(const EnvelopeBase<T>& env) const
     {
         return std::sqrt(distanceSquared(env));
-    }
-
-    /** \brief
-     * Computes the maximum distance between points in this and another Envelope.
-     */
-    double maxDistance(const Envelope& other) const
-    {
-        Coordinate p(std::min(minx, other.minx), std::min(miny, other.miny));
-        Coordinate q(std::max(maxx, other.maxx), std::max(maxy, other.maxy));
-        return p.distance(q);
     }
 
     /** \brief
@@ -679,7 +635,7 @@ public:
      * The distance between overlapping Envelopes is 0. Otherwise, the
      * distance is the Euclidean distance between the closest points.
      */
-    double distanceSquared(const Envelope& env) const
+    T distanceSquared(const EnvelopeBase<T>& env) const
     {
         double dx = std::max(0.0,
             std::max(maxx, env.maxx) - std::min(minx, env.minx) - (maxx - minx) -
@@ -690,6 +646,175 @@ public:
 
         return dx * dx + dy * dy;
     };
+
+    /** \brief
+     * Computes the maximum distance between points in this and another Envelope.
+     */
+    double maxDistance(const EnvelopeBase<T>& other) const
+    {
+        Coordinate p(std::min(minx, other.minx), std::min(miny, other.miny));
+        Coordinate q(std::max(maxx, other.maxx), std::max(maxy, other.maxy));
+        return p.distance(q);
+    }
+
+    /// Checks if two Envelopes are equal (2D only check)
+    // GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
+    GEOS_DLL friend bool
+    operator==(const EnvelopeBase<T>& a, const EnvelopeBase<T>& b)
+    {
+        return a.equals(&b);
+    }
+
+    // GEOS_DLL bool operator!=(const Envelope& a, const Envelope& b);
+    GEOS_DLL friend bool
+    operator!=(const EnvelopeBase<T>& a, const EnvelopeBase<T>& b)
+    {
+        return !(a == b);
+    }
+
+    /// Strict weak ordering operator for Envelope
+    /// This is the C++ equivalent of JTS's compareTo
+    GEOS_DLL friend bool
+    operator< (const EnvelopeBase<T>& a, const EnvelopeBase<T>& b) {
+        /*
+        * Compares two envelopes using lexicographic ordering.
+        * The ordering comparison is based on the usual numerical
+        * comparison between the sequence of ordinates.
+        * Null envelopes are less than all non-null envelopes.
+        */
+        if (a.isNull()) {
+        // null == null
+        if (b.isNull())
+            return false;
+        // null < notnull
+        else
+            return true;
+        }
+        // notnull > null
+        if (b.isNull())
+        return false;
+
+        // compare based on numerical ordering of ordinates
+        if (a.getMinX() < b.getMinX()) return true;
+        if (a.getMinX() > b.getMinX()) return false;
+        if (a.getMinY() < b.getMinY()) return true;
+        if (a.getMinY() > b.getMinY()) return false;
+        if (a.getMaxX() < b.getMaxX()) return true;
+        if (a.getMaxX() > b.getMaxX()) return false;
+        if (a.getMaxY() < b.getMaxY()) return true;
+        if (a.getMaxY() > b.getMaxY()) return false;
+        return false; // == is not strictly <
+    }
+
+protected:
+
+    /// the minimum x-coordinate
+    T minx;
+
+    /// the maximum x-coordinate
+    T maxx;
+
+    /// the minimum y-coordinate
+    T miny;
+
+    /// the maximum y-coordinate
+    T maxy;
+};
+
+class GEOS_DLL Envelope : public EnvelopeBase<double> {
+public:
+
+    using EnvelopeBase<double>::EnvelopeBase;
+    using EnvelopeBase<double>::distance;
+    using EnvelopeBase<double>::intersects;
+
+    /** \brief
+     * Creates an Envelope for a region defined by two Coordinates.
+     *
+     * @param  p1  the first Coordinate
+     * @param  p2  the second Coordinate
+     */
+    Envelope(const CoordinateXY& p1, const CoordinateXY& p2)
+    {
+        init(p1, p2);
+    }
+
+    /** \brief
+     * Creates an Envelope for a region defined by a single Coordinate.
+     *
+     * @param  p  the Coordinate
+     */
+    explicit Envelope(const CoordinateXY& p)
+    {
+        init(p);
+    }
+
+    /** \brief
+     * Create an Envelope from an Envelope string representation produced
+     * by Envelope::toString()
+     */
+    explicit Envelope(const std::string& str);
+
+    /** \brief
+     * Check if the extent defined by two extremal points intersects
+     * the extent of this Envelope.
+     *
+     * @param a a point
+     * @param b another point
+     * @return `true` if the extents intersect
+     */
+    bool intersects(const CoordinateXY& a, const CoordinateXY& b) const;
+
+
+    /** \brief
+     * Test the point `q` to see whether it intersects the Envelope
+     * defined by `p1-p2`.
+     *
+     * @param p1 one extremal point of the envelope
+     * @param p2 another extremal point of the envelope
+     * @param q the point to test for intersection
+     * @return `true` if q intersects the envelope p1-p2
+     */
+    static bool intersects(const CoordinateXY& p1, const CoordinateXY& p2,
+                           const CoordinateXY& q);
+
+    /** \brief
+     * Test the envelope defined by `p1-p2` for intersection
+     * with the envelope defined by `q1-q2`.
+     *
+     * @param p1 one extremal point of the envelope P
+     * @param p2 another extremal point of the envelope P
+     * @param q1 one extremal point of the envelope Q
+     * @param q2 another extremal point of the envelope Q
+     *
+     * @return `true` if Q intersects P
+     */
+    static bool intersects(
+        const CoordinateXY& p1, const CoordinateXY& p2,
+        const CoordinateXY& q1, const CoordinateXY& q2)
+    {
+        double minq = std::min(q1.x, q2.x);
+        double maxq = std::max(q1.x, q2.x);
+        double minp = std::min(p1.x, p2.x);
+        double maxp = std::max(p1.x, p2.x);
+        if(minp > maxq) {
+            return false;
+        }
+        if(maxp < minq) {
+            return false;
+        }
+        minq = std::min(q1.y, q2.y);
+        maxq = std::max(q1.y, q2.y);
+        minp = std::min(p1.y, p2.y);
+        maxp = std::max(p1.y, p2.y);
+        if(minp > maxq) {
+            return false;
+        }
+        if(maxp < minq) {
+            return false;
+        }
+        return true;
+    }
 
     /** \brief
      * Computes the distance between one Coordinate and an Envelope
@@ -755,27 +880,21 @@ public:
         };
     };
 
-    /// Checks if two Envelopes are equal (2D only check)
-    // GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
-    GEOS_DLL friend bool
-    operator==(const Envelope& a, const Envelope& b)
-    {
-        return a.equals(&b);
-    }
-
-    // GEOS_DLL bool operator!=(const Envelope& a, const Envelope& b);
-    GEOS_DLL friend bool
-    operator!=(const Envelope& a, const Envelope& b)
-    {
-        return !(a == b);
-    }
-
-    /// Strict weak ordering operator for Envelope
-    /// This is the C++ equivalent of JTS's compareTo
-    GEOS_DLL friend bool
-    operator< (const Envelope& a, const Envelope& b);
+    /** \brief
+     * Returns a `string` of the form `Env[minx:maxx,miny:maxy]`.
+     *
+     * @return a `string` of the form `Env[minx:maxx,miny:maxy]`
+     */
+    std::string toString() const;
 
 private:
+
+    static double distance(double x0, double y0, double x1, double y1)
+    {
+        double dx = x1 - x0;
+        double dy = y1 - y0;
+        return std::sqrt(dx * dx + dy * dy);
+    }
 
     /** \brief
      * Splits a string into parts based on the supplied delimiters.
@@ -786,26 +905,12 @@ private:
     static std::vector<std::string> split(const std::string& str,
                                    const std::string& delimiters = " ");
 
-    static double distance(double x0, double y0, double x1, double y1)
-    {
-        double dx = x1 - x0;
-        double dy = y1 - y0;
-        return std::sqrt(dx * dx + dy * dy);
-    }
 
-    /// the minimum x-coordinate
-    double minx;
-
-    /// the maximum x-coordinate
-    double maxx;
-
-    /// the minimum y-coordinate
-    double miny;
-
-    /// the maximum y-coordinate
-    double maxy;
 };
 
+class GEOS_DLL FloatEnvelope : public EnvelopeBase<float> {
+    using EnvelopeBase<float>::EnvelopeBase;
+};
 
 
 
