@@ -87,11 +87,15 @@ main()
 
     check(index::strtree::Interval);
     check(index::strtree::FloatInterval);
+
+    // Templates don't work with the "check" macro. Workaround by defining an alias.
     using TreeNodePtrFloatInterval = index::strtree::TemplateSTRNode<void*,index::strtree::IntervalTraits<float>>;
     using TreeNodePtrDoubleInterval = index::strtree::TemplateSTRNode<void*,index::strtree::IntervalTraits<double>>;
+    using TreeNodePtrFloatEnvelope = index::strtree::TemplateSTRNode<void*,index::strtree::EnvelopeTraits<float>>;
     using TreeNodePtrDoubleEnvelope = index::strtree::TemplateSTRNode<void*,index::strtree::EnvelopeTraits<double>>;
     check(TreeNodePtrFloatInterval);
     check(TreeNodePtrDoubleInterval);
+    check(TreeNodePtrFloatEnvelope);
     check(TreeNodePtrDoubleEnvelope);
 
 }

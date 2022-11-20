@@ -754,11 +754,11 @@ struct IntervalTraits {
         return a.getWidth();
     }
 
-    static double getX(const BoundsType& a) {
+    static T getX(const BoundsType& a) {
         return a.getMin() + a.getMax();
     }
 
-    static double getY(const BoundsType& a) {
+    static T getY(const BoundsType& a) {
         return a.getMin() + a.getMax();
     }
 

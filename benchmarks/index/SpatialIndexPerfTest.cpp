@@ -34,6 +34,7 @@ using geos::index::strtree::ItemDistance;
 using geos::index::strtree::ItemBoundable;
 
 using TemplateIntervalTree = TemplateSTRtree<const Interval*, geos::index::strtree::IntervalTraits<double>>;
+using TemplateFloatEnvelopeTree = TemplateSTRtree<const Envelope*, geos::index::strtree::EnvelopeTraits<float>>;
 
 //////////////////////////
 // Test Data Generation //
@@ -264,13 +265,19 @@ static void BM_STRtree2DQuery(benchmark::State& state) {
     }
 }
 
+template<>
+void BM_STRtree2DQuery<TemplateFloatEnvelopeTree>(benchmark::State& state) {
+}
+
+template<class Tree>
 static void BM_STRtree2DQueryPairs(benchmark::State& state) {
     std::default_random_engine eng(12345);
+    BoundsType
     Envelope extent(0, 1, 0, 1);
     auto envelopes = generate_envelopes(eng, extent, 10000);
     Envelope empty_env;
 
-    TemplateSTRtree<const Envelope*> tree;
+    Tree tree;
     for (auto& e : envelopes) {
         tree.insert(&e, &e);
     }
@@ -353,9 +360,10 @@ BENCHMARK_TEMPLATE(BM_STRtree2DQuery, Quadtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, STRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, SimpleSTRtree);
 BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*>);
-//BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*, geos::index::strtree::EnvelopeTraits<float>>);
+BENCHMARK_TEMPLATE(BM_STRtree2DQuery, TemplateSTRtree<const Envelope*, geos::index::strtree::EnvelopeTraits<float>>);
 
-BENCHMARK(BM_STRtree2DQueryPairs);
+BENCHMARK_TEMPLATE(BM_STRtree2DQueryPairs<TemplateSTRtree<const Envelope*>);
+BENCHMARK_TEMPLATE(BM_STRtree2DQueryPairs, TemplateSTRtree<const Envelope*, geos::index::strtree::EnvelopeTraits<float>>);
 BENCHMARK(BM_STRtree2DQueryPairsNaive);
 
 BENCHMARK_MAIN();

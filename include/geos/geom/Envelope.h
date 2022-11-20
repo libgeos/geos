@@ -103,7 +103,7 @@ public:
      * @param  y1  the first y-value
      * @param  y2  the second y-value
      */
-    void init(double x1, double x2, double y1, double y2)
+    void init(T x1, T x2, T y1, T y2)
     {
         if(x1 < x2) {
             minx = x1;
@@ -206,7 +206,7 @@ public:
      * Returns the Envelope maximum y-value. `min y > max y` indicates
      * that this is a null Envelope.
      */
-    double getMaxY() const
+    T getMaxY() const
     {
         assert(!isNull());
         return maxy;
@@ -216,7 +216,7 @@ public:
      * Returns the Envelope maximum x-value. `min x > max x` indicates
      * that this is a null Envelope.
      */
-    double getMaxX() const
+    T getMaxX() const
     {
         assert(!isNull());
         return maxx;
@@ -226,7 +226,7 @@ public:
      * Returns the Envelope minimum y-value. `min y > max y` indicates
      * that this is a null Envelope.
      */
-    double getMinY() const
+    T getMinY() const
     {
         assert(!isNull());
         return miny;
@@ -236,7 +236,7 @@ public:
      * Returns the Envelope minimum x-value. `min x > max x` indicates
      * that this is a null Envelope.
      */
-    double getMinX() const
+    T getMinX() const
     {
         assert(!isNull());
         return minx;
@@ -457,7 +457,8 @@ public:
     bool
     contains(const CoordinateXY& p) const
     {
-        return covers(p.x, p.y);
+        return covers(static_cast<T>(p.x),
+                      static_cast<T>(p.y));
     }
 
     /** \brief
@@ -910,6 +911,17 @@ private:
 
 class GEOS_DLL FloatEnvelope : public EnvelopeBase<float> {
     using EnvelopeBase<float>::EnvelopeBase;
+
+public:
+
+    FloatEnvelope(const EnvelopeBase<double>& e)
+        : EnvelopeBase<float>(
+              static_cast<float>(e.getMinX()),
+              static_cast<float>(e.getMaxX()),
+              static_cast<float>(e.getMinY()),
+              static_cast<float>(e.getMaxY()))
+    {}
+
 };
 
 

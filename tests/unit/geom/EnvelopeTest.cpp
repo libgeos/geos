@@ -18,6 +18,7 @@ namespace tut {
 
 using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
+using geos::geom::FloatEnvelope;
 
 // dummy data, not used
 struct test_envelope_data {
@@ -653,6 +654,23 @@ void object::test<20>
     set.emplace(2, 0, 2, 1);
 
     ensure_equals(set.size(), 2u);
+}
+
+// Test double containment in FloatEnvelope
+template<>
+template<>
+void object::test<21>
+()
+{
+    FloatEnvelope e(0, 1, 0, 1);
+
+    double xmin = static_cast<double>(e.getMinX());
+    double xmax = static_cast<double>(e.getMaxX());
+    double ymin = static_cast<double>(e.getMinY());
+    double ymax = static_cast<double>(e.getMaxY());
+
+    ensure(e.contains(CoordinateXY(xmax, ymax)));
+    ensure(e.contains(CoordinateXY(xmin, ymin)));
 }
 
 } // namespace tut
