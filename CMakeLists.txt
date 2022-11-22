@@ -269,7 +269,7 @@ option(VERSION_MINGW_SHARED_LIBS "Add version suffix to MinGW shared libraries" 
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
-    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
+    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION_NOPATCH})
   set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_NOPATCH})
