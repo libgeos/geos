@@ -19,7 +19,7 @@
 #  if defined(GEOS_DLL_EXPORT)
 #    define GEOS_DLL   __declspec(dllexport)
 #  elif defined(GEOS_DLL_IMPORT)
-#    define GEOS_DLL   __declspec(dllimport)
+#    define GEOS_DLL   extern __declspec(dllimport)
 #  else
 #    define GEOS_DLL
 #  endif

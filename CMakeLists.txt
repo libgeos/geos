@@ -187,7 +187,7 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 target_compile_options(geos_cxx_flags INTERFACE
 	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
-	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
+	"$<$<BOOL:${MSVC}>:/fp:precise>"
 	)
 
 # Use -ffloat-store for 32-bit builds (needed to make some tests pass)
@@ -227,10 +227,10 @@ target_compile_definitions(geos_cxx_flags
 
 target_compile_definitions(geos_developer_cxx_flags
   INTERFACE
-    $<$<CXX_COMPILER_ID:MSVC>:_CRT_NONSTDC_NO_DEPRECATE>
-    $<$<CXX_COMPILER_ID:MSVC>:_SCL_SECURE_NO_DEPRECATE>
-    $<$<CXX_COMPILER_ID:MSVC>:_CRT_SECURE_NO_WARNINGS>
-    $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX>)
+    $<$<BOOL:${MSVC}>:_CRT_NONSTDC_NO_DEPRECATE>
+    $<$<BOOL:${MSVC}>:_SCL_SECURE_NO_DEPRECATE>
+    $<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>
+    $<$<BOOL:${WIN32}>:NOMINMAX>)
 
 target_compile_options(geos_developer_cxx_flags
   INTERFACE
@@ -269,7 +269,7 @@ option(VERSION_MINGW_SHARED_LIBS "Add version suffix to MinGW shared libraries" 
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+    PRIVATE $<$<BOOL:${WIN32}>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION_NOPATCH})
   set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_NOPATCH})
@@ -287,7 +287,7 @@ target_link_libraries(geos_c PRIVATE geos)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
-    PRIVATE $<IF:$<CXX_COMPILER_ID:MSVC>,GEOS_DLL_EXPORT,DLL_EXPORT>)
+    PRIVATE $<$<BOOL:${WIN32}>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
   if(NOT WIN32 OR MINGW)
