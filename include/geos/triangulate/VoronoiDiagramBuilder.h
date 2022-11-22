@@ -98,7 +98,7 @@ public:
     std::unique_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
 
     /** \brief
-     * Gets the faces of the computed diagram as a geom::GeometryCollection
+     * Gets the faces of the computed diagram as a {@link geom::GeometryCollection}
      * of {@link geom::Polygon}s, clipped as specified.
      *
      * @param geomFact the geometry factory to use to create the output
@@ -107,13 +107,13 @@ public:
     std::unique_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
 
     /** \brief
-     * Gets the faces of the computed diagram as a geom::GeometryCollection
-     * of {@link geom::LineString}s, clipped as specified.
+     * Gets the edges of the computed diagram as a {@link geom::MultiLineString},
+     * clipped as specified.
      *
      * @param geomFact the geometry factory to use to create the output
-     * @return the faces of the diagram
+     * @return the edges of the diagram
      */
-    std::unique_ptr<geom::Geometry> getDiagramEdges(const geom::GeometryFactory& geomFact);
+    std::unique_ptr<geom::MultiLineString> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
 private:
 
@@ -132,4 +132,3 @@ private:
 
 } //namespace geos.triangulate
 } //namespace geos
-

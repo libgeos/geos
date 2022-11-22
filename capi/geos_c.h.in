@@ -3757,11 +3757,17 @@ extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
     const GEOSGeometry *g);
 
 /**
-* Returns the Voronoi polygons of the vertices of the given geometry.
+* Returns the Voronoi polygons or edges of the vertices of the given geometry.
 *
 * \param g the input geometry whose vertices will be used as sites.
-* \param tolerance snapping tolerance to use for improved robustness
-* \param onlyEdges whether to return only edges of the voronoi cells
+* \param tolerance snapping tolerance to use for improved robustness. A
+                   tolerance of 0.0 specifies that no snapping will take
+                   place. This argument can be finicky and is known to cause
+                   the algorithm to fail in several cases. If you're using
+                   tolerance and getting a failure, try setting it to 0.0.
+* \param onlyEdges whether to return only edges of the voronoi cells.
+*                  If non-zero, the result will be a MultiLineString, otherwise
+*                  it will be a GeometryCollection of Polygons.
 * \param env clipping envelope for the returned diagram, automatically
 *            determined if env is NULL.
 *            The diagram will be clipped to the larger

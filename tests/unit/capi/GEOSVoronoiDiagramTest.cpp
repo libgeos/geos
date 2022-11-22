@@ -140,4 +140,3 @@ void object::test<7>
 }
 
 } // namespace tut
-
