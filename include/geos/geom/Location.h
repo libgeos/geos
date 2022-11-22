@@ -29,7 +29,7 @@ namespace geom { // geos::geom
  * [OpenGIS Simple Features Specification for SQL](http://www.opengis.org/techno/specs.htm").
  */
 
-enum class GEOS_DLL Location : char {
+enum class Location : char {
     /**
      *  Used for uninitialized location values.
      */
