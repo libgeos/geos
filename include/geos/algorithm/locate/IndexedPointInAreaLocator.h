@@ -51,7 +51,7 @@ namespace locate { // geos::algorithm::locate
  * The index is lazy-loaded, which allows creating instances even if they are not used.
  *
  */
-class IndexedPointInAreaLocator : public PointOnGeometryLocator {
+class GEOS_DLL IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
     struct SegmentView {
         SegmentView(const geom::Coordinate* p_p0, const geom::Coordinate* p_p1) : m_p0(p_p0) {
