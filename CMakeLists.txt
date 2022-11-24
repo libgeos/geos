@@ -193,7 +193,7 @@ if(NOT HAVE_STD_ISNAN)
       check_prototype_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
     endif()
   else()
-    check_prototype_exists(isnan math.h HAVE_ISNAN)
+    check_symbol_exists(isnan math.h HAVE_ISNAN)
   endif()
 endif()
 
