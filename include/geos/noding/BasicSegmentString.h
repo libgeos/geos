@@ -53,37 +53,11 @@ public:
     BasicSegmentString(geom::CoordinateSequence* newPts,
                        const void* newContext)
         :
-        SegmentString(newContext),
-        pts(newPts)
+        SegmentString(newContext, newPts)
     {}
 
     ~BasicSegmentString() override
     {}
-
-    // see dox in SegmentString.h
-    size_t
-    size() const override
-    {
-        return pts->size();
-    }
-
-    // see dox in SegmentString.h
-    const geom::Coordinate& getCoordinate(std::size_t i) const override
-    {
-        return pts->getAt(i);
-    };
-
-    /// @see SegmentString::getCoordinates() const
-    geom::CoordinateSequence* getCoordinates() const override
-    {
-        return pts;
-    };
-
-    // see dox in SegmentString.h
-    bool isClosed() const override
-    {
-        return pts->getAt(0) == pts->getAt(size() - 1);
-    };
 
     // see dox in SegmentString.h
     std::ostream& print(std::ostream& os) const override;
@@ -104,8 +78,6 @@ public:
     };
 
 private:
-
-    geom::CoordinateSequence* pts;
 
     // Declare type as noncopyable
     BasicSegmentString(const BasicSegmentString& other) = delete;

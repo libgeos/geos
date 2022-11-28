@@ -74,31 +74,12 @@ NodedSegmentString::getNodedSubstrings(
     return resultEdgelist;
 }
 
-/* virtual public */
-const geom::Coordinate&
-NodedSegmentString::getCoordinate(std::size_t i) const
-{
-    return pts->getAt(i);
-}
-
-/* virtual public */
-geom::CoordinateSequence*
-NodedSegmentString::getCoordinates() const
-{
-    return pts.get();
-}
-
-geom::CoordinateSequence*
+std::unique_ptr<geom::CoordinateSequence>
 NodedSegmentString::releaseCoordinates()
 {
-    return pts.release();
-}
-
-/* virtual public */
-bool
-NodedSegmentString::isClosed() const
-{
-    return pts->getAt(0) == pts->getAt(size() - 1);
+    auto ret = std::unique_ptr<CoordinateSequence>(seq);
+    seq = nullptr;
+    return ret;
 }
 
 /* public virtual */
@@ -106,7 +87,7 @@ std::ostream&
 NodedSegmentString::print(std::ostream& os) const
 {
     os << "NodedSegmentString: " << std::endl;
-    os << " LINESTRING" << *(pts) << ";" << std::endl;
+    os << " LINESTRING" << *(getCoordinates()) << ";" << std::endl;
     os << " Nodes: " << nodeList.size() << std::endl;
 
     return os;

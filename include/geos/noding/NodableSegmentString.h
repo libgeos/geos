@@ -37,9 +37,9 @@ class GEOS_DLL NodableSegmentString : public SegmentString {
 private:
 protected:
 public:
-    NodableSegmentString(const void* newContext)
+    NodableSegmentString(const void* newContext, geom::CoordinateSequence* newSeq)
         :
-        SegmentString(newContext)
+        SegmentString(newContext, newSeq)
     { }
 
     /**

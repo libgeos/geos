@@ -53,7 +53,7 @@ struct test_overlaygraph_data {
         std::unique_ptr<CoordinateSequence> cs = line->getCoordinates();
 
         EdgeSourceInfo esi(0);
-        Edge e(cs.release(), &esi);
+        Edge e(std::move(cs), &esi);
         std::unique_ptr<CoordinateSequence> pts = e.getCoordinates();
 
         graph->addEdge(&e);

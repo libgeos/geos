@@ -21,6 +21,8 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/SegmentNodeList.h>
 
 #include <vector>
@@ -53,9 +55,11 @@ public:
     /// \brief Construct a SegmentString.
     ///
     /// @param newContext the context associated to this SegmentString
+    /// @param newSeq coordinates of this SegmentString
     ///
-    SegmentString(const void* newContext)
+    SegmentString(const void* newContext, geom::CoordinateSequence* newSeq)
         :
+        seq(newSeq),
         context(newContext)
     {}
 
@@ -84,10 +88,13 @@ public:
         context = data;
     }
 
+    std::size_t size() const {
+        return seq->size();
+    }
 
-    virtual std::size_t size() const = 0;
-
-    virtual const geom::Coordinate& getCoordinate(std::size_t i) const = 0;
+    const geom::Coordinate& getCoordinate(std::size_t i) const {
+        return seq->getAt(i);
+    }
 
     /// \brief
     /// Return a pointer to the CoordinateSequence associated
@@ -95,14 +102,24 @@ public:
     ///
     /// @note The CoordinateSequence is owned by this SegmentString!
     ///
-    virtual geom::CoordinateSequence* getCoordinates() const = 0;
+    const geom::CoordinateSequence* getCoordinates() const {
+        return seq;
+    }
 
-    virtual bool isClosed() const = 0;
+    geom::CoordinateSequence* getCoordinates() {
+        return seq;
+    }
+
+    bool isClosed() const {
+        return seq->front().equals(seq->back());
+    }
 
     virtual std::ostream& print(std::ostream& os) const;
 
-private:
+protected:
+    geom::CoordinateSequence* seq;
 
+private:
     const void* context;
 
     // Declare type as noncopyable
