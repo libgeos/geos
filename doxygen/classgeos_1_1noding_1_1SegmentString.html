@@ -46,10 +46,11 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1noding_1_1SegmentString-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">geos::noding::SegmentString Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">geos::noding::SegmentString Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -80,30 +81,39 @@ typedef std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9bbddb9c8ba5a7b33c0a6b971536c7c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#a9bbddb9c8ba5a7b33c0a6b971536c7c4">SegmentString</a> (const void *newContext)</td></tr>
-<tr class="memdesc:a9bbddb9c8ba5a7b33c0a6b971536c7c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>.  <a href="classgeos_1_1noding_1_1SegmentString.html#a9bbddb9c8ba5a7b33c0a6b971536c7c4">More...</a><br /></td></tr>
-<tr class="separator:a9bbddb9c8ba5a7b33c0a6b971536c7c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22f4911ff2cb28fd186045c0b4e5448b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#a22f4911ff2cb28fd186045c0b4e5448b">SegmentString</a> (const void *newContext, <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *newSeq)</td></tr>
+<tr class="memdesc:a22f4911ff2cb28fd186045c0b4e5448b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>.  <a href="classgeos_1_1noding_1_1SegmentString.html#a22f4911ff2cb28fd186045c0b4e5448b">More...</a><br /></td></tr>
+<tr class="separator:a22f4911ff2cb28fd186045c0b4e5448b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5eae74d0e5082661c6ff62d693243f3"><td class="memItemLeft" align="right" valign="top">const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#ae5eae74d0e5082661c6ff62d693243f3">getData</a> () const</td></tr>
 <tr class="memdesc:ae5eae74d0e5082661c6ff62d693243f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the user-defined data for this segment string.  <a href="classgeos_1_1noding_1_1SegmentString.html#ae5eae74d0e5082661c6ff62d693243f3">More...</a><br /></td></tr>
 <tr class="separator:ae5eae74d0e5082661c6ff62d693243f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae904e3ae8ad4cbf87f6d72d4a74b0371"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#ae904e3ae8ad4cbf87f6d72d4a74b0371">setData</a> (const void *data)</td></tr>
 <tr class="memdesc:ae904e3ae8ad4cbf87f6d72d4a74b0371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the user-defined data for this segment string.  <a href="classgeos_1_1noding_1_1SegmentString.html#ae904e3ae8ad4cbf87f6d72d4a74b0371">More...</a><br /></td></tr>
 <tr class="separator:ae904e3ae8ad4cbf87f6d72d4a74b0371"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf8c5164e8633e753235642d6087554e"><td class="memItemLeft" align="right" valign="top"><a id="abf8c5164e8633e753235642d6087554e"></a>
-virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const =0</td></tr>
-<tr class="separator:abf8c5164e8633e753235642d6087554e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acec58e51133cad91d2b95d7dc78d6989"><td class="memItemLeft" align="right" valign="top"><a id="acec58e51133cad91d2b95d7dc78d6989"></a>
-virtual const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> (std::size_t i) const =0</td></tr>
-<tr class="separator:acec58e51133cad91d2b95d7dc78d6989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca3ec349545a36bea18be67b2763a862"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#aca3ec349545a36bea18be67b2763a862">getCoordinates</a> () const =0</td></tr>
-<tr class="memdesc:aca3ec349545a36bea18be67b2763a862"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>.  <a href="classgeos_1_1noding_1_1SegmentString.html#aca3ec349545a36bea18be67b2763a862">More...</a><br /></td></tr>
-<tr class="separator:aca3ec349545a36bea18be67b2763a862"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabf4d633db90713e82e30da182594733"><td class="memItemLeft" align="right" valign="top"><a id="aabf4d633db90713e82e30da182594733"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClosed</b> () const =0</td></tr>
-<tr class="separator:aabf4d633db90713e82e30da182594733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f0b8434ef56ceff5eb00d4d4cfda643"><td class="memItemLeft" align="right" valign="top"><a id="a4f0b8434ef56ceff5eb00d4d4cfda643"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:a4f0b8434ef56ceff5eb00d4d4cfda643"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b8581c45fc05127792045db3da5ae1"><td class="memItemLeft" align="right" valign="top"><a id="ab5b8581c45fc05127792045db3da5ae1"></a>
+const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> (std::size_t i) const</td></tr>
+<tr class="separator:ab5b8581c45fc05127792045db3da5ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae03fec2cbe7326ec271184022946309b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#ae03fec2cbe7326ec271184022946309b">getCoordinates</a> () const</td></tr>
+<tr class="memdesc:ae03fec2cbe7326ec271184022946309b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>.  <a href="classgeos_1_1noding_1_1SegmentString.html#ae03fec2cbe7326ec271184022946309b">More...</a><br /></td></tr>
+<tr class="separator:ae03fec2cbe7326ec271184022946309b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92873f7138d3ee5e372880cb91b814db"><td class="memItemLeft" align="right" valign="top"><a id="a92873f7138d3ee5e372880cb91b814db"></a>
+<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> ()</td></tr>
+<tr class="separator:a92873f7138d3ee5e372880cb91b814db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a118c502758b829cb2683cfc65946a415"><td class="memItemLeft" align="right" valign="top"><a id="a118c502758b829cb2683cfc65946a415"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClosed</b> () const</td></tr>
+<tr class="separator:a118c502758b829cb2683cfc65946a415"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4df2e7f88719af3010e2b4d47656e7ff"><td class="memItemLeft" align="right" valign="top"><a id="a4df2e7f88719af3010e2b4d47656e7ff"></a>
 virtual std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (std::ostream &amp;os) const</td></tr>
 <tr class="separator:a4df2e7f88719af3010e2b4d47656e7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a31fed1acea361d4719d13007887e4167"><td class="memItemLeft" align="right" valign="top"><a id="a31fed1acea361d4719d13007887e4167"></a>
+<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>seq</b></td></tr>
+<tr class="separator:a31fed1acea361d4719d13007887e4167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -115,8 +125,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p>An interface for classes which represent a sequence of contiguous line segments. </p>
 <p>SegmentStrings can carry a context object, which is useful for preserving topological or parentage information. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9bbddb9c8ba5a7b33c0a6b971536c7c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bbddb9c8ba5a7b33c0a6b971536c7c4">&#9670;&nbsp;</a></span>SegmentString()</h2>
+<a id="a22f4911ff2cb28fd186045c0b4e5448b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22f4911ff2cb28fd186045c0b4e5448b">&#9670;&nbsp;</a></span>SegmentString()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -128,8 +138,18 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td class="memname">geos::noding::SegmentString::SegmentString </td>
           <td>(</td>
           <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>newContext</em></td><td>)</td>
+          <td class="paramname"><em>newContext</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td>
+          <td class="paramname"><em>newSeq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -143,6 +163,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">newContext</td><td>the context associated to this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a> </td></tr>
+    <tr><td class="paramname">newSeq</td><td>coordinates of this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a> </td></tr>
   </table>
   </dd>
 </dl>
@@ -150,8 +171,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aca3ec349545a36bea18be67b2763a862"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca3ec349545a36bea18be67b2763a862">&#9670;&nbsp;</a></span>getCoordinates()</h2>
+<a id="ae03fec2cbe7326ec271184022946309b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03fec2cbe7326ec271184022946309b">&#9670;&nbsp;</a></span>getCoordinates()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,23 +181,22 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* geos::noding::SegmentString::getCoordinates </td>
+          <td class="memname">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* geos::noding::SegmentString::getCoordinates </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>. </p>
 <dl class="section note"><dt>Note</dt><dd>The CoordinateSequence is owned by this SegmentString! </dd></dl>
-
-<p>Implemented in <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html#adfacb83d4ca5337056deea3a88b3e1d4">geos::noding::NodedSegmentString</a>, and <a class="el" href="classgeos_1_1noding_1_1BasicSegmentString.html#af1666cfa24bd45622d9153a979bfbe96">geos::noding::BasicSegmentString</a>.</p>
 
 </div>
 </div>

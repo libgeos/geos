@@ -207,7 +207,7 @@ $(function() {
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isCollapsed(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* pts);</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="comment">// takes ownership of pts from caller</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* p_pts, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>(std::unique_ptr&lt;geom::CoordinateSequence&gt;&amp;&amp; p_pts, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">// return a clone of the underlying points</span></div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; getCoordinates()</div>

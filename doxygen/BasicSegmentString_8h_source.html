@@ -88,68 +88,39 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1BasicSegmentString.html#a4c40c6763de003ae390fcf7cb334e71f">   53</a></span>&#160;    <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html#a4c40c6763de003ae390fcf7cb334e71f">BasicSegmentString</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* newPts,</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                       <span class="keyword">const</span> <span class="keywordtype">void</span>* newContext)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        :</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>(newContext),</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        pts(newPts)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    ~<a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>()<span class="keyword"> override</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">    </span>{}</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// see dox in SegmentString.h</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">size_t</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    size()<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> pts-&gt;size();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// see dox in SegmentString.h</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">const</span> geom::Coordinate&amp; getCoordinate(std::size_t i)<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> pts-&gt;getAt(i);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    };</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1BasicSegmentString.html#af1666cfa24bd45622d9153a979bfbe96">   77</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html#af1666cfa24bd45622d9153a979bfbe96">getCoordinates</a>()<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> pts;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    };</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>(newContext, newPts)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {}</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    ~<a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>()<span class="keyword"> override</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">    </span>{}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// see dox in SegmentString.h</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::ostream&amp; print(std::ostream&amp; os) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">   72</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">getSegmentOctant</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span>(index &gt;= size() - 1) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">Octant::octant</a>(getCoordinate(index), getCoordinate(index + 1));</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// see dox in SegmentString.h</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">bool</span> isClosed()<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> pts-&gt;<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html#a21b38920a6a53f3ae0723ef0813fa462">getAt</a>(0) == pts-&gt;getAt(size() - 1);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    };</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;};</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">// see dox in SegmentString.h</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    std::ostream&amp; print(std::ostream&amp; os) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">   98</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">getSegmentOctant</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">if</span>(index &gt;= size() - 1) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">Octant::octant</a>(getCoordinate(index), getCoordinate(index + 1));</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    };</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* pts;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1noding_1_1BasicSegmentString.html">BasicSegmentString</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;} <span class="comment">// namespace geos.noding</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;} <span class="comment">// namespace geos.noding</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:45</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html_a21b38920a6a53f3ae0723ef0813fa462"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html#a21b38920a6a53f3ae0723ef0813fa462">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">virtual const Coordinate &amp; getAt(std::size_t i) const =0</div><div class="ttdoc">Returns a read-only reference to Coordinate at position i.</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html">geos::noding::BasicSegmentString</a></div><div class="ttdoc">Represents a list of contiguous line segments, and supports noding the segments.</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:44</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html_a086c3b73a66d1d4b87f9532963922500"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">geos::noding::BasicSegmentString::getSegmentOctant</a></div><div class="ttdeci">int getSegmentOctant(std::size_t index) const</div><div class="ttdoc">Gets the octant of the segment starting at vertex index.</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:98</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html_a086c3b73a66d1d4b87f9532963922500"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html#a086c3b73a66d1d4b87f9532963922500">geos::noding::BasicSegmentString::getSegmentOctant</a></div><div class="ttdeci">int getSegmentOctant(std::size_t index) const</div><div class="ttdoc">Gets the octant of the segment starting at vertex index.</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:72</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html_a4c40c6763de003ae390fcf7cb334e71f"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html#a4c40c6763de003ae390fcf7cb334e71f">geos::noding::BasicSegmentString::BasicSegmentString</a></div><div class="ttdeci">BasicSegmentString(geom::CoordinateSequence *newPts, const void *newContext)</div><div class="ttdoc">Construct a BasicSegmentString.</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:53</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html_af1666cfa24bd45622d9153a979bfbe96"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html#af1666cfa24bd45622d9153a979bfbe96">geos::noding::BasicSegmentString::getCoordinates</a></div><div class="ttdeci">geom::CoordinateSequence * getCoordinates() const override</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:77</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1Octant_html_a350e883accdfa65dc98a557d95badf7e"><div class="ttname"><a href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">geos::noding::Octant::octant</a></div><div class="ttdeci">static int octant(double dx, double dy)</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition:</b> SegmentString.h:45</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition:</b> SegmentString.h:47</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
