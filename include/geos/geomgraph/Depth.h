@@ -24,6 +24,7 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Position.h>
 #include <string>
+#include <cstdint>
 
 // Forward declarations
 namespace geos {

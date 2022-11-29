@@ -27,6 +27,7 @@
 #include <array>
 #include <string>
 #include <cassert>
+#include <cstdint>
 
 #ifdef _MSC_VER
 #pragma warning(push)
