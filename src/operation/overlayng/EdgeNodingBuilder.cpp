@@ -271,17 +271,6 @@ EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeS
 }
 
 /*private*/
-#if 0
-void
-EdgeNodingBuilder::addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info)
-{
-    CoordinateSequence* cas = new CoordinateSequence(std::move(pts));
-    NodedSegmentString* ss = new NodedSegmentString(cas, reinterpret_cast<const void*>(info));
-    inputEdges->push_back(ss);
-}
-#endif
-
-/*private*/
 bool
 EdgeNodingBuilder::isClippedCompletely(const Envelope* env)
 {

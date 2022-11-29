@@ -107,18 +107,6 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
     throw IllegalArgumentException("Unknown Geometry subtype.");
 }
 
-#if 0
-std::unique_ptr<CoordinateSequence>
-GeometryTransformer::createCoordinateSequence(
-    std::unique_ptr< std::vector<Coordinate> > coords)
-{
-    return std::unique_ptr<CoordinateSequence>(
-               factory->getCoordinateSequenceFactory()->create(
-                   coords.release())
-           );
-}
-#endif
-
 std::unique_ptr<CoordinateSequence>
 GeometryTransformer::transformCoordinates(
     const CoordinateSequence* coords,

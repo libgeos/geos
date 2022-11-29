@@ -122,7 +122,6 @@ private:
     void addPolygonRing(const LinearRing* ring, bool isHole, uint8_t geomIndex);
     void addLine(const LineString* line, uint8_t geomIndex);
     void addLine(std::unique_ptr<CoordinateSequence>& pts, uint8_t geomIndex);
-    //void addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info);
     void addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeSourceInfo* info);
 
     // Create a EdgeSourceInfo* owned by EdgeNodingBuilder

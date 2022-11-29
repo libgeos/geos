@@ -209,9 +209,6 @@ protected:
     LineString(CoordinateSequence::Ptr && pts,
                const GeometryFactory& newFactory);
 
-    //LineString(std::vector<Coordinate> && pts,
-    //           const GeometryFactory& newFactory);
-
     LineString* cloneImpl() const override { return new LineString(*this); }
 
     LineString* reverseImpl() const override;
