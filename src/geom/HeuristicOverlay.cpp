@@ -614,10 +614,10 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
                 ret.reset(OverlayOp::overlayOp(rG0.get(), rG1.get(), OverlayOp::OpCode(opCode)));
                 // restore original precision (least precision between inputs)
                 if(g0->getFactory()->getPrecisionModel()->compareTo(g1->getFactory()->getPrecisionModel()) < 0) {
-                    ret.reset(g0->getFactory()->createGeometry(ret.get()));
+                    ret = g0->getFactory()->createGeometry(ret.get());
                 }
                 else {
-                    ret.reset(g1->getFactory()->createGeometry(ret.get()));
+                    ret = g1->getFactory()->createGeometry(ret.get());
                 }
 
 #if GEOS_CHECK_PRECISION_REDUCTION_VALIDITY

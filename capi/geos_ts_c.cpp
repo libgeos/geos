@@ -2173,7 +2173,6 @@ extern "C" {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
-            Geometry* out;
 
             // Polygonize
             Polygonizer plgnzr;
@@ -2191,20 +2190,16 @@ extern "C" {
             // (it's just a waste of processor and memory, btw)
             // XXX mloskot: See comment for GEOSPolygonize_r
 
-            // TODO avoid "new" here
-            std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
+            std::vector<std::unique_ptr<Geometry>> linevec(lines.size());
 
             for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                (*linevec)[i] = lines[i]->clone().release();
+                linevec[i] = lines[i]->clone();
             }
 
-            // The below takes ownership of the passed vector,
-            // so we must *not* delete it
-
-            out = gf->createGeometryCollection(linevec);
+            auto out = gf->createGeometryCollection(std::move(linevec));
             out->setSRID(srid);
 
-            return out;
+            return out.release();
         });
     }
 
@@ -2752,7 +2747,7 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createPoint(cs);
+            return gf->createPoint(std::unique_ptr<CoordinateSequence>(cs)).release();
         });
     }
 
@@ -2763,8 +2758,8 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            geos::geom::Coordinate c(x, y);
-            return gf->createPoint(c);
+            geos::geom::CoordinateXY c(x, y);
+            return gf->createPoint(c).release();
         });
     }
 
@@ -2775,7 +2770,7 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createLinearRing(cs);
+            return gf->createLinearRing(std::unique_ptr<CoordinateSequence>(cs)).release();
         });
     }
 
@@ -2797,7 +2792,7 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createLineString(cs);
+            return gf->createLineString(std::unique_ptr<CoordinateSequence>(cs)).release();
         });
     }
 
@@ -2898,7 +2893,7 @@ extern "C" {
 
             const PrecisionModel* pm = g->getPrecisionModel();
             double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
-            Geometry* ret;
+            std::unique_ptr<Geometry> ret;
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(&newpm, g->getSRID());
             if(gridSize != 0 && cursize != gridSize) {
@@ -2907,13 +2902,13 @@ extern "C" {
                 reducer.setUseAreaReducer(!(flags & GEOS_PREC_NO_TOPO));
                 reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);
                 reducer.setRemoveCollapsedComponents(!(flags & GEOS_PREC_KEEP_COLLAPSED));
-                ret = reducer.reduce(*g).release();
+                ret = reducer.reduce(*g);
             }
             else {
                 // No need or willing to snap, just change the factory
                 ret = gf->createGeometry(g);
             }
-            return ret;
+            return ret.release();
         });
     }
 
@@ -3691,9 +3686,9 @@ extern "C" {
             geos::linearref::LengthIndexedLine lil(g);
             geos::geom::Coordinate coord = lil.extractPoint(d);
             const GeometryFactory* gf = handle->geomFactory;
-            Geometry* point = gf->createPoint(coord);
+            auto point = gf->createPoint(coord);
             point->setSRID(g->getSRID());
-            return point;
+            return point.release();
         });
     }
 
@@ -3748,20 +3743,20 @@ extern "C" {
             g->apply_ro(&filter);
 
             /* 2: for each point, create a geometry and put into a vector */
-            std::vector<Geometry*>* points = new std::vector<Geometry*>();
-            points->reserve(coords.size());
+            std::vector<std::unique_ptr<Geometry>> points;
+            points.reserve(coords.size());
             const GeometryFactory* factory = g->getFactory();
             for(std::vector<const Coordinate*>::iterator it = coords.begin(),
                     itE = coords.end();
                     it != itE; ++it) {
-                Geometry* point = factory->createPoint(*(*it));
-                points->push_back(point);
+                auto point = factory->createPoint(*(*it));
+                points.push_back(std::move(point));
             }
 
             /* 3: create a multipoint */
-            Geometry* out = factory->createMultiPoint(points);
+            auto out = factory->createMultiPoint(std::move(points));
             out->setSRID(g->getSRID());
-            return out;
+            return out.release();
 
         });
     }
@@ -3817,39 +3812,33 @@ extern "C" {
         const GeometryFactory* factory = g1->getFactory();
         std::size_t count;
 
-        std::unique_ptr< std::vector<Geometry*> > out1(
-            new std::vector<Geometry*>()
-        );
+        std::vector<std::unique_ptr<Geometry>> out1;
         count = forw.size();
-        out1->reserve(count);
+        out1.reserve(count);
         for(std::size_t i = 0; i < count; ++i) {
-            out1->push_back(forw[i]);
+            out1.emplace_back(forw[i]);
         }
         std::unique_ptr<Geometry> out1g(
-            factory->createMultiLineString(out1.release())
+            factory->createMultiLineString(std::move(out1))
         );
 
-        std::unique_ptr< std::vector<Geometry*> > out2(
-            new std::vector<Geometry*>()
-        );
+        std::vector<std::unique_ptr<Geometry>> out2;
         count = back.size();
-        out2->reserve(count);
+        out2.reserve(count);
         for(std::size_t i = 0; i < count; ++i) {
-            out2->push_back(back[i]);
+            out2.emplace_back(back[i]);
         }
         std::unique_ptr<Geometry> out2g(
-            factory->createMultiLineString(out2.release())
+            factory->createMultiLineString(std::move(out2))
         );
 
-        std::unique_ptr< std::vector<Geometry*> > out(
-            new std::vector<Geometry*>()
-        );
-        out->reserve(2);
-        out->push_back(out1g.release());
-        out->push_back(out2g.release());
+        std::vector<std::unique_ptr<Geometry>> out;
+        out.reserve(2);
+        out.push_back(std::move(out1g));
+        out.push_back(std::move(out2g));
 
         std::unique_ptr<Geometry> outg(
-            factory->createGeometryCollection(out.release())
+            factory->createGeometryCollection(std::move(out))
         );
 
         outg->setSRID(g1->getSRID());

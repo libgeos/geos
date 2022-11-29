@@ -168,7 +168,7 @@ protected:
      *
      * @param newFactory the GeometryFactory used to create this geometry
      */
-    Point(CoordinateSequence* newCoords, const GeometryFactory* newFactory);
+    Point(CoordinateSequence&& newCoords, const GeometryFactory* newFactory);
 
     Point(const Coordinate& c, const GeometryFactory* newFactory);
 

@@ -203,9 +203,6 @@ protected:
     /// \brief
     /// Constructs a LineString taking ownership the
     /// given CoordinateSequence.
-    LineString(CoordinateSequence* pts, const GeometryFactory* newFactory);
-
-    /// Hopefully cleaner version of the above
     LineString(CoordinateSequence::Ptr && pts,
                const GeometryFactory& newFactory);
 

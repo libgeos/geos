@@ -35,15 +35,6 @@ namespace geom { // geos::geom
 LinearRing::LinearRing(const LinearRing& lr): LineString(lr) {}
 
 /*public*/
-LinearRing::LinearRing(CoordinateSequence* newCoords,
-                       const GeometryFactory* newFactory)
-    :
-    LineString(newCoords, newFactory)
-{
-    validateConstruction();
-}
-
-/*public*/
 LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
                        const GeometryFactory& newFactory)
         : LineString(std::move(newCoords), newFactory)

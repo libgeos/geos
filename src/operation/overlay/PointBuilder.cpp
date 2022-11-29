@@ -97,7 +97,7 @@ PointBuilder::filterCoveredNodeToPoint(const Node* n)
 {
     const Coordinate& coord = n->getCoordinate();
     if(!op->isCoveredByLA(coord)) {
-        Point* pt = geometryFactory->createPoint(coord);
+        Point* pt = geometryFactory->createPoint(coord).release();
         resultPointList->push_back(pt);
     }
 }

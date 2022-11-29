@@ -35,13 +35,6 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-MultiLineString::MultiLineString(std::vector<Geometry*>* newLines,
-                                 const GeometryFactory* factory)
-    :
-    GeometryCollection(newLines, factory)
-{
-}
-
 MultiLineString::MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
         const GeometryFactory& factory)
         : GeometryCollection(std::move(newLines), factory)

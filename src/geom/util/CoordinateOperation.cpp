@@ -48,7 +48,7 @@ CoordinateOperation::edit(const Geometry* geometry,
     if(const Point* point = dynamic_cast<const Point*>(geometry)) {
         auto coords = point->getCoordinatesRO();
         auto newCoords = edit(coords, geometry);
-        return std::unique_ptr<Geometry>(factory->createPoint(newCoords.release()));
+        return factory->createPoint(std::move(newCoords));
     }
 
     return geometry->clone();

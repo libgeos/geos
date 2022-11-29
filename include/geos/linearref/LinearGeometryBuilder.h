@@ -40,14 +40,14 @@ class LinearGeometryBuilder {
 private:
     const geom::GeometryFactory* geomFact;
 
-    typedef std::vector<const geom::Geometry*> GeomPtrVect;
+    typedef std::vector<std::unique_ptr<geom::Geometry>> GeomPtrVect;
 
     // Geometry elements owned by this class
     GeomPtrVect lines;
 
     bool ignoreInvalidLines;
     bool fixInvalidLines;
-    geom::CoordinateSequence* coordList;
+    std::unique_ptr<geom::CoordinateSequence> coordList;
 
     geom::Coordinate lastPt;
 
@@ -98,7 +98,7 @@ public:
     /// Terminate the current LineString.
     void endLine();
 
-    geom::Geometry* getGeometry();
+    std::unique_ptr<geom::Geometry> getGeometry();
 };
 
 } // namespace geos.linearref

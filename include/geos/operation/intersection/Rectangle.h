@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <memory>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -108,9 +109,9 @@ public:
      *
      * @note Ownership transferred to caller
      */
-    geom::Polygon* toPolygon(const geom::GeometryFactory& f) const;
+    std::unique_ptr<geom::Polygon> toPolygon(const geom::GeometryFactory& f) const;
 
-    geom::LinearRing* toLinearRing(const geom::GeometryFactory& f) const;
+    std::unique_ptr<geom::LinearRing> toLinearRing(const geom::GeometryFactory& f) const;
 
     /**
      * @brief Position with respect to a clipping rectangle

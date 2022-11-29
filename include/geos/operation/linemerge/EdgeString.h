@@ -21,6 +21,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -55,7 +56,7 @@ class GEOS_DLL EdgeString {
 private:
     const geom::GeometryFactory* factory;
     std::vector<LineMergeDirectedEdge*> directedEdges;
-    geom::CoordinateSequence* getCoordinates();
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates() const;
 public:
     /**
      * \brief
@@ -74,7 +75,7 @@ public:
     /**
      * Converts this EdgeString into a LineString.
      */
-    geom::LineString* toLineString();
+    std::unique_ptr<geom::LineString> toLineString() const;
 };
 
 } // namespace geos::operation::linemerge

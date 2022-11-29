@@ -17,24 +17,25 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 #include "bigtest.h"
 
 #define PI 3.14159265358979
 
 using namespace geos::geom;
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometryTestFactory::createBox(GeometryFactory* fact, double minx, double miny, int nSide, double segLen)
 {
-    CoordinateSequence* pts = createBox(minx, miny, nSide, segLen);
-    return fact->createPolygon(fact->createLinearRing(pts), nullptr);
+    auto pts = createBox(minx, miny, nSide, segLen);
+    return fact->createPolygon(fact->createLinearRing(std::move(pts)));
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLen)
 {
     int i;
-    CoordinateSequence* pts = new CoordinateSequence();
+    auto pts = detail::make_unique<CoordinateSequence>();
     double maxx = minx + nSide * segLen;
     double maxy = miny + nSide * segLen;
 
@@ -69,10 +70,10 @@ GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLe
  * @param size the size of the envelope of the star
  * @param nPts the number of points in the star
  */
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 GeometryTestFactory::createCircle(double basex, double basey, double size, uint32_t nPts)
 {
-    CoordinateSequence* pts = new CoordinateSequence(nPts + 1);
+    auto pts = detail::make_unique<CoordinateSequence>(nPts + 1);
     double len = size / 2.0;
 
     for(uint32_t i = 0; i < nPts; i++) {
@@ -85,11 +86,11 @@ GeometryTestFactory::createCircle(double basex, double basey, double size, uint3
     return pts;
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometryTestFactory::createCircle(GeometryFactory* fact, double basex, double basey, double size, uint32_t nPts)
 {
-    CoordinateSequence* pts = createCircle(basex, basey, size, nPts);
-    return fact->createPolygon(fact->createLinearRing(pts), nullptr);
+    auto pts = createCircle(basex, basey, size, nPts);
+    return fact->createPolygon(fact->createLinearRing(std::move(pts)));
 }
 
 /**
@@ -101,7 +102,7 @@ GeometryTestFactory::createCircle(GeometryFactory* fact, double basex, double ba
  * @param nArms the number of arms of the star
  * @param nPts the number of points in the star
  */
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 GeometryTestFactory::createSineStar(double basex, double basey, double size, double armLen, int nArms, int nPts)
 {
     double armBaseLen = size / 2 - armLen;
@@ -116,7 +117,7 @@ GeometryTestFactory::createSineStar(double basex, double basey, double size, dou
     }
 
     //int nPts2=nArmPt*nArms;
-    CoordinateSequence* pts = new CoordinateSequence();
+    auto pts = detail::make_unique<CoordinateSequence>();
 
     double starAng = 0.0;
 
@@ -138,10 +139,10 @@ GeometryTestFactory::createSineStar(double basex, double basey, double size, dou
     return pts;
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometryTestFactory::createSineStar(GeometryFactory* fact, double basex, double basey, double size, double armLen,
                                     int nArms, int nPts)
 {
-    CoordinateSequence* pts = createSineStar(basex, basey, size, armLen, nArms, nPts);
-    return fact->createPolygon(fact->createLinearRing(pts), nullptr);
+    auto pts = createSineStar(basex, basey, size, armLen, nArms, nPts);
+    return fact->createPolygon(fact->createLinearRing(std::move(pts)));
 }

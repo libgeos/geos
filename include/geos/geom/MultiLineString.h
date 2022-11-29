@@ -114,9 +114,6 @@ protected:
      *       the vector and its elements.
      *
      */
-    MultiLineString(std::vector<Geometry*>* newLines,
-                    const GeometryFactory* newFactory);
-
     MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
             const GeometryFactory& newFactory);
 

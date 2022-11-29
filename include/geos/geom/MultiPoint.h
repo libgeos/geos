@@ -112,8 +112,6 @@ protected:
      *	Caller must keep the factory alive for the life-time
      *	of the constructed MultiPoint.
      */
-    MultiPoint(std::vector<Geometry*>* newPoints, const GeometryFactory* newFactory);
-
     MultiPoint(std::vector<std::unique_ptr<Point>> && newPoints, const GeometryFactory& newFactory);
 
     MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, const GeometryFactory& newFactory);

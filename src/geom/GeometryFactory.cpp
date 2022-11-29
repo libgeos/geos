@@ -161,9 +161,9 @@ GeometryFactory::~GeometryFactory()
 }
 
 /*public*/
-Point*
+std::unique_ptr<Point>
 GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
-        const Geometry* exemplar) const
+        const Geometry* exemplar)
 {
     assert(coord);
     Coordinate newcoord = *coord;
@@ -216,15 +216,15 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::size_t coordinateDimension) const
 {
-    auto coords = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
-    return std::unique_ptr<Point>(new Point(coords.release(), this));
+    CoordinateSequence seq(0u, coordinateDimension);
+    return std::unique_ptr<Point>(new Point(std::move(seq), this));
 }
 
 /*public*/
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
 {
-    return std::unique_ptr<Point>(new Point(coords.release(), this));
+    return std::unique_ptr<Point>(new Point(std::move(*coords), this));
 }
 
 std::unique_ptr<Point>
@@ -239,30 +239,23 @@ GeometryFactory::createPoint(const CoordinateXY& coordinate) const
 }
 
 /*public*/
-Point*
+std::unique_ptr<Point>
 GeometryFactory::createPoint(const Coordinate& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint().release();
+        return createPoint();
     }
     else {
-        return new Point(coordinate, this);
+        return std::unique_ptr<Point>(new Point(coordinate, this));
     }
 }
 
 /*public*/
-Point*
-GeometryFactory::createPoint(CoordinateSequence* newCoords) const
-{
-    return new Point(newCoords, this);
-}
-
-/*public*/
-Point*
+std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 {
-    auto newCoords = fromCoords.clone();
-    return new Point(newCoords.release(), this);
+    CoordinateSequence newCoords(fromCoords);
+    return std::unique_ptr<Point>(new Point(std::move(newCoords), this));
 
 }
 
@@ -270,19 +263,11 @@ GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 std::unique_ptr<MultiLineString>
 GeometryFactory::createMultiLineString() const
 {
-    return std::unique_ptr<MultiLineString>(new MultiLineString(nullptr, this));
+    return createMultiLineString(std::vector<std::unique_ptr<Geometry>>());
 }
 
 /*public*/
-MultiLineString*
-GeometryFactory::createMultiLineString(std::vector<Geometry*>* newLines)
-const
-{
-    return new MultiLineString(newLines, this);
-}
-
-/*public*/
-MultiLineString*
+std::unique_ptr<MultiLineString>
 GeometryFactory::createMultiLineString(const std::vector<const Geometry*>& fromLines)
 const
 {
@@ -298,7 +283,7 @@ const
         newGeoms[i].reset(new LineString(*line));
     }
 
-    return new MultiLineString(std::move(newGeoms), *this);
+    return createMultiLineString(std::move(newGeoms));
 }
 
 std::unique_ptr<MultiLineString>
@@ -317,7 +302,7 @@ GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<Geometry>> &&
 std::unique_ptr<GeometryCollection>
 GeometryFactory::createGeometryCollection() const
 {
-    return std::unique_ptr<GeometryCollection>(new GeometryCollection(nullptr, this));
+    return createGeometryCollection(std::vector<std::unique_ptr<Geometry>>());
 }
 
 /*public*/
@@ -328,14 +313,7 @@ GeometryFactory::createEmptyGeometry() const
 }
 
 /*public*/
-GeometryCollection*
-GeometryFactory::createGeometryCollection(std::vector<Geometry*>* newGeoms) const
-{
-    return new GeometryCollection(newGeoms, this);
-}
-
-/*public*/
-GeometryCollection*
+std::unique_ptr<GeometryCollection>
 GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fromGeoms) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromGeoms.size());
@@ -344,23 +322,17 @@ GeometryFactory::createGeometryCollection(const std::vector<const Geometry*>& fr
         newGeoms[i] = fromGeoms[i]->clone();
     }
 
-    return new GeometryCollection(std::move(newGeoms), *this);
+    return createGeometryCollection(std::move(newGeoms));
 }
 
 /*public*/
 std::unique_ptr<MultiPolygon>
 GeometryFactory::createMultiPolygon() const
 {
-    return std::unique_ptr<MultiPolygon>(new MultiPolygon(nullptr, this));
+    return createMultiPolygon(std::vector<std::unique_ptr<Polygon>>());
 }
 
 /*public*/
-MultiPolygon*
-GeometryFactory::createMultiPolygon(std::vector<Geometry*>* newPolys) const
-{
-    return new MultiPolygon(newPolys, this);
-}
-
 std::unique_ptr<MultiPolygon>
 GeometryFactory::createMultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys) const
 {
@@ -376,7 +348,7 @@ GeometryFactory::createMultiPolygon(std::vector<std::unique_ptr<Geometry>> && ne
 }
 
 /*public*/
-MultiPolygon*
+std::unique_ptr<MultiPolygon>
 GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPolys) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPolys.size());
@@ -385,21 +357,15 @@ GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPoly
         newGeoms[i] = fromPolys[i]->clone();
     }
 
-    return new MultiPolygon(std::move(newGeoms), *this);
+    return createMultiPolygon(std::move(newGeoms));
 }
 
 /*public*/
 std::unique_ptr<LinearRing>
 GeometryFactory::createLinearRing() const
 {
-    return std::unique_ptr<LinearRing>(new LinearRing(nullptr, this));
-}
-
-/*public*/
-LinearRing*
-GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
-{
-    return new LinearRing(newCoords, this);
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LinearRing>(new LinearRing(nullptr, *this));
 }
 
 std::unique_ptr<LinearRing>
@@ -410,34 +376,13 @@ GeometryFactory::createLinearRing(CoordinateSequence::Ptr && newCoords) const
 }
 
 /*public*/
-LinearRing*
+std::unique_ptr<LinearRing>
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
-    auto newCoords = fromCoords.clone();
-    LinearRing* g = nullptr;
-    // construction failure will delete newCoords
-    g = new LinearRing(newCoords.release(), this);
-    return g;
+    return createLinearRing(fromCoords.clone());
 }
 
 /*public*/
-MultiPoint*
-GeometryFactory::createMultiPoint(std::vector<Geometry*>* newPoints) const
-{
-    return new MultiPoint(newPoints, this);
-}
-
-std::unique_ptr<MultiPoint>
-GeometryFactory::createMultiPoint(std::vector<CoordinateXY> && newPoints) const {
-    std::vector<std::unique_ptr<Geometry>> pts(newPoints.size());
-
-    for(std::size_t i = 0; i < newPoints.size(); ++i) {
-        pts[i] = createPoint(newPoints[i]);
-    }
-
-    return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(pts), *this));
-}
-
 std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const
 {
@@ -451,7 +396,7 @@ GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newP
 }
 
 /*public*/
-MultiPoint*
+std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint(const std::vector<const Geometry*>& fromPoints) const
 {
     std::vector<std::unique_ptr<Geometry>> newGeoms(fromPoints.size());
@@ -459,28 +404,28 @@ GeometryFactory::createMultiPoint(const std::vector<const Geometry*>& fromPoints
         newGeoms[i] = fromPoints[i]->clone();
     }
 
-    return new MultiPoint(std::move(newGeoms), *this);
+    return createMultiPoint(std::move(newGeoms));
 }
 
 /*public*/
 std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint() const
 {
-    return std::unique_ptr<MultiPoint>(new MultiPoint(nullptr, this));
+    return std::unique_ptr<MultiPoint>(new MultiPoint(std::vector<std::unique_ptr<Geometry>>(), *this));
 }
 
 /*public*/
-MultiPoint*
+std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 {
     std::size_t npts = fromCoords.getSize();
     std::vector<std::unique_ptr<Geometry>> pts(npts);
 
     for(std::size_t i = 0; i < npts; ++i) {
-        pts[i].reset(createPoint(fromCoords.getAt(i)));
+        pts[i] = createPoint(fromCoords.getAt(i));
     }
 
-    return new MultiPoint(std::move(pts), *this);
+    return createMultiPoint(std::move(pts));
 }
 
 /*public*/
@@ -488,16 +433,8 @@ std::unique_ptr<Polygon>
 GeometryFactory::createPolygon(std::size_t coordinateDimension) const
 {
     auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
-    auto lr = createLinearRing(cs.release());
-    return std::unique_ptr<Polygon>(createPolygon(lr, nullptr));
-}
-
-/*public*/
-Polygon*
-GeometryFactory::createPolygon(LinearRing* shell, std::vector<LinearRing*>* holes)
-const
-{
-    return new Polygon(shell, holes, this);
+    auto lr = createLinearRing(std::move(cs));
+    return createPolygon(std::move(lr));
 }
 
 std::unique_ptr<Polygon>
@@ -548,11 +485,8 @@ const
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(std::size_t coordinateDimension) const
 {
-    if (coordinateDimension == 3) {
-        auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
-        return createLineString(std::move(cs));
-    }
-    return std::unique_ptr<LineString>(new LineString(nullptr, this));
+    auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    return createLineString(std::move(cs));
 }
 
 /*public*/
@@ -561,14 +495,6 @@ GeometryFactory::createLineString(const LineString& ls) const
 {
     // Can't use make_unique with protected constructor
     return std::unique_ptr<LineString>(new LineString(ls));
-}
-
-/*public*/
-LineString*
-GeometryFactory::createLineString(CoordinateSequence* newCoords)
-const
-{
-    return new LineString(newCoords, this);
 }
 
 /*public*/
@@ -581,15 +507,12 @@ const
 }
 
 /*public*/
-LineString*
+std::unique_ptr<LineString>
 GeometryFactory::createLineString(const CoordinateSequence& fromCoords)
 const
 {
-    auto newCoords = fromCoords.clone();
-    LineString* g = nullptr;
-    // construction failure will delete newCoords
-    g = new LineString(newCoords.release(), this);
-    return g;
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LineString>(new LineString(fromCoords.clone(), *this));
 }
 
 /*public*/
@@ -630,32 +553,6 @@ GeometryTypeId commonType(const T& geoms) {
         case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
         case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
         default: return GEOS_GEOMETRYCOLLECTION;
-    }
-}
-
-/*public*/
-Geometry*
-GeometryFactory::buildGeometry(std::vector<Geometry*>* newGeoms) const
-{
-    if(newGeoms->empty()) {
-        // we do not need the vector anymore
-        delete newGeoms;
-        return createGeometryCollection().release();
-    }
-
-    if (newGeoms->size() == 1) {
-        Geometry* ret = (*newGeoms)[0];
-        delete newGeoms;
-        return ret;
-    }
-
-    auto resultType = commonType(*newGeoms);
-
-    switch(resultType) {
-        case GEOS_MULTIPOINT: return createMultiPoint(newGeoms);
-        case GEOS_MULTILINESTRING: return createMultiLineString(newGeoms);
-        case GEOS_MULTIPOLYGON: return createMultiPolygon(newGeoms);
-        default: return createGeometryCollection(newGeoms);
     }
 }
 
@@ -723,15 +620,15 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) c
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 GeometryFactory::buildGeometry(const std::vector<const Geometry*>& fromGeoms) const
 {
     if(fromGeoms.empty()) {
-        return createGeometryCollection().release();
+        return createGeometryCollection();
     }
 
     if(fromGeoms.size() == 1) {
-        return fromGeoms[0]->clone().release();
+        return fromGeoms[0]->clone();
     }
 
     auto resultType = commonType(fromGeoms);
@@ -745,14 +642,14 @@ GeometryFactory::buildGeometry(const std::vector<const Geometry*>& fromGeoms) co
 }
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 GeometryFactory::createGeometry(const Geometry* g) const
 {
     // could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
-    //return g->clone();
+    //return g->clone(); <-- a simple clone() wouldn't change the factory to `this`
     util::GeometryEditor editor(this);
     gfCoordinateOperation coordOp;
-    return editor.edit(g, &coordOp).release();
+    return editor.edit(g, &coordOp);
 }
 
 /*public*/

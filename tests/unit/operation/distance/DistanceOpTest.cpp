@@ -532,8 +532,8 @@ void object::test<20>()
     seq1->setAt(b0, 0);
     seq1->setAt(b1, 1);
 
-    GeomPtr g0(gfact->createLineString(seq0.release()));
-    GeomPtr g1(gfact->createLineString(seq1.release()));
+    auto g0 = gfact->createLineString(std::move(seq0));
+    auto g1 = gfact->createLineString(std::move(seq1));
 
     DistanceOp dist(g0.get(), g1.get());
     CSPtr seq(dist.nearestPoints());

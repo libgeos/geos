@@ -75,15 +75,8 @@ public:
      * @param newFactory the GeometryFactory used to create this geometry
      *
      */
-    LinearRing(CoordinateSequence* points,
-               const GeometryFactory* newFactory);
-
-    /// Hopefully cleaner version of the above
     LinearRing(CoordinateSequence::Ptr && points,
             const GeometryFactory& newFactory);
-
-    LinearRing(std::vector<Coordinate> && pts,
-               const GeometryFactory& newFactory);
 
     std::unique_ptr<LinearRing> clone() const
     {

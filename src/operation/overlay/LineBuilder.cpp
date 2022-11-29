@@ -188,8 +188,8 @@ LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 #if COMPUTE_Z
         propagateZ(cs.get());
 #endif
-        LineString* line = geometryFactory->createLineString(cs.release());
-        resultLineList->push_back(line);
+        auto line = geometryFactory->createLineString(std::move(cs));
+        resultLineList->push_back(line.release());
         e->setInResult(true);
     }
 }

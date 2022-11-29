@@ -39,8 +39,8 @@ struct test_templatestrtree_data {
             for (std::size_t j = 0; j < grid.ny; ++j) {
                 geom::Coordinate c(grid.x0 + grid.dx*static_cast<double>(i),
                                    grid.y0 + grid.dy*static_cast<double>(j));
-                geom::Point* pt = gf->createPoint(c);
-                ret.emplace_back(pt);
+                auto pt = gf->createPoint(c);
+                ret.emplace_back(std::move(pt));
             }
         }
 
