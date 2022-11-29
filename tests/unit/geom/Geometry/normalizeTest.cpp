@@ -227,6 +227,19 @@ void object::test<8>
             "LINESTRING (8 15, 15 22, 22 15, 15 8, 8 15)");
 }
 
+// zero-length linestring
+template<>
+template<>
+void object::test<9>
+()
+{
+    runTest("LINESTRING (0 1, 0 1)",
+            "LINESTRING (0 1, 0 1)");
+
+    runTest("LINESTRING (0 1, 0 1, 0 1)",
+            "LINESTRING (0 1, 0 1, 0 1)");
+}
+
 
 } // namespace tut
 

@@ -346,7 +346,7 @@ LineString::normalizeClosed()
     const CoordinateXY* minCoordinate = coords->minCoordinate();
 
     CoordinateSequence::scroll(coords.get(), minCoordinate);
-    coords->closeRing();
+    coords->closeRing(true);
 
     if(coords->size() >= 4 && algorithm::Orientation::isCCW(coords.get())) {
         coords->reverse();

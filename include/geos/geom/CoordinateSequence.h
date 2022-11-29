@@ -602,7 +602,7 @@ public:
      */
     void expandEnvelope(Envelope& env) const;
 
-    void closeRing();
+    void closeRing(bool allowRepeated = false);
 
     /// @}
     /// \defgroup iterate Iteration
