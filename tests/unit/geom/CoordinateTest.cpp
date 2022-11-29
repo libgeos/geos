@@ -339,26 +339,26 @@ void object::test<13>
 ()
 {
     CoordinateXY xy(1, 2);
-    ensure_equals("XY", xy.toString(), std::string("(1 2)"));
+    ensure_equals("XY", xy.toString(), std::string("1 2"));
 
     Coordinate xyz(1, 2, 3);
-    ensure_equals("XYZ", xyz.toString(), std::string("(1 2 3)"));
+    ensure_equals("XYZ", xyz.toString(), std::string("1 2 3"));
     xyz.z = geos::DoubleNotANumber;
-    ensure_equals("XYZ", xyz.toString(), std::string("(1 2)"));
+    ensure_equals("XYZ", xyz.toString(), std::string("1 2"));
 
     CoordinateXYM xym(1, 2, 3);
-    ensure_equals("XYM", xym.toString(), std::string("(1 2 3)"));
+    ensure_equals("XYM", xym.toString(), std::string("1 2 3"));
     xym.m = geos::DoubleNotANumber;
-    ensure_equals("XYM", xym.toString(), std::string("(1 2)"));
+    ensure_equals("XYM", xym.toString(), std::string("1 2"));
 
     CoordinateXYZM xyzm(1, 2, 3, 4);
-    ensure_equals("XYZM", xyzm.toString(), std::string("(1 2 3 4)"));
+    ensure_equals("XYZM", xyzm.toString(), std::string("1 2 3 4"));
     xyzm.z = geos::DoubleNotANumber;
-    ensure_equals("XYZM", xyzm.toString(), std::string("(1 2 nan 4)"));
+    ensure_equals("XYZM", xyzm.toString(), std::string("1 2 nan 4"));
     xyzm.m = geos::DoubleNotANumber;
-    ensure_equals("XYZM", xyzm.toString(), std::string("(1 2)"));
+    ensure_equals("XYZM", xyzm.toString(), std::string("1 2"));
     xyzm.z = 3;
-    ensure_equals("XYZM", xyzm.toString(), std::string("(1 2 3)"));
+    ensure_equals("XYZM", xyzm.toString(), std::string("1 2 3"));
 }
 
 // Test object sizes

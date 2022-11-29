@@ -57,7 +57,7 @@ std::string
 Coordinate::toString() const
 {
     std::ostringstream s;
-    s << std::setprecision(17) << "(" << *this << ")";
+    s << std::setprecision(17) << *this;
     return s.str();
 }
 
@@ -65,7 +65,7 @@ std::string
 CoordinateXY::toString() const
 {
     std::ostringstream s;
-    s << std::setprecision(17) << "(" << *this << ")";
+    s << std::setprecision(17) << *this;
     return s.str();
 }
 
@@ -73,7 +73,7 @@ std::string
 CoordinateXYM::toString() const
 {
     std::ostringstream s;
-    s << std::setprecision(17) << "(" << *this << ")";
+    s << std::setprecision(17) << *this;
     return s.str();
 }
 
@@ -81,7 +81,7 @@ std::string
 CoordinateXYZM::toString() const
 {
     std::ostringstream s;
-    s << std::setprecision(17) << "(" << *this << ")";
+    s << std::setprecision(17) << *this;
     return s.str();
 }
 
