@@ -39,7 +39,6 @@ class MaximalEdgeRing;
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequence;
 using geos::geom::Location;
 
 namespace geos {      // geos.
