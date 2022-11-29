@@ -12,7 +12,7 @@ Changes in 3.10.4
   - Fix crash in GEOSIntersects with empty point inputs (#673, Dan Baston)
   - Fix RelateOp for empty geometry and closed linear geometry (#1096, Dan Baston)
   - Return 2D result on 2D input to GeometryPrecisionReducer (#1137, Dan Baston)
-
+  - Support gcc-13 (GH-743, Sergei Trofimovich)
 
 
 Changes in 3.10.3
