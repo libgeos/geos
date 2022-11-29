@@ -66,59 +66,60 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span>Coordinate;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// Forward declarations</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>geom {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">class </span>Coordinate;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>shape {   <span class="comment">// geos.shape</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>fractal { <span class="comment">// geos.shape.fractal</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">   64</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">HilbertCode</a> {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a1fc2b2b231874c146550a4cf2d0cd061">   71</a></span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> MAX_LEVEL = 16;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> decode(uint32_t level, uint32_t i);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">static</span> uint32_t encode(uint32_t level, uint32_t x, uint32_t y);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#ad3136e6d81a9ffe94c399c7d6c65ce99">   84</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#ad3136e6d81a9ffe94c399c7d6c65ce99">levelSize</a>(uint32_t level);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a879e764997c9ff58ed452ed14c58d5fd">   94</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a879e764997c9ff58ed452ed14c58d5fd">maxOrdinate</a>(uint32_t level);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a98c152123ea5d5192824ed2f04e88cec">  103</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a98c152123ea5d5192824ed2f04e88cec">level</a>(uint32_t numPoints);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>shape {   <span class="comment">// geos.shape</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>fractal { <span class="comment">// geos.shape.fractal</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">   65</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">HilbertCode</a> {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a1fc2b2b231874c146550a4cf2d0cd061">   72</a></span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> MAX_LEVEL = 16;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> decode(uint32_t level, uint32_t i);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">static</span> uint32_t encode(uint32_t level, uint32_t x, uint32_t y);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#ad3136e6d81a9ffe94c399c7d6c65ce99">   85</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#ad3136e6d81a9ffe94c399c7d6c65ce99">levelSize</a>(uint32_t level);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a879e764997c9ff58ed452ed14c58d5fd">   95</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a879e764997c9ff58ed452ed14c58d5fd">maxOrdinate</a>(uint32_t level);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a98c152123ea5d5192824ed2f04e88cec">  104</a></span>&#160;    <span class="keyword">static</span> uint32_t <a class="code" href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a98c152123ea5d5192824ed2f04e88cec">level</a>(uint32_t numPoints);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> uint32_t deinterleave(uint32_t x);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keyword">static</span> uint32_t interleave(uint32_t x);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">static</span> uint32_t prefixScan(uint32_t x);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">static</span> uint32_t descan(uint32_t x);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> checkLevel(uint32_t level);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">static</span> uint32_t deinterleave(uint32_t x);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keyword">static</span> uint32_t interleave(uint32_t x);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">static</span> uint32_t prefixScan(uint32_t x);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">static</span> uint32_t descan(uint32_t x);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> checkLevel(uint32_t level);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;} <span class="comment">// namespace geos.shape.fractal</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace geos.shape</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace geos.shape.fractal</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace geos.shape</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:187</div></div>
-<div class="ttc" id="aclassgeos_1_1shape_1_1fractal_1_1HilbertCode_html"><div class="ttname"><a href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">geos::shape::fractal::HilbertCode</a></div><div class="ttdef"><b>Definition:</b> HilbertCode.h:64</div></div>
+<div class="ttc" id="aclassgeos_1_1shape_1_1fractal_1_1HilbertCode_html"><div class="ttname"><a href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html">geos::shape::fractal::HilbertCode</a></div><div class="ttdef"><b>Definition:</b> HilbertCode.h:65</div></div>
 <div class="ttc" id="aclassgeos_1_1shape_1_1fractal_1_1HilbertCode_html_a879e764997c9ff58ed452ed14c58d5fd"><div class="ttname"><a href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a879e764997c9ff58ed452ed14c58d5fd">geos::shape::fractal::HilbertCode::maxOrdinate</a></div><div class="ttdeci">static uint32_t maxOrdinate(uint32_t level)</div></div>
 <div class="ttc" id="aclassgeos_1_1shape_1_1fractal_1_1HilbertCode_html_a98c152123ea5d5192824ed2f04e88cec"><div class="ttname"><a href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#a98c152123ea5d5192824ed2f04e88cec">geos::shape::fractal::HilbertCode::level</a></div><div class="ttdeci">static uint32_t level(uint32_t numPoints)</div></div>
 <div class="ttc" id="aclassgeos_1_1shape_1_1fractal_1_1HilbertCode_html_ad3136e6d81a9ffe94c399c7d6c65ce99"><div class="ttname"><a href="classgeos_1_1shape_1_1fractal_1_1HilbertCode.html#ad3136e6d81a9ffe94c399c7d6c65ce99">geos::shape::fractal::HilbertCode::levelSize</a></div><div class="ttdeci">static uint32_t levelSize(uint32_t level)</div></div>
