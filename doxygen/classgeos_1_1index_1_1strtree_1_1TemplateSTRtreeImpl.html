@@ -124,6 +124,10 @@ template&lt;typename ItemDistance &gt; </td></tr>
 template&lt;typename Visitor &gt; </td></tr>
 <tr class="memitem:ga9d004b85b0d60ce3bf8f9b18dcd324e8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>query</b> (const BoundsType &amp;queryEnv, Visitor &amp;&amp;visitor)</td></tr>
 <tr class="separator:ga9d004b85b0d60ce3bf8f9b18dcd324e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6feff47706682ac953fc7a04ed53f4ee"><td class="memTemplParams" colspan="2">
+template&lt;typename Visitor &gt; </td></tr>
+<tr class="memitem:ga6feff47706682ac953fc7a04ed53f4ee"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>queryPairs</b> (Visitor &amp;&amp;visitor)</td></tr>
+<tr class="separator:ga6feff47706682ac953fc7a04ed53f4ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadbe6b7796cacbfd940ff1098197892f4"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>query</b> (const BoundsType &amp;queryEnv, std::vector&lt; ItemType &gt; &amp;results)</td></tr>
 <tr class="separator:gadbe6b7796cacbfd940ff1098197892f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +176,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>sortNodesY</b> (const
 template&lt;typename Visitor , typename std::enable_if&lt; std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaf</b> (Visitor &amp;&amp;visitor, const Node &amp;node)</td></tr>
 <tr class="separator:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37967c7102e19910302ae9550a1c433f"><td class="memTemplParams" colspan="2"><a id="a37967c7102e19910302ae9550a1c433f"></a>
+template&lt;typename Visitor , typename std::enable_if&lt; std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; ItemType &gt;(), std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
+<tr class="memitem:a37967c7102e19910302ae9550a1c433f"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaves</b> (Visitor &amp;&amp;visitor, const Node &amp;node1, const Node &amp;node2)</td></tr>
+<tr class="separator:a37967c7102e19910302ae9550a1c433f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplParams" colspan="2"><a id="ab2566f83f51ef6d3cf8ceaf539a938b8"></a>
 template&lt;typename Visitor , typename std::enable_if&lt; std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; BoundsType &gt;(), std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaf</b> (Visitor &amp;&amp;visitor, const Node &amp;node)</td></tr>
@@ -180,6 +188,10 @@ template&lt;typename Visitor , typename std::enable_if&lt; std::is_void&lt; decl
 template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaf</b> (Visitor &amp;&amp;visitor, const Node &amp;node)</td></tr>
 <tr class="separator:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37967c7102e19910302ae9550a1c433f"><td class="memTemplParams" colspan="2"><a id="a37967c7102e19910302ae9550a1c433f"></a>
+template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; ItemType &gt;(), std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
+<tr class="memitem:a37967c7102e19910302ae9550a1c433f"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaves</b> (Visitor &amp;&amp;visitor, const Node &amp;node1, const Node &amp;node2)</td></tr>
+<tr class="separator:a37967c7102e19910302ae9550a1c433f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplParams" colspan="2"><a id="ab2566f83f51ef6d3cf8ceaf539a938b8"></a>
 template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decltype(std::declval&lt; Visitor &gt;()(std::declval&lt; BoundsType &gt;(), std::declval&lt; ItemType &gt;()))&gt;::value , std::nullptr_t , ::type  = nullptr&gt; </td></tr>
 <tr class="memitem:ab2566f83f51ef6d3cf8ceaf539a938b8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitLeaf</b> (Visitor &amp;&amp;visitor, const Node &amp;node)</td></tr>
@@ -188,6 +200,10 @@ template&lt;typename Visitor , typename std::enable_if&lt;!std::is_void&lt; decl
 template&lt;typename Visitor &gt; </td></tr>
 <tr class="memitem:a4450e0995b414e8acd5b96c04dfca104"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>query</b> (const BoundsType &amp;queryEnv, const Node &amp;node, Visitor &amp;&amp;visitor)</td></tr>
 <tr class="separator:a4450e0995b414e8acd5b96c04dfca104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a996a10aad512876c09824c2c1e7433ae"><td class="memTemplParams" colspan="2"><a id="a996a10aad512876c09824c2c1e7433ae"></a>
+template&lt;typename Visitor &gt; </td></tr>
+<tr class="memitem:a996a10aad512876c09824c2c1e7433ae"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>queryPairs</b> (const Node &amp;queryNode, const Node &amp;searchNode, Visitor &amp;&amp;visitor)</td></tr>
+<tr class="separator:a996a10aad512876c09824c2c1e7433ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ac8e1816c4d52c98d3eaf357bdf7b0"><td class="memItemLeft" align="right" valign="top"><a id="a13ac8e1816c4d52c98d3eaf357bdf7b0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (const BoundsType &amp;queryEnv, const Node &amp;node, const ItemType &amp;item)</td></tr>
 <tr class="separator:a13ac8e1816c4d52c98d3eaf357bdf7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
