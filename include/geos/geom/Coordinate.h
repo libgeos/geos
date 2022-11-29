@@ -249,7 +249,7 @@ public:
 
     bool isNull() const
     {
-        return (std::isnan(x) && std::isnan(y) && std::isnan(z));
+        return CoordinateXY::isNull() && std::isnan(z);
     };
 
     /// 3D comparison
@@ -297,10 +297,9 @@ public:
         m = DoubleNotANumber;
     };
 
-
     bool isNull() const
     {
-        return (std::isnan(x) && std::isnan(y) && std::isnan(m));
+        return CoordinateXY::isNull() && std::isnan(m);
     }
     bool equals3D(const CoordinateXYM& other) const {
         return x == other.x && y == other.y && (m == other.m || (std::isnan(m) && std::isnan(other.m)));
