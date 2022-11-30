@@ -6,7 +6,6 @@
 // geos
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>

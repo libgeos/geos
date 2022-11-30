@@ -16,7 +16,6 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
@@ -35,7 +34,7 @@ namespace polygon {
 
 
 /* public */
-PolygonEarClipper::PolygonEarClipper(std::vector<Coordinate>& polyShell)
+PolygonEarClipper::PolygonEarClipper(const geom::CoordinateSequence& polyShell)
     : vertex(polyShell)
     , vertexSize(polyShell.size()-1)
     , vertexFirst(0)
@@ -61,10 +60,10 @@ PolygonEarClipper::createNextLinks(std::size_t size) const
 
 /* public static */
 void
-PolygonEarClipper::triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult)
+PolygonEarClipper::triangulate(const geom::CoordinateSequence& polyShell, TriList<Tri>& triListResult)
 {
     PolygonEarClipper clipper(polyShell);
-    return clipper.compute(triListResult);
+    clipper.compute(triListResult);
 }
 
 
@@ -348,7 +347,7 @@ std::unique_ptr<Polygon>
 PolygonEarClipper::toGeometry() const
 {
     auto gf = geom::GeometryFactory::create();
-    std::unique_ptr<geom::CoordinateArraySequence> cs(new geom::CoordinateArraySequence());
+    std::unique_ptr<geom::CoordinateSequence> cs(new geom::CoordinateSequence());
     std::size_t index = vertexFirst;
     for (std::size_t i = 0; i < vertexSize; i++) {
         const Coordinate& v = vertex[index];

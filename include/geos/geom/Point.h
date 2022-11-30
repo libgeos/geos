@@ -23,7 +23,6 @@
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
-#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
@@ -40,7 +39,6 @@
 namespace geos {
 namespace geom { // geos::geom
 class Coordinate;
-class CoordinateArraySequence;
 class CoordinateFilter;
 class CoordinateSequenceFilter;
 class GeometryComponentFilter;
@@ -96,6 +94,10 @@ public:
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
 
+    bool hasM() const override;
+
+    bool hasZ() const override;
+
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;
 
@@ -110,8 +112,13 @@ public:
     std::unique_ptr<Geometry> getBoundary() const override;
 
     void setXY(double x, double y) {
-        empty3d = empty2d = false;
-        coordinates.setAt({x, y}, 0);
+        if (isEmpty()) {
+            coordinates.add(x, y);
+        } else {
+            CoordinateXY& prev = coordinates.front<CoordinateXY>();
+            prev.x = x;
+            prev.y = y;
+        }
         geometryChangedAction();
     }
 
@@ -188,10 +195,7 @@ private:
     /**
      *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
      */
-    FixedSizeCoordinateSequence<1> coordinates;
-
-    bool empty2d;
-    bool empty3d;
+    CoordinateSequence coordinates;
 };
 
 } // namespace geos::geom

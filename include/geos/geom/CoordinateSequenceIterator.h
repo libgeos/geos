@@ -41,11 +41,11 @@ public:
     CoordinateSequenceIterator(SequenceType* seq, std::size_t size) : m_seq(seq), m_pos(static_cast<difference_type>(size)) {}
 
     reference operator*() const {
-        return (*m_seq)[static_cast<std::size_t>(m_pos)];
+        return m_seq->template getAt<value_type>(static_cast<std::size_t>(m_pos));
     }
 
     pointer operator->() const {
-        return &(*m_seq)[static_cast<std::size_t>(m_pos)];
+        return &m_seq->template getAt<value_type>(static_cast<std::size_t>(m_pos));
     }
 
     CoordinateSequenceIterator& operator++() {

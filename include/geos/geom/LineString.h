@@ -39,7 +39,6 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateArraySequence;
 class CoordinateSequenceFilter;
 }
 }
@@ -114,6 +113,10 @@ public:
 
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
+
+    bool hasM() const override;
+
+    bool hasZ() const override;
 
     /**
      * \brief
@@ -204,9 +207,6 @@ protected:
 
     /// Hopefully cleaner version of the above
     LineString(CoordinateSequence::Ptr && pts,
-               const GeometryFactory& newFactory);
-
-    LineString(std::vector<Coordinate> && pts,
                const GeometryFactory& newFactory);
 
     LineString* cloneImpl() const override { return new LineString(*this); }

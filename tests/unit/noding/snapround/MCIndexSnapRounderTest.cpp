@@ -14,7 +14,6 @@
 #include <geos/io/WKBReader.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>

@@ -23,7 +23,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h> // for Ptr typedefs
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/util/GeometryTransformer.h> // for DPTransformer inheritance
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
@@ -113,16 +112,7 @@ DPTransformer::transformCoordinates(
 {
     ::geos::ignore_unused_variable_warning(parent);
 
-    Coordinate::Vect inputPts;
-    coords->toVector(inputPts);
-
-    std::unique_ptr<Coordinate::Vect> newPts =
-        DouglasPeuckerLineSimplifier::simplify(inputPts, distanceTolerance);
-
-    return CoordinateSequence::Ptr(
-               factory->getCoordinateSequenceFactory()->create(
-                   newPts.release()
-               ));
+    return DouglasPeuckerLineSimplifier::simplify(*coords, distanceTolerance);
 }
 
 Geometry::Ptr

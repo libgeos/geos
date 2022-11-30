@@ -26,6 +26,8 @@ namespace tut {
 // Test Group
 //
 
+using geos::geom::CoordinateXYZM;
+
 // dummy data, not used
 struct test_wkbreader_data {
     geos::geom::PrecisionModel pm;
@@ -503,11 +505,20 @@ template<>
 void object::test<20>
 ()
 {
-    testInput(
-        "01D1070000000000000000F03F00000000000000400000000000000840",
-        "0101000000000000000000F03F0000000000000040"
-    );
+    auto g = readHex("01D1070000000000000000F03F00000000000000400000000000000840");
 
+    auto coords = g->getCoordinates();
+
+    ensure_equals("size", coords->size(), 1u);
+    ensure("!hasZ", !coords->hasZ());
+    ensure("hasM", coords->hasM());
+
+    CoordinateXYZM coord;
+    coords->getAt(0, coord);
+    ensure_equals(coord.x, 1);
+    ensure_equals(coord.y, 2);
+    ensure_equals(coord.m, 3);
+    ensure(std::isnan(coord.z));
 }
 
 // POINT ZM (1 2 3 4)
@@ -516,11 +527,20 @@ template<>
 void object::test<21>
 ()
 {
-    testInput(
-        "01B90B0000000000000000F03F000000000000004000000000000008400000000000001040",
-        "0101000080000000000000F03F00000000000000400000000000000840"
-    );
+    auto g = readHex("01B90B0000000000000000F03F000000000000004000000000000008400000000000001040");
 
+    auto coords = g->getCoordinates();
+
+    ensure_equals("size", coords->size(), 1u);
+    ensure("hasZ", coords->hasZ());
+    ensure("hasM", coords->hasM());
+
+    CoordinateXYZM coord;
+    coords->getAt(0, coord);
+    ensure_equals(coord.x, 1);
+    ensure_equals(coord.y, 2);
+    ensure_equals(coord.z, 3);
+    ensure_equals(coord.m, 4);
 }
 
 // LINESTRING M (1 2 3, 4 5 6)
@@ -529,11 +549,26 @@ template<>
 void object::test<22>
 ()
 {
-    testInput(
-        "01D207000002000000000000000000F03F00000000000000400000000000000840000000000000104000000000000014400000000000001840",
-        "010200000002000000000000000000F03F000000000000004000000000000010400000000000001440"
-    );
+    auto g = readHex("01D207000002000000000000000000F03F00000000000000400000000000000840000000000000104000000000000014400000000000001840");
 
+    auto coords = g->getCoordinates();
+
+    ensure_equals("size", coords->size(), 2u);
+    ensure("!hasZ", !coords->hasZ());
+    ensure("hasM", coords->hasM());
+
+    CoordinateXYZM c0, c1;
+    coords->getAt(0, c0);
+    ensure_equals(c0.x, 1);
+    ensure_equals(c0.y, 2);
+    ensure_equals(c0.m, 3);
+    ensure(std::isnan(c0.z));
+
+    coords->getAt(1, c1);
+    ensure_equals(c1.x, 4);
+    ensure_equals(c1.y, 5);
+    ensure_equals(c1.m, 6);
+    ensure(std::isnan(c1.z));
 }
 
 // LINESTRING ZM (1 2 3 4, 5 6 7 8)
@@ -542,11 +577,26 @@ template<>
 void object::test<23>
 ()
 {
-    testInput(
-        "01BA0B000002000000000000000000F03F000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001C400000000000002040",
-        "010200008002000000000000000000F03F00000000000000400000000000000840000000000000144000000000000018400000000000001C40"
-    );
+    auto g = readHex("01BA0B000002000000000000000000F03F000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001C400000000000002040");
 
+    auto coords = g->getCoordinates();
+
+    ensure_equals("size", coords->size(), 2u);
+    ensure("hasZ", coords->hasZ());
+    ensure("hasM", coords->hasM());
+
+    CoordinateXYZM c0, c1;
+    coords->getAt(0, c0);
+    ensure_equals(c0.x, 1);
+    ensure_equals(c0.y, 2);
+    ensure_equals(c0.z, 3);
+    ensure_equals(c0.m, 4);
+
+    coords->getAt(1, c1);
+    ensure_equals(c1.x, 5);
+    ensure_equals(c1.y, 6);
+    ensure_equals(c1.z, 7);
+    ensure_equals(c1.m, 8);
 }
 
 // EMPTY WKB TESTS
@@ -567,6 +617,16 @@ void object::test<24>
     ensure("POINT Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("POINT Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
 
+    // POINT M EMPTY
+    g = readHex(std::string("01D1070000000000000000F87F000000000000F87F000000000000F87F"));
+    ensure("POINT M EMPTY isEmpty", g->isEmpty());
+    ensure_equals("POINT M EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // POINT ZM EMPTY
+    g = readHex(std::string("01B90B0000000000000000F87F000000000000F87F000000000000F87F000000000000F87F"));
+    ensure("POINT ZM EMPTY isEmpty", g->isEmpty());
+    ensure_equals("POINT ZM EMPTY getCoordinateDimension", g->getCoordinateDimension(), 4);
+
     // LINESTRING EMPTY
     g = readHex(std::string("010200000000000000"));
     ensure("LINESTRING EMPTY isEmpty", g->isEmpty());
@@ -576,6 +636,16 @@ void object::test<24>
     g = readHex(std::string("010200008000000000"));
     ensure("LINESTRING Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("LINESTRING Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // LINESTRING M EMPTY
+    g = readHex(std::string("01D207000000000000"));
+    ensure("LINESTRING M EMPTY isEmpty", g->isEmpty());
+    ensure_equals("LINESTRING M EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // LINESTRING ZM EMPTY
+    g = readHex(std::string("01BA0B000000000000"));
+    ensure("LINESTRING ZM EMPTY isEmpty", g->isEmpty());
+    ensure_equals("LINESTRING ZM EMPTY getCoordinateDimension", g->getCoordinateDimension(), 4);
 
     // POLYGON EMPTY
     g = readHex(std::string("010300000000000000"));
@@ -587,6 +657,15 @@ void object::test<24>
     ensure("POLYGON Z EMPTY isEmpty", g->isEmpty());
     ensure_equals("POLYGON Z EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
 
+    // POLYGON M EMPTY
+    g = readHex(std::string("01D307000000000000"));
+    ensure("POLYGON M EMPTY isEmpty", g->isEmpty());
+    ensure_equals("POLYGON M EMPTY getCoordinateDimension", g->getCoordinateDimension(), 3);
+
+    // POLYGON ZM EMPTY
+    g = readHex(std::string("01BB0B000000000000"));
+    ensure("POLYGON ZM EMPTY isEmpty", g->isEmpty());
+    ensure_equals("POLYGON ZM EMPTY getCoordinateDimension", g->getCoordinateDimension(), 4);
 }
 
 // Malformed WKB wrong coordinate count

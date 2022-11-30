@@ -23,7 +23,6 @@
 #include <geos/geom/util/NoOpGeometryOperation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
@@ -143,8 +142,7 @@ GeometryPrecisionReducer::createFactory(const GeometryFactory& oldGF,
 {
     GeometryFactory::Ptr p_newFactory(
         GeometryFactory::create(&newPM,
-                                oldGF.getSRID(),
-                                const_cast<CoordinateSequenceFactory*>(oldGF.getCoordinateSequenceFactory()))
+                                oldGF.getSRID())
     );
     return p_newFactory;
 }

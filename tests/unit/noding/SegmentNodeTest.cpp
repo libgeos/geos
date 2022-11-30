@@ -6,8 +6,7 @@
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/util.h>
 // std
 #include <memory>
@@ -26,10 +25,7 @@ struct test_segmentnode_data {
     typedef std::unique_ptr<geos::noding::SegmentString>
     SegmentStringPtr;
 
-    const geos::geom::CoordinateSequenceFactory* factory_;
-
     test_segmentnode_data()
-        : factory_(geos::geom::CoordinateArraySequenceFactory::instance())
     {}
 };
 
@@ -54,7 +50,7 @@ void object::test<1>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -103,7 +99,7 @@ void object::test<2>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -146,7 +142,7 @@ void object::test<3>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -189,7 +185,7 @@ void object::test<4>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0u, coords_size);
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 

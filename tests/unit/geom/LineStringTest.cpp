@@ -7,7 +7,7 @@
 // geos
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -16,6 +16,7 @@
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/constants.h>
+#include <geos/util.h>
 // std
 #include <string>
 #include <cmath>
@@ -41,7 +42,7 @@ struct test_linestring_data {
         : pm_(1000)
         , factory_(geos::geom::GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
-        , empty_line_(factory_->createLineString(new geos::geom::CoordinateArraySequence()))
+        , empty_line_(factory_->createLineString(new geos::geom::CoordinateSequence()))
     {
         assert(nullptr != empty_line_);
     }
@@ -71,11 +72,11 @@ void object::test<1>
     using geos::geom::Coordinate;
 
     // Empty sequence of coordinates
-    CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
+    auto pseq = geos::detail::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     // Create empty linstring instance
-    LineStringAutoPtr ls(factory_->createLineString(pseq));
+    auto ls = factory_->createLineString(std::move(pseq));
 
     ensure(ls->isEmpty());
     ensure(ls->isSimple());
@@ -93,7 +94,7 @@ void object::test<2>
     // Non-empty sequence of coordinates
     const std::size_t size3 = 3;
 
-    CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
+    auto pseq = geos::detail::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, 0, 0));
@@ -103,7 +104,7 @@ void object::test<2>
     ensure_equals(pseq->size(), size3);
 
     // Create non-empty LineString instance
-    LineStringAutoPtr ls(factory_->createLineString(pseq));
+    auto ls = factory_->createLineString(std::move(pseq));
 
     ensure(!ls->isEmpty());
     ensure(ls->isSimple());
@@ -141,15 +142,14 @@ void object::test<3>
 ()
 {
     // Single-element sequence of coordinates
-    CoordArrayPtr pseq = nullptr;
     try {
-        pseq = new geos::geom::CoordinateArraySequence();
+        auto pseq = geos::detail::make_unique<CoordinateSequence>();
         ensure("sequence is null pointer.", pseq != nullptr);
         pseq->add(geos::geom::Coordinate(0, 0, 0));
         ensure_equals(pseq->size(), 1u);
 
         // Create incomplete LineString
-        LineStringAutoPtr ls(factory_->createLineString(pseq));
+        auto ls= factory_->createLineString(std::move(pseq));
         fail("IllegalArgumentException expected.");
     }
     catch(geos::util::IllegalArgumentException const& e) {
@@ -173,7 +173,7 @@ void object::test<4>
     // Non-empty sequence of coordinates
     const std::size_t size = 3;
 
-    CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
+    auto pseq = geos::detail::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, 0, 0));
@@ -183,12 +183,12 @@ void object::test<4>
     ensure_equals(pseq->size(), size);
 
     // Create example of LineString instance
-    LineStringAutoPtr examplar(factory_->createLineString(pseq));
+    auto examplar = factory_->createLineString(std::move(pseq));
 
     // Create copy
-    LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone().release()));
+    auto copy = examplar->clone();
 
-    ensure(nullptr != copy.get());
+    ensure(nullptr != copy);
 
     ensure(!copy->isEmpty());
     ensure(copy->isSimple());
@@ -552,7 +552,7 @@ void object::test<31>
     // Non-empty sequence of coordinates
     const std::size_t size3 = 3;
 
-    CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
+    auto pseq = geos::detail::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, geos::DoubleNotANumber));
@@ -562,7 +562,7 @@ void object::test<31>
 
     try {
         // Create non-empty LineString instance
-        auto lr(factory_->createLinearRing(pseq));
+        auto lr(factory_->createLinearRing(std::move(pseq)));
         ensure(!lr->isEmpty());
         fail("IllegalArgumentException expected.");
     }

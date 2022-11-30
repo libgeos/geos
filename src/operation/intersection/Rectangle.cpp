@@ -16,9 +16,9 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace operation { // geos::operation
@@ -49,8 +49,7 @@ Rectangle::toPolygon(const geom::GeometryFactory& f) const
 geom::LinearRing*
 Rectangle::toLinearRing(const geom::GeometryFactory& f) const
 {
-    const geom::CoordinateSequenceFactory* csf = f.getCoordinateSequenceFactory();
-    auto seq = csf->create(5, 2);
+    auto seq = detail::make_unique<geom::CoordinateSequence>(5u, false, false, false);
     seq->setAt(geom::Coordinate(xMin, yMin), 0);
     seq->setAt(geom::Coordinate(xMin, yMax), 1);
     seq->setAt(geom::Coordinate(xMax, yMax), 2);

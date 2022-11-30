@@ -17,7 +17,7 @@
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/SegmentString.h>
 
 
@@ -73,7 +73,7 @@ processIntersections(
             delete intSegments;
 
             // record intersecting segments
-            intSegments = new geom::CoordinateArraySequence();
+            intSegments = new geom::CoordinateSequence();
             intSegments->add(p00, true);
             intSegments->add(p01, true);
             intSegments->add(p10, true);

@@ -20,7 +20,6 @@
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -100,7 +99,7 @@ MaximumInscribedCircle::getRadiusLine()
 {
     compute();
 
-    auto cl = factory->getCoordinateSequenceFactory()->create(2);
+    auto cl = detail::make_unique<CoordinateSequence>(2u);
     cl->setAt(centerPt, 0);
     cl->setAt(radiusPt, 1);
     return factory->createLineString(std::move(cl));
@@ -219,7 +218,7 @@ MaximumInscribedCircle::compute()
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
     const auto& nearestPts = indexedDistance.nearestPoints(centerPoint.get());
-    radiusPt = nearestPts[0];
+    radiusPt = nearestPts->getAt(0);
 
     // flag computation
     done = true;

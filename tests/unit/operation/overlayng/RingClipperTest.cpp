@@ -39,7 +39,7 @@ struct test_ringclipper_data {
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
 
         RingClipper clipper(&clipEnv);
-        std::unique_ptr<CoordinateArraySequence> pts = clipper.clip((line->getCoordinates()).get());
+        auto pts = clipper.clip((line->getCoordinates()).get());
         std::unique_ptr<Geometry> result = line->getFactory()->createLineString(std::move(pts));
 
         // std::cout << std::endl;

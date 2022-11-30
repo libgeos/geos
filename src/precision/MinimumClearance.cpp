@@ -20,7 +20,6 @@
 #include <geos/precision/MinimumClearance.h>
 #include <geos/index/strtree/STRtree.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/operation/distance/FacetSequenceTreeBuilder.h>
 #include <geos/geom/LineSegment.h>
 
@@ -165,8 +164,7 @@ MinimumClearance::compute()
     }
 
     // initialize to "No Distance Exists" state
-    minClearancePts = std::unique_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2,
-                      2));
+    minClearancePts = detail::make_unique<CoordinateSequence>(2u, 2u);
     minClearance = DoubleInfinity;
 
     // handle empty geometries

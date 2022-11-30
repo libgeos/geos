@@ -143,7 +143,7 @@ private:
     * @return
     */
     static void extractSection(const CoordinateSequence* ring, int iStartIndex,
-            std::vector<bool>& isExtracted, std::vector<Coordinate>& extractedPoints);
+            std::vector<bool>& isExtracted, CoordinateSequence& extractedPoints);
 
     static std::size_t next(std::size_t i, std::size_t size);
 

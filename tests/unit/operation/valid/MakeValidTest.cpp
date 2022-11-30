@@ -2,13 +2,14 @@
 // geos
 #include <geos/constants.h> // for std::isnan
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/util.h>
 
 #include <utility.h>
 // std
@@ -44,23 +45,21 @@ template<>
 void object::test<1>
 ()
 {
-    std::vector<Coordinate> v;
-    v.emplace_back(2.22, 2.28);
-    v.emplace_back(7.67, 2.06);
-    v.emplace_back(10.98, 7.70);
-    v.emplace_back(9.39, 5.00);
-    v.emplace_back(7.96, 7.12);
-    v.emplace_back(6.77, 5.16);
-    v.emplace_back(7.43, 6.24);
-    v.emplace_back(3.70, 7.22);
-    v.emplace_back(5.72, 5.77);
-    v.emplace_back(4.18, 10.74);
-    v.emplace_back(2.20, 6.83);
-    v.emplace_back(2.22, 2.28);
+    auto cs = geos::detail::make_unique<CoordinateSequence>();
+    cs->add(2.22, 2.28);
+    cs->add(7.67, 2.06);
+    cs->add(10.98, 7.70);
+    cs->add(9.39, 5.00);
+    cs->add(7.96, 7.12);
+    cs->add(6.77, 5.16);
+    cs->add(7.43, 6.24);
+    cs->add(3.70, 7.22);
+    cs->add(5.72, 5.77);
+    cs->add(4.18, 10.74);
+    cs->add(2.20, 6.83);
+    cs->add(2.22, 2.28);
 
     auto gf = GeometryFactory::getDefaultInstance();
-
-    auto cs = gf->getCoordinateSequenceFactory()->create(std::move(v));
     auto lr = gf->createLinearRing(std::move(cs));
     auto errplyg = gf->createPolygon(std::move(lr));
 

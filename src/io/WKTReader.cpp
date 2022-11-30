@@ -29,9 +29,7 @@
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/util.h>
 #include <geos/util/string.h>
 
@@ -66,16 +64,13 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
 {
     std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->getCoordinateSequenceFactory()->create(std::size_t(0), ordinateFlags.hasZ() ? 3 : 2);
+        return detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
     }
 
-    Coordinate coord;
+    CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
-    // Check dim after reading first coord, because we may have picked up an implicit Z dimension
-    std::size_t dim = ordinateFlags.hasZ() ? 3 : 2;
-
-    auto coordinates = detail::make_unique<CoordinateArraySequence>(0u, dim);
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
@@ -91,7 +86,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags
 void
 WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
                                 OrdinateSet& ordinateFlags,
-                                Coordinate& coord) const {
+                                CoordinateXYZM& coord) const {
     coord.x = getNextNumber(tokenizer);
     coord.y = getNextNumber(tokenizer);
 
@@ -110,8 +105,7 @@ WKTReader::getPreciseCoordinate(StringTokenizer* tokenizer,
     }
 
     if (ordinateFlags.hasM()) {
-        // discard M ordinate
-        getNextNumber(tokenizer);
+        coord.m = getNextNumber(tokenizer);
     }
 
     ordinateFlags.setChangesAllowed(false); // First coordinate read; future coordinates must be consistent
@@ -312,16 +306,8 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
 std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
-    if(nextToken == "EMPTY") {
-        return geometryFactory->createPoint(ordinateFlags.hasZ() ? 3 : 2);
-    }
-
-    Coordinate coord;
-    getPreciseCoordinate(tokenizer, ordinateFlags, coord);
-    getNextCloser(tokenizer);
-
-    return std::unique_ptr<Point>(geometryFactory->createPoint(coord));
+    auto coords = getCoordinates(tokenizer, ordinateFlags);
+    return geometryFactory->createPoint(std::move(coords));
 }
 
 std::unique_ptr<LineString>
@@ -336,9 +322,7 @@ WKTReader::readLinearRingText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
 {
     auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     if (fixStructure && !coords->isRing()) {
-        std::unique_ptr<CoordinateArraySequence> cas(new CoordinateArraySequence(*coords));
-        cas->closeRing();
-        coords.reset(cas.release());
+        coords->closeRing();
     }
     return geometryFactory->createLinearRing(std::move(coords));
 }
@@ -356,10 +340,10 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
     if(tok == StringTokenizer::TT_NUMBER) {
 
         // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
-        auto coords = detail::make_unique<CoordinateArraySequence>();
+        auto coords = detail::make_unique<CoordinateSequence>();
 
+        CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
         do {
-            Coordinate coord;
             getPreciseCoordinate(tokenizer, ordinateFlags, coord);
             coords->add(coord);
             nextToken = getNextCloserOrComma(tokenizer);
@@ -419,7 +403,9 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlag
 {
     std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPolygon(ordinateFlags.hasZ() ? 3 : 2);
+        auto coords = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+        auto ring = geometryFactory->createLinearRing(std::move(coords));
+        return geometryFactory->createPolygon(std::move(ring));
     }
 
     std::vector<std::unique_ptr<LinearRing>> holes;

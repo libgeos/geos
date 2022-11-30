@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #include <geos/export.h>
 #include <array>
@@ -59,9 +59,9 @@ private:
 
     // Members
     const Envelope* limitEnv;
-    std::unique_ptr<std::vector<Coordinate>> ptList;
+    std::unique_ptr<geom::CoordinateSequence> ptList;
     const Coordinate* lastOutside;
-    std::vector<std::unique_ptr<CoordinateArraySequence>> sections;
+    std::vector<std::unique_ptr<CoordinateSequence>> sections;
 
     // Methods
     void addPoint(const Coordinate* p);
@@ -80,7 +80,7 @@ public:
         , lastOutside(nullptr)
         {};
 
-    std::vector<std::unique_ptr<CoordinateArraySequence>>& limit(const CoordinateSequence *pts);
+    std::vector<std::unique_ptr<CoordinateSequence>>& limit(const CoordinateSequence *pts);
 
 };
 

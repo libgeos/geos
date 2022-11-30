@@ -23,7 +23,7 @@
 
 #include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LinearRing.h>
 
 #include <cassert> // for testInvariant
@@ -173,7 +173,7 @@ private:
     /// the DirectedEdges making up this EdgeRing
     std::vector<DirectedEdge*> edges;
 
-    std::vector<geom::Coordinate> pts;
+    geom::CoordinateSequence pts;
 
     // label stores the locations of each geometry on the
     // face surrounded by this ring

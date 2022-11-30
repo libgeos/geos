@@ -15,12 +15,12 @@
 #include <geos/noding/BoundaryChainNoder.h>
 
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/SegmentString.h>
 
 
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 using geos::geom::Coordinate;
 
 
@@ -149,7 +149,7 @@ BoundaryChainNoder::BoundarySegmentMap::createChain(
     std::size_t startIndex,
     std::size_t endIndex)
 {
-    std::unique_ptr<CoordinateArraySequence> pts(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
     // Coordinate[] pts = new Coordinate[endIndex - startIndex + 1];
     for (std::size_t i = startIndex; i < endIndex + 1; i++) {
         pts->add(segString->getCoordinate(i));

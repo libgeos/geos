@@ -10,9 +10,6 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
@@ -35,7 +32,6 @@
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateArraySequence;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::LineString;
@@ -54,9 +50,6 @@ typedef geos::geom::Coordinate const* CoordinateCPtr;
 
 typedef geos::geom::CoordinateSequence* CoordSeqPtr;
 typedef geos::geom::CoordinateSequence const* CoordSeqCPtr;
-
-typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
-typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
 
 typedef geos::geom::Geometry* GeometryPtr;
 typedef geos::geom::Geometry const* GeometryCPtr;
@@ -116,7 +109,19 @@ ensure_equals_xyz(geos::geom::Coordinate const& actual,
     }
 }
 
+inline void ensure_same(const char* msg, double a, double b)
+{
+    if (std::isnan(a) && std::isnan(b)) {
+        return;
+    }
 
+    ensure_equals(msg, a, b);
+}
+
+inline void ensure_same(double a, double b)
+{
+    ensure_same("values are not equal", a, b);
+}
 
 //
 // Geometries structure comparators

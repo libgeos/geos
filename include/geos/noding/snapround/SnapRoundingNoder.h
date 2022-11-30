@@ -108,7 +108,7 @@ private:
     * @param pts the coordinates to round
     * @return array of rounded coordinates
     */
-    std::vector<geom::Coordinate> round(const std::vector<geom::Coordinate>& pts) const;
+    std::unique_ptr<geom::CoordinateSequence> round(const geom::CoordinateSequence& pts) const;
 
     /**
     * Computes new segment strings which are rounded and contain

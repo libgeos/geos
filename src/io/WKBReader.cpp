@@ -29,10 +29,9 @@
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/util.h>
 
 #include <iomanip>
 #include <ostream>
@@ -338,19 +337,15 @@ WKBReader::readGeometry()
 std::unique_ptr<Point>
 WKBReader::readPoint()
 {
-    readCoordinate();
+    auto seq = readCoordinateSequence(1);
 
     // POINT EMPTY
-    if (std::isnan(ordValues[0]) && std::isnan(ordValues[1])) {
-        return std::unique_ptr<Point>(factory.createPoint(hasZ ? 3 : 2));
+    const CoordinateXY& coord = seq->getAt<CoordinateXY>(0);
+    if (std::isnan(coord.x) && std::isnan(coord.y)) {
+        seq->clear();
     }
 
-    if (hasZ) {
-        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2])));
-    }
-    else {
-        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1])));
-    }
+    return factory.createPoint(std::move(seq));
 }
 
 std::unique_ptr<LineString>
@@ -376,9 +371,7 @@ WKBReader::readLinearRing()
     auto pts = readCoordinateSequence(size);
     // Replace unclosed ring with closed
     if (fixStructure && !pts->isRing()) {
-        std::unique_ptr<CoordinateArraySequence> cas(new CoordinateArraySequence(*pts));
-        cas->closeRing();
-        pts.reset(cas.release());
+        pts->closeRing();
     }
     return factory.createLinearRing(std::move(pts));
 }
@@ -393,11 +386,13 @@ WKBReader::readPolygon()
     std::size_t << "WKB numRings: " << numRings << std::endl;
 #endif
 
-    if(numRings == 0) {
-        return factory.createPolygon(hasZ ? 3 : 2);
+    std::unique_ptr<LinearRing> shell;
+    if (numRings == 0) {
+        auto coords = detail::make_unique<CoordinateSequence>(0u, hasZ, hasM);
+        shell = factory.createLinearRing(std::move(coords));
+    } else {
+        shell = readLinearRing();
     }
-
-    std::unique_ptr<LinearRing> shell(readLinearRing());
 
     if(numRings > 1) {
         std::vector<std::unique_ptr<LinearRing>> holes(numRings - 1);
@@ -485,16 +480,23 @@ std::unique_ptr<CoordinateSequence>
 WKBReader::readCoordinateSequence(uint32_t size)
 {
     minMemSize(GEOS_LINESTRING, size);
-    unsigned int targetDim = 2 + (hasZ ? 1 : 0);
-    auto seq = factory.getCoordinateSequenceFactory()->create(size, targetDim);
-    if(targetDim > inputDimension) {
-        targetDim = inputDimension;
-    }
+    auto seq = detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
+
+    CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     for(uint32_t i = 0; i < size; i++) {
         readCoordinate();
-        for(unsigned int j = 0; j < targetDim; j++) {
-            seq->setOrdinate(i, j, ordValues[j]);
+
+        unsigned int j = 0;
+        coord.x = ordValues[j++];
+        coord.y = ordValues[j++];
+        if (hasZ) {
+            coord.z = ordValues[j++];
         }
+        if (hasM) {
+            coord.m = ordValues[j++];
+        }
+
+        seq->setAt(coord, i);
     }
     return seq;
 }
@@ -503,16 +505,12 @@ void
 WKBReader::readCoordinate()
 {
     const PrecisionModel& pm = *factory.getPrecisionModel();
+
     for(std::size_t i = 0; i < inputDimension; ++i) {
         if (i < 2) {
             ordValues[i] = pm.makePrecise(dis.readDouble());
-        }
-        else if (hasZ) {
+        } else {
             ordValues[i] = dis.readDouble();
-        }
-        else {
-            // Read and throw away any extra (M) dimensions
-            dis.readDouble();
         }
     }
 #if DEBUG_WKB_READER

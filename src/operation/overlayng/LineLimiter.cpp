@@ -16,6 +16,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 #include <algorithm>
 
@@ -24,7 +25,7 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /*public*/
-std::vector<std::unique_ptr<CoordinateArraySequence>>&
+std::vector<std::unique_ptr<CoordinateSequence>>&
 LineLimiter::limit(const CoordinateSequence *pts)
 {
     // Reset for new limit run
@@ -51,7 +52,7 @@ void
 LineLimiter::addPoint(const Coordinate* p)
 {
     startSection();
-    ptList->emplace_back(*p);
+    ptList->add(*p, false);
 }
 
 /*private*/
@@ -96,11 +97,11 @@ void
 LineLimiter::startSection()
 {
     if (!isSectionOpen()) {
-        ptList.reset(new std::vector<Coordinate>);
+        ptList = detail::make_unique<CoordinateSequence>();
     }
 
     if (lastOutside != nullptr) {
-        ptList->emplace_back(*lastOutside);
+        ptList->add(*lastOutside, false);
     }
     lastOutside = nullptr;
 }
@@ -114,16 +115,15 @@ LineLimiter::finishSection()
 
     // finish off this section
     if (lastOutside != nullptr) {
-        ptList->emplace_back(*lastOutside);
+        ptList->add(*lastOutside, false);
         lastOutside = nullptr;
     }
 
     // remove repeated points from the section
-    ptList->erase(std::unique(ptList->begin(), ptList->end()), ptList->end());
+    assert(!ptList->hasRepeatedPoints());
+    //ptList->erase(std::unique(ptList->begin(), ptList->end()), ptList->end());
 
-    // std::unique_ptr<CoordinateArraySequence> cas();
-    CoordinateArraySequence* cas = new CoordinateArraySequence(ptList.release());
-    sections.emplace_back(cas);
+    sections.emplace_back(ptList.release());
     ptList.reset(nullptr);
 }
 

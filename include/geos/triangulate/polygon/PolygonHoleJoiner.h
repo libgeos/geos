@@ -64,7 +64,7 @@ private:
 
     static constexpr double EPS = 1.0E-4;
 
-    std::vector<Coordinate> shellCoords;
+    std::unique_ptr<CoordinateSequence> shellCoords;
 
     // orderedCoords is a copy of shellCoords for sort purposes
     std::set<Coordinate> shellCoordsSorted;
@@ -80,8 +80,6 @@ private:
     std::vector<std::unique_ptr<noding::SegmentString>> polySegStringStore;
 
     // Methods
-
-    static std::vector<Coordinate> ringCoordinates(const LinearRing* ring);
 
     void joinHoles();
 
@@ -172,15 +170,13 @@ public:
 
     PolygonHoleJoiner(const Polygon* p_inputPolygon);
 
-    static std::vector<Coordinate> join(const Polygon* inputPolygon);
+    static std::unique_ptr<CoordinateSequence> join(const Polygon* inputPolygon);
     static std::unique_ptr<Polygon> joinAsPolygon(const Polygon* inputPolygon);
 
     /**
     * Computes the joined ring.
-    *
-    * @return the points in the joined ring
     */
-    std::vector<Coordinate> compute();
+    void compute();
 
 
 };

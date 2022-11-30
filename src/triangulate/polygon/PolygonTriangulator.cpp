@@ -70,9 +70,9 @@ PolygonTriangulator::triangulatePolygon(const Polygon* poly, TriList<Tri>& triLi
     std::unique_ptr<Polygon> polyNorm = poly->clone();
     polyNorm->normalize();
 
-    std::vector<Coordinate> polyShell = PolygonHoleJoiner::join(polyNorm.get());
+    auto polyShell = PolygonHoleJoiner::join(polyNorm.get());
 
-    PolygonEarClipper::triangulate(polyShell, triList);
+    PolygonEarClipper::triangulate(*polyShell, triList);
     //Tri::validate(triList);
 
     return;

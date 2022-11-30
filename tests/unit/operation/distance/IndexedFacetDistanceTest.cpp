@@ -16,7 +16,6 @@
 #include <geos/profiler.h>
 #include <geos/constants.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -64,12 +63,12 @@ struct test_facetdistanceop_data {
         using geos::operation::distance::IndexedFacetDistance;
         GeomPtr g1(_wktreader.read(wkt1));
         GeomPtr g2(_wktreader.read(wkt2));
-        const auto& pts = IndexedFacetDistance::nearestPoints(g1.get(), g2.get());
-        ensure(fabs(pts[0].distance(pts[1])-distance) < 1e08);
-        ensure(fabs(pts[0].x - p1.x) < 1e-08);
-        ensure(fabs(pts[0].y - p1.y) < 1e-08);
-        ensure(fabs(pts[1].x - p2.x) < 1e-08);
-        ensure(fabs(pts[1].y - p2.y) < 1e-08);
+        auto pts = IndexedFacetDistance::nearestPoints(g1.get(), g2.get());
+        ensure(fabs((*pts)[0].distance((*pts)[1])-distance) < 1e08);
+        ensure(fabs((*pts)[0].x - p1.x) < 1e-08);
+        ensure(fabs((*pts)[0].y - p1.y) < 1e-08);
+        ensure(fabs((*pts)[1].x - p2.x) < 1e-08);
+        ensure(fabs((*pts)[1].y - p2.y) < 1e-08);
         return;
     }
 
@@ -90,16 +89,16 @@ struct test_facetdistanceop_data {
     std::unique_ptr<geos::geom::LineString>
     makeSinCircle(std::size_t nvertices, double radius, double amplitude)
     {
-        geos::geom::CoordinateArraySequence cs;
+        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>();
         std::vector<geos::geom::Coordinate> coords;
         for (std::size_t i = 0; i < nvertices; i++) {
             geos::geom::Coordinate c;
             double angle = (double)i*360.0/(double)nvertices;
             angle2sincircle(angle, radius, amplitude, &c.x, &c.y);
-            cs.add(c);
+            cs->add(c);
         }
 
-        std::unique_ptr<geos::geom::LineString> ls(_factory->createLineString(cs));
+        auto ls = _factory->createLineString(std::move(cs));
         return ls;
     }
 
@@ -263,9 +262,9 @@ void object::test<9>
     double d = ifd.distance(g1.get());
     ensure_equals("incorrect distance", d, 0.0, 0.001);
 
-    const auto& nearestPts = ifd.nearestPoints(g1.get());
-    ensure_equals("nearest points x", nearestPts[0].x, nearestPts[1].x, 0.00001);
-    ensure_equals("nearest points y", nearestPts[0].y, nearestPts[1].y, 0.00001);
+    auto nearestPts = ifd.nearestPoints(g1.get());
+    ensure_equals("nearest points x", (*nearestPts)[0].x, (*nearestPts)[1].x, 0.00001);
+    ensure_equals("nearest points y", (*nearestPts)[0].y, (*nearestPts)[1].y, 0.00001);
 }
 
 // Invalid polygon collapsed to a line

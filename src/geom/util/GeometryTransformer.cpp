@@ -19,7 +19,6 @@
 
 #include <geos/geom/util/GeometryTransformer.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
@@ -106,16 +105,6 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
     }
 
     throw IllegalArgumentException("Unknown Geometry subtype.");
-}
-
-std::unique_ptr<CoordinateSequence>
-GeometryTransformer::createCoordinateSequence(
-    std::unique_ptr< std::vector<Coordinate> > coords)
-{
-    return std::unique_ptr<CoordinateSequence>(
-               factory->getCoordinateSequenceFactory()->create(
-                   coords.release())
-           );
 }
 
 std::unique_ptr<CoordinateSequence>

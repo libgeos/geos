@@ -65,7 +65,7 @@ public:
 private:
     double distanceTolerance;
     const Geometry* inputGeom;
-    static std::unique_ptr<Coordinate::Vect> densifyPoints(const Coordinate::Vect pts, double distanceTolerance,
+    static std::unique_ptr<CoordinateSequence> densifyPoints(const CoordinateSequence& pts, double distanceTolerance,
             const PrecisionModel* precModel);
 
     class GEOS_DLL DensifyTransformer: public GeometryTransformer {

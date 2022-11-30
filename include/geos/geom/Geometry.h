@@ -367,8 +367,12 @@ public:
                t == GEOS_MULTIPOLYGON;
     }
 
-    /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
+    /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ or XYM, 4=XYZM).
     virtual uint8_t getCoordinateDimension() const = 0; //Abstract
+
+    virtual bool hasZ() const = 0;
+
+    virtual bool hasM() const = 0;
 
     /**
      * \brief

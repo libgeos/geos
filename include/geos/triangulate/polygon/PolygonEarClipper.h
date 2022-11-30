@@ -78,7 +78,7 @@ private:
     * Thus for convex interior angles
     * the vertices forming the angle are in CW orientation.
     */
-    std::vector<Coordinate> vertex;
+    const CoordinateSequence& vertex;
     std::vector<std::size_t> vertexNext;
     std::size_t vertexSize;
 
@@ -177,7 +177,7 @@ public:
     *
     * @param polyShell the polygon vertices to process
     */
-    PolygonEarClipper(std::vector<Coordinate>& polyShell);
+    PolygonEarClipper(const geom::CoordinateSequence& polyShell);
 
     /**
     * Triangulates a polygon via ear-clipping.
@@ -185,7 +185,7 @@ public:
     * @param polyShell the vertices of the polygon
     * @param triListResult vector to fill in with the resultant Tri s
     */
-    static void triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult);
+    static void triangulate(const geom::CoordinateSequence& polyShell, TriList<Tri>& triListResult);
 
     /**
     * Sets whether flat corners formed by collinear adjacent line segments

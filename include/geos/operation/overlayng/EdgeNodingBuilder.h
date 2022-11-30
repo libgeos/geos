@@ -21,7 +21,7 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -121,9 +121,8 @@ private:
     void addPolygon(const Polygon* poly, uint8_t geomIndex);
     void addPolygonRing(const LinearRing* ring, bool isHole, uint8_t geomIndex);
     void addLine(const LineString* line, uint8_t geomIndex);
-    void addLine(std::unique_ptr<CoordinateArraySequence>& pts, uint8_t geomIndex);
-    void addEdge(std::unique_ptr<std::vector<Coordinate>> pts, const EdgeSourceInfo* info);
-    void addEdge(std::unique_ptr<CoordinateArraySequence>& cas, const EdgeSourceInfo* info);
+    void addLine(std::unique_ptr<CoordinateSequence>& pts, uint8_t geomIndex);
+    void addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeSourceInfo* info);
 
     // Create a EdgeSourceInfo* owned by EdgeNodingBuilder
     const EdgeSourceInfo* createEdgeSourceInfo(uint8_t index, int depthDelta, bool isHole);
@@ -147,7 +146,7 @@ private:
     * limit the line to the clip envelope.
     *
     */
-    std::vector<std::unique_ptr<CoordinateArraySequence>>& limit(const LineString* line);
+    std::vector<std::unique_ptr<CoordinateSequence>>& limit(const LineString* line);
 
     /**
     * If a clipper is present,
@@ -163,7 +162,7 @@ private:
     * @param ring the line to clip
     * @return the points in the clipped line
     */
-    std::unique_ptr<CoordinateArraySequence> clip(const LinearRing* line);
+    std::unique_ptr<CoordinateSequence> clip(const LinearRing* line);
 
     /**
     * Removes any repeated points from a linear component.
@@ -172,7 +171,7 @@ private:
     * @param line the line to process
     * @return the points of the line with repeated points removed
     */
-    static std::unique_ptr<CoordinateArraySequence> removeRepeatedPoints(const LineString* line);
+    static std::unique_ptr<CoordinateSequence> removeRepeatedPoints(const LineString* line);
 
     static int computeDepthDelta(const LinearRing* ring, bool isHole);
 

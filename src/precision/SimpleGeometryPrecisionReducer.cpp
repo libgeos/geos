@@ -22,7 +22,6 @@
 #include <geos/geom/util/CoordinateOperation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
@@ -74,16 +73,13 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     auto csSize = cs->size();
 
-    auto vc = detail::make_unique<std::vector<Coordinate>>(csSize);
+    auto reducedCoords = detail::make_unique<CoordinateSequence>(csSize);
 
     // copy coordinates and reduce
     for(unsigned int i = 0; i < csSize; ++i) {
-        (*vc)[i] = cs->getAt(i);
-        sgpr->getPrecisionModel()->makePrecise((*vc)[i]);
+        (*reducedCoords)[i] = cs->getAt(i);
+        sgpr->getPrecisionModel()->makePrecise((*reducedCoords)[i]);
     }
-
-    // reducedCoords take ownership of 'vc'
-    auto reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc.release());
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.

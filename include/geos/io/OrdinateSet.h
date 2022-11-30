@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/util/GEOSException.h>
 
 namespace geos {
 namespace io {

@@ -29,7 +29,6 @@
 namespace geos {
 namespace geom { // geos::geom
 class Coordinate;
-class CoordinateArraySequence;
 }
 }
 

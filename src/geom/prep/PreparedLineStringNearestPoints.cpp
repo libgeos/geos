@@ -20,7 +20,6 @@
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/geom/prep/PreparedLineStringNearestPoints.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 
 namespace geos {
@@ -30,10 +29,8 @@ namespace prep { // geos.geom.prep
 std::unique_ptr<geom::CoordinateSequence>
 PreparedLineStringNearestPoints::nearestPoints(const geom::Geometry* g) const
 {
-    const GeometryFactory *gf = prepLine.getGeometry().getFactory();
-    const CoordinateSequenceFactory *cf = gf->getCoordinateSequenceFactory();
     operation::distance::IndexedFacetDistance *idf = prepLine.getIndexedFacetDistance();
-    return cf->create(idf->nearestPoints(g));
+    return idf->nearestPoints(g);
 }
 
 } // namespace geos.geom.prep

@@ -67,9 +67,7 @@ PointGeometryUnion::Union() const
         ptComp.reset(geomFact->createPoint(*(exteriorCoords.begin())));
     }
     else {
-        std::vector<Coordinate> coords(exteriorCoords.size());
-        std::copy(exteriorCoords.begin(), exteriorCoords.end(), coords.begin());
-        ptComp.reset(geomFact->createMultiPoint(coords));
+        ptComp = geomFact->createMultiPoint(exteriorCoords);
     }
 
     // add point component to the other geometry

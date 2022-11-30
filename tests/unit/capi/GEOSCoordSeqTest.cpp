@@ -152,7 +152,7 @@ void object::test<3>
     ensure_equals(zcheck, z);
 
     // correct error on wrong ordinate index
-    ensure(0 == GEOSCoordSeq_setOrdinate(cs_, 0, 3, z));
+    ensure(0 == GEOSCoordSeq_setOrdinate(cs_, 0, 37, z));
 }
 
 // Test swapped setX calls (see bug #133, fixed)
@@ -345,10 +345,10 @@ void object::test<11>
     unsigned int dims;
 
     ensure(0 != GEOSCoordSeq_getSize(cs_, &size));
-    ensure_equals(size, 1u);
+    ensure_equals("Seq has expected size", size, 1u);
 
     ensure(0 != GEOSCoordSeq_getDimensions(cs_, &dims));
-    ensure_equals(dims, 2u);
+    ensure_equals("seq has expected dim", dims, 2u);
 
     double x = 10;
     double y = 11;
@@ -361,12 +361,14 @@ void object::test<11>
     ensure_equals(xcheck, x);
     ensure_equals(ycheck, y);
 
+    // Calling getXYZ on a 2D seq gets you NaN for Z
     ensure(0 != GEOSCoordSeq_getXYZ(cs_, 0, &xcheck, &ycheck, &zcheck));
 
     ensure_equals(xcheck, x);
     ensure_equals(ycheck, y);
-    ensure(std::isnan(zcheck));
+    ensure("z is NaN on 2D seq", std::isnan(zcheck));
 
+    // Calling setXYZ on a 2D seq coerces to 3D
     double z = 12;
     GEOSCoordSeq_setXYZ(cs_, 0, x, y, z);
 
@@ -417,45 +419,45 @@ void object::test<12>()
 }
 
 // test 3D from/to buffer
-    template<>
-    template<>
-    void object::test<13>()
-    {
-        unsigned int N = 10;
-        unsigned int dim = 3;
-        std::vector<double> values(N * dim);
-        for (size_t i = 0; i < values.size(); i++) {
-            values[i] = static_cast<double>(i);
-        }
-
-        cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, true, false);
-
-        double x, y, z;
-        ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
-        ensure_equals(x, 0.0);
-        ensure_equals(y, 1.0);
-        ensure_equals(z, 2.0);
-
-        ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
-        ensure_equals(x, static_cast<double>(N-1)*3);
-        ensure_equals(y, static_cast<double>(N-1)*3 + 1);
-        ensure_equals(z, static_cast<double>(N-1)*3 + 2);
-
-        unsigned int dim_out;
-        ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
-        ensure_equals(dim_out, dim);
-
-        std::vector<double> out3(N * 3);
-        ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), true, false));
-        ensure(out3 == values);
-
-        std::vector<double> out2(N * 2);
-        ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), false, false));
-        ensure_equals(out2[0], values[0]); // X1
-        ensure_equals(out2[1], values[1]); // Y1
-        ensure_equals(out2[2], values[3]); // X2
-        ensure_equals(out2[3], values[4]); // Y2
+template<>
+template<>
+void object::test<13>()
+{
+    unsigned int N = 10;
+    unsigned int dim = 3;
+    std::vector<double> values(N * dim);
+    for (size_t i = 0; i < values.size(); i++) {
+        values[i] = static_cast<double>(i);
     }
+
+    cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, true, false);
+
+    double x, y, z;
+    ensure(GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z));
+    ensure_equals(x, 0.0);
+    ensure_equals(y, 1.0);
+    ensure_equals(z, 2.0);
+
+    ensure(GEOSCoordSeq_getXYZ(cs_, N - 1, &x, &y, &z));
+    ensure_equals(x, static_cast<double>(N-1)*3);
+    ensure_equals(y, static_cast<double>(N-1)*3 + 1);
+    ensure_equals(z, static_cast<double>(N-1)*3 + 2);
+
+    unsigned int dim_out;
+    ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
+    ensure_equals(dim_out, dim);
+
+    std::vector<double> out3(N * 3);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3.data(), true, false));
+    ensure(out3 == values);
+
+    std::vector<double> out2(N * 2);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), false, false));
+    ensure_equals(out2[0], values[0]); // X1
+    ensure_equals(out2[1], values[1]); // Y1
+    ensure_equals(out2[2], values[3]); // X2
+    ensure_equals(out2[3], values[4]); // Y2
+}
 
 // test 2D from/to arrays
 template<>
@@ -564,10 +566,10 @@ void object::test<16>()
 
     cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, false, true);
 
-    // XYM buffer produces 2D coordinate sequence
+    // XYM buffer produces 3D coordinate sequence
     unsigned int dim_out;
     ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
-    ensure_equals(dim_out, 2u);
+    ensure_equals(dim_out, 3u);
 
     // Check first coordinate
     double x, y, z;
@@ -605,10 +607,10 @@ void object::test<17>()
 
     cs_ = GEOSCoordSeq_copyFromBuffer(values.data(), N, true, true);
 
-    // XYZM buffer creates a 3D coordinate sequence
+    // XYZM buffer creates a 4D coordinate sequence
     unsigned int dim_out;
     ensure(GEOSCoordSeq_getDimensions(cs_, &dim_out));
-    ensure_equals(dim_out, 3u);
+    ensure_equals(dim_out, 4u);
 
     // Check first coordinate
     double x, y, z;
@@ -626,13 +628,14 @@ void object::test<17>()
     // Copy to 4D buffer
     std::vector<double> out2(N * 4);
     ensure(GEOSCoordSeq_copyToBuffer(cs_, out2.data(), true, true));
-    ensure_equals(out2[0], values[0]); // X1
-    ensure_equals(out2[1], values[1]); // Y1
-    ensure_equals(out2[2], values[2]); // Z1
-    ensure(std::isnan(out2[3]));
-    ensure_equals(out2[4], values[4]); // X2
-    ensure_equals(out2[5], values[5]); // Y2
-    ensure_equals(out2[6], values[6]); // Z2
+    ensure_equals("X1", out2[0], values[0]);
+    ensure_equals("Y1", out2[1], values[1]);
+    ensure_equals("Z1", out2[2], values[2]);
+    ensure_equals("M1", out2[3], values[3]);
+    ensure_equals("X2", out2[4], values[4]);
+    ensure_equals("Y2", out2[5], values[5]);
+    ensure_equals("Z2", out2[6], values[6]);
+    ensure_equals("w2", out2[7], values[7]);
 }
 
 } // namespace tut

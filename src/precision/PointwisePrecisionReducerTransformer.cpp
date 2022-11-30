@@ -19,12 +19,12 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/precision/PointwisePrecisionReducerTransformer.h>
+#include <geos/util.h>
 
 
 using namespace geos::geom;
@@ -49,29 +49,25 @@ PointwisePrecisionReducerTransformer::transformCoordinates(const CoordinateSeque
     (void)(parent); // ignore unused variable
 
     if (coords->isEmpty()) {
-        CoordinateArraySequence* cas = new CoordinateArraySequence(std::size_t(0u), coords->getDimension());
-        return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
-    std::vector<Coordinate> coordsReduce = reducePointwise(coords);
-    CoordinateArraySequence* cas = new CoordinateArraySequence(std::move(coordsReduce));
-    return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+    return reducePointwise(coords);
 }
 
 
 /* private */
-std::vector<Coordinate>
+std::unique_ptr<CoordinateSequence>
 PointwisePrecisionReducerTransformer::reducePointwise(const CoordinateSequence* coordinates)
 {
-    std::vector<Coordinate> coordReduce;
-    coordReduce.reserve(coordinates->size());
+    auto coordReduce = detail::make_unique<CoordinateSequence>();
+    coordReduce->reserve(coordinates->size());
 
     // copy coordinates and reduce
-    for (std::size_t i = 0; i < coordinates->size(); i++) {
-        Coordinate coord = coordinates->getAt(i);
+    coordinates->forEach<Coordinate>([&coordReduce, this](Coordinate coord) {
         targetPM.makePrecise(coord);
-        coordReduce.emplace_back(coord);
-    }
+        coordReduce->add(coord);
+    });
     return coordReduce;
 }
 

@@ -22,9 +22,11 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/util.h>
 #include <map>
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::Dimension;
 using geos::geom::Geometry;
 using geos::geom::LineString;
@@ -134,17 +136,17 @@ BoundaryOp::boundaryMultiLineString(const geom::MultiLineString& mLine)
     auto bdyPts = computeBoundaryCoordinates(mLine);
 
     // return Point or MultiPoint
-    if (bdyPts.size() == 1) {
-        return std::unique_ptr<Geometry>(m_geomFact.createPoint(bdyPts[0]));
+    if (bdyPts->size() == 1) {
+        return std::unique_ptr<Geometry>(m_geomFact.createPoint(bdyPts->getAt(0)));
     }
     // this handles 0 points case as well
-    return m_geomFact.createMultiPoint(std::move(bdyPts));
+    return std::unique_ptr<Geometry>(m_geomFact.createMultiPoint(*bdyPts));
 }
 
-std::vector<geom::Coordinate>
+std::unique_ptr<CoordinateSequence>
 BoundaryOp::computeBoundaryCoordinates(const geom::MultiLineString& mLine)
 {
-    std::vector<Coordinate> bdyPts;
+    auto bdyPts = detail::make_unique<CoordinateSequence>();
     std::map<Coordinate, int> endpointMap;
 
     for (std::size_t i = 0; i < mLine.getNumGeometries(); i++) {
@@ -161,7 +163,7 @@ BoundaryOp::computeBoundaryCoordinates(const geom::MultiLineString& mLine)
     for (const auto& entry: endpointMap) {
         auto valence = entry.second;
         if (m_bnRule.isInBoundary(valence)) {
-            bdyPts.push_back(entry.first);
+            bdyPts->add(entry.first);
         }
     }
 

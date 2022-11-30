@@ -16,20 +16,20 @@
 
 #include <benchmark/benchmark.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainOverlapAction.h>
 
 using geos::geom::Coordinate;
 using geos::geom::LineSegment;
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 using geos::geom::Envelope;
 using geos::index::chain::MonotoneChain;
 using geos::index::chain::MonotoneChainOverlapAction;
 
 static void BM_MonotoneChainOverlaps(benchmark::State& state) {
-    CoordinateArraySequence cs1;
-    CoordinateArraySequence cs2;
+    CoordinateSequence cs1;
+    CoordinateSequence cs2;
 
     std::default_random_engine e(12345);
     std::uniform_real_distribution<> dist(0, 1);

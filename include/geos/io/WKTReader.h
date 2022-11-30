@@ -132,7 +132,7 @@ private:
     const geom::PrecisionModel* precisionModel;
     bool fixStructure;
 
-    void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, geom::Coordinate&) const;
+    void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, geom::CoordinateXYZM&) const;
 
     static bool isNumberNext(io::StringTokenizer* tokenizer);
     static bool isOpenerNext(io::StringTokenizer* tokenizer);

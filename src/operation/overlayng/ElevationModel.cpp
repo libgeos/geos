@@ -113,7 +113,7 @@ ElevationModel::add(const Geometry& geom)
         void filter_ro(const geom::CoordinateSequence& seq, std::size_t i) override
         {
             if (! seq.hasZ()) {
-                hasZ = false;;
+                hasZ = false;
                 return;
             }
             const Coordinate& c = seq.getAt(i);

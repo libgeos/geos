@@ -6,15 +6,18 @@
 #include <utility.h>
 
 // geos
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKTReader.h>
 // #include <geos/io/WKTWriter.h>
 #include <geos/triangulate/polygon/PolygonTriangulator.h>
+#include <geos/util.h>
 
 // std
 #include <stdio.h>
 
 using geos::triangulate::polygon::PolygonTriangulator;
+using geos::geom::CoordinateSequence;
 using geos::geom::Geometry;
 
 namespace tut {
@@ -186,16 +189,11 @@ template<>
 template<>
 void object::test<12>()
 {
-    std::vector<geos::geom::Coordinate> shell_points{{0, 0}, {0, 10}, {3, 10}, {3, 0}, {0, 0}};
-    std::vector<geos::geom::Coordinate> hole_1_points{{1, 1}, {2, 1}, {2, 2}, {1, 2}, {1, 1}};
-    std::vector<geos::geom::Coordinate> hole_2_points{{1, 8}, {1, 9}, {2, 9}, {2, 8}, {1, 8}};
+    auto shell_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{0, 0}, Coordinate{0, 10}, Coordinate{3, 10}, Coordinate{3, 0}, Coordinate{0, 0}});
+    auto hole_1_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 1}, Coordinate{2, 1}, Coordinate{2, 2}, Coordinate{1, 2}, Coordinate{1, 1}});
+    auto hole_2_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 8}, Coordinate{1, 9}, Coordinate{2, 9}, Coordinate{2, 8}, Coordinate{1, 8}});
 
-    auto* geom_factory      = geos::geom::GeometryFactory::getDefaultInstance();
-    auto* coord_seq_factory = geom_factory->getCoordinateSequenceFactory();
-
-    auto shell_seq  = coord_seq_factory->create(std::move(shell_points));
-    auto hole_1_seq = coord_seq_factory->create(std::move(hole_1_points));
-    auto hole_2_seq = coord_seq_factory->create(std::move(hole_2_points));
+    auto* geom_factory = geos::geom::GeometryFactory::getDefaultInstance();
 
     auto shell_ring  = geom_factory->createLinearRing(std::move(shell_seq));
     auto hole_1_ring = geom_factory->createLinearRing(std::move(hole_1_seq));

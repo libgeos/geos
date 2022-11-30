@@ -21,7 +21,6 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
@@ -94,18 +93,18 @@ GeometryCollection::setSRID(int newSRID)
 std::unique_ptr<CoordinateSequence>
 GeometryCollection::getCoordinates() const
 {
-    std::vector<Coordinate> coordinates(getNumPoints());
+    auto coordinates = detail::make_unique<CoordinateSequence>(getNumPoints());
 
     std::size_t k = 0;
     for(const auto& g : geometries) {
         auto childCoordinates = g->getCoordinates(); // TODO avoid this copy where getCoordinateRO() exists
         std::size_t npts = childCoordinates->getSize();
         for(std::size_t j = 0; j < npts; ++j) {
-            coordinates[k] = childCoordinates->getAt(j);
+            coordinates->setAt(childCoordinates->getAt(j), k);
             k++;
         }
     }
-    return CoordinateArraySequenceFactory::instance()->create(std::move(coordinates));
+    return coordinates;
 }
 
 bool
@@ -156,6 +155,28 @@ GeometryCollection::getCoordinateDimension() const
         dimension = std::max(dimension, g->getCoordinateDimension());
     }
     return dimension;
+}
+
+bool
+GeometryCollection::hasM() const
+{
+    for (const auto& g : geometries) {
+        if (g->hasM()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
+GeometryCollection::hasZ() const
+{
+    for (const auto& g : geometries) {
+        if (g->hasZ()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 size_t

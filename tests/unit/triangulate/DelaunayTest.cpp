@@ -13,7 +13,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 //#include <stdio.h>
 
 using namespace geos::triangulate;
@@ -198,11 +198,10 @@ template<>
 void object::test<9>
 ()
 {
-    std::vector<Coordinate>* v = new std::vector<Coordinate>();
-    v->push_back(Coordinate(150, 200));
-    v->push_back(Coordinate(180, 270));
-    v->push_back(Coordinate(275, 163));
-    geos::geom::CoordinateArraySequence seq(v);
+    geos::geom::CoordinateSequence seq;
+    seq.add(Coordinate(150, 200));
+    seq.add(Coordinate(180, 270));
+    seq.add(Coordinate(275, 163));
 
     Envelope env = DelaunayTriangulationBuilder::envelope(seq);
 

@@ -19,12 +19,12 @@
 #include <geos/constants.h>
 #include <geos/geom/util/SineStarFactory.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cmath>
@@ -56,7 +56,7 @@ SineStarFactory::createSineStar() const
     double centreX = env->getMinX() + radius;
     double centreY = env->getMinY() + radius;
 
-    std::vector<CoordinateXY> pts(nPts + 1);
+    auto pts = detail::make_unique<CoordinateSequence>(nPts + 1);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         // the fraction of the way thru the current arm - in [0,1]
@@ -76,12 +76,11 @@ SineStarFactory::createSineStar() const
         double ang = i * (2 * MATH_PI / nPts);
         double x = curveRadius * cos(ang) + centreX;
         double y = curveRadius * sin(ang) + centreY;
-        pts[iPt++] = coord(x, y);
+        (*pts)[iPt++] = coord(x, y);
     }
-    pts[iPt] = pts[0];
+    (*pts)[iPt] = (*pts)[0];
 
-    auto cs = geomFact->getCoordinateSequenceFactory()->create(std::move(pts));
-    auto ring = geomFact->createLinearRing(std::move(cs));
+    auto ring = geomFact->createLinearRing(std::move(pts));
     auto poly = geomFact->createPolygon(std::move(ring));
     return poly;
 }

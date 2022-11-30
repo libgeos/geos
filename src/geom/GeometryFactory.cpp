@@ -20,7 +20,6 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/DefaultCoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
@@ -57,16 +56,12 @@ namespace {
 
 class gfCoordinateOperation: public util::CoordinateOperation {
     using CoordinateOperation::edit;
-    const CoordinateSequenceFactory* _gsf;
 public:
-    gfCoordinateOperation(const CoordinateSequenceFactory* gsf)
-        : _gsf(gsf)
-    {}
     std::unique_ptr<CoordinateSequence>
     edit(const CoordinateSequence* coordSeq,
          const Geometry*) override
     {
-        return _gsf->create(*coordSeq);
+        return detail::make_unique<CoordinateSequence>(*coordSeq);
     }
 };
 
@@ -77,8 +72,7 @@ public:
 /*protected*/
 GeometryFactory::GeometryFactory()
     :
-    SRID(0),
-    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
+    SRID(0)
     , _refCount(0), _autoDestroy(false)
 {
 #if GEOS_DEBUG
@@ -95,72 +89,9 @@ GeometryFactory::create()
 }
 
 /*protected*/
-GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
-                                 CoordinateSequenceFactory* nCoordinateSequenceFactory)
-    :
-    SRID(newSRID)
-    , _refCount(0), _autoDestroy(false)
-{
-#if GEOS_DEBUG
-    std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(PrecisionModel[" << pm << "], SRID)" <<
-              std::endl;
-#endif
-    if(pm) {
-        precisionModel = *pm;
-    }
-
-    if(! nCoordinateSequenceFactory) {
-        coordinateListFactory = DefaultCoordinateSequenceFactory::instance();
-    }
-    else {
-        coordinateListFactory = nCoordinateSequenceFactory;
-    }
-}
-
-/*public static*/
-GeometryFactory::Ptr
-GeometryFactory::create(const PrecisionModel* pm, int newSRID,
-                        CoordinateSequenceFactory* nCoordinateSequenceFactory)
-{
-    return GeometryFactory::Ptr(
-               new GeometryFactory(pm, newSRID, nCoordinateSequenceFactory)
-           );
-}
-
-/*protected*/
-GeometryFactory::GeometryFactory(
-    CoordinateSequenceFactory* nCoordinateSequenceFactory)
-    :
-    SRID(0)
-    , _refCount(0), _autoDestroy(false)
-{
-#if GEOS_DEBUG
-    std::cerr << "GEOS_DEBUG: GeometryFactory[" << this << "]::GeometryFactory(CoordinateSequenceFactory[" <<
-              nCoordinateSequenceFactory << "])" << std::endl;
-#endif
-    if(! nCoordinateSequenceFactory) {
-        coordinateListFactory = DefaultCoordinateSequenceFactory::instance();
-    }
-    else {
-        coordinateListFactory = nCoordinateSequenceFactory;
-    }
-}
-
-/*public static*/
-GeometryFactory::Ptr
-GeometryFactory::create(
-    CoordinateSequenceFactory* nCoordinateSequenceFactory)
-{
-    return GeometryFactory::Ptr(
-               new GeometryFactory(nCoordinateSequenceFactory)
-           );
-}
-
-/*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm)
     :
-    SRID(0),
-    coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
+    SRID(0)
     , _refCount(0), _autoDestroy(false)
 {
 #if GEOS_DEBUG
@@ -183,7 +114,6 @@ GeometryFactory::create(const PrecisionModel* pm)
 /*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
     : SRID(newSRID)
-    , coordinateListFactory(DefaultCoordinateSequenceFactory::instance())
     , _refCount(0)
     , _autoDestroy(false)
 {
@@ -209,7 +139,6 @@ GeometryFactory::create(const PrecisionModel* pm, int newSRID)
 GeometryFactory::GeometryFactory(const GeometryFactory& gf)
     : precisionModel(gf.precisionModel)
     , SRID(gf.SRID)
-    , coordinateListFactory(gf.coordinateListFactory)
     , _refCount(0)
     , _autoDestroy(false)
 {}
@@ -247,7 +176,7 @@ GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
 std::unique_ptr<Geometry>
 GeometryFactory::toGeometry(const Envelope* envelope) const
 {
-    Coordinate coord;
+    CoordinateXY coord;
 
     if(envelope->isNull()) {
         return createPoint();
@@ -258,7 +187,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
         return std::unique_ptr<Geometry>(createPoint(coord));
     }
 
-    auto cl = coordinateListFactory->create(5, 2);
+    auto cl = detail::make_unique<CoordinateSequence>(5u, false, false, false);
 
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
@@ -287,11 +216,15 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::size_t coordinateDimension) const
 {
-    if (coordinateDimension == 3) {
-        geos::geom::FixedSizeCoordinateSequence<0> seq(coordinateDimension);
-        return std::unique_ptr<Point>(createPoint(seq));
-    }
-    return std::unique_ptr<Point>(new Point(nullptr, this));
+    auto coords = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    return std::unique_ptr<Point>(new Point(coords.release(), this));
+}
+
+/*public*/
+std::unique_ptr<Point>
+GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
+{
+    return std::unique_ptr<Point>(new Point(coords.release(), this));
 }
 
 std::unique_ptr<Point>
@@ -477,15 +410,6 @@ GeometryFactory::createLinearRing(CoordinateSequence::Ptr && newCoords) const
 }
 
 /*public*/
-std::unique_ptr<LinearRing>
-GeometryFactory::createLinearRing(std::vector<Coordinate> && newCoords)
-const
-{
-    // Can't use make_unique with protected constructor
-    return std::unique_ptr<LinearRing>(new LinearRing(std::move(newCoords), *this));
-}
-
-/*public*/
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
@@ -501,17 +425,6 @@ MultiPoint*
 GeometryFactory::createMultiPoint(std::vector<Geometry*>* newPoints) const
 {
     return new MultiPoint(newPoints, this);
-}
-
-std::unique_ptr<MultiPoint>
-GeometryFactory::createMultiPoint(std::vector<Coordinate> && newPoints) const {
-    std::vector<std::unique_ptr<Geometry>> pts(newPoints.size());
-
-    for(std::size_t i = 0; i < newPoints.size(); ++i) {
-        pts[i].reset(createPoint(newPoints[i]));
-    }
-
-    return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(pts), *this));
 }
 
 std::unique_ptr<MultiPoint>
@@ -571,24 +484,10 @@ GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 }
 
 /*public*/
-MultiPoint*
-GeometryFactory::createMultiPoint(const std::vector<Coordinate>& fromCoords) const
-{
-    std::size_t npts = fromCoords.size();
-    std::vector<std::unique_ptr<Geometry>> pts(npts);
-
-    for(std::size_t i = 0; i < npts; ++i) {
-        pts[i].reset(createPoint(fromCoords[i]));
-    }
-
-    return new MultiPoint(std::move(pts), *this);
-}
-
-/*public*/
 std::unique_ptr<Polygon>
 GeometryFactory::createPolygon(std::size_t coordinateDimension) const
 {
-    auto cs = coordinateListFactory->create(std::size_t(0), coordinateDimension);
+    auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
     auto lr = createLinearRing(cs.release());
     return std::unique_ptr<Polygon>(createPolygon(lr, nullptr));
 }
@@ -611,11 +510,10 @@ const
 
 /*public*/
 std::unique_ptr<Polygon>
-GeometryFactory::createPolygon(std::vector<Coordinate> && coords)
+GeometryFactory::createPolygon(CoordinateSequence && coords)
 const
 {
-    const geom::CoordinateSequenceFactory* csf = getCoordinateSequenceFactory();
-    std::unique_ptr<geom::CoordinateSequence> cs = csf->create(std::move(coords));
+    auto cs = detail::make_unique<CoordinateSequence>(std::move(coords));
     std::unique_ptr<geom::LinearRing> lr = createLinearRing(std::move(cs));
     std::unique_ptr<geom::Polygon> ply = createPolygon(std::move(lr));
     return ply;
@@ -651,7 +549,8 @@ std::unique_ptr<LineString>
 GeometryFactory::createLineString(std::size_t coordinateDimension) const
 {
     if (coordinateDimension == 3) {
-        return createLineString(coordinateListFactory->create(std::size_t(0), coordinateDimension));
+        auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+        return createLineString(std::move(cs));
     }
     return std::unique_ptr<LineString>(new LineString(nullptr, this));
 }
@@ -675,15 +574,6 @@ const
 /*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(CoordinateSequence::Ptr && newCoords)
-const
-{
-    // Can't use make_unique with protected constructor
-    return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
-}
-
-/*public*/
-std::unique_ptr<LineString>
-GeometryFactory::createLineString(std::vector<Coordinate> && newCoords)
 const
 {
     // Can't use make_unique with protected constructor
@@ -861,7 +751,7 @@ GeometryFactory::createGeometry(const Geometry* g) const
     // could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
     //return g->clone();
     util::GeometryEditor editor(this);
-    gfCoordinateOperation coordOp(coordinateListFactory);
+    gfCoordinateOperation coordOp;
     return editor.edit(g, &coordOp).release();
 }
 

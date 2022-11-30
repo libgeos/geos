@@ -8,9 +8,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
@@ -22,6 +20,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 // std
 #include <vector>
 #include <cstring> // std::size_t
@@ -101,25 +100,19 @@ void object::test<2>
 {
     using geos::geom::GeometryFactory;
     using geos::geom::PrecisionModel;
-    using geos::geom::CoordinateArraySequenceFactory;
-
-    CoordinateArraySequenceFactory csf;
 
     {
         PrecisionModel pm(1.0);
-        GeometryFactory::Ptr gf = GeometryFactory::create(&pm, srid_, &csf);
+        GeometryFactory::Ptr gf = GeometryFactory::create(&pm, srid_);
 
         ensure_equals(gf->getSRID(), srid_);
         ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED);
-
-        ensure_equals(&csf, gf->getCoordinateSequenceFactory());
 
         auto geo = gf->createEmptyGeometry();
         ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED);
     }
-    // csf lifetime must exceed lifetime of the GeometryFactory instance
 
 } // test<2>
 
@@ -130,12 +123,9 @@ void object::test<3>
 ()
 {
     using geos::geom::GeometryFactory;
-    using geos::geom::CoordinateArraySequenceFactory;
-
-    CoordinateArraySequenceFactory csf;
 
     {
-        GeometryFactory::Ptr gf = GeometryFactory::create(&csf);
+        GeometryFactory::Ptr gf = GeometryFactory::create();
 
         ensure_equals(gf->getSRID(), 0);
         ensure_equals(gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
@@ -145,7 +135,6 @@ void object::test<3>
         ensure_equals(geo->getSRID(), gf->getSRID());
         ensure_equals(geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING);
     }
-    // csf lifetime must exceed lifetime of the GeometryFactory instance
 }
 
 // Test of user's constructor
@@ -320,12 +309,12 @@ void object::test<10>
 {
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    CoordArrayPtr sequence = new geos::geom::CoordinateArraySequence();
+    auto sequence = geos::detail::make_unique<CoordinateSequence>();
 
     ensure("sequence is null pointer.", sequence != nullptr);
     sequence->add(coord);
 
-    PointPtr pt = factory_->createPoint(sequence);
+    PointPtr pt = factory_->createPoint(sequence.release());
 
     ensure("createPoint() returned null pointer.", pt != nullptr);
     ensure("createPoint() returned empty point.", !pt->isEmpty());
@@ -375,7 +364,7 @@ void object::test<11>
 {
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    geos::geom::CoordinateArraySequence sequence;
+    geos::geom::CoordinateSequence sequence;
     sequence.add(coord);
 
     PointPtr pt = factory_->createPoint(sequence);
@@ -458,11 +447,11 @@ void object::test<13>
 ()
 {
     const std::size_t size = 5;
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
+    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), size);
 
-    LinearRingPtr lr = factory_->createLinearRing(coords);
+    LinearRingPtr lr = factory_->createLinearRing(coords.release());
     ensure("createLinearRing() returned null pointer.", lr != nullptr);
     ensure("createLinearRing() returned empty point.", !lr->isEmpty());
     ensure(lr->isSimple());
@@ -489,7 +478,7 @@ void object::test<14>
 ()
 {
     const std::size_t size = 5;
-    geos::geom::CoordinateArraySequence coords(size);
+    geos::geom::CoordinateSequence coords(size);
     ensure_equals(coords.getSize(), size);
 
     LinearRingPtr lr = factory_->createLinearRing(coords);
@@ -555,11 +544,11 @@ void object::test<16>
 ()
 {
     const std::size_t size = 5;
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
+    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), size);
 
-    LineStringPtr line = factory_->createLineString(coords);
+    auto line = factory_->createLineString(std::move(coords));
     ensure("createLineString() returned null pointer.", line != nullptr);
     ensure("createLineString() returned empty point.", !line->isEmpty());
     ensure(line->isSimple());
@@ -574,9 +563,6 @@ void object::test<16>
     ensure_equals(line->getNumPoints(), size);
     ensure_equals(line->getLength(), 0.0);
     ensure_equals(line->getArea(), 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(line);
 }
 
 // Test of createLineString(const CoordinateSequence& coordinates) const
@@ -586,7 +572,7 @@ void object::test<17>
 ()
 {
     const std::size_t size = 5;
-    geos::geom::CoordinateArraySequence coords(size);
+    geos::geom::CoordinateSequence coords(size);
     ensure_equals(coords.getSize(), size);
 
     LineStringPtr line = factory_->createLineString(coords);
@@ -658,7 +644,7 @@ void object::test<19>
     const std::size_t size = 7;
 
     // Create sequence of coordinates
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
+    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);
     coords->setAt(Coordinate(5, 5), 1);
@@ -670,7 +656,7 @@ void object::test<19>
     ensure_equals(coords->getSize(), size);
 
     // Create exterior ring
-    LinearRingPtr exterior = factory_->createLinearRing(coords);
+    auto exterior = factory_->createLinearRing(std::move(coords));
     ensure("createLinearRing returned null pointer.", exterior != nullptr);
     ensure("createLinearRing() returned empty point.", !exterior->isEmpty());
     ensure(exterior->isSimple());
@@ -682,7 +668,7 @@ void object::test<19>
     ensure(exterior->getLength() != 0.0);
 
     // Create polygon
-    PolygonPtr poly = factory_->createPolygon(exterior, nullptr);
+    auto poly = factory_->createPolygon(std::move(exterior));
     ensure("createPolygon returned null pointer.", poly != nullptr);
     ensure("createPolygon() returned empty point.", !poly->isEmpty());
     ensure(poly->isSimple());
@@ -692,9 +678,6 @@ void object::test<19>
     ensure_equals(poly->getNumPoints(), size);
     ensure(poly->getArea() != 0.0);
     ensure(poly->getLength() != 0.0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(poly);
 }
 
 // Test of createPolygon(const LinearRing& shell, const std::vector<Geometry*>& holes) const
@@ -708,7 +691,7 @@ void object::test<20>
     const std::size_t interiorSize = 5;
 
     // Create sequence of coordinates
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(exteriorSize);
+    auto coords = geos::detail::make_unique<CoordinateSequence>(exteriorSize);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);
     coords->setAt(Coordinate(5, 5), 1);
@@ -720,7 +703,7 @@ void object::test<20>
     ensure_equals(coords->getSize(), exteriorSize);
 
     // Create exterior ring
-    LinearRingPtr exterior = factory_->createLinearRing(coords);
+    auto exterior = factory_->createLinearRing(std::move(coords));
     ensure("createLinearRing returned null pointer.", exterior != nullptr);
     ensure("createLinearRing() returned empty point.", !exterior->isEmpty());
     ensure(exterior->isSimple());
@@ -732,20 +715,16 @@ void object::test<20>
     ensure(exterior->getLength() != 0.0);
 
     // Create collection of holes
-    auto geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
-    ensure(geo != nullptr);
-
-    LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo.release());
+    auto hole = reader_.read<LinearRing>(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
     ensure(hole != nullptr);
     ensure(hole->isRing());
     ensure_equals(hole->getNumPoints(), interiorSize);
 
-    // REMEMBER TO DEALLOCATE THIS COLLECTION
-    std::vector<LinearRingPtr> holes;
-    holes.push_back(hole);
+    std::vector<decltype(hole)> holes;
+    holes.emplace_back(std::move(hole));
 
     // Create polygon using copy ctor
-    PolygonPtr poly = factory_->createPolygon((*exterior), holes);
+    auto poly = factory_->createPolygon(std::move(exterior), std::move(holes));
     ensure("createPolygon returned null pointer.", poly != nullptr);
     ensure("createPolygon() returned empty point.", !poly->isEmpty());
     ensure(poly->isSimple());
@@ -758,15 +737,6 @@ void object::test<20>
 
     ensure_equals(poly->getNumGeometries(), 1u);
     ensure_equals(poly->getNumInteriorRing(), 1u);
-
-    // FREE MEMORY
-    for(auto& h : holes) {
-        delete h;
-    }
-    holes.clear();
-
-    factory_->destroyGeometry(exterior);
-    factory_->destroyGeometry(poly);
 }
 
 // Test of createGeometryCollection() const
@@ -798,32 +768,29 @@ void object::test<22>
     using geos::geom::Coordinate;
 
     // Buffer for geometries
-    std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
+    std::vector<std::unique_ptr<Geometry>> vec;
 
     // Add single point
     Coordinate coord(x_, y_, z_);
-    GeometryPtr point = factory_->createPoint(coord);
+    std::unique_ptr<Geometry> point(factory_->createPoint(coord));
     ensure(point != nullptr);
-    vec->push_back(point);
+    vec.push_back(std::move(point));
 
     // Add single LineString
-    CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(3);
+    auto coords = geos::detail::make_unique<CoordinateSequence>(3u);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 0), 0);
     coords->setAt(Coordinate(5, 5), 1);
     coords->setAt(Coordinate(10, 5), 2);
     ensure_equals(coords->getSize(), 3u);
-    GeometryPtr line = factory_->createLineString(coords);
-    vec->push_back(line);
+    auto line = factory_->createLineString(std::move(coords));
+    vec.push_back(std::move(line));
 
     // Create geometry collection
-    GeometryColPtr col = factory_->createGeometryCollection(vec);
-    ensure(coords != nullptr);
+    auto col = factory_->createGeometryCollection(std::move(vec));
+    ensure(col != nullptr);
     ensure_equals(col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
     ensure_equals(col->getNumGeometries(), 2u);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(col);
 }
 
 // Test of createGeometryCollection(const std::vector<Geometry*>& newGeoms) const
@@ -999,7 +966,7 @@ void object::test<27>
     const std::size_t size = 3;
 
     // Add collection of coordinates
-    geos::geom::CoordinateArraySequence coords(size);
+    geos::geom::CoordinateSequence coords(size);
     coords.setAt(Coordinate(0, 0), 0);
     coords.setAt(Coordinate(5, 5), 1);
     coords.setAt(Coordinate(10, 5), 2);
@@ -1066,35 +1033,32 @@ void object::test<29>
     const std::size_t size = 5;
     const std::size_t lineSize = 2;
 
-    std::vector<GeometryPtr>* lines = new std::vector<GeometryPtr>();
+    std::vector<std::unique_ptr<Geometry>> lines;
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
-        CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
+        auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(lineSize);
         ensure(coords != nullptr);
         coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
         coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
         ensure_equals(coords->getSize(), lineSize);
 
-        LineStringPtr line = factory_->createLineString(coords);
+        auto line = factory_->createLineString(std::move(coords));
         ensure("createLineString() returned empty point.", !line->isEmpty());
         ensure_equals(line->getNumPoints(), lineSize);
         ensure(line->isSimple());
         ensure(line->getCoordinate() != nullptr);
         ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
 
-        lines->push_back(line);
+        lines.push_back(std::move(line));
     }
 
-    MultiLineStringPtr mls = factory_->createMultiLineString(lines);
+    auto mls = factory_->createMultiLineString(std::move(lines));
     ensure(mls != nullptr);
     // TODO - mloskot - why isValid() returns false?
     //ensure( mls->isValid() );
     ensure_equals(mls->getNumGeometries(), size);
     ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(mls);
 }
 
 // Test of createMultiLineString(const std::vector<Geometry*>& fromLines) const
@@ -1108,38 +1072,32 @@ void object::test<30>
     const std::size_t size = 5;
     const std::size_t lineSize = 2;
 
-    std::vector<const geos::geom::Geometry*> lines;
+    std::vector<std::unique_ptr<geos::geom::Geometry>> lines;
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
-        CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
+        auto coords = geos::detail::make_unique<CoordinateSequence>(lineSize);
         ensure(coords != nullptr);
         coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
         coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
         ensure_equals(coords->getSize(), lineSize);
 
-        LineStringPtr line = factory_->createLineString(coords);
+        auto line = factory_->createLineString(std::move(coords));
         ensure("createLineString() returned empty point.", !line->isEmpty());
         ensure_equals(line->getNumPoints(), lineSize);
         ensure(line->isSimple());
         ensure(line->getCoordinate() != nullptr);
         ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
 
-        lines.push_back(line);
+        lines.push_back(std::move(line));
     }
 
-    MultiLineStringPtr mls = factory_->createMultiLineString(lines);
+    auto mls = factory_->createMultiLineString(std::move(lines));
     ensure(mls != nullptr);
     // TODO - mloskot - why isValid() returns false?
     //ensure( mls->isValid() );
     ensure_equals(mls->getNumGeometries(), size);
     ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(mls);
-    for(auto& g : lines) {
-        delete g;
-    }
 }
 
 // Test of createMultiPolygon() const

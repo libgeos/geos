@@ -23,8 +23,8 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h> // shouldn't be using this
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 
 #include <sstream>
 #include <string>
@@ -145,26 +145,24 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
     std::cerr << "    npts:" << npts << std::endl;
 #endif // GEOS_DEBUG
 
-    std::vector<Coordinate> vc;
-    vc.reserve(npts);
+    auto vc = detail::make_unique<CoordinateSequence>();
+    vc->reserve(npts);
 
-    vc.push_back(ei0->coord);
+    vc->add(ei0->coord);
     for(auto i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; ++i) {
         if(! useIntPt1 && ei1->segmentIndex == i) {
-            vc.push_back(ei1->coord);
+            vc->add(ei1->coord);
         }
         else {
-            vc.push_back(edge->pts->getAt(i));
+            vc->add(edge->pts->getAt(i));
         }
     }
 
     if(useIntPt1) {
-        vc.push_back(ei1->coord);
+        vc->add(ei1->coord);
     }
 
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateArraySequence(std::move(vc)));
-
-    return new Edge(pts.release(), edge->getLabel());
+    return new Edge(vc.release(), edge->getLabel());
 }
 
 std::string

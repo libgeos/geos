@@ -29,7 +29,6 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geom/Position.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
@@ -174,7 +173,7 @@ EdgeRing::computeRing()
     if(ring != nullptr) {
         return;    // don't compute more than once
     }
-    auto coordSeq = geometryFactory->getCoordinateSequenceFactory()->create(std::move(pts));
+    auto coordSeq = detail::make_unique<CoordinateSequence>(std::move(pts));
     ring = geometryFactory->createLinearRing(std::move(coordSeq));
     isHoleVar = Orientation::isCCW(ring->getCoordinatesRO());
 
@@ -322,11 +321,11 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
 
     if(isForward) {
         if(isFirstEdge) {
-            edgePts->toVector(pts);
+            pts = *edgePts;
             return;
         } else {
             for(std::size_t i = 1; i < numEdgePts; ++i) {
-                pts.push_back(edgePts->getAt(i));
+                pts.add(edgePts->getAt(i));
             }
         }
     }
@@ -337,7 +336,7 @@ EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
             startIndex = numEdgePts;
         }
         for(std::size_t i = startIndex; i > 0; --i) {
-            pts.push_back(edgePts->getAt(i - 1));
+            pts.add(edgePts->getAt(i - 1));
         }
     }
 

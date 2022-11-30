@@ -125,7 +125,7 @@ private:
     static bool findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei1,
                            size_t& collapsedVertexIndex);
 
-    void addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, std::vector<geom::Coordinate>& coordList) const;
+    void addEdgeCoordinates(const SegmentNode* ei0, const SegmentNode* ei1, geom::CoordinateSequence& coordList) const;
 
 public:
 
@@ -223,7 +223,7 @@ public:
     * @return an array of Coordinates
     *
     */
-    std::vector<geom::Coordinate> getSplitCoordinates();
+    std::unique_ptr<geom::CoordinateSequence> getSplitCoordinates();
 
 
 };

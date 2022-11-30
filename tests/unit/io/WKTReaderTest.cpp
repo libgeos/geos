@@ -44,7 +44,9 @@ struct test_wktreader_data {
 
     void ensure_dimension(const std::string & wkt, std::size_t dim) const {
         auto geom = wktreader.read(wkt);
-        ensure_equals(geom->getCoordinateDimension(), dim);
+        ensure_equals(wkt,
+                      static_cast<std::size_t>(geom->getCoordinateDimension()),
+                      dim);
     }
 
     void ensure_parseexception(const std::string & wkt) const {
@@ -90,13 +92,15 @@ void object::test<2>
         "POINT(-117 33 10)",
         "POINTZ(-117 33 10)",
         "POINT Z(-117 33 10)",
-        "POINT (-117 33 10 6)" // discard implicit M
+        "POINT Z (-117 33 10)"
     };
 
     for (const auto& wkt : variants) {
         GeomPtr geom(wktreader.read(wkt));
         auto coords = geom->getCoordinates();
 
+        ensure(coords->hasZ());
+        ensure(!coords->hasM());
         ensure(coords->getDimension() == 3);
         ensure(coords->getOrdinate(0, geos::geom::CoordinateSequence::Z) == 10.0);
     }
@@ -111,19 +115,28 @@ void object::test<3>
     ensure_dimension("LINESTRING(-117 33, -116 34)", 2);
 }
 
-// 4 - Ensure we can read ZM geometries, just discarding the M.
+// 4 - Ensure we can read ZM geometries
 template<>
 template<>
 void object::test<4>
 ()
 {
-    GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
-    auto coords = geom->getCoordinates();
+    auto geom = wktreader.read<geos::geom::LineString>("LINESTRING ZM (-117 33 2 3, -116 34 4 5)");
+    auto coords = geom->getCoordinatesRO();
 
-    ensure(coords->getDimension() == 3);
+    ensure_equals(coords->getDimension(), 4u);
 
-    ensure_equals(wktwriter.write(geom.get()),
-                  std::string("LINESTRING Z (-117 33 2, -116 34 4)"));
+    auto c0 = coords->getAt<geos::geom::CoordinateXYZM>(0);
+    ensure_equals(c0.x, -117);
+    ensure_equals(c0.y, 33);
+    ensure_equals(c0.z, 2);
+    ensure_equals(c0.m, 3);
+
+    auto c1 = coords->getAt<geos::geom::CoordinateXYZM>(1);
+    ensure_equals(c1.x, -116);
+    ensure_equals(c1.y, 34);
+    ensure_equals(c1.z, 4);
+    ensure_equals(c1.m, 5);
 }
 
 // 5 - Check support for mixed case keywords (and old style 3D)
@@ -219,31 +232,31 @@ void object::test<9>
 ()
 {
     ensure_dimension("POINT EMPTY", 2);
-    ensure_dimension("POINTM EMPTY", 2);
-    ensure_dimension("POINT M EMPTY", 2);
+    ensure_dimension("POINTM EMPTY", 3);
+    ensure_dimension("POINT M EMPTY", 3);
     ensure_dimension("POINTZ EMPTY", 3);
     ensure_dimension("POINT Z EMPTY", 3);
-    ensure_dimension("POINTZM EMPTY", 3);
-    ensure_dimension("POINT ZM EMPTY", 3);
-    ensure_dimension("POINT Z M EMPTY", 3);
+    ensure_dimension("POINTZM EMPTY", 4);
+    ensure_dimension("POINT ZM EMPTY", 4);
+    ensure_dimension("POINT Z M EMPTY", 4);
 
     ensure_dimension("LINESTRING EMPTY", 2);
-    ensure_dimension("LINESTRINGM EMPTY", 2);
-    ensure_dimension("LINESTRING M EMPTY", 2);
+    ensure_dimension("LINESTRINGM EMPTY", 3);
+    ensure_dimension("LINESTRING M EMPTY", 3);
     ensure_dimension("LINESTRINGZ EMPTY", 3);
     ensure_dimension("LINESTRING Z EMPTY", 3);
-    ensure_dimension("LINESTRINGZM EMPTY", 3);
-    ensure_dimension("LINESTRING ZM EMPTY", 3);
-    ensure_dimension("LINESTRING Z M EMPTY", 3);
+    ensure_dimension("LINESTRINGZM EMPTY", 4);
+    ensure_dimension("LINESTRING ZM EMPTY", 4);
+    ensure_dimension("LINESTRING Z M EMPTY", 4);
 
     ensure_dimension("POLYGON EMPTY", 2);
-    ensure_dimension("POLYGONM EMPTY", 2);
-    ensure_dimension("POLYGON M EMPTY", 2);
+    ensure_dimension("POLYGONM EMPTY", 3);
+    ensure_dimension("POLYGON M EMPTY", 3);
     ensure_dimension("POLYGONZ EMPTY", 3);
     ensure_dimension("POLYGON Z EMPTY", 3);
-    ensure_dimension("POLYGONZM EMPTY", 3);
-    ensure_dimension("POLYGON ZM EMPTY", 3);
-    ensure_dimension("POLYGON Z M EMPTY", 3);
+    ensure_dimension("POLYGONZM EMPTY", 4);
+    ensure_dimension("POLYGON ZM EMPTY", 4);
+    ensure_dimension("POLYGON Z M EMPTY", 4);
 }
 
 
@@ -325,10 +338,10 @@ void object::test<14>
 ()
 {
     auto geom = wktreader.read("POINT M(1 2 3)");
-    ensure_equals(geom->getCoordinateDimension(), 2u);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 
     geom = wktreader.read("POINTM(1 2 3)");
-    ensure_equals(geom->getCoordinateDimension(), 2u);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 }
 
 // https://github.com/libgeos/geos/issues/669
@@ -339,7 +352,7 @@ void object::test<15>
 {
     auto geom = wktreader.read("LINESTRINGZ(0 0 1, 1 1 1)");
 
-    ensure_equals(geom->getCoordinateDimension(), 3);
+    ensure_equals(geom->getCoordinateDimension(), 3u);
 }
 
 // Raise exception on dimensionality inconsistent with declared
@@ -409,6 +422,5 @@ void object::test<21>
         ensure_equals(msg, "ParseException: Unexpected text after end of geometry");
     }
 }
-
 
 } // namespace tut

@@ -22,6 +22,7 @@
 #include <geos/operation/overlayng/CoverageUnion.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Triangle.h>
@@ -30,6 +31,7 @@
 
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateList;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
@@ -102,18 +104,18 @@ HullTriangulation::traceBoundaryPolygon(
         HullTri* tri = triList[0];
         return tri->toPolygon(factory);
     }
-    std::vector<Coordinate> pts = traceBoundary(triList);
+    auto&& pts = traceBoundary(triList);
     return factory->createPolygon(std::move(pts));
 }
 
 
 /* private static */
-std::vector<Coordinate>
+CoordinateSequence
 HullTriangulation::traceBoundary(TriList<HullTri>& triList)
 {
     HullTri* triStart = findBorderTri(triList);
 
-    CoordinateList coordList;
+    CoordinateSequence coordList;
     HullTri* tri = triStart;
     do {
         TriIndex borderIndex = tri->boundaryIndexCCW();
@@ -129,7 +131,7 @@ HullTriangulation::traceBoundary(TriList<HullTri>& triList)
         tri = nextBorderTri(tri);
     } while (tri != triStart);
     coordList.closeRing();
-    return *(coordList.toCoordinateArray());
+    return coordList;
 }
 
 

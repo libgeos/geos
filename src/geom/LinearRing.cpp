@@ -20,7 +20,6 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
 
@@ -51,15 +50,6 @@ LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
 {
     validateConstruction();
 }
-
-LinearRing::LinearRing(std::vector<Coordinate> && newCoords,
-                       const GeometryFactory& factory)
-    :
-    LineString(std::move(newCoords), factory)
-{
-    validateConstruction();
-}
-
 
 void
 LinearRing::validateConstruction()
@@ -126,7 +116,7 @@ LinearRing::reverseImpl() const
 
     assert(points.get());
     auto seq = points->clone();
-    CoordinateSequence::reverse(seq.get());
+    seq->reverse();
     assert(getFactory());
     return getFactory()->createLinearRing(std::move(seq)).release();
 }

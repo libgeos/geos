@@ -21,7 +21,6 @@
 #include <cmath>
 
 #include <geos/geom/util/Densifier.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -38,6 +37,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <limits>
 #include <vector>
@@ -59,16 +59,15 @@ Densifier::DensifyTransformer::transformCoordinates(const CoordinateSequence* co
 {
     Coordinate::Vect emptyPts;
     Coordinate::Vect inputPts;
-    coords->toVector(inputPts);
-    std::unique_ptr<Coordinate::Vect> newPts = Densifier::densifyPoints(inputPts, distanceTolerance,
-            parent->getPrecisionModel());
+    auto newPts = Densifier::densifyPoints(*coords, distanceTolerance, parent->getPrecisionModel());
+
     if(const LineString* ls = dynamic_cast<const LineString*>(parent)) {
         if(ls->getNumPoints() <= 1) {
             newPts->clear();
         }
     }
-    CoordinateSequence::Ptr csp(factory->getCoordinateSequenceFactory()->create(newPts.release()));
-    return csp;
+
+    return newPts;
 }
 
 Geometry::Ptr
@@ -105,16 +104,17 @@ Densifier::Densifier(const Geometry* geom):
     inputGeom(geom)
 {}
 
-std::unique_ptr<Coordinate::Vect>
-Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, const PrecisionModel* precModel)
+std::unique_ptr<CoordinateSequence>
+Densifier::densifyPoints(const CoordinateSequence& pts, double distanceTolerance, const PrecisionModel* precModel)
 {
     geom::LineSegment seg;
-    geom::CoordinateList coordList;
+    auto coordList = detail::make_unique<CoordinateSequence>();
 
-    for(Coordinate::Vect::const_iterator it = pts.begin(), itEnd = pts.end() - 1; it < itEnd; ++it) {
+    auto items = pts.items<Coordinate>();
+    for(auto it = items.cbegin(), itEnd = items.cend() - 1; it < itEnd; ++it) {
         seg.p0 = *it;
         seg.p1 = *(it + 1);
-        coordList.insert(coordList.end(), seg.p0, false);
+        coordList->add(seg.p0, false);
         const double len = seg.getLength();
         const double densifiedSegCountDbl = ceil(len / distanceTolerance);
         if(densifiedSegCountDbl > std::numeric_limits<int>::max()) {
@@ -130,16 +130,17 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
                 Coordinate p;
                 seg.pointAlong(segFract, p);
                 precModel->makePrecise(p);
-                coordList.insert(coordList.end(), p, false);
+                coordList->add(p, false);
             }
         }
         else {
             // no densification required; insert the last coordinate and continue
-            coordList.insert(coordList.end(), seg.p1, false);
+            coordList->add(seg.p1, false);
         }
     }
-    coordList.insert(coordList.end(), pts[pts.size() - 1], false);
-    return coordList.toCoordinateArray();
+    coordList->add(pts[pts.size() - 1], false);
+
+    return coordList;
 }
 
 /**

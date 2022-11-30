@@ -39,7 +39,7 @@ struct test_linelimiter_data {
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
 
         LineLimiter limiter(&clipEnv);
-        std::vector<std::unique_ptr<CoordinateArraySequence>>& sections = limiter.limit((line->getCoordinates()).get());
+        std::vector<std::unique_ptr<CoordinateSequence>>& sections = limiter.limit((line->getCoordinates()).get());
 
         std::unique_ptr<Geometry> result = toLines(sections, line->getFactory());
 
@@ -53,7 +53,7 @@ struct test_linelimiter_data {
     }
 
     std::unique_ptr<Geometry>
-    toLines(std::vector<std::unique_ptr<CoordinateArraySequence>>& sections, const GeometryFactory* factory)
+    toLines(std::vector<std::unique_ptr<CoordinateSequence>>& sections, const GeometryFactory* factory)
     {
         std::vector<std::unique_ptr<LineString>> lines;
         for (auto& cas: sections) {

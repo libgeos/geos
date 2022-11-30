@@ -35,7 +35,6 @@ class MultiLineString;
 class Geometry;
 class GeometryCollection;
 class GeometryFactory;
-class CoordinateSequenceFactory;
 }
 namespace operation {
 namespace intersection {
@@ -110,7 +109,6 @@ private:
     const geom::Geometry& _geom;
     const Rectangle& _rect;
     const geom::GeometryFactory* _gf;
-    const geom::CoordinateSequenceFactory* _csf;
 
     void clip_geom(const geom::Geometry* g,
                    RectangleIntersectionBuilder& parts,

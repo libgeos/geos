@@ -14,15 +14,20 @@
 
 #pragma once
 
+#include <geos/export.h>
+#include <vector>
+
 // Forward declarations
 namespace geos {
 namespace geom {
 class Coordinate;
+class CoordinateSequence;
 class Envelope;
 }
 }
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::Envelope;
 
 
@@ -58,7 +63,7 @@ private:
     static constexpr std::size_t NODE_CAPACITY = 16;
 
     // Members
-    const std::vector<Coordinate>& items;
+    const CoordinateSequence& items;
     std::vector<bool> removedItems;
     std::vector<std::size_t> levelOffset;
     std::size_t nodeCapacity = NODE_CAPACITY;
@@ -93,7 +98,7 @@ private:
 
     static Envelope computeNodeEnvelope(const std::vector<Envelope>& bounds,
         std::size_t start, std::size_t end);
-    static Envelope computeItemEnvelope(const std::vector<Coordinate>& items,
+    static Envelope computeItemEnvelope(const CoordinateSequence& items,
         std::size_t start, std::size_t end);
 
     void queryNode(const Envelope& queryEnv,
@@ -118,7 +123,7 @@ public:
     *
     * @param pts a sequence of points
     */
-    VertexSequencePackedRtree(const std::vector<Coordinate>& pts);
+    VertexSequencePackedRtree(const CoordinateSequence& pts);
 
     std::vector<Envelope> getBounds();
 

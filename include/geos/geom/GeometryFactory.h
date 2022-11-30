@@ -35,7 +35,6 @@
 
 namespace geos {
 namespace geom {
-class CoordinateSequenceFactory;
 class Coordinate;
 class CoordinateSequence;
 class Envelope;
@@ -84,29 +83,6 @@ public:
      * floating PrecisionModel and a spatial-reference ID of 0.
      */
     static GeometryFactory::Ptr create();
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having
-     * the given PrecisionModel, spatial-reference ID, and
-     * CoordinateSequence implementation.
-     *
-     * NOTES:
-     * (1) the given PrecisionModel is COPIED
-     * (2) the CoordinateSequenceFactory is NOT COPIED
-     *     and must be available for the whole lifetime
-     *     of the GeometryFactory
-     */
-    static GeometryFactory::Ptr create(const PrecisionModel* pm, int newSRID,
-                                       CoordinateSequenceFactory* nCoordinateSequenceFactory);
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having the
-     * given CoordinateSequence implementation, a double-precision floating
-     * PrecisionModel and a spatial-reference ID of 0.
-     */
-    static GeometryFactory::Ptr create(CoordinateSequenceFactory* nCoordinateSequenceFactory);
 
     /**
      * \brief
@@ -177,6 +153,8 @@ public:
     /// Creates a Point with a deep-copy of the given CoordinateSequence.
     Point* createPoint(const CoordinateSequence& coordinates) const;
 
+    std::unique_ptr<Point> createPoint(std::unique_ptr<CoordinateSequence>&& coordinates) const;
+
     /// Construct an EMPTY GeometryCollection
     std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 
@@ -240,9 +218,6 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
-    std::unique_ptr<LinearRing> createLinearRing(
-        std::vector<Coordinate> && coordinates) const;
-
     /// Construct a LinearRing with a deep-copy of given arguments
     LinearRing* createLinearRing(
         const CoordinateSequence& coordinates) const;
@@ -253,7 +228,17 @@ public:
     /// Construct a MultiPoint taking ownership of given arguments
     MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
 
-    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<Coordinate> && newPoints) const;
+    template<typename T>
+    std::unique_ptr<MultiPoint> createMultiPoint(const T& fromCoords) const
+    {
+        std::vector<std::unique_ptr<Geometry>> pts;
+        pts.reserve(fromCoords.size());
+        for (const Coordinate& c : fromCoords) {
+            pts.emplace_back(createPoint(c));
+        }
+
+        return createMultiPoint(std::move(pts));
+    }
 
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<CoordinateXY> && newPoints) const;
 
@@ -271,12 +256,6 @@ public:
     MultiPoint* createMultiPoint(
         const CoordinateSequence& fromCoords) const;
 
-    /// \brief
-    /// Construct a MultiPoint containing a Point geometry
-    /// for each Coordinate in the given vector.
-    MultiPoint* createMultiPoint(
-        const std::vector<Coordinate>& fromCoords) const;
-
     /// Construct an EMPTY Polygon
     std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
 
@@ -290,7 +269,7 @@ public:
                                            std::vector<std::unique_ptr<LinearRing>> && holes) const;
 
     /// Construct a Polygon from a Coordinate vector, taking ownership of the vector
-    std::unique_ptr<Polygon> createPolygon(std::vector<Coordinate> && coords) const;
+    std::unique_ptr<Polygon> createPolygon(CoordinateSequence && coords) const;
 
     /// Construct a Polygon with a deep-copy of given arguments
     Polygon* createPolygon(const LinearRing& shell,
@@ -307,9 +286,6 @@ public:
 
     std::unique_ptr<LineString> createLineString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
-
-    std::unique_ptr<LineString> createLineString(
-        std::vector<Coordinate> && coordinates) const;
 
     /// Construct a LineString with a deep-copy of given argument
     LineString* createLineString(
@@ -440,14 +416,6 @@ public:
         return SRID;
     };
 
-    /// \brief
-    /// Returns the CoordinateSequenceFactory associated
-    /// with this GeometryFactory
-    const CoordinateSequenceFactory* getCoordinateSequenceFactory() const
-    {
-        return coordinateListFactory;
-    };
-
     /// Returns a clone of given Geometry.
     Geometry* createGeometry(const Geometry* g) const;
 
@@ -470,29 +438,6 @@ protected:
      * floating PrecisionModel and a spatial-reference ID of 0.
      */
     GeometryFactory();
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having
-     * the given PrecisionModel, spatial-reference ID, and
-     * CoordinateSequence implementation.
-     *
-     * NOTES:
-     * (1) the given PrecisionModel is COPIED
-     * (2) the CoordinateSequenceFactory is NOT COPIED
-     *     and must be available for the whole lifetime
-     *     of the GeometryFactory
-     */
-    GeometryFactory(const PrecisionModel* pm, int newSRID,
-                    CoordinateSequenceFactory* nCoordinateSequenceFactory);
-
-    /**
-     * \brief
-     * Constructs a GeometryFactory that generates Geometries having the
-     * given CoordinateSequence implementation, a double-precision floating
-     * PrecisionModel and a spatial-reference ID of 0.
-     */
-    GeometryFactory(CoordinateSequenceFactory* nCoordinateSequenceFactory);
 
     /**
      * \brief
@@ -529,7 +474,6 @@ private:
 
     PrecisionModel precisionModel;
     int SRID;
-    const CoordinateSequenceFactory* coordinateListFactory;
 
     mutable int _refCount;
     bool _autoDestroy;

@@ -101,18 +101,6 @@ protected:
 
     const GeometryFactory* factory;
 
-    /** \brief
-     * Convenience method which provides standard way of
-     * creating a CoordinateSequence.
-     *
-     * @param coords the coordinate array to copy
-     * @return a coordinate sequence for the array
-     *
-     * [final]
-     */
-    CoordinateSequence::Ptr createCoordinateSequence(
-        std::unique_ptr< std::vector<Coordinate> > coords);
-
     virtual CoordinateSequence::Ptr transformCoordinates(
         const CoordinateSequence* coords,
         const Geometry* parent);

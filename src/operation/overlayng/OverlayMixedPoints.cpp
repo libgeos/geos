@@ -16,8 +16,9 @@
 
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -41,7 +42,7 @@ using namespace geos::geom;
  */
 class CoordinateExtractingFilter: public geom::CoordinateFilter {
 public:
-    CoordinateExtractingFilter(CoordinateArraySequence& p_pts, const PrecisionModel& p_pm)
+    CoordinateExtractingFilter(CoordinateSequence& p_pts, const PrecisionModel& p_pm)
         : pts(p_pts), pm(p_pm)
     {}
 
@@ -67,7 +68,7 @@ public:
     }
 
 private:
-    CoordinateArraySequence& pts;
+    CoordinateSequence& pts;
     const PrecisionModel& pm;
 };
 
@@ -109,7 +110,7 @@ OverlayMixedPoints::getResult()
     geomNonPointDim = geomNonPoint->getDimension();
     locator = createLocator(geomNonPoint.get());
 
-    std::unique_ptr<CoordinateArraySequence> coords = extractCoordinates(geomPoint, pm);
+    std::unique_ptr<CoordinateSequence> coords = extractCoordinates(geomPoint, pm);
 
     switch (opCode) {
         case OverlayNG::INTERSECTION: {
@@ -160,7 +161,7 @@ OverlayMixedPoints::prepareNonPoint(const Geometry* geomInput)
 
 /*private*/
 std::unique_ptr<Geometry>
-OverlayMixedPoints::computeIntersection(const CoordinateArraySequence* coords) const
+OverlayMixedPoints::computeIntersection(const CoordinateSequence* coords) const
 {
     std::vector<std::unique_ptr<Point>> points = findPoints(true, coords);
     return createPointResult(points);
@@ -168,7 +169,7 @@ OverlayMixedPoints::computeIntersection(const CoordinateArraySequence* coords) c
 
 /*private*/
 std::unique_ptr<Geometry>
-OverlayMixedPoints::computeUnion(const CoordinateArraySequence* coords)
+OverlayMixedPoints::computeUnion(const CoordinateSequence* coords)
 {
     std::vector<std::unique_ptr<Point>> resultPointList = findPoints(false, coords);
     std::vector<std::unique_ptr<LineString>> resultLineList;
@@ -185,7 +186,7 @@ OverlayMixedPoints::computeUnion(const CoordinateArraySequence* coords)
 
 /*private*/
 std::unique_ptr<Geometry>
-OverlayMixedPoints::computeDifference(const CoordinateArraySequence* coords)
+OverlayMixedPoints::computeDifference(const CoordinateSequence* coords)
 {
     if (isPointRHS) {
         return geomNonPoint->clone();
@@ -224,7 +225,7 @@ OverlayMixedPoints::createPointResult(std::vector<std::unique_ptr<Point>>& point
 
 /*private*/
 std::vector<std::unique_ptr<Point>>
-OverlayMixedPoints::findPoints(bool isCovered, const CoordinateArraySequence* coords) const
+OverlayMixedPoints::findPoints(bool isCovered, const CoordinateSequence* coords) const
 {
     // use set to remove duplicates
     std::set<Coordinate> resultCoords;
@@ -263,10 +264,10 @@ OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
 
 
 /*private*/
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
 {
-    std::unique_ptr<CoordinateArraySequence> coords(new CoordinateArraySequence());
+    auto coords = detail::make_unique<CoordinateSequence>();
 
     CoordinateExtractingFilter filter(*coords, *p_pm);
     points->apply_ro(&filter);

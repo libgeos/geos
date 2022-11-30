@@ -34,7 +34,6 @@
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geomgraph/index/EdgeSetIntersector.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Point.h>
@@ -127,7 +126,7 @@ GeometryGraph::getBoundaryPoints()
     if(! boundaryPoints.get()) {
         // Collection will be destroyed by GeometryGraph dtor
         std::vector<Node*>* coll = getBoundaryNodes();
-        boundaryPoints.reset(new CoordinateArraySequence(coll->size()));
+        boundaryPoints.reset(new CoordinateSequence(coll->size()));
         std::size_t i = 0;
         for(std::vector<Node*>::iterator it = coll->begin(), endIt = coll->end();
                 it != endIt; ++it) {

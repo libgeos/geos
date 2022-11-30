@@ -28,11 +28,10 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cmath> // for fabs
@@ -122,23 +121,27 @@ std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
-        return getFactory()->getCoordinateSequenceFactory()->create();
+        return detail::make_unique<CoordinateSequence>();
     }
 
-    std::vector<Coordinate> cl;
-    cl.reserve(getNumPoints());
+    auto cl = detail::make_unique<CoordinateSequence>();
+    cl->reserve(getNumPoints());
 
     // Add shell points
     const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
-    shellCoords->toVector(cl);
+    shellCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
+        cl->add(c);
+    });
 
     // Add holes points
     for(const auto& hole : holes) {
         const CoordinateSequence* childCoords = hole->getCoordinatesRO();
-        childCoords->toVector(cl);
+        childCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
+            cl->add(c);
+        });
     }
 
-    return getFactory()->getCoordinateSequenceFactory()->create(std::move(cl));
+    return cl;
 }
 
 size_t
@@ -171,6 +174,36 @@ Polygon::getCoordinateDimension() const
     }
 
     return dimension;
+}
+
+bool
+Polygon::hasM() const {
+    if (shell->getCoordinatesRO()->hasM()) {
+        return true;
+    }
+
+    for (const auto& hole : holes) {
+        if (hole->getCoordinatesRO()->hasM()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool
+Polygon::hasZ() const {
+    if (shell->getCoordinatesRO()->hasZ()) {
+        return true;
+    }
+
+    for (const auto& hole : holes) {
+        if (hole->getCoordinatesRO()->hasZ()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int
@@ -383,20 +416,21 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
         return;
     }
 
-    auto coords = detail::make_unique<std::vector<Coordinate>>();
-    ring->getCoordinatesRO()->toVector(*coords);
-    coords->erase(coords->end() - 1); // remove last point (repeated)
-
-    auto uniqueCoordinates = detail::make_unique<CoordinateArraySequence>(coords.release());
-
-    const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
-
-    CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
-    uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-    if(algorithm::Orientation::isCCW(uniqueCoordinates.get()) == clockwise) {
-        CoordinateSequence::reverse(uniqueCoordinates.get());
+    const auto& ringCoords = ring->getCoordinatesRO();
+    CoordinateSequence coords(ringCoords->getSize() - 1);
+    // exclude last point (repeated)
+    for (std::size_t i = 0; i < coords.getSize(); i++) {
+        coords.setAt(ringCoords->getAt(i), i);
     }
-    ring->setPoints(uniqueCoordinates.get());
+
+    const CoordinateXY* minCoordinate = coords.minCoordinate();
+
+    CoordinateSequence::scroll(&coords, minCoordinate);
+    coords.add(coords[0]); // close ring
+    if(algorithm::Orientation::isCCW(&coords) == clockwise) {
+        coords.reverse();
+    }
+    ring->setPoints(&coords);
 }
 
 const CoordinateXY*

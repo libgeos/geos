@@ -26,7 +26,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/util/Interrupt.h>
 
 #include <algorithm>

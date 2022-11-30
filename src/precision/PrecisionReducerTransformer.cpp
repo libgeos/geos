@@ -18,9 +18,8 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
@@ -43,7 +42,8 @@ class PrecisionReducerFilter : public CoordinateFilter {
     public:
 
         PrecisionReducerFilter(bool p_removeRepeated, const PrecisionModel& p_filterPM)
-            : removeRepeated(p_removeRepeated)
+            : m_coords(detail::make_unique<CoordinateSequence>())
+            , removeRepeated(p_removeRepeated)
             , filterPM(p_filterPM)
             {
                 m_prev.setNull();
@@ -59,17 +59,17 @@ class PrecisionReducerFilter : public CoordinateFilter {
             if (removeRepeated && !m_prev.isNull() && coord.equals2D(m_prev))
                 return;
 
-            m_coords.push_back(coord);
+            m_coords->add(coord);
             m_prev = coord;
         }
 
-        std::vector<Coordinate> getCoords() {
+        std::unique_ptr<CoordinateSequence> getCoords() {
             return std::move(m_coords);
         }
 
     private:
 
-        std::vector<Coordinate> m_coords;
+        std::unique_ptr<CoordinateSequence> m_coords;
         Coordinate m_prev;
         bool removeRepeated;
         const PrecisionModel& filterPM;
@@ -90,15 +90,15 @@ PrecisionReducerTransformer::reduce(
 /* private */
 void
 PrecisionReducerTransformer::extend(
-    std::vector<Coordinate>& coords,
+    CoordinateSequence& coords,
     std::size_t minLength)
 {
     if (coords.size() >= minLength)
         return;
 
     while(coords.size() < minLength) {
-        Coordinate endCoord = coords.back();
-        coords.push_back(endCoord);
+        const Coordinate& endCoord = coords.back();
+        coords.add(endCoord);
     }
 }
 
@@ -112,14 +112,13 @@ PrecisionReducerTransformer::transformCoordinates(
         return nullptr;
 
     if (coords->isEmpty()) {
-        return detail::make_unique<CoordinateArraySequence>(0u, coords->getDimension());
+        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
     const bool removeRepeated = true;
     PrecisionReducerFilter filter(removeRepeated, targetPM);
     coords->apply_ro(&filter);
-    std::vector<Coordinate> coordsReduce = filter.getCoords();
-    // std::unique_ptr<CoordinateArraySequence> coordSeqReduced();
+    auto coordsReduce = filter.getCoords();
 
     /**
      * Check to see if the removal of repeated points collapsed the coordinate
@@ -140,14 +139,13 @@ PrecisionReducerTransformer::transformCoordinates(
     * Handle collapse. If specified return null so parent geometry is removed or empty,
     * otherwise extend to required length.
     */
-    if (coordsReduce.size() < minLength) {
+    if (coordsReduce->size() < minLength) {
         if (isRemoveCollapsed)
             return nullptr;
-        extend(coordsReduce, minLength);
+        extend(*coordsReduce, minLength);
     }
 
-    CoordinateArraySequence* cas = new CoordinateArraySequence(std::move(coordsReduce));
-    return std::unique_ptr<CoordinateSequence>(static_cast<CoordinateSequence*>(cas));
+    return coordsReduce;
 }
 
 

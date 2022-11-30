@@ -16,7 +16,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 //#include <stdio.h>
 #include <iostream>
 using namespace geos::triangulate;
@@ -79,7 +79,8 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
     results->normalize();
     expected->normalize();
 
-    ensure_equals(results->getCoordinateDimension(), expected->getCoordinateDimension());
+    ensure_equals(static_cast<std::size_t>(results->getCoordinateDimension()),
+                  static_cast<std::size_t>(expected->getCoordinateDimension()));
     bool eq = results->equalsExact(expected.get(), 1e-7);
     if(! eq) {
         writer.setTrim(true);
@@ -105,13 +106,12 @@ void object::test<1>
     Coordinate d(244, 284);
 
     geos::triangulate::VoronoiDiagramBuilder builder;
-    std::unique_ptr< std::vector<Coordinate> > v(new std::vector<Coordinate>());
-    v->push_back(a);
-    v->push_back(b);
-    v->push_back(c);
-    v->push_back(d);
+    CoordinateSequence seq;
+    seq.add(a);
+    seq.add(b);
+    seq.add(c);
+    seq.add(d);
 
-    geos::geom::CoordinateArraySequence seq(v.release());
     builder.setSites(seq);
 
     //getting the subdiv()

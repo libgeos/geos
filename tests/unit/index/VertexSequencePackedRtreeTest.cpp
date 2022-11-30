@@ -27,7 +27,7 @@ namespace tut {
 struct test_packedrtree_data {
 
     geos::io::WKTReader r;
-    std::vector<Coordinate> coords;
+    geos::geom::CoordinateSequence coords;
     std::vector<std::size_t> expected;
 
     test_packedrtree_data() {}
@@ -39,7 +39,7 @@ struct test_packedrtree_data {
         auto geom_a = r.read(multipointwkt);
         for (std::size_t i = 0; i < geom_a->getNumGeometries(); i++) {
             auto pt = dynamic_cast<const Point*>(geom_a->getGeometryN(i));
-            coords.emplace_back(pt->getX(), pt->getY());
+            coords.add(Coordinate(pt->getX(), pt->getY()));
         }
         std::unique_ptr<VertexSequencePackedRtree> vspr(new VertexSequencePackedRtree(coords));
         return vspr;

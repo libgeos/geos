@@ -22,6 +22,7 @@ struct test_capigeosclipbyrect_data : public capitest::utility {
     void
     isEqual(GEOSGeom g, const char* exp_wkt)
     {
+        ensure(g);
         geom3_ = GEOSGeomFromWKT(exp_wkt);
         bool eq = GEOSEquals(geom3_, g) != 0;
         if(! eq) {

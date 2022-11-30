@@ -24,9 +24,8 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/util.h>
 
 #include <algorithm>
 #include <ostream>
@@ -234,14 +233,13 @@ std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(
     const geos_nlohmann::json& j) const
 {
     const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-    std::vector<geom::Coordinate> coordinates;
-    coordinates.reserve(coords.size());
+    auto coordinates = detail::make_unique<CoordinateSequence>();
+    coordinates->reserve(coords.size());
     for (const auto& coord : coords) {
         const geom::Coordinate& c = readCoordinate(coord);
-        coordinates.push_back(c);
+        coordinates->add(c);
     }
-    auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
-    return geometryFactory.createLineString(std::move(coordinateSequence));
+    return geometryFactory.createLineString(std::move(coordinates));
 }
 
 std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(
@@ -258,18 +256,17 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(
     std::vector<std::unique_ptr<geom::LinearRing>> rings;
     rings.reserve(polygonCoords.size());
     for (const auto& ring : polygonCoords) {
-        std::vector<geom::Coordinate> coordinates;
-        coordinates.reserve(ring.size());
+    auto coordinates = detail::make_unique<CoordinateSequence>();
+        coordinates->reserve(ring.size());
         for (const auto& coord : ring) {
             const geom::Coordinate& c = readCoordinate(coord);
-            coordinates.push_back(c);
+            coordinates->add(c);
         }
-        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
         if (!shell) {
-            shell = geometryFactory.createLinearRing(std::move(coordinateSequence));
+            shell = geometryFactory.createLinearRing(std::move(coordinates));
         }
         else {
-            rings.push_back(geometryFactory.createLinearRing(std::move(coordinateSequence)));
+            rings.push_back(geometryFactory.createLinearRing(std::move(coordinates)));
         }
     }
     if (!shell) {
@@ -303,14 +300,13 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(
     std::vector<std::unique_ptr<geom::LineString>> lines;
     lines.reserve(listOfCoords.size());
     for (const auto& coords :  listOfCoords) {
-        std::vector<geom::Coordinate> coordinates;
-        coordinates.reserve(coords.size());
+        auto coordinates = detail::make_unique<geom::CoordinateSequence>();
+        coordinates->reserve(coords.size());
         for (const auto& coord : coords) {
             const geom::Coordinate& c = readCoordinate(coord);
-            coordinates.push_back(geom::Coordinate{c.x, c.y});
+            coordinates->add(geom::Coordinate{c.x, c.y});
         }
-        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
-        lines.push_back(geometryFactory.createLineString(std::move(coordinateSequence)));
+        lines.push_back(geometryFactory.createLineString(std::move(coordinates)));
     }
     return geometryFactory.createMultiLineString(std::move(lines));
 }

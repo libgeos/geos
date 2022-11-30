@@ -14,7 +14,7 @@
 
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/index/kdtree/KdTree.h>
 #include <geos/index/kdtree/KdNode.h>
@@ -97,23 +97,23 @@ SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
 SegmentString*
 SnappingNoder::snapVertices(SegmentString* ss)
 {
-    std::unique_ptr<std::vector<Coordinate>> snapCoords = snap(ss->getCoordinates());
-    std::unique_ptr<CoordinateArraySequence> cs(new CoordinateArraySequence(snapCoords.release()));
-    return new NodedSegmentString(cs.release(), ss->getData());
+    auto snapCoords = snap(ss->getCoordinates());
+    return new NodedSegmentString(snapCoords.release(), ss->getData());
 }
 
 
 /*private*/
-std::unique_ptr<std::vector<Coordinate>>
-SnappingNoder::snap(CoordinateSequence* cs)
+std::unique_ptr<CoordinateSequence>
+SnappingNoder::snap(const CoordinateSequence* cs)
 {
-    std::unique_ptr<std::vector<Coordinate>> snapCoords(new std::vector<Coordinate>);
-    for (std::size_t i = 0, sz = cs->size(); i < sz; i++) {
-        const Coordinate& pt = snapIndex.snap(cs->getAt(i));
-        snapCoords->push_back(pt);
-    }
-    // Remove repeated points
-    snapCoords->erase(std::unique(snapCoords->begin(), snapCoords->end()), snapCoords->end());
+    auto snapCoords = detail::make_unique<CoordinateSequence>();
+    snapCoords->reserve(cs->size());
+
+    cs->forEach<Coordinate>([&snapCoords, this](const Coordinate& origPt) {
+        const Coordinate& pt = snapIndex.snap(origPt);
+        snapCoords->add(pt, false); // Remove repeated points
+
+    });
     return snapCoords;
 }
 

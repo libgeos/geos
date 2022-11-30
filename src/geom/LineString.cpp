@@ -22,8 +22,6 @@
 #include <geos/algorithm/Length.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -36,6 +34,7 @@
 #include <geos/geom/MultiPoint.h> // for getBoundary
 #include <geos/geom/Envelope.h>
 #include <geos/operation/BoundaryOp.h>
+#include <geos/util.h>
 
 #include <algorithm>
 #include <typeinfo>
@@ -67,7 +66,7 @@ LineString::reverseImpl() const
 
     assert(points.get());
     auto seq = points->clone();
-    CoordinateSequence::reverse(seq.get());
+    seq->reverse();
     assert(getFactory());
     return getFactory()->createLineString(seq.release());
 }
@@ -78,7 +77,7 @@ void
 LineString::validateConstruction()
 {
     if(points.get() == nullptr) {
-        points = getFactory()->getCoordinateSequenceFactory()->create();
+        points = detail::make_unique<CoordinateSequence>();
         return;
     }
 
@@ -103,16 +102,6 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
     :
     Geometry(&factory),
     points(std::move(newCoords))
-{
-    validateConstruction();
-}
-
-/*public*/
-LineString::LineString(std::vector<Coordinate> && newCoords,
-                       const GeometryFactory& factory)
-    :
-    Geometry(&factory),
-    points(new CoordinateArraySequence(std::move(newCoords)))
 {
     validateConstruction();
 }
@@ -157,6 +146,18 @@ uint8_t
 LineString::getCoordinateDimension() const
 {
     return (uint8_t) points->getDimension();
+}
+
+bool
+LineString::hasM() const
+{
+    return points->hasM();
+}
+
+bool
+LineString::hasZ() const
+{
+    return points->hasZ();
 }
 
 int
@@ -318,22 +319,28 @@ LineString::apply_ro(GeometryFilter* filter) const
 void
 LineString::normalizeClosed()
 {
-    auto coords = detail::make_unique<std::vector<Coordinate>>();
-    getCoordinatesRO()->toVector(*coords);
-
-    coords->erase(coords->end() - 1); // remove last point (repeated)
-
-    auto uniqueCoordinates = detail::make_unique<CoordinateArraySequence>(coords.release());
-
-    const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
-
-    CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
-    uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-
-    if(uniqueCoordinates->size() >= 4 && algorithm::Orientation::isCCW(uniqueCoordinates.get())) {
-        CoordinateSequence::reverse(uniqueCoordinates.get());
+    if(isEmpty()) {
+        return;
     }
-    points = uniqueCoordinates.get()->clone();
+
+    const auto& ringCoords = getCoordinatesRO();
+
+    auto coords = detail::make_unique<CoordinateSequence>(ringCoords->getSize() - 1);
+    // exclude last point (repeated)
+    for (std::size_t i = 0; i < coords->getSize(); i++) {
+        coords->setAt(ringCoords->getAt(i), i);
+    }
+
+    const CoordinateXY* minCoordinate = coords->minCoordinate();
+
+    CoordinateSequence::scroll(coords.get(), minCoordinate);
+    coords->closeRing(true);
+
+    if(coords->size() >= 4 && algorithm::Orientation::isCCW(coords.get())) {
+        coords->reverse();
+    }
+
+    points = std::move(coords);
 }
 
 /*public*/
@@ -352,7 +359,7 @@ LineString::normalize()
         std::size_t j = npts - 1 - i;
         if(!(points->getAt(i) == points->getAt(j))) {
             if(points->getAt(i).compareTo(points->getAt(j)) > 0) {
-                CoordinateSequence::reverse(points.get());
+                points->reverse();
             }
             return;
         }

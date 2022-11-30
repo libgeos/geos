@@ -25,7 +25,6 @@
 #include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
@@ -35,6 +34,7 @@
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/geom/util/PointExtracter.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <iostream>
@@ -131,11 +131,11 @@ DistanceOp::nearestPoints()
         return nullptr;
     }
 
-    std::vector<Coordinate> nearestPts(2);
-    nearestPts[0] = Coordinate(locs[0]->getCoordinate());
-    nearestPts[1] = Coordinate(locs[1]->getCoordinate());
+    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
+    nearestPts->setAt(locs[0]->getCoordinate(), 0);
+    nearestPts->setAt(locs[1]->getCoordinate(), 1);
 
-    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(std::move(nearestPts)));
+    return nearestPts;
 }
 
 void

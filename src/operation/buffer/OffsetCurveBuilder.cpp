@@ -27,7 +27,6 @@
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geom/Position.h>
-#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
@@ -108,7 +107,7 @@ OffsetCurveBuilder::getOffsetCurve(
     // for right side line is traversed in reverse direction, so have to reverse generated line
     if (isRightSide) {
         for (auto* cs: lineList) {
-            CoordinateSequence::reverse(cs);
+            cs->reverse();
         }
     }
     return;

@@ -32,7 +32,6 @@
 namespace geos {
 namespace geom { // geos::geom
 class Coordinate;
-class CoordinateArraySequence;
 class CoordinateSequenceFilter;
 }
 }
@@ -113,6 +112,10 @@ public:
 
     /// Returns coordinate dimension.
     uint8_t getCoordinateDimension() const override;
+
+    bool hasM() const override;
+
+    bool hasZ() const override;
 
     std::unique_ptr<Geometry> getBoundary() const override;
 

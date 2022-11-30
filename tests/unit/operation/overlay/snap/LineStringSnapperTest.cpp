@@ -7,10 +7,12 @@
 #include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 // std
 #include <string>
 #include <vector>
+
+using geos::geom::CoordinateSequence;
 
 namespace tut {
 //
@@ -41,9 +43,6 @@ void object::test<1>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
     Coordinate src_a(0, 0);
     Coordinate src_b(10, 10);
@@ -52,17 +51,17 @@ void object::test<1>
     Coordinate snp_a(0.1, 0);
     Coordinate snp_b(10, 10.1);
 
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
 
-    Coordinate::ConstVect snpCoords;
+    std::vector<const Coordinate*> snpCoords;
     snpCoords.push_back(&snp_a);
     snpCoords.push_back(&snp_b);
 
     LineStringSnapper snapper(srcCoords, 0.4);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     // both points should have been snapped
     ensure_equals(ret->size(), 2u);
@@ -80,9 +79,6 @@ void object::test<2>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
     Coordinate src_a(0, 0);
     Coordinate src_b(10, 10);
@@ -91,9 +87,9 @@ void object::test<2>
     Coordinate snp_a(0.4, 0);
     Coordinate snp_b(10, 10.4);
 
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
 
     Coordinate::ConstVect snpCoords;
     snpCoords.push_back(&snp_a);
@@ -101,7 +97,7 @@ void object::test<2>
 
     LineStringSnapper snapper(srcCoords, 0.3);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     // snap point a should be inserted
     ensure_equals(ret->size(), 3u);
@@ -120,20 +116,17 @@ void object::test<3>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
 
     Coordinate src_a(0, 0);
     Coordinate src_b(10, 10);
     Coordinate src_c(0, 10);
 
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
-    srcCoords.push_back(src_c);
-    srcCoords.push_back(src_a);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
+    srcCoords.add(src_c);
+    srcCoords.add(src_a);
 
     // snap coordinates
 
@@ -146,7 +139,7 @@ void object::test<3>
 
     LineStringSnapper snapper(srcCoords, 0.4);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     // Points A and B should be snapped
     ensure_equals(ret->size(), 4u);
@@ -166,14 +159,11 @@ void object::test<4>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
 
     Coordinate src_a(0, 0);
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
 
     // snap coordinates
 
@@ -183,7 +173,7 @@ void object::test<4>
 
     LineStringSnapper snapper(srcCoords, 0.4);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     ensure_equals(ret->size(), 1u);
     ensure_equals(ret->operator[](0), snp_a);
@@ -199,12 +189,9 @@ void object::test<5>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
 
-    Coordinate::Vect srcCoords;
+    CoordinateSequence srcCoords;
 
     // snap coordinates
 
@@ -212,7 +199,7 @@ void object::test<5>
 
     LineStringSnapper snapper(srcCoords, 0.4);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     ensure_equals(ret->size(), 0u);
 
@@ -227,12 +214,9 @@ void object::test<6>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // source coordinates
 
-    Coordinate::Vect srcCoords;
+    CoordinateSequence srcCoords;
 
     // snap coordinates
 
@@ -242,7 +226,7 @@ void object::test<6>
 
     LineStringSnapper snapper(srcCoords, 0.4);
 
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     ensure_equals(ret->size(), 0u);
 
@@ -257,17 +241,14 @@ void object::test<7>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // Source: (0 0, 10 0, 0 1)
     Coordinate src_a(0, 0);
     Coordinate src_b(10, 0);
     Coordinate src_c(0, 1);
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
-    srcCoords.push_back(src_c);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
+    srcCoords.add(src_c);
 
     // Snap: (0 0)
     Coordinate snp_a(0, 0);
@@ -280,7 +261,7 @@ void object::test<7>
 
     // Allow source-snapping, expect: (0 0, 5 0, 0 0, 10 0)
     snapper.setAllowSnappingToSourceVertices(true);
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
 
     ensure_equals(ret->size(), 4u);
     ensure_equals(ret->operator[](0), src_a);
@@ -306,17 +287,14 @@ void object::test<8>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // Source: (0 0, 1 0, 1 1)
     Coordinate src_a(0, 0);
     Coordinate src_b(1, 0);
     Coordinate src_c(1, 1);
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
-    srcCoords.push_back(src_c);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
+    srcCoords.add(src_c);
 
     // Snap: (0.5, 0)
     Coordinate snp_a(0.5, 0);
@@ -328,7 +306,7 @@ void object::test<8>
     LineStringSnapper snapper(srcCoords, 1);
 
     // Expect: (0.5 0, 1 0, 1 1)
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
     ensure_equals(ret->size(), 3u);
     ensure_equals(ret->operator[](0), snp_a);
     ensure_equals(ret->operator[](1), src_b);
@@ -345,18 +323,15 @@ void object::test<9>
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
-
-
     // Source: (1 1, 5 9, 9 1, 1 1)
     Coordinate src_a(1, 1);
     Coordinate src_b(5, 9);
     Coordinate src_c(9, 1);
-    Coordinate::Vect srcCoords;
-    srcCoords.push_back(src_a);
-    srcCoords.push_back(src_b);
-    srcCoords.push_back(src_c);
-    srcCoords.push_back(src_a);
+    CoordinateSequence srcCoords;
+    srcCoords.add(src_a);
+    srcCoords.add(src_b);
+    srcCoords.add(src_c);
+    srcCoords.add(src_a);
 
     // Snap: (0 0, 10 0, 1 0.5)
     Coordinate snp_a(0, 0);
@@ -372,7 +347,7 @@ void object::test<9>
     LineStringSnapper snapper(srcCoords, 2);
 
     // Expect: (0 0, 5 9, 10 0, 1 0.5, 0 0)
-    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    auto ret(snapper.snapTo(snpCoords));
     ensure_equals(ret->size(), 5u);
     ensure_equals(ret->operator[](0), snp_a); //  0 0
     ensure_equals(ret->operator[](1), src_b); //  5 9

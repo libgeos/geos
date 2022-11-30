@@ -21,10 +21,10 @@ namespace overlayng { // geos.operation.overlayng
 
 
 /*public*/
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 RingClipper::clip(const CoordinateSequence* cs) const
 {
-    std::unique_ptr<CoordinateArraySequence> pts;
+    std::unique_ptr<CoordinateSequence> pts;
     for (int edgeIndex = 0; edgeIndex < 4; edgeIndex++) {
         bool closeRing = (edgeIndex == 3);
         pts = clipToBoxEdge(cs, edgeIndex, closeRing);
@@ -36,11 +36,11 @@ RingClipper::clip(const CoordinateSequence* cs) const
 }
 
 /*private*/
-std::unique_ptr<CoordinateArraySequence>
+std::unique_ptr<CoordinateSequence>
 RingClipper::clipToBoxEdge(const CoordinateSequence* pts, int edgeIndex, bool closeRing) const
 {
     // TODO: is it possible to avoid copying array 4 times?
-    std::unique_ptr<CoordinateArraySequence> ptsClip(new CoordinateArraySequence());
+    std::unique_ptr<CoordinateSequence> ptsClip(new CoordinateSequence());
 
     Coordinate p0;
     pts->getAt(pts->size() - 1, p0);

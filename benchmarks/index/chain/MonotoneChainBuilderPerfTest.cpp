@@ -16,13 +16,13 @@
 
 #include <benchmark/benchmark.h>
 
-#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainBuilder.h>
 
 using geos::geom::Coordinate;
 using geos::geom::LineSegment;
-using geos::geom::CoordinateArraySequence;
+using geos::geom::CoordinateSequence;
 using geos::geom::Envelope;
 using geos::index::chain::MonotoneChain;
 using geos::index::chain::MonotoneChainBuilder;
@@ -42,7 +42,7 @@ static void BM_MonotoneChainBuilder(benchmark::State& state) {
 
     std::size_t num_points = 1000;
 
-    CoordinateArraySequence cs;
+    CoordinateSequence cs;
     Coordinate prev(0, 0);
     while(cs.size() <= num_points) {
         size_t chain_length = 1 + static_cast<size_t>(chain_length_dist(e));

@@ -25,9 +25,9 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util.h>
 
 #include <typeinfo>
 #include <cmath> // for fabs()
@@ -144,7 +144,7 @@ MinimumDiameter::getDiameter()
     Coordinate basePt;
     minBaseSeg.project(minWidthPt, basePt);
 
-    auto cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2);
+    auto cl = detail::make_unique<CoordinateSequence>(2u);
     cl->setAt(basePt, 0);
     cl->setAt(minWidthPt, 1);
     return inputGeom->getFactory()->createLineString(std::move(cl));
@@ -326,10 +326,7 @@ MinimumDiameter::getMinimumRectangle()
     Coordinate p2 = minParaLine.lineIntersection(minPerpLine);
     Coordinate p3 = maxParaLine.lineIntersection(minPerpLine);
 
-    const CoordinateSequenceFactory* csf =
-        inputGeom->getFactory()->getCoordinateSequenceFactory();
-
-    auto seq = csf->create(5, 2);
+    auto seq = detail::make_unique<CoordinateSequence>(5u, 2u);
     seq->setAt(p0, 0);
     seq->setAt(p1, 1);
     seq->setAt(p2, 2);
@@ -367,9 +364,7 @@ MinimumDiameter::computeMaximumLine(const geom::CoordinateSequence* pts,
       p1 = ptMaxY;
     }
 
-    const CoordinateSequenceFactory* csf =
-        factory->getCoordinateSequenceFactory();
-    auto seq = csf->create(2, 2);
+    auto seq = detail::make_unique<CoordinateSequence>(2u, 2u);
     seq->setAt(p0, 0);
     seq->setAt(p1, 1);
 

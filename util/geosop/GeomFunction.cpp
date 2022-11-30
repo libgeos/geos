@@ -547,7 +547,7 @@ GeomFunction::init()
             (*pts)[1] = ptArray[1];
             //std::cout << ptArray[0] << std::endl;
             //std::cout << ptArray[1] << std::endl;
-            auto cs = std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(pts.release()));
+            auto cs = std::unique_ptr<CoordinateSequence>(new CoordinateSequence(pts.release()));
 
             auto factory = geom->getFactory();
             auto res = factory->createLineString( std::move(cs) );
