@@ -65,6 +65,9 @@ Public Member Functions</h2></td></tr>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTWriter.html#aa8f8d15c4219c3b7fdd4b7fe3cab8329">write</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geometry)</td></tr>
 <tr class="memdesc:aa8f8d15c4219c3b7fdd4b7fe3cab8329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns WKT string for the given Geometry. <br /></td></tr>
 <tr class="separator:aa8f8d15c4219c3b7fdd4b7fe3cab8329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a725c280d69042d7308d9adc4d66266cb"><td class="memItemLeft" align="right" valign="top"><a id="a725c280d69042d7308d9adc4d66266cb"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geometry)</td></tr>
+<tr class="separator:a725c280d69042d7308d9adc4d66266cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fd813741b658932b84737b30ec9a71d"><td class="memItemLeft" align="right" valign="top"><a id="a1fd813741b658932b84737b30ec9a71d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geometry, Writer *writer)</td></tr>
 <tr class="separator:a1fd813741b658932b84737b30ec9a71d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,60 +104,63 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toPoint
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a277c4c7653c778f55b9b6c170fd475d1"><td class="memItemLeft" align="right" valign="top"><a id="a277c4c7653c778f55b9b6c170fd475d1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geometry, int level, Writer *writer)</td></tr>
-<tr class="separator:a277c4c7653c778f55b9b6c170fd475d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cf217e0860765155e28d314149d4299"><td class="memItemLeft" align="right" valign="top"><a id="a8cf217e0860765155e28d314149d4299"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPointTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *coordinate, int level, Writer *writer)</td></tr>
-<tr class="separator:a8cf217e0860765155e28d314149d4299"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20c30fe58429e2955de31646ddf8d564"><td class="memItemLeft" align="right" valign="top"><a id="a20c30fe58429e2955de31646ddf8d564"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLineStringTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *lineString, int level, Writer *writer)</td></tr>
-<tr class="separator:a20c30fe58429e2955de31646ddf8d564"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cea7da4d2f9f935c6b8ad906235f2e3"><td class="memItemLeft" align="right" valign="top"><a id="a2cea7da4d2f9f935c6b8ad906235f2e3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLinearRingTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">geom::LinearRing</a> *lineString, int level, Writer *writer)</td></tr>
-<tr class="separator:a2cea7da4d2f9f935c6b8ad906235f2e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52c0e47aa944946bb2ebf4789d15705e"><td class="memItemLeft" align="right" valign="top"><a id="a52c0e47aa944946bb2ebf4789d15705e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPolygonTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> *polygon, int level, Writer *writer)</td></tr>
-<tr class="separator:a52c0e47aa944946bb2ebf4789d15705e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50415ef36c5513c37f457e18f30430ba"><td class="memItemLeft" align="right" valign="top"><a id="a50415ef36c5513c37f457e18f30430ba"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPointTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html">geom::MultiPoint</a> *multipoint, int level, Writer *writer)</td></tr>
-<tr class="separator:a50415ef36c5513c37f457e18f30430ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a159e93392ed94ad9d1c64e548e0da134"><td class="memItemLeft" align="right" valign="top"><a id="a159e93392ed94ad9d1c64e548e0da134"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiLineStringTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a> *multiLineString, int level, Writer *writer)</td></tr>
-<tr class="separator:a159e93392ed94ad9d1c64e548e0da134"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7efb2f326339b41e3f7a3d2b893ca36a"><td class="memItemLeft" align="right" valign="top"><a id="a7efb2f326339b41e3f7a3d2b893ca36a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPolygonTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a> *multiPolygon, int level, Writer *writer)</td></tr>
-<tr class="separator:a7efb2f326339b41e3f7a3d2b893ca36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4d80becd4b4407852340e70e3b0cecd"><td class="memItemLeft" align="right" valign="top"><a id="aa4d80becd4b4407852340e70e3b0cecd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryCollectionTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geom::GeometryCollection</a> *geometryCollection, int level, Writer *writer)</td></tr>
-<tr class="separator:aa4d80becd4b4407852340e70e3b0cecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7a74c651009619c59a908ac2d854d7c"><td class="memItemLeft" align="right" valign="top"><a id="ae7a74c651009619c59a908ac2d854d7c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPointText</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *coordinate, int level, Writer *writer)</td></tr>
-<tr class="separator:ae7a74c651009619c59a908ac2d854d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a741d7a1405b32e5ee0e00f61de4413c4"><td class="memItemLeft" align="right" valign="top"><a id="a741d7a1405b32e5ee0e00f61de4413c4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendCoordinate</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *coordinate, Writer *writer)</td></tr>
-<tr class="separator:a741d7a1405b32e5ee0e00f61de4413c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1b8b231a301277a225af35183cc84ae"><td class="memItemLeft" align="right" valign="top"><a id="aa1b8b231a301277a225af35183cc84ae"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geometry, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:aa1b8b231a301277a225af35183cc84ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0e58e206545b79b2c5329bd5e03d654"><td class="memItemLeft" align="right" valign="top"><a id="aa0e58e206545b79b2c5329bd5e03d654"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPointTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Point.html">geom::Point</a> &amp;point, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:aa0e58e206545b79b2c5329bd5e03d654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2b8c65d27db63a52f8677a9c1a67827"><td class="memItemLeft" align="right" valign="top"><a id="ac2b8c65d27db63a52f8677a9c1a67827"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLineStringTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &amp;lineString, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:ac2b8c65d27db63a52f8677a9c1a67827"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ce6396906ab7de46e5866b3997a5364"><td class="memItemLeft" align="right" valign="top"><a id="a2ce6396906ab7de46e5866b3997a5364"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLinearRingTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">geom::LinearRing</a> &amp;lineString, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:a2ce6396906ab7de46e5866b3997a5364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b1b458a635fc8ec4f2914fbe41071c"><td class="memItemLeft" align="right" valign="top"><a id="a86b1b458a635fc8ec4f2914fbe41071c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPolygonTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> &amp;polygon, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:a86b1b458a635fc8ec4f2914fbe41071c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeee0b30076e919345d043caa1f9b1ff"><td class="memItemLeft" align="right" valign="top"><a id="aeeee0b30076e919345d043caa1f9b1ff"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPointTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html">geom::MultiPoint</a> &amp;multipoint, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:aeeee0b30076e919345d043caa1f9b1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad107625161c7d0e50d813ad64fcb7219"><td class="memItemLeft" align="right" valign="top"><a id="ad107625161c7d0e50d813ad64fcb7219"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiLineStringTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a> &amp;multiLineString, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:ad107625161c7d0e50d813ad64fcb7219"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5819bf497a7b0d0d03e7230f47f1694"><td class="memItemLeft" align="right" valign="top"><a id="aa5819bf497a7b0d0d03e7230f47f1694"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPolygonTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a> &amp;multiPolygon, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:aa5819bf497a7b0d0d03e7230f47f1694"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d6144a6f8110d57458e1fe137ffe81"><td class="memItemLeft" align="right" valign="top"><a id="af0d6144a6f8110d57458e1fe137ffe81"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryCollectionTaggedText</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geom::GeometryCollection</a> &amp;geometryCollection, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:af0d6144a6f8110d57458e1fe137ffe81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb9deb06bafe66b907f2be49d33e9912"><td class="memItemLeft" align="right" valign="top"><a id="adb9deb06bafe66b907f2be49d33e9912"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendOrdinateText</b> (<a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, Writer &amp;writer) const</td></tr>
+<tr class="separator:adb9deb06bafe66b907f2be49d33e9912"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27eb187afb110083e5486d1a90bf32a0"><td class="memItemLeft" align="right" valign="top"><a id="a27eb187afb110083e5486d1a90bf32a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendSequenceText</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;seq, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, bool doIntent, Writer &amp;writer) const</td></tr>
+<tr class="separator:a27eb187afb110083e5486d1a90bf32a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2eb42c209ad25ff48a58a772638bc8"><td class="memItemLeft" align="right" valign="top"><a id="afc2eb42c209ad25ff48a58a772638bc8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendCoordinate</b> (const geom::CoordinateXYZM &amp;coordinate, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, Writer &amp;writer) const</td></tr>
+<tr class="separator:afc2eb42c209ad25ff48a58a772638bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27a19555435228308a4b8ae343329eb2"><td class="memItemLeft" align="right" valign="top"><a id="a27a19555435228308a4b8ae343329eb2"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>writeNumber</b> (double d) const</td></tr>
 <tr class="separator:a27a19555435228308a4b8ae343329eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb346622124d13bcd8d867919f5b8a33"><td class="memItemLeft" align="right" valign="top"><a id="aeb346622124d13bcd8d867919f5b8a33"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLineStringText</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *lineString, int level, bool doIndent, Writer *writer)</td></tr>
-<tr class="separator:aeb346622124d13bcd8d867919f5b8a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1f85cfd1a2d6d027d02e1b065fcc8e7"><td class="memItemLeft" align="right" valign="top"><a id="ab1f85cfd1a2d6d027d02e1b065fcc8e7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPolygonText</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> *polygon, int level, bool indentFirst, Writer *writer)</td></tr>
-<tr class="separator:ab1f85cfd1a2d6d027d02e1b065fcc8e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e1df417aca530c3562a2788398a76dd"><td class="memItemLeft" align="right" valign="top"><a id="a4e1df417aca530c3562a2788398a76dd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPointText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html">geom::MultiPoint</a> *multiPoint, int level, Writer *writer)</td></tr>
-<tr class="separator:a4e1df417aca530c3562a2788398a76dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7ac0ba72b6acba37543a7a42aa1d016"><td class="memItemLeft" align="right" valign="top"><a id="ac7ac0ba72b6acba37543a7a42aa1d016"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiLineStringText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a> *multiLineString, int level, bool indentFirst, Writer *writer)</td></tr>
-<tr class="separator:ac7ac0ba72b6acba37543a7a42aa1d016"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cc4d05ec1975f2d05c465bb96e6bb8f"><td class="memItemLeft" align="right" valign="top"><a id="a5cc4d05ec1975f2d05c465bb96e6bb8f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPolygonText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a> *multiPolygon, int level, Writer *writer)</td></tr>
-<tr class="separator:a5cc4d05ec1975f2d05c465bb96e6bb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f4b494791067c147b068eefe707c376"><td class="memItemLeft" align="right" valign="top"><a id="a1f4b494791067c147b068eefe707c376"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryCollectionText</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geom::GeometryCollection</a> *geometryCollection, int level, Writer *writer)</td></tr>
-<tr class="separator:a1f4b494791067c147b068eefe707c376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e65b2a08ad13c4bff30623ec5d21259"><td class="memItemLeft" align="right" valign="top"><a id="a5e65b2a08ad13c4bff30623ec5d21259"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendLineStringText</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &amp;lineString, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, bool doIndent, Writer &amp;writer) const</td></tr>
+<tr class="separator:a5e65b2a08ad13c4bff30623ec5d21259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b60683668b85f2a576c5fdcd66c01d4"><td class="memItemLeft" align="right" valign="top"><a id="a0b60683668b85f2a576c5fdcd66c01d4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendPolygonText</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> &amp;polygon, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, bool indentFirst, Writer &amp;writer) const</td></tr>
+<tr class="separator:a0b60683668b85f2a576c5fdcd66c01d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19e6bf1965dd3cb81cd1ce14d95175f8"><td class="memItemLeft" align="right" valign="top"><a id="a19e6bf1965dd3cb81cd1ce14d95175f8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPointText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html">geom::MultiPoint</a> &amp;multiPoint, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:a19e6bf1965dd3cb81cd1ce14d95175f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27d777c16f0ebd7ce17f451b8029dbcf"><td class="memItemLeft" align="right" valign="top"><a id="a27d777c16f0ebd7ce17f451b8029dbcf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiLineStringText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a> &amp;multiLineString, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, bool indentFirst, Writer &amp;writer) const</td></tr>
+<tr class="separator:a27d777c16f0ebd7ce17f451b8029dbcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74d675f1d4679aae473f96872da0e4ee"><td class="memItemLeft" align="right" valign="top"><a id="a74d675f1d4679aae473f96872da0e4ee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendMultiPolygonText</b> (const <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a> &amp;multiPolygon, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:a74d675f1d4679aae473f96872da0e4ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af371318a85a57c9bcf1dfd8a5a676f46"><td class="memItemLeft" align="right" valign="top"><a id="af371318a85a57c9bcf1dfd8a5a676f46"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>appendGeometryCollectionText</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geom::GeometryCollection</a> &amp;geometryCollection, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> outputOrdinates, int level, Writer &amp;writer) const</td></tr>
+<tr class="separator:af371318a85a57c9bcf1dfd8a5a676f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>

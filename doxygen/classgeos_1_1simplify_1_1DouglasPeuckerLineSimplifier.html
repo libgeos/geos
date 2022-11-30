@@ -75,23 +75,23 @@ typedef std::unique_ptr&lt; CoordsVect &gt;&#160;</td><td class="memItemRight" v
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a85f6ae3d1c6e34ac30d448313815d50a"><td class="memItemLeft" align="right" valign="top"><a id="a85f6ae3d1c6e34ac30d448313815d50a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DouglasPeuckerLineSimplifier</b> (const CoordsVect &amp;nPts)</td></tr>
-<tr class="separator:a85f6ae3d1c6e34ac30d448313815d50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d043a33d229c55bd666e06b5c6d7b34"><td class="memItemLeft" align="right" valign="top"><a id="a2d043a33d229c55bd666e06b5c6d7b34"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DouglasPeuckerLineSimplifier</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;nPts)</td></tr>
+<tr class="separator:a2d043a33d229c55bd666e06b5c6d7b34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a722e8afe0527f2403655c7c7034d63e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#a722e8afe0527f2403655c7c7034d63e6">setDistanceTolerance</a> (double nDistanceTolerance)</td></tr>
 <tr class="memdesc:a722e8afe0527f2403655c7c7034d63e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the distance tolerance for the simplification.  <a href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#a722e8afe0527f2403655c7c7034d63e6">More...</a><br /></td></tr>
 <tr class="separator:a722e8afe0527f2403655c7c7034d63e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7708c5a1d2cdca4a84853667d1fff907"><td class="memItemLeft" align="right" valign="top"><a id="a7708c5a1d2cdca4a84853667d1fff907"></a>
-CoordsVectAutoPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#a7708c5a1d2cdca4a84853667d1fff907">simplify</a> ()</td></tr>
-<tr class="memdesc:a7708c5a1d2cdca4a84853667d1fff907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated Coordinate vector, wrapped into an unique_ptr. <br /></td></tr>
-<tr class="separator:a7708c5a1d2cdca4a84853667d1fff907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada5b94d52fda3161cea6690fc65b872e"><td class="memItemLeft" align="right" valign="top"><a id="ada5b94d52fda3161cea6690fc65b872e"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#ada5b94d52fda3161cea6690fc65b872e">simplify</a> ()</td></tr>
+<tr class="memdesc:ada5b94d52fda3161cea6690fc65b872e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated Coordinate vector, wrapped into an unique_ptr. <br /></td></tr>
+<tr class="separator:ada5b94d52fda3161cea6690fc65b872e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2350c9e531d607496a861c5470b8a763"><td class="memItemLeft" align="right" valign="top"><a id="a2350c9e531d607496a861c5470b8a763"></a>
-static CoordsVectAutoPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#a2350c9e531d607496a861c5470b8a763">simplify</a> (const CoordsVect &amp;nPts, double distanceTolerance)</td></tr>
-<tr class="memdesc:a2350c9e531d607496a861c5470b8a763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated Coordinate vector, wrapped into an unique_ptr. <br /></td></tr>
-<tr class="separator:a2350c9e531d607496a861c5470b8a763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7128ab84ae0f0f0186aac81ee20e0301"><td class="memItemLeft" align="right" valign="top"><a id="a7128ab84ae0f0f0186aac81ee20e0301"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1DouglasPeuckerLineSimplifier.html#a7128ab84ae0f0f0186aac81ee20e0301">simplify</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;nPts, double distanceTolerance)</td></tr>
+<tr class="memdesc:a7128ab84ae0f0f0186aac81ee20e0301"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated Coordinate vector, wrapped into an unique_ptr. <br /></td></tr>
+<tr class="separator:a7128ab84ae0f0f0186aac81ee20e0301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simplifies a linestring (sequence of points) using the standard Douglas-Peucker algorithm. </p>

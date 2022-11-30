@@ -63,7 +63,7 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateArraySequence.h&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
@@ -75,12 +75,12 @@ $(function() {
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">static</span> std::unique_ptr&lt;geom::CoordinateArraySequence&gt;</div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#af5c3f304a27071965dc69a19529b4b49">   42</a></span>&#160;            <a class="code" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#af5c3f304a27071965dc69a19529b4b49">removeRepeatedPoints</a>(</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">static</span> std::unique_ptr&lt;geom::CoordinateSequence&gt;</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#a8adfefab8e228543c986783e4a427951">   42</a></span>&#160;            <a class="code" href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#a8adfefab8e228543c986783e4a427951">removeRepeatedPoints</a>(</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq,</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="keywordtype">double</span> tolerance = 0.0);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> std::unique_ptr&lt;geom::CoordinateArraySequence&gt;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> std::unique_ptr&lt;geom::CoordinateSequence&gt;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            removeRepeatedAndInvalidPoints(</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq,</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="keywordtype">double</span> tolerance = 0.0);</div>
@@ -95,10 +95,10 @@ $(function() {
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:45</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1valid_1_1RepeatedPointRemover_html"><div class="ttname"><a href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html">geos::operation::valid::RepeatedPointRemover</a></div><div class="ttdef"><b>Definition:</b> RepeatedPointRemover.h:28</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1valid_1_1RepeatedPointRemover_html_af5c3f304a27071965dc69a19529b4b49"><div class="ttname"><a href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#af5c3f304a27071965dc69a19529b4b49">geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::CoordinateArraySequence &gt; removeRepeatedPoints(const geom::CoordinateSequence *seq, double tolerance=0.0)</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1valid_1_1RepeatedPointRemover_html_a8adfefab8e228543c986783e4a427951"><div class="ttname"><a href="classgeos_1_1operation_1_1valid_1_1RepeatedPointRemover.html#a8adfefab8e228543c986783e4a427951">geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::CoordinateSequence &gt; removeRepeatedPoints(const geom::CoordinateSequence *seq, double tolerance=0.0)</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

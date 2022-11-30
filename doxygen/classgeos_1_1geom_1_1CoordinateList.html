@@ -70,9 +70,13 @@ typedef std::list&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4f03839515dea95f4336977fdc48db25"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateList.html#a4f03839515dea95f4336977fdc48db25">CoordinateList</a> (const std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;v)</td></tr>
-<tr class="memdesc:a4f03839515dea95f4336977fdc48db25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new list from an array of Coordinates, allowing repeated points.  <a href="classgeos_1_1geom_1_1CoordinateList.html#a4f03839515dea95f4336977fdc48db25">More...</a><br /></td></tr>
-<tr class="separator:a4f03839515dea95f4336977fdc48db25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae987b6e97025cb32f4d306cf3ff0d74c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae987b6e97025cb32f4d306cf3ff0d74c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateList.html#ae987b6e97025cb32f4d306cf3ff0d74c">CoordinateList</a> (const T &amp;v)</td></tr>
+<tr class="memdesc:ae987b6e97025cb32f4d306cf3ff0d74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new list from an array of Coordinates, allowing repeated points.  <a href="classgeos_1_1geom_1_1CoordinateList.html#ae987b6e97025cb32f4d306cf3ff0d74c">More...</a><br /></td></tr>
+<tr class="separator:ae987b6e97025cb32f4d306cf3ff0d74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c4138507a0e662bc72c6e5340d90ba"><td class="memItemLeft" align="right" valign="top"><a id="ad6c4138507a0e662bc72c6e5340d90ba"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CoordinateList</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;v)</td></tr>
+<tr class="separator:ad6c4138507a0e662bc72c6e5340d90ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbd1fa86eb5b8bf542aee9a1ebf7759d"><td class="memItemLeft" align="right" valign="top"><a id="abbd1fa86eb5b8bf542aee9a1ebf7759d"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
 <tr class="separator:abbd1fa86eb5b8bf542aee9a1ebf7759d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,6 +113,9 @@ iterator&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (iterat
 <tr class="memitem:a7b523188c5191ce428951c44a371f385"><td class="memItemLeft" align="right" valign="top"><a id="a7b523188c5191ce428951c44a371f385"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a59345d3a409b5d2ebe01fcfcdcca92cb">Coordinate::Vect</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toCoordinateArray</b> () const</td></tr>
 <tr class="separator:a7b523188c5191ce428951c44a371f385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f59fb5e1cdf24c37934a3923c75824a"><td class="memItemLeft" align="right" valign="top"><a id="a7f59fb5e1cdf24c37934a3923c75824a"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toCoordinateSequence</b> () const</td></tr>
+<tr class="separator:a7f59fb5e1cdf24c37934a3923c75824a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5edac5733623bab11d47aa5d3632143"><td class="memItemLeft" align="right" valign="top"><a id="af5edac5733623bab11d47aa5d3632143"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>closeRing</b> ()</td></tr>
 <tr class="separator:af5edac5733623bab11d47aa5d3632143"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,11 +136,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p>A list of <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>s, which may be set to prevent repeated coordinates from occuring in the list. </p>
 <p>Use this class when fast insertions and removal at arbitrary position is needed. The class keeps ownership of the Coordinates. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4f03839515dea95f4336977fdc48db25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f03839515dea95f4336977fdc48db25">&#9670;&nbsp;</a></span>CoordinateList()</h2>
+<a id="ae987b6e97025cb32f4d306cf3ff0d74c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae987b6e97025cb32f4d306cf3ff0d74c">&#9670;&nbsp;</a></span>CoordinateList()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -141,7 +150,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         <tr>
           <td class="memname">geos::geom::CoordinateList::CoordinateList </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>v</em></td><td>)</td>
           <td></td>
         </tr>

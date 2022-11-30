@@ -47,10 +47,9 @@ $(function() {
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classgeos_1_1geom_1_1CoordinateSequence-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">geos::geom::CoordinateSequence Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">geos::geom::CoordinateSequence Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -58,15 +57,6 @@ $(function() {
  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="geom_8h_source.html">geos.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for geos::geom::CoordinateSequence:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classgeos_1_1geom_1_1CoordinateSequence.png" usemap="#geos::geom::CoordinateSequence_map" alt=""/>
-  <map id="geos::geom::CoordinateSequence_map" name="geos::geom::CoordinateSequence_map">
-<area href="classgeos_1_1geom_1_1CoordinateArraySequence.html" title="The default implementation of CoordinateSequence." alt="geos::geom::CoordinateArraySequence" shape="rect" coords="0,56,232,80"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -89,573 +79,256 @@ typedef std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateS
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1671b92e89441e2e6c996013bdf4d5d4"><td class="memItemLeft" align="right" valign="top"><a id="a1671b92e89441e2e6c996013bdf4d5d4"></a>
-virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a1671b92e89441e2e6c996013bdf4d5d4">clone</a> () const =0</td></tr>
-<tr class="memdesc:a1671b92e89441e2e6c996013bdf4d5d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a deep copy of this collection. <br /></td></tr>
-<tr class="separator:a1671b92e89441e2e6c996013bdf4d5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21b38920a6a53f3ae0723ef0813fa462"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a21b38920a6a53f3ae0723ef0813fa462">getAt</a> (std::size_t i) const =0</td></tr>
-<tr class="memdesc:a21b38920a6a53f3ae0723ef0813fa462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a read-only reference to <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i.  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#a21b38920a6a53f3ae0723ef0813fa462">More...</a><br /></td></tr>
-<tr class="separator:a21b38920a6a53f3ae0723ef0813fa462"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66e401c6986c6cbf22847fd72f85186d"><td class="memItemLeft" align="right" valign="top"><a id="a66e401c6986c6cbf22847fd72f85186d"></a>
-virtual <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getAt</b> (std::size_t i)=0</td></tr>
-<tr class="separator:a66e401c6986c6cbf22847fd72f85186d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d60116646a50b0eba152bca475f59eb"><td class="memItemLeft" align="right" valign="top"><a id="a1d60116646a50b0eba152bca475f59eb"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a1d60116646a50b0eba152bca475f59eb">back</a> () const</td></tr>
-<tr class="memdesc:a1d60116646a50b0eba152bca475f59eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return last <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
-<tr class="separator:a1d60116646a50b0eba152bca475f59eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d66e2b59ca9f3a68b831ac6362f58e"><td class="memItemLeft" align="right" valign="top"><a id="a77d66e2b59ca9f3a68b831ac6362f58e"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a77d66e2b59ca9f3a68b831ac6362f58e">front</a> () const</td></tr>
-<tr class="memdesc:a77d66e2b59ca9f3a68b831ac6362f58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
-<tr class="separator:a77d66e2b59ca9f3a68b831ac6362f58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac01cfaddbe448affadfefa50eaea9d8e"><td class="memItemLeft" align="right" valign="top"><a id="ac01cfaddbe448affadfefa50eaea9d8e"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (std::size_t i) const</td></tr>
-<tr class="separator:ac01cfaddbe448affadfefa50eaea9d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adde8b64f4e22635a7917cc38b1270164"><td class="memItemLeft" align="right" valign="top"><a id="adde8b64f4e22635a7917cc38b1270164"></a>
-<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (std::size_t i)</td></tr>
-<tr class="separator:adde8b64f4e22635a7917cc38b1270164"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4bd8ee7d9f42406effb3bb752deb026"><td class="memItemLeft" align="right" valign="top"><a id="ab4bd8ee7d9f42406effb3bb752deb026"></a>
-virtual <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEnvelope</b> () const</td></tr>
-<tr class="separator:ab4bd8ee7d9f42406effb3bb752deb026"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21e9cebf585767cc8233f54629729f24"><td class="memItemLeft" align="right" valign="top"><a id="a21e9cebf585767cc8233f54629729f24"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a21e9cebf585767cc8233f54629729f24">getAt</a> (std::size_t i, <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c) const =0</td></tr>
-<tr class="memdesc:a21e9cebf585767cc8233f54629729f24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i to given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
-<tr class="separator:a21e9cebf585767cc8233f54629729f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11ed8d7eca9c62dcd19012245fe25416"><td class="memItemLeft" align="right" valign="top"><a id="a11ed8d7eca9c62dcd19012245fe25416"></a>
-virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a11ed8d7eca9c62dcd19012245fe25416">getSize</a> () const =0</td></tr>
-<tr class="memdesc:a11ed8d7eca9c62dcd19012245fe25416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of Coordinates (actual or otherwise, as this implementation may not store its data in <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> objects). <br /></td></tr>
-<tr class="separator:a11ed8d7eca9c62dcd19012245fe25416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a885b821fe2928633cd6de16474dee54c"><td class="memItemLeft" align="right" valign="top"><a id="a885b821fe2928633cd6de16474dee54c"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
-<tr class="separator:a885b821fe2928633cd6de16474dee54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9338282a924b596db9c923aa4eef188"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#aa9338282a924b596db9c923aa4eef188">toVector</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;coords) const =0</td></tr>
-<tr class="separator:aa9338282a924b596db9c923aa4eef188"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadd39fd3f44a1daed852b47b43edd463"><td class="memItemLeft" align="right" valign="top"><a id="aadd39fd3f44a1daed852b47b43edd463"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>toVector</b> (std::vector&lt; CoordinateXY &gt; &amp;coords) const =0</td></tr>
-<tr class="separator:aadd39fd3f44a1daed852b47b43edd463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03d2e25eac13c33c536a54d2108de344"><td class="memItemLeft" align="right" valign="top"><a id="a03d2e25eac13c33c536a54d2108de344"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a03d2e25eac13c33c536a54d2108de344">isEmpty</a> () const =0</td></tr>
-<tr class="memdesc:a03d2e25eac13c33c536a54d2108de344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> it list contains no coordinates. <br /></td></tr>
-<tr class="separator:a03d2e25eac13c33c536a54d2108de344"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a422179995ad225e63563cba78170eb89"><td class="memItemLeft" align="right" valign="top"><a id="a422179995ad225e63563cba78170eb89"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a422179995ad225e63563cba78170eb89">setAt</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c, std::size_t pos)=0</td></tr>
-<tr class="memdesc:a422179995ad225e63563cba78170eb89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> c to position pos. <br /></td></tr>
-<tr class="separator:a422179995ad225e63563cba78170eb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4784e0fa749f3aff959fa132059cd328"><td class="memItemLeft" align="right" valign="top"><a id="a4784e0fa749f3aff959fa132059cd328"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setAt</b> (const CoordinateXY &amp;c, std::size_t pos)</td></tr>
-<tr class="separator:a4784e0fa749f3aff959fa132059cd328"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca9592f066ecbc03dde2e827aa59b54f"><td class="memItemLeft" align="right" valign="top"><a id="aca9592f066ecbc03dde2e827aa59b54f"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#aca9592f066ecbc03dde2e827aa59b54f">toString</a> () const</td></tr>
-<tr class="memdesc:aca9592f066ecbc03dde2e827aa59b54f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a string representation of <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
-<tr class="separator:aca9592f066ecbc03dde2e827aa59b54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed2aa2f665e1c688ea45ca192929c49d"><td class="memItemLeft" align="right" valign="top"><a id="aed2aa2f665e1c688ea45ca192929c49d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#aed2aa2f665e1c688ea45ca192929c49d">setPoints</a> (const std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;v)=0</td></tr>
-<tr class="memdesc:aed2aa2f665e1c688ea45ca192929c49d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Substitute <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> list with a copy of the given vector. <br /></td></tr>
-<tr class="separator:aed2aa2f665e1c688ea45ca192929c49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d18ad27b99881dcf2282a2b5ee7a003"><td class="memItemLeft" align="right" valign="top"><a id="a9d18ad27b99881dcf2282a2b5ee7a003"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a9d18ad27b99881dcf2282a2b5ee7a003">hasRepeatedPoints</a> () const</td></tr>
-<tr class="memdesc:a9d18ad27b99881dcf2282a2b5ee7a003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if contains any two consecutive points. <br /></td></tr>
-<tr class="separator:a9d18ad27b99881dcf2282a2b5ee7a003"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e999b49b23e0c232cbc7eb717c603d"><td class="memItemLeft" align="right" valign="top"><a id="a59e999b49b23e0c232cbc7eb717c603d"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a59e999b49b23e0c232cbc7eb717c603d">minCoordinate</a> () const</td></tr>
-<tr class="memdesc:a59e999b49b23e0c232cbc7eb717c603d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns lower-left <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in list. <br /></td></tr>
-<tr class="separator:a59e999b49b23e0c232cbc7eb717c603d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaeb1320a591615a4907cc6929f42e15"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#abaeb1320a591615a4907cc6929f42e15">isRing</a> () const</td></tr>
-<tr class="memdesc:abaeb1320a591615a4907cc6929f42e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether an a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> forms a ring, by checking length and closure. Self-intersection is not checked.  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#abaeb1320a591615a4907cc6929f42e15">More...</a><br /></td></tr>
-<tr class="separator:abaeb1320a591615a4907cc6929f42e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96077c66e7e2e60eba2f3c00a25de12d"><td class="memItemLeft" align="right" valign="top">virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a96077c66e7e2e60eba2f3c00a25de12d">getDimension</a> () const =0</td></tr>
-<tr class="separator:a96077c66e7e2e60eba2f3c00a25de12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5afb275a61de82d6c64d1b8f6411c9b"><td class="memItemLeft" align="right" valign="top"><a id="ab5afb275a61de82d6c64d1b8f6411c9b"></a>
+<tr class="memitem:ga978f0b66cbc7cb3f0ee6070c31331e95"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga978f0b66cbc7cb3f0ee6070c31331e95">CoordinateSequence</a> ()</td></tr>
+<tr class="separator:ga978f0b66cbc7cb3f0ee6070c31331e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac0802ee04c23bc18d6041657fd01dea7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#gac0802ee04c23bc18d6041657fd01dea7">CoordinateSequence</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>, std::size_t dim=0)</td></tr>
+<tr class="separator:gac0802ee04c23bc18d6041657fd01dea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga305d969cdf19ef75facba58811ff8f78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga305d969cdf19ef75facba58811ff8f78">CoordinateSequence</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>, bool hasz, bool hasm, bool initialize=true)</td></tr>
+<tr class="separator:ga305d969cdf19ef75facba58811ff8f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae393d391d965183ec6f803c890c29d54"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#gae393d391d965183ec6f803c890c29d54">CoordinateSequence</a> (const std::initializer_list&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;)</td></tr>
+<tr class="separator:gae393d391d965183ec6f803c890c29d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1b13a3f46e2cd29c977d413f978b7d0d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga1b13a3f46e2cd29c977d413f978b7d0d">CoordinateSequence</a> (const std::initializer_list&lt; CoordinateXY &gt; &amp;)</td></tr>
+<tr class="separator:ga1b13a3f46e2cd29c977d413f978b7d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad05144eb72c2bd409c7f7fe1f1746a23"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#gad05144eb72c2bd409c7f7fe1f1746a23">CoordinateSequence</a> (const std::initializer_list&lt; CoordinateXYM &gt; &amp;)</td></tr>
+<tr class="separator:gad05144eb72c2bd409c7f7fe1f1746a23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1152c9784b410473ef3d355a3cadbfe1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga1152c9784b410473ef3d355a3cadbfe1">CoordinateSequence</a> (const std::initializer_list&lt; CoordinateXYZM &gt; &amp;)</td></tr>
+<tr class="separator:ga1152c9784b410473ef3d355a3cadbfe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga299ead1cb75026ea7849cb8158486cda"><td class="memItemLeft" align="right" valign="top">
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga299ead1cb75026ea7849cb8158486cda">clone</a> () const</td></tr>
+<tr class="memdesc:ga299ead1cb75026ea7849cb8158486cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a heap-allocated deep copy of this <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
+<tr class="separator:ga299ead1cb75026ea7849cb8158486cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga256f09c71a46c1c079b3bfd781fd6329"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#ga256f09c71a46c1c079b3bfd781fd6329">getEnvelope</a> () const</td></tr>
+<tr class="separator:ga256f09c71a46c1c079b3bfd781fd6329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2255ef6f65c1fe9159820ffa5256b33a"><td class="memItemLeft" align="right" valign="top">
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#ga2255ef6f65c1fe9159820ffa5256b33a">getSize</a> () const</td></tr>
+<tr class="memdesc:ga2255ef6f65c1fe9159820ffa5256b33a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of Coordinates. <br /></td></tr>
+<tr class="separator:ga2255ef6f65c1fe9159820ffa5256b33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga885b821fe2928633cd6de16474dee54c"><td class="memItemLeft" align="right" valign="top">
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a> () const</td></tr>
+<tr class="memdesc:ga885b821fe2928633cd6de16474dee54c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of Coordinates. <br /></td></tr>
+<tr class="separator:ga885b821fe2928633cd6de16474dee54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab726c5b705885c57f54273280225828f"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#gab726c5b705885c57f54273280225828f">isEmpty</a> () const</td></tr>
+<tr class="memdesc:gab726c5b705885c57f54273280225828f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> if list contains no coordinates. <br /></td></tr>
+<tr class="separator:gab726c5b705885c57f54273280225828f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabaeb1320a591615a4907cc6929f42e15"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">isRing</a> () const</td></tr>
+<tr class="memdesc:gabaeb1320a591615a4907cc6929f42e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether an a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> forms a ring, by checking length and closure. Self-intersection is not checked.  <a href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">More...</a><br /></td></tr>
+<tr class="separator:gabaeb1320a591615a4907cc6929f42e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad396612f604ab2cb228e8526abb1b0c4"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">getDimension</a> () const</td></tr>
+<tr class="separator:gad396612f604ab2cb228e8526abb1b0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab5afb275a61de82d6c64d1b8f6411c9b"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasZ</b> () const</td></tr>
-<tr class="separator:ab5afb275a61de82d6c64d1b8f6411c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a8d9c386dc966ac14c1ec38affa74f4"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a5a8d9c386dc966ac14c1ec38affa74f4">getOrdinate</a> (std::size_t index, std::size_t ordinateIndex) const</td></tr>
-<tr class="separator:a5a8d9c386dc966ac14c1ec38affa74f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43ca13136249873fd913ba95e6187c31"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43ca13136249873fd913ba95e6187c31">getX</a> (std::size_t index) const</td></tr>
-<tr class="separator:a43ca13136249873fd913ba95e6187c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43dde96d4f32a0b527abc25bd98bb365"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a43dde96d4f32a0b527abc25bd98bb365">getY</a> (std::size_t index) const</td></tr>
-<tr class="separator:a43dde96d4f32a0b527abc25bd98bb365"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cb41773fe4e6d72bd5004d1d6f79bcd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6cb41773fe4e6d72bd5004d1d6f79bcd">setOrdinate</a> (std::size_t index, std::size_t ordinateIndex, double value)=0</td></tr>
-<tr class="separator:a6cb41773fe4e6d72bd5004d1d6f79bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a624599b9d4efb5fe2f966e4e35284341"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a624599b9d4efb5fe2f966e4e35284341">expandEnvelope</a> (<a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;env) const</td></tr>
-<tr class="separator:a624599b9d4efb5fe2f966e4e35284341"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd103ca9668f584c7ec363ba9d5d8406"><td class="memItemLeft" align="right" valign="top"><a id="acd103ca9668f584c7ec363ba9d5d8406"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_rw</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a> *filter)=0</td></tr>
-<tr class="separator:acd103ca9668f584c7ec363ba9d5d8406"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a509dac08bd83c8344d21a28f7edba3af"><td class="memItemLeft" align="right" valign="top"><a id="a509dac08bd83c8344d21a28f7edba3af"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_ro</b> (<a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a> *filter) const =0</td></tr>
-<tr class="separator:a509dac08bd83c8344d21a28f7edba3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ba2cfd860eef2342b1306e855b58b0c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a6ba2cfd860eef2342b1306e855b58b0c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">applyCoordinateFilter</a> (T &amp;f)</td></tr>
-<tr class="memdesc:a6ba2cfd860eef2342b1306e855b58b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a filter to each <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> of this sequence. The filter is expected to provide a .filter(Coordinate&amp;) method.  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#a6ba2cfd860eef2342b1306e855b58b0c">More...</a><br /></td></tr>
-<tr class="separator:a6ba2cfd860eef2342b1306e855b58b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b017448a3075ca8980342f4e6bb5cc7"><td class="memItemLeft" align="right" valign="top"><a id="a2b017448a3075ca8980342f4e6bb5cc7"></a>
-iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
-<tr class="separator:a2b017448a3075ca8980342f4e6bb5cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac59324f47d421225cce96badbf9c0e9c"><td class="memItemLeft" align="right" valign="top"><a id="ac59324f47d421225cce96badbf9c0e9c"></a>
-iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
-<tr class="separator:ac59324f47d421225cce96badbf9c0e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a848e2e95fd3de6aebc1cef600baeedf3"><td class="memItemLeft" align="right" valign="top"><a id="a848e2e95fd3de6aebc1cef600baeedf3"></a>
-const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () const</td></tr>
-<tr class="separator:a848e2e95fd3de6aebc1cef600baeedf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a509d5f96c6464009e45aed93cbfe28ef"><td class="memItemLeft" align="right" valign="top"><a id="a509d5f96c6464009e45aed93cbfe28ef"></a>
-const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () const</td></tr>
-<tr class="separator:a509d5f96c6464009e45aed93cbfe28ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:gab5afb275a61de82d6c64d1b8f6411c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga29bb40e4a7b928f4c0f7f77884c83f55"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasM</b> () const</td></tr>
+<tr class="separator:ga29bb40e4a7b928f4c0f7f77884c83f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d18ad27b99881dcf2282a2b5ee7a003"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">hasRepeatedPoints</a> () const</td></tr>
+<tr class="memdesc:ga9d18ad27b99881dcf2282a2b5ee7a003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if contains any two consecutive points. <br /></td></tr>
+<tr class="separator:ga9d18ad27b99881dcf2282a2b5ee7a003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa8ff355f1567a5b910cdff2f9181976e"><td class="memItemLeft" align="right" valign="top">CoordinateType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">getCoordinateType</a> () const</td></tr>
+<tr class="separator:gaa8ff355f1567a5b910cdff2f9181976e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac8256373579d4568e0920a69969c1296"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:gac8256373579d4568e0920a69969c1296"><td class="memTemplItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a> (std::size_t i) const</td></tr>
+<tr class="memdesc:gac8256373579d4568e0920a69969c1296"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a read-only reference to <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i. <br /></td></tr>
+<tr class="separator:gac8256373579d4568e0920a69969c1296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4152a6b33f8b83897b8df829adb0e4ef"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:ga4152a6b33f8b83897b8df829adb0e4ef"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">getAt</a> (std::size_t i)</td></tr>
+<tr class="memdesc:ga4152a6b33f8b83897b8df829adb0e4ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i. <br /></td></tr>
+<tr class="separator:ga4152a6b33f8b83897b8df829adb0e4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga83ee824a5f6d8b1322ea0ea539d9e0bc"><td class="memTemplParams" colspan="2">
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga83ee824a5f6d8b1322ea0ea539d9e0bc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">getAt</a> (std::size_t i, T &amp;c) const</td></tr>
+<tr class="memdesc:ga83ee824a5f6d8b1322ea0ea539d9e0bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i to given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
+<tr class="separator:ga83ee824a5f6d8b1322ea0ea539d9e0bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab1c61d712d5636b0d03add6226d3c616"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getAt</b> (std::size_t i, CoordinateXY &amp;c) const</td></tr>
+<tr class="separator:gab1c61d712d5636b0d03add6226d3c616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac01cfaddbe448affadfefa50eaea9d8e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">operator[]</a> (std::size_t i) const</td></tr>
+<tr class="separator:gac01cfaddbe448affadfefa50eaea9d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadde8b64f4e22635a7917cc38b1270164"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">operator[]</a> (std::size_t i)</td></tr>
+<tr class="separator:gadde8b64f4e22635a7917cc38b1270164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4f0bb3d886e036e5f2a26620b7bea63b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">getOrdinate</a> (std::size_t index, std::size_t ordinateIndex) const</td></tr>
+<tr class="separator:ga4f0bb3d886e036e5f2a26620b7bea63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadc750ec82bcc62a5c9a358826b1c7f2f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">getX</a> (std::size_t index) const</td></tr>
+<tr class="separator:gadc750ec82bcc62a5c9a358826b1c7f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaedc561083d2e5ee9ed2d1912c3395eed"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">getY</a> (std::size_t index) const</td></tr>
+<tr class="separator:gaedc561083d2e5ee9ed2d1912c3395eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa1bbf3593a22cb34dc59aeb42206bdaf"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:gaa1bbf3593a22cb34dc59aeb42206bdaf"><td class="memTemplItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">back</a> () const</td></tr>
+<tr class="memdesc:gaa1bbf3593a22cb34dc59aeb42206bdaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return last <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
+<tr class="separator:gaa1bbf3593a22cb34dc59aeb42206bdaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga47fa2c2296f7b23175791ff9eb87a7a3"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:ga47fa2c2296f7b23175791ff9eb87a7a3"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">back</a> ()</td></tr>
+<tr class="memdesc:ga47fa2c2296f7b23175791ff9eb87a7a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return last <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
+<tr class="separator:ga47fa2c2296f7b23175791ff9eb87a7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga75ca961fcb621b141c39e81fca70f62c"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:ga75ca961fcb621b141c39e81fca70f62c"><td class="memTemplItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">front</a> () const</td></tr>
+<tr class="memdesc:ga75ca961fcb621b141c39e81fca70f62c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
+<tr class="separator:ga75ca961fcb621b141c39e81fca70f62c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga755282f2708362f581f1bb2bb2a57fca"><td class="memTemplParams" colspan="2">
+template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:ga755282f2708362f581f1bb2bb2a57fca"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">front</a> ()</td></tr>
+<tr class="memdesc:ga755282f2708362f581f1bb2bb2a57fca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in the sequence. <br /></td></tr>
+<tr class="separator:ga755282f2708362f581f1bb2bb2a57fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3be70d74c163ee237ee0786e2058ac8c"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">toVector</a> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;coords) const</td></tr>
+<tr class="memdesc:ga3be70d74c163ee237ee0786e2058ac8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pushes all Coordinates of this sequence into the provided vector. <br /></td></tr>
+<tr class="separator:ga3be70d74c163ee237ee0786e2058ac8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7ba4c5c779ed818f5b6f6fac829f0bb9"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>toVector</b> (std::vector&lt; CoordinateXY &gt; &amp;coords) const</td></tr>
+<tr class="separator:ga7ba4c5c779ed818f5b6f6fac829f0bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8e7e357116832e340ba1e4b35ddba6b3"><td class="memTemplParams" colspan="2">
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga8e7e357116832e340ba1e4b35ddba6b3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">setAt</a> (const T &amp;c, std::size_t pos)</td></tr>
+<tr class="memdesc:ga8e7e357116832e340ba1e4b35ddba6b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> c to position pos. <br /></td></tr>
+<tr class="separator:ga8e7e357116832e340ba1e4b35ddba6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4cdec235879fc02491ac44ba377f8d52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">setOrdinate</a> (std::size_t index, std::size_t ordinateIndex, double value)</td></tr>
+<tr class="separator:ga4cdec235879fc02491ac44ba377f8d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga55b7f07173fed6b48eae8f045064aa34"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">setPoints</a> (const std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;v)</td></tr>
+<tr class="memdesc:ga55b7f07173fed6b48eae8f045064aa34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Substitute <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> list with a copy of the given vector. <br /></td></tr>
+<tr class="separator:ga55b7f07173fed6b48eae8f045064aa34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9fa8f1bf92b1e6f28f64d6d5a4750f0b"><td class="memTemplParams" colspan="2">template&lt;typename T  = Coordinate&gt; </td></tr>
+<tr class="memitem:ga9fa8f1bf92b1e6f28f64d6d5a4750f0b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">add</a> (const T &amp;c)</td></tr>
+<tr class="separator:ga9fa8f1bf92b1e6f28f64d6d5a4750f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6bb200879c236e234d4ba6ac78bd5a18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga6bb200879c236e234d4ba6ac78bd5a18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">add</a> (const T &amp;c, bool allowRepeated)</td></tr>
+<tr class="separator:ga6bb200879c236e234d4ba6ac78bd5a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa999bccc601bc2ebe80ba98ef0a0e058"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gaa999bccc601bc2ebe80ba98ef0a0e058"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">add</a> (const T &amp;c, std::size_t pos)</td></tr>
+<tr class="memdesc:gaa999bccc601bc2ebe80ba98ef0a0e058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts the specified coordinate at the specified position in this sequence. If multiple coordinates are to be added, a multiple- insert method should be used for best performance.  <a href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">More...</a><br /></td></tr>
+<tr class="separator:gaa999bccc601bc2ebe80ba98ef0a0e058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga798d63a907608a3379f54588736620c7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga798d63a907608a3379f54588736620c7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__add.html#ga798d63a907608a3379f54588736620c7">add</a> (std::size_t i, const T &amp;coord, bool allowRepeated)</td></tr>
+<tr class="memdesc:ga798d63a907608a3379f54588736620c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts the specified coordinate at the specified position in this list.  <a href="group__add.html#ga798d63a907608a3379f54588736620c7">More...</a><br /></td></tr>
+<tr class="separator:ga798d63a907608a3379f54588736620c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf9e46988d7cfefe05cb18cec779b4b1b"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (double x, double y)</td></tr>
+<tr class="separator:gaf9e46988d7cfefe05cb18cec779b4b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga30f84f56ffec6db750b7ee1db7ac32eb"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;cs)</td></tr>
+<tr class="separator:ga30f84f56ffec6db750b7ee1db7ac32eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac570fa3cbfd680dfeab5032a56372b2b"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;cs, bool allowRepeated)</td></tr>
+<tr class="separator:gac570fa3cbfd680dfeab5032a56372b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga86ce8e3352422ad47ceff4278be9236b"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;cl, bool allowRepeated, bool forwardDirection)</td></tr>
+<tr class="separator:ga86ce8e3352422ad47ceff4278be9236b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4298b2678c0f387820eb104e8040b396"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;cs, std::size_t from, std::size_t to)</td></tr>
+<tr class="separator:ga4298b2678c0f387820eb104e8040b396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf74354423c31b5a804c80c0570a33e91"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;cs, std::size_t from, std::size_t to, bool allowRepeated)</td></tr>
+<tr class="separator:gaf74354423c31b5a804c80c0570a33e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga823ac017bf8a4394276ad55feba19c38"><td class="memTemplParams" colspan="2">
+template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:ga823ac017bf8a4394276ad55feba19c38"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add</b> (T begin, T end, Args... args)</td></tr>
+<tr class="separator:ga823ac017bf8a4394276ad55feba19c38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9a51834f402a7a55cc5fe9cceb36581d"><td class="memTemplParams" colspan="2">
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga9a51834f402a7a55cc5fe9cceb36581d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add</b> (std::size_t i, T from, T to)</td></tr>
+<tr class="separator:ga9a51834f402a7a55cc5fe9cceb36581d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaead00c2e2da32ea01556c460257ec51a"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:gaead00c2e2da32ea01556c460257ec51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga16ab28dfbc4bedc64ac9ab48b4d4430d"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reserve</b> (std::size_t capacity)</td></tr>
+<tr class="separator:ga16ab28dfbc4bedc64ac9ab48b4d4430d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa362dd638a590b5255e262f917796263"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (std::size_t capacity)</td></tr>
+<tr class="separator:gaa362dd638a590b5255e262f917796263"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45f111987979022cb4cb12db5857cb1b"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>pop_back</b> ()</td></tr>
+<tr class="separator:ga45f111987979022cb4cb12db5857cb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaca9592f066ecbc03dde2e827aa59b54f"><td class="memItemLeft" align="right" valign="top">
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gaca9592f066ecbc03dde2e827aa59b54f">toString</a> () const</td></tr>
+<tr class="memdesc:gaca9592f066ecbc03dde2e827aa59b54f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a string representation of <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
+<tr class="separator:gaca9592f066ecbc03dde2e827aa59b54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68a5bb38c125bf5775f96ba8b7862ec9"><td class="memItemLeft" align="right" valign="top">
+const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">minCoordinate</a> () const</td></tr>
+<tr class="memdesc:ga68a5bb38c125bf5775f96ba8b7862ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns lower-left <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in list. <br /></td></tr>
+<tr class="separator:ga68a5bb38c125bf5775f96ba8b7862ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga18952029ba26af894137333b708d4d2f"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga18952029ba26af894137333b708d4d2f">reverse</a> ()</td></tr>
+<tr class="memdesc:ga18952029ba26af894137333b708d4d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> order in given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
+<tr class="separator:ga18952029ba26af894137333b708d4d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga50e02e22183f167f70154aecd1a67a49"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>sort</b> ()</td></tr>
+<tr class="separator:ga50e02e22183f167f70154aecd1a67a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga941242198fbe4ec05127503bfce9f9bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga941242198fbe4ec05127503bfce9f9bc">expandEnvelope</a> (<a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;env) const</td></tr>
+<tr class="separator:ga941242198fbe4ec05127503bfce9f9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9b80ad08332aab02684eb2ef3b1e21b"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>closeRing</b> (bool allowRepeated=false)</td></tr>
+<tr class="separator:gac9b80ad08332aab02684eb2ef3b1e21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga07eebd4d6dc2e23742abc569694c3c90"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_rw</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a> *filter)</td></tr>
+<tr class="separator:ga07eebd4d6dc2e23742abc569694c3c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab70ec5d726648d22c6e0974214b59557"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_ro</b> (<a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a> *filter) const</td></tr>
+<tr class="separator:gab70ec5d726648d22c6e0974214b59557"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga898ca52f0befd17aa2979b51643dca10"><td class="memTemplParams" colspan="2">
+template&lt;typename T , typename F &gt; </td></tr>
+<tr class="memitem:ga898ca52f0befd17aa2979b51643dca10"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>forEach</b> (F &amp;&amp;fun) const</td></tr>
+<tr class="separator:ga898ca52f0befd17aa2979b51643dca10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf203c30ccab6db1aae3edb2b9f516005"><td class="memTemplParams" colspan="2">
+template&lt;typename T , typename F &gt; </td></tr>
+<tr class="memitem:gaf203c30ccab6db1aae3edb2b9f516005"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>forEach</b> (std::size_t from, std::size_t to, F &amp;&amp;fun) const</td></tr>
+<tr class="separator:gaf203c30ccab6db1aae3edb2b9f516005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6df0f86ae618e8d353f74c4a6c43fad3"><td class="memTemplParams" colspan="2">
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga6df0f86ae618e8d353f74c4a6c43fad3"><td class="memTemplItemLeft" align="right" valign="top">Coordinates&lt; typename std::add_const&lt; T &gt;::type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>items</b> () const</td></tr>
+<tr class="separator:ga6df0f86ae618e8d353f74c4a6c43fad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga58e4942965601cca017e62ffeb0ba780"><td class="memTemplParams" colspan="2">
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga58e4942965601cca017e62ffeb0ba780"><td class="memTemplItemLeft" align="right" valign="top">Coordinates&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>items</b> ()</td></tr>
+<tr class="separator:ga58e4942965601cca017e62ffeb0ba780"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e19f69e67b2235d84b5a8a2c816cb7"><td class="memItemLeft" align="right" valign="top"><a id="a57e19f69e67b2235d84b5a8a2c816cb7"></a>
+double *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
+<tr class="separator:a57e19f69e67b2235d84b5a8a2c816cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252a9526562ccb7ac46a0a3946b2df8c"><td class="memItemLeft" align="right" valign="top"><a id="a252a9526562ccb7ac46a0a3946b2df8c"></a>
+const double *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const</td></tr>
+<tr class="separator:a252a9526562ccb7ac46a0a3946b2df8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2933e1d264d4b133b5631a5c17039749"><td class="memItemLeft" align="right" valign="top"><a id="a2933e1d264d4b133b5631a5c17039749"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a2933e1d264d4b133b5631a5c17039749">hasRepeatedPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl)</td></tr>
-<tr class="memdesc:a2933e1d264d4b133b5631a5c17039749"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> contains any two consecutive <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
-<tr class="separator:a2933e1d264d4b133b5631a5c17039749"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5dbb8e6b020b0db7945a3ffa535de54"><td class="memItemLeft" align="right" valign="top"><a id="ad5dbb8e6b020b0db7945a3ffa535de54"></a>
-static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#ad5dbb8e6b020b0db7945a3ffa535de54">atLeastNCoordinatesOrNothing</a> (std::size_t n, <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *c)</td></tr>
-<tr class="memdesc:ad5dbb8e6b020b0db7945a3ffa535de54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns either the given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> if its length is greater than the given amount, or an empty <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
-<tr class="separator:ad5dbb8e6b020b0db7945a3ffa535de54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ba8139f3bc96a6a26db5923bfca4667"><td class="memItemLeft" align="right" valign="top">static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a5ba8139f3bc96a6a26db5923bfca4667">indexOf</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *coordinate, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl)</td></tr>
-<tr class="memdesc:a5ba8139f3bc96a6a26db5923bfca4667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return position of a <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>.  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#a5ba8139f3bc96a6a26db5923bfca4667">More...</a><br /></td></tr>
-<tr class="separator:a5ba8139f3bc96a6a26db5923bfca4667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefd3dacec98fad79435ba76601e61880"><td class="memItemLeft" align="right" valign="top"><a id="aefd3dacec98fad79435ba76601e61880"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#aefd3dacec98fad79435ba76601e61880">equals</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl1, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl2)</td></tr>
-<tr class="memdesc:aefd3dacec98fad79435ba76601e61880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two arrays are identical, both null, or pointwise equal. <br /></td></tr>
-<tr class="separator:aefd3dacec98fad79435ba76601e61880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad731d3ad1514dd8a1ac92d1d53d5964b"><td class="memItemLeft" align="right" valign="top"><a id="ad731d3ad1514dd8a1ac92d1d53d5964b"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#ad731d3ad1514dd8a1ac92d1d53d5964b">scroll</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *firstCoordinate)</td></tr>
-<tr class="memdesc:ad731d3ad1514dd8a1ac92d1d53d5964b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scroll given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> so to start with given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
-<tr class="separator:ad731d3ad1514dd8a1ac92d1d53d5964b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fa893acf32a068019741318ade63896"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a8fa893acf32a068019741318ade63896">increasingDirection</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;pts)</td></tr>
-<tr class="memdesc:a8fa893acf32a068019741318ade63896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which orientation of the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> array is (overall) increasing.  <a href="classgeos_1_1geom_1_1CoordinateSequence.html#a8fa893acf32a068019741318ade63896">More...</a><br /></td></tr>
-<tr class="separator:a8fa893acf32a068019741318ade63896"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09cd5d0357620486e7b23bb1f3514e27"><td class="memItemLeft" align="right" valign="top"><a id="a09cd5d0357620486e7b23bb1f3514e27"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html#a09cd5d0357620486e7b23bb1f3514e27">reverse</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl)</td></tr>
-<tr class="memdesc:a09cd5d0357620486e7b23bb1f3514e27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> order in given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
-<tr class="separator:a09cd5d0357620486e7b23bb1f3514e27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a6fa22fa9e29897db91d039afb0decbf6"><td class="memItemLeft" align="right" valign="top"><a id="a6fa22fa9e29897db91d039afb0decbf6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>CoordinateSequence</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;)</td></tr>
-<tr class="separator:a6fa22fa9e29897db91d039afb0decbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c3ff87a40d08252743e3741ce46822e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga8c3ff87a40d08252743e3741ce46822e">XY</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>)</td></tr>
+<tr class="separator:ga8c3ff87a40d08252743e3741ce46822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6f0f8ed00aa569b5e4b3950452052e74"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga6f0f8ed00aa569b5e4b3950452052e74">XYZ</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>)</td></tr>
+<tr class="separator:ga6f0f8ed00aa569b5e4b3950452052e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga619969fca2eb5358e91e0c6bb7b988e4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga619969fca2eb5358e91e0c6bb7b988e4">XYZM</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>)</td></tr>
+<tr class="separator:ga619969fca2eb5358e91e0c6bb7b988e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1930c9f651dcb5ed97efc2d1ac40486a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__construct.html#ga1930c9f651dcb5ed97efc2d1ac40486a">XYM</a> (std::size_t <a class="el" href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">size</a>)</td></tr>
+<tr class="separator:ga1930c9f651dcb5ed97efc2d1ac40486a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad5dbb8e6b020b0db7945a3ffa535de54"><td class="memItemLeft" align="right" valign="top">
+static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gad5dbb8e6b020b0db7945a3ffa535de54">atLeastNCoordinatesOrNothing</a> (std::size_t n, <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *c)</td></tr>
+<tr class="memdesc:gad5dbb8e6b020b0db7945a3ffa535de54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns either the given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> if its length is greater than the given amount, or an empty <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
+<tr class="separator:gad5dbb8e6b020b0db7945a3ffa535de54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae655a4ee179280a37400c97ec5f37a03"><td class="memItemLeft" align="right" valign="top">static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">indexOf</a> (const CoordinateXY *coordinate, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl)</td></tr>
+<tr class="memdesc:gae655a4ee179280a37400c97ec5f37a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return position of a <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>.  <a href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">More...</a><br /></td></tr>
+<tr class="separator:gae655a4ee179280a37400c97ec5f37a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaefd3dacec98fad79435ba76601e61880"><td class="memItemLeft" align="right" valign="top">
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">equals</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl1, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl2)</td></tr>
+<tr class="memdesc:gaefd3dacec98fad79435ba76601e61880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two arrays are identical, both null, or pointwise equal. <br /></td></tr>
+<tr class="separator:gaefd3dacec98fad79435ba76601e61880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7545644308ae3b237ac8f3a2462f6a8d"><td class="memItemLeft" align="right" valign="top">
+static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">scroll</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl, const CoordinateXY *firstCoordinate)</td></tr>
+<tr class="memdesc:ga7545644308ae3b237ac8f3a2462f6a8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scroll given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> so to start with given <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
+<tr class="separator:ga7545644308ae3b237ac8f3a2462f6a8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8fa893acf32a068019741318ade63896"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga8fa893acf32a068019741318ade63896">increasingDirection</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;pts)</td></tr>
+<tr class="memdesc:ga8fa893acf32a068019741318ade63896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which orientation of the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> array is (overall) increasing.  <a href="group__util.html#ga8fa893acf32a068019741318ade63896">More...</a><br /></td></tr>
+<tr class="separator:ga8fa893acf32a068019741318ade63896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The internal representation of a list of coordinates inside a <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6ba2cfd860eef2342b1306e855b58b0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ba2cfd860eef2342b1306e855b58b0c">&#9670;&nbsp;</a></span>applyCoordinateFilter()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::geom::CoordinateSequence::applyCoordinateFilter </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>f</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Apply a filter to each <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> of this sequence. The filter is expected to provide a .filter(Coordinate&amp;) method. </p>
-<p>TODO: accept a Functor instead, will be more flexible. actually, define iterators on <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> </p>
-
-</div>
-</div>
-<a id="a624599b9d4efb5fe2f966e4e35284341"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a624599b9d4efb5fe2f966e4e35284341">&#9670;&nbsp;</a></span>expandEnvelope()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void geos::geom::CoordinateSequence::expandEnvelope </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;&#160;</td>
-          <td class="paramname"><em>env</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Expands the given <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> to include the coordinates in the sequence. Allows implementing classes to optimize access to coordinate values.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">env</td><td>the envelope to expand </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented in <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#a56b68617fbb4c839950ba61139af56dc">geos::geom::CoordinateArraySequence</a>.</p>
-
-</div>
-</div>
-<a id="a21b38920a6a53f3ae0723ef0813fa462"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21b38920a6a53f3ae0723ef0813fa462">&#9670;&nbsp;</a></span>getAt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; geos::geom::CoordinateSequence::getAt </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a read-only reference to <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> at position i. </p>
-<p>Whether or not the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> returned is the actual underlying <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> or merely a copy depends on the implementation. </p>
-
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#a2c396bf9459e91fa5a02b51b76fa919f">geos::geom::CoordinateArraySequence</a>.</p>
-
-</div>
-</div>
-<a id="a96077c66e7e2e60eba2f3c00a25de12d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96077c66e7e2e60eba2f3c00a25de12d">&#9670;&nbsp;</a></span>getDimension()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual std::size_t geos::geom::CoordinateSequence::getDimension </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the dimension (number of ordinates in each coordinate) for this sequence.</p>
-<dl class="section return"><dt>Returns</dt><dd>the dimension of the sequence. </dd></dl>
-
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#ac7c228353fe19ab61a642b016a411917">geos::geom::CoordinateArraySequence</a>.</p>
-
-</div>
-</div>
-<a id="a5a8d9c386dc966ac14c1ec38affa74f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a8d9c386dc966ac14c1ec38affa74f4">&#9670;&nbsp;</a></span>getOrdinate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual double geos::geom::CoordinateSequence::getOrdinate </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>ordinateIndex</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns the ordinate of a coordinate in this sequence. Ordinate indices 0 and 1 are assumed to be X and Y. Ordinates indices greater than 1 have user-defined semantics (for instance, they may contain other dimensions or measure values).</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td>the coordinate index in the sequence </td></tr>
-    <tr><td class="paramname">ordinateIndex</td><td>the ordinate index in the coordinate (in range [0, dimension-1]) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a43ca13136249873fd913ba95e6187c31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43ca13136249873fd913ba95e6187c31">&#9670;&nbsp;</a></span>getX()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual double geos::geom::CoordinateSequence::getX </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns ordinate X (0) of the specified coordinate.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the value of the X ordinate in the index'th coordinate </dd></dl>
-
-</div>
-</div>
-<a id="a43dde96d4f32a0b527abc25bd98bb365"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43dde96d4f32a0b527abc25bd98bb365">&#9670;&nbsp;</a></span>getY()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual double geos::geom::CoordinateSequence::getY </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Returns ordinate Y (1) of the specified coordinate.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the value of the Y ordinate in the index'th coordinate </dd></dl>
-
-</div>
-</div>
-<a id="a8fa893acf32a068019741318ade63896"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fa893acf32a068019741318ade63896">&#9670;&nbsp;</a></span>increasingDirection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int geos::geom::CoordinateSequence::increasingDirection </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;&#160;</td>
-          <td class="paramname"><em>pts</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines which orientation of the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> array is (overall) increasing. </p>
-<p>In other words, determines which end of the array is "smaller" (using the standard ordering on <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>). Returns an integer indicating the increasing direction. If the sequence is a palindrome, it is defined to be oriented in a positive direction.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pts</td><td>the array of Coordinates to test </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>1</code> if the array is smaller at the start or is a palindrome, <code>-1</code> if smaller at the end</dd></dl>
-<p>NOTE: this method is found in CoordinateArrays class for JTS </p>
-
-</div>
-</div>
-<a id="a5ba8139f3bc96a6a26db5923bfca4667"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ba8139f3bc96a6a26db5923bfca4667">&#9670;&nbsp;</a></span>indexOf()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::size_t geos::geom::CoordinateSequence::indexOf </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> *&#160;</td>
-          <td class="paramname"><em>coordinate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *&#160;</td>
-          <td class="paramname"><em>cl</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return position of a <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. </p>
-<p>or numeric_limits&lt;std::size_t&gt;::max() if not found </p>
-
-</div>
-</div>
-<a id="abaeb1320a591615a4907cc6929f42e15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abaeb1320a591615a4907cc6929f42e15">&#9670;&nbsp;</a></span>isRing()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool geos::geom::CoordinateSequence::isRing </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Tests whether an a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> forms a ring, by checking length and closure. Self-intersection is not checked. </p>
-<dl class="section return"><dt>Returns</dt><dd>true if the coordinate form a ring. </dd></dl>
-
-</div>
-</div>
-<a id="a6cb41773fe4e6d72bd5004d1d6f79bcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6cb41773fe4e6d72bd5004d1d6f79bcd">&#9670;&nbsp;</a></span>setOrdinate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void geos::geom::CoordinateSequence::setOrdinate </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>ordinateIndex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets the value for a given ordinate of a coordinate in this sequence.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td>the coordinate index in the sequence </td></tr>
-    <tr><td class="paramname">ordinateIndex</td><td>the ordinate index in the coordinate (in range [0, dimension-1]) </td></tr>
-    <tr><td class="paramname">value</td><td>the new ordinate value </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#ad3a3ba17afb9cc4f6af31e327fdad27d">geos::geom::CoordinateArraySequence</a>.</p>
-
-</div>
-</div>
-<a id="aa9338282a924b596db9c923aa4eef188"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9338282a924b596db9c923aa4eef188">&#9670;&nbsp;</a></span>toVector()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void geos::geom::CoordinateSequence::toVector </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>coords</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Pushes all Coordinates of this sequence into the provided vector.</p>
-<p>This method is a port of the toCoordinateArray() method of JTS. </p>
-
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html#a262658cb21b10905f31219eaebaf89b0">geos::geom::CoordinateArraySequence</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<p>A <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> is capable of storing XY, XYZ, XYM, or XYZM Coordinates. For efficient storage, the dimensionality of the <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> should be specified at creation using the constructor with <code>hasz</code> and <code>hasm</code> arguments. Currently most of the GEOS code base stores 2D Coordinates and accesses using the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> type. Sequences used by these parts of the code must be created with constructors without <code>hasz</code> and <code>hasm</code> arguments.</p>
+<p>If a high-dimension <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> coordinate is read from a low-dimension <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>, the higher dimensions will be populated with incorrect values or a segfault may occur. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="CoordinateSequence_8h_source.html">CoordinateSequence.h</a></li>
 </ul>
 </div><!-- contents -->

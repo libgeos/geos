@@ -48,7 +48,6 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1geom_1_1Coordinate-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::geom::Coordinate Class Reference</div>  </div>
@@ -61,6 +60,8 @@ $(function() {
 <p><code>#include &lt;<a class="el" href="geom_8h_source.html">geos.h</a>&gt;</code></p>
 
 <p>Inherits geos::geom::CoordinateXY.</p>
+
+<p>Inherited by geos::geom::CoordinateXYZM.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -83,9 +84,9 @@ typedef std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memItemLeft" align="right" valign="top"><a id="a5962f9f08a8c0e3ce9d6b4a1dbf53765"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Coordinate</b> (double xNew, double yNew, double zNew=DoubleNotANumber)</td></tr>
-<tr class="separator:a5962f9f08a8c0e3ce9d6b4a1dbf53765"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1383a3dc4f625f71e59a85478aae44a"><td class="memItemLeft" align="right" valign="top"><a id="ab1383a3dc4f625f71e59a85478aae44a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Coordinate</b> (double xNew, double yNew, double zNew=DEFAULT_Z)</td></tr>
+<tr class="separator:ab1383a3dc4f625f71e59a85478aae44a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9dfdbef868b1d5285b38d160f6ccf267"><td class="memItemLeft" align="right" valign="top"><a id="a9dfdbef868b1d5285b38d160f6ccf267"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Coordinate</b> (const CoordinateXY &amp;other)</td></tr>
 <tr class="separator:a9dfdbef868b1d5285b38d160f6ccf267"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -103,12 +104,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a15b8ee1013a8cab759b1570b0925cbdf">toString</a> () const</td></tr>
 <tr class="memdesc:a15b8ee1013a8cab759b1570b0925cbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string of the form <em>(x,y,z)</em> . <br /></td></tr>
 <tr class="separator:a15b8ee1013a8cab759b1570b0925cbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96ee82a92270a269860cffea9204ecf6"><td class="memItemLeft" align="right" valign="top"><a id="a96ee82a92270a269860cffea9204ecf6"></a>
+<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const CoordinateXY &amp;other)</td></tr>
+<tr class="separator:a96ee82a92270a269860cffea9204ecf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a45201240fe444687d56c1e3cb751d8df"><td class="memItemLeft" align="right" valign="top"><a id="a45201240fe444687d56c1e3cb751d8df"></a>
-static <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNull</b> ()</td></tr>
-<tr class="separator:a45201240fe444687d56c1e3cb751d8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc86590514e8edb96e20b83ae2c1bd5"><td class="memItemLeft" align="right" valign="top"><a id="a8cc86590514e8edb96e20b83ae2c1bd5"></a>
+static const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNull</b> ()</td></tr>
+<tr class="separator:a8cc86590514e8edb96e20b83ae2c1bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -116,13 +120,6 @@ Public Attributes</h2></td></tr>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#af0c1b234c851ae467c371dea8861612f">z</a></td></tr>
 <tr class="memdesc:af0c1b234c851ae467c371dea8861612f"><td class="mdescLeft">&#160;</td><td class="mdescRight">z-coordinate <br /></td></tr>
 <tr class="separator:af0c1b234c851ae467c371dea8861612f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="memItemLeft" align="right" valign="top"><a id="a004f9fac1c6f3f968cc2d93d92aa741b"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html#a004f9fac1c6f3f968cc2d93d92aa741b">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c)</td></tr>
-<tr class="memdesc:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output function. <br /></td></tr>
-<tr class="separator:a004f9fac1c6f3f968cc2d93d92aa741b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> is the lightweight class used to store coordinates. </p>

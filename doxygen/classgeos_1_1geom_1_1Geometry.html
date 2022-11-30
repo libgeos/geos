@@ -185,8 +185,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCollection</b> () c
 <tr class="separator:a0665311981f7e5b63e5f6319ef8ae06b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a458b74b03913b42cfbec6bcb8f8c7ed2"><td class="memItemLeft" align="right" valign="top"><a id="a458b74b03913b42cfbec6bcb8f8c7ed2"></a>
 virtual uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a458b74b03913b42cfbec6bcb8f8c7ed2">getCoordinateDimension</a> () const =0</td></tr>
-<tr class="memdesc:a458b74b03913b42cfbec6bcb8f8c7ed2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coordinate dimension of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> (2=XY, 3=XYZ, 4=XYZM in future). <br /></td></tr>
+<tr class="memdesc:a458b74b03913b42cfbec6bcb8f8c7ed2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coordinate dimension of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> (2=XY, 3=XYZ or XYM, 4=XYZM). <br /></td></tr>
 <tr class="separator:a458b74b03913b42cfbec6bcb8f8c7ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee15013c209344634725056782a0c2b2"><td class="memItemLeft" align="right" valign="top"><a id="aee15013c209344634725056782a0c2b2"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasZ</b> () const =0</td></tr>
+<tr class="separator:aee15013c209344634725056782a0c2b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a384e8382c280ab76f422a53b73ecb316"><td class="memItemLeft" align="right" valign="top"><a id="a384e8382c280ab76f422a53b73ecb316"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasM</b> () const =0</td></tr>
+<tr class="separator:a384e8382c280ab76f422a53b73ecb316"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41b9f1f8571b73f6b3772e98076a8fb1"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a41b9f1f8571b73f6b3772e98076a8fb1">getBoundary</a> () const =0</td></tr>
 <tr class="memdesc:a41b9f1f8571b73f6b3772e98076a8fb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the boundary, or an empty geometry of appropriate dimension if this <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code> is empty.  <a href="classgeos_1_1geom_1_1Geometry.html#a41b9f1f8571b73f6b3772e98076a8fb1">More...</a><br /></td></tr>
 <tr class="separator:a41b9f1f8571b73f6b3772e98076a8fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>

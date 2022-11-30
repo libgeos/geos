@@ -58,9 +58,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace5097f9696e3bae20b7ad1405363b5b"><td class="memItemLeft" align="right" valign="top"><a id="ace5097f9696e3bae20b7ad1405363b5b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LineLimiter</b> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> *env)</td></tr>
 <tr class="separator:ace5097f9696e3bae20b7ad1405363b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87c9cfa1125b70a8aaea49638f00c757"><td class="memItemLeft" align="right" valign="top"><a id="a87c9cfa1125b70a8aaea49638f00c757"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateArraySequence.html">CoordinateArraySequence</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>limit</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *pts)</td></tr>
-<tr class="separator:a87c9cfa1125b70a8aaea49638f00c757"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdf18393931c362c862a9d98c77712f"><td class="memItemLeft" align="right" valign="top"><a id="a4bdf18393931c362c862a9d98c77712f"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>limit</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *pts)</td></tr>
+<tr class="separator:a4bdf18393931c362c862a9d98c77712f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Limits the segments in a list of segments to those which intersect an envelope. This creates zero or more sections of the input segment sequences, containing only line segments which intersect the limit envelope. Segments are not clipped, since that can move line segments enough to alter topology, and it happens in the overlay in any case. This can substantially reduce the number of vertices which need to be processed during overlay.</p>

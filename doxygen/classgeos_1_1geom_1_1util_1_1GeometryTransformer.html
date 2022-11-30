@@ -79,9 +79,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSkipTransformedInv
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a964e87b4694f7c6273ee0fbf627adf6a"><td class="memItemLeft" align="right" valign="top">CoordinateSequence::Ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1util_1_1GeometryTransformer.html#a964e87b4694f7c6273ee0fbf627adf6a">createCoordinateSequence</a> (std::unique_ptr&lt; std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &gt; coords)</td></tr>
-<tr class="memdesc:a964e87b4694f7c6273ee0fbf627adf6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method which provides standard way of creating a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>.  <a href="classgeos_1_1geom_1_1util_1_1GeometryTransformer.html#a964e87b4694f7c6273ee0fbf627adf6a">More...</a><br /></td></tr>
-<tr class="separator:a964e87b4694f7c6273ee0fbf627adf6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4dcbbefc24b49ebe21d0e2e7f9fc64bc"><td class="memItemLeft" align="right" valign="top"><a id="a4dcbbefc24b49ebe21d0e2e7f9fc64bc"></a>
 virtual CoordinateSequence::Ptr&#160;</td><td class="memItemRight" valign="bottom"><b>transformCoordinates</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *coords, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *parent)</td></tr>
 <tr class="separator:a4dcbbefc24b49ebe21d0e2e7f9fc64bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,44 +121,7 @@ const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFac
 <p>Note that all <code>transformX</code> methods may return <code>null</code>, to avoid creating empty geometry objects. This will be handled correctly by the transformer. The <code>GeometryTransformer::transform(const Geometry* nInputGeom)</code> method itself will always return a geometry object.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1util_1_1GeometryEditor.html">GeometryEditor</a></dd></dl>
 <p>Possible extensions: getParent() method to return immediate parent e.g. of LinearRings in Polygons </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a964e87b4694f7c6273ee0fbf627adf6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a964e87b4694f7c6273ee0fbf627adf6a">&#9670;&nbsp;</a></span>createCoordinateSequence()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">CoordinateSequence::Ptr geos::geom::util::GeometryTransformer::createCoordinateSequence </td>
-          <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; &gt;&#160;</td>
-          <td class="paramname"><em>coords</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Convenience method which provides standard way of creating a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">coords</td><td>the coordinate array to copy </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a coordinate sequence for the array</dd></dl>
-<p>[final] </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="GeometryTransformer_8h_source.html">GeometryTransformer.h</a></li>
 </ul>
 </div><!-- contents -->
