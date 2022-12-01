@@ -365,6 +365,13 @@ void object::test<22> ()
         "POLYGON ((3670164 3396600, 3670164 3397824, 3670776 3397212, 3670776 3396600, 3670164 3396600))");
 }
 
+// https://github.com/libgeos/geos/issues/748
+template<>
+template<>
+void object::test<23> ()
+{
+    checkReduce(1, "POINT EMPTY", "POINT EMPTY");
+}
 
 
 } // namespace tut

@@ -224,7 +224,9 @@ GeometryFactory::createPoint(std::size_t coordinateDimension) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
 {
-    return std::unique_ptr<Point>(new Point(std::move(*coords), this));
+    return std::unique_ptr<Point>(new Point(
+                                      coords ? std::move(*coords) : CoordinateSequence(),
+                                      this));
 }
 
 std::unique_ptr<Point>
