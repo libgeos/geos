@@ -165,4 +165,19 @@ void object::test<5>
     runTest("LINESTRING (1 1, 2 2)", "LINESTRING (1 4, 2 3)", 3);
 }
 
+template<>
+template<>
+void object::test<6>
+()
+{
+    auto g1 = reader.read("LINESTRING EMPTY");
+    auto g2 = reader.read("POLYGON EMPTY");
+
+    try {
+        DiscreteFrechetDistance::distance(*g1, *g2);
+    } catch (const geos::util::GEOSException& e) {
+
+    }
+}
+
 } // namespace tut

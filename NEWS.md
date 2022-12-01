@@ -29,7 +29,7 @@ xxxx-xx-xx
   - Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (GH-718, Martin Davis)
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
-
+  - DiscreteFrechetDistance: Fix crash with empty inputs (GH-751, Dan Baston)
 
 
 ## Changes in 3.11.0
