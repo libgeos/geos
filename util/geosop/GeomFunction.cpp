@@ -453,7 +453,7 @@ GeomFunction::init()
             std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
             return new Result( im->toString() );
         });
-    add("relateBNR", 2, 0, Result::typeString, catRel,
+    add("relateBNR", 2, 1, Result::typeString, catRel,
         "compute DE-9IM matrix for geometry A and B with a Boundary Node Rule (1=Mod2,2=Endpt,3=Multivalent,4=Monovalent)",
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             int bnr = (int) d;
