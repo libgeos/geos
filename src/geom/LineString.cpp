@@ -68,7 +68,7 @@ LineString::reverseImpl() const
     auto seq = points->clone();
     seq->reverse();
     assert(getFactory());
-    return getFactory()->createLineString(seq.release());
+    return getFactory()->createLineString(std::move(seq)).release();
 }
 
 
@@ -84,16 +84,6 @@ LineString::validateConstruction()
     if(points->size() == 1) {
         throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
     }
-}
-
-/*protected*/
-LineString::LineString(CoordinateSequence* newCoords,
-                       const GeometryFactory* factory)
-    :
-    Geometry(factory),
-    points(newCoords)
-{
-    validateConstruction();
 }
 
 /*public*/

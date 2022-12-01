@@ -447,7 +447,7 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
         coordSeq->setAt(qe->orig().getCoordinate(), 0);
         coordSeq->setAt(qe->dest().getCoordinate(), 1);
 
-        edges.emplace_back(geomFact.createLineString(coordSeq.release()));
+        edges.emplace_back(geomFact.createLineString(std::move(coordSeq)));
     }
 
     return geomFact.createMultiLineString(std::move(edges));

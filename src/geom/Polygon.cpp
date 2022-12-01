@@ -60,32 +60,6 @@ Polygon::Polygon(const Polygon& p)
     }
 }
 
-/*protected*/
-Polygon::Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
-                 const GeometryFactory* newFactory):
-    Geometry(newFactory)
-{
-    if(newShell == nullptr) {
-        shell = getFactory()->createLinearRing();
-    }
-    else {
-        if(newHoles != nullptr && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
-            throw util::IllegalArgumentException("shell is empty but holes are not");
-        }
-        shell.reset(newShell);
-    }
-
-    if(newHoles != nullptr) {
-        if(hasNullElements(newHoles)) {
-            throw util::IllegalArgumentException("holes must not contain null elements");
-        }
-        for (const auto& hole : *newHoles) {
-            holes.emplace_back(hole);
-        }
-        delete newHoles;
-    }
-}
-
 Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
                  const GeometryFactory& newFactory) :
         Geometry(&newFactory),

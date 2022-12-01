@@ -136,7 +136,7 @@ GeometryTransformer::transformPoint(
     CoordinateSequence::Ptr cs(transformCoordinates(
                                    geom->getCoordinatesRO(), geom));
 
-    return Geometry::Ptr(factory->createPoint(cs.release()));
+    return factory->createPoint(std::move(cs));
 }
 
 Geometry::Ptr

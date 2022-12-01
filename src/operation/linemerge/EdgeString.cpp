@@ -55,8 +55,8 @@ EdgeString::add(LineMergeDirectedEdge* directedEdge)
     directedEdges.push_back(directedEdge);
 }
 
-CoordinateSequence*
-EdgeString::getCoordinates()
+std::unique_ptr<CoordinateSequence>
+EdgeString::getCoordinates() const
 {
     int forwardDirectedEdges = 0;
     int reverseDirectedEdges = 0;
@@ -79,14 +79,14 @@ EdgeString::getCoordinates()
     if(reverseDirectedEdges > forwardDirectedEdges) {
         coordinates->reverse();
     }
-    return coordinates.release();
+    return coordinates;
 }
 
 /*
  * Converts this EdgeString into a new LineString.
  */
-LineString*
-EdgeString::toLineString()
+std::unique_ptr<LineString>
+EdgeString::toLineString() const
 {
     return factory->createLineString(getCoordinates());
 }

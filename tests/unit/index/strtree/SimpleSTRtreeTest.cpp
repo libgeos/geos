@@ -37,9 +37,9 @@ void object::test<1>
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
             geom::Coordinate c((double)i, (double)j);
-            geom::Point* pt = gf->createPoint(c);
-            geoms.emplace_back(pt);
-            t.insert(pt);
+            auto pt = gf->createPoint(c);
+            t.insert(pt.get());
+            geoms.emplace_back(std::move(pt));
         }
     }
 
@@ -90,12 +90,12 @@ void object::test<2>
         for (int j = 0; j < gridSize; ++j) {
             geom::Coordinate c1((double)i, (double)j);
             geom::Coordinate c2((double)(i+gridSize+1), (double)(j+gridSize+1));
-            geom::Point *pt1 = gf->createPoint(c1);
-            geom::Point *pt2 = gf->createPoint(c2);
-            geoms.emplace_back(pt1);
-            geoms.emplace_back(pt2);
-            t1.insert(pt1);
-            t2.insert(pt2);
+            auto pt1 = gf->createPoint(c1);
+            auto pt2 = gf->createPoint(c2);
+            t1.insert(pt1.get());
+            t2.insert(pt2.get());
+            geoms.emplace_back(std::move(pt1));
+            geoms.emplace_back(std::move(pt2));
         }
     }
 

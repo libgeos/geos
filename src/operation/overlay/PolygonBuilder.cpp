@@ -129,10 +129,10 @@ PolygonBuilder::add(const std::vector<DirectedEdge*>* dirEdges,
 }
 
 /*public*/
-std::vector<Geometry*>*
+std::vector<std::unique_ptr<Geometry>>
 PolygonBuilder::getPolygons()
 {
-    std::vector<Geometry*>* resultPolyList = computePolygons(shellList);
+    std::vector<std::unique_ptr<Geometry>> resultPolyList = computePolygons(shellList);
     return resultPolyList;
 }
 
@@ -359,19 +359,19 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing* testEr,
 }
 
 /*private*/
-std::vector<Geometry*>*
+std::vector<std::unique_ptr<Geometry>>
 PolygonBuilder::computePolygons(std::vector<EdgeRing*>& newShellList)
 {
 #if GEOS_DEBUG
     std::cerr << "PolygonBuilder::computePolygons: got " << newShellList.size() << " shells" << std::endl;
 #endif
-    std::vector<Geometry*>* resultPolyList = new std::vector<Geometry*>();
+    std::vector<std::unique_ptr<Geometry>> resultPolyList;
 
     // add Polygons for all shells
     for(std::size_t i = 0, n = newShellList.size(); i < n; i++) {
         EdgeRing* er = newShellList[i];
-        Polygon* poly = er->toPolygon(geometryFactory).release();
-        resultPolyList->push_back(poly);
+        auto poly = er->toPolygon(geometryFactory);
+        resultPolyList.push_back(std::move(poly));
     }
     return resultPolyList;
 }

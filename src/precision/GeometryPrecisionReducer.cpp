@@ -121,7 +121,7 @@ GeometryPrecisionReducer::fixPolygonalTopology(const Geometry& geom)
 
     if(! newFactory) {
         tmpFactory = createFactory(*geom.getFactory(), targetPM);
-        tmp.reset(tmpFactory->createGeometry(&geom));
+        tmp = tmpFactory->createGeometry(&geom);
         geomToBuffer = tmp.get();
     }
 
@@ -129,7 +129,7 @@ GeometryPrecisionReducer::fixPolygonalTopology(const Geometry& geom)
 
     if(! newFactory) {
         // a slick way to copy the geometry with the original precision factory
-        bufGeom.reset(geom.getFactory()->createGeometry(bufGeom.get()));
+        bufGeom = geom.getFactory()->createGeometry(bufGeom.get());
     }
 
     return bufGeom;

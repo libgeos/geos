@@ -85,14 +85,14 @@ template <class Iterator>
 std::unique_ptr<Geometry>
 convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
 {
-    std::vector<Geometry*> lines;
+    std::vector<std::unique_ptr<Geometry>> lines;
     while(it != et) {
         const SegmentString* ss = *it;
-        LineString* line = fact->createLineString(ss->getCoordinates()->clone().release());
-        lines.push_back(line);
+        auto line = fact->createLineString(ss->getCoordinates()->clone());
+        lines.push_back(std::move(line));
         ++it;
     }
-    return std::unique_ptr<Geometry>(fact->buildGeometry(lines.begin(), lines.end()));
+    return fact->buildGeometry(lines.begin(), lines.end());
 }
 
 }
@@ -204,18 +204,15 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
 
     // Create a geometry out of the noded substrings.
-    std::vector< Geometry* >* singleSidedNodedEdges =
-        new std::vector< Geometry* >();
-    singleSidedNodedEdges->reserve(nodedEdges->size());
+    std::vector<std::unique_ptr<Geometry>> singleSidedNodedEdges;
+    singleSidedNodedEdges.reserve(nodedEdges->size());
     for(std::size_t i = 0, n = nodedEdges->size(); i < n; ++i) {
         SegmentString* ss = (*nodedEdges)[i];
 
-        Geometry* tmp = geomFact->createLineString(
-                            ss->getCoordinates()->clone().release()
-                        );
+        auto tmp = geomFact->createLineString(ss->getCoordinates()->clone());
         delete ss;
 
-        singleSidedNodedEdges->push_back(tmp);
+        singleSidedNodedEdges.push_back(std::move(tmp));
     }
 
     delete nodedEdges;
@@ -225,8 +222,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     }
     curveList.clear();
 
-    std::unique_ptr<Geometry> singleSided(geomFact->createMultiLineString(
-            singleSidedNodedEdges));
+    auto singleSided = geomFact->createMultiLineString(std::move(singleSidedNodedEdges));
 
 #ifdef GEOS_DEBUG_SSB
     std::cerr << "edges|" << *singleSided << std::endl;
@@ -251,8 +247,8 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     lineMerge.add(intersectedLines.get());
     auto mergedLines = lineMerge.getMergedLineStrings();
 
-    // Convert the result into a std::vector< Geometry* >.
-    std::vector< Geometry* >* mergedLinesGeom = new std::vector< Geometry* >();
+    // Convert the result into a vector of geometries
+    std::vector<std::unique_ptr<Geometry>> mergedLinesGeom;
     const Coordinate& startPoint = l->getCoordinatesRO()->front();
     const Coordinate& endPoint = l->getCoordinatesRO()->back();
     while(!mergedLines.empty()) {
@@ -339,7 +335,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
                 }
 
                 // Add the coordinates to the resultant line string.
-                mergedLinesGeom->push_back(geomFact->createLineString(coords.release()));
+                mergedLinesGeom.push_back(geomFact->createLineString(std::move(coords)));
             }
         }
 
@@ -354,17 +350,14 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     singleSided.reset();
     intersectedLines.reset();
 
-    if(mergedLinesGeom->size() > 1) {
-        return std::unique_ptr<Geometry>(geomFact->createMultiLineString(mergedLinesGeom));
+    if(mergedLinesGeom.size() > 1) {
+        return geomFact->createMultiLineString(std::move(mergedLinesGeom));
     }
-    else if(mergedLinesGeom->size() == 1) {
-
-        std::unique_ptr<Geometry> single((*mergedLinesGeom)[0]);
-        delete mergedLinesGeom;
+    else if(mergedLinesGeom.size() == 1) {
+        std::unique_ptr<Geometry> single = std::move(mergedLinesGeom[0]);
         return single;
     }
     else {
-        delete mergedLinesGeom;
         return geomFact->createLineString();
     }
 }
@@ -419,7 +412,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 #endif
 
     std::unique_ptr<Geometry> resultGeom(nullptr);
-    std::unique_ptr< std::vector<Geometry*> > resultPolyList;
+    std::vector<std::unique_ptr<Geometry>> resultPolyList;
     std::vector<BufferSubgraph*> subgraphList;
 
     try {
@@ -446,7 +439,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
             PolygonBuilder polyBuilder(geomFact);
             buildSubgraphs(subgraphList, polyBuilder);
 
-            resultPolyList.reset(polyBuilder.getPolygons());
+            resultPolyList = polyBuilder.getPolygons();
         }
 
         // Get rid of the subgraphs, shouldn't be needed anymore
@@ -466,12 +459,12 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 #endif
 
         // just in case ...
-        if(resultPolyList->empty()) {
+        if(resultPolyList.empty()) {
             return createEmptyResultGeometry();
         }
 
         // resultPolyList ownership transferred here
-        resultGeom.reset(geomFact->buildGeometry(resultPolyList.release()));
+        resultGeom = geomFact->buildGeometry(std::move(resultPolyList));
 
     }
     catch(const util::GEOSException& /* exc */) {

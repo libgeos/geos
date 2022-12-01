@@ -123,8 +123,8 @@ public:
 
 //Skipped a lot of list to array convertors
 
-    Point* createPointFromInternalCoord(const Coordinate* coord,
-                                        const Geometry* exemplar) const;
+    static std::unique_ptr<Point> createPointFromInternalCoord(const Coordinate* coord,
+                                        const Geometry* exemplar);
 
     /// Converts an Envelope to a Geometry.
     ///
@@ -144,16 +144,14 @@ public:
     std::unique_ptr<Point> createPoint(std::size_t coordinateDimension = 2) const;
 
     /// Creates a Point using the given Coordinate
-    Point* createPoint(const Coordinate& coordinate) const;
+    std::unique_ptr<Point> createPoint(const Coordinate& coordinate) const;
     std::unique_ptr<Point> createPoint(const CoordinateXY& coordinate) const;
 
     /// Creates a Point taking ownership of the given CoordinateSequence
-    Point* createPoint(CoordinateSequence* coordinates) const;
+    std::unique_ptr<Point> createPoint(std::unique_ptr<CoordinateSequence>&& coordinates) const;
 
     /// Creates a Point with a deep-copy of the given CoordinateSequence.
-    Point* createPoint(const CoordinateSequence& coordinates) const;
-
-    std::unique_ptr<Point> createPoint(std::unique_ptr<CoordinateSequence>&& coordinates) const;
+    std::unique_ptr<Point> createPoint(const CoordinateSequence& coordinates) const;
 
     /// Construct an EMPTY GeometryCollection
     std::unique_ptr<GeometryCollection> createGeometryCollection() const;
@@ -162,9 +160,6 @@ public:
     std::unique_ptr<Geometry> createEmptyGeometry() const;
 
     /// Construct a GeometryCollection taking ownership of given arguments
-    GeometryCollection* createGeometryCollection(
-        std::vector<Geometry*>* newGeoms) const;
-
     template<typename T>
     std::unique_ptr<GeometryCollection> createGeometryCollection(
             std::vector<std::unique_ptr<T>> && newGeoms) const {
@@ -173,20 +168,17 @@ public:
     }
 
     /// Constructs a GeometryCollection with a deep-copy of args
-    GeometryCollection* createGeometryCollection(
+    std::unique_ptr<GeometryCollection> createGeometryCollection(
         const std::vector<const Geometry*>& newGeoms) const;
 
     /// Construct an EMPTY MultiLineString
     std::unique_ptr<MultiLineString> createMultiLineString() const;
 
-    /// Construct a MultiLineString taking ownership of given arguments
-    MultiLineString* createMultiLineString(
-        std::vector<Geometry*>* newLines) const;
-
     /// Construct a MultiLineString with a deep-copy of given arguments
-    MultiLineString* createMultiLineString(
+    std::unique_ptr<MultiLineString> createMultiLineString(
         const std::vector<const Geometry*>& fromLines) const;
 
+    /// Construct a MultiLineString taking ownership of given arguments
     std::unique_ptr<MultiLineString> createMultiLineString(
             std::vector<std::unique_ptr<LineString>> && fromLines) const;
 
@@ -196,13 +188,11 @@ public:
     /// Construct an EMPTY MultiPolygon
     std::unique_ptr<MultiPolygon> createMultiPolygon() const;
 
-    /// Construct a MultiPolygon taking ownership of given arguments
-    MultiPolygon* createMultiPolygon(std::vector<Geometry*>* newPolys) const;
-
     /// Construct a MultiPolygon with a deep-copy of given arguments
-    MultiPolygon* createMultiPolygon(
+    std::unique_ptr<MultiPolygon> createMultiPolygon(
         const std::vector<const Geometry*>& fromPolys) const;
 
+    /// Construct a MultiPolygon taking ownership of given arguments
     std::unique_ptr<MultiPolygon> createMultiPolygon(
         std::vector<std::unique_ptr<Polygon>> && fromPolys) const;
 
@@ -213,56 +203,47 @@ public:
     std::unique_ptr<LinearRing> createLinearRing() const;
 
     /// Construct a LinearRing taking ownership of given arguments
-    LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
-
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
     /// Construct a LinearRing with a deep-copy of given arguments
-    LinearRing* createLinearRing(
+    std::unique_ptr<LinearRing> createLinearRing(
         const CoordinateSequence& coordinates) const;
 
     /// Constructs an EMPTY <code>MultiPoint</code>.
     std::unique_ptr<MultiPoint> createMultiPoint() const;
-
-    /// Construct a MultiPoint taking ownership of given arguments
-    MultiPoint* createMultiPoint(std::vector<Geometry*>* newPoints) const;
 
     template<typename T>
     std::unique_ptr<MultiPoint> createMultiPoint(const T& fromCoords) const
     {
         std::vector<std::unique_ptr<Geometry>> pts;
         pts.reserve(fromCoords.size());
-        for (const Coordinate& c : fromCoords) {
+        for (const auto& c : fromCoords) {
             pts.emplace_back(createPoint(c));
         }
 
         return createMultiPoint(std::move(pts));
     }
 
-    std::unique_ptr<MultiPoint> createMultiPoint(std::vector<CoordinateXY> && newPoints) const;
-
+    /// Construct a MultiPoint taking ownership of given arguments
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const;
 
     std::unique_ptr<MultiPoint> createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints) const;
 
     /// Construct a MultiPoint with a deep-copy of given arguments
-    MultiPoint* createMultiPoint(
+    std::unique_ptr<MultiPoint> createMultiPoint(
         const std::vector<const Geometry*>& fromPoints) const;
 
     /// \brief
     /// Construct a MultiPoint containing a Point geometry
     /// for each Coordinate in the given list.
-    MultiPoint* createMultiPoint(
+    std::unique_ptr<MultiPoint> createMultiPoint(
         const CoordinateSequence& fromCoords) const;
 
     /// Construct an EMPTY Polygon
     std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
 
     /// Construct a Polygon taking ownership of given arguments
-    Polygon* createPolygon(LinearRing* shell,
-                           std::vector<LinearRing*>* holes) const;
-
     std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell) const;
 
     std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell,
@@ -282,13 +263,11 @@ public:
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;
 
     /// Construct a LineString taking ownership of given argument
-    LineString* createLineString(CoordinateSequence* coordinates) const;
-
     std::unique_ptr<LineString> createLineString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
 
     /// Construct a LineString with a deep-copy of given argument
-    LineString* createLineString(
+    std::unique_ptr<LineString> createLineString(
         const CoordinateSequence& coordinates) const;
 
     /**
@@ -330,8 +309,6 @@ public:
      * NOTE: the returned Geometry will take ownership of the
      *       given vector AND its elements
      */
-    Geometry* buildGeometry(std::vector<Geometry*>* geoms) const;
-
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) const;
 
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Point>> && geoms) const;
@@ -409,7 +386,7 @@ public:
      * The difference is that this version will copy needed data
      * leaving ownership to the caller.
      */
-    Geometry* buildGeometry(const std::vector<const Geometry*>& geoms) const;
+    std::unique_ptr<Geometry> buildGeometry(const std::vector<const Geometry*>& geoms) const;
 
     int getSRID() const
     {
@@ -417,7 +394,7 @@ public:
     };
 
     /// Returns a clone of given Geometry.
-    Geometry* createGeometry(const Geometry* g) const;
+    std::unique_ptr<Geometry> createGeometry(const Geometry* g) const;
 
     /// Destroy a Geometry, or release it
     void destroyGeometry(Geometry* g) const;

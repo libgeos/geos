@@ -141,12 +141,10 @@ template<>
 void object::test<4>
 ()
 {
-    typedef geos::geom::Geometry Geom;
-    typedef std::vector<Geom*> GeomVect;
-    GeomVect* geoms = new GeomVect;
-    geoms->push_back(wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))").release());
-    geoms->back()->setSRID(4326);
-    Geom* geom = gf->createGeometryCollection(geoms);
+    std::vector<std::unique_ptr<geos::geom::Geometry>> geoms;
+    geoms.push_back(wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))"));
+    geoms.back()->setSRID(4326);
+    auto geom = gf->createGeometryCollection(std::move(geoms));
     geom->setSRID(4326);
     std::stringstream result_stream;
 
@@ -154,7 +152,6 @@ void object::test<4>
     wkbwriter.setByteOrder(1);
     wkbwriter.setIncludeSRID(1);
     wkbwriter.writeHEX(*geom, result_stream);
-    delete geom;
 
     std::string actual = result_stream.str();
     ensure_equals(actual,

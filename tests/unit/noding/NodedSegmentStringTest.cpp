@@ -49,13 +49,13 @@ struct test_nodedsegmentstring_data {
     std::unique_ptr<Geometry>
     toLines(SegmentString::NonConstVect& ss, const GeometryFactory* gf)
     {
-        std::vector<Geometry *> *lines = new std::vector<Geometry *>();
+        std::vector<std::unique_ptr<Geometry>> lines;
         for (auto s: ss)
         {
             std::unique_ptr<CoordinateSequence> cs = s->getCoordinates()->clone();
-            lines->push_back(gf->createLineString(*cs));
+            lines.push_back(gf->createLineString(std::move(cs)));
         }
-        return std::unique_ptr<Geometry>(gf->createMultiLineString(lines));
+        return gf->createMultiLineString(std::move(lines));
     }
 
     void

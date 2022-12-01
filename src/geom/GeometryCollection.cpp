@@ -45,25 +45,6 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
     }
 }
 
-/*protected*/
-GeometryCollection::GeometryCollection(std::vector<Geometry*>* newGeoms, const GeometryFactory* factory):
-    Geometry(factory)
-{
-    if(newGeoms == nullptr) {
-        return;
-    }
-    if(hasNullElements(newGeoms)) {
-        throw  util::IllegalArgumentException("geometries must not contain null elements\n");
-    }
-    for (const auto& geom : *newGeoms) {
-        geometries.emplace_back(geom);
-    }
-    delete newGeoms;
-
-    // Set SRID for inner geoms
-    setSRID(getSRID());
-}
-
 GeometryCollection::GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& factory) :
     Geometry(&factory),
     geometries(std::move(newGeoms)) {

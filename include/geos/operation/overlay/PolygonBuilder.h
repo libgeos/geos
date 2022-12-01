@@ -82,7 +82,7 @@ public:
              const std::vector<geomgraph::Node*>* nodes);
     // throw(const TopologyException &)
 
-    std::vector<geom::Geometry*>* getPolygons();
+    std::vector<std::unique_ptr<geom::Geometry>> getPolygons();
 
 private:
 
@@ -190,7 +190,7 @@ private:
     geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing* testEr,
             std::vector<FastPIPRing>& newShellList);
 
-    std::vector<geom::Geometry*>* computePolygons(
+    std::vector<std::unique_ptr<geom::Geometry>> computePolygons(
         std::vector<geomgraph::EdgeRing*>& newShellList);
 
     /**

@@ -420,9 +420,9 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon* g,
     for(std::size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
         if(clip_linestring_parts(g->getInteriorRingN(i), parts, rect)) {
             // clones
-            LinearRing* hole = new LinearRing(*(g->getInteriorRingN(i)));
+            auto hole =g->getInteriorRingN(i)->clone();
             // becomes exterior
-            Polygon* poly = _gf->createPolygon(hole, nullptr);
+            Polygon* poly = _gf->createPolygon(std::move(hole)).release();
             toParts.add(poly);
         }
         else if(!parts.empty()) {
@@ -492,8 +492,8 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon* g,
         const LinearRing* hole = g->getInteriorRingN(i);
         if(clip_linestring_parts(hole, holeparts, rect)) {
             // becomes exterior
-            LinearRing* cloned = new LinearRing(*hole);
-            Polygon* poly = _gf->createPolygon(cloned, nullptr);
+            auto cloned = hole->clone();
+            Polygon* poly = _gf->createPolygon(std::move(cloned)).release();
             parts.add(poly);
         }
         else {

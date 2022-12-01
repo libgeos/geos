@@ -204,17 +204,8 @@ protected:
      *	Elements may be empty <code>Geometry</code>s,
      *	but not <code>null</code>s.
      *
-     *	If construction succeed the created object will take
-     *	ownership of newGeoms vector and elements.
-     *
-     *	If construction	fails "IllegalArgumentException *"
-     *	is thrown and it is your responsibility to delete newGeoms
-     *	vector and content.
-     *
      * @param newFactory the GeometryFactory used to create this geometry
      */
-    GeometryCollection(std::vector<Geometry*>* newGeoms, const GeometryFactory* newFactory);
-
     GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& newFactory);
 
     /// Convenience constructor to build a GeometryCollection from vector of Geometry subclass pointers

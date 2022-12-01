@@ -688,30 +688,29 @@ OverlayOp::computeGeometry(std::vector<Point*>* nResultPointList,
     std::size_t nLines = nResultLineList->size();
     std::size_t nPolys = nResultPolyList->size();
 
-    std::unique_ptr<std::vector<Geometry*>> geomList{new std::vector<Geometry*>()};
-    geomList->reserve(nPoints + nLines + nPolys);
+    std::vector<std::unique_ptr<Geometry>> geomList;
+    geomList.reserve(nPoints + nLines + nPolys);
 
     // element geometries of the result are always in the order P,L,A
-    geomList->insert(geomList->end(),
-                     nResultPointList->begin(),
-                     nResultPointList->end());
+    for(auto* g : *nResultPointList) {
+        geomList.emplace_back(g);
+    }
 
-    geomList->insert(geomList->end(),
-                     nResultLineList->begin(),
-                     nResultLineList->end());
+    for(auto* g : *nResultLineList) {
+        geomList.emplace_back(g);
+    }
 
-    geomList->insert(geomList->end(),
-                     nResultPolyList->begin(),
-                     nResultPolyList->end());
+    for(auto* g : *nResultPolyList) {
+        geomList.emplace_back(g);
+    }
 
-
-    if(geomList->empty()) {
+    if(geomList.empty()) {
         return createEmptyResult(opCode, arg[0]->getGeometry(),
                                  arg[1]->getGeometry(), geomFact).release();
     }
     // build the most specific geometry possible
-    Geometry* g = geomFact->buildGeometry(geomList.release());
-    return g;
+    auto g = geomFact->buildGeometry(std::move(geomList));
+    return g.release();
 }
 
 /*private*/
@@ -860,14 +859,13 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
     // might throw a TopologyException *
     polyBuilder.add(&graph);
 
-    std::vector<Geometry*>* gv = polyBuilder.getPolygons();
-    std::size_t gvsize = gv->size();
+    auto&& gv = polyBuilder.getPolygons();
+    std::size_t gvsize = gv.size();
     resultPolyList = new std::vector<Polygon*>(gvsize);
     for(std::size_t i = 0; i < gvsize; ++i) {
-        Polygon* p = dynamic_cast<Polygon*>((*gv)[i]);
+        Polygon* p = dynamic_cast<Polygon*>(gv[i].release());
         (*resultPolyList)[i] = p;
     }
-    delete gv;
 
     LineBuilder lineBuilder(this, geomFact, &ptLocator);
     resultLineList = lineBuilder.build(opCode);

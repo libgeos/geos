@@ -557,30 +557,29 @@ Geometry::Union(const Geometry* other) const
         std::size_t ngeomsOther = other->getNumGeometries();
 
         // Allocated for ownership transfer
-        std::vector<Geometry*>* v = new std::vector<Geometry*>();
-        v->reserve(ngeomsThis + ngeomsOther);
+        std::vector<std::unique_ptr<Geometry>> v;
+        v.reserve(ngeomsThis + ngeomsOther);
 
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(std::size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone().release());
+                v.push_back(coll->getGeometryN(i)->clone());
             }
         }
         else {
-            v->push_back(this->clone().release());
+            v.push_back(this->clone());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(std::size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone().release());
+                v.push_back(coll->getGeometryN(i)->clone());
             }
         }
         else {
-            v->push_back(other->clone().release());
+            v.push_back(other->clone());
         }
 
-        std::unique_ptr<Geometry>out(_factory->buildGeometry(v));
-        return out;
+        return _factory->buildGeometry(std::move(v));
     }
 #endif
 
@@ -636,29 +635,29 @@ Geometry::symDifference(const Geometry* other) const
         std::size_t ngeomsOther = other->getNumGeometries();
 
         // Allocated for ownership transfer
-        std::vector<Geometry*>* v = new std::vector<Geometry*>();
-        v->reserve(ngeomsThis + ngeomsOther);
+        std::vector<std::unique_ptr<Geometry>> v;
+        v.reserve(ngeomsThis + ngeomsOther);
 
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(std::size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone().release());
+                v.push_back(coll->getGeometryN(i)->clone());
             }
         }
         else {
-            v->push_back(this->clone().release());
+            v.push_back(this->clone());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(std::size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone().release());
+                v.push_back(coll->getGeometryN(i)->clone());
             }
         }
         else {
-            v->push_back(other->clone().release());
+            v.push_back(other->clone());
         }
 
-        return std::unique_ptr<Geometry>(_factory->buildGeometry(v));
+        return _factory->buildGeometry(std::move(v));
     }
 
     return HeuristicOverlay(this, other, OverlayOp::opSYMDIFFERENCE);

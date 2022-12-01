@@ -935,6 +935,10 @@ protected:
         return gv;
     }
 
+    static std::vector<std::unique_ptr<Geometry>> toGeometryArray(std::vector<std::unique_ptr<Geometry>> && v) {
+        return std::move(v);
+    }
+
 protected:
 
     virtual int getSortIndex() const = 0;

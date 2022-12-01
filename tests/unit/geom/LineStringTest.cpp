@@ -36,21 +36,19 @@ struct test_linestring_data {
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
 
-    LineStringPtr empty_line_;
+    std::unique_ptr<geos::geom::LineString> empty_line_;
 
     test_linestring_data()
         : pm_(1000)
         , factory_(geos::geom::GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
-        , empty_line_(factory_->createLineString(new geos::geom::CoordinateSequence()))
+        , empty_line_(factory_->createLineString())
     {
         assert(nullptr != empty_line_);
     }
 
     ~test_linestring_data()
     {
-        factory_->destroyGeometry(empty_line_);
-        empty_line_ = nullptr;
     }
 };
 

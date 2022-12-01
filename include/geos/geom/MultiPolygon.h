@@ -116,8 +116,6 @@ protected:
      *	Caller must keep the factory alive for the life-time
      *	of the constructed MultiPolygon.
      */
-    MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* newFactory);
-
     MultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys,
             const GeometryFactory& newFactory);
 

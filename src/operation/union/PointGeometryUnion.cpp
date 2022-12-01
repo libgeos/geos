@@ -64,16 +64,14 @@ PointGeometryUnion::Union() const
     std::unique_ptr<Geometry> ptComp;
 
     if(exteriorCoords.size() == 1) {
-        ptComp.reset(geomFact->createPoint(*(exteriorCoords.begin())));
+        ptComp = geomFact->createPoint(*(exteriorCoords.begin()));
     }
     else {
         ptComp = geomFact->createMultiPoint(exteriorCoords);
     }
 
     // add point component to the other geometry
-    return std::unique_ptr<Geometry> (
-               GeometryCombiner::combine(ptComp.get(), &otherGeom)
-           );
+    return GeometryCombiner::combine(ptComp.get(), &otherGeom);
 }
 
 /* public  static */

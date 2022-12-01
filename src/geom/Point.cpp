@@ -42,14 +42,11 @@ namespace geom { // geos::geom
 
 
 /*protected*/
-Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
+Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
     : Geometry(factory)
+    , coordinates(newCoords)
 {
-    std::unique_ptr<CoordinateSequence> coords(newCoords); // Take ownership in case of exception
-
-    if (coords->getSize() <= 1) {
-        coordinates = *(coords.get());
-    } else if (coords->getSize() > 1) {
+    if (coordinates.getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
     }
 }

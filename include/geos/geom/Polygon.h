@@ -187,14 +187,11 @@ protected:
      *
      * Polygon will take ownership of Shell and Holes LinearRings
      */
-    Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
-            const GeometryFactory* newFactory);
-
     Polygon(std::unique_ptr<LinearRing> && newShell,
+            std::vector<std::unique_ptr<LinearRing>> && newHoles,
             const GeometryFactory& newFactory);
 
     Polygon(std::unique_ptr<LinearRing> && newShell,
-            std::vector<std::unique_ptr<LinearRing>> && newHoles,
             const GeometryFactory& newFactory);
 
     Polygon* cloneImpl() const override { return new Polygon(*this); }
