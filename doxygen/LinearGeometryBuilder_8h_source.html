@@ -83,14 +83,14 @@ $(function() {
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geomFact;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">typedef</span> std::vector&lt;const geom::Geometry*&gt; GeomPtrVect;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">typedef</span> std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; GeomPtrVect;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// Geometry elements owned by this class</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    GeomPtrVect lines;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">bool</span> ignoreInvalidLines;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">bool</span> fixInvalidLines;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* coordList;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; coordList;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> lastPt;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
@@ -112,16 +112,14 @@ $(function() {
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
 <div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classgeos_1_1linearref_1_1LinearGeometryBuilder.html#af216d4eb19bf0a147c0a05ca733ab871">   99</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1linearref_1_1LinearGeometryBuilder.html#af216d4eb19bf0a147c0a05ca733ab871">endLine</a>();</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* getGeometry();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; getGeometry();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;};</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;} <span class="comment">// namespace geos.linearref</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:205</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:65</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:186</div></div>
 <div class="ttc" id="aclassgeos_1_1linearref_1_1LinearGeometryBuilder_html"><div class="ttname"><a href="classgeos_1_1linearref_1_1LinearGeometryBuilder.html">geos::linearref::LinearGeometryBuilder</a></div><div class="ttdoc">Builds a linear geometry (LineString or MultiLineString) incrementally (point-by-point).</div><div class="ttdef"><b>Definition:</b> LinearGeometryBuilder.h:39</div></div>
 <div class="ttc" id="aclassgeos_1_1linearref_1_1LinearGeometryBuilder_html_a7cbe44b571e1394fe74d25a1528d41a5"><div class="ttname"><a href="classgeos_1_1linearref_1_1LinearGeometryBuilder.html#a7cbe44b571e1394fe74d25a1528d41a5">geos::linearref::LinearGeometryBuilder::setIgnoreInvalidLines</a></div><div class="ttdeci">void setIgnoreInvalidLines(bool ignoreInvalidLines)</div><div class="ttdoc">Allows invalid lines to be ignored rather than causing Exceptions.</div></div>
 <div class="ttc" id="aclassgeos_1_1linearref_1_1LinearGeometryBuilder_html_abb1f3ba3f2e3b09b72c55c4ef830b569"><div class="ttname"><a href="classgeos_1_1linearref_1_1LinearGeometryBuilder.html#abb1f3ba3f2e3b09b72c55c4ef830b569">geos::linearref::LinearGeometryBuilder::add</a></div><div class="ttdeci">void add(const geom::Coordinate &amp;pt, bool allowRepeatedPoints)</div><div class="ttdoc">Adds a point to the current line.</div></div>

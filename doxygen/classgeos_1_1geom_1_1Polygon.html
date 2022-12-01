@@ -388,14 +388,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ad69419712f7da9b12fa86dd481f36edf"><td class="memItemLeft" align="right" valign="top"><a id="ad69419712f7da9b12fa86dd481f36edf"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>compareToSameClass</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *p) const override</td></tr>
 <tr class="separator:ad69419712f7da9b12fa86dd481f36edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42495b3364d68ae74a921bc6b42b24ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Polygon.html#a42495b3364d68ae74a921bc6b42b24ee">Polygon</a> (<a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> *newShell, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> * &gt; *newHoles, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *newFactory)</td></tr>
-<tr class="separator:a42495b3364d68ae74a921bc6b42b24ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf1853c23e1b5c4e47dc640e6d6a5b5a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Polygon.html#aaf1853c23e1b5c4e47dc640e6d6a5b5a">Polygon</a> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt; &amp;&amp;newShell, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt;&gt; &amp;&amp;newHoles, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;newFactory)</td></tr>
+<tr class="separator:aaf1853c23e1b5c4e47dc640e6d6a5b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63e53d6d77abf2839b58f59d670ac5d8"><td class="memItemLeft" align="right" valign="top"><a id="a63e53d6d77abf2839b58f59d670ac5d8"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Polygon</b> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt; &amp;&amp;newShell, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;newFactory)</td></tr>
 <tr class="separator:a63e53d6d77abf2839b58f59d670ac5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf1853c23e1b5c4e47dc640e6d6a5b5a"><td class="memItemLeft" align="right" valign="top"><a id="aaf1853c23e1b5c4e47dc640e6d6a5b5a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Polygon</b> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt; &amp;&amp;newShell, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt;&gt; &amp;&amp;newHoles, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;newFactory)</td></tr>
-<tr class="separator:aaf1853c23e1b5c4e47dc640e6d6a5b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f0ddb894d76ed5f5493d7c3ac705e60"><td class="memItemLeft" align="right" valign="top"><a id="a4f0ddb894d76ed5f5493d7c3ac705e60"></a>
 <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Polygon.html#a4f0ddb894d76ed5f5493d7c3ac705e60">cloneImpl</a> () const override</td></tr>
 <tr class="memdesc:a4f0ddb894d76ed5f5493d7c3ac705e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make a deep-copy of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. <br /></td></tr>
@@ -481,14 +478,17 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>checkNotGeomet
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0011cf7156ff985f7847eb56369d5881 inherit pro_static_methods_classgeos_1_1geom_1_1Geometry"><td class="memTemplItemLeft" align="right" valign="top">static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toGeometryArray</b> (std::vector&lt; std::unique_ptr&lt; T &gt;&gt; &amp;&amp;v)</td></tr>
 <tr class="separator:a0011cf7156ff985f7847eb56369d5881 inherit pro_static_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27da7c00b105278102332cd7f6dbac3a inherit pro_static_methods_classgeos_1_1geom_1_1Geometry"><td class="memItemLeft" align="right" valign="top"><a id="a27da7c00b105278102332cd7f6dbac3a"></a>
+static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toGeometryArray</b> (std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;&amp;v)</td></tr>
+<tr class="separator:a27da7c00b105278102332cd7f6dbac3a inherit pro_static_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a linear polygon, which may include holes. </p>
 <p>The shell and holes of the polygon are represented by <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>s. In a valid polygon, holes may touch the shell or other holes at a single point. However, no sequence of touching holes may split the polygon into two pieces. The orientation of the rings in the polygon does not matter. </p>
 <p>The shell and holes must conform to the assertions specified in the <a href="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features Specification for SQL</a> . </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a42495b3364d68ae74a921bc6b42b24ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42495b3364d68ae74a921bc6b42b24ee">&#9670;&nbsp;</a></span>Polygon()</h2>
+<a id="aaf1853c23e1b5c4e47dc640e6d6a5b5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1853c23e1b5c4e47dc640e6d6a5b5a">&#9670;&nbsp;</a></span>Polygon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -499,19 +499,19 @@ template&lt;typename T &gt; </td></tr>
         <tr>
           <td class="memname">geos::geom::Polygon::Polygon </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> *&#160;</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>newShell</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> * &gt; *&#160;</td>
+          <td class="paramtype">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> &gt;&gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>newHoles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;&#160;</td>
           <td class="paramname"><em>newFactory</em>&#160;</td>
         </tr>
         <tr>
