@@ -66,12 +66,15 @@ CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, boo
 }
 
 CoordinateSequence::CoordinateSequence(std::size_t sz, std::size_t dim) :
-    m_vect(sz * 3),
-    m_stride(3u),
+    m_vect(sz * std::max(static_cast<std::uint8_t>(dim), static_cast<std::uint8_t>(3))),
+    m_stride(std::max(static_cast<std::uint8_t>(dim), static_cast<std::uint8_t>(3))),
     m_hasdim(dim > 0),
-    m_hasz(dim == 3),
-    m_hasm(false)
+    m_hasz(dim >= 3),
+    m_hasm(dim == 4)
 {
+    if (dim == 1 || dim > 4) {
+        throw util::IllegalArgumentException("Declared dimension must be 2, 3, or 4");
+    }
     initialize();
 }
 

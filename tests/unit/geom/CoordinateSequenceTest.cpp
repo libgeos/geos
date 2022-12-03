@@ -21,6 +21,8 @@ using geos::geom::CoordinateXYM;
 using geos::geom::CoordinateXYZM;
 using geos::geom::CoordinateSequence;
 
+constexpr const int MAX_TESTS = 100;
+
 namespace tut {
 //
 // Test Group
@@ -48,7 +50,7 @@ struct test_coordinatearraysequence_data {
     };
 };
 
-typedef test_group<test_coordinatearraysequence_data> group;
+typedef test_group<test_coordinatearraysequence_data, MAX_TESTS> group;
 typedef group::object object;
 
 group test_coordinatearraysequence_group("geos::geom::CoordinateSequence");
@@ -1307,6 +1309,22 @@ void object::test<50>
     ensure(!seq2.hasZ());
     ensure(seq2.hasM());
     ensure_equals(data_ptr, seq2.data());
+}
+
+// Test numeric dimension constructor
+template<>
+template<>
+void object::test<51>
+()
+{
+    try {
+        CoordinateSequence seq(0, 1);
+        fail();
+    } catch (const geos::util::GEOSException&) {}
+
+    CoordinateSequence seq(0, 4);
+    ensure(seq.hasZ());
+    ensure(seq.hasM());
 }
 
 } // namespace tut
