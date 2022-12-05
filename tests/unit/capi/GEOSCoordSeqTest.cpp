@@ -638,5 +638,35 @@ void object::test<17>()
     ensure_equals("w2", out2[7], values[7]);
 }
 
+// test error on invalid dim
+template<>
+template<>
+void object::test<18>()
+{
+    ensure(!GEOSCoordSeq_create(0, 1));
+    ensure(!GEOSCoordSeq_create(0, 5));
+}
+
+// test 3d values stored correctly in 4D seq
+template<>
+template<>
+void object::test<19>()
+{
+    cs_ = GEOSCoordSeq_create(2, 4);
+    GEOSCoordSeq_setXYZ(cs_, 0, 1, 2, 3);
+    GEOSCoordSeq_setXYZ(cs_, 1, 4, 5, 6);
+
+    double x, y, z;
+    GEOSCoordSeq_getXYZ(cs_, 0, &x, &y, &z);
+    ensure_equals(x, 1);
+    ensure_equals(y, 2);
+    ensure_equals(z, 3);
+
+    GEOSCoordSeq_getXYZ(cs_, 1, &x, &y, &z);
+    ensure_equals(x, 4);
+    ensure_equals(y, 5);
+    ensure_equals(z, 6);
+}
+
 } // namespace tut
 
