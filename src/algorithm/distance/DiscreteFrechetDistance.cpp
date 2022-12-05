@@ -138,6 +138,10 @@ DiscreteFrechetDistance::compute(
     const geom::Geometry& discreteGeom,
     const geom::Geometry& geom)
 {
+    if (discreteGeom.isEmpty() || geom.isEmpty()) {
+        throw util::IllegalArgumentException("DiscreteFrechetDistance called with empty inputs.");
+    }
+
     auto lp = discreteGeom.getCoordinates();
     auto lq = geom.getCoordinates();
     std::size_t pSize, qSize;
