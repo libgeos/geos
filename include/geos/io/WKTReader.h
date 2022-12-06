@@ -112,7 +112,7 @@ public:
     std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
 
 protected:
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer, OrdinateSet& ordinates) const;
+    geom::CoordinateSequence getCoordinates(io::StringTokenizer* tokenizer, OrdinateSet& ordinates) const;
     static double getNextNumber(io::StringTokenizer* tokenizer);
     static std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer, OrdinateSet& dim);
     static std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);

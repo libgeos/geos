@@ -59,24 +59,24 @@ WKTReader::read(const std::string& wellKnownText) const
     return ret;
 }
 
-std::unique_ptr<CoordinateSequence>
+CoordinateSequence
 WKTReader::getCoordinates(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
     std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
     if(nextToken == "EMPTY") {
-        return detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+        return CoordinateSequence(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
     }
 
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     getPreciseCoordinate(tokenizer, ordinateFlags, coord);
 
-    auto coordinates = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
-    coordinates->add(coord);
+    CoordinateSequence coordinates(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+    coordinates.add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
     while(nextToken == ",") {
         getPreciseCoordinate(tokenizer, ordinateFlags, coord);
-        coordinates->add(coord);
+        coordinates.add(coord);
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
@@ -321,8 +321,8 @@ std::unique_ptr<LinearRing>
 WKTReader::readLinearRingText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
     auto&& coords = getCoordinates(tokenizer, ordinateFlags);
-    if (fixStructure && !coords->isRing()) {
-        coords->closeRing();
+    if (fixStructure && !coords.isRing()) {
+        coords.closeRing();
     }
     return geometryFactory->createLinearRing(std::move(coords));
 }
