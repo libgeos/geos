@@ -253,14 +253,17 @@ OverlayEdgeRing::getCoordinate()
 std::unique_ptr<Polygon>
 OverlayEdgeRing::toPolygon(const GeometryFactory* factory)
 {
-    std::vector<std::unique_ptr<LinearRing>> holeLR;
-    if (holes.size() > 0) {
+    if (holes.empty()) {
+        return factory->createPolygon(std::move(ring));
+    } else {
+        std::vector<std::unique_ptr<LinearRing>> holeLR(holes.size());
+
         for (std::size_t i = 0; i < holes.size(); i++) {
-            std::unique_ptr<LinearRing> r = holes[i]->getRing();
-            holeLR.push_back(std::move(r));
+            holeLR[i] = holes[i]->getRing();
         }
+
+        return factory->createPolygon(std::move(ring), std::move(holeLR));
     }
-    return factory->createPolygon(std::move(ring), std::move(holeLR));
 }
 
 /*public*/
