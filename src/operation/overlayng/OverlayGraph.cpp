@@ -47,7 +47,8 @@ std::vector<OverlayEdge*>
 OverlayGraph::getNodeEdges()
 {
     std::vector<OverlayEdge*> nodeEdges;
-    for (auto nodeMapPair : nodeMap) {
+    nodeEdges.reserve(nodeMap.size());
+    for (const auto& nodeMapPair : nodeMap) {
         nodeEdges.push_back(nodeMapPair.second);
     }
     return nodeEdges;
@@ -57,7 +58,7 @@ OverlayGraph::getNodeEdges()
 OverlayEdge*
 OverlayGraph::getNodeEdge(const Coordinate& nodePt) const
 {
-    auto it = nodeMap.find(nodePt);
+    const auto& it = nodeMap.find(nodePt);
     if (it == nodeMap.end()) {
         return nullptr;
     }
@@ -107,19 +108,19 @@ OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
 OverlayEdge*
 OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl, bool direction)
 {
-    Coordinate origin;
-    Coordinate dirPt;
+    const Coordinate* origin;
+    const Coordinate* dirPt;
     if (direction) {
-        origin = pts->getAt(0);
-        dirPt = pts->getAt(1);
+        origin = &pts->getAt(0);
+        dirPt = &pts->getAt(1);
     }
     else {
         assert(pts->size() > 0);
         std::size_t ilast = pts->size() - 1;
-        origin = pts->getAt(ilast);
-        dirPt = pts->getAt(ilast-1);
+        origin = &pts->getAt(ilast);
+        dirPt = &pts->getAt(ilast-1);
     }
-    ovEdgeQue.emplace_back(origin, dirPt, direction, lbl, pts);
+    ovEdgeQue.emplace_back(*origin, *dirPt, direction, lbl, pts);
     OverlayEdge& ove = ovEdgeQue.back();
     return &ove;
 }
@@ -149,7 +150,7 @@ OverlayGraph::insert(OverlayEdge* e)
      * insert the edge into the star of edges around the node.
      * Otherwise, add a new node for the origin.
      */
-    auto it = nodeMap.find(e->orig());
+    const auto& it = nodeMap.find(e->orig());
     if (it != nodeMap.end()) {
         // found in map
         OverlayEdge* nodeEdge = it->second;
