@@ -356,7 +356,7 @@ public:
 
 private:
     typedef std::stack<QuadEdge*> QuadEdgeStack;
-    typedef std::vector<std::unique_ptr<geom::CoordinateSequence>> TriList;
+    typedef std::vector<geom::CoordinateSequence> TriList;
 
     /** \brief
      * The quadedges forming a single triangle.

@@ -363,13 +363,13 @@ public:
     void
     visit(std::array<QuadEdge*, 3>& triEdges) override
     {
-        auto coordSeq = detail::make_unique<geom::CoordinateSequence>(4u, 0u);
-        for(std::size_t i = 0; i < 3; i++) {
-            Vertex v = triEdges[i]->orig();
-            coordSeq->setAt(v.getCoordinate(), i);
-        }
-        coordSeq->setAt(triEdges[0]->orig().getCoordinate(), 3);
-        triCoords->push_back(std::move(coordSeq));
+        CoordinateSequence coordSeq{
+            triEdges[0]->orig().getCoordinate(),
+            triEdges[1]->orig().getCoordinate(),
+            triEdges[2]->orig().getCoordinate(),
+            triEdges[0]->orig().getCoordinate()
+        };
+        triCoords->emplace_back(std::move(coordSeq));
     }
 };
 
@@ -442,11 +442,10 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 
     edges.reserve(p_quadEdges->size());
     for(const QuadEdge* qe : *p_quadEdges) {
-        auto coordSeq = detail::make_unique<geom::CoordinateSequence>(2u);
-
-        coordSeq->setAt(qe->orig().getCoordinate(), 0);
-        coordSeq->setAt(qe->dest().getCoordinate(), 1);
-
+        CoordinateSequence coordSeq{
+            qe->orig().getCoordinate(),
+            qe->dest().getCoordinate()
+        };
         edges.emplace_back(geomFact.createLineString(std::move(coordSeq)));
     }
 
@@ -522,13 +521,13 @@ QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    auto cellPts = detail::make_unique<CoordinateSequence>();
+    CoordinateSequence cellPts;
 
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts->isEmpty() || cellPts->back() != cc) {  // no duplicates
-            cellPts->add(cc);
+        if(cellPts.isEmpty() || cellPts.back() != cc) {  // no duplicates
+            cellPts.add(cc);
         }
         qe = &qe->oPrev();
 
@@ -536,11 +535,11 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts->front() != cellPts->back()) {
-        cellPts->closeRing();
+    if (cellPts.front() != cellPts.back()) {
+        cellPts.closeRing();
     }
-    if (cellPts->size() < 4) {
-        cellPts->add(cellPts->back());
+    if (cellPts.size() < 4) {
+        cellPts.add(cellPts.back());
     }
 
     std::unique_ptr<Geometry> cellPoly = geomFact.createPolygon(geomFact.createLinearRing(std::move(cellPts)));
@@ -558,13 +557,13 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    auto cellPts = detail::make_unique<CoordinateSequence>();
+    CoordinateSequence cellPts;
 
     const QuadEdge* startQE = qe;
     do {
         const Coordinate& cc = qe->rot().orig().getCoordinate();
-        if(cellPts->isEmpty() || cellPts->back() != cc) {  // no duplicates
-            cellPts->add(cc);
+        if(cellPts.isEmpty() || cellPts.back() != cc) {  // no duplicates
+            cellPts.add(cc);
         }
         qe = &qe->oPrev();
 
@@ -572,8 +571,8 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
     while(qe != startQE);
 
     // Close the ring
-    if (cellPts->front() != cellPts->back()) {
-        cellPts->closeRing();
+    if (cellPts.front() != cellPts.back()) {
+        cellPts.closeRing();
     }
 
     std::unique_ptr<geom::Geometry> cellEdge(
