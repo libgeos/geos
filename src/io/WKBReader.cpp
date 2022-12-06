@@ -340,9 +340,9 @@ WKBReader::readPoint()
     auto seq = readCoordinateSequence(1);
 
     // POINT EMPTY
-    const CoordinateXY& coord = seq->getAt<CoordinateXY>(0);
+    const CoordinateXY& coord = seq.getAt<CoordinateXY>(0);
     if (std::isnan(coord.x) && std::isnan(coord.y)) {
-        seq->clear();
+        seq.clear();
     }
 
     return factory.createPoint(std::move(seq));
@@ -370,8 +370,8 @@ WKBReader::readLinearRing()
 #endif
     auto pts = readCoordinateSequence(size);
     // Replace unclosed ring with closed
-    if (fixStructure && !pts->isRing()) {
-        pts->closeRing();
+    if (fixStructure && !pts.isRing()) {
+        pts.closeRing();
     }
     return factory.createLinearRing(std::move(pts));
 }
@@ -476,11 +476,11 @@ WKBReader::readGeometryCollection()
     return factory.createGeometryCollection(std::move(geoms));
 }
 
-std::unique_ptr<CoordinateSequence>
+CoordinateSequence
 WKBReader::readCoordinateSequence(uint32_t size)
 {
     minMemSize(GEOS_LINESTRING, size);
-    auto seq = detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
+    CoordinateSequence seq(size, hasZ, hasM, false);
 
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     for(uint32_t i = 0; i < size; i++) {
@@ -496,7 +496,7 @@ WKBReader::readCoordinateSequence(uint32_t size)
             coord.m = ordValues[j++];
         }
 
-        seq->setAt(coord, i);
+        seq.setAt(coord, i);
     }
     return seq;
 }
