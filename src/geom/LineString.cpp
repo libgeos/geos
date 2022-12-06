@@ -52,9 +52,8 @@ LineString::~LineString(){}
 LineString::LineString(const LineString& ls)
     :
     Geometry(ls),
-    points(ls.points->clone())
+    points(ls.points)
 {
-    //points=ls.points->clone();
 }
 
 LineString*
@@ -63,31 +62,23 @@ LineString::reverseImpl() const
     if(isEmpty()) {
         return clone().release();
     }
-
-    assert(points.get());
-    auto seq = points->clone();
-    seq->reverse();
-    assert(getFactory());
-    return getFactory()->createLineString(std::move(seq)).release();
+    CoordinateSequence revPts(points);
+    revPts.reverse();
+    return getFactory()->createLineString(std::move(revPts)).release();
 }
 
 
 /*private*/
 void
-LineString::validateConstruction()
+LineString::validateConstruction() const
 {
-    if(points.get() == nullptr) {
-        points = detail::make_unique<CoordinateSequence>();
-        return;
-    }
-
-    if(points->size() == 1) {
+    if(points.size() == 1) {
         throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
     }
 }
 
 /*public*/
-LineString::LineString(CoordinateSequence::Ptr && newCoords,
+LineString::LineString(CoordinateSequence && newCoords,
                        const GeometryFactory& factory)
     :
     Geometry(&factory),
@@ -99,22 +90,19 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
-    assert(points.get());
-    return points->clone();
-    //return points;
+    return points.clone();
 }
 
 const CoordinateSequence*
 LineString::getCoordinatesRO() const
 {
-    assert(nullptr != points.get());
-    return points.get();
+    return &points;
 }
 
 std::unique_ptr<CoordinateSequence>
 LineString::releaseCoordinates()
 {
-    auto ret = std::move(points);
+    auto ret = detail::make_unique<CoordinateSequence>(std::move(points));
     geometryChanged();
     return ret;
 }
@@ -122,8 +110,7 @@ LineString::releaseCoordinates()
 const Coordinate&
 LineString::getCoordinateN(std::size_t n) const
 {
-    assert(points.get());
-    return points->getAt(n);
+    return points.getAt(n);
 }
 
 Dimension::DimensionType
@@ -135,19 +122,19 @@ LineString::getDimension() const
 uint8_t
 LineString::getCoordinateDimension() const
 {
-    return (uint8_t) points->getDimension();
+    return (uint8_t) points.getDimension();
 }
 
 bool
 LineString::hasM() const
 {
-    return points->hasM();
+    return points.hasM();
 }
 
 bool
 LineString::hasZ() const
 {
-    return points->hasZ();
+    return points.hasZ();
 }
 
 int
@@ -162,23 +149,20 @@ LineString::getBoundaryDimension() const
 bool
 LineString::isEmpty() const
 {
-    assert(points.get());
-    return points->isEmpty();
+    return points.isEmpty();
 }
 
 std::size_t
 LineString::getNumPoints() const
 {
-    assert(points.get());
-    return points->getSize();
+    return points.getSize();
 }
 
 std::unique_ptr<Point>
 LineString::getPointN(std::size_t n) const
 {
     assert(getFactory());
-    assert(points.get());
-    return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt(n)));
+    return std::unique_ptr<Point>(getFactory()->createPoint(points.getAt(n)));
 }
 
 std::unique_ptr<Point>
@@ -232,10 +216,9 @@ LineString::getBoundary() const
 bool
 LineString::isCoordinate(Coordinate& pt) const
 {
-    assert(points.get());
-    std::size_t npts = points->getSize();
+    std::size_t npts = points.getSize();
     for(std::size_t i = 0; i < npts; i++) {
-        if(points->getAt(i) == pt) {
+        if(points.getAt(i) == pt) {
             return true;
         }
     }
@@ -254,7 +237,7 @@ LineString::computeEnvelopeInternal() const
         return Envelope::Ptr(new Envelope());
     }
 
-    return detail::make_unique<Envelope>(points->getEnvelope());
+    return detail::make_unique<Envelope>(points.getEnvelope());
 }
 
 bool
@@ -265,12 +248,12 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
     }
 
     const LineString* otherLineString = detail::down_cast<const LineString*>(other);
-    std::size_t npts = points->getSize();
-    if(npts != otherLineString->points->getSize()) {
+    std::size_t npts = points.getSize();
+    if(npts != otherLineString->points.getSize()) {
         return false;
     }
     for(std::size_t i = 0; i < npts; ++i) {
-        if(!equal(points->getAt(i), otherLineString->points->getAt(i), tolerance)) {
+        if(!equal(points.getAt(i), otherLineString->points.getAt(i), tolerance)) {
             return false;
         }
     }
@@ -280,15 +263,13 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
 void
 LineString::apply_rw(const CoordinateFilter* filter)
 {
-    assert(points.get());
-    points->apply_rw(filter);
+    points.apply_rw(filter);
 }
 
 void
 LineString::apply_ro(CoordinateFilter* filter) const
 {
-    assert(points.get());
-    points->apply_ro(filter);
+    points.apply_ro(filter);
 }
 
 void
@@ -315,19 +296,19 @@ LineString::normalizeClosed()
 
     const auto& ringCoords = getCoordinatesRO();
 
-    auto coords = detail::make_unique<CoordinateSequence>(ringCoords->getSize() - 1);
+    CoordinateSequence coords(ringCoords->getSize() - 1);
     // exclude last point (repeated)
-    for (std::size_t i = 0; i < coords->getSize(); i++) {
-        coords->setAt(ringCoords->getAt(i), i);
+    for (std::size_t i = 0; i < coords.getSize(); i++) {
+        coords.setAt(ringCoords->getAt(i), i);
     }
 
-    const CoordinateXY* minCoordinate = coords->minCoordinate();
+    const CoordinateXY* minCoordinate = coords.minCoordinate();
 
-    CoordinateSequence::scroll(coords.get(), minCoordinate);
-    coords->closeRing(true);
+    CoordinateSequence::scroll(&coords, minCoordinate);
+    coords.closeRing(true);
 
-    if(coords->size() >= 4 && algorithm::Orientation::isCCW(coords.get())) {
-        coords->reverse();
+    if(coords.size() >= 4 && algorithm::Orientation::isCCW(&coords)) {
+        coords.reverse();
     }
 
     points = std::move(coords);
@@ -338,18 +319,18 @@ void
 LineString::normalize()
 {
     if (isEmpty()) return;
-    assert(points.get());
+
     if (isClosed()) {
         normalizeClosed();
         return;
     }
-    std::size_t npts = points->getSize();
+    std::size_t npts = points.getSize();
     std::size_t n = npts / 2;
     for(std::size_t i = 0; i < n; i++) {
         std::size_t j = npts - 1 - i;
-        if(!(points->getAt(i) == points->getAt(j))) {
-            if(points->getAt(i).compareTo(points->getAt(j)) > 0) {
-                points->reverse();
+        if(!(points.getAt<CoordinateXY>(i) == points.getAt<CoordinateXY>(j))) {
+            if(points.getAt<CoordinateXY>(i).compareTo(points.getAt<CoordinateXY>(j)) > 0) {
+                points.reverse();
             }
             return;
         }
@@ -362,8 +343,8 @@ LineString::compareToSameClass(const Geometry* ls) const
     const LineString* line = detail::down_cast<const LineString*>(ls);
 
     // MD - optimized implementation
-    std::size_t mynpts = points->getSize();
-    std::size_t othnpts = line->points->getSize();
+    std::size_t mynpts = points.getSize();
+    std::size_t othnpts = line->points.getSize();
     if(mynpts > othnpts) {
         return 1;
     }
@@ -371,7 +352,7 @@ LineString::compareToSameClass(const Geometry* ls) const
         return -1;
     }
     for(std::size_t i = 0; i < mynpts; i++) {
-        int cmp = points->getAt(i).compareTo(line->points->getAt(i));
+        int cmp = points.getAt<CoordinateXY>(i).compareTo(line->points.getAt<CoordinateXY>(i));
         if(cmp) {
             return cmp;
         }
@@ -385,13 +366,13 @@ LineString::getCoordinate() const
     if(isEmpty()) {
         return nullptr;
     }
-    return &(points->getAt(0));
+    return &(points.getAt(0));
 }
 
 double
 LineString::getLength() const
 {
-    return Length::ofLine(points.get());
+    return Length::ofLine(&points);
 }
 
 void
@@ -411,12 +392,12 @@ LineString::apply_ro(GeometryComponentFilter* filter) const
 void
 LineString::apply_rw(CoordinateSequenceFilter& filter)
 {
-    std::size_t npts = points->size();
+    std::size_t npts = points.size();
     if(!npts) {
         return;
     }
     for(std::size_t i = 0; i < npts; ++i) {
-        filter.filter_rw(*points, i);
+        filter.filter_rw(points, i);
         if(filter.isDone()) {
             break;
         }
@@ -429,12 +410,12 @@ LineString::apply_rw(CoordinateSequenceFilter& filter)
 void
 LineString::apply_ro(CoordinateSequenceFilter& filter) const
 {
-    std::size_t npts = points->size();
+    std::size_t npts = points.size();
     if(!npts) {
         return;
     }
     for(std::size_t i = 0; i < npts; ++i) {
-        filter.filter_ro(*points, i);
+        filter.filter_ro(points, i);
         if(filter.isDone()) {
             break;
         }

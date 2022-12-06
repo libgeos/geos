@@ -75,7 +75,7 @@ public:
      * @param newFactory the GeometryFactory used to create this geometry
      *
      */
-    LinearRing(CoordinateSequence::Ptr && points,
+    LinearRing(CoordinateSequence && points,
             const GeometryFactory& newFactory);
 
     std::unique_ptr<LinearRing> clone() const
@@ -117,7 +117,7 @@ protected:
 
 private:
 
-    void validateConstruction();
+    void validateConstruction() const;
 };
 
 

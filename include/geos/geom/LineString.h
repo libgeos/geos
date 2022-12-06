@@ -203,7 +203,7 @@ protected:
     /// \brief
     /// Constructs a LineString taking ownership the
     /// given CoordinateSequence.
-    LineString(CoordinateSequence::Ptr && pts,
+    LineString(CoordinateSequence && pts,
                const GeometryFactory& newFactory);
 
     LineString* cloneImpl() const override { return new LineString(*this); }
@@ -212,7 +212,7 @@ protected:
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 
-    CoordinateSequence::Ptr points;
+    CoordinateSequence points;
 
     int
     getSortIndex() const override
@@ -222,7 +222,7 @@ protected:
 
 private:
 
-    void validateConstruction();
+    void validateConstruction() const;
     void normalizeClosed();
 
 

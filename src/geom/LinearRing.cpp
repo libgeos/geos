@@ -35,7 +35,7 @@ namespace geom { // geos::geom
 LinearRing::LinearRing(const LinearRing& lr): LineString(lr) {}
 
 /*public*/
-LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
+LinearRing::LinearRing(CoordinateSequence && newCoords,
                        const GeometryFactory& newFactory)
         : LineString(std::move(newCoords), newFactory)
 {
@@ -43,10 +43,10 @@ LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
 }
 
 void
-LinearRing::validateConstruction()
+LinearRing::validateConstruction() const
 {
     // Empty ring is valid
-    if(points->isEmpty()) {
+    if(points.isEmpty()) {
         return;
     }
 
@@ -56,10 +56,10 @@ LinearRing::validateConstruction()
         );
     }
 
-    if(points->getSize() < MINIMUM_VALID_SIZE) {
+    if(points.getSize() < MINIMUM_VALID_SIZE) {
         std::ostringstream os;
         os << "Invalid number of points in LinearRing found "
-           << points->getSize() << " - must be 0 or >= 4";
+           << points.getSize() << " - must be 0 or >= 4";
         throw util::IllegalArgumentException(os.str());
     }
 }
@@ -73,7 +73,7 @@ LinearRing::getBoundaryDimension() const
 bool
 LinearRing::isClosed() const
 {
-    if(points->isEmpty()) {
+    if(points.isEmpty()) {
         // empty LinearRings are closed by definition
         return true;
     }
@@ -89,7 +89,7 @@ LinearRing::getGeometryType() const
 void
 LinearRing::setPoints(const CoordinateSequence* cl)
 {
-    points = cl->clone();
+    points = *cl;
 }
 
 GeometryTypeId
@@ -105,11 +105,9 @@ LinearRing::reverseImpl() const
         return clone().release();
     }
 
-    assert(points.get());
-    auto seq = points->clone();
-    seq->reverse();
-    assert(getFactory());
-    return getFactory()->createLinearRing(std::move(seq)).release();
+    CoordinateSequence revPts(points);
+    revPts.reverse();
+    return getFactory()->createLinearRing(std::move(revPts)).release();
 }
 
 } // namespace geos::geom

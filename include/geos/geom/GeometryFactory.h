@@ -206,6 +206,8 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
+    std::unique_ptr<LinearRing> createLinearRing(CoordinateSequence && newCoords) const;
+
     /// Construct a LinearRing with a deep-copy of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
         const CoordinateSequence& coordinates) const;
@@ -265,6 +267,8 @@ public:
     /// Construct a LineString taking ownership of given argument
     std::unique_ptr<LineString> createLineString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
+
+    std::unique_ptr<LineString> createLineString(CoordinateSequence && coordinates) const;
 
     /// Construct a LineString with a deep-copy of given argument
     std::unique_ptr<LineString> createLineString(
