@@ -45,6 +45,7 @@ std::vector<std::unique_ptr<Polygon>>
 PolygonBuilder::computePolygons(const std::vector<OverlayEdgeRing*>& shells) const
 {
     std::vector<std::unique_ptr<Polygon>> resultPolyList;
+    resultPolyList.reserve(shells.size());
     // add Polygons for all shells
     for (OverlayEdgeRing* er : shells) {
         std::unique_ptr<Polygon> poly = er->toPolygon(geometryFactory);
