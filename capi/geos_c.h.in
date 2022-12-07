@@ -305,8 +305,10 @@ typedef int (*GEOSTransformXYCallback)(
 */
 typedef void (GEOSInterruptCallback)(void);
 
+typedef void (GEOSInterruptThreadCallback)(void*);
+
 /**
-* Register a function to be called when processing is interrupted.
+* Register a function to be called when processing is interrupted on any thread.
 * \param cb Callback function to invoke
 * \return the previously configured callback
 * \see GEOSInterruptCallback
@@ -315,9 +317,28 @@ extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(
     GEOSInterruptCallback* cb);
 
 /**
-* Request safe interruption of operations
+* Register a function to be called when processing is interrupted on the current thread.
+*
+* \param cb Callback function to invoke
+* \param context pointer to a context object that will be passed to `cb`
+* \return the previously configured callback
+* \see GEOSInterruptCallback
+*/
+extern GEOSInterruptThreadCallback GEOS_DLL *GEOS_interruptRegisterThreadCallback(
+    GEOSInterruptThreadCallback* cb, void* context);
+
+/**
+* Request safe interruption of operations. The next thread to check for an
+* interrupt will be interrupted. To request interruption of a specific thread,
+* instead call `GEOS_interruptThread` from a callback executed by that thread.
 */
 extern void GEOS_DLL GEOS_interruptRequest(void);
+
+/**
+* Request safe interruption of operations in the current thread. This function
+* should be called from a callback registered by `GEOS_interruptRegisterThreadCallback`.
+*/
+extern void GEOS_DLL GEOS_interruptThread(void);
 
 /**
 * Cancel a pending interruption request
