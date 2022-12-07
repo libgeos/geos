@@ -1,9 +1,11 @@
-//
-// Test Suite for C-API custom allocators
+// Test Suite for C-API interrupt functions
 
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/util/Interrupt.h>
+// std
+#include <thread>
 
 #include "capi_test_utils.h"
 
@@ -15,6 +17,7 @@ namespace tut {
 // Common data used in test cases.
 struct test_capiinterrupt_data : public capitest::utility {
     static int numcalls;
+    static int maxcalls;
     static GEOSInterruptCallback* nextcb;
 
     static void
@@ -32,9 +35,18 @@ struct test_capiinterrupt_data : public capitest::utility {
         }
     }
 
+    static void
+    interruptAfterMaxCalls(void* data)
+    {
+        if (++*static_cast<int*>(data) >= maxcalls) {
+            GEOS_interruptThread();
+        }
+    }
+
 };
 
 int test_capiinterrupt_data::numcalls = 0;
+int test_capiinterrupt_data::maxcalls = 0;
 GEOSInterruptCallback* test_capiinterrupt_data::nextcb = nullptr;
 
 typedef test_group<test_capiinterrupt_data> group;
@@ -79,7 +91,7 @@ void object::test<1>
     finishGEOS();
 }
 
-/// Test interrupt callback being called XXX
+/// Test interrupt callback being called
 template<>
 template<>
 void object::test<2>
@@ -194,6 +206,54 @@ void object::test<5>
     GEOSGeom_destroy(geom1);
 
     finishGEOS();
+}
+
+
+// Test callback is thread-local
+template<>
+template<>
+void object::test<6>
+()
+{
+    using geos::util::Interrupt;
+
+    maxcalls = 3;
+    int calls_1 = 0;
+    int calls_2 = 0;
+
+    GEOSContextHandle_t h1 = initGEOS_r(notice, notice);
+    GEOSContextHandle_t h2 = initGEOS_r(notice, notice);
+
+    GEOSContext_setInterruptCallback_r(h1, interruptAfterMaxCalls, &calls_1);
+    GEOSContext_setInterruptCallback_r(h2, interruptAfterMaxCalls, &calls_2);
+
+    // get previously registered callback and verify there was none
+    ensure(Interrupt::registerThreadCallback(nullptr, nullptr) == nullptr);
+
+    auto buffer = [](GEOSContextHandle_t handle) {
+        GEOSWKTReader* reader = GEOSWKTReader_create_r(handle);
+        GEOSGeometry* geom1 = GEOSWKTReader_read_r(handle, reader, "LINESTRING (0 0, 1 0)");
+        GEOSGeometry* geom2 = GEOSBuffer_r(handle, geom1, 1, 8);
+
+        GEOSGeom_destroy_r(handle, geom2);
+        GEOSGeom_destroy_r(handle, geom1);
+        GEOSWKTReader_destroy_r(handle, reader);
+    };
+
+    std::thread t1(buffer, h1);
+    std::thread t2(buffer, h2);
+
+    t1.join();
+    t2.join();
+
+    ensure_equals(calls_1, maxcalls);
+    ensure_equals(calls_2, maxcalls);
+
+    // get previously registered callback and verify there was none
+    ensure(Interrupt::registerThreadCallback(nullptr, nullptr) == nullptr);
+
+    finishGEOS_r(h1);
+    finishGEOS_r(h2);
 }
 
 

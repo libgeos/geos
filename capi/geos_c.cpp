@@ -143,6 +143,12 @@ extern "C" {
     }
 
     void
+    GEOS_interruptThread()
+    {
+        geos::util::Interrupt::requestForCurrentThread();
+    }
+
+    void
     GEOS_interruptCancel()
     {
         geos::util::Interrupt::cancel();
