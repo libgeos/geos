@@ -75,7 +75,9 @@ CoordinateSequence::CoordinateSequence(std::size_t sz, std::size_t dim) :
     if (dim == 1 || dim > 4) {
         throw util::IllegalArgumentException("Declared dimension must be 2, 3, or 4");
     }
-    initialize();
+    if (sz > 0 && dim == 0) {
+      reinterpret_cast<Coordinate*>(m_vect.data())[0] = geos::geom::Coordinate();
+    }
 }
 
 CoordinateSequence::CoordinateSequence(const std::initializer_list<Coordinate>& list) :
