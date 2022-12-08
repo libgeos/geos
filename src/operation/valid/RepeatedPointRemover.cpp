@@ -190,7 +190,7 @@ public:
             minLength = 2;
         }
         if(geom->getGeometryTypeId() == geom::GEOS_LINEARRING) {
-            minLength = 4;
+            minLength = geom::LinearRing::MINIMUM_VALID_SIZE;
         }
 
         // No way to filter short sequences.
