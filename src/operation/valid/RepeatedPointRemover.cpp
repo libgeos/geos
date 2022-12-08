@@ -211,12 +211,13 @@ public:
 
         // End points for comparison and sequence repair
         const Coordinate& origEndCoord = coordinates->back();
-        const Coordinate& filtEndCoord = filtCoords->back();
 
         // Fluff up overly small filtered outputs
         if(filtCoords->size() < minLength) {
             filtCoords->add(origEndCoord);
         }
+
+        const Coordinate& filtEndCoord = filtCoords->back();
 
         // We stripped the last point, let's put it back on
         if (!origEndCoord.equals2D(filtEndCoord)) {
