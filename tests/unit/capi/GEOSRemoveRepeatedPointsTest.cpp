@@ -45,6 +45,17 @@ void object::test<1>
     ensure_geometry_equals(geom2_, expected_);
 }
 
+// https://github.com/libgeos/geos/issues/759
+template<>
+template<>
+void object::test<2>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))");
+    result_ = GEOSRemoveRepeatedPoints(geom1_, 2.0);
+
+    ensure(result_ == nullptr);
+}
 
 
 } // namespace tut
