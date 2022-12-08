@@ -59,7 +59,7 @@ LinearRing::validateConstruction()
     if(points->getSize() < MINIMUM_VALID_SIZE) {
         std::ostringstream os;
         os << "Invalid number of points in LinearRing found "
-           << points->getSize() << " - must be 0 or >= 4";
+           << points->getSize() << " - must be 0 or >= " << MINIMUM_VALID_SIZE;
         throw util::IllegalArgumentException(os.str());
     }
 }
