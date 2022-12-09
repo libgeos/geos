@@ -69,7 +69,7 @@ public:
      * before checking for interruption requests.
      *
      * NOTE that interruption request checking may happen
-     * frequently so the callback shoudl execute quickly.
+     * frequently so the callback should execute quickly.
      *
      * The callback can be used to call Interrupt::request()
      * or Interrupt::requestForCurrentThread().
