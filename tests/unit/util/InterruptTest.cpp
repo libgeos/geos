@@ -89,6 +89,10 @@ void object::test<2>
     toInterrupt = &shouldInterrupt;
 
     shouldInterrupt[t2.get_id()] = true;
+
+    // We need to wait until t2 has actually been interrupted
+    // before we interrupt t1. Otherwise, t2 may cancel our
+    // request for t1's interrupt.
     t2.join();
 
     shouldInterrupt[t1.get_id()] = true;
