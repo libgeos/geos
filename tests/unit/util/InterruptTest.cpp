@@ -72,7 +72,7 @@ void object::test<1>
     t.join();
 }
 
-// Interrupt worker thread via global requset from worker thread using a callback
+// Interrupt worker thread via global request from worker thread using a callback
 template<>
 template<>
 void object::test<2>
@@ -89,11 +89,10 @@ void object::test<2>
     toInterrupt = &shouldInterrupt;
 
     shouldInterrupt[t2.get_id()] = true;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    shouldInterrupt[t1.get_id()] = true;
-
-    t1.join();
     t2.join();
+
+    shouldInterrupt[t1.get_id()] = true;
+    t1.join();
 }
 
 // Register separate callbacks for each thread. Each callback will
