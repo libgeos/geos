@@ -43,7 +43,7 @@ struct test_interrupt_data {
         auto it = toInterrupt->find(std::this_thread::get_id());
         if (it != toInterrupt->end() && it->second) {
             it->second = false;
-            Interrupt::request();
+            Interrupt::requestForCurrentThread();
         }
     }
 };
@@ -72,7 +72,7 @@ void object::test<1>
     t.join();
 }
 
-// Interrupt worker thread via global request from worker thread using a callback
+// Interrupt worker thread via thread-specific request from worker thread using a callback
 template<>
 template<>
 void object::test<2>
@@ -93,14 +93,6 @@ void object::test<2>
     toInterrupt = &shouldInterrupt;
 
     shouldInterrupt[t2.get_id()] = true;
-
-    // We need to wait until t2 has actually been interrupted
-    // before we interrupt t1. Otherwise, t2 may cancel our
-    // request for t1's interrupt. Alternatively, we could
-    // implement `interruptIfRequested` to repeatedly call
-    // Interrupt::request() to avoid the lost request. Or just
-    // use Interrupt::requestForThread() which would also
-    // avoid this possibility.
     t2.join();
 
     shouldInterrupt[t1.get_id()] = true;
