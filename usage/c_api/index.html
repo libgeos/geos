@@ -1081,7 +1081,7 @@ When <code>GEOSGeometry</code> values have been created they must be deallocated
 <p>The <code>createEmpty</code> functions take no arguments and return geometries that are &ldquo;empty&rdquo;.
 Empty geometries represent a (typed) empty set of space.
 For example, the intersection of two <strong>disjoint polygons</strong> is a &ldquo;empty polygon&rdquo;.</p>
-<p>The <code>GEOSGeom_createPoint()</code>, <code>GEOSGeom_createLinearRing()</code> and <code>GEOSGeom_createLinearRing()</code> functions accept a single <code>GEOSCoordSequence</code> and take ownership of that sequence,
+<p>The <code>GEOSGeom_createPoint()</code>, <code>GEOSGeom_createLinearRing()</code> and <code>GEOSGeom_createLineString()</code> functions accept a single <code>GEOSCoordSequence</code> and take ownership of that sequence,
 so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the allocated memory.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
