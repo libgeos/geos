@@ -83,6 +83,10 @@ void object::test<2>
     std::thread t1(workForever);
     std::thread t2(workForever);
 
+    // Create map and add entries before exposing it to the interrupt
+    // callback that will be acessed from multiple threads. It's OK
+    // for multiple threads to modify entries in the map but not for
+    // multiple threads to create entries.
     std::map<std::thread::id, bool> shouldInterrupt;
     shouldInterrupt[t1.get_id()] = false;
     shouldInterrupt[t2.get_id()] = false;
@@ -92,7 +96,11 @@ void object::test<2>
 
     // We need to wait until t2 has actually been interrupted
     // before we interrupt t1. Otherwise, t2 may cancel our
-    // request for t1's interrupt.
+    // request for t1's interrupt. Alternatively, we could
+    // implement `interruptIfRequested` to repeatedly call
+    // Interrupt::request() to avoid the lost request. Or just
+    // use Interrupt::requestForThread() which would also
+    // avoid this possibility.
     t2.join();
 
     shouldInterrupt[t1.get_id()] = true;
