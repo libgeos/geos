@@ -228,7 +228,7 @@ The `createEmpty` functions take no arguments and return geometries that are "em
 Empty geometries represent a (typed) empty set of space.
 For example, the intersection of two **disjoint polygons** is a "empty polygon".
 
-The `GEOSGeom_createPoint()`, `GEOSGeom_createLinearRing()` and `GEOSGeom_createLinearRing()` functions accept a single `GEOSCoordSequence` and take ownership of that sequence,
+The `GEOSGeom_createPoint()`, `GEOSGeom_createLinearRing()` and `GEOSGeom_createLineString()` functions accept a single `GEOSCoordSequence` and take ownership of that sequence,
 so freeing the geometry with `GEOSGeom_destroy()` frees all the allocated memory.
 
 ```c
