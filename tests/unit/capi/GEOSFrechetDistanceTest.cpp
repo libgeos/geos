@@ -64,4 +64,36 @@ void object::test<2>
     ensure_distance(dist, 50., 1e-12);
 }
 
+// No crash with tiny densify fraction
+// https://trac.osgeo.org/geos/ticket/1086
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 3 7, 5 5)");
+    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 9 1, 2 2)");
+
+    double dist;
+    GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-40, &dist);
+
+    // no crash
+}
+
+// No crash with tiny densify fraction
+// https://trac.osgeo.org/geos/ticket/1086
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 3 7, 5 5)");
+    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 9 1, 2 2)");
+
+    double dist;
+    GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-19, &dist);
+
+    // no crash
+}
+
 } // namespace tut
