@@ -208,6 +208,10 @@ SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentStrin
 
         void visit(KdNode* node) override {
             HotPixel* hp = static_cast<HotPixel*>(node->getData());
+            (*this)(hp);
+        }
+
+        void operator()(HotPixel* hp) {
             /**
             * If the hot pixel is not a node, and it contains one of the segment vertices,
             * then that vertex is the source for the hot pixel.
@@ -265,7 +269,10 @@ SnapRoundingNoder::snapVertexNode(const Coordinate& p0, NodedSegmentString* ss, 
 
         void visit(KdNode* node) override {
             HotPixel* hp = static_cast<HotPixel*>(node->getData());
+            (*this)(hp);
+        }
 
+        void operator()(const HotPixel* hp) {
             /**
             * If vertex pixel is a node, add it.
             */
