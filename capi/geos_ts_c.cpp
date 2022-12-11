@@ -2434,16 +2434,27 @@ extern "C" {
 
             if (hasZ) {
                 if (hasM) {
+                    // XYZM
                     assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZM);
                     std::memcpy(coords->data(), buf, size * sizeof(geos::geom::CoordinateXYZM));
                 } else {
+                    // XYZ
                     assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZ);
                     std::memcpy(coords->data(), buf, size * sizeof(geos::geom::Coordinate));
                 }
             } else {
-                for (std::size_t i = 0; i < size; i++) {
-                    coords->setAt(Coordinate{ *buf, *(buf + 1) }, i);
-                    buf += stride;
+                if (hasM) {
+                    // XYM
+                    for (std::size_t i = 0; i < size; i++) {
+                        coords->setAt(geos::geom::CoordinateXYM{ *buf, *(buf + 1), *(buf + 2)}, i);
+                        buf += stride;
+                    }
+                } else {
+                    // XY
+                    for (std::size_t i = 0; i < size; i++) {
+                        coords->setAt(Coordinate{ *buf, *(buf + 1) }, i);
+                        buf += stride;
+                    }
                 }
             }
 
