@@ -74,11 +74,11 @@ public:
     CoordinateSequence();
 
     /**
-     * Create a CoordinateSequence capable of storing XY or XYZ coordinates.
+     * Create a CoordinateSequence capable of storing XY, XYZ or XYZM coordinates.
      *
      * @param size size of the sequence to create.
-     * @param dim 2 for 2D, 3 for XYZ, or 0 to determine this bassed on the
-     *            first coordinate in the sequence
+     * @param dim 2 for 2D, 3 for XYZ, 4 for XYZM, or 0 to determine
+     *            this based on the first coordinate in the sequence
      */
     CoordinateSequence(std::size_t size, std::size_t dim = 0);
 

@@ -2017,7 +2017,7 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 /**
 * Create a coordinate sequence.
 * \param size number of coordinates in the sequence
-* \param dims dimensionality of the coordinates (2 or 3)
+* \param dims dimensionality of the coordinates (2, 3 or 4)
 * \return the sequence or NULL on exception
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsigned int dims);
@@ -2027,7 +2027,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsign
 * \param buf pointer to buffer
 * \param size number of coordinates in the sequence
 * \param hasZ does buffer have Z values?
-* \param hasM does buffer have M values? (they will be ignored)
+* \param hasM does buffer have M values? (they will be ignored if hasZ is false)
 * \return the sequence or NULL on exception
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM);
@@ -2037,7 +2037,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf
 * \param x array of x coordinates
 * \param y array of y coordinates
 * \param z array of z coordinates, or NULL
-* \param m array of m coordinates, (must be NULL)
+* \param m array of m coordinates, or NULL
 * \param size length of each array
 * \return the sequence or NULL on exception
 */
@@ -2048,7 +2048,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, 
 * \param s sequence to copy
 * \param buf buffer to which coordinates should be copied
 * \param hasZ copy Z values to buffer?
-* \param hasM copy M values to buffer? (will be NaN)
+* \param hasM copy M values to buffer?
 * \return 1 on success, 0 on error
 */
 extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, int hasZ, int hasM);
@@ -2059,7 +2059,7 @@ extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double
 * \param x array to which x values should be copied
 * \param y array to which y values should be copied
 * \param z array to which z values should be copied, or NULL
-* \param m array to which m values should be copied (will all be NAN)
+* \param m array to which m values should be copied, or NULL
 * \return 1 on success, 0 on error
 */
 extern int GEOS_DLL GEOSCoordSeq_copyToArrays(const GEOSCoordSequence* s, double* x, double* y, double* z, double* m);
