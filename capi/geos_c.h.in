@@ -2027,7 +2027,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsign
 * \param buf pointer to buffer
 * \param size number of coordinates in the sequence
 * \param hasZ does buffer have Z values?
-* \param hasM does buffer have M values? (they will be ignored if hasZ is false)
+* \param hasM does buffer have M values?
 * \return the sequence or NULL on exception
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM);
