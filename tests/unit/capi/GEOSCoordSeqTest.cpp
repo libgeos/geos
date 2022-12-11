@@ -591,9 +591,16 @@ void object::test<16>()
     ensure_equals(out2[1], values[1]); // Y1
     ensure_equals(out2[2], values[3]); // X2
     ensure_equals(out2[3], values[4]); // Y2
+
+    // Copy to XYM buffer
+    std::vector<double> out3m(N * 3);
+    ensure(GEOSCoordSeq_copyToBuffer(cs_, out3m.data(), false, true));
+    for (size_t i =0; i < values.size(); i++) {
+        ensure_equals(out3m[i], values[i]);
+    }
 }
 
-// test 3DZM from/to buffer
+// test 4D from/to buffer
 template<>
 template<>
 void object::test<17>()
@@ -635,7 +642,7 @@ void object::test<17>()
     ensure_equals("X2", out2[4], values[4]);
     ensure_equals("Y2", out2[5], values[5]);
     ensure_equals("Z2", out2[6], values[6]);
-    ensure_equals("w2", out2[7], values[7]);
+    ensure_equals("M2", out2[7], values[7]);
 }
 
 // test error on invalid dim
