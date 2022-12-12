@@ -70,11 +70,11 @@ DouglasPeuckerLineSimplifier::simplify()
         return coordList;
     }
 
-    usePt = BoolVectAutoPtr(new BoolVect(pts.size(), true));
+    usePt = std::vector<bool>(pts.size(), true);
     simplifySection(0, pts.size() - 1);
 
     for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
-        if(usePt->operator[](i)) {
+        if(usePt[i]) {
             coordList->add(pts[i]);
         }
     }
@@ -92,8 +92,6 @@ DouglasPeuckerLineSimplifier::simplify()
         }
     }
 
-    // unique_ptr transfer ownership to its
-    // returned copy
     return coordList;
 }
 
@@ -107,7 +105,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
         return;
     }
 
-    geos::geom::LineSegment seg(pts[i], pts[j]);
+    geom::LineSegment seg(pts[i], pts[j]);
     double maxDistance = -1.0;
 
     std::size_t maxIndex = i;
@@ -121,7 +119,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
     }
     if(maxDistance <= distanceTolerance) {
         for(std::size_t k = i + 1; k < j; k++) {
-            usePt->operator[](k) = false;
+            usePt[k] = false;
         }
     }
     else {

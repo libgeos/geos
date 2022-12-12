@@ -46,13 +46,6 @@ class GEOS_DLL DouglasPeuckerLineSimplifier {
 
 public:
 
-    typedef std::vector<short int> BoolVect;
-    typedef std::unique_ptr<BoolVect> BoolVectAutoPtr;
-
-    typedef std::vector<geom::Coordinate> CoordsVect;
-    typedef std::unique_ptr<CoordsVect> CoordsVectAutoPtr;
-
-
     /** \brief
      * Returns a newly allocated Coordinate vector, wrapped
      * into an unique_ptr
@@ -82,7 +75,7 @@ public:
 private:
 
     const geom::CoordinateSequence& pts;
-    BoolVectAutoPtr usePt;
+    std::vector<bool> usePt;
     double distanceTolerance;
 
     void simplifySection(std::size_t i, std::size_t j);
