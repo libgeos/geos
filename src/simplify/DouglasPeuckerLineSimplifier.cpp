@@ -36,10 +36,12 @@ namespace simplify { // geos::simplify
 std::unique_ptr<CoordinateSequence>
 DouglasPeuckerLineSimplifier::simplify(
     const CoordinateSequence& nPts,
-    double distanceTolerance)
+    double distanceTolerance,
+    bool preserveClosedEndpoint)
 {
     DouglasPeuckerLineSimplifier simp(nPts);
     simp.setDistanceTolerance(distanceTolerance);
+    simp.setPreserveClosedEndpoint(preserveClosedEndpoint);
     return simp.simplify();
 }
 
@@ -57,6 +59,12 @@ DouglasPeuckerLineSimplifier::setDistanceTolerance(
     double nDistanceTolerance)
 {
     distanceTolerance = nDistanceTolerance;
+}
+
+void
+DouglasPeuckerLineSimplifier::setPreserveClosedEndpoint(bool preserve)
+{
+    preserveEndpoint = preserve;
 }
 
 /*public*/
@@ -79,8 +87,8 @@ DouglasPeuckerLineSimplifier::simplify()
         }
     }
 
-    // TODO avoid copying entire sequence
-    bool simplifyRing = pts.isRing();
+    // TODO avoid copying entire sequence?
+    bool simplifyRing = !preserveEndpoint && pts.isRing();
     if (simplifyRing && coordList->size() > geom::LinearRing::MINIMUM_VALID_SIZE) {
         geom::LineSegment seg(coordList->getAt(coordList->size() - 2), coordList->getAt(1));
         if (seg.distance(coordList->getAt(0)) <= distanceTolerance) {

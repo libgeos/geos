@@ -52,7 +52,8 @@ public:
      */
     static std::unique_ptr<geom::CoordinateSequence> simplify(
         const geom::CoordinateSequence& nPts,
-        double distanceTolerance);
+        double distanceTolerance,
+        bool preserveClosedEndpoint);
 
     DouglasPeuckerLineSimplifier(const geom::CoordinateSequence& nPts);
 
@@ -67,6 +68,13 @@ public:
     void setDistanceTolerance(double nDistanceTolerance);
 
     /** \brief
+     * Sets whether the endpoint of a closed LineString should be preserved
+     *
+     * @param preserve `true` if the endpoint should be preserved
+     */
+    void setPreserveClosedEndpoint(bool preserve);
+
+    /** \brief
      * Returns a newly allocated Coordinate vector, wrapped
      * into an unique_ptr
      */
@@ -77,6 +85,7 @@ private:
     const geom::CoordinateSequence& pts;
     std::vector<bool> usePt;
     double distanceTolerance;
+    bool preserveEndpoint;
 
     void simplifySection(std::size_t i, std::size_t j);
 

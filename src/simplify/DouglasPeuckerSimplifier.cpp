@@ -112,7 +112,9 @@ DPTransformer::transformCoordinates(
 {
     ::geos::ignore_unused_variable_warning(parent);
 
-    return DouglasPeuckerLineSimplifier::simplify(*coords, distanceTolerance);
+    bool preserveRingEndpoint = parent->getGeometryTypeId() != GEOS_LINEARRING;
+
+    return DouglasPeuckerLineSimplifier::simplify(*coords, distanceTolerance, preserveRingEndpoint);
 }
 
 Geometry::Ptr
