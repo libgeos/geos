@@ -47,7 +47,7 @@ struct test_linestring_data {
     {
         assert(nullptr != empty_line_);
 
-        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(2, false, false);
+        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
         cs->setAt(geos::geom::Coordinate{0, 0}, 0);
         cs->setAt(geos::geom::Coordinate{1, 1}, 1);
         line_ = factory_->createLineString(std::move(cs));
