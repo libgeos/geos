@@ -117,6 +117,15 @@ GeometryCollection::isDimensionStrict(Dimension::DimensionType d) const {
             });
 }
 
+bool
+GeometryCollection::hasDimension(Dimension::DimensionType d) const {
+    return std::any_of(geometries.begin(),
+                       geometries.end(),
+                       [&d](const std::unique_ptr<Geometry>& g) {
+        return g->hasDimension(d);
+    });
+}
+
 int
 GeometryCollection::getBoundaryDimension() const
 {
