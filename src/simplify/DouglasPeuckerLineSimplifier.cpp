@@ -19,6 +19,7 @@
 #include <geos/simplify/DouglasPeuckerLineSimplifier.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LineSegment.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/util.h>
 
 #include <vector>
@@ -75,6 +76,19 @@ DouglasPeuckerLineSimplifier::simplify()
     for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
         if(usePt->operator[](i)) {
             coordList->add(pts[i]);
+        }
+    }
+
+    // TODO avoid copying entire sequence
+    bool simplifyRing = pts.isRing();
+    if (simplifyRing && coordList->size() > geom::LinearRing::MINIMUM_VALID_SIZE) {
+        geom::LineSegment seg(coordList->getAt(coordList->size() - 2), coordList->getAt(1));
+        if (seg.distance(coordList->getAt(0)) <= distanceTolerance) {
+            auto ret = detail::make_unique<CoordinateSequence>();
+            ret->reserve(coordList->size() - 1);
+            ret->add(*coordList, 1, coordList->size() - 2);
+            ret->closeRing();
+            coordList = std::move(ret);
         }
     }
 

@@ -432,5 +432,17 @@ void object::test<15>
     ensure_equals_geometry(simplified.get(), expected.get());
 }
 
+// Test that start point of a polygon can be removed
+template<>
+template<>
+void object::test<16>
+()
+{
+     auto g = wktreader.read("POLYGON ((1 0, 2 0, 2 2, 0 2, 0 0, 1 0))");
+     auto simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0);
+     auto expected = wktreader.read("POLYGON (( 0 0, 2 0, 2 2, 0 2, 0 0))");
+     ensure_equals_geometry(simplified.get(), expected.get());
+}
+
 
 } // namespace tut
