@@ -154,4 +154,31 @@ void object::test<7>()
     ensure_equals(components.size(), 2u);
 }
 
+// Test of hasDimension()
+template<>
+template<>
+void object::test<8>
+()
+{
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (1 1), LINESTRING (1 1, 2 2))");
+
+    ensure(gc->hasDimension(geos::geom::Dimension::P));
+    ensure(gc->hasDimension(geos::geom::Dimension::L));
+    ensure(!gc->hasDimension(geos::geom::Dimension::A));
+}
+
+
+// Test of hasDimension() for nested collection
+template<>
+template<>
+void object::test<9>
+()
+{
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (1 1), GEOMETRYCOLLECTION(LINESTRING (1 1, 2 2), POLYGON((0 0, 0 1, 1 1, 0 0))))");
+
+    ensure(gc->hasDimension(geos::geom::Dimension::P));
+    ensure(gc->hasDimension(geos::geom::Dimension::L));
+    ensure(gc->hasDimension(geos::geom::Dimension::A));
+}
+
 } // namespace tut

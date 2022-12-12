@@ -37,6 +37,7 @@ struct test_linestring_data {
     geos::io::WKTReader reader_;
 
     std::unique_ptr<geos::geom::LineString> empty_line_;
+    std::unique_ptr<geos::geom::LineString> line_;
 
     test_linestring_data()
         : pm_(1000)
@@ -45,6 +46,11 @@ struct test_linestring_data {
         , empty_line_(factory_->createLineString())
     {
         assert(nullptr != empty_line_);
+
+        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(2, false, false);
+        cs->setAt(geos::geom::Coordinate{0, 0}, 0);
+        cs->setAt(geos::geom::Coordinate{1, 1}, 1);
+        line_ = factory_->createLineString(std::move(cs));
     }
 
     ~test_linestring_data()
@@ -571,6 +577,16 @@ void object::test<31>
 
 }
 
+// Test of hasDimension()
+template<>
+template<>
+void object::test<32>
+()
+{
+    ensure(!line_->hasDimension(geos::geom::Dimension::P));
+    ensure(line_->hasDimension(geos::geom::Dimension::L));
+    ensure(!line_->hasDimension(geos::geom::Dimension::A));
+}
 
 } // namespace tut
 
