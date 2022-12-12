@@ -3819,7 +3819,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">x</td><td>array of x coordinates </td></tr>
     <tr><td class="paramname">y</td><td>array of y coordinates </td></tr>
     <tr><td class="paramname">z</td><td>array of z coordinates, or NULL </td></tr>
-    <tr><td class="paramname">m</td><td>array of m coordinates, (must be NULL) </td></tr>
+    <tr><td class="paramname">m</td><td>array of m coordinates, or NULL </td></tr>
     <tr><td class="paramname">size</td><td>length of each array </td></tr>
   </table>
   </dd>
@@ -3923,7 +3923,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">buf</td><td>pointer to buffer </td></tr>
     <tr><td class="paramname">size</td><td>number of coordinates in the sequence </td></tr>
     <tr><td class="paramname">hasZ</td><td>does buffer have Z values? </td></tr>
-    <tr><td class="paramname">hasM</td><td>does buffer have M values? (they will be ignored) </td></tr>
+    <tr><td class="paramname">hasM</td><td>does buffer have M values? </td></tr>
   </table>
   </dd>
 </dl>
@@ -4027,7 +4027,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">x</td><td>array to which x values should be copied </td></tr>
     <tr><td class="paramname">y</td><td>array to which y values should be copied </td></tr>
     <tr><td class="paramname">z</td><td>array to which z values should be copied, or NULL </td></tr>
-    <tr><td class="paramname">m</td><td>array to which m values should be copied (will all be NAN) </td></tr>
+    <tr><td class="paramname">m</td><td>array to which m values should be copied, or NULL </td></tr>
   </table>
   </dd>
 </dl>
@@ -4130,7 +4130,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">s</td><td>sequence to copy </td></tr>
     <tr><td class="paramname">buf</td><td>buffer to which coordinates should be copied </td></tr>
     <tr><td class="paramname">hasZ</td><td>copy Z values to buffer? </td></tr>
-    <tr><td class="paramname">hasM</td><td>copy M values to buffer? (will be NaN) </td></tr>
+    <tr><td class="paramname">hasM</td><td>copy M values to buffer? </td></tr>
   </table>
   </dd>
 </dl>
@@ -4213,7 +4213,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>Create a coordinate sequence. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">size</td><td>number of coordinates in the sequence </td></tr>
-    <tr><td class="paramname">dims</td><td>dimensionality of the coordinates (2 or 3) </td></tr>
+    <tr><td class="paramname">dims</td><td>dimensionality of the coordinates (2, 3 or 4) </td></tr>
   </table>
   </dd>
 </dl>
