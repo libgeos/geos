@@ -39,6 +39,7 @@
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
 #include <geos/algorithm/ConvexHull.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/predicate/RectangleContains.h>
@@ -242,15 +243,7 @@ Geometry::getEnvelopeInternal() const
 bool
 Geometry::disjoint(const Geometry* g) const
 {
-#ifdef SHORTCIRCUIT_PREDICATES
-    // short-circuit test
-    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
-        return true;
-    }
-#endif
-    std::unique_ptr<IntersectionMatrix> im(relate(g));
-    bool res = im->isDisjoint();
-    return res;
+    return !intersects(g);
 }
 
 bool
@@ -303,9 +296,13 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
-    std::unique_ptr<IntersectionMatrix> im(relate(g));
-    bool res = im->isIntersects();
-    return res;
+    if (getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION) {
+        auto im = relate(g);
+        bool res = im->isIntersects();
+        return res;
+    } else {
+        return prep::PreparedGeometryFactory::prepare(this)->intersects(g);
+    }
 }
 
 /*public*/
