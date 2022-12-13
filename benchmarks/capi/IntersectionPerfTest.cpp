@@ -18,15 +18,19 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <deque>
+
+using BinaryPredicate = decltype(&GEOSIntersects);
+using BinaryOperation = decltype(&GEOSIntersection);
 
 int main(int argc, char** argv) {
-    if (argc != 2 && argc != 3) {
+    if (argc < 2 || argc > 5) {
         std::cout << "perf_intersection reads geometries from a WKT file and" << std::endl;
         std::cout << "inserts them into an STR-tree. For each input geometry, it" << std::endl;
         std::cout << "queries the tree to find all intersecting geometries and" << std::endl;
         std::cout << "then computes their intersection." << std::endl;
         std::cout << std::endl;
-        std::cout << "Usage: perf_intersection [wktfile] [n]" << std::endl;
+        std::cout << "Usage: perf_intersection [wktfile] [n] [pred] [op]" << std::endl;
         return 0;
     }
 
@@ -35,12 +39,52 @@ int main(int argc, char** argv) {
     std::string fname{argv[1]};
 
     long max_geoms;
-    if (argc == 3) {
+    if (argc >= 3 && std::string(argv[2]) != "all") {
         max_geoms = std::atol(argv[2]);
         std::cout << "Reading up to " << max_geoms << " geometries from " << fname << std::endl;
     } else {
         std::cout << "Reading geometries from " << fname << std::endl;
-        max_geoms = -1;
+        max_geoms = std::numeric_limits<decltype(max_geoms)>::max();
+    }
+
+    std::string pred = "intersects";
+    if (argc >= 4) {
+        pred = argv[3];
+    }
+
+    BinaryPredicate predfn = GEOSIntersects;
+    if (pred == "intersects") {
+        predfn = GEOSIntersects;
+    } else if (pred == "contains") {
+        predfn = GEOSContains;
+    } else if (pred == "covers") {
+        predfn = GEOSCovers;
+    } else if (pred == "within") {
+        predfn = GEOSWithin;
+    } else if (pred == "coveredby") {
+        predfn = GEOSCoveredBy;
+    } else if (pred == "touches") {
+        predfn = GEOSTouches;
+    } else if (pred == "overlaps") {
+        predfn = GEOSOverlaps;
+    } else if (pred == "crosses") {
+        predfn = GEOSCrosses;
+    } else if (pred == "equals") {
+        predfn = GEOSEquals;
+    } else {
+        std::cerr << "Unknown predicate." << std::endl;
+        return 1;
+    }
+
+    std::string overlay = "intersection";
+    if (argc >= 5) {
+        overlay = argv[4];
+    }
+    BinaryOperation overlayfn = GEOSIntersection;
+    if (overlay == "intersection") {
+        overlayfn = GEOSIntersection;
+    } else if (overlay == "none") {
+        overlayfn = nullptr;
     }
 
     std::vector<GEOSGeometry*> geoms;
@@ -48,13 +92,20 @@ int main(int argc, char** argv) {
     std::ifstream f(fname);
     std::string line;
     long i = 0;
+    std::deque<long> lineNos;
     while(std::getline(f, line) && i < max_geoms) {
-        geoms.push_back(GEOSGeomFromWKT(line.c_str()));
-        i++;
+        auto geom = GEOSGeomFromWKT(line.c_str());
+        if (geom) {
+            i++;
+            lineNos.push_back(i);
+            GEOSGeom_setUserData(geom, &lineNos.back());
+            geoms.push_back(geom);
+        }
     }
     f.close();
 
     std::cout << "Read " << geoms.size() << " geometries." << std::endl;
+    std::cout << "Testing according to predicate: " << pred << " and performing operation: " << overlay << std::endl;
 
     GEOSSTRtree* tree = GEOSSTRtree_create(10);
 
@@ -65,18 +116,45 @@ int main(int argc, char** argv) {
     geos::util::Profile sw("Intersection");
     sw.start();
 
+    struct QueryContext {
+        GEOSGeometry* queryGeom;
+        BinaryPredicate pred;
+        BinaryOperation overlay;
+        std::size_t* treeHits;
+        std::size_t* predHits;
+    };
+
+    std::size_t treeHits = 0;
+    std::size_t predHits = 0;
+
+
     for (const auto& g : geoms) {
-        GEOSSTRtree_query(tree, g, [](void* g2v, void* g1v) {
-            GEOSGeometry* g1 = (GEOSGeometry*) g1v;
-            GEOSGeometry* g2 = (GEOSGeometry*) g2v;
-            if (GEOSIntersects(g1, g2) == 1) {
-                GEOSGeometry* g3 = GEOSIntersection(g1, g2);
-                GEOSGeom_destroy(g3);
+        QueryContext ctxt{g, predfn, overlayfn, &treeHits, &predHits};
+
+        GEOSSTRtree_query(tree, g, [](void* item, void* data) {
+            auto context = static_cast<QueryContext*>(data);
+            ++*context->treeHits;
+
+            GEOSGeometry* g1 = (GEOSGeometry*) context->queryGeom;
+            GEOSGeometry* g2 = (GEOSGeometry*) item;
+
+#if 0
+            std::cout << "Eval pred btwn geom " << *static_cast<long*>(GEOSGeom_getUserData(g1)) << " and " << *static_cast<long*>(GEOSGeom_getUserData(g2)) << std::endl;
+#endif
+
+            if ((context->pred)(g1, g2) == 1) {
+                ++*context->predHits;
+
+                if (context->overlay) {
+                    GEOSGeometry* g3 = (context->overlay)(g1, g2);
+                    GEOSGeom_destroy(g3);
+                }
             }
-        }, g);
+        }, &ctxt);
     }
 
     sw.stop();
+    std::cerr << predHits << " out of " << treeHits << " bounding box intersections satisfied predicate: " << pred << " (" << 100 * static_cast<double>(predHits) / static_cast<double>(treeHits) << "%)" << std::endl;
     std::cout << sw.getTotFormatted() << std::endl;
 
     GEOSSTRtree_destroy(tree);
@@ -85,3 +163,4 @@ int main(int argc, char** argv) {
         GEOSGeom_destroy(g);
     }
 }
+
