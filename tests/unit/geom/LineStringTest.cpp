@@ -573,6 +573,18 @@ void object::test<31>
 
 }
 
+// Test of hasDimension()
+template<>
+template<>
+void object::test<32>
+()
+{
+    auto line = reader_.read<geos::geom::LineString>("LINESTRING (0 0, 10 10)");
+
+    ensure(!line->hasDimension(geos::geom::Dimension::P));
+    ensure(line->hasDimension(geos::geom::Dimension::L));
+    ensure(!line->hasDimension(geos::geom::Dimension::A));
+}
 
 } // namespace tut
 

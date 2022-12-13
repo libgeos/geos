@@ -652,4 +652,15 @@ void object::test<44>()
     ensure_equals(holes.size(), 1u);
 }
 
+// Test of hasDimension()
+template<>
+template<>
+void object::test<45>
+()
+{
+    ensure(!poly_->hasDimension(geos::geom::Dimension::P));
+    ensure(!poly_->hasDimension(geos::geom::Dimension::L));
+    ensure(poly_->hasDimension(geos::geom::Dimension::A));
+}
+
 } // namespace tut

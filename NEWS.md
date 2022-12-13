@@ -12,6 +12,7 @@
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
+  - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection with points (GH-774, Dan Baston)
 
 ## Changes in 3.11.2
 2023-03-16

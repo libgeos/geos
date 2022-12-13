@@ -63,6 +63,10 @@ public:
         return d == Dimension::P;
     }
 
+    bool hasDimension(Dimension::DimensionType d) const override {
+        return d == Dimension::P;
+    }
+
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;
 

@@ -66,6 +66,10 @@ public:
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
 
+    bool hasDimension(Dimension::DimensionType d) const override {
+        return d == Dimension::A;
+    }
+
     bool isDimensionStrict(Dimension::DimensionType d) const override {
         return d == Dimension::A;
     }

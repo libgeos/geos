@@ -417,5 +417,16 @@ void object::test<31>
     ensure(!empty_mp_->isDimensionStrict(geos::geom::Dimension::L));
 }
 
+// Test of hasDimension()
+template<>
+template<>
+void object::test<32>
+()
+{
+    ensure(mp_->hasDimension(geos::geom::Dimension::P));
+    ensure(!mp_->hasDimension(geos::geom::Dimension::L));
+    ensure(!mp_->hasDimension(geos::geom::Dimension::A));
+}
+
 } // namespace tut
 

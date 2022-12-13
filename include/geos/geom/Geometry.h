@@ -342,6 +342,11 @@ public:
     /// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
     virtual Dimension::DimensionType getDimension() const = 0; //Abstract
 
+    /// Checks whether any component of this geometry has dimension d
+    virtual bool hasDimension(Dimension::DimensionType d) const {
+        return getDimension() == d;
+    }
+
     /// Checks whether this Geometry consists only of components having dimension d.
     virtual bool isDimensionStrict(Dimension::DimensionType d) const {
         return d == getDimension();
