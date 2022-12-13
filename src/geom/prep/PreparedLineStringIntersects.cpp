@@ -70,11 +70,6 @@ PreparedLineStringIntersects::intersects(const geom::Geometry* g) const
         return true;
     }
 
-    // For L/L case we are done
-    if(g->getDimension() == 1) {
-        return false;
-    }
-
     // For L/A case, need to check for proper inclusion of the target in the test
     if(g->getDimension() == 2
             &&	prepLine.isAnyTargetComponentInTest(g)) {
@@ -82,7 +77,7 @@ PreparedLineStringIntersects::intersects(const geom::Geometry* g) const
     }
 
     // For L/P case, need to check if any points lie on line(s)
-    if(g->getDimension() == 0) {
+    if(g->hasDimension(Dimension::P)) {
         return isAnyTestPointInTarget(g);
     }
 

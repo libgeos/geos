@@ -17,6 +17,7 @@
 #include <memory>
 #include <string>
 
+constexpr int MAX_TESTS = 100;
 
 namespace tut {
 //
@@ -58,7 +59,7 @@ struct test_point_data {
     }
 };
 
-typedef test_group<test_point_data> group;
+typedef test_group<test_point_data, MAX_TESTS> group;
 typedef group::object object;
 
 group test_point_group("geos::geom::Point");
@@ -598,6 +599,17 @@ void object::test<46>
     PointAutoPtr point(factory_->createPoint(coords));
     ensure("point->isEmpty()", point->isEmpty());
     ensure("point->getCoordinateDimension() == 2", point->getCoordinateDimension() == 2);
+}
+
+// Test of hasDimension()
+template<>
+template<>
+void object::test<47>
+()
+{
+    ensure(point_->hasDimension(geos::geom::Dimension::P));
+    ensure(!point_->hasDimension(geos::geom::Dimension::L));
+    ensure(!point_->hasDimension(geos::geom::Dimension::A));
 }
 
 } // namespace tut
