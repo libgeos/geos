@@ -63,5 +63,18 @@ void object::test<3>
     ensure(!mls_->isDimensionStrict(geos::geom::Dimension::A));
 }
 
+
+// Test of hasDimension()
+template<>
+template<>
+void object::test<4>
+()
+{
+    ensure(!mls_->hasDimension(geos::geom::Dimension::P));
+    ensure(mls_->hasDimension(geos::geom::Dimension::L));
+    ensure(!mls_->hasDimension(geos::geom::Dimension::A));
+}
+
+
 } // namespace tut
 
