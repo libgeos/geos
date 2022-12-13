@@ -1283,6 +1283,11 @@ extern char GEOS_DLL GEOSHasZ_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSHasM */
+extern char GEOS_DLL GEOSHasM_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g);
+
 /** \see GEOSisClosed */
 extern char GEOS_DLL GEOSisClosed_r(
     GEOSContextHandle_t handle,
@@ -2648,11 +2653,18 @@ extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
 extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g);
 
 /**
-* Tests whether the input geometry has z coordinates.
+* Tests whether the input geometry has Z coordinates.
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
 */
 extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g);
+
+/**
+* Tests whether the input geometry has M coordinates.
+* \param g The geometry to test
+* \return 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSHasM(const GEOSGeometry* g);
 
 /**
 * Tests whether the input geometry is closed.
