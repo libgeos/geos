@@ -31,3 +31,7 @@ IF(benchmark_FOUND)
     target_link_libraries(perf_coordseq PRIVATE
             benchmark::benchmark geos_cxx_flags)
 endif()
+
+add_executable(perf_prepared_polygon_intersects
+    PreparedPolygonIntersectsPerfTest.cpp)
+target_link_libraries(perf_prepared_polygon_intersects PRIVATE geos)
