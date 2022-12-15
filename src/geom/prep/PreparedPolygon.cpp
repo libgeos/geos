@@ -30,6 +30,7 @@
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 // std
 #include <cstddef>
 
@@ -68,11 +69,18 @@ algorithm::locate::PointOnGeometryLocator*
 PreparedPolygon::
 getPointLocator() const
 {
+    // If we are only going to locate a single point, it's faster to do a brute-force SimplePointInAreaLocator
+    // instead of an IndexedPointInAreaLocator. There's a reasonable chance we will only use this locator
+    // once (for example, if we get here through Geometry::intersects). So we create a simple locator for the
+    // first usage and switch to an indexed locator when it is clear we're in a multiple-use scenario.
     if(! ptOnGeomLoc) {
-        ptOnGeomLoc.reset(new algorithm::locate::IndexedPointInAreaLocator(getGeometry()));
+        ptOnGeomLoc = detail::make_unique<algorithm::locate::SimplePointInAreaLocator>(&getGeometry());
+        return ptOnGeomLoc.get();
+    } else if (!indexedPtOnGeomLoc) {
+        indexedPtOnGeomLoc = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(getGeometry());
     }
 
-    return ptOnGeomLoc.get();
+    return indexedPtOnGeomLoc.get();
 }
 
 bool
