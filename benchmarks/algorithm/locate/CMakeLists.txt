@@ -12,10 +12,11 @@
 #################################################################################
 
 if (benchmark_FOUND)
-    add_executable(perf_indexed_point_in_area_locator IndexedPointInAreaLocatorPerfTest.cpp)
-    target_include_directories(perf_indexed_point_in_area_locator PUBLIC
+    add_executable(perf_point_locator PointLocatorPerfTest.cpp)
+    target_include_directories(perf_point_locator PUBLIC
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
-    target_link_libraries(perf_indexed_point_in_area_locator PRIVATE
+    target_link_libraries(perf_point_locator PRIVATE
             benchmark::benchmark geos)
 endif()

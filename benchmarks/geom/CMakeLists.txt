@@ -34,4 +34,6 @@ endif()
 
 add_executable(perf_prepared_polygon_intersects
     PreparedPolygonIntersectsPerfTest.cpp)
+target_include_directories(perf_prepared_polygon_intersects PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
 target_link_libraries(perf_prepared_polygon_intersects PRIVATE geos)

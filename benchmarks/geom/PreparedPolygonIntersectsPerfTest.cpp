@@ -4,6 +4,7 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/io/WKBWriter.h>
+#include <BenchmarkUtils.h>
 
 using namespace geos::geom;
 
@@ -11,58 +12,8 @@ std::size_t MAX_ITER = 10;
 std::size_t NUM_LINES = 10000;
 std::size_t NUM_LINES_PTS = 100;
 
-std::unique_ptr<Polygon>
-createSineStar(const CoordinateXY& origin, double size, std::size_t npts) {
-    util::SineStarFactory gsf(GeometryFactory::getDefaultInstance());
-    gsf.setCentre(origin);
-    gsf.setSize(size);
-    gsf.setNumPoints(static_cast<std::uint32_t>(npts));
-    gsf.setArmLengthRatio(0.1);
-    gsf.setNumArms(50);
 
-    return gsf.createSineStar();
-}
-
-std::unique_ptr<Geometry>
-createLine(const CoordinateXY& base, double size, std::size_t npts) {
-    util::SineStarFactory gsf(GeometryFactory::getDefaultInstance());
-    gsf.setCentre(base);
-    gsf.setSize(size);
-    gsf.setNumPoints(static_cast<std::uint32_t>(npts));
-
-    auto circle = gsf.createSineStar();
-
-    return circle->getBoundary();
-}
-
-
-std::vector<std::unique_ptr<Geometry>>
-createLines(const Envelope& env, std::size_t nItems, double size, std::size_t npts) {
-    int nCells = static_cast<int>(std::sqrt(nItems));
-
-    std::vector<std::unique_ptr<Geometry>> geoms;
-    double width = env.getWidth();
-    double xInc = width / nCells;
-    double yInc = width / nCells;
-
-    double x0 = env.getMinX();
-    double y0 = env.getMinY();
-
-    for(int i = 0; i < nCells; i++) {
-        for(int j = 0; j < nCells; j++) {
-            CoordinateXY base(x0 + i*xInc, y0 + j*yInc);
-            auto line = createLine(base, size, npts);
-            geoms.push_back(std::move(line));
-        }
-    }
-
-    return geoms;
-}
-
-int testRelateOp(std::size_t iter, const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
-    if (iter == 0) {
-        std::cout << "Using RelateOp" << std::endl;
-    }
+int testRelateOp(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
     int count = 0;
     for (const auto& line : lines) {
         auto im = g.relate(line.get());
@@ -71,10 +22,7 @@ int testRelateOp(std::size_t iter, const Geometry& g, const std::vector<std::uni
     return count;
 }
 
-int testGeometryIntersects(std::size_t iter, const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
-    if (iter == 0) {
-        std::cout << "Using Geometry::intersects" << std::endl;
-    }
+int testGeometryIntersects(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
     int count = 0;
     for (const auto& line : lines) {
         count += g.intersects(line.get());
@@ -82,10 +30,15 @@ int testGeometryIntersects(std::size_t iter, const Geometry& g, const std::vecto
     return count;
 }
 
-int testPrepGeomCached(std::size_t iter, const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
-    if (iter == 0) {
-        std::cout << "Using cached Prepared Geometry" << std::endl;
+int testGeometryContains(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
+    int count = 0;
+    for (const auto& line : lines) {
+        count += g.contains(line.get());
     }
+    return count;
+}
+
+int testPrepGeomCached(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines) {
     int count = 0;
     auto prep = prep::PreparedGeometryFactory::prepare(&g);
     for (const auto& line : lines) {
@@ -95,39 +48,42 @@ int testPrepGeomCached(std::size_t iter, const Geometry& g, const std::vector<st
 }
 
 template<typename F>
-void test(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines, F&& fun)
+void test(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& lines, const std::string& method, F&& fun)
 {
-    std::cout << "AOI # pts: " << g.getNumPoints() << " # lines " << lines.size() << " # pts in line: " << NUM_LINES_PTS << std::endl;
-
     geos::util::Profile sw("PreparedPolygonIntersects");
-    std::cout << std::endl;
     sw.start();
 
     int count = 0;
     for (std::size_t i = 0; i < MAX_ITER; i++) {
-        count += fun(i, g, lines);
+        count += fun(g, lines);
     }
 
     sw.stop();
-    std::cout << "Count of intersections = " << count << std::endl;
-    std::cout << "Finished in " << sw.getTotFormatted() << std::endl;
+    std::cout << g.getNumPoints() << "," << MAX_ITER * lines.size() << "," << count << "," << lines[0]->getGeometryType() << "," << lines[0]->getNumPoints() << "," << method << "," << sw.getTot() << std::endl;
 }
 
 void test (std::size_t npts) {
 
-    auto target = createSineStar({0, 0}, 100, npts);
-    auto lines = createLines(*target->getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+    auto target = geos::benchmark::createSineStar({0, 0}, 100, npts);
+    auto lines = geos::benchmark::createLines(*target->getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+    auto points = geos::benchmark::createPoints(*target->getEnvelopeInternal(), NUM_LINES);
 
-    test(*target, lines, testRelateOp);
-    test(*target, lines, testGeometryIntersects);
-    test(*target, lines, testPrepGeomCached);
+    test(*target, lines, "RelateOp", testRelateOp);
+    test(*target, lines, "Geometry::intersects", testGeometryIntersects);
+    test(*target, lines, "PrepGeomCached", testPrepGeomCached);
+    test(*target, points, "RelateOp", testRelateOp);
+    test(*target, points, "Geometry::intersects", testGeometryIntersects);
+    test(*target, points, "PrepGeomCached", testPrepGeomCached);
 }
 
 int main() {
+    std::cout << "target_points,num_tests,num_hits,test_type,pts_in_test,method,time" << std::endl;
     test(5);
     test(10);
     test(500);
     test(1000);
     test(2000);
     test(4000);
+    test(8000);
+    test(16000);
 }

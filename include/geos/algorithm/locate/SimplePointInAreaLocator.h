@@ -91,6 +91,10 @@ public:
         : g(p_g)
     { }
 
+    SimplePointInAreaLocator(const geom::Geometry& p_g)
+        : g(&p_g)
+    { }
+
     geom::Location
     locate(const geom::CoordinateXY* p) override
     {
