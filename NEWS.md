@@ -30,6 +30,7 @@ xxxx-xx-xx
   - Improve ConvexHull radial sort robustness (GH-724, Martin Davis)
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
   - DiscreteFrechetDistance: Fix crash with empty inputs (GH-751, Dan Baston)
+  - GEOSSimplify / DouglasPeuckerSimplifier: Allow ring origin to be removed (GH-773, Dan Baston)
 
 
 ## Changes in 3.11.0
