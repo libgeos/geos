@@ -108,6 +108,8 @@ public:
      */
     Dimension::DimensionType getDimension() const override;
 
+    bool hasDimension(Dimension::DimensionType d) const override;
+
     bool isDimensionStrict(Dimension::DimensionType d) const override;
 
     /// Returns coordinate dimension.

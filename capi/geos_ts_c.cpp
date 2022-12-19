@@ -2369,6 +2369,14 @@ extern "C" {
         });
     }
 
+    char
+    GEOSHasM_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        return execute(extHandle, 2, [&]() {
+            return g->hasM();
+        });
+    }
+
     int
     GEOS_getWKBOutputDims_r(GEOSContextHandle_t extHandle)
     {

@@ -17,6 +17,7 @@ xxxx-xx-xx
   - WKTReader: Throw exception on inconsistent geometry dimension (#1080, Dan Baston)
   - WKTReader: Throw exception if WKT contains extra text after end of geometry (#1095, Dan Baston)
   - GEOSIntersects: Fix crash with empty point inputs (#1110, Dan Baston)
+  - GEOSIntersects: Improve performance/robustness by using PreparedGeometry algorithm (GH-775, Dan Baston)
   - LineMerger: Recursively collect all components from GeometryCollections (#401, Dan Baston)
   - GeometryPrecisionReducer: Return correct dimensionality for empty results (GH-684, Dan Baston)
   - Improve performance of coverage union (GH-681, Dan Baston)
@@ -31,6 +32,7 @@ xxxx-xx-xx
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
   - DiscreteFrechetDistance: Fix crash with empty inputs (GH-751, Dan Baston)
   - GEOSSimplify / DouglasPeuckerSimplifier: Allow ring origin to be removed (GH-773, Dan Baston)
+  - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection (GH-774, Dan Baston)
 
 
 ## Changes in 3.11.0

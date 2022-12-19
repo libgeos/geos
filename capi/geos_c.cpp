@@ -953,6 +953,12 @@ extern "C" {
         return GEOSHasZ_r(handle, g);
     }
 
+    char
+    GEOSHasM(const Geometry* g)
+    {
+        return GEOSHasM_r(handle, g);
+    }
+
     int
     GEOS_getWKBOutputDims()
     {
