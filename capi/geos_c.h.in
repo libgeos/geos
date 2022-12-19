@@ -296,8 +296,8 @@ typedef int (*GEOSTransformXYCallback)(
 /* ========== Interruption ========== */
 
 /**
-* Callback function for use in interruption. The callback will be invoked _before_ checking for
-* an interruption request and can be used to request interruption.
+* Callback function for use in interruption. The callback will be invoked at each
+* possible interruption point and can be used to request interruption.
 *
 * \see GEOS_interruptRegisterCallback
 * \see GEOS_interruptRequest
@@ -305,6 +305,13 @@ typedef int (*GEOSTransformXYCallback)(
 */
 typedef void (GEOSInterruptCallback)(void);
 
+/**
+* Callback function for use in interruption. The callback will be invoked at each
+* possible interruption point and can be used to request interruption.
+*
+* \see GEOS_interruptRegisterThreadCallback
+* \see GEOS_interruptThread
+*/
 typedef void (GEOSInterruptThreadCallback)(void*);
 
 /**
