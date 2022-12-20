@@ -53,6 +53,7 @@ private:
     bool isRectangle;
     mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ptOnGeomLoc;
+    mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> indexedPtOnGeomLoc;
     mutable noding::SegmentString::ConstVect segStrings;
     mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
 
