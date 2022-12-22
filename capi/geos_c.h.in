@@ -4185,7 +4185,7 @@ extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries cover the same space on the place.
+* True if geometries cover the same space on the plane.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
