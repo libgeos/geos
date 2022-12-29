@@ -79,8 +79,8 @@ NodingIntersectionFinder::processIntersections(
     /**
      * Check for an intersection between two vertices which are not both endpoints.
      */
-    long long segDiff = static_cast<long long>(segIndex1 - segIndex0);
-    bool isAdjacentSegment = isSameSegString && std::abs(segDiff) <= 1;
+    std::size_t segDiff = std::max(segIndex0, segIndex1) - std::min(segIndex0, segIndex1);
+    bool isAdjacentSegment = isSameSegString && segDiff <= 1;
     bool isInteriorVertexInt = (!isAdjacentSegment) &&
                                isInteriorVertexIntersection(p00, p01, p10, p11, isEnd00, isEnd01, isEnd10, isEnd11);
 
