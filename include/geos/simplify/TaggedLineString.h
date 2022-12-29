@@ -67,11 +67,14 @@ public:
     typedef std::unique_ptr<geom::CoordinateSequence> CoordSeqPtr;
 
     TaggedLineString(const geom::LineString* nParentLine,
-                     std::size_t minimumSize = 2);
+                     std::size_t minimumSize,
+                     bool preserveEndpoint);
 
     ~TaggedLineString();
 
     std::size_t getMinimumSize() const;
+
+    bool getPreserveEndpoint() const;
 
     const geom::LineString* getParent() const;
 
@@ -89,7 +92,11 @@ public:
 
     const std::vector<TaggedLineSegment*>& getSegments() const;
 
+    const std::vector<TaggedLineSegment*>& getResultSegments() const;
+
     void addToResult(std::unique_ptr<TaggedLineSegment> seg);
+
+    void removeRingEndpoint();
 
     std::unique_ptr<geom::Geometry> asLineString() const;
 
@@ -106,6 +113,8 @@ private:
     std::vector<TaggedLineSegment*> resultSegs;
 
     std::size_t minimumSize;
+
+    bool preserveEndpoint;
 
     void init();
 

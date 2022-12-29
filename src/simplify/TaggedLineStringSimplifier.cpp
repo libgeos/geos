@@ -23,8 +23,7 @@
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-//#include <geos/geom/Geometry.h> // for std::unique_ptr destructor
-//#include <geos/geom/GeometryFactory.h>
+#include <geos/util.h>
 
 #include <algorithm>
 #include <cassert>
@@ -82,8 +81,10 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
     }
     simplifySection(0, linePts->size() - 1, 0);
 
+    if(!line->getPreserveEndpoint() && linePts->isRing()) {
+        simplifyRingEndpoint();
+    }
 }
-
 
 /*private*/
 void
@@ -169,9 +170,24 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 
     simplifySection(i, furthestPtIndex, depth);
     simplifySection(furthestPtIndex, j, depth);
-
 }
 
+/*private*/
+void
+TaggedLineStringSimplifier::simplifyRingEndpoint()
+{
+    if (line->getResultSize() > line->getMinimumSize()) {
+        const auto* firstSeg = line->getResultSegments().front();
+        const auto* lastSeg = line->getResultSegments().back();
+
+        LineSegment candidateSeg(lastSeg->p0, firstSeg->p1);
+        if (candidateSeg.distance(firstSeg->p0) <= distanceTolerance &&
+                !hasBadIntersection(line, std::make_pair(0, line->getSegments().size()), candidateSeg)) {
+            auto newSeg = detail::make_unique<TaggedLineSegment>(candidateSeg.p0, candidateSeg.p1);
+            line->removeRingEndpoint();
+        }
+    }
+}
 
 /*private*/
 std::unique_ptr<TaggedLineSegment>
@@ -239,14 +255,12 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
     const pair<std::size_t, std::size_t>& sectionIndex,
     const LineSegment& candidateSeg)
 {
-    std::unique_ptr< std::vector<LineSegment*> > querySegs =
-        inputIndex->query(&candidateSeg);
+    const auto& foundSegs = inputIndex->query(&candidateSeg);
 
-    for(const LineSegment* ls : *querySegs) {
-        const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
+    for(const LineSegment* ls : *foundSegs) {
+        const TaggedLineSegment* foundSeg = static_cast<const TaggedLineSegment*>(ls);
 
-        if(!isInLineSection(parentLine, sectionIndex, querySeg) && hasInteriorIntersection(*querySeg, candidateSeg)) {
-
+        if(!isInLineSection(parentLine, sectionIndex, foundSeg) && hasInteriorIntersection(*foundSeg, candidateSeg)) {
             return true;
         }
     }

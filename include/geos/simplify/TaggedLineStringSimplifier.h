@@ -105,6 +105,8 @@ private:
     void simplifySection(std::size_t i, std::size_t j,
                          std::size_t depth);
 
+    void simplifyRingEndpoint();
+
     static std::size_t findFurthestPoint(
         const geom::CoordinateSequence* pts,
         std::size_t i, std::size_t j,
@@ -129,13 +131,13 @@ private:
     /** \brief
      * Tests whether a segment is in a section of a TaggedLineString
      *
-     * @param parentLine
-     * @param sectionIndex
-     * @param seg
+     * @param line line to be checked for the presence of `seg`
+     * @param sectionIndex start and end indices of the section to check
+     * @param seg segment to look for in `line`
      * @return
      */
     static bool isInLineSection(
-        const TaggedLineString* parentLine,
+        const TaggedLineString* line,
         const std::pair<std::size_t, std::size_t>& sectionIndex,
         const TaggedLineSegment* seg);
 
