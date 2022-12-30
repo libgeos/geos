@@ -38,6 +38,15 @@ jobs:
           cmake: 3.13.*
           os: ubuntu-18.04
 
+        - cxx_compiler: g++-5
+          c_compiler: gcc-5
+          build_type: Release
+          cxxstd: 11
+          arch: 32
+          packages: 'g++-5-multilib gcc-5-multilib g++-multilib gcc-multilib'
+          cmake: 3.13.*
+          os: ubuntu-18.04
+
         - cxx_compiler: g++-6
           c_compiler: gcc-6
           build_type: Release
