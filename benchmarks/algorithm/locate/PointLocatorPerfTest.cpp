@@ -34,11 +34,11 @@ static void BM_PointInAreaLocator(benchmark::State& state) {
 
     auto geom = geos::benchmark::createSineStar({0, 0}, 100, nRingPts);
 
-    auto test_pts = geos::benchmark::randomCoords(*geom->getEnvelopeInternal(), nTestPts, seed);
+    auto test_pts = geos::benchmark::createRandomCoords(*geom->getEnvelopeInternal(), nTestPts, seed);
 
     for (auto _ : state) {
         Locator loc(*geom);
-        for (const auto& coord : test_pts) {
+        for (const auto& coord : test_pts->items<geos::geom::CoordinateXY>()) {
             loc.locate(&coord);
         }
     }

@@ -2,6 +2,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/util/SineStarFactory.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util.h>
 
 #include <random>
 #include <vector>
@@ -71,16 +72,17 @@ createPoints(const geom::Envelope& env, std::size_t nItems) {
     });
 }
 
-std::vector<geom::CoordinateXY>
-randomCoords(const geom::Envelope& env, std::size_t npts, std::size_t seed) {
+std::unique_ptr<geom::CoordinateSequence>
+createRandomCoords(const geom::Envelope& env, std::size_t npts, std::size_t seed) {
+    auto ret = detail::make_unique<geom::CoordinateSequence>(npts, false, false, false);
+
     std::default_random_engine e(seed);
 
     std::uniform_real_distribution<> xdist(env.getMinX(), env.getMaxX());
     std::uniform_real_distribution<> ydist(env.getMinY(), env.getMaxY());
 
-    std::vector<geom::CoordinateXY> ret(npts);
     for (std::size_t i = 0;i < npts; i++) {
-        ret[i] = geom::CoordinateXY(xdist(e), ydist(e));
+        ret->setAt(geom::CoordinateXY(xdist(e), ydist(e)), i);
     }
 
     return ret;

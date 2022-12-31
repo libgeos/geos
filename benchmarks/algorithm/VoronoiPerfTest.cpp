@@ -23,69 +23,84 @@
 #include <vector>
 #include <memory>
 
-class VoronoiPerfTest {
+#include <benchmark/benchmark.h>
 
-public:
-    void test(std::size_t num_points) {
-        using namespace geos::geom;
+#include <BenchmarkUtils.h>
 
-        std::default_random_engine e(12345);
-        std::uniform_real_distribution<> dis(0, 100);
+using geos::geom::Coordinate;
+using geos::geom::Envelope;
 
-        CoordinateSequence seq(num_points);
-        std::generate(seq.items<Coordinate>().begin(), seq.items<Coordinate>().end(), [&dis, &e]() {
-            return Coordinate(dis(e), dis(e));
-        });
-        auto geom = gfact->createLineString(seq.clone());
+static void BM_DelaunayFromSeq(benchmark::State& state) {
+    Envelope e(0, 100, 0, 100);
+    auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
 
-        voronoi(seq);
-        voronoi(*geom);
-
-        delaunay(seq);
-        delaunay(*geom);
-
-        std::cout << std::endl;
-    }
-private:
-    decltype(geos::geom::GeometryFactory::create()) gfact = geos::geom::GeometryFactory::create();
-    geos::util::Profiler* profiler = geos::util::Profiler::instance();
-
-    template<typename T>
-    void voronoi(const T & sites) {
-        auto sw = profiler->get(std::string("Voronoi from ") + typeid(T).name());
-        sw->start();
-
-        geos::triangulate::VoronoiDiagramBuilder vdb;
-        vdb.setSites(sites);
-
-        auto result = vdb.getDiagram(*gfact);
-
-        sw->stop();
-        std::cout << sw->name << ": " << result->getNumGeometries() << ": " << *sw << std::endl;
-    }
-
-    template<typename T>
-    void delaunay(const T & seq) {
-        auto sw = profiler->get(std::string("Delaunay from ") + typeid(T).name());
-        sw->start();
+    std::size_t i = 0;
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto nPts = static_cast<std::size_t>(state.range(0));
+        auto sites = geos::benchmark::createRandomCoords(e, nPts, i++);
+        state.ResumeTiming();
 
         geos::triangulate::DelaunayTriangulationBuilder dtb;
-        dtb.setSites(seq);
-
+        dtb.setSites(*sites);
         auto result = dtb.getTriangles(*gfact);
-
-        sw->stop();
-        std::cout << sw->name << ": " << result->getNumGeometries() << ": " << *sw << std::endl;
-    }
-};
-
-int main() {
-    VoronoiPerfTest tester;
-
-    //tester.test(100);
-    //tester.test(1000);
-    //tester.test(10000);
-    for (auto i = 0; i < 5; i++) {
-        tester.test(100000);
     }
 }
+
+static void BM_DelaunayFromGeom(benchmark::State& state) {
+    Envelope e(0, 100, 0, 100);
+    auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+
+    std::size_t i = 0;
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto nPts = static_cast<std::size_t>(state.range(0));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        state.ResumeTiming();
+
+        geos::triangulate::DelaunayTriangulationBuilder dtb;
+        dtb.setSites(*sites);
+        auto result = dtb.getTriangles(*gfact);
+    }
+}
+
+static void BM_VoronoiFromSeq(benchmark::State& state) {
+    Envelope e(0, 100, 0, 100);
+    auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+
+    std::size_t i = 0;
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto nPts = static_cast<std::size_t>(state.range(0));
+        auto sites = geos::benchmark::createRandomCoords(e, nPts, i++);
+        state.ResumeTiming();
+
+        geos::triangulate::VoronoiDiagramBuilder vdb;
+        vdb.setSites(*sites);
+        auto result = vdb.getDiagram(*gfact);
+    }
+}
+
+static void BM_VoronoiFromGeom(benchmark::State& state) {
+    Envelope e(0, 100, 0, 100);
+    auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+
+    std::size_t i = 0;
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto nPts = static_cast<std::size_t>(state.range(0));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        state.ResumeTiming();
+
+        geos::triangulate::VoronoiDiagramBuilder vdb;
+        vdb.setSites(*sites);
+        auto result = vdb.getDiagram(*gfact);
+    }
+}
+
+BENCHMARK(BM_DelaunayFromSeq)->Range(10, 1e6);
+BENCHMARK(BM_DelaunayFromGeom)->Range(10, 1e6);
+BENCHMARK(BM_VoronoiFromSeq)->Range(10, 1e6);
+BENCHMARK(BM_VoronoiFromGeom)->Range(10, 1e6);
+
+BENCHMARK_MAIN();

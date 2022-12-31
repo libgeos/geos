@@ -13,9 +13,6 @@
 add_executable(perf_interiorpoint_area InteriorPointAreaPerfTest.cpp)
 target_link_libraries(perf_interiorpoint_area geos)
 
-add_executable(perf_voronoi VoronoiPerfTest.cpp)
-target_link_libraries(perf_voronoi geos)
-
 add_executable(perf_unaryunion_segments UnaryUnionSegmentsPerfTest.cpp)
 target_link_libraries(perf_unaryunion_segments geos)
 
@@ -34,6 +31,14 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
     target_link_libraries(perf_line_intersector PRIVATE
+            benchmark::benchmark geos)
+
+    add_executable(perf_voronoi VoronoiPerfTest.cpp)
+    target_include_directories(perf_voronoi PUBLIC
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+    target_link_libraries(perf_voronoi PRIVATE
             benchmark::benchmark geos)
 endif()
 
