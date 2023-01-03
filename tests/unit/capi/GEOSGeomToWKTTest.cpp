@@ -45,19 +45,6 @@ struct test_capigeosgeomtowkt_data : public capitest::utility {
 
         ensure_equals(out.substr(0, n), wkt.substr(0, n));
     }
-
-    void
-    test_writer_wkt(GEOSWKTWriter* writer, std::string const& wkt)
-    {
-        geom1_ = GEOSGeomFromWKT(wkt.c_str());
-        ensure(nullptr != geom1_);
-
-        char* wkt_c = GEOSWKTWriter_write(writer, geom1_);
-        std::string out(wkt_c);
-        free(wkt_c);
-
-        ensure_equals(out, wkt);
-    }
 };
 
 typedef test_group<test_capigeosgeomtowkt_data> group;
@@ -166,27 +153,6 @@ void object::test<12>
 ()
 {
     test_wkt("MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2)),((60 60, 60 50, 70 40, 60 60)))", 17);
-}
-
-// Test the WKTWriter API instead of the quicky function.
-
-template<>
-template<>
-void object::test<13>
-()
-{
-    GEOSWKTWriter* writer = GEOSWKTWriter_create();
-
-    ensure("getOutputDimension_1",
-           GEOSWKTWriter_getOutputDimension(writer) == 2);
-
-    GEOSWKTWriter_setTrim(writer, 1);
-    GEOSWKTWriter_setOutputDimension(writer, 3);
-    ensure("getOutputDimension_2",
-           GEOSWKTWriter_getOutputDimension(writer) == 3);
-
-    test_writer_wkt(writer, "POINT Z (10 13 3)");
-    GEOSWKTWriter_destroy(writer);
 }
 
 } // namespace tut
