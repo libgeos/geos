@@ -77,15 +77,12 @@ void object::test<3>
 {
     geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
     ensure(nullptr != geom1_);
-    geom2_ = GEOSMinimumBoundingCircle(geom1_, NULL, NULL);
-    ensure(nullptr != geom2_);
-    geom3_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    ensure(nullptr != geom3_);
+    result_ = GEOSMinimumBoundingCircle(geom1_, NULL, NULL);
+    ensure(nullptr != result_);
+    expected_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    ensure(nullptr != expected_);
 
-    // wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
-    // std::cout << wkt_ << std::endl;
-
-    bool eq = GEOSEqualsExact(geom2_, geom3_, 0.0001) != 0;
+    bool eq = GEOSEqualsExact(result_, expected_, 0.0001) != 0;
     ensure(eq);
 }
 

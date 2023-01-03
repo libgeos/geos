@@ -1538,11 +1538,6 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             auto ret = g1->getInteriorPoint();
-            if(ret == nullptr) {
-                const GeometryFactory* gf = g1->getFactory();
-                // return an empty point
-                ret = gf->createPoint();
-            }
             ret->setSRID(g1->getSRID());
             return ret.release();
         });
@@ -1895,12 +1890,6 @@ extern "C" {
     {
         return execute(extHandle, [&]() -> Geometry* {
             auto ret = g->getCentroid();
-
-            if(ret == nullptr) {
-                // TODO check if getCentroid() can really return null
-                const GeometryFactory* gf = g->getFactory();
-                ret =  gf->createPoint();
-            }
             ret->setSRID(g->getSRID());
             return ret.release();
         });
@@ -1931,11 +1920,6 @@ extern "C" {
             geos::algorithm::MinimumBoundingCircle mc(g);
             std::unique_ptr<Geometry> ret = mc.getCircle();
             const GeometryFactory* gf = handle->geomFactory;
-            if(!ret) {
-                if (center) *center = NULL;
-                if (radius) *radius = 0.0;
-                return gf->createPolygon().release();
-            }
             if (center) *center = gf->createPoint(mc.getCentre()).release();
             if (radius) *radius = mc.getRadius();
             ret->setSRID(g->getSRID());
