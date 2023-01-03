@@ -74,8 +74,11 @@ void object::test<4>
 ()
 {
     input_ = GEOSGeomFromWKT("LINESTRING (0 0, 2 2)");
-    result_ = GEOSLineSubstring(input_, 0.5, 1.5);
 
+    result_ = GEOSLineSubstring(input_, 0.5, 1.5);
+    ensure(result_ == nullptr);
+
+    result_ = GEOSLineSubstring(input_, 0.5, -0.1);
     ensure(result_ == nullptr);
 }
 
