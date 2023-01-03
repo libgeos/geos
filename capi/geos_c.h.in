@@ -16,8 +16,8 @@
 * \brief C API for the GEOS geometry algorithms library.
 * \tableofcontents
 *
-* The C API is the preferred API to use when integration GEOS into
-* you program/language/etc. While the C++ API is available, the ABI
+* The C API is the preferred API to use when integrating GEOS into
+* your application/library/etc. While the C++ API is available, the ABI
 * will not be stable between versions, and the API may also change.
 * The GEOS team makes an effort to keep the C API stable, and to
 * deprecate function signatures only over a long time period to allow
@@ -2015,7 +2015,7 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 /* ========= Coordinate Sequence functions ========= */
 /** @name Coordinate Sequences
 * A GEOSCoordSequence is an ordered list of coordinates.
-* Coordinates are 2 (XY) or 3 (XYZ) dimensional.
+* Coordinates are 2 (XY), 3 (XYZ or XYM), or 4 (XYZM) dimensional.
 */
 ///@{
 
@@ -2028,7 +2028,7 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsigned int dims);
 
 /**
-* Create a coordinate sequence by copying from a buffer of doubles (XYXY or XYZXYZ)
+* Create a coordinate sequence by copying from an interleaved buffer of doubles (e.g., XYXY or XYZXYZ)
 * \param buf pointer to buffer
 * \param size number of coordinates in the sequence
 * \param hasZ does buffer have Z values?
@@ -2049,7 +2049,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, const double* m, unsigned int size);
 
 /**
-* Copy the contents of a coordinate sequence to a buffer of doubles (XYXY or XYZXYZ)
+* Copy the contents of a coordinate sequence to an interleaved buffer of doubles (e.g., XYXY or XYZXYZ)
 * \param s sequence to copy
 * \param buf buffer to which coordinates should be copied
 * \param hasZ copy Z values to buffer?
@@ -2059,7 +2059,7 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, 
 extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, int hasZ, int hasM);
 
 /**
-* Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ)
+* Copy the contents of a coordinate sequence to arrays of doubles
 * \param s sequence to copy
 * \param x array to which x values should be copied
 * \param y array to which y values should be copied
@@ -2297,7 +2297,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
 
 /**
-* Creates a polygon geometry from line ring geometries.
+* Creates a polygon geometry from linear ring geometries.
 * \param shell A linear ring that is the exterior ring of the polygon.
 * \param holes An array of linear rings that are the holes.
 * \param nholes The number of rings in the holes array.
@@ -2320,7 +2320,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(
 * \param ngeoms The number of geometries in the geoms list
 * \return A newly allocated geometry collection. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
-* \note The holes argument is an array of GEOSGeometry* objects.
+* \note The geoms argument is an array of GEOSGeometry* objects.
 *       The caller **retains ownership** of the containing array,
 *       but the ownership of the pointed-to objects is transferred
 *       to the returned \ref GEOSGeometry.
@@ -2398,11 +2398,11 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 
 /**
 * Return the anonymous "user data" for this geometry.
-* User data must be managed by the caller, and freed before
-* the geometry is freed.
+* User data must be managed by the caller, and is not freed when
+* the geometry is destoryed.
 * \param g Input geometry
 * \return A void* to the user data, caller is responsible for
-*         casting to the appropriate type and freeing.
+*         casting to the appropriate type.
 */
 extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
 
@@ -2423,7 +2423,7 @@ extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
 * Returned object is a pointer to internal storage:
 * it must NOT be destroyed directly.
 * \param g Input geometry
-* \param n Sub-geometry index, zero-base
+* \param n Sub-geometry index, zero-based
 * \return A const \ref GEOSGeometry, do not free!
           It will be freed when the parent is freed.
           Returns NULL on exception.
@@ -2692,7 +2692,6 @@ extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 
 /**
 * Set the anonymous "user data" for this geometry.
-* Don't forget to free the user data before freeing the geometry.
 * \param g Input geometry
 * \param userData Void pointer to user data
 */
@@ -4146,7 +4145,7 @@ extern char GEOS_DLL GEOSTouches(const GEOSGeometry* g1, const GEOSGeometry* g2)
 extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries interiors interact but their boundares do not.
+* True if geometries interiors interact but their boundaries do not.
 * Most useful for finding line crosses cases.
 * \param g1 Input geometry
 * \param g2 Input geometry
@@ -4326,7 +4325,7 @@ extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
 extern void GEOS_DLL GEOSPreparedGeom_destroy(const GEOSPreparedGeometry* g);
 
 /**
-* Using a \ref GEOSPreparedGeometry do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation of whether the provided geometry is contained.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -4488,8 +4487,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(
     const GEOSGeometry* g2);
 
 /**
-* Using a \ref GEOSPreparedDistance do a high performance
-* calculation to find the distance points between the
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation to find the distance between the
 * prepared and provided geometry. Useful for situations where
 * one geometry is large and static and needs to be tested
 * against a large number of other geometries.
@@ -4504,7 +4503,7 @@ extern int GEOS_DLL GEOSPreparedDistance(
     double *dist);
 
 /**
-* Using a \ref GEOSPreparedDistanceWithin do a high performance
+* Use a \ref GEOSPreparedGeometry do a high performance
 * calculation to find whether the prepared and provided geometry
 * are within the given max distance.
 * Useful for situations where
@@ -4910,17 +4909,17 @@ extern unsigned char GEOS_DLL *GEOSWKBWriter_writeHEX(
 
 /**
 * Read the current output dimension of the writer.
-* Either 2 or 3 dimensions.
+* Either 2, 3, or 4 dimensions.
 * Return current number of dimensions.
 * \param writer The writer to read from.
-* \return Number of dimensions (2 or 3)
+* \return Number of dimensions (2, 3, or 4)
 */
 extern int GEOS_DLL GEOSWKBWriter_getOutputDimension(
     const GEOSWKBWriter* writer);
 
 /**
 * Set the output dimensionality of the writer. Either
-* 2 or 3 dimensions.
+* 2, 3, or 4 dimensions.
 * \param writer The writer to read from.
 * \param newDimension The dimensionality desired
 */
