@@ -166,8 +166,13 @@ void object::test<6>
 
     ensure(nullptr != geom1_);
 
-    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                 GEOSBUF_JOIN_ROUND, 5.0);
+    GEOSBufferParams* params = GEOSBufferParams_create();
+    ensure_equals(GEOSBufferParams_setQuadrantSegments(params, 20), 1);
+    ensure_equals(GEOSBufferParams_setEndCapStyle(params, GEOSBUF_CAP_SQUARE), 1);
+    ensure_equals(GEOSBufferParams_setJoinStyle(params, GEOSBUF_JOIN_ROUND), 1);
+    ensure_equals(GEOSBufferParams_setMitreLimit(params, 5.0), 1);
+
+    geom2_ = GEOSBufferWithParams(geom1_, params, 5);
 
     ensure(nullptr != geom2_);
 
@@ -178,6 +183,7 @@ void object::test<6>
     ensure(0 != GEOSArea(geom2_, &area_));
     ensure_area(area_, 211.803, 0.001);
 
+    GEOSBufferParams_destroy(params);
 }
 
 // Buffer with flat end caps on a 2-vertices line (no matter quadSegs)
@@ -575,6 +581,20 @@ void object::test<22>
     ensure(nullptr != geom2_);
 
     ensure(GEOSisValid(geom2_));
+}
+
+// Error raised on invalid value of buffer params
+template<>
+template<>
+void object::test<23>
+()
+{
+    GEOSBufferParams* params = GEOSBufferParams_create();
+
+    ensure_equals(GEOSBufferParams_setEndCapStyle(params, 500), 0);
+    ensure_equals(GEOSBufferParams_setJoinStyle(params, 500), 0);
+
+    GEOSBufferParams_destroy(params);
 }
 
 
