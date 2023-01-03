@@ -2376,8 +2376,8 @@ extern "C" {
         return execute(extHandle, -1, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
 
-            if (newdims < 2 || newdims > 3) {
-                handle->ERROR_MESSAGE("WKB output dimensions out of range 2..3");
+            if (newdims < 2 || newdims > 4) {
+                handle->ERROR_MESSAGE("WKB output dimensions out of range 2..4");
             }
 
             const int olddims = handle->WKBOutputDims;

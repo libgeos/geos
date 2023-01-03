@@ -41,5 +41,42 @@ void object::test<1>()
     free(hex);
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    GEOSContextHandle_t handle = GEOS_init_r();
+
+    ensure_equals(GEOS_getWKBOutputDims_r(handle), 2);
+    ensure_equals(GEOS_getWKBByteOrder_r(handle), getMachineByteOrder());
+
+    GEOS_finish_r(handle);
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    GEOSContextHandle_t handle = GEOS_init_r();
+
+    ensure_equals(GEOS_setWKBOutputDims_r(handle, 4), 2);
+    ensure_equals(GEOS_setWKBByteOrder_r(handle, GEOS_WKB_XDR), getMachineByteOrder());
+
+    ensure_equals(GEOS_getWKBOutputDims_r(handle), 4);
+    ensure_equals(GEOS_getWKBByteOrder_r(handle), GEOS_WKB_XDR);
+
+    geom1_ = fromWKT("POINT ZM (3 8 2 6)");
+
+    std::size_t size;
+    unsigned char* hex = GEOSGeomToHEX_buf_r(handle, geom1_, &size);
+    std::string hexStr(reinterpret_cast<char*>(hex));
+
+    // SELECT encode(ST_AsEWKB('POINT ZM (3 8 2 6)'::geometry, 'XDR'), 'hex')
+    ensure_equals(hexStr, "00C00000014008000000000000402000000000000040000000000000004018000000000000");
+    GEOSFree(hex);
+
+    GEOS_finish_r(handle);
+}
+
 } // namespace tut
 
