@@ -656,7 +656,7 @@ Functions</h2></td></tr>
 <tr class="memitem:af441d2a4d72e592e197505e919a02fd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree</a> (void *buffer)</td></tr>
 <tr class="separator:af441d2a4d72e592e197505e919a02fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Coordinate Sequences</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>A GEOSCoordSequence is an ordered list of coordinates. Coordinates are 2 (XY) or 3 (XYZ) dimensional. </p>
+<tr><td colspan="2"><div class="groupText"><p>A GEOSCoordSequence is an ordered list of coordinates. Coordinates are 2 (XY), 3 (XYZ or XYM), or 4 (XYZM) dimensional. </p>
 </div></td></tr>
 <tr class="memitem:af9973b08bdbbb097635e972f2ef59384"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#af9973b08bdbbb097635e972f2ef59384">GEOSCoordSeq_create</a> (unsigned int size, unsigned int dims)</td></tr>
 <tr class="separator:af9973b08bdbbb097635e972f2ef59384"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1245,7 +1245,7 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>C API for the GEOS geometry algorithms library. </p>
-<p>The C API is the preferred API to use when integration GEOS into you program/language/etc. While the C++ API is available, the ABI will not be stable between versions, and the API may also change. The GEOS team makes an effort to keep the C API stable, and to deprecate function signatures only over a long time period to allow transition time.</p>
+<p>The C API is the preferred API to use when integrating GEOS into your application/library/etc. While the C++ API is available, the ABI will not be stable between versions, and the API may also change. The GEOS team makes an effort to keep the C API stable, and to deprecate function signatures only over a long time period to allow transition time.</p>
 <p>Important programming notes:</p>
 <ul>
 <li>Remember to call <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS()</a> before any use of this library's functions, and call <a class="el" href="geos__c_8h.html#ad9d8ccc4c6a7d7d0e0f12629fd96ef7c">finishGEOS()</a> when done.</li>
@@ -3922,7 +3922,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Create a coordinate sequence by copying from a buffer of doubles (XYXY or XYZXYZ) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Create a coordinate sequence by copying from an interleaved buffer of doubles (e.g., XYXY or XYZXYZ) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buf</td><td>pointer to buffer </td></tr>
     <tr><td class="paramname">size</td><td>number of coordinates in the sequence </td></tr>
@@ -4025,7 +4025,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Copy the contents of a coordinate sequence to a buffer of doubles (XYZY or XYZXYZ) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Copy the contents of a coordinate sequence to arrays of doubles </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>sequence to copy </td></tr>
     <tr><td class="paramname">x</td><td>array to which x values should be copied </td></tr>
@@ -4129,7 +4129,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Copy the contents of a coordinate sequence to a buffer of doubles (XYXY or XYZXYZ) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Copy the contents of a coordinate sequence to an interleaved buffer of doubles (e.g., XYXY or XYZXYZ) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>sequence to copy </td></tr>
     <tr><td class="paramname">buf</td><td>buffer to which coordinates should be copied </td></tr>
@@ -5861,7 +5861,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries interiors interact but their boundares do not. Most useful for finding line crosses cases. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>True if geometries interiors interact but their boundaries do not. Most useful for finding line crosses cases. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -7424,7 +7424,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry collection. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The holes argument is an array of GEOSGeometry* objects. The caller <b>retains ownership</b> of the containing array, but the ownership of the pointed-to objects is transferred to the returned <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The geoms argument is an array of GEOSGeometry* objects. The caller <b>retains ownership</b> of the containing array, but the ownership of the pointed-to objects is transferred to the returned <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>. </dd></dl>
 
 </div>
 </div>
@@ -7901,7 +7901,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a polygon geometry from line ring geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Creates a polygon geometry from linear ring geometries. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">shell</td><td>A linear ring that is the exterior ring of the polygon. </td></tr>
     <tr><td class="paramname">holes</td><td>An array of linear rings that are the holes. </td></tr>
@@ -8512,13 +8512,13 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the anonymous "user data" for this geometry. User data must be managed by the caller, and freed before the geometry is freed. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the anonymous "user data" for this geometry. User data must be managed by the caller, and is not freed when the geometry is destoryed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A void* to the user data, caller is responsible for casting to the appropriate type and freeing. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A void* to the user data, caller is responsible for casting to the appropriate type. </dd></dl>
 
 </div>
 </div>
@@ -8948,7 +8948,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the anonymous "user data" for this geometry. Don't forget to free the user data before freeing the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the anonymous "user data" for this geometry. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramname">userData</td><td>Void pointer to user data </td></tr>
@@ -10193,7 +10193,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>Returns the specified sub-geometry of a collection. For a simple geometry, returns a pointer to the input. Returned object is a pointer to internal storage: it must NOT be destroyed directly. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
-    <tr><td class="paramname">n</td><td>Sub-geometry index, zero-base </td></tr>
+    <tr><td class="paramname">n</td><td>Sub-geometry index, zero-based </td></tr>
   </table>
   </dd>
 </dl>
@@ -13967,7 +13967,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Using a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation of whether the provided geometry is contained. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation of whether the provided geometry is contained. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pg1</td><td>The prepared geometry </td></tr>
     <tr><td class="paramname">g2</td><td>The geometry to test </td></tr>
@@ -14490,7 +14490,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Using a <a class="el" href="geos__c_8h.html#a565d932d711493b425385b46a5eb4100">GEOSPreparedDistance</a> do a high performance calculation to find the distance points between the prepared and provided geometry. Useful for situations where one geometry is large and static and needs to be tested against a large number of other geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation to find the distance between the prepared and provided geometry. Useful for situations where one geometry is large and static and needs to be tested against a large number of other geometries. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pg1</td><td>The prepared geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>The geometry to test </td></tr>
@@ -14574,7 +14574,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Using a <a class="el" href="geos__c_8h.html#a093a24151fe744d575dc8336e8c2f6fd">GEOSPreparedDistanceWithin</a> do a high performance calculation to find whether the prepared and provided geometry are within the given max distance. Useful for situations where one geometry is large and static and needs to be tested against a large number of other geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation to find whether the prepared and provided geometry are within the given max distance. Useful for situations where one geometry is large and static and needs to be tested against a large number of other geometries. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pg1</td><td>The prepared geometry </td></tr>
     <tr><td class="paramname">g2</td><td>The geometry to test </td></tr>
@@ -18357,13 +18357,13 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Read the current output dimension of the writer. Either 2 or 3 dimensions. Return current number of dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Read the current output dimension of the writer. Either 2, 3, or 4 dimensions. Return current number of dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>The writer to read from. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Number of dimensions (2 or 3) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of dimensions (2, 3, or 4) </dd></dl>
 
 </div>
 </div>
@@ -18631,7 +18631,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the output dimensionality of the writer. Either 2 or 3 dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the output dimensionality of the writer. Either 2, 3, or 4 dimensions. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>The writer to read from. </td></tr>
     <tr><td class="paramname">newDimension</td><td>The dimensionality desired </td></tr>
