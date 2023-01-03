@@ -21,8 +21,8 @@ template<>
 void object::test<1>
 ()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
-    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input);
+    input_ = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
 
     double x = -1;
     double y = -1;
@@ -30,20 +30,31 @@ void object::test<1>
 
     ensure_equals(x, 9);
     ensure_equals(y, -2);
-
-    GEOSGeom_destroy(input);
 }
 
 template<>
 template<>
 void object::test<2>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("POLYGON ((1 1, 2 1, 2 2, 1 1))");
-    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input);
+    input_ = GEOSGeomFromWKT("POLYGON ((1 1, 2 1, 2 2, 1 1))");
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
 
     ensure(seq == nullptr); // can't get seq from Polygon
+}
 
-    GEOSGeom_destroy(input);
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = GEOSGeomFromWKT("POINT (3 8)");
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
+
+    double x = -1;
+    double y = -1;
+    GEOSCoordSeq_getXY(seq,  0, &x, &y);
+
+    ensure_equals(x, 3);
+    ensure_equals(y, 8);
 }
 
 } // namespace tut
