@@ -2365,7 +2365,7 @@ extern "C" {
                 return false;
             }
 
-            return g->getCoordinateDimension() == 3;
+            return g->hasZ();
         });
     }
 
