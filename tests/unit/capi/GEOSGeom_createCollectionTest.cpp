@@ -121,6 +121,9 @@ void object::test<4>
     geom_ = GEOSGeom_createCollection_r(handle_, 12345,
                                         geoms.data(), static_cast<unsigned int>(geoms.size()));
     ensure(geom_ == nullptr);
+
+    geom_ = GEOSGeom_createEmptyCollection_r(handle_, 12345);
+    ensure(geom_ == nullptr);
 }
 
 } // namespace tut

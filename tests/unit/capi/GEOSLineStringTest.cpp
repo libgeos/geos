@@ -1,4 +1,4 @@
-// Test Suite for C-API LineString and Point functions
+// Test Suite for C-API LineString functions
 
 #include <tut/tut.hpp>
 // geos
@@ -17,12 +17,12 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capilinestringpoint_data : public capitest::utility {};
+struct test_capilinestring_data : public capitest::utility {};
 
-typedef test_group<test_capilinestringpoint_data> group;
+typedef test_group<test_capilinestring_data> group;
 typedef group::object object;
 
-group test_capilinestringpoint_group("capi::GEOSLineString_Point");
+group test_capilinestring_group("capi::GEOSLineString");
 
 //
 // Test Cases
@@ -52,6 +52,8 @@ void object::test<1>
     ensure(std::isnan(z));
 
     GEOSGeom_destroy(geom2);
+
+    ensure(GEOSGeomGetPointN(geom1_, -1) == nullptr);
 
     geom2 = GEOSGeomGetStartPoint(geom1_);
     GEOSGeomGetX(geom2, &x);
@@ -87,6 +89,23 @@ void object::test<2>
 
     GEOSGeomGetLength(geom1_, &length);
     ensure(length != 0.0);
+}
+
+// Check error on invalid input type
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POINT (0 0)");
+
+    ensure(GEOSGeomGetStartPoint(geom1_) == nullptr);
+    ensure(GEOSGeomGetEndPoint(geom1_) == nullptr);
+    ensure(GEOSGeomGetPointN(geom1_, 0) == nullptr);
+    ensure(GEOSGeomGetPointN(geom1_, 0) == nullptr);
+
+    double length;
+    ensure_equals(GEOSGeomGetLength(geom1_, &length), 0);
 }
 
 } // namespace tut

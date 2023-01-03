@@ -31,4 +31,14 @@ namespace tut
         ensure_equals("LINEARRING (35 10, 45 45, 15 40, 10 20, 35 10)", toWKT(result));
     }
 
+    template <>
+    template <>
+    void object::test<2>()
+    {
+        geom1_ = fromWKT("LINESTRING (0 0, 1 0, 1 1, 0 0)");
+        ensure(nullptr != geom1_);
+
+        ensure(GEOSGetExteriorRing(geom1_) == nullptr);
+    }
+
 } // namespace tut

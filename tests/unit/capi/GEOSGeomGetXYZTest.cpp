@@ -68,9 +68,11 @@ void object::test<4>()
 
     double x = 0;
     double y = 0;
+    double z = 0;
 
     ensure_equals(GEOSGeomGetX(input_, &x), 0);
     ensure_equals(GEOSGeomGetY(input_, &y), 0);
+    ensure_equals(GEOSGeomGetZ(input_, &z), 0);
 }
 
 

@@ -30,6 +30,8 @@ void object::test<1>()
     result = const_cast<GEOSGeometry*>(GEOSGetGeometryN(geom1_, 2));
     ensure(nullptr != result);
     ensure_equals("POINT (3 3)", toWKT(result));
+
+    ensure(GEOSGetGeometryN(geom1_, -1) == nullptr);
 }
 
 } // namespace tut
