@@ -5,9 +5,7 @@
 // geos
 #include <geos_c.h>
 // std
-#if (defined(_MSC_VER) && _MSC_VER >= 1600) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <array>
-#endif
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -76,7 +74,6 @@ void object::test<1>
     ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), (int)geom_size);
 }
 
-#if (defined(_MSC_VER) && _MSC_VER >= 1600) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 // Create collection from constant length std::array
 template<>
 template<>
@@ -84,16 +81,15 @@ void object::test<2>
 ()
 {
     std::array<GEOSGeom, geom_size> geoms = {{
-        GEOSGeom_createEmptyPoint_r(handle_),
-        GEOSGeom_createEmptyPoint_r(handle_),
-        GEOSGeom_createEmptyPoint_r(handle_)
+        GEOSGeom_createEmptyLineString_r(handle_),
+        GEOSGeom_createEmptyLineString_r(handle_),
+        GEOSGeom_createEmptyLineString_r(handle_)
     }};
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT,
+    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTILINESTRING,
                                         geoms.data(), static_cast<unsigned int>(geoms.size()));
     ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
 }
-#endif
 
 // Create collection from dynamic length std::vector of geometries
 template<>
@@ -102,15 +98,29 @@ void object::test<3>
 ()
 {
     std::vector<GEOSGeom> geoms;
-    geoms.push_back(GEOSGeom_createEmptyPoint_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPoint_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPoint_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPoint_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPoint_r(handle_));
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT,
+    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOLYGON,
                                         geoms.data(), static_cast<unsigned int>(geoms.size()));
     ensure_equals(static_cast<size_t>(GEOSGetNumGeometries_r(handle_, geom_)), geoms.size());
+}
+
+// Error on invalid collection type, ownership is still transferred
+template<>
+template<>
+void object::test<4>
+()
+{
+    std::vector<GEOSGeom> geoms;
+    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    // takes ownership of individual geometries
+    geom_ = GEOSGeom_createCollection_r(handle_, 12345,
+                                        geoms.data(), static_cast<unsigned int>(geoms.size()));
+    ensure(geom_ == nullptr);
 }
 
 } // namespace tut

@@ -89,33 +89,4 @@ void object::test<2>
     ensure(length != 0.0);
 }
 
-template<>
-template<>
-void object::test<3>
-()
-{
-    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 5 5, 10 10)");
-    int points;
-    ensure(nullptr != geom1_);
-
-    points = GEOSGeomGetNumPoints(geom1_);
-    ensure_equals(points, 3);
-}
-
-template<>
-template<>
-void object::test<4>
-()
-{
-    geom1_ = GEOSGeomFromWKT("POINT Z(0 10 20)");
-    double x, y, z;
-
-    GEOSGeomGetX(geom1_, &x);
-    GEOSGeomGetY(geom1_, &y);
-    GEOSGeomGetZ(geom1_, &z);
-
-    ensure_equals(x, 0);
-    ensure_equals(y, 10);
-    ensure_equals(z, 20);
-}
 } // namespace tut

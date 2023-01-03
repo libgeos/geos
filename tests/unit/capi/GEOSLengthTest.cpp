@@ -20,16 +20,42 @@ template<>
 template<>
 void object::test<1>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("LINESTRING (1 0, 5 0)");
+    input_ = GEOSGeomFromWKT("LINESTRING (1 0, 5 0)");
 
     double length = -1;
 
-    int ret = GEOSLength(input, &length);
+    int ret = GEOSLength(input_, &length);
 
     ensure_equals(ret, 1);
     ensure_equals(length, 4);
+}
 
-    GEOSGeom_destroy(input);
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = GEOSGeomFromWKT("POINT (0 0)");
+
+    double length = -1;
+
+    int ret = GEOSLength(input_, &length);
+
+    ensure_equals(ret, 1);
+    ensure_equals(length, 0);
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+
+    double length = -1;
+
+    int ret = GEOSLength(input_, &length);
+
+    ensure_equals(ret, 1);
+    ensure_equals(length, 0);
 }
 
 } // namespace tut

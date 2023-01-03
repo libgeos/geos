@@ -19,12 +19,12 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capiisclosed_data : public capitest::utility {};
+struct test_capiisring_data : public capitest::utility {};
 
-typedef test_group<test_capiisclosed_data> group;
+typedef test_group<test_capiisring_data> group;
 typedef group::object object;
 
-group test_capiisclosed_group("capi::GEOSisClosed");
+group test_capiisring_group("capi::GEOSisRing");
 
 //
 // Test Cases
@@ -36,7 +36,7 @@ void object::test<1>
 ()
 {
     geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 1 0, 1 1)");
-    int r = GEOSisClosed(geom1_);
+    int r = GEOSisRing(geom1_);
     ensure_equals(r, 0);
 }
 
@@ -45,8 +45,8 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 0 1, 1 1, 0 0)");
-    int r = GEOSisClosed(geom1_);
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 1 0, 1 1, 0 0)");
+    int r = GEOSisRing(geom1_);
     ensure_equals(r, 1);
 }
 
@@ -55,8 +55,8 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((1 1, 1 2, 2 2, 1 1), (0 0, 0 1, 1 1))");
-    int r = GEOSisClosed(geom1_);
+    geom1_ = GEOSGeomFromWKT("POINT (1 1)");
+    int r = GEOSisRing(geom1_);
     ensure_equals(r, 0);
 }
 
@@ -65,9 +65,9 @@ template<>
 void object::test<4>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((1 1, 1 2, 2 2, 1 1), (0 0, 0 1, 1 1, 0 0))");
-    int r = GEOSisClosed(geom1_);
-    ensure_equals(r, 1);
+    geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((0 0, 1 0, 1 1, 0 0))");
+    int r = GEOSisRing(geom1_);
+    ensure_equals(r, 0);
 }
 
 template<>
@@ -75,9 +75,10 @@ template<>
 void object::test<5>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POINT (1 1)");
-    int r = GEOSisClosed(geom1_);
-    ensure_equals(r, 2);
+    geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+    int r = GEOSisRing(geom1_);
+    ensure_equals(r, 0);
 }
+
 
 } // namespace tut

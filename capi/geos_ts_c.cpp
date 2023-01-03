@@ -2000,7 +2000,7 @@ extern "C" {
                 g = gf->createMultiPolygon(std::move(vgeoms));
                 break;
             default:
-                handle->ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
+                handle->ERROR_MESSAGE("Unsupported type request for GEOSGeom_createCollection_r");
             }
 
             return g.release();
