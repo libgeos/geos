@@ -34,9 +34,8 @@ void object::test<1>
 ()
 {
     geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
-    GEOSGeometry* geom2 = GEOSInterpolate(geom1_, 1);
-    ensure_equals(GEOSisEmpty(geom2), 1);
-    GEOSGeom_destroy(geom2);
+    result_ = GEOSInterpolate(geom1_, 1);
+    ensure_equals(GEOSisEmpty(result_), 1);
 }
 
 template<>
@@ -45,9 +44,32 @@ void object::test<2>
 ()
 {
     geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION EMPTY");
-    GEOSGeometry* geom2 = GEOSInterpolate(geom1_, 1);
-    ensure_equals(GEOSisEmpty(geom2), 1);
-    GEOSGeom_destroy(geom2);
+    result_ = GEOSInterpolate(geom1_, 1);
+    ensure_equals(GEOSisEmpty(result_), 1);
+}
+
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+    result_ = GEOSInterpolate(geom1_, 0.5);
+    expected_ = GEOSGeomFromWKT("POINT (0.5 0)");
+
+    ensure_geometry_equals(result_, expected_);
+}
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+    result_ = GEOSInterpolateNormalized(geom1_, 0.5);
+    expected_ = GEOSGeomFromWKT("POINT (5 0)");
+
+    ensure_geometry_equals(result_, expected_);
 }
 
 } // namespace tut
