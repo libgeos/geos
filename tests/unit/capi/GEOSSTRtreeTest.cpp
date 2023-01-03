@@ -416,6 +416,57 @@ void object::test<12>()
     GEOSSTRtree_destroy(tree);
 }
 
+// Test GEOSSTRtree_iterate
+template<>
+template<>
+void object::test<13>()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(4);
+    std::vector<GEOSGeometry*> geoms;
+
+    for (int i = 50; i >= 0; i--) {
+        geoms.push_back(GEOSGeom_createPointFromXY((double) i, 0));
+        GEOSSTRtree_insert(tree, geoms.back(), geoms.back());
+    }
+
+    std::vector<GEOSGeometry*> geomsFound;
+
+    // Iterate to collect all tree items
+    GEOSSTRtree_iterate(tree, [](void* item, void* userdata) {
+        std::vector<GEOSGeometry*>& hits = *static_cast<std::vector<GEOSGeometry*>*>(userdata);
+        hits.push_back(static_cast<GEOSGeometry*>(item));
+    }, &geomsFound);
+
+    // GEOSSTRtree_iterate does not force tree construction, so input order = iteration order
+    ensure_equals(geomsFound.size(), geoms.size());
+    for (std::size_t i = 0; i < geomsFound.size(); i++) {
+        ensure_equals(geoms[i], geomsFound[i]);
+    }
+
+    // Perform a query to force tree construction
+    GEOSSTRtree_query(tree, geoms[0], [](void* item, void* userdata) {
+        (void) item;
+        (void) userdata;
+    }, nullptr);
+
+    // Iterate to collect all tree items
+    std::vector<GEOSGeometry*> geomsFound2;
+    GEOSSTRtree_iterate(tree, [](void* item, void* userdata) {
+        std::vector<GEOSGeometry*>& hits = *static_cast<std::vector<GEOSGeometry*>*>(userdata);
+        hits.push_back(static_cast<GEOSGeometry*>(item));
+    }, &geomsFound2);
+
+    ensure_equals(geomsFound2.size(), geoms.size());
+    // Tree has been constructed so item order now reflects tree order rather than insertion order
+    ensure(geomsFound2[0] != geoms[0]);
+
+    // Cleanup
+    for (auto& g : geoms) {
+        GEOSGeom_destroy(g);
+    }
+
+    GEOSSTRtree_destroy(tree);
+}
 
 } // namespace tut
 
