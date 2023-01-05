@@ -18,13 +18,13 @@
  **********************************************************************/
 
 #include <geos/operation/overlay/PolygonBuilder.h>
-#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/MaximalEdgeRing.h>
 #include <geos/operation/overlay/MinimalEdgeRing.h>
 #include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/NodeMap.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
