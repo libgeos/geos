@@ -1,5 +1,0 @@
-This directory is a mess, should be renamed to reflect that :)
-
-Now seriously, there's no automated test in this directory, but
-random tests intended for manual runs. They get built by 'make check'
-but not executed.
