@@ -54,6 +54,9 @@ Envelope::intersects(const CoordinateXY& p1, const CoordinateXY& p2,
 bool
 Envelope::intersects(const CoordinateXY& a, const CoordinateXY& b) const
 {
+    if(isNull()) {
+        return false;
+    }
     // These comparisons look redundant, but an alternative using
     // std::minmax performs no better and compiles down to more
     // instructions.
@@ -227,6 +230,9 @@ Envelope::translate(double transX, double transY)
 void
 Envelope::expandBy(double deltaX, double deltaY)
 {
+    if(isNull()) {
+        return;
+    }
     minx -= deltaX;
     maxx += deltaX;
     miny -= deltaY;

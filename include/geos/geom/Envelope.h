@@ -559,6 +559,9 @@ public:
      */
     bool intersects(const Envelope* other) const
     {
+        if(isNull() || other->isNull()) {
+            return false;
+        }
         return other->minx <= maxx &&
                other->maxx >= minx &&
                other->miny <= maxy &&
@@ -584,6 +587,9 @@ public:
 
     bool disjoint(const Envelope* other) const
     {
+        if(isNull()) {
+            return true;
+        }
         return !(other->minx <= maxx ||
                  other->maxx >= minx ||
                  other->miny <= maxy ||

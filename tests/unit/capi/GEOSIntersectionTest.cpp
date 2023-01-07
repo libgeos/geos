@@ -3,6 +3,7 @@
 
 #include "capi_test_utils.h"
 
+#include <fenv.h>
 
 namespace tut {
 //
@@ -131,6 +132,36 @@ void object::test<6>
     // No memory leaked
 }
 
+template<>
+template<>
+void object::test<7>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON ((1 0, 1 1, 0 1, 0 0, 1 0))");
+    geom2_ = GEOSGeomFromWKT("POLYGON ((1 2, 1 3, 0 3, 0 2, 1 2))");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    // clear all floating point exceptions
+    feclearexcept (FE_ALL_EXCEPT);
+
+    int old_excepts = fegetexcept(); /* Store old exceptions */
+    feenableexcept(FE_INVALID);
+
+    geom3_ = GEOSIntersection(geom1_, geom2_);
+    ensure(nullptr != geom3_);
+    ensure(GEOSisEmpty(geom3_));
+
+    // check for floating point overflow exceptions
+    int raised = fetestexcept(FE_INVALID);
+    ensure_equals(raised & FE_INVALID, 0);
+
+    /* Restore old exceptions */
+    fedisableexcept(FE_ALL_EXCEPT); 
+    feenableexcept(old_excepts);
+
+}
 
 } // namespace tut
 
