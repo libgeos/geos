@@ -7,13 +7,31 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
 
+#include <cfenv>
+
 namespace tut {
 //
 // Test Group
 //
 
+using geos::geom::Envelope;
+
 // dummy data, not used
-struct test_envelope_data {};
+struct test_envelope_data {
+    test_envelope_data()
+    {
+        std::feclearexcept(FE_ALL_EXCEPT);
+    }
+
+    static void ensure_no_fp_except()
+    {
+        ensure("FE_DIVBYZERO raised", !std::fetestexcept(FE_DIVBYZERO));
+        //ensure("FE_INEXACT raised", !std::fetestexcept(FE_INEXACT));
+        ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+        ensure("FE_OVERFLOW raised", !std::fetestexcept(FE_OVERFLOW));
+        ensure("FE_UNDERFLOW raised", !std::fetestexcept(FE_UNDERFLOW));
+    }
+};
 
 typedef test_group<test_envelope_data> group;
 typedef group::object object;
@@ -36,6 +54,8 @@ void object::test<1>
 
     ensure_equals(empty.getWidth(), 0);
     ensure_equals(empty.getHeight(), 0);
+
+    ensure_no_fp_except();
 }
 
 // 2 - Test of overridden constructor
@@ -57,6 +77,8 @@ void object::test<2>
     ensure_equals(box.getMaxX(), box.getMaxY());
 
     ensure_equals(box.getWidth(), box.getHeight());
+
+    ensure_no_fp_except();
 }
 
 // 3 - Test of copy constructor
@@ -75,6 +97,8 @@ void object::test<3>
     ensure(!copied.isNull());
     ensure(copied == box);
     ensure_equals(copied.getWidth(), copied.getHeight());
+
+    ensure_no_fp_except();
 }
 
 // 4 - Test of setToNull()
@@ -88,6 +112,8 @@ void object::test<4>
     ensure(!e.isNull());
     e.setToNull();
     ensure(e.isNull());
+
+    ensure_no_fp_except();
 }
 
 // 5 - Test of equals()
@@ -117,6 +143,8 @@ void object::test<5>
 
     ensure(!box.equals(&empty));
     ensure(!box.equals(&zero));
+
+    ensure_no_fp_except();
 }
 
 // 6 - Test of contains()
@@ -160,6 +188,8 @@ void object::test<6>
     ensure_equals(origin.y, 0);
     ensure_equals(origin.z, 0);
     ensure(small.contains(origin));
+
+    ensure_no_fp_except();
 }
 
 // Test of intersects() and disjoint()
@@ -213,6 +243,8 @@ void object::test<7>
     ensure(with_origin.intersects(origin));
 
     ensure("empty envelope does not intersect coordinate", !empty.intersects(origin));
+
+    ensure_no_fp_except();
 }
 
 // Test of expand()
@@ -238,6 +270,8 @@ void object::test<8>
     empty.expandToInclude(&box);
     ensure("expanding null envelope to include non-null envelope makes null envelope not null",
            empty == exemplar);
+
+    ensure_no_fp_except();
 }
 
 // Second test of expand()
@@ -257,6 +291,8 @@ void object::test<9>
     // Expand empty envelope to include bigger envelope
     empty.expandToInclude(&box);
     ensure(empty == exemplar);
+
+    ensure_no_fp_except();
 }
 
 // Test point-to-envelope distance
@@ -278,11 +314,9 @@ void object::test<10>
     // 20 21 22 23 24
     std::vector<Coordinate> c(25);
 
-    // std::cout<<std::endl;
     for (std::size_t i = 0; i < c.size(); i++) {
         c[i].x = static_cast<double>(i % 5);
         c[i].y = static_cast<double>(5 - (i / 5));
-        // std::cout<< c[i] << std::endl;
     }
 
     // point contained in envelope
@@ -319,6 +353,7 @@ void object::test<10>
     ensure_equals(Envelope::distanceToCoordinate(c[6], c[12], c[14]),
                   c[6].distance(c[12]));
 
+    ensure_no_fp_except();
 }
 
 // Test envelope distance
@@ -371,7 +406,38 @@ void object::test<11>
     b = Envelope({17, 3}, {20, 5});
     ensure_equals(a.distance(b), Coordinate(13, 11).distance(Coordinate(17, 5)));
     ensure_equals(a.distance(b), b.distance(a));
+
+    ensure_no_fp_except();
 }
+
+// comparison of empty envelopes
+template<>
+template<>
+void object::test<12>
+()
+{
+    Envelope empty1;
+    Envelope empty2;
+
+    ensure(!(empty1 < empty2));
+    ensure(!(empty2 < empty1));
+
+    ensure_no_fp_except();
+}
+
+// Envelope::intersects(Coordinate, Coordinate)
+template<>
+template<>
+void object::test<13>
+()
+{
+    Envelope empty;
+
+    ensure(!empty.intersects({1, 1}, {2, 2}));
+
+    ensure_no_fp_except();
+}
+
 
 } // namespace tut
 

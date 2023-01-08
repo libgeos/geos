@@ -454,16 +454,16 @@ public:
             maxy = other->maxy;
         }
         else {
-            if(other->minx < minx) {
+            if(std::isless(other->minx, minx)) {
                 minx = other->minx;
             }
-            if(other->maxx > maxx) {
+            if(std::isgreater(other->maxx, maxx)) {
                 maxx = other->maxx;
             }
-            if(other->miny < miny) {
+            if(std::isless(other->miny, miny)) {
                 miny = other->miny;
             }
-            if(other->maxy > maxy) {
+            if(std::isgreater(other->maxy, maxy)) {
                 maxy = other->maxy;
             }
         }
@@ -535,8 +535,8 @@ public:
      */
     bool intersects(const CoordinateXY& other) const
     {
-        return (other.x <= maxx && other.x >= minx &&
-                other.y <= maxy && other.y >= miny);
+        return (std::islessequal(other.x, maxx) && std::isgreaterequal(other.x, minx) &&
+                std::islessequal(other.y, maxy) && std::isgreaterequal(other.y,  miny));
     }
 
     /** \brief
@@ -548,7 +548,10 @@ public:
      */
     bool intersects(double x, double y) const
     {
-        return (x <= maxx && x >= minx && y <= maxy && y >= miny);
+        return std::islessequal(x, maxx) &&
+               std::isgreaterequal(x, minx) &&
+               std::islessequal(y, maxy) &&
+               std::isgreaterequal(y, miny);
     }
 
     /** \brief
@@ -559,10 +562,10 @@ public:
      */
     bool intersects(const Envelope* other) const
     {
-        return other->minx <= maxx &&
-               other->maxx >= minx &&
-               other->miny <= maxy &&
-               other->maxy >= miny;
+        return std::islessequal(other->minx, maxx) &&
+               std::isgreaterequal(other->maxx, minx) &&
+               std::islessequal(other->miny, maxy) &&
+               std::isgreaterequal(other->maxy, miny);
     }
 
     bool intersects(const Envelope& other) const
@@ -584,10 +587,10 @@ public:
 
     bool disjoint(const Envelope* other) const
     {
-        return !(other->minx <= maxx ||
-                 other->maxx >= minx ||
-                 other->miny <= maxy ||
-                 other->maxy >= miny);
+        return !(std::islessequal(other->minx, maxx) ||
+                 std::isgreaterequal(other->maxx, minx) ||
+                 std::islessequal(other->miny, maxy) ||
+                 std::isgreaterequal(other->maxy,  miny));
     }
 
     /** \brief
@@ -598,10 +601,10 @@ public:
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
     bool covers(double x, double y) const {
-        return x >= minx &&
-               x <= maxx &&
-               y >= miny &&
-               y <= maxy;
+        return std::isgreaterequal(x,  minx) &&
+               std::islessequal(x, maxx) &&
+               std::isgreaterequal(y, miny) &&
+               std::islessequal(y,  maxy);
     }
 
     /** \brief

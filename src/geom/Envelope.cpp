@@ -58,22 +58,22 @@ Envelope::intersects(const CoordinateXY& a, const CoordinateXY& b) const
     // std::minmax performs no better and compiles down to more
     // instructions.
     double envminx = (a.x < b.x) ? a.x : b.x;
-    if(!(maxx >= envminx)) { // awkward comparison catches cases where this->isNull()
+    if(!std::isgreaterequal(maxx, envminx)) { // awkward comparison catches cases where this->isNull()
         return false;
     }
 
     double envmaxx = (a.x > b.x) ? a.x : b.x;
-    if(envmaxx < minx) {
+    if(std::isless(envmaxx, minx)) {
         return false;
     }
 
     double envminy = (a.y < b.y) ? a.y : b.y;
-    if(envminy > maxy) {
+    if(std::isgreater(envminy, maxy)) {
         return false;
     }
 
     double envmaxy = (a.y > b.y) ? a.y : b.y;
-    if(envmaxy < miny) {
+    if(std::isless(envmaxy, miny)) {
         return false;
     }
 
@@ -105,10 +105,10 @@ bool
 Envelope::covers(const Envelope& other) const
 {
     return
-        other.minx >= minx &&
-        other.maxx <= maxx &&
-        other.miny >= miny &&
-        other.maxy <= maxy;
+        std::isgreaterequal(other.minx,  minx) &&
+        std::islessequal(other.maxx,  maxx) &&
+        std::isgreaterequal(other.miny, miny) &&
+        std::islessequal(other.maxy,  maxy);
 }
 
 /*public*/
@@ -233,7 +233,7 @@ Envelope::expandBy(double deltaX, double deltaY)
     maxy += deltaY;
 
     // check for envelope disappearing
-    if(minx > maxx || miny > maxy) {
+    if(std::isgreater(minx, maxx) || std::isgreater(miny, maxy)) {
         setToNull();
     }
 }

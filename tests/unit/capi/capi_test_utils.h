@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cfenv>
 
 
 namespace capitest {
@@ -29,6 +30,8 @@ namespace capitest {
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
+
+            std::feclearexcept(FE_ALL_EXCEPT);
         }
 
         ~utility()
