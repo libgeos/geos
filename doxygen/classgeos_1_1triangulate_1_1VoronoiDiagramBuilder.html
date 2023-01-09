@@ -68,6 +68,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5993689ded378c5cbc6b7c17558985e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a5993689ded378c5cbc6b7c17558985e9">setSites</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;coords)</td></tr>
 <tr class="memdesc:a5993689ded378c5cbc6b7c17558985e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the sites (point or vertices) which will be diagrammed from a collection of <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>s.  <a href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a5993689ded378c5cbc6b7c17558985e9">More...</a><br /></td></tr>
 <tr class="separator:a5993689ded378c5cbc6b7c17558985e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30d99a09942efde7ca72192cf30a4a13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a30d99a09942efde7ca72192cf30a4a13">setOrdered</a> (bool isOrdered)</td></tr>
+<tr class="memdesc:a30d99a09942efde7ca72192cf30a4a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify whether the geometries in the generated diagram should reflect the order of coordinates in the input. If the generated diagram cannot be consistent with the input coordinate order (e.g., for repeated input points that become a single cell) an exception will be thrown.  <a href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a30d99a09942efde7ca72192cf30a4a13">More...</a><br /></td></tr>
+<tr class="separator:a30d99a09942efde7ca72192cf30a4a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a133000f655c3139370f1171804347ff4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a133000f655c3139370f1171804347ff4">setClipEnvelope</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> *clipEnv)</td></tr>
 <tr class="memdesc:a133000f655c3139370f1171804347ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the envelope to clip the diagram to.  <a href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a133000f655c3139370f1171804347ff4">More...</a><br /></td></tr>
 <tr class="separator:a133000f655c3139370f1171804347ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -83,6 +86,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a45cf8274aa00aa09126466747dcc991d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a45cf8274aa00aa09126466747dcc991d">getDiagramEdges</a> (const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> &amp;geomFact)</td></tr>
 <tr class="memdesc:a45cf8274aa00aa09126466747dcc991d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the edges of the computed diagram as a <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">geom::MultiLineString</a>, clipped as specified.  <a href="classgeos_1_1triangulate_1_1VoronoiDiagramBuilder.html#a45cf8274aa00aa09126466747dcc991d">More...</a><br /></td></tr>
 <tr class="separator:a45cf8274aa00aa09126466747dcc991d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4ef297f237e5258b642b7e2344bec94"><td class="memItemLeft" align="right" valign="top"><a id="af4ef297f237e5258b642b7e2344bec94"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reorderCellsToInput</b> (std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&gt; &amp;polys) const</td></tr>
+<tr class="separator:af4ef297f237e5258b642b7e2344bec94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A utility class which creates Voronoi Diagrams from collections of points. </p>
@@ -184,6 +190,32 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clipEnv</td><td>the clip envelope; must be kept alive by caller until done with this instance; set to 0 for no clipping. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a30d99a09942efde7ca72192cf30a4a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30d99a09942efde7ca72192cf30a4a13">&#9670;&nbsp;</a></span>setOrdered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::triangulate::VoronoiDiagramBuilder::setOrdered </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isOrdered</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specify whether the geometries in the generated diagram should reflect the order of coordinates in the input. If the generated diagram cannot be consistent with the input coordinate order (e.g., for repeated input points that become a single cell) an exception will be thrown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">isOrdered</td><td>should the geometries reflect the input order? </td></tr>
   </table>
   </dd>
 </dl>
