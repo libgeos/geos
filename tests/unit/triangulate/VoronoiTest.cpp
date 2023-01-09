@@ -47,6 +47,11 @@ readTextOrHex(const char* wkt)
     WKTReader wktreader;
     WKBReader wkbreader;
     std::string wktstr(wkt);
+
+    if (wktstr == "") {
+        return nullptr;
+    }
+
     if ("01" == wktstr.substr(0, 2) || "00" == wktstr.substr(0, 2))
     {
         std::stringstream is(wkt);
@@ -58,7 +63,7 @@ readTextOrHex(const char* wkt)
 
 //helper function for running triangulation
 void
-runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance, const bool onlyEdges = false)
+runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance, const bool onlyEdges = false, const bool checkOrder = false)
 {
     WKTWriter writer;
     geos::triangulate::VoronoiDiagramBuilder builder;
@@ -67,6 +72,7 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
     std::unique_ptr<Geometry> results;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
     builder.setSites(*sites);
+    builder.setOrdered(checkOrder);
 
     //set Tolerance:
     builder.setTolerance(tolerance);
@@ -74,6 +80,21 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
         results = builder.getDiagramEdges(geomFact);
     } else {
         results = builder.getDiagram(geomFact);
+    }
+
+    if (checkOrder) {
+        if(sites->getGeometryTypeId() == GEOS_MULTIPOINT) {
+            for (size_t i = 0; i < sites->getNumGeometries(); i++) {
+                ensure("order is preserved", results->getGeometryN(i)->contains(sites->getGeometryN(i)) );
+            }
+        }
+        if(sites->getGeometryTypeId() == GEOS_LINESTRING) {
+            const auto& line = static_cast<const LineString&>(*sites);
+            for (size_t i = 0; i < line.getNumPoints(); i++) {
+                auto pt = line.getPointN(i);
+                ensure("order is preserved", results->getGeometryN(i)->contains(pt.get()) );
+            }
+        }
     }
 
     results->normalize();
@@ -122,6 +143,7 @@ void object::test<1>
     //ensure_equals(subdiv->getEnvelope().toString(), "Env[-3540:4020,-3436:4050]");
 
 }
+
 // 1 - Case with a single point
 template<>
 template<>
@@ -169,6 +191,7 @@ void object::test<5>
         "GEOMETRYCOLLECTION (POLYGON ((110 -50, 110 349.02631578947364, 405.31091180866963 170.28550074738416, 392.35294117647055 -50, 110 -50)), POLYGON ((740 63.57142857142859, 740 -50, 392.35294117647055 -50, 405.31091180866963 170.28550074738416, 429.9147677857019 205.76082797008175, 470.12061711079946 217.7882187938289, 740 63.57142857142859)), POLYGON ((110 349.02631578947364, 110 510, 323.9438202247191 510, 429.9147677857019 205.76082797008175, 405.31091180866963 170.28550074738416, 110 349.02631578947364)),  POLYGON ((323.9438202247191 510, 424.57333333333327 510, 499.70666666666665 265, 470.12061711079946 217.7882187938289, 429.9147677857019 205.76082797008175, 323.9438202247191 510)),POLYGON ((740 265, 740 63.57142857142859, 470.12061711079946 217.7882187938289, 499.70666666666665 265, 740 265)), POLYGON ((424.57333333333327 510, 740 510, 740 265, 499.70666666666665 265, 424.57333333333327 510)))";
     runVoronoi(wkt, expected, 0);
 }
+
 //6. A little larger number of points
 template<>
 template<>
@@ -183,6 +206,7 @@ void object::test<6>
 
     runVoronoi(wkt, expected, 0);
 }
+
 //Test with case of Tolerance:
 template<>
 template<>
@@ -197,6 +221,7 @@ void object::test<7>
 
     runVoronoi(wkt, expected, 6);
 }
+
 template<>
 template<>
 void object::test<8>
@@ -209,6 +234,7 @@ void object::test<8>
 
     runVoronoi(wkt, expected, 10);
 }
+
 //Taking tolerance very very high
 template<>
 template<>
@@ -265,5 +291,39 @@ void object::test<12>
     runVoronoi(wkb, expected, 0, false);
 }
 
+
+// Polygon order reflects component order in input
+template<>
+template<>
+void object::test<13>
+()
+{
+    const char *wkt1 = "MULTIPOINT ((280 300), (420 330), (380 230), (320 160))";
+    const char *wkt2 = "LINESTRING (280 300, 380 230, 420 330, 320 160)";
+    const char *wkt3 = "MULTILINESTRING ((320 160, 280 300), (380 230, 420 330))";
+
+    // We check result component order independently of how it's specified in WKT,
+    // so the three input arrangements can all use the same expected value.
+    const char *expected =
+            "GEOMETRYCOLLECTION (POLYGON ((110 175.71428571428572, 110 500, 310.35714285714283 500, 353.515625 298.59375, 306.875 231.96428571428572, 110 175.71428571428572)), POLYGON ((590 204, 590 -10, 589.1666666666666 -10, 306.875 231.96428571428572, 353.515625 298.59375, 590 204)), POLYGON ((110 -10, 110 175.71428571428572, 306.875 231.96428571428572, 589.1666666666666 -10, 110 -10)), POLYGON ((310.35714285714283 500, 590 500, 590 204, 353.515625 298.59375, 310.35714285714283 500)))";
+    runVoronoi(wkt1, expected, 0, false, true);
+    runVoronoi(wkt2, expected, 0, false, true);
+    runVoronoi(wkt3, expected, 0, false, true);
+}
+
+// Error thrown when trying to get ordered diagram from input with repeated points
+template<>
+template<>
+void object::test<14>
+()
+{
+    const char* wkt = "MULTIPOINT (0 0, 1 1, 1 1, 2 2)";
+
+    try {
+        runVoronoi(wkt, "", 0, false, true);
+        fail();
+    } catch (const geos::util::GEOSException & e) {
+    }
+}
 
 } // namespace tut

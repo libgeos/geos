@@ -22,6 +22,28 @@ struct test_capigeosvoronoidiagram_data : public capitest::utility {
     test_capigeosvoronoidiagram_data() {
         GEOSWKTWriter_setTrim(wktw_, 1);
     }
+
+
+    void check_voronoi_ordered(const char* wkt)
+    {
+        GEOSGeometry* input = GEOSGeomFromWKT(wkt);
+        GEOSGeometry* result = GEOSVoronoiDiagram(input, nullptr, 0, GEOS_VORONOI_PRESERVE_ORDER);
+
+        ensure_equals(GEOSGetNumGeometries(result), GEOSGetNumCoordinates(input));
+
+        const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input);
+        double x, y;
+        for (int i = 0; i < GEOSGetNumGeometries(result); i++) {
+        GEOSCoordSeq_getXY(seq, (unsigned int) i, &x, &y);
+        GEOSGeometry* pt = GEOSGeom_createPointFromXY(x, y);
+        const GEOSGeometry* cell = GEOSGetGeometryN(result, i);
+        ensure(GEOSContains(cell, pt));
+        GEOSGeom_destroy(pt);
+        }
+
+        GEOSGeom_destroy(result);
+        GEOSGeom_destroy(input);
+    }
 };
 
 typedef test_group<test_capigeosvoronoidiagram_data> group;
@@ -137,6 +159,16 @@ void object::test<7>
     std::string hex = "0104000020110F0000130000000101000000F06D31DFAA2E1B4131A0CD7FB94F604101010000000FE54E38B80E1B41C845F1FBB85260410101000000F06D31DFAA2E1B41CD873BECB854604101010000000FE54E38B80E1B4131A0CD7FB94F604101010000000FE54E38B80E1B410B4DECBCB94E604101010000000FE54E38B80E1B41452CADCDB85360410101000000F06D31DFAA2E1B41BAD5931AB950604101010000000FE54E38B80E1B417251B946BA4D604101010000000FE54E38B80E1B412209A9E2B85560410101000000F06D31DFAA2E1B41C845F1FBB85260410101000000F06D31DFAA2E1B41C2863DA9B95860410101000000F06D31DFAA2E1B413D7BF725B95660410101000000F06D31DFAA2E1B41E9C72241B95760410101000000F06D31DFAA2E1B4172D01602B951604101010000000FE54E38B80E1B4172D01602B951604101010000000FE54E38B80E1B41CD873BECB854604101010000000FE54E38B80E1B41BAD5931AB95060410101000000F06D31DFAA2E1B412209A9E2B85560410101000000F06D31DFAA2E1B41452CADCDB8536041";
     geom1_ = GEOSGeomFromHEX_buf((const unsigned char*)(hex.c_str()), hex.length());
     geom2_ = GEOSVoronoiDiagram(geom1_, nullptr, 0, 1);
+}
+
+// Ordered output
+template<>
+template<>
+void object::test<8>
+()
+{
+    check_voronoi_ordered("LINESTRING (1 1, 3 3, 2 2)");
+    check_voronoi_ordered("LINESTRING (1 1, 2 2, 3 3)");
 }
 
 } // namespace tut

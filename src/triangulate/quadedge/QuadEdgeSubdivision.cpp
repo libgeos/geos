@@ -545,13 +545,10 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
 
     std::unique_ptr<Geometry> cellPoly = geomFact.createPolygon(geomFact.createLinearRing(std::move(cellPts)));
 
-    /*
-    //-- attach cell centroid coordinate
-    // MD - disable this since memory handling is problematic
-    Vertex v = startQE->orig();
-    c = v.getCoordinate();
-    cellPoly->setUserData(reinterpret_cast<void*>(&c));
-    */
+    const Vertex& v = startQE->orig();
+    const Coordinate& c = v.getCoordinate();
+    cellPoly->setUserData(const_cast<Coordinate*>(&c));
+
     return cellPoly;
 }
 
@@ -579,11 +576,6 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
     std::unique_ptr<geom::Geometry> cellEdge(
         geomFact.createLineString(std::move(cellPts)));
 
-    // FIXME why is this returning a pointer to a local variable?
-    //Vertex v = startQE->orig();
-    //Coordinate c(0, 0);
-    //c = v.getCoordinate();
-    //cellEdge->setUserData(reinterpret_cast<void*>(&c));
     return cellEdge;
 }
 
@@ -618,4 +610,5 @@ QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
+
 } //namespace goes

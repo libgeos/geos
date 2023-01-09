@@ -3982,7 +3982,7 @@ extern "C" {
 
     Geometry*
     GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* env, double tolerance,
-                         int onlyEdges)
+                         int flags)
     {
         using geos::triangulate::VoronoiDiagramBuilder;
 
@@ -3990,19 +3990,20 @@ extern "C" {
             VoronoiDiagramBuilder builder;
             builder.setSites(*g1);
             builder.setTolerance(tolerance);
+            builder.setOrdered(flags & GEOS_VORONOI_PRESERVE_ORDER);
+            std::unique_ptr<Geometry> out;
             if(env) {
                 builder.setClipEnvelope(env->getEnvelopeInternal());
             }
-            if(onlyEdges) {
-                Geometry* out = builder.getDiagramEdges(*g1->getFactory()).release();
-                out->setSRID(g1->getSRID());
-                return out;
+            if(flags & GEOS_VORONOI_ONLY_EDGES) {
+                out = builder.getDiagramEdges(*g1->getFactory());
             }
             else {
-                Geometry* out = builder.getDiagram(*g1->getFactory()).release();
-                out->setSRID(g1->getSRID());
-                return out;
+                out = builder.getDiagram(*g1->getFactory());
             }
+
+            out->setSRID(g1->getSRID());
+            return out.release();
         });
     }
 
