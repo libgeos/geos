@@ -134,9 +134,6 @@ class LineStringMapBuilderFilter: public geom::GeometryComponentFilter {
 
 public:
 
-    // no more needed
-    //friend class TopologyPreservingSimplifier;
-
     /**
      * Filters linear geometries.
      *
@@ -172,16 +169,19 @@ LineStringMapBuilderFilter::LineStringMapBuilderFilter(LinesMap& nMap, std::vect
 void
 LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 {
-    TaggedLineString* taggedLine;
+    auto typ = geom->getGeometryTypeId();
+    bool preserveEndpoint = true;
 
-    if(const LineString* ls =
-                dynamic_cast<const LineString*>(geom)) {
-        std::size_t minSize = ls->isClosed() ? 4 : 2;
-        taggedLine = new TaggedLineString(ls, minSize);
-    }
-    else {
+    if (typ == GEOS_LINEARRING) {
+        preserveEndpoint = false;
+    } else if (typ != GEOS_LINESTRING) {
         return;
     }
+
+
+    auto ls = static_cast<const LineString*>(geom);
+    std::size_t minSize = ls->isClosed() ? 4 : 2;
+    TaggedLineString* taggedLine = new TaggedLineString(ls, minSize, preserveEndpoint);
 
     // Duplicated Geometry pointers shouldn't happen
     if(! linestringMap.insert(std::make_pair(geom, taggedLine)).second) {

@@ -238,7 +238,7 @@ void object::test<10>
     std::string wkt("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))");
     GeomPtr g(wktreader.read(wkt));
 
-    std::string wkt_exp("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 5))");
+    std::string wkt_exp("POLYGON ((0 0, 5 5, 5 0, 0 0))");
     GeomPtr exp(wktreader.read(wkt_exp));
 
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
@@ -355,6 +355,29 @@ void object::test<16>
     ensure("Simplified geometry is invalid!", simp->isValid());
     ensure_equals(wktwriter.write(simp.get()),
                   "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0))");
+}
+
+// Test that start point of a closed LineString is not changed
+template<>
+template<>
+void object::test<17>
+()
+{
+     auto g = wktreader.read("LINESTRING (1 0, 2 0, 2 2, 0 2, 0 0, 1 0)");
+     auto simplified = TopologyPreservingSimplifier::simplify(g.get(), 0);
+     ensure_equals_geometry(simplified.get(), g.get());
+}
+
+// Test that removing starting point of ring does not break topology
+template<>
+template<>
+void object::test<18>
+()
+{
+    auto g = wktreader.read("POLYGON ((0 0, 5 2.05, 10 0, 10 10, 0 10, 0 0),  (5 2.1, 6 2, 6 4, 4 4, 4 2, 5 2.1))");
+    auto simplified = TopologyPreservingSimplifier::simplify(g.get(), 0.1);
+
+    ensure_equals_geometry(simplified.get(), g.get());
 }
 
 } // namespace tut

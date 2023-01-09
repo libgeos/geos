@@ -44,10 +44,12 @@ namespace simplify { // geos::simplify
 
 /*public*/
 TaggedLineString::TaggedLineString(const geom::LineString* nParentLine,
-                                   std::size_t nMinimumSize)
+                                   std::size_t nMinimumSize,
+                                   bool bPreserveEndpoint)
     :
     parentLine(nParentLine),
-    minimumSize(nMinimumSize)
+    minimumSize(nMinimumSize),
+    preserveEndpoint(bPreserveEndpoint)
 {
     init();
 }
@@ -109,6 +111,13 @@ std::size_t
 TaggedLineString::getMinimumSize() const
 {
     return minimumSize;
+}
+
+/*public*/
+bool
+TaggedLineString::getPreserveEndpoint() const
+{
+    return preserveEndpoint;
 }
 
 /*public*/
@@ -199,7 +208,6 @@ TaggedLineString::getSegment(std::size_t i) const
 std::vector<TaggedLineSegment*>&
 TaggedLineString::getSegments()
 {
-    assert(0);
     return segs;
 }
 
@@ -208,6 +216,13 @@ const std::vector<TaggedLineSegment*>&
 TaggedLineString::getSegments() const
 {
     return segs;
+}
+
+/*public*/
+const std::vector<TaggedLineSegment*>&
+TaggedLineString::getResultSegments() const
+{
+    return resultSegs;
 }
 
 /*public*/
@@ -241,6 +256,17 @@ TaggedLineString::addToResult(std::unique_ptr<TaggedLineSegment> seg)
          << " seg " << seg.get() << " to result"
          << std::endl;
 #endif
+}
+
+void
+TaggedLineString::removeRingEndpoint()
+{
+    auto* firstSeg = resultSegs.front();
+    auto* lastSeg = resultSegs.back();
+
+    firstSeg->p0 = lastSeg->p0;
+    delete lastSeg;
+    resultSegs.pop_back();
 }
 
 } // namespace geos::simplify
