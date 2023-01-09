@@ -32,6 +32,7 @@ xxxx-xx-xx
   - Use more robust Delaunay Triangulation frame size heuristic (GH-728, Martin Davis)
   - DiscreteFrechetDistance: Fix crash with empty inputs (GH-751, Dan Baston)
   - GEOSSimplify / DouglasPeuckerSimplifier: Allow ring origin to be removed (GH-773, Dan Baston)
+  - GEOSTopologyPreserveSimplify / TopologyPreservingSimplifier: Allow ring origin to be removed (GH-784, Dan Baston)
   - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection (GH-774, Dan Baston)
 
 
