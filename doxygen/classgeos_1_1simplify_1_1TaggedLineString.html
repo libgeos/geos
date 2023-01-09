@@ -74,12 +74,15 @@ typedef std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateS
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6d32f2bc2597282731fe335afb47f901"><td class="memItemLeft" align="right" valign="top"><a id="a6d32f2bc2597282731fe335afb47f901"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TaggedLineString</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *nParentLine, std::size_t minimumSize=2)</td></tr>
-<tr class="separator:a6d32f2bc2597282731fe335afb47f901"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4ea7ecf14edda3f70e65c11ddf74ce"><td class="memItemLeft" align="right" valign="top"><a id="a1b4ea7ecf14edda3f70e65c11ddf74ce"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TaggedLineString</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *nParentLine, std::size_t minimumSize, bool preserveEndpoint)</td></tr>
+<tr class="separator:a1b4ea7ecf14edda3f70e65c11ddf74ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5146bc8a3b2c94ec3238c9324f5d9da"><td class="memItemLeft" align="right" valign="top"><a id="af5146bc8a3b2c94ec3238c9324f5d9da"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getMinimumSize</b> () const</td></tr>
 <tr class="separator:af5146bc8a3b2c94ec3238c9324f5d9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdeb959ce5cd637315fadcfcd6326e36"><td class="memItemLeft" align="right" valign="top"><a id="acdeb959ce5cd637315fadcfcd6326e36"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getPreserveEndpoint</b> () const</td></tr>
+<tr class="separator:acdeb959ce5cd637315fadcfcd6326e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3d1e363b58c59bed5ed81f16917a8a2"><td class="memItemLeft" align="right" valign="top"><a id="af3d1e363b58c59bed5ed81f16917a8a2"></a>
 const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getParent</b> () const</td></tr>
 <tr class="separator:af3d1e363b58c59bed5ed81f16917a8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,9 +107,15 @@ std::vector&lt; <a class="el" href="classgeos_1_1simplify_1_1TaggedLineSegment.h
 <tr class="memitem:aa2763a2289ae78a1ba6f1f953487d159"><td class="memItemLeft" align="right" valign="top"><a id="aa2763a2289ae78a1ba6f1f953487d159"></a>
 const std::vector&lt; <a class="el" href="classgeos_1_1simplify_1_1TaggedLineSegment.html">TaggedLineSegment</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSegments</b> () const</td></tr>
 <tr class="separator:aa2763a2289ae78a1ba6f1f953487d159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbd3653c4c1fc588b2027e406247aeaf"><td class="memItemLeft" align="right" valign="top"><a id="adbd3653c4c1fc588b2027e406247aeaf"></a>
+const std::vector&lt; <a class="el" href="classgeos_1_1simplify_1_1TaggedLineSegment.html">TaggedLineSegment</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getResultSegments</b> () const</td></tr>
+<tr class="separator:adbd3653c4c1fc588b2027e406247aeaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a801c099ca6cc9921903e3f24e5de8534"><td class="memItemLeft" align="right" valign="top"><a id="a801c099ca6cc9921903e3f24e5de8534"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addToResult</b> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1simplify_1_1TaggedLineSegment.html">TaggedLineSegment</a> &gt; seg)</td></tr>
 <tr class="separator:a801c099ca6cc9921903e3f24e5de8534"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab290e88a74d17db3b8420cdb3da5f5eb"><td class="memItemLeft" align="right" valign="top"><a id="ab290e88a74d17db3b8420cdb3da5f5eb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRingEndpoint</b> ()</td></tr>
+<tr class="separator:ab290e88a74d17db3b8420cdb3da5f5eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5060d1c7059ffaffbab74aaf4444e66"><td class="memItemLeft" align="right" valign="top"><a id="ac5060d1c7059ffaffbab74aaf4444e66"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>asLineString</b> () const</td></tr>
 <tr class="separator:ac5060d1c7059ffaffbab74aaf4444e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
