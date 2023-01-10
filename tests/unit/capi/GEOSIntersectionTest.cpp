@@ -131,6 +131,20 @@ void object::test<6>
     // No memory leaked
 }
 
+// https://github.com/libgeos/geos/pull/790
+template<>
+template<>
+void object::test<7>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON ((1 0, 1 1, 0 1, 0 0, 1 0))");
+    geom2_ = GEOSGeomFromWKT("POLYGON ((1 2, 1 3, 0 3, 0 2, 1 2))");
+
+    result_ = GEOSIntersection(geom1_, geom2_);
+
+    ensure(!std::fetestexcept(FE_INVALID));
+}
+
 
 } // namespace tut
 
