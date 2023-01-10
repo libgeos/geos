@@ -44,7 +44,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classgeos_1_1operation_1_1overlay_1_1snap_1_1SnapOverlayOp-members.html">List of all members</a>  </div>
@@ -58,26 +57,20 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="SnapOverlayOp_8h_source.html">SnapOverlayOp.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a5738c564f72a387f18e2bf38380eb197"><td class="memItemLeft" align="right" valign="top"><a id="a5738c564f72a387f18e2bf38380eb197"></a>
-typedef std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GeomPtr</b></td></tr>
-<tr class="separator:a5738c564f72a387f18e2bf38380eb197"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab2159dd46cb116fbdc5cc213f1d52ab8"><td class="memItemLeft" align="right" valign="top"><a id="ab2159dd46cb116fbdc5cc213f1d52ab8"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SnapOverlayOp</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g1, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g2)</td></tr>
 <tr class="separator:ab2159dd46cb116fbdc5cc213f1d52ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae51e2f9a67cc76721434039fcda8249"><td class="memItemLeft" align="right" valign="top"><a id="aae51e2f9a67cc76721434039fcda8249"></a>
-GeomPtr&#160;</td><td class="memItemRight" valign="bottom"><b>getResultGeometry</b> (<a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayOp.html#a1f2552b975ce852f0b192dc00997b131">OverlayOp::OpCode</a> opCode)</td></tr>
-<tr class="separator:aae51e2f9a67cc76721434039fcda8249"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af34e809a143f54a5125dd3dcecb2ca49"><td class="memItemLeft" align="right" valign="top"><a id="af34e809a143f54a5125dd3dcecb2ca49"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getResultGeometry</b> (int opCode)</td></tr>
+<tr class="separator:af34e809a143f54a5125dd3dcecb2ca49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d27d5781dcf6129304fd55ee3b5316d"><td class="memItemLeft" align="right" valign="top"><a id="a2d27d5781dcf6129304fd55ee3b5316d"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>overlayOp</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g1, <a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayOp.html#a1f2552b975ce852f0b192dc00997b131">OverlayOp::OpCode</a> opCode)</td></tr>
-<tr class="separator:a2d27d5781dcf6129304fd55ee3b5316d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc406bb1121ad597254acf0b374a134d"><td class="memItemLeft" align="right" valign="top"><a id="abc406bb1121ad597254acf0b374a134d"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>overlayOp</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g1, int opCode)</td></tr>
+<tr class="separator:abc406bb1121ad597254acf0b374a134d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae14a525995b98a201f469bfb5c383a95"><td class="memItemLeft" align="right" valign="top"><a id="ae14a525995b98a201f469bfb5c383a95"></a>
 static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersection</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g1)</td></tr>
 <tr class="separator:ae14a525995b98a201f469bfb5c383a95"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -62,25 +62,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a866c00a386a14fb828e4f7b49a4c4e26"><td class="memItemLeft" align="right" valign="top"><a id="a866c00a386a14fb828e4f7b49a4c4e26"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>OverlayResultValidator</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom1, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;result)</td></tr>
 <tr class="separator:a866c00a386a14fb828e4f7b49a4c4e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a40d2149f43daa808da8e285b6e559f"><td class="memItemLeft" align="right" valign="top"><a id="a4a40d2149f43daa808da8e285b6e559f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (<a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayOp.html#a1f2552b975ce852f0b192dc00997b131">OverlayOp::OpCode</a> opCode)</td></tr>
-<tr class="separator:a4a40d2149f43daa808da8e285b6e559f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a717eaa51f8d57ad2c75088f1a2e45a54"><td class="memItemLeft" align="right" valign="top"><a id="a717eaa51f8d57ad2c75088f1a2e45a54"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (int opCode)</td></tr>
+<tr class="separator:a717eaa51f8d57ad2c75088f1a2e45a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ac4216dfffd2a920eb36b3c555f696b"><td class="memItemLeft" align="right" valign="top"><a id="a9ac4216dfffd2a920eb36b3c555f696b"></a>
 <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvalidLocation</b> ()</td></tr>
 <tr class="separator:a9ac4216dfffd2a920eb36b3c555f696b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ae2bb9a60c0c0333bf2f63d3fb27e0d8c"><td class="memItemLeft" align="right" valign="top"><a id="ae2bb9a60c0c0333bf2f63d3fb27e0d8c"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom1, <a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayOp.html#a1f2552b975ce852f0b192dc00997b131">OverlayOp::OpCode</a> opCode, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;result)</td></tr>
-<tr class="separator:ae2bb9a60c0c0333bf2f63d3fb27e0d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bdc073fd6da2759be1b50bdfc126c1a"><td class="memItemLeft" align="right" valign="top"><a id="a1bdc073fd6da2759be1b50bdfc126c1a"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom1, int opCode, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;result)</td></tr>
+<tr class="separator:a1bdc073fd6da2759be1b50bdfc126c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Validates that the result of an overlay operation is geometrically correct within a determined tolerance. </p>
 <p>Uses fuzzy point location to find points which are definitely in either the interior or exterior of the result geometry, and compares these results with the expected ones.</p>
 <p>This algorithm is only useful where the inputs are polygonal.</p>
 <p>This is a heuristic test, and may return false positive results (I.e. it may fail to detect an invalid result.) It should never return a false negative result, however (I.e. it should never report a valid result as invalid.)</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayOp.html" title="Computes the geometric overlay of two Geometry.">OverlayOp</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>OverlayOp </dd></dl>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="OverlayResultValidator_8h_source.html">OverlayResultValidator.h</a></li>
 </ul>
