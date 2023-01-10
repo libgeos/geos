@@ -304,8 +304,47 @@ void object::test<11>
                   std::string("LINESTRING (1 2, 3 4)"));
 }
 
+// Test writing 3D/4D EMPTY geometries
+// https://trac.osgeo.org/geos/ticket/1129
+template<>
+template<>
+void object::test<12>
+()
+{
+    wktwriter.setOutputDimension(4);
 
+    CoordinateSequence coords_xyz(0u, true, false);
+    CoordinateSequence coords_xym(0u, false, true);
+    CoordinateSequence coords_xyzm(0u, true, true);
 
+    auto pt_xyz = gf->createPoint(coords_xyz.clone());
+    auto pt_xym = gf->createPoint(coords_xym.clone());
+    auto pt_xyzm = gf->createPoint(coords_xyzm.clone());
+
+    ensure_equals(wktwriter.write(*pt_xyz), std::string("POINT Z EMPTY"));
+    ensure_equals(wktwriter.write(*pt_xym), std::string("POINT M EMPTY"));
+    ensure_equals(wktwriter.write(*pt_xyzm), std::string("POINT ZM EMPTY"));
+
+    auto ls_xyz = gf->createLineString(coords_xyz.clone());
+    auto ls_xym = gf->createLineString(coords_xym.clone());
+    auto ls_xyzm = gf->createLineString(coords_xyzm.clone());
+
+    ensure_equals(wktwriter.write(*ls_xyz), std::string("LINESTRING Z EMPTY"));
+    ensure_equals(wktwriter.write(*ls_xym), std::string("LINESTRING M EMPTY"));
+    ensure_equals(wktwriter.write(*ls_xyzm), std::string("LINESTRING ZM EMPTY"));
+
+    auto lr_xyz = gf->createLinearRing(coords_xyz.clone());
+    auto lr_xym = gf->createLinearRing(coords_xym.clone());
+    auto lr_xyzm = gf->createLinearRing(coords_xyzm.clone());
+
+    auto poly_xyz = gf->createPolygon(std::move(lr_xyz));
+    auto poly_xym = gf->createPolygon(std::move(lr_xym));
+    auto poly_xyzm = gf->createPolygon(std::move(lr_xyzm));
+
+    ensure_equals(wktwriter.write(*poly_xyz), std::string("POLYGON Z EMPTY"));
+    ensure_equals(wktwriter.write(*poly_xym), std::string("POLYGON M EMPTY"));
+    ensure_equals(wktwriter.write(*poly_xyzm), std::string("POLYGON ZM EMPTY"));
+}
 
 } // namespace tut
 
