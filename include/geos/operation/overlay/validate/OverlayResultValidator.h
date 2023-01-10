@@ -19,7 +19,6 @@
 #pragma once
 
 #include <geos/export.h>
-#include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
 #include <geos/operation/overlay/validate/FuzzyPointLocator.h> // composition
 #include <geos/geom/Location.h> // for Location::Value type
 
@@ -67,7 +66,7 @@ public:
     static bool isValid(
         const geom::Geometry& geom0,
         const geom::Geometry& geom1,
-        OverlayOp::OpCode opCode,
+        int opCode,
         const geom::Geometry& result);
 
     OverlayResultValidator(
@@ -75,7 +74,7 @@ public:
         const geom::Geometry& geom1,
         const geom::Geometry& result);
 
-    bool isValid(OverlayOp::OpCode opCode);
+    bool isValid(int opCode);
 
     geom::Coordinate&
     getInvalidLocation()
@@ -107,12 +106,11 @@ private:
 
     void addVertices(const geom::Geometry& g);
 
-    bool testValid(OverlayOp::OpCode overlayOp);
+    bool testValid(int overlayOp);
 
-    bool testValid(OverlayOp::OpCode overlayOp, const geom::Coordinate& pt);
+    bool testValid(int overlayOp, const geom::Coordinate& pt);
 
-    bool isValidResult(OverlayOp::OpCode overlayOp,
-                       std::vector<geom::Location>& location);
+    bool isValidResult(int overlayOp, std::vector<geom::Location>& location);
 
     static double computeBoundaryDistanceTolerance(
         const geom::Geometry& g0, const geom::Geometry& g1);

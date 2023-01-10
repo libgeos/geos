@@ -43,18 +43,16 @@ SnapOverlayOp::computeSnapTolerance()
 {
     snapTolerance = GeometrySnapper::computeOverlaySnapTolerance(geom0,
                     geom1);
-
-    // std::size_t << "Snap tol = " <<  snapTolerance << std::endl;
 }
 
 /* public */
 std::unique_ptr<Geometry>
-SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
+SnapOverlayOp::getResultGeometry(int opCode)
 {
     geom::GeomPtrPair prepGeom;
     snap(prepGeom);
-    GeomPtr result(OverlayOp::overlayOp(prepGeom.first.get(),
-                                        prepGeom.second.get(), opCode));
+    auto result = overlayng::OverlayNG::overlay(prepGeom.first.get(), prepGeom.second.get(), opCode);
+
     prepareResult(*result);
     return result;
 }
@@ -72,13 +70,6 @@ SnapOverlayOp::snap(geom::GeomPtrPair& snapGeom)
     // MD - may want to do this at some point, but it adds cycles
 //    checkValid(snapGeom[0]);
 //    checkValid(snapGeom[1]);
-
-    /*
-    System.out.println("Snapped geoms: ");
-    System.out.println(snapGeom[0]);
-    System.out.println(snapGeom[1]);
-    */
-
 }
 
 /* private */

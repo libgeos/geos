@@ -22,7 +22,7 @@
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/valid/IsValidOp.h>
 
-#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/geom/HeuristicOverlay.h>
@@ -50,7 +50,7 @@
 #endif
 
 using namespace geos::geom;
-using namespace geos::operation::overlay;
+using geos::operation::overlayng::OverlayNG;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -60,19 +60,19 @@ namespace valid { // geos.operation.valid
 static std::unique_ptr<geom::Geometry>
 makeValidSymDifference(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return HeuristicOverlay(g0, g1, OverlayOp::opSYMDIFFERENCE);
+    return HeuristicOverlay(g0, g1, OverlayNG::SYMDIFFERENCE);
 }
 
 static std::unique_ptr<geom::Geometry>
 makeValidDifference(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return HeuristicOverlay(g0, g1, OverlayOp::opDIFFERENCE);
+    return HeuristicOverlay(g0, g1, OverlayNG::DIFFERENCE);
 }
 
 static std::unique_ptr<geom::Geometry>
 makeValidUnion(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    return HeuristicOverlay(g0, g1, OverlayOp::opUNION);
+    return HeuristicOverlay(g0, g1, OverlayNG::UNION);
 }
 
 /*

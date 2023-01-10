@@ -20,6 +20,7 @@
 #include <geos/operation/overlay/validate/FuzzyPointLocator.h>
 #include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
+#include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
@@ -45,7 +46,6 @@
 
 
 using namespace geos::geom;
-using namespace geos::geomgraph;
 using namespace geos::algorithm;
 
 namespace geos {
@@ -57,7 +57,7 @@ namespace validate { // geos.operation.overlay.validate
 /* static public */
 bool
 OverlayResultValidator::isValid(const Geometry& geom0, const Geometry& geom1,
-                                OverlayOp::OpCode opCode,
+                                int opCode,
                                 const Geometry& result)
 {
     OverlayResultValidator validator(geom0, geom1, result);
@@ -85,7 +85,7 @@ OverlayResultValidator::OverlayResultValidator(
 
 /*public*/
 bool
-OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
+OverlayResultValidator::isValid(int overlayOp)
 {
 
     addTestPts(g0);
@@ -125,7 +125,7 @@ OverlayResultValidator::addVertices(const Geometry& g)
 
 /*private*/
 bool
-OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp)
+OverlayResultValidator::testValid(int overlayOp)
 {
     for(std::size_t i = 0, n = testCoords.size(); i < n; ++i) {
         Coordinate& pt = testCoords[i];
@@ -139,7 +139,7 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp)
 
 /*private*/
 bool
-OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
+OverlayResultValidator::testValid(int overlayOp,
                                   const Coordinate& pt)
 {
     // TODO use std::array<geom::Location, 3> ?
@@ -173,11 +173,11 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
 
 /* private */
 bool
-OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
+OverlayResultValidator::isValidResult(int overlayOp,
                                       std::vector<geom::Location>& location)
 {
-    bool expectedInterior = OverlayOp::isResultOfOp(location[0],
-                            location[1], overlayOp);
+    bool expectedInterior = overlayng::OverlayNG::isResultOfOp(overlayOp, location[0],
+                            location[1]);
 
     bool resultInInterior = (location[2] == Location::INTERIOR);
 
