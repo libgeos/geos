@@ -35,6 +35,9 @@ xxxx-xx-xx
   - GEOSSimplify / DouglasPeuckerSimplifier: Allow ring origin to be removed (GH-773, Dan Baston)
   - GEOSTopologyPreserveSimplify / TopologyPreservingSimplifier: Allow ring origin to be removed (GH-784, Dan Baston)
   - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection (GH-774, Dan Baston)
+  - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
+    (GH-791, Joris Van den Bossche & Dan Baston)
+  - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
 
 
 ## Changes in 3.11.0
