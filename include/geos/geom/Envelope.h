@@ -582,15 +582,12 @@ public:
     */
     bool disjoint(const Envelope& other) const
     {
-        return disjoint(&other);
+        return !intersects(other);
     }
 
     bool disjoint(const Envelope* other) const
     {
-        return !(std::islessequal(other->minx, maxx) ||
-                 std::isgreaterequal(other->maxx, minx) ||
-                 std::islessequal(other->miny, maxy) ||
-                 std::isgreaterequal(other->maxy,  miny));
+        return !intersects(other);
     }
 
     /** \brief
