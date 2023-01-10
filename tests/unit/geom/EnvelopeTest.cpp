@@ -9,6 +9,7 @@
 
 #include <array>
 #include <cfenv>
+#include <unordered_set>
 
 namespace tut {
 //
@@ -635,6 +636,20 @@ void object::test<19>
     ensure_equals(e, Envelope(0, 6, 1, 7));
 
     ensure_no_fp_except();
+}
+
+// Test of HashCode
+template<>
+template<>
+void object::test<20>
+()
+{
+    std::unordered_set<Envelope, Envelope::HashCode> set;
+    set.emplace(0, 1, 0, 1);
+    set.emplace(1, 0, 1, 0);
+    set.emplace(2, 0, 2, 1);
+
+    ensure_equals(set.size(), 2u);
 }
 
 } // namespace tut

@@ -727,7 +727,26 @@ public:
         return dx*dx + dy*dy;
     }
 
-    std::size_t hashCode() const;
+    std::size_t hashCode() const
+    {
+        auto hash = std::hash<double>{};
+
+        //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+        std::size_t result = 17;
+        result = 37 * result + hash(minx);
+        result = 37 * result + hash(maxx);
+        result = 37 * result + hash(miny);
+        result = 37 * result + hash(maxy);
+        return result;
+    }
+
+    struct GEOS_DLL HashCode
+    {
+        std::size_t operator()(const Envelope& e) const
+        {
+            return e.hashCode();
+        };
+    };
 
     /// Checks if two Envelopes are equal (2D only check)
     // GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);

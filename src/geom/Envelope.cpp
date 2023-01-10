@@ -143,22 +143,6 @@ Envelope::toString() const
     return s.str();
 }
 
-
-/*public*/
-size_t
-Envelope::hashCode() const
-{
-    auto hash = std::hash<double>{};
-
-    //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-    std::size_t result = 17;
-    result = 37 * result + hash(minx);
-    result = 37 * result + hash(maxx);
-    result = 37 * result + hash(miny);
-    result = 37 * result + hash(maxy);
-    return result;
-}
-
 /*public static*/
 std::vector<std::string>
 Envelope::split(const std::string& str, const std::string& delimiters)
