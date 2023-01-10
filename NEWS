@@ -1,6 +1,6 @@
 
 Changes in 3.10.4
-2022-xx-xx
+2023-xx-xx
 
 - Fixes/Improvements:
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
@@ -12,6 +12,9 @@ Changes in 3.10.4
   - Fix crash in GEOSIntersects with empty point inputs (#673, Dan Baston)
   - Fix RelateOp for empty geometry and closed linear geometry (#1096, Dan Baston)
   - Return 2D result on 2D input to GeometryPrecisionReducer (#1137, Dan Baston)
+  - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
+    (GH-791, Joris Van den Bossche & Dan Baston)
+  - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
 
 
 Changes in 3.10.3

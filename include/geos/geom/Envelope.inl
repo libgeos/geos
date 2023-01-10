@@ -94,16 +94,16 @@ Envelope::expandToInclude(const Envelope* other)
         maxy = other->maxy;
     }
     else {
-        if(other->minx < minx) {
+        if(std::isless(other->minx, minx)) {
             minx = other->minx;
         }
-        if(other->maxx > maxx) {
+        if(std::isgreater(other->maxx, maxx)) {
             maxx = other->maxx;
         }
-        if(other->miny < miny) {
+        if(std::isless(other->miny, miny)) {
             miny = other->miny;
         }
-        if(other->maxy > maxy) {
+        if(std::isgreater(other->maxy, maxy)) {
             maxy = other->maxy;
         }
     }
@@ -234,8 +234,8 @@ Envelope::init(const Coordinate& p)
 INLINE bool
 Envelope::intersects(const Coordinate& other) const
 {
-    return (other.x <= maxx && other.x >= minx &&
-            other.y <= maxy && other.y >= miny);
+    return (std::islessequal(other.x, maxx) && std::isgreaterequal(other.x, minx) &&
+            std::islessequal(other.y, maxy) && std::isgreaterequal(other.y,  miny));
 }
 
 /*public*/
@@ -256,17 +256,20 @@ Envelope::isNull(void) const
 INLINE bool
 Envelope::intersects(const Envelope* other) const
 {
-    return other->minx <= maxx &&
-           other->maxx >= minx &&
-           other->miny <= maxy &&
-           other->maxy >= miny;
+    return std::islessequal(other->minx, maxx) &&
+           std::isgreaterequal(other->maxx, minx) &&
+           std::islessequal(other->miny, maxy) &&
+           std::isgreaterequal(other->maxy, miny);
 }
 
 /*public*/
 INLINE bool
 Envelope::intersects(double x, double y) const
 {
-    return (x <= maxx && x >= minx && y <= maxy && y >= miny);
+    return std::islessequal(x, maxx) &&
+        std::isgreaterequal(x, minx) &&
+        std::islessequal(y, maxy) &&
+        std::isgreaterequal(y, miny);
 }
 
 /*public*/
@@ -280,10 +283,7 @@ Envelope::disjoint(const Envelope& other) const
 INLINE bool
 Envelope::disjoint(const Envelope* other) const
 {
-    return !(other->minx <= maxx ||
-             other->maxx >= minx ||
-             other->miny <= maxy ||
-             other->maxy >= miny);
+    return !intersects(other);
 }
 
 
