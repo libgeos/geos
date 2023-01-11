@@ -35,8 +35,7 @@ namespace snapround { // geos.noding.snapround
 HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
     :
     pm(p_pm),
-    scaleFactor(p_pm->getScale()),
-    index(new KdTree())
+    scaleFactor(p_pm->getScale())
 {
 }
 
@@ -72,8 +71,9 @@ HotPixelIndex::add(const Coordinate& p)
     // Pick up a pointer to the most recently added
     // HotPixel.
     hp = &(hotPixelQue.back());
+    hotPixelMap[hp->getCoordinate()] = hp;
 
-    index->insert(hp->getCoordinate(), hp);
+    index.insert(Envelope(hp->getCoordinate()), hp);
     return hp;
 }
 
@@ -140,11 +140,18 @@ HotPixelIndex::addNodes(const std::vector<geom::Coordinate>& pts)
 HotPixel*
 HotPixelIndex::find(const geom::Coordinate& pixelPt)
 {
-    index::kdtree::KdNode *kdNode = index->query(pixelPt);
-    if (kdNode == nullptr) {
+    auto it = hotPixelMap.find(pixelPt);
+    if (it != hotPixelMap.end()) {
+        return it->second;
+    } else {
         return nullptr;
     }
-    return (HotPixel*)(kdNode->getData());
+    //HotPixel* ret = nullptr;
+    //index.query(Envelope(pixelPt, pixelPt), [&ret](HotPixel* hit) {
+    //    ret = hit;
+    //    return false;
+    //});
+    //return ret;
 }
 
 /*private*/
@@ -156,15 +163,6 @@ HotPixelIndex::round(const Coordinate& pt)
     return p2;
 }
 
-
-/*public*/
-void
-HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::kdtree::KdNodeVisitor& visitor)
-{
-    Envelope queryEnv(p0, p1);
-    queryEnv.expandBy(1.0 / scaleFactor);
-    index->query(queryEnv, visitor);
-}
 
 
 } // namespace geos.noding.snapround

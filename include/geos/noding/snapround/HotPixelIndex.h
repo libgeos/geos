@@ -24,6 +24,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/index/kdtree/KdTree.h>
 #include <geos/index/kdtree/KdNodeVisitor.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
 
 #include <array>
 #include <map>
@@ -63,8 +64,10 @@ private:
     /* members */
     const geom::PrecisionModel* pm;
     double scaleFactor;
-    std::unique_ptr<geos::index::kdtree::KdTree> index;
+    //std::unique_ptr<geos::index::kdtree::KdTree> index;
+    index::strtree::TemplateSTRtree<HotPixel*> index;
     std::deque<HotPixel> hotPixelQue;
+    std::map<geom::Coordinate, HotPixel*> hotPixelMap;
 
     /* methods */
     geom::Coordinate round(const geom::Coordinate& c);
@@ -84,8 +87,15 @@ public:
     * The visitor must determine whether each hot pixel actually intersects
     * the segment.
     */
+    template<typename Visitor>
     void query(const geom::Coordinate& p0, const geom::Coordinate& p1,
-               index::kdtree::KdNodeVisitor& visitor);
+               Visitor&& visitor) {
+        geom::Envelope queryEnv(p0, p1);
+        queryEnv.expandBy(1.0 / scaleFactor);
+
+        index.query(queryEnv, visitor);
+    }
+
 
 };
 

@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include <stack>
 
 using namespace geos::geom;
