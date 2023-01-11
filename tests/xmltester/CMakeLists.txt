@@ -10,9 +10,6 @@
 # See the COPYING file for more information.
 ################################################################################
 
-add_executable(test_simplewkttester SimpleWKTTester.cpp)
-target_link_libraries(test_simplewkttester PRIVATE geos)
-
 # Setup tinyxml as a separate library so we can avoid picking up GEOS compile flags
 add_library(tinyxml2 STATIC
         tinyxml2/tinyxml2.h
