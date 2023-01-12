@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/Intersection.h>
+#include <geos/algorithm/Interpolate.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 
@@ -309,7 +310,7 @@ private:
      * We store real Coordinates here because
      * we must compute the Z of intersection point.
      */
-    geom::Coordinate intPt[2];
+    geom::CoordinateXYZM intPt[2];
 
     /**
      * The indexes of the endpoints of the intersection lines, in order along
@@ -420,50 +421,18 @@ private:
                                             const geom::Coordinate& q1,
                                             const geom::Coordinate& q2);
 
-    static double zGet(
-        const geom::Coordinate& p,
-        const geom::Coordinate& q)
-    {
-        double z = p.z;
-        if ( std::isnan(z) ) {
-            z = q.z; // may be NaN
-        }
-        return z;
-    };
 
-    static double zGetOrInterpolate(
-        const geom::Coordinate& p,
-        const geom::Coordinate& p1,
-        const geom::Coordinate& p2)
+    template<typename C1, typename C2>
+    static geom::CoordinateXYZM zmGetOrInterpolateCopy(
+        const C1& p,
+        const C2& p1,
+        const C2& p2)
     {
-        double z = p.z;
-        if (! std::isnan(z) ) return z;
-        return zInterpolate(p, p1, p2); // may be NaN
-    };
-
-    static geom::Coordinate zGetOrInterpolateCopy(
-        const geom::Coordinate& p,
-        const geom::Coordinate& p1,
-        const geom::Coordinate& p2)
-    {
-        geom::Coordinate pCopy = p;
-        double z = zGetOrInterpolate(p, p1, p2);
-        pCopy.z = z;
+        geom::CoordinateXYZM pCopy(p);
+        pCopy.z = Interpolate::zGetOrInterpolate(p, p1, p2);
+        pCopy.m = Interpolate::mGetOrInterpolate(p, p1, p2);
         return pCopy;
-    };
-
-    /// \brief
-    /// Return a Z value being the interpolation of Z from p0 to p1 at
-    /// the given point p
-    static double zInterpolate(const geom::Coordinate& p,
-                               const geom::Coordinate& p0,
-                               const geom::Coordinate& p1);
-
-    static double zInterpolate(const geom::Coordinate& p,
-                               const geom::Coordinate& p1,
-                               const geom::Coordinate& p2,
-                               const geom::Coordinate& q1,
-                               const geom::Coordinate& q2);
+    }
 
 };
 
