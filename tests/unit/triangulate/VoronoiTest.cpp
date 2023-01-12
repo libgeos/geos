@@ -326,4 +326,17 @@ void object::test<14>
     }
 }
 
+// empty input
+// https://github.com/libgeos/geos/issues/795
+template<>
+template<>
+void object::test<15>
+()
+{
+    const char* wkt = "POLYGON EMPTY";
+    const char* expected = "GEOMETRYCOLLECTION EMPTY";
+
+    runVoronoi(wkt, expected, 0, false, false);
+}
+
 } // namespace tut

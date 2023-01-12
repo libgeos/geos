@@ -129,19 +129,22 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 {
     create();
 
-    auto polys = subdiv->getVoronoiCellPolygons(geomFact);
+    std::unique_ptr<GeometryCollection> ret;
+    if (subdiv) {
+        auto polys = subdiv->getVoronoiCellPolygons(geomFact);
 
-    if (isOrdered) {
-        reorderCellsToInput(polys);
+        if (isOrdered) {
+            reorderCellsToInput(polys);
+        }
+
+        for (auto& p : polys) {
+            // Don't let references to Vertex objects
+            // owned by the QuadEdgeSubdivision escape
+            p->setUserData(nullptr);
+        }
+
+        ret = clipGeometryCollection(polys, diagramEnv);
     }
-
-    for (auto& p : polys) {
-        // Don't let references to Vertex objects
-        // owned by the QuadEdgeSubdivision escape
-        p->setUserData(nullptr);
-    }
-
-    auto ret = clipGeometryCollection(polys, diagramEnv);
 
     if (ret == nullptr) {
         return std::unique_ptr<geom::GeometryCollection>(geomFact.createGeometryCollection());
