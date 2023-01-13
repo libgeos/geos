@@ -330,6 +330,10 @@ public:
         : Coordinate(c)
         , m(DEFAULT_M) {}
 
+    explicit CoordinateXYZM(const CoordinateXYM& c)
+        : Coordinate(c)
+        , m(c.m) {}
+
     explicit CoordinateXYZM(const Coordinate& c)
         : Coordinate(c)
         , m(DEFAULT_M) {}

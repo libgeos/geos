@@ -373,6 +373,23 @@ void object::test<14>
     ensure_equals("XYZM", sizeof(CoordinateXYZM), 32u);
 }
 
+// Test 4D initialization from XYM
+template<>
+template<>
+void object::test<15>
+()
+{
+    double default_z = Coordinate().z;
+
+    CoordinateXYM xym(1,2,3);
+    CoordinateXYZM xyzm1(xym);
+    CoordinateXYZM xyzm2;
+    xyzm2 = xym;
+
+    ensure_equals_xyzm(xyzm1, {1, 2, default_z, 3});
+    ensure_equals_xyzm(xyzm2, {1, 2, default_z, 3});
+}
+
 
 } // namespace tut
 
