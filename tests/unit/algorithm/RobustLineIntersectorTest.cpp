@@ -60,10 +60,10 @@ template<>
 void object::test<1>
 ()
 {
-    Coordinate p1(10, 10);
-    Coordinate p2(20, 20);
-    Coordinate q1(20, 10);
-    Coordinate q2(10, 20);
+    CoordinateXY p1(10, 10);
+    CoordinateXY p2(20, 20);
+    CoordinateXY q1(20, 10);
+    CoordinateXY q2(10, 20);
     Coordinate x(15, 15);
     i.computeIntersection(p1, p2, q1, q2);
 

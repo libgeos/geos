@@ -27,14 +27,14 @@ auto nTestsRange = benchmark::CreateDenseRange(1, 20, 1);
 
 template<class Locator>
 static void BM_PointInAreaLocator(benchmark::State& state) {
-    constexpr std::size_t seed = 12345;
+    std::default_random_engine eng(12345);
 
     auto nRingPts = static_cast<std::size_t>(state.range(0));
     auto nTestPts = static_cast<std::size_t>(state.range(1));
 
     auto geom = geos::benchmark::createSineStar({0, 0}, 100, nRingPts);
 
-    auto test_pts = geos::benchmark::createRandomCoords(*geom->getEnvelopeInternal(), nTestPts, seed);
+    auto test_pts = geos::benchmark::createRandomCoords(*geom->getEnvelopeInternal(), nTestPts, eng);
 
     for (auto _ : state) {
         Locator loc(*geom);

@@ -73,16 +73,16 @@ createPoints(const geom::Envelope& env, std::size_t nItems) {
 }
 
 std::unique_ptr<geom::CoordinateSequence>
-createRandomCoords(const geom::Envelope& env, std::size_t npts, std::size_t seed) {
-    auto ret = detail::make_unique<geom::CoordinateSequence>(npts, false, false, false);
-
-    std::default_random_engine e(seed);
+createRandomCoords(const geom::Envelope& env, std::size_t npts, std::default_random_engine& e) {
+    auto ret = detail::make_unique<geom::CoordinateSequence>(npts, true, true, false);
 
     std::uniform_real_distribution<> xdist(env.getMinX(), env.getMaxX());
     std::uniform_real_distribution<> ydist(env.getMinY(), env.getMaxY());
+    std::uniform_real_distribution<> zdist(0, 1);
+    std::uniform_real_distribution<> mdist(0, 1);
 
     for (std::size_t i = 0;i < npts; i++) {
-        ret->setAt(geom::CoordinateXY(xdist(e), ydist(e)), i);
+        ret->setAt(geom::CoordinateXYZM(xdist(e), ydist(e), zdist(e), mdist(e)), i);
     }
 
     return ret;

@@ -29,7 +29,8 @@ if (benchmark_FOUND)
     add_executable(perf_line_intersector LineIntersectorPerfTest.cpp)
     target_include_directories(perf_line_intersector PUBLIC
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
     target_link_libraries(perf_line_intersector PRIVATE
             benchmark::benchmark geos)
 

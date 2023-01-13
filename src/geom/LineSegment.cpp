@@ -264,7 +264,8 @@ LineSegment::intersection(const LineSegment& line) const
 Coordinate
 LineSegment::lineIntersection(const LineSegment& line) const
 {
-    return algorithm::Intersection::intersection(p0, p1, line.p0, line.p1);
+    // TODO return a CoordinateXY here.
+    return Coordinate(algorithm::Intersection::intersection(p0, p1, line.p0, line.p1));
 }
 
 
