@@ -52,11 +52,14 @@ struct test_repeated_point_remover_test_data
         std::unique_ptr<Geometry> exGeom = reader.read(expected);
 
         const CoordinateSequence* inCoords = static_cast<LineString*>(inGeom.get())->getCoordinatesRO();
+        const CoordinateSequence* exCoords = static_cast<LineString*>(exGeom.get())->getCoordinatesRO();
+
         auto outCoords = RepeatedPointRemover::removeRepeatedPoints(inCoords, tolerance);
-        std::unique_ptr<Geometry> outGeom = inGeom->getFactory()->createLineString(std::move(outCoords));
-        // std::cout << std::endl << wkt(*outGeom) << std::endl;
-        // std::cout << wkt(*exGeom) << std::endl;
-        ensure_equals_geometry(outGeom.get(), exGeom.get());
+
+        ensure_equals("hasZ", exCoords->hasZ(), outCoords->hasZ());
+        ensure_equals("hasM", exCoords->hasM(), outCoords->hasM());
+
+        ensure_equals(*outCoords, *exCoords);
     }
 
     void
@@ -135,6 +138,16 @@ void object::test<5>()
         "MULTIPOLYGON (((0 0, 9 0, 10 10, 0 10, 0 0)))",
         3.0
         );
+}
+
+
+// Dimension is preserved
+template<>
+template<>
+void object::test<6>()
+{
+    checkSequence("LINESTRING M EMPTY", "LINESTRING M EMPTY", 0.0);
+    checkSequence("LINESTRING M (1 1 1, 2 2 2, 2 2 3, 3 3 3)", "LINESTRING M (1 1 1, 2 2 2, 3 3 3)", 0.0);
 }
 
 

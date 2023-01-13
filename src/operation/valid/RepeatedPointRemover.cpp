@@ -80,11 +80,11 @@ std::unique_ptr<CoordinateSequence>
 RepeatedPointRemover::removeRepeatedPoints(const CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
+        return detail::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
     }
 
     if (tolerance == 0.0) {
-        auto ret = detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
+        auto ret = detail::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
         ret->reserve(seq->size());
         ret->add(*seq, false);
         return ret;
