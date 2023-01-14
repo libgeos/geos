@@ -146,6 +146,8 @@ public:
     /// Creates a Point using the given Coordinate
     std::unique_ptr<Point> createPoint(const Coordinate& coordinate) const;
     std::unique_ptr<Point> createPoint(const CoordinateXY& coordinate) const;
+    std::unique_ptr<Point> createPoint(const CoordinateXYM& coordinate) const;
+    std::unique_ptr<Point> createPoint(const CoordinateXYZM& coordinate) const;
 
     /// Creates a Point taking ownership of the given CoordinateSequence
     std::unique_ptr<Point> createPoint(std::unique_ptr<CoordinateSequence>&& coordinates) const;

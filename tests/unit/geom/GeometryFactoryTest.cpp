@@ -25,6 +25,10 @@
 #include <vector>
 #include <cstring> // std::size_t
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::geom::CoordinateXYM;
+using geos::geom::CoordinateXYZM;
 using geos::geom::GeometryFactory;
 using geos::geom::PrecisionModel;
 
@@ -1196,6 +1200,49 @@ void object::test<38>
     ensure_equals(pt->getNumPoints(), 1u);
     ensure_equals(pt->getLength(), 0.0);
     ensure_equals(pt->getArea(), 0.0);
+}
+
+// Test of createPoint for various coordinate types
+template<>
+template<>
+void object::test<39>
+()
+{
+    // XY
+    auto pt_xy = factory_->createPoint(CoordinateXY{1, 2});
+    CoordinateXY xy_out;
+    ensure_equals(pt_xy->getCoordinateDimension(), 2u);
+    pt_xy->getCoordinatesRO()->getAt(0, xy_out);
+    ensure_equals(xy_out, CoordinateXY{1, 2});
+    ensure(!pt_xy->hasZ());
+    ensure(!pt_xy->hasM());
+
+    // XYZ
+    auto pt_xyz = factory_->createPoint(Coordinate{1, 2, 3});
+    Coordinate xyz_out;
+    pt_xyz->getCoordinatesRO()->getAt(0, xyz_out);
+    ensure_equals(pt_xyz->getCoordinateDimension(), 3u);
+    ensure_equals_xyz(xyz_out, Coordinate{1, 2, 3});
+    ensure(pt_xyz->hasZ());
+    ensure(!pt_xyz->hasM());
+
+    // XYM
+    auto pt_xym = factory_->createPoint(CoordinateXYM{1, 2, 3});
+    CoordinateXYM xym_out;
+    pt_xym->getCoordinatesRO()->getAt(0, xym_out);
+    ensure_equals(pt_xym->getCoordinateDimension(), 3u);
+    ensure_equals_xym(xym_out, CoordinateXYM{1, 2, 3});
+    ensure(!pt_xym->hasZ());
+    ensure(pt_xym->hasM());
+
+    // XYZM
+    auto pt_xyzm = factory_->createPoint(CoordinateXYZM{1, 2, 3, 4});
+    CoordinateXYZM xyzm_out;
+    pt_xyzm->getCoordinatesRO()->getAt(0, xyzm_out);
+    ensure_equals(pt_xyzm->getCoordinateDimension(), 4u);
+    ensure_equals_xyzm(xyzm_out, CoordinateXYZM{1, 2, 3, 4});
+    ensure(pt_xyzm->hasZ());
+    ensure(pt_xyzm->hasM());
 }
 
 } // namespace tut

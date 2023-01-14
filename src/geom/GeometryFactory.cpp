@@ -252,6 +252,28 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
     }
 }
 
+std::unique_ptr<Point>
+GeometryFactory::createPoint(const CoordinateXYM& coordinate) const
+{
+    if(coordinate.isNull()) {
+        return createPoint();
+    }
+    else {
+        return std::unique_ptr<Point>(new Point(coordinate, this));
+    }
+}
+
+std::unique_ptr<Point>
+GeometryFactory::createPoint(const CoordinateXYZM& coordinate) const
+{
+    if(coordinate.isNull()) {
+        return createPoint();
+    }
+    else {
+        return std::unique_ptr<Point>(new Point(coordinate, this));
+    }
+}
+
 /*public*/
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const

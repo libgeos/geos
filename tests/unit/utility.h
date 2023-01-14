@@ -110,6 +110,19 @@ ensure_equals_xyz(geos::geom::Coordinate const& actual,
 }
 
 inline void
+ensure_equals_xym(geos::geom::CoordinateXYM const& actual,
+                  geos::geom::CoordinateXYM const& expected)
+{
+    ensure_equals("Coordinate X", actual.x, expected.x );
+    ensure_equals("Coordinate Y", actual.y, expected.y );
+    if ( std::isnan(expected.m) ) {
+        ensure("Coordinate M should be NaN", std::isnan(actual.m) );
+    } else {
+        ensure_equals("Coordinate M", actual.m, expected.m );
+    }
+}
+
+inline void
 ensure_equals_xyzm(geos::geom::CoordinateXYZM const& actual,
                    geos::geom::CoordinateXYZM const& expected)
 {
