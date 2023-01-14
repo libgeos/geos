@@ -211,12 +211,19 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
                                     int p_level,
                                     Writer& writer) const
 {
-    // evaluate the ordinates actually present in the geometry
-    CheckOrdinatesFilter cof(checkOrdinates);
-    geometry.apply_ro(cof);
+    OrdinateSet outputOrdinates = OrdinateSet::createXY();
+    if (geometry.isEmpty()) {
+        // for an empty geometry, use the declared dimensionality
+        outputOrdinates.setZ(geometry.hasZ());
+        outputOrdinates.setM(geometry.hasM());
+    } else {
+        // for a non-empty geometry, evaluate the ordinates actually present in the geometry
+        CheckOrdinatesFilter cof(checkOrdinates);
+        geometry.apply_ro(cof);
+        // remove detected ordinates to stay within defaultOutputDimension
+        outputOrdinates = cof.getFoundOrdinates();
+    }
 
-    // remove detected ordinates to stay within defaultOutputDimension
-    OrdinateSet outputOrdinates = cof.getFoundOrdinates();
     while (outputOrdinates.size() > defaultOutputDimension) {
         if (outputOrdinates.hasZ() && outputOrdinates.hasM()) {
             // 4D -> 3D
