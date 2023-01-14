@@ -148,6 +148,7 @@ void object::test<6>()
 {
     checkSequence("LINESTRING M EMPTY", "LINESTRING M EMPTY", 0.0);
     checkSequence("LINESTRING M (1 1 1, 2 2 2, 2 2 3, 3 3 3)", "LINESTRING M (1 1 1, 2 2 2, 3 3 3)", 0.0);
+    checkSequence("LINESTRING ZM (1 2 3 4, 5 6 7 8, 5 6 9 9, 10 11 12 13)", "LINESTRING ZM (1 2 3 4, 5 6 7 8, 10 11 12 13)", 0.5);
 }
 
 

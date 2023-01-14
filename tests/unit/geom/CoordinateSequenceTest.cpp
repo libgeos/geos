@@ -35,6 +35,11 @@ struct test_coordinatearraysequence_data {
     struct Filter : public geos::geom::CoordinateFilter {
         bool is3d;
         Filter() : is3d(false) {}
+
+        void
+        filter_rw(geos::geom::CoordinateXY*) const override
+        {}
+
         void
         filter_rw(geos::geom::Coordinate* c) const override
         {
@@ -1325,6 +1330,66 @@ void object::test<51>
     CoordinateSequence seq(0, 4);
     ensure(seq.hasZ());
     ensure(seq.hasM());
+}
+
+struct AddToSequence : public geos::geom::CoordinateInspector<AddToSequence> {
+
+    AddToSequence(CoordinateSequence& out) : m_seq(out) {}
+
+    template<typename T>
+    void filter(const T* c) {
+        m_seq.add(*c);
+    }
+
+private:
+    CoordinateSequence& m_seq;
+};
+
+// Test that templated filter preserves dimensionality
+template<>
+template<>
+void object::test<52>
+()
+{
+    // XY
+    CoordinateSequence xy({CoordinateXY{1,2}, CoordinateXY{3, 4}});
+    CoordinateSequence xy_out = CoordinateSequence::XY(0);
+    AddToSequence filter_xy(xy_out);
+    xy.apply_ro(&filter_xy);
+    ensure_equals(xy.size(), xy_out.size());
+    for (std::size_t i = 0; i < xy.size(); i++) {
+        ensure(xy.getAt<CoordinateXY>(i).equals2D(xy_out.getAt<CoordinateXY>(i)));
+    }
+
+    // XYZ
+    CoordinateSequence xyz({Coordinate{1,2,3}, Coordinate{4,5,6}});
+    CoordinateSequence xyz_out = CoordinateSequence::XYZ(0);
+    AddToSequence filter_xyz(xyz_out);
+    xyz.apply_ro(&filter_xyz);
+    ensure_equals(xyz.size(), xyz_out.size());
+    for (std::size_t i = 0; i < xyz.size(); i++) {
+        ensure(xyz.getAt<Coordinate>(i).equals3D(xyz_out.getAt<Coordinate>(i)));
+    }
+
+    // XYM
+    CoordinateSequence xym({CoordinateXYM{1,2,3}, CoordinateXYM{4,5,6}});
+    CoordinateSequence xym_out = CoordinateSequence::XYM(0);
+    AddToSequence filter_xym(xym_out);
+    xym.apply_ro(&filter_xym);
+    ensure_equals(xym.size(), xym_out.size());
+    for (std::size_t i = 0; i < xym.size(); i++) {
+        ensure(xym.getAt<CoordinateXYM>(i).equals2D(xym_out.getAt<CoordinateXYM>(i)));
+    }
+
+    // XYZM
+    CoordinateSequence xyzm({CoordinateXYZM{1,2,3,4}, CoordinateXYZM{5,6,7,8}});
+    CoordinateSequence xyzm_out = CoordinateSequence::XYZM(0);
+    AddToSequence filter_xyzm(xyzm_out);
+    xyzm.apply_ro(&filter_xyzm);
+    ensure_equals(xyzm.size(), xyzm_out.size());
+    for (std::size_t i = 0; i < xyzm.size(); i++) {
+        ensure(xyzm.getAt<CoordinateXYZM>(i).equals4D(xyzm_out.getAt<CoordinateXYZM>(i)));
+    }
 }
 
 } // namespace tut

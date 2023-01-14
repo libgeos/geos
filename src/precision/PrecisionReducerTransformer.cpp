@@ -38,29 +38,29 @@ namespace geos {
 namespace precision { // geos.precision
 
 
-class PrecisionReducerFilter : public CoordinateFilter {
+class PrecisionReducerFilter : public CoordinateInspector<PrecisionReducerFilter> {
     public:
 
-        PrecisionReducerFilter(bool p_removeRepeated, const PrecisionModel& p_filterPM)
-            : m_coords(detail::make_unique<CoordinateSequence>())
+        PrecisionReducerFilter(bool p_removeRepeated, const PrecisionModel& p_filterPM, bool has_z, bool has_m)
+            : m_coords(detail::make_unique<CoordinateSequence>(0u, has_z, has_m))
+            , m_prev(nullptr)
             , removeRepeated(p_removeRepeated)
             , filterPM(p_filterPM)
-            {
-                m_prev.setNull();
-            }
+            {}
 
-        void filter_ro(const Coordinate* curr) override final {
+        template<typename CoordType>
+        void filter(const CoordType* curr) {
 
             // round to precision model
-            Coordinate coord = *curr;
+            CoordType coord = *curr;
             filterPM.makePrecise(coord);
 
             // skip duplicate point
-            if (removeRepeated && !m_prev.isNull() && coord.equals2D(m_prev))
+            if (removeRepeated && m_prev != nullptr && coord.equals2D(*m_prev))
                 return;
 
             m_coords->add(coord);
-            m_prev = coord;
+            m_prev = &m_coords->back<CoordinateXY>();
         }
 
         std::unique_ptr<CoordinateSequence> getCoords() {
@@ -70,7 +70,7 @@ class PrecisionReducerFilter : public CoordinateFilter {
     private:
 
         std::unique_ptr<CoordinateSequence> m_coords;
-        Coordinate m_prev;
+        CoordinateXY* m_prev;
         bool removeRepeated;
         const PrecisionModel& filterPM;
 };
@@ -116,7 +116,7 @@ PrecisionReducerTransformer::transformCoordinates(
     }
 
     const bool removeRepeated = true;
-    PrecisionReducerFilter filter(removeRepeated, targetPM);
+    PrecisionReducerFilter filter(removeRepeated, targetPM, coords->hasZ(), coords->hasM());
     coords->apply_ro(&filter);
     auto coordsReduce = filter.getCoords();
 

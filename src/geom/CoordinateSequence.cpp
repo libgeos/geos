@@ -239,25 +239,6 @@ CoordinateSequence::add(const CoordinateSequence& cl, bool allowRepeated, bool f
 
 /*public*/
 
-void
-CoordinateSequence::apply_rw(const CoordinateFilter* filter)
-{
-    // FIXME dispatch on dimension?
-    for(auto& c : items<Coordinate>()) {
-        filter->filter_rw(&c);
-    }
-    m_hasdim = m_hasz = false; // re-check (see http://trac.osgeo.org/geos/ticket/435)
-}
-
-void
-CoordinateSequence::apply_ro(CoordinateFilter* filter) const
-{
-    // FIXME dispatch on dimension?
-    for(const auto& c : items<Coordinate>()) {
-        filter->filter_ro(&c);
-    };
-}
-
 std::unique_ptr<CoordinateSequence>
 CoordinateSequence::clone() const
 {
