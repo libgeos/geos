@@ -197,12 +197,21 @@ EdgeRing::getPolygon()
 
 /*public*/
 bool
-EdgeRing::isValid()
+EdgeRing::isValid() const
 {
-    if(! getRingInternal()) {
-        return false;    // computes cached ring
+    return is_valid;
+}
+
+void
+EdgeRing::computeValid()
+{
+    getCoordinates();
+    if (ringPts->size() <= 3) {
+        is_valid = false;
+        return;
     }
-    return ring->isValid();
+    getRingInternal();
+    is_valid = ring->isValid();
 }
 
 /*private*/

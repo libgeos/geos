@@ -72,6 +72,7 @@ private:
 
     EdgeRing* shell = nullptr;
     bool is_hole;
+    bool is_valid = false;
     bool is_processed = false;
     bool is_included_set = false;
     bool is_included = false;
@@ -168,6 +169,10 @@ public:
     void build(PolygonizeDirectedEdge* startDE);
 
     void computeHole();
+
+    const DeList& getEdges() const {
+        return deList;
+    }
 
     /** \brief
      * Tests whether this ring is a hole.
@@ -298,7 +303,9 @@ public:
      * Tests if the LinearRing ring formed by this edge ring
      * is topologically valid.
      */
-    bool isValid();
+    bool isValid() const;
+
+    void computeValid();
 
     /** \brief
      * Gets the coordinates for this ring as a LineString.
