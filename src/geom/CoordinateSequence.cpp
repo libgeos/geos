@@ -566,16 +566,19 @@ std::ostream&
 operator<< (std::ostream& os, const CoordinateSequence& cs)
 {
     os << "(";
-    for(std::size_t i = 0, n = cs.size(); i < n; ++i) {
-        if(i) {
+
+    bool writeComma = false;
+    auto write = [&os, &writeComma](const auto& coord) {
+        if (writeComma) {
             os << ", ";
-        }
-        if (cs.hasZ()) {
-            os << cs.getAt(i);
         } else {
-            os << cs.getAt<CoordinateXY>(i);
+            writeComma = true;
         }
-    }
+
+        os << coord;
+    };
+
+    cs.forEach(write);
     os << ")";
 
     return os;

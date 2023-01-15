@@ -1392,4 +1392,29 @@ void object::test<52>
     }
 }
 
+// Test type-detecting version of forEach
+template<>
+template<>
+void object::test<53>
+()
+{
+    CoordinateSequence dst(0u, true, true);
+
+    CoordinateSequence src1{{Coordinate{1, 2, 3}, Coordinate{4, 5, 6}}};
+    CoordinateSequence src2{{CoordinateXYM{7, 8, 9}, {10, 11, 12}}};
+
+    auto appendToDst = [&dst](auto& coord) {
+        dst.add(coord);
+    };
+
+    src1.forEach(appendToDst);
+    src2.forEach(appendToDst);
+
+    ensure_equals(dst.size(), 4u);
+    ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(0), CoordinateXYZM{1, 2, 3, DoubleNotANumber});
+    ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(1), CoordinateXYZM{4, 5, 6, DoubleNotANumber});
+    ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(2), CoordinateXYZM{7, 8,    DoubleNotANumber, 9});
+    ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(3), CoordinateXYZM{10, 11,  DoubleNotANumber, 12});
+}
+
 } // namespace tut

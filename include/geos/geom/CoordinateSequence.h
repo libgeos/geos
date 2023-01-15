@@ -629,6 +629,16 @@ public:
         }
     }
 
+    template<typename F>
+    void forEach(F&& fun) const {
+        switch(getCoordinateType()) {
+            case CoordinateType::XY:    for (const auto& c : items<CoordinateXY>())   { fun(c); } break;
+            case CoordinateType::XYZ:   for (const auto& c : items<Coordinate>())     { fun(c); } break;
+            case CoordinateType::XYM:   for (const auto& c : items<CoordinateXYM>())  { fun(c); } break;
+            case CoordinateType::XYZM:  for (const auto& c : items<CoordinateXYZM>()) { fun(c); } break;
+        }
+    }
+
     template<typename T, typename F>
     void forEach(F&& fun) const
     {

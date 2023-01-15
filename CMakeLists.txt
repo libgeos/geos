@@ -128,7 +128,7 @@ include(CMakeDependentOption)
 
 ## CMake global variables
 option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
-set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
+set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ standard version to use (default is 11)")
 
 ## GEOS custom variables
 option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
