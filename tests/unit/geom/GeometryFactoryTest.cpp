@@ -1244,4 +1244,43 @@ void object::test<39>
     ensure(pt_xyzm->hasM());
 }
 
+// createMultiPoint(CoordinateSequence) preserves dimension
+template<>
+template<>
+void object::test<40>
+()
+{
+    // XY
+    CoordinateSequence xy_seq{CoordinateXY{1,2}, CoordinateXY{3,4}};
+    auto mp_xy = factory_->createMultiPoint(xy_seq);
+    ensure_equals(mp_xy->getCoordinateDimension(), 2u);
+    ensure_equals(mp_xy->getNumGeometries(), 2u);
+    ensure(!mp_xy->hasZ());
+    ensure(!mp_xy->hasM());
+
+    // XYZ
+    CoordinateSequence xyz_seq{Coordinate{1,2,3}, Coordinate{4,5,6}};
+    auto mp_xyz = factory_->createMultiPoint(xyz_seq);
+    ensure_equals(mp_xyz->getCoordinateDimension(), 3u);
+    ensure_equals(mp_xy->getNumGeometries(), 2u);
+    ensure(mp_xyz->hasZ());
+    ensure(!mp_xyz->hasM());
+
+    // XYM
+    CoordinateSequence xym_seq{CoordinateXYM{1,2,3}, CoordinateXYM{4,5,6}};
+    auto mp_xym = factory_->createMultiPoint(xym_seq);
+    ensure_equals(mp_xym->getCoordinateDimension(), 3u);
+    ensure_equals(mp_xy->getNumGeometries(), 2u);
+    ensure(!mp_xym->hasZ());
+    ensure(mp_xym->hasM());
+
+    // XYZM
+    CoordinateSequence xyzm_seq{CoordinateXYZM{1,2,3,4}, CoordinateXYZM{5,6,7,8}};
+    auto mp_xyzm = factory_->createMultiPoint(xyzm_seq);
+    ensure_equals(mp_xyzm->getCoordinateDimension(), 4u);
+    ensure_equals(mp_xy->getNumGeometries(), 2u);
+    ensure(mp_xyzm->hasZ());
+    ensure(mp_xyzm->hasM());
+}
+
 } // namespace tut

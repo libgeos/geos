@@ -443,11 +443,12 @@ std::unique_ptr<MultiPoint>
 GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 {
     std::size_t npts = fromCoords.getSize();
-    std::vector<std::unique_ptr<Geometry>> pts(npts);
+    std::vector<std::unique_ptr<Geometry>> pts;
+    pts.reserve(npts);
 
-    for(std::size_t i = 0; i < npts; ++i) {
-        pts[i] = createPoint(fromCoords.getAt(i));
-    }
+    fromCoords.forEach([&pts, this](const auto& coord) -> void {
+        pts.push_back(this->createPoint(coord));
+    });
 
     return createMultiPoint(std::move(pts));
 }

@@ -71,8 +71,11 @@ Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
 
 Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
     : Geometry(factory),
-      coordinates{c}
+      // check Z and M values because we may be constructing this from
+      // an XYM coordinate that was stored as XYZM
+      coordinates{1u, !std::isnan(c.z), !std::isnan(c.m), false}
 {
+    coordinates.setAt(c, 0);
 }
 
 /*protected*/
