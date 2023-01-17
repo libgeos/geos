@@ -106,7 +106,7 @@ GeometryFixer::fixPointElement(const Point* p_geom) const
 bool
 GeometryFixer::isValidPoint(const Point* pt) const
 {
-    const Coordinate* p = pt->getCoordinate();
+    const CoordinateXY* p = pt->getCoordinate();
     return p->isValid();
 }
 

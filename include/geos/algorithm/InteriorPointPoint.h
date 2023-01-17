@@ -42,7 +42,7 @@ private:
 
     bool hasInterior;
 
-    geom::Coordinate centroid;
+    geom::CoordinateXY centroid;
 
     double minDistance;
 
@@ -55,7 +55,7 @@ private:
      */
     void add(const geom::Geometry* geom);
 
-    void add(const geom::Coordinate* point);
+    void add(const geom::CoordinateXY* point);
 
 public:
 
@@ -63,7 +63,7 @@ public:
 
     ~InteriorPointPoint() {}
 
-    bool getInteriorPoint(geom::Coordinate& ret) const;
+    bool getInteriorPoint(geom::CoordinateXY& ret) const;
 
 };
 

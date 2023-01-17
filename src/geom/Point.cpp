@@ -168,7 +168,7 @@ Point::getZ() const
     if(isEmpty()) {
         throw util::UnsupportedOperationException("getZ called on empty Point\n");
     }
-    return getCoordinate()->z;
+    return coordinates.getAt<Coordinate>(0).z;
 }
 
 std::string
@@ -198,18 +198,12 @@ Point::computeEnvelopeInternal() const
 void
 Point::apply_ro(CoordinateFilter* filter) const
 {
-    if(isEmpty()) {
-        return;
-    }
-    filter->filter_ro(getCoordinate());
+    coordinates.apply_ro(filter);
 }
 
 void
 Point::apply_rw(const CoordinateFilter* filter)
 {
-    if (isEmpty()) {
-        return;
-    }
     coordinates.apply_rw(filter);
 }
 
@@ -256,7 +250,6 @@ Point::apply_ro(CoordinateSequenceFilter& filter) const
         return;
     }
     filter.filter_ro(coordinates, 0);
-    //if (filter.isGeometryChanged()) geometryChanged();
 }
 
 bool

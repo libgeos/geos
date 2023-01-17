@@ -63,7 +63,7 @@ InteriorPointPoint::add(const Geometry* geom)
 
 /*private*/
 void
-InteriorPointPoint::add(const Coordinate* point)
+InteriorPointPoint::add(const CoordinateXY* point)
 {
     assert(point);    // we wouldn't been called if this was an empty geom
     double dist = point->distance(centroid);
@@ -75,7 +75,7 @@ InteriorPointPoint::add(const Coordinate* point)
 
 /*public*/
 bool
-InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
+InteriorPointPoint::getInteriorPoint(CoordinateXY& ret) const
 {
     if (! hasInterior) {
         return false;

@@ -219,7 +219,7 @@ GeometryGraph::addCollection(const GeometryCollection* gc)
 void
 GeometryGraph::addPoint(const Point* p)
 {
-    const Coordinate& coord = *(p->getCoordinate());
+    const Coordinate& coord = p->getCoordinatesRO()->getAt(0);
     insertPoint(argIndex, coord, Location::INTERIOR);
 }
 

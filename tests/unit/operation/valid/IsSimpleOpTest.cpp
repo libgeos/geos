@@ -63,7 +63,7 @@ struct test_issimpleop_data {
         auto g = reader_.read(wkt);
         IsSimpleOp op(*g, bnRule);
         bool isSimple = op.isSimple();
-        Coordinate nonSimpleLoc = op.getNonSimpleLocation();
+        const auto& nonSimpleLoc = op.getNonSimpleLocation();
         // if geom is not simple, should have a valid location
         ensure("unexpected result", expectedResult == isSimple);
         ensure("not simple implies a non-simple location", isSimple || ! nonSimpleLoc.isNull());

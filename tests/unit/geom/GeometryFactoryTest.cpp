@@ -255,11 +255,11 @@ void object::test<9>
     ensure(pt->isValid());
     ensure(pt->getCoordinate() != nullptr);
 
-    CoordinateCPtr pcoord = pt->getCoordinate();
-    ensure(pcoord != nullptr);
-    ensure_equals(pcoord->x, x_);
-    ensure_equals(pcoord->y, y_);
-    ensure_equals(pcoord->z, z_);
+    Coordinate pcoord;
+    pt->getCoordinatesRO()->getAt(0, pcoord);
+    ensure_equals(pcoord.x, x_);
+    ensure_equals(pcoord.y, y_);
+    ensure_equals(pcoord.z, z_);
 
     std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
@@ -308,11 +308,11 @@ void object::test<10>
     ensure(pt->isValid());
     ensure(pt->getCoordinate() != nullptr);
 
-    CoordinateCPtr pcoord = pt->getCoordinate();
-    ensure(pcoord != nullptr);
-    ensure_equals(pcoord->x, x_);
-    ensure_equals(pcoord->y, y_);
-    ensure_equals(pcoord->z, z_);
+    Coordinate pcoord;
+    pt->getCoordinatesRO()->getAt(0, pcoord);
+    ensure_equals(pcoord.x, x_);
+    ensure_equals(pcoord.y, y_);
+    ensure_equals(pcoord.z, z_);
 
     std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
@@ -358,11 +358,11 @@ void object::test<11>
     ensure(pt->isValid());
     ensure(pt->getCoordinate() != nullptr);
 
-    CoordinateCPtr pcoord = pt->getCoordinate();
-    ensure(pcoord != nullptr);
-    ensure_equals(pcoord->x, x_);
-    ensure_equals(pcoord->y, y_);
-    ensure_equals(pcoord->z, z_);
+    Coordinate pcoord;
+    pt->getCoordinatesRO()->getAt(0, pcoord);
+    ensure_equals(pcoord.x, x_);
+    ensure_equals(pcoord.y, y_);
+    ensure_equals(pcoord.z, z_);
 
     std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
@@ -1170,11 +1170,10 @@ void object::test<38>
     ensure(pt->isValid());
     ensure(pt->getCoordinate() != nullptr);
 
-    CoordinateCPtr pcoord = pt->getCoordinate();
+    const CoordinateXY* pcoord = pt->getCoordinate();
     ensure(pcoord != nullptr);
     ensure_equals(pcoord->x, x_);
     ensure_equals(pcoord->y, y_);
-    ensure(std::isnan(pcoord->z));
 
     std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();

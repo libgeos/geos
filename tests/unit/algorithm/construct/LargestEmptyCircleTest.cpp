@@ -67,9 +67,9 @@ struct test_lec_data {
         double tolerance = 2*build_tolerance;
         LargestEmptyCircle lec(geom, tolerance);
         std::unique_ptr<Point> centerPoint = lec.getCenter();
-        const Coordinate* centerPt = centerPoint->getCoordinate();
+        Coordinate centerPt(*centerPoint->getCoordinate());
         Coordinate expectedCenter(x, y);
-        ensure_equals_coordinate(*centerPt, expectedCenter, tolerance);
+        ensure_equals_coordinate(centerPt, expectedCenter, tolerance);
         std::unique_ptr<LineString> radiusLine = lec.getRadiusLine();
         double actualRadius = radiusLine->getLength();
         ensure_equals("radius", actualRadius, expectedRadius, tolerance);
@@ -80,8 +80,8 @@ struct test_lec_data {
         // std::cout << writer_.write(geom) << std::endl;
         // std::cout << writer_.write(radiusLine.get()) << std::endl;
 
-        ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate radiusPt = *lec.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(centerPt, linePt0, tolerance);
+        Coordinate radiusPt(*lec.getRadiusPoint()->getCoordinate());
         ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 
@@ -90,7 +90,7 @@ struct test_lec_data {
     {
         LargestEmptyCircle lec(geom, tolerance);
         std::unique_ptr<Point> centerPoint = lec.getCenter();
-        const Coordinate* centerPt = centerPoint->getCoordinate();
+        Coordinate centerPt(*centerPoint->getCoordinate());
         std::unique_ptr<LineString> radiusLine = lec.getRadiusLine();
         double actualRadius = radiusLine->getLength();
         ensure_equals("radius", actualRadius, 0.0, tolerance);
@@ -98,8 +98,8 @@ struct test_lec_data {
         const Coordinate& linePt0 = radiusLine->getCoordinateN(0);
         const Coordinate& linePt1 = radiusLine->getCoordinateN(1);
 
-        ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate radiusPt = *lec.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(centerPt, linePt0, tolerance);
+        Coordinate radiusPt(*lec.getRadiusPoint()->getCoordinate());
         ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 

@@ -55,7 +55,7 @@ IsSimpleOp::isSimple(const Geometry& geom)
 }
 
 /* public static */
-Coordinate
+CoordinateXY
 IsSimpleOp::getNonSimpleLocation(const Geometry& geom)
 {
     IsSimpleOp op(geom);
@@ -78,21 +78,21 @@ IsSimpleOp::isSimple()
 }
 
 /* public */
-Coordinate
+CoordinateXY
 IsSimpleOp::getNonSimpleLocation()
 {
     compute();
     if (nonSimplePts.size() == 0) {
-        Coordinate c;
+        CoordinateXY c;
         c.setNull();
         return c;
     }
-    return nonSimplePts.at(0);
+    return nonSimplePts[0];
 }
 
 
 /* public */
-const std::vector<Coordinate>&
+const std::vector<CoordinateXY>&
 IsSimpleOp::getNonSimpleLocations()
 {
     compute();
@@ -141,11 +141,11 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 {
     if (mp.isEmpty()) return true;
     bool bIsSimple = true;
-    std::unordered_set<Coordinate, Coordinate::HashCode> points;
+    std::unordered_set<CoordinateXY, Coordinate::HashCode> points;
 
     for (std::size_t i = 0; i < mp.getNumGeometries(); i++) {
         const Point* pt = mp.getGeometryN(i);
-        const Coordinate* p = pt->getCoordinate();
+        const CoordinateXY* p = pt->getCoordinate();
         if (points.find(*p) != points.end()) {
             nonSimplePts.push_back(*p);
             bIsSimple = false;

@@ -80,7 +80,7 @@ RectangleContains::isPointContainedInBoundary(const Point& point)
 
 /*private*/
 bool
-RectangleContains::isPointContainedInBoundary(const Coordinate& pt)
+RectangleContains::isPointContainedInBoundary(const CoordinateXY& pt)
 {
     /**
      * contains = false iff the point is properly contained

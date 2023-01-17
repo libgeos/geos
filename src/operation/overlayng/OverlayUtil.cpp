@@ -308,8 +308,7 @@ bool
 OverlayUtil::round(const Point* pt, const PrecisionModel* pm, Coordinate& rsltCoord)
 {
     if (pt->isEmpty()) return false;
-    const Coordinate* p = pt->getCoordinate();
-    rsltCoord = *p;
+    pt->getCoordinatesRO()->getAt(0, rsltCoord);
     if (! isFloating(pm)) {
         pm->makePrecise(rsltCoord);
     }

@@ -170,7 +170,7 @@ Geometry::getCentroid() const
 
 /*public*/
 bool
-Geometry::getCentroid(Coordinate& ret) const
+Geometry::getCentroid(CoordinateXY& ret) const
 {
     if(isEmpty()) {
         return false;

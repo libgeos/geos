@@ -492,7 +492,7 @@ DistanceOp::computeMinDistance(const LineString* line,
         return;
     }
     const CoordinateSequence* coord0 = line->getCoordinatesRO();
-    const Coordinate* coord = pt->getCoordinate();
+    const CoordinateXY* coord = pt->getCoordinate();
 
     // brute force approach!
     std::size_t npts0 = coord0->getSize();

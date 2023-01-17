@@ -64,7 +64,7 @@ private:
      * @param pt the point to test
      * @return true if the point is contained in the boundary
      */
-    bool isPointContainedInBoundary(const geom::Coordinate& pt);
+    bool isPointContainedInBoundary(const geom::CoordinateXY& pt);
 
     /** \brief
      * Tests if a linestring is completely contained in the boundary

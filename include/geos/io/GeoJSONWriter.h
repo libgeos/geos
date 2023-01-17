@@ -76,7 +76,7 @@ public:
 
 private:
 
-    std::pair<double, double> convertCoordinate(const geom::Coordinate* c);
+    std::pair<double, double> convertCoordinate(const geom::CoordinateXY* c);
 
     std::vector<std::pair<double, double>> convertCoordinateSequence(const geom::CoordinateSequence* c);
 

@@ -556,7 +556,7 @@ void object::test<38>
     ensure(!point->isEmpty());
     ensure_equals(point->getGeometryTypeId(), geos::geom::GEOS_POINT);
 
-    CoordinateCPtr pointCoord = point->getCoordinate();
+    const auto* pointCoord = point->getCoordinate();
     ensure(pointCoord != nullptr);
     geos::geom::Coordinate pointCentr(*pointCoord);
 

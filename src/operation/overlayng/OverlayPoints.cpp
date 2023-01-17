@@ -56,7 +56,7 @@ struct PointExtractingFilter: public GeometryComponentFilter {
     static Coordinate
     roundCoord(const Point* pt, const PrecisionModel* p_pm)
     {
-        const Coordinate* p = pt->getCoordinate();
+        const Coordinate* p = static_cast<const Coordinate*>(pt->getCoordinate());
         if (OverlayUtil::isFloating(p_pm))
             return *p;
         Coordinate p2 = *p;

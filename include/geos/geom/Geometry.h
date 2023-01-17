@@ -829,7 +829,7 @@ public:
     //
     /// Returns false if centroid cannot be computed (EMPTY geometry)
     ///
-    virtual bool getCentroid(Coordinate& ret) const;
+    virtual bool getCentroid(CoordinateXY& ret) const;
 
     /** \brief
      * Computes an interior point of this <code>Geometry</code>.

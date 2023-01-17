@@ -48,7 +48,7 @@ PointGeometryUnion::Union() const
     for(std::size_t i = 0, n = pointGeom.getNumGeometries(); i < n; ++i) {
         const Point* point = dynamic_cast<const Point*>(pointGeom.getGeometryN(i));
         assert(point);
-        const Coordinate* coord = point->getCoordinate();
+        const Coordinate* coord = static_cast<const Coordinate*>(point->getCoordinate());
         Location loc = locater.locate(*coord, &otherGeom);
         if(loc == Location::EXTERIOR) {
             exteriorCoords.insert(*coord);

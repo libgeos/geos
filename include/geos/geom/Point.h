@@ -122,8 +122,8 @@ public:
         geometryChangedAction();
     }
 
-    const Coordinate* getCoordinate() const override {
-        return isEmpty() ? nullptr : &coordinates[0];
+    const CoordinateXY* getCoordinate() const override {
+        return isEmpty() ? nullptr : &coordinates.getAt<CoordinateXY>(0);
     }
 
     double getX() const;

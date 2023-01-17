@@ -65,9 +65,9 @@ struct test_mic_data {
         double tolerance = 2*build_tolerance;
         MaximumInscribedCircle mic(geom, tolerance);
         std::unique_ptr<Point> centerPoint = mic.getCenter();
-        const Coordinate* centerPt = centerPoint->getCoordinate();
+        Coordinate centerPt(*centerPoint->getCoordinate());
         Coordinate expectedCenter(x, y);
-        ensure_equals_coordinate(*centerPt, expectedCenter, tolerance);
+        ensure_equals_coordinate(centerPt, expectedCenter, tolerance);
         std::unique_ptr<LineString> radiusLine = mic.getRadiusLine();
         double actualRadius = radiusLine->getLength();
         ensure_equals("radius", actualRadius, expectedRadius, tolerance);
@@ -78,8 +78,8 @@ struct test_mic_data {
         // std::cout << writer_.write(geom) << std::endl;
         // std::cout << writer_.write(radiusLine.get()) << std::endl;
 
-        ensure_equals_coordinate(*centerPt, linePt0, tolerance);
-        const Coordinate radiusPt = *mic.getRadiusPoint()->getCoordinate();
+        ensure_equals_coordinate(centerPt, linePt0, tolerance);
+        Coordinate radiusPt(*mic.getRadiusPoint()->getCoordinate());
         ensure_equals_coordinate(radiusPt, linePt1, tolerance);
     }
 

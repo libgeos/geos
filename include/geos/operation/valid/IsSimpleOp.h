@@ -99,7 +99,7 @@ private:
     bool isClosedEndpointsInInterior = true;
     bool isFindAllLocations = false;
     bool isSimpleResult = false;
-    std::vector<geom::Coordinate> nonSimplePts;
+    std::vector<geom::CoordinateXY> nonSimplePts;
     bool computed = false;
 
     void compute();
@@ -143,7 +143,7 @@ private:
         bool isClosedEndpointsInInterior;
         bool isFindAll = false;
 
-        std::vector<geom::Coordinate>& intersectionPts;
+        std::vector<geom::CoordinateXY>& intersectionPts;
         algorithm::LineIntersector li;
 
         // bool hasInteriorInt;
@@ -186,7 +186,7 @@ private:
         NonSimpleIntersectionFinder(
             bool p_isClosedEndpointsInInterior,
             bool p_isFindAll,
-            std::vector<geom::Coordinate>& p_intersectionPts)
+            std::vector<geom::CoordinateXY>& p_intersectionPts)
         : isClosedEndpointsInInterior(p_isClosedEndpointsInInterior)
         , isFindAll(p_isFindAll)
         , intersectionPts(p_intersectionPts)
@@ -255,7 +255,7 @@ public:
     * @param geom the input geometry
     * @return a non-simple location, or null if the geometry is simple
     */
-    geom::Coordinate getNonSimpleLocation(const geom::Geometry& geom);
+    geom::CoordinateXY getNonSimpleLocation(const geom::Geometry& geom);
 
     /**
     * Sets whether all non-simple intersection points
@@ -280,14 +280,14 @@ public:
     * @return a coordinate for the location of the non-boundary self-intersection
     * or null if the geometry is simple
     */
-    geom::Coordinate getNonSimpleLocation();
+    geom::CoordinateXY getNonSimpleLocation();
 
     /**
     * Gets all non-simple intersection locations.
     *
     * @return a list of the coordinates of non-simple locations
     */
-    const std::vector<geom::Coordinate>& getNonSimpleLocations();
+    const std::vector<geom::CoordinateXY>& getNonSimpleLocations();
 
 
 
