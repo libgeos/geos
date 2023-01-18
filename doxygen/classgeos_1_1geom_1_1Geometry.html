@@ -348,9 +348,9 @@ virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 <tr class="memitem:a6909149c7e0109e60661de4216f72094"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Point.html">Point</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a6909149c7e0109e60661de4216f72094">getCentroid</a> () const</td></tr>
 <tr class="memdesc:a6909149c7e0109e60661de4216f72094"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the centroid of this <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>.  <a href="classgeos_1_1geom_1_1Geometry.html#a6909149c7e0109e60661de4216f72094">More...</a><br /></td></tr>
 <tr class="separator:a6909149c7e0109e60661de4216f72094"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a588fe84365f35745d03822df06f63a86"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a588fe84365f35745d03822df06f63a86">getCentroid</a> (<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;ret) const</td></tr>
-<tr class="memdesc:a588fe84365f35745d03822df06f63a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the centroid of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> as a <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>.  <a href="classgeos_1_1geom_1_1Geometry.html#a588fe84365f35745d03822df06f63a86">More...</a><br /></td></tr>
-<tr class="separator:a588fe84365f35745d03822df06f63a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56f2fd6cb8ccbb3f4bcde87a388b0c13"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a56f2fd6cb8ccbb3f4bcde87a388b0c13">getCentroid</a> (CoordinateXY &amp;ret) const</td></tr>
+<tr class="memdesc:a56f2fd6cb8ccbb3f4bcde87a388b0c13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the centroid of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> as a <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>.  <a href="classgeos_1_1geom_1_1Geometry.html#a56f2fd6cb8ccbb3f4bcde87a388b0c13">More...</a><br /></td></tr>
+<tr class="separator:a56f2fd6cb8ccbb3f4bcde87a388b0c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad807972c7186212129d2b50b0b859d46"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Point.html">Point</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ad807972c7186212129d2b50b0b859d46">getInteriorPoint</a> () const</td></tr>
 <tr class="memdesc:ad807972c7186212129d2b50b0b859d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an interior point of this <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>.  <a href="classgeos_1_1geom_1_1Geometry.html#ad807972c7186212129d2b50b0b859d46">More...</a><br /></td></tr>
 <tr class="separator:ad807972c7186212129d2b50b0b859d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1025,8 +1025,8 @@ next lower dimension."</p>
 
 </div>
 </div>
-<a id="a588fe84365f35745d03822df06f63a86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a588fe84365f35745d03822df06f63a86">&#9670;&nbsp;</a></span>getCentroid() <span class="overload">[2/2]</span></h2>
+<a id="a56f2fd6cb8ccbb3f4bcde87a388b0c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56f2fd6cb8ccbb3f4bcde87a388b0c13">&#9670;&nbsp;</a></span>getCentroid() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1037,7 +1037,7 @@ next lower dimension."</p>
         <tr>
           <td class="memname">virtual bool geos::geom::Geometry::getCentroid </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>ret</em></td><td>)</td>
           <td> const</td>
         </tr>
