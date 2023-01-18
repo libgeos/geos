@@ -54,7 +54,8 @@ NodingTestUtil::toSegmentStrings(std::vector<const LineString*>& lines)
         // into a unique_ptr<> which we have to release() to the
         // NodedSegmentString constructor, so
         // nss now owns nss->pts
-        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), line);
+        // FIXME: evaluate usage of hasZ, hasM here
+        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), true, false, line);
         nssList.push_back(nss);
     }
     return nssList;

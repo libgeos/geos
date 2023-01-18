@@ -53,7 +53,7 @@ public:
     friend std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 
     /// the point of intersection (own copy)
-    geom::Coordinate coord;
+    geom::CoordinateXYZM coord;
 
     /// the index of the containing line segment in the parent edge
     std::size_t segmentIndex;
@@ -71,8 +71,11 @@ public:
     /// @param nSegmentOctant
     ///
     SegmentNode(const NodedSegmentString& ss,
-                const geom::Coordinate& nCoord,
-                std::size_t nSegmentIndex, int nSegmentOctant);
+        const geom::CoordinateXYZM& nCoord,
+        std::size_t nSegmentIndex, int nSegmentOctant);
+    SegmentNode(const NodedSegmentString& ss,
+        const geom::Coordinate& nCoord,
+        std::size_t nSegmentIndex, int nSegmentOctant);
 
     ~SegmentNode() {}
 

@@ -20,13 +20,6 @@
 #include <cassert>
 #include <geos/geom/Coordinate.h>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-}
-
 namespace geos {
 namespace edgegraph { // geos.edgegraph
 
@@ -65,7 +58,7 @@ class GEOS_DLL HalfEdge {
 private:
 
     /* members */
-    geom::Coordinate m_orig;
+    geom::CoordinateXYZM m_orig;
     HalfEdge* m_sym;
     HalfEdge* m_next;
 
@@ -116,7 +109,7 @@ protected:
     *
     * @return the direction point for the edge
     */
-    virtual const geom::Coordinate& directionPt() const { return dest(); };
+    virtual const geom::CoordinateXYZM& directionPt() const { return dest(); };
 
 
 public:
@@ -126,7 +119,7 @@ public:
     *
     * @param p_orig the origin coordinate
     */
-    HalfEdge(const geom::Coordinate& p_orig) :
+    HalfEdge(const geom::CoordinateXYZM& p_orig) :
         m_orig(p_orig)
     {};
 
@@ -139,7 +132,7 @@ public:
     * @param p1 a vertex coordinate
     * @return the HalfEdge with origin at p0
     */
-    static HalfEdge* create(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    static HalfEdge* create(const geom::CoordinateXYZM& p0, const geom::CoordinateXYZM& p1);
 
     /**
     * Links this edge with its sym (opposite) edge.
@@ -154,14 +147,14 @@ public:
     *
     * @return the origin coordinate
     */
-    const geom::Coordinate& orig() const { return m_orig; };
+    const geom::CoordinateXYZM& orig() const { return m_orig; };
 
     /**
     * Gets the destination coordinate of this edge.
     *
     * @return the destination coordinate
     */
-    const geom::Coordinate& dest() const { return m_sym->m_orig; }
+    const geom::CoordinateXYZM& dest() const { return m_sym->m_orig; }
 
     /**
     * The X component of the direction vector.
@@ -233,7 +226,7 @@ public:
     * @return the edge with the required dest vertex, if it exists,
     * or null
     */
-    HalfEdge* find(const geom::Coordinate& dest);
+    HalfEdge* find(const geom::CoordinateXY& dest);
 
     /**
     * Tests whether this edge has the given orig and dest vertices.
@@ -242,7 +235,7 @@ public:
     * @param p1 the destination vertex to test
     * @return true if the vertices are equal to the ones of this edge
     */
-    bool equals(const geom::Coordinate& p0, const geom::Coordinate& p1) const;
+    bool equals(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) const;
 
     /**
     * Inserts an edge

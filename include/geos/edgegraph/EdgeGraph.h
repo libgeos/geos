@@ -25,13 +25,6 @@
 #include <memory>
 #include <vector>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-}
-
 #undef EDGEGRAPH_HEAPHACK
 
 namespace geos {
@@ -60,9 +53,9 @@ class GEOS_DLL EdgeGraph {
 private:
 
     std::deque<HalfEdge> edges;
-    std::map<geom::Coordinate, HalfEdge*> vertexMap;
+    std::map<geom::CoordinateXY, HalfEdge*> vertexMap;
 
-    HalfEdge* create(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    HalfEdge* create(const geom::CoordinateXYZM& p0, const geom::CoordinateXYZM& p1);
 
 
 protected:
@@ -74,7 +67,7 @@ protected:
     * @param orig the origin location
     * @return a new HalfEdge with the given origin
     */
-    HalfEdge* createEdge(const geom::Coordinate& orig);
+    HalfEdge* createEdge(const geom::CoordinateXYZM& orig);
 
     /**
     * Inserts an edge not already present into the graph.
@@ -84,7 +77,7 @@ protected:
     * @param eAdj an existing edge with same orig (if any)
     * @return the created edge
     */
-    HalfEdge* insert(const geom::Coordinate& orig, const geom::Coordinate& dest, HalfEdge* eAdj);
+    HalfEdge* insert(const geom::CoordinateXYZM& orig, const geom::CoordinateXYZM& dest, HalfEdge* eAdj);
 
 
 public:
@@ -106,7 +99,7 @@ public:
     *
     * @see isValidEdge(Coordinate, Coordinate)
     */
-    HalfEdge* addEdge(const geom::Coordinate& orig, const geom::Coordinate& dest);
+    HalfEdge* addEdge(const geom::CoordinateXYZM& orig, const geom::CoordinateXYZM& dest);
 
     /**
     * Tests if the given coordinates form a valid edge (with non-zero length).
@@ -115,7 +108,7 @@ public:
     * @param dest the end coordinate
     * @return true if the edge formed is valid
     */
-    static bool isValidEdge(const geom::Coordinate& orig, const geom::Coordinate& dest);
+    static bool isValidEdge(const geom::CoordinateXY& orig, const geom::CoordinateXY& dest);
 
     void getVertexEdges(std::vector<const HalfEdge*>& edgesOut);
 
@@ -127,7 +120,7 @@ public:
     * @param dest the destination location.
     * @return an edge with the given orig and dest, or null if none exists
     */
-    HalfEdge* findEdge(const geom::Coordinate& orig, const geom::Coordinate& dest);
+    HalfEdge* findEdge(const geom::CoordinateXY& orig, const geom::CoordinateXY& dest);
 
 
 

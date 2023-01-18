@@ -60,7 +60,8 @@ SegmentExtractingNoder::extractSegments(
         auto cs = detail::make_unique<CoordinateSequence>(2u);
         cs->setAt(ss->getCoordinate(i), 0);
         cs->setAt(ss->getCoordinate(i + 1), 1);
-        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), ss->getData()));
+        // FIXME remove hardcoded hasZ, hasM and derive from input
+        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), true, false, ss->getData()));
         outputSegs.push_back(seg.release());
     }
 }

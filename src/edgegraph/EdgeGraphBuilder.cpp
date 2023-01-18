@@ -86,7 +86,8 @@ EdgeGraphBuilder::add(const LineString* line)
 {
     const CoordinateSequence* seq = line->getCoordinatesRO();
     for (std::size_t i = 1, sz = seq->getSize(); i < sz; i++) {
-        graph->addEdge(seq->getAt(i-1), seq->getAt(i));
+        // FIXME handle types properly
+        graph->addEdge(CoordinateXYZM(seq->getAt(i-1)), CoordinateXYZM(seq->getAt(i)));
     }
 }
 

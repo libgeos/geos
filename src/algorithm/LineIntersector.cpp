@@ -25,6 +25,7 @@
 #include <geos/algorithm/Intersection.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateUtils.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
 
@@ -169,6 +170,46 @@ LineIntersector::getEdgeDistance(std::size_t segmentIndex, std::size_t intIndex)
                                       *inputLines[segmentIndex][0],
                                       *inputLines[segmentIndex][1]);
     return dist;
+}
+
+class DoIntersect {
+public:
+    DoIntersect(algorithm::LineIntersector& li,
+                const CoordinateSequence& seq0,
+                std::size_t i0,
+                const CoordinateSequence& seq1,
+                std::size_t i1) :
+        m_li(li),
+        m_seq0(seq0),
+        m_i0(i0),
+        m_seq1(seq1),
+        m_i1(i1) {}
+
+    template<typename T1, typename T2>
+    void operator()() {
+        const T1& p00 = m_seq0.getAt<T1>(m_i0);
+        const T1& p01 = m_seq0.getAt<T1>(m_i0 + 1);
+        const T2& p10 = m_seq1.getAt<T2>(m_i1);
+        const T2& p11 = m_seq1.getAt<T2>(m_i1 + 1);
+
+        m_li.computeIntersection(p00, p01, p10, p11);
+    }
+
+private:
+    algorithm::LineIntersector& m_li;
+    const CoordinateSequence& m_seq0;
+    std::size_t m_i0;
+    const CoordinateSequence& m_seq1;
+    std::size_t m_i1;
+};
+
+/*public*/
+void
+LineIntersector::computeIntersection(const CoordinateSequence& p, std::size_t p0,
+                                     const CoordinateSequence& q, std::size_t q0)
+{
+    DoIntersect dis(*this, p, p0, q, q0);
+    binaryDispatch(p, q, dis);
 }
 
 /*public*/

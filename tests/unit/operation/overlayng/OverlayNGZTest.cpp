@@ -80,6 +80,7 @@ group test_overlayngz_group("geos::operation::overlayng::OverlayNGZ");
 //
 
 // testPointXYPointDifference
+// uses ElevationModel
 template<>
 template<>
 void object::test<1> ()
@@ -96,6 +97,9 @@ void object::test<2> ()
 {
   checkIntersection("POINT Z (5 5 99)", "POLYGON Z ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
       "POINT Z(5 5 99)");
+
+  checkIntersection("POINT M (5 5 99)", "POLYGON M ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
+      "POINT M(5 5 99)");
 }
 
 // testLineIntersectionPointZInterpolated
@@ -105,6 +109,9 @@ void object::test<3> ()
 {
   checkIntersection("LINESTRING (0 0 0, 10 10 10)", "LINESTRING (10 0 0, 0 10 10)",
       "POINT(5 5 5)");
+
+  checkIntersection("LINESTRING M (0 0 0, 10 10 10)", "LINESTRING M (10 0 0, 0 10 10)",
+      "POINT M(5 5 5)");
 }
 
 // testLineIntersectionPointZValue
@@ -114,6 +121,9 @@ void object::test<4> ()
 {
   checkIntersection("LINESTRING (0 0 0, 10 10 10)", "LINESTRING (10 0 0, 5 5 999, 0 10 10)",
       "POINT(5 5 999)");
+
+  checkIntersection("LINESTRING M (0 0 0, 10 10 10)", "LINESTRING M (10 0 0, 5 5 999, 0 10 10)",
+      "POINT M(5 5 999)");
 }
 
 // testLineOverlapUnion
@@ -123,6 +133,9 @@ void object::test<5> ()
 {
   checkUnion("LINESTRING (0 0 0, 10 10 10)", "LINESTRING (5 5 990, 15 15 999)",
       "MULTILINESTRING Z((0 0 0, 5 5 990), (5 5 990, 10 10 10), (10 10 10, 15 15 999))");
+
+  checkUnion("LINESTRING M (0 0 0, 10 10 10)", "LINESTRING M (5 5 990, 15 15 999)",
+      "MULTILINESTRING M((0 0 0, 5 5 990), (5 5 990, 10 10 10), (10 10 10, 15 15 999))");
 }
 
 // testLineLineXYDifferenceLineInterpolated
@@ -132,6 +145,9 @@ void object::test<6> ()
 {
   checkDifference("LINESTRING (0 0 0, 10 10 10)", "LINESTRING (5 5, 6 6)",
       "MULTILINESTRING ((0 0 0, 5 5 5), (6 6 6, 10 10 10))");
+
+  checkDifference("LINESTRING M (0 0 0, 10 10 10)", "LINESTRING (5 5, 6 6)",
+      "MULTILINESTRING M ((0 0 0, 5 5 5), (6 6 6, 10 10 10))");
 }
 
 // testLinePolygonIntersection
@@ -141,6 +157,9 @@ void object::test<7> ()
 {
   checkIntersection("LINESTRING Z (0 0 0, 5 5 5)", "POLYGON Z ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
       "LINESTRING Z (1 1 1, 5 5 5)");
+
+  checkIntersection("LINESTRING M (0 0 0, 5 5 5)", "POLYGON M ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
+      "LINESTRING M (1 1 1, 5 5 5)");
 }
 
 // testLinePolygonDifference
@@ -150,9 +169,14 @@ void object::test<8> ()
 {
   checkDifference("LINESTRING Z (0 5 0, 10 5 10)", "POLYGON Z ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
       "MULTILINESTRING Z((0 5 0, 1 5 2), (9 5 8, 10 5 10))");
+
+  checkDifference("LINESTRING M (0 5 0, 10 5 10)", "POLYGON M ((1 9 5, 9 9 9, 9 1 5, 1 1 1, 1 9 5))",
+      "MULTILINESTRING M((0 5 0, 1 5 2), (9 5 8, 10 5 10))");
 }
 
 // testPointXYPolygonIntersection
+// 2D point intersects interior of 3D polygon
+// uses ElevationModel
 template<>
 template<>
 void object::test<9> ()
@@ -163,12 +187,16 @@ void object::test<9> ()
 
 // XY Polygon gets Z value from Point
 // testPointPolygonXYUnion
+// uses ElevationModel
 template<>
 template<>
 void object::test<10> ()
 {
   checkUnion("POINT Z (5 5 77)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
       "POLYGON Z((1 1 77, 1 9 77, 9 9 77, 9 1 77, 1 1 77))");
+
+  checkUnion("POINT M (5 5 77)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+      "POLYGON M((1 1 77, 1 9 77, 9 9 77, 9 1 77, 1 1 77))");
 }
 
 // testLinePolygonXYDifference
@@ -178,9 +206,14 @@ void object::test<11> ()
 {
   checkDifference("LINESTRING Z (0 5 0, 10 5 10)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
       "MULTILINESTRING Z((0 5 0, 1 5 1), (9 5 9, 10 5 10))");
+
+  checkDifference("LINESTRING M (0 5 0, 10 5 10)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+      "MULTILINESTRING M((0 5 0, 1 5 1), (9 5 9, 10 5 10))");
 }
 
 // testLineXYPolygonDifference
+// Z values where line intersects polygon are populated by interpolating along polygon edges
+// Z values from line points outside the polygon are populated by ElevationModel
 template<>
 template<>
 void object::test<12> ()
@@ -190,6 +223,7 @@ void object::test<12> ()
 }
 
 // testPolygonXYPolygonIntersection
+// uses ElevationModel
 template<>
 template<>
 void object::test<13> ()
@@ -199,6 +233,7 @@ void object::test<13> ()
 }
 
 // testPolygonXYPolygonUnion
+// uses ElevationModel
 template<>
 template<>
 void object::test<14> ()
@@ -219,6 +254,7 @@ void object::test<15> ()
 
 // from https://trac.osgeo.org/geos/ticket/435
 // testLineXYLineIntersection
+// uses ElevationModel
 template<>
 template<>
 void object::test<16> ()
@@ -228,6 +264,39 @@ void object::test<16> ()
         "LINESTRING(10 10 4,10 0 5,0 0 5)",
         "GEOMETRYCOLLECTION Z(POINT Z(0 0 5), LINESTRING Z(10 0 5, 10 10 4))"
     );
+}
+
+// Point Intersection: XYM - XYM
+template<>
+template<>
+void object::test<17>()
+{
+  checkIntersection(
+              "LINESTRING M (0 0 0, 10 10 10)",
+              "LINESTRING M (10 0 0, 0 10 10)",
+              "POINT M (5 5 5)");
+}
+
+// Point Intersection: XYZ - XYM
+template<>
+template<>
+void object::test<18>()
+{
+  // XYZ - XYM
+  checkIntersection(
+              "LINESTRING Z (0 0 10, 10 10 20)",
+              "LINESTRING M (10 0 0, 0 10 10)",
+              "POINT ZM (5 5 15 5)");
+}
+
+// Point M is preserved
+template<>
+template<>
+void object::test<19>()
+{
+    checkIntersection("POINT M (5 5 99)",
+                      "POLYGON ((0 0, 5 0, 5 5, 0 0))",
+                      "POINT M (5 5 99)");
 }
 
 } // namespace tut

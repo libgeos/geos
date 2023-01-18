@@ -59,7 +59,8 @@ public:
         if(ls) {
             auto coord = ls->getCoordinates();
             // coord ownership transferred to SegmentString
-            SegmentString* ss = new NodedSegmentString(coord.release(), nullptr);
+            // FIXME remove hardcoded hasZ, hasM and derive from input
+            SegmentString* ss = new NodedSegmentString(coord.release(), true, false, nullptr);
             _to.push_back(ss);
         }
     }

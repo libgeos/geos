@@ -167,9 +167,10 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
         assert(cs->size() == npts);
 
         operation::valid::RepeatedPointTester rpt;
+        // FIXME remove hardcoded hasZ, hasM and derive from input
         if (rpt.hasRepeatedPoint(cs)) {
             auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
-            segStrings[i] = new NodedSegmentString(cs2.release(), ss->getData());
+            segStrings[i] = new NodedSegmentString(cs2.release(), true, false, ss->getData());
             delete ss;
         }
     }

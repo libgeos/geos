@@ -154,7 +154,8 @@ BoundaryChainNoder::BoundarySegmentMap::createChain(
     for (std::size_t i = startIndex; i < endIndex + 1; i++) {
         pts->add(segString->getCoordinate(i));
     }
-    return new NodedSegmentString(pts.release(), segString->getData());
+    // TODO remove hardcoded hasZ, hasM
+    return new NodedSegmentString(pts.release(), true, false, segString->getData());
 }
 
 /* private */

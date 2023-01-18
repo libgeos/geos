@@ -155,7 +155,8 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
         return nullptr;
 
     // Create new nodedSS to allow adding any hot pixel nodes
-    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getData());
+    // FIXME remove hardcoded hasZ, hasM
+    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), true, false, ss->getData());
 
     std::size_t snapSSindex = 0;
     for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {

@@ -99,18 +99,19 @@ public:
      *
      * @param newPts CoordinateSequence representing the string,
      *               ownership transferred.
-     *
+     * @param constructZ should newly-constructed coordinates store Z values?
+     * @param constructM should newly-constructed coordinates store M values?
      * @param newContext the user-defined data of this segment string
      *                   (may be null)
      */
-    NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)
+    NodedSegmentString(geom::CoordinateSequence* newPts, bool constructZ, bool constructM, const void* newContext)
         : NodableSegmentString(newContext, newPts)
-        , nodeList(this)
+        , nodeList(*this, constructZ, constructM)
     {}
 
-    NodedSegmentString(SegmentString* ss)
+    NodedSegmentString(SegmentString* ss, bool constructZ, bool constructM)
         : NodableSegmentString(ss->getData(), ss->getCoordinates()->clone().release())
-        , nodeList(this)
+        , nodeList(*this, constructZ, constructM)
     {}
 
     ~NodedSegmentString() override {
@@ -168,7 +169,7 @@ public:
     {
         ::geos::ignore_unused_variable_warning(geomIndex);
 
-        const geom::Coordinate& intPt = li->getIntersection(intIndex);
+        const auto& intPt = li->getIntersection(intIndex);
         addIntersection(intPt, segmentIndex);
     };
 
@@ -179,7 +180,8 @@ public:
      * edge is normalized
      * to use the higher of the two possible segmentIndexes
      */
-    void addIntersection(const geom::Coordinate& intPt,
+    template<typename CoordType>
+    void addIntersection(const CoordType& intPt,
         std::size_t segmentIndex)
     {
         std::size_t normalizedSegmentIndex = segmentIndex;
@@ -191,7 +193,7 @@ public:
         // normalize the intersection point location
         auto nextSegIndex = normalizedSegmentIndex + 1;
         if (nextSegIndex < size()) {
-            const geom::Coordinate& nextPt = getCoordinate(nextSegIndex);
+            const auto& nextPt = getCoordinate<geom::CoordinateXY>(nextSegIndex);
 
             // Normalize segment index if intPt falls on vertex
             // The check for point equality is 2D only -
@@ -206,7 +208,7 @@ public:
          * (unless the node is already known)
          */
         nodeList.add(intPt, normalizedSegmentIndex);
-    };
+    }
 
 private:
 

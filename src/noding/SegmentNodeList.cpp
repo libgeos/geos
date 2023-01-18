@@ -57,6 +57,14 @@ SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
     ready = false;
 }
 
+void
+SegmentNodeList::add(const CoordinateXYZM& intPt, std::size_t segmentIndex)
+{
+    // SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    nodeMap.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
+    ready = false;
+}
+
 void SegmentNodeList::prepare() const {
     if (!ready) {
         std::sort(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
@@ -75,8 +83,15 @@ void
 SegmentNodeList::addEndpoints()
 {
     std::size_t maxSegIndex = edge.size() - 1;
-    add(&(edge.getCoordinate(0)), 0);
-    add(&(edge.getCoordinate(maxSegIndex)), maxSegIndex);
+
+    const auto* edgePts = edge.getCoordinates();
+
+    CoordinateXYZM p0, p1;
+    edgePts->getAt(0, p0);
+    edgePts->getAt(maxSegIndex, p1);
+
+    add(p0, 0);
+    add(p1, maxSegIndex);
 }
 
 /* private */
@@ -244,7 +259,7 @@ std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
     auto pts = createSplitEdgePts(ei0, ei1);
-    return detail::make_unique<NodedSegmentString>(pts.release(), edge.getData());
+    return detail::make_unique<NodedSegmentString>(pts.release(), constructZ, constructM, edge.getData());
 }
 
 
@@ -254,13 +269,16 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 {
     bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
 
+    // FIXME need to construct appropriate-dimension sequences here.
     // if only two points in split edge they must be the node points
     if (twoPoints) {
-        auto pts = detail::make_unique<CoordinateSequence>(std::initializer_list<Coordinate>{ei0->coord, ei1->coord});
+        auto pts = detail::make_unique<CoordinateSequence>(2u, constructZ, constructM);
+        pts->setAt(ei0->coord, 0);
+        pts->setAt(ei1->coord, 1);
         return pts;
     }
 
-    const Coordinate& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);
+    const CoordinateXY& lastSegStartPt = edge.getCoordinate(ei1->segmentIndex);
     /**
     * If the last intersection point is not equal to the its segment start pt,
     * add it to the points list as well.
@@ -272,21 +290,17 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 
     std::size_t npts = 1 + (ei1->segmentIndex - ei0->segmentIndex) + useIntPt1;
 
-    // create empty sequence then resize to npts.
-    // this bypasses CoordinateSequence::initialize(), which is a significant
-    // performance hit in this context. This hack will be unnecessary when
-    // we switch to the has_z, has_m initialization.
-    auto pts = detail::make_unique<CoordinateSequence>();
-    pts->resize(npts);
-    std::size_t j = 0;
+    auto pts = detail::make_unique<CoordinateSequence>(0u, constructZ, constructM);
+    pts->reserve(npts);
 
-    pts->setAt(ei0->coord, j++);
-    for (std::size_t i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
-        pts->setAt(edge.getCoordinate(i), j++);
-    }
+    pts->add(ei0->coord);
+    const CoordinateSequence* edgeCoords = edge.getCoordinates();
+    pts->add(*edgeCoords, ei0->segmentIndex + 1, ei1->segmentIndex);
     if (useIntPt1) {
-        pts->setAt(ei1->coord, j++);
+        pts->add(ei1->coord);
     }
+
+    assert(pts->size() == npts);
 
     return pts;
 }

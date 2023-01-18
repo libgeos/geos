@@ -33,7 +33,7 @@ namespace edgegraph { // geos.edgegraph
 
 /*public static*/
 HalfEdge*
-HalfEdge::create(const Coordinate& p0, const Coordinate& p1)
+HalfEdge::create(const CoordinateXYZM& p0, const CoordinateXYZM& p1)
 {
     HalfEdge* e0 = new HalfEdge(p0);
     HalfEdge* e1 = new HalfEdge(p1);
@@ -54,7 +54,7 @@ HalfEdge::link(HalfEdge* p_sym)
 
 /*public*/
 HalfEdge*
-HalfEdge::find(const Coordinate& p_dest)
+HalfEdge::find(const CoordinateXY& p_dest)
 {
     HalfEdge* oNxt = this;
     do {
@@ -71,7 +71,7 @@ HalfEdge::find(const Coordinate& p_dest)
 
 /*public*/
 bool
-HalfEdge::equals(const Coordinate& p0, const Coordinate& p1) const
+HalfEdge::equals(const CoordinateXY& p0, const CoordinateXY& p1) const
 {
     return m_orig.equals2D(p0) && m_sym->m_orig.equals2D(p1);
 }

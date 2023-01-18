@@ -188,7 +188,7 @@ PolygonNoder::createNodedSegString(std::unique_ptr<CoordinateSequence>& ringPts,
     // note: in PolygonHoleJoiner::nodeRings we will replace the contents
     // of the shellRing and holeRings with the results of the calculation
     // here, so it's OK to take ownership of the points from them here
-    NodedSegmentString* nss = new NodedSegmentString(ringPts.release(), nullptr);
+    NodedSegmentString* nss = new NodedSegmentString(ringPts.release(), false, false, nullptr);
     nss->setData(nss);
     // need to map the identity of this nss to the index number of the
     // ring it represents. use an external map to avoid abusing the void*

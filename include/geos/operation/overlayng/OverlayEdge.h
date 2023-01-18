@@ -38,6 +38,7 @@ class MaximalEdgeRing;
 }
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateXYZM;
 using geos::geom::CoordinateSequence;
 using geos::geom::Location;
 
@@ -60,7 +61,7 @@ private:
     * The label must be interpreted accordingly.
     */
     bool direction;
-    Coordinate dirPt;
+    CoordinateXYZM dirPt;
     OverlayLabel* label;
     bool m_isInResultArea;
     bool m_isInResultLine;
@@ -78,8 +79,7 @@ private:
 
 public:
 
-    // takes ownershiph of CoordinateSequence
-    OverlayEdge(const Coordinate& p_orig, const Coordinate& p_dirPt,
+    OverlayEdge(const CoordinateXYZM& p_orig, const CoordinateXYZM& p_dirPt,
                 bool p_direction, OverlayLabel* p_label,
                 const CoordinateSequence* p_pts)
         : HalfEdge(p_orig)
@@ -103,7 +103,7 @@ public:
         return direction;
     };
 
-    const Coordinate& directionPt() const override
+    const CoordinateXYZM& directionPt() const override
     {
         return dirPt;
     };
@@ -118,7 +118,7 @@ public:
         return label->getLocation(index, position, direction);
     };
 
-    const Coordinate& getCoordinate() const
+    const CoordinateXYZM& getCoordinate() const
     {
         return orig();
     };

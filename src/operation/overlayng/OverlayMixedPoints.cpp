@@ -28,6 +28,7 @@
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayUtil.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/util/Assert.h>
 
 namespace geos {      // geos
@@ -40,7 +41,7 @@ using namespace geos::geom;
  * @brief Extracts and rounds coordinates from a geometry
  *
  */
-class CoordinateExtractingFilter: public geom::CoordinateFilter {
+class CoordinateExtractingFilter: public geom::CoordinateInspector<CoordinateExtractingFilter> {
 public:
     CoordinateExtractingFilter(CoordinateSequence& p_pts, const PrecisionModel& p_pm)
         : pts(p_pts), pm(p_pm)
@@ -59,10 +60,10 @@ public:
      * @param coord The "read-only" Coordinate to which
      * 				the filter is applied.
      */
-    void
-    filter_ro(const geom::Coordinate* coord) override
+    template<typename CoordType>
+    void filter(const CoordType* coord)
     {
-        Coordinate p(*coord);
+        CoordType p(*coord);
         pm.makePrecise(p);
         pts.add(p);
     }
@@ -125,7 +126,7 @@ OverlayMixedPoints::getResult()
             return computeDifference(coords.get());
         }
     }
-    util::Assert::shouldNeverReachHere("Unknown overlay op code");
+    geos::util::Assert::shouldNeverReachHere("Unknown overlay op code");
     return nullptr;
 }
 
@@ -163,7 +164,7 @@ OverlayMixedPoints::prepareNonPoint(const Geometry* geomInput)
 std::unique_ptr<Geometry>
 OverlayMixedPoints::computeIntersection(const CoordinateSequence* coords) const
 {
-    std::vector<std::unique_ptr<Point>> points = findPoints(true, coords);
+    auto&& points = findPoints(true, coords);
     return createPointResult(points);
 }
 
@@ -227,33 +228,39 @@ OverlayMixedPoints::createPointResult(std::vector<std::unique_ptr<Point>>& point
 std::vector<std::unique_ptr<Point>>
 OverlayMixedPoints::findPoints(bool isCovered, const CoordinateSequence* coords) const
 {
-    // use set to remove duplicates
-    std::set<Coordinate> resultCoords;
-    // keep only points contained
-    for (std::size_t i = 0; i < coords->size(); i++) {
-        const Coordinate& coord = coords->getAt(i);
-        if (hasLocation(isCovered, coord)) {
-            resultCoords.insert(coord);
+    CoordinateSequence resultCoords(0, coords->hasZ(), coords->hasM());
+
+    coords->forEach([&resultCoords, isCovered, this](const auto& coord) {
+        // keep only points contained
+        if (this->hasLocation(isCovered, coord)) {
+            resultCoords.add(coord);
         }
+    });
+
+    // remove duplicates by sorting and removing repeated points
+    resultCoords.sort();
+    if (resultCoords.hasRepeatedPoints()) {
+        resultCoords = *valid::RepeatedPointRemover::removeRepeatedPoints(&resultCoords);
     }
+
     return createPoints(resultCoords);
 }
 
 /*private*/
 std::vector<std::unique_ptr<Point>>
-OverlayMixedPoints::createPoints(std::set<Coordinate>& coords) const
+OverlayMixedPoints::createPoints(const CoordinateSequence& coords) const
 {
     std::vector<std::unique_ptr<Point>> points;
-    for (const Coordinate& coord : coords) {
-        std::unique_ptr<Point> point(geometryFactory->createPoint(coord));
-        points.push_back(std::move(point));
-    }
+    points.reserve(coords.size());
+    coords.forEach([&points, this](const auto& coord) {
+        points.push_back(geometryFactory->createPoint(coord));
+    });
     return points;
 }
 
 /*private*/
 bool
-OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
+OverlayMixedPoints::hasLocation(bool isCovered, const CoordinateXY& coord) const
 {
     bool isExterior = (Location::EXTERIOR == locator->locate(&coord));
     if (isCovered) {
@@ -267,7 +274,8 @@ OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
 std::unique_ptr<CoordinateSequence>
 OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
 {
-    auto coords = detail::make_unique<CoordinateSequence>();
+    auto coords = detail::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
+    coords->reserve(points->getNumPoints());
 
     CoordinateExtractingFilter filter(*coords, *p_pm);
     points->apply_ro(&filter);

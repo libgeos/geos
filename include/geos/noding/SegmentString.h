@@ -92,8 +92,9 @@ public:
         return seq->size();
     }
 
-    const geom::Coordinate& getCoordinate(std::size_t i) const {
-        return seq->getAt(i);
+    template<typename CoordType = geom::Coordinate>
+    const CoordType& getCoordinate(std::size_t i) const {
+        return seq->getAt<CoordType>(i);
     }
 
     /// \brief

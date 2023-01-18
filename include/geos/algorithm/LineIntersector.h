@@ -168,6 +168,10 @@ public:
         result = computeIntersect(p1, p2, p3, p4);
     }
 
+    /// Compute the intersection between two segments, given a sequence and starting index of each
+    void computeIntersection(const geom::CoordinateSequence& p, std::size_t p0,
+                             const geom::CoordinateSequence& q, std::size_t q0);
+
     std::string toString() const;
 
     /**

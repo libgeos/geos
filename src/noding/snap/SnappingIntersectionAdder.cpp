@@ -65,8 +65,8 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, std::size_t
          */
         if (li.hasIntersection() && li.getIntersectionNum() == 1) {
 
-            const Coordinate& intPt = li.getIntersection(0);
-            const Coordinate& snapPt = snapPointIndex.snap(intPt);
+            const auto& intPt = li.getIntersection(0);
+            const auto& snapPt = snapPointIndex.snap(intPt);
 
             static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);
             static_cast<NodedSegmentString*>(seg1)->addIntersection(snapPt, segIndex1);

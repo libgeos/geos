@@ -61,6 +61,9 @@ private:
     mutable std::vector<SegmentNode> nodeMap;
     mutable bool ready = false;
 
+    bool constructZ;
+    bool constructM;
+
     void prepare() const;
 
     // the parent edge
@@ -140,9 +143,12 @@ public:
     using iterator = container::iterator;
     using const_iterator = container::const_iterator;
 
-    explicit SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
-
-    explicit SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
+    explicit SegmentNodeList(const NodedSegmentString& newEdge,
+                             bool p_constructZ,
+                             bool p_constructM)
+        : constructZ(p_constructZ)
+        , constructM(p_constructM)
+        , edge(newEdge) {}
 
     ~SegmentNodeList() = default;
 
@@ -160,12 +166,7 @@ public:
      * @param segmentIndex
      */
     void add(const geom::Coordinate& intPt, std::size_t segmentIndex);
-
-    void
-    add(const geom::Coordinate* intPt, std::size_t segmentIndex)
-    {
-        add(*intPt, segmentIndex);
-    }
+    void add(const geom::CoordinateXYZM& intPt, std::size_t segmentIndex);
 
     /// Return the number of nodes in this list
     size_t

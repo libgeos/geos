@@ -42,7 +42,7 @@ struct test_nodedsegmentstring_data {
     makeSegmentString(geos::geom::CoordinateSequence* cs, void* d = nullptr)
     {
         return SegmentStringAutoPtr(
-                   new geos::noding::NodedSegmentString(cs, d)
+                   new geos::noding::NodedSegmentString(cs, true, false, d)
                );
     }
 
@@ -66,7 +66,7 @@ struct test_nodedsegmentstring_data {
         std::unique_ptr<Geometry> line = r.read(wktLine);
         std::unique_ptr<Geometry> pts = r.read(wktNodes);
 
-        NodedSegmentString nss(line->getCoordinates().release(), 0);
+        NodedSegmentString nss(line->getCoordinates().release(), true, false, 0);
         std::unique_ptr<CoordinateSequence> node = pts->getCoordinates();
 
         for (std::size_t i = 0, n=node->size(); i < n; ++i) {
