@@ -25,6 +25,8 @@ namespace tut {
 // Test Group
 //
 
+using geos::geom::Geometry;
+
 // Common data used by tests
 struct test_polygonizetest_data {
     geos::io::WKTReader wktreader;
@@ -34,6 +36,13 @@ struct test_polygonizetest_data {
     typedef geos::geom::Geometry Geom;
     typedef geos::geom::Polygon Poly;
     typedef geos::operation::polygonize::Polygonizer Polygonizer;
+
+    enum ResultType {
+        POLYGONS,
+        CUT_EDGES,
+        DANGLES,
+        INVALID_RING_LINES
+    };
 
     test_polygonizetest_data()
         : wktreader()
@@ -96,13 +105,22 @@ struct test_polygonizetest_data {
 
     }
 
+    template<class T>
+    std::vector<std::unique_ptr<Geometry>> asGeometry(T&& in) {
+        std::vector<std::unique_ptr<Geometry>> ret(in.size());
+        for (std::size_t i = 0; i < in.size(); i++) {
+            ret[i] = in[i]->clone();
+        }
+        return ret;
+    }
+
     bool
-    doTest(const std::vector<std::string> & inputWKT, const std::vector<std::string> & expectWKT, bool onlyPolygonal)
+    doTest(const std::vector<std::string> & inputWKT, const std::vector<std::string> & expectWKT, bool onlyPolygonal, ResultType typ)
     {
         using std::cout;
         using std::endl;
 
-        std::vector<std::unique_ptr<geos::geom::Geometry>> inputGeoms, expectGeoms;
+        std::vector<std::unique_ptr<geos::geom::Geometry>> inputGeoms, expectGeoms, retGeoms;
 
         for (const auto& wkt : inputWKT) {
             inputGeoms.push_back(wktreader.read(wkt));
@@ -119,12 +137,26 @@ struct test_polygonizetest_data {
             polygonizer.add(p.get());
         }
 
-        auto retGeoms = polygonizer.getPolygons();
+        switch(typ) {
+            case ResultType::POLYGONS: retGeoms = asGeometry(polygonizer.getPolygons()); break;
+            case ResultType::CUT_EDGES: retGeoms = asGeometry(polygonizer.getCutEdges()); break;
+            case ResultType::DANGLES: retGeoms = asGeometry(polygonizer.getDangles()); break;
+            case ResultType::INVALID_RING_LINES: retGeoms = asGeometry(polygonizer.getInvalidRingLines()); break;
+        }
+
         for (const auto& g : retGeoms) {
             g->normalize();
         }
 
-        bool ok = compare(expectGeoms, retGeoms);
+        bool ok;
+        if (typ == INVALID_RING_LINES) {
+            auto retColl = inputGeoms[0]->getFactory()->buildGeometry(std::move(retGeoms));
+            auto expectColl = inputGeoms[0]->getFactory()->buildGeometry(std::move(expectGeoms));
+            ok = retColl->equals(expectColl.get());
+        } else {
+            ok = compare(expectGeoms, retGeoms);
+        }
+
         if(! ok) {
             cout << "EXPECTED(" << expectGeoms.size() << "): " << std::endl;
             printAll(cout, expectGeoms);
@@ -158,7 +190,7 @@ void object::test<1>
 
     std::vector<std::string> exp{};
 
-    doTest(inp, exp, false);
+    doTest(inp, exp, false, POLYGONS);
 }
 
 // test2() in JTS
@@ -177,7 +209,7 @@ void object::test<2>
         "POLYGON ((100 180, 160 20, 20 20, 100 180), (100 180, 80 60, 120 60, 100 180))"
     };
 
-    doTest(inp, exp, false);
+    doTest(inp, exp, false, POLYGONS);
 }
 
 // JTS test3
@@ -200,7 +232,7 @@ void object::test<3>()
         "POLYGON ((4 0, 5 3, 6 0, 4 0))"
     };
 
-    doTest(inp, exp, false);
+    doTest(inp, exp, false, POLYGONS);
 }
 
 // JTS testPolygonal1
@@ -217,7 +249,7 @@ void object::test<4>()
             "POLYGON ((100 100, 100 300, 300 300, 300 100, 100 100), (150 150, 150 250, 250 250, 250 150, 150 150))"
     };
 
-    doTest(inp, exp, true);
+    doTest(inp, exp, true, POLYGONS);
 }
 
 // JTS testPolygonal2
@@ -240,7 +272,7 @@ void object::test<5>()
             "POLYGON ((20 20, 20 30, 30 30, 30 20, 20 20))"
     };
 
-    doTest(inp, exp, true);
+    doTest(inp, exp, true, POLYGONS);
 }
 
 // JTS testPolygonal_OuterOnly_1
@@ -261,7 +293,7 @@ void object::test<6>()
             "POLYGON ((20 20, 20 10, 10 10, 10 20, 20 20))"
     };
 
-    doTest(inp, exp, true);
+    doTest(inp, exp, true, POLYGONS);
 }
 
 // JTS testPolygonal_OuterOnly_2
@@ -284,7 +316,7 @@ void object::test<7>()
          "POLYGON ((200 200, 250 200, 300 200, 300 100, 200 100, 200 200))"
     };
 
-    doTest(inp, exp, true);
+    doTest(inp, exp, true, POLYGONS);
 }
 
 // JTS testPolygonal_OuterOnly_Checkerboard
@@ -323,7 +355,31 @@ void object::test<8>()
             "POLYGON ((30 40, 40 40, 40 30, 30 30, 30 40))"
     };
 
-    doTest(inp, exp, true);
+    doTest(inp, exp, true, POLYGONS);
+}
+
+// testUniqueInvalidRings
+template<>
+template<>
+void object::test<9>()
+{
+    doTest(
+        {"MULTILINESTRING ((0 0, 2 0, 2 2, 0 2, 0 0), (0 0, 1 1), (2 2, 4 4, 2 4, 4 2, 2 2))"},
+        {"LINESTRING (2 2, 4 2, 2 4, 4 4, 2 2)"},
+        false,
+        INVALID_RING_LINES);
+}
+
+// testUniqueInvalidRings2
+template<>
+template<>
+void object::test<10>()
+{
+    doTest(
+        {"MULTILINESTRING ((3 8, 7 8), (7 8, 7 3), (7 3, 3 3), (3 3, 3 8), (7 3, 9 6, 9 5, 7 8), (3 8, 1 5), (1 5, 1 6), (1 6, 3 3))"},
+        {"MULTILINESTRING ((3 8, 3 3, 1 6, 1 5, 3 8), (7 3, 7 8, 9 5, 9 6, 7 3))"},
+        false,
+        INVALID_RING_LINES);
 }
 
 } // namespace tut

@@ -109,7 +109,32 @@ private:
 
     static void findValidRings(const std::vector<EdgeRing*>& edgeRingList,
                                std::vector<EdgeRing*>& validEdgeRingList,
-                               std::vector<std::unique_ptr<geom::LineString>>& invalidRingList);
+                               std::vector<EdgeRing*>& invalidRingList);
+
+    /**
+     * Extracts unique lines for invalid rings,
+     * discarding rings which correspond to outer rings and hence contain
+     * duplicate linework.
+     */
+    std::vector<std::unique_ptr<geom::LineString>> extractInvalidLines(
+            std::vector<EdgeRing*>& invalidRings);
+
+    /**
+     * Tests if a invalid ring should be included in
+     * the list of reported invalid rings.
+     *
+     * Rings are included only if they contain
+     * linework which is not already in a valid ring,
+     * or in an already-included ring.
+     *
+     * Because the invalid rings list is sorted by extent area,
+     * this results in outer rings being discarded,
+     * since all their linework is reported in the rings they contain.
+     *
+     * @param invalidRing the ring to test
+     * @return true if the ring should be included
+     */
+    bool isIncludedInvalid(EdgeRing* invalidRing);
 
     void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 

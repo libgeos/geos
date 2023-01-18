@@ -233,8 +233,10 @@ Polygonizer::polygonize()
     std::cerr << "Polygonizer::polygonize(): " << edgeRingList.size() << " edgeRings in graph" << std::endl;
 #endif
     std::vector<EdgeRing*> validEdgeRingList;
+    std::vector<EdgeRing*> invalidRings;
     invalidRingLines.clear(); /* what if it was populated already ? we should clean ! */
-    findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
+    findValidRings(edgeRingList, validEdgeRingList, invalidRings);
+    invalidRingLines = extractInvalidLines(invalidRings);
 #if GEOS_DEBUG
     std::cerr << "                           " << validEdgeRingList.size() << " valid" << std::endl;
     std::cerr << "                           " << invalidRingLines.size() << " invalid" << std::endl;
@@ -262,17 +264,66 @@ Polygonizer::polygonize()
 void
 Polygonizer::findValidRings(const std::vector<EdgeRing*>& edgeRingList,
                             std::vector<EdgeRing*>& validEdgeRingList,
-                            std::vector<std::unique_ptr<LineString>>& invalidRingList)
+                            std::vector<EdgeRing*>& invalidRingList)
 {
     for(const auto& er : edgeRingList) {
+        er->computeValid();
         if(er->isValid()) {
             validEdgeRingList.push_back(er);
         }
         else {
-            invalidRingList.push_back(er->getLineString());
+            invalidRingList.push_back(er);
         }
         GEOS_CHECK_FOR_INTERRUPTS();
     }
+}
+
+std::vector<std::unique_ptr<geom::LineString>>
+Polygonizer::extractInvalidLines(std::vector<EdgeRing*>& invalidRings)
+{
+    /**
+     * Sort rings by increasing envelope area.
+     * This causes inner rings to be processed before the outer rings
+     * containing them, which allows outer invalid rings to be discarded
+     * since their linework is already reported in the inner rings.
+     */
+    std::sort(invalidRings.begin(),
+              invalidRings.end(),
+              [](EdgeRing* a, EdgeRing* b) {
+                return a->getRingInternal()->getEnvelope()->getArea() <
+                       b->getRingInternal()->getEnvelope()->getArea();
+    });
+
+    /**
+     * Scan through rings.  Keep only rings which have an adjacent EdgeRing
+     * which is either valid or marked as not processed.
+     * This avoids including outer rings which have linework which is duplicated.
+     */
+    std::vector<std::unique_ptr<LineString>> invalidLines;
+    for (EdgeRing* er : invalidRings) {
+        if (isIncludedInvalid(er)) {
+            invalidLines.push_back(er->getLineString());
+        }
+        er->setProcessed(true);
+    }
+
+    return invalidLines;
+}
+
+bool
+Polygonizer::isIncludedInvalid(EdgeRing* invalidRing)
+{
+    for (const PolygonizeDirectedEdge* de: invalidRing->getEdges()) {
+        const PolygonizeDirectedEdge* deAdj = static_cast<PolygonizeDirectedEdge*>(de->getSym());
+        const EdgeRing* erAdj = deAdj->getRing();
+
+        bool isEdgeIncluded = erAdj->isValid() || erAdj->isProcessed();
+        if (!isEdgeIncluded) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* private */

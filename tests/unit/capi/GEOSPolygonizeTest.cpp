@@ -154,5 +154,38 @@ void object::test<5>
     }
 }
 
+// Test GEOSPolygonize_full
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((0 0, 1 0, 1 1, 0 1, 0 0),  (0 0, 0.5 0.5),  (1 1, 2 2, 1 2, 2 1, 1 1))");
+
+    GEOSGeometry* cuts;
+    GEOSGeometry* dangles;
+    GEOSGeometry* invalidRings;
+
+    result_ = GEOSPolygonize_full(geom1_, &cuts, &dangles, &invalidRings);
+
+    expected_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION(POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)))");
+    GEOSGeometry* expected_cuts = GEOSGeomFromWKT("GEOMETRYCOLLECTION EMPTY");
+    GEOSGeometry* expected_dangles = GEOSGeomFromWKT("GEOMETRYCOLLECTION(LINESTRING (0 0, 0.5 0.5))");
+    GEOSGeometry* expected_invalidRings = GEOSGeomFromWKT("GEOMETRYCOLLECTION(LINESTRING (1 1, 2 2, 1 2, 2 1, 1 1))");
+
+    ensure_geometry_equals(result_, expected_);
+    ensure_geometry_equals(cuts, expected_cuts);
+    ensure_geometry_equals(dangles, expected_dangles);
+    ensure_geometry_equals(invalidRings, expected_invalidRings);
+
+    GEOSGeom_destroy(cuts);
+    GEOSGeom_destroy(dangles);
+    GEOSGeom_destroy(invalidRings);
+
+    GEOSGeom_destroy(expected_cuts);
+    GEOSGeom_destroy(expected_dangles);
+    GEOSGeom_destroy(expected_invalidRings);
+}
+
 } // namespace tut
 

@@ -38,6 +38,7 @@ xxxx-xx-xx
   - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
     (GH-791, Joris Van den Bossche & Dan Baston)
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
+  - Polygonizer: Fix duplicate lines return by getInvalidRingLines (GH-782, Martin Davis & Dan Baston)
 
 
 ## Changes in 3.11.0
