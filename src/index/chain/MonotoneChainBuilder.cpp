@@ -57,7 +57,7 @@ public:
      m_context(context),
      m_list(list) {}
 
-    void filter_ro(const Coordinate* c) override final {
+    void filter_ro(const CoordinateXY* c) override {
         process(c);
 
         m_prev = c;
@@ -76,7 +76,7 @@ private:
         m_start = chainEnd;
     }
 
-    void process(const Coordinate* curr) {
+    void process(const CoordinateXY* curr) {
         if (m_prev == nullptr || curr->equals2D(*m_prev)) {
             return;
         }
@@ -93,7 +93,7 @@ private:
         }
     }
 
-    const Coordinate* m_prev;
+    const CoordinateXY* m_prev;
     std::size_t m_i;
     int m_quadrant;
     std::size_t m_start;

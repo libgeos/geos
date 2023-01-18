@@ -15,13 +15,12 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Coordinate.h>
 
 #include <cassert>
 
 namespace geos {
 namespace geom { // geos::geom
-
-class Coordinate;
 
 /** \brief
  * Geometry classes support the concept of applying a
@@ -34,8 +33,11 @@ class Coordinate;
  * used to implement such things as coordinate transformations, centroid and
  * envelope computation, and many other functions.
  *
- * TODO: provide geom::CoordinateInspector and geom::CoordinateMutator instead
- * of having the two versions of filter_rw and filter_ro
+ * A CoordinateFilter should be able to process a CoordinateXY object and can
+ * optionally provide specialized implementations for higher-dimensionality
+ * Coordinates. If the behavior can be templated on coordinate type, then
+ * a filter may inherit from CoordinateInspector or CoordinateMutator to
+ * generate these implementations from a template.
  *
  */
 class GEOS_DLL CoordinateFilter {
@@ -49,7 +51,7 @@ public:
      * **param** `coord` a Coordinate to which the filter is applied.
      */
     virtual void
-    filter_rw(Coordinate* /*coord*/) const
+    filter_rw(CoordinateXY* /*coord*/) const
     {
         assert(0);
     }
@@ -60,10 +62,66 @@ public:
      * **param** `coord`  a Coordinate to which the filter is applied.
      */
     virtual void
-    filter_ro(const Coordinate* /*coord*/)
+    filter_ro(const CoordinateXY* /*coord*/)
     {
         assert(0);
     }
+
+    virtual void
+    filter_rw(Coordinate* c) const
+    {
+        filter_rw(static_cast<CoordinateXY*>(c));
+    }
+
+    virtual void
+    filter_ro(const Coordinate* c)
+    {
+        filter_ro(static_cast<const CoordinateXY*>(c));
+    }
+
+    virtual void
+    filter_rw(CoordinateXYM* c) const
+    {
+        filter_rw(static_cast<CoordinateXY*>(c));
+    }
+
+    virtual void
+    filter_ro(const CoordinateXYM* c)
+    {
+        filter_ro(static_cast<const CoordinateXY*>(c));
+    }
+
+    virtual void
+    filter_rw(CoordinateXYZM* c) const
+    {
+        filter_rw(static_cast<Coordinate*>(c));
+    }
+
+    virtual void
+    filter_ro(const CoordinateXYZM* c)
+    {
+        filter_ro(static_cast<const Coordinate*>(c));
+    }
+};
+
+template<class Derived>
+class CoordinateInspector : public CoordinateFilter
+{
+public:
+    virtual void filter_ro(const CoordinateXY* c) override { static_cast<Derived*>(this)->filter(c); }
+    virtual void filter_ro(const Coordinate* c) override { static_cast<Derived*>(this)->filter(c); }
+    virtual void filter_ro(const CoordinateXYM* c) override { static_cast<Derived*>(this)->filter(c); }
+    virtual void filter_ro(const CoordinateXYZM* c) override { static_cast<Derived*>(this)->filter(c); }
+};
+
+template<class Derived>
+class CoordinateMutator : public CoordinateFilter
+{
+public:
+    virtual void filter_rw(CoordinateXY* c) const override { static_cast<const Derived*>(this)->filter(c); }
+    virtual void filter_rw(Coordinate* c) const override { static_cast<const Derived*>(this)->filter(c); }
+    virtual void filter_rw(CoordinateXYM* c) const override { static_cast<const Derived*>(this)->filter(c); }
+    virtual void filter_rw(CoordinateXYZM* c) const override { static_cast<const Derived*>(this)->filter(c); }
 };
 
 } // namespace geos::geom

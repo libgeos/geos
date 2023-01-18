@@ -95,7 +95,7 @@ public:
      *
      * @throws IllegalArgumentException if the points are equal
      */
-    static int quadrant(const geom::Coordinate& p0, const geom::Coordinate& p1)
+    static int quadrant(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
     {
         if(p1.x == p0.x && p1.y == p0.y) {
             throw util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());

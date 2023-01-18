@@ -152,7 +152,7 @@ public:
         {}
 
         void
-        filter_ro(const geom::Coordinate* pt) override
+        filter_ro(const geom::CoordinateXY* pt) override
         {
             minPtDist.initialize();
             DistanceToPoint::computeDistance(geom, *pt,

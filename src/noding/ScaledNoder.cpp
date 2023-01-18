@@ -89,7 +89,7 @@ public:
     //void filter_ro(const geom::Coordinate* c) { assert(0); }
 
     void
-    filter_rw(geom::Coordinate* c) const override
+    filter_rw(geom::CoordinateXY* c) const override
     {
         c->x = util::round((c->x - sn.offsetX) * sn.scaleFactor);
         c->y = util::round((c->y - sn.offsetY) * sn.scaleFactor);
@@ -114,14 +114,14 @@ public:
     }
 
     void
-    filter_ro(const geom::Coordinate* c) override
+    filter_ro(const geom::CoordinateXY* c) override
     {
         ::geos::ignore_unused_variable_warning(c);
         assert(0);
     }
 
     void
-    filter_rw(geom::Coordinate* c) const override
+    filter_rw(geom::CoordinateXY* c) const override
     {
         c->x = c->x / sn.scaleFactor + sn.offsetX;
         c->y = c->y / sn.scaleFactor + sn.offsetY;

@@ -38,14 +38,14 @@ namespace util { // geos::util
  *
  *  Last port: util/UniqueCoordinateArrayFilter.java rev. 1.17
  */
-class GEOS_DLL UniqueCoordinateArrayFilter: public geom::CoordinateFilter {
+class GEOS_DLL UniqueCoordinateArrayFilter : public geom::CoordinateInspector<UniqueCoordinateArrayFilter> {
 public:
     /**
      * Constructs a CoordinateArrayFilter.
      *
      * @param target The destination set.
      */
-    UniqueCoordinateArrayFilter(geom::Coordinate::ConstVect& target)
+    UniqueCoordinateArrayFilter(std::vector<const geom::Coordinate*>& target)
         : pts(target)
     {}
 
@@ -62,17 +62,27 @@ public:
      * @param coord The "read-only" Coordinate to which
      * 				the filter is applied.
      */
-    void
-    filter_ro(const geom::Coordinate* coord) override
+    template<typename CoordType>
+    void filter(const CoordType* coord)
     {
         if(uniqPts.insert(coord).second) {
+            // TODO make `pts` a CoordinateSequence rather than coercing the type
             pts.push_back(coord);
         }
     }
 
+    void filter(const geom::CoordinateXY*) {
+        assert(0); // not supported
+    }
+
+
+    void filter(const geom::CoordinateXYM*) {
+        assert(0); // not supported
+    }
+
 private:
-    geom::Coordinate::ConstVect& pts;	// target set reference
-    geom::Coordinate::ConstSet uniqPts; 	// unique points set
+    std::vector<const geom::Coordinate*>& pts;	// target set reference
+    std::set<const geom::CoordinateXY*, geom::CoordinateLessThen> uniqPts; 	// unique points set
 
     // Declare type as noncopyable
     UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other) = delete;
