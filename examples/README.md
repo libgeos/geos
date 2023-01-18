@@ -36,7 +36,7 @@ To build a C++ API program, you must pass a define indicating you're OK with the
 
 ```
 c++ -I/usr/local/include -v \
-    -std=c++11 \
+    -std=c++14 \
     -D USE_UNSTABLE_GEOS_CPP_API \
     cpp_read.cpp \
     -o cpp_read \

@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-GEOS has no external library dependencies and can be built with any C++11
+GEOS has no external library dependencies and can be built with any C++14
 compiler.
 
 ### Unix

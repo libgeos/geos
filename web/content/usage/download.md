@@ -30,7 +30,7 @@ All *future* **Final Release** dates are subject to change.
 ### Build Requirements
 
 * [CMake](https://cmake.org/download/) 3.13 or later.
-* C++11 compiler. We regularly test GCC, Clang and Microsoft Visual C++.
+* C++14 compiler. We regularly test GCC, Clang and Microsoft Visual C++.
 * [Doxygen](https://www.doxygen.nl/) to build the API documentation.
 
 ### Build

@@ -2,6 +2,7 @@
 xxxx-xx-xx
 
 - New things:
+  - C++14 is now required.
   - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator,
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
   - Support reading and writing M values through WKB and WKT readers/writers
