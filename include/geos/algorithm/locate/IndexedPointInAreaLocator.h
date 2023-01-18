@@ -54,22 +54,32 @@ namespace locate { // geos::algorithm::locate
 class GEOS_DLL IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
     struct SegmentView {
-        SegmentView(const geom::Coordinate* p_p0, const geom::Coordinate* p_p1) : m_p0(p_p0) {
-            // All GEOS CoordinateSequences store their coordinates sequentially.
-            // Should that ever change, this assert will fail.
-            (void) p_p1;
-            assert(p_p0 + 1 == p_p1);
+        SegmentView(const geom::CoordinateXY* p0, const geom::CoordinateXY* p1) {
+            // There is a significant performance benefit in fitting our
+            // line segment into 8 bytes (about 15-20%). Because we know that
+            // p1 follows p0 in a CoordinateSequence, we know that the address
+            // of p1 is 16, 24, or 32 bytes greater than the address of p0.
+            // By packing this offset into the least significant bits of p0,
+            // we can retrieve both p0 and p1 while only using 8 byytes.
+            std::size_t os = static_cast<std::size_t>(reinterpret_cast<const double*>(p1) - reinterpret_cast<const double*>(p0)) - 2u;
+            m_p0 = reinterpret_cast<std::size_t>(p0) | os;
+
+            assert(&this->p0() == p0);
+            assert(&this->p1() == p1);
         }
 
-        const geom::Coordinate& p0() const {
-            return *m_p0;
+        const geom::CoordinateXY& p0() const {
+            auto ret = reinterpret_cast<const geom::CoordinateXY*>(m_p0 >> 2 << 2);
+            return *ret;
         }
 
-        const geom::Coordinate& p1() const {
-            return *(m_p0 + 1);
+        const geom::CoordinateXY& p1() const {
+            auto offset = (m_p0 & 0x03) + 2;
+            auto ret = reinterpret_cast<const geom::CoordinateXY*>(reinterpret_cast<double*>(m_p0 >> 2 << 2) + offset);
+            return *ret;
         }
 
-        const geom::Coordinate* m_p0;
+        std::size_t m_p0;
     };
 
     class IntervalIndexedGeometry {

@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <typeinfo>
 
+using geos::geom::CoordinateXY;
+
 namespace geos {
 namespace algorithm {
 namespace locate {
@@ -73,7 +75,7 @@ void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::CoordinateSequence* pts)
 {
     for(std::size_t i = 1, ni = pts->size(); i < ni; i++) {
-        SegmentView seg(&pts->getAt(i-1), &pts->getAt(i));
+        SegmentView seg(&pts->getAt<CoordinateXY>(i-1), &pts->getAt<CoordinateXY>(i));
         auto r = std::minmax(seg.p0().y, seg.p1().y);
 
         index.insert(index::strtree::Interval(r.first, r.second), seg);
