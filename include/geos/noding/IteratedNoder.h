@@ -66,7 +66,7 @@ private:
      */
     void node(std::vector<SegmentString*>* segStrings,
               int& numInteriorIntersections,
-              geom::Coordinate& intersectionPoint);
+              geom::CoordinateXY& intersectionPoint);
 
 public:
 

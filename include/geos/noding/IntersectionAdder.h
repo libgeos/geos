@@ -65,7 +65,7 @@ private:
     bool hasInterior;
 
     // the proper intersection point found
-    geom::Coordinate properIntersectionPoint;
+    geom::CoordinateXYZM properIntersectionPoint;
 
     algorithm::LineIntersector& li;
     // bool isSelfIntersection;
@@ -117,7 +117,7 @@ public:
      * @return the proper intersection point, or `Coordinate::getNull()`
      *         if none was found
      */
-    const geom::Coordinate&
+    const geom::CoordinateXYZM&
     getProperIntersectionPoint()
     {
         return properIntersectionPoint;

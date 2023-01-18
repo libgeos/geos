@@ -40,7 +40,7 @@ namespace noding { // geos.noding
 void
 IteratedNoder::node(std::vector<SegmentString*>* segStrings,
                     int& numInteriorIntersections,
-                    Coordinate& intersectionPoint)
+                    CoordinateXY& intersectionPoint)
 {
     IntersectionAdder si(li);
     MCIndexNoder noder;
@@ -64,7 +64,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
     int nodingIterationCount = 0;
     int lastNodesCreated = -1;
     std::vector<SegmentString*>* lastStrings = nullptr;
-    Coordinate intersectionPoint = Coordinate::getNull();
+    CoordinateXY intersectionPoint = CoordinateXY::getNull();
 
     do {
         // NOTE: will change this.nodedSegStrings
