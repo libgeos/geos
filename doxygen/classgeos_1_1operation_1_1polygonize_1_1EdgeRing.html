@@ -74,6 +74,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>build</b> (<a class="
 <tr class="memitem:a1504d80b33474c73c962924dbedcc3e9"><td class="memItemLeft" align="right" valign="top"><a id="a1504d80b33474c73c962924dbedcc3e9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>computeHole</b> ()</td></tr>
 <tr class="separator:a1504d80b33474c73c962924dbedcc3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ded056ee846c00818cbe0f8b16060ce"><td class="memItemLeft" align="right" valign="top"><a id="a0ded056ee846c00818cbe0f8b16060ce"></a>
+const DeList &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEdges</b> () const</td></tr>
+<tr class="separator:a0ded056ee846c00818cbe0f8b16060ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8def8a752f6266749ae148bc3d3d8518"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a8def8a752f6266749ae148bc3d3d8518">isHole</a> () const</td></tr>
 <tr class="memdesc:a8def8a752f6266749ae148bc3d3d8518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether this ring is a hole.  <a href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a8def8a752f6266749ae148bc3d3d8518">More...</a><br /></td></tr>
 <tr class="separator:a8def8a752f6266749ae148bc3d3d8518"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,10 +126,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addHole</b> (<a class
 <tr class="memitem:a6c6ffae4769a3e2d79c1e6d37e9a787b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a6c6ffae4769a3e2d79c1e6d37e9a787b">getPolygon</a> ()</td></tr>
 <tr class="memdesc:a6c6ffae4769a3e2d79c1e6d37e9a787b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Polygon formed by this ring and any contained holes.  <a href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a6c6ffae4769a3e2d79c1e6d37e9a787b">More...</a><br /></td></tr>
 <tr class="separator:a6c6ffae4769a3e2d79c1e6d37e9a787b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9019f754953d4dac0450089764b0431"><td class="memItemLeft" align="right" valign="top"><a id="af9019f754953d4dac0450089764b0431"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#af9019f754953d4dac0450089764b0431">isValid</a> ()</td></tr>
-<tr class="memdesc:af9019f754953d4dac0450089764b0431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests if the LinearRing ring formed by this edge ring is topologically valid. <br /></td></tr>
-<tr class="separator:af9019f754953d4dac0450089764b0431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab91c0db52eadd4e40e0b5cd116ec3504"><td class="memItemLeft" align="right" valign="top"><a id="ab91c0db52eadd4e40e0b5cd116ec3504"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#ab91c0db52eadd4e40e0b5cd116ec3504">isValid</a> () const</td></tr>
+<tr class="memdesc:ab91c0db52eadd4e40e0b5cd116ec3504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests if the LinearRing ring formed by this edge ring is topologically valid. <br /></td></tr>
+<tr class="separator:ab91c0db52eadd4e40e0b5cd116ec3504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25e8e39d4420b35393586f2762d8d3bf"><td class="memItemLeft" align="right" valign="top"><a id="a25e8e39d4420b35393586f2762d8d3bf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>computeValid</b> ()</td></tr>
+<tr class="separator:a25e8e39d4420b35393586f2762d8d3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8546a1eb89bef3df5926f5ab01601df6"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a8546a1eb89bef3df5926f5ab01601df6">getLineString</a> ()</td></tr>
 <tr class="memdesc:a8546a1eb89bef3df5926f5ab01601df6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the coordinates for this ring as a LineString.  <a href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a8546a1eb89bef3df5926f5ab01601df6">More...</a><br /></td></tr>
 <tr class="separator:a8546a1eb89bef3df5926f5ab01601df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
