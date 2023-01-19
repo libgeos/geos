@@ -28,7 +28,6 @@
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/NodableSegmentString.h> // for inheritance
-#include <geos/noding/Octant.h>
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/SegmentString.h>
@@ -128,22 +127,6 @@ public:
 
 
     /** \brief
-     * Gets the octant of the segment starting at vertex index.
-     *
-     * @param index the index of the vertex starting the segment.
-     *              Must not be the last index in the vertex list
-     * @return the octant of the segment at the vertex
-     */
-    int getSegmentOctant(std::size_t index) const
-    {
-        if (index >= size() - 1) {
-            return -1;
-        }
-        return safeOctant(getCoordinate(index), getCoordinate(index + 1));
-        //return Octant::octant(getCoordinate(index), getCoordinate(index+1));
-    };
-
-    /** \brief
      * Add {@link SegmentNode}s for one or both
      * intersections found for a segment of an edge to the edge
      * intersection list.
@@ -213,14 +196,6 @@ public:
 private:
 
     SegmentNodeList nodeList;
-
-    static int safeOctant(const geom::Coordinate& p0, const geom::Coordinate& p1)
-    {
-        if(p0.equals2D(p1)) {
-            return 0;
-        }
-        return Octant::octant(p0, p1);
-    };
 
 };
 

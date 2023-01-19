@@ -110,7 +110,7 @@ private:
     void addCollapsedNodes();
 
     /**
-     * Adds nodes for any collapsed edge pairs
+ /    * Adds nodes for any collapsed edge pairs
      * which are pre-existing in the vertex list.
      */
     void findCollapsesFromExistingVertices(
@@ -173,8 +173,12 @@ public:
      * @param intPt the intersection Coordinate, will be copied
      * @param segmentIndex
      */
-    void add(const geom::Coordinate& intPt, std::size_t segmentIndex);
-    void add(const geom::CoordinateXYZM& intPt, std::size_t segmentIndex);
+    template<typename CoordType>
+    void add(const CoordType& intPt, std::size_t segmentIndex) {
+        // Cast edge to SegmentString to avoid circular dependency between NodedSegmentString and SegmentNodeList
+        nodeMap.emplace_back(edge, intPt, segmentIndex, reinterpret_cast<const SegmentString&>(edge).getSegmentOctant(segmentIndex));
+        ready = false;
+    }
 
     /// Return the number of nodes in this list
     size_t

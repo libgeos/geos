@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/export.h>
 #include <geos/util.h>
 #include <cmath>
 
@@ -21,7 +22,7 @@ namespace util { // geos.util
 /*
  * Symmetric Rounding Algorithm  - equivalent to C99 round()
  */
-double
+double GEOS_DLL
 sym_round(double val)
 {
     double n;
@@ -53,7 +54,7 @@ sym_round(double val)
 /*
  * Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
  */
-double
+double GEOS_DLL
 java_math_round(double val)
 {
     double n;
@@ -116,7 +117,7 @@ rint_vc(double val)
 }
 
 
-double
+double GEOS_DLL
 clamp(double x, double min, double max)
 {
     if (x < min) return min;

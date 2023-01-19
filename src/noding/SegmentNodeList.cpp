@@ -48,23 +48,6 @@ namespace noding { // geos.noding
 static Profiler* profiler = Profiler::instance();
 #endif
 
-
-void
-SegmentNodeList::add(const Coordinate& intPt, std::size_t segmentIndex)
-{
-    // SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    nodeMap.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    ready = false;
-}
-
-void
-SegmentNodeList::add(const CoordinateXYZM& intPt, std::size_t segmentIndex)
-{
-    // SegmentNode sn(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    nodeMap.emplace_back(edge, intPt, segmentIndex, edge.getSegmentOctant(segmentIndex));
-    ready = false;
-}
-
 void SegmentNodeList::prepare() const {
     if (!ready) {
         std::sort(nodeMap.begin(), nodeMap.end(), [](const SegmentNode& s1, const SegmentNode& s2) {
@@ -269,7 +252,6 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 {
     bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
 
-    // FIXME need to construct appropriate-dimension sequences here.
     // if only two points in split edge they must be the node points
     if (twoPoints) {
         auto pts = detail::make_unique<CoordinateSequence>(2u, constructZ, constructM);
@@ -312,7 +294,7 @@ SegmentNodeList::getSplitCoordinates()
 {
     // ensure that the list has entries for the first and last point of the edge
     addEndpoints();
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = detail::make_unique<CoordinateSequence>(0u, constructZ, constructM);
     // there should always be at least two entries in the list, since the endpoints are nodes
     auto it = begin();
     const SegmentNode* eiPrev = &(*it);

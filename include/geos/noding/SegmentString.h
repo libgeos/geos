@@ -23,7 +23,7 @@
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/noding/SegmentNodeList.h>
+#include <geos/noding/Octant.h>
 
 #include <vector>
 
@@ -111,6 +111,26 @@ public:
         return seq;
     }
 
+    /** \brief
+     * Gets the octant of the segment starting at vertex index.
+     *
+     * @param index the index of the vertex starting the segment.
+     *              Must not be the last index in the vertex list
+     * @return the octant of the segment at the vertex
+     */
+    int getSegmentOctant(std::size_t index) const
+    {
+        if (index >= size() - 1) {
+            return -1;
+        }
+        return safeOctant(seq->getAt<geom::CoordinateXY>(index),
+                          seq->getAt<geom::CoordinateXY>(index + 1));
+    };
+
+    static int getSegmentOctant(const SegmentString& ss, std::size_t index) {
+        return ss.getSegmentOctant(index);
+    }
+
     bool isClosed() const {
         return seq->front().equals(seq->back());
     }
@@ -122,6 +142,14 @@ protected:
 
 private:
     const void* context;
+
+    static int safeOctant(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
+    {
+        if(p0.equals2D(p1)) {
+            return 0;
+        }
+        return Octant::octant(p0, p1);
+    };
 
     // Declare type as noncopyable
     SegmentString(const SegmentString& other) = delete;

@@ -81,8 +81,8 @@ SnapRoundingNoder::addIntersectionPixels(std::vector<SegmentString*>& segStrings
     SnapRoundingIntersectionAdder intAdder(tolerance);
     MCIndexNoder noder(&intAdder, tolerance);
     noder.computeNodes(&segStrings);
-    std::unique_ptr<std::vector<Coordinate>> intPts = intAdder.getIntersections();
-    pixelIndex.addNodes(*intPts);
+    const auto& intPts = intAdder.getIntersections();
+    pixelIndex.addNodes(&intPts);
 }
 
 /*private void*/
@@ -99,10 +99,9 @@ SnapRoundingNoder::addVertexPixels(std::vector<SegmentString*>& segStrings)
 std::unique_ptr<CoordinateSequence>
 SnapRoundingNoder::round(const CoordinateSequence& pts) const
 {
-    auto roundPts = detail::make_unique<CoordinateSequence>();
+    auto roundPts = detail::make_unique<CoordinateSequence>(0u, pts.hasZ(), pts.hasM());
     roundPts->reserve(pts.size());
-    pts.forEach<Coordinate>([this, &roundPts](const Coordinate& origPt) {
-        Coordinate pt = origPt;
+    pts.forEach([this, &roundPts](auto pt) {
         pm->makePrecise(pt);
         roundPts->add(pt, false);
     });
@@ -155,24 +154,23 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
         return nullptr;
 
     // Create new nodedSS to allow adding any hot pixel nodes
-    // FIXME remove hardcoded hasZ, hasM
-    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), true, false, ss->getData());
+    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getNodeList().getConstructZ(), ss->getNodeList().getConstructM(), ss->getData());
 
     std::size_t snapSSindex = 0;
     for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
 
-        const geom::Coordinate& currSnap = snapSS->getCoordinate(snapSSindex);
+        const geom::CoordinateXY& currSnap = snapSS->getCoordinate(snapSSindex);
 
         /**
         * If the segment has collapsed completely, skip it
         */
-        Coordinate p1 = pts->getAt(i+1);
-        Coordinate p1Round = p1;
+        const CoordinateXY& p1 = pts->getAt<CoordinateXY>(i+1);
+        CoordinateXY p1Round(p1);
         pm->makePrecise(p1Round);
         if (p1Round.equals2D(currSnap))
             continue;
 
-        Coordinate p0 = pts->getAt(i);
+        const CoordinateXY p0 = pts->getAt<CoordinateXY>(i);
 
         /**
         * Add any Hot Pixel intersections with *original* segment to rounded segment.
@@ -195,16 +193,16 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
 */
 /*private*/
 void
-SnapRoundingNoder::snapSegment(Coordinate& p0, Coordinate& p1, NodedSegmentString* ss, std::size_t segIndex)
+SnapRoundingNoder::snapSegment(const CoordinateXY& p0, const CoordinateXY& p1, NodedSegmentString* ss, std::size_t segIndex)
 {
     /* First define a visitor to use in the pixelIndex.query() */
     struct SnapRoundingVisitor : KdNodeVisitor {
-        const Coordinate& p0;
-        const Coordinate& p1;
+        const CoordinateXY& p0;
+        const CoordinateXY& p1;
         NodedSegmentString* ss;
         std::size_t segIndex;
 
-        SnapRoundingVisitor(const Coordinate& pp0, const Coordinate& pp1, NodedSegmentString* pss, std::size_t psegIndex)
+        SnapRoundingVisitor(const CoordinateXY& pp0, const CoordinateXY& pp1, NodedSegmentString* pss, std::size_t psegIndex)
             : p0(pp0), p1(pp1), ss(pss), segIndex(psegIndex) {};
 
         void visit(KdNode* node) override {
@@ -244,24 +242,27 @@ void
 SnapRoundingNoder::addVertexNodeSnaps(NodedSegmentString* ss)
 {
     const CoordinateSequence* pts = ss->getCoordinates();
-    for (std::size_t i = 1; i < pts->size() - 1; i++) {
-        const Coordinate& p0 = pts->getAt(i);
-        snapVertexNode(p0, ss, i);
-    }
+    std::size_t i = 0;
+    pts->forEach([this, ss, &i](const auto& p0) -> void {
+        if (i > 0 && i < ss->size() - 1) {
+            this->snapVertexNode(p0, ss, i);
+        }
+        i++;
+    });
 }
 
 void
-SnapRoundingNoder::snapVertexNode(const Coordinate& p0, NodedSegmentString* ss, std::size_t segIndex)
+SnapRoundingNoder::snapVertexNode(const CoordinateXY& p0, NodedSegmentString* ss, std::size_t segIndex)
 {
 
     /* First define a visitor to use in the pixelIndex.query() */
     struct SnapRoundingVertexNodeVisitor : KdNodeVisitor {
 
-        const Coordinate& p0;
+        const CoordinateXY& p0;
         NodedSegmentString* ss;
         std::size_t segIndex;
 
-        SnapRoundingVertexNodeVisitor(const Coordinate& pp0, NodedSegmentString* pss, std::size_t psegIndex)
+        SnapRoundingVertexNodeVisitor(const CoordinateXY& pp0, NodedSegmentString* pss, std::size_t psegIndex)
             : p0(pp0), ss(pss), segIndex(psegIndex) {};
 
         void visit(KdNode* node) override {

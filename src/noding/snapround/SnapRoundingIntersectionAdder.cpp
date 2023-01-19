@@ -47,17 +47,16 @@ SnapRoundingIntersectionAdder::processIntersections(
     // don't bother intersecting a segment with itself
     if (e0 == e1 && segIndex0 == segIndex1) return;
 
-    const Coordinate& p00 = e0->getCoordinate(segIndex0);
-    const Coordinate& p01 = e0->getCoordinate(segIndex0 + 1);
-    const Coordinate& p10 = e1->getCoordinate(segIndex1);
-    const Coordinate& p11 = e1->getCoordinate(segIndex1 + 1);
+    const CoordinateSequence& seq0 = *e0->getCoordinates();
+    const CoordinateSequence& seq1 = *e1->getCoordinates();
 
-    li.computeIntersection(p00, p01, p10, p11);
+    li.computeIntersection(seq0, segIndex0, seq1, segIndex1);
+
     if (li.hasIntersection()) {
         if (li.isInteriorIntersection()) {
             for (std::size_t intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
                 // Take a copy of the intersection coordinate
-                intersections->emplace_back(li.getIntersection(intIndex));
+                intersections.add(li.getIntersection(intIndex));
             }
             static_cast<NodedSegmentString*>(e0)->addIntersections(&li, segIndex0, 0);
             static_cast<NodedSegmentString*>(e1)->addIntersections(&li, segIndex1, 1);
@@ -71,34 +70,38 @@ SnapRoundingIntersectionAdder::processIntersections(
      * To avoid certain robustness issues in snap-rounding,
      * also treat very near vertex-segment situations as intersections.
      */
-    processNearVertex(p00, e1, segIndex1, p10, p11 );
-    processNearVertex(p01, e1, segIndex1, p10, p11 );
-    processNearVertex(p10, e0, segIndex0, p00, p01 );
-    processNearVertex(p11, e0, segIndex0, p00, p01 );
+    processNearVertex(seq0, segIndex0, seq1, segIndex1, e1);
+    processNearVertex(seq0, segIndex0 + 1, seq1, segIndex1, e1);
+    processNearVertex(seq1, segIndex1, seq0, segIndex0, e0);
+    processNearVertex(seq1, segIndex1 + 1, seq0, segIndex0, e0);
+}
+
+bool
+SnapRoundingIntersectionAdder::isNearSegmentInterior(
+    const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) const
+{
+    if (p.distance(p0) < nearnessTol) return false;
+    if (p.distance(p1) < nearnessTol) return false;
+
+    double distSeg = algorithm::Distance::pointToSegment(p, p0, p1);
+    return distSeg < nearnessTol;
 }
 
 /*private*/
 void
 SnapRoundingIntersectionAdder::processNearVertex(
-    const geom::Coordinate& p, SegmentString* edge, std::size_t segIndex,
-    const geom::Coordinate& p0, const geom::Coordinate& p1)
+        const CoordinateSequence& ptSeq, std::size_t ptIndex,
+        const CoordinateSequence& segSeq, std::size_t segIndex,
+        SegmentString* edge)
 {
-    /**
-     * Don't add intersection if candidate vertex is near endpoints of segment.
-     * This avoids creating "zig-zag" linework
-     * (since the vertex could actually be outside the segment envelope).
-     */
-    if (p.distance(p0) < nearnessTol) return;
-    if (p.distance(p1) < nearnessTol) return;
-
-    double distSeg = algorithm::Distance::pointToSegment(p, p0, p1);
-    if (distSeg < nearnessTol) {
-        intersections->emplace_back(p);
-        static_cast<NodedSegmentString*>(edge)->addIntersection(p, segIndex);
+    const CoordinateXY& pt = ptSeq.getAt<CoordinateXY>(ptIndex);
+    const CoordinateXY& seg0 = segSeq.getAt<CoordinateXY>(segIndex);
+    const CoordinateXY& seg1 = segSeq.getAt<CoordinateXY>(segIndex + 1);
+    if (isNearSegmentInterior(pt, seg0, seg1)) {
+        intersections.add(ptSeq, ptIndex, ptIndex);
+        static_cast<NodedSegmentString*>(edge)->addIntersection(intersections.back<CoordinateXYZM>(), segIndex);
     }
 }
-
-
 
 } // namespace geos.noding.snapround
 } // namespace geos.noding

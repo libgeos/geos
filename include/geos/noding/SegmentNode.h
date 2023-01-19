@@ -21,16 +21,10 @@
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/noding/SegmentPointComparator.h>
+#include <geos/noding/SegmentString.h>
 
 #include <vector>
 #include <iostream>
-
-// Forward declarations
-namespace geos {
-namespace noding {
-class NodedSegmentString;
-}
-}
 
 namespace geos {
 namespace noding { // geos.noding
@@ -43,8 +37,6 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL SegmentNode {
 private:
-    // const NodedSegmentString* segString;
-
     int segmentOctant;
 
     bool isInteriorVar;
@@ -70,12 +62,18 @@ public:
     ///
     /// @param nSegmentOctant
     ///
-    SegmentNode(const NodedSegmentString& ss,
-        const geom::CoordinateXYZM& nCoord,
-        std::size_t nSegmentIndex, int nSegmentOctant);
-    SegmentNode(const NodedSegmentString& ss,
-        const geom::Coordinate& nCoord,
-        std::size_t nSegmentIndex, int nSegmentOctant);
+    template<typename CoordType>
+    SegmentNode(const SegmentString& ss,
+        const CoordType& nCoord,
+        std::size_t nSegmentIndex, int nSegmentOctant)
+        : segmentOctant(nSegmentOctant)
+        , coord(nCoord)
+        , segmentIndex(nSegmentIndex)
+    {
+        // Number of points in NodedSegmentString is one-more number of segments
+        assert(segmentIndex < ss.size());
+        isInteriorVar = !coord.equals2D(ss.getCoordinate(segmentIndex));
+    }
 
     ~SegmentNode() {}
 

@@ -43,9 +43,8 @@ HotPixelIndex::HotPixelIndex(const PrecisionModel* p_pm)
 
 /*public*/
 HotPixel*
-HotPixelIndex::add(const Coordinate& p)
+HotPixelIndex::addRounded(const CoordinateXYZM& pRound)
 {
-    Coordinate pRound = round(p);
     HotPixel* hp = find(pRound);
 
     /**
@@ -53,6 +52,7 @@ HotPixelIndex::add(const Coordinate& p)
      * must have more than one vertex in them
      * and thus must be nodes.
      */
+
     if (hp != nullptr) {
         hp->setToNode();
         return hp;
@@ -94,8 +94,11 @@ HotPixelIndex::add(const CoordinateSequence *pts)
     std::mt19937 g(rd());
     std::shuffle(idxs.begin(), idxs.end(), g);
 
-    for (auto i : idxs) {
-        add(pts->getAt(i));
+    switch(pts->getCoordinateType()){
+        case CoordinateType::XY:    for (auto i : idxs) { add(CoordinateXYZM(pts->getAt<CoordinateXY>(i)));   } break;
+        case CoordinateType::XYZ:   for (auto i : idxs) { add(pts->getAt<Coordinate>(i));     } break;
+        case CoordinateType::XYM:   for (auto i : idxs) { add(CoordinateXYZM(pts->getAt<CoordinateXYM>(i)));  } break;
+        case CoordinateType::XYZM:  for (auto i : idxs) { add(pts->getAt<CoordinateXYZM>(i)); } break;
     }
 }
 
@@ -118,12 +121,12 @@ HotPixelIndex::add(const std::vector<geom::Coordinate>& pts)
 
 /*public*/
 void
-HotPixelIndex::addNodes(const CoordinateSequence *pts)
+HotPixelIndex::addNodes(const CoordinateSequence* pts)
 {
-    for (std::size_t i = 0, sz = pts->size(); i < sz; i++) {
-        HotPixel* hp = add(pts->getAt(i));
+    pts->forEach([this](const auto& coord) -> void {
+        HotPixel* hp = this->add(coord);
         hp->setToNode();
-    }
+    });
 }
 
 /*public*/
@@ -147,19 +150,10 @@ HotPixelIndex::find(const geom::Coordinate& pixelPt)
     return (HotPixel*)(kdNode->getData());
 }
 
-/*private*/
-Coordinate
-HotPixelIndex::round(const Coordinate& pt)
-{
-    Coordinate p2 = pt;
-    pm->makePrecise(p2);
-    return p2;
-}
-
 
 /*public*/
 void
-HotPixelIndex::query(const Coordinate& p0, const Coordinate& p1, index::kdtree::KdNodeVisitor& visitor)
+HotPixelIndex::query(const CoordinateXY& p0, const CoordinateXY& p1, index::kdtree::KdNodeVisitor& visitor)
 {
     Envelope queryEnv(p0, p1);
     queryEnv.expandBy(1.0 / scaleFactor);

@@ -53,12 +53,13 @@ struct test_snaproundingnoder_data {
 
         std::unique_ptr<Geometry> expected = r.read(expected_wkt);
 
+        // w.setOutputDimension(4);
         // std::cout << std::endl << "result" << std::endl;
         // std::cout << std::endl << w.write(result.get()) << std::endl;
         // std::cout << std::endl << "expected" << std::endl;
         // std::cout << std::endl << w.write(expected.get()) << std::endl;
 
-        ensure_equals_geometry(result.get(), expected.get());
+        ensure_equals_geometry_xyzm(result.get(), expected.get());
     }
 
 
@@ -281,6 +282,26 @@ void object::test<17> ()
     std::string wkt =      "MULTILINESTRING ((1 3.3, 1.3 1.4, 3.1 1.4, 3.1 0.9, 1.3 0.9, 1 -0.2, 0.8 1.3, 1 3.3), (1 2.9, 2.9 2.9, 2.9 1.3, 1.7 1, 1.3 0.9, 1 0.4, 1 2.9))";
     std::string expected = "MULTILINESTRING ((1 3, 1 1), (1 1, 2 1), (2 1, 3 1), (3 1, 2 1), (2 1, 1 1), (1 1, 1 0), (1 0, 1 1), (1 1, 1 3), (1 3, 3 3, 3 1), (3 1, 2 1), (2 1, 1 1), (1 1, 1 0), (1 0, 1 1), (1 1, 1 3))";
     checkRounding(wkt, 1.0, expected);
+}
+
+// Z preserved for simple intersection
+template<>
+template<>
+void object::test<18> ()
+{
+    std::string wkt = "MULTILINESTRING Z ((1 1 0, 9 2 60), (3 3 0, 3 0 36))";
+    std::string expected = "MULTILINESTRING Z ((1 1 0, 3 1 18), (3 1 18, 9 2 60), (3 3 0, 3 1 18), (3 1 18, 3 0 36))";
+    checkRounding(wkt, 1, expected); // intersection point of (3 1.25) is snapped to (3 1) but Z interpolation is done at (3 1.25)
+}
+
+// M preserved for simple intersection
+template<>
+template<>
+void object::test<19> ()
+{
+    std::string wkt = "MULTILINESTRING M ((1 1 0, 9 2 60), (3 3 0, 3 0 36))";
+    std::string expected = "MULTILINESTRING M ((1 1 0, 3 1 18), (3 1 18, 9 2 60), (3 3 0, 3 1 18), (3 1 18, 3 0 36))";
+    checkRounding(wkt, 1, expected); // intersection point of (3 1.25) is snapped to (3 1) but M interpolation is done at (3 1.25)
 }
 
 

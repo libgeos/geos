@@ -73,8 +73,7 @@ struct test_mcidxsnprndr_data {
     getSegmentStrings(const Geometry& g, SegStrVct& vct)
     {
         CoordSeqPtr s(g.getCoordinates());
-        // FIXME evaluate use of hasZ, hasM here
-        vct.push_back(new NodedSegmentString(s.release(), true, false, nullptr));
+        vct.push_back(new NodedSegmentString(s.release(), g.hasZ(), g.hasM(), nullptr));
     }
 
     GeomPtr
