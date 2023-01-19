@@ -158,6 +158,14 @@ public:
         return edge;
     }
 
+    bool getConstructZ() const {
+        return constructZ;
+    }
+
+    bool getConstructM() const {
+        return constructM;
+    }
+
     /**
      * Adds an intersection into the list, if it isn't already there.
      * The input segmentIndex is expected to be normalized.

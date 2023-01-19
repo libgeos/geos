@@ -69,8 +69,7 @@ public:
     /**
     * Creates a new segment-extracting noder.
     */
-    SegmentExtractingNoder()
-        : segList(nullptr)
+    SegmentExtractingNoder() : segList(nullptr)
         {};
 
     void computeNodes(std::vector<SegmentString*>* segStrings) override;

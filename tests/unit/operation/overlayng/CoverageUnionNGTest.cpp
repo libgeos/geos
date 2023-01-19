@@ -32,9 +32,15 @@ struct test_coverageunionng_data {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
         std::unique_ptr<Geometry> result = CoverageUnion::geomunion(geom.get());
-        // std::string wkt_result = w.write(result.get());
-        // std::cout << std::endl << wkt_result << std::endl;
-        ensure_equals_geometry(result.get(), expected.get());
+
+        try {
+            ensure_equals_geometry_xyzm(result.get(), expected.get());
+        } catch (const std::exception& e) {
+            w.setOutputDimension(4);
+            std::string wkt_result = w.write(result.get());
+            std::cerr << std::endl << wkt_result << std::endl;
+            throw;
+        }
     }
 
 };
@@ -167,5 +173,34 @@ void object::test<11> ()
         "MULTILINESTRING ((1 9, 3.1 8), (2 3, 4 3), (3.1 8, 5 7), (4 3, 5 3), (5 3, 5 7), (5 3, 7 4), (5 3, 8 1), (5 7, 7 8), (7 4, 9 5), (7 8, 9 9))");
 }
 
+// Z values preserved in linear inpuuts
+template<>
+template<>
+void object::test<12> ()
+{
+    checkUnion(
+        "MULTILINESTRING Z ((1 1 8, 5 1 9), (9 1 6, 5 1 2))",
+        "MULTILINESTRING Z ((1 1 8, 5 1 9), (5 1 2, 9 1 6))");
+}
+
+// M values preserved in linear inpuuts
+template<>
+template<>
+void object::test<13> ()
+{
+    checkUnion(
+        "MULTILINESTRING M ((1 1 8, 5 1 9), (9 1 6, 5 1 2))",
+        "MULTILINESTRING M ((1 1 8, 5 1 9), (5 1 2, 9 1 6))");
+}
+
+// Mixed Z/M values handled
+// missing Z values are populated by ElevationModel
+template<>
+template<>
+void object::test<14>()
+{
+    checkUnion("GEOMETRYCOLLECTION (LINESTRING Z(1 1 8, 5 1 9), LINESTRING M(9 1 6, 5 1 2))",
+               "MULTILINESTRING ZM ((1 1 8 NaN, 5 1 9 NaN), (5 1 9 2, 9 1 8.5 6))");
+}
 
 } // namespace tut
