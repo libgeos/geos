@@ -46,7 +46,7 @@ BoundaryChainNoder::getNodedSubstrings() const
     return chainList;
 }
 
-/* private static */
+/* private */
 void
 BoundaryChainNoder::addSegments(
     std::vector<SegmentString*>* segStrings,
@@ -54,6 +54,9 @@ BoundaryChainNoder::addSegments(
     std::vector<BoundarySegmentMap>& includedSegs)
 {
     for (SegmentString* ss : *segStrings) {
+        m_constructZ |= ss->getCoordinates()->hasZ();
+        m_constructM |= ss->getCoordinates()->hasM();
+
         includedSegs.emplace_back(ss);
         BoundarySegmentMap& segInclude = includedSegs.back();
         addSegments(ss, segInclude, segSet);
@@ -80,10 +83,10 @@ BoundaryChainNoder::addSegments(
     BoundarySegmentMap& segMap,
     SegmentSet& segSet)
 {
+    const CoordinateSequence& segCoords = *segString->getCoordinates();
+
     for (std::size_t i = 0; i < segString->size() - 1; i++) {
-        const Coordinate& p0 = segString->getCoordinate(i);
-        const Coordinate& p1 = segString->getCoordinate(i + 1);
-        Segment seg(p0, p1, segMap, i);
+        Segment seg(segCoords,segMap, i);
         if (segSetContains(segSet, seg)) {
             segSet.erase(seg);
         }
@@ -103,13 +106,13 @@ BoundaryChainNoder::markBoundarySegments(SegmentSet& segSet)
     }
 }
 
-/* private static */
+/* private */
 std::vector<SegmentString*>*
-BoundaryChainNoder::extractChains(std::vector<BoundarySegmentMap>& sections)
+BoundaryChainNoder::extractChains(std::vector<BoundarySegmentMap>& sections) const
 {
     std::vector<SegmentString*>* sectionList = new std::vector<SegmentString*>();
     for (BoundarySegmentMap& sect : sections) {
-        sect.createChains(*sectionList);
+        sect.createChains(*sectionList, m_constructZ, m_constructM);
     }
     return sectionList;
 }
@@ -128,7 +131,9 @@ BoundaryChainNoder::BoundarySegmentMap::setBoundarySegment(std::size_t index)
 /* public */
 void
 BoundaryChainNoder::BoundarySegmentMap::createChains(
-    std::vector<SegmentString*>& chains)
+    std::vector<SegmentString*>& chains,
+    bool constructZ,
+    bool constructM)
 {
     std::size_t endIndex = 0;
     while (true) {
@@ -136,7 +141,7 @@ BoundaryChainNoder::BoundarySegmentMap::createChains(
         if (startIndex >= segString->size() - 1)
             break;
         endIndex = findChainEnd(startIndex);
-        SegmentString* ss = createChain(segString, startIndex, endIndex);
+        SegmentString* ss = createChain(segString, startIndex, endIndex, constructZ, constructM);
         chains.push_back(ss);
     }
 }
@@ -147,15 +152,16 @@ SegmentString*
 BoundaryChainNoder::BoundarySegmentMap::createChain(
     const SegmentString* segString,
     std::size_t startIndex,
-    std::size_t endIndex)
+    std::size_t endIndex,
+    bool constructZ,
+    bool constructM)
 {
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
-    // Coordinate[] pts = new Coordinate[endIndex - startIndex + 1];
-    for (std::size_t i = startIndex; i < endIndex + 1; i++) {
-        pts->add(segString->getCoordinate(i));
-    }
-    // TODO remove hardcoded hasZ, hasM
-    return new NodedSegmentString(pts.release(), true, false, segString->getData());
+    auto npts = endIndex - startIndex + 1;
+    auto pts = detail::make_unique<CoordinateSequence>(0, constructZ, constructM);
+    pts->reserve(npts);
+    pts->add(*segString->getCoordinates(), startIndex, endIndex);
+
+    return new NodedSegmentString(pts.release(), constructZ, constructM, segString->getData());
 }
 
 /* private */

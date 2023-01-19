@@ -193,7 +193,7 @@ void object::test<13> ()
         "MULTILINESTRING M ((1 1 8, 5 1 9), (5 1 2, 9 1 6))");
 }
 
-// Mixed Z/M values handled
+// Mixed Z/M values handled in linear inputs
 // missing Z values are populated by ElevationModel
 template<>
 template<>
@@ -201,6 +201,24 @@ void object::test<14>()
 {
     checkUnion("GEOMETRYCOLLECTION (LINESTRING Z(1 1 8, 5 1 9), LINESTRING M(9 1 6, 5 1 2))",
                "MULTILINESTRING ZM ((1 1 8 NaN, 5 1 9 NaN), (5 1 9 2, 9 1 8.5 6))");
+}
+
+// Z values preserved in polygonal inputs
+template<>
+template<>
+void object::test<15>()
+{
+    checkUnion("GEOMETRYCOLLECTION( POLYGON Z ((0 0 0, 1 0 1, 1 1 2, 0 0 0)), POLYGON Z ((0 0 0, 1 1 2, 0 1 3, 0 0 0)) )",
+               "POLYGON Z ((0 0 0, 1 0 1, 1 1 2, 0 1 3, 0 0 0))");
+}
+
+// M values preserved in polygonal inputs
+template<>
+template<>
+void object::test<17>()
+{
+    checkUnion("GEOMETRYCOLLECTION( POLYGON M ((0 0 0, 1 0 1, 1 1 2, 0 0 0)), POLYGON M ((0 0 0, 1 1 2, 0 1 3, 0 0 0)) )",
+               "POLYGON M ((0 0 0, 1 0 1, 1 1 2, 0 1 3, 0 0 0))");
 }
 
 } // namespace tut
