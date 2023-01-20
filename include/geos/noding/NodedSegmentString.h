@@ -89,6 +89,10 @@ public:
 
     std::unique_ptr<geom::CoordinateSequence> getNodedCoordinates();
 
+    bool hasNodes() const
+    {
+        return nodeList.size() > 0;
+    }
 
     /** \brief
      * Creates a new segment string from a list of vertices.

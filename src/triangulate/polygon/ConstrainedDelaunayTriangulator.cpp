@@ -88,15 +88,7 @@ ConstrainedDelaunayTriangulator::toGeometry(
 void
 ConstrainedDelaunayTriangulator::triangulatePolygon(const Polygon* poly, TriList<Tri>& triList)
 {
-    /**
-     * Normalize to ensure that shell and holes have canonical orientation.
-     *
-     * TODO: perhaps better to just correct orientation of rings?
-     */
-    std::unique_ptr<Polygon> polyNorm = poly->clone();
-    polyNorm->normalize();
-
-    auto polyShell = PolygonHoleJoiner::join(polyNorm.get());
+    auto polyShell = PolygonHoleJoiner::join(poly);
     PolygonEarClipper::triangulate(*polyShell, triList);
     tri::TriangulationBuilder::build(triList);
     TriDelaunayImprover::improve(triList);

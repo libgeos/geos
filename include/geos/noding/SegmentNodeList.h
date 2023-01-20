@@ -53,10 +53,11 @@ namespace noding { // geos::noding
  */
 class GEOS_DLL SegmentNodeList {
 private:
-    // Since we are adding frequently to the SegmentNodeList and iterating infrequently,
-    // it is faster to store all the SegmentNodes in a vector and sort/remove duplicates
-    // before iteration, rather than storing them in a set and continuously maintaining
-    // a sorted order.
+    // Since we are adding frequently to the SegmentNodeList and
+    // iterating infrequently, it is faster to store all the
+    // SegmentNodes in a vector and sort/remove duplicates
+    // before iteration, rather than storing them in a set
+    // and continuously maintaining a sorted order.
     mutable std::vector<SegmentNode> nodeMap;
     mutable bool ready = false;
 
