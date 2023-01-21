@@ -35,7 +35,6 @@ void
 ignore_unused_variable_warning(T const &) {}
 
 namespace detail {
-using std::make_unique;
 
 /** Use detail::down_cast<Derived*>(pointer_to_base) as equivalent of
  * static_cast<Derived*>(pointer_to_base) with safe checking in debug
