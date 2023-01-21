@@ -49,7 +49,7 @@ PointwisePrecisionReducerTransformer::transformCoordinates(const CoordinateSeque
     (void)(parent); // ignore unused variable
 
     if (coords->isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
+        return std::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
     return reducePointwise(coords);
@@ -60,7 +60,7 @@ PointwisePrecisionReducerTransformer::transformCoordinates(const CoordinateSeque
 std::unique_ptr<CoordinateSequence>
 PointwisePrecisionReducerTransformer::reducePointwise(const CoordinateSequence* coordinates)
 {
-    auto coordReduce = detail::make_unique<CoordinateSequence>();
+    auto coordReduce = std::make_unique<CoordinateSequence>();
     coordReduce->reserve(coordinates->size());
 
     // copy coordinates and reduce

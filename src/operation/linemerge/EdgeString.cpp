@@ -60,7 +60,7 @@ EdgeString::getCoordinates() const
 {
     int forwardDirectedEdges = 0;
     int reverseDirectedEdges = 0;
-    auto coordinates = detail::make_unique<CoordinateSequence>();
+    auto coordinates = std::make_unique<CoordinateSequence>();
     for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
         LineMergeDirectedEdge* directedEdge = directedEdges[i];
         if(directedEdge->getEdgeDirection()) {

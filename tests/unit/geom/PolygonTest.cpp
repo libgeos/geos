@@ -82,7 +82,7 @@ void object::test<1>
 
     // Create non-empty Coordinate sequence for Exterior LinearRing
     const std::size_t size = 7;
-    auto coords = geos::detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", coords != nullptr);
 
     coords->add(Coordinate(0, 10));

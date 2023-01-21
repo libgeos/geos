@@ -71,7 +71,7 @@ void
 LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
 {
     if(!coordList) {
-        coordList = detail::make_unique<CoordinateSequence>();
+        coordList = std::make_unique<CoordinateSequence>();
     }
     coordList->add(pt, allowRepeatedPoints);
     lastPt = pt;

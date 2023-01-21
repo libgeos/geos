@@ -57,7 +57,7 @@ SegmentExtractingNoder::extractSegments(
 {
     std::size_t ssSize = ss->size() - 1;
     for (std::size_t i = 0; i < ssSize; i++) {
-        auto cs = detail::make_unique<CoordinateSequence>(2u);
+        auto cs = std::make_unique<CoordinateSequence>(2u);
         cs->setAt(ss->getCoordinate(i), 0);
         cs->setAt(ss->getCoordinate(i + 1), 1);
         std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), ss->getData()));

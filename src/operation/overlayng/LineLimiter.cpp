@@ -97,7 +97,7 @@ void
 LineLimiter::startSection()
 {
     if (!isSectionOpen()) {
-        ptList = detail::make_unique<CoordinateSequence>();
+        ptList = std::make_unique<CoordinateSequence>();
     }
 
     if (lastOutside != nullptr) {

@@ -35,8 +35,6 @@
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/util.h>
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace triangulate { //geos.triangulate
 

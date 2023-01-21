@@ -295,7 +295,7 @@ void object::test<10>
 {
     geos::geom::Coordinate coord(x_, y_, z_);
 
-    auto sequence = geos::detail::make_unique<CoordinateSequence>();
+    auto sequence = std::make_unique<CoordinateSequence>();
 
     ensure("sequence is null pointer.", sequence != nullptr);
     sequence->add(coord);
@@ -427,7 +427,7 @@ void object::test<13>
 ()
 {
     const std::size_t size = 5;
-    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
+    auto coords = std::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), size);
 
@@ -518,7 +518,7 @@ void object::test<16>
 ()
 {
     const std::size_t size = 5;
-    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
+    auto coords = std::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), size);
 
@@ -616,7 +616,7 @@ void object::test<19>
     const std::size_t size = 7;
 
     // Create sequence of coordinates
-    auto coords = geos::detail::make_unique<CoordinateSequence>(size);
+    auto coords = std::make_unique<CoordinateSequence>(size);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);
     coords->setAt(Coordinate(5, 5), 1);
@@ -663,7 +663,7 @@ void object::test<20>
     const std::size_t interiorSize = 5;
 
     // Create sequence of coordinates
-    auto coords = geos::detail::make_unique<CoordinateSequence>(exteriorSize);
+    auto coords = std::make_unique<CoordinateSequence>(exteriorSize);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 10), 0);
     coords->setAt(Coordinate(5, 5), 1);
@@ -749,7 +749,7 @@ void object::test<22>
     vec.push_back(std::move(point));
 
     // Add single LineString
-    auto coords = geos::detail::make_unique<CoordinateSequence>(3u);
+    auto coords = std::make_unique<CoordinateSequence>(3u);
     ensure(coords != nullptr);
     coords->setAt(Coordinate(0, 0), 0);
     coords->setAt(Coordinate(5, 5), 1);
@@ -988,7 +988,7 @@ void object::test<29>
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
-        auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(lineSize);
+        auto coords = std::make_unique<geos::geom::CoordinateSequence>(lineSize);
         ensure(coords != nullptr);
         coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
         coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
@@ -1027,7 +1027,7 @@ void object::test<30>
 
     for(std::size_t i = 0; i < size; ++i) {
         const double factor = static_cast<double>(i * i);
-        auto coords = geos::detail::make_unique<CoordinateSequence>(lineSize);
+        auto coords = std::make_unique<CoordinateSequence>(lineSize);
         ensure(coords != nullptr);
         coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
         coords->setAt(Coordinate(5. + factor, 5. + factor), 1);

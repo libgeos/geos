@@ -96,7 +96,7 @@ private:
                 if (minPair) {
                     *minPair = pair;
                 } else {
-                    minPair = detail::make_unique<NodePair>(pair);
+                    minPair = std::make_unique<NodePair>(pair);
                 }
             } else {
                 /*

@@ -98,7 +98,7 @@ Vertex::bisector(const Vertex& a, const Vertex& b)
     HCoordinate l1 = HCoordinate(a.getX() + dx / 2.0, a.getY() + dy / 2.0, 1.0);
     HCoordinate l2 = HCoordinate(a.getX() - dy + dx / 2.0, a.getY() + dx + dy / 2.0, 1.0);
 
-    return detail::make_unique<HCoordinate>(l1, l2);
+    return std::make_unique<HCoordinate>(l1, l2);
 }
 
 double
@@ -125,19 +125,19 @@ Vertex::midPoint(const Vertex& a)
     double xm = (p.x + a.getX()) / 2.0;
     double ym = (p.y + a.getY()) / 2.0;
     double zm = (p.z + a.getZ()) / 2.0;
-    return detail::make_unique<Vertex>(xm, ym, zm);
+    return std::make_unique<Vertex>(xm, ym, zm);
 }
 
 std::unique_ptr<Vertex>
 Vertex::circleCenter(const Vertex& b, const Vertex& c) const
 {
-    auto a = detail::make_unique<Vertex>(getX(), getY());
+    auto a = std::make_unique<Vertex>(getX(), getY());
     // compute the perpendicular bisector of cord ab
     std::unique_ptr<HCoordinate> cab = bisector(*a, b);
     // compute the perpendicular bisector of cord bc
     std::unique_ptr<HCoordinate> cbc = bisector(b, c);
     // compute the intersection of the bisectors (circle radii)
-    std::unique_ptr<HCoordinate> hcc = detail::make_unique<HCoordinate>(*cab, *cbc);
+    std::unique_ptr<HCoordinate> hcc = std::make_unique<HCoordinate>(*cab, *cbc);
     std::unique_ptr<Vertex> cc;
 
     try {

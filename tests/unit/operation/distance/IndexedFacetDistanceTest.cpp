@@ -89,7 +89,7 @@ struct test_facetdistanceop_data {
     std::unique_ptr<geos::geom::LineString>
     makeSinCircle(std::size_t nvertices, double radius, double amplitude)
     {
-        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>();
+        auto cs = std::make_unique<geos::geom::CoordinateSequence>();
         std::vector<geos::geom::Coordinate> coords;
         for (std::size_t i = 0; i < nvertices; i++) {
             geos::geom::Coordinate c;

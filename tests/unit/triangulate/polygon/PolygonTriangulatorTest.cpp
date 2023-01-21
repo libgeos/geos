@@ -192,9 +192,9 @@ template<>
 template<>
 void object::test<12>()
 {
-    auto shell_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{0, 0}, Coordinate{0, 10}, Coordinate{3, 10}, Coordinate{3, 0}, Coordinate{0, 0}});
-    auto hole_1_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 1}, Coordinate{2, 1}, Coordinate{2, 2}, Coordinate{1, 2}, Coordinate{1, 1}});
-    auto hole_2_seq = geos::detail::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 8}, Coordinate{1, 9}, Coordinate{2, 9}, Coordinate{2, 8}, Coordinate{1, 8}});
+    auto shell_seq = std::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{0, 0}, Coordinate{0, 10}, Coordinate{3, 10}, Coordinate{3, 0}, Coordinate{0, 0}});
+    auto hole_1_seq = std::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 1}, Coordinate{2, 1}, Coordinate{2, 2}, Coordinate{1, 2}, Coordinate{1, 1}});
+    auto hole_2_seq = std::make_unique<CoordinateSequence>(CoordinateSequence{Coordinate{1, 8}, Coordinate{1, 9}, Coordinate{2, 9}, Coordinate{2, 8}, Coordinate{1, 8}});
 
     auto* geom_factory = geos::geom::GeometryFactory::getDefaultInstance();
 

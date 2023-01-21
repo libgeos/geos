@@ -164,7 +164,7 @@ MinimumClearance::compute()
     }
 
     // initialize to "No Distance Exists" state
-    minClearancePts = detail::make_unique<CoordinateSequence>(2u, 2u);
+    minClearancePts = std::make_unique<CoordinateSequence>(2u, 2u);
     minClearance = DoubleInfinity;
 
     // handle empty geometries

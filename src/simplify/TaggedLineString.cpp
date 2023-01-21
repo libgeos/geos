@@ -160,7 +160,7 @@ std::unique_ptr<CoordinateSequence>
 TaggedLineString::extractCoordinates(
     const std::vector<TaggedLineSegment*>& segs)
 {
-    auto pts = detail::make_unique<geom::CoordinateSequence>();
+    auto pts = std::make_unique<geom::CoordinateSequence>();
 
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << " segs.size: " << segs.size() << std::endl;

@@ -379,7 +379,7 @@ RingHull::Corner::isRemoved(const LinkedRing& ring) const
 std::unique_ptr<LineString>
 RingHull::Corner::toLineString(const LinkedRing& ring)
 {
-    auto coords = detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
     coords->add(ring.getCoordinate(prev));
     coords->add(ring.getCoordinate(index));
     coords->add(ring.getCoordinate(next));

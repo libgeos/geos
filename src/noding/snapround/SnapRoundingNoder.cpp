@@ -99,7 +99,7 @@ SnapRoundingNoder::addVertexPixels(std::vector<SegmentString*>& segStrings)
 std::unique_ptr<CoordinateSequence>
 SnapRoundingNoder::round(const CoordinateSequence& pts) const
 {
-    auto roundPts = detail::make_unique<CoordinateSequence>();
+    auto roundPts = std::make_unique<CoordinateSequence>();
     roundPts->reserve(pts.size());
     pts.forEach<Coordinate>([this, &roundPts](const Coordinate& origPt) {
         Coordinate pt = origPt;

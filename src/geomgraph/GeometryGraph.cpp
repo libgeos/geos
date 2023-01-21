@@ -349,7 +349,7 @@ std::unique_ptr<SegmentIntersector>
 GeometryGraph::computeSelfNodes(LineIntersector& li,
                                 bool computeRingSelfNodes, const Envelope* env)
 {
-    auto si = detail::make_unique<SegmentIntersector>(&li, true, false);
+    auto si = std::make_unique<SegmentIntersector>(&li, true, false);
     std::unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
     typedef std::vector<Edge*> EC;

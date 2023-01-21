@@ -74,7 +74,7 @@ createPoints(const geom::Envelope& env, std::size_t nItems) {
 
 std::unique_ptr<geom::CoordinateSequence>
 createRandomCoords(const geom::Envelope& env, std::size_t npts, std::size_t seed) {
-    auto ret = detail::make_unique<geom::CoordinateSequence>(npts, false, false, false);
+    auto ret = std::make_unique<geom::CoordinateSequence>(npts, false, false, false);
 
     std::default_random_engine e(seed);
 

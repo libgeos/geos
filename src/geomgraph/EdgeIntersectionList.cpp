@@ -145,7 +145,7 @@ EdgeIntersectionList::createSplitEdge(const EdgeIntersection* ei0,
     std::cerr << "    npts:" << npts << std::endl;
 #endif // GEOS_DEBUG
 
-    auto vc = detail::make_unique<CoordinateSequence>();
+    auto vc = std::make_unique<CoordinateSequence>();
     vc->reserve(npts);
 
     vc->add(ei0->coord);

@@ -216,7 +216,7 @@ void object::test<7>
 
     PrecisionModel pmLocal;
     auto factory_ = GeometryFactory::create(&pmLocal);
-    auto coords = geos::detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
 
     coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
@@ -248,7 +248,7 @@ template<>
 void object::test<9>
 ()
 {
-    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, true, true);
+    auto coords = std::make_unique<CoordinateSequence>(2u, true, true);
     coords->setAt(CoordinateXYZM(1, 2, 3, 4), 0);
     coords->setAt(CoordinateXYZM(5, 6, 7, 8), 1);
 
@@ -273,7 +273,7 @@ template<>
 void object::test<10>
 ()
 {
-    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, false, true);
+    auto coords = std::make_unique<CoordinateSequence>(2u, false, true);
     coords->setAt(CoordinateXYM(1, 2, 3), 0);
     coords->setAt(CoordinateXYM(4, 5, 6), 1);
 
@@ -292,7 +292,7 @@ template<>
 void object::test<11>
 ()
 {
-    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, false, false);
+    auto coords = std::make_unique<CoordinateSequence>(2u, false, false);
     coords->setAt(CoordinateXY(1, 2), 0);
     coords->setAt(CoordinateXY(3, 4), 1);
 

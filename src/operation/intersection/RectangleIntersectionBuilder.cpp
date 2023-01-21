@@ -423,7 +423,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
 
         while(!lines.empty() || ring != nullptr) {
             if(ring == nullptr) {
-                ring = detail::make_unique<CoordinateSequence>();
+                ring = std::make_unique<CoordinateSequence>();
                 LineString* line = lines.front();
                 lines.pop_front();
                 ring->add(*line->getCoordinatesRO());

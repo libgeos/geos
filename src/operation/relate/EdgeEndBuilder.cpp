@@ -111,7 +111,7 @@ EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, std::vector<std::unique_ptr<Edg
     Label label(edge->getLabel());
     // since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
     label.flip();
-    auto e = detail::make_unique<EdgeEnd>(edge, eiCurr->coord, pPrev, label);
+    auto e = std::make_unique<EdgeEnd>(edge, eiCurr->coord, pPrev, label);
     //e.print(System.out);  System.out.println();
     l.push_back(std::move(e));
 }
@@ -139,7 +139,7 @@ EdgeEndBuilder::createEdgeEndForNext(Edge* edge, std::vector<std::unique_ptr<Edg
         pNext = eiNext->coord;
     }
 
-    auto e = detail::make_unique<EdgeEnd>(edge, eiCurr->coord, pNext, edge->getLabel());
+    auto e = std::make_unique<EdgeEnd>(edge, eiCurr->coord, pNext, edge->getLabel());
     //Debug.println(e);
     l.push_back(std::move(e));
 }

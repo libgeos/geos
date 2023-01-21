@@ -388,7 +388,7 @@ WKBReader::readPolygon()
 
     std::unique_ptr<LinearRing> shell;
     if (numRings == 0) {
-        auto coords = detail::make_unique<CoordinateSequence>(0u, hasZ, hasM);
+        auto coords = std::make_unique<CoordinateSequence>(0u, hasZ, hasM);
         shell = factory.createLinearRing(std::move(coords));
     } else {
         shell = readLinearRing();
@@ -480,7 +480,7 @@ std::unique_ptr<CoordinateSequence>
 WKBReader::readCoordinateSequence(uint32_t size)
 {
     minMemSize(GEOS_LINESTRING, size);
-    auto seq = detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
+    auto seq = std::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
 
     CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
     for(uint32_t i = 0; i < size; i++) {

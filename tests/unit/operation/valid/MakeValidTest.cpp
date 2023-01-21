@@ -45,7 +45,7 @@ template<>
 void object::test<1>
 ()
 {
-    auto cs = geos::detail::make_unique<CoordinateSequence>();
+    auto cs = std::make_unique<CoordinateSequence>();
     cs->add(2.22, 2.28);
     cs->add(7.67, 2.06);
     cs->add(10.98, 7.70);

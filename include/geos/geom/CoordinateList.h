@@ -187,7 +187,7 @@ public:
     std::unique_ptr<geom::CoordinateSequence>
     toCoordinateSequence() const
     {
-        auto ret = detail::make_unique<geom::CoordinateSequence>();
+        auto ret = std::make_unique<geom::CoordinateSequence>();
         ret->add(begin(), end());
         return ret;
     }

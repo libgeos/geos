@@ -71,7 +71,7 @@ IsValidOp::getValidationError()
 void
 IsValidOp::logInvalid(int code, const CoordinateXY& pt)
 {
-    validErr = detail::make_unique<TopologyValidationError>(code, pt);
+    validErr = std::make_unique<TopologyValidationError>(code, pt);
 }
 
 /* private */

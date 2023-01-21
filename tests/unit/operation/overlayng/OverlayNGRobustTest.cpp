@@ -64,7 +64,7 @@ struct test_overlayngrobust_data {
     std::unique_ptr<Geometry>
     double2geom(const std::vector<double>& x, const std::vector<double>& y)
     {
-        auto coords = geos::detail::make_unique<CoordinateSequence>();
+        auto coords = std::make_unique<CoordinateSequence>();
         for (std::size_t i = 0; i < x.size(); i++)
             coords->add(CoordinateXY{x[i], y[i]});
         std::unique_ptr<Geometry> geom = factory->createPolygon(factory->createLinearRing(std::move(coords)));

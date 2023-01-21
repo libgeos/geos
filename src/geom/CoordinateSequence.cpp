@@ -242,7 +242,7 @@ CoordinateSequence::add(const CoordinateSequence& cl, bool allowRepeated, bool f
 std::unique_ptr<CoordinateSequence>
 CoordinateSequence::clone() const
 {
-    return detail::make_unique<CoordinateSequence>(*this);
+    return std::make_unique<CoordinateSequence>(*this);
 }
 
 void

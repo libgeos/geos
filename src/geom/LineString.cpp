@@ -77,7 +77,7 @@ void
 LineString::validateConstruction()
 {
     if(points.get() == nullptr) {
-        points = detail::make_unique<CoordinateSequence>();
+        points = std::make_unique<CoordinateSequence>();
         return;
     }
 
@@ -254,7 +254,7 @@ LineString::computeEnvelopeInternal() const
         return Envelope::Ptr(new Envelope());
     }
 
-    return detail::make_unique<Envelope>(points->getEnvelope());
+    return std::make_unique<Envelope>(points->getEnvelope());
 }
 
 bool
@@ -315,7 +315,7 @@ LineString::normalizeClosed()
 
     const auto& ringCoords = getCoordinatesRO();
 
-    auto coords = detail::make_unique<CoordinateSequence>(ringCoords->getSize() - 1);
+    auto coords = std::make_unique<CoordinateSequence>(ringCoords->getSize() - 1);
     // exclude last point (repeated)
     for (std::size_t i = 0; i < coords->getSize(); i++) {
         coords->setAt(ringCoords->getAt(i), i);

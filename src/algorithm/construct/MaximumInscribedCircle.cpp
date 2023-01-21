@@ -99,7 +99,7 @@ MaximumInscribedCircle::getRadiusLine()
 {
     compute();
 
-    auto cl = detail::make_unique<CoordinateSequence>(2u);
+    auto cl = std::make_unique<CoordinateSequence>(2u);
     cl->setAt(centerPt, 0);
     cl->setAt(radiusPt, 1);
     return factory->createLineString(std::move(cl));

@@ -93,7 +93,7 @@ GeometricShapeFactory::createRectangle()
     double XsegLen = env->getWidth() / nSide;
     double YsegLen = env->getHeight() / nSide;
 
-    auto vc = detail::make_unique<CoordinateSequence>(4 * nSide + 1);
+    auto vc = std::make_unique<CoordinateSequence>(4 * nSide + 1);
 
     for(i = 0; i < nSide; i++) {
         double x = env->getMinX() + i * XsegLen;
@@ -132,7 +132,7 @@ GeometricShapeFactory::createCircle()
     double centreY = env->getMinY() + yRadius;
     env.reset();
 
-    auto pts = detail::make_unique<CoordinateSequence>(nPts + 1);
+    auto pts = std::make_unique<CoordinateSequence>(nPts + 1);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = i * (2 * 3.14159265358979 / nPts);
@@ -163,7 +163,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    auto pts = detail::make_unique<CoordinateSequence>(nPts);
+    auto pts = std::make_unique<CoordinateSequence>(nPts);
     uint32_t iPt = 0;
     for(uint32_t i = 0; i < nPts; i++) {
         double ang = startAng + i * angInc;
@@ -192,7 +192,7 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     }
     double angInc = angSize / (nPts - 1);
 
-    auto pts = detail::make_unique<CoordinateSequence>(nPts + 2);
+    auto pts = std::make_unique<CoordinateSequence>(nPts + 2);
     uint32_t iPt = 0;
     (*pts)[iPt++] = coord(centreX, centreY);
     for(uint32_t i = 0; i < nPts; i++) {
@@ -250,12 +250,12 @@ std::unique_ptr<Envelope>
 GeometricShapeFactory::Dimensions::getEnvelope() const
 {
     if(!base.isNull()) {
-        return detail::make_unique<Envelope>(base.x, base.x + width, base.y, base.y + height);
+        return std::make_unique<Envelope>(base.x, base.x + width, base.y, base.y + height);
     }
     if(!centre.isNull()) {
-        return detail::make_unique<Envelope>(centre.x - width / 2, centre.x + width / 2, centre.y - height / 2, centre.y + height / 2);
+        return std::make_unique<Envelope>(centre.x - width / 2, centre.x + width / 2, centre.y - height / 2, centre.y + height / 2);
     }
-    return detail::make_unique<Envelope>(0, width, 0, height);
+    return std::make_unique<Envelope>(0, width, 0, height);
 }
 
 /*protected*/

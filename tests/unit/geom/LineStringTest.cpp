@@ -47,7 +47,7 @@ struct test_linestring_data {
     {
         assert(nullptr != empty_line_);
 
-        auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
+        auto cs = std::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
         cs->setAt(geos::geom::Coordinate{0, 0}, 0);
         cs->setAt(geos::geom::Coordinate{1, 1}, 1);
         line_ = factory_->createLineString(std::move(cs));
@@ -76,7 +76,7 @@ void object::test<1>
     using geos::geom::Coordinate;
 
     // Empty sequence of coordinates
-    auto pseq = geos::detail::make_unique<geos::geom::CoordinateSequence>();
+    auto pseq = std::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     // Create empty linstring instance
@@ -98,7 +98,7 @@ void object::test<2>
     // Non-empty sequence of coordinates
     const std::size_t size3 = 3;
 
-    auto pseq = geos::detail::make_unique<geos::geom::CoordinateSequence>();
+    auto pseq = std::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, 0, 0));
@@ -147,7 +147,7 @@ void object::test<3>
 {
     // Single-element sequence of coordinates
     try {
-        auto pseq = geos::detail::make_unique<CoordinateSequence>();
+        auto pseq = std::make_unique<CoordinateSequence>();
         ensure("sequence is null pointer.", pseq != nullptr);
         pseq->add(geos::geom::Coordinate(0, 0, 0));
         ensure_equals(pseq->size(), 1u);
@@ -177,7 +177,7 @@ void object::test<4>
     // Non-empty sequence of coordinates
     const std::size_t size = 3;
 
-    auto pseq = geos::detail::make_unique<CoordinateSequence>();
+    auto pseq = std::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, 0, 0));
@@ -556,7 +556,7 @@ void object::test<31>
     // Non-empty sequence of coordinates
     const std::size_t size3 = 3;
 
-    auto pseq = geos::detail::make_unique<CoordinateSequence>();
+    auto pseq = std::make_unique<CoordinateSequence>();
     ensure("sequence is null pointer.", pseq != nullptr);
 
     pseq->add(Coordinate(0, geos::DoubleNotANumber));

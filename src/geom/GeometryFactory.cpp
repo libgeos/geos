@@ -61,7 +61,7 @@ public:
     edit(const CoordinateSequence* coordSeq,
          const Geometry*) override
     {
-        return detail::make_unique<CoordinateSequence>(*coordSeq);
+        return std::make_unique<CoordinateSequence>(*coordSeq);
     }
 };
 
@@ -187,7 +187,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
         return std::unique_ptr<Geometry>(createPoint(coord));
     }
 
-    auto cl = detail::make_unique<CoordinateSequence>(5u, false, false, false);
+    auto cl = std::make_unique<CoordinateSequence>(5u, false, false, false);
 
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
@@ -457,7 +457,7 @@ GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 std::unique_ptr<Polygon>
 GeometryFactory::createPolygon(std::size_t coordinateDimension) const
 {
-    auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    auto cs = std::make_unique<CoordinateSequence>(0u, coordinateDimension);
     auto lr = createLinearRing(std::move(cs));
     return createPolygon(std::move(lr));
 }
@@ -475,7 +475,7 @@ std::unique_ptr<Polygon>
 GeometryFactory::createPolygon(CoordinateSequence && coords)
 const
 {
-    auto cs = detail::make_unique<CoordinateSequence>(std::move(coords));
+    auto cs = std::make_unique<CoordinateSequence>(std::move(coords));
     std::unique_ptr<geom::LinearRing> lr = createLinearRing(std::move(cs));
     std::unique_ptr<geom::Polygon> ply = createPolygon(std::move(lr));
     return ply;
@@ -510,7 +510,7 @@ const
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(std::size_t coordinateDimension) const
 {
-    auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    auto cs = std::make_unique<CoordinateSequence>(0u, coordinateDimension);
     return createLineString(std::move(cs));
 }
 

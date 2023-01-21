@@ -74,7 +74,7 @@ GeometryCollection::setSRID(int newSRID)
 std::unique_ptr<CoordinateSequence>
 GeometryCollection::getCoordinates() const
 {
-    auto coordinates = detail::make_unique<CoordinateSequence>(getNumPoints());
+    auto coordinates = std::make_unique<CoordinateSequence>(getNumPoints());
 
     std::size_t k = 0;
     for(const auto& g : geometries) {

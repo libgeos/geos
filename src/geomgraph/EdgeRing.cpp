@@ -150,14 +150,14 @@ EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
     // We don't use "clone" here because
     // GeometryFactory::createPolygon really
     // wants a LinearRing
-    auto shellLR = detail::make_unique<LinearRing>(*(getLinearRing()));
+    auto shellLR = std::make_unique<LinearRing>(*(getLinearRing()));
     if (holes.empty()) {
         return p_geometryFactory->createPolygon(std::move(shellLR));
     } else {
         std::size_t nholes = holes.size();
         std::vector<std::unique_ptr<LinearRing>> holeLR(nholes);
         for(std::size_t i = 0; i < nholes; ++i) {
-            holeLR[i] = detail::make_unique<LinearRing>(*(holes[i]->getLinearRing()));
+            holeLR[i] = std::make_unique<LinearRing>(*(holes[i]->getLinearRing()));
         }
 
         return p_geometryFactory->createPolygon(std::move(shellLR), std::move(holeLR));
@@ -173,7 +173,7 @@ EdgeRing::computeRing()
     if(ring != nullptr) {
         return;    // don't compute more than once
     }
-    auto coordSeq = detail::make_unique<CoordinateSequence>(std::move(pts));
+    auto coordSeq = std::make_unique<CoordinateSequence>(std::move(pts));
     ring = geometryFactory->createLinearRing(std::move(coordSeq));
     isHoleVar = Orientation::isCCW(ring->getCoordinatesRO());
 

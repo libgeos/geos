@@ -2421,7 +2421,7 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             std::ptrdiff_t stride = 2 + hasZ + hasM;
-            auto coords = geos::detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
+            auto coords = std::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
 
             if (hasZ) {
                 if (hasM) {
@@ -2460,7 +2460,7 @@ extern "C" {
             bool hasZ = z != nullptr;
             bool hasM = m != nullptr;
 
-            auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(size, hasZ, hasM, false);
+            auto coords = std::make_unique<geos::geom::CoordinateSequence>(size, hasZ, hasM, false);
 
             geos::geom::CoordinateXYZM c;
             for (std::size_t i = 0; i < size; i++) {

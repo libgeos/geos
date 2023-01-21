@@ -244,7 +244,7 @@ std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
     auto pts = createSplitEdgePts(ei0, ei1);
-    return detail::make_unique<NodedSegmentString>(pts.release(), edge.getData());
+    return std::make_unique<NodedSegmentString>(pts.release(), edge.getData());
 }
 
 
@@ -256,7 +256,7 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 
     // if only two points in split edge they must be the node points
     if (twoPoints) {
-        auto pts = detail::make_unique<CoordinateSequence>(std::initializer_list<Coordinate>{ei0->coord, ei1->coord});
+        auto pts = std::make_unique<CoordinateSequence>(std::initializer_list<Coordinate>{ei0->coord, ei1->coord});
         return pts;
     }
 
@@ -276,7 +276,7 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
     // this bypasses CoordinateSequence::initialize(), which is a significant
     // performance hit in this context. This hack will be unnecessary when
     // we switch to the has_z, has_m initialization.
-    auto pts = detail::make_unique<CoordinateSequence>();
+    auto pts = std::make_unique<CoordinateSequence>();
     pts->resize(npts);
     std::size_t j = 0;
 
@@ -298,7 +298,7 @@ SegmentNodeList::getSplitCoordinates()
 {
     // ensure that the list has entries for the first and last point of the edge
     addEndpoints();
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = std::make_unique<CoordinateSequence>();
     // there should always be at least two entries in the list, since the endpoints are nodes
     auto it = begin();
     const SegmentNode* eiPrev = &(*it);

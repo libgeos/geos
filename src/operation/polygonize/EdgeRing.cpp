@@ -219,7 +219,7 @@ const CoordinateSequence*
 EdgeRing::getCoordinates()
 {
     if(ringPts == nullptr) {
-        ringPts = detail::make_unique<CoordinateSequence>(0u, 0u);
+        ringPts = std::make_unique<CoordinateSequence>(0u, 0u);
         for(const auto& de : deList) {
             auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),

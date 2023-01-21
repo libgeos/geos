@@ -48,7 +48,7 @@ Rectangle::toPolygon(const geom::GeometryFactory& f) const
 std::unique_ptr<geom::LinearRing>
 Rectangle::toLinearRing(const geom::GeometryFactory& f) const
 {
-    auto seq = detail::make_unique<geom::CoordinateSequence>(5u, false, false, false);
+    auto seq = std::make_unique<geom::CoordinateSequence>(5u, false, false, false);
     seq->setAt(geom::Coordinate(xMin, yMin), 0);
     seq->setAt(geom::Coordinate(xMin, yMax), 1);
     seq->setAt(geom::Coordinate(xMax, yMax), 2);

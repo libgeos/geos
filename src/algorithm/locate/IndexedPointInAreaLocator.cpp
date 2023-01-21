@@ -86,7 +86,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::Coordina
 void
 IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 {
-    index = detail::make_unique<IntervalIndexedGeometry>(g);
+    index = std::make_unique<IntervalIndexedGeometry>(g);
 }
 
 

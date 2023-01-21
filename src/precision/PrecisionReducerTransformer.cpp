@@ -42,7 +42,7 @@ class PrecisionReducerFilter : public CoordinateInspector<PrecisionReducerFilter
     public:
 
         PrecisionReducerFilter(bool p_removeRepeated, const PrecisionModel& p_filterPM, bool has_z, bool has_m)
-            : m_coords(detail::make_unique<CoordinateSequence>(0u, has_z, has_m))
+            : m_coords(std::make_unique<CoordinateSequence>(0u, has_z, has_m))
             , m_prev(nullptr)
             , removeRepeated(p_removeRepeated)
             , filterPM(p_filterPM)
@@ -112,7 +112,7 @@ PrecisionReducerTransformer::transformCoordinates(
         return nullptr;
 
     if (coords->isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, coords->getDimension());
+        return std::make_unique<CoordinateSequence>(0u, coords->getDimension());
     }
 
     const bool removeRepeated = true;

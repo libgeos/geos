@@ -106,7 +106,7 @@ SnappingNoder::snapVertices(SegmentString* ss)
 std::unique_ptr<CoordinateSequence>
 SnappingNoder::snap(const CoordinateSequence* cs)
 {
-    auto snapCoords = detail::make_unique<CoordinateSequence>();
+    auto snapCoords = std::make_unique<CoordinateSequence>();
     snapCoords->reserve(cs->size());
 
     cs->forEach<Coordinate>([&snapCoords, this](const Coordinate& origPt) {

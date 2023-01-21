@@ -267,7 +267,7 @@ OverlayMixedPoints::hasLocation(bool isCovered, const Coordinate& coord) const
 std::unique_ptr<CoordinateSequence>
 OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
 {
-    auto coords = detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
 
     CoordinateExtractingFilter filter(*coords, *p_pm);
     points->apply_ro(&filter);

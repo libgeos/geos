@@ -132,7 +132,7 @@ PolygonHoleJoiner::compute()
         joinHoles();
     }
     // return CoordinateArrays.toCoordinateArray(joinedRing);
-    return detail::make_unique<CoordinateSequence>(joinedRing);
+    return std::make_unique<CoordinateSequence>(joinedRing);
 }
 
 /* private */

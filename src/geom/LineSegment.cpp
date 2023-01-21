@@ -316,7 +316,7 @@ LineSegment::offset(double offsetDistance)
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    auto cl = detail::make_unique<CoordinateSequence>(2u);
+    auto cl = std::make_unique<CoordinateSequence>(2u);
 
     cl->setAt(p0, 0);
     cl->setAt(p1, 1);

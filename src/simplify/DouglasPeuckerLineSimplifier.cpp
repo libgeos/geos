@@ -71,7 +71,7 @@ DouglasPeuckerLineSimplifier::setPreserveClosedEndpoint(bool preserve)
 std::unique_ptr<CoordinateSequence>
 DouglasPeuckerLineSimplifier::simplify()
 {
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = std::make_unique<CoordinateSequence>();
 
     // empty coordlist is the simplest, won't simplify further
     if(pts.isEmpty()) {
@@ -92,7 +92,7 @@ DouglasPeuckerLineSimplifier::simplify()
     if (simplifyRing && coordList->size() > geom::LinearRing::MINIMUM_VALID_SIZE) {
         geom::LineSegment seg(coordList->getAt(coordList->size() - 2), coordList->getAt(1));
         if (seg.distance(coordList->getAt(0)) <= distanceTolerance) {
-            auto ret = detail::make_unique<CoordinateSequence>();
+            auto ret = std::make_unique<CoordinateSequence>();
             ret->reserve(coordList->size() - 1);
             ret->add(*coordList, 1, coordList->size() - 2);
             ret->closeRing();

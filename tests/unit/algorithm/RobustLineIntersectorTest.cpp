@@ -248,7 +248,7 @@ void object::test<13>
     using geos::geom::LineString;
 
     GeometryFactory::Ptr factory = GeometryFactory::create();
-    auto cs = geos::detail::make_unique<CoordinateSequence>();
+    auto cs = std::make_unique<CoordinateSequence>();
     cs->add(p1);
     cs->add(p2);
 

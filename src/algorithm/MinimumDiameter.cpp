@@ -144,7 +144,7 @@ MinimumDiameter::getDiameter()
     Coordinate basePt;
     minBaseSeg.project(minWidthPt, basePt);
 
-    auto cl = detail::make_unique<CoordinateSequence>(2u);
+    auto cl = std::make_unique<CoordinateSequence>(2u);
     cl->setAt(basePt, 0);
     cl->setAt(minWidthPt, 1);
     return inputGeom->getFactory()->createLineString(std::move(cl));
@@ -326,7 +326,7 @@ MinimumDiameter::getMinimumRectangle()
     Coordinate p2 = minParaLine.lineIntersection(minPerpLine);
     Coordinate p3 = maxParaLine.lineIntersection(minPerpLine);
 
-    auto seq = detail::make_unique<CoordinateSequence>(5u, 2u);
+    auto seq = std::make_unique<CoordinateSequence>(5u, 2u);
     seq->setAt(p0, 0);
     seq->setAt(p1, 1);
     seq->setAt(p2, 2);
@@ -364,7 +364,7 @@ MinimumDiameter::computeMaximumLine(const geom::CoordinateSequence* pts,
       p1 = ptMaxY;
     }
 
-    auto seq = detail::make_unique<CoordinateSequence>(2u, 2u);
+    auto seq = std::make_unique<CoordinateSequence>(2u, 2u);
     seq->setAt(p0, 0);
     seq->setAt(p1, 1);
 

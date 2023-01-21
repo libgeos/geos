@@ -92,7 +92,7 @@ std::unique_ptr<CoordinateSequence>
 IndexedFacetDistance::nearestPoints(const geom::Geometry* g) const
 {
     std::vector<GeometryLocation> minDistanceLocation = nearestLocations(g);
-    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
+    auto nearestPts = std::make_unique<CoordinateSequence>(2u);
     nearestPts->setAt(minDistanceLocation[0].getCoordinate(), 0);
     nearestPts->setAt(minDistanceLocation[1].getCoordinate(), 1);
     return nearestPts;

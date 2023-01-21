@@ -73,7 +73,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     auto csSize = cs->size();
 
-    auto reducedCoords = detail::make_unique<CoordinateSequence>(csSize);
+    auto reducedCoords = std::make_unique<CoordinateSequence>(csSize);
 
     // copy coordinates and reduce
     for(unsigned int i = 0; i < csSize; ++i) {

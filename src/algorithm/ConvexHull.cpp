@@ -115,7 +115,7 @@ public:
 std::unique_ptr<CoordinateSequence>
 ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
 {
-    auto cs = detail::make_unique<CoordinateSequence>(cv.size());
+    auto cs = std::make_unique<CoordinateSequence>(cv.size());
 
     for(std::size_t i = 0; i < cv.size(); ++i) {
         cs->setAt(*(cv[i]), i); // Coordinate copy

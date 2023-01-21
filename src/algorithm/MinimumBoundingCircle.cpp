@@ -71,14 +71,14 @@ MinimumBoundingCircle::getMaximumDiameter()
         case 1:
             return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
         case 2: {
-            auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
+            auto cs = std::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
             cs->setAt(extremalPts.front(), 0);
             cs->setAt(extremalPts.back(), 1);
             return input->getFactory()->createLineString(std::move(cs));
         }
         default: {
             const auto& fp = farthestPoints(extremalPts);
-            auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
+            auto cs = std::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
             cs->setAt(fp.front(), 0);
             cs->setAt(fp.back(), 1);
             return input->getFactory()->createLineString(std::move(cs));
@@ -122,7 +122,7 @@ MinimumBoundingCircle::getDiameter()
         return std::unique_ptr<Geometry>(input->getFactory()->createPoint(centre));
     }
     std::size_t len = 2;
-    auto cs = detail::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
+    auto cs = std::make_unique<CoordinateSequence>(len, input->hasZ(), input->hasM(), false);
     // TODO: handle case of 3 extremal points, by computing a line from one of
     // them through the centre point with len = 2*radius
     cs->setAt(extremalPts[0], 0);

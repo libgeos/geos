@@ -363,7 +363,7 @@ public:
     void
     visit(std::array<QuadEdge*, 3>& triEdges) override
     {
-        auto coordSeq = detail::make_unique<geom::CoordinateSequence>(4u, 0u);
+        auto coordSeq = std::make_unique<geom::CoordinateSequence>(4u, 0u);
         for(std::size_t i = 0; i < 3; i++) {
             Vertex v = triEdges[i]->orig();
             coordSeq->setAt(v.getCoordinate(), i);
@@ -442,7 +442,7 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 
     edges.reserve(p_quadEdges->size());
     for(const QuadEdge* qe : *p_quadEdges) {
-        auto coordSeq = detail::make_unique<geom::CoordinateSequence>(2u);
+        auto coordSeq = std::make_unique<geom::CoordinateSequence>(2u);
 
         coordSeq->setAt(qe->orig().getCoordinate(), 0);
         coordSeq->setAt(qe->dest().getCoordinate(), 1);
@@ -522,7 +522,7 @@ QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    auto cellPts = detail::make_unique<CoordinateSequence>();
+    auto cellPts = std::make_unique<CoordinateSequence>();
 
     const QuadEdge* startQE = qe;
     do {
@@ -555,7 +555,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(const QuadEdge* qe, const geom::Geome
 std::unique_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::GeometryFactory& geomFact)
 {
-    auto cellPts = detail::make_unique<CoordinateSequence>();
+    auto cellPts = std::make_unique<CoordinateSequence>();
 
     const QuadEdge* startQE = qe;
     do {
@@ -582,7 +582,7 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
 std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList>
 QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
-    auto edges = detail::make_unique<QuadEdgeList>();
+    auto edges = std::make_unique<QuadEdgeList>();
     std::set<Vertex> visitedVertices; // TODO unordered_set of Vertex* ?
 
     for(auto& quartet : quadEdges) {

@@ -74,10 +74,10 @@ getPointLocator() const
     // once (for example, if we get here through Geometry::intersects). So we create a simple locator for the
     // first usage and switch to an indexed locator when it is clear we're in a multiple-use scenario.
     if(! ptOnGeomLoc) {
-        ptOnGeomLoc = detail::make_unique<algorithm::locate::SimplePointInAreaLocator>(&getGeometry());
+        ptOnGeomLoc = std::make_unique<algorithm::locate::SimplePointInAreaLocator>(&getGeometry());
         return ptOnGeomLoc.get();
     } else if (!indexedPtOnGeomLoc) {
-        indexedPtOnGeomLoc = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(getGeometry());
+        indexedPtOnGeomLoc = std::make_unique<algorithm::locate::IndexedPointInAreaLocator>(getGeometry());
     }
 
     return indexedPtOnGeomLoc.get();

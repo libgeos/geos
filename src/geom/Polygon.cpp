@@ -52,11 +52,11 @@ namespace geom { // geos::geom
 Polygon::Polygon(const Polygon& p)
     :
     Geometry(p),
-    shell(detail::make_unique<LinearRing>(*p.shell)),
+    shell(std::make_unique<LinearRing>(*p.shell)),
     holes(p.holes.size())
 {
     for(std::size_t i = 0; i < holes.size(); ++i) {
-        holes[i] = detail::make_unique<LinearRing>(*p.holes[i]);
+        holes[i] = std::make_unique<LinearRing>(*p.holes[i]);
     }
 }
 
@@ -95,10 +95,10 @@ std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
-        return detail::make_unique<CoordinateSequence>();
+        return std::make_unique<CoordinateSequence>();
     }
 
-    auto cl = detail::make_unique<CoordinateSequence>();
+    auto cl = std::make_unique<CoordinateSequence>();
     cl->reserve(getNumPoints());
 
     // Add shell points
@@ -265,7 +265,7 @@ Polygon::getBoundary() const
 Envelope::Ptr
 Polygon::computeEnvelopeInternal() const
 {
-    return detail::make_unique<Envelope>(*(shell->getEnvelopeInternal()));
+    return std::make_unique<Envelope>(*(shell->getEnvelopeInternal()));
 }
 
 bool

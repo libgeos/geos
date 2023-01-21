@@ -517,8 +517,8 @@ void object::test<20>()
 
     auto gfact = GeometryFactory::create();
 
-    auto seq0 = geos::detail::make_unique<CoordinateSequence>(2u);
-    auto seq1 = geos::detail::make_unique<CoordinateSequence>(2u);
+    auto seq0 = std::make_unique<CoordinateSequence>(2u);
+    auto seq1 = std::make_unique<CoordinateSequence>(2u);
 
     Coordinate a0{1, 5.0/3.0};
     Coordinate a1{2, 10.0/3.0};

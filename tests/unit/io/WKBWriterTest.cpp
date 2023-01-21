@@ -318,7 +318,7 @@ template<>
 void object::test<11>
 ()
 {
-    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, true, true);
+    auto coords = std::make_unique<CoordinateSequence>(2u, true, true);
     coords->setAt(CoordinateXYZM{1, 2, 3, 4}, 0);
     coords->setAt(CoordinateXYZM{5, 6, 7, 8}, 1);
 
@@ -349,7 +349,7 @@ template<>
 void object::test<12>
 ()
 {
-    auto coords = geos::detail::make_unique<CoordinateSequence>(2u, false, true);
+    auto coords = std::make_unique<CoordinateSequence>(2u, false, true);
     coords->setAt(CoordinateXYM{1, 2, 3}, 0);
     coords->setAt(CoordinateXYM{4, 5, 6}, 1);
 

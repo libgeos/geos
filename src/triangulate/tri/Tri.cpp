@@ -473,7 +473,7 @@ Tri::getLength(TriIndex i) const
 std::unique_ptr<geom::Polygon>
 Tri::toPolygon(const geom::GeometryFactory* gf) const
 {
-    auto coords = detail::make_unique<geom::CoordinateSequence>(4u);
+    auto coords = std::make_unique<geom::CoordinateSequence>(4u);
     (*coords)[0] = p0;
     (*coords)[1] = p1;
     (*coords)[2] = p2;

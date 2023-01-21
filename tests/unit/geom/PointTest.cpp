@@ -88,7 +88,7 @@ void object::test<2>
     using geos::geom::Coordinate;
     using geos::geom::CoordinateSequence;
 
-    auto coords = geos::detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
     coords->add(Coordinate(1.234, 5.678));
 
@@ -112,7 +112,7 @@ void object::test<3>
 
     // TODO - mloskot - temporary solution of Bug #89
     try {
-        auto coords = geos::detail::make_unique<CoordinateSequence>();
+        auto coords = std::make_unique<CoordinateSequence>();
         ensure(coords != nullptr);
         coords->add(Coordinate(1.234, 5.678));
         coords->add(Coordinate(4.321, 8.765));
@@ -570,12 +570,12 @@ void object::test<45>
     auto empty2d = factory_->createPoint();
     ensure_equals(empty2d->getCoordinateDimension(), 2);
 
-    auto seq2 = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto seq2 = std::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
     ensure_equals(seq2->getDimension(), 2u);
     auto pt2 = factory_->createPoint(std::move(seq2));
     ensure_equals(pt2->getCoordinateDimension(), 2);
 
-    auto seq3 = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 3u);
+    auto seq3 = std::make_unique<geos::geom::CoordinateSequence>(0u, 3u);
     ensure_equals(seq3->getDimension(), 3u);
     auto pt3 = factory_->createPoint(std::move(seq3));
     ensure_equals(pt3->getCoordinateDimension(), 3);
@@ -592,7 +592,7 @@ void object::test<46>
     using geos::geom::Coordinate;
     using geos::geom::CoordinateSequence;
 
-    auto coords = geos::detail::make_unique<CoordinateSequence>();
+    auto coords = std::make_unique<CoordinateSequence>();
     ensure(coords != nullptr);
     coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
 

@@ -168,7 +168,7 @@ OffsetCurve::offsetSegment(const CoordinateSequence* pts, double p_distance)
 {
     LineSegment ls(pts->getAt(0), pts->getAt(1));
     LineSegment offsetSeg = ls.offset(p_distance);
-    auto coords = detail::make_unique<CoordinateSequence>(2u);
+    auto coords = std::make_unique<CoordinateSequence>(2u);
     coords->setAt(offsetSeg.p0, 0);
     coords->setAt(offsetSeg.p1, 1);
     return geomFactory->createLineString(std::move(coords));
@@ -248,7 +248,7 @@ OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<Coord
             curveStart = index;
         }
     }
-    auto curvePts = detail::make_unique<CoordinateSequence>();
+    auto curvePts = std::make_unique<CoordinateSequence>();
     extractSection(bufferPts, curveStart, isInCurve, *curvePts);
     return geomFactory->createLineString(std::move(curvePts));
 }

@@ -228,7 +228,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                         Rectangle::onEdge(pos) &&
                         !Rectangle::onSameEdge(prev_pos, pos)	// discard if travels along edge
                   ) {
-                    auto coords = detail::make_unique<geom::CoordinateSequence>(2u);
+                    auto coords = std::make_unique<geom::CoordinateSequence>(2u);
                     coords->setAt(Coordinate(x0, y0), 0);
                     coords->setAt(Coordinate(x, y), 1);
                     auto line = _gf->createLineString(std::move(coords));
@@ -289,7 +289,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                     // Output a LineString if it at least one segment long
 
                     if(start_index < i - 1 || add_start || through_box) {
-                        auto coords = detail::make_unique<CoordinateSequence>();
+                        auto coords = std::make_unique<CoordinateSequence>();
                         if(add_start) {
                             coords->add(Coordinate(x0, y0));
                             add_start = false;
@@ -312,7 +312,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                     if(Rectangle::onSameEdge(prev_pos, pos)) {
                         // Nothing to output if we haven't been elsewhere
                         if(start_index < i - 1 || add_start) {
-                        auto coords = detail::make_unique<CoordinateSequence>();
+                        auto coords = std::make_unique<CoordinateSequence>();
                             //geom::LineString * line = new geom::LineString();
                             if(add_start) {
                                 //line->addPoint(x0,y0);
@@ -345,7 +345,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
 
             if(!go_outside &&						// meaning data ended
                     (start_index < i - 1 || add_start)) {	// meaning something has to be generated
-                auto coords = detail::make_unique<CoordinateSequence>();
+                auto coords = std::make_unique<CoordinateSequence>();
                 //geom::LineString * line = new geom::LineString();
                 if(add_start) {
                     //line->addPoint(x0,y0);

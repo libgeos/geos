@@ -58,7 +58,7 @@ private:
         using std::unique_ptr;
 
         assert(srcPts);
-        auto coords = detail::make_unique<CoordinateSequence>();
+        auto coords = std::make_unique<CoordinateSequence>();
         coords->add(*srcPts);
         LineStringSnapper snapper(*coords, snapTol);
         return snapper.snapTo(snapPts);
@@ -90,7 +90,7 @@ public:
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-    auto snapPts = detail::make_unique<Coordinate::ConstVect>();
+    auto snapPts = std::make_unique<Coordinate::ConstVect>();
     util::UniqueCoordinateArrayFilter filter(*snapPts);
     g.apply_ro(&filter);
     // integrity check

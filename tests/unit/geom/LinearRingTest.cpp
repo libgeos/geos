@@ -46,7 +46,7 @@ struct test_linearring_data {
     test_linearring_data()
         : pm_(1000), factory_(geos::geom::GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
-        , empty_ring_(geos::detail::make_unique<geos::geom::CoordinateSequence>(), *factory_)
+        , empty_ring_(std::make_unique<geos::geom::CoordinateSequence>(), *factory_)
         , ring_(reader_.read<geos::geom::LinearRing>("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)"))
         , ring_size_(7)
     {}
@@ -80,7 +80,7 @@ void object::test<1>
 
     // Non-empty sequence of coordinates
     const std::size_t size7 = 7;
-    auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>();
+    auto coords = std::make_unique<geos::geom::CoordinateSequence>();
     ensure("sequence is null pointer.", coords != nullptr);
 
     coords->add(Coordinate(0, 10));

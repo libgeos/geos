@@ -108,7 +108,7 @@ std::unique_ptr<CoordinateSequence>
 Densifier::densifyPoints(const CoordinateSequence& pts, double distanceTolerance, const PrecisionModel* precModel)
 {
     geom::LineSegment seg;
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = std::make_unique<CoordinateSequence>();
 
     auto items = pts.items<Coordinate>();
     for(auto it = items.cbegin(), itEnd = items.cend() - 1; it < itEnd; ++it) {

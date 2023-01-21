@@ -80,7 +80,7 @@ template<>
 template<>
 void object::test<1> ()
 {
-    auto cs = geos::detail::make_unique<CoordinateSequence>();
+    auto cs = std::make_unique<CoordinateSequence>();
     cs->add(Coordinate(0.0, 0.0));
     cs->add(Coordinate(1.0, geos::DoubleNotANumber));
     auto line = factory_->createLineString(std::move(cs));

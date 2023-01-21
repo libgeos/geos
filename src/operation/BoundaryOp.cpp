@@ -146,7 +146,7 @@ BoundaryOp::boundaryMultiLineString(const geom::MultiLineString& mLine)
 std::unique_ptr<CoordinateSequence>
 BoundaryOp::computeBoundaryCoordinates(const geom::MultiLineString& mLine)
 {
-    auto bdyPts = detail::make_unique<CoordinateSequence>();
+    auto bdyPts = std::make_unique<CoordinateSequence>();
     std::map<Coordinate, int> endpointMap;
 
     for (std::size_t i = 0; i < mLine.getNumGeometries(); i++) {

@@ -183,7 +183,7 @@ TaggedLineStringSimplifier::simplifyRingEndpoint()
         LineSegment candidateSeg(lastSeg->p0, firstSeg->p1);
         if (candidateSeg.distance(firstSeg->p0) <= distanceTolerance &&
                 !hasBadIntersection(line, std::make_pair(0, line->getSegments().size()), candidateSeg)) {
-            auto newSeg = detail::make_unique<TaggedLineSegment>(candidateSeg.p0, candidateSeg.p1);
+            auto newSeg = std::make_unique<TaggedLineSegment>(candidateSeg.p0, candidateSeg.p1);
             line->removeRingEndpoint();
         }
     }

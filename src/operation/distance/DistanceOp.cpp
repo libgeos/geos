@@ -131,7 +131,7 @@ DistanceOp::nearestPoints()
         return nullptr;
     }
 
-    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
+    auto nearestPts = std::make_unique<CoordinateSequence>(2u);
     nearestPts->setAt(locs[0]->getCoordinate(), 0);
     nearestPts->setAt(locs[1]->getCoordinate(), 1);
 

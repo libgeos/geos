@@ -109,7 +109,7 @@ template<>
 void object::test<1>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -145,7 +145,7 @@ template<>
 void object::test<2>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -181,7 +181,7 @@ template<>
 void object::test<3>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -254,7 +254,7 @@ void object::test<5>
     geos::geom::Coordinate p1(10, 0);
 
 
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
     cs->add(p0);
     cs->add(p1);
 

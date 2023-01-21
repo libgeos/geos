@@ -114,7 +114,7 @@ Edge::getMonotoneChainEdge()
 {
     testInvariant();
     if(mce == nullptr) {
-        mce = detail::make_unique<MonotoneChainEdge>(this);
+        mce = std::make_unique<MonotoneChainEdge>(this);
     }
     return mce.get();
 }

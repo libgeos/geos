@@ -40,7 +40,7 @@ class RepeatedPointFilter : public geom::CoordinateInspector<RepeatedPointFilter
     public:
 
         RepeatedPointFilter(bool has_z, bool has_m, double tolerance = 0.0)
-            : m_coords(detail::make_unique<CoordinateSequence>(0u, has_z, has_m))
+            : m_coords(std::make_unique<CoordinateSequence>(0u, has_z, has_m))
             , m_prev(nullptr)
             , sqTolerance(tolerance*tolerance) {}
 
@@ -76,11 +76,11 @@ std::unique_ptr<CoordinateSequence>
 RepeatedPointRemover::removeRepeatedPoints(const CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
+        return std::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
     }
 
     if (tolerance == 0.0) {
-        auto ret = detail::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
+        auto ret = std::make_unique<CoordinateSequence>(0u, seq->hasZ(), seq->hasM());
         ret->reserve(seq->size());
         ret->add(*seq, false);
         return ret;
@@ -96,7 +96,7 @@ class RepeatedInvalidPointFilter : public geom::CoordinateInspector<RepeatedInva
     public:
 
         RepeatedInvalidPointFilter(bool has_z, bool has_m, double tolerance = 0.0)
-            : m_coords(detail::make_unique<CoordinateSequence>(0u, has_z, has_m))
+            : m_coords(std::make_unique<CoordinateSequence>(0u, has_z, has_m))
             , m_prev(nullptr)
             , sqTolerance(tolerance*tolerance) {}
 
@@ -138,7 +138,7 @@ std::unique_ptr<CoordinateSequence>
 RepeatedPointRemover::removeRepeatedAndInvalidPoints(const CoordinateSequence* seq, double tolerance) {
 
     if (seq->isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, seq->getDimension());
+        return std::make_unique<CoordinateSequence>(0u, seq->getDimension());
     }
 
     RepeatedInvalidPointFilter filter(seq->hasZ(), seq->hasM(), tolerance);
