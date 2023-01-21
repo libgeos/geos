@@ -55,6 +55,9 @@ LineSegment::projectionFactor(const CoordinateXY& p) const
     if(p == p1) {
         return 1.0;
     }
+    if(p0 == p1) {
+        return 0.0;
+    }
     // Otherwise, use comp.graphics.algorithms Frequently Asked Questions method
     /*(1)     	      AC dot AB
                    r = ---------

@@ -5,6 +5,7 @@
 // geos
 #include <geos_c.h>
 // std
+#include <cfenv>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -61,6 +62,8 @@ template<>
 void object::test<1>
 ()
 {
+    std::feclearexcept(FE_ALL_EXCEPT);
+
     geom1_ = GEOSGeomFromWKT("POINT(10 20)");
 
     geom2_ = GEOSVoronoiDiagram(geom1_, nullptr, 0, 0);
@@ -70,6 +73,8 @@ void object::test<1>
     GEOSGeom_destroy(geom2_);
     geom2_ = GEOSVoronoiDiagram(geom1_, nullptr, 0, 1);
     ensure_geometry_equals(geom2_, "MULTILINESTRING EMPTY");
+
+    ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
 }
 
 //More points:

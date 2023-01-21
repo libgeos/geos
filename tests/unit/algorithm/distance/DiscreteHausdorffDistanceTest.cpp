@@ -17,6 +17,7 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <cfenv>
 
 namespace geos {
 namespace geom {
@@ -181,6 +182,24 @@ void object::test<5>
     ensure(std::isnan(distance));
 }
 
+
+// https://github.com/libgeos/geos/issues/515
+//
+// Avoid FE_INVALID floating point errors being raised
+//
+template<>
+template<>
+void object::test<6>
+()
+{
+    std::feclearexcept(FE_ALL_EXCEPT);
+
+    runTest(
+        "LINESTRING (0 0, 100 0, 10 100, 10 100)",
+        "LINESTRING (0 100, 0 10, 80 10)", 0.001, 47.89);
+
+    ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+}
 
 } // namespace tut
 
