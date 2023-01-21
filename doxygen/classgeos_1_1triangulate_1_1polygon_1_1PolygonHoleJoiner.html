@@ -46,6 +46,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1triangulate_1_1polygon_1_1PolygonHoleJoiner-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::triangulate::polygon::PolygonHoleJoiner Class Reference</div>  </div>
@@ -59,37 +60,111 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa5d7f237b638d0a77fc4b245a921fc00"><td class="memItemLeft" align="right" valign="top"><a id="aa5d7f237b638d0a77fc4b245a921fc00"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>PolygonHoleJoiner</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *p_inputPolygon)</td></tr>
 <tr class="separator:aa5d7f237b638d0a77fc4b245a921fc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b0f9ef250765f66db11d733b015b2cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1polygon_1_1PolygonHoleJoiner.html#a5b0f9ef250765f66db11d733b015b2cb">compute</a> ()</td></tr>
-<tr class="separator:a5b0f9ef250765f66db11d733b015b2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07f2e96d59d6941c2e211d077554dc22"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1polygon_1_1PolygonHoleJoiner.html#a07f2e96d59d6941c2e211d077554dc22">compute</a> ()</td></tr>
+<tr class="separator:a07f2e96d59d6941c2e211d077554dc22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7e3af91bae78be4dbe1a96f218d342c"><td class="memItemLeft" align="right" valign="top"><a id="ab7e3af91bae78be4dbe1a96f218d342c"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>join</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *inputPolygon)</td></tr>
-<tr class="separator:ab7e3af91bae78be4dbe1a96f218d342c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15ebcf0b29a3416ded1401baddff4147"><td class="memItemLeft" align="right" valign="top"><a id="a15ebcf0b29a3416ded1401baddff4147"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>joinAsPolygon</b> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *inputPolygon)</td></tr>
-<tr class="separator:a15ebcf0b29a3416ded1401baddff4147"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a024cfb7a8333f03a486dbb43bd139422"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1polygon_1_1PolygonHoleJoiner.html#a024cfb7a8333f03a486dbb43bd139422">joinAsPolygon</a> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *p_inputPolygon)</td></tr>
+<tr class="separator:a024cfb7a8333f03a486dbb43bd139422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f477f287f3fc3089b51ac35b517242f"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1polygon_1_1PolygonHoleJoiner.html#a5f477f287f3fc3089b51ac35b517242f">join</a> (const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *p_inputPolygon)</td></tr>
+<tr class="separator:a5f477f287f3fc3089b51ac35b517242f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a4f8017be5b54ebffe17f1754118c4f73"><td class="memItemLeft" align="right" valign="top"><a id="a4f8017be5b54ebffe17f1754118c4f73"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>PolygonHoleJoiner::InteriorIntersectionDetector</b></td></tr>
+<tr class="separator:a4f8017be5b54ebffe17f1754118c4f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Transforms a polygon with holes into a single self-touching (invalid) ring by connecting holes to the exterior shell or to another hole. The holes are added from the lowest upwards. As the resulting shell develops, a hole might be added to what was originally another hole.</p>
-<p>There is no attempt to optimize the quality of the join lines. In particular, a hole which already touches at a vertex may be joined at a different vertex. </p>
+<div class="textblock"><p>Transforms a polygon with holes into a single self-touching (invalid) ring by joining holes to the exterior shell or to another hole with out-and-back line segments. The holes are added in order of their envelopes (leftmost/lowest first). As the result shell develops, a hole may be added to what was originally another hole.</p>
+<p>There is no attempt to optimize the quality of the join lines. In particular, holes may be joined by lines longer than is optimal. However, holes which touch the shell or other holes are joined at the touch point.</p>
+<p>The class does not require the input polygon to have normal orientation (shell CW and rings CCW). The output ring is always CW. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5b0f9ef250765f66db11d733b015b2cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b0f9ef250765f66db11d733b015b2cb">&#9670;&nbsp;</a></span>compute()</h2>
+<a id="a07f2e96d59d6941c2e211d077554dc22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07f2e96d59d6941c2e211d077554dc22">&#9670;&nbsp;</a></span>compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void geos::triangulate::polygon::PolygonHoleJoiner::compute </td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::triangulate::polygon::PolygonHoleJoiner::compute </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Computes the joined ring. </p>
+<p>Computes the joined ring.</p>
+<dl class="section return"><dt>Returns</dt><dd>the points in the joined ring </dd></dl>
+
+</div>
+</div>
+<a id="a5f477f287f3fc3089b51ac35b517242f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f477f287f3fc3089b51ac35b517242f">&#9670;&nbsp;</a></span>join()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::triangulate::polygon::PolygonHoleJoiner::join </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *&#160;</td>
+          <td class="paramname"><em>p_inputPolygon</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Joins the shell and holes of a polygon and returns the result as sequence of Coordinates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_inputPolygon</td><td>the polygon to join </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the result coordinates </dd></dl>
+
+</div>
+</div>
+<a id="a024cfb7a8333f03a486dbb43bd139422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a024cfb7a8333f03a486dbb43bd139422">&#9670;&nbsp;</a></span>joinAsPolygon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>&gt; geos::triangulate::polygon::PolygonHoleJoiner::joinAsPolygon </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> *&#160;</td>
+          <td class="paramname"><em>p_inputPolygon</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Joins the shell and holes of a polygon and returns the result as an (invalid) Polygon.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_inputPolygon</td><td>the polygon to join </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the result polygon </dd></dl>
 
 </div>
 </div>
