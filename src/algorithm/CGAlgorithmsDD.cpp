@@ -158,6 +158,9 @@ CGAlgorithmsDD::intersection(const CoordinateXY& p1, const CoordinateXY& p2,
 CoordinateXY
 CGAlgorithmsDD::circumcentreDD(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
 {
+    if((a == b) && (a == c)){
+        return a;
+    }
     DD ax = DD(a.x) - DD(c.x);
     DD ay = DD(a.y) - DD(c.y);
     DD bx = DD(b.x) - DD(c.x);
