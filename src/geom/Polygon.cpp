@@ -301,6 +301,36 @@ Polygon::equalsExact(const Geometry* other, double tolerance) const
     return true;
 }
 
+bool
+Polygon::identicalTo(const Geometry& other_g) const
+{
+    if(!isEquivalentClass(&other_g)) {
+        return false;
+    }
+
+    const auto& other = static_cast<const Polygon&>(other_g);
+
+    if (getNumInteriorRing() != other.getNumInteriorRing()) {
+        return false;
+    }
+
+    if (envelope && other.envelope && *envelope != *other.envelope) {
+        return false;
+    }
+
+    if (!getExteriorRing()->identicalTo(*other.getExteriorRing())) {
+            return false;
+    }
+
+    for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
+        if (!getInteriorRingN(i)->identicalTo(*other.getInteriorRingN(i))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void
 Polygon::apply_ro(CoordinateFilter* filter) const
 {

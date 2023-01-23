@@ -1417,4 +1417,36 @@ void object::test<53>
     ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(3), CoordinateXYZM{10, 11,  DoubleNotANumber, 12});
 }
 
+// Test identicalTo()
+template<>
+template<>
+void object::test<54>
+()
+{
+    CoordinateSequence xyz2 = CoordinateSequence::XYZ(2);
+    CoordinateSequence xyz3 = CoordinateSequence::XYZ(3);
+    CoordinateSequence xy3 = CoordinateSequence::XY(3);
+    CoordinateSequence xyz3_2 = CoordinateSequence::XYZ(0);
+
+    xyz2.setAt(Coordinate(1, 2, 3), 0);
+    xyz2.setAt(Coordinate(4, 5, 6), 1);
+
+    xyz3.setAt(Coordinate(1, 2, 3), 0);
+    xyz3.setAt(Coordinate(4, 5, 6), 1);
+    xyz3.setAt(Coordinate(7, 8, 9), 2);
+
+    xyz3_2.add(xyz3);
+
+    xy3.setAt(Coordinate(1, 2, 3), 0);
+    xy3.setAt(Coordinate(4, 5, 6), 1);
+    xy3.setAt(Coordinate(7, 8, 9), 2);
+
+    ensure(xy3.identicalTo(xy3));
+
+    ensure(!xyz2.identicalTo(xyz3));
+    ensure(!xyz3.identicalTo(xy3));
+    ensure(xyz3.identicalTo(xyz3_2));
+    ensure(xyz3_2.identicalTo(xyz3));
+}
+
 } // namespace tut

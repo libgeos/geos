@@ -270,11 +270,27 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
     for(std::size_t i = 0; i < npts; ++i) {
-        if(!equal(points->getAt(i), otherLineString->points->getAt(i), tolerance)) {
+        if(!equal(points->getAt<CoordinateXY>(i), otherLineString->points->getAt<CoordinateXY>(i), tolerance)) {
             return false;
         }
     }
     return true;
+}
+
+bool
+LineString::identicalTo(const Geometry& other_g) const
+{
+    if(!isEquivalentClass(&other_g)) {
+        return false;
+    }
+
+    const auto& other = static_cast<const LineString&>(other_g);
+
+    if (envelope && other.envelope && *envelope != *other.envelope) {
+        return false;
+    }
+
+    return getCoordinatesRO()->identicalTo(*other.getCoordinatesRO());
 }
 
 void

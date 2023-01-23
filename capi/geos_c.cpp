@@ -267,6 +267,12 @@ extern "C" {
         return GEOSEqualsExact_r(handle, g1, g2, tolerance);
     }
 
+    char
+    GEOSIdentical(const Geometry* g1, const Geometry* g2)
+    {
+        return GEOSIdentical_r(handle, g1, g2);
+    }
+
     int
     GEOSDistance(const Geometry* g1, const Geometry* g2, double* dist)
     {

@@ -812,6 +812,14 @@ extern "C" {
         });
     }
 
+    char
+    GEOSIdentical_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
+    {
+        return execute(extHandle, 2, [&]() {
+            return g1->identicalTo(*g2);
+        });
+    }
+
     int
     GEOSDistance_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
     {

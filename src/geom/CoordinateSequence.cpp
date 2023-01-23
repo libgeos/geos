@@ -23,6 +23,7 @@
 #include <geos/util.h>
 
 #include <cstdio>
+#include <cstring>
 #include <algorithm>
 #include <vector>
 #include <cassert>
@@ -441,6 +442,30 @@ CoordinateSequence::equals(const CoordinateSequence* cl1,
         }
     }
     return true;
+}
+
+bool
+CoordinateSequence::identicalTo(const CoordinateSequence& other) const
+{
+    if (this == &other) {
+        return true;
+    }
+
+    if (size() != other.size()) {
+        return false;
+    }
+
+    if (hasZ() != other.hasZ()) {
+        return false;
+    }
+
+    if (hasM() != other.hasM()) {
+        return false;
+    }
+
+    assert(getCoordinateType() == other.getCoordinateType());
+
+    return std::memcmp(data(), other.data(), size() * stride() * sizeof(double)) == 0;
 }
 
 void

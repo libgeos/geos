@@ -143,6 +143,8 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
+    bool identicalTo(const Geometry& other) const override;
+
     void
     normalize(void) override
     {
