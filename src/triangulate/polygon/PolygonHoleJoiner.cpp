@@ -124,14 +124,11 @@ PolygonHoleJoiner::compute()
     if (holeRings.size() > 0) {
         nodeRings();
     }
-    // joinedRing = copyToList(shellRing);
     joinedRing.clear();
     joinedRing.add(*shellRing);
-    // std::copy(shellRing->begin(), shellRing->end(), std::back_inserter(joinedRing));
     if (holeRings.size() > 0) {
         joinHoles();
     }
-    // return CoordinateArrays.toCoordinateArray(joinedRing);
     return detail::make_unique<CoordinateSequence>(joinedRing);
 }
 
@@ -183,13 +180,13 @@ PolygonHoleJoiner::joinHoles()
     joinedPts.insert(joinedRing.items<Coordinate>().begin(), joinedRing.items<Coordinate>().end());
 
     for (std::size_t i = 0; i < holeRings.size(); i++) {
-        joinHole(i, holeRings[i]);
+        joinHole(i, *(holeRings[i]));
     }
 }
 
 /* private */
 void
-PolygonHoleJoiner::joinHole(std::size_t index, std::unique_ptr<CoordinateSequence>& holeCoords)
+PolygonHoleJoiner::joinHole(std::size_t index, const CoordinateSequence& holeCoords)
 {
     //-- check if hole is touching
     if (isHoleTouchingHint[index]) {
@@ -203,7 +200,7 @@ PolygonHoleJoiner::joinHole(std::size_t index, std::unique_ptr<CoordinateSequenc
 
 /* private */
 bool
-PolygonHoleJoiner::joinTouchingHole(std::unique_ptr<CoordinateSequence>& holeCoords)
+PolygonHoleJoiner::joinTouchingHole(const CoordinateSequence& holeCoords)
 {
     std::size_t holeTouchIndex = findHoleTouchIndex(holeCoords);
 
@@ -215,8 +212,8 @@ PolygonHoleJoiner::joinTouchingHole(std::unique_ptr<CoordinateSequence>& holeCoo
      * Find shell corner which contains the hole,
      * by finding corner which has a hole segment at the join pt in interior
      */
-    const Coordinate& joinPt = holeCoords->getAt(holeTouchIndex);
-    const Coordinate& holeSegPt = holeCoords->getAt(prev(holeTouchIndex, holeCoords->size()));
+    const Coordinate& joinPt = holeCoords.getAt(holeTouchIndex);
+    const Coordinate& holeSegPt = holeCoords.getAt(prev(holeTouchIndex, holeCoords.size()));
 
     std::size_t joinIndex = findJoinIndex(joinPt, holeSegPt);
     addJoinedHole(joinIndex, holeCoords, holeTouchIndex);
@@ -226,11 +223,14 @@ PolygonHoleJoiner::joinTouchingHole(std::unique_ptr<CoordinateSequence>& holeCoo
 
 /* private */
 std::size_t
-PolygonHoleJoiner::findHoleTouchIndex(std::unique_ptr<CoordinateSequence>& holeCoords)
+PolygonHoleJoiner::findHoleTouchIndex(const CoordinateSequence& holeCoords)
 {
-    for (std::size_t i = 0; i < holeCoords->size(); i++) {
-        if (joinedPts.count(holeCoords->getAt(i)) > 0)
+    std::size_t i = 0;
+    for (auto& coord : holeCoords.items<Coordinate>()) {
+        if (joinedPts.count(coord) > 0) {
             return i;
+        }
+        i++;
     }
     return NO_INDEX;
 }
@@ -238,48 +238,15 @@ PolygonHoleJoiner::findHoleTouchIndex(std::unique_ptr<CoordinateSequence>& holeC
 
 /* private */
 void
-PolygonHoleJoiner::joinNonTouchingHole(std::unique_ptr<CoordinateSequence>& holeCoords)
+PolygonHoleJoiner::joinNonTouchingHole(const CoordinateSequence& holeCoords)
 {
     std::size_t holeJoinIndex = findLowestLeftVertexIndex(holeCoords);
-    const Coordinate& holeJoinCoord = holeCoords->getAt(holeJoinIndex);
+    const Coordinate& holeJoinCoord = holeCoords.getAt(holeJoinIndex);
     const Coordinate& joinCoord = findJoinableVertex(holeJoinCoord);
     std::size_t joinIndex = findJoinIndex(joinCoord, holeJoinCoord);
     addJoinedHole(joinIndex, holeCoords, holeJoinIndex);
 }
 
-/**
-* Finds a shell vertex that is joinable to the hole join vertex.
-* One must always exist, since the hole join vertex is on the left
-* of the hole, and thus must always have at least one shell vertex visible to it.
-*
-* There is no attempt to optimize the selection of shell vertex
-* to join to (e.g. by choosing one with shortest distance).
-*
-* @param holeJoinCoord the hole join vertex
-* @return the shell vertex to join to
-*/
-/* private */
-// const Coordinate&
-// findJoinableVertex(const Coordinate& holeJoinCoord)
-// {
-//     //-- find highest shell vertex in half-plane left of hole pt
-//     Coordinate candidate = joinedPts.higher(holeJoinCoord);
-//     while (candidate.x == holeJoinCoord.x) {
-//       candidate = joinedPts.higher(candidate);
-//     }
-//     //-- drop back to last vertex with same X as hole
-//     candidate = joinedPts.lower(candidate);
-
-//     //-- find rightmost joinable shell vertex
-//     while (intersectsBoundary(holeJoinCoord, candidate)) {
-//         candidate = joinedPts.lower(candidate);
-//         //Assert: candidate is not null, since a joinable candidate always exists
-//         if (candidate.isNull()) {
-//             throw IllegalStateException("Unable to find joinable vertex");
-//         }
-//     }
-//     return candidate;
-// }
 
 const Coordinate&
 PolygonHoleJoiner::findJoinableVertex(const Coordinate& holeJoinCoord)
@@ -347,10 +314,10 @@ PolygonHoleJoiner::next(std::size_t i, std::size_t size)
 
 /* private */
 void
-PolygonHoleJoiner::addJoinedHole(std::size_t joinIndex, std::unique_ptr<CoordinateSequence>& holeCoords, std::size_t holeJoinIndex)
+PolygonHoleJoiner::addJoinedHole(std::size_t joinIndex, const CoordinateSequence& holeCoords, std::size_t holeJoinIndex)
 {
     const Coordinate& joinPt = joinedRing.getAt(joinIndex);
-    const Coordinate& holeJoinPt = holeCoords->getAt(holeJoinIndex);
+    const Coordinate& holeJoinPt = holeCoords.getAt(holeJoinIndex);
 
     //-- check for touching (zero-length) join to avoid inserting duplicate vertices
     bool isVertexTouch = joinPt.equals2D(holeJoinPt);
@@ -361,10 +328,7 @@ PolygonHoleJoiner::addJoinedHole(std::size_t joinIndex, std::unique_ptr<Coordina
 
     //-- add section after shell join vertex
     std::size_t addIndex = joinIndex + 1;
-    // joinedRing.addAll(addIndex, newSection);
-    // joinedRing.insert(joinedRing.begin() + addIndex, newSection.begin(), newSection.end());
     joinedRing.add(addIndex, newSection.begin(), newSection.end());
-    // joinedPts.addAll(newSection);
     joinedPts.insert(newSection.begin(), newSection.end());
 }
 
@@ -372,7 +336,7 @@ PolygonHoleJoiner::addJoinedHole(std::size_t joinIndex, std::unique_ptr<Coordina
 /* private */
 std::vector<Coordinate>
 PolygonHoleJoiner::createHoleSection(
-    std::unique_ptr<CoordinateSequence>& holeCoords,
+    const CoordinateSequence& holeCoords,
     std::size_t holeJoinIndex,
     const Coordinate& joinPt)
 {
@@ -384,13 +348,13 @@ PolygonHoleJoiner::createHoleSection(
      * Except if hole DOES touch, join vertex is already in shell ring
      */
     if (isNonTouchingHole)
-      section.push_back(holeCoords->getAt(holeJoinIndex));
+      section.push_back(holeCoords.getAt(holeJoinIndex));
 
-    std::size_t holeSize = holeCoords->size() - 1;
+    std::size_t holeSize = holeCoords.size() - 1;
     std::size_t index = holeJoinIndex;
     for (std::size_t i = 0; i < holeSize; i++) {
         index = (index + 1) % holeSize;
-        section.push_back(holeCoords->getAt(index));
+        section.push_back(holeCoords.getAt(index));
     }
     /**
      * Add duplicate shell vertex at end of the return join line.
@@ -423,14 +387,14 @@ PolygonHoleJoiner::sortHoles(const Polygon* poly)
 
 /* private static */
 std::size_t
-PolygonHoleJoiner::findLowestLeftVertexIndex(const std::unique_ptr<CoordinateSequence>& coords)
+PolygonHoleJoiner::findLowestLeftVertexIndex(const CoordinateSequence& holeCoords)
 {
     Coordinate lowestLeftCoord;
     lowestLeftCoord.setNull();
     std::size_t lowestLeftIndex = NO_INDEX;
-    for (std::size_t i = 0; i < coords->size() - 1; i++) {
-        if (lowestLeftCoord.isNull() || coords->getAt(i).compareTo(lowestLeftCoord) < 0) {
-            lowestLeftCoord = coords->getAt(i);
+    for (std::size_t i = 0; i < holeCoords.size() - 1; i++) {
+        if (lowestLeftCoord.isNull() || holeCoords.getAt(i).compareTo(lowestLeftCoord) < 0) {
+            lowestLeftCoord = holeCoords.getAt(i);
             lowestLeftIndex = i;
         }
     }
@@ -471,10 +435,6 @@ PolygonHoleJoiner::createBoundaryIntersector()
     mssmi->setBaseSegments(&polySegStrings);
     return mssmi;
 }
-
-
-
-
 
 
 } // namespace geos.triangulate.polygon

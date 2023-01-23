@@ -103,7 +103,7 @@ private:
     void nodeRings();
     void joinHoles();
 
-    void joinHole(std::size_t index, std::unique_ptr<CoordinateSequence>& holeCoords);
+    void joinHole(std::size_t index, const CoordinateSequence& holeCoords);
 
     /**
     * Joins a hole to the shell only if the hole touches the shell.
@@ -112,7 +112,7 @@ private:
     * @param holeCoords the hole to join
     * @return true if the hole was touching, false if not
     */
-    bool joinTouchingHole(std::unique_ptr<CoordinateSequence>& holeCoords);
+    bool joinTouchingHole(const CoordinateSequence& holeCoords);
 
     /**
     * Finds the vertex index of a hole where it touches the
@@ -123,7 +123,7 @@ private:
     * @param holeCoords the hole
     * @return the index of the touching vertex, or -1 if no touch
     */
-    std::size_t findHoleTouchIndex(std::unique_ptr<CoordinateSequence>& holeCoords);
+    std::size_t findHoleTouchIndex(const CoordinateSequence& holeCoords);
 
     /**
     * Joins a single non-touching hole to the current joined ring.
@@ -131,7 +131,7 @@ private:
     * @param holeCoords the hole to join
     */
     void joinNonTouchingHole(
-        std::unique_ptr<CoordinateSequence>& holeCoords);
+        const CoordinateSequence& holeCoords);
 
     const Coordinate& findJoinableVertex(
         const Coordinate& holeJoinCoord);
@@ -181,7 +181,7 @@ private:
     */
     void addJoinedHole(
         std::size_t joinIndex,
-        std::unique_ptr<CoordinateSequence>& holeCoords,
+        const CoordinateSequence& holeCoords,
         std::size_t holeJoinIndex);
 
     /**
@@ -195,7 +195,7 @@ private:
     * @return a list of new vertices to be added
     */
     std::vector<Coordinate> createHoleSection(
-        std::unique_ptr<CoordinateSequence>& holeCoords,
+        const CoordinateSequence& holeCoords,
         std::size_t holeJoinIndex,
         const Coordinate& joinPt);
 
@@ -209,7 +209,7 @@ private:
         const Polygon* poly);
 
     static std::size_t findLowestLeftVertexIndex(
-        const std::unique_ptr<CoordinateSequence>& coords);
+        const CoordinateSequence& holeCoords);
 
     /**
     * Tests whether the interior of a line segment intersects the polygon boundary.
