@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 
 #include "capi_test_utils.h"
 

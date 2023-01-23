@@ -18,6 +18,7 @@
 #include <geos/export.h>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 // Forward declarations
 namespace geos {
