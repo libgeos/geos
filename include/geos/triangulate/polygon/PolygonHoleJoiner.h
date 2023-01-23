@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
+ * Copyright (C) 2023 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -15,21 +15,23 @@
 #pragma once
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/SegmentIntersector.h>
+#include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/SegmentSetMutualIntersector.h>
 
-#include <unordered_map>
-#include <vector>
+#include <set>
+#include <limits>
 
 // Forward declarations
 namespace geos {
 namespace geom {
 class Envelope;
 class Geometry;
-class CoordinateSequence;
 class LinearRing;
 }
 namespace noding {
-class SegmentString;
 }
 }
 
@@ -37,6 +39,8 @@ using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
 using geos::geom::Polygon;
 using geos::geom::LinearRing;
+using geos::noding::BasicSegmentString;
+using geos::noding::SegmentSetMutualIntersector;
 
 
 namespace geos {
@@ -47,14 +51,19 @@ namespace polygon {
 
 /**
  * Transforms a polygon with holes into a single self-touching (invalid) ring
- * by connecting holes to the exterior shell or to another hole.
- * The holes are added from the lowest upwards.
- * As the resulting shell develops, a hole might be added to what was
+ * by joining holes to the exterior shell or to another hole
+ * with out-and-back line segments.
+ * The holes are added in order of their envelopes (leftmost/lowest first).
+ * As the result shell develops, a hole may be added to what was
  * originally another hole.
  *
  * There is no attempt to optimize the quality of the join lines.
- * In particular, a hole which already touches at a vertex may be
- * joined at a different vertex.
+ * In particular, holes may be joined by lines longer than is optimal.
+ * However, holes which touch the shell or other holes are joined at the touch point.
+ *
+ * The class does not require the input polygon to have normal
+ * orientation (shell CW and rings CCW).
+ * The output ring is always CW.
  */
 class GEOS_DLL PolygonHoleJoiner {
 
@@ -62,129 +71,196 @@ private:
 
     // Members
 
-    static constexpr double EPS = 1.0E-4;
+    static constexpr std::size_t NO_INDEX = std::numeric_limits<std::size_t>::max();
 
-    std::vector<Coordinate> shellCoords;
-
-    // orderedCoords is a copy of shellCoords for sort purposes
-    std::set<Coordinate> shellCoordsSorted;
-
-    // Key: starting end of the cut; Value: list of the other end of the cut
-    std::unordered_map<Coordinate, std::vector<Coordinate>, Coordinate::HashCode> cutMap;
-
-    std::unique_ptr<noding::SegmentSetMutualIntersector> polygonIntersector;
     const Polygon* inputPolygon;
 
-    // The segstrings allocated in createPolygonIntersector need a
-    // place to hold ownership through the lifecycle of the hole joiner
-    std::vector<std::unique_ptr<noding::SegmentString>> polySegStringStore;
+    //-- normalized, sorted and noded polygon rings
+    std::unique_ptr<CoordinateSequence> shellRing;
+    std::vector<std::unique_ptr<CoordinateSequence>> holeRings;
 
-    // Methods
+    //-- indicates whether a hole should be testing for touching
+    std::vector<bool> isHoleTouchingHint;
 
-    static std::vector<Coordinate> ringCoordinates(const LinearRing* ring);
+    std::vector<Coordinate> joinedRing;
 
+    // a sorted and searchable version of the joinedRing
+    std::set<Coordinate> joinedPts;
+
+    std::unique_ptr<SegmentSetMutualIntersector> boundaryIntersector;
+
+    // holding place for some BasicSegmentStrings
+    std::vector<std::unique_ptr<BasicSegmentString>> polySegStringStore;
+
+
+    // Classes
+    class InteriorIntersectionDetector;
+    friend class PolygonHoleJoiner::InteriorIntersectionDetector;
+
+
+    void extractOrientedRings(const Polygon* polygon);
+    static std::unique_ptr<CoordinateSequence> extractOrientedRing(const LinearRing* ring, bool isCW);
+    void nodeRings();
     void joinHoles();
 
-    /**
-    * Joins a single hole to the current shellRing.
-    *
-    * @param hole the hole to join
-    */
-    void joinHole(const LinearRing* hole);
+    void joinHole(std::size_t index, const CoordinateSequence& holeCoords);
 
     /**
-    * Get the ith shellvertex in shellCoords[] that the current should add after
+    * Joins a hole to the shell only if the hole touches the shell.
+    * Otherwise, reports the hole is non-touching.
     *
-    * @param shellVertex Coordinate of the shell vertex
-    * @param holeVertex  Coordinate of the hole vertex
-    * @return the ith shellvertex
+    * @param holeCoords the hole to join
+    * @return true if the hole was touching, false if not
     */
-    std::size_t getShellCoordIndex(const Coordinate& shellVertex, const Coordinate& holeVertex);
+    bool joinTouchingHole(const CoordinateSequence& holeCoords);
 
     /**
-    * Find the index of the coordinate in ShellCoords ArrayList,
-    * skipping over some number of matches
+    * Finds the vertex index of a hole where it touches the
+    * current shell (if it does).
+    * If a hole does touch, it must touch at a single vertex
+    * (otherwise, the polygon is invalid).
     *
-    * @param coord
-    * @return
+    * @param holeCoords the hole
+    * @return the index of the touching vertex, or -1 if no touch
     */
-    std::size_t getShellCoordIndexSkip(const Coordinate& coord, std::size_t numSkip);
+    std::size_t findHoleTouchIndex(const CoordinateSequence& holeCoords);
 
     /**
-    * Gets a list of shell vertices that could be used to join with the hole.
-    * This list contains only one item if the chosen vertex does not share the same
-    * x value with holeCoord
+    * Joins a single non-touching hole to the current joined ring.
     *
-    * @param holeCoord the hole coordinates
-    * @return a list of candidate join vertices
+    * @param holeCoords the hole to join
     */
-    std::vector<Coordinate> findLeftShellVertices(const Coordinate& holeCoord);
+    void joinNonTouchingHole(
+        const CoordinateSequence& holeCoords);
+
+    const Coordinate& findJoinableVertex(
+        const Coordinate& holeJoinCoord);
 
     /**
-    * Determine if a line segment between a hole vertex
-    * and a shell vertex lies inside the input polygon.
+    * Gets the join ring vertex index that the hole is joined after.
+    * A vertex can occur multiple times in the join ring, so it is necessary
+    * to choose the one which forms a corner having the
+    * join line in the ring interior.
     *
-    * @param holeCoord a hole coordinate
-    * @param shellCoord a shell coordinate
-    * @return true if the line lies inside the polygon
+    * @param joinCoord the join ring vertex
+    * @param holeJoinCoord the hole join vertex
+    * @return the join ring vertex index to join after
     */
-    bool isJoinable(const Coordinate& holeCoord, const Coordinate& shellCoord) const;
+    std::size_t findJoinIndex(
+        const Coordinate& joinCoord,
+        const Coordinate& holeJoinCoord);
 
     /**
-    * Tests whether a line segment crosses the polygon boundary.
+    * Tests if a line between a ring corner vertex and a given point
+    * is interior to the ring corner.
     *
-    * @param p0 a vertex
-    * @param p1 a vertex
-    * @return true if the line segment crosses the polygon boundary
+    * @param ring a ring of points
+    * @param ringIndex the index of a ring vertex
+    * @param linePt the point to be joined to the ring
+    * @return true if the line to the point is interior to the ring corner
     */
-    bool crossesPolygon(const Coordinate& p0, const Coordinate& p1) const;
+    static bool isLineInterior(
+        const std::vector<Coordinate>& ring,
+        std::size_t ringIndex,
+        const Coordinate& linePt);
+
+    static std::size_t prev(std::size_t i, std::size_t size);
+    static std::size_t next(std::size_t i, std::size_t size);
 
     /**
-    * Add hole at proper position in shell coordinate list.
+    * Add hole vertices at proper position in shell vertex list.
+    * This code assumes that if hole touches (shell or other hole),
+    * it touches at a node.  This requires an initial noding step.
+    * In this case, the code avoids duplicating join vertices.
+    *
     * Also adds hole points to ordered coordinates.
     *
-    * @param shellVertexIndex
-    * @param holeCoords
-    * @param holeVertexIndex
+    * @param joinIndex index of join vertex in shell
+    * @param holeCoords the vertices of the hole to be inserted
+    * @param holeJoinIndex index of join vertex in hole
     */
-    void addHoleToShell(std::size_t shellVertexIndex, const CoordinateSequence* holeCoords, std::size_t holeVertexIndex);
+    void addJoinedHole(
+        std::size_t joinIndex,
+        const CoordinateSequence& holeCoords,
+        std::size_t holeJoinIndex);
 
     /**
-    * Sort the holes by minimum X, minimum Y.
+    * Creates the new section of vertices for ad added hole,
+    * including any required vertices from the shell at the join point,
+    * and ensuring join vertices are not duplicated.
+    *
+    * @param holeCoords the hole vertices
+    * @param holeJoinIndex the index of the join vertex
+    * @param joinPt the shell join vertex
+    * @return a list of new vertices to be added
+    */
+    std::vector<Coordinate> createHoleSection(
+        const CoordinateSequence& holeCoords,
+        std::size_t holeJoinIndex,
+        const Coordinate& joinPt);
+
+    /**
+    * Sort the hole rings by minimum X, minimum Y.
     *
     * @param poly polygon that contains the holes
-    * @return a list of ordered hole geometry
+    * @return a list of sorted hole rings
     */
-    static std::vector<const LinearRing*> sortHoles(const Polygon* poly);
+    static std::vector<const LinearRing*> sortHoles(
+        const Polygon* poly);
+
+    static std::size_t findLowestLeftVertexIndex(
+        const CoordinateSequence& coords);
 
     /**
-    * Gets a list of indices of the leftmost vertices in a ring.
+    * Tests whether the interior of a line segment intersects the polygon boundary.
+    * If so, the line is not a valid join line.
     *
-    * @param geom the hole ring
-    * @return index of the left most vertex
+    * @param p0 a segment vertex
+    * @param p1 the other segment vertex
+    * @return true if the segment interior intersects a polygon boundary segment
     */
-    static std::vector<std::size_t> findLeftVertices(const LinearRing* ring);
+    bool intersectsBoundary(
+        const Coordinate& p0,
+        const Coordinate& p1);
 
-    std::unique_ptr<noding::SegmentSetMutualIntersector> createPolygonIntersector(const Polygon* polygon);
+    std::unique_ptr<SegmentSetMutualIntersector> createBoundaryIntersector();
 
 
 public:
 
-    PolygonHoleJoiner(const Polygon* p_inputPolygon);
+    PolygonHoleJoiner(const Polygon* p_inputPolygon)
+        : inputPolygon(p_inputPolygon)
+        , boundaryIntersector(nullptr)
+        {};
 
-    static std::vector<Coordinate> join(const Polygon* inputPolygon);
-    static std::unique_ptr<Polygon> joinAsPolygon(const Polygon* inputPolygon);
+    /**
+    * Joins the shell and holes of a polygon
+    * and returns the result as an (invalid) Polygon.
+    *
+    * @param p_inputPolygon the polygon to join
+    * @return the result polygon
+    */
+    static std::unique_ptr<Polygon> joinAsPolygon(
+        const Polygon* p_inputPolygon);
+
+    /**
+    * Joins the shell and holes of a polygon
+    * and returns the result as sequence of Coordinates.
+    *
+    * @param p_inputPolygon the polygon to join
+    * @return the result coordinates
+    */
+    static std::unique_ptr<CoordinateSequence> join(
+        const Polygon* p_inputPolygon);
 
     /**
     * Computes the joined ring.
     *
     * @return the points in the joined ring
     */
-    std::vector<Coordinate> compute();
-
+    std::unique_ptr<CoordinateSequence> compute();
 
 };
-
 
 
 } // namespace geos.triangulate.polygon

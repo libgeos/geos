@@ -6,6 +6,8 @@
   - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
     (GH-791, Joris Van den Bossche & Dan Baston)
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
+  - Fix handling of odd cases in PolygonHoleJoiner (JTS-946, Paul Ramsey, Martin Davis)
+
 
 ## Changes in 3.11.1
 2022-11-13

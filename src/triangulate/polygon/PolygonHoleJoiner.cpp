@@ -14,90 +14,162 @@
 
 
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
-#include <geos/noding/SegmentIntersectionDetector.h>
+#include <geos/noding/SegmentSetMutualIntersector.h>
 #include <geos/noding/SegmentString.h>
-#include <geos/noding/SegmentStringUtil.h>
+#include <geos/noding/NodedSegmentString.h>
+#include <geos/triangulate/polygon/PolygonNoder.h>
 #include <geos/util/IllegalStateException.h>
-#include <geos/util/IllegalArgumentException.h>
 
 #include <geos/triangulate/polygon/PolygonHoleJoiner.h>
 
-#include <limits>
 
-
-using geos::geom::GeometryFactory;
+using geos::algorithm::LineIntersector;
+using geos::algorithm::Orientation;
+using geos::algorithm::PolygonNodeTopology;
+using geos::geom::Coordinate;
+using geos::geom::CoordinateArraySequence;
 using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFactory;
+using geos::noding::BasicSegmentString;
 using geos::noding::SegmentString;
+using geos::noding::NodedSegmentString;
 using geos::noding::SegmentSetMutualIntersector;
+using geos::noding::MCIndexSegmentSetMutualIntersector;
+using geos::util::IllegalStateException;
+
 
 namespace geos {
 namespace triangulate {
 namespace polygon {
 
 
-PolygonHoleJoiner::PolygonHoleJoiner(const Polygon* p_inputPolygon)
-    : polygonIntersector(nullptr)
-    , inputPolygon(p_inputPolygon)
-{
-    polygonIntersector = createPolygonIntersector(p_inputPolygon);
-    if(p_inputPolygon->getNumPoints() < 4)
-        throw util::IllegalArgumentException("Input polygon has too few points");
-}
+/**
+* Detects if a segment has an interior intersection with another segment.
+*/
+class PolygonHoleJoiner::InteriorIntersectionDetector : public noding::SegmentIntersector {
+
+private:
+
+    LineIntersector li;
+    bool m_hasIntersection = false;
+
+public:
+
+    bool hasIntersection() const
+    {
+        return m_hasIntersection;
+    }
+
+    void processIntersections(
+        SegmentString* ss0, std::size_t segIndex0,
+        SegmentString* ss1, std::size_t segIndex1) override
+    {
+        const Coordinate& p00 = ss0->getCoordinate(segIndex0);
+        const Coordinate& p01 = ss0->getCoordinate(segIndex0 + 1);
+        const Coordinate& p10 = ss1->getCoordinate(segIndex1);
+        const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
+
+        li.computeIntersection(p00, p01, p10, p11);
+        if (li.getIntersectionNum() == 0) {
+            return;
+        }
+        else if (li.getIntersectionNum() == 1) {
+            if (li.isInteriorIntersection())
+                m_hasIntersection = true;
+        }
+        else { // li.getIntersectionNum() >= 2 - must be collinearf
+            m_hasIntersection = true;
+        }
+    }
+
+    bool isDone() const override
+    {
+        return m_hasIntersection;
+    }
+}; // InteriorIntersectionDetector
 
 
 /* public static */
 std::unique_ptr<Polygon>
-PolygonHoleJoiner::joinAsPolygon(const Polygon* inputPolygon)
+PolygonHoleJoiner::joinAsPolygon(const Polygon* polygon)
 {
-    std::vector<Coordinate> coords = join(inputPolygon);
-    const geom::GeometryFactory* gf = inputPolygon->getFactory();
-    return gf->createPolygon(std::move(coords));
+    auto factory = polygon->getFactory();
+    auto lr = factory->createLinearRing(join(polygon));
+    return factory->createPolygon(std::move(lr));
 }
 
 
 /* public static */
-std::vector<Coordinate>
-PolygonHoleJoiner::join(const Polygon* inputPolygon)
+std::unique_ptr<CoordinateSequence>
+PolygonHoleJoiner::join(const Polygon* polygon)
 {
-    PolygonHoleJoiner joiner(inputPolygon);
+    PolygonHoleJoiner joiner(polygon);
     return joiner.compute();
 }
 
 
 /* public */
-std::vector<Coordinate>
+std::unique_ptr<CoordinateSequence>
 PolygonHoleJoiner::compute()
 {
-    //--- copy the input polygon shell coords
-    shellCoords = ringCoordinates(inputPolygon->getExteriorRing());
-    if (inputPolygon->getNumInteriorRing() != 0) {
+    extractOrientedRings(inputPolygon);
+    if (holeRings.size() > 0) {
+        nodeRings();
+    }
+    joinedRing.clear();
+    shellRing->toVector(joinedRing);
+    if (holeRings.size() > 0) {
         joinHoles();
     }
-    return shellCoords;
+    std::unique_ptr<CoordinateSequence> cas(new CoordinateArraySequence(std::move(joinedRing)));
+    return cas;
 }
 
+/* private */
+void
+PolygonHoleJoiner::extractOrientedRings(const Polygon* polygon)
+{
+    shellRing = extractOrientedRing(polygon->getExteriorRing(), true);
+    std::vector<const LinearRing*> holes = sortHoles(polygon);
+    for (const LinearRing* hole : holes) {
+        auto oHole = extractOrientedRing(hole, false);
+        holeRings.emplace_back(oHole.release());
+    }
+}
 
 /* private static */
-std::vector<Coordinate>
-PolygonHoleJoiner::ringCoordinates(const LinearRing* ring)
+std::unique_ptr<CoordinateSequence>
+PolygonHoleJoiner::extractOrientedRing(const LinearRing* ring, bool isCW)
 {
-    const CoordinateSequence* cs = ring->getCoordinatesRO();
-    std::vector<Coordinate> coords(cs->size());
-    for (std::size_t i = 0; i < cs->size(); i++) {
-        coords[i] = cs->getAt(i);
+    std::unique_ptr<CoordinateSequence> pts = ring->getCoordinates();
+    bool isRingCW = ! Orientation::isCCW(pts.get());
+    if (isCW != isRingCW) {
+        CoordinateSequence::reverse(pts.get());
     }
-    return coords;
+    return pts;
+}
+
+/* private */
+void
+PolygonHoleJoiner::nodeRings()
+{
+    PolygonNoder noder(shellRing, holeRings);
+    noder.node();
+    shellRing = noder.getNodedShell();
+    for (std::size_t i = 0; i < holeRings.size(); i++) {
+        holeRings[i] = noder.getNodedHole(i);
+    }
+    isHoleTouchingHint = noder.getHolesTouching();
 }
 
 
@@ -105,207 +177,195 @@ PolygonHoleJoiner::ringCoordinates(const LinearRing* ring)
 void
 PolygonHoleJoiner::joinHoles()
 {
-    shellCoordsSorted.insert(shellCoords.begin(), shellCoords.end());
-    std::vector<const LinearRing*> orderedHoles = sortHoles(inputPolygon);
-    for (std::size_t i = 0; i < orderedHoles.size(); i++) {
-        joinHole(orderedHoles.at(i));
+    boundaryIntersector = createBoundaryIntersector();
+
+    joinedPts.clear();
+    joinedPts.insert(joinedRing.begin(), joinedRing.end());
+
+    for (std::size_t i = 0; i < holeRings.size(); i++) {
+        joinHole(i, *(holeRings[i]));
     }
+}
+
+/* private */
+void
+PolygonHoleJoiner::joinHole(std::size_t index, const CoordinateSequence& holeCoords)
+{
+    //-- check if hole is touching
+    if (isHoleTouchingHint[index]) {
+        bool isTouching = joinTouchingHole(holeCoords);
+        if (isTouching)
+            return;
+    }
+    joinNonTouchingHole(holeCoords);
+}
+
+
+/* private */
+bool
+PolygonHoleJoiner::joinTouchingHole(const CoordinateSequence& holeCoords)
+{
+    std::size_t holeTouchIndex = findHoleTouchIndex(holeCoords);
+
+    //-- hole does not touch
+    if (holeTouchIndex == NO_INDEX)
+        return false;
+
+    /**
+     * Find shell corner which contains the hole,
+     * by finding corner which has a hole segment at the join pt in interior
+     */
+    const Coordinate& joinPt = holeCoords.getAt(holeTouchIndex);
+    const Coordinate& holeSegPt = holeCoords.getAt(prev(holeTouchIndex, holeCoords.size()));
+
+    std::size_t joinIndex = findJoinIndex(joinPt, holeSegPt);
+    addJoinedHole(joinIndex, holeCoords, holeTouchIndex);
+    return true;
+}
+
+
+/* private */
+std::size_t
+PolygonHoleJoiner::findHoleTouchIndex(const CoordinateSequence& holeCoords)
+{
+    for (std::size_t i = 0; i < holeCoords.size(); i++) {
+        if (joinedPts.count(holeCoords.getAt(i)) > 0)
+            return i;
+    }
+    return NO_INDEX;
 }
 
 
 /* private */
 void
-PolygonHoleJoiner::joinHole(const LinearRing* hole)
+PolygonHoleJoiner::joinNonTouchingHole(const CoordinateSequence& holeCoords)
 {
-    /**
-     * 1) Get a list of HoleVertex Index.
-     * 2) Get a list of ShellVertex.
-     * 3) Get the pair that has the shortest distance between them.
-     * This pair is the endpoints of the cut
-     * 4) The selected ShellVertex may occurs multiple times in
-     * shellCoords[], so find the proper one and add the hole after it.
-     */
-    const CoordinateSequence* holeCoordSeq = hole->getCoordinatesRO();
-    std::vector<std::size_t> holeLeftVerticesIndex = findLeftVertices(hole);
-    const Coordinate& holeCoord = holeCoordSeq->getAt(holeLeftVerticesIndex[0]);
-    std::vector<Coordinate> shellCoordsList = findLeftShellVertices(holeCoord);
-    Coordinate shellCoord = shellCoordsList.at(0);
-    std::size_t shortestHoleVertexIndex = 0;
-    //--- pick the shell-hole vertex pair that gives the shortest distance
-    if (std::abs(shellCoord.x - holeCoord.x) < EPS) {
-        double shortest = DoubleInfinity;
-        for (std::size_t i = 0; i < holeLeftVerticesIndex.size(); i++) {
-            for (std::size_t j = 0; j < shellCoordsList.size(); j++) {
-                double shellCoordY = shellCoordsList[j].y;
-                double holeLeftY = (holeCoordSeq->getAt(holeLeftVerticesIndex[i])).y;
-                double currLength = std::abs(shellCoordY - holeLeftY);
-                if (currLength < shortest) {
-                    shortest = currLength;
-                    shortestHoleVertexIndex = i;
-                    shellCoord = shellCoordsList[j];
-                }
-            }
-        }
+    std::size_t holeJoinIndex = findLowestLeftVertexIndex(holeCoords);
+    const Coordinate& holeJoinCoord = holeCoords.getAt(holeJoinIndex);
+    const Coordinate& joinCoord = findJoinableVertex(holeJoinCoord);
+    std::size_t joinIndex = findJoinIndex(joinCoord, holeJoinCoord);
+    addJoinedHole(joinIndex, holeCoords, holeJoinIndex);
+}
+
+
+const Coordinate&
+PolygonHoleJoiner::findJoinableVertex(const Coordinate& holeJoinCoord)
+{
+
+    auto it = joinedPts.upper_bound(holeJoinCoord);
+    // find highest shell vertex in half-plane left of hole pt
+    while ((*it).x == holeJoinCoord.x) {
+        it++;
     }
-    std::size_t shellVertexIndex = getShellCoordIndex(shellCoord,
-        holeCoordSeq->getAt(holeLeftVerticesIndex[shortestHoleVertexIndex]));
-    addHoleToShell(shellVertexIndex, holeCoordSeq, holeLeftVerticesIndex[shortestHoleVertexIndex]);
+    //-- find rightmost joinable shell vertex
+    do {
+        it--;
+    }
+    while (intersectsBoundary(holeJoinCoord, *it) && it != joinedPts.begin());
+    return *it;
 }
 
 
 /* private */
 std::size_t
-PolygonHoleJoiner::getShellCoordIndex(const Coordinate& shellVertex, const Coordinate& holeVertex)
+PolygonHoleJoiner::findJoinIndex(const Coordinate& joinCoord, const Coordinate& holeJoinCoord)
 {
-    std::size_t numSkip = 0;
-    std::vector<Coordinate> newValueList;
-    newValueList.emplace_back(holeVertex);
-    auto it = cutMap.find(shellVertex);
-    if (it != cutMap.end()) { // found
-        std::vector<Coordinate>& cutMapCoords = it->second; // value
-        for (const Coordinate& coord : cutMapCoords) {
-            if ( coord.y < holeVertex.y ) {
-                numSkip++;
-            }
-        }
-        cutMapCoords.emplace_back(holeVertex);
-    } else {
-        cutMap[shellVertex] = newValueList;
-    }
-    it = cutMap.find(holeVertex);
-    if (it == cutMap.end()) { // not found
-        cutMap[holeVertex] = newValueList;
-    }
-    return getShellCoordIndexSkip(shellVertex, numSkip);
-}
-
-
-/* private */
-std::size_t
-PolygonHoleJoiner::getShellCoordIndexSkip(const Coordinate& coord, std::size_t numSkip)
-{
-    for (std::size_t i = 0; i < shellCoords.size(); i++) {
-        if (shellCoords[i].equals2D(coord, EPS)) {
-            if (numSkip == 0)
+    std::size_t i = 0;
+    for (auto& coord: joinedRing) {
+        if (joinCoord.equals2D(coord)) {
+            if (isLineInterior(joinedRing, i, holeJoinCoord)) {
                 return i;
-            numSkip--;
+            }
         }
+        i++;
     }
-    throw util::IllegalStateException("Vertex is not in shellcoords");
+    throw IllegalStateException("Unable to find shell join index with interior join line");
 }
+
+
+/* private static */
+bool
+PolygonHoleJoiner::isLineInterior(const std::vector<Coordinate>& ring, std::size_t ringIndex, const Coordinate& linePt)
+{
+    const Coordinate& nodePt = ring.at(ringIndex);
+    const Coordinate& shell0 = ring.at(prev(ringIndex, ring.size()));
+    const Coordinate& shell1 = ring.at(next(ringIndex, ring.size()));
+    return PolygonNodeTopology::isInteriorSegment(&nodePt, &shell0, &shell1, &linePt);
+}
+
+/* private static */
+std::size_t
+PolygonHoleJoiner::prev(std::size_t i, std::size_t size)
+{
+    if (i == 0)
+        return size - 2;
+    return i - 1;
+}
+
+/* private static */
+std::size_t
+PolygonHoleJoiner::next(std::size_t i, std::size_t size)
+{
+    std::size_t next = i + 1;
+    if ((size < 2) || (next > size - 2))
+        return 0;
+    return next;
+}
+
+
+/* private */
+void
+PolygonHoleJoiner::addJoinedHole(std::size_t joinIndex, const CoordinateSequence& holeCoords, std::size_t holeJoinIndex)
+{
+    const Coordinate& joinPt = joinedRing.at(joinIndex);
+    const Coordinate& holeJoinPt = holeCoords.getAt(holeJoinIndex);
+
+    //-- check for touching (zero-length) join to avoid inserting duplicate vertices
+    bool isVertexTouch = joinPt.equals2D(holeJoinPt);
+    const Coordinate& addJoinPt = isVertexTouch ? Coordinate::getNull() : joinPt;
+
+    //-- create new section of vertices to insert in shell
+    std::vector<Coordinate> newSection = createHoleSection(holeCoords, holeJoinIndex, addJoinPt);
+
+    //-- add section after shell join vertex
+    long addIndex = static_cast<long>(joinIndex + 1);
+    joinedRing.insert(joinedRing.begin() + addIndex, newSection.begin(), newSection.end());
+    joinedPts.insert(newSection.begin(), newSection.end());
+}
+
 
 /* private */
 std::vector<Coordinate>
-PolygonHoleJoiner::findLeftShellVertices(const Coordinate& holeCoord)
+PolygonHoleJoiner::createHoleSection(
+    const CoordinateSequence& holeCoords,
+    std::size_t holeJoinIndex,
+    const Coordinate& joinPt)
 {
-    std::vector<Coordinate> list;
-    auto it = shellCoordsSorted.upper_bound(holeCoord);
-    // scroll forward until x changes
-    while ((*it).x == holeCoord.x) {
-        it++;
-    }
-    do {
-        it--;
-    } while (!isJoinable(holeCoord, *it) && it != shellCoordsSorted.begin());
-    // we now have the closest coordinate
-    list.emplace_back(*it);
-    if ( it->x != holeCoord.x )
-        return list;
+    std::vector<Coordinate> section;
 
-    const double chosenX = it->x;
-    list.clear();
-    while (chosenX == it->x) {
-        list.emplace_back(*it);
-        // reached the start of the list
-        if (it == shellCoordsSorted.begin())
-            return list;
-        // paper over difference between Java TreeSet.lower()
-        // and std::set::lower_bound()
-        it--;
-    }
-    return list;
-}
-
-/* private */
-bool
-PolygonHoleJoiner::isJoinable(const Coordinate& holeCoord, const Coordinate& shellCoord) const
-{
+    bool isNonTouchingHole = ! joinPt.isNull();
     /**
-     * Since the line runs between a hole and the shell,
-     * it is inside the polygon if it does not cross the polygon boundary.
+     * Add all hole vertices, including duplicate at hole join vertex
+     * Except if hole DOES touch, join vertex is already in shell ring
      */
-    bool bIsJoinable = ! crossesPolygon(holeCoord, shellCoord);
-    /*
-    //--- slow code for testing only
-    LineString join = geomFact.createLineString(new Coordinate[] { holeCoord, shellCoord });
-    bool isJoinableSlow = inputPolygon.covers(join)
-    if (isJoinableSlow != isJoinable) {
-      System.out.println(WKTWriter.toLineString(holeCoord, shellCoord));
+    if (isNonTouchingHole)
+      section.push_back(holeCoords.getAt(holeJoinIndex));
+
+    std::size_t holeSize = holeCoords.size() - 1;
+    std::size_t index = holeJoinIndex;
+    for (std::size_t i = 0; i < holeSize; i++) {
+        index = (index + 1) % holeSize;
+        section.push_back(holeCoords.getAt(index));
     }
-    //Assert.isTrue(isJoinableSlow == isJoinable);
-    */
-    return bIsJoinable;
-}
-
-
-/* private */
-bool
-PolygonHoleJoiner::crossesPolygon(const Coordinate& p0, const Coordinate& p1) const
-{
-    // Build up a two-point SegmentString to pass to
-    // the SegmentIntersectionDetector
-    std::vector<Coordinate> coords;
-    coords.emplace_back(p0);
-    coords.emplace_back(p1);
-    auto* csf = inputPolygon->getFactory()->getCoordinateSequenceFactory();
-    auto cs = csf->create(std::move(coords));
-    noding::BasicSegmentString segString(cs.get(), nullptr);
-
-    std::vector<const SegmentString*> segStrings;
-    segStrings.push_back(&segString);
-
-    algorithm::LineIntersector li;
-    noding::SegmentIntersectionDetector segInt(&li);
-    segInt.setFindProper(true);
-    polygonIntersector->setSegmentIntersector(&segInt);
-    polygonIntersector->process(&segStrings);
-    return segInt.hasProperIntersection();
-}
-
-
-/* private */
-void
-PolygonHoleJoiner::addHoleToShell(std::size_t shellJoinIndex,
-    const CoordinateSequence* holeCoords, std::size_t holeJoinIndex)
-{
-    Coordinate shellJoinPt = shellCoords[shellJoinIndex];
-    Coordinate holeJoinPt = holeCoords->getAt(holeJoinIndex);
-    //-- check for touching (zero-length) join to avoid inserting duplicate vertices
-    bool isJoinTouching = shellJoinPt.equals2D(holeJoinPt);
-
-    //-- create new section of vertices to insert in shell
-    std::vector<Coordinate> newSection;
-    if (! isJoinTouching) {
-        newSection.emplace_back(shellJoinPt);
+    /**
+     * Add duplicate shell vertex at end of the return join line.
+     * Except if hole DOES touch, join line is zero-length so do not need dup vertex
+     */
+    if (isNonTouchingHole) {
+        section.push_back(joinPt);
     }
 
-    std::size_t nPts = holeCoords->size() - 1;
-    std::size_t i = holeJoinIndex;
-    do {
-        newSection.emplace_back(holeCoords->getAt(i));
-        i = (i + 1) % nPts;
-    } while (i != holeJoinIndex);
-    if (! isJoinTouching) {
-        newSection.emplace_back(holeCoords->getAt(holeJoinIndex));
-    }
-
-    // Insert newCoords into shellCoords, starting at shellVertextIndex
-    shellCoords.insert(
-        shellCoords.begin() + static_cast<long>(shellJoinIndex),
-        newSection.begin(),
-        newSection.end());
-    // Insert all newCoords into orderedCoords
-    shellCoordsSorted.insert(newSection.begin(), newSection.end());
+    return section;
 }
 
 
@@ -327,37 +387,55 @@ PolygonHoleJoiner::sortHoles(const Polygon* poly)
 
 
 /* private static */
-std::vector<std::size_t>
-PolygonHoleJoiner::findLeftVertices(const LinearRing* ring)
+std::size_t
+PolygonHoleJoiner::findLowestLeftVertexIndex(const CoordinateSequence& coords)
 {
-    const CoordinateSequence* cs = ring->getCoordinatesRO();
-    std::vector<std::size_t> leftmostIndex;
-    double leftX = ring->getEnvelopeInternal()->getMinX();
-    for (std::size_t i = 0; i < cs->size(); i++) {
-        if (std::abs(cs->getAt(i).x - leftX) < EPS) {
-            leftmostIndex.push_back(i);
+    Coordinate lowestLeftCoord;
+    lowestLeftCoord.setNull();
+    std::size_t lowestLeftIndex = NO_INDEX;
+    for (std::size_t i = 0; i < coords.size() - 1; i++) {
+        if (lowestLeftCoord.isNull() || coords.getAt(i).compareTo(lowestLeftCoord) < 0) {
+            lowestLeftCoord = coords.getAt(i);
+            lowestLeftIndex = i;
         }
     }
-    return leftmostIndex;
+    return lowestLeftIndex;
 }
+
+
+/* private */
+bool
+PolygonHoleJoiner::intersectsBoundary(const Coordinate& p0, const Coordinate& p1)
+{
+    CoordinateArraySequence cs;
+    cs.add(p0); cs.add(p1);
+    BasicSegmentString bss(&cs, nullptr);
+    std::vector<const SegmentString*> segStrings { &bss };
+
+    InteriorIntersectionDetector segInt;
+    boundaryIntersector->setSegmentIntersector(&segInt);
+    boundaryIntersector->process(&segStrings);
+    return segInt.hasIntersection();
+}
+
 
 /* private */
 std::unique_ptr<SegmentSetMutualIntersector>
-PolygonHoleJoiner::createPolygonIntersector(const Polygon* polygon)
+PolygonHoleJoiner::createBoundaryIntersector()
 {
     std::vector<const SegmentString*> polySegStrings;
-    noding::SegmentStringUtil::extractSegmentStrings(polygon, polySegStrings);
-
-    // Put the ownership on the PolygonHoleJoiner, so that
-    // when the joining is done, the SegmentStrings go away.
-    // TODO: xxxxxx Make extractSegmentStrings() return non-const pointers
-    // so that this cast and others go away
-    for (const SegmentString* ss: polySegStrings)
-        polySegStringStore.emplace_back(const_cast<SegmentString*>(ss));
-
-    std::unique_ptr<SegmentSetMutualIntersector> ssmi(new noding::MCIndexSegmentSetMutualIntersector());
-    ssmi->setBaseSegments(&polySegStrings);
-    return ssmi;
+    polySegStringStore.clear();
+    BasicSegmentString* bss = new BasicSegmentString(shellRing.get(), nullptr);
+    polySegStringStore.emplace_back(bss);
+    polySegStrings.push_back(bss);
+    for (auto& hole : holeRings) {
+        bss = new BasicSegmentString(hole.get(), nullptr);
+        polySegStringStore.emplace_back(bss);
+        polySegStrings.push_back(bss);
+    }
+    std::unique_ptr<MCIndexSegmentSetMutualIntersector> mssmi(new MCIndexSegmentSetMutualIntersector());
+    mssmi->setBaseSegments(&polySegStrings);
+    return mssmi;
 }
 
 

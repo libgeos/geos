@@ -20,7 +20,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentPointComparator.h>
 
 #include <vector>

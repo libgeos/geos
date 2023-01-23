@@ -26,12 +26,14 @@
 namespace geos {
 namespace geom {
 class Coordinate;
+class CoordinateSequence;
 class Polygon;
 class Envelope;
 }
 }
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::Polygon;
 using geos::geom::Envelope;
 using geos::triangulate::tri::Tri;
@@ -177,7 +179,7 @@ public:
     *
     * @param polyShell the polygon vertices to process
     */
-    PolygonEarClipper(std::vector<Coordinate>& polyShell);
+    PolygonEarClipper(const std::vector<Coordinate>& polyShell);
 
     /**
     * Triangulates a polygon via ear-clipping.
@@ -185,7 +187,8 @@ public:
     * @param polyShell the vertices of the polygon
     * @param triListResult vector to fill in with the resultant Tri s
     */
-    static void triangulate(std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult);
+    static void triangulate(const std::vector<Coordinate>& polyShell, TriList<Tri>& triListResult);
+    static void triangulate(const CoordinateSequence& polyShell, TriList<Tri>& triListResult);
 
     /**
     * Sets whether flat corners formed by collinear adjacent line segments

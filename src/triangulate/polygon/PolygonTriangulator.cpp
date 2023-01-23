@@ -62,19 +62,9 @@ PolygonTriangulator::compute()
 void
 PolygonTriangulator::triangulatePolygon(const Polygon* poly, TriList<Tri>& triList)
 {
-    /**
-     * Normalize to ensure that shell and holes have canonical orientation.
-     *
-     * TODO: perhaps better to just correct orientation of rings?
-     */
-    std::unique_ptr<Polygon> polyNorm = poly->clone();
-    polyNorm->normalize();
-
-    std::vector<Coordinate> polyShell = PolygonHoleJoiner::join(polyNorm.get());
-
-    PolygonEarClipper::triangulate(polyShell, triList);
+    auto polyShell = PolygonHoleJoiner::join(poly);
+    PolygonEarClipper::triangulate(*polyShell, triList);
     //Tri::validate(triList);
-
     return;
 }
 
