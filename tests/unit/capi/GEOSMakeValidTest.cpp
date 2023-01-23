@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 
 namespace tut {
 //
