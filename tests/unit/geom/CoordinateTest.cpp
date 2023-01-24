@@ -390,6 +390,23 @@ void object::test<15>
     ensure_equals_xyzm(xyzm2, {1, 2, default_z, 3});
 }
 
+// Test use of std::common_type
+template<>
+template<>
+void object::test<16>()
+{
+    CoordinateXYM xym(1, 2, 3);
+    Coordinate xyz(1, 2, 3);
+
+    auto c = std::common_type_t<CoordinateXYM, Coordinate>(xyz);
+    c.m = xym.m;
+
+    ensure_equals(c.x, xyz.x);
+    ensure_equals(c.y, xyz.y);
+    ensure_equals(c.z, xyz.z);
+    ensure_equals(c.m, xym.m);
+}
+
 
 } // namespace tut
 

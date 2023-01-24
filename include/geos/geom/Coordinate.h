@@ -443,6 +443,29 @@ GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXYZM& c);
 } // namespace geos.geom
 } // namespace geos
 
+// Add specializations of std::common_type for Coordinate types
+namespace std {
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXY>     { using type = geos::geom::CoordinateXY;   };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::Coordinate>       { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXYM>    { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXYZM>   { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXY>       { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::Coordinate>         { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXYM>      { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXYZM>     { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXY>    { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::Coordinate>      { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXYM>   { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXYZM>  { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXY>   { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::Coordinate>     { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXYM>  { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXYZM> { using type = geos::geom::CoordinateXYZM; };
+}
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
