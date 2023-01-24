@@ -181,13 +181,13 @@ private:
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
         for (std::size_t i = 1; i < seq->size(); i++) {
-            const Coordinate& ptPrev = seq->getAt(i - 1);
-            const Coordinate& pt = seq->getAt(i);
+            const CoordinateXY& ptPrev = seq->getAt<CoordinateXY>(i - 1);
+            const CoordinateXY& pt = seq->getAt<CoordinateXY>(i);
             addEdgeCrossing(ptPrev, pt, interiorPointY, crossings);
         }
     }
 
-    static void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, std::vector<double>& crossings)
+    static void addEdgeCrossing(const CoordinateXY& p0, const CoordinateXY& p1, double scanY, std::vector<double>& crossings)
     {
         // skip non-crossing segments
         if (!intersectsHorizontalLine(p0, p1, scanY))
@@ -227,7 +227,7 @@ private:
     }
 
     static bool
-    isEdgeCrossingCounted(const Coordinate& p0, const Coordinate& p1, double scanY)
+    isEdgeCrossingCounted(const CoordinateXY& p0, const CoordinateXY& p1, double scanY)
     {
         // skip horizontal lines
         if (p0.y == p1.y)
@@ -243,7 +243,7 @@ private:
     }
 
     static double
-    intersection(const Coordinate& p0, const Coordinate& p1, double Y)
+    intersection(const CoordinateXY& p0, const CoordinateXY& p1, double Y)
     {
         double x0 = p0.x;
         double x1 = p1.x;
@@ -270,7 +270,7 @@ private:
     }
 
     static bool
-    intersectsHorizontalLine(const Coordinate& p0, const Coordinate& p1, double y)
+    intersectsHorizontalLine(const CoordinateXY& p0, const CoordinateXY& p1, double y)
     {
         // both ends above?
         if (p0.y > y && p1.y > y)
