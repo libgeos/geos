@@ -27,6 +27,8 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 
+using geos::geom::CoordinateXY;
+
 namespace geos {
 namespace algorithm { // geos.algorithm
 
@@ -60,20 +62,20 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
      * Note this relies on the convention that
      * rings have the same start and end point.
      */
-    geom::Coordinate upHiPt(ring->getAt(0));
-    geom::Coordinate upLowPt(geom::Coordinate::getNull());
+    const CoordinateXY* upHiPt = &ring->getAt<CoordinateXY>(0);
+    const CoordinateXY* upLowPt = &CoordinateXY::getNull();
 
-    double prevY = upHiPt.y;
+    double prevY = upHiPt->y;
     uint32_t iUpHi = 0;
     for (uint32_t i = 1; i <= nPts; i++) {
         double py = ring->getY(i);
         /**
         * If segment is upwards and endpoint is higher, record it
         */
-        if (py > prevY && py >= upHiPt.y) {
+        if (py > prevY && py >= upHiPt->y) {
             iUpHi = i;
-            upHiPt = ring->getAt(i);
-            upLowPt = ring->getAt(i-1);
+            upHiPt = &ring->getAt<CoordinateXY>(i);
+            upLowPt = &ring->getAt<CoordinateXY>(i-1);
         }
         prevY = py;
     }
@@ -90,11 +92,11 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
     uint32_t iDownLow = iUpHi;
     do {
         iDownLow = (iDownLow + 1) % nPts;
-    } while (iDownLow != iUpHi && ring->getY(iDownLow) == upHiPt.y );
+    } while (iDownLow != iUpHi && ring->getY(iDownLow) == upHiPt->y );
 
-    const geom::Coordinate& downLowPt = ring->getAt(iDownLow);
+    const CoordinateXY& downLowPt = ring->getAt<CoordinateXY>(iDownLow);
     uint32_t iDownHi = iDownLow > 0 ? iDownLow - 1 : nPts - 1;
-    const geom::Coordinate& downHiPt = ring->getAt(iDownHi);
+    const CoordinateXY& downHiPt = ring->getAt<CoordinateXY>(iDownHi);
 
     /**
      * Two cases can occur:
@@ -105,14 +107,14 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
      *    In this case the top of the cap is flat.
      *    The ring orientation is given by the direction of the flat segment
      */
-    if (upHiPt.equals2D(downHiPt)) {
+    if (upHiPt->equals2D(downHiPt)) {
         /**
         * Check for the case where the cap has configuration A-B-A.
         * This can happen if the ring does not contain 3 distinct points
         * (including the case where the input array has fewer than 4 elements), or
         * it contains coincident line segments.
         */
-        if (upLowPt.equals2D(upHiPt) || downLowPt.equals2D(upHiPt) || upLowPt.equals2D(downLowPt))
+        if (upLowPt->equals2D(*upHiPt) || downLowPt.equals2D(*upHiPt) || upLowPt->equals2D(downLowPt))
             return false;
 
         /**
@@ -120,14 +122,14 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
         * This is an invalid ring, which cannot be computed correctly.
         * In this case the orientation is 0, and the result is false.
         */
-        int orientationIndex = index(upLowPt, upHiPt, downLowPt);
+        int orientationIndex = index(*upLowPt, *upHiPt, downLowPt);
         return orientationIndex == COUNTERCLOCKWISE;
     }
     else {
         /**
         * Flat cap - direction of flat top determines orientation
         */
-        double delX = downHiPt.x - upHiPt.x;
+        double delX = downHiPt.x - upHiPt->x;
         return delX < 0;
     }
 }
