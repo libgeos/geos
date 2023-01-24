@@ -169,7 +169,7 @@ PointLocator::locate(const CoordinateXY& p, const LineString* l)
 
     const CoordinateSequence* seq = l->getCoordinatesRO();
     if(! l->isClosed()) {
-        if((p == seq->getAt(0)) || (p == seq->getAt(seq->getSize() - 1))) {
+        if((p == seq->getAt<CoordinateXY>(0)) || (p == seq->getAt<CoordinateXY>(seq->getSize() - 1))) {
             return Location::BOUNDARY;
         }
     }

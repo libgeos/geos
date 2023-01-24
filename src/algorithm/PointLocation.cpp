@@ -39,9 +39,9 @@ PointLocation::isOnLine(const geom::CoordinateXY& p, const geom::CoordinateSeque
         return false;
     }
 
-    const geom::Coordinate* pp = &(pt->getAt(0));
+    const geom::CoordinateXY* pp = &(pt->getAt<geom::CoordinateXY>(0));
     for(std::size_t i = 1; i < ptsize; ++i) {
-        const geom::Coordinate& p1 = pt->getAt(i);
+        const geom::CoordinateXY& p1 = pt->getAt<geom::CoordinateXY>(i);
         if(LineIntersector::hasIntersection(p, *pp, p1)) {
             return true;
         }
