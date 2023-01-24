@@ -50,7 +50,7 @@ const Envelope&
 MonotoneChain::getEnvelope(double expansionDistance) const
 {
     if (env.isNull()) {
-        env.init(pts->getAt(start), pts->getAt(end));
+        env.init(pts->getAt<CoordinateXY>(start), pts->getAt<CoordinateXY>(end));
         if (expansionDistance > 0.0) {
             env.expandBy(expansionDistance);
         }
@@ -75,8 +75,8 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
                              std::size_t start0, std::size_t end0,
                              MonotoneChainSelectAction& mcs) const
 {
-    const Coordinate& p0 = pts->getAt(start0);
-    const Coordinate& p1 = pts->getAt(end0);
+    const CoordinateXY& p0 = pts->getAt<CoordinateXY>(start0);
+    const CoordinateXY& p1 = pts->getAt<CoordinateXY>(end0);
 
     // terminating condition for the recursion
     if(end0 - start0 == 1) {
@@ -164,8 +164,8 @@ MonotoneChain::computeOverlaps(std::size_t start0, std::size_t end0,
 
 /*private*/
 bool
-MonotoneChain::overlaps(const Coordinate& p1, const Coordinate& p2,
-                        const Coordinate& q1, const Coordinate& q2,
+MonotoneChain::overlaps(const CoordinateXY& p1, const CoordinateXY& p2,
+                        const CoordinateXY& q1, const CoordinateXY& q2,
                         double overlapTolerance)
 {
     double maxq = std::max(q1.x, q2.x);

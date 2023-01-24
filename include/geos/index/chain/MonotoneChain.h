@@ -167,15 +167,20 @@ private:
                   const MonotoneChain& mc, std::size_t start1, std::size_t end1,
                   double overlapTolerance) const {
         if (overlapTolerance > 0.0) {
-            return overlaps(pts->getAt(start0), pts->getAt(end0),
-                            mc.pts->getAt(start1), mc.pts->getAt(end1), overlapTolerance);
+            return overlaps(pts->getAt<geom::CoordinateXY>(start0),
+                            pts->getAt<geom::CoordinateXY>(end0),
+                            mc.pts->getAt<geom::CoordinateXY>(start1),
+                            mc.pts->getAt<geom::CoordinateXY>(end1),
+                            overlapTolerance);
         }
-        return geom::Envelope::intersects(pts->getAt(start0), pts->getAt(end0),
-                                          mc.pts->getAt(start1), mc.pts->getAt(end1));
+        return geom::Envelope::intersects(pts->getAt<geom::CoordinateXY>(start0),
+                                          pts->getAt<geom::CoordinateXY>(end0),
+                                          mc.pts->getAt<geom::CoordinateXY>(start1),
+                                          mc.pts->getAt<geom::CoordinateXY>(end1));
     }
 
-    static bool overlaps(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                  const geom::Coordinate& q1, const geom::Coordinate& q2,
+    static bool overlaps(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                  const geom::CoordinateXY& q1, const geom::CoordinateXY& q2,
                   double overlapTolerance);
 
     /// Externally owned
