@@ -36,12 +36,12 @@ Length::ofLine(const geom::CoordinateSequence* pts)
 
     double len = 0.0;
 
-    const geom::Coordinate& p = pts->getAt(0);
+    const geom::CoordinateXY& p = pts->getAt<geom::CoordinateXY>(0);
     double x0 = p.x;
     double y0 = p.y;
 
     for(std::size_t i = 1; i < n; i++) {
-        const geom::Coordinate& pi = pts->getAt(i);
+        const geom::CoordinateXY& pi = pts->getAt<geom::CoordinateXY>(i);
         double x1 = pi.x;
         double y1 = pi.y;
         double dx = x1 - x0;
