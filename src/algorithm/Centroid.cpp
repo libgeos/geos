@@ -111,11 +111,11 @@ Centroid::addShell(const CoordinateSequence& pts)
 {
     std::size_t len = pts.size();
     if(len > 0) {
-        setAreaBasePoint(pts[0]);
+        setAreaBasePoint(pts.getAt<CoordinateXY>(0));
     }
     bool isPositiveArea = ! Orientation::isCCW(&pts);
     for(std::size_t i = 0; i < len - 1; ++i) {
-        addTriangle(*areaBasePt, pts[i], pts[i + 1], isPositiveArea);
+        addTriangle(*areaBasePt, pts.getAt<CoordinateXY>(i), pts.getAt<CoordinateXY>(i + 1), isPositiveArea);
     }
     addLineSegments(pts);
 }
@@ -126,7 +126,7 @@ Centroid::addHole(const CoordinateSequence& pts)
 {
     bool isPositiveArea = Orientation::isCCW(&pts);
     for(std::size_t i = 0, e = pts.size() - 1; i < e; ++i) {
-        addTriangle(*areaBasePt, pts[i], pts[i + 1], isPositiveArea);
+        addTriangle(*areaBasePt, pts.getAt<CoordinateXY>(i), pts.getAt<CoordinateXY>(i + 1), isPositiveArea);
     }
     addLineSegments(pts);
 }
@@ -168,16 +168,16 @@ Centroid::addLineSegments(const CoordinateSequence& pts)
     std::size_t npts = pts.size();
     double lineLen = 0.0;
     for(std::size_t i = 0; i < npts - 1; i++) {
-        double segmentLen = pts[i].distance(pts[i + 1]);
+        double segmentLen = pts.getAt<CoordinateXY>(i).distance(pts.getAt<CoordinateXY>(i + 1));
         if(segmentLen == 0.0) {
             continue;
         }
 
         lineLen += segmentLen;
 
-        double midx = (pts[i].x + pts[i + 1].x) / 2;
+        double midx = (pts.getAt<CoordinateXY>(i).x + pts.getAt<CoordinateXY>(i + 1).x) / 2;
         lineCentSum.x += segmentLen * midx;
-        double midy = (pts[i].y + pts[i + 1].y) / 2;
+        double midy = (pts.getAt<CoordinateXY>(i).y + pts.getAt<CoordinateXY>(i + 1).y) / 2;
         lineCentSum.y += segmentLen * midy;
     }
     totalLength += lineLen;
