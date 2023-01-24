@@ -2663,7 +2663,7 @@ extern "C" {
     GEOSCoordSeq_getXY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y)
     {
         return execute(extHandle, 0, [&]() {
-            auto& c = cs->getAt(idx);
+            auto& c = cs->getAt<CoordinateXY>(idx);
             *x = c.x;
             *y = c.y;
             return 1;
