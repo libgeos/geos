@@ -21,6 +21,8 @@
 
 #include <geos/algorithm/Area.h>
 
+using geos::geom::CoordinateXY;
+
 namespace geos {
 namespace algorithm { // geos.algorithm
 
@@ -74,9 +76,9 @@ Area::ofRingSigned(const geom::CoordinateSequence* ring)
      * Based on the Shoelace formula.
      * http://en.wikipedia.org/wiki/Shoelace_formula
      */
-    geom::Coordinate p0, p1, p2;
-    p1 = ring->getAt(0);
-    p2 = ring->getAt(1);
+    CoordinateXY p0, p1, p2;
+    p1 = ring->getAt<CoordinateXY>(0);
+    p2 = ring->getAt<CoordinateXY>(1);
     double x0 = p1.x;
     p2.x -= x0;
     double sum = 0.0;
@@ -84,7 +86,7 @@ Area::ofRingSigned(const geom::CoordinateSequence* ring)
         p0.y = p1.y;
         p1.x = p2.x;
         p1.y = p2.y;
-        p2 = ring->getAt(i + 1);
+        p2 = ring->getAt<CoordinateXY>(i + 1);
         p2.x -= x0;
         sum += p1.x * (p0.y - p2.y);
     }
