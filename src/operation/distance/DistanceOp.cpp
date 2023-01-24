@@ -438,8 +438,8 @@ DistanceOp::computeMinDistance(
 
     // brute force approach!
     for(std::size_t i = 0; i < npts0 - 1; ++i) {
-        const Coordinate& p00 = coord0->getAt(i);
-        const Coordinate& p01 = coord0->getAt(i+1);
+        const CoordinateXY& p00 = coord0->getAt<CoordinateXY>(i);
+        const CoordinateXY& p01 = coord0->getAt<CoordinateXY>(i+1);
 
         Envelope segEnv0(p00, p01);
 
@@ -448,8 +448,8 @@ DistanceOp::computeMinDistance(
         }
 
         for(std::size_t j = 0; j < npts1 - 1; ++j) {
-            const Coordinate& p10 = coord1->getAt(j);
-            const Coordinate& p11 = coord1->getAt(j+1);
+            const CoordinateXY& p10 = coord1->getAt<CoordinateXY>(j);
+            const CoordinateXY& p11 = coord1->getAt<CoordinateXY>(j+1);
 
             Envelope segEnv1(p10, p11);
 
@@ -464,8 +464,8 @@ DistanceOp::computeMinDistance(
                 // TODO avoid copy from constructing segs, maybe
                 // by making a static closestPoints that takes four
                 // coordinate references
-                LineSegment seg0(p00, p01);
-                LineSegment seg1(p10, p11);
+                LineSegment seg0{Coordinate(p00), Coordinate(p01)};
+                LineSegment seg1{Coordinate(p10), Coordinate(p11)};
                 auto closestPt = seg0.closestPoints(seg1);
 
                 locGeom[0].reset(new GeometryLocation(line0, i, closestPt[0]));
@@ -497,14 +497,14 @@ DistanceOp::computeMinDistance(const LineString* line,
     // brute force approach!
     std::size_t npts0 = coord0->getSize();
     for(std::size_t i = 0; i < npts0 - 1; ++i) {
-        double dist = Distance::pointToSegment(*coord, coord0->getAt(i), coord0->getAt(i + 1));
+        double dist = Distance::pointToSegment(*coord, coord0->getAt<CoordinateXY>(i), coord0->getAt<CoordinateXY>(i + 1));
         if(dist < minDistance) {
             minDistance = dist;
 
             // TODO avoid copy from constructing segs, maybe
             // by making a static closestPoints that takes three
             // coordinate references
-            LineSegment seg(coord0->getAt(i), coord0->getAt(i + 1));
+            LineSegment seg{Coordinate(coord0->getAt<CoordinateXY>(i)), Coordinate(coord0->getAt<CoordinateXY>(i + 1))};
             Coordinate segClosestPoint;
             seg.closestPoint(*coord, segClosestPoint);
 
