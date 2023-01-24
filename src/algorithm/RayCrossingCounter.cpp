@@ -44,8 +44,8 @@ RayCrossingCounter::locatePointInRing(const geom::CoordinateXY& point,
     RayCrossingCounter rcc(point);
 
     for(std::size_t i = 1, ni = ring.size(); i < ni; i++) {
-        const geom::Coordinate& p1 = ring[ i - 1 ];
-        const geom::Coordinate& p2 = ring[ i ];
+        const geom::CoordinateXY& p1 = ring.getAt<geom::CoordinateXY>(i-1);;
+        const geom::CoordinateXY& p2 = ring.getAt<geom::CoordinateXY>(i);
 
         rcc.countSegment(p1, p2);
 
