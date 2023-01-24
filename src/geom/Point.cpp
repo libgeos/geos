@@ -103,7 +103,7 @@ Point::isEmpty() const
         return true;
     }
 
-    const Coordinate& c = coordinates.getAt(0);
+    const CoordinateXY& c = coordinates.getAt<CoordinateXY>(0);
     if (std::isnan(c.x) && std::isnan(c.y)) {
         return true;
     }
