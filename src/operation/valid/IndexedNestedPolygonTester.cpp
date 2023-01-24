@@ -129,7 +129,7 @@ IndexedNestedPolygonTester::findNestedPoint(
         return true;
     }
 
-    const CoordinateXY& shellPt1 = shellCoords->getAt(1);
+    const CoordinateXY& shellPt1 = shellCoords->getAt<CoordinateXY>(1);
     Location loc1 = locator.locate(&shellPt1);
     if (loc1 == Location::EXTERIOR) return false;
     if (loc1 == Location::INTERIOR) {
@@ -186,7 +186,7 @@ IndexedNestedPolygonTester::findIncidentSegmentNestedPoint(
      * The shell is contained in the polygon, but is not contained in a hole.
      * This is invalid.
      */
-    coordNested = shell->getCoordinatesRO()->getAt(0);
+    coordNested = shell->getCoordinatesRO()->getAt<CoordinateXY>(0);
     return true;
 }
 

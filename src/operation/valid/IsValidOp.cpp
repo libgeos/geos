@@ -261,9 +261,9 @@ void
 IsValidOp::checkCoordinatesValid(const CoordinateSequence* coords)
 {
     for (std::size_t i = 0; i < coords->size(); i++) {
-        if (! isValid(coords->getAt(i))) {
+        if (! isValid(coords->getAt<CoordinateXY>(i))) {
             logInvalid(TopologyValidationError::eInvalidCoordinate,
-                       coords->getAt(i));
+                       coords->getAt<CoordinateXY>(i));
             return;
         }
     }
@@ -338,8 +338,8 @@ void
 IsValidOp::checkTooFewPoints(const LineString* line, std::size_t minSize)
 {
     if (! isNonRepeatedSizeAtLeast(line, minSize) ) {
-        Coordinate pt = line->getNumPoints() >= 1
-                        ? line->getCoordinateN(0)
+        CoordinateXY pt = line->getNumPoints() >= 1
+                        ? line->getCoordinatesRO()->getAt<CoordinateXY>(0)
                         : Coordinate();
         logInvalid(TopologyValidationError::eTooFewPoints, pt);
     }
@@ -351,10 +351,11 @@ bool
 IsValidOp::isNonRepeatedSizeAtLeast(const LineString* line, std::size_t minSize)
 {
     std::size_t numPts = 0;
-    const Coordinate* prevPt = nullptr;
-    for (std::size_t i = 0; i < line->getNumPoints(); i++) {
+    const CoordinateXY* prevPt = nullptr;
+    const CoordinateSequence& seq = *line->getCoordinatesRO();
+    for (std::size_t i = 0; i < seq.size(); i++) {
         if (numPts >= minSize) return true;
-        const Coordinate& pt = line->getCoordinateN(i);
+        const CoordinateXY& pt = seq.getAt<CoordinateXY>(i);
         if (prevPt == nullptr || ! pt.equals2D(*prevPt))
             numPts++;
         prevPt = &pt;
@@ -421,7 +422,7 @@ IsValidOp::checkHolesInShell(const Polygon* poly)
 const CoordinateXY*
 IsValidOp::findHoleOutsideShellPoint(const LinearRing* hole, const LinearRing* shell)
 {
-    const CoordinateXY& holePt0 = hole->getCoordinateN(0);
+    const CoordinateXY& holePt0 = hole->getCoordinatesRO()->getAt<CoordinateXY>(0);
     /**
      * If hole envelope is not covered by shell, it must be outside
      */

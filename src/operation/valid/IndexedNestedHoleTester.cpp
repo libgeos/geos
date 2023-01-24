@@ -65,7 +65,7 @@ IndexedNestedHoleTester::isNested()
              * the topology of the incident edges.
              */
             if (PolygonTopologyAnalyzer::isRingNested(hole, testHole)) {
-                nestedPt = hole->getCoordinatesRO()->getAt(0);
+                nestedPt = hole->getCoordinatesRO()->getAt<CoordinateXY>(0);
                 return true;
             }
         }

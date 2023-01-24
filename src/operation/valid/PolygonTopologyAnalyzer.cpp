@@ -76,7 +76,7 @@ bool
 PolygonTopologyAnalyzer::isRingNested(const LinearRing* test,
     const LinearRing* target)
 {
-    const CoordinateXY& p0 = test->getCoordinateN(0);
+    const CoordinateXY& p0 = test->getCoordinatesRO()->getAt<CoordinateXY>(0);
     const CoordinateSequence* targetPts = target->getCoordinatesRO();
     Location loc = algorithm::PointLocation::locateInRing(p0, *targetPts);
     if (loc == Location::EXTERIOR) return false;
@@ -96,12 +96,13 @@ const CoordinateXY&
 PolygonTopologyAnalyzer::findNonEqualVertex(const LinearRing* ring, const CoordinateXY& p)
 {
     std::size_t i = 1;
-    const Coordinate* next = &(ring->getCoordinateN(i));
+    const CoordinateSequence& ringPts = *ring->getCoordinatesRO();
+    const CoordinateXY* next = &(ringPts.getAt<CoordinateXY>(i));
     while (next->equals2D(p) && i < ring->getNumPoints() - 1) {
         i += 1;
-        next = &(ring->getCoordinateN(i));
+        next = &(ringPts.getAt<CoordinateXY>(i));
     }
-    return ring->getCoordinateN(i);
+    return ringPts.getAt<CoordinateXY>(i);
 }
 
 /* private static */
@@ -130,12 +131,12 @@ const CoordinateXY&
 PolygonTopologyAnalyzer::findRingVertexPrev(const CoordinateSequence* ringPts, std::size_t index, const CoordinateXY& node)
 {
     std::size_t iPrev = index;
-    const CoordinateXY* prev = &(ringPts->getAt(iPrev));
+    const CoordinateXY* prev = &(ringPts->getAt<CoordinateXY>(iPrev));
     while (prev->equals2D(node)) {
       iPrev = ringIndexPrev(ringPts, iPrev);
-      prev = &(ringPts->getAt(iPrev));
+      prev = &(ringPts->getAt<CoordinateXY>(iPrev));
     }
-    return ringPts->getAt(iPrev);
+    return ringPts->getAt<CoordinateXY>(iPrev);
 }
 
 /* private static */
@@ -144,12 +145,12 @@ PolygonTopologyAnalyzer::findRingVertexNext(const CoordinateSequence* ringPts, s
 {
     //-- safe, since index is always the start of a ring segment
     std::size_t iNext = index + 1;
-    const CoordinateXY* next = &(ringPts->getAt(iNext));
+    const CoordinateXY* next = &(ringPts->getAt<CoordinateXY>(iNext));
     while (next->equals2D(node)) {
       iNext = ringIndexNext(ringPts, iNext);
-      next = &(ringPts->getAt(iNext));
+      next = &(ringPts->getAt<CoordinateXY>(iNext));
     }
-    return ringPts->getAt(iNext);
+    return ringPts->getAt<CoordinateXY>(iNext);
 }
 
 /* private static */
@@ -179,10 +180,10 @@ PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
 {
     algorithm::LineIntersector li;
     for (std::size_t i = 0; i < ringPts->size() - 1; i++) {
-      li.computeIntersection(*pt, ringPts->getAt(i), ringPts->getAt(i+1));
+      li.computeIntersection(*pt, ringPts->getAt<CoordinateXY>(i), ringPts->getAt<CoordinateXY>(i+1));
       if (li.hasIntersection()) {
         //-- check if pt is the start point of the next segment
-        if (pt->equals2D(ringPts->getAt(i + 1))) {
+        if (pt->equals2D(ringPts->getAt<CoordinateXY>(i + 1))) {
           return i + 1;
         }
         return i;

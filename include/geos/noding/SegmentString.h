@@ -132,7 +132,7 @@ public:
     }
 
     bool isClosed() const {
-        return seq->front().equals(seq->back());
+        return seq->front<geom::CoordinateXY>().equals(seq->back<geom::CoordinateXY>());
     }
 
     virtual std::ostream& print(std::ostream& os) const;

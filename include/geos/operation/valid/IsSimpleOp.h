@@ -154,8 +154,8 @@ private:
         bool findIntersection(
             noding::SegmentString* ss0, std::size_t segIndex0,
             noding::SegmentString* ss1, std::size_t segIndex1,
-            const geom::Coordinate& p00, const geom::Coordinate& p01,
-            const geom::Coordinate& p10, const geom::Coordinate& p11);
+            const geom::CoordinateXY& p00, const geom::CoordinateXY& p01,
+            const geom::CoordinateXY& p10, const geom::CoordinateXY& p11);
 
         /**
         * Tests whether an intersection vertex is an endpoint of a segment string.

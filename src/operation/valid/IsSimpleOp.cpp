@@ -269,10 +269,10 @@ IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
     if (isSameSegment)
         return;
 
-    const Coordinate& p00 = ss0->getCoordinate(segIndex0);
-    const Coordinate& p01 = ss0->getCoordinate(segIndex0 + 1);
-    const Coordinate& p10 = ss1->getCoordinate(segIndex1);
-    const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
+    const CoordinateXY& p00 = ss0->getCoordinate<CoordinateXY>(segIndex0);
+    const CoordinateXY& p01 = ss0->getCoordinate<CoordinateXY>(segIndex0 + 1);
+    const CoordinateXY& p10 = ss1->getCoordinate<CoordinateXY>(segIndex1);
+    const CoordinateXY& p11 = ss1->getCoordinate<CoordinateXY>(segIndex1 + 1);
 
     bool hasInt = findIntersection(
         ss0, segIndex0, ss1, segIndex1,
@@ -280,7 +280,7 @@ IsSimpleOp::NonSimpleIntersectionFinder::processIntersections(
 
     // found an intersection!
     if (hasInt) {
-        const Coordinate& intPt = li.getIntersection(0);
+        const CoordinateXY& intPt = li.getIntersection(0);
         // don't save dupes
         for (auto& pt: intersectionPts) {
             if (intPt.equals2D(pt))
@@ -296,8 +296,8 @@ bool
 IsSimpleOp::NonSimpleIntersectionFinder::findIntersection(
     SegmentString* ss0, std::size_t segIndex0,
     SegmentString* ss1, std::size_t segIndex1,
-    const Coordinate& p00, const Coordinate& p01,
-    const Coordinate& p10, const Coordinate& p11)
+    const CoordinateXY& p00, const CoordinateXY& p01,
+    const CoordinateXY& p10, const CoordinateXY& p11)
 {
 
     li.computeIntersection(p00, p01, p10, p11);

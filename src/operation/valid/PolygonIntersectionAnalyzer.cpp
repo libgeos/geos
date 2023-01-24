@@ -58,10 +58,10 @@ PolygonIntersectionAnalyzer::findInvalidIntersection(
     const SegmentString* ss0, std::size_t segIndex0,
     const SegmentString* ss1, std::size_t segIndex1)
 {
-    const Coordinate& p00 = ss0->getCoordinate(segIndex0);
-    const Coordinate& p01 = ss0->getCoordinate(segIndex0 + 1);
-    const Coordinate& p10 = ss1->getCoordinate(segIndex1);
-    const Coordinate& p11 = ss1->getCoordinate(segIndex1 + 1);
+    const CoordinateXY& p00 = ss0->getCoordinate<CoordinateXY>(segIndex0);
+    const CoordinateXY& p01 = ss0->getCoordinate<CoordinateXY>(segIndex0 + 1);
+    const CoordinateXY& p10 = ss1->getCoordinate<CoordinateXY>(segIndex1);
+    const CoordinateXY& p11 = ss1->getCoordinate<CoordinateXY>(segIndex1 + 1);
 
     li.computeIntersection(p00, p01, p10, p11);
 
@@ -199,7 +199,7 @@ PolygonIntersectionAnalyzer::prevCoordinateInRing(
     else {
         prevIndex = segIndex - 1;
     }
-    return ringSS->getCoordinate(prevIndex);
+    return ringSS->getCoordinate<CoordinateXY>(prevIndex);
 }
 
 /* private */
