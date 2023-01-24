@@ -402,7 +402,7 @@ LineString::getCoordinate() const
     if(isEmpty()) {
         return nullptr;
     }
-    return &(points->getAt(0));
+    return &(points->getAt<CoordinateXY>(0));
 }
 
 double
