@@ -49,9 +49,9 @@ void object::test<1>
 
     CoordinateSequence::Ptr pts(geom->getCoordinates());
 
-    int const a = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
-    int const b = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
-    int const c = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
+    int const a = Orientation::index(pts->getAt<CoordinateXY>(0), pts->getAt<CoordinateXY>(1), pts->getAt<CoordinateXY>(2));
+    int const b = Orientation::index(pts->getAt<CoordinateXY>(0), pts->getAt<CoordinateXY>(1), pts->getAt<CoordinateXY>(2));
+    int const c = Orientation::index(pts->getAt<CoordinateXY>(0), pts->getAt<CoordinateXY>(1), pts->getAt<CoordinateXY>(2));
 
     ensure_equals(a, b);
     ensure_equals(a, c);
