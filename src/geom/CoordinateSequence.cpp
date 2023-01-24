@@ -445,7 +445,7 @@ CoordinateSequence::equals(const CoordinateSequence* cl1,
 }
 
 bool
-CoordinateSequence::identicalTo(const CoordinateSequence& other) const
+CoordinateSequence::equalsIdentical(const CoordinateSequence& other) const
 {
     if (this == &other) {
         return true;

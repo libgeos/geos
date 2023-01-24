@@ -156,7 +156,7 @@ public:
     bool equalsExact(const Geometry* other, double tolerance = 0)
     const override;
 
-    bool identicalTo(const Geometry& other) const override;
+    bool equalsIdentical(const Geometry* other) const override;
 
     void apply_rw(const CoordinateFilter* filter) override;
 

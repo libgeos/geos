@@ -278,19 +278,19 @@ LineString::equalsExact(const Geometry* other, double tolerance) const
 }
 
 bool
-LineString::identicalTo(const Geometry& other_g) const
+LineString::equalsIdentical(const Geometry* other_g) const
 {
-    if(!isEquivalentClass(&other_g)) {
+    if(!isEquivalentClass(other_g)) {
         return false;
     }
 
-    const auto& other = static_cast<const LineString&>(other_g);
+    const auto& other = static_cast<const LineString&>(*other_g);
 
     if (envelope && other.envelope && *envelope != *other.envelope) {
         return false;
     }
 
-    return getCoordinatesRO()->identicalTo(*other.getCoordinatesRO());
+    return getCoordinatesRO()->equalsIdentical(*other.getCoordinatesRO());
 }
 
 void

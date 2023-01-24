@@ -231,13 +231,13 @@ GeometryCollection::equalsExact(const Geometry* other, double tolerance) const
 }
 
 bool
-GeometryCollection::identicalTo(const Geometry& other_g) const
+GeometryCollection::equalsIdentical(const Geometry* other_g) const
 {
-    if(!isEquivalentClass(&other_g)) {
+    if(!isEquivalentClass(other_g)) {
         return false;
     }
 
-    const auto& other = static_cast<const GeometryCollection&>(other_g);
+    const auto& other = static_cast<const GeometryCollection&>(*other_g);
     if(getNumGeometries() != other.getNumGeometries()) {
         return false;
     }
@@ -247,7 +247,7 @@ GeometryCollection::identicalTo(const Geometry& other_g) const
     }
 
     for(std::size_t i = 0; i < getNumGeometries(); i++) {
-        if(!(getGeometryN(i)->identicalTo(*other.getGeometryN(i)))) {
+        if(!(getGeometryN(i)->equalsIdentical(other.getGeometryN(i)))) {
             return false;
         }
     }

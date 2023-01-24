@@ -1088,8 +1088,8 @@ extern char GEOS_DLL GEOSEqualsExact_r(
     const GEOSGeometry* g2,
     double tolerance);
 
-/** \see GEOSIdentical */
-extern char GEOS_DLL GEOSIdentical_r(
+/** \see GEOSEqualsIdentical */
+extern char GEOS_DLL GEOSEqualsIdentical_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g1,
     const GEOSGeometry* g2);
@@ -4257,7 +4257,7 @@ extern char GEOS_DLL GEOSEqualsExact(
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
 */
-extern char GEOS_DLL GEOSIdentical(
+extern char GEOS_DLL GEOSEqualsIdentical(
         const GEOSGeometry* g1,
         const GEOSGeometry* g2);
 

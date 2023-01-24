@@ -283,14 +283,14 @@ Point::equalsExact(const Geometry* other, double tolerance) const
 }
 
 bool
-Point::identicalTo(const Geometry& other) const
+Point::equalsIdentical(const Geometry* other) const
 {
-    if(!isEquivalentClass(&other)) {
+    if(!isEquivalentClass(other)) {
         return false;
     }
 
-    return getCoordinatesRO()->identicalTo(
-                *static_cast<const Point&>(other).getCoordinatesRO());
+    return getCoordinatesRO()->equalsIdentical(
+                *static_cast<const Point*>(other)->getCoordinatesRO());
 }
 
 int

@@ -12,6 +12,7 @@ xxxx-xx-xx
   - Geometry clustering: DBSCAN, geometry intersection/distance, envelope
     intersection/distance (GH-688, Dan Baston)
   - CAPI: GEOSLineSubstring (GH-706, Dan Baston)
+  - CAPI: GEOSEqualsIdentical (GH-810, Dan Baston)
   - Voronoi: Add option to create diagram in order consistent with inputs (GH-781, Dan Baston)
 
 - Fixes/Improvements:

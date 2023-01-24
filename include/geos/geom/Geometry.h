@@ -739,7 +739,7 @@ public:
      * Returns true if the two geometries are of the same type and their
      * vertices corresponding by index are equal in all dimensions.
      */
-    virtual bool identicalTo(const Geometry& other) const = 0;
+    virtual bool equalsIdentical(const Geometry* other) const = 0;
 
     virtual void apply_rw(const CoordinateFilter* filter) = 0; //Abstract
     virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract

@@ -268,9 +268,9 @@ extern "C" {
     }
 
     char
-    GEOSIdentical(const Geometry* g1, const Geometry* g2)
+    GEOSEqualsIdentical(const Geometry* g1, const Geometry* g2)
     {
-        return GEOSIdentical_r(handle, g1, g2);
+        return GEOSEqualsIdentical_r(handle, g1, g2);
     }
 
     int

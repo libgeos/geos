@@ -302,13 +302,13 @@ Polygon::equalsExact(const Geometry* other, double tolerance) const
 }
 
 bool
-Polygon::identicalTo(const Geometry& other_g) const
+Polygon::equalsIdentical(const Geometry* other_g) const
 {
-    if(!isEquivalentClass(&other_g)) {
+    if(!isEquivalentClass(other_g)) {
         return false;
     }
 
-    const auto& other = static_cast<const Polygon&>(other_g);
+    const auto& other = static_cast<const Polygon&>(*other_g);
 
     if (getNumInteriorRing() != other.getNumInteriorRing()) {
         return false;
@@ -318,12 +318,12 @@ Polygon::identicalTo(const Geometry& other_g) const
         return false;
     }
 
-    if (!getExteriorRing()->identicalTo(*other.getExteriorRing())) {
+    if (!getExteriorRing()->equalsIdentical(other.getExteriorRing())) {
             return false;
     }
 
     for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
-        if (!getInteriorRingN(i)->identicalTo(*other.getInteriorRingN(i))) {
+        if (!getInteriorRingN(i)->equalsIdentical(other.getInteriorRingN(i))) {
             return false;
         }
     }

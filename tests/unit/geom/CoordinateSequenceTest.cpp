@@ -1417,7 +1417,7 @@ void object::test<53>
     ensure_equals_xyzm(dst.getAt<CoordinateXYZM>(3), CoordinateXYZM{10, 11,  DoubleNotANumber, 12});
 }
 
-// Test identicalTo()
+// Test equalsIdentical()
 template<>
 template<>
 void object::test<54>
@@ -1441,12 +1441,12 @@ void object::test<54>
     xy3.setAt(Coordinate(4, 5, 6), 1);
     xy3.setAt(Coordinate(7, 8, 9), 2);
 
-    ensure(xy3.identicalTo(xy3));
+    ensure(xy3.equalsIdentical(xy3));
 
-    ensure(!xyz2.identicalTo(xyz3));
-    ensure(!xyz3.identicalTo(xy3));
-    ensure(xyz3.identicalTo(xyz3_2));
-    ensure(xyz3_2.identicalTo(xyz3));
+    ensure(!xyz2.equalsIdentical(xyz3));
+    ensure(!xyz3.equalsIdentical(xy3));
+    ensure(xyz3.equalsIdentical(xyz3_2));
+    ensure(xyz3_2.equalsIdentical(xyz3));
 }
 
 } // namespace tut

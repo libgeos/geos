@@ -572,7 +572,7 @@ public:
      * Returns true if the two sequences are identical or pointwise
      * equal in all dimensions.
      */
-    bool identicalTo(const CoordinateSequence& other) const;
+    bool equalsIdentical(const CoordinateSequence& other) const;
 
     /// Scroll given CoordinateSequence so to start with given Coordinate.
     static void scroll(CoordinateSequence* cl, const CoordinateXY* firstCoordinate);
