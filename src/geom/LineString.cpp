@@ -207,7 +207,8 @@ LineString::isClosed() const
     if(isEmpty()) {
         return false;
     }
-    return getCoordinateN(0).equals2D(getCoordinateN(getNumPoints() - 1));
+
+    return points->front<CoordinateXY>().equals2D(points->back<CoordinateXY>());
 }
 
 bool
