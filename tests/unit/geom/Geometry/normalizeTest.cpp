@@ -39,7 +39,12 @@ struct test_geometry_normalize_data {
         ensure("g2 is parsed", g2.get() != 0);
         g2->normalize();
 
+
         GeomPtr ge(reader.read(exp));
+
+        ensure_equals(g2->hasZ(), ge->hasZ());
+        ensure_equals(g2->hasM(), ge->hasM());
+
         bool eq = g2->equalsExact(ge.get());
         if(! eq) {
             using namespace std;
@@ -238,6 +243,26 @@ void object::test<9>
 
     runTest("LINESTRING (0 1, 0 1, 0 1)",
             "LINESTRING (0 1, 0 1, 0 1)");
+}
+
+// closed LineString M
+template<>
+template<>
+void object::test<10>
+()
+{
+    runTest("LINESTRING M (8 15 0, 15 8 1, 22 15 2, 15 22 3, 8 15 0)",
+            "LINESTRING M (8 15 0, 15 22 3, 22 15 2, 15 8 1, 8 15 0)");
+}
+
+// non-closed LineString M
+template<>
+template<>
+void object::test<11>
+()
+{
+    runTest("LINESTRING M (100 0 0, 100 100 1, 0 100 2, 0 0 3)",
+            "LINESTRING M (0 0 3, 0 100 2, 100 100 1, 100 0 0)");
 }
 
 

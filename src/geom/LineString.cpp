@@ -236,7 +236,7 @@ LineString::isCoordinate(Coordinate& pt) const
     assert(points.get());
     std::size_t npts = points->getSize();
     for(std::size_t i = 0; i < npts; i++) {
-        if(points->getAt(i) == pt) {
+        if(points->getAt<CoordinateXY>(i) == pt) {
             return true;
         }
     }
@@ -332,11 +332,10 @@ LineString::normalizeClosed()
 
     const auto& ringCoords = getCoordinatesRO();
 
-    auto coords = detail::make_unique<CoordinateSequence>(ringCoords->getSize() - 1);
+    auto coords = detail::make_unique<CoordinateSequence>(0u, ringCoords->hasZ(), ringCoords->hasM());
+    coords->reserve(ringCoords->size());
     // exclude last point (repeated)
-    for (std::size_t i = 0; i < coords->getSize(); i++) {
-        coords->setAt(ringCoords->getAt(i), i);
-    }
+    coords->add(*ringCoords, 0, ringCoords->size() - 2);
 
     const CoordinateXY* minCoordinate = coords->minCoordinate();
 
@@ -364,8 +363,8 @@ LineString::normalize()
     std::size_t n = npts / 2;
     for(std::size_t i = 0; i < n; i++) {
         std::size_t j = npts - 1 - i;
-        if(!(points->getAt(i) == points->getAt(j))) {
-            if(points->getAt(i).compareTo(points->getAt(j)) > 0) {
+        if(!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
+            if(points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
                 points->reverse();
             }
             return;
@@ -388,7 +387,7 @@ LineString::compareToSameClass(const Geometry* ls) const
         return -1;
     }
     for(std::size_t i = 0; i < mynpts; i++) {
-        int cmp = points->getAt(i).compareTo(line->points->getAt(i));
+        int cmp = points->getAt<CoordinateXY>(i).compareTo(line->points->getAt<CoordinateXY>(i));
         if(cmp) {
             return cmp;
         }
