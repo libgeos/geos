@@ -1572,7 +1572,7 @@ extern "C" {
                             m_callback(p_callback),
                             m_userdata(p_userdata) {}
 
-            void filter_rw(geos::geom::Coordinate* c) const final {
+            void filter_rw(geos::geom::CoordinateXY* c) const final {
                 if (!m_callback(&(c->x), &(c->y), m_userdata)) {
                     throw std::runtime_error(std::string("Failed to transform coordinates."));
                 }

@@ -43,7 +43,7 @@ void object::test<1>() {
         nullptr);
 
     ensure(out != nullptr);
-    ensure_equals(GEOSEquals(out, geom), 1);
+    ensure_equals(GEOSEqualsExact(out, geom, 0), 1);
 
     GEOSGeom_destroy(geom);
     GEOSGeom_destroy(out);
