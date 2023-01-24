@@ -95,24 +95,18 @@ std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
-        return detail::make_unique<CoordinateSequence>();
+        return detail::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
     }
 
-    auto cl = detail::make_unique<CoordinateSequence>();
+    auto cl = detail::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
     cl->reserve(getNumPoints());
 
     // Add shell points
-    const CoordinateSequence* shellCoords = shell->getCoordinatesRO();
-    shellCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
-        cl->add(c);
-    });
+    cl->add(*shell->getCoordinatesRO());
 
     // Add holes points
     for(const auto& hole : holes) {
-        const CoordinateSequence* childCoords = hole->getCoordinatesRO();
-        childCoords->forEach<Coordinate>([&cl](const Coordinate& c) {
-            cl->add(c);
-        });
+        cl->add(*hole->getCoordinatesRO());
     }
 
     return cl;
