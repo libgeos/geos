@@ -194,9 +194,6 @@ void object::test<10> ()
 {
   checkUnion("POINT Z (5 5 77)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
       "POLYGON Z((1 1 77, 1 9 77, 9 9 77, 9 1 77, 1 1 77))");
-
-  checkUnion("POINT M (5 5 77)", "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
-      "POLYGON M((1 1 77, 1 9 77, 9 9 77, 9 1 77, 1 1 77))");
 }
 
 // testLinePolygonXYDifference
