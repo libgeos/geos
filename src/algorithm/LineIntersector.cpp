@@ -25,7 +25,7 @@
 #include <geos/algorithm/Intersection.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateUtils.h>
+#include <geos/geom/CoordinateSequences.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
 
@@ -209,7 +209,7 @@ LineIntersector::computeIntersection(const CoordinateSequence& p, std::size_t p0
                                      const CoordinateSequence& q, std::size_t q0)
 {
     DoIntersect dis(*this, p, p0, q, q0);
-    binaryDispatch(p, q, dis);
+    CoordinateSequences::binaryDispatch(p, q, dis);
 }
 
 /*public*/

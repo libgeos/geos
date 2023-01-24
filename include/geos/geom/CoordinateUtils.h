@@ -44,41 +44,7 @@ template<> struct CommonCoordinateType<CoordinateXYZM, CoordinateXYM>  { using t
 template<> struct CommonCoordinateType<CoordinateXYZM, CoordinateXYZM> { using type = CoordinateXYZM; };
 
 
-constexpr int
-type_pair(const CoordinateType& typ1, const CoordinateType& typ2) {
-    return (static_cast<int>(typ1) << 4) | static_cast<int>(typ2);
-}
 
-template<typename F, class... Args>
-void binaryDispatch(const CoordinateSequence& seq1, const CoordinateSequence& seq2, F& fun, Args... args)
-{
-    using CoordinateXYZ = Coordinate;
-
-    auto typ1 = seq1.getCoordinateType();
-    auto typ2 = seq2.getCoordinateType();
-
-    switch(type_pair(typ1, typ2)) {
-        case type_pair(CoordinateType::XY, CoordinateType::XY):     fun.template operator()<CoordinateXY, CoordinateXY>(args...);   break;
-        case type_pair(CoordinateType::XY, CoordinateType::XYZ):    fun.template operator()<CoordinateXY, CoordinateXYZ>(args...);  break;
-        case type_pair(CoordinateType::XY, CoordinateType::XYM):    fun.template operator()<CoordinateXY, CoordinateXYM>(args...);  break;
-        case type_pair(CoordinateType::XY, CoordinateType::XYZM):   fun.template operator()<CoordinateXY, CoordinateXYZM>(args...); break;
-
-        case type_pair(CoordinateType::XYZ, CoordinateType::XY):    fun.template operator()<CoordinateXYZ, CoordinateXY>(args...);   break;
-        case type_pair(CoordinateType::XYZ, CoordinateType::XYZ):   fun.template operator()<CoordinateXYZ, CoordinateXYZ>(args...);  break;
-        case type_pair(CoordinateType::XYZ, CoordinateType::XYM):   fun.template operator()<CoordinateXYZ, CoordinateXYM>(args...);  break;
-        case type_pair(CoordinateType::XYZ, CoordinateType::XYZM):  fun.template operator()<CoordinateXYZ, CoordinateXYZM>(args...); break;
-
-        case type_pair(CoordinateType::XYM, CoordinateType::XY):    fun.template operator()<CoordinateXYM, CoordinateXY>(args...);   break;
-        case type_pair(CoordinateType::XYM, CoordinateType::XYZ):   fun.template operator()<CoordinateXYM, CoordinateXYZ>(args...);  break;
-        case type_pair(CoordinateType::XYM, CoordinateType::XYM):   fun.template operator()<CoordinateXYM, CoordinateXYM>(args...);  break;
-        case type_pair(CoordinateType::XYM, CoordinateType::XYZM):  fun.template operator()<CoordinateXYM, CoordinateXYZM>(args...); break;
-
-        case type_pair(CoordinateType::XYZM, CoordinateType::XY):   fun.template operator()<CoordinateXYZM, CoordinateXY>(args...);   break;
-        case type_pair(CoordinateType::XYZM, CoordinateType::XYZ):  fun.template operator()<CoordinateXYZM, CoordinateXYZ>(args...);  break;
-        case type_pair(CoordinateType::XYZM, CoordinateType::XYM):  fun.template operator()<CoordinateXYZM, CoordinateXYM>(args...);  break;
-        case type_pair(CoordinateType::XYZM, CoordinateType::XYZM): fun.template operator()<CoordinateXYZM, CoordinateXYZM>(args...); break;
-    }
-}
 
 
 }
