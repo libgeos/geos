@@ -249,8 +249,8 @@ OverlayNG::computeEdgeOverlay()
     // std::sort(edges.begin(), edges.end(), EdgeComparator);
     OverlayGraph graph;
     for (Edge* e : edges) {
-        // Write out edge graph as hex for examination
-        // std::cout << *e << std::endl;
+        // Write out edge coordinates
+        // std::cout << *e->getCoordinatesRO() << std::endl;
         graph.addEdge(e);
     }
 

@@ -98,7 +98,8 @@ SegmentString*
 SnappingNoder::snapVertices(SegmentString* ss)
 {
     auto snapCoords = snap(ss->getCoordinates());
-    return new NodedSegmentString(snapCoords.release(), ss->getData());
+    // FIXME remove hardcoded hasZ, hasM and derive from input
+    return new NodedSegmentString(snapCoords.release(), false, false, ss->getData());
 }
 
 

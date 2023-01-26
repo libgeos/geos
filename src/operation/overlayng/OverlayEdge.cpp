@@ -69,7 +69,7 @@ OverlayEdge::addCoordinates(CoordinateSequence* coords) const
             startIndex = (int)(pts->size()) - 1;
         }
         for (int i = startIndex; i >= 0; i--) {
-            coords->add(pts->getAt(static_cast<std::size_t>(i)), false);
+            coords->add(*pts, static_cast<std::size_t>(i), static_cast<std::size_t>(i), false);
         }
     }
 }

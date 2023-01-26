@@ -21,8 +21,7 @@
 #include <geos/export.h>
 
 #include <geos/geom/Coordinate.h> // for composition
-#include <geos/geom/Envelope.h> // for unique_ptr
-#include <geos/io/WKTWriter.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/util/math.h>
 
 #include <array>
@@ -69,15 +68,16 @@ private:
     static constexpr int LOWER_LEFT  = 2;
     static constexpr int LOWER_RIGHT = 3;
 
-    geom::Coordinate originalPt;
+    // Store all ordinates because we may use them in constructing a SegmentNode.
+    geom::CoordinateXYZM originalPt;
     double scaleFactor;
-
-    /* Indicates if this hot pixel must be a node in the output. */
-    bool hpIsNode;
 
     /* The scaled ordinates of the hot pixel point */
     double hpx;
     double hpy;
+
+    /* Indicates if this hot pixel must be a node in the output. */
+    bool hpIsNode;
 
     double scaleRound(double val) const
     {
@@ -112,16 +112,30 @@ public:
      * Creates a new hot pixel.
      *
      * @param pt the coordinate at the centre of the pixel.
-     *           Will be kept by reference, so make sure to keep it alive.
-     * @param scaleFactor the scaleFactor determining the pixel size     */
-    HotPixel(const geom::Coordinate& pt, double scaleFactor);
+     * @param scaleFact the scaleFactor determining the pixel size     */
+    template<typename CoordType>
+    HotPixel(const CoordType& pt, double scaleFact)
+        : originalPt(pt)
+        , scaleFactor(scaleFact)
+        , hpx(pt.x)
+        , hpy(pt.y)
+        , hpIsNode(false)
+    {
+        if(scaleFactor <= 0.0) {
+            throw util::IllegalArgumentException("Scale factor must be non-zero");
+        }
+        if(scaleFactor != 1.0) {
+            hpx = scaleRound(pt.x);
+            hpy = scaleRound(pt.y);
+        }
+    }
 
     /*
     * Gets the coordinate this hot pixel is based at.
     *
     * @return the coordinate of the pixel
     */
-    const geom::Coordinate& getCoordinate() const;
+    const geom::CoordinateXYZM& getCoordinate() const;
 
     /**
      * Tests whether the line segment (p0-p1) intersects this hot pixel.
@@ -130,8 +144,8 @@ public:
      * @param p1 the second coordinate of the line segment to test
      * @return true if the line segment intersects this hot pixel
      */
-    bool intersects(const geom::Coordinate& p0,
-                    const geom::Coordinate& p1) const;
+    bool intersects(const geom::CoordinateXY& p0,
+                    const geom::CoordinateXY& p1) const;
 
     /**
     * Tests whether a coordinate lies in (intersects) this hot pixel.
@@ -139,7 +153,7 @@ public:
     * @param p the coordinate to test
     * @return true if the coordinate intersects this hot pixel
     */
-    bool intersects(const geom::Coordinate& p) const;
+    bool intersects(const geom::CoordinateXY& p) const;
 
     bool isNode() const { return hpIsNode; };
     void setToNode() { hpIsNode = true; };

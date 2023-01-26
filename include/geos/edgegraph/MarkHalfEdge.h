@@ -21,13 +21,6 @@
 #include <string>
 #include <cassert>
 
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-}
-
 namespace geos {
 namespace edgegraph { // geos.edgegraph
 
@@ -44,7 +37,7 @@ public:
     *
     * @param orig the coordinate of the edge origin
     */
-    MarkHalfEdge(const geom::Coordinate& p_orig) :
+    MarkHalfEdge(const geom::CoordinateXYZM& p_orig) :
         HalfEdge(p_orig),
         m_isMarked(false)
     {};

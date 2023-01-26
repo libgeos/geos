@@ -20,8 +20,8 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/util/IllegalArgumentException.h>
 #include <geos/noding/snapround/HotPixel.h>
+#include <geos/io/WKTWriter.h>
 
 #include <algorithm> // for std::min and std::max
 #include <cassert>
@@ -34,24 +34,8 @@ namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
-HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor)
-    : originalPt(newPt)
-    , scaleFactor(newScaleFactor)
-    , hpIsNode(false)
-    , hpx(newPt.x)
-    , hpy(newPt.y)
-{
-    if(scaleFactor <= 0.0) {
-        throw util::IllegalArgumentException("Scale factor must be non-zero");
-    }
-    if(scaleFactor != 1.0) {
-        hpx = scaleRound(newPt.x);
-        hpy = scaleRound(newPt.y);
-    }
-}
-
 /*public*/
-const geom::Coordinate&
+const geom::CoordinateXYZM&
 HotPixel::getCoordinate() const
 {
     return originalPt;
@@ -59,7 +43,7 @@ HotPixel::getCoordinate() const
 
 /* public */
 bool
-HotPixel::intersects(const Coordinate& p) const
+HotPixel::intersects(const CoordinateXY& p) const
 {
     double x = scale(p.x);
     double y = scale(p.y);
@@ -76,8 +60,8 @@ HotPixel::intersects(const Coordinate& p) const
 
 /*public*/
 bool
-HotPixel::intersects(const Coordinate& p0,
-                     const Coordinate& p1) const
+HotPixel::intersects(const CoordinateXY& p0,
+                     const CoordinateXY& p1) const
 {
     if(scaleFactor == 1.0) {
         return intersectsScaled(p0.x, p0.y, p1.x, p1.y);

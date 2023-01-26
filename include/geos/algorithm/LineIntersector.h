@@ -21,8 +21,11 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/Intersection.h>
+#include <geos/algorithm/Interpolate.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/PrecisionModel.h>
 
 #include <string>
 
@@ -50,12 +53,6 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL LineIntersector {
 public:
 
-    /// \brief
-    /// Return a Z value being the interpolation of Z from p0 and p1 at
-    /// the given point p
-    static double interpolateZ(const geom::Coordinate& p, const geom::Coordinate& p0, const geom::Coordinate& p1);
-
-
     /// Computes the "edge distance" of an intersection point p in an edge.
     ///
     /// The edge distance is a metric of the point along the edge.
@@ -74,7 +71,7 @@ public:
     /// result of <b>rounding</b> points which lie on the line,
     /// but not safe to use for <b>truncated</b> points.
     ///
-    static double computeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p0, const geom::Coordinate& p1);
+    static double computeEdgeDistance(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1);
 
     static double nonRobustComputeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p1,
             const geom::Coordinate& p2);
@@ -160,8 +157,20 @@ public:
     };
 
     /// Computes the intersection of the lines p1-p2 and p3-p4
-    void computeIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& p3, const geom::Coordinate& p4);
+    template<typename C1, typename C2>
+    void computeIntersection(const C1& p1, const C1& p2,
+                             const C2& p3, const C2& p4)
+    {
+        inputLines[0][0] = &p1;
+        inputLines[0][1] = &p2;
+        inputLines[1][0] = &p3;
+        inputLines[1][1] = &p4;
+        result = computeIntersect(p1, p2, p3, p4);
+    }
+
+    /// Compute the intersection between two segments, given a sequence and starting index of each
+    void computeIntersection(const geom::CoordinateSequence& p, std::size_t p0,
+                             const geom::CoordinateSequence& q, std::size_t q0);
 
     std::string toString() const;
 
@@ -184,7 +193,7 @@ public:
     * @param ptIndex the index of the endpoint (0 or 1)
     * @return the specified endpoint
     */
-    const geom::Coordinate*
+    const geom::CoordinateXY*
     getEndpoint(std::size_t segmentIndex, std::size_t ptIndex) const
     {
         return inputLines[segmentIndex][ptIndex];
@@ -207,7 +216,7 @@ public:
     ///
     /// @return the intIndex'th intersection point
     ///
-    const geom::Coordinate&
+    const geom::CoordinateXYZM&
     getIntersection(std::size_t intIndex) const
     {
         return intPt[intIndex];
@@ -303,13 +312,13 @@ private:
 
     std::size_t result;
 
-    const geom::Coordinate* inputLines[2][2];
+    const geom::CoordinateXY* inputLines[2][2];
 
     /**
      * We store real Coordinates here because
      * we must compute the Z of intersection point.
      */
-    geom::Coordinate intPt[2];
+    geom::CoordinateXYZM intPt[2];
 
     /**
      * The indexes of the endpoints of the intersection lines, in order along
@@ -327,8 +336,136 @@ private:
         return result == COLLINEAR_INTERSECTION;
     }
 
-    uint8_t computeIntersect(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                             const geom::Coordinate& q1, const geom::Coordinate& q2);
+    template<typename C1, typename C2>
+    uint8_t computeIntersect(const C1& p1, const C1& p2, const C2& q1, const C2& q2)
+    {
+        isProperVar = false;
+
+        // first try a fast test to see if the envelopes of the lines intersect
+        if(!geom::Envelope::intersects(p1, p2, q1, q2)) {
+            return NO_INTERSECTION;
+        }
+
+        // for each endpoint, compute which side of the other segment it lies
+        // if both endpoints lie on the same side of the other segment,
+        // the segments do not intersect
+        int Pq1 = Orientation::index(p1, p2, q1);
+        int Pq2 = Orientation::index(p1, p2, q2);
+
+        if((Pq1 > 0 && Pq2 > 0) || (Pq1 < 0 && Pq2 < 0)) {
+            return NO_INTERSECTION;
+        }
+
+        int Qp1 = Orientation::index(q1, q2, p1);
+        int Qp2 = Orientation::index(q1, q2, p2);
+
+        if((Qp1 > 0 && Qp2 > 0) || (Qp1 < 0 && Qp2 < 0)) {
+            return NO_INTERSECTION;
+        }
+
+        /**
+         * Intersection is collinear if each endpoint lies on the other line.
+         */
+        bool collinear = Pq1 == 0 && Pq2 == 0 && Qp1 == 0 && Qp2 == 0;
+        if(collinear) {
+            return computeCollinearIntersection(p1, p2, q1, q2);
+        }
+
+        /*
+         * At this point we know that there is a single intersection point
+         * (since the lines are not collinear).
+         */
+
+        /*
+         * Check if the intersection is an endpoint.
+         * If it is, copy the endpoint as
+         * the intersection point. Copying the point rather than
+         * computing it ensures the point has the exact value,
+         * which is important for robustness. It is sufficient to
+         * simply check for an endpoint which is on the other line,
+         * since at this point we know that the inputLines must
+         *  intersect.
+         */
+        geom::CoordinateXYZM p;
+        double z = DoubleNotANumber;
+        double m = DoubleNotANumber;
+
+        if(Pq1 == 0 || Pq2 == 0 || Qp1 == 0 || Qp2 == 0) {
+
+        isProperVar = false;
+
+        /* Check for two equal endpoints.
+         * This is done explicitly rather than by the orientation tests
+         * below in order to improve robustness.
+         *
+         * (A example where the orientation tests fail
+         *  to be consistent is:
+         *
+         * LINESTRING ( 19.850257749638203 46.29709338043669,
+         * 			20.31970698357233 46.76654261437082 )
+         * and
+         * LINESTRING ( -48.51001596420236 -22.063180333403878,
+         * 			19.850257749638203 46.29709338043669 )
+         *
+         * which used to produce the INCORRECT result:
+         * (20.31970698357233, 46.76654261437082, NaN)
+         */
+
+        if (p1.equals2D(q1)) {
+            p = p1;
+            z = Interpolate::zGet(p1, q1);
+            m = Interpolate::mGet(p1, q1);
+        }
+        else if (p1.equals2D(q2)) {
+            p = p1;
+            z = Interpolate::zGet(p1, q2);
+            m = Interpolate::mGet(p1, q2);
+        }
+        else if (p2.equals2D(q1)) {
+            p = p2;
+            z = Interpolate::zGet(p2, q1);
+            m = Interpolate::mGet(p2, q1);
+        }
+        else if (p2.equals2D(q2)) {
+            p = p2;
+            z = Interpolate::zGet(p2, q2);
+            m = Interpolate::mGet(p2, q2);
+        }
+        /*
+         * Now check to see if any endpoint lies on the interior of the other segment.
+         */
+        else if(Pq1 == 0) {
+            p = q1;
+            z = Interpolate::zGetOrInterpolate(q1, p1, p2);
+            m = Interpolate::mGetOrInterpolate(q1, p1, p2);
+        }
+        else if(Pq2 == 0) {
+            p = q2;
+            z = Interpolate::zGetOrInterpolate(q2, p1, p2);
+            m = Interpolate::mGetOrInterpolate(q2, p1, p2);
+        }
+        else if(Qp1 == 0) {
+            p = p1;
+            z = Interpolate::zGetOrInterpolate(p1, q1, q2);
+            m = Interpolate::mGetOrInterpolate(p1, q1, q2);
+        }
+        else if(Qp2 == 0) {
+            p = p2;
+            z = Interpolate::zGetOrInterpolate(p2, q1, q2);
+            m = Interpolate::mGetOrInterpolate(p2, q1, q2);
+        }
+    } else {
+        isProperVar = true;
+        p = intersection(p1, p2, q1, q2);
+        z = Interpolate::zInterpolate(p, p1, p2, q1, q2);
+        m = Interpolate::mInterpolate(p, p1, p2, q1, q2);
+        }
+        intPt[0] = geom::CoordinateXYZM(p.x, p.y, z, m);
+    #if GEOS_DEBUG
+        std::cerr << " POINT_INTERSECTION; intPt[0]:" << intPt[0].toString() << std::endl;
+    #endif // GEOS_DEBUG
+        return POINT_INTERSECTION;
+    }
 
     bool
     isEndPoint() const
@@ -340,8 +477,53 @@ private:
 
     void computeIntLineIndex(std::size_t segmentIndex);
 
-    uint8_t computeCollinearIntersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                                         const geom::Coordinate& q1, const geom::Coordinate& q2);
+    template<typename C1, typename C2>
+    uint8_t computeCollinearIntersection(const C1& p1, const C1& p2, const C2& q1, const C2& q2)
+    {
+        bool q1inP = geom::Envelope::intersects(p1, p2, q1);
+        bool q2inP = geom::Envelope::intersects(p1, p2, q2);
+        bool p1inQ = geom::Envelope::intersects(q1, q2, p1);
+        bool p2inQ = geom::Envelope::intersects(q1, q2, p2);
+
+        if(q1inP && q2inP) {
+            intPt[0] = zmGetOrInterpolateCopy(q1, p1, p2);
+            intPt[1] = zmGetOrInterpolateCopy(q2, p1, p2);
+            return COLLINEAR_INTERSECTION;
+        }
+        if(p1inQ && p2inQ) {
+            intPt[0] = zmGetOrInterpolateCopy(p1, q1, q2);
+            intPt[1] = zmGetOrInterpolateCopy(p2, q1, q2);
+            return COLLINEAR_INTERSECTION;
+        }
+        if(q1inP && p1inQ) {
+            // if pts are equal Z is chosen arbitrarily
+            intPt[0] = zmGetOrInterpolateCopy(q1, p1, p2);
+            intPt[1] = zmGetOrInterpolateCopy(p1, q1, q2);
+
+            return (q1 == p1) && !q2inP && !p2inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        }
+        if(q1inP && p2inQ) {
+            // if pts are equal Z is chosen arbitrarily
+            intPt[0] = zmGetOrInterpolateCopy(q1, p1, p2);
+            intPt[1] = zmGetOrInterpolateCopy(p2, q1, q2);
+
+            return (q1 == p2) && !q2inP && !p1inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        }
+        if(q2inP && p1inQ) {
+            // if pts are equal Z is chosen arbitrarily
+            intPt[0] = zmGetOrInterpolateCopy(q2, p1, p2);
+            intPt[1] = zmGetOrInterpolateCopy(p1, q1, q2);
+
+            return (q2 == p1) && !q1inP && !p2inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        }
+        if(q2inP && p2inQ) {
+            // if pts are equal Z is chosen arbitrarily
+            intPt[0] = zmGetOrInterpolateCopy(q2, p1, p2);
+            intPt[1] = zmGetOrInterpolateCopy(p2, q1, q2);
+            return (q2 == p2) && !q1inP && !p1inQ ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
+        }
+        return NO_INTERSECTION;
+    }
 
     /** \brief
      * This method computes the actual value of the intersection point.
@@ -352,10 +534,36 @@ private:
      * removing common significant digits from the calculation to
      * maintain more bits of precision.
      */
-    geom::Coordinate intersection(const geom::Coordinate& p1,
-                                  const geom::Coordinate& p2,
-                                  const geom::Coordinate& q1,
-                                  const geom::Coordinate& q2) const;
+    template<typename C1, typename C2>
+    geom::CoordinateXYZM intersection (const C1& p1, const C1& p2, const C2& q1, const C2& q2) const {
+        auto intPtOut = intersectionSafe(p1, p2, q1, q2);
+
+        /*
+         * Due to rounding it can happen that the computed intersection is
+         * outside the envelopes of the input segments.  Clearly this
+         * is inconsistent.
+         * This code checks this condition and forces a more reasonable answer
+         *
+         * MD - May 4 2005 - This is still a problem.  Here is a failure case:
+         *
+         * LINESTRING (2089426.5233462777 1180182.3877339689,
+         *             2085646.6891757075 1195618.7333999649)
+         * LINESTRING (1889281.8148903656 1997547.0560044837,
+         *             2259977.3672235999 483675.17050843034)
+         * int point = (2097408.2633752143,1144595.8008114607)
+         */
+
+        if(! isInSegmentEnvelopes(intPtOut)) {
+            //intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+            intPtOut = nearestEndpoint(p1, p2, q1, q2);
+        }
+
+        if(precisionModel != nullptr) {
+            precisionModel->makePrecise(intPtOut);
+        }
+
+        return intPtOut;
+    }
 
     /**
      * Test whether a point lies in the envelopes of both input segments.
@@ -367,7 +575,7 @@ private:
      * @return true if the input point lies within both
      *         input segment envelopes
      */
-    bool isInSegmentEnvelopes(const geom::Coordinate& pt) const
+    bool isInSegmentEnvelopes(const geom::CoordinateXY& pt) const
     {
         geom::Envelope env0(*inputLines[0][0], *inputLines[0][1]);
         geom::Envelope env1(*inputLines[1][0], *inputLines[1][1]);
@@ -386,15 +594,17 @@ private:
      * @param q2 a segment endpoint
      * @return the computed intersection point is stored there
      */
-    geom::Coordinate intersectionSafe(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                                      const geom::Coordinate& q1, const geom::Coordinate& q2) const
+    template<typename C1, typename C2>
+    geom::CoordinateXYZM intersectionSafe(const C1& p1, const C1& p2,
+                                          const C2& q1, const C2& q2) const
     {
-        geom::Coordinate ptInt = Intersection::intersection(p1, p2, q1, q2);
+        geom::CoordinateXYZM ptInt(Intersection::intersection(p1, p2, q1, q2));
         if (ptInt.isNull()) {
-            ptInt = nearestEndpoint(p1, p2, q1, q2);
+            // FIXME need to cast to correct type in mixed-dimensionality case
+            ptInt = static_cast<const C1&>(nearestEndpoint(p1, p2, q1, q2));
         }
         return ptInt;
-    };
+    }
 
     /**
      * Finds the endpoint of the segments P and Q which
@@ -415,55 +625,23 @@ private:
      * @param q2 an endpoint of segment Q
      * @return the nearest endpoint to the other segment
      */
-    static geom::Coordinate nearestEndpoint(const geom::Coordinate& p1,
-                                            const geom::Coordinate& p2,
-                                            const geom::Coordinate& q1,
-                                            const geom::Coordinate& q2);
+    static const geom::CoordinateXY& nearestEndpoint(const geom::CoordinateXY& p1,
+                                                     const geom::CoordinateXY& p2,
+                                                     const geom::CoordinateXY& q1,
+                                                     const geom::CoordinateXY& q2);
 
-    static double zGet(
-        const geom::Coordinate& p,
-        const geom::Coordinate& q)
-    {
-        double z = p.z;
-        if ( std::isnan(z) ) {
-            z = q.z; // may be NaN
-        }
-        return z;
-    };
 
-    static double zGetOrInterpolate(
-        const geom::Coordinate& p,
-        const geom::Coordinate& p1,
-        const geom::Coordinate& p2)
+    template<typename C1, typename C2>
+    static geom::CoordinateXYZM zmGetOrInterpolateCopy(
+        const C1& p,
+        const C2& p1,
+        const C2& p2)
     {
-        double z = p.z;
-        if (! std::isnan(z) ) return z;
-        return zInterpolate(p, p1, p2); // may be NaN
-    };
-
-    static geom::Coordinate zGetOrInterpolateCopy(
-        const geom::Coordinate& p,
-        const geom::Coordinate& p1,
-        const geom::Coordinate& p2)
-    {
-        geom::Coordinate pCopy = p;
-        double z = zGetOrInterpolate(p, p1, p2);
-        pCopy.z = z;
+        geom::CoordinateXYZM pCopy(p);
+        pCopy.z = Interpolate::zGetOrInterpolate(p, p1, p2);
+        pCopy.m = Interpolate::mGetOrInterpolate(p, p1, p2);
         return pCopy;
-    };
-
-    /// \brief
-    /// Return a Z value being the interpolation of Z from p0 to p1 at
-    /// the given point p
-    static double zInterpolate(const geom::Coordinate& p,
-                               const geom::Coordinate& p0,
-                               const geom::Coordinate& p1);
-
-    static double zInterpolate(const geom::Coordinate& p,
-                               const geom::Coordinate& p1,
-                               const geom::Coordinate& p2,
-                               const geom::Coordinate& q1,
-                               const geom::Coordinate& q2);
+    }
 
 };
 

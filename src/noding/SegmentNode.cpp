@@ -26,23 +26,11 @@
 #include <geos/geom/Coordinate.h>
 
 
+using geos::geom::CoordinateXYZM;
 using geos::geom::Coordinate;
 
 namespace geos {
 namespace noding { // geos.noding
-
-/*public*/
-SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
-    std::size_t nSegmentIndex, int nSegmentOctant)
-    : segmentOctant(nSegmentOctant)
-    , coord(nCoord)
-    , segmentIndex(nSegmentIndex)
-{
-    // Number of points in NodedSegmentString is one-more number of segments
-    assert(segmentIndex < ss.size());
-    isInteriorVar = !coord.equals2D(ss.getCoordinate(segmentIndex));
-}
-
 
 std::ostream&
 operator<< (std::ostream& os, const SegmentNode& n)

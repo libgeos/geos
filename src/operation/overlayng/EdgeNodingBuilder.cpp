@@ -80,6 +80,9 @@ EdgeNodingBuilder::setClipEnvelope(const Envelope* p_clipEnv)
 std::vector<Edge*>
 EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 {
+    inputHasZ = geom0->hasZ() || (geom1 != nullptr && geom1->hasZ());
+    inputHasM = geom0->hasM() || (geom1 != nullptr && geom1->hasM());
+
     add(geom0, 0);
     add(geom1, 1);
     std::vector<Edge*> nodedEdges = node(inputEdges.get());
@@ -266,13 +269,13 @@ EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeS
     // TODO: manage these internally to EdgeNodingBuilder in a std::deque,
     // since they do not have a life span longer than the EdgeNodingBuilder
     // in OverlayNG::buildGraph()
-    NodedSegmentString* ss = new NodedSegmentString(cas.release(), reinterpret_cast<const void*>(info));
+    NodedSegmentString* ss = new NodedSegmentString(cas.release(), inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
     inputEdges->push_back(ss);
 }
 
 /*private*/
 bool
-EdgeNodingBuilder::isClippedCompletely(const Envelope* env)
+EdgeNodingBuilder::isClippedCompletely(const Envelope* env) const
 {
     if (clipEnv == nullptr) return false;
     return clipEnv->disjoint(env);

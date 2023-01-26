@@ -73,7 +73,7 @@ struct test_mcidxsnprndr_data {
     getSegmentStrings(const Geometry& g, SegStrVct& vct)
     {
         CoordSeqPtr s(g.getCoordinates());
-        vct.push_back(new NodedSegmentString(s.release(), nullptr));
+        vct.push_back(new NodedSegmentString(s.release(), g.hasZ(), g.hasM(), nullptr));
     }
 
     GeomPtr

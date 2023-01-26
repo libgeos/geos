@@ -379,8 +379,8 @@ IsSimpleOp::NonSimpleIntersectionFinder::intersectionVertexIndex(
     const LineIntersector& lineInter,
     std::size_t segmentIndex) const
 {
-    const Coordinate& intPt = lineInter.getIntersection(0);
-    const Coordinate* endPt0 = lineInter.getEndpoint(segmentIndex, 0);
+    const CoordinateXY& intPt = lineInter.getIntersection(0);
+    const CoordinateXY* endPt0 = lineInter.getEndpoint(segmentIndex, 0);
     return intPt.equals2D(*endPt0) ? 0 : 1;
 }
 

@@ -41,7 +41,7 @@ OverlayEdgeRing::OverlayEdgeRing(OverlayEdge* start, const GeometryFactory* geom
     , locator(nullptr)
     , shell(nullptr)
 {
-    auto ringPts = detail::make_unique<CoordinateSequence>();
+    auto ringPts = detail::make_unique<CoordinateSequence>(0u, start->getCoordinatesRO()->hasZ(), start->getCoordinatesRO()->hasM());
     computeRingPts(start, *ringPts);
     computeRing(std::move(ringPts), geometryFactory);
 }

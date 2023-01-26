@@ -102,6 +102,8 @@ private:
     // EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque
     std::deque<EdgeSourceInfo> edgeSourceInfoQue;
     std::deque<Edge> edgeQue;
+    bool inputHasZ;
+    bool inputHasM;
 
     /**
     * Gets a noder appropriate for the precision model supplied.
@@ -132,7 +134,7 @@ private:
     * Tests whether a geometry (represented by its envelope)
     * lies completely outside the clip extent(if any).
     */
-    bool isClippedCompletely(const Envelope* env);
+    bool isClippedCompletely(const Envelope* env) const;
 
     /**
     * Tests whether it is worth limiting a line.
@@ -201,6 +203,8 @@ public:
         , hasEdges{{false,false}}
         , clipEnv(nullptr)
         , intAdder(lineInt)
+        , inputHasZ(false)
+        , inputHasM(false)
         {};
 
     ~EdgeNodingBuilder()

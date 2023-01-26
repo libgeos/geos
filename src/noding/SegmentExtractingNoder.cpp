@@ -55,12 +55,17 @@ SegmentExtractingNoder::extractSegments(
         const SegmentString* ss,
         std::vector<SegmentString*>& outputSegs)
 {
-    std::size_t ssSize = ss->size() - 1;
-    for (std::size_t i = 0; i < ssSize; i++) {
-        auto cs = detail::make_unique<CoordinateSequence>(2u);
-        cs->setAt(ss->getCoordinate(i), 0);
-        cs->setAt(ss->getCoordinate(i + 1), 1);
-        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), ss->getData()));
+    const CoordinateSequence* ss_seq = ss->getCoordinates();
+
+    const NodedSegmentString* nss = dynamic_cast<const NodedSegmentString*>(ss);
+    bool constructZ = nss ? nss->getNodeList().getConstructZ() : ss_seq->hasZ();
+    bool constructM = nss ? nss->getNodeList().getConstructM() : ss_seq->hasM();
+
+    for (std::size_t i = 0; i < ss_seq->getSize() - 1; i++) {
+        auto cs = detail::make_unique<CoordinateSequence>(0, constructZ, constructM);
+        cs->reserve(2);
+        cs->add(*ss_seq, i, i + 1);
+        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), constructZ, constructM, ss->getData()));
         outputSegs.push_back(seg.release());
     }
 }

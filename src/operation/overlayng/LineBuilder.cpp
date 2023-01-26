@@ -178,9 +178,15 @@ std::unique_ptr<LineString>
 LineBuilder::toLine(OverlayEdge* edge) const
 {
     // bool isForward = edge->isForward();
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
+    const auto* edgePts = edge->getCoordinatesRO();
+
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence(0u, edgePts->hasZ(), edgePts->hasM()));
+    pts->reserve(edgePts->size());
     pts->add(edge->orig(), false);
     edge->addCoordinates(pts.get());
+
+    assert(pts->size() == edgePts->size());
+
     return geometryFactory->createLineString(std::move(pts));
 }
 

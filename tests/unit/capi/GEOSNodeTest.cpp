@@ -124,5 +124,86 @@ void object::test<5>
     ensure_equals(out, "LINESTRING EMPTY");
 }
 
+// Noding two XYZ LineStrings
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom1_= GEOSGeomFromWKT("MULTILINESTRING Z ((0 0 0, 1 1 1), (0 1 5, 1 0 10))");
+    result_ = GEOSNode(geom1_);
+    expected_ = GEOSGeomFromWKT("MULTILINESTRING Z("
+                                "(0 0 0, 0.5 0.5 4),"
+                                "(0.5 0.5 4, 1 0 10),"
+                                "(0 1 5, 0.5 0.5 4),"
+                                "(0.5 0.5 4, 1 1 1))");
+
+    GEOSNormalize(result_);
+    GEOSNormalize(expected_);
+    GEOSWKTWriter_setOutputDimension(wktw_, 3);
+
+    auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
+    auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);
+
+    ensure_equals(std::string(wkt_result), std::string(wkt_expected));
+
+    GEOSFree(wkt_result);
+    GEOSFree(wkt_expected);
+}
+
+// Noding two XYM LineStrings
+template<>
+template<>
+void object::test<7>
+()
+{
+    geom1_= GEOSGeomFromWKT("MULTILINESTRING M ((0 0 0, 1 1 1), (0 1 5, 1 0 10))");
+    result_ = GEOSNode(geom1_);
+    expected_ = GEOSGeomFromWKT("MULTILINESTRING M("
+                                "(0 0 0, 0.5 0.5 4),"
+                                "(0.5 0.5 4, 1 0 10),"
+                                "(0 1 5, 0.5 0.5 4),"
+                                "(0.5 0.5 4, 1 1 1))");
+
+    GEOSNormalize(result_);
+    GEOSNormalize(expected_);
+    GEOSWKTWriter_setOutputDimension(wktw_, 3);
+
+    auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
+    auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);
+
+    ensure_equals(std::string(wkt_result), std::string(wkt_expected));
+
+    GEOSFree(wkt_result);
+    GEOSFree(wkt_expected);
+}
+
+// Noding two XYZ and XYM LineStrings
+template<>
+template<>
+void object::test<8>
+()
+{
+    geom1_= GEOSGeomFromWKT("GEOMETRYCOLLECTION (LINESTRING Z(0 0 0, 1 1 1), LINESTRING M(0 1 5, 1 0 10))");
+    result_ = GEOSNode(geom1_);
+    expected_ = GEOSGeomFromWKT("MULTILINESTRING ZM("
+                                "(0 0 0 NaN, 0.5 0.5 0.5 7.5),"
+                                "(0.5 0.5 0.5 7.5, 1 0 NaN 10),"
+                                "(0 1 NaN 5, 0.5 0.5 0.5 7.5),"
+                                "(0.5 0.5 0.5 7.5, 1 1 1 NaN))");
+
+    GEOSNormalize(result_);
+    GEOSNormalize(expected_);
+    GEOSWKTWriter_setOutputDimension(wktw_, 4);
+
+    auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
+    auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);
+
+    ensure_equals(std::string(wkt_result), std::string(wkt_expected));
+
+    GEOSFree(wkt_result);
+    GEOSFree(wkt_expected);
+}
+
 } // namespace tut
 

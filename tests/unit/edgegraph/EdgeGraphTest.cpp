@@ -17,7 +17,7 @@ struct test_edgegraph_data {
     geos::io::WKTReader reader_;
 
     HalfEdge* addEdge(EdgeGraph& graph, double p0x, double p0y, double p1x, double p1y) {
-        return graph.addEdge(Coordinate(p0x, p0y), Coordinate(p1x, p1y));
+        return graph.addEdge(CoordinateXYZM(Coordinate(p0x, p0y)), CoordinateXYZM(Coordinate(p1x, p1y)));
     }
 
     std::unique_ptr<EdgeGraph> build(std::string wkt) {

@@ -305,8 +305,8 @@ ensure_equals_dims(T const *, T const *,
 
 template <>
 inline void
-ensure_equals_dims(const geos::geom::CoordinateSequence *seq1,
-                   const geos::geom::CoordinateSequence *seq2,
+ensure_equals_dims(const geos::geom::CoordinateSequence* seq1,
+                   const geos::geom::CoordinateSequence* seq2,
                    unsigned int dims, double tolerance)
 {
     assert(nullptr != seq1);
@@ -376,6 +376,76 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
     }
 }
 
+inline void
+ensure_equals_exact_xyzm(const geos::geom::CoordinateSequence* seq1,
+             const geos::geom::CoordinateSequence* seq2,
+             double tol)
+{
+    ensure_equals("hasZ not equal", seq1->hasZ(), seq2->hasZ());
+    ensure_equals("hasM not equal", seq1->hasM(), seq2->hasM());
+    ensure_equals("size not equal", seq1->getSize(), seq2->getSize());
+
+    geos::geom::CoordinateXYZM c1, c2;
+    for (std::size_t i = 0; i < seq1->getSize(); i++) {
+        seq1->getAt(i, c1);
+        seq2->getAt(i, c2);
+
+        ensure("xy not in tolerance", c1.distance(c2) <= tol);
+        ensure_same("z not same", c1.z, c2.z);
+        ensure_same("z not same", c1.m, c2.m);
+    }
+}
+
+inline void
+ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
+                                  const geos::geom::Geometry *rhs_in,
+                                  double tolerance)
+{
+    assert(nullptr != lhs_in);
+    assert(nullptr != rhs_in);
+
+    using geos::geom::Point;
+    using geos::geom::LineString;
+    using geos::geom::Polygon;
+    using geos::geom::CoordinateSequence;
+    using geos::geom::GeometryCollection;
+
+    ensure_equals("type id do not match",
+                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
+
+    if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
+      const Point *gpt2 = static_cast<const Point *>(rhs_in);
+      return ensure_equals_exact_xyzm(gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), tolerance);
+    }
+    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
+      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+      return ensure_equals_exact_xyzm(gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), tolerance);
+    }
+    else if (const Polygon* gply1 = dynamic_cast<const Polygon*>(lhs_in)) {
+      const Polygon* gply2 = static_cast<const Polygon*>(rhs_in);
+      const LinearRing* extRing1 = gply1->getExteriorRing();
+      const LinearRing* extRing2 = gply2->getExteriorRing();
+
+      ensure_equals_exact_geometry_xyzm(extRing1, extRing2, tolerance);
+
+      ensure_equals("number of holes does not match",
+                    gply1->getNumInteriorRing(),
+                    gply2->getNumInteriorRing());
+
+      for (std::size_t i = 0; i < gply1->getNumInteriorRing(); i++) {
+        ensure_equals_exact_geometry_xyzm(gply1->getInteriorRingN(i),
+                                    gply2->getInteriorRingN(i),
+                                    tolerance);
+      }
+    }
+    else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
+      const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
+      for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
+        ensure_equals_exact_geometry_xyzm(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
+      }
+    }
+}
+
 template <typename T>
 inline void
 ensure_equals_geometry_xyz(const T *lhs_in,
@@ -387,6 +457,23 @@ ensure_equals_geometry_xyz(const T *lhs_in,
     std::unique_ptr<geos::geom::Geometry> g2 = rhs_in->clone();
     g2->normalize();
     ensure_equals_exact_geometry_xyz(g1.get(), g2.get(), tolerance);
+}
+
+template <typename T>
+inline void
+ensure_equals_geometry_xyzm(const T *lhs_in,
+                           const T *rhs_in,
+                           double tolerance=0.0)
+{
+    ensure_equals("hasZ is not consistent", lhs_in->hasZ(), rhs_in->hasZ());
+    ensure_equals("hasM is not consistent", lhs_in->hasM(), rhs_in->hasM());
+
+    std::unique_ptr<geos::geom::Geometry> g1 = lhs_in->clone();
+    g1->normalize();
+    std::unique_ptr<geos::geom::Geometry> g2 = rhs_in->clone();
+    g2->normalize();
+
+    ensure_equals_exact_geometry_xyzm(g1.get(), g2.get(), tolerance);
 }
 
 /*

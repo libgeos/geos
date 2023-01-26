@@ -36,6 +36,24 @@ using geos::geom::Coordinate;
 namespace geos {   // geos
 namespace noding { // geos::noding
 
+/**
+ * A noder which extracts chains of boundary segments
+ * as SegmentStrings from a polygonal coverage.
+ * Boundary segments are those which are not duplicated in the input polygonal coverage.
+ * Extracting chains of segments minimize the number of segment strings created,
+ * which produces a more efficient topological graph structure.
+ * <p>
+ * This enables fast overlay of polygonal coverages in CoverageUnion.
+ * Using this noder is faster than SegmentExtractingNoder
+ * and BoundarySegmentNoder.
+ * <p>
+ * No precision reduction is carried out.
+ * If that is required, another noder must be used (such as a snap-rounding noder),
+ * or the input must be precision-reduced beforehand.
+ *
+ * @author Martin Davis
+ *
+ */
 class GEOS_DLL BoundaryChainNoder : public Noder {
 
 private:
@@ -51,7 +69,9 @@ private:
             static SegmentString* createChain(
                 const SegmentString* segString,
                 std::size_t startIndex,
-                std::size_t endIndex);
+                std::size_t endIndex,
+                bool constructZ,
+                bool constructM);
 
             std::size_t findChainStart(std::size_t index) const;
             std::size_t findChainEnd(std::size_t index) const;
@@ -64,50 +84,57 @@ private:
                 };
 
             void setBoundarySegment(std::size_t index);
-            void createChains(std::vector<SegmentString*>& chainList);
+            void createChains(std::vector<SegmentString*>& chainList, bool constructZ, bool constructM);
     };
 
+    class Segment {
+    public:
+        Segment(const geom::CoordinateSequence& seq,
+            BoundarySegmentMap& segMap,
+            std::size_t index)
+            : m_seq(seq)
+            , m_segMap(segMap)
+            , m_index(index)
+            , m_flip(seq.getAt<geom::CoordinateXY>(index).compareTo(seq.getAt<geom::CoordinateXY>(index + 1)) < 0)
+        {}
 
-    class Segment : public geom::LineSegment {
+        const geom::CoordinateXY& p0() const {
+            return m_seq.getAt<geom::CoordinateXY>(m_flip ? m_index : m_index + 1);
+        }
 
-        private:
+        const geom::CoordinateXY& p1() const {
+            return m_seq.getAt<geom::CoordinateXY>(m_flip ? m_index + 1 : m_index);
+        }
 
-            BoundarySegmentMap& segMap;
-            std::size_t index;
+        void markInBoundary() const {
+            m_segMap.setBoundarySegment(m_index);
+        };
 
-        public:
+        bool operator==(const Segment& other) const {
+            return p0().equals2D(other.p0()) && p1().equals2D(other.p1());
+        }
 
-            Segment(const Coordinate& c0, const Coordinate& c1,
-                BoundarySegmentMap& p_segMap, std::size_t p_index)
-                : LineSegment(c0, c1)
-                , segMap(p_segMap)
-                , index(p_index)
-            {
-                normalize();
-            };
+        struct HashCode {
+            std::size_t operator()(const Segment& s) const {
+                std::size_t h = std::hash<double>{}(s.p0().x);
+                h ^= (std::hash<double>{}(s.p0().y) << 1);
+                h ^= (std::hash<double>{}(s.p1().x) << 1);
+                h ^= (std::hash<double>{}(s.p1().y) << 1);
+                return h;
+            }
+        };
 
-            void markInBoundary() const {
-                segMap.setBoundarySegment(index);
-            };
-
-            // struct HashCode {
-            //     std::size_t operator()(const Segment& s) const {
-            //         std::size_t h = std::hash<double>{}(s.p0.x);
-            //         h ^= (std::hash<double>{}(s.p0.y) << 1);
-            //         h ^= (std::hash<double>{}(s.p1.x) << 1);
-            //         h ^= (std::hash<double>{}(s.p1.y) << 1);
-            //         return h ^ (std::hash<std::size_t>{}(s.index) << 1);
-            //     }
-            // };
+    private:
+        const geom::CoordinateSequence& m_seq;
+        BoundarySegmentMap& m_segMap;
+        std::size_t m_index;
+        bool m_flip;
     };
-
 
 public:
+    using SegmentSet = std::unordered_set<Segment, Segment::HashCode>;
 
-    // typedef std::unordered_set<Segment, Segment::HashCode> SegmentSet;
-    typedef std::unordered_set<Segment, geos::geom::LineSegment::HashCode> SegmentSet;
-
-    BoundaryChainNoder() : chainList(nullptr) {};
+    BoundaryChainNoder() : chainList(nullptr), m_constructZ(false), m_constructM(false) {};
 
     // Noder virtual methods
     std::vector<SegmentString*>* getNodedSubstrings() const override;
@@ -118,9 +145,11 @@ private:
 
     // Members
     std::vector<SegmentString*>* chainList;
+    bool m_constructZ;
+    bool m_constructM;
 
     // Methods
-    static void addSegments(std::vector<SegmentString*>* segStrings,
+    void addSegments(std::vector<SegmentString*>* segStrings,
         SegmentSet& segSet,
         std::vector<BoundarySegmentMap>& includedSegs);
 
@@ -130,7 +159,7 @@ private:
 
     static void markBoundarySegments(SegmentSet& segSet);
 
-    static std::vector<SegmentString*>* extractChains(std::vector<BoundarySegmentMap>& sections);
+    std::vector<SegmentString*>* extractChains(std::vector<BoundarySegmentMap>& sections) const;
 
     static bool segSetContains(SegmentSet& segSet, Segment& seg);
 

@@ -108,19 +108,20 @@ OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
 OverlayEdge*
 OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl, bool direction)
 {
-    const Coordinate* origin;
-    const Coordinate* dirPt;
+    CoordinateXYZM origin;
+    CoordinateXYZM dirPt;
+
     if (direction) {
-        origin = &pts->getAt(0);
-        dirPt = &pts->getAt(1);
+        pts->getAt(0, origin);
+        pts->getAt(1, dirPt);
     }
     else {
         assert(pts->size() > 0);
         std::size_t ilast = pts->size() - 1;
-        origin = &pts->getAt(ilast);
-        dirPt = &pts->getAt(ilast-1);
+        pts->getAt(ilast, origin);
+        pts->getAt(ilast-1, dirPt);
     }
-    ovEdgeQue.emplace_back(*origin, *dirPt, direction, lbl, pts);
+    ovEdgeQue.emplace_back(origin, dirPt, direction, lbl, pts);
     OverlayEdge& ove = ovEdgeQue.back();
     return &ove;
 }

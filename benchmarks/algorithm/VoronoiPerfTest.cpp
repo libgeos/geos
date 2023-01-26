@@ -33,12 +33,12 @@ using geos::geom::Envelope;
 static void BM_DelaunayFromSeq(benchmark::State& state) {
     Envelope e(0, 100, 0, 100);
     auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+    std::default_random_engine eng(12345);
 
-    std::size_t i = 0;
     for (auto _ : state) {
         state.PauseTiming();
         auto nPts = static_cast<std::size_t>(state.range(0));
-        auto sites = geos::benchmark::createRandomCoords(e, nPts, i++);
+        auto sites = geos::benchmark::createRandomCoords(e, nPts, eng);
         state.ResumeTiming();
 
         geos::triangulate::DelaunayTriangulationBuilder dtb;
@@ -50,12 +50,12 @@ static void BM_DelaunayFromSeq(benchmark::State& state) {
 static void BM_DelaunayFromGeom(benchmark::State& state) {
     Envelope e(0, 100, 0, 100);
     auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+    std::default_random_engine eng(12345);
 
-    std::size_t i = 0;
     for (auto _ : state) {
         state.PauseTiming();
         auto nPts = static_cast<std::size_t>(state.range(0));
-        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, eng));
         state.ResumeTiming();
 
         geos::triangulate::DelaunayTriangulationBuilder dtb;
@@ -67,12 +67,12 @@ static void BM_DelaunayFromGeom(benchmark::State& state) {
 static void BM_VoronoiFromSeq(benchmark::State& state) {
     Envelope e(0, 100, 0, 100);
     auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+    std::default_random_engine eng(12345);
 
-    std::size_t i = 0;
     for (auto _ : state) {
         state.PauseTiming();
         auto nPts = static_cast<std::size_t>(state.range(0));
-        auto sites = geos::benchmark::createRandomCoords(e, nPts, i++);
+        auto sites = geos::benchmark::createRandomCoords(e, nPts, eng);
         state.ResumeTiming();
 
         geos::triangulate::VoronoiDiagramBuilder vdb;
@@ -84,12 +84,12 @@ static void BM_VoronoiFromSeq(benchmark::State& state) {
 static void BM_VoronoiFromGeom(benchmark::State& state) {
     Envelope e(0, 100, 0, 100);
     auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+    std::default_random_engine eng(12345);
 
-    std::size_t i = 0;
     for (auto _ : state) {
         state.PauseTiming();
         auto nPts = static_cast<std::size_t>(state.range(0));
-        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, eng));
         state.ResumeTiming();
 
         geos::triangulate::VoronoiDiagramBuilder vdb;
@@ -101,12 +101,12 @@ static void BM_VoronoiFromGeom(benchmark::State& state) {
 static void BM_OrderedVoronoiFromGeom(benchmark::State& state) {
     Envelope e(0, 100, 0, 100);
     auto gfact = geos::geom::GeometryFactory::getDefaultInstance();
+    std::default_random_engine eng(12345);
 
-    std::size_t i = 0;
     for (auto _ : state) {
         state.PauseTiming();
         auto nPts = static_cast<std::size_t>(state.range(0));
-        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, i++));
+        auto sites = gfact->createLineString(geos::benchmark::createRandomCoords(e, nPts, eng));
         state.ResumeTiming();
 
         geos::triangulate::VoronoiDiagramBuilder vdb;

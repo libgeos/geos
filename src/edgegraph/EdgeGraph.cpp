@@ -31,7 +31,7 @@ namespace edgegraph { // geos.edgegraph
 
 /*protected*/
 HalfEdge*
-EdgeGraph::createEdge(const Coordinate& orig)
+EdgeGraph::createEdge(const CoordinateXYZM& orig)
 {
     edges.emplace_back(orig);
     return &(edges.back());
@@ -39,7 +39,7 @@ EdgeGraph::createEdge(const Coordinate& orig)
 
 /*private*/
 HalfEdge*
-EdgeGraph::create(const Coordinate& p0, const Coordinate& p1)
+EdgeGraph::create(const CoordinateXYZM& p0, const CoordinateXYZM& p1)
 {
     HalfEdge* e0 = createEdge(p0);
     HalfEdge* e1 = createEdge(p1);
@@ -49,7 +49,7 @@ EdgeGraph::create(const Coordinate& p0, const Coordinate& p1)
 
 /*public*/
 HalfEdge*
-EdgeGraph::addEdge(const Coordinate& orig, const Coordinate& dest)
+EdgeGraph::addEdge(const CoordinateXYZM& orig, const CoordinateXYZM& dest)
 {
     if (! isValidEdge(orig, dest)) {
         return nullptr;
@@ -80,14 +80,14 @@ EdgeGraph::addEdge(const Coordinate& orig, const Coordinate& dest)
 
 /*public static*/
 bool
-EdgeGraph::isValidEdge(const Coordinate& orig, const Coordinate& dest)
+EdgeGraph::isValidEdge(const CoordinateXY& orig, const CoordinateXY& dest)
 {
     return dest.compareTo(orig) != 0;
 }
 
 /*private*/
 HalfEdge*
-EdgeGraph::insert(const Coordinate& orig, const Coordinate& dest, HalfEdge* eAdj)
+EdgeGraph::insert(const CoordinateXYZM& orig, const CoordinateXYZM& dest, HalfEdge* eAdj)
 {
     // edge does not exist, so create it and insert in graph
     HalfEdge* e = create(orig, dest);
@@ -125,7 +125,7 @@ EdgeGraph::getVertexEdges(std::vector<const HalfEdge*>& edgesOut)
 
 /*public*/
 HalfEdge*
-EdgeGraph::findEdge(const Coordinate& orig, const Coordinate& dest)
+EdgeGraph::findEdge(const CoordinateXY& orig, const CoordinateXY& dest)
 {
     HalfEdge* e = nullptr;
     auto it = vertexMap.find(orig);

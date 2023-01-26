@@ -49,7 +49,7 @@ struct test_intersection_data {
         Coordinate p2(p2x, p2y);
         Coordinate q1(q1x, q1y);
         Coordinate q2(q2x, q2y);
-        Coordinate actual = Intersection::intersection(p1, p2, q1, q2);
+        auto actual = Intersection::intersection(p1, p2, q1, q2);
         ensure("checkIntersectionNull", actual.isNull());
     }
 
@@ -61,7 +61,7 @@ struct test_intersection_data {
         Coordinate q1(q1x, q1y);
         Coordinate q2(q2x, q2y);
         Coordinate expected(expectedx, expectedy);
-        Coordinate actual = Intersection::intersection(p1, p2, q1, q2);
+        auto actual = Intersection::intersection(p1, p2, q1, q2);
         double dist = actual.distance(expected);
         // std::cout << "Expected: " << expected << "  Actual: " << actual << "  Dist = " << dist << std::endl;
         ensure("checkIntersection", dist <= MAX_ABS_ERROR);

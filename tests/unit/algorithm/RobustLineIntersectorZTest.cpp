@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <utility>
 
 
 using namespace geos::geom;
@@ -25,90 +26,79 @@ namespace tut {
 //
 
 struct test_robustlineintersectorz_data {
+    template<typename C>
+    using Segment = std::pair<C, C>;
 
-    void checkIntersection(const LineSegment& line1, const LineSegment& line2,
-                           const Coordinate& p1, const Coordinate& p2)
+    using XY = CoordinateXY;
+    using XYZ = Coordinate;
+    using XYM = CoordinateXYM;
+    using XYZM = CoordinateXYZM;
+
+    template<typename C1, typename C2>
+    void checkIntersection(const Segment<C1>& line1,
+                           const Segment<C2>& line2,
+                           const CoordinateXYZM& p1,
+                           const CoordinateXYZM& p2 = CoordinateXYZM::getNull())
     {
         checkIntersectionDir(line1, line2, p1, p2);
         checkIntersectionDir(line2, line1, p1, p2);
-        LineSegment line1Rev(line1.p1, line1.p0);
-        LineSegment line2Rev(line2.p1, line2.p0);
+        Segment<C1> line1Rev(line1.second, line1.first);
+        Segment<C2> line2Rev(line2.second, line2.first);
         checkIntersectionDir(line1Rev, line2Rev, p1, p2);
         checkIntersectionDir(line2Rev, line1Rev, p1, p2);
     }
 
-
+    template<typename C1, typename C2>
     void checkIntersectionDir(
-                const LineSegment& line1,
-                const LineSegment& line2,
-                const Coordinate& p1,
-                const Coordinate& p2)
+                const Segment<C1>& line1,
+                const Segment<C2>& line2,
+                const CoordinateXYZM& p1,
+                const CoordinateXYZM& p2)
     {
         RobustLineIntersector li;
         li.computeIntersection(
-            line1.p0, line1.p1,
-            line2.p0, line2.p1);
+            line1.first, line1.second,
+            line2.first, line2.second);
 
-        ensure_equals(li.getIntersectionNum(), 2u);
+        auto actual1 = li.getIntersection(0);
+        auto actual2 = li.getIntersection(1);
 
-        Coordinate actual1 = li.getIntersection(0);
-        Coordinate actual2 = li.getIntersection(1);
-        // normalize actual results
-        if (actual1.compareTo(actual2) > 0) {
-            actual1 = li.getIntersection(1);
-            actual2 = li.getIntersection(0);
+        if (p2.isNull()) {
+            ensure_equals(li.getIntersectionNum(), 1u);
+        } else {
+            ensure_equals(li.getIntersectionNum(), 2u);
+
+            // normalize actual results
+            if (actual1.compareTo(actual2) > 0) {
+                actual1 = li.getIntersection(1);
+                actual2 = li.getIntersection(0);
+            }
         }
 
-        ensure_equals_xyz( actual1, p1 );
-        ensure_equals_xyz( actual2, p2 );
+        ensure_equals_xyzm( actual1, p1 );
+        if (!p2.isNull())
+            ensure_equals_xyzm( actual2, p2 );
   }
 
-    void checkIntersection(
-            const LineSegment& line1,
-            const LineSegment& line2,
-            const Coordinate& p_pt)
-    {
-        checkIntersectionDir(line1, line2, p_pt);
-        checkIntersectionDir(line2, line1, p_pt);
-        LineSegment line1Rev(line1.p1, line1.p0);
-        LineSegment line2Rev(line2.p1, line2.p0);
-        checkIntersectionDir(line1Rev, line2Rev, p_pt);
-        checkIntersectionDir(line2Rev, line1Rev, p_pt);
+    static CoordinateXYZM xyz(double x, double y, double z) {
+        return CoordinateXYZM(Coordinate(x, y, z));
     }
 
-    void checkIntersectionDir(
-            const LineSegment& line1,
-            const LineSegment& line2,
-            const Coordinate& p_pt)
-    {
-        RobustLineIntersector li;
-        li.computeIntersection(
-            line1.p0, line1.p1,
-            line2.p0, line2.p1);
-        ensure_equals(li.getIntersectionNum(), 1u);
-        Coordinate actual = li.getIntersection(0);
-        ensure_equals_xyz( actual, p_pt );
+    static CoordinateXYZM xy(double x, double y) {
+        return CoordinateXYZM(CoordinateXY(x, y));
     }
 
-    static Coordinate pt(double x, double y, double z) {
-        return Coordinate(x, y, z);
+    static CoordinateXYZM xym(double x, double y, double m) {
+        return CoordinateXYZM(CoordinateXYM(x, y, m));
     }
 
-    static Coordinate pt(double x, double y) {
-        return Coordinate(x, y);
+    static CoordinateXYZM xyzm(double x, double y, double z, double m) {
+        return CoordinateXYZM(x, y, z, m);
     }
 
-    static LineSegment line(double x1, double y1, double z1,
-                            double x2, double y2, double z2)
-    {
-        return LineSegment(Coordinate(x1, y1, z1),
-                           Coordinate(x2, y2, z2));
-    }
-
-    static LineSegment line(double x1, double y1,
-                            double x2, double y2)
-    {
-        return LineSegment(Coordinate(x1, y1), Coordinate(x2, y2));
+    template<typename C=Coordinate>
+    static Segment<C> line(const C& p0, const C& p1) {
+        return Segment<C>(p0, p1);
     }
 
 };
@@ -134,10 +124,9 @@ void object::test<1>
 ()
 {
     checkIntersection(
-        line(1, 1, 1, 3, 3, 3),
-        line(1, 3, 10, 3, 1, 30),
-        pt(2, 2, 11)
-    );
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({1, 3, 10}, {3, 1, 30}),
+                xyz(2, 2, 11));
 }
 
 
@@ -148,10 +137,9 @@ void object::test<2>
 ()
 {
     checkIntersection(
-        line(1, 1, 3, 3),
-        line(1, 3, 3, 1),
-        pt(2, 2)
-    );
+                line<XY>({1, 1}, {3, 3}),
+                line<XY>({1, 3}, {3, 1}),
+                xy(2, 2));
 }
 
 // testInterior3D2D
@@ -160,8 +148,10 @@ template<>
 void object::test<3>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(1, 3, 3, 1),
-        pt(2, 2, 2));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XY>({1, 3}, {3, 1}),
+                xyz(2, 2, 2));
 }
 
 // testInterior2D3D
@@ -170,21 +160,23 @@ template<>
 void object::test<4>
 ()
 {
-    checkIntersection( line(1, 1, 3, 3), line(1, 3, 10, 3, 1, 30),
-        pt(2, 2, 20));
+    checkIntersection(
+                line<XY>({1, 1}, {3, 3}),
+                line<XYZ>({1, 3, 10}, {3, 1, 30}),
+                xyz(2, 2, 20));
 }
 
 // testInterior2D3DPart
-    // result is average of line1 interpolated and line2 p0 Z
+// result is average of line1 interpolated and line2 p0 Z
 template<>
 template<>
 void object::test<5>
 ()
 {
     checkIntersection(
-        line(1, 1, 1, 3, 3, 3),
-        line(1, 3, 10, 3, 1, geos::DoubleNotANumber),
-        pt(2, 2, 6));
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({1, 3, 10}, {3, 1, geos::DoubleNotANumber}),
+                xyz(2, 2, 6));
 }
 
 // testEndpoint
@@ -193,8 +185,10 @@ template<>
 void object::test<6>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(3, 3, 3, 3, 1, 30),
-        pt(3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({3, 3, 3}, {3, 1, 30}),
+                xyz(3, 3, 3));
 }
 
 // testEndpoint2D
@@ -203,8 +197,10 @@ template<>
 void object::test<7>
 ()
 {
-    checkIntersection( line(1, 1, 3, 3), line(3, 3, 3, 1),
-        pt(3, 3, geos::DoubleNotANumber));
+    checkIntersection(
+                line<XY>({1, 1}, {3, 3}),
+                line<XY>({3, 3}, {3, 1}),
+                xyz(3, 3, geos::DoubleNotANumber));
 }
 
 // testEndpoint2D3D
@@ -214,8 +210,10 @@ void object::test<8>
 ()
 {
     // result Z is from 3D point
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(3, 3, 3, 1),
-        pt(3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XY>({3, 3}, {3, 1}),
+                xyz(3, 3, 3));
 }
 
 // testInteriorEndpoint
@@ -225,8 +223,10 @@ void object::test<9>
 ()
 {
     // result Z is from 3D point
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(2, 2, 10, 3, 1, 30),
-        pt(2, 2, 10));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({2, 2, 10}, {3, 1, 30}),
+                xyz(2, 2, 10));
 }
 
 // testInteriorEndpoint3D2D
@@ -236,19 +236,23 @@ void object::test<10>
 ()
 {
     // result Z is interpolated
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(2, 2, 3, 1),
-        pt(2, 2, 2));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XY>({2, 2}, {3, 1}),
+                xyz(2, 2, 2));
 }
 
 // testInteriorEndpoint2D3D
-    // result Z is from 3D point
+// result Z is from 3D point
 template<>
 template<>
 void object::test<11>
 ()
 {
-    checkIntersection( line(1, 1, 3, 3), line(2, 2, 10, 3, 1, 20),
-        pt(2, 2, 10));
+    checkIntersection(
+                line<XY>({1, 1}, {3, 3}),
+                line<XYZ>({2, 2, 10}, {3, 1, 20}),
+                xyz(2, 2, 10));
 }
 
 // testCollinearEqual
@@ -257,8 +261,10 @@ template<>
 void object::test<12>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(1, 1, 1, 3, 3, 3),
-        pt(1, 1, 1), pt( 3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                xyz(1, 1, 1), xyz( 3, 3, 3));
 }
 
 // testCollinearEqual3D2D
@@ -267,8 +273,10 @@ template<>
 void object::test<13>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(1, 1, 3, 3),
-        pt(1, 1, 1), pt( 3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XY>({1, 1}, {3, 3}),
+                xyz(1, 1, 1), xyz( 3, 3, 3));
 }
 
 // testCollinearEndpoint
@@ -277,19 +285,23 @@ template<>
 void object::test<14>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(3, 3, 3, 5, 5, 5),
-        pt(3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XYZ>({3, 3, 3}, {5, 5, 5}),
+                xyz(3, 3, 3));
 }
 
 // testCollinearEndpoint3D2D
-    // result Z is from 3D point
+// result Z is from 3D point
 template<>
 template<>
 void object::test<15>
 ()
 {
-    checkIntersection( line(1, 1, 1, 3, 3, 3), line(3, 3, 5, 5),
-        pt(3, 3, 3));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {3, 3, 3}),
+                line<XY>({3, 3}, {5, 5}),
+                xyz(3, 3, 3));
 }
 
 // testCollinearContained
@@ -298,8 +310,11 @@ template<>
 void object::test<16>
 ()
 {
-    checkIntersection( line(1, 1, 1, 5, 5, 5), line(3, 3, 3, 4, 4, 4),
-        pt(3, 3, 3), pt(4, 4, 4));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {5, 5, 5}),
+                line<XYZ>({3, 3, 3}, {4, 4, 4}),
+                xyz(3, 3, 3),
+                xyz(4, 4, 4));
 }
 
 // testCollinearContained3D2D
@@ -309,8 +324,35 @@ void object::test<17>
 ()
 {
     // result Z is interpolated
-    checkIntersection( line(1, 1, 1, 5, 5, 5), line(3, 3, 4, 4),
-        pt(3, 3, 3), pt(4, 4, 4));
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {5, 5, 5}),
+                line<XY>({3, 3}, {4, 4}),
+                xyz(3, 3, 3),
+                xyz(4, 4, 4));
+}
+
+// Interior XYM-XYM
+template<>
+template<>
+void object::test<18>
+()
+{
+    checkIntersection(
+                line<XYM>({1, 1, 1}, {3, 3, 3}),
+                line<XYM>({1, 3, 10}, {3, 1, 30}),
+                xym(2, 2, 11));
+}
+
+// Interior XYZM-XYZM
+template<>
+template<>
+void object::test<19>
+()
+{
+    checkIntersection(
+                line<XYZM>({1, 1, 1, -1}, {3, 3, 3, -3}),
+                line<XYZM>({1, 3, 10, -10}, {3, 1, 30, -30}),
+                xyzm(2, 2, 11, -11));
 }
 
 } // namespace tut

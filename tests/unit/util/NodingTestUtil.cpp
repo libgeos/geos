@@ -49,12 +49,20 @@ std::vector<SegmentString*>
 NodingTestUtil::toSegmentStrings(std::vector<const LineString*>& lines)
 {
     std::vector<SegmentString*> nssList;
+
+    bool constructZ = false;
+    bool constructM = false;
+    for (auto line : lines) {
+        constructZ |= line->hasZ();
+        constructM |= line->hasM();
+    }
+
     for (auto line : lines) {
         // line->getCoordinates() clones CoordinateSequence
         // into a unique_ptr<> which we have to release() to the
         // NodedSegmentString constructor, so
         // nss now owns nss->pts
-        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), line);
+        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), constructZ, constructM, line);
         nssList.push_back(nss);
     }
     return nssList;

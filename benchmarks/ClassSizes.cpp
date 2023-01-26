@@ -35,6 +35,7 @@
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/snapround/HotPixel.h>
 #include <geos/profiler.h>
 #include <geos/constants.h>
 #include <iostream>
@@ -63,6 +64,7 @@ main()
     check(geomgraph::TopologyLocation);
     check(geomgraph::index::SweepLineEvent);
     check(noding::NodedSegmentString);
+    check(noding::snapround::HotPixel);
     check(geom::Geometry);
     check(geom::Point);
     check(geom::LineString);

@@ -63,7 +63,7 @@ void object::test<1>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(cs.release(), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -112,7 +112,7 @@ void object::test<2>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(cs.release(), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -155,7 +155,7 @@ void object::test<3>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(cs.release(), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -198,7 +198,7 @@ void object::test<4>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), nullptr);
+    NodedSegmentString segment(cs.release(), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 

@@ -28,7 +28,6 @@
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/NodableSegmentString.h> // for inheritance
-#include <geos/noding/Octant.h>
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/SegmentString.h>
@@ -99,18 +98,19 @@ public:
      *
      * @param newPts CoordinateSequence representing the string,
      *               ownership transferred.
-     *
+     * @param constructZ should newly-constructed coordinates store Z values?
+     * @param constructM should newly-constructed coordinates store M values?
      * @param newContext the user-defined data of this segment string
      *                   (may be null)
      */
-    NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)
+    NodedSegmentString(geom::CoordinateSequence* newPts, bool constructZ, bool constructM, const void* newContext)
         : NodableSegmentString(newContext, newPts)
-        , nodeList(this)
+        , nodeList(*this, constructZ, constructM)
     {}
 
-    NodedSegmentString(SegmentString* ss)
+    NodedSegmentString(SegmentString* ss, bool constructZ, bool constructM)
         : NodableSegmentString(ss->getData(), ss->getCoordinates()->clone().release())
-        , nodeList(this)
+        , nodeList(*this, constructZ, constructM)
     {}
 
     ~NodedSegmentString() override {
@@ -125,22 +125,6 @@ public:
 
     std::ostream& print(std::ostream& os) const override;
 
-
-    /** \brief
-     * Gets the octant of the segment starting at vertex index.
-     *
-     * @param index the index of the vertex starting the segment.
-     *              Must not be the last index in the vertex list
-     * @return the octant of the segment at the vertex
-     */
-    int getSegmentOctant(std::size_t index) const
-    {
-        if (index >= size() - 1) {
-            return -1;
-        }
-        return safeOctant(getCoordinate(index), getCoordinate(index + 1));
-        //return Octant::octant(getCoordinate(index), getCoordinate(index+1));
-    };
 
     /** \brief
      * Add {@link SegmentNode}s for one or both
@@ -168,7 +152,7 @@ public:
     {
         ::geos::ignore_unused_variable_warning(geomIndex);
 
-        const geom::Coordinate& intPt = li->getIntersection(intIndex);
+        const auto& intPt = li->getIntersection(intIndex);
         addIntersection(intPt, segmentIndex);
     };
 
@@ -179,7 +163,8 @@ public:
      * edge is normalized
      * to use the higher of the two possible segmentIndexes
      */
-    void addIntersection(const geom::Coordinate& intPt,
+    template<typename CoordType>
+    void addIntersection(const CoordType& intPt,
         std::size_t segmentIndex)
     {
         std::size_t normalizedSegmentIndex = segmentIndex;
@@ -191,7 +176,7 @@ public:
         // normalize the intersection point location
         auto nextSegIndex = normalizedSegmentIndex + 1;
         if (nextSegIndex < size()) {
-            const geom::Coordinate& nextPt = getCoordinate(nextSegIndex);
+            const auto& nextPt = getCoordinate<geom::CoordinateXY>(nextSegIndex);
 
             // Normalize segment index if intPt falls on vertex
             // The check for point equality is 2D only -
@@ -206,19 +191,11 @@ public:
          * (unless the node is already known)
          */
         nodeList.add(intPt, normalizedSegmentIndex);
-    };
+    }
 
 private:
 
     SegmentNodeList nodeList;
-
-    static int safeOctant(const geom::Coordinate& p0, const geom::Coordinate& p1)
-    {
-        if(p0.equals2D(p1)) {
-            return 0;
-        }
-        return Octant::octant(p0, p1);
-    };
 
 };
 

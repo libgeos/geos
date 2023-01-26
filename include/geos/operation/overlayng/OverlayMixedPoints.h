@@ -108,9 +108,9 @@ private:
 
     std::vector<std::unique_ptr<Point>> findPoints(bool isCovered, const CoordinateSequence* coords) const;
 
-    std::vector<std::unique_ptr<Point>> createPoints(std::set<Coordinate>& coords) const;
+    std::vector<std::unique_ptr<Point>> createPoints(const CoordinateSequence& coords) const;
 
-    bool hasLocation(bool isCovered, const Coordinate& coord) const;
+    bool hasLocation(bool isCovered, const CoordinateXY& coord) const;
 
     std::unique_ptr<Geometry> copyNonPoint() const;
 

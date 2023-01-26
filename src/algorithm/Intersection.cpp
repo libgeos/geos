@@ -22,9 +22,9 @@ namespace algorithm { // geos.algorithm
 
 
 /* public static */
-geom::Coordinate
-Intersection::intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                           const geom::Coordinate& q1, const geom::Coordinate& q2)
+geom::CoordinateXY
+Intersection::intersection(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                           const geom::CoordinateXY& q1, const geom::CoordinateXY& q2)
 {
     double minX0 = p1.x < p2.x ? p1.x : p2.x;
     double minY0 = p1.y < p2.y ? p1.y : p2.y;
@@ -69,7 +69,7 @@ Intersection::intersection(const geom::Coordinate& p1, const geom::Coordinate& p
 
     double xInt = x/w;
     double yInt = y/w;
-    geom::Coordinate rv;
+    geom::CoordinateXY rv;
     // check for parallel lines
     if (!std::isfinite(xInt) || !std::isfinite(yInt)) {
         rv.setNull();

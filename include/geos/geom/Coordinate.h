@@ -43,6 +43,12 @@ enum class CoordinateType : std::uint8_t {
     XYM,
 };
 
+enum class Ordinate : std::uint8_t {
+    X,
+    Y,
+    Z,
+    M
+};
 
 GEOS_DLL std::ostream& operator<< (std::ostream&, const CoordinateType);
 
@@ -57,7 +63,6 @@ protected:
     constexpr const static double DEFAULT_M = DoubleNotANumber;
 
 public:
-
     CoordinateXY()
         : x(DEFAULT_X)
         , y(DEFAULT_Y)
@@ -67,6 +72,9 @@ public:
         : x(xNew)
         , y(yNew)
     {}
+
+    template<Ordinate>
+    double get() const;
 
     /// x-coordinate
     double x;
@@ -239,6 +247,9 @@ public:
         , z(DEFAULT_Z)
         {};
 
+    template<Ordinate>
+    double get() const;
+
     void setNull()
     {
         CoordinateXY::setNull();
@@ -288,6 +299,9 @@ public:
         , m(m_) {}
 
     double m;
+
+    template<Ordinate>
+    double get() const;
 
     static const CoordinateXYM& getNull();
 
@@ -343,6 +357,9 @@ public:
         , m(m_) {}
 
     double m;
+
+    template<Ordinate>
+    double get() const;
 
     static const CoordinateXYZM& getNull();
 
@@ -435,6 +452,112 @@ inline bool operator<(const CoordinateXY& a, const CoordinateXY& b)
     return CoordinateLessThen()(a, b);
 }
 
+
+// Generic accessors, XY
+
+template<>
+inline double CoordinateXY::get<Ordinate::X>() const
+{
+    return x;
+}
+
+template<>
+inline double CoordinateXY::get<Ordinate::Y>() const
+{
+    return y;
+}
+
+template<>
+inline double CoordinateXY::get<Ordinate::Z>() const
+{
+    return DEFAULT_Z;
+}
+
+template<>
+inline double CoordinateXY::get<Ordinate::M>() const
+{
+    return DEFAULT_M;
+}
+
+// Generic accessors, XYZ
+
+template<>
+inline double Coordinate::get<Ordinate::X>() const
+{
+    return x;
+}
+
+template<>
+inline double Coordinate::get<Ordinate::Y>() const
+{
+    return y;
+}
+
+template<>
+inline double Coordinate::get<Ordinate::Z>() const
+{
+    return z;
+}
+
+template<>
+inline double Coordinate::get<Ordinate::M>() const
+{
+    return DEFAULT_M;
+}
+
+// Generic accessors, XYM
+
+template<>
+inline double CoordinateXYM::get<Ordinate::X>() const
+{
+    return x;
+}
+
+template<>
+inline double CoordinateXYM::get<Ordinate::Y>() const
+{
+    return y;
+}
+
+template<>
+inline double CoordinateXYM::get<Ordinate::Z>() const
+{
+    return DEFAULT_Z;
+}
+
+template<>
+inline double CoordinateXYM::get<Ordinate::M>() const
+{
+    return m;
+}
+
+// Generic accessors, XYZM
+
+template<>
+inline double CoordinateXYZM::get<Ordinate::X>() const
+{
+    return x;
+}
+
+template<>
+inline double CoordinateXYZM::get<Ordinate::Y>() const
+{
+    return y;
+}
+
+template<>
+inline double CoordinateXYZM::get<Ordinate::Z>() const
+{
+    return z;
+}
+
+template<>
+inline double CoordinateXYZM::get<Ordinate::M>() const
+{
+    return m;
+}
+
+
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXY& c);
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXYM& c);
@@ -442,6 +565,29 @@ GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXYZM& c);
 
 } // namespace geos.geom
 } // namespace geos
+
+// Add specializations of std::common_type for Coordinate types
+namespace std {
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXY>     { using type = geos::geom::CoordinateXY;   };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::Coordinate>       { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXYM>    { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXY, geos::geom::CoordinateXYZM>   { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXY>       { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::Coordinate>         { using type = geos::geom::Coordinate;     };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXYM>      { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::Coordinate, geos::geom::CoordinateXYZM>     { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXY>    { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::Coordinate>      { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXYM>   { using type = geos::geom::CoordinateXYM;  };
+    template<> struct common_type<geos::geom::CoordinateXYM, geos::geom::CoordinateXYZM>  { using type = geos::geom::CoordinateXYZM; };
+
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXY>   { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::Coordinate>     { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXYM>  { using type = geos::geom::CoordinateXYZM; };
+    template<> struct common_type<geos::geom::CoordinateXYZM, geos::geom::CoordinateXYZM> { using type = geos::geom::CoordinateXYZM; };
+}
 
 #ifdef _MSC_VER
 #pragma warning(pop)

@@ -61,6 +61,9 @@ private:
     mutable std::vector<SegmentNode> nodeMap;
     mutable bool ready = false;
 
+    bool constructZ;
+    bool constructM;
+
     void prepare() const;
 
     // the parent edge
@@ -107,7 +110,7 @@ private:
     void addCollapsedNodes();
 
     /**
-     * Adds nodes for any collapsed edge pairs
+ /    * Adds nodes for any collapsed edge pairs
      * which are pre-existing in the vertex list.
      */
     void findCollapsesFromExistingVertices(
@@ -140,9 +143,12 @@ public:
     using iterator = container::iterator;
     using const_iterator = container::const_iterator;
 
-    explicit SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
-
-    explicit SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
+    explicit SegmentNodeList(const NodedSegmentString& newEdge,
+                             bool p_constructZ,
+                             bool p_constructM)
+        : constructZ(p_constructZ)
+        , constructM(p_constructM)
+        , edge(newEdge) {}
 
     ~SegmentNodeList() = default;
 
@@ -152,6 +158,14 @@ public:
         return edge;
     }
 
+    bool getConstructZ() const {
+        return constructZ;
+    }
+
+    bool getConstructM() const {
+        return constructM;
+    }
+
     /**
      * Adds an intersection into the list, if it isn't already there.
      * The input segmentIndex is expected to be normalized.
@@ -159,12 +173,11 @@ public:
      * @param intPt the intersection Coordinate, will be copied
      * @param segmentIndex
      */
-    void add(const geom::Coordinate& intPt, std::size_t segmentIndex);
-
-    void
-    add(const geom::Coordinate* intPt, std::size_t segmentIndex)
-    {
-        add(*intPt, segmentIndex);
+    template<typename CoordType>
+    void add(const CoordType& intPt, std::size_t segmentIndex) {
+        // Cast edge to SegmentString to avoid circular dependency between NodedSegmentString and SegmentNodeList
+        nodeMap.emplace_back(edge, intPt, segmentIndex, reinterpret_cast<const SegmentString&>(edge).getSegmentOctant(segmentIndex));
+        ready = false;
     }
 
     /// Return the number of nodes in this list

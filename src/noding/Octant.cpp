@@ -83,7 +83,7 @@ Octant::octant(double dx, double dy)
 
 /*public static*/
 int
-Octant::octant(const Coordinate& p0, const Coordinate& p1)
+Octant::octant(const CoordinateXY& p0, const CoordinateXY& p1)
 {
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;

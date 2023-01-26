@@ -421,16 +421,17 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     }
 
     const auto& ringCoords = ring->getCoordinatesRO();
-    CoordinateSequence coords(ringCoords->getSize() - 1);
+    CoordinateSequence coords(0u, ringCoords->hasZ(), ringCoords->hasM());
+    coords.reserve(ringCoords->size());
+
     // exclude last point (repeated)
-    for (std::size_t i = 0; i < coords.getSize(); i++) {
-        coords.setAt(ringCoords->getAt(i), i);
-    }
+    coords.add(*ringCoords, 0, ringCoords->size() - 2);
 
     const CoordinateXY* minCoordinate = coords.minCoordinate();
 
     CoordinateSequence::scroll(&coords, minCoordinate);
-    coords.add(coords[0]); // close ring
+    coords.closeRing();
+
     if(algorithm::Orientation::isCCW(&coords) == clockwise) {
         coords.reverse();
     }

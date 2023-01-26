@@ -24,6 +24,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/index/kdtree/KdTree.h>
 #include <geos/index/kdtree/KdNodeVisitor.h>
+#include <geos/util.h>
 
 #include <array>
 #include <map>
@@ -67,13 +68,28 @@ private:
     std::deque<HotPixel> hotPixelQue;
 
     /* methods */
-    geom::Coordinate round(const geom::Coordinate& c);
+    template<typename CoordType>
+    geom::CoordinateXYZM round(const CoordType& pt) {
+        geom::CoordinateXYZM p2(pt);
+        pm->makePrecise(p2);
+        return p2;
+    }
+
     HotPixel* find(const geom::Coordinate& pixelPt);
 
 public:
 
     HotPixelIndex(const geom::PrecisionModel* p_pm);
-    HotPixel* add(const geom::Coordinate& pt);
+    HotPixel* addRounded(const geom::CoordinateXYZM& pt);
+
+    template<typename CoordType>
+    HotPixel* add(const CoordType& p) {
+        static_assert(std::is_base_of<geom::CoordinateXY, CoordType>(), "Only valid for Coordinate types");
+
+        auto pRound = round(p);
+        return addRounded(pRound);
+    }
+
     void add(const geom::CoordinateSequence* pts);
     void add(const std::vector<geom::Coordinate>& pts);
     void addNodes(const geom::CoordinateSequence* pts);
@@ -84,7 +100,7 @@ public:
     * The visitor must determine whether each hot pixel actually intersects
     * the segment.
     */
-    void query(const geom::Coordinate& p0, const geom::Coordinate& p1,
+    void query(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                index::kdtree::KdNodeVisitor& visitor);
 
 };
