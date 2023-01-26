@@ -103,6 +103,18 @@ ConcaveHull::concaveHullByLengthRatio(
     return hull.getHull();
 }
 
+/* public static */
+std::unique_ptr<Geometry>
+ConcaveHull::alphaShape(
+    const Geometry* geom,
+    double alpha,
+    bool holesAllowed)
+{
+    ConcaveHull hull(geom);
+    hull.setAlpha(alpha);
+    hull.setHolesAllowed(holesAllowed);
+    return hull.getHull();
+}
 
 /* public */
 void
@@ -110,8 +122,9 @@ ConcaveHull::setMaximumEdgeLength(double edgeLength)
 {
     if (edgeLength < 0)
         throw util::IllegalArgumentException("Edge length must be non-negative");
-    maxEdgeLength = edgeLength;
+    maxSizeInHull = edgeLength;
     maxEdgeLengthRatio = -1.0;
+    criteriaType = PARAM_EDGE_LENGTH;
 }
 
 
@@ -122,6 +135,7 @@ ConcaveHull::setMaximumEdgeLengthRatio(double edgeLengthRatio)
     if (edgeLengthRatio < 0 || edgeLengthRatio > 1)
         throw util::IllegalArgumentException("Edge length ratio must be in range [0,1]");
     maxEdgeLengthRatio = edgeLengthRatio;
+    criteriaType = PARAM_EDGE_LENGTH;
 }
 
 
@@ -132,6 +146,14 @@ ConcaveHull::setHolesAllowed(bool holesAllowed)
     isHolesAllowed = holesAllowed;
 }
 
+/* public */
+void
+ConcaveHull::setAlpha(double newAlpha)
+{
+    alpha = newAlpha;
+    maxSizeInHull = newAlpha;
+    criteriaType = PARAM_ALPHA;
+}
 
 /* public */
 std::unique_ptr<Geometry>
@@ -142,8 +164,10 @@ ConcaveHull::getHull()
     }
     TriList<HullTri> triList;
     HullTriangulation::createDelaunayTriangulation(inputGeometry, triList);
+    setSize(triList);
+
     if (maxEdgeLengthRatio >= 0) {
-        maxEdgeLength = computeTargetEdgeLength(triList, maxEdgeLengthRatio);
+        maxSizeInHull = computeTargetEdgeLength(triList, maxEdgeLengthRatio);
     }
     if (triList.empty()) {
         return inputGeometry->convexHull();
@@ -153,6 +177,26 @@ ConcaveHull::getHull()
     return hull;
 }
 
+/* private */
+void
+ConcaveHull::setSize(TriList<HullTri>& triList)
+{
+    for (auto* tri : triList) {
+        if (criteriaType == PARAM_EDGE_LENGTH) {
+            tri->setSizeToLongestEdge();
+        }
+        else {
+            tri->setSizeToCircumradius();
+        }
+    }
+}
+
+/* private */
+bool
+ConcaveHull::isInHull(const HullTri* tri) const
+{
+    return tri->getSize() < maxSizeInHull;
+}
 
 /* private static */
 double
@@ -198,13 +242,13 @@ ConcaveHull::computeHullBorder(TriList<HullTri>& triList)
     HullTriQueue queue;
     createBorderQueue(queue, triList);
 
-    // remove tris in order of decreasing size (edge length)
+    // process tris in order of decreasing size (edge length or circumradius)
     while (! queue.empty()) {
 
         HullTri* tri = queue.top();
         queue.pop();
 
-        if (isBelowLengthThreshold(tri))
+        if (isInHull(tri))
             break;
 
         if (isRemovableBorder(tri)) {
@@ -229,13 +273,7 @@ void
 ConcaveHull::createBorderQueue(HullTriQueue& queue, TriList<HullTri>& triList)
 {
     for (auto* tri : triList) {
-        //-- add only border triangles which could be eroded
-        // (if tri has only 1 adjacent it can't be removed because that would isolate a vertex)
-        if (tri->numAdjacent() != 2){
-            continue;
-        }
-        tri->setSizeToBoundary();
-        queue.push(tri);
+        addBorderTri(tri, queue);
     }
     return;
 }
@@ -247,23 +285,27 @@ ConcaveHull::addBorderTri(HullTri* tri, HullTriQueue& queue)
 {
     if (tri == nullptr) return;
     if (tri->numAdjacent() != 2) return;
-    tri->setSizeToBoundary();
+    setSize(tri);
     queue.push(tri);
 }
 
 
 /* private */
-bool
-ConcaveHull::isBelowLengthThreshold(const HullTri* tri) const
+void
+ConcaveHull::setSize(HullTri* tri)
 {
-    return tri->lengthOfBoundary() < maxEdgeLength;
+    if (criteriaType == PARAM_EDGE_LENGTH)
+        tri->setSizeToBoundary();
+    else
+        tri->setSizeToCircumradius();
 }
+
 
 /* private */
 void
 ConcaveHull::computeHullHoles(TriList<HullTri>& triList)
 {
-    std::vector<HullTri*> candidateHoles = findCandidateHoles(triList, maxEdgeLength);
+    std::vector<HullTri*> candidateHoles = findCandidateHoles(triList, maxSizeInHull);
     // remove tris in order of decreasing size (edge length)
     for (auto* tri : candidateHoles) {
         if (tri->isRemoved() ||
@@ -277,17 +319,19 @@ ConcaveHull::computeHullHoles(TriList<HullTri>& triList)
 
 /* private static */
 std::vector<HullTri*>
-ConcaveHull::findCandidateHoles(TriList<HullTri>& triList, double minEdgeLen)
+ConcaveHull::findCandidateHoles(TriList<HullTri>& triList, double maxSizeInHull)
 {
     std::vector<HullTri*> candidates;
     for (auto* tri : triList) {
-        if (tri->getSize() < minEdgeLen) continue;
+        //-- tris below the size threshold are in the hull, so NOT in a hole
+        if (tri->getSize() < maxSizeInHull) continue;
+
         bool isTouchingBoundary = tri->isBorder() || tri->hasBoundaryTouch();
         if (! isTouchingBoundary) {
             candidates.push_back(tri);
         }
     }
-    // sort by HullTri comparator - longest edge length first
+    // sort by HullTri comparator - larger sizes first
     std::sort(candidates.begin(), candidates.end(), HullTri::HullTriCompare());
     return candidates;
 }
@@ -310,7 +354,7 @@ ConcaveHull::removeHole(TriList<HullTri>& triList, HullTri* triHole)
         HullTri* tri = queue.top();
         queue.pop();
 
-        if (tri != triHole && isBelowLengthThreshold(tri)) {
+        if (tri != triHole && isInHull(tri)) {
             break;
         }
 

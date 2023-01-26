@@ -4,12 +4,19 @@
 // tut
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/algorithm/CGAlgorithmsDD.h>
+#include <geos/geom/Geometry.h>
+#include <geos/io/WKTReader.h>
 
 // std
 #include <cmath>
+
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::geom::Geometry;
+using geos::geom::Triangle;
 
 namespace tut {
 //
@@ -18,18 +25,41 @@ namespace tut {
 
 // Common data used by tests
 struct test_triangle_data {
-    // Coordinates of simple triangle: ABC
-    geos::geom::Coordinate a;
-    geos::geom::Coordinate b;
-    geos::geom::Coordinate c;
 
-    geos::geom::Coordinate d;
-    geos::geom::Coordinate e;
-    geos::geom::Coordinate f;
+    geos::io::WKTReader reader_;
+
+    // Coordinates of simple triangle: ABC
+    Coordinate a;
+    Coordinate b;
+    Coordinate c;
+
+    Coordinate d;
+    Coordinate e;
+    Coordinate f;
 
     test_triangle_data()
         : a(3, 3), b(9, 3), c(6, 6), d(-4, -2), e(-8, -2), f(-4, -4)
     {}
+
+    void
+    checkCircumradius(const std::string& wkt)
+    {
+        std::unique_ptr<Geometry> geom = reader_.read(wkt);
+        auto pt = geom->getCoordinates();
+        auto c0 = pt->getAt<CoordinateXY>(0);
+        auto c1 = pt->getAt<CoordinateXY>(1);
+        auto c2 = pt->getAt<CoordinateXY>(2);
+
+        CoordinateXY circumcentre = Triangle::circumcentre(c0, c1, c2);
+        double circumradius = Triangle::circumradius(c0, c1, c2);
+        //System.out.println("(Static) circumcentre = " + circumcentre);
+        double rad0 = c0.distance(circumcentre);
+        double rad1 = c1.distance(circumcentre);
+        double rad2 = c2.distance(circumcentre);
+        ensure(fabs(rad0 - circumradius) < 0.00001);
+        ensure(fabs(rad1 - circumradius) < 0.00001);
+        ensure(fabs(rad2 - circumradius) < 0.00001);
+    };
 
 };
 
@@ -199,6 +229,21 @@ void object::test<7>
 
     ensure(cc1 == cc2);
 }
+
+
+// testCircumradius
+template<>
+template<>
+void object::test<8>()
+{
+    // right triangle
+    checkCircumradius("POLYGON((10 10, 20 20, 20 10, 10 10))");
+    // CCW right tri
+    checkCircumradius("POLYGON((10 10, 20 10, 20 20, 10 10))");
+    // acute
+    checkCircumradius("POLYGON((10 10, 20 10, 15 20, 10 10))");
+}
+
 
 
 } // namespace tut

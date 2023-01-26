@@ -28,6 +28,9 @@ namespace tut {
 struct test_concavehull_data {
     WKTReader reader_;
 
+    std::string WKT_SIMPLE = "MULTIPOINT ((14 18), (18 14), (15 6), (15 2), (5 5), (3 13), (8 14), (8 10), (16 8))";
+    std::string WKT_CIRCLE = "MULTIPOINT ((90 20), (80 10), (45 5), (10 20), (20 10), (21 30), (40 20), (11 60), (20 70), (20 90), (40 80), (70 80), (80 60), (90 70), (80 90), (56 95), (95 45), (80 40), (70 20), (15 45), (5 40), (40 96), (60 15))";
+
     test_concavehull_data() {};
 
     void
@@ -66,6 +69,21 @@ struct test_concavehull_data {
         // std::cout << "ACTUAL" << std::endl << actual->toText() << std::endl;
         // std::cout << "EXPECT" << std::endl << expected->toText() << std::endl;
         ensure_equals_geometry(expected.get(), actual.get());
+    }
+
+    void
+    checkAlphaShape(const std::string& wkt, double alpha, bool isHolesAllowed, const std::string& wktExpected)
+    {
+        std::unique_ptr<Geometry> geom = reader_.read(wkt);
+        std::unique_ptr<Geometry> actual = ConcaveHull::alphaShape(geom.get(), alpha, isHolesAllowed);
+        std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
+        ensure_equals_geometry(expected.get(), actual.get());
+    }
+
+    void
+    checkAlphaShape(const std::string& wkt, double alpha, const std::string& wktExpected)
+    {
+        checkAlphaShape(wkt, alpha, false, wktExpected);
     }
 
 };
@@ -228,8 +246,8 @@ template<>
 template<>
 void object::test<14>()
 {
-    checkHullWithHolesByLength("MULTIPOINT ((90 20), (80 10), (45 5), (10 20), (20 10), (21 30), (40 20), (11 60), (20 70), (20 90), (40 80), (70 80), (80 60), (90 70), (80 90), (56 95), (95 45), (80 40), (70 20), (15 45), (5 40), (40 96), (60 15))",
-       40, "POLYGON ((20 90, 40 96, 56 95, 80 90, 90 70, 95 45, 90 20, 80 10, 45 5, 20 10, 10 20, 5 40, 11 60, 20 90), (20 70, 15 45, 40 20, 70 20, 80 40, 80 60, 70 80, 40 80, 20 70))" );
+    checkHullWithHolesByLength(WKT_CIRCLE, 40,
+        "POLYGON ((20 90, 40 96, 56 95, 80 90, 90 70, 95 45, 90 20, 80 10, 45 5, 20 10, 10 20, 5 40, 11 60, 20 90), (20 70, 15 45, 40 20, 70 20, 80 40, 80 60, 70 80, 40 80, 20 70))" );
 }
 
 //
@@ -239,8 +257,45 @@ template<>
 template<>
 void object::test<15>()
 {
-    checkHullWithHolesByLength("MULTIPOINT ((90 20), (80 10), (45 5), (10 20), (20 10), (21 30), (40 20), (11 60), (20 70), (20 90), (40 80), (70 80), (80 60), (90 70), (80 90), (56 95), (95 45), (80 40), (70 20), (15 45), (5 40), (40 96), (60 15))",
-       0, "POLYGON ((20 90, 40 96, 56 95, 70 80, 80 90, 90 70, 80 60, 95 45, 80 40, 70 20, 90 20, 80 10, 60 15, 45 5, 40 20, 40 80, 15 45, 21 30, 20 10, 10 20, 5 40, 11 60, 20 70, 20 90))" );
+    checkHullWithHolesByLength(WKT_CIRCLE, 0,
+        "POLYGON ((20 90, 40 96, 56 95, 70 80, 80 90, 90 70, 80 60, 95 45, 80 40, 70 20, 90 20, 80 10, 60 15, 45 5, 40 20, 40 80, 15 45, 21 30, 20 10, 10 20, 5 40, 11 60, 20 70, 20 90))" );
+}
+
+
+// testLengthSimple
+template<>
+template<>
+void object::test<16>()
+{
+    checkHullByLength(WKT_SIMPLE, 8,
+        "POLYGON ((8 10, 5 5, 3 13, 8 14, 14 18, 18 14, 16 8, 15 2, 15 6, 8 10))" );
+}
+
+// testAlphaSimple
+template<>
+template<>
+void object::test<17>()
+{
+    checkAlphaShape(WKT_SIMPLE, 4,
+        "POLYGON ((5 5, 3 13, 8 14, 14 18, 18 14, 16 8, 8 10, 15 6, 15 2, 5 5))" );
+}
+
+// testAlphaCircle
+template<>
+template<>
+void object::test<18>()
+{
+    checkAlphaShape(WKT_CIRCLE, 20,
+        "POLYGON ((20 70, 20 90, 40 96, 56 95, 80 90, 90 70, 95 45, 90 20, 80 10, 60 15, 45 5, 20 10, 10 20, 5 40, 11 60, 20 70))" );
+}
+
+// testAlphaWithHolesCircle
+template<>
+template<>
+void object::test<19>()
+{
+    checkAlphaShape(WKT_CIRCLE, 20, true,
+        "POLYGON ((20 90, 40 96, 56 95, 80 90, 90 70, 95 45, 90 20, 80 10, 60 15, 45 5, 20 10, 10 20, 5 40, 11 60, 20 70, 20 90), (40 80, 15 45, 21 30, 40 20, 70 20, 80 40, 80 60, 70 80, 40 80))" );
 }
 
 

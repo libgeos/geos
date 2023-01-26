@@ -15,9 +15,10 @@
 #include <geos/algorithm/hull/HullTri.h>
 
 #include <geos/geom/Coordinate.h>
-
+#include <geos/geom/Triangle.h>
 
 using geos::geom::Coordinate;
+using geos::geom::Triangle;
 
 
 namespace geos {
@@ -36,6 +37,20 @@ void
 HullTri::setSizeToBoundary()
 {
     m_size = lengthOfBoundary();
+}
+
+/* public */
+void
+HullTri::setSizeToLongestEdge()
+{
+    m_size = lengthOfLongestEdge();
+}
+
+/* public */
+void
+HullTri::setSizeToCircumradius()
+{
+    m_size = Triangle::circumradius(p2, p1, p0);
 }
 
 /* public */

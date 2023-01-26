@@ -69,14 +69,36 @@ public:
      */
     void circumcentreDD(CoordinateXY& resultPoint);
 
-    /** Computes the circumcentre of a triangle.
+    /** Computes the circumcentre of a triangle. The circumcentre is the centre
+     * of the circumcircle, the smallest circle which passes through all the triangle vertices.
+     * It is also the common intersection point of the perpendicular bisectors of the
      * @param p0 corner of the triangle
      * @param p1  corner of the triangle
      * @param p2 corner of the triangle
      * @return the center of the the smallest circle that encloses the triangle
-     * @overload
      */
     static const CoordinateXY circumcentre(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2);
+
+    /**
+    * Computes the radius of the circumcircle of a triangle.
+    * Formula is as per https://math.stackexchange.com/a/3610959
+    *
+    * @param a a vertex of the triangle
+    * @param b a vertex of the triangle
+    * @param c a vertex of the triangle
+    * @return the circumradius of the triangle
+    */
+    static double circumradius(const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c);
+
+    /**
+    * Computes the radius of the circumcircle of a triangle.
+    *
+    * @return the triangle circumradius
+    */
+    double circumradius() const
+    {
+        return circumradius(p0, p1, p2);
+    };
 
     bool isIsoceles();
 

@@ -57,15 +57,22 @@ typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTri::HullTriCom
 
 /**
 * Constructs a concave hull of a set of points.
-* The hull is constructed by eroding the Delaunay Triangulation of the points
-* until specified target criteria are reached.
+* The hull is constructed by removing border triangles
+* of the Delaunay Triangulation of the points
+* as long as their "size" is larger than the target criterion.
 * The target criteria are:
 *
-*  * Maximum Edge Length Ratio - determine the Maximum Edge Length
-*    as a fraction of the difference between the longest and shortest edge lengths
-*    in the Delaunay Triangulation. This normalizes the Maximum Edge Length to be scale-independent.
+*  * Maximum Edge Length Ratio - determines the Maximum Edge Length
+*    by a fraction of the difference between
+*    the longest and shortest edge lengths
+*    in the Delaunay Triangulation. This normalizes the
+*    Maximum Edge Length to be scale-independent.
 *  * Maximum Area Ratio - the ratio of the concave hull area to the convex
 *    hull area will be no larger than this value
+*  * Alpha - produces Alpha-shapes, by removing border triangles
+*    with a circumradius greater than alpha.
+*    Large values produce the convex hull; a value of 0
+*    produces maximum concaveness.
 *
 * The preferred criterium is the Maximum Edge Length Ratio, since it is
 * scale-free and local (so that no assumption needs to be made about the
@@ -80,9 +87,8 @@ typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTri::HullTriCom
 * (unless it is degenerate, in which case it will be a geom::Point or a geom::LineString).
 * This constraint may cause the concave hull to fail to meet the target criteria.
 *
-* Optionally the concave hull can be allowed to contain holes.
-* Note that this may be substantially slower than not permitting holes,
-* and it can produce results of lower quality.
+* Optionally the concave hull can be allowed
+* to contain holes by calling setHolesAllowed(boolean).
 *
 * @author mdavis
 */
@@ -92,9 +98,11 @@ public:
 
     ConcaveHull(const Geometry* geom)
         : inputGeometry(geom)
-        , maxEdgeLength(0.0)
         , maxEdgeLengthRatio(-1.0)
+        , alpha(-1)
         , isHolesAllowed(false)
+        , criteriaType(PARAM_EDGE_LENGTH)
+        , maxSizeInHull(0.0)
         , geomFactory(geom->getFactory())
         {};
 
@@ -154,7 +162,23 @@ public:
     * @return the concave hull
     */
     static std::unique_ptr<Geometry> concaveHullByLengthRatio(
-        const Geometry* geom, double lengthRatio, bool isHolesAllowed);
+        const Geometry* geom,
+        double lengthRatio,
+        bool isHolesAllowed);
+
+    /**
+    * Computes the alpha shape of a geometry as a polygon.
+    * The alpha parameter is the radius of the eroding disc.
+    *
+    * @param geom the input geometry
+    * @param alpha the radius of the eroding disc
+    * @param isHolesAllowed whether holes are allowed in the result
+    * @return the alpha shape polygon
+    */
+    static std::unique_ptr<Geometry> alphaShape(
+        const Geometry* geom,
+        double alpha,
+        bool isHolesAllowed);
 
     /**
     * Sets the target maximum edge length for the concave hull.
@@ -194,6 +218,15 @@ public:
     void setHolesAllowed(bool holesAllowed);
 
     /**
+    * Sets the alpha parameter to compute an alpha shape of the input.
+    * Alpha is the radius of the eroding disc.
+    * Border triangles with circumradius greater than alpha are removed.
+    *
+    * @param newAlpha the alpha radius
+    */
+    void setAlpha(double newAlpha);
+
+    /**
     * Gets the computed concave hull.
     *
     * @return the concave hull
@@ -203,13 +236,20 @@ public:
 
 private:
 
+    // Constants
+    static constexpr int PARAM_EDGE_LENGTH = 1;
+    static constexpr int PARAM_ALPHA = 2;
+
     // Members
     const Geometry* inputGeometry;
-    double maxEdgeLength;
     double maxEdgeLengthRatio;
+    double alpha;
     bool isHolesAllowed;
+    int criteriaType;
+    double maxSizeInHull;
     const GeometryFactory* geomFactory;
 
+    // Methods
     static double computeTargetEdgeLength(
         TriList<HullTri>& triList,
         double edgeLengthFactor);
@@ -221,19 +261,44 @@ private:
     /**
     * Adds a Tri to the queue.
     * Only add tris with a single border edge.
-    * The ordering size is the length of the border edge.
+    * since otherwise that would risk isolating a vertex if
+    * the tri ends up being eroded from the hull.
+    * Sets the tri size according to the threshold parameter being used.
     *
     * @param tri the Tri to add
     * @param queue the priority queue
     */
     void addBorderTri(HullTri* tri, HullTriQueue& queue);
-    bool isBelowLengthThreshold(const HullTri* tri) const;
     void computeHullHoles(TriList<HullTri>& triList);
+    void setSize(HullTri* tri);
 
+
+    /**
+    * Finds tris which may be the start of holes.
+    * Only tris which have a long enough edge and which do not touch the current hull
+    * boundary are included.
+    * This avoids the risk of disconnecting the result polygon.
+    * The list is sorted in decreasing order of edge length.
+    * The list is sorted in decreasing order of size.
+    *
+    * @param triList
+    * @param maxSizeInHull maximum tri size which is not in a hole
+    * @return
+    */
     static std::vector<HullTri*> findCandidateHoles(
-        TriList<HullTri>& triList, double minEdgeLen);
+        TriList<HullTri>& triList, double maxSizeInHull);
 
     void removeHole(TriList<HullTri>& triList, HullTri* triHole);
+    void setSize(TriList<HullTri>& triList);
+
+    /**
+    * Tests if a tri is included in the hull.
+    * Tris with size less than the maximum are included in the hull.
+    *
+    * @param tri the tri to test
+    * @return true if the tri is included in the hull
+    */
+    bool isInHull(const HullTri* tri) const;
 
     bool isRemovableBorder(const HullTri* tri) const;
     bool isRemovableHole(const HullTri* tri) const;

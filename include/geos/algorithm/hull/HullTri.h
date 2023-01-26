@@ -83,6 +83,10 @@ class HullTri : public Tri
         */
         void setSizeToBoundary();
 
+        void setSizeToLongestEdge();
+        void setSizeToCircumradius();
+
+
         bool isMarked() const;
         void setMarked(bool marked);
         bool isRemoved();

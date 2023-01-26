@@ -71,6 +71,24 @@ Triangle::circumcentre(CoordinateXY& result)
     result = CoordinateXY(ccx, ccy);
 }
 
+
+double
+Triangle::circumradius(
+    const CoordinateXY& a,
+    const CoordinateXY& b,
+    const CoordinateXY& c)
+{
+    double A = a.distance(b);
+    double B = b.distance(c);
+    double C = c.distance(a);
+    double triArea = area(a, b, c);
+    if (triArea == 0.0)
+        return std::numeric_limits<double>::infinity();
+
+    return (A * B * C) / (4 * triArea);
+}
+
+
 void
 Triangle::circumcentreDD(CoordinateXY& result)
 {
