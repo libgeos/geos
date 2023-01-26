@@ -23,67 +23,16 @@
 namespace geos {
 namespace algorithm {
 
-// Define some machinery to access Z and M values from various types in a
-// generic way, substituting NaN for types that do not have Z/M values.
-namespace {
-
-    enum InterpolationOrdinate {
-        Z, M
-    };
-
-    template<InterpolationOrdinate ordinate>
-    struct Getter {
-        template<typename C>
-        static double get();
-    };
-
-    template<>
-    struct Getter<Z> {
-        template<typename C>
-        static double get(const C& c) {
-            return c.z;
-        }
-
-        static double get(const geom::CoordinateXY& c) {
-            (void) c;
-            return DoubleNotANumber;
-        }
-
-        static double get(const geom::CoordinateXYM& c) {
-            (void) c;
-            return DoubleNotANumber;
-        }
-    };
-
-    template<>
-    struct Getter<M> {
-        template<typename C>
-        static double get(const C& c) {
-            return c.m;
-        }
-
-        static double get(const geom::CoordinateXY& c) {
-            (void) c;
-            return DoubleNotANumber;
-        }
-
-        static double get(const geom::Coordinate& c) {
-            (void) c;
-            return DoubleNotANumber;
-        }
-    };
-}
-
 class GEOS_DLL Interpolate {
 
 private:
 
-    template<InterpolationOrdinate Ordinate, typename CoordType>
+    template<geom::Ordinate Ord, typename CoordType>
     static double
     interpolate(const geom::CoordinateXY& p, const CoordType& p1, const CoordType& p2)
     {
-        double p1z = Getter<Ordinate>::get(p1);
-        double p2z = Getter<Ordinate>::get(p2);
+        double p1z = p1.template get<Ord>();
+        double p2z = p2.template get<Ord>();
 
         if (std::isnan(p1z)) {
             return p2z; // may be NaN
@@ -117,12 +66,12 @@ private:
         return zInterpolated;
     }
 
-    template<InterpolationOrdinate Ordinate, typename C1, typename C2>
+    template<geom::Ordinate Ord, typename C1, typename C2>
     static double
     interpolate(const geom::CoordinateXY& p, const C1& p1, const C1& p2, const C2& q1, const C2& q2)
     {
-        double zp = interpolate<Ordinate>(p, p1, p2);
-        double zq = interpolate<Ordinate>(p, q1, q2);
+        double zp = interpolate<Ord>(p, p1, p2);
+        double zq = interpolate<Ord>(p, q1, q2);
 
         if (std::isnan(zp)) {
           return zq; // may be NaN
@@ -134,25 +83,25 @@ private:
         return (zp + zq) / 2.0;
     }
 
-    template<InterpolationOrdinate Ordinate, typename C1, typename C2>
+    template<geom::Ordinate Ord, typename C1, typename C2>
     static double
     get(const C1& p, const C2& q)
     {
-        double a = Getter<Ordinate>::get(p);
-        double b = Getter<Ordinate>::get(q);
+        double a = p.template get<Ord>();
+        double b = q.template get<Ord>();
         if (std::isnan(a)) {
             return b;
         }
         return a;
     }
 
-    template<InterpolationOrdinate Ordinate, typename C1, typename C2>
+    template<geom::Ordinate Ord, typename C1, typename C2>
     static double
     getOrInterpolate(const C1& p, const C2& p1, const C2& p2)
     {
-        double z = Getter<Ordinate>::get(p);
+        double z = p.template get<Ord>();
         if (!std::isnan(z)) return z;
-        return interpolate<Ordinate>(p, p1, p2);
+        return interpolate<Ord>(p, p1, p2);
     }
 
     static double
@@ -168,7 +117,7 @@ public:
     static double
     zInterpolate(const geom::CoordinateXY& p, const CoordType& p1, const CoordType& p2)
     {
-        return interpolate<Z>(p, p1, p2);
+        return interpolate<geom::Ordinate::Z>(p, p1, p2);
     }
 
     /// Calculate an average interpolated Z value from two pairs of other coordinates.
@@ -176,7 +125,7 @@ public:
     static double
     zInterpolate(const geom::CoordinateXY& p, const C1& p1, const C1& p2, const C2& q1, const C2& q2)
     {
-        return interpolate<Z>(p, p1, p2, q1, q2);
+        return interpolate<geom::Ordinate::Z>(p, p1, p2, q1, q2);
     }
 
     /// Interpolate an M value for a coordinate from two other coordinates.
@@ -184,7 +133,7 @@ public:
     static double
     mInterpolate(const geom::CoordinateXY& p, const CoordType& p1, const CoordType& p2)
     {
-        return interpolate<M>(p, p1, p2);
+        return interpolate<geom::Ordinate::M>(p, p1, p2);
     }
 
     /// Calculate an average interpolated M value from two pairs of other coordinates.
@@ -192,7 +141,7 @@ public:
     static double
     mInterpolate(const geom::CoordinateXY& p, const C1& p1, const C1& p2, const C2& q1, const C2& q2)
     {
-        return interpolate<M>(p, p1, p2, q1, q2);
+        return interpolate<geom::Ordinate::M>(p, p1, p2, q1, q2);
     }
 
     /// Return the first non-NaN Z value from two coordinates, or NaN if both values are NaN.
@@ -200,7 +149,7 @@ public:
     static double
     zGet(const C1& p, const C2& q)
     {
-        return get<Z>(p, q);
+        return get<geom::Ordinate::Z>(p, q);
     }
 
     /// Return the first non-NaN M value from two coordinates, or NaN if both values are NaN.
@@ -208,7 +157,7 @@ public:
     static double
     mGet(const C1& p, const C2& q)
     {
-        return get<M>(p, q);
+        return get<geom::Ordinate::M>(p, q);
     }
 
     /// Return a coordinates's non-NaN Z value or interpolate it from two other coordinates if it is NaN.
@@ -216,7 +165,7 @@ public:
     static double
     zGetOrInterpolate(const C1& p, const C2& p1, const C2& p2)
     {
-        return getOrInterpolate<Z>(p, p1, p2);
+        return getOrInterpolate<geom::Ordinate::Z>(p, p1, p2);
     }
 
     /// Return a coordinates's non-NaN M value or interpolate it from two other coordinates if it is NaN.
@@ -224,7 +173,7 @@ public:
     static double
     mGetOrInterpolate(const C1& p, const C2& p1, const C2& p2)
     {
-        return getOrInterpolate<M>(p, p1, p2);
+        return getOrInterpolate<geom::Ordinate::M>(p, p1, p2);
     }
 
 };

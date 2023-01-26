@@ -20,6 +20,8 @@ using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYM;
 using geos::geom::CoordinateXYZM;
 using geos::geom::CoordinateType;
+using geos::geom::Ordinate;
+using geos::DoubleNotANumber;
 
 // Common data used by tests
 struct test_coordinate_data {
@@ -405,6 +407,36 @@ void object::test<16>()
     ensure_equals(c.y, xyz.y);
     ensure_equals(c.z, xyz.z);
     ensure_equals(c.m, xym.m);
+}
+
+// Test use of get()
+template<>
+template<>
+void object::test<17>()
+{
+    CoordinateXY xy(1, 2);
+    ensure_same(xy.get<Ordinate::X>(), 1);
+    ensure_same(xy.get<Ordinate::Y>(), 2);
+    ensure_same(xy.get<Ordinate::Z>(), DoubleNotANumber);
+    ensure_same(xy.get<Ordinate::M>(), DoubleNotANumber);
+
+    Coordinate xyz(1, 2, 3);
+    ensure_same(xyz.get<Ordinate::X>(), 1);
+    ensure_same(xyz.get<Ordinate::Y>(), 2);
+    ensure_same(xyz.get<Ordinate::Z>(), 3);
+    ensure_same(xyz.get<Ordinate::M>(), DoubleNotANumber);
+
+    CoordinateXYM xym(1, 2, 3);
+    ensure_same(xym.get<Ordinate::X>(), 1);
+    ensure_same(xym.get<Ordinate::Y>(), 2);
+    ensure_same(xym.get<Ordinate::Z>(), DoubleNotANumber);
+    ensure_same(xym.get<Ordinate::M>(), 3);
+
+    CoordinateXYZM xyzm(1, 2, 3, 4);
+    ensure_same(xyzm.get<Ordinate::X>(), 1);
+    ensure_same(xyzm.get<Ordinate::Y>(), 2);
+    ensure_same(xyzm.get<Ordinate::Z>(), 3);
+    ensure_same(xyzm.get<Ordinate::M>(), 4);
 }
 
 
