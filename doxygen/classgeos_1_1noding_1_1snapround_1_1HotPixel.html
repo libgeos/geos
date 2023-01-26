@@ -63,15 +63,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a96189477db039c852a09626d47aa473c"><td class="memItemLeft" align="right" valign="top"><a id="a96189477db039c852a09626d47aa473c"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getScaleFactor</b> () const</td></tr>
 <tr class="separator:a96189477db039c852a09626d47aa473c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a207e82ebac2ef0201dae8b9b26c8d9f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#a207e82ebac2ef0201dae8b9b26c8d9f3">HotPixel</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;pt, double scaleFactor)</td></tr>
-<tr class="separator:a207e82ebac2ef0201dae8b9b26c8d9f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49f6bf22badbbdae1f267ab8c7843c66"><td class="memItemLeft" align="right" valign="top"><a id="a49f6bf22badbbdae1f267ab8c7843c66"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> () const</td></tr>
-<tr class="separator:a49f6bf22badbbdae1f267ab8c7843c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ea8567e8a739690b937e748c7592692"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#a2ea8567e8a739690b937e748c7592692">intersects</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1) const</td></tr>
-<tr class="separator:a2ea8567e8a739690b937e748c7592692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac58a650defbd8aed16212cc3c43d8b38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#ac58a650defbd8aed16212cc3c43d8b38">intersects</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p) const</td></tr>
-<tr class="separator:ac58a650defbd8aed16212cc3c43d8b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac738eb658d398213ece7cd56dfc0ceb0"><td class="memTemplParams" colspan="2">template&lt;typename CoordType &gt; </td></tr>
+<tr class="memitem:ac738eb658d398213ece7cd56dfc0ceb0"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#ac738eb658d398213ece7cd56dfc0ceb0">HotPixel</a> (const CoordType &amp;pt, double scaleFact)</td></tr>
+<tr class="separator:ac738eb658d398213ece7cd56dfc0ceb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5e804cb312412b58587bad2834ee141"><td class="memItemLeft" align="right" valign="top"><a id="aa5e804cb312412b58587bad2834ee141"></a>
+const geom::CoordinateXYZM &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> () const</td></tr>
+<tr class="separator:aa5e804cb312412b58587bad2834ee141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af793040e040bb4ded9a28130d2414126"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#af793040e040bb4ded9a28130d2414126">intersects</a> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1) const</td></tr>
+<tr class="separator:af793040e040bb4ded9a28130d2414126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a231ea4c8952973e16071aaeb7e304986"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1HotPixel.html#a231ea4c8952973e16071aaeb7e304986">intersects</a> (const geom::CoordinateXY &amp;p) const</td></tr>
+<tr class="separator:a231ea4c8952973e16071aaeb7e304986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a198c4dad267316ad1d9bc6c08f6f5c30"><td class="memItemLeft" align="right" valign="top"><a id="a198c4dad267316ad1d9bc6c08f6f5c30"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isNode</b> () const</td></tr>
 <tr class="separator:a198c4dad267316ad1d9bc6c08f6f5c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -87,23 +88,28 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>A hot pixel contains the interior of the tolerance square and the boundary minus the top and right segments.</p>
 <p>The hot pixel operations are all computed in the integer domain to avoid rounding problems. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a207e82ebac2ef0201dae8b9b26c8d9f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a207e82ebac2ef0201dae8b9b26c8d9f3">&#9670;&nbsp;</a></span>HotPixel()</h2>
+<a id="ac738eb658d398213ece7cd56dfc0ceb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac738eb658d398213ece7cd56dfc0ceb0">&#9670;&nbsp;</a></span>HotPixel()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename CoordType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">geos::noding::snapround::HotPixel::HotPixel </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const CoordType &amp;&#160;</td>
           <td class="paramname"><em>pt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>scaleFactor</em>&#160;</td>
+          <td class="paramname"><em>scaleFact</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -111,12 +117,17 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Creates a new hot pixel.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pt</td><td>the coordinate at the centre of the pixel. Will be kept by reference, so make sure to keep it alive. </td></tr>
-    <tr><td class="paramname">scaleFactor</td><td>the scaleFactor determining the pixel size <br  />
+    <tr><td class="paramname">pt</td><td>the coordinate at the centre of the pixel. </td></tr>
+    <tr><td class="paramname">scaleFact</td><td>the scaleFactor determining the pixel size <br  />
  </td></tr>
   </table>
   </dd>
@@ -151,8 +162,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="ac58a650defbd8aed16212cc3c43d8b38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac58a650defbd8aed16212cc3c43d8b38">&#9670;&nbsp;</a></span>intersects() <span class="overload">[1/2]</span></h2>
+<a id="a231ea4c8952973e16071aaeb7e304986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a231ea4c8952973e16071aaeb7e304986">&#9670;&nbsp;</a></span>intersects() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,7 +171,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         <tr>
           <td class="memname">bool geos::noding::snapround::HotPixel::intersects </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -177,8 +188,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="a2ea8567e8a739690b937e748c7592692"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ea8567e8a739690b937e748c7592692">&#9670;&nbsp;</a></span>intersects() <span class="overload">[2/2]</span></h2>
+<a id="af793040e040bb4ded9a28130d2414126"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af793040e040bb4ded9a28130d2414126">&#9670;&nbsp;</a></span>intersects() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,13 +197,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         <tr>
           <td class="memname">bool geos::noding::snapround::HotPixel::intersects </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p0</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p1</em>&#160;</td>
         </tr>
         <tr>

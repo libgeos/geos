@@ -78,20 +78,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8ddf6a836d01c34d7da7f49bb55e4712"><td class="memItemLeft" align="right" valign="top"><a id="a8ddf6a836d01c34d7da7f49bb55e4712"></a>
 <a class="el" href="classgeos_1_1noding_1_1SegmentNodeList.html">SegmentNodeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classgeos_1_1noding_1_1SegmentNodeList.html">SegmentNodeList</a> &amp;rhs)=delete</td></tr>
 <tr class="separator:a8ddf6a836d01c34d7da7f49bb55e4712"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5db48efe1f4abf3c7a84dce584bdd31c"><td class="memItemLeft" align="right" valign="top"><a id="a5db48efe1f4abf3c7a84dce584bdd31c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SegmentNodeList</b> (const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> *newEdge)</td></tr>
-<tr class="separator:a5db48efe1f4abf3c7a84dce584bdd31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6aaf7b1535465068991cf2ca8ede988e"><td class="memItemLeft" align="right" valign="top"><a id="a6aaf7b1535465068991cf2ca8ede988e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SegmentNodeList</b> (const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> &amp;newEdge)</td></tr>
-<tr class="separator:a6aaf7b1535465068991cf2ca8ede988e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc4e379faf2b5cc3ae7f7f87c6d84550"><td class="memItemLeft" align="right" valign="top"><a id="acc4e379faf2b5cc3ae7f7f87c6d84550"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SegmentNodeList</b> (const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> &amp;newEdge, bool p_constructZ, bool p_constructM)</td></tr>
+<tr class="separator:acc4e379faf2b5cc3ae7f7f87c6d84550"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a1243bf34f9c5021455cbb908e9cdd0"><td class="memItemLeft" align="right" valign="top"><a id="a7a1243bf34f9c5021455cbb908e9cdd0"></a>
 const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEdge</b> () const</td></tr>
 <tr class="separator:a7a1243bf34f9c5021455cbb908e9cdd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e9d54d2535193ca3ed3e968ba0ce508"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNodeList.html#a6e9d54d2535193ca3ed3e968ba0ce508">add</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;intPt, std::size_t segmentIndex)</td></tr>
-<tr class="separator:a6e9d54d2535193ca3ed3e968ba0ce508"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab324a4d2625e8c982e638716e06e55b4"><td class="memItemLeft" align="right" valign="top"><a id="ab324a4d2625e8c982e638716e06e55b4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *intPt, std::size_t segmentIndex)</td></tr>
-<tr class="separator:ab324a4d2625e8c982e638716e06e55b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82e5f274ad2db870e6a8f5ad1ce907a7"><td class="memItemLeft" align="right" valign="top"><a id="a82e5f274ad2db870e6a8f5ad1ce907a7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getConstructZ</b> () const</td></tr>
+<tr class="separator:a82e5f274ad2db870e6a8f5ad1ce907a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67abf0e3c15653d8487ebf9cf9119444"><td class="memItemLeft" align="right" valign="top"><a id="a67abf0e3c15653d8487ebf9cf9119444"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getConstructM</b> () const</td></tr>
+<tr class="separator:a67abf0e3c15653d8487ebf9cf9119444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa69e3d649713e883b8759373ba30ee1"><td class="memTemplParams" colspan="2">template&lt;typename CoordType &gt; </td></tr>
+<tr class="memitem:aaa69e3d649713e883b8759373ba30ee1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNodeList.html#aaa69e3d649713e883b8759373ba30ee1">add</a> (const CoordType &amp;intPt, std::size_t segmentIndex)</td></tr>
+<tr class="separator:aaa69e3d649713e883b8759373ba30ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9347e9f1c9f68a5ac1c65a3f911c90f"><td class="memItemLeft" align="right" valign="top"><a id="ad9347e9f1c9f68a5ac1c65a3f911c90f"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNodeList.html#ad9347e9f1c9f68a5ac1c65a3f911c90f">size</a> () const</td></tr>
 <tr class="memdesc:ad9347e9f1c9f68a5ac1c65a3f911c90f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of nodes in this list. <br /></td></tr>
@@ -127,16 +128,21 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A list of the <a class="el" href="classgeos_1_1noding_1_1SegmentNode.html" title="Represents an intersection point between two NodedSegmentString.">SegmentNode</a> present along a <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html" title="Represents a list of contiguous line segments, and supports noding the segments.">NodedSegmentString</a>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6e9d54d2535193ca3ed3e968ba0ce508"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e9d54d2535193ca3ed3e968ba0ce508">&#9670;&nbsp;</a></span>add()</h2>
+<a id="aaa69e3d649713e883b8759373ba30ee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa69e3d649713e883b8759373ba30ee1">&#9670;&nbsp;</a></span>add()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename CoordType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void geos::noding::SegmentNodeList::add </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const CoordType &amp;&#160;</td>
           <td class="paramname"><em>intPt</em>, </td>
         </tr>
         <tr>
@@ -151,6 +157,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Adds an intersection into the list, if it isn't already there. The input segmentIndex is expected to be normalized.</p>
 <dl class="params"><dt>Parameters</dt><dd>

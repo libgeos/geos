@@ -81,21 +81,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a742294f2808e7d07387771ca31a6c07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a452ecd15c6e39e2b5f079ec9a3fd7fbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a452ecd15c6e39e2b5f079ec9a3fd7fbd">computeIntersection</a> (const geom::CoordinateXY &amp;p, const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</td></tr>
 <tr class="separator:a452ecd15c6e39e2b5f079ec9a3fd7fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05ea0783ab6adef9152f3b882efa31d7"><td class="memItemLeft" align="right" valign="top"><a id="a05ea0783ab6adef9152f3b882efa31d7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a05ea0783ab6adef9152f3b882efa31d7">computeIntersection</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p2, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p3, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p4)</td></tr>
-<tr class="memdesc:a05ea0783ab6adef9152f3b882efa31d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the lines p1-p2 and p3-p4. <br /></td></tr>
-<tr class="separator:a05ea0783ab6adef9152f3b882efa31d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2306b29dd15cb7e11c98e43e8799360"><td class="memTemplParams" colspan="2"><a id="ab2306b29dd15cb7e11c98e43e8799360"></a>
+template&lt;typename C1 , typename C2 &gt; </td></tr>
+<tr class="memitem:ab2306b29dd15cb7e11c98e43e8799360"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ab2306b29dd15cb7e11c98e43e8799360">computeIntersection</a> (const C1 &amp;p1, const C1 &amp;p2, const C2 &amp;p3, const C2 &amp;p4)</td></tr>
+<tr class="memdesc:ab2306b29dd15cb7e11c98e43e8799360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the lines p1-p2 and p3-p4. <br /></td></tr>
+<tr class="separator:ab2306b29dd15cb7e11c98e43e8799360"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a230b7bc3fc25b37b9f8e977dad4027"><td class="memItemLeft" align="right" valign="top"><a id="a1a230b7bc3fc25b37b9f8e977dad4027"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a1a230b7bc3fc25b37b9f8e977dad4027">computeIntersection</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;p, std::size_t p0, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;q, std::size_t q0)</td></tr>
+<tr class="memdesc:a1a230b7bc3fc25b37b9f8e977dad4027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the intersection between two segments, given a sequence and starting index of each. <br /></td></tr>
+<tr class="separator:a1a230b7bc3fc25b37b9f8e977dad4027"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac69cde47d29749afade1acebce3d148b"><td class="memItemLeft" align="right" valign="top"><a id="ac69cde47d29749afade1acebce3d148b"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> () const</td></tr>
 <tr class="separator:ac69cde47d29749afade1acebce3d148b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e38286c3535a9c5228a3318f1f96e5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a8e38286c3535a9c5228a3318f1f96e5a">hasIntersection</a> () const</td></tr>
 <tr class="separator:a8e38286c3535a9c5228a3318f1f96e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08d43a3f3879e8f6dc2c0b4c9a8250e0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a08d43a3f3879e8f6dc2c0b4c9a8250e0">getEndpoint</a> (std::size_t segmentIndex, std::size_t ptIndex) const</td></tr>
-<tr class="separator:a08d43a3f3879e8f6dc2c0b4c9a8250e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae67993c29e6156bb22ca831dc059f686"><td class="memItemLeft" align="right" valign="top">const geom::CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ae67993c29e6156bb22ca831dc059f686">getEndpoint</a> (std::size_t segmentIndex, std::size_t ptIndex) const</td></tr>
+<tr class="separator:ae67993c29e6156bb22ca831dc059f686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6241feb4ff09ca195f461374fb7b5fe"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ae6241feb4ff09ca195f461374fb7b5fe">getIntersectionNum</a> () const</td></tr>
 <tr class="separator:ae6241feb4ff09ca195f461374fb7b5fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81cfb4bcb6c300a14dce72f49c73fcf0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a81cfb4bcb6c300a14dce72f49c73fcf0">getIntersection</a> (std::size_t intIndex) const</td></tr>
-<tr class="separator:a81cfb4bcb6c300a14dce72f49c73fcf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb351eb47cc51b0c151bd00680ef3cfe"><td class="memItemLeft" align="right" valign="top">const geom::CoordinateXYZM &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#acb351eb47cc51b0c151bd00680ef3cfe">getIntersection</a> (std::size_t intIndex) const</td></tr>
+<tr class="separator:acb351eb47cc51b0c151bd00680ef3cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee71ebaeae08238a6ecaf09db84f8d22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#aee71ebaeae08238a6ecaf09db84f8d22">isIntersection</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;pt) const</td></tr>
 <tr class="memdesc:aee71ebaeae08238a6ecaf09db84f8d22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether a point is a intersection point of two line segments.  <a href="classgeos_1_1algorithm_1_1LineIntersector.html#aee71ebaeae08238a6ecaf09db84f8d22">More...</a><br /></td></tr>
 <tr class="separator:aee71ebaeae08238a6ecaf09db84f8d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,12 +119,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3b0c7b64e8e86a00f5ded4e9898165b"><td class="memItemLeft" align="right" valign="top"><a id="ad3b0c7b64e8e86a00f5ded4e9898165b"></a>
-static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ad3b0c7b64e8e86a00f5ded4e9898165b">interpolateZ</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1)</td></tr>
-<tr class="memdesc:ad3b0c7b64e8e86a00f5ded4e9898165b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a Z value being the interpolation of Z from p0 and p1 at the given point p. <br /></td></tr>
-<tr class="separator:ad3b0c7b64e8e86a00f5ded4e9898165b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdd0af88c0da30b78d381b17914dca94"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#acdd0af88c0da30b78d381b17914dca94">computeEdgeDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1)</td></tr>
-<tr class="separator:acdd0af88c0da30b78d381b17914dca94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f83d834dd5c87afa60c32d8a9b55d1e"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a7f83d834dd5c87afa60c32d8a9b55d1e">computeEdgeDistance</a> (const geom::CoordinateXY &amp;p, const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</td></tr>
+<tr class="separator:a7f83d834dd5c87afa60c32d8a9b55d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad28d55013c5d7df0ca36eadaeb06c6bb"><td class="memItemLeft" align="right" valign="top"><a id="ad28d55013c5d7df0ca36eadaeb06c6bb"></a>
 static double&#160;</td><td class="memItemRight" valign="bottom"><b>nonRobustComputeEdgeDistance</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p2)</td></tr>
 <tr class="separator:ad28d55013c5d7df0ca36eadaeb06c6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,8 +158,8 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acdd0af88c0da30b78d381b17914dca94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdd0af88c0da30b78d381b17914dca94">&#9670;&nbsp;</a></span>computeEdgeDistance()</h2>
+<a id="a7f83d834dd5c87afa60c32d8a9b55d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f83d834dd5c87afa60c32d8a9b55d1e">&#9670;&nbsp;</a></span>computeEdgeDistance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,19 +170,19 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
         <tr>
           <td class="memname">static double geos::algorithm::LineIntersector::computeEdgeDistance </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p0</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p1</em>&#160;</td>
         </tr>
         <tr>
@@ -277,8 +278,8 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 </div>
 </div>
-<a id="a08d43a3f3879e8f6dc2c0b4c9a8250e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08d43a3f3879e8f6dc2c0b4c9a8250e0">&#9670;&nbsp;</a></span>getEndpoint()</h2>
+<a id="ae67993c29e6156bb22ca831dc059f686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae67993c29e6156bb22ca831dc059f686">&#9670;&nbsp;</a></span>getEndpoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +288,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* geos::algorithm::LineIntersector::getEndpoint </td>
+          <td class="memname">const geom::CoordinateXY* geos::algorithm::LineIntersector::getEndpoint </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>segmentIndex</em>, </td>
@@ -360,8 +361,8 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 </div>
 </div>
-<a id="a81cfb4bcb6c300a14dce72f49c73fcf0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81cfb4bcb6c300a14dce72f49c73fcf0">&#9670;&nbsp;</a></span>getIntersection()</h2>
+<a id="acb351eb47cc51b0c151bd00680ef3cfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb351eb47cc51b0c151bd00680ef3cfe">&#9670;&nbsp;</a></span>getIntersection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -370,7 +371,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; geos::algorithm::LineIntersector::getIntersection </td>
+          <td class="memname">const geom::CoordinateXYZM&amp; geos::algorithm::LineIntersector::getIntersection </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>intIndex</em></td><td>)</td>

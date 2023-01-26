@@ -70,7 +70,7 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// Forward declarations</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span>CoordinateXY;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
@@ -84,10 +84,10 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">   56</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">octant</a>(<span class="keywordtype">double</span> dx, <span class="keywordtype">double</span> dy);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1Octant.html#a1aea0d1d6ad3989179cd22087ea88b42">   61</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1noding_1_1Octant.html#a1aea0d1d6ad3989179cd22087ea88b42">octant</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1);</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1Octant.html#a7d38358af783d2a456f387c06a53365c">   61</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1noding_1_1Octant.html#a7d38358af783d2a456f387c06a53365c">octant</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    octant(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* p0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* p1)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    octant(<span class="keyword">const</span> geom::CoordinateXY* p0, <span class="keyword">const</span> geom::CoordinateXY* p1)</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    {</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        ::geos::ignore_unused_variable_warning(p0);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> octant(*p0, *p1);</div>
@@ -97,10 +97,9 @@ $(function() {
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace geos.noding</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:205</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1Octant_html"><div class="ttname"><a href="classgeos_1_1noding_1_1Octant.html">geos::noding::Octant</a></div><div class="ttdoc">Methods for computing and working with octants of the Cartesian plane.</div><div class="ttdef"><b>Definition:</b> Octant.h:47</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1Octant_html_a1aea0d1d6ad3989179cd22087ea88b42"><div class="ttname"><a href="classgeos_1_1noding_1_1Octant.html#a1aea0d1d6ad3989179cd22087ea88b42">geos::noding::Octant::octant</a></div><div class="ttdeci">static int octant(const geom::Coordinate &amp;p0, const geom::Coordinate &amp;p1)</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1Octant_html_a350e883accdfa65dc98a557d95badf7e"><div class="ttname"><a href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">geos::noding::Octant::octant</a></div><div class="ttdeci">static int octant(double dx, double dy)</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1Octant_html_a7d38358af783d2a456f387c06a53365c"><div class="ttname"><a href="classgeos_1_1noding_1_1Octant.html#a7d38358af783d2a456f387c06a53365c">geos::noding::Octant::octant</a></div><div class="ttdeci">static int octant(const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

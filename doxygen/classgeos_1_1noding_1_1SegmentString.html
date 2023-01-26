@@ -46,6 +46,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1noding_1_1SegmentString-members.html">List of all members</a>  </div>
@@ -93,21 +94,31 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f0b8434ef56ceff5eb00d4d4cfda643"><td class="memItemLeft" align="right" valign="top"><a id="a4f0b8434ef56ceff5eb00d4d4cfda643"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
 <tr class="separator:a4f0b8434ef56ceff5eb00d4d4cfda643"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5b8581c45fc05127792045db3da5ae1"><td class="memItemLeft" align="right" valign="top"><a id="ab5b8581c45fc05127792045db3da5ae1"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> (std::size_t i) const</td></tr>
-<tr class="separator:ab5b8581c45fc05127792045db3da5ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71cf12d4d488d2d8141735e439a0d1af"><td class="memTemplParams" colspan="2"><a id="a71cf12d4d488d2d8141735e439a0d1af"></a>
+template&lt;typename CoordType  = geom::Coordinate&gt; </td></tr>
+<tr class="memitem:a71cf12d4d488d2d8141735e439a0d1af"><td class="memTemplItemLeft" align="right" valign="top">const CoordType &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getCoordinate</b> (std::size_t i) const</td></tr>
+<tr class="separator:a71cf12d4d488d2d8141735e439a0d1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae03fec2cbe7326ec271184022946309b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#ae03fec2cbe7326ec271184022946309b">getCoordinates</a> () const</td></tr>
 <tr class="memdesc:ae03fec2cbe7326ec271184022946309b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>.  <a href="classgeos_1_1noding_1_1SegmentString.html#ae03fec2cbe7326ec271184022946309b">More...</a><br /></td></tr>
 <tr class="separator:ae03fec2cbe7326ec271184022946309b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92873f7138d3ee5e372880cb91b814db"><td class="memItemLeft" align="right" valign="top"><a id="a92873f7138d3ee5e372880cb91b814db"></a>
 <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> ()</td></tr>
 <tr class="separator:a92873f7138d3ee5e372880cb91b814db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa15df810175a07c391401d4872bd64d3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">getSegmentOctant</a> (std::size_t index) const</td></tr>
+<tr class="memdesc:aa15df810175a07c391401d4872bd64d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the octant of the segment starting at vertex index.  <a href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">More...</a><br /></td></tr>
+<tr class="separator:aa15df810175a07c391401d4872bd64d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a118c502758b829cb2683cfc65946a415"><td class="memItemLeft" align="right" valign="top"><a id="a118c502758b829cb2683cfc65946a415"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClosed</b> () const</td></tr>
 <tr class="separator:a118c502758b829cb2683cfc65946a415"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4df2e7f88719af3010e2b4d47656e7ff"><td class="memItemLeft" align="right" valign="top"><a id="a4df2e7f88719af3010e2b4d47656e7ff"></a>
 virtual std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (std::ostream &amp;os) const</td></tr>
 <tr class="separator:a4df2e7f88719af3010e2b4d47656e7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3dcf9ee61075befb7a2217ab1a203636"><td class="memItemLeft" align="right" valign="top"><a id="a3dcf9ee61075befb7a2217ab1a203636"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>getSegmentOctant</b> (const <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &amp;ss, std::size_t index)</td></tr>
+<tr class="separator:a3dcf9ee61075befb7a2217ab1a203636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -225,6 +236,41 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 <p>Gets the user-defined data for this segment string. </p>
 <dl class="section return"><dt>Returns</dt><dd>the user-defined data </dd></dl>
+
+</div>
+</div>
+<a id="aa15df810175a07c391401d4872bd64d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa15df810175a07c391401d4872bd64d3">&#9670;&nbsp;</a></span>getSegmentOctant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int geos::noding::SegmentString::getSegmentOctant </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the octant of the segment starting at vertex index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>the index of the vertex starting the segment. Must not be the last index in the vertex list </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the octant of the segment at the vertex </dd></dl>
 
 </div>
 </div>

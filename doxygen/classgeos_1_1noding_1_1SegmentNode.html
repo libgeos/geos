@@ -60,8 +60,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac2467a11b5469615a9b6a198cd96693f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#ac2467a11b5469615a9b6a198cd96693f">SegmentNode</a> (const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> &amp;ss, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;nCoord, std::size_t nSegmentIndex, int nSegmentOctant)</td></tr>
-<tr class="separator:ac2467a11b5469615a9b6a198cd96693f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfc50d801839374c03fbc8d3dbd40ba5"><td class="memTemplParams" colspan="2">template&lt;typename CoordType &gt; </td></tr>
+<tr class="memitem:adfc50d801839374c03fbc8d3dbd40ba5"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#adfc50d801839374c03fbc8d3dbd40ba5">SegmentNode</a> (const <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &amp;ss, const CoordType &amp;nCoord, std::size_t nSegmentIndex, int nSegmentOctant)</td></tr>
+<tr class="separator:adfc50d801839374c03fbc8d3dbd40ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e9243ec90d0e92e510af8285bab01f9"><td class="memItemLeft" align="right" valign="top"><a id="a6e9243ec90d0e92e510af8285bab01f9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a6e9243ec90d0e92e510af8285bab01f9">isInterior</a> () const</td></tr>
 <tr class="memdesc:a6e9243ec90d0e92e510af8285bab01f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this Node is <em>internal</em> (not on the boundary) of the corresponding segment. Currently only the <em>first</em> segment endpoint is checked, actually. <br /></td></tr>
@@ -74,10 +75,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEndPoint</b> (unsig
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a5656325aac7b3507394727895094625d"><td class="memItemLeft" align="right" valign="top"><a id="a5656325aac7b3507394727895094625d"></a>
-<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a5656325aac7b3507394727895094625d">coord</a></td></tr>
-<tr class="memdesc:a5656325aac7b3507394727895094625d"><td class="mdescLeft">&#160;</td><td class="mdescRight">the point of intersection (own copy) <br /></td></tr>
-<tr class="separator:a5656325aac7b3507394727895094625d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234e17e1812d580a5d29256ae68cf62b"><td class="memItemLeft" align="right" valign="top"><a id="a234e17e1812d580a5d29256ae68cf62b"></a>
+geom::CoordinateXYZM&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a234e17e1812d580a5d29256ae68cf62b">coord</a></td></tr>
+<tr class="memdesc:a234e17e1812d580a5d29256ae68cf62b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the point of intersection (own copy) <br /></td></tr>
+<tr class="separator:a234e17e1812d580a5d29256ae68cf62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad4de6fb3159aa0a73ee7a5a53693e7"><td class="memItemLeft" align="right" valign="top"><a id="a1ad4de6fb3159aa0a73ee7a5a53693e7"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a1ad4de6fb3159aa0a73ee7a5a53693e7">segmentIndex</a></td></tr>
 <tr class="memdesc:a1ad4de6fb3159aa0a73ee7a5a53693e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">the index of the containing line segment in the parent edge <br /></td></tr>
@@ -93,22 +94,27 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><p>Represents an intersection point between two <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html" title="Represents a list of contiguous line segments, and supports noding the segments.">NodedSegmentString</a>. </p>
 <p>Final class. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac2467a11b5469615a9b6a198cd96693f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2467a11b5469615a9b6a198cd96693f">&#9670;&nbsp;</a></span>SegmentNode()</h2>
+<a id="adfc50d801839374c03fbc8d3dbd40ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfc50d801839374c03fbc8d3dbd40ba5">&#9670;&nbsp;</a></span>SegmentNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename CoordType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">geos::noding::SegmentNode::SegmentNode </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html">NodedSegmentString</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &amp;&#160;</td>
           <td class="paramname"><em>ss</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const CoordType &amp;&#160;</td>
           <td class="paramname"><em>nCoord</em>, </td>
         </tr>
         <tr>
@@ -129,6 +135,11 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Construct a node on the given <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html" title="Represents a list of contiguous line segments, and supports noding the segments.">NodedSegmentString</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -173,7 +184,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <dd>
 1 this EdgeIntersection is located after the argument location </dd></dl>
 
-<p class="reference">References <a class="el" href="classgeos_1_1noding_1_1SegmentPointComparator.html#ad46e6c91ff33c9b14be08072a094ac4a">geos::noding::SegmentPointComparator::compare()</a>, <a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a5656325aac7b3507394727895094625d">coord</a>, and <a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a1ad4de6fb3159aa0a73ee7a5a53693e7">segmentIndex</a>.</p>
+<p class="reference">References <a class="el" href="classgeos_1_1noding_1_1SegmentPointComparator.html#ad46e6c91ff33c9b14be08072a094ac4a">geos::noding::SegmentPointComparator::compare()</a>, <a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a234e17e1812d580a5d29256ae68cf62b">coord</a>, and <a class="el" href="classgeos_1_1noding_1_1SegmentNode.html#a1ad4de6fb3159aa0a73ee7a5a53693e7">segmentIndex</a>.</p>
 
 </div>
 </div>

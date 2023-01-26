@@ -87,40 +87,40 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">   51</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a> : <span class="keyword">public</span> <a class="code" href="classgeos_1_1edgegraph_1_1HalfEdge.html">edgegraph::HalfEdge</a> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* pts;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span> direction;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> dirPt;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a>* label;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> m_isInResultArea;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> m_isInResultLine;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">bool</span> m_isVisited;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>* nextResultEdge;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">const</span> OverlayEdgeRing* edgeRing;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> MaximalEdgeRing* maxEdgeRing;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>* nextResultMaxEdge;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> markVisited()</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        m_isVisited = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    };</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">using</span> geos::geom::CoordinateXYZM;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">   52</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a> : <span class="keyword">public</span> <a class="code" href="classgeos_1_1edgegraph_1_1HalfEdge.html">edgegraph::HalfEdge</a> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* pts;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> direction;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    CoordinateXYZM dirPt;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a>* label;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> m_isInResultArea;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">bool</span> m_isInResultLine;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">bool</span> m_isVisited;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>* nextResultEdge;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> OverlayEdgeRing* edgeRing;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">const</span> MaximalEdgeRing* maxEdgeRing;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>* nextResultMaxEdge;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> markVisited()</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        m_isVisited = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// takes ownershiph of CoordinateSequence</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p_orig, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p_dirPt,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">OverlayEdge</a>(<span class="keyword">const</span> CoordinateXYZM&amp; p_orig, <span class="keyword">const</span> CoordinateXYZM&amp; p_dirPt,</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                <span class="keywordtype">bool</span> p_direction, <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a>* p_label,</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* p_pts)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        : HalfEdge(p_orig)</div>
@@ -144,7 +144,7 @@ $(function() {
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> direction;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    };</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#ab5e3e036c6b8cf0fa9f88dcb64118dc2">  106</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#ab5e3e036c6b8cf0fa9f88dcb64118dc2">directionPt</a>()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#a4f442af487ecc30b4ec519bb530b2600">  106</a></span>&#160;    <span class="keyword">const</span> CoordinateXYZM&amp; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#a4f442af487ecc30b4ec519bb530b2600">directionPt</a>()<span class="keyword"> const override</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">return</span> dirPt;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    };</div>
@@ -159,7 +159,7 @@ $(function() {
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordflow">return</span> label-&gt;<a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html#a131ffcc6d195aee8d6b1f291c8e223c4">getLocation</a>(index, position, direction);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    };</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; getCoordinate()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">const</span> CoordinateXYZM&amp; getCoordinate()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">return</span> orig();</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    };</div>
@@ -309,11 +309,11 @@ $(function() {
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;} <span class="comment">// namespace geos.operation.overlayng</span></div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="ttc" id="aclassgeos_1_1edgegraph_1_1HalfEdge_html"><div class="ttname"><a href="classgeos_1_1edgegraph_1_1HalfEdge.html">geos::edgegraph::HalfEdge</a></div><div class="ttdef"><b>Definition:</b> HalfEdge.h:63</div></div>
+<div class="ttc" id="aclassgeos_1_1edgegraph_1_1HalfEdge_html"><div class="ttname"><a href="classgeos_1_1edgegraph_1_1HalfEdge.html">geos::edgegraph::HalfEdge</a></div><div class="ttdef"><b>Definition:</b> HalfEdge.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:205</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayEdge_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">geos::operation::overlayng::OverlayEdge</a></div><div class="ttdef"><b>Definition:</b> OverlayEdge.h:51</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayEdge_html_ab5e3e036c6b8cf0fa9f88dcb64118dc2"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#ab5e3e036c6b8cf0fa9f88dcb64118dc2">geos::operation::overlayng::OverlayEdge::directionPt</a></div><div class="ttdeci">const Coordinate &amp; directionPt() const override</div><div class="ttdef"><b>Definition:</b> OverlayEdge.h:106</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:213</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayEdge_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html">geos::operation::overlayng::OverlayEdge</a></div><div class="ttdef"><b>Definition:</b> OverlayEdge.h:52</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayEdge_html_a4f442af487ecc30b4ec519bb530b2600"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#a4f442af487ecc30b4ec519bb530b2600">geos::operation::overlayng::OverlayEdge::directionPt</a></div><div class="ttdeci">const CoordinateXYZM &amp; directionPt() const override</div><div class="ttdef"><b>Definition:</b> OverlayEdge.h:106</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayEdge_html_af40306ac86d8f7672ad10d09be2060d7"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#af40306ac86d8f7672ad10d09be2060d7">geos::operation::overlayng::OverlayEdge::addCoordinates</a></div><div class="ttdeci">void addCoordinates(CoordinateSequence *coords) const</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayLabel_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">geos::operation::overlayng::OverlayLabel</a></div><div class="ttdef"><b>Definition:</b> OverlayLabel.h:89</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayLabel_html_a131ffcc6d195aee8d6b1f291c8e223c4"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html#a131ffcc6d195aee8d6b1f291c8e223c4">geos::operation::overlayng::OverlayLabel::getLocation</a></div><div class="ttdeci">Location getLocation(uint8_t index) const</div><div class="ttdef"><b>Definition:</b> OverlayLabel.h:371</div></div>

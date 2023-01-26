@@ -75,8 +75,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f9b105d999b63621d1856e425f98655"><td class="memItemLeft" align="right" valign="top"><a id="a4f9b105d999b63621d1856e425f98655"></a>
 <a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html">algorithm::LineIntersector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLineIntersector</b> ()</td></tr>
 <tr class="separator:a4f9b105d999b63621d1856e425f98655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a498656c55fb638a303a02b20b688cbc7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IntersectionAdder.html#a498656c55fb638a303a02b20b688cbc7">getProperIntersectionPoint</a> ()</td></tr>
-<tr class="separator:a498656c55fb638a303a02b20b688cbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a583b0f190599e460e62edfcaf6b5ab35"><td class="memItemLeft" align="right" valign="top">const geom::CoordinateXYZM &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IntersectionAdder.html#a583b0f190599e460e62edfcaf6b5ab35">getProperIntersectionPoint</a> ()</td></tr>
+<tr class="separator:a583b0f190599e460e62edfcaf6b5ab35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa24647fa6f90433ae81c8109beddc829"><td class="memItemLeft" align="right" valign="top"><a id="aa24647fa6f90433ae81c8109beddc829"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasIntersection</b> ()</td></tr>
 <tr class="separator:aa24647fa6f90433ae81c8109beddc829"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +123,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>numTests</b></td></tr>
 <div class="textblock"><p>Computes the intersections between two line segments in <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a> and adds them to each string. </p>
 <p>The <a class="el" href="classgeos_1_1noding_1_1SegmentIntersector.html" title="Processes possible intersections detected by a Noder.">SegmentIntersector</a> is passed to a <a class="el" href="classgeos_1_1noding_1_1Noder.html" title="Computes all intersections between segments in a set of SegmentString.">Noder</a>. The <a class="el" href="classgeos_1_1noding_1_1NodedSegmentString.html#acbb58f1930f79eef4d1d70a6d073743d" title="Add SegmentNodes for one or both intersections found for a segment of an edge to the edge intersectio...">NodedSegmentString::addIntersections(algorithm::LineIntersector* li, std::size_t segmentIndex, std::size_t geomIndex)</a> method is called whenever the <a class="el" href="classgeos_1_1noding_1_1Noder.html" title="Computes all intersections between segments in a set of SegmentString.">Noder</a> detects that two SegmentStrings <em>might</em> intersect. This class is an example of the <em>Strategy</em> pattern. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a498656c55fb638a303a02b20b688cbc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a498656c55fb638a303a02b20b688cbc7">&#9670;&nbsp;</a></span>getProperIntersectionPoint()</h2>
+<a id="a583b0f190599e460e62edfcaf6b5ab35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a583b0f190599e460e62edfcaf6b5ab35">&#9670;&nbsp;</a></span>getProperIntersectionPoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -133,7 +133,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>numTests</b></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; geos::noding::IntersectionAdder::getProperIntersectionPoint </td>
+          <td class="memname">const geom::CoordinateXYZM&amp; geos::noding::IntersectionAdder::getProperIntersectionPoint </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

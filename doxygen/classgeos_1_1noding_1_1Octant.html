@@ -60,11 +60,11 @@ $(function() {
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a350e883accdfa65dc98a557d95badf7e"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1Octant.html#a350e883accdfa65dc98a557d95badf7e">octant</a> (double dx, double dy)</td></tr>
 <tr class="separator:a350e883accdfa65dc98a557d95badf7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aea0d1d6ad3989179cd22087ea88b42"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1Octant.html#a1aea0d1d6ad3989179cd22087ea88b42">octant</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1)</td></tr>
-<tr class="separator:a1aea0d1d6ad3989179cd22087ea88b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ab2f05c322d09a51c7becfb0ed32542"><td class="memItemLeft" align="right" valign="top"><a id="a9ab2f05c322d09a51c7becfb0ed32542"></a>
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>octant</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> *p1)</td></tr>
-<tr class="separator:a9ab2f05c322d09a51c7becfb0ed32542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d38358af783d2a456f387c06a53365c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1Octant.html#a7d38358af783d2a456f387c06a53365c">octant</a> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</td></tr>
+<tr class="separator:a7d38358af783d2a456f387c06a53365c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35d799a04bee64c7471cea26b543708f"><td class="memItemLeft" align="right" valign="top"><a id="a35d799a04bee64c7471cea26b543708f"></a>
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>octant</b> (const geom::CoordinateXY *p0, const geom::CoordinateXY *p1)</td></tr>
+<tr class="separator:a35d799a04bee64c7471cea26b543708f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Methods for computing and working with octants of the Cartesian plane. </p>
@@ -73,8 +73,8 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>octant</b> (con
 <p>If line segments lie along a coordinate axis, the octant is the lower of the two possible values.</p>
 <p>Last port: noding/Octant.java rev. 1.2 (JTS-1.7) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1aea0d1d6ad3989179cd22087ea88b42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1aea0d1d6ad3989179cd22087ea88b42">&#9670;&nbsp;</a></span>octant() <span class="overload">[1/2]</span></h2>
+<a id="a7d38358af783d2a456f387c06a53365c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d38358af783d2a456f387c06a53365c">&#9670;&nbsp;</a></span>octant() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -85,13 +85,13 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>octant</b> (con
         <tr>
           <td class="memname">static int geos::noding::Octant::octant </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p0</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p1</em>&#160;</td>
         </tr>
         <tr>

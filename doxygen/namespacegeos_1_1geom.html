@@ -82,6 +82,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">CoordinateSequenceFilter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for classes which provide operations that can be applied to the coordinates in a <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>.  <a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequences.html">CoordinateSequences</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classgeos_1_1geom_1_1CoordinateSequences.html" title="The CoordinateSequences class provides utility methods to operate on CoordinateSequences....">CoordinateSequences</a> class provides utility methods to operate on <a class="el" href="classgeos_1_1geom_1_1CoordinateSequences.html" title="The CoordinateSequences class provides utility methods to operate on CoordinateSequences....">CoordinateSequences</a>. Methods that do not benefit from access to the <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a> internals can be placed here.  <a href="classgeos_1_1geom_1_1CoordinateSequences.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Dimension.html">Dimension</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a></td></tr>
@@ -144,6 +147,12 @@ Enumerations</h2></td></tr>
 , <b>XYM</b>
  }</td></tr>
 <tr class="separator:affc90d588fed6e27be310ccd749e201b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abebafc697b4813ad015bdeb9f61e8ab1"><td class="memItemLeft" align="right" valign="top"><a id="abebafc697b4813ad015bdeb9f61e8ab1"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Ordinate</b> : std::uint8_t { <b>X</b>
+, <b>Y</b>
+, <b>Z</b>
+, <b>M</b>
+ }</td></tr>
+<tr class="separator:abebafc697b4813ad015bdeb9f61e8ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98c5b0e81001a7c3fdc7a058960356d8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">GeometryTypeId</a> { <br />
 &#160;&#160;<a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8ac376a9701abf81f81a64a270ad4eb5de">GEOS_POINT</a>
 , <a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8acac50eabb09b9a062bfeaef7f943f9e7">GEOS_LINESTRING</a>
@@ -188,6 +197,70 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">operator&lt;</a> (const CoordinateXY &amp;a, const CoordinateXY &amp;b)</td></tr>
 <tr class="memdesc:a31a2ff1f54bc4fd6cde47bdda53fcb82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strict weak ordering operator for <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. <br /></td></tr>
 <tr class="separator:a31a2ff1f54bc4fd6cde47bdda53fcb82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f6d6c7ae99731ee39e01cf48483ed18"><td class="memItemLeft" align="right" valign="top"><a id="a9f6d6c7ae99731ee39e01cf48483ed18"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a9f6d6c7ae99731ee39e01cf48483ed18"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXY::get&lt; Ordinate::X &gt;</b> () const</td></tr>
+<tr class="separator:a9f6d6c7ae99731ee39e01cf48483ed18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8b644f5552cd55964e5db7d1163827"><td class="memItemLeft" align="right" valign="top"><a id="aad8b644f5552cd55964e5db7d1163827"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:aad8b644f5552cd55964e5db7d1163827"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXY::get&lt; Ordinate::Y &gt;</b> () const</td></tr>
+<tr class="separator:aad8b644f5552cd55964e5db7d1163827"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac33d9e67a41dd22e7e9b8582110811a2"><td class="memItemLeft" align="right" valign="top"><a id="ac33d9e67a41dd22e7e9b8582110811a2"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:ac33d9e67a41dd22e7e9b8582110811a2"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXY::get&lt; Ordinate::Z &gt;</b> () const</td></tr>
+<tr class="separator:ac33d9e67a41dd22e7e9b8582110811a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af30d80f54012f3349f016b40b5c7902a"><td class="memItemLeft" align="right" valign="top"><a id="af30d80f54012f3349f016b40b5c7902a"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:af30d80f54012f3349f016b40b5c7902a"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXY::get&lt; Ordinate::M &gt;</b> () const</td></tr>
+<tr class="separator:af30d80f54012f3349f016b40b5c7902a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14c9fdcf07153a44db39ca5c0e343d85"><td class="memItemLeft" align="right" valign="top"><a id="a14c9fdcf07153a44db39ca5c0e343d85"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a14c9fdcf07153a44db39ca5c0e343d85"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Coordinate::get&lt; Ordinate::X &gt;</b> () const</td></tr>
+<tr class="separator:a14c9fdcf07153a44db39ca5c0e343d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6175ee851109063b8623a2c830531d3"><td class="memItemLeft" align="right" valign="top"><a id="aa6175ee851109063b8623a2c830531d3"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:aa6175ee851109063b8623a2c830531d3"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Coordinate::get&lt; Ordinate::Y &gt;</b> () const</td></tr>
+<tr class="separator:aa6175ee851109063b8623a2c830531d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b2a8d974f966b25789f9e679f284579"><td class="memItemLeft" align="right" valign="top"><a id="a2b2a8d974f966b25789f9e679f284579"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a2b2a8d974f966b25789f9e679f284579"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Coordinate::get&lt; Ordinate::Z &gt;</b> () const</td></tr>
+<tr class="separator:a2b2a8d974f966b25789f9e679f284579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aec2cd36e48e8bcd448f0a9125e1b96"><td class="memItemLeft" align="right" valign="top"><a id="a2aec2cd36e48e8bcd448f0a9125e1b96"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a2aec2cd36e48e8bcd448f0a9125e1b96"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Coordinate::get&lt; Ordinate::M &gt;</b> () const</td></tr>
+<tr class="separator:a2aec2cd36e48e8bcd448f0a9125e1b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e45ccc9efdd82334ebac5084d1a9e8e"><td class="memItemLeft" align="right" valign="top"><a id="a0e45ccc9efdd82334ebac5084d1a9e8e"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a0e45ccc9efdd82334ebac5084d1a9e8e"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYM::get&lt; Ordinate::X &gt;</b> () const</td></tr>
+<tr class="separator:a0e45ccc9efdd82334ebac5084d1a9e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e019e2c74600ebe33ff7d76ae224859"><td class="memItemLeft" align="right" valign="top"><a id="a1e019e2c74600ebe33ff7d76ae224859"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a1e019e2c74600ebe33ff7d76ae224859"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYM::get&lt; Ordinate::Y &gt;</b> () const</td></tr>
+<tr class="separator:a1e019e2c74600ebe33ff7d76ae224859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a918c4f5bb8db3b7da9e5c53f0bfb8a88"><td class="memItemLeft" align="right" valign="top"><a id="a918c4f5bb8db3b7da9e5c53f0bfb8a88"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a918c4f5bb8db3b7da9e5c53f0bfb8a88"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYM::get&lt; Ordinate::Z &gt;</b> () const</td></tr>
+<tr class="separator:a918c4f5bb8db3b7da9e5c53f0bfb8a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cdfd9bd5c4c3b0c4ca559eb985d6aa4"><td class="memItemLeft" align="right" valign="top"><a id="a9cdfd9bd5c4c3b0c4ca559eb985d6aa4"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a9cdfd9bd5c4c3b0c4ca559eb985d6aa4"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYM::get&lt; Ordinate::M &gt;</b> () const</td></tr>
+<tr class="separator:a9cdfd9bd5c4c3b0c4ca559eb985d6aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebe2e02ad3d677192ac49e51edca9ade"><td class="memItemLeft" align="right" valign="top"><a id="aebe2e02ad3d677192ac49e51edca9ade"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:aebe2e02ad3d677192ac49e51edca9ade"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYZM::get&lt; Ordinate::X &gt;</b> () const</td></tr>
+<tr class="separator:aebe2e02ad3d677192ac49e51edca9ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46aac34076debf74fa0805170b7fcf38"><td class="memItemLeft" align="right" valign="top"><a id="a46aac34076debf74fa0805170b7fcf38"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a46aac34076debf74fa0805170b7fcf38"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYZM::get&lt; Ordinate::Y &gt;</b> () const</td></tr>
+<tr class="separator:a46aac34076debf74fa0805170b7fcf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa71394dfb0be7299ce072c61fa4180d6"><td class="memItemLeft" align="right" valign="top"><a id="aa71394dfb0be7299ce072c61fa4180d6"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:aa71394dfb0be7299ce072c61fa4180d6"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYZM::get&lt; Ordinate::Z &gt;</b> () const</td></tr>
+<tr class="separator:aa71394dfb0be7299ce072c61fa4180d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d401fb8d283a3ac1a3ea7f7cde0cd2"><td class="memItemLeft" align="right" valign="top"><a id="af0d401fb8d283a3ac1a3ea7f7cde0cd2"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:af0d401fb8d283a3ac1a3ea7f7cde0cd2"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CoordinateXYZM::get&lt; Ordinate::M &gt;</b> () const</td></tr>
+<tr class="separator:af0d401fb8d283a3ac1a3ea7f7cde0cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52aa73f72c23295b21ea567927f0ef0f"><td class="memItemLeft" align="right" valign="top"><a id="a52aa73f72c23295b21ea567927f0ef0f"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const CoordinateXY &amp;c)</td></tr>
 <tr class="separator:a52aa73f72c23295b21ea567927f0ef0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
