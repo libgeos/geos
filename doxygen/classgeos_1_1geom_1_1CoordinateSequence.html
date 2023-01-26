@@ -254,6 +254,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">minCoordinate</a> () const</td></tr>
 <tr class="memdesc:ga68a5bb38c125bf5775f96ba8b7862ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns lower-left <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in list. <br /></td></tr>
 <tr class="separator:ga68a5bb38c125bf5775f96ba8b7862ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0b6fc62c3a901496be471de894c312fa"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga0b6fc62c3a901496be471de894c312fa">equalsIdentical</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;other) const</td></tr>
+<tr class="memdesc:ga0b6fc62c3a901496be471de894c312fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two sequences are identical (pointwise equal in all dimensions, with NaN == NaN). <br /></td></tr>
+<tr class="separator:ga0b6fc62c3a901496be471de894c312fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18952029ba26af894137333b708d4d2f"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga18952029ba26af894137333b708d4d2f">reverse</a> ()</td></tr>
 <tr class="memdesc:ga18952029ba26af894137333b708d4d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> order in given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
@@ -320,7 +324,7 @@ static <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">Coordin
 <tr class="separator:gae655a4ee179280a37400c97ec5f37a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaefd3dacec98fad79435ba76601e61880"><td class="memItemLeft" align="right" valign="top">
 static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">equals</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl1, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl2)</td></tr>
-<tr class="memdesc:gaefd3dacec98fad79435ba76601e61880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two arrays are identical, both null, or pointwise equal. <br /></td></tr>
+<tr class="memdesc:gaefd3dacec98fad79435ba76601e61880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two arrays are identical, both null, or pointwise equal in two dimensions. <br /></td></tr>
 <tr class="separator:gaefd3dacec98fad79435ba76601e61880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7545644308ae3b237ac8f3a2462f6a8d"><td class="memItemLeft" align="right" valign="top">
 static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">scroll</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *cl, const CoordinateXY *firstCoordinate)</td></tr>

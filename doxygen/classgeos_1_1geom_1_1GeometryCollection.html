@@ -157,8 +157,12 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <tr class="separator:a7004410b8382d1772a9aac803afbdc96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acac88b19fa154f59288855af92c5ce0d"><td class="memItemLeft" align="right" valign="top"><a id="acac88b19fa154f59288855af92c5ce0d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#acac88b19fa154f59288855af92c5ce0d">equalsExact</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other, double tolerance=0) const override</td></tr>
-<tr class="memdesc:acac88b19fa154f59288855af92c5ce0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true iff the two Geometrys are of the same type and their vertices corresponding by index are equal up to a specified tolerance. <br /></td></tr>
+<tr class="memdesc:acac88b19fa154f59288855af92c5ce0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true iff the two Geometrys are of the same type and their vertices corresponding by index are equal up to a specified distance tolerance. Geometries are not required to have the same dimemsion; any Z/M values are ignored. <br /></td></tr>
 <tr class="separator:acac88b19fa154f59288855af92c5ce0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d73ecbfd2ab2f3b74f8e66e3eb8989"><td class="memItemLeft" align="right" valign="top"><a id="a47d73ecbfd2ab2f3b74f8e66e3eb8989"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a47d73ecbfd2ab2f3b74f8e66e3eb8989">equalsIdentical</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const override</td></tr>
+<tr class="memdesc:a47d73ecbfd2ab2f3b74f8e66e3eb8989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two geometries are of the same type and their vertices corresponding by index are equal in all dimensions. <br /></td></tr>
+<tr class="separator:a47d73ecbfd2ab2f3b74f8e66e3eb8989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a1b1a45c73d3f094e849db39606c209"><td class="memItemLeft" align="right" valign="top"><a id="a4a1b1a45c73d3f094e849db39606c209"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_ro</b> (<a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html">CoordinateFilter</a> *filter) const override</td></tr>
 <tr class="separator:a4a1b1a45c73d3f094e849db39606c209"><td class="memSeparator" colspan="2">&#160;</td></tr>

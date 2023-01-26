@@ -176,8 +176,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>apply_ro</b> (<a clas
 <tr class="separator:a523970887b3aacae63b4cd20be5c8183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93b538f1fc0a3abd26f61cfe0631b4f2"><td class="memItemLeft" align="right" valign="top"><a id="a93b538f1fc0a3abd26f61cfe0631b4f2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Point.html#a93b538f1fc0a3abd26f61cfe0631b4f2">equalsExact</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other, double tolerance=0) const override</td></tr>
-<tr class="memdesc:a93b538f1fc0a3abd26f61cfe0631b4f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true iff the two Geometrys are of the same type and their vertices corresponding by index are equal up to a specified tolerance. <br /></td></tr>
+<tr class="memdesc:a93b538f1fc0a3abd26f61cfe0631b4f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true iff the two Geometrys are of the same type and their vertices corresponding by index are equal up to a specified distance tolerance. Geometries are not required to have the same dimemsion; any Z/M values are ignored. <br /></td></tr>
 <tr class="separator:a93b538f1fc0a3abd26f61cfe0631b4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa36ce755b0470801848028ce475ff798"><td class="memItemLeft" align="right" valign="top"><a id="aa36ce755b0470801848028ce475ff798"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Point.html#aa36ce755b0470801848028ce475ff798">equalsIdentical</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const override</td></tr>
+<tr class="memdesc:aa36ce755b0470801848028ce475ff798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two geometries are of the same type and their vertices corresponding by index are equal in all dimensions. <br /></td></tr>
+<tr class="separator:aa36ce755b0470801848028ce475ff798"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a696338f7fafa4ea3edb07ff54c0dd5f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Point.html#a696338f7fafa4ea3edb07ff54c0dd5f0">normalize</a> (void) override</td></tr>
 <tr class="separator:a696338f7fafa4ea3edb07ff54c0dd5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a3cbeaf6511c2ad3b7906d9d8af0cde"><td class="memItemLeft" align="right" valign="top"><a id="a9a3cbeaf6511c2ad3b7906d9d8af0cde"></a>
