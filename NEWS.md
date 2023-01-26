@@ -7,6 +7,7 @@ xxxx-xx-xx
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
   - Support reading and writing M values through WKB and WKT readers/writers
     (GH-721, Dan Baston)
+  - Interpolate M values in overlay results (GH-802, Dan Baston)
   - CAPI: GEOSPreparedContainsXY, GEOSPreparedIntersectsXY (GH-677, Dan Baston)
   - Add CoordinateSequenceIterator (GH-685, Dan Baston)
   - Geometry clustering: DBSCAN, geometry intersection/distance, envelope
