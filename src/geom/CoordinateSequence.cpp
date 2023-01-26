@@ -465,7 +465,15 @@ CoordinateSequence::equalsIdentical(const CoordinateSequence& other) const
 
     assert(getCoordinateType() == other.getCoordinateType());
 
-    return std::memcmp(data(), other.data(), size() * stride() * sizeof(double)) == 0;
+    for (std::size_t i = 0; i < m_vect.size(); i++) {
+        const double& a = m_vect[i];
+        const double& b = other.m_vect[i];
+        if (a != b && !(std::isnan(a) && std::isnan(b))) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void

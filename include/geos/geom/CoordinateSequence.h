@@ -569,8 +569,8 @@ public:
 
     /**
      * \brief
-     * Returns true if the two sequences are identical or pointwise
-     * equal in all dimensions.
+     * Returns true if the two sequences are identical (pointwise
+     * equal in all dimensions, with NaN == NaN).
      */
     bool equalsIdentical(const CoordinateSequence& other) const;
 

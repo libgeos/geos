@@ -4251,7 +4251,8 @@ extern char GEOS_DLL GEOSEqualsExact(
 /**
  * Determine pointwise equivalence of two geometries by checking
  * that the structure, ordering, and values of all vertices are
- * identical in all dimensions.
+ * identical in all dimensions. NaN values are considered to be
+ * equal to other NaN values.
  *
 * \param g1 Input geometry
 * \param g2 Input geometry

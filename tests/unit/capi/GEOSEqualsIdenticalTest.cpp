@@ -113,7 +113,7 @@ void object::test<8>
     geom1_ = GEOSGeom_createPointFromXY(std::numeric_limits<double>::quiet_NaN(), 0);
     geom2_ = GEOSGeom_createPointFromXY(std::numeric_limits<double>::signaling_NaN(), 0);
 
-    ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 0);
+    ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 1);
 }
 
 // equal lines
@@ -198,6 +198,18 @@ void object::test<15>
     geom2_ = GEOSGeomFromWKT("MULTILINESTRING ((2 2, 3 3), (1 1, 2 2))");
 
     ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 0);
+}
+
+// negative zero and positive zero are equal
+template<>
+template<>
+void object::test<16>
+()
+{
+    geom1_ = GEOSGeom_createPointFromXY(1, 0.0);
+    geom2_ = GEOSGeom_createPointFromXY(1, -0.0);
+
+    ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 1);
 }
 
 } // namespace tut
