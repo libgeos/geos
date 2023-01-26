@@ -65,6 +65,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf9d635b3617a54e6e06da6ec74a538c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68167a701f4e4859e920b205b2818f00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a68167a701f4e4859e920b205b2818f00">setHolesAllowed</a> (bool holesAllowed)</td></tr>
 <tr class="separator:a68167a701f4e4859e920b205b2818f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df1c1c860a5dfd9c42bd3dec88160c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a9df1c1c860a5dfd9c42bd3dec88160c4">setAlpha</a> (double newAlpha)</td></tr>
+<tr class="separator:a9df1c1c860a5dfd9c42bd3dec88160c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11fbc932ba38b2261873e464858f6ec6"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">getHull</a> ()</td></tr>
 <tr class="separator:a11fbc932ba38b2261873e464858f6ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -81,19 +83,74 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.htm
 <tr class="separator:a4e860cafd3b3ff5873d20e89fcfca7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12a269099b0f13deece4cda1fe5706fd"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">concaveHullByLengthRatio</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom, double lengthRatio, bool isHolesAllowed)</td></tr>
 <tr class="separator:a12a269099b0f13deece4cda1fe5706fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab04c3a7a3600a8493787e07a723b91cf"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ab04c3a7a3600a8493787e07a723b91cf">alphaShape</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom, double alpha, bool isHolesAllowed)</td></tr>
+<tr class="separator:ab04c3a7a3600a8493787e07a723b91cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Constructs a concave hull of a set of points. The hull is constructed by eroding the Delaunay Triangulation of the points until specified target criteria are reached. The target criteria are:</p>
+<div class="textblock"><p>Constructs a concave hull of a set of points. The hull is constructed by removing border triangles of the Delaunay Triangulation of the points as long as their "size" is larger than the target criterion. The target criteria are:</p>
 <ul>
-<li>Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> Ratio - determine the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> as a fraction of the difference between the longest and shortest edge lengths in the Delaunay Triangulation. This normalizes the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> to be scale-independent.</li>
+<li>Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> Ratio - determines the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> by a fraction of the difference between the longest and shortest edge lengths in the Delaunay Triangulation. This normalizes the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> to be scale-independent.</li>
 <li>Maximum Area Ratio - the ratio of the concave hull area to the convex hull area will be no larger than this value</li>
+<li>Alpha - produces Alpha-shapes, by removing border triangles with a circumradius greater than alpha. Large values produce the convex hull; a value of 0 produces maximum concaveness.</li>
 </ul>
 <p>The preferred criterium is the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a> Ratio, since it is scale-free and local (so that no assumption needs to be made about the total amount of concavity present.</p>
 <p>Other length criteria can be used by setting the Maximum Edge <a class="el" href="classgeos_1_1algorithm_1_1Length.html" title="Functions for computing length.">Length</a>. For example, use a length relative to the longest edge length in the Minimum Spanning Tree of the point set. Or, use a length derived from the uniformGridEdgeLength() value.</p>
 <p>The computed hull is always a single connected <a class="el" href="classgeos_1_1geom_1_1Polygon.html" title="Represents a linear polygon, which may include holes.">geom::Polygon</a> (unless it is degenerate, in which case it will be a <a class="el" href="classgeos_1_1geom_1_1Point.html">geom::Point</a> or a <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a>). This constraint may cause the concave hull to fail to meet the target criteria.</p>
-<p>Optionally the concave hull can be allowed to contain holes. Note that this may be substantially slower than not permitting holes, and it can produce results of lower quality.</p>
+<p>Optionally the concave hull can be allowed to contain holes by calling setHolesAllowed(boolean).</p>
 <dl class="section author"><dt>Author</dt><dd>mdavis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab04c3a7a3600a8493787e07a723b91cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab04c3a7a3600a8493787e07a723b91cf">&#9670;&nbsp;</a></span>alphaShape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::algorithm::hull::ConcaveHull::alphaShape </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isHolesAllowed</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the alpha shape of a geometry as a polygon. The alpha parameter is the radius of the eroding disc.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>the input geometry </td></tr>
+    <tr><td class="paramname">alpha</td><td>the radius of the eroding disc </td></tr>
+    <tr><td class="paramname">isHolesAllowed</td><td>whether holes are allowed in the result </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the alpha shape polygon </dd></dl>
+
+</div>
+</div>
 <a id="ada45f68340212afa6984e310f7a560a9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada45f68340212afa6984e310f7a560a9">&#9670;&nbsp;</a></span>concaveHullByLength()</h2>
 
@@ -252,6 +309,31 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.htm
 </div><div class="memdoc">
 <p>Gets the computed concave hull.</p>
 <dl class="section return"><dt>Returns</dt><dd>the concave hull </dd></dl>
+
+</div>
+</div>
+<a id="a9df1c1c860a5dfd9c42bd3dec88160c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9df1c1c860a5dfd9c42bd3dec88160c4">&#9670;&nbsp;</a></span>setAlpha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::algorithm::hull::ConcaveHull::setAlpha </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>newAlpha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the alpha parameter to compute an alpha shape of the input. Alpha is the radius of the eroding disc. Border triangles with circumradius greater than alpha are removed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newAlpha</td><td>the alpha radius </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

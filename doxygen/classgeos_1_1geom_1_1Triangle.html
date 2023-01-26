@@ -71,6 +71,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5226faf6436ea3ad6a79809b2be8d806"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab71d0dd48aa0d07ea6b661c2ae395d64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#ab71d0dd48aa0d07ea6b661c2ae395d64">circumcentreDD</a> (CoordinateXY &amp;resultPoint)</td></tr>
 <tr class="separator:ab71d0dd48aa0d07ea6b661c2ae395d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a847602ba9516b2cae10338ab1cada884"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a847602ba9516b2cae10338ab1cada884">circumradius</a> () const</td></tr>
+<tr class="separator:a847602ba9516b2cae10338ab1cada884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8707e552329befd166b07789f8260ee6"><td class="memItemLeft" align="right" valign="top"><a id="a8707e552329befd166b07789f8260ee6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isIsoceles</b> ()</td></tr>
 <tr class="separator:a8707e552329befd166b07789f8260ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -90,6 +92,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>area</b> () const</
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af66ec008037e2db696bf3a9ded2ee2b4"><td class="memItemLeft" align="right" valign="top">static const CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#af66ec008037e2db696bf3a9ded2ee2b4">circumcentre</a> (const CoordinateXY &amp;p0, const CoordinateXY &amp;p1, const CoordinateXY &amp;p2)</td></tr>
 <tr class="separator:af66ec008037e2db696bf3a9ded2ee2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a845aee88e49e4637e5f2b606905b432f"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a845aee88e49e4637e5f2b606905b432f">circumradius</a> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, const CoordinateXY &amp;c)</td></tr>
+<tr class="separator:a845aee88e49e4637e5f2b606905b432f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a7a57f7692f67c1ef52c9b22c52abaa"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#a7a7a57f7692f67c1ef52c9b22c52abaa">isAcute</a> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, const CoordinateXY &amp;c)</td></tr>
 <tr class="separator:a7a7a57f7692f67c1ef52c9b22c52abaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acccd4dbe9951f0685826f666785c1ee7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Triangle.html#acccd4dbe9951f0685826f666785c1ee7">isCCW</a> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, const CoordinateXY &amp;c)</td></tr>
@@ -209,7 +213,7 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the circumcentre of a triangle. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Computes the circumcentre of a triangle. The circumcentre is the centre of the circumcircle, the smallest circle which passes through all the triangle vertices. It is also the common intersection point of the perpendicular bisectors of the </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p0</td><td>corner of the triangle </td></tr>
     <tr><td class="paramname">p1</td><td>corner of the triangle </td></tr>
@@ -217,7 +221,7 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the center of the the smallest circle that encloses the triangle This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the center of the the smallest circle that encloses the triangle </dd></dl>
 
 </div>
 </div>
@@ -271,6 +275,85 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a847602ba9516b2cae10338ab1cada884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a847602ba9516b2cae10338ab1cada884">&#9670;&nbsp;</a></span>circumradius() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double geos::geom::Triangle::circumradius </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the radius of the circumcircle of a triangle.</p>
+<dl class="section return"><dt>Returns</dt><dd>the triangle circumradius </dd></dl>
+
+</div>
+</div>
+<a id="a845aee88e49e4637e5f2b606905b432f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a845aee88e49e4637e5f2b606905b432f">&#9670;&nbsp;</a></span>circumradius() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::geom::Triangle::circumradius </td>
+          <td>(</td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the radius of the circumcircle of a triangle. Formula is as per <a href="https://math.stackexchange.com/a/3610959">https://math.stackexchange.com/a/3610959</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">b</td><td>a vertex of the triangle </td></tr>
+    <tr><td class="paramname">c</td><td>a vertex of the triangle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the circumradius of the triangle </dd></dl>
 
 </div>
 </div>
