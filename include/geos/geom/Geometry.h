@@ -728,10 +728,18 @@ public:
 
     /** \brief
      * Returns true iff the two Geometrys are of the same type and their
-     * vertices corresponding by index are equal up to a specified tolerance.
+     * vertices corresponding by index are equal up to a specified distance
+     * tolerance. Geometries are not required to have the same dimemsion;
+     * any Z/M values are ignored.
      */
     virtual bool equalsExact(const Geometry* other, double tolerance = 0)
         const = 0; // Abstract
+
+    /** \brief
+     * Returns true if the two geometries are of the same type and their
+     * vertices corresponding by index are equal in all dimensions.
+     */
+    virtual bool equalsIdentical(const Geometry* other) const = 0;
 
     virtual void apply_rw(const CoordinateFilter* filter) = 0; //Abstract
     virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract

@@ -230,6 +230,31 @@ GeometryCollection::equalsExact(const Geometry* other, double tolerance) const
     return true;
 }
 
+bool
+GeometryCollection::equalsIdentical(const Geometry* other_g) const
+{
+    if(!isEquivalentClass(other_g)) {
+        return false;
+    }
+
+    const auto& other = static_cast<const GeometryCollection&>(*other_g);
+    if(getNumGeometries() != other.getNumGeometries()) {
+        return false;
+    }
+
+    if (envelope && other.envelope && *envelope != *other.envelope) {
+        return false;
+    }
+
+    for(std::size_t i = 0; i < getNumGeometries(); i++) {
+        if(!(getGeometryN(i)->equalsIdentical(other.getGeometryN(i)))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void
 GeometryCollection::apply_rw(const CoordinateFilter* filter)
 {

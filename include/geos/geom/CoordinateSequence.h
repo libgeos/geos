@@ -562,10 +562,17 @@ public:
     /**
      * \brief
      * Returns true if the two arrays are identical, both null,
-     * or pointwise equal
+     * or pointwise equal in two dimensions
      */
     static bool equals(const CoordinateSequence* cl1,
                        const CoordinateSequence* cl2);
+
+    /**
+     * \brief
+     * Returns true if the two sequences are identical (pointwise
+     * equal in all dimensions, with NaN == NaN).
+     */
+    bool equalsIdentical(const CoordinateSequence& other) const;
 
     /// Scroll given CoordinateSequence so to start with given Coordinate.
     static void scroll(CoordinateSequence* cl, const CoordinateXY* firstCoordinate);

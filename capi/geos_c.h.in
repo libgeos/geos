@@ -1088,6 +1088,12 @@ extern char GEOS_DLL GEOSEqualsExact_r(
     const GEOSGeometry* g2,
     double tolerance);
 
+/** \see GEOSEqualsIdentical */
+extern char GEOS_DLL GEOSEqualsIdentical_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g1,
+    const GEOSGeometry* g2);
+
 /** \see GEOSCovers */
 extern char GEOS_DLL GEOSCovers_r(
     GEOSContextHandle_t handle,
@@ -4226,6 +4232,8 @@ extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g
 * checking that they have identical structure
 * and that each vertex of g2 is
 * within the distance tolerance of the corresponding vertex in g1.
+* Z and M values are ignored by GEOSEqualsExact, and this function may return true
+* for inputs with different dimensionality.
 * Unlike GEOSEquals(), geometries that are topologically equivalent but have different
 * representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not
 * considered equal by GEOSEqualsExact().
@@ -4239,6 +4247,20 @@ extern char GEOS_DLL GEOSEqualsExact(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
     double tolerance);
+
+/**
+ * Determine pointwise equivalence of two geometries by checking
+ * that the structure, ordering, and values of all vertices are
+ * identical in all dimensions. NaN values are considered to be
+ * equal to other NaN values.
+ *
+* \param g1 Input geometry
+* \param g2 Input geometry
+* \returns 1 on true, 0 on false, 2 on exception
+*/
+extern char GEOS_DLL GEOSEqualsIdentical(
+        const GEOSGeometry* g1,
+        const GEOSGeometry* g2);
 
 /**
 * Calculate the DE9IM pattern for this geometry pair

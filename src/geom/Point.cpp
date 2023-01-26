@@ -282,6 +282,17 @@ Point::equalsExact(const Geometry* other, double tolerance) const
     return equal(*this_coord, *other_coord, tolerance);
 }
 
+bool
+Point::equalsIdentical(const Geometry* other) const
+{
+    if(!isEquivalentClass(other)) {
+        return false;
+    }
+
+    return getCoordinatesRO()->equalsIdentical(
+                *static_cast<const Point*>(other)->getCoordinatesRO());
+}
+
 int
 Point::compareToSameClass(const Geometry* g) const
 {
