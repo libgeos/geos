@@ -1,6 +1,10 @@
 
 Changes in 3.10.4
+<<<<<<< HEAD
 2022-11-14
+=======
+2023-xx-xx
+>>>>>>> f86a329731d0cda50b90dcb2a5b9606e1d852d27
 
 - Fixes/Improvements:
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
@@ -13,6 +17,9 @@ Changes in 3.10.4
   - Fix RelateOp for empty geometry and closed linear geometry (#1096, Dan Baston)
   - Return 2D result on 2D input to GeometryPrecisionReducer (#1137, Dan Baston)
   - Support gcc-13 (GH-743, Sergei Trofimovich)
+  - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
+    (GH-791, Joris Van den Bossche & Dan Baston)
+  - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
 
 
 Changes in 3.10.3

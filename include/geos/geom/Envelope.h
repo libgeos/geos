@@ -334,7 +334,7 @@ public:
     bool
     contains(const Envelope* other) const
     {
-        return contains(*other);
+        return covers(*other);
     }
 
     /** \brief
