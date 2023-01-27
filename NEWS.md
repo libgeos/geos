@@ -7,6 +7,7 @@
     (GH-791, Joris Van den Bossche & Dan Baston)
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
   - Fix handling of odd cases in PolygonHoleJoiner (JTS-946, Paul Ramsey, Martin Davis)
+  - Support gcc-13 (GH-743, Sergei Trofimovich)
 
 
 ## Changes in 3.11.1
