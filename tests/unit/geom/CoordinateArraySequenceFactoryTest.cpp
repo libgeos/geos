@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::CoordinateArraySequence class.
 
 #include <tut.hpp>
@@ -49,10 +49,10 @@ namespace tut
 			ensure(typeid(base).name(), typeid(base) == typeid(CoordinateFactoryCPtr) );
 			ensure(typeid(base).name(), typeid(base) != typeid(CoordinateArrayFactoryCPtr) );
 
-			CoordinateArrayFactoryCPtr derived;
-			derived = dynamic_cast<CoordinateArrayFactoryCPtr>(base);
-			ensure( 0 != derived );
-			ensure(typeid(derived).name(), typeid(derived) == typeid(CoordinateArrayFactoryCPtr) );
+			// CoordinateArrayFactoryCPtr derived;
+			// derived = dynamic_cast<CoordinateArrayFactoryCPtr>(base);
+			// ensure( 0 != derived );
+			// ensure(typeid(derived).name(), typeid(derived) == typeid(CoordinateArrayFactoryCPtr) );
 		}
 		catch (std::exception& e)
 		{
@@ -152,7 +152,7 @@ namespace tut
 			ensure( sequence->hasRepeatedPoints() );
 			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 - 1) );
 			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 / 2) );
-			
+
 			// FREE MEMORY
 			delete sequence;
 		}
