@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - Bug fixes / improvements
   - Fix segfault in Hausdorff distance with empty geometries (GH-569)
+  - Fix crash in GEOSIntersects with EMPTY inside collection (#1110, Dan Baston)
 
 
 Changes in 3.6.5
