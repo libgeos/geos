@@ -195,7 +195,6 @@ Polygon::getExteriorRing() const
 std::unique_ptr<LinearRing>
 Polygon::releaseExteriorRing()
 {
-    envelope.reset();
     return std::move(shell);
 }
 
@@ -256,12 +255,6 @@ Polygon::getBoundary() const
     return getFactory()->createMultiLineString(std::move(rings));
 }
 
-Envelope::Ptr
-Polygon::computeEnvelopeInternal() const
-{
-    return detail::make_unique<Envelope>(*(shell->getEnvelopeInternal()));
-}
-
 bool
 Polygon::equalsExact(const Geometry* other, double tolerance) const
 {
@@ -305,10 +298,6 @@ Polygon::equalsIdentical(const Geometry* other_g) const
     const auto& other = static_cast<const Polygon&>(*other_g);
 
     if (getNumInteriorRing() != other.getNumInteriorRing()) {
-        return false;
-    }
-
-    if (envelope && other.envelope && *envelope != *other.envelope) {
         return false;
     }
 

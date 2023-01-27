@@ -163,6 +163,10 @@ public:
 
     bool isRectangle() const override;
 
+    const Envelope* getEnvelopeInternal() const override {
+        return shell->getEnvelopeInternal();
+    }
+
 protected:
 
 
@@ -203,7 +207,7 @@ protected:
 
     std::vector<std::unique_ptr<LinearRing>> holes;
 
-    Envelope::Ptr computeEnvelopeInternal() const override;
+    void geometryChangedAction() override {}
 
     int
     getSortIndex() const override

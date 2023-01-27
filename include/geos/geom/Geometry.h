@@ -407,7 +407,7 @@ public:
      * Returns the minimum and maximum x and y values in this Geometry,
      * or a null Envelope if this Geometry is empty.
      */
-    virtual const Envelope* getEnvelopeInternal() const;
+    virtual const Envelope* getEnvelopeInternal() const = 0;
 
     /**
      * Tests whether this geometry is disjoint from the specified geometry.
@@ -863,14 +863,9 @@ public:
      * Notifies this Geometry that its Coordinates have been changed
      * by an external party.
      */
-    void geometryChangedAction() {
-        envelope.reset();
-    }
+    virtual void geometryChangedAction() = 0;
 
 protected:
-
-    /// The bounding box of this Geometry
-    mutable std::unique_ptr<Envelope> envelope;
 
     /// Make a deep-copy of this Geometry
     virtual Geometry* cloneImpl() const = 0;
@@ -905,13 +900,6 @@ protected:
     virtual bool isEquivalentClass(const Geometry* other) const;
 
     static void checkNotGeometryCollection(const Geometry* g);
-    // throw(IllegalArgumentException *);
-
-    //virtual void checkEqualSRID(Geometry *other);
-
-    //virtual void checkEqualPrecisionModel(Geometry *other);
-
-    virtual Envelope::Ptr computeEnvelopeInternal() const = 0; //Abstract
 
     virtual int compareToSameClass(const Geometry* geom) const = 0; //Abstract
 

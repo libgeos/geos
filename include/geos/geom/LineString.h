@@ -198,6 +198,13 @@ public:
      */
     std::unique_ptr<LineString> reverse() const { return std::unique_ptr<LineString>(reverseImpl()); }
 
+    const Envelope* getEnvelopeInternal() const override {
+        if (!envelope) {
+            envelope = computeEnvelopeInternal();
+        }
+        return envelope.get();
+    }
+
 protected:
 
     LineString(const LineString& ls);
@@ -212,15 +219,21 @@ protected:
 
     LineString* reverseImpl() const override;
 
-    Envelope::Ptr computeEnvelopeInternal() const override;
+    Envelope::Ptr computeEnvelopeInternal() const;
 
     CoordinateSequence::Ptr points;
+
+    mutable std::unique_ptr<Envelope> envelope;
 
     int
     getSortIndex() const override
     {
         return SORTINDEX_LINESTRING;
     };
+
+    void geometryChangedAction() override {
+        envelope.reset();
+    }
 
 private:
 
