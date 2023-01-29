@@ -84,7 +84,7 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        }</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">auto</span> flattened = operation::cluster::GeometryFlattener::flatten(g.clone());</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">auto</span> clustered = m_finder.cluster(std::move(flattened));</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">auto</span> clustered = m_finder.clusterToVector(std::move(flattened));</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; subset : clustered) {</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            subset = f(*subset);</div>
