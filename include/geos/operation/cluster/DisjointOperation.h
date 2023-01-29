@@ -44,7 +44,7 @@ public:
         }
 
         auto flattened = operation::cluster::GeometryFlattener::flatten(g.clone());
-        auto clustered = m_finder.cluster(std::move(flattened));
+        auto clustered = m_finder.clusterToVector(std::move(flattened));
 
         for (auto& subset : clustered) {
             subset = f(*subset);
