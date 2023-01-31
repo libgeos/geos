@@ -16350,7 +16350,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Snap first geometry onto second within the given tolerance. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Snaps the vertices and segments of the first geometry to vertices of the second geometry within the given tolerance.</p>
+<p>Snapping one geometry to another can improve robustness for overlay operations by eliminating nearly-coincident edges (which cause problems during noding and intersection calculation). Because too much snapping can result in invalid topology being created, heuristics are used to determine the number and location of snapped vertices that are likely safe to snap. These heuristics may omit some potential snaps that are otherwise within the tolerance.</p>
+<p>Where possible, this operation tries to avoid creating invalid geometries; however, it does not guarantee that output geometries will be valid. It is the responsibility of the caller to check for and handle invalid geometries.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>An input geometry </td></tr>
     <tr><td class="paramname">snap_target</td><td>A geometry to snap the input to </td></tr>
