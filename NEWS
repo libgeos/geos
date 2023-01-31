@@ -1,10 +1,12 @@
+Changes in 3.10.5
+2023-xx-xx
+
+- Fixes/Improvements:
+  - Support gcc-13 (GH-743, Sergei Trofimovich)
+
 
 Changes in 3.10.4
-<<<<<<< HEAD
 2022-11-14
-=======
-2023-xx-xx
->>>>>>> f86a329731d0cda50b90dcb2a5b9606e1d852d27
 
 - Fixes/Improvements:
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
