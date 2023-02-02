@@ -147,6 +147,18 @@ public:
     void setTrim(bool p0);
 
     /**
+     * Enables/disables removal of Z/M dimensions that have
+     * no non-NaN values in a geometry.
+     *
+     * @brief setRemoveEmptyDimensions
+     * @param remove
+     */
+    void setRemoveEmptyDimensions(bool remove)
+    {
+        removeEmptyDimensions = remove;
+    }
+
+    /**
      * Enable old style 3D/4D WKT generation.
      *
      * By default the WKBWriter produces new style 3D/4D WKT
@@ -290,6 +302,8 @@ private:
     int roundingPrecision;
 
     bool trim;
+
+    bool removeEmptyDimensions = false;
 
     int level;
 

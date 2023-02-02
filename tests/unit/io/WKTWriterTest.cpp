@@ -346,5 +346,44 @@ void object::test<12>
     ensure_equals(wktwriter.write(*poly_xyzm), std::string("POLYGON ZM EMPTY"));
 }
 
+// Test writing an explicitly-created XYZ geometry where Z is NaN
+// https://github.com/libgeos/geos/issues/808
+template<>
+template<>
+void object::test<13>
+()
+{
+    wktwriter.setOutputDimension(3);
+    wktwriter.setTrim(true);
+
+    CoordinateSequence xyz(1, true, false);
+    xyz.setAt(Coordinate(1, 2, std::numeric_limits<double>::quiet_NaN()), 0);
+    auto pt = gf->createPoint(std::move(xyz));
+
+    ensure_equals(wktwriter.write(*pt), std::string("POINT Z (1 2 NaN)"));
+
+    wktwriter.setRemoveEmptyDimensions(true);
+
+    ensure_equals(wktwriter.write(*pt), std::string("POINT (1 2)"));
+}
+
+// Test removal of empty dimensions
+template<>
+template<>
+void object::test<14>
+()
+{
+    wktwriter.setOutputDimension(4);
+    wktwriter.setTrim(true);
+
+    auto g = wktreader.read("LINESTRING ZM (1 2 NaN 3, 4 5 NaN NaN)");
+
+    ensure_equals(wktwriter.write(*g), "LINESTRING ZM (1 2 NaN 3, 4 5 NaN NaN)");
+
+    wktwriter.setRemoveEmptyDimensions(true);
+
+    ensure_equals(wktwriter.write(*g), "LINESTRING M (1 2 3, 4 5 NaN)");
+}
+
 } // namespace tut
 
