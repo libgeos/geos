@@ -1646,6 +1646,32 @@ extern "C" {
     }
 
     int
+    GEOSOrientPolygons_r(GEOSContextHandle_t extHandle, Geometry* g, int exteriorCW)
+    {
+        return execute(extHandle, -1, [&]() {
+            class OrientPolygons : public geos::geom::GeometryComponentFilter {
+            public:
+                OrientPolygons(bool isExteriorCW) : exteriorCW(isExteriorCW) {}
+
+                void filter_rw(Geometry* g) override {
+                    if (g->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_POLYGON) {
+                        auto p = geos::detail::down_cast<Polygon*>(g);
+                        p->orientRings(exteriorCW);
+                    }
+                }
+
+            private:
+                bool exteriorCW;
+            };
+
+            OrientPolygons op(exteriorCW);
+            g->apply_rw(&op);
+
+            return 0;
+        });
+    }
+
+    int
     GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, -1, [&]() {

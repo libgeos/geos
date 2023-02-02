@@ -374,6 +374,15 @@ Polygon::normalize()
     });
 }
 
+void
+Polygon::orientRings(bool exteriorCW)
+{
+    shell->orient(exteriorCW);
+    for (auto& hole : holes) {
+        hole->orient(!exteriorCW);
+    }
+}
+
 int
 Polygon::compareToSameClass(const Geometry* g) const
 {

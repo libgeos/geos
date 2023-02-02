@@ -1477,6 +1477,12 @@ extern int GEOS_DLL GEOSNormalize_r(
     GEOSContextHandle_t handle,
     GEOSGeometry* g);
 
+/** \see GEOSOrientPolygons */
+extern int GEOS_DLL GEOSOrientPolygons_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry* g,
+    int exteriorCW);
+
 /**
 * Controls the behavior of GEOSGeom_setPrecision()
 * when altering the precision of a geometry.
@@ -2722,6 +2728,18 @@ extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 * \return 0 on success or -1 on exception
 */
 extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
+
+/**
+* Enforce a ring orientation on all polygonal elements in the input geometry.
+* Non-polygonal geometries will not be modified.
+*
+* \param g Input geometry
+* \param exteriorCW if 1, exterior rings will be clockwise and interior ringts
+*                         will be counter-clockwise
+* \return 0 on success or -1 on exception
+*/
+extern int GEOS_DLL GEOSOrientPolygons(GEOSGeometry* g,
+                                       int exteriorCW);
 
 ///@}
 
