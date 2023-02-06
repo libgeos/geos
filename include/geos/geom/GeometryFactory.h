@@ -202,7 +202,7 @@ public:
             std::vector<std::unique_ptr<Geometry>> && fromPolys) const;
 
     /// Construct an EMPTY LinearRing
-    std::unique_ptr<LinearRing> createLinearRing() const;
+    std::unique_ptr<LinearRing> createLinearRing(std::size_t coordinateDimension = 2) const;
 
     /// Construct a LinearRing taking ownership of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
