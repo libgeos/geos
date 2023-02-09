@@ -192,6 +192,7 @@ void object::test<5>
     geos::geom::Envelope zero(0, 0, 0, 0);
     geos::geom::Envelope zero2(0, 0, 0, 0);
     geos::geom::Envelope box(0, 100, 0, 100);
+    geos::geom::Envelope inf(0, 100, 0, std::numeric_limits<double>::infinity());
 
     ensure(empty.isNull());
     ensure(!zero.isNull());
@@ -209,6 +210,8 @@ void object::test<5>
 
     ensure(!box.equals(&empty));
     ensure(!box.equals(&zero));
+
+    ensure(!inf.isfinite());
 
     ensure_no_fp_except();
 }
