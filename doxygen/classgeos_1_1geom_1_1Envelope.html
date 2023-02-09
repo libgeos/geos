@@ -205,6 +205,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>covers</b> (const <a 
 <tr class="memitem:a2c606cdee82842a2d8b3ced881a86c30"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a2c606cdee82842a2d8b3ced881a86c30">equals</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> *other) const</td></tr>
 <tr class="memdesc:a2c606cdee82842a2d8b3ced881a86c30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> if the <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> <code>other</code> spatially equals this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>.  <a href="classgeos_1_1geom_1_1Envelope.html#a2c606cdee82842a2d8b3ced881a86c30">More...</a><br /></td></tr>
 <tr class="separator:a2c606cdee82842a2d8b3ced881a86c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c87a8c49cb1de92e5899bf3e5f4219f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a1c87a8c49cb1de92e5899bf3e5f4219f">isfinite</a> () const</td></tr>
+<tr class="separator:a1c87a8c49cb1de92e5899bf3e5f4219f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb50db7aee39551bfb6a489d5c3575bf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#acb50db7aee39551bfb6a489d5c3575bf">toString</a> () const</td></tr>
 <tr class="memdesc:acb50db7aee39551bfb6a489d5c3575bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <code>string</code> of the form <code>Env[minx:maxx,miny:maxy]</code>.  <a href="classgeos_1_1geom_1_1Envelope.html#acb50db7aee39551bfb6a489d5c3575bf">More...</a><br /></td></tr>
 <tr class="separator:acb50db7aee39551bfb6a489d5c3575bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1620,6 +1622,25 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the point intersects this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> </dd></dl>
+
+</div>
+</div>
+<a id="a1c87a8c49cb1de92e5899bf3e5f4219f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c87a8c49cb1de92e5899bf3e5f4219f">&#9670;&nbsp;</a></span>isfinite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::geom::Envelope::isfinite </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns <code>true</code> if all the extents of the <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> are finite and defined (not NaN)</p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if envelope has only finite/valid extents, <code>false</code> otherwise </dd></dl>
 
 </div>
 </div>
