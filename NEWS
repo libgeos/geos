@@ -3,6 +3,7 @@ Changes in 3.10.5
 
 - Fixes/Improvements:
   - Support gcc-13 (GH-743, Sergei Trofimovich)
+  - Disallow Inf envelopes in Quadtree, avoid inf loop (Paul Ramsey)
 
 
 Changes in 3.10.4
