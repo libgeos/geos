@@ -22,6 +22,7 @@
 #include <geos/index/quadtree/IntervalSize.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cassert>
 
@@ -51,6 +52,9 @@ Root::insert(const Envelope* itemEnv, void* item)
 #if GEOS_DEBUG
     std::cerr << "Root(" << this << ")::insert(" << itemEnv->toString() << ", " << item << ") called" << std::endl;
 #endif
+    if (!itemEnv->isfinite()) {
+        throw util::IllegalArgumentException("Non-finite envelope bounds passed to index insert");
+    }
     int index = getSubnodeIndex(itemEnv, origin);
     // if index is -1, itemEnv must cross the X or Y axis.
     if(index == -1) {
