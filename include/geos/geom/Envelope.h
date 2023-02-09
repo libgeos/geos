@@ -633,6 +633,13 @@ public:
      */
     bool equals(const Envelope* other) const;
 
+    /**
+     * Returns `true` if all the extents of the Envelope are finite and defined (not NaN)
+     *
+     * @return `true` if envelope has only finite/valid extents, `false` otherwise
+     */
+    bool isfinite() const;
+
     /** \brief
      * Returns a `string` of the form `Env[minx:maxx,miny:maxy]`.
      *
