@@ -8,6 +8,7 @@
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
   - Fix handling of odd cases in PolygonHoleJoiner (JTS-946, Paul Ramsey, Martin Davis)
   - Support gcc-13 (GH-743, Sergei Trofimovich)
+  - Disallow Inf envelopes in Quadtree, avoid inf loop (Paul Ramsey)
 
 
 ## Changes in 3.11.1
