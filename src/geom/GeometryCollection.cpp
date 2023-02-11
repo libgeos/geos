@@ -38,7 +38,8 @@ namespace geom { // geos::geom
 GeometryCollection::GeometryCollection(const GeometryCollection& gc)
     :
     Geometry(gc),
-    geometries(gc.geometries.size())
+    geometries(gc.geometries.size()),
+    envelope(gc.envelope)
 {
     for(std::size_t i = 0; i < geometries.size(); ++i) {
         geometries[i] = gc.geometries[i]->clone();
@@ -47,7 +48,8 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
 
 GeometryCollection::GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& factory) :
     Geometry(&factory),
-    geometries(std::move(newGeoms)) {
+    geometries(std::move(newGeoms)),
+    envelope(computeEnvelopeInternal()) {
 
     if (hasNullElements(&geometries)) {
         throw util::IllegalArgumentException("geometries must not contain null elements\n");
@@ -242,7 +244,7 @@ GeometryCollection::equalsIdentical(const Geometry* other_g) const
         return false;
     }
 
-    if (envelope && other.envelope && *envelope != *other.envelope) {
+    if (envelope != other.envelope) {
         return false;
     }
 
@@ -300,13 +302,13 @@ GeometryCollection::normalize()
     });
 }
 
-Envelope::Ptr
+Envelope
 GeometryCollection::computeEnvelopeInternal() const
 {
-    Envelope::Ptr p_envelope(new Envelope());
+    Envelope p_envelope;
     for(const auto& g : geometries) {
         const Envelope* env = g->getEnvelopeInternal();
-        p_envelope->expandToInclude(env);
+        p_envelope.expandToInclude(env);
     }
     return p_envelope;
 }

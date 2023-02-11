@@ -103,8 +103,11 @@ public:
      * @param  p  the Coordinate
      */
     explicit Envelope(const CoordinateXY& p)
+        : minx(p.x)
+        , maxx(p.x)
+        , miny(p.y)
+        , maxy(p.y)
     {
-        init(p);
     }
 
     /** \brief

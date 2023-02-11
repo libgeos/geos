@@ -124,10 +124,6 @@ Geometry::Geometry(const Geometry& geom)
     _factory(geom._factory),
     _userData(nullptr)
 {
-    //factory=geom.factory;
-    //envelope(new Envelope(*(geom.envelope.get())));
-    //SRID=geom.getSRID();
-    //_userData=NULL;
     _factory->addRef();
 }
 

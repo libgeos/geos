@@ -866,7 +866,6 @@ public:
     virtual void geometryChangedAction() = 0;
 
 protected:
-
     /// Make a deep-copy of this Geometry
     virtual Geometry* cloneImpl() const = 0;
 

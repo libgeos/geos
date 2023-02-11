@@ -45,6 +45,7 @@ namespace geom { // geos::geom
 Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
     : Geometry(factory)
     , coordinates(newCoords)
+    , envelope(computeEnvelopeInternal())
 {
     if (coordinates.getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
@@ -52,28 +53,32 @@ Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
 }
 
 Point::Point(const Coordinate & c, const GeometryFactory* factory)
-    : Geometry(factory),
-      coordinates{c}
+    : Geometry(factory)
+    , coordinates{c}
+    , envelope(c)
 {
 }
 
 Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
-    : Geometry(factory),
-      coordinates{c}
+    : Geometry(factory)
+    , coordinates{c}
+    , envelope(c)
 {
 }
 
 Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
-    : Geometry(factory),
-      coordinates{c}
+    : Geometry(factory)
+    , coordinates{c}
+    , envelope(c)
 {
 }
 
 Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
-    : Geometry(factory),
+    : Geometry(factory)
       // check Z and M values because we may be constructing this from
       // an XYM coordinate that was stored as XYZM
-      coordinates{1u, !std::isnan(c.z), !std::isnan(c.m), false}
+    , coordinates{1u, !std::isnan(c.z), !std::isnan(c.m), false}
+    , envelope(c)
 {
     coordinates.setAt(c, 0);
 }
@@ -82,6 +87,7 @@ Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
 Point::Point(const Point& p)
     : Geometry(p)
     , coordinates(p.coordinates)
+    , envelope(p.envelope)
 {}
 
 std::unique_ptr<CoordinateSequence>
@@ -186,16 +192,14 @@ Point::getBoundary() const
     return getFactory()->createGeometryCollection();
 }
 
-Envelope::Ptr
+Envelope
 Point::computeEnvelopeInternal() const
 {
     if(isEmpty()) {
-        return Envelope::Ptr(new Envelope());
+        return Envelope();
     }
 
-    return Envelope::Ptr(new Envelope(getCoordinate()->x,
-                                      getCoordinate()->x, getCoordinate()->y,
-                                      getCoordinate()->y));
+    return Envelope(*getCoordinate());
 }
 
 void

@@ -157,10 +157,7 @@ public:
     }
 
     const Envelope* getEnvelopeInternal() const override {
-        if (!envelope) {
-            envelope = computeEnvelopeInternal();
-        }
-        return envelope.get();
+        return &envelope;
     }
 
 protected:
@@ -193,7 +190,7 @@ protected:
 
     Point* reverseImpl() const override { return new Point(*this); }
 
-    Envelope::Ptr computeEnvelopeInternal() const;
+    Envelope computeEnvelopeInternal() const;
 
     int compareToSameClass(const Geometry* p) const override;
 
@@ -204,16 +201,13 @@ protected:
     };
 
     void geometryChangedAction() override {
-        envelope.reset();
+        envelope = computeEnvelopeInternal();
     }
 
 private:
 
-    /**
-     *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
-     */
     CoordinateSequence coordinates;
-    mutable std::unique_ptr<Envelope> envelope;
+    Envelope envelope;
 };
 
 } // namespace geos::geom
