@@ -23,6 +23,7 @@
 #include <cmath>
 #include <string>
 #include <memory>
+#include <thread>
 
 using namespace geos::geom;
 using namespace geos::operation::relate;
@@ -83,5 +84,41 @@ void object::test<2> ()
 "LINESTRING (-57.267475399999995 49.4067465, -57.2675701 49.406864299999995, -57.267989 49.407135399999994)",
     "FF10F0102"    );
 }
+
+// Test use of Geometry::relate in multiple threads
+// https://trac.osgeo.org/geos/ticket/855
+template<>
+template<>
+void object::test<3>()
+{
+    constexpr std::size_t numPolys = 128;
+    constexpr std::size_t numThreads = 16;
+
+    auto geom = wktreader.read("POLYGON ((0 0, 0 1, 1 1, 0 0))");
+
+    // Clone lots of identical triangles
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    for (std::size_t i = 0; i < numPolys; i++) {
+        geoms.push_back(geom->clone());
+    }
+
+    auto runRelate = [](const Geometry* p_g, const std::vector<std::unique_ptr<Geometry>> & p_geoms) {
+        for (const auto& gz : p_geoms) {
+            p_g->relate(gz.get());
+        }
+    };
+
+    // Launch some threads to check relationships between polygons
+    std::vector<std::thread> threads;
+    for (std::size_t i = 0; i < numThreads; i++) {
+        threads.emplace_back(runRelate, geoms[i].get(), std::ref(geoms));
+    }
+
+    // Wait for threads to complete
+    for (auto& t : threads) {
+        t.join();
+    }
+}
+
 
 } // namespace tut
