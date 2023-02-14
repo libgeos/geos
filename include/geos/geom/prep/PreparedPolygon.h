@@ -50,12 +50,18 @@ namespace prep { // geos::geom::prep
  */
 class PreparedPolygon : public BasicPreparedGeometry {
 private:
-    bool isRectangle;
     mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ptOnGeomLoc;
     mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> indexedPtOnGeomLoc;
-    mutable noding::SegmentString::ConstVect segStrings;
     mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+
+    mutable noding::SegmentString::ConstVect segStrings;
+
+    mutable std::once_flag segIntFinderFlag;
+    mutable std::once_flag ptOnGeomLocFlag;
+    mutable std::once_flag indexedPtOnGeomLocFlag;
+    mutable std::once_flag indexedDistanceFlag;
+    bool isRectangle;
 
 protected:
 public:
