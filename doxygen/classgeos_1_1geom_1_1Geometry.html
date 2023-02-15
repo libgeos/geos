@@ -208,10 +208,10 @@ virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7352973ac75fab8187dc458360067297">getEnvelope</a> () const</td></tr>
 <tr class="memdesc:a7352973ac75fab8187dc458360067297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns this Geometrys bounding box. <br /></td></tr>
 <tr class="separator:a7352973ac75fab8187dc458360067297"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a324004dc935d645b8ca9ca3049b428f4"><td class="memItemLeft" align="right" valign="top"><a id="a324004dc935d645b8ca9ca3049b428f4"></a>
-virtual const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a324004dc935d645b8ca9ca3049b428f4">getEnvelopeInternal</a> () const</td></tr>
-<tr class="memdesc:a324004dc935d645b8ca9ca3049b428f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum and maximum x and y values in this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or a null <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> if this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> is empty. <br /></td></tr>
-<tr class="separator:a324004dc935d645b8ca9ca3049b428f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c178f91a48b24268bf7547b14eae66"><td class="memItemLeft" align="right" valign="top"><a id="a25c178f91a48b24268bf7547b14eae66"></a>
+virtual const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a25c178f91a48b24268bf7547b14eae66">getEnvelopeInternal</a> () const =0</td></tr>
+<tr class="memdesc:a25c178f91a48b24268bf7547b14eae66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum and maximum x and y values in this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>, or a null <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> if this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> is empty. <br /></td></tr>
+<tr class="separator:a25c178f91a48b24268bf7547b14eae66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaea1f43a37760207a907ea83c0a5404d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#aaea1f43a37760207a907ea83c0a5404d">disjoint</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const</td></tr>
 <tr class="separator:aaea1f43a37760207a907ea83c0a5404d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ea2a99592c05f1b9b3c790518c75267"><td class="memItemLeft" align="right" valign="top"><a id="a8ea2a99592c05f1b9b3c790518c75267"></a>
@@ -362,10 +362,10 @@ virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#aea794bfb662989dd8690854723edc72c">geometryChanged</a> ()</td></tr>
 <tr class="memdesc:aea794bfb662989dd8690854723edc72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> that its Coordinates have been changed by an external party (using a <a class="el" href="classgeos_1_1geom_1_1CoordinateFilter.html" title="Geometry classes support the concept of applying a coordinate filter to every coordinate in the Geome...">CoordinateFilter</a>, for example). <br /></td></tr>
 <tr class="separator:aea794bfb662989dd8690854723edc72c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a175a97030b47b67bce9d92123ba570e8"><td class="memItemLeft" align="right" valign="top"><a id="a175a97030b47b67bce9d92123ba570e8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a175a97030b47b67bce9d92123ba570e8">geometryChangedAction</a> ()</td></tr>
-<tr class="memdesc:a175a97030b47b67bce9d92123ba570e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> that its Coordinates have been changed by an external party. <br /></td></tr>
-<tr class="separator:a175a97030b47b67bce9d92123ba570e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f262333ac43700920a0666f9383e480"><td class="memItemLeft" align="right" valign="top"><a id="a1f262333ac43700920a0666f9383e480"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a1f262333ac43700920a0666f9383e480">geometryChangedAction</a> ()=0</td></tr>
+<tr class="memdesc:a1f262333ac43700920a0666f9383e480"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> that its Coordinates have been changed by an external party. <br /></td></tr>
+<tr class="separator:a1f262333ac43700920a0666f9383e480"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -381,9 +381,6 @@ virtual <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ab31ee32bab2f7198c4322039ea461e59">isEquivalentClass</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const</td></tr>
 <tr class="memdesc:ab31ee32bab2f7198c4322039ea461e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the two Geometrys are equal, from the point of view of the equalsExact method. <br /></td></tr>
 <tr class="separator:ab31ee32bab2f7198c4322039ea461e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aceb3b9165580c49b251ba45227fdaacb"><td class="memItemLeft" align="right" valign="top"><a id="aceb3b9165580c49b251ba45227fdaacb"></a>
-virtual Envelope::Ptr&#160;</td><td class="memItemRight" valign="bottom"><b>computeEnvelopeInternal</b> () const =0</td></tr>
-<tr class="separator:aceb3b9165580c49b251ba45227fdaacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d64998d440dadd536ccf357c1d02988"><td class="memItemLeft" align="right" valign="top"><a id="a3d64998d440dadd536ccf357c1d02988"></a>
 virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>compareToSameClass</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom) const =0</td></tr>
 <tr class="separator:a3d64998d440dadd536ccf357c1d02988"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -438,10 +435,6 @@ static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a3078813471b2c70b04da6271a5da83eb"><td class="memItemLeft" align="right" valign="top"><a id="a3078813471b2c70b04da6271a5da83eb"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a3078813471b2c70b04da6271a5da83eb">envelope</a></td></tr>
-<tr class="memdesc:a3078813471b2c70b04da6271a5da83eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bounding box of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. <br /></td></tr>
-<tr class="separator:a3078813471b2c70b04da6271a5da83eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac26216d9188cf7e60112a56ccdb7f01c"><td class="memItemLeft" align="right" valign="top"><a id="ac26216d9188cf7e60112a56ccdb7f01c"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>SRID</b></td></tr>
 <tr class="separator:ac26216d9188cf7e60112a56ccdb7f01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
