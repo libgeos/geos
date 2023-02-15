@@ -199,6 +199,7 @@ public:
 protected:
 
     GeometryCollection(const GeometryCollection& gc);
+    GeometryCollection& operator=(const GeometryCollection& gc);
 
     /** \brief
      * Construct a GeometryCollection with the given GeometryFactory.

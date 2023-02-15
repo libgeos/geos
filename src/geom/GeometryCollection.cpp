@@ -46,6 +46,19 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
     }
 }
 
+GeometryCollection&
+GeometryCollection::operator=(const GeometryCollection& gc)
+{
+    geometries.resize(gc.geometries.size());
+    envelope = gc.envelope;
+
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        geometries[i] = gc.geometries[i]->clone();
+    }
+
+    return *this;
+}
+
 GeometryCollection::GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& factory) :
     Geometry(&factory),
     geometries(std::move(newGeoms)),
