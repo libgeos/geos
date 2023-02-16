@@ -32,29 +32,22 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
-                             std::size_t nstart, std::size_t nend, void* nContext)
+                             std::size_t nstart, std::size_t nend, void* nContext,
+                             double expansionDistance)
     : pts(&newPts)
     , context(nContext)
     , start(nstart)
     , end(nend)
-    , env()
-{}
+    , env(pts->getAt<CoordinateXY>(start), pts->getAt<CoordinateXY>(end))
+{
+    if (expansionDistance > 0.0) {
+        env.expandBy(expansionDistance);
+    }
+}
 
 const Envelope&
 MonotoneChain::getEnvelope() const
 {
-    return getEnvelope(0.0);
-}
-
-const Envelope&
-MonotoneChain::getEnvelope(double expansionDistance) const
-{
-    if (env.isNull()) {
-        env.init(pts->getAt<CoordinateXY>(start), pts->getAt<CoordinateXY>(end));
-        if (expansionDistance > 0.0) {
-            env.expandBy(expansionDistance);
-        }
-    }
     return env;
 }
 

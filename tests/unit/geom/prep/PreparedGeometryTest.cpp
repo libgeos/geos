@@ -76,7 +76,8 @@ void object::test<2>
 ()
 {
     std::vector<std::unique_ptr<Geometry>> geoms;
-    std::vector<std::unique_ptr<PreparedGeometry>> pgeoms;
+    std::vector<std::unique_ptr<PreparedGeometry>> ppolys;
+    std::vector<std::unique_ptr<PreparedGeometry>> plines;
     std::vector<std::thread> threads;
 
     constexpr std::size_t nrow = 10;
@@ -89,18 +90,31 @@ void object::test<2>
             auto pt = factory->createPoint(c);
 
             geoms.emplace_back(pt->buffer(1.5));
-            pgeoms.push_back(prep::PreparedGeometryFactory::prepare(geoms.back().get()));
+            ppolys.push_back(prep::PreparedGeometryFactory::prepare(geoms.back().get()));
+            plines.push_back(prep::PreparedGeometryFactory::prepare(static_cast<Polygon*>(geoms.back().get())->getExteriorRing()));
         }
     }
 
     auto findIntersects = [&geoms](const PreparedGeometry* pg) {
         for (const auto& geom : geoms) {
             pg->intersects(geom.get());
+            pg->distance(geom.get());
         }
     };
 
+    // check PreparedPolygon
     for (std::size_t i = 0; i < nthreads; i++) {
-        threads.emplace_back(findIntersects, pgeoms[i].get());
+        threads.emplace_back(findIntersects, ppolys[0].get());
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    // check PreparedLineString
+    threads.clear();
+    for (std::size_t i = 0; i < nthreads; i++) {
+        threads.emplace_back(findIntersects, plines[0].get());
     }
 
     for (auto& thread : threads) {

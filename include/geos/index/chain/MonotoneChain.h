@@ -96,13 +96,12 @@ public:
     ///   Ownership left to caller, this class holds a reference.
     ///
     MonotoneChain(const geom::CoordinateSequence& pts,
-                  std::size_t start, std::size_t end, void* context);
+                  std::size_t start, std::size_t end, void* context, double expansionDistance);
 
     ~MonotoneChain() = default;
 
     /// Returned envelope is owned by this class
     const geom::Envelope& getEnvelope() const;
-    const geom::Envelope& getEnvelope(double expansionDistance) const;
 
     size_t
     getStartIndex() const

@@ -40,7 +40,7 @@ namespace noding { // geos::noding
  */
 class SegmentIntersectionDetector : public SegmentIntersector {
 private:
-    algorithm::LineIntersector* li;
+    algorithm::LineIntersector li;
 
     bool findProper;
     bool findAllTypes;
@@ -54,9 +54,8 @@ private:
 
 protected:
 public:
-    SegmentIntersectionDetector(algorithm::LineIntersector* p_li)
+    SegmentIntersectionDetector()
         :
-        li(p_li),
         findProper(false),
         findAllTypes(false),
         _hasIntersection(false),
@@ -68,7 +67,6 @@ public:
 
     ~SegmentIntersectionDetector() override
     {
-        //delete intPt;
         delete intSegments;
     }
 

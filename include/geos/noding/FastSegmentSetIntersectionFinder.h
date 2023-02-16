@@ -49,8 +49,7 @@ namespace noding { // geos::noding
  */
 class FastSegmentSetIntersectionFinder {
 private:
-    std::unique_ptr<MCIndexSegmentSetMutualIntersector> segSetMutInt;
-    std::unique_ptr<geos::algorithm::LineIntersector> lineIntersector;
+    MCIndexSegmentSetMutualIntersector segSetMutInt;
 
 protected:
 public:
@@ -67,7 +66,7 @@ public:
     const SegmentSetMutualIntersector*
     getSegmentSetIntersector() const
     {
-        return segSetMutInt.get();
+        return &segSetMutInt;
     }
 
     bool intersects(SegmentString::ConstVect* segStrings);

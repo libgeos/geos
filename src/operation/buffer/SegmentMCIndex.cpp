@@ -37,7 +37,7 @@ SegmentMCIndex::SegmentMCIndex(const CoordinateSequence* segs)
 void
 SegmentMCIndex::buildIndex(const CoordinateSequence* segs)
 {
-    chain::MonotoneChainBuilder::getChains(segs, nullptr, segChains);
+    chain::MonotoneChainBuilder::getChains(segs, nullptr, 0.0, segChains);
     for (chain::MonotoneChain& mc : segChains) {
         index.insert(&(mc.getEnvelope()), &mc);
     }

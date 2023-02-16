@@ -111,7 +111,7 @@ void object::test<3>()
     // Launch some threads to check relationships between polygons
     std::vector<std::thread> threads;
     for (std::size_t i = 0; i < numThreads; i++) {
-        threads.emplace_back(runRelate, geoms[i].get(), std::ref(geoms));
+        threads.emplace_back(runRelate, geoms[0].get(), std::ref(geoms));
     }
 
     // Wait for threads to complete

@@ -29,8 +29,6 @@ class SegmentIntersector;
 }
 }
 
-//using namespace geos::index::strtree;
-
 namespace geos {
 namespace noding { // geos::noding
 
@@ -45,12 +43,7 @@ class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
 public:
 
     MCIndexSegmentSetMutualIntersector(double p_tolerance)
-        : monoChains()
-        , indexCounter(0)
-        , processCounter(0)
-        , nOverlaps(0)
-        , overlapTolerance(p_tolerance)
-        , indexBuilt(false)
+        : overlapTolerance(p_tolerance)
     {}
 
     MCIndexSegmentSetMutualIntersector()
@@ -68,8 +61,9 @@ public:
 
     void setBaseSegments(SegmentString::ConstVect* segStrings) override;
 
-    // NOTE: re-populates the MonotoneChain vector with newly created chains
     void process(SegmentString::ConstVect* segStrings) override;
+
+    void process(SegmentString::ConstVect* segStrings, SegmentIntersector* si);
 
     class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
     private:
@@ -98,7 +92,6 @@ public:
 private:
 
     typedef std::vector<index::chain::MonotoneChain> MonoChains;
-    MonoChains monoChains;
 
     /*
      * The index::SpatialIndex used should be something that supports
@@ -106,23 +99,18 @@ private:
      * or index::strtree::STRtree).
      */
     index::strtree::TemplateSTRtree<const index::chain::MonotoneChain*> index;
-    int indexCounter;
-    int processCounter;
-    // statistics
-    int nOverlaps;
-    double overlapTolerance;
+
+    const double overlapTolerance;
 
     /* memory management helper, holds MonotoneChain objects used
      * in the SpatialIndex. It's cleared when the SpatialIndex is
      */
-    bool indexBuilt;
+    std::once_flag indexBuilt;
     MonoChains indexChains;
 
-    void addToIndex(SegmentString* segStr);
+    void intersectChains(const MonoChains& chains, SegmentIntersector& segmentIntersector);
 
-    void intersectChains();
-
-    void addToMonoChains(SegmentString* segStr);
+    void addChains(const SegmentString* segStr, MonoChains& chains) const;
 
 };
 

@@ -39,17 +39,15 @@ namespace noding { // geos::noding
  */
 FastSegmentSetIntersectionFinder::
 FastSegmentSetIntersectionFinder(noding::SegmentString::ConstVect* baseSegStrings)
-    :	segSetMutInt(new MCIndexSegmentSetMutualIntersector()),
-      lineIntersector(new algorithm::LineIntersector())
 {
-    segSetMutInt->setBaseSegments(baseSegStrings);
+    segSetMutInt.setBaseSegments(baseSegStrings);
 }
 
 bool
 FastSegmentSetIntersectionFinder::
 intersects(noding::SegmentString::ConstVect* segStrings)
 {
-    SegmentIntersectionDetector intFinder(lineIntersector.get());
+    SegmentIntersectionDetector intFinder;
 
     return this->intersects(segStrings, &intFinder);
 }
@@ -59,8 +57,7 @@ FastSegmentSetIntersectionFinder::
 intersects(noding::SegmentString::ConstVect* segStrings,
            SegmentIntersectionDetector* intDetector)
 {
-    segSetMutInt->setSegmentIntersector(intDetector);
-    segSetMutInt->process(segStrings);
+    segSetMutInt.process(segStrings, intDetector);
 
     return intDetector->hasIntersection();
 }

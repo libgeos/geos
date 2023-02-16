@@ -83,9 +83,7 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
     noding::SegmentString::ConstVect lineSegStr;
     noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
 
-    algorithm::LineIntersector li;
-
-    noding::SegmentIntersectionDetector intDetector(&li);
+    noding::SegmentIntersectionDetector intDetector;
 
     intDetector.setFindAllIntersectionTypes(true);
     prepPoly->getIntersectionFinder()->intersects(&lineSegStr, &intDetector);

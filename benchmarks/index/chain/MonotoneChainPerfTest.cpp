@@ -48,8 +48,8 @@ static void BM_MonotoneChainOverlaps(benchmark::State& state) {
         prev = c;
     }
 
-    MonotoneChain mc1(cs1, 0, cs1.size(), nullptr);
-    MonotoneChain mc2(cs2, 0, cs1.size(), nullptr);
+    MonotoneChain mc1(cs1, 0, cs1.size(), nullptr, 0.0);
+    MonotoneChain mc2(cs2, 0, cs1.size(), nullptr, 0.0);
 
     struct EmptyOverlapAction : public MonotoneChainOverlapAction {
         virtual void

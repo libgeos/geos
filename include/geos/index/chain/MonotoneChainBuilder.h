@@ -58,6 +58,7 @@ public:
      */
     static void getChains(const geom::CoordinateSequence* pts,
                           void* context,
+                          double expansionDistance,
                           std::vector<MonotoneChain>& mcList);
 
     /**

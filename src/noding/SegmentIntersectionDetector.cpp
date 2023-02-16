@@ -43,13 +43,13 @@ processIntersections(
     const CoordinateXY& p10 = e1->getCoordinate<CoordinateXY>( segIndex1 );
     const CoordinateXY& p11 = e1->getCoordinate<CoordinateXY>( segIndex1 + 1 );
 
-    li->computeIntersection(p00, p01, p10, p11);
+    li.computeIntersection(p00, p01, p10, p11);
 
-    if(li->hasIntersection()) {
+    if(li.hasIntersection()) {
         // record intersection info
         _hasIntersection = true;
 
-        bool isProper = li->isProper();
+        bool isProper = li.isProper();
 
         if(isProper) {
             _hasProperIntersection = true;
@@ -69,7 +69,7 @@ processIntersections(
 
         if(!intPt || saveLocation) {
             // record intersection location (approximate)
-            intPt = &li->getIntersection(0);
+            intPt = &li.getIntersection(0);
 
             delete intSegments;
 
