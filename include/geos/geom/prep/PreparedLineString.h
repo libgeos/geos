@@ -40,9 +40,12 @@ namespace prep { // geos::geom::prep
  */
 class PreparedLineString : public BasicPreparedGeometry {
 private:
-    std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
+    mutable std::unique_ptr<noding::FastSegmentSetIntersectionFinder> segIntFinder;
     mutable noding::SegmentString::ConstVect segStrings;
     mutable std::unique_ptr<operation::distance::IndexedFacetDistance> indexedDistance;
+
+    mutable std::once_flag segIntFinderFlag;
+    mutable std::once_flag indexedDistanceFlag;
 
 protected:
 public:
@@ -54,7 +57,7 @@ public:
 
     ~PreparedLineString() override;
 
-    noding::FastSegmentSetIntersectionFinder* getIntersectionFinder();
+    noding::FastSegmentSetIntersectionFinder* getIntersectionFinder() const;
 
     bool intersects(const geom::Geometry* g) const override;
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const override;
