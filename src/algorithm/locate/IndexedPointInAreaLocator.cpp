@@ -100,15 +100,12 @@ IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
     :	areaGeom(g)
 {
+    buildIndex(areaGeom);
 }
 
 geom::Location
 IndexedPointInAreaLocator::locate(const geom::CoordinateXY* /*const*/ p)
 {
-    if (index == nullptr) {
-        buildIndex(areaGeom);
-    }
-
     algorithm::RayCrossingCounter rcc(*p);
 
     index->query(p->y, p->y, [&rcc](const SegmentView& ls) {
