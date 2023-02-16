@@ -231,7 +231,7 @@ public:
 
     template<typename ItemDistance>
     ItemType nearestNeighbour(const BoundsType& env, const ItemType& item, ItemDistance& itemDist) {
-        build();
+        buildIfNeeded();
 
         if (getRoot() == nullptr) {
             return nullptr;
@@ -273,9 +273,7 @@ public:
     // false values will be taken as a signal to stop the query.
     template<typename Visitor>
     void query(const BoundsType& queryEnv, Visitor &&visitor) {
-        if (!built()) {
-            build();
-        }
+        buildIfNeeded();
 
         if (root && root->boundsIntersect(queryEnv)) {
             if (root->isLeaf()) {
@@ -294,9 +292,7 @@ public:
     // false values will be taken as a signal to stop the query.
     template<typename Visitor>
     void queryPairs(Visitor&& visitor) {
-        if (!built()) {
-            build();
-        }
+        buildIfNeeded();
 
         if (numItems < 2) {
             return;
@@ -318,7 +314,7 @@ public:
      * Returns a depth-first iterator over all items in the tree.
      */
     Items items() {
-        build();
+        buildIfNeeded();
         return Items(*this);
     }
 
@@ -341,7 +337,7 @@ public:
     /// @{
 
     bool remove(const BoundsType& itemEnv, const ItemType& item) {
-        build();
+        buildIfNeeded();
 
         if (root == nullptr) {
             return false;
@@ -369,16 +365,18 @@ public:
 
     /** Determine whether the tree has been built, and no more items may be added. */
     const Node* getRoot() {
-        build();
+        buildIfNeeded();
         return root;
     }
 
     /// @}
 
     /** Build the tree if it has not already been built. */
-    void build() {
-        std::lock_guard<std::mutex> lock(lock_);
+    void buildIfNeeded() {
+        std::call_once(builtFlag, [this]() { build(); });
+    }
 
+    void build() {
         if (built()) {
             return;
         }
@@ -410,7 +408,7 @@ public:
     }
 
 protected:
-    std::mutex lock_;
+    std::once_flag builtFlag;
     NodeList nodes;      //**< a list of all leaf and branch nodes in the tree. */
     Node* root;          //**< a pointer to the root node, if the tree has been built. */
     size_t nodeCapacity; //*< maximum number of children of each node */
