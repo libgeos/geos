@@ -58,10 +58,7 @@ public:
         return op.intersects(geom);
     }
 
-    /**
-     * \todo FIXME - mloskot: Why not taking linestring through const reference?
-     */
-    PreparedLineStringIntersects(PreparedLineString& prep)
+    PreparedLineStringIntersects(const PreparedLineString& prep)
         : prepLine(prep)
     { }
 
@@ -74,7 +71,7 @@ public:
     bool intersects(const geom::Geometry* g) const;
 
 protected:
-    PreparedLineString& prepLine;
+    const PreparedLineString& prepLine;
 
     /**
      * Tests whether any representative point of the test Geometry intersects
