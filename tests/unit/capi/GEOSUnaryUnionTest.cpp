@@ -240,5 +240,22 @@ void object::test<10>
 
     ensure_equals(toWKT(geom2_), std::string("LINESTRING EMPTY"));
 }
+
+// https://github.com/libgeos/geos/issues/830
+// Self-union on collection with an empty point
+template<>
+template<>
+void object::test<11>
+()
+{
+    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING (0 0, 1 1))");
+
+    geom2_ = GEOSUnaryUnion(geom1_);
+
+    ensure_equals(toWKT(geom2_), std::string("LINESTRING (0 0, 1 1)"));
+}
+
+
 } // namespace tut
+
 

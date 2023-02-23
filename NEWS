@@ -1,3 +1,9 @@
+Changes in 3.9.5
+2023-XX-XX
+
+- Bug fixes / improvements:
+  - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
+
 
 Changes in 3.9.4
 2022-11-14
