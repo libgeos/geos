@@ -42,6 +42,7 @@ xxxx-xx-xx
     (GH-791, Joris Van den Bossche & Dan Baston)
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
   - Polygonizer: Fix duplicate lines return by getInvalidRingLines (GH-782, Martin Davis & Dan Baston)
+  - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
 
 
 ## Changes in 3.11.0
