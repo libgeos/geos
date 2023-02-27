@@ -33,6 +33,8 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+using geos::operation::distance::IndexedFacetDistance;
+
 namespace tut {
 //
 // Test Group
@@ -364,6 +366,31 @@ void object::test<11>
         fail("IndexedFacedDistance::nearestPoints did not throw on empty input");
     }
     catch (const GEOSException&) { }
+}
+
+// Test with Inf coords
+template<>
+template<>
+void object::test<12>()
+{
+    auto g1 = _wktreader.read("POINT (0 0)");
+    auto g2 = _wktreader.read("LINESTRING (3 Inf, 5 Inf)");
+
+    IndexedFacetDistance ifd1(g1.get());
+
+    auto pts = ifd1.nearestPoints(g2.get());
+    ensure_equals(pts.size(), 2u);
+
+    auto seq = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(std::move(pts));
+
+    auto ls = _factory->createLineString(std::move(seq));
+    ls->normalize();
+
+    const auto& normPts = *ls->getCoordinatesRO();
+
+    ensure_equals(normPts.getX(0), 0);
+    ensure_equals(normPts.getY(0), 0);
+    ensure_equals(normPts.getY(1), geos::DoubleInfinity);
 }
 
 

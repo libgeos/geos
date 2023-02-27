@@ -3,6 +3,7 @@ Changes in 3.9.5
 
 - Bug fixes / improvements:
   - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
+  - IndexedFacetDistance: Fix crash with Inf coordinates (GH-821, Dan Baston)
 
 
 Changes in 3.9.4

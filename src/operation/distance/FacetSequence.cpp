@@ -128,7 +128,7 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
         const Coordinate& q0 = facetSeq.pts->getAt(i);
         const Coordinate& q1 = facetSeq.pts->getAt(i + 1);
         double dist = Distance::pointToSegment(pt, q0, q1);
-        if(dist < minDistance) {
+        if(dist < minDistance || (locs != nullptr && locs->empty())) {
             minDistance = dist;
             if (locs != nullptr) {
                 updateNearestLocationsPointLine(pt, facetSeq, i, q0, q1, locs);
