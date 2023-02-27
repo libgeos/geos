@@ -44,6 +44,7 @@ xxxx-xx-xx
   - Polygonizer: Fix duplicate lines return by getInvalidRingLines (GH-782, Martin Davis & Dan Baston)
   - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
   - GEOSBuffer: Fix crash with Inf coordinates (GH-822, Dan Baston)
+  - GEOSSTRtree_iterate: Do not return removed items (GH-833, Dan Baston)
 
 
 ## Changes in 3.11.0
