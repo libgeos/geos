@@ -3562,6 +3562,16 @@ extern "C" {
         });
     }
 
+    int
+    GEOSSTRtree_build_r(GEOSContextHandle_t extHandle,
+                        GEOSSTRtree* tree)
+    {
+        return execute(extHandle, 0, [&]() {
+            tree->build();
+            return 1;
+        });
+    }
+
     void
     GEOSSTRtree_insert_r(GEOSContextHandle_t extHandle,
                          GEOSSTRtree* tree,
