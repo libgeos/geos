@@ -11,6 +11,7 @@
   - Disallow Inf envelopes in Quadtree, avoid inf loop (Paul Ramsey)
   - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
   - GEOSSTRtree_iterate: Do not return removed items (GH-833, Dan Baston)
+  - IndexedFacetDistance: Fix crash with Inf coordinates (GH-821, Dan Baston)
 
 
 ## Changes in 3.11.1
