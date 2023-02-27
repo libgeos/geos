@@ -297,7 +297,9 @@ public:
     void iterate(F&& func) {
         auto n = built() ? numItems : nodes.size();
         for (size_t i = 0; i < n; i++) {
-            func(nodes[i].getItem());
+            if (!nodes[i].isDeleted()) {
+                func(nodes[i].getItem());
+            }
         }
     }
 
