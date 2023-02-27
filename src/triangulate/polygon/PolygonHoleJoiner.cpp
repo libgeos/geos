@@ -435,7 +435,7 @@ PolygonHoleJoiner::createBoundaryIntersector()
     }
     std::unique_ptr<MCIndexSegmentSetMutualIntersector> mssmi(new MCIndexSegmentSetMutualIntersector());
     mssmi->setBaseSegments(&polySegStrings);
-    return mssmi;
+    return RETURN_UNIQUE_PTR(mssmi);
 }
 
 

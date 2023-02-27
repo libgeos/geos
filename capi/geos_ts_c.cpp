@@ -2324,7 +2324,7 @@ extern "C" {
     const char* GEOSversion()
     {
         static char version[256];
-        sprintf(version, "%s", GEOS_CAPI_VERSION);
+        snprintf(version, sizeof(version), "%s", GEOS_CAPI_VERSION);
         return version;
     }
 
