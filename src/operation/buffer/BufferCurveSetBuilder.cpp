@@ -245,6 +245,10 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
     auto shellCoord =
             operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(shell->getCoordinatesRO());
 
+    if (shellCoord->isEmpty()) {
+        throw util::GEOSException("Shell empty after removing invalid points");
+    }
+
     // don't attempt to buffer a polygon
     // with too few distinct vertices
     if(distance <= 0.0 && shellCoord->size() < 3) {
