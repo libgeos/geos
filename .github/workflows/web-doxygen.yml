@@ -1,0 +1,61 @@
+#
+# GitHub Actions for GEOS Push doxygen to website
+# Regina Obe <lr@pcorp.us>
+#
+
+name: 'Doxygen'
+
+on:
+  push:
+    branches:
+      - '3.11'
+      - '3.11-doxygen'
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    name: 'Build Doxygen - Deploy'
+    runs-on: ubuntu-latest
+
+    # Only run docbuild on central repo
+    # TODO: change to robe2 to libgeos on pull request
+    if: github.repository == 'robe2/geos'
+    steps:
+
+    - name: 'Install'
+      run: |
+        set -e
+        uname -a
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
+
+    - name: 'Check Out 📗'
+      uses: actions/checkout@v2
+
+    - name: 'Branch name'
+      run: |
+          echo running on branch ${GITHUB_REF##*/}
+
+    - name: 'Doxygen Build 🛠'
+      run: |
+        set -e
+        mkdir build.cmake
+        cd build.cmake
+        cmake --version
+        cmake -DBUILD_DOCUMENTATION=YES ..
+        cmake --build . --target docs
+
+    - name: 'Bundle 🛠'
+      run: |
+        mkdir -p public_html/doxygen
+        cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen
+
+    - name: 'Deploy 🚀'
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
+      with:
+        branch: gh-pages           # The branch the action should deploy to.
+        folder: public_html/doxygen   # The folder the action should deploy.
+        target-folder:  doxygen/3.11 #The folder it should deploy to
+
+
