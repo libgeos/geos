@@ -9,7 +9,6 @@ on:
   push:
     branches:
       - '3.11'
-      - '3.11-doxygen'
 
 permissions:
   contents: write
@@ -20,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Only run docbuild on central repo
-    # TODO: change to robe2 to libgeos on pull request
-    if: github.repository == 'robe2/geos'
+    if: github.repository == 'libgeos/geos'
     steps:
 
     - name: 'Install'
