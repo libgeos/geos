@@ -201,5 +201,20 @@ void object::test<6>
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
 }
 
+// Crash on collection with empty components
+// https://github.com/libgeos/geos/issues/840
+template<>
+template<>
+void object::test<7>
+()
+{
+    auto g1 = reader.read("GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING (0 0, 1 1))");
+    auto g2 = reader.read("POINT (1 2)");
+    auto g3 = reader.read("LINESTRING (0 0, 1 1)");
+
+    ensure_equals(DiscreteHausdorffDistance::distance(*g1, *g2),
+                  DiscreteHausdorffDistance::distance(*g2, *g3));
+}
+
 } // namespace tut
 
