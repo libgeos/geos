@@ -341,7 +341,7 @@ jobs:
       matrix:
         xcode: [11.7, 12.4, 13.2.1]
         cxxstd: [14]
-        build_type: ['Debug']
+        build_type: ['ASAN']
         include:
           - xcode: 13.2.1
             cxxstd: 17
