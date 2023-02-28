@@ -703,6 +703,8 @@ XMLTester::parseCase(const tinyxml2::XMLNode* node)
         std::cout << *curr_file << ":";
         std::cout << " case" << caseCount << ":";
         std::cout << " skipped (" << thrownException << ")." << std::endl;
+        if (gA) delete gA;
+        if (gB) delete gB;
         return;
     }
 

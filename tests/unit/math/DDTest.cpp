@@ -164,7 +164,7 @@ struct test_dd_data {
         DD d(1.0);
         int sign = 1;
         while (t.doubleValue() > eps) {
-            k++;
+            k = k + 1;
             if (sign < 0)
                 at = at - (t / d);
             else
@@ -190,7 +190,7 @@ struct test_dd_data {
         int i = 0;
         while(t.doubleValue() > eps)
         {
-            i++;
+            i = i + 1;
             n += 1.0;
             t = t / DD(n);
             s = s + t;

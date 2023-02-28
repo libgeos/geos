@@ -156,6 +156,39 @@ message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 #-----------------------------------------------------------------------------
+# Add ASAN build option
+#-----------------------------------------------------------------------------
+#
+# To use ASAN with MacOSX you will need to install clang++ from MacPorts
+# or HomeBrew, the default XCode one won't work. Then get cmake to use your
+# new compiler, with something like.
+#
+#  cmake \
+#   -D CMAKE_C_COMPILER=/opt/local/bin/clang-mp-15 \
+#   -D CMAKE_CXX_COMPILER=/opt/local/bin/clang-mp-15++ \
+#   -D CMAKE_BUILD_TYPE=ASAN
+#
+# To suppress reporting on leaks in MacOS itself (yes, really), 
+# add a suppression file to your build directory. 
+#
+#  echo leak:realizeClassWithoutSwift >> lsan.supp
+#
+# Now run the program with env vars set to turn on leak checking and suppression.
+# 
+#  MallocNanoZone=0 \
+#  ASAN_OPTIONS=detect_leaks=1 \
+#  LSAN_OPTIONS=suppressions=lsan.supp \
+#  ./bin/test_geos_unit
+#
+
+set(CMAKE_C_FLAGS_ASAN "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -fno-common" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_ASAN "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -fno-common" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_ASAN "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address" CACHE STRING "" FORCE)
+set(CMAKE_SHARED_LINKER_FLAGS_ASAN "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=address" CACHE STRING "" FORCE)
+
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "ASAN")
+
+#-----------------------------------------------------------------------------
 # Install directories
 #-----------------------------------------------------------------------------
 
