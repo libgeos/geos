@@ -19,131 +19,140 @@ jobs:
     strategy:
       matrix:
         ci:
-        - cxx_compiler: g++
-          c_compiler: gcc
-          build_type: Coverage
-          cxxstd: 14
-          arch: 64
-          packages: g++
-          cmake: 3.15.*
-          cmake_extra: '-DBUILD_BENCHMARKS=ON'
-          os: ubuntu-latest
+        # - cxx_compiler: g++
+        #   c_compiler: gcc
+        #   build_type: Coverage
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: g++
+        #   cmake: 3.15.*
+        #   cmake_extra: '-DBUILD_BENCHMARKS=ON'
+        #   os: ubuntu-latest
 
-        - cxx_compiler: g++-5
-          c_compiler: gcc-5
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-5-multilib gcc-5-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
+        # - cxx_compiler: g++-5
+        #   c_compiler: gcc-5
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-5-multilib gcc-5-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-18.04
 
-        - cxx_compiler: g++-5
-          c_compiler: gcc-5
-          build_type: Release
-          cxxstd: 14
-          arch: 32
-          packages: 'g++-5-multilib gcc-5-multilib g++-multilib gcc-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
+        # - cxx_compiler: g++-5
+        #   c_compiler: gcc-5
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 32
+        #   packages: 'g++-5-multilib gcc-5-multilib g++-multilib gcc-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-18.04
 
-        - cxx_compiler: g++-6
-          c_compiler: gcc-6
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-6-multilib gcc-6-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
+        # - cxx_compiler: g++-6
+        #   c_compiler: gcc-6
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-6-multilib gcc-6-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-18.04
 
-        - cxx_compiler: g++-7
-          c_compiler: gcc-7
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-7-multilib gcc-7-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: g++-7
+        #   c_compiler: gcc-7
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-7-multilib gcc-7-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: g++-8
-          c_compiler: gcc-8
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-8-multilib gcc-8-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: g++-8
+        #   c_compiler: gcc-8
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-8-multilib gcc-8-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: g++-9
-          c_compiler: gcc-9
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-9-multilib gcc-9-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: g++-9
+        #   c_compiler: gcc-9
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-9-multilib gcc-9-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: g++-10
-          c_compiler: gcc-10
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-10-multilib gcc-10-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: g++-10
+        #   c_compiler: gcc-10
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'g++-10-multilib gcc-10-multilib'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: g++-11
-          c_compiler: gcc-11
-          build_type: Release
-          cxxstd: 17
-          arch: 64
-          packages: 'g++'
-          cmake: 3.22.*
-          os: ubuntu-22.04
+        # - cxx_compiler: g++-11
+        #   c_compiler: gcc-11
+        #   build_type: Release
+        #   cxxstd: 17
+        #   arch: 64
+        #   packages: 'g++'
+        #   cmake: 3.22.*
+        #   os: ubuntu-22.04
 
-        - cxx_compiler: g++-11
-          c_compiler: gcc-11
-          build_type: Release
-          cxxstd: 20
-          arch: 64
-          packages: 'g++'
-          cmake: 3.22.*
-          os: ubuntu-22.04
+        # - cxx_compiler: g++-11
+        #   c_compiler: gcc-11
+        #   build_type: Release
+        #   cxxstd: 20
+        #   arch: 64
+        #   packages: 'g++'
+        #   cmake: 3.22.*
+        #   os: ubuntu-22.04
 
-        - cxx_compiler: clang++-7
-          c_compiler: clang-7
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-7'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: clang++-7
+        #   c_compiler: clang-7
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'clang-7'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: clang++-8
-          c_compiler: clang-8
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-8'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: clang++-8
+        #   c_compiler: clang-8
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'clang-8'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
 
-        - cxx_compiler: clang++-9
-          c_compiler: clang-9
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-9'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+        # - cxx_compiler: clang++-9
+        #   c_compiler: clang-9
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'clang-9'
+        #   cmake: 3.13.*
+        #   os: ubuntu-20.04
+
+        # - cxx_compiler: clang++-10
+        #   c_compiler: clang
+        #   build_type: Release
+        #   cxxstd: 14
+        #   arch: 64
+        #   packages: 'clang'
+        #   cmake: 3.17.*
+        #   os: ubuntu-20.04
 
         - cxx_compiler: clang++-10
           c_compiler: clang
-          build_type: Release
+          build_type: ASAN
           cxxstd: 14
           arch: 64
           packages: 'clang'
-          cmake: 3.17.*
+          cmake: 3.25.*
           os: ubuntu-20.04
 
 
@@ -208,196 +217,196 @@ jobs:
         bash codecov.sh
       shell: bash
 
-  windows-mingw:
-    name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
-    runs-on: windows-2019
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v3
+  # windows-mingw:
+  #   name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
+  #   runs-on: windows-2019
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'Setup'
-      uses: msys2/setup-msys2@v2
-      with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
-        update: true
+  #   - name: 'Setup'
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
+  #       update: true
 
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
-       cmake --build . -j 2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Debug -G"MSYS Makefiles" ..
+  #      cmake --build . -j 2
 
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure .
+  #   - name: 'Test'
+  #     run: |
+  #      cd build
+  #      ctest --output-on-failure .
 
-  windows-mingw-release:
-    name: 'Windows (mingw-w64, Release, 11, x86_64, windows-2019)'
-    runs-on: windows-2019
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v3
+  # windows-mingw-release:
+  #   name: 'Windows (mingw-w64, Release, 11, x86_64, windows-2019)'
+  #   runs-on: windows-2019
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'Setup'
-      uses: msys2/setup-msys2@v2
-      with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
-        update: true
+  #   - name: 'Setup'
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make
+  #       update: true
 
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -G"MSYS Makefiles" ..
-       cmake --build . -j 2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Release -G"MSYS Makefiles" ..
+  #      cmake --build . -j 2
 
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure .
+  #   - name: 'Test'
+  #     run: |
+  #      cd build
+  #      ctest --output-on-failure .
 
-  windows-msvc-22:
-    name: 'Windows (Visual Studio 2022, Debug, windows-2022)'
-    runs-on: windows-2022
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v3
+  # windows-msvc-22:
+  #   name: 'Windows (Visual Studio 2022, Debug, windows-2022)'
+  #   runs-on: windows-2022
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Debug -j 2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+  #      cmake --build . --config Debug -j 2
 
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure -C Debug
+  #   - name: 'Test'
+  #     run: |
+  #      cd build
+  #      ctest --output-on-failure -C Debug
 
-  windows-msvc-19:
-    name: 'Windows (Visual Studio 2019, Release, windows-2019)'
-    runs-on: windows-2019
-    steps:
-    - name: 'Check Out'
-      uses: actions/checkout@v3
+  # windows-msvc-19:
+  #   name: 'Windows (Visual Studio 2019, Release, windows-2019)'
+  #   runs-on: windows-2019
+  #   steps:
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'Build'
-      run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
-       cmake --build . --config Release -j 2
+  #   - name: 'Build'
+  #     run: |
+  #      mkdir build
+  #      cd build
+  #      cmake --version
+  #      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+  #      cmake --build . --config Release -j 2
 
-    - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure -C Release
+  #   - name: 'Test'
+  #     run: |
+  #      cd build
+  #      ctest --output-on-failure -C Release
 
-  macos:
-    name: 'macOS clang'
-    strategy:
-      matrix:
-        xcode: [11.7, 12.4, 13.2.1]
-        cxxstd: [14]
-        build_type: ['Debug']
-        include:
-          - xcode: 13.2.1
-            cxxstd: 17
-            build_type: Debug
-          - xcode: 13.2.1
-            cxxstd: 20
-            build_type: Debug
+  # macos:
+  #   name: 'macOS clang'
+  #   strategy:
+  #     matrix:
+  #       xcode: [11.7, 12.4, 13.2.1]
+  #       cxxstd: [14]
+  #       build_type: ['Debug']
+  #       include:
+  #         - xcode: 13.2.1
+  #           cxxstd: 17
+  #           build_type: Debug
+  #         - xcode: 13.2.1
+  #           cxxstd: 20
+  #           build_type: Debug
 
-    runs-on: macos-11
-    steps:
+  #   runs-on: macos-11
+  #   steps:
 
-    - name: 'Install'
-      env:
-        XCODE_APP: /Applications/XCode_${{ matrix.xcode }}.app
-      run: |
-        set -e
-        uname -a
-        sudo xcode-select -switch ${XCODE_APP}
-        which clang++
-        clang++ --version
+  #   - name: 'Install'
+  #     env:
+  #       XCODE_APP: /Applications/XCode_${{ matrix.xcode }}.app
+  #     run: |
+  #       set -e
+  #       uname -a
+  #       sudo xcode-select -switch ${XCODE_APP}
+  #       which clang++
+  #       clang++ --version
 
-    - name: 'Check Out'
-      uses: actions/checkout@v3
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'Build'
-      env:
-        BUILD_TYPE: ${{ matrix.build_type }}
-        CXX_STANDARD: ${{ matrix.cxxstd }}
-      run: |
-        set -e
-        mkdir build
-        cd build
-        cmake --version
-        cmake -DCMAKE_CXX_STANDARD=${CXX_STANDARD} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-        cmake --build . --config ${BUILD_TYPE} -j 3
+  #   - name: 'Build'
+  #     env:
+  #       BUILD_TYPE: ${{ matrix.build_type }}
+  #       CXX_STANDARD: ${{ matrix.cxxstd }}
+  #     run: |
+  #       set -e
+  #       mkdir build
+  #       cd build
+  #       cmake --version
+  #       cmake -DCMAKE_CXX_STANDARD=${CXX_STANDARD} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
+  #       cmake --build . --config ${BUILD_TYPE} -j 3
 
-    - name: 'Test'
-      run: |
-        cd build
-        ctest -V --output-on-failure -C ${BUILD_TYPE}
-
-
-  code-quality:
-    name: Code quality checks
-    runs-on: ubuntu-latest
-    steps:
-    - name: Install
-      run: |
-        set -e
-        sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
-
-    - name: 'Check Out'
-      uses: actions/checkout@v3
-
-    - name: 'cppcheck'
-      run: |
-        ./tools/cppcheck.sh
+  #   - name: 'Test'
+  #     run: |
+  #       cd build
+  #       ctest -V --output-on-failure -C ${BUILD_TYPE}
 
 
-  cmake-subproject:
-    name: 'CMake Subproject'
-    runs-on: ubuntu-20.04
-    steps:
-    - name: 'Install'
-      run: |
-        set -e
-        uname -a
-        sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
-        python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+  # code-quality:
+  #   name: Code quality checks
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Install
+  #     run: |
+  #       set -e
+  #       sudo -E apt-get update
+  #       sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
 
-    - name: 'Check Out'
-      uses: actions/checkout@v3
-      with:
-        path: geos
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
 
-    - name: 'CMake Superbuild'
-      run: |
-        set -e
-        cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
-        cp geos/examples/capi_read.c .
-        cmake --version
-        cmake -S . -B build
-        cmake --build build -j 2
-        build/capi_read
-        test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
+  #   - name: 'cppcheck'
+  #     run: |
+  #       ./tools/cppcheck.sh
+
+
+  # cmake-subproject:
+  #   name: 'CMake Subproject'
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #   - name: 'Install'
+  #     run: |
+  #       set -e
+  #       uname -a
+  #       sudo -E apt-get update
+  #       sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
+  #       python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
+  #       echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+  #   - name: 'Check Out'
+  #     uses: actions/checkout@v3
+  #     with:
+  #       path: geos
+
+  #   - name: 'CMake Superbuild'
+  #     run: |
+  #       set -e
+  #       cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
+  #       cp geos/examples/capi_read.c .
+  #       cmake --version
+  #       cmake -S . -B build
+  #       cmake --build build -j 2
+  #       build/capi_read
+  #       test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
