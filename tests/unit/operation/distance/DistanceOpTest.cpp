@@ -565,6 +565,17 @@ void object::test<21>()
     ensure_equals(g1->distance(g2.get()), 1.9996999774966246);
 }
 
+template<>
+template<>
+void object::test<22>()
+{
+    auto g1 = wktreader.read("GEOMETRYCOLLECTION (POINT EMPTY, LINESTRING (0 0, 1 1))");
+    auto g2 = wktreader.read("POINT (1 2)");
+
+    ensure_equals(g1->distance(g2.get()), 1);
+    ensure_equals(g2->distance(g1.get()), 1);
+}
+
 // TODO: finish the tests by adding:
 // 	LINESTRING - *all*
 // 	MULTILINESTRING - *all*
