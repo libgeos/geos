@@ -1557,6 +1557,12 @@ extern "C" {
         return GEOSSTRtree_create_r(handle, nodeCapacity);
     }
 
+    int
+    GEOSSTRtree_build(GEOSSTRtree* tree)
+    {
+        return GEOSSTRtree_build_r(handle, tree);
+    }
+
     void
     GEOSSTRtree_insert(GEOSSTRtree* tree,
                        const geos::geom::Geometry* g,

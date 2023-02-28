@@ -444,10 +444,7 @@ void object::test<13>()
     }
 
     // Perform a query to force tree construction
-    GEOSSTRtree_query(tree, geoms[0], [](void* item, void* userdata) {
-        (void) item;
-        (void) userdata;
-    }, nullptr);
+    ensure_equals(GEOSSTRtree_build(tree), 1);
 
     // Iterate to collect all tree items
     std::vector<GEOSGeometry*> geomsFound2;
