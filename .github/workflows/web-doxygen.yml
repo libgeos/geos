@@ -10,6 +10,9 @@ on:
     branches-ignore:
       - 'main'
 
+permissions:
+  contents: write
+
 jobs:
   linux:
     name: 'Build Web'
@@ -48,7 +51,7 @@ jobs:
         cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen/3.1
 
     - name: 'Deploy 🚀'
-      uses: JamesIves/github-pages-deploy-action@4.1.5
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         branch: gh-pages           # The branch the action should deploy to.
         folder: public_html/doxygen/3.1   # The folder the action should depl y.
