@@ -292,6 +292,15 @@ public:
     }
 
     /** \brief
+     * Returns true if this Envelope covers a finite region
+     */
+    bool
+    isFinite() const
+    {
+        return std::isfinite(getArea());
+    }
+
+    /** \brief
      * Returns the Envelope maximum y-value. `min y > max y` indicates
      * that this is a null Envelope.
      */
