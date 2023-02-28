@@ -47,6 +47,7 @@ xxxx-xx-xx
   - GEOSSTRtree_iterate: Do not return removed items (GH-833, Dan Baston)
   - IndexedFacetDistance: Fix crash with Inf coordinates (GH-821, Dan Baston)
   - HausdorffDistance: Fix crash on collection containing empty point (GH-840, Dan Baston)
+  - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
 
 
 ## Changes in 3.11.0
