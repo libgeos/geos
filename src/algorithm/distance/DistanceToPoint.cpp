@@ -40,6 +40,10 @@ DistanceToPoint::computeDistance(const geom::Geometry& geom,
                                  const geom::Coordinate& pt,
                                  PointPairDistance& ptDist)
 {
+    if (geom.isEmpty()) {
+        ptDist.initialize();
+        return;
+    }
     if(const LineString* ls = dynamic_cast<const LineString*>(&geom)) {
         computeDistance(*ls, pt, ptDist);
     }
