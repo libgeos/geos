@@ -14,8 +14,9 @@
       
       <guid>https://libgeos.org/usage/doxygen/</guid>
       <description>The Doxygen documentation is the most up-to-date reference for the C and C++ API of GEOS.
- C API C++ API  See also:
- C API tutorial C++ API tutorial.  Code examples are available in the code repository.</description>
+ C API: Dev 3.11 C++ API: Dev 3.11  See also:
+ C API tutorial C++ API tutorial.  Code examples dev are available in the code repository.
+Code examples 3.11 are available in the 3.11 branch code repository.</description>
     </item>
     
     <item>
