@@ -7,15 +7,16 @@ name: 'Doxygen'
 
 on:
   push:
-    branches-ignore:
-      - 'main'
+    branches:
+      - '3.11'
+      - '3.11-doxygen'
 
 permissions:
   contents: write
 
 jobs:
   linux:
-    name: 'Build Web'
+    name: 'Build Doxygen - Deploy'
     runs-on: ubuntu-latest
 
     # Only run docbuild on central repo
@@ -47,13 +48,14 @@ jobs:
 
     - name: 'Bundle 🛠'
       run: |
-        mkdir -p public_html/doxygen/3.1
-        cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen/3.1
+        mkdir -p public_html/doxygen
+        cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen
 
     - name: 'Deploy 🚀'
       uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         branch: gh-pages           # The branch the action should deploy to.
-        folder: public_html/doxygen/3.1   # The folder the action should depl y.
+        folder: public_html/doxygen   # The folder the action should deploy.
+        target-folder:  doxygen/3.11 #The folder it should deploy to
 
 
