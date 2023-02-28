@@ -374,7 +374,13 @@ DistanceOp::computeMinDistancePoints(
     std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom)
 {
     for(const Point* pt0 : points0) {
+        if (pt0->isEmpty()) {
+            continue;
+        }
         for(const Point* pt1 : points1) {
+            if (pt1->isEmpty()) {
+                continue;
+            }
             double dist = pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
 
 #if GEOS_DEBUG
