@@ -13,6 +13,7 @@
   - GEOSSTRtree_iterate: Do not return removed items (GH-833, Dan Baston)
   - IndexedFacetDistance: Fix crash with Inf coordinates (GH-821, Dan Baston)
   - HausdorffDistance: Fix crash on collection containing empty point (GH-840, Dan Baston)
+  - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
 
 

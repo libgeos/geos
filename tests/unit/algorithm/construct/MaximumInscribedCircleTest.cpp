@@ -173,7 +173,6 @@ void object::test<6>
        0.01, 100, 100, 0 );
 }
 
-
 // //
 // // Invalid polygon collapsed to a line
 // //
@@ -184,6 +183,25 @@ void object::test<7>
 {
      checkCircle("POLYGON((1 2, 1 2, 1 2, 1 2, 3 2, 1 2))",
        0.01, 2, 2, 0 );
+}
+
+// Exception thrown to avoid infinite loop with infinite envelope
+template<>
+template<>
+void object::test<8>
+()
+{
+    auto g1 = reader_.read("POLYGON ((0 0, 1 0, 1 1, 0 Inf, 0 0))");
+    try {
+        MaximumInscribedCircle mic(g1.get(), 1);
+        mic.getCenter();
+    } catch (const util::GEOSException & e) {}
+
+    auto g2 = reader_.read("POLYGON ((0 0, 1 0, 2 NaN,  0 0))");
+    try {
+        MaximumInscribedCircle mic(g1.get(), 1);
+        mic.getCenter();
+    } catch (const util::GEOSException & e) {}
 }
 
 
