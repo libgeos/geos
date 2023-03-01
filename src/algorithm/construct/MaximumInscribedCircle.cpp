@@ -112,6 +112,10 @@ MaximumInscribedCircle::getRadiusLine()
 void
 MaximumInscribedCircle::createInitialGrid(const Envelope* env, std::priority_queue<Cell>& cellQueue)
 {
+    if (!std::isfinite(env->getArea())) {
+        throw util::GEOSException("Non-finite envelope encountered.");
+    }
+
     double minX = env->getMinX();
     double maxX = env->getMaxX();
     double minY = env->getMinY();
