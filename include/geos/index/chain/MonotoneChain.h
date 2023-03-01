@@ -95,6 +95,8 @@ public:
     /// @param context
     ///   Ownership left to caller, this class holds a reference.
     ///
+    /// @param expansionDistance distance by which envelope should be expanded
+    ///
     MonotoneChain(const geom::CoordinateSequence& pts,
                   std::size_t start, std::size_t end, void* context, double expansionDistance);
 
