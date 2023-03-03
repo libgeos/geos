@@ -1,7 +1,8 @@
 ---
-title: "Support"
+title: "Development"
 date: 2021-10-04T14:21:00-07:00
 draft: false
+weight: 5
 ---
 
 ## Resources
@@ -21,7 +22,7 @@ Defects should be reported using
 
 When submitting bugs caused by particular geometries, you must
 **submit the geometries that cause the failure**, preferably in hex-encoded
-[WKB]({{< ref "../specifications/wkb" >}}), so that we can re-produce
+[WKB]({{< ref "../../specifications/wkb" >}}), so that we can re-produce
 the failure cases.
 
 

@@ -2,6 +2,7 @@
 title: "CI Status"
 date: 2021-10-04T14:21:00-07:00
 draft: false
+weight: 50
 ---
 
 | CI     | main   | 3.11 | 3.10   | 3.9    | 3.8    | 3.7    |
