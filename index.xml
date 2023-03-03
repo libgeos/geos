@@ -9,23 +9,33 @@
     <lastBuildDate>Mon, 04 Oct 2021 14:13:20 -0700</lastBuildDate><atom:link href="https://libgeos.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>GEOS RFC 11 - GEOS Version and EOL Policy</title>
-      <link>https://libgeos.org/development/rfcs/rfc11/</link>
+      <link>https://libgeos.org/project/rfcs/rfc11/</link>
       <pubDate>Mon, 12 Sep 2022 00:00:00 -0400</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc11/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc11/</guid>
       <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Accepted, September 20, 2022    This document describes the GEOS project policy for versioning and EOLing GEOS minor versions.
 Versioning The GEOS project generally produces a new minor version every 1-2 years. Minor versions typically contain new features, as well as bug fixes and performance improvements.</description>
     </item>
     
     <item>
       <title>GEOS RFC 10 - Move Project to GitHub</title>
-      <link>https://libgeos.org/development/rfcs/rfc10/</link>
+      <link>https://libgeos.org/project/rfcs/rfc10/</link>
       <pubDate>Fri, 29 Oct 2021 00:00:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc10/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc10/</guid>
       <description>RFC 10 Move Project to GitHub   Author Paul Ramsey   Contact pramsey@cleverelephant.ca   Status Accepted, November 9, 2021    GitHub has been the largest source of 3rd party code contribution via pull-requests for some time now.
 Moving to Github has the following components:
  Move the canonical (writeable) repository to GitHub Migrate the (current, useful) contents of the Trac wiki to the new web framework Deleting the migrated and out-of-date contents of the Trac wiki Switching the Trac tickets to read-only Web scraping the Trac ticket contents and placing in a geos-old-tickets repo  At that point:</description>
+    </item>
+    
+    <item>
+      <title>Testing</title>
+      <link>https://libgeos.org/project/development/tests/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
+      
+      <guid>https://libgeos.org/project/development/tests/</guid>
+      <description>Testing executables are in bin
+ See also the ctest documentation.  Unit Tests The GEOS unit tests are written using the TUT framework. There are tests for both the C++ code and the C API. The test source files are in the test/unit directory. The test group names are in the group declaration in each XXXTest.cpp file. By convention the test group name is based on the test file path and name.</description>
     </item>
     
     <item>
@@ -82,13 +92,12 @@ You can explore the C++ model via the Doxygen reference.</description>
     </item>
     
     <item>
-      <title>Testing</title>
-      <link>https://libgeos.org/development/testing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>CI Status</title>
+      <link>https://libgeos.org/project/development/ci_status/</link>
+      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/testing/</guid>
-      <description>Testing executables are in bin
- See also the ctest documentation.  Unit Tests The GEOS unit tests are written using the TUT framework. There are tests for both the C++ code and the C API. The test source files are in the test/unit directory. The test group names are in the group declaration in each XXXTest.cpp file. By convention the test group name is based on the test file path and name.</description>
+      <guid>https://libgeos.org/project/development/ci_status/</guid>
+      <description>CI main 3.11 3.10 3.9 3.8 3.7     GitHub         GitLab         Debbie         Winnie         Dronie         Bessie         Bessie32         Berrie         Berrie64          Runners  GitHub - Ubuntu various, Windows various, CMake GitLab - Debian 8.</description>
     </item>
     
     <item>
@@ -191,30 +200,21 @@ This release is a bug fix release.
     </item>
     
     <item>
-      <title>CI Status</title>
-      <link>https://libgeos.org/development/ci_status/</link>
-      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
-      
-      <guid>https://libgeos.org/development/ci_status/</guid>
-      <description>CI main 3.11 3.10 3.9 3.8 3.7     GitHub         GitLab         Debbie         Winnie         Dronie         Bessie         Bessie32         Berrie         Berrie64          Runners  GitHub - Ubuntu various, Windows various, CMake GitLab - Debian 8.</description>
-    </item>
-    
-    <item>
       <title>GEOS RFC 1 - Project Steering Committee</title>
-      <link>https://libgeos.org/development/rfcs/rfc01/</link>
+      <link>https://libgeos.org/project/rfcs/rfc01/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc01/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc01/</guid>
       <description>This document describes how the PSC GEOS Project Steering Committee determines membership, and makes decisions on all aspects of the GEOS project - both technical and non-technical.
          RFC 1 Project Steering Committee   Author Paul Ramsey   Contact pramsey@cleverelephant.ca   Status Approved, April 10, 2008    Summary This document describes how the GEOS Project Steering Committee (PSC) determines membership, and makes decisions on all aspects of the GEOS project - both technical and non-technical.</description>
     </item>
     
     <item>
       <title>GEOS RFC 2 - Committer Guidelines </title>
-      <link>https://libgeos.org/development/rfcs/rfc02/</link>
+      <link>https://libgeos.org/project/rfcs/rfc02/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc02/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc02/</guid>
       <description>This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].
          RFC 2 Committer Guidelines   Author Paul Ramsey, Regina Obe   Contact pramsey@cleverelephant.ca, lr@pcorp.us   Status Draft    Summary This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].
 Election to GIT Commit Access Permission for GIT commit access shall be provided to new developers only if accepted by the [wiki:PSC GEOS Project Steering Committee].</description>
@@ -222,10 +222,10 @@ Election to GIT Commit Access Permission for GIT commit access shall be provided
     
     <item>
       <title>GEOS RFC 3 - Thread Safe CAPI </title>
-      <link>https://libgeos.org/development/rfcs/rfc03/</link>
+      <link>https://libgeos.org/project/rfcs/rfc03/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc03/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc03/</guid>
       <description>Summary The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
 Definitions (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
 Reentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.
@@ -234,10 +234,10 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
     
     <item>
       <title>GEOS RFC 4 - Code Formatting Style</title>
-      <link>https://libgeos.org/development/rfcs/rfc04/</link>
+      <link>https://libgeos.org/project/rfcs/rfc04/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc04/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc04/</guid>
       <description>This document proposes and describes desired code formatting style used across C/C++ source code in GEOS.
          RFC 4 Code Formatting Style   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Dropped (no agreement)    Summary The document proposes and describes desired default code formatting style guidelines for GEOS programming in C and C++ languages.
 The goal of this document is to initiate process to reach an agreement for the default code formatting style.</description>
@@ -245,10 +245,10 @@ The goal of this document is to initiate process to reach an agreement for the d
     
     <item>
       <title>GEOS RFC 5 - C&#43;&#43;11 Compilation Mode</title>
-      <link>https://libgeos.org/development/rfcs/rfc05/</link>
+      <link>https://libgeos.org/project/rfcs/rfc05/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc05/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc05/</guid>
       <description>This document proposes and describes desired code formatting style used across C/C++ source code in GEOS.
          RFC 5 C++11 Compilation Mode   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Accepted (no agreement)    Summary The document proposes to switch to C++11 compilation mode as default throughout the whole C++ source code of GEOS.
 The goal of the document is to request and achieve agreement on using C++11 as the minimum required version of the C++ programming language standard.</description>
@@ -256,19 +256,19 @@ The goal of the document is to request and achieve agreement on using C++11 as t
     
     <item>
       <title>GEOS RFC 6 - Require explicit configure to use the C&#43;&#43; API</title>
-      <link>https://libgeos.org/development/rfcs/rfc06/</link>
+      <link>https://libgeos.org/project/rfcs/rfc06/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc06/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc06/</guid>
       <description>RFC 9 Require explicit configure to use the C++ API   Author Regina Obe   Contact lr@pcorp.us   Status Not Passed    Past discussions Trac ticket to deprecate another request to deprecate and osm2pgsql mess more examples about how apps linking directly to GEOS C++ causing problems for other applications Pointing out removing ability to use GEOS C++ reduces users freedoms</description>
     </item>
     
     <item>
       <title>GEOS RFC 7 - Use CMake for Build System</title>
-      <link>https://libgeos.org/development/rfcs/rfc07/</link>
+      <link>https://libgeos.org/project/rfcs/rfc07/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc07/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc07/</guid>
       <description>RFC 7 Use CMake for build system   Author Daniel Baston   Contact dbaston@gmail.com   Status Accepted, January 15, 2021    This document proposes to use CMake as the build system for GEOS and discontinue use of autotools and NMake.
 Since version 3.5, we have officially supported building GEOS with CMake: https://trac.osgeo.org/geos/wiki/BuildingOnUnixWithCMake
 GEOS is also required to build with autotools and NMake.</description>
@@ -276,10 +276,10 @@ GEOS is also required to build with autotools and NMake.</description>
     
     <item>
       <title>GEOS RFC 8 - Improve Coordinate Sequence API (WIP)</title>
-      <link>https://libgeos.org/development/rfcs/rfc08/</link>
+      <link>https://libgeos.org/project/rfcs/rfc08/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc08/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc08/</guid>
       <description>RFC 8 Improve Coordinate Sequence API   Author Martin Davis   Contact martin.davis@crunchydata.com   Status In Discussion    This document proposes to modify the Coordinate Sequence API to improve performance and adaptiveness.
 These improvements are (likely to be) breaking changes to the C++ API.
 These may require extensions to the C API to be externally available, but should not result in breaking the current C API.</description>
@@ -287,24 +287,13 @@ These may require extensions to the C API to be externally available, but should
     
     <item>
       <title>GEOS RFC 9 - Restore the C&#43;&#43; API (WIP)</title>
-      <link>https://libgeos.org/development/rfcs/rfc09/</link>
+      <link>https://libgeos.org/project/rfcs/rfc09/</link>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
-      <guid>https://libgeos.org/development/rfcs/rfc09/</guid>
+      <guid>https://libgeos.org/project/rfcs/rfc09/</guid>
       <description>RFC 9 Restore the C++ API   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status [https://lists.osgeo.org/pipermail/geos-devel/2019-May/008972.html Proposed]    The GEOS library is a C++ library offering two kinds of public API: C++ API and C API.
 The GEOS library started as a C++ library. The C API was introduced in version 2.2.
 The GEOS library has never promised any stability of the C++ API and this fact has always been documented and clearly stated:</description>
-    </item>
-    
-    <item>
-      <title>Support</title>
-      <link>https://libgeos.org/project/support/</link>
-      <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
-      
-      <guid>https://libgeos.org/project/support/</guid>
-      <description>Resources  git repository: https://github.com/libgeos/geos geos-devel mailing list and archive #geos chat channel (all bridged):  Matrix: https://matrix.to/#/#geos:osgeo.org IRC: irc://irc.libera.chat/#osgeo-geos (https://kiwiirc.com/nextclient/irc.libera.chat/#osgeo-geos) Slack: https://osgeo.slack.com/messages/C07RKJ06B/    Bug Reporting Defects should be reported using GitHub Issues.
-When submitting bugs caused by particular geometries, you must submit the geometries that cause the failure, preferably in hex-encoded WKB, so that we can re-produce the failure cases.
-Contributing To contribute fixes to outstanding issues, enhancements, and other smaller changes, open a pull request with your change and a fullsome description of what you are trying to achieve.</description>
     </item>
     
     <item>

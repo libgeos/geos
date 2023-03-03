@@ -3,16 +3,19 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://libgeos.org/project/</loc>
-    <lastmod>2022-02-16T00:00:00-07:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/development/</loc>
     <lastmod>2022-09-12T00:00:00-04:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc11/</loc>
+    <loc>https://libgeos.org/project/development/</loc>
+    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
+  </url><url>
+    <loc>https://libgeos.org/project/rfcs/rfc11/</loc>
     <lastmod>2022-09-12T00:00:00-04:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc10/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc10/</loc>
     <lastmod>2021-10-29T00:00:00-07:00</lastmod>
+  </url><url>
+    <loc>https://libgeos.org/project/development/tests/</loc>
+    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/usage/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
@@ -23,7 +26,7 @@
     <loc>https://libgeos.org/project/psc/</loc>
     <lastmod>2021-10-27T00:00:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/</loc>
+    <loc>https://libgeos.org/project/rfcs/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/usage/doxygen/</loc>
@@ -35,13 +38,14 @@
     <loc>https://libgeos.org/usage/cpp_api/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
+    <loc>https://libgeos.org/project/development/ci_status/</loc>
+    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
+  </url><url>
     <loc>https://libgeos.org/specifications/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/posts/</loc>
     <lastmod>2022-11-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/development/testing/</loc>
   </url><url>
     <loc>https://libgeos.org/usage/tools/</loc>
   </url><url>
@@ -67,37 +71,31 @@
     <loc>https://libgeos.org/posts/2021-10-01-geos-3-10-released/</loc>
     <lastmod>2021-10-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/ci_status/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc01/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc01/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc02/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc02/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc03/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc03/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc04/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc04/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc05/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc05/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc06/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc06/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc07/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc07/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc08/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc08/</loc>
-    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/development/rfcs/rfc09/</loc>
-    <lastmod>2021-10-04T14:21:00-07:00</lastmod>
-  </url><url>
-    <loc>https://libgeos.org/project/support/</loc>
+    <loc>https://libgeos.org/project/rfcs/rfc09/</loc>
     <lastmod>2021-10-04T14:21:00-07:00</lastmod>
   </url><url>
     <loc>https://libgeos.org/specifications/geojson/</loc>

@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 6 - Require explicit configure to use the C&#43;&#43; API">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 6 - Require explicit configure to use the C&#43;&#43; API | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 6 - Require explicit configure to use the C++ API
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc06.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 6 - Require explicit configure to use the C&#43;&#43; API</h1>
         
 
 
@@ -869,6 +883,77 @@
     
 
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 9</td>
+<td>Require explicit configure to use the C++ API</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Regina Obe</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:lr@pcorp.us">lr@pcorp.us</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td><a href="https://lists.osgeo.org/pipermail/geos-devel/2017-October/thread.html#8050">Not Passed</a></td>
+</tr>
+</tbody>
+</table>
+<div class="gdoc-page__anchorwrap"><h2 id="past-discussions">Past discussions<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc06/#past-discussions" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Past discussions" href="#past-discussions"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p><a href="https://trac.osgeo.org/geos/ticket/553">Trac ticket to deprecate</a>
+<a href="https://lists.osgeo.org/pipermail/geos-devel/2017-January/007652.html">another request to deprecate and osm2pgsql mess</a>
+<a href="https://lists.osgeo.org/pipermail/geos-devel/2012-June/005861.html">more examples about how apps linking directly to GEOS C++ causing problems for other applications</a>
+<a href="https://lists.osgeo.org/pipermail/geos-devel/2017-January/007653.html">Pointing out removing ability to use GEOS C++ reduces users freedoms</a></p>
+<div class="gdoc-page__anchorwrap"><h2 id="summary">Summary<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc06/#summary" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Summary" href="#summary"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>This document proposes to change the <code>./configure</code> and CMake to by default only allow use of the C-API.</p>
+<p>The C++ API headers and library will only be installed if explicitly asked for
+as detailed in <a href="https://lists.osgeo.org/pipermail/geos-devel/2017-October/008054.html">https://lists.osgeo.org/pipermail/geos-devel/2017-October/008054.html</a></p>
+<p>Any developers who want to use the C++ API will have to build with</p>
+<pre tabindex="0"><code>#autoconf users
+   ./configure --with-cplusplus-sdk-install
+
+#cmake users
+   cmake -DINSTALL_CPLUSPLUS_SDK
+</code></pre><p>If cplusplus sdk install is not expressly requested only the C headers will be included and the C++ headers will not be installed. In addition, when the C++ headers are used by any project, if users choose to build with the cplusplus-sdk, a warning will be shown before start of compile stating:</p>
+<blockquote>
+<p>The GEOS project does not guarantee ABI stability of the C++ API during minor updates.
+This means your code may need recompilation or changes to upgrade to next minor version of GEOS.
+If you want ABI stability from minor version to minor version, you should use the C-API instead.</p>
+</blockquote>
+<p>In addition the GEOS C++API Headers <code>Geometry.h</code> will by default include a warning as noted in <a href="https://git.osgeo.org/gogs/geos/geos/pulls/14">https://git.osgeo.org/gogs/geos/geos/pulls/14</a> as proposed in <a href="https://lists.osgeo.org/pipermail/geos-devel/2017-October/008071.html">https://lists.osgeo.org/pipermail/geos-devel/2017-October/008071.html</a></p>
+<blockquote>
+<p>The GEOS C++ API is unstable, please use the C API instead
+HINT: #include geos_c.h</p>
+</blockquote>
+<p>Which will show during compile time if the following variable is not defined</p>
+<blockquote>
+<p>WE_ACKNOWLEDGE_THAT_THE_GEOS_CPLUSPLUS_API_IS_UNSTABLE</p>
+</blockquote>
+<p>This message will continue to be shown in every project that a user tries to compile using GEOS C++ API headers.</p>
+<p>I propose doing this in GEOS 3.7.0.</p>
+<p>The main purpose is to discourage the use of the C++ API because we do not have the manpower to guarantee ABI or API compatiblity from minor version to minor version and thus using it in an environment where the GEOS library is shared across many software is unsupported.  We are also planning significant refactoring in GEOS 3.8 which will very likely break the C++ API.</p>
+<p>Currently <a href="https://github.com/openstreetmap/osm2pgsql/issues/634">osm2pgsql</a> and OSSIM are the only ones that used the GEOS C++ API and largely distributed in shared environment.  We want to discourage future projects that plan to be used in a shared environment from using the GEOS C++ API and to stick with the GEOS C API.</p>
+<p>So the purpose of the above is to affect the following change:</p>
+<ol>
+<li>Package Distributions do not need compile with these flags, though they may choose to at their own risk to support C++ API users.</li>
+<li>The end effect being, no C++ headers installed  and just the C header file installed.</li>
+<li>People building their own binaries or their own projects that utilize the C++ API may not be able to build using a packaged libgeosdev-++ if packagers don&rsquo;t compile with c++ support.</li>
+<li>If a package distributtion does choose to offer the headers and take the default of not defining the WE_&hellip; users building with the package will get the above warning at compile time of their project.</li>
+</ol>
+<p>That way new projects will be clear about what compromise they are making using the C++ API and if they are not users will ask</p>
+<blockquote>
+<p>What is this warning I keep on getting about you using an unstable API?</p>
+</blockquote>
 
 
     </article>

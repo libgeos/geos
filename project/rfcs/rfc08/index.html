@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 8 - Improve Coordinate Sequence API (WIP)">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 8 - Improve Coordinate Sequence API (WIP) | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 8 - Improve Coordinate Sequence API (WIP)
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc08.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 8 - Improve Coordinate Sequence API (WIP)</h1>
         
 
 
@@ -869,6 +883,103 @@
     
 
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 8</td>
+<td>Improve Coordinate Sequence API</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Martin Davis</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:martin.davis@crunchydata.com">martin.davis@crunchydata.com</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td>In Discussion</td>
+</tr>
+</tbody>
+</table>
+<p>This document proposes to modify the Coordinate Sequence API to improve performance and adaptiveness.</p>
+<p>These improvements are (likely to be) breaking changes to the C++ API.</p>
+<p>These may require extensions to the C API to be externally available, but should not result in breaking the current C API.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="background">Background<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc08/#background" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Background" href="#background"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>The Coordinate Sequence API as it stands imposes a large cost on clients.</p>
+<ul>
+<li>It requires copying coordinate list structures one or more times</li>
+<li>It imposes the cost of a Z ordinate even if not required by the client</li>
+<li>(related) It is necessary to construct a full Geometry object just to pass a simple Point (e.g. for Point0In-Polygon)</li>
+<li>(related) Geometry objects for Point and Multi Point are very memory inefficient due to Point overhead</li>
+</ul>
+<p>The API also has some functional limitations:</p>
+<ul>
+<li>does not support M values</li>
+</ul>
+<p>Downstream projects which are feeling pain:</p>
+<ul>
+<li>PDAL - had to use custom Point-In-Polygon because of overhead in passing points to GEOS</li>
+<li>Shapely - there are several allocations required to marshall from NumPY to GEOS</li>
+<li>PostGIS - hopefully this will allow calling GEOS without copying out of LWGEOM structure</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="goals">Goals<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc08/#goals" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Goals" href="#goals"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ul>
+<li>
+<p>Allow using external coordinate list structures with no copying (except as needed by GEOS algorithms, e.g. removing repeated points)</p>
+</li>
+<li>
+<p>Prevent mutating of external coordinate structures</p>
+</li>
+<li>
+<p>Support XY, XYM, XYZ, XYZM</p>
+<ul>
+<li>Coord Seq will need to know dimension of coordinates</li>
+</ul>
+</li>
+<li>
+<p>Support efficient input of Point data</p>
+</li>
+<li>
+<p>Optimized storage of Point and Multi Point data</p>
+</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="ideas">Ideas<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc08/#ideas" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Ideas" href="#ideas"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p><strong>Memory-based Coordinate Sequence implementation</strong></p>
+<ul>
+<li>Class which contains pointer to memory block of coordinates, length, dimension</li>
+<li>Coordinate Sequence becomes a slimmed-down interface with accessors</li>
+<li>Will still provide setters, but use const to prevent unwanted modification</li>
+<li>How will coordinates be accessed?
+<ul>
+<li>By copying into stack-allocated object?  This would allow using a Coordinate with XYZM</li>
+<li>By getX, getY and optional getZ, getM?  This requires rewriting some GEOS code to avoid copying coordinates</li>
+</ul>
+</li>
+</ul>
+<p><strong>Templates</strong></p>
+<ul>
+<li>problem: would templates pervade entire code base?</li>
+<li>does not allow dynamic adapting to external structures?</li>
+</ul>
+<p><strong>Prior Art</strong></p>
+<ul>
+<li>C++ <a href="https://www.modernescpp.com/index.php/c-17-avoid-copying-with-std-string-view">string_view</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="tasks">Tasks<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc08/#tasks" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Tasks" href="#tasks"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<ol>
+<li>Remove extraneous operations from CoordinateSequence (e.g. removeRepeatedPoints)</li>
+<li>Create a MemoryBasedCoordinateSequence (better name?) which allows access to external blocks of memory</li>
+<li>Review how Coordinates are accessed - is there a better way?</li>
+<li>Review how this can provide XYZM capability?</li>
+</ol>
 
 
     </article>

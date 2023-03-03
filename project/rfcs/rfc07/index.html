@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 7 - Use CMake for Build System">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 7 - Use CMake for Build System | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 7 - Use CMake for Build System
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc07.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 7 - Use CMake for Build System</h1>
         
 
 
@@ -869,6 +883,46 @@
     
 
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 7</td>
+<td>Use CMake for build system</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Daniel Baston</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:dbaston@gmail.com">dbaston@gmail.com</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td><a href="https://lists.osgeo.org/pipermail/geos-devel/2021-January/010098.html">Accepted</a>, January 15, 2021</td>
+</tr>
+</tbody>
+</table>
+<p>This document proposes to use CMake as the build system for GEOS and discontinue use of autotools and NMake.</p>
+<p>Since version 3.5, we have officially supported building GEOS with CMake: <a href="https://trac.osgeo.org/geos/wiki/BuildingOnUnixWithCMake">https://trac.osgeo.org/geos/wiki/BuildingOnUnixWithCMake</a></p>
+<p>GEOS is also required to build with autotools and NMake.</p>
+<p>Supporting three build systems:</p>
+<ul>
+<li>Decreases ease of contribution, because any change must be tested against all three build systems. This results in more developer effort devoted to the build system rather than the library itself (see for example, commit history of this PR: <a href="https://github.com/libgeos/geos/pull/125">https://github.com/libgeos/geos/pull/125</a>)</li>
+<li>Increases the risk that differences between build systems cause the library to be compiled with different behavior, or with different version information (for example, see <a href="https://trac.osgeo.org/geos/ticket/882">https://trac.osgeo.org/geos/ticket/882</a>)</li>
+<li>Increases the length of the commit-testing feedback cycle, since multiple build systems must be tested before giving a pull request a &ldquo;green light&rdquo; and insufficient workers are available to test all build systems in parallel.</li>
+</ul>
+<p>This RFC proposes that CMake be used as the exclusive build system because:</p>
+<ul>
+<li>It is used by the majority of active committers</li>
+<li>It is the only cross-platform (OS/compiler) build system</li>
+</ul>
 
 
     </article>

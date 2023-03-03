@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 3 - Thread Safe CAPI ">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 3 - Thread Safe CAPI  | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 3 - Thread Safe CAPI 
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc03.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 3 - Thread Safe CAPI </h1>
         
 
 
@@ -869,6 +883,56 @@
     
 
 
+<div class="gdoc-page__anchorwrap"><h2 id="summary">Summary<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#summary" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Summary" href="#summary"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>The current CAPI in GEOS is not thread safe.  The error handling and initialization/finalization process specifically can cause problems.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="definitions">Definitions<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#definitions" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Definitions" href="#definitions"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>(As defined by Frank Warmerdam in <a href="http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy">http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy</a>)</p>
+<p><strong>Reentrant:</strong> A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.</p>
+<p><strong>Thread-safe:</strong> A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="objective">Objective<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#objective" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Objective" href="#objective"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>Allow the GEOS CAPI to be thread safe.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="implementation">Implementation<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#implementation" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Implementation" href="#implementation"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>In order to implement the thread safe API, the current API will be copied and all static variables will be placed into a &lsquo;handle.&rsquo;  This handle will be initialized on the initGeos call.  Once initialized it will be passed to all subsequent GEOS functions, allowing each thread to have it&rsquo;s own copy of the data.  This will not affect the current API as it will be provided in addition to the old API.  In order to prevent  maintenance issues the OLD API will be changed to call the NEW API with a global handle.  The handle (GEOSContextHandle_t) will be an opaque type to allow exentensions without recompilation being required.  Function names in the new API will be updated with an _r, as is the familiar C standard for reentrant/thread safe versions.  Current GEOS functions that do not make reference to the context handle will not be changed.</p>
+<p>The intent will be to altogether replace the existing functions with the _r functions in a future release, making the thread safe versions the only supported functions.</p>
+<div class="gdoc-page__anchorwrap"><h3 id="handle-definition">Handle Definition<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#handle-definition" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Handle Definition" href="#handle-definition"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>Here are the internals of the handle and how the application visual handle will look.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandleInternal</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">geomFactory</span><span class="p">;</span>
+    <span class="n">GEOSMessageHandler</span> <span class="n">NOTICE_MESSAGE</span><span class="p">;</span>
+    <span class="n">GEOSMessageHandler</span> <span class="n">ERROR_MESSAGE</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">WKBOutputDims</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">WKBByteOrder</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">initialized</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">GEOSConextHandleInternal_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandle_HS</span> <span class="o">*</span><span class="n">GEOSContextHandle_t</span><span class="p">;</span>
+</code></pre></div><p>The typedef for GEOSContextHandle_t will make it easier for the compiler to help detect an incorrect pointer being passed to the functions.</p>
+<div class="gdoc-page__anchorwrap"><h3 id="example-prototypes">Example Prototypes<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#example-prototypes" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Example Prototypes" href="#example-prototypes"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h3></div>
+<p>Here are examples of what some of the new function prototypes would be.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">GEOSContextHandle_t</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS_r</span><span class="p">(</span> <span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
+                                         <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">);</span>
+
+
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</code></pre></div><p>For comparison, here are the same functions as they exist now.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS</span><span class="p">(</span><span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
+        <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</code></pre></div><div class="gdoc-page__anchorwrap"><h2 id="limitations">Limitations<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#limitations" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Limitations" href="#limitations"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>This change will focus on making a thread safe version of the API.  Other extensions to the context handle have been suggested, e.g. Access to other geometry factories, overriding memory allocators.  These extensions are beyond the current scope of this design, but this design will be implemented to allow such extensions in the future.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="testing">Testing<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc03/#testing" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Testing" href="#testing"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>An example test executable will be provided that shows the current problem.  It is copied from the existing CAPI test tool.  Once the thread safe API is created the test tool will be updated to the new interface which will address the former problems.</p>
 
 
     </article>

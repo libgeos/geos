@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 9 - Restore the C&#43;&#43; API (WIP)">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 9 - Restore the C&#43;&#43; API (WIP) | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 9 - Restore the C++ API (WIP)
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc09.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 9 - Restore the C&#43;&#43; API (WIP)</h1>
         
 
 
@@ -869,6 +883,64 @@
     
 
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 9</td>
+<td>Restore the C++ API</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Mateusz Łoskot</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:mateusz@loskot.net">mateusz@loskot.net</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td>[https://lists.osgeo.org/pipermail/geos-devel/2019-May/008972.html Proposed]</td>
+</tr>
+</tbody>
+</table>
+<p>The GEOS library is a C++ library offering two kinds of public API: C++ API and C API.</p>
+<p>The GEOS library started as a C++ library. The C API was introduced in version 2.2.</p>
+<p>The GEOS library has never promised any stability of the C++ API and this fact has always been documented and clearly stated:</p>
+<p>on the wiki:</p>
+<blockquote>
+<p>C++ API (will likely change across versions)
+C API (provides long-term ABI stability)</p>
+</blockquote>
+<p>on the front page of the API reference:</p>
+<blockquote>
+<p>The recommended low-level interface to the GEOS library is the simplified C wrapper interface.
+This will ensure stability of the API and the ABI of the library during performance improvements
+that will likely change classes definitions.</p>
+<p>If you don&rsquo;t care about adapting/rebuilding your client code you can still use the C++ interface.</p>
+</blockquote>
+<p>in the NEWS file:</p>
+<blockquote>
+<p>Changes in 2.2.0</p>
+<ul>
+<li>NEW Simplified and stabler C API</li>
+</ul>
+</blockquote>
+<p>The GEOS library as always been deployed as two <strong>distinct</strong> binaries:</p>
+<ul>
+<li><code>geos</code> accompanied with the C++ headers.</li>
+<li><code>geos_c</code> accompanied with the C header.</li>
+</ul>
+<p>Removing the C++ API from the public scope and asking developers to opt-in to use the C++ API,fundamentally breaks the original concept of the library.</p>
+<p>If there are developers surprised by any breaking changes in the C++ API, it means they have not read the documentation and it is not role of the GEOS developers to make them read it.</p>
+<p>Any user of the GEOS C++ API is expected to be aware of its volatile state and be prepared to update in order to use any newer version of GEOS. These implicit usage terms of the contract, which have always been clear and consistent with nearly any other C++ API, remain unchanged.</p>
+<p>Considering these issues, there is very little value in the <code>#ifdef USE_UNSTABLE_GEOS_CPP_API</code> and related guards.</p>
+<p>Let&rsquo;s revert the implementation of the RFC6.</p>
 
 
     </article>

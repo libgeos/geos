@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 11 - GEOS Version and EOL Policy">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 11 - GEOS Version and EOL Policy | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 11 - GEOS Version and EOL Policy
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc11.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 11 - GEOS Version and EOL Policy</h1>
         
 
 
@@ -869,6 +883,58 @@
     
 
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 11</td>
+<td>End-of-Life (EOL) Policy</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Regina Obe</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:lr@pcorp.us">lr@pcorp.us</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td><a href="https://lists.osgeo.org/pipermail/geos-devel/2022-September/010784.html">Accepted</a>, September 20, 2022</td>
+</tr>
+</tbody>
+</table>
+<p>This document describes the GEOS project policy for versioning and EOLing GEOS minor versions.</p>
+<h1 id="versioning">Versioning</h1>
+<p>The GEOS project generally produces a new minor version every 1-2 years.
+Minor versions typically contain new features, as well as bug fixes and performance improvements.
+Minor versions have version numbers in the form <code>major.minor</code> (e.g. <code>3.9</code>, <code>3.10</code>, <code>3.11</code>, etc).</p>
+<p>Each minor version has a named git branch (e.g. branch <code>3.11</code>).
+The first release of a minor version has a micro version of <code>x.x.0</code> and is git tagged.
+For example, the first release of version <code>3.11</code> was <code>3.11.0</code> and has git tag <code>3.11.0</code>.</p>
+<h1 id="patch-policy">Patch Policy</h1>
+<p>On an as-needed basis, each supported minor version will have additional micro releases (e.g. <code>3.10.1</code>,<code>3.10.2</code>).
+These subsequent micro releases may have bug fixes, performance improvements, and security fixes
+but will not include new features.
+They are patch releases for the parent minor version.
+Micro releases are git tagged with the version number (e.g. tag <code>3.10.1</code>).</p>
+<ul>
+<li>The newer the minor version, the more likely performance improvements will be added. Performance improvements that could destabilize a release (e.g. requiring too much code) or change behavior will generally not be applied.</li>
+<li>Bug fixes that are not trivial changes of code or major security or crash issues, will likely not be applied to older versions.</li>
+<li>The latest stable release (meaning the minor release with highest number that is not the main branch) will have all bug fixes and enhancements which are not new features.</li>
+</ul>
+<h1 id="end-of-life-policy">End-of-Life Policy</h1>
+<p>Minor versions marked EOL will not have further releases. We may apply fixes to a minor branch if an entity is willing to fund such an effort, but the change will not be tagged.</p>
+<p>The policy for making a minor version EOL is:</p>
+<ul>
+<li>If the first release of the minor version is more than 3-5 years old, it may become EOL.</li>
+</ul>
+<p>When a minor version is EOL, it will either be removed from <a href="/usage/download/">Downloads</a> or will have an <strong>EOL</strong> marker showing it is the last release for the minor version.</p>
 
 
     </article>

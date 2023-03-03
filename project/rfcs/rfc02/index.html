@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project">
+<meta name="description" content="GEOS RFC 2 - Committer Guidelines ">
 
-<title>Project | GEOS</title>
+<title>GEOS RFC 2 - Committer Guidelines  | GEOS</title>
 
 <link rel="icon" href="/favicon/favicon-32x32.png" type="image/x-icon">
 
@@ -31,7 +31,6 @@
 <link rel="preload" href="/custom.css" as="style">
 <link rel="stylesheet" href="/custom.css" media="all">
 
-<link rel="alternate" type="application/rss+xml" href="https://libgeos.org/project/index.xml" title="GEOS" />
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
 </head>
@@ -840,7 +839,21 @@
         
     
     
-        <a href='/'>GEOS</a> / Project
+        
+        
+        
+    
+    
+        
+        
+        
+    
+    
+        <a href='/'>GEOS</a> / <a href='/project/'>Project</a> / <a href='/project/rfcs/'>Requests for Comment</a> / GEOS RFC 2 - Committer Guidelines 
+    
+
+    
+
     
 
     
@@ -852,7 +865,7 @@
         
         <span class="editpage">
             <svg class="icon code"><use xlink:href="#code"></use></svg>
-            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/_index.md">
+            <a href="https://github.com/libgeos/geos/edit/main/web/content/project/rfcs/rfc02.md">
                 Edit this page
             </a>
         </span>
@@ -860,8 +873,9 @@
     </span>
 </div>
 
+
     <article class="gdoc-markdown">
-        <h1>Project</h1>
+        <h1>GEOS RFC 2 - Committer Guidelines </h1>
         
 
 
@@ -869,6 +883,120 @@
     
 
 
+<p>This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">RFC 2</td>
+<td>Committer Guidelines</td>
+</tr>
+<tr>
+<td style="text-align:left">Author</td>
+<td>Paul Ramsey, Regina Obe</td>
+</tr>
+<tr>
+<td style="text-align:left">Contact</td>
+<td><a href="mailto:pramsey@cleverelephant.ca">pramsey@cleverelephant.ca</a>, <a href="mailto:lr@pcorp.us">lr@pcorp.us</a></td>
+</tr>
+<tr>
+<td style="text-align:left">Status</td>
+<td>Draft</td>
+</tr>
+</tbody>
+</table>
+<div class="gdoc-page__anchorwrap"><h2 id="summary">Summary<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#summary" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Summary" href="#summary"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].</p>
+<div class="gdoc-page__anchorwrap"><h2 id="election-to-git-commit-access">Election to GIT Commit Access<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#election-to-git-commit-access" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Election to GIT Commit Access" href="#election-to-git-commit-access"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>Permission for GIT commit access shall be provided to new developers only if accepted by the [wiki:PSC GEOS Project Steering Committee]. A proposal should be written to the PSC for new committers and voted on normally. It is not necessary to write an <a href="http://en.wikipedia.org/wiki/Request_for_Comments">RFC</a> document for these votes, a proposal to <a href="http://lists.osgeo.org/mailman/listinfo/geos-devel">geos-devel</a> is sufficient.</p>
+<p>Every developer position in the project is represented by an individual, and commit access will be granted to individuals only, group accounts are not permitted.</p>
+<p>Removal of GIT commit access should be handled by the same process.</p>
+<p>The new committer should have demonstrated commitment to GEOS and knowledge of the GEOS source code and processes to the committee&rsquo;s satisfaction, usually by reporting bugs, submitting patches, and/or actively participating in the GEOS mailing list(s).</p>
+<p>The new committer should also be prepared to support any new feature or changes that he/she commits to the GEOS source tree in future releases, or to find someone to which to delegate responsibility for them if he/she stops being available to support the portions of code that he/she is responsible for.</p>
+<p>All committers should also be a member of the <a href="http://lists.osgeo.org/mailman/listinfo/geos-devel">geos-devel</a> mailing list so they can stay informed on policies, technical developments and release preparation.</p>
+<p><strong>Before being approved, new committers must send an email to the <a href="http://lists.osgeo.org/mailman/listinfo/geos-devel">geos-devel</a> mailing list confirming that they have read, understand, and agree to follow the terms of this document.</strong></p>
+<div class="gdoc-page__anchorwrap"><h2 id="committer-tracking">Committer Tracking<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#committer-tracking" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Committer Tracking" href="#committer-tracking"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>A list of all project committers will be kept in the GEOS source tree in <code>AUTHORS</code> , listing for each committer:</p>
+<ul>
+<li>Userid: the id that will appear in the SVN logs for this person.</li>
+<li>Full name: the users actual name.</li>
+<li>Email address: A current email address at which the committer can be reached. It may be altered in normal ways to make it harder to auto-harvest.</li>
+<li>A brief indication of areas of responsibility.</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="git-administrator">GIT Administrator<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#git-administrator" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor GIT Administrator" href="#git-administrator"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>One member of the Project Steering Committee will be designated the <a href="https://git.osgeo.org/gitea/geos/">GEOS GIT</a> repository Administrator. That person will be responsible for giving GIT commit access to folks, updating the committers list, and other GIT related management.</p>
+<div class="gdoc-page__anchorwrap"><h2 id="legal-responsibilities">Legal Responsibilities<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#legal-responsibilities" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Legal Responsibilities" href="#legal-responsibilities"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>Committers are the front line gatekeepers to keep the code base clear of improperly contributed code. It is important to the GEOS users, developers and the OSGeo foundation to avoid contributing any code to the project without it being clearly licensed under the project license.</p>
+<p>Every GEOS code contribution should meet the following tests:</p>
+<ol>
+<li>
+<p>The person or organization providing code understands that the code will be released under the <a href="http://www.opensource.org/licenses/lgpl-2.1.php">LGPL license</a>.</p>
+</li>
+<li>
+<p>The person or organization providing the code has the legal right to contribute the code.</p>
+</li>
+<li>
+<p>If the contribution was developed on behalf of an employer (on work time, as part of a work project, etc) then it is important that employees have permission from a supervisor or manager to contribute the code.</p>
+</li>
+<li>
+<p>The code should be developed by the contributor, or the code should be from a source which can be rightfully contributed such as from the public domain, or from an open source project under a compatible license.</p>
+</li>
+</ol>
+<p>All unusual situations need to be discussed, preferably on the public <a href="http://lists.osgeo.org/mailman/listinfo/geos-devel">geos-devel</a> mailing list, and/or documented.</p>
+<p>Committers should adhere to the following guidelines, and may be personally legally liable for improperly contributing code to the source repository:</p>
+<ul>
+<li>
+<p>Make sure the contributor (and possibly employer) is aware of the contribution terms.</p>
+</li>
+<li>
+<p>Code coming from a source other than the contributor (such as adapted from another project) should be clearly marked as to the original source, copyright holders, license terms and so forth. This information can be in the file headers, but should also be added to the project licensing file if not exactly matching normal project licensing (see [source:trunk/COPYING COPYING] file).</p>
+</li>
+<li>
+<p>Existing copyright headers and license text should never be stripped from a file. If a copyright holder wishes to give up copyright they must do so in writing to the <a href="http://www.osgeo.org">OSGeo Foundation</a> before copyright messages are removed. If license terms are changed it has to be by agreement (written in email is OK) of the copyright holders.</p>
+</li>
+<li>
+<p>When substantial contributions are added to a file (such as substantial patches) the author/contributor should be added to the list of copyright holders for the file.</p>
+</li>
+<li>
+<p>If there is uncertainty about whether a change is proper to contribute to the code base, please seek more information from the project steering committee, or the foundation legal counsel.</p>
+</li>
+</ul>
+<div class="gdoc-page__anchorwrap"><h2 id="technical-responsibilities">Technical Responsibilities<a data-clipboard-text="https://libgeos.org/project/rfcs/rfc02/#technical-responsibilities" class="gdoc-page__anchor gdoc-page__anchor--right clip" aria-label="Anchor Technical Responsibilities" href="#technical-responsibilities"><svg class="icon link"><use xlink:href="#link"></use></svg></a></h2></div>
+<p>The following are considered good SVN commit practices for the GEOS project.</p>
+<ul>
+<li>
+<p>Use meaningful descriptions for commit log entries.</p>
+</li>
+<li>
+<p>Add a bug reference like &ldquo;references #1232&rdquo; or &ldquo;closes #1232&rdquo; at the end of the commit log entries when committing changes related to an existing [wiki:TracTickets Ticket] in the GEOS Trac database, so it&rsquo;s properly linked on the Trac pages (see [wiki:TracLinks])</p>
+</li>
+<li>
+<p>Changes should not be committed in stable branches without a corresponding [wiki:TracTickets Ticket] number. Any change worth pushing into the stable version is worth a [wiki:TracTickets Ticket] entry.</p>
+</li>
+<li>
+<p>Never commit new features to a stable branch without permission of the [wiki:PSC PSC] or release manager. Normally only fixes should go into stable branches. New features go in the main development trunk.</p>
+</li>
+<li>
+<p>Only bug fixes should be committed to the code during pre-release code freeze, without permission from the [wiki:PSC PSC] or release manager.</p>
+</li>
+<li>
+<p>Significant changes to the main development version should be discussed on the <a href="http://lists.osgeo.org/mailman/listinfo/geos-devel">geos-devel</a> list before you make them, and larger changes will require a RFC approved by the [wiki:PSC PSC].</p>
+</li>
+<li>
+<p>All source code in GIT should be in Unix <a href="http://en.wikipedia.org/wiki/Newline">text format</a> (LF) as opposed to DOS (CR+LF) or Mac OS text mode (CR).</p>
+</li>
+<li>
+<p>When committing new features or significant changes to existing source code, the committer should take reasonable measures to insure that the source code continues to build and work on the most commonly supported platforms (currently Linux, Windows and Mac OS), either by testing on those platforms directly, running [wiki:Buildbot] tests, or by getting help from other developers working on those platforms. If new files or library dependencies are added, then the configure.in, Makefile.in, Makefile.vc and related documentations should be kept up to date.</p>
+</li>
+<li>
+<p>Every commit introducing new feature *<em>should</em>() be covered with corresponding test case included to the GEOS set of unit tests.</p>
+</li>
+</ul>
 
 
     </article>
