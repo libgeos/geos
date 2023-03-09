@@ -555,6 +555,23 @@ GeometryFactory::createEmpty(int dimension) const
     }
 }
 
+/*public*/
+std::unique_ptr<Geometry>
+GeometryFactory::createEmpty(GeometryTypeId typeId) const
+{
+    switch (typeId) {
+        case GEOS_POINT: return createPoint();
+        case GEOS_LINESTRING: return createLineString();
+        case GEOS_POLYGON: return createPolygon();
+        case GEOS_MULTIPOINT: return createMultiPoint();
+        case GEOS_MULTILINESTRING: return createMultiLineString();
+        case GEOS_MULTIPOLYGON: return createMultiPolygon();
+        case GEOS_GEOMETRYCOLLECTION: return createGeometryCollection();
+        default:
+            throw geos::util::IllegalArgumentException("Invalid GeometryTypeId");
+    }
+}
+
 
 template<typename T>
 GeometryTypeId commonType(const T& geoms) {
