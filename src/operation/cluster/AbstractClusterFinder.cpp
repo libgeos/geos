@@ -108,7 +108,10 @@ AbstractClusterFinder::process(const std::vector<const Geometry*> & components,
             if (uf.different(i, j)) {
                 const geom::Geometry* gj = components[j];
 
-                if (shouldJoin(gi, gj)) {
+                // Only call shouldJoin with the more complex geometry in the LHS, where it will become
+                // the prepared geometry.
+                // TODO move point check to subclasses that benefit to avoid for those that don't?
+                if (gi->getNumPoints() >= gj->getNumPoints() && shouldJoin(gi, gj)) {
                     uf.join(i, j);
                 }
             }

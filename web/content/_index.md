@@ -11,9 +11,6 @@ It implements the [OGC](https://www.ogc.org/standards/sfa)
 [*Simple Features*](https://en.wikipedia.org/wiki/Simple_Features) geometry model and provides all the spatial functions in that standard as well as many others.
 GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), and [Shapely](https://shapely.readthedocs.io/en/stable/project.html).
 
-If you need support using the GEOS library or would like to get involved in the community
-check out the [Support]({{< ref "project/support" >}}) page.
-
 ## Capabilities
 
 Spatial Model and Functions

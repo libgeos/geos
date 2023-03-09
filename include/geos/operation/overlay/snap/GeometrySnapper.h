@@ -43,16 +43,15 @@ namespace snap { // geos::operation::overlay::snap
  * Snaps the vertices and segments of a {@link geom::Geometry}
  * to another Geometry's vertices.
  *
- * A snap distance tolerance is used to control where snapping is performed.
- * Snapping one geometry to another can improve
- * robustness for overlay operations by eliminating
- * nearly-coincident edges
- * (which cause problems during noding and intersection calculation).
- * Too much snapping can result in invalid topology
- * being created, so the number and location of snapped vertices
- * is decided using heuristics to determine when it
- * is safe to snap.
- * This can result in some potential snaps being omitted, however.
+ * Where possible, this operation tries to avoid creating invalid geometries;
+ * however, it does not guarantee that output geometries will be valid.  It is
+ * the responsibility of the caller to check for and handle invalid geometries.
+ *
+ * Because too much snapping can result in invalid
+ * topology being created, heuristics are used to determine the number and
+ * location of snapped vertices that are likely safe to snap. These heuristics
+ * may omit some potential snaps that are otherwise within the tolerance.
+ *
  */
 class GEOS_DLL GeometrySnapper {
 

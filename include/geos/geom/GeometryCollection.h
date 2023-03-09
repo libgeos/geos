@@ -189,9 +189,17 @@ public:
      */
     std::unique_ptr<GeometryCollection> reverse() const { return std::unique_ptr<GeometryCollection>(reverseImpl()); }
 
+    const Envelope* getEnvelopeInternal() const override {
+        if (envelope.isNull()) {
+            envelope = computeEnvelopeInternal();
+        }
+        return &envelope;
+    }
+
 protected:
 
     GeometryCollection(const GeometryCollection& gc);
+    GeometryCollection& operator=(const GeometryCollection& gc);
 
     /** \brief
      * Construct a GeometryCollection with the given GeometryFactory.
@@ -228,8 +236,13 @@ protected:
     };
 
     std::vector<std::unique_ptr<Geometry>> geometries;
+    mutable Envelope envelope;
 
-    Envelope::Ptr computeEnvelopeInternal() const override;
+    Envelope computeEnvelopeInternal() const;
+
+    void geometryChangedAction() override {
+        envelope.setToNull();
+    }
 
     int compareToSameClass(const Geometry* gc) const override;
 

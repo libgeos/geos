@@ -26,10 +26,17 @@ namespace cluster {
 
 class GEOS_DLL DisjointOperation {
 public:
-    DisjointOperation(AbstractClusterFinder& finder) : m_finder(finder) {}
+    DisjointOperation(AbstractClusterFinder& finder) : m_finder(finder), m_split_inputs(false) {}
+
+    /** Splits multipart geometries into their underlying components before identifying
+     *  disjoint subsets.
+     */
+    void setSplitInputs(bool b) {
+        m_split_inputs = b;
+    }
 
     /** Decompose a geometry into disjoint subsets using the provided `ClusterFinder`,
-     *  process each subset using `f`, and combine the results. It is assumed that
+     *  process each subset using `f`, and combine/flatten the results. It is assumed that
      *  the processed results of each subset will also be disjoint; therefore, this
      *  algorithm may not be suitable for operations such as buffering.
      *
@@ -43,7 +50,7 @@ public:
             return f(g);
         }
 
-        auto flattened = operation::cluster::GeometryFlattener::flatten(g.clone());
+        auto flattened = m_split_inputs ? operation::cluster::GeometryFlattener::flatten(g.clone()) : g.clone();
         auto clustered = m_finder.clusterToVector(std::move(flattened));
 
         for (auto& subset : clustered) {
@@ -57,6 +64,7 @@ public:
 
 private:
     AbstractClusterFinder& m_finder;
+    bool m_split_inputs;
 };
 
 

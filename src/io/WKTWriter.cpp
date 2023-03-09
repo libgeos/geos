@@ -212,7 +212,7 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
                                     Writer& writer) const
 {
     OrdinateSet outputOrdinates = OrdinateSet::createXY();
-    if (geometry.isEmpty()) {
+    if (geometry.isEmpty() || !removeEmptyDimensions) {
         // for an empty geometry, use the declared dimensionality
         outputOrdinates.setZ(geometry.hasZ());
         outputOrdinates.setM(geometry.hasM());

@@ -232,6 +232,7 @@ void object::test<8>
     ensure(geo->isEmpty());
 
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
+    ensure_equals(pt->getCoordinateDimension(), 2u);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
     ensure_equals(pt->getBoundaryDimension(), geos::geom::Dimension::False);
     ensure_equals(pt->getNumPoints(), 0u);
@@ -414,6 +415,7 @@ void object::test<12>
 
     ensure_equals(lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING);
     ensure_equals(lr->getDimension(), geos::geom::Dimension::L);
+    ensure_equals(lr->getCoordinateDimension(), 2u);
     ensure_equals(lr->getBoundaryDimension(), geos::geom::Dimension::False);
     ensure_equals(lr->getNumPoints(), 0u);
     ensure_equals(lr->getLength(), 0.0);
@@ -505,6 +507,7 @@ void object::test<15>
 
     ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(line->getDimension(), geos::geom::Dimension::L);
+    ensure_equals(line->getCoordinateDimension(), 2u);
     ensure_equals(line->getBoundaryDimension(), geos::geom::Dimension::P);   // empty linestring
     ensure_equals(line->getNumPoints(), 0u);
     ensure_equals(line->getLength(), 0.0);
@@ -724,6 +727,7 @@ void object::test<21>
     ensure(col->isValid());
     ensure(col->getCentroid()->isEmpty());
     ensure_equals(col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(col->getCoordinateDimension(), 2u);
     ensure_equals(col->getDimension(), geos::geom::Dimension::False);
     ensure_equals(col->getBoundaryDimension(), geos::geom::Dimension::False);
     ensure_equals(col->getNumPoints(), 0u);
@@ -830,6 +834,7 @@ void object::test<24>
     ensure(geo->isEmpty());
 
     ensure_equals(mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
+    ensure_equals(mp->getCoordinateDimension(), 2u);
     ensure_equals(mp->getDimension(), geos::geom::Dimension::P);
     ensure_equals(mp->getBoundaryDimension(), geos::geom::Dimension::False);
     ensure_equals(mp->getNumPoints(), 0u);
@@ -966,6 +971,7 @@ void object::test<28>
     ensure(geo->isEmpty());
 
     ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    ensure_equals(mls->getCoordinateDimension(), 2u);
     ensure_equals(mls->getDimension(), geos::geom::Dimension::L);
     ensure_equals(mls->getBoundaryDimension(), geos::geom::Dimension::P);
     ensure_equals(mls->getNumPoints(), 0u);
@@ -1057,8 +1063,11 @@ template<>
 void object::test<31>
 ()
 {
-    // TODO - mloskot
-    //inform("Test not implemented!");
+    auto mp = factory_->createMultiPolygon();
+
+    ensure_equals(mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
+    ensure_equals(mp->getCoordinateDimension(), 2u);
+    ensure_equals(mp->getDimension(), geos::geom::Dimension::A);
 }
 
 // Test of createMultiPolygon(std::vector<Geometry>* newPolys) const

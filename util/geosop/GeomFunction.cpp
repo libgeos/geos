@@ -531,6 +531,12 @@ GeomFunction::init()
             (void)d;  // prevent unused variable warning
             return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(*geom, *geomB ) );
         });
+    add("hausdorffDistance", 2, 0, Result::typeDouble, catDist,
+        "compute discrete Hausdorff distance between geometry A and B",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            return new Result( geos::algorithm::distance::DiscreteHausdorffDistance::distance(*geom, *geomB ) );
+        });
         /*
         // MD - can't get this to work for now
      add("frechetDistanceLine", 2, 0, Result::typeGeometry, catDist,

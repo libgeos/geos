@@ -29,32 +29,8 @@ jobs:
           cmake_extra: '-DBUILD_BENCHMARKS=ON'
           os: ubuntu-latest
 
-        - cxx_compiler: g++-5
-          c_compiler: gcc-5
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-5-multilib gcc-5-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
-
-        - cxx_compiler: g++-5
-          c_compiler: gcc-5
-          build_type: Release
-          cxxstd: 14
-          arch: 32
-          packages: 'g++-5-multilib gcc-5-multilib g++-multilib gcc-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
-
-        - cxx_compiler: g++-6
-          c_compiler: gcc-6
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-6-multilib gcc-6-multilib'
-          cmake: 3.13.*
-          os: ubuntu-18.04
+          # gcc 6 and lower are not supported
+          # in ubuntu 20.04 and higher
 
         - cxx_compiler: g++-7
           c_compiler: gcc-7
@@ -62,6 +38,15 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'g++-7-multilib gcc-7-multilib'
+          cmake: 3.13.*
+          os: ubuntu-20.04
+
+        - cxx_compiler: g++-7
+          c_compiler: gcc-7
+          build_type: Release
+          cxxstd: 14
+          arch: 32
+          packages: 'g++-7-multilib gcc-7-multilib g++-multilib gcc-multilib'
           cmake: 3.13.*
           os: ubuntu-20.04
 
@@ -92,23 +77,29 @@ jobs:
           cmake: 3.13.*
           os: ubuntu-20.04
 
+          # gcc 10 and lower are not supported
+          # in ubuntu 22.04 and higher
+
         - cxx_compiler: g++-11
           c_compiler: gcc-11
           build_type: Release
           cxxstd: 17
           arch: 64
-          packages: 'g++'
+          packages: 'g++-11-multilib gcc-11-multilib'
           cmake: 3.22.*
           os: ubuntu-22.04
 
-        - cxx_compiler: g++-11
-          c_compiler: gcc-11
+        - cxx_compiler: g++-12
+          c_compiler: gcc-12
           build_type: Release
           cxxstd: 20
           arch: 64
-          packages: 'g++'
+          packages: 'g++-12-multilib gcc-12-multilib'
           cmake: 3.22.*
           os: ubuntu-22.04
+
+          # clang 6 and lower are not supported
+          # in ubuntu 20.04 and higher
 
         - cxx_compiler: clang++-7
           c_compiler: clang-7
@@ -138,14 +129,52 @@ jobs:
           os: ubuntu-20.04
 
         - cxx_compiler: clang++-10
-          c_compiler: clang
+          c_compiler: clang-10
           build_type: Release
           cxxstd: 14
           arch: 64
-          packages: 'clang'
+          packages: 'clang-10'
           cmake: 3.17.*
           os: ubuntu-20.04
 
+          # clang 10 and lower are not supported
+          # in ubuntu 22.04 and higher
+
+        - cxx_compiler: clang++-11
+          c_compiler: clang-11
+          build_type: Debug
+          cxxstd: 14
+          arch: 64
+          packages: 'clang-11'
+          cmake: 3.25.*
+          os: ubuntu-22.04
+
+        - cxx_compiler: clang++-12
+          c_compiler: clang-12
+          build_type: ASAN
+          cxxstd: 14
+          arch: 64
+          packages: 'clang-12'
+          cmake: 3.25.*
+          os: ubuntu-22.04
+
+        - cxx_compiler: clang++-13
+          c_compiler: clang-13
+          build_type: ASAN
+          cxxstd: 17
+          arch: 64
+          packages: 'clang-13'
+          cmake: 3.25.*
+          os: ubuntu-22.04
+
+        - cxx_compiler: clang++-14
+          c_compiler: clang-14
+          build_type: ASAN
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-14'
+          cmake: 3.25.*
+          os: ubuntu-22.04
 
     runs-on: ${{ matrix.ci.os }}
     steps:
@@ -312,7 +341,7 @@ jobs:
       matrix:
         xcode: [11.7, 12.4, 13.2.1]
         cxxstd: [14]
-        build_type: ['Debug']
+        build_type: ['ASAN']
         include:
           - xcode: 13.2.1
             cxxstd: 17

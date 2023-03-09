@@ -597,5 +597,23 @@ void object::test<23>
     GEOSBufferParams_destroy(params);
 }
 
+// Segfault with Inf coords
+// https://github.com/libgeos/geos/issues/822
+template<>
+template<>
+void object::test<24>
+()
+{
+    std::string wkb("0106000020E61000000100000001030000000100000005000000000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F");
+    geom1_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(wkb.c_str()), wkb.size());
+
+    result_ = GEOSBuffer(geom1_, 20, 8);
+
+    ensure(result_ == nullptr);
+
+    result_ = GEOSBuffer(geom1_, -20, 8);
+
+    ensure(result_ == nullptr);
+}
 
 } // namespace tut

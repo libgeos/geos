@@ -78,6 +78,7 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/CoverageUnion.h>
+#include <geos/operation/union/DisjointSubsetUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
@@ -1479,6 +1480,16 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             auto g3 = geos::operation::geounion::CoverageUnion::Union(g);
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSDisjointSubsetUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        return execute(extHandle, [&]() {
+            auto g3 = geos::operation::geounion::DisjointSubsetUnion::Union(g);
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -3585,6 +3596,16 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             return new GEOSSTRtree(nodeCapacity);
+        });
+    }
+
+    int
+    GEOSSTRtree_build_r(GEOSContextHandle_t extHandle,
+                        GEOSSTRtree* tree)
+    {
+        return execute(extHandle, 0, [&]() {
+            tree->build();
+            return 1;
         });
     }
 

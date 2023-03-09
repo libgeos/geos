@@ -52,9 +52,20 @@ LineString::~LineString(){}
 LineString::LineString(const LineString& ls)
     :
     Geometry(ls),
-    points(ls.points->clone())
+    points(ls.points->clone()),
+    envelope(ls.envelope)
 {
-    //points=ls.points->clone();
+}
+
+/*public*/
+LineString::LineString(CoordinateSequence::Ptr && newCoords,
+                       const GeometryFactory& factory)
+    :
+    Geometry(&factory),
+    points(newCoords ? std::move(newCoords) : detail::make_unique<CoordinateSequence>()),
+    envelope(computeEnvelopeInternal())
+{
+    validateConstruction();
 }
 
 LineString*
@@ -86,16 +97,6 @@ LineString::validateConstruction()
     }
 }
 
-/*public*/
-LineString::LineString(CoordinateSequence::Ptr && newCoords,
-                       const GeometryFactory& factory)
-    :
-    Geometry(&factory),
-    points(std::move(newCoords))
-{
-    validateConstruction();
-}
-
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
@@ -114,7 +115,9 @@ LineString::getCoordinatesRO() const
 std::unique_ptr<CoordinateSequence>
 LineString::releaseCoordinates()
 {
+    auto newPts = detail::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
     auto ret = std::move(points);
+    points = std::move(newPts);
     geometryChanged();
     return ret;
 }
@@ -186,7 +189,6 @@ LineString::getStartPoint() const
 {
     if(isEmpty()) {
         return nullptr;
-        //return new Point(NULL,NULL);
     }
     return getPointN(0);
 }
@@ -196,7 +198,6 @@ LineString::getEndPoint() const
 {
     if(isEmpty()) {
         return nullptr;
-        //return new Point(NULL,NULL);
     }
     return getPointN(getNumPoints() - 1);
 }
@@ -244,18 +245,14 @@ LineString::isCoordinate(Coordinate& pt) const
 }
 
 /*protected*/
-Envelope::Ptr
+Envelope
 LineString::computeEnvelopeInternal() const
 {
     if(isEmpty()) {
-        // We don't return NULL here
-        // as it would indicate "unknown"
-        // envelope. In this case we
-        // *know* the envelope is EMPTY.
-        return Envelope::Ptr(new Envelope());
+        return Envelope();
     }
 
-    return detail::make_unique<Envelope>(points->getEnvelope());
+    return points->getEnvelope();
 }
 
 bool
@@ -287,7 +284,7 @@ LineString::equalsIdentical(const Geometry* other_g) const
 
     const auto& other = static_cast<const LineString&>(*other_g);
 
-    if (envelope && other.envelope && *envelope != *other.envelope) {
+    if (envelope != other.envelope) {
         return false;
     }
 

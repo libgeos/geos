@@ -106,6 +106,12 @@ public:
         to.push_back(segList.getCoordinates());
     }
 
+    std::unique_ptr<geom::CoordinateSequence>
+    getCoordinates()
+    {
+        return std::unique_ptr<geom::CoordinateSequence>(segList.getCoordinates());
+    }
+
     void
     closeRing()
     {

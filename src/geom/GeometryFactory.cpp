@@ -386,10 +386,11 @@ GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPoly
 
 /*public*/
 std::unique_ptr<LinearRing>
-GeometryFactory::createLinearRing() const
+GeometryFactory::createLinearRing(std::size_t coordinateDimension) const
 {
     // Can't use make_unique with protected constructor
-    return std::unique_ptr<LinearRing>(new LinearRing(nullptr, *this));
+    auto cs = detail::make_unique<CoordinateSequence>(0u, coordinateDimension);
+    return std::unique_ptr<LinearRing>(new LinearRing(std::move(cs), *this));
 }
 
 std::unique_ptr<LinearRing>

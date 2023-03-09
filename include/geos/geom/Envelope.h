@@ -103,8 +103,11 @@ public:
      * @param  p  the Coordinate
      */
     explicit Envelope(const CoordinateXY& p)
+        : minx(p.x)
+        , maxx(p.x)
+        , miny(p.y)
+        , maxy(p.y)
     {
-        init(p);
     }
 
     /** \brief
@@ -286,6 +289,15 @@ public:
     getArea() const
     {
         return getWidth() * getHeight();
+    }
+
+    /** \brief
+     * Returns true if this Envelope covers a finite region
+     */
+    bool
+    isFinite() const
+    {
+        return std::isfinite(getArea());
     }
 
     /** \brief
@@ -637,6 +649,13 @@ public:
      * @return `true` if this and `other` Envelope objects are spatially equal
      */
     bool equals(const Envelope* other) const;
+
+    /**
+     * Returns `true` if all the extents of the Envelope are finite and defined (not NaN)
+     *
+     * @return `true` if envelope has only finite/valid extents, `false` otherwise
+     */
+    bool isfinite() const;
 
     /** \brief
      * Returns a `string` of the form `Env[minx:maxx,miny:maxy]`.

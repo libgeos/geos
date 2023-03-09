@@ -124,6 +124,13 @@ Envelope::equals(const Envelope* other) const
             other->maxy == maxy;
 }
 
+bool
+Envelope::isfinite() const
+{
+    return std::isfinite(minx) && std::isfinite(maxx) &&
+           std::isfinite(miny) && std::isfinite(maxy);
+}
+
 /* public */
 std::ostream&
 operator<< (std::ostream& os, const Envelope& o)

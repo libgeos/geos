@@ -891,6 +891,11 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSDisjointSubsetUnion */
+extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g);
+
 /** \see GEOSPointOnSurface */
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(
     GEOSContextHandle_t handle,
@@ -1216,6 +1221,11 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin_r(
 extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create_r(
     GEOSContextHandle_t handle,
     size_t nodeCapacity);
+
+/** \see GEOSSTRtree_build */
+extern int GEOS_DLL GEOSSTRtree_build_r(
+    GEOSContextHandle_t handle,
+    GEOSSTRtree *tree);
 
 /** \see GEOSSTRtree_insert */
 extern void GEOS_DLL GEOSSTRtree_insert_r(
@@ -3306,6 +3316,16 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
 /**
+* Optimized union algorithm for inputs that can be divided into subsets
+* that do not intersect. If there is only one such subset, performance
+* can be expected to be worse than GEOSUnionaryUnion.
+* \param g The input geometry
+* \return A newly allocated geometry of the union, or NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion(const GEOSGeometry *g);
+
+/**
 * Intersection optimized for a rectangular clipping polygon.
 * Supposed to be faster than using GEOSIntersection(). Not
 * guaranteed to return valid results.
@@ -4097,7 +4117,18 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
     void* userdata);
 
 /**
-* Snap first geometry onto second within the given tolerance.
+* Snaps the vertices and segments of the first geometry to vertices of the
+* second geometry within the given tolerance.
+*
+* Where possible, this operation tries to avoid creating invalid geometries;
+* however, it does not guarantee that output geometries will be valid.  It is
+* the responsibility of the caller to check for and handle invalid geometries.
+*
+* Because too much snapping can result in invalid
+* topology being created, heuristics are used to determine the number and
+* location of snapped vertices that are likely safe to snap. These heuristics
+* may omit some potential snaps that are otherwise within the tolerance.
+*
 * \param input An input geometry
 * \param snap_target A geometry to snap the input to
 * \param tolerance Snapping tolerance
@@ -4590,6 +4621,17 @@ extern char GEOS_DLL GEOSPreparedDistanceWithin(
 extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 
 /**
+* Construct an STRtree from items that have been inserted. Once constructed,
+* no more items may be inserted into the tree. Functions that require a
+* constructed tree will build it automatically, so there is no need to call
+* `GEOSSTRtree_build` unless it is desired to explicity construct the tree
+* in a certain section of code or using a certain thread.
+*
+* \return 1 on success, 0 on error
+*/
+extern int GEOS_DLL GEOSSTRtree_build(GEOSSTRtree *tree);
+
+/**
 * Insert an item into an \ref GEOSSTRtree
 *
 * \param tree the \ref GEOSSTRtree in which the item should be inserted
@@ -4605,7 +4647,9 @@ extern void GEOS_DLL GEOSSTRtree_insert(
     void *item);
 
 /**
-* Query an \ref GEOSSTRtree for items intersecting a specified envelope
+* Query a \ref GEOSSTRtree for items intersecting a specified envelope.
+* The tree will automatically be constructed if necessary, after which
+* no more items may be added.
 *
 * \param tree the \ref GEOSSTRtree to search
 * \param g a GEOSGeomety from which a query envelope will be extracted
@@ -4624,6 +4668,8 @@ extern void GEOS_DLL GEOSSTRtree_query(
 * Returns the nearest item in the \ref GEOSSTRtree to the supplied geometry.
 * All items in the tree MUST be of type \ref GEOSGeometry.
 * If this is not the case, use GEOSSTRtree_nearest_generic() instead.
+* The tree will automatically be constructed if necessary, after which
+* no more items may be added.
 *
 * \param tree the \ref GEOSSTRtree to search
 * \param geom the geometry with which the tree should be queried
@@ -4636,6 +4682,8 @@ extern const GEOSGeometry GEOS_DLL *GEOSSTRtree_nearest(
 
 /**
 * Returns the nearest item in the \ref GEOSSTRtree to the supplied item
+* The tree will automatically be constructed if necessary, after which
+* no more items may be added.
 *
 * \param tree the STRtree to search
 * \param item the item with which the tree should be queried
@@ -4659,6 +4707,7 @@ extern const void GEOS_DLL *GEOSSTRtree_nearest_generic(
 
 /**
 * Iterate over all items in the \ref GEOSSTRtree.
+* This will not cause the tree to be constructed.
 *
 * \param tree the STRtree over which to iterate
 * \param callback a function to be executed for each item in the tree.
@@ -4671,6 +4720,8 @@ extern void GEOS_DLL GEOSSTRtree_iterate(
 
 /**
  * Removes an item from the \ref GEOSSTRtree
+ * The tree will automatically be constructed if necessary, after which
+ * no more items may be added.
  *
  * \param tree the STRtree from which to remove an item
  * \param g the envelope of the item to remove

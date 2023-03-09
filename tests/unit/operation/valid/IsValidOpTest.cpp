@@ -102,6 +102,30 @@ void object::test<1> ()
 
 template<>
 template<>
+void object::test<29> ()
+{
+    auto cs = geos::detail::make_unique<CoordinateSequence>();
+    cs->add(Coordinate(0.0, 0.0));
+    cs->add(Coordinate(1.0, geos::DoubleInfinity));
+    auto line = factory_->createLineString(std::move(cs));
+
+
+    IsValidOp isValidOp(line.get());
+    bool valid = isValidOp.isValid();
+
+    const TopologyValidationError* err = isValidOp.getValidationError();
+    ensure(nullptr != err);
+    const auto& errCoord = err->getCoordinate();
+
+    ensure_equals(err->getErrorType(),
+                  TopologyValidationError::eInvalidCoordinate);
+
+    ensure(!std::isfinite(errCoord.y));
+    ensure_equals(valid, false);
+}
+
+template<>
+template<>
 void object::test<2> ()
 {
     std::string wkt0("POLYGON((25495445.625 6671632.625,25495445.625 6671711.375,25495555.375 6671711.375,25495555.375 6671632.625,25495445.625 6671632.625),(25495368.0441 6671726.9312,25495368.3959388 6671726.93601515,25495368.7478 6671726.9333,25495368.0441 6671726.9312))");

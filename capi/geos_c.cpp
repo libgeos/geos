@@ -607,6 +607,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSDisjointSubsetUnion(const Geometry* g)
+    {
+        return GEOSDisjointSubsetUnion_r(handle, g);
+    }
+
+    Geometry*
     GEOSNode(const Geometry* g)
     {
         return GEOSNode_r(handle, g);
@@ -1561,6 +1567,12 @@ extern "C" {
     GEOSSTRtree_create(std::size_t nodeCapacity)
     {
         return GEOSSTRtree_create_r(handle, nodeCapacity);
+    }
+
+    int
+    GEOSSTRtree_build(GEOSSTRtree* tree)
+    {
+        return GEOSSTRtree_build_r(handle, tree);
     }
 
     void

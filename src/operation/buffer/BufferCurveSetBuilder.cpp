@@ -113,9 +113,7 @@ BufferCurveSetBuilder::addCurve(CoordinateSequence* coord,
     Label* newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 
     // coord ownership transferred to SegmentString
-    constexpr bool hasZ = false;
-    constexpr bool hasM = false;
-    SegmentString* e = new NodedSegmentString(coord, hasZ, hasM, newlabel);
+    SegmentString* e = new NodedSegmentString(coord, coord->hasZ(), coord->hasM(), newlabel);
 
     // SegmentString doesnt own the sequence, so we need to delete in
     // the destructor
@@ -246,6 +244,10 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
 
     auto shellCoord =
             operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(shell->getCoordinatesRO());
+
+    if (shellCoord->isEmpty()) {
+        throw util::GEOSException("Shell empty after removing invalid points");
+    }
 
     // don't attempt to buffer a polygon
     // with too few distinct vertices

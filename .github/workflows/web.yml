@@ -50,9 +50,14 @@ jobs:
         cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen
 
     - name: 'Deploy 🚀'
-      uses: JamesIves/github-pages-deploy-action@4.1.5
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         branch: gh-pages           # The branch the action should deploy to.
-        folder: public_html    # The folder the action should depl y.
+        folder: public_html    # The folder the action should deploy.
+        # This does default to true,
+        # but specifying it in case we want to change it later
+        clean: true
+        clean-exclude: |
+            doxygen/*
 
 

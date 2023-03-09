@@ -191,7 +191,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         CoordinateSequence* seq = lineList[i];
 
         // SegmentString takes ownership of CoordinateSequence
-        SegmentString* ss = new NodedSegmentString(seq, false, false, nullptr);
+        SegmentString* ss = new NodedSegmentString(seq, seq->hasZ(), seq->hasM(), nullptr);
         curveList.push_back(ss);
     }
     lineList.clear();

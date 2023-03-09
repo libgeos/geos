@@ -444,10 +444,7 @@ void object::test<13>()
     }
 
     // Perform a query to force tree construction
-    GEOSSTRtree_query(tree, geoms[0], [](void* item, void* userdata) {
-        (void) item;
-        (void) userdata;
-    }, nullptr);
+    ensure_equals(GEOSSTRtree_build(tree), 1);
 
     // Iterate to collect all tree items
     std::vector<GEOSGeometry*> geomsFound2;
@@ -467,6 +464,48 @@ void object::test<13>()
 
     GEOSSTRtree_destroy(tree);
 }
+
+// Removed items are not returned by GEOSSTRtree_iterate
+template<>
+template<>
+void object::test<14>()
+{
+    GEOSSTRtree* tree = GEOSSTRtree_create(4);
+    std::vector<GEOSGeometry*> geoms;
+    std::size_t ngeoms = 50;
+
+    for (std::size_t i = 0; i < ngeoms; i++) {
+        geoms.push_back(GEOSGeom_createPointFromXY((double) i, 0));
+        GEOSSTRtree_insert(tree, geoms.back(), geoms.back());
+    }
+
+    // Remove even numbers
+    for (const auto& g : geoms) {
+        double x;
+        GEOSGeomGetX(g, &x);
+        if (static_cast<int>(x) % 2 == 0) {
+            GEOSSTRtree_remove(tree, g, g);
+        }
+    }
+
+    std::vector<const GEOSGeometry*> geomsFound;
+
+    // Iterate to collect all tree items
+    GEOSSTRtree_iterate(tree, [](void* item, void* userdata) {
+        auto& hits = *static_cast<std::vector<const GEOSGeometry*>*>(userdata);
+        hits.push_back(static_cast<const GEOSGeometry*>(item));
+    }, &geomsFound);
+
+    ensure_equals(geomsFound.size(), ngeoms / 2);
+
+    // Cleanup
+    for (auto& g : geoms) {
+        GEOSGeom_destroy(g);
+    }
+
+    GEOSSTRtree_destroy(tree);
+}
+
 
 } // namespace tut
 

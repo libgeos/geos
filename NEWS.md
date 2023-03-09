@@ -12,9 +12,11 @@ xxxx-xx-xx
   - Add CoordinateSequenceIterator (GH-685, Dan Baston)
   - Geometry clustering: DBSCAN, geometry intersection/distance, envelope
     intersection/distance (GH-688, Dan Baston)
+  - CAPI: GEOSDisjointSubsetUnion (GH-692, Dan Baston)
   - CAPI: GEOSLineSubstring (GH-706, Dan Baston)
   - CAPI: GEOSEqualsIdentical (GH-810, Dan Baston)
   - CAPI: GEOSOrientPolygons (GH-818, Dan Baston)
+  - CAPI: GEOSSTRtree_build (GH-835, Dan Baston)
   - Voronoi: Add option to create diagram in order consistent with inputs (GH-781, Dan Baston)
 
 - Fixes/Improvements:
@@ -43,7 +45,14 @@ xxxx-xx-xx
     (GH-791, Joris Van den Bossche & Dan Baston)
   - Fix incorrect result from Envelope::disjoint (GH-791, Dan Baston)
   - Polygonizer: Fix duplicate lines return by getInvalidRingLines (GH-782, Martin Davis & Dan Baston)
-
+  - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
+  - GEOSBuffer: Fix crash with Inf coordinates (GH-822, Dan Baston)
+  - GEOSSTRtree_iterate: Do not return removed items (GH-833, Dan Baston)
+  - IndexedFacetDistance: Fix crash with Inf coordinates (GH-821, Dan Baston)
+  - HausdorffDistance: Fix crash on collection containing empty point (GH-840, Dan Baston)
+  - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
+  - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
+  - Improve OffsetCurve behaviour and add Joined mode (JTS-956, Martin Davis)
 
 ## Changes in 3.11.0
 2022-07-01

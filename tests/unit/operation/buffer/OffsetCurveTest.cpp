@@ -67,6 +67,15 @@ struct test_offsetcurve_data {
         ensure_equals_geometry(result.get(), expected.get(), tolerance);
     }
 
+    void
+    checkOffsetCurveJoined(const std::string& wkt, double distance, const std::string& wktExpected)
+    {
+        std::unique_ptr<geos::geom::Geometry> geom = wktreader.read(wkt);
+        std::unique_ptr<geos::geom::Geometry> result = OffsetCurve::getCurveJoined(*geom, distance);
+        std::unique_ptr<geos::geom::Geometry> expected = wktreader.read(wktExpected);
+        ensure_equals_geometry(result.get(), expected.get(), 0.05);
+    }
+
 };
 
 typedef test_group<test_offsetcurve_data> group;
@@ -108,33 +117,72 @@ void object::test<3> ()
         );
 }
 
-// testSegment1Short
+/**
+* testRepeatedPoint
+* Test bug fix for removing repeated points in input for raw curve.
+* See https://github.com/locationtech/jts/issues/957
+*/
 template<>
 template<>
 void object::test<4> ()
 {
     checkOffsetCurve(
-        "LINESTRING (2 2, 2 2.0000001)", 1,
-        "LINESTRING (1 2, 1 2.0000001)",
-        0.00000001
+        "LINESTRING (4 9, 1 2, 7 5, 7 5, 4 9)", 1,
+        "LINESTRING (4.24 7.02, 2.99 4.12, 5.48 5.36, 4.24 7.02)"
         );
 }
 
-// testSegment1
+
+// testSegment1Short
 template<>
 template<>
 void object::test<5> ()
 {
     checkOffsetCurve(
+        "LINESTRING (2 2, 2 2.0000001)", 1,
+        "LINESTRING (1 2, 1 2.0000001)",
+        0.00000001
+    );
+}
+
+// testSegment1
+template<>
+template<>
+void object::test<6> ()
+{
+    checkOffsetCurve(
         "LINESTRING (0 0, 9 9)", 1,
         "LINESTRING (-0.71 0.71, 8.29 9.71)"
-        );
+    );
+}
+
+
+// testSegment1Neg
+template<>
+template<>
+void object::test<7> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (0 0, 9 9)", -1,
+        "LINESTRING (0.71 -0.71, 9.71 8.29)"
+    );
 }
 
 // testSegments2
 template<>
 template<>
-void object::test<6> ()
+void object::test<8> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (0 0, 9 9, 25 0)", 1,
+        "LINESTRING (-0.707 0.707, 8.293 9.707, 8.435 9.825, 8.597 9.915, 8.773 9.974, 8.956 9.999, 9.141 9.99, 9.321 9.947, 9.49 9.872, 25.49 0.872)"
+        );
+}
+
+// testSegments3
+template<>
+template<>
+void object::test<9> ()
 {
     checkOffsetCurve(
         "LINESTRING (0 0, 9 9, 25 0, 30 15)", 1,
@@ -142,10 +190,21 @@ void object::test<6> ()
         );
 }
 
+// testRightAngle
+template<>
+template<>
+void object::test<10> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (2 8, 8 8, 8 1)", 1,
+        "LINESTRING (2 9, 8 9, 8.2 8.98, 8.38 8.92, 8.56 8.83, 8.71 8.71, 8.83 8.56, 8.92 8.38, 8.98 8.2, 9 8, 9 1)"
+        );
+}
+
 // testZigzagOneEndCurved4
 template<>
 template<>
-void object::test<7> ()
+void object::test<11> ()
 {
     checkOffsetCurve(
         "LINESTRING (1 3, 6 3, 4 5, 9 5)", 1,
@@ -153,10 +212,54 @@ void object::test<7> ()
         );
 }
 
+// testZigzagOneEndCurved1
+template<>
+template<>
+void object::test<12> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (1 3, 6 3, 4 5, 9 5)", 1,
+        "LINESTRING (1 4, 3.59 4, 3.29 4.29, 3.17 4.44, 3.08 4.62, 3.02 4.8, 3 5, 3.02 5.2, 3.08 5.38, 3.17 5.56, 3.29 5.71, 3.44 5.83, 3.62 5.92, 3.8 5.98, 4 6, 9 6)"
+        );
+}
+
+
+// testAsymmetricU
+template<>
+template<>
+void object::test<13> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (1 1, 9 1, 9 2, 5 2)", 1,
+        "LINESTRING (1 2, 4 2)"
+        );
+
+    checkOffsetCurve(
+        "LINESTRING (1 1, 9 1, 9 2, 5 2)", -1,
+        "LINESTRING (1 0, 9 0, 9.2 0.02, 9.38 0.08, 9.56 0.17, 9.71 0.29, 9.83 0.44, 9.92 0.62, 9.98 0.8, 10 1, 10 2, 9.98 2.2, 9.92 2.38, 9.83 2.56, 9.71 2.71, 9.56 2.83, 9.38 2.92, 9.2 2.98, 9 3, 5 3)"
+        );
+}
+
+// testSymmetricU
+template<>
+template<>
+void object::test<14> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (1 1, 9 1, 9 2, 1 2)", 1,
+        "LINESTRING EMPTY"
+        );
+
+    checkOffsetCurve(
+        "LINESTRING (1 1, 9 1, 9 2, 1 2)", -1,
+        "LINESTRING (1 0, 9 0, 9.2 0.02, 9.38 0.08, 9.56 0.17, 9.71 0.29, 9.83 0.44, 9.92 0.62, 9.98 0.8, 10 1, 10 2, 9.98 2.2, 9.92 2.38, 9.83 2.56, 9.71 2.71, 9.56 2.83, 9.38 2.92, 9.2 2.98, 9 3, 1 3)"
+        );
+}
+
 // testEmptyResult
 template<>
 template<>
-void object::test<8> ()
+void object::test<15> ()
 {
     checkOffsetCurve(
         "LINESTRING (3 5, 5 7, 7 5)", -4,
@@ -167,27 +270,69 @@ void object::test<8> ()
 // testSelfCross
 template<>
 template<>
-void object::test<9> ()
+void object::test<16> ()
 {
     checkOffsetCurve(
         "LINESTRING (50 90, 50 10, 90 50, 10 50)", 10,
-        "LINESTRING (60 90, 60 60)" );
+        "MULTILINESTRING ((60 90, 60 60), (60 40, 60 34.14, 65.85 40, 60 40), (40 40, 10 40))" );
 }
 
 // testSelfCrossNeg
 template<>
 template<>
-void object::test<10> ()
+void object::test<17> ()
 {
     checkOffsetCurve(
         "LINESTRING (50 90, 50 10, 90 50, 10 50)", -10,
-        "LINESTRING (40 90, 40 60, 10 60)" );
+        "MULTILINESTRING ((40 90, 40 60, 10 60), (40 40, 40 10, 40.19 8.05, 40.76 6.17, 41.69 4.44, 42.93 2.93, 44.44 1.69, 46.17 0.76, 48.05 0.19, 50 0, 51.95 0.19, 53.83 0.76, 55.56 1.69, 57.07 2.93, 97.07 42.93, 98.31 44.44, 99.24 46.17, 99.81 48.05, 100 50, 99.81 51.95, 99.24 53.83, 98.31 55.56, 97.07 57.07, 95.56 58.31, 93.83 59.24, 91.95 59.81, 90 60, 60 60))" );
+}
+
+// testSelfCrossCWNeg
+template<>
+template<>
+void object::test<18> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (0 70, 100 70, 40 0, 40 100)", -10,
+        "MULTILINESTRING ((0 60, 30 60), (50 60, 50 27.03, 78.25 60, 50 60), (50 80, 50 100))" );
+}
+
+// testSelfCrossDartInside
+template<>
+template<>
+void object::test<19> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (60 50, 10 80, 50 10, 90 80, 40 50)", 10,
+        "MULTILINESTRING ((54.86 41.43, 50 44.34, 45.14 41.43), (43.9 40.83, 50 30.16, 56.1 40.83))" );
+}
+
+
+// testSelfCrossDartOutside
+template<>
+template<>
+void object::test<20> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (60 50, 10 80, 50 10, 90 80, 40 50)", -10,
+        "LINESTRING (50 67.66, 15.14 88.57, 13.32 89.43, 11.35 89.91, 9.33 89.98, 7.34 89.64, 5.46 88.91, 3.76 87.82, 2.32 86.4, 1.19 84.73, 0.42 82.86, 0.04 80.88, 0.07 78.86, 0.5 76.88, 1.32 75.04, 41.32 5.04, 42.42 3.48, 43.8 2.16, 45.4 1.12, 47.17 0.41, 49.05 0.05, 50.95 0.05, 52.83 0.41, 54.6 1.12, 56.2 2.16, 57.58 3.48, 58.68 5.04, 98.68 75.04, 99.5 76.88, 99.93 78.86, 99.96 80.88, 99.58 82.86, 98.81 84.73, 97.68 86.4, 96.24 87.82, 94.54 88.91, 92.66 89.64, 90.67 89.98, 88.65 89.91, 86.68 89.43, 84.86 88.57, 50 67.66)" );
+}
+
+
+// testSelfCrossDart2Inside
+template<>
+template<>
+void object::test<21> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (64 45, 10 80, 50 10, 90 80, 35 45)", 10,
+        "LINESTRING (55.00 38.91, 49.58 42.42, 44.74 39.34, 50 30.15, 55.00 38.91)" );
 }
 
 // testRing
 template<>
 template<>
-void object::test<11> ()
+void object::test<22> ()
 {
     checkOffsetCurve(
         "LINESTRING (10 10, 50 90, 90 10, 10 10)", -10,
@@ -197,18 +342,54 @@ void object::test<11> ()
 // testClosedCurve
 template<>
 template<>
-void object::test<12> ()
+void object::test<23> ()
 {
     checkOffsetCurve(
-        "LINESTRING (30 70, 80 80, 50 10, 10 80, 60 70)", 10,
-        "LINESTRING (45 83.2, 78.04 89.81, 80 90, 81.96 89.81, 83.85 89.23, 85.59 88.29, 87.11 87.04, 88.35 85.5, 89.27 83.76, 89.82 81.87, 90 79.9, 89.79 77.94, 89.19 76.06, 59.19 6.06, 58.22 4.3, 56.91 2.77, 55.32 1.53, 53.52 0.64, 51.57 0.12, 49.56 0.01, 47.57 0.3, 45.68 0.98, 43.96 2.03, 42.49 3.4, 41.32 5.04, 1.32 75.04, 0.53 76.77, 0.09 78.63, 0.01 80.53, 0.29 82.41, 0.93 84.2, 1.89 85.85, 3.14 87.28, 4.65 88.45, 6.34 89.31, 8.17 89.83, 10.07 90, 11.96 89.81, 45 83.2)"
+        "LINESTRING (70 80, 10 80, 50 10, 90 80, 40 80)", 10,
+        "LINESTRING (70 70, 40 70, 27.23 70, 50 30.15, 72.76 70, 70 70)"
+        );
+}
+
+
+// testOverlapTriangleInside
+template<>
+template<>
+void object::test<24> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (70 80, 10 80, 50 10, 90 80, 40 80)", 10,
+        "LINESTRING (70 70, 40 70, 27.23 70, 50 30.15, 72.76 70, 70 70)" );
+}
+
+
+// testOverlapTriangleOutside
+template<>
+template<>
+void object::test<25> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (70 80, 10 80, 50 10, 90 80, 40 80)", -10,
+        "LINESTRING (70 90, 40 90, 10 90, 8.11 89.82, 6.29 89.29, 4.6 88.42, 3.11 87.25, 1.87 85.82, 0.91 84.18, 0.29 82.39, 0.01 80.51, 0.1 78.61, 0.54 76.77, 1.32 75.04, 41.32 5.04, 42.42 3.48, 43.8 2.16, 45.4 1.12, 47.17 0.41, 49.05 0.05, 50.95 0.05, 52.83 0.41, 54.6 1.12, 56.2 2.16, 57.58 3.48, 58.68 5.04, 98.68 75.04, 99.46 76.77, 99.9 78.61, 99.99 80.51, 99.71 82.39, 99.09 84.18, 98.13 85.82, 96.89 87.25, 95.4 88.42, 93.71 89.29, 91.89 89.82, 90 90, 70 90)"
+        );
+}
+
+
+// testMultiPoint
+template<>
+template<>
+void object::test<26> ()
+{
+    checkOffsetCurve(
+        "MULTIPOINT ((0 0), (1 1))", 1,
+        "LINESTRING EMPTY"
     );
 }
+
 
 // testMultiLine
 template<>
 template<>
-void object::test<13> ()
+void object::test<27> ()
 {
     checkOffsetCurve(
         "MULTILINESTRING ((20 30, 60 10, 80 60), (40 50, 80 30))", 10,
@@ -216,10 +397,23 @@ void object::test<13> ()
     );
 }
 
-// testPolygon
+
+// testMixedWithPoint
 template<>
 template<>
-void object::test<14> ()
+void object::test<28> ()
+{
+    checkOffsetCurve(
+        "GEOMETRYCOLLECTION (LINESTRING (20 30, 60 10, 80 60), POINT (0 0))", 10,
+        "LINESTRING (24.47 38.94, 54.75 23.8, 70.72 63.71)"
+    );
+}
+
+
+// testPolygon1
+template<>
+template<>
+void object::test<29> ()
 {
     checkOffsetCurve(
         "POLYGON ((100 200, 200 100, 100 100, 100 200))", 10,
@@ -227,10 +421,10 @@ void object::test<14> ()
     );
 }
 
-// testPolygon
+// testPolygon2
 template<>
 template<>
-void object::test<15> ()
+void object::test<30> ()
 {
     checkOffsetCurve(
         "POLYGON ((100 200, 200 100, 100 100, 100 200))", -10,
@@ -238,10 +432,11 @@ void object::test<15> ()
     );
 }
 
-// testPolygonWithHole
+
+// testPolygonWithHole1
 template<>
 template<>
-void object::test<16> ()
+void object::test<31> ()
 {
     checkOffsetCurve(
         "POLYGON ((20 80, 80 80, 80 20, 20 20, 20 80), (30 70, 70 70, 70 30, 30 30, 30 70))", 10,
@@ -249,10 +444,10 @@ void object::test<16> ()
     );
 }
 
-// testPolygonWithHole
+// testPolygonWithHole2
 template<>
 template<>
-void object::test<17> ()
+void object::test<32> ()
 {
     checkOffsetCurve(
         "POLYGON ((20 80, 80 80, 80 20, 20 20, 20 80), (30 70, 70 70, 70 30, 30 30, 30 70))", -10,
@@ -260,12 +455,50 @@ void object::test<17> ()
     );
 }
 
-  //---------------------------------------
+
+
+//-------------------------------------------------
+
+// testJoined1
+template<>
+template<>
+void object::test<33> ()
+{
+    checkOffsetCurveJoined("LINESTRING (0 50, 100 50, 50 100, 50 0)", 10,
+        "LINESTRING (0 60, 75.85 60, 60 75.85, 60 0)"
+    );
+}
+
+// testJoined2
+template<>
+template<>
+void object::test<34> ()
+{
+    checkOffsetCurveJoined("LINESTRING (0 50, 100 50, 50 100, 50 0)", -10,
+        "LINESTRING (0 40, 100 40, 101.95 40.19, 103.83 40.76, 105.56 41.69, 107.07 42.93, 108.31 44.44, 109.24 46.17, 109.81 48.05, 110 50, 109.81 51.95, 109.24 53.83, 108.31 55.56, 107.07 57.07, 57.07 107.07, 55.56 108.31, 53.83 109.24, 51.95 109.81, 50 110, 48.05 109.81, 46.17 109.24, 44.44 108.31, 42.93 107.07, 41.69 105.56, 40.76 103.83, 40.19 101.95, 40 100, 40 0)"
+    );
+}
+
+
+//-------------------------------------------------
+
+// testInfiniteLoop
+template<>
+template<>
+void object::test<35> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (21 101, -1 78, 12 43, 50 112, 73 -5, 19 2, 87 85, -7 38, 105 40)", 4,
+        "MULTILINESTRING ((23.89 98.24, 3.62 77.04, 12.71 52.58, 46.50 113.93, 46.96 114.60, 47.55 115.16, 48.24 115.59, 49.00 115.87, 49.80 116.00, 50.62 115.95, 51.40 115.75, 52.13 115.38, 52.77 114.88, 53.30 114.26, 53.69 113.55, 53.92 112.77, 61.06 76.50), (62.66 68.36, 63.73 62.91, 72.03 73.05, 62.66 68.36), (65.73 52.73, 67.58 43.33, 104.93 44.00), (69.14 35.36, 76.92 -4.23, 77.00 -4.98, 76.93 -5.73, 76.72 -6.46, 76.38 -7.14, 75.92 -7.73, 75.35 -8.24, 74.70 -8.62, 73.99 -8.88, 73.24 -8.99, 72.49 -8.97, 18.49 -1.97, 17.73 -1.79, 17.03 -1.48, 16.39 -1.04, 15.86 -0.48, 15.44 0.17, 15.16 0.89, 15.02 1.65, 15.02 2.42, 15.18 3.18, 15.48 3.89, 15.91 4.53, 40.74 34.85), (47.40 42.97, 57.15 54.88), (55.23 64.64, 18.32 46.19), (16.24 42.42, 47.40 42.97), (57.89 43.16, 59.45 43.19))"
+    );
+}
+
+//---------------------------------------
 
 // testQuadSegs
 template<>
 template<>
-void object::test<18> ()
+void object::test<36> ()
 {
     checkOffsetCurve(
         "LINESTRING (20 20, 50 50, 80 20)",
@@ -277,7 +510,7 @@ void object::test<18> ()
 // testJoinBevel
 template<>
 template<>
-void object::test<19> ()
+void object::test<37> ()
 {
     checkOffsetCurve(
         "LINESTRING (20 20, 50 50, 80 20)",
@@ -289,7 +522,7 @@ void object::test<19> ()
 // testJoinMitre
 template<>
 template<>
-void object::test<20> ()
+void object::test<38> ()
 {
     checkOffsetCurve(
         "LINESTRING (20 20, 50 50, 80 20)",

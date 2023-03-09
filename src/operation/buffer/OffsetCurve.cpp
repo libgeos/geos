@@ -12,59 +12,49 @@
  *
  **********************************************************************/
 
-#include <geos/operation/buffer/OffsetCurve.h>
-#include <geos/operation/buffer/BufferParameters.h>
-#include <geos/operation/buffer/OffsetCurveBuilder.h>
-#include <geos/operation/buffer/SegmentMCIndex.h>
-#include <geos/operation/buffer/BufferOp.h>
 
 #include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateList.h>
-#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Envelope.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
-#include <geos/geom/Point.h>
+#include <geos/geom/MultiLineString.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/util/GeometryMapper.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/util/Assert.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
-#include <cassert>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/OffsetCurve.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/buffer/OffsetCurveSection.h>
+#include <geos/operation/buffer/SegmentMCIndex.h>
 
-using namespace geos::index::chain;
-using namespace geos::geom;
+using geos::algorithm::Distance;
 using geos::geom::util::GeometryMapper;
+using geos::index::chain::MonotoneChain;
+using geos::index::chain::MonotoneChainSelectAction;
+using geos::operation::valid::RepeatedPointRemover;
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation {
 namespace buffer {
 
-/* public static */
-std::unique_ptr<Geometry>
-OffsetCurve::getCurve(const Geometry& geom, double distance)
-{
-    OffsetCurve oc(geom, distance);
-    return oc.getCurve();
-}
+static constexpr double NOT_IN_CURVE = -1.0;
 
-
-/* public static */
-std::unique_ptr<Geometry>
-OffsetCurve::getCurve(const Geometry& geom,
-    double dist,
-    int quadSegs,
-    BufferParameters::JoinStyle joinStyle,
-    double mitreLimit)
+/* public */
+void
+OffsetCurve::setJoined(bool pIsJoined)
 {
-    BufferParameters bufParms;
-    if (quadSegs >= 0) bufParms.setQuadrantSegments(quadSegs);
-    if (joinStyle >= 0) bufParms.setJoinStyle(joinStyle);
-    if (mitreLimit >= 0) bufParms.setMitreLimit(mitreLimit);
-    OffsetCurve oc(geom, dist, bufParms);
-    return oc.getCurve();
+    isJoined = pIsJoined;
 }
 
 
@@ -92,48 +82,99 @@ OffsetCurve::getCurve()
     return GeometryMapper::flatMap(inputGeom, 1, GetCurveMapOp);
 }
 
-
 /* public static */
-void
-OffsetCurve::rawOffset(const LineString& geom, double dist,
-    std::vector<CoordinateSequence*>& lineList)
+std::unique_ptr<Geometry>
+OffsetCurve::getCurve(const Geometry& geom, double distance)
 {
-    BufferParameters bp;
-    rawOffset(geom, dist, bp, lineList);
-    return;
+    OffsetCurve oc(geom, distance);
+    return oc.getCurve();
 }
 
 
 /* public static */
-void
-OffsetCurve::rawOffset(const LineString& geom, double distance, BufferParameters& bufParams,
-    std::vector<CoordinateSequence*>& lineList)
+std::unique_ptr<Geometry>
+OffsetCurve::getCurve(const Geometry& geom,
+    double dist,
+    int quadSegs,
+    BufferParameters::JoinStyle joinStyle,
+    double mitreLimit)
 {
-    OffsetCurveBuilder ocb(geom.getFactory()->getPrecisionModel(), bufParams);
-    ocb.getOffsetCurve(geom.getCoordinatesRO(), distance, lineList);
-    return;
+    BufferParameters bufParms;
+    if (quadSegs >= 0) bufParms.setQuadrantSegments(quadSegs);
+    if (joinStyle >= 0) bufParms.setJoinStyle(joinStyle);
+    if (mitreLimit >= 0) bufParms.setMitreLimit(mitreLimit);
+    OffsetCurve oc(geom, dist, bufParms);
+    return oc.getCurve();
 }
 
+
+/* public static */
+std::unique_ptr<Geometry>
+OffsetCurve::getCurveJoined(const Geometry& geom, double dist)
+{
+    OffsetCurve oc(geom, dist);
+    oc.setJoined(true);
+    return oc.getCurve();
+}
+
+
+/* public static */
+std::unique_ptr<CoordinateSequence>
+OffsetCurve::rawOffsetCurve(
+    const LineString& line,
+    double dist,
+    BufferParameters& bufParams)
+{
+    const CoordinateSequence* pts = line.getCoordinatesRO();
+    std::unique_ptr<CoordinateSequence> cleanPts = RepeatedPointRemover::removeRepeatedAndInvalidPoints(pts);
+
+    OffsetCurveBuilder ocb(line.getFactory()->getPrecisionModel(), bufParams);
+    return ocb.getOffsetCurve(cleanPts.get(), dist);
+}
+
+
+/* public static */
+std::unique_ptr<CoordinateSequence>
+OffsetCurve::rawOffset(const LineString& line, double dist)
+{
+    BufferParameters bufParams;
+    return rawOffsetCurve(line, dist, bufParams);
+}
 
 /* private */
-std::unique_ptr<LineString>
-OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
+std::unique_ptr<Geometry>
+OffsetCurve::computeCurve(const LineString& lineGeom, double dist)
 {
-    //-- first handle special/simple cases
+    //-- first handle simple cases
+    //-- empty or single-point line
     if (lineGeom.getNumPoints() < 2 || lineGeom.getLength() == 0.0) {
         return geomFactory->createLineString();
     }
+    //-- two-point line
     if (lineGeom.getNumPoints() == 2) {
-        return offsetSegment(lineGeom.getCoordinatesRO(), p_distance);
+        return offsetSegment(lineGeom.getCoordinatesRO(), dist);
     }
 
-    std::vector<CoordinateSequence*> rawOffsetLines;
-    rawOffset(lineGeom, p_distance, bufferParams, rawOffsetLines);
-    if (rawOffsetLines.empty() || rawOffsetLines[0]->size() == 0) {
-        for (auto* cs: rawOffsetLines)
-            delete cs;
-        return geomFactory->createLineString();
+    auto sections = computeSections(lineGeom, dist);
+
+    if (isJoined) {
+        return OffsetCurveSection::toLine(sections, geomFactory);
     }
+    else {
+        return OffsetCurveSection::toGeometry(sections, geomFactory);
+    }
+}
+
+/* private */
+std::vector<std::unique_ptr<OffsetCurveSection>>
+OffsetCurve::computeSections(const LineString& lineGeom, double dist)
+{
+    std::unique_ptr<CoordinateSequence> rawCurve = rawOffsetCurve(lineGeom, dist, bufferParams);
+    std::vector<std::unique_ptr<OffsetCurveSection>> sections;
+    if (rawCurve->size() == 0) {
+        return sections;
+    }
+
     /**
      * Note: If the raw offset curve has no
      * narrow concave angles or self-intersections it could be returned as is.
@@ -141,209 +182,312 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
      * and testing indicates little performance advantage,
      * so not doing this.
      */
+    std::unique_ptr<Polygon> bufferPoly = getBufferOriented(lineGeom, dist, bufferParams);
 
-    std::unique_ptr<Polygon> bufferPoly = getBufferOriented(lineGeom, p_distance, bufferParams);
+    //-- first extract offset curve sections from shell
+    auto shell = bufferPoly->getExteriorRing()->getCoordinatesRO();
+    computeCurveSections(shell, *rawCurve, sections);
 
-    //-- first try matching shell to raw curve
-    const CoordinateSequence* shell = bufferPoly->getExteriorRing()->getCoordinatesRO();
-    std::unique_ptr<LineString> offsetCurve = computeCurve(shell, rawOffsetLines);
-    if (! offsetCurve->isEmpty() || bufferPoly->getNumInteriorRing() == 0) {
-        for (auto* cs: rawOffsetLines)
-            delete cs;
-        return offsetCurve;
+    //-- extract offset curve sections from holes
+    for (std::size_t i = 0; i < bufferPoly->getNumInteriorRing(); i++) {
+        auto hole = bufferPoly->getInteriorRingN(i)->getCoordinatesRO();
+        computeCurveSections(hole, *rawCurve, sections);
     }
-
-    //-- if shell didn't work, try matching to largest hole
-    auto longestHole = extractLongestHole(*bufferPoly);
-    const CoordinateSequence* holePts = longestHole ? longestHole->getCoordinatesRO() : nullptr;
-    offsetCurve = computeCurve(holePts, rawOffsetLines);
-    for (auto* cs: rawOffsetLines)
-        delete cs;
-    return offsetCurve;
+    return sections;
 }
 
- /* private */
+/* private */
 std::unique_ptr<LineString>
-OffsetCurve::offsetSegment(const CoordinateSequence* pts, double p_distance)
+OffsetCurve::offsetSegment(const CoordinateSequence* pts, double dist)
 {
-    LineSegment ls(pts->getAt(0), pts->getAt(1));
-    LineSegment offsetSeg = ls.offset(p_distance);
-    auto coords = detail::make_unique<CoordinateSequence>(2u);
-    coords->setAt(offsetSeg.p0, 0);
-    coords->setAt(offsetSeg.p1, 1);
-    return geomFactory->createLineString(std::move(coords));
+    LineSegment offsetSeg(pts->getAt(0), pts->getAt(1));
+    offsetSeg = offsetSeg.offset(dist);
+    CoordinateSequence cs;
+    cs.add(offsetSeg.p0);
+    cs.add(offsetSeg.p1);
+    return geomFactory->createLineString(std::move(cs));
 }
 
 /* private static */
 std::unique_ptr<Polygon>
-OffsetCurve::getBufferOriented(const LineString& geom, double p_distance, BufferParameters& bufParms)
+OffsetCurve::getBufferOriented(const LineString& geom, double dist, BufferParameters& bufParams)
 {
-    std::unique_ptr<Geometry> buffer = BufferOp::bufferOp(&geom, std::abs(p_distance), bufParms);
-    std::unique_ptr<Polygon> bufferPoly = extractMaxAreaPolygon(*buffer);
+    std::unique_ptr<Geometry> buffer = BufferOp::bufferOp(&geom, std::abs(dist), bufParams);
+    const Polygon* bufferPoly = extractMaxAreaPolygon(buffer.get());
     //-- for negative distances (Right of input) reverse buffer direction to match offset curve
-    if (p_distance < 0) {
-        bufferPoly = bufferPoly->reverse();
-    }
-    return bufferPoly;
+    return dist < 0
+        ? bufferPoly->reverse()
+        : bufferPoly->clone();
 }
 
 
 /* private static */
-std::unique_ptr<Polygon>
-OffsetCurve::extractMaxAreaPolygon(const Geometry& geom)
+const Polygon*
+OffsetCurve::extractMaxAreaPolygon(const Geometry* geom)
 {
-    const std::size_t numGeometries = geom.getNumGeometries();
-    if (numGeometries == 1) {
-        const Polygon& poly = static_cast<const Polygon&>(geom);
-        return poly.clone();
-    }
+    if (geom->getGeometryTypeId() == GEOS_POLYGON)
+        return static_cast<const Polygon*>(geom);
 
-    assert(numGeometries > 1);
-    const Polygon* maxPoly = static_cast<const Polygon*>(geom.getGeometryN(0));
-    double maxArea = maxPoly->getArea();
-    for (std::size_t i = 1; i < numGeometries; i++) {
-        const Polygon* poly = static_cast<const Polygon*>(geom.getGeometryN(i));
+    double maxArea = 0.0;
+    const Polygon* maxPoly = nullptr;
+    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+        const Geometry* subgeom = geom->getGeometryN(i);
+        if (subgeom->getGeometryTypeId() != GEOS_POLYGON) continue;
+        const Polygon* poly = static_cast<const Polygon*>(subgeom);
         double area = poly->getArea();
-        if (area > maxArea) {
+        if (maxPoly == nullptr || area > maxArea) {
             maxPoly = poly;
             maxArea = area;
         }
     }
-    return maxPoly->clone();
+    return maxPoly;
 }
 
-/* private static */
-std::unique_ptr<LinearRing>
-OffsetCurve::extractLongestHole(const Polygon& poly)
-{
-    const LinearRing* largestHole = nullptr;
-    double maxLen = -1;
-    for (std::size_t i = 0; i < poly.getNumInteriorRing(); i++) {
-        const LinearRing* hole = poly.getInteriorRingN(i);
-        double len = hole->getLength();
-        if (len > maxLen) {
-            largestHole = hole;
-            maxLen = len;
-        }
-    }
-    return largestHole ? largestHole->clone() : nullptr;
-}
 
 /* private */
-std::unique_ptr<LineString>
-OffsetCurve::computeCurve(const CoordinateSequence* bufferPts, std::vector<CoordinateSequence*>& rawOffsetList)
+void
+OffsetCurve::computeCurveSections(
+    const CoordinateSequence* bufferRingPts,
+    const CoordinateSequence& rawCurve,
+    std::vector<std::unique_ptr<OffsetCurveSection>>& sections)
 {
-    std::vector<bool> isInCurve;
-    isInCurve.resize(bufferPts->size() - 1, false);
+    std::vector<double> rawPosition(bufferRingPts->size()-1, NOT_IN_CURVE);
 
-    SegmentMCIndex segIndex(bufferPts);
-
-    int curveStart = -1;
-    CoordinateSequence* cs = rawOffsetList[0];
-    for (std::size_t i = 0; i < cs->size() - 1; i++) {
-        int index = markMatchingSegments(
-                        cs->getAt(i), cs->getAt(i+1),
-                        segIndex, bufferPts, isInCurve);
-        if (curveStart < 0) {
-            curveStart = index;
+    SegmentMCIndex bufferSegIndex(bufferRingPts);
+    std::size_t bufferFirstIndex = UNKNOWN_INDEX;
+    double minRawPosition = -1;
+    for (std::size_t i = 0; i < rawCurve.size() - 1; i++) {
+        std::size_t minBufferIndexForSeg = matchSegments(rawCurve[i], rawCurve[i+1], i, bufferSegIndex, bufferRingPts, rawPosition);
+        if (minBufferIndexForSeg != UNKNOWN_INDEX) {
+            double pos = rawPosition[minBufferIndexForSeg];
+            if (bufferFirstIndex == UNKNOWN_INDEX || pos < minRawPosition) {
+                minRawPosition = pos;
+                bufferFirstIndex = minBufferIndexForSeg;
+            }
         }
     }
-    auto curvePts = detail::make_unique<CoordinateSequence>();
-    extractSection(bufferPts, curveStart, isInCurve, *curvePts);
-    return geomFactory->createLineString(std::move(curvePts));
+    //-- no matching sections found in this buffer ring
+    if (bufferFirstIndex == UNKNOWN_INDEX)
+        return;
+
+    extractSections(bufferRingPts, rawPosition, bufferFirstIndex, sections);
 }
 
-void
-OffsetCurve::MatchCurveSegmentAction::select(const MonotoneChain& mc, std::size_t segIndex)
+
+/* private */
+std::size_t
+OffsetCurve::matchSegments(
+    const Coordinate& raw0, const Coordinate& raw1,
+    std::size_t rawCurveIndex,
+    SegmentMCIndex& bufferSegIndex,
+    const CoordinateSequence* bufferPts,
+    std::vector<double>& rawCurvePos)
 {
-    (void)mc; // Quiet unused variable warning
 
     /**
-    * A curveRingPt segment may match all or only a portion of a single raw segment.
-    * There may be multiple curve ring segs that match along the raw segment.
-    * The one closest to the segment start is recorded as the offset curve start.
+    * An action to match a raw offset curve segment
+    * to segments in a buffer ring
+    * and record the matched segment locations(s) along the raw curve.
+    *
+    * @author Martin Davis
     */
-    double frac = subsegmentMatchFrac(bufferPts->getAt(segIndex), bufferPts->getAt(segIndex+1), p0, p1, matchDistance);
-    //-- no match
-    if (frac < 0) return;
+    /* private static */
+    class MatchCurveSegmentAction : public MonotoneChainSelectAction
+    {
 
-    isInCurve[segIndex] = true;
+    public:
 
-    //-- record lowest index
-    if (minFrac < 0 || frac < minFrac) {
-        minFrac = frac;
-        minCurveIndex = static_cast<int>(segIndex);
-    }
-}
+        const Coordinate& p0;
+        const Coordinate& p1;
+        std::size_t rawCurveIndex;
+        double matchDistance;
+        const CoordinateSequence* bufferRingPts;
+        std::vector<double>& rawCurveLoc;
+        double minRawLocation;
+        std::size_t bufferRingMinIndex;
 
-/* private */
-int
-OffsetCurve::markMatchingSegments(
-    const Coordinate& p0, const Coordinate& p1,
-    SegmentMCIndex& segIndex, const CoordinateSequence* bufferPts,
-    std::vector<bool>& isInCurve)
-{
-    Envelope matchEnv(p0, p1);
+        MatchCurveSegmentAction(
+            const Coordinate& p_p0,
+            const Coordinate& p_p1,
+            std::size_t p_rawCurveIndex,
+            double p_matchDistance,
+            const CoordinateSequence* p_bufferRingPts,
+            std::vector<double>& p_rawCurveLoc)
+            : p0(p_p0)
+            , p1(p_p1)
+            , rawCurveIndex(p_rawCurveIndex)
+            , matchDistance(p_matchDistance)
+            , bufferRingPts(p_bufferRingPts)
+            , rawCurveLoc(p_rawCurveLoc)
+            , minRawLocation(-1.0)
+            , bufferRingMinIndex(UNKNOWN_INDEX)
+            {};
+
+        std::size_t getBufferMinIndex() {
+            return bufferRingMinIndex;
+        }
+
+        void select(const geom::LineSegment& seg) override {
+            (void)seg; // quiet ununsed variable warning
+            return;
+        }
+
+        void select(const MonotoneChain& mc, std::size_t segIndex) override
+        {
+            (void)mc; // quiet ununsed variable warning
+            /**
+            * A curveRingPt segment may match all or only a portion of a single raw segment.
+            * There may be multiple curve ring segs that match along the raw segment.
+            */
+            double frac = segmentMatchFrac(
+                bufferRingPts->getAt(segIndex),
+                bufferRingPts->getAt(segIndex+1),
+                p0, p1, matchDistance);
+
+            //-- no match
+            if (frac < 0) return;
+
+            //-- location is used to sort segments along raw curve
+            double location = static_cast<double>(rawCurveIndex) + frac;
+            rawCurveLoc[segIndex] = location;
+            //-- record lowest index
+            if (minRawLocation < 0 || location < minRawLocation) {
+                minRawLocation = location;
+                bufferRingMinIndex = segIndex;
+            }
+        }
+    };
+
+    Envelope matchEnv(raw0, raw1);
     matchEnv.expandBy(matchDistance);
-    MatchCurveSegmentAction action(p0, p1, bufferPts, matchDistance, isInCurve);
-    segIndex.query(&matchEnv, action);
-    return action.getMinCurveIndex();
+    MatchCurveSegmentAction matchAction(raw0, raw1, rawCurveIndex, matchDistance, bufferPts, rawCurvePos);
+    bufferSegIndex.query(&matchEnv, matchAction);
+    return matchAction.getBufferMinIndex();
 }
-
 
 /* private static */
 double
-OffsetCurve::subsegmentMatchFrac(const Coordinate& p0, const Coordinate& p1,
-      const Coordinate& seg0, const Coordinate& seg1, double matchDistance)
+OffsetCurve::segmentMatchFrac(
+    const Coordinate& p0,   const Coordinate& p1,
+    const Coordinate& seg0, const Coordinate& seg1,
+    double matchDistance)
 {
-    if (matchDistance < algorithm::Distance::pointToSegment(p0, seg0, seg1))
-        return -1;
-    if (matchDistance < algorithm::Distance::pointToSegment(p1, seg0, seg1))
-        return -1;
-    //-- matched - determine position as fraction
+    if (matchDistance < Distance::pointToSegment(p0, seg0, seg1))
+        return -1.0;
+    if (matchDistance < Distance::pointToSegment(p1, seg0, seg1))
+        return -1.0;
+    //-- matched - determine position as fraction along segment
     LineSegment seg(seg0, seg1);
     return seg.segmentFraction(p0);
 }
 
 
-/* private static */
+/* private */
 void
-OffsetCurve::extractSection(const CoordinateSequence* ring, int iStartIndex,
-        std::vector<bool>& isExtracted, CoordinateSequence& extractedPoints)
+OffsetCurve::extractSections(
+    const CoordinateSequence* ringPts,
+    std::vector<double>& rawCurveLoc,
+    std::size_t startIndex,
+    std::vector<std::unique_ptr<OffsetCurveSection>>& sections)
 {
-    if (iStartIndex < 0)
-        return;
-
-    CoordinateList coordList;
-    std::size_t startIndex = static_cast<std::size_t>(iStartIndex);
-    std::size_t i = startIndex;
+    std::size_t sectionStart = startIndex;
+    std::size_t sectionCount = 0;
+    std::size_t sectionEnd;
     do {
-        coordList.insert(coordList.end(), ring->getAt(i), false);
-        if (! isExtracted[i]) {
-            break;
+        sectionEnd = findSectionEnd(rawCurveLoc, sectionStart, startIndex);
+        double location = rawCurveLoc[sectionStart];
+        std::size_t lastIndex = prevIndex(sectionEnd, rawCurveLoc.size());
+        double lastLoc = rawCurveLoc[lastIndex];
+        std::unique_ptr<OffsetCurveSection> section = OffsetCurveSection::create(ringPts, sectionStart, sectionEnd, location, lastLoc);
+        sections.emplace_back(section.release());
+        sectionStart = findSectionStart(rawCurveLoc, sectionEnd);
+
+        //-- check for an abnormal state
+        if (sectionCount++ > ringPts->size()) {
+            util::Assert::shouldNeverReachHere("Too many sections for ring - probable bug");
         }
-        i = next(i, ring->size() - 1);
-    } while (i != startIndex);
-    //-- handle case where every segment is extracted
-    if (isExtracted[i]) {
-        coordList.insert(coordList.end(), ring->getAt(i), false);
-    }
+    } while (sectionStart != startIndex && sectionEnd != startIndex);
+}
 
-    //-- if only one point found return empty LineString
-    if (coordList.size() == 1)
-        return;
 
-    extractedPoints.add(coordList.begin(), coordList.end());
+/* private */
+std::size_t
+OffsetCurve::findSectionStart(
+    const std::vector<double>& loc,
+    std::size_t end)
+{
+    std::size_t start = end;
+    do {
+        std::size_t next = nextIndex(start, loc.size());
+        //-- skip ahead if segment is not in raw curve
+        if (loc[start] == NOT_IN_CURVE) {
+            start = next;
+            continue;
+        }
+        std::size_t prev = prevIndex(start, loc.size());
+        //-- if prev segment is not in raw curve then have found a start
+        if (loc[prev] == NOT_IN_CURVE) {
+            return start;
+        }
+        if (isJoined) {
+            /**
+             *  Start section at next gap in raw curve.
+             *  Only needed for joined curve, since otherwise
+             *  contiguous buffer segments can be in same curve section.
+             */
+            double locDelta = std::abs(loc[start] - loc[prev]);
+            if (locDelta > 1.0)
+                return start;
+        }
+        start = next;
+    } while (start != end);
+    return start;
+}
 
-    return;
+
+/* private */
+std::size_t
+OffsetCurve::findSectionEnd(
+    const std::vector<double>& loc,
+    std::size_t start,
+    std::size_t firstStartIndex)
+{
+    // assert: pos[start] is IN CURVE
+    std::size_t end = start;
+    std::size_t next;
+    do {
+        next = nextIndex(end, loc.size());
+        if (loc[next] == NOT_IN_CURVE)
+            return next;
+        if (isJoined) {
+        /**
+         *  End section at gap in raw curve.
+         *  Only needed for joined curve, since otherwise
+         *  contigous buffer segments can be in same section
+         */
+            double locDelta = std::abs(loc[next] - loc[end]);
+            if (locDelta > 1)
+                return next;
+        }
+      end = next;
+    } while (end != start && end != firstStartIndex);
+    return end;
 }
 
 /* private static */
 std::size_t
-OffsetCurve::next(std::size_t i, std::size_t size) {
-    i += 1;
-    return (i < size) ? i : 0;
+OffsetCurve::nextIndex(std::size_t i, std::size_t size)
+{
+    return i >= size - 1 ? 0 : i + 1;
 }
+
+/* private static */
+std::size_t
+OffsetCurve::prevIndex(std::size_t i, std::size_t size)
+{
+    return i == 0 ? size - 1 : i - 1;
+}
+
 
 
 

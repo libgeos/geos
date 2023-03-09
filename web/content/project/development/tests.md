@@ -1,14 +1,15 @@
 ---
 title: "Testing"
+date: 2021-10-04T14:21:00-07:00
 draft: false
-weight: 100
+weight: 20
 ---
 
 Testing executables are in `bin`
 
 * See also the `ctest` [documentation](/usage/download/#testing).
 
-## Unit Tests
+### Unit Tests
 
 The GEOS unit tests are written using the [TUT](http://mrzechonek.github.io/tut-framework/) framework.
 There are tests for both the C++ code and the C API.
@@ -36,7 +37,7 @@ Individual tests within a test group can be run by specifying the group name and
 $ bin/test_geos_unit capi::GEOSBuffer 1
 ```
 
-## XML Tests
+### XML Tests
 
 The XML test suite is a set of portable, declarative tests which can be run in both GEOS and JTS.
 They are located in `../geos/tests/xmltester/tests`.
@@ -58,7 +59,7 @@ Options:
 --wkb-output         Print Geometries as HEXWKB
 ```
 
-## Performance Tests
+### Performance Tests
 
 There are performance tests which are built, but not run as part of the standard test suite.
 These can be run from the command line:

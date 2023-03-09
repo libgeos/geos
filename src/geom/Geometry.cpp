@@ -108,7 +108,6 @@ Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 
 Geometry::Geometry(const GeometryFactory* newFactory)
     :
-    envelope(nullptr),
     _factory(newFactory),
     _userData(nullptr)
 {
@@ -125,13 +124,6 @@ Geometry::Geometry(const Geometry& geom)
     _factory(geom._factory),
     _userData(nullptr)
 {
-    if(geom.envelope.get()) {
-        envelope.reset(new Envelope(*(geom.envelope)));
-    }
-    //factory=geom.factory;
-    //envelope(new Envelope(*(geom.envelope.get())));
-    //SRID=geom.getSRID();
-    //_userData=NULL;
     _factory->addRef();
 }
 
@@ -230,15 +222,6 @@ std::unique_ptr<Geometry>
 Geometry::getEnvelope() const
 {
     return std::unique_ptr<Geometry>(getFactory()->toGeometry(getEnvelopeInternal()));
-}
-
-const Envelope*
-Geometry::getEnvelopeInternal() const
-{
-    if(!envelope.get()) {
-        envelope = computeEnvelopeInternal();
-    }
-    return envelope.get();
 }
 
 bool
@@ -574,11 +557,7 @@ Geometry::Ptr
 Geometry::Union() const
 {
     using geos::operation::geounion::UnaryUnionOp;
-#ifdef DISABLE_OVERLAYNG
     return UnaryUnionOp::Union(*this);
-#else
-    return operation::overlayng::OverlayNGRobust::Union(this);
-#endif
 }
 
 std::unique_ptr<Geometry>
