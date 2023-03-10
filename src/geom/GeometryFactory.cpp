@@ -572,6 +572,34 @@ GeometryFactory::createEmpty(GeometryTypeId typeId) const
     }
 }
 
+/*public*/
+std::unique_ptr<Geometry>
+GeometryFactory::createMulti(std::unique_ptr<Geometry> && geom) const
+{
+    GeometryTypeId typeId = geom->getGeometryTypeId();
+
+    // Already a collection? Done!
+    if (geom->isCollection())
+        return geom;
+
+    if (geom->isEmpty()) {
+        return geom->getFactory()->createEmpty(Geometry::multiTypeId(typeId));
+    }
+
+    std::vector<std::unique_ptr<Geometry>> subgeoms;
+    const GeometryFactory* gf = geom->getFactory();
+    subgeoms.push_back(std::move(geom));
+    switch (typeId) {
+        case GEOS_POINT:
+            return gf->createMultiPoint(std::move(subgeoms));
+        case GEOS_LINESTRING:
+            return gf->createMultiLineString(std::move(subgeoms));
+        case GEOS_POLYGON:
+            return gf->createMultiPolygon(std::move(subgeoms));
+        default:
+            throw geos::util::IllegalArgumentException("Unsupported GeometryTypeId");
+    }
+}
 
 template<typename T>
 GeometryTypeId commonType(const T& geoms) {

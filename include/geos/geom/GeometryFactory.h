@@ -288,6 +288,8 @@ public:
     */
     std::unique_ptr<Geometry> createEmpty(GeometryTypeId typeId) const;
 
+    std::unique_ptr<Geometry> createMulti(std::unique_ptr<Geometry> && geom) const;
+
     /**
      *  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
      *  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in

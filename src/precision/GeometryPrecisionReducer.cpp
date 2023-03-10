@@ -57,26 +57,9 @@ GeometryPrecisionReducer::reduce(const Geometry& geom)
     // if necessary
     if (geom.isCollection()
         && ! reduced->isCollection()
-        && (geom.getCoordinateDimension() == reduced->getCoordinateDimension())
-        && reduced->getGeometryTypeId() != GEOS_GEOMETRYCOLLECTION)
+        && (geom.getCoordinateDimension() == reduced->getCoordinateDimension()))
     {
-        GeometryTypeId typeId = reduced->getGeometryTypeId();
-        if (reduced->isEmpty()) return geom.getFactory()->createEmpty(geom.getGeometryTypeId());
-        std::vector<std::unique_ptr<Geometry>> subgeoms;
-        subgeoms.push_back(std::move(reduced));
-        switch (typeId) {
-            case GEOS_POINT:
-                reduced = geom.getFactory()->createMultiPoint(std::move(subgeoms));
-                break;
-            case GEOS_LINESTRING:
-                reduced = geom.getFactory()->createMultiLineString(std::move(subgeoms));
-                break;
-            case GEOS_POLYGON:
-                reduced = geom.getFactory()->createMultiPolygon(std::move(subgeoms));
-                break;
-            default:
-                break;
-        }
+        reduced = geom.getFactory()->createMulti(std::move(reduced));
     }
 
     // TODO: incorporate this in the Transformer above
