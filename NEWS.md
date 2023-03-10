@@ -15,7 +15,7 @@
   - HausdorffDistance: Fix crash on collection containing empty point (GH-840, Dan Baston)
   - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
-
+  - Guard against non-finite distances in Buffer/OffsetCurve (GH-661, Paul Ramsey)
 
 ## Changes in 3.11.1
 2022-11-13
