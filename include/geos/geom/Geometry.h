@@ -372,6 +372,15 @@ public:
                t == GEOS_MULTIPOLYGON;
     }
 
+    static GeometryTypeId multiTypeId(GeometryTypeId typeId) {
+        switch (typeId) {
+            case GEOS_POINT: return GEOS_MULTIPOINT;
+            case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
+            case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
+            default: return typeId;
+        }
+    }
+
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ or XYM, 4=XYZM).
     virtual uint8_t getCoordinateDimension() const = 0; //Abstract
 

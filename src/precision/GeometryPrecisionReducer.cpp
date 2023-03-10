@@ -53,6 +53,15 @@ GeometryPrecisionReducer::reduce(const Geometry& geom)
         reduced = PrecisionReducerTransformer::reduce(geom, targetPM, removeCollapsed);
     }
 
+    // Match the collection level of the output to the input
+    // if necessary
+    if (geom.isCollection()
+        && ! reduced->isCollection()
+        && (geom.getCoordinateDimension() == reduced->getCoordinateDimension()))
+    {
+        reduced = geom.getFactory()->createMulti(std::move(reduced));
+    }
+
     // TODO: incorporate this in the Transformer above
     if (changePrecisionModel &&
         (&targetPM != geom.getFactory()->getPrecisionModel()))

@@ -106,7 +106,6 @@ struct test_gpr_data {
         std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
         std::unique_ptr<Geometry> actual = reducerAny.reduce(*g);
 
-
         // std::cout << *actual << std::endl;
 
         ensure_equals_geometry(expected.get(), actual.get());
@@ -287,7 +286,7 @@ void object::test<15> ()
 {
     checkReduce(
         "MULTIPOLYGON (((1 9, 5 9, 5 1, 1 1, 1 9)), ((5.2 8.7, 9 8.7, 9 1, 5.2 1, 5.2 8.7)))",
-        "POLYGON ((1 1, 1 9, 5 9, 9 9, 9 1, 5 1, 1 1))");
+        "MULTIPOLYGON (((1 1, 1 9, 5 9, 9 9, 9 1, 5 1, 1 1)))");
 }
 
 // testGC
@@ -387,14 +386,30 @@ void object::test<23> ()
 // }
 
 // https://github.com/libgeos/geos/issues/662
-// template<>
-// template<>
-// void object::test<25> ()
-// {
-//     checkReduce(1, "MULTIPOLYGON EMPTY", "MULTIPOLYGON EMPTY");
-// }
+template<>
+template<>
+void object::test<25> ()
+{
+    checkReduce(1, "MULTIPOLYGON EMPTY", "MULTIPOLYGON EMPTY");
+}
 
+template<>
+template<>
+void object::test<26> ()
+{
+    checkReduce(10,
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)))",
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)))");
+}
 
+template<>
+template<>
+void object::test<28> ()
+{
+    checkReduce(10,
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 11 10, 11 11, 10 11, 10 10)))",
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 11 10, 11 11, 10 11, 10 10)))");
+}
 
 
 
