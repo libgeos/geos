@@ -111,6 +111,9 @@ BufferOp::bufferOp(const geom::Geometry* g, double dist,
 std::unique_ptr<Geometry>
 BufferOp::getResultGeometry(double nDistance)
 {
+    if (!std::isfinite(nDistance)) {
+        throw util::IllegalArgumentException("BufferOp::getResultGeometry distance must be a finite value");
+    }
     distance = nDistance;
     computeGeometry();
     return std::unique_ptr<Geometry>(resultGeometry.release());

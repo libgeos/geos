@@ -205,7 +205,11 @@ public:
         , distance(dist)
         , matchDistance(std::abs(dist)/MATCH_DISTANCE_FACTOR)
         , geomFactory(geom.getFactory())
-        {};
+        {
+            if (!std::isfinite(dist)) {
+                throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+            }
+        };
 
     /**
     * Creates a new instance for computing an offset curve for a geometry at a given distance.
@@ -222,7 +226,11 @@ public:
         , bufferParams(bp)
         , matchDistance(std::abs(dist)/MATCH_DISTANCE_FACTOR)
         , geomFactory(geom.getFactory())
-        {};
+        {
+            if (!std::isfinite(dist)) {
+                throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
+            }
+        };
 
     /**
     * Computes a single curve line for each input linear component,
