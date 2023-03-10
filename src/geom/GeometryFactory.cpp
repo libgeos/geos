@@ -580,7 +580,7 @@ GeometryFactory::createMulti(std::unique_ptr<Geometry> && geom) const
 
     // Already a collection? Done!
     if (geom->isCollection())
-        return geom;
+        return std::move(geom);
 
     if (geom->isEmpty()) {
         return geom->getFactory()->createEmpty(Geometry::multiTypeId(typeId));
