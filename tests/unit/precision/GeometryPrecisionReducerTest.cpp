@@ -402,6 +402,14 @@ void object::test<26> ()
         "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)))");
 }
 
+template<>
+template<>
+void object::test<28> ()
+{
+    checkReduce(10,
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 11 10, 11 11, 10 11, 10 10)))",
+        "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 11 10, 11 11, 10 11, 10 10)))");
+}
 
 
 
