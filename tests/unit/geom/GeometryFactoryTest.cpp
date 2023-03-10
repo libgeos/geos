@@ -1292,4 +1292,27 @@ void object::test<40>
     ensure(mp_xyzm->hasM());
 }
 
+
+// Test createEmpty and createMulti
+template<>
+template<>
+void object::test<41>
+()
+{
+    auto g1 = factory_->createEmpty(geos::geom::GEOS_MULTIPOINT);
+    auto g2 = factory_->createEmpty(geos::geom::GEOS_POINT);
+    auto mg1 = factory_->createMulti(std::move(g1));
+    auto mg2 = factory_->createMulti(std::move(g2));
+    ensure(mg1->isEmpty());
+    ensure(mg2->isEmpty());
+    g1 = reader_.read("POINT(1 1)");
+    g2 = reader_.read("MULTIPOINT(1 1)");
+    mg1 = factory_->createMulti(std::move(g1));
+    mg2 = factory_->createMulti(std::move(g2));
+    g2 = reader_.read("MULTIPOINT(1 1)");
+    ensure_equals_geometry(g2.get(), mg1.get());
+    ensure_equals_geometry(g2.get(), mg2.get());
+}
+
+
 } // namespace tut
