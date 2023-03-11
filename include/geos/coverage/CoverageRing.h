@@ -49,9 +49,7 @@ private:
     // Members
     bool m_isInteriorOnRight;
     std::vector<bool> m_isInvalid;
-    std::vector<bool> m_isValid;
-
-    static void createRings(const Polygon* poly, std::vector<CoverageRing*>& rings, std::deque<CoverageRing>& coverageRingStore);
+    std::vector<bool> m_isMatched;
 
     std::size_t findInvalidStart(std::size_t index);
 
@@ -85,21 +83,44 @@ public:
 
     CoverageRing(const LinearRing* ring, bool isShell);
 
-    static std::vector<CoverageRing*> createRings(const Geometry* geom, std::deque<CoverageRing>& coverageRingStore);
+    /**
+    * Tests if all rings have known status (matched or invalid)
+    * for all segments.
+    *
+    * @param rings a list of rings
+    * @return true if all ring segments have known status
+    */
+    static bool isKnown(std::vector<CoverageRing*>& rings);
 
-    static std::vector<CoverageRing*> createRings(std::vector<const Polygon*>& polygons,  std::deque<CoverageRing>& coverageRingStore);
-
-    static bool isValid(std::vector<CoverageRing*>& rings);
-
+    /**
+    * Reports if the ring has canonical orientation,
+    * with the polygon interior on the right (shell is CW).
+    *
+    * @return true if the polygon interior is on the right
+    */
     bool isInteriorOnRight() const;
 
     /**
-    * Tests if a segment is marked valid.
+    * Marks a segment as invalid.
     *
-    * @param index the segment index
-    * @return true if the segment is valid
+    * @param i the segment index
     */
-    bool isValid(std::size_t index) const;
+    void markInvalid(std::size_t index);
+
+    /**
+    * Marks a segment as matched.
+    *
+    * @param i the segment index
+    */
+    void markMatched(std::size_t index);
+
+    /**
+    * Tests if all segments in the ring have known status
+    * (matched or invalid).
+    *
+    * @return true if all segments have known status
+    */
+    bool isKnown() const;
 
     /**
     * Tests if a segment is marked invalid.
@@ -107,14 +128,7 @@ public:
     * @param index the segment index
     * @return true if the segment is invalid
     */
-    bool isInvalid(std::size_t index) const;
-
-    /**
-    * Tests whether all segments are valid.
-    *
-    * @return true if all segments are valid
-    */
-    bool isValid() const;
+    bool isInvalid(std::size_t i) const;
 
     /**
     * Tests whether all segments are invalid.
@@ -173,20 +187,6 @@ public:
     * @return the index of the next segment
     */
     std::size_t next(std::size_t index) const;
-
-    /**
-    * Marks a segment as invalid.
-    *
-    * @param i the segment index
-    */
-    void markInvalid(std::size_t i);
-
-    /**
-    * Marks a segment as valid.
-    *
-    * @param i the segment index
-    */
-    void markValid(std::size_t i);
 
     void createInvalidLines(
         const GeometryFactory* geomFactory,

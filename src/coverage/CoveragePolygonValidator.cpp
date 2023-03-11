@@ -15,6 +15,7 @@
 #include <geos/coverage/CoveragePolygonValidator.h>
 #include <geos/coverage/InvalidSegmentDetector.h>
 
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -25,9 +26,11 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/util/PolygonExtracter.h>
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
 
 using geos::algorithm::locate::IndexedPointInAreaLocator;
+using geos::algorithm::Orientation;
 using geos::geom::Coordinate;
 using geos::geom::Envelope;
 using geos::geom::Geometry;
@@ -38,7 +41,7 @@ using geos::geom::Location;
 using geos::geom::Polygon;
 using geos::geom::util::PolygonExtracter;
 using geos::noding::MCIndexSegmentSetMutualIntersector;
-
+using geos::operation::valid::RepeatedPointRemover;
 
 namespace geos {     // geos
 namespace coverage { // geos.coverage
@@ -65,11 +68,11 @@ CoveragePolygonValidator::validate(const Geometry* targetPolygon, std::vector<co
 
 /* public */
 CoveragePolygonValidator::CoveragePolygonValidator(
-    const Geometry* targetPolygon,
-    std::vector<const Geometry*>& adjPolygons)
-    : targetGeom(targetPolygon)
-    , adjGeoms(adjPolygons)
-    , geomFactory(targetPolygon->getFactory())
+    const Geometry* geom,
+    std::vector<const Geometry*>& p_adjGeoms)
+    : targetGeom(geom)
+    , adjGeoms(p_adjGeoms)
+    , geomFactory(geom->getFactory())
 {}
 
 
@@ -85,34 +88,51 @@ CoveragePolygonValidator::setGapWidth(double p_gapWidth)
 std::unique_ptr<Geometry>
 CoveragePolygonValidator::validate()
 {
-    std::vector<const Polygon*> adjPolygons = extractPolygons(adjGeoms);
+    m_adjPolygons = extractPolygons(adjGeoms);
 
-    if (hasDuplicateGeom(targetGeom, adjPolygons)) {
-        //TODO: convert to LineString copies
-        return targetGeom->getBoundary();
-    }
-
-    std::vector<CoverageRing*> targetRings = CoverageRing::createRings(targetGeom, coverageRingStore);
-    std::vector<CoverageRing*> adjRings = CoverageRing::createRings(adjPolygons, coverageRingStore);
+    std::vector<CoverageRing*> targetRings = createRings(targetGeom);
+    std::vector<CoverageRing*> adjRings = createRings(m_adjPolygons);
 
     /**
-    * Mark matching segments as valid first.
-    * Valid segments are not considered for further checks.
+    * Mark matching segments first.
+    * Matched segments are not considered for further checks.
     * This improves performance substantially for mostly-valid coverages.
     */
     Envelope targetEnv = *(targetGeom->getEnvelopeInternal());
     targetEnv.expandBy(gapWidth);
-    markMatchedSegments(targetRings, adjRings, targetEnv);
 
-    //-- check if target is fully matched and thus forms a clean coverage
-    if (CoverageRing::isValid(targetRings))
-        return createEmptyResult();
-
-    findInvalidInteractingSegments(targetRings, adjRings, gapWidth);
-
-    findInteriorSegments(targetRings, adjPolygons);
+    checkTargetRings(targetRings, adjRings, targetEnv);
 
     return createInvalidLines(targetRings);
+}
+
+
+/* private */
+void
+CoveragePolygonValidator::checkTargetRings(
+    std::vector<CoverageRing*>& targetRings,
+    std::vector<CoverageRing*>& adjRings,
+    const Envelope& targetEnv)
+{
+    markMatchedSegments(targetRings, adjRings, targetEnv);
+
+    /**
+     * Short-circuit if target is fully known (matched or invalid).
+     * This often happens in clean coverages,
+     * when the target is surrounded by matching polygons.
+     * It can also happen in invalid coverages
+     * which have polygons which are duplicates,
+     * or perfectly overlap other polygons.
+     */
+    if (CoverageRing::isKnown(targetRings))
+        return;
+
+    /**
+     * Here target has at least one unmatched segment.
+     * Do further checks to see if any of them are are invalid.
+     */
+    markInvalidInteractingSegments(targetRings, adjRings, gapWidth);
+    markInvalidInteriorSegments(targetRings, m_adjPolygons);
 }
 
 
@@ -133,20 +153,6 @@ std::unique_ptr<Geometry>
 CoveragePolygonValidator::createEmptyResult()
 {
     return geomFactory->createLineString();
-}
-
-
-/* private */
-bool
-CoveragePolygonValidator::hasDuplicateGeom(const Geometry* geom, std::vector<const Polygon*>& adjPolygons) const
-{
-    for (auto adjPoly : adjPolygons) {
-        if (adjPoly->getEnvelopeInternal()->equals(geom->getEnvelopeInternal())) {
-            if (adjPoly->equals(geom))
-                return true;
-        }
-    }
-    return false;
 }
 
 
@@ -172,17 +178,19 @@ CoveragePolygonValidator::markMatchedSegments(
 {
     for (CoverageRing* ring : rings) {
         for (std::size_t i = 0; i < ring->size() - 1; i++) {
-            CoverageRingSegment* seg = createCoverageRingSegment(ring, i);
+            const Coordinate& p0 = ring->getCoordinate(i);
+            const Coordinate& p1 = ring->getCoordinate(i + 1);
+
             //-- skip segments which lie outside the limit envelope
-            if (! envLimit.intersects(seg->p0, seg->p1)) {
+            if (! envLimit.intersects(p0, p1)) {
                 continue;
             }
-            //-- if segments match, mark them valid
+            //-- if segment keys match, mark them as matched (or invalid)
+            CoverageRingSegment* seg = createCoverageRingSegment(ring, i);
             auto search = segmentMap.find(seg);
             if (search != segmentMap.end()) {
                 CoverageRingSegment* segMatch = search->second;
-                segMatch->markValid();
-                seg->markValid();
+                seg->match(segMatch);
             }
             else {
                 segmentMap[seg] = seg;
@@ -196,17 +204,23 @@ CoveragePolygonValidator::markMatchedSegments(
 CoveragePolygonValidator::CoverageRingSegment*
 CoveragePolygonValidator::createCoverageRingSegment(CoverageRing* ring, std::size_t index)
 {
-      const Coordinate& p0 = ring->getCoordinate(index);
-      const Coordinate& p1 = ring->getCoordinate(index + 1);
-      coverageRingSegmentStore.emplace_back(p0, p1, ring, index);
-      CoverageRingSegment& seg = coverageRingSegmentStore.back();
-      return &seg;
+    const Coordinate& p0 = ring->getCoordinate(index);
+    const Coordinate& p1 = ring->getCoordinate(index + 1);
+
+    if(ring->isInteriorOnRight()) {
+        coverageRingSegmentStore.emplace_back(p0, p1, ring, index);
+    }
+    else {
+        coverageRingSegmentStore.emplace_back(p1, p0, ring, index);
+    }
+    CoverageRingSegment& seg = coverageRingSegmentStore.back();
+    return &seg;
 }
 
 
 /* private */
 void
-CoveragePolygonValidator::findInvalidInteractingSegments(
+CoveragePolygonValidator::markInvalidInteractingSegments(
     std::vector<CoverageRing*>& targetRings,
     std::vector<CoverageRing*>& adjRings,
     double distanceTolerance)
@@ -230,7 +244,7 @@ CoveragePolygonValidator::findInvalidInteractingSegments(
 
 /* private */
 void
-CoveragePolygonValidator::findInteriorSegments(
+CoveragePolygonValidator::markInvalidInteriorSegments(
     std::vector<CoverageRing*>& targetRings,
     std::vector<const Polygon*>& adjPolygons)
 {
@@ -260,7 +274,8 @@ CoveragePolygonValidator::findInteriorSegments(
 
 /* private */
 bool
-CoveragePolygonValidator::isInteriorVertex(const Coordinate& p,
+CoveragePolygonValidator::isInteriorVertex(
+    const Coordinate& p,
     std::vector<const Polygon*>& adjPolygons)
 {
     /**
@@ -271,9 +286,6 @@ CoveragePolygonValidator::isInteriorVertex(const Coordinate& p,
     //TODO: try a spatial index?
     for (std::size_t i = 0; i < adjPolygons.size(); i++) {
         const Polygon* adjPoly = adjPolygons[i];
-        if (! adjPoly->getEnvelopeInternal()->intersects(p))
-            continue;
-
         if (polygonContainsPoint(i, adjPoly, p))
             return true;
     }
@@ -286,6 +298,8 @@ bool
 CoveragePolygonValidator::polygonContainsPoint(std::size_t index,
     const Polygon* poly, const Coordinate& pt)
 {
+    if (! poly->getEnvelopeInternal()->intersects(pt))
+        return false;
     IndexedPointInAreaLocator* pia = getLocator(index, poly);
     return Location::INTERIOR == pia->locate(&pt);
 }
@@ -329,6 +343,61 @@ CoveragePolygonValidator::createInvalidLines(std::vector<CoverageRing*>& rings)
 
     return geomFactory->createMultiLineString(std::move(lines));
 }
+
+/**********************************************************************************/
+
+/* private */
+std::vector<CoverageRing*>
+CoveragePolygonValidator::createRings(const Geometry* geom)
+{
+    std::vector<const Polygon*> polygons;
+    geom::util::PolygonExtracter::getPolygons(*geom, polygons);
+    return createRings(polygons);
+}
+
+/* private */
+std::vector<CoverageRing*>
+CoveragePolygonValidator::createRings(std::vector<const Polygon*>& polygons)
+{
+    std::vector<CoverageRing*> rings;
+    for (const Polygon* poly : polygons) {
+        createRings(poly, rings);
+    }
+    return rings;
+}
+
+/* private */
+void
+CoveragePolygonValidator::createRings(
+    const Polygon* poly,
+    std::vector<CoverageRing*>& rings)
+{
+    // Create exterior shell ring
+    rings.push_back(createRing(poly->getExteriorRing(), true));
+
+    // Create hole rings
+    for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
+        rings.push_back(createRing(poly->getInteriorRingN(i), false));
+    }
+}
+
+/* private */
+CoverageRing*
+CoveragePolygonValidator::createRing(const LinearRing* ring, bool isShell)
+{
+    CoordinateSequence* pts = const_cast<CoordinateSequence*>(ring->getCoordinatesRO());
+    if (pts->hasRepeatedOrInvalidPoints()) {
+        CoordinateSequence* cleanPts = RepeatedPointRemover::removeRepeatedAndInvalidPoints(pts).release();
+        localCoordinateSequences.emplace_back(cleanPts);
+        pts = cleanPts;
+    }
+    bool isCCW = Orientation::isCCW(pts);
+    bool isInteriorOnRight = isShell ? ! isCCW : isCCW;
+    coverageRingStore.emplace_back(pts, isInteriorOnRight);
+    CoverageRing& cRing = coverageRingStore.back();
+    return &cRing;
+}
+
 
 
 

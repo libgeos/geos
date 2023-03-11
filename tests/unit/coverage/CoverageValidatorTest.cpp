@@ -190,6 +190,26 @@ void object::test<2> ()
     checkInvalid(coverage, expected);
 }
 
+
+// testFullyCoveredTriangles
+template<>
+template<>
+void object::test<20> ()
+{
+    std::vector<std::string> coverage{
+        "POLYGON ((1 9, 9 1, 1 1, 1 9))",
+        "POLYGON ((9 9, 1 9, 9 1, 9 9))",
+        "POLYGON ((9 9, 9 1, 1 1, 1 9, 9 9))"
+    };
+    std::vector<std::string> expected{
+        "LINESTRING (9 1, 1 1, 1 9)",
+        "LINESTRING (9 1, 9 9, 1 9)",
+        "LINESTRING (9 9, 9 1, 1 1, 1 9, 9 9)"
+    };
+    checkInvalid(coverage, expected);
+}
+
+
 //========  Gap cases   =============================
 
 // testGap
@@ -261,5 +281,8 @@ void object::test<10> ()
     };
     checkValid(coverage);
 }
+
+
+
 
 } // namespace tut

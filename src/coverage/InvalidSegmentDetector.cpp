@@ -56,10 +56,27 @@ InvalidSegmentDetector::processIntersections(
     if (t0.equals2D(t1) || adj0.equals2D(adj1))
         return;
 
+    if (isEqual(t0, t1, adj0, adj1))
+        return;
+
     bool bInvalid = isInvalid(t0, t1, adj0, adj1, adj, iAdj);
     if (bInvalid) {
         target->markInvalid(iTarget);
     }
+}
+
+
+/* private */
+bool
+InvalidSegmentDetector::isEqual(
+    const Coordinate& t0, const Coordinate& t1,
+    const Coordinate& adj0, const Coordinate& adj1)
+{
+    if (t0.equals2D(adj0) && t1.equals2D(adj1))
+        return true;
+    if (t0.equals2D(adj1) && t1.equals2D(adj0))
+        return true;
+    return false;
 }
 
 
@@ -131,6 +148,12 @@ InvalidSegmentDetector::isInteriorSegment(
     //-- find adjacent-ring vertices on either side of intersection vertex
     const Coordinate* adjPrev = &adj->findVertexPrev(indexAdj, intVertex);
     const Coordinate* adjNext = &adj->findVertexNext(indexAdj, intVertex);
+
+    //-- don't check if test segment is equal to either corner segment
+    if (tgtEnd->equals2D(*adjPrev) || tgtEnd->equals2D(*adjNext)) {
+        return false;
+    }
+
     //-- if needed, re-orient corner to have interior on right
     if (! adj->isInteriorOnRight()) {
         const Coordinate* temp = adjPrev;

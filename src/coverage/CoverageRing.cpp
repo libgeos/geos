@@ -39,53 +39,11 @@ namespace coverage { // geos.coverage
 
 
 /* public static */
-std::vector<CoverageRing*>
-CoverageRing::createRings(const Geometry* geom, std::deque<CoverageRing>& coverageRingStore)
-{
-    std::vector<const Polygon*> polygons;
-    geom::util::PolygonExtracter::getPolygons(*geom, polygons);
-    return createRings(polygons, coverageRingStore);
-}
-
-
-/* public static */
-std::vector<CoverageRing*>
-CoverageRing::createRings(std::vector<const Polygon*>& polygons, std::deque<CoverageRing>& coverageRingStore)
-{
-    std::vector<CoverageRing*> rings;
-    for (const Polygon* poly : polygons) {
-        createRings(poly, rings, coverageRingStore);
-    }
-    return rings;
-}
-
-
-/* private static */
-void
-CoverageRing::createRings(const Polygon* poly,
-    std::vector<CoverageRing*>& rings,
-    std::deque<CoverageRing>& coverageRingStore)
-{
-    // Create exterior shell ring
-    coverageRingStore.emplace_back(poly->getExteriorRing(), true);
-    CoverageRing& extRing = coverageRingStore.back();
-    rings.push_back(&extRing);
-
-    // Create hole rings
-    for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        coverageRingStore.emplace_back(poly->getInteriorRingN(i), false);
-        CoverageRing& intRing = coverageRingStore.back();
-        rings.push_back(&intRing);
-    }
-}
-
-
-/* public static */
 bool
-CoverageRing::isValid(std::vector<CoverageRing*>& rings)
+CoverageRing::isKnown(std::vector<CoverageRing*>& rings)
 {
     for (auto* ring : rings) {
-        if (! ring->isValid())
+        if (! ring->isKnown())
             return false;
     }
     return true;
@@ -98,7 +56,7 @@ CoverageRing::CoverageRing(CoordinateSequence* inPts, bool interiorOnRight)
     , m_isInteriorOnRight(interiorOnRight)
 {
     m_isInvalid.resize(size() - 1, false);
-    m_isValid.resize(size() - 1, false);
+    m_isMatched.resize(size() - 1, false);
 }
 
 
@@ -125,37 +83,38 @@ CoverageRing::isInteriorOnRight() const
 
 
 /* public */
-bool
-CoverageRing::isValid(std::size_t index) const
+void
+CoverageRing::markInvalid(std::size_t index)
 {
-    return m_isValid[index];
+    m_isInvalid[index] = true;
+}
+
+
+/* public */
+void
+CoverageRing::markMatched(std::size_t index)
+{
+    m_isMatched[index] = true;
 }
 
 
 /* public */
 bool
-CoverageRing::isInvalid(std::size_t index) const
+CoverageRing::isKnown() const
 {
-    return m_isInvalid[index];
-}
-
-
-/* public */
-bool
-CoverageRing::isValid() const
-{
-    for (bool b: m_isValid) {
-        if (!b)
+    for (size_t i = 0; i < m_isMatched.size(); i++ ) {
+        if (!(m_isMatched[i] && m_isInvalid[i]))
             return false;
     }
     return true;
-    // for (std::size_t i = 0; i < m_isValid.size(); i++) {
-    //     if (! m_isValid[i])
-    //         return false;
-    // }
-    // return true;
 }
 
+/* public */
+bool
+CoverageRing::isInvalid(std::size_t i) const
+{
+    return m_isInvalid[i];
+}
 
 /* public */
 bool
@@ -178,11 +137,6 @@ CoverageRing::hasInvalid() const
             return true;
     }
     return false;
-    // for (int i = 0; i < m_isInvalid.length; i++) {
-    //     if (m_isInvalid[i])
-    //         return true;
-    // }
-    // return false;
 }
 
 
@@ -190,7 +144,7 @@ CoverageRing::hasInvalid() const
 bool
 CoverageRing::isKnown(std::size_t i) const
 {
-    return m_isValid[i] || m_isInvalid[i];
+    return m_isMatched[i] || m_isInvalid[i];
 }
 
 
@@ -240,26 +194,6 @@ CoverageRing::next(std::size_t index) const
     if (index < size() - 2)
         return index + 1;
     return 0;
-}
-
-
-/* public */
-void
-CoverageRing::markInvalid(std::size_t i)
-{
-    if (m_isValid[i])
-        throw util::IllegalStateException("Setting valid edge to invalid");
-    m_isInvalid[i] = true;
-}
-
-
-/* public */
-void
-CoverageRing::markValid(std::size_t i)
-{
-    if (m_isInvalid[i])
-        throw util::IllegalStateException("Setting invalid edge to valid");
-    m_isValid[i] = true;
 }
 
 

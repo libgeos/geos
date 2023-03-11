@@ -102,7 +102,7 @@ void object::test<1> ()
         "LINESTRING (100 200, 200 200)");
 }
 
-// testDuplicateGeometry
+// testDuplicate
 template<>
 template<>
 void object::test<2> ()
@@ -112,10 +112,20 @@ void object::test<2> ()
         "LINESTRING (1 3, 3 3, 3 1, 1 1, 1 3)");
 }
 
-// testCrossingSegment
+// testDuplicateReversed
 template<>
 template<>
 void object::test<3> ()
+{
+    checkInvalid("POLYGON ((1 3, 3 3, 3 1, 1 1, 1 3))",
+        "MULTIPOLYGON (((1 3, 1 1, 3 1, 3 3, 1 3)), ((5 3, 5 1, 3 1, 3 3, 5 3)))",
+        "LINESTRING (1 3, 1 1, 3 1, 3 3, 1 3)");
+}
+
+// testCrossingSegment
+template<>
+template<>
+void object::test<4> ()
 {
     checkInvalid("POLYGON ((1 9, 9 9, 9 3, 1 3, 1 9))",
         "POLYGON ((1 1, 5 6, 9 1, 1 1))",
@@ -125,7 +135,7 @@ void object::test<3> ()
 // testCrossingAndInteriorSegments
 template<>
 template<>
-void object::test<4> ()
+void object::test<5> ()
 {
     checkInvalid("POLYGON ((1 1, 3 4, 7 4, 9 1, 1 1))",
         "POLYGON ((1 9, 9 9, 9 3, 1 3, 1 9))",
@@ -135,7 +145,7 @@ void object::test<4> ()
 // testTargetVertexTouchesSegment
 template<>
 template<>
-void object::test<5> ()
+void object::test<6> ()
 {
     checkInvalid("POLYGON ((1 9, 9 9, 9 5, 1 5, 1 9))",
         "POLYGON ((1 1, 5 5, 9 1, 1 1))",
@@ -145,7 +155,7 @@ void object::test<5> ()
 // testAdjVertexTouchesSegment
 template<>
 template<>
-void object::test<6> ()
+void object::test<7> ()
 {
     checkInvalid("POLYGON ((1 1, 5 5, 9 1, 1 1))",
         "POLYGON ((1 9, 9 9, 9 5, 1 5, 1 9))",
@@ -155,7 +165,7 @@ void object::test<6> ()
 // testInteriorSegmentTouchingEdge
 template<>
 template<>
-void object::test<7> ()
+void object::test<8> ()
 {
     checkInvalid("POLYGON ((4 3, 4 7, 8 9, 8 1, 4 3))",
         "POLYGON ((1 7, 6 7, 6 3, 1 3, 1 7))",
@@ -165,7 +175,7 @@ void object::test<7> ()
 // testInteriorSegmentTouchingNodes
 template<>
 template<>
-void object::test<8> ()
+void object::test<9> ()
 {
     checkInvalid("POLYGON ((4 2, 4 8, 8 9, 8 1, 4 2))",
         "POLYGON ((1 5, 4 8, 7 5, 4 2, 1 5))",
@@ -175,7 +185,7 @@ void object::test<8> ()
 // testInteriorSegmentsTouching
 template<>
 template<>
-void object::test<9> ()
+void object::test<10> ()
 {
     checkInvalid("POLYGON ((1 9, 5 9, 8 7, 5 7, 3 5, 8 2, 1 2, 1 9))",
         "POLYGON ((5 9, 9 9, 9 1, 5 1, 5 9))",
@@ -185,7 +195,7 @@ void object::test<9> ()
 // testTargetMultiPolygon
 template<>
 template<>
-void object::test<10> ()
+void object::test<11> ()
 {
     checkInvalid("MULTIPOLYGON (((4 8, 9 9, 9 7, 4 8)), ((3 5, 9 6, 9 4, 3 5)), ((2 2, 9 3, 9 1, 2 2)))",
         "POLYGON ((1 1, 1 9, 5 9, 6 7, 5 5, 6 3, 5 1, 1 1))",
@@ -195,7 +205,7 @@ void object::test<10> ()
 // testBothMultiPolygon
 template<>
 template<>
-void object::test<11> ()
+void object::test<12> ()
 {
     checkInvalid("MULTIPOLYGON (((4 8, 9 9, 9 7, 4 8)), ((3 5, 9 6, 9 4, 3 5)), ((2 2, 9 3, 9 1, 2 2)))",
         "MULTIPOLYGON (((1 6, 1 9, 5 9, 6 7, 5 5, 1 6)), ((1 4, 5 5, 6 3, 5 1, 1 1, 1 4)))",
@@ -210,17 +220,17 @@ void object::test<11> ()
 // testInteriorSegmentsWithMatch
 template<>
 template<>
-void object::test<12> ()
+void object::test<13> ()
 {
     checkInvalid("POLYGON ((7 6, 1 1, 3 6, 7 6))",
         "MULTIPOLYGON (((1 9, 9 9, 9 1, 1 1, 3 6, 1 9)), ((0 1, 0 9, 1 9, 3 6, 1 1, 0 1)))",
-        "LINESTRING (3 6, 7 6, 1 1)");
+        "LINESTRING (7 6, 1 1, 3 6, 7 6)");
 }
 
 // testAdjacentHoleOverlap
 template<>
 template<>
-void object::test<13> ()
+void object::test<14> ()
 {
     checkInvalid("POLYGON ((3 3, 3 7, 6 8, 7 3, 3 3))",
         "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9), (3 7, 7 7, 7 3, 3 3, 3 7))",
@@ -230,7 +240,7 @@ void object::test<13> ()
 // testTargetHoleOverlap
 template<>
 template<>
-void object::test<14> ()
+void object::test<15> ()
 {
     checkInvalid("POLYGON ((1 1, 1 9, 9 9, 9 1, 1 1), (2 2, 8 2, 8 8, 5 4, 3 5, 2 5, 2 2))",
         "POLYGON ((2 2, 2 5, 3 5, 8 6.7, 8 2, 2 2))",
@@ -240,19 +250,51 @@ void object::test<14> ()
 // testFullyContained
 template<>
 template<>
-void object::test<15> ()
+void object::test<16> ()
 {
     checkInvalid("POLYGON ((3 7, 7 7, 7 3, 3 3, 3 7))",
         "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
         "LINESTRING (3 7, 7 7, 7 3, 3 3, 3 7)");
 }
 
+// testFullyCoveredAndMatched
+template<>
+template<>
+void object::test<17> ()
+{
+    checkInvalid("POLYGON ((1 3, 2 3, 2 2, 1 2, 1 3))",
+        "MULTIPOLYGON (((1 1, 1 2, 2 2, 2 1, 1 1)), ((3 1, 2 1, 2 2, 3 2, 3 1)), ((3 3, 3 2, 2 2, 2 3, 3 3)), ((2 3, 3 3, 3 2, 3 1, 2 1, 1 1, 1 2, 1 3, 2 3)))",
+        "LINESTRING (1 2, 1 3, 2 3)");
+}
+
+// testTargetCoveredAndMatching
+template<>
+template<>
+void object::test<18> ()
+{
+    checkInvalid("POLYGON ((1 7, 5 7, 9 7, 9 3, 5 3, 1 3, 1 7))",
+        "MULTIPOLYGON (((5 9, 9 7, 5 7, 1 7, 5 9)), ((1 7, 5 7, 5 3, 1 3, 1 7)), ((9 3, 5 3, 5 7, 9 7, 9 3)), ((1 3, 5 3, 9 3, 5 1, 1 3)))",
+        "LINESTRING (1 7, 5 7, 9 7, 9 3, 5 3, 1 3, 1 7)");
+}
+
+// testCoveredBy2AndMatching
+template<>
+template<>
+void object::test<19> ()
+{
+    checkInvalid("POLYGON ((1 9, 9 9, 9 5, 1 5, 1 9))",
+        "MULTIPOLYGON (((1 5, 9 5, 9 1, 1 1, 1 5)), ((1 9, 5 9, 5 1, 1 1, 1 9)), ((9 9, 9 1, 5 1, 5 9, 9 9)))",
+        "LINESTRING (1 5, 1 9, 9 9, 9 5)");
+}
+
+
+
 //========  Gap cases   =============================
 
 // testGap
 template<>
 template<>
-void object::test<16> ()
+void object::test<20> ()
 {
     checkInvalidGap("POLYGON ((1 5, 9 5, 9 1, 1 1, 1 5))",
         "POLYGON ((1 9, 5 9, 5 5.1, 1 5, 1 9))",
@@ -265,7 +307,7 @@ void object::test<16> ()
 // testMatchedEdges
 template<>
 template<>
-void object::test<17> ()
+void object::test<21> ()
 {
     checkValid("POLYGON ((3 7, 7 7, 7 3, 3 3, 3 7))",
         "MULTIPOLYGON (((1 7, 3 7, 3 3, 1 3, 1 7)), ((3 9, 7 9, 7 7, 3 7, 3 9)), ((9 7, 9 3, 7 3, 7 7, 9 7)), ((3 1, 3 3, 7 3, 7 1, 3 1)))");
@@ -274,26 +316,17 @@ void object::test<17> ()
 // testRingsCCW
 template<>
 template<>
-void object::test<18> ()
+void object::test<22> ()
 {
     checkValid("POLYGON ((1 1, 6 5, 4 9, 1 9, 1 1))",
         "POLYGON ((1 1, 9 1, 9 4, 6 5, 1 1))");
-}
-
-// testTargetCoveredAndMatching
-template<>
-template<>
-void object::test<19> ()
-{
-    checkValid("POLYGON ((1 7, 5 7, 9 7, 9 3, 5 3, 1 3, 1 7))",
-        "MULTIPOLYGON (((5 9, 9 7, 5 7, 1 7, 5 9)), ((1 7, 5 7, 5 3, 1 3, 1 7)), ((9 3, 5 3, 5 7, 9 7, 9 3)), ((1 3, 5 3, 9 3, 5 1, 1 3)))");
 }
 
 //-- confirms zero-length segments are skipped in processing
 // testRepeatedCommonVertexInTarget
 template<>
 template<>
-void object::test<20> ()
+void object::test<23> ()
 {
     checkValid("POLYGON ((1 1, 1 3, 5 3, 5 3, 9 1, 1 1))",
         "POLYGON ((1 9, 9 9, 9 5, 5 3, 1 3, 1 9))");
@@ -303,7 +336,7 @@ void object::test<20> ()
 // testRepeatedCommonVertexInAdjacent
 template<>
 template<>
-void object::test<21> ()
+void object::test<24> ()
 {
     checkValid("POLYGON ((1 1, 1 3, 5 3, 9 1, 1 1))",
         "POLYGON ((1 9, 9 9, 9 5, 5 3, 5 3, 1 3, 1 9))");

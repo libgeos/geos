@@ -224,6 +224,9 @@ public:
     /// Returns true if contains any two consecutive points
     bool hasRepeatedPoints() const;
 
+    /// Returns true if contains any NaN/Inf coordinates
+    bool hasRepeatedOrInvalidPoints() const;
+
     /// Get the backing type of this CoordinateSequence. This is not necessarily
     /// consistent with the dimensionality of the stored Coordinates; 2D Coordinates
     /// may be stored as a XYZ coordinates.

@@ -39,6 +39,19 @@ using geos::geom::Coordinate;
 namespace geos {      // geos.
 namespace coverage { // geos.coverage
 
+/**
+ * Detects invalid coverage topology where ring segments interact.
+ * The inputs to processIntersections(SegmentString, int, SegmentString, int)}
+ * must be CoverageRing s.
+ * If an invalid situation is detected the input target segment is
+ * marked invalid using CoverageRing#markInvalid(int).
+ *
+ * This class assumes it is used with SegmentSetMutualIntersector,
+ * so that segments in the same ring are not evaluated.
+ *
+ * @author Martin Davis
+ *
+ */
 class GEOS_DLL InvalidSegmentDetector : public SegmentIntersector {
 
 private:
@@ -50,6 +63,10 @@ private:
     bool isInvalid(const Coordinate& tgt0, const Coordinate& tgt1,
         const Coordinate& adj0, const Coordinate& adj1,
         CoverageRing* adj, std::size_t indexAdj);
+
+    bool isEqual(
+        const Coordinate& t0, const Coordinate& t1,
+        const Coordinate& adj0, const Coordinate& adj1);
 
     /**
     * Checks if the segments are collinear, or if the target segment
@@ -100,7 +117,7 @@ public:
     * Process interacting segments.
     * The input order is important.
     * The adjacent segment is first, the target is second.
-    * The inputs must be {@link CoverageRing}s.
+    * The inputs must be CoverageRing.
     */
     void processIntersections(
         SegmentString* ssAdj,    std::size_t iAdj,

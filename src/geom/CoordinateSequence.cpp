@@ -307,6 +307,27 @@ CoordinateSequence::hasRepeatedPoints() const
     return false;
 }
 
+bool
+CoordinateSequence::hasRepeatedOrInvalidPoints() const
+{
+    // Check first points
+    if (! (std::isfinite(m_vect[0]) && std::isfinite(m_vect[1]) )) {
+        return true;
+    }
+    // Iterate over the array of doubles and check x/y values directly.
+    // This is about 30% faster than retrieving/comparing CoordinateXY&.
+    for (std::size_t i = stride(); i < m_vect.size(); i += stride()) {
+        if (! (std::isfinite(m_vect[i]) && std::isfinite(m_vect[i+1]) )) {
+            return true;
+        }
+        if (m_vect[i - stride()] == m_vect[i] && m_vect[i + 1 - stride()] == m_vect[i+1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 /*
  * Returns either the given coordinate array if its length is greater than the
  * given amount, or an empty coordinate array.
