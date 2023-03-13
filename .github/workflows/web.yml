@@ -17,6 +17,7 @@ jobs:
 
     # Only run docbuild on central repo
     if: github.repository == 'libgeos/geos'
+
     steps:
 
     - name: 'Install'
