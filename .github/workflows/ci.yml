@@ -282,7 +282,7 @@ jobs:
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
       with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make ccache
+        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make mingw-w64-x86_64-ccache
         update: true
 
     - name: Retrieve build cache
