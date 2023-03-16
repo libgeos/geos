@@ -1,6 +1,6 @@
 
 ## Changes in 3.11.2
-2023-xx-xx
+2023-03-16
 
 - Fixes/Improvements:
   - GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
