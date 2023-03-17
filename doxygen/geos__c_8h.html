@@ -1232,12 +1232,12 @@ Functions</h2></td></tr>
 <tr class="separator:ad952d7e2281a776fc7e969a0d486660f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaceadb7351dda799a583edca329931ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aaceadb7351dda799a583edca329931ae">GEOSConcaveHull</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double ratio, unsigned int allowHoles)</td></tr>
 <tr class="separator:aaceadb7351dda799a583edca329931ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a525677d61874382bf4fb0f8b6e52ca6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a525677d61874382bf4fb0f8b6e52ca6e">GEOSConcaveHullOfPolygons</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double lengthRatio, unsigned int isTight, unsigned int isHolesAllowed)</td></tr>
+<tr class="separator:a525677d61874382bf4fb0f8b6e52ca6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8545b2a279924742f98324c484697426"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8545b2a279924742f98324c484697426">GEOSPolygonHullSimplify</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, unsigned int isOuter, double vertexNumFraction)</td></tr>
 <tr class="separator:a8545b2a279924742f98324c484697426"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad58add536abf495b5e1b98a33e277f3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad58add536abf495b5e1b98a33e277f3d">GEOSPolygonHullSimplifyMode</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, unsigned int isOuter, unsigned int parameterMode, double parameter)</td></tr>
 <tr class="separator:ad58add536abf495b5e1b98a33e277f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a525677d61874382bf4fb0f8b6e52ca6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a525677d61874382bf4fb0f8b6e52ca6e">GEOSConcaveHullOfPolygons</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double lengthRatio, unsigned int isTight, unsigned int isHolesAllowed)</td></tr>
-<tr class="separator:a525677d61874382bf4fb0f8b6e52ca6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2fe4730b571dd6ab527befdf248ccd0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad2fe4730b571dd6ab527befdf248ccd0">GEOSMinimumRotatedRectangle</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:ad2fe4730b571dd6ab527befdf248ccd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7980d2fa0fe572204c3d2f3340083ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac7980d2fa0fe572204c3d2f3340083ff">GEOSMaximumInscribedCircle</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double tolerance)</td></tr>
@@ -1748,9 +1748,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Controls the behavior of the GEOSPolygonHullSimplify parameter. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8a1d073c91a1594d1b29c5ee722e0a8eafabaecbaea1b331731271029fcbb33ab"></a>GEOSHULL_PARAM_VERTEX_RATIO&#160;</td><td class="fielddoc"><p>See <a class="el" href="classgeos_1_1simplify_1_1PolygonHullSimplifier.html#a06044f6524af8615ddd9215b2e963c96">geos::simplify::PolygonHullSimplifier::hull()</a> </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8a1d073c91a1594d1b29c5ee722e0a8eafabaecbaea1b331731271029fcbb33ab"></a>GEOSHULL_PARAM_VERTEX_RATIO&#160;</td><td class="fielddoc"><p>Fraction of input vertices retained </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a8a1d073c91a1594d1b29c5ee722e0a8eac7d05af59fcb56bd7e9aac53c21b8a49"></a>GEOSHULL_PARAM_AREA_RATIO&#160;</td><td class="fielddoc"><p>See <a class="el" href="classgeos_1_1simplify_1_1PolygonHullSimplifier.html#a0325df02a3d7322326b12b42bcd9ec16">geos::simplify::PolygonHullSimplifier::hullByAreaDelta()</a> </p>
+<tr><td class="fieldname"><a id="a8a1d073c91a1594d1b29c5ee722e0a8eac7d05af59fcb56bd7e9aac53c21b8a49"></a>GEOSHULL_PARAM_AREA_RATIO&#160;</td><td class="fielddoc"><p>Ratio of simplified hull area to input area </p>
 </td></tr>
 </table>
 
@@ -13676,7 +13676,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   <table class="params">
     <tr><td class="paramname">g</td><td>the polygonal geometry to process </td></tr>
     <tr><td class="paramname">isOuter</td><td>indicates whether to compute an outer or inner hull (1 for outer hull, 0 for inner) </td></tr>
-    <tr><td class="paramname">parameterMode</td><td>the interpretation to apply to the parameter argument </td></tr>
+    <tr><td class="paramname">parameterMode</td><td>the interpretation to apply to the parameter argument; see <a class="el" href="geos__c_8h.html#a8a1d073c91a1594d1b29c5ee722e0a8e">GEOSPolygonHullParameterModes</a> </td></tr>
     <tr><td class="paramname">parameter</td><td>the target ratio of area difference to original area </td></tr>
   </table>
   </dd>
