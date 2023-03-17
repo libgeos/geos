@@ -781,7 +781,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     unsigned int isOuter,
     double vertexNumFraction);
 
-/** \see GEOSPolygonHullSimplifyByArea */
+/** \see GEOSPolygonHullSimplifyMode */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
@@ -3600,8 +3600,8 @@ enum GEOSPolygonHullParameterModes {
 /**
 * Computes a topology-preserving simplified hull of a polygonal geometry,
 * with hull shape determined by the parameter, controlled by a parameter
-* mode, which is one defined in GEOSPolygonHullParameterModes. In general,
-* larger values compute less concave results and value of 0
+* mode, which is one defined in \ref GEOSPolygonHullParameterModes.
+* Larger values compute less concave results and a value of 0
 * produces the original geometry.
 * Either outer or inner hulls can be computed.
 *
@@ -3613,6 +3613,8 @@ enum GEOSPolygonHullParameterModes {
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::PolygonHullSimplifier
+* \see GEOSPolygonHullParameterModes
+* \see GEOSPolygonHullSimplify
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
     const GEOSGeometry* g,
