@@ -55,10 +55,5 @@ jobs:
       with:
         branch: gh-pages           # The branch the action should deploy to.
         folder: public_html    # The folder the action should deploy.
-        # This does default to true,
-        # but specifying it in case we want to change it later
-        clean: true
-        clean-exclude: |
-            doxygen/*
 
 
