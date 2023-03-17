@@ -46,6 +46,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::operation::buffer::OffsetCurve Class Reference</div>  </div>
@@ -60,31 +61,45 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a882750686d501110344c86806028e5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00645a9ed472ddc1374dbe906eab9f2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a00645a9ed472ddc1374dbe906eab9f2a">OffsetCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, double dist, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> &amp;bp)</td></tr>
 <tr class="separator:a00645a9ed472ddc1374dbe906eab9f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bc620f2e5833e6bd6f4a80a55978c39"><td class="memItemLeft" align="right" valign="top"><a id="a1bc620f2e5833e6bd6f4a80a55978c39"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCurve</b> ()</td></tr>
+<tr class="memitem:a69c052db216447517585bd15f29d7221"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a69c052db216447517585bd15f29d7221">setJoined</a> (bool pIsJoined)</td></tr>
+<tr class="separator:a69c052db216447517585bd15f29d7221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bc620f2e5833e6bd6f4a80a55978c39"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a1bc620f2e5833e6bd6f4a80a55978c39">getCurve</a> ()</td></tr>
 <tr class="separator:a1bc620f2e5833e6bd6f4a80a55978c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3cb47ef867395b622533db16e7582c4c"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a3cb47ef867395b622533db16e7582c4c">getCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, double dist, int quadSegs, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ae40a3908d24a3ac91212b35f8464b9c7">BufferParameters::JoinStyle</a> joinStyle, double mitreLimit)</td></tr>
+<tr class="memitem:a3cb47ef867395b622533db16e7582c4c"><td class="memItemLeft" align="right" valign="top"><a id="a3cb47ef867395b622533db16e7582c4c"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCurve</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, double dist, int quadSegs, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ae40a3908d24a3ac91212b35f8464b9c7">BufferParameters::JoinStyle</a> joinStyle, double mitreLimit)</td></tr>
 <tr class="separator:a3cb47ef867395b622533db16e7582c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a624c054e048ff1e4b82c0f5e051b1526"><td class="memItemLeft" align="right" valign="top"><a id="a624c054e048ff1e4b82c0f5e051b1526"></a>
 static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCurve</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, double dist)</td></tr>
 <tr class="separator:a624c054e048ff1e4b82c0f5e051b1526"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eed451428f9ac649a037f33492a549e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a3eed451428f9ac649a037f33492a549e">rawOffset</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;geom, double dist, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> &amp;bufParams, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList)</td></tr>
-<tr class="separator:a3eed451428f9ac649a037f33492a549e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71c1d8ca9e6db8f83a39bec85f9b3c45"><td class="memItemLeft" align="right" valign="top"><a id="a71c1d8ca9e6db8f83a39bec85f9b3c45"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;geom, double dist, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList)</td></tr>
-<tr class="separator:a71c1d8ca9e6db8f83a39bec85f9b3c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f42672ce50132fd90f27218179ea6f7"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a7f42672ce50132fd90f27218179ea6f7">getCurveJoined</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;geom, double dist)</td></tr>
+<tr class="separator:a7f42672ce50132fd90f27218179ea6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70da916e3af6d34005ad1c37b4b19c0e"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a70da916e3af6d34005ad1c37b4b19c0e">rawOffsetCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;line, double distance, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> &amp;bufParams)</td></tr>
+<tr class="separator:a70da916e3af6d34005ad1c37b4b19c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b8fc30d2c00369bfee1af1e01f32aa"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a64b8fc30d2c00369bfee1af1e01f32aa">rawOffset</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;line, double distance)</td></tr>
+<tr class="separator:a64b8fc30d2c00369bfee1af1e01f32aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a09db60ebda1b39a105bc6049583aa7af"><td class="memItemLeft" align="right" valign="top"><a id="a09db60ebda1b39a105bc6049583aa7af"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MATCH_DISTANCE_FACTOR</b> = 10000</td></tr>
+<tr class="separator:a09db60ebda1b39a105bc6049583aa7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c954aa5b044494246dc0b16db1c1395"><td class="memItemLeft" align="right" valign="top"><a id="a6c954aa5b044494246dc0b16db1c1395"></a>
+static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>UNKNOWN_INDEX</b> = std::numeric_limits&lt;std::size_t&gt;::max()</td></tr>
+<tr class="separator:a6c954aa5b044494246dc0b16db1c1395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Computes an offset curve from a geometry. The offset curve is a linear geometry which is offset a specified distance from the input. If the offset distance is positive the curve lies on the left side of the input; if it is negative the curve is on the right side.</p>
-<p>The offset curve of a line is a LineString which The offset curve of a Point is an empty LineString. The offset curve of a Polygon is the boundary of the polygon buffer (which may be a MultiLineString. For a collection the output is a MultiLineString of the element offset curves.</p>
-<p>The offset curve is computed as a single contiguous section of the geometry buffer boundary. In some geometric situations this definition is ill-defined. This algorithm provides a "best-effort" interpretation. In particular:</p>
+<div class="textblock"><p>Computes an offset curve from a geometry. An offset curve is a linear geometry which is offset a given distance from the input. If the offset distance is positive the curve lies on the left side of the input; if it is negative the curve is on the right side. The curve(s) have the same direction as the input line(s).</p>
+<p>The offset curve is based on the boundary of the buffer for the geometry at the offset distance (see <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html" title="Computes the buffer of a geometry, for both positive and negative buffer distances.">BufferOp</a>). The normal mode of operation is to return the sections of the buffer boundary which lie on the raw offset curve (obtained via rawOffset(LineString, double). The offset curve will contain multiple sections if the input self-intersects or has close approaches. The computed sections are ordered along the raw offset curve. Sections are disjoint. They never self-intersect, but may be rings.</p>
 <ul>
-<li>For self-intersecting lines, the buffer boundary includes offset lines for both left and right sides of the input line. Only a single contiguous portion on the specified side is returned.</li>
-<li>If the offset corresponds to buffer holes, only the largest hole is used.</li>
+<li>For a LineString the offset curve is a linear geometry (LineString or MultiLineString).</li>
+<li>For a Point or MultiPoint the offset curve is an empty LineString.</li>
+<li>For a Polygon the offset curve is the boundary of the polygon buffer (which may be a MultiLineString.</li>
+<li>For a collection the output is a MultiLineString containing the offset curves of the elements.</li>
 </ul>
+<p>In "joined" mode (see <a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a69c052db216447517585bd15f29d7221">setJoined(bool)</a>) the sections computed for each input line are joined into a single offset curve line. The joined curve may self-intersect. At larger offset distances the curve may contain "flat-line" artifacts in places where the input self-intersects.</p>
 <p>Offset curves support setting the number of quadrant segments, the join style, and the mitre limit (if applicable) via the <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html" title="Contains the parameters which describe how a buffer should be constructed.">BufferParameters</a>.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -121,11 +136,11 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates a new instance for computing an offset curve for a geometryat a given distance. with default quadrant segments <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ab0a64ab1030d5dc576449dbf9ecde9e8" title="The default number of facets into which to divide a fillet of 90 degrees.">BufferParameters::DEFAULT_QUADRANT_SEGMENTS</a> and join style BufferParameters::JOIN_STYLE.</p>
+<p>Creates a new instance for computing an offset curve for a geometry at a given distance. with default quadrant segments (<a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ab0a64ab1030d5dc576449dbf9ecde9e8" title="The default number of facets into which to divide a fillet of 90 degrees.">BufferParameters::DEFAULT_QUADRANT_SEGMENTS</a>) and join style (BufferParameters::JOIN_STYLE).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">geom</td><td>the geometry to offset </td></tr>
-    <tr><td class="paramname">dist</td><td>the offset distance (positive = left, negative = right)</td></tr>
+    <tr><td class="paramname">dist</td><td>the offset distance (positive for left, negative for right)</td></tr>
   </table>
   </dd>
 </dl>
@@ -172,12 +187,12 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates a new instance for computing an offset curve for a geometry at a given distance. allowing the quadrant segments and join style and mitre limit to be set via <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html" title="Contains the parameters which describe how a buffer should be constructed.">BufferParameters</a>.</p>
+<p>Creates a new instance for computing an offset curve for a geometry at a given distance. setting the quadrant segments and join style and mitre limit via <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geom</td><td></td></tr>
-    <tr><td class="paramname">dist</td><td></td></tr>
-    <tr><td class="paramname">bp</td><td></td></tr>
+    <tr><td class="paramname">geom</td><td>the geometry to offset </td></tr>
+    <tr><td class="paramname">dist</td><td>the offset distance (positive for left, negative for right) </td></tr>
+    <tr><td class="paramname">bp</td><td>the buffer parameters to use </td></tr>
   </table>
   </dd>
 </dl>
@@ -185,8 +200,27 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3cb47ef867395b622533db16e7582c4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cb47ef867395b622533db16e7582c4c">&#9670;&nbsp;</a></span>getCurve()</h2>
+<a id="a1bc620f2e5833e6bd6f4a80a55978c39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bc620f2e5833e6bd6f4a80a55978c39">&#9670;&nbsp;</a></span>getCurve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::operation::buffer::OffsetCurve::getCurve </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the computed offset curve lines.</p>
+<dl class="section return"><dt>Returns</dt><dd>the offset curve geometry </dd></dl>
+
+</div>
+</div>
+<a id="a7f42672ce50132fd90f27218179ea6f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f42672ce50132fd90f27218179ea6f7">&#9670;&nbsp;</a></span>getCurveJoined()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,7 +229,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::operation::buffer::OffsetCurve::getCurve </td>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::operation::buffer::OffsetCurve::getCurveJoined </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &amp;&#160;</td>
           <td class="paramname"><em>geom</em>, </td>
@@ -204,25 +238,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>dist</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>quadSegs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ae40a3908d24a3ac91212b35f8464b9c7">BufferParameters::JoinStyle</a>&#160;</td>
-          <td class="paramname"><em>joinStyle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>mitreLimit</em>&#160;</td>
+          <td class="paramname"><em>dist</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -236,23 +252,20 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the offset curve of a geometry at a given distance, and for a specified quadrant segments, join style and mitre limit.</p>
+<p>Computes the offset curve of a geometry at a given distance, joining curve sections into a single line for each input line.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">geom</td><td>a geometry </td></tr>
-    <tr><td class="paramname">dist</td><td>the offset distance (positive = left, negative = right) </td></tr>
-    <tr><td class="paramname">quadSegs</td><td>the quadrant segments (-1 for default) </td></tr>
-    <tr><td class="paramname">joinStyle</td><td>the join style (-1 for default) </td></tr>
-    <tr><td class="paramname">mitreLimit</td><td>the mitre limit (-1 for default) </td></tr>
+    <tr><td class="paramname">dist</td><td>the offset distance (positive for left, negative for right) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the offset curve </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the joined offset curve </dd></dl>
 
 </div>
 </div>
-<a id="a3eed451428f9ac649a037f33492a549e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3eed451428f9ac649a037f33492a549e">&#9670;&nbsp;</a></span>rawOffset()</h2>
+<a id="a64b8fc30d2c00369bfee1af1e01f32aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b8fc30d2c00369bfee1af1e01f32aa">&#9670;&nbsp;</a></span>rawOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,28 +274,16 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void geos::operation::buffer::OffsetCurve::rawOffset </td>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::operation::buffer::OffsetCurve::rawOffset </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;&#160;</td>
-          <td class="paramname"><em>geom</em>, </td>
+          <td class="paramname"><em>line</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>dist</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> &amp;&#160;</td>
-          <td class="paramname"><em>bufParams</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>lineList</em>&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -296,14 +297,90 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>rawOffset</b> 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets the raw offset line. The quadrant segments and join style and mitre limit to be set via <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html" title="Contains the parameters which describe how a buffer should be constructed.">BufferParameters</a>.</p>
-<p>The raw offset line may contain loops and other artifacts which are not present in the true offset curve. The raw offset line is matched to the buffer ring (which is clean) to extract the offset curve.</p>
+<p>Gets the raw offset curve for a line at a given distance, with default buffer parameters.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geom</td><td>the linestring to offset </td></tr>
-    <tr><td class="paramname">dist</td><td>the offset distance </td></tr>
+    <tr><td class="paramname">line</td><td>the line to offset </td></tr>
+    <tr><td class="paramname">distance</td><td>the offset distance (positive for left, negative for right) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the raw offset curve points </dd></dl>
+
+</div>
+</div>
+<a id="a70da916e3af6d34005ad1c37b4b19c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70da916e3af6d34005ad1c37b4b19c0e">&#9670;&nbsp;</a></span>rawOffsetCurve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&gt; geos::operation::buffer::OffsetCurve::rawOffsetCurve </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>distance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> &amp;&#160;</td>
+          <td class="paramname"><em>bufParams</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the raw offset curve for a line at a given distance. The quadrant segments, join style and mitre limit can be specified via <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html" title="Contains the parameters which describe how a buffer should be constructed.">BufferParameters</a>.</p>
+<p>The raw offset line may contain loops and other artifacts which are not present in the true offset curve.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>the line to offset </td></tr>
+    <tr><td class="paramname">distance</td><td>the offset distance (positive for left, negative for right) </td></tr>
     <tr><td class="paramname">bufParams</td><td>the buffer parameters to use </td></tr>
-    <tr><td class="paramname">lineList</td><td>the vector to populate with the return value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the raw offset curve points </dd></dl>
+
+</div>
+</div>
+<a id="a69c052db216447517585bd15f29d7221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69c052db216447517585bd15f29d7221">&#9670;&nbsp;</a></span>setJoined()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::operation::buffer::OffsetCurve::setJoined </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>pIsJoined</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes a single curve line for each input linear component, by joining curve sections in order along the raw offset curve. The default mode is to compute separate curve sections.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pIsJoined</td><td>true if joined mode should be used. </td></tr>
   </table>
   </dd>
 </dl>

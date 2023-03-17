@@ -218,6 +218,11 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">Li
 <tr class="separator:aebff64b6e6ebfc4a2d9a6ce4f8d5881d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a848c506a480482acb6361f1e55714539"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a848c506a480482acb6361f1e55714539">createEmpty</a> (int dimension) const</td></tr>
 <tr class="separator:a848c506a480482acb6361f1e55714539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa68bd6807d9fe07ae26b1ecc5334d253"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#aa68bd6807d9fe07ae26b1ecc5334d253">createEmpty</a> (<a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">GeometryTypeId</a> typeId) const</td></tr>
+<tr class="separator:aa68bd6807d9fe07ae26b1ecc5334d253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a919f5ae45b40ae915b485dc1b0ff8f32"><td class="memItemLeft" align="right" valign="top"><a id="a919f5ae45b40ae915b485dc1b0ff8f32"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createMulti</b> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &amp;&amp;geom) const</td></tr>
+<tr class="separator:a919f5ae45b40ae915b485dc1b0ff8f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a163a9bb22244008c6c7995cdb87d3486"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#a163a9bb22244008c6c7995cdb87d3486">buildGeometry</a> (std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;&amp;geoms) const</td></tr>
 <tr class="separator:a163a9bb22244008c6c7995cdb87d3486"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a88381782caff381b8b10fc9a87eda3"><td class="memItemLeft" align="right" valign="top"><a id="a3a88381782caff381b8b10fc9a87eda3"></a>
@@ -642,8 +647,33 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="aa68bd6807d9fe07ae26b1ecc5334d253"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa68bd6807d9fe07ae26b1ecc5334d253">&#9670;&nbsp;</a></span>createEmpty() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::geom::GeometryFactory::createEmpty </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">GeometryTypeId</a>&#160;</td>
+          <td class="paramname"><em>typeId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates an empty atomic geometry of the given type. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">typeId</td><td>the desired GeometryTypeId </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an empty atomic geometry of given dimension </dd></dl>
+
+</div>
+</div>
 <a id="a848c506a480482acb6361f1e55714539"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a848c506a480482acb6361f1e55714539">&#9670;&nbsp;</a></span>createEmpty()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a848c506a480482acb6361f1e55714539">&#9670;&nbsp;</a></span>createEmpty() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

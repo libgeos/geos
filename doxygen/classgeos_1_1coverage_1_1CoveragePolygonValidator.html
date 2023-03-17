@@ -71,7 +71,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7209c60609ba1a545e29d9438c0f9bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Validates that a polygon forms a valid polygonal coverage with the set of polygons surrounding it. If the polygon is coverage-valid an empty <a class="el" href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a> is returned. Otherwise, the result is a linear geometry containing the polygon boundary linework causing the invalidity.</p>
+<div class="textblock"><p>Validates that a polygon forms a valid polygonal coverage with the set of polygons adjacent to it. If the polygon is coverage-valid an empty <a class="el" href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a> is returned. Otherwise, the result is a linear geometry containing the polygon boundary linework causing the invalidity.</p>
 <p>A polygon is coverage-valid if:</p>
 <ul>
 <li>The polygon interior does not intersect the interior of other polygons.</li>
@@ -80,14 +80,16 @@ Static Public Member Functions</h2></td></tr>
 <p>The algorithm detects the following coverage errors:</p>
 <ul>
 <li>the polygon is a duplicate of another one</li>
-<li>a polygon boundary segment is collinear with an adjacent segment but not equal to it</li>
+<li>a polygon boundary segment equals an adjacent segment (with same orientation). This determines that the polygons overlap</li>
+<li>a polygon boundary segment is collinear and overlaps an adjacent segment but is not equal to it</li>
 <li>a polygon boundary segment touches an adjacent segment at a non-vertex point</li>
 <li>a polygon boundary segment crosses into an adjacent polygon</li>
 <li>a polygon boundary segment is in the interior of an adjacent polygon</li>
 </ul>
 <p>If any of these errors is present, the target polygon does not form a valid coverage with the adjacent polygons.</p>
-<p>The validity rules does not preclude gaps between coverage polygons. However, this class can detect narrow gaps, by specifying a maximum gap width using <a class="el" href="classgeos_1_1coverage_1_1CoveragePolygonValidator.html#a859f8efd3ad8c359bfe67d9528c52c10">setGapWidth(double)</a>. Note that this will also identify narrow gaps separating disjoint coverage regions, and narrow gores. In some situations it may also produce false positives (i.e. linework identified as part of a gap which is wider than the given width).</p>
+<p>The validity rules do not preclude gaps between coverage polygons. However, this class can detect narrow gaps, by specifying a maximum gap width using <a class="el" href="classgeos_1_1coverage_1_1CoveragePolygonValidator.html#a859f8efd3ad8c359bfe67d9528c52c10">setGapWidth(double)</a>. Note that this will also identify narrow gaps separating disjoint coverage regions, and narrow gores. In some situations it may also produce false positives (i.e. linework identified as part of a gap which is wider than the given width). To fully identify gaps it maybe necessary to use <a class="el" href="classgeos_1_1coverage_1_1CoverageUnion.html">CoverageUnion</a> and analyze the holes in the result to see if they are acceptable.</p>
 <p>A polygon may be coverage-valid with respect to a set of surrounding polygons, but the collection as a whole may not form a clean coverage. For example, the target polygon boundary may be fully matched by adjacent boundary segments, but the adjacent set contains polygons which are not coverage-valid relative to other ones in the set. A coverage is valid only if every polygon in the coverage is coverage-valid. Use <a class="el" href="classgeos_1_1coverage_1_1CoverageValidator.html">CoverageValidator</a> to validate an entire set of polygons.</p>
+<p>The adjacent set may contain polygons which do not intersect the target polygon. These are effectively ignored during validation (but may decrease performance).</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abb82a67c548573f05007454b660418a5"></a>
