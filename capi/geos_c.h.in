@@ -774,6 +774,13 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull_r(
     double ratio,
     unsigned int allowHoles);
 
+/** \see GEOSConcaveHullByLength */
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHullByLength_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double ratio,
+    unsigned int allowHoles);
+
 /** \see GEOSPolygonHullSimplify */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     GEOSContextHandle_t handle,
@@ -3555,12 +3562,47 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 * Caller is responsible for freeing with GEOSGeom_destroy().
 *
 * \see geos::algorithm::hull::ConcaveHull
+* \see GEOSConcaveHullByLength
 * \see GEOSConcaveHullOfPolygons
 * \see GEOSConvexHull
 */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
     double ratio,
+    unsigned int allowHoles);
+
+/**
+* Returns a "concave hull" of a geometry. A concave hull is
+* a polygon which contains all the
+* points of the input, but is a better approximation than the convex hull
+* to the area occupied by the input.
+* Frequently used to convert a multi-point into a polygonal area.
+* that contains all the points in the input Geometry.
+*
+* A set of points has a sequence of hulls of increasing concaveness,
+* determined by a numeric target parameter.
+* The concave hull is constructed by removing the longest outer edges
+* of the Delaunay Triangulation of the space between the polygons,
+* until the specified maximm edge length is reached.
+* A large value produces the convex hull, 0 produces the hull of maximim concaveness.
+*
+* \param g The input geometry
+* \param length The maximum edge length (0 or greater)
+* \param allowHoles When non-zero, the polygonal output may contain holes.
+* \return A newly allocated geometry of the concave hull. NULL on exception.
+*
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \see geos::algorithm::hull::ConcaveHull
+* \see GEOSConcaveHull
+* \see GEOSConcaveHullOfPolygons
+* \see GEOSConvexHull
+*
+* \since 3.12
+*/
+extern GEOSGeometry GEOS_DLL *GEOSConcaveHullByLength(
+    const GEOSGeometry* g,
+    double length,
     unsigned int allowHoles);
 
 /**

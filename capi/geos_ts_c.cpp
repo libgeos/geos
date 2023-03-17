@@ -1251,6 +1251,22 @@ extern "C" {
     }
 
     Geometry*
+    GEOSConcaveHullByLength_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1,
+        double length,
+        unsigned int allowHoles)
+    {
+        return execute(extHandle, [&]() {
+            ConcaveHull hull(g1);
+            hull.setMaximumEdgeLength(length);
+            hull.setHolesAllowed(allowHoles);
+            std::unique_ptr<Geometry> g3 = hull.getHull();
+            g3->setSRID(g1->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSPolygonHullSimplify_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
         unsigned int isOuter,

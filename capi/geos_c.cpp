@@ -484,6 +484,15 @@ extern "C" {
     }
 
     Geometry*
+    GEOSConcaveHullByLength(const Geometry* g,
+                    double length,
+                    unsigned int allowHoles)
+
+    {
+        return GEOSConcaveHullByLength_r(handle, g, length, allowHoles);
+    }
+
+    Geometry*
     GEOSPolygonHullSimplify(const Geometry* g,
                             unsigned int isOuter,
                             double vertexNumFraction)
