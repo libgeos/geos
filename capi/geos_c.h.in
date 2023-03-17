@@ -3532,24 +3532,31 @@ extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 
 /**
-* Returns "concave hull" of a geometry. The concave hull is fully
-* contained within the convex hull and also contains all the
-* points of the input, but in a smaller area.
-* The area ratio is the ratio
-* of the area of the convex hull and the concave hull. Frequently
-* used to convert a multi-point into a polygonal area.
-* that contains all the points in the input Geometry
+* Returns a "concave hull" of a geometry. A concave hull is
+* a polygon which contains all the
+* points of the input, but is a better approximation than the convex hull
+* to the area occupied by the input.
+* Frequently used to convert a multi-point into a polygonal area.
+* that contains all the points in the input Geometry.
+*
+* A set of points has a sequence of hulls of increasing concaveness,
+* determined by a numeric target parameter.
+* The concave hull is constructed by removing the longest outer edges
+* of the Delaunay Triangulation of the space between the polygons,
+* until the target criterion parameter is reached.
+* This can be expressed as a ratio between the lengths of the longest and shortest edges.
+* 1 produces the convex hull; 0 produces a hull with maximum concaveness
+*
 * \param g The input geometry
-* \param ratio The ratio value, between 0 and 1.
+* \param ratio The edge length ratio value, between 0 and 1.
 * \param allowHoles When non-zero, the polygonal output may contain holes.
 * \return A newly allocated geometry of the concave hull. NULL on exception.
-* The area ratio is the ratio of the concave hull area to the convex hull area.
-* 1 produces the convex hull; 0 produces maximum concaveness.
-* The Length Ratio is a fraction determining the length of the longest
-* edge in the computed hull.  1 produces the convex hull;
-* 0 produces a hull with maximum concaveness
+*
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
 * \see geos::algorithm::hull::ConcaveHull
+* \see GEOSConcaveHullOfPolygons
+* \see GEOSConvexHull
 */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
@@ -3617,20 +3624,23 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
 * Constructs a concave hull of a set of polygons, respecting
 * the polygons as constraints.
 *
-* A concave hull is a possibly non-convex polygon containing all the input polygons.
-* A given set of polygons has a sequence of hulls of increasing concaveness,
-* determined by a numeric target parameter.
+* A concave hull is a (possibly) non-convex polygon containing all the input polygons.
 * The computed hull "fills the gap" between the polygons,
 * and does not intersect their interior.
+* A set of polygons has a sequence of hulls of increasing concaveness,
+* determined by a numeric target parameter.
 *
 * The concave hull is constructed by removing the longest outer edges
 * of the Delaunay Triangulation of the space between the polygons,
 * until the target criterion parameter is reached.
+* The "Maximum Edge Length" parameter limits the length of the longest edge between polygons to be no larger than this value.
+* This can be expressed as a ratio between the lengths of the longest and shortest edges.
 *
-* "Maximum Edge Length" constrains the length of the longest edge between the polygons to be no larger than this value.
+* The input polygons *must* be a *valid* MultiPolygon
+* (i.e. they must be non-overlapping).
 *
 * \param g the valid MultiPolygon geometry to process
-* \param lengthRatio determine the Maximum Edge Length as a
+* \param lengthRatio specifies the Maximum Edge Length as a
 *        fraction of the difference between the longest and
 *        shortest edge lengths between the polygons.
 *        This normalizes the Maximum Edge Length to be scale-free.
@@ -3641,10 +3651,10 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
-* \see geos::algorithm::hull::ConcaveHullOfPolygons
 *
-* The input polygons *must* form a *valid* MultiPolygon
-* (i.e. they must be non-overlapping).
+* \see geos::algorithm::hull::ConcaveHullOfPolygons
+* \see GEOSConcaveHull
+* \see GEOSConvexHull
 */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons(
     const GEOSGeometry* g,
