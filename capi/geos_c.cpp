@@ -486,7 +486,7 @@ extern "C" {
     Geometry*
     GEOSConcaveHullByLength(const Geometry* g,
                     double length,
-                    unsigned int allowHoles)
+                    char allowHoles)
 
     {
         return GEOSConcaveHullByLength_r(handle, g, length, allowHoles);

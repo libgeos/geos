@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2010-2012 Sandro Santilli <strk@kbt.io>
- * Copyright (C) 2016-2021 Daniel Baston <dbaston@gmail.com>
+ * Copyright (C) 2016-2023 Daniel Baston <dbaston@gmail.com>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -1254,7 +1254,7 @@ extern "C" {
     GEOSConcaveHullByLength_r(GEOSContextHandle_t extHandle,
         const Geometry* g1,
         double length,
-        unsigned int allowHoles)
+        char allowHoles)
     {
         return execute(extHandle, [&]() {
             ConcaveHull hull(g1);

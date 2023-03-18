@@ -779,7 +779,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHullByLength_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     double ratio,
-    unsigned int allowHoles);
+    char allowHoles);
 
 /** \see GEOSPolygonHullSimplify */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
@@ -3603,7 +3603,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHullByLength(
     const GEOSGeometry* g,
     double length,
-    unsigned int allowHoles);
+    char allowHoles);
 
 /**
 * Constructs a concave hull of a set of polygons, respecting
