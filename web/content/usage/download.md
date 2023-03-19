@@ -18,7 +18,7 @@ draft: false
 | **3.5.2** EOL | 2019/10/04 | 2015/08/16 | 2019/10/04|  [geos-3.5.2.tar.bz2](https://download.osgeo.org/geos/geos-3.5.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.5.2/NEWS) |
 
 If you see **EOL** next to a released version, it means no security or patch updates will be added to that minor and you should upgrade to a higher release.
-Refer to our [End-Of-Life (EOL) Policy](/development/rfcs/rfc11/) for details.
+Refer to our [End-Of-Life (EOL) Policy](/project/rfcs/rfc11/) for details.
 Older releases prior to the ones listed above, are all EOL'd.
 
 Old releases can be downloaded from https://download.osgeo.org/geos/.
