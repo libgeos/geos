@@ -345,6 +345,8 @@ extern void GEOS_DLL GEOS_finish_r(GEOSContextHandle_t handle);
 * \param extHandle the context returned by \ref GEOS_init_r.
 * \param nf the handler callback
 * \return the previously configured message handler or NULL if no message handler was configured
+*
+* \since 3.3
 */
 extern GEOSMessageHandler GEOS_DLL GEOSContext_setNoticeHandler_r(
     GEOSContextHandle_t extHandle,
@@ -357,6 +359,8 @@ extern GEOSMessageHandler GEOS_DLL GEOSContext_setNoticeHandler_r(
 * \param extHandle the GEOS context from \ref GEOS_init_r
 * \param ef the handler callback
 * \return the previously configured message handler or NULL if no message handler was configured
+*
+* \since 3.3
 */
 extern GEOSMessageHandler GEOS_DLL GEOSContext_setErrorHandler_r(
     GEOSContextHandle_t extHandle,
@@ -2057,6 +2061,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsign
 * \param hasZ does buffer have Z values?
 * \param hasM does buffer have M values?
 * \return the sequence or NULL on exception
+*
+* \since 3.10
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM);
 
@@ -2068,6 +2074,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer(const double* buf
 * \param m array of m coordinates, or NULL
 * \param size length of each array
 * \return the sequence or NULL on exception
+*
+* \since 3.10
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, const double* y, const double* z, const double* m, unsigned int size);
 
@@ -2078,6 +2086,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromArrays(const double* x, 
 * \param hasZ copy Z values to buffer?
 * \param hasM copy M values to buffer?
 * \return 1 on success, 0 on error
+*
+* \since 3.10
 */
 extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double* buf, int hasZ, int hasM);
 
@@ -2089,6 +2099,8 @@ extern int GEOS_DLL GEOSCoordSeq_copyToBuffer(const GEOSCoordSequence* s, double
 * \param z array to which z values should be copied, or NULL
 * \param m array to which m values should be copied, or NULL
 * \return 1 on success, 0 on error
+*
+* \since 3.10
 */
 extern int GEOS_DLL GEOSCoordSeq_copyToArrays(const GEOSCoordSequence* s, double* x, double* y, double* z, double* m);
 
@@ -2139,6 +2151,8 @@ extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSequence* s,
 * \param x the value to set the X ordinate to
 * \param y the value to set the Y ordinate to
 * \return 0 on exception
+*
+* \since 3.8
 */
 extern int GEOS_DLL GEOSCoordSeq_setXY(GEOSCoordSequence* s,
     unsigned int idx, double x, double y);
@@ -2150,6 +2164,8 @@ extern int GEOS_DLL GEOSCoordSeq_setXY(GEOSCoordSequence* s,
 * \param y the value to set the Y ordinate to
 * \param z the value to set the Z ordinate to
 * \return 0 on exception
+*
+* \since 3.8
 */
 extern int GEOS_DLL GEOSCoordSeq_setXYZ(GEOSCoordSequence* s,
     unsigned int idx, double x, double y, double z);
@@ -2199,6 +2215,8 @@ extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSequence* s,
 * \param x pointer where ordinate X value will be placed
 * \param y pointer where ordinate Y value will be placed
 * \return 0 on exception
+*
+* \since 3.8
 */
 extern int GEOS_DLL GEOSCoordSeq_getXY(const GEOSCoordSequence* s,
     unsigned int idx, double *x, double *y);
@@ -2210,6 +2228,8 @@ extern int GEOS_DLL GEOSCoordSeq_getXY(const GEOSCoordSequence* s,
 * \param y pointer where ordinate Y value will be placed
 * \param z pointer where ordinate Z value will be placed
 * \return 0 on exception
+*
+* \since 3.8
 */
 extern int GEOS_DLL GEOSCoordSeq_getXYZ(const GEOSCoordSequence* s,
     unsigned int idx, double *x, double *y, double *z);
@@ -2251,6 +2271,8 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions(
 * \param s the coordinate sequence
 * \param is_ccw pointer for ccw value, 1 if counter-clockwise orientation, 0 otherwise
 * \return 0 on exception, 1 on success
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSCoordSeq_isCCW(
     const GEOSCoordSequence* s,
@@ -2279,6 +2301,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
 * \param y The Y coordinate
 * \return A newly allocated point geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
 
@@ -2286,6 +2310,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPointFromXY(double x, double y);
 * Creates an empty point.
 * \return A newly allocated empty point geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint(void);
 
@@ -2309,6 +2335,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
 * Creates an emptylinestring geometry.
 * \return A newly allocated linestring geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
 
@@ -2316,6 +2344,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString(void);
 * Creates an empty polygon geometry.
 * \return A newly allocated empty polygon geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon(void);
 
@@ -2358,6 +2388,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
 * \param type The geometry type, enumerated by \ref GEOSGeomTypes
 * \return A newly allocated empty geometry collection. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 
@@ -2368,6 +2400,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 * \param ymin Lower bound of envelope
 * \param xmax Right bound of envelope
 * \param ymax Upper bound of envelope
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
     double xmin, double ymin,
@@ -2426,6 +2460,8 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 * \param g Input geometry
 * \return A void* to the user data, caller is responsible for
 *         casting to the appropriate type.
+*
+* \since 3.6
 */
 extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
 
@@ -2464,6 +2500,8 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
 * precision or 0.0 if it is full floating point precision.
 * \param g Input geometry
 * \return The grid size, or -1 on exception
+*
+* \since 3.6
 */
 extern double GEOS_DLL GEOSGeom_getPrecision(const GEOSGeometry *g);
 
@@ -2507,6 +2545,8 @@ extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
 * \param[in] g Input Point geometry
 * \param[out] z Pointer to hold return value
 * \returns 1 on success, 0 on exception
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
 
@@ -2574,6 +2614,8 @@ extern int GEOS_DLL GEOSGeom_getDimensions(
 *
 * \param g Input geometry
 * \return The dimension
+*
+* \since 3.3
 */
 extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
     const GEOSGeometry* g);
@@ -2583,6 +2625,8 @@ extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
 
@@ -2591,6 +2635,8 @@ extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
 
@@ -2599,6 +2645,8 @@ extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
 
@@ -2607,6 +2655,8 @@ extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
 
@@ -2620,6 +2670,8 @@ extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
 * \param[out] xmax Pointer to place result for maximum X value
 * \param[out] ymax Pointer to place result for maximum Y value
 * \return 1 on success, 0 on exception
+*
+* \since 3.11
 */
 extern int GEOS_DLL GEOSGeom_getExtent(
     const GEOSGeometry* g,
@@ -2717,6 +2769,8 @@ extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 * Set the anonymous "user data" for this geometry.
 * \param g Input geometry
 * \param userData Void pointer to user data
+*
+* \since 3.6
 */
 extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 
@@ -2777,6 +2831,8 @@ extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g);
 * \param g The geometry to test
 * \return A string with the reason, NULL on exception.
           Caller must GEOSFree() their result.
+*
+* \since 3.1
 */
 extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 
@@ -2791,6 +2847,8 @@ extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 * \param reason A pointer in which the reason string will be places
 * \param location A pointer in which the location GEOSGeometry will be placed
 * \return 1 when valid, 0 when invalid, 2 on exception
+*
+* \since 3.3
 */
 extern char GEOS_DLL GEOSisValidDetail(
     const GEOSGeometry* g,
@@ -2802,6 +2860,8 @@ extern char GEOS_DLL GEOSisValidDetail(
 * Repair an invalid geometry, returning a valid output.
 * \param g The geometry to repair
 * \return The repaired geometry. Caller must free with GEOSGeom_destroy().
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValid(
     const GEOSGeometry* g);
@@ -2816,6 +2876,8 @@ extern GEOSGeometry GEOS_DLL *GEOSMakeValid(
 * \see GEOSMakeValidParams_destroy
 * \see GEOSMakeValidParams_setMethod
 * \see GEOSMakeValidParams_setKeepCollapsed
+*
+* \since 3.10
 */
 extern GEOSGeometry GEOS_DLL *GEOSMakeValidWithParams(
     const GEOSGeometry* g,
@@ -2874,6 +2936,8 @@ extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
 * \return 0 if no exception occurred.
 *         2 if an exception occurred.
 * \see geos::precision::MinimumClearance
+*
+* \since 3.6
 */
 extern int GEOS_DLL GEOSMinimumClearance(const GEOSGeometry* g, double* d);
 
@@ -2885,6 +2949,8 @@ extern int GEOS_DLL GEOSMinimumClearance(const GEOSGeometry* g, double* d);
 * \return a linestring geometry, or NULL if an exception occurred.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::precision::MinimumClearance
+*
+* \since 3.6
 */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
 
@@ -2902,6 +2968,8 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
 * \param tolerance Remove all points within this distance of each other. Use 0.0 to remove only exactly repeated points.
 *
 * \see GEOSMakeValidWithParams
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
     const GEOSGeometry* g,
@@ -2975,6 +3043,8 @@ extern int GEOS_DLL GEOSDistance(
 * \param g2 Input geometry
 * \param dist The max distance
 * \returns 1 on true, 0 on false, 2 on exception
+*
+* \since 3.10
 */
 extern char GEOS_DLL GEOSDistanceWithin(
     const GEOSGeometry* g1,
@@ -2991,6 +3061,8 @@ extern char GEOS_DLL GEOSDistanceWithin(
 * \param[out] dist Pointer to be filled in with distance result
 * \return 1 on success, 0 on exception.
 * \see geos::operation::distance:;IndexedFacetDistance
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSDistanceIndexed(
     const GEOSGeometry* g1,
@@ -3005,6 +3077,8 @@ extern int GEOS_DLL GEOSDistanceIndexed(
 * \param[in] g2 Input geometry
 * \return A coordinate sequence with the two points, or NULL on exception.
 * Caller must free with GEOSCoordSeq_destroy().
+*
+* \since 3.5
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
     const GEOSGeometry* g1,
@@ -3054,6 +3128,8 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify(
 * \param[out] dist Pointer to be filled in with distance result
 * \return 1 on success, 0 on exception.
 * \see geos::algorithm::distance::DiscreteFrechetDistance
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSFrechetDistance(
     const GEOSGeometry *g1,
@@ -3168,6 +3244,8 @@ extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEO
 * \return A newly allocated geometry of the intersection. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.9
 */
 extern GEOSGeometry GEOS_DLL *GEOSIntersectionPrec(const GEOSGeometry* g1, const GEOSGeometry* g2, double gridSize);
 
@@ -3196,6 +3274,8 @@ extern GEOSGeometry GEOS_DLL *GEOSDifference(
 * \return A newly allocated geometry of the difference. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.9
 */
 extern GEOSGeometry GEOS_DLL *GEOSDifferencePrec(
     const GEOSGeometry* ga,
@@ -3229,6 +3309,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(
 * \return A newly allocated geometry of the symmetric difference. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.9
 */
 extern GEOSGeometry GEOS_DLL *GEOSSymDifferencePrec(
     const GEOSGeometry* ga,
@@ -3260,6 +3342,8 @@ extern GEOSGeometry GEOS_DLL *GEOSUnion(
 * \return A newly allocated geometry of the union. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.9
 */
 extern GEOSGeometry GEOS_DLL *GEOSUnionPrec(
     const GEOSGeometry* ga,
@@ -3274,6 +3358,8 @@ extern GEOSGeometry GEOS_DLL *GEOSUnionPrec(
 * \return A newly allocated geometry of the union. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
 
@@ -3289,6 +3375,8 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
 * \return A newly allocated geometry of the union. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::overlayng::OverlayNG
+*
+* \since 3.9
 */
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
     const GEOSGeometry* g,
@@ -3301,6 +3389,8 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
 * \param g The input geometry
 * \return A geometry that covers all the points of the input geometry.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
@@ -3311,6 +3401,8 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 * \param g The input geometry
 * \return A newly allocated geometry of the union, or NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.12
 */
 extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion(const GEOSGeometry *g);
 
@@ -3347,6 +3439,8 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
 * \return The shared paths
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::sharedpaths::SharedPathsOp
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
     const GEOSGeometry* g1,
@@ -3449,6 +3543,8 @@ extern int GEOS_DLL GEOSBufferParams_setSingleSided(
 * \param width The buffer distance
 * \return The buffered geometry, or NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSBufferWithParams(
     const GEOSGeometry* g,
@@ -3565,6 +3661,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 * \see GEOSConcaveHullByLength
 * \see GEOSConcaveHullOfPolygons
 * \see GEOSConvexHull
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
     const GEOSGeometry* g,
@@ -3663,6 +3761,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHullOfPolygons(
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::PolygonHullSimplifier
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
     const GEOSGeometry* g,
@@ -3698,6 +3798,8 @@ enum GEOSPolygonHullParameterModes {
 * \see geos::simplify::PolygonHullSimplifier
 * \see GEOSPolygonHullParameterModes
 * \see GEOSPolygonHullSimplify
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
     const GEOSGeometry* g,
@@ -3715,6 +3817,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode(
 * \param g The input geometry
 * \return A newly allocated geometry of the rotated envelope. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.6
 */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle(const GEOSGeometry* g);
 
@@ -3781,6 +3885,8 @@ extern GEOSGeometry GEOS_DLL *GEOSLargestEmptyCircle(
 * \return A newly allocated geometry of the LEC. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::algorithm::MinimumDiameter
+*
+* \since 3.6
 */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumWidth(const GEOSGeometry* g);
 
@@ -3812,6 +3918,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGetCentroid(const GEOSGeometry* g);
 * \return The circle geometry or NULL on exception
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::algorithm::MinimumBoundingCircle::getCircle
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumBoundingCircle(
     const GEOSGeometry* g,
@@ -3842,6 +3950,8 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
 * \param g the input geometry whose rings will be used as input
 * \return A newly allocated geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.10
 */
 extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
     const GEOSGeometry *g);
@@ -3874,6 +3984,8 @@ enum GEOSVoronoiFlags
 *
 * \return A newly allocated geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.5
 */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
     const GEOSGeometry *g,
@@ -3952,6 +4064,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize(
 * \return The polygonal output geometry.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::polygonize::Polygonizer
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_valid(
     const GEOSGeometry * const geoms[],
@@ -3983,6 +4097,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(
 * \return The polygonal valid output
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::polygonize::Polygonizer
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(
     const GEOSGeometry* input,
@@ -3998,6 +4114,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(
 * \return The polygonal output
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::polygonize::BuildArea
+*
+* \since 3.8
 */
 extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 
@@ -4019,6 +4137,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 * \param tolerance the distance tolerance to densify
 * \return The densified geometry, or NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.10
 */
 extern GEOSGeometry GEOS_DLL *GEOSDensify(
     const GEOSGeometry* g,
@@ -4042,6 +4162,8 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 * \return The merged linework
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::operation::linemerge::LineMerger
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
 
@@ -4053,6 +4175,8 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
  *  \param end_fraction end fraction (0-1) along the length of g
  *  \return selected substring.
  *  Caller is responsible for freeing with GEOSGeom_destroy()
+ *
+ *  \since 3.12
  */
 extern GEOSGeometry GEOS_DLL *GEOSLineSubstring(
         const GEOSGeometry* g,
@@ -4066,6 +4190,8 @@ extern GEOSGeometry GEOS_DLL *GEOSLineSubstring(
 * \param g The input geometry
 * \return The reversed geometry
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.7
 */
 extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
 
@@ -4080,6 +4206,8 @@ extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
 * \return The simplified geometry
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::DouglasPeuckerSimplifier
+*
+* \since 3.0
 */
 extern GEOSGeometry GEOS_DLL *GEOSSimplify(
     const GEOSGeometry* g,
@@ -4098,6 +4226,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSimplify(
 * \return The simplified geometry
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \see geos::simplify::DouglasPeuckerSimplifier
+*
+* \since 3.0
 */
 extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(
     const GEOSGeometry* g,
@@ -4110,6 +4240,8 @@ extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(
 * \param g The input geometry
 * \return The distinct points
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints(
     const GEOSGeometry* g);
@@ -4126,6 +4258,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints(
 * \param[in] level The level of precision of the Hilbert curve, up to 16
 * \param[out] code Pointer to be filled in with Hilbert code result
 * \return 1 on success, 0 on exception.
+*
+* \since 3.11
 */
 extern int GEOS_DLL GEOSHilbertCode(
     const GEOSGeometry *geom,
@@ -4145,6 +4279,8 @@ extern int GEOS_DLL GEOSHilbertCode(
 * \param userdata an optional pointer to pe passed to 'callback' as an argument
 * \return a copy of the input geometry with transformed coordinates.
 * Caller must free with GEOSGeom_destroy().
+*
+* \since 3.11
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
     const GEOSGeometry* g,
@@ -4169,6 +4305,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
 * \param tolerance Snapping tolerance
 * \return The snapped verion of the input. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSSnap(
     const GEOSGeometry* input,
@@ -4201,6 +4339,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(
 * \return The precision reduced result.
 *         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
+*
+* \since 3.6
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
 	const GEOSGeometry *g,
@@ -4298,6 +4438,8 @@ extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
 * \see geos::geom::Geometry::covers
+*
+* \since 3.3
 */
 extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
@@ -4308,6 +4450,8 @@ extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
 * \see geos::geom::Geometry::coveredBy
+*
+* \since 3.3
 */
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
@@ -4341,6 +4485,8 @@ extern char GEOS_DLL GEOSEqualsExact(
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
+*
+* \since 3.12
 */
 extern char GEOS_DLL GEOSEqualsIdentical(
         const GEOSGeometry* g1,
@@ -4381,6 +4527,8 @@ extern char GEOS_DLL *GEOSRelate(
 * \param mat Complete DE9IM string (does not have "*")
 * \param pat Pattern to match to (may contain "*")
 * \return 1 on true, 0 on false, 2 on exception
+*
+* \since 3.3
 */
 extern char GEOS_DLL GEOSRelatePatternMatch(
     const char *mat,
@@ -4396,6 +4544,8 @@ extern char GEOS_DLL GEOSRelatePatternMatch(
 * \param bnr A member of the \ref GEOSRelateBoundaryNodeRules enum
 * \return DE9IM string. Caller is responsible for freeing with GEOSFree().
 *         NULL on exception
+*
+* \since 3.3
 */
 extern char GEOS_DLL *GEOSRelateBoundaryNodeRule(
     const GEOSGeometry* g1,
@@ -4459,6 +4609,8 @@ extern char GEOS_DLL GEOSPreparedContains(
 * \param y y coordinate of point to test
 * \returns 1 on true, 0 on false, 2 on exception
 * \see GEOSContains
+*
+* \since 3.12
 */
 extern char GEOS_DLL GEOSPreparedContainsXY(
         const GEOSPreparedGeometry* pg1,
@@ -4545,6 +4697,8 @@ extern char GEOS_DLL GEOSPreparedIntersects(
 * \param y y coordinate of point to test
 * \returns 1 on true, 0 on false, 2 on exception
 * \see GEOSIntersects
+*
+* \since 3.12
 */
 extern char GEOS_DLL GEOSPreparedIntersectsXY(
         const GEOSPreparedGeometry* pg1,
@@ -4596,6 +4750,8 @@ extern char GEOS_DLL GEOSPreparedWithin(
 * \returns A coordinate sequence containing the nearest points, or NULL on exception.
 *          The first point in the sequence is from the prepared geometry, and the
 *          seconds is from the other argument.
+*
+* \since 3.9
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(
     const GEOSPreparedGeometry* pg1,
@@ -4611,6 +4767,8 @@ extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints(
 * \param[in] g2 The geometry to test
 * \param[out] dist Pointer to store the result in
 * \return 1 on success
+*
+* \since 3.9
 */
 extern int GEOS_DLL GEOSPreparedDistance(
     const GEOSPreparedGeometry* pg1,
@@ -4628,6 +4786,8 @@ extern int GEOS_DLL GEOSPreparedDistance(
 * \param g2 The geometry to test
 * \param dist The max distance
 * \return 1 on success
+*
+* \since 3.10
 */
 extern char GEOS_DLL GEOSPreparedDistanceWithin(
     const GEOSPreparedGeometry* pg1,
@@ -4663,6 +4823,8 @@ extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 * in a certain section of code or using a certain thread.
 *
 * \return 1 on success, 0 on error
+*
+* \since 3.12
 */
 extern int GEOS_DLL GEOSSTRtree_build(GEOSSTRtree *tree);
 
@@ -4710,6 +4872,8 @@ extern void GEOS_DLL GEOSSTRtree_query(
 * \param geom the geometry with which the tree should be queried
 * \return a const pointer to the nearest \ref GEOSGeometry in the tree to 'geom', or NULL in
 *            case of exception
+*
+* \since 3.6
 */
 extern const GEOSGeometry GEOS_DLL *GEOSSTRtree_nearest(
     GEOSSTRtree *tree,
@@ -4732,6 +4896,8 @@ extern const GEOSGeometry GEOS_DLL *GEOSSTRtree_nearest(
 *            each time it is called.
 * \return a const pointer to the nearest item in the tree to 'item', or NULL in
 *            case of exception
+*
+* \since 3.6
 */
 extern const void GEOS_DLL *GEOSSTRtree_nearest_generic(
     GEOSSTRtree *tree,
@@ -4801,6 +4967,8 @@ extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
 * \param[out] cy y-coordinate of intersection point
 *
 * \return 0 on error, 1 on success, -1 if segments do not intersect
+*
+* \since 3.7
 */
 extern int GEOS_DLL GEOSSegmentIntersection(
        double ax0, double ay0,
@@ -4821,6 +4989,8 @@ extern int GEOS_DLL GEOSSegmentIntersection(
 * \return  -1 if reaching P takes a counter-clockwise (left) turn,
 *           1 if reaching P takes a clockwise (right) turn,
 *           0 if P is collinear with A-B
+*
+* \since 3.3
 */
 extern int GEOS_DLL GEOSOrientationIndex(
     double Ax, double Ay,
@@ -4865,6 +5035,8 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(
 * in the input (currently just unclosed rings) while reading.
 * \param reader A WKT reader object, caller retains ownership
 * \param doFix Set to 1 to repair, 0 for no repair (default).
+*
+* \since 3.11
 */
 extern void GEOS_DLL GEOSWKTReader_setFixStructure(
     GEOSWKTReader *reader,
@@ -4924,6 +5096,8 @@ extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision(
 * Legal values are 2 or 3.
 * \param writer A \ref GEOSWKTWriter.
 * \param dim The desired dimension, default 2.
+*
+* \since 3.3
 */
 extern void GEOS_DLL GEOSWKTWriter_setOutputDimension(
     GEOSWKTWriter *writer,
@@ -4942,6 +5116,8 @@ extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension(GEOSWKTWriter *writer);
 * format does includes a tag, eg "POINT Z (1 2 3)".
 * \param writer A \ref GEOSWKTWriter.
 * \param useOld3D True to use the old format, false is the default.
+*
+* \since 3.3
 */
 extern void GEOS_DLL GEOSWKTWriter_setOld3D(
     GEOSWKTWriter *writer,
@@ -5094,6 +5270,8 @@ extern void GEOS_DLL GEOSWKBWriter_setByteOrder(
 * The return value is a member of \ref GEOSWKBFlavors.
 * \param writer The writer to read flavor from
 * \return The current flavor
+*
+* \since 3.10
 */
 extern int GEOS_DLL GEOSWKBWriter_getFlavor(
     const GEOSWKBWriter* writer);
@@ -5103,6 +5281,8 @@ extern int GEOS_DLL GEOSWKBWriter_getFlavor(
 * a value from \ref GEOSWKBFlavors enum.
 * \param writer The writer to set flavor on
 * \param flavor Desired flavor
+*
+* \since 3.10
 */
 extern void GEOS_DLL GEOSWKBWriter_setFlavor(
     GEOSWKBWriter* writer,
@@ -5137,12 +5317,16 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(
 /**
 * Allocate a new \ref GEOSGeoJSONReader.
 * \returns a new reader. Caller must free with GEOSGeoJSONReader_destroy()
+*
+* \since 3.10
 */
 extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSGeoJSONReader.
 * \param reader The reader to destroy.
+*
+* \since 3.10
 */
 extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
 
@@ -5153,6 +5337,8 @@ extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
 * \param reader A GeoJSON reader object, caller retains ownership
 * \param geojson The json string to parse, caller retains ownership
 * \return A \ref GEOSGeometry, caller to free with GEOSGeom_destroy())
+*
+* \since 3.10
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry(
     GEOSGeoJSONReader* reader,
@@ -5163,12 +5349,16 @@ extern GEOSGeometry GEOS_DLL *GEOSGeoJSONReader_readGeometry(
 /**
 * Allocate a new \ref GEOSGeoJSONWriter.
 * \returns a new writer. Caller must free with GEOSGeoJSONWriter_destroy()
+*
+* \since 3.10
 */
 extern GEOSGeoJSONWriter GEOS_DLL *GEOSGeoJSONWriter_create(void);
 
 /**
 * Free the memory associated with a \ref GEOSGeoJSONWriter.
 * \param writer The writer to destroy.
+*
+* \since 3.10
 */
 extern void GEOS_DLL GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer);
 
@@ -5179,6 +5369,8 @@ extern void GEOS_DLL GEOSGeoJSONWriter_destroy(GEOSGeoJSONWriter* writer);
 * \param g The geometry to convert, caller retains ownership.
 * \param indent The indentation used. Use -1 for no formatting.
 * \return A char pointer, caller to free with GEOSFree())
+*
+* \since 3.10
 */
 extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
