@@ -54,6 +54,7 @@ xxxx-xx-xx
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
   - Improve OffsetCurve behaviour and add Joined mode (JTS-956, Martin Davis)
   - GeometryPrecisionReducer preserves input collection types (GH-846, Paul Ramsey)
+  - Fix OffsetCurve to handle zero-distance offsets (GH-850, Martin Davis)
 
 ## Changes in 3.11.0
 2022-07-01
