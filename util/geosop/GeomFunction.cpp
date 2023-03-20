@@ -280,6 +280,13 @@ GeomFunction::init()
             hull.setMaximumEdgeLengthRatio( d );
             return new Result( hull.getHull() );
         });
+    add("concaveHullByLength", Result::typeGeometry, catConst,
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB; (void)d;  // prevent unused variable warning
+            geos::algorithm::hull::ConcaveHull hull(geom.get());
+            hull.setMaximumEdgeLength( d );
+            return new Result( hull.getHull() );
+        });
     add("concaveHullHoles", Result::typeGeometry, catConst,
         [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
             (void) geomB; (void)d;  // prevent unused variable warning
