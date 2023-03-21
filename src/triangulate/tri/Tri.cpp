@@ -23,6 +23,7 @@
 #include <geos/geom/Triangle.h>
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/IllegalStateException.h>
 
 
 using geos::util::IllegalArgumentException;
@@ -61,7 +62,7 @@ Tri::setTri(TriIndex edgeIndex, Tri* tri)
         case 1: tri1 = tri; return;
         case 2: tri2 = tri; return;
     }
-    assert(false); // never reach here
+    throw util::IllegalArgumentException("Tri::setTri - invalid index");
 }
 
 /* private */
@@ -283,13 +284,12 @@ Tri::hasCoordinate(const Coordinate& v) const
 const Coordinate&
 Tri::getCoordinate(TriIndex i) const
 {
-    if ( i == 0 ) {
-        return p0;
+    switch(i) {
+    case 0: return p0;
+    case 1: return p1;
+    case 2: return p2;
     }
-    if ( i == 1 ) {
-        return p1;
-    }
-    return p2;
+    throw util::IllegalArgumentException("Tri::getCoordinate - invalid index");
 }
 
 /* public */
@@ -327,8 +327,7 @@ Tri::getAdjacent(TriIndex i) const
     case 1: return tri1;
     case 2: return tri2;
     }
-    assert(false); // Never get here
-    return nullptr;
+    throw util::IllegalArgumentException("Tri::getAdjacent - invalid index");
 }
 
 /* public */
@@ -377,6 +376,9 @@ Tri::isInteriorVertex(TriIndex index) const
         const Tri* adj = curr->getAdjacent(currIndex);
         if (adj == nullptr) return false;
         TriIndex adjIndex = adj->getIndex(curr);
+        if (adjIndex < 0) {
+            throw util::IllegalStateException("Inconsistent adjacency - invalid triangulation");
+        }
         curr = adj;
         currIndex = Tri::next(adjIndex);
     }
@@ -508,4 +510,3 @@ operator<<(std::ostream& os, const Tri& tri)
 } // namespace geos.triangulate.tri
 } // namespace geos.triangulate
 } // namespace geos
-

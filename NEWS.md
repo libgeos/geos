@@ -2,7 +2,7 @@
 2023-xx-xx
 
 - Fixes/Improvements:
-
+  - Add exceptions for invalid indexes in Tri methods (GH-853, Martin Davis)
 
 
 ## Changes in 3.11.2
