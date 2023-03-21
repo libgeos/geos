@@ -55,6 +55,7 @@ xxxx-xx-xx
   - Improve OffsetCurve behaviour and add Joined mode (JTS-956, Martin Davis)
   - GeometryPrecisionReducer preserves input collection types (GH-846, Paul Ramsey)
   - Fix OffsetCurve to handle zero-distance offsets (GH-850, Martin Davis)
+  - Add exceptions for invalid indexes in Tri methods (GH-853, Martin Davis)
 
 ## Changes in 3.11.0
 2022-07-01
