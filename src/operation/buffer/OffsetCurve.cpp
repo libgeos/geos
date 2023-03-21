@@ -123,6 +123,10 @@ OffsetCurve::computeCurve(const LineString& lineGeom, double p_distance)
     if (lineGeom.getNumPoints() < 2 || lineGeom.getLength() == 0.0) {
         return geomFactory->createLineString();
     }
+    //-- zero offset distance
+    if (p_distance == 0) {
+      return lineGeom.clone();
+    }
     if (lineGeom.getNumPoints() == 2) {
         return offsetSegment(lineGeom.getCoordinatesRO(), p_distance);
     }
@@ -350,4 +354,3 @@ OffsetCurve::next(std::size_t i, std::size_t size) {
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-

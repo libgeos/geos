@@ -3,7 +3,7 @@
 
 - Fixes/Improvements:
   - Add exceptions for invalid indexes in Tri methods (GH-853, Martin Davis)
-
+  - Fix OffsetCurve to handle zero-distance offsets (GH-850, Martin Davis)
 
 ## Changes in 3.11.2
 2023-03-16
