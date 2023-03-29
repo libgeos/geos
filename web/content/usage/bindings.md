@@ -21,6 +21,7 @@ GEOS can be accessed from a variety of other languages via bindings to the libra
 
 ## PHP
 * [php-geos](https://git.osgeo.org/gitea/geos/php-geos).
+* [GeoPHP](https://geophp.net/geos.html).
 
 ## Python
 Python bindings are available via:
