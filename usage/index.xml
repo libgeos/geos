@@ -55,7 +55,7 @@ You can explore the C++ model via the Doxygen reference.</description>
       
       <guid>https://libgeos.org/usage/bindings/</guid>
       <description>GEOS can be accessed from a variety of other languages via bindings to the library.
-Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos.  Python Python bindings are available via:
+Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos. GeoPHP.  Python Python bindings are available via:
  Shapely PyGEOS Calling functions from libgeos_c via Python ctypes GeoPandas  R  sf geos  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  Geospatial applications using GEOS include:</description>
     </item>
     
