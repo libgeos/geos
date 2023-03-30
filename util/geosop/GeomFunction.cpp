@@ -34,6 +34,7 @@
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/geom/util/Densifier.h>
 #include <geos/geom/util/GeometryFixer.h>
+#include <geos/linearref/LengthIndexedLine.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -99,6 +100,7 @@ const std::string catDist = "Distance";
 const std::string catGeom = "Geometry";
 const std::string catMetric = "Metric";
 const std::string catOverlay = "Overlay";
+const std::string catLinearref = "Linear Referencing";
 const std::string catRel = "Spatial Relationship";
 const std::string catValid = "Validity";
 
@@ -581,6 +583,27 @@ GeomFunction::init()
             auto factory = geom->getFactory();
             auto res = factory->createLineString( std::move(cs) );
             return new Result( std::move(res) );
+        });
+
+//----------------------------------------
+
+    add("interpolate", 1, 0, Result::typeGeometry, catLinearref,
+        "compute a point interpolated along a distance from the start of geometry A",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void) geomB;  // prevent unused variable warning
+            auto lil = geos::linearref::LengthIndexedLine( geom.get() );
+            auto coord = geos::geom::Coordinate( lil.extractPoint(d) );
+            auto factory = geom->getFactory();
+            auto res = factory->createPoint( std::move(coord) );
+            return new Result( std::move(res) );
+        });
+
+    add("project", 2, 0, Result::typeDouble, catLinearref,
+        "compute the distance of point B projected onto line A from the start of the line",
+        [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d)->Result* {
+            (void)d;  // prevent unused variable warning
+            auto inputPt = geos::geom::Coordinate( *geomB->getCoordinate() );
+            return new Result( geos::linearref::LengthIndexedLine( geom.get() ).project( inputPt ) );
         });
 
 //----------------------------------------
