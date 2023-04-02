@@ -52,11 +52,11 @@ xxxx-xx-xx
   - HausdorffDistance: Fix crash on collection containing empty point (GH-840, Dan Baston)
   - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
-  - Improve OffsetCurve behaviour and add Joined mode (JTS-956, Martin Davis)
-  - GeometryPrecisionReducer preserves input collection types (GH-846, Paul Ramsey)
-  - Fix OffsetCurve to handle zero-distance offsets (GH-850, Martin Davis)
-  - Add exceptions for invalid indexes in Tri methods (GH-853, Martin Davis)
-  - LargestEmptyCircle: enhannce boundary to allow any polygonal geometry (GH-859, Martin Davis)
+  - OffsetCurve: improve behaviour and add Joined mode (JTS-956, Martin Davis)
+  - GeometryPrecisionReducer: preserve input collection types (GH-846, Paul Ramsey)
+  - OffsetCurve: handle zero-distance offsets (GH-850, Martin Davis)
+  - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
+  - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
 
 ## Changes in 3.11.0
 2022-07-01
