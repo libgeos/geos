@@ -116,17 +116,15 @@ private:
     /* private members */
     double tolerance;
     const geom::Geometry* obstacles;
+    std::unique_ptr<geom::Geometry> boundary;
     const geom::GeometryFactory* factory;
-    std::unique_ptr<geom::Geometry> boundary; // convexhull(obstacles)
+    geom::Envelope gridEnv;
     operation::distance::IndexedFacetDistance obstacleDistance;
     bool done;
     std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
     std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
     geom::Coordinate centerPt;
     geom::Coordinate radiusPt;
-
-    /* private methods */
-    void setBoundary(const geom::Geometry* obstacles);
 
     /**
     * Computes the signed distance from a point to the constraints
@@ -140,6 +138,7 @@ private:
     */
     double distanceToConstraints(const geom::Coordinate& c);
     double distanceToConstraints(double x, double y);
+    void initBoundary();
     void compute();
 
     /* private class */
