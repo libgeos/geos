@@ -62,10 +62,10 @@ struct test_lec_data {
     }
 
     void
-    checkCircle(const Geometry *geom, double build_tolerance, double x, double y, double expectedRadius)
+    checkCircle(const Geometry *obstacles, const Geometry *boundary, double build_tolerance, double x, double y, double expectedRadius)
     {
         double tolerance = 2*build_tolerance;
-        LargestEmptyCircle lec(geom, tolerance);
+        LargestEmptyCircle lec(obstacles, boundary, tolerance);
         std::unique_ptr<Point> centerPoint = lec.getCenter();
         Coordinate centerPt(*centerPoint->getCoordinate());
         Coordinate expectedCenter(x, y);
@@ -114,7 +114,15 @@ struct test_lec_data {
     checkCircle(std::string wkt, double tolerance, double x, double y, double expectedRadius)
     {
         std::unique_ptr<Geometry> geom(reader_.read(wkt));
-        checkCircle(geom.get(), tolerance, x, y, expectedRadius);
+        checkCircle(geom.get(), nullptr, tolerance, x, y, expectedRadius);
+    }
+
+    void
+    checkCircle(std::string wktObstacles, std::string wktBoundary, double tolerance, double x, double y, double expectedRadius)
+    {
+        std::unique_ptr<Geometry> obstacles(reader_.read(wktObstacles));
+        std::unique_ptr<Geometry> boundary(reader_.read(wktBoundary));
+        checkCircle(obstacles.get(), boundary.get(), tolerance, x, y, expectedRadius);
     }
 
 };
@@ -235,7 +243,59 @@ void object::test<9>
        0.01 );
 }
 
+// testBoundaryEmpty
+template<>
+template<>
+void object::test<10>
+()
+{
+ checkCircle("MULTIPOINT ((2 2), (8 8), (7 5))",
+        "POLYGON EMPTY",
+        0.01, 4.127, 4.127, 3 );
+}
+
+// testBoundarySquare
+template<>
+template<>
+void object::test<11>
+()
+{
+    checkCircle("MULTIPOINT ((2 2), (6 4), (8 8))",
+        "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+        0.01, 1.00390625, 8.99609375, 7.065 );
+}
+
+//testBoundarySquareObstaclesOutside
+template<>
+template<>
+void object::test<12>
+()
+{
+    checkCircle("MULTIPOINT ((10 10), (10 0))",
+        "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+        0.01, 1.0044, 4.997, 10.29 );
+}
+
+// testBoundaryMultiSquares
+template<>
+template<>
+void object::test<13>
+()
+{
+    checkCircle("MULTIPOINT ((10 10), (10 0), (5 5))",
+        "MULTIPOLYGON (((1 9, 9 9, 9 1, 1 1, 1 9)), ((15 20, 20 20, 20 15, 15 15, 15 20)))",
+        0.01, 19.995, 19.997, 14.137 );
+}
+
+// testBoundaryAsObstacle
+template<>
+template<>
+void object::test<14>
+()
+{
+    checkCircle("GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9)), POINT (4 3), POINT (7 6))",
+        "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+        0.01, 4, 6, 3 );
+}
 
 } // namespace tut
-
-
