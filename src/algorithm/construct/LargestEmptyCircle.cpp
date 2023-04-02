@@ -35,12 +35,9 @@
 
 using namespace geos::geom;
 
-
 namespace geos {
 namespace algorithm { // geos.algorithm
 namespace construct { // geos.algorithm.construct
-
-
 
 LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, double p_tolerance)
     : LargestEmptyCircle(p_obstacles, nullptr, p_tolerance)
@@ -54,29 +51,14 @@ LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, const Geomet
     , obstacleDistance(p_obstacles)
     , done(false)
 {
-    if (!p_boundary)
-    {
-        boundary = p_obstacles->convexHull();
-    }
-    else
-    {
-        boundary = p_boundary->clone();
-    }
-
     if (obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
     }
-    if (boundary->isEmpty()) {
-        throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
+    if (! p_boundary || p_boundary->isEmpty()) {
+        boundary = obstacles->convexHull();
     }
-    if (!boundary->covers(obstacles)) {
-        throw util::IllegalArgumentException("Boundary geometry does not cover obstacles");
-    }
-
-    // if boundary does not enclose an area cannot create a ptLocator
-    if (boundary->getDimension() >= 2) {
-        ptLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*(boundary.get())));
-        boundaryDistance.reset(new operation::distance::IndexedFacetDistance(boundary.get()));
+    else {
+        boundary = p_boundary->clone();
     }
 }
 
@@ -211,15 +193,26 @@ LargestEmptyCircle::createCentroidCell(const Geometry* geom)
     return cell;
 }
 
+/* private */
+void
+LargestEmptyCircle::initBoundary()
+{
+    gridEnv = *(boundary->getEnvelopeInternal());
+    // if boundary does not enclose an area cannot create a ptLocator
+    if (boundary->getDimension() >= 2) {
+        ptLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*(boundary.get())));
+        boundaryDistance.reset(new operation::distance::IndexedFacetDistance(boundary.get()));
+    }
+}
 
 /* private */
 void
 LargestEmptyCircle::compute()
 {
-
     // check if already computed
     if (done) return;
 
+    initBoundary();
     // if ptLocator is not present then result is degenerate (represented as zero-radius circle)
     if (!ptLocator) {
         const Coordinate* pt = obstacles->getCoordinate();
@@ -231,7 +224,7 @@ LargestEmptyCircle::compute()
 
     // Priority queue of cells, ordered by decreasing distance from constraints
     std::priority_queue<Cell> cellQueue;
-    createInitialGrid(obstacles->getEnvelopeInternal(), cellQueue);
+    createInitialGrid(&gridEnv, cellQueue);
 
     Cell farthestCell = createCentroidCell(obstacles);
 
@@ -286,5 +279,3 @@ LargestEmptyCircle::compute()
 } // namespace geos.algorithm.construct
 } // namespace geos.algorithm
 } // namespace geos
-
-
