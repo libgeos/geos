@@ -2,8 +2,10 @@
 2023-xx-xx
 
 - Fixes/Improvements:
-  - Add exceptions for invalid indexes in Tri methods (GH-853, Martin Davis)
-  - Fix OffsetCurve to handle zero-distance offsets (GH-850, Martin Davis)
+  - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
+  - OffsetCurve: handle zero-distance offsets (GH-850, Martin Davis)
+  - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
+
 
 ## Changes in 3.11.2
 2023-03-16
