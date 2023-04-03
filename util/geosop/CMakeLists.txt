@@ -11,7 +11,7 @@
 
 add_executable(geosop
   GeosOp.cpp
-  GeomFunction.cpp
+  GeometryOp.cpp
   )
 
 target_link_libraries(geosop PRIVATE geos geos_c)

@@ -28,7 +28,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "GeomFunction.h"
+#include "GeometryOp.h"
 #include "GeosOp.h"
 #include "cxxopts.hpp"
 
@@ -52,8 +52,6 @@ static bool endsWith(const std::string& str, const std::string& suffix)
 }
 
 int main(int argc, char** argv) {
-    GeomFunction::init();
-
     GeosOpArgs cmdArgs;
 
     cxxopts::Options options("geosop", "Executes GEOS geometry operations");
@@ -95,7 +93,7 @@ int main(int argc, char** argv) {
             std::cout << "- Negative numeric op arguments can be specified with leading N:  e.g. N-0.1" << std::endl;
             std::cout << std::endl;
             std::cout << "Operations:" << std::endl;
-            std::vector<std::string> ops = GeomFunction::list();
+            std::vector<std::string> ops = GeometryOp::listOps();
             for (auto opName : ops) {
                std::cout << "  " << opName << std::endl;
             }
@@ -340,7 +338,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
 }
 
 void GeosOp::run() {
-    GeomFunction* fun = getFun();
+    GeometryOp* op = getOp();
 
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
@@ -348,7 +346,7 @@ void GeosOp::run() {
     auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
 
     //--- collect input into single geometry collection if required
-    bool doCollect = args.isCollect || fun->isAggregate();
+    bool doCollect = args.isCollect || op->isAggregate();
     if (doCollect && geomsLoadA.size() > 1) {
         geomA = collect( geomsLoadA );
     }
@@ -361,7 +359,7 @@ void GeosOp::run() {
     //------------------------
 
     try {
-        execute(fun);
+        execute(op);
     }
     catch (std::exception &e) {
         std::cerr << "Run-time exception: " << e.what() << std::endl;
@@ -378,48 +376,49 @@ void GeosOp::run() {
     }
 }
 
-GeomFunction* GeosOp::getFun() {
-    std::string op = args.opName;
+GeometryOp* GeosOp::getOp() {
+    std::string opName = args.opName;
 
-    GeomFunction * fun;
-    if (op == "" || op == "no-op") {
-        op = "copy";
+    GeometryOp * op;
+    //-- default op is to copy geom
+    if (opName == "" || opName == "no-op") {
+        opName = "copy";
     }
-    fun = GeomFunction::find(op);
+    op = GeometryOp::find(opName);
 
-    if (fun == nullptr) {
-        std::cerr << "Unknown operation: " << op << std::endl;
+    if (op == nullptr) {
+        std::cerr << "Unknown operation: " << opName << std::endl;
         exit(1);
     }
-    return fun;
+    return op;
 }
 
-void GeosOp::execute(GeomFunction* fun) {
+void GeosOp::execute(GeometryOp* op) {
 
-    if (fun->isBinary()) {
-        executeBinary(fun);
+    if (op->isBinary()) {
+        executeBinary(op);
     }
     else {
-        executeUnary(fun);
+        executeUnary(op);
     }
 }
 
-void GeosOp::executeUnary(GeomFunction * fun) {
+void GeosOp::executeUnary(GeometryOp * op) {
     for (unsigned i = 0; i < geomA.size(); i++) {
         vertexCount += geomA[i]->getNumPoints();
-        Result* result = executeOpRepeat(fun, i, geomA[i], 0, nullptr);
+        Result* result = executeOpRepeat(op, i, geomA[i], 0, nullptr);
 
         output(result);
         delete result;
     }
 }
 
-void GeosOp::executeBinary(GeomFunction * fun) {
+void GeosOp::executeBinary(GeometryOp * op) {
     for (unsigned ia = 0; ia < geomA.size(); ia++) {
         for (unsigned ib = 0; ib < geomB.size(); ib++) {
             vertexCount += geomA[ia]->getNumPoints();
             vertexCount += geomB[ib]->getNumPoints();
-            Result* result = executeOpRepeat(fun, ia, geomA[ia], ib, geomB[ib]);
+            Result* result = executeOpRepeat(op, ia, geomA[ia], ib, geomB[ib]);
 
             output(result);
             delete result;
@@ -437,7 +436,7 @@ std::string inputDesc(std::string name, unsigned int index, const std::unique_pt
     return desc;
 }
 
-Result* GeosOp::executeOpRepeat(GeomFunction * fun,
+Result* GeosOp::executeOpRepeat(GeometryOp * op,
     unsigned int indexA,
     const std::unique_ptr<Geometry>& gA,
     unsigned int indexB,
@@ -445,12 +444,12 @@ Result* GeosOp::executeOpRepeat(GeomFunction * fun,
 {
     Result* res = nullptr;
     for (int i = 0; i < args.repeatNum; i++) {
-        res = executeOp(fun, indexA, gA, indexB, gB);
+        res = executeOp(op, indexA, gA, indexB, gB);
     }
     return res;
 }
 
-Result* GeosOp::executeOp(GeomFunction * fun,
+Result* GeosOp::executeOp(GeometryOp * op,
     unsigned int indexA,
     const std::unique_ptr<Geometry>& gA,
     unsigned int indexB,
@@ -460,7 +459,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
     geos::util::Profile sw( "op" );
     sw.start();
 
-    Result* result = fun->execute( gA, gB, args.opArg1  );
+    Result* result = op->execute( gA, gB, args.opArg1  );
     sw.stop();
     double time = sw.getTot();
     totalTime += time;
@@ -468,7 +467,7 @@ Result* GeosOp::executeOp(GeomFunction * fun,
     // avoid cost of logging if not verbose
     if (args.isVerbose) {
         log(
-            "[ " + std::to_string(opCount) + "] " + fun->name() + ": "
+            "[ " + std::to_string(opCount) + "] " + op->name() + ": "
             + inputDesc("A", indexA, gA) + " "
             + inputDesc("B", indexB, gB)
             + " -> " + result->metadata()
