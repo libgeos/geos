@@ -110,7 +110,7 @@ struct GeometryOpCreator {
 * Static array of operation definitions.
 * All metadata for an operation is defined here.
 * Operation objects are created on-demand via a
-* lamba, for efficiency.
+* lambda, for efficiency.
 *
 * To add an operation, add an entry to this array.
 *
@@ -132,6 +132,22 @@ std::vector<GeometryOpCreator> opRegistry {
     catGeom, "envelope of geometry",
     [](const std::unique_ptr<Geometry>& geom) {
         return new Result( geom->getEnvelope() );
+    });
+}},
+{"hasZ", [](std::string name) { return GeometryOp::create(name,
+    catGeom,
+    "test if geometry has Z ordinate",
+    Result::typeBool,
+    [](const std::unique_ptr<Geometry>& geom) {
+        return new Result( geom->hasZ() );
+    });
+}},
+{"hasM", [](std::string name) { return GeometryOp::create(name,
+    catGeom,
+    "test if geometry has M ordinate",
+    Result::typeBool,
+    [](const std::unique_ptr<Geometry>& geom) {
+        return new Result( geom->hasM() );
     });
 }},
 {"isEmpty", [](std::string name) { return GeometryOp::create(name,
