@@ -20,20 +20,6 @@ target_include_directories(test_geos_unit
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 
-add_executable(test_cs ${CMAKE_CURRENT_LIST_DIR}/geom/CoordinateSequenceTest.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/geos_unit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../../src/geom/Coordinate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../../src/io/Unload.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../../src/geom/CoordinateSequence.cpp)
-target_link_libraries(test_cs PRIVATE geos_cxx_flags)
-target_include_directories(test_cs
-  PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
-get_target_property(x geos INCLUDE_DIRECTORIES)
-target_include_directories(test_cs
-    PRIVATE ${x})
-
-
 file(GLOB_RECURSE _testfiles ${CMAKE_CURRENT_LIST_DIR}/**/*Test.cpp CONFIGURE_DEPEND)
 foreach(_testfile ${_testfiles})
     string(REPLACE ${CMAKE_CURRENT_LIST_DIR}/ "" _testname ${_testfile})
