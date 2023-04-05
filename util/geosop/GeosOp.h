@@ -20,6 +20,10 @@
 using namespace geos;
 using namespace geos::geom;
 
+class OpParams {
+public:
+    double arg1;
+};
 
 class GeosOpArgs {
 
@@ -44,8 +48,6 @@ public:
     std::string srcB;
 
     std::string opName;
-    double opArg1 = 0.0;
-    //std::string opArg2;
 };
 
 class GeosOp {
@@ -55,7 +57,7 @@ public:
 
     GeosOp(GeosOpArgs& args);
     ~GeosOp();
-    void run();
+    void run(OpParams& opParams);
 
 private:
 
@@ -72,15 +74,17 @@ private:
     std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit);
     std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit);
     GeometryOp* getOp();
-    void execute(GeometryOp * op);
-    void executeUnary(GeometryOp * op);
-    void executeBinary(GeometryOp * op);
+    void execute(GeometryOp * op, OpParams& opParams);
+    void executeUnary(GeometryOp * op, OpParams& opParams);
+    void executeBinary(GeometryOp * op, OpParams& opParams);
     Result* executeOpRepeat(GeometryOp * op,
         unsigned int indexA, const  std::unique_ptr<Geometry>& geomA,
-        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB);
+        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB,
+        OpParams& opParams);
     Result* executeOp(GeometryOp * op,
         unsigned int indexA, const  std::unique_ptr<Geometry>& geomA,
-        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB);
+        unsigned int indexB, const  std::unique_ptr<Geometry>& geomB,
+        OpParams& opParams);
     void output(Result* result);
     void outputExplode(std::unique_ptr<Geometry>& geom);
     void outputGeometry( const Geometry* geom);
