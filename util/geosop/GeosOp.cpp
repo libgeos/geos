@@ -23,6 +23,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBStreamReader.h>
+#include <geos/io/WKBWriter.h>
 
 #include <fstream>
 #include <iostream>
@@ -514,15 +515,22 @@ void GeosOp::outputGeometry(const Geometry * geom) {
     }
 
     if (args.format == GeosOpArgs::fmtWKB ) {
-        std::cout << *(geom) << std::endl;
+        // output as hex-encoded WKB
+        WKBWriter writer;
+        writer.setOutputDimension(4);
+        writer.writeHEX(*geom, std::cout);
+        std::cout << std::endl;
     }
     else {
         // output as text/WKT
         WKTWriter writer;
-        // turn off stoopid fixed precision
-        writer.setTrim(true);
+        writer.setOutputDimension(4);
         if (args.precision >= 0) {
              writer.setRoundingPrecision(args.precision);
+        }
+        else {
+            // turn off stoopid fixed precision
+            writer.setTrim(true);
         }
         std::cout << writer.write(geom) << std::endl;
     }
