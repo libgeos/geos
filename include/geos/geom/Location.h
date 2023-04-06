@@ -15,9 +15,9 @@
 #ifndef GEOS_GEOM_LOCATION_H
 #define GEOS_GEOM_LOCATION_H
 
-#include <geos/export.h>
 #include <iostream> // for ostream
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 namespace geos {

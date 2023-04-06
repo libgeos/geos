@@ -21,16 +21,15 @@
 #ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 #define GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 
-#include <geos/export.h>
-#include <geos/inline.h>
-#include <geos/geom/Location.h>
-
 #include <vector>
 #include <array>
 #include <string>
 #include <cassert>
 #include <cstdint>
 
+#include <geos/export.h>
+#include <geos/inline.h>
+#include <geos/geom/Location.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)

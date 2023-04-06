@@ -21,13 +21,15 @@
 #ifndef GEOS_GEOMGRAPH_LABEL_H
 #define GEOS_GEOMGRAPH_LABEL_H
 
+#include <cstdint>
+#include <iosfwd> // for operator<<
+
 #include <geos/export.h>
+#include <geos/inline.h>
+
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/TopologyLocation.h>
 
-#include <geos/inline.h>
-
-#include <iosfwd> // for operator<<
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
