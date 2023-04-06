@@ -80,16 +80,17 @@ int main(int argc, char** argv) {
     options.add_options()
         ("a", "source for A geometries (WKT, WKB, file, stdin, stdin.wkb)", cxxopts::value<std::string>( cmdArgs.srcA ))
         ("b", "source for B geometries (WKT, WKB, file, stdin, stdin.wkb)", cxxopts::value<std::string>( cmdArgs.srcB ))
-        ("alimit", "Limit number of A geometries read", cxxopts::value<int>( cmdArgs.limitA ))
+        ("l,limita", "Limit number of A geometries read", cxxopts::value<int>( cmdArgs.limitA ))
+        ("o,offseta", "Skip reading first N geometries of A", cxxopts::value<int>( cmdArgs.offsetA ) )
         ("c,collect", "Collect input into single geometry (automatic for AGG ops)", cxxopts::value<bool>( cmdArgs.isCollect ))
         ("e,explode", "Explode results into component geometries", cxxopts::value<bool>( cmdArgs.isExplode))
         ("f,format", "Output format (wkt, wkb or txt)", cxxopts::value<std::string>( ))
-        ("h,help", "Print help")
         ("p,precision", "Set number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
         ("q,quiet", "Disable result output", cxxopts::value<bool>( cmdArgs.isQuiet ) )
         ("r,repeat", "Repeat operation N times", cxxopts::value<int>( cmdArgs.repeatNum ) )
         ("t,time", "Print execution time", cxxopts::value<bool>( cmdArgs.isShowTime ) )
         ("v,verbose", "Verbose output", cxxopts::value<bool>( cmdArgs.isVerbose )->default_value("false"))
+        ("h,help", "Print help")
 
         ("opName", "Operation name", cxxopts::value<std::string>()->default_value("no-op"))
         ("opArgs", "Operation arguments ", cxxopts::value<std::vector<std::string>>())
@@ -220,54 +221,58 @@ bool isWKBLiteral(std::string s) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKTFile(std::istream& in, int limit) {
+readWKTFile(std::istream& in, int limit, int offset) {
 
     WKTStreamReader rdr( in );
     std::vector<std::unique_ptr<Geometry>> geoms;
     int count = 0;
-    while (limit < 0 || count < limit) {
+    while (limit < 0 || (int) geoms.size() < limit) {
         auto geom = rdr.next();
         if (geom == nullptr)
             break;
-        geoms.push_back(std::move(geom));
+        if (count > offset) {
+            geoms.push_back(std::move(geom));
+        }
         count++;
     }
     return geoms;
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKTFile(std::string src, int limit) {
+readWKTFile(std::string src, int limit, int offset) {
     if (src == "-" || src == "-.wkt" || src == "stdin" || src == "stdin.wkt") {
-        return readWKTFile( std::cin, limit );
+        return readWKTFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
-    auto geoms = readWKTFile( f, limit );
+    auto geoms = readWKTFile( f, limit, offset );
     f.close();
     return geoms;
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKBFile(std::istream& in, int limit) {
+readWKBFile(std::istream& in, int limit, int offset) {
     WKBStreamReader rdr( in );
     std::vector<std::unique_ptr<Geometry>> geoms;
     int count = 0;
-    while (limit < 0 || count < limit) {
+    while (limit < 0 || (int) geoms.size() < limit) {
         auto geom = rdr.next();
         if (geom == nullptr)
             break;
-        geoms.push_back(std::move(geom));
+        if (count > offset) {
+            geoms.push_back(std::move(geom));
+        }
         count++;
     }
     return geoms;
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKBFile(std::string src, int limit) {
+readWKBFile(std::string src, int limit, int offset) {
     if (src == "-.wkb" || src == "stdin.wkb" ) {
-        return readWKBFile( std::cin, limit );
+        return readWKBFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
-    auto geoms = readWKBFile( f, limit );
+    auto geoms = readWKBFile( f, limit, offset );
     f.close();
     return geoms;
 }
@@ -280,7 +285,7 @@ void GeosOp::log(std::string s) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-GeosOp::readInput(std::string name, std::string src, int limit) {
+GeosOp::readInput(std::string name, std::string src, int limit, int offset) {
     std::vector<std::unique_ptr<Geometry>> geoms;
     std::string srcDesc = "Input " + name + ": ";
     if ( isWKTLiteral(src) ) {
@@ -300,11 +305,11 @@ GeosOp::readInput(std::string name, std::string src, int limit) {
     }
     else if (endsWith(src, ".wkb")) {
         log(srcDesc + "WKB file " + src);
-        geoms = readWKBFile( src, limit );
+        geoms = readWKBFile( src, limit, offset );
     }
     else {
         log(srcDesc + "WKT file " + src);
-        geoms = readWKTFile( src, limit );
+        geoms = readWKTFile( src, limit, offset );
     }
     return geoms;
 }
@@ -325,7 +330,7 @@ std::string summaryStats(std::vector<std::unique_ptr<Geometry>>& geoms) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-GeosOp::loadInput(std::string name, std::string src, int limit) {
+GeosOp::loadInput(std::string name, std::string src, int limit, int offset) {
     if (src.length() == 0) {
         std::vector<std::unique_ptr<Geometry>> geoms;
         return geoms;
@@ -335,7 +340,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
 
     std::vector<std::unique_ptr<Geometry>> geoms;
     try {
-      geoms = readInput( name, src, limit );
+      geoms = readInput( name, src, limit, offset );
     } catch (geos::util::GEOSException & e) {
       std::cout << e.what() << std::endl;
       exit(1);
@@ -358,7 +363,7 @@ void GeosOp::run(OpArguments& opArgs) {
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
-    auto geomsLoadA = loadInput("A", args.srcA, args.limitA);
+    auto geomsLoadA = loadInput("A", args.srcA, args.limitA, args.offsetA);
 
     //--- collect input into single geometry collection if required
     bool doCollect = args.isCollect || op->isAggregate();
@@ -369,7 +374,7 @@ void GeosOp::run(OpArguments& opArgs) {
         geomA = std::move(geomsLoadA);
     }
 
-    geomB = loadInput("B", args.srcB, -1);
+    geomB = loadInput("B", args.srcB, -1, -1);
 
     //------------------------
 

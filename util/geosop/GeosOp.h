@@ -44,6 +44,7 @@ public:
 
     std::string srcA;
     int limitA = -1;
+    int offsetA = -1;
     bool isCollect = true;
     bool isExplode = false;
 
@@ -73,8 +74,8 @@ private:
 
     std::vector<std::unique_ptr<Geometry>> geomB;
 
-    std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit);
-    std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit);
+    std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit, int offset);
+    std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit, int offset);
     GeometryOp* getOp();
     void execute(GeometryOp * op, OpArguments& opArgs);
     void executeUnary(GeometryOp * op, OpArguments& opArgs);
