@@ -74,7 +74,7 @@ double parseNumber(std::string s) {
 
 int main(int argc, char** argv) {
     GeosOpArgs cmdArgs;
-    OpParams opParams;
+    OpArguments opArgs;
 
     cxxopts::Options options("geosop", "Executes GEOS geometry operations");
     options.add_options()
@@ -149,17 +149,17 @@ int main(int argc, char** argv) {
             std::cerr << "too many positional arguments: " << v.size() << std::endl;
             exit(1);
         }
-        opParams.nArgs = (int) v.size();
+        opArgs.nArgs = (int) v.size();
         if (v.size() >= 1) {
-            opParams.arg1 = parseNumber(v[0]);
+            opArgs.arg1 = parseNumber(v[0]);
         }
         if (v.size() >= 2) {
-            opParams.arg2 = parseNumber(v[1]);
+            opArgs.arg2 = parseNumber(v[1]);
         }
     }
 
     GeosOp geosop(cmdArgs);
-    geosop.run(opParams);
+    geosop.run(opArgs);
 }
 
 GeosOp::GeosOp(GeosOpArgs& arg)
@@ -347,10 +347,10 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
     return geoms;
 }
 
-void GeosOp::run(OpParams& opParams) {
+void GeosOp::run(OpArguments& opArgs) {
     GeometryOp* op = getOp();
 
-    if (opParams.nArgs != op->nParam()) {
+    if (opArgs.nArgs != op->nParam()) {
         std::cerr << "wrong number of arguments for operation: " << op->name() << std::endl;
         return;
     }
@@ -374,7 +374,7 @@ void GeosOp::run(OpParams& opParams) {
     //------------------------
 
     try {
-        execute(op, opParams);
+        execute(op, opArgs);
     }
     catch (std::exception &e) {
         std::cerr << "Run-time exception: " << e.what() << std::endl;
@@ -408,32 +408,32 @@ GeometryOp* GeosOp::getOp() {
     return op;
 }
 
-void GeosOp::execute(GeometryOp* op, OpParams& opParams) {
+void GeosOp::execute(GeometryOp* op, OpArguments& opArgs) {
 
     if (op->isBinary()) {
-        executeBinary(op, opParams);
+        executeBinary(op, opArgs);
     }
     else {
-        executeUnary(op, opParams);
+        executeUnary(op, opArgs);
     }
 }
 
-void GeosOp::executeUnary(GeometryOp * op, OpParams& opParams) {
+void GeosOp::executeUnary(GeometryOp * op, OpArguments& opArgs) {
     for (unsigned i = 0; i < geomA.size(); i++) {
         vertexCount += geomA[i]->getNumPoints();
-        Result* result = executeOpRepeat(op, i, geomA[i], 0, nullptr, opParams);
+        Result* result = executeOpRepeat(op, i, geomA[i], 0, nullptr, opArgs);
 
         output(result);
         delete result;
     }
 }
 
-void GeosOp::executeBinary(GeometryOp * op, OpParams& opParams) {
+void GeosOp::executeBinary(GeometryOp * op, OpArguments& opArgs) {
     for (unsigned ia = 0; ia < geomA.size(); ia++) {
         for (unsigned ib = 0; ib < geomB.size(); ib++) {
             vertexCount += geomA[ia]->getNumPoints();
             vertexCount += geomB[ib]->getNumPoints();
-            Result* result = executeOpRepeat(op, ia, geomA[ia], ib, geomB[ib], opParams);
+            Result* result = executeOpRepeat(op, ia, geomA[ia], ib, geomB[ib], opArgs);
 
             output(result);
             delete result;
@@ -456,11 +456,11 @@ Result* GeosOp::executeOpRepeat(GeometryOp * op,
     const std::unique_ptr<Geometry>& gA,
     unsigned int indexB,
     const std::unique_ptr<Geometry>& gB,
-    OpParams& opParams)
+    OpArguments& opArgs)
 {
     Result* res = nullptr;
     for (int i = 0; i < args.repeatNum; i++) {
-        res = executeOp(op, indexA, gA, indexB, gB, opParams);
+        res = executeOp(op, indexA, gA, indexB, gB, opArgs);
     }
     return res;
 }
@@ -470,13 +470,13 @@ Result* GeosOp::executeOp(GeometryOp * op,
     const std::unique_ptr<Geometry>& gA,
     unsigned int indexB,
     const std::unique_ptr<Geometry>& gB,
-    OpParams& opParams) {
+    OpArguments& opArgs) {
 
     opCount++;
     geos::util::Profile sw( "op" );
     sw.start();
 
-    Result* result = op->execute( gA, gB, opParams.arg1, opParams.arg2  );
+    Result* result = op->execute( gA, gB, opArgs.arg1, opArgs.arg2  );
     sw.stop();
     double time = sw.getTot();
     totalTime += time;
