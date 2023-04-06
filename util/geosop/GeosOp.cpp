@@ -52,6 +52,26 @@ static bool endsWith(const std::string& str, const std::string& suffix)
     return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
 }
 
+double parseNumber(std::string s) {
+    auto val = s;
+    /**
+     * To get around cmdline parset limitation for parsing neg numbers,
+     * allow syntax "Nnum" as well
+     */
+    if (startsWith(val, "N")) {
+        val = val.substr(1, val.size()-1);
+    }
+    try {
+        return std::stod(val);
+    } catch (const std::invalid_argument&) {
+        std::cerr << "Invalid positional argument '" << val << "' (expected number)" << std::endl;
+        exit(1);
+    } catch (const std::out_of_range&) {
+        std::cerr << "Out of range positional argument '" << val << "' (expected double)" << std::endl;
+        exit(1);
+    }
+}
+
 int main(int argc, char** argv) {
     GeosOpArgs cmdArgs;
     OpParams opParams;
@@ -121,32 +141,20 @@ int main(int argc, char** argv) {
     if (result.count("opName")) {
         cmdArgs.opName = result["opName"].as<std::string>();
     }
-    //--- parse positional op arg (only one supported for now)
-    if (result.count("opArgs"))
-    {
+    //--- parse positional op arg
+    // TODO: verify param number against operation
+    if (result.count("opArgs")) {
         auto& v = result["opArgs"].as<std::vector<std::string>>();
+        if ( v.size() > 2 ) {
+            std::cerr << "too many positional arguments: " << v.size() << std::endl;
+            exit(1);
+        }
+        opParams.nArgs = (int) v.size();
         if (v.size() >= 1) {
-            if ( v.size() > 1 )
-            {
-                std::cerr << "positional arguments after the second one are discarded" << std::endl;
-            }
-            auto val = v[0];
-            /**
-             * To get around cmdline parset limitation for parsing neg numbers,
-             * allow syntax "Nnum" as well
-             */
-            if (startsWith(val, "N")) {
-                val = val.substr(1, val.size()-1);
-            }
-            try {
-                opParams.arg1 = std::stod(val);
-            } catch (const std::invalid_argument&) {
-                std::cerr << "Invalid positional argument '" << val << "' (expected number)" << std::endl;
-                exit(1);
-            } catch (const std::out_of_range&) {
-                std::cerr << "Out of range positional argument '" << val << "' (expected double)" << std::endl;
-                exit(1);
-            }
+            opParams.arg1 = parseNumber(v[0]);
+        }
+        if (v.size() >= 2) {
+            opParams.arg2 = parseNumber(v[1]);
         }
     }
 
@@ -342,6 +350,11 @@ GeosOp::loadInput(std::string name, std::string src, int limit) {
 void GeosOp::run(OpParams& opParams) {
     GeometryOp* op = getOp();
 
+    if (opParams.nArgs != op->nParam()) {
+        std::cerr << "wrong number of arguments for operation: " << op->name() << std::endl;
+        return;
+    }
+
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
@@ -463,7 +476,7 @@ Result* GeosOp::executeOp(GeometryOp * op,
     geos::util::Profile sw( "op" );
     sw.start();
 
-    Result* result = op->execute( gA, gB, opParams.arg1  );
+    Result* result = op->execute( gA, gB, opParams.arg1, opParams.arg2  );
     sw.stop();
     double time = sw.getTot();
     totalTime += time;

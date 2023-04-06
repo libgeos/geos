@@ -789,6 +789,15 @@ std::vector<GeometryOpCreator> opRegistry {
 
 //=============  category: Linear Referencing  ==================
 
+{"extractLine", [](std::string name) { return GeometryOp::create(name,
+    catLinearref,
+    "compute the line between two distances along linear geometry A",
+    [](const std::unique_ptr<Geometry>& geom, double d, double d2) {
+        auto lil = geos::linearref::LengthIndexedLine( geom.get() );
+        auto res = lil.extractLine(d, d2);
+        return new Result( std::move(res) );
+    });
+}},
 {"interpolate", [](std::string name) { return GeometryOp::create(name,
     catLinearref,
     "compute a point interpolated along a distance from the start of geometry A",
@@ -914,23 +923,30 @@ bool GeometryOp::isAggregate()
     return _isAggregate;
 }
 
+int GeometryOp::nParam()
+{
+    return numParam;
+}
+
 std::string GeometryOp::signature() {
     std::string sig =  " A";
     sig += isBinary() ? " B" : "  ";
     sig += "  ";
     sig += opName;
     if (numParam > 0) sig += " N";
+    if (numParam > 1) sig += " N";
     sig += _isAggregate ? " AGG" : "";
     sig += " > ";
     sig += Result::code(resultType);
     return sig;
 }
 
-Result * GeometryOp::execute( const std::unique_ptr<Geometry>& geomA, const std::unique_ptr<Geometry>& geomB, double d )
+Result * GeometryOp::execute( const std::unique_ptr<Geometry>& geomA, const std::unique_ptr<Geometry>& geomB, double d, double d2 )
 {
     if (numGeomParam == 1) {
         if (numParam == 0) return geomfun_G(geomA);
         if (numParam == 1) return geomfun_GD(geomA, d);
+        if (numParam == 2) return geomfun_GDD(geomA, d, d2);
     }
     if (numGeomParam == 2) {
         if (numParam == 0) return geomfun_GG(geomA, geomB);

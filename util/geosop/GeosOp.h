@@ -22,7 +22,9 @@ using namespace geos::geom;
 
 class OpParams {
 public:
+    int nArgs;
     double arg1;
+    double arg2;
 };
 
 class GeosOpArgs {

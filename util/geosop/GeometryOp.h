@@ -62,6 +62,9 @@ typedef std::function<Result *( const std::unique_ptr<Geometry>& )>
 typedef std::function<Result *( const std::unique_ptr<Geometry>&, double d )>
     geomFunSig_GD;
 
+typedef std::function<Result *( const std::unique_ptr<Geometry>&, double d, double d2 )>
+    geomFunSig_GDD;
+
 typedef std::function<Result *( const std::unique_ptr<Geometry>&, const std::unique_ptr<Geometry>& )>
     geomFunSig_GG;
 
@@ -98,6 +101,13 @@ public:
                     std::string cat,
                     std::string desc,
                     geomFunSig_GD fun) {
+        return new GeometryOp(name, cat, desc, false, Result::typeGeometry, fun);
+    }
+
+    static GeometryOp* create(std::string name,
+                    std::string cat,
+                    std::string desc,
+                    geomFunSig_GDD fun) {
         return new GeometryOp(name, cat, desc, false, Result::typeGeometry, fun);
     }
 
@@ -187,6 +197,23 @@ public:
                     std::string desc,
                     bool isAgg,
                     int resType,
+                    geomFunSig_GDD fun)
+        :
+        opName(strName),
+        numGeomParam(1),
+        numParam(2),
+        _isAggregate(isAgg),
+        resultType(resType),
+        category(cat),
+        description(desc),
+        geomfun_GDD(fun)
+    {}
+
+    GeometryOp(std::string strName,
+                    std::string cat,
+                    std::string desc,
+                    bool isAgg,
+                    int resType,
                     geomFunSig_GG fun)
         :
         opName(strName),
@@ -222,10 +249,12 @@ public:
     std::string name();
     bool isBinary();
     bool isAggregate();
+    int nParam();
     std::string signature();
 
     Result * execute( const std::unique_ptr<Geometry>& geomA,
-        const std::unique_ptr<Geometry>& geomB, double d );
+        const std::unique_ptr<Geometry>& geomB,
+        double d, double d2 );
 
 private:
 
@@ -241,6 +270,7 @@ private:
 
     geomFunSig_G geomfun_G;
     geomFunSig_GD geomfun_GD;
+    geomFunSig_GDD geomfun_GDD;
     geomFunSig_GG geomfun_GG;
     geomFunSig_GGD geomfun_GGD;
 };
