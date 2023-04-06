@@ -5,6 +5,7 @@
   - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
   - OffsetCurve: handle zero-distance offsets (GH-850, Martin Davis)
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
+  - Build issues with RH (GH-860)
 
 
 ## Changes in 3.11.2

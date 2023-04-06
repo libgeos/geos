@@ -16,6 +16,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <cstdint>
 #include <string>
 #include <vector>
 

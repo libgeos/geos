@@ -16,8 +16,8 @@
 #pragma once
 
 #include <geos/export.h>
-#include <string>
 #include <cstdint>
+#include <string>
 
 // Forward declarations
 namespace geos {
