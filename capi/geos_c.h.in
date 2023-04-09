@@ -1559,6 +1559,12 @@ extern int GEOS_DLL GEOSGeomGetZ_r(
     const GEOSGeometry *g,
     double *z);
 
+/** \see GEOSGeomGetM */
+extern int GEOS_DLL GEOSGeomGetM_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g,
+    double *m);
+
 /** \see GEOSGetInteriorRingN */
 extern const GEOSGeometry GEOS_DLL *GEOSGetInteriorRingN_r(
     GEOSContextHandle_t handle,
@@ -2557,6 +2563,17 @@ extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
 * \since 3.7
 */
 extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
+
+/**
+* Returns the M coordinate, for a Point input, or an
+* exception otherwise.
+* \param[in] g Input Point geometry
+* \param[out] m Pointer to hold return value
+* \returns 1 on success, 0 on exception
+*
+* \since 3.12
+*/
+extern int GEOS_DLL GEOSGeomGetM(const GEOSGeometry *g, double *m);
 
 /**
 * Returns the N'th ring for a Polygon input.

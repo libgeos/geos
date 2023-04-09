@@ -1885,6 +1885,25 @@ extern "C" {
     }
 
     /*
+     * For POINT
+     * returns 0 on exception, otherwise 1
+     */
+    int
+    GEOSGeomGetM_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* m)
+    {
+        using geos::geom::Point;
+
+        return execute(extHandle, 0, [&]() {
+            const Point* po = dynamic_cast<const Point*>(g1);
+            if(!po) {
+                throw IllegalArgumentException("Argument is not a Point");
+            }
+            *m = po->getM();
+            return 1;
+        });
+    }
+
+    /*
      * Call only on polygon
      * Return a pointer to the internal Geometry.
      */
