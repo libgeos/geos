@@ -288,7 +288,7 @@ CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) co
         case CoordinateSequence::Z:
             return hasZ() ? getAt<Coordinate>(index).z : DoubleNotANumber;
         case CoordinateSequence::M:
-            return hasM() ? (hasZ() ? getAt<CoordinateXYZM>(index).m : getAt<CoordinateXYM>(index).m) : DoubleNotANumber;
+            return hasM() ? getAt<CoordinateXYZM>(index).m : DoubleNotANumber;
         default:
             return DoubleNotANumber;
     }

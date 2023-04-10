@@ -9,12 +9,12 @@ namespace tut {
 // Test Group
 //
 
-struct test_geosgeomgetxyz_data : public capitest::utility {};
+struct test_geosgeomgetxyzm_data : public capitest::utility {};
 
-typedef test_group<test_geosgeomgetxyz_data> group;
+typedef test_group<test_geosgeomgetxyzm_data> group;
 typedef group::object object;
 
-group test_geosgeomgetxyz("capi::GEOSGeomGetXYZ");
+group test_geosgeomgetxyzm("capi::GEOSGeomGetXYZM");
 
 template<>
 template<>
@@ -41,7 +41,7 @@ template<>
 template<>
 void object::test<2>()
 {
-    input_ = GEOSGeomFromWKT("POINT (1 2 3)");
+    input_ = GEOSGeomFromWKT("POINT Z (1 2 3)");
     double z = 0;
     double m = 0;
 
@@ -71,7 +71,7 @@ template<>
 template<>
 void object::test<4>()
 {
-    input_ = GEOSGeomFromWKT("POINT (1 2 3 4)");
+    input_ = GEOSGeomFromWKT("POINT ZM (1 2 3 4)");
     double z = 0;
     double m = 0;
 
