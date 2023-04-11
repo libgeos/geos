@@ -77,6 +77,7 @@ void object::test<3>
     ensure(GEOSGeometryList_size(glist) == 2);
 
     GEOSGeometry* geom_ptr = GEOSGeometryList_pop(glist);
+    ensure(GEOSGeometryList_size(glist) == 1);
     ensure(geom2_ == geom_ptr);
 
     geom_ptr = GEOSGeometryList_at(glist, 0);
