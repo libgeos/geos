@@ -97,26 +97,25 @@ private:
             , area(p_area)
             {};
 
-        /**
-        * Orders corners by increasing area
-        * Used in std::priority_queue which
-        * ordinarily returns largest element.
-        * We invert sense of <> here in order to get
-        * smallest element first.
-        */
-        bool operator< (const Corner& rhs) const
-        {
-            return area > rhs.area;
+        inline int compareTo(const Corner& rhs) const {
+            if (area == rhs.getArea()) {
+                if (index == rhs.getIndex())
+                    return 0;
+                else return index < rhs.getIndex() ? -1 : 1;
+            }
+            else return area < rhs.getArea() ? -1 : 1;
+        }
+
+        inline bool operator< (const Corner& rhs) const {
+            return compareTo(rhs) < 0;
         };
 
-        bool operator> (const Corner& rhs) const
-        {
-            return area < rhs.area;
+        inline bool operator> (const Corner& rhs) const {
+            return compareTo(rhs) > 0;
         };
 
-        bool operator==(const Corner& rhs) const
-        {
-            return area == rhs.area;
+        inline bool operator==(const Corner& rhs) const {
+            return compareTo(rhs) == 0;
         };
 
         bool isVertex(std::size_t p_index) const;
@@ -126,6 +125,14 @@ private:
         bool intersects(const Coordinate& v, const LinkedRing& ring) const;
         bool isRemoved(const LinkedRing& ring) const;
         std::unique_ptr<LineString> toLineString(const LinkedRing& ring);
+
+        struct Greater {
+            inline bool operator()(const Corner & a, const Corner & b) const {
+                return a > b;
+            }
+        };
+
+        using PriorityQueue = std::priority_queue<Corner, std::vector<Corner>, Corner::Greater>;
 
     }; // class Corner
 
@@ -151,11 +158,11 @@ private:
     */
     std::unique_ptr<VertexSequencePackedRtree> vertexIndex;
 
-    std::priority_queue<Corner> cornerQueue;
+    Corner::PriorityQueue cornerQueue;
 
 
     void init(CoordinateSequence& ring, bool isOuter);
-    void addCorner(std::size_t i, std::priority_queue<Corner>& cornerQueue);
+    void addCorner(std::size_t i, Corner::PriorityQueue& cornerQueue);
     bool isAtTarget(const Corner& corner);
 
     /**
@@ -167,7 +174,7 @@ private:
     * @param corner the corner to remove
     * @param cornerQueue the corner queue
     */
-    void removeCorner(const Corner& corner, std::priority_queue<Corner>& cornerQueue);
+    void removeCorner(const Corner& corner, Corner::PriorityQueue& cornerQueue);
     bool isRemovable(const Corner& corner, const RingHullIndex& hullIndex) const;
 
     /**

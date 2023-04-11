@@ -17,6 +17,7 @@
 #include <geos/export.h>
 #include <geos/constants.h> // for DoubleNotANumber
 #include <set>
+#include <unordered_set>
 #include <stack>
 #include <vector> // for typedefs
 #include <string>
@@ -182,6 +183,8 @@ public:
             return h;
         };
     };
+
+    using UnorderedSet = std::unordered_set<Coordinate, HashCode>;
 
     ///  Returns a string of the form <I>(x,y,z)</I> .
     std::string toString() const;
@@ -556,7 +559,6 @@ inline double CoordinateXYZM::get<Ordinate::M>() const
 {
     return m;
 }
-
 
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateXY& c);
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);

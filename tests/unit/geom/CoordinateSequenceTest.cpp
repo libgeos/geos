@@ -7,6 +7,7 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/util.h>
+#include <geos/constants.h>
 #include <utility.h>
 // std
 #include <string>
@@ -925,7 +926,7 @@ void object::test<31>
     ensure_equals("z dimension ignored", CoordinateSequence::indexOf(&c1, &seq), 1u);
 
     CoordinateXY c2{9, 9};
-    ensure_equals("maxint when not found", CoordinateSequence::indexOf(&c2, &seq), std::numeric_limits<std::size_t>::max());
+    ensure_equals("maxint when not found", CoordinateSequence::indexOf(&c2, &seq), geos::NO_COORD_INDEX);
 }
 
 // Test add 4D to empty sequence with unspecified dimensionality

@@ -142,7 +142,7 @@ PolygonEarClipper::isValidEar(std::size_t cornerIdx, const std::array<Coordinate
 {
     std::size_t intApexIndex = findIntersectingVertex(cornerIdx, corner);
     //--- no intersections found
-    if (intApexIndex == NO_VERTEX_INDEX)
+    if (intApexIndex == NO_COORD_INDEX)
         return true;
     //--- check for duplicate corner apex vertex
     if ( vertex[intApexIndex].equals2D(corner[1]) ) {
@@ -161,7 +161,7 @@ PolygonEarClipper::findIntersectingVertex(std::size_t cornerIdx, const std::arra
     std::vector<std::size_t> result;
     vertexCoordIndex.query(cornerEnv, result);
 
-    std::size_t dupApexIndex = NO_VERTEX_INDEX;
+    std::size_t dupApexIndex = NO_COORD_INDEX;
     //--- check for duplicate vertices
     for (std::size_t i = 0; i < result.size(); i++) {
         std::size_t vertIndex = result[i];
@@ -191,10 +191,10 @@ PolygonEarClipper::findIntersectingVertex(std::size_t cornerIdx, const std::arra
         else if (geom::Triangle::intersects(corner[0], corner[1], corner[2], v))
             return vertIndex;
     }
-    if (dupApexIndex != NO_VERTEX_INDEX) {
+    if (dupApexIndex != NO_COORD_INDEX) {
         return dupApexIndex;
     }
-    return NO_VERTEX_INDEX;
+    return NO_COORD_INDEX;
 }
 
 
@@ -260,7 +260,7 @@ PolygonEarClipper::removeCorner()
     }
     vertexNext[cornerIndex[0]] = vertexNext[cornerApexIndex];
     vertexCoordIndex.remove(cornerApexIndex);
-    vertexNext[cornerApexIndex] = NO_VERTEX_INDEX;
+    vertexNext[cornerApexIndex] = NO_COORD_INDEX;
     vertexSize--;
     //-- adjust following corner indexes
     cornerIndex[1] = nextIndex(cornerIndex[0]);
@@ -272,7 +272,7 @@ PolygonEarClipper::removeCorner()
 bool
 PolygonEarClipper::isRemoved(std::size_t vertexIndex) const
 {
-    return NO_VERTEX_INDEX == vertexNext[vertexIndex];
+    return NO_COORD_INDEX == vertexNext[vertexIndex];
 }
 
 

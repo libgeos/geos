@@ -17,6 +17,7 @@
 #include <geos/index/VertexSequencePackedRtree.h>
 #include <geos/triangulate/tri/TriList.h>
 #include <geos/triangulate/tri/Tri.h>
+#include <geos/constants.h>
 
 #include <array>
 #include <memory>
@@ -69,8 +70,6 @@ private:
 
     // Members
 
-    static constexpr std::size_t NO_VERTEX_INDEX = std::numeric_limits<std::size_t>::max();
-
     bool isFlatCornersSkipped = false;
 
     /**
@@ -110,7 +109,7 @@ private:
     *
     * @param cornerIndex the index of the corner apex vertex
     * @param corner the corner vertices
-    * @return the index of an intersecting or duplicate vertex, or {@link #NO_VERTEX_INDEX} if none
+    * @return the index of an intersecting or duplicate vertex, or NO_COORD_INDEX if none
     */
     std::size_t findIntersectingVertex(std::size_t cornerIndex, const std::array<Coordinate, 3>& corner) const;
 

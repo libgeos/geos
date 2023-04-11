@@ -270,7 +270,7 @@ template<>
 void object::test<10>
 ()
 {
-    std::unordered_set<Coordinate, Coordinate::HashCode> coords;
+    Coordinate::UnorderedSet coords;
 
     coords.emplace(1, 2);
     ensure_equals(coords.size(), 1ul);

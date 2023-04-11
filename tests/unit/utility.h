@@ -182,6 +182,7 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
 
     using geos::geom::Polygon;
     using geos::geom::GeometryCollection;
+    using geos::io::WKTWriter;
 
     // Take clones so we can normalize them
     std::unique_ptr<geos::geom::Geometry> lhs = lhs_in->clone();
@@ -213,17 +214,20 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
     ensure_equals("boundary dimension do not match",
                   lhs->getBoundaryDimension(), rhs->getBoundaryDimension());
 
-    // NOTE - mloskot: Intentionally disabled, so simplified geometry
-    // can be compared to its original
-    ensure_equals("number of points do not match",
-                  lhs->getNumPoints(), rhs->getNumPoints());
+    bool areaNumPointsEqual = lhs->getNumPoints() == rhs->getNumPoints();
+    bool areCoordsEqual = lhs->equalsExact(rhs.get(), tolerance);
 
-    bool areEqual = lhs->equalsExact(rhs.get(), tolerance);
-    if(!areEqual) {
-        std::cout << std::endl << rhs->toText() << std::endl << lhs->toText() << std::endl;
+    if(! (areCoordsEqual && areaNumPointsEqual)) {
+        WKTWriter writer;
+        writer.setTrim(true);
+        std::cout << std::endl
+            << writer.write(*rhs) << std::endl
+            << writer.write(*lhs) << std::endl;
     }
 
-    ensure("coordinates do not match", areEqual);
+    ensure("number of points do not match", areaNumPointsEqual);
+
+    ensure("coordinates do not match", areCoordsEqual);
     // Dispatch to run more specific testes
     // if(isInstanceOf<Polygon>(lhs)
     //         && isInstanceOf<Polygon>(rhs)) {

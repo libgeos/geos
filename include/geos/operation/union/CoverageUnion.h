@@ -18,7 +18,6 @@
 #include <geos/geom/Geometry.h>
 
 #include <memory>
-#include <unordered_set>
 
 namespace geos {
     namespace geom {
@@ -29,26 +28,35 @@ namespace geos {
     }
 }
 
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+using geos::geom::Polygon;
+using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::LineSegment;
+
+
 namespace geos {
 namespace operation {
 namespace geounion {
 
     class GEOS_DLL CoverageUnion {
     public:
-        static std::unique_ptr<geom::Geometry> Union(const geom::Geometry* geom);
+        static std::unique_ptr<Geometry> Union(const Geometry* geom);
 
     private:
         CoverageUnion() = default;
 
-        void extractRings(const geom::Polygon* geom);
-        void extractRings(const geom::Geometry* geom);
-        void extractSegments(const geom::LineString* geom);
+        void extractRings(const Polygon* geom);
+        void extractRings(const Geometry* geom);
+        void extractSegments(const LineString* geom);
         void sortRings();
 
-        std::unique_ptr<geom::Geometry> polygonize(const geom::GeometryFactory* gf);
+        std::unique_ptr<Geometry> polygonize(const GeometryFactory* gf);
 
-        std::vector<const geom::LinearRing*> rings;
-        std::unordered_set<geos::geom::LineSegment, geos::geom::LineSegment::HashCode> segments;
+        std::vector<const LinearRing*> rings;
+        // std::unordered_set<geos::geom::LineSegment, geos::geom::LineSegment::HashCode> segments;
+        LineSegment::UnorderedSet segments;
         static constexpr double AREA_PCT_DIFF_TOL = 1e-6;
     };
 

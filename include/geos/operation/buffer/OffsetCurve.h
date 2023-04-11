@@ -18,6 +18,7 @@
 
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/constants.h>
 
 // Forward declarations
 namespace geos {
@@ -188,7 +189,6 @@ public:
 
     // Constants
     static constexpr int MATCH_DISTANCE_FACTOR = 10000;
-    static constexpr std::size_t UNKNOWN_INDEX = std::numeric_limits<std::size_t>::max();
 
     /**
     * Creates a new instance for computing an offset curve for a geometry at a given distance.

@@ -160,17 +160,6 @@ LineSegment::closestPoint(const CoordinateXY& p, CoordinateXY& ret) const
 }
 
 /*public*/
-int
-LineSegment::compareTo(const LineSegment& other) const
-{
-    int comp0 = p0.compareTo(other.p0);
-    if(comp0 != 0) {
-        return comp0;
-    }
-    return p1.compareTo(other.p1);
-}
-
-/*public*/
 bool
 LineSegment::equalsTopo(const LineSegment& other) const
 {
@@ -327,11 +316,17 @@ LineSegment::toGeometry(const GeometryFactory& gf) const
     return gf.createLineString(std::move(cl));
 }
 
+/* public */
 std::ostream&
-operator<< (std::ostream& o, const LineSegment& l)
+LineSegment::operator<< (std::ostream& os)
 {
-    return o << "LINESEGMENT(" << l.p0.x << " " << l.p0.y << "," << l.p1.x << " " << l.p1.y << ")";
+    return os << "LINESEGMENT("
+        << p0.x << " " << p0.y << ","
+        << p1.x << " " << p1.y << ")";
 }
+
+
+
 
 } // namespace geos::geom
 } // namespace geos

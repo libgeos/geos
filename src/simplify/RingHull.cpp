@@ -118,7 +118,7 @@ RingHull::init(CoordinateSequence& ring, bool isOuter)
 
 /* private */
 void
-RingHull::addCorner(std::size_t i, std::priority_queue<Corner>& queue)
+RingHull::addCorner(std::size_t i, Corner::PriorityQueue& queue)
 {
     //-- convex corners are left untouched
     if (isConvex(*vertexRing, i))
@@ -204,7 +204,7 @@ RingHull::isAtTarget(const Corner& corner)
 */
 /* private */
 void
-RingHull::removeCorner(const Corner& corner, std::priority_queue<Corner>& queue)
+RingHull::removeCorner(const Corner& corner, Corner::PriorityQueue& queue)
 {
     std::size_t index = corner.getIndex();
     std::size_t prev = vertexRing->prev(index);

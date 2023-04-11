@@ -14,6 +14,7 @@
  *
  **********************************************************************/
 
+#include <geos/constants.h>
 #include <geos/profiler.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -368,7 +369,7 @@ CoordinateSequence::indexOf(const CoordinateXY* coordinate,
             return i;
         }
     }
-    return std::numeric_limits<std::size_t>::max();
+    return NO_COORD_INDEX;
 }
 
 void

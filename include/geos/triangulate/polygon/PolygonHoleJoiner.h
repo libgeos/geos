@@ -20,6 +20,7 @@
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/SegmentSetMutualIntersector.h>
+#include <geos/constants.h>
 
 #include <set>
 #include <limits>
@@ -70,8 +71,6 @@ class GEOS_DLL PolygonHoleJoiner {
 private:
 
     // Members
-
-    static constexpr std::size_t NO_INDEX = std::numeric_limits<std::size_t>::max();
 
     const Polygon* inputPolygon;
 

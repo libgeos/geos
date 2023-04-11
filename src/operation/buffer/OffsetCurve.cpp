@@ -258,20 +258,20 @@ OffsetCurve::computeCurveSections(
     std::vector<double> rawPosition(bufferRingPts->size()-1, NOT_IN_CURVE);
 
     SegmentMCIndex bufferSegIndex(bufferRingPts);
-    std::size_t bufferFirstIndex = UNKNOWN_INDEX;
+    std::size_t bufferFirstIndex = NO_COORD_INDEX;
     double minRawPosition = -1;
     for (std::size_t i = 0; i < rawCurve.size() - 1; i++) {
         std::size_t minBufferIndexForSeg = matchSegments(rawCurve[i], rawCurve[i+1], i, bufferSegIndex, bufferRingPts, rawPosition);
-        if (minBufferIndexForSeg != UNKNOWN_INDEX) {
+        if (minBufferIndexForSeg != NO_COORD_INDEX) {
             double pos = rawPosition[minBufferIndexForSeg];
-            if (bufferFirstIndex == UNKNOWN_INDEX || pos < minRawPosition) {
+            if (bufferFirstIndex == NO_COORD_INDEX || pos < minRawPosition) {
                 minRawPosition = pos;
                 bufferFirstIndex = minBufferIndexForSeg;
             }
         }
     }
     //-- no matching sections found in this buffer ring
-    if (bufferFirstIndex == UNKNOWN_INDEX)
+    if (bufferFirstIndex == NO_COORD_INDEX)
         return;
 
     extractSections(bufferRingPts, rawPosition, bufferFirstIndex, sections);
@@ -324,7 +324,7 @@ OffsetCurve::matchSegments(
             , bufferRingPts(p_bufferRingPts)
             , rawCurveLoc(p_rawCurveLoc)
             , minRawLocation(-1.0)
-            , bufferRingMinIndex(UNKNOWN_INDEX)
+            , bufferRingMinIndex(NO_COORD_INDEX)
             {};
 
         std::size_t getBufferMinIndex() {

@@ -205,7 +205,7 @@ PolygonHoleJoiner::joinTouchingHole(const CoordinateSequence& holeCoords)
     std::size_t holeTouchIndex = findHoleTouchIndex(holeCoords);
 
     //-- hole does not touch
-    if (holeTouchIndex == NO_INDEX)
+    if (holeTouchIndex == NO_COORD_INDEX)
         return false;
 
     /**
@@ -232,7 +232,7 @@ PolygonHoleJoiner::findHoleTouchIndex(const CoordinateSequence& holeCoords)
         }
         i++;
     }
-    return NO_INDEX;
+    return NO_COORD_INDEX;
 }
 
 
@@ -391,7 +391,7 @@ PolygonHoleJoiner::findLowestLeftVertexIndex(const CoordinateSequence& holeCoord
 {
     Coordinate lowestLeftCoord;
     lowestLeftCoord.setNull();
-    std::size_t lowestLeftIndex = NO_INDEX;
+    std::size_t lowestLeftIndex = NO_COORD_INDEX;
     for (std::size_t i = 0; i < holeCoords.size() - 1; i++) {
         if (lowestLeftCoord.isNull() || holeCoords.getAt(i).compareTo(lowestLeftCoord) < 0) {
             lowestLeftCoord = holeCoords.getAt(i);

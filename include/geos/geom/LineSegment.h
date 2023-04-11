@@ -31,6 +31,7 @@
 #include <functional> // for std::hash
 #include <memory> // for unique_ptr
 #include <cassert>
+#include <unordered_set>
 
 // Forward declarations
 namespace geos {
@@ -60,16 +61,9 @@ namespace geom { // geos::geom
 class GEOS_DLL LineSegment {
 public:
 
+
     Coordinate p0; /// Segment start
     Coordinate p1; /// Segment end
-
-    friend std::ostream& operator<< (std::ostream& o, const LineSegment& l);
-
-    /// Checks if two LineSegment are equal (2D only check)
-    friend bool operator==(const LineSegment& a, const LineSegment& b)
-    {
-        return a.p0 == b.p0 && a.p1 == b.p1;
-    };
 
     LineSegment(const Coordinate& c0, const Coordinate& c1)
         : p0(c0)
@@ -407,19 +401,6 @@ public:
     void closestPoint(const CoordinateXY& p, CoordinateXY& ret) const;
 
     /** \brief
-     * Compares this object with the specified object for order.
-     *
-     * Uses the standard lexicographic ordering for the points in the LineSegment.
-     *
-     * @param  other  the LineSegment with which this LineSegment
-     *            is being compared
-     * @return a negative integer, zero, or a positive integer as this
-     *         LineSegment is less than, equal to, or greater than the
-     *         specified LineSegment
-     */
-    int compareTo(const LineSegment& other) const;
-
-    /** \brief
      *  Returns <code>true</code> if <code>other</code> is
      *  topologically equal to this LineSegment (e.g. irrespective
      *  of orientation).
@@ -484,15 +465,50 @@ public:
      */
     std::unique_ptr<LineString> toGeometry(const GeometryFactory& gf) const;
 
+
+    /** \brief
+     * Compares this object with the specified object for order.
+     *
+     * Uses the standard lexicographic ordering for the points in the LineSegment.
+     *
+     * @param  other  the LineSegment with which this LineSegment
+     *            is being compared
+     * @return a negative integer, zero, or a positive integer as this
+     *         LineSegment is less than, equal to, or greater than the
+     *         specified LineSegment
+     */
+    inline int compareTo(const LineSegment& other) const
+    {
+        int comp0 = p0.compareTo(other.p0);
+        if (comp0 != 0) {
+            return comp0;
+        }
+        return p1.compareTo(other.p1);
+    }
+
+    std::ostream& operator<< (std::ostream& o);
+
+    inline bool operator==(const LineSegment& rhs) const {
+        return compareTo(rhs) == 0;
+    };
+
+    inline bool operator<(const LineSegment& rhs) const {
+        return compareTo(rhs) < 0;
+    };
+
+    inline bool operator>(const LineSegment& rhs) const {
+        return compareTo(rhs) > 0;
+    };
+
     struct HashCode {
-        std::size_t operator()(const LineSegment & s) const {
+        inline std::size_t operator()(const LineSegment & s) const {
             std::size_t h = std::hash<double>{}(s.p0.x);
             h ^= (std::hash<double>{}(s.p0.y) << 1);
             h ^= (std::hash<double>{}(s.p1.x) << 1);
             return h ^ (std::hash<double>{}(s.p1.y) << 1);
         }
 
-        std::size_t operator()(const LineSegment * s) const {
+        inline std::size_t operator()(const LineSegment * s) const {
             std::size_t h = std::hash<double>{}(s->p0.x);
             h ^= (std::hash<double>{}(s->p0.y) << 1);
             h ^= (std::hash<double>{}(s->p1.x) << 1);
@@ -501,13 +517,16 @@ public:
 
     };
 
+    using UnorderedSet = std::unordered_set<LineSegment, LineSegment::HashCode>;
+
+
 private:
     void project(double factor, CoordinateXY& ret) const;
 
 };
 
-// std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 
+// std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 
 
 } // namespace geos::geom

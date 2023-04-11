@@ -18,6 +18,7 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/constants.h>
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
@@ -30,9 +31,6 @@ namespace simplify { // geos::simplify
 class LinkedRing
 {
     private:
-
-        static constexpr std::size_t
-            NO_COORD_INDEX = std::numeric_limits<std::size_t>::max();
 
         const CoordinateSequence& m_coord;
         std::size_t m_size;

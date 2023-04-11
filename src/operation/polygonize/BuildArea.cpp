@@ -94,7 +94,7 @@ static bool ringsEqualAnyDirection(const LinearRing* r1, const LinearRing* r2)
 
     const Coordinate& firstPoint = cs1->getAt(0);
     size_t offset = CoordinateSequence::indexOf(&firstPoint, cs2);
-    if ( offset == std::numeric_limits<std::size_t>::max() ) return false;
+    if ( offset == NO_COORD_INDEX ) return false;
 
     bool equal = true;
 
