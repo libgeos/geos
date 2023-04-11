@@ -517,7 +517,7 @@ public:
 
     };
 
-    using UnorderedSet = std::unordered_set<LineSegment, LineSegment::HashCode>;
+    using UnorderedSet = std::unordered_set<LineSegment, HashCode>;
 
 
 private:

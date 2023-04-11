@@ -28,7 +28,7 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-struct CoordinateLessThen;
+struct CoordinateLessThan;
 }
 namespace geomgraph {
 //class EdgeEndStar;

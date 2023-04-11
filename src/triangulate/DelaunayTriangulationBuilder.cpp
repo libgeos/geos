@@ -47,7 +47,7 @@ std::unique_ptr<CoordinateSequence>
 DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq)
 {
     auto sortedSeq = detail::make_unique<CoordinateSequence>(*seq);
-    std::sort(sortedSeq->items<Coordinate>().begin(), sortedSeq->items<Coordinate>().end(), geos::geom::CoordinateLessThen());
+    std::sort(sortedSeq->items<Coordinate>().begin(), sortedSeq->items<Coordinate>().end(), geos::geom::CoordinateLessThan());
 
     operation::valid::RepeatedPointTester rpt;
     if (rpt.hasRepeatedPoint(sortedSeq.get())) {

@@ -82,7 +82,7 @@ public:
 
 private:
     std::vector<const geom::Coordinate*>& pts;	// target set reference
-    std::set<const geom::CoordinateXY*, geom::CoordinateLessThen> uniqPts; 	// unique points set
+    std::set<const geom::CoordinateXY*, geom::CoordinateLessThan> uniqPts; 	// unique points set
 
     // Declare type as noncopyable
     UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other) = delete;

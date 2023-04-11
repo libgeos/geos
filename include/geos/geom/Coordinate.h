@@ -32,7 +32,7 @@ namespace geos {
 namespace geom { // geos.geom
 
 // Forward declarations
-struct CoordinateLessThen;
+struct CoordinateLessThan;
 class CoordinateXYZM;
 class CoordinateXYM;
 class Coordinate;
@@ -128,8 +128,8 @@ public:
         return equals2D(other);
     };
 
-    /// TODO: deprecate this, move logic to CoordinateLessThen instead
-    int compareTo(const CoordinateXY& other) const
+    /// TODO: deprecate this, move logic to CoordinateLessThan instead
+    inline int compareTo(const CoordinateXY& other) const
     {
         if(x < other.x) {
             return -1;
@@ -175,7 +175,7 @@ public:
 
     struct GEOS_DLL HashCode
     {
-        std::size_t operator()(const CoordinateXY& c) const
+        inline std::size_t operator()(const CoordinateXY& c) const
         {
             size_t h = std::hash<double>{}(c.x);
             h ^= std::hash<double>{}(c.y) << 1;
@@ -221,7 +221,7 @@ private:
 
 public:
     /// A set of const Coordinate pointers
-    typedef std::set<const Coordinate*, CoordinateLessThen> ConstSet;
+    typedef std::set<const Coordinate*, CoordinateLessThan> ConstSet;
 
     /// A vector of const Coordinate pointers
     typedef std::vector<const Coordinate*> ConstVect;
@@ -425,7 +425,7 @@ CoordinateXYM::operator=(const CoordinateXYZM& other) {
 
 
 /// Strict weak ordering Functor for Coordinate
-struct GEOS_DLL CoordinateLessThen {
+struct GEOS_DLL CoordinateLessThan {
 
     bool operator()(const CoordinateXY* a, const CoordinateXY* b) const
     {
@@ -452,7 +452,7 @@ struct GEOS_DLL CoordinateLessThen {
 /// Strict weak ordering operator for Coordinate
 inline bool operator<(const CoordinateXY& a, const CoordinateXY& b)
 {
-    return CoordinateLessThen()(a, b);
+    return CoordinateLessThan()(a, b);
 }
 
 

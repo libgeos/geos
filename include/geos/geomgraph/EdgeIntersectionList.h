@@ -27,7 +27,7 @@
 #include <string>
 
 #include <geos/geomgraph/EdgeIntersection.h> // for EdgeIntersectionLessThen
-#include <geos/geom/Coordinate.h> // for CoordinateLessThen
+#include <geos/geom/Coordinate.h> // for CoordinateLessThan
 
 #ifdef _MSC_VER
 #pragma warning(push)

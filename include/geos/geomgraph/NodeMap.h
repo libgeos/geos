@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 
-#include <geos/geom/Coordinate.h> // for CoordinateLessThen
+#include <geos/geom/Coordinate.h> // for CoordinateLessThan
 #include <geos/geomgraph/Node.h> // for testInvariant
 
 
@@ -50,7 +50,7 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL NodeMap {
 public:
 
-    typedef std::map<geom::Coordinate*, std::unique_ptr<Node>, geom::CoordinateLessThen> container;
+    typedef std::map<geom::Coordinate*, std::unique_ptr<Node>, geom::CoordinateLessThan> container;
 
     typedef container::iterator iterator;
 
