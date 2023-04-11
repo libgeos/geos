@@ -43,6 +43,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSGeometryList std::vector<geos::geom::Geometry*>
 typedef struct GEOSBufParams_t GEOSBufferParams;
 typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 
@@ -1793,5 +1794,48 @@ extern "C" {
                                          bx0, by0, bx1, by1,
                                          cx, cy);
     }
+
+    GEOSGeometryList*
+    GEOSGeometryList_create()
+    {
+        return GEOSGeometryList_create_r(handle);
+    }
+
+    int
+    GEOSGeometryList_destroy(GEOSGeometryList* list)
+    {
+        return GEOSGeometryList_destroy_r(handle, list);
+    }
+
+    int
+    GEOSGeometryList_release(GEOSGeometryList* list)
+    {
+        return GEOSGeometryList_release_r(handle, list);
+    }
+
+    int
+    GEOSGeometryList_push(GEOSGeometryList* list, Geometry* g)
+    {
+        return GEOSGeometryList_push_r(handle, list, g);
+    }
+
+    Geometry*
+    GEOSGeometryList_pop(GEOSGeometryList* list)
+    {
+        return GEOSGeometryList_pop_r(handle, list);
+    }
+
+    int
+    GEOSGeometryList_size(GEOSGeometryList* list)
+    {
+        return GEOSGeometryList_size_r(handle, list);
+    }
+
+    Geometry*
+    GEOSGeometryList_at(GEOSGeometryList* list, unsigned int i)
+    {
+        return GEOSGeometryList_at_r(handle, list, i);
+    }
+
 
 } /* extern "C" */

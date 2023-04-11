@@ -128,6 +128,9 @@
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
 
+// Implementation definition for the GEOSGeometryList object
+#define GEOSGeometryList std::vector<geos::geom::Geometry*>
+
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
     int method;
@@ -4043,5 +4046,82 @@ extern "C" {
             return 1;
         });
     }
+
+    /* xxxxxx */
+
+    GEOSGeometryList*
+    GEOSGeometryList_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            return new GEOSGeometryList();
+        });
+    }
+
+    int
+    GEOSGeometryList_destroy_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list)
+    {
+        return execute(extHandle, 0, [&]() {
+            if (list == nullptr) return 0;
+            for (Geometry* g : *list) {
+                if (g != nullptr) delete g;
+            }
+            delete list;
+            return 1;
+        });
+    }
+
+    int
+    GEOSGeometryList_release_r(GEOSContextHandle_t extHandle, std::vector<Geometry*>* list)
+    {
+        return execute(extHandle, 0, [&]() {
+            if (list == nullptr) return 0;
+            delete list;
+            return 1;
+        });
+    }
+
+    int
+    GEOSGeometryList_push_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list, Geometry* g)
+    {
+        return execute(extHandle, 0, [&]() {
+            if (list == nullptr) return 0;
+            if (g == nullptr) return 0;
+            list->push_back(g);
+            return 1;
+        });
+    }
+
+    Geometry*
+    GEOSGeometryList_pop_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list)
+    {
+        return execute(extHandle, [&]() -> Geometry* {
+            if (list == nullptr) return nullptr;
+            if (list->empty()) return nullptr;
+            Geometry *g = list->back();
+            list->pop_back();
+            return g;
+        });
+    }
+
+    int
+    GEOSGeometryList_size_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list)
+    {
+        return execute(extHandle, 0, [&]() {
+            if (list == nullptr) return -1;
+            return static_cast<int>(list->size());
+        });
+    }
+
+    Geometry*
+    GEOSGeometryList_at_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list, unsigned int i)
+    {
+        return execute(extHandle, [&]() -> Geometry* {
+            if (list == nullptr)   return nullptr;
+            if (list->empty())     return nullptr;
+            if (i >= list->size()) return nullptr;
+            return list->at(i);
+        });
+    }
+
 
 } /* extern "C" */
