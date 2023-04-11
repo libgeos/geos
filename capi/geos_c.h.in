@@ -781,7 +781,7 @@ extern int GEOS_DLL
         GEOSGeometry* g);
 
 /** \see GEOSGeometryList_pop */
-extern GEOSGeometry* GEOS_DLL
+extern GEOSGeometry GEOS_DLL *
     GEOSGeometryList_pop_r(
         GEOSContextHandle_t extHandle,
         GEOSGeometryList* list);
@@ -793,11 +793,24 @@ extern int GEOS_DLL
         GEOSGeometryList* list);
 
 /** \see GEOSGeometryList_at */
-extern GEOSGeometry* GEOS_DLL
+extern GEOSGeometry GEOS_DLL *
     GEOSGeometryList_at_r(
         GEOSContextHandle_t extHandle,
         GEOSGeometryList* list,
         unsigned int i);
+
+/* ========= Coverage ========= */
+
+extern GEOSGeometryList GEOS_DLL *
+    GEOSCoverage_valid_r(
+        GEOSContextHandle_t extHandle,
+        GEOSGeometryList* list);
+
+extern GEOSGeometryList GEOS_DLL *
+    GEOSCoverage_simplify_r(
+        GEOSContextHandle_t extHandle,
+        GEOSGeometryList* list,
+        double tolerance);
 
 /* ========= Memory management ========= */
 
@@ -2533,7 +2546,7 @@ extern int GEOS_DLL
 * \param list The geometry list to access.
 * \return The last geometry in the list.
 */
-extern GEOSGeometry* GEOS_DLL
+extern GEOSGeometry GEOS_DLL *
     GEOSGeometryList_pop(
         GEOSGeometryList* list);
 
@@ -2552,10 +2565,46 @@ extern int GEOS_DLL
 * \param i The index of the geometry to access.
 * \return The geometry at index location or null on error.
 */
-extern GEOSGeometry* GEOS_DLL
+extern GEOSGeometry GEOS_DLL *
     GEOSGeometryList_at(
         GEOSGeometryList* list,
         unsigned int i);
+
+///@}
+
+
+/* ====================================================================== */
+/** @name Coverages
+* Functions to work with coverages represented by lists of polygons
+* that exactly share edge geometry.
+*/
+///@{
+
+/**
+* Analyze a coverage (represented as a list of polygonal geometry
+* with exactly matching edge geometry) to find places where the
+* assumption of exactly matching edges is not met.
+* \param list The coverage to access, stored in a geometry list.
+* \return A geometry list with exactly the same length as the input,
+*         where each entry shows the location of invalidity for that
+*         input polygon.
+*/
+extern GEOSGeometryList GEOS_DLL * GEOSCoverage_valid(
+    GEOSGeometryList* list);
+
+/**
+* Operates on a coverage (represented as a list of polygonal geometry
+* with exactly matching edge geometry) to apply a Visvalingam–Whyatt
+* simplification to the edges, reducing complexity in proportion with
+* the provided tolerance, while retaining a valid coverage (no edges
+* will cross or touch after the simplification).
+* \param list The geometry list to simplify.
+* \param tolerance A tolerance parameter in linear units.
+* \return A list containing the simplified geometries in a valid coverage.
+*/
+extern GEOSGeometryList GEOS_DLL * GEOSCoverage_simplify(
+    GEOSGeometryList* list, double tolerance);
+
 
 ///@}
 

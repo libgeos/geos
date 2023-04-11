@@ -1837,5 +1837,18 @@ extern "C" {
         return GEOSGeometryList_at_r(handle, list, i);
     }
 
+    GEOSGeometryList*
+    GEOSCoverage_valid(GEOSGeometryList* list)
+    {
+        return GEOSCoverage_valid_r(handle, list);
+    }
+
+    GEOSGeometryList*
+    GEOSCoverage_simplify(GEOSGeometryList* list, double tolerance)
+    {
+        return GEOSCoverage_simplify_r(handle, list, tolerance);
+    }
+
+
 
 } /* extern "C" */

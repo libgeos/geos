@@ -27,6 +27,8 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
+#include <geos/coverage/CoverageValidator.h>
+#include <geos/coverage/CoverageSimplifier.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -4122,6 +4124,50 @@ extern "C" {
             return list->at(i);
         });
     }
+
+    GEOSGeometryList*
+    GEOSCoverage_valid_r(GEOSContextHandle_t extHandle, GEOSGeometryList* list)
+    {
+        using geos::coverage::CoverageValidator;
+
+        return execute(extHandle, [&]() -> GEOSGeometryList* {
+            if (list == nullptr) return nullptr;
+            std::vector<const Geometry*> coverage;
+            for (std::size_t i = 0; i < list->size(); i++) {
+                coverage.push_back(const_cast<Geometry*>(list->at(i)));
+            }
+            std::vector<std::unique_ptr<Geometry>> valid = CoverageValidator::validate(coverage);
+            std::unique_ptr<GEOSGeometryList> result(new GEOSGeometryList);
+            for (std::unique_ptr<Geometry>& vg : valid) {
+                result->push_back(vg.release());
+            }
+            return result.release();
+        });
+    }
+
+    GEOSGeometryList*
+    GEOSCoverage_simplify_r(GEOSContextHandle_t extHandle,
+        GEOSGeometryList* list,
+        double tolerance)
+    {
+        using geos::coverage::CoverageSimplifier;
+
+        return execute(extHandle, [&]() -> GEOSGeometryList* {
+            if (list == nullptr) return nullptr;
+            std::vector<const Geometry*> coverage;
+            for (std::size_t i = 0; i < list->size(); i++) {
+                coverage.push_back(const_cast<Geometry*>(list->at(i)));
+            }
+            std::vector<std::unique_ptr<Geometry>> simple =
+                CoverageSimplifier::simplify(coverage, tolerance);
+            std::unique_ptr<GEOSGeometryList> result(new GEOSGeometryList);
+            for (std::unique_ptr<Geometry>& s : simple) {
+                result->push_back(s.release());
+            }
+            return result.release();
+        });
+    }
+
 
 
 } /* extern "C" */
