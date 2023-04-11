@@ -115,7 +115,7 @@ $(function() {
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::vector&lt;const geom::Coordinate*&gt;&amp; pts;  <span class="comment">// target set reference</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::set&lt;const geom::CoordinateXY*, geom::CoordinateLessThen&gt; uniqPts;      <span class="comment">// unique points set</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::set&lt;const geom::CoordinateXY*, geom::CoordinateLessThan&gt; uniqPts;      <span class="comment">// unique points set</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    UniqueCoordinateArrayFilter(<span class="keyword">const</span> UniqueCoordinateArrayFilter&amp; other) = <span class="keyword">delete</span>;</div>

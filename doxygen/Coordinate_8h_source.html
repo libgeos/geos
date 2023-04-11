@@ -81,7 +81,7 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>geom { <span class="comment">// geos.geom</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">struct </span>CoordinateLessThen;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">struct </span>CoordinateLessThan;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">class </span>CoordinateXYZM;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span>CoordinateXYM;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>Coordinate;</div>
@@ -172,7 +172,7 @@ $(function() {
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">return</span> equals2D(other);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    };</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">int</span> compareTo(<span class="keyword">const</span> CoordinateXY&amp; other)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">int</span> compareTo(<span class="keyword">const</span> CoordinateXY&amp; other)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">if</span>(x &lt; other.x) {</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">return</span> -1;</div>
@@ -218,7 +218,7 @@ $(function() {
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keyword">struct </span>GEOS_DLL HashCode</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        std::size_t operator()(<span class="keyword">const</span> CoordinateXY&amp; c)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keyword">inline</span> std::size_t operator()(<span class="keyword">const</span> CoordinateXY&amp; c)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <span class="keywordtype">size_t</span> h = std::hash&lt;double&gt;{}(c.x);</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            h ^= std::hash&lt;double&gt;{}(c.y) &lt;&lt; 1;</div>
@@ -242,7 +242,7 @@ $(function() {
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> _nullCoord;</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Coordinate.html#a92d121905d46be35fe34bc342957d895">  224</a></span>&#160;    <span class="keyword">typedef</span> std::set&lt;const Coordinate*, CoordinateLessThen&gt; <a class="code" href="classgeos_1_1geom_1_1Coordinate.html#a92d121905d46be35fe34bc342957d895">ConstSet</a>;</div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Coordinate.html#a55542d3a86a43657b9278ed044477130">  224</a></span>&#160;    <span class="keyword">typedef</span> std::set&lt;const Coordinate*, CoordinateLessThan&gt; <a class="code" href="classgeos_1_1geom_1_1Coordinate.html#a55542d3a86a43657b9278ed044477130">ConstSet</a>;</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
 <div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">  227</a></span>&#160;    <span class="keyword">typedef</span> std::vector&lt;const Coordinate*&gt; <a class="code" href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">ConstVect</a>;</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
@@ -439,7 +439,7 @@ $(function() {
 <div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;}</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
-<div class="line"><a name="l00428"></a><span class="lineno"><a class="line" href="structgeos_1_1geom_1_1CoordinateLessThen.html">  428</a></span>&#160;<span class="keyword">struct </span>GEOS_DLL <a class="code" href="structgeos_1_1geom_1_1CoordinateLessThen.html">CoordinateLessThen</a> {</div>
+<div class="line"><a name="l00428"></a><span class="lineno"><a class="line" href="structgeos_1_1geom_1_1CoordinateLessThan.html">  428</a></span>&#160;<span class="keyword">struct </span>GEOS_DLL <a class="code" href="structgeos_1_1geom_1_1CoordinateLessThan.html">CoordinateLessThan</a> {</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> CoordinateXY* a, <span class="keyword">const</span> CoordinateXY* b)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="keyword">    </span>{</div>
@@ -465,7 +465,7 @@ $(function() {
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
 <div class="line"><a name="l00453"></a><span class="lineno"><a class="line" href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">  453</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">operator&lt;</a>(<span class="keyword">const</span> CoordinateXY&amp; a, <span class="keyword">const</span> CoordinateXY&amp; b)</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;{</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structgeos_1_1geom_1_1CoordinateLessThen.html">CoordinateLessThen</a>()(a, b);</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structgeos_1_1geom_1_1CoordinateLessThan.html">CoordinateLessThan</a>()(a, b);</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;}</div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160; </div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160; </div>
@@ -635,15 +635,15 @@ $(function() {
 <div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:216</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a15b8ee1013a8cab759b1570b0925cbdf"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a15b8ee1013a8cab759b1570b0925cbdf">geos::geom::Coordinate::toString</a></div><div class="ttdeci">std::string toString() const</div><div class="ttdoc">Returns a string of the form (x,y,z) .</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a55542d3a86a43657b9278ed044477130"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a55542d3a86a43657b9278ed044477130">geos::geom::Coordinate::ConstSet</a></div><div class="ttdeci">std::set&lt; const Coordinate *, CoordinateLessThan &gt; ConstSet</div><div class="ttdoc">A set of const Coordinate pointers.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:224</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a59345d3a409b5d2ebe01fcfcdcca92cb"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a59345d3a409b5d2ebe01fcfcdcca92cb">geos::geom::Coordinate::Vect</a></div><div class="ttdeci">std::vector&lt; Coordinate &gt; Vect</div><div class="ttdoc">A vector of Coordinate objects (real object, not pointers)</div><div class="ttdef"><b>Definition:</b> Coordinate.h:233</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a59a363dbe699943a46ea014355e63cac"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">geos::geom::Coordinate::ConstVect</a></div><div class="ttdeci">std::vector&lt; const Coordinate * &gt; ConstVect</div><div class="ttdoc">A vector of const Coordinate pointers.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:227</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a92d121905d46be35fe34bc342957d895"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a92d121905d46be35fe34bc342957d895">geos::geom::Coordinate::ConstSet</a></div><div class="ttdeci">std::set&lt; const Coordinate *, CoordinateLessThen &gt; ConstSet</div><div class="ttdoc">A set of const Coordinate pointers.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:224</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a933fc24747d76da8799945f9e5fd1644"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a933fc24747d76da8799945f9e5fd1644">geos::geom::Coordinate::ConstStack</a></div><div class="ttdeci">std::stack&lt; const Coordinate * &gt; ConstStack</div><div class="ttdoc">A stack of const Coordinate pointers.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:230</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_ae2faf986f71445dc623aff367ceb0abc"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#ae2faf986f71445dc623aff367ceb0abc">geos::geom::Coordinate::equals3D</a></div><div class="ttdeci">bool equals3D(const Coordinate &amp;other) const</div><div class="ttdoc">3D comparison</div><div class="ttdef"><b>Definition:</b> Coordinate.h:270</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_af0c1b234c851ae467c371dea8861612f"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#af0c1b234c851ae467c371dea8861612f">geos::geom::Coordinate::z</a></div><div class="ttdeci">double z</div><div class="ttdoc">z-coordinate</div><div class="ttdef"><b>Definition:</b> Coordinate.h:236</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_a31a2ff1f54bc4fd6cde47bdda53fcb82"><div class="ttname"><a href="namespacegeos_1_1geom.html#a31a2ff1f54bc4fd6cde47bdda53fcb82">geos::geom::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(const CoordinateXY &amp;a, const CoordinateXY &amp;b)</div><div class="ttdoc">Strict weak ordering operator for Coordinate.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:453</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
-<div class="ttc" id="astructgeos_1_1geom_1_1CoordinateLessThen_html"><div class="ttname"><a href="structgeos_1_1geom_1_1CoordinateLessThen.html">geos::geom::CoordinateLessThen</a></div><div class="ttdoc">Strict weak ordering Functor for Coordinate.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:428</div></div>
+<div class="ttc" id="astructgeos_1_1geom_1_1CoordinateLessThan_html"><div class="ttname"><a href="structgeos_1_1geom_1_1CoordinateLessThan.html">geos::geom::CoordinateLessThan</a></div><div class="ttdoc">Strict weak ordering Functor for Coordinate.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:428</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
