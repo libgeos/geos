@@ -44,9 +44,9 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classgeos_1_1geom_1_1LineSegment-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">geos::geom::LineSegment Class Reference</div>  </div>
@@ -64,10 +64,17 @@ Inheritance diagram for geos::geom::LineSegment:</div>
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a29ceba42ccc24eff6b6eb62af3f1a583"><td class="memItemLeft" align="right" valign="top"><a id="a29ceba42ccc24eff6b6eb62af3f1a583"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>UnorderedSet</b> = std::unordered_set&lt; <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a>, LineSegment::HashCode &gt;</td></tr>
+<tr class="separator:a29ceba42ccc24eff6b6eb62af3f1a583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a105348291a24edfce16b8fa243793fb4"><td class="memItemLeft" align="right" valign="top"><a id="a105348291a24edfce16b8fa243793fb4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LineSegment</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c1)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a105348291a24edfce16b8fa243793fb4">LineSegment</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;c1)</td></tr>
+<tr class="memdesc:a105348291a24edfce16b8fa243793fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment end. <br /></td></tr>
 <tr class="separator:a105348291a24edfce16b8fa243793fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2ff6b0bb555727c6bd9e7e97c637ccb"><td class="memItemLeft" align="right" valign="top"><a id="ad2ff6b0bb555727c6bd9e7e97c637ccb"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LineSegment</b> (double x0, double y0, double x1, double y1)</td></tr>
@@ -163,9 +170,6 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memitem:ac06246c1b76294e2f413167e221754b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#ac06246c1b76294e2f413167e221754b0">closestPoint</a> (const CoordinateXY &amp;p, CoordinateXY &amp;ret) const</td></tr>
 <tr class="memdesc:ac06246c1b76294e2f413167e221754b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the closest point on this line segment to another point.  <a href="classgeos_1_1geom_1_1LineSegment.html#ac06246c1b76294e2f413167e221754b0">More...</a><br /></td></tr>
 <tr class="separator:ac06246c1b76294e2f413167e221754b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23291518ab1903d56cb280663fe25563"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a23291518ab1903d56cb280663fe25563">compareTo</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;other) const</td></tr>
-<tr class="memdesc:a23291518ab1903d56cb280663fe25563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this object with the specified object for order.  <a href="classgeos_1_1geom_1_1LineSegment.html#a23291518ab1903d56cb280663fe25563">More...</a><br /></td></tr>
-<tr class="separator:a23291518ab1903d56cb280663fe25563"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68ac16afde233d0d3cd023ca2c088901"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a68ac16afde233d0d3cd023ca2c088901">equalsTopo</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;other) const</td></tr>
 <tr class="memdesc:a68ac16afde233d0d3cd023ca2c088901"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> if <code>other</code> is topologically equal to this <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> (e.g. irrespective of orientation).  <a href="classgeos_1_1geom_1_1LineSegment.html#a68ac16afde233d0d3cd023ca2c088901">More...</a><br /></td></tr>
 <tr class="separator:a68ac16afde233d0d3cd023ca2c088901"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +185,21 @@ std::array&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordin
 <tr class="separator:a9f630689d1c3d6e90b912b5e79420122"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3133ebba869de9510354a70ea2bd0b13"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a3133ebba869de9510354a70ea2bd0b13">toGeometry</a> (const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;gf) const</td></tr>
 <tr class="separator:a3133ebba869de9510354a70ea2bd0b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23291518ab1903d56cb280663fe25563"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a23291518ab1903d56cb280663fe25563">compareTo</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;other) const</td></tr>
+<tr class="memdesc:a23291518ab1903d56cb280663fe25563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this object with the specified object for order.  <a href="classgeos_1_1geom_1_1LineSegment.html#a23291518ab1903d56cb280663fe25563">More...</a><br /></td></tr>
+<tr class="separator:a23291518ab1903d56cb280663fe25563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17c00d47295eef2ac28f0dacb615aaa7"><td class="memItemLeft" align="right" valign="top"><a id="a17c00d47295eef2ac28f0dacb615aaa7"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;o)</td></tr>
+<tr class="separator:a17c00d47295eef2ac28f0dacb615aaa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c5b05d943dbf2370d6a0d033831208"><td class="memItemLeft" align="right" valign="top"><a id="a83c5b05d943dbf2370d6a0d033831208"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;rhs) const</td></tr>
+<tr class="separator:a83c5b05d943dbf2370d6a0d033831208"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a613b30c62042410e4b050207fbda9e0f"><td class="memItemLeft" align="right" valign="top"><a id="a613b30c62042410e4b050207fbda9e0f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;rhs) const</td></tr>
+<tr class="separator:a613b30c62042410e4b050207fbda9e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2910c1eea7e3d580c5044bca30e2c9c"><td class="memItemLeft" align="right" valign="top"><a id="ad2910c1eea7e3d580c5044bca30e2c9c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;rhs) const</td></tr>
+<tr class="separator:ad2910c1eea7e3d580c5044bca30e2c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -191,17 +210,6 @@ Public Attributes</h2></td></tr>
 <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a9382e49d86a10de5d5be69560824d900">p1</a></td></tr>
 <tr class="memdesc:a9382e49d86a10de5d5be69560824d900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment start. <br /></td></tr>
 <tr class="separator:a9382e49d86a10de5d5be69560824d900"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ad7f0e1ac0c774fca24372d1181e5748f"><td class="memItemLeft" align="right" valign="top"><a id="ad7f0e1ac0c774fca24372d1181e5748f"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#ad7f0e1ac0c774fca24372d1181e5748f">operator&lt;&lt;</a> (std::ostream &amp;o, const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;l)</td></tr>
-<tr class="memdesc:ad7f0e1ac0c774fca24372d1181e5748f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment end. <br /></td></tr>
-<tr class="separator:ad7f0e1ac0c774fca24372d1181e5748f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4e50365689d0d60fa2ccc43d561c9c7"><td class="memItemLeft" align="right" valign="top"><a id="aa4e50365689d0d60fa2ccc43d561c9c7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#aa4e50365689d0d60fa2ccc43d561c9c7">operator==</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;a, const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;b)</td></tr>
-<tr class="memdesc:aa4e50365689d0d60fa2ccc43d561c9c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if two <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> are equal (2D only check) <br /></td></tr>
-<tr class="separator:aa4e50365689d0d60fa2ccc43d561c9c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a line segment defined by two <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a>. Provides methods to compute various geometric properties and relationships of line segments.</p>
@@ -301,6 +309,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int geos::geom::LineSegment::compareTo </td>
@@ -310,6 +321,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Compares this object with the specified object for order. </p>
@@ -321,6 +337,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a negative integer, zero, or a positive integer as this <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> is less than, equal to, or greater than the specified <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a9382e49d86a10de5d5be69560824d900">p1</a>.</p>
 
 </div>
 </div>
