@@ -155,17 +155,18 @@ using geos::geom::Coordinate;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYM;
 using geos::geom::CoordinateXYZM;
+using geos::geom::CoordinateSequence;
+using geos::geom::Envelope;
 using geos::geom::Geometry;
+using geos::geom::GeometryCollection;
+using geos::geom::GeometryFactory;
 using geos::geom::LineString;
 using geos::geom::LinearRing;
 using geos::geom::MultiLineString;
 using geos::geom::MultiPolygon;
+using geos::geom::Point;
 using geos::geom::Polygon;
 using geos::geom::PrecisionModel;
-using geos::geom::CoordinateSequence;
-using geos::geom::GeometryCollection;
-using geos::geom::GeometryFactory;
-using geos::geom::Envelope;
 
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
@@ -195,8 +196,6 @@ using geos::simplify::PolygonHullSimplifier;
 
 using geos::util::IllegalArgumentException;
 
-typedef std::unique_ptr<Geometry> GeomPtr;
-
 typedef struct GEOSContextHandle_HS {
     const GeometryFactory* geomFactory;
     char msgBuffer[1024];
@@ -209,7 +208,7 @@ typedef struct GEOSContextHandle_HS {
     uint8_t WKBOutputDims;
     int WKBByteOrder;
     int initialized;
-    std::unique_ptr<geos::geom::Point> point2d;
+    std::unique_ptr<Point> point2d;
 
     GEOSContextHandle_HS()
         :
@@ -224,7 +223,7 @@ typedef struct GEOSContextHandle_HS {
     {
         memset(msgBuffer, 0, sizeof(msgBuffer));
         geomFactory = GeometryFactory::getDefaultInstance();
-        point2d = geomFactory->createPoint(geos::geom::CoordinateXY{0, 0});
+        point2d = geomFactory->createPoint(CoordinateXY{0, 0});
         WKBOutputDims = 2;
         WKBByteOrder = getMachineByteOrder();
         setNoticeHandler(nullptr);
@@ -1099,8 +1098,6 @@ extern "C" {
     GEOSIntersectionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double gridSize)
     {
         return execute(extHandle, [&]() {
-            using geos::geom::PrecisionModel;
-
             std::unique_ptr<PrecisionModel> pm;
             if(gridSize != 0) {
                 pm.reset(new PrecisionModel(1.0 / gridSize));
@@ -1515,7 +1512,7 @@ extern "C" {
     GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            GeomPtr g3(g->Union());
+            std::unique_ptr<Geometry> g3(g->Union());
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -1559,7 +1556,7 @@ extern "C" {
             // CascadedUnion is the same as UnaryUnion, except that
             // CascadedUnion only works on MultiPolygon, so we just delegate
             // now and retain a check on MultiPolygon type.
-            const geos::geom::MultiPolygon *p = dynamic_cast<const geos::geom::MultiPolygon *>(g1);
+            const MultiPolygon *p = dynamic_cast<const MultiPolygon *>(g1);
             if (!p) {
                 throw IllegalArgumentException("Invalid argument (must be a MultiPolygon)");
             }
@@ -1599,7 +1596,7 @@ extern "C" {
                             m_callback(p_callback),
                             m_userdata(p_userdata) {}
 
-            void filter_rw(geos::geom::CoordinateXY* c) const final {
+            void filter_rw(CoordinateXY* c) const final {
                 if (!m_callback(&(c->x), &(c->y), m_userdata)) {
                     throw std::runtime_error(std::string("Failed to transform coordinates."));
                 }
@@ -1717,8 +1714,6 @@ extern "C" {
     Geometry*
     GEOSGeomGetPointN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        using geos::geom::LineString;
-
         return execute(extHandle, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(!ls) {
@@ -1737,8 +1732,6 @@ extern "C" {
     Geometry*
     GEOSGeomGetStartPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        using geos::geom::LineString;
-
         return execute(extHandle, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(!ls) {
@@ -1755,8 +1748,6 @@ extern "C" {
     Geometry*
     GEOSGeomGetEndPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        using geos::geom::LineString;
-
         return execute(extHandle, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(!ls) {
@@ -1773,9 +1764,6 @@ extern "C" {
     char
     GEOSisClosed_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        using geos::geom::LineString;
-        using geos::geom::MultiLineString;
-
         return execute(extHandle, 2, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(ls) {
@@ -1798,8 +1786,6 @@ extern "C" {
     int
     GEOSGeomGetLength_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* length)
     {
-        using geos::geom::LineString;
-
         return execute(extHandle, 0, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(!ls) {
@@ -1816,8 +1802,6 @@ extern "C" {
     int
     GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        using geos::geom::LineString;
-
         return execute(extHandle, -1, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g1);
             if(!ls) {
@@ -1834,8 +1818,6 @@ extern "C" {
     int
     GEOSGeomGetX_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* x)
     {
-        using geos::geom::Point;
-
         return execute(extHandle, 0, [&]() {
             const Point* po = dynamic_cast<const Point*>(g1);
             if(!po) {
@@ -1853,8 +1835,6 @@ extern "C" {
     int
     GEOSGeomGetY_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* y)
     {
-        using geos::geom::Point;
-
         return execute(extHandle, 0, [&]() {
             const Point* po = dynamic_cast<const Point*>(g1);
             if(!po) {
@@ -1872,8 +1852,6 @@ extern "C" {
     int
     GEOSGeomGetZ_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* z)
     {
-        using geos::geom::Point;
-
         return execute(extHandle, 0, [&]() {
             const Point* po = dynamic_cast<const Point*>(g1);
             if(!po) {
@@ -1937,7 +1915,7 @@ extern "C" {
         using geos::shape::fractal::HilbertEncoder;
 
         return execute(extHandle, 0, [&]() {
-            geos::geom::Envelope e = *extent->getEnvelopeInternal();
+            Envelope e = *extent->getEnvelopeInternal();
             HilbertEncoder encoder(level, e);
             *code = encoder.encode(geom->getEnvelopeInternal());
             return 1;
@@ -2462,17 +2440,17 @@ extern "C" {
                 if (hasM) {
                     // XYZM
                     assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZM);
-                    std::memcpy(coords->data(), buf, size * sizeof(geos::geom::CoordinateXYZM));
+                    std::memcpy(coords->data(), buf, size * sizeof(CoordinateXYZM));
                 } else {
                     // XYZ
                     assert(coords->getCoordinateType() == geos::geom::CoordinateType::XYZ);
-                    std::memcpy(coords->data(), buf, size * sizeof(geos::geom::Coordinate));
+                    std::memcpy(coords->data(), buf, size * sizeof(Coordinate));
                 }
             } else {
                 if (hasM) {
                     // XYM
                     for (std::size_t i = 0; i < size; i++) {
-                        coords->setAt(geos::geom::CoordinateXYM{ *buf, *(buf + 1), *(buf + 2)}, i);
+                        coords->setAt(CoordinateXYM{ *buf, *(buf + 1), *(buf + 2)}, i);
                         buf += stride;
                     }
                 } else {
@@ -2497,7 +2475,7 @@ extern "C" {
 
             auto coords = geos::detail::make_unique<geos::geom::CoordinateSequence>(size, hasZ, hasM, false);
 
-            geos::geom::CoordinateXYZM c;
+            CoordinateXYZM c;
             for (std::size_t i = 0; i < size; i++) {
                 c.x = x[i];
                 c.y = y[i];
@@ -2520,7 +2498,7 @@ extern "C" {
                                 double* x, double* y, double* z, double* m)
     {
         return execute(extHandle, 0, [&]() {
-            geos::geom::CoordinateXYZM c;
+            CoordinateXYZM c;
             for (std::size_t i = 0; i < cs->size(); i++) {
                 cs->getAt(i, c);
                 x[i] = c.x;
@@ -2750,8 +2728,6 @@ extern "C" {
     const CoordinateSequence*
     GEOSGeom_getCoordSeq_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        using geos::geom::Point;
-
         return execute(extHandle, [&]() {
             const LineString* ls = dynamic_cast<const LineString*>(g);
             if(ls) {
@@ -2795,7 +2771,7 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
 
-            geos::geom::CoordinateXY c(x, y);
+            CoordinateXY c(x, y);
             return gf->createPoint(c).release();
         });
     }
@@ -2846,8 +2822,6 @@ extern "C" {
     Geometry*
     GEOSGeom_createPolygon_r(GEOSContextHandle_t extHandle, Geometry* shell, Geometry** holes, unsigned int nholes)
     {
-        using geos::geom::LinearRing;
-
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
@@ -2901,7 +2875,7 @@ extern "C" {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
-            geos::geom::Envelope env(xmin, xmax, ymin, ymax);
+            Envelope env(xmin, xmax, ymin, ymax);
             return (gf->toGeometry(&env)).release();
         });
     }
@@ -3074,8 +3048,6 @@ extern "C" {
     WKTReader*
     GEOSWKTReader_create_r(GEOSContextHandle_t extHandle)
     {
-        using geos::io::WKTReader;
-
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
             return new WKTReader((GeometryFactory *) handle->geomFactory);
@@ -3811,7 +3783,6 @@ extern "C" {
     int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
                                double Ax, double Ay, double Bx, double By, double Px, double Py)
     {
-        using geos::geom::Coordinate;
         using geos::algorithm::Orientation;
 
         return execute(extHandle, 2, [&]() {
