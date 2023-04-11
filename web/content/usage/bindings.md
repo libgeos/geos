@@ -53,6 +53,7 @@ Geospatial applications using GEOS include:
  * [MonetDB](http://monetdb.cwi.nl/)
  * [SpatiaLite](http://www.gaia-gis.it/spatialite/)
  * [CockroachDB](https://github.com/cockroachdb/cockroach)
+ * [DuckDB](https://github.com/duckdblabs/duckdb_spatial)
 
 ## Applications
 
