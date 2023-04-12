@@ -3725,7 +3725,8 @@ extern int GEOSCoverageIsValid(
 * \param preserveBoundary Use 1 to preserve the outside edges
 *        of the coverage without simplification,
 *        0 to allow them to be simplified.
-* \return A collection containing the simplified geometries.
+* \return A collection containing the simplified geometries, or null
+*         on error.
 *
 * \since 3.12
 */
