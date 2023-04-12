@@ -4067,7 +4067,9 @@ extern "C" {
 
     int
     GEOSCoverageIsValid_r(GEOSContextHandle_t extHandle,
-        const Geometry* input)
+        const Geometry* input,
+        double gapWidth,
+        Geometry** invalidEdges)
     {
         using geos::coverage::CoverageValidator;
 
@@ -4076,45 +4078,33 @@ extern "C" {
             if (!col)
                 return -1;
 
-            std::vector<const Geometry*> coverage;
-            for (const auto& g : *col) {
-                coverage.push_back(g.get());
-            }
-            int isValid = CoverageValidator::isValid(coverage);
-            return isValid;
-        });
-    }
-
-    Geometry*
-    GEOSCoverageValid_r(GEOSContextHandle_t extHandle,
-        const Geometry* input,
-        double gapWidth)
-    {
-        using geos::coverage::CoverageValidator;
-
-        return execute(extHandle, [&]() -> Geometry* {
-            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
-            if (!col)
-                return nullptr;
+            // Initialize to nullptr
+            if (invalidEdges) *invalidEdges = nullptr;
 
             std::vector<const Geometry*> coverage;
             for (const auto& g : *col) {
                 coverage.push_back(g.get());
             }
+
             CoverageValidator cov(coverage);
             cov.setGapWidth(gapWidth);
-            std::vector<std::unique_ptr<Geometry>> simple = cov.validate();
+            std::vector<std::unique_ptr<Geometry>> invalid = cov.validate();
+            bool hasInvalid = CoverageValidator::hasInvalidResult(invalid);
 
-            const GeometryFactory* gf = input->getFactory();
-            for (auto& g : simple) {
-                // Replace nullptr with 'MULTILINESTRING EMPTY'
-                if (g == nullptr) {
-                    auto empty = gf->createEmpty(GEOS_MULTILINESTRING);
-                    g.reset(empty.release());
+            if (invalidEdges && hasInvalid) {
+                const GeometryFactory* gf = input->getFactory();
+                for (auto& g : invalid) {
+                    // Replace nullptr with 'MULTILINESTRING EMPTY'
+                    if (g == nullptr) {
+                        auto empty = gf->createEmpty(GEOS_MULTILINESTRING);
+                        g.reset(empty.release());
+                    }
                 }
+                auto r = gf->createGeometryCollection(std::move(invalid));
+                *invalidEdges = r.release();
             }
-            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(simple));
-            return r.release();
+
+            return hasInvalid ? 0 : 1;
         });
     }
 

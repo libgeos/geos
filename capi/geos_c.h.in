@@ -757,17 +757,12 @@ extern void GEOS_DLL GEOSGeom_destroy_r(
 /* ========= Coverages ========= */
 
 /** \see GEOSCoverageIsValid */
-extern int GEOS_DLL
+int
 GEOSCoverageIsValid_r(
     GEOSContextHandle_t extHandle,
-    const GEOSGeometry* input);
-
-/** \see GEOSCoverageValid */
-extern GEOSGeometry GEOS_DLL *
-GEOSCoverageValid_r(
-    GEOSContextHandle_t extHandle,
     const GEOSGeometry* input,
-    double gapWidth);
+    double gapWidth,
+    GEOSGeometry** output);
 
 /** \see GEOSCoverageSimplify */
 extern GEOSGeometry GEOS_DLL *
@@ -3689,31 +3684,26 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
 * assumption of exactly matching edges is not met.
 *
 * \param input The polygonal coverage to access,
-*        stored in a geometry collection.
+*        stored in a geometry collection. All members must be POLYGON
+*        or MULTIPOLYGON.
+* \param gapWidth The maximum width of gaps to detect.
+* \param invalidEdges When there are invalidities in the coverage,
+*        this pointer
+*        will be set with a geometry collection of the same length as
+*        the input, with a MULTILINESTRING of the error edges for each
+*        invalid polygon, or an EMPTY where the polygon is a valid
+*        participant in the coverage.
 * \return A value of 1 for a valid coverage, 0 for invalid and -1 for
-*         a processing error.
+*         a processing error. Invalidity includes polygons that overlap,
+*         that have gaps smaller than the gapWidth, or non-polygonal
+*         entries in the input collection.
 *
 * \since 3.12
 */
 extern int GEOSCoverageIsValid(
-    const GEOSGeometry* input);
-
-/**
-* Analyze a coverage (represented as a collection of polygonal geometry
-* with exactly matching edge geometry) to find places where the
-* assumption of exactly matching edges is not met.
-*
-* \param input The polygonal coverage to access,
-*        stored in a geometry collection.
-* \param gapWidth The maximum width of gaps to detect.
-* \return A collection containing a MULTILINESTRING indicating the
-*         invalid edges for each input polygon, or an empty
-*         MULTILINESTRING for polygons that are valid.
-*
-* \since 3.12
-*/
-extern GEOSGeometry GEOS_DLL *GEOSCoverageValid(
-    const GEOSGeometry* input, double gapWidth);
+    const GEOSGeometry* input,
+    double gapWidth,
+    GEOSGeometry** invalidEdges);
 
 /**
 * Operates on a coverage (represented as a list of polygonal geometry
@@ -3721,9 +3711,16 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageValid(
 * simplification to the edges, reducing complexity in proportion with
 * the provided tolerance, while retaining a valid coverage (no edges
 * will cross or touch after the simplification).
+* Geometries never disappear, but they may be simplified down to just
+* a triangle. Also, some invalid geoms (such as Polygons which have too
+* few non-repeated points) will be returned unchanged.
+* If the input dataset is not a valid coverage due to overlaps,
+* it will still be simplified, but invalid topology such as crossing
+* edges will still be invalid.
 *
 * \param input The polygonal coverage to access,
-*        stored in a geometry collection.
+*        stored in a geometry collection. All members must be POLYGON
+*        or MULTIPOLYGON.
 * \param tolerance A tolerance parameter in linear units.
 * \param preserveBoundary Use 1 to preserve the outside edges
 *        of the coverage without simplification,
@@ -3734,7 +3731,8 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageValid(
 */
 extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplify(
     const GEOSGeometry* input,
-    double tolerance, int preserveBoundary);
+    double tolerance,
+    int preserveBoundary);
 
 ///@}
 

@@ -1805,15 +1805,12 @@ extern "C" {
     }
 
     int
-    GEOSCoverageIsValid(const Geometry* input)
+    GEOSCoverageIsValid(
+        const Geometry* input,
+        double gapWidth,
+        Geometry** invalidEdges)
     {
-        return GEOSCoverageIsValid_r(handle, input);
-    }
-
-    Geometry*
-    GEOSCoverageValid(const Geometry* input, double gapWidth)
-    {
-        return GEOSCoverageValid_r(handle, input, gapWidth);
+        return GEOSCoverageIsValid_r(handle, input, gapWidth, invalidEdges);
     }
 
     Geometry*
