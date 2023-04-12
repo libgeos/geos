@@ -41,6 +41,7 @@
 #include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/cluster/GeometryDistanceClusterFinder.h>
 #include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
+#include <geos/coverage/CoverageSimplifier.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -105,6 +106,14 @@ struct GeometryOpCreator {
     std::string name;
     std::function<GeometryOp *( std::string name )> create;
 } ;
+
+std::vector<const Geometry*> toList(const std::unique_ptr<Geometry>& geom) {
+    std::vector<const Geometry*> geomList;
+    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+        geomList.emplace_back( geom->getGeometryN(i));
+    }
+    return geomList;
+}
 
 /*
 * Static array of operation definitions.
@@ -838,6 +847,20 @@ std::vector<GeometryOpCreator> opRegistry {
 
 //=============  category: Polygonal Coverage  ==================
 
+{"coverageSimplify", [](std::string name) { return GeometryOp::createAgg(name,
+    catCoverage, "simplify a polygonal coverage by a distance tolerance",
+    [](const std::unique_ptr<Geometry>& geom, double d) {
+        std::vector<const Geometry*> coverage = toList(geom);
+        std::vector<std::unique_ptr<Geometry>> result
+            = geos::coverage::CoverageSimplifier::simplify(coverage, d);
+        //-- convert list type (be nice to avoid this)
+        std::vector<std::unique_ptr<const Geometry>> resultList;
+        for (std::size_t i = 0; i < result.size(); i++) {
+            resultList.emplace_back( std::move(result[i]) );
+        }
+        return new Result( std::move(resultList) );
+    });
+}},
 {"coverageUnionNG", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "union a polygonal coverage",
     [](const std::unique_ptr<Geometry>& geom) {
@@ -853,16 +876,11 @@ std::vector<GeometryOpCreator> opRegistry {
 {"coverageValidate", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "validate a polygonal coverage",
     [](const std::unique_ptr<Geometry>& geom) {
-        //-- create list of input polygons
-        std::vector<const Geometry*> coverage;
-        for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-            coverage.emplace_back( geom->getGeometryN(i));
-        }
-
+        std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> invalidList
             = geos::coverage::CoverageValidator::validate(coverage);
 
-        //-- create GeometryCollection from result list
+        // result may contain nulls, so remove them
         std::vector<std::unique_ptr<const Geometry>> resultList;
         for (std::size_t i = 0; i < invalidList.size(); i++) {
             if (invalidList[i] != nullptr) {
@@ -1041,7 +1059,7 @@ Result::toString() {
     case typeGeomList:
        return metadata();
     }
-    return "Value for Unknonwn type";
+    return "Value for Unknown type";
 }
 
 std::string
