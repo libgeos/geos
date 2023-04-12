@@ -795,6 +795,16 @@ extern "C" {
     }
 
     /*
+     * For POINT
+     * returns 0 on exception, otherwise 1
+     */
+    int
+    GEOSGeomGetM(const Geometry* g1, double* m)
+    {
+        return GEOSGeomGetM_r(handle, g1, m);
+    }
+
+    /*
      * Call only on polygon
      * Return a copy of the internal Geometry.
      */

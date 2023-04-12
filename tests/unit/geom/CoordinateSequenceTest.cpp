@@ -1258,25 +1258,68 @@ void object::test<47>
     ensure_equals(seq.getDimension(), 2u);
 }
 
-// Test getOrinate
+// Test getOrdinate
 template<>
 template<>
 void object::test<48>
 ()
 {
-    CoordinateSequence seq{CoordinateXY(1, 2), CoordinateXY(3, 4)};
+    {
+        CoordinateSequence seq_xy{CoordinateXY(1, 2), CoordinateXY(3, 4)};
 
-    ensure_same(seq.getOrdinate(0, CoordinateSequence::Y), 2);
-    ensure_same(seq.getOrdinate(1, CoordinateSequence::X), 3);
-    ensure_same(seq.getOrdinate(1, CoordinateSequence::Z), DoubleNotANumber);
-    ensure_same(seq.getOrdinate(1, CoordinateSequence::M), DoubleNotANumber);
+        ensure_same(seq_xy.getOrdinate(0, CoordinateSequence::X), 1);
+        ensure_same(seq_xy.getOrdinate(0, CoordinateSequence::Y), 2);
+        ensure_same(seq_xy.getOrdinate(0, CoordinateSequence::Z), DoubleNotANumber);
+        ensure_same(seq_xy.getOrdinate(0, CoordinateSequence::M), DoubleNotANumber);
 
-    CoordinateSequence seq2{CoordinateXYZM(1, 2, 3, 4)};
+        ensure_same(seq_xy.getOrdinate(1, CoordinateSequence::X), 3);
+        ensure_same(seq_xy.getOrdinate(1, CoordinateSequence::Y), 4);
+        ensure_same(seq_xy.getOrdinate(1, CoordinateSequence::Z), DoubleNotANumber);
+        ensure_same(seq_xy.getOrdinate(1, CoordinateSequence::M), DoubleNotANumber);
+    }
 
-    ensure_same(seq2.getOrdinate(0, CoordinateSequence::X), 1);
-    ensure_same(seq2.getOrdinate(0, CoordinateSequence::Y), 2);
-    ensure_same(seq2.getOrdinate(0, CoordinateSequence::Z), 3);
-    ensure_same(seq2.getOrdinate(0, CoordinateSequence::M), 4);
+    {
+        CoordinateSequence seq_xym{CoordinateXYM(1, 2, 3), CoordinateXYM(4, 5, 6)};
+
+        ensure_same(seq_xym.getOrdinate(0, CoordinateSequence::X), 1);
+        ensure_same(seq_xym.getOrdinate(0, CoordinateSequence::Y), 2);
+        ensure_same(seq_xym.getOrdinate(0, CoordinateSequence::Z), DoubleNotANumber);
+        ensure_same(seq_xym.getOrdinate(0, CoordinateSequence::M), 3);
+
+        ensure_same(seq_xym.getOrdinate(1, CoordinateSequence::X), 4);
+        ensure_same(seq_xym.getOrdinate(1, CoordinateSequence::Y), 5);
+        ensure_same(seq_xym.getOrdinate(1, CoordinateSequence::Z), DoubleNotANumber);
+        ensure_same(seq_xym.getOrdinate(1, CoordinateSequence::M), 6);
+    }
+
+    {
+        CoordinateSequence seq_xyz{Coordinate(1, 2, 3), Coordinate(4, 5, 6)};
+
+        ensure_same(seq_xyz.getOrdinate(0, CoordinateSequence::X), 1);
+        ensure_same(seq_xyz.getOrdinate(0, CoordinateSequence::Y), 2);
+        ensure_same(seq_xyz.getOrdinate(0, CoordinateSequence::Z), 3);
+        ensure_same(seq_xyz.getOrdinate(0, CoordinateSequence::M), DoubleNotANumber);
+
+        ensure_same(seq_xyz.getOrdinate(1, CoordinateSequence::X), 4);
+        ensure_same(seq_xyz.getOrdinate(1, CoordinateSequence::Y), 5);
+        ensure_same(seq_xyz.getOrdinate(1, CoordinateSequence::Z), 6);
+        ensure_same(seq_xyz.getOrdinate(1, CoordinateSequence::M), DoubleNotANumber);
+    }
+
+    {
+        CoordinateSequence seq_xyzm{CoordinateXYZM(1, 2, 3, 4), CoordinateXYZM(5, 6, 7, 8)};
+
+        ensure_same(seq_xyzm.getOrdinate(0, CoordinateSequence::X), 1);
+        ensure_same(seq_xyzm.getOrdinate(0, CoordinateSequence::Y), 2);
+        ensure_same(seq_xyzm.getOrdinate(0, CoordinateSequence::Z), 3);
+        ensure_same(seq_xyzm.getOrdinate(0, CoordinateSequence::M), 4);
+
+        ensure_same(seq_xyzm.getOrdinate(1, CoordinateSequence::X), 5);
+        ensure_same(seq_xyzm.getOrdinate(1, CoordinateSequence::Y), 6);
+        ensure_same(seq_xyzm.getOrdinate(1, CoordinateSequence::Z), 7);
+        ensure_same(seq_xyzm.getOrdinate(1, CoordinateSequence::M), 8);
+
+    }
 }
 
 // Test setOrdinate

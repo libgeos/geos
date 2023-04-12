@@ -177,7 +177,16 @@ Point::getZ() const
     if(isEmpty()) {
         throw util::UnsupportedOperationException("getZ called on empty Point\n");
     }
-    return coordinates.getAt<Coordinate>(0).z;
+    return coordinates.getOrdinate(0, CoordinateSequence::Z);
+}
+
+double
+Point::getM() const
+{
+    if(isEmpty()) {
+        throw util::UnsupportedOperationException("getM called on empty Point\n");
+    }
+    return coordinates.getOrdinate(0, CoordinateSequence::M);
 }
 
 std::string

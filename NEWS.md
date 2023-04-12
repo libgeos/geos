@@ -17,6 +17,7 @@ xxxx-xx-xx
   - CAPI: GEOSEqualsIdentical (GH-810, Dan Baston)
   - CAPI: GEOSSTRtree_build (GH-835, Dan Baston)
   - CAPI: GEOSConcaveHullByLength (GH-849, Martin Davis)
+  - CAPI: GEOSGeomGetM (GH-864, Mike Taves)
   - Voronoi: Add option to create diagram in order consistent with inputs (GH-781, Dan Baston)
 
 - Fixes/Improvements:

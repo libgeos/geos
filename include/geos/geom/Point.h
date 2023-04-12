@@ -129,6 +129,7 @@ public:
     double getX() const;
     double getY() const;
     double getZ() const;
+    double getM() const;
 
     std::string getGeometryType() const override;
     GeometryTypeId getGeometryTypeId() const override;

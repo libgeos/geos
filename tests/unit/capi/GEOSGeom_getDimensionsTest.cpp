@@ -22,7 +22,7 @@ void object::test<1>
 ()
 {
     GEOSGeometry* point = GEOSGeomFromWKT("POINT (4 2 7)");
-    GEOSGeometry* line = GEOSGeomFromWKT("LINESTRING (4 2 7, 8 2 9)");
+    GEOSGeometry* line = GEOSGeomFromWKT("LINESTRING (4 2 7 1, 8 2 9 5)");
     GEOSGeometry* poly = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
 
     ensure_equals(GEOSGeom_getDimensions(point), 0);
