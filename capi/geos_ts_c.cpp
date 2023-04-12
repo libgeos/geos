@@ -4109,7 +4109,7 @@ extern "C" {
     }
 
     Geometry*
-    GEOSCoverageSimplify_r(GEOSContextHandle_t extHandle,
+    GEOSCoverageSimplifyVW_r(GEOSContextHandle_t extHandle,
         const Geometry* input,
         double tolerance,
         int preserveBoundary)

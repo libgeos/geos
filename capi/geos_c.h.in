@@ -766,7 +766,7 @@ GEOSCoverageIsValid_r(
 
 /** \see GEOSCoverageSimplify */
 extern GEOSGeometry GEOS_DLL *
-GEOSCoverageSimplify_r(
+GEOSCoverageSimplifyVW_r(
     GEOSContextHandle_t extHandle,
     const GEOSGeometry* input,
     double tolerance,
@@ -3730,7 +3730,7 @@ extern int GEOSCoverageIsValid(
 *
 * \since 3.12
 */
-extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplify(
+extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
     const GEOSGeometry* input,
     double tolerance,
     int preserveBoundary);

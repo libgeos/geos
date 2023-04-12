@@ -1814,9 +1814,9 @@ extern "C" {
     }
 
     Geometry*
-    GEOSCoverageSimplify(const Geometry* input, double tolerance, int preserveBoundary)
+    GEOSCoverageSimplifyVW(const Geometry* input, double tolerance, int preserveBoundary)
     {
-        return GEOSCoverageSimplify_r(handle, input, tolerance, preserveBoundary);
+        return GEOSCoverageSimplifyVW_r(handle, input, tolerance, preserveBoundary);
     }
 
 
