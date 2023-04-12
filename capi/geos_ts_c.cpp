@@ -27,6 +27,8 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
+#include <geos/coverage/CoverageValidator.h>
+#include <geos/coverage/CoverageSimplifier.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -4062,5 +4064,94 @@ extern "C" {
             return 1;
         });
     }
+
+    int
+    GEOSCoverageIsValid_r(GEOSContextHandle_t extHandle,
+        const Geometry* input)
+    {
+        using geos::coverage::CoverageValidator;
+
+        return execute(extHandle, 0, [&]() {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+            if (!col)
+                return -1;
+
+            std::vector<const Geometry*> coverage;
+            for (const auto& g : *col) {
+                coverage.push_back(g.get());
+            }
+            int isValid = CoverageValidator::isValid(coverage);
+            return isValid;
+        });
+    }
+
+    Geometry*
+    GEOSCoverageValid_r(GEOSContextHandle_t extHandle,
+        const Geometry* input,
+        double gapWidth)
+    {
+        using geos::coverage::CoverageValidator;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+            if (!col)
+                return nullptr;
+
+            std::vector<const Geometry*> coverage;
+            for (const auto& g : *col) {
+                coverage.push_back(g.get());
+            }
+            CoverageValidator cov(coverage);
+            cov.setGapWidth(gapWidth);
+            std::vector<std::unique_ptr<Geometry>> simple = cov.validate();
+
+            const GeometryFactory* gf = input->getFactory();
+            for (auto& g : simple) {
+                // Replace nullptr with 'MULTILINESTRING EMPTY'
+                if (g == nullptr) {
+                    auto empty = gf->createEmpty(GEOS_MULTILINESTRING);
+                    g.reset(empty.release());
+                }
+            }
+            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(simple));
+            return r.release();
+        });
+    }
+
+    Geometry*
+    GEOSCoverageSimplify_r(GEOSContextHandle_t extHandle,
+        const Geometry* input,
+        double tolerance,
+        int preserveBoundary)
+    {
+        using geos::coverage::CoverageSimplifier;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+            if (!col)
+                return nullptr;
+
+            std::vector<const Geometry*> coverage;
+            for (const auto& g : *col) {
+                coverage.push_back(g.get());
+            }
+            CoverageSimplifier cov(coverage);
+            std::vector<std::unique_ptr<Geometry>> simple;
+            if (preserveBoundary == 1) {
+                simple = cov.simplifyInner(tolerance);
+            }
+            else if (preserveBoundary == 0) {
+                simple = cov.simplify(tolerance);
+            }
+            else return nullptr;
+
+            const GeometryFactory* gf = input->getFactory();
+            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(simple));
+            return r.release();
+        });
+    }
+
+
+
 
 } /* extern "C" */

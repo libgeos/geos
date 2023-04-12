@@ -1804,4 +1804,23 @@ extern "C" {
                                          cx, cy);
     }
 
+    int
+    GEOSCoverageIsValid(const Geometry* input)
+    {
+        return GEOSCoverageIsValid_r(handle, input);
+    }
+
+    Geometry*
+    GEOSCoverageValid(const Geometry* input, double gapWidth)
+    {
+        return GEOSCoverageValid_r(handle, input, gapWidth);
+    }
+
+    Geometry*
+    GEOSCoverageSimplify(const Geometry* input, double tolerance, int preserveBoundary)
+    {
+        return GEOSCoverageSimplify_r(handle, input, tolerance, preserveBoundary);
+    }
+
+
 } /* extern "C" */

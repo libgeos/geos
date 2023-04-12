@@ -754,6 +754,29 @@ extern void GEOS_DLL GEOSGeom_destroy_r(
     GEOSContextHandle_t handle,
     GEOSGeometry* g);
 
+/* ========= Coverages ========= */
+
+/** \see GEOSCoverageIsValid */
+extern int GEOS_DLL
+GEOSCoverageIsValid_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input);
+
+/** \see GEOSCoverageValid */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageValid_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input,
+    double gapWidth);
+
+/** \see GEOSCoverageSimplify */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageSimplify_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input,
+    double tolerance,
+    int preserveBoundary);
+
 /* ========= Topology Operations ========= */
 
 /** \see GEOSEnvelope */
@@ -3649,6 +3672,68 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
 */
 extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
     double width, int quadsegs, int joinStyle, double mitreLimit);
+
+///@}
+
+
+/* ====================================================================== */
+/** @name Coverages
+* Functions to work with coverages represented by lists of polygons
+* that exactly share edge geometry.
+*/
+///@{
+
+/**
+* Analyze a coverage (represented as a collection of polygonal geometry
+* with exactly matching edge geometry) to find places where the
+* assumption of exactly matching edges is not met.
+*
+* \param input The polygonal coverage to access,
+*        stored in a geometry collection.
+* \return A value of 1 for a valid coverage, 0 for invalid and -1 for
+*         a processing error.
+*
+* \since 3.12
+*/
+extern int GEOSCoverageIsValid(
+    const GEOSGeometry* input);
+
+/**
+* Analyze a coverage (represented as a collection of polygonal geometry
+* with exactly matching edge geometry) to find places where the
+* assumption of exactly matching edges is not met.
+*
+* \param input The polygonal coverage to access,
+*        stored in a geometry collection.
+* \return A collection containing a MULTILINESTRING indicating the
+*         invalid edges for each input polygon, or an empty
+*         MULTILINESTRING for polygons that are valid.
+*
+* \since 3.12
+*/
+extern GEOSGeometry GEOS_DLL *GEOSCoverageValid(
+    const GEOSGeometry* input, double gapWidth);
+
+/**
+* Operates on a coverage (represented as a list of polygonal geometry
+* with exactly matching edge geometry) to apply a Visvalingam–Whyatt
+* simplification to the edges, reducing complexity in proportion with
+* the provided tolerance, while retaining a valid coverage (no edges
+* will cross or touch after the simplification).
+*
+* \param input The polygonal coverage to access,
+*        stored in a geometry collection.
+* \param tolerance A tolerance parameter in linear units.
+* \param preserveBoundary Use 1 to preserve the outside edges
+*        of the coverage without simplification,
+*        0 to allow them to be simplified.
+* \return A collection containing the simplified geometries.
+*
+* \since 3.12
+*/
+extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplify(
+    const GEOSGeometry* input,
+    double tolerance, int preserveBoundary);
 
 ///@}
 
