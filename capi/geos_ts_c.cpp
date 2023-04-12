@@ -4076,7 +4076,7 @@ extern "C" {
         return execute(extHandle, 0, [&]() {
             const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
             if (!col)
-                return -1;
+                return 2;
 
             // Initialize to nullptr
             if (invalidEdges) *invalidEdges = nullptr;
