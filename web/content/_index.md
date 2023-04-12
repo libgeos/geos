@@ -9,7 +9,7 @@ GEOS is a C/C++ library for [computational geometry](https://en.wikipedia.org/wi
 [geographic information systems](https://en.wikipedia.org/wiki/Geographic_information_system) (GIS) software.
 It implements the [OGC](https://www.ogc.org/standards/sfa)
 [*Simple Features*](https://en.wikipedia.org/wiki/Simple_Features) geometry model and provides all the spatial functions in that standard as well as many others.
-GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), and [Shapely](https://shapely.readthedocs.io/en/stable/project.html).
+GEOS is a core dependency of [PostGIS](https://postgis.net), [QGIS](https://qgis.org), [GDAL](https://gdal.org), [Shapely](https://shapely.readthedocs.io/en/stable/project.html) and [many others]({{< ref "usage/bindings" >}}).
 
 ## Capabilities
 
