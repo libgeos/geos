@@ -3705,6 +3705,7 @@ extern int GEOSCoverageIsValid(
 *
 * \param input The polygonal coverage to access,
 *        stored in a geometry collection.
+* \param gapWidth The maximum width of gaps to detect.
 * \return A collection containing a MULTILINESTRING indicating the
 *         invalid edges for each input polygon, or an empty
 *         MULTILINESTRING for polygons that are valid.
