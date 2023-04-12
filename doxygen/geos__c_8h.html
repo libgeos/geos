@@ -1914,7 +1914,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>For non-reentrant code, call when all GEOS operations are complete, cleans up global resources. </p>
+<p>For non-reentrant code, call when all GEOS operations are complete, cleans up global resources. </p><dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
 
 </div>
 </div>
@@ -2073,7 +2073,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Cancel a pending interruption request </p>
+<p>Cancel a pending interruption request </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
 
 </div>
 </div>
@@ -2100,6 +2100,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the previously configured callback </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
 
 </div>
 </div>
@@ -2118,7 +2119,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Request safe interruption of operations </p>
+<p>Request safe interruption of operations </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
 
 </div>
 </div>
@@ -2251,6 +2252,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -2317,6 +2319,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the boundary. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -2389,6 +2392,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> of the buffered result. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -3496,7 +3500,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <dd>
 <a class="el" href="geos__c_8h.html#aaceadb7351dda799a583edca329931ae">GEOSConcaveHull</a> </dd>
 <dd>
-<a class="el" href="geos__c_8h.html#ad952d7e2281a776fc7e969a0d486660f">GEOSConvexHull</a> </dd></dl>
+<a class="el" href="geos__c_8h.html#ad952d7e2281a776fc7e969a0d486660f">GEOSConvexHull</a></dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.11 </dd></dl>
 
 </div>
 </div>
@@ -3637,6 +3642,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ab28a71e7f596d6eea18af5cc0310afaf" title="Returns true if other.within(this) returns true.">geos::geom::Geometry::contains</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -3861,6 +3867,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the convex hull. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayNG.html">geos::operation::overlayng::OverlayNG</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -3915,6 +3922,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a copy of the coordinate sequence or NULL on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4398,6 +4406,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the sequence or NULL on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4457,6 +4466,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4522,6 +4532,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4607,6 +4618,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4690,6 +4702,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -4768,6 +4781,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5061,6 +5075,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5145,6 +5160,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5308,6 +5324,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5398,6 +5415,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5691,6 +5709,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -5775,6 +5794,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6054,6 +6074,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a35df2ea00e251e550e8dc2aa05f8e979">geos::geom::Geometry::crosses</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6284,6 +6305,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the difference. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayNG.html">geos::operation::overlayng::OverlayNG</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6442,6 +6464,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#aaea1f43a37760207a907ea83c0a5404d">geos::geom::Geometry::disjoint</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6575,6 +6598,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6812,6 +6836,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated polygonal envelope or point. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6878,6 +6903,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a15157273b773249cbfdfe7321ec9c073" title="Returns true if the DE-9IM intersection matrix for the two Geometrys is T*F**FFF*.">geos::geom::Geometry::equals</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -6957,6 +6983,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aa0ab6f3a7ff15253d46c0073b77d6766">GEOSNormalize()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -7280,6 +7307,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.1 </dd></dl>
 
 </div>
 </div>
@@ -7677,6 +7705,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -7750,6 +7779,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry collection. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The geoms argument is an array of GEOSGeometry* objects. The caller <b>retains ownership</b> of the containing array, but the ownership of the pointed-to objects is transferred to the returned <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -7988,6 +8018,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated linear ring geometry. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8042,6 +8073,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated linestring geometry. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8096,6 +8128,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated point geometry. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8241,6 +8274,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The holes argument is an array of GEOSGeometry* objects. The caller <b>retains ownership</b> of the containing array, but the ownership of the pointed-to objects is transferred to the returned <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8403,6 +8437,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8572,6 +8607,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Coordinate sequence or NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -8633,6 +8669,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dimensionality </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -9618,6 +9655,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A Point geometry. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
 </div>
@@ -9684,6 +9722,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
 </div>
@@ -9816,6 +9855,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of points, -1 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -9881,6 +9921,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A Point geometry. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
 </div>
@@ -9941,6 +9982,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A Point geometry. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
 </div>
@@ -10006,6 +10048,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10077,6 +10120,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10385,6 +10429,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A string with the geometry type. Caller must free with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a>. NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10439,6 +10484,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The geometry type number, or -1 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10493,7 +10539,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point at the center of mass of the input Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1Centroid.html" title="Computes the centroid of a Geometry of any dimension.">geos::algorithm::Centroid</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1Centroid.html" title="Computes the centroid of a Geometry of any dimension.">geos::algorithm::Centroid</a></dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10549,6 +10596,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>LinearRing geometry. Owned by parent geometry, do not free. NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10615,6 +10663,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>, do not free! It will be freed when the parent is freed. Returns NULL on exception. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Up to GEOS 3.2.0 the input geometry must be a Collection, in later versions it doesn't matter (getGeometryN(0) for a single will return the input). </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10687,6 +10736,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>LinearRing geometry. Owned by parent geometry, do not free. NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10747,6 +10797,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of points in the geometry. -1 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10802,6 +10853,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of direct children in this collection </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>For GEOS &lt; 3.2 this function may crash when fed simple geometries </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10856,6 +10908,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of interior rings, -1 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -10910,6 +10963,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>SRID number or 0 if unknown / not set. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11019,6 +11073,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11092,6 +11147,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html" title="An algorithm for computing a distance metric which is an approximation to the Hausdorff Distance base...">geos::algorithm::distance::DiscreteHausdorffDistance</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -11184,6 +11240,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html" title="An algorithm for computing a distance metric which is an approximation to the Hausdorff Distance base...">geos::algorithm::distance::DiscreteHausdorffDistance</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -11365,6 +11422,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The point <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> that is distance from the start of line. Caller takes ownership of returned geometry. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -11436,6 +11494,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The point <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> that is distance from the start of line. Caller takes ownership of returned geometry. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -11508,6 +11567,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the intersection. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayNG.html">geos::operation::overlayng::OverlayNG</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11666,6 +11726,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a31c30fa6527e9736b97ca2e4e22ac75b" title="Returns true if disjoint returns false.">geos::geom::Geometry::intersects</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11726,6 +11787,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
 </div>
@@ -11780,6 +11842,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11834,6 +11897,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11888,6 +11952,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -11949,6 +12014,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd>geos::operation::valid::isValidOp </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -12253,6 +12319,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -12314,6 +12381,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The merged linework Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMerger.html" title="Sews together a set of fully noded LineStrings.">geos::operation::linemerge::LineMerger</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -13412,6 +13480,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -13721,6 +13790,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#adae69b4440e409c879ef182640e7d613" title="Returns true if the DE-9IM intersection matrix for the two Geometrys is T*T***T** (for two points or ...">geos::geom::Geometry::overlaps</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -13781,7 +13851,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point that is inside the input Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1InteriorPointArea.html" title="Computes a point in the interior of an areal geometry. The point will lie in the geometry interior in...">geos::algorithm::InteriorPointArea</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1InteriorPointArea.html" title="Computes a point in the interior of an areal geometry. The point will lie in the geometry interior in...">geos::algorithm::InteriorPointArea</a></dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -14049,7 +14120,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The polygonal output geometry. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html" title="Polygonizes a set of Geometrys which contain linework that represents the edges of a planar graph.">geos::operation::polygonize::Polygonizer</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html" title="Polygonizes a set of Geometrys which contain linework that represents the edges of a planar graph.">geos::operation::polygonize::Polygonizer</a></dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -15624,6 +15696,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>distance along line that point projects to, -1 on exception</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Line parameter must be a LineString. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -15695,6 +15768,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The proportion of the overall line length that the projected point falls at. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
 </div>
@@ -15767,6 +15841,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>DE9IM string. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a>. NULL on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -15934,6 +16009,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -16389,6 +16465,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -17508,6 +17585,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the symmetric difference. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayNG.html">geos::operation::overlayng::OverlayNG</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -17739,6 +17817,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a8ea2a99592c05f1b9b3c790518c75267" title="Returns true if the DE-9IM intersection matrix for the two Geometrys is FT*******,...">geos::geom::Geometry::touches</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -17940,6 +18019,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated geometry of the union. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayNG.html">geos::operation::overlayng::OverlayNG</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -18128,6 +18208,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Returns the current GEOS version string. eg: "3.10.0" This function does not have a reentrant variant and is available if <code>GEOS_USE_ONLY_R_API</code> is defined. </p><dl class="section return"><dt>Returns</dt><dd>version string </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -18264,6 +18345,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on true, 0 on false, 2 on exception </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7038c4ce6fdf2f5a519ff705e1ac40fd" title="Returns true if the DE-9IM intersection matrix for the two Geometrys is T*F**F***.">geos::geom::Geometry::within</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
@@ -18318,6 +18400,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Allocate a new <a class="el" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a>. </p><dl class="section return"><dt>Returns</dt><dd>a new reader. Caller must free with <a class="el" href="geos__c_8h.html#a11519c830c62e0123fa7985dbbb15d12">GEOSWKBReader_destroy()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18361,6 +18444,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18433,6 +18517,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> built from the WKB, or NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18517,6 +18602,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> built from the HEX WKB, or NULL on exception. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18648,6 +18734,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Allocate a new <a class="el" href="geos__c_8h.html#a64363cbc6dc4d662935039fee901e14d">GEOSWKBWriter</a>. </p><dl class="section return"><dt>Returns</dt><dd>a new writer. Caller must free with <a class="el" href="geos__c_8h.html#a94d40ff344a35ccfd52d1cdd54bc7c7e">GEOSWKBWriter_destroy()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18691,6 +18778,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18745,6 +18833,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The current byte order </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18853,6 +18942,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18907,6 +18997,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of dimensions (2, 3, or 4) </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -18971,6 +19062,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19112,6 +19204,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19182,6 +19275,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19260,6 +19354,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The WKB representation. Caller must free with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19344,6 +19439,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The HEX WKB representation. Caller must free with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19404,6 +19500,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Allocate a new <a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a>. </p><dl class="section return"><dt>Returns</dt><dd>a new reader. Caller must free with <a class="el" href="geos__c_8h.html#a29dd14560ca1d7dadd8fec74595654e0">GEOSWKTReader_destroy()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19447,6 +19544,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19512,6 +19610,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>, caller to free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>) </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19637,6 +19736,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Allocate a new <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. </p><dl class="section return"><dt>Returns</dt><dd>a new writer. Caller must free with <a class="el" href="geos__c_8h.html#a36f7cc8ba37287c0905cd9705859828f">GEOSWKTWriter_destroy()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -19680,6 +19780,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -20084,6 +20185,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A newly allocated string containing the WKT output or NULL on exception. Caller must free with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.0 </dd></dl>
 
 </div>
 </div>
@@ -20156,6 +20258,7 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
   </table>
   </dd>
 </dl>
+<dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
 </div>
 </div>
