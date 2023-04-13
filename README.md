@@ -14,12 +14,13 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 
 ## Build Status
 
-| CI    | Status | CI    | Status | CI    | Status |
-| :---: | :----- | :---: | :----- | :---: | :----- |
-| GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch/main)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:main) | Bessie | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) |
-| Azure | [![Build Status](https://dev.azure.com/libgeos/geos/_apis/build/status/libgeos.geos?branchName=main)](https://dev.azure.com/libgeos/geos/_build/latest?definitionId=2&branchName=main) | Bessie32  | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) | Winnie | [![winnie](https://winnie.postgis.net/view/GEOS/job/GEOS_Master/badge/icon)](https://winnie.postgis.net/view/GEOS/job/GEOS_Master/) |
-| GitLab CI | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/main/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/main) | Berrie | [![berrie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie) | Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=main)](https://dronie.osgeo.org/geos/geos?branch=master) |
-| AppVeyor | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/main?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/main) | Berrie64 | [![berrie64](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie64&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie64) |
+| CI    | Status | CI    | Status |
+| :---: | :----- | :---: | :----- |
+| GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch/3.11)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:3.11) | GitLab CI | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.11/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/3.11) |
+| Bessie | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&build=last:${params.reference=refs/heads/3.11})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.11)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.11/) |
+| Bessie32  | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&build=last:${params.reference=refs/heads/3.11})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) | Winnie | [![winnie](https://winnie.postgis.net/view/GEOS/job/GEOS_Branch_3.11/badge/icon)](https://winnie.postgis.net/view/GEOS/job/GEOS_Branch_3.11/) |
+| Berrie | [![berrie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie&build=last:${params.reference=refs/heads/3.11})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie) | Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.11)](https://dronie.osgeo.org/geos/geos?branch=3.11) |
+| Berrie64 | [![berrie64](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie64&build=last:${params.reference=refs/heads/3.11})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie64) |
 
 ## Community Resources
 
