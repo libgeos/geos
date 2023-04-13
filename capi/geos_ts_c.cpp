@@ -4073,7 +4073,7 @@ extern "C" {
     {
         using geos::coverage::CoverageValidator;
 
-        return execute(extHandle, 0, [&]() {
+        return execute(extHandle, 2, [&]() {
             const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
             if (!col)
                 throw geos::util::IllegalArgumentException("input is not a collection");
