@@ -3,7 +3,7 @@ xxxx-xx-xx
 
 - New things:
   - C++14 is now required.
-  - Polygonal coverage operations: CoverageValidator, CoveragePolygonValidator,
+  - Polygonal coverages: CoverageValidator, CoveragePolygonValidator,
     CoverageGapFinder, CoverageUnion (JTS-900, Martin Davis & Paul Ramsey)
   - Support reading and writing M values through WKB and WKT readers/writers
     (GH-721, Dan Baston)
@@ -19,6 +19,8 @@ xxxx-xx-xx
   - CAPI: GEOSConcaveHullByLength (GH-849, Martin Davis)
   - CAPI: GEOSGeomGetM (GH-864, Mike Taves)
   - Voronoi: Add option to create diagram in order consistent with inputs (GH-781, Dan Baston)
+  - Polygonal coverages: CoverageSimplifier (JTS-911, Martin Davis)
+  - CAPI: GEOSCoverageIsValid, GEOSCoverageSimplifyVW (GH-867, Paul Ramsey)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
