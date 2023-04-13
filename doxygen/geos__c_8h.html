@@ -278,6 +278,10 @@ Functions</h2></td></tr>
 <tr class="separator:a36e647d81b4cd73fcddca52f3d4b54c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fe52b52669abe659da27633c1743904"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a2fe52b52669abe659da27633c1743904">GEOSGeom_destroy_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:a2fe52b52669abe659da27633c1743904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc9ca29549849215a66ff83209f2b13"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a6cc9ca29549849215a66ff83209f2b13">GEOSCoverageIsValid_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *input, double gapWidth, <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> **output)</td></tr>
+<tr class="separator:a6cc9ca29549849215a66ff83209f2b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba1044c956087f45bf871cc24c7d088e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aba1044c956087f45bf871cc24c7d088e">GEOSCoverageSimplifyVW_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *input, double tolerance, int preserveBoundary)</td></tr>
+<tr class="separator:aba1044c956087f45bf871cc24c7d088e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7721ea56f8fb69035bf0fe8b001918a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac7721ea56f8fb69035bf0fe8b001918a">GEOSEnvelope_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:ac7721ea56f8fb69035bf0fe8b001918a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7f46df2867e73a57c3e95317bb30f89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ae7f46df2867e73a57c3e95317bb30f89">GEOSIntersection_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g1, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g2)</td></tr>
@@ -941,6 +945,13 @@ Functions</h2></td></tr>
 <tr class="separator:ac65f01341af414e75cd2f9ffda94fbbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7c7d7ec5cc5cb6566dbecadc557b7e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab7c7d7ec5cc5cb6566dbecadc557b7e9">GEOSOffsetCurve</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double width, int quadsegs, int joinStyle, double mitreLimit)</td></tr>
 <tr class="separator:ab7c7d7ec5cc5cb6566dbecadc557b7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Coverages</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>Functions to work with coverages represented by lists of polygons that exactly share edge geometry. </p>
+</div></td></tr>
+<tr class="memitem:a562112e71b059c2bccd84ba05b5e0907"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a562112e71b059c2bccd84ba05b5e0907">GEOSCoverageIsValid</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *input, double gapWidth, <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> **invalidEdges)</td></tr>
+<tr class="separator:a562112e71b059c2bccd84ba05b5e0907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac518117f097bddbbc237b2a47fea546e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac518117f097bddbbc237b2a47fea546e">GEOSCoverageSimplifyVW</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *input, double tolerance, int preserveBoundary)</td></tr>
+<tr class="separator:ac518117f097bddbbc237b2a47fea546e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Noding and Polygonization</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Functions computing noding of lines, and forming noded lines into polygons. </p>
 </div></td></tr>
@@ -5836,6 +5847,178 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aa9d7f7fd094d0fce75144da7af581132">GEOSCoordSeq_setZ</a> </dd></dl>
+
+</div>
+</div>
+<a id="a562112e71b059c2bccd84ba05b5e0907"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a562112e71b059c2bccd84ba05b5e0907">&#9670;&nbsp;</a></span>GEOSCoverageIsValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCoverageIsValid </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gapWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> **&#160;</td>
+          <td class="paramname"><em>invalidEdges</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Analyze a coverage (represented as a collection of polygonal geometry with exactly matching edge geometry) to find places where the assumption of exactly matching edges is not met.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>The polygonal coverage to access, stored in a geometry collection. All members must be POLYGON or MULTIPOLYGON. </td></tr>
+    <tr><td class="paramname">gapWidth</td><td>The maximum width of gaps to detect. </td></tr>
+    <tr><td class="paramname">invalidEdges</td><td>When there are invalidities in the coverage, this pointer will be set with a geometry collection of the same length as the input, with a MULTILINESTRING of the error edges for each invalid polygon, or an EMPTY where the polygon is a valid participant in the coverage. Pass NULL if you do not want the invalid edges returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A value of 1 for a valid coverage, 0 for invalid and 2 for an exception or error. Invalidity includes polygons that overlap, that have gaps smaller than the gapWidth, or non-polygonal entries in the input collection.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.12 </dd></dl>
+
+</div>
+</div>
+<a id="a6cc9ca29549849215a66ff83209f2b13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cc9ca29549849215a66ff83209f2b13">&#9670;&nbsp;</a></span>GEOSCoverageIsValid_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCoverageIsValid_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gapWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> **&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a562112e71b059c2bccd84ba05b5e0907">GEOSCoverageIsValid</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac518117f097bddbbc237b2a47fea546e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac518117f097bddbbc237b2a47fea546e">&#9670;&nbsp;</a></span>GEOSCoverageSimplifyVW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* GEOSCoverageSimplifyVW </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>preserveBoundary</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Operates on a coverage (represented as a list of polygonal geometry with exactly matching edge geometry) to apply a Visvalingam–Whyatt simplification to the edges, reducing complexity in proportion with the provided tolerance, while retaining a valid coverage (no edges will cross or touch after the simplification). Geometries never disappear, but they may be simplified down to just a triangle. Also, some invalid geoms (such as Polygons which have too few non-repeated points) will be returned unchanged. If the input dataset is not a valid coverage due to overlaps, it will still be simplified, but invalid topology such as crossing edges will still be invalid.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>The polygonal coverage to access, stored in a geometry collection. All members must be POLYGON or MULTIPOLYGON. </td></tr>
+    <tr><td class="paramname">tolerance</td><td>A tolerance parameter in linear units. </td></tr>
+    <tr><td class="paramname">preserveBoundary</td><td>Use 1 to preserve the outside edges of the coverage without simplification, 0 to allow them to be simplified. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A collection containing the simplified geometries, or null on error.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.12 </dd></dl>
+
+</div>
+</div>
+<a id="aba1044c956087f45bf871cc24c7d088e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba1044c956087f45bf871cc24c7d088e">&#9670;&nbsp;</a></span>GEOSCoverageSimplifyVW_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>* GEOSCoverageSimplifyVW_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>preserveBoundary</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd>GEOSCoverageSimplify </dd></dl>
 
 </div>
 </div>
