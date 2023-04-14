@@ -252,7 +252,10 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
 void
 WKTWriter::appendOrdinateText(OrdinateSet outputOrdinates, Writer& writer) const
 {
-    if (old3D && !outputOrdinates.hasM()) {
+    if (old3D) {
+        if (!outputOrdinates.hasZ() && outputOrdinates.hasM()) {
+            writer.write("M ");
+        }
         return;
     }
 

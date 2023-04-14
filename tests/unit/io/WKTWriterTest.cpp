@@ -260,11 +260,21 @@ void object::test<9>
     ensure_equals(wktwriter.write(*ls),
                   std::string("LINESTRING ZM (1 2 3 4, 5 6 7 8)"));
 
+    wktwriter.setOld3D(true);
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING (1 2 3 4, 5 6 7 8)"));
+
+
     // If only 3 dimensions are allowed we pick Z instead of M
+    wktwriter.setOld3D(false);
     wktwriter.setOutputDimension(3);
 
     ensure_equals(wktwriter.write(*ls),
                   std::string("LINESTRING Z (1 2 3, 5 6 7)"));
+
+    wktwriter.setOld3D(true);
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING (1 2 3, 5 6 7)"));
 }
 
 // Test writing XYM
@@ -284,6 +294,11 @@ void object::test<10>
 
     ensure_equals(wktwriter.write(*ls),
                   std::string("LINESTRING M (1 2 3, 4 5 6)"));
+
+    // Same output
+    wktwriter.setOld3D(true);
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING M (1 2 3, 4 5 6)"));
 }
 
 // Test writing XY
@@ -300,6 +315,11 @@ void object::test<11>
 
     wktwriter.setTrim(true);
 
+    ensure_equals(wktwriter.write(*ls),
+                  std::string("LINESTRING (1 2, 3 4)"));
+
+    // Same output
+    wktwriter.setOld3D(true);
     ensure_equals(wktwriter.write(*ls),
                   std::string("LINESTRING (1 2, 3 4)"));
 }

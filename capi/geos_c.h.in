@@ -5407,8 +5407,9 @@ extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension(GEOSWKTWriter *writer);
 
 /**
 * Sets the format for 3D outputs. The "old 3D" format does not
-* include a dimensionality tag, eg. "POINT(1 2 3)" while the new (ISO)
-* format does includes a tag, eg "POINT Z (1 2 3)".
+* include a Z dimension tag, e.g. "POINT (1 2 3)", except for XYM,
+* e.g. "POINT M (1 2 3)". Geometries with XYZM coordinates do not add
+* any dimensionality tags, e.g. "POINT (1 2 3 4)".
 * \param writer A \ref GEOSWKTWriter.
 * \param useOld3D True to use the old format, false is the default.
 *
