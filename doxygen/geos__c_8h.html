@@ -1333,7 +1333,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Coordinate sequence. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#af9973b08bdbbb097635e972f2ef59384">GEOSCoordSeq_create()</a> </dd>
+<p>Coordinate sequence type representing fixed-size lists of coordinates. Contains the list of vertices defining the location of a <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#af9973b08bdbbb097635e972f2ef59384">GEOSCoordSeq_create()</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#a5c9aabaf591ca73fdb00372ef7f65db1">GEOSCoordSeq_destroy()</a> </dd></dl>
 
@@ -1412,7 +1412,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Geometry generic type. Geometry can be a point, linestring, polygon, multipoint, multilinestring, multipolygon, or geometrycollection. Geometry type can be read with <a class="el" href="geos__c_8h.html#a350231db7c2c6cfbf1239c9335ed1a98">GEOSGeomTypeId</a>. Most functions in GEOS either have GEOSGeometry* as a parameter or a return type. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a5892fe4db8adc5d80e0318ae0b0d705d">GEOSGeom_createPoint</a> </dd>
+<p>The generic type for a geometry. A geometry can be a Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, or GeometryCollection. The geometry type can be read with <a class="el" href="geos__c_8h.html#a350231db7c2c6cfbf1239c9335ed1a98">GEOSGeomTypeId</a>. Most functions in GEOS have <code>GEOSGeometry *</code> as either a parameter or a return type. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a5892fe4db8adc5d80e0318ae0b0d705d">GEOSGeom_createPoint</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#aeffc2384bd04d595b2773aacaaf8c919">GEOSGeom_createLineString</a> </dd>
 <dd>
@@ -1473,7 +1473,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Callback function for passing GEOS error messages to parent process.</p>
-<p>Set the GEOSMessageHandler for error and notice messages in <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> for single-threaded programs, or using <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a> for threaded programs</p>
+<p>Set the <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> function for error and notice messages in <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> for single-threaded programs, or using <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a> for threaded programs</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fmt</td><td>the message format template </td></tr>
