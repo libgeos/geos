@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSCoverageUnion
+// Test Suite for C-API GEOSCoverageSimplifyVW
 
 #include <tut/tut.hpp>
 // geos
@@ -38,7 +38,7 @@ group test_capicoveragesimplify_group("capi::GEOSCoverageSimplify");
 // Test Cases
 //
 
-
+// GEOSCoverageSimplifyVW - all
 template<>
 template<> void object::test<1>
 ()
@@ -61,7 +61,25 @@ template<> void object::test<1>
     ensure_geometry_equals(result_, expected_, 0.1);
 }
 
+// GEOSCoverageSimplifyVW - inner
+template<>
+template<> void object::test<2>
+()
+{
+    const char* inputWKT = "GEOMETRYCOLLECTION( POLYGON ((1 9, 5 9.1, 9 9, 9 5, 5 5.1, 1 5, 1 9)), POLYGON ((1 1, 1 5, 5 5.1, 9 5, 9 1, 1 1)))";
+
+    input_ = fromWKT(inputWKT);
+    result_ = GEOSCoverageSimplifyVW(input_, 1.0, 1);
+
+    ensure( result_ != nullptr );
+    ensure( GEOSGeomTypeId(result_) == GEOS_GEOMETRYCOLLECTION );
+
+    const char* expectedWKT = "GEOMETRYCOLLECTION(POLYGON ((9 5, 1 5, 1 9, 5 9.1, 9 9, 9 5)), POLYGON ((9 5, 1 5, 1 1, 9 1, 9 5)))";
+
+    expected_ = fromWKT(expectedWKT);
+    ensure_geometry_equals(result_, expected_, 0.1);
+}
+
 
 
 } // namespace tut
-
