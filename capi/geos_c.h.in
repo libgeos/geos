@@ -97,7 +97,7 @@ typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 /**
 * Callback function for passing GEOS error messages to parent process.
 *
-* Set the GEOSMessageHandler for error and notice messages in \ref initGEOS
+* Set the \ref GEOSMessageHandler function for error and notice messages in \ref initGEOS
 * for single-threaded programs, or using \ref initGEOS_r for threaded
 * programs
 *
@@ -127,10 +127,10 @@ typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 #ifndef GEOSGeometry
 
 /**
-* Geometry generic type. Geometry can be a point, linestring, polygon,
-* multipoint, multilinestring, multipolygon, or geometrycollection.
-* Geometry type can be read with \ref GEOSGeomTypeId. Most functions
-* in GEOS either have GEOSGeometry* as a parameter or a return type.
+* The generic type for a geometry. A geometry can be a Point, LineString, Polygon,
+* MultiPoint, MultiLineString, MultiPolygon, or GeometryCollection.
+* The geometry type can be read with \ref GEOSGeomTypeId. Most functions
+* in GEOS have `GEOSGeometry *` as either a parameter or a return type.
 * \see GEOSGeom_createPoint
 * \see GEOSGeom_createLineString
 * \see GEOSGeom_createPolygon
@@ -147,7 +147,8 @@ typedef struct GEOSGeom_t GEOSGeometry;
 typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 
 /**
-* Coordinate sequence.
+* Coordinate sequence type representing fixed-size lists of coordinates.
+* Contains the list of vertices defining the location of a \ref GEOSGeometry.
 * \see GEOSCoordSeq_create()
 * \see GEOSCoordSeq_destroy()
 */
