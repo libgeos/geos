@@ -7408,7 +7408,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features. For more precision, first densify the inputs. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features. The inputs can be densified to provide a more accurate result. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -7642,7 +7642,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Use a reader to parse a GeoJSON. A single geometry or feature is converted into a geometry. A featurecollection is converted into a geometrycollection. Feature properties are not read. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a reader to parse a GeoJSON string. A single geometry or <code>Feature</code> is parsed as a geometry. A <code>FeatureCollection</code> is parsed as a <code>GeometryCollection</code>. Feature properties are not read. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">reader</td><td>A GeoJSON reader object, caller retains ownership </td></tr>
     <tr><td class="paramname">geojson</td><td>The json string to parse, caller retains ownership </td></tr>
