@@ -3251,8 +3251,8 @@ extern int GEOS_DLL GEOSFrechetDistance(
 * Calculate the
 * [Frechet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)
 * between two geometries,
-* a similarity measure for linear features. For more precision, first
-* densify the inputs.
+* a similarity measure for linear features.
+* The inputs can be densified to provide a more accurate result.
 * \param[in] g1 Input geometry
 * \param[in] g2 Input geometry
 * \param[in] densifyFrac The largest % of the overall line length that
@@ -5642,9 +5642,9 @@ extern GEOSGeoJSONReader GEOS_DLL *GEOSGeoJSONReader_create(void);
 extern void GEOS_DLL GEOSGeoJSONReader_destroy(GEOSGeoJSONReader* reader);
 
 /**
-* Use a reader to parse a GeoJSON. A single geometry or feature is
-* converted into a geometry. A featurecollection is converted into a
-* geometrycollection. Feature properties are not read.
+* Use a reader to parse a GeoJSON string. A single geometry or `Feature` is
+* parsed as a geometry. A  `FeatureCollection` is parsed as a
+* `GeometryCollection`. Feature properties are not read.
 * \param reader A GeoJSON reader object, caller retains ownership
 * \param geojson The json string to parse, caller retains ownership
 * \return A \ref GEOSGeometry, caller to free with GEOSGeom_destroy())
