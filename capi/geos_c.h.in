@@ -16,13 +16,12 @@
 * \brief C API for the GEOS geometry algorithms library.
 * \tableofcontents
 *
-* The C API is the supported API to use GEOS in
+* The C API is the supported API for using GEOS in
 * your application/library/etc.
-* The GEOS team makes an effort to keep the C API stable, and to
-* deprecate function signatures only over a long time period to allow
-* transition time.
-* While the C++ API is available, the ABI
-* will not be stable between versions, and the API may change.
+* The C API is kept stable, and deprecated function signatures
+* are kept available over a long time period to allow transition time.
+* While the C++ API is available, it may change at any time, and the ABI
+* may not be stable between versions.
 *
 * Important programming notes:
 *
@@ -30,7 +29,7 @@
 * - Call finishGEOS() when finished using the library.
 * - To avoid memory leaks, call GEOSGeom_destroy() on
 *   \ref GEOSGeometry objects, and call GEOSFree() on
-*   all returned char * (unless const).
+*   returned `char *` strings and byte buffers (unless marked `const`).
 * - Functions ending with `_r` are thread safe (reentrant);
 *   see details in https://libgeos.org/development/rfcs/rfc03.
 *   To avoid accidental use of non-reentrant functions,
