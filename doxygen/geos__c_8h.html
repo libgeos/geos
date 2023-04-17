@@ -1280,12 +1280,13 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>C API for the GEOS geometry algorithms library. </p>
-<p>The C API is the preferred API to use when integrating GEOS into your application/library/etc. While the C++ API is available, the ABI will not be stable between versions, and the API may also change. The GEOS team makes an effort to keep the C API stable, and to deprecate function signatures only over a long time period to allow transition time.</p>
+<p>The C API is the supported API to use GEOS in your application/library/etc. The GEOS team makes an effort to keep the C API stable, and to deprecate function signatures only over a long time period to allow transition time. While the C++ API is available, the ABI will not be stable between versions, and the API may change.</p>
 <p>Important programming notes:</p>
 <ul>
-<li>Remember to call <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS()</a> before any use of this library's functions, and call <a class="el" href="geos__c_8h.html#ad9d8ccc4c6a7d7d0e0f12629fd96ef7c">finishGEOS()</a> when done.</li>
-<li>Currently you have to explicitly <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> all GEOSGeom objects to avoid memory leaks, and <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> all returned char * (unless const).</li>
-<li>Functions ending with _r are thread safe (reentrant); see details in <a href="https://libgeos.org/development/rfcs/rfc03">https://libgeos.org/development/rfcs/rfc03</a>. To avoid accidental use of non-reentrant functions, define GEOS_USE_ONLY_R_API before including <a class="el" href="geos__c_8h.html" title="C API for the GEOS geometry algorithms library.">geos_c.h</a>. </li>
+<li>Call <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS()</a> before using the library functions.</li>
+<li>Call <a class="el" href="geos__c_8h.html#ad9d8ccc4c6a7d7d0e0f12629fd96ef7c">finishGEOS()</a> when finished using the library.</li>
+<li>To avoid memory leaks, call <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> on <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> objects, and call <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> on all returned char * (unless const).</li>
+<li>Functions ending with <code>_r</code> are thread safe (reentrant); see details in <a href="https://libgeos.org/development/rfcs/rfc03">https://libgeos.org/development/rfcs/rfc03</a>. To avoid accidental use of non-reentrant functions, define <code>GEOS_USE_ONLY_R_API</code> before including <a class="el" href="geos__c_8h.html" title="C API for the GEOS geometry algorithms library.">geos_c.h</a>. </li>
 </ul>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="ac2b4dad07a3457748e88459f3eeef1b6"></a>
