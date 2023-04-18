@@ -760,8 +760,14 @@ extern void GEOS_DLL GEOSGeom_destroy_r(
 
 /* ========= Coverages ========= */
 
+/** \see GEOSCoverageUnion */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageUnion_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g);
+
 /** \see GEOSCoverageIsValid */
-int
+extern int GEOS_DLL
 GEOSCoverageIsValid_r(
     GEOSContextHandle_t extHandle,
     const GEOSGeometry* input,
@@ -926,11 +932,6 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     double gridSize);
-
-/** \see GEOSCoverageUnion */
-extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(
-    GEOSContextHandle_t handle,
-    const GEOSGeometry* g);
 
 /** \see GEOSDisjointSubsetUnion */
 extern GEOSGeometry GEOS_DLL *GEOSDisjointSubsetUnion_r(
@@ -3505,18 +3506,6 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec(
     double gridSize);
 
 /**
-* Optimized union algorithm for polygonal inputs that are correctly
-* noded and do not overlap. It will generate an error (return NULL)
-* for inputs that do not satisfy this constraint.
-* \param g The input geometry
-* \return A geometry that covers all the points of the input geometry.
-* Caller is responsible for freeing with GEOSGeom_destroy().
-*
-* \since 3.8
-*/
-extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
-
-/**
 * Optimized union algorithm for inputs that can be divided into subsets
 * that do not intersect. If there is only one such subset, performance
 * can be expected to be worse than GEOSUnionaryUnion.
@@ -3745,6 +3734,19 @@ extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g,
 * that exactly share edge geometry.
 */
 ///@{
+
+/**
+* Optimized union algorithm for polygonal inputs that are correctly
+* noded and do not overlap. It will generate an error (return NULL)
+* for inputs that do not satisfy this constraint.
+* \param g The input geometry
+* \return A geometry that covers all the points of the input geometry.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* \since 3.8
+*/
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
+
 
 /**
 * Analyze a coverage (represented as a collection of polygonal geometry
