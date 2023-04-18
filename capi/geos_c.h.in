@@ -5129,7 +5129,7 @@ extern void GEOS_DLL GEOSSTRtree_insert(
 * \param callback a function to be executed for each item in the tree whose envelope intersects
 *            the envelope of 'g'.  The callback function should take two parameters: a void
 *            pointer representing the located item in the tree, and a void userdata pointer.
-* \param userdata an optional pointer to pe passed to 'callback' as an argument
+* \param userdata an optional pointer to pe passed to `callback` as an argument
 *
 * \since 3.2
 */
@@ -5168,11 +5168,11 @@ extern const GEOSGeometry GEOS_DLL *GEOSSTRtree_nearest(
 * \param distancefn a function that can compute the distance between two items
 *            in the STRtree.  The function should return zero in case of error,
 *            and should store the computed distance to the location pointed to by
-*            the 'distance' argument.  The computed distance between two items
+*            the `distance` argument.  The computed distance between two items
 *            must not exceed the Cartesian distance between their envelopes.
-* \param userdata optional pointer to arbitrary data; will be passed to distancefn
+* \param userdata optional pointer to arbitrary data; will be passed to `distancefn`
 *            each time it is called.
-* \return a const pointer to the nearest item in the tree to 'item', or NULL in
+* \return a const pointer to the nearest item in the tree to `item`, or NULL in
 *            case of exception
 *
 * \since 3.6
