@@ -17453,12 +17453,12 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">tree</td><td>the STRtree to search </td></tr>
     <tr><td class="paramname">item</td><td>the item with which the tree should be queried </td></tr>
     <tr><td class="paramname">itemEnvelope</td><td>a GEOSGeometry having the bounding box of 'item' </td></tr>
-    <tr><td class="paramname">distancefn</td><td>a function that can compute the distance between two items in the STRtree. The function should return zero in case of error, and should store the computed distance to the location pointed to by the 'distance' argument. The computed distance between two items must not exceed the Cartesian distance between their envelopes. </td></tr>
-    <tr><td class="paramname">userdata</td><td>optional pointer to arbitrary data; will be passed to distancefn each time it is called. </td></tr>
+    <tr><td class="paramname">distancefn</td><td>a function that can compute the distance between two items in the STRtree. The function should return zero in case of error, and should store the computed distance to the location pointed to by the <code>distance</code> argument. The computed distance between two items must not exceed the Cartesian distance between their envelopes. </td></tr>
+    <tr><td class="paramname">userdata</td><td>optional pointer to arbitrary data; will be passed to <code>distancefn</code> each time it is called. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>a const pointer to the nearest item in the tree to 'item', or NULL in case of exception</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a const pointer to the nearest item in the tree to <code>item</code>, or NULL in case of exception</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.6 </dd></dl>
 
 </div>
@@ -17594,7 +17594,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
     <tr><td class="paramname">tree</td><td>the <a class="el" href="geos__c_8h.html#aee0e622ed8fcc9f5959b27cf4b26c31b">GEOSSTRtree</a> to search </td></tr>
     <tr><td class="paramname">g</td><td>a GEOSGeomety from which a query envelope will be extracted </td></tr>
     <tr><td class="paramname">callback</td><td>a function to be executed for each item in the tree whose envelope intersects the envelope of 'g'. The callback function should take two parameters: a void pointer representing the located item in the tree, and a void userdata pointer. </td></tr>
-    <tr><td class="paramname">userdata</td><td>an optional pointer to pe passed to 'callback' as an argument</td></tr>
+    <tr><td class="paramname">userdata</td><td>an optional pointer to pe passed to <code>callback</code> as an argument</td></tr>
   </table>
   </dd>
 </dl>
