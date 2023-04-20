@@ -20077,7 +20077,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the format for 3D outputs. The "old 3D" format does not include a dimensionality tag, eg. "POINT(1 2 3)" while the new (ISO) format does includes a tag, eg "POINT Z (1 2 3)". </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets the format for 3D outputs. The "old 3D" format does not include a Z dimension tag, e.g. "POINT (1 2 3)", except for XYM, e.g. "POINT M (1 2 3)". Geometries with XYZM coordinates do not add any dimensionality tags, e.g. "POINT (1 2 3 4)". </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>A <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. </td></tr>
     <tr><td class="paramname">useOld3D</td><td>True to use the old format, false is the default.</td></tr>
