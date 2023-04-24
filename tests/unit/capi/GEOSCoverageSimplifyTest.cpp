@@ -81,5 +81,25 @@ template<> void object::test<2>
 }
 
 
+// GEOSCoverageSimplifyVW
+template<>
+template<> void object::test<3>
+()
+{
+    const char* inputWKT = "GEOMETRYCOLLECTION(POLYGON(( 0 0,10 0,10.1 5,10 10,0 10,0 0)),POLYGON((10 0,20 0,20 10,10 10,10.1 5,10 0)))";
+
+    input_ = fromWKT(inputWKT);
+    result_ = GEOSCoverageSimplifyVW(input_, 1.0, 0);
+
+    ensure( result_ != nullptr );
+    ensure( GEOSGeomTypeId(result_) == GEOS_GEOMETRYCOLLECTION );
+
+    const char* expectedWKT = "GEOMETRYCOLLECTION(POLYGON((0 0,10 0,10 10,0 10,0 0)),POLYGON((10 0,20 0,20 10,10 10,10 0)))";
+
+    expected_ = fromWKT(expectedWKT);
+    ensure_geometry_equals(result_, expected_, 0.1);
+}
+
+
 
 } // namespace tut

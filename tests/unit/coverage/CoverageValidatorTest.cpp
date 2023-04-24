@@ -23,13 +23,13 @@ struct test_coveragevalidator_data {
     WKTWriter w;
 
     void
-    printResult(std::unique_ptr<Geometry>& actual, std::unique_ptr<Geometry>& expected)
+    printResult(const Geometry& actual, const Geometry& expected)
     {
         std::cout << std::endl;
         std::cout << "--actual--" << std::endl;
-        std::cout << w.write(actual.get()) << std::endl;
+        std::cout << w.write(actual) << std::endl;
         std::cout << "--expect--" << std::endl;
-        std::cout << w.write(expected.get()) << std::endl;
+        std::cout << w.write(expected) << std::endl;
     }
 
     void

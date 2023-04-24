@@ -113,6 +113,7 @@ void object::test<2>
     auto geo = gf->createEmptyGeometry();
     ensure("createEmptyGeometry() returned null pointer.", geo != nullptr);
     ensure_equals(geo->getSRID(), gf->getSRID());
+    ensure_equals(geo->getSRID(), srid_);
     ensure_equals(geo->getPrecisionModel()->getType(), PrecisionModel::FIXED);
 } // test<2>
 
@@ -238,6 +239,7 @@ void object::test<8>
     ensure_equals(pt->getNumPoints(), 0u);
     ensure_equals(pt->getLength(), 0.0);
     ensure_equals(pt->getArea(), 0.0);
+    ensure_equals(pt->getSRID(), srid_);
 }
 
 // Test of createPoint(const Coordinate &coordinate) const

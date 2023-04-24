@@ -2456,7 +2456,6 @@ extern "C" {
         return execute(extHandle, [&]() {
             std::ptrdiff_t stride = 2 + hasZ + hasM;
             auto coords = geos::detail::make_unique<CoordinateSequence>(size, hasZ, hasM, false);
-
             if (hasZ) {
                 if (hasM) {
                     // XYZM
@@ -4091,12 +4090,12 @@ extern "C" {
             std::vector<std::unique_ptr<Geometry>> invalid = cov.validate();
             bool hasInvalid = CoverageValidator::hasInvalidResult(invalid);
 
-            if (invalidEdges && hasInvalid) {
+            if (invalidEdges) {
                 const GeometryFactory* gf = input->getFactory();
                 for (auto& g : invalid) {
                     // Replace nullptr with 'MULTILINESTRING EMPTY'
                     if (g == nullptr) {
-                        auto empty = gf->createEmpty(GEOS_MULTILINESTRING);
+                        auto empty = gf->createEmpty(1);
                         g.reset(empty.release());
                     }
                 }

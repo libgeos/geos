@@ -367,7 +367,21 @@ void object::test<19> ()
 
 }
 
-
+//---------------------------------
+// all inputs empty
+// template<>
+// template<>
+// void object::test<20> ()
+// {
+//     checkResult(readArray({
+//             "POLYGON EMPTY",
+//             "POLYGON EMPTY" }),
+//         1.5,
+//         readArray({
+//             "POLYGON EMPTY",
+//             "POLYGON EMPTY" })
+//     );
+// }
 
 
 } // namespace tut

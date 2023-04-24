@@ -3771,7 +3771,7 @@ extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 *
 * \since 3.12
 */
-extern int GEOSCoverageIsValid(
+extern int GEOS_DLL GEOSCoverageIsValid(
     const GEOSGeometry* input,
     double gapWidth,
     GEOSGeometry** invalidEdges);
