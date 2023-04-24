@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferCurveSetBuilder.java r378 (JTS-1.12)
+ * Last port: operation/buffer/BufferCurveSetBuilder.java 4c343e79f (JTS-1.19)
  *
  **********************************************************************/
 
