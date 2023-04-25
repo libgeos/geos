@@ -54,6 +54,7 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/overlayng/CoverageUnion.h>
+#include <geos/operation/overlayng/UnaryUnionNG.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/union/CoverageUnion.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
@@ -783,7 +784,15 @@ std::vector<GeometryOpCreator> opRegistry {
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
         return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
-});
+    });
+}},
+{"unaryUnionSR", [](std::string name) { return GeometryOp::createAgg(name,
+    catOverlay,
+    "compute aggregate union",
+    [](const std::unique_ptr<Geometry>& geom, double d) {
+        geos::geom::PrecisionModel pm(d);
+        return new Result( geos::operation::overlayng::UnaryUnionNG::Union(geom.get(), pm ));
+    });
 }},
 {"node", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
