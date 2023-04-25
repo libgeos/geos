@@ -35,6 +35,7 @@
 #include <geos/geom/util/Densifier.h>
 #include <geos/geom/util/GeometryFixer.h>
 #include <geos/linearref/LengthIndexedLine.h>
+#include <geos/noding/GeometryNoder.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -782,6 +783,13 @@ std::vector<GeometryOpCreator> opRegistry {
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
         return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
+});
+}},
+{"node", [](std::string name) { return GeometryOp::create(name,
+    catOverlay,
+    "compute fully noded geometry",
+    [](const std::unique_ptr<Geometry>& geom) {
+        return new Result( geos::noding::GeometryNoder::node( *geom ) );
 });
 }},
 {"clipRect", [](std::string name) { return GeometryOp::create(name,
