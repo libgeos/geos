@@ -121,7 +121,7 @@ private:
         LineSegment::UnorderedSet& boundarySegs,
         std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap);
 
-    void addBoundaryNodes(
+    void addBoundaryInnerNodes(
         const LinearRing* ring,
         LineSegment::UnorderedSet& boundarySegs,
         Coordinate::UnorderedSet& nodes);
@@ -132,24 +132,24 @@ private:
         Coordinate::UnorderedSet& nodes);
 
     CoverageEdge* createEdge(
-        const LinearRing* ring,
+        const CoordinateSequence& ring,
         std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap);
 
     CoverageEdge* createEdge(
-        const LinearRing* ring,
+        const CoordinateSequence& ring,
         std::size_t start, std::size_t end,
         std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap);
 
     std::size_t findNextNodeIndex(
-        const LinearRing* ring,
+        const CoordinateSequence& ring,
         std::size_t start,
         Coordinate::UnorderedSet& nodes) const;
 
     static std::size_t next(
         std::size_t index,
-        const LinearRing* ring);
+        const CoordinateSequence& ring);
 
-    Coordinate::UnorderedSet findNodes(
+    Coordinate::UnorderedSet findMultiRingNodes(
         std::vector<const Geometry*>& coverage);
 
     Coordinate::UnorderedSet findBoundaryNodes(
@@ -177,8 +177,3 @@ private:
 
 } // namespace geos.coverage
 } // namespace geos
-
-
-
-
-

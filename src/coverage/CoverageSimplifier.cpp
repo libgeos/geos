@@ -17,7 +17,6 @@
 #include <geos/coverage/CoverageEdge.h>
 #include <geos/coverage/CoverageRingEdges.h>
 #include <geos/coverage/TPVWSimplifier.h>
-#include <geos/coverage/VertexCounter.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>

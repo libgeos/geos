@@ -33,15 +33,15 @@ namespace coverage { // geos.coverage
 
 /* public static */
 std::unique_ptr<CoverageEdge>
-CoverageEdge::createEdge(const LinearRing* ring)
+CoverageEdge::createEdge(const CoordinateSequence& ring)
 {
-    auto pts = extractEdgePoints(ring, 0, ring->getNumPoints() - 1);
+    auto pts = extractEdgePoints(ring, 0, ring.getSize() - 1);
     return detail::make_unique<CoverageEdge>(std::move(pts), true);
 }
 
 /* public static */
 std::unique_ptr<CoverageEdge>
-CoverageEdge::createEdge(const LinearRing* ring,
+CoverageEdge::createEdge(const CoordinateSequence& ring,
     std::size_t start, std::size_t end)
 {
     auto pts = extractEdgePoints(ring, start, end);
@@ -73,19 +73,18 @@ CoverageEdge::toLineString(const GeometryFactory* geomFactory)
 
 /* private static */
 std::unique_ptr<CoordinateSequence>
-CoverageEdge::extractEdgePoints(const LinearRing* ring,
+CoverageEdge::extractEdgePoints(const CoordinateSequence& ring,
     std::size_t start, std::size_t end)
 {
     auto pts = detail::make_unique<CoordinateSequence>();
     std::size_t size = start < end
                   ? end - start + 1
-                  : ring->getNumPoints() - start + end;
+                  : ring.getSize() - start + end;
     std::size_t iring = start;
-    auto cs = ring->getCoordinatesRO();
     for (std::size_t i = 0; i < size; i++) {
-        pts->add(cs->getAt(iring));
+        pts->add(ring.getAt(iring));
         iring += 1;
-        if (iring >= ring->getNumPoints())
+        if (iring >= ring.getSize())
             iring = 1;
     }
     return pts;
@@ -94,19 +93,18 @@ CoverageEdge::extractEdgePoints(const LinearRing* ring,
 
 /* public static */
 LineSegment
-CoverageEdge::key(const LinearRing* ring)
+CoverageEdge::key(const CoordinateSequence& ring)
 {
-    const CoordinateSequence* pts = ring->getCoordinatesRO();
     // find lowest vertex index
     std::size_t indexLow = 0;
-    for (std::size_t i = 1; i < pts->size() - 1; i++) {
-        if (pts->getAt(indexLow).compareTo(pts->getAt(i)) < 0)
+    for (std::size_t i = 1; i < ring.size() - 1; i++) {
+        if (ring.getAt(indexLow).compareTo(ring.getAt(i)) < 0)
             indexLow = i;
     }
-    const Coordinate& key0 = pts->getAt(indexLow);
+    const Coordinate& key0 = ring.getAt(indexLow);
     // find distinct adjacent vertices
-    const Coordinate& adj0 = findDistinctPoint(pts, indexLow, true, key0);
-    const Coordinate& adj1 = findDistinctPoint(pts, indexLow, false, key0);
+    const Coordinate& adj0 = findDistinctPoint(ring, indexLow, true, key0);
+    const Coordinate& adj1 = findDistinctPoint(ring, indexLow, false, key0);
     const Coordinate& key1 = adj0.compareTo(adj1) < 0 ? adj0 : adj1;
     return LineSegment(key0, key1);
 }
@@ -114,23 +112,22 @@ CoverageEdge::key(const LinearRing* ring)
 
 /* public static */
 LineSegment
-CoverageEdge::key(const LinearRing* ring,
+CoverageEdge::key(const CoordinateSequence& ring,
     std::size_t start, std::size_t end)
 {
-    const CoordinateSequence* pts = ring->getCoordinatesRO();
     //-- endpoints are distinct in a line edge
-    const Coordinate& end0 = pts->getAt(start);
-    const Coordinate& end1 = pts->getAt(end);
+    const Coordinate& end0 = ring.getAt(start);
+    const Coordinate& end1 = ring.getAt(end);
     bool isForward = 0 > end0.compareTo(end1);
     const Coordinate* key0;
     const Coordinate* key1;
     if (isForward) {
         key0 = &end0;
-        key1 = &findDistinctPoint(pts, start, true, *key0);
+        key1 = &findDistinctPoint(ring, start, true, *key0);
     }
     else {
         key0 = &end1;
-        key1 = &findDistinctPoint(pts, end, false, *key0);
+        key1 = &findDistinctPoint(ring, end, false, *key0);
     }
     return LineSegment(*key0, *key1);
 }
@@ -138,16 +135,16 @@ CoverageEdge::key(const LinearRing* ring,
 /* private static */
 const Coordinate&
 CoverageEdge::findDistinctPoint(
-    const CoordinateSequence* pts,
+    const CoordinateSequence& pts,
     std::size_t index,
     bool isForward,
     const Coordinate& pt)
 {
     std::size_t i = index;
-    std::size_t endIndex = pts->size()-1;
+    std::size_t endIndex = pts.size()-1;
     do {
-        if (! pts->getAt(i).equals2D(pt)) {
-            return pts->getAt(i);
+        if (! pts.getAt(i).equals2D(pt)) {
+            return pts.getAt(i);
         }
         // increment index with wrapping
         if (isForward) {
@@ -173,5 +170,3 @@ CoverageEdge::findDistinctPoint(
 
 } // namespace geos.coverage
 } // namespace geos
-
-

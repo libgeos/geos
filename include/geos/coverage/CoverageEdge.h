@@ -63,12 +63,12 @@ private:
     // Methods
 
     static std::unique_ptr<CoordinateSequence>
-    extractEdgePoints(const LinearRing* ring,
+    extractEdgePoints(const CoordinateSequence& ring,
         std::size_t start, std::size_t end);
 
     static const Coordinate&
     findDistinctPoint(
-        const CoordinateSequence* pts,
+        const CoordinateSequence& pts,
         std::size_t index,
         bool isForward,
         const Coordinate& pt);
@@ -91,7 +91,7 @@ public:
     * @return a LineSegment representing the key
     */
     static LineSegment key(
-        const LinearRing* ring);
+        const CoordinateSequence& ring);
 
     /**
     * Computes a distinct key for a section of a linear ring.
@@ -102,15 +102,15 @@ public:
     * @return a LineSegment representing the key
     */
     static LineSegment key(
-        const LinearRing* ring,
+        const CoordinateSequence& ring,
         std::size_t start,
         std::size_t end);
 
     static std::unique_ptr<CoverageEdge> createEdge(
-        const LinearRing* ring);
+        const CoordinateSequence& ring);
 
     static std::unique_ptr<CoverageEdge> createEdge(
-        const LinearRing* ring,
+        const CoordinateSequence& ring,
         std::size_t start,
         std::size_t end);
 
@@ -169,8 +169,3 @@ public:
 
 } // namespace geos.coverage
 } // namespace geos
-
-
-
-
-

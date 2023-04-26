@@ -36,12 +36,12 @@ using geos::geom::Geometry;
 namespace geos {
 namespace coverage { // geos::coverage
 
-class VertexCounter : public CoordinateSequenceFilter
+class VertexRingCounter : public CoordinateSequenceFilter
 {
 
 public:
 
-    VertexCounter(std::map<Coordinate, std::size_t>& counts)
+    VertexRingCounter(std::map<Coordinate, std::size_t>& counts)
         : vertexCounts(counts)
         {};
 
@@ -63,7 +63,7 @@ private:
 
     std::map<Coordinate, std::size_t>& vertexCounts;
 
-}; // VertexCounter
+}; // VertexRingCounter
 
 
 
