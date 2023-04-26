@@ -137,5 +137,15 @@ void object::test<5> ()
         "MULTILINESTRING ((1 2, 2 2), (2 1, 2 2), (2 2, 2 3), (2 2, 3 2))");
 }
 
+// testMultiPolygons
+template<>
+template<>
+void object::test<6> ()
+{
+    checkEdges(
+        "GEOMETRYCOLLECTION (MULTIPOLYGON (((5 9, 2.5 7.5, 1 5, 5 5, 5 9)), ((5 5, 9 5, 7.5 2.5, 5 1, 5 5))), MULTIPOLYGON (((5 9, 6.5 6.5, 9 5, 5 5, 5 9)), ((1 5, 5 5, 5 1, 3.5 3.5, 1 5))))",
+        "MULTILINESTRING ((1 5, 2.5 7.5, 5 9), (1 5, 3.5 3.5, 5 1), (1 5, 5 5), (5 1, 5 5), (5 1, 7.5 2.5, 9 5), (5 5, 5 9), (5 5, 9 5), (5 9, 6.5 6.5, 9 5))"
+    );
+}
 
 } // namespace tut

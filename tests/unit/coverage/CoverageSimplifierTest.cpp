@@ -367,6 +367,58 @@ void object::test<19> ()
 
 }
 
+// testRepeatedPointRemoved
+template<>
+template<>
+void object::test<20> ()
+{
+    checkResult(readArray({
+        "POLYGON ((5 9, 6.5 6.5, 9 5, 5 5, 5 5, 5 9))" }),
+        2,
+        readArray({
+            "POLYGON ((5 5, 5 9, 9 5, 5 5))" })
+    );
+}
+
+// testRepeatedPointCollapseToLine
+template<>
+template<>
+void object::test<21> ()
+{
+checkResult(readArray({
+    "MULTIPOLYGON (((10 10, 10 20, 20 19, 30 20, 30 10, 10 10)), ((10 30, 20 29, 30 30, 30 20, 20 19, 10 20, 10 30)), ((10 20, 20 19, 20 19, 10 20)))" }),
+    5,
+    readArray({
+        "MULTIPOLYGON (((10 20, 20 19, 30 20, 30 10, 10 10, 10 20)), ((30 20, 20 19, 10 20, 10 30, 30 30, 30 20)), ((10 20, 20 19, 10 20)))" })
+);
+}
+
+// testRepeatedPointCollapseToPoint()
+template<>
+template<>
+void object::test<22> ()
+{
+    checkResult(readArray({
+        "MULTIPOLYGON (((10 10, 10 20, 20 19, 30 20, 30 10, 10 10)), ((10 30, 20 29, 30 30, 30 20, 20 19, 10 20, 10 30)), ((20 19, 20 19, 20 19)))" }),
+        5,
+        readArray({
+            "MULTIPOLYGON (((10 10, 10 20, 20 19, 30 20, 30 10, 10 10)), ((10 20, 10 30, 30 30, 30 20, 20 19, 10 20)), ((20 19, 20 19, 20 19)))" })
+    );
+}
+
+// testRepeatedPointCollapseToPoint2
+template<>
+template<>
+void object::test<23> ()
+{
+    checkResult(readArray({
+        "MULTIPOLYGON (((100 200, 150 195, 200 200, 200 100, 100 100, 100 200)), ((150 195, 150 195, 150 195, 150 195)))" }),
+        40,
+        readArray({
+            "MULTIPOLYGON (((150 195, 200 200, 200 100, 100 100, 100 200, 150 195)), ((150 195, 150 195, 150 195, 150 195)))" })
+    );
+}
+
 //---------------------------------
 // all inputs empty
 // template<>

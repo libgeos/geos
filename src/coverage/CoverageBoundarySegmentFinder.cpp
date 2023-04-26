@@ -85,5 +85,3 @@ CoverageBoundarySegmentFinder::isBoundarySegment(
 
 } // namespace geos.coverage
 } // namespace geos
-
-

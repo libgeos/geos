@@ -18,7 +18,7 @@
 #include <geos/coverage/CoverageBoundarySegmentFinder.h>
 #include <geos/coverage/CoverageEdge.h>
 #include <geos/coverage/CoverageRingEdges.h>
-#include <geos/coverage/VertexCounter.h>
+#include <geos/coverage/VertexRingCounter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
@@ -27,9 +27,9 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/constants.h>
-
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
@@ -39,7 +39,7 @@ using geos::geom::LineSegment;
 using geos::geom::LinearRing;
 using geos::geom::Polygon;
 using geos::geom::MultiPolygon;
-
+using geos::operation::valid::RepeatedPointRemover;
 
 namespace geos {     // geos
 namespace coverage { // geos.coverage
@@ -63,7 +63,7 @@ CoverageRingEdges::selectEdges(std::size_t ringCount) const
 void
 CoverageRingEdges::build()
 {
-    Coordinate::UnorderedSet nodes = findNodes(m_coverage);
+    Coordinate::UnorderedSet nodes = findMultiRingNodes(m_coverage);
     LineSegment::UnorderedSet boundarySegs = CoverageBoundarySegmentFinder::findBoundarySegments(m_coverage);
     Coordinate::UnorderedSet boundaryNodes = findBoundaryNodes(boundarySegs);
     nodes.insert(boundaryNodes.begin(), boundaryNodes.end());
@@ -92,14 +92,16 @@ CoverageRingEdges::addRingEdges(
     LineSegment::UnorderedSet& boundarySegs,
     std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap)
 {
-    addBoundaryNodes(ring, boundarySegs, nodes);
+    addBoundaryInnerNodes(ring, boundarySegs, nodes);
     std::vector<CoverageEdge*> ringEdges = extractRingEdges(ring, uniqueEdgeMap, nodes);
-    m_ringEdgesMap[ring] = ringEdges;
+    if (ringEdges.size() > 0) {
+        m_ringEdgesMap[ring] = ringEdges;
+    }
 }
 
 /* private */
 void
-CoverageRingEdges::addBoundaryNodes(
+CoverageRingEdges::addBoundaryInnerNodes(
     const LinearRing* ring,
     LineSegment::UnorderedSet& boundarySegs,
     Coordinate::UnorderedSet& nodes)
@@ -124,19 +126,25 @@ CoverageRingEdges::extractRingEdges(
     std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap,
     Coordinate::UnorderedSet& nodes)
 {
+    std::unique_ptr<CoordinateSequence> pts
+        = RepeatedPointRemover::removeRepeatedPoints( ring->getCoordinatesRO() );
     std::vector<CoverageEdge*> ringEdges;
-    std::size_t first = findNextNodeIndex(ring, NO_COORD_INDEX, nodes);
+    //-- if compacted ring is too short, don't process it
+    if (pts->getSize() < 3)
+      return ringEdges;
+
+    std::size_t first = findNextNodeIndex(*pts, NO_COORD_INDEX, nodes);
     if (first == NO_COORD_INDEX) {
         //-- ring does not contain a node, so edge is entire ring
-        CoverageEdge* edge = createEdge(ring, uniqueEdgeMap);
+        CoverageEdge* edge = createEdge(*pts, uniqueEdgeMap);
         ringEdges.push_back(edge);
     }
     else {
         std::size_t start = first;
         std::size_t end = start;
         do {
-            end = findNextNodeIndex(ring, start, nodes);
-            CoverageEdge* edge = createEdge(ring, start, end, uniqueEdgeMap);
+            end = findNextNodeIndex(*pts, start, nodes);
+            CoverageEdge* edge = createEdge(*pts, start, end, uniqueEdgeMap);
             ringEdges.push_back(edge);
             start = end;
         } while (end != first);
@@ -147,7 +155,7 @@ CoverageRingEdges::extractRingEdges(
 /* private */
 CoverageEdge*
 CoverageRingEdges::createEdge(
-    const LinearRing* ring,
+    const CoordinateSequence& ring,
     std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap)
 {
     CoverageEdge* edge;
@@ -173,7 +181,7 @@ CoverageRingEdges::createEdge(
 /* private */
 CoverageEdge*
 CoverageRingEdges::createEdge(
-    const LinearRing* ring,
+    const CoordinateSequence& ring,
     std::size_t start, std::size_t end,
     std::map<LineSegment, CoverageEdge*>& uniqueEdgeMap)
 {
@@ -200,7 +208,7 @@ CoverageRingEdges::createEdge(
 /* private */
 std::size_t
 CoverageRingEdges::findNextNodeIndex(
-    const LinearRing* ring,
+    const CoordinateSequence& ring,
     std::size_t start,
     Coordinate::UnorderedSet& nodes) const
 {
@@ -214,7 +222,7 @@ CoverageRingEdges::findNextNodeIndex(
             }
             isScanned0 = true;
         }
-        const Coordinate& pt = ring->getCoordinatesRO()->getAt(index);
+        const Coordinate& pt = ring.getAt(index);
         if (nodes.find(pt) != nodes.end()) {
             return index;
         }
@@ -224,11 +232,11 @@ CoverageRingEdges::findNextNodeIndex(
 
 /* private static */
 std::size_t
-CoverageRingEdges::next(std::size_t index, const LinearRing* ring)
+CoverageRingEdges::next(std::size_t index, const CoordinateSequence& ring)
 {
     if (index == NO_COORD_INDEX) return 0;
     index = index + 1;
-    if (index >= ring->getNumPoints() - 1)
+    if (index >= ring.getSize() - 1)
         index = 0;
     return index;
 }
@@ -236,17 +244,17 @@ CoverageRingEdges::next(std::size_t index, const LinearRing* ring)
 
 /* private */
 Coordinate::UnorderedSet
-CoverageRingEdges::findNodes(std::vector<const Geometry*>& coverage)
+CoverageRingEdges::findMultiRingNodes(std::vector<const Geometry*>& coverage)
 {
-    std::map<Coordinate, std::size_t> vertexCount;
-    VertexCounter::count(coverage, vertexCount);
+    std::map<Coordinate, std::size_t> vertexRingCount;
+    VertexRingCounter::count(coverage, vertexRingCount);
     Coordinate::UnorderedSet nodes;
     // for (Coordinate v : vertexCount.keySet()) {
     //     if (vertexCount.get(v) > 2) {
     //         nodes.add(v);
     //     }
     // }
-    for (const auto &mapPair : vertexCount) {
+    for (const auto &mapPair : vertexRingCount) {
         const Coordinate& v = mapPair.first;
         std::size_t count = mapPair.second;
         if (count > 2)
@@ -258,26 +266,26 @@ CoverageRingEdges::findNodes(std::vector<const Geometry*>& coverage)
 
 /* private */
 Coordinate::UnorderedSet
-CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& lineSegments)
+CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments)
 {
     std::map<Coordinate, std::size_t> counter;
-    for (const LineSegment& line : lineSegments) {
+    for (const LineSegment& seg : boundarySegments) {
         // counter.put(line.p0, counter.getOrDefault(line.p0, 0) + 1);
         // counter.put(line.p1, counter.getOrDefault(line.p1, 0) + 1);
-        auto search0 = counter.find(line.p0);
+        auto search0 = counter.find(seg.p0);
         if (search0 != counter.end()) {
-            counter[line.p0] = search0->second + 1;
+            counter[seg.p0] = search0->second + 1;
         }
         else {
-            counter[line.p0] = 0;
+            counter[seg.p0] = 0;
         }
 
-        auto search1 = counter.find(line.p1);
+        auto search1 = counter.find(seg.p1);
         if (search1 != counter.end()) {
-            counter[line.p1] = search1->second + 1;
+            counter[seg.p1] = search1->second + 1;
         }
         else {
-            counter[line.p1] = 0;
+            counter[seg.p1] = 0;
         }
     }
 
@@ -360,8 +368,8 @@ CoverageRingEdges::buildRing(const LinearRing* ring) const
     // List<CoverageEdge> ringEdges = m_ringEdgesMap.get(ring);
     auto result = m_ringEdgesMap.find(ring);
     if (result == m_ringEdgesMap.end()) {
-        // return nullptr;
-        throw util::IllegalStateException("buildRing");
+        //-- if ring is not in map, must have been invalid.  Just copy original
+        return ring->clone();
     }
     else {
         ringEdges = &(result->second);
@@ -404,5 +412,3 @@ CoverageRingEdges::isEdgeDirForward(
 
 } // namespace geos.coverage
 } // namespace geos
-
-

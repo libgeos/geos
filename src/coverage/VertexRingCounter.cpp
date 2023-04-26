@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <geos/coverage/VertexCounter.h>
+#include <geos/coverage/VertexRingCounter.h>
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -32,11 +32,11 @@ namespace coverage { // geos.coverage
 
 /* public static  */
 void
-VertexCounter::count(
+VertexRingCounter::count(
     std::vector<const Geometry*>& geoms,
     std::map<Coordinate, std::size_t>& counts)
 {
-    VertexCounter vertextCounter(counts);
+    VertexRingCounter vertextCounter(counts);
     for (const Geometry* geom : geoms) {
         geom->apply_ro(vertextCounter);
     }
@@ -45,7 +45,7 @@ VertexCounter::count(
 
 /* public */
 void
-VertexCounter::filter_ro(const CoordinateSequence& seq, std::size_t i)
+VertexRingCounter::filter_ro(const CoordinateSequence& seq, std::size_t i)
 {
     //-- for rings don't double-count duplicate endpoint
     if (seq.isRing() && i == 0)
