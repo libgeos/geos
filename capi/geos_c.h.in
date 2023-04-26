@@ -2320,8 +2320,7 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions(
 
 /**
 * Check orientation of a coordinate sequence. Closure of the sequence is
-* assumed. Invalid (collapsed) sequences will return false. Short (less
-* than 4 points) sequences will return exception.
+* assumed. Invalid (collapsed) or short (fewer than 4 points) sequences return false.
 * \param s the coordinate sequence
 * \param is_ccw pointer for ccw value, 1 if counter-clockwise orientation, 0 otherwise
 * \return 0 on exception, 1 on success
