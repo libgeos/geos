@@ -319,7 +319,8 @@ void object::test<9>
     GEOSCoordSeq_setX(cs_, 2, 1);
     GEOSCoordSeq_setY(cs_, 2, 0);
 
-    ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
+    ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 1);
+    ensure(!ccw);
 }
 
 template<>
@@ -331,7 +332,8 @@ void object::test<10>
     cs_ = GEOSCoordSeq_create(0, 0);
     char ccw;
 
-    ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
+    ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 1);
+    ensure(!ccw);
 }
 
 template<>
@@ -765,4 +767,3 @@ void object::test<21>()
 }
 
 } // namespace tut
-

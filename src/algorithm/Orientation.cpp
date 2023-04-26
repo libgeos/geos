@@ -50,8 +50,7 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
     int inPts = static_cast<int>(ring->size()) - 1;
     // sanity check
     if (inPts < 3)
-        throw util::IllegalArgumentException(
-            "Ring has fewer than 4 points, so orientation cannot be determined");
+        return false;
 
     uint32_t nPts = static_cast<uint32_t>(inPts);
     /**
@@ -146,4 +145,3 @@ Orientation::isCCWArea(const geom::CoordinateSequence* ring)
 
 } // namespace geos.algorithm
 } //namespace geos
-
