@@ -72,12 +72,20 @@ CoverageRingEdges::build()
     for (const Geometry* geom : m_coverage) {
         for (std::size_t ipoly = 0; ipoly < geom->getNumGeometries(); ipoly++) {
             const Polygon* poly = static_cast<const Polygon*>(geom->getGeometryN(ipoly));
+
+            //-- skip empty elements. Missing elements are copied in result
+            if (poly->isEmpty())
+                continue;
+
             //-- extract shell
             const LinearRing* shell = poly->getExteriorRing();
             addRingEdges(shell, nodes, boundarySegs, uniqueEdgeMap);
             //-- extract holes
             for (std::size_t ihole = 0; ihole < poly->getNumInteriorRing(); ihole++) {
                 const LinearRing* hole = poly->getInteriorRingN(ihole);
+                //-- skip empty rings. Missing rings are copied in result
+                if (hole->isEmpty())
+                    continue;
                 addRingEdges(hole, nodes, boundarySegs, uniqueEdgeMap);
             }
         }

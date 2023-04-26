@@ -419,21 +419,49 @@ void object::test<23> ()
     );
 }
 
-//---------------------------------
-// all inputs empty
-// template<>
-// template<>
-// void object::test<20> ()
-// {
-//     checkResult(readArray({
-//             "POLYGON EMPTY",
-//             "POLYGON EMPTY" }),
-//         1.5,
-//         readArray({
-//             "POLYGON EMPTY",
-//             "POLYGON EMPTY" })
-//     );
-// }
+// testAllEmpty()
+template<>
+template<>
+void object::test<24> ()
+{
+    checkResult(readArray({
+        "POLYGON EMPTY",
+        "POLYGON EMPTY" }),
+        1,
+        readArray({
+            "POLYGON EMPTY",
+            "POLYGON EMPTY" })
+    );
+  }
 
+// testOneEmpty
+template<>
+template<>
+void object::test<25> ()
+{
+    checkResult(readArray({
+        "POLYGON ((1 9, 5 9.1, 9 9, 9 1, 1 1, 1 9))",
+        "POLYGON EMPTY" }),
+        1,
+        readArray({
+            "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
+            "POLYGON EMPTY" })
+    );
+  }
+
+// testEmptyHole()
+template<>
+template<>
+void object::test<26> ()
+{
+    checkResult(readArray({
+        "POLYGON ((1 9, 5 9.1, 9 9, 9 1, 1 1, 1 9), EMPTY)",
+        "POLYGON EMPTY"  }),
+        1,
+        readArray({
+            "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9), EMPTY)",
+            "POLYGON EMPTY" })
+    );
+  }
 
 } // namespace tut
