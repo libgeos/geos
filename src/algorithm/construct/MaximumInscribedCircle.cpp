@@ -28,6 +28,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/util/Interrupt.h>
 
 #include <typeinfo> // for dynamic_cast
 #include <cassert>
@@ -184,12 +185,15 @@ MaximumInscribedCircle::compute()
      * Carry out the branch-and-bound search
      * of the cell space
      */
+    std::size_t iterationCount = 0;
     while (!cellQueue.empty()) {
         // pick the most promising cell from the queue
         Cell cell = cellQueue.top();
         cellQueue.pop();
 
-        // std::cout << i << ": (" << cell.getX() << ", " << cell.getY() << ") " << cell.getHSize() << " dist = " << cell.getDistance() << std::endl;
+        if ((iterationCount++ % 1000) == 0) {
+            GEOS_CHECK_FOR_INTERRUPTS();
+        }
 
         // update the center cell if the candidate is further from the boundary
         if (cell.getDistance() > farthestCell.getDistance()) {
@@ -212,7 +216,6 @@ MaximumInscribedCircle::compute()
             cellQueue.emplace(cell.getX()+h2, cell.getY()+h2, h2, distanceToBoundary(cell.getX()+h2, cell.getY()+h2));
         }
     }
-    // std::cout << "number of iterations: " << i << std::endl;
 
     // the farthest cell is the best approximation to the MIC center
     Cell centerCell = farthestCell;
