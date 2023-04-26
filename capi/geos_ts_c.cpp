@@ -80,6 +80,7 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/CoverageUnion.h>
+#include <geos/coverage/CoverageUnion.h>
 #include <geos/operation/union/DisjointSubsetUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
@@ -1494,7 +1495,11 @@ extern "C" {
     GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            auto g3 = geos::operation::geounion::CoverageUnion::Union(g);
+            std::vector<const Geometry*> geoms;
+            for (std::size_t i = 0; i < g->getNumGeometries(); i++) {
+                geoms.push_back(g->getGeometryN(i));
+            }
+            auto g3 = geos::coverage::CoverageUnion::Union(geoms);
             g3->setSRID(g->getSRID());
             return g3.release();
         });
