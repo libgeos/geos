@@ -282,6 +282,73 @@ void object::test<10> ()
     checkValid(coverage);
 }
 
+// testMultiPolygon
+template<>
+template<>
+void object::test<11> ()
+{
+    std::vector<std::string> coverage{
+        "MULTIPOLYGON (((1 9, 5 9, 5 5, 1 5, 1 9)), ((9 1, 5 1, 5 5, 9 5, 9 1)))",
+        "MULTIPOLYGON (((1 1, 1 5, 5 5, 5 1, 1 1)), ((9 9, 9 5, 5 5, 5 9, 9 9)))"
+    };
+    checkValid(coverage);
+}
+
+// testValidDuplicatePoints
+template<>
+template<>
+void object::test<12> ()
+{
+    std::vector<std::string> coverage{
+        "POLYGON ((1 9, 5 9, 5 5, 1 5, 1 5, 1 5, 1 9))",
+        "POLYGON ((9 9, 9 5, 5 5, 5 9, 9 9))",
+        "POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1))",
+        "POLYGON ((9 1, 5 1, 5 5, 9 5, 9 1))"
+    };
+    checkValid(coverage);
+}
+
+// testRingCollapse
+template<>
+template<>
+void object::test<13> ()
+{
+    std::vector<std::string> coverage{
+        "POLYGON ((1 9, 5 9, 1 9))",
+        "POLYGON ((9 9, 9 5, 5 5, 5 9, 9 9))",
+        "POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1))",
+        "POLYGON ((9 1, 5 1, 5 5, 9 5, 9 1))"
+    };
+    checkValid(coverage);
+}
+
+  //========  Valid cases with EMPTY  =============================
+
+// testPolygonEmpty
+template<>
+template<>
+void object::test<14> ()
+{
+    std::vector<std::string> coverage{
+        "POLYGON ((1 9, 5 9, 5 5, 1 5, 1 9))",
+        "POLYGON ((9 9, 9 5, 5 5, 5 9, 9 9))",
+        "POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1))",
+        "POLYGON EMPTY"
+    };
+    checkValid(coverage);
+}
+
+// testMultiPolygonWithEmptyRing
+template<>
+template<>
+void object::test<15> ()
+{
+    std::vector<std::string> coverage{
+        "MULTIPOLYGON (((9 9, 9 1, 1 1, 2 4, 7 7, 9 9)), EMPTY)"
+    };
+    checkValid(coverage);
+}
+
 
 
 

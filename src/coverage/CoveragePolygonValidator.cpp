@@ -373,12 +373,24 @@ CoveragePolygonValidator::createRings(
     std::vector<CoverageRing*>& rings)
 {
     // Create exterior shell ring
-    rings.push_back(createRing(poly->getExteriorRing(), true));
+    addRing( poly->getExteriorRing(), true, rings);
 
     // Create hole rings
     for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        rings.push_back(createRing(poly->getInteriorRingN(i), false));
+        addRing( poly->getInteriorRingN(i), false, rings);
     }
+}
+
+/* private */
+void
+CoveragePolygonValidator::addRing(
+    const LinearRing* ring,
+    bool isShell,
+    std::vector<CoverageRing*>& rings)
+{
+    if (ring->isEmpty())
+        return;
+    rings.push_back(createRing(ring, isShell));
 }
 
 /* private */
@@ -403,5 +415,3 @@ CoveragePolygonValidator::createRing(const LinearRing* ring, bool isShell)
 
 } // namespace geos.coverage
 } // namespace geos
-
-

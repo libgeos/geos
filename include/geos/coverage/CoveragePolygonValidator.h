@@ -372,6 +372,11 @@ private:
 
     void createRings(const Polygon* poly, std::vector<CoverageRing*>& rings);
 
+    void addRing(
+        const LinearRing* ring,
+        bool isShell,
+        std::vector<CoverageRing*>& rings);
+
     CoverageRing* createRing(const LinearRing* ring, bool isShell);
 
 
@@ -380,11 +385,3 @@ private:
 
 } // namespace geos::coverage
 } // namespace geos
-
-
-
-
-
-
-
-
