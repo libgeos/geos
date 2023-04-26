@@ -22,7 +22,7 @@ using namespace geos::geom;
 
 class OpArguments {
 public:
-    int nArgs;
+    int nArgs = 0;
     double arg1;
     double arg2;
 };
