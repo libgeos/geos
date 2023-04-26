@@ -5242,7 +5242,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check orientation of a coordinate sequence. Closure of the sequence is assumed. Invalid (collapsed) sequences will return false. Short (less than 4 points) sequences will return exception. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Check orientation of a coordinate sequence. Closure of the sequence is assumed. Invalid (collapsed) or short (fewer than 4 points) sequences return false. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>the coordinate sequence </td></tr>
     <tr><td class="paramname">is_ccw</td><td>pointer for ccw value, 1 if counter-clockwise orientation, 0 otherwise </td></tr>
