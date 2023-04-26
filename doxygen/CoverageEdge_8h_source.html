@@ -104,12 +104,12 @@ $(function() {
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// Methods</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;CoordinateSequence&gt;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    extractEdgePoints(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    extractEdgePoints(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; ring,</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        std::size_t start, std::size_t end);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    findDistinctPoint(</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* pts,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; pts,</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        std::size_t index,</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">bool</span> isForward,</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; pt);</div>
@@ -123,19 +123,19 @@ $(function() {
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        , m_isFreeRing(isFreeRing)</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        {}</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1CoverageEdge.html#ab75c1c358acd8946069b485faf539985">   93</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> <a class="code" href="classgeos_1_1coverage_1_1CoverageEdge.html#ab75c1c358acd8946069b485faf539985">key</a>(</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring);</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1CoverageEdge.html#a672ca6a6e7e45764cee2caa29834d05b">   93</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> <a class="code" href="classgeos_1_1coverage_1_1CoverageEdge.html#a672ca6a6e7e45764cee2caa29834d05b">key</a>(</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; ring);</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1CoverageEdge.html#a76903bc51e955377d85b5a768aca1b6f">  104</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> <a class="code" href="classgeos_1_1coverage_1_1CoverageEdge.html#a76903bc51e955377d85b5a768aca1b6f">key</a>(</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring,</div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1CoverageEdge.html#abfaad5fa04676242941e330db69e44f4">  104</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> <a class="code" href="classgeos_1_1coverage_1_1CoverageEdge.html#abfaad5fa04676242941e330db69e44f4">key</a>(</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; ring,</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        std::size_t start,</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        std::size_t end);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;CoverageEdge&gt; createEdge(</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; ring);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;CoverageEdge&gt; createEdge(</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; ring,</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        std::size_t start,</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        std::size_t end);</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
@@ -188,15 +188,10 @@ $(function() {
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;} <span class="comment">// namespace geos.coverage</span></div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html">geos::coverage::CoverageEdge</a></div><div class="ttdef"><b>Definition:</b> CoverageEdge.h:54</div></div>
+<div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html_a672ca6a6e7e45764cee2caa29834d05b"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html#a672ca6a6e7e45764cee2caa29834d05b">geos::coverage::CoverageEdge::key</a></div><div class="ttdeci">static LineSegment key(const CoordinateSequence &amp;ring)</div></div>
 <div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html_a7209f4146c5fd59ac0a5d43b6a7b3700"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html#a7209f4146c5fd59ac0a5d43b6a7b3700">geos::coverage::CoverageEdge::isFreeRing</a></div><div class="ttdeci">bool isFreeRing() const</div><div class="ttdef"><b>Definition:</b> CoverageEdge.h:142</div></div>
-<div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html_a76903bc51e955377d85b5a768aca1b6f"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html#a76903bc51e955377d85b5a768aca1b6f">geos::coverage::CoverageEdge::key</a></div><div class="ttdeci">static LineSegment key(const LinearRing *ring, std::size_t start, std::size_t end)</div></div>
-<div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html_ab75c1c358acd8946069b485faf539985"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html#ab75c1c358acd8946069b485faf539985">geos::coverage::CoverageEdge::key</a></div><div class="ttdeci">static LineSegment key(const LinearRing *ring)</div></div>
+<div class="ttc" id="aclassgeos_1_1coverage_1_1CoverageEdge_html_abfaad5fa04676242941e330db69e44f4"><div class="ttname"><a href="classgeos_1_1coverage_1_1CoverageEdge.html#abfaad5fa04676242941e330db69e44f4">geos::coverage::CoverageEdge::key</a></div><div class="ttdeci">static LineSegment key(const CoordinateSequence &amp;ring, std::size_t start, std::size_t end)</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:216</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:65</div></div>
