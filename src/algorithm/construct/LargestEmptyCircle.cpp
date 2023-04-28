@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
+#include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -28,6 +29,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/util/Interrupt.h>
 
 #include <typeinfo> // for dynamic_cast
 #include <cassert>
@@ -110,21 +112,20 @@ LargestEmptyCircle::getRadiusLine()
 void
 LargestEmptyCircle::createInitialGrid(const Envelope* env, std::priority_queue<Cell>& cellQueue)
 {
-    double minX = env->getMinX();
-    double maxX = env->getMaxX();
-    double minY = env->getMinY();
-    double maxY = env->getMaxY();
-    double width = env->getWidth();
-    double height = env->getHeight();
-    double cellSize = std::min(width, height);
-    double hSize = cellSize / 2.0;
-
-    // compute initial grid of cells to cover area
-    for (double x = minX; x < maxX; x += cellSize) {
-        for (double y = minY; y < maxY; y += cellSize) {
-            cellQueue.emplace(x+hSize, y+hSize, hSize, distanceToConstraints(x+hSize, y+hSize));
-        }
+    if (!env->isFinite()) {
+        throw util::GEOSException("Non-finite envelope encountered.");
     }
+
+    double cellSize = std::max(env->getWidth(), env->getHeight());
+    double hSide = cellSize / 2.0;
+
+    // Collapsed geometries just end up using the centroid
+    // as the answer and skip all the other machinery
+    if (cellSize == 0) return;
+
+    CoordinateXY c;
+    env->centre(c);
+    cellQueue.emplace(c.x, c.y, hSide, distanceToConstraints(c.x, c.y));
 }
 
 /* private */
@@ -231,11 +232,17 @@ LargestEmptyCircle::compute()
      * Carry out the branch-and-bound search
      * of the cell space
      */
-    while (!cellQueue.empty()) {
+    std::size_t maxIter = MaximumInscribedCircle::computeMaximumIterations(boundary.get(), tolerance);
+    std::size_t iterationCount = 0;
+    while (!cellQueue.empty() && iterationCount < maxIter) {
 
         // pick the most promising cell from the queue
         Cell cell = cellQueue.top();
         cellQueue.pop();
+
+        if ((iterationCount++ % 1000) == 0) {
+            GEOS_CHECK_FOR_INTERRUPTS();
+        }
 
         // update the center cell if the candidate is further from the constraints
         if (cell.getDistance() > farthestCell.getDistance()) {

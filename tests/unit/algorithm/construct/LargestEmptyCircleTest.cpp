@@ -61,6 +61,24 @@ struct test_lec_data {
         ensure_equals("y coordinate does not match", lhs.y, rhs.y, tolerance);
     }
 
+    /**
+     * A coarse distance check, mainly testing
+     * that there is not a huge number of iterations.
+     * (This will be revealed by CI taking a very long time!)
+     */
+    void
+    checkCircle(std::string wktObstacles, double tolerance)
+    {
+        std::unique_ptr<Geometry> geom(reader_.read(wktObstacles));
+        LargestEmptyCircle lec(geom.get(), tolerance);
+        std::unique_ptr<Point> centerPoint = lec.getCenter();
+        double dist = geom->distance(centerPoint.get());
+        //std::cout << dist << std::endl;
+        std::unique_ptr<LineString> radiusLine = lec.getRadiusLine();
+        double actualRadius = radiusLine->getLength();
+        ensure(std::abs(actualRadius - dist) < 2 * tolerance);
+    }
+
     void
     checkCircle(const Geometry *obstacles, const Geometry *boundary, double build_tolerance, double x, double y, double expectedRadius)
     {
@@ -202,8 +220,8 @@ void object::test<6>
 ()
 {
 
-    checkCircle("MULTILINESTRING ((100 100, 200 150, 100 200, 250 250, 100 300, 300 350, 100 400), (50 400, 0 350, 50 300, 0 250, 50 200, 0 150, 50 100))",
-       0.01, 77.52, 349.99, 54.81 );
+    checkCircle("MULTILINESTRING ((100 100, 200 150, 100 200, 250 250, 100 300, 300 350, 100 400), (70 380, 0 350, 50 300, 0 250, 50 200, 0 150, 50 120))",
+       0.01, 77.52, 249.99, 54.81 );
 }
 
 //
@@ -243,10 +261,20 @@ void object::test<9>
        0.01 );
 }
 
-// testBoundaryEmpty
+// testThinExtent
 template<>
 template<>
 void object::test<10>
+()
+{
+    checkCircle("MULTIPOINT ((100 100), (300 100), (200 100.1))",
+       0.01 );
+}
+
+// testBoundaryEmpty
+template<>
+template<>
+void object::test<11>
 ()
 {
  checkCircle("MULTIPOINT ((2 2), (8 8), (7 5))",
@@ -257,7 +285,7 @@ void object::test<10>
 // testBoundarySquare
 template<>
 template<>
-void object::test<11>
+void object::test<12>
 ()
 {
     checkCircle("MULTIPOINT ((2 2), (6 4), (8 8))",
@@ -268,7 +296,7 @@ void object::test<11>
 //testBoundarySquareObstaclesOutside
 template<>
 template<>
-void object::test<12>
+void object::test<13>
 ()
 {
     checkCircle("MULTIPOINT ((10 10), (10 0))",
@@ -279,7 +307,7 @@ void object::test<12>
 // testBoundaryMultiSquares
 template<>
 template<>
-void object::test<13>
+void object::test<14>
 ()
 {
     checkCircle("MULTIPOINT ((10 10), (10 0), (5 5))",
@@ -290,7 +318,7 @@ void object::test<13>
 // testBoundaryAsObstacle
 template<>
 template<>
-void object::test<14>
+void object::test<15>
 ()
 {
     checkCircle("GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9)), POINT (4 3), POINT (7 6))",
