@@ -49,6 +49,18 @@ Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
 {
     if (coordinates.getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
+    } else if (coordinates.getSize() == 1) {
+        // Replace all-NaN point with empty point
+        bool isnull = false;
+        switch(coordinates.getCoordinateType()) {
+            case CoordinateType::XY: isnull = coordinates.getAt<CoordinateXY>(0).isNull(); break;
+            case CoordinateType::XYZ: isnull = coordinates.getAt<Coordinate>(0).isNull(); break;
+            case CoordinateType::XYZM: isnull = coordinates.getAt<CoordinateXYZM>(0).isNull(); break;
+            case CoordinateType::XYM: isnull = coordinates.getAt<CoordinateXYM>(0).isNull(); break;
+        }
+        if (isnull) {
+            coordinates = CoordinateSequence(0, coordinates.hasZ(), coordinates.hasM(), false);
+        }
     }
 }
 
@@ -57,6 +69,9 @@ Point::Point(const Coordinate & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
+    if (c.isNull()) {
+        coordinates = CoordinateSequence(0u, true, false, false);
+    }
 }
 
 Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
@@ -64,6 +79,9 @@ Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
+    if (c.isNull()) {
+        coordinates = CoordinateSequence(0u, false, false, false);
+    }
 }
 
 Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
@@ -71,6 +89,9 @@ Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
+    if (c.isNull()) {
+        coordinates = CoordinateSequence(0u, false, true, false);
+    }
 }
 
 Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
@@ -80,7 +101,11 @@ Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
     , coordinates{1u, !std::isnan(c.z), !std::isnan(c.m), false}
     , envelope(c)
 {
-    coordinates.setAt(c, 0);
+    if (c.isNull()) {
+        coordinates = CoordinateSequence(0u, true, true, false);
+    } else {
+        coordinates.setAt(c, 0);
+    }
 }
 
 /*protected*/
@@ -105,16 +130,7 @@ Point::getNumPoints() const
 bool
 Point::isEmpty() const
 {
-    if (coordinates.isEmpty()) {
-        return true;
-    }
-
-    const CoordinateXY& c = coordinates.getAt<CoordinateXY>(0);
-    if (std::isnan(c.x) && std::isnan(c.y)) {
-        return true;
-    }
-
-    return false;
+    return coordinates.isEmpty();
 }
 
 bool
