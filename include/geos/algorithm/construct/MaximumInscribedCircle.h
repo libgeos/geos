@@ -107,6 +107,22 @@ public:
     */
     static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* polygonal, double tolerance);
 
+    /**
+     * Computes the maximum number of iterations allowed.
+     * Uses a heuristic based on the area of the input geometry
+     * and the tolerance distance.
+     * The number of tolerance-sized cells that cover the input geometry area
+     * is computed, times a safety factor.
+     * This prevents massive numbers of iterations and created cells
+     * for casees where the input geometry has extremely small area
+     * (e.g. is very thin).
+     *
+     * @param geom the input geometry
+     * @param toleranceDist the tolerance distance
+     * @return the maximum number of iterations allowed
+     */
+    static std::size_t computeMaximumIterations(const geom::Geometry* geom, double toleranceDist);
+
 private:
 
     /* private members */
@@ -170,22 +186,32 @@ private:
         {
             return y;
         }
+
         bool operator< (const Cell& rhs) const
         {
             return maxDist <  rhs.maxDist;
         }
+
         bool operator> (const Cell& rhs) const
         {
             return maxDist >  rhs.maxDist;
         }
+
         bool operator==(const Cell& rhs) const
         {
             return maxDist == rhs.maxDist;
         }
+
+        /**
+         * The Cell priority queue is sorted by the natural order of maxDistance.
+         * std::priority_queue sorts with largest first,
+         * which is what is needed for this algorithm.
+         */
+        using CellQueue = std::priority_queue<Cell>;
     };
 
-    void createInitialGrid(const geom::Envelope* env, std::priority_queue<Cell>& cellQueue);
-    Cell createCentroidCell(const geom::Geometry* geom);
+    void createInitialGrid(const geom::Envelope* env, Cell::CellQueue& cellQueue);
+    Cell createInteriorPointCell(const geom::Geometry* geom);
 
 };
 
@@ -193,4 +219,3 @@ private:
 } // geos::algorithm::construct
 } // geos::algorithm
 } // geos
-
