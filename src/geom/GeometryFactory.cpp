@@ -224,16 +224,19 @@ GeometryFactory::createPoint(std::size_t coordinateDimension) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
 {
-    return std::unique_ptr<Point>(new Point(
-                                      coords ? std::move(*coords) : CoordinateSequence(),
-                                      this));
+    if (!coords) {
+        return createPoint();
+    } else if ((*coords).isNullPoint()) {
+        return createPoint((*coords).getDimension());
+    }
+    return std::unique_ptr<Point>(new Point(std::move(*coords), this));
 }
 
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXY& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint();
+        return createPoint(2);
     }
     else {
         return std::unique_ptr<Point>(new Point(coordinate, this));
@@ -245,7 +248,7 @@ std::unique_ptr<Point>
 GeometryFactory::createPoint(const Coordinate& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint();
+        return createPoint(3);
     }
     else {
         return std::unique_ptr<Point>(new Point(coordinate, this));
@@ -256,7 +259,7 @@ std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXYM& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint();
+        return createPoint(4);  // can't do XYM!
     }
     else {
         return std::unique_ptr<Point>(new Point(coordinate, this));
@@ -267,7 +270,7 @@ std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXYZM& coordinate) const
 {
     if(coordinate.isNull()) {
-        return createPoint();
+        return createPoint(4);
     }
     else {
         return std::unique_ptr<Point>(new Point(coordinate, this));
@@ -278,6 +281,9 @@ GeometryFactory::createPoint(const CoordinateXYZM& coordinate) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 {
+    if (fromCoords.isNullPoint()) {
+        return createPoint(fromCoords.getDimension());
+    }
     CoordinateSequence newCoords(fromCoords);
     return std::unique_ptr<Point>(new Point(std::move(newCoords), this));
 

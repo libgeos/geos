@@ -49,18 +49,6 @@ Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
 {
     if (coordinates.getSize() > 1) {
         throw util::IllegalArgumentException("Point coordinate list must contain a single element");
-    } else if (coordinates.getSize() == 1) {
-        // Replace all-NaN point with empty point
-        bool isnull = false;
-        switch(coordinates.getCoordinateType()) {
-            case CoordinateType::XY: isnull = coordinates.getAt<CoordinateXY>(0).isNull(); break;
-            case CoordinateType::XYZ: isnull = coordinates.getAt<Coordinate>(0).isNull(); break;
-            case CoordinateType::XYZM: isnull = coordinates.getAt<CoordinateXYZM>(0).isNull(); break;
-            case CoordinateType::XYM: isnull = coordinates.getAt<CoordinateXYM>(0).isNull(); break;
-        }
-        if (isnull) {
-            coordinates.clear();
-        }
     }
 }
 
@@ -69,9 +57,6 @@ Point::Point(const Coordinate & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
-    if (c.isNull()) {
-        coordinates.clear();
-    }
 }
 
 Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
@@ -79,9 +64,6 @@ Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
-    if (c.isNull()) {
-        coordinates.clear();
-    }
 }
 
 Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
@@ -89,9 +71,6 @@ Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
     , coordinates{c}
     , envelope(c)
 {
-    if (c.isNull()) {
-        coordinates.clear();
-    }
 }
 
 Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
@@ -101,9 +80,7 @@ Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
     , coordinates{1u, !std::isnan(c.z), !std::isnan(c.m), false}
     , envelope(c)
 {
-    if (c.isNull()) {
-        coordinates.clear();
-    }
+    coordinates.setAt(c, 0);
 }
 
 /*protected*/
