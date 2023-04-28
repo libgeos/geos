@@ -68,7 +68,7 @@ jobs:
           arch: 64,
           packages: 'clang',
           cmake: 3.17.*,
-          os: ubuntu-latest,
+          os: ubuntu-20.04,
         }
         - {
           compiler: clang++,
