@@ -145,7 +145,7 @@ void object::test<4>
     ensure(geom_ == nullptr);
 }
 
-// Create collection from dynamic length std::vector of geometries
+// Release empty collection
 template<>
 template<>
 void object::test<5>
@@ -161,7 +161,7 @@ void object::test<5>
 }
 
 
-// Create collection from dynamic length std::vector of geometries
+// Release generic collection
 template<>
 template<>
 void object::test<6>
@@ -182,7 +182,7 @@ void object::test<6>
 
 }
 
-// Create collection from dynamic length std::vector of geometries
+// Release typed collection
 template<>
 template<>
 void object::test<7>
