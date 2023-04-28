@@ -774,7 +774,7 @@ GEOSCoverageIsValid_r(
     double gapWidth,
     GEOSGeometry** output);
 
-/** \see GEOSCoverageSimplify */
+/** \see GEOSCoverageSimplifyVW */
 extern GEOSGeometry GEOS_DLL *
 GEOSCoverageSimplifyVW_r(
     GEOSContextHandle_t extHandle,
