@@ -126,5 +126,42 @@ void object::test<4>
     ensure(geom_ == nullptr);
 }
 
+// Create collection from dynamic length std::vector of geometries
+template<>
+template<>
+void object::test<5>
+()
+{
+    unsigned int ngeoms;
+    GEOSGeometry ** geoms;
+
+    GEOSWKTReader *reader = GEOSWKTReader_create_r(handle_);
+
+    const char *wkt1 = "MULTIPOLYGON EMPTY";
+    geom_ = GEOSWKTReader_read_r(handle_, reader, wkt1);
+    ensure(geom_ != nullptr);
+
+    geoms = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms);
+    ensure(geoms == nullptr);
+    ensure(ngeoms == 0);
+
+    const char *wkt2 = "GEOMETRYCOLLECTION(POINT(0 0), POINT(1 1))";
+    geom_ = GEOSWKTReader_read_r(handle_, reader, wkt2);
+    ensure(geom_ != nullptr);
+
+    geoms = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms);
+    ensure(geoms != nullptr);
+    ensure(ngeoms == 2);
+
+    for (size_t i = 0 ; i < ngeoms; i++) {
+        ensure(GEOSGeomTypeId_r(handle_, geoms[i]) == GEOS_POINT);
+        GEOSGeom_destroy_r(handle_, geoms[i]);
+    }
+
+    GEOSFree_r(handle_, geoms);
+    GEOSWKTReader_destroy_r(handle_, reader);
+}
+
+
 } // namespace tut
 

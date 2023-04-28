@@ -849,6 +849,12 @@ extern "C" {
         return GEOSGeom_createCollection_r(handle, type, geoms, ngeoms);
     }
 
+    Geometry**
+    GEOSGeom_releaseCollection(Geometry* collection, unsigned int * ngeoms)
+    {
+        return GEOSGeom_releaseCollection_r(handle, collection, ngeoms);
+    }
+
     Geometry*
     GEOSPolygonize(const Geometry* const* g, unsigned int ngeoms)
     {

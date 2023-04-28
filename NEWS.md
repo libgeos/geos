@@ -21,6 +21,7 @@ xxxx-xx-xx
   - Voronoi: Add option to create diagram in order consistent with inputs (GH-781, Dan Baston)
   - Polygonal coverages: CoverageSimplifier (JTS-911, Martin Davis)
   - CAPI: GEOSCoverageIsValid, GEOSCoverageSimplifyVW (GH-867, Paul Ramsey)
+  - CAPI: GEOSGeom_releaseCollection (GH-848)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)

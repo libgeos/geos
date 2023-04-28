@@ -2024,6 +2024,38 @@ extern "C" {
         });
     }
 
+    Geometry**
+    GEOSGeom_releaseCollection_r(GEOSContextHandle_t extHandle, Geometry* collection, unsigned int * ngeoms)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+
+            if (ngeoms == nullptr) {
+                handle->ERROR_MESSAGE("Parameter ngeoms of GEOSGeom_releaseCollection_r must not be null");
+            }
+
+            GeometryCollection *col = dynamic_cast<GeometryCollection*>(collection);
+            if (!col) {
+                handle->ERROR_MESSAGE("Parameter collection of GEOSGeom_releaseCollection_r must not be a collection");
+            }
+
+            // Early exit on empty/null input
+            *ngeoms = static_cast<unsigned int>(col->getNumGeometries());
+            if (!col || *ngeoms == 0) {
+                return static_cast<Geometry**>(nullptr);
+            }
+
+            std::vector<std::unique_ptr<Geometry>> subgeoms = col->releaseGeometries();
+
+            Geometry** subgeomArray = static_cast<Geometry**>(malloc(sizeof(Geometry*) * subgeoms.size()));
+            for (std::size_t i = 0; i < subgeoms.size(); i++) {
+                subgeomArray[i] = subgeoms[i].release();
+            }
+
+            return subgeomArray;
+        });
+    }
+
     Geometry*
     GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
     {
