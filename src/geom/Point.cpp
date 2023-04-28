@@ -59,7 +59,7 @@ Point::Point(CoordinateSequence&& newCoords, const GeometryFactory* factory)
             case CoordinateType::XYM: isnull = coordinates.getAt<CoordinateXYM>(0).isNull(); break;
         }
         if (isnull) {
-            coordinates = CoordinateSequence(0, coordinates.hasZ(), coordinates.hasM(), false);
+            coordinates.clear();
         }
     }
 }
@@ -70,7 +70,7 @@ Point::Point(const Coordinate & c, const GeometryFactory* factory)
     , envelope(c)
 {
     if (c.isNull()) {
-        coordinates = CoordinateSequence(0u, true, false, false);
+        coordinates.clear();
     }
 }
 
@@ -80,7 +80,7 @@ Point::Point(const CoordinateXY & c, const GeometryFactory* factory)
     , envelope(c)
 {
     if (c.isNull()) {
-        coordinates = CoordinateSequence(0u, false, false, false);
+        coordinates.clear();
     }
 }
 
@@ -90,7 +90,7 @@ Point::Point(const CoordinateXYM & c, const GeometryFactory* factory)
     , envelope(c)
 {
     if (c.isNull()) {
-        coordinates = CoordinateSequence(0u, false, true, false);
+        coordinates.clear();
     }
 }
 
@@ -102,9 +102,7 @@ Point::Point(const CoordinateXYZM & c, const GeometryFactory* factory)
     , envelope(c)
 {
     if (c.isNull()) {
-        coordinates = CoordinateSequence(0u, true, true, false);
-    } else {
-        coordinates.setAt(c, 0);
+        coordinates.clear();
     }
 }
 
