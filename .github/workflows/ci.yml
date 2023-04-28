@@ -25,7 +25,7 @@ jobs:
           packages: 'g++',
           cmake: 3.15.*,
           cmake_extra: '-DBUILD_BENCHMARKS=ON',
-          os: ubuntu-18.04
+          os: ubuntu-20.04
         }
         - {
           compiler: g++,
@@ -34,7 +34,7 @@ jobs:
           arch: 32,
           packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
           cmake: 3.13.*,
-          os: ubuntu-18.04
+          os: ubuntu-20.04
         }
         - {
           compiler: clang++,
@@ -43,7 +43,7 @@ jobs:
           arch: 64,
           packages: 'clang',
           cmake: 3.13.*,
-          os: ubuntu-18.04
+          os: ubuntu-20.04
         }
         - {
           compiler: clang++,
@@ -254,7 +254,7 @@ jobs:
 
   cmake-subproject:
     name: 'CMake Subproject'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: 'Install'
       run: |
