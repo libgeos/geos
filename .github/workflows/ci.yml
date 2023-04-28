@@ -23,7 +23,7 @@ jobs:
           cxxstd: 11,
           arch: 64,
           packages: 'g++ automake doxygen git2cl',
-          os: ubuntu-18.04
+          os: ubuntu-latest
         }
 #        - {
 #          compiler: g++,
@@ -46,7 +46,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make ${{ matrix.ci.packages }}
 
     - name: 'Check Out'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: 'Build'
       run: |
