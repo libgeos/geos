@@ -72,11 +72,58 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a2e7e87479fd930a4bee7db66e4eef9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7263cee24898700731c8c3082ade0802"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#a7263cee24898700731c8c3082ade0802">getRadiusLine</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *polygonal, double tolerance)</td></tr>
 <tr class="separator:a7263cee24898700731c8c3082ade0802"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1f20f7005d0071c7449778d162d0bb"><td class="memItemLeft" align="right" valign="top">static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#aaa1f20f7005d0071c7449778d162d0bb">computeMaximumIterations</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, double toleranceDist)</td></tr>
+<tr class="separator:aaa1f20f7005d0071c7449778d162d0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Computes the Euclidean distance (L2 metric) from a Point to a Geometry.</p>
 <p>Also computes two points which are separated by the distance. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aaa1f20f7005d0071c7449778d162d0bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1f20f7005d0071c7449778d162d0bb">&#9670;&nbsp;</a></span>computeMaximumIterations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::size_t geos::algorithm::construct::MaximumInscribedCircle::computeMaximumIterations </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>toleranceDist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the maximum number of iterations allowed. Uses a heuristic based on the area of the input geometry and the tolerance distance. The number of tolerance-sized cells that cover the input geometry area is computed, times a safety factor. This prevents massive numbers of iterations and created cells for casees where the input geometry has extremely small area (e.g. is very thin).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>the input geometry </td></tr>
+    <tr><td class="paramname">toleranceDist</td><td>the tolerance distance </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the maximum number of iterations allowed </dd></dl>
+
+</div>
+</div>
 <a id="a85f93832a3686c6fa49fc06f9e089dda"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85f93832a3686c6fa49fc06f9e089dda">&#9670;&nbsp;</a></span>getCenter() <span class="overload">[1/2]</span></h2>
 
