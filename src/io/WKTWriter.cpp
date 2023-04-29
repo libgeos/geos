@@ -281,7 +281,7 @@ WKTWriter::appendPointTaggedText(const Point& point, OrdinateSet outputOrdinates
     appendOrdinateText(outputOrdinates, writer);
 
     const CoordinateXY* coord = point.getCoordinate();
-    if (coord == nullptr || (std::isnan(coord->x) && std::isnan(coord->y))) {
+    if (coord == nullptr) {
         writer.write("EMPTY");
     } else {
         appendSequenceText(*point.getCoordinatesRO(), outputOrdinates, p_level, false, writer);

@@ -105,16 +105,7 @@ Point::getNumPoints() const
 bool
 Point::isEmpty() const
 {
-    if (coordinates.isEmpty()) {
-        return true;
-    }
-
-    const CoordinateXY& c = coordinates.getAt<CoordinateXY>(0);
-    if (std::isnan(c.x) && std::isnan(c.y)) {
-        return true;
-    }
-
-    return false;
+    return coordinates.isEmpty();
 }
 
 bool

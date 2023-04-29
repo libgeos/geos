@@ -197,6 +197,20 @@ public:
         return m_vect.empty();
     }
 
+    /// Returns <code>true</code> if there is 1 coordinate and if it is null.
+    bool isNullPoint() const {
+        if (size() != 1) {
+            return false;
+        }
+        switch(getCoordinateType()) {
+            case CoordinateType::XY: return getAt<CoordinateXY>(0).isNull();
+            case CoordinateType::XYZ: return getAt<Coordinate>(0).isNull();
+            case CoordinateType::XYZM: return getAt<CoordinateXYZM>(0).isNull();
+            case CoordinateType::XYM: return getAt<CoordinateXYM>(0).isNull();
+            default: return false;
+        }
+    }
+
     /** \brief
     * Tests whether an a {@link CoordinateSequence} forms a ring,
     * by checking length and closure. Self-intersection is not checked.
