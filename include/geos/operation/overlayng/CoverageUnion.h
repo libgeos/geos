@@ -79,6 +79,8 @@ private:
 
 public:
 
+    static constexpr double AREA_PCT_DIFF_TOL = 1e-6;
+
     /**
     * Unions a valid polygonal coverage or linear network.
     *

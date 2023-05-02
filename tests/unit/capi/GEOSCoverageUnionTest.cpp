@@ -83,7 +83,7 @@ template<>
 template<>
 void object::test<2>
 () {
-    // Overlapping inputs (error)
+    // Overlapping inputs (unchanged output)
     std::vector<std::string> wkt{
             "POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))",
             "POLYGON ((1 0, 0.9 1, 2 1, 2 0, 1 0))"
@@ -96,10 +96,11 @@ void object::test<2>
 
     auto input = GEOSGeom_createCollection_r(m_context, GEOS_GEOMETRYCOLLECTION, geoms, 2);
     auto result = GEOSCoverageUnion_r(m_context, input);
-
-    ensure( result == nullptr );
+    ensure( result != nullptr );
+    ensure( GEOSEquals_r(m_context, input, result) );
 
     GEOSGeom_destroy_r(m_context, input);
+    GEOSGeom_destroy_r(m_context, result);
 }
 
 

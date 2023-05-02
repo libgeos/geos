@@ -48,10 +48,18 @@ public:
     /**
     * Unions a polygonal coverage.
     *
-    * @param coverage the polygons in the coverage
+    * @param coverage a vector of polygons in the coverage
     * @return the union of the coverage polygons
     */
     static std::unique_ptr<Geometry> Union(std::vector<const Geometry*>& coverage);
+
+    /**
+    * Unions a polygonal coverage.
+    *
+    * @param coverage a collection of the polygons in the coverage
+    * @return the union of the coverage polygons
+    */
+    static std::unique_ptr<Geometry> Union(const Geometry* coverage);
 
 };
 

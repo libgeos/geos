@@ -29,6 +29,7 @@
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/coverage/CoverageSimplifier.h>
+#include <geos/coverage/CoverageUnion.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -79,7 +80,6 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
-#include <geos/operation/union/CoverageUnion.h>
 #include <geos/operation/union/DisjointSubsetUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
@@ -1494,7 +1494,7 @@ extern "C" {
     GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            auto g3 = geos::operation::geounion::CoverageUnion::Union(g);
+            auto g3 = geos::coverage::CoverageUnion::Union(g);
             g3->setSRID(g->getSRID());
             return g3.release();
         });
