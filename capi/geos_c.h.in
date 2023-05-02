@@ -736,6 +736,12 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection_r(
     GEOSGeometry* *geoms,
     unsigned int ngeoms);
 
+/** \see GEOSGeom_releaseCollection */
+extern GEOSGeometry GEOS_DLL ** GEOSGeom_releaseCollection_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry * collection,
+    unsigned int * ngeoms);
+
 /** \see GEOSGeom_createEmptyCollection */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection_r(
     GEOSContextHandle_t handle, int type);
@@ -2440,6 +2446,26 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
     int type,
     GEOSGeometry** geoms,
     unsigned int ngeoms);
+
+/**
+* Release the sub-geometries of a collection for management.
+* by the caller. The input collection remains as an empty collection,
+* that the caller is responsible for destroying. The output geometries
+* are also the responsibility of the caller, as is the containing array,
+* which must be freed with GEOSFree().
+* \param collection The collection that will have its components released.
+* \param ngeoms A pointer to a variable that will be filled with the
+*        size of the output array.
+* \return A newly allocated array of GEOSGeometry pointers.
+* \note The caller is responsible for freeing the returned array
+*       with GEOSFree() and all the elements with GEOSGeom_destroy().
+*       If called with an empty collection, null will be returned
+*       and ngeoms set to zero.
+* \since 3.4
+*/
+extern GEOSGeometry GEOS_DLL ** GEOSGeom_releaseCollection(
+    GEOSGeometry * collection,
+    unsigned int * ngeoms);
 
 /**
 * Create an empty geometry collection.

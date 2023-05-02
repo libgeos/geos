@@ -21,7 +21,11 @@ namespace tut {
 // Common data used in test cases.
 struct test_capigeosgeom_createcollection_data {
     GEOSContextHandle_t handle_;
-    GEOSGeom geom_; // collection result
+    GEOSWKTReader * reader_;
+    GEOSGeometry * geom_;
+    GEOSGeometry ** geoms_;
+    unsigned int ngeoms_;
+
     enum { geom_size = 3 };
 
     static void
@@ -37,16 +41,31 @@ struct test_capigeosgeom_createcollection_data {
         std::fprintf(stdout, "\n");
     }
 
+    GEOSGeometry*
+    read(const char* wkt)
+    {
+        return GEOSWKTReader_read_r(handle_, reader_, wkt);
+    }
+
     test_capigeosgeom_createcollection_data()
-        : handle_(initGEOS_r(notice, notice)), geom_(nullptr)
+        : handle_(initGEOS_r(notice, notice))
+        , reader_(GEOSWKTReader_create_r(handle_))
+        , geom_(nullptr)
+        , geoms_(nullptr)
+        , ngeoms_(0)
     {
     }
 
     ~test_capigeosgeom_createcollection_data()
     {
-        GEOSGeom_destroy(geom_);
-        geom_ = nullptr;
+        if (reader_) GEOSWKTReader_destroy_r(handle_, reader_);
+        if (geom_)   GEOSGeom_destroy_r(handle_, geom_);
+        if (geoms_)  GEOSFree_r(handle_, geoms_);
         finishGEOS_r(handle_);
+        handle_ = nullptr;
+        reader_ = nullptr;
+        geom_ = nullptr;
+        geoms_ = nullptr;
     }
 };
 
@@ -124,6 +143,64 @@ void object::test<4>
 
     geom_ = GEOSGeom_createEmptyCollection_r(handle_, 12345);
     ensure(geom_ == nullptr);
+}
+
+// Release empty collection
+template<>
+template<>
+void object::test<5>
+()
+{
+    const char *wkt = "MULTIPOLYGON EMPTY";
+    geom_ = read(wkt);
+    ensure(geom_ != nullptr);
+
+    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
+    ensure(geoms_ == nullptr);
+    ensure(ngeoms_ == 0);
+}
+
+
+// Release generic collection
+template<>
+template<>
+void object::test<6>
+()
+{
+    const char *wkt = "GEOMETRYCOLLECTION(POINT(0 0), POINT(1 1))";
+    geom_ = read(wkt);
+    ensure(geom_ != nullptr);
+
+    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
+    ensure(geoms_ != nullptr);
+    ensure(ngeoms_ == 2);
+
+    for (size_t i = 0 ; i < ngeoms_; i++) {
+        ensure(GEOSGeomTypeId_r(handle_, geoms_[i]) == GEOS_POINT);
+        GEOSGeom_destroy_r(handle_, geoms_[i]);
+    }
+
+}
+
+// Release typed collection
+template<>
+template<>
+void object::test<7>
+()
+{
+    const char *wkt = "MULTIPOINT(0 0, 1 1)";
+    geom_ = read(wkt);
+    ensure(geom_ != nullptr);
+
+    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
+    ensure(geoms_ != nullptr);
+    ensure(ngeoms_ == 2);
+
+    for (size_t i = 0 ; i < ngeoms_; i++) {
+        ensure(GEOSGeomTypeId_r(handle_, geoms_[i]) == GEOS_POINT);
+        GEOSGeom_destroy_r(handle_, geoms_[i]);
+    }
+
 }
 
 } // namespace tut
