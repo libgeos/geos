@@ -57,14 +57,50 @@ $(function() {
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a88888065c266709b70a9dabeb0ec3931"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageUnion.html#a88888065c266709b70a9dabeb0ec3931">Union</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage)</td></tr>
 <tr class="separator:a88888065c266709b70a9dabeb0ec3931"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a577dcc68ec61cbefa5c825a100d0cbc7"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageUnion.html#a577dcc68ec61cbefa5c825a100d0cbc7">Union</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *coverage)</td></tr>
+<tr class="separator:a577dcc68ec61cbefa5c825a100d0cbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unions a polygonal coverage in an efficient way.</p>
 <p>Valid polygonal coverage topology allows merging polygons in a very efficient way.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a577dcc68ec61cbefa5c825a100d0cbc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a577dcc68ec61cbefa5c825a100d0cbc7">&#9670;&nbsp;</a></span>Union() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>&gt; geos::coverage::CoverageUnion::Union </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td>
+          <td class="paramname"><em>coverage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unions a polygonal coverage.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coverage</td><td>a collection of the polygons in the coverage </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the union of the coverage polygons </dd></dl>
+
+</div>
+</div>
 <a id="a88888065c266709b70a9dabeb0ec3931"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88888065c266709b70a9dabeb0ec3931">&#9670;&nbsp;</a></span>Union()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a88888065c266709b70a9dabeb0ec3931">&#9670;&nbsp;</a></span>Union() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -89,7 +125,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Unions a polygonal coverage.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">coverage</td><td>the polygons in the coverage </td></tr>
+    <tr><td class="paramname">coverage</td><td>a vector of polygons in the coverage </td></tr>
   </table>
   </dd>
 </dl>
