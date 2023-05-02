@@ -61,6 +61,7 @@ xxxx-xx-xx
   - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
   - Fix MaximumInscribedCircle and LargestEmptyCircle performance and memory issues (GH-883, Martin Davis)
+  - GEOSHasZ: Fix handling with empty geometries (GH-887, Mike Taves)
 
 - Changes:
   - Remove Orientation.isCCW exception to simplify logic and align with JTS (GH-878, Martin Davis)

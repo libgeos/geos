@@ -2378,10 +2378,6 @@ extern "C" {
     GEOSHasZ_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            if(g->isEmpty()) {
-                return false;
-            }
-
             return g->hasZ();
         });
     }
