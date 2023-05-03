@@ -449,11 +449,11 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         subgraphList.clear();
 
 #if GEOS_DEBUG
-        std::cerr << "PolygonBuilder got " << resultPolyList->size()
+        std::cerr << "PolygonBuilder got " << resultPolyList.size()
                   << " polygons" << std::endl;
 #if GEOS_DEBUG > 1
-        for(std::size_t i = 0, n = resultPolyList->size(); i < n; i++) {
-            std::cerr << (*resultPolyList)[i]->toString() << std::endl;
+        for(std::size_t i = 0, n = resultPolyList.size(); i < n; i++) {
+            std::cerr << resultPolyList[i]->toString() << std::endl;
         }
 #endif
 #endif
