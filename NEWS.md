@@ -15,6 +15,7 @@ xxxx-xx-xx
   - CAPI: GEOSDisjointSubsetUnion (GH-692, Dan Baston)
   - CAPI: GEOSLineSubstring (GH-706, Dan Baston)
   - CAPI: GEOSEqualsIdentical (GH-810, Dan Baston)
+  - CAPI: GEOSOrientPolygons (GH-818, Dan Baston)
   - CAPI: GEOSSTRtree_build (GH-835, Dan Baston)
   - CAPI: GEOSConcaveHullByLength (GH-849, Martin Davis)
   - CAPI: GEOSGeomGetM (GH-864, Mike Taves)

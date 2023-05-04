@@ -152,6 +152,16 @@ public:
 
     void normalize() override;
 
+    /**
+     * \brief
+     * Apply a ring ordering convention to this polygon, with
+     * interior rings having an opposite orientation to the
+     * specified exterior orientation.
+     *
+     * \param exteriorCW should exterior ring be clockwise?
+     */
+    void orientRings(bool exteriorCW);
+
     std::unique_ptr<Polygon> reverse() const { return std::unique_ptr<Polygon>(reverseImpl()); }
 
     const CoordinateXY* getCoordinate() const override;

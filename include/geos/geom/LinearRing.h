@@ -103,6 +103,8 @@ public:
 
     std::unique_ptr<LinearRing> reverse() const { return std::unique_ptr<LinearRing>(reverseImpl()); }
 
+    void orient(bool isCW);
+
 protected:
 
     int

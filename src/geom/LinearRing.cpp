@@ -17,6 +17,8 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Orientation.h>
+
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -96,6 +98,19 @@ GeometryTypeId
 LinearRing::getGeometryTypeId() const
 {
     return GEOS_LINEARRING;
+}
+
+void
+LinearRing::orient(bool isCW)
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    if (algorithm::Orientation::isCCW(points.get()) == isCW) {
+        points->reverse();
+    }
+
 }
 
 LinearRing*

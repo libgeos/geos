@@ -682,6 +682,12 @@ extern "C" {
     }
 
     int
+    GEOSOrientPolygons(Geometry* g, int exteriorCW)
+    {
+        return GEOSOrientPolygons_r(handle, g, exteriorCW);
+    }
+
+    int
     GEOSGetNumInteriorRings(const Geometry* g)
     {
         return GEOSGetNumInteriorRings_r(handle, g);
