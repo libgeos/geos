@@ -46,5 +46,35 @@ void object::test<3>()
     ensure_equals(GEOSHasM(input_), 0);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = GEOSGeomFromWKT("POINT Z EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 1);
+    ensure_equals(GEOSHasM(input_), 0);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    input_ = GEOSGeomFromWKT("POINT M EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 0);
+    ensure_equals(GEOSHasM(input_), 1);
+}
+
+template<>
+template<>
+void object::test<6>()
+{
+    input_ = GEOSGeomFromWKT("POINT ZM EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 1);
+    ensure_equals(GEOSHasM(input_), 1);
+}
+
 } // namespace tut
 
