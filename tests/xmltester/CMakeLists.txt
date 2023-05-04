@@ -36,7 +36,7 @@ foreach(_testdir general issue misc robust validate)
         CONFIGURE_DEPEND)
     foreach(_testfile ${_testfiles})
         get_filename_component(_testname ${_testfile} NAME_WE)
-        add_test(NAME ${_testdir}-${_testname}
+        add_test(NAME xml-${_testdir}-${_testname}
             COMMAND test_xmltester -v --test-valid-output ${_testfile})
         list(APPEND _xmltests ${_testfile})
     endforeach()
@@ -52,7 +52,7 @@ add_test(NAME all-xml-tests
 unset(_xmltests)
 
 # Disable tests that are known to fail on 32-bit systems.
-set_tests_properties(issue-issue-geos-837 PROPERTIES DISABLED $<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>)
+set_tests_properties(xml-issue-issue-geos-837 PROPERTIES DISABLED $<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>)
 
 unset(_testdir)
 unset(_testname)
