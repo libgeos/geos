@@ -411,13 +411,98 @@ BufferBuilder::buffer(const Geometry* g, double distance)
     std::cerr << std::endl << edgeList << std::endl;
 #endif
 
+    std::vector<Edge*> *edges = &edgeList.getEdges();
+    std::vector<Edge*> reducedEdges; // only needed if bufParams.isSingleSided
+
+    if ( bufParams.isSingleSided() )
+    {
+#if GEOS_DEBUG
+        std::cerr << "Single-sided buffer was desired, we'll drop edges not being in the full buffer" << std::endl;
+#endif
+
+        // First, generate the two-sided buffer using a butt-cap.
+        BufferParameters modParams = bufParams;
+        modParams.setEndCapStyle(BufferParameters::CAP_FLAT);
+        modParams.setSingleSided(false);
+        BufferBuilder tmpBB(modParams);
+        std::unique_ptr<Geometry> buf(tmpBB.buffer(g, std::abs(distance)));
+        // Create MultiLineStrings from this polygon.
+        std::unique_ptr<Geometry> bufLineString(buf->getBoundary());
+
+#if GEOS_DEBUG
+        std::cerr << "Boundaries of full buffer:" << *bufLineString << std::endl;
+#endif
+
+        // Get linework of input geom
+        const Geometry *inputLineString = g;
+        std::unique_ptr<Geometry> inputPolygonBoundary;
+        if ( g->getDimension() > 1 )
+        {
+            inputPolygonBoundary = g->getBoundary();
+            inputLineString = inputPolygonBoundary.get();
+        }
+
+#if GEOS_DEBUG
+        std::cerr << "Input linework: " << *inputLineString << std::endl;
+#endif
+
+
+        // Union input line and full buffer line
+        std::unique_ptr<Geometry> usableLines = inputLineString->Union( bufLineString.get() );
+
+#if GEOS_DEBUG
+        std::cerr << "Usable lines: " << *usableLines << std::endl;
+#endif
+
+
+        for ( auto& e : *edges )
+        {
+            std::unique_ptr<Geometry> edgeGeom = geomFact->createLineString(*(e->getCoordinates()));
+
+            // NOTE: we use Snapped overlay because the actual buffer boundary might
+            //       diverge from original offset curves due to the addition of
+            //       intersections with caps and joins curves
+            using geos::operation::overlay::snap::SnapOverlayOp;
+            std::unique_ptr<Geometry> xset = SnapOverlayOp::overlayOp(
+                    *edgeGeom, *usableLines,
+                    overlayng::OverlayNG::INTERSECTION
+            );
+#if GEOS_DEBUG > 1
+            std::cerr << "Intersection: " << *xset << std::endl;
+#endif
+
+            // Drop edges not having linear intersection with
+            // the union of full buffer boundary and input line
+            if ( xset->getDimension() == 1 )
+            {
+#if GEOS_DEBUG > 1
+                std::cerr << "Covered edge: " << *e << std::endl;
+#endif
+                reducedEdges.push_back(e);
+            }
+            else
+            {
+#if GEOS_DEBUG > 1
+                std::cerr << "Non-covered edge: " << *e << std::endl;
+#endif
+            }
+        }
+        if ( reducedEdges.empty() )
+        {
+            // Or we could maybe be tolerant here
+            throw util::GEOSException("Unable to find single-sided Buffer Curves covered by boundary of full Buffer");
+        }
+        edges = &reducedEdges;
+
+    }
+
     std::unique_ptr<Geometry> resultGeom(nullptr);
     std::vector<std::unique_ptr<Geometry>> resultPolyList;
     std::vector<BufferSubgraph*> subgraphList;
 
     try {
         PlanarGraph graph(OverlayNodeFactory::instance());
-        graph.addEdges(edgeList.getEdges());
+        graph.addEdges(*edges);
 
         GEOS_CHECK_FOR_INTERRUPTS();
 
