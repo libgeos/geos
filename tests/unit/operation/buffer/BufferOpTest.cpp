@@ -549,4 +549,25 @@ void object::test<20>
     ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
 }
 
+// Test for single-sided buffer
+// See https://github.com/libgeos/geos/issues/665
+template<>
+template<>
+void object::test<21>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt("LINESTRING (50 50, 150 150, 150 100, 150 0)");
+    GeomPtr geom(wktreader.read(wkt));
+
+    geos::operation::buffer::BufferParameters bp;
+    bp.setSingleSided(true);
+    geos::operation::buffer::BufferOp op(geom.get(), bp);
+
+    std::unique_ptr<Geometry> result = op.getResultGeometry(-21);
+    ensure_equals(int(result->getArea()), 5055);
+}
+
 } // namespace tut
