@@ -516,6 +516,8 @@ Functions</h2></td></tr>
 <tr class="separator:a6df812a0cc01289ed215e20ec1bd0636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf4fdd418434d65c81265ff81c02b0a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aaf4fdd418434d65c81265ff81c02b0a3">GEOSNormalize_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:aaf4fdd418434d65c81265ff81c02b0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41ec156e3a99e84136f78bd337302e79"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a41ec156e3a99e84136f78bd337302e79">GEOSOrientPolygons_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, int exteriorCW)</td></tr>
+<tr class="separator:a41ec156e3a99e84136f78bd337302e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae03ba598c8b3f27051650db86121612"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aae03ba598c8b3f27051650db86121612">GEOSGeom_setPrecision_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double gridSize, int flags)</td></tr>
 <tr class="separator:aae03ba598c8b3f27051650db86121612"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa768b1fa7d28aca9dd0446ee64015499"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa768b1fa7d28aca9dd0446ee64015499">GEOSGeom_getPrecision_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
@@ -825,6 +827,8 @@ Functions</h2></td></tr>
 <tr class="separator:aba81052c4f5fe5dafee6b9d428da3a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0ab6f3a7ff15253d46c0073b77d6766"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa0ab6f3a7ff15253d46c0073b77d6766">GEOSNormalize</a> (<a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:aa0ab6f3a7ff15253d46c0073b77d6766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a739f5675ee0c2a2071d08f2751f73878"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a739f5675ee0c2a2071d08f2751f73878">GEOSOrientPolygons</a> (<a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, int exteriorCW)</td></tr>
+<tr class="separator:a739f5675ee0c2a2071d08f2751f73878"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Validation</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Functions to check and create topological validity, simplicity and geometric quality. </p>
 </div></td></tr>
@@ -14014,6 +14018,78 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a8a6a59466f0b50f2f5f9d5ebb699cad4">GEOSOrientationIndex</a> </dd></dl>
+
+</div>
+</div>
+<a id="a739f5675ee0c2a2071d08f2751f73878"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a739f5675ee0c2a2071d08f2751f73878">&#9670;&nbsp;</a></span>GEOSOrientPolygons()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSOrientPolygons </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>exteriorCW</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enforce a ring orientation on all polygonal elements in the input geometry. Non-polygonal geometries will not be modified.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Input geometry </td></tr>
+    <tr><td class="paramname">exteriorCW</td><td>if 1, exterior rings will be clockwise and interior rings will be counter-clockwise </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success or -1 on exception </dd></dl>
+
+</div>
+</div>
+<a id="a41ec156e3a99e84136f78bd337302e79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41ec156e3a99e84136f78bd337302e79">&#9670;&nbsp;</a></span>GEOSOrientPolygons_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSOrientPolygons_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>exteriorCW</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a739f5675ee0c2a2071d08f2751f73878">GEOSOrientPolygons</a> </dd></dl>
 
 </div>
 </div>

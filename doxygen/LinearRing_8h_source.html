@@ -114,27 +114,29 @@ $(function() {
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::unique_ptr&lt;LinearRing&gt; reverse()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> std::unique_ptr&lt;LinearRing&gt;(reverseImpl()); }</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> orient(<span class="keywordtype">bool</span> isCW);</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">int</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    getSortIndex()<span class="keyword"> const override</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">return</span> SORTINDEX_LINEARRING;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">  114</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* <a class="code" href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">cloneImpl</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>(*<span class="keyword">this</span>); }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">int</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    getSortIndex()<span class="keyword"> const override</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> SORTINDEX_LINEARRING;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1LinearRing.html#a44cd139647f8cb08c5fec5d941042880">  116</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* <a class="code" href="classgeos_1_1geom_1_1LinearRing.html#a44cd139647f8cb08c5fec5d941042880">reverseImpl</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">  116</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* <a class="code" href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">cloneImpl</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>(*<span class="keyword">this</span>); }</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1LinearRing.html#a44cd139647f8cb08c5fec5d941042880">  118</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* <a class="code" href="classgeos_1_1geom_1_1LinearRing.html#a44cd139647f8cb08c5fec5d941042880">reverseImpl</a>() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> validateConstruction();</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;};</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">void</span> validateConstruction();</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;};</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:65</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LineString_html"><div class="ttname"><a href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a></div><div class="ttdef"><b>Definition:</b> LineString.h:65</div></div>
@@ -143,7 +145,7 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_a44cd139647f8cb08c5fec5d941042880"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#a44cd139647f8cb08c5fec5d941042880">geos::geom::LinearRing::reverseImpl</a></div><div class="ttdeci">LinearRing * reverseImpl() const override</div><div class="ttdoc">Make a geometry with coordinates in reverse order.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_a8d05cd7f0b81ab72b033e4f19ef21f2b"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#a8d05cd7f0b81ab72b033e4f19ef21f2b">geos::geom::LinearRing::LinearRing</a></div><div class="ttdeci">LinearRing(CoordinateSequence::Ptr &amp;&amp;points, const GeometryFactory &amp;newFactory)</div><div class="ttdoc">Constructs a LinearRing with the given points.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_a90b6957c2b68bf34e83147b30ca6e3e4"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#a90b6957c2b68bf34e83147b30ca6e3e4">geos::geom::LinearRing::getGeometryType</a></div><div class="ttdeci">std::string getGeometryType() const override</div><div class="ttdoc">Return a string representation of this Geometry type.</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_aa797111150bff7607a4c2c44f8a906be"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">geos::geom::LinearRing::cloneImpl</a></div><div class="ttdeci">LinearRing * cloneImpl() const override</div><div class="ttdoc">Make a deep-copy of this Geometry.</div><div class="ttdef"><b>Definition:</b> LinearRing.h:114</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_aa797111150bff7607a4c2c44f8a906be"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#aa797111150bff7607a4c2c44f8a906be">geos::geom::LinearRing::cloneImpl</a></div><div class="ttdeci">LinearRing * cloneImpl() const override</div><div class="ttdoc">Make a deep-copy of this Geometry.</div><div class="ttdef"><b>Definition:</b> LinearRing.h:116</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html_adf89e6d52cd27371730f6e6c2cddee76"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html#adf89e6d52cd27371730f6e6c2cddee76">geos::geom::LinearRing::getGeometryTypeId</a></div><div class="ttdeci">GeometryTypeId getGeometryTypeId() const override</div><div class="ttdoc">Return an integer representation of this Geometry type.</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_a98c5b0e81001a7c3fdc7a058960356d8"><div class="ttname"><a href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">geos::geom::GeometryTypeId</a></div><div class="ttdeci">GeometryTypeId</div><div class="ttdoc">Geometry types.</div><div class="ttdef"><b>Definition:</b> Geometry.h:73</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>

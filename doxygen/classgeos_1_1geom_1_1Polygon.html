@@ -188,6 +188,9 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geom
 <tr class="separator:a44852687ce538bd199b97789be3634ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09d5aa2c344c9ba6dafc261655de4484"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Polygon.html#a09d5aa2c344c9ba6dafc261655de4484">normalize</a> () override</td></tr>
 <tr class="separator:a09d5aa2c344c9ba6dafc261655de4484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87597da82e6b615a65da109af7055ba6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Polygon.html#a87597da82e6b615a65da109af7055ba6">orientRings</a> (bool exteriorCW)</td></tr>
+<tr class="memdesc:a87597da82e6b615a65da109af7055ba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a ring ordering convention to this polygon, with interior rings having an opposite orientation to the specified exterior orientation.  <a href="classgeos_1_1geom_1_1Polygon.html#a87597da82e6b615a65da109af7055ba6">More...</a><br /></td></tr>
+<tr class="separator:a87597da82e6b615a65da109af7055ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b2d1f533ca14bd6e67eaaba939fbd63"><td class="memItemLeft" align="right" valign="top"><a id="a8b2d1f533ca14bd6e67eaaba939fbd63"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reverse</b> () const</td></tr>
 <tr class="separator:a8b2d1f533ca14bd6e67eaaba939fbd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -698,6 +701,32 @@ static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom
 <p>Reorganizes this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> into normal form (or canonical form). Starting point of rings is lower left, collections are ordered by geometry type, etc. </p>
 
 <p>Implements <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a2ea3b58d562bc183e118e2a68f86414d">geos::geom::Geometry</a>.</p>
+
+</div>
+</div>
+<a id="a87597da82e6b615a65da109af7055ba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87597da82e6b615a65da109af7055ba6">&#9670;&nbsp;</a></span>orientRings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::geom::Polygon::orientRings </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exteriorCW</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a ring ordering convention to this polygon, with interior rings having an opposite orientation to the specified exterior orientation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">exteriorCW</td><td>should exterior ring be clockwise? </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
