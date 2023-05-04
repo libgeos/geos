@@ -71,6 +71,7 @@ MCIndexNoder::intersectChains()
     index.queryPairs([this, &overlapAction](const MonotoneChain* queryChain, const MonotoneChain* testChain) {
         queryChain->computeOverlaps(testChain, overlapTolerance, &overlapAction);
         nOverlaps++;
+        GEOS_CHECK_FOR_INTERRUPTS();
 
         return !segInt->isDone(); // abort early if segInt->isDone()
     });
