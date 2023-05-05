@@ -485,6 +485,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
 #if GEOS_DEBUG > 1
                 std::cerr << "Non-covered edge: " << *e << std::endl;
 #endif
+                delete e;
             }
         }
         if ( reducedEdges.empty() )
