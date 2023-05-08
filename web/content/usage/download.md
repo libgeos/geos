@@ -71,6 +71,7 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Librarys end up in `./libs` headers in `./include` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
+| BUILD_TESTING        | ON         | Build unit tests. |
 
 
 ## Testing
