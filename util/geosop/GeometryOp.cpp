@@ -292,9 +292,7 @@ std::vector<GeometryOpCreator> opRegistry {
     catConst,
     "compute the offset curve of geometry by a distance",
     [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::operation::buffer::BufferParameters bp;
-
-        geos::operation::buffer::OffsetCurve oc(*geom, d, bp);
+        geos::operation::buffer::OffsetCurve oc(*geom, d);
         std::unique_ptr<Geometry> g3 = oc.getCurve();
         return new Result( g3.release() );
     });
