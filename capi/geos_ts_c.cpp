@@ -1167,7 +1167,7 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             BufferParameters bp;
-            bp.setEndCapStyle(BufferParameters::CAP_FLAT);
+            //-- use default cap style ROUND 
             bp.setQuadrantSegments(quadsegs);
 
             if(joinStyle > BufferParameters::JOIN_BEVEL) {
