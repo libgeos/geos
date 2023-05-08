@@ -223,13 +223,16 @@ public:
     OffsetCurve(const Geometry& geom, double dist, BufferParameters& bp)
         : inputGeom(geom)
         , distance(dist)
-        , bufferParams(bp)
         , matchDistance(std::abs(dist)/MATCH_DISTANCE_FACTOR)
         , geomFactory(geom.getFactory())
         {
             if (!std::isfinite(dist)) {
                 throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
             }
+            //-- set buffer params, leaving cap style as the default CAP_ROUND
+            bufferParams.setQuadrantSegments( bp.getQuadrantSegments());
+            bufferParams.setJoinStyle( bp.getJoinStyle());
+            bufferParams.setMitreLimit( bp.getMitreLimit());
         };
 
     /**
