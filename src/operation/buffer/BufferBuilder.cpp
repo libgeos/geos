@@ -35,6 +35,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
@@ -476,6 +477,73 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         subgraphList.clear();
 
         throw;
+    }
+
+    // Cleanup single-sided buffer artifacts, if needed
+    if ( bufParams.isSingleSided() )
+    {
+
+        // Get linework of input geom
+        const Geometry *inputLineString = g;
+        std::unique_ptr<Geometry> inputPolygonBoundary;
+        if ( g->getDimension() > 1 )
+        {
+            inputPolygonBoundary = g->getBoundary();
+            inputLineString = inputPolygonBoundary.get();
+        }
+
+#if GEOS_DEBUG
+        std::cerr << "Input linework: " << *inputLineString << std::endl;
+#endif
+
+        // Get linework of buffer geom
+        std::unique_ptr<Geometry> bufferBoundary = resultGeom->getBoundary();
+
+#if GEOS_DEBUG
+        std::cerr << "Buffer boundary: " << *bufferBoundary << std::endl;
+#endif
+
+        // Node all linework
+        using operation::overlayng::OverlayNG;
+        std::unique_ptr<Geometry> nodedLinework = OverlayNG::overlay(inputLineString, bufferBoundary.get(), OverlayNG::UNION);
+
+#if GEOS_DEBUG
+        std::cerr << "Noded linework: " << *nodedLinework << std::endl;
+#endif
+
+        using operation::polygonize::Polygonizer;
+        Polygonizer plgnzr;
+        plgnzr.add(nodedLinework.get());
+        std::vector<std::unique_ptr<geom::Polygon>> polys = plgnzr.getPolygons();
+
+#if GEOS_DEBUG
+        std::cerr << "Polygonization of noded linework returend: " << polys.size() << " polygons" << std::endl;
+#endif
+
+        if ( polys.size() > 1 )
+        {
+            // Only keep larger polygon
+            std::vector<std::unique_ptr<geom::Polygon>>::iterator
+                it,
+                itEnd = polys.end(),
+                biggestPolygonIterator = itEnd;
+            double maxArea = 0;
+            for ( it = polys.begin(); it != itEnd; ++it )
+            {
+                double area = (*it)->getArea();
+                if ( area > maxArea )
+                {
+                    biggestPolygonIterator = it;
+                    maxArea = area;
+                }
+            }
+
+            if ( biggestPolygonIterator != itEnd ) {
+                Geometry *gg = (*biggestPolygonIterator).release();
+                return std::unique_ptr<Geometry>( gg );
+            } // else there were no polygons formed...
+        }
+
     }
 
     return resultGeom;

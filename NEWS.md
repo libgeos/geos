@@ -65,6 +65,7 @@ xxxx-xx-xx
   - Fix MaximumInscribedCircle and LargestEmptyCircle performance and memory issues (GH-883, Martin Davis)
   - GEOSHasZ: Fix handling with empty geometries (GH-887, Mike Taves)
   - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
+  - Reduce artifacts in single-sided Buffers: (GH-665 #810 and #712, Sandro Santilli)
 
 - Changes:
   - Remove Orientation.isCCW exception to simplify logic and align with JTS (GH-878, Martin Davis)
