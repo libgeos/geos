@@ -538,8 +538,10 @@ BufferBuilder::buffer(const Geometry* g, double distance)
                 }
             }
 
-            Geometry *gg = (*biggestPolygonIterator).release();
-            return std::unique_ptr<Geometry>( gg );
+            if ( biggestPolygonIterator != itEnd ) {
+                Geometry *gg = (*biggestPolygonIterator).release();
+                return std::unique_ptr<Geometry>( gg );
+            } // else there were no polygons formed...
         }
 
     }
