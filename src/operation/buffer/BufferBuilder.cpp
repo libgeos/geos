@@ -480,9 +480,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
     }
 
     // Cleanup single-sided buffer artifacts, if needed
-    if ( bufParams.isSingleSided() &&
-         resultGeom->getNumGeometries() > 1
-    )
+    if ( bufParams.isSingleSided() )
     {
 
         // Get linework of input geom
@@ -522,24 +520,27 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         std::cerr << "Polygonization of noded linework returend: " << polys.size() << " polygons" << std::endl;
 #endif
 
-        // Only keep larger polygon
-        std::vector<std::unique_ptr<geom::Polygon>>::iterator
-            it,
-            itEnd = polys.end(),
-            biggestPolygonIterator = itEnd;
-        double maxArea = 0;
-        for ( it = polys.begin(); it != itEnd; ++it )
+        if ( polys.size() > 1 )
         {
-            double area = (*it)->getArea();
-            if ( area > maxArea )
+            // Only keep larger polygon
+            std::vector<std::unique_ptr<geom::Polygon>>::iterator
+                it,
+                itEnd = polys.end(),
+                biggestPolygonIterator = itEnd;
+            double maxArea = 0;
+            for ( it = polys.begin(); it != itEnd; ++it )
             {
-                biggestPolygonIterator = it;
-                maxArea = area;
+                double area = (*it)->getArea();
+                if ( area > maxArea )
+                {
+                    biggestPolygonIterator = it;
+                    maxArea = area;
+                }
             }
-        }
 
-        Geometry *gg = (*biggestPolygonIterator).release();
-        return std::unique_ptr<Geometry>( gg );
+            Geometry *gg = (*biggestPolygonIterator).release();
+            return std::unique_ptr<Geometry>( gg );
+        }
 
     }
 
