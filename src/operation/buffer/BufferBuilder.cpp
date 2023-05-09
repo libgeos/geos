@@ -479,9 +479,12 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         throw;
     }
 
-    // Cleanup single-sided buffer artifacts, if any
-    if ( bufParams.isSingleSided() )
+    // Cleanup single-sided buffer artifacts, if needed
+    if ( bufParams.isSingleSided() &&
+         resultGeom->getNumGeometries() > 1
+    )
     {
+
         // Get linework of input geom
         const Geometry *inputLineString = g;
         std::unique_ptr<Geometry> inputPolygonBoundary;
