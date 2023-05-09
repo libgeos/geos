@@ -88,13 +88,13 @@ template<>
 void object::test<4>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("MULTIPOINT (4 5, 6 7, 4 5, 6 5, 6 7)");
+    geom1_ = GEOSGeomFromWKT("MULTIPOINT ((4 5), (6 7), (4 5), (6 5), (6 7))");
     ensure(nullptr != geom1_);
 
     geom2_ = GEOSUnaryUnion(geom1_);
     ensure(nullptr != geom2_);
 
-    ensure_equals(toWKT(geom2_), std::string("MULTIPOINT (4 5, 6 5, 6 7)"));
+    ensure_equals(toWKT(geom2_), std::string("MULTIPOINT ((4 5), (6 5), (6 7))"));
 }
 
 // Self-union a collection of puntal and lineal geometries

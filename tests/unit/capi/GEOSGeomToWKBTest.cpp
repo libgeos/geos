@@ -149,7 +149,7 @@ template<>
 void object::test<10>
 ()
 {
-    test_wkb("MULTIPOINT (0 0, 5 5, 10 10, 15 15, 20 20)");
+    test_wkb("MULTIPOINT ((0 0), (5 5), (10 10), (15 15), (20 20))");
 }
 
 template<>
