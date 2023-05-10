@@ -96,7 +96,7 @@ void object::test<4>
 ()
 {
     GeomPtr g1(reader.read(
-                   "MULTIPOINT (0 100, 5 6)"
+                   "MULTIPOINT ((0 100), (5 6))"
                ));
     g1->setSRID(66);
     GeomPtr g2(g1->clone());

@@ -286,8 +286,8 @@ template<>
 void object::test<13>
 ()
 {
-    std::string wkt("MULTIPOINT(80 200, 240 200, 240 60, \
-                    80 60, 80 200, 140 199, 120 120)");
+    std::string wkt("MULTIPOINT((80 200), (240 200), (240 60), \
+                    (80 60), (80 200), (140 199), (120 120))");
 
     GeomPtr g(wktreader.read(wkt));
     GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
@@ -328,7 +328,7 @@ void object::test<15>
 ()
 {
     std::string wkt("GEOMETRYCOLLECTION ( \
-                    MULTIPOINT (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120), \
+                    MULTIPOINT ((80 200), (240 200), (240 60), (80 60), (80 200), (140 199), (120 120)), \
                     POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200)), \
                     LINESTRING (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120))");
 

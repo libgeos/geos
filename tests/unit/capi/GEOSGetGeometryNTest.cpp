@@ -20,7 +20,7 @@ template<>
 template<>
 void object::test<1>()
 {
-    geom1_ = fromWKT("MULTIPOINT (1 1, 2 2, 3 3)");
+    geom1_ = fromWKT("MULTIPOINT ((1 1), (2 2), (3 3))");
     ensure(nullptr != geom1_);
 
     GEOSGeometry* result = const_cast<GEOSGeometry*>(GEOSGetGeometryN(geom1_, 0));

@@ -34,7 +34,7 @@ template<>
 void object::test<1>
 ()
 {
-    input_ = GEOSGeomFromWKT("MULTIPOINT (130 240, 130 240, 570 240, 570 290, 650 240)");
+    input_ = GEOSGeomFromWKT("MULTIPOINT ((130 240), (130 240), (570 240), (570 290), (650 240))");
     ensure(nullptr != input_);
 
     expected_ = GEOSGeomFromWKT("POLYGON ((130 240, 570 290, 650 240, 130 240))");

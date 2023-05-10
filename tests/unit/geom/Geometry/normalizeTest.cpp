@@ -120,13 +120,13 @@ void object::test<4>
 {
     const char* inp =
         "MULTIPOINT ("
-        "0 100," // leftmost
-        "5 6"    // rightmost
+        "(0 100)," // leftmost
+        "(5 6)"    // rightmost
         ")";
     const char* exp =
         "MULTIPOINT ("
-        "5 6,"   // rightmost
-        "0 100"  // leftmost
+        "(5 6),"   // rightmost
+        "(0 100)"  // leftmost
         ")";
     runTest(inp, exp);
 }
@@ -175,8 +175,8 @@ void object::test<7>
     const char* inp =
         "GEOMETRYCOLLECTION("
         "MULTIPOINT ("
-        "0 100," // leftmost
-        "5 6"    // rightmost
+        "(0 100)," // leftmost
+        "(5 6)"    // rightmost
         "),"
         "POINT(10 4)," // more on the right than the multipoint
         "MULTILINESTRING("
@@ -211,8 +211,8 @@ void object::test<7>
         "),"
         "LINESTRING (0 0, 0 100, 100 100, 100 0),"
         "MULTIPOINT ("
-        "5 6,"   // rightmost
-        "0 100"  // leftmost
+        "(5 6),"   // rightmost
+        "(0 100)"  // leftmost
         "),"
         "POINT(10 4)" // more on the right than the multipoint
         ")";

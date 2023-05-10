@@ -40,7 +40,7 @@ struct test_multipoint_data {
         , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
     {
         // Create non-empty MultiPoint
-        auto geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
+        auto geo = reader_.read("MULTIPOINT((0 0), (5 5), (10 10), (15 15), (20 20))");
         mp_ = dynamic_cast<MultiPointPtr>(geo.release());
     }
 

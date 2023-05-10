@@ -103,7 +103,7 @@ template<>
 void object::test<5>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT(6 7, 6 5, 6 7), LINESTRING(0 5, 10 5), LINESTRING(4 -10, 4 10))");
+    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT((6 7), (6 5), (6 7)), LINESTRING(0 5, 10 5), LINESTRING(4 -10, 4 10))");
     ensure(nullptr != geom1_);
 
     geom2_ = GEOSUnaryUnion(geom1_);
@@ -122,7 +122,7 @@ template<>
 void object::test<6>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT(6 7, 6 5, 6 7), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)))");
+    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT((6 7), (6 5), (6 7)), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)))");
     ensure(nullptr != geom1_);
 
     geom2_ = GEOSUnaryUnion(geom1_);
@@ -160,7 +160,7 @@ template<>
 void object::test<8>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (MULTILINESTRING((5 7, 12 7), (4 5, 6 5), (5.5 7.5, 6.5 7.5)), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)), MULTIPOINT(6 6.5, 6 1, 12 2, 6 1))");
+    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (MULTILINESTRING((5 7, 12 7), (4 5, 6 5), (5.5 7.5, 6.5 7.5)), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)), MULTIPOINT((6 6.5), (6 1), (12 2), (6 1)))");
     ensure(nullptr != geom1_);
 
     geom2_ = GEOSUnaryUnion(geom1_);

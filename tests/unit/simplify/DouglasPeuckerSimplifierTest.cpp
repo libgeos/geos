@@ -237,7 +237,7 @@ template<>
 void object::test<9>
 ()
 {
-    std::string wkt_in("MULTIPOINT(80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120)");
+    std::string wkt_in("MULTIPOINT((80 200), (240 200), (240 60), (80 60), (80 200), (140 199), (120 120))");
 
     GeomPtr g(wktreader.read(wkt_in));
 
@@ -278,7 +278,7 @@ void object::test<11>
 ()
 {
     std::string wkt_in("GEOMETRYCOLLECTION ( \
-					MULTIPOINT (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120), \
+					MULTIPOINT ((80 200), (240 200), (240 60), (80 60), (80 200), (140 199), (120 120)), \
 					POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200)), \
 					LINESTRING (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120) )");
 

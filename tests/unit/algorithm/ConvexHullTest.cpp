@@ -77,7 +77,7 @@ template<>
 void object::test<2>
 ()
 {
-    checkHull("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)",
+    checkHull("MULTIPOINT ((130 240), (130 240), (130 240), (570 240), (570 240), (570 240), (650 240))",
         "LINESTRING (130 240, 650 240)");
 }
 
@@ -87,7 +87,7 @@ template<>
 void object::test<3>
 ()
 {
-    checkHull("MULTIPOINT (0 0, 0 0, 10 0)",
+    checkHull("MULTIPOINT ((0 0), (0 0), (10 0))",
             "LINESTRING (0 0, 10 0)");
 }
 
@@ -97,7 +97,7 @@ template<>
 void object::test<4>
 ()
 {
-    checkHull("MULTIPOINT (0 0, 10 0, 10 0)",
+    checkHull("MULTIPOINT ((0 0), (10 0), (10 0))",
         "LINESTRING (0 0, 10 0)");
 }
 
@@ -107,7 +107,7 @@ template<>
 void object::test<5>
 ()
 {
-    checkHull("MULTIPOINT (0 0, 5 0, 10 0)",
+    checkHull("MULTIPOINT ((0 0), (5 0), (10 0))",
         "LINESTRING (0 0, 10 0)");
 }
 
@@ -117,7 +117,7 @@ template<>
 void object::test<6>
 ()
 {
-    checkHull("MULTIPOINT (0 0, 5 1, 10 0)",
+    checkHull("MULTIPOINT ((0 0), (5 1), (10 0))",
         "POLYGON ((0 0, 5 1, 10 0, 0 0))");
 }
 
@@ -127,7 +127,7 @@ template<>
 void object::test<7>
 ()
 {
-    checkHull("MULTIPOINT (0 0, 0 0, 5 0, 5 0, 10 0, 10 0)",
+    checkHull("MULTIPOINT ((0 0), (0 0), (5 0), (5 0), (10 0), (10 0))",
         "LINESTRING (0 0, 10 0)");
 }
 
