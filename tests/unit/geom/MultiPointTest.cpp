@@ -373,15 +373,26 @@ template<>
 void object::test<28>
 ()
 {
-    try {
-        auto geo = reader_.read("MULTIPOINT(0 0, 5)");
-        ensure(geo != nullptr);
+    std::vector<std::string> variants{
+        "MULTIPOINT(0 0, 5)",
+        "MULTIPOINT((0 0), (5))",
+        "MULTIPOINT((0 0), 5 0)",
+        "MULTIPOINT(0 0, (5 0))",
+        "MULTIPOINT(0, 5)",
+        "MULTIPOINT((0, 5))",
+    };
 
-        fail("ParseException expected.");
-    }
-    catch(geos::io::ParseException const& e) {
-        const char* msg = e.what(); // ok
-        ensure(msg != nullptr);
+    for (const auto& wkt : variants) {
+        try {
+            auto geo = reader_.read(wkt);
+            ensure(geo != nullptr);
+
+            fail("ParseException expected.");
+        }
+        catch(geos::io::ParseException const& e) {
+            const char* msg = e.what(); // ok
+            ensure(msg != nullptr);
+        }
     }
 }
 
