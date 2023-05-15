@@ -44,7 +44,7 @@ You can explore the C++ model via the Doxygen reference.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/tools/</guid>
-      <description>GeosOp  Usage   JTS TestBuilder   GeosOp geosop is a CLI (command-line interface) for GEOS. It can be used to:
+      <description>GeosOp  Usage   JTS TestBuilder    GeosOp     geosop is a CLI (command-line interface) for GEOS. It can be used to:
  Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.</description>
     </item>
     
@@ -55,8 +55,8 @@ You can explore the C++ model via the Doxygen reference.</description>
       
       <guid>https://libgeos.org/usage/bindings/</guid>
       <description>GEOS can be accessed from a variety of other languages via bindings to the library.
-Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  php-geos. GeoPHP.  Python Python bindings are available via:
- Shapely PyGEOS Calling functions from libgeos_c via Python ctypes GeoPandas  R  sf geos  Ruby  RGeo.  Rust  geos crate  Swift  GeoSwift  Geospatial applications using GEOS include:</description>
+Go      gogeos  Haskell      geos hgeos  Javascript      node-geos  Julia      LibGEOS.jl  PHP      php-geos. GeoPHP.  Python     Python bindings are available via:
+ Shapely PyGEOS Calling functions from libgeos_c via Python ctypes GeoPandas  R      sf geos  Ruby      RGeo.</description>
     </item>
     
     <item>
@@ -65,7 +65,7 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/faq/</guid>
-      <description>Design and Architecture  Why is the C++ API not kept stable? Why does GEOS follow JTS design?   Spatial Model  Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)?   Robustness  Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line?     Design and Architecture Why is the C++ API not kept stable?</description>
+      <description>Design and Architecture  Why is the C++ API not kept stable? Why does GEOS follow JTS design?   Spatial Model  Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)?   Robustness  Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line?      Design and Architecture     Why is the C++ API not kept stable?</description>
     </item>
     
     <item>
@@ -74,8 +74,8 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
       <pubDate>Mon, 04 Oct 2021 13:44:59 -0700</pubDate>
       
       <guid>https://libgeos.org/usage/install/</guid>
-      <description>Red Hat Ubuntu Debian Amazon Linux Homebrew Macports     Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
-# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</description>
+      <description>Red Hat Ubuntu Debian Amazon Linux Homebrew Macports      Red Hat     There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu     The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</description>
     </item>
     
     <item>
@@ -84,7 +84,7 @@ Go  gogeos  Haskell  geos hgeos  Javascript  node-geos  Julia  LibGEOS.jl  PHP  
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project    Release Release Date First Release Final Release Download Link Changes     3.11.2 2023/03/16 2022/07/01 2026/07/01 geos-3.11.2.tar.bz2 Changes   3.10.5 2023/03/16 2021/10/20 2025/10/20 geos-3.10.5.tar.bz2 Changes   3.9.4 2022/11/14 2020/12/09 2024/12/09 geos-3.9.4.tar.bz2 Changes   3.8.3 2022/06/02 2019/10/10 2023/10/10 geos-3.8.3.tar.bz2 Changes   3.7.5 2022/06/08 2018/09/10 2023/03/31 geos-3.7.5.tar.bz2 Changes    Old releases can be downloaded from https://download.osgeo.org/geos/. Any releases not in this list are end-of-life (EOL).</description>
+      <description>Download Project        Release Release Date First Release Final Release Download Link Changes     3.11.2 2023/03/16 2022/07/01 2026/07/01 geos-3.11.2.tar.bz2 Changes   3.10.5 2023/03/16 2021/10/20 2025/10/20 geos-3.10.5.tar.bz2 Changes   3.9.4 2022/11/14 2020/12/09 2024/12/09 geos-3.9.4.tar.bz2 Changes   3.8.3 2022/06/02 2019/10/10 2023/10/10 geos-3.8.3.tar.bz2 Changes   3.7.5 2022/06/08 2018/09/10 2023/03/31 geos-3.7.5.tar.bz2 Changes    Old releases can be downloaded from https://download.</description>
     </item>
     
   </channel>

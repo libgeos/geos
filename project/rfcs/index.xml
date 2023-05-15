@@ -14,7 +14,7 @@
       
       <guid>https://libgeos.org/project/rfcs/rfc11/</guid>
       <description>RFC 11 End-of-Life (EOL) Policy   Author Regina Obe   Contact lr@pcorp.us   Status Accepted, September 20, 2022    This document describes the GEOS project policy for versioning and EOLing GEOS minor versions.
-Versioning The GEOS project generally produces a new minor version every 1-2 years. Minor versions typically contain new features, as well as bug fixes and performance improvements.</description>
+Versioning     The GEOS project generally produces a new minor version every 1-2 years. Minor versions typically contain new features, as well as bug fixes and performance improvements.</description>
     </item>
     
     <item>
@@ -35,7 +35,7 @@ Moving to Github has the following components:
       
       <guid>https://libgeos.org/project/rfcs/rfc01/</guid>
       <description>This document describes how the PSC GEOS Project Steering Committee determines membership, and makes decisions on all aspects of the GEOS project - both technical and non-technical.
-         RFC 1 Project Steering Committee   Author Paul Ramsey   Contact pramsey@cleverelephant.ca   Status Approved, April 10, 2008    Summary This document describes how the GEOS Project Steering Committee (PSC) determines membership, and makes decisions on all aspects of the GEOS project - both technical and non-technical.</description>
+         RFC 1 Project Steering Committee   Author Paul Ramsey   Contact pramsey@cleverelephant.ca   Status Approved, April 10, 2008    Summary     This document describes how the GEOS Project Steering Committee (PSC) determines membership, and makes decisions on all aspects of the GEOS project - both technical and non-technical.</description>
     </item>
     
     <item>
@@ -45,8 +45,8 @@ Moving to Github has the following components:
       
       <guid>https://libgeos.org/project/rfcs/rfc02/</guid>
       <description>This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].
-         RFC 2 Committer Guidelines   Author Paul Ramsey, Regina Obe   Contact pramsey@cleverelephant.ca, lr@pcorp.us   Status Draft    Summary This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].
-Election to GIT Commit Access Permission for GIT commit access shall be provided to new developers only if accepted by the [wiki:PSC GEOS Project Steering Committee].</description>
+         RFC 2 Committer Guidelines   Author Paul Ramsey, Regina Obe   Contact pramsey@cleverelephant.ca, lr@pcorp.us   Status Draft    Summary     This document describes the technical and legal responsibilities of [wiki:PSC GEOS committers].
+Election to GIT Commit Access     Permission for GIT commit access shall be provided to new developers only if accepted by the [wiki:PSC GEOS Project Steering Committee].</description>
     </item>
     
     <item>
@@ -55,10 +55,10 @@ Election to GIT Commit Access Permission for GIT commit access shall be provided
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>https://libgeos.org/project/rfcs/rfc03/</guid>
-      <description>Summary The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
-Definitions (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
+      <description>Summary     The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
+Definitions     (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
 Reentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.
-Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized.</description>
+Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data.</description>
     </item>
     
     <item>
@@ -68,8 +68,7 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
       
       <guid>https://libgeos.org/project/rfcs/rfc04/</guid>
       <description>This document proposes and describes desired code formatting style used across C/C++ source code in GEOS.
-         RFC 4 Code Formatting Style   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Dropped (no agreement)    Summary The document proposes and describes desired default code formatting style guidelines for GEOS programming in C and C++ languages.
-The goal of this document is to initiate process to reach an agreement for the default code formatting style.</description>
+         RFC 4 Code Formatting Style   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Dropped (no agreement)    Summary     The document proposes and describes desired default code formatting style guidelines for GEOS programming in C and C++ languages.</description>
     </item>
     
     <item>
@@ -79,8 +78,7 @@ The goal of this document is to initiate process to reach an agreement for the d
       
       <guid>https://libgeos.org/project/rfcs/rfc05/</guid>
       <description>This document proposes and describes desired code formatting style used across C/C++ source code in GEOS.
-         RFC 5 C++11 Compilation Mode   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Accepted (no agreement)    Summary The document proposes to switch to C++11 compilation mode as default throughout the whole C++ source code of GEOS.
-The goal of the document is to request and achieve agreement on using C++11 as the minimum required version of the C++ programming language standard.</description>
+         RFC 5 C++11 Compilation Mode   Author Mateusz Łoskot   Contact mateusz@loskot.net   Status Accepted (no agreement)    Summary     The document proposes to switch to C++11 compilation mode as default throughout the whole C++ source code of GEOS.</description>
     </item>
     
     <item>
@@ -89,7 +87,7 @@ The goal of the document is to request and achieve agreement on using C++11 as t
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>https://libgeos.org/project/rfcs/rfc06/</guid>
-      <description>RFC 9 Require explicit configure to use the C++ API   Author Regina Obe   Contact lr@pcorp.us   Status Not Passed    Past discussions Trac ticket to deprecate another request to deprecate and osm2pgsql mess more examples about how apps linking directly to GEOS C++ causing problems for other applications Pointing out removing ability to use GEOS C++ reduces users freedoms</description>
+      <description>RFC 9 Require explicit configure to use the C++ API   Author Regina Obe   Contact lr@pcorp.us   Status Not Passed    Past discussions     Trac ticket to deprecate another request to deprecate and osm2pgsql mess more examples about how apps linking directly to GEOS C++ causing problems for other applications Pointing out removing ability to use GEOS C++ reduces users freedoms</description>
     </item>
     
     <item>
