@@ -20,7 +20,9 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
 
 #include <fstream>
 #include <iostream>
@@ -34,6 +36,7 @@
 
 using namespace geos;
 using namespace geos::geom;
+using namespace geos::io;
 
 std::string const GeosOp::opNames[] = {
     "area",
@@ -449,10 +452,16 @@ void GeosOp::outputGeometry(const Geometry * geom) {
     }
 
     if (args.format == GeosOpArgs::fmtWKB ) {
-        std::cout << *(geom) << std::endl;
+        // output as hex-encoded WKB
+        WKBWriter writer;
+        writer.setOutputDimension(3);
+        writer.writeHEX(*geom, std::cout);
+        std::cout << std::endl;
     }
     else {
         // output as text/WKT
-        std::cout << geom->toString() << std::endl;
+        WKTWriter writer;
+        writer.setOutputDimension(3);
+        std::cout << writer.write(geom) << std::endl;
     }
 }
