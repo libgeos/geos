@@ -240,7 +240,7 @@ std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(
         const geom::Coordinate& c = readCoordinate(coord);
         coordinates.push_back(c);
     }
-    auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
+    auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates), 2u);
     return geometryFactory.createLineString(std::move(coordinateSequence));
 }
 
@@ -264,7 +264,7 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(
             const geom::Coordinate& c = readCoordinate(coord);
             coordinates.push_back(c);
         }
-        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
+        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates), 2u);
         if (!shell) {
             shell = geometryFactory.createLinearRing(std::move(coordinateSequence));
         }
@@ -309,7 +309,7 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(
             const geom::Coordinate& c = readCoordinate(coord);
             coordinates.push_back(geom::Coordinate{c.x, c.y});
         }
-        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates));
+        auto coordinateSequence = geometryFactory.getCoordinateSequenceFactory()->create(std::move(coordinates), 2u);
         lines.push_back(geometryFactory.createLineString(std::move(coordinateSequence)));
     }
     return geometryFactory.createMultiLineString(std::move(lines));

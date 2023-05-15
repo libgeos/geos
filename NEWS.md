@@ -7,6 +7,7 @@
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
   - Build issues with RH (GH-860)
   - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
+  - GeoJSONReader: Fix 2D empty geometry creation (GH-910, Mike Taves)
 
 ## Changes in 3.11.2
 2023-03-16
