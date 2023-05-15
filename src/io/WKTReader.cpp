@@ -338,9 +338,8 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
     int tok = tokenizer->peekNextToken();
 
     if(tok == StringTokenizer::TT_NUMBER) {
-
-        // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
-        auto coords = detail::make_unique<CoordinateSequence>();
+        // Try to parse "MULTIPOINT (0 0, 1 1)"
+        auto coords = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
 
         CoordinateXYZM coord(0, 0, DoubleNotANumber, DoubleNotANumber);
         do {
@@ -353,8 +352,8 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
         return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint(*coords));
     }
 
-    else if(tok == '(' ||  // Try to parse correct form "MULTIPOINT((0 0), (1 1))"
-            tok == StringTokenizer::TT_WORD)  // EMPTY?
+    else if(tok == '(' ||        // Try to parse "MULTIPOINT ((0 0), (1 1))"
+            tok == StringTokenizer::TT_WORD)  // "MULTIPOINT (EMPTY, (1 1))"
     {
         std::vector<std::unique_ptr<Point>> points;
 

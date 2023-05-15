@@ -49,6 +49,12 @@ struct test_wktreader_data {
                       dim);
     }
 
+    void ensure_dimension(const std::string & wkt, bool has_z, bool has_m) const {
+        auto geom = wktreader.read(wkt);
+        ensure_equals(wkt + " hasZ", geom->hasZ(), has_z);
+        ensure_equals(wkt + " hasM", geom->hasM(), has_m);
+    }
+
     void ensure_parseexception(const std::string & wkt) const {
         try {
             auto geom = wktreader.read(wkt);
@@ -421,6 +427,24 @@ void object::test<21>
         std::string msg(e.what());
         ensure_equals(msg, "ParseException: Unexpected text after end of geometry");
     }
+}
+
+// https://github.com/libgeos/geos/issues/886
+template<>
+template<>
+void object::test<22>
+()
+{
+
+    ensure_dimension("MULTIPOINT (0 0, 1 2)", false, false);
+    ensure_dimension("MULTIPOINT Z (0 0 4, 1 2 4)", true, false);
+    ensure_dimension("MULTIPOINT M (0 0 3, 1 2 5)", false, true);
+    ensure_dimension("MULTIPOINT ZM (0 0 4 3, 1 2 4 5)", true, true);
+
+    ensure_dimension("MULTIPOINT ((0 0), (1 2))", false, false);
+    ensure_dimension("MULTIPOINT Z ((0 0 4), (1 2 4))", true, false);
+    ensure_dimension("MULTIPOINT M ((0 0 3), (1 2 5))", false, true);
+    ensure_dimension("MULTIPOINT ZM ((0 0 4 3), (1 2 4 5))", true, true);
 }
 
 } // namespace tut
