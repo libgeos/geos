@@ -1,0 +1,8 @@
+{{- $searchDataFile := printf "search/%s.data.json" .Language.Lang -}}
+{{- $searchData := resources.Get "search/data.json" | resources.ExecuteAsTemplate $searchDataFile . | resources.Minify -}}
+{
+  "dataFile": {{ $searchData.RelPermalink | jsonify }},
+  "indexConfig": {{ .Site.Params.GeekdocSearchConfig | jsonify }},
+  "showParent": {{ if .Site.Params.GeekdocSearchShowParent }}true{{ else }}false{{ end }},
+  "showDescription": {{ if .Site.Params.GeekdocSearchshowDescription }}true{{ else }}false{{ end }}
+}

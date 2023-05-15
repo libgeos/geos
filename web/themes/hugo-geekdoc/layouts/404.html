@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.Language.Lang }}">
+  <head>
+    {{ partial "head/meta" . }}
+    <title>{{ i18n "error_page_title" }}</title>
 
-<head>
-    {{ partial "head" . }}
-</head>
+    {{ partial "head/favicons" . }}
+    {{ partial "head/others" . }}
+  </head>
 
-<body>
+  <body>
     {{ partial "svg-icon-symbols" . }}
 
+
     <div class="wrapper">
-        {{ partial "site-header" (dict "Root" . "MenuEnabled" false) }}
+      <input type="checkbox" class="hidden" id="menu-header-control" />
 
-        <main class="gdoc-error flex-even">
-            <div class="flex align-center justify-center">
-                <div class="gdoc-error__icon">
-                    <svg class="icon telescope"><use xlink:href="#telescope"></use></svg>
-                </div>
-                <div class="gdoc-error__message">
-                    <div class="gdoc-error__line gdoc-error__title">Lost?</div>
-                    <div class="gdoc-error__line gdoc-error__code">Error 404</div>
-                    <div class="gdoc-error__line gdoc-error__help">
-                        Seems like what you are looking for can't be found. Don't worry we can
-                        bring you back to the <a class="gdoc-error__link" href="{{ .Site.BaseURL }}">homepage</a>.
-                    </div>
-                </div>
+      {{ partial "site-header" (dict "Root" . "MenuEnabled" false) }}
+
+
+      <main class="gdoc-error flex-even">
+        <div class="flex align-center justify-center">
+          <div class="gdoc-error__icon">
+            <svg class="gdoc-icon gdoc_cloud_off"><use xlink:href="#gdoc_cloud_off"></use></svg>
+          </div>
+          <div class="gdoc-error__message">
+            <div class="gdoc-error__line gdoc-error__title">{{ i18n "error_message_title" }}</div>
+            <div class="gdoc-error__line gdoc-error__code">{{ i18n "error_message_code" }}</div>
+            <div class="gdoc-error__line gdoc-error__help">
+              {{ i18n "error_message_text" .Site.BaseURL | safeHTML }}
             </div>
-        </main>
+          </div>
+        </div>
+      </main>
 
-        {{ partial "site-footer" . }}
+      {{ partial "site-footer" . }}
 
     </div>
-</body>
-
+  </body>
 </html>

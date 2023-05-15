@@ -1,26 +1,47 @@
 {{ define "main" }}
-    {{ range .Paginator.Pages }}
-        <article class="gdoc-markdown gdoc-post">
-            <header class="gdoc-post__header">
-                <h1 class="gdoc-post__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
-                <div class="gdoc-post__date">
-                    <svg class="icon date"><use xlink:href="#date"></use></svg>
-                    <time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
-                        {{ if ne (.Lastmod.Format "2006-01-02") (.Date.Format "2006-01-02") }}
-                        Updated on
-                        {{ end }}
-                        {{ .Lastmod.Format "Jan 2, 2006" }}
-                    </time>
-                </div>
-            </header>
-            <section>
-                {{ .Summary }}
-            </section>
-            {{ if .Truncated }}
-            <div class="gdoc-post__readmore">
-                <a class="flex-inline align-center fake-link" title="Read full post" href="{{ .RelPermalink }}">Read full post</a>
-            </div>
-            {{ end }}
-        </article>
-    {{ end }}
+  {{ range .Paginator.Pages }}
+    <article class="gdoc-markdown gdoc-post">
+      <header class="gdoc-post__header">
+        <h1 class="gdoc-post__title">
+          <a href="{{ .RelPermalink }}">{{ partial "utils/title" . }}</a>
+        </h1>
+      </header>
+      <section>
+        {{ .Summary }}
+      </section>
+      <div class="gdoc-post__readmore">
+        {{ if .Truncated }}
+          <a
+            class="flex-inline align-center fake-link"
+            title="{{ i18n "posts_read_more" }}"
+            href="{{ .RelPermalink }}"
+          >
+            {{ i18n "posts_read_more" }}
+            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
+          </a>
+        {{ end }}
+      </div>
+
+      <footer class="gdoc-post__footer">
+        <div class="flex flex-wrap align-center gdoc-post__meta">
+          {{ partial "posts/metadata.html" . }}
+        </div>
+      </footer>
+    </article>
+  {{ end }}
+  {{ partial "pagination.html" . }}
+{{ end }}
+
+{{ define "post-tag" }}
+  <span class="gdoc-post__tag">
+    <span class="gdoc-button">
+      <a
+        class="gdoc-button__link"
+        href="{{ .page.RelPermalink }}"
+        title="{{ i18n "posts_tagged_with" .name }}"
+      >
+        {{ .name }}
+      </a>
+    </span>
+  </span>
 {{ end }}
