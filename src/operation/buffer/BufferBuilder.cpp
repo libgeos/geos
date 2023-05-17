@@ -36,6 +36,7 @@
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
 #include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
@@ -368,6 +369,27 @@ std::unique_ptr<Geometry>
 BufferBuilder::buffer(const Geometry* g, double distance)
 // throw(GEOSException *)
 {
+    // Single-sided buffer only works on single geometries
+    // so we'll need to do it individually and then union
+    // the result
+    if ( bufParams.isSingleSided() && g->getNumGeometries() > 1 )
+    {
+        std::vector< std::unique_ptr<Geometry> > geoms_to_delete;
+        for ( size_t i=0, n=g->getNumGeometries(); i<n; ++i )
+        {
+            // BufferBuilder class cannot be re-used, so
+            // we create a new one for each subgeom
+            BufferBuilder subbuilder(bufParams);
+            const Geometry *subgeom = g->getGeometryN(i);
+            std::unique_ptr<Geometry> subbuf = subbuilder.buffer(subgeom, distance);
+            geoms_to_delete.push_back( std::move(subbuf) );
+        }
+        std::vector< Geometry* > geoms;
+        for ( size_t i=0, n=geoms_to_delete.size(); i<n; ++i )
+            geoms.push_back( geoms_to_delete[i].get() );
+        return operation::geounion::UnaryUnionOp::Union(geoms);
+    }
+
     const PrecisionModel* precisionModel = workingPrecisionModel;
     if(precisionModel == nullptr) {
         precisionModel = g->getPrecisionModel();
