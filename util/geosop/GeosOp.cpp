@@ -18,6 +18,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/valid/MakeValid.h>
+#include <geos/io/GeoJSONWriter.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTStreamReader.h>
 #include <geos/io/WKTWriter.h>
@@ -84,7 +85,7 @@ int main(int argc, char** argv) {
         ("o,offseta", "Skip reading first N geometries of A", cxxopts::value<int>( cmdArgs.offsetA ) )
         ("c,collect", "Collect input into single geometry (automatic for AGG ops)", cxxopts::value<bool>( cmdArgs.isCollect ))
         ("e,explode", "Explode results into component geometries", cxxopts::value<bool>( cmdArgs.isExplode))
-        ("f,format", "Output format (wkt, wkb or txt)", cxxopts::value<std::string>( ))
+        ("f,format", "Output format (wkt, wkb, txt or geojson)", cxxopts::value<std::string>( ))
         ("p,precision", "Set number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
         ("q,quiet", "Disable result output", cxxopts::value<bool>( cmdArgs.isQuiet ) )
         ("r,repeat", "Repeat operation N times", cxxopts::value<int>( cmdArgs.repeatNum ) )
@@ -127,11 +128,17 @@ int main(int argc, char** argv) {
 
     if (result.count("format")) {
         auto fmt = result["format"].as<std::string>();
+        // Use lowercase matching
+        std::transform(fmt.begin(), fmt.end(), fmt.begin(),
+            [](unsigned char c){ return std::tolower(c); });
         if (fmt == "txt" || fmt == "wkt" ) {
             cmdArgs.format = GeosOpArgs::fmtText;
         }
         else if (fmt == "wkb") {
             cmdArgs.format = GeosOpArgs::fmtWKB;
+        }
+        else if (fmt == "geojson" || fmt == "json") {
+            cmdArgs.format = GeosOpArgs::fmtGeoJSON;
         }
         else {
             std::cerr << "Invalid format value: " << fmt << std::endl;
@@ -541,6 +548,12 @@ void GeosOp::outputGeometry(const Geometry * geom) {
         writer.setOutputDimension(4);
         writer.writeHEX(*geom, std::cout);
         std::cout << std::endl;
+    }
+    else if (args.format == GeosOpArgs::fmtGeoJSON ) {
+        // output as GeoJSON
+        // TODO: enable args.precision to output
+        geos::io::GeoJSONWriter geojsonwriter;
+        std::cout << geojsonwriter.write(geom) << std::endl;
     }
     else {
         // output as text/WKT

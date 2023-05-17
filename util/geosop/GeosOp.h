@@ -31,7 +31,10 @@ class GeosOpArgs {
 
 public:
     enum {
-        fmtNone, fmtText, fmtWKB
+        fmtNone,
+        fmtText,
+        fmtWKB,
+        fmtGeoJSON,
     } format = fmtText;
 
     bool isShowTime = false;
