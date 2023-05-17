@@ -4,8 +4,7 @@
 It can be used to:
 
 * Run GEOS operations on one or many geometries
-* Output geometry resuls in various formats (WKT and WKB)
-* Convert between WKT and WKB
+* Output geometry results in various formats (WKT, WKB and GeoJSON)
 * Time the performance of operations
 * Check for memory leaks in operations
 * Check the semantics of GEOS operations
@@ -28,14 +27,17 @@ It can be used to:
 ```
   geosop [OPTION...] opName opArg
 
-  -a arg               source for A geometries (WKT, WKB, file, stdin, stdin.wkb)
-  -b arg               source for B geometries (WKT, WKB, file, stdin, stdin.wkb)
+  -a arg               source for A geometries (WKT, WKB, file, stdin,
+                       stdin.wkb)
+  -b arg               source for B geometries (WKT, WKB, file, stdin,
+                       stdin.wkb)
   -l, --limita arg     Limit number of A geometries read
   -o, --offseta arg    Skip reading first N geometries of A
-  -c, --collect        Collect input into single geometry
+  -c, --collect        Collect input into single geometry (automatic for AGG
+                       ops)
   -e, --explode        Explode results into component geometries
-  -f, --format arg     Output format (wkt, wkb or txt)
-  -p, --precision arg  Sets number of decimal places in output coordinates
+  -f, --format arg     Output format (wkt, wkb, txt or geojson)
+  -p, --precision arg  Set number of decimal places in output coordinates
   -q, --quiet          Disable result output
   -r, --repeat arg     Repeat operation N times
   -t, --time           Print execution time
@@ -82,9 +84,9 @@ It can be used to:
 
     `geosop -a geoms.wkt -f wkb unaryUnion`
 
-* Compute the buffer of a WKB literal and output as WKT
+* Compute the buffer of a WKB literal and output as GeoJSON
 
-    `geosop -a 000000000140240000000000004024000000000000 buffer 10`
+    `geosop -a 000000000140240000000000004024000000000000 -f geojson buffer 10`
 
 * Polygonize lines and output the individual result polygons as WKT
 
