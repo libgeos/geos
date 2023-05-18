@@ -75,8 +75,7 @@ If you believe someone is breaking this code of conduct, you may reply to them, 
 
 Should there be difficulties in dealing with the situation, you may report your concerns to event staff, a forum leader or the GEOS PSC. Serious or persistent offenders may be expelled from the event or forum by event organizers or forum leaders.
 
-To privately email the code of conduct committee leadership use coc@osgeo.org.
-
+To privately email the code of conduct committee leadership use conduct-report@osgeo.org.
 
 ## Credits
 

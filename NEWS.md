@@ -66,6 +66,7 @@ xxxx-xx-xx
   - GEOSHasZ: Fix handling with empty geometries (GH-887, Mike Taves)
   - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
   - Reduce artifacts in single-sided Buffers: (GH-665 #810 and #712, Sandro Santilli)
+  - GeoJSONReader: Fix 2D empty geometry creation (GH-909, Mike Taves)
 
 - Changes:
   - Remove Orientation.isCCW exception to simplify logic and align with JTS (GH-878, Martin Davis)

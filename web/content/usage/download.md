@@ -14,16 +14,9 @@ draft: false
 |  **3.9.4**  | 2022/11/14 | 2020/12/09 | *2024/12/09* | [geos-3.9.4.tar.bz2](https://download.osgeo.org/geos/geos-3.9.4.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.9.4/NEWS) |
 |  **3.8.3** | 2022/06/02 |  2019/10/10 | *2023/10/10* | [geos-3.8.3.tar.bz2](https://download.osgeo.org/geos/geos-3.8.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.8.3/NEWS) |
 | **3.7.5**  | 2022/06/08  | 2018/09/10 | *2023/03/31*  | [geos-3.7.5.tar.bz2](https://download.osgeo.org/geos/geos-3.7.5.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.7.5/NEWS) |
-| **3.6.6** EOL | 2023/01/27 | 2016/10/25 | 2023/01/27 | [geos-3.6.6.tar.bz2](https://download.osgeo.org/geos/geos-3.6.6.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.6.6/NEWS) |
-| **3.5.2** EOL | 2019/10/04 | 2015/08/16 | 2019/10/04|  [geos-3.5.2.tar.bz2](https://download.osgeo.org/geos/geos-3.5.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.5.2/NEWS) |
 
-If you see **EOL** next to a released version, it means no security or patch updates will be added to that minor and you should upgrade to a higher release.
-Refer to our [End-Of-Life (EOL) Policy](/project/rfcs/rfc11/) for details.
-Older releases prior to the ones listed above, are all EOL'd.
+Old releases can be downloaded from https://download.osgeo.org/geos/.  Any releases not in this list are end-of-life (EOL). Refer to our [EOL policy](/project/rfcs/rfc11/) for details. All *Final Release* dates are subject to change.
 
-Old releases can be downloaded from https://download.osgeo.org/geos/.
-
-All *future* **Final Release** dates are subject to change.
 
 ## Build From Source
 

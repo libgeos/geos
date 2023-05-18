@@ -1,0 +1,14 @@
+more:
+  - name: News
+    ref: "/posts"
+    external: false
+    icon: "gdoc_notification"
+  - name: Releases
+    ref: "/usage/download"
+    external: false
+    icon: "gdoc_download"
+  - name: "View Source"
+    ref: "https://git.osgeo.org/gitea/postgis/postgis"
+    external: true
+    icon: "gdoc_github"
+

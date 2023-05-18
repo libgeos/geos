@@ -15,6 +15,8 @@ The 3.10 release of GEOS is now available [to download]({{< ref "/usage/download
   * CAPI addition for ISO WKB output, `GEOSWKBWriter_getFlavor` and `GEOSWKBWriter_setFlavor`
   * CAPI addition to create a constrained delaunay of polygonal input, `GEOSConstrainedDelaunayTriangulation`
 
+<!--more-->
+
 * There is a new utility for running arbitrary GEOS commands against input files, `geosop`. See the [user guide](https://github.com/libgeos/geos/blob/e286d4afd4826fd1886a4ac18e32a3c026e11394/util/geosop/README.md) for examples.
 
 * The C API is now fully documented and available as a [reference document](http://libgeos.org/doxygen/geos__c_8h.html).

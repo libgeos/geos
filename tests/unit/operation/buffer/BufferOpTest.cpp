@@ -570,4 +570,26 @@ void object::test<21>
     ensure_equals(int(result->getArea()), 5055);
 }
 
+// Another test for single-sided buffer
+// See https://github.com/libgeos/geos/issues/665
+template<>
+template<>
+void object::test<22>
+()
+{
+    using geos::operation::buffer::BufferOp;
+    using geos::operation::buffer::BufferParameters;
+
+    std::string wkt("MULTILINESTRING((0 0,10 0),(20 0,30 0))");
+    GeomPtr geom(wktreader.read(wkt));
+
+    geos::operation::buffer::BufferParameters bp;
+    bp.setSingleSided(true);
+    geos::operation::buffer::BufferOp op(geom.get(), bp);
+
+    std::unique_ptr<Geometry> result = op.getResultGeometry(-10);
+    ensure_equals(result->getNumGeometries(), 2u);
+    ensure_equals(result->getArea(), 200);
+}
+
 } // namespace tut
