@@ -233,7 +233,7 @@ std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(
     const geos_nlohmann::json& j) const
 {
     const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-    auto coordinates = detail::make_unique<CoordinateSequence>();
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, 2u);
     coordinates->reserve(coords.size());
     for (const auto& coord : coords) {
         const geom::Coordinate& c = readCoordinate(coord);
@@ -256,7 +256,7 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(
     std::vector<std::unique_ptr<geom::LinearRing>> rings;
     rings.reserve(polygonCoords.size());
     for (const auto& ring : polygonCoords) {
-    auto coordinates = detail::make_unique<CoordinateSequence>();
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, 2u);
         coordinates->reserve(ring.size());
         for (const auto& coord : ring) {
             const geom::Coordinate& c = readCoordinate(coord);
@@ -300,7 +300,7 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(
     std::vector<std::unique_ptr<geom::LineString>> lines;
     lines.reserve(listOfCoords.size());
     for (const auto& coords :  listOfCoords) {
-        auto coordinates = detail::make_unique<geom::CoordinateSequence>();
+        auto coordinates = detail::make_unique<geom::CoordinateSequence>(0u, 2u);
         coordinates->reserve(coords.size());
         for (const auto& coord : coords) {
             const geom::Coordinate& c = readCoordinate(coord);
