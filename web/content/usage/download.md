@@ -51,7 +51,7 @@ make install
 ### Build Options
 
 The GEOS build can be customized using build options.
-Options are specified via [`cmake` variables](https://cmake.org/cmake/help/v2.8.8/cmake.html#section_Variables).
+Options are specified via [`cmake` variables](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html).
 They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 
 {{< hint warning >}}
@@ -61,10 +61,11 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 | Option               | Default    | Note  |
 | :------------------: | :--------: | :---: |
 | CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. |
-| CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Librarys end up in `./libs` headers in `./include` |
+| CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Libraries end up in `./lib` or `./lib64`, headers in `./include`, executables in `./bin` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
 | BUILD_TESTING        | ON         | Build unit tests. |
+| USE_CCACHE           | OFF        | Use [`ccache`](https://ccache.dev/) to compile C/C++ objects, making subsequent builds quicker. |
 
 
 ## Testing
@@ -73,6 +74,7 @@ It is possible to run `ctest` directly. This gives access to ctest command line 
 
 ```bash
 ctest
+ctest --output-on-failure
 ctest --verbose
 ```
 
