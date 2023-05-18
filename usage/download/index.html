@@ -59,7 +59,7 @@
       "url" : "https://libgeos.org/usage/download/",
       "headline": "Download and Build",
       "description": "Download Project        Release Release Date First Release Final Release Download Link Changes     3.11.2 2023\/03\/16 2022\/07\/01 2026\/07\/01 geos-3.11.2.tar.bz2 Changes   3.10.5 2023\/03\/16 2021\/10\/20 2025\/10\/20 geos-3.10.5.tar.bz2 Changes   3.9.4 2022\/11\/14 2020\/12\/09 2024\/12\/09 geos-3.9.4.tar.bz2 Changes   3.8.3 2022\/06\/02 2019\/10\/10 2023\/10\/10 geos-3.8.3.tar.bz2 Changes   3.7.5 2022\/06\/08 2018\/09\/10 2023\/03\/31 geos-3.7.5.tar.bz2 Changes    Old releases can be downloaded from https:\/\/download.",
-      "wordCount" : "388",
+      "wordCount" : "407",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1627,7 +1627,7 @@ make install
 <p>The GEOS build can be customized using build options.
 Options are specified via <a
   class="gdoc-markdown__link--code"
-  href="https://cmake.org/cmake/help/v2.8.8/cmake.html#section_Variables"
+  href="https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html"
 ><code>cmake</code> variables</a>.
 They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>.</p>
 
@@ -1657,7 +1657,7 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 <tr>
 <td style="text-align:center">CMAKE_INSTALL_PREFIX</td>
 <td style="text-align:center">/usr/local</td>
-<td style="text-align:center">Set to install root. Librarys end up in <code>./libs</code> headers in <code>./include</code></td>
+<td style="text-align:center">Set to install root. Libraries end up in <code>./lib</code> or <code>./lib64</code>, headers in <code>./include</code>, executables in <code>./bin</code></td>
 </tr>
 <tr>
 <td style="text-align:center">BUILD_DOCUMENTATION</td>
@@ -1674,6 +1674,14 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 <td style="text-align:center">ON</td>
 <td style="text-align:center">Build unit tests.</td>
 </tr>
+<tr>
+<td style="text-align:center">USE_CCACHE</td>
+<td style="text-align:center">OFF</td>
+<td style="text-align:center">Use <a
+  class="gdoc-markdown__link--code"
+  href="https://ccache.dev/"
+><code>ccache</code></a> to compile C/C++ objects, making subsequent builds quicker.</td>
+</tr>
 </tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
@@ -1687,6 +1695,7 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 </div>
 <p>It is possible to run <code>ctest</code> directly. This gives access to ctest command line options (see <code>ctest --help</code> for a listing).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ctest
+ctest --output-on-failure
 ctest --verbose
 </code></pre></div><p>A list of GEOS test suites is obtained by running <code>ctest --show-only</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ ctest --show-only
