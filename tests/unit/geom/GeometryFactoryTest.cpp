@@ -1308,10 +1308,10 @@ void object::test<41>
     ensure(mg1->isEmpty());
     ensure(mg2->isEmpty());
     g1 = reader_.read("POINT(1 1)");
-    g2 = reader_.read("MULTIPOINT(1 1)");
+    g2 = reader_.read("MULTIPOINT((1 1))");
     mg1 = factory_->createMulti(std::move(g1));
     mg2 = factory_->createMulti(std::move(g2));
-    g2 = reader_.read("MULTIPOINT(1 1)");
+    g2 = reader_.read("MULTIPOINT((1 1))");
     ensure_equals_geometry(g2.get(), mg1.get());
     ensure_equals_geometry(g2.get(), mg2.get());
 }

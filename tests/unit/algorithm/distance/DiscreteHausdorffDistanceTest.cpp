@@ -146,7 +146,7 @@ void object::test<3>
 ()
 {
     runTest("LINESTRING (0 0, 2 0)",
-            "MULTIPOINT (0 1, 1 0, 2 1)", 1.0);
+            "MULTIPOINT ((0 1), (1 0), (2 1))", 1.0);
 }
 
 // 4 - testLinesShowingDiscretenessEffect

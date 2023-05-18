@@ -64,7 +64,7 @@ template<>
 void object::test<3>()
 {
     checkFlattener("GEOMETRYCOLLECTION (POINT (1 1))", "POINT (1 1)");
-    checkFlattener("MULTIPOINT (1 1)", "POINT (1 1)");
+    checkFlattener("MULTIPOINT ((1 1))", "POINT (1 1)");
 }
 
 // most narrow representation used
@@ -72,7 +72,7 @@ template<>
 template<>
 void object::test<4>()
 {
-    checkFlattener("GEOMETRYCOLLECTION (POINT (1 1), MULTIPOINT (1 2, 1 3), GEOMETRYCOLLECTION (POINT (1 4), POINT EMPTY))",
+    checkFlattener("GEOMETRYCOLLECTION (POINT (1 1), MULTIPOINT ((1 2), (1 3)), GEOMETRYCOLLECTION (POINT (1 4), POINT EMPTY))",
                    "MULTIPOINT ((1 1), (1 2), (1 3), (1 4), EMPTY)");
     checkFlattener("GEOMETRYCOLLECTION(MULTILINESTRING ((1 1, 2 2)), MULTIPOINT ((3 3), (4 4)))",
                    "GEOMETRYCOLLECTION(LINESTRING (1 1, 2 2), POINT (3 3), POINT (4 4))");

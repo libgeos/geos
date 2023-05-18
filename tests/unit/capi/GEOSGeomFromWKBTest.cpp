@@ -99,7 +99,7 @@ template<>
 void object::test<5>
 ()
 {
-    std::string wkt("MULTIPOINT (1.123 1.456, 2.123 2.456, 3.123 3.456)");
+    std::string wkt("MULTIPOINT ((1.123 1.456), (2.123 2.456), (3.123 3.456))");
     std::string
     ewkb("01040000000300000001010000002b8716d9cef7f13fb29defa7c64bf73f010100000096438b6ce7fb0040d9cef753e3a50340010100000096438b6ce7fb0840d9cef753e3a50b40");
     test_wkb(ewkb, wkt);

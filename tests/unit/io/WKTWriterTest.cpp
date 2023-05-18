@@ -201,7 +201,7 @@ void object::test<6>
     wktwriter.setRoundingPrecision(2);
     wktwriter.setTrim(true);
     std::string result = wktwriter.write(col.get());
-    ensure_equals(result, std::string("MULTIPOINT (EMPTY, 1 2)"));
+    ensure_equals(result, std::string("MULTIPOINT (EMPTY, (1 2))"));
 }
 
 

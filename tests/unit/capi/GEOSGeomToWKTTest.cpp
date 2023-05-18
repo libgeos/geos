@@ -136,7 +136,7 @@ template<>
 void object::test<10>
 ()
 {
-    test_wkt("MULTIPOINT (0 0, 5 5, 10 10, 15 15, 20 20)", 13);
+    test_wkt("MULTIPOINT ((0 0), (5 5), (10 10), (15 15), (20 20))", 13);
 }
 
 template<>

@@ -188,7 +188,7 @@ template<>
 void object::test<7>
 ()
 {
-    const char *wkt = "MULTIPOINT(0 0, 1 1)";
+    const char *wkt = "MULTIPOINT((0 0), (1 1))";
     geom_ = read(wkt);
     ensure(geom_ != nullptr);
 

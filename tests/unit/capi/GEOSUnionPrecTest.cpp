@@ -29,7 +29,7 @@ void object::test<1>()
     GEOSSetSRID(a, 4326);
 
     GEOSGeometry* result = GEOSUnionPrec(a, b, 2);
-    GEOSGeometry* expected = GEOSGeomFromWKT("MULTIPOINT (2 8, 4 10)");
+    GEOSGeometry* expected = GEOSGeomFromWKT("MULTIPOINT ((2 8), (4 10))");
 
     ensure(result);
     ensure(expected);

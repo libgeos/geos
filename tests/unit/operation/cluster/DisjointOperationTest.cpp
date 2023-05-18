@@ -27,7 +27,7 @@ void object::test<1>
 {
     using geos::operation::cluster::GeometryDistanceClusterFinder;
 
-    auto g = reader_.read("MULTIPOINT (0 0, 1 0, 1 1, 2 2, 3 2, 3 3)");
+    auto g = reader_.read("MULTIPOINT ((0 0), (1 0), (1 1), (2 2), (3 2), (3 3))");
 
     GeometryDistanceClusterFinder finder(1.0);
 

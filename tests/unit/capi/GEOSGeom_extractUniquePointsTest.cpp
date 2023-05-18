@@ -81,8 +81,8 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 0 0, 1 1)");
-    geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1)");
+    geom1_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT((0 0), (0 0), (1 1))");
+    geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT((0 0), (1 1))");
     /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
     geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
     ensure(0 != GEOSEquals_r(handle_, geom3_, geom2_));
@@ -94,8 +94,8 @@ void object::test<3>
 ()
 {
     geom1_ = GEOSGeomFromWKT_r(handle_,
-                               "GEOMETRYCOLLECTION(MULTIPOINT(0 0, 0 0, 1 1),LINESTRING(1 1, 2 2, 2 2, 0 0),POLYGON((5 5, 0 0, 0 2, 2 2, 5 5)))");
-    geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1, 2 2, 5 5, 0 2)");
+                               "GEOMETRYCOLLECTION(MULTIPOINT((0 0), (0 0), (1 1)),LINESTRING(1 1, 2 2, 2 2, 0 0),POLYGON((5 5, 0 0, 0 2, 2 2, 5 5)))");
+    geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT((0 0), (1 1), (2 2), (5 5), (0 2))");
     geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
     /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
     ensure(0 != GEOSEquals_r(handle_, geom3_, geom2_));

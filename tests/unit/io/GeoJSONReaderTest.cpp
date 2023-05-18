@@ -100,7 +100,7 @@ void object::test<5>
 {
     std::string geojson { "{\"type\":\"MultiPoint\",\"coordinates\":[[10, 40], [40, 30], [20, 20], [30, 10]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals("MULTIPOINT (10.000 40.000, 40.000 30.000, 20.000 20.000, 30.000 10.000)", geom->toText());
+    ensure_equals("MULTIPOINT ((10.000 40.000), (40.000 30.000), (20.000 20.000), (30.000 10.000))", geom->toText());
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 

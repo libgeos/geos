@@ -317,7 +317,7 @@ template<>
 void object::test<14>
 ()
 {
-    const char* wkt = "MULTIPOINT (0 0, 1 1, 1 1, 2 2)";
+    const char* wkt = "MULTIPOINT ((0 0), (1 1), (1 1), (2 2))";
 
     try {
         runVoronoi(wkt, "", 0, false, true);

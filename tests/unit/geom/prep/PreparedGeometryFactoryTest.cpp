@@ -416,7 +416,7 @@ template<>
 void object::test<24>
 ()
 {
-    g_ = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
+    g_ = reader_.read("MULTIPOINT((0 0), (5 5), (10 10), (15 15), (20 20))");
     ensure(nullptr != g_);
 
     pg_ = prep::PreparedGeometryFactory::prepare(g_.get());
@@ -431,7 +431,7 @@ template<>
 void object::test<25>
 ()
 {
-    g_ = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
+    g_ = reader_.read("MULTIPOINT((0 0), (5 5), (10 10), (15 15), (20 20))");
     ensure(nullptr != g_);
 
     prep::PreparedGeometryFactory pgf;

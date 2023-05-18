@@ -481,8 +481,10 @@ WKTWriter::appendMultiPointText(const MultiPoint& multiPoint, OrdinateSet output
             }
             else {
                 CoordinateXYZM coord;
+                writer.write("(");
                 seq->getAt(0, coord);
                 appendCoordinate(coord, outputOrdinates, writer);
+                writer.write(")");
             }
         }
         writer.write(")");

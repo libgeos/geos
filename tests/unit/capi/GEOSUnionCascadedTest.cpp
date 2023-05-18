@@ -28,7 +28,7 @@ void object::test<1>()
     geom3_ = GEOSUnion(geom1_, geom2_);
     ensure(nullptr != geom3_);
 
-     ensure_equals("MULTIPOINT (2 8, 3 9)", toWKT(geom3_));
+     ensure_equals("MULTIPOINT ((2 8), (3 9))", toWKT(geom3_));
 }
 
 } // namespace tut
