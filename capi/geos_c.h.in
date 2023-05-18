@@ -5584,7 +5584,7 @@ extern int GEOS_DLL GEOSWKBWriter_getOutputDimension(
 
 /**
 * Set the output dimensionality of the writer. Either
-* 2, 3, or 4 dimensions.
+* 2, 3, or 4 dimensions. Default since GEOS 3.12 is 4.
 * \param writer The writer to read from.
 * \param newDimension The dimensionality desired
 * \since 3.0

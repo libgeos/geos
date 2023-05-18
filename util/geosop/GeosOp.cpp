@@ -545,7 +545,6 @@ void GeosOp::outputGeometry(const Geometry * geom) {
     if (args.format == GeosOpArgs::fmtWKB ) {
         // output as hex-encoded WKB
         WKBWriter writer;
-        writer.setOutputDimension(4);
         writer.writeHEX(*geom, std::cout);
         std::cout << std::endl;
     }
