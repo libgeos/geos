@@ -14,9 +14,9 @@ on:
 
 jobs:
 
-  linux:
+  container:
 
-    name: 'Linux'
+    name: 'Build container'
     if: github.repository == 'libgeos/geos'
     runs-on: ubuntu-latest
 
