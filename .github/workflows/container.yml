@@ -14,9 +14,9 @@ on:
 
 jobs:
 
-  linux:
+  container:
 
-    name: 'Linux'
+    name: 'Build container'
     runs-on: ubuntu-latest
 
     steps:
