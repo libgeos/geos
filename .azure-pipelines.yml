@@ -61,24 +61,24 @@ stages:
           PACKAGES: g++-7
           VM_IMAGE: ubuntu-20.04
           VM_NAME: focal
-        GCC 6:
-          CXXSTD: 11
-          CXX: g++-6
-          PACKAGES: g++-6
-          VM_IMAGE: ubuntu-18.04
-          VM_NAME: focal
-        GCC 5:
-          CXXSTD: 11
-          CXX: g++-5
-          PACKAGES: g++-5
-          VM_IMAGE: ubuntu-18.04
-          VM_NAME: focal
-        GCC 4.8:
-          CXXSTD: 11
-          CXX: g++-4.8
-          PACKAGES: g++-4.8
-          VM_IMAGE: ubuntu-18.04
-          VM_NAME: focal
+        # GCC 6:
+        #   CXXSTD: 11
+        #   CXX: g++-6
+        #   PACKAGES: g++-6
+        #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: focal
+        # GCC 5:
+        #   CXXSTD: 11
+        #   CXX: g++-5
+        #   PACKAGES: g++-5
+        #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: focal
+        # GCC 4.8:
+        #   CXXSTD: 11
+        #   CXX: g++-4.8
+        #   PACKAGES: g++-4.8
+        #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: focal
         Clang 12:
           CXXSTD: 11, 20
           CXX: clang++-12
@@ -107,20 +107,20 @@ stages:
           LLVM_REPO: llvm-toolchain-focal-9
           VM_IMAGE: ubuntu-20.04
           VM_NAME: focal
-        Clang 8:
-          CXXSTD: 11
-          CXX: clang++-8
-          PACKAGES: clang-8
-          LLVM_REPO: llvm-toolchain-bionic-8
-          VM_IMAGE: ubuntu-18.04
-          VM_NAME: bionic
-        Clang 7:
-          CXXSTD: 11
-          CXX: clang++-7
-          PACKAGES: clang-7
-          LLVM_REPO: llvm-toolchain-bionic-7
-          VM_IMAGE: ubuntu-18.04
-          VM_NAME: bionic
+        # Clang 8:
+        #   CXXSTD: 11
+        #   CXX: clang++-8
+        #   PACKAGES: clang-8
+        #   LLVM_REPO: llvm-toolchain-bionic-8
+        #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: bionic
+        # Clang 7:
+        #   CXXSTD: 11
+        #   CXX: clang++-7
+        #   PACKAGES: clang-7
+        #   LLVM_REPO: llvm-toolchain-bionic-7
+        #   VM_IMAGE: ubuntu-18.04
+        #   VM_NAME: bionic
         # Clang 6:
         #   CXXSTD: 11
         #   CXX: clang++-6.0
@@ -228,10 +228,10 @@ stages:
 
   - job: 'macOS'
     pool:
-      vmImage: 'macOS-10.15'
+      vmImage: 'macOS-11'
     strategy:
       matrix:
-        # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md#xcode
         Xcode 12.4:
           TOOLSET: clang
           CXXSTD: 11, 14, 20
@@ -240,10 +240,10 @@ stages:
           TOOLSET: clang
           CXXSTD: 11, 17
           XCODE_APP: /Applications/Xcode_11.7.app
-        Xcode 10.3:
-          TOOLSET: clang
-          CXXSTD: 11
-          XCODE_APP: /Applications/Xcode_10.3.app
+        # Xcode 10.3:
+        #   TOOLSET: clang
+        #   CXXSTD: 11
+        #   XCODE_APP: /Applications/Xcode_10.3.app
     steps:
     - script: |
         set -e
