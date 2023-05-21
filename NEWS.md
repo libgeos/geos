@@ -67,6 +67,7 @@ xxxx-xx-xx
   - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
   - Reduce artifacts in single-sided Buffers: (GH-665 #810 and #712, Sandro Santilli)
   - GeoJSONReader: Fix 2D empty geometry creation (GH-909, Mike Taves)
+  - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
 
 - Changes:
   - Remove Orientation.isCCW exception to simplify logic and align with JTS (GH-878, Martin Davis)

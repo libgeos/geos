@@ -117,7 +117,7 @@ RectangleIntersection::clip_point(const geom::Point* g,
                                   RectangleIntersectionBuilder& parts,
                                   const Rectangle& rect)
 {
-    if(g == nullptr) {
+    if(g == nullptr || g->isEmpty()) {
         return;
     }
 

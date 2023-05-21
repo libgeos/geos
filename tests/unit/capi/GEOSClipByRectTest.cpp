@@ -204,6 +204,26 @@ template<> template<> void object::test<15>
     isEqual(geom2_, "POLYGON ((2 2, 2 5, 5 5, 5 2, 2 2))");
 }
 
+/// Empty combinations
+template<> template<> void object::test<16>
+()
+{
+    std::vector<std::string> variants{
+        "POINT EMPTY",
+        "LINESTRING EMPTY",
+        "POLYGON EMPTY",
+        "MULTIPOINT EMPTY",
+        "MULTILINESTRING EMPTY",
+        "MULTIPOLYGON EMPTY",
+        "GEOMETRYCOLLECTION EMPTY",
+        "LINEARRING EMPTY",
+    };
+    for (const auto& wkt : variants) {
+        geom1_ = GEOSGeomFromWKT(wkt.c_str());
+        geom2_ = GEOSClipByRect(geom1_, 0, 0, 1, 1);
+        isEqual(geom2_, wkt.c_str());
+    }
+}
 
 
 } // namespace tut
