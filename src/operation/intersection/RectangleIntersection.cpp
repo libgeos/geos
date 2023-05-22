@@ -534,6 +534,10 @@ RectangleIntersection::clip_polygon(const geom::Polygon* g,
                                     const Rectangle& rect,
                                     bool keep_polygons)
 {
+    if(g == nullptr || g->isEmpty()) {
+        return;
+    }
+
     if(keep_polygons) {
         clip_polygon_to_polygons(g, parts, rect);
     }
