@@ -14622,7 +14622,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Same polygonizing behavior as <a class="el" href="geos__c_8h.html#a9d98e448d3b846d591c726d1c0000d25">GEOSPolygonize()</a>, but only returning results that are valid.</p>
+<p>Has the same polygonizing behavior as <a class="el" href="geos__c_8h.html#a9d98e448d3b846d591c726d1c0000d25">GEOSPolygonize()</a>, but returns a result which is a valid polygonal geometry. The result will not contain any edge-adjacent elements.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects. </td></tr>
@@ -14631,7 +14631,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The polygonal output geometry. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html" title="Polygonizes a set of Geometrys which contain linework that represents the edges of a planar graph.">geos::operation::polygonize::Polygonizer</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html" title="Polygonizes a set of Geometrys which contain linework that represents the edges of a planar graph.">geos::operation::polygonize::Polygonizer</a> </dd>
+<dd>
+<a class="el" href="geos__c_8h.html#a10102a911a449e6d2e150c33f63c09be">GEOSBuildArea()</a></dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.8 </dd></dl>
 
 </div>
