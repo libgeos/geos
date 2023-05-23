@@ -58,9 +58,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2a3e8cf7a73465644b4e84c9aa522a61"><td class="memItemLeft" align="right" valign="top"><a id="a2a3e8cf7a73465644b4e84c9aa522a61"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>WKBWriter</b> (uint8_t dims=2, int bo=getMachineByteOrder(), bool includeSRID=false, int flv=WKBConstants::wkbExtended)</td></tr>
-<tr class="separator:a2a3e8cf7a73465644b4e84c9aa522a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43bb4af18be46d7bd5a4a26431e4ce7f"><td class="memItemLeft" align="right" valign="top"><a id="a43bb4af18be46d7bd5a4a26431e4ce7f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>WKBWriter</b> (uint8_t dims=4, int bo=getMachineByteOrder(), bool includeSRID=false, int flv=WKBConstants::wkbExtended)</td></tr>
+<tr class="separator:a43bb4af18be46d7bd5a4a26431e4ce7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af34416afd5b4c4cad33a0a89931a75c9"><td class="memItemLeft" align="right" valign="top"><a id="af34416afd5b4c4cad33a0a89931a75c9"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getOutputDimension</b> () const</td></tr>
 <tr class="separator:af34416afd5b4c4cad33a0a89931a75c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -94,7 +94,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlavor</b> (int ne
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Writes a Geometry into Well-Known Binary format. </p>
-<p>The WKB format is specified in the OGC Simple Features for SQL specification. This implementation supports the extended WKB standard for representing 3-dimensional coordinates. The presence of 3D coordinates is signified by setting the high bit of the wkbType word.</p>
+<p>The WKB format is specified in the OGC Simple Features for SQL specification. This implementation supports the extended WKB standard for representing Z and M coordinates. The presence of Z and/or M coordinates is signified by setting the high bit of the wkbType word.</p>
 <p>Empty Points cannot be represented in WKB; an IllegalArgumentException will be thrown if one is written. The WKB specification does not support representing LinearRing they will be written as LineString</p>
 <p>This class is designed to support reuse of a single instance to read multiple geometries. This class is not thread-safe; each thread should create its own instance.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1io_1_1WKBReader.html" title="Reads a Geometry from Well-Known Binary format.">WKBReader</a> </dd></dl>

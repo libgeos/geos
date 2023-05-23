@@ -73,7 +73,7 @@ GEOS can read and write three “flavours” of WKB:
       "url" : "https://libgeos.org/specifications/wkb/",
       "headline": "Well-Known Binary (WKB)",
       "description": "“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.\nGEOS can read and write three “flavours” of WKB:\n Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.",
-      "wordCount" : "1118",
+      "wordCount" : "1136",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1754,8 +1754,9 @@ WKBPointZ {
 <span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
 <span class="n">GEOSSetSRID</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="mi">4326</span><span class="p">);</span>
 
-<span class="cm">/* Write it out as ISO WKB */</span>
+<span class="cm">/* Write it out as Extended WKB */</span>
 <span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_create</span><span class="p">();</span>
+<span class="cm">/* Next line only needed before GEOS 3.12 */</span>
 <span class="n">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
 <span class="n">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_EXTENDED</span><span class="p">);</span>
 <span class="n">GEOSWKBWriter_setIncludeSRID</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
@@ -1816,6 +1817,7 @@ WKBPointZ {
 
 <span class="cm">/* Write it out as ISO WKB */</span>
 <span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_create</span><span class="p">();</span>
+<span class="cm">/* Next line only needed before GEOS 3.12 */</span>
 <span class="n">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
 <span class="n">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_ISO</span><span class="p">);</span>
 
