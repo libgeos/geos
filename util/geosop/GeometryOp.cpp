@@ -472,6 +472,21 @@ std::vector<GeometryOpCreator> opRegistry {
         return new Result( std::move(geoms) ) ;
     });
     }},
+{"polygonizeValid", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "polygonize lines into a valid polygonal geometry",
+    [](const std::unique_ptr<Geometry>& geom) {
+        geos::operation::polygonize::Polygonizer p(true);
+        p.add(geom.get());
+
+        std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
+        std::vector<std::unique_ptr<const Geometry>> geoms;
+        for(unsigned int i = 0; i < polys.size(); i++) {
+            geoms.push_back( std::move(polys[i]) );
+        }
+        return new Result( std::move(geoms) ) ;
+    });
+    }},
 {"buildArea", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "build area from lines",
