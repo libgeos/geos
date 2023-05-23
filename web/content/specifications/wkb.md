@@ -254,8 +254,9 @@ GEOSWKBReader* reader = GEOSWKBReader_create();
 GEOSGeom* geom = GEOSWKTReader_read(reader, linestring);
 GEOSSetSRID(geom, 4326);
 
-/* Write it out as ISO WKB */
+/* Write it out as Extended WKB */
 GEOSWKBWriter* writer = GEOSWKBWriter_create();
+/* Next line only needed before GEOS 3.12 */
 GEOSWKBWriter_setOutputDimension(writer, 3);
 GEOSWKBWriter_setFlavor(writer, GEOS_WKB_EXTENDED);
 GEOSWKBWriter_setIncludeSRID(writer, 1);
@@ -294,6 +295,7 @@ GEOSGeom* geom = GEOSWKTReader_read(reader, linestring);
 
 /* Write it out as ISO WKB */
 GEOSWKBWriter* writer = GEOSWKBWriter_create();
+/* Next line only needed before GEOS 3.12 */
 GEOSWKBWriter_setOutputDimension(writer, 3);
 GEOSWKBWriter_setFlavor(writer, GEOS_WKB_ISO);
 
