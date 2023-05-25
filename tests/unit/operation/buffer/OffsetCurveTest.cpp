@@ -553,6 +553,20 @@ void object::test<40> ()
         );
 }
 
+// See https://github.com/qgis/QGIS/issues/53165
+template<>
+template<>
+void object::test<41> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (421.3851855669636279 622.2522632932523265, 446.2721764058806002 625.2150002978742123, 448.8256617572624236 626.8399455213802867)",
+        112.369, // distance
+        0, // number of segments
+        BufferParameters::JOIN_MITRE,
+        2,  // mitre limit
+        "LINESTRING (509.1540012679829488 532.0382691415252339, 484.9905620941226516 516.6615351227474093, 434.6686888251484220 510.6708359240824961)"
+    );
+}
 
 
 } // namespace tut
