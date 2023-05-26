@@ -554,5 +554,32 @@ void object::test<40> ()
 }
 
 
+// testMinQuadrantSegments
+// See https://github.com/qgis/QGIS/issues/53165
+template<>
+template<>
+void object::test<41> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (553772.0645892698 177770.05079236583, 553780.9235869241 177768.99614978794, 553781.8325485934 177768.41771963477)",
+        -11, 0, BufferParameters::JOIN_MITRE, -1,
+        "LINESTRING (553770.76 177759.13, 553777.54 177758.32)"
+    );
+}
+
+// testMinQuadrantSegments_QGIS
+// See https://github.com/qgis/QGIS/issues/53165#issuecomment-1563214857
+template<>
+template<>
+void object::test<42> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (421 622, 446 625, 449 627)",
+        133, 0, BufferParameters::JOIN_MITRE, -1,
+        "LINESTRING (405.15 754.05, 416.3 755.39)"
+    );
+}
+
+
 
 } // namespace tut
