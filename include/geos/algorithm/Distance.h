@@ -49,10 +49,11 @@ public:
      *          another point of the line (must be different to A)
      */
     // formerly distanceLineLine
-    static double segmentToSegment(const geom::CoordinateXY& A,
-                                   const geom::CoordinateXY& B,
-                                   const geom::CoordinateXY& C,
-                                   const geom::CoordinateXY& D);
+    static double segmentToSegment(
+        const geom::CoordinateXY& A,
+        const geom::CoordinateXY& B,
+        const geom::CoordinateXY& C,
+        const geom::CoordinateXY& D);
 
     /**
     * Computes the distance from a point to a sequence of line segments.
@@ -63,8 +64,9 @@ public:
     *          a sequence of contiguous line segments defined by their vertices
     * @return the minimum distance between the point and the line segments
     */
-    static double pointToSegmentString(const geom::CoordinateXY& p,
-                                       const geom::CoordinateSequence* seq);
+    static double pointToSegmentString(
+        const geom::CoordinateXY& p,
+        const geom::CoordinateSequence* seq);
 
     /**
     * Computes the distance from a point p to a line segment AB
@@ -80,9 +82,10 @@ public:
     * @return the distance from p to line segment AB
     */
     // formerly distancePointLine
-    static double pointToSegment(const geom::CoordinateXY& p,
-                                 const geom::CoordinateXY& A,
-                                 const geom::CoordinateXY& B);
+    static double pointToSegment(
+        const geom::CoordinateXY& p,
+        const geom::CoordinateXY& A,
+        const geom::CoordinateXY& B);
 
     /**
     * Computes the perpendicular distance from a point p to the (infinite) line
@@ -97,10 +100,15 @@ public:
     * @return the distance from p to line AB
     */
     // formerly distancePointLinePerpendicular
-    static double pointToLinePerpendicular(const geom::CoordinateXY& p,
-                                           const geom::CoordinateXY& A,
-                                           const geom::CoordinateXY& B);
+    static double pointToLinePerpendicular(
+        const geom::CoordinateXY& p,
+        const geom::CoordinateXY& A,
+        const geom::CoordinateXY& B);
 
+    static double pointToLinePerpendicularSigned(
+        const geom::CoordinateXY& p,
+        const geom::CoordinateXY& A,
+        const geom::CoordinateXY& B);
 };
 
 } // namespace geos::algorithm

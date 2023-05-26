@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2023 Paul Ramsey <pramsey@cleverelephant.ca>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -10,10 +11,6 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
- *
- **********************************************************************
- *
- * Last port: algorithm/MinimumDiameter.java r966
  *
  **********************************************************************/
 
@@ -53,12 +50,16 @@ namespace algorithm { // geos::algorithm
  *
  * This class can also be used to compute a line segment representing
  * the minimum diameter, the supporting line segment of the minimum diameter,
- * and a minimum rectangle enclosing the input geometry.
+ * and a minimum-width rectangle of the input geometry.
  * This rectangle will have width equal to the minimum diameter, and have
  * one side parallel to the supporting segment.
  *
- * @see ConvexHull
+ * In degenerate cases the rectangle may be a LineString or a Point.
+ * (Note that this may not be the enclosing rectangle with minimum area;
+ * use MinimumAreaRectangle to compute this.)
  *
+ * @see ConvexHull
+ * @see MinimumAreaRectangle
  */
 class GEOS_DLL MinimumDiameter {
 private:
@@ -75,7 +76,7 @@ private:
     void computeWidthConvex(const geom::Geometry* geom);
 
     /**
-     * Compute the width information for a ring of {@link geom::Coordinate}s.
+     * Compute the width information for a ring of Coordinate.
      * Leaves the width information in the instance variables.
      *
      * @param pts
@@ -127,7 +128,7 @@ public:
     double getLength();
 
     /** \brief
-     * Gets the {@link geom::Coordinate} forming one end of the minimum diameter.
+     * Gets the geom::Coordinate forming one end of the minimum diameter.
      *
      * @return a coordinate forming one end of the minimum diameter
      */
@@ -148,15 +149,17 @@ public:
     std::unique_ptr<geom::LineString> getDiameter();
 
     /** \brief
-     * Gets the minimum rectangular Polygon which encloses the input geometry.
+     * Gets the rectangular Polygon which encloses the input geometry
+     * and is based on the minimum diameter supporting segment.
      *
      * The rectangle has width equal to the minimum diameter, and a longer
      * length. If the convex hill of the input is degenerate (a line or point)
      * a LineString or Point is returned.
-     * The minimum rectangle can be used as an extremely generalized
-     * representation for the given geometry.
+     * This is not necessarily the rectangle with minimum area.
+     * Use MinimumAreaRectangle to compute this.
      *
-     * @return the minimum rectangle enclosing the input (or a line or point if degenerate)
+     * @return the the minimum-width rectangle enclosing the geometry
+     * @see MinimumAreaRectangle
      */
     std::unique_ptr<geom::Geometry> getMinimumRectangle();
 
@@ -164,7 +167,8 @@ public:
      * Gets the minimum rectangle enclosing a geometry.
      *
      * @param geom the geometry
-     * @return the minimum rectangle enclosing the geometry
+     * @return a rectangle enclosing the input (or a line or point if degenerate)
+     * @see MinimumAreaRectangle
     */
     static std::unique_ptr<geom::Geometry> getMinimumRectangle(geom::Geometry* geom);
 

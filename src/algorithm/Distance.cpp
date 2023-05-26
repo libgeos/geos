@@ -201,6 +201,29 @@ Distance::pointToSegmentString(const geom::CoordinateXY& p,
 }
 
 
+/*public static*/
+double
+Distance::pointToLinePerpendicularSigned(
+    const geom::CoordinateXY& p,
+    const geom::CoordinateXY& A,
+    const geom::CoordinateXY& B)
+{
+    // use comp.graphics.algorithms Frequently Asked Questions method
+    /*
+     * (2) s = (Ay-Cy)(Bx-Ax)-(Ax-Cx)(By-Ay)
+     *         -----------------------------
+     *                    L^2
+     *
+     * Then the distance from C to P = |s|*L.
+     */
+    double len2 = (B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y);
+    double s = ((A.y - p.y) * (B.x - A.x) - (A.x - p.x) * (B.y - A.y))
+        / len2;
+
+    return s * std::sqrt(len2);
+}
+
+
 } // namespace geos.algorithm
 } //namespace geos
 

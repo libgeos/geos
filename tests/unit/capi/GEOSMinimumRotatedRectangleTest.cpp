@@ -28,10 +28,12 @@ struct test_minimumrotatedrectangle_data : public capitest::utility {
         // input
         geom1_ = GEOSGeomFromWKT(wkt);
         ensure(nullptr != geom1_);
+        GEOSSetSRID(geom1_, 1234);
 
         // result
         geom2_ = GEOSMinimumRotatedRectangle(geom1_);
         ensure(nullptr != geom2_);
+        ensure("SRID equal", GEOSGetSRID(geom2_) == GEOSGetSRID(geom1_));
 
         // expected
         if (expected) {
@@ -93,7 +95,9 @@ template<>
 void object::test<5>
 ()
 {
-    checkMinRectangle("LINESTRING (1 2, 3 8, 9 6)", "POLYGON ((9 6, 7 10, -1 6, 1 2, 9 6))");
+    checkMinRectangle(
+        "LINESTRING (1 2, 3 8, 9 6)",
+        "POLYGON ((1 2, 3 8, 9 6, 7 0, 1 2))");
 }
 
 // Failure case from https://trac.osgeo.org/postgis/ticket/5163
@@ -104,8 +108,20 @@ void object::test<6>
 {
     checkMinRectangle(
         "LINESTRING(-99.48710639268086 34.79029839231914,-99.48370699999998 34.78689899963806,-99.48152167568102 34.784713675318976)",
-        "LINESTRING (-99.48710639268086 34.79029839231914, -99.48152167568102 34.784713675318976)"
+        "POLYGON ((-99.48710639 34.79029839, -99.48710639 34.79029839, -99.48152168 34.78471368, -99.48152168 34.78471368, -99.48710639 34.79029839))"
         );
 }
+
+// Collection Input
+template<>
+template<>
+void object::test<7>
+()
+{
+    checkMinRectangle(
+        "MULTILINESTRING ((1 2, 3 8, 9 6))",
+        "POLYGON ((1 2, 3 8, 9 6, 7 0, 1 2))");
+}
+
 
 } // namespace tut

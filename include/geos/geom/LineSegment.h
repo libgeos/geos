@@ -188,7 +188,21 @@ public:
         return orientationIndex(*seg);
     };
 
-
+    /**
+    * Determines the orientation index of a Coordinate relative to this segment.
+    * The orientation index is as defined in Orientation::index(Coordinate, Coordinate, Coordinate).
+    *
+    * @param p the coordinate to compare
+    *
+    * @return 1 (LEFT) if "p" is to the left of this segment
+    * @return -1 (RIGHT) if "p" is to the right of this segment
+    * @return 0 (COLLINEAR) if "p" is collinear with this segment
+    *
+    */
+    int orientationIndex(const CoordinateXY& p) const
+    {
+        return algorithm::Orientation::index(p0, p1, p);
+    }
 
     /** \brief
      * Determines the orientation index of a Coordinate
@@ -255,14 +269,34 @@ public:
         return algorithm::Distance::pointToSegment(p, p0, p1);
     };
 
-    /** \brief
+    /**
      * Computes the perpendicular distance between the (infinite)
      * line defined by this line segment and a point.
+     * If the segment has zero length this returns the distance between
+     * the segment and the point.
+     *
+     * @param p the point to compute the distance to
+     * @return the perpendicular distance between the line and point
      */
     double distancePerpendicular(const CoordinateXY& p) const
     {
+        if (p0.equals2D(p1))
+            return p0.distance(p);
         return algorithm::Distance::pointToLinePerpendicular(p, p0, p1);
     };
+
+    /**
+     * Computes the oriented perpendicular distance between the (infinite) line
+     * defined by this line segment and a point.
+     * The oriented distance is positive if the point on the left of the line,
+     * and negative if it is on the right.
+     * If the segment has zero length this returns the distance between
+     * the segment and the point.
+     *
+     * @param p the point to compute the distance to
+     * @return the oriented perpendicular distance between the line and point
+     */
+    double distancePerpendicularOriented(const CoordinateXY& p) const;
 
     /** \brief
      * Computes the Coordinate that lies a given
@@ -374,6 +408,8 @@ public:
      * the projection factor will lie outside the range [0.0, 1.0].
      */
     void project(const Coordinate& p, Coordinate& ret) const;
+
+    CoordinateXY project(const CoordinateXY& p) const;
 
     /** \brief
      * Project a line segment onto this line segment and return the resulting

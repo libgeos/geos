@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2023 Paul Ramsey <pramsey@cleverelephant.ca>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
@@ -10,10 +11,6 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation.
  * See the COPYING file for more information.
- *
- **********************************************************************
- *
- * Last port: algorithm/MinimumDiameter.java r966
  *
  **********************************************************************/
 
@@ -59,7 +56,7 @@ namespace algorithm { // geos.algorithm
 /**
  * Compute a minimum diameter for a giver {@link Geometry}.
  *
- * @param geom a Geometry
+ * @param newInputGeom a Geometry
  */
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 {
@@ -78,8 +75,8 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
  * (e.g. a convex Polygon or LinearRing,
  * or a two-point LineString, or a Point).
  *
- * @param geom a Geometry which is convex
- * @param isConvex <code>true</code> if the input geometry is convex
+ * @param newInputGeom a Geometry which is convex
+ * @param newIsConvex <code>true</code> if the input geometry is convex
  */
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsConvex)
 {
@@ -219,7 +216,7 @@ MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
     unsigned int currMaxIndex = 1;
     LineSegment seg;
 
-    // compute the max distance for all segments in the ring, and pick the minimum
+    // for each segment, find a vertex at max distance, and pick the minimum
     const std::size_t npts = pts->getSize();
     for(std::size_t i = 1; i < npts; ++i) {
         seg.p0 = pts->getAt(i - 1);

@@ -96,10 +96,25 @@ LineSegment::project(const Coordinate& p, Coordinate& ret) const
 {
     if(p == p0 || p == p1) {
         ret = p;
+        return;
     }
     double r = projectionFactor(p);
     ret = Coordinate(p0.x + r * (p1.x - p0.x), p0.y + r * (p1.y - p0.y));
 }
+
+CoordinateXY
+LineSegment::project(const CoordinateXY& p) const
+{
+    if(p == p0 || p == p1) {
+        return p;
+    }
+    double r = projectionFactor(p);
+    double x = p0.x + r * (p1.x - p0.x);
+    double y = p0.y + r * (p1.y - p0.y);
+    return CoordinateXY(x, y);
+}
+
+
 
 /*private*/
 void
@@ -304,6 +319,17 @@ LineSegment::offset(double offsetDistance)
     return ls;
 }
 
+/* public */
+double
+LineSegment::distancePerpendicularOriented(const CoordinateXY& p) const
+{
+    if (p0.equals2D(p1))
+        return p0.distance(p);
+    double dist = distancePerpendicular(p);
+    if (orientationIndex(p) < 0)
+        return -dist;
+    return dist;
+}
 
 /* public */
 std::unique_ptr<LineString>

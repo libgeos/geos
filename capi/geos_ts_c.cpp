@@ -20,6 +20,7 @@
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
+#include <geos/algorithm/MinimumAreaRectangle.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
@@ -1323,9 +1324,10 @@ extern "C" {
     Geometry*
     GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
+        using geos::algorithm::MinimumAreaRectangle;
+
         return execute(extHandle, [&]() {
-            geos::algorithm::MinimumDiameter m(g);
-            auto g3 = m.getMinimumRectangle();
+            auto g3 = MinimumAreaRectangle::getMinimumRectangle(g);
             g3->setSRID(g->getSRID());
             return g3.release();
         });
