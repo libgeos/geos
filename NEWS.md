@@ -23,6 +23,7 @@ xxxx-xx-xx
   - Polygonal coverages: CoverageSimplifier (JTS-911, Martin Davis)
   - CAPI: GEOSCoverageIsValid, GEOSCoverageSimplifyVW (GH-867, Paul Ramsey)
   - CAPI: GEOSGeom_releaseCollection (GH-848)
+  - CAPI: GEOSMinimumRotatedRectangle now uses MinimumAreaRectangle (Paul Ramsey)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
