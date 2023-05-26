@@ -69,7 +69,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8761c629d0aee8f0c45f587ca0898ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the length of the minimum diameter of the input Geometry.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a8761c629d0aee8f0c45f587ca0898ea3">More...</a><br /></td></tr>
 <tr class="separator:a8761c629d0aee8f0c45f587ca0898ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d50521cdbdb69d46d2979e60124b5d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a16d50521cdbdb69d46d2979e60124b5d">getWidthCoordinate</a> ()</td></tr>
-<tr class="memdesc:a16d50521cdbdb69d46d2979e60124b5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> forming one end of the minimum diameter.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a16d50521cdbdb69d46d2979e60124b5d">More...</a><br /></td></tr>
+<tr class="memdesc:a16d50521cdbdb69d46d2979e60124b5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">geom::Coordinate</a> forming one end of the minimum diameter.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a16d50521cdbdb69d46d2979e60124b5d">More...</a><br /></td></tr>
 <tr class="separator:a16d50521cdbdb69d46d2979e60124b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a384340ccaff682c80653dcae651abffd"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a384340ccaff682c80653dcae651abffd">getSupportingSegment</a> ()</td></tr>
 <tr class="memdesc:a384340ccaff682c80653dcae651abffd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the segment forming the base of the minimum diameter.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a384340ccaff682c80653dcae651abffd">More...</a><br /></td></tr>
@@ -78,7 +78,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ae9de89b6811dc28471d6a7886748f621"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a LineString which is a minimum diameter.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#ae9de89b6811dc28471d6a7886748f621">More...</a><br /></td></tr>
 <tr class="separator:ae9de89b6811dc28471d6a7886748f621"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a503cb5f3281902beafd2561dd83c2c78"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a503cb5f3281902beafd2561dd83c2c78">getMinimumRectangle</a> ()</td></tr>
-<tr class="memdesc:a503cb5f3281902beafd2561dd83c2c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the minimum rectangular Polygon which encloses the input geometry.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a503cb5f3281902beafd2561dd83c2c78">More...</a><br /></td></tr>
+<tr class="memdesc:a503cb5f3281902beafd2561dd83c2c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the rectangular Polygon which encloses the input geometry and is based on the minimum diameter supporting segment.  <a href="classgeos_1_1algorithm_1_1MinimumDiameter.html#a503cb5f3281902beafd2561dd83c2c78">More...</a><br /></td></tr>
 <tr class="separator:a503cb5f3281902beafd2561dd83c2c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -94,8 +94,11 @@ Static Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Computes the minimum diameter of a <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">geom::Geometry</a>. </p>
 <p>The minimum diameter is defined to be the width of the smallest band that contains the geometry, where a band is a strip of the plane defined by two parallel lines. This can be thought of as the smallest hole that the geometry can be moved through, with a single rotation.</p>
 <p>The first step in the algorithm is computing the convex hull of the Geometry. If the input Geometry is known to be convex, a hint can be supplied to avoid this computation.</p>
-<p>This class can also be used to compute a line segment representing the minimum diameter, the supporting line segment of the minimum diameter, and a minimum rectangle enclosing the input geometry. This rectangle will have width equal to the minimum diameter, and have one side parallel to the supporting segment.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1ConvexHull.html" title="Computes the convex hull of a Geometry.">ConvexHull</a> </dd></dl>
+<p>This class can also be used to compute a line segment representing the minimum diameter, the supporting line segment of the minimum diameter, and a minimum-width rectangle of the input geometry. This rectangle will have width equal to the minimum diameter, and have one side parallel to the supporting segment.</p>
+<p>In degenerate cases the rectangle may be a LineString or a Point. (Note that this may not be the enclosing rectangle with minimum area; use <a class="el" href="classgeos_1_1algorithm_1_1MinimumAreaRectangle.html">MinimumAreaRectangle</a> to compute this.)</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1ConvexHull.html" title="Computes the convex hull of a Geometry.">ConvexHull</a> </dd>
+<dd>
+<a class="el" href="classgeos_1_1algorithm_1_1MinimumAreaRectangle.html">MinimumAreaRectangle</a> </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab3986f0716ce07de04dbd988c16db4b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3986f0716ce07de04dbd988c16db4b3">&#9670;&nbsp;</a></span>MinimumDiameter() <span class="overload">[1/2]</span></h2>
@@ -251,9 +254,10 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gets the minimum rectangular Polygon which encloses the input geometry. </p>
-<p>The rectangle has width equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate (a line or point) a LineString or Point is returned. The minimum rectangle can be used as an extremely generalized representation for the given geometry.</p>
-<dl class="section return"><dt>Returns</dt><dd>the minimum rectangle enclosing the input (or a line or point if degenerate) </dd></dl>
+<p>Gets the rectangular Polygon which encloses the input geometry and is based on the minimum diameter supporting segment. </p>
+<p>The rectangle has width equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate (a line or point) a LineString or Point is returned. This is not necessarily the rectangle with minimum area. Use <a class="el" href="classgeos_1_1algorithm_1_1MinimumAreaRectangle.html">MinimumAreaRectangle</a> to compute this.</p>
+<dl class="section return"><dt>Returns</dt><dd>the the minimum-width rectangle enclosing the geometry </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1MinimumAreaRectangle.html">MinimumAreaRectangle</a> </dd></dl>
 
 </div>
 </div>
@@ -288,7 +292,8 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the minimum rectangle enclosing the geometry </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a rectangle enclosing the input (or a line or point if degenerate) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1algorithm_1_1MinimumAreaRectangle.html">MinimumAreaRectangle</a> </dd></dl>
 
 </div>
 </div>
@@ -327,7 +332,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> forming one end of the minimum diameter. </p>
+<p>Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">geom::Coordinate</a> forming one end of the minimum diameter. </p>
 <dl class="section return"><dt>Returns</dt><dd>a coordinate forming one end of the minimum diameter </dd></dl>
 
 </div>

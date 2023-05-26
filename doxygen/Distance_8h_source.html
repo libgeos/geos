@@ -78,29 +78,37 @@ $(function() {
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// formerly distanceLineLine</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a27bd201fb4516e13bba5163ff173dcc4">   52</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a27bd201fb4516e13bba5163ff173dcc4">segmentToSegment</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; B,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; C,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                   <span class="keyword">const</span> geom::CoordinateXY&amp; D);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a6e60eae2c4846b28907d11e869e1a010">   66</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a6e60eae2c4846b28907d11e869e1a010">pointToSegmentString</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// formerly distancePointLine</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a07275120e3fa78d44b9fc19148375afa">   83</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a07275120e3fa78d44b9fc19148375afa">pointToSegment</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                 <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                 <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">// formerly distancePointLinePerpendicular</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#aa2c60e708a65f864d5f7abf4c0b05ef8">  100</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#aa2c60e708a65f864d5f7abf4c0b05ef8">pointToLinePerpendicular</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                           <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                           <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a27bd201fb4516e13bba5163ff173dcc4">   52</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a27bd201fb4516e13bba5163ff173dcc4">segmentToSegment</a>(</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; B,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; C,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; D);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a6e60eae2c4846b28907d11e869e1a010">   67</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a6e60eae2c4846b28907d11e869e1a010">pointToSegmentString</a>(</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="comment">// formerly distancePointLine</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#a07275120e3fa78d44b9fc19148375afa">   85</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#a07275120e3fa78d44b9fc19148375afa">pointToSegment</a>(</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// formerly distancePointLinePerpendicular</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Distance.html#aa2c60e708a65f864d5f7abf4c0b05ef8">  103</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Distance.html#aa2c60e708a65f864d5f7abf4c0b05ef8">pointToLinePerpendicular</a>(</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> pointToLinePerpendicularSigned(</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; A,</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keyword">const</span> geom::CoordinateXY&amp; B);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;};</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Distance_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Distance.html">geos::algorithm::Distance</a></div><div class="ttdoc">Functions to compute distance between basic geometric structures.</div><div class="ttdef"><b>Definition:</b> Distance.h:34</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Distance_html_a07275120e3fa78d44b9fc19148375afa"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Distance.html#a07275120e3fa78d44b9fc19148375afa">geos::algorithm::Distance::pointToSegment</a></div><div class="ttdeci">static double pointToSegment(const geom::CoordinateXY &amp;p, const geom::CoordinateXY &amp;A, const geom::CoordinateXY &amp;B)</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Distance_html_a27bd201fb4516e13bba5163ff173dcc4"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Distance.html#a27bd201fb4516e13bba5163ff173dcc4">geos::algorithm::Distance::segmentToSegment</a></div><div class="ttdeci">static double segmentToSegment(const geom::CoordinateXY &amp;A, const geom::CoordinateXY &amp;B, const geom::CoordinateXY &amp;C, const geom::CoordinateXY &amp;D)</div></div>
