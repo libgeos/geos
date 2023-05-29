@@ -292,7 +292,7 @@ void object::test<20> ()
     checkOffsetCurve(
         "LINESTRING (20 20, 50 50, 80 20)",
         10, 2, -1, -1,
-        "LINESTRING (12.93 27.07, 42.93 57.07, 50 60, 57.07 57.07, 87.07 27.07)"
+        "LINESTRING (12.928932188134524 27.071067811865476, 42.928932188134524 57.071067811865476, 44.44429766980398 58.314696123025456, 46.1731656763491 59.23879532511287, 48.04909677983872 59.80785280403231, 50 60, 51.95090322016128 59.80785280403231, 53.8268343236509 59.23879532511287, 55.55570233019602 58.314696123025456, 57.071067811865476 57.071067811865476, 87.07106781186548 27.071067811865476)"
         );
 }
 
@@ -318,6 +318,33 @@ void object::test<22> ()
         10, -1, BufferParameters::JOIN_MITRE, -1,
         "LINESTRING (12.93 27.07, 50 64.14, 87.07 27.07)"
         );
+}
+
+
+// testMinQuadrantSegments
+// See https://github.com/qgis/QGIS/issues/53165
+template<>
+template<>
+void object::test<41> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (553772.0645892698 177770.05079236583, 553780.9235869241 177768.99614978794, 553781.8325485934 177768.41771963477)",
+        -11, 0, BufferParameters::JOIN_MITRE, -1,
+        "LINESTRING (553770.76 177759.13, 553777.54 177758.32)"
+    );
+}
+
+// testMinQuadrantSegments_QGIS
+// See https://github.com/qgis/QGIS/issues/53165#issuecomment-1563214857
+template<>
+template<>
+void object::test<42> ()
+{
+    checkOffsetCurve(
+        "LINESTRING (421 622, 446 625, 449 627)",
+        133, 0, BufferParameters::JOIN_MITRE, -1,
+        "LINESTRING (405.15 754.05, 416.3 755.39)"
+    );
 }
 
 

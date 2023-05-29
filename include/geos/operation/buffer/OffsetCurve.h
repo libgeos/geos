@@ -187,9 +187,15 @@ private:
 public:
 
     /**
-    * Creates a new instance for computing an offset curve for a geometryat a given distance.
-    * with default quadrant segments BufferParameters::DEFAULT_QUADRANT_SEGMENTS
-    * and join style BufferParameters::JOIN_STYLE.
+    * A QuadSegs minimum value that will prevent generating
+    * unwanted offset curve artifacts near end caps.
+    */
+    static constexpr int MIN_QUADRANT_SEGMENTS = 8;
+
+    /**
+    * Creates a new instance for computing an offset curve for a geometry at a given distance.
+    * with default quadrant segments (BufferParameters::DEFAULT_QUADRANT_SEGMENTS)
+    * and join style (BufferParameters::JOIN_STYLE).
     *
     * @param geom the geometry to offset
     * @param dist the offset distance (positive = left, negative = right)
@@ -226,7 +232,17 @@ public:
                 throw util::IllegalArgumentException("OffsetCurve distance must be a finite value");
             }
             //-- set buffer params, leaving cap style as the default CAP_ROUND
-            bufferParams.setQuadrantSegments( bp.getQuadrantSegments());
+
+            /**
+            * Prevent using a very small QuadSegs value, to avoid
+            * offset curve artifacts near the end caps.
+            */
+            int quadSegs = bp.getQuadrantSegments();
+            if (quadSegs < MIN_QUADRANT_SEGMENTS) {
+                quadSegs = MIN_QUADRANT_SEGMENTS;
+            }
+            bufferParams.setQuadrantSegments(quadSegs);
+
             bufferParams.setJoinStyle( bp.getJoinStyle());
             bufferParams.setMitreLimit( bp.getMitreLimit());
         };
