@@ -137,7 +137,6 @@ void object::test<5>
                   ));
 }
 
-
 // 0 distance
 // See http://trac.osgeo.org/postgis/ticket/454
 template<>
