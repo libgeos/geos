@@ -86,6 +86,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a09db60ebda1b39a105bc6049583aa7af"><td class="memItemLeft" align="right" valign="top"><a id="a09db60ebda1b39a105bc6049583aa7af"></a>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MATCH_DISTANCE_FACTOR</b> = 10000</td></tr>
 <tr class="separator:a09db60ebda1b39a105bc6049583aa7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0993ae766a279833ef52f0a26a1aa2ca"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurve.html#a0993ae766a279833ef52f0a26a1aa2ca">MIN_QUADRANT_SEGMENTS</a> = 8</td></tr>
+<tr class="separator:a0993ae766a279833ef52f0a26a1aa2ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Computes an offset curve from a geometry. An offset curve is a linear geometry which is offset a given distance from the input. If the offset distance is positive the curve lies on the left side of the input; if it is negative the curve is on the right side. The curve(s) have the same direction as the input line(s).</p>
@@ -193,6 +195,7 @@ static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MATCH
   </table>
   </dd>
 </dl>
+<p>Prevent using a very small QuadSegs value, to avoid offset curve artifacts near the end caps.</p>
 
 <p class="reference">References <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a238ed39126f33678a308fd5fe3af45ab">geos::operation::buffer::BufferParameters::getJoinStyle()</a>, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a013777714e4bebe544b497c0666a500e">geos::operation::buffer::BufferParameters::getMitreLimit()</a>, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ad9e1b5c1ee47cd1b747000015e8911ab">geos::operation::buffer::BufferParameters::getQuadrantSegments()</a>, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a9b8fb6b023de5b70e658c81dc7a78f8e">geos::operation::buffer::BufferParameters::setJoinStyle()</a>, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a1c30adfb1d8385b59b58073ec6213410">geos::operation::buffer::BufferParameters::setMitreLimit()</a>, and <a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">geos::operation::buffer::BufferParameters::setQuadrantSegments()</a>.</p>
 
@@ -383,6 +386,30 @@ static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MATCH
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0993ae766a279833ef52f0a26a1aa2ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0993ae766a279833ef52f0a26a1aa2ca">&#9670;&nbsp;</a></span>MIN_QUADRANT_SEGMENTS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int geos::operation::buffer::OffsetCurve::MIN_QUADRANT_SEGMENTS = 8</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A QuadSegs minimum value that will prevent generating unwanted offset curve artifacts near end caps. </p>
 
 </div>
 </div>
