@@ -14,7 +14,7 @@ Unlike [WKB]({{< ref "wkb" >}}) and [WKT]({{< ref "wkt" >}}), GeoJSON does not r
 * [Feature](https://datatracker.ietf.org/doc/html/rfc7946#section-3.2), representation of an object that has a "geometry" and an arbitrary set of other non-geometric "properties".
 * [FeatureCollection](https://datatracker.ietf.org/doc/html/rfc7946#section-3.3), representation of a list of Features.
 
-Since GEOS is almost 100% concerned with geometry operations, there is no GEOS abstraction to translate the non-geometric properties of GeoJSON Feature into, so handling of Feature properties is only available via the C++ [GeoJSON.h](/libgeos/geos/blob/main/include/geos/io/GeoJSON.h) utilities.
+Since GEOS is almost 100% concerned with geometry operations, there is no GEOS abstraction to translate the non-geometric properties of GeoJSON Feature into, so handling of Feature properties is only available via the C++ [GeoJSON.h](https://github.com/libgeos/geos/blob/main/include/geos/io/GeoJSON.h) utilities.
 
 
 ### Writing GeoJSON
