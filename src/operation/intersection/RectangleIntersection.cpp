@@ -109,7 +109,7 @@ RectangleIntersection::clip_point(const geom::Point * g,
 				RectangleIntersectionBuilder & parts,
 				const Rectangle & rect)
 {
-  if(g == nullptr)
+  if(g == nullptr || g->isEmpty())
 	return;
 
   double x = g->getX();
@@ -552,6 +552,9 @@ RectangleIntersection::clip_polygon(const geom::Polygon * g,
 				  const Rectangle & rect,
 				  bool keep_polygons)
 {
+  if(g == nullptr || g->isEmpty())
+	return;
+
   if(keep_polygons)
 	clip_polygon_to_polygons(g, parts, rect);
   else

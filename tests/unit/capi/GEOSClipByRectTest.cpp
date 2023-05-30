@@ -187,5 +187,31 @@ namespace tut
     isEqual(geom2_, "POLYGON ((5 5, 5 15, 10 15, 10 10, 15 10, 15 5, 5 5))");
   }
 
+  // Empty combinations - always return GEOMETRYCOLLECTION EMPTY
+  template<> template<> void object::test<14>
+  ()
+  {
+    std::vector<const char*> variants{
+      "POINT EMPTY",
+      "LINESTRING EMPTY",
+      "POLYGON EMPTY",
+      "MULTIPOINT EMPTY",
+      "MULTILINESTRING EMPTY",
+      "MULTIPOLYGON EMPTY",
+      "GEOMETRYCOLLECTION EMPTY",
+      "LINEARRING EMPTY",
+    };
+    for (const auto& wkt : variants) {
+      GEOSGeom geom1 = GEOSGeomFromWKT(wkt);
+      GEOSGeom geom2 = GEOSClipByRect(geom1, 0, 0, 1, 1);
+      char* obt_wkt = GEOSWKTWriter_write(w_, geom2);
+      std::string obt_wkt2(obt_wkt);
+      GEOSFree(obt_wkt);
+      GEOSGeom_destroy(geom1);
+      GEOSGeom_destroy(geom2);
+      ensure_equals(obt_wkt2, "GEOMETRYCOLLECTION EMPTY");
+  }
+}
+
 } // namespace tut
 
