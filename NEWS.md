@@ -9,6 +9,8 @@
   - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
   - GeoJSONReader: Fix 2D empty geometry creation (GH-910, Mike Taves)
   - OffsetCurve: add minimum threshold for quadsegs (GH-897, Martin Davis, Paul Ramsey)
+  - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
+
 
 ## Changes in 3.11.2
 2023-03-16
