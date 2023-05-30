@@ -4,6 +4,7 @@ Changes in 3.8.4
 
 - Bug fixes / improvements
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
+  - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
 
 
 Changes in 3.8.3
