@@ -1679,4 +1679,27 @@ template<> template<> void object::test<208>
 
     doClipTest(inp, exp, r, 1e-10);
 }
+
+/// Empty combinations - always return GEOMETRYCOLLECTION EMPTY
+template<> template<> void object::test<209>
+()
+{
+    std::vector<const char*> variants{
+        "POINT EMPTY",
+        "LINESTRING EMPTY",
+        "POLYGON EMPTY",
+        "MULTIPOINT EMPTY",
+        "MULTILINESTRING EMPTY",
+        "MULTIPOLYGON EMPTY",
+        "GEOMETRYCOLLECTION EMPTY",
+        "LINEARRING EMPTY",
+    };
+    for (const auto& inp : variants) {
+        doClipTest(
+            inp,
+            "GEOMETRYCOLLECTION EMPTY",
+            Rectangle(0, 0, 1, 1)
+        );
+    }
+}
 }
