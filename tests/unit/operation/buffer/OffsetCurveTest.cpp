@@ -553,17 +553,25 @@ void object::test<40> ()
         );
 }
 
-
 // testMinQuadrantSegments
 // See https://github.com/qgis/QGIS/issues/53165
 template<>
 template<>
-void object::test<41> ()
+void object::test<42> ()
 {
     checkOffsetCurve(
         "LINESTRING (553772.0645892698 177770.05079236583, 553780.9235869241 177768.99614978794, 553781.8325485934 177768.41771963477)",
         -11, 0, BufferParameters::JOIN_MITRE, -1,
         "LINESTRING (553770.76 177759.13, 553777.54 177758.32)"
+    );
+
+    checkOffsetCurve(
+        "LINESTRING (417.9785426266025752 432.5653800140134990, 447.6161954912822694 436.0936720217578113, 450.6571140550076962 438.0288020166335627)",
+        133.819, // distance
+        0, // number of segments
+        BufferParameters::JOIN_MITRE,
+        2,  // mitre limit
+        "LINESTRING (402.15941192825255 565.4460778784833, 418.95730224139794 567.4458267253115)"
     );
 }
 
@@ -571,7 +579,7 @@ void object::test<41> ()
 // See https://github.com/qgis/QGIS/issues/53165#issuecomment-1563214857
 template<>
 template<>
-void object::test<42> ()
+void object::test<43> ()
 {
     checkOffsetCurve(
         "LINESTRING (421 622, 446 625, 449 627)",
@@ -582,4 +590,4 @@ void object::test<42> ()
 
 
 
-} // namespace tut
+} // namespace tut2
